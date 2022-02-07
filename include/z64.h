@@ -168,8 +168,10 @@ typedef struct {
     /* 0x5 */ Color_RGB8 envColor;
 } FireObjLightParams; // size = 0x8
 
+#define FONT_CHAR_TEX_WIDTH  16
+#define FONT_CHAR_TEX_HEIGHT 16
 //! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
-#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2)
+#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
 // Font textures are loaded into here
 typedef struct {
@@ -468,9 +470,11 @@ typedef enum {
 } GfxPrintFlag;
 
 typedef struct {
-    /* 0x00 */ u16 countdown;
-    /* 0x04 */ Vec3f originPos;
-    /* 0x10 */ Vec3f relativePos;
+    /* 0x00 */ u8 countdown;
+    /* 0x01 */ u8 playSfxEachFrame;
+    /* 0x02 */ u16 sfxId;
+    /* 0x04 */ Vec3f worldPos;
+    /* 0x10 */ Vec3f projectedPos;
 } SoundSource; // size = 0x1C
 
 typedef struct {
@@ -491,13 +495,12 @@ typedef struct {
     /* 0x0E0 */ Mtx unkE0;
     /* 0x120 */ Mtx* projectionPtr;
     /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f quakeRot;
-    /* 0x134 */ Vec3f quakeScale;
-    /* 0x140 */ f32 quakeSpeed;
-    /* 0x144 */ Vec3f currQuakeRot;
-    /* 0x150 */ Vec3f currQuakeScale;
+    /* 0x128 */ Vec3f distortionDirRot;
+    /* 0x134 */ Vec3f distortionScale;
+    /* 0x140 */ f32 distortionSpeed;
+    /* 0x144 */ Vec3f curDistortionDirRot;
+    /* 0x150 */ Vec3f curDistortionScale;
     /* 0x15C */ u16 normal;
-    /* 0x15E */ UNK_TYPE1 pad15E[0x2];
     /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
     /* 0x164 */ UNK_TYPE4 unk164;
 } View; // size = 0x168
@@ -706,7 +709,7 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ u16 unk_0;
-    /* 0x02 */ u16 unk_2;
+    /* 0x02 */ u16 timeIncrement;
     /* 0x04 */ f32 unk_4;
     /* 0x08 */ f32 unk_8;
     /* 0x0C */ f32 unk_C;
@@ -853,15 +856,15 @@ typedef struct {
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
-    /* 0x11F22 */ u8 unk11F22;
+    /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
-    /* 0x1202A */ u16 unk1202A;
-    /* 0x1202C */ UNK_TYPE1 pad1202C[0x2];
+    /* 0x1202A */ u16 ocarinaMode;
+    /* 0x1202C */ u16 ocarinaAction;
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
@@ -869,7 +872,11 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
     /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0x21];
+    /* 0x12049 */ UNK_TYPE1 pad12049[0xB];
+    /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
+    /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
+    /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
+    /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
@@ -882,23 +889,6 @@ typedef struct {
     /* 0x120D6 */ UNK_TYPE2 unk120D6;
     /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
 } MessageContext; // size = 0x120E0
-
-typedef struct ArenaNode {
-    /* 0x0 */ s16 magic; // Should always be 0x7373
-    /* 0x2 */ s16 isFree;
-    /* 0x4 */ size_t size;
-    /* 0x8 */ struct ArenaNode* next;
-    /* 0xC */ struct ArenaNode* prev;
-} ArenaNode; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ ArenaNode* head;
-    /* 0x04 */ void* start;
-    /* 0x08 */ OSMesgQueue lock;
-    /* 0x20 */ u8 unk20;
-    /* 0x21 */ u8 isInit;
-    /* 0x22 */ u8 flag;
-} Arena; // size = 0x24
 
 typedef struct FaultAddrConvClient {
     /* 0x0 */ struct FaultAddrConvClient* next;
@@ -1138,13 +1128,13 @@ typedef struct {
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state;
-} Quake2Context; // size = 0xC
+} DistortionContext; // size = 0xC
 
 typedef enum {
-    QUAKE2_INACTIVE,
-    QUAKE2_ACTIVE,
-    QUAKE2_SETUP,
-} Quake2State;
+    /* 0 */ DISTORTION_INACTIVE,
+    /* 1 */ DISTORTION_ACTIVE,
+    /* 2 */ DISTORTION_SETUP,
+} DistortionState;
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
@@ -1324,7 +1314,7 @@ struct GlobalContext {
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
     /* 0x187FC */ MtxF billboardMtxF;
-    /* 0x1883C */ Mtx* unk_1883C;
+    /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
     /* 0x18845 */ u8 unk_18845;
@@ -1411,7 +1401,7 @@ typedef struct EnHy {
 typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8;
+    /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);

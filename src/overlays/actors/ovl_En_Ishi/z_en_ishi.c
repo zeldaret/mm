@@ -430,8 +430,11 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_8095E5AC(this);
 }
 
-void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnIshi* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_8095E5AC(EnIshi* this) {
@@ -467,7 +470,7 @@ void func_8095E660(EnIshi* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         func_8095E934(this);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, D_8095F7AC[sp38]);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, D_8095F7AC[sp38]);
         if (ENISHI_GET_2(&this->actor)) {
             func_8095E204(this, globalCtx);
         }
@@ -482,7 +485,7 @@ void func_8095E660(EnIshi* this, GlobalContext* globalCtx) {
             return;
         }
         func_8095DF90(this, globalCtx);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, D_8095F6D4[sp38], D_8095F6D0[sp38]);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, D_8095F6D4[sp38], D_8095F6D0[sp38]);
         D_8095F6D8[sp38](&this->actor, globalCtx);
         D_8095F6E0[sp38](this, globalCtx);
         Actor_MarkForDeath(&this->actor);
@@ -585,7 +588,7 @@ void func_8095EBDC(EnIshi* this, GlobalContext* globalCtx) {
         D_8095F6D8[sp70](&this->actor, globalCtx);
 
         if (!(this->actor.bgCheckFlags & 0x20)) {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, D_8095F6D4[sp70], D_8095F6D0[sp70]);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, D_8095F6D4[sp70], D_8095F6D0[sp70]);
             D_8095F6E0[sp70](this, globalCtx);
         }
 
@@ -632,7 +635,7 @@ void func_8095EBDC(EnIshi* this, GlobalContext* globalCtx) {
         D_8095F690 >>= 2;
         D_8095F694 >>= 2;
 
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         this->actor.bgCheckFlags &= ~0x40;
     }
 
@@ -660,7 +663,7 @@ void func_8095F0A4(EnIshi* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, D_8095F6D4[sp28], D_8095F6D0[sp28]);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, D_8095F6D4[sp28], D_8095F6D0[sp28]);
         D_8095F6D8[sp28](&this->actor, globalCtx);
         D_8095F6E0[sp28](this, globalCtx);
         this->actor.draw = NULL;

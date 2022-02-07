@@ -290,8 +290,7 @@ void func_80A1143C(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg
 
 void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
     static TexturePtr D_80A16644[] = {
-        &gameplay_keep_Tex_08F7E0, &gameplay_keep_Tex_08F3E0, &gameplay_keep_Tex_08EFE0, &gameplay_keep_Tex_08EBE0,
-        &gameplay_keep_Tex_08E7E0, &gameplay_keep_Tex_08E3E0, &gameplay_keep_Tex_08DFE0, &gameplay_keep_Tex_08DBE0,
+        &gDust8Tex, &gDust7Tex, &gDust6Tex, &gDust5Tex, &gDust4Tex, &gDust3Tex, &gDust2Tex, &gDust1Tex,
     };
     static Color_RGBA8 D_80A16664[] = {
         { 255, 255, 255, 0 },
@@ -524,7 +523,7 @@ s32 func_80A1222C(EnGo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 ret = false;
 
-    if (((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
+    if (((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
          (globalCtx->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.weekEventReg[22] & 4) && (globalCtx->sceneNum == SCENE_16GORON_HOUSE) &&
          (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (globalCtx->csCtx.unk_12 == 1))) {
@@ -1993,7 +1992,7 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnGo_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGo* this = THIS;
     u16 temp_v0;
     s32 phi_v1;
@@ -2044,9 +2043,9 @@ void EnGo_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_TYPE D_80A1670C[] = {
-        &object_oF1d_map_Tex_010438, &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_011038,
-        &object_oF1d_map_Tex_010C38, &object_oF1d_map_Tex_010838,
+    static TexturePtr D_80A1670C[] = {
+        object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_011038,
+        object_oF1d_map_Tex_010C38, object_oF1d_map_Tex_010838,
     };
     EnGo* this = THIS;
 
@@ -2060,8 +2059,9 @@ void func_80A15FEC(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk_3DC == 14) {
             Matrix_InsertTranslation(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnGo_OverrideLimbDraw, NULL, EnGo_UnkDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnGo_OverrideLimbDraw, NULL, EnGo_TransfromLimbDraw,
+                                       &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else {

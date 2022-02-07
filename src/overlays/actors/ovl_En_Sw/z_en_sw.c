@@ -5,6 +5,7 @@
  */
 
 #include "z_en_sw.h"
+#include "objects/object_st/object_st.h"
 
 #define FLAGS 0x00000005
 
@@ -26,21 +27,6 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx);
 void func_808DB100(EnSw* this, GlobalContext* globalCtx);
 void func_808DB25C(EnSw* this, GlobalContext* globalCtx);
 void func_808DB2E0(EnSw* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000304;
-extern Gfx D_06003FB0[];
-extern Gfx D_060043D8[];
-extern Gfx D_060045C0[];
-extern Gfx D_06004658[];
-extern Gfx D_060046F0[];
-extern Gfx D_06004788[];
-extern Gfx D_06004820[];
-extern Gfx D_060048B8[];
-extern Gfx D_06004950[];
-extern Gfx D_060049E8[];
-extern SkeletonHeader D_06005298;
-extern AnimationHeader D_060055A8;
-extern AnimationHeader D_06005B98;
 
 const ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
@@ -149,10 +135,10 @@ static DamageTable sDamageTable2 = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06000304, 1.0f, 0, -1, 3, 0 },
-    { &D_06000304, 1.0f, 0, -1, 3, -4 },
-    { &D_060055A8, 1.0f, 0, -1, 1, -4 },
-    { &D_06005B98, 1.0f, 0, -1, 1, -4 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, 3, 0 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, 3, -4 },
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, 1, -4 },
+    { &object_st_Anim_005B98, 1.0f, 0, -1, 1, -4 },
 };
 
 void func_808D8940(EnSw* this, GlobalContext* globalCtx) {
@@ -686,7 +672,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
 
             this->unk_45C = 0;
         } else if (!func_808D90C4(this)) {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.flags &= ~1;
             if (!ENSW_GET_3(&this->actor)) {
@@ -1171,7 +1157,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!func_808D9968(this, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005298, NULL, this->jointTable, this->morphTable, 30);
+        SkelAnime_Init(globalCtx, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
+                       30);
         func_8013BC6C(&this->skelAnime, sAnimations, 0);
         this->skelAnime.playSpeed = 4.0f;
 
@@ -1276,43 +1263,43 @@ s32 EnSw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     if (ENSW_GET_3(&this->actor)) {
         switch (limbIndex) {
             case 23:
-                *dList = D_06004788;
+                *dList = object_st_DL_004788;
                 break;
 
             case 8:
-                *dList = D_060046F0;
+                *dList = object_st_DL_0046F0;
                 break;
 
             case 14:
-                *dList = D_06004658;
+                *dList = object_st_DL_004658;
                 break;
 
             case 11:
-                *dList = D_060045C0;
+                *dList = object_st_DL_0045C0;
                 break;
 
             case 26:
-                *dList = D_06004820;
+                *dList = object_st_DL_004820;
                 break;
 
             case 20:
-                *dList = D_060048B8;
+                *dList = object_st_DL_0048B8;
                 break;
 
             case 17:
-                *dList = D_06004950;
+                *dList = object_st_DL_004950;
                 break;
 
             case 29:
-                *dList = D_060049E8;
+                *dList = object_st_DL_0049E8;
                 break;
 
             case 5:
-                *dList = D_06003FB0;
+                *dList = object_st_DL_003FB0;
                 break;
 
             case 4:
-                *dList = D_060043D8;
+                *dList = object_st_DL_0043D8;
                 break;
         }
     }
