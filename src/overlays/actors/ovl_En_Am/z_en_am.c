@@ -8,7 +8,6 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 
-
 #define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
 
 #define THIS ((EnAm*)thisx)
@@ -19,9 +18,9 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAm_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808AFF9C(EnAm* this);
-void func_808B0040(EnAm* this, GlobalContext* globalCtx);
-void func_808B00D8(EnAm* this);
-void func_808B0124(EnAm* this, GlobalContext* globalCtx);
+void EnAm_RemoveEnemyTexture(EnAm* this, GlobalContext* globalCtx);
+void EnAm_WakeUp(EnAm* this);
+void EnAm_ApplyEnemyTexture(EnAm* this, GlobalContext* globalCtx);
 void func_808B0358(EnAm* this);
 void func_808B03C0(EnAm* this, GlobalContext* globalCtx);
 void func_808B0460(EnAm* this);
@@ -136,7 +135,7 @@ static InitChainEntry sInitChain[] = {
 
 static Vec3f sVelocity = { 0.0f, -1.5f, 0.0f };
 
-static Vec3f sAccel = { 0.0f, -0.20000000298f, 0.0f };
+static Vec3f sAccel = { 0.0f, -(1.0f / 5.0f), 0.0f };
 
 static Color_RGBA8 D_808B1118 = { 100, 100, 100, 0 };
 
@@ -168,7 +167,7 @@ void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 300.0f / 7.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_am_Skel_005948, &object_am_Anim_00033C, this->jointTable,
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_am_Skel_005948, &gArmosPushedBackAnim, this->jointTable,
                    this->morphTable, OBJECT_AM_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->enemyCollider, &this->actor, &sEnemyCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->interactCollider, &this->actor, &sCylinderInit);
@@ -204,23 +203,23 @@ void EnAm_SpawnEffects(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808AFF9C(EnAm* this) {
-    f32 lastFrame = Animation_GetLastFrame(&object_am_Anim_00033C);
+    f32 lastFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
-    Animation_Change(&this->skelAnime, &object_am_Anim_00033C, 0.0f, lastFrame, lastFrame, 0, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, 0, 0.0f);
     this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
     this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
         this->enemyCollider.base.atFlags &= ~AT_ON;
     }
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-    this->actionFunc = func_808B0040;
+    this->actionFunc = EnAm_RemoveEnemyTexture;
 }
 
-void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
+void EnAm_RemoveEnemyTexture(EnAm* this, GlobalContext* globalCtx) {
     if (((this->enemyCollider.base.ocFlags1 & OC1_HIT) && (this->enemyCollider.base.ocFlags2 & OC2_HIT_PLAYER)) ||
         (this->interactCollider.base.acFlags & AC_HIT)) {
         if (this->textureBlend == 0) {
-            func_808B00D8(this);
+            EnAm_WakeUp(this);
         }
     } else if (this->textureBlend > 10) {
         this->textureBlend -= 10;
@@ -231,14 +230,14 @@ void func_808B0040(EnAm* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808B00D8(EnAm* this) {
+void EnAm_WakeUp(EnAm* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_WAVE);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AMOS_VOICE);
     this->returnHomeTimer = 300;
-    this->actionFunc = func_808B0124;
+    this->actionFunc = EnAm_ApplyEnemyTexture;
 }
 
-void func_808B0124(EnAm* this, GlobalContext* globalCtx) {
+void EnAm_ApplyEnemyTexture(EnAm* this, GlobalContext* globalCtx) {
     s32 tempTextureBlend;
     f32 cos;
     u8 pad;
@@ -292,7 +291,7 @@ void func_808B0208(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B0358(EnAm* this) {
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &object_am_Anim_000238, 4.0f);
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &gArmosHopAnim, 4.0f);
     this->explodeTimer = 3;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -360,7 +359,7 @@ void func_808B05C8(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B0640(EnAm* this) {
-    this->explodeTimer = 0x28;
+    this->explodeTimer = 40;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->speed = 0.0f;
     this->actionFunc = func_808B066C;
@@ -380,11 +379,11 @@ void func_808B066C(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void EnAm_TakeDamage(EnAm* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &object_am_Anim_005B3C, 1.0f, 4.0f,
-                     Animation_GetLastFrame(&object_am_Anim_005B3C) - 6, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f,
+                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, 2, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speedXZ = 6.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&object_am_Anim_005B3C) - 10);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, Animation_GetLastFrame(&gArmosTakeDamageAnim) - 10);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DAMAGE);
     this->enemyCollider.base.acFlags &= ~AC_ON;
     this->textureBlend = 255;
@@ -404,7 +403,7 @@ void func_808B07A8(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B0820(EnAm* this) {
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &object_am_Anim_000238, 4.0f);
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &gArmosHopAnim, 4.0f);
     this->explodeTimer = 64;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.flags |= ACTOR_FLAG_10;
@@ -441,7 +440,7 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     } else if (!(this->explodeTimer & 3)) {
-        Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 4);
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 4);
     }
     if (this->actor.world.rot.z < 0x1F40) {
         this->actor.world.rot.z += 0x320;
@@ -450,7 +449,7 @@ void func_808B0894(EnAm* this, GlobalContext* globalCtx) {
 }
 
 void func_808B0AD0(EnAm* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &object_am_Anim_00033C, 1.0f, 0.0f, 8.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 1.0f, 0.0f, 8.0f, 2, 0.0f);
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.speedXZ = -6.0f;
     this->actionFunc = func_808B0B4C;

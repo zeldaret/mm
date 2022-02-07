@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_am" Segment="6">
         <Collision Name="object_am_Colheader_000118" Offset="0x118" />
-        <Animation Name="object_am_Anim_000238" Offset="0x238" />
-        <Animation Name="object_am_Anim_00033C" Offset="0x33C" />
+        <Animation Name="gArmosHopAnim" Offset="0x238" />
+        <Animation Name="gArmosPushedBackAnim" Offset="0x33C" />
         <DList Name="object_am_DL_0005D0" Offset="0x5D0" />
         <DList Name="object_am_DL_0007A8" Offset="0x7A8" />
         <DList Name="object_am_DL_0016C8" Offset="0x16C8" />
@@ -35,7 +35,7 @@
         <Limb Name="object_am_Standardlimb_0058FC" Type="Standard" EnumName="OBJECT_AM_LIMB_BASE" Offset="0x58FC" />
         <Limb Name="object_am_Standardlimb_005908" Type="Standard" EnumName="OBJECT_AM_LIMB_0D" Offset="0x5908" />
         <Skeleton Name="object_am_Skel_005948" Type="Normal" LimbType="Standard" LimbNone="OBJECT_AM_LIMB_NONE" LimbMax="OBJECT_AM_LIMB_MAX" EnumName="object_am_Limbs" Offset="0x5948" />
-        <Animation Name="object_am_Anim_005B3C" Offset="0x5B3C" />
+        <Animation Name="gArmosTakeDamageAnim" Offset="0x5B3C" />
         <Collision Name="object_am_Colheader_005CF8" Offset="0x5CF8" />
     </File>
 </Root>
