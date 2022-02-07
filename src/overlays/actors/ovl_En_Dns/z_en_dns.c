@@ -5,7 +5,6 @@
  */
 
 #include "z_en_dns.h"
-#include "objects/object_dns/object_dns.h"
 
 #define FLAGS 0x00000019
 
@@ -149,11 +148,11 @@ void func_8092C86C(EnDns* this, GlobalContext* globalCtx) {
 }
 
 void func_8092C934(EnDns* this) {
-    if ((this->unk_2C6 & 0x40) && (DECR(this->unk_2DE) == 0)) {
-        this->unk_2E0++;
-        if (this->unk_2E0 >= 4) {
-            this->unk_2DE = Rand_S16Offset(30, 30);
-            this->unk_2E0 = 0;
+    if ((this->unk_2C6 & 0x40) && (DECR(this->blinkTimer) == 0)) {
+        this->eyeIndex++;
+        if (this->eyeIndex >= 4) {
+            this->blinkTimer = Rand_S16Offset(30, 30);
+            this->eyeIndex = 0;
         }
     }
 }
@@ -483,7 +482,7 @@ void EnDns_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dns_Skel_002DD8, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gKingsChamberDekuGuardSkel, NULL, this->jointTable, this->morphTable, KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX);
     this->unk_2F8 = -1;
     func_8092C63C(this, 2);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -585,7 +584,7 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         }
     }
 
-    if (limbIndex == 2) {
+    if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_HEAD_LIMB) {
         func_8092D954(this->unk_2CC, this->unk_2CE + this->actor.shape.rot.y, &this->unk_218, &this->unk_224, phi_v1,
                       phi_v0);
         Matrix_InsertTranslation(this->unk_218.x, this->unk_218.y, this->unk_218.z, MTXMODE_NEW);
@@ -604,7 +603,7 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_8092DE1C[] = { object_dns_Tex_0028E8, object_dns_Tex_002968, object_dns_Tex_0029E8,
+    static TexturePtr sEyeTextures[] = { object_dns_Tex_0028E8, object_dns_Tex_002968, object_dns_Tex_0029E8,
                                        object_dns_Tex_002968 };
     EnDns* this = THIS;
 
@@ -612,7 +611,7 @@ void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_8092DE1C[this->unk_2E0]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     gDPPipeSync(POLY_OPA_DISP++);
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDns_OverrideLimbDraw,

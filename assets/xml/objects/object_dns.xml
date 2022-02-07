@@ -25,19 +25,19 @@
         <Texture Name="object_dns_Tex_002968" OutName="tex_002968" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
         <Texture Name="object_dns_Tex_0029E8" OutName="tex_0029E8" Format="rgba16" Width="8" Height="8" Offset="0x29E8" />
         <DList Name="object_dns_DL_002C48" Offset="0x2C48" />
-        <Limb Name="object_dns_Standardlimb_002D18" Type="Standard" Offset="0x2D18" />
-        <Limb Name="object_dns_Standardlimb_002D24" Type="Standard" Offset="0x2D24" />
-        <Limb Name="object_dns_Standardlimb_002D30" Type="Standard" Offset="0x2D30" />
-        <Limb Name="object_dns_Standardlimb_002D3C" Type="Standard" Offset="0x2D3C" />
-        <Limb Name="object_dns_Standardlimb_002D48" Type="Standard" Offset="0x2D48" />
-        <Limb Name="object_dns_Standardlimb_002D54" Type="Standard" Offset="0x2D54" />
-        <Limb Name="object_dns_Standardlimb_002D60" Type="Standard" Offset="0x2D60" />
-        <Limb Name="object_dns_Standardlimb_002D6C" Type="Standard" Offset="0x2D6C" />
-        <Limb Name="object_dns_Standardlimb_002D78" Type="Standard" Offset="0x2D78" />
-        <Limb Name="object_dns_Standardlimb_002D84" Type="Standard" Offset="0x2D84" />
-        <Limb Name="object_dns_Standardlimb_002D90" Type="Standard" Offset="0x2D90" />
-        <Limb Name="object_dns_Standardlimb_002D9C" Type="Standard" Offset="0x2D9C" />
-        <Skeleton Name="object_dns_Skel_002DD8" Type="Normal" LimbType="Standard" Offset="0x2DD8" />
+        <Limb Name="gKingsChamberDekuGuardTorsoLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_TORSO_LIMB" Offset="0x2D18" />
+        <Limb Name="gKingsChamberDekuGuardHeadLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_HEAD_LIMB" Offset="0x2D24" />
+        <Limb Name="gKingsChamberDekuGuardStalkLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_STALK_LIMB" Offset="0x2D30" />
+        <Limb Name="gKingsChamberDekuGuardLeftLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_LEAF_LIMB" Offset="0x2D3C" />
+        <Limb Name="gKingsChamberDekuGuardRightLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_LEAF_LIMB" Offset="0x2D48" />
+        <Limb Name="gKingsChamberDekuGuardCenterLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_CENTER_LEAF_LIMB" Offset="0x2D54" />
+        <Limb Name="gKingsChamberDekuGuardMouthLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_MOUTH_LIMB" Offset="0x2D60" />
+        <Limb Name="gKingsChamberDekuGuardRightMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_MUSTACHE_LIMB" Offset="0x2D6C" />
+        <Limb Name="gKingsChamberDekuGuardLeftMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_MUSTACHE_LIMB" Offset="0x2D78" />
+        <Limb Name="gKingsChamberDekuGuardEyesLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_EYES_LIMB" Offset="0x2D84" />
+        <Limb Name="gKingsChamberDekuGuardLeftFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_FOOT_LIMB" Offset="0x2D90" />
+        <Limb Name="gKingsChamberDekuGuardRightFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_FOOT_LIMB" Offset="0x2D9C" />
+        <Skeleton Name="gKingsChamberDekuGuardSkel" Type="Normal" LimbType="Standard" LimbNone="KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE" LimbMax="KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX" EnumName="KingsChamberDekuGuardLimbs" Offset="0x2DD8" />
         <Animation Name="object_dns_Anim_003310" Offset="0x3310" />
         <Animation Name="object_dns_Anim_0034EC" Offset="0x34EC" />
     </File>
