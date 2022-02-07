@@ -114,10 +114,6 @@ TexturePtr D_80AD2590 = object_osn_Tex_0176F8;
 TexturePtr D_80AD2594 = object_osn_Tex_017EF8;
 TexturePtr D_80AD2598 = object_osn_Tex_0182F8;
 
-extern Gfx object_osn_DL_0192A0[];
-extern AnimationHeader object_osn_Anim_0201BC;
-extern FlexSkeletonHeader object_osn_Skel_0202F0;
-
 void func_80AD1634(EnOsn*, GlobalContext*);
 void func_80AD16A8(EnOsn*, GlobalContext*);
 void func_80AD14C8(EnOsn*, GlobalContext*);
@@ -620,16 +616,14 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actionFunc = func_80AD1634;
-            return;
-        }
-        if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
-            (temp_v1 > -0x4000)) {
+        } else if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
+                   (temp_v1 > -0x4000)) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xFFFF;
         }
     } else {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            this->unk_1F4 = (s16)func_80AD0E10(this, globalCtx);
+            this->unk_1F4 = func_80AD0E10(this, globalCtx);
             func_801518B0(globalCtx, this->unk_1F4, &this->actor);
             this->actionFunc = func_80AD19A0;
         } else if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
@@ -751,11 +745,11 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
         func_800EDF24(&this->actor, globalCtx, temp_v0);
-        return;
+    } else {
+        this->unk_1F0 = 1;
+        this->unk_1ED = 0x63;
+        func_80AD144C(this, globalCtx);
     }
-    this->unk_1F0 = 1;
-    this->unk_1ED = 0x63;
-    func_80AD144C(this, globalCtx);
 }
 
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
@@ -787,7 +781,7 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_1FA = 255;
-    switch (ENOSN_GET_3(THIS)) {
+    switch (ENOSN_GET_3(&this->actor)) {
         case 0:
             if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
                 (gSaveContext.entranceIndex == 0xC060)) {
@@ -840,16 +834,15 @@ void EnOsn_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
-    u32 pad1;
-    u16 pad2;
-    u32 sp34;
+    s32 pad;
     EnOsn* this = THIS;
+    u32 sp34;
 
     sp34 = Flags_GetSwitch(globalCtx, 0);
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     SkelAnime_Update(&this->skelAnime);
-    if (!(ENOSN_GET_3(THIS))) {
+    if (!(ENOSN_GET_3(&this->actor))) {
         if (sp34 != 0) {
             this->actor.flags |= ACTOR_FLAG_1;
             func_80AD0830(this, globalCtx);
@@ -862,9 +855,9 @@ void EnOsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_800E9250(globalCtx, &this->actor, &this->unk_1D8, &this->unk_1DE, this->actor.focus.pos);
 }
 
-s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor,
+s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
                            Gfx** gfx) {
-    EnOsn* this = (EnOsn*)actor;
+    EnOsn* this = (EnOsn*)thisx;
 
     if (this->unk_1F0 && limbIndex == 11) {
         Matrix_InsertXRotation_s(this->unk_1D8.y, MTXMODE_APPLY);
@@ -872,7 +865,7 @@ s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if ((this->unk_1EC == 9 || this->unk_1EC == 8) && limbIndex == 10) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
@@ -897,7 +890,7 @@ void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    GraphicsContext* temp_s0;
+    s32 pad;
     EnOsn* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
