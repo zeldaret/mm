@@ -161,3 +161,30 @@ static TexturePtr sEyeTextures[] = { gKingsChamberDekuGuardEyeOpenTex, gKingsCha
 ```
 
 Note that this step might be tricky to do if multiple things in the actor use the same segment. It's okay to wait to do this until you've named all the display lists in the actor, since that will make it easier to find the display list associated with a given texture.
+
+## Step #4: Naming anything else in the actor
+
+For some actors, there may be a few other things left to name that are directly referenced in the actor's code. In our case, there is one display list that we still need to name:
+```c
+gSPDisplayList(POLY_OPA_DISP++, &D_06002C48);
+```
+
+In Z64Utils, scroll to find this display list, then right-click and select "Open in Dlist Viewer":
+
+![Opening dlist_00002C48 in Z64Utils](images/z64utils_dns_display_list.png)
+
+We can see this is the guard's Deku Flower:
+
+![Showing the guard's Deku Flower in Z64Utils](images/z64utils_dns_deku_flower.png)
+
+We can name the display list as such in the XML:
+```xml
+<DList Name="gKingsChamberDekuGuardDekuFlower" Offset="0x2C48" />
+```
+
+Then, like all steps before, we can run `./extract_assets.py -s objects/object_dns` and then update `z_en_dns.c` with our new name:
+```c
+gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
+```
+
+Since we've now named every single thing in the actor, we can delete all symbols associated with `ovl_En_Dns` in [undefined_syms](../../undefined_syms.txt).

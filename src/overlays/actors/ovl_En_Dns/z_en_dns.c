@@ -386,7 +386,7 @@ void func_8092D108(EnDns* this, GlobalContext* globalCtx) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_dns_DL_002C48);
+    gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
