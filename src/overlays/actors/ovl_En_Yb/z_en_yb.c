@@ -29,7 +29,6 @@ void EnYb_Talk(EnYb* this, GlobalContext* globalCtx);
 void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
 void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx);
 
-// custom shadow function
 void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx);
 void EnYb_SetAnimation(GlobalContext*, EnYb*, s16, u8, f32);
 s32 EnYb_CanTalk(EnYb* this, GlobalContext* globalCtx);
@@ -86,7 +85,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, EnYb_ActorShadowFunc, 20.0f);
 
-    // I dont know why
+    // @Bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200,
                        (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, ENYB_LIMBCOUNT);
 
@@ -95,7 +94,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = EnYb_Idle;
-    this->currentAnimIndex = 3; // gets overwritten in EnYb_SetAnimation...?
+    this->currentAnimIndex = 3; // gets overwritten in EnYb_SetAnimation later
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -113,10 +112,10 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->cutsceneIndex = -1;
     this->actor.cutscene = this->cutscenes[0];
 
-    // between midnight and morning
+    // between midnight and morning start spawned
     if (gSaveContext.time < CLOCK_TIME(6, 0)) {
         this->alpha = 255;
-    } else {
+    } else { // else (night 6pm to midnight): wait to spawn
         this->alpha = 0;
         this->actionFunc = EnYb_WaitForMidnight;
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -173,7 +172,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx
 
 /**
  * weird animation changing function
- * only gets called from init with static variables though: (globalCtx, this, 2, 0, 0.0f);
+ * only gets called from init with static variables though: (animIndex: 2, animMode: 0, transitionRate: 0.0f)
  */
 void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 animMode, f32 transitionRate) {
     if (animIndex >= 0 && animIndex < 3) {
@@ -183,12 +182,12 @@ void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 a
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
                 } else {
-                    // unused case, called once with animMode = 0
+                    // unused case, (only called once with animMode = 0)
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
                 }
             } else {
-                // unused case, called once with animIndex = 2
+                // unused case, (only called once with animIndex = 2)
                 AnimationHeader* animationPtr = gYbUnusedAnimations[animIndex];
 
                 if (1) {}
@@ -436,10 +435,10 @@ void EnYb_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnYb* this = THIS;
 
-    if (limbIndex == 11) {
+    if (limbIndex == OBJECT_YB_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
     }
-    if (limbIndex == 3) {
+    if (limbIndex == OBJECT_YB_LIMB_LEGS_ROOT) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
     }
 }
@@ -447,10 +446,10 @@ void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnYb_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnYb* this = THIS;
 
-    if (limbIndex == 11) {
+    if (limbIndex == OBJECT_YB_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
     }
-    if (limbIndex == 3) {
+    if (limbIndex == OBJECT_YB_LIMB_LEGS_ROOT) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
     }
 }
