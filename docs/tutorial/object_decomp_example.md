@@ -14,7 +14,7 @@ In the resulting window, go to "Analysis -> Find Dlists" and press OK (the defau
 
 When you open the Skeleton Viewer, you'll see a list of animations off to the side. Selecting one of them will display an error that says something like "RENDER ERROR AT 0x06001A98! (Could not read 0x80 bytes at address 08000000)". This is because one of the display lists in the skeleton is expecting something to be set at segment 8. From the actor, we know that it's expecting the eye textures to be loaded into segment 8 like so:
 ```c
-static TexturePtr sEyeTextures[] = { D_060028E8, D_06002968, D_060029E8, D_06002968 };
+static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
 [...]
 gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 ```
@@ -109,3 +109,55 @@ static ActorAnimationEntryS sAnimations[] = {
     { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, 2, 0 },
 };
 ```
+
+## Step 3: Identifying the blob
+
+In the XML, you may notice undefined blobs like this:
+```xml
+<!-- <Blob Name="object_dns_Blob_0028E8" Size="0x180" Offset="0x28E8" /> -->
+```
+
+You might already have an idea as to what this is based on what you've seen before. Recall that the eye textures are referenced in the actor's code like this:
+```c
+static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
+```
+
+Do you notice how the "28E8" in `D_060028E8` also appears as the Offset in that blob? That's because the blob is just the eye textures; the process for automatically creating the XML wasn't able to figure it out on its own, so we'll need to do it ourselves. But how should we define these textures in the XML? Recall that the eye textures were loaded into segment 8; let's take a look in `object_dns.c` and see if we can find something that uses this segment. This display list has the answer:
+```c
+Gfx object_dns_DL_001A50[] = {
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsDPPipeSync(),
+    gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, PRIMITIVE, 0, COMBINED, 0, 0, 0, 0, COMBINED),
+    gsDPSetPrimColor(0, 0xFF, 255, 255, 255, 255),
+    gsDPSetRenderMode(G_RM_PASS, G_RM_AA_ZB_TEX_EDGE2),
+    gsDPSetTextureLUT(G_TT_NONE),
+    gsDPLoadTextureBlock(0x08000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR |
+                         G_TX_CLAMP, 3, 3, G_TX_NOLOD, G_TX_NOLOD),
+    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
+    gsSPVertex(&object_dnsVtx_001000[62], 6, 0),
+    gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
+    gsSPEndDisplayList(),
+};
+```
+
+Using `0x08000000` with `gsDPLoadTextureBlock` signals that this display list is expecting a texture in segment 8. What kind of texture is it expecting? We can look at the arguments after the `0x08000000`. It's looking for an RBGA16 texture with dimensions of 8x8, so we can define these textures in the XML like so:
+```xml
+<Texture Name="object_dns_Tex_0028E8" OutName="tex_0028E8" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />
+<Texture Name="object_dns_Tex_002968" OutName="tex_002968" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
+<Texture Name="object_dns_Tex_0029E8" OutName="tex_0029E8" Format="rgba16" Width="8" Height="8" Offset="0x29E8" />
+```
+
+Now, we just have to name them. In [Step #1](#step-1-naming-the-skeleton-and-limbs), we set segment 8 to one of the eye textures; we can use that same technique with the other two eye textures to see what they are. Like most NPCs, these various eye textures are used for handling blinking, so we can name them based on how open the eye is:
+```xml
+<Texture Name="gKingsChamberDekuGuardEyeOpenTex" OutName="kings_chamber_deku_guard_eye_open" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />
+<Texture Name="gKingsChamberDekuGuardEyeHalfTex" OutName="kings_chamber_deku_guard_eye_half" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
+<Texture Name="gKingsChamberDekuGuardEyeClosedTex" OutName="kings_chamber_deku_guard_eye_closed" Format="rgba16" Width="8" Height="8" Offset="0x29E8" />
+```
+
+Like with previous steps, we can run `./extract_assets.py -s objects/object_dns` and then update `z_en_dns.c` with our new names:
+```c
+static TexturePtr sEyeTextures[] = { gKingsChamberDekuGuardEyeOpenTex, gKingsChamberDekuGuardEyeHalfTex,
+                                     gKingsChamberDekuGuardEyeClosedTex, gKingsChamberDekuGuardEyeHalfTex };
+```
+
+Note that this step might be tricky to do if multiple things in the actor use the same segment. It's okay to wait to do this until you've named all the display lists in the actor, since that will make it easier to find the display list associated with a given texture.
