@@ -141,7 +141,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
             if (globalCtx->msgCtx.choiceIndex != 0) {
                 func_8019F208();
-                globalCtx->msgCtx.unk11F22 = 0x4D;
+                globalCtx->msgCtx.msgMode = 0x4D;
                 globalCtx->msgCtx.unk120D6 = 0;
                 globalCtx->msgCtx.unk120D4 = 0;
                 gSaveContext.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
