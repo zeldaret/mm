@@ -195,8 +195,8 @@ void EnAni_FallOverInPain(EnAni* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->blinkFunc = EnAni_WaitForEyeOpen;
         this->actionFunc = EnAni_IdleInPain;
-        Animation_Change(&this->skelAnime, &gAniHoldingFootPainWrithingAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gAniHoldingFootPainWrithingAnim), 0, 0.0f);
+        Animation_Change(&this->skelAnime, &gAniHoldingFootWrithingInPainAnim, 1.0f, 0.0f,
+                         Animation_GetLastFrame(&gAniHoldingFootWrithingInPainAnim), 0, 0.0f);
     }
 }
 
