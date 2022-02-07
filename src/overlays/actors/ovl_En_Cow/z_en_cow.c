@@ -235,7 +235,7 @@ void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
 
 void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        if (func_80114E90()) {
+        if (Interface_HasEmptyBottle()) {
             func_80151938(globalCtx, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;
         } else {
@@ -264,7 +264,7 @@ void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.unk1202A == 0) || (globalCtx->msgCtx.unk1202A == 4)) {
+    if ((globalCtx->msgCtx.ocarinaMode == 0) || (globalCtx->msgCtx.ocarinaMode == 4)) {
         if (D_801BDAA4 != 0) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;
@@ -292,7 +292,7 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
         if (func_801A5100() == 4) {
             if (!(gSaveContext.weekEventReg[87] & 1)) {
                 gSaveContext.weekEventReg[87] |= 1;
-                if (func_80114E90()) {
+                if (Interface_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.

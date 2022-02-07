@@ -98,6 +98,9 @@
         <DList Name="object_knight_DL_0189F0" Offset="0x189F0" />
         <DList Name="object_knight_DL_018AF0" Offset="0x18AF0" />
         <TextureAnimation Name="object_knight_Matanimheader_018BC4" Offset="0x18BC4" />
+        <Array Name="object_knight_Vtx_018BD0" Count="18" Offset="0x18BD0">
+            <Vtx/>
+        </Array>
         <DList Name="object_knight_DL_018CF0" Offset="0x18CF0" />
         <DList Name="object_knight_DL_018DE0" Offset="0x18DE0" />
         <DList Name="object_knight_DL_018E50" Offset="0x18E50" />
