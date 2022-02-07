@@ -7,7 +7,7 @@
 #include "z_bg_ingate.h"
 #include "objects/object_sichitai_obj/object_sichitai_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_10)
 
 #define THIS ((BgIngate*)thisx)
 
@@ -16,8 +16,7 @@ void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-Actor* func_80953A90(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId);
-
+Actor* BgIngate_findActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId);
 s32 func_80953BEC(BgIngate* this);
 void func_80953B40(BgIngate* this);
 void func_80953F8C(BgIngate* this, GlobalContext* globalCtx);
@@ -39,67 +38,73 @@ const ActorInit Bg_Ingate_InitVars = {
     (ActorFunc)BgIngate_Draw,
 };
 
-Actor* func_80953A90(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {
+/**
+ * @brief Searches for an actor based on the parameters given to the function. Returns Actor* of actor found or NULL
+ *
+ * @param this
+ * @param globalCtx
+ * @param actorCat - Category of Actor
+ * @param actorId - ID of actor to search for
+ * @return Actor*
+ */
+Actor* BgIngate_findActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {
     Actor* foundActor = NULL;
-    Actor* temp_v0;
+    Actor* tempActor;
 
     while (true) {
         foundActor = SubS_FindActor(globalCtx, foundActor, actorCat, actorId);
 
-        if ((foundActor == NULL) || (this != (BgIngate*)foundActor) && (foundActor->update != NULL)) {
+        if ((foundActor == NULL) || (((this != (BgIngate*)foundActor)) && (foundActor->update != NULL))) {
             break;
         }
 
-        temp_v0 = foundActor->next;
-        if (temp_v0 == NULL) {
+        tempActor = foundActor->next;
+        if (tempActor == NULL) {
             foundActor = NULL;
             break;
         }
-        foundActor = temp_v0;
+        foundActor = tempActor;
     }
 
     return foundActor;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/func_80953B40.s")
-// void func_80953B40(BgIngate* this) {
-//     s32 temp_t8;
-//     u16 temp_t7;
+void func_80953B40(BgIngate* this) {
+    s32 temp;
 
-//     if ((gSaveContext.eventInf[3] & 0x20) == 0) {
-//         this->unk180 = 0xFA0;
-//         this->unk168 = 4;
-//     } else {
-//         this->unk180 = 0x7D0;
-//         this->unk168 = 1;
-//     }
-//     this->unk188 = 2;
-//     this->unk18C = 0;
-//     temp_t7 = this->unk160 & ~1;
-//     temp_t8 = temp_t7 & 0xFFFF;
-//     this->unk160 = temp_t7;
-//     this->unk184 = (s32)this->unk180 / (s32)(this->unk164->count - 2);
-//     this->unk160 = temp_t8 & ~2;
-// }
+    if ((gSaveContext.eventInf[3] & 0x20) == 0) {
+        this->unk180 = 0xFA0;
+        this->unk168 = 4;
+    } else {
+        this->unk180 = 0x7D0;
+        this->unk168 = 1;
+    }
+    temp = this->unk164->count - 2;
+    this->unk184 = this->unk180 / temp;
+    this->unk188 = 2;
+    this->unk18C = 0;
+    this->unk160 &= ~0x1;
+    this->unk160 &= ~0x2;
+}
 
 s32 func_80953BEC(BgIngate* this) {
     f32 sp74[265];
     Vec3f sp68;
     Vec3f sp5C;
-    Vec3f sp50;
-    s16 temp_v0;
+    Vec3f zeroVec;
+    s16 yaw;
 
     func_8013AF00(sp74, 3, this->unk164->count + 3);
     if ((this->unk160 & 1) == 0) {
-        sp50 = gZeroVec3f;
+        zeroVec = gZeroVec3f;
         func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
-                      &sp50, this->unk168);
+                      &zeroVec, this->unk168);
         this->unk160 |= 1;
     } else {
-        sp50 = this->unk170;
+        zeroVec = this->unk170;
     }
-    this->dyna.actor.world.pos.x = sp50.x;
-    this->dyna.actor.world.pos.z = sp50.z;
+    this->dyna.actor.world.pos.x = zeroVec.x;
+    this->dyna.actor.world.pos.z = zeroVec.z;
     this->unk170 = gZeroVec3f;
     if (func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
                       &this->unk170, this->unk168) != 0) {
@@ -107,12 +112,12 @@ s32 func_80953BEC(BgIngate* this) {
     } else {
         sp68 = this->dyna.actor.world.pos;
         sp5C = this->unk170;
-        temp_v0 = Math_Vec3f_Yaw(&sp68, &sp5C);
-        this->dyna.actor.world.rot.y = temp_v0;
-        this->dyna.actor.shape.rot.y = temp_v0;
+        yaw = Math_Vec3f_Yaw(&sp68, &sp5C);
+        this->dyna.actor.world.rot.y = yaw;
+        this->dyna.actor.shape.rot.y = yaw;
     }
 
-    return 0;
+    return false;
 }
 
 s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
@@ -125,14 +130,17 @@ s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
     }
     func_800DFAC8(camera, 0x2F);
     globalCtx->unk_1887C = 0x63;
+
     return false;
 }
 
 void func_80953E38(GlobalContext* globalCtx) {
     func_800DFAC8(Play_GetCamera(globalCtx, 0), 1);
+
     if ((gSaveContext.eventInf[3] & 0x20) == 0) {
         gSaveContext.eventInf[4] &= 0xFD;
     }
+
     globalCtx->unk_1887C = -1;
 }
 
@@ -171,12 +179,15 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
     Camera* camera = Play_GetCamera(globalCtx, 0);
 
     if ((gSaveContext.eventInf[4] & 1) == 0) {
+
         if (!(gSaveContext.eventInf[3] & 0x20) && ((this->unk160 & 0x10) != 0) && (this->unk16C == 0)) {
             this->dyna.actor.textId = 0x9E3;
             func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
             this->unk160 &= ~0x10;
         }
+
         if ((this->unk160 & 2) != 0) {
+
             if (this->unk164->unk1 != 0xFF) {
                 func_80953E38(globalCtx);
                 func_800B7298(globalCtx, &this->dyna.actor, 7);
@@ -186,7 +197,8 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
                 gSaveContext.weekEventReg[0x5A] |= 0x40;
                 this->actionFunc = func_809543D4;
             } else {
-                if ((gSaveContext.eventInf[3] & 0x20) == 0) {
+                
+                if (!(gSaveContext.eventInf[3] & 0x20)) {
                     gSaveContext.eventInf[4] &= 0xFD;
                 } else {
                     gSaveContext.eventInf[4] |= 1;
@@ -202,11 +214,11 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
             func_800DFAC8(camera, 1);
-            player->stateFlags1 |= 0x20;
+            player->stateFlags1 |= ACTOR_FLAG_20;
             globalCtx->actorCtx.unk5 &= ~0x4;
         } else {
             func_800DFAC8(camera, 0x2F);
-            player->stateFlags1 &= ~0x20;
+            player->stateFlags1 &= ~ACTOR_FLAG_20;
         }
     }
     this->unk16E = ActorCutscene_GetCurrentIndex();
@@ -303,64 +315,64 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Ingate/BgIngate_Init.s")
-// void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx) {
-//     Vec3f sp20;
-//     s32 phi_a2;
-//     Vec3s* sp38;
-//     Vec3f sp2C;
-//     BgIngate* this = THIS;
+void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    BgIngate* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
+    s32 phi_a2;
+    Vec3s* sp38;
+    Vec3f sp2C;
+    Vec3f sp20;
 
-//     if (func_80953A90(this, globalCtx, ACTORCAT_BG, ACTOR_BG_INGATE) == 0) {
-//         DynaPolyActor_Init(&this->dyna, 3);
-//         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_sichitai_obj_Colheader_0016DC);
-//         this->unk160 = 0;
-//         this->unk160 |= 0x8;
-//         this->unk160 |= 0x10;
-//         Actor_SetScale(&this->dyna.actor, 1.0f);
-//         this->unk164 = func_8013BB34(globalCtx, this->dyna.actor.params & 0xFF, 0);
-//         this->dyna.actor.room = -1;
-//         if ((gSaveContext.weekEventReg[0x14] & 2) != 0) {
-//             gSaveContext.weekEventReg[0x5A] &= 0xBF;
-//         }
-//         if ((!(gSaveContext.eventInf[3] & 0x20)) && (gSaveContext.weekEventReg[0x5A] & 0x40)) {
-//             phi_a2 = 1;
-//             this->unk16C = 1;
-//             this->actionFunc = func_809541B8;
-//         } else {
-//             phi_a2 = 0;
-//             if (globalCtx->curSpawn == 6) {
-//                 func_80953F14(this, globalCtx);
-//                 if (gSaveContext.eventInf[3] & 0x20) {
-//                     func_80112AFC(globalCtx);
-//                 } else {
-//                     gSaveContext.eventInf[4] |= 2;
-//                 }
-//             } else {
-//                 this->actionFunc = func_80953F8C;
-//             }
-//         }
-//         this->unk164 = func_8013BB34(globalCtx, this->dyna.actor.params & 0xFF, phi_a2);
-//         if (this->unk164 != 0) {
-//             sp38 = Lib_SegmentedToVirtual(this->unk164->points);
-//             Math_Vec3s_ToVec3f(&sp20, &sp38[0]);
-//             Math_Vec3s_ToVec3f(&sp2C, &sp38[1]);
-//             this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&sp2C, &sp20);
-//             this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
-//             this->dyna.actor.world.pos.x = sp2C.x;
-//             this->dyna.actor.world.pos.y = -15.0f;
-//             this->dyna.actor.world.pos.z = sp2C.z;
-//         }
-//         this->unk164 = func_8013BB34(globalCtx, this->dyna.actor.params & 0xFF, 0);
-//         return;
-//     }
-//     Actor_MarkForDeath(&this->dyna.actor);
-// }
+    if (BgIngate_findActor(this, globalCtx, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
+        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gSichitaiBoatCol);
+        this->unk160 = 0;
+        this->unk160 |= 0x8;
+        this->unk160 |= 0x10;
+        Actor_SetScale(&this->dyna.actor, 1.0f);
+        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->dyna.actor.room = -1;
+        if (gSaveContext.weekEventReg[0x14] & 2) {
+            gSaveContext.weekEventReg[0x5A] &= 0xBF;
+        }
+        if ((!(gSaveContext.eventInf[3] & 0x20)) && (gSaveContext.weekEventReg[0x5A] & 0x40)) {
+            phi_a2 = 1;
+            this->unk16C = 1;
+            this->actionFunc = func_809541B8;
+        } else {
+            phi_a2 = 0;
+            if (globalCtx->curSpawn == 6) {
+                func_80953F14(this, globalCtx);
+                if (gSaveContext.eventInf[3] & 0x20) {
+                    func_80112AFC(globalCtx);
+                } else {
+                    gSaveContext.eventInf[4] |= 2;
+                }
+            } else {
+                this->actionFunc = func_80953F8C;
+            }
+        }
+        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
+        if (this->unk164 != 0) {
+            sp38 = Lib_SegmentedToVirtual(this->unk164->points);
+            Math_Vec3s_ToVec3f(&sp2C, &sp38[0]);
+            Math_Vec3s_ToVec3f(&sp20, &sp38[1]);
+            this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&sp2C, &sp20);
+            this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
+            this->dyna.actor.world.pos.x = sp2C.x;
+            this->dyna.actor.world.pos.y = -15.0f;
+            this->dyna.actor.world.pos.z = sp2C.z;
+        }
+        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+    } else {
+        Actor_MarkForDeath(&this->dyna.actor);
+    }
+}
 
 void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgIngate* this = THIS;
 
-    if ((this->unk160 & 8) != 0) {
+    if (this->unk160 & 8) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -373,8 +385,10 @@ void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_sichitai_obj_DL_0006B0);
+    gSPDisplayList(POLY_OPA_DISP++, gSichitaiBoat);
+    
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

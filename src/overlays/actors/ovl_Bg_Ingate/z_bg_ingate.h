@@ -7,11 +7,12 @@ struct BgIngate;
 
 typedef void (*BgIngateActionFunc)(struct BgIngate*, GlobalContext*);
 
+#define BGINGATE_GET_FF(thisx) ((thisx)->params & 0xFF)
+
 typedef struct BgIngate {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgIngateActionFunc actionFunc;
     /* 0x160 */ u16 unk160;
-    /* 0x162 */ char pad162[2];
     /* 0x164 */ Path *unk164;
     /* 0x168 */ s16 unk168;
     /* 0x16A */ s16 unk16A;
