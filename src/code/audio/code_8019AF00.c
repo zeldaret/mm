@@ -125,7 +125,7 @@ u16 D_801FD438;
 
 // AudioOcarina bss
 OcarinaStaff sPlayingStaff;
-OcarinaStaff sDisplayedStaff;
+OcarinaStaff sPlaybackStaff;
 OcarinaStaff sRecordingStaff;
 u32 sOcarinaUpdateTaskCurrent;
 OcarinaControlStick sOcarinaInputStickRel;
@@ -143,7 +143,7 @@ u8 sOcarinaStaffPlayingPos;
 u16 sMusicStaffPos[OCARINA_SONG_MAX];
 u16 sMusicStaffCurHeldLength[OCARINA_SONG_MAX];
 u16 sMusicStaffExpectedLength[OCARINA_SONG_MAX];
-u8 sMusicStaffExpectedNoteIdx[OCARINA_SONG_MAX]; // Next required noteIdx in song playback
+u8 sMusicStaffExpectedPitch[OCARINA_SONG_MAX]; // Next required pitch in song playback
 u8 D_801FD518[OCARINA_SONG_MAX];
 u32 D_801FD530[OCARINA_SONG_MAX];
 OcarinaNote sRecordingSongNote;
@@ -982,24 +982,24 @@ NatureAmbienceDataIO sNatureAmbienceData[20] = {
 // AudioOcarina Data
 u8 sIsOcarinaInputEnabled = false;
 s8 sOcarinaInstrumentId = OCARINA_INSTRUMENT_OFF;
-u8 sCurOcarinaNoteIdx = NOTE_NONE;
-u8 sPrevOcarinaNoteIdx = 0;
+u8 sCurOcarinaPitch = OCARINA_PITCH_NONE;
+u8 sPrevOcarinaPitch = 0;
 u8 sCurOcarinaButtonIdx = 0;
-u8 sMusicStaffPrevNoteIdx = 0;
+u8 sMusicStaffPrevPitch = 0;
 f32 sCurOcarinaBendFreq = 1.0f;
 f32 sDefaultOcarinaVolume = 0.68503935f;
 s8 sCurOcarinaBendIdx = 0;
 s8 sCurOcarinaVolume = 0x57;
 s8 sCurOcarinaVibrato = 0;
-u8 sDisplayedState = 0;
+u8 sPlaybackState = 0;
 u8 D_801D6FE4 = 0xFF;
 u8 D_801D6FE8 = 0xFF;
 u32 sOcarinaFlags = 0;
-s32 sDisplayedNoteTimer = 0;
-u16 sDisplayedNotePos = 0;
-u16 sDisplayedStaffPos = 0;
+s32 sPlaybackNoteTimer = 0;
+u16 sPlaybackNotePos = 0;
+u16 sPlaybackStaffPos = 0;
 u32 sPrevOcarinaSongFlags = 0; // Stores sOcarinaFlags but never used
-u8 sDisplayedNoteValue = NOTE_NONE;
+u8 sPlaybackNoteValue = OCARINA_PITCH_NONE;
 u8 sNotePlaybackVolume = 0;
 u8 sNotePlaybackVibrato = 0;
 s8 sNotePlaybackBend = 0;
@@ -1008,17 +1008,18 @@ f32 sNormalizedNotePlaybackVolume = 1.0f;
 u32 sOcarinaPlaybackTaskStart = 0;
 u32 sOcarinaWallCounter = 0;
 u8 sCurOcarinaSong[8] = {
-    NOTE_C4, NOTE_C4, NOTE_C4, NOTE_C4, NOTE_C4, NOTE_C4, NOTE_C4, NOTE_C4,
+    OCARINA_PITCH_C4, OCARINA_PITCH_C4, OCARINA_PITCH_C4, OCARINA_PITCH_C4,
+    OCARINA_PITCH_C4, OCARINA_PITCH_C4, OCARINA_PITCH_C4, OCARINA_PITCH_C4,
 };
 u8 sOcarinaSongAppendPos = 0;
 u8 sOcarinaSongStartingPos = 0;
 
 u8 sButtonToNoteMap[5] = {
-    NOTE_D4, // OCARINA_BTN_A
-    NOTE_F4, // OCARINA_BTN_C_DOWN
-    NOTE_A4, // OCARINA_BTN_C_RIGHT
-    NOTE_B4, // OCARINA_BTN_C_LEFT
-    NOTE_D5, // OCARINA_BTN_C_UP
+    OCARINA_PITCH_D4, // OCARINA_BTN_A
+    OCARINA_PITCH_F4, // OCARINA_BTN_C_DOWN
+    OCARINA_PITCH_A4, // OCARINA_BTN_C_RIGHT
+    OCARINA_PITCH_B4, // OCARINA_BTN_C_LEFT
+    OCARINA_PITCH_D5, // OCARINA_BTN_C_UP
 };
 
 u8 sOcaMemoryGameAppendPos = 0;
@@ -1027,393 +1028,393 @@ u8 sOcaMemoryGameNumNotes[] = { 5, 6, 8 };
 OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
     // 0: Sonata of Awakening
     {
-        { NOTE_D5, 19, 92, 0, 0, 0 },
-        { NOTE_B4, 19, 90, 0, 0, 0 },
-        { NOTE_D5, 19, 90, 0, 0, 0 },
-        { NOTE_B4, 38, 90, 0, 0, 0 },
-        { NOTE_D4, 39, 92, 0, 0, 0 },
-        { NOTE_A4, 76, 89, 0, 0, 0 },
-        { NOTE_D4, 77, 82, 0, 0, 0 },
-        { NOTE_NONE, 0, 86, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 19, 92, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 19, 90, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 19, 90, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 38, 90, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 39, 92, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 76, 89, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 77, 82, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 86, 0, 0, 0 },
     },
 
     // 1: Goron Lullaby
     {
-        { NOTE_D4, 41, 80, 0, 0, 0 },
-        { NOTE_A4, 40, 72, 0, 0, 0 },
-        { NOTE_B4, 39, 84, 0, 0, 0 },
-        { NOTE_D4, 42, 76, 0, 0, 0 },
-        { NOTE_A4, 40, 84, 0, 0, 0 },
-        { NOTE_B4, 39, 76, 0, 0, 0 },
-        { NOTE_A4, 41, 84, 0, 0, 0 },
-        { NOTE_D4, 80, 76, 0, 0, 0 },
-        { NOTE_NONE, 40, 76, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 41, 80, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 40, 72, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 39, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 42, 76, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 40, 84, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 39, 76, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 41, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 80, 76, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 40, 76, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 2: New Wave Bossa Nova
     {
-        { NOTE_B4, 64, 74, 0, 0, 0 },
-        { NOTE_D5, 13, 88, 0, 0, 0 },
-        { NOTE_B4, 12, 90, 0, 0, 0 },
-        { NOTE_A4, 78, 88, 0, 0, 0 },
-        { NOTE_F4, 12, 76, 0, 0, 0 },
-        { NOTE_B4, 13, 76, 0, 0, 0 },
-        { NOTE_A4, 114, 76, 6, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 64, 74, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 13, 88, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 12, 90, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 78, 88, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 12, 76, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 13, 76, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 114, 76, 6, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 3: Elegy of Emptyness
     {
-        { NOTE_A4, 85, 93, 0, 0, 0 },
-        { NOTE_B4, 43, 91, 0, 0, 0 },
-        { NOTE_A4, 43, 93, 0, 0, 0 },
-        { NOTE_F4, 21, 88, 0, 0, 0 },
-        { NOTE_A4, 21, 88, 0, 0, 0 },
-        { NOTE_D5, 43, 101, 0, 0, 0 },
-        { NOTE_B4, 85, 95, 0, 0, 0 },
-        { NOTE_NONE, 0, 94, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 85, 93, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 43, 91, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 43, 93, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 21, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 21, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 43, 101, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 85, 95, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 94, 0, 0, 0 },
     },
 
     // 4: Oath to Order
     {
-        { NOTE_A4, 97, 104, 0, 0, 0 },
-        { NOTE_F4, 48, 88, 0, 0, 0 },
-        { NOTE_D4, 49, 78, 0, 0, 0 },
-        { NOTE_F4, 49, 78, 0, 0, 0 },
-        { NOTE_A4, 48, 94, 0, 0, 0 },
-        { NOTE_D5, 97, 100, 0, 0, 0 },
-        { NOTE_NONE, 0, 96, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 97, 104, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 48, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 49, 78, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 49, 78, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 48, 94, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 97, 100, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 96, 0, 0, 0 },
 
     },
 
     // 5: Sarias Song
     {
-        { NOTE_F4, 17, 84, 0, 0, 0 },
-        { NOTE_A4, 17, 88, 0, 0, 0 },
-        { NOTE_B4, 34, 80, 0, 0, 0 },
-        { NOTE_F4, 17, 84, 0, 0, 0 },
-        { NOTE_A4, 17, 88, 0, 0, 0 },
-        { NOTE_B4, 136, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 17, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 17, 88, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 34, 80, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 17, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 17, 88, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 136, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 6: Song of Time
     {
-        { NOTE_A4, 32, 84, 0, 0, 0 },
-        { NOTE_D4, 65, 88, 0, 0, 0 },
-        { NOTE_F4, 33, 80, 0, 0, 0 },
-        { NOTE_A4, 32, 84, 0, 0, 0 },
-        { NOTE_D4, 65, 88, 0, 0, 0 },
-        { NOTE_F4, 99, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 32, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 65, 88, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 33, 80, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 32, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 65, 88, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 99, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 7: Song of Healing
     {
-        { NOTE_B4, 32, 88, 0, 0, 0 },
-        { NOTE_A4, 33, 88, 0, 0, 0 },
-        { NOTE_F4, 33, 69, 0, 0, 0 },
-        { NOTE_B4, 32, 94, 0, 0, 0 },
-        { NOTE_A4, 33, 88, 0, 0, 0 },
-        { NOTE_F4, 121, 86, 2, 0, 0 },
-        { NOTE_NONE, 10, 84, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 32, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 88, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 33, 69, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 32, 94, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 88, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 121, 86, 2, 0, 0 },
+        { OCARINA_PITCH_NONE, 10, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 8: Eponas Song
     {
-        { NOTE_D5, 18, 84, 0, 0, 0 },
-        { NOTE_B4, 18, 88, 0, 0, 0 },
-        { NOTE_A4, 72, 80, 0, 0, 0 },
-        { NOTE_D5, 18, 84, 0, 0, 0 },
-        { NOTE_B4, 18, 88, 0, 0, 0 },
-        { NOTE_A4, 144, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 18, 84, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 18, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 72, 80, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 18, 84, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 18, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 144, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 9: Song of Soaring
     {
-        { NOTE_F4, 18, 84, 0, 0, 0 },
-        { NOTE_B4, 18, 80, 0, 0, 0 },
-        { NOTE_D5, 36, 94, 0, 0, 0 },
-        { NOTE_F4, 18, 73, 0, 0, 0 },
-        { NOTE_B4, 18, 76, 0, 0, 0 },
-        { NOTE_D5, 108, 96, 2, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 18, 84, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 18, 80, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 36, 94, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 18, 73, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 18, 76, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 108, 96, 2, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 10: Song of Storms
     {
-        { NOTE_D4, 11, 84, 0, 0, 0 },
-        { NOTE_F4, 11, 88, 0, 0, 0 },
-        { NOTE_D5, 45, 80, 0, 0, 0 },
-        { NOTE_D4, 11, 84, 0, 0, 0 },
-        { NOTE_F4, 11, 88, 0, 0, 0 },
-        { NOTE_D5, 90, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 11, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 11, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 45, 80, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 11, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 11, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 90, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 11: Suns Song
     {
-        { NOTE_A4, 12, 84, 0, 0, 0 },
-        { NOTE_F4, 13, 88, 0, 0, 0 },
-        { NOTE_D5, 29, 80, 2, 0, 0 },
-        { NOTE_NONE, 9, 84, 0, 0, 0 },
-        { NOTE_A4, 12, 84, 0, 0, 0 },
-        { NOTE_F4, 13, 88, 0, 0, 0 },
-        { NOTE_D5, 120, 80, 3, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 12, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 13, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 29, 80, 2, 0, 0 },
+        { OCARINA_PITCH_NONE, 9, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 12, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 13, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 120, 80, 3, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 12: Inverted Song of Time
     {
-        { NOTE_F4, 32, 84, 0, 0, 0 },
-        { NOTE_D4, 65, 88, 0, 0, 0 },
-        { NOTE_A4, 33, 80, 0, 0, 0 },
-        { NOTE_F4, 32, 84, 0, 0, 0 },
-        { NOTE_D4, 65, 88, 0, 0, 0 },
-        { NOTE_A4, 99, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 32, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 65, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 80, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 32, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 65, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 99, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 13: Song of Double Time
     {
-        { NOTE_A4, 29, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 84, 0, 0, 0 },
-        { NOTE_A4, 30, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 84, 0, 0, 0 },
-        { NOTE_D4, 29, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 84, 0, 0, 0 },
-        { NOTE_D4, 30, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 84, 0, 0, 0 },
-        { NOTE_F4, 29, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 84, 0, 0, 0 },
-        { NOTE_F4, 99, 84, 0, 0, 0 },
-        { NOTE_NONE, 0, 0, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 29, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 30, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 29, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 30, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 29, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 99, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 0, 0, 0, 0 },
     },
 
     // 14: Goron Lullaby Intro
     {
-        { NOTE_D4, 32, 78, 0, 0, 0 },
-        { NOTE_A4, 33, 90, 0, 0, 0 },
-        { NOTE_B4, 33, 87, 0, 0, 0 },
-        { NOTE_D4, 32, 92, 0, 0, 0 },
-        { NOTE_A4, 33, 86, 0, 0, 0 },
-        { NOTE_B4, 130, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 32, 78, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 90, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 33, 87, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 32, 92, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 86, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 130, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 15: Milk Bar Jam "Ballad of the Wind Fish" Human
     {
-        { NOTE_D5, 89, 80, 0, 0, 0 },
-        { NOTE_A4, 41, 72, 0, 0, 0 },
-        { NOTE_B4, 22, 84, 0, 0, 0 },
-        { NOTE_A4, 91, 76, 0, 0, 0 },
-        { NOTE_NONE, 30, 66, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 89, 80, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 41, 72, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 22, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 91, 76, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 30, 66, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 16: Milk Bar Jam "Ballad of the Wind Fish" Goron
     {
-        { NOTE_D4, 52, 80, 0, 0, 0 },
-        { NOTE_NONE, 3, 66, 0, 0, 0 },
-        { NOTE_D4, 8, 72, 0, 0, 0 },
-        { NOTE_NONE, 3, 66, 0, 0, 0 },
-        { NOTE_D4, 30, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 66, 0, 0, 0 },
-        { NOTE_F4, 34, 76, 0, 0, 0 },
-        { NOTE_D4, 52, 80, 0, 0, 0 },
-        { NOTE_NONE, 3, 66, 0, 0, 0 },
-        { NOTE_D4, 8, 72, 0, 0, 0 },
-        { NOTE_NONE, 3, 66, 0, 0, 0 },
-        { NOTE_D4, 30, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 66, 0, 0, 0 },
-        { NOTE_A4, 34, 76, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 52, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 8, 72, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 30, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 66, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 34, 76, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 52, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 8, 72, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 30, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 66, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 34, 76, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 17: Milk Bar Jam "Ballad of the Wind Fish" Zora
     {
-        { NOTE_D5, 11, 80, 0, 0, 0 },
-        { NOTE_A4, 11, 72, 0, 0, 0 },
-        { NOTE_F4, 11, 84, 0, 0, 0 },
-        { NOTE_D4, 100, 76, 0, 0, 0 },
-        { NOTE_D5, 11, 84, 0, 0, 0 },
-        { NOTE_B4, 11, 76, 0, 0, 0 },
-        { NOTE_A4, 11, 72, 0, 0, 0 },
-        { NOTE_F4, 100, 84, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 11, 80, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 11, 72, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 11, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 100, 76, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 11, 84, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 11, 76, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 11, 72, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 100, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 18: Milk Bar Jam "Ballad of the Wind Fish" Deku
     {
-        { NOTE_A4, 54, 80, 0, 0, 0 },
-        { NOTE_D4, 77, 72, 0, 0, 0 },
-        { NOTE_F4, 19, 84, 0, 0, 0 },
-        { NOTE_B4, 20, 76, 0, 0, 0 },
-        { NOTE_A4, 78, 84, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 54, 80, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 77, 72, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 19, 84, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 20, 76, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 78, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 19: Evan HP (Zora Band Leader) Song Part 1
     {
-        { NOTE_A4, 33, 100, 0, 0, 0 },
-        { NOTE_NONE, 3, 92, 0, 0, 0 },
-        { NOTE_A4, 37, 104, 0, 0, 0 },
-        { NOTE_F4, 24, 100, 0, 0, 0 },
-        { NOTE_D4, 70, 97, 0, 0, 0 },
-        { NOTE_NONE, 3, 96, 0, 0, 0 },
-        { NOTE_D4, 12, 93, 0, 0, 0 },
-        { NOTE_F4, 12, 100, 0, 0, 0 },
-        { NOTE_A4, 12, 62, 0, 0, 0 },
-        { NOTE_D4, 170, 91, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 100, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 92, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 37, 104, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 24, 100, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 70, 97, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 96, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 12, 93, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 12, 100, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 12, 62, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 170, 91, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 20: Evan HP (Zora Band Leader) Song Part 2
     {
-        { NOTE_B4, 33, 107, 0, 0, 0 },
-        { NOTE_NONE, 3, 100, 0, 0, 0 },
-        { NOTE_B4, 37, 104, 0, 0, 0 },
-        { NOTE_A4, 24, 97, 0, 0, 0 },
-        { NOTE_F4, 70, 104, 0, 0, 0 },
-        { NOTE_NONE, 3, 104, 0, 0, 0 },
-        { NOTE_F4, 12, 90, 0, 0, 0 },
-        { NOTE_A4, 12, 96, 0, 0, 0 },
-        { NOTE_B4, 12, 81, 0, 0, 0 },
-        { NOTE_F4, 170, 66, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 33, 107, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 100, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 37, 104, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 24, 97, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 70, 104, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 104, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 12, 90, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 12, 96, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 12, 81, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 170, 66, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // 21: Zeldas Lullaby
     {
-        { NOTE_B4, 51, 84, 0, 0, 0 },
-        { NOTE_D5, 25, 88, 0, 0, 0 },
-        { NOTE_A4, 78, 80, 0, 0, 0 },
-        { NOTE_B4, 51, 84, 0, 0, 0 },
-        { NOTE_D5, 25, 88, 0, 0, 0 },
-        { NOTE_A4, 100, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 51, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 25, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 78, 80, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 51, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 25, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 100, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // 22: Scarecrow
     {
-        { NOTE_D4, 3, 0, 0, 0, 0 },
-        { NOTE_NONE, 0, 255, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 3, 0, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 255, 0, 0, 0 },
     },
 
     // 23: Termina Field 2D Song Buttons Appearing on Wall (In OoT, this is Ocarina Memory Game)
     {
-        { NOTE_D4, 3, 0, 0, 0, 0 },
-        { NOTE_NONE, 0, 255, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 3, 0, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 255, 0, 0, 0 },
     },
 };
 
 OcarinaNote sOoTOcarinaSongNotes[9][20] = {
     // Minuet
     {
-        { NOTE_D4, 18, 86, 0, 0, 0 },
-        { NOTE_D5, 18, 92, 0, 0, 0 },
-        { NOTE_B4, 72, 86, 0, 0, 0 },
-        { NOTE_A4, 18, 80, 0, 0, 0 },
-        { NOTE_B4, 18, 88, 0, 0, 0 },
-        { NOTE_A4, 144, 86, 0, 0, 0 },
-        { NOTE_NONE, 0, 86, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 18, 86, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 18, 92, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 72, 86, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 18, 80, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 18, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 144, 86, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 86, 0, 0, 0 },
     },
 
     // Bolero
     {
-        { NOTE_F4, 15, 80, 0, 0, 0 },
-        { NOTE_D4, 15, 72, 0, 0, 0 },
-        { NOTE_F4, 15, 84, 0, 0, 0 },
-        { NOTE_D4, 15, 76, 0, 0, 0 },
-        { NOTE_A4, 15, 84, 0, 0, 0 },
-        { NOTE_F4, 15, 74, 0, 0, 0 },
-        { NOTE_A4, 15, 78, 0, 0, 0 },
-        { NOTE_F4, 135, 66, 0, 0, 0 },
-        { NOTE_NONE, 0, 66, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 15, 80, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 15, 72, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 15, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 15, 76, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 15, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 15, 74, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 15, 78, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 135, 66, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 66, 0, 0, 0 },
     },
 
     // Serenade
     {
-        { NOTE_D4, 36, 60, 0, 0, 0 },
-        { NOTE_F4, 36, 78, 0, 0, 0 },
-        { NOTE_A4, 33, 82, 0, 0, 0 },
-        { NOTE_NONE, 3, 82, 0, 0, 0 },
-        { NOTE_A4, 36, 84, 0, 0, 0 },
-        { NOTE_B4, 144, 90, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 36, 60, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 36, 78, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 82, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 82, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 36, 84, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 144, 90, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // Requiem
     {
-        { NOTE_D4, 45, 88, 0, 0, 0 },
-        { NOTE_F4, 23, 86, 0, 0, 0 },
-        { NOTE_D4, 22, 84, 0, 0, 0 },
-        { NOTE_A4, 45, 86, 0, 0, 0 },
-        { NOTE_F4, 45, 94, 0, 0, 0 },
-        { NOTE_D4, 180, 94, 0, 0, 0 },
-        { NOTE_NONE, 0, 94, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 45, 88, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 23, 86, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 22, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 45, 86, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 45, 94, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 180, 94, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 94, 0, 0, 0 },
     },
 
     // Nocturne
     {
-        { NOTE_B4, 36, 88, 0, 0, 0 },
-        { NOTE_A4, 33, 84, 0, 0, 0 },
-        { NOTE_NONE, 3, 84, 0, 0, 0 },
-        { NOTE_A4, 18, 82, 0, 0, 0 },
-        { NOTE_D4, 18, 60, 0, 0, 0 },
-        { NOTE_B4, 18, 90, 0, 0, 0 },
-        { NOTE_A4, 18, 88, 0, 0, 0 },
-        { NOTE_F4, 144, 96, 0, 0, 0 },
-        { NOTE_NONE, 0, 96, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 36, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 33, 84, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 3, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 18, 82, 0, 0, 0 },
+        { OCARINA_PITCH_D4, 18, 60, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 18, 90, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 18, 88, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 144, 96, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 96, 0, 0, 0 },
     },
 
     // Prelude
     {
-        { NOTE_D5, 15, 84, 0, 0, 0 },
-        { NOTE_A4, 45, 88, 0, 0, 0 },
-        { NOTE_D5, 15, 88, 0, 0, 0 },
-        { NOTE_A4, 15, 82, 0, 0, 0 },
-        { NOTE_B4, 15, 86, 0, 0, 0 },
-        { NOTE_D5, 60, 90, 0, 0, 0 },
-        { NOTE_NONE, 75, 90, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 15, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 45, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 15, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 15, 82, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 15, 86, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 60, 90, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 75, 90, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // Sarias
     {
-        { NOTE_F4, 17, 84, 0, 0, 0 },
-        { NOTE_A4, 17, 88, 0, 0, 0 },
-        { NOTE_B4, 34, 80, 0, 0, 0 },
-        { NOTE_F4, 17, 84, 0, 0, 0 },
-        { NOTE_A4, 17, 88, 0, 0, 0 },
-        { NOTE_B4, 136, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 17, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 17, 88, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 34, 80, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 17, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 17, 88, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 136, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // Zeldas Lullaby
     {
-        { NOTE_B4, 51, 84, 0, 0, 0 },
-        { NOTE_D5, 25, 88, 0, 0, 0 },
-        { NOTE_A4, 78, 80, 0, 0, 0 },
-        { NOTE_B4, 51, 84, 0, 0, 0 },
-        { NOTE_D5, 25, 88, 0, 0, 0 },
-        { NOTE_A4, 100, 80, 0, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 51, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 25, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 78, 80, 0, 0, 0 },
+        { OCARINA_PITCH_B4, 51, 84, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 25, 88, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 100, 80, 0, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 
     // Suns Song
     {
-        { NOTE_A4, 12, 84, 0, 0, 0 },
-        { NOTE_F4, 13, 88, 0, 0, 0 },
-        { NOTE_D5, 29, 80, 2, 0, 0 },
-        { NOTE_NONE, 9, 84, 0, 0, 0 },
-        { NOTE_A4, 12, 84, 0, 0, 0 },
-        { NOTE_F4, 13, 88, 0, 0, 0 },
-        { NOTE_D5, 120, 80, 3, 0, 0 },
-        { NOTE_NONE, 0, 90, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 12, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 13, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 29, 80, 2, 0, 0 },
+        { OCARINA_PITCH_NONE, 9, 84, 0, 0, 0 },
+        { OCARINA_PITCH_A4, 12, 84, 0, 0, 0 },
+        { OCARINA_PITCH_F4, 13, 88, 0, 0, 0 },
+        { OCARINA_PITCH_D5, 120, 80, 3, 0, 0 },
+        { OCARINA_PITCH_NONE, 0, 90, 0, 0, 0 },
     },
 };
 
@@ -1429,7 +1430,7 @@ u8 sOoTOcarinaSongsNumNotes[] = {
     6, // Suns Song
 };
 
-OcarinaNote* sDisplayedSong = sOcarinaSongNotes[OCARINA_SONG_SONATA];
+OcarinaNote* sPlaybackSong = sOcarinaSongNotes[OCARINA_SONG_SONATA];
 u8 sFrogsSongNotes[14] = {
     OCARINA_BTN_A,       OCARINA_BTN_C_LEFT,  OCARINA_BTN_C_RIGHT, OCARINA_BTN_C_DOWN, OCARINA_BTN_C_LEFT,
     OCARINA_BTN_C_RIGHT, OCARINA_BTN_C_DOWN,  OCARINA_BTN_A,       OCARINA_BTN_C_DOWN, OCARINA_BTN_A,
@@ -1439,7 +1440,7 @@ u8* gFrogsSongPtr = sFrogsSongNotes;
 u8 sRecordingState = OCARINA_RECORD_OFF;
 u8 sRecordSongPos = 0;
 u32 sOcarinaRecordTaskStart = 0;
-u8 sRecordOcarinaNoteIdx = 0;
+u8 sRecordOcarinaPitch = 0;
 u8 sRecordOcarinaVolume = 0;
 u8 sRecordOcarinaVibrato = 0;
 s8 sRecordOcarinaBendIdx = 0;
@@ -1451,8 +1452,8 @@ u32 D_801D8534 = 0;
 u8 sIsOcarinaNoteChanged = false;
 
 OcarinaNote sScarecrowsLongSongNotes[108] = {
-    { NOTE_NONE, 0, 0, 0, 0, 0 },
-    { NOTE_NONE, 0, 0, 0, 0, 0 },
+    { OCARINA_PITCH_NONE, 0, 0, 0, 0, 0 },
+    { OCARINA_PITCH_NONE, 0, 0, 0, 0, 0 },
 };
 
 OcarinaNote* gScarecrowLongSongPtr = sScarecrowsLongSongNotes;
@@ -1460,22 +1461,22 @@ u8* gScarecrowSpawnSongPtr = (u8*)&sOcarinaSongNotes[OCARINA_SONG_SCARECROW];
 OcarinaNote* sTerminaWallSongPtr = sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL];
 
 u8 sNoteToButtonMap[16] = {
-    OCARINA_BTN_A,                            // NOTE_C4
-    OCARINA_BTN_A,                            // NOTE_DFLAT4
-    OCARINA_BTN_A,                            // NOTE_D4
-    OCARINA_BTN_A,                            // NOTE_EFLAT4
-    OCARINA_BTN_C_DOWN,                       // NOTE_E4
-    OCARINA_BTN_C_DOWN,                       // NOTE_F4
-    OCARINA_BTN_C_DOWN,                       // NOTE_GFLAT4
-    OCARINA_BTN_C_RIGHT,                      // NOTE_G4
-    OCARINA_BTN_C_RIGHT,                      // NOTE_AFLAT4
-    OCARINA_BTN_C_RIGHT,                      // NOTE_A4
-    OCARINA_BTN_C_RIGHT + OCARINA_BTN_C_LEFT, // NOTE_BFLAT4: Interface/Overlap between C_RIGHT and C_LEFT
-    OCARINA_BTN_C_LEFT,                       // NOTE_B4
-    OCARINA_BTN_C_LEFT,                       // NOTE_C5
-    OCARINA_BTN_C_UP,                         // NOTE_DFLAT5
-    OCARINA_BTN_C_UP,                         // NOTE_D5
-    OCARINA_BTN_C_UP,                         // NOTE_EFLAT5
+    OCARINA_BTN_A,                            // OCARINA_PITCH_C4
+    OCARINA_BTN_A,                            // OCARINA_PITCH_DFLAT4
+    OCARINA_BTN_A,                            // OCARINA_PITCH_D4
+    OCARINA_BTN_A,                            // OCARINA_PITCH_EFLAT4
+    OCARINA_BTN_C_DOWN,                       // OCARINA_PITCH_E4
+    OCARINA_BTN_C_DOWN,                       // OCARINA_PITCH_F4
+    OCARINA_BTN_C_DOWN,                       // OCARINA_PITCH_GFLAT4
+    OCARINA_BTN_C_RIGHT,                      // OCARINA_PITCH_G4
+    OCARINA_BTN_C_RIGHT,                      // OCARINA_PITCH_AFLAT4
+    OCARINA_BTN_C_RIGHT,                      // OCARINA_PITCH_A4
+    OCARINA_BTN_C_RIGHT + OCARINA_BTN_C_LEFT, // OCARINA_PITCH_BFLAT4: Interface/Overlap between C_RIGHT and C_LEFT
+    OCARINA_BTN_C_LEFT,                       // OCARINA_PITCH_B4
+    OCARINA_BTN_C_LEFT,                       // OCARINA_PITCH_C5
+    OCARINA_BTN_C_UP,                         // OCARINA_PITCH_DFLAT5
+    OCARINA_BTN_C_UP,                         // OCARINA_PITCH_D5
+    OCARINA_BTN_C_UP,                         // OCARINA_PITCH_EFLAT5
 };
 
 // seqData written in the music macro language

@@ -382,6 +382,13 @@ Useful only for the unused `object_human`'s animation data.
   - `Name`: Required. Suxffixed by `Skel`.
   - `Type`: Required. Valid values: `Normal`, `Flex` and `Curve`.
   - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin`, `Curve` and `Legacy`.
+  - `EnumName`: Optional. The name of `typedef`'d limb enum.
+  - `LimbNone`: Optional. The name of the limb with index zero in the limb enum.
+  - `LimbMax`: Optional. The name of the max limb index in the limb enum.
+
+ZAPD is able to generate a limb enum by itself only if all the required data is provided. Providing some but not all the required data would trigger an error and the execution will halt.
+
+The required data is providing the `EnumName`, `LimbNone` and `LimbMax` attributes in the `Skeleton` or `LimbTable` node and the `EnumName` attribute in every `Limb` of this skeleton.
 
 ※ There are no restrictions in the `Type` and `LimbType` attributes besides the valid values, so any skeleton type can be combined with any limb type.
 
@@ -400,6 +407,11 @@ Useful only for the unused `object_human`'s animation data.
   - `Name`: Required. Suxffixed by `Skel`.
   - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin`, `Curve` and `Legacy`.
   - `Count`: Required. Amount of limbs. Integer.
+  - `EnumName`: Optional. The name of `typedef`'d limb enum.
+  - `LimbNone`: Optional. The name of the limb with index zero in the limb enum.
+  - `LimbMax`: Optional. The name of the max limb index in the limb enum.
+
+See [Skeleton](#skeleton) for info on the limb enum generation.
 
 -------------------------
 
@@ -415,6 +427,9 @@ Useful only for the unused `object_human`'s animation data.
 
   - `Name`: Required. Suxffixed by `Limb`.
   - `LimbType`: Required. Valid values: `Standard`, `LOD`, `Skin`, `Curve` and `Legacy`.
+  - `EnumName`: Optional. The name used for this limb in the limbs enum. It must be either present in every limb or in none.
+
+See [Skeleton](#skeleton) for info on the limb enum generation.
 
 -------------------------
 
