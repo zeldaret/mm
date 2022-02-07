@@ -165,7 +165,7 @@ static s32 animatedMaterialsVirtualized = false;
 void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFamos* this = THIS;
     Path* path;
-    s32 sTrue = 1;
+    s32 sTrue = 1; // required to be separate to match
     int i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -239,7 +239,7 @@ void func_808ACB58(EnFamos* this) {
         particlePtr->pos.x = (Math_SinS(randVelDirection) * 20.0f) + this->actor.world.pos.x;
         particlePtr->pos.y = this->actor.floorHeight;
         particlePtr->pos.z = (Math_CosS(randVelDirection) * 20.0f) + this->actor.world.pos.z;
-        particlePtr->scale = Rand_ZeroFloat(0.0015f) + (1 / 500.0f);
+        particlePtr->scale = Rand_ZeroFloat(0.0015f) + (2.0f * 0.001f);
     }
 }
 
@@ -265,8 +265,7 @@ void func_808ACD2C(EnFamos* this) {
         particlePtr->pos.x = Math_SinS(randVelDirection) * 20.0f + this->actor.world.pos.x;
         particlePtr->pos.y = randPlusMinusPoint5Scaled(60.0f) + (this->actor.world.pos.y + 40.0f);
         particlePtr->pos.z = Math_CosS(randVelDirection) * 20.0f + this->actor.world.pos.z;
-        // not quite 1/400 or 0.0025, 0xB -> 0xA
-        particlePtr->scale = Rand_ZeroFloat(0.002f) + 0.0025000002f;
+        particlePtr->scale = Rand_ZeroFloat(0.002f) + (2.5f * 0.001f);
     }
 }
 
@@ -460,14 +459,12 @@ void EnFamos_Alert(EnFamos* this, GlobalContext* globalCtx) {
     }
 }
 
-// start chasing player
 void EnFamos_SetupChase(EnFamos* this) {
     this->hoverClk = 0;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnFamos_Chase;
 }
 
-// start chasing player
 void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f abovePlayerPos;
@@ -490,7 +487,6 @@ void EnFamos_Chase(EnFamos* this, GlobalContext* globalCtx) {
     } else if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE ||
                this->unk1F0 < Actor_XZDistanceToPoint(&GET_PLAYER(globalCtx)->actor, &this->unk200) ||
                Actor_IsFacingPlayer(&this->actor, 0x6000) == 0) {
-        // drop agro?
         EnFamos_SetupDropAgro(this);
     }
 }
@@ -517,7 +513,6 @@ void EnFamos_SetupAttack(EnFamos* this) {
 }
 
 void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
-//void func_808AD8B8(EnFamos* this, GlobalContext* globalCtx) {
     s32 hitFloor;
     u32 surfaceType;
 
@@ -535,7 +530,7 @@ void EnFamos_Attack(EnFamos* this, GlobalContext* globalCtx) {
             func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 15, 10);
             func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             func_808ACB58(this);
-            // crator
+            // spawn crator actor on floor
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x0);
 
@@ -598,14 +593,14 @@ void func_808ADB70(EnFamos* this, GlobalContext* globalCtx) {
             func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
         }
     }
+
     if (this->unk1EC < this->actor.world.pos.y || this->actor.bgCheckFlags & 0x10) { // touching ceiling
         this->actor.speedXZ = 0.0f;
         EnFamos_SetupChase(this);
     }
 }
 
-
-// scanning for player
+// scanning side-to-side for player
 void EnFamos_SetupDropAgro(EnFamos* this) {
     this->delayTimer = 60;
     this->actionFunc = EnFamos_DropAgro;
@@ -616,7 +611,7 @@ void EnFamos_DropAgro(EnFamos* this, GlobalContext* globalCtx) {
 
     EnFamos_UpdateBobbingHeight(this);
     this->delayTimer--;
-    if (EnFamos_IsPlayerSeen(this, globalCtx) != 0) {
+    if (EnFamos_IsPlayerSeen(this, globalCtx)) {
         EnFamos_SetupAlert(this);
     } else if (this->delayTimer == 0) {
         EnFamos_SetupTurnHome(this);
@@ -627,7 +622,6 @@ void EnFamos_DropAgro(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 // 8040ECB4 in kz
-// every frame of rising away from
 void func_808ADD20(EnFamos* this) {
     this->emblemCollider.base.acFlags &= ~AC_ON;
     this->delayTimer = 20;
