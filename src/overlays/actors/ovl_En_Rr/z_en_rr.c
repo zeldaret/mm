@@ -307,7 +307,7 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
         if (((this->unk_1E2 == 0) && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) &&
             (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) == EQUIP_SHIELD)) {
             sp34 = true;
-            this->unk_1E2 = func_8012ED78(globalCtx, 1);
+            this->unk_1E2 = Inventory_DeleteEquipment(globalCtx, 1);
         } else {
             sp34 = false;
         }

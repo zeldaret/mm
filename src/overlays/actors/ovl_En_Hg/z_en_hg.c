@@ -357,7 +357,7 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
         } else {
             D_80BD00C8 = false;
         }
-        if (globalCtx->msgCtx.unk1202A == 3) {
+        if (globalCtx->msgCtx.ocarinaMode == 3) {
             if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
                 if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                     this->unk218 = 3;

@@ -321,7 +321,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
 }
 
 s32 func_80BED2FC(EnAkindonuts* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return 2;
     }
 
@@ -335,7 +335,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
 }
 
 s32 func_80BED35C(EnAkindonuts* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return 2;
     }
 
@@ -414,7 +414,7 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C &= ~0x1;
                         this->unk_32C |= 0x40;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -497,7 +497,7 @@ void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -592,7 +592,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -675,7 +675,7 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -765,7 +765,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -843,7 +843,7 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x161A;
                         this->actionFunc = func_80BEF360;
@@ -926,7 +926,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x1629;
                         this->actionFunc = func_80BEF360;
@@ -1004,7 +1004,7 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -1235,7 +1235,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
         if (func_80147624(globalCtx)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_33C = 0;
                 this->actionFunc = func_80BEEE10;
@@ -1243,7 +1243,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
                 this->unk_32C &= ~0x20;
                 this->actor.flags &= ~1;
                 this->unk_32C &= ~0x4;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_338 = 8;
                 this->unk_33C = 0;
@@ -1275,7 +1275,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
 
 void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_33C = 0;
         this->actionFunc = func_80BEEE10;
@@ -1302,7 +1302,7 @@ void func_80BEF20C(EnAkindonuts* this, GlobalContext* globalCtx) {
     if ((sp27 == 5) && func_80147624(globalCtx)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = func_80BEF360;
         } else {

@@ -112,7 +112,7 @@ s8 func_80997A90(s16 arg0, s16 arg1) {
     if ((arg0 == 0) || ((arg0 != 1) && (arg0 != 2) && (arg0 == 3))) {
         phi_v1 = 0;
     } else {
-        phi_v1 = (gSaveContext.roomInf[126][1] >> (arg1 * 3)) & 7;
+        phi_v1 = (gSaveContext.unk_EC4 >> (arg1 * 3)) & 7;
     }
     return phi_v1;
 }
@@ -273,7 +273,7 @@ void func_80998040(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
-    switch (globalCtx->msgCtx.unk1202A) {
+    switch (globalCtx->msgCtx.ocarinaMode) {
         case 3:
             switch (globalCtx->msgCtx.unk1202E) {
                 case 7:
@@ -388,8 +388,8 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
-        gSaveContext.roomInf[126][1] =
-            (gSaveContext.roomInf[126][1] & ~(7 << (this->unk_198 * 3))) | ((this->unk_194 & 7) << (this->unk_198 * 3));
+        gSaveContext.unk_EC4 =
+            ((u32)gSaveContext.unk_EC4 & ~(7 << (this->unk_198 * 3))) | ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {
@@ -450,7 +450,7 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
-                if (((gSaveContext.roomInf[126][1] >> (i * 3)) & 7) != (u32)this->unk_194) {
+                if (((gSaveContext.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
                     phi_v0 = 0;
                 }
             }
@@ -1006,7 +1006,7 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGs* this = THIS;
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, globalCtx);

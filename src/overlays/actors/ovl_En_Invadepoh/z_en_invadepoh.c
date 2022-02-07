@@ -628,10 +628,9 @@ void func_80B439B0(s32 arg0, s32 arg1) {
     }
 
     if (!(arg0 & 1)) {
-        gSaveContext.roomInf[124][arg0 >> 1] = (gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
+        gSaveContext.unk_E88[arg0 >> 1] = (gSaveContext.unk_E88[arg0 >> 1] & 0xFFFF0000) | (arg1 & 0xFFFF);
     } else {
-        gSaveContext.roomInf[124][arg0 >> 1] =
-            (gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF) | ((arg1 & 0xFFFF) << 0x10);
+        gSaveContext.unk_E88[arg0 >> 1] = (gSaveContext.unk_E88[arg0 >> 1] & 0xFFFF) | ((arg1 & 0xFFFF) << 0x10);
     }
 }
 
@@ -639,19 +638,19 @@ s32 func_80B43A24(s32 arg0) {
     u32 phi_v1;
 
     if ((arg0 & 1) == 0) {
-        phi_v1 = gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF;
+        phi_v1 = gSaveContext.unk_E88[arg0 >> 1] & 0xFFFF;
     } else {
-        phi_v1 = (gSaveContext.roomInf[124][arg0 >> 1] & 0xFFFF0000) >> 0x10;
+        phi_v1 = (gSaveContext.unk_E88[arg0 >> 1] & 0xFFFF0000) >> 0x10;
     }
     return phi_v1 + 0x1AAA;
 }
 
 void func_80B43A74(s32 arg0) {
-    gSaveContext.roomInf[124][4] = (gSaveContext.roomInf[124][4] & ~0xFF) | (arg0 & 0xFF);
+    gSaveContext.unk_E88[4] = (gSaveContext.unk_E88[4] & ~0xFF) | (arg0 & 0xFF);
 }
 
 s32 func_80B43A9C(void) {
-    return (gSaveContext.roomInf[124][4] >> 0) & 0xFF;
+    return (gSaveContext.unk_E88[4] >> 0) & 0xFF;
 }
 
 s32 func_80B43AB0(void) {
@@ -3465,7 +3464,7 @@ void func_80B4B024(EnInvadepoh* this) {
 
 void func_80B4B048(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (globalCtx->msgCtx.unk120B1 == 0) {
-        if (globalCtx->msgCtx.unk11F22 == 0) {
+        if (globalCtx->msgCtx.msgMode == 0) {
             D_80B4E998 = 1;
         } else if ((Message_GetState(&globalCtx->msgCtx) == 6) || (Message_GetState(&globalCtx->msgCtx) == 5)) {
             D_80B4E998 = 1;
