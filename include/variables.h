@@ -3340,6 +3340,7 @@ extern FaultAddrConvClient sGraphFaultAddrConvClient;
 extern FaultClient sGraphFaultClient;
 extern GfxMasterList* gGfxMasterDL;
 extern CfbInfo sGraphCfbInfos[3];
+extern OSTime sGraphTaskStartTime;
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
 extern u32 gSegments[NUM_SEGMENTS];
