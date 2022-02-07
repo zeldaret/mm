@@ -105,15 +105,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-Vec3f D_80AD2574 = { 0.0f, 0.0f, 0.0f };
-Vec3s D_80AD2580 = { 0x9920, -0x384, -0x320 };
-
-TexturePtr D_80AD2588 = object_osn_Tex_0166F8;
-TexturePtr D_80AD258C = object_osn_Tex_016EF8;
-TexturePtr D_80AD2590 = object_osn_Tex_0176F8;
-TexturePtr D_80AD2594 = object_osn_Tex_017EF8;
-TexturePtr D_80AD2598 = object_osn_Tex_0182F8;
-
 void func_80AD1634(EnOsn*, GlobalContext*);
 void func_80AD16A8(EnOsn*, GlobalContext*);
 void func_80AD14C8(EnOsn*, GlobalContext*);
@@ -870,8 +861,8 @@ s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
 void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
     EnOsn* this = (EnOsn*)actor;
-    Vec3f sp30 = D_80AD2574;
-    Vec3s sp28 = D_80AD2580;
+    Vec3f sp30 = { 0.0f, 0.0f, 0.0f };
+    Vec3s sp28 = { 0x9920, -0x384, -0x320 };
 
     if (limbIndex == 0xB) {
         Matrix_MultiplyVector3fByState(&sp30, &actor->focus.pos);
@@ -892,6 +883,11 @@ void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnOsn* this = THIS;
+    static TexturePtr D_80AD2588 = object_osn_Tex_0166F8;
+    static TexturePtr D_80AD258C = object_osn_Tex_016EF8;
+    static TexturePtr D_80AD2590 = object_osn_Tex_0176F8;
+    static TexturePtr D_80AD2594 = object_osn_Tex_017EF8;
+    static TexturePtr D_80AD2598 = object_osn_Tex_0182F8;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
