@@ -7,7 +7,7 @@
 #include "z_en_am.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
-#include "objects/object_am/object_am.h"
+
 
 #define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
 
@@ -169,7 +169,7 @@ void EnAm_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 300.0f / 7.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_am_Skel_005948, &object_am_Anim_00033C, this->jointTable,
-                   this->morphTable, AM_LIMB_MAX);
+                   this->morphTable, OBJECT_AM_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->enemyCollider, &this->actor, &sEnemyCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->interactCollider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
