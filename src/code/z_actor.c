@@ -4466,7 +4466,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
         f32 lightOrbsScale;
         f32 electricStunScale;
         f32 steamScale;
-        Vec3f* limbAux = limbPos;
+        Vec3f* limbPosStart = limbPos;
         u32 gameplayFrames = globalCtx->gameplayFrames;
         f32 effectAlphaScaled;
 
@@ -4536,7 +4536,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPDisplayList(POLY_XLU_DISP++, gFrozenIceVtxDL);
                 }
 
-                limbPos = limbAux; // reset limbPos
+                limbPos = limbPosStart; // reset limbPos
 
                 // Setup to draw steam over frozen actor
 
@@ -4575,7 +4575,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
                 } else {
                     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 0);
-                    // Reuse type for blue primary color
+                    // Reuse type for blue primitive color
                     type = 255;
                 }
 
@@ -4596,7 +4596,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                         alpha = 255.0f;
                     }
 
-                    // Use type for blue primary color
+                    // Use type for blue primitive color
                     // = 0 for ACTOR_DRAW_DMGEFF_FIRE
                     // = 255 for ACTOR_DRAW_DMGEFF_BLUE_FIRE
                     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, type, (u8)alpha);
