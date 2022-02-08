@@ -409,7 +409,7 @@ void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx) {
 void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
         (globalCtx->msgCtx.unk1202E == 1)) {
         func_80B3E5DC(this, 1);
         this->actionFunc = func_80B3EE8C;

@@ -199,7 +199,7 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -342,7 +342,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
@@ -382,12 +382,12 @@ void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x88F) {
-            if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
+            if (Interface_HasEmptyBottle() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
@@ -403,7 +403,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 EnTrt_SetupStartShopping(globalCtx, this, 0);
             } else if (gSaveContext.weekEventReg[0x54] & 0x40) {
                 this->textId = 0x83B;
-                if (func_80114F2C(ITEM_POTION_RED)) {
+                if (Interface_HasItemInBottle(ITEM_POTION_RED)) {
                     EnTrt_SetupStartShopping(globalCtx, this, false);
                 } else {
                     this->actionFunc = EnTrt_TryToGiveRedPotion;
@@ -632,7 +632,7 @@ void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
     Player* player = GET_PLAYER(globalCtx);
 
     Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
@@ -715,7 +715,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
                 }
             }
         } else if (talkState == 5 && func_80147624(globalCtx)) {
-            if (!func_80114E90()) {
+            if (!Interface_HasEmptyBottle()) {
                 play_sound(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(globalCtx, this, 0x846);
             } else {
@@ -926,7 +926,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 
     this->blinkFunc = EnTrt_Blink;
     if (talkState == 6 && func_80147624(globalCtx)) {
-        if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
+        if (Interface_HasEmptyBottle() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -945,12 +945,12 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x83C) {
-            if (func_80114E90()) {
+            if (Interface_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
