@@ -233,10 +233,10 @@ void func_808D0930(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D09CC(EnFloormas* this) {
-    this->unk_18C = 10;
-    this->unk_2C8 = 0.55f;
-    this->unk_2CC = 0.82500005f;
-    this->unk_2C4 = 1.0f;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+    this->drawDmgEffScale = 0.55f;
+    this->drawDmgEffFrozenSmokeScale = 0.82500005f;
+    this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;
     this->actor.flags &= ~(0x400 | 0x200);
@@ -244,11 +244,11 @@ void func_808D09CC(EnFloormas* this) {
 }
 
 void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
-    if (this->unk_18C == 10) {
-        this->unk_18C = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT0;
-        this->unk_2C4 = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0), 2,
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2,
                               this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= 0x400;
@@ -556,7 +556,7 @@ void func_808D19D4(EnFloormas* this) {
     Actor* parent;
 
     this->actor.colorFilterTimer = 0;
-    this->unk_2C4 = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     Actor_SetScale(&this->actor, 0.004f);
     this->actor.flags |= 0x10;
     if ((this->actor.flags & 0x80) == 0x80) {
@@ -896,7 +896,7 @@ void func_808D2A20(EnFloormas* this) {
     EnFloormas* parent = (EnFloormas*)this->actor.parent;
     EnFloormas* child = (EnFloormas*)this->actor.child;
 
-    this->unk_2C4 = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
 
     if ((parent->actionFunc == func_808D2AA8) && (child->actionFunc == func_808D2AA8)) {
         func_808D2AB8(parent);
@@ -1009,16 +1009,17 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.info);
-        if ((this->unk_18C != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.colChkInfo.damageEffect == 0xE) {
                 func_808D0908(this);
                 this->actor.colorFilterTimer = 0;
                 this->actor.colChkInfo.damage = 4;
                 this->unk_192 = -1600;
                 this->actor.gravity = -1.0f;
-                this->unk_2C4 = 4.0f;
-                this->unk_2C8 = 0.55f;
-                this->unk_18C = 20;
+                this->drawDmgEffAlpha = 4.0f;
+                this->drawDmgEffScale = 0.55f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             }
 
             if (this->collider.base.colType != COLTYPE_HARD) {
@@ -1053,19 +1054,19 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
                         this->unk_18E = 40;
                         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                        this->unk_2C8 = 0.55f;
-                        this->unk_2C4 = 2.0f;
-                        this->unk_18C = 31;
+                        this->drawDmgEffScale = 0.55f;
+                        this->drawDmgEffAlpha = 2.0f;
+                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM;
                         func_808D2D6C(this);
                     } else {
                         if (this->actor.colChkInfo.damageEffect == 2) {
-                            this->unk_2C4 = 4.0f;
-                            this->unk_2C8 = 0.55f;
-                            this->unk_18C = 0;
+                            this->drawDmgEffAlpha = 4.0f;
+                            this->drawDmgEffScale = 0.55f;
+                            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else if (this->actor.colChkInfo.damageEffect == 4) {
-                            this->unk_2C4 = 4.0f;
-                            this->unk_2C8 = 0.55f;
-                            this->unk_18C = 20;
+                            this->drawDmgEffAlpha = 4.0f;
+                            this->drawDmgEffScale = 0.55f;
+                            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                         this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
                                         this->collider.info.bumper.hitPos.z, 0, 0, 0,
@@ -1133,12 +1134,12 @@ void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
 
-            if (this->unk_2C4 > 0.0f) {
-                if (this->unk_18C != 10) {
-                    Math_StepToF(&this->unk_2C4, 0.0f, 0.05f);
-                    this->unk_2C8 = (this->unk_2C4 + 1.0f) * 0.275f;
-                    this->unk_2C8 = CLAMP_MAX(this->unk_2C8, 0.55f);
-                } else if (!Math_StepToF(&this->unk_2CC, 0.55f, 0.01375f)) {
+            if (this->drawDmgEffAlpha > 0.0f) {
+                if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+                    Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+                    this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
+                    this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
+                } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.55f, 0.01375f)) {
                     func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
             }
@@ -1161,12 +1162,12 @@ void EnFloormas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnFloormas* this = THIS;
 
     if (D_808D393C[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->unk_2D0[D_808D393C[limbIndex]]);
+        Matrix_GetStateTranslation(&this->limbPos[D_808D393C[limbIndex]]);
     }
 
     if (limbIndex == 19) {
-        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->unk_2D0[9]);
-        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->unk_2D0[10]);
+        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[9]);
+        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
         return;
     }
 
@@ -1203,9 +1204,10 @@ void EnFloormas_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    func_800BE680(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0),
-                  100.0f * (this->unk_2C8 * this->actor.scale.x), 100.0f * (this->unk_2CC * this->actor.scale.x),
-                  this->unk_2C4, this->unk_18C);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            100.0f * (this->drawDmgEffScale * this->actor.scale.x),
+                            100.0f * (this->drawDmgEffFrozenSmokeScale * this->actor.scale.x), this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 }
 
 void func_808D3754(Actor* thisx, GlobalContext* globalCtx) {
@@ -1227,7 +1229,8 @@ void func_808D3754(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    func_800BE680(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0),
-                  this->unk_2C8 * this->actor.scale.x * 100.0f, this->unk_2CC * this->actor.scale.x * 100.0f,
-                  this->unk_2C4, this->unk_18C);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->drawDmgEffScale * this->actor.scale.x * 100.0f,
+                            this->drawDmgEffFrozenSmokeScale * this->actor.scale.x * 100.0f, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 }

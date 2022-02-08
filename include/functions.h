@@ -799,7 +799,7 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider);
 void func_800BE568(Actor* actor, ColliderSphere* collider);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex);
 s32 func_800BE63C(struct EnBox* chest);
-void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 effectScale, f32 steamScale, f32 effectAlpha, u8 mode);
+void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 effectScale, f32 steamScale, f32 effectAlpha, u8 mode);
 void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 limbPosCount, s32 effectsPerLimb, f32 scale, f32 scaleRange);
 
 void ActorOverlayTable_FaultPrint(void* arg0, void* arg1);

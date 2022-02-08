@@ -16,14 +16,14 @@ typedef struct EnRailgibud {
     /* 0x0144 */ ColliderCylinder collider;
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ EnRailgibudActionFunc actionFunc;
-    /* 0x01D8 */ Vec3f unk_1D8[15];
+    /* 0x01D8 */ Vec3f limbPos[15];
     /* 0x028C */ s32 unk_28C;
     /* 0x0290 */ UNK_TYPE1 unk290[0x4];
     /* 0x0294 */ Vec3s* unk_294;
     /* 0x0298 */ s32 unk_298;
     /* 0x029C */ s32 unk_29C;
-    /* 0x02A0 */ f32 unk_2A0;
-    /* 0x02A4 */ f32 unk_2A4;
+    /* 0x02A0 */ f32 drawDmgEffAlpha;
+    /* 0x02A4 */ f32 drawDmgEffScale;
     /* 0x02A8 */ Vec3s jointTable[26];
     /* 0x0344 */ Vec3s morphTable[26];
     /* 0x03E0 */ UNK_TYPE1 unk3E0[0x2];
@@ -43,7 +43,7 @@ typedef struct EnRailgibud {
     /* 0x03FE */ u16 unk_3FE;
     /* 0x0400 */ u16 textId;
     /* 0x0402 */ s16 unk_402;
-    /* 0x0404 */ u8 unk_404;
+    /* 0x0404 */ u8 drawDmgEffType;
     /* 0x0405 */ s8 unk_405;
 } EnRailgibud; // size = 0x408
 

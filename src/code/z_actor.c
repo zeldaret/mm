@@ -4452,18 +4452,20 @@ TexturePtr D_801AEFA8[] = {
     gameplay_keep_Tex_0923E0,
 };
 
-// Draw common damageEffects
-void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 effectScale, f32 steamScale,
-                   f32 effectAlpha, u8 mode) {
+/**
+ * Draw common damage effects on each limb provided in limbPos
+ */
+void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 limbPosCount, f32 effectScale,
+                             f32 frozenSteamScale, f32 effectAlpha, u8 type) {
     if (effectAlpha > 0.001f) {
         s32 temp_v1_3;
         s16 i;
         MtxF* temp_s3;
         f32 alpha;
-        f32 sp124;
+        f32 frozenScale;
         f32 sp120;
-        f32 sp11C;
-        f32 sp118;
+        f32 electricStunScale;
+        f32 steamScale;
         Vec3f* limbAux = limbPos;
         u32 sp110 = globalCtx->gameplayFrames;
         f32 sp74;
@@ -4471,13 +4473,13 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
         temp_s3 = Matrix_GetCurrentState();
 
         if ((actor != NULL) && (effectAlpha > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
-            if (mode == 0) {
+            if (type == ACTOR_DRAW_DMGEFF_FIRE) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
-            } else if (mode == 1) {
+            } else if (type == ACTOR_DRAW_DMGEFF_BLUE_FIRE) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
-            } else if (mode == 0xB) {
+            } else if (type == ACTOR_DRAW_DMGEFF_FROZEN_SFX) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
-            } else if ((mode == 0x14) || (mode == 0x15)) {
+            } else if ((type == ACTOR_DRAW_DMGEFF_LIGHT_ORBS) || (type == ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS)) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
             }
         }
@@ -4486,11 +4488,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        switch (mode) {
-            case 0xA:
-            case 0xB:
-                sp124 = ((KREG(19) * 0.01f) + 2.3f) * effectScale;
-                sp118 = ((KREG(28) * 0.0001f) + 0.035f) * steamScale;
+        switch (type) {
+            case ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX:
+            case ACTOR_DRAW_DMGEFF_FROZEN_SFX:
+                frozenScale = ((KREG(19) * 0.01f) + 2.3f) * effectScale;
+                steamScale = ((KREG(28) * 0.0001f) + 0.035f) * frozenSteamScale;
                 func_800BCC68(limbPos, globalCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -4502,7 +4504,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050648);
 
                 sp74 = effectAlpha * 255.0f;
-                for (i = 0; i < arg3; i++) {
+
+                for (i = 0; i < limbPosCount; i++) {
                     alpha = i & 3;
                     alpha = sp74 - (30.0f * alpha);
                     if (sp74 < (30.0f * (i & 3))) {
@@ -4515,7 +4518,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 0xC8, KREG(21) + 0xC8, KREG(22) + 0xFF, (u8)alpha);
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
-                    Matrix_Scale(sp124, sp124, sp124, MTXMODE_APPLY);
+                    Matrix_Scale(frozenScale, frozenScale, frozenScale, MTXMODE_APPLY);
                     if (i & 1) {
                         Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
@@ -4546,7 +4549,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
 
-                for (i = 0; i < arg3; i++) {
+                for (i = 0; i < limbPosCount; i++) {
                     temp_v1_3 = ((i * 3) + sp110);
                     gSPSegment(POLY_XLU_DISP++, 0x08,
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_v1_3 * 3, temp_v1_3 * -0xC, 0x20, 0x40,
@@ -4554,7 +4557,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-                    Matrix_Scale(sp118, sp118, 1.0f, MTXMODE_APPLY);
+                    Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4565,13 +4568,14 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 }
                 break;
 
-            case 0x0:
-            case 0x1:
-                if (mode == 0) {
+            case ACTOR_DRAW_DMGEFF_FIRE:
+            case ACTOR_DRAW_DMGEFF_BLUE_FIRE:
+                if (type == ACTOR_DRAW_DMGEFF_FIRE) {
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
                 } else {
                     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 0);
-                    mode = 0xFF;
+                    // Use type for blue primary color
+                    type = 255;
                 }
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
@@ -4579,7 +4583,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 sp74 = effectAlpha * 255.0f;
 
-                for (i = 0; i < arg3; i++) {
+                for (i = 0; i < limbPosCount; i++) {
                     alpha = i & 3;
                     alpha = sp74 - 30.0f * alpha;
                     if (sp74 < 30.0f * (i & 3)) {
@@ -4589,7 +4593,10 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                         alpha = 255.0f;
                     }
 
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, mode, (u8)alpha);
+                    // Use type for blue primary color
+                    // = 0 for ACTOR_DRAW_DMGEFF_FIRE
+                    // = 255 for ACTOR_DRAW_DMGEFF_BLUE_FIRE
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, type, (u8)alpha);
 
                     gSPSegment(POLY_XLU_DISP++, 0x08,
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
@@ -4609,8 +4616,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 }
                 break;
 
-            case 0x14:
-            case 0x15:
+            case ACTOR_DRAW_DMGEFF_LIGHT_ORBS:
+            case ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS:
                 sp120 = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
@@ -4620,7 +4627,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     alpha = 255.0f;
                 }
 
-                if (mode == 0x15) {
+                if (type == ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS) {
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF), (u8)(sREG(17) + 0xFF),
                                     (u8)(sREG(18) + 0xFF), (u8)alpha);
 
@@ -4630,10 +4637,11 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 100, 128);
                 }
+
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale(sp120, sp120, 1.0f, MTXMODE_APPLY);
 
-                for (i = 0; i < arg3; i++) {
+                for (i = 0; i < limbPosCount; i++) {
                     Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
                     temp_s3->mf[3][0] = limbPos->x;
                     temp_s3->mf[3][1] = limbPos->y;
@@ -4648,15 +4656,15 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 }
                 break;
 
-            case 0x1E:
-            case 0x1F:
-            case 0x20:
-                if (mode == 0x1E) {
-                    sp11C = (KREG(19) * 0.01f + 1.0f) * effectScale;
-                } else if (mode == 0x1F) {
-                    sp11C = (KREG(19) * 0.01f + 1.5f) * effectScale;
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL:
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM:
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_LARGE:
+                if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL) {
+                    electricStunScale = (KREG(19) * 0.01f + 1.0f) * effectScale;
+                } else if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM) {
+                    electricStunScale = (KREG(19) * 0.01f + 1.5f) * effectScale;
                 } else {
-                    sp11C = (KREG(19) * 0.01f + 2.0f) * effectScale;
+                    electricStunScale = (KREG(19) * 0.01f + 2.0f) * effectScale;
                 }
 
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801AEFA8[globalCtx->gameplayFrames & 3]));
@@ -4670,9 +4678,9 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                                (u8)sREG(23));
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale(sp11C, sp11C, sp11C, MTXMODE_APPLY);
+                Matrix_Scale(electricStunScale, electricStunScale, electricStunScale, MTXMODE_APPLY);
 
-                for (i = 0; i < arg3; i++) {
+                for (i = 0; i < limbPosCount; i++) {
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;

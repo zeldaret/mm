@@ -189,7 +189,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80BA5400(this, globalCtx);
     this->unk_3F2 = 0;
     this->unk_402 = gSaveContext.time;
-    this->unk_404 = 0;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->unk_3F8 = 0;
     this->textId = 0;
     this->unk_3FA = 0;
@@ -499,7 +499,7 @@ void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_405 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if ((this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
+        if ((this->unk_3F6 > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) && (this->unk_3F8 == 0)) {
             this->actor.hintId = 0x2A;
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
                                this->morphTable, 26);
@@ -564,7 +564,8 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
         this->unk_3F2++;
     }
 
-    if ((this->unk_3F2 == 20) && (this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
+    if ((this->unk_3F2 == 20) && (this->unk_3F6 > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
+        (this->unk_3F8 == 0)) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
                            this->morphTable, 26);
         this->unk_3F8 = 1;
@@ -708,9 +709,9 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 } else {
                     func_80BA6440(this);
                 }
-                this->unk_404 = 0;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 this->unk_3F6 = 180;
-                this->unk_2A0 = 1.0f;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case 4:
@@ -720,17 +721,17 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
                 } else {
                     func_80BA6440(this);
                 }
-                this->unk_404 = 20;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->unk_3F6 = 60;
-                this->unk_2A0 = 1.0f;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case 12:
                 if ((this->actionFunc != func_80BA5E18) &&
                     ((this->actionFunc != func_80BA6604) || (this->unk_3F2 == 0))) {
-                    this->unk_404 = 30;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
                     this->unk_3F6 = 40;
-                    this->unk_2A0 = 1.0f;
+                    this->drawDmgEffAlpha = 1.0f;
                     func_80BA6584(this);
                 }
                 break;
@@ -800,10 +801,10 @@ void func_80BA7388(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_3F6 < 20) {
-        Math_SmoothStepToF(&this->unk_2A4, 0.0f, 0.5f, 0.03f, 0.0f);
-        this->unk_2A0 = this->unk_3F6 * 0.05f;
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
+        this->drawDmgEffAlpha = this->unk_3F6 * 0.05f;
     } else {
-        Math_SmoothStepToF(&this->unk_2A4, 0.5f, 0.1f, 0.02f, 0.0f);
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
     }
 }
 
@@ -931,7 +932,7 @@ void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
          (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
          (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
-        Matrix_GetStateTranslation(&this->unk_1D8[this->unk_28C]);
+        Matrix_GetStateTranslation(&this->limbPos[this->unk_28C]);
         this->unk_28C++;
     }
 }
@@ -963,8 +964,8 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_3F6 > 0) {
-        func_800BE680(globalCtx, &this->actor, this->unk_1D8, ARRAY_COUNT(this->unk_1D8), this->unk_2A4, 0.5f,
-                      this->unk_2A0, this->unk_404);
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

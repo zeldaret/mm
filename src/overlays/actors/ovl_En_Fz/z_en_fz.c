@@ -228,8 +228,8 @@ void EnFz_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_BA4 = 0;
-    this->unk_BA0 = 0.0f;
-    this->unk_B9C = 0.0f;
+    this->drawDmgEffScale = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     func_80932784(this, globalCtx);
 }
 
@@ -416,7 +416,7 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:
                     this->unk_BA4 = 0x28;
-                    this->unk_B9C = 1.0f;
+                    this->drawDmgEffAlpha = 1.0f;
 
                 case 15:
                     Actor_ApplyDamage(&this->actor);
@@ -778,10 +778,10 @@ void func_80933B48(EnFz* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_BA4 < 20) {
-            Math_SmoothStepToF(&this->unk_BA0, 0.0f, 0.5f, 0.03f, 0.0f);
-            this->unk_B9C = this->unk_BA4 * 0.05f;
+            Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
+            this->drawDmgEffAlpha = this->unk_BA4 * 0.05f;
         } else {
-            Math_SmoothStepToF(&this->unk_BA0, 0.5f, 0.1f, 0.02f, 0.0f);
+            Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
         }
     }
 }
@@ -863,15 +863,15 @@ void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_BA4 > 0) {
         s32 pad2[6];
-        Vec3f sp58;
-        Vec3f sp4C;
+        Vec3f limbPos[2];
         s32 pad3;
 
-        sp4C = this->actor.world.pos;
-        sp58 = this->actor.world.pos;
-        sp4C.y += 20.0f;
-        sp58.y += 40.0f;
-        func_800BE680(globalCtx, NULL, &sp4C, 2, this->unk_BA0 * 4.0f, 0.5f, this->unk_B9C, 20);
+        limbPos[0] = this->actor.world.pos;
+        limbPos[1] = this->actor.world.pos;
+        limbPos[0].y += 20.0f;
+        limbPos[1].y += 40.0f;
+        Actor_DrawDamageEffects(globalCtx, NULL, limbPos, ARRAY_COUNT(limbPos), this->drawDmgEffScale * 4.0f, 0.5f,
+                                this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

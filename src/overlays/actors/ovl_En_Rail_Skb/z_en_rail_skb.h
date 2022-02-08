@@ -19,13 +19,13 @@ typedef struct EnRailSkb {
     /* 0x228 */ EnRailSkbActionFunc actionFunc;
     /* 0x22C */ ObjHakaisi* unk_22C;
     /* 0x230 */ Vec3s* unk_230;
-    /* 0x234 */ Vec3f unk_234[14];
-    /* 0x2DC */ s32 unk_2DC;
+    /* 0x234 */ Vec3f limbPos[14];
+    /* 0x2DC */ s32 limbCount;
     /* 0x2E0 */ s32 unk_2E0;
     /* 0x2E4 */ s32 unk_2E4;
     /* 0x2E8 */ s32 unk_2E8;
-    /* 0x2EC */ f32 unk_2EC;
-    /* 0x2F0 */ f32 unk_2F0;
+    /* 0x2EC */ f32 drawDmgEffAlpha;
+    /* 0x2F0 */ f32 drawDmgEffScale;
     /* 0x2F4 */ Vec3s jointTable[20];
     /* 0x36C */ Vec3s morphTable[20];
     /* 0x3E4 */ UNK_TYPE1 unk3E4[0xC];
@@ -39,7 +39,7 @@ typedef struct EnRailSkb {
     /* 0x3FE */ s16 unk_3FE;
     /* 0x400 */ u16 unk_400;
     /* 0x402 */ u8 unk_402;
-    /* 0x403 */ u8 unk_403;
+    /* 0x403 */ u8 drawDmgEffType;
 } EnRailSkb; // size = 0x404
 
 extern const ActorInit En_Rail_Skb_InitVars;

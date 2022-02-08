@@ -224,13 +224,13 @@ void EnTalkGibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->grabWaitTimer = 0;
     this->itemActionParam = PLAYER_AP_NONE;
     this->effectTimer = 0;
-    this->effectType = 0;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->isTalking = false;
     this->type = EN_TALK_GIBUD_TYPE_GIBDO;
     this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx);
     this->switchFlag = EN_TALK_GIBUD_SWITCH_FLAG(thisx);
-    this->effectAlpha = 0.0f;
-    this->effectScale = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
+    this->drawDmgEffScale = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
         this->limbPos[i] = gZeroVec3f;
@@ -533,7 +533,8 @@ void EnTalkGibud_Damage(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_3F7 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if (this->effectTimer > 0 && this->effectType == 0 && this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
+        if (this->effectTimer > 0 && this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE &&
+            this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
             this->actor.hintId = 0x2A;
             this->actor.flags &= ~(0x8 | 0x1);
             this->actor.flags |= (0x4 | 0x1);
@@ -565,7 +566,7 @@ void EnTalkGibud_Dead(EnTalkGibud* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 250, 0);
         this->deathTimer++;
     }
-    if (this->deathTimer == 20 && this->effectTimer > 0 && this->effectType == 0 &&
+    if (this->deathTimer == 20 && this->effectTimer > 0 && this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE &&
         this->type == EN_TALK_GIBUD_TYPE_GIBDO) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
                            this->morphTable, EN_TALK_GIBUD_LIMB_MAX);
@@ -991,8 +992,8 @@ void EnTalkGibud_CheckDamageEffect(EnTalkGibud* this, GlobalContext* globalCtx) 
                     EnTalkGibud_SetupDamage(this);
                 }
                 this->effectTimer = 180;
-                this->effectType = 0;
-                this->effectAlpha = 1.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_LIGHT_ARROW:
@@ -1003,16 +1004,16 @@ void EnTalkGibud_CheckDamageEffect(EnTalkGibud* this, GlobalContext* globalCtx) 
                     EnTalkGibud_SetupDamage(this);
                 }
                 this->effectTimer = 60;
-                this->effectType = 20;
-                this->effectAlpha = 1.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_ZORA_MAGIC:
                 if (this->actionFunc != EnTalkGibud_Grab &&
                     (this->actionFunc != EnTalkGibud_Stunned || this->stunTimer == 0)) {
-                    this->effectAlpha = 1.0f;
+                    this->drawDmgEffAlpha = 1.0f;
                     this->effectTimer = 40;
-                    this->effectType = 30;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
                     EnTalkGibud_SetupStunned(this);
                 }
                 break;
@@ -1071,10 +1072,10 @@ void EnTalkGibud_UpdateEffect(EnTalkGibud* this, GlobalContext* globalCtx) {
         this->effectTimer--;
     }
     if (this->effectTimer < 20) {
-        Math_SmoothStepToF(&this->effectScale, 0.0f, 0.5f, 0.03f, 0.0f);
-        this->effectAlpha = this->effectTimer * 0.05f;
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
+        this->drawDmgEffAlpha = this->effectTimer * 0.05f;
     } else {
-        Math_SmoothStepToF(&this->effectScale, 0.5f, 0.1f, 0.02f, 0.0f);
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
     }
 }
 
@@ -1150,8 +1151,8 @@ void EnTalkGibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                            EnTalkGibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
     if (this->effectTimer > 0) {
-        func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, 0.5f,
-                      this->effectAlpha, this->effectType);
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

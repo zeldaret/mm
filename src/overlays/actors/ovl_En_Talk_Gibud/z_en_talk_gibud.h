@@ -61,8 +61,8 @@ typedef struct EnTalkGibud {
     /* 0x290 */ s32 requestedItemIndex;
     /* 0x294 */ s32 itemActionParam;
     /* 0x298 */ s32 switchFlag;
-    /* 0x29C */ f32 effectAlpha;
-    /* 0x2A0 */ f32 effectScale;
+    /* 0x29C */ f32 drawDmgEffAlpha;
+    /* 0x2A0 */ f32 drawDmgEffScale;
     /* 0x2A4 */ Vec3s jointTable[EN_TALK_GIBUD_LIMB_MAX];
     /* 0x340 */ Vec3s morphTable[EN_TALK_GIBUD_LIMB_MAX];
     /* 0x3DC */ s16 textId;
@@ -81,7 +81,7 @@ typedef struct EnTalkGibud {
     /* 0x3F0 */ s16 effectTimer;
     /* 0x3F2 */ s16 type;
     /* 0x3F4 */ s16 isTalking;
-    /* 0x3F6 */ u8 effectType;
+    /* 0x3F6 */ u8 drawDmgEffType;
     /* 0x3F7 */ s8 unk_3F7; // related to player->unk_ADD
 } EnTalkGibud; // size = 0x3F8
 

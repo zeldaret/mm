@@ -872,8 +872,8 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
                 }
 
                 if (this->actor.colChkInfo.damageEffect == 4) {
-                    this->unk_2F0 = 4.0f;
-                    this->unk_2F4 = 0.5f;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 0.5f;
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                 this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
                                 this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -922,17 +922,17 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.shadowAlpha = this->unk_229;
     Actor_SetFocus(&this->actor, 40.0f);
 
-    if (this->unk_2F0 > 0.0f) {
-        Math_StepToF(&this->unk_2F0, 0.0f, 0.05f);
+    if (this->drawDmgEffAlpha > 0.0f) {
+        Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
         if (this->unk_229 != 255) {
             temp_f2 = this->unk_229 * (1.0f / 255);
             if (temp_f2 < this->unk_229) {
-                this->unk_2F0 = temp_f2;
+                this->drawDmgEffAlpha = temp_f2;
             }
         }
 
-        this->unk_2F4 = (this->unk_2F0 + 1.0f) * 0.25f;
-        this->unk_2F4 = CLAMP_MAX(this->unk_2F4, 0.5f);
+        this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
+        this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
     }
 
     if (this->unk_191 & (0x10 | 0x8 | 0x4 | 0x2 | 0x1)) {
@@ -1057,14 +1057,14 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     f32 temp_f2;
 
     if (D_80B1DB08[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->unk_28C[D_80B1DB08[limbIndex]]);
+        Matrix_GetStateTranslation(&this->limbPos[D_80B1DB08[limbIndex]]);
     } else if (limbIndex == 9) {
-        Matrix_GetStateTranslationAndScaledY(-2500.0f, &this->unk_28C[4]);
-        Matrix_GetStateTranslationAndScaledY(3000.0f, &this->unk_28C[5]);
+        Matrix_GetStateTranslationAndScaledY(-2500.0f, &this->limbPos[4]);
+        Matrix_GetStateTranslationAndScaledY(3000.0f, &this->limbPos[5]);
     } else if (limbIndex == 10) {
-        Matrix_GetStateTranslationAndScaledY(-4000.0f, &this->unk_28C[6]);
+        Matrix_GetStateTranslationAndScaledY(-4000.0f, &this->limbPos[6]);
     } else if (limbIndex == 11) {
-        Matrix_GetStateTranslationAndScaledX(3000.0f, &this->unk_28C[7]);
+        Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[7]);
     }
 
     if ((this->actionFunc == func_80B1BA90) && (this->unk_192 >= 8) && (limbIndex == 9)) {
@@ -1179,8 +1179,9 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
-    func_800BE680(globalCtx, &this->actor, this->unk_28C, ARRAY_COUNT(this->unk_28C),
-                  this->actor.scale.x * 142.857131958f * this->unk_2F4, 0.0f, this->unk_2F0, 20);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->actor.scale.x * 142.857131958f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
+                            ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

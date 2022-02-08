@@ -1136,8 +1136,8 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
 
         // light arrows
         if (this->actor.colChkInfo.damageEffect == 4) {
-            this->unk21C = 4.0f;
-            this->unk220 = 1.0f;
+            this->drawDmgEffAlpha = 4.0f;
+            this->drawDmgEffScale = 1.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -1201,15 +1201,15 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &thisCollider->base);
     }
 
-    if (this->unk21C > 0.0f) {
-        Math_StepToF(&this->unk21C, 0.0f, 0.05f);
+    if (this->drawDmgEffAlpha > 0.0f) {
+        Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
         if (this->mainColor.a != 255) { // NOT fully visible
             if (this->mainColor.a * (1.0f / 255.0f) < this->mainColor.a) {
-                this->unk21C = this->mainColor.a * (1.0f / 255.0f);
+                this->drawDmgEffAlpha = this->mainColor.a * (1.0f / 255.0f);
             }
         }
-        this->unk220 = ((this->unk21C + 1.0f) * 0.5f);
-        this->unk220 = CLAMP_MAX(this->unk220, 1.0f);
+        this->drawDmgEffScale = ((this->drawDmgEffAlpha + 1.0f) * 0.5f);
+        this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.0f);
     }
 }
 
@@ -1318,8 +1318,9 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // 71.428566f might be 500/7 context unknown
-    func_800BE680(globalCtx, &this->actor, this->limbPos, 9, this->actor.scale.x * 71.428566f * this->unk220, 0,
-                  this->unk21C, 0x14);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0, this->drawDmgEffAlpha,
+                            ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
     Matrix_SetCurrentState(&this->drawMtxF);
     EnBigpo_DrawLantern(&this->actor, globalCtx);

@@ -43,8 +43,8 @@ typedef struct EnFz {
     /* 0x22C */ Vec3f unk_22C;
     /* 0x238 */ f32 unk_238;
     /* 0x23C */ EnFzStruct unk_23C[40];
-    /* 0xB9C */ f32 unk_B9C;
-    /* 0xBA0 */ f32 unk_BA0;
+    /* 0xB9C */ f32 drawDmgEffAlpha;
+    /* 0xBA0 */ f32 drawDmgEffScale;
     /* 0xBA4 */ s16 unk_BA4;
     /* 0xBA8 */ f32 unk_BA8;
     /* 0xBAC */ f32 unk_BAC;

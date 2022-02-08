@@ -25,9 +25,9 @@ typedef struct EnSw {
     /* 0x0374 */ Vec3f unk_374;
     /* 0x0380 */ Vec3f unk_380[12];
     /* 0x0410 */ u16 unk_410;
-    /* 0x0412 */ u8 unk_412;
+    /* 0x0412 */ u8 drawDmgEffType;
     /* 0x0414 */ f32 unk_414;
-    /* 0x0418 */ f32 unk_418[12];
+    /* 0x0418 */ f32 drawDmgEffFrozenSmokeScales[12];
     /* 0x0448 */ f32 unk_448;
     /* 0x044C */ f32 unk_44C;
     /* 0x0450 */ f32 unk_450;

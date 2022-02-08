@@ -1073,8 +1073,8 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 if ((this->actionFunc != func_808D58CC) &&
                     ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
                     this->unk_3E6 = 40;
-                    this->unk_3E8 = 30;
-                    this->unk_294 = 1.0f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                    this->drawDmgEffAlpha = 1.0f;
                     func_808D64D0(this);
                 }
                 return;
@@ -1086,19 +1086,19 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
             case 2:
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->unk_3E6 = 180;
-                this->unk_3E8 = 0;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
-                this->unk_294 = 1.0f;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case 4:
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->unk_3E6 = 60;
-                this->unk_3E8 = 20;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
-                this->unk_294 = 1.0f;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case 15:
@@ -1148,10 +1148,10 @@ void func_808D6B64(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_3E6 < 20) {
-        Math_SmoothStepToF(&this->unk_298, 0.0f, 0.5f, 0.03f, 0.0f);
-        this->unk_294 = this->unk_3E6 * 0.05f;
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
+        this->drawDmgEffAlpha = this->unk_3E6 * 0.05f;
     } else {
-        Math_SmoothStepToF(&this->unk_298, 0.5f, 0.1f, 0.02f, 0.0f);
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
     }
 }
 
@@ -1209,7 +1209,7 @@ void EnRd_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         ((limbIndex == 3) || (limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8) || (limbIndex == 9) ||
          (limbIndex == 11) || (limbIndex == 14) || (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18) ||
          (limbIndex == 20) || (limbIndex == 21) || (limbIndex == 22) || (limbIndex == 24) || (limbIndex == 25))) {
-        Matrix_GetStateTranslation(&this->unk_1DC[this->unk_290]);
+        Matrix_GetStateTranslation(&this->limbPos[this->unk_290]);
         this->unk_290++;
     }
 }
@@ -1250,7 +1250,7 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (this->unk_3E6 > 0) {
-        func_800BE680(globalCtx, &this->actor, this->unk_1DC, ARRAY_COUNT(this->unk_1DC), this->unk_298, 0.5f,
-                      this->unk_294, this->unk_3E8);
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }
