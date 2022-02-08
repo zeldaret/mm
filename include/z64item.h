@@ -380,7 +380,8 @@ typedef enum {
     /* 0x00 */ EXCH_ITEM_NONE,
     /* 0x13 */ EXCH_ITEM_13 = 0x13,
     /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
-    /* 0x2A */ EXCH_ITEM_2A = 0x2A // MOON_TEAR?
+    /* 0x2A */ EXCH_ITEM_2A = 0x2A, // MOON_TEAR?
+    /* 0x2E */ EXCH_ITEM_2E = 0x2E
 } ExchangeItemID;
 
 #endif

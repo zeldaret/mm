@@ -42,13 +42,14 @@
         <Texture Name="object_ani_Tex_0060D8" OutName="tex_0060D8" Format="i8" Width="8" Height="8" Offset="0x60D8" />
         <Texture Name="object_ani_Tex_006118" OutName="tex_006118" Format="ci8" Width="16" Height="16" Offset="0x6118" />
         <Texture Name="object_ani_Tex_006218" OutName="tex_006218" Format="ci8" Width="16" Height="16" Offset="0x6218" />
-        <Texture Name="object_ani_TLUT_006318" OutName="tlut_006318" Format="rgba16" Width="16" Height="16" Offset="0x6318" />
-        <!-- <Blob Name="object_ani_Blob_006518" Size="0x380" Offset="0x6518" /> -->
+        <Texture Name="object_ani_Tex_006318" OutName="tlut_006318" Format="rgba16" Width="192" Height="1" Offset="0x6318" />
+        <Texture Name="object_ani_Tex_006498" OutName="tex_006498" Format="ci8" TlutOffset="0x6318" Width="32" Height="32" Offset="0x6498" />
         <Texture Name="object_ani_Tex_006898" OutName="tex_006898" Format="ci8" Width="16" Height="16" Offset="0x6898" />
         <Texture Name="object_ani_Tex_006998" OutName="tex_006998" Format="ci8" Width="8" Height="8" Offset="0x6998" />
         <Texture Name="object_ani_Tex_0069D8" OutName="tex_0069D8" Format="ci8" Width="8" Height="8" Offset="0x69D8" />
         <Texture Name="object_ani_Tex_006A18" OutName="tex_006A18" Format="ci8" Width="16" Height="16" Offset="0x6A18" />
-        <!-- <Blob Name="object_ani_Blob_006B18" Size="0x800" Offset="0x6B18" /> -->
+        <Texture Name="object_ani_Tex_006B18" OutName="tex_006B18" Format="ci8" TlutOffset="0x6318" Width="32" Height="32" Offset="0x6B18" />
+        <Texture Name="object_ani_Tex_006F18" OutName="tex_006F18" Format="ci8" TlutOffset="0x6318" Width="32" Height="32" Offset="0x6F18" />
         <DList Name="object_ani_DL_007B58" Offset="0x7B58" />
         <Animation Name="object_ani_Anim_009220" Offset="0x9220" />
         <Animation Name="object_ani_Anim_009734" Offset="0x9734" />
