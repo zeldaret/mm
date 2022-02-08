@@ -9,7 +9,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS 0x00800010
+#define FLAGS (ACTOR_FLAG_800000 | ACTOR_FLAG_10)
 
 #define THIS ((EnKusa*)thisx)
 
@@ -112,11 +112,11 @@ static InitChainEntry sInitChain[] = {
 };
 
 /**
- * @brief Updates the state of the provided matrix
+ * @brief Applies a "swaying" motion of the provided matrix
  *
  * @param[in]     matrix  Matrix to update the current state
  */
-void EnKusa_GetMtxState(MtxF* matrix) {
+void EnAm_ApplySway(MtxF* matrix) {
     MtxF* mtxState = Matrix_GetCurrentState();
     f32* tmp = &mtxState->mf[0][0];
     f32* tmp2 = &matrix->mf[0][0];
@@ -246,14 +246,14 @@ void EnKusa_DropCollectible(EnKusa* this, GlobalContext* globalCtx) {
     s32 collectableParams;
 
     if ((GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_GRASS) || (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_BUSH)) {
-        if (!(KUSA_GET_PARAMS_0C(&this->actor) & 0x1)) {
+        if (!(KUSA_GET_PARAMS_0C(&this->actor))) {
             Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos,
                                        KUSA_GET_RAND_COLLECTIBLE_ID(&this->actor) * 0x10);
         }
     } else if (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_REGROW_GRASS) {
         Item_DropCollectible(globalCtx, &this->actor.world.pos, 3);
     } else {
-        collectible = func_800A8150(KUSA_GET_PARAMS_02(&this->actor) & 0x3F);
+        collectible = func_800A8150(KUSA_GET_PARAMS_3F(&this->actor));
         if (collectible >= 0) {
             collectableParams = KUSA_GET_COLLECTIBLE_ID(&this->actor);
             Item_DropCollectible(globalCtx, &this->actor.world.pos, (collectableParams << 8) | collectible);
@@ -286,9 +286,9 @@ void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor) {
  *
  */
 void EnKusa_SetScaleSmall(EnKusa* this) {
-    this->actor.scale.y = 0.16000001f;
-    this->actor.scale.x = 0.120000005f;
-    this->actor.scale.z = 0.120000005f;
+    this->actor.scale.y = 160.0f * 0.001f;
+    this->actor.scale.x = 120.0f * 0.001f;
+    this->actor.scale.z = 120.0f * 0.001f;
 }
 
 /**
@@ -441,8 +441,9 @@ void EnKusa_SetupWaitObject(EnKusa* this) {
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex) != 0) {
+    if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         s32 kusaType = GET_KUSA_TYPE(&this->actor);
+
         if (this->isCut) {
             EnKusa_SetupCut(this);
         } else {
@@ -454,13 +455,13 @@ void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx) {
             this->actor.draw = EnKusa_DrawGrass;
         }
         this->actor.objBankIndex = this->objIndex;
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
     }
 }
 
 void EnKusa_SetupInteract(EnKusa* this) {
     this->actionFunc = EnKusa_WaitForInteract;
-    this->actor.flags &= ~0x10;
+    this->actor.flags &= ~ACTOR_FLAG_10;
 }
 
 /**
@@ -481,7 +482,7 @@ void EnKusa_WaitForInteract(EnKusa* this, GlobalContext* globalCtx) {
         EnKusa_DropCollectible(this, globalCtx);
         SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
 
-        if ((KUSA_GET_PARAMS_04(&this->actor)) & 1) {
+        if ((KUSA_GET_PARAMS_04(&this->actor))) {
             if (GET_KUSA_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
                 EnKusa_SpawnBugs(this, globalCtx);
             }
@@ -517,7 +518,7 @@ void EnKusa_WaitForInteract(EnKusa* this, GlobalContext* globalCtx) {
 void EnKusa_SetupLiftedUp(EnKusa* this) {
     this->actionFunc = EnKusa_LiftedUp;
     this->actor.room = -1;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
 }
 
 void EnKusa_LiftedUp(EnKusa* this, GlobalContext* globalCtx) {
@@ -571,7 +572,7 @@ void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx) {
         this->collider.base.atFlags &= ~AT_HIT;
     }
     this->timer++;
-    if (((this->actor.bgCheckFlags & 0xB)) || (wasHit) || ((this->timer) >= 100)) {
+    if ((this->actor.bgCheckFlags & 0xB) || (wasHit) || (this->timer >= 100)) {
         if (!(this->actor.bgCheckFlags & 0x20)) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
@@ -648,7 +649,7 @@ void EnKusa_SetupCut(EnKusa* this) {
  */
 void EnKusa_CutWaitRegrow(EnKusa* this, GlobalContext* globalCtx) {
     this->timer++;
-    if ((this->timer) >= 120) {
+    if (this->timer >= 120) {
         EnKusa_SetupRegrow(this);
     }
 }
@@ -676,7 +677,7 @@ void EnKusa_SetupUprootedWaitRegrow(EnKusa* this) {
  */
 void EnKusa_UprootedWaitRegrow(EnKusa* this, GlobalContext* globalCtx) {
     this->timer++;
-    if ((this->timer) > 120) {
+    if (this->timer > 120) {
         if (Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.6f) && (this->timer >= 170)) {
             EnKusa_SetupRegrow(this);
         }
@@ -704,8 +705,8 @@ void EnKusa_Regrow(EnKusa* this, GlobalContext* globalCtx) {
 }
 
 void EnKusa_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnKusa* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnKusa* this = THIS;
 
     this->actionFunc(this, globalCtx);
 
@@ -728,7 +729,7 @@ void EnKusa_DrawBush(Actor* thisx, GlobalContext* globalCtx2) {
 
         if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract) &&
             (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
-            EnKusa_GetMtxState(&D_80936AD8[this->kusaMtxIdx]);
+            EnAm_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
         }
 
         Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
@@ -757,7 +758,7 @@ void EnKusa_DrawGrass(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
-                EnKusa_GetMtxState(&D_80936AD8[this->kusaMtxIdx]);
+                EnAm_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }
         }
         Gfx_DrawDListOpa(globalCtx, gKusaSprout);
