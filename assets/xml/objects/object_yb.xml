@@ -35,27 +35,27 @@
         <Texture Name="gYbEyeTex" OutName="yb_eye" Format="ci8" Width="32" Height="32" Offset="0x58F8" />
         <Texture Name="gYbPantsTex" OutName="yb_pants" Format="i8" Width="16" Height="16" Offset="0x5CF8" />
         <!-- some limbs wont highlight in z64utils, some guesswork here -->
-        <Limb Name="gYbMainRootLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_MAIN_ROOT" Offset="0x5DF8" />
-        <Limb Name="gYbPantsLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_PANTS" Offset="0x5E04" />
-        <Limb Name="gYbLegsRootLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_LEGS_ROOT" Offset="0x5E10" />
-        <Limb Name="gYbRightThighLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_RIGHT_THIGH" Offset="0x5E1C" />
-        <Limb Name="gYbRightCalfLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_RIGHT_CALF" Offset="0x5E28" />
-        <Limb Name="gYbRightFootLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_RIGHT_FOOT" Offset="0x5E34" />
-        <Limb Name="gYbLeftThighLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_LEFT_THIGH" Offset="0x5E40" />
-        <Limb Name="gYbLeftCalfLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_LEFT_CALF" Offset="0x5E4C" />
-        <Limb Name="gYbLeftFootLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_LEFT_FOOT" Offset="0x5E58" />
-        <Limb Name="gYbChestRootLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_CHEST_ROOT" Offset="0x5E64" />
-        <Limb Name="gYbHeadLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_HEAD" Offset="0x5E70" />
-        <Limb Name="gYbPonyTailLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_PONYTAIL" Offset="0x5E7C" />
-        <Limb Name="gYbEmpty5E88Limb" Type="Standard" EnumName="OBJECT_YB_LIMB_EMPTY_5E88" Offset="0x5E88" />
-        <Limb Name="gYbLeftUpperArmLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_LEFT_UPPER_ARM" Offset="0x5E94" />
-        <Limb Name="gYbLeftForArmLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_LEFT_FORARM" Offset="0x5EA0" />
-        <Limb Name="gYbLeftHandLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_LEFT_HAND" Offset="0x5EAC" />
-        <Limb Name="gYbRightUpperArmLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_RIGHT_UPPER_ARM" Offset="0x5EB8" />
-        <Limb Name="gYbRightForArmLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_RIGHT_FORARM" Offset="0x5EC4" />
-        <Limb Name="gYbRightHandLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_RIGHT_HAND" Offset="0x5ED0" />
-        <Limb Name="gYbEmpty5EDCLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_EMPTY_5EDC" Offset="0x5EDC" />
-        <Limb Name="gYbUpperTorsoLimb" Type="Standard" EnumName="OBJECT_YB_LIMB_TORSO" Offset="0x5EE8" />
-        <Skeleton Name="gYbSkeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_YB_LIMB_NONE" LimbMax="OBJECT_YB_LIMB_MAX" EnumName="object_yb_Limbs" Offset="0x5F48" />
+        <Limb Name="gYbMainRootLimb" Type="Standard" EnumName="YB_LIMB_MAIN_ROOT" Offset="0x5DF8" />
+        <Limb Name="gYbPantsLimb" Type="Standard" EnumName="YB_LIMB_PANTS" Offset="0x5E04" />
+        <Limb Name="gYbLegsRootLimb" Type="Standard" EnumName="YB_LIMB_LEGS_ROOT" Offset="0x5E10" />
+        <Limb Name="gYbRightThighLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_THIGH" Offset="0x5E1C" />
+        <Limb Name="gYbRightCalfLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_CALF" Offset="0x5E28" />
+        <Limb Name="gYbRightFootLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_FOOT" Offset="0x5E34" />
+        <Limb Name="gYbLeftThighLimb" Type="Standard" EnumName="YB_LIMB_LEFT_THIGH" Offset="0x5E40" />
+        <Limb Name="gYbLeftCalfLimb" Type="Standard" EnumName="YB_LIMB_LEFT_CALF" Offset="0x5E4C" />
+        <Limb Name="gYbLeftFootLimb" Type="Standard" EnumName="YB_LIMB_LEFT_FOOT" Offset="0x5E58" />
+        <Limb Name="gYbChestRootLimb" Type="Standard" EnumName="YB_LIMB_CHEST_ROOT" Offset="0x5E64" />
+        <Limb Name="gYbHeadLimb" Type="Standard" EnumName="YB_LIMB_HEAD" Offset="0x5E70" />
+        <Limb Name="gYbPonyTailLimb" Type="Standard" EnumName="YB_LIMB_PONYTAIL" Offset="0x5E7C" />
+        <Limb Name="gYbEmpty5E88Limb" Type="Standard" EnumName="YB_LIMB_EMPTY_5E88" Offset="0x5E88" />
+        <Limb Name="gYbLeftUpperArmLimb" Type="Standard" EnumName="YB_LIMB_LEFT_UPPER_ARM" Offset="0x5E94" />
+        <Limb Name="gYbLeftForArmLimb" Type="Standard" EnumName="YB_LIMB_LEFT_FORARM" Offset="0x5EA0" />
+        <Limb Name="gYbLeftHandLimb" Type="Standard" EnumName="YB_LIMB_LEFT_HAND" Offset="0x5EAC" />
+        <Limb Name="gYbRightUpperArmLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_UPPER_ARM" Offset="0x5EB8" />
+        <Limb Name="gYbRightForArmLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_FORARM" Offset="0x5EC4" />
+        <Limb Name="gYbRightHandLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_HAND" Offset="0x5ED0" />
+        <Limb Name="gYbEmpty5EDCLimb" Type="Standard" EnumName="YB_LIMB_EMPTY_5EDC" Offset="0x5EDC" />
+        <Limb Name="gYbUpperTorsoLimb" Type="Standard" EnumName="YB_LIMB_TORSO" Offset="0x5EE8" />
+        <Skeleton Name="gYbSkeleton" Type="Flex" LimbType="Standard" LimbNone="YB_LIMB_NONE" LimbMax="YB_LIMB_MAX" EnumName="ObjectYBLimbs" Offset="0x5F48" />
     </File>
 </Root>

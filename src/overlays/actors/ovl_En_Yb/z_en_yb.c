@@ -6,7 +6,6 @@
 
 #include "z_en_yb.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_yb/object_yb.h"
 
 #define FLAGS (ACTOR_FLAG_2000000 | ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
@@ -87,7 +86,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // @Bug this alignment is because of player animations, but should be using ALIGN16
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gYbSkeleton, &object_yb_Anim_000200,
-                       (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, ENYB_LIMBCOUNT);
+                       (uintptr_t)this->jointTable & ~0xF, (uintptr_t)this->morphTable & ~0xF, YB_LIMB_MAX);
 
     Animation_PlayLoop(&this->skelAnime, &object_yb_Anim_000200);
 
@@ -434,10 +433,10 @@ void EnYb_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnYb* this = THIS;
 
-    if (limbIndex == OBJECT_YB_LIMB_HEAD) {
+    if (limbIndex == YB_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
     }
-    if (limbIndex == OBJECT_YB_LIMB_LEGS_ROOT) {
+    if (limbIndex == YB_LIMB_LEGS_ROOT) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
     }
 }
@@ -445,10 +444,10 @@ void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnYb_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnYb* this = THIS;
 
-    if (limbIndex == OBJECT_YB_LIMB_HEAD) {
+    if (limbIndex == YB_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
     }
-    if (limbIndex == OBJECT_YB_LIMB_LEGS_ROOT) {
+    if (limbIndex == YB_LIMB_LEGS_ROOT) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
     }
 }
