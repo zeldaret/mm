@@ -3,7 +3,7 @@
         <DList Name="object_uch_DL_000080" Offset="0x80" />
         <Texture Name="object_uch_Tex_000130" OutName="tex_000130" Format="i8" Width="32" Height="32" Offset="0x130" />
         <TextureAnimation Name="object_uch_Matanimheader_000550" Offset="0x550" />
-        <!-- <Blob Name="object_uch_Blob_000560" Size="0x10" Offset="0x560" /> -->
+        <TextureAnimation Name="object_uch_Matanimheader_000560" Offset="0x560" />
         <Animation Name="object_uch_Anim_000608" Offset="0x608" />
         <Animation Name="object_uch_Anim_0006C8" Offset="0x6C8" />
         <DList Name="object_uch_DL_000720" Offset="0x720" />

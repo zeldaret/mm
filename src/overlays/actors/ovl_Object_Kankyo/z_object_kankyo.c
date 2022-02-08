@@ -554,7 +554,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
                 gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_08EBE0));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
             }
 
             Matrix_InsertTranslation(spC4.x, spC4.y, spC4.z, MTXMODE_NEW);
@@ -629,7 +629,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_08EBE0));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);

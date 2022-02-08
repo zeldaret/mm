@@ -6,6 +6,7 @@
 
 #include "z_en_po_sisters.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_po_sisters/object_po_sisters.h"
 
 #define FLAGS 0x00005015
 
@@ -46,24 +47,6 @@ void func_80B1C030(EnPoSisters* this);
 void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx);
 void func_80B1C2E8(EnPoSisters* this);
 void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000114;
-extern AnimationHeader D_060008C0;
-extern AnimationHeader D_06000A54;
-extern AnimationHeader D_06000D40;
-extern AnimationHeader D_0600119C;
-extern AnimationHeader D_060014CC;
-extern Gfx D_06001CB0[];
-extern Gfx D_06001DE0[];
-extern Gfx D_060027B0[];
-extern Gfx D_06002EB8[];
-extern Gfx D_06002F88[];
-extern Gfx D_06003628[];
-extern Gfx D_06003880[];
-extern Gfx D_06003DC8[];
-extern Gfx D_06004020[];
-extern Gfx D_060046E0[];
-extern SkeletonHeader D_060065C8;
 
 static Color_RGBA8 D_80B1DA30[] = {
     { 255, 170, 255, 255 },
@@ -159,7 +142,8 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060065C8, &D_060014CC, this->jointTable, this->morphTable, 12);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_po_sisters_Skel_0065C8, &object_po_sisters_Anim_0014CC,
+                   this->jointTable, this->morphTable, 12);
     this->unk_226 = 255;
     this->unk_227 = 255;
     this->unk_228 = 210;
@@ -293,7 +277,7 @@ void func_80B1A9B0(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1AA88(EnPoSisters* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_060014CC, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_0014CC, -3.0f);
     this->actor.speedXZ = 0.0f;
     this->unk_192 = Rand_S16Offset(100, 50);
     this->actionFunc = func_80B1AAE8;
@@ -308,7 +292,7 @@ void func_80B1AAE8(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1AB5C(EnPoSisters* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_060014CC, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_0014CC, -3.0f);
     this->unk_192 = Rand_S16Offset(2, 3);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80B1ABB8;
@@ -329,7 +313,7 @@ void func_80B1ABB8(EnPoSisters* this, GlobalContext* globalCtx) {
 
 void func_80B1AC40(EnPoSisters* this) {
     if (this->actionFunc != func_80B1AE3C) {
-        Animation_MorphToLoop(&this->skelAnime, &D_06000D40, -3.0f);
+        Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_000D40, -3.0f);
     }
     this->unk_192 = Rand_S16Offset(15, 3);
     this->unk_191 |= (0x6 | 0x1);
@@ -391,9 +375,9 @@ void func_80B1AF8C(EnPoSisters* this) {
         this->collider.base.acFlags |= AC_HARD;
     }
 
-    Animation_MorphToLoop(&this->skelAnime, &D_06000114, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_000114, -5.0f);
     this->actor.speedXZ = 0.0f;
-    this->unk_192 = Animation_GetLastFrame(&D_06000114.common) * 3 + 3;
+    this->unk_192 = Animation_GetLastFrame(&object_po_sisters_Anim_000114.common) * 3 + 3;
     this->unk_191 &= ~2;
     this->actionFunc = func_80B1B020;
 }
@@ -418,7 +402,7 @@ void func_80B1B0E0(EnPoSisters* this) {
     if (this->unk_18C == 0) {
         this->collider.base.colType = COLTYPE_METAL;
         this->collider.base.acFlags |= AC_HARD;
-        Animation_MorphToLoop(&this->skelAnime, &D_06000114, -5.0f);
+        Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_000114, -5.0f);
     }
     this->unk_192 = 5;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -456,7 +440,7 @@ void func_80B1B168(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1B280(EnPoSisters* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06000D40, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_000D40, -3.0f);
     this->actor.world.rot.y = BINANG_ROT180(this->actor.yawTowardsPlayer);
     if (this->unk_18C != 0) {
         this->collider.base.colType = COLTYPE_HIT3;
@@ -480,7 +464,7 @@ void func_80B1B2F0(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1B3A8(EnPoSisters* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_060008C0, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_po_sisters_Anim_0008C0, -3.0f);
     if (this->collider.base.ac != NULL) {
         func_800BE504(&this->actor, &this->collider);
     }
@@ -524,7 +508,7 @@ void func_80B1B444(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1B5B4(EnPoSisters* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06000A54, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_000A54, -3.0f);
     this->actor.world.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
     this->unk_192 = 5;
     this->unk_191 |= (0x8 | 0x2 | 0x1);
@@ -552,7 +536,8 @@ void func_80B1B628(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1B70C(EnPoSisters* this) {
-    Animation_Change(&this->skelAnime, &D_0600119C, 1.5f, 0.0f, Animation_GetLastFrame(&D_0600119C.common), 2, -3.0f);
+    Animation_Change(&this->skelAnime, &object_po_sisters_Anim_00119C, 1.5f, 0.0f,
+                     Animation_GetLastFrame(&object_po_sisters_Anim_00119C.common), 2, -3.0f);
     this->unk_194 = 100;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -576,7 +561,8 @@ void func_80B1B7BC(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1B860(EnPoSisters* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &D_0600119C, 1.5f, 0.0f, Animation_GetLastFrame(&D_0600119C.common), 2, -3.0f);
+    Animation_Change(&this->skelAnime, &object_po_sisters_Anim_00119C, 1.5f, 0.0f,
+                     Animation_GetLastFrame(&object_po_sisters_Anim_00119C.common), 2, -3.0f);
     if (this->unk_18C == 0) {
         this->unk_2EC = 110.0f;
         func_80B1A768(this, globalCtx);
@@ -758,7 +744,7 @@ void func_80B1BF2C(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1C030(EnPoSisters* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06000D40, -3.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_po_sisters_Anim_000D40, -3.0f);
     this->unk_229 = 255;
     this->unk_192 = 300;
     this->unk_194 = 3;
@@ -825,7 +811,7 @@ void func_80B1C0A4(EnPoSisters* this, GlobalContext* globalCtx) {
 }
 
 void func_80B1C2E8(EnPoSisters* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_0600119C);
+    Animation_PlayOnce(&this->skelAnime, &object_po_sisters_Anim_00119C);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
     this->unk_229 = 0;
     this->unk_191 = 0x20;
@@ -980,15 +966,15 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B1C974(EnPoSisters* this) {
-    if (this->skelAnime.animation == &D_06000114) {
+    if (this->skelAnime.animation == &object_po_sisters_Anim_000114) {
         this->unk_226 = CLAMP_MAX(this->unk_226 + 5, 255);
         this->unk_227 = CLAMP_MIN(this->unk_227 - 5, 50);
         this->unk_228 = CLAMP_MIN(this->unk_228 - 5, 0);
-    } else if (this->skelAnime.animation == &D_06000A54) {
+    } else if (this->skelAnime.animation == &object_po_sisters_Anim_000A54) {
         this->unk_226 = CLAMP_MAX(this->unk_226 + 5, 80);
         this->unk_227 = CLAMP_MAX(this->unk_227 + 5, 255);
         this->unk_228 = CLAMP_MAX(this->unk_228 + 5, 225);
-    } else if (this->skelAnime.animation == &D_060008C0) {
+    } else if (this->skelAnime.animation == &object_po_sisters_Anim_0008C0) {
         if (this->actor.colorFilterTimer & 0x2) {
             this->unk_226 = 0;
             this->unk_227 = 0;
@@ -1014,16 +1000,16 @@ void func_80B1C974(EnPoSisters* this) {
 s32 EnPoSisters_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                  Actor* thisx, Gfx** gfx) {
     static Gfx* D_80B1DACC[] = {
-        D_06001DE0,
-        D_06002F88,
-        D_06003628,
-        D_06003DC8,
+        object_po_sisters_DL_001DE0,
+        object_po_sisters_DL_002F88,
+        object_po_sisters_DL_003628,
+        object_po_sisters_DL_003DC8,
     };
     static Gfx* D_80B1DADC[] = {
-        D_06001CB0,
-        D_06002EB8,
-        D_06003880,
-        D_06004020,
+        object_po_sisters_DL_001CB0,
+        object_po_sisters_DL_002EB8,
+        object_po_sisters_DL_003880,
+        object_po_sisters_DL_004020,
     };
     static Color_RGBA8 D_80B1DAEC[] = {
         { 80, 0, 100, 0 },
@@ -1083,7 +1069,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     if ((this->actionFunc == func_80B1BA90) && (this->unk_192 >= 8) && (limbIndex == 9)) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, D_060046E0);
+        gSPDisplayList((*gfx)++, object_po_sisters_DL_0046E0);
     }
 
     if (limbIndex == 8) {
@@ -1153,7 +1139,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_SetCurrentState(&this->unk_358);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_060027B0);
+        gSPDisplayList(POLY_OPA_DISP++, object_po_sisters_DL_0027B0);
     }
 
     gSPSegment(POLY_XLU_DISP++, 0x08,

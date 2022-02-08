@@ -5,6 +5,7 @@
  */
 
 #include "z_en_railgibud.h"
+#include "objects/object_rd/object_rd.h"
 
 #define FLAGS 0x00000415
 
@@ -47,28 +48,6 @@ void func_80BA7D04(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA7D30(EnRailgibud* this, GlobalContext* globalCtx);
 void func_80BA8050(Actor* thisx, GlobalContext* globalCtx);
 
-extern AnimationHeader D_060009C4;
-extern AnimationHeader D_06000F1C;
-extern AnimationHeader D_06001600;
-extern FlexSkeletonHeader D_060053E8;
-extern AnimationHeader D_06005DF4;
-extern AnimationHeader D_060061E4;
-extern AnimationHeader D_06006678;
-extern AnimationHeader D_06006B08;
-extern AnimationHeader D_06006EEC;
-extern AnimationHeader D_060073A4;
-extern AnimationHeader D_06007BBC;
-extern AnimationHeader D_060081A8;
-extern AnimationHeader D_06009298;
-extern AnimationHeader D_06009900;
-extern AnimationHeader D_0600A450;
-extern AnimationHeader D_0600ABE0;
-extern FlexSkeletonHeader D_06010B88;
-extern AnimationHeader D_060113EC;
-extern AnimationHeader D_060118D8;
-extern AnimationHeader D_06011DB8;
-extern AnimationHeader D_0601216C;
-
 const ActorInit En_Railgibud_InitVars = {
     ACTOR_EN_RAILGIBUD,
     ACTORCAT_ENEMY,
@@ -82,16 +61,16 @@ const ActorInit En_Railgibud_InitVars = {
 };
 
 static ActorAnimationEntry sAnimations[] = {
-    { &D_06006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
-    { &D_06006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_06007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_060081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_06009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_0600A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_0600ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &D_0601216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600A450, 3.0f, 0.0f, 0.0f, 2, -6.0f }, { &D_06005DF4, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &D_060061E4, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06001600, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_060009C4, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &D_06000F1C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
+    { &object_rd_Anim_006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_rd_Anim_007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_rd_Anim_00A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_00ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_0113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &object_rd_Anim_01216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_0118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_00A450, 3.0f, 0.0f, 0.0f, 2, -6.0f }, { &object_rd_Anim_005DF4, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+    { &object_rd_Anim_0061E4, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_001600, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_rd_Anim_0009C4, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_000F1C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -220,7 +199,8 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable,
+                       this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -521,7 +501,8 @@ void func_80BA64AC(EnRailgibud* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if ((this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
             this->actor.hintId = 0x2A;
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
+                               this->morphTable, 26);
             this->unk_3F8 = 1;
         }
         func_80BA6284(this);
@@ -584,7 +565,8 @@ void func_80BA66C8(EnRailgibud* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_3F2 == 20) && (this->unk_3F6 > 0) && (this->unk_404 == 0) && (this->unk_3F8 == 0)) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, NULL, this->jointTable, this->morphTable, 26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, NULL, this->jointTable,
+                           this->morphTable, 26);
         this->unk_3F8 = 1;
     }
 }
@@ -996,7 +978,8 @@ void func_80BA7B6C(EnRailgibud* this, GlobalContext* globalCtx) {
     this->actor.flags |= 0x100000;
     this->actor.flags |= 0x10;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 28.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable, 26);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0, this->jointTable,
+                       this->morphTable, 26);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

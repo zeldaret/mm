@@ -14,7 +14,7 @@ beginseg
     name "boot"
     address 0x80080060
     include "build/src/boot_O2_g3/boot_main.o"
-    include "build/data/boot/rsp_boot.data.o"
+    include "build/data/boot/rspboot.data.o"
     include "build/src/boot_O2_g3/idle.o"
     include "build/src/boot_O2_g3/idle_extra_bss.o"
     include "build/src/boot_O2_g3/viconfig.o"
@@ -422,7 +422,9 @@ beginseg
     compress
     after "dmadata"
     include "build/src/code/z_en_a_keep.o"
-    include "build/data/code/rsp.data.o"
+    include "build/data/code/aspMain.data.o"
+    include "build/data/code/gspS2DEX2.fifo.data.o"
+    include "build/data/code/njpgdspMain.data.o"
     include "build/data/code/code_801ADE60.data.o"
     include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
@@ -660,7 +662,11 @@ beginseg
     include "build/src/code/jpegdecoder.o"
     include_readonly "build/src/code/z_game_over.o"
     include "build/src/code/z_construct.o"
-    include "build/data/code/rsp.rodata.o"
+    include "build/data/code/audio_tables.rodata.o"
+    include "build/data/code/aspMain.rodata.o"
+    include "build/data/code/gspF3DZEX2.NoN.PosLight.fifo.rodata.o"
+    include "build/data/code/gspS2DEX2.fifo.rodata.o"
+    include "build/data/code/njpgdspMain.rodata.o"
 endseg
 
 beginseg
@@ -802,9 +808,7 @@ beginseg
     name "ovl_En_Bom"
     compress
     include "build/src/overlays/actors/ovl_En_Bom/z_en_bom.o"
-    include "build/data/ovl_En_Bom/ovl_En_Bom.data.o"
-    include "build/data/ovl_En_Bom/ovl_En_Bom.bss.o"
-    include "build/data/ovl_En_Bom/ovl_En_Bom.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bom/ovl_En_Bom_reloc.o"
 endseg
 
 beginseg
@@ -2686,11 +2690,7 @@ beginseg
     name "ovl_Obj_Iceblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Iceblock/z_obj_iceblock.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Obj_Iceblock/ovl_Obj_Iceblock_reloc.o"
-#else
-    include "build/data/ovl_Obj_Iceblock/ovl_Obj_Iceblock.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -9200,56 +9200,64 @@ beginseg
     name "scene_texture_01"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_01.o"
+    number 6
+    include "build/assets/misc/scene_texture_01/scene_texture_01.o"
 endseg
 
 beginseg
     name "scene_texture_02"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_02.o"
+    number 6
+    include "build/assets/misc/scene_texture_02/scene_texture_02.o"
 endseg
 
 beginseg
     name "scene_texture_03"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_03.o"
+    number 6
+    include "build/assets/misc/scene_texture_03/scene_texture_03.o"
 endseg
 
 beginseg
     name "scene_texture_04"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_04.o"
+    number 6
+    include "build/assets/misc/scene_texture_04/scene_texture_04.o"
 endseg
 
 beginseg
     name "scene_texture_05"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_05.o"
+    number 6
+    include "build/assets/misc/scene_texture_05/scene_texture_05.o"
 endseg
 
 beginseg
     name "scene_texture_06"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_06.o"
+    number 6
+    include "build/assets/misc/scene_texture_06/scene_texture_06.o"
 endseg
 
 beginseg
     name "scene_texture_07"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_07.o"
+    number 6
+    include "build/assets/misc/scene_texture_07/scene_texture_07.o"
 endseg
 
 beginseg
     name "scene_texture_08"
     compress
     romalign 0x1000
-    include "build/baserom/scene_texture_08.o"
+    number 6
+    include "build/assets/misc/scene_texture_08/scene_texture_08.o"
 endseg
 
 beginseg
