@@ -1591,7 +1591,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     for (i = 0, flag = false; i < ARRAY_COUNT(D_809E0438); i++, effect++) {
         if (effect->unk_24 == 4) {
             if (!flag) { //! @bug - dev forgot to set flag to 1, should only apply to first entry?
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrbs1DL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
             }
 
@@ -1603,7 +1603,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawLightOrbDL);
+            gSPDisplayList(POLY_XLU_DISP++, gLightOrbsVtxDL);
         }
     }
 

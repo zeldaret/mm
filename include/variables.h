@@ -428,7 +428,6 @@ extern Color_RGBA8 actorDefaultHitColor;
 // extern UNK_TYPE2 D_801AEE4C;
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];
-// extern UNK_TYPE1 D_801AEFA8;
 // extern UNK_TYPE1 D_801AEFB8;
 // extern UNK_TYPE1 D_801AEFBC;
 // extern UNK_TYPE1 D_801AEFC0;

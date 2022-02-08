@@ -642,7 +642,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                  this->actor.world.pos.y + 84.0f + this->unk_1B4,
                                  (this->actor.world.pos.z - 2.0f) + spE0, MTXMODE_NEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbs1DL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)((140.0f * sp68) + 115.0f), temp_s2);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)((100.0f * sp68) + 65.0f), 128);
 
@@ -650,7 +650,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 64, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawLightOrbDL);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbsVtxDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
