@@ -150,8 +150,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx
     if (this->alpha > 0) {
         if (this->currentAnimIndex == 2) {
             // regalloc without temp
-            // almost 1/2250.0f, but thats off by 0x1 in rodata
-            f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * 0.00044444448f) + 0.01f;
+            f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1/2.25f) * 0.001f)) + 0.01f;
             this->actor.scale.x = tempScale;
         }
         Math_Vec3f_Copy(&oldPos, &this->actor.world.pos);
