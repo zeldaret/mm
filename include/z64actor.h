@@ -415,7 +415,7 @@ typedef enum {
     /* 30 */ ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL = 30,
     /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM,
     /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_LARGE
-} ActorDrawDamangeEffectType;
+} ActorDrawDamageEffectType;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,
