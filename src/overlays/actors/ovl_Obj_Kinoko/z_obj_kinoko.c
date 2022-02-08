@@ -36,7 +36,6 @@ void ObjKinoko_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjKinoko_Update(Actor* thisx, GlobalContext* globalCtx) {
-    f32 phi_f2;
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->currentMask != PLAYER_MASK_SCENTS) {
@@ -78,10 +77,10 @@ void ObjKinoko_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetEnvColor(&gfx[1], 110, 44, 200, 100);
     gDPSetRenderMode(&gfx[2], G_RM_PASS, G_RM_ZB_CLD_SURF2);
     gSPMatrix(&gfx[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[4], &gameplay_keep_DL_029D10[2]);
+    gSPDisplayList(&gfx[4], &gMushroomGlow[2]);
     Matrix_InsertXRotation_s(-0x4000, 1);
     gSPMatrix(&gfx[5], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[6], &gameplay_keep_DL_029D10[2]);
+    gSPDisplayList(&gfx[6], &gMushroomGlow[2]);
     POLY_XLU_DISP = &gfx[7];
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
