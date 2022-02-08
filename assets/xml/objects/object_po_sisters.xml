@@ -41,7 +41,7 @@
         <Texture Name="gPoSistersAmyHairTieTex" OutName="posisters_amy_hair_tie" Format="rgba16" Width="4" Height="4" Offset="0x62F8" />
         <Texture Name="gPoSistersCrispBodyTex" OutName="posisters_crisp_body" Format="rgba16" Width="16" Height="16" Offset="0x6318" />
         <!--- unknown? wont draw on meg -->
-        <Limb Name="object_po_sisters_Standardlimb_006518" Type="Standard" Offset="0x6518" />
+        <Limb Name="gPoSistersMainRootLimb" Type="Standard" Offset="0x6518" />
         <Limb Name="gPoSistersLeftArmLimb" Type="Standard" Offset="0x6524" />
         <!--- unknown? wont draw on meg -->
         <Limb Name="object_po_sisters_Standardlimb_006530" Type="Standard" Offset="0x6530" />

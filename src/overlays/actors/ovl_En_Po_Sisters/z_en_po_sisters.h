@@ -9,7 +9,7 @@ typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, GlobalContext*);
 
 #define ENPOSISTERS_GET_TYPE(thisx) (((thisx)->params >> 8) & 3)
 #define ENPOSISTERS_GET_MEG_CLONE(thisx) (((thisx)->params >> 0xA) & 3)
-#define ENPOSISTERS_GET_1000(thisx) ((thisx)->params & 0x1000)
+#define ENPOSISTERS_GET_OBSERVER_FLAG(thisx) ((thisx)->params & 0x1000)
 
 #define REALMEG 0
 
@@ -21,6 +21,7 @@ typedef enum EnPoSisterType {
 } EnPoSisterType;
 
 // stateTimer gets reused:
+// if observer type, counts frames until next laugh
 // in the death actionfunc it counts frames up to actionfunc changes
 // when spinning back into reality, it counts frames of the animation
 
@@ -30,18 +31,19 @@ typedef struct EnPoSisters {
     /* 0x0188 */ EnPoSistersActionFunc actionFunc;
     /* 0x018C */ u8 sisterType;
     /* 0x018D */ u8 megCloneNum;
-    /* 0x018E */ u8 unk_18E; // timer, start at 32
-    /* 0x018F */ u8 zTimer; // how many frames the player is z targeting, if zero -> invis
+    /* 0x018E */ u8 floatingBobbingTimer; // counts down from 32 to zero, reset
+    /* 0x018F */ u8 zTargetTimer; // how many frames the player is z targeting, if zero -> invis
     /* 0x0190 */ u8 fireCount;
-    /* 0x0191 */ u8 flags191;
+    /* 0x0191 */ u8 poSisterFlags;
     /* 0x0192 */ s16 stateTimer; // reused, see above
     /* 0x0194 */ s16 inivisTimer;
-    /* 0x0196 */ Vec3s jointTable[12];
+    /* 0x0196 */ Vec3s jointTable[12]; // todo change these to match object enum
     /* 0x01DE */ Vec3s morphTable[12];
     /* 0x0226 */ Color_RGBA8 color;
     /* 0x022C */ Vec3f fireLoc[8];
-    /* 0x028C */ Vec3f unk_28C[8]; // appear related to limbs in draw
+    /* 0x028C */ Vec3f limbPos[8];
     /* 0x02EC */ f32 megDistToPlayer;
+    // these two are linked, reason they are separate is unknown
     /* 0x02F0 */ f32 unk_2F0; // from alpha?
     /* 0x02F4 */ f32 unk_2F4; // used as scale in limbs draw
     /* 0x02F8 */ LightNode* lightNode;
