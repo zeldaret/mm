@@ -122,21 +122,21 @@ Player* EnShn_GetPlayer(EnShn* this, GlobalContext* globalCtx) {
 
 void func_80AE626C(EnShn* this) {
     s32 topPad; // Vec3f Sandwhich
-    Vec3f sp44;
-    Vec3f b;
+    Vec3f playerPos;
+    Vec3f shnPos;
     s32 bottomPad;
 
-    Math_Vec3f_Copy(&sp44, &this->shnPlayerRef->actor.world.pos);
-    Math_Vec3f_Copy(&b, &this->actor.world.pos);
-    Math_ApproachS(&this->unk_2BC, (Math_Vec3f_Yaw(&b, &sp44) - this->actor.shape.rot.y), 4, 0x2AA8);
+    Math_Vec3f_Copy(&playerPos, &this->shnPlayerRef->actor.world.pos);
+    Math_Vec3f_Copy(&shnPos, &this->actor.world.pos);
+    Math_ApproachS(&this->unk_2BC, (Math_Vec3f_Yaw(&shnPos, &playerPos) - this->actor.shape.rot.y), 4, 0x2AA8);
     this->unk_2BC = CLAMP(this->unk_2BC, -0x1FFE, 0x1FFE);
-    Math_Vec3f_Copy(&b, &this->actor.focus.pos);
-    if (this->shnPlayerRef->actor.id == 0) {
-        sp44.y = this->shnPlayerRef->bodyPartsPos[7].y + 3.0f;
+    Math_Vec3f_Copy(&shnPos, &this->actor.focus.pos);
+    if (this->shnPlayerRef->actor.id == ACTOR_PLAYER) {
+        playerPos.y = this->shnPlayerRef->bodyPartsPos[7].y + 3.0f;
     } else {
-        Math_Vec3f_Copy(&sp44, &this->shnPlayerRef->actor.focus.pos);
+        Math_Vec3f_Copy(&playerPos, &this->shnPlayerRef->actor.focus.pos);
     }
-    Math_ApproachS(&this->unk_2BA, Math_Vec3f_Pitch(&b, &sp44), 4, 0x2AA8);
+    Math_ApproachS(&this->unk_2BA, Math_Vec3f_Pitch(&shnPos, &playerPos), 4, 0x2AA8);
     this->unk_2BA = CLAMP(this->unk_2BA, -0x1554, 0x1554);
 }
 
@@ -145,7 +145,7 @@ void func_80AE63A8(EnShn* this, GlobalContext* globalCtx) {
     s16 phi_v1_2;
 
     this->shnPlayerRef = EnShn_GetPlayer(this, globalCtx);
-    if ((this->unk_1D8 & 8) && (this->shnPlayerRef != 0)) {
+    if ((this->unk_1D8 & 8) && (this->shnPlayerRef != NULL)) {
         if (this->unk_2CA == 0) {
             phi_v1 = 0;
         } else {
@@ -296,7 +296,7 @@ s32 func_80AE68F0(EnShn* this, GlobalContext* globalCtx) {
             if (player->exchangeItemId == EXCH_ITEM_13) {
                 this->unk_1D8 |= 0x80;
                 this->unk_2E4 = player->exchangeItemId;
-            } else if (player->exchangeItemId) {
+            } else if (player->exchangeItemId != EXCH_ITEM_NONE) {
                 this->unk_1D8 |= 0x100;
                 this->unk_2E4 = player->exchangeItemId;
             }
