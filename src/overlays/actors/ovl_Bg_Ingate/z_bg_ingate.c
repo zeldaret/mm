@@ -16,7 +16,7 @@ void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-Actor* BgIngate_findActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId);
+Actor* BgIngate_FindActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId);
 s32 func_80953BEC(BgIngate* this);
 void func_80953B40(BgIngate* this);
 void func_80953F8C(BgIngate* this, GlobalContext* globalCtx);
@@ -47,7 +47,7 @@ const ActorInit Bg_Ingate_InitVars = {
  * @param actorId - ID of actor to search for
  * @return Actor*
  */
-Actor* BgIngate_findActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {
+Actor* BgIngate_FindActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {
     Actor* foundActor = NULL;
     Actor* tempActor;
 
@@ -72,7 +72,7 @@ Actor* BgIngate_findActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat,
 void func_80953B40(BgIngate* this) {
     s32 temp;
 
-    if ((gSaveContext.eventInf[3] & 0x20) == 0) {
+    if (!(gSaveContext.eventInf[3] & 0x20)) {
         this->unk180 = 0xFA0;
         this->unk168 = 4;
     } else {
@@ -91,20 +91,20 @@ s32 func_80953BEC(BgIngate* this) {
     f32 sp74[265];
     Vec3f sp68;
     Vec3f sp5C;
-    Vec3f zeroVec;
+    Vec3f unkVec;
     s16 yaw;
 
     func_8013AF00(sp74, 3, this->unk164->count + 3);
-    if ((this->unk160 & 1) == 0) {
-        zeroVec = gZeroVec3f;
+    if (!(this->unk160 & 1)) {
+        unkVec = gZeroVec3f;
         func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
-                      &zeroVec, this->unk168);
+                      &unkVec, this->unk168);
         this->unk160 |= 1;
     } else {
-        zeroVec = this->unk170;
+        unkVec = this->unk170;
     }
-    this->dyna.actor.world.pos.x = zeroVec.x;
-    this->dyna.actor.world.pos.z = zeroVec.z;
+    this->dyna.actor.world.pos.x = unkVec.x;
+    this->dyna.actor.world.pos.z = unkVec.z;
     this->unk170 = gZeroVec3f;
     if (func_8013B6B0(this->unk164, &this->unk17C, &this->unk18C, this->unk184, this->unk180, &this->unk188, sp74,
                       &this->unk170, this->unk168) != 0) {
@@ -121,24 +121,24 @@ s32 func_80953BEC(BgIngate* this) {
 }
 
 s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
-    Camera* camera = Play_GetCamera(globalCtx, 0);
+    Camera* camera = Play_GetCamera(globalCtx, MAIN_CAM);
 
-    if ((gSaveContext.eventInf[3] & 0x20) != 0) {
+    if (gSaveContext.eventInf[3] & 0x20) {
         func_800B7298(globalCtx, &this->dyna.actor, 7);
     } else {
         gSaveContext.eventInf[4] |= 2;
     }
-    func_800DFAC8(camera, 0x2F);
+    func_800DFAC8(camera, 47);
     globalCtx->unk_1887C = 0x63;
 
     return false;
 }
 
 void func_80953E38(GlobalContext* globalCtx) {
-    func_800DFAC8(Play_GetCamera(globalCtx, 0), 1);
+    func_800DFAC8(Play_GetCamera(globalCtx, MAIN_CAM), 1);
 
-    if ((gSaveContext.eventInf[3] & 0x20) == 0) {
-        gSaveContext.eventInf[4] &= 0xFD;
+    if (!(gSaveContext.eventInf[3] & 0x20)) {
+        gSaveContext.eventInf[4] &= (u8)~2;
     }
 
     globalCtx->unk_1887C = -1;
@@ -176,17 +176,17 @@ void func_80953F8C(BgIngate* this, GlobalContext* globalCtx) {
 
 void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Camera* camera = Play_GetCamera(globalCtx, 0);
+    Camera* camera = Play_GetCamera(globalCtx, MAIN_CAM);
 
-    if ((gSaveContext.eventInf[4] & 1) == 0) {
+    if (!(gSaveContext.eventInf[4] & 1)) {
 
-        if (!(gSaveContext.eventInf[3] & 0x20) && ((this->unk160 & 0x10) != 0) && (this->unk16C == 0)) {
+        if (!(gSaveContext.eventInf[3] & 0x20) && (this->unk160 & 0x10) && (this->unk16C == 0)) {
             this->dyna.actor.textId = 0x9E3;
             func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
             this->unk160 &= ~0x10;
         }
 
-        if ((this->unk160 & 2) != 0) {
+        if (this->unk160 & 2) {
 
             if (this->unk164->unk1 != 0xFF) {
                 func_80953E38(globalCtx);
@@ -197,28 +197,27 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
                 gSaveContext.weekEventReg[0x5A] |= 0x40;
                 this->actionFunc = func_809543D4;
             } else {
-                
+
                 if (!(gSaveContext.eventInf[3] & 0x20)) {
-                    gSaveContext.eventInf[4] &= 0xFD;
+                    gSaveContext.eventInf[4] &= (u8)~2;
                 } else {
                     gSaveContext.eventInf[4] |= 1;
                 }
                 this->actionFunc = func_809542A0;
             }
-        } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->unk164 != 0)) {
-            // This sound macro doesn't exist??
-            Actor_PlaySfxAtPos(&this->dyna.actor, 0x211E);
+        } else if ((ActorCutscene_GetCurrentIndex() == -1) && (this->unk164 != NULL)) {
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CRUISER - SFX_FLAG);
             func_80953BEC(this);
         }
     }
     if (ActorCutscene_GetCurrentIndex() != this->unk16E) {
         if (ActorCutscene_GetCurrentIndex() != -1) {
             func_800DFAC8(camera, 1);
-            player->stateFlags1 |= ACTOR_FLAG_20;
+            player->stateFlags1 |= 0x20;
             globalCtx->actorCtx.unk5 &= ~0x4;
         } else {
-            func_800DFAC8(camera, 0x2F);
-            player->stateFlags1 &= ~ACTOR_FLAG_20;
+            func_800DFAC8(camera, 47);
+            player->stateFlags1 &= ~0x20;
         }
     }
     this->unk16E = ActorCutscene_GetCurrentIndex();
@@ -237,15 +236,15 @@ void func_809541B8(BgIngate* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_809543D4;
             }
         }
-    } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna) == 0) {
+    } else if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
         this->unk160 |= 4;
     }
 }
 
 void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.eventInf[5] & 1) != 0) {
+    if (gSaveContext.eventInf[5] & 1) {
         globalCtx->nextEntranceIndex = 0xA820;
-        gSaveContext.eventInf[5] &= 0xFE;
+        gSaveContext.eventInf[5] &= (u8)~1;
     } else {
         globalCtx->nextEntranceIndex = 0xA810;
     }
@@ -254,7 +253,7 @@ void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
     globalCtx->unk_1887F = 3;
     gSaveContext.nextTransition = 3;
     this->actionFunc = func_80953F8C;
-    gSaveContext.weekEventReg[90] &= 0xBF;
+    gSaveContext.weekEventReg[90] &= (u8)~0x40;
     func_800FE498();
 }
 
@@ -270,9 +269,8 @@ void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
 }
 
 void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
-    u8 talkState;
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    talkState = Message_GetState(&globalCtx->msgCtx);
     if (((talkState == 4) || (talkState == 5)) && func_80147624(globalCtx)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
@@ -291,7 +289,7 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
                         this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
                     }
                     func_80953F14(this, globalCtx);
-                    gSaveContext.weekEventReg[0x5A] &= 0xBF;
+                    gSaveContext.weekEventReg[0x5A] &= (u8)~0x40;
                     func_8019F230();
                 }
                 func_801477B4(globalCtx);
@@ -299,7 +297,7 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
             case 0x9E6:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_80953EA4(this, globalCtx);
-                    gSaveContext.weekEventReg[0x5A] &= 0xBF;
+                    gSaveContext.weekEventReg[0x5A] &= (u8)~0x40;
                     func_8019F208();
                 } else {
                     this = this;
@@ -316,14 +314,14 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
 }
 
 void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    BgIngate* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    BgIngate* this = THIS;
     s32 phi_a2;
     Vec3s* sp38;
     Vec3f sp2C;
     Vec3f sp20;
 
-    if (BgIngate_findActor(this, globalCtx, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
+    if (BgIngate_FindActor(this, globalCtx, ACTORCAT_BG, ACTOR_BG_INGATE) == NULL) {
         DynaPolyActor_Init(&this->dyna, 3);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gSichitaiBoatCol);
         this->unk160 = 0;
@@ -335,7 +333,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
         if (gSaveContext.weekEventReg[0x14] & 2) {
             gSaveContext.weekEventReg[0x5A] &= 0xBF;
         }
-        if ((!(gSaveContext.eventInf[3] & 0x20)) && (gSaveContext.weekEventReg[0x5A] & 0x40)) {
+        if (!(gSaveContext.eventInf[3] & 0x20) && (gSaveContext.weekEventReg[0x5A] & 0x40)) {
             phi_a2 = 1;
             this->unk16C = 1;
             this->actionFunc = func_809541B8;
@@ -389,6 +387,6 @@ void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gSichitaiBoat);
-    
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

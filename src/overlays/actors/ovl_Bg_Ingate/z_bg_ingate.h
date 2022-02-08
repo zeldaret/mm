@@ -13,7 +13,7 @@ typedef struct BgIngate {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgIngateActionFunc actionFunc;
     /* 0x160 */ u16 unk160;
-    /* 0x164 */ Path *unk164;
+    /* 0x164 */ Path* unk164;
     /* 0x168 */ s16 unk168;
     /* 0x16A */ s16 unk16A;
     /* 0x16C */ s16 unk16C;

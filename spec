@@ -1631,8 +1631,7 @@ beginseg
     name "ovl_Bg_Ingate"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ingate/z_bg_ingate.o"
-    // include "build/data/ovl_Bg_Ingate/ovl_Bg_Ingate.data.o"
-    include "build/data/ovl_Bg_Ingate/ovl_Bg_Ingate.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Ingate/ovl_Bg_Ingate_reloc.o"
 endseg
 
 beginseg

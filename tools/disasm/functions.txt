@@ -7655,7 +7655,7 @@
     0x8095376C:("func_8095376C",),
     0x80953848:("func_80953848",),
     0x80953888:("EnHs_Draw",),
-    0x80953A90:("BgIngate_findActor",),
+    0x80953A90:("BgIngate_FindActor",),
     0x80953B40:("func_80953B40",),
     0x80953BEC:("func_80953BEC",),
     0x80953DA8:("func_80953DA8",),
