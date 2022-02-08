@@ -4496,18 +4496,17 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 steamScale = ((KREG(28) * 0.0001f) + 0.035f) * frozenSteamScale;
                 func_800BCC68(limbPos, globalCtx);
 
-                // Draw Ice over frozen actor
+                // Setup to draw ice over frozen actor
 
                 gSPSegment(POLY_XLU_DISP++, 0x08,
                            Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 32, 16, 1, 0,
                                             (gameplayFrames * 2) & 0xFF, 64, 32));
-
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
-
                 gSPDisplayList(POLY_XLU_DISP++, gFrozenIceDL);
 
                 effectAlphaScaled = effectAlpha * 255.0f;
 
+                // Apply and draw ice over each limb of frozen actor
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
                     alpha = limbIndex & 3;
                     alpha = effectAlphaScaled - (30.0f * alpha);
@@ -4539,12 +4538,10 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                 limbPos = limbAux; // reset limbPos
 
-                // Draw Steam over frozen actor
+                // Setup to draw steam over frozen actor
 
                 gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
-
                 gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);
-
                 gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
 
                 alpha = effectAlpha * 100.0f;
@@ -4554,6 +4551,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
 
+                // Apply and draw steam over each limb of frozen actor
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
                     twoTexScrollParam = ((limbIndex * 3) + gameplayFrames);
                     gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -4587,6 +4585,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                 effectAlphaScaled = effectAlpha * 255.0f;
 
+                // Apply and draw fire on every limb
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
                     alpha = limbIndex & 3;
                     alpha = effectAlphaScaled - 30.0f * alpha;
@@ -4620,9 +4619,12 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
             case ACTOR_DRAW_DMGEFF_LIGHT_ORBS:
             case ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS:
+
+                // Setup to draw light orbs on actor
+
                 lightOrbsScale = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
 
-                gSPDisplayList(POLY_XLU_DISP++, gLightOrbs1DL);
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
 
                 alpha = effectAlpha * 255.0f;
                 if (alpha > 255.0f) {
@@ -4643,6 +4645,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale(lightOrbsScale, lightOrbsScale, 1.0f, MTXMODE_APPLY);
 
+                // Apply and draw a light orb over each limb of frozen actor
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
                     Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = limbPos->x;
@@ -4652,7 +4655,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbsVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
                 }
                 break;
 

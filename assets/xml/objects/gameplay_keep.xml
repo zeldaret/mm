@@ -903,9 +903,9 @@
         <DList Name="gameplay_keep_DL_023130" Offset="0x23130" />
         <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
-        <DList Name="gLightOrbs1DL" Offset="0x23348" />
-        <DList Name="gLightOrbs2DL" Offset="0x233B8" />
-        <DList Name="gLightOrbsVtxDL" Offset="0x23428" />
+        <DList Name="gLightOrb1DL" Offset="0x23348" />
+        <DList Name="gLightOrb2DL" Offset="0x233B8" />
+        <DList Name="gLightOrbVtxDL" Offset="0x23428" />
         <DList Name="gElectricShockDL" Offset="0x23480" />
         <DList Name="gElectricShockVtxDL" Offset="0x234F0" />
         <Texture Name="gLightOrbTex" OutName="light_orb_tex" Format="i8" Width="64" Height="64" Offset="0x23508" />
