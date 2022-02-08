@@ -5,6 +5,9 @@
  */
 
 #include "z_en_dnk.h"
+#include "objects/object_dnk/object_dnk.h"
+#include "objects/object_hintnuts/object_hintnuts.h"
+#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS 0x00000009
 
@@ -18,39 +21,6 @@ void func_80A51890(EnDnk* this, GlobalContext* globalCtx);
 void EnDnk_DoNothing(EnDnk* this, GlobalContext* globalCtx);
 void func_80A52018(Actor* thisx, GlobalContext* globalCtx);
 void func_80A52134(EnDnk* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000168;
-extern AnimationHeader D_0600031C;
-extern AnimationHeader D_06000430;
-extern AnimationHeader D_060006CC;
-extern AnimationHeader D_06000894;
-extern AnimationHeader D_06000B70;
-extern UNK_PTR D_06001680[];
-extern UNK_PTR D_06001700[];
-extern UNK_PTR D_06001780[];
-extern SkeletonHeader D_060023B8;
-extern SkeletonHeader D_06002468;
-extern AnimationHeader D_060024CC;
-extern AnimationHeader D_0600259C;
-extern AnimationHeader D_060026C4;
-extern SkeletonHeader D_06002848;
-extern AnimationHeader D_06002894;
-extern AnimationHeader D_06002950;
-extern AnimationHeader D_060029BC;
-extern AnimationHeader D_06002A08;
-extern AnimationHeader D_06002A5C;
-extern AnimationHeader D_06002B6C;
-extern AnimationHeader D_06002B90;
-extern AnimationHeader D_06002BD4;
-extern AnimationHeader D_06002DD4;
-extern AnimationHeader D_06002E84;
-extern AnimationHeader D_06002F7C;
-extern AnimationHeader D_06002FA4;
-extern AnimationHeader D_06003128;
-extern AnimationHeader D_06003180;
-extern AnimationHeader D_0600326C;
-extern AnimationHeader D_060033E4;
-extern AnimationHeader D_06003780;
 
 static s16 D_80A521A0 = 0;
 
@@ -124,18 +94,24 @@ static DamageTable sDamageTable = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06000B70, 1.0f, 0, -1, 2, 0 },  { &D_06000B70, 1.0f, 0, -1, 2, -4 }, { &D_06002A08, 1.0f, 0, -1, 0, -4 },
-    { &D_0600031C, 1.0f, 0, -1, 0, -4 }, { &D_06000430, 1.0f, -1, -1, 2, 0 }, { &D_06000430, 1.0f, 0, -1, 2, -4 },
-    { &D_06000894, 1.0f, 0, -1, 2, -4 }, { &D_06002B6C, 1.0f, 0, -1, 0, 0 },  { &D_06002B6C, 1.0f, 0, -1, 0, -4 },
-    { &D_060006CC, 1.0f, 0, -1, 0, -4 }, { &D_06000168, 1.0f, 0, -1, 2, -4 }, { &D_060024CC, 1.0f, -1, -1, 2, 0 },
-    { &D_060024CC, 1.0f, 0, -1, 2, -4 }, { &D_060026C4, 1.0f, 0, -1, 2, -4 }, { &D_06002894, 1.0f, 0, -1, 2, -4 },
-    { &D_06002B90, 1.0f, 0, -1, 2, -4 }, { &D_06002F7C, 1.0f, 0, -1, 0, 0 },  { &D_06002F7C, 1.0f, 0, -1, 0, -4 },
-    { &D_06003128, 1.0f, 0, -1, 0, 0 },  { &D_06003128, 1.0f, 0, -1, 0, -4 }, { &D_060029BC, 1.0f, 0, -1, 0, -4 },
-    { &D_06002E84, 1.0f, 0, -1, 0, -4 }, { &D_06000168, 1.0f, 0, -1, 0, -4 }, { &D_0600259C, 1.0f, 0, -1, 2, -4 },
-    { &D_06002A5C, 1.0f, 0, -1, 2, 0 },  { &D_06002A5C, 1.0f, 0, -1, 2, -4 }, { &D_06002BD4, 1.0f, 0, -1, 2, -4 },
-    { &D_06002DD4, 1.0f, 0, -1, 2, -4 }, { &D_06002FA4, 1.0f, 0, -1, 0, -4 }, { &D_06003180, 1.0f, 0, -1, 2, -4 },
-    { &D_0600326C, 1.0f, 0, -1, 0, 0 },  { &D_0600326C, 1.0f, 0, -1, 0, -4 }, { &D_060033E4, 1.0f, 0, -1, 0, -4 },
-    { &D_06003780, 1.0f, 0, -1, 0, 0 },  { &D_06003780, 1.0f, 0, -1, 0, -4 }, { &D_06002950, 1.0f, 0, -1, 0, 0 },
+    { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, 0 },       { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, -4 },
+    { &object_dnk_Anim_002A08, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_00031C, 1.0f, 0, -1, 0, -4 },
+    { &object_dnk_Anim_000430, 1.0f, -1, -1, 2, 0 },      { &object_dnk_Anim_000430, 1.0f, 0, -1, 2, -4 },
+    { &object_dnk_Anim_000894, 1.0f, 0, -1, 2, -4 },      { &object_dnk_Anim_002B6C, 1.0f, 0, -1, 0, 0 },
+    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_0006CC, 1.0f, 0, -1, 0, -4 },
+    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, 2, 0 },
+    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, 2, -4 },
+    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, 2, -4 },
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, 0, 0 },  { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, 0, -4 },
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, 0, 0 },  { &object_hintnuts_Anim_003128, 1.0f, 0, -1, 0, -4 },
+    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, 0, -4 }, { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, 0, -4 },
+    { &object_dekunuts_Anim_000168, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_00259C, 1.0f, 0, -1, 2, -4 },
+    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, 2, 0 },  { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, 2, -4 },
+    { &object_dekunuts_Anim_002BD4, 1.0f, 0, -1, 2, -4 }, { &object_dekunuts_Anim_002DD4, 1.0f, 0, -1, 2, -4 },
+    { &object_dekunuts_Anim_002FA4, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_003180, 1.0f, 0, -1, 2, -4 },
+    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, 0, 0 },  { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, 0, -4 },
+    { &object_dekunuts_Anim_0033E4, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_003780, 1.0f, 0, -1, 0, 0 },
+    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_002950, 1.0f, 0, -1, 0, 0 },
 };
 
 s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
@@ -144,7 +120,7 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
     s32 sp30 = false;
 
     if (animIndex >= 0) {
-        if (animIndex < 36) {
+        if (animIndex < ARRAY_COUNT(sAnimations)) {
             sp30 = true;
             frameCount = sAnimations[animIndex].frameCount;
             if (frameCount < 0) {
@@ -184,17 +160,20 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002848, NULL, this->jointTable, this->morphTable, 11);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &object_dnk_Skel_002848, NULL, this->jointTable,
+                               this->morphTable, 11);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
             case ENDNK_GET_3_1:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_060023B8, NULL, this->jointTable, this->morphTable, 10);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
+                               this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 18);
                 break;
 
             case ENDNK_GET_3_2:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, NULL, this->jointTable, this->morphTable, 10);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, NULL, this->jointTable,
+                               this->morphTable, 10);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
         }
@@ -265,7 +244,7 @@ void EnDnk_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     SkelAnime_Update(&this->skelAnime);
     func_80A515C4(this);
-    Actor_SetHeight(&this->actor, 34.0f);
+    Actor_SetFocus(&this->actor, 34.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -283,7 +262,7 @@ s32 func_80A51A78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
-    Vec3f sp50 = D_801D15B0;
+    Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
     Vec3s sp3C;
 
@@ -328,10 +307,10 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
-    static UNK_PTR D_80A5245C[] = {
-        D_06001680,
-        D_06001700,
-        D_06001780,
+    static TexturePtr D_80A5245C[] = {
+        object_dnk_Tex_001680,
+        object_dnk_Tex_001700,
+        object_dnk_Tex_001780,
     };
     s32 pad;
 
@@ -359,7 +338,7 @@ s32 func_80A51D78(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDnk* this = THIS;
     MtxF sp5C;
-    Vec3f sp50 = D_801D15B0;
+    Vec3f sp50 = gZeroVec3f;
     Vec3f sp44;
     Vec3s sp3C;
 
@@ -436,11 +415,11 @@ void func_80A52074(EnDnk* this, GlobalContext* globalCtx) {
             break;
 
         case 438:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKNUTS_DANCE_BIG);
             break;
 
         case 493:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKIDS_APPEAR);
             break;
     }
 

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dns.h"
+#include "objects/object_dns/object_dns.h"
 
 #define FLAGS 0x00000019
 
@@ -18,20 +19,6 @@ void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8092D330(EnDns* this, GlobalContext* globalCtx);
 void EnDns_DoNothing(EnDns* this, GlobalContext* globalCtx);
 void func_8092D4D8(EnDns* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060002A8;
-extern AnimationHeader D_06000734;
-extern AnimationHeader D_060008F4;
-extern AnimationHeader D_06000BD8;
-extern AnimationHeader D_06000D58;
-extern AnimationHeader D_06000FEC;
-extern TexturePtr D_060028E8;
-extern TexturePtr D_06002968;
-extern TexturePtr D_060029E8;
-extern Gfx D_06002C48[];
-extern SkeletonHeader D_06002DD8;
-extern AnimationHeader D_06003310;
-extern AnimationHeader D_060034EC;
 
 static s32 D_8092DCB0[] = {
     0x00172000, 0x050E082F, 0x0C100E08, 0x200C1000, 0x00172000, 0x050E0830, 0x0C100E08, 0x210C1000,
@@ -74,10 +61,11 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &D_06003310, 1.0f, 0, -1, 0, 0 },  { &D_06003310, 1.0f, 0, -1, 0, -4 }, { &D_060034EC, 1.0f, 0, -1, 0, 0 },
-    { &D_060034EC, 1.0f, 0, -1, 0, -4 }, { &D_060008F4, 1.0f, 0, -1, 2, 0 },  { &D_06000BD8, 1.0f, 0, -1, 0, 0 },
-    { &D_06000D58, 1.0f, 0, -1, 2, 0 },  { &D_06000FEC, 1.0f, 0, -1, 0, 0 },  { &D_060002A8, 1.0f, 0, -1, 2, 0 },
-    { &D_06000734, 1.0f, 0, -1, 2, 0 },
+    { &object_dns_Anim_003310, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_003310, 1.0f, 0, -1, 0, -4 },
+    { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, -4 },
+    { &object_dns_Anim_0008F4, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000BD8, 1.0f, 0, -1, 0, 0 },
+    { &object_dns_Anim_000D58, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000FEC, 1.0f, 0, -1, 0, 0 },
+    { &object_dns_Anim_0002A8, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000734, 1.0f, 0, -1, 2, 0 },
 };
 
 void func_8092C5C0(EnDns* this) {
@@ -85,7 +73,7 @@ void func_8092C5C0(EnDns* this) {
 
     if (((this->unk_2F8 == 2) || (this->unk_2F8 == 3) || (this->unk_2F8 == 6) || (this->unk_2F8 == 7)) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 3.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 }
 
@@ -220,7 +208,7 @@ s32 func_8092CAD0(EnDns* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if (this->unk_2C6 & 7) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_8013AED4(&this->unk_2C6, 0, 7);
             this->unk_2C6 &= ~0x10;
             if (ENDNS_GET_4000(&this->actor)) {
@@ -284,15 +272,15 @@ s32 func_8092CCEC(EnDns* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     Math_Vec3f_Copy(&sp3C, &player->actor.world.pos);
-    this->unk_2D6 = Math_Vec3f_Yaw(&D_801D15B0, &sp3C);
-    this->unk_2D4 = Math_Vec3f_Yaw(&D_801D15B0, &sp30);
-    this->unk_2EC = Math_Vec3f_DistXZ(&sp30, &D_801D15B0);
-    sp2E = Math_Vec3f_Yaw(&D_801D15B0, &sp3C);
-    sp2E -= Math_Vec3f_Yaw(&D_801D15B0, &sp30);
+    this->unk_2D6 = Math_Vec3f_Yaw(&gZeroVec3f, &sp3C);
+    this->unk_2D4 = Math_Vec3f_Yaw(&gZeroVec3f, &sp30);
+    this->unk_2EC = Math_Vec3f_DistXZ(&sp30, &gZeroVec3f);
+    sp2E = Math_Vec3f_Yaw(&gZeroVec3f, &sp3C);
+    sp2E -= Math_Vec3f_Yaw(&gZeroVec3f, &sp30);
     this->unk_2D8 = (Rand_ZeroOne() * 182.0f) + 182.0f;
     this->unk_2D8 = (sp2E > 0) ? this->unk_2D8 : -this->unk_2D8;
     this->unk_2D0 = 0x28;
-    this->actor.shape.shadowDraw = func_800B3FC0;
+    this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
     return 1;
 }
 
@@ -308,7 +296,7 @@ s32 func_8092CE38(EnDns* this) {
         this->unk_2C6 &= ~0x200;
         this->skelAnime.curFrame = 0.0f;
         if (this->unk_2D2 == 2) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_JUMP);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_JUMP);
         }
         this->unk_2D2++;
         if (this->unk_2D2 >= 3) {
@@ -321,7 +309,7 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 this->unk_2E4 = 0.0f;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_JUMP);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
                 frame = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -332,7 +320,7 @@ s32 func_8092CE38(EnDns* this) {
         } else {
             if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                 Animation_OnFrame(&this->skelAnime, 13.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_NUTS_WALK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
             }
 
             if (this->skelAnime.curFrame > 7.0f) {
@@ -376,7 +364,7 @@ void func_8092D108(EnDns* this, GlobalContext* globalCtx) {
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06002C48);
+    gSPDisplayList(POLY_OPA_DISP++, object_dns_DL_002C48);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -413,7 +401,7 @@ void EnDns_DoNothing(EnDns* this, GlobalContext* globalCtx) {
 
 void func_8092D330(EnDns* this, GlobalContext* globalCtx) {
     s32 pad;
-    Vec3f sp30 = D_801D15B0;
+    Vec3f sp30 = gZeroVec3f;
     s16 temp = this->unk_2D6 - this->unk_2D4;
 
     if (ABS_ALT(temp) < 0xC16) {
@@ -426,7 +414,7 @@ void func_8092D330(EnDns* this, GlobalContext* globalCtx) {
         sp30.x = Math_SinS(this->unk_2D4) * this->unk_2EC;
         sp30.z = Math_CosS(this->unk_2D4) * this->unk_2EC;
         Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp30), 3, 0x2AA8);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
     if ((this->unk_2C6 & 0x100) && (DECR(this->unk_2D0) == 0)) {
         this->unk_2C6 &= ~0x100;
@@ -495,7 +483,7 @@ void EnDns_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002DD8, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dns_Skel_002DD8, NULL, this->jointTable, this->morphTable, 13);
     this->unk_2F8 = -1;
     func_8092C63C(this, 2);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -538,7 +526,7 @@ void EnDns_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8092C86C(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, 0, this->unk_2C6 & 7);
-        Actor_SetHeight(&this->actor, 34.0f);
+        Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, globalCtx);
         func_8092C5C0(this);
     }
@@ -549,7 +537,7 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    Matrix_MultiplyVector3fByState(&D_801D15B0, &sp74);
+    Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp74);
     Matrix_CopyCurrentState(&sp2C);
     func_8018219C(&sp2C, &sp6C, 0);
     *arg2 = sp74;
@@ -616,7 +604,8 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
+    static TexturePtr D_8092DE1C[] = { object_dns_Tex_0028E8, object_dns_Tex_002968, object_dns_Tex_0029E8,
+                                       object_dns_Tex_002968 };
     EnDns* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

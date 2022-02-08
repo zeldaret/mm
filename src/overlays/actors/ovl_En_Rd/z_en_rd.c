@@ -5,6 +5,7 @@
  */
 
 #include "z_en_rd.h"
+#include "objects/object_rd/object_rd.h"
 
 #define FLAGS 0x00000415
 
@@ -48,23 +49,6 @@ void func_808D6130(EnRd* this, GlobalContext* globalCtx);
 void func_808D6200(EnRd* this, GlobalContext* globalCtx);
 void func_808D6388(EnRd* this, GlobalContext* globalCtx);
 void func_808D65BC(EnRd* this, GlobalContext* globalCtx);
-
-extern FlexSkeletonHeader D_060053E8;
-extern AnimationHeader D_06006678;
-extern AnimationHeader D_06006B08;
-extern AnimationHeader D_06006EEC;
-extern AnimationHeader D_060073A4;
-extern AnimationHeader D_06007BBC;
-extern AnimationHeader D_060081A8;
-extern AnimationHeader D_06009298;
-extern AnimationHeader D_06009900;
-extern AnimationHeader D_0600A450;
-extern AnimationHeader D_0600ABE0;
-extern FlexSkeletonHeader D_06010B88;
-extern AnimationHeader D_060113EC;
-extern AnimationHeader D_060118D8;
-extern AnimationHeader D_06011DB8;
-extern AnimationHeader D_0601216C;
 
 const ActorInit En_Rd_InitVars = {
     ACTOR_EN_RD,
@@ -163,11 +147,11 @@ void EnRd_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.params >= ENRD_GET_MINUS_1) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06010B88, &D_0600ABE0, this->jointTable, this->morphTable,
-                           26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_010B88, &object_rd_Anim_00ABE0,
+                           this->jointTable, this->morphTable, 26);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060053E8, &D_0600ABE0, this->jointTable, this->morphTable,
-                           26);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rd_Skel_0053E8, &object_rd_Anim_00ABE0,
+                           this->jointTable, this->morphTable, 26);
     }
 
     Collider_InitCylinder(globalCtx, &this->collider);
@@ -244,7 +228,7 @@ void EnRd_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_808D4190(GlobalContext* globalCtx, EnRd* this, s32 arg2) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first;
 
     while (actor != NULL) {
         if ((actor->id != ACTOR_EN_RD) || (this == (EnRd*)actor) || (actor->params < ENRD_GET_0)) {
@@ -280,9 +264,9 @@ void func_808D4260(EnRd* this, GlobalContext* globalCtx) {
 
 void func_808D4308(EnRd* this) {
     if (this->actor.params != ENRD_GET_2) {
-        Animation_MorphToLoop(&this->skelAnime, &D_0600ABE0, -6.0f);
+        Animation_MorphToLoop(&this->skelAnime, &object_rd_Anim_00ABE0, -6.0f);
     } else {
-        Animation_PlayLoop(&this->skelAnime, &D_060081A8);
+        Animation_PlayLoop(&this->skelAnime, &object_rd_Anim_0081A8);
     }
 
     this->unk_3EF = 0;
@@ -298,9 +282,9 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->unk_3DA, 0, 1, 100, 0);
     if ((this->actor.params == ENRD_GET_2) && Animation_OnFrame(&this->skelAnime, 0.0f)) {
         if (Rand_ZeroOne() >= 0.5f) {
-            Animation_PlayLoop(&this->skelAnime, &D_060081A8);
+            Animation_PlayLoop(&this->skelAnime, &object_rd_Anim_0081A8);
         } else {
-            Animation_PlayLoop(&this->skelAnime, &D_06007BBC);
+            Animation_PlayLoop(&this->skelAnime, &object_rd_Anim_007BBC);
         }
     } else {
         this->unk_3D6--;
@@ -338,12 +322,12 @@ void func_808D43AC(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void func_808D45D4(EnRd* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_0601216C, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_rd_Anim_01216C, -6.0f);
     this->unk_3EF = 14;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->unk_3E4 = 0;
@@ -367,7 +351,7 @@ void func_808D4660(EnRd* this, GlobalContext* globalCtx) {
         } else {
             this->actor.hintId = 0x2A;
         }
-        Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, 19.0f, 2, -10.0f);
+        Animation_Change(&this->skelAnime, &object_rd_Anim_0073A4, 0.0f, 0.0f, 19.0f, 2, -10.0f);
         this->actionFunc = func_808D49E4;
     }
 
@@ -381,12 +365,12 @@ void func_808D4660(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void func_808D47DC(EnRd* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06011DB8, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_rd_Anim_011DB8, -6.0f);
     this->unk_3EF = 15;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->unk_3E4 = 0;
@@ -410,7 +394,7 @@ void func_808D4868(EnRd* this, GlobalContext* globalCtx) {
         } else {
             this->actor.hintId = 0x2A;
         }
-        Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, 19.0f, 2, -10.0f);
+        Animation_Change(&this->skelAnime, &object_rd_Anim_0073A4, 0.0f, 0.0f, 19.0f, 2, -10.0f);
         this->actionFunc = func_808D49E4;
     }
 
@@ -424,14 +408,14 @@ void func_808D4868(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void func_808D49E4(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     this->unk_3E4++;
@@ -446,7 +430,7 @@ void func_808D49E4(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4A90(EnRd* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_060118D8, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_rd_Anim_0118D8, -6.0f);
     this->unk_3EF = 16;
     this->unk_3D6 = (Rand_ZeroOne() * 10.0f) + 5.0f;
     this->unk_3E4 = 4370;
@@ -483,7 +467,7 @@ void func_808D4B20(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -499,7 +483,7 @@ void func_808D4B20(EnRd* this, GlobalContext* globalCtx) {
 void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 
     this->actor.world.rot.y -= this->unk_3E4;
@@ -507,7 +491,7 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
 
     this->unk_3E4 -= 100;
     if ((this->unk_3E4 < 2100) && (this->unk_3E4 >= 2000)) {
-        Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, 19.0f, 2, -10.0f);
+        Animation_Change(&this->skelAnime, &object_rd_Anim_0073A4, 0.0f, 0.0f, 19.0f, 2, -10.0f);
     } else if (this->unk_3E4 < 1000) {
         if ((this->actor.params != ENRD_GET_2) && (this->unk_3EC == 0)) {
             func_808D5C54(this);
@@ -518,7 +502,8 @@ void func_808D4CA8(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4DC4(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_0600ABE0, 0.0f, 0.0f, Animation_GetLastFrame(&D_0600ABE0), 0, -6.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_00ABE0, 0.0f, 0.0f,
+                     Animation_GetLastFrame(&object_rd_Anim_00ABE0), 0, -6.0f);
     this->unk_3EF = 13;
     this->unk_3D6 = 6;
     this->actor.shape.rot.x = -0x4000;
@@ -537,7 +522,7 @@ void func_808D4E60(EnRd* this, GlobalContext* globalCtx) {
         }
     } else {
         if (this->actor.world.pos.y == this->actor.home.pos.y) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
         }
 
         if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y + 50.0f, 0.3f, 2.0f, 0.3f) == 0.0f) {
@@ -552,9 +537,9 @@ void func_808D4E60(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D4FE0(EnRd* this, GlobalContext* globalCtx) {
-    f32 frameCount = Animation_GetLastFrame(&D_060113EC);
+    f32 frameCount = Animation_GetLastFrame(&object_rd_Anim_0113EC);
 
-    Animation_Change(&this->skelAnime, &D_060113EC, 1.0f, 4.0f, frameCount, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_0113EC, 1.0f, 4.0f, frameCount, 1, -4.0f);
     this->actor.speedXZ = 0.4f;
     this->unk_3EF = 4;
     this->actionFunc = func_808D506C;
@@ -587,7 +572,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
                     func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
                 }
                 this->unk_3ED = 60;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             }
         } else {
             func_808D53C0(this, globalCtx);
@@ -599,7 +584,7 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (!this->unk_3EE && (Actor_DistanceBetweenActors(&this->actor, &player->actor) <= 45.0f) &&
-        Actor_IsActorFacingLink(&this->actor, 0x38E3)) {
+        Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         player->actor.freezeTimer = 0;
         if ((player->transformation == PLAYER_FORM_GORON) || (player->transformation == PLAYER_FORM_DEKU)) {
             if (Actor_DistanceToPoint(&this->actor, &this->actor.home.pos) < 150.0f) {
@@ -620,14 +605,15 @@ void func_808D506C(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void func_808D53C0(EnRd* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, Animation_GetLastFrame(&D_060113EC), 1, -4.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_0113EC, 0.5f, 0.0f,
+                     Animation_GetLastFrame(&object_rd_Anim_0113EC), 1, -4.0f);
     this->unk_3EF = 2;
     this->actionFunc = func_808D5440;
 }
@@ -670,16 +656,16 @@ void func_808D5440(EnRd* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void func_808D5660(EnRd* this) {
-    f32 frameCount = Animation_GetLastFrame(&D_060113EC);
+    f32 frameCount = Animation_GetLastFrame(&object_rd_Anim_0113EC);
 
-    Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, frameCount, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_0113EC, 0.5f, 0.0f, frameCount, 1, -4.0f);
     this->unk_3EF = 3;
     this->unk_3EC = 1;
     this->actionFunc = func_808D56E4;
@@ -715,14 +701,14 @@ void func_808D56E4(EnRd* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 22.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_RIZA_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_WALK);
     } else if ((globalCtx->gameplayFrames & 0x5F) == 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_CRY);
     }
 }
 
 void func_808D586C(EnRd* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06006EEC);
+    Animation_PlayOnce(&this->skelAnime, &object_rd_Anim_006EEC);
     this->unk_3D6 = 0;
     this->unk_3EB = 0;
     this->unk_3EA = 200;
@@ -741,7 +727,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
 
     switch (this->unk_3EB) {
         case 1:
-            Animation_PlayLoop(&this->skelAnime, &D_06006678);
+            Animation_PlayLoop(&this->skelAnime, &object_rd_Anim_006678);
             this->unk_3EB++;
             globalCtx->damagePlayer(globalCtx, -8);
             func_8013ECE0(this->actor.xzDistToPlayer, 255, 1, 12);
@@ -757,8 +743,8 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                Animation_Change(&this->skelAnime, &D_06006B08, 0.5f, 0.0f, Animation_GetLastFrame(&D_06006B08), 3,
-                                 0.0f);
+                Animation_Change(&this->skelAnime, &object_rd_Anim_006B08, 0.5f, 0.0f,
+                                 Animation_GetLastFrame(&object_rd_Anim_006B08), 3, 0.0f);
                 this->unk_3EB++;
                 this->unk_3EF = 4;
                 break;
@@ -786,7 +772,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 6000, 0);
 
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_ATTACK);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_ATTACK);
             }
 
             this->unk_3EA--;
@@ -794,7 +780,7 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
                 globalCtx->damagePlayer(globalCtx, -8);
                 func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->unk_3EA = 20;
-                func_800B8E58(&player->actor, player->ageProperties->unk_92 + 0x6805);
+                func_800B8E58(player, player->ageProperties->unk_92 + 0x6805);
             }
             break;
 
@@ -818,7 +804,8 @@ void func_808D58CC(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5C54(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_060073A4, 0.0f, 0.0f, Animation_GetLastFrame(&D_060073A4), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_0073A4, 0.0f, 0.0f,
+                     Animation_GetLastFrame(&object_rd_Anim_0073A4), 2, 0.0f);
     this->unk_3EF = 7;
     this->actionFunc = func_808D5CCC;
 }
@@ -833,16 +820,16 @@ void func_808D5CCC(EnRd* this, GlobalContext* globalCtx) {
             func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
             func_80123E90(globalCtx, &this->actor);
         }
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_AIM);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
         func_808D4FE0(this, globalCtx);
     }
 }
 
 void func_808D5D88(EnRd* this) {
     this->unk_3EF = 8;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06009900, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_rd_Anim_009900, -6.0f);
     this->actor.speedXZ = -2.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EF = 8;
     this->actionFunc = func_808D5DF4;
 }
@@ -862,9 +849,9 @@ void func_808D5DF4(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D5E98(EnRd* this) {
-    f32 frameCount = Animation_GetLastFrame(&D_060113EC);
+    f32 frameCount = Animation_GetLastFrame(&object_rd_Anim_0113EC);
 
-    Animation_Change(&this->skelAnime, &D_060113EC, 0.5f, 0.0f, frameCount, 1, -4.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_0113EC, 0.5f, 0.0f, frameCount, 1, -4.0f);
     this->unk_3EF = 9;
     this->unk_3D4 = 0;
     this->actionFunc = func_808D5F18;
@@ -884,7 +871,7 @@ void func_808D5F18(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D6008(EnRd* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A450, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_rd_Anim_00A450, -4.0f);
     this->unk_3EF = 5;
     this->actionFunc = func_808D6054;
 }
@@ -900,7 +887,8 @@ void func_808D6054(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D60B0(EnRd* this) {
-    Animation_Change(&this->skelAnime, &D_0600A450, -1.0f, Animation_GetLastFrame(&D_0600A450), 0.0f, 2, -4.0f);
+    Animation_Change(&this->skelAnime, &object_rd_Anim_00A450, -1.0f, Animation_GetLastFrame(&object_rd_Anim_00A450),
+                     0.0f, 2, -4.0f);
     this->unk_3EF = 6;
     this->actionFunc = func_808D6130;
 }
@@ -913,13 +901,13 @@ void func_808D6130(EnRd* this, GlobalContext* globalCtx) {
 
 void func_808D616C(EnRd* this) {
     this->actor.shape.yOffset = 0.0f;
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06009900, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_rd_Anim_009900, -6.0f);
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = -2.0f;
     }
 
     this->actor.flags |= 1;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3EF = 11;
     this->actionFunc = func_808D6200;
 }
@@ -949,12 +937,12 @@ void func_808D6200(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void func_808D6310(EnRd* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06009298, -1.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_rd_Anim_009298, -1.0f);
     this->unk_3EF = 12;
     this->unk_3D6 = 300;
     this->actor.flags &= ~1;
     this->actor.speedXZ = 0.0f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_REDEAD_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->actionFunc = func_808D6388;
 }
 
@@ -969,7 +957,7 @@ void func_808D6388(EnRd* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_3D6 == 0) {
             if (!Flags_GetSwitch(globalCtx, this->unk_3DC & 0x7F)) {
-                Actor_SetSwitchFlag(globalCtx, this->unk_3DC & 0x7F);
+                Flags_SetSwitch(globalCtx, this->unk_3DC & 0x7F);
             }
 
             if (this->unk_3DE != 0) {
@@ -985,7 +973,7 @@ void func_808D6388(EnRd* this, GlobalContext* globalCtx) {
             this->unk_3D6--;
         }
     } else if (Animation_OnFrame(&this->skelAnime, 33.0f) || Animation_OnFrame(&this->skelAnime, 40.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 }
 
@@ -997,12 +985,12 @@ void func_808D64D0(EnRd* this) {
     if (gSaveContext.unk_3F58 != 0) {
         this->unk_3E9 = 1;
         this->unk_3E0 = 600;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
-        func_800BCB70(&this->actor, 0x8000, 0x80C8, 0, 255);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIGHT_ARROW_HIT);
+        Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
     } else if (this->unk_3F0 == 1) {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
     } else if (this->unk_3F0 == 12) {
-        func_800BCB70(&this->actor, 0, 0xC8, 0, 40);
+        Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 40);
     }
     this->actionFunc = func_808D65BC;
 }
@@ -1016,7 +1004,7 @@ void func_808D65BC(EnRd* this, GlobalContext* globalCtx) {
         if (this->unk_3E0 != 0) {
             this->unk_3E0--;
             if (this->unk_3E0 >= 255) {
-                func_800BCB70(&this->actor, 0x8000, 0x80C8, 0, 255);
+                Actor_SetColorFilter(&this->actor, 0x8000, 0x80C8, 0, 255);
             }
 
             if (this->unk_3E0 == 0) {
@@ -1074,7 +1062,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
             return;
         }
 
-        func_800BE258(&this->actor, &this->collider.info);
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
 
         if (player->unk_ADC != 0) {
             this->unk_3F1 = player->unk_ADD;
@@ -1096,7 +1084,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 return;
 
             case 2:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->unk_3E6 = 180;
                 this->unk_3E8 = 0;
                 this->unk_3E9 = 0;
@@ -1105,7 +1093,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 break;
 
             case 4:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
                 this->unk_3E6 = 60;
                 this->unk_3E8 = 20;
                 this->unk_3E9 = 0;
@@ -1114,13 +1102,13 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 break;
 
             case 15:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
                 break;
 
             case 14:
-                func_800BCB70(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
                 this->unk_3E9 = 0;
                 this->unk_3E0 = 0;
                 this->actor.colChkInfo.health = 0;
@@ -1183,7 +1171,7 @@ void EnRd_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
 
         if ((this->unk_3EF != 10) && (this->actor.speedXZ != 0.0f)) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
         }
 
         if ((this->actor.shape.rot.x == 0) && (this->unk_3EF != 10) && (this->actor.speedXZ != 0.0f)) {

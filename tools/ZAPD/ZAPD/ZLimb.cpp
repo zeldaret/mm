@@ -4,12 +4,15 @@
 
 #include "Globals.h"
 #include "Utils/BitConverter.h"
+#include "Utils/StringHelper.h"
 #include "WarningHandler.h"
+#include "ZSkeleton.h"
 
 REGISTER_ZFILENODE(Limb, ZLimb);
 
 ZLimb::ZLimb(ZFile* nParent) : ZResource(nParent), segmentStruct(nParent)
 {
+	RegisterOptionalAttribute("EnumName");
 	RegisterOptionalAttribute("LimbType");
 	RegisterOptionalAttribute("Type");
 }
@@ -29,6 +32,12 @@ void ZLimb::ExtractFromBinary(uint32_t nRawDataIndex, ZLimbType nType)
 void ZLimb::ParseXML(tinyxml2::XMLElement* reader)
 {
 	ZResource::ParseXML(reader);
+
+	auto& enumNameXml = registeredAttributes.at("EnumName").value;
+	if (enumNameXml != "")
+	{
+		enumName = enumNameXml;
+	}
 
 	// Reading from a <Skeleton/>
 	std::string limbType = registeredAttributes.at("LimbType").value;
@@ -228,8 +237,8 @@ std::string ZLimb::GetBodySourceCode() const
 	{
 		std::string childName;
 		std::string siblingName;
-		Globals::Instance->GetSegmentedPtrName(childPtr, parent, "Gfx", childName);
-		Globals::Instance->GetSegmentedPtrName(siblingPtr, parent, "Gfx", siblingName);
+		Globals::Instance->GetSegmentedPtrName(childPtr, parent, "LegacyLimb", childName);
+		Globals::Instance->GetSegmentedPtrName(siblingPtr, parent, "LegacyLimb", siblingName);
 
 		entryStr += StringHelper::Sprintf("%s,\n", dListStr.c_str());
 		entryStr +=
@@ -240,11 +249,24 @@ std::string ZLimb::GetBodySourceCode() const
 	}
 	else
 	{
+		std::string childStr;
+		std::string siblingStr;
+		if (limbsTable != nullptr)
+		{
+			childStr = limbsTable->GetLimbEnumName(childIndex);
+			siblingStr = limbsTable->GetLimbEnumName(siblingIndex);
+		}
+		else
+		{
+			childStr = StringHelper::Sprintf("0x%02X", childIndex);
+			siblingStr = StringHelper::Sprintf("0x%02X", siblingIndex);
+		}
+
 		if (type != ZLimbType::Curve)
 		{
 			entryStr += StringHelper::Sprintf("{ %i, %i, %i }, ", transX, transY, transZ);
 		}
-		entryStr += StringHelper::Sprintf("0x%02X, 0x%02X,\n", childIndex, siblingIndex);
+		entryStr += StringHelper::Sprintf("%s, %s,\n", childStr.c_str(), siblingStr.c_str());
 
 		switch (type)
 		{
@@ -350,6 +372,11 @@ ZLimbType ZLimb::GetTypeByAttributeName(const std::string& attrName)
 		return ZLimbType::Legacy;
 	}
 	return ZLimbType::Invalid;
+}
+
+void ZLimb::SetLimbIndex(uint8_t nLimbIndex)
+{
+	limbIndex = nLimbIndex;
 }
 
 void ZLimb::DeclareDList(segptr_t dListSegmentedPtr, const std::string& prefix,

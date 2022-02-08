@@ -54,6 +54,6 @@
         <Limb Name="gPoSistersMainBodyLimb" Type="Standard" Offset="0x6578" />
         <Limb Name="gPoSistersFaceLimb" Type="Standard" Offset="0x6584" />
         <Limb Name="gPoSistersLowerBodyLimb" Type="Standard" Offset="0x6590" />
-        <Skeleton Name="object_po_sisters_Skel_0065C8" Type="Normal" LimbType="Standard" Offset="0x65C8" />
+        <Skeleton Name="gPoSistersSkeleton" Type="Normal" LimbType="Standard" Offset="0x65C8" />
     </File>
 </Root>

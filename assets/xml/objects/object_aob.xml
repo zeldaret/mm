@@ -23,9 +23,9 @@
         <Texture Name="object_aob_Tex_0004D8" OutName="tex_0004D8" Format="ci8" Width="16" Height="16" Offset="0x4D8" />
         <Texture Name="object_aob_Tex_0005D8" OutName="tex_0005D8" Format="ci8" Width="8" Height="8" Offset="0x5D8" />
         <Texture Name="object_aob_Tex_000618" OutName="tex_000618" Format="ci8" Width="8" Height="8" Offset="0x618" />
-        <Texture Name="object_aob_TEx_000658" OutName="tex_000658" Format="rgba16" Width="32" Height="32" Offset="0x658" /> 
-        <Texture Name="object_aob_TEx_000E58" OutName="tex_000E58" Format="rgba16" Width="32" Height="32" Offset="0xE58" /> 
-        <Texture Name="object_aob_TEx_001658" OutName="tex_001658" Format="rgba16" Width="32" Height="32" Offset="0x1658" /> 
+        <Texture Name="object_aob_Tex_000658" OutName="tex_000658" Format="rgba16" Width="32" Height="32" Offset="0x658" /> 
+        <Texture Name="object_aob_Tex_000E58" OutName="tex_000E58" Format="rgba16" Width="32" Height="32" Offset="0xE58" /> 
+        <Texture Name="object_aob_Tex_001658" OutName="tex_001658" Format="rgba16" Width="32" Height="32" Offset="0x1658" /> 
         <Texture Name="object_aob_Tex_001E58" OutName="tex_001E58" Format="ci8" Width="16" Height="16" Offset="0x1E58" />
         <Texture Name="object_aob_Tex_001F58" OutName="tex_001F58" Format="ci8" Width="8" Height="8" Offset="0x1F58" />
         <Texture Name="object_aob_Tex_001F98" OutName="tex_001F98" Format="ci8" Width="8" Height="8" Offset="0x1F98" />

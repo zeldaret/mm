@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hsstump.h"
+#include "objects/object_hsstump/object_hsstump.h"
 
 #define FLAGS 0x00000010
 
@@ -38,9 +39,6 @@ static InitChainEntry sInitChain[] = {
 
 static Vec3f iceSmokeAccel = { 0.0f, 0.0f, 0.0f };
 
-extern Gfx D_060003B8[];
-extern CollisionHeader D_060011B0;
-
 void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHsStump* this = THIS;
 
@@ -48,7 +46,7 @@ void ObjHsStump_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
     this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx); // Must be thisx to match
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060011B0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hsstump_Colheader_0011B0);
     switch (this->isHidden) {
         case true:
             if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
@@ -116,7 +114,7 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
                 offsetAngle = i * angleBinary;
                 Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
-                Lib_Vec3f_TranslateAndRotateY(&D_801D15B0, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
+                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(globalCtx, &iceSmokePos, &iceSmokeVel, &iceSmokeAccel, 100);
             }
         }
@@ -146,5 +144,5 @@ void ObjHsStump_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjHsStump_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060003B8);
+    Gfx_DrawDListOpa(globalCtx, object_hsstump_DL_0003B8);
 }
