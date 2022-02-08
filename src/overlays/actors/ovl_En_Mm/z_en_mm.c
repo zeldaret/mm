@@ -131,8 +131,8 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
         }
 
         if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
-            angle = BINANG_SUB(this->actor.world.rot.y, BINANG_ROT180(this->actor.wallYaw));
-            this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
+            angle = SUB16(this->actor.world.rot.y, BINANG_ROT180(this->actor.wallYaw));
+            this->actor.world.rot.y += SUB16(0x8000, (s16)(angle * 2));
             this->actor.speedXZ *= 0.5f;
             CollisionCheck_SpawnShieldParticles(globalCtx, &this->actor.world.pos);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
@@ -156,7 +156,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
 
             if (!Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f)) {
                 direction = this->actor.world.rot.y;
-                if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
+                if (ABS_ALT(SUB16(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                     direction = BINANG_ROT180(direction);
                 }
                 Math_ScaledStepToS(&this->actor.shape.rot.y, direction, this->actor.speedXZ * 100.0f);

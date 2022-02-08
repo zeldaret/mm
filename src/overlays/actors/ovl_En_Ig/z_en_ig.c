@@ -326,8 +326,8 @@ s32 func_80BF17BC(EnIg* this, GlobalContext* globalCtx) {
                 case 2:
                 case 4:
                     if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                        func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
-                                      this->actor.child);
+                        Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
+                                              this->actor.child);
                     }
                     this->unk_3F6++;
                     ret = true;
@@ -340,7 +340,7 @@ s32 func_80BF17BC(EnIg* this, GlobalContext* globalCtx) {
                 ActorCutscene_Stop(sp2A);
                 this->unk_3F6 = 5;
             } else {
-                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
             }
             this->unk_3F6++;
             ret = true;
@@ -530,7 +530,7 @@ s32 func_80BF1DF4(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
 
-            if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, sp50->actor.shape.rot.y)) <= 0x4000) {
+            if (ABS_ALT(SUB16(this->actor.world.rot.y, sp50->actor.shape.rot.y)) <= 0x4000) {
                 this->unk_2A4 = -75;
             } else {
                 this->unk_2A4 = 75;

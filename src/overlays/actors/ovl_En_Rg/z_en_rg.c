@@ -599,7 +599,7 @@ void func_80BF4AB8(EnRg* this, GlobalContext* globalCtx) {
                     player->linearVelocity *= 0.5f;
                     player->unk_B08[0] = player->linearVelocity;
                     player->unk_B08[1] += player->linearVelocity * 0.05f;
-                    if (BINANG_SUB(this->actor.yawTowardsPlayer, player->currentYaw) > 0) {
+                    if (SUB16(this->actor.yawTowardsPlayer, player->currentYaw) > 0) {
                         player->currentYaw += 0x2000;
                     } else {
                         player->currentYaw -= 0x2000;

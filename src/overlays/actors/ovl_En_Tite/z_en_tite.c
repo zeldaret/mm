@@ -765,7 +765,7 @@ void func_80895738(EnTite* this, GlobalContext* globalCtx) {
             func_808956FC(this);
         }
     } else if (this->actor.bgCheckFlags & 8) {
-        this->actor.world.rot.y = BINANG_SUB((this->actor.wallYaw * 2) - this->actor.world.rot.y, 0x8000);
+        this->actor.world.rot.y = SUB16((this->actor.wallYaw * 2) - this->actor.world.rot.y, 0x8000);
     }
 
     if (this->unk_2BC == -1) {
@@ -905,7 +905,7 @@ void func_80895E28(EnTite* this, GlobalContext* globalCtx) {
     sp44.y = this->actor.world.pos.y + 15.0f;
     sp44.z = (Math_CosS(this->actor.shape.rot.y) * 25.0f) + this->actor.world.pos.z;
 
-    sp36 = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
+    sp36 = SUB16(this->actor.shape.rot.y, 0x4000);
 
     sp38.x = 2.0f * Math_SinS(sp36);
     sp38.y = 3.0f;

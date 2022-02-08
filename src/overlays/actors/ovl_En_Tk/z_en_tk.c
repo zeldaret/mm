@@ -444,7 +444,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
             door1 = SubS_FindActor(globalCtx, door1, ACTORCAT_DOOR, ACTOR_EN_DOOR);
             if (door1 != NULL) {
                 if (Actor_XZDistanceBetweenActors(&this->actor, door1) <= 120.0f) {
-                    if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &door1->world.pos), this->actor.shape.rot.y)) <=
+                    if (ABS(SUB16(Actor_YawToPoint(&this->actor, &door1->world.pos), this->actor.shape.rot.y)) <=
                         0x2000) {
                         this->unk_2CA |= 0x400;
                         sp4C4 = (EnDoor*)door1;
@@ -1154,13 +1154,13 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
 
     if (BgCheck_SphVsFirstWall(&globalCtx->colCtx, &sp58, 20.0f)) {
         Math_Vec3f_Copy(&sp48, &this->actor.world.pos);
-        sp56 = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
+        sp56 = ADD16(this->actor.shape.rot.y, 0x4000);
         sp48.x += (Math_SinS(sp56) * 20.0f);
         sp48.y += 30.0f;
         sp48.z += Math_CosS(sp56) * 20.0f;
 
         Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
-        sp56 = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
+        sp56 = SUB16(this->actor.shape.rot.y, 0x4000);
         sp3C.x += (Math_SinS(sp56) * 20.0f);
         sp3C.y += 30.0f;
         sp3C.z += Math_CosS(sp56) * 20.0f;

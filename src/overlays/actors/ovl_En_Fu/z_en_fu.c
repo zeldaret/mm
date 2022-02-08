@@ -340,7 +340,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_53C & 2) {
-        s16 rotY = BINANG_SUB(this->actor.shape.rot.y, 0x8000);
+        s16 rotY = SUB16(this->actor.shape.rot.y, 0x8000);
 
         func_80961F38(globalCtx, &this->unk_514, this->unk_52A, rotY, 0x38E3, 0x5555);
     } else {
@@ -419,7 +419,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
     } else {
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, SUB16(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
 }
 
 void func_80962588(EnFu* this, GlobalContext* globalCtx) {
@@ -727,7 +727,8 @@ void func_80962D60(EnFu* this, GlobalContext* globalCtx) {
 void func_80962EBC(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 != 0) {
         if (this->actor.cutscene != -1) {
-            func_800DFB14(globalCtx->cameraPtrs[MAIN_CAM], ActorCutscene_GetCutscene(this->actor.cutscene)->unk4);
+            Camera_ChangeDataIdx(globalCtx->cameraPtrs[CAM_ID_MAIN],
+                                 ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
         }
     }
 }
@@ -1160,11 +1161,11 @@ void func_80963F44(EnFu* this, GlobalContext* globalCtx) {
 
 void func_80963F88(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 == 1) {
-        func_800DFAC8(globalCtx->cameraPtrs[MAIN_CAM], 75);
+        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 75);
         globalCtx->unk_1887E = 0;
     } else if (this->unk_542 == 2) {
         globalCtx->unk_1887D = 0;
-        func_800DFAC8(globalCtx->cameraPtrs[MAIN_CAM], 75);
+        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 75);
     }
 }
 
@@ -1201,7 +1202,7 @@ void func_809640D8(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_8096413C(EnFu* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.yawTowardsPlayer, 0x4000), 5, 1000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, SUB16(this->actor.yawTowardsPlayer, 0x4000), 5, 1000, 100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
@@ -1418,7 +1419,7 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len) {
 
 void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
-    s16 activeCam = func_800DFC68(GET_ACTIVE_CAM(globalCtx));
+    s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
     s32 i;
 
     for (i = 0; i < len; i++, ptr++) {
@@ -1431,7 +1432,7 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             ptr->unk_08.z += 2.0f * Math_CosS(ptr->unk_2C);
             Matrix_StatePush();
             Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_RotateY(activeCam, MTXMODE_APPLY);
+            Matrix_RotateY(yaw, MTXMODE_APPLY);
             Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
             Matrix_StatePop();
             ptr->unk_2C += 6000;

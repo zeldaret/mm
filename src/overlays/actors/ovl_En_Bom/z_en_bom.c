@@ -209,11 +209,11 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
     }
 
     if ((this->actor.speedXZ != 0.0f) && (this->actor.bgCheckFlags & 8)) {
-        s16 yDiff = BINANG_SUB(this->actor.wallYaw, this->actor.world.rot.y);
+        s16 yDiff = SUB16(this->actor.wallYaw, this->actor.world.rot.y);
 
         if (ABS_ALT(yDiff) > 0x4000) {
             this->actor.world.rot.y =
-                BINANG_SUB(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
+                SUB16(this->actor.wallYaw - this->actor.world.rot.y + this->actor.wallYaw, 0x8000);
         }
 
         Actor_PlaySfxAtPos(&this->actor, this->isPowderKeg ? NA_SE_EV_PUT_DOWN_WOODBOX : NA_SE_EV_BOMB_BOUND);
@@ -272,7 +272,7 @@ void func_80871058(EnBom* this, GlobalContext* globalCtx) {
             s16 temp = this->actor.world.rot.y;
             s32 pad;
 
-            if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
+            if (ABS_ALT(SUB16(this->actor.world.rot.y, this->actor.shape.rot.y)) > 0x4000) {
                 temp = BINANG_ROT180(temp);
             }
             Math_ScaledStepToS(&this->actor.shape.rot.y, temp, this->actor.speedXZ * 100.0f);
@@ -724,8 +724,8 @@ void func_808726DC(GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* ar
         sqrt = sqrtf(SQ(spCC.x) + SQ(spCC.z));
         ptr2->unk_1A = Math_FAtan2F(sqrt, spCC.y);
 
-        ptr2->unk_18 = (s16)CLAMP(BINANG_SUB(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;
-        ptr2->unk_1A = (s16)CLAMP(BINANG_SUB(ptr2->unk_1A, ptr->unk_1A), -8000, 8000) + ptr->unk_1A;
+        ptr2->unk_18 = (s16)CLAMP(SUB16(ptr2->unk_18, ptr->unk_18), -8000, 8000) + ptr->unk_18;
+        ptr2->unk_1A = (s16)CLAMP(SUB16(ptr2->unk_1A, ptr->unk_1A), -8000, 8000) + ptr->unk_1A;
 
         temp_f20 = Math_CosS(ptr2->unk_1A) * phi_f22;
         spC0.x = Math_SinS(ptr2->unk_18) * temp_f20;

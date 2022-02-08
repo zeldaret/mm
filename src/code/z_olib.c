@@ -66,7 +66,7 @@ Vec3f* OLib_Vec3fDistNormalize(Vec3f* dest, Vec3f* a, Vec3f* b) {
     v1.y = b->y - a->y;
     v1.z = b->z - a->z;
 
-    dist = OLib_ClampMinDist(sqrtf(SQ(v1.x) + SQ(v1.y) + SQ(v1.z)), 0.01f);
+    dist = OLib_ClampMinDist(sqrtf(SQXYZ(v1)), 0.01f);
 
     v2.x = v1.x / dist;
     v2.y = v1.y / dist;

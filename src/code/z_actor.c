@@ -1279,7 +1279,7 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
  * Sets the current and new inputs.
  */
 void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 magnitude, s16 baseYaw) {
-    s16 relativeYaw = baseYaw - func_800DFC68(GET_ACTIVE_CAM(globalCtx));
+    s16 relativeYaw = baseYaw - Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
 
     input->cur.stick_x = -Math_SinS(relativeYaw) * magnitude;
     input->rel.stick_x = input->cur.stick_x;
@@ -1341,7 +1341,7 @@ void Actor_SetCameraHorseSetting(GlobalContext* globalCtx, Player* player) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
-            func_800DFAC8(Play_GetCamera(globalCtx, MAIN_CAM), 4);
+            func_800DFAC8(Play_GetCamera(globalCtx, CAM_ID_MAIN), 4);
         }
     }
 }
@@ -1400,7 +1400,7 @@ void func_800B72F8(DynaPolyActor* dyna, f32 extraPushForce, s16 yRotation) {
  */
 s32 Player_IsFacingActor(Actor* actor, s16 maxAngleDiff, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 yawDiff = BINANG_ADD(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
+    s16 yawDiff = ADD16(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
 
     if (ABS_ALT(yawDiff) < maxAngleDiff) {
         return true;
@@ -1786,7 +1786,7 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
 
 f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
     f32 temp_f12;
-    s16 temp_v0 = BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle);
+    s16 temp_v0 = SUB16(SUB16(actor->yawTowardsPlayer, 0x8000), angle);
     s16 yaw = ABS_ALT(temp_v0);
 
     if (player->unk_730 != NULL) {
@@ -1823,7 +1823,7 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
     }
 
     if (!flag) {
-        s16 yaw = BINANG_SUB(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
+        s16 yaw = SUB16(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
         s16 phi_v1 = ABS_ALT(yaw);
         f32 dist;
 
@@ -3329,7 +3329,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
 
     if ((player != NULL) && (actor == player->unk_730)) {
         func_80123DA4(player);
-        Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCameraIndex(globalCtx)), 0);
+        Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCamId(globalCtx)), 0);
     }
 
     if (actor == actorCtx->targetContext.arrowPointedActor) {
@@ -3627,7 +3627,7 @@ s32 func_800BC188(s32 index) {
 
 s32 func_800BC1B4(Actor* actor, Actor* arg1, f32 arg2, f32 arg3) {
     if ((arg3 > 0.0f) && (Actor_DistanceBetweenActors(arg1, actor) < ((arg3 * 2.5f) + arg2))) {
-        s16 temp_v1 = BINANG_SUB(Actor_YawBetweenActors(arg1, actor), arg1->world.rot.y);
+        s16 temp_v1 = SUB16(Actor_YawBetweenActors(arg1, actor), arg1->world.rot.y);
 
         if (ABS_ALT(temp_v1) < 0x1400) {
             return true;
@@ -4122,7 +4122,7 @@ s16 func_800BD6E4(Actor* actor, struct_800BD888_arg1* arg1, f32 arg2, s16 arg3, 
         return 1;
     } else {
         s16 yaw = Math_Vec3f_Yaw(&actor->world.pos, &arg1->unk_18);
-        s16 phi_a0 = ABS_ALT(BINANG_SUB(yaw, actor->shape.rot.y));
+        s16 phi_a0 = ABS_ALT(SUB16(yaw, actor->shape.rot.y));
 
         if (arg3 >= phi_a0) {
             arg1->unk_04 = 0;
@@ -4308,7 +4308,7 @@ Actor* Actor_FindNearby(GlobalContext* globalCtx, Actor* inActor, s16 actorId, u
 
 s32 func_800BE184(GlobalContext* globalCtx, Actor* actor, f32 xzDist, s16 arg3, s16 arg4, s16 arg5) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 phi_v0 = BINANG_SUB(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
+    s16 phi_v0 = SUB16(BINANG_ROT180(actor->yawTowardsPlayer), player->actor.shape.rot.y);
     s16 temp_t0 = actor->yawTowardsPlayer - arg5;
 
     if ((actor->xzDistToPlayer <= xzDist) && (player->swordState != 0)) {

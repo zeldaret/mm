@@ -110,11 +110,11 @@ void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
 }
 
 void EnMuto_SetHeadRotation(EnMuto* this) {
-    s32 yawRotToTarget = ABS_ALT(BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y));
+    s32 yawRotToTarget = ABS_ALT(SUB16(this->yawTowardsTarget, this->actor.world.rot.y));
 
     this->headRotTarget.y = 0;
     if (this->actor.xzDistToPlayer < 200.0f && yawRotToTarget < 0x4E20) {
-        this->headRotTarget.y = BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y);
+        this->headRotTarget.y = SUB16(this->yawTowardsTarget, this->actor.world.rot.y);
         if (this->headRotTarget.y > 0x2710) {
             this->headRotTarget.y = 0x2710;
         } else if (this->headRotTarget.y < -0x2710) {
@@ -153,7 +153,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
     }
 
     if (!this->isInMayorsRoom) {
-        s16 yawRotToPlayer = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
+        s16 yawRotToPlayer = ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
 
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         if (yawRotToPlayer > 0x2890) {

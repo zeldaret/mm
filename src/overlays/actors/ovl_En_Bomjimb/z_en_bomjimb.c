@@ -274,7 +274,7 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
                 sp48.x += randPlusMinusPoint5Scaled(150.0f);
                 sp48.z += randPlusMinusPoint5Scaled(150.0f);
 
-                abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
+                abs = ABS_ALT(SUB16(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp48, &sp60,
                                                                &colPoly, 1, 0, 0, 1, &sp44)) {
                     func_80C0113C(this, 5, 1.0f);
@@ -291,7 +291,7 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2D6, 10, 2000, 20);
             }
 
-            if ((s16)ABS_ALT(BINANG_SUB(this->actor.world.rot.y, this->unk_2D6)) < 0x100) {
+            if ((s16)ABS_ALT(SUB16(this->actor.world.rot.y, this->unk_2D6)) < 0x100) {
                 Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
@@ -332,7 +332,7 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
     if (player->stateFlags3 != 0x1000000) {
         phi_f0 = 200.0f;
 
-        abs = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
+        abs = ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
         if (abs > 0x2890) {
             phi_f0 = 150.0f;
         }
@@ -409,7 +409,7 @@ void func_80C01C18(EnBomjimb* this, GlobalContext* globalCtx) {
     if (this->unk_2E4 != NULL) {
         if (this->unk_2E4->update != NULL) {
             this->unk_2E4->velocity.y = 8.0f;
-            this->unk_2E4->shape.rot.z = BINANG_SUB(4000, ((s16)(globalCtx->gameplayFrames & 2) * 4000));
+            this->unk_2E4->shape.rot.z = SUB16(4000, ((s16)(globalCtx->gameplayFrames & 2) * 4000));
             this->unk_294.x = this->unk_2E4->world.pos.x;
             this->unk_294.y = this->actor.world.pos.y;
             this->unk_294.z = this->unk_2E4->world.pos.z;
@@ -489,7 +489,7 @@ void func_80C01FD4(EnBomjimb* this) {
 }
 
 void func_80C0201C(EnBomjimb* this, GlobalContext* globalCtx) {
-    s16 abs = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
+    s16 abs = ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
 
     this->unk_290 = 0;
     if ((this->actor.xzDistToPlayer < 200.0f) && (abs < 0x61A8)) {
@@ -557,19 +557,19 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
     if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, 1, 0, 0, 1, &sp60)) {
-        s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
+        s16 temp = SUB16((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 
         if (temp < 0) {
-            this->unk_2D6 += BINANG_ADD((s32)Rand_ZeroFloat(0x200), 0x4000);
+            this->unk_2D6 += ADD16((s32)Rand_ZeroFloat(0x200), 0x4000);
             if (this->unk_2D0 != 0) {
-                this->unk_2D6 += BINANG_ADD((s32)Rand_ZeroFloat(0x200), 0x4000);
+                this->unk_2D6 += ADD16((s32)Rand_ZeroFloat(0x200), 0x4000);
             }
             this->unk_2D0 = 1;
         } else {
-            this->unk_2D6 -= BINANG_ADD((s32)Rand_ZeroFloat(0x200), 0x4000);
+            this->unk_2D6 -= ADD16((s32)Rand_ZeroFloat(0x200), 0x4000);
             if (this->unk_2D0 != 0) {
-                this->unk_2D6 -= BINANG_ADD((s32)Rand_ZeroFloat(0x200), 0x4000);
+                this->unk_2D6 -= ADD16((s32)Rand_ZeroFloat(0x200), 0x4000);
             }
             this->unk_2D0 = 1;
         }
@@ -586,7 +586,7 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->unk_2D6 + this->unk_2D4;
 
     if (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, sp58, sp5C)) {
-        s16 temp = BINANG_SUB(this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x8000);
+        s16 temp = SUB16(this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x8000);
 
         if (temp < 0) {
             this->unk_2D4 -= 0x1000;

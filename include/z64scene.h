@@ -290,7 +290,7 @@ typedef struct {
 typedef struct {
     struct {
         s8 room;    // Room to switch to
-        s8 effects; // How the camera reacts during the transition
+        s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
     } /* 0x00 */ sides[2]; // 0 = front, 1 = back
     /* 0x04 */ s16   id;
     /* 0x06 */ Vec3s pos;
@@ -496,10 +496,12 @@ typedef struct {
 } MinimapChest; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ s16 type;
-    /* 0x00 */ s16 numPoints;
-    /* 0x00 */ Vec3s* points;
-} CsCameraEntry;
+    /* 0x00 */ s16 setting;
+    /* 0x00 */ s16 numData;
+    /* 0x00 */ Vec3s* data;
+} CsCamData;
+
+typedef CsCamData CsCameraEntry;
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;

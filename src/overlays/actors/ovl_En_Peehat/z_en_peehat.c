@@ -441,7 +441,7 @@ void func_80897A94(EnPeehat* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     } else if (this->colliderTris.base.atFlags & AT_HIT) {
         this->colliderTris.base.atFlags &= ~AT_HIT;
-        if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y) > 0) {
+        if (SUB16(this->actor.yawTowardsPlayer, this->actor.world.rot.y) > 0) {
             this->actor.world.rot.y -= 0x2000;
         } else {
             this->actor.world.rot.y += 0x2000;
@@ -449,8 +449,8 @@ void func_80897A94(EnPeehat* this, GlobalContext* globalCtx) {
         this->unk_2B0 = 40;
     } else if (this->colliderCylinder.base.ocFlags1 & OC1_HIT) {
         this->colliderCylinder.base.ocFlags1 &= ~OC1_HIT;
-        if ((BINANG_SUB(Actor_YawBetweenActors(&this->actor, this->colliderCylinder.base.oc),
-                        this->actor.world.rot.y)) > 0) {
+        if ((SUB16(Actor_YawBetweenActors(&this->actor, this->colliderCylinder.base.oc), this->actor.world.rot.y)) >
+            0) {
             this->actor.world.rot.y -= 0x2000;
         } else {
             this->actor.world.rot.y += 0x2000;

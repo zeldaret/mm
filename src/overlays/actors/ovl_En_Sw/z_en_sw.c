@@ -598,9 +598,9 @@ void func_808D9DA0(EnSw* this) {
     this->unk_350.x = Math_SinS(this->actor.shape.rot.y);
     this->unk_350.y = 0.0f;
     this->unk_350.z = Math_CosS(this->actor.shape.rot.y);
-    this->unk_35C.x = Math_SinS(BINANG_ADD(this->actor.shape.rot.y, 0x4000));
+    this->unk_35C.x = Math_SinS(ADD16(this->actor.shape.rot.y, 0x4000));
     this->unk_35C.y = 0.0f;
-    this->unk_35C.z = Math_CosS(BINANG_ADD(this->actor.shape.rot.y, 0x4000));
+    this->unk_35C.z = Math_CosS(ADD16(this->actor.shape.rot.y, 0x4000));
 }
 
 void func_808D9E44(EnSw* this) {

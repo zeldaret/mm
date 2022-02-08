@@ -927,7 +927,7 @@ s32 func_80A131F8(EnGo* this, GlobalContext* globalCtx) {
 
 void func_80A132C8(EnGo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    s16 temp_v1 = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         func_8013AED4(&this->unk_390, 3, 7);
@@ -1034,7 +1034,7 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
 }
 
 void func_80A136B8(GlobalContext* globalCtx, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, MAIN_CAM), 3);
+    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, CAM_ID_MAIN), 3);
 
     Quake_SetCountdown(sp26, arg3);
     Quake_SetSpeed(sp26, arg1);
@@ -1514,7 +1514,7 @@ void func_80A149B0(EnGo* this, GlobalContext* globalCtx) {
                     break;
             }
         } else if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
-            if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
+            if (ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
                 func_8013AED4(&this->unk_390, 3, 7);
             } else {
                 func_8013AED4(&this->unk_390, 0, 7);

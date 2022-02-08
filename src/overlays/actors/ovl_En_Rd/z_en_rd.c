@@ -1032,7 +1032,7 @@ void func_808D66A0(EnRd* this, GlobalContext* globalCtx) {
     phi_v0 -= this->unk_3D8;
     phi_v0 = CLAMP(phi_v0, -0x1F4, 0x1F4);
 
-    if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
+    if (SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
         this->unk_3DA += ABS_ALT(temp_v0);
         this->unk_3D8 += ABS_ALT(phi_v0);
     } else {

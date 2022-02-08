@@ -235,7 +235,8 @@ void func_80BD8758(EnPamera* this, GlobalContext* globalCtx) {
     if (this->hideInisdeTimer++ > 1800) {
         if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
-            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[0])), &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[0])),
+                                   &this->actor);
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
@@ -421,7 +422,8 @@ void func_80BD90AC(EnPamera* this, GlobalContext* globalCtx) {
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
         if ((ActorCutscene_GetCanPlayNext(this->cutscenes[1])) && ((this->cutscenes[1] != -1))) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
-            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[1])), &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[1])),
+                                   &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->cutscenes[1] != -1) {
             ActorCutscene_SetIntentToPlay(this->cutscenes[1]);

@@ -603,7 +603,7 @@ void EnDai_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             Matrix_CopyCurrentState(&sp24);
             func_8018219C(&sp24, &sp64, 0);
-            this->unk_1D4 = BINANG_SUB(sp64.y, 0x4000);
+            this->unk_1D4 = SUB16(sp64.y, 0x4000);
             break;
 
         case 10:

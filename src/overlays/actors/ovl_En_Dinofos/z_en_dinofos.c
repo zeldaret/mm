@@ -363,11 +363,11 @@ void func_8089A9B0(EnDinofos* this, GlobalContext* globalCtx) {
 }
 
 void func_8089ABF4(EnDinofos* this, GlobalContext* globalCtx) {
-    if (this->camId != 0) {
-        Camera* camera = Play_GetCamera(globalCtx, this->camId);
+    if (this->subCamId != CAM_ID_MAIN) {
+        Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
 
-        Play_CameraSetAtEye(globalCtx, 0, &camera->at, &camera->eye);
-        this->camId = 0;
+        Play_CameraSetAtEye(globalCtx, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        this->subCamId = CAM_ID_MAIN;
         ActorCutscene_Stop(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
             func_800B724C(globalCtx, &this->actor, 6);
@@ -462,14 +462,14 @@ s32 func_8089AE00(EnDinofos* this, GlobalContext* globalCtx) {
 }
 
 void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
-    Camera* camera = Play_GetCamera(globalCtx, this->camId);
+    Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp3C;
 
     Animation_Change(&this->skelAnime, &object_dinofos_Anim_001CCC, 1.0f,
                      Animation_GetLastFrame(&object_dinofos_Anim_001CCC),
                      Animation_GetLastFrame(&object_dinofos_Anim_001CCC), 2, 0.0f);
-    func_800BE33C(&camera->eye, &camera->at, &this->unk_29A, true);
+    func_800BE33C(&subCam->eye, &subCam->at, &this->unk_29A, true);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
     this->unk_2BC.x = player->actor.world.pos.x + (0.4f * sp3C.x);
     this->unk_2BC.y = player->actor.world.pos.y + 5.0f;
@@ -477,19 +477,19 @@ void func_8089B100(EnDinofos* this, GlobalContext* globalCtx) {
     this->unk_2C8.x = this->actor.world.pos.x;
     this->unk_2C8.y = this->actor.focus.pos.y - 400.0f;
     this->unk_2C8.z = this->actor.world.pos.z;
-    this->unk_2AC = Math_Vec3f_DistXYZ(&camera->eye, &this->unk_2BC) * 0.05f;
-    this->unk_2A8 = Math_Vec3f_DistXYZ(&camera->at, &this->unk_2C8) * 0.05f;
+    this->unk_2AC = Math_Vec3f_DistXYZ(&subCam->eye, &this->unk_2BC) * 0.05f;
+    this->unk_2A8 = Math_Vec3f_DistXYZ(&subCam->at, &this->unk_2C8) * 0.05f;
     this->unk_290 = 20;
     this->actionFunc = func_8089B288;
 }
 
 void func_8089B288(EnDinofos* this, GlobalContext* globalCtx) {
-    Camera* camera = Play_GetCamera(globalCtx, this->camId);
+    Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
 
     this->unk_290--;
-    Math_Vec3f_StepTo(&camera->eye, &this->unk_2BC, this->unk_2AC);
-    Math_Vec3f_StepTo(&camera->at, &this->unk_2C8, this->unk_2A8);
-    Play_CameraSetAtEye(globalCtx, this->camId, &camera->at, &camera->eye);
+    Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, this->unk_2AC);
+    Math_Vec3f_StepTo(&subCam->at, &this->unk_2C8, this->unk_2A8);
+    Play_CameraSetAtEye(globalCtx, this->subCamId, &subCam->at, &subCam->eye);
     if (this->unk_290 == 0) {
         func_8089B320(this);
     }
@@ -506,24 +506,24 @@ void func_8089B320(EnDinofos* this) {
 }
 
 void func_8089B3D4(EnDinofos* this, GlobalContext* globalCtx) {
-    Camera* camera = Play_GetCamera(globalCtx, this->camId);
-    Vec3f sp28;
+    Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
+    Vec3f subCamAt;
 
-    Math_Vec3f_StepTo(&camera->eye, &this->unk_2BC, 10.0f);
+    Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
     this->unk_290++;
     if (this->unk_290 == 10) {
         func_801A2E54(NA_BGM_MINI_BOSS);
     }
 
-    sp28.x = this->actor.world.pos.x;
-    sp28.z = this->actor.world.pos.z;
-    if (this->actor.focus.pos.y <= camera->at.y) {
-        sp28.y = this->actor.focus.pos.y;
+    subCamAt.x = this->actor.world.pos.x;
+    subCamAt.z = this->actor.world.pos.z;
+    if (this->actor.focus.pos.y <= subCam->at.y) {
+        subCamAt.y = this->actor.focus.pos.y;
     } else {
-        sp28.y = camera->at.y;
+        subCamAt.y = subCam->at.y;
     }
 
-    Play_CameraSetAtEye(globalCtx, this->camId, &sp28, &camera->eye);
+    Play_CameraSetAtEye(globalCtx, this->subCamId, &subCamAt, &subCam->eye);
     if (this->actor.bgCheckFlags & 1) {
         func_8089B4A4(this);
     }
@@ -544,11 +544,11 @@ void func_8089B4A4(EnDinofos* this) {
 }
 
 void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
-    Camera* camera = Play_GetCamera(globalCtx, this->camId);
+    Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
 
     this->unk_290++;
     if (this->unk_290 < 8) {
-        Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &camera->eye);
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.focus.pos, &subCam->eye);
     }
 
     if (this->skelAnime.curFrame > 35.0f) {
@@ -556,8 +556,8 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
             globalCtx->envCtx.unk_C3 = 11;
         }
 
-        Math_Vec3f_StepTo(&camera->eye, &this->unk_2BC, 10.0f);
-        Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &camera->eye);
+        Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.focus.pos, &subCam->eye);
         if (this->skelAnime.curFrame <= 55.0f) {
             func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         }
@@ -677,10 +677,10 @@ void func_8089BAC0(EnDinofos* this) {
         Animation_MorphToLoop(&this->skelAnime, &object_dinofos_Anim_000580, -4.0f);
         this->actor.speedXZ = 0.0f;
     }
-    if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) > 0) {
-        this->unk_28C = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
+    if (SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) > 0) {
+        this->unk_28C = ADD16(this->actor.shape.rot.y, 0x4000);
     } else {
-        this->unk_28C = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
+        this->unk_28C = SUB16(this->actor.shape.rot.y, 0x4000);
     }
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_8089AD70(this);
@@ -719,7 +719,7 @@ void func_8089BBB4(EnDinofos* this, GlobalContext* globalCtx) {
                              0.0f, 0, -4.0f);
         }
 
-        this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
+        this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
         this->unk_2A4 = 0;
         this->unk_292 = (s32)Rand_ZeroFloat(10.0f) + 5;
     }
@@ -736,9 +736,9 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
     if (!func_8089AE00(this, globalCtx)) {
         if (this->actor.bgCheckFlags & 8) {
             if (this->actor.speedXZ >= 0.0f) {
-                phi_v0 = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
+                phi_v0 = ADD16(this->actor.shape.rot.y, 0x4000);
             } else {
-                phi_v0 = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
+                phi_v0 = SUB16(this->actor.shape.rot.y, 0x4000);
             }
 
             phi_v0 = this->actor.wallYaw - phi_v0;
@@ -752,7 +752,7 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
             }
         }
 
-        phi_v0 = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
+        phi_v0 = SUB16(player->actor.shape.rot.y, this->actor.shape.rot.y);
         if ((phi_v0 >= 0) && (phi_v0 < 0x7800)) {
             this->actor.speedXZ += 0.125f;
         } else if ((phi_v0 < 0) && (phi_v0 > -0x7800)) {
@@ -765,7 +765,7 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
             this->skelAnime.playSpeed = -1.0f;
         }
 
-        this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
+        this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
         if (Actor_OtherIsTargeted(globalCtx, &this->actor)) {
             sp2C = 100.0f;
         }
@@ -1169,7 +1169,7 @@ void func_8089D11C(EnDinofos* this, s16 arg1) {
     }
     Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * (1.0f / 7.5f), 0.0f, 0.0f, 0,
                      -4.0f);
-    this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
+    this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
     this->unk_292 = 10;
     this->unk_2A4 = 0.0f;
     func_8089AD70(this);
@@ -1182,7 +1182,7 @@ void func_8089D1E0(EnDinofos* this, GlobalContext* globalCtx) {
 
     this->skelAnime.playSpeed =
         (1.0f + fabsf(this->actor.speedXZ * (1.0f / 15.0f))) * ((this->actor.speedXZ >= 0.0f) ? 1.0f : -1.0f);
-    this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
+    this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
     SkelAnime_Update(&this->skelAnime);
     if (this->unk_292 != 0) {
         this->unk_292--;
@@ -1201,7 +1201,7 @@ void func_8089D2E0(EnDinofos* this) {
 }
 
 void func_8089D318(EnDinofos* this, GlobalContext* globalCtx) {
-    Vec3f sp24;
+    Vec3f subCamEye;
 
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         if (this->actor.colChkInfo.health == 0) {
@@ -1210,12 +1210,12 @@ void func_8089D318(EnDinofos* this, GlobalContext* globalCtx) {
         } else {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
-        this->camId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+        this->subCamId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
         if (this->actor.colChkInfo.health == 0) {
-            sp24.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
-            sp24.y = this->actor.focus.pos.y;
-            sp24.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.z;
-            Play_CameraSetAtEye(globalCtx, this->camId, &this->actor.focus.pos, &sp24);
+            subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
+            subCamEye.y = this->actor.focus.pos.y;
+            subCamEye.z = (Math_CosS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.z;
+            Play_CameraSetAtEye(globalCtx, this->subCamId, &this->actor.focus.pos, &subCamEye);
             func_8089CFAC(this);
         } else {
             func_8089B100(this, globalCtx);
@@ -1236,7 +1236,7 @@ void func_8089D42C(EnDinofos* this, GlobalContext* globalCtx) {
         this->unk_28E = cos_rad(this->unk_290 * (M_PI / 20)) * 0x2C00;
     } else if (!func_801690CC(globalCtx)) {
         temp_v0_2 = this->unk_28E + this->actor.shape.rot.y;
-        temp_v0_2 = BINANG_SUB(this->actor.yawTowardsPlayer, temp_v0_2);
+        temp_v0_2 = SUB16(this->actor.yawTowardsPlayer, temp_v0_2);
         temp_v0_2 = CLAMP(temp_v0_2, -0x300, 0x300);
         this->unk_28E += temp_v0_2;
         this->unk_28E = CLAMP(this->unk_28E, -0x2C00, 0x2C00);

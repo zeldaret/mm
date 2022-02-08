@@ -843,10 +843,10 @@ void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, GlobalContext* glo
 void EnBigslime_EndCutscene(EnBigslime* this, GlobalContext* globalCtx) {
     Camera* subCam;
 
-    if (this->subCamId != MAIN_CAM) {
+    if (this->subCamId != CAM_ID_MAIN) {
         subCam = Play_GetCamera(globalCtx, this->subCamId);
-        Play_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
-        this->subCamId = MAIN_CAM;
+        Play_CameraSetAtEye(globalCtx, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        this->subCamId = CAM_ID_MAIN;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         func_800B724C(globalCtx, &this->actor, 6);
@@ -1019,7 +1019,7 @@ void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 20.0f;
 
-    if (this->subCamId != MAIN_CAM) {
+    if (this->subCamId != CAM_ID_MAIN) {
         this->actor.speedXZ = 0.0f;
         this->ceilingMoveTimer = 20;
     } else {
@@ -1043,7 +1043,7 @@ void EnBigslime_MoveOnCeiling(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslime_Scale(this, pitch, 0.04f, 0.04f);
     EnBigslime_UpdateWavySurface(this);
 
-    if (this->subCamId != MAIN_CAM) {
+    if (this->subCamId != CAM_ID_MAIN) {
         if (this->ceilingMoveTimer == 0) {
             EnBigslime_EndCutscene(this, globalCtx);
             this->ceilingMoveTimer = 320;
@@ -1493,7 +1493,7 @@ void EnBigslime_Rise(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
-    Camera* mainCam = Play_GetCamera(globalCtx, MAIN_CAM);
+    Camera* mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
     s16 yaw;
 
     Play_CameraSetAtEye(globalCtx, this->subCamId, &mainCam->at, &mainCam->eye);
@@ -1501,7 +1501,7 @@ void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalC
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
-    yaw = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - this->actor.world.rot.y;
+    yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.world.rot.y;
 
     if (yaw > 0x4000) {
         this->subCamYawGrabPlayer = -0x2000;
@@ -2088,7 +2088,7 @@ void EnBigslime_SetupIdleLookAround(EnBigslime* this) {
     Animation_PlayOnce(&this->skelAnime, &gGekkoNervousIdleAnim);
     this->idleTimer = 60;
     this->actor.speedXZ = 0.0f;
-    if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
+    if (SUB16(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
         this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
     } else {
         this->gekkoYaw = this->gekkoRot.y - ((u32)Rand_Next() >> 20) - 0x2000;
@@ -2110,7 +2110,7 @@ void EnBigslime_IdleLookAround(EnBigslime* this, GlobalContext* globalCtx) {
 
     if ((this->skelAnime.animation == &gGekkoNervousIdleAnim) &&
         Math_ScaledStepToS(&this->gekkoRot.y, this->gekkoYaw, 0x400)) {
-        if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
+        if (SUB16(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->gekkoRot.y) > 0) {
             this->gekkoYaw = this->gekkoRot.y + ((u32)Rand_Next() >> 20) + 0x2000;
         } else {
             this->gekkoYaw = this->gekkoRot.y - ((u32)Rand_Next() >> 20) - 0x2000;
@@ -2334,7 +2334,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) 
     subCamAt.y = this->actor.world.pos.y + 40.0f;
     subCamAt.z = this->actor.world.pos.z;
 
-    if (BINANG_SUB(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->actor.world.rot.y) > 0) {
+    if (SUB16(Actor_YawToPoint(&this->actor, &this->actor.home.pos), this->actor.world.rot.y) > 0) {
         yawOffset = this->actor.world.rot.y + 0x4000;
     } else {
         yawOffset = this->actor.world.rot.y - 0x4000;
@@ -2423,7 +2423,7 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
     Vec3f* worldPos;
     Vec3f dustPos;
     Vec3f hahenVel;
-    s16 yaw = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
+    s16 yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
     s16 yawReverse = yaw + 0x8000;
     s32 i;
 

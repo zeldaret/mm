@@ -256,7 +256,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
         }
     }
 
-    temp_v0 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
+    temp_v0 = ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
     if (temp_v0 > 0x2890) {
         if (sp98 != 2) {
             if ((this->unk_276 == 5) || (this->unk_276 == 9)) {

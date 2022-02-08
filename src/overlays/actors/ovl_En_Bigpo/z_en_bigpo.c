@@ -271,7 +271,7 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext) {
     Camera* subCam;
 
-    if (this->cutsceneSubCamId != SUBCAM_FREE) {
+    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
         subCam = Play_GetCamera(globalContext, this->cutsceneSubCamId);
         subCam->eye.y -= this->actor.velocity.y;
         if (this->actor.velocity.y > 0.0f) {
@@ -332,7 +332,7 @@ void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.scale.y = 0.015f;
     this->actor.scale.z = 0.0f;
 
-    if (this->cutsceneSubCamId != SUBCAM_FREE) {
+    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
         Vec3f subCamEye;
 
         subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
@@ -460,8 +460,8 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, GlobalContext* globalCtx) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         subCam = Play_GetCamera(globalCtx, this->cutsceneSubCamId);
-        Play_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
-        this->cutsceneSubCamId = SUBCAM_FREE;
+        Play_CameraSetAtEye(globalCtx, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        this->cutsceneSubCamId = CAM_ID_MAIN;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = SubS_FindActor(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
@@ -683,25 +683,25 @@ void EnBigpo_SetupDeath(EnBigpo* this) {
 void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
     Vec3f tempVec;
     f32 unkTemp2; // dont really know what these unktemps are doing
-    s16 cam;
+    s16 camYaw;
     s16 unkTemp;
     s16 modifiedTimer;
 
     this->idleTimer++;
     if (this->idleTimer < 8) {
-        cam = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
+        camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
         if (this->idleTimer < 5) {
             unkTemp = (this->idleTimer << 0xC) - 0x4000;
             // 1.4.0...1 is NOT 1.4, the rodata demands it
             tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
-            tempVec.x = (Math_SinS(cam) * unkTemp2) + this->actor.world.pos.x;
-            tempVec.z = (Math_CosS(cam) * unkTemp2) + this->actor.world.pos.z;
+            tempVec.x = (Math_SinS(camYaw) * unkTemp2) + this->actor.world.pos.x;
+            tempVec.z = (Math_CosS(camYaw) * unkTemp2) + this->actor.world.pos.z;
 
         } else {
             tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * 1.4000001f);
-            tempVec.x = (Math_SinS(cam) * 32.2f) + this->actor.world.pos.x;
-            tempVec.z = (Math_CosS(cam) * 32.2f) + this->actor.world.pos.z;
+            tempVec.x = (Math_SinS(camYaw) * 32.2f) + this->actor.world.pos.x;
+            tempVec.z = (Math_CosS(camYaw) * 32.2f) + this->actor.world.pos.z;
         }
 
         // not sure what we're turning this into, but its based on the timer
@@ -955,7 +955,7 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, GlobalContext* globalCtx) 
     }
 
     // Setup sub camera
-    if (this->cutsceneSubCamId != SUBCAM_FREE) {
+    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
@@ -1219,7 +1219,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = THIS;
 
-    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
     this->actionFunc(this, globalCtx);
 }
 
@@ -1350,7 +1350,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
                               this->actor.world.pos.z, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                               this->mainColor.a * 2);
 
-    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1430,7 +1430,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_NEW);
+    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_NEW);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         fireRadius = 500;

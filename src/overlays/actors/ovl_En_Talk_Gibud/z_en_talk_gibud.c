@@ -284,7 +284,7 @@ void EnTalkGibud_SetupAttemptPlayerStun(EnTalkGibud* this) {
 void EnTalkGibud_AttemptPlayerStun(EnTalkGibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 rot = this->actor.shape.rot.y + this->headRotation.y + this->upperBodyRotation.y;
-    s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
+    s16 yaw = SUB16(this->actor.yawTowardsPlayer, rot);
 
     if (ABS_ALT(yaw) < 0x2008) {
         player->actor.freezeTimer = 60;
@@ -900,7 +900,7 @@ void EnTalkGibud_TurnTowardsPlayer(EnTalkGibud* this, GlobalContext* globalCtx) 
     headAngle -= this->headRotation.y;
     headAngle = CLAMP(headAngle, -500, 500);
 
-    if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
+    if (SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
         this->upperBodyRotation.y += ABS_ALT(upperBodyAngle);
         this->headRotation.y += ABS_ALT(headAngle);
     } else {

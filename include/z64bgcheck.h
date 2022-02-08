@@ -89,9 +89,9 @@ typedef struct CollisionPoly {
 } CollisionPoly; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u16 cameraSType;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ Vec3s* camPosData;
+    /* 0x00 */ u16 setting;
+    /* 0x02 */ s16 numData;
+    /* 0x04 */ Vec3s* data;
 } CamData;
 
 typedef struct {

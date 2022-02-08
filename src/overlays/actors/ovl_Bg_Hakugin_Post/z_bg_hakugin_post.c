@@ -826,7 +826,7 @@ void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
         collider = D_80A9E028.unk_0000[i].collider;
         if ((collider != NULL) && (collider->base.acFlags & AT_HIT) && (D_80A9E028.unk_0000[i].unk_34 == 1)) {
             temp_f2 = this->unk_16C;
-            yDiff = ABS_ALT(BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y));
+            yDiff = ABS_ALT(SUB16(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y));
             temp_f0 = temp_f2 + D_80A9E028.unk_0000[i].unk_14.y;
             if ((yDiff > 0x5000) && ((temp_f0 - 60.0f) < player->actor.world.pos.y) &&
                 (player->actor.world.pos.y < ((temp_f0 + D_80A9D880[D_80A9E028.unk_0000[i].unk_00].unk_00) - 70.0f))) {

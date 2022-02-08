@@ -66,7 +66,7 @@
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
-    /* 0x4 */ s16 unk4;
+    /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Positive indices index CsCameraEntry from scene
     /* 0x6 */ s16 unk6;
     /* 0x8 */ s16 additionalCutscene;
     /* 0xA */ u8 sound;
@@ -118,8 +118,8 @@ typedef struct {
     /* 0x18 */ u16   unk_18;
     /* 0x1A */ u8    unk_1A;
     /* 0x1B */ u8    unk_1B;
-    /* 0x1C */ CutsceneCameraPoint* cameraFocus;
-    /* 0x20 */ CutsceneCameraPoint* cameraPosition;
+    /* 0x1C */ CutsceneCameraPoint* atPoints;
+    /* 0x20 */ CutsceneCameraPoint* eyePoints;
     /* 0x24 */ CsCmdActorAction* linkAction;
     /* 0x28 */ CsCmdActorAction* npcActions[10]; // "npcdemopnt"
     /* 0x50 */ CutsceneEntry* sceneCsList;
@@ -717,8 +717,8 @@ typedef struct {
     /* 0x12 */ u8 unk_12;
     /* 0x13 */ u8 unk_13;
     /* 0x14 */ u8 unk_14;
-    /* 0x15 */ u8 unk_15;
-    /* 0x16 */ u8 unk_16;
+    /* 0x15 */ u8 skyboxDisabled;
+    /* 0x16 */ u8 sunMoonDisabled;
     /* 0x17 */ u8 unk_17;
     /* 0x18 */ u8 unk_18;
     /* 0x19 */ u8 unk_19;
@@ -1069,7 +1069,7 @@ typedef struct Camera {
     /* 0x15E */ s16 animState;
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 timer;
-    /* 0x164 */ s16 thisIdx;
+    /* 0x164 */ s16 camId;
     /* 0x166 */ s16 prevCamDataIdx;
     /* 0x168 */ s16 unk168;
     /* 0x16A */ s16 unk16A;
@@ -1098,7 +1098,7 @@ typedef struct {
     /* 0x1A */ s16 speed;
     /* 0x1C */ s16 isShakePerpendicular;
     /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 cameraPtrsIdx;
+    /* 0x20 */ s16 camId;
 } QuakeRequest; // size = 0x24
 
 typedef struct {
@@ -1322,7 +1322,7 @@ struct GlobalContext {
     /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
-    /* 0x18858 */ void* unk_18858;
+    /* 0x18858 */ CsCamData* csCamData;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;

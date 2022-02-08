@@ -401,7 +401,7 @@ s32 func_80990948(GlobalContext* globalCtx, EnWf* this, s16 arg2) {
     s16 sp2E;
     Actor* actor;
 
-    sp38 = ABS_ALT(BINANG_SUB(this->actor.wallYaw, this->actor.shape.rot.y));
+    sp38 = ABS_ALT(SUB16(this->actor.wallYaw, this->actor.shape.rot.y));
 
     if (((this->unk_295 == 0) ||
          ((this->unk_295 == 1) && (this->actor.child != NULL) && (this->actor.child->update != NULL))) &&
@@ -615,7 +615,7 @@ void func_80991280(EnWf* this, GlobalContext* globalCtx) {
     }
 
     if (!func_8099408C(globalCtx, this) && !func_80990948(globalCtx, this, 0)) {
-        phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
+        phi_v1 = ABS_ALT(SUB16(player->actor.shape.rot.y, this->actor.shape.rot.y));
         if ((this->actor.xzDistToPlayer < 80.0f) && (player->swordState != 0) && (phi_v1 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -664,7 +664,7 @@ void func_8099149C(EnWf* this, GlobalContext* globalCtx) {
             sp2C = 0.0f;
         }
 
-        sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
+        sp28 = ABS_ALT(SUB16(player->actor.shape.rot.y, this->actor.shape.rot.y));
 
         if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->swordState != 0) && (sp28 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -825,8 +825,8 @@ void func_80991C80(EnWf* this, GlobalContext* globalCtx) {
     s32 sp2C;
     s16 sp2A;
 
-    sp2A = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
-    sp30 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
+    sp2A = SUB16(player->actor.shape.rot.y, this->actor.shape.rot.y);
+    sp30 = ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
 
     this->actor.speedXZ = 0.0f;
     if (((this->skelAnime.curFrame >= 9.0f) && (this->skelAnime.curFrame < 13.0f)) ||
@@ -890,8 +890,8 @@ void func_80992068(EnWf* this, GlobalContext* globalCtx) {
     s32 sp28;
     s16 sp26;
 
-    sp26 = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
-    sp28 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
+    sp26 = SUB16(player->actor.shape.rot.y, this->actor.shape.rot.y);
+    sp28 = ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (!Actor_IsFacingPlayer(&this->actor, 0x1554)) {
@@ -1116,7 +1116,7 @@ void func_80992B8C(EnWf* this, GlobalContext* globalCtx) {
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_29A, 2000);
     if (this->actor.bgCheckFlags & 8) {
-        sp2C = BINANG_SUB((this->actor.wallYaw - this->actor.yawTowardsPlayer), this->unk_29A);
+        sp2C = SUB16((this->actor.wallYaw - this->actor.yawTowardsPlayer), this->unk_29A);
         if (ABS_ALT(sp2C) > 0x2EE0) {
             this->unk_29A = -this->unk_29A;
         }
@@ -1128,7 +1128,7 @@ void func_80992B8C(EnWf* this, GlobalContext* globalCtx) {
     if (!func_80990948(globalCtx, this, 0)) {
         this->unk_2A0--;
         if (this->unk_2A0 == 0) {
-            sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.yawTowardsPlayer));
+            sp28 = ABS_ALT(SUB16(player->actor.shape.rot.y, this->actor.yawTowardsPlayer));
             if (sp28 >= 0x3A98) {
                 func_80991200(this);
                 this->unk_2A0 = (s32)Rand_ZeroFloat(3.0f) + 1;
@@ -1218,7 +1218,7 @@ void func_80993018(EnWf* this, GlobalContext* globalCtx) {
             func_80993350(this);
         } else {
             s16 temp_v0 = Actor_YawBetweenActors(this->actor.child, &this->actor);
-            s16 temp_v1 = BINANG_SUB(temp_v0 - this->actor.child->yawTowardsPlayer, 0x8000);
+            s16 temp_v1 = SUB16(temp_v0 - this->actor.child->yawTowardsPlayer, 0x8000);
 
             if (ABS_ALT(temp_v1) > 0x800) {
                 func_80993148(this);
@@ -1338,7 +1338,7 @@ void func_8099357C(EnWf* this, GlobalContext* globalCtx) {
             }
 
             if (this->actor.bgCheckFlags & 8) {
-                if (BINANG_SUB(sp2E, this->actor.wallYaw) > 0) {
+                if (SUB16(sp2E, this->actor.wallYaw) > 0) {
                     sp2E = this->actor.wallYaw - 0x4000;
                 } else {
                     sp2E = this->actor.wallYaw + 0x4000;

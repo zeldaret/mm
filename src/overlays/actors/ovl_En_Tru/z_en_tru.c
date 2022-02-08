@@ -931,7 +931,7 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
 
         case 1:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                sp3E = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
+                sp3E = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
                 Math_Vec3f_Copy(&sp4C, &gZeroVec3f);
                 sp4C.z = 40.0f;
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp3E, &sp4C, &sp40);
