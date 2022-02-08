@@ -1492,7 +1492,7 @@ void func_800FE658(f32 arg0);
 // void func_800FE788(void);
 // void func_800FE798(void);
 // void func_800FE7A8(void);
-// void func_800FE9B4(void);
+s32 func_800FE9B4(GlobalContext* globalCtx);
 // void func_800FEA50(void);
 void func_800FEAB0(void);
 // void func_800FEAC0(void);
