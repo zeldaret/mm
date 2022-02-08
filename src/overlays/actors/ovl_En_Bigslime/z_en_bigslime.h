@@ -109,7 +109,7 @@ typedef struct EnBigslime {
     /* 0x02F8 */ Vec3f limbPos[12];
     /* 0x0388 */ f32 gekkoDrawDmgEffAlpha;
     /* 0x038C */ f32 gekkoDrawDmgEffScale;
-    /* 0x0390 */ f32 gekkoDrawDmgEffFrozenSmokeScale;
+    /* 0x0390 */ f32 gekkoDrawDmgEffFrozenSteamScale;
     /* 0x0394 */ f32 gekkoScale;
     /* 0x0398 */ f32 vtxSurfacePerturbation[BIGSLIME_NUM_VTX];
     /* 0x0620 */ f32 vtxScaleX;

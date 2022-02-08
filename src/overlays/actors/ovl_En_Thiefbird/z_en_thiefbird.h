@@ -34,7 +34,7 @@ typedef struct EnThiefbird {
     /* 0x0350 */ Vec3f limbPos[11];
     /* 0x03D4 */ f32 drawDmgEffAlpha;
     /* 0x03D8 */ f32 drawDmgEffScale;
-    /* 0x03DC */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x03DC */ f32 drawDmgEffFrozenSteamScale;
     /* 0x03E0 */ f32 unk_3E0;
     /* 0x03E4 */ Gfx* unk_3E4;
     /* 0x03E8 */ Gfx* unk_3E8;

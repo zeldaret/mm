@@ -149,7 +149,7 @@ void EnDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_808BD348(EnDekunuts* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSmokeScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 0.82500005f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_190 = 80;
@@ -656,7 +656,7 @@ void EnDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
         } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
-                   !Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.55f, (33.0f / 1600.0f))) {
+                   !Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, (33.0f / 1600.0f))) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -741,5 +741,5 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     Gfx_DrawDListOpa(globalCtx, object_dekunuts_DL_001E50);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSmokeScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

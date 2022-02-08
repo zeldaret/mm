@@ -650,7 +650,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 64, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawLightOrbDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -193,7 +193,7 @@ void func_808FA11C(EnRr* this) {
     this->collider1.info.elemType = ELEMTYPE_UNK0;
     this->unk_1EE = 80;
     this->drawDmgEffScale = 0.85f;
-    this->drawDmgEffFrozenSmokeScale = 1.2750001f;
+    this->drawDmgEffFrozenSteamScale = 1.2750001f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~0x400;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
@@ -860,7 +860,7 @@ void EnRr_Update(Actor* thisx, GlobalContext* globalCtx) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.425f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.85f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.85f, 0.02125f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.85f, 0.02125f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -934,7 +934,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
 
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
-                            this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSmokeScale,
+                            this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

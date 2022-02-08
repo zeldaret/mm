@@ -4455,22 +4455,22 @@ TexturePtr D_801AEFA8[] = {
 /**
  * Draw common damage effects on each limb provided in limbPos
  */
-void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 limbPosCount, f32 effectScale,
+void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 limbCount, f32 effectScale,
                              f32 frozenSteamScale, f32 effectAlpha, u8 type) {
     if (effectAlpha > 0.001f) {
-        s32 temp_v1_3;
-        s16 i;
-        MtxF* temp_s3;
+        s32 twoTexScrollParam;
+        s16 limbIndex;
+        MtxF* currentMatrix;
         f32 alpha;
         f32 frozenScale;
-        f32 sp120;
+        f32 lightOrbsScale;
         f32 electricStunScale;
         f32 steamScale;
         Vec3f* limbAux = limbPos;
-        u32 sp110 = globalCtx->gameplayFrames;
-        f32 sp74;
+        u32 gameplayFrames = globalCtx->gameplayFrames;
+        f32 effectAlphaScaled;
 
-        temp_s3 = Matrix_GetCurrentState();
+        currentMatrix = Matrix_GetCurrentState();
 
         if ((actor != NULL) && (effectAlpha > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
             if (type == ACTOR_DRAW_DMGEFF_FIRE) {
@@ -4496,19 +4496,19 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 func_800BCC68(limbPos, globalCtx);
 
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, sp110 & 0xFF, 0x20, 0x10, 1, 0,
-                                            (sp110 * 2) & 0xFF, 0x40, 0x20));
+                           Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 32, 16, 1, 0,
+                                            (gameplayFrames * 2) & 0xFF, 64, 32));
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050648);
 
-                sp74 = effectAlpha * 255.0f;
+                effectAlphaScaled = effectAlpha * 255.0f;
 
-                for (i = 0; i < limbPosCount; i++) {
-                    alpha = i & 3;
-                    alpha = sp74 - (30.0f * alpha);
-                    if (sp74 < (30.0f * (i & 3))) {
+                for (limbIndex = 0; limbIndex < limbCount; limbIndex++) {
+                    alpha = limbIndex & 3;
+                    alpha = effectAlphaScaled - (30.0f * alpha);
+                    if (effectAlphaScaled < (30.0f * (limbIndex & 3))) {
                         alpha = 0.0f;
                     }
                     if (alpha > 255.0f) {
@@ -4519,10 +4519,12 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_Scale(frozenScale, frozenScale, frozenScale, MTXMODE_APPLY);
-                    if (i & 1) {
+
+                    if (limbIndex & 1) {
                         Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
-                    if (i & 2) {
+
+                    if (limbIndex & 2) {
                         Matrix_InsertZRotation_f(M_PI, MTXMODE_APPLY);
                     }
 
@@ -4549,11 +4551,11 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
 
-                for (i = 0; i < limbPosCount; i++) {
-                    temp_v1_3 = ((i * 3) + sp110);
+                for (limbIndex = 0; limbIndex < limbCount; limbIndex++) {
+                    twoTexScrollParam = ((limbIndex * 3) + gameplayFrames);
                     gSPSegment(POLY_XLU_DISP++, 0x08,
-                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_v1_3 * 3, temp_v1_3 * -0xC, 0x20, 0x40,
-                                                1, 0, 0, 0x20, 0x20));
+                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, twoTexScrollParam * 3,
+                                                twoTexScrollParam * -12, 32, 64, 1, 0, 0, 32, 32));
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -4574,19 +4576,20 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
                 } else {
                     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 0);
-                    // Use type for blue primary color
+                    // Reuse type for blue primary color
                     type = 255;
                 }
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f, 1);
+                Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f,
+                             MTXMODE_APPLY);
 
-                sp74 = effectAlpha * 255.0f;
+                effectAlphaScaled = effectAlpha * 255.0f;
 
-                for (i = 0; i < limbPosCount; i++) {
-                    alpha = i & 3;
-                    alpha = sp74 - 30.0f * alpha;
-                    if (sp74 < 30.0f * (i & 3)) {
+                for (limbIndex = 0; limbIndex < limbCount; limbIndex++) {
+                    alpha = limbIndex & 3;
+                    alpha = effectAlphaScaled - 30.0f * alpha;
+                    if (effectAlphaScaled < 30.0f * (limbIndex & 3)) {
                         alpha = 0.0f;
                     }
                     if (alpha > 255.0f) {
@@ -4599,13 +4602,13 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, type, (u8)alpha);
 
                     gSPSegment(POLY_XLU_DISP++, 0x08,
-                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
-                                                ((i * 10 + sp110) * -0x14) & 0x1FF, 0x20, 0x80));
+                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
+                                                ((limbIndex * 10 + gameplayFrames) * -20) & 0x1FF, 32, 128));
 
                     Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
-                    temp_s3->mf[3][0] = limbPos->x;
-                    temp_s3->mf[3][1] = limbPos->y;
-                    temp_s3->mf[3][2] = limbPos->z;
+                    currentMatrix->mf[3][0] = limbPos->x;
+                    currentMatrix->mf[3][1] = limbPos->y;
+                    currentMatrix->mf[3][2] = limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4618,7 +4621,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
             case ACTOR_DRAW_DMGEFF_LIGHT_ORBS:
             case ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS:
-                sp120 = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
+                lightOrbsScale = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
 
@@ -4639,18 +4642,18 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 }
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale(sp120, sp120, 1.0f, MTXMODE_APPLY);
+                Matrix_Scale(lightOrbsScale, lightOrbsScale, 1.0f, MTXMODE_APPLY);
 
-                for (i = 0; i < limbPosCount; i++) {
+                for (limbIndex = 0; limbIndex < limbCount; limbIndex++) {
                     Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
-                    temp_s3->mf[3][0] = limbPos->x;
-                    temp_s3->mf[3][1] = limbPos->y;
-                    temp_s3->mf[3][2] = limbPos->z;
+                    currentMatrix->mf[3][0] = limbPos->x;
+                    currentMatrix->mf[3][1] = limbPos->y;
+                    currentMatrix->mf[3][2] = limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
+                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawLightOrbDL);
 
                     limbPos++;
                 }
@@ -4667,7 +4670,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     electricStunScale = (KREG(19) * 0.01f + 2.0f) * effectScale;
                 }
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801AEFA8[globalCtx->gameplayFrames & 3]));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801AEFA8[globalCtx->gameplayFrames % 4]));
 
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023480);
 
@@ -4680,12 +4683,12 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale(electricStunScale, electricStunScale, electricStunScale, MTXMODE_APPLY);
 
-                for (i = 0; i < limbPosCount; i++) {
+                for (limbIndex = 0; limbIndex < limbCount; limbIndex++) {
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
-                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4693,10 +4696,10 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0234F0);
 
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
-                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
+                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4712,8 +4715,8 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
     }
 }
 
-void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 limbPosCount,
-                           s32 effectsPerLimb, f32 scale, f32 scaleRange) {
+void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s32 limbCount, s32 effectsPerLimb,
+                           f32 scale, f32 scaleRange) {
     static Color_RGBA8 primColor = { 170, 255, 255, 255 };
     static Color_RGBA8 envColor = { 200, 200, 255, 255 };
     static Vec3f accel = { 0.0f, -1.0f, 0.0f };
@@ -4726,7 +4729,7 @@ void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos
 
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
-    for (i = 0; i < limbPosCount; i++) {
+    for (i = 0; i < limbCount; i++) {
         yaw = Actor_YawToPoint(actor, limbPos);
 
         for (j = 0; j < effectsPerLimb; j++) {

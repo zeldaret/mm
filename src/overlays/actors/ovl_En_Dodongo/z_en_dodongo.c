@@ -417,7 +417,7 @@ void func_80876CAC(EnDodongo* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider1.base.colType = COLTYPE_HIT3;
     this->drawDmgEffScale = 0.75f;
-    this->drawDmgEffFrozenSmokeScale = 1.125f;
+    this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
     this->actor.flags &= ~0x400;
@@ -1050,7 +1050,7 @@ void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
             this->drawDmgEffScale = (this->drawDmgEffScale > 0.75f) ? 0.75f : this->drawDmgEffScale;
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.75f, 0.01875f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1106,6 +1106,6 @@ void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,
                       EnDodongo_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
-                            this->drawDmgEffScale * this->unk_334, this->drawDmgEffFrozenSmokeScale * this->unk_334,
+                            this->drawDmgEffScale * this->unk_334, this->drawDmgEffFrozenSteamScale * this->unk_334,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 }

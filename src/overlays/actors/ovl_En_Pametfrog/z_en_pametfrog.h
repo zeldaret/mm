@@ -67,7 +67,7 @@ typedef struct EnPametfrog {
     /* 0x2C0 */ f32 wallRotation;
     /* 0x2C4 */ f32 drawDmgEffAlpha;
     /* 0x2C8 */ f32 drawDmgEffScale;
-    /* 0x2CC */ f32 drawDmgEffFrozenSmokeScale; 
+    /* 0x2CC */ f32 drawDmgEffFrozenSteamScale; 
     /* 0x2D0 */ Vec3f unk_2D0; // MtxF zx/zy/zz
     /* 0x2DC */ Vec3f unk_2DC; // MtxF yx/yy/yz: wallNorm/floorNorm/Base of Gekko walking???
     /* 0x2E8 */ Vec3f unk_2E8; // MtxF xx/xy/xz

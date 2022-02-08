@@ -182,7 +182,7 @@ s32 func_808D8B58(EnSw* this) {
             this->unk_464[i] = 80;
         }
         this->unk_47C[i] = this->unk_464[i];
-        this->drawDmgEffFrozenSmokeScales[i] = 0.45000002f;
+        this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
             this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
@@ -206,7 +206,7 @@ s32 func_808D8D60(EnSw* this, GlobalContext* globalCtx, s32 arg2) {
         if (this->unk_464[arg2] != 0) {
             drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
             drawDmgEffType = this->drawDmgEffType;
-            Math_ApproachF(&this->drawDmgEffFrozenSmokeScales[arg2], 0.3f, 0.3f, 0.5f);
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
             Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
             limbPos[0].x += this->unk_380[arg2].x;
             limbPos[0].y += this->unk_380[arg2].y;
@@ -218,7 +218,7 @@ s32 func_808D8D60(EnSw* this, GlobalContext* globalCtx, s32 arg2) {
                 drawDmgEffAlpha = 1.0f;
             }
             Actor_DrawDamageEffects(globalCtx, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
-                                    this->drawDmgEffFrozenSmokeScales[arg2], drawDmgEffAlpha, drawDmgEffType);
+                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
             ret = true;
         }
     }

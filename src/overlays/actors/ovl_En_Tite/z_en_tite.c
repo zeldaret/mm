@@ -268,7 +268,7 @@ void func_80893DD4(EnTite* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_2BC = 80;
     this->drawDmgEffScale = 0.5f;
-    this->drawDmgEffFrozenSmokeScale = 0.75f;
+    this->drawDmgEffFrozenSteamScale = 0.75f;
     this->drawDmgEffAlpha = 1.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
     this->actor.flags &= ~0x200;
@@ -1089,7 +1089,7 @@ void EnTite_Update(Actor* thisx, GlobalContext* globalCtx) {
                 Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
-            } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.5f, 0.0125f)) {
+            } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.5f, 0.0125f)) {
                 func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
@@ -1174,7 +1174,7 @@ void EnTite_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnTite_OverrideLimbDraw,
                       EnTite_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSmokeScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -165,7 +165,7 @@ void func_80AD6F34(EnKame* this) {
 void func_80AD6F9C(EnKame* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.6f;
-    this->drawDmgEffFrozenSmokeScale = 0.90000004f;
+    this->drawDmgEffFrozenSteamScale = 0.90000004f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_2A2 = 80;
@@ -742,7 +742,7 @@ void EnKame_Update(Actor* thisx, GlobalContext* globalCtx) {
             } else {
                 this->drawDmgEffScale = this->drawDmgEffScale;
             }
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.6f, 0.015000001f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.6f, 0.015000001f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -809,7 +809,7 @@ void EnKame_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime1.skeleton, this->skelAnime1.jointTable,
                           this->skelAnime1.dListCount, func_80AD8A48, func_80AD8AF8, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSmokeScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     if (this->actor.shape.shadowDraw == NULL) {
         ActorShadow_DrawCircle(&this->actor, NULL, globalCtx);

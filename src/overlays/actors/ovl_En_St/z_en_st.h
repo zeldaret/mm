@@ -30,7 +30,7 @@ typedef struct EnSt {
     /* 0x2D0 */ f32 unk_2D0;
     /* 0x2D4 */ f32 unk_2D4;
     /* 0x2D8 */ f32 unk_2D8;
-    /* 0x2DC */ f32 drawDmgEffFrozenSmokeScales[12];
+    /* 0x2DC */ f32 drawDmgEffFrozenSteamScales[12];
     /* 0x30C */ s16 unk_30C;
     /* 0x30E */ s16 unk_30E;
     /* 0x310 */ s16 unk_310;

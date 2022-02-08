@@ -45,7 +45,7 @@ typedef struct EnBigokuta {
     /* 0x0210 */ Vec3s morphTable[BIGOKUTA_LIMB_MAX];
     /* 0x0288 */ f32 drawDmgEffAlpha;
     /* 0x028C */ f32 drawDmgEffScale;
-    /* 0x0290 */ f32 drawDmgEffFrozenSmokeScale; // only affects DRAWEFFECT_ICE
+    /* 0x0290 */ f32 drawDmgEffFrozenSteamScale; // only affects DRAWEFFECT_ICE
     /* 0x0294 */ Vec3f playerPos;
     /* 0x02A0 */ Vec3f playerHoldPos;
     /* 0x02AC */ Vec3f camAt;

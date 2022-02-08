@@ -379,7 +379,7 @@ void func_8089AC70(EnDinofos* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
     this->colliderJntSph.base.colType = COLTYPE_HIT3;
-    this->drawDmgEffFrozenSmokeScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 0.82500005f;
     this->drawDmgEffAlpha = 1.0f;
     this->unk_290 = 80;
     this->actor.flags &= ~0x400;
@@ -1394,7 +1394,7 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * (11.0f / 40.0f);
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.55f, 0.01375f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1497,7 +1497,7 @@ void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSmokeScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -56,7 +56,7 @@ typedef struct EnRr {
     /* 0x218 */ f32 unk_218;
     /* 0x21C */ f32 drawDmgEffAlpha;
     /* 0x220 */ f32 drawDmgEffScale;
-    /* 0x224 */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x224 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x228 */ Vec3f unk_228;
     /* 0x234 */ Vec3f limbPos[20];
     /* 0x324 */ EnRrStruct unk_324[5];

@@ -235,7 +235,7 @@ void EnPametfrog_Freeze(EnPametfrog* this) {
     this->collider.base.colType = COLTYPE_HIT3;
     this->collider.elements->info.elemType = ELEMTYPE_UNK0;
     this->drawDmgEffScale = 0.75f;
-    this->drawDmgEffFrozenSmokeScale = 1.125f;
+    this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
 }
 
@@ -1364,7 +1364,7 @@ void EnPametfrog_Update(Actor* thisx, GlobalContext* globalCtx) {
             unk2C4 = ((this->drawDmgEffAlpha + 1.0f) * 0.375f);
             this->drawDmgEffScale = unk2C4;
             this->drawDmgEffScale = unk2C4 > 0.75f ? 0.75f : this->drawDmgEffScale;
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.75f, (3.0f / 160.0f))) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, (3.0f / 160.0f))) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1422,5 +1422,5 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnPametfrog_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSmokeScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

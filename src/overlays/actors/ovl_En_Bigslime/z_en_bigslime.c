@@ -911,7 +911,7 @@ void EnBigslime_GekkoFreeze(EnBigslime* this) {
     this->gekkoCollider.info.elemType = ELEMTYPE_UNK0;
     this->stunTimer = 2;
     this->gekkoDrawDmgEffScale = 0.75f;
-    this->gekkoDrawDmgEffFrozenSmokeScale = 1.125f;
+    this->gekkoDrawDmgEffFrozenSteamScale = 1.125f;
     this->gekkoDrawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~0x200;
 }
@@ -2761,7 +2761,7 @@ void EnBigslime_UpdateEffects(EnBigslime* this) {
             Math_StepToF(&this->gekkoDrawDmgEffAlpha, 0.0f, 0.05f);
             this->gekkoDrawDmgEffScale = 0.375f * (this->gekkoDrawDmgEffAlpha + 1.0f);
             this->gekkoDrawDmgEffScale = CLAMP_MAX(this->gekkoDrawDmgEffScale, 0.75f);
-        } else if (!Math_StepToF(&this->gekkoDrawDmgEffFrozenSmokeScale, 0.75f, 0.01875f)) {
+        } else if (!Math_StepToF(&this->gekkoDrawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -3110,10 +3110,9 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
 
     EnBigslime_DrawShatteringEffects(this, globalCtx);
 
-    // Draw actor damage effects
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->gekkoScale * (999.99991f / 7.0f) * this->gekkoDrawDmgEffScale,
-                            this->gekkoDrawDmgEffFrozenSmokeScale, this->gekkoDrawDmgEffAlpha,
+                            this->gekkoDrawDmgEffFrozenSteamScale, this->gekkoDrawDmgEffAlpha,
                             this->gekkoDrawDmgEffType);
 }
 

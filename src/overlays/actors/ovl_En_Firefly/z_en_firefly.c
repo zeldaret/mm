@@ -343,7 +343,7 @@ void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
         this->drawDmgEffAlpha = 1.0f;
         this->drawDmgEffScale = 0.55f;
-        this->drawDmgEffFrozenSmokeScale = 0.82500005f;
+        this->drawDmgEffFrozenSteamScale = 0.82500005f;
     } else if (this->actor.colChkInfo.damageEffect == 4) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         this->drawDmgEffAlpha = 4.0f;
@@ -715,7 +715,7 @@ void EnFirefly_Update(Actor* thisx, GlobalContext* globalCtx2) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.55f, 0.01375f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -831,7 +831,7 @@ void EnFirefly_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_DrawDamageEffects(globalCtx, NULL, this->limbPos, ARRAY_COUNT(this->limbPos),
-                            this->drawDmgEffScale * this->actor.scale.y * 200.0f, this->drawDmgEffFrozenSmokeScale,
+                            this->drawDmgEffScale * this->actor.scale.y * 200.0f, this->drawDmgEffFrozenSteamScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
     this->unk_2F4 = globalCtx->gameplayFrames;
 

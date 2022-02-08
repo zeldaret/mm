@@ -26,7 +26,7 @@ typedef struct EnPeehat {
     /* 0x2C4 */ f32 unk_2C4;
     /* 0x2C8 */ f32 drawDmgEffAlpha;
     /* 0x2CC */ f32 drawDmgEffScale;
-    /* 0x2D0 */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x2D0 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2D4 */ Vec3f unk_2D4[2];
     /* 0x2EC */ Vec3f limbPos[18];
     /* 0x3C4 */ ColliderCylinder colliderCylinder;

@@ -445,7 +445,7 @@ void func_80C11338(EnThiefbird* this, GlobalContext* globalCtx) {
 void func_80C11454(EnThiefbird* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.5f;
-    this->drawDmgEffFrozenSmokeScale = 0.75f;
+    this->drawDmgEffFrozenSteamScale = 0.75f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~0x200;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
@@ -1025,7 +1025,7 @@ void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
             Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.5f, 0.0125f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.5f, 0.0125f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1152,6 +1152,6 @@ void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     func_80C13354(this, globalCtx);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSmokeScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements[1].dim.worldSphere.center);
 }

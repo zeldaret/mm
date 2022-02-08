@@ -27,7 +27,7 @@ typedef struct EnKame {
     /* 0x02AC */ f32 unk_2AC;
     /* 0x02B0 */ f32 drawDmgEffAlpha;
     /* 0x02B4 */ f32 drawDmgEffScale;
-    /* 0x02B8 */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x02B8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x02BC */ Vec3f unk_2BC;
     /* 0x02C8 */ Vec3f limbPos[10];
     /* 0x0340 */ ColliderCylinder collider;

@@ -235,7 +235,7 @@ void func_808D0930(EnFloormas* this, GlobalContext* globalCtx) {
 void func_808D09CC(EnFloormas* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSmokeScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 0.82500005f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;
@@ -1139,7 +1139,7 @@ void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx) {
                     Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
                     this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                     this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
-                } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 0.55f, 0.01375f)) {
+                } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
                     func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
             }
@@ -1206,7 +1206,7 @@ void EnFloormas_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             100.0f * (this->drawDmgEffScale * this->actor.scale.x),
-                            100.0f * (this->drawDmgEffFrozenSmokeScale * this->actor.scale.x), this->drawDmgEffAlpha,
+                            100.0f * (this->drawDmgEffFrozenSteamScale * this->actor.scale.x), this->drawDmgEffAlpha,
                             this->drawDmgEffType);
 }
 
@@ -1231,6 +1231,6 @@ void func_808D3754(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->drawDmgEffScale * this->actor.scale.x * 100.0f,
-                            this->drawDmgEffFrozenSmokeScale * this->actor.scale.x * 100.0f, this->drawDmgEffAlpha,
+                            this->drawDmgEffFrozenSteamScale * this->actor.scale.x * 100.0f, this->drawDmgEffAlpha,
                             this->drawDmgEffType);
 }

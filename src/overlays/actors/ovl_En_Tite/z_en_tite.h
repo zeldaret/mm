@@ -30,7 +30,7 @@ typedef struct EnTite {
     /* 0x02C0 */ s32 unk_2C0;
     /* 0x02C4 */ f32 drawDmgEffAlpha;
     /* 0x02C8 */ f32 drawDmgEffScale;
-    /* 0x02CC */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x02CC */ f32 drawDmgEffFrozenSteamScale;
     /* 0x02D0 */ Vec3f limbPos[9];
     /* 0x033C */ Vec3f unk_33C[9];
     /* 0x03A8 */ Gfx* unk_3A8;

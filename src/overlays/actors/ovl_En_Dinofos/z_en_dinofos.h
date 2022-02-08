@@ -30,7 +30,7 @@ typedef struct EnDinofos {
     /* 0x2AC */ f32 unk_2AC;
     /* 0x2B0 */ f32 drawDmgEffAlpha;
     /* 0x2B4 */ f32 drawDmgEffScale;
-    /* 0x2B8 */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x2B8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2BC */ Vec3f unk_2BC;
     /* 0x2C8 */ Vec3f unk_2C8;
     /* 0x2D4 */ Vec3f limbPos[12];

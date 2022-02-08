@@ -32,7 +32,7 @@ typedef struct EnFirefly {
     /* 0x2E4 */ f32 maxAltitude;
     /* 0x2E8 */ f32 drawDmgEffAlpha;
     /* 0x2E8 */ f32 drawDmgEffScale;
-    /* 0x2E8 */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x2E8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2F4 */ u32 unk_2F4;
     /* 0x2F8 */ Vec3f limbPos[3];
     /* 0x31C */ ColliderSphere collider;

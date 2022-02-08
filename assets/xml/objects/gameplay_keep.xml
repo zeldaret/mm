@@ -905,7 +905,7 @@
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
         <DList Name="gameplay_keep_DL_023348" Offset="0x23348" />
         <DList Name="gameplay_keep_DL_0233B8" Offset="0x233B8" />
-        <DList Name="gameplay_keep_DL_023428" Offset="0x23428" />
+        <DList Name="gGameplayKeepDrawLightOrbDL" Offset="0x23428" />
         <DList Name="gameplay_keep_DL_023480" Offset="0x23480" />
         <DList Name="gameplay_keep_DL_0234F0" Offset="0x234F0" />
         <Texture Name="gameplay_keep_Tex_023508" OutName="tex_023508" Format="i8" Width="64" Height="64" Offset="0x23508" />

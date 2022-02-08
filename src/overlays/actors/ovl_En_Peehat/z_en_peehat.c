@@ -229,7 +229,7 @@ void EnPeehat_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80897170(EnPeehat* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 1.1f;
-    this->drawDmgEffFrozenSmokeScale = 1.6500001f;
+    this->drawDmgEffFrozenSteamScale = 1.6500001f;
     this->drawDmgEffAlpha = 1.0f;
     this->colliderSphere.base.colType = COLTYPE_HIT3;
     this->unk_2B0 = 80;
@@ -825,7 +825,7 @@ void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.55f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.1f);
             }
-        } else if (!Math_StepToF(&this->drawDmgEffFrozenSmokeScale, 1.1f, 0.0275f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.1f, 0.0275f)) {
             func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -947,5 +947,5 @@ void EnPeehat_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSmokeScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

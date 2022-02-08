@@ -30,7 +30,7 @@ typedef struct EnFloormas {
     /* 0x022C */ Vec3s morphTable[25];
     /* 0x02C4 */ f32 drawDmgEffAlpha;
     /* 0x02C8 */ f32 drawDmgEffScale;
-    /* 0x02CC */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x02CC */ f32 drawDmgEffFrozenSteamScale;
     /* 0x02D0 */ Vec3f limbPos[11];
     /* 0x0354 */ ColliderCylinder collider;
 } EnFloormas; // size = 0x3A0

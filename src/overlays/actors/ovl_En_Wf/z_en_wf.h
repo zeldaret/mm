@@ -28,7 +28,7 @@ typedef struct EnWf {
     /* 0x02A8 */ f32 unk_2A8;
     /* 0x02AC */ f32 drawDmgEffAlpha;
     /* 0x02B0 */ f32 drawDmgEffScale;
-    /* 0x02B4 */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x02B4 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x02B8 */ Vec3f limbPos[10];
     /* 0x0330 */ ColliderJntSph collider1;
     /* 0x0350 */ ColliderJntSphElement collider1Elements[4];

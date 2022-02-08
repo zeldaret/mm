@@ -26,7 +26,7 @@ typedef struct EnDodongo {
     /* 0x338 */ s32 unk_338;
     /* 0x33C */ f32 drawDmgEffAlpha;
     /* 0x340 */ f32 drawDmgEffScale;
-    /* 0x344 */ f32 drawDmgEffFrozenSmokeScale;
+    /* 0x344 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x348 */ Vec3f limbPos[9];
     /* 0x3B4 */ ColliderJntSph collider1;
     /* 0x3D4 */ ColliderJntSphElement collider1Elements[10];
