@@ -6,7 +6,6 @@
  */
 
 #include "z_en_ani.h"
-#include "objects/object_ani/object_ani.h"
 
 #define FLAGS (ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
@@ -118,7 +117,7 @@ void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
-                       this->morphTable, ANI_LIMB_COUNT);
+                       this->morphTable, ANI_LIMB_MAX);
     Animation_PlayOnce(&this->skelAnime, &gAniStandingNormalAnim);
     Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit);
@@ -320,7 +319,7 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnAni_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnAni* this = THIS;
 
-    if (limbIndex == OBJECT_ANI_LIMB_HEAD) {
+    if (limbIndex == ANI_LIMB_HEAD) {
         rot->x += this->headRot.y;
         rot->z += this->headRot.x;
     }
@@ -331,7 +330,7 @@ s32 EnAni_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 void EnAni_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_809686A4 = { 800.0f, 500.0f, 0.0f };
 
-    if (limbIndex == OBJECT_ANI_LIMB_HEAD) {
+    if (limbIndex == ANI_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_809686A4, &thisx->focus.pos);
     }
 }
