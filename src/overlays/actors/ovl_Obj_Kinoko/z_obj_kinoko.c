@@ -46,7 +46,7 @@ void ObjKinoko_Update(Actor* thisx, GlobalContext* globalCtx) {
         thisx->draw = ObjKinoko_Draw;
         thisx->hintId = 0x64;
         thisx->flags |= ACTOR_FLAG_1;
-        if (Actor_HasParent(thisx, globalCtx) != 0) {
+        if (Actor_HasParent(thisx, globalCtx)) {
             Flags_SetCollectible(globalCtx, OBJ_KINOKO_PARAMS(thisx));
             Actor_MarkForDeath(thisx);
             return;
