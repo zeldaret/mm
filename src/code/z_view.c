@@ -187,17 +187,17 @@ void View_SetScissorForLetterbox(View* view) {
     CLOSE_DISPS(view->gfxCtx);
 }
 
-s32 View_SetDistortionRotation(View* view, f32 x, f32 y, f32 z) {
-    view->distortionRot.x = x;
-    view->distortionRot.y = y;
-    view->distortionRot.z = z;
+s32 View_SetDistortionDirRot(View* view, f32 dirRotX, f32 dirRotY, f32 dirRotZ) {
+    view->distortionDirRot.x = dirRotX;
+    view->distortionDirRot.y = dirRotY;
+    view->distortionDirRot.z = dirRotZ;
     return 1;
 }
 
-s32 View_SetDistortionScale(View* view, f32 x, f32 y, f32 z) {
-    view->distortionScale.x = x;
-    view->distortionScale.y = y;
-    view->distortionScale.z = z;
+s32 View_SetDistortionScale(View* view, f32 scaleX, f32 scaleY, f32 scaleZ) {
+    view->distortionScale.x = scaleX;
+    view->distortionScale.y = scaleY;
+    view->distortionScale.z = scaleZ;
     return 1;
 }
 
@@ -207,22 +207,22 @@ s32 View_SetDistortionSpeed(View* view, f32 speed) {
 }
 
 s32 View_InitDistortion(View* view) {
-    view->distortionRot.x = 0.0f;
-    view->distortionRot.y = 0.0f;
-    view->distortionRot.z = 0.0f;
+    view->distortionDirRot.x = 0.0f;
+    view->distortionDirRot.y = 0.0f;
+    view->distortionDirRot.z = 0.0f;
     view->distortionScale.x = 1.0f;
     view->distortionScale.y = 1.0f;
     view->distortionScale.z = 1.0f;
-    view->currDistortionRot = view->distortionRot;
-    view->currDistortionScale = view->distortionScale;
+    view->curDistortionDirRot = view->distortionDirRot;
+    view->curDistortionScale = view->distortionScale;
     view->distortionSpeed = 0.0f;
     return 1;
 }
 
 s32 View_ClearDistortion(View* view) {
-    view->distortionRot.x = 0.0f;
-    view->distortionRot.y = 0.0f;
-    view->distortionRot.z = 0.0f;
+    view->distortionDirRot.x = 0.0f;
+    view->distortionDirRot.y = 0.0f;
+    view->distortionDirRot.z = 0.0f;
     view->distortionScale.x = 1.0f;
     view->distortionScale.y = 1.0f;
     view->distortionScale.z = 1.0f;
@@ -230,47 +230,50 @@ s32 View_ClearDistortion(View* view) {
     return 1;
 }
 
-s32 View_SetDistortion(View* view, Vec3f rot, Vec3f scale, f32 speed) {
-    view->distortionRot = rot;
+s32 View_SetDistortion(View* view, Vec3f dirRot, Vec3f scale, f32 speed) {
+    view->distortionDirRot = dirRot;
     view->distortionScale = scale;
     view->distortionSpeed = speed;
     return 1;
 }
 
-s32 View_StepDistortion(View* view, Mtx* matrix) {
-    MtxF mf;
+s32 View_StepDistortion(View* view, Mtx* projectionMtx) {
+    MtxF projectionMtxF;
 
     if (view->distortionSpeed == 0.0f) {
-        return 0;
+        return false;
     } else if (view->distortionSpeed == 1.0f) {
-        view->currDistortionRot = view->distortionRot;
-        view->currDistortionScale = view->distortionScale;
+        view->curDistortionDirRot = view->distortionDirRot;
+        view->curDistortionScale = view->distortionScale;
         view->distortionSpeed = 0.0f;
     } else {
-        view->currDistortionRot.x += ((view->distortionRot.x - view->currDistortionRot.x) * view->distortionSpeed);
-        view->currDistortionRot.y += ((view->distortionRot.y - view->currDistortionRot.y) * view->distortionSpeed);
-        view->currDistortionRot.z += ((view->distortionRot.z - view->currDistortionRot.z) * view->distortionSpeed);
+        view->curDistortionDirRot.x =
+            F32_LERPIMP(view->curDistortionDirRot.x, view->distortionDirRot.x, view->distortionSpeed);
+        view->curDistortionDirRot.y =
+            F32_LERPIMP(view->curDistortionDirRot.y, view->distortionDirRot.y, view->distortionSpeed);
+        view->curDistortionDirRot.z =
+            F32_LERPIMP(view->curDistortionDirRot.z, view->distortionDirRot.z, view->distortionSpeed);
 
-        view->currDistortionScale.x +=
-            ((view->distortionScale.x - view->currDistortionScale.x) * view->distortionSpeed);
-        view->currDistortionScale.y +=
-            ((view->distortionScale.y - view->currDistortionScale.y) * view->distortionSpeed);
-        view->currDistortionScale.z +=
-            ((view->distortionScale.z - view->currDistortionScale.z) * view->distortionSpeed);
+        view->curDistortionScale.x =
+            F32_LERPIMP(view->curDistortionScale.x, view->distortionScale.x, view->distortionSpeed);
+        view->curDistortionScale.y =
+            F32_LERPIMP(view->curDistortionScale.y, view->distortionScale.y, view->distortionSpeed);
+        view->curDistortionScale.z =
+            F32_LERPIMP(view->curDistortionScale.z, view->distortionScale.z, view->distortionSpeed);
     }
 
-    Matrix_FromRSPMatrix(matrix, &mf);
-    Matrix_SetCurrentState(&mf);
-    Matrix_RotateStateAroundXAxis(view->currDistortionRot.x);
-    Matrix_InsertYRotation_f(view->currDistortionRot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(view->currDistortionRot.z, MTXMODE_APPLY);
-    Matrix_Scale(view->currDistortionScale.x, view->currDistortionScale.y, view->currDistortionScale.z, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(-view->currDistortionRot.z, MTXMODE_APPLY);
-    Matrix_InsertYRotation_f(-view->currDistortionRot.y, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(-view->currDistortionRot.x);
-    Matrix_ToMtx(matrix);
+    Matrix_FromRSPMatrix(projectionMtx, &projectionMtxF);
+    Matrix_SetCurrentState(&projectionMtxF);
+    Matrix_RotateStateAroundXAxis(view->curDistortionDirRot.x);
+    Matrix_InsertYRotation_f(view->curDistortionDirRot.y, MTXMODE_APPLY);
+    Matrix_InsertZRotation_f(view->curDistortionDirRot.z, MTXMODE_APPLY);
+    Matrix_Scale(view->curDistortionScale.x, view->curDistortionScale.y, view->curDistortionScale.z, MTXMODE_APPLY);
+    Matrix_InsertZRotation_f(-view->curDistortionDirRot.z, MTXMODE_APPLY);
+    Matrix_InsertYRotation_f(-view->curDistortionDirRot.y, MTXMODE_APPLY);
+    Matrix_RotateStateAroundXAxis(-view->curDistortionDirRot.x);
+    Matrix_ToMtx(projectionMtx);
 
-    return 1;
+    return true;
 }
 
 void View_RenderView(View* view, s32 uParm2) {
@@ -312,8 +315,8 @@ s32 View_RenderToPerspectiveMatrix(View* view) {
 
     guPerspective(projection, &view->normal, view->fovy, aspect, view->zNear, view->zFar, view->scale);
     view->projection = *projection;
-    //! @bug: This cast of `projection` is invalid
-    View_StepDistortion(view, (Mtx*)projection);
+
+    View_StepDistortion(view, projection);
 
     gSPPerspNormalize(POLY_OPA_DISP++, view->normal);
     gSPMatrix(POLY_OPA_DISP++, projection, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
