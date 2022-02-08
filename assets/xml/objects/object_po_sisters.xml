@@ -18,8 +18,8 @@
         <DList Name="gPoSistersDrawTorchDL" Offset="0x27B0" />
         <!--- hand I think-->
         <DList Name="object_po_sisters_DL_002870" Offset="0x2870" />
-        <DList Name="gPoSistersJoelleBodyDL" Offset="0x2EB8" />
-        <DList Name="gPoSistersJoelleFaceDL" Offset="0x2F88" />
+        <DList Name="gPoSistersJoelleFaceDL" Offset="0x2EB8" />
+        <DList Name="gPoSistersJoelleBodyDL" Offset="0x2F88" />
         <DList Name="gPoSistersBethBodyDL" Offset="0x3628" />
         <DList Name="gPoSistersBethFaceDL" Offset="0x3880" />
         <DList Name="gPoSistersAmyBodyDL" Offset="0x3DC8" />

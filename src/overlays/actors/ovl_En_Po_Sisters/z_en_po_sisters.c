@@ -49,17 +49,17 @@ void func_80B1C2E8(EnPoSisters* this);
 void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx);
 
 static Color_RGBA8 D_80B1DA30[] = {
-    { 255, 170, 255, 255 },
-    { 255, 200, 0, 255 },
-    { 0, 170, 255, 255 },
-    { 170, 255, 0, 255 },
+    { 255, 170, 255, 255 }, // meg
+    { 255, 200, 0, 255 },   // jo
+    { 0, 170, 255, 255 },   // beth
+    { 170, 255, 0, 255 },   // amy
 };
 
 static Color_RGBA8 D_80B1DA40[] = {
-    { 100, 0, 255, 255 },
-    { 255, 0, 0, 255 },
-    { 0, 0, 255, 255 },
-    { 0, 150, 0, 255 },
+    { 100, 0, 255, 255 }, // meg
+    { 255, 0, 0, 255 },   // jo
+    { 0, 0, 255, 255 },   // beth
+    { 0, 150, 0, 255 },   // amy
 };
 
 const ActorInit En_Po_Sisters_InitVars = {
@@ -1037,13 +1037,13 @@ s32 EnPoSisters_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx, Gfx** gfx) {
     static Gfx* D_80B1DACC[] = {
         gPoSistersMegBodyDL,
-        gPoSistersJoelleFaceDL,
+        gPoSistersJoelleBodyDL,
         gPoSistersBethBodyDL,
         gPoSistersAmyBodyDL,
     };
     static Gfx* D_80B1DADC[] = {
         gPoSistersMegFaceDL,
-        gPoSistersJoelleBodyDL,
+        gPoSistersJoelleFaceDL,
         gPoSistersBethFaceDL,
         gPoSistersAmyFaceDL,
     };
@@ -1148,7 +1148,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
     s32 phi_s5;
-    f32 phi_f20;
+    f32 scale;
     s32 pad2;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1185,10 +1185,10 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actionFunc == EnPoSister_DeathStage2) {
         phi_s5 = (((-this->stateTimer * 255) + 0x1FE0) / 32) & 0xFF;
-        phi_f20 = 0.0056000003f;
+        scale = (7/1.2500 * 0.001f);
     } else {
         phi_s5 = 0;
-        phi_f20 = this->actor.scale.x * 0.5f;
+        scale = this->actor.scale.x * 0.5f;
     }
 
     for (i = 0; i < this->fireCount; i++) {
@@ -1205,11 +1205,11 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         if (this->actionFunc == EnPoSister_DeathStage1) {
             f32 phi_f0;
 
-            phi_f20 = ((this->stateTimer - i) * 0.025f) + 0.5f;
-            phi_f0 = CLAMP(phi_f20, 0.5f, 0.8f);
-            phi_f20 = phi_f0 * 0.007f;
+            scale = ((this->stateTimer - i) * 0.025f) + 0.5f;
+            phi_f0 = CLAMP(scale, 0.5f, 0.8f);
+            scale = phi_f0 * 0.007f;
         }
-        Matrix_Scale(phi_f20, phi_f20, phi_f20, MTXMODE_APPLY);
+        Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
