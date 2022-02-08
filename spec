@@ -4954,8 +4954,7 @@ beginseg
     name "ovl_En_Demo_heishi"
     compress
     include "build/src/overlays/actors/ovl_En_Demo_heishi/z_en_demo_heishi.o"
-    include "build/data/ovl_En_Demo_heishi/ovl_En_Demo_heishi.data.o"
-    include "build/data/ovl_En_Demo_heishi/ovl_En_Demo_heishi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Demo_heishi/ovl_En_Demo_heishi_reloc.o"
 endseg
 
 beginseg
