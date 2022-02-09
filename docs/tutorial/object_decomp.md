@@ -37,7 +37,7 @@ All objects have had their XML generated in an automated way, so most constituen
 
 ### Extracting assets
 
-You can run `extract_assets.py` to extract the object's assets. Running it with no arguments extracts *everything* all over again, though. A better way is to run it with `-s` (for single file), and give it the location of the object you want to extract relative to `assets`, i.e.
+You can run `extract_assets.py` to extract the object's assets. Running it with no arguments extracts all files that have been updated since the last time it was run. You can also run it with `-s` (for single file), and give it the location of the object you want to extract relative to `assets`, i.e.
 
 ```bash
 ./extract_assets.py -s objects/object_name
