@@ -1419,7 +1419,7 @@
         <Texture Name="gameplay_keep_Tex_091BE0" OutName="tex_091BE0" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
         <Texture Name="gameplay_keep_Tex_091CE0" OutName="tex_091CE0" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
         
-        <!-- Electric shock textures from Zora-Form attack -->
+        <!-- Electric spark textures from Zora-Form attack -->
         <Texture Name="gElectricSpark1Tex" OutName="electric_shock_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
         <Texture Name="gElectricSpark2Tex" OutName="electric_shock_2" Format="i4" Width="32" Height="32" Offset="0x91FE0" />
         <Texture Name="gElectricSpark3Tex" OutName="electric_shock_3" Format="i4" Width="32" Height="32" Offset="0x921E0" />
