@@ -610,7 +610,7 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         }
     }
 
-    if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_HEAD_LIMB) {
+    if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD) {
         func_8092D954(this->unk_2CC, this->unk_2CE + this->actor.shape.rot.y, &this->unk_218, &this->unk_224, phi_v1,
                       phi_v0);
         Matrix_InsertTranslation(this->unk_218.x, this->unk_218.y, this->unk_218.z, MTXMODE_NEW);

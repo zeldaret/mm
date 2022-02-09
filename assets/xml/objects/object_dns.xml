@@ -26,18 +26,18 @@
         <Texture Name="gKingsChamberDekuGuardEyeHalfTex" OutName="kings_chamber_deku_guard_eye_half" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
         <Texture Name="gKingsChamberDekuGuardEyeClosedTex" OutName="kings_chamber_deku_guard_eye_closed" Format="rgba16" Width="8" Height="8" Offset="0x29E8" />
         <DList Name="gKingsChamberDekuGuardDekuFlower" Offset="0x2C48" />
-        <Limb Name="gKingsChamberDekuGuardTorsoLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_TORSO_LIMB" Offset="0x2D18" />
-        <Limb Name="gKingsChamberDekuGuardHeadLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_HEAD_LIMB" Offset="0x2D24" />
-        <Limb Name="gKingsChamberDekuGuardStalkLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_STALK_LIMB" Offset="0x2D30" />
-        <Limb Name="gKingsChamberDekuGuardLeftLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_LEAF_LIMB" Offset="0x2D3C" />
-        <Limb Name="gKingsChamberDekuGuardRightLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_LEAF_LIMB" Offset="0x2D48" />
-        <Limb Name="gKingsChamberDekuGuardCenterLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_CENTER_LEAF_LIMB" Offset="0x2D54" />
-        <Limb Name="gKingsChamberDekuGuardSnoutLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_SNOUT_LIMB" Offset="0x2D60" />
-        <Limb Name="gKingsChamberDekuGuardRightMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_MUSTACHE_LIMB" Offset="0x2D6C" />
-        <Limb Name="gKingsChamberDekuGuardLeftMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_MUSTACHE_LIMB" Offset="0x2D78" />
-        <Limb Name="gKingsChamberDekuGuardEyesLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_EYES_LIMB" Offset="0x2D84" />
-        <Limb Name="gKingsChamberDekuGuardLeftFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_FOOT_LIMB" Offset="0x2D90" />
-        <Limb Name="gKingsChamberDekuGuardRightFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_FOOT_LIMB" Offset="0x2D9C" />
+        <Limb Name="gKingsChamberDekuGuardTorsoLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_TORSO" Offset="0x2D18" />
+        <Limb Name="gKingsChamberDekuGuardHeadLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD" Offset="0x2D24" />
+        <Limb Name="gKingsChamberDekuGuardStalkLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_STALK" Offset="0x2D30" />
+        <Limb Name="gKingsChamberDekuGuardLeftLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_LEFT_LEAF" Offset="0x2D3C" />
+        <Limb Name="gKingsChamberDekuGuardRightLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_RIGHT_LEAF" Offset="0x2D48" />
+        <Limb Name="gKingsChamberDekuGuardCenterLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_CENTER_LEAF" Offset="0x2D54" />
+        <Limb Name="gKingsChamberDekuGuardSnoutLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_SNOUT" Offset="0x2D60" />
+        <Limb Name="gKingsChamberDekuGuardRightMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_RIGHT_MUSTACHE" Offset="0x2D6C" />
+        <Limb Name="gKingsChamberDekuGuardLeftMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_LEFT_MUSTACHE" Offset="0x2D78" />
+        <Limb Name="gKingsChamberDekuGuardEyesLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_EYES" Offset="0x2D84" />
+        <Limb Name="gKingsChamberDekuGuardLeftFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_LEFT_FOOT" Offset="0x2D90" />
+        <Limb Name="gKingsChamberDekuGuardRightFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_RIGHT_FOOT" Offset="0x2D9C" />
         <Skeleton Name="gKingsChamberDekuGuardSkel" Type="Normal" LimbType="Standard" LimbNone="KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE" LimbMax="KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX" EnumName="KingsChamberDekuGuardLimbs" Offset="0x2DD8" />
         <Animation Name="gKingsChamberDekuGuardIdleAnim" Offset="0x3310" /> <!-- Original name is "dns_wait" -->
         <Animation Name="gKingsChamberDekuGuardBouncingIdleAnim" Offset="0x34EC" /> <!-- Original name is "dns_walk" -->
