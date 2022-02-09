@@ -105,7 +105,7 @@ says that there is a texture at offset `0x6110`, its Format is `rgba16`, Width i
 
 See [this web page](http://n64devkit.square7.ch/tutorial/graphics/3/3_3.htm) for more information about these formats, and [gSP functions](http://n64devkit.square7.ch/n64man/gsp/gSP_INDEX.htm) and [gDP functions](http://n64devkit.square7.ch/n64man/gdp/gDP_INDEX.htm) for more about the graphics functions used.
 
-The `ci` formats use palettes, which are declared separately. The shape you give the palette does not matter, but to avoid overlap errors it needs to fit into a rectangle; choose the one you think looks best.
+The `ci` formats use palettes, which are declared separately. The shape you give the palette does not matter, but to avoid overlap errors it needs to fit into a rectangle; choose the one you think looks best, and if in doubt, just do height 1 and appropriate width.
 
 If in doubt, look at completed objects in the repo, and if still in doubt, ask.
 
