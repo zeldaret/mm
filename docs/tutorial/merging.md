@@ -1,6 +1,7 @@
 # The merging process
 
 Up: [Contents](contents.md)
+
 Previous: [Documenting](documenting.md)
 
 
