@@ -89,8 +89,7 @@ static ActorAnimationEntryS sAnimations[] = {
 void func_8092C5C0(EnDns* this) {
     s32 pad;
 
-    if (((this->animationIndex == EN_DNS_ANIMATION_WALK_1) ||
-         (this->animationIndex == EN_DNS_ANIMATION_WALK_2) ||
+    if (((this->animationIndex == EN_DNS_ANIMATION_WALK_1) || (this->animationIndex == EN_DNS_ANIMATION_WALK_2) ||
          (this->animationIndex == EN_DNS_ANIMATION_RUN_START) || (this->animationIndex == EN_DNS_ANIMATION_RUN_LOOP)) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 3.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
