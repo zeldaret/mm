@@ -141,4 +141,21 @@ N.B. doing this will overwrite every custom texture, as will running `make setup
 
 An example of decompiling a particular object is given [here](object_decomp_example.md).
 
+## Tips and Tricks
+
+### Fixing improper-looking textures
+
+For CI4 and CI8 textures, you might see improper-looking textures like so:
+
+![An improper-looking CI8 texture](images/broken_texture.png)
+
+The reason this happens is because ZAPD couldn't determine the TLUT for the texture, so it couldn't use the proper palette. To fix this, you can supply a `TlutOffset` to the texture like so:
+```xml
+<Texture Name="gGiantFaceEyeOpenTex" OutName="giant_face_eye_open" Format="ci8" Width="32" Height="64" Offset="0x5A80" TlutOffset="0x5380" />
+```
+
+### Understanding texture animations
+
+Texture animations are new to Majora's Mask, and they can be pretty tricky to understand. Luckily, there's some extensive documentation on how they're strucutred [here](https://github.com/zeldaret/mm/blob/master/tools/ZAPD/ZAPD/ZTextureAnimation.cpp). One useful thing to remember is that empty texture animations take the form of `00 00 00 06 00 00 00 00`. The process that automatically generated all the object XMLs sometimes failed to recognize this as an empty texture animation, so it puts it in various blobs or fails to account for it at all.
+
 Next: [The merging process](merging.md)

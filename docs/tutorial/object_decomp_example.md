@@ -252,4 +252,3 @@ If you have any other unnamed assets, now's the time to identify them. Otherwise
 ```
 
 And we're done! Hopefully, you found this example helpful when decompiling your own objects.
-
