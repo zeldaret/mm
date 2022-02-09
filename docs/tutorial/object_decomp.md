@@ -156,6 +156,6 @@ The reason this happens is because ZAPD couldn't determine the TLUT for the text
 
 ### Understanding texture animations
 
-Texture animations are new to Majora's Mask, and they can be pretty tricky to understand. Luckily, there's some extensive documentation on how they're strucutred [here](https://github.com/zeldaret/mm/blob/master/tools/ZAPD/ZAPD/ZTextureAnimation.cpp). One useful thing to remember is that empty texture animations take the form of `00 00 00 06 00 00 00 00`. The process that automatically generated all the object XMLs sometimes failed to recognize this as an empty texture animation, so it puts it in various blobs or fails to account for it at all.
+Texture animations are new to Majora's Mask, and they can be pretty tricky to understand. Luckily, there's some extensive documentation on how they're structured [here](https://github.com/zeldaret/mm/blob/master/tools/ZAPD/ZAPD/ZTextureAnimation.cpp). One useful thing to remember is that empty texture animations take the form of `00 00 00 06 00 00 00 00`. The process that automatically generated all the object XMLs sometimes failed to recognize this as an empty texture animation, so it puts it in various blobs or fails to account for it at all.
 
 Next: [The merging process](merging.md)
