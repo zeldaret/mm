@@ -93,7 +93,7 @@ After naming the animations, the end result will look something like this:
 <Animation Name="gKingsChamberDekuGuardRunLoopAnim" Offset="0xFEC" />
 [...]
 <Animation Name="gKingsChamberDekuGuardIdleAnim" Offset="0x3310" />
-<Animation Name="gKingsChamberDekuGuardBouncingIdleAnim" Offset="0x34EC" />
+<Animation Name="gKingsChamberDekuGuardWalkAnim" Offset="0x34EC" />
 ```
 
 Once again, we can run `./extract_assets.py -s objects/object_dns` to extract the object, and we can update the animation names in `z_en_dns.c` to use our new names like so:
@@ -101,8 +101,8 @@ Once again, we can run `./extract_assets.py -s objects/object_dns` to extract th
 static ActorAnimationEntryS sAnimations[] = {
     { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, 0 },
     { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, -4 },
-    { &gKingsChamberDekuGuardBouncingIdleAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardBouncingIdleAnim, 1.0f, 0, -1, 0, -4 },
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, 0, 0 },
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, 0, -4 },
     { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, 2, 0 },
     { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, 0, 0 },
     { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, 2, 0 },

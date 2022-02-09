@@ -40,6 +40,6 @@
         <Limb Name="gKingsChamberDekuGuardRightFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_RIGHT_FOOT" Offset="0x2D9C" />
         <Skeleton Name="gKingsChamberDekuGuardSkel" Type="Normal" LimbType="Standard" LimbNone="KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE" LimbMax="KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX" EnumName="KingsChamberDekuGuardLimbs" Offset="0x2DD8" />
         <Animation Name="gKingsChamberDekuGuardIdleAnim" Offset="0x3310" /> <!-- Original name is "dns_wait" -->
-        <Animation Name="gKingsChamberDekuGuardBouncingIdleAnim" Offset="0x34EC" /> <!-- Original name is "dns_walk" -->
+        <Animation Name="gKingsChamberDekuGuardWalkAnim" Offset="0x34EC" /> <!-- Original name is "dns_walk" -->
     </File>
 </Root>
