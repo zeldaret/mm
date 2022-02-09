@@ -1,5 +1,7 @@
 # Object Decompilation Example
 
+Previous: [Object Decompilation](object_decomp.md)
+
 Let's take a look at `object_dns`, which is a pretty typical NPC object. It's used by one actor: `ovl_En_Dns`.
 
 ## Step 1: Naming the skeleton and limbs
@@ -35,7 +37,7 @@ We can now start naming the skeleton and individual limbs. Since we know this pa
 <Limb Name="gKingsChamberDekuGuardLeftLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_LEAF_LIMB" Offset="0x2D3C" />
 <Limb Name="gKingsChamberDekuGuardRightLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_LEAF_LIMB" Offset="0x2D48" />
 <Limb Name="gKingsChamberDekuGuardCenterLeafLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_CENTER_LEAF_LIMB" Offset="0x2D54" />
-<Limb Name="gKingsChamberDekuGuardMouthLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_MOUTH_LIMB" Offset="0x2D60" />
+<Limb Name="gKingsChamberDekuGuardSnoutLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_SNOUT_LIMB" Offset="0x2D60" />
 <Limb Name="gKingsChamberDekuGuardRightMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_RIGHT_MUSTACHE_LIMB" Offset="0x2D6C" />
 <Limb Name="gKingsChamberDekuGuardLeftMustacheLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LEFT_MUSTACHE_LIMB" Offset="0x2D78" />
 <Limb Name="gKingsChamberDekuGuardEyesLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_EYES_LIMB" Offset="0x2D84" />
@@ -125,18 +127,10 @@ static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_060
 Do you notice how the "28E8" in `D_060028E8` also appears as the Offset in that blob? That's because the blob is just the eye textures; the process for automatically creating the XML wasn't able to figure it out on its own, so we'll need to do it ourselves. But how should we define these textures in the XML? Recall that the eye textures were loaded into segment 8; let's take a look in `object_dns.c` and see if we can find something that uses this segment. This display list has the answer:
 ```c
 Gfx object_dns_DL_001A50[] = {
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsDPPipeSync(),
-    gsDPSetCombineLERP(TEXEL0, 0, SHADE, 0, 0, 0, 0, TEXEL0, PRIMITIVE, 0, COMBINED, 0, 0, 0, 0, COMBINED),
-    gsDPSetPrimColor(0, 0xFF, 255, 255, 255, 255),
-    gsDPSetRenderMode(G_RM_PASS, G_RM_AA_ZB_TEX_EDGE2),
-    gsDPSetTextureLUT(G_TT_NONE),
+    [...]
     gsDPLoadTextureBlock(0x08000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR |
                          G_TX_CLAMP, 3, 3, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPLoadGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH),
-    gsSPVertex(&object_dnsVtx_001000[62], 6, 0),
-    gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
-    gsSPEndDisplayList(),
+    [...]
 };
 ```
 
@@ -207,7 +201,7 @@ Either way you go about it, you should be able to name all the limb display list
 ```xml
 <DList Name="gKingsChamberDekuGuardRightFootDL" Offset="0x1640" />
 <DList Name="gKingsChamberDekuGuardLeftFootDL" Offset="0x16F0" />
-<DList Name="gKingsChamberDekuGuardMouthDL" Offset="0x17A0" />
+<DList Name="gKingsChamberDekuGuardSnoutDL" Offset="0x17A0" />
 <DList Name="gKingsChamberDekuGuardHeadDL" Offset="0x18B8" />
 <DList Name="gKingsChamberDekuGuardStalkDL" Offset="0x19B8" />
 <DList Name="gKingsChamberDekuGuardEyesDL" Offset="0x1A50" />
@@ -220,3 +214,42 @@ Either way you go about it, you should be able to name all the limb display list
 ```
 
 Run `./extract_assets.py -s objects/object_dns` once again, since it will help in the next step to have all of our display lists named.
+
+### Step #6: Naming remaining textures
+
+With every display list named, it's now a lot easier to name the remaining textures. In the `assets/objects/object_dns/` folder, you can see all the textures in the object as various PNG files. For some of the textures, just looking at them will give you a good idea as to what they should be named. For other textures, it may help to see how the texture is used in the object's display lists. Let's take a look at `object_dns_Tex_002868`, which is only used in one display list:
+```c
+Gfx gKingsChamberDekuGuardSnoutDL[] = {
+    [...]
+    gsDPLoadTextureBlock(object_dns_Tex_002868, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 8, 0, G_TX_MIRROR | G_TX_CLAMP,
+                         G_TX_MIRROR | G_TX_CLAMP, 3, 3, G_TX_NOLOD, G_TX_NOLOD),
+    [...]
+};
+```
+
+Since `tex_002868.rgba16.png` looks like the inside of the Deku Guard's mouth, and since it's *only* used in the snout display list, you can probably name this something like `gKingsChamberDekuGuardMouthTex`. But rather than guessing, we can confirm it by editing the texture ourselves and then viewing it in-game. Let's change `tex_002868.rgba16.png` to this:
+
+![Our custom mouth texture](images/dns_custom_texture.png)
+
+Now, rebuild the game using [the steps described here](object_decomp.md#building-and-investigative-modding) and look at the guard in-game. You should see something like this:
+
+![Our custom mouth texture being shown in-game](images/custom_texture_in_game.png)
+
+This confirms our suspicion that this is indeed the mouth texture, so we can name it as such. We can use similar strategies to name all the other textures like so:
+```xml
+<Texture Name="gKingsChamberDekuGuardLeafTex" OutName="kings_chamber_deku_guard_leaf" Format="rgba16" Width="32" Height="32" Offset="0x1E68" />
+<Texture Name="gKingsChamberDekuGuardBodyTex" OutName="kings_chamber_deku_guard_body" Format="rgba16" Width="16" Height="16" Offset="0x2668" />
+<Texture Name="gKingsChamberDekuGuardMouthTex" OutName="kings_chamber_deku_guard_mouth" Format="rgba16" Width="8" Height="8" Offset="0x2868" />
+```
+
+### Step #7: Finishing up
+
+If you have any other unnamed assets, now's the time to identify them. Otherwise, finish up the file by putting a comment at the top above the `<File>` node:
+```xml
+<Root>
+    <!-- Assets for the King's Chamber Deku Guards -->
+    <File Name="object_dns" Segment="6">
+```
+
+And we're done! Hopefully, you found this example helpful when decompiling your own objects.
+
