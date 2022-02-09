@@ -4445,11 +4445,11 @@ s32 func_800BE63C(struct EnBox* chest) {
     return false;
 }
 
-TexturePtr sElectricShockTextures[] = {
-    gElectricShock1Tex,
-    gElectricShock2Tex,
-    gElectricShock3Tex,
-    gElectricShock4Tex,
+TexturePtr sElectricSparkTextures[] = {
+    gElectricSpark1Tex,
+    gElectricSpark2Tex,
+    gElectricSpark3Tex,
+    gElectricSpark4Tex,
 };
 
 /**
@@ -4671,9 +4671,9 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 }
 
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Lib_SegmentedToVirtual(sElectricShockTextures[globalCtx->gameplayFrames % 4]));
+                           Lib_SegmentedToVirtual(sElectricSparkTextures[globalCtx->gameplayFrames % 4]));
 
-                gSPDisplayList(POLY_XLU_DISP++, gElectricShockDL);
+                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkDL);
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 255), (u8)(sREG(17) + 255), (u8)(sREG(18) + 150),
                                 (u8)(sREG(19) + 255));
@@ -4695,7 +4695,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricShockVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
 
                     // second electric shock
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
@@ -4707,7 +4707,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gElectricShockVtxDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
                 }
 
                 break;

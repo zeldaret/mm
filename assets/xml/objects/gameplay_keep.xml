@@ -906,8 +906,8 @@
         <DList Name="gLightOrb1DL" Offset="0x23348" />
         <DList Name="gLightOrb2DL" Offset="0x233B8" />
         <DList Name="gLightOrbVtxDL" Offset="0x23428" />
-        <DList Name="gElectricShockDL" Offset="0x23480" />
-        <DList Name="gElectricShockVtxDL" Offset="0x234F0" />
+        <DList Name="gElectricSparkDL" Offset="0x23480" />
+        <DList Name="gElectricSparkVtxDL" Offset="0x234F0" />
         <Texture Name="gLightOrbTex" OutName="light_orb_tex" Format="i8" Width="64" Height="64" Offset="0x23508" />
         <Texture Name="gameplay_keep_Tex_024510" OutName="tex_024510" Format="i8" Width="64" Height="32" Offset="0x24510" />
         <Texture Name="gameplay_keep_Tex_024D10" OutName="tex_024D10" Format="i8" Width="64" Height="32" Offset="0x24D10" />
@@ -1420,9 +1420,9 @@
         <Texture Name="gameplay_keep_Tex_091CE0" OutName="tex_091CE0" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
         
         <!-- Electric shock textures from Zora-Form attack -->
-        <Texture Name="gElectricShock1Tex" OutName="electric_shock_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
-        <Texture Name="gElectricShock2Tex" OutName="electric_shock_2" Format="i4" Width="32" Height="32" Offset="0x91FE0" />
-        <Texture Name="gElectricShock3Tex" OutName="electric_shock_3" Format="i4" Width="32" Height="32" Offset="0x921E0" />
-        <Texture Name="gElectricShock4Tex" OutName="electric_shock_4" Format="i4" Width="32" Height="32" Offset="0x923E0" />
+        <Texture Name="gElectricSpark1Tex" OutName="electric_shock_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
+        <Texture Name="gElectricSpark2Tex" OutName="electric_shock_2" Format="i4" Width="32" Height="32" Offset="0x91FE0" />
+        <Texture Name="gElectricSpark3Tex" OutName="electric_shock_3" Format="i4" Width="32" Height="32" Offset="0x921E0" />
+        <Texture Name="gElectricSpark4Tex" OutName="electric_shock_4" Format="i4" Width="32" Height="32" Offset="0x923E0" />
     </File>
 </Root>
