@@ -15,7 +15,7 @@ An object file is generally where most of the information used by overlays is st
 - DisplayLists (instructions to the graphics processor on how to put together textures and vertices)
 - Skeleton (The underlying structure of an actor's shape, that can be manipulated to change its "pose")
 - Animations
-- Texture Animations
+- Texture Animations (instructions to scroll/cycle textures or change colors)
 
 ## How we work with objects
 
