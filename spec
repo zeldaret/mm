@@ -3893,8 +3893,7 @@ beginseg
     name "ovl_Obj_Dhouse"
     compress
     include "build/src/overlays/actors/ovl_Obj_Dhouse/z_obj_dhouse.o"
-    include "build/data/ovl_Obj_Dhouse/ovl_Obj_Dhouse.data.o"
-    include "build/data/ovl_Obj_Dhouse/ovl_Obj_Dhouse.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Dhouse/ovl_Obj_Dhouse_reloc.o"
 endseg
 
 beginseg
