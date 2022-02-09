@@ -33,7 +33,7 @@ The ZAPD output will go in the folder `assets/objects/object_name/`. You'll want
 
 ### Examining actor files
 
-All objects have had their XML generated in an automated way, so most constituent parts of each object are already identified, but will still need to be named and documented properly. Also, these objects usually have some blobs unreferenced by the object's own contents and hence not automatically extracted; most of the time these can be identified by looking at references in the actor which uses said object.
+All objects have had their XML generated in an automated way, so most constituent parts of each object are already identified, but will still need to be named and documented properly. Further, these objects usually have some blobs unreferenced by the object's own contents and hence not automatically extracted; most of the time these can be identified by looking at references in the actor which uses said object.
 
 ### Extracting assets
 
