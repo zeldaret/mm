@@ -61,7 +61,7 @@ You'll want to name everything that exists in the XML, but it helps to break it 
 
 5. Lastly, try to name every texture in the object. This can be a bit tricky just by looking at the textures, so it helps to see how they're used in the display lists. You can also try manipulating the textures, recompiling the game, and loading up the resulting ROM to see what your changes look like in-game.
 
-You'll notice that we didn't mention vertices in this list. This is because, for the most part, vertices don't really appear in the XML, and you don't need to name them. However, some actors have code that manipulates or otherwise interacts with vertices; in these cases, the vertices should be added to the XML and named.
+You'll notice that we didn't mention vertices in this list. This is because, for the most part, vertices are not used outside the object itself, and so are not required to have names. However, some actors have code that manipulates or otherwise interacts with vertices; in these cases, the vertices should be added to the XML and named.
 
 Current naming practice is to name each item in the xml using camelCase as usual, with the `g` prefix (for "global"), and the type of data last (Skel, Anim, DL, Tex, TLUT, Vtx, TexAnim), while output texture files are named in `snake_case`. TLUTs (texture look-up tables) should always have their output file end in `tlut`.
 
