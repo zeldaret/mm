@@ -14,7 +14,7 @@ In the resulting window, go to "Analysis -> Find Dlists" and press OK (the defau
 
 ![Finding object_dns's SkeletonHeader in Z64Utils](images/z64utils_dns_skeletonheader.png)
 
-When you open the Skeleton Viewer, you'll see a list of animations off to the side. Selecting one of them will display an error that says something like "RENDER ERROR AT 0x06001A98! (Could not read 0x80 bytes at address 08000000)". This is because one of the display lists in the skeleton is expecting something to be set at segment 8. From the actor, we know that it's expecting the eye textures to be loaded into segment 8 like so:
+When you open the Skeleton Viewer, you'll see a list of animations off to the side. Selecting one of them will display an error that says something like `RENDER ERROR AT 0x06001A98! (Could not read 0x80 bytes at address 08000000)`. This is because one of the display lists in the skeleton is expecting something to be set at segment 8. From the actor, we know that it's expecting the eye textures to be loaded into segment 8 like so:
 ```c
 static TexturePtr D_8092DE1C[] = { &D_060028E8, &D_06002968, &D_060029E8, &D_06002968 };
 [...]
