@@ -859,13 +859,13 @@ s32 EnOsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     return false;
 }
 
-void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
-    EnOsn* this = (EnOsn*)actor;
+void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    EnOsn* this = (EnOsn*)thisx;
     Vec3f sp30 = { 0.0f, 0.0f, 0.0f };
     Vec3s sp28 = { 0x9920, -0x384, -0x320 };
 
-    if (limbIndex == 0xB) {
-        Matrix_MultiplyVector3fByState(&sp30, &actor->focus.pos);
+    if (limbIndex == 11) {
+        Matrix_MultiplyVector3fByState(&sp30, &thisx->focus.pos);
     }
     if (((this->unk_1EC == 17) || (this->unk_1EC == 21) || (this->unk_1EC == 22)) && (limbIndex == 6)) {
         Matrix_StatePush();
@@ -881,13 +881,13 @@ void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    s32 pad;
-    EnOsn* this = THIS;
     static TexturePtr D_80AD2588 = object_osn_Tex_0166F8;
     static TexturePtr D_80AD258C = object_osn_Tex_016EF8;
     static TexturePtr D_80AD2590 = object_osn_Tex_0176F8;
     static TexturePtr D_80AD2594 = object_osn_Tex_017EF8;
     static TexturePtr D_80AD2598 = object_osn_Tex_0182F8;
+    s32 pad;
+    EnOsn* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
