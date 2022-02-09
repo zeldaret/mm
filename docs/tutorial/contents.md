@@ -34,7 +34,7 @@
 
 - [Documenting a decompiled file](documenting.md)
 
-## [Object Decompilation](object_decomp.md) (TODO)
+## [Object Decompilation](object_decomp.md)
 - Object files
 - How we decompile objects
 
