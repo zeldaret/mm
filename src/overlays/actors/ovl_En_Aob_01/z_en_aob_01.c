@@ -394,7 +394,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 &= ~2;
                 func_801159EC(-this->unk_434);
                 func_800B7298(globalCtx, NULL, 7);
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_809C1C9C;
                 return;
@@ -455,7 +455,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
             }
         }
     } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_210 = 0;
         this->actionFunc = func_809C2060;
@@ -578,7 +578,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 &= ~0x40;
             if (this->unk_2D2 & 0x10) {
                 this->unk_2D2 &= ~0x10;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_809C2060;
             } else {
@@ -748,7 +748,7 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
     if (func_809C15BC(this)) {
         if ((sp2F == 5) && func_80147624(globalCtx)) {
             this->unk_434 = 0;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
         }
 
@@ -979,10 +979,10 @@ void EnAob01_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                              Actor* thisx) {
     EnAob01* this = THIS;
-    UNK_TYPE sp38[] = {
-        &object_aob_Tex_000658,
-        &object_aob_Tex_000E58,
-        &object_aob_Tex_001658,
+    TexturePtr sp38[] = {
+        object_aob_Tex_000658,
+        object_aob_Tex_000E58,
+        object_aob_Tex_001658,
     };
 
     if (limbIndex == 15) {
@@ -1023,7 +1023,7 @@ void EnAob01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 }
 
-void EnAob01_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAob01_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -1040,8 +1040,9 @@ void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 50, 80, 0, 0));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnAob01_OverrideLimbDraw, EnAob01_PostLimbDraw, EnAob01_UnkDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnAob01_OverrideLimbDraw, EnAob01_PostLimbDraw,
+                                   EnAob01_TransformLimbDraw, &this->actor);
 
     if (this->actor.draw != NULL) {
         func_8012C2DC(globalCtx->state.gfxCtx);

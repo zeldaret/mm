@@ -5,6 +5,7 @@
  */
 
 #include "z_en_recepgirl.h"
+#include "objects/object_bg/object_bg.h"
 
 #define FLAGS 0x00000009
 
@@ -32,11 +33,8 @@ const ActorInit En_Recepgirl_InitVars = {
     (ActorFunc)EnRecepgirl_Draw,
 };
 
-extern TexturePtr D_0600F8F0;
-extern TexturePtr D_0600FCF0;
-extern TexturePtr D_060100F0;
-
-static TexturePtr sEyeTextures[] = { &D_0600F8F0, &D_0600FCF0, &D_060100F0, &D_0600FCF0 };
+static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0,
+                                     object_bg_Tex_00FCF0 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
@@ -45,20 +43,14 @@ static InitChainEntry sInitChain[] = {
 
 static s32 texturesDesegmented = false;
 
-extern AnimationHeader D_06000968;
-extern AnimationHeader D_06001384;
-extern AnimationHeader D_06009890;
-extern AnimationHeader D_0600A280;
-extern AnimationHeader D_0600AD98;
-extern FlexSkeletonHeader D_06011B60;
-
 void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRecepgirl* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable,
+                       this->morphTable, 24);
 
     if (!texturesDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
@@ -93,18 +85,18 @@ void EnRecepgirl_UpdateEyes(EnRecepgirl* this) {
 }
 
 void EnRecepgirl_SetupWait(EnRecepgirl* this) {
-    if (this->skelAnime.animation == &D_06001384) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (this->skelAnime.animation == &object_bg_Anim_001384) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
     }
     this->actionFunc = EnRecepgirl_Wait;
 }
 
 void EnRecepgirl_Wait(EnRecepgirl* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
-        if (this->skelAnime.animation == &D_0600A280) {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+        if (this->skelAnime.animation == &object_bg_Anim_00A280) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         } else {
-            Animation_MorphToLoop(&this->skelAnime, &D_06009890, -4.0f);
+            Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, -4.0f);
         }
     }
 
@@ -123,7 +115,7 @@ void EnRecepgirl_Wait(EnRecepgirl* this, GlobalContext* globalCtx) {
 }
 
 void EnRecepgirl_SetupTalk(EnRecepgirl* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
     this->actionFunc = EnRecepgirl_Talk;
 }
 
@@ -131,19 +123,19 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
     u8 temp_v0_2;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->skelAnime.animation == &D_0600A280) {
-            Animation_PlayLoop(&this->skelAnime, &D_06001384);
-        } else if (this->skelAnime.animation == &D_0600AD98) {
+        if (this->skelAnime.animation == &object_bg_Anim_00A280) {
+            Animation_PlayLoop(&this->skelAnime, &object_bg_Anim_001384);
+        } else if (this->skelAnime.animation == &object_bg_Anim_00AD98) {
             if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
-                Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 10.0f);
             } else {
-                Animation_MorphToLoop(&this->skelAnime, &D_06009890, 10.0f);
+                Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, 10.0f);
             }
         } else {
             if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
-                Animation_MorphToLoop(&this->skelAnime, &D_06009890, 10.0f);
+                Animation_MorphToLoop(&this->skelAnime, &object_bg_Anim_009890, 10.0f);
             } else {
-                Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
             }
         }
     }
@@ -155,7 +147,7 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
     } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Flags_SetSwitch(globalCtx, this->actor.params);
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
 
             if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
                 this->actor.textId = 0x2ADF;            // Mayor's office is on the left (meeting ended)
@@ -163,10 +155,10 @@ void EnRecepgirl_Talk(EnRecepgirl* this, GlobalContext* globalCtx) {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)
             }
         } else if (this->actor.textId == 0x2ADC) { // hear directions again?
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
             this->actor.textId = 0x2ADD; // "So..."
         } else {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 10.0f);
 
             if (this->actor.textId == 0x2ADD) {        // "So..."
                 this->actor.textId = 0x2ADE;           // Mayor's office is on the left, drawing room on the right
@@ -200,7 +192,7 @@ s32 EnRecepgirl_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     return false;
 }
 
-void EnRecepgirl_UnkLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnRecepgirl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
@@ -217,8 +209,9 @@ void EnRecepgirl_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[this->eyeTexIndex]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnRecepgirl_OverrideLimbDraw, NULL, EnRecepgirl_UnkLimbDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnRecepgirl_OverrideLimbDraw, NULL,
+                                   EnRecepgirl_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

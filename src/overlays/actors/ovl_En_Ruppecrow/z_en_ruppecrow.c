@@ -367,7 +367,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, GlobalContext* globalCtx) {
 s32 EnRuppecrow_CheckPlayedMatchingSong(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (globalCtx->msgCtx.unk1202A == 0x3) {
+    if (globalCtx->msgCtx.ocarinaMode == 0x3) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
                 if (globalCtx->msgCtx.unk1202E == OCARINA_SONG_SONATA) {
@@ -623,8 +623,8 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
 }
 
 void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    EnRuppecrow* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnRuppecrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0, this->joinTable,

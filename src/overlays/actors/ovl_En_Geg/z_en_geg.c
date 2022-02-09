@@ -277,7 +277,7 @@ u8 func_80BB1B14(EnGeg* this, GlobalContext* globalCtx) {
                 return 0;
             }
 
-            if (((EnBom*)explosive)->unk_1F9 == 0) {
+            if (((EnBom*)explosive)->isPowderKeg == 0) {
                 return 2;
             }
 
@@ -541,7 +541,7 @@ void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
 
             case 0xD61:
                 ActorCutscene_Stop(this->unk_498);
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_230 &= ~0x10;
                 this->actionFunc = func_80BB221C;
@@ -557,14 +557,14 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         switch (this->unk_496) {
             case 0xD63:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB221C;
                 break;
 
             case 0xD69:
                 this->unk_49A = this->unk_49C[6];
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB2520;
                 break;
@@ -572,7 +572,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
             case 0xD6D:
             case 0xD6F:
             case 0xD8A:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB31B8;
                 break;
@@ -580,7 +580,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
             case 0xD72:
             case 0xD75:
             case 0xD8B:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_230 &= ~0x10;
                 this->unk_49A = this->unk_49C[7];
@@ -607,7 +607,7 @@ void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
         }
     } else if ((sp27 == 5) && func_80147624(globalCtx)) {
         if (this->unk_496 == 0xD67) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_49A = this->unk_49C[4];
             this->actionFunc = func_80BB2520;
@@ -624,7 +624,7 @@ void func_80BB2A54(EnGeg* this, GlobalContext* globalCtx) {
             ActorCutscene_Stop(this->unk_498);
             this->unk_230 &= ~0x10;
             this->unk_244 = 65;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = func_80BB347C;
         } else {
@@ -966,7 +966,7 @@ void EnGeg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void EnGeg_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnGeg* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -1025,10 +1025,10 @@ void EnGeg_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 void func_80BB3BE0(EnGeg* this, GlobalContext* globalCtx) {
     static TexturePtr D_80BB4088[] = {
-        &object_oF1d_map_Tex_010438,
-        &object_oF1d_map_Tex_010C38,
-        &object_oF1d_map_Tex_011038,
-        &object_oF1d_map_Tex_010838,
+        object_oF1d_map_Tex_010438,
+        object_oF1d_map_Tex_010C38,
+        object_oF1d_map_Tex_011038,
+        object_oF1d_map_Tex_010838,
     };
     s32 pad;
 
@@ -1039,8 +1039,9 @@ void func_80BB3BE0(EnGeg* this, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BB4088[this->unk_23E]));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnGeg_OverrideLimbDraw, EnGeg_PostLimbDraw, EnGeg_UnkDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnGeg_OverrideLimbDraw, EnGeg_PostLimbDraw,
+                                   EnGeg_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
