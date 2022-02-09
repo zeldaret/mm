@@ -1,8 +1,7 @@
 # Data
 
-Up: [Contents](contents.md)
-
-Previous: [Draw functions](draw_functions.md)
+- Up: [Contents](contents.md)
+- Previous: [Draw functions](draw_functions.md)
 
 ## Table of Contents
 

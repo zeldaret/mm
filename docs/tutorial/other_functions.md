@@ -1,8 +1,7 @@
 # The rest of the functions in the actor
 
-Up: [Contents](contents.md)
-
-Previous: [Beginning decompilation: the Init function and the Actor struct](beginning_decomp.md)
+- Up: [Contents](contents.md)
+- Previous: [Beginning decompilation: the Init function and the Actor struct](beginning_decomp.md)
 
 ## Now what?
 

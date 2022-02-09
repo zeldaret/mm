@@ -1,6 +1,6 @@
 # Beginning decompilation: the Init function and the Actor struct
 
-Up: [Contents](contents.md)
+- Up: [Contents](contents.md)
 
 Open the C file and the H file with your actor's name from the appropriate directory in `src/overlays/actors/`. These will be the main files we work with. We will be using EnRecepgirl (the rather forward Mayor's receptionist in the Mayor's residence in East Clock Town) as our example: it is a nice simple NPC with most of the common features of an NPC.
 

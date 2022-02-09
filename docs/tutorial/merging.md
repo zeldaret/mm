@@ -1,8 +1,7 @@
 # The merging process
 
-Up: [Contents](contents.md)
-
-Previous: [Documenting](documenting.md)
+- Up: [Contents](contents.md)
+- Previous: [Documenting](documenting.md)
 
 
 ## Preparing to PR

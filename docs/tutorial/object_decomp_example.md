@@ -1,6 +1,6 @@
 # Object Decompilation Example
 
-Previous: [Object Decompilation](object_decomp.md)
+- Previous: [Object Decompilation](object_decomp.md)
 
 Let's take a look at `object_dns`, which is a pretty typical NPC object. It's used by one actor: `ovl_En_Dns`.
 

@@ -1,8 +1,7 @@
 # Object Decompilation
 
-Up: [Contents](contents.md)
-
-Previous: [Documenting](documenting.md)
+- Up: [Contents](contents.md)
+- Previous: [Documenting](documenting.md)
 
 Object decompilation is the process of taking an object file and writing instructions to extract the various assets from it in the correct format, with appropriate labelling to distinguish their nature and/or use.
 
