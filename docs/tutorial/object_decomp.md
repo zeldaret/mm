@@ -125,7 +125,7 @@ Thankfully it is not necessary to do a full make from clean to check that a part
 If you want to change a texture, for example to see precisely where it is used, the following steps ensure it will be used in the build
 
 - Change and save the texture
-- Touch the C file in the same directory (that includes it)
+- Touch the object's main C file (in the same directory)
 - make
 - Ironically, ERROR 1 implies success (your new texture has changed the checksum).
 
