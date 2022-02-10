@@ -611,7 +611,7 @@ void func_808BE73C(EnDekunuts* this, GlobalContext* globalCtx) {
                                 this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
                                 this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_LARGE;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_LARGE;
                     this->drawDmgEffAlpha = 4.0f;
                     this->drawDmgEffScale = 0.55f;
                 }

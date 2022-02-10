@@ -249,7 +249,7 @@ typedef enum {
     /* 0x2 */ BIGSLIME_DMGEFF_FIRE,
     /* 0x3 */ BIGSLIME_DMGEFF_ICE,
     /* 0x4 */ BIGSLIME_DMGEFF_LIGHT,
-    /* 0x5 */ BIGSLIME_DMGEFF_ELECTRIC_STUN,
+    /* 0x5 */ BIGSLIME_DMGEFF_ELECTRIC_SPARK,
     /* 0xD */ BIGSLIME_DMGEFF_DEKU_STUN = 0xD,
     /* 0xE */ BIGSLIME_DMGEFF_HOOKSHOT,
     /* 0xF */ BIGSLIME_DMGEFF_BREAK_ICE,
@@ -275,7 +275,7 @@ static DamageTable sDamageTable = {
     /* Deku bubble    */ DMG_ENTRY(1, BIGSLIME_DMGEFF_NONE),
     /* Deku launch    */ DMG_ENTRY(0, BIGSLIME_DMGEFF_NONE),
     /* UNK_DMG_0x12   */ DMG_ENTRY(0, BIGSLIME_DMGEFF_STUN),
-    /* Zora barrier   */ DMG_ENTRY(0, BIGSLIME_DMGEFF_ELECTRIC_STUN),
+    /* Zora barrier   */ DMG_ENTRY(0, BIGSLIME_DMGEFF_ELECTRIC_SPARK),
     /* Normal shield  */ DMG_ENTRY(0, BIGSLIME_DMGEFF_NONE),
     /* Light ray      */ DMG_ENTRY(0, BIGSLIME_DMGEFF_NONE),
     /* Thrown object  */ DMG_ENTRY(1, BIGSLIME_DMGEFF_BREAK_ICE),
@@ -2642,10 +2642,10 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                         EnBigslime_GekkoFreeze(this);
                     }
                     EnBigslime_SetupCutscene(this);
-                } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ELECTRIC_STUN) {
+                } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ELECTRIC_SPARK) {
                     this->stunTimer = 40;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                    this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                     this->gekkoDrawDmgEffScale = 0.75f;
                     this->gekkoDrawDmgEffAlpha = 2.0f;
                     EnBigslime_SetupStunGekko(this);
@@ -3077,7 +3077,7 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->actionFunc == EnBigslime_StunGekko) {
         if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             func_800AE434(globalCtx, &gekkoDamageColor, this->stunTimer, 80);
-        } else if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL) {
+        } else if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL) {
             func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);
         } else {
             func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);

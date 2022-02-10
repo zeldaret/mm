@@ -1073,7 +1073,7 @@ void func_808D6814(EnRd* this, GlobalContext* globalCtx) {
                 if ((this->actionFunc != func_808D58CC) &&
                     ((this->actionFunc != func_808D65BC) || (this->unk_3D6 == 0))) {
                     this->unk_3E6 = 40;
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                     this->drawDmgEffAlpha = 1.0f;
                     func_808D64D0(this);
                 }

@@ -1428,7 +1428,7 @@ void func_8099386C(EnWf* this, GlobalContext* globalCtx) {
             } else if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A0 = 40;
                 Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
-                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                 this->drawDmgEffScale = 0.75f;
                 this->drawDmgEffAlpha = 2.0f;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);

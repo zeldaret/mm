@@ -1056,7 +1056,7 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                         this->drawDmgEffScale = 0.55f;
                         this->drawDmgEffAlpha = 2.0f;
-                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM;
+                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_MEDIUM;
                         func_808D2D6C(this);
                     } else {
                         if (this->actor.colChkInfo.damageEffect == 2) {

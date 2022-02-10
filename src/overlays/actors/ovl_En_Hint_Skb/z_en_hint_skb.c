@@ -649,7 +649,7 @@ void func_80C20E90(EnHintSkb* this, GlobalContext* globalCtx) {
 
         switch (this->actor.colChkInfo.damageEffect) {
             case 11:
-                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                 this->unk_3E2 = 40;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.0f;

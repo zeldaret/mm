@@ -406,7 +406,7 @@ void EnPametfrog_ApplyElectricStun(EnPametfrog* this) {
     this->freezeTimer = 40;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
     this->drawDmgEffScale = 0.75f;
     this->drawDmgEffAlpha = 2.0f;
 }

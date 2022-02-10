@@ -1013,7 +1013,7 @@ void EnTalkGibud_CheckDamageEffect(EnTalkGibud* this, GlobalContext* globalCtx) 
                     (this->actionFunc != EnTalkGibud_Stunned || this->stunTimer == 0)) {
                     this->drawDmgEffAlpha = 1.0f;
                     this->effectTimer = 40;
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                     EnTalkGibud_SetupStunned(this);
                 }
                 break;

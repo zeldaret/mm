@@ -729,7 +729,7 @@ void func_80BA6DF8(EnRailgibud* this, GlobalContext* globalCtx) {
             case 12:
                 if ((this->actionFunc != func_80BA5E18) &&
                     ((this->actionFunc != func_80BA6604) || (this->unk_3F2 == 0))) {
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                     this->unk_3F6 = 40;
                     this->drawDmgEffAlpha = 1.0f;
                     func_80BA6584(this);

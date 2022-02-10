@@ -946,7 +946,7 @@ void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
             this->drawDmgEffScale = 0.5f;
             this->drawDmgEffAlpha = 4.0f;
         } else if (this->actor.colChkInfo.damageEffect == 5) {
-            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
             this->drawDmgEffScale = 0.5f;
             this->drawDmgEffAlpha = 2.0f;
         }

@@ -4464,7 +4464,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
         f32 alpha;
         f32 frozenScale;
         f32 lightOrbsScale;
-        f32 electricStunScale;
+        f32 electricSparkScale;
         f32 steamScale;
         Vec3f* limbPosStart = limbPos;
         u32 gameplayFrames = globalCtx->gameplayFrames;
@@ -4659,15 +4659,15 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 }
                 break;
 
-            case ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL:
-            case ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM:
-            case ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_LARGE:
-                if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL) {
-                    electricStunScale = (KREG(19) * 0.01f + 1.0f) * effectScale;
-                } else if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM) {
-                    electricStunScale = (KREG(19) * 0.01f + 1.5f) * effectScale;
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL:
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_MEDIUM:
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_LARGE:
+                if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL) {
+                    electricSparkScale = (KREG(19) * 0.01f + 1.0f) * effectScale;
+                } else if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_MEDIUM) {
+                    electricSparkScale = (KREG(19) * 0.01f + 1.5f) * effectScale;
                 } else {
-                    electricStunScale = (KREG(19) * 0.01f + 2.0f) * effectScale;
+                    electricSparkScale = (KREG(19) * 0.01f + 2.0f) * effectScale;
                 }
 
                 gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -4681,7 +4681,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 255), (u8)(sREG(21) + 255), (u8)sREG(22), (u8)sREG(23));
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale(electricStunScale, electricStunScale, electricStunScale, MTXMODE_APPLY);
+                Matrix_Scale(electricSparkScale, electricSparkScale, electricSparkScale, MTXMODE_APPLY);
 
                 // Every limb draws two electric shocks at random orientations
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {

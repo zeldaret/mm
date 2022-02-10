@@ -701,7 +701,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
                     break;
 
                 case 5:
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;

@@ -957,7 +957,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
                     this->unk_2BC = 40;
                     Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_LARGE;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_LARGE;
                     this->drawDmgEffScale = 0.5f;
                     this->drawDmgEffAlpha = 2.0f;
                     func_80894DD0(this);

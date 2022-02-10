@@ -591,7 +591,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
                     break;
 
                 case 5:
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
                     this->unk_312 = 40;
                     func_808A576C(this);
                     Actor_SetColorFilter(&this->actor, 0, 200, 0, this->unk_312);
@@ -881,7 +881,7 @@ void EnSt_Update(Actor* thisx, GlobalContext* globalCtx) {
         idx += this->actor.world.rot.y;
         this->actor.shape.rot.y = idx;
 
-        if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_SMALL) {
+        if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL) {
             if (this->unk_312 == 1) {
                 s32 i;
 

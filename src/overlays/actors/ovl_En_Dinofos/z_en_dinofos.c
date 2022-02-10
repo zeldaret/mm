@@ -1314,7 +1314,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
             Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
             this->drawDmgEffScale = 0.55f;
             this->drawDmgEffAlpha = 2.0f;
-            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_STUN_MEDIUM;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_MEDIUM;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
             func_8089C784(this);
             return true;
