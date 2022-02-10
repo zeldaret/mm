@@ -41,7 +41,7 @@ typedef struct EnHeishi {
     /* 0x0260 */ s16 headRotXTarget;
     /* 0x0262 */ s16 headRotZTarget;
     /* 0x0264 */ s32 animIndex;
-    /* 0x0268 */ s32 paramCopy;
+    /* 0x0268 */ s32 paramsCopy;
     /* 0x026C */ s32 shouldSetHeadRotation;
     /* 0x0270 */ s16 timer;
     /* 0x0272 */ s16 yawTowardsPlayer;

@@ -20,8 +20,6 @@ void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex);
 void EnHeishi_SetHeadRotation(EnHeishi* this);
 void EnHeishi_SetupIdle(EnHeishi* this);
 void EnHeishi_Idle(EnHeishi* this, GlobalContext* globalCtx);
-s32 EnHeishi_OverrideLimbDraw(GlobalContext* globalctx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                              Actor* thisx);
 
 typedef enum {
     /* 0 */ HEISHI_ANIMATION_STAND_HAND_ON_HIP,
@@ -70,19 +68,19 @@ void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierWave, this->jointTable,
                        this->morphTable, HEISHI_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->paramCopy = this->actor.params;
+    this->paramsCopy = this->actor.params;
     this->yawTowardsPlayer = this->actor.world.rot.y;
 
-    if (!this->paramCopy) {
+    if (this->paramsCopy == 0) {
         this->shouldSetHeadRotation = 1;
-        if (!(gSaveContext.weekEventReg[63] & ACTOR_FLAG_80) && ((gSaveContext.day != 3) || !gSaveContext.isNight)) {
+        if (!(gSaveContext.weekEventReg[63] & 0x80) && !((gSaveContext.day == 3) && gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
         this->colliderCylinder.dim.radius = 30;
         this->colliderCylinder.dim.height = 60;
         this->colliderCylinder.dim.yShift = 0;
-        if ((gSaveContext.weekEventReg[63] & ACTOR_FLAG_80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -101,11 +99,14 @@ void EnHeishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnHeishi_ChangeAnimation(EnHeishi* this, s32 animIndex) {
-    static AnimationHeader* sAnimations[] = { &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave,
-                                              &gSoldierSitAndReach, &gSoldierStandUp };
-    static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
-                               ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
-                               ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP };
+    static AnimationHeader* sAnimations[] = {
+        &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
+    };
+    static u8 sAnimModes[] = {
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+    };
 
     this->animIndex = animIndex;
     this->frameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
@@ -149,7 +150,7 @@ void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if ((this->paramCopy) && (gSaveContext.day == 3) && gSaveContext.isNight) {
+    if ((this->paramsCopy != 0) && (gSaveContext.day == 3) && gSaveContext.isNight) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actionFunc(this, globalCtx);
