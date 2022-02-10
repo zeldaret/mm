@@ -1319,7 +1319,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
 
     // 71.428566f might be 500/7 context unknown
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
-                            this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0, this->drawDmgEffAlpha,
+                            this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
     Matrix_SetCurrentState(&this->drawMtxF);
