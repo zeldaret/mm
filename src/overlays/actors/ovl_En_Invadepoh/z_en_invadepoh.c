@@ -2364,8 +2364,8 @@ void func_80B47FA8(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetObjectDependency(globalCtx, thisx);
         this->actor.update = func_80B48060;
         this->actor.draw = func_80B4E158;
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowBodySkel, NULL, this->jointTable, this->morphTable, 6);
-        Animation_PlayLoop(&this->skelAnime, &gCowBodyMoveHeadAnim);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowSkel, NULL, this->jointTable, this->morphTable, 6);
+        Animation_PlayLoop(&this->skelAnime, &gCowMooAnim);
     }
 }
 

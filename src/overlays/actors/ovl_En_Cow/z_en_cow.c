@@ -5,7 +5,6 @@
  */
 
 #include "z_en_cow.h"
-#include "objects/object_cow/object_cow.h"
 
 #define FLAGS 0x00000009
 
@@ -107,9 +106,9 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     switch (EN_COW_TYPE(thisx)) {
         case EN_COW_TYPE_DEFAULT:
         case EN_COW_TYPE_ABDUCTED:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowBodySkel, NULL, this->jointTable, this->morphTable,
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowSkel, NULL, this->jointTable, this->morphTable,
                                COW_LIMB_MAX);
-            Animation_PlayLoop(&this->skelAnime, &gCowBodyChewAnim);
+            Animation_PlayLoop(&this->skelAnime, &gCowChewAnim);
 
             Collider_InitAndSetCylinder(globalCtx, &this->colliders[0], &this->actor, &sCylinderInit);
             Collider_InitAndSetCylinder(globalCtx, &this->colliders[1], &this->actor, &sCylinderInit);
@@ -171,13 +170,13 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
         this->animationTimer--;
     } else {
         this->animationTimer = Rand_ZeroFloat(500.0f) + 40.0f;
-        Animation_Change(&this->skelAnime, &gCowBodyChewAnim, 1.0f, this->skelAnime.curFrame,
-                         Animation_GetLastFrame(&gCowBodyChewAnim), ANIMMODE_ONCE, 1.0f);
+        Animation_Change(&this->skelAnime, &gCowChewAnim, 1.0f, this->skelAnime.curFrame,
+                         Animation_GetLastFrame(&gCowChewAnim), ANIMMODE_ONCE, 1.0f);
     }
     if (this->actor.xzDistToPlayer < 150.0f) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
-            if (this->skelAnime.animation == &gCowBodyChewAnim) {
+            if (this->skelAnime.animation == &gCowChewAnim) {
                 this->animationTimer = 0;
             }
         }
@@ -344,12 +343,12 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->skelAnime.animation == &gCowBodyChewAnim) {
+        if (this->skelAnime.animation == &gCowChewAnim) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COW_CRY);
-            Animation_Change(&this->skelAnime, &gCowBodyMoveHeadAnim, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&gCowBodyMoveHeadAnim), ANIMMODE_ONCE, 1.0f);
+            Animation_Change(&this->skelAnime, &gCowMooAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowMooAnim),
+                             ANIMMODE_ONCE, 1.0f);
         } else {
-            Animation_Change(&this->skelAnime, &gCowBodyChewAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowBodyChewAnim),
+            Animation_Change(&this->skelAnime, &gCowChewAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowChewAnim),
                              ANIMMODE_LOOP, 1.0f);
         }
     }
