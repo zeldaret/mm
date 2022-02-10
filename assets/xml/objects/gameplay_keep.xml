@@ -908,7 +908,7 @@
         <DList Name="gLightOrbVtxDL" Offset="0x23428" />
         <DList Name="gElectricSparkDL" Offset="0x23480" />
         <DList Name="gElectricSparkVtxDL" Offset="0x234F0" />
-        <Texture Name="gLightOrbTex" OutName="light_orb_tex" Format="i8" Width="64" Height="64" Offset="0x23508" />
+        <Texture Name="gLightOrbTex" OutName="light_orb" Format="i8" Width="64" Height="64" Offset="0x23508" />
         <Texture Name="gameplay_keep_Tex_024510" OutName="tex_024510" Format="i8" Width="64" Height="32" Offset="0x24510" />
         <Texture Name="gameplay_keep_Tex_024D10" OutName="tex_024D10" Format="i8" Width="64" Height="32" Offset="0x24D10" />
         <DList Name="gameplay_keep_DL_025850" Offset="0x25850" />
