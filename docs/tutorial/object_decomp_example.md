@@ -196,7 +196,7 @@ Now that we've named everything that's used externally by the actor, we just nee
 Another way is to simply check `object_dns.c`. Each limb lists its own display list like this:
 ```c
 StandardLimb gKingsChamberDekuGuardHeadLimb = { 
-    { 0, 1300, 0 }, KINGS_CHAMBER_DEKU_GUARD_STALK_LIMB - 1, KINGS_CHAMBER_DEKU_GUARD_LEFT_FOOT_LIMB - 1,
+    { 0, 1300, 0 }, KINGS_CHAMBER_DEKU_GUARD_LIMB_STALK - 1, KINGS_CHAMBER_DEKU_GUARD_LIMB_LEFT_FOOT - 1,
     object_dns_DL_0018B8
 };
 ```
