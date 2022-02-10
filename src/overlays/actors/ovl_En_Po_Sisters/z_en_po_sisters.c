@@ -387,6 +387,7 @@ void EnPoSisters_IdleFlying(EnPoSisters* this, GlobalContext* globalCtx) {
     }
 }
 
+// EnPoSisters_SetupSpinUp
 void func_80B1AF8C(EnPoSisters* this) {
     if (this->color.a != 0) {
         this->collider.base.colType = COLTYPE_METAL;
@@ -400,6 +401,7 @@ void func_80B1AF8C(EnPoSisters* this) {
     this->actionFunc = func_80B1B020;
 }
 
+// EnPoSisters_SpinUp
 // gaining speed for spin attack
 void func_80B1B020(EnPoSisters* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
@@ -426,7 +428,7 @@ void EnPoSisters_SetupSpinAttack(EnPoSisters* this) {
     this->actionFunc = EnPoSisters_SpinAttack;
 }
 
-// action: spin attack dive at player
+// spin attack dive at player
 void EnPoSisters_SpinAttack(EnPoSisters* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
@@ -1219,6 +1221,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                   this->actor.scale.x * 142.857131958f * this->unk_2F4, 0.0f, this->unk_2F0, 20);
                   //this->actor.scale.x * (1.0f/7 * 1000.0f ) * this->unk_2F4, 0.0f, this->unk_2F0, 20);
+                  //this->actor.scale.x * (1000.0f/7.0f ) * this->unk_2F4, 0.0f, this->unk_2F0, 20);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
