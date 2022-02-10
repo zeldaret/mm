@@ -229,7 +229,7 @@ Gfx gKingsChamberDekuGuardSnoutDL[] = {
 };
 ```
 
-Since `tex_002868.rgba16.png` looks like the inside of the Deku Guard's mouth, and it's *only* used in the snout display list, you can probably name this something like `gKingsChamberDekuGuardMouthTex`. But rather than guessing, we can confirm it by editing the texture ourselves and then viewing it in-game. Let's change `tex_002868.rgba16.png` to this:
+Since `tex_002868.rgba16.png` looks like the inside of the Deku Guard's mouth, and it's *only* used in the snout display list, you can probably name this something like `gKingsChamberDekuGuardMouthTex`. But rather than guessing, we can confirm it by editing the texture ourselves and then viewing it in-game. Using an image editor, let's change `tex_002868.rgba16.png` to this:
 
 ![Our custom mouth texture](images/dns_custom_texture.png)
 
