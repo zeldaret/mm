@@ -6,7 +6,7 @@
 
 #include "z_en_cow.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
 #define THIS ((EnCow*)thisx)
 
@@ -135,7 +135,7 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case EN_COW_TYPE_TAIL:
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowTailSkel, NULL, this->jointTable, this->morphTable,
-                               COW_LIMB_MAX);
+                               COW_TAIL_LIMB_MAX);
             Animation_PlayLoop(&this->skelAnime, &gCowTailIdleAnim);
 
             this->actor.update = EnCow_UpdateTail;
@@ -144,7 +144,7 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             EnCow_SetTailPos(this);
 
-            this->actor.flags &= ~EN_COW_FLAG_IS_TAIL;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->animationTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
             break;
     }
@@ -201,7 +201,7 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
 
 void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_Idle;
     }
@@ -209,7 +209,7 @@ void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
 
 void EnCow_GiveMilkEnd(EnCow* this, GlobalContext* globalCtx) {
     if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnCow_Idle;
     }
 }
@@ -225,7 +225,7 @@ void EnCow_GiveMilkWait(EnCow* this, GlobalContext* globalCtx) {
 
 void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_GiveMilkWait;
         Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
@@ -254,7 +254,7 @@ void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
             this->actionFunc = EnCow_TalkEnd;
         }
     } else {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 170.0f);
         this->actor.textId = 0x32C8; //! @bug textId is reset to this no matter the intial value
     }
@@ -272,7 +272,7 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
                        ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
                 D_801BDAA4 = 0;
                 this->actionFunc = EnCow_Talk;
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 170.0f);
                 this->actor.textId = 0x32C8; // Text to give milk after playing Epona's Song.
 
@@ -296,7 +296,7 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
                 } else {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.
                 }
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 170.0f);
                 this->actionFunc = EnCow_Talk;
             }
