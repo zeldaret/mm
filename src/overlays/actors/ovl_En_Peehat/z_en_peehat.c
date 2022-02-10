@@ -701,7 +701,7 @@ void func_8089874C(EnPeehat* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->drawDmgEffScale = 1.1f;
                 this->drawDmgEffAlpha = 2.0f;
-                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_LARGE;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                 func_80898414(this);
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2B0 = 40;

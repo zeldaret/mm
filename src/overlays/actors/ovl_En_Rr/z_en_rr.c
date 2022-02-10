@@ -183,7 +183,7 @@ void func_808FA01C(EnRr* this, GlobalContext* globalCtx, ColliderCylinder* colli
     } else if (this->actor.colChkInfo.damageEffect == 5) {
         this->drawDmgEffScale = 0.85f;
         this->drawDmgEffAlpha = 4.0f;
-        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
     }
 }
 
@@ -673,7 +673,7 @@ void func_808FB398(EnRr* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL) {
         if (this->unk_1EC & 2) {
             phi_v1 = 1000;
         } else {

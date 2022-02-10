@@ -638,7 +638,7 @@ void EnFirefly_UpdateDamage(EnFirefly* this, GlobalContext* globalCtx) {
             EnFirefly_SetupStunned(this);
         } else if (this->actor.colChkInfo.damageEffect == 5) {
             this->timer = 40;
-            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_MEDIUM;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
             this->drawDmgEffAlpha = 2.0f;
             this->drawDmgEffScale = 0.55f;
             EnFirefly_SetupStunned(this);

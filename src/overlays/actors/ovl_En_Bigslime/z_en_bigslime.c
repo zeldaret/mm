@@ -2645,7 +2645,7 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                 } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ELECTRIC_STUN) {
                     this->stunTimer = 40;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
+                    this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->gekkoDrawDmgEffScale = 0.75f;
                     this->gekkoDrawDmgEffAlpha = 2.0f;
                     EnBigslime_SetupStunGekko(this);
@@ -3077,7 +3077,7 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->actionFunc == EnBigslime_StunGekko) {
         if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             func_800AE434(globalCtx, &gekkoDamageColor, this->stunTimer, 80);
-        } else if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL) {
+        } else if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL) {
             func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);
         } else {
             func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);

@@ -975,7 +975,7 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
         switch (this->actor.colChkInfo.damageEffect) {
             case 11:
                 this->unk_3F0 = 40;
-                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.0f;
                 Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);

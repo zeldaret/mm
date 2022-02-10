@@ -1002,7 +1002,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
                     this->timer = 40;
                     Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARK_SMALL;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->drawDmgEffScale = 0.75f;
                     this->drawDmgEffAlpha = 2.0f;
                     func_80878594(this);
