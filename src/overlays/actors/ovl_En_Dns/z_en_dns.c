@@ -474,8 +474,12 @@ void func_8092D4D8(EnDns* this, GlobalContext* globalCtx) {
 }
 
 void func_8092D5E8(EnDns* this, GlobalContext* globalCtx) {
-    static s32 D_8092DE0C[] = { EN_DNS_ANIMATION_IDLE_1, EN_DNS_ANIMATION_IDLE_1, EN_DNS_ANIMATION_SURPRISE_START,
-                                EN_DNS_ANIMATION_RUN_START };
+    static s32 D_8092DE0C[] = {
+        EN_DNS_ANIMATION_IDLE_1,
+        EN_DNS_ANIMATION_IDLE_1,
+        EN_DNS_ANIMATION_SURPRISE_START,
+        EN_DNS_ANIMATION_RUN_START,
+    };
     u32 temp_v0;
     u32 temp_v1;
 
@@ -628,8 +632,12 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 }
 
 void EnDns_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { gKingsChamberDekuGuardEyeOpenTex, gKingsChamberDekuGuardEyeHalfTex,
-                                         gKingsChamberDekuGuardEyeClosedTex, gKingsChamberDekuGuardEyeHalfTex };
+    static TexturePtr sEyeTextures[] = {
+        gKingsChamberDekuGuardEyeOpenTex,
+        gKingsChamberDekuGuardEyeHalfTex,
+        gKingsChamberDekuGuardEyeClosedTex,
+        gKingsChamberDekuGuardEyeHalfTex,
+    };
     EnDns* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

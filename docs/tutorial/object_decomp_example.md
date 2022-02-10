@@ -150,8 +150,12 @@ Now, we just have to name them. In [Step #1](#step-1-naming-the-skeleton-and-lim
 
 Like with previous steps, we can run `./extract_assets.py -s objects/object_dns` and then update `z_en_dns.c` with our new names:
 ```c
-static TexturePtr sEyeTextures[] = { gKingsChamberDekuGuardEyeOpenTex, gKingsChamberDekuGuardEyeHalfTex,
-                                     gKingsChamberDekuGuardEyeClosedTex, gKingsChamberDekuGuardEyeHalfTex };
+static TexturePtr sEyeTextures[] = {
+    gKingsChamberDekuGuardEyeOpenTex,
+    gKingsChamberDekuGuardEyeHalfTex,
+    gKingsChamberDekuGuardEyeClosedTex,
+    gKingsChamberDekuGuardEyeHalfTex,
+};
 ```
 
 Note that this step might be tricky to do if multiple things in the actor use the same segment. It's okay to wait to do this until you've named all the display lists in the actor, since that will make it easier to find the display list associated with a given texture.
