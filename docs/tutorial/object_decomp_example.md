@@ -25,9 +25,11 @@ Let's set segment 8 to be one of the eye textures listed here. Click on "Segment
 
 ![Setting segment 8 to one of the eye textures in Z64Utils](images/z64utils_set_segment_8.png)
 
-Now that we've gotten around the error, we can see what each limb in the skeleton corresponds to by clicking on it in the Hierarchy. Clicking on any given limb will highlight what part of the model it represents in red. Note that some limbs don't actually render anything, so sometimes clicking on a limb will not turn anything red. In the below example, this limb is clearly the head:
+Now that we've gotten around the error, we can see what each limb in the skeleton corresponds to by clicking on it in the Hierarchy. Clicking on any given limb will highlight what part of the model it represents in red. In the below example, this limb is clearly the head:
 
 ![Showing the head limb in Z64Utils](images/z64utils_dns_head_limb.png)
+
+Note that some limbs don't actually render anything, so sometimes clicking on a limb will not turn anything red; this may indicate a "Root" limb that has no associated display list, or it may indicate something like an eye limb that doesn't have the right textures loaded to display anything in Z64Utils. It may be useful to skip ahead to [Step #5](#step-5-naming-limb-display-lists) to learn how to check if the limb has a display list. If it doesn't have a display list, then it's a "Root" limb that will never be highlighted.
 
 We can now start naming the skeleton and individual limbs. Since we know this particular skeleton is the King's Chamber Deku Guard, we can name the skeleton `gKingsChamberDekuGuardSkel`. For the LimbNone name, we can call it something like `KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE`, and we can name the LimbMax similarly. For the EnumName, we can name it `KingsChamberDekuGuardLimbs`. For each individual limb, we can name them based on what we see in Z64Utils; just make sure to update both the Name and the EnumName. After naming everything, we have something that looks like this:
 ```xml
