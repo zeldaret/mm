@@ -1404,14 +1404,15 @@
         <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
         
         <!-- Dust Textures -->
-        <Texture Name="gDust1Tex" OutName="tex_08DBE0" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
-        <Texture Name="gDust2Tex" OutName="tex_08DFE0" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
-        <Texture Name="gDust3Tex" OutName="tex_08E3E0" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
-        <Texture Name="gDust4Tex" OutName="tex_08E7E0" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
-        <Texture Name="gDust5Tex" OutName="tex_08EBE0" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
-        <Texture Name="gDust6Tex" OutName="tex_08EFE0" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
-        <Texture Name="gDust7Tex" OutName="tex_08F3E0" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
-        <Texture Name="gDust8Tex" OutName="tex_08F7E0" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        <Texture Name="gDust1Tex" OutName="dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
+        <Texture Name="gDust2Tex" OutName="dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
+        <Texture Name="gDust3Tex" OutName="dust_3" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
+        <Texture Name="gDust4Tex" OutName="dust_4" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
+        <Texture Name="gDust5Tex" OutName="dust_5" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
+        <Texture Name="gDust6Tex" OutName="dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
+        <Texture Name="gDust7Tex" OutName="dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
+        <Texture Name="gDust8Tex" OutName="dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        
         <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
