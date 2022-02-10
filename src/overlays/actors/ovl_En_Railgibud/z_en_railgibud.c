@@ -274,7 +274,7 @@ void func_80BA59F0(EnRailgibud* this) {
 void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 rot = this->actor.shape.rot.y + this->unk_3E2 + this->unk_3E8;
-    s16 yaw = SUB16(this->actor.yawTowardsPlayer, rot);
+    s16 yaw = BINANG_SUB(this->actor.yawTowardsPlayer, rot);
 
     if (ABS_ALT(yaw) < 0x2008) {
         player->actor.freezeTimer = 60;
@@ -632,7 +632,7 @@ void func_80BA6B9C(EnRailgibud* this, GlobalContext* globalCtx) {
     temp_v0 -= this->unk_3E2;
     temp_v0 = CLAMP(temp_v0, -500, 500);
 
-    if (SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
+    if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) >= 0) {
         this->unk_3E8 += ABS_ALT(phi_a2);
         this->unk_3E2 += ABS_ALT(temp_v0);
     } else {

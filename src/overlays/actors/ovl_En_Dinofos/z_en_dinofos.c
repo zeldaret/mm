@@ -677,10 +677,10 @@ void func_8089BAC0(EnDinofos* this) {
         Animation_MorphToLoop(&this->skelAnime, &object_dinofos_Anim_000580, -4.0f);
         this->actor.speedXZ = 0.0f;
     }
-    if (SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) > 0) {
-        this->unk_28C = ADD16(this->actor.shape.rot.y, 0x4000);
+    if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) > 0) {
+        this->unk_28C = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
     } else {
-        this->unk_28C = SUB16(this->actor.shape.rot.y, 0x4000);
+        this->unk_28C = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
     }
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_8089AD70(this);
@@ -719,7 +719,7 @@ void func_8089BBB4(EnDinofos* this, GlobalContext* globalCtx) {
                              0.0f, 0, -4.0f);
         }
 
-        this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
+        this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
         this->unk_2A4 = 0;
         this->unk_292 = (s32)Rand_ZeroFloat(10.0f) + 5;
     }
@@ -736,9 +736,9 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
     if (!func_8089AE00(this, globalCtx)) {
         if (this->actor.bgCheckFlags & 8) {
             if (this->actor.speedXZ >= 0.0f) {
-                phi_v0 = ADD16(this->actor.shape.rot.y, 0x4000);
+                phi_v0 = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
             } else {
-                phi_v0 = SUB16(this->actor.shape.rot.y, 0x4000);
+                phi_v0 = BINANG_SUB(this->actor.shape.rot.y, 0x4000);
             }
 
             phi_v0 = this->actor.wallYaw - phi_v0;
@@ -752,7 +752,7 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
             }
         }
 
-        phi_v0 = SUB16(player->actor.shape.rot.y, this->actor.shape.rot.y);
+        phi_v0 = BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y);
         if ((phi_v0 >= 0) && (phi_v0 < 0x7800)) {
             this->actor.speedXZ += 0.125f;
         } else if ((phi_v0 < 0) && (phi_v0 > -0x7800)) {
@@ -765,7 +765,7 @@ void func_8089BD28(EnDinofos* this, GlobalContext* globalCtx) {
             this->skelAnime.playSpeed = -1.0f;
         }
 
-        this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
+        this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
         if (Actor_OtherIsTargeted(globalCtx, &this->actor)) {
             sp2C = 100.0f;
         }
@@ -1169,7 +1169,7 @@ void func_8089D11C(EnDinofos* this, s16 arg1) {
     }
     Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speedXZ * (1.0f / 7.5f), 0.0f, 0.0f, 0,
                      -4.0f);
-    this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
+    this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
     this->unk_292 = 10;
     this->unk_2A4 = 0.0f;
     func_8089AD70(this);
@@ -1182,7 +1182,7 @@ void func_8089D1E0(EnDinofos* this, GlobalContext* globalCtx) {
 
     this->skelAnime.playSpeed =
         (1.0f + fabsf(this->actor.speedXZ * (1.0f / 15.0f))) * ((this->actor.speedXZ >= 0.0f) ? 1.0f : -1.0f);
-    this->actor.world.rot.y = ADD16(this->actor.shape.rot.y, 0x4000);
+    this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
     SkelAnime_Update(&this->skelAnime);
     if (this->unk_292 != 0) {
         this->unk_292--;
@@ -1236,7 +1236,7 @@ void func_8089D42C(EnDinofos* this, GlobalContext* globalCtx) {
         this->unk_28E = cos_rad(this->unk_290 * (M_PI / 20)) * 0x2C00;
     } else if (!func_801690CC(globalCtx)) {
         temp_v0_2 = this->unk_28E + this->actor.shape.rot.y;
-        temp_v0_2 = SUB16(this->actor.yawTowardsPlayer, temp_v0_2);
+        temp_v0_2 = BINANG_SUB(this->actor.yawTowardsPlayer, temp_v0_2);
         temp_v0_2 = CLAMP(temp_v0_2, -0x300, 0x300);
         this->unk_28E += temp_v0_2;
         this->unk_28E = CLAMP(this->unk_28E, -0x2C00, 0x2C00);

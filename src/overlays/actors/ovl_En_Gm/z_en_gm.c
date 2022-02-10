@@ -940,7 +940,7 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
 
-            if (ABS_ALT(SUB16(this->actor.world.rot.y, sp50->actor.shape.rot.y)) <= 0x4000) {
+            if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, sp50->actor.shape.rot.y)) <= 0x4000) {
                 this->unk_261 = -75;
             } else {
                 this->unk_261 = 75;
@@ -1714,8 +1714,8 @@ void EnGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
     }
 
     if (limbIndex == 16) {
-        func_8013AD9C(ADD16(this->unk_3BC + this->unk_3C0, 0x4000),
-                      ADD16(this->unk_3BE + this->unk_3C2 + this->actor.shape.rot.y, 0x4000), &this->unk_290,
+        func_8013AD9C(BINANG_ADD(this->unk_3BC + this->unk_3C0, 0x4000),
+                      BINANG_ADD(this->unk_3BE + this->unk_3C2 + this->actor.shape.rot.y, 0x4000), &this->unk_290,
                       &this->unk_2A8, phi_v1, phi_v0);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
@@ -1725,7 +1725,7 @@ void EnGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         Matrix_InsertZRotation_s(this->unk_2A8.z, MTXMODE_APPLY);
         Matrix_StatePush();
     } else if (limbIndex == 9) {
-        func_8013AD9C(ADD16(this->unk_3C0, 0x4000), ADD16(this->unk_3C2 + this->actor.shape.rot.y, 0x4000),
+        func_8013AD9C(BINANG_ADD(this->unk_3C0, 0x4000), BINANG_ADD(this->unk_3C2 + this->actor.shape.rot.y, 0x4000),
                       &this->unk_29C, &this->unk_2AE, phi_v1, phi_v0);
         Matrix_StatePop();
         Matrix_InsertTranslation(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);

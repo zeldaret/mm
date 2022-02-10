@@ -266,7 +266,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
                 sp54.x += randPlusMinusPoint5Scaled(150.0f);
                 sp54.z += randPlusMinusPoint5Scaled(150.0f);
 
-                abs = ABS_ALT(SUB16(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
+                abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C,
                                                                &sp50, 1, 0, 0, 1, &sp4C)) {
                     func_80BFE494(this, 5, 1.0f);
@@ -283,7 +283,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
                 Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2DC, 10, 2000, 20);
             }
 
-            abs2 = SUB16(this->actor.world.rot.y, this->unk_2DC);
+            abs2 = BINANG_SUB(this->actor.world.rot.y, this->unk_2DC);
             if ((s16)ABS_ALT(abs2) < 0x100) {
                 Math_Vec3f_Copy(&sp60, &this->actor.world.pos);
 

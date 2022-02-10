@@ -1036,15 +1036,15 @@ s32 func_8094156C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
     if ((this->collider.base.acFlags & AC_HIT) && ((params == ENGOROIWA_C000_1) || (params == ENGOROIWA_C000_2))) {
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x4000) {
-            s16 sp7E = SUB16(actor->yawTowardsPlayer, this->actor.world.rot.y);
+            s16 sp7E = BINANG_SUB(actor->yawTowardsPlayer, this->actor.world.rot.y);
             f32 temp;
             f32 temp2;
             f32 temp3;
 
             this->unk_1CC = 50;
-            this->unk_1E8[0].unk_1E = SUB16(this->actor.yawTowardsPlayer, 0x4000);
+            this->unk_1E8[0].unk_1E = BINANG_SUB(this->actor.yawTowardsPlayer, 0x4000);
             this->unk_1E8[0].unk_24 = Rand_ZeroOne() * -600.0f;
-            this->unk_1E8[1].unk_1E = ADD16(this->actor.yawTowardsPlayer, 0x4000);
+            this->unk_1E8[1].unk_1E = BINANG_ADD(this->actor.yawTowardsPlayer, 0x4000);
             this->unk_1E8[1].unk_24 = Rand_ZeroOne() * 600.0f;
 
             for (i = 0; i < ARRAY_COUNT(this->unk_1E8); i++) {

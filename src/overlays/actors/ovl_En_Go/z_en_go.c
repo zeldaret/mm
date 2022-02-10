@@ -927,7 +927,7 @@ s32 func_80A131F8(EnGo* this, GlobalContext* globalCtx) {
 
 void func_80A132C8(EnGo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 temp_v1 = SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
+    s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
         func_8013AED4(&this->unk_390, 3, 7);
@@ -1514,7 +1514,7 @@ void func_80A149B0(EnGo* this, GlobalContext* globalCtx) {
                     break;
             }
         } else if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
-            if (ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
+            if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
                 func_8013AED4(&this->unk_390, 3, 7);
             } else {
                 func_8013AED4(&this->unk_390, 0, 7);

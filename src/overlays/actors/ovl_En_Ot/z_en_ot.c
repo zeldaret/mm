@@ -403,7 +403,7 @@ void func_80B5C244(EnOt* this, GlobalContext* globalCtx) {
 void func_80B5C25C(EnOt* this, GlobalContext* globalCtx) {
     this->unk_390 = Actor_YawBetweenActors(&this->actor, &this->unk_360->actor);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_390, 3, 0xE38, 0x38E);
-    if (SUB16(BINANG_ROT180(this->unk_360->actor.shape.rot.y), this->actor.shape.rot.y) < 0x38E) {
+    if (BINANG_SUB(BINANG_ROT180(this->unk_360->actor.shape.rot.y), this->actor.shape.rot.y) < 0x38E) {
         this->unk_32C |= 0x80;
     }
 
@@ -500,7 +500,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     Vec3f sp30;
 
     sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
-    Matrix_RotateY(ADD16(sp3E, 0x4000), MTXMODE_NEW);
+    Matrix_RotateY(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
         Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp30);
     } else {
@@ -531,7 +531,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
         this->actor.textId = 0;
         this->unk_384 = 1;
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            this->unk_3A0 = ADD16(sp3E, 0x4000);
+            this->unk_3A0 = BINANG_ADD(sp3E, 0x4000);
             this->unk_360->unk_3A0 = this->unk_3A0;
             func_80B5C9A8(this, globalCtx);
             func_80B5D114(this, globalCtx);
