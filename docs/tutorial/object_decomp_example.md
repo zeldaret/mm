@@ -185,8 +185,6 @@ Then, like all steps before, we can run `./extract_assets.py -s objects/object_d
 gSPDisplayList(POLY_OPA_DISP++, gKingsChamberDekuGuardDekuFlower);
 ```
 
-Since we've now named every single thing in the actor, we can delete all symbols associated with `ovl_En_Dns` in [undefined_syms](../../undefined_syms.txt).
-
 ## Step #5: Naming limb display lists
 
 Now that we've named everything that's used externally by the actor, we just need to clean up the rest of the unnamed stuff in the XML. Let's start by naming the display lists for each limb. There are two ways you can determine which display list is associated with a given limb. One way is to click on the limb in Z64Utils; it will tell you what display list is used for that limb:
