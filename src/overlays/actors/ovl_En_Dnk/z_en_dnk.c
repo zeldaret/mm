@@ -95,10 +95,10 @@ static DamageTable sDamageTable = {
 
 static ActorAnimationEntryS sAnimations[] = {
     { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, 0 },       { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, -4 },
-    { &object_dnk_Anim_002A08, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_00031C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnk_Anim_000430, 1.0f, -1, -1, 2, 0 },      { &object_dnk_Anim_000430, 1.0f, 0, -1, 2, -4 },
-    { &object_dnk_Anim_000894, 1.0f, 0, -1, 2, -4 },      { &object_dnk_Anim_002B6C, 1.0f, 0, -1, 0, 0 },
-    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_0006CC, 1.0f, 0, -1, 0, -4 },
+    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, 0, -4 },      { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, 0, -4 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, 2, 0 },      { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, 2, -4 },
+    { &object_dnk_Anim_000894, 1.0f, 0, -1, 2, -4 },      { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, 0, 0 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_0006CC, 1.0f, 0, -1, 0, -4 },
     { &object_hintnuts_Anim_000168, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, 2, 0 },
     { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, 2, -4 },
     { &object_hintnuts_Anim_002894, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, 2, -4 },
@@ -160,7 +160,7 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &object_dnk_Skel_002848, NULL, this->jointTable,
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable,
                                this->morphTable, 11);
                 func_80A514F0(&this->skelAnime, 7);
                 break;

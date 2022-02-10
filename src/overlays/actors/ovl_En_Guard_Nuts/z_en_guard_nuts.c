@@ -5,9 +5,9 @@
  */
 
 #include "z_en_guard_nuts.h"
-#include "objects/object_dnk/object_dnk.h"
 
-#define FLAGS 0x80100009
+// #define FLAGS 0x80100009
+#define FLAGS ( ACTOR_FLAG_80000000 | ACTOR_FLAG_100000 | ACTOR_FLAG_8 | ACTOR_FLAG_1 )
 
 #define THIS ((EnGuardNuts*)thisx)
 
@@ -16,7 +16,7 @@ void EnGuardNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnGuardNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80ABB210(EnGuardNuts* this, s32 index);
+void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 index);
 void func_80ABB29C(EnGuardNuts* this);
 void func_80ABB2D4(EnGuardNuts* this, GlobalContext* globalCtx);
 void func_80ABB540(EnGuardNuts* this);
@@ -61,18 +61,18 @@ s32 D_80ABBE1C = 0;
 
 s32 D_80ABBE20 = 0;
 
-u16 D_80ABBE24[] = { 0x0824, 0x0825, 0x0826, 0x082D, 0x0827, 0x0828, 0x0829, 0x082A, 0x082B, 0x082C };
+static u16 sTextIDs[] = { 0x0824, 0x0825, 0x0826, 0x082D, 0x0827, 0x0828, 0x0829, 0x082A, 0x082B, 0x082C };
 
 s16 D_80ABBE38[] = { 0x0000, 0x0000, 0x0002, 0x0001, 0x0000, 0x0000, 0x0002, 0x0000, 0x0000, 0x0002 };
 
-static AnimationHeader* D_80ABBE4C[] = {
-    &object_dnk_Anim_002A08,
-    &object_dnk_Anim_002B6C,
-    &object_dnk_Anim_000430,
-    &object_dnk_Anim_002B6C,
+static AnimationHeader* sAnimations[] = {
+    &gDekuPalaceGuardWaitAnim,
+    &gDekuPalaceGuardWalkAnim,
+    &gDekuPalaceGuardDigAnim,
+    &gDekuPalaceGuardWalkAnim,
 };
 
-u8 D_80ABBE5C[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
 static TexturePtr D_80ABBE60[] = { object_dnk_Tex_001680, object_dnk_Tex_001700, object_dnk_Tex_001780 };
 
@@ -80,8 +80,8 @@ void EnGuardNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuardNuts* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dnk_Skel_002848, &object_dnk_Anim_002A08, this->jointTable,
-                   this->morphTable, 11);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
+                   this->morphTable, OBJECT_DNK_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 1;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -102,15 +102,15 @@ void EnGuardNuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80ABB210(EnGuardNuts* this, s32 index) {
+void EnGuardNuts_ChangeAnim(EnGuardNuts* this, s32 index) {
     this->animIndex = index;
-    this->animeFrameCount = Animation_GetLastFrame(D_80ABBE4C[this->animIndex]);
-    Animation_Change(&this->skelAnime, D_80ABBE4C[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
-                     D_80ABBE5C[this->animIndex], -2.0f);
+    this->animeFrameCount = Animation_GetLastFrame(sAnimations[this->animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
+                     sAnimModes[this->animIndex], -2.0f);
 }
 
 void func_80ABB29C(EnGuardNuts* this) {
-    func_80ABB210(this, 0);
+    EnGuardNuts_ChangeAnim(this, 0);
     this->unk21C = 0;
     this->actionFunc = func_80ABB2D4;
 }
@@ -118,16 +118,16 @@ void func_80ABB29C(EnGuardNuts* this) {
 void func_80ABB2D4(EnGuardNuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 phi_a1;
-    s16 temp_a2;
+    s16 yawDiff;
     s32 phi_a2;
 
     SkelAnime_Update(&this->skelAnime);
-    temp_a2 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
+    yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80ABB540(this);
         return;
     }
-    if (temp_a2 > 0x6000) {
+    if (yawDiff > 0x6000) {
         D_80ABBE20 = 2;
     }
     if (player->transformation == 3) {
@@ -140,7 +140,7 @@ void func_80ABB2D4(EnGuardNuts* this, GlobalContext* globalCtx) {
     } else {
         this->textId = 3;
     }
-    this->actor.textId = D_80ABBE24[this->textId];
+    this->actor.textId = sTextIDs[this->textId];
     phi_a1 = this->actor.world.rot.y;
     if (D_80ABBE20 == 2) {
         func_80ABB854(this, globalCtx);
@@ -148,14 +148,14 @@ void func_80ABB2D4(EnGuardNuts* this, GlobalContext* globalCtx) {
     }
     if (D_80ABBE20 == 1) {
         if (this->animIndex != 1) {
-            func_80ABB210(this, 1);
+            EnGuardNuts_ChangeAnim(this, 1);
         }
         phi_a1 = (this->actor.home.rot.y + 0x8000);
     }
     if (fabsf((f32)(this->actor.shape.rot.y - phi_a1)) < 100.0f) {
         this->actor.shape.rot.y = phi_a1;
         if ((D_80ABBE20 == 1) && (this->animIndex != 3)) {
-            func_80ABB210(this, 3);
+            EnGuardNuts_ChangeAnim(this, 3);
         }
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, phi_a1, 1, 0xBB8, 0);
@@ -170,7 +170,7 @@ void func_80ABB2D4(EnGuardNuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ABB540(EnGuardNuts* this) {
-    func_80ABB210(this, 1);
+    EnGuardNuts_ChangeAnim(this, 1);
     this->unk23C = 0;
     this->unk23A = this->unk23C;
     this->unk214 = 0x10;
@@ -199,7 +199,7 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
         this->unk23C = 0;
         this->unk23A = 0;
         if ((this->textId == 3) && (this->animIndex == 0)) {
-            func_80ABB210(this, 0);
+            EnGuardNuts_ChangeAnim(this, 0);
         }
         if (func_80147624(globalCtx) != 0) {
             if (D_80ABBE38[this->textId] != 1) {
@@ -211,7 +211,7 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
                     return;
                 }
                 this->textId++;
-                func_801518B0(globalCtx, D_80ABBE24[this->textId], &this->actor);
+                func_801518B0(globalCtx, sTextIDs[this->textId], &this->actor);
                 if (D_80ABBE38[this->textId] == 2) {
                     D_80ABBE20 = 1;
                 }
@@ -243,14 +243,14 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ABB854(EnGuardNuts* this, GlobalContext* globalCtx) {
-    Vec3f sp3C;
+    Vec3f digPos;
 
-    func_80ABB210(this, 2);
-    Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
-    sp3C.y = this->actor.floorHeight;
-    EffectSsHahen_SpawnBurst(globalCtx, &sp3C, 4.0f, 0, 0xA, 3, 0xF, -1, 0xA, NULL);
+    EnGuardNuts_ChangeAnim(this, 2);
+    Math_Vec3f_Copy(&digPos, &this->actor.world.pos);
+    digPos.y = this->actor.floorHeight;
+    EffectSsHahen_SpawnBurst(globalCtx, &digPos, 4.0f, 0, 10, 3, 15, -1, 10, NULL);
     this->unk23C = 0;
-    this->actor.flags |= 0x08000000;
+    this->actor.flags |= ACTOR_FLAG_8000000;
     this->unk23A = this->unk23C;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
@@ -258,10 +258,10 @@ void func_80ABB854(EnGuardNuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ABB91C(EnGuardNuts* this, GlobalContext* globalCtx) {
-    f32 sp1C = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
 
     SkelAnime_Update(&this->skelAnime);
-    if (this->animeFrameCount <= sp1C) {
+    if (this->animeFrameCount <= curFrame) {
         this->unk21C = 3;
         this->actionFunc = func_80ABB990;
         this->actor.world.rot.y = this->actor.home.rot.y;
@@ -273,18 +273,18 @@ void func_80ABB990(EnGuardNuts* this, GlobalContext* globalCtx) {
     s16 phi_v1;
     Vec3f sp40;
 
-    if (!(gSaveContext.weekEventReg[0x17] & 0x20)) {
+    if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         phi_v1 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
         if ((phi_v1 < 0x4000) && ((D_80ABBE20 == 0) || (this->actor.xzDistToPlayer > 150.0f))) {
             Math_Vec3f_Copy(&sp40, &this->actor.world.pos);
             sp40.y = this->actor.floorHeight;
             EffectSsHahen_SpawnBurst(globalCtx, &sp40, 4.0f, 0, 0xA, 3, 0xF, -1, 0xA, NULL);
-            Actor_PlaySfxAtPos(&this->actor, 0x387CU);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
             D_80ABBE20 = 0;
             if (this->textId == 9) {
                 this->unk224 = 1;
             }
-            this->actor.flags &= 0xF7FFFFFF;
+            this->actor.flags &= ~ACTOR_FLAG_8000000;
             func_80ABB29C(this);
         }
     }
@@ -327,7 +327,7 @@ void EnGuardNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // OverrideLimb
-s32 func_80ABBC60(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnGuardNuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGuardNuts* this = THIS;
 
     if (limbIndex == 2) {
@@ -347,7 +347,7 @@ void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80ABBE60[this->unk210]));
 
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80ABBC60, NULL,
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnGuardNuts_OverrideLimbDraw, NULL,
                       &this->actor);
     Matrix_InsertTranslation(this->unk228.x, this->actor.floorHeight, this->unk228.z, 0);
     Matrix_Scale(0.015f, 0.015f, 0.015f, 1);
