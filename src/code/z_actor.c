@@ -4683,9 +4683,9 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale(electricSparksScale, electricSparksScale, electricSparksScale, MTXMODE_APPLY);
 
-                // Every limb draws two electric shocks at random orientations
+                // Every limb draws two electric sparks at random orientations
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
-                    // first electric shock
+                    // first electric spark
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
@@ -4697,7 +4697,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                     gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
 
-                    // second electric shock
+                    // second electric spark
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
