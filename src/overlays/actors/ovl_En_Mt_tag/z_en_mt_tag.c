@@ -230,7 +230,26 @@ void func_809CFE28(EnMttag* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
 }
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFF94.s")
+
+void func_809CFF94(EnMttag* this, GlobalContext* globalCtx) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+        if (globalCtx->msgCtx.choiceIndex != 0) {
+            func_8019F230();
+            gSaveContext.unk_3DD0[4] = 0;
+            func_809CF848(globalCtx, 2, 2);
+            gSaveContext.eventInf[1] &= 0xF7;
+            gSaveContext.eventInf[1] |= 4;
+            Actor_MarkForDeath(&this->actor);
+        } else {
+            func_8019F208();
+            func_801477B4(globalCtx);
+            func_800B7298(globalCtx, &this->actor, 6);
+            gSaveContext.eventInf[1] &= 0xF7;
+            this->unk_15A = 0x64;
+            this->actionFunc = func_809CFC38;
+        }
+    }
+}
 
 void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Player* player;
