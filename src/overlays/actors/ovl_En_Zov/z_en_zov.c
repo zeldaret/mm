@@ -6,6 +6,7 @@
 
 #include "z_en_zov.h"
 #include "objects/object_zov/object_zov.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -16,7 +17,7 @@ void EnZov_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZov_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZov_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BD1570(EnZov* this, s16 idx, u8 mode);
+void func_80BD1570(EnZov* this, s16 index, u8 mode);
 void func_80BD187C(EnZov* this, GlobalContext* globalCtx);
 void func_80BD19FC(EnZov* this, GlobalContext* globalCtx);
 void func_80BD1BF0(EnZov* this, GlobalContext* globalCtx);
@@ -146,11 +147,11 @@ void func_80BD1440(EnZov* this, s16 arg1) {
     this->unk_32C = arg1;
 }
 
-void func_80BD1470(EnZov* this, s16 idx, u8 mode, f32 transitionRate) {
+void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
     f32 frame;
 
-    if (((idx != this->unk_322) || mode) && (idx >= 0) && (idx < ARRAY_COUNT(D_80BD270C))) {
-        switch (idx) {
+    if (((index != this->unk_322) || mode) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
+        switch (index) {
             case 6:
                 frame = 30.0f;
                 break;
@@ -163,14 +164,14 @@ void func_80BD1470(EnZov* this, s16 idx, u8 mode, f32 transitionRate) {
                 frame = 0.0f;
                 break;
         }
-        Animation_Change(&this->skelAnime, D_80BD270C[idx], 1.0f, frame, Animation_GetLastFrame(D_80BD270C[idx]), mode,
-                         transitionRate);
-        this->unk_322 = idx;
+        Animation_Change(&this->skelAnime, D_80BD270C[index], 1.0f, frame, Animation_GetLastFrame(D_80BD270C[index]),
+                         mode, transitionRate);
+        this->unk_322 = index;
     }
 }
 
-void func_80BD1570(EnZov* this, s16 idx, u8 mode) {
-    func_80BD1470(this, idx, mode, 5.0f);
+void func_80BD1570(EnZov* this, s16 index, u8 mode) {
+    func_80BD1470(this, index, mode, 5.0f);
 }
 
 s32 func_80BD15A4(EnZov* this, GlobalContext* globalCtx) {
@@ -301,11 +302,6 @@ void func_80BD187C(EnZov* this, GlobalContext* globalCtx) {
     }
 }
 
-typedef struct {
-    char unk00[0x264];
-    u16 unk_264;
-} Tempp;
-
 void func_80BD19FC(EnZov* this, GlobalContext* globalCtx) {
     func_80BD1764(this);
     if (this->unk_322 == 0) {
@@ -319,7 +315,7 @@ void func_80BD19FC(EnZov* this, GlobalContext* globalCtx) {
         } else {
             func_80BD13DC(this);
             func_801518B0(globalCtx, 0x1021, &this->actor);
-            ((Tempp*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 4;
+            ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 4;
             Actor_ChangeFocus(&this->actor, globalCtx, GET_PLAYER(globalCtx)->tatlActor);
             this->actionFunc = func_80BD187C;
         }
