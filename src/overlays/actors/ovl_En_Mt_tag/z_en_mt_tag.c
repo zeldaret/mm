@@ -79,6 +79,7 @@ s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF4EC.s")
 
+s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF67C.s")
 
 s32 func_809CF848(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
@@ -180,7 +181,41 @@ s32 func_809CFBC4(EnMttag* this) {
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFC38.s")
+void func_809CFC38(EnMttag* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3f* playerPos = &player->actor.world.pos;
+    s32 temp_v0;
+
+    if (func_809CF350(playerPos)) {
+        gSaveContext.unk_3DD0[4] = 6;
+        play_sound(NA_SE_SY_START_SHOT);
+        Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
+        this->unk_15A = 0x37;
+        gSaveContext.eventInf[1] |= 2;
+        this->actionFunc = func_809CFD98;
+    } else if (func_809CFBC4(this)) {
+        gSaveContext.unk_3DD0[4] = 6;
+        play_sound(NA_SE_SY_START_SHOT);
+        Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
+        this->unk_15A = 0x37;
+        gSaveContext.eventInf[1] |= 4;
+        this->actionFunc = func_809CFD98;
+    } else {
+        temp_v0 = func_809CF394(playerPos);
+        if (temp_v0 != 0) {
+            if (temp_v0 == 1) {
+                this->unk_164 = 1;
+            } else {
+                this->unk_164 = 0;
+            }
+            func_809CF8EC(this, globalCtx);
+            gSaveContext.eventInf[1] |= 8;
+        } else if ((func_809CF67C(this, globalCtx)) && (this->unk_15A == 0)) {
+            func_809CF950(this, globalCtx);
+            gSaveContext.eventInf[1] |= 8;
+        }
+    }
+}
 
 void func_809CFD98(EnMttag* this, GlobalContext* globalCtx) {
     s32 phi_v1;
