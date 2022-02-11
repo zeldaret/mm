@@ -37,7 +37,9 @@ const ActorInit En_Mt_tag_InitVars = {
 
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF350.s")
+s32 func_809CF350(Vec3f* pos) {
+    return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
+}
 
 s32 func_809CF394(Vec3f* pos) {
     if (!(gSaveContext.eventInf[1] & 1)) {
