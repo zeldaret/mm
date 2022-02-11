@@ -201,7 +201,7 @@ void func_80B12B38(ObjDhouse* this2, GlobalContext* globalCtx) {
             if (ptr->unk_0C.y < 0.0f) {
                 func_80B12A50(ptr, ptr3, &sp80);
                 temp_f0 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &sp90, &sp7C, &this->dyna.actor, &sp80);
-                if (((sp80.y - 35.0f) < temp_f0) && (temp_f0 > -31999.0f)) {
+                if (((sp80.y - 35.0f) < temp_f0) && (temp_f0 > (BGCHECK_Y_MIN + 1.0f))) {
                     phi_s3 = true;
                 }
             }
