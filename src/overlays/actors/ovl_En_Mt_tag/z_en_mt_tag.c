@@ -69,7 +69,30 @@ const ActorInit En_Mt_tag_InitVars = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFF94.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/EnMttag_Init.s")
+void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
+    Player* player;
+    EnMttag* this = THIS;
+
+    if (gSaveContext.entranceIndex == 0xD010) {
+        player = GET_PLAYER(globalCtx);
+        player->stateFlags1 |= 0x20;
+        this->unk_158 = 0;
+        this->unk_15A = 0x64;
+        gSaveContext.eventInf[1] &= 0xFE;
+        gSaveContext.eventInf[1] &= 0xFD;
+        gSaveContext.eventInf[1] &= 0xFB;
+        gSaveContext.eventInf[1] &= 0xF7;
+        if (!(gSaveContext.weekEventReg[0xC] & 2)) {
+            this->actionFunc = func_809CF9A0;
+        } else {
+            s32 requiredScopeTemp;
+
+            this->actionFunc = func_809CFA54;
+        }
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/EnMttag_Destroy.s")
 
