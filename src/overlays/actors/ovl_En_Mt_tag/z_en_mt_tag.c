@@ -81,7 +81,13 @@ s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF848.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF8EC.s")
+void func_809CF8EC(EnMttag* this, GlobalContext* globalCtx) {
+    gSaveContext.unk_3DD0[4] = 0;
+    func_801518B0(globalCtx, 0xE95U, NULL);
+    func_800B7298(globalCtx, &this->actor, 7);
+    Audio_QueueSeqCmd(0x101400FFU);
+    this->actionFunc = func_809CFE28;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF950.s")
 
