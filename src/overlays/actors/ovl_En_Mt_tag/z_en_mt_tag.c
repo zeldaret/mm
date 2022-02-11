@@ -167,7 +167,18 @@ void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFBC4.s")
+s32 func_809CFBC4(EnMttag* this) {
+    s32 ret = 0;
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        if ((func_809CF350(&this->unk_148[i]->world.pos)) && (this->unk_148[i]->update != NULL)) {
+            ret = 1;
+            break;
+        }
+    }
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFC38.s")
 
