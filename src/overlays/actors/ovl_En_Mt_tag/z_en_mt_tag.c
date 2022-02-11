@@ -85,7 +85,7 @@ void func_809CF8EC(EnMttag* this, GlobalContext* globalCtx) {
     gSaveContext.unk_3DD0[4] = 0;
     func_801518B0(globalCtx, 0xE95U, NULL);
     func_800B7298(globalCtx, &this->actor, 7);
-    Audio_QueueSeqCmd(0x101400FFU);
+    Audio_QueueSeqCmd(0x101400FF);
     this->actionFunc = func_809CFE28;
 }
 
@@ -107,7 +107,46 @@ void func_809CFA00(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFA54.s")
+void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 temp_v0_2;
+    s32 phi_v1;
+
+    if (this->unk_158 == 1) {
+        temp_v0_2 = func_809CF394(&player->actor.world.pos);
+        if (temp_v0_2 != 0) {
+            if (temp_v0_2 == 1) {
+                this->unk_164 = 1;
+            } else {
+                this->unk_164 = 0;
+            }
+            func_809CF8EC(this, globalCtx);
+            gSaveContext.eventInf[1] |= 8;
+        } else {
+            if (this->unk_15A == 0) {
+                phi_v1 = 0;
+            } else {
+                this->unk_15A--;
+                phi_v1 = this->unk_15A;
+            }
+            if (phi_v1 == 0x3C) {
+                func_8010E9F0(4, 0);
+                globalCtx->interfaceCtx.unk_280 = 1;
+                Audio_QueueSeqCmd(NA_BGM_GORON_RACE | 0x8000);
+                globalCtx->envCtx.unk_E4 = 0xFE;
+                player->stateFlags1 &= ~0x20;
+            } else if ((this->unk_15A < 0x3C) && (globalCtx->interfaceCtx.unk_280 == 8)) {
+                this->unk_15A = 0;
+                gSaveContext.eventInf[1] |= 1;
+                this->actionFunc = func_809CFC38;
+            }
+        }
+    } else {
+        if (func_809CF444(this, globalCtx)) {
+            this->unk_158 = 1;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFBC4.s")
 
