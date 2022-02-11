@@ -18,7 +18,7 @@ void EnTanron5_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron5_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron5_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BE5818(Actor* thisx, GlobalContext* globalCtx2);
+void func_80BE5818(Actor* thisx, GlobalContext* globalCtx);
 void func_80BE5C10(Actor* thisx, GlobalContext* globalCtx);
 
 s32 D_80BE5D80 = 0;
@@ -447,7 +447,8 @@ void func_80BE5818(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (this->unk_1A1 == 0) {
-        if ((D_80BE5DD0 > 0.5f) && ((ENTANRON5_GET(&this->actor) < ENTANRON5_108) || (ENTANRON5_GET(&this->actor) >= ENTANRON5_110))) {
+        if ((D_80BE5DD0 > 0.5f) &&
+            ((ENTANRON5_GET(&this->actor) < ENTANRON5_108) || (ENTANRON5_GET(&this->actor) >= ENTANRON5_110))) {
             Player* player = GET_PLAYER(globalCtx);
             Vec3f temp;
 

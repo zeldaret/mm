@@ -7,8 +7,8 @@
 
 typedef struct {
     /* 0x00 */ s16 x;
-    /* 0x04 */ s16 z;
-} Vec2s; // size = 0x08
+    /* 0x02 */ s16 z;
+} Vec2s; // size = 0x04
 
 typedef struct {
     /* 0x00 */ f32 x;
