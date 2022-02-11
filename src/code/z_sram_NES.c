@@ -235,11 +235,11 @@ void func_80143B0C(GlobalContext* globalCtx) {
     temp_s0 = convert_scene_number_among_shared_scenes(globalCtx->sceneNum);
     func_80169D40(globalCtx);
 
-    globalCtx->actorCtx.chestFlags &= D_801C5FC0[temp_s0][2];
-    globalCtx->actorCtx.switchFlags[0] &= D_801C5FC0[temp_s0][0];
-    globalCtx->actorCtx.switchFlags[1] &= D_801C5FC0[temp_s0][1];
-    globalCtx->actorCtx.collectibleFlags[0] &= D_801C5FC0[temp_s0][3];
-    globalCtx->actorCtx.clearedRooms = 0;
+    globalCtx->actorCtx.flags.chest &= D_801C5FC0[temp_s0][2];
+    globalCtx->actorCtx.flags.switches[0] &= D_801C5FC0[temp_s0][0];
+    globalCtx->actorCtx.flags.switches[1] &= D_801C5FC0[temp_s0][1];
+    globalCtx->actorCtx.flags.collectible[0] &= D_801C5FC0[temp_s0][3];
+    globalCtx->actorCtx.flags.clearedRoom = 0;
 
     for (i = 0; i < 113; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 &= D_801C5FC0[i][0];
