@@ -62,7 +62,7 @@ You'll want to name everything that exists in the XML, but it helps to break it 
 
 You'll notice that we didn't mention vertices in this list. This is because, for the most part, vertices are not used outside the object itself, and so are not required to have names. However, some actors have code that manipulates or otherwise interacts with vertices; in these cases, the vertices should be added to the XML and named.
 
-Current naming practice is to name each item in the xml using camelCase as usual, with the `g` prefix (for "global"), and the type of data last (`Skel`, `Anim`, `DL`, `Tex`, `TLUT`, `Vtx`, `TexAnim`, etc.), while output texture files are named in `snake_case`. TLUTs (texture look-up tables) should always have their output file end in `tlut`.
+Current naming practice is to name each item in the xml using camelCase as usual, with the `g` prefix (for "global"), and the type of data last (`Skel`, `Anim`, `DL`, `Tex`, `TLUT`, `Vtx`, `TexAnim`, etc.), while output texture files are named in `snake_case`. TLUTs (texture look-up tables) should always have their output file end in `tlut`. For more info on which suffixes to use, check out the [ZAPD documentation on extraction XML](https://github.com/zeldaret/mm/blob/master/tools/ZAPD/docs/zapd_extraction_xml_reference.md).
 
 ### Textures
 
