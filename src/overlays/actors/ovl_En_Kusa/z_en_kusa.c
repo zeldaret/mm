@@ -426,7 +426,6 @@ void EnKusa_SetupWaitObject(EnKusa* this) {
     this->actionFunc = EnKusa_WaitObject;
 }
 
-
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx) {
     s32 pad;
 
