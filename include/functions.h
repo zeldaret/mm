@@ -1540,7 +1540,7 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor);
 // void func_800F3940(void);
 // void func_800F39B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800F3A64(void);
-// void func_800F3B2C(void);
+void func_800F3B2C(GlobalContext* globalCtx);
 // void func_800F3B68(void);
 // void func_800F3C44(void);
 // void func_800F3ED4(void);

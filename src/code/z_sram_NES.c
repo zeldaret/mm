@@ -242,10 +242,11 @@ void func_80143B0C(GlobalContext* globalCtx) {
     globalCtx->actorCtx.flags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) { // a2 (ptr)
-        gSaveContext.cycleSceneFlags[i].switch0 = ((void) 0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
-        gSaveContext.cycleSceneFlags[i].switch1 = ((void) 0, gSaveContext.cycleSceneFlags[i].switch1) & D_801C5FC0[i][1];
-        gSaveContext.cycleSceneFlags[i].chest = ((void) 0, gSaveContext.cycleSceneFlags[i].chest) & D_801C5FC0[i][2];
-        gSaveContext.cycleSceneFlags[i].collectible = ((void) 0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
+        gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
+        gSaveContext.cycleSceneFlags[i].switch1 = ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & D_801C5FC0[i][1];
+        gSaveContext.cycleSceneFlags[i].chest = ((void)0, gSaveContext.cycleSceneFlags[i].chest) & D_801C5FC0[i][2];
+        gSaveContext.cycleSceneFlags[i].collectible =
+            ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
         gSaveContext.save.permanentSceneFlags[i].unk_14 = 0;
         gSaveContext.save.permanentSceneFlags[i].unk_18 = 0;
@@ -272,7 +273,8 @@ void func_80143B0C(GlobalContext* globalCtx) {
 
         for (j = 0; j < ARRAY_COUNT(D_801C6890); j++) { // s1
             if ((phi_v1_3 & 3) == 0) {
-                gSaveContext.save.weekEventReg[i] = ((void) 0, gSaveContext.save.weekEventReg[i]) & (0xFF ^ D_801C6890[j]);
+                gSaveContext.save.weekEventReg[i] =
+                    ((void)0, gSaveContext.save.weekEventReg[i]) & (0xFF ^ D_801C6890[j]);
             }
             phi_v1_3 >>= 2;
         }
@@ -292,25 +294,25 @@ void func_80143B0C(GlobalContext* globalCtx) {
         gSaveContext.eventInf[7] |= 1;
     }
 
-    if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB){
+    if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
         temp2 = INV_CONTENT(ITEM_BOMB);
         if (AMMO(temp2) != 0) {
             gSaveContext.eventInf[7] |= 2;
         }
     }
-    if (INV_CONTENT(ITEM_NUT) == ITEM_NUT){
+    if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
         temp2 = INV_CONTENT(ITEM_NUT);
         if (AMMO(temp2) != 0) {
             gSaveContext.eventInf[7] |= 4;
         }
     }
-    if (INV_CONTENT(ITEM_STICK) == ITEM_STICK){
+    if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
         temp2 = INV_CONTENT(ITEM_STICK);
         if (AMMO(temp2) != 0) {
             gSaveContext.eventInf[7] |= 8;
         }
     }
-    if (INV_CONTENT(ITEM_BOW) == ITEM_BOW){
+    if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
         temp2 = INV_CONTENT(ITEM_BOW);
         if (AMMO(temp2) != 0) {
             gSaveContext.eventInf[7] |= 0x10;
@@ -332,7 +334,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
             if (gSaveContext.save.inventory.items[i] <= ITEM_OBABA_DRINK) {
 
                 for (j = 1; j < 4; j++) { // s1
-                    //phi_v0 = GET_CUR_FORM_BTN_ITEM(j);
+                    // phi_v0 = GET_CUR_FORM_BTN_ITEM(j);
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
                         func_80112B40(globalCtx, j);
@@ -358,7 +360,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
 
                 gSaveContext.save.equips.buttonItems[CUR_FORM][0] = ITEM_SWORD_GILDED;
                 gSaveContext.save.equips.equipment =
-                     (((void) 0, gSaveContext.save.equips.equipment) & gEquipNegMasks[0]) | (u16)(3 << gEquipShifts[0]);
+                    (((void)0, gSaveContext.save.equips.equipment) & gEquipNegMasks[0]) | (u16)(3 << gEquipShifts[0]);
             } else {
                 gSaveContext.save.equips.buttonItems[CUR_FORM][0] = ITEM_SWORD_KOKIRI;
             }
@@ -367,7 +369,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
                 (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) >= ITEM_SWORD_GILDED)) {
                 gSaveContext.save.equips.buttonItems[0][0] = ITEM_SWORD_GILDED;
                 gSaveContext.save.equips.equipment =
-                     (((void) 0, gSaveContext.save.equips.equipment) & gEquipNegMasks[0]) | (u16)(3 << gEquipShifts[0]);
+                    (((void)0, gSaveContext.save.equips.equipment) & gEquipNegMasks[0]) | (u16)(3 << gEquipShifts[0]);
             } else {
                 gSaveContext.save.equips.buttonItems[0][0] = ITEM_SWORD_KOKIRI;
             }
