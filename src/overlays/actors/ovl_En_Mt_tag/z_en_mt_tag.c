@@ -101,4 +101,7 @@ void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/EnMttag_Update.s")
+void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnMttag* this = THIS;
+    this->actionFunc(this, globalCtx);
+}
