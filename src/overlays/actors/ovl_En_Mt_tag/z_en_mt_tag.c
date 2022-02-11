@@ -41,7 +41,30 @@ const ActorInit En_Mt_tag_InitVars = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF394.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF444.s")
+s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
+    Actor* actor = NULL;
+    s32 i = 0;
+    s32 ret;
+
+    do {
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_RG);
+        if (actor != NULL) {
+            this->unk_148[i] = actor;
+            i++;
+        } else if ((actor == NULL) || (actor->next == NULL)) {
+            break;
+        }
+        actor = actor->next;
+    } while (i < 4);
+
+    if (i < 4) {
+        ret = 0;
+    } else {
+        ret = 1;
+    }
+
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF4EC.s")
 
