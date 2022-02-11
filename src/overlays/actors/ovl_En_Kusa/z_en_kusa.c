@@ -9,7 +9,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS (ACTOR_FLAG_800000 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnKusa*)thisx)
 
@@ -281,20 +281,12 @@ void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor) {
     vec->z -= vec->z * scaleFactor;
 }
 
-/**
- * @brief Creates a small scale version of grass
- *
- */
 void EnKusa_SetScaleSmall(EnKusa* this) {
     this->actor.scale.y = 160.0f * 0.001f;
     this->actor.scale.x = 120.0f * 0.001f;
     this->actor.scale.z = 120.0f * 0.001f;
 }
 
-/**
- * @brief Spawns fragments of leaves when cut or hitting floor
- *
- */
 void EnKusa_SpawnFragments(EnKusa* this, GlobalContext* globalCtx) {
     Vec3f velocity;
     Vec3f pos;
@@ -434,10 +426,7 @@ void EnKusa_SetupWaitObject(EnKusa* this) {
     this->actionFunc = EnKusa_WaitObject;
 }
 
-/**
- * @brief Waits for object to be loaded then draws the appropriate model
- *
- */
+
 void EnKusa_WaitObject(EnKusa* this, GlobalContext* globalCtx) {
     s32 pad;
 
@@ -464,10 +453,6 @@ void EnKusa_SetupInteract(EnKusa* this) {
     this->actor.flags &= ~ACTOR_FLAG_10;
 }
 
-/**
- * @brief Handles the main logic and control flow for all kusa types
- *
- */
 void EnKusa_WaitForInteract(EnKusa* this, GlobalContext* globalCtx) {
     s32 pad;
 
@@ -482,7 +467,7 @@ void EnKusa_WaitForInteract(EnKusa* this, GlobalContext* globalCtx) {
         EnKusa_DropCollectible(this, globalCtx);
         SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
 
-        if ((KUSA_GET_PARAMS_04(&this->actor))) {
+        if (KUSA_SHOULD_SPAWN_BUGS(&this->actor)) {
             if (GET_KUSA_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
                 EnKusa_SpawnBugs(this, globalCtx);
             }
@@ -556,10 +541,6 @@ void EnKusa_SetupFall(EnKusa* this) {
     this->timer = 0;
 }
 
-/**
- * @brief Handles logic for when grass/bush falls
- *
- */
 void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 wasHit;
@@ -643,10 +624,6 @@ void EnKusa_SetupCut(EnKusa* this) {
     this->timer = 0;
 }
 
-/**
- * @brief When cut, grass leaves behind a stump that will begin the regrow process after 120 frames
- *
- */
 void EnKusa_CutWaitRegrow(EnKusa* this, GlobalContext* globalCtx) {
     this->timer++;
     if (this->timer >= 120) {
@@ -657,10 +634,6 @@ void EnKusa_CutWaitRegrow(EnKusa* this, GlobalContext* globalCtx) {
 void EnKusa_DoNothing(EnKusa* this, GlobalContext* globalCtx) {
 }
 
-/**
- * @brief Creates a small scale version of grass underground
- *
- */
 void EnKusa_SetupUprootedWaitRegrow(EnKusa* this) {
     this->actor.world.pos.x = this->actor.home.pos.x;
     this->actor.world.pos.y = this->actor.home.pos.y - 9.0f;
@@ -671,10 +644,6 @@ void EnKusa_SetupUprootedWaitRegrow(EnKusa* this) {
     this->actionFunc = EnKusa_UprootedWaitRegrow;
 }
 
-/**
- * @brief Window of 50 frames before the grass surfaces to then regrow
- *
- */
 void EnKusa_UprootedWaitRegrow(EnKusa* this, GlobalContext* globalCtx) {
     this->timer++;
     if (this->timer > 120) {
