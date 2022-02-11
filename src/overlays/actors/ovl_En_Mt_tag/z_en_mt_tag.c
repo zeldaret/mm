@@ -201,8 +201,35 @@ void func_809CFD98(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFE28.s")
+void func_809CFE28(EnMttag* this, GlobalContext* globalCtx) {
+    u8 talkState;
 
+    talkState = Message_GetState(&globalCtx->msgCtx);
+    if (((talkState == 5 && func_80147624(globalCtx)) || talkState == 2)) {
+        if (this->unk_164) {
+            globalCtx->nextEntranceIndex = 0xD010;
+            if ((gSaveContext.weekEventReg[0x21] & 0x80)) {
+                gSaveContext.nextCutsceneIndex = 0xFFF0;
+            } else {
+                gSaveContext.nextCutsceneIndex = 0;
+            }
+            globalCtx->sceneLoadFlag = 0x14;
+            globalCtx->unk_1887F = 2;
+            gSaveContext.nextTransition = 2;
+            func_801477B4(globalCtx);
+            func_800B7298(globalCtx, &this->actor, 7);
+            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.doubleMagic * 48) + 48);
+            gSaveContext.eventInf[1] &= 0xFE;
+            gSaveContext.eventInf[1] &= 0xFD;
+            gSaveContext.eventInf[1] &= 0xFB;
+            gSaveContext.eventInf[1] &= 0xF7;
+            gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
+        } else {
+            func_809CF848(globalCtx, 2, 2);
+        }
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFF94.s")
 
 void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
