@@ -37,6 +37,7 @@ void ObjKinoko_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjKinoko_Update(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
+    s32 pad;
 
     if (player->currentMask != PLAYER_MASK_SCENTS) {
         thisx->draw = NULL;
@@ -47,7 +48,7 @@ void ObjKinoko_Update(Actor* thisx, GlobalContext* globalCtx) {
         thisx->hintId = 0x64;
         thisx->flags |= ACTOR_FLAG_1;
         if (Actor_HasParent(thisx, globalCtx)) {
-            Flags_SetCollectible(globalCtx, OBJ_KINOKO_PARAMS(thisx));
+            Flags_SetCollectible(globalCtx, OBJ_KINOKO_GET_FLAG(thisx));
             Actor_MarkForDeath(thisx);
             return;
         }
@@ -71,7 +72,9 @@ void ObjKinoko_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Gfx* gfx;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C2DC(globalCtx->state.gfxCtx);
+
     gfx = POLY_XLU_DISP;
     gDPSetPrimColor(&gfx[0], 0, 0, 169, 63, 186, (u8)thisx->speedXZ);
     gDPSetEnvColor(&gfx[1], 110, 44, 200, 100);
@@ -82,5 +85,6 @@ void ObjKinoko_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(&gfx[5], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&gfx[6], &gMushroomGlow[2]);
     POLY_XLU_DISP = &gfx[7];
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

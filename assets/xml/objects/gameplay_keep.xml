@@ -935,7 +935,7 @@
         <DList Name="gameplay_keep_DL_029BE8" Offset="0x29BE8" />
         <DList Name="gameplay_keep_DL_029CB0" Offset="0x29CB0" />
         <DList Name="gameplay_keep_DL_029CF0" Offset="0x29CF0" />
-        <DList Name="gMushroomGlow" Offset="0x29D10" />
+        <DList Name="gMushroomGlow" Offset="0x29D10" /> <!-- Original name is "gameplay_keep_DL_029D10" -->
         <Texture Name="gameplay_keep_Tex_029EF8" OutName="tex_029EF8" Format="rgba16" Width="32" Height="64" Offset="0x29EF8" />
         <Limb Name="gameplay_keep_Standardlimb_02AEF8" Type="Standard" Offset="0x2AEF8" />
         <Limb Name="gameplay_keep_Standardlimb_02AF04" Type="Standard" Offset="0x2AF04" />
