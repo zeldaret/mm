@@ -85,7 +85,12 @@ void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFA00.s")
+void func_809CFA00(EnMttag* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+        gSaveContext.weekEventReg[0xC] |= 2;
+        this->actionFunc = func_809CFA54;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFA54.s")
 
