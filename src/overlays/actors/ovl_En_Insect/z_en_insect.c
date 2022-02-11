@@ -185,6 +185,7 @@ void func_8091ACC4(EnInsect* this, GlobalContext* globalCtx) {
         this->skelAnime.playSpeed = 0.0f;
     } else {
         f32 clamped = CLAMP_MAX(temp_f2, 1.9f);
+
         this->skelAnime.playSpeed = clamped;
     }
 
@@ -307,12 +308,13 @@ void func_8091B2D8(EnInsect* this, GlobalContext* globalCtx) {
     } else if (this->unk_312 == 0) {
         if (this->unk_30C & 4) {
             Actor_MarkForDeath(&this->actor);
-        } else {
-            Actor_SetScale(&this->actor, 0.01f);
-            func_8091AC78(this);
+            return;
         }
+
+        Actor_SetScale(&this->actor, 0.01f);
+        func_8091AC78(this);
     } else if (this->unk_312 < 20) {
-        Actor_SetScale(&this->actor, CLAMP_MAX(this->actor.scale.x + 0.001f, 0.01F));
+        Actor_SetScale(&this->actor, CLAMP_MAX(this->actor.scale.x + 0.001f, 0.01f));
         SkelAnime_Update(&this->skelAnime);
     }
 }
