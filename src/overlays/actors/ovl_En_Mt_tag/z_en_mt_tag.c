@@ -104,7 +104,11 @@ void func_809CF8EC(EnMttag* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809CFE28;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF950.s")
+void func_809CF950(EnMttag* this, GlobalContext* globalCtx) {
+    func_801518B0(globalCtx, 0xE97, NULL);
+    func_800B7298(globalCtx, &this->actor, 7);
+    this->actionFunc = func_809CFF94;
+}
 
 void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
