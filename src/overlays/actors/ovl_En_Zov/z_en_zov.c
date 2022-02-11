@@ -315,7 +315,7 @@ void func_80BD19FC(EnZov* this, GlobalContext* globalCtx) {
         } else {
             func_80BD13DC(this);
             func_801518B0(globalCtx, 0x1021, &this->actor);
-            ((EnElf*)GET_PLAYER(globalCtx)->tatlActor)->unk_264 |= 4;
+            ((EnElf*)(GET_PLAYER(globalCtx)->tatlActor))->unk_264 |= 4;
             Actor_ChangeFocus(&this->actor, globalCtx, GET_PLAYER(globalCtx)->tatlActor);
             this->actionFunc = func_80BD187C;
         }
@@ -494,7 +494,7 @@ void EnZov_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (DECR(this->unk_2EE) == 0) {
-        this->unk_2EE = Rand_S16Offset(0x3C, 0x3C);
+        this->unk_2EE = Rand_S16Offset(60, 60);
     }
 
     this->unk_2EC = this->unk_2EE;
@@ -555,7 +555,7 @@ void EnZov_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 phi_a1;
     u8 phi_v1;
 
-    if (0) {}
+    if (1) {}
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
