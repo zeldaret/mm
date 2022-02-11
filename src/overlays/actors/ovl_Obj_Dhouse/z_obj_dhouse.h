@@ -33,9 +33,7 @@ typedef struct {
     /* 0x04 */ Gfx* unk_04;
     /* 0x08 */ Vec3f unk_08;
     /* 0x14 */ Vec3f unk_14;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ s16 unk_24;
+    /* 0x20 */ Vec3s unk_20;
     /* 0x26 */ s8 unk_26;
 } ObjDhouseStruct3; // size = 0x28
 

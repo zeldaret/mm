@@ -1,7 +1,7 @@
 /*
  * File: z_obj_dhouse.c
  * Overlay: ovl_Obj_Dhouse
- * Description: Dinner plate Prop
+ * Description: Stone bridge that Keeta sleeps under
  */
 
 #include "z_obj_dhouse.h"
@@ -188,9 +188,9 @@ void func_80B12B38(ObjDhouse* this2, GlobalContext* globalCtx) {
                 ptr->unk_00.y += ptr->unk_0C.y;
                 ptr->unk_00.z += ptr->unk_0C.z;
 
-                ptr->unk_18.x += ptr3->unk_20;
-                ptr->unk_18.y += ptr3->unk_22;
-                ptr->unk_18.z += ptr3->unk_24;
+                ptr->unk_18.x += ptr3->unk_20.x;
+                ptr->unk_18.y += ptr3->unk_20.y;
+                ptr->unk_18.z += ptr3->unk_20.z;
 
                 if (ptr->unk_1E == ptr3->unk_26) {
                     func_80B12E7C(this, globalCtx, ptr, ptr3);
@@ -209,7 +209,7 @@ void func_80B12B38(ObjDhouse* this2, GlobalContext* globalCtx) {
             if (phi_s3) {
                 ptr->unk_1E = -1;
                 func_80B13170(this, globalCtx, ptr, ptr3);
-            } else if (ptr->unk_1E >= 0x3D) {
+            } else if (ptr->unk_1E > 60) {
                 ptr->unk_1E = -1;
             } else {
                 ptr->unk_1E++;
