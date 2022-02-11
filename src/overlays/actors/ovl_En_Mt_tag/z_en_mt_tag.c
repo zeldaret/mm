@@ -94,6 +94,11 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/EnMttag_Destroy.s")
+void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnMttag* this = THIS;
+    if (gSaveContext.unk_3DD0[4] != 6) {
+        gSaveContext.unk_3DD0[4] = 5;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/EnMttag_Update.s")
