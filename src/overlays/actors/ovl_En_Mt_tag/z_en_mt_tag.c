@@ -182,7 +182,24 @@ s32 func_809CFBC4(EnMttag* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFC38.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFD98.s")
+void func_809CFD98(EnMttag* this, GlobalContext* globalCtx) {
+    s32 phi_v1;
+
+    if (this->unk_15A == 0) {
+        phi_v1 = 0;
+    } else {
+        this->unk_15A--;
+        phi_v1 = this->unk_15A;
+    }
+    if (phi_v1 == 0) {
+        if ((gSaveContext.eventInf[1] & 2)) {
+            func_809CF848(globalCtx, 3, 3);
+        } else {
+            func_809CF848(globalCtx, 2, 2);
+        }
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFE28.s")
 
