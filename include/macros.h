@@ -74,6 +74,17 @@
 #define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
+#define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == 0 ? gSaveContext.save.equips.buttonItems[CUR_FORM][btn] : gSaveContext.save.equips.buttonItems[0][btn]))
+
+#define SET_CUR_FORM_BTN_ITEM(btn, item) \
+    do { \
+        if ((btn) == 0) { \
+            gSaveContext.save.equips.buttonItems[CUR_FORM][btn] = (item); \
+        } else { \
+            gSaveContext.save.equips.buttonItems[0][btn] = (item); \
+        } \
+    } while (0)
+
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
