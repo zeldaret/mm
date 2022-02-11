@@ -260,7 +260,7 @@ void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
 void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
     if (!DECR(this->unk16A)) {
         if (this->unk164 != 0) {
-            func_800B7298(globalCtx, &this->dyna.actor, 6U);
+            func_800B7298(globalCtx, &this->dyna.actor, 6);
             this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
             func_80953F14(this, globalCtx);
             func_800FE484();
@@ -331,7 +331,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
         if (gSaveContext.weekEventReg[0x14] & 2) {
-            gSaveContext.weekEventReg[0x5A] &= 0xBF;
+            gSaveContext.weekEventReg[0x5A] &= (u8)~0x40;
         }
         if (!(gSaveContext.eventInf[3] & 0x20) && (gSaveContext.weekEventReg[0x5A] & 0x40)) {
             phi_a2 = 1;
