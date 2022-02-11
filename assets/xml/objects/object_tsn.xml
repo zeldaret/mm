@@ -26,11 +26,11 @@
         <Texture Name="object_tsn_Tex_006CB8" OutName="tex_006CB8" Format="ci8" Width="32" Height="32" Offset="0x6CB8" />
         <Texture Name="object_tsn_Tex_0070B8" OutName="tex_0070B8" Format="rgba16" Width="16" Height="16" Offset="0x70B8" />
         <Texture Name="object_tsn_Tex_0072B8" OutName="tex_0072B8" Format="ci8" Width="16" Height="16" Offset="0x72B8" />
-        <!-- <Blob Name="object_tsn_Blob_0073B8" Size="0x400" Offset="0x73B8" /> -->
+        <Texture Name="object_tsn_Tex_0073B8" OutName="tex_0073B8" Format="ci8" Width="32" Height="32" Offset="0x73B8" />
         <Texture Name="object_tsn_Tex_0077B8" OutName="tex_0077B8" Format="rgba16" Width="16" Height="32" Offset="0x77B8" />
         <Texture Name="object_tsn_Tex_007BB8" OutName="tex_007BB8" Format="rgba16" Width="16" Height="16" Offset="0x7BB8" />
         <Texture Name="object_tsn_Tex_007DB8" OutName="tex_007DB8" Format="rgba16" Width="32" Height="32" Offset="0x7DB8" />
-        <!-- <Blob Name="object_tsn_Blob_0085B8" Size="0x400" Offset="0x85B8" /> -->
+        <Texture Name="object_tsn_Tex_0085B8" OutName="tex_0085B8" Format="ci8" Width="32" Height="32" Offset="0x85B8" />
         <Limb Name="object_tsn_Standardlimb_0089B8" Type="Standard" Offset="0x89B8" />
         <Limb Name="object_tsn_Standardlimb_0089C4" Type="Standard" Offset="0x89C4" />
         <Limb Name="object_tsn_Standardlimb_0089D0" Type="Standard" Offset="0x89D0" />
