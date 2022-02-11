@@ -7,7 +7,7 @@
 
 - [Data first](#data-first)
 - [Extern and data last](#extern-and-data-last)
-- [Segmented pointers](#segmented-pointers)
+- [Segmented pointers and object symbols](#segmented-pointers-and-object-symbols)
 - [Fake symbols](#fake-symbols)
 - [Inlining](#inlining)
 
@@ -114,7 +114,7 @@ static s32 D_80C106C8 = 0;
 That should be everything, and we should now be able to `make` without the data file with no issues. 
 
 
-## Segmented pointers
+## Segmented pointers and object symbols
 
 The game has a convenient system that allows it to sometimes effectively use offsets into a file instead of raw memory addresses to reference things. This is done by setting a file address to a *segment*. A segmented address is of the form `0x0XYYYYYY`, where `X` is the segment number. There are 16 available segments, and actors always set segment 6 to their object file, which is a file containing assets (skeleton, animations, textures, etc.) that they use. This is what all those `D_06...` are, and it is also what the entries in `D_80C106B0` are: they are currently raw numbers instead of symbols, though, and we would like to replace them.
 
@@ -124,28 +124,22 @@ mips-linux-gnu-ld: build/src/overlays/actors/ovl_En_Recepgirl/z_en_recepgirl.o:(
 ````
 As we'd expect, of course: we didn't fulfil our promise that they were defined elsewhere.)
 
-This is mitigated by use of the file `undefined_syms.txt`, which feeds the linker the raw addresses to use as the symbol definitions. If you find a segmented address that is not in already externed, `extern` it at the top of the file and add it to the actor's section in undefined_syms:
-```C
-extern void* D_0600F8F0;
-extern void* D_0600FCF0;
-extern void* D_060100F0;
-extern void* D_0600FCF0;
+For actors which have yet to be decompiled, this is mitigated by use of the file `undefined_syms.txt`, which feeds the linker the raw addresses to use as the symbol definitions. However, we want to replace these segmented addresses with proper object symbols whenever possible. In `En_Recepgirl_InitVars`, we can see that this actor uses the object `OBJECT_BG`:
+```c
+const ActorInit En_Recepgirl_InitVars = {
+    ACTOR_EN_RECEPGIRL,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_BG,
+};
+```
 
-static void* D_80C106B0[4] = { &D_0600F8F0, &D_0600FCF0, &D_060100F0, &D_0600FCF0 };
+If we open up `assets/objects/object_bg.h`, we can see a bunch of different names corresponding to every asset in the object. You may notice that some of these names look a bit familiar; `object_bg_Tex_00F8F0` seems very close to the segmented address `(void*)0x600F8F0`. This is the proper object symbol for this segmented address, so we should `#include` this header in our actor and use these object symbols like so:
+```c
+static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
 ```
-and in undefined_syms.txt:
-```
-// ovl_En_Recepgirl
-D_06000968 = 0x06000968;
-D_06001384 = 0x06001384;
-D_06009890 = 0x06009890;
-D_0600A280 = 0x0600A280;
-D_0600AD98 = 0x0600AD98;
-D_0600F8F0 = 0x0600F8F0;
-D_0600FCF0 = 0x0600FCF0;
-D_060100F0 = 0x060100F0;
-D_06011B60 = 0x06011B60;
-```
+
+After replacing every segmented pointer with an object symbol, you should go ahead and delete every segmented pointer associated with this actor from `undefined_syms`.
 
 We will come back and name these later when we do the object.
 
