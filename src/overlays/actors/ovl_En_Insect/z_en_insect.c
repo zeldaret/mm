@@ -216,7 +216,8 @@ void func_8091AE5C(EnInsect* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.5f, 0.1f, 0.5f, 0.0f);
 
-    if ((EnInsect_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(40.0f)) || (this->unk_312 < 4)) {
+    if ((EnInsect_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(40.0f)) ||
+        (this->unk_312 < 4)) {
         Math_ScaledStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos),
                            0x7D0);
     } else if ((this->actor.child != NULL) && (&this->actor != this->actor.child)) {
@@ -258,7 +259,8 @@ void func_8091B07C(EnInsect* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.8f, 0.1f, 0.5f, 0.0f);
 
-    if ((EnInsect_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(160.0f)) || (this->unk_312 < 4)) {
+    if ((EnInsect_XZDistanceSquared(&this->actor.world.pos, &this->actor.home.pos) > SQ(160.0f)) ||
+        (this->unk_312 < 4)) {
         Math_ScaledStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos),
                            0x7D0);
     } else if (sp38) {
