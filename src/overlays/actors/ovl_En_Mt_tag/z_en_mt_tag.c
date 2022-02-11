@@ -97,18 +97,15 @@ s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
     return ret;
 }
 
-#ifdef NON_MATCHING
-// Stack is too big
 s32 func_809CF4EC(Actor* actor, GlobalContext* globalCtx, s32* arg1, f32* arg2, f32* arg3) {
     s32 phi_s2 = -1;
     s32 phi_s4 = 0;
     f32 phi_f20 = 0.0f;
-    Vec3f* phi_s0;
+    s32 temp_v0;
     f32 sp74;
     f32 sp70;
     f32 sp6C;
     s32 temp_s1;
-    s32 temp_v0;
 
     temp_v0 = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     if ((temp_v0 < 4) || (temp_v0 >= 19)) {
@@ -118,9 +115,9 @@ s32 func_809CF4EC(Actor* actor, GlobalContext* globalCtx, s32* arg1, f32* arg2, 
     temp_s1 = D_809D01B0[temp_v0];
 
     do {
-        phi_s0 = &D_809D01FC[temp_s1];
-        if ((Math3D_PointDistToLine2D(actor->world.pos.x, actor->world.pos.z, phi_s0[-1].x, phi_s0[-1].z, phi_s0[1].x,
-                                      phi_s0[1].z, &sp74, &sp70, &sp6C) != 0) &&
+        if ((Math3D_PointDistToLine2D(actor->world.pos.x, actor->world.pos.z, (&D_809D01FC[temp_s1])[-1].x,
+                                      (&D_809D01FC[temp_s1])[-1].z, (&D_809D01FC[temp_s1])[1].x,
+                                      (&D_809D01FC[temp_s1])[1].z, &sp74, &sp70, &sp6C) != 0) &&
             ((phi_s4 == 0) || ((phi_s2 + 1) == temp_s1) || (sp6C < phi_f20))) {
             phi_f20 = sp6C;
             phi_s2 = temp_s1;
@@ -134,9 +131,6 @@ s32 func_809CF4EC(Actor* actor, GlobalContext* globalCtx, s32* arg1, f32* arg2, 
     *arg1 = phi_s2 + 1;
     return phi_s2;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF4EC.s")
-#endif
 
 #ifdef NON_MATCHING
 // Needs tons more work
