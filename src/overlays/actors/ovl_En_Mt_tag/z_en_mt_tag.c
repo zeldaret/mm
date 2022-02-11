@@ -81,7 +81,20 @@ s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF67C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF848.s")
+s32 func_809CF848(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
+    CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
+    globalCtx->nextEntranceIndex = 0xD020;
+    if ((gSaveContext.weekEventReg[0x21] & 0x80)) {
+        gSaveContext.nextCutsceneIndex = 0xFFF0;
+    } else {
+        gSaveContext.nextCutsceneIndex = 0;
+    }
+    globalCtx->sceneLoadFlag = 0x14;
+    globalCtx->unk_1887F = arg1;
+    gSaveContext.nextTransition = arg2;
+    func_801477B4(globalCtx);
+    return 1;
+}
 
 void func_809CF8EC(EnMttag* this, GlobalContext* globalCtx) {
     gSaveContext.unk_3DD0[4] = 0;
