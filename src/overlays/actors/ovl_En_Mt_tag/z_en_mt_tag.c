@@ -53,7 +53,14 @@ const ActorInit En_Mt_tag_InitVars = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF950.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF9A0.s")
+void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        this->actionFunc = func_809CFA00;
+    } else {
+        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CFA00.s")
 
