@@ -331,7 +331,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         // Check for all bottled items
         if (gSaveContext.save.inventory.items[i] >= ITEM_POTION_RED) {
             if (gSaveContext.save.inventory.items[i] <= ITEM_OBABA_DRINK) {
-                for (j = 1; j < 4; j++) { // s1
+                for (j = 1; j < 4; j++) {
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
                         func_80112B40(globalCtx, j);
