@@ -1,5 +1,5 @@
-#ifndef _MACROS_H_
-#define _MACROS_H_
+#ifndef MACROS_H
+#define MACROS_H
 
 #include "libc/stdint.h"
 #include "ultra64/convert.h"
@@ -78,13 +78,13 @@
 
 #define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 
-#define SET_CUR_FORM_BTN_ITEM(btn, item)                  \
-    do {                                                                                      \
-        if ((btn) == EQUIP_SLOT_B) {                                         \
-            BUTTON_ITEM_EQUIP(CUR_FORM, btn) = (item);   \
-        } else {                                                                              \
-            BUTTON_ITEM_EQUIP(0, btn) = (item);                     \
-        }                                                                                        \
+#define SET_CUR_FORM_BTN_ITEM(btn, item)                 \
+    do {                                                 \
+        if ((btn) == EQUIP_SLOT_B) {                     \
+            BUTTON_ITEM_EQUIP(CUR_FORM, (btn)) = (item); \
+        } else {                                         \
+            BUTTON_ITEM_EQUIP(0, (btn)) = (item);        \
+        }                                                \
     } while (0)
 
 #define STOLEN_ITEM_NONE (0)
@@ -92,8 +92,10 @@
 #define STOLEN_ITEM_1 ((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18)
 #define STOLEN_ITEM_2 ((gSaveContext.save.stolenItems & 0x00FF0000) >> 0x10)
 
-#define SET_STOLEN_ITEM_1(itemId) (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
-#define SET_STOLEN_ITEM_2(itemId) (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
+#define SET_STOLEN_ITEM_1(itemId) \
+    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
+#define SET_STOLEN_ITEM_2(itemId) \
+    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
@@ -193,4 +195,4 @@ extern GraphicsContext* __gfxCtx;
 #define ALIGNED8
 #endif
 
-#endif // _MACROS_H_
+#endif // MACROS_H
