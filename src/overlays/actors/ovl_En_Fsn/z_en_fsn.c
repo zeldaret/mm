@@ -299,13 +299,13 @@ s16 EnFsn_GetStolenItemId(u32 stolenItem) {
 
 s32 EnFsn_HasItemsToSell(void) {
     if (CURRENT_DAY != 3) {
-        if (STOLEN_ITEM_1 || STOLEN_ITEM_2) {
+        if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE)) {
             return true;
         }
         return false;
     }
 
-    if (STOLEN_ITEM_1 || STOLEN_ITEM_2 || !(gSaveContext.save.weekEventReg[0x21] & 4)) {
+    if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE) || !(gSaveContext.save.weekEventReg[0x21] & 4)) {
         return true;
     }
 
@@ -1142,9 +1142,9 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             item = this->items[this->cursorIdx];
             item->boughtFunc(globalCtx, item);
             if (this->stolenItem1 == this->cursorIdx) {
-                CLEAR_STOLEN_ITEM_1();
+                SET_STOLEN_ITEM_1(STOLEN_ITEM_NONE);
             } else if (this->stolenItem2 == this->cursorIdx) {
-                CLEAR_STOLEN_ITEM_2();
+                SET_STOLEN_ITEM_2(STOLEN_ITEM_NONE);
             }
             this->numSellingItems--;
             this->itemIds[this->cursorIdx] = -1;

@@ -87,14 +87,13 @@
         } \
     } while (0)
 
+#define STOLEN_ITEM_NONE (0)
+
 #define STOLEN_ITEM_1 ((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18)
 #define STOLEN_ITEM_2 ((gSaveContext.save.stolenItems & 0x00FF0000) >> 0x10)
 
 #define SET_STOLEN_ITEM_1(itemId) (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
 #define SET_STOLEN_ITEM_2(itemId) (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
-
-#define CLEAR_STOLEN_ITEM_1() (gSaveContext.save.stolenItems &= ~0xFF000000)
-#define CLEAR_STOLEN_ITEM_2() (gSaveContext.save.stolenItems &= ~0x00FF0000)
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))

@@ -394,8 +394,8 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    CLEAR_STOLEN_ITEM_1();
-    CLEAR_STOLEN_ITEM_2();
+    SET_STOLEN_ITEM_1(STOLEN_ITEM_NONE);
+    SET_STOLEN_ITEM_2(STOLEN_ITEM_NONE);
 
     // ??
     func_801149A0(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
