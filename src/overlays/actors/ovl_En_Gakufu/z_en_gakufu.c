@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gakufu.h"
+#include "interface/parameter_static/parameter_static.h"
 
 #define FLAGS 0x02000010
 
@@ -23,7 +24,7 @@ void func_80AFCB94(EnGakufu* this, GlobalContext* globalCtx);
 void func_80AFCBD4(EnGakufu* this, GlobalContext* globalCtx);
 void EnGakufu_DoNothing(EnGakufu* this, GlobalContext* globalCtx);
 void EnGakufu_GiveReward(EnGakufu* this, GlobalContext* globalCtx);
-void func_80AFCD44(EnGakufu* this, GlobalContext* globalCtx);
+void EnGakufu_PlayRewardCutscene(EnGakufu* this, GlobalContext* globalCtx);
 void func_80AFCDC8(EnGakufu* this, GlobalContext* globalCtx);
 
 const ActorInit En_Gakufu_InitVars = {
@@ -38,13 +39,13 @@ const ActorInit En_Gakufu_InitVars = {
     (ActorFunc)EnGakufu_Draw,
 };
 
-Vec3f D_80AFD1D0 = {
+Vec3f sRewardDropsSpawnPos = {
     -710.0f,
     -123.0f,
     -3528.0f,
 };
 
-u8 D_80AFD1DC[] = {
+u8 sRewardDropsIndex[] = {
     3,  // CLOCK_TIME(0, 0) - CLOCKTIME(1, 0)
     12, // CLOCK_TIME(1, 0) - CLOCKTIME(2, 0)
     6,  // CLOCK_TIME(2, 0) - CLOCKTIME(3, 0)
@@ -71,7 +72,7 @@ u8 D_80AFD1DC[] = {
     12, // CLOCK_TIME(23, 0) - CLOCKTIME(0, 0)
 };
 
-u8 D_80AFD1F4[] = {
+u8 sRewardDrops[] = {
     ITEM00_RUPEE_RED,   ITEM00_RUPEE_RED,   ITEM00_RUPEE_RED,   // Set 1 (index 0)
     ITEM00_RUPEE_RED,   ITEM00_RUPEE_GREEN, ITEM00_RUPEE_GREEN, // Set 2 (index 3)
     ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  ITEM00_RUPEE_BLUE,  // Set 3 (index 6)
@@ -80,38 +81,19 @@ u8 D_80AFD1F4[] = {
 };
 
 // y-offset of ocarina buttons drawn on wall
-f32 D_80AFD204[] = {
+f32 sOcarinaBtnWallYOffset[] = {
     -4.0f, -2.0f, 0.0f, 1.0f, 3.0f,
 };
 
 // Segment addresses for ocarina notes
-// sOcarinaWallButtonTextures
-s32 D_80AFD218[] = {
-    0x020024A0, 0x020025A0, 0x020026A0, 0x020027A0, 0x020028A0, 0x00000000,
+TexturePtr sOcarinaBtnWallTextures[] = {
+    gOcarinaATex, gOcarinaCDownTex, gOcarinaCRightTex, gOcarinaCLeftTex, gOcarinaCUpTex,
 };
 
-// Vtx
-s32 D_80AFD230[] = {
-    0x00140014, 0x00000000, 0x02000000, 0x545400FF, 
-    0xFFEC0014, 0x00000000, 0x00000000, 0x545400FF,
-    0xFFECFFEC, 0x00000000, 0x00000200, 0x545400FF, 
-    0x0014FFEC, 0x00000000, 0x02000200, 0x545400FF,
-};
-
-// Display lists
-s32 D_80AFD270[] = {
-    0xE7000000, 0x00000000, 
-    0xD7000002, 0xFFFFFFFF, 
-    0xFC11FFFF, 0xFFFFF238, 
-    0xEF182CA0, 0x0C184A50,
-    0xD9000000, 0x00200005, 
-    0x01004008, D_80AFD230, 
-    0x06000204, 0x00000406, 
-    0xDF000000, 0x00000000,
-};
+#include "overlays/ovl_En_Gakufu/ovl_En_Gakufu.c"
 
 void EnGakufu_ProcessNotes(EnGakufu* this) {
-    OcarinaStaff* displayedStaff;
+    OcarinaStaff* playbackStaff;
     OcarinaSongButtons* ocarinaSongButtons;
     s32 songNumButtons;
     s32 i;
@@ -120,9 +102,9 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
     AudioOcarina_TerminaWallGenerateNotes();
     AudioOcarina_SetInstrumentId(1);
     AudioOcarina_StartDefault((1 << this->songIndex) | 0x80000000);
-    displayedStaff = AudioOcarina_GetPlaybackStaff();
-    displayedStaff->pos = 0;
-    displayedStaff->state = 0xFF;
+    playbackStaff = AudioOcarina_GetPlaybackStaff();
+    playbackStaff->pos = 0;
+    playbackStaff->state = 0xFF;
     AudioOcarina_SetInstrumentId(0);
 
     songIndex = this->songIndex;
@@ -210,13 +192,13 @@ void EnGakufu_GiveReward(EnGakufu* this, GlobalContext* globalCtx) {
     // 24 hours / The total time in a day
     index = gSaveContext.time * (24.0f / 0x10000);
     for (i = 0; i < 3; i++) {
-        Item_DropCollectible(globalCtx, &D_80AFD1D0, D_80AFD1F4[i + D_80AFD1DC[index]]);
+        Item_DropCollectible(globalCtx, &sRewardDropsSpawnPos, sRewardDrops[i + sRewardDropsIndex[index]]);
     }
 
     this->actionFunc = EnGakufu_DoNothing;
 }
 
-void func_80AFCD44(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_PlayRewardCutscene(EnGakufu* this, GlobalContext* globalCtx) {
     if (this->actor.cutscene == -1) {
         EnGakufu_GiveReward(this, globalCtx);
     } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
@@ -233,8 +215,8 @@ void func_80AFCDC8(EnGakufu* this, GlobalContext* globalCtx) {
             gSaveContext.eventInf[3] &= (u8)~2;
             gSaveContext.eventInf[3] &= (u8)~4;
 
-            this->actionFunc = func_80AFCD44;
-            func_80AFCD44(this, globalCtx);
+            this->actionFunc = EnGakufu_PlayRewardCutscene;
+            EnGakufu_PlayRewardCutscene(this, globalCtx);
             this->actor.draw = NULL;
         } else if (!EnGakufu_IsWithinRange(this, globalCtx)) {
             gSaveContext.eventInf[3] &= (u8)~2;
@@ -262,12 +244,12 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; (i < 8) && (this->buttonIdx[i] != OCARINA_BTN_INVALID); i++) {
         Matrix_StatePush();
-        Matrix_InsertTranslation(30 * i - 105, D_80AFD204[this->buttonIdx[i]] * 7.5f, 1.0f, 1);
-        Matrix_Scale(0.6f, 0.6f, 0.6f, 1);
+        Matrix_InsertTranslation(30 * i - 105, sOcarinaBtnWallYOffset[this->buttonIdx[i]] * 7.5f, 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(0.6f, 0.6f, 0.6f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetTextureLUT(POLY_XLU_DISP++, G_TT_NONE);
-        gDPSetTextureImage(POLY_XLU_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, D_80AFD218[this->buttonIdx[i]]);
+        gDPSetTextureImage(POLY_XLU_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, sOcarinaBtnWallTextures[this->buttonIdx[i]]);
 
         // clang-format off
         gDPSetTile(POLY_XLU_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, 4, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, 4, G_TX_NOLOD); \
@@ -286,7 +268,7 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 50, 200);
         }
 
-        gSPDisplayList(POLY_XLU_DISP++, D_80AFD270);
+        gSPDisplayList(POLY_XLU_DISP++, gGakufuDL);
 
         Matrix_StatePop();
     }
