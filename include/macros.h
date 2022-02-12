@@ -76,15 +76,15 @@
 #define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
-#define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == 0 ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
+#define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 
-#define SET_CUR_FORM_BTN_ITEM(btn, item) \
-    do { \
-        if ((btn) == 0) { \
-            BUTTON_ITEM_EQUIP(CUR_FORM, btn) = (item); \
-        } else { \
-            BUTTON_ITEM_EQUIP(0, btn) = (item); \
-        } \
+#define SET_CUR_FORM_BTN_ITEM(btn, item)                  \
+    do {                                                                                      \
+        if ((btn) == EQUIP_SLOT_B) {                                         \
+            BUTTON_ITEM_EQUIP(CUR_FORM, btn) = (item);   \
+        } else {                                                                              \
+            BUTTON_ITEM_EQUIP(0, btn) = (item);                     \
+        }                                                                                        \
     } while (0)
 
 #define STOLEN_ITEM_NONE (0)
