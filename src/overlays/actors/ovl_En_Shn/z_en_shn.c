@@ -18,8 +18,6 @@ void EnShn_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80AE69E8(EnShn* this, GlobalContext* globalCtx);
 void func_80AE6A64(EnShn* this, GlobalContext* globalCtx);
 s32 func_80AE6704(EnShn* this, GlobalContext* globalCtx);
-void EnShn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-void EnShn_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
 
 // Could be something related to text/dialogue?
 static UNK_TYPE D_80AE6F00[] = {
@@ -347,7 +345,7 @@ void EnShn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnShn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, NULL, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, NULL, this->jointTable, this->morphTable,
                        OBJECT_SHN_LIMB_MAX);
     this->unk_2E8 = -1;
     if (gSaveContext.weekEventReg[23] & 8) {
@@ -388,16 +386,16 @@ void EnShn_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnShn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnShn* this = THIS;
 
-    if (limbIndex == SHN_LIMB_HEAD) {
+    if (limbIndex == OBJECT_SHN_LIMB_HEAD) {
         func_80AE6488(this, globalCtx);
-        *dList = object_shn_DL_00B738;
+        *dList = gObjectShnSwampGuideHead;
     }
     return false;
 }
 
 Vec3f D_80AE7270 = { 1200.0f, 0.0f, 0.0f };
 void EnShn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == SHN_LIMB_HEAD) {
+    if (limbIndex == OBJECT_SHN_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_80AE7270, &thisx->focus.pos);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
     }
@@ -420,7 +418,7 @@ void EnShn_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
         phi_v0 = 0;
     }
 
-    if (limbIndex == SHN_LIMB_HEAD) {
+    if (limbIndex == OBJECT_SHN_LIMB_HEAD) {
         func_8013AD9C((this->unk_2BA + 0x4000), (this->unk_2BC + this->actor.shape.rot.y + 0x4000), &this->unk_1E8,
                       &this->unk_1F4, phi_v0, phi_v1);
         Matrix_StatePop();
