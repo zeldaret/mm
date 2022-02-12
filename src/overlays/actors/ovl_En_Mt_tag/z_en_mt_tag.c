@@ -113,7 +113,7 @@ s32 EnMttag_InitializeRace(EnMttag* this, GlobalContext* globalCtx) {
 s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* upcomingCheckpoint, f32* arg2,
                                  f32* arg3) {
     s32 curentCheckpoint = -1;
-    s32 determinedCurrentCheckpoint = false;
+    s32 hasSetCurrentCheckpointOnce = false;
     f32 phi_f20 = 0.0f;
     s32 sceneExitIndex;
     f32 sp74;
@@ -133,12 +133,12 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
                 actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
                 (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
                 (&sCheckpointPositions[checkpointIterator])[1].z, &sp74, &sp70, &sp6C)) &&
-            (!determinedCurrentCheckpoint || ((curentCheckpoint + 1) == checkpointIterator) || (sp6C < phi_f20))) {
+            (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) || (sp6C < phi_f20))) {
             phi_f20 = sp6C;
             curentCheckpoint = checkpointIterator;
             *arg2 = sp74;
             *arg3 = sp70;
-            determinedCurrentCheckpoint = true;
+            hasSetCurrentCheckpointOnce = true;
         }
         checkpointIterator++;
     } while (checkpointIterator < sStartingCheckpointPerSceneExitIndex[sceneExitIndex + 1]);
