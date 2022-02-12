@@ -56,13 +56,11 @@ const ActorInit En_Mt_tag_InitVars = {
 };
 */
 
-// Highest checkpoint value per floor poly type
-static s32 D_809D01B0[] = {
+static s32 sStartingCheckpointPerSceneExitIndex[] = {
     0, 0, 0, 0, 1, 9, 12, 16, 19, 22, 26, 29, 30, 32, 34, 36, 39, 42, 45,
 };
 
-// Race checkpoints?
-static Vec3f D_809D01FC[] = {
+static Vec3f sCheckpointPositions[] = {
     { -105.0, 1000.0, -240.0 },   { -1751.0, 1000.0, -240.0 },  { -3138.0, 1000.0, -74.0 },
     { -4617.0, 1000.0, 277.0 },   { -5060.0, 1000.0, 388.0 },   { -5412.0, 1000.0, 573.0 },
     { -5523.0, 1000.0, 1035.0 },  { -5393.0, 1000.0, 1405.0 },  { -5060.0, 1000.0, 1553.0 },
@@ -131,34 +129,35 @@ s32 EnMttag_InitializeRace(EnMttag* this, GlobalContext* globalCtx) {
 s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* upcomingCheckpoint, f32* arg2,
                                  f32* arg3) {
     s32 curentCheckpoint = -1;
-    s32 phi_s4 = 0;
+    s32 determinedCurrentCheckpoint = false;
     f32 phi_f20 = 0.0f;
     s32 sceneExitIndex;
     f32 sp74;
     f32 sp70;
     f32 sp6C;
-    s32 temp_s1;
+    s32 checkpointIterator;
 
     sceneExitIndex = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
         return -1;
     }
 
-    temp_s1 = D_809D01B0[sceneExitIndex];
+    checkpointIterator = sStartingCheckpointPerSceneExitIndex[sceneExitIndex];
 
     do {
-        if ((Math3D_PointDistToLine2D(actor->world.pos.x, actor->world.pos.z, (&D_809D01FC[temp_s1])[-1].x,
-                                      (&D_809D01FC[temp_s1])[-1].z, (&D_809D01FC[temp_s1])[1].x,
-                                      (&D_809D01FC[temp_s1])[1].z, &sp74, &sp70, &sp6C)) &&
-            ((phi_s4 == 0) || ((curentCheckpoint + 1) == temp_s1) || (sp6C < phi_f20))) {
+        if ((Math3D_PointDistToLine2D(
+                actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
+                (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
+                (&sCheckpointPositions[checkpointIterator])[1].z, &sp74, &sp70, &sp6C)) &&
+            (!determinedCurrentCheckpoint || ((curentCheckpoint + 1) == checkpointIterator) || (sp6C < phi_f20))) {
             phi_f20 = sp6C;
-            curentCheckpoint = temp_s1;
+            curentCheckpoint = checkpointIterator;
             *arg2 = sp74;
             *arg3 = sp70;
-            phi_s4 = 1;
+            determinedCurrentCheckpoint = true;
         }
-        temp_s1++;
-    } while (temp_s1 < D_809D01B0[sceneExitIndex + 1]);
+        checkpointIterator++;
+    } while (checkpointIterator < sStartingCheckpointPerSceneExitIndex[sceneExitIndex + 1]);
 
     *upcomingCheckpoint = curentCheckpoint + 1;
     return curentCheckpoint;
@@ -477,12 +476,13 @@ void PrintStuff(GlobalContext* globalCtx, GraphicsContext* gfxCtx) {
     GfxPrint_SetColor(&printer, 255, 255, 255, 255);
 
     idx = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId);
-    idx2 = D_809D01B0[idx];
+    idx2 = sStartingCheckpointPerSceneExitIndex[idx];
 
     do {
-        if ((Math3D_PointDistToLine2D(player->actor.world.pos.x, player->actor.world.pos.z, (&D_809D01FC[idx2])[-1].x,
-                                      (&D_809D01FC[idx2])[-1].z, (&D_809D01FC[idx2])[1].x, (&D_809D01FC[idx2])[1].z,
-                                      &sp74, &sp70, &sp6C)) &&
+        if ((Math3D_PointDistToLine2D(player->actor.world.pos.x, player->actor.world.pos.z,
+(&sCheckpointPositions[idx2])[-1].x,
+                                      (&sCheckpointPositions[idx2])[-1].z, (&sCheckpointPositions[idx2])[1].x,
+(&sCheckpointPositions[idx2])[1].z, &sp74, &sp70, &sp6C)) &&
             ((phi_s4 == 0) || ((phi_s2 + 1) == idx2) || (sp6C < phi_f20))) {
             phi_f20 = sp6C;
             phi_s2 = idx2;
@@ -491,7 +491,7 @@ void PrintStuff(GlobalContext* globalCtx, GraphicsContext* gfxCtx) {
             phi_s4 = 1;
         }
         idx2++;
-    } while (idx2 < D_809D01B0[idx + 1]);
+    } while (idx2 < sStartingCheckpointPerSceneExitIndex[idx + 1]);
 
     arg1 = phi_s2 + 1;
 
@@ -503,10 +503,9 @@ void PrintStuff(GlobalContext* globalCtx, GraphicsContext* gfxCtx) {
         GfxPrint_SetPos(&printer, i, j++);
         GfxPrint_Printf(&printer, "1B0[idx]: %d", idx2);
         GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "1FC[idx2][-1]: (%f, %f)", (&D_809D01FC[idx2])[-1].x, (&D_809D01FC[idx2])[-1].z);
-        GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "1FC[idx2][1]: (%f, %f)", (&D_809D01FC[idx2])[1].x, (&D_809D01FC[idx2])[1].z);
-        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "1FC[idx2][-1]: (%f, %f)", (&sCheckpointPositions[idx2])[-1].x,
+(&sCheckpointPositions[idx2])[-1].z); GfxPrint_SetPos(&printer, i, j++); GfxPrint_Printf(&printer, "1FC[idx2][1]: (%f,
+%f)", (&sCheckpointPositions[idx2])[1].x, (&sCheckpointPositions[idx2])[1].z); GfxPrint_SetPos(&printer, i, j++);
         GfxPrint_Printf(&printer, "arg1: %d", arg1);
         GfxPrint_SetPos(&printer, i, j++);
         GfxPrint_Printf(&printer, "arg2: %f", arg2);
