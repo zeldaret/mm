@@ -132,11 +132,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00DFEC,
-                           this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00DFEC, this->jointTable,
+                           this->morphTable, OBJECT_SHN_LIMB_MAX);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00D9D0,
-                           this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00D9D0, this->jointTable,
+                           this->morphTable, OBJECT_SHN_LIMB_MAX);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
