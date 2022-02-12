@@ -80,7 +80,7 @@ s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
     do {
         actor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_RG);
         if (actor != NULL) {
-            this->unk_148[i] = (EnRg*)actor;
+            this->raceGorons[i] = (EnRg*)actor;
             i++;
         } else if ((actor == NULL) || (actor->next == NULL)) {
             break;
@@ -149,14 +149,14 @@ s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx) {
 
     spA4[0] = func_809CF4EC(&player->actor, globalCtx, &sp90[0], &sp7C[0], &sp68[0]);
     for (i = 1; i < 5; i++) {
-        spA4[i] = func_809CF4EC(&this->unk_148[i - 1]->actor, globalCtx, &sp90[i], &sp7C[i], &sp68[i]);
+        spA4[i] = func_809CF4EC(&this->raceGorons[i - 1]->actor, globalCtx, &sp90[i], &sp7C[i], &sp68[i]);
         if (phi_fp < spA4[i]) {
             phi_fp = spA4[i];
         }
     }
 
     for (i = 1; i < 5; i++) {
-        rg = this->unk_148[i - 1];
+        rg = this->raceGorons[i - 1];
         if ((sp90[i] != -1) && (sp90[0] != -1)) {
             rg->unk_348 = (sp90[i] - sp90[0]);
         } else {
@@ -185,16 +185,16 @@ s32 func_809CF848(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
     return 1;
 }
 
-void func_809CF8EC(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_ShowFalseStartMessage(EnMttag* this, GlobalContext* globalCtx) {
     gSaveContext.unk_3DD0[4] = 0;
-    func_801518B0(globalCtx, 0xE95U, NULL);
+    func_801518B0(globalCtx, 0xE95, NULL); // An entrant made a false start
     func_800B7298(globalCtx, &this->actor, 7);
     Audio_QueueSeqCmd(0x101400FF);
     this->actionFunc = func_809CFE28;
 }
 
-void func_809CF950(EnMttag* this, GlobalContext* globalCtx) {
-    func_801518B0(globalCtx, 0xE97, NULL);
+void EnMttag_ShowCantWinMessage(EnMttag* this, GlobalContext* globalCtx) {
+    func_801518B0(globalCtx, 0xE97, NULL); // You can't win now...
     func_800B7298(globalCtx, &this->actor, 7);
     this->actionFunc = func_809CFF94;
 }
@@ -228,7 +228,7 @@ void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_164 = 0;
             }
-            func_809CF8EC(this, globalCtx);
+            EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         } else {
             if (this->unk_15A == 0) {
@@ -261,7 +261,7 @@ s32 func_809CFBC4(EnMttag* this) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if ((func_809CF350(&this->unk_148[i]->actor.world.pos)) && (this->unk_148[i]->actor.update != NULL)) {
+        if ((func_809CF350(&this->raceGorons[i]->actor.world.pos)) && (this->raceGorons[i]->actor.update != NULL)) {
             ret = 1;
             break;
         }
@@ -296,10 +296,10 @@ void func_809CFC38(EnMttag* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_164 = 0;
             }
-            func_809CF8EC(this, globalCtx);
+            EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         } else if ((func_809CF67C(this, globalCtx)) && (this->unk_15A == 0)) {
-            func_809CF950(this, globalCtx);
+            EnMttag_ShowCantWinMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         }
     }
