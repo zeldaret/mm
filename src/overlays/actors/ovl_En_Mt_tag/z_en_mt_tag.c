@@ -18,7 +18,7 @@ void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFA00(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFA54(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFC38(EnMttag* this, GlobalContext* globalCtx);
-void func_809CFD98(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFE28(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFF94(EnMttag* this, GlobalContext* globalCtx);
 
@@ -170,7 +170,7 @@ s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx) {
     return ret;
 }
 
-s32 func_809CF848(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
+s32 EnMttag_ExitRace(GlobalContext* globalCtx, s32 arg1, s32 nextTransition) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     globalCtx->nextEntranceIndex = 0xD020;
     if ((gSaveContext.weekEventReg[0x21] & 0x80)) {
@@ -180,7 +180,7 @@ s32 func_809CF848(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
     }
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = arg1;
-    gSaveContext.nextTransition = arg2;
+    gSaveContext.nextTransition = nextTransition;
     func_801477B4(globalCtx);
     return 1;
 }
@@ -218,7 +218,6 @@ void func_809CFA00(EnMttag* this, GlobalContext* globalCtx) {
 void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 temp_v0_2;
-    s32 phi_v1;
 
     if (this->unk_158 == 1) {
         temp_v0_2 = func_809CF394(&player->actor.world.pos);
@@ -231,20 +230,14 @@ void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
             EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         } else {
-            if (this->unk_15A == 0) {
-                phi_v1 = 0;
-            } else {
-                this->unk_15A--;
-                phi_v1 = this->unk_15A;
-            }
-            if (phi_v1 == 0x3C) {
+            if (DECR(this->timer) == 60) {
                 func_8010E9F0(4, 0);
                 globalCtx->interfaceCtx.unk_280 = 1;
                 Audio_QueueSeqCmd(NA_BGM_GORON_RACE | 0x8000);
                 globalCtx->envCtx.unk_E4 = 0xFE;
                 player->stateFlags1 &= ~0x20;
-            } else if ((this->unk_15A < 0x3C) && (globalCtx->interfaceCtx.unk_280 == 8)) {
-                this->unk_15A = 0;
+            } else if ((this->timer < 60) && (globalCtx->interfaceCtx.unk_280 == 8)) {
+                this->timer = 0;
                 gSaveContext.eventInf[1] |= 1;
                 this->actionFunc = func_809CFC38;
             }
@@ -278,16 +271,16 @@ void func_809CFC38(EnMttag* this, GlobalContext* globalCtx) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
-        this->unk_15A = 0x37;
+        this->timer = 55;
         gSaveContext.eventInf[1] |= 2;
-        this->actionFunc = func_809CFD98;
+        this->actionFunc = EnMttag_FinishRace;
     } else if (func_809CFBC4(this)) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
-        this->unk_15A = 0x37;
+        this->timer = 55;
         gSaveContext.eventInf[1] |= 4;
-        this->actionFunc = func_809CFD98;
+        this->actionFunc = EnMttag_FinishRace;
     } else {
         temp_v0 = func_809CF394(playerPos);
         if (temp_v0 != 0) {
@@ -298,28 +291,23 @@ void func_809CFC38(EnMttag* this, GlobalContext* globalCtx) {
             }
             EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
-        } else if ((func_809CF67C(this, globalCtx)) && (this->unk_15A == 0)) {
+        } else if ((func_809CF67C(this, globalCtx)) && (this->timer == 0)) {
             EnMttag_ShowCantWinMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         }
     }
 }
 
-void func_809CFD98(EnMttag* this, GlobalContext* globalCtx) {
-    s32 phi_v1;
-
-    if (this->unk_15A == 0) {
-        phi_v1 = 0;
-    } else {
-        this->unk_15A--;
-        phi_v1 = this->unk_15A;
-    }
-    if (phi_v1 == 0) {
+void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx) {
+    if (DECR(this->timer) == 0) {
         if ((gSaveContext.eventInf[1] & 2)) {
-            func_809CF848(globalCtx, 3, 3);
+            // Player won
+            EnMttag_ExitRace(globalCtx, 3, 3);
         } else {
-            func_809CF848(globalCtx, 2, 2);
+            // A non-player Goron won
+            EnMttag_ExitRace(globalCtx, 2, 2);
         }
+
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -348,7 +336,7 @@ void func_809CFE28(EnMttag* this, GlobalContext* globalCtx) {
             gSaveContext.eventInf[1] &= 0xF7;
             gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
         } else {
-            func_809CF848(globalCtx, 2, 2);
+            EnMttag_ExitRace(globalCtx, 2, 2);
         }
         Actor_MarkForDeath(&this->actor);
     }
@@ -359,7 +347,7 @@ void func_809CFF94(EnMttag* this, GlobalContext* globalCtx) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             func_8019F230();
             gSaveContext.unk_3DD0[4] = 0;
-            func_809CF848(globalCtx, 2, 2);
+            EnMttag_ExitRace(globalCtx, 2, 2);
             gSaveContext.eventInf[1] &= 0xF7;
             gSaveContext.eventInf[1] |= 4;
             Actor_MarkForDeath(&this->actor);
@@ -368,7 +356,7 @@ void func_809CFF94(EnMttag* this, GlobalContext* globalCtx) {
             func_801477B4(globalCtx);
             func_800B7298(globalCtx, &this->actor, 6);
             gSaveContext.eventInf[1] &= 0xF7;
-            this->unk_15A = 0x64;
+            this->timer = 100;
             this->actionFunc = func_809CFC38;
         }
     }
@@ -382,7 +370,7 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
         player = GET_PLAYER(globalCtx);
         player->stateFlags1 |= 0x20;
         this->unk_158 = 0;
-        this->unk_15A = 0x64;
+        this->timer = 100;
         gSaveContext.eventInf[1] &= 0xFE;
         gSaveContext.eventInf[1] &= 0xFD;
         gSaveContext.eventInf[1] &= 0xFB;
