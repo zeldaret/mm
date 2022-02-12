@@ -14,13 +14,19 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx);
-void func_809CFA00(EnMttag* this, GlobalContext* globalCtx);
-void func_809CFA54(EnMttag* this, GlobalContext* globalCtx);
-void EnMttag_RunRace(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_StartRace(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_HandleRace(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx);
-void func_809CFE28(EnMttag* this, GlobalContext* globalCtx);
-void func_809CFF94(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx);
+
+typedef enum {
+    PLAYER_CHEAT_STATUS_NO_CHEATING,
+    PLAYER_CHEAT_STATUS_FALSE_START,
+    PLAYER_CHEAT_STATUS_TRYING_TO_REACH_GOAL_FROM_BEHIND
+} PlayerCheatStatus;
 
 const ActorInit En_Mt_tag_InitVars = {
     ACTOR_EN_MT_TAG,
@@ -61,18 +67,24 @@ s32 EnMttag_IsInGoal(Vec3f* pos) {
     return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
-s32 func_809CF394(Vec3f* pos) {
+s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
     if (!(gSaveContext.eventInf[1] & 1)) {
         if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
-            return 1;
+            // The race hasn't started yet, but the player is beyond the starting line
+            return PLAYER_CHEAT_STATUS_FALSE_START;
         }
     } else if (Math3D_XZBoundCheck(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
-        return 2;
+        // The goal is actually quite close to the start, just behind a large wall.
+        // This checks if the player is in an area "behind" the goal that is not accessible
+        // in normal play; it can only be reached by climbing the wall somehow. Perhaps they
+        // were worried that players would find a way to climb the wall with a glitch, or
+        // perhaps they just wanted to punish people using cheat codes
+        return PLAYER_CHEAT_STATUS_TRYING_TO_REACH_GOAL_FROM_BEHIND;
     }
-    return 0;
+    return PLAYER_CHEAT_STATUS_NO_CHEATING;
 }
 
-s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
+s32 EnMttag_InitializeRace(EnMttag* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
     s32 i = 0;
     s32 ret;
@@ -85,6 +97,7 @@ s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
         } else if ((actor == NULL) || (actor->next == NULL)) {
             break;
         }
+
         actor = actor->next;
     } while (i < 4);
 
@@ -117,7 +130,7 @@ s32 func_809CF4EC(Actor* actor, GlobalContext* globalCtx, s32* arg1, f32* arg2, 
     do {
         if ((Math3D_PointDistToLine2D(actor->world.pos.x, actor->world.pos.z, (&D_809D01FC[temp_s1])[-1].x,
                                       (&D_809D01FC[temp_s1])[-1].z, (&D_809D01FC[temp_s1])[1].x,
-                                      (&D_809D01FC[temp_s1])[1].z, &sp74, &sp70, &sp6C) != 0) &&
+                                      (&D_809D01FC[temp_s1])[1].z, &sp74, &sp70, &sp6C)) &&
             ((phi_s4 == 0) || ((phi_s2 + 1) == temp_s1) || (sp6C < phi_f20))) {
             phi_f20 = sp6C;
             phi_s2 = temp_s1;
@@ -133,7 +146,7 @@ s32 func_809CF4EC(Actor* actor, GlobalContext* globalCtx, s32* arg1, f32* arg2, 
 }
 
 s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx) {
-    Player* player;
+    Player* player = GET_PLAYER(globalCtx);
     EnRg* rg;
     s32 spA4[5];
     s32 sp90[5];
@@ -141,12 +154,9 @@ s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx) {
     f32 sp68[5];
     s32 phi_fp;
     s32 i;
-    s32 ret;
+    s32 ret = false;
 
-    player = GET_PLAYER(globalCtx);
-    ret = 0;
     phi_fp = -1;
-
     spA4[0] = func_809CF4EC(&player->actor, globalCtx, &sp90[0], &sp7C[0], &sp68[0]);
     for (i = 1; i < 5; i++) {
         spA4[i] = func_809CF4EC(&this->raceGorons[i - 1]->actor, globalCtx, &sp90[i], &sp7C[i], &sp68[i]);
@@ -165,8 +175,9 @@ s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx) {
     }
 
     if ((spA4[0] > 0) && (spA4[0] < phi_fp) && (player->actor.bgCheckFlags & 1) && ((phi_fp - spA4[0]) >= 0x18)) {
-        ret = 1;
+        ret = true;
     }
+
     return ret;
 }
 
@@ -178,6 +189,7 @@ s32 EnMttag_ExitRace(GlobalContext* globalCtx, s32 arg1, s32 nextTransition) {
     } else {
         gSaveContext.nextCutsceneIndex = 0;
     }
+
     globalCtx->sceneLoadFlag = 0x14;
     globalCtx->unk_1887F = arg1;
     gSaveContext.nextTransition = nextTransition;
@@ -190,43 +202,44 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, GlobalContext* globalCtx) {
     func_801518B0(globalCtx, 0xE95, NULL); // An entrant made a false start
     func_800B7298(globalCtx, &this->actor, 7);
     Audio_QueueSeqCmd(0x101400FF);
-    this->actionFunc = func_809CFE28;
+    this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
 
 void EnMttag_ShowCantWinMessage(EnMttag* this, GlobalContext* globalCtx) {
     func_801518B0(globalCtx, 0xE97, NULL); // You can't win now...
     func_800B7298(globalCtx, &this->actor, 7);
-    this->actionFunc = func_809CFF94;
+    this->actionFunc = EnMttag_HandleCantWinChoice;
 }
 
-void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        this->actionFunc = func_809CFA00;
+        this->actionFunc = EnMttag_WaitForIntroCutsceneToEnd;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
 }
 
-void func_809CFA00(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
         gSaveContext.weekEventReg[0xC] |= 2;
-        this->actionFunc = func_809CFA54;
+        this->actionFunc = EnMttag_StartRace;
     }
 }
 
-void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_StartRace(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 temp_v0_2;
+    s32 playerCheatStatus;
 
-    if (this->unk_158 == true) {
-        temp_v0_2 = func_809CF394(&player->actor.world.pos);
-        if (temp_v0_2 != 0) {
-            if (temp_v0_2 == 1) {
-                this->unk_164 = 1;
+    if (this->raceInitialized == true) {
+        playerCheatStatus = EnMttag_CheckPlayerCheatStatus(&player->actor.world.pos);
+        if (playerCheatStatus != PLAYER_CHEAT_STATUS_NO_CHEATING) {
+            if (playerCheatStatus == PLAYER_CHEAT_STATUS_FALSE_START) {
+                this->shouldRestartRace = true;
             } else {
-                this->unk_164 = 0;
+                this->shouldRestartRace = false;
             }
+
             EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         } else {
@@ -239,12 +252,12 @@ void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
             } else if ((this->timer < 60) && (globalCtx->interfaceCtx.unk_280 == 8)) {
                 this->timer = 0;
                 gSaveContext.eventInf[1] |= 1;
-                this->actionFunc = EnMttag_RunRace;
+                this->actionFunc = EnMttag_HandleRace;
             }
         }
     } else {
-        if (func_809CF444(this, globalCtx)) {
-            this->unk_158 = true;
+        if (EnMttag_InitializeRace(this, globalCtx)) {
+            this->raceInitialized = true;
         }
     }
 }
@@ -262,10 +275,10 @@ s32 EnMttag_IsAnyRaceGoronInGoal(EnMttag* this) {
     return ret;
 }
 
-void EnMttag_RunRace(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_HandleRace(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f* playerPos = &player->actor.world.pos;
-    s32 temp_v0;
+    s32 playerCheatStatus;
 
     if (EnMttag_IsInGoal(playerPos)) {
         gSaveContext.unk_3DD0[4] = 6;
@@ -282,13 +295,14 @@ void EnMttag_RunRace(EnMttag* this, GlobalContext* globalCtx) {
         gSaveContext.eventInf[1] |= 4;
         this->actionFunc = EnMttag_FinishRace;
     } else {
-        temp_v0 = func_809CF394(playerPos);
-        if (temp_v0 != 0) {
-            if (temp_v0 == 1) {
-                this->unk_164 = 1;
+        playerCheatStatus = EnMttag_CheckPlayerCheatStatus(playerPos);
+        if (playerCheatStatus != PLAYER_CHEAT_STATUS_NO_CHEATING) {
+            if (playerCheatStatus == PLAYER_CHEAT_STATUS_FALSE_START) {
+                this->shouldRestartRace = true;
             } else {
-                this->unk_164 = 0;
+                this->shouldRestartRace = false;
             }
+
             EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         } else if ((func_809CF67C(this, globalCtx)) && (this->timer == 0)) {
@@ -312,24 +326,27 @@ void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809CFE28(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
     u8 talkState;
 
     talkState = Message_GetState(&globalCtx->msgCtx);
     if (((talkState == 5 && func_80147624(globalCtx)) || talkState == 2)) {
-        if (this->unk_164) {
+        if (this->shouldRestartRace) {
             globalCtx->nextEntranceIndex = 0xD010;
+
             if ((gSaveContext.weekEventReg[0x21] & 0x80)) {
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
                 gSaveContext.nextCutsceneIndex = 0;
             }
+
             globalCtx->sceneLoadFlag = 0x14;
             globalCtx->unk_1887F = 2;
             gSaveContext.nextTransition = 2;
             func_801477B4(globalCtx);
             func_800B7298(globalCtx, &this->actor, 7);
             Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.doubleMagic * 48) + 48);
+
             gSaveContext.eventInf[1] &= 0xFE;
             gSaveContext.eventInf[1] &= 0xFD;
             gSaveContext.eventInf[1] &= 0xFB;
@@ -342,7 +359,7 @@ void func_809CFE28(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809CFF94(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             func_8019F230();
@@ -357,7 +374,7 @@ void func_809CFF94(EnMttag* this, GlobalContext* globalCtx) {
             func_800B7298(globalCtx, &this->actor, 6);
             gSaveContext.eventInf[1] &= 0xF7;
             this->timer = 100;
-            this->actionFunc = EnMttag_RunRace;
+            this->actionFunc = EnMttag_HandleRace;
         }
     }
 }
@@ -369,18 +386,20 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (gSaveContext.entranceIndex == 0xD010) {
         player = GET_PLAYER(globalCtx);
         player->stateFlags1 |= 0x20;
-        this->unk_158 = 0;
+        this->raceInitialized = false;
         this->timer = 100;
+
         gSaveContext.eventInf[1] &= 0xFE;
         gSaveContext.eventInf[1] &= 0xFD;
         gSaveContext.eventInf[1] &= 0xFB;
         gSaveContext.eventInf[1] &= 0xF7;
+
         if (!(gSaveContext.weekEventReg[0xC] & 2)) {
-            this->actionFunc = func_809CF9A0;
+            this->actionFunc = EnMttag_ShowIntroCutscene;
         } else {
             s32 requiredScopeTemp;
 
-            this->actionFunc = func_809CFA54;
+            this->actionFunc = EnMttag_StartRace;
         }
     } else {
         Actor_MarkForDeath(&this->actor);
