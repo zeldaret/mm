@@ -381,7 +381,7 @@ asm/non_matchings/code/z_actor/Actor_SpawnShieldParticlesMetal.s,Actor_SpawnShie
 asm/non_matchings/code/z_actor/Actor_SetColorFilter.s,Actor_SetColorFilter,0x800BCB70,0x21
 asm/non_matchings/code/z_actor/func_800BCBF4.s,func_800BCBF4,0x800BCBF4,0x1D
 asm/non_matchings/code/z_actor/func_800BCC68.s,func_800BCC68,0x800BCC68,0x1D
-asm/non_matchings/code/z_actor/func_800BCCDC.s,func_800BCCDC,0x800BCCDC,0x176
+asm/non_matchings/code/z_actor/Actor_GetNearestPosOnPath.s,Actor_GetNearestPosOnPath,0x800BCCDC,0x176
 asm/non_matchings/code/z_actor/func_800BD2B4.s,func_800BD2B4,0x800BD2B4,0x34
 asm/non_matchings/code/z_actor/func_800BD384.s,func_800BD384,0x800BD384,0xCD
 asm/non_matchings/code/z_actor/func_800BD6B8.s,func_800BD6B8,0x800BD6B8,0xB
