@@ -183,6 +183,7 @@ u8 D_801F6AF2;
 void Sram_ActivateOwl(u8 owlId) {
     gSaveContext.save.playerData.owlActivationFlags =
         ((void)0, gSaveContext.save.playerData.owlActivationFlags) | (u16)gBitFlags[owlId];
+
     if (gSaveContext.save.playerData.unk_20 == 0xFF) {
         gSaveContext.save.playerData.unk_20 = owlId;
     }
@@ -194,6 +195,7 @@ void func_80143A54(void) {
     gSaveContext.save.horseBackBalloonHighScore = 6000; // 60 seconds
     gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | 0x27;
     gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF) | 0xA0000;
+
     gSaveContext.save.dekuPlaygroundHighScores[0] = 7500; // 75 seconds
     gSaveContext.save.dekuPlaygroundHighScores[1] = 7500; // 75 seconds
     gSaveContext.save.dekuPlaygroundHighScores[2] = 7600; // 76 seconds
@@ -262,7 +264,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         gSaveContext.maskMaskBit[i] = 0;
     }
 
-    if (gSaveContext.save.weekEventReg[0x54] & 0x20) {
+    if (gSaveContext.save.weekEventReg[84] & 0x20) {
         func_801149A0(ITEM_MASK_FIERCE_DEITY, gItemSlots[ITEM_MASK_FIERCE_DEITY]);
     }
 
@@ -395,8 +397,8 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    gSaveContext.save.stolenItems &= 0x00FFFFFF;
-    gSaveContext.save.stolenItems &= 0xFF00FFFF;
+    gSaveContext.save.stolenItems &= ~0xFF000000;
+    gSaveContext.save.stolenItems &= ~0x00FF0000;
 
     // ??
     func_801149A0(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
@@ -410,8 +412,8 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    gSaveContext.save.skullTokenCount &= 0x0000FFFF;
-    gSaveContext.save.skullTokenCount &= 0xFFFF0000;
+    gSaveContext.save.skullTokenCount &= ~0xFFFF0000;
+    gSaveContext.save.skullTokenCount &= ~0x0000FFFF;
     gSaveContext.save.unk_EC4 = 0;
 
     gSaveContext.save.unk_E88[0] = 0;
@@ -453,9 +455,9 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.bombersCaughtOrder[3] = 0;
     gSaveContext.save.bombersCaughtOrder[4] = 0;
     // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
-    gSaveContext.save.weekEventReg[0x49] &= (u8)~0x10;
+    gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
     // Unconfirmed: "Bombers Hide & Seek in Progress"
-    gSaveContext.save.weekEventReg[0x55] &= (u8)~0x02;
+    gSaveContext.save.weekEventReg[85] &= (u8)~0x02;
 }
 
 u16 Sram_CalcChecksum(void* data, size_t count) {
@@ -1009,7 +1011,7 @@ void func_80145698(SramContext* sramCtx) {
 
     gSaveContext.save.checksum = 0;
     gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
-    if (gSaveContext.unk_3F3F != 0) {
+    if (gSaveContext.unk_3F3F) {
         Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, sizeof(Save));
         Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
     }
@@ -1388,11 +1390,11 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146628.s")
 #endif
 
-void func_80146AA0(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
+void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
     s32 phi_v0;
     u16 i;
     FileChooseContext* fileChooseCtx = fileChooseCtx2;
-    s16 phi_a0;
+    s16 maskCount;
 
     if (gSaveContext.unk_3F3F) {
         Sram_InitNewSave();
@@ -1400,7 +1402,7 @@ void func_80146AA0(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
             gSaveContext.save.cutscene = 0xFFF0;
         }
 
-        for (phi_v0 = 0; phi_v0 != ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v0++) {
+        for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(gSaveContext.save.playerData.playerName); phi_v0++) {
             gSaveContext.save.playerData.playerName[phi_v0] =
                 fileChooseCtx->unk_24414[fileChooseCtx->unk_24480][phi_v0];
         }
@@ -1437,13 +1439,13 @@ void func_80146AA0(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         fileChooseCtx->rupees[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.rupees;
         fileChooseCtx->unk_24474[fileChooseCtx->unk_24480] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, phi_a0 = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
+        for (i = 0, maskCount = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
             if (gSaveContext.save.inventory.masks[(s32)i] != ITEM_NONE) {
-                phi_a0++;
+                maskCount++;
             }
         }
 
-        fileChooseCtx->maskCount[fileChooseCtx->unk_24480] = phi_a0;
+        fileChooseCtx->maskCount[fileChooseCtx->unk_24480] = maskCount;
         fileChooseCtx->heartPieceCount[fileChooseCtx->unk_24480] =
             (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
     }
@@ -1454,6 +1456,7 @@ void func_80146AA0(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
 void func_80146DF8(SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
+        // TODO: macros for languages
         gSaveContext.options.language = 1;
         Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
@@ -1466,7 +1469,7 @@ void func_80146E40(GameState* gameState, SramContext* sramCtx) {
 }
 
 void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
-    if (gSaveContext.unk_3F3F != 0) {
+    if (gSaveContext.unk_3F3F) {
         sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, sizeof(*sramCtx->saveBuf));
         sramCtx->status = 0;
     }
@@ -1502,7 +1505,7 @@ void func_80146F5C(GlobalContext* globalCtx) {
     day = gSaveContext.save.day;
 
     // Unconfirmed: "Obtained Fierce Deity Mask?"
-    gSaveContext.save.weekEventReg[0x54] &= (u8)~0x20;
+    gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
 
     func_80143B0C(globalCtx);
     func_8014546C(&globalCtx->sramCtx);

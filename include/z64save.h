@@ -284,7 +284,7 @@ void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 void func_80146580(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx, s32 fileNum);
 void func_80146628(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
-void func_80146AA0(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+void Sram_InitSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
 void func_80146E40(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);

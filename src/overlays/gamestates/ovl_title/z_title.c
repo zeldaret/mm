@@ -173,7 +173,7 @@ void Title_Init(GameState* thisx) {
         gSaveContext.fileNum = 0xFF;
     }
 
-    gSaveContext.unk_3F3F = 1;
+    gSaveContext.unk_3F3F = true;
     Sram_Alloc(thisx, &this->sramCtx);
     this->ult = 0;
     this->timer = 20;

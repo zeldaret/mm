@@ -272,7 +272,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (!((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18)) {
-        gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
+        gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & 0x00FFFFFF) | ((itemId1 & 0xFF) << 0x18);
     } else {
         gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & 0xFF00FFFF) | ((itemId1 & 0xFF) << 0x10);
     }
@@ -571,7 +571,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
                     (!((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) ||
-                     !((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10)) &&
+                     !((gSaveContext.save.stolenItems & 0x00FF0000) >> 0x10)) &&
                     (Rand_ZeroOne() < 0.5f) && func_80C10B0C(this, globalCtx)) {
                     func_80C1242C(this);
                 } else if (func_80C10E98(globalCtx)) {
