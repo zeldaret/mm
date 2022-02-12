@@ -3897,7 +3897,7 @@
     0x8019FE74:("func_8019FE74",),
     0x8019FEDC:("func_8019FEDC",),
     0x8019FF38:("func_8019FF38",),
-    0x8019FF9C:("func_8019FF9C",),
+    0x8019FF9C:("Audio_PlaySfxForRiver",),
     0x801A0048:("func_801A0048",),
     0x801A00EC:("func_801A00EC",),
     0x801A0124:("func_801A0124",),

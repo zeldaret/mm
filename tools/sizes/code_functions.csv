@@ -3415,7 +3415,7 @@ asm/non_matchings/code/code_8019AF00/func_8019FE1C.s,func_8019FE1C,0x8019FE1C,0x
 asm/non_matchings/code/code_8019AF00/func_8019FE74.s,func_8019FE74,0x8019FE74,0x1A
 asm/non_matchings/code/code_8019AF00/func_8019FEDC.s,func_8019FEDC,0x8019FEDC,0x17
 asm/non_matchings/code/code_8019AF00/func_8019FF38.s,func_8019FF38,0x8019FF38,0x19
-asm/non_matchings/code/code_8019AF00/func_8019FF9C.s,func_8019FF9C,0x8019FF9C,0x2B
+asm/non_matchings/code/code_8019AF00/Audio_PlaySfxForRiver.s,Audio_PlaySfxForRiver,0x8019FF9C,0x2B
 asm/non_matchings/code/code_8019AF00/func_801A0048.s,func_801A0048,0x801A0048,0x29
 asm/non_matchings/code/code_8019AF00/func_801A00EC.s,func_801A00EC,0x801A00EC,0xE
 asm/non_matchings/code/code_8019AF00/func_801A0124.s,func_801A0124,0x801A0124,0x18

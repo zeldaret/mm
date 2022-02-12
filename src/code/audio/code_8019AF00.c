@@ -1,6 +1,6 @@
 #include "global.h"
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/D_801E0BD0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/gAudioEnvironmentalSfx.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019AF00.s")
 
@@ -188,7 +188,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019FF38.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019FF9C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_PlaySfxForRiver.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0048.s")
 

@@ -3791,7 +3791,7 @@
     0x801E07C4:("jtbl_801E07C4","UNK_PTR","",0x4),
     0x801E0948:("jtbl_801E0948","UNK_PTR","",0x4),
     0x801E0A08:("jtbl_801E0A08","UNK_PTR","",0x4),
-    0x801E0BD0:("D_801E0BD0","UNK_TYPE1","",0x1),
+    0x801E0BD0:("gAudioEnvironmentalSfx","UNK_TYPE1","",0x1),
     0x801E0BFC:("D_801E0BFC","UNK_TYPE1","",0x1),
     0x801E0C14:("D_801E0C14","char","[]",0x1),
     0x801E0C38:("D_801E0C38","char","[]",0x1),

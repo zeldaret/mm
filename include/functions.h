@@ -3678,7 +3678,7 @@ void func_8019FDC8(UNK_PTR arg0, u16 sfxId, UNK_TYPE arg2);
 void func_8019FE74(f32* arg0, f32 arg1, s32 arg2);
 // void func_8019FEDC(void);
 // void func_8019FF38(void);
-// void func_8019FF9C(void);
+void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale);
 // void func_801A0048(void);
 // void func_801A00EC(void);
 void func_801A0124(Vec3f* pos, u8 arg1);
