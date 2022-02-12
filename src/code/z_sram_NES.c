@@ -220,7 +220,6 @@ void func_80143B0C(GlobalContext* globalCtx) {
     s32 i;
     u8 temp;
     u8 temp2;
-    u8 temp3;
 
     gSaveContext.save.daySpeed = 0;
     gSaveContext.save.daysElapsed = 0;
