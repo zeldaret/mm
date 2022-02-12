@@ -3358,10 +3358,10 @@ asm/non_matchings/code/code_8019AF00/func_8019CF6C.s,func_8019CF6C,0x8019CF6C,0x
 asm/non_matchings/code/code_8019AF00/func_8019CF78.s,func_8019CF78,0x8019CF78,0x9
 asm/non_matchings/code/code_8019AF00/AudioOcarina_GetPlaybackStaff.s,AudioOcarina_GetPlaybackStaff,0x8019CF9C,0x3
 asm/non_matchings/code/code_8019AF00/func_8019CFA8.s,func_8019CFA8,0x8019CFA8,0x63
-asm/non_matchings/code/code_8019AF00/func_8019D134.s,func_8019D134,0x8019D134,0x4E
+asm/non_matchings/code/code_8019AF00/AudioOcarina_TerminaWallValidateNotes.s,AudioOcarina_TerminaWallValidateNotes,0x8019D134,0x4E
 asm/non_matchings/code/code_8019AF00/AudioOcarina_TerminaWallGenerateNotes.s,AudioOcarina_TerminaWallGenerateNotes,0x8019D26C,0x87
-asm/non_matchings/code/code_8019AF00/func_8019D488.s,func_8019D488,0x8019D488,0x1C
-asm/non_matchings/code/code_8019AF00/func_8019D4F8.s,func_8019D4F8,0x8019D4F8,0x42
+asm/non_matchings/code/code_8019AF00/AudioOcarina_MemoryGameSetNumNotes.s,AudioOcarina_MemoryGameSetNumNotes,0x8019D488,0x1C
+asm/non_matchings/code/code_8019AF00/AudioOcarina_MemoryGameGenerateNotes.s,AudioOcarina_MemoryGameGenerateNotes,0x8019D4F8,0x42
 asm/non_matchings/code/code_8019AF00/func_8019D600.s,func_8019D600,0x8019D600,0x56
 asm/non_matchings/code/code_8019AF00/func_8019D758.s,func_8019D758,0x8019D758,0x43
 asm/non_matchings/code/code_8019AF00/func_8019D864.s,func_8019D864,0x8019D864,0x14
