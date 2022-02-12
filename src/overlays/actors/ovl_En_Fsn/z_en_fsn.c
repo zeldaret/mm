@@ -305,7 +305,8 @@ s32 EnFsn_HasItemsToSell(void) {
         return false;
     }
 
-    if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE) || !(gSaveContext.save.weekEventReg[0x21] & 4)) {
+    if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE) ||
+        !(gSaveContext.save.weekEventReg[0x21] & 4)) {
         return true;
     }
 
