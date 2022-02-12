@@ -2506,7 +2506,7 @@ beginseg
     name "ovl_En_Mt_tag"
     compress
     include "build/src/overlays/actors/ovl_En_Mt_tag/z_en_mt_tag.o"
-    include "build/data/ovl_En_Mt_tag/ovl_En_Mt_tag.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mt_tag/ovl_En_Mt_tag_reloc.o"
 endseg
 
 beginseg
