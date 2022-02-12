@@ -1794,7 +1794,7 @@ extern UNK_PTR D_801D88A0;
 extern UNK_PTR D_801D88A4;
 // extern UNK_TYPE1 D_801D88A8;
 // extern UNK_TYPE1 D_801D88B8;
-// extern UNK_TYPE1 D_801D8A48;
+extern OcarinaSongButtons gOcarinaSongButtons[24];
 // extern UNK_TYPE1 D_801D8B20;
 extern UNK_PTR D_801D8B24;
 // extern UNK_TYPE2 D_801D8B28;

@@ -22,7 +22,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B4B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B544.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_StartDefault.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B568.s")
 
@@ -48,7 +48,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C2E4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C300.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_SetInstrumentId.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C398.s")
 
@@ -70,13 +70,13 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CF78.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CF9C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_GetPlaybackStaff.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CFA8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D134.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D26C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_TerminaWallGenerateNotes.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D488.s")
 
