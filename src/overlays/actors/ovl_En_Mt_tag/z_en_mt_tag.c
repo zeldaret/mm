@@ -17,7 +17,7 @@ void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
 void func_809CF9A0(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFA00(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFA54(EnMttag* this, GlobalContext* globalCtx);
-void func_809CFC38(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_RunRace(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFE28(EnMttag* this, GlobalContext* globalCtx);
 void func_809CFF94(EnMttag* this, GlobalContext* globalCtx);
@@ -57,7 +57,7 @@ static Vec3f D_809D01FC[] = {
     { -1085.0, 1000.0, -2059.0 }, { -1067.0, 1000.0, -912.0 },
 };
 
-s32 func_809CF350(Vec3f* pos) {
+s32 EnMttag_IsInGoal(Vec3f* pos) {
     return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
@@ -89,9 +89,9 @@ s32 func_809CF444(EnMttag* this, GlobalContext* globalCtx) {
     } while (i < 4);
 
     if (i < 4) {
-        ret = 0;
+        ret = false;
     } else {
-        ret = 1;
+        ret = true;
     }
 
     return ret;
@@ -219,7 +219,7 @@ void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 temp_v0_2;
 
-    if (this->unk_158 == 1) {
+    if (this->unk_158 == true) {
         temp_v0_2 = func_809CF394(&player->actor.world.pos);
         if (temp_v0_2 != 0) {
             if (temp_v0_2 == 1) {
@@ -239,42 +239,42 @@ void func_809CFA54(EnMttag* this, GlobalContext* globalCtx) {
             } else if ((this->timer < 60) && (globalCtx->interfaceCtx.unk_280 == 8)) {
                 this->timer = 0;
                 gSaveContext.eventInf[1] |= 1;
-                this->actionFunc = func_809CFC38;
+                this->actionFunc = EnMttag_RunRace;
             }
         }
     } else {
         if (func_809CF444(this, globalCtx)) {
-            this->unk_158 = 1;
+            this->unk_158 = true;
         }
     }
 }
 
-s32 func_809CFBC4(EnMttag* this) {
-    s32 ret = 0;
+s32 EnMttag_IsAnyRaceGoronInGoal(EnMttag* this) {
+    s32 ret = false;
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if ((func_809CF350(&this->raceGorons[i]->actor.world.pos)) && (this->raceGorons[i]->actor.update != NULL)) {
-            ret = 1;
+        if ((EnMttag_IsInGoal(&this->raceGorons[i]->actor.world.pos)) && (this->raceGorons[i]->actor.update != NULL)) {
+            ret = true;
             break;
         }
     }
     return ret;
 }
 
-void func_809CFC38(EnMttag* this, GlobalContext* globalCtx) {
+void EnMttag_RunRace(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f* playerPos = &player->actor.world.pos;
     s32 temp_v0;
 
-    if (func_809CF350(playerPos)) {
+    if (EnMttag_IsInGoal(playerPos)) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
         this->timer = 55;
         gSaveContext.eventInf[1] |= 2;
         this->actionFunc = EnMttag_FinishRace;
-    } else if (func_809CFBC4(this)) {
+    } else if (EnMttag_IsAnyRaceGoronInGoal(this)) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
@@ -357,7 +357,7 @@ void func_809CFF94(EnMttag* this, GlobalContext* globalCtx) {
             func_800B7298(globalCtx, &this->actor, 6);
             gSaveContext.eventInf[1] &= 0xF7;
             this->timer = 100;
-            this->actionFunc = func_809CFC38;
+            this->actionFunc = EnMttag_RunRace;
         }
     }
 }
