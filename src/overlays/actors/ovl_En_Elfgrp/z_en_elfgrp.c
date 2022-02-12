@@ -46,11 +46,13 @@ const ActorInit En_Elfgrp_InitVars = {
 };
 
 void func_80A396B0(EnElfgrp* this, s32 arg1) {
-    for (; arg1 > 0; arg1--) {
+    while (arg1 > 0) {
         if (this->actor.cutscene == -1) {
             break;
         }
         this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+
+        arg1--;
     }
 }
 
@@ -285,8 +287,8 @@ s32 func_80A39F50(GlobalContext* globalCtx) {
         }
 
         elfOrg = (EnElforg*)itemAction;
-        if (!(elfOrg->flags & 1)) {
-            elfOrg->flags |= 1;
+        if (!(elfOrg->flags & STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME)) {
+            elfOrg->flags |= STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME;
         }
         itemAction = itemAction->next;
     }
@@ -307,8 +309,8 @@ s32 func_80A39FBC(GlobalContext* globalCtx) {
         }
 
         elfOrg = (EnElforg*)itemAction;
-        if (!(elfOrg->flags & 4)) {
-            elfOrg->flags |= 4;
+        if (!(elfOrg->flags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN)) {
+            elfOrg->flags |= STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN;
             if (phi_v1 >= 100) {
                 return phi_v1;
             }
@@ -335,7 +337,7 @@ void func_80A3A044(GlobalContext* globalCtx) {
 
         elfOrg = (EnElforg*)itemAction;
         elfOrg->actor.home.rot.x = 0x14;
-        elfOrg->flags |= 2;
+        elfOrg->flags |= STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS;
 
         itemAction = itemAction->next;
     }
