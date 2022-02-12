@@ -9,124 +9,130 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-u32 D_801C5FC0[][4] = {
-    { 0xC00, 0, 0, 0x40000000 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0xC04 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0x100000, 0, 0, 0x40000002 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0x4000000, 0, 0, 0 },
-    { 2, 0, 0, 0 },
-    { 0x4000000, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0xF, 0, 0, 0 },
-    { 0x70B000, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0x80000000, 0, 0x400 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0 },
-    { 0x1A00020, 0, 0, 0 },
-    { 0x400, 0, 0, 0 },
-    { 0, 0, 0, 0x1000 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 2 },
-    { 0x400, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 2 },
-    { 0, 0, 0, 0x40000000 },
-    { 0, 0, 0, 0 },
-    { 0x10, 0, 0, 0 },
-    { 3, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x80000000 },
-    { 0x100400, 0, 0, 0x22 },
-    { 0x400, 0, 0, 0x80 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0x400, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 2 },
-    { 0, 0, 0, 0x80000002 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x80000000 },
-    { 0xC00, 0, 0, 0x40000000 },
-    { 0x102, 0, 0, 0x400 },
-    { 0, 0, 0, 2 },
-    { 0, 0, 0, 0x40000000 },
-    { 0x70, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x40000000 },
-    { 0, 0, 0, 0x40000000 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0x100000, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0x400, 0, 0, 0 },
-    { 0x400, 0, 0, 0 },
-    { 0x100000, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0x100 },
-    { 0x400, 0, 0, 0 },
-    { 0, 0, 0, 0x80 },
-    { 0, 0, 0, 0x80 },
-    { 0, 0, 0, 0x80000000 },
-    { 0, 0, 0, 0x400 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 1, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 2 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 1, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0x400 },
-    { 0x100000, 0, 0, 0x400 },
-    { 0, 0, 1, 0 },
+// default scene flags (?)
+// indices of subarray:
+// - 0: switch0
+// - 1: switch1
+// - 2: chest
+// - 3: collectible
+u32 D_801C5FC0[SCENE_MAX][4] = {
+    { 0xC00, 0, 0, 0x40000000 },    // SCENE_20SICHITAI2
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_1
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_2
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_3
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_4
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_5
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_6
+    { 0, 0, 0, 0xC04 },             // SCENE_KAKUSIANA
+    { 0, 0, 0, 0 },                 // SCENE_SPOT00
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_9
+    { 0, 0, 0, 0 },                 // SCENE_WITCH_SHOP
+    { 0, 0, 0, 0x80000000 },        // SCENE_LAST_BS
+    { 0, 0, 0, 0x80000000 },        // SCENE_HAKASHITA
+    { 0, 0, 0, 0 },                 // SCENE_AYASHIISHOP
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_E
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_F
+    { 0, 0, 0, 0 },                 // SCENE_OMOYA
+    { 0, 0, 0, 0 },                 // SCENE_BOWLING
+    { 0, 0, 0, 0 },                 // SCENE_SONCHONOIE
+    { 0x100000, 0, 0, 0x40000002 }, // SCENE_IKANA
+    { 0, 0, 0, 0 },                 // SCENE_KAIZOKU
+    { 0, 0, 0, 0 },                 // SCENE_MILK_BAR
+    { 0x4000000, 0, 0, 0 },         // SCENE_INISIE_N
+    { 2, 0, 0, 0 },                 // SCENE_TAKARAYA
+    { 0x4000000, 0, 0, 0 },         // SCENE_INISIE_R
+    { 0, 0, 0, 0 },                 // SCENE_OKUJOU
+    { 0xF, 0, 0, 0 },               // SCENE_OPENINGDAN
+    { 0x70B000, 0, 0, 0 },          // SCENE_MITURIN
+    { 0, 0, 0, 0 },                 // SCENE_13HUBUKINOMITI
+    { 0, 0x80000000, 0, 0x400 },    // SCENE_CASTLE
+    { 0, 0, 0, 0 },                 // SCENE_DEKUTES
+    { 0, 0, 0, 0x80000000 },        // SCENE_MITURIN_BS
+    { 0, 0, 0, 0 },                 // SCENE_SYATEKI_MIZU
+    { 0x1A00020, 0, 0, 0 },         // SCENE_HAKUGIN
+    { 0x400, 0, 0, 0 },             // SCENE_ROMANYMAE
+    { 0, 0, 0, 0x1000 },            // SCENE_PIRATE
+    { 0, 0, 0, 0 },                 // SCENE_SYATEKI_MORI
+    { 0, 0, 0, 2 },                 // SCENE_SINKAI
+    { 0x400, 0, 0, 0 },             // SCENE_YOUSEI_IZUMI
+    { 0, 0, 0, 0 },                 // SCENE_KINSTA1
+    { 0, 0, 0, 0x80000000 },        // SCENE_KINDAN2
+    { 0, 0, 0, 0 },                 // SCENE_TENMON_DAI
+    { 0, 0, 0, 2 },                 // SCENE_LAST_DEKU
+    { 0, 0, 0, 0x40000000 },        // SCENE_22DEKUCITY
+    { 0, 0, 0, 0 },                 // SCENE_KAJIYA
+    { 0x10, 0, 0, 0 },              // SCENE_00KEIKOKU
+    { 3, 0, 0, 0 },                 // SCENE_POSTHOUSE
+    { 0, 0, 0, 0 },                 // SCENE_LABO
+    { 0, 0, 0, 0x80000000 },        // SCENE_DANPEI2TEST
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_31
+    { 0, 0, 0, 0 },                 // SCENE_16GORON_HOUSE
+    { 0, 0, 0, 0 },                 // SCENE_33ZORACITY
+    { 0, 0, 0, 0 },                 // SCENE_8ITEMSHOP
+    { 0, 0, 0, 0 },                 // SCENE_F01
+    { 0, 0, 0, 0x80000000 },        // SCENE_INISIE_BS
+    { 0x100400, 0, 0, 0x22 },       // SCENE_30GYOSON
+    { 0x400, 0, 0, 0x80 },          // SCENE_31MISAKI
+    { 0, 0, 0, 0 },                 // SCENE_TAKARAKUJI
+    { 0, 0, 0, 0 },                 // SCENE_UNSET_3A
+    { 0x400, 0, 0, 0 },             // SCENE_TORIDE
+    { 0, 0, 0, 0 },                 // SCENE_FISHERMAN
+    { 0, 0, 0, 0 },                 // SCENE_GORONSHOP
+    { 0, 0, 0, 0 },                 // SCENE_DEKU_KING
+    { 0, 0, 0, 2 },                 // SCENE_LAST_GORON
+    { 0, 0, 0, 0x80000002 },        // SCENE_24KEMONOMITI
+    { 0, 0, 0, 0 },                 // SCENE_F01_B
+    { 0, 0, 0, 0 },                 // SCENE_F01C
+    { 0, 0, 0, 0 },                 // SCENE_BOTI
+    { 0, 0, 0, 0x80000000 },        // SCENE_HAKUGIN_BS
+    { 0xC00, 0, 0, 0x40000000 },    // SCENE_20SICHITAI
+    { 0x102, 0, 0, 0x400 },         // SCENE_21MITURINMAE
+    { 0, 0, 0, 2 },                 // SCENE_LAST_ZORA
+    { 0, 0, 0, 0x40000000 },        // SCENE_11GORONNOSATO2
+    { 0x70, 0, 0, 0 },              // SCENE_SEA
+    { 0, 0, 0, 0 },                 // SCENE_35TAKI
+    { 0, 0, 0, 0 },                 // SCENE_REDEAD
+    { 0, 0, 0, 0x40000000 },        // SCENE_BANDROOM
+    { 0, 0, 0, 0x40000000 },        // SCENE_11GORONNOSATO
+    { 0, 0, 0, 0 },                 // SCENE_GORON_HAKA
+    { 0, 0, 0, 0 },                 // SCENE_SECOM
+    { 0x100000, 0, 0, 0x80000000 }, // SCENE_10YUKIYAMANOMURA
+    { 0, 0, 0, 0 },                 // SCENE_TOUGITES
+    { 0, 0, 0, 0 },                 // SCENE_DANPEI
+    { 0, 0, 0, 0 },                 // SCENE_IKANAMAE
+    { 0, 0, 0, 0 },                 // SCENE_DOUJOU
+    { 0, 0, 0, 0 },                 // SCENE_MUSICHOUSE
+    { 0, 0, 0, 0 },                 // SCENE_IKNINSIDE
+    { 0, 0, 0, 0 },                 // SCENE_MAP_SHOP
+    { 0x400, 0, 0, 0 },             // SCENE_F40
+    { 0x400, 0, 0, 0 },             // SCENE_F41
+    { 0x100000, 0, 0, 0x80000000 }, // SCENE_10YUKIYAMANOMURA2
+    { 0, 0, 0, 0x100 },             // SCENE_14YUKIDAMANOMITI
+    { 0x400, 0, 0, 0 },             // SCENE_12HAKUGINMAE
+    { 0, 0, 0, 0x80 },              // SCENE_17SETUGEN
+    { 0, 0, 0, 0x80 },              // SCENE_17SETUGEN2
+    { 0, 0, 0, 0x80000000 },        // SCENE_SEA_BS
+    { 0, 0, 0, 0x400 },             // SCENE_RANDOM
+    { 0, 0, 0, 0 },                 // SCENE_YADOYA
+    { 0, 0, 0, 0 },                 // SCENE_KONPEKI_ENT
+    { 1, 0, 0, 0 },                 // SCENE_INSIDETOWER
+    { 0, 0, 0, 0 },                 // SCENE_26SARUNOMORI
+    { 0, 0, 0, 0 },                 // SCENE_LOST_WOODS
+    { 0, 0, 0, 2 },                 // SCENE_LAST_LINK
+    { 0, 0, 0, 0 },                 // SCENE_SOUGEN
+    { 0, 0, 0, 0 },                 // SCENE_BOMYA
+    { 0, 0, 0, 0 },                 // SCENE_KYOJINNOMA
+    { 0, 0, 0, 0 },                 // SCENE_KOEPONARACE
+    { 0, 0, 0, 0 },                 // SCENE_GORONRACE
+    { 1, 0, 0, 0 },                 // SCENE_TOWN
+    { 0, 0, 0, 0 },                 // SCENE_ICHIBA
+    { 0, 0, 0, 0x400 },             // SCENE_BACKTOWN
+    { 0x100000, 0, 0, 0x400 },      // SCENE_CLOCKTOWER
+    { 0, 0, 1, 0 },                 // SCENE_ALLEY
 };
 
 // Related to weekEventReg
-u16 D_801C66D0[100] = {
+u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.weekEventReg)] = {
     0xFFFC, 0xFFFF, 0xFFFF, 0xFFFF, 0,      0,      0,      0xC000, 0xC00,  0,      0xC0,   0,      0x300,
     0x3000, 0xC000, 0xC00,  0,      0,      0,      0,      0,      0,      0xC00C, 0xC00C, 0xC008, 3,
     0x3000, 0,      0,      0,      0xFF00, 0xC3F,  0x3F,   0,      0,      0xCFFF, 0,      0,      0xC00,
