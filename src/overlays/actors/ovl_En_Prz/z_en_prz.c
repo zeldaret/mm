@@ -6,6 +6,7 @@
 
 #include "z_en_prz.h"
 #include "objects/object_pr/object_pr.h"
+#include "overlays/actors/ovl_En_Pr/z_en_pr.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
@@ -108,7 +109,7 @@ void EnPrz_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.targetMode = 3;
-    this->unk_1E8 = 0xFF;
+    this->unk_1E8 = 255;
     this->actor.hintId = 0x5B;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.health = 1;
@@ -308,15 +309,9 @@ void func_80A76748(EnPrz* this) {
     this->actionFunc = func_80A767A8;
 }
 
-typedef struct {
-    Actor actor;
-    char unk_144[0x184];
-    f32 unk_2C8;
-} EnPrzUnkParent;
-
 void func_80A767A8(EnPrz* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    EnPrzUnkParent* sp38 = (EnPrzUnkParent*)this->actor.parent;
+    EnPr* pr = (EnPr*)this->actor.parent;
     f32 sqrt;
     s32 pad[2];
     u8 playerForm;
@@ -331,7 +326,7 @@ void func_80A767A8(EnPrz* this, GlobalContext* globalCtx) {
     sqrt = sqrtf(SQ(player->actor.world.pos.x - this->actor.parent->home.pos.x) +
                  SQ(player->actor.world.pos.z - this->actor.parent->home.pos.z));
 
-    if (!(player->stateFlags1 & 0x8000000) || (sp38->unk_2C8 < sqrt)) {
+    if (!(player->stateFlags1 & 0x8000000) || (pr->unk_2C8 < sqrt)) {
         this->unk_1F2 = 100;
         this->skelAnime.playSpeed = 1.0f;
         func_80A76388(this);
