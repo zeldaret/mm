@@ -264,7 +264,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.save.weekEventReg[84] & 0x20) {
-        func_801149A0(ITEM_MASK_FIERCE_DEITY, gItemSlots[ITEM_MASK_FIERCE_DEITY]);
+        func_801149A0(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
     for (i = 0; i < ARRAY_COUNT(D_801C66D0); i++) {
