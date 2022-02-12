@@ -658,7 +658,7 @@ void Sram_InitNewSave(void) {
     gSaveContext.save.horseData.pos.x = -1420;
     gSaveContext.save.horseData.pos.y = 257;
     gSaveContext.save.horseData.pos.z = -1285;
-    gSaveContext.save.horseData.angle = -0x7554;
+    gSaveContext.save.horseData.yaw = -0x7554;
 
     gSaveContext.nextCutsceneIndex = 0;
     gSaveContext.save.playerData.magicLevel = 0;
@@ -787,7 +787,7 @@ void Sram_InitDebugSave(void) {
     gSaveContext.save.horseData.pos.x = -1420;
     gSaveContext.save.horseData.pos.y = 257;
     gSaveContext.save.horseData.pos.z = -1285;
-    gSaveContext.save.horseData.angle = -0x7554;
+    gSaveContext.save.horseData.yaw = -0x7554;
 
     gSaveContext.save.entranceIndex = 0x1C00;
     gSaveContext.save.isFirstCycle = true;

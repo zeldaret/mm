@@ -43,7 +43,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s16 scene;
     /* 0x02 */ Vec3s pos;
-    /* 0x08 */ s16 angle;
+    /* 0x08 */ s16 yaw;
 } HorseData; // size = 0x0A
 
 typedef struct {
