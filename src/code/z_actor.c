@@ -3911,19 +3911,18 @@ Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
 
 /**
  * Calculates the closest position `dstPos` to the input position `srcPos` along the path given by `points`/`numPoints`
- * Certain river sound sfxs use a form a closed-loop path `isPathLoop`
- * points beyond range
+ * Whether the points provided forms a closed-loop path is indicated by `isPathLoop`
  */
 void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop) {
     s32 pointIndex;
     s32 closestPointIndex;
-    s32 useAdjacentPoints[2] = {
-        false, // use previous point
-        false, // use next point
+    s32 useAdjacentLines[2] = {
+        false, // determines whether to use line connecting to previous point in calculations
+        false, // determines whether to use line connecting to next point in calculations
     };
-    s32 isInsideLoop[2] = {
-        false, // srcPos is not on the right side of the line connecting closestPointPrev to closestPoint
-        false, // srcPos is not on the right side of the line connecting closestPoint to closestPointNext
+    s32 isRightSideOfAdjacentLines[2] = {
+        false, // determines whether srcPos is on the right side of the line connecting the closest point to the previous point
+        false, // determines whether srcPos is on the right side of the line connecting the closest point to the next point
     };
     Vec3f closestPoint;
     Vec3f closestPos[2];
@@ -3956,12 +3955,14 @@ void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         closestPointPrev.x = GET_POINT(closestPointIndex - 1)->x;
         closestPointPrev.z = GET_POINT(closestPointIndex - 1)->z;
     } else if (isPathLoop) {
-        // The final point on the path
+        // Closest point is the first point in the path list
+        // Set the previous point to loop around to the the final point on the path
         closestPointPrev.x = GET_POINT(numPoints - 1)->x;
         closestPointPrev.z = GET_POINT(numPoints - 1)->z;
     }
     if ((closestPointIndex != 0) || isPathLoop) {
-        useAdjacentPoints[0] =
+        // Use the adjacent line 
+        useAdjacentLines[0] =
             Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPointPrev.x, closestPointPrev.z, closestPoint.x,
                                      closestPoint.z, &closestPos[0].x, &closestPos[0].z, &distSq);
     }
@@ -3972,45 +3973,51 @@ void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         closestPointNext.x = GET_POINT(closestPointIndex + 1)->x;
         closestPointNext.z = GET_POINT(closestPointIndex + 1)->z;
     } else if (isPathLoop) {
-        // The first point on the path
+        // Closest point is the final point in the path list
+        // Set the next point to loop around to the the first point on the path
         closestPointNext.x = GET_POINT(0)->x;
         closestPointNext.z = GET_POINT(0)->z;
     }
     if ((closestPointIndex + 1 != numPoints) || isPathLoop) {
-        useAdjacentPoints[1] =
+        useAdjacentLines[1] =
             Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPoint.x, closestPoint.z, closestPointNext.x,
                                      closestPointNext.z, &closestPos[1].x, &closestPos[1].z, &distSq);
     }
 
-    // Special case for environmental sfxs of river_sound
+    /**
+     * For close-looped paths, they must be defined in a clockwise orientation looking from the top down.
+     * Therefore, `srcPos` being interior of the loop will lead to both lines of `isRightSideOfAdjacentLines`
+     * returning true.
+     */
     if (isPathLoop) {
-
-        isInsideLoop[0] = ((closestPointPrev.x - srcPos->x) * (closestPoint.z - srcPos->z)) <
+        isRightSideOfAdjacentLines[0] = ((closestPointPrev.x - srcPos->x) * (closestPoint.z - srcPos->z)) <
                          ((closestPointPrev.z - srcPos->z) * (closestPoint.x - srcPos->x));
 
-        isInsideLoop[1] = ((closestPointNext.z - srcPos->z) * (closestPoint.x - srcPos->x)) <
+        isRightSideOfAdjacentLines[1] = ((closestPointNext.z - srcPos->z) * (closestPoint.x - srcPos->x)) <
                          ((closestPoint.z - srcPos->z) * (closestPointNext.x - srcPos->x));
 
         for (i = 0; i < ARRAY_COUNT(loopDistSq); i++) {
-            if (useAdjacentPoints[i]) {
+            if (useAdjacentLines[i]) {
+                // Get distSq from srcPos to closestPos (same value as distSq but this is saved for logic later in the function)
                 loopDistSq[i] = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, closestPos[i].x, closestPos[i].z);
             } else {
+                // The closest Pos is not contained within the line-segment 
                 loopDistSq[i] = SQ(40000.0f);
             }
         }
     }
 
     // Calculate closest point on path
-    if (isPathLoop && ((isInsideLoop[0] && isInsideLoop[1]) ||
-                       (isInsideLoop[0] && useAdjacentPoints[0] && (loopDistSq[0] < loopDistSq[1])) ||
-                       (isInsideLoop[1] && useAdjacentPoints[1] && (loopDistSq[1] < loopDistSq[0])))) {
-        // Inside loop?
+    if (isPathLoop && ((isRightSideOfAdjacentLines[0] && isRightSideOfAdjacentLines[1]) ||
+                       (isRightSideOfAdjacentLines[0] && useAdjacentLines[0] && (loopDistSq[0] < loopDistSq[1])) ||
+                       (isRightSideOfAdjacentLines[1] && useAdjacentLines[1] && (loopDistSq[1] < loopDistSq[0])))) {
+        // srcPos is contained within the closed loop
         dstPos->x = srcPos->x;
         dstPos->z = srcPos->z;
-    } else if (useAdjacentPoints[0] && useAdjacentPoints[1]) {
-        // Option 2
-        if (!isInsideLoop[0] && !isInsideLoop[1]) {
-            // Option 2a
+    } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
+        // srcPos is somewhere withing the bend of the path
+        if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
+            // srcPos is not inside a loop
             if (!Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
                                           closestPos[1].z, &dstPos->x, &dstPos->z, &distSq)) {
                 // The dstPos calculated in Math3D_PointDistToLine2D was not valid.
@@ -4019,25 +4026,25 @@ void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
                 dstPos->z = (closestPos[1].z + closestPos[0].z) * 0.5f;
             }
         } else if (loopDistSq[1] < loopDistSq[0]) {
-            // Use closest position along the loop connecting the closest point and the point immediately next in the point list
+            // Use closest position along the line in the loop connecting the closest point and the point immediately next in the point list
             dstPos->x = closestPos[1].x;
             dstPos->z = closestPos[1].z;
         } else {
-            // Use closest position along the loop connecting the closest point and the point immediately previous in the point list
+            // Use closest position along the ling in the loop connecting the closest point and the point immediately previous in the point list
             dstPos->x = closestPos[0].x;
             dstPos->z = closestPos[0].z;
         }
-    } else if (useAdjacentPoints[0]) {
+    } else if (useAdjacentLines[0]) {
         // Use closest position along line segment connecting the closest point and the point immediately previous in the point list
         dstPos->x = closestPos[0].x;
         dstPos->z = closestPos[0].z;
-    } else if (useAdjacentPoints[1]) {
+    } else if (useAdjacentLines[1]) {
         // Use closest position along line segment connecting the closest point and the point immediately next in the point list
         dstPos->x = closestPos[1].x;
         dstPos->z = closestPos[1].z;
     } else if (isPathLoop && ((((closestPointPrev.x - srcPos->x) * (closestPointNext.z - srcPos->z)) <
                                ((closestPointPrev.z - srcPos->z) * (closestPointNext.x - srcPos->x))))) {
-        // Inside loop?
+        // Inside the line that directly connects the previous point to the next point (inside the bend of a corner)
         dstPos->x = srcPos->x;
         dstPos->z = srcPos->z;
     } else {

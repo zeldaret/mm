@@ -389,7 +389,6 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0868.s")
 
-
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A09D4.s")
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_ClearSariaBgm.s")
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_ClearSariaBgmAtPos.s")
@@ -455,7 +454,6 @@
 //     }
 // }
 
-
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0CB0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0E44.s")
@@ -489,7 +487,6 @@
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A1FB4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2090.s")
-
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_PlaySariaBgm.s")
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_ClearSariaBgm2.s")
