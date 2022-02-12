@@ -13,10 +13,10 @@
 
 // clang-format off
 #define ANI_STATE_STANDING  (0)
-#define ANI_STATE_UNK       (1 <<  0)
-#define ANI_STATE_SUFFERING (1 <<  1)
-#define ANI_STATE_CLIMBING  (1 <<  2)
-#define ANI_STATE_FALLING   (1 <<  3)
+#define ANI_STATE_UNK       (1 << 0)
+#define ANI_STATE_WRITHING (1 << 1)
+#define ANI_STATE_CLIMBING  (1 << 2)
+#define ANI_STATE_FALLING   (1 << 3)
 // clang-format on
 
 void EnAni_Init(Actor* thisx, GlobalContext* globalCtx);
@@ -162,7 +162,7 @@ void EnAni_SetText(EnAni* this, GlobalContext* globalCtx, u16 textId) {
     s16 diffAngle = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     this->actor.textId = textId;
-    if ((this->stateFlags & ANI_STATE_SUFFERING) || ABS_ALT(diffAngle) <= 0x4300) {
+    if ((this->stateFlags & ANI_STATE_WRITHING) || ABS_ALT(diffAngle) <= 0x4300) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             func_800B8614(&this->actor, globalCtx, 120.0f);
         }
@@ -218,7 +218,7 @@ void EnAni_FallToGround(EnAni* this, GlobalContext* globalCtx) {
         this->actor.velocity.z = 0.0f;
         // the animation gets cut short, (first 16 frames only) only the landing part is seen
         Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, 2, 0.0f);
-        this->stateFlags |= ANI_STATE_SUFFERING;
+        this->stateFlags |= ANI_STATE_WRITHING;
         quakeValue = Quake_Add(globalCtx->cameraPtrs[0], 3);
         Quake_SetSpeed(quakeValue, 0x6978);
         Quake_SetQuakeValues(quakeValue, 7, 0, 0, 0);
