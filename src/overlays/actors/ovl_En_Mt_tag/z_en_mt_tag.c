@@ -7,14 +7,12 @@
 #include "z_en_mt_tag.h"
 
 #define FLAGS ACTOR_FLAG_10
-// #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnMttag*)thisx)
 
 void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
-// void EnMttag_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx);
@@ -41,20 +39,6 @@ const ActorInit En_Mt_tag_InitVars = {
     (ActorFunc)EnMttag_Update,
     (ActorFunc)NULL,
 };
-
-/*
-const ActorInit En_Mt_tag_InitVars = {
-    ACTOR_EN_MT_TAG,
-    ACTORCAT_BG,
-    FLAGS,
-    GAMEPLAY_KEEP,
-    sizeof(EnMttag),
-    (ActorFunc)EnMttag_Init,
-    (ActorFunc)EnMttag_Destroy,
-    (ActorFunc)EnMttag_Update,
-    (ActorFunc)EnMttag_Draw,
-};
-*/
 
 static s32 sStartingCheckpointPerSceneExitIndex[] = {
     0, 0, 0, 0, 1, 9, 12, 16, 19, 22, 26, 29, 30, 32, 34, 36, 39, 42, 45,
@@ -438,95 +422,3 @@ void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMttag* this = THIS;
     this->actionFunc(this, globalCtx);
 }
-
-/*
-void PrintStuff(GlobalContext* globalCtx, GraphicsContext* gfxCtx) {
-    Player* player = GET_PLAYER(globalCtx);
-    GfxPrint printer;
-    Gfx* gfxRef;
-    Gfx* gfx;
-    s32 i = 1;
-    s32 j = 11;
-    s32 idx;
-    s32 idx2;
-
-    // Blah
-    s32 phi_s2 = -1;
-    s32 phi_s4 = 0;
-    f32 phi_f20 = 0.0f;
-    f32 sp74;
-    f32 sp70;
-    f32 sp6C;
-    s32 arg1;
-    f32 arg2;
-    f32 arg3;
-
-    OPEN_DISPS(gfxCtx);
-
-    func_8012C4C0(gfxCtx);
-
-    GfxPrint_Init(&printer);
-
-    gfxRef = POLY_OPA_DISP;
-    gfx = Graph_GfxPlusOne(gfxRef);
-    gSPDisplayList(OVERLAY_DISP++, gfx);
-
-    GfxPrint_Open(&printer, gfx);
-
-    GfxPrint_SetColor(&printer, 255, 255, 255, 255);
-
-    idx = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId);
-    idx2 = sStartingCheckpointPerSceneExitIndex[idx];
-
-    do {
-        if ((Math3D_PointDistToLine2D(player->actor.world.pos.x, player->actor.world.pos.z,
-(&sCheckpointPositions[idx2])[-1].x,
-                                      (&sCheckpointPositions[idx2])[-1].z, (&sCheckpointPositions[idx2])[1].x,
-(&sCheckpointPositions[idx2])[1].z, &sp74, &sp70, &sp6C)) &&
-            ((phi_s4 == 0) || ((phi_s2 + 1) == idx2) || (sp6C < phi_f20))) {
-            phi_f20 = sp6C;
-            phi_s2 = idx2;
-            arg2 = sp74;
-            arg3 = sp70;
-            phi_s4 = 1;
-        }
-        idx2++;
-    } while (idx2 < sStartingCheckpointPerSceneExitIndex[idx + 1]);
-
-    arg1 = phi_s2 + 1;
-
-    GfxPrint_SetPos(&printer, i, j++);
-    GfxPrint_Printf(&printer, "pos: (%f, %f)", player->actor.world.pos.x, player->actor.world.pos.z);
-    GfxPrint_SetPos(&printer, i, j++);
-    GfxPrint_Printf(&printer, "idx: %d", idx);
-    if (idx >= 4 && idx < 19) {
-        GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "1B0[idx]: %d", idx2);
-        GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "1FC[idx2][-1]: (%f, %f)", (&sCheckpointPositions[idx2])[-1].x,
-(&sCheckpointPositions[idx2])[-1].z); GfxPrint_SetPos(&printer, i, j++); GfxPrint_Printf(&printer, "1FC[idx2][1]: (%f,
-%f)", (&sCheckpointPositions[idx2])[1].x, (&sCheckpointPositions[idx2])[1].z); GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "arg1: %d", arg1);
-        GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "arg2: %f", arg2);
-        GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "arg3: %f", arg3);
-        GfxPrint_SetPos(&printer, i, j++);
-        GfxPrint_Printf(&printer, "ret: %d", phi_s2);
-    }
-
-    gfx = GfxPrint_Close(&printer);
-
-    gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxRef, gfx);
-    POLY_OPA_DISP = gfx;
-
-    GfxPrint_Destroy(&printer);
-
-    CLOSE_DISPS(gfxCtx);
-}
-
-void EnMttag_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    PrintStuff(globalCtx, globalCtx->state.gfxCtx);
-}
-*/
