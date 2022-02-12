@@ -55,9 +55,9 @@ void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&eye, &globalCtx->view.eye);
 
     if (this->actor.params < 0xFD) {
-        Actor_GetNearestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, true);
+        Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, true);
     } else {
-        Actor_GetNearestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, false);
+        Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, false);
         if (BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, worldPos) !=
             BGCHECK_Y_MIN) {
             this->soundFreqIndex = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, this->actor.floorPoly, bgId);

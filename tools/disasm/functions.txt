@@ -867,7 +867,7 @@
     0x800BCB70:("Actor_SetColorFilter",),
     0x800BCBF4:("func_800BCBF4",),
     0x800BCC68:("func_800BCC68",),
-    0x800BCCDC:("Actor_GetNearestPosOnPath",),
+    0x800BCCDC:("Actor_GetClosestPosOnPath",),
     0x800BD2B4:("func_800BD2B4",),
     0x800BD384:("func_800BD384",),
     0x800BD6B8:("func_800BD6B8",),

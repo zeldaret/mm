@@ -3907,13 +3907,11 @@ Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
     return Hilite_DrawXlu(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-#define GET_POINT(index) ((void)0, &points[index])
-
 /**
  * Calculates the closest position `dstPos` to the input position `srcPos` along the path given by `points`/`numPoints`
  * Whether the points provided forms a closed-loop path is indicated by `isPathLoop`
  */
-void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop) {
+void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop) {
     s32 pointIndex;
     s32 closestPointIndex;
     s32 useAdjacentLines[2] = {
@@ -3945,20 +3943,20 @@ void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         }
     }
 
-    closestPoint.x = GET_POINT(closestPointIndex)->x;
-    closestPoint.z = GET_POINT(closestPointIndex)->z;
-    dstPos->y = GET_POINT(closestPointIndex)->y;
+    closestPoint.x = (points + closestPointIndex)->x;
+    closestPoint.z = (points + closestPointIndex)->z;
+    dstPos->y = (points + closestPointIndex)->y;
 
     // Analyze point on path immediately previous to the closest point
     if (closestPointIndex != 0) {
         // The point previous to the closest point
-        closestPointPrev.x = GET_POINT(closestPointIndex - 1)->x;
-        closestPointPrev.z = GET_POINT(closestPointIndex - 1)->z;
+        closestPointPrev.x = (points + closestPointIndex - 1)->x;
+        closestPointPrev.z = (points + closestPointIndex - 1)->z;
     } else if (isPathLoop) {
         // Closest point is the first point in the path list
         // Set the previous point to loop around to the the final point on the path
-        closestPointPrev.x = GET_POINT(numPoints - 1)->x;
-        closestPointPrev.z = GET_POINT(numPoints - 1)->z;
+        closestPointPrev.x = (points + numPoints - 1)->x;
+        closestPointPrev.z = (points + numPoints - 1)->z;
     }
     if ((closestPointIndex != 0) || isPathLoop) {
         // Use the adjacent line 
@@ -3970,13 +3968,13 @@ void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
     // Analyze point on path immediately next to the closest point
     if (closestPointIndex + 1 != numPoints) {
         // The point next to the closest point
-        closestPointNext.x = GET_POINT(closestPointIndex + 1)->x;
-        closestPointNext.z = GET_POINT(closestPointIndex + 1)->z;
+        closestPointNext.x = (points + closestPointIndex + 1)->x;
+        closestPointNext.z = (points + closestPointIndex + 1)->z;
     } else if (isPathLoop) {
         // Closest point is the final point in the path list
         // Set the next point to loop around to the the first point on the path
-        closestPointNext.x = GET_POINT(0)->x;
-        closestPointNext.z = GET_POINT(0)->z;
+        closestPointNext.x = (points + 0)->x;
+        closestPointNext.z = (points + 0)->z;
     }
     if ((closestPointIndex + 1 != numPoints) || isPathLoop) {
         useAdjacentLines[1] =
@@ -4007,7 +4005,7 @@ void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         }
     }
 
-    // Calculate closest point on path
+    // Calculate closest position along path
     if (isPathLoop && ((isRightSideOfAdjacentLines[0] && isRightSideOfAdjacentLines[1]) ||
                        (isRightSideOfAdjacentLines[0] && useAdjacentLines[0] && (loopDistSq[0] < loopDistSq[1])) ||
                        (isRightSideOfAdjacentLines[1] && useAdjacentLines[1] && (loopDistSq[1] < loopDistSq[0])))) {
@@ -4053,8 +4051,6 @@ void Actor_GetNearestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         dstPos->z = closestPoint.z;
     }
 }
-
-#undef GET_POINT
 
 // unused
 s32 func_800BD2B4(GlobalContext* globalCtx, Actor* actor, s16* arg2, f32 arg3,

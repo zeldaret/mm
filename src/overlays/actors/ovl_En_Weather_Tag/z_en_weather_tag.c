@@ -422,7 +422,7 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     f32 range;
     f32 strength = 0.0f;
 
-    Actor_GetNearestPosOnPath(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos,
+    Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos,
                               &this->actor.world.pos, 0);
 
     distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
