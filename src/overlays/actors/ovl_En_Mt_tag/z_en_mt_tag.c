@@ -6,13 +6,15 @@
 
 #include "z_en_mt_tag.h"
 
-#define FLAGS 0x00000010
+#define FLAGS ACTOR_FLAG_10
+// #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnMttag*)thisx)
 
 void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
+// void EnMttag_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx);
@@ -40,7 +42,21 @@ const ActorInit En_Mt_tag_InitVars = {
     (ActorFunc)NULL,
 };
 
-// Starting race checkpoint per SceneExitIndex? 
+/*
+const ActorInit En_Mt_tag_InitVars = {
+    ACTOR_EN_MT_TAG,
+    ACTORCAT_BG,
+    FLAGS,
+    GAMEPLAY_KEEP,
+    sizeof(EnMttag),
+    (ActorFunc)EnMttag_Init,
+    (ActorFunc)EnMttag_Destroy,
+    (ActorFunc)EnMttag_Update,
+    (ActorFunc)EnMttag_Draw,
+};
+*/
+
+// Highest checkpoint value per floor poly type
 static s32 D_809D01B0[] = {
     0, 0, 0, 0, 1, 9, 12, 16, 19, 22, 26, 29, 30, 32, 34, 36, 39, 42, 45,
 };
@@ -112,71 +128,75 @@ s32 EnMttag_InitializeRace(EnMttag* this, GlobalContext* globalCtx) {
     return ret;
 }
 
-s32 func_809CF4EC(Actor* actor, GlobalContext* globalCtx, s32* arg1, f32* arg2, f32* arg3) {
-    s32 phi_s2 = -1;
+s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* upcomingCheckpoint, f32* arg2,
+                                 f32* arg3) {
+    s32 curentCheckpoint = -1;
     s32 phi_s4 = 0;
     f32 phi_f20 = 0.0f;
-    s32 temp_v0;
+    s32 sceneExitIndex;
     f32 sp74;
     f32 sp70;
     f32 sp6C;
     s32 temp_s1;
 
-    temp_v0 = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
-    if ((temp_v0 < 4) || (temp_v0 >= 19)) {
+    sceneExitIndex = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
+    if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
         return -1;
     }
 
-    temp_s1 = D_809D01B0[temp_v0];
+    temp_s1 = D_809D01B0[sceneExitIndex];
 
     do {
         if ((Math3D_PointDistToLine2D(actor->world.pos.x, actor->world.pos.z, (&D_809D01FC[temp_s1])[-1].x,
                                       (&D_809D01FC[temp_s1])[-1].z, (&D_809D01FC[temp_s1])[1].x,
                                       (&D_809D01FC[temp_s1])[1].z, &sp74, &sp70, &sp6C)) &&
-            ((phi_s4 == 0) || ((phi_s2 + 1) == temp_s1) || (sp6C < phi_f20))) {
+            ((phi_s4 == 0) || ((curentCheckpoint + 1) == temp_s1) || (sp6C < phi_f20))) {
             phi_f20 = sp6C;
-            phi_s2 = temp_s1;
+            curentCheckpoint = temp_s1;
             *arg2 = sp74;
             *arg3 = sp70;
             phi_s4 = 1;
         }
         temp_s1++;
-    } while (temp_s1 < D_809D01B0[temp_v0 + 1]);
+    } while (temp_s1 < D_809D01B0[sceneExitIndex + 1]);
 
-    *arg1 = phi_s2 + 1;
-    return phi_s2;
+    *upcomingCheckpoint = curentCheckpoint + 1;
+    return curentCheckpoint;
 }
 
-s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx) {
+s32 EnMttag_PlayerProbablyCantWin(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnRg* rg;
-    s32 spA4[5];
-    s32 sp90[5];
+    s32 currentCheckpoints[5];
+    s32 upcomingCheckpoints[5];
     f32 sp7C[5];
     f32 sp68[5];
-    s32 phi_fp;
+    s32 highestCurrentCheckpoint;
     s32 i;
     s32 ret = false;
 
-    phi_fp = -1;
-    spA4[0] = func_809CF4EC(&player->actor, globalCtx, &sp90[0], &sp7C[0], &sp68[0]);
+    highestCurrentCheckpoint = -1;
+    currentCheckpoints[0] =
+        EnMttag_GetCurrentCheckpoint(&player->actor, globalCtx, &upcomingCheckpoints[0], &sp7C[0], &sp68[0]);
     for (i = 1; i < 5; i++) {
-        spA4[i] = func_809CF4EC(&this->raceGorons[i - 1]->actor, globalCtx, &sp90[i], &sp7C[i], &sp68[i]);
-        if (phi_fp < spA4[i]) {
-            phi_fp = spA4[i];
+        currentCheckpoints[i] = EnMttag_GetCurrentCheckpoint(&this->raceGorons[i - 1]->actor, globalCtx,
+                                                             &upcomingCheckpoints[i], &sp7C[i], &sp68[i]);
+        if (highestCurrentCheckpoint < currentCheckpoints[i]) {
+            highestCurrentCheckpoint = currentCheckpoints[i];
         }
     }
 
     for (i = 1; i < 5; i++) {
         rg = this->raceGorons[i - 1];
-        if ((sp90[i] != -1) && (sp90[0] != -1)) {
-            rg->unk_348 = (sp90[i] - sp90[0]);
+        if ((upcomingCheckpoints[i] != -1) && (upcomingCheckpoints[0] != -1)) {
+            rg->unk_348 = (upcomingCheckpoints[i] - upcomingCheckpoints[0]);
         } else {
             rg->unk_348 = 0;
         }
     }
 
-    if ((spA4[0] > 0) && (spA4[0] < phi_fp) && (player->actor.bgCheckFlags & 1) && ((phi_fp - spA4[0]) >= 0x18)) {
+    if ((currentCheckpoints[0] > 0) && (currentCheckpoints[0] < highestCurrentCheckpoint) &&
+        (player->actor.bgCheckFlags & 1) && ((highestCurrentCheckpoint - currentCheckpoints[0]) >= 24)) {
         ret = true;
     }
 
@@ -307,7 +327,7 @@ void EnMttag_HandleRace(EnMttag* this, GlobalContext* globalCtx) {
 
             EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
-        } else if ((func_809CF67C(this, globalCtx)) && (this->timer == 0)) {
+        } else if ((EnMttag_PlayerProbablyCantWin(this, globalCtx)) && (this->timer == 0)) {
             EnMttag_ShowCantWinMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         }
@@ -419,3 +439,95 @@ void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnMttag* this = THIS;
     this->actionFunc(this, globalCtx);
 }
+
+/*
+void PrintStuff(GlobalContext* globalCtx, GraphicsContext* gfxCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    GfxPrint printer;
+    Gfx* gfxRef;
+    Gfx* gfx;
+    s32 i = 1;
+    s32 j = 11;
+    s32 idx;
+    s32 idx2;
+
+    // Blah
+    s32 phi_s2 = -1;
+    s32 phi_s4 = 0;
+    f32 phi_f20 = 0.0f;
+    f32 sp74;
+    f32 sp70;
+    f32 sp6C;
+    s32 arg1;
+    f32 arg2;
+    f32 arg3;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C4C0(gfxCtx);
+
+    GfxPrint_Init(&printer);
+
+    gfxRef = POLY_OPA_DISP;
+    gfx = Graph_GfxPlusOne(gfxRef);
+    gSPDisplayList(OVERLAY_DISP++, gfx);
+
+    GfxPrint_Open(&printer, gfx);
+
+    GfxPrint_SetColor(&printer, 255, 255, 255, 255);
+
+    idx = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId);
+    idx2 = D_809D01B0[idx];
+
+    do {
+        if ((Math3D_PointDistToLine2D(player->actor.world.pos.x, player->actor.world.pos.z, (&D_809D01FC[idx2])[-1].x,
+                                      (&D_809D01FC[idx2])[-1].z, (&D_809D01FC[idx2])[1].x, (&D_809D01FC[idx2])[1].z,
+                                      &sp74, &sp70, &sp6C)) &&
+            ((phi_s4 == 0) || ((phi_s2 + 1) == idx2) || (sp6C < phi_f20))) {
+            phi_f20 = sp6C;
+            phi_s2 = idx2;
+            arg2 = sp74;
+            arg3 = sp70;
+            phi_s4 = 1;
+        }
+        idx2++;
+    } while (idx2 < D_809D01B0[idx + 1]);
+
+    arg1 = phi_s2 + 1;
+
+    GfxPrint_SetPos(&printer, i, j++);
+    GfxPrint_Printf(&printer, "pos: (%f, %f)", player->actor.world.pos.x, player->actor.world.pos.z);
+    GfxPrint_SetPos(&printer, i, j++);
+    GfxPrint_Printf(&printer, "idx: %d", idx);
+    if (idx >= 4 && idx < 19) {
+        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "1B0[idx]: %d", idx2);
+        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "1FC[idx2][-1]: (%f, %f)", (&D_809D01FC[idx2])[-1].x, (&D_809D01FC[idx2])[-1].z);
+        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "1FC[idx2][1]: (%f, %f)", (&D_809D01FC[idx2])[1].x, (&D_809D01FC[idx2])[1].z);
+        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "arg1: %d", arg1);
+        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "arg2: %f", arg2);
+        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "arg3: %f", arg3);
+        GfxPrint_SetPos(&printer, i, j++);
+        GfxPrint_Printf(&printer, "ret: %d", phi_s2);
+    }
+
+    gfx = GfxPrint_Close(&printer);
+
+    gSPEndDisplayList(gfx++);
+    Graph_BranchDlist(gfxRef, gfx);
+    POLY_OPA_DISP = gfx;
+
+    GfxPrint_Destroy(&printer);
+
+    CLOSE_DISPS(gfxCtx);
+}
+
+void EnMttag_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    PrintStuff(globalCtx, globalCtx->state.gfxCtx);
+}
+*/
