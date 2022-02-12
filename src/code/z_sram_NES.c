@@ -213,10 +213,8 @@ void func_80143AC4(void) {
 }
 
 void func_80143B0C(GlobalContext* globalCtx) {
-    s32 pad;
     s16 sceneNum;
     s32 j;
-    u8 phi_v0;
     s32 i;
     u8 temp;
     u8 temp2;
@@ -225,9 +223,9 @@ void func_80143B0C(GlobalContext* globalCtx) {
     gSaveContext.save.daySpeed = 0;
     gSaveContext.save.daysElapsed = 0;
     gSaveContext.save.day = 0;
-    gSaveContext.save.time = 0x3FFF;
-    gSaveContext.save.playerData.deaths++;
+    gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
 
+    gSaveContext.save.playerData.deaths++;
     if (gSaveContext.save.playerData.deaths > 999) {
         gSaveContext.save.playerData.deaths = 999;
     }
@@ -241,7 +239,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
     globalCtx->actorCtx.flags.collectible[0] &= D_801C5FC0[sceneNum][3];
     globalCtx->actorCtx.flags.clearedRoom = 0;
 
-    for (i = 0; i < SCENE_MAX; i++) { // a2 (ptr)
+    for (i = 0; i < SCENE_MAX; i++) {
         gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
         gSaveContext.cycleSceneFlags[i].switch1 = ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & D_801C5FC0[i][1];
         gSaveContext.cycleSceneFlags[i].chest = ((void)0, gSaveContext.cycleSceneFlags[i].chest) & D_801C5FC0[i][2];
@@ -252,7 +250,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         gSaveContext.save.permanentSceneFlags[i].unk_18 = 0;
     }
 
-    for (; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) { // a2 (ptr)
+    for (; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
         gSaveContext.cycleSceneFlags[i].chest = 0;
         gSaveContext.cycleSceneFlags[i].switch0 = 0;
         gSaveContext.cycleSceneFlags[i].switch1 = 0;
@@ -260,7 +258,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         gSaveContext.cycleSceneFlags[i].collectible = 0;
     }
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.maskMaskBit); i++) { // s0
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.maskMaskBit); i++) {
         gSaveContext.maskMaskBit[i] = 0;
     }
 
@@ -268,10 +266,10 @@ void func_80143B0C(GlobalContext* globalCtx) {
         func_801149A0(ITEM_MASK_FIERCE_DEITY, gItemSlots[ITEM_MASK_FIERCE_DEITY]);
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801C66D0); i++) { // a1
+    for (i = 0; i < ARRAY_COUNT(D_801C66D0); i++) {
         u16 phi_v1_3 = D_801C66D0[i];
 
-        for (j = 0; j < ARRAY_COUNT(D_801C6890); j++) { // s1
+        for (j = 0; j < ARRAY_COUNT(D_801C6890); j++) {
             if ((phi_v1_3 & 3) == 0) {
                 gSaveContext.save.weekEventReg[i] =
                     ((void)0, gSaveContext.save.weekEventReg[i]) & (0xFF ^ D_801C6890[j]);
@@ -280,7 +278,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.eventInf); i++) { // s0
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.eventInf); i++) {
         gSaveContext.eventInf[i] = 0;
     }
 
@@ -319,22 +317,20 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_801C67B0); i++) { // a1
-        if (D_801C67B0[i] != 0xFF) {
-            if ((gSaveContext.save.inventory.items[i] != ITEM_NONE) && (i != 0xD)) {
+    for (i = 0; i < ARRAY_COUNT(D_801C67B0); i++) {
+        if (D_801C67B0[i] != ITEM_NONE) {
+            if ((gSaveContext.save.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTO_BOX)) {
                 temp2 = gSaveContext.save.inventory.items[i];
                 AMMO(temp2) = 0;
             }
         }
     }
 
-    for (i = SLOT_BOTTLE_1; i <= SLOT_BOTTLE_6; i++) { // s0 (ptr)
+    for (i = SLOT_BOTTLE_1; i <= SLOT_BOTTLE_6; i++) {
         // Check for all bottled items
-        if (gSaveContext.save.inventory.items[i] > ITEM_BOTTLE) {
+        if (gSaveContext.save.inventory.items[i] >= ITEM_POTION_RED) {
             if (gSaveContext.save.inventory.items[i] <= ITEM_OBABA_DRINK) {
-
                 for (j = 1; j < 4; j++) { // s1
-                    // phi_v0 = GET_CUR_FORM_BTN_ITEM(j);
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
                         func_80112B40(globalCtx, j);
@@ -358,32 +354,30 @@ void func_80143B0C(GlobalContext* globalCtx) {
             if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) >= ITEM_SWORD_GILDED) ||
                 (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) >= ITEM_SWORD_GILDED)) {
 
-                gSaveContext.save.equips.buttonItems[CUR_FORM][0] = ITEM_SWORD_GILDED;
-                gSaveContext.save.equips.equipment =
-                    (((void)0, gSaveContext.save.equips.equipment) & gEquipNegMasks[0]) | (u16)(3 << gEquipShifts[0]);
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
+                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
             } else {
-                gSaveContext.save.equips.buttonItems[CUR_FORM][0] = ITEM_SWORD_KOKIRI;
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
         } else {
             if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) >= ITEM_SWORD_GILDED) ||
                 (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) >= ITEM_SWORD_GILDED)) {
-                gSaveContext.save.equips.buttonItems[0][0] = ITEM_SWORD_GILDED;
-                gSaveContext.save.equips.equipment =
-                    (((void)0, gSaveContext.save.equips.equipment) & gEquipNegMasks[0]) | (u16)(3 << gEquipShifts[0]);
+                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
+                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
             } else {
-                gSaveContext.save.equips.buttonItems[0][0] = ITEM_SWORD_KOKIRI;
+                BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
         }
     }
 
     if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) == ITEM_SWORD_GREAT_FAIRY) ||
         (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) == ITEM_SWORD_GREAT_FAIRY)) {
-        gSaveContext.save.inventory.items[gItemSlots[0x10]] = ITEM_SWORD_GREAT_FAIRY;
+        INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) = ITEM_SWORD_GREAT_FAIRY;
     }
 
     if (((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) == ITEM_BOTTLE) {
         temp = gItemSlots[ITEM_BOTTLE];
-        for (i = 0; i < 6; i++) { // a1
+        for (i = 0; i < 6; i++) {
             if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
                 break;
@@ -393,7 +387,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
 
     if (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) == ITEM_BOTTLE) {
         temp = gItemSlots[ITEM_BOTTLE];
-        for (i = 0; i < 6; i++) { // a1
+        for (i = 0; i < 6; i++) {
             if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
                 break;
@@ -401,7 +395,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    gSaveContext.save.stolenItems &= 0xFFFFFF;
+    gSaveContext.save.stolenItems &= 0x00FFFFFF;
     gSaveContext.save.stolenItems &= 0xFF00FFFF;
 
     // ??
@@ -409,14 +403,14 @@ void func_80143B0C(GlobalContext* globalCtx) {
     func_801149A0(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
     func_801149A0(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
-    for (j = 1; j != 4; j++) { // s1
+    for (j = 1; j < 4; j++) { // s1
         if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
             func_80112B40(globalCtx, j);
         }
     }
 
-    gSaveContext.save.skullTokenCount &= 0xFFFF;
+    gSaveContext.save.skullTokenCount &= 0x0000FFFF;
     gSaveContext.save.skullTokenCount &= 0xFFFF0000;
     gSaveContext.save.unk_EC4 = 0;
 
@@ -430,7 +424,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
 
     func_80143A54();
 
-    for (i = 0; i < 8; i++) { // s0 (ptr)
+    for (i = 0; i < 8; i++) {
         gSaveContext.save.inventory.dungeonItems[i] &= (u8)~1;
         gSaveContext.save.inventory.dungeonKeys[i] = 0;
         gSaveContext.save.inventory.strayFairies[i] = 0;
@@ -780,8 +774,8 @@ void Sram_InitDebugSave(void) {
     Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDebugChecksum, sizeof(gSaveContext.save.checksum));
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-        gSaveContext.save.equips.buttonItems[0][2] = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
-        gSaveContext.save.equips.cButtonSlots[0][2] = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        BUTTON_ITEM_EQUIP(0, 2) = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        C_SLOT_EQUIP(0, 2) = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
     }
 
     gSaveContext.save.hasTatl = true;
@@ -1122,7 +1116,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                     fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
                     fileChooseCtx->unk_24468[sp76] = gSaveContext.save.isOwlSave;
                     fileChooseCtx->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                    fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(4);
+                    fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
                     for (sp7A = 0, phi_a0 = 0; sp7A < ARRAY_COUNT(gSaveContext.save.inventory.masks); sp7A++) {
                         if (gSaveContext.save.inventory.masks[(s32)sp7A] != 0xFF) {
@@ -1217,7 +1211,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                         fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
                         fileChooseCtx->unk_24468[sp76] = gSaveContext.save.isOwlSave;
                         fileChooseCtx->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                        fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(4);
+                        fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
                         for (sp7A = 0, phi_a0 = 0; sp7A < ARRAY_COUNT(gSaveContext.save.inventory.masks); sp7A++) {
                             if (gSaveContext.save.inventory.masks[(s32)sp7A] != 0xFF) {
@@ -1302,6 +1296,7 @@ void func_80146580(FileChooseContext* fileChooseCtx2, SramContext* sramCtx, s32 
         bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
+
     gSaveContext.save.time = D_801F6AF0;
     gSaveContext.unk_3F3F = D_801F6AF2;
 }
@@ -1440,8 +1435,7 @@ void func_80146AA0(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         fileChooseCtx->unk_24460[fileChooseCtx->unk_24480] = gSaveContext.save.day;
         fileChooseCtx->unk_24468[fileChooseCtx->unk_24480] = gSaveContext.save.isOwlSave;
         fileChooseCtx->rupees[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.rupees;
-        fileChooseCtx->unk_24474[fileChooseCtx->unk_24480] =
-            (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
+        fileChooseCtx->unk_24474[fileChooseCtx->unk_24480] = CUR_UPG_VALUE(UPG_WALLET);
 
         for (i = 0, phi_a0 = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
             if (gSaveContext.save.inventory.masks[(s32)i] != ITEM_NONE) {
@@ -1453,6 +1447,7 @@ void func_80146AA0(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         fileChooseCtx->heartPieceCount[fileChooseCtx->unk_24480] =
             (gSaveContext.save.inventory.questItems & 0xF0000000) >> 0x1C;
     }
+
     gSaveContext.save.time = D_801F6AF0;
     gSaveContext.unk_3F3F = D_801F6AF2;
 }
@@ -1500,13 +1495,12 @@ void func_80146EE8(GlobalContext* globalCtx) {
  * Save the game
  */
 void func_80146F5C(GlobalContext* globalCtx) {
-    s32 cutscene;
+    s32 cutscene = gSaveContext.save.cutscene;
     s32 day;
-    u16 time;
+    u16 time = gSaveContext.save.time;
 
-    cutscene = gSaveContext.save.cutscene;
-    time = gSaveContext.save.time;
     day = gSaveContext.save.day;
+
     // Unconfirmed: "Obtained Fierce Deity Mask?"
     gSaveContext.save.weekEventReg[0x54] &= (u8)~0x20;
 
@@ -1585,7 +1579,7 @@ void func_80147198(SramContext* sramCtx) {
     } else if (((osGetTime() - sramCtx->unk_18) * 0x40) / 3000 / 10000 >= 200) {
         sramCtx->status = 0;
         bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-        gSaveContext.save.isOwlSave = 0;
+        gSaveContext.save.isOwlSave = false;
         gSaveContext.save.checksum = 0;
         // flash read to buffer then copy to save context
         func_80185968(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);

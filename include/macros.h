@@ -70,18 +70,20 @@
 #define GET_CUR_UPG_VALUE(upg) ((GET_SAVE_INVENTORY_UPGRADES & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
 
 #define SET_EQUIP_VALUE(equip, value) (gSaveContext.save.equips.equipment = ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipNegMasks[equip]) | (u16)((u16)(value) << gEquipShifts[equip])))
-#define CUR_FORM_EQUIP(button) (gSaveContext.save.equips.buttonItems[CUR_FORM][button])
+#define BUTTON_ITEM_EQUIP(form, button) (gSaveContext.save.equips.buttonItems[form][button])
+#define CUR_FORM_EQUIP(button) BUTTON_ITEM_EQUIP(CUR_FORM, button)
+#define C_SLOT_EQUIP(form, button) (gSaveContext.save.equips.cButtonSlots[form][button])
 #define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
 
-#define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == 0 ? gSaveContext.save.equips.buttonItems[CUR_FORM][btn] : gSaveContext.save.equips.buttonItems[0][btn]))
+#define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == 0 ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
 
 #define SET_CUR_FORM_BTN_ITEM(btn, item) \
     do { \
         if ((btn) == 0) { \
-            gSaveContext.save.equips.buttonItems[CUR_FORM][btn] = (item); \
+            BUTTON_ITEM_EQUIP(CUR_FORM, btn) = (item); \
         } else { \
-            gSaveContext.save.equips.buttonItems[0][btn] = (item); \
+            BUTTON_ITEM_EQUIP(0, btn) = (item); \
         } \
     } while (0)
 
