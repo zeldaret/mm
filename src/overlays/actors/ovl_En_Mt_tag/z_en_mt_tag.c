@@ -132,68 +132,43 @@ s32 func_809CF4EC(Actor* actor, GlobalContext* globalCtx, s32* arg1, f32* arg2, 
     return phi_s2;
 }
 
-#ifdef NON_MATCHING
-// Needs tons more work
 s32 func_809CF67C(EnMttag* this, GlobalContext* globalCtx) {
-    s32 spA4;
-    s32 sp94[4];
-    s32 sp90;
-    f32 sp80[4];
-    f32 sp7C;
-    f32 sp6C[4];
-    f32 sp68;
-    s32 ret;
     Player* player;
-    s32 temp_v0;
+    EnRg* rg;
+    s32 spA4[5];
+    s32 sp90[5];
+    f32 sp7C[5];
+    f32 sp68[5];
     s32 phi_fp;
-    s32 phi_fp_2;
     s32 i;
+    s32 ret;
 
     player = GET_PLAYER(globalCtx);
     ret = 0;
     phi_fp = -1;
-    spA4 = func_809CF4EC(&player->actor, globalCtx, &sp90, &sp7C, &sp68);
-    for (i = 0; i < 4; i++) {
-        temp_v0 = func_809CF4EC(&this->unk_148[i]->actor, globalCtx, &sp94[i], &sp80[i], &sp6C[i]);
-        phi_fp_2 = phi_fp;
-        if (phi_fp < temp_v0) {
-            phi_fp_2 = temp_v0;
+
+    spA4[0] = func_809CF4EC(&player->actor, globalCtx, &sp90[0], &sp7C[0], &sp68[0]);
+    for (i = 1; i < 5; i++) {
+        spA4[i] = func_809CF4EC(&this->unk_148[i - 1]->actor, globalCtx, &sp90[i], &sp7C[i], &sp68[i]);
+        if (phi_fp < spA4[i]) {
+            phi_fp = spA4[i];
         }
-        phi_fp = phi_fp_2;
     }
 
-    if ((sp94[0] != -1) && (sp90 != -1)) {
-        this->unk_148[0]->unk_348 = (sp94[0] - sp90);
-    } else {
-        this->unk_148[0]->unk_348 = 0;
+    for (i = 1; i < 5; i++) {
+        rg = this->unk_148[i - 1];
+        if ((sp90[i] != -1) && (sp90[0] != -1)) {
+            rg->unk_348 = (sp90[i] - sp90[0]);
+        } else {
+            rg->unk_348 = 0;
+        }
     }
 
-    if ((sp94[1] != -1) && (sp90 != -1)) {
-        this->unk_148[1]->unk_348 = (sp94[1] - sp90);
-    } else {
-        this->unk_148[1]->unk_348 = 0;
-    }
-
-    if ((sp94[2] != -1) && (sp90 != -1)) {
-        this->unk_148[2]->unk_348 = (sp94[2] - sp90);
-    } else {
-        this->unk_148[2]->unk_348 = 0;
-    }
-
-    if ((sp94[3] != -1) && (sp90 != -1)) {
-        this->unk_148[3]->unk_348 = (sp94[3] - sp90);
-    } else {
-        this->unk_148[3]->unk_348 = 0;
-    }
-
-    if ((spA4 > 0) && (spA4 < phi_fp_2) && ((player->actor.bgCheckFlags & 1) != 0) && ((phi_fp_2 - spA4) >= 0x18)) {
+    if ((spA4[0] > 0) && (spA4[0] < phi_fp) && (player->actor.bgCheckFlags & 1) && ((phi_fp - spA4[0]) >= 0x18)) {
         ret = 1;
     }
     return ret;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Mt_tag/func_809CF67C.s")
-#endif
 
 s32 func_809CF848(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
