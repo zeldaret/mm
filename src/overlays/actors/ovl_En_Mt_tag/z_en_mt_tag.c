@@ -40,10 +40,12 @@ const ActorInit En_Mt_tag_InitVars = {
     (ActorFunc)NULL,
 };
 
+// Starting race checkpoint per SceneExitIndex? 
 static s32 D_809D01B0[] = {
     0, 0, 0, 0, 1, 9, 12, 16, 19, 22, 26, 29, 30, 32, 34, 36, 39, 42, 45,
 };
 
+// Race checkpoints?
 static Vec3f D_809D01FC[] = {
     { -105.0, 1000.0, -240.0 },   { -1751.0, 1000.0, -240.0 },  { -3138.0, 1000.0, -74.0 },
     { -4617.0, 1000.0, 277.0 },   { -5060.0, 1000.0, 388.0 },   { -5412.0, 1000.0, 573.0 },
