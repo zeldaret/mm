@@ -353,7 +353,6 @@ void func_80143B0C(GlobalContext* globalCtx) {
 
         if (CUR_FORM == 0) {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
-
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
                 SET_EQUIP_VALUE(EQUIP_SWORD, 3);
             } else {
