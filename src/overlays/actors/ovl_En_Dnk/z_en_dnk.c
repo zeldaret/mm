@@ -95,10 +95,10 @@ static DamageTable sDamageTable = {
 
 static ActorAnimationEntryS sAnimations[] = {
     { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, 0 },       { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, -4 },
-    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, 0, -4 },      { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, 0, -4 },
-    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, 2, 0 },      { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, 2, -4 },
+    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, 0, -4 },    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, 0, -4 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, 2, 0 },     { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, 2, -4 },
     { &object_dnk_Anim_000894, 1.0f, 0, -1, 2, -4 },      { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, 0, 0 },
-    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_0006CC, 1.0f, 0, -1, 0, -4 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, 0, -4 },    { &object_dnk_Anim_0006CC, 1.0f, 0, -1, 0, -4 },
     { &object_hintnuts_Anim_000168, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, 2, 0 },
     { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, 2, -4 },
     { &object_hintnuts_Anim_002894, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, 2, -4 },
@@ -308,9 +308,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     static TexturePtr D_80A5245C[] = {
-        object_dnk_Tex_001680,
-        object_dnk_Tex_001700,
-        object_dnk_Tex_001780,
+        gDekuPalaceGuardEyeOpenTex,
+        gDekuPalaceGuardEyeHalfTex,
+        gDekuPalaceGuardEyeClosedTex,
     };
     s32 pad;
 
