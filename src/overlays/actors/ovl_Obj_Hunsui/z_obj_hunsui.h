@@ -2,6 +2,7 @@
 #define Z_OBJ_HUNSUI_H
 
 #include "global.h"
+#include "overlays/actors/ovl_Bg_Dblue_Movebg/z_bg_dblue_movebg.h"
 
 struct ObjHunsui;
 
@@ -50,7 +51,7 @@ typedef struct ObjHunsui {
     /* 0x0196 */ UNK_TYPE1 unk1A6[0x6];
     /* 0x01AC */ f32 unk_1AC;
     /* 0x01B0 */ f32 unk_1B0;
-    /* 0x01B4 */ struct BgDblueMovebg* unk_1B4;
+    /* 0x01B4 */ BgDblueMovebg* unk_1B4;
 } ObjHunsui; // size = 0x1B8
 
 extern const ActorInit Obj_Hunsui_InitVars;

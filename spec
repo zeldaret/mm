@@ -4461,11 +4461,7 @@ beginseg
     name "ovl_Obj_Hunsui"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Obj_Hunsui/ovl_Obj_Hunsui_reloc.o"
-#else
-    include "build/data/ovl_Obj_Hunsui/ovl_Obj_Hunsui.reloc.o"
-#endif
 endseg
 
 beginseg

@@ -5,7 +5,6 @@
  */
 
 #include "z_obj_hunsui.h"
-#include "overlays/actors/ovl_Bg_Dblue_Movebg/z_bg_dblue_movebg.h"
 #include "objects/object_hunsui/object_hunsui.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -110,60 +109,63 @@ s32 func_80B9C450(GlobalContext* globalCtx, s32 arg1, s32 arg2) {
     return sp2C;
 }
 
-#ifdef NON_MATCHING
-// Float regalloc with sp38
 void func_80B9C5E8(ObjHunsui* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 temp_f10;
     f32 temp_f16;
     Vec3f sp40;
     s16 sp3E;
+    f32 sp38;
+    f32 sp34;
 
     if ((this->dyna.actor.xzDistToPlayer < (45.0f * this->dyna.actor.scale.x * 10.0f)) &&
         (this->dyna.actor.playerHeightRel < -21.0f)) {
         if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
             this->unk_172 &= ~8;
-            this->unk_18C++;
             this->unk_19C = 0.0f;
             this->unk_1A0 = 0.0f;
+
+            this->unk_18C++;
             if (this->unk_18C >= 3) {
                 this->unk_18C = 0;
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
+
                 sp40.x += randPlusMinusPoint5Scaled(10.0f);
                 sp40.z += randPlusMinusPoint5Scaled(10.0f);
                 sp40.y += Rand_ZeroFloat(2.0f);
+
                 EffectSsGSplash_Spawn(globalCtx, &sp40, NULL, NULL, 2.0f * Rand_ZeroOne(), 1);
             }
         } else {
             this->unk_172 |= 8;
+
             this->unk_18C++;
             if (this->unk_18C >= 3) {
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
                 this->unk_18C = 0;
+
                 sp40.x += randPlusMinusPoint5Scaled(10.0f);
                 sp40.z += randPlusMinusPoint5Scaled(10.0f);
                 sp40.y += Rand_ZeroFloat(45.0f);
+
                 EffectSsGSplash_Spawn(globalCtx, &sp40, NULL, NULL, 1, 1);
             }
 
             sp3E = BINANG_ROT180(player->actor.world.rot.y - this->dyna.actor.yawTowardsPlayer);
             player->actor.gravity = 0.0f;
             player->actor.velocity.y = 0.0f;
+
             if ((this->unk_160 != OBJHUNSUI_F000_5) && (this->unk_160 != OBJHUNSUI_F000_6)) {
                 Math_SmoothStepToF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.5f, 4.0f, 1.0f);
             }
 
             if ((sp3E < 0x4000) && (sp3E > -0x4000)) {
-                f32 sp38;
-                f32 sp34;
-
                 this->unk_1A4 = BINANG_ROT180(player->actor.world.rot.y);
-                sp38 = (45.0f * this->dyna.actor.scale.x) * 10.0f;
-                temp_f16 = this->dyna.actor.xzDistToPlayer;
+                sp34 = this->dyna.actor.xzDistToPlayer / (45.0f * this->dyna.actor.scale.x * 10.0f);
+                if (1) {}
+                sp38 = this->dyna.actor.xzDistToPlayer / (45.0f * this->dyna.actor.scale.x * 10.0f);
 
-                sp34 = temp_f16 / sp38;
-                sp38 = sp34;
-                if (sp34 > 1.0f) {
+                if (sp38 > 1.0f) {
                     sp38 = sp34;
                 }
 
@@ -195,9 +197,6 @@ void func_80B9C5E8(ObjHunsui* this, GlobalContext* globalCtx) {
         this->unk_172 &= ~8;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hunsui/func_80B9C5E8.s")
-#endif
 
 void ObjHunsui_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjHunsui* this = THIS;
@@ -332,7 +331,7 @@ void ObjHunsui_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1AC > 1024.0f) {
-        this->unk_1AC = this->unk_1AC - 1024.0f;
+        this->unk_1AC -= 1024.0f;
     }
 
     if (this->unk_1AC <= 0.0f) {
@@ -366,7 +365,7 @@ void func_80B9CE64(ObjHunsui* this, GlobalContext* globalCtx) {
             this->unk_172 |= 0x10;
             this->unk_174 = 240.0f;
             if (this->unk_178 == 240.0f) {
-                if ((this->unk_188++ <= 40) ^ 1) {
+                if (this->unk_188++ > 40) {
                     this->unk_188 = 0;
                     this->unk_186 = 1;
                     this->unk_194 = 0.0f;
@@ -377,7 +376,7 @@ void func_80B9CE64(ObjHunsui* this, GlobalContext* globalCtx) {
         } else {
             this->unk_174 = 30.0f;
             if (this->unk_178 == 30.0f) {
-                if ((this->unk_188++ <= 40) ^ 1) {
+                if (this->unk_188++ > 40) {
                     this->unk_188 = 0;
                     this->unk_186 = 0;
                     this->unk_194 = 0.0f;
@@ -596,6 +595,7 @@ void func_80B9D714(ObjHunsui* this, GlobalContext* globalCtx) {
                 }
             } else {
                 s32 pad;
+
                 if (Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 800.0f, 0.1f, 8.0f,
                                        1.0f) < 0.5f) {
                     if (DECR(this->unk_16E) == 0) {
