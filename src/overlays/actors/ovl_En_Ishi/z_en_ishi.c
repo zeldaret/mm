@@ -430,8 +430,11 @@ void EnIshi_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_8095E5AC(this);
 }
 
-void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+void EnIshi_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnIshi* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_8095E5AC(EnIshi* this) {
