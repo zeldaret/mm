@@ -383,7 +383,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
     }
 
     if (STOLEN_ITEM_2 == ITEM_BOTTLE) {
-        temp = gItemSlots[ITEM_BOTTLE];
+        temp = SLOT(ITEM_BOTTLE);
         for (i = 0; i < 6; i++) {
             if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
                 gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
