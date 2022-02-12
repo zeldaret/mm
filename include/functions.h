@@ -3266,7 +3266,7 @@ void Slowly_Stop(SlowlyTask* slowly);
 // char* func_801857D0(void);
 // void func_80185864(void);
 u32 func_80185908(void);
-UNK_TYPE func_80185968(void*, UNK_TYPE, UNK_TYPE);
+UNK_TYPE func_80185968(void* arg0, UNK_TYPE arg1, UNK_TYPE arg2);
 // void func_801859F0(void);
 // void func_80185A2C(void);
 // void func_80185B1C(void);
