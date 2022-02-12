@@ -353,8 +353,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         SET_EQUIP_VALUE(EQUIP_SWORD, 1);
 
         if (CUR_FORM == 0) {
-            if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) >= ITEM_SWORD_GILDED) ||
-                (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) >= ITEM_SWORD_GILDED)) {
+            if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
 
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
                 SET_EQUIP_VALUE(EQUIP_SWORD, 3);
@@ -362,8 +361,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
         } else {
-            if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) >= ITEM_SWORD_GILDED) ||
-                (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) >= ITEM_SWORD_GILDED)) {
+            if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
                 SET_EQUIP_VALUE(EQUIP_SWORD, 3);
             } else {
@@ -372,12 +370,11 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    if ((((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) == ITEM_SWORD_GREAT_FAIRY) ||
-        (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) == ITEM_SWORD_GREAT_FAIRY)) {
+    if ((STOLEN_ITEM_1 == ITEM_SWORD_GREAT_FAIRY) || (STOLEN_ITEM_2 == ITEM_SWORD_GREAT_FAIRY)) {
         INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) = ITEM_SWORD_GREAT_FAIRY;
     }
 
-    if (((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18) == ITEM_BOTTLE) {
+    if (STOLEN_ITEM_1 == ITEM_BOTTLE) {
         temp = gItemSlots[ITEM_BOTTLE];
         for (i = 0; i < 6; i++) {
             if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
@@ -387,7 +384,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    if (((gSaveContext.save.stolenItems & 0xFF0000) >> 0x10) == ITEM_BOTTLE) {
+    if (STOLEN_ITEM_2 == ITEM_BOTTLE) {
         temp = gItemSlots[ITEM_BOTTLE];
         for (i = 0; i < 6; i++) {
             if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
@@ -397,8 +394,8 @@ void func_80143B0C(GlobalContext* globalCtx) {
         }
     }
 
-    gSaveContext.save.stolenItems &= ~0xFF000000;
-    gSaveContext.save.stolenItems &= ~0x00FF0000;
+    CLEAR_STOLEN_ITEM_1();
+    CLEAR_STOLEN_ITEM_2();
 
     // ??
     func_801149A0(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
