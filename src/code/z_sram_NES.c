@@ -209,13 +209,13 @@ void func_80143A54(void) {
 
 void func_80143AC4(void) {
     // Unconfirmed: "Link the Goron Claims His Reservation: 4:30 PM"
-    gSaveContext.save.weekEventReg[55] &= (u8)~0x02;
+    gSaveContext.save.weekEventReg[55] &= (u8)~2;
     // Unconfirmed: "Postman fleeing town"
-    gSaveContext.save.weekEventReg[90] &= (u8)~0x01;
+    gSaveContext.save.weekEventReg[90] &= (u8)~1;
     // Unconfirmed: "Postman is about to flee"
     gSaveContext.save.weekEventReg[89] &= (u8)~0x40;
     // Unconfirmed: "Postman has delivered priority mail"
-    gSaveContext.save.weekEventReg[89] &= (u8)~0x08;
+    gSaveContext.save.weekEventReg[89] &= (u8)~8;
     // Unconfirmed: "Postman showing priority mail to Madame"
     gSaveContext.save.weekEventReg[85] &= (u8)~0x80;
 }
