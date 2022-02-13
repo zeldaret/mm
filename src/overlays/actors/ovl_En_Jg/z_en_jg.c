@@ -279,14 +279,12 @@ s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
     if (currentPoint == 0) {
         diffX = points[1].x - points[0].x;
         diffZ = points[1].z - points[0].z;
+    } else if (currentPoint == (pathCount - 1)) {
+        diffX = points[pathCount - 1].x - points[pathCount - 2].x;
+        diffZ = points[pathCount - 1].z - points[pathCount - 2].z;
     } else {
-        if (currentPoint == (pathCount - 1)) {
-            diffX = points[pathCount - 1].x - points[pathCount - 2].x;
-            diffZ = points[pathCount - 1].z - points[pathCount - 2].z;
-        } else {
-            diffX = points[currentPoint + 1].x - points[currentPoint - 1].x;
-            diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
-        }
+        diffX = points[currentPoint + 1].x - points[currentPoint - 1].x;
+        diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
     func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
