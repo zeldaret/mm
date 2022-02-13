@@ -89,7 +89,7 @@ void EnGuardNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk21E = D_80ABBE1C;
     D_80ABBE1C++;
 
-    // If you have returned deku princess guards will Init burrowed.
+    // If you have returned deku princess guards will init burrowed.
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         EnGuardNuts_SetupWait(this);
     } else {
@@ -144,7 +144,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, GlobalContext* globalCtx) {
             // I told you not to enter!!
             this->textId = 7;
         } else if (gSaveContext.weekEventReg[12] & 0x40) {
-            // come do see the money again?
+            // come to see the monkey again?
             this->textId = 4;
         }
     } else {
@@ -364,7 +364,7 @@ void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gSPDisplayList(POLY_OPA_DISP++, object_dnk_DL_002700);
+    gSPDisplayList(POLY_OPA_DISP++, gDekuPalaceGuardFlower);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
