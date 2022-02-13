@@ -94,11 +94,11 @@ s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
 }
 
 /**
- * This function tries to find all four Racing Gorons present in the racetrack.
+ * This function tries to find all four Race Gorons present in the racetrack.
  * If it finds them, it stores a pointer to each one in the actor's struct.
- * Returns true if all four Racing Gorons are found.
+ * Returns true if all four Race Gorons are found.
  */
-s32 EnMttag_AreFourRacingGoronsPresent(EnMttag* this, GlobalContext* globalCtx) {
+s32 EnMttag_AreFourRaceGoronsPresent(EnMttag* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
     s32 i = 0;
     s32 ret;
@@ -326,7 +326,7 @@ void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        if (EnMttag_AreFourRacingGoronsPresent(this, globalCtx)) {
+        if (EnMttag_AreFourRaceGoronsPresent(this, globalCtx)) {
             this->raceInitialized = true;
         }
     }

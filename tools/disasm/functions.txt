@@ -9200,7 +9200,7 @@
     0x809CEF30:("BgSpdweb_Draw",),
     0x809CF350:("EnMttag_IsInFinishLine",),
     0x809CF394:("EnMttag_CheckPlayerCheatStatus",),
-    0x809CF444:("EnMttag_AreFourRacingGoronsPresent",),
+    0x809CF444:("EnMttag_AreFourRaceGoronsPresent",),
     0x809CF4EC:("EnMttag_GetCurrentCheckpoint",),
     0x809CF67C:("EnMttag_IsPlayerDramaticallyBehindAndUpdateRaceGoronCheckpoints",),
     0x809CF848:("EnMttag_ExitRace",),
