@@ -23,9 +23,9 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx);
 
 typedef enum {
-    PLAYER_CHEAT_STATUS_NO_CHEATING,
-    PLAYER_CHEAT_STATUS_FALSE_START,
-    PLAYER_CHEAT_STATUS_TRYING_TO_REACH_GOAL_FROM_BEHIND
+    CHEAT_NO_CHEATING,
+    CHEAT_FALSE_START,
+    CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND,
 } PlayerCheatStatus;
 
 const ActorInit En_Mt_tag_InitVars = {
@@ -80,7 +80,7 @@ s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
     if (!(gSaveContext.eventInf[1] & 1)) {
         if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
             // The race hasn't started yet, but the player is beyond the starting line.
-            return PLAYER_CHEAT_STATUS_FALSE_START;
+            return CHEAT_FALSE_START;
         }
     } else if (Math3D_XZBoundCheck(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
         // The goal is actually quite close to the start, just behind a large wall.
@@ -88,9 +88,9 @@ s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
         // in normal play; it can only be reached by climbing the wall somehow. Perhaps they
         // were worried that players would find a way to climb the wall with a glitch, or
         // perhaps they just wanted to punish people using cheat codes.
-        return PLAYER_CHEAT_STATUS_TRYING_TO_REACH_GOAL_FROM_BEHIND;
+        return CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND;
     }
-    return PLAYER_CHEAT_STATUS_NO_CHEATING;
+    return CHEAT_NO_CHEATING;
 }
 
 /**
@@ -301,8 +301,8 @@ void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx) {
 
     if (this->raceInitialized == true) {
         playerCheatStatus = EnMttag_CheckPlayerCheatStatus(&player->actor.world.pos);
-        if (playerCheatStatus != PLAYER_CHEAT_STATUS_NO_CHEATING) {
-            if (playerCheatStatus == PLAYER_CHEAT_STATUS_FALSE_START) {
+        if (playerCheatStatus != CHEAT_NO_CHEATING) {
+            if (playerCheatStatus == CHEAT_FALSE_START) {
                 this->shouldRestartRace = true;
             } else {
                 this->shouldRestartRace = false;
@@ -372,8 +372,8 @@ void EnMttag_Race(EnMttag* this, GlobalContext* globalCtx) {
         this->actionFunc = EnMttag_RaceFinish;
     } else {
         playerCheatStatus = EnMttag_CheckPlayerCheatStatus(playerPos);
-        if (playerCheatStatus != PLAYER_CHEAT_STATUS_NO_CHEATING) {
-            if (playerCheatStatus == PLAYER_CHEAT_STATUS_FALSE_START) {
+        if (playerCheatStatus != CHEAT_NO_CHEATING) {
+            if (playerCheatStatus == CHEAT_FALSE_START) {
                 this->shouldRestartRace = true;
             } else {
                 this->shouldRestartRace = false;
