@@ -567,8 +567,8 @@ SavePlayerData sSaveDefaultPlayerData = {
     { '\0', '\0', '\0', '\0', '\0', '\0' },             // newf
     0,                                                  // deaths
     { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "        "
-    0x0030,                                             // healthCapacity
-    0x0030,                                             // health
+    0x30,                                             // healthCapacity
+    0x30,                                             // health
     0x00,                                               // magicLevel
     0x30,                                               // magic
     0x0000,                                             // rupees
