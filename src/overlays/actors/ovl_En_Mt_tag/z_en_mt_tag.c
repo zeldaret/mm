@@ -110,19 +110,20 @@ s32 EnMttag_InitializeRace(EnMttag* this, GlobalContext* globalCtx) {
     return ret;
 }
 
-s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* upcomingCheckpoint, f32* arg2,
-                                 f32* arg3) {
+s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* upcomingCheckpoint,
+                                 f32* outPerpendicularPointX, f32* outPerpendicularPointZ) {
     s32 curentCheckpoint = -1;
     s32 hasSetCurrentCheckpointOnce = false;
     f32 minLineLengthSq = 0.0f;
     s32 sceneExitIndex;
     f32 perpendicularPointX;
-    f32 perpendicularPointY;
+    f32 perpendicularPointZ;
     f32 lineLenSq;
     s32 checkpointIterator;
 
     sceneExitIndex = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
+        //! @bug - upcomingCheckpoint is not initialized here
         return -1;
     }
 
@@ -132,14 +133,14 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
         if ((Math3D_PointDistToLine2D(
                 actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
                 (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
-                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointY,
+                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointZ,
                 &lineLenSq)) &&
             (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
              (lineLenSq < minLineLengthSq))) {
             minLineLengthSq = lineLenSq;
             curentCheckpoint = checkpointIterator;
-            *arg2 = perpendicularPointX;
-            *arg3 = perpendicularPointY;
+            *outPerpendicularPointX = perpendicularPointX;
+            *outPerpendicularPointZ = perpendicularPointZ;
             hasSetCurrentCheckpointOnce = true;
         }
         checkpointIterator++;
@@ -174,6 +175,9 @@ s32 EnMttag_PlayerProbablyCantWin(EnMttag* this, GlobalContext* globalCtx) {
 
     for (i = 1; i < 5; i++) {
         rg = this->raceGorons[i - 1];
+
+        // Because of the bug described in EnMttag_GetCurrentCheckpoint, these values may not be initialized.
+        //! @bug When initialized, this check is pointless because upcomingCheckpoint is always 0 or higher.
         if ((upcomingCheckpoints[i] != -1) && (upcomingCheckpoints[0] != -1)) {
             rg->unk_348 = (upcomingCheckpoints[i] - upcomingCheckpoints[0]);
         } else {
