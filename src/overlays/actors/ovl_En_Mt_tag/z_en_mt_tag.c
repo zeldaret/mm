@@ -45,7 +45,7 @@ static s32 sStartingCheckpointPerSceneExitIndex[] = {
 };
 
 // The Y-positions here are never used by any part of this actor. They're probably entirely arbitrary.
-static Vec3f sCheckpointDeterminingPositions[] = {
+static Vec3f sCheckpointPositions[] = {
     { -105.0, 1000.0, -240.0 },   { -1751.0, 1000.0, -240.0 },  { -3138.0, 1000.0, -74.0 },
     { -4617.0, 1000.0, 277.0 },   { -5060.0, 1000.0, 388.0 },   { -5412.0, 1000.0, 573.0 },
     { -5523.0, 1000.0, 1035.0 },  { -5393.0, 1000.0, 1405.0 },  { -5060.0, 1000.0, 1553.0 },
@@ -154,12 +154,11 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
 
     // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
     do {
-        if ((Math3D_PointDistToLine2D(actor->world.pos.x, actor->world.pos.z,
-                                      (&sCheckpointDeterminingPositions[checkpointIterator])[-1].x,
-                                      (&sCheckpointDeterminingPositions[checkpointIterator])[-1].z,
-                                      (&sCheckpointDeterminingPositions[checkpointIterator])[1].x,
-                                      (&sCheckpointDeterminingPositions[checkpointIterator])[1].z, &perpendicularPointX,
-                                      &perpendicularPointZ, &lineLenSq)) &&
+        if ((Math3D_PointDistToLine2D(
+                actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
+                (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
+                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointZ,
+                &lineLenSq)) &&
             (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
              (lineLenSq < minLineLengthSq))) {
             minLineLengthSq = lineLenSq;
