@@ -786,7 +786,7 @@ void func_8094F3D0(EnGm* this, GlobalContext* globalCtx) {
         this->unk_3AC = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_3B0, this->unk_3AC, 0.8f, 40.0f, 10.0f);
-    Matrix_InsertTranslation(this->unk_3B0, 0.0f, 0.0f, 1);
+    Matrix_InsertTranslation(this->unk_3B0, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_3F0 = sp28;
 }
 
