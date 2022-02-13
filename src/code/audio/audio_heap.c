@@ -1111,7 +1111,7 @@ void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size) {
     // return addr;
 }
 
-void* AudioHeap_AllocSampleCache(size_t size, s32 fontId, void* sampleAddr, s8 medium, s32 cache) {
+void* AudioHeap_AllocSampleCache(size_t size, s32 sampleBankId, void* sampleAddr, s8 medium, s32 cache) {
     SampleCacheEntry* entry;
 
     if (cache == CACHE_TEMPORARY) {
@@ -1121,8 +1121,7 @@ void* AudioHeap_AllocSampleCache(size_t size, s32 fontId, void* sampleAddr, s8 m
     }
 
     if (entry != NULL) {
-        //! @bug Should use sampleBankId, not fontId
-        entry->sampleBankId = fontId;
+        entry->sampleBankId = sampleBankId;
         entry->sampleAddr = sampleAddr;
         entry->origMedium = medium;
         return entry->allocatedAddr;

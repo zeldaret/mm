@@ -3382,7 +3382,7 @@ s32 AudioHeap_ResetStep(void);
 void AudioHeap_Init(void);
 void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id);
 void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size);
-void* AudioHeap_AllocSampleCache(size_t size, s32 fontId, void* sampleAddr, s8 medium, s32 cache);
+void* AudioHeap_AllocSampleCache(size_t size, s32 sampleBankId, void* sampleAddr, s8 medium, s32 cache);
 void AudioHeap_ApplySampleBankCache(s32 sampleBankId);
 void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 flags);
 // void func_8018EB60(void);
