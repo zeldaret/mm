@@ -66,7 +66,7 @@
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
-    /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Positive indices index CsCameraEntry from scene
+    /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
     /* 0x6 */ s16 unk6;
     /* 0x8 */ s16 additionalCutscene;
     /* 0xA */ u8 sound;
