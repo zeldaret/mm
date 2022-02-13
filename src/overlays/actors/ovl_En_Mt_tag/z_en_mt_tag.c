@@ -114,11 +114,11 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
                                  f32* arg3) {
     s32 curentCheckpoint = -1;
     s32 hasSetCurrentCheckpointOnce = false;
-    f32 phi_f20 = 0.0f;
+    f32 minLineLengthSq = 0.0f;
     s32 sceneExitIndex;
-    f32 sp74;
-    f32 sp70;
-    f32 sp6C;
+    f32 perpendicularPointX;
+    f32 perpendicularPointY;
+    f32 lineLenSq;
     s32 checkpointIterator;
 
     sceneExitIndex = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
@@ -132,12 +132,14 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
         if ((Math3D_PointDistToLine2D(
                 actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
                 (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
-                (&sCheckpointPositions[checkpointIterator])[1].z, &sp74, &sp70, &sp6C)) &&
-            (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) || (sp6C < phi_f20))) {
-            phi_f20 = sp6C;
+                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointY,
+                &lineLenSq)) &&
+            (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
+             (lineLenSq < minLineLengthSq))) {
+            minLineLengthSq = lineLenSq;
             curentCheckpoint = checkpointIterator;
-            *arg2 = sp74;
-            *arg3 = sp70;
+            *arg2 = perpendicularPointX;
+            *arg3 = perpendicularPointY;
             hasSetCurrentCheckpointOnce = true;
         }
         checkpointIterator++;
@@ -152,18 +154,19 @@ s32 EnMttag_PlayerProbablyCantWin(EnMttag* this, GlobalContext* globalCtx) {
     EnRg* rg;
     s32 currentCheckpoints[5];
     s32 upcomingCheckpoints[5];
-    f32 sp7C[5];
-    f32 sp68[5];
+    f32 perpendicularPointsX[5];
+    f32 perpendicularPointsZ[5];
     s32 highestCurrentCheckpoint;
     s32 i;
     s32 ret = false;
 
     highestCurrentCheckpoint = -1;
-    currentCheckpoints[0] =
-        EnMttag_GetCurrentCheckpoint(&player->actor, globalCtx, &upcomingCheckpoints[0], &sp7C[0], &sp68[0]);
+    currentCheckpoints[0] = EnMttag_GetCurrentCheckpoint(&player->actor, globalCtx, &upcomingCheckpoints[0],
+                                                         &perpendicularPointsX[0], &perpendicularPointsZ[0]);
     for (i = 1; i < 5; i++) {
-        currentCheckpoints[i] = EnMttag_GetCurrentCheckpoint(&this->raceGorons[i - 1]->actor, globalCtx,
-                                                             &upcomingCheckpoints[i], &sp7C[i], &sp68[i]);
+        currentCheckpoints[i] =
+            EnMttag_GetCurrentCheckpoint(&this->raceGorons[i - 1]->actor, globalCtx, &upcomingCheckpoints[i],
+                                         &perpendicularPointsX[i], &perpendicularPointsZ[i]);
         if (highestCurrentCheckpoint < currentCheckpoints[i]) {
             highestCurrentCheckpoint = currentCheckpoints[i];
         }
