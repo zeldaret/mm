@@ -569,15 +569,15 @@ SavePlayerData sSaveDefaultPlayerData = {
     { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "        "
     0x30,                                             // healthCapacity
     0x30,                                             // health
-    0x00,                                               // magicLevel
+    0,                                               // magicLevel
     0x30,                                               // magic
-    0x0000,                                             // rupees
-    0x0000,                                             // swordHealth
-    0x0000,                                             // tatlTimer
-    0x00,                                               // magicAcquired
-    0x00,                                               // doubleMagic
-    0x00,                                               // doubleDefense
-    0x00,                                               // unk_1F
+    0,                                             // rupees
+    0,                                             // swordHealth
+    0,                                             // tatlTimer
+    0,                                               // magicAcquired
+    0,                                               // doubleMagic
+    0,                                               // doubleDefense
+    0,                                               // unk_1F
     0xFF,                                               // unk_20
     0x0000,                                             // owlActivationFlags
     0xFF,                                               // unk_24
