@@ -458,7 +458,7 @@ void Sram_IncrementDay(void) {
     // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
     gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
     // Unconfirmed: "Bombers Hide & Seek in Progress"
-    gSaveContext.save.weekEventReg[85] &= (u8)~0x02;
+    gSaveContext.save.weekEventReg[85] &= (u8)~2;
 }
 
 u16 Sram_CalcChecksum(void* data, size_t count) {
