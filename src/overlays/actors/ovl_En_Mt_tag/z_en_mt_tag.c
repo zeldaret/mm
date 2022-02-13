@@ -16,9 +16,9 @@ void EnMttag_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx);
-void EnMttag_StartRace(EnMttag* this, GlobalContext* globalCtx);
-void EnMttag_HandleRace(EnMttag* this, GlobalContext* globalCtx);
-void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_Race(EnMttag* this, GlobalContext* globalCtx);
+void EnMttag_RaceFinish(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx);
 
@@ -44,7 +44,8 @@ static s32 sStartingCheckpointPerSceneExitIndex[] = {
     0, 0, 0, 0, 1, 9, 12, 16, 19, 22, 26, 29, 30, 32, 34, 36, 39, 42, 45,
 };
 
-static Vec3f sCheckpointPositions[] = {
+// The Y-positions here are never used by any part of this actor. They're probably entirely arbitrary.
+static Vec3f sCheckpointDeterminingPositions[] = {
     { -105.0, 1000.0, -240.0 },   { -1751.0, 1000.0, -240.0 },  { -3138.0, 1000.0, -74.0 },
     { -4617.0, 1000.0, 277.0 },   { -5060.0, 1000.0, 388.0 },   { -5412.0, 1000.0, 573.0 },
     { -5523.0, 1000.0, 1035.0 },  { -5393.0, 1000.0, 1405.0 },  { -5060.0, 1000.0, 1553.0 },
@@ -63,14 +64,22 @@ static Vec3f sCheckpointPositions[] = {
     { -1085.0, 1000.0, -2059.0 }, { -1067.0, 1000.0, -912.0 },
 };
 
-s32 EnMttag_IsInGoal(Vec3f* pos) {
+/**
+ * Returns true if the specified position is in the finish line.
+ * The range extends a little bit beyond the finish line's in-game visual.
+ */
+s32 EnMttag_IsInFinishLine(Vec3f* pos) {
     return Math3D_XZBoundCheck(-1261.0f, -901.0f, -1600.0f, -1520.0f, pos->x, pos->z);
 }
 
+/**
+ * Returns a value in PlayerCheatStatus that indicates if the player is cheating
+ * and, if so, what kind of cheating the player is performing.
+ */
 s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
     if (!(gSaveContext.eventInf[1] & 1)) {
         if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
-            // The race hasn't started yet, but the player is beyond the starting line
+            // The race hasn't started yet, but the player is beyond the starting line.
             return PLAYER_CHEAT_STATUS_FALSE_START;
         }
     } else if (Math3D_XZBoundCheck(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
@@ -78,13 +87,18 @@ s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
         // This checks if the player is in an area "behind" the goal that is not accessible
         // in normal play; it can only be reached by climbing the wall somehow. Perhaps they
         // were worried that players would find a way to climb the wall with a glitch, or
-        // perhaps they just wanted to punish people using cheat codes
+        // perhaps they just wanted to punish people using cheat codes.
         return PLAYER_CHEAT_STATUS_TRYING_TO_REACH_GOAL_FROM_BEHIND;
     }
     return PLAYER_CHEAT_STATUS_NO_CHEATING;
 }
 
-s32 EnMttag_InitializeRace(EnMttag* this, GlobalContext* globalCtx) {
+/**
+ * This function tries to find all four Racing Gorons present in the racetrack.
+ * If it finds them, it stores a pointer to each one in the actor's struct.
+ * Returns true if all four Racing Gorons are found.
+ */
+s32 EnMttag_AreFourRacingGoronsPresent(EnMttag* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
     s32 i = 0;
     s32 ret;
@@ -110,6 +124,13 @@ s32 EnMttag_InitializeRace(EnMttag* this, GlobalContext* globalCtx) {
     return ret;
 }
 
+/**
+ * Returns the checkpoint number for the supplied actor.
+ * At the start of the race, all race entrants are at checkpoint 1, and their
+ * checkpoint number gradually increases as they move forward through the racetrack.
+ * The player can have a checkpoint number of -1 if they move far enough backwards
+ * from the starting line.
+ */
 s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* upcomingCheckpoint,
                                  f32* outPerpendicularPointX, f32* outPerpendicularPointZ) {
     s32 curentCheckpoint = -1;
@@ -121,6 +142,8 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
     f32 lineLenSq;
     s32 checkpointIterator;
 
+    // The Goron Racetrack is configured such that the sceneExitIndex for any given floor polygon
+    // gradually increases as you move forward through the racetrack.
     sceneExitIndex = SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     if ((sceneExitIndex < 4) || (sceneExitIndex >= 19)) {
         //! @bug - upcomingCheckpoint is not initialized here
@@ -129,12 +152,14 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
 
     checkpointIterator = sStartingCheckpointPerSceneExitIndex[sceneExitIndex];
 
+    // Iterates through all possible checkpoints that are associated with this sceneExitIndex.
     do {
-        if ((Math3D_PointDistToLine2D(
-                actor->world.pos.x, actor->world.pos.z, (&sCheckpointPositions[checkpointIterator])[-1].x,
-                (&sCheckpointPositions[checkpointIterator])[-1].z, (&sCheckpointPositions[checkpointIterator])[1].x,
-                (&sCheckpointPositions[checkpointIterator])[1].z, &perpendicularPointX, &perpendicularPointZ,
-                &lineLenSq)) &&
+        if ((Math3D_PointDistToLine2D(actor->world.pos.x, actor->world.pos.z,
+                                      (&sCheckpointDeterminingPositions[checkpointIterator])[-1].x,
+                                      (&sCheckpointDeterminingPositions[checkpointIterator])[-1].z,
+                                      (&sCheckpointDeterminingPositions[checkpointIterator])[1].x,
+                                      (&sCheckpointDeterminingPositions[checkpointIterator])[1].z, &perpendicularPointX,
+                                      &perpendicularPointZ, &lineLenSq)) &&
             (!hasSetCurrentCheckpointOnce || ((curentCheckpoint + 1) == checkpointIterator) ||
              (lineLenSq < minLineLengthSq))) {
             minLineLengthSq = lineLenSq;
@@ -150,6 +175,13 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
     return curentCheckpoint;
 }
 
+/**
+ * Returns true if the player is almost certainly going to lose the race.
+ * Specifically, it checks if the player's current checkpoint is 24 or more
+ * checkpoints behind the leading racer. This value was probably chosen because
+ * falling off the wooden bridge in the middle of the track can set the player
+ * back up to 23 checkpoints.
+ */
 s32 EnMttag_PlayerProbablyCantWin(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnRg* rg;
@@ -193,12 +225,18 @@ s32 EnMttag_PlayerProbablyCantWin(EnMttag* this, GlobalContext* globalCtx) {
     return ret;
 }
 
+/**
+ * Exits the race and returns the player back to "normal" gameplay.
+ * Whether the player won or lost the race is determined by arg1 and nextTransition.
+ */
 s32 EnMttag_ExitRace(GlobalContext* globalCtx, s32 arg1, s32 nextTransition) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     globalCtx->nextEntranceIndex = 0xD020;
     if ((gSaveContext.weekEventReg[0x21] & 0x80)) {
+        // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {
+        // Winter
         gSaveContext.nextCutsceneIndex = 0;
     }
 
@@ -209,6 +247,9 @@ s32 EnMttag_ExitRace(GlobalContext* globalCtx, s32 arg1, s32 nextTransition) {
     return 1;
 }
 
+/**
+ * Displays the text which says that the player has made a false start.
+ */
 void EnMttag_ShowFalseStartMessage(EnMttag* this, GlobalContext* globalCtx) {
     gSaveContext.unk_3DD0[4] = 0;
     func_801518B0(globalCtx, 0xE95, NULL); // An entrant made a false start
@@ -217,12 +258,19 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, GlobalContext* globalCtx) {
     this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
 
+/**
+ * Displays the text from the Goron Elder's child which tells the player that
+ * they probably can't win the race.
+ */
 void EnMttag_ShowCantWinMessage(EnMttag* this, GlobalContext* globalCtx) {
     func_801518B0(globalCtx, 0xE97, NULL); // You can't win now...
     func_800B7298(globalCtx, &this->actor, 7);
     this->actionFunc = EnMttag_HandleCantWinChoice;
 }
 
+/**
+ * Shows the cutscene that pans over the race track and shows all five race entrants.
+ */
 void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
@@ -232,14 +280,22 @@ void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * When the intro cutscene concludes, this sets the weekEventReg to prevent it
+ * from showing again and starts the race.
+ */
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
         gSaveContext.weekEventReg[0xC] |= 2;
-        this->actionFunc = EnMttag_StartRace;
+        this->actionFunc = EnMttag_RaceStart;
     }
 }
 
-void EnMttag_StartRace(EnMttag* this, GlobalContext* globalCtx) {
+/**
+ * Handles the race from when the Gorons are first lined up at the
+ * starting block to when the countdown finishes.
+ */
+void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 playerCheatStatus;
 
@@ -264,22 +320,26 @@ void EnMttag_StartRace(EnMttag* this, GlobalContext* globalCtx) {
             } else if ((this->timer < 60) && (globalCtx->interfaceCtx.unk_280 == 8)) {
                 this->timer = 0;
                 gSaveContext.eventInf[1] |= 1;
-                this->actionFunc = EnMttag_HandleRace;
+                this->actionFunc = EnMttag_Race;
             }
         }
     } else {
-        if (EnMttag_InitializeRace(this, globalCtx)) {
+        if (EnMttag_AreFourRacingGoronsPresent(this, globalCtx)) {
             this->raceInitialized = true;
         }
     }
 }
 
-s32 EnMttag_IsAnyRaceGoronInGoal(EnMttag* this) {
+/**
+ * Returns true if any Race Goron is in the finish line.
+ */
+s32 EnMttag_IsAnyRaceGoronInFinishLine(EnMttag* this) {
     s32 ret = false;
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if ((EnMttag_IsInGoal(&this->raceGorons[i]->actor.world.pos)) && (this->raceGorons[i]->actor.update != NULL)) {
+        if ((EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos)) &&
+            (this->raceGorons[i]->actor.update != NULL)) {
             ret = true;
             break;
         }
@@ -287,25 +347,29 @@ s32 EnMttag_IsAnyRaceGoronInGoal(EnMttag* this) {
     return ret;
 }
 
-void EnMttag_HandleRace(EnMttag* this, GlobalContext* globalCtx) {
+/**
+ * Handles the race from when the countdown finishes to when
+ * any race entrant crosses the finish line.
+ */
+void EnMttag_Race(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f* playerPos = &player->actor.world.pos;
     s32 playerCheatStatus;
 
-    if (EnMttag_IsInGoal(playerPos)) {
+    if (EnMttag_IsInFinishLine(playerPos)) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
         this->timer = 55;
         gSaveContext.eventInf[1] |= 2;
-        this->actionFunc = EnMttag_FinishRace;
-    } else if (EnMttag_IsAnyRaceGoronInGoal(this)) {
+        this->actionFunc = EnMttag_RaceFinish;
+    } else if (EnMttag_IsAnyRaceGoronInFinishLine(this)) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
         this->timer = 55;
         gSaveContext.eventInf[1] |= 4;
-        this->actionFunc = EnMttag_FinishRace;
+        this->actionFunc = EnMttag_RaceFinish;
     } else {
         playerCheatStatus = EnMttag_CheckPlayerCheatStatus(playerPos);
         if (playerCheatStatus != PLAYER_CHEAT_STATUS_NO_CHEATING) {
@@ -324,7 +388,11 @@ void EnMttag_HandleRace(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
-void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx) {
+/**
+ * Handles the race after any race entrant crosses the finish line.
+ * This function simply waits for a bit before exiting the race.
+ */
+void EnMttag_RaceFinish(EnMttag* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         if ((gSaveContext.eventInf[1] & 2)) {
             // Player won
@@ -338,6 +406,11 @@ void EnMttag_FinishRace(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Restarts the race if this->shouldRestartRace is true. Otherwise, it exits the race.
+ * In practice, the only time this exits the race is if the player tries to cheat by
+ * reaching the goal from behind.
+ */
 void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
     u8 talkState;
 
@@ -346,9 +419,11 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
         if (this->shouldRestartRace) {
             globalCtx->nextEntranceIndex = 0xD010;
 
-            if ((gSaveContext.weekEventReg[0x21] & 0x80)) {
+            if (gSaveContext.weekEventReg[0x21] & 0x80) {
+                // Spring
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
+                // Winter
                 gSaveContext.nextCutsceneIndex = 0;
             }
 
@@ -371,9 +446,14 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * This function either exits the race or resumes it based on how the player
+ * responded to the Goron Elder's son's question.
+ */
 void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
+            // Exit the race
             func_8019F230();
             gSaveContext.unk_3DD0[4] = 0;
             EnMttag_ExitRace(globalCtx, 2, 2);
@@ -381,12 +461,13 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
             gSaveContext.eventInf[1] |= 4;
             Actor_MarkForDeath(&this->actor);
         } else {
+            // Keep racing
             func_8019F208();
             func_801477B4(globalCtx);
             func_800B7298(globalCtx, &this->actor, 6);
             gSaveContext.eventInf[1] &= 0xF7;
             this->timer = 100;
-            this->actionFunc = EnMttag_HandleRace;
+            this->actionFunc = EnMttag_Race;
         }
     }
 }
@@ -411,7 +492,7 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             s32 requiredScopeTemp;
 
-            this->actionFunc = EnMttag_StartRace;
+            this->actionFunc = EnMttag_RaceStart;
         }
     } else {
         Actor_MarkForDeath(&this->actor);
