@@ -2632,7 +2632,7 @@ beginseg
     name "ovl_Bg_Numa_Hana"
     compress
     include "build/src/overlays/actors/ovl_Bg_Numa_Hana/z_bg_numa_hana.o"
-    include "build/data/ovl_Bg_Numa_Hana/ovl_Bg_Numa_Hana.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Numa_Hana/ovl_Bg_Numa_Hana_reloc.o"
 endseg
 
 beginseg
