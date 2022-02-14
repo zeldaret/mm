@@ -32,7 +32,7 @@ void EnRiverSound_Init(Actor* thisx, GlobalContext* globalCtx) {
     Path* path;
     s32 pathIndex;
 
-    this->playSound = 0;
+    this->playSound = false;
     pathIndex = RS_GET_PATH_INDEX(&this->actor);
     this->actor.params = RS_GET_TYPE(&this->actor);
     if (pathIndex == 0xFF) {
@@ -42,7 +42,7 @@ void EnRiverSound_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     path = &globalCtx->setupPathList[pathIndex];
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
-    this->pathCount = path->count;
+    this->numPoints = path->count;
 }
 
 void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -56,9 +56,9 @@ void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.params < RS_RIVER_DEFAULT_LOW_FREQ) {
         // All sfx from river_sound that accesses gAudioEnvironmentalSfx is associated with a closed-loop
         // path that is used to play a regional sfx
-        Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, true);
+        Actor_GetClosestPosOnPath(this->pathPoints, this->numPoints, &eye, worldPos, true);
     } else {
-        Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, false);
+        Actor_GetClosestPosOnPath(this->pathPoints, this->numPoints, &eye, worldPos, false);
         if (BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId, &this->actor, worldPos) !=
             BGCHECK_Y_MIN) {
             this->soundFreqIndex = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, this->actor.floorPoly, bgId);
