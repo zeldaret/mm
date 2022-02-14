@@ -7,7 +7,7 @@
 #include "z_dm_char01.h"
 #include "objects/object_mtoride/object_mtoride.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((DmChar01*)thisx)
 
@@ -27,10 +27,10 @@ void func_80AA9020(DmChar01* this, GlobalContext* globalCtx);
 void func_80AA90AC(DmChar01* this, GlobalContext* globalCtx);
 void func_80AA90F4(DmChar01* this, GlobalContext* globalCtx);
 
-static s16 D_80AAAE20;
-static s16 D_80AAAE22;
-static s16 D_80AAAE24;
-static s16 D_80AAAE26;
+s16 D_80AAAE20;
+s16 D_80AAAE22;
+s16 D_80AAAE24;
+s16 D_80AAAE26;
 
 #include "overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
@@ -50,7 +50,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_STOP),
 };
 
-static s16 D_80AAAAB4 = 0;
+s16 D_80AAAAB4 = false;
 
 void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmChar01* this = THIS;
@@ -60,12 +60,12 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 1.0f);
 
     this->unk_346 = 0;
-    this->unk_34D = 0;
+    this->unk_34D = false;
     D_80AAAE24 = 0;
     D_80AAAE26 = 0;
 
-    switch (this->dyna.actor.params) {
-        case 0:
+    switch (DMCHAR01_GET(&this->dyna.actor)) {
+        case DMCHAR01_0:
             if (gSaveContext.weekEventReg[20] & 2) {
                 this->unk_34C = 2;
                 this->actionFunc = func_80AA8F1C;
@@ -85,7 +85,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
             DynaPolyActor_Init(&this->dyna, 0);
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_mtoride_Colheader_009E4C);
 
-            this->unk_34D = 1;
+            this->unk_34D = true;
             if (gSaveContext.sceneSetupIndex == 1) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8C28;
@@ -95,7 +95,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
 
-        case 1:
+        case DMCHAR01_1:
             if ((gSaveContext.weekEventReg[20] & 2) || (gSaveContext.sceneSetupIndex == 1)) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8F1C;
@@ -104,7 +104,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
 
-        case 2:
+        case DMCHAR01_2:
             this->unk_34C = 0;
             if (!(gSaveContext.weekEventReg[20] & 1)) {
                 this->unk_34C = 1;
@@ -114,12 +114,12 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->dyna.actor.shape.rot.y += 0x8000;
             DynaPolyActor_Init(&this->dyna, 0);
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_mtoride_Colheader_010C3C);
-            this->unk_34D = 1;
+            this->unk_34D = true;
             this->unk_348 = 200.0f;
             this->actionFunc = func_80AA8F2C;
             break;
 
-        case 3:
+        case DMCHAR01_3:
             this->dyna.actor.world.rot.y += 0x8000;
             this->dyna.actor.shape.rot.y += 0x8000;
             if (!(gSaveContext.weekEventReg[20] & 1)) {
@@ -131,7 +131,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
             DynaPolyActor_Init(&this->dyna, 0);
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_mtoride_Colheader_00FE5C);
 
-            this->unk_34D = 1;
+            this->unk_34D = true;
             if (!(gSaveContext.weekEventReg[20] & 2)) {
                 this->actionFunc = func_80AA9020;
                 this->dyna.actor.world.pos.y -= 120.0f;
@@ -149,7 +149,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
 void DmChar01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmChar01* this = THIS;
 
-    if (this->unk_34D != 0) {
+    if (this->unk_34D) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
@@ -165,15 +165,15 @@ void func_80AA8698(DmChar01* this, GlobalContext* globalCtx) {
     if ((player->stateFlags2 & 0x8000000) && (player2->actor.world.pos.x > -40.0f) &&
         (player2->actor.world.pos.x < 40.0f) && (player2->actor.world.pos.z > 1000.0f) &&
         (player2->actor.world.pos.z < 1078.0f)) {
-        if (D_80AAAAB4 == 0) {
+        if (!D_80AAAAB4) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-            D_80AAAAB4 = 1;
+            D_80AAAAB4 = true;
         }
     } else {
-        D_80AAAAB4 = 0;
+        D_80AAAAB4 = false;
     }
 
-    if ((player->transformation == PLAYER_FORM_DEKU) && (globalCtx->msgCtx.unk1202A == 3) &&
+    if ((player->transformation == PLAYER_FORM_DEKU) && (globalCtx->msgCtx.ocarinaMode == 3) &&
         (globalCtx->msgCtx.unk1202E == 0)) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&
@@ -363,8 +363,8 @@ void DmChar01_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actionFunc(this, globalCtx);
 
-    if (this->unk_34D != 0) {
-        if (this->dyna.actor.params == 0) {
+    if (this->unk_34D) {
+        if (DMCHAR01_GET(&this->dyna.actor) == DMCHAR01_0) {
             Player* player = GET_PLAYER(globalCtx);
 
             if (player->actor.world.pos.y > 5.0f) {
@@ -374,7 +374,7 @@ void DmChar01_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
 
-        if (this->dyna.actor.params == 2) {
+        if (DMCHAR01_GET(&this->dyna.actor) == DMCHAR01_2) {
             if (this->dyna.actor.xzDistToPlayer > 600.0f) {
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
             } else {
@@ -395,10 +395,10 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     f32 temp_f12;
     f32 spBC;
     s32 i;
-    u8 spB7 = 0;
+    u8 spB7 = false;
 
-    switch (thisx->params) {
-        case 0:
+    switch (DMCHAR01_GET(thisx)) {
+        case DMCHAR01_0:
             switch (this->unk_34C) {
                 case 0:
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00AA50));
@@ -451,7 +451,7 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
 
-        case 1:
+        case DMCHAR01_1:
             switch (this->unk_34C) {
                 case 0:
                     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00A5C0));
@@ -465,7 +465,7 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
 
-        case 2:
+        case DMCHAR01_2:
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_mtoride_Matanimheader_00FE90));
             Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_00DF18);
 
@@ -494,20 +494,22 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
                         D_80AAAAC4 = 0;
                         D_80AAAAC8 = 900;
                         D_80AAAACC = 700;
-                        spB7 = 1;
+                        spB7 = true;
                         if (D_80AAAE22 < 1350) {
                             f32 temp_f0 = temp_f12 / 2000.0f;
+
                             D_80AAAAB8 = 420.0f - (420.0f * temp_f0);
                             D_80AAAABC = (200.0f * temp_f0) + 200.0f;
                         } else {
                             f32 temp_f0 = temp_f12 / 2000.0f;
+
                             D_80AAAAB8 = 420.0f - (420.0f * temp_f0);
                             D_80AAAABC = 400.0f;
                         }
                     }
                 }
 
-                if (spB7 != 0) {
+                if (spB7) {
                     for (i = 0; i < D_80AAAAC0 * 2; i++) {
                         Vec3f sp44;
                         f32 phi_f2 = D_80AAAABC;
@@ -534,7 +536,7 @@ void DmChar01_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Gfx_DrawDListXlu(globalCtx, object_mtoride_DL_00DE50);
             break;
 
-        case 3:
+        case DMCHAR01_3:
             if (thisx->world.pos.y > -120.0f) {
                 Gfx_DrawDListOpa(globalCtx, object_mtoride_DL_00FAE8);
             }

@@ -7,6 +7,15 @@ struct DmChar01;
 
 typedef void (*DmChar01ActionFunc)(struct DmChar01*, GlobalContext*);
 
+#define DMCHAR01_GET(thisx) ((thisx)->params)
+
+enum {
+    /* 0 */ DMCHAR01_0,
+    /* 1 */ DMCHAR01_1,
+    /* 2 */ DMCHAR01_2,
+    /* 3 */ DMCHAR01_3,
+};
+
 typedef struct DmChar01 {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ UNK_TYPE1 unk15C[0x44];
