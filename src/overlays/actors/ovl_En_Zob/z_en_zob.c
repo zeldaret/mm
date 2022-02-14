@@ -268,7 +268,7 @@ void func_80B9FC70(EnZob* this, s16 arg1) {
 
 void func_80B9FCA0(EnZob* this, GlobalContext* globalCtx) {
     func_801477B4(globalCtx);
-    globalCtx->msgCtx.unk1202A = 4;
+    globalCtx->msgCtx.ocarinaMode = 4;
     func_80B9FC0C(this);
     this->unk_2F4 &= ~1;
     this->actionFunc = func_80BA0728;
@@ -315,7 +315,7 @@ void func_80B9FE1C(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80B9FE5C(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
-    if (globalCtx->msgCtx.unk1202A == 3) {
+    if (globalCtx->msgCtx.ocarinaMode == 3) {
         globalCtx->msgCtx.unk11F10 = 0;
         this->actionFunc = func_80B9FDDC;
         func_80B9FC70(this, 0);
@@ -339,7 +339,7 @@ void func_80B9FF20(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80B9FF80(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
-    if (globalCtx->msgCtx.unk1202A == 3) {
+    if (globalCtx->msgCtx.ocarinaMode == 3) {
         this->actionFunc = func_80B9FF20;
         this->unk_304 = 6;
         func_80B9F7E4(this, 1, 0);
