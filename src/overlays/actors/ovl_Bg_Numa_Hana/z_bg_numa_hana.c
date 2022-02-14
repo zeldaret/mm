@@ -135,7 +135,15 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A1A56C(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/BgNumaHana_Destroy.s")
+void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    BgNumaHana* this = THIS;
+
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    if (!(this->dyna.actor.params & 1)) {
+        FireObj_Destroy(globalCtx, &this->unk_15C);
+        Collider_DestroyCylinder(globalCtx, &this->unk_1E8);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AA14.s")
 
