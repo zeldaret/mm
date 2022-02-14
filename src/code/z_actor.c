@@ -320,13 +320,12 @@ void func_800B4AEC(GlobalContext* globalCtx, Actor* actor, f32 y) {
 void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
     f32 spEC;
     f32 temp_f12;
-    f32 temp_f20;
     f32 shadowScaleZ;
     f32 temp_f22;
     f32 temp_f24;
     f32 temp_f8;
-    MtxF sp94;
     s32 lightNum;
+    MtxF sp94;
     s32 numLights;
     s8 phi_v1;
     u8 temp_v0;
@@ -342,7 +341,8 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 
         spEC = actor->world.pos.y - actor->floorHeight;
         if (spEC > 20.0f) {
-            temp_f20 = actor->shape.shadowScale;
+            f32 temp_f20 = actor->shape.shadowScale;
+
             temp_v0 = actor->shape.shadowAlpha;
             actor->shape.shadowScale *= 0.3f;
             temp_f12 = (spEC - 20.0f) * 0.02f;
@@ -350,7 +350,6 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
             ActorShadow_DrawCircle(actor, mapper, globalCtx);
             actor->shape.shadowScale = temp_f20;
             actor->shape.shadowAlpha = temp_v0;
-        dummy_label_111649:;
         } else if (spEC >= -1.0f) {
             numLights = mapper->numLights - 2;
 
@@ -377,8 +376,8 @@ void func_800B4B50(Actor* actor, Lights* mapper, GlobalContext* globalCtx) {
 
             for (j = 0; j < 2; j++, phi_s0++) {
                 if (phi_s0->l.dir[1] > 0) {
-                    lightNum = (ABS_ALT(phi_s0->l.dir[1]) * (phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2])) -
-                               (lightNumMax * ((void)0, 8));
+                    lightNum = ((phi_s0->l.col[0] + phi_s0->l.col[1] + phi_s0->l.col[2]) * ABS_ALT(phi_s0->l.dir[1])) -
+                               (8 * lightNumMax);
                     if (lightNum > 0) {
                         ActorShadow_DrawFoot(globalCtx, phi_s0, &sp94, lightNum, temp_f22, temp_f24, shadowScaleZ);
                     }
@@ -2139,7 +2138,7 @@ void func_800B8E58(Player* player, u16 sfxId) {
  * Plays the sound effect at the actor's position
  */
 void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId) {
-    func_8019F1C0(&actor->projectedPos, sfxId);
+    Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
 }
 
 void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
@@ -2155,8 +2154,8 @@ void func_800B8EF4(GlobalContext* globalCtx, Actor* actor) {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
-    func_8019F1C0(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
-    func_8019F1C0(&actor->projectedPos, sfxId + SFX_FLAG);
+    Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
+    Audio_PlaySfxAtPos(&actor->projectedPos, sfxId + SFX_FLAG);
 }
 
 void func_800B8F98(Actor* actor, u16 sfxId) {
@@ -2580,7 +2579,7 @@ void func_800B9D1C(Actor* actor) {
         } else if (actor->audioFlags & 0x10) {
             func_801A0810(&D_801DB4A4, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
         } else if (actor->audioFlags & 1) {
-            func_8019F1C0(&actor->projectedPos, sfxId);
+            Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
         }
     }
 
@@ -3345,7 +3344,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
         actorCtx->targetContext.bgmEnemy = NULL;
     }
 
-    func_801A72CC(&actor->projectedPos);
+    Audio_StopSfxByPos(&actor->projectedPos);
     Actor_Destroy(actor, globalCtx);
 
     newHead = Actor_RemoveFromCategory(globalCtx, actorCtx, actor);
@@ -3487,7 +3486,7 @@ void func_800BB8EC(GameState* gameState, ActorContext* actorCtx, Actor** arg2, A
  */
 void Enemy_StartFinishingBlow(GlobalContext* globalCtx, Actor* actor) {
     globalCtx->actorCtx.freezeFlashTimer = 5;
-    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 20, NA_SE_EN_LAST_DAMAGE);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &actor->world.pos, 20, NA_SE_EN_LAST_DAMAGE);
 }
 
 // blinking routine
@@ -4253,7 +4252,7 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnimation(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 index) {
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animation, s32 index) {
     f32 frameCount;
 
     animation += index;
@@ -4717,7 +4716,7 @@ void Actor_SpawnIceEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos
     s16 yaw;
     s32 j;
 
-    Audio_PlaySoundAtPosition(globalCtx, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &actor->world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < limbPosCount; i++) {
         yaw = Actor_YawToPoint(actor, limbPos);

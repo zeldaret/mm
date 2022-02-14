@@ -61,7 +61,7 @@ void EnWeatherTag_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = (EnWeatherTag*)thisx;
+    EnWeatherTag* this = THIS;
     s32 pad;
     Path* path;
     s32 pathID;
@@ -480,11 +480,11 @@ void func_80967608(EnWeatherTag* this, GlobalContext* globalCtx) {
 }
 
 void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnWeatherTag* this = (EnWeatherTag*)thisx;
+    EnWeatherTag* this = THIS;
     u16 oldTime;
 
     this->actionFunc(this, globalCtx);
-    if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.unk11F22 != 0) && (globalCtx->msgCtx.unk11F04 == 0x5E6) &&
+    if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) && (globalCtx->msgCtx.unk11F04 == 0x5E6) &&
         (!FrameAdvance_IsEnabled(&globalCtx->state)) && (globalCtx->sceneLoadFlag == 0) &&
         (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 

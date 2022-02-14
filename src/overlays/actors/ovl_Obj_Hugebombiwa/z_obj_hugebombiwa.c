@@ -358,8 +358,11 @@ void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A54BF0(this);
 }
 
-void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    ObjHugebombiwa* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_80A54BF0(ObjHugebombiwa* this) {
@@ -410,9 +413,9 @@ void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         } else {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {

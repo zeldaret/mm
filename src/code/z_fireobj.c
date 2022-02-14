@@ -131,7 +131,7 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
             }
         } else if (player->unk_B28 == 0) {
             player->unk_B28 = 0xD2;
-            Audio_PlaySoundAtPosition(globalCtx, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
         } else if (player->unk_B28 < 0xC8) {
             player->unk_B28 = 0xC8;
         }
@@ -242,7 +242,7 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor) {
     } else if ((fire->collision.base.acFlags & 2) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
-        arrow->unk_1C0 = 0x800;
+        arrow->collider.info.toucher.dmgFlags = 0x800;
     }
     fire->collision.dim.pos.x = fire->position.x;
     fire->collision.dim.pos.y = fire->position.y;
