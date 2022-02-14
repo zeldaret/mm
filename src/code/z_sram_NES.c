@@ -567,17 +567,17 @@ SavePlayerData sSaveDefaultPlayerData = {
     { '\0', '\0', '\0', '\0', '\0', '\0' },             // newf
     0,                                                  // deaths
     { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "        "
-    0x30,                                             // healthCapacity
-    0x30,                                             // health
-    0,                                               // magicLevel
+    0x30,                                               // healthCapacity
+    0x30,                                               // health
+    0,                                                  // magicLevel
     0x30,                                               // magic
-    0,                                             // rupees
-    0,                                             // swordHealth
-    0,                                             // tatlTimer
-    0,                                               // magicAcquired
-    0,                                               // doubleMagic
-    0,                                               // doubleDefense
-    0,                                               // unk_1F
+    0,                                                  // rupees
+    0,                                                  // swordHealth
+    0,                                                  // tatlTimer
+    0,                                                  // magicAcquired
+    0,                                                  // doubleMagic
+    0,                                                  // doubleDefense
+    0,                                                  // unk_1F
     0xFF,                                               // unk_20
     0x0000,                                             // owlActivationFlags
     0xFF,                                               // unk_24
@@ -669,19 +669,19 @@ SavePlayerData sSaveDebugPlayerData = {
     { 'Z', 'E', 'L', 'D', 'A', '3' },                   // newf
     0x0000,                                             // deaths
     { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "LINK    "
-    0x80,                                             // healthCapacity
-    0x80,                                             // health
-    0,                                               // magicLevel
+    0x80,                                               // healthCapacity
+    0x80,                                               // health
+    0,                                                  // magicLevel
     0x30,                                               // magic
-    0x32,                                             // rupees
-    0x64,                                             // swordHealth
-    0,                                             // tatlTimer
-    1,                                               // magicAcquired
-    0,                                               // doubleMagic
-    0,                                               // doubleDefense
-    0,                                               // unk_1F
+    0x32,                                               // rupees
+    0x64,                                               // swordHealth
+    0,                                                  // tatlTimer
+    1,                                                  // magicAcquired
+    0,                                                  // doubleMagic
+    0,                                                  // doubleDefense
+    0,                                                  // unk_1F
     0xFF,                                               // unk_20
-    0,                                             // owlActivationFlags
+    0,                                                  // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneNum
 };
