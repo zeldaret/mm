@@ -125,7 +125,7 @@ u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
     switch (this->textId) {
         case 0:
-            if (!(gSaveContext.weekEventReg[0x50] & 0x10)) {
+            if (!(gSaveContext.weekEventReg[80] & 0x10)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -138,7 +138,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
                 this->flags |= ENFSN_GIVE_ITEM;
                 this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
-                gSaveContext.weekEventReg[0x50] |= 0x10;
+                gSaveContext.weekEventReg[80] |= 0x10;
                 this->textId = 0x29F1;
                 break;
             } else {
@@ -158,7 +158,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
-            gSaveContext.weekEventReg[0x50] |= 0x10;
+            gSaveContext.weekEventReg[80] |= 0x10;
             this->textId = 0x29F1;
             break;
         case 0x29F1:
@@ -272,8 +272,8 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
 }
 
 s16 EnFsn_GetThirdDayItemId(void) {
-    if (!(gSaveContext.weekEventReg[0x21] & 4) && CURRENT_DAY == 3) {
-        if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+    if (!(gSaveContext.weekEventReg[33] & 4) && CURRENT_DAY == 3) {
+        if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
             return SI_BOMB_BAG_30_1;
         }
         return SI_MASK_ALL_NIGHT;
@@ -305,7 +305,7 @@ s32 EnFsn_HasItemsToSell(void) {
         return false;
     } else {
         if (((gSaveContext.stolenItems & 0xFF000000) >> 0x18) || ((gSaveContext.stolenItems & 0xFF0000) >> 0x10) ||
-            !(gSaveContext.weekEventReg[0x21] & 4)) {
+            !(gSaveContext.weekEventReg[33] & 4)) {
             return true;
         }
         return false;
@@ -411,9 +411,9 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, GlobalContext* globalCtx) {
             func_8019F208();
             if (CURRENT_DAY != 3) {
                 this->actor.textId = 0x29FB;
-            } else if (gSaveContext.weekEventReg[0x21] & 4) {
+            } else if (gSaveContext.weekEventReg[33] & 4) {
                 this->actor.textId = 0x29FF;
-            } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+            } else if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
                 this->actor.textId = 0x29D7;
             } else {
                 this->actor.textId = 0x29D8;
@@ -835,9 +835,9 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, this->actor.textId, &this->actor);
                     break;
                 case 0x29D2:
-                    if (gSaveContext.weekEventReg[0x21] & 4) {
+                    if (gSaveContext.weekEventReg[33] & 4) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+                    } else if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;
@@ -1123,7 +1123,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
-            gSaveContext.weekEventReg[0x21] |= 4;
+            gSaveContext.weekEventReg[33] |= 4;
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == 2) {
                 ActorCutscene_Stop(this->cutscene);
@@ -1392,7 +1392,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, globalCtx);
     } else {
-        if ((gSaveContext.weekEventReg[0x21] & 8) || (gSaveContext.weekEventReg[0x4F] & 0x40)) {
+        if ((gSaveContext.weekEventReg[33] & 8) || (gSaveContext.weekEventReg[79] & 0x40)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }

@@ -134,7 +134,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
     this->actor.textId = sTextIds[this->textIdIndex];
 
     if (!this->isInMayorsRoom && (player = GET_PLAYER(globalCtx))->transformation == PLAYER_FORM_DEKU) {
-        if (!(gSaveContext.weekEventReg[0x58] & 8)) {
+        if (!(gSaveContext.weekEventReg[88] & 8)) {
             this->actor.textId = 0x62C;
         } else {
             this->actor.textId = 0x62B;
@@ -161,7 +161,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         }
     } else {
         this->textIdIndex = 0;
-        if (gSaveContext.weekEventReg[0x3C] & 8) {
+        if (gSaveContext.weekEventReg[60] & 8) {
             this->textIdIndex = 1;
         }
         if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLE) {

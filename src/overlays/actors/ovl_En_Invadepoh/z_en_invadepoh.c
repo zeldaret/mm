@@ -1818,7 +1818,7 @@ void EnInvadepoh_InitCremia(EnInvadepoh* this, GlobalContext* globalCtx) {
     if (this->bankIndex < 0) {
         Actor_MarkForDeath(&this->actor);
     }
-    if (!(gSaveContext.weekEventReg[0x16] & 1)) {
+    if (!(gSaveContext.weekEventReg[22] & 1)) {
         Actor_MarkForDeath(&this->actor);
     }
     D_80B503F8 = this;
