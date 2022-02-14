@@ -3,78 +3,79 @@
  * Description: Unused System for NPCs (includes animation, door interaction, blinking, pathing, and collider helpers)
  */
 
-#include "global.h"
+#include "z_en_hy.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "objects/object_aob/object_aob.h"
+#include "objects/object_bba/object_bba.h"
+#include "objects/object_bji/object_bji.h"
+#include "objects/object_boj/object_boj.h"
+#include "objects/object_os_anime/object_os_anime.h"
 
-extern AnimationHeader D_0600007C;
-extern AnimationHeader D_0600066C;
-extern AnimationHeader D_0600071C;
-extern AnimationHeader D_060008C0;
-extern AnimationHeader D_06000AB0;
-extern AnimationHeader D_06000FDC;
-extern AnimationHeader D_06001494;
-extern AnimationHeader D_06001908;
-extern AnimationHeader D_06001EE0;
-extern AnimationHeader D_06005DC4;
-extern AnimationHeader D_06005D9C;
-extern AnimationHeader D_0600DED8;
-extern AnimationHeader D_0600F920;
-extern AnimationHeader D_0600FC1C;
-extern AnimationHeader D_0600FEE4;
-extern AnimationHeader D_06010330;
-
-static ActorAnimationEntryS animations[] = {
-    { &D_0600007C, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, 0 },  { &D_06001494, 1.0f, 0, -1, 0, -8 },
-    { &D_06001908, 1.0f, 0, -1, 0, 0 },  { &D_06001908, 1.0f, 0, -1, 0, -8 }, { &D_060008C0, 1.0f, 0, -1, 0, 0 },
-    { &D_06005DC4, 1.0f, 0, -1, 0, 0 },  { &D_06000FDC, 1.0f, 0, -1, 0, 0 },  { &D_06000AB0, 1.0f, 0, -1, 0, -8 },
-    { &D_0600066C, 1.0f, 0, -1, 0, 0 },  { &D_0600071C, 1.0f, 0, -1, 0, 0 },  { &D_06001EE0, 1.0f, 0, -1, 0, 0 },
-    { &D_0600DED8, 1.5f, 0, -1, 2, 0 },  { &D_0600F920, 1.5f, 0, -1, 2, 0 },  { &D_0600FC1C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600FEE4, 1.0f, 0, -1, 0, 0 },  { &D_06010330, 1.0f, 0, -1, 0, 0 },  { &D_0600FC1C, 1.0f, 0, -1, 0, -8 },
-    { &D_0600FEE4, 1.0f, 0, -1, 0, -8 }, { &D_06010330, 1.0f, 0, -1, 0, -8 }, { &D_06005D9C, 1.0f, 0, -1, 0, -8 },
+ActorAnimationEntryS sAnimations[] = {
+    { &object_aob_Anim_00007C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+    { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_bba_Anim_005DC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+    { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_00071C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_os_anime_Anim_001EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_00DED8, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_boj_Anim_00F920, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+    { &object_boj_Anim_005D9C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
 };
 
-s8 D_801BC3F0[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2 };
+s8 gEnHyBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2 };
 
-s8 D_801BC400[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13, 0 };
+s8 gEnHyBodyPartsIndex[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
 
-u8 D_801BC410[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+u8 gEnHyShadowSize[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 isChanged = false;
 
-    if (animIndex >= 0 && animIndex <= 20) {
+    if (animIndex >= ENHY_ANIMATION_AOB_0 && animIndex < ENHY_ANIMATION_MAX) {
         isChanged = true;
-        frameCount = animations[animIndex].frameCount;
+        frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&animations[animIndex].animationSeg->common);
+            frameCount = Animation_GetLastFrame(&sAnimations[animIndex].animationSeg->common);
         }
-        Animation_Change(skelAnime, animations[animIndex].animationSeg, animations[animIndex].playbackSpeed,
-                         animations[animIndex].frame, frameCount, animations[animIndex].mode,
-                         animations[animIndex].transitionRate);
+        Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
+                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].transitionRate);
     }
     return isChanged;
 }
 
-//! @TODO: Return Door instance when c and h files are split
-Actor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
-    Actor* nearestDoor = NULL;
+EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
+    EnDoor* nearestDoor = NULL;
     Actor* doorIter = NULL;
-    Actor* door;
+    EnDoor* door;
     f32 dist;
     s32 isSetup = false;
     f32 minDist = 0.0f;
 
     do {
         doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
-        door = doorIter;
-        dist = Actor_DistanceBetweenActors(actor, door);
+        door = (EnDoor*)doorIter;
+        dist = Actor_DistanceBetweenActors(actor, &door->actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;
             isSetup = true;
         }
-        doorIter = door->next;
+        doorIter = door->actor.next;
     } while (doorIter != NULL);
 
     if (1) {}
@@ -111,27 +112,29 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
 s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
     s32 isInitialized = false;
 
-    if ((func_8013D8DC(enHy->animObjIndex, globalCtx) == 1) && (func_8013D8DC(enHy->unk190, globalCtx) == 1) &&
-        (func_8013D8DC(enHy->unk191, globalCtx) == 1) && (func_8013D8DC(enHy->unk192, globalCtx) == 1)) {
-        enHy->actor.objBankIndex = enHy->unk192;
+    if ((func_8013D8DC(enHy->animObjIndex, globalCtx) == true) &&
+        (func_8013D8DC(enHy->headObjIndex, globalCtx) == true) &&
+        (func_8013D8DC(enHy->skelUpperObjIndex, globalCtx) == true) &&
+        (func_8013D8DC(enHy->skelLowerObjIndex, globalCtx) == true)) {
+        enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[enHy->actor.objBankIndex].segment);
         SkelAnime_InitFlex(globalCtx, &enHy->skelAnime, skeletonHeaderSeg, NULL, enHy->jointTable, enHy->morphTable,
-                           16);
+                           ENHY_LIMB_MAX);
         EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
     }
+
     return isInitialized;
 }
 
-//! @TODO: Should just take EnDoor instead of actor when c and h are split
-void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, Actor* door, s16 arg3, s16 arg4) {
+void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, EnDoor* door, s16 arg3, s16 arg4) {
     s32 pad;
     s8 sp3B;
     Vec3f offset;
     f32 phi_f0;
 
-    Actor_OffsetOfPointInActorCoords(door, &offset, &enHy->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&door->actor, &offset, &enHy->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
     sp3B = ((s8)phi_f0 < 0) ? 0 : 2;
     EnHy_ChangeObjectAndAnim(enHy, globalCtx, (sp3B == 0) ? arg3 : arg4);
@@ -139,14 +142,14 @@ void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, Actor* door, s16 arg3, 
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.moveFlags |= 3;
     AnimationContext_SetMoveActor(globalCtx, &enHy->actor, &enHy->skelAnime, 1.0f);
-    ((EnDoor*)door)->unk_1A1 = 1;
-    ((EnDoor*)door)->unk_1A0 = sp3B;
+    door->unk_1A1 = 1;
+    door->unk_1A0 = sp3B;
 }
 
 s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
     s32 ret = false;
     s16 yaw;
-    Actor* door;
+    EnDoor* door;
     s32 pad;
 
     if (func_8013D68C(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
@@ -154,7 +157,7 @@ s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3
         if (door != NULL) {
             ret = true;
             func_800F0BB4(enHy, globalCtx, door, arg3, arg4);
-            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->world.pos);
+            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->actor.world.pos);
             enHy->actor.world.pos.x += arg5 * Math_SinS(yaw);
             enHy->actor.world.pos.z += arg5 * Math_CosS(yaw);
             enHy->actor.world.rot.y = -yaw;
@@ -168,7 +171,7 @@ s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3
 s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     s32 ret = false;
     s32 pad;
-    Actor* door;
+    EnDoor* door;
 
     enHy->curPoint = 0;
     if (func_8013D68C(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
@@ -176,10 +179,10 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
         if (door != NULL) {
             ret = true;
             func_800F0BB4(enHy, globalCtx, door, arg2, arg3);
-            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->world.pos);
+            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->actor.world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
-            enHy->actor.flags &= ~1;
+            enHy->actor.flags &= ~ACTOR_FLAG_1;
         }
     }
     return ret;
@@ -187,16 +190,16 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
 
 s32 EnHy_SetPointFowards(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex) {
     enHy->actor.gravity = gravity;
-    enHy->actor.flags |= 1;
+    enHy->actor.flags |= ACTOR_FLAG_1;
     EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
     enHy->curPoint++;
-    return 0;
+    return false;
 }
 
 s32 EnHy_SetPointBackwards(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex) {
     EnHy_ChangeObjectAndAnim(enHy, globalCtx, animIndex);
     enHy->curPoint--;
-    return 0;
+    return false;
 }
 
 s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget) {
@@ -212,6 +215,7 @@ s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget) {
             reachedEnd = true;
         }
     }
+
     return reachedEnd;
 }
 
@@ -228,6 +232,7 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
             reachedEnd = true;
         }
     }
+
     return reachedEnd;
 }
 
@@ -267,5 +272,6 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
         Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }
-    return 0;
+
+    return false;
 }
