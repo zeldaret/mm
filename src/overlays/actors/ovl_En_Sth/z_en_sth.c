@@ -61,6 +61,23 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
+AnimationHeader* D_80B6D1C8[] = {
+    &ovl_En_Sth_Anim_003F50, &ovl_En_Sth_Anim_0045B4, &ovl_En_Sth_Anim_004CC0, &ovl_En_Sth_Anim_00533C,
+    &ovl_En_Sth_Anim_0059B8, &ovl_En_Sth_Anim_005E40, &ovl_En_Sth_Anim_006354, &ovl_En_Sth_Anim_00645C,
+};
+
+u16 D_80B6D1E8[] = { 0x1144, 0x1145, 0x1146 };
+
+u16 D_80B6D1F0[] = { 0x1139, 0x113E, 0x1143 };
+
+u16 D_80B6D1F8[] = { 0x1132, 0x113A, 0x113F };
+
+Vec3f D_80B6D200 = { 700.0f, 400.0f, 0.0f };
+
+Color_RGB8 D_80B6D20C[] = {
+    { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 0x50 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
+};
+
 void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnSth* this = THIS;
@@ -96,7 +113,7 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENSTH_F_2:
-            if (func_8012F22C(globalCtx->sceneNum) >= 30) {
+            if (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30) {
                 this->actionFunc = func_80B67DA0;
             } else {
                 Actor_MarkForDeath(&this->actor);
@@ -108,7 +125,7 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENSTH_F_3:
-            if ((gSaveContext.roomInf[126][0] & 0xFFFF) >= 30) {
+            if ((gSaveContext.skullTokenCount & 0xFFFF) >= 30) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -131,7 +148,7 @@ void EnSth_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENSTH_F_5:
-            if (!(gSaveContext.weekEventReg[13] & 0x20) || (func_8012F22C(globalCtx->sceneNum) < 30)) {
+            if (!(gSaveContext.weekEventReg[13] & 0x20) || (Inventory_GetSkullTokenCount(globalCtx->sceneNum) < 30)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -161,11 +178,6 @@ s32 func_80B6703C(EnSth* this, GlobalContext* globalCtx) {
 }
 
 void func_80B670A4(EnSth* this, s16 arg1) {
-    static AnimationHeader* D_80B6D1C8[] = {
-        &ovl_En_Sth_Anim_003F50, &ovl_En_Sth_Anim_0045B4, &ovl_En_Sth_Anim_004CC0, &ovl_En_Sth_Anim_00533C,
-        &ovl_En_Sth_Anim_0059B8, &ovl_En_Sth_Anim_005E40, &ovl_En_Sth_Anim_006354, &ovl_En_Sth_Anim_00645C,
-    };
-
     if ((arg1 >= 0) && (arg1 < ARRAY_COUNT(D_80B6D1C8)) && (arg1 != this->unk_29A)) {
         Animation_Change(&this->skelAnime, D_80B6D1C8[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80B6D1C8[arg1]), 0,
                          -5.0f);
@@ -174,7 +186,6 @@ void func_80B670A4(EnSth* this, s16 arg1) {
 }
 
 void func_80B67148(EnSth* this, GlobalContext* globalCtx) {
-    static u16 D_80B6D1E8[] = { 0x1144, 0x1145, 0x1146 };
     s32 day = CURRENT_DAY - 1;
     u16 val;
 
@@ -207,8 +218,6 @@ void func_80B67208(EnSth* this, GlobalContext* globalCtx) {
 }
 
 void func_80B672A4(EnSth* this, GlobalContext* globalCtx) {
-    static u16 D_80B6D1F0[] = { 0x1139, 0x113E, 0x1143 };
-    static u16 D_80B6D1F8[] = { 0x1132, 0x113A, 0x113F };
     u16 sp1E;
     s32 day = CURRENT_DAY - 1;
 
@@ -437,7 +446,7 @@ void func_80B67984(EnSth* this, GlobalContext* globalCtx) {
             sp1E = 0x918;
         }
         func_80B670A4(this, 2);
-    } else if (func_8012F22C(globalCtx->sceneNum) >= 30) {
+    } else if (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30) {
         if (INV_CONTENT(ITEM_MASK_TRUTH) == ITEM_MASK_TRUTH) {
             this->unk_29C |= 4;
             sp1E = 0x919;
@@ -476,7 +485,7 @@ void func_80B67B50(EnSth* this, GlobalContext* globalCtx) {
     } else {
         this->unk_29C &= ~1;
         gSaveContext.weekEventReg[34] |= 8;
-        Actor_PickUp(&this->actor, globalCtx, 0x8A, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MASK_CAPTAIN, 10000.0f, 50.0f);
     }
 }
 
@@ -550,7 +559,7 @@ void func_80B67DA0(EnSth* this, GlobalContext* globalCtx) {
 void func_80B67E20(Actor* thisx, GlobalContext* globalCtx) {
     EnSth* this = THIS;
 
-    if (func_8012F22C(globalCtx->sceneNum) >= 30) {
+    if (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30) {
         this->actor.update = func_80B680A8;
         this->actor.draw = func_80B6849C;
         this->actor.flags |= ACTOR_FLAG_1;
@@ -571,7 +580,7 @@ void EnSth_Update(Actor* thisx, GlobalContext* globalCtx) {
             Animation_PlayLoop(&this->skelAnime, &ovl_En_Sth_Anim_0045B4);
             this->unk_29A = 1;
             if ((gSaveContext.weekEventReg[34] & 0x10) || (gSaveContext.weekEventReg[34] & 0x20) ||
-                (gSaveContext.weekEventReg[34] & 0x40) || (func_8012F22C(globalCtx->sceneNum) >= 30)) {
+                (gSaveContext.weekEventReg[34] & 0x40) || (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30)) {
                 func_80B670A4(this, 3);
             }
         } else {
@@ -601,7 +610,7 @@ void EnSth_Update(Actor* thisx, GlobalContext* globalCtx) {
                 break;
         }
 
-        if ((ENSTH_GET_F(&this->actor) == ENSTH_F_4) && (func_8012F22C(globalCtx->sceneNum) < 30)) {
+        if ((ENSTH_GET_F(&this->actor) == ENSTH_F_4) && (Inventory_GetSkullTokenCount(globalCtx->sceneNum) < 30)) {
             this->actor.update = func_80B67E20;
             this->actor.draw = NULL;
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -649,7 +658,6 @@ s32 func_80B681E8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void func_80B68310(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80B6D200 = { 700.0f, 400.0f, 0.0f };
     EnSth* this = THIS;
 
     if (limbIndex == 15) {
@@ -687,9 +695,6 @@ void func_80B68310(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 }
 
 void func_80B6849C(Actor* thisx, GlobalContext* globalCtx) {
-    static Color_RGB8 D_80B6D20C[] = {
-        { 190, 110, 0 }, { 0, 180, 110 }, { 0, 255, 0x50 }, { 255, 160, 60 }, { 190, 230, 250 }, { 240, 230, 120 },
-    };
     s32 pad;
     EnSth* this = THIS;
 

@@ -11,8 +11,8 @@ typedef void (*EnSthActionFunc)(struct EnSth*, GlobalContext*);
 #define ENSTH_GET_100(thisx) ((thisx)->params & 0x100)
 
 enum {
-    /* 3 */ ENSTH_F_1 = 1,
-    /* 3 */ ENSTH_F_2,
+    /* 1 */ ENSTH_F_1 = 1,
+    /* 2 */ ENSTH_F_2,
     /* 3 */ ENSTH_F_3,
     /* 4 */ ENSTH_F_4,
     /* 5 */ ENSTH_F_5,
