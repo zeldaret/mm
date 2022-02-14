@@ -1138,7 +1138,7 @@ void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
     if (func_800B8718(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk1202A = 4;
+        globalCtx->msgCtx.ocarinaMode = 4;
         func_8019B544(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= 0x10000;

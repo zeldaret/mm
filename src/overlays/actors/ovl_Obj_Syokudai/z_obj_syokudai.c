@@ -221,7 +221,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderHurtboxActor->params = 0;
-                            ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
+                            ((EnArrow*)flameColliderHurtboxActor)->collider.info.toucher.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&

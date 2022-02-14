@@ -130,16 +130,20 @@ s32 func_80B3E5B4(EnDai* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80B3E5DC(EnDai* this, s32 arg1) {
-    static ActorAnimationEntryS D_80B3FBFC[] = {
-        { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, 0 },  { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, -4 },
-        { &object_dai_Anim_007354, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_000CEC, 1.0f, 0, -1, 2, -4 },
-        { &object_dai_Anim_0069DC, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, 0 },
-        { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_002E58, 1.0f, 0, -1, 0, -4 },
-        { &object_dai_Anim_006590, 1.0f, 0, -1, 2, -4 },
+    static AnimationInfoS D_80B3FBFC[] = {
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_000CEC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_0069DC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_002E58, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_006590, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     };
 
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case 0:
@@ -165,7 +169,7 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_A70 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80B3FBFC, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80B3FBFC, arg1);
     }
 
     return ret;
@@ -409,7 +413,7 @@ void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx) {
 void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
         (globalCtx->msgCtx.unk1202E == 1)) {
         func_80B3E5DC(this, 1);
         this->actionFunc = func_80B3EE8C;
