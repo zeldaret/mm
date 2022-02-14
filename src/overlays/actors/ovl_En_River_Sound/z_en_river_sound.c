@@ -54,6 +54,8 @@ void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&eye, &globalCtx->view.eye);
 
     if (this->actor.params < RS_RIVER_DEFAULT_LOW_FREQ) {
+        // All sfx from river_sound that accesses gAudioEnvironmentalSfx is associated with a closed-loop
+        // path that is used to play a regional sfx
         Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, true);
     } else {
         Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, false);
