@@ -6,7 +6,7 @@
 
 #include "z_en_river_sound.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnRiverSound*)thisx)
 

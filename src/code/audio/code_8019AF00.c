@@ -66,6 +66,9 @@ typedef struct {
     /* 0xC */ s32 remainingFrames;
 } FreqLerp; // size = 0x10
 
+s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume);
+void func_801A3238(s8 playerIndex, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
+
 // Sfx bss
 SfxSettings sSfxSettings[8];
 u8 sSfxSettingsFlags;
@@ -1878,9 +1881,6 @@ const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
 };
 */
 
-s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume);
-void func_801A3238(s8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
-
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019AF00.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019AF58.s")
@@ -2135,7 +2135,7 @@ void Audio_StepFreqLerp(FreqLerp* lerp) {
  * Tower
  */
 void Audio_SetGanonsTowerBgmVolumeLevel(u8 ganonsTowerLevel) {
-    u8 channelIdx;
+    u8 channelIndex;
     s8 pan = 0;
 
     // Ganondorfs's Lair
@@ -2143,9 +2143,9 @@ void Audio_SetGanonsTowerBgmVolumeLevel(u8 ganonsTowerLevel) {
         pan = 0x7F;
     }
 
-    for (channelIdx = 0; channelIdx < 16; channelIdx++) {
+    for (channelIndex = 0; channelIndex < 16; channelIndex++) {
         // CHAN_UPD_PAN_UNSIGNED
-        Audio_QueueCmdS8(((u8)(u32)channelIdx << 8) | 0x7000000, pan);
+        Audio_QueueCmdS8(((u8)(u32)channelIndex << 8) | 0x7000000, pan);
     }
 
     // Lowest room in Ganon's Tower (Entrance Room)
@@ -2164,7 +2164,7 @@ void Audio_SetGanonsTowerBgmVolumeLevel(u8 ganonsTowerLevel) {
  */
 s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
     u8 lowPassFilterCutoff;
-    u8 channelIdx;
+    u8 channelIndex;
     u16 reverb;
 
     if (sGanonsTowerVol != targetVolume) {
@@ -2185,15 +2185,16 @@ s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
                           (u8)(lowPassFilterCutoff));
 
         // Sets the reverb
-        for (channelIdx = 0; channelIdx < ARRAY_COUNT(gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
-             channelIdx++) {
+        for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
+             channelIndex++) {
             if (&gAudioContext.sequenceChannelNone !=
-                gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIdx]) {
+                gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
                 // soundScriptIO[5] was set to 0x40 in channels 0, 1, and 4 (BGM no longer in OoT)
-                if ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIdx]->soundScriptIO[5] != 0xFF) {
+                if ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
+                    0xFF) {
                     // Higher volume leads to lower reverb
                     reverb =
-                        (((u16)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIdx]->soundScriptIO[5] -
+                        (((u16)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
                           targetVolume) +
                          0x7F);
 
@@ -2203,7 +2204,7 @@ s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
 
                     // CHAN_UPD_REVERB
                     Audio_QueueCmdS8(_SHIFTL(5, 24, 8) | _SHIFTL(SEQ_PLAYER_BGM_MAIN, 16, 8) |
-                                         _SHIFTL(channelIdx, 8, 8),
+                                         _SHIFTL(channelIndex, 8, 8),
                                      (u8)reverb);
                 }
             }
@@ -2272,7 +2273,7 @@ void Audio_UpdateRiverSoundVolumes(void) {
 void func_801A09D4(Vec3f* pos, f32 xzDistToPlayer) {
     f32 volumeRel;
     s8 pan;
-    u8 channelIdx;
+    u8 channelIndex;
 
     if (sRiverSoundBgmPos == NULL) {
         sRiverSoundBgmPos = pos;
@@ -2302,11 +2303,11 @@ void func_801A09D4(Vec3f* pos, f32 xzDistToPlayer) {
         volumeRel = ((1.0f - ((sRiverSoundXZDistToPlayer - 120.0f) / 280.0f)) * 0.9f) + 0.1f;
     }
 
-    for (channelIdx = 0; channelIdx < 16; channelIdx++) {
-        if (channelIdx != 9) {
+    for (channelIndex = 0; channelIndex < 16; channelIndex++) {
+        if (channelIndex != 9) {
             Audio_QueueSeqCmd(((u32)(6) << 28) | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(2) << 16) |
-                              ((u32)(channelIdx) << 8) | ((u8)(127.0f * volumeRel)));
-            Audio_QueueCmdS8(0x03000000 | ((u8)((u32)channelIdx) << 8), pan);
+                              ((u32)(channelIndex) << 8) | ((u8)(127.0f * volumeRel)));
+            Audio_QueueCmdS8(0x03000000 | ((u8)((u32)channelIndex) << 8), pan);
         }
     }
 }
