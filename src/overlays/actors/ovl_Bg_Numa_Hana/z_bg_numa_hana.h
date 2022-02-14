@@ -7,8 +7,8 @@
 #define BG_NUMA_HANA_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
 typedef enum {
-    /* 0 */ BG_NUMA_HANA_TYPE_VISUAL,
-    /* 1 */ BG_NUMA_HANA_TYPE_COLLISION,
+    /* 0 */ BG_NUMA_HANA_TYPE_NORMAL,
+    /* 1 */ BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION,
 } BgNumaHanaType;
 
 struct BgNumaHana;
@@ -28,16 +28,16 @@ typedef struct BgNumaHana {
     /* 0x234 */ BgNumaHanaActionFunc actionFunc;
     /* 0x238 */ UnkBgNumaHanaStruct unk_238[6];
     /* 0x2B0 */ UnkBgNumaHanaStruct unk_2B0[6];
-    /* 0x328 */ s16 unk_328;
-    /* 0x32A */ s16 unk_32A;
+    /* 0x328 */ s16 unk_328; // overall petal rotation?
+    /* 0x32A */ s16 unk_32A; // gets added to contribute to overall petal rotation
     /* 0x32C */ s16 unk_32C;
-    /* 0x32E */ s16 unk_32E;
+    /* 0x32E */ s16 unk_32E; // gets added to contibute to overall petal rotation
     /* 0x330 */ s16 unk_330;
     /* 0x334 */ f32 unk_334;
-    /* 0x338 */ s16 unk_338;
+    /* 0x338 */ s16 unk_338; // second part of petal rotation?
     /* 0x33A */ s16 unk_33A;
-    /* 0x33C */ s16 unk_33C;
-    /* 0x33E */ s16 unk_33E;
+    /* 0x33C */ s16 unk_33C; // flower's rotational velocity
+    /* 0x33E */ s16 unk_33E; // jostle timer?
 } BgNumaHana; // size = 0x340
 
 extern const ActorInit Bg_Numa_Hana_InitVars;

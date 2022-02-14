@@ -17,14 +17,14 @@
         <Texture Name="object_numa_obj_Tex_0072B0" OutName="tex_0072B0" Format="rgba16" Width="32" Height="64" Offset="0x72B0" />
         <DList Name="object_numa_obj_DL_008440" Offset="0x8440" />
         <Texture Name="object_numa_obj_Tex_0085A0" OutName="tex_0085A0" Format="rgba16" Width="32" Height="64" Offset="0x85A0" />
-        <Collision Name="object_numa_obj_Colheader_009FE0" Offset="0x9FE0" />
-        <Collision Name="object_numa_obj_Colheader_00A740" Offset="0xA740" />
+        <Collision Name="gWoodenFlowerOpenFlowerCol" Offset="0x9FE0" />
+        <Collision Name="gWoodenFlowerClosedFlowerCol" Offset="0xA740" />
         <DList Name="object_numa_obj_DL_00AB80" Offset="0xAB80" />
-        <DList Name="object_numa_obj_DL_00AB88" Offset="0xAB88" />
+        <DList Name="gWoodenFlowerPetalInnerDL" Offset="0xAB88" />
         <DList Name="object_numa_obj_DL_00B920" Offset="0xB920" />
-        <DList Name="object_numa_obj_DL_00B928" Offset="0xB928" />
+        <DList Name="gWoodenFlowerStalkDL" Offset="0xB928" />
         <DList Name="object_numa_obj_DL_00BE50" Offset="0xBE50" />
-        <DList Name="object_numa_obj_DL_00BE58" Offset="0xBE58" />
+        <DList Name="gWoodenFlowerPetalOuterDL" Offset="0xBE58" />
         <Texture Name="object_numa_obj_Tex_00BFD0" OutName="tex_00BFD0" Format="rgba16" Width="32" Height="32" Offset="0xBFD0" />
         <Texture Name="object_numa_obj_Tex_00C7D0" OutName="tex_00C7D0" Format="rgba16" Width="32" Height="64" Offset="0xC7D0" />
         <Texture Name="object_numa_obj_Tex_00D7D0" OutName="tex_00D7D0" Format="rgba16" Width="32" Height="64" Offset="0xD7D0" />

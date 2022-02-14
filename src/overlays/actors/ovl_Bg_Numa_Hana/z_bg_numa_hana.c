@@ -17,18 +17,18 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A1AA14(BgNumaHana* this);
-void func_80A1AA28(BgNumaHana* this, GlobalContext* globalCtx);
-void func_80A1AA38(BgNumaHana* this);
-void func_80A1AA4C(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_SetupDoNothing(BgNumaHana* this);
+void BgNumaHana_DoNothing(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_SetupClosedIdle(BgNumaHana* this);
+void BgNumaHana_ClosedIdle(BgNumaHana* this, GlobalContext* globalCtx);
 void func_80A1AAE8(BgNumaHana* this);
 void func_80A1AB00(BgNumaHana* this, GlobalContext* globalCtx);
 void func_80A1ABD8(BgNumaHana* this);
 void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx);
 void func_80A1ACCC(BgNumaHana* this);
 void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx);
-void func_80A1AE08(BgNumaHana* this);
-void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx);
+void BgNumaHana_SetupOpenedIdle(BgNumaHana* this);
+void BgNumaHana_OpenedIdle(BgNumaHana* this, GlobalContext* globalCtx);
 
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
@@ -75,13 +75,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_STOP),
 };
 
-s32 func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx) {
+s32 BgNumaHana_SpawnOpenFlowerCollisionChild(BgNumaHana* this, GlobalContext* globalCtx) {
     Actor* child;
 
     child = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_BG_NUMA_HANA,
                                this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                                this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
-                               BG_NUMA_HANA_TYPE_COLLISION);
+                               BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION);
 
     return child != NULL;
 }
@@ -135,19 +135,19 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 3);
-    if (type == BG_NUMA_HANA_TYPE_COLLISION) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_numa_obj_Colheader_009FE0);
-        func_80A1AA14(this);
+    if (type == BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION) {
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gWoodenFlowerOpenFlowerCol);
+        BgNumaHana_SetupDoNothing(this);
         this->dyna.actor.draw = NULL;
         return;
     }
 
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_numa_obj_Colheader_00A740);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gWoodenFlowerClosedFlowerCol);
     FireObj_Init(globalCtx, &this->fire, &sFireObjInit, &this->dyna.actor);
     Collider_InitCylinder(globalCtx, &this->torchCollider);
     Collider_SetCylinder(globalCtx, &this->torchCollider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    if (!func_80A1A500(this, globalCtx)) {
+    if (!BgNumaHana_SpawnOpenFlowerCollisionChild(this, globalCtx)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -166,12 +166,12 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 210.0f;
         FireObj_SetState2(&this->fire, 0.05f, 2);
         Flags_SetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
-        func_80A1AE08(this);
+        BgNumaHana_SetupOpenedIdle(this);
     } else {
         child = (DynaPolyActor*)this->dyna.actor.child;
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, child->bgId);
         Flags_UnsetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
-        func_80A1AA38(this);
+        BgNumaHana_SetupClosedIdle(this);
     }
 
     func_80A1A56C(this);
@@ -181,24 +181,24 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgNumaHana* this = THIS;
 
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    if (BG_NUMA_HANA_GET_TYPE(&this->dyna.actor) == BG_NUMA_HANA_TYPE_VISUAL) {
+    if (BG_NUMA_HANA_GET_TYPE(&this->dyna.actor) == BG_NUMA_HANA_TYPE_NORMAL) {
         FireObj_Destroy(globalCtx, &this->fire);
         Collider_DestroyCylinder(globalCtx, &this->torchCollider);
     }
 }
 
-void func_80A1AA14(BgNumaHana* this) {
-    this->actionFunc = func_80A1AA28;
+void BgNumaHana_SetupDoNothing(BgNumaHana* this) {
+    this->actionFunc = BgNumaHana_DoNothing;
 }
 
-void func_80A1AA28(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_DoNothing(BgNumaHana* this, GlobalContext* globalCtx) {
 }
 
-void func_80A1AA38(BgNumaHana* this) {
-    this->actionFunc = func_80A1AA4C;
+void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
+    this->actionFunc = BgNumaHana_ClosedIdle;
 }
 
-void func_80A1AA4C(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_ClosedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
     if (this->fire.state != 3) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
@@ -220,7 +220,7 @@ void func_80A1AAE8(BgNumaHana* this) {
 void func_80A1AB00(BgNumaHana* this, GlobalContext* globalCtx) {
     Math_StepToS(&this->unk_32C, 0xF0, 0xE);
     if (Math_ScaledStepToS(&this->unk_32A, 0x2000, this->unk_32C)) {
-        if (this->unk_33E >= 0xB) {
+        if (this->unk_33E >= 11) {
             func_80A1ABD8(this);
         } else {
             if (this->unk_33E <= 0) {
@@ -229,7 +229,7 @@ void func_80A1AB00(BgNumaHana* this, GlobalContext* globalCtx) {
                 this->unk_334 = 420.0f;
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
-            this->unk_33E += 1;
+            this->unk_33E++;
         }
     } else {
         func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
@@ -248,7 +248,7 @@ void func_80A1ABD8(BgNumaHana* this) {
 void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx) {
     Math_StepToS(&this->unk_33A, 0xF0, 0xE);
     if (Math_ScaledStepToS(&this->unk_338, -0x4000, this->unk_33A)) {
-        if (this->unk_33E >= 0xB) {
+        if (this->unk_33E >= 11) {
             func_80A1ACCC(this);
         } else {
             if (this->unk_33E <= 0) {
@@ -257,7 +257,7 @@ void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx) {
                 this->unk_334 = 130.0f;
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
-            this->unk_33E += 1;
+            this->unk_33E++;
         }
     } else {
         func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
@@ -296,18 +296,18 @@ void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx) {
         this->unk_33C = 0x147;
         this->unk_334 = 0.0f;
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        func_80A1AE08(this);
+        BgNumaHana_SetupOpenedIdle(this);
     }
 
     func_80A1A56C(this);
     func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
 
-void func_80A1AE08(BgNumaHana* this) {
-    this->actionFunc = func_80A1AE1C;
+void BgNumaHana_SetupOpenedIdle(BgNumaHana* this) {
+    this->actionFunc = BgNumaHana_OpenedIdle;
 }
 
-void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx) {
+void BgNumaHana_OpenedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y += this->unk_33C;
     this->unk_328 = this->unk_32A + this->unk_32E;
     func_80A1A56C(this);
@@ -321,7 +321,7 @@ void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f firePos;
 
     type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
-    if (type == BG_NUMA_HANA_TYPE_VISUAL) {
+    if (type == BG_NUMA_HANA_TYPE_NORMAL) {
         firePos.x = this->dyna.actor.world.pos.x;
         firePos.y = this->dyna.actor.world.pos.y + 10.5f;
         firePos.z = this->dyna.actor.world.pos.z;
@@ -331,7 +331,7 @@ void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if (type == BG_NUMA_HANA_TYPE_VISUAL) {
+    if (type == BG_NUMA_HANA_TYPE_NORMAL) {
         this->dyna.actor.child->shape.rot = this->dyna.actor.shape.rot;
         Collider_UpdateCylinder(&this->dyna.actor, &this->torchCollider);
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->torchCollider.base);
@@ -351,7 +351,7 @@ void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_numa_obj_DL_00B928);
+    gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 
     for (i = 0; i < 6; i++) {
         phi_s1 = &this->unk_238[i];
@@ -360,12 +360,12 @@ void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_SetStateRotationAndTranslation(phi_s1->unk_00.x, phi_s1->unk_00.y, phi_s1->unk_00.z, &phi_s1->unk_0C);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_numa_obj_DL_00AB88);
+        gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerPetalInnerDL);
 
         Matrix_SetStateRotationAndTranslation(phi_s2->unk_00.x, phi_s2->unk_00.y, phi_s2->unk_00.z, &phi_s2->unk_0C);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_numa_obj_DL_00BE58);
+        gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerPetalOuterDL);
     }
 
     objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_SYOKUDAI);
