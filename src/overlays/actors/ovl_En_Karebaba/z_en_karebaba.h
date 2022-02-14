@@ -24,9 +24,7 @@ typedef struct EnKarebaba {
     /* 0x01F0 */ f32 unk_1F0;
     /* 0x01F4 */ f32 unk_1F4;
     /* 0x01F8 */ f32 unk_1F8;
-    /* 0x01FC */ Vec3f unk_1FC;
-    /* 0x0208 */ Vec3f unk_208[2];
-    /* 0x0220 */ Vec3f unk_220;
+    /* 0x01FC */ Vec3f unk_1FC[4];
     /* 0x022C */ CollisionPoly* unk_22C;
     /* 0x0230 */ ColliderCylinder collider1;
     /* 0x027C */ ColliderCylinder collider2;

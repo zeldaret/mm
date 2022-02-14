@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_dekubaba/object_dekubaba.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnKarebaba*)thisx)
 
@@ -133,6 +133,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
 };
 
+Color_RGBA8 D_808F2E28 = { 0, 0, 0, 0 };
+
+Gfx* D_808F2E2C[] = { object_dekubaba_DL_001330, object_dekubaba_DL_001628, object_dekubaba_DL_001828 };
+
 void EnKarebaba_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKarebaba* this = THIS;
 
@@ -179,7 +183,7 @@ void func_808F1374(EnKarebaba* this, GlobalContext* globalCtx) {
         } else {
             phi_a3 = 4;
         }
-        Actor_SpawnIceEffects(globalCtx, &this->actor, &this->unk_1FC, phi_a3, 4, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_1FC, phi_a3, 4, 0.3f, 0.2f);
     }
 }
 
@@ -308,7 +312,7 @@ void func_808F190C(EnKarebaba* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MIZUBABA1_MOUTH);
     }
 
-    if (this->collider2.base.acFlags & 2) {
+    if (this->collider2.base.acFlags & AC_HIT) {
         func_808F13FC(this, globalCtx);
         if (this->actor.params == ENKAREBABA_1) {
             func_808F1BF8(this);
@@ -331,7 +335,6 @@ void func_808F1A3C(EnKarebaba* this) {
 void func_808F1A58(EnKarebaba* this, GlobalContext* globalCtx) {
     s32 phi_v0;
     f32 sp28;
-    s32 abs;
 
     if (this->unk_1EE != 0) {
         this->unk_1EE--;
@@ -344,13 +347,7 @@ void func_808F1A58(EnKarebaba* this, GlobalContext* globalCtx) {
     }
 
     phi_v0 = 20 - this->unk_1EE;
-    if (phi_v0 < 0) {
-        abs = -phi_v0;
-    } else {
-        abs = phi_v0;
-    }
-
-    phi_v0 = 20 - abs;
+    phi_v0 = 20 - ABS_ALT(phi_v0);
     if (phi_v0 > 10) {
         phi_v0 = 10;
     }
@@ -364,7 +361,7 @@ void func_808F1A58(EnKarebaba* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = (Math_SinS(this->actor.shape.rot.y) * sp28) + this->actor.home.pos.x;
     this->actor.world.pos.z = (Math_CosS(this->actor.shape.rot.y) * sp28) + this->actor.home.pos.z;
 
-    if (this->collider2.base.acFlags & 2) {
+    if (this->collider2.base.acFlags & AC_HIT) {
         func_808F13FC(this, globalCtx);
         func_808F1BF8(this);
         Enemy_StartFinishingBlow(globalCtx, &this->actor);
@@ -385,7 +382,7 @@ void func_808F1BF8(EnKarebaba* this) {
     }
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
-    this->actor.flags |= 0x30;
+    this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     this->actionFunc = func_808F1C84;
 }
 
@@ -397,7 +394,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
     f32 temp_f24;
 
     if (this->unk_1EC == 10) {
-        this->unk_1EE += -1;
+        this->unk_1EE--;
         if (this->unk_1EE == 0) {
             this->actor.gravity = -0.8f;
             this->actor.speedXZ = 3.0f;
@@ -417,7 +414,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
                 this->actor.scale.y = 0.0f;
                 this->actor.scale.x = 0.0f;
                 this->actor.speedXZ = 0.0f;
-                this->actor.flags &= ~(4 | 1);
+                this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, -1, 10, NULL);
             }
 
@@ -447,8 +444,8 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
 
 void func_808F1FAC(EnKarebaba* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
-    this->actor.flags |= (0x20 | 0x10);
-    this->actor.flags &= ~1;
+    this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
+    this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->unk_1EC == 10) {
         this->unk_1EE = 3;
     }
@@ -463,7 +460,7 @@ void func_808F200C(EnKarebaba* this, GlobalContext* globalCtx) {
         }
     } else {
         if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.0005f)) {
-            Item_DropCollectible(globalCtx, &this->actor.world.pos, 12);
+            Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_NUTS_1);
             func_808F238C(this);
         } else {
             EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, -1, 10, NULL);
@@ -476,14 +473,14 @@ void func_808F200C(EnKarebaba* this, GlobalContext* globalCtx) {
 
 void func_808F20FC(EnKarebaba* this, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.03f);
-    this->actor.shape.rot.x += -0x4000;
+    this->actor.shape.rot.x -= 0x4000;
     this->actor.shape.yOffset = 1000.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.shape.shadowScale = 3.0f;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 8);
     this->unk_1EE = 200;
-    this->actor.flags &= ~0x20;
+    this->actor.flags &= ~ACTOR_FLAG_20;
     this->unk_1F0 = 0.0f;
     this->actionFunc = func_808F21A4;
 }
@@ -496,7 +493,7 @@ void func_808F21A4(EnKarebaba* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx) || (this->unk_1EE == 0)) {
         func_808F238C(this);
     } else {
-        Actor_PickUpNearby(&this->actor, globalCtx, 25);
+        Actor_PickUpNearby(&this->actor, globalCtx, GI_STICKS_1);
     }
 }
 
@@ -547,8 +544,8 @@ void func_808F241C(EnKarebaba* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = this->actor.home.pos.y + (14.0f * sp1C);
 
     if (this->unk_1EE == 20) {
-        this->actor.flags &= ~0x10;
-        this->actor.flags |= (4 | 1);
+        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
         if (this->actor.params == ENKAREBABA_1) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 5);
         }
@@ -646,8 +643,6 @@ void func_808F280C(EnKarebaba* this, GlobalContext* globalCtx) {
 }
 
 void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Color_RGBA8 D_808F2E28 = { 0, 0, 0, 0 };
-    static Gfx* D_808F2E2C[] = { object_dekubaba_DL_001330, object_dekubaba_DL_001628, object_dekubaba_DL_001828 };
     EnKarebaba* this = THIS;
     s32 i;
     s32 sp94;
@@ -657,7 +652,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Math_Vec3f_Copy(&this->unk_1FC, &this->actor.world.pos);
+    Math_Vec3f_Copy(this->unk_1FC, &this->actor.world.pos);
 
     if (this->actionFunc == func_808F21A4) {
         if ((this->unk_1EE > 40) || (this->unk_1EE & 1)) {
@@ -696,7 +691,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_808F2E2C[i]);
 
-            Matrix_GetStateTranslation(&this->unk_208[i]);
+            Matrix_GetStateTranslation(&this->unk_1FC[1 + i]);
             if ((i == 0) && (this->actionFunc == func_808F1C84)) {
                 Matrix_GetStateTranslation(&this->actor.focus.pos);
             }
@@ -724,7 +719,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_001828);
 
-        Matrix_GetStateTranslation(&this->unk_220);
+        Matrix_GetStateTranslation(&this->unk_1FC[3]);
     }
 
     func_800AE5A0(globalCtx);
@@ -735,7 +730,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
         phi_a3 = 4;
     }
 
-    func_800BE680(globalCtx, &this->actor, &this->unk_1FC, phi_a3, this->unk_1F4, this->unk_1F8, this->unk_1F0,
+    func_800BE680(globalCtx, &this->actor, this->unk_1FC, phi_a3, this->unk_1F4, this->unk_1F8, this->unk_1F0,
                   this->unk_1EC);
 
     if (this->unk_22C != 0) {
