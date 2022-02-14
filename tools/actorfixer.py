@@ -213,7 +213,8 @@ animdict = {
     "func_800BE2B8": "Actor_SetDropFlagJntSph",
     "Actor_TitleCardCreate": "TitleCard_InitBossName",
     "func_800B867C": "Actor_TextboxIsClosing",
-    "func_800BDC5C": "Actor_ChangeAnimation",
+    "func_800BDC5C": "Actor_ChangeAnimationByInfo",
+    "Actor_ChangeAnimation(": "Actor_ChangeAnimationByInfo(",
     "func_80152498": "Message_GetState",
     "func_800B8898": "Actor_GetScreenPos",
     "Audio_PlayActorSound2": "Actor_PlaySfxAtPos",
@@ -414,7 +415,12 @@ animdict = {
     "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
     "func_8013AB00": "SubS_DrawTransformFlex",
     "func_8013A860": "SubS_DrawTransformFlexLimb",
-    
+    "func_8013BC6C": "SubS_ChangeAnimationByInfoS",
+    "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo",
+    "func_8013D9C8": "SubS_FillLimbRotTables",
+    "func_80114E90": "Interface_HasEmptyBottle",
+    "func_80114F2C": "Interface_HasItemInBottle",
+    "func_80123C90": "Player_SetEquipmentData",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",
@@ -447,6 +453,9 @@ animdict = {
     "player->unk_394": "player->csMode",
     "player->unk_A87": "player->exchangeItemId",
     "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
+    "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
+    "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
+    "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
 
     # Variables
     "D_0407D590": "gGameplayKeepDrawFlameDL",
@@ -454,6 +463,11 @@ animdict = {
     "D_801D15BC": "gZeroVec3s",
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
+
+    # Structs
+    "ActorAnimationEntry": "AnimationInfo",
+    "ActorAnimationEntryS": "AnimationInfoS",
+    "struct_80B8E1A8": "AnimationSpeedInfo",
 
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",

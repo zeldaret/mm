@@ -230,14 +230,21 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_mm_Anim_002238, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_002238, 1.0f, 0, -1, 0, -4 },
-    { &object_mm_Anim_00A4E0, 1.0f, 0, -1, 2, 0 },  { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, 0 },
-    { &object_mm_Anim_00B09C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_00BA78, 1.0f, 0, -1, 2, 0 },
-    { &object_mm_Anim_00C32C, 1.0f, 0, -1, 0, -4 }, { &object_mm_Anim_0099B4, 1.0f, 0, -1, 0, 0 },
-    { &object_mm_Anim_000FC4, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00A8D8, 1.0f, 0, -1, 0, 0 },
-    { &object_mm_Anim_00099C, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_001F84, 1.0f, 0, -1, 2, 0 },
-    { &object_mm_Anim_000468, 1.0f, 0, -1, 0, 0 },  { &object_mm_Anim_00C640, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_002238, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_mm_Anim_00A4E0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_mm_Anim_00B09C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00B09C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_mm_Anim_00BA78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_mm_Anim_00C32C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_mm_Anim_0099B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_000FC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00A8D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00099C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_001F84, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_mm_Anim_000468, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_mm_Anim_00C640, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80AF7B40(void) {
@@ -415,7 +422,7 @@ s32 func_80AF7E98(EnPm* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_384 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
         this->unk_35C = this->skelAnime.playSpeed;
     }
 

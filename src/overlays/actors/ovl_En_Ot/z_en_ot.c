@@ -95,10 +95,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 5, 33, -20, { 0, 0, 0 } },
 };
 
-static struct_80B8E1A8 sAnimations[] = {
-    { &object_ot_Anim_004B30, 1.0f, 0, -5.0f },
-    { &object_ot_Anim_0008D8, 1.0f, 0, -5.0f },
-    { &object_ot_Anim_000420, 1.0f, 0, 0.0f },
+static AnimationSpeedInfo sAnimations[] = {
+    { &object_ot_Anim_004B30, 1.0f, ANIMMODE_LOOP, -5.0f },
+    { &object_ot_Anim_0008D8, 1.0f, ANIMMODE_LOOP, -5.0f },
+    { &object_ot_Anim_000420, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -152,10 +152,10 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable,
                        this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
-                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),
-                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common), sAnimations[0].mode,
-                     sAnimations[0].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimations[0].animation, 1.0f,
+                     Animation_GetLastFrame(&sAnimations[0].animation->common) * Rand_ZeroOne(),
+                     Animation_GetLastFrame(&sAnimations[0].animation->common), sAnimations[0].mode,
+                     sAnimations[0].morphFrames);
     this->unk_346 = ENOT_GET_7F(&this->actor);
     this->unk_344 = this->actor.world.rot.z;
     this->actor.world.rot.z = 0;
@@ -163,7 +163,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     this->unk_744.r = 255;
@@ -300,7 +300,7 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 }
 
 void func_80B5BDA8(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->actionFunc = func_80B5BE04;
 }
@@ -322,7 +322,7 @@ void func_80B5BE04(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5BE88(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actionFunc = func_80B5BED4;
 }
 
@@ -337,7 +337,7 @@ void func_80B5BED4(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5BF60(EnOt* this, GlobalContext* globalCtx) {
     this->unk_32C |= 0x40;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5BFB8;
 }
 
@@ -410,8 +410,8 @@ void func_80B5C25C(EnOt* this, GlobalContext* globalCtx) {
     if ((this->unk_33C == 2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
         this->unk_32C |= 0x100;
         this->unk_360->unk_32C |= 0x100;
-        func_8013E1C8(&this->skelAnime, sAnimations, 2, &this->animIdx);
-        func_8013E1C8(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIdx);
+        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
         this->actor.flags |= 0x8000000;
         this->actor.flags &= ~(0x8 | 0x1);
         this->unk_360->actor.flags |= 0x8000000;
@@ -437,7 +437,7 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     Vec3f sp38;
 
     this->unk_3A0 += 0x2D8;
-    Matrix_RotateY(this->unk_3A0, 0);
+    Matrix_RotateY(this->unk_3A0, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp5C);
     Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp50);
     this->unk_348.x = this->unk_394.x + sp5C.x;
@@ -461,7 +461,7 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)), 0);
+        Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_NEW);
         sp38.x = 1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
@@ -489,7 +489,7 @@ void func_80B5C64C(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5C684(EnOt* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5C6DC;
 }
 
@@ -635,7 +635,7 @@ void func_80B5CCA0(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CCF4(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5CD40;
 }
 
@@ -676,7 +676,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
 void func_80B5CE6C(EnOt* this, GlobalContext* globalCtx) {
     this->unk_384 = 0;
     this->unk_32C |= 0x20;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5CEC8;
 }
 
@@ -731,7 +731,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5D114(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5D160;
 }
 
@@ -891,7 +891,7 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     this->unk_2C0.unk_2C.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~(0x8 | 0x1);
     Flags_SetSwitch(globalCtx, ENOT_GET_3F80(&this->actor));

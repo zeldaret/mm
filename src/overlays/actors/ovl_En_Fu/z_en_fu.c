@@ -74,11 +74,14 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -369,7 +372,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_809622FC(EnFu* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -534,7 +537,7 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -1212,7 +1215,7 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 break;
 
             case 0x2840:
@@ -1238,21 +1241,21 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                 break;
 
             case 0x2860:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                 break;
 
             case 0x285F:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
                 break;
         }
     }
