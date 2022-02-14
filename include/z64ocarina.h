@@ -93,7 +93,7 @@ typedef enum {
 
 /**
  * BFlat4Flag Note:
- * Flag for resolving whether (noteIdx = NOTE_BFLAT4) 
+ * Flag for resolving whether (pitch = OCARINA_PITCH_BFLAT4) 
  * gets mapped to either C_RIGHT and C_LEFT
  * 
  * This is required as C_RIGHT and C_LEFT are the only notes
@@ -103,11 +103,11 @@ typedef enum {
  */ 
 
 typedef struct {
-    /* 0x0 */ u8 noteIdx; // number of semitones above middle C
+    /* 0x0 */ u8 pitch; // number of semitones above middle C
     /* 0x2 */ u16 length; // number of frames the note is sustained
     /* 0x4 */ u8 volume;
     /* 0x5 */ u8 vibrato;
-    /* 0x6 */ s8 bend; // frequency multiplicative offset from the pitch defined by noteIdx
+    /* 0x6 */ s8 bend; // frequency multiplicative offset from the pitch defined by pitch
     /* 0x7 */ u8 BFlat4Flag; // See note above
 } OcarinaNote;  // size = 0x8
 

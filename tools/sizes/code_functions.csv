@@ -3236,7 +3236,7 @@ asm/non_matchings/code/code_80192BE0/func_8019440C.s,func_8019440C,0x8019440C,0x
 asm/non_matchings/code/code_80192BE0/func_80194528.s,func_80194528,0x80194528,0x8
 asm/non_matchings/code/code_80192BE0/func_80194548.s,func_80194548,0x80194548,0x8
 asm/non_matchings/code/code_80192BE0/func_80194568.s,func_80194568,0x80194568,0x40
-asm/non_matchings/code/code_80192BE0/func_80194668.s,func_80194668,0x80194668,0x1F
+asm/non_matchings/code/code_80192BE0/Audio_NextRandom.s,Audio_NextRandom,0x80194668,0x1F
 asm/non_matchings/code/code_80192BE0/func_801946E4.s,func_801946E4,0x801946E4,0xB
 asm/non_matchings/code/code_80194710/Audio_InvalDCache.s,Audio_InvalDCache,0x80194710,0x10
 asm/non_matchings/code/code_80194710/Audio_WritebackDCache.s,Audio_WritebackDCache,0x80194750,0x10
@@ -3327,7 +3327,7 @@ asm/non_matchings/code/code_8019AF00/func_8019AF00.s,func_8019AF00,0x8019AF00,0x
 asm/non_matchings/code/code_8019AF00/func_8019AF58.s,func_8019AF58,0x8019AF58,0x24
 asm/non_matchings/code/code_8019AF00/func_8019AFE8.s,func_8019AFE8,0x8019AFE8,0x11
 asm/non_matchings/code/code_8019AF00/func_8019B02C.s,func_8019B02C,0x8019B02C,0x12
-asm/non_matchings/code/code_8019AF00/func_8019B074.s,func_8019B074,0x8019B074,0x34
+asm/non_matchings/code/code_8019AF00/AudioOcarina_MapSongFromNotesToButtons.s,AudioOcarina_MapSongFromNotesToButtons,0x8019B074,0x34
 asm/non_matchings/code/code_8019AF00/func_8019B144.s,func_8019B144,0x8019B144,0x8D
 asm/non_matchings/code/code_8019AF00/func_8019B378.s,func_8019B378,0x8019B378,0x5
 asm/non_matchings/code/code_8019AF00/func_8019B38C.s,func_8019B38C,0x8019B38C,0x11

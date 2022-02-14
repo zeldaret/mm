@@ -1014,7 +1014,7 @@ u8 sCurOcarinaSong[8] = {
 u8 sOcarinaSongAppendPos = 0;
 u8 sOcarinaSongStartingPos = 0;
 
-u8 sButtonToNoteMap[5] = {
+u8 sButtonToPitchMap[5] = {
     OCARINA_PITCH_D4, // OCARINA_BTN_A
     OCARINA_PITCH_F4, // OCARINA_BTN_C_DOWN
     OCARINA_PITCH_A4, // OCARINA_BTN_C_RIGHT
@@ -1460,7 +1460,7 @@ OcarinaNote* gScarecrowLongSongPtr = sScarecrowsLongSongNotes;
 u8* gScarecrowSpawnSongPtr = (u8*)&sOcarinaSongNotes[OCARINA_SONG_SCARECROW];
 OcarinaNote* sTerminaWallSongPtr = sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL];
 
-u8 sNoteToButtonMap[16] = {
+u8 sPitchToButtonMap[16] = {
     OCARINA_BTN_A,                            // OCARINA_PITCH_C4
     OCARINA_BTN_A,                            // OCARINA_PITCH_DFLAT4
     OCARINA_BTN_A,                            // OCARINA_PITCH_D4
@@ -1849,6 +1849,7 @@ const u16 gAudioEnvironmentalSfx[] = {
     NA_SE_EV_WAVE_S - SFX_FLAG,         NA_SE_EV_WAVE_S - SFX_FLAG,
 };
 
+extern const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX];
 /**
 const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
     true,  // OCARINA_SONG_SONATA
@@ -1878,6 +1879,8 @@ const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
 };
 */
 
+s32 AudioOcarina_MemoryGameGenerateNotes(void);
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019AF00.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019AF58.s")
@@ -1886,7 +1889,8 @@ const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B02C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B074.s")
+void AudioOcarina_MapSongFromNotesToButtons(u8 noteSongIdx, u8 buttonSongIdx, u8 numButtons);
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_MapSongFromNotesToButtons.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B144.s")
 
@@ -1957,150 +1961,148 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CFA8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_TerminaWallValidateNotes.s")
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_TerminaWallGenerateNotes.s")
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_MemoryGameSetNumNotes.s")
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_MemoryGameGenerateNotes.s")
-// /**
-//  * Tests to see if the notes from songIdx contain identical notes
-//  * within its song to any of the reserved songIdx from 0 up to maxSongIdx
-//  */
-// s32 AudioOcarina_TerminaWallValidateNotes(u8 songIdx, u8 maxSongIdx) {
-//     u8 curSongIdx;
-//     u8 j;
-//     u8 k;
+/**
+ * Tests to see if the notes from songIdx contain identical notes
+ * within its song to any of the reserved songIdx from 0 up to maxSongIdx
+ */
+s32 AudioOcarina_TerminaWallValidateNotes(u8 songIdx, u8 maxSongIdx) {
+    u8 curSongIdx;
+    u8 j;
+    u8 k;
 
-//     // loop through all possible songs up to maxSongIdx
-//     for (curSongIdx = 0; curSongIdx < maxSongIdx; curSongIdx++) {
-//         // check to see if the song is reserved or not
-//         if (sIsOcarinaSongReserved[curSongIdx]) {
-//             // starting index to test the song
-//             for (j = 0; j < (9 - gOcarinaSongButtons[curSongIdx].numButtons); j++) {
-//                 // loop through each note in the song
-//                 for (k = 0;
-//                      (k < gOcarinaSongButtons[curSongIdx].numButtons) && ((k + j) < 8) &&
-//                      (gOcarinaSongButtons[curSongIdx].buttonIdx[k] == gOcarinaSongButtons[songIdx].buttonIdx[(k +
-//                      j)]); k++) {
-//                     continue;
-//                 }
+    // loop through all possible songs up to maxSongIdx
+    for (curSongIdx = 0; curSongIdx < maxSongIdx; curSongIdx++) {
+        // check to see if the song is reserved or not
+        if (sIsOcarinaSongReserved[curSongIdx]) {
+            // starting index to test the song
+            for (j = 0; j < (9 - gOcarinaSongButtons[curSongIdx].numButtons); j++) {
+                // loop through each note in the song
+                for (k = 0;
+                     (k < gOcarinaSongButtons[curSongIdx].numButtons) && ((k + j) < 8) &&
+                     (gOcarinaSongButtons[curSongIdx].buttonIdx[k] == gOcarinaSongButtons[songIdx].buttonIdx[(k + j)]);
+                     k++) {
+                    continue;
+                }
 
-//                 if (k == gOcarinaSongButtons[curSongIdx].numButtons) {
-//                     // failure: songIdx is identical to curSongIdx.
-//                     return -1;
-//                 }
-//             }
-//         }
-//     }
+                if (k == gOcarinaSongButtons[curSongIdx].numButtons) {
+                    // failure: songIdx is identical to curSongIdx.
+                    return -1;
+                }
+            }
+        }
+    }
 
-//     // success: notes are accepted and used
-//     return 0;
-// }
+    // success: notes are accepted and used
+    return 0;
+}
 
-// /**
-//  * Generates the notes displayed on the Termina Field wall of musical notes
-//  * Song generation iterates back and forth from 8 random notes to a song from Ocarina of Time (OoT).
-//  * Will check to see that the notes are valid by ensuring no playable song is within the selected notes
-//  * All OoT songs are valid, so the outer loop will run a maxiumum of two times.
-//  * i.e. if random notes fails, then the next set of notes will be from a valid OoT song
-//  */
-// void AudioOcarina_TerminaWallGenerateNotes(void) {
-//     OcarinaNote* ocarinaNote;
-//     u8 randButton;
-//     u8 i;
-//     u8 j;
+/**
+ * Generates the notes displayed on the Termina Field wall of musical notes
+ * Song generation iterates back and forth from 8 random notes to a song from Ocarina of Time (OoT).
+ * Will check to see that the notes are valid by ensuring no playable song is within the selected notes
+ * All OoT songs are valid, so the outer loop will run a maxiumum of two times.
+ * i.e. if random notes fails, then the next set of notes will be from a valid OoT song
+ */
+void AudioOcarina_TerminaWallGenerateNotes(void) {
+    OcarinaNote* ocarinaNote;
+    u8 randButton;
+    u8 i;
+    u8 j;
 
-//     do {
-//         i = 0;
-//         if (sOcarinaWallCounter++ % 2) {
-//             j = 0;
+    do {
+        i = 0;
+        if (sOcarinaWallCounter++ % 2) {
+            j = 0;
 
-//             for (; i < 8; i++) {
-//                 randButton = Audio_NextRandom() % 5;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].pitch = sButtonToPitchMap[randButton];
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].length = 19;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].volume = 80;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].vibrato = 0;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].bend = 0;
-//                 j++;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].pitch = OCARINA_PITCH_NONE;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].length = 3;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].volume = 0;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].vibrato = 0;
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].bend = 0;
-//                 j++;
-//             }
+            for (; i < 8; i++) {
+                randButton = Audio_NextRandom() % 5;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].pitch = sButtonToPitchMap[randButton];
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].length = 19;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].volume = 80;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].vibrato = 0;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].bend = 0;
+                j++;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].pitch = OCARINA_PITCH_NONE;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].length = 3;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].volume = 0;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].vibrato = 0;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].bend = 0;
+                j++;
+            }
 
-//             sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j - 2].length = 90;
-//             sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j - 1].length = 22;
-//             sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j + 1].pitch = OCARINA_PITCH_NONE;
-//             sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j + 1].length = 0;
-//             AudioOcarina_MapSongFromNotesToButtons(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL, 8);
-//         } else {
-//             j = Audio_NextRandom() % 9;
-//             ocarinaNote = sOoTOcarinaSongNotes[j];
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j - 2].length = 90;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j - 1].length = 22;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j + 1].pitch = OCARINA_PITCH_NONE;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j + 1].length = 0;
+            AudioOcarina_MapSongFromNotesToButtons(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL, 8);
+        } else {
+            j = Audio_NextRandom() % 9;
+            ocarinaNote = sOoTOcarinaSongNotes[j];
 
-//             for (; ocarinaNote[i].length != 0; i++) {
-//                 sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i] = ocarinaNote[i];
-//             }
+            for (; ocarinaNote[i].length != 0; i++) {
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i] = ocarinaNote[i];
+            }
 
-//             sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i].pitch = OCARINA_PITCH_NONE;
-//             sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i].length = 0;
-//             AudioOcarina_MapSongFromNotesToButtons(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL,
-//                                                    sOoTOcarinaSongsNumNotes[j]);
-//         }
-//     } while (AudioOcarina_TerminaWallValidateNotes(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL) != 0);
-// }
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i].pitch = OCARINA_PITCH_NONE;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i].length = 0;
+            AudioOcarina_MapSongFromNotesToButtons(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL,
+                                                   sOoTOcarinaSongsNumNotes[j]);
+        }
+    } while (AudioOcarina_TerminaWallValidateNotes(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL) != 0);
+}
 
-// // Unused remnant of OoT
-// void AudioOcarina_MemoryGameSetNumNotes(u8 minigameRound) {
-//     u8 i;
+/**
+ * Unused remnant of OoT
+ */
+void AudioOcarina_MemoryGameSetNumNotes(u8 minigameRound) {
+    u8 i;
 
-//     if (minigameRound > 2) {
-//         minigameRound = 2;
-//     }
+    if (minigameRound > 2) {
+        minigameRound = 2;
+    }
 
-//     sOcaMemoryGameAppendPos = 0;
-//     sOcaMemoryGameEndPos = sOcaMemoryGameNumNotes[minigameRound];
+    sOcaMemoryGameAppendPos = 0;
+    sOcaMemoryGameEndPos = sOcaMemoryGameNumNotes[minigameRound];
 
-//     for (i = 0; i < 3; i++) {
-//         AudioOcarina_MemoryGameGenerateNotes();
-//     }
-// }
+    for (i = 0; i < 3; i++) {
+        AudioOcarina_MemoryGameGenerateNotes();
+    }
+}
 
-// /**
-//  * Unused remnant of OoT, Id 14 now represent Goron Lullaby Intro instead of the OoT ocarina memory game
-//  */
-// #define OCARINA_SONG_MEMORYGAME OCARINA_SONG_GORON_LULLABY_INTRO
-// s32 AudioOcarina_MemoryGameGenerateNotes(void) {
-//     u32 rndButtonIdx;
-//     u8 pitch;
+/**
+ * Unused remnant of OoT, Id 14 now represent Goron Lullaby Intro instead of the OoT ocarina memory game
+ */
+#define OCARINA_SONG_MEMORYGAME OCARINA_SONG_GORON_LULLABY_INTRO
+s32 AudioOcarina_MemoryGameGenerateNotes(void) {
+    u32 rndButtonIdx;
+    u8 rndPitch;
 
-//     if (sOcaMemoryGameAppendPos == sOcaMemoryGameEndPos) {
-//         return true;
-//     }
+    if (sOcaMemoryGameAppendPos == sOcaMemoryGameEndPos) {
+        return true;
+    }
 
-//     rndButtonIdx = Audio_NextRandom();
-//     pitch = sButtonToPitchMap[rndButtonIdx % 5];
+    rndButtonIdx = Audio_NextRandom();
+    rndPitch = sButtonToPitchMap[rndButtonIdx % 5];
 
-//     if (sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos - 1].pitch == pitch) {
-//         pitch = sButtonToPitchMap[(rndButtonIdx + 1) % 5];
-//     }
+    if (sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos - 1].pitch == rndPitch) {
+        rndPitch = sButtonToPitchMap[(rndButtonIdx + 1) % 5];
+    }
 
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].pitch = pitch;
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].length = 45;
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].volume = 0x50;
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].vibrato = 0;
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].bend = 0;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].pitch = rndPitch;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].length = 45;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].volume = 0x50;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].vibrato = 0;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].bend = 0;
 
-//     sOcaMemoryGameAppendPos++;
+    sOcaMemoryGameAppendPos++;
 
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].pitch = OCARINA_PITCH_NONE;
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].length = 0;
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos + 1].pitch = OCARINA_PITCH_NONE;
-//     sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos + 1].length = 0;
-//     if (1) {}
-//     return false;
-// }
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].pitch = OCARINA_PITCH_NONE;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos].length = 0;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos + 1].pitch = OCARINA_PITCH_NONE;
+    sOcarinaSongNotes[OCARINA_SONG_GORON_LULLABY_INTRO][sOcaMemoryGameAppendPos + 1].length = 0;
+    if (1) {}
+    return false;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D600.s")
 
