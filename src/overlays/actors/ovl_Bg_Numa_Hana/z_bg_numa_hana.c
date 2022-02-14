@@ -66,7 +66,7 @@ static FireObjInitParams sFireObjInit = {
     0.00405000010505f, 0.0500000007451f, 3, 1, 0, 0, 0,
 };
 
-static s16 D_80A1B29C[] = { 0x0000, 0x2AAA, 0x5555, 0x8000, 0xAAAA, 0xD555 };
+static s16 sAnglePerPetal[] = { 0x0000, 0x2AAA, 0x5555, 0x8000, 0xAAAA, 0xD555 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
@@ -86,37 +86,38 @@ s32 BgNumaHana_SpawnOpenFlowerCollisionChild(BgNumaHana* this, GlobalContext* gl
     return child != NULL;
 }
 
-void func_80A1A56C(BgNumaHana* this) {
-    f32 temp_f20;
-    f32 temp_f24;
-    f32 temp_f26;
-    s16 temp_s1;
-    UnkBgNumaHanaStruct* phi_s2;
-    UnkBgNumaHanaStruct* phi_s5;
+void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
+    f32 outerPetalPosScale;
+    f32 innerPetalYPos;
+    f32 outerPetalYPos;
+    s16 angle;
+    WoodenFlowerPetalPosRot* innerPetalPosRot;
+    WoodenFlowerPetalPosRot* outerPetalPosRot;
     s32 i;
 
-    temp_f24 = this->dyna.actor.world.pos.y + -10.0f;
-    temp_s1 = this->unk_328 - 0x2000;
-    temp_f20 = (Math_CosS(temp_s1) * 77.42784f) + 74.95192f;
-    temp_f26 = (Math_SinS(this->unk_328) * 77.42784f) + this->dyna.actor.world.pos.y + -64.74976f;
-    for (i = 0; i < 6; i++) {
-        phi_s2 = &this->unk_238[i];
-        phi_s5 = &this->unk_2B0[i];
-        temp_s1 = D_80A1B29C[i] + this->dyna.actor.shape.rot.y + 0x1555;
+    innerPetalYPos = this->dyna.actor.world.pos.y + -10.0f;
+    angle = this->overallPetalZRot - 0x2000;
+    outerPetalPosScale = (Math_CosS(angle) * 77.42784f) + 74.95192f;
+    outerPetalYPos = (Math_SinS(this->overallPetalZRot) * 77.42784f) + this->dyna.actor.world.pos.y + -64.74976f;
 
-        phi_s2->unk_00.x = (Math_SinS(temp_s1) * 74.95192f) + this->dyna.actor.world.pos.x;
-        phi_s2->unk_00.y = temp_f24;
-        phi_s2->unk_00.z = (Math_CosS(temp_s1) * 74.95192f) + this->dyna.actor.world.pos.z;
-        phi_s2->unk_0C.x = this->dyna.actor.shape.rot.x;
-        phi_s2->unk_0C.y = temp_s1 - 0x4000;
-        phi_s2->unk_0C.z = this->dyna.actor.shape.rot.z + this->unk_328;
+    for (i = 0; i < ARRAY_COUNT(this->innerPetalPosRot); i++) {
+        innerPetalPosRot = &this->innerPetalPosRot[i];
+        outerPetalPosRot = &this->outerPetalPosRot[i];
+        angle = sAnglePerPetal[i] + this->dyna.actor.shape.rot.y + 0x1555;
 
-        phi_s5->unk_00.x = (Math_SinS(temp_s1) * temp_f20) + this->dyna.actor.world.pos.x;
-        phi_s5->unk_00.y = temp_f26;
-        phi_s5->unk_00.z = (Math_CosS(temp_s1) * temp_f20) + this->dyna.actor.world.pos.z;
-        phi_s5->unk_0C.x = phi_s2->unk_0C.x;
-        phi_s5->unk_0C.y = phi_s2->unk_0C.y;
-        phi_s5->unk_0C.z = phi_s2->unk_0C.z + this->unk_338;
+        innerPetalPosRot->pos.x = (Math_SinS(angle) * 74.95192f) + this->dyna.actor.world.pos.x;
+        innerPetalPosRot->pos.y = innerPetalYPos;
+        innerPetalPosRot->pos.z = (Math_CosS(angle) * 74.95192f) + this->dyna.actor.world.pos.z;
+        innerPetalPosRot->rot.x = this->dyna.actor.shape.rot.x;
+        innerPetalPosRot->rot.y = angle - 0x4000;
+        innerPetalPosRot->rot.z = this->dyna.actor.shape.rot.z + this->overallPetalZRot;
+
+        outerPetalPosRot->pos.x = (Math_SinS(angle) * outerPetalPosScale) + this->dyna.actor.world.pos.x;
+        outerPetalPosRot->pos.y = outerPetalYPos;
+        outerPetalPosRot->pos.z = (Math_CosS(angle) * outerPetalPosScale) + this->dyna.actor.world.pos.z;
+        outerPetalPosRot->rot.x = innerPetalPosRot->rot.x;
+        outerPetalPosRot->rot.y = innerPetalPosRot->rot.y;
+        outerPetalPosRot->rot.z = innerPetalPosRot->rot.z + this->extraOuterPetalZRot;
     }
 }
 
@@ -154,13 +155,13 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (gSaveContext.weekEventReg[12] & 1) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->unk_328 = 0x2000;
+        this->overallPetalZRot = 0x2000;
         this->unk_32A = 0x2000;
         this->unk_32C = 0;
         this->unk_32E = 0;
         this->unk_330 = 0;
         this->unk_334 = 0.0f;
-        this->unk_338 = -0x4000;
+        this->extraOuterPetalZRot = -0x4000;
         this->unk_33A = 0;
         this->unk_33C = 0x147;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 210.0f;
@@ -174,7 +175,7 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
         BgNumaHana_SetupClosedIdle(this);
     }
 
-    func_80A1A56C(this);
+    BgNumaHana_UpdatePetalPosRots(this);
 }
 
 void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -236,8 +237,8 @@ void func_80A1AB00(BgNumaHana* this, GlobalContext* globalCtx) {
     }
 
     func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 20.0f);
-    this->unk_328 = this->unk_32A + this->unk_32E;
-    func_80A1A56C(this);
+    this->overallPetalZRot = this->unk_32A + this->unk_32E;
+    BgNumaHana_UpdatePetalPosRots(this);
 }
 
 void func_80A1ABD8(BgNumaHana* this) {
@@ -247,7 +248,7 @@ void func_80A1ABD8(BgNumaHana* this) {
 
 void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx) {
     Math_StepToS(&this->unk_33A, 0xF0, 0xE);
-    if (Math_ScaledStepToS(&this->unk_338, -0x4000, this->unk_33A)) {
+    if (Math_ScaledStepToS(&this->extraOuterPetalZRot, -0x4000, this->unk_33A)) {
         if (this->unk_33E >= 11) {
             func_80A1ACCC(this);
         } else {
@@ -264,8 +265,8 @@ void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx) {
     }
 
     func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 7.0f);
-    this->unk_328 = this->unk_32A + this->unk_32E;
-    func_80A1A56C(this);
+    this->overallPetalZRot = this->unk_32A + this->unk_32E;
+    BgNumaHana_UpdatePetalPosRots(this);
 }
 
 void func_80A1ACCC(BgNumaHana* this) {
@@ -277,7 +278,7 @@ void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx) {
     DynaPolyActor* child;
 
     func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 10.0f);
-    this->unk_328 = this->unk_32A + this->unk_32E;
+    this->overallPetalZRot = this->unk_32A + this->unk_32E;
     Math_StepToS(&this->unk_33C, 0x111, 0xA);
     this->dyna.actor.shape.rot.y += this->unk_33C;
     Math_StepToF(&this->dyna.actor.velocity.y, 3.0f, 0.3f);
@@ -286,12 +287,12 @@ void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx) {
         child = (DynaPolyActor*)this->dyna.actor.child;
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, child->bgId);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->unk_328 = 0x2000;
+        this->overallPetalZRot = 0x2000;
         this->unk_32A = 0x2000;
         this->unk_32C = 0;
         this->unk_32E = 0;
         this->unk_330 = 0;
-        this->unk_338 = -0x4000;
+        this->extraOuterPetalZRot = -0x4000;
         this->unk_33A = 0;
         this->unk_33C = 0x147;
         this->unk_334 = 0.0f;
@@ -299,7 +300,7 @@ void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx) {
         BgNumaHana_SetupOpenedIdle(this);
     }
 
-    func_80A1A56C(this);
+    BgNumaHana_UpdatePetalPosRots(this);
     func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
 
@@ -309,8 +310,8 @@ void BgNumaHana_SetupOpenedIdle(BgNumaHana* this) {
 
 void BgNumaHana_OpenedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y += this->unk_33C;
-    this->unk_328 = this->unk_32A + this->unk_32E;
-    func_80A1A56C(this);
+    this->overallPetalZRot = this->unk_32A + this->unk_32E;
+    BgNumaHana_UpdatePetalPosRots(this);
     func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
 
@@ -342,8 +343,8 @@ void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     BgNumaHana* this = THIS;
-    UnkBgNumaHanaStruct* phi_s1;
-    UnkBgNumaHanaStruct* phi_s2;
+    WoodenFlowerPetalPosRot* innerPetalPosRot;
+    WoodenFlowerPetalPosRot* outerPetalPosRot;
     s32 objectIndex;
     s32 i;
 
@@ -353,16 +354,18 @@ void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 
-    for (i = 0; i < 6; i++) {
-        phi_s1 = &this->unk_238[i];
-        phi_s2 = &this->unk_2B0[i];
+    for (i = 0; i < ARRAY_COUNT(this->innerPetalPosRot); i++) {
+        innerPetalPosRot = &this->innerPetalPosRot[i];
+        outerPetalPosRot = &this->outerPetalPosRot[i];
 
-        Matrix_SetStateRotationAndTranslation(phi_s1->unk_00.x, phi_s1->unk_00.y, phi_s1->unk_00.z, &phi_s1->unk_0C);
+        Matrix_SetStateRotationAndTranslation(innerPetalPosRot->pos.x, innerPetalPosRot->pos.y, innerPetalPosRot->pos.z,
+                                              &innerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerPetalInnerDL);
 
-        Matrix_SetStateRotationAndTranslation(phi_s2->unk_00.x, phi_s2->unk_00.y, phi_s2->unk_00.z, &phi_s2->unk_0C);
+        Matrix_SetStateRotationAndTranslation(outerPetalPosRot->pos.x, outerPetalPosRot->pos.y, outerPetalPosRot->pos.z,
+                                              &outerPetalPosRot->rot);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerPetalOuterDL);
