@@ -173,9 +173,16 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1ACE0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AE08.s")
+void func_80A1AE08(BgNumaHana* this) {
+    this->actionFunc = func_80A1AE1C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AE1C.s")
+void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx) {
+    this->dyna.actor.shape.rot.y += this->unk_33C;
+    this->unk_328 = this->unk_32A + this->unk_32E;
+    func_80A1A56C(this);
+    func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
+}
 
 void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
