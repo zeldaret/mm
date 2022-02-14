@@ -9078,7 +9078,7 @@
     0x809C5BA0:("func_809C5BA0",),
     0x809C5BF4:("func_809C5BF4",),
     0x809C5E14:("EnBomBowlMan_Update",),
-    0x809C5F44:("func_809C5F44",),
+    0x809C5F44:("EnBomBowlMan_OverrideLimbDraw",),
     0x809C5FC4:("EnBomBowlMan_Draw",),
     0x809C64C0:("func_809C64C0",),
     0x809C6578:("EnSyatekiMan_Init",),

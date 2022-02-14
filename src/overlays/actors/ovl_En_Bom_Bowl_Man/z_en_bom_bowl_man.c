@@ -33,9 +33,9 @@ void func_809C5B1C(EnBomBowlMan* this, GlobalContext* globalCtx);
 void func_809C5BA0(EnBomBowlMan* this);
 void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx);
 
-static s32 D_809C6100 = 0;
+s32 D_809C6100 = 0;
 
-static s32 D_809C6104 = 0;
+s32 D_809C6104 = 0;
 
 const ActorInit En_Bom_Bowl_Man_InitVars = {
     ACTOR_EN_BOM_BOWL_MAN,
@@ -57,13 +57,18 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0, &object_cs_Anim_0031C4,
 };
 
-static u8 D_809C6178[] = {
+u8 D_809C6178[] = {
     0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0,
 };
 
-static u16 D_809C618C[] = { 0x710, 0x711, 0x715, 0x716, 0x717, 0x718 };
+u16 D_809C618C[] = { 0x710, 0x711, 0x715, 0x716, 0x717, 0x718 };
 
-static u16 D_809C6198[] = { 0x74F, 0x750, 0x751, 0x752 };
+u16 D_809C6198[] = { 0x74F, 0x750, 0x751, 0x752 };
+
+Vec3f D_809C61A0[] = {
+    { -730.0f, 200.0f, -2350.0f }, { -690.0f, 200.0f, -2350.0f }, { -650.0f, 200.0f, -2350.0f },
+    { -610.0f, 200.0f, -2350.0f }, { -570.0f, 200.0f, -2350.0f },
+};
 
 void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBomBowlMan* this = THIS;
@@ -159,10 +164,6 @@ void func_809C4B6C(EnBomBowlMan* this) {
 }
 
 void func_809C4BC4(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    static Vec3f D_809C61A0[] = {
-        { -730.0f, 200.0f, -2350.0f }, { -690.0f, 200.0f, -2350.0f }, { -650.0f, 200.0f, -2350.0f },
-        { -610.0f, 200.0f, -2350.0f }, { -570.0f, 200.0f, -2350.0f },
-    };
     s32 pad;
     s32 i;
     Vec3f sp7C;
@@ -331,7 +332,7 @@ void func_809C51B4(EnBomBowlMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if ((globalCtx->msgCtx.unk120B1 == 0) &&
-        ((globalCtx->msgCtx.unk11F22 == 0) || (Message_GetState(&globalCtx->msgCtx) == 6))) {
+        ((globalCtx->msgCtx.msgMode == 0) || (Message_GetState(&globalCtx->msgCtx) == 6))) {
         globalCtx->nextEntranceIndex = Entrance_CreateIndexFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
         globalCtx->sceneLoadFlag = 0x14;
@@ -449,7 +450,7 @@ void func_809C5738(EnBomBowlMan* this, GlobalContext* globalCtx) {
 
     if (this->unk_2C2 == 0) {
         if ((globalCtx->msgCtx.unk120B1 == 0) &&
-            ((globalCtx->msgCtx.unk11F22 == 0) || (Message_GetState(&globalCtx->msgCtx) == 6))) {
+            ((globalCtx->msgCtx.msgMode == 0) || (Message_GetState(&globalCtx->msgCtx) == 6))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -495,7 +496,7 @@ void func_809C5738(EnBomBowlMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C59A4(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    Actor_PickUp(&this->actor, globalCtx, 80, 300.0f, 300.0f);
+    Actor_PickUp(&this->actor, globalCtx, GI_50, 300.0f, 300.0f);
     this->unk_29C = 1;
     this->actionFunc = func_809C59F0;
 }
@@ -512,7 +513,7 @@ void func_809C59F0(EnBomBowlMan* this, GlobalContext* globalCtx) {
         func_800B8500(&this->actor, globalCtx, 400.0f, 400.0f, -1);
         this->actionFunc = func_809C5AA4;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x50, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_50, 300.0f, 300.0f);
     }
 }
 
@@ -632,7 +633,8 @@ void EnBomBowlMan_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-s32 func_809C5F44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnBomBowlMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                  Actor* thisx) {
     EnBomBowlMan* this = THIS;
 
     if (limbIndex == 15) {
@@ -655,18 +657,18 @@ s32 func_809C5F44(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 
 #include "overlays/ovl_En_Bom_Bowl_Man/ovl_En_Bom_Bowl_Man.c"
 
-static TexturePtr D_809C6200[] = {
+TexturePtr D_809C6200[] = {
     gEnBomBowlMan_D_809C61E0, gEnBomBowlMan_D_809C61F0, gEnBomBowlMan_D_809C61F0,
     gEnBomBowlMan_D_809C61F0, gEnBomBowlMan_D_809C61F0,
 };
 
-static TexturePtr D_809C6214[] = {
+TexturePtr D_809C6214[] = {
     object_cs_Tex_00C520,
     object_cs_Tex_00CD20,
     object_cs_Tex_00D520,
 };
 
-static TexturePtr D_809C6220[] = {
+TexturePtr D_809C6220[] = {
     object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
 };
 
@@ -684,7 +686,7 @@ void EnBomBowlMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     Scene_SetRenderModeXlu(globalCtx, 0, 1);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_809C5F44, NULL, &this->actor);
+                          EnBomBowlMan_OverrideLimbDraw, NULL, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
