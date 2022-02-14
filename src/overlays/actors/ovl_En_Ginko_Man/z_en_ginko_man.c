@@ -173,17 +173,17 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
                     this->curTextId = 0x45D; // "What's this? You've already saved up 5000 Rupees?!
                 } else if (this->previousBankValue < (s16)(gSaveContext.bankRupees & 0xFFFF)) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
-                    func_801518B0(globalCtx, 0x45E, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x45E, &this->actor);
                     this->curTextId =
                         0x45E; // "...Hang on there, little guy.  I can't take any more deposits.  Sorry..."
                 } else {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
-                    func_801518B0(globalCtx, 0x460, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x460, &this->actor);
                     this->curTextId = 0x460; // "Come back and deposit some after you save up a bunch!"
                 }
             } else {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
-                func_801518B0(globalCtx, 0x460, &this->actor);
+                Message_StartTextbox(globalCtx, 0x460, &this->actor);
                 this->curTextId = 0x460; // "Come back and deposit some after you save up a bunch!"
             }
             break;
@@ -337,7 +337,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                 if (gSaveContext.rupees < globalCtx->msgCtx.bankRupeesSelected) {
                     play_sound(NA_SE_SY_ERROR);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
-                    func_801518B0(globalCtx, 0x459, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x459, &this->actor);
                     this->curTextId = 0x459; // HEY you dont have that much
                 } else {
                     func_8019F208();
@@ -349,7 +349,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         this->curTextId = 0x454; // Seriously? that's a lot. A lot!
                     } else {
                         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
-                        func_801518B0(globalCtx, 0x453, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x453, &this->actor);
                         this->curTextId = 0x453; // That's it? That aint nothing at all
                     }
 
@@ -399,7 +399,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                     ((s32)(globalCtx->msgCtx.bankRupeesSelected + this->serviceFee))) {
                     play_sound(NA_SE_SY_ERROR);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_FLOORSMACKING);
-                    func_801518B0(globalCtx, 0x476, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
                 } else if (CUR_CAPACITY(UPG_WALLET) < (globalCtx->msgCtx.bankRupeesSelected + gSaveContext.rupees)) {
                     // check if wallet is big enough
@@ -441,7 +441,7 @@ void EnGinkoMan_WaitForRupeeCount(EnGinkoMan* this, GlobalContext* globalCtx) {
             case 0x450: // "How much? How much?" [rupee prompt] Set the amount with [Control Stick] and
                 if (globalCtx->msgCtx.bankRupeesSelected == 0) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
-                    func_801518B0(globalCtx, 0x457, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x457, &this->actor);
                     this->curTextId = 0x457; // Zero Rupees? Cruel joke!
                 } else {
                     Message_StartTextbox(globalCtx, 0x452, &this->actor);
@@ -540,7 +540,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x47A; // Message after receiving reward for depositing 200 rupees.
         } else {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
-            func_801518B0(globalCtx, 0x47B, &this->actor);
+            Message_StartTextbox(globalCtx, 0x47B, &this->actor);
             this->curTextId = 0x47B; // Message after receiving reward for depositing 1000 rupees.
         }
 
@@ -572,7 +572,7 @@ void EnGinkoMan_Stamp(EnGinkoMan* this, GlobalContext* globalCtx) {
         switch (this->curTextId) {
             case 0x464: // "Hey, relax! It doesn't leave any marks, and it's not gonna hurt."
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, GINKO_SITTING);
-                func_801518B0(globalCtx, 0x465, &this->actor);
+                Message_StartTextbox(globalCtx, 0x465, &this->actor);
                 this->curTextId = 0x465; // "There! Now I'll know you when I see you!"
                 break;
             case 0x469: // "Excuse me, but let me take a look at you..."
