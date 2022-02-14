@@ -24,6 +24,7 @@ void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx);
 void func_80A1AA14(BgNumaHana* this);
 void func_80A1AE08(BgNumaHana* this);
 void func_80A1AA38(BgNumaHana* this);
+void func_80A1AAE8(BgNumaHana* this);
 
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
@@ -160,9 +161,23 @@ void func_80A1AA14(BgNumaHana* this) {
 void func_80A1AA28(BgNumaHana* this, GlobalContext* globalCtx) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AA38.s")
+void func_80A1AA38(BgNumaHana* this) {
+    this->actionFunc = func_80A1AA4C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AA4C.s")
+void func_80A1AA4C(BgNumaHana* this, GlobalContext* globalCtx) {
+    if (this->unk_15C.state != 3) {
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
+        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+            gSaveContext.weekEventReg[12] |= 1;
+            Flags_SetSwitch(globalCtx, BG_NUMA_HAMA_SWITCH_FLAG(&this->dyna.actor));
+            func_80A1AAE8(this);
+        } else {
+            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AAE8.s")
 
