@@ -26,6 +26,7 @@ void func_80A1AE08(BgNumaHana* this);
 void func_80A1AA38(BgNumaHana* this);
 void func_80A1AAE8(BgNumaHana* this);
 void func_80A1ABD8(BgNumaHana* this);
+void func_80A1ACCC(BgNumaHana* this);
 
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
@@ -128,9 +129,9 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->unk_328 = 0x2000;
         this->unk_32A = 0x2000;
-        this->unk_32C.x = 0;
-        this->unk_32C.y = 0;
-        this->unk_32C.z = 0;
+        this->unk_32C = 0;
+        this->unk_32E = 0;
+        this->unk_330 = 0;
         this->unk_334 = 0.0f;
         this->unk_338 = -0x4000;
         this->unk_33A = 0;
@@ -189,15 +190,92 @@ void func_80A1AAE8(BgNumaHana* this) {
     this->unk_33E = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AB00.s")
+void func_80A1AB00(BgNumaHana* this, GlobalContext* globalCtx) {
+    Math_StepToS(&this->unk_32C, 0xF0, 0xE);
+    if (Math_ScaledStepToS(&this->unk_32A, 0x2000, this->unk_32C)) {
+        if (this->unk_33E >= 0xB) {
+            func_80A1ABD8(this);
+        } else {
+            if (this->unk_33E <= 0) {
+                this->unk_32E = 0;
+                this->unk_330 = 0;
+                this->unk_334 = 420.0f;
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+            }
+            this->unk_33E += 1;
+        }
+    } else {
+        func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1ABD8.s")
+    func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 20.0f);
+    this->unk_328 = this->unk_32A + this->unk_32E;
+    func_80A1A56C(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1ABF0.s")
+void func_80A1ABD8(BgNumaHana* this) {
+    this->actionFunc = func_80A1ABF0;
+    this->unk_33E = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1ACCC.s")
+void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1ACE0.s")
+    Math_StepToS(&this->unk_33A, 0xF0, 0xE);
+    if (Math_ScaledStepToS(&this->unk_338, -0x4000, this->unk_33A)) {
+        if (this->unk_33E >= 0xB) {
+            func_80A1ACCC(this);
+        } else {
+            if (this->unk_33E <= 0) {
+                this->unk_32E = 0;
+                this->unk_330 = 0x5120;
+                this->unk_334 = 130.0f;
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
+            }
+            this->unk_33E += 1;
+        }
+    } else {
+        func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
+    }
+
+    func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 7.0f);
+    this->unk_328 = this->unk_32A + this->unk_32E;
+    func_80A1A56C(this);
+}
+
+void func_80A1ACCC(BgNumaHana* this) {
+    this->actionFunc = func_80A1ACE0;
+}
+
+void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx) {
+    s32 pad;
+    DynaPolyActor* child;
+
+    func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 10.0f);
+    this->unk_328 = this->unk_32A + this->unk_32E;
+    Math_StepToS(&this->unk_33C, 0x111, 0xA);
+    this->dyna.actor.shape.rot.y += this->unk_33C;
+    Math_StepToF(&this->dyna.actor.velocity.y, 3.0f, 0.3f);
+    if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 210.0f,
+                     this->dyna.actor.velocity.y)) {
+        child = (DynaPolyActor*)this->dyna.actor.child;
+        func_800C6314(globalCtx, &globalCtx->colCtx.dyna, child->bgId);
+        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+        this->unk_328 = 0x2000;
+        this->unk_32A = 0x2000;
+        this->unk_32C = 0;
+        this->unk_32E = 0;
+        this->unk_330 = 0;
+        this->unk_338 = -0x4000;
+        this->unk_33A = 0;
+        this->unk_33C = 0x147;
+        this->unk_334 = 0.0f;
+        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        func_80A1AE08(this);
+    }
+
+    func_80A1A56C(this);
+    func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
+}
 
 void func_80A1AE08(BgNumaHana* this) {
     this->actionFunc = func_80A1AE1C;
@@ -205,7 +283,7 @@ void func_80A1AE08(BgNumaHana* this) {
 
 void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y += this->unk_33C;
-    this->unk_328 = this->unk_32A + this->unk_32C.y;
+    this->unk_328 = this->unk_32A + this->unk_32E;
     func_80A1A56C(this);
     func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }

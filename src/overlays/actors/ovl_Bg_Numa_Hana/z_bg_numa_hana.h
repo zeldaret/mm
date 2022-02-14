@@ -17,7 +17,9 @@ typedef struct BgNumaHana {
     /* 0x238 */ char unk_238[0xF0];
     /* 0x328 */ s16 unk_328;
     /* 0x32A */ s16 unk_32A;
-    /* 0x32C */ Vec3s unk_32C;
+    /* 0x32C */ s16 unk_32C;
+    /* 0x32E */ s16 unk_32E;
+    /* 0x330 */ s16 unk_330;
     /* 0x334 */ f32 unk_334;
     /* 0x338 */ s16 unk_338;
     /* 0x33A */ s16 unk_33A;
