@@ -418,7 +418,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
     f32 sp4C;
     Camera* temp_s3 = Play_GetCamera(globalCtx, this->unk_284);
 
-    sp78 = Play_GetCamera(globalCtx, 0);
+    sp78 = Play_GetCamera(globalCtx, MAIN_CAM);
 
     switch (this->unk_274) {
         case 90:
@@ -603,7 +603,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
 
     if (DECR(this->unk_27A) == 0) {
         func_80A916F0(this, globalCtx);
-        globalCtx->msgCtx.unk1202A = 4;
+        globalCtx->msgCtx.ocarinaMode = 4;
     }
 }
 
@@ -999,7 +999,7 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 } else {
                     gSaveContext.respawnFlag = 2;
                 }
-                globalCtx->msgCtx.unk1202A = 4;
+                globalCtx->msgCtx.ocarinaMode = 4;
                 return;
         }
     } else {
@@ -1075,7 +1075,7 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                     globalCtx->nextEntranceIndex = gSaveContext.respawn[1].entranceIndex;
                     globalCtx->unk_1887F = 2;
                     gSaveContext.respawnFlag = 2;
-                    globalCtx->msgCtx.unk1202A = 4;
+                    globalCtx->msgCtx.ocarinaMode = 4;
                 }
                 return;
         }

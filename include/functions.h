@@ -1590,7 +1590,7 @@ void func_800FD538(Color_RGB8* param_1, Color_RGB8* param_2, f32 param_3, Vec3s*
 void func_800FD59C(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
 void func_800FD5E0(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
 void func_800FD654(GlobalContext* globalCtx, Color_RGB8* pzParm2, f32 fParm3);
-void func_800FD698(GlobalContext* globalCtx, s16 arg, s16 arg2, f32 arg3);
+void func_800FD698(GlobalContext* globalCtx, s16 arg1, s16 arg2, f32 arg3);
 // u32 get_days_elapsed(void);
 // void reset_days_elapsed(void);
 // u32 get_current_day(void);
