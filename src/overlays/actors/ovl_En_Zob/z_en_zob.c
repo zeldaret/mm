@@ -7,7 +7,7 @@
 #include "z_en_zob.h"
 #include "objects/object_zob/object_zob.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnZob*)thisx)
 
@@ -69,11 +69,13 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BA10FC[9] = {
+static AnimationHeader* sAnimations[] = {
     &object_zob_Anim_0027D0, &object_zob_Anim_002B38, &object_zob_Anim_0037A0,
     &object_zob_Anim_0043C4, &object_zob_Anim_005224, &object_zob_Anim_005E90,
     &object_zob_Anim_006998, &object_zob_Anim_011144, &object_zob_Anim_001FD4,
 };
+
+Vec3f D_80BA1120 = { 300.0f, 900.0f, 0.0f };
 
 void EnZob_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnZob* this = THIS;
@@ -108,7 +110,7 @@ void EnZob_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.cutscene = this->unk_306[0];
-    this->actor.flags |= 0x02000000;
+    this->actor.flags |= ACTOR_FLAG_2000000;
 
     switch (ENZOB_GET_F(&this->actor)) {
         case ENZOB_F_1:
@@ -136,7 +138,7 @@ void EnZob_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (gSaveContext.weekEventReg[55] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
             }
-            this->actor.flags |= 0x10;
+            this->actor.flags |= ACTOR_FLAG_10;
             break;
     }
 }
@@ -148,7 +150,7 @@ void EnZob_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B9F7E4(EnZob* this, s16 arg1, u8 arg2) {
-    Animation_Change(&this->skelAnime, D_80BA10FC[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80BA10FC[arg1]), arg2,
+    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]), arg2,
                      -5.0f);
     this->unk_302 = arg1;
 }
@@ -534,7 +536,7 @@ void func_80BA0374(EnZob* this, GlobalContext* globalCtx) {
 void func_80BA0610(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801518B0(globalCtx, 0x120D, &this->actor);
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, 2);
@@ -549,7 +551,7 @@ void func_80BA06BC(EnZob* this, GlobalContext* globalCtx) {
     func_80B9FD24(this, globalCtx);
     if (!func_800EE29C(globalCtx, 500)) {
         this->actionFunc = func_80BA0610;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_80BA0610(this, globalCtx);
     }
 }
@@ -743,7 +745,6 @@ s32 func_80BA0F64(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 void func_80BA0FAC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80BA1120 = { 300.0f, 900.0f, 0.0f };
     EnZob* this = THIS;
 
     if (limbIndex == 9) {
