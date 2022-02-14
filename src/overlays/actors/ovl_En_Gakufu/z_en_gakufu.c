@@ -20,12 +20,12 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnGakufu_ProcessNotes(EnGakufu* this);
 s32 EnGakufu_IsWithinRange(EnGakufu* this, GlobalContext* globalCtx);
-void func_80AFCB94(EnGakufu* this, GlobalContext* globalCtx);
-void func_80AFCBD4(EnGakufu* this, GlobalContext* globalCtx);
+void EnGakufu_DisplayOnTimer(EnGakufu* this, GlobalContext* globalCtx);
+void EnGakufu_WaitForTimer(EnGakufu* this, GlobalContext* globalCtx);
 void EnGakufu_DoNothing(EnGakufu* this, GlobalContext* globalCtx);
 void EnGakufu_GiveReward(EnGakufu* this, GlobalContext* globalCtx);
 void EnGakufu_PlayRewardCutscene(EnGakufu* this, GlobalContext* globalCtx);
-void func_80AFCDC8(EnGakufu* this, GlobalContext* globalCtx);
+void EnGakufu_WaitForSong(EnGakufu* this, GlobalContext* globalCtx);
 
 const ActorInit En_Gakufu_InitVars = {
     ACTOR_EN_GAKUFU,
@@ -127,9 +127,9 @@ void EnGakufu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGakufu_ProcessNotes(this);
     Actor_SetScale(&this->actor, 1.0f);
 
-    if ((this->actor.params & 0xF) == 1) {
+    if (GAKUFU_GET_TYPE(&this->actor) == GAKUFU_MILK_BAR) {
         this->actor.draw = NULL;
-        this->actionFunc = func_80AFCBD4;
+        this->actionFunc = EnGakufu_WaitForTimer;
         return;
     }
 
@@ -141,33 +141,43 @@ void EnGakufu_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.eventInf[3] &= (u8)~2;
     }
 
-    this->actionFunc = func_80AFCDC8;
+    this->actionFunc = EnGakufu_WaitForSong;
     gSaveContext.eventInf[3] &= (u8)~4;
 }
 
 void EnGakufu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnGakufu* this = THIS;
 
-    if ((this->actor.params & 0xF) != 1) {
+    if (GAKUFU_GET_TYPE(&this->actor) != GAKUFU_MILK_BAR) {
         gSaveContext.eventInf[3] &= (u8)~2;
     }
 }
 
-void func_80AFCB94(EnGakufu* this, GlobalContext* globalCtx) {
+/**
+ * Special behaviour for the Milk Bar:
+ * this->actor.home.rot.x acts as a timer. Draws the notes on the back of the stage
+ * until the timer runs out
+ */
+void EnGakufu_DisplayOnTimer(EnGakufu* this, GlobalContext* globalCtx) {
     if (this->actor.home.rot.x > 0) {
         this->actor.draw = EnGakufu_Draw;
         this->actor.home.rot.x--;
     } else {
         this->actor.draw = NULL;
         this->actor.home.rot.x = 0;
-        this->actionFunc = func_80AFCBD4;
+        this->actionFunc = EnGakufu_WaitForTimer;
     }
 }
 
-void func_80AFCBD4(EnGakufu* this, GlobalContext* globalCtx) {
+/**
+ * Special behaviour for the Milk Bar:
+ * this->actor.home.rot.x acts as a timer. Waits for this timer to be set,
+ * then rerolls the notes and start displaying the notes
+ */
+void EnGakufu_WaitForTimer(EnGakufu* this, GlobalContext* globalCtx) {
     if (this->actor.home.rot.x > 0) {
         EnGakufu_ProcessNotes(this);
-        this->actionFunc = func_80AFCB94;
+        this->actionFunc = EnGakufu_DisplayOnTimer;
     }
 }
 
@@ -182,8 +192,10 @@ s32 EnGakufu_IsWithinRange(EnGakufu* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Reward the player with three item drops depending on the time of day
+ */
 void EnGakufu_GiveReward(EnGakufu* this, GlobalContext* globalCtx) {
-    f32 phi_f6;
     s32 index;
     s32 i;
 
@@ -209,7 +221,7 @@ void EnGakufu_PlayRewardCutscene(EnGakufu* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AFCDC8(EnGakufu* this, GlobalContext* globalCtx) {
+void EnGakufu_WaitForSong(EnGakufu* this, GlobalContext* globalCtx) {
     if (gSaveContext.eventInf[3] & 2) {
         if (gSaveContext.eventInf[3] & 4) {
             gSaveContext.eventInf[3] &= (u8)~2;
@@ -258,9 +270,9 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
         // clang-format on
 
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetTile(POLY_XLU_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                   4, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, 4, G_TX_NOLOD);
-        gDPSetTileSize(POLY_XLU_DISP++, G_TX_RENDERTILE, 0, 0, 0x003C, 0x003C);
+        gDPSetTile(POLY_XLU_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, 4,
+                   G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, 4, G_TX_NOLOD);
+        gDPSetTileSize(POLY_XLU_DISP++, G_TX_RENDERTILE, 0, 0, 0x3C, 0x3C);
 
         if (this->buttonIdx[i] == 0) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 80, 150, 255, 200);
@@ -268,7 +280,7 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 50, 200);
         }
 
-        gSPDisplayList(POLY_XLU_DISP++, gGakufuDL);
+        gSPDisplayList(POLY_XLU_DISP++, gGakufuButtonIdxDL);
 
         Matrix_StatePop();
     }
