@@ -112,7 +112,8 @@ void EnCne01_UpdateModel(EnCne01* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->enHy.torsoRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.y, 0, 4, 0x3E8, 1);
     }
-    SubS_FillLimbRotTables(globalCtx, this->enHy.limbRotTableY, this->enHy.limbRotTableZ, ARRAY_COUNT(this->enHy.limbRotTableY));
+    SubS_FillLimbRotTables(globalCtx, this->enHy.limbRotTableY, this->enHy.limbRotTableZ,
+                           ARRAY_COUNT(this->enHy.limbRotTableY));
     EnHy_UpdateCollider(&this->enHy, globalCtx);
 }
 
