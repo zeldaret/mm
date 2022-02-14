@@ -59,14 +59,20 @@ const ActorInit En_Fsn_InitVars = {
     (ActorFunc)EnFsn_Draw,
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 },
-    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_fsn_Anim_012C34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_0131FC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00C58C, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00F00C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00D354, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_01430C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00C26C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -687,7 +693,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
     this->blinkTimer = 20;
     this->animationIdx = 4;
     this->eyeTextureIdx = 0;
-    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     this->actionFunc = EnFsn_Idle;
 }
 
@@ -696,10 +702,10 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
     if (this->animationIdx == 4) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         }
         return;
     }
@@ -732,12 +738,12 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
         this->animationIdx = 11;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     } else {
         if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -745,16 +751,16 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
             this->animationIdx = 12;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else {
             if (this->animationIdx == 12) {
                 if (curFrame == frameCount) {
                     this->animationIdx = 5;
-                    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -1403,7 +1409,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags |= 1;
         this->actor.targetMode = 0;
         this->animationIdx = 0;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         this->actionFunc = EnFsn_IdleBackroom;
     }
 }
@@ -1420,7 +1426,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
-    func_8013D9C8(globalCtx, this->limbRotYTable, this->limbRotZTable, 19);
+    SubS_FillLimbRotTables(globalCtx, this->limbRotYTable, this->limbRotZTable, ARRAY_COUNT(this->limbRotYTable));
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {
         EnFsn_UpdateJoystickInputState(this, globalCtx);
