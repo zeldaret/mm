@@ -242,7 +242,7 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor) {
     } else if ((fire->collision.base.acFlags & 2) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
-        arrow->unk_1C0 = 0x800;
+        arrow->collider.info.toucher.dmgFlags = 0x800;
     }
     fire->collision.dim.pos.x = fire->position.x;
     fire->collision.dim.pos.y = fire->position.y;

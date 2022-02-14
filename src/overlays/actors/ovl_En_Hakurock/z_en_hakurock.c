@@ -6,6 +6,8 @@
 
 #include "z_en_hakurock.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_boss_hakugin/object_boss_hakugin.h"
 
 #define FLAGS 0x00000030
 
@@ -64,10 +66,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 60, 60, MASS_IMMOVABLE };
 
-extern Gfx D_06011100[];
-
 // Stalactite
-extern Gfx D_06011178[];
 
 void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
@@ -344,7 +343,7 @@ void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, &D_0406AB30);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -353,7 +352,7 @@ void EnHakurock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     Matrix_InsertTranslation(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06011100);
-    gSPDisplayList(POLY_OPA_DISP++, D_06011178);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011100);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011178);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
