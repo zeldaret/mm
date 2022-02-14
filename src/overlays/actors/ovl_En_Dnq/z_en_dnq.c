@@ -57,17 +57,27 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80A5349C[] = {
-    { &object_dnq_Anim_008328, 1.0f, 0, -1, 0, 0 },  { &object_dnq_Anim_008328, 1.0f, 0, -1, 0, -4 },
-    { &object_dnq_Anim_007528, 1.0f, 0, -1, 2, -4 }, { &object_dnq_Anim_0006F0, 1.0f, 0, -1, 2, 0 },
-    { &object_dnq_Anim_000BF8, 1.0f, 0, -1, 0, -4 }, { &object_dnq_Anim_002690, 0.0f, 0, -1, 2, 0 },
-    { &object_dnq_Anim_002690, 1.0f, 0, -1, 2, -4 }, { &object_dnq_Anim_003408, 1.0f, 0, -1, 0, -4 },
-    { &object_dnq_Anim_006984, 1.0f, 0, -1, 2, -4 }, { &object_dnq_Anim_005E18, 1.0f, 0, -1, 2, -4 },
-    { &object_dnq_Anim_005A14, 1.0f, 0, -1, 2, -4 }, { &object_dnq_Anim_005284, 1.0f, 0, -1, 2, -4 },
-    { &object_dnq_Anim_001AEC, 1.0f, 0, -1, 2, 0 },  { &object_dnq_Anim_001100, 1.0f, 0, -1, 2, 0 },
-    { &object_dnq_Anim_004EA0, 1.0f, 0, -1, 0, -4 }, { &object_dnq_Anim_00F504, 1.0f, 0, -1, 0, -4 },
-    { &object_dnq_Anim_0047B8, 1.0f, 0, -1, 0, -4 }, { &object_dnq_Anim_003DBC, 1.0f, 0, -1, 2, -4 },
-    { &object_dnq_Anim_005A14, 1.0f, 0, -1, 0, -4 }, { &object_dnq_Anim_003DBC, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS D_80A5349C[] = {
+    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_0006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_00F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_0047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 void func_80A52530(GlobalContext* globalCtx, EnDnq* this) {
@@ -94,7 +104,7 @@ s32 func_80A5257C(EnDnq* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_398 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80A5349C, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A5349C, arg1);
     }
 
     return ret;
@@ -332,7 +342,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
 
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (func_80114F2C(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
+        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
             (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.weekEventReg[29] & 0x40)) {
                 func_801518B0(globalCtx, 0x969, NULL);

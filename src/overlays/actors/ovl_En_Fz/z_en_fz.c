@@ -619,7 +619,7 @@ void func_809334B8(EnFz* this, GlobalContext* globalCtx) {
         sp58.y = this->actor.world.pos.y + 20.0f;
         sp58.z = this->actor.world.pos.z;
 
-        Matrix_RotateY(this->actor.shape.rot.y, 0);
+        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
         sp64.x = 0.0f;
         sp64.y = -2.0f;
@@ -736,7 +736,7 @@ void func_809338E0(EnFz* this, GlobalContext* globalCtx) {
     sp58.y = this->actor.world.pos.y + 20.0f;
     sp58.z = this->actor.world.pos.z;
 
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     sp64.x = 0.0f;
     sp64.y = -2.0f;
