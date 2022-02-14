@@ -92,7 +92,7 @@ typedef struct {
     /* 0x0 */ u16 setting;
     /* 0x2 */ s16 numData;
     /* 0x4 */ Vec3s* data;
-} CamData; // size = 0x8 (bgCamData)
+} CamData; // size = 0x8 (BgCamData)
 
 typedef struct {
     /* 0x0 */ Vec3s minPos;

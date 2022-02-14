@@ -501,7 +501,7 @@ typedef struct {
     /* 0x4 */ Vec3s* data;
 } CsCamData; // size = 0x8
 
-typedef CsCamData CsCameraEntry;
+typedef CsCamData CsCameraEntry; // TODO: Remove once ZAPD updates its structs
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;

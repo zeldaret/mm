@@ -179,7 +179,7 @@ void Scene_HeaderCmdActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->csCamData = (CsCameraEntry*)Lib_SegmentedToVirtual(cmd->csCameraList.segment);
+    globalCtx->csCamData = Lib_SegmentedToVirtual(cmd->csCameraList.segment);
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header

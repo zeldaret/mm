@@ -126,7 +126,7 @@ s32 func_8013A530(GlobalContext* globalCtx, Actor* actor, s32 flag, Vec3f* pos, 
     }
 
     x = func_8013A504(Camera_GetCamDirPitch(camera) + rot->x);
-    y = func_8013A504(Camera_GetCamDirYaw(camera) - (s16)(rot->y - 0x7FFF));
+    y = func_8013A504(Camera_GetCamDirYaw(camera) - BINANG_SUB(rot->y, 0x7FFF));
     if ((0 < angleError) && ((angleError < x) || (angleError < y))) {
         func_8013A41C(0x3E);
         ret |= 0x3E;
