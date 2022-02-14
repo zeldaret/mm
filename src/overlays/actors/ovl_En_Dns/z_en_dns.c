@@ -60,12 +60,17 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dns_Anim_003310, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_003310, 1.0f, 0, -1, 0, -4 },
-    { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, 0 }, { &object_dns_Anim_0034EC, 1.0f, 0, -1, 0, -4 },
-    { &object_dns_Anim_0008F4, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000BD8, 1.0f, 0, -1, 0, 0 },
-    { &object_dns_Anim_000D58, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000FEC, 1.0f, 0, -1, 0, 0 },
-    { &object_dns_Anim_0002A8, 1.0f, 0, -1, 2, 0 }, { &object_dns_Anim_000734, 1.0f, 0, -1, 2, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dns_Anim_003310, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dns_Anim_003310, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dns_Anim_0034EC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dns_Anim_0034EC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dns_Anim_0008F4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dns_Anim_000BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dns_Anim_000D58, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dns_Anim_000FEC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dns_Anim_0002A8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dns_Anim_000734, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 void func_8092C5C0(EnDns* this) {
@@ -79,7 +84,7 @@ void func_8092C5C0(EnDns* this) {
 
 s32 func_8092C63C(EnDns* this, s32 arg1) {
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case 0:
@@ -104,7 +109,7 @@ s32 func_8092C63C(EnDns* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_2F8 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;
