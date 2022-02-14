@@ -26,7 +26,7 @@ typedef struct {
 typedef struct EnZow {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ ColliderCylinder collider1;
+    /* 0x0188 */ ColliderCylinder collider;
     /* 0x01D4 */ Vec3s jointTable[20];
     /* 0x024C */ Vec3s morphTable[20];
     /* 0x02C4 */ s16 unk_2C4;

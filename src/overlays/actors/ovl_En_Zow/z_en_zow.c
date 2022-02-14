@@ -7,7 +7,7 @@
 #include "z_en_zow.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnZow*)thisx)
 
@@ -54,9 +54,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-static Vec3f D_80BDDD1C = { 0.0f, 1.0f, 0.0f };
+Vec3f D_80BDDD1C = { 0.0f, 1.0f, 0.0f };
 
-static Vec3f D_80BDDD28 = { 0.0f, -1.0f, 0.0f };
+Vec3f D_80BDDD28 = { 0.0f, -1.0f, 0.0f };
 
 void func_80BDC270(EnZowStruct* ptr, Vec3f* arg1, f32 arg2, f32 arg3, u8 arg4) {
     s16 i;
@@ -313,11 +313,10 @@ void EnZow_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80BDD79C;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zo_Skel_00D208, &object_zo_Anim_004248, this->jointTable,
-                       this->morphTable, 20);
-    Animation_PlayOnce(&this->skelAnime, &object_zo_Anim_003610);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
+    Animation_PlayOnce(&this->skelAnime, &gZoraSurfacingAnim);
     this->unk_2C8 = 1;
-    Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.shape.rot.z = 0;
     this->unk_2CA = 0;
     this->unk_2CC = 0;
@@ -331,12 +330,12 @@ void EnZow_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnZow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnZow* this = THIS;
 
-    Collider_DestroyCylinder(globalCtx, &this->collider1);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80BDD04C(EnZow* this, s16 arg1, u8 arg2) {
-    static AnimationHeader* sAnimations[] = { &object_zo_Anim_004168, &object_zo_Anim_003610, &object_zo_Anim_003610 };
+AnimationHeader* sAnimations[] = { &object_zo_Anim_004168, &gZoraSurfacingAnim, &gZoraSurfacingAnim };
 
+void func_80BDD04C(EnZow* this, s16 arg1, u8 arg2) {
     if ((arg1 >= 0) && (arg1 < 3)) {
         if (arg1 < 2) {
             Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]),
@@ -363,11 +362,11 @@ void func_80BDD1E0(EnZow* this, GlobalContext* globalCtx) {
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
         if (gSaveContext.weekEventReg[55] & 0x80) {
             if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-                if (gSaveContext.weekEventReg[78] & 0x4) {
+                if (gSaveContext.weekEventReg[78] & 4) {
                     phi_a1 = 0x12FD;
                 } else {
                     phi_a1 = 0x12FA;
-                    gSaveContext.weekEventReg[78] |= 0x4;
+                    gSaveContext.weekEventReg[78] |= 4;
                 }
             } else if (gSaveContext.weekEventReg[78] & 0x10) {
                 phi_a1 = 0x1301;
@@ -376,11 +375,11 @@ void func_80BDD1E0(EnZow* this, GlobalContext* globalCtx) {
                 phi_a1 = 0x12FF;
             }
         } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-            if (gSaveContext.weekEventReg[78] & 0x8) {
+            if (gSaveContext.weekEventReg[78] & 8) {
                 phi_a1 = 0x12F8;
             } else {
                 phi_a1 = 0x12F3;
-                gSaveContext.weekEventReg[78] |= 0x8;
+                gSaveContext.weekEventReg[78] |= 8;
             }
         } else if (gSaveContext.weekEventReg[78] & 0x10) {
             phi_a1 = 0x1301;
@@ -395,11 +394,11 @@ void func_80BDD1E0(EnZow* this, GlobalContext* globalCtx) {
             phi_a1 = 0x12F1;
         }
     } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[78] & 0x2) {
+        if (gSaveContext.weekEventReg[78] & 2) {
             phi_a1 = 0x12EB;
         } else {
             phi_a1 = 0x12E8;
-            gSaveContext.weekEventReg[78] |= 0x2;
+            gSaveContext.weekEventReg[78] |= 2;
         }
     } else {
         phi_a1 = 0x12EF;
@@ -549,8 +548,8 @@ void EnZow_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     Actor_MoveWithGravity(&this->actor);
-    Collider_UpdateCylinder(&this->actor, &this->collider1);
-    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 15.0f, 30.0f, 5);
 
     if (this->unk_2CE != 0) {
@@ -600,23 +599,23 @@ Gfx* func_80BDDA7C(GraphicsContext* gfxCtx) {
     return gfx;
 }
 
-void func_80BDDAA0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
-    static Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };
+Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };
 
+void func_80BDDAA0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80BDDD4C, &actor->focus.pos);
+        Matrix_MultiplyVector3fByState(&D_80BDDD4C, &thisx->focus.pos);
     }
 }
 
-void func_80BDDAE0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor, Gfx** gfx) {
-    func_80BDDAA0(globalCtx, limbIndex, dList, rot, actor);
+void func_80BDDAE0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    func_80BDDAA0(globalCtx, limbIndex, dList, rot, thisx);
 }
 
 void EnZow_Draw(Actor* thisx, GlobalContext* globalCtx) {
     TexturePtr sp54[] = {
-        object_zo_Tex_0050A0,
-        object_zo_Tex_0058A0,
-        object_zo_Tex_0060A0,
+        gZoraEyeOpenTex,
+        gZoraEyeHalfTex,
+        gZoraEyeClosedTex,
     };
     EnZow* this = THIS;
 
