@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_goron_oyu.h"
+#include "objects/object_oyu/object_oyu.h"
 
 #define FLAGS 0x00000030
 
@@ -33,11 +34,6 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
     (ActorFunc)BgGoronOyu_Update,
     (ActorFunc)BgGoronOyu_Draw,
 };
-
-extern Gfx D_06000080;
-extern Gfx D_06000158;
-extern AnimatedMaterial D_06000968;
-extern CollisionHeader D_06000988;
 
 void func_80B40080(BgGoronOyu* this) {
     this->unk_17E = 1;
@@ -157,7 +153,7 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, 1);
-    CollisionHeader_GetVirtual(&D_06000988, &colHeader);
+    CollisionHeader_GetVirtual(&object_oyu_Colheader_000988, &colHeader);
 
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
 
@@ -188,9 +184,9 @@ void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000968));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &D_06000158);
-    gSPDisplayList(POLY_XLU_DISP++, &D_06000080);
+    gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
+    gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
