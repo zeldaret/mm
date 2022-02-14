@@ -1328,6 +1328,7 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
             fileChooseCtx->unk_24464[fileChooseCtx->fileNum] = gSaveContext.save.day;
             fileChooseCtx->unk_2446A[fileChooseCtx->fileNum] = gSaveContext.save.isOwlSave;
             fileChooseCtx->unk_24470[fileChooseCtx->fileNum] = gSaveContext.save.playerData.rupees;
+            // = CUR_UPG_VALUE(UPG_WALLET);
             fileChooseCtx->unk_24476[fileChooseCtx->fileNum] =
                 (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
@@ -1370,6 +1371,7 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         fileChooseCtx->unk_24460[fileChooseCtx->fileNum] = gSaveContext.save.day;
         fileChooseCtx->unk_24468[fileChooseCtx->fileNum] = gSaveContext.save.isOwlSave;
         fileChooseCtx->rupees[fileChooseCtx->fileNum] = gSaveContext.save.playerData.rupees;
+        // = CUR_UPG_VALUE(UPG_WALLET);
         fileChooseCtx->unk_24474[fileChooseCtx->fileNum] =
             (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
