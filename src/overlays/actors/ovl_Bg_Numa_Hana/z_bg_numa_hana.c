@@ -77,7 +77,10 @@ static InitChainEntry D_80A1B2A8[] = {
 
 extern CollisionHeader D_06009FE0;
 extern CollisionHeader D_0600A740;
-extern UNK_TYPE D_0600B928;
+extern Gfx D_0600AB88[];
+extern Gfx D_0600BE58[];
+extern Gfx D_0600B928[];
+extern Gfx D_06000870[];
 
 s32 func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx) {
     Actor* child;
@@ -344,4 +347,46 @@ void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/BgNumaHana_Draw.s")
+void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    BgNumaHana* this = THIS;
+    UnkBgNumaHanaStruct* phi_s1;
+    UnkBgNumaHanaStruct* phi_s2;
+    s32 objectIndex;
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_0600B928);
+
+    for (i = 0; i < 6; i++) {
+        phi_s1 = &this->unk_238[i];
+        phi_s2 = &this->unk_2B0[i];
+
+        Matrix_SetStateRotationAndTranslation(phi_s1->unk_00.x, phi_s1->unk_00.y, phi_s1->unk_00.z, &phi_s1->unk_0C);
+        Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_0600AB88);
+
+        Matrix_SetStateRotationAndTranslation(phi_s2->unk_00.x, phi_s2->unk_00.y, phi_s2->unk_00.z, &phi_s2->unk_0C);
+        Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_0600BE58);
+    }
+
+    objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_SYOKUDAI);
+    if ((objectIndex >= 0) && (Object_IsLoaded(&globalCtx->objectCtx, objectIndex))) {
+        Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 64.5f,
+                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+        Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[objectIndex].segment);
+        gSPDisplayList(POLY_OPA_DISP++, D_06000870);
+    }
+
+    FireObj_Draw(globalCtx, &this->unk_15C);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
