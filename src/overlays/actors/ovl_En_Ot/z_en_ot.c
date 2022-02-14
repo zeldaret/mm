@@ -6,6 +6,8 @@
 
 #include "z_en_ot.h"
 #include "prevent_bss_reordering.h"
+#include "objects/object_ot/object_ot.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000019
 
@@ -57,15 +59,6 @@ EnOtUnkStruct* func_80B5DF58(EnOtUnkStruct* arg0, u8 arg1, Vec3f* arg2, Vec3s* a
 void func_80B5E078(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2);
 void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2);
 
-extern Gfx D_06000040[];
-extern Gfx D_06000078[];
-extern AnimationHeader D_06000420;
-extern Gfx D_060004A0[];
-extern AnimatedMaterial D_060005F8;
-extern AnimationHeader D_060008D8;
-extern FlexSkeletonHeader D_06004800;
-extern AnimationHeader D_06004B30;
-
 static EnOt* D_80B5E880;
 static EnOt* D_80B5E884;
 static EnOt* D_80B5E888;
@@ -102,10 +95,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 5, 33, -20, { 0, 0, 0 } },
 };
 
-static struct_80B8E1A8 sAnimations[] = {
-    { &D_06004B30, 1.0f, 0, -5.0f },
-    { &D_060008D8, 1.0f, 0, -5.0f },
-    { &D_06000420, 1.0f, 0, 0.0f },
+static AnimationSpeedInfo sAnimations[] = {
+    { &object_ot_Anim_004B30, 1.0f, ANIMMODE_LOOP, -5.0f },
+    { &object_ot_Anim_0008D8, 1.0f, ANIMMODE_LOOP, -5.0f },
+    { &object_ot_Anim_000420, 1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -156,12 +149,13 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004800, &D_060008D8, this->jointTable, this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable,
+                       this->morphTable, 19);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    Animation_Change(&this->skelAnime, sAnimations[0].animationSeg, 1.0f,
-                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common) * Rand_ZeroOne(),
-                     Animation_GetLastFrame(&sAnimations[0].animationSeg->common), sAnimations[0].mode,
-                     sAnimations[0].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimations[0].animation, 1.0f,
+                     Animation_GetLastFrame(&sAnimations[0].animation->common) * Rand_ZeroOne(),
+                     Animation_GetLastFrame(&sAnimations[0].animation->common), sAnimations[0].mode,
+                     sAnimations[0].morphFrames);
     this->unk_346 = ENOT_GET_7F(&this->actor);
     this->unk_344 = this->actor.world.rot.z;
     this->actor.world.rot.z = 0;
@@ -169,7 +163,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
     this->unk_744.r = 255;
@@ -306,7 +300,7 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 }
 
 void func_80B5BDA8(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->actionFunc = func_80B5BE04;
 }
@@ -328,7 +322,7 @@ void func_80B5BE04(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5BE88(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actionFunc = func_80B5BED4;
 }
 
@@ -343,7 +337,7 @@ void func_80B5BED4(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5BF60(EnOt* this, GlobalContext* globalCtx) {
     this->unk_32C |= 0x40;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5BFB8;
 }
 
@@ -416,8 +410,8 @@ void func_80B5C25C(EnOt* this, GlobalContext* globalCtx) {
     if ((this->unk_33C == 2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
         this->unk_32C |= 0x100;
         this->unk_360->unk_32C |= 0x100;
-        func_8013E1C8(&this->skelAnime, sAnimations, 2, &this->animIdx);
-        func_8013E1C8(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIdx);
+        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
         this->actor.flags |= 0x8000000;
         this->actor.flags &= ~(0x8 | 0x1);
         this->unk_360->actor.flags |= 0x8000000;
@@ -443,7 +437,7 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     Vec3f sp38;
 
     this->unk_3A0 += 0x2D8;
-    Matrix_RotateY(this->unk_3A0, 0);
+    Matrix_RotateY(this->unk_3A0, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp5C);
     Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp50);
     this->unk_348.x = this->unk_394.x + sp5C.x;
@@ -467,7 +461,7 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 12.0f)) {
-        Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)), 0);
+        Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)), MTXMODE_NEW);
         sp38.x = 1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
@@ -495,7 +489,7 @@ void func_80B5C64C(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5C684(EnOt* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5C6DC;
 }
 
@@ -641,7 +635,7 @@ void func_80B5CCA0(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CCF4(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5CD40;
 }
 
@@ -682,7 +676,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
 void func_80B5CE6C(EnOt* this, GlobalContext* globalCtx) {
     this->unk_384 = 0;
     this->unk_32C |= 0x20;
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5CEC8;
 }
 
@@ -737,7 +731,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5D114(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, sAnimations, 0, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->actionFunc = func_80B5D160;
 }
 
@@ -897,7 +891,7 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     this->unk_2C0.unk_2C.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
-    func_8013E1C8(&this->skelAnime, sAnimations, 1, &this->animIdx);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
     this->actor.flags |= 0x8000000;
     this->actor.flags &= ~(0x8 | 0x1);
     Flags_SetSwitch(globalCtx, ENOT_GET_3F80(&this->actor));
@@ -1044,7 +1038,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    AnimatedMat_Draw(globalCtx, (AnimatedMaterial*)Lib_SegmentedToVirtual(&D_060005F8));
+    AnimatedMat_Draw(globalCtx, (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnOt_PostLimbDraw, &this->actor);
     Matrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
@@ -1057,10 +1051,10 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSetOtherMode(&gfx[0], G_SETOTHERMODE_H, 4, 4, 0x00000080);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                       0);
-    gSPDisplayList(&gfx[2], D_04029CB0);
+    gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);
     gDPSetPrimColor(&gfx[3], 0, 0, this->unk_747.r, this->unk_747.g, this->unk_747.b, 50);
     gSPMatrix(&gfx[4], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(&gfx[5], D_04029CF0);
+    gSPDisplayList(&gfx[5], gameplay_keep_DL_029CF0);
 
     POLY_XLU_DISP = &gfx[6];
 
@@ -1075,7 +1069,7 @@ void EnOt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         OPEN_DISPS(globalCtx->state.gfxCtx);
         Gfx* gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], D_060004A0);
+        gSPDisplayList(&gfx[0], object_ot_DL_0004A0);
         POLY_OPA_DISP = &gfx[1];
         Matrix_MultiplyVector3fByState(&D_80B5E410, &this->unk_74C);
 
@@ -1152,7 +1146,7 @@ void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
     for (i = 0; i < arg2; i++, arg1++) {
         if (arg1->unk_00) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000040);
+                gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000040);
                 flag = true;
                 if (globalCtx) {}
             }
@@ -1161,10 +1155,10 @@ void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
             Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
             Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_06000078);
+            gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
         }
     }
 
