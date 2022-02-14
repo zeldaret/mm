@@ -26,9 +26,9 @@ void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx);
 void func_80BB7408(EnTanron2* this, GlobalContext* globalCtx);
 void func_80BB7B90(Actor* thisx, GlobalContext* globalCtx);
 
-static Boss04* D_80BB8450;
-static f32 D_80BB8454;
-static EnTanron2* D_80BB8458[82];
+Boss04* D_80BB8450;
+f32 D_80BB8454;
+EnTanron2* D_80BB8458[82];
 
 const ActorInit En_Tanron2_InitVars = {
     ACTOR_EN_TANRON2,
@@ -117,6 +117,9 @@ static ColliderCylinderInit sCylinderInit2 = {
     { 22, 42, -21, { 0, 0, 0 } },
 };
 
+Color_RGBA8 D_80BB81E8 = { 255, 255, 255, 255 };
+Color_RGBA8 D_80BB81EC = { 255, 100, 100, 255 };
+
 void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron2* this = THIS;
 
@@ -140,7 +143,7 @@ void EnTanron2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
 
-    if ((gGameInfo->data[0x520] != 0) || ((gSaveContext.eventInf[6] & 1) != 0)) {
+    if ((KREG(64) != 0) || (gSaveContext.eventInf[6] & 1)) {
         func_80BB69C0(this);
     } else {
         func_80BB6F64(this);
@@ -350,8 +353,6 @@ void func_80BB6F78(EnTanron2* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB71C8(EnTanron2* this, GlobalContext* globalCtx) {
-    static Color_RGBA8 D_80BB81E8 = { 255, 255, 255, 255 };
-    static Color_RGBA8 D_80BB81EC = { 255, 100, 100, 255 };
     s32 i;
     Vec3f spA8;
     Vec3f sp9C;
@@ -537,7 +538,7 @@ void EnTanron2_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (!(this->unk_148 & 0x1F)) {
-        if ((this->actionFunc != func_80BB69FC) && (this->actor.xyzDistToPlayerSq < 40000.0f)) {
+        if ((this->actionFunc != func_80BB69FC) && (this->actor.xyzDistToPlayerSq < SQ(200.0f))) {
             this->unk_15B = 1;
         } else {
             this->unk_15B = 0;
@@ -582,10 +583,8 @@ void func_80BB7B90(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    EnTanron2* this = THIS;
     s32 i;
     s32 j;
     s32 found;
@@ -617,10 +616,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         for (i = 0; i < found - 1; i++) {
             if (D_80BB8458[i + 1] != NULL) {
                 if (D_80BB8458[i]->actor.projectedPos.z < D_80BB8458[i + 1]->actor.projectedPos.z) {
-                    EnTanron2* curr = D_80BB8458[i];
-
-                    D_80BB8458[i] = D_80BB8458[i + 1];
-                    D_80BB8458[i + 1] = curr;
+                    SWAP(EnTanron2*, D_80BB8458[i], D_80BB8458[i + 1]);
                 }
             }
         }
@@ -685,6 +681,3 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron2/EnTanron2_Draw.s")
-#endif
