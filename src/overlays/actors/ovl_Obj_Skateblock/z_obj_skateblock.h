@@ -7,6 +7,8 @@ struct ObjSkateblock;
 
 typedef void (*ObjSkateblockActionFunc)(struct ObjSkateblock*, GlobalContext*);
 
+#define OBJSKAEBLOCK_GET_F(thisx) ((thisx)->params & 0xF)
+
 typedef struct {
     /* 0x00 */ CollisionPoly* poly;
     /* 0x04 */ f32 height;

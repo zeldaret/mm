@@ -39,11 +39,51 @@ const ActorInit Obj_Skateblock_InitVars = {
     (ActorFunc)ObjSkateblock_Draw,
 };
 
-static s32 D_80A22A10 = 0;
+s32 D_80A22A10 = 0;
 
-static s32 D_80A22A14 = 0;
+s32 D_80A22A14 = 0;
 
-static TexturePtr D_80A22A18 = NULL;
+TexturePtr D_80A22A18 = NULL;
+
+Vec2f D_80A22A1C[] = {
+    { -300.0f, 300.0f }, { 300.0f, 300.0f }, { -300.0f, -300.0f }, { 300.0f, -300.0f }, { 0.0f, 0.0f },
+};
+
+Vec2f D_80A22A44[] = {
+    { 0.5f, -0.5f }, { -0.5f, -0.5f }, { 0.5f, 0.5f }, { -0.5f, 0.5f }, { 0.0f, 0.0f },
+};
+
+Vec2f D_80A22A6C[] = {
+    { -300.0f, 0.0f }, { 300.0f, 0.0f }, { -300.0f, 600.0f }, { 300.0f, 600.0f }, { 0.0f, 300.0f },
+};
+
+Vec2f D_80A22A94[] = {
+    { 1.0f, 1.0f }, { -1.0f, 1.0f }, { 1.0f, -1.0f }, { -1.0f, -1.0f }, { 0.0f, 0.0f },
+};
+
+f32 D_80A22ABC[] = { -300.0f, 300.0f };
+
+f32 D_80A22AC4[] = { 1.0f, -1.0f };
+
+Vec3f D_80A22ACC = { 0.0f, 0.3f, 0.0f };
+
+Color_RGBA8 D_80A22AD8 = { 250, 250, 250, 255 };
+
+Color_RGBA8 D_80A22ADC = { 180, 180, 180, 255 };
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32_DIV1000(gravity, -1700, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),   ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
+};
+
+f32 D_80A22AF8[] = { 14.0f, -14.0f, 14.0f, -14.0f };
+
+Color_RGB8 D_80A22B08[] = {
+    { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
+    { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
+    { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
+};
 
 s32 func_80A21150(ObjSkateblock* this) {
     s32 temp_v0;
@@ -99,21 +139,14 @@ void func_80A212F0(Vec3f* arg0, Vec3f* arg1, s16 arg2) {
 }
 
 s32 func_80A21370(ObjSkateblock* this, GlobalContext* globalCtx) {
-    static Vec2f D_80A22A1C[] = {
-        { -300.0f, 300.0f }, { 300.0f, 300.0f }, { -300.0f, -300.0f }, { 300.0f, -300.0f }, { 0.0f, 0.0f },
-    };
-    static Vec2f D_80A22A44[] = {
-        { 0.5f, -0.5f }, { -0.5f, -0.5f }, { 0.5f, 0.5f }, { -0.5f, 0.5f }, { 0.0f, 0.0f },
-    };
     ObjSkateblockFloor* floor;
     s32 i;
     s32 pad;
     s32 sp98;
     Vec3f sp8C;
     s32 sp88;
-    f32 phi_f20;
+    f32 phi_f20 = BGCHECK_Y_MIN;
 
-    phi_f20 = BGCHECK_Y_MIN;
     sp88 = false;
     sp8C.y = this->dyna.actor.world.pos.y + 40.0f;
     sp98 = -1;
@@ -178,12 +211,6 @@ s32 func_80A21548(ObjSkateblock* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A216D4(ObjSkateblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f* arg3) {
-    static Vec2f D_80A22A6C[] = {
-        { -300.0f, 0.0f }, { 300.0f, 0.0f }, { -300.0f, 600.0f }, { 300.0f, 600.0f }, { 0.0f, 300.0f },
-    };
-    static Vec2f D_80A22A94[] = {
-        { 1.0f, 1.0f }, { -1.0f, 1.0f }, { 1.0f, -1.0f }, { -1.0f, -1.0f }, { 0.0f, 0.0f },
-    };
     s32 pad;
     f32 spE8;
     f32 spE4;
@@ -255,8 +282,6 @@ s32 func_80A21934(ObjSkateblock* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A21990(ObjSkateblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
-    static f32 D_80A22ABC[] = { -300.0f, 300.0f };
-    static f32 D_80A22AC4[] = { 1.0f, -1.0f };
     s32 i;
     f32 sp100;
     s16 phi_s6 = this->dyna.yRotation;
@@ -414,9 +439,6 @@ void func_80A21F68(ObjSkateblock* this) {
 }
 
 void func_80A21F74(ObjSkateblock* this, GlobalContext* globalCtx) {
-    static Vec3f D_80A22ACC = { 0.0f, 0.3f, 0.0f };
-    static Color_RGBA8 D_80A22AD8 = { 250, 250, 250, 255 };
-    static Color_RGBA8 D_80A22ADC = { 180, 180, 180, 255 };
     s32 pad;
     Vec3f spA8;
     Vec3f sp9C;
@@ -467,14 +489,6 @@ void func_80A21F74(ObjSkateblock* this, GlobalContext* globalCtx) {
 }
 
 void ObjSkateblock_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static InitChainEntry sInitChain[] = {
-        ICHAIN_F32_DIV1000(gravity, -1700, ICHAIN_CONTINUE),
-        ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
-        ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
-        ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
-    };
     ObjSkateblock* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
@@ -534,8 +548,6 @@ void func_80A22334(ObjSkateblock* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2244C(ObjSkateblock* this) {
-    static f32 D_80A22AF8[] = { 14.0f, -14.0f, 14.0f, -14.0f };
-
     this->actionFunc = func_80A224A4;
     this->unk_168 = D_80A22AF8[this->unk_170];
     this->unk_164 = 0.0f;
@@ -668,15 +680,9 @@ void ObjSkateblock_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjSkateblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Color_RGB8 D_80A22B08[] = {
-        { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
-        { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
-        { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
-        { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
-    };
     s32 pad;
     ObjSkateblock* this = THIS;
-    Color_RGB8* sp2C = &D_80A22B08[this->dyna.actor.params & 0xF];
+    Color_RGB8* sp2C = &D_80A22B08[OBJSKAEBLOCK_GET_F(&this->dyna.actor)];
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
