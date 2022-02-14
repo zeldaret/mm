@@ -7,7 +7,7 @@
 #include "z_en_cne_01.h"
 #include "objects/object_cne/object_cne.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnCne01*)thisx)
 
@@ -91,7 +91,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
 };
 
-static u16 D_809CBF58[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+u16 D_809CBF58[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
 
 void EnCne01_UpdateModel(EnCne01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
