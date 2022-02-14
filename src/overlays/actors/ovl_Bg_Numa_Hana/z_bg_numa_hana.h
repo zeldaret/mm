@@ -17,7 +17,7 @@ typedef struct {
 
 typedef struct BgNumaHana {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ FireObj unk_15C;
+    /* 0x15C */ FireObj fire;
     /* 0x1E8 */ ColliderCylinder collider;
     /* 0x234 */ BgNumaHanaActionFunc actionFunc;
     /* 0x238 */ UnkBgNumaHanaStruct unk_238[6];
