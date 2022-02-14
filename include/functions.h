@@ -3715,7 +3715,7 @@ void func_801A2C20(void);
 // void func_801A2C88(void);
 // void func_801A2D54(void);
 s32 Audio_IsSequencePlaying(u8 seqId);
-void func_801A2E54(s32 param_1);
+void func_801A2E54(s32 bgmId);
 void func_801A2ED8(void);
 // void func_801A2F88(void);
 // void func_801A3000(void);
