@@ -683,7 +683,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, 0);
+        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);
@@ -1387,8 +1387,8 @@ static s8 limbPosIndex[] = {
     -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
 };
 
-void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
-    EnPametfrog* this = (EnPametfrog*)arg;
+void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnPametfrog* this = THIS;
     Vec3f vec;
     Vec3s* center;
     s8 index;

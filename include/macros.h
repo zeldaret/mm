@@ -70,7 +70,7 @@
 #define ALL_EQUIP_VALUE(equip) ((gSaveContext.inventory.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_EQUIP_VALUE(equip) ((gSaveContext.equips.equipment & gEquipMasks[equip]) >> gEquipShifts[equip])
 #define CUR_UPG_VALUE(upg) ((gSaveContext.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
-#define TAKE_EQUIPPED_ITEM(equip) (gSaveContext.equips.equipment = ((((void)0, gSaveContext.equips.equipment) & (gEquipNegMasks[equip])) | (u16)(0 << gEquipShifts[equip])))
+#define SET_EQUIP_VALUE(equip, value) (gSaveContext.equips.equipment = ((((void)0, gSaveContext.equips.equipment) & (gEquipNegMasks[equip])) | (u16)((u16)(value) << gEquipShifts[equip])))
 #define CUR_FORM_EQUIP(button) (gSaveContext.equips.buttonItems[CUR_FORM][button])
 #define CHECK_QUEST_ITEM(item) (((void)0, gSaveContext.inventory.questItems) & gBitFlags[item])
 #define REMOVE_QUEST_ITEM(item) (gSaveContext.inventory.questItems = (((void)0, gSaveContext.inventory.questItems) & (-1 - gBitFlags[item])))
@@ -126,6 +126,21 @@ extern GraphicsContext* __gfxCtx;
     { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
 
 #define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size))))
+
+// Custom gbi macro
+#define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
+    {                                                                                                                  \
+        gDPPipeSync(pkt);                                                                                              \
+        gDPTileSync(pkt);                                                                                              \
+        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_LOADTILE, 0, cmt, maskt, shiftt, cms, \
+                   masks, shifts);                                                                                     \
+        gDPTileSync(pkt);                                                                                              \
+        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt,  \
+                   cms, masks, shifts);                                                                                \
+        gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC,                                \
+                       ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
+    }                                                                                                                  \
+    (void)0
 
 #define ALIGN8(val) (((val) + 7) & ~7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)

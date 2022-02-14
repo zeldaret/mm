@@ -1198,6 +1198,9 @@ def parse_elf_data_references(data: bytes) -> List[Tuple[int, int, str]]:
                 # Skip .text -> .text references
                 continue
             sec_name = sec_names[s.sh_info].decode("latin1")
+            if sec_name == ".mwcats.text":
+                # Skip Metrowerks CATS Utility section
+                continue
             sec_base = sections[s.sh_info].sh_offset
             for i in range(0, s.sh_size, s.sh_entsize):
                 if s.sh_type == SHT_REL:
@@ -1330,11 +1333,6 @@ def dump_binary(
         (objdump_flags + flags2, project.myimg, None),
     )
 
-DATA_POOL_PLACEHOLDER = "DATA_POOL_PLACEHOLDER-OFFSET_{}"
-DATA_POOL_PLACEHOLDER_PATTERN = re.compile(
-    r"DATA_POOL_PLACEHOLDER-OFFSET_([a-zA-z0-9]+)"
-)
-
 # Example: "ldr r4, [pc, #56]    ; (4c <AddCoins+0x4c>)"
 ARM32_LOAD_POOL_PATTERN = r"(ldr\s+r([0-9]|1[0-3]),\s+\[pc,.*;\s*)(\([a-fA-F0-9]+.*\))"
 
@@ -1357,7 +1355,7 @@ class AsmProcessor:
 
     def _normalize_arch_specific(self, mnemonic: str, row: str) -> str:
         return row
-    
+
     def post_process(self, lines: List["Line"]) -> None:
         return
 
@@ -1460,37 +1458,21 @@ class AsmProcessorARM32(AsmProcessor):
 
     def _normalize_data_pool(self, row: str) -> str:
         pool_match = re.search(ARM32_LOAD_POOL_PATTERN, row)
-        if pool_match:
-            offset = pool_match.group(3).split(" ")[0][1:]
-            repl = DATA_POOL_PLACEHOLDER.format(offset)
-            return pool_match.group(1) + repl
-        return row
+        return pool_match.group(1) if pool_match else row
 
     def post_process(self, lines: List["Line"]) -> None:
         lines_by_line_number = {}
         for line in lines:
             lines_by_line_number[line.line_num] = line
         for line in lines:
-            reloc_match = re.search(
-                DATA_POOL_PLACEHOLDER_PATTERN, line.normalized_original
-            )
-            if reloc_match is None:
+            if line.data_pool_addr is None:
                 continue
 
-            # Get value at relocation
-            reloc = reloc_match.group(0)
-            line_number = re.search(
-                DATA_POOL_PLACEHOLDER_PATTERN, reloc).group(1)
-            line_original = lines_by_line_number[int(line_number, 16)].original
+            # Add data symbol and its address to the line.
+            line_original = lines_by_line_number[line.data_pool_addr].original
             value = line_original.split()[1]
-
-            # Replace relocation placeholder with value
-            replaced = re.sub(
-                DATA_POOL_PLACEHOLDER_PATTERN,
-                f"={value} ({line_number})",
-                line.normalized_original,
-            )
-            line.original = replaced
+            addr = "{:x}".format(line.data_pool_addr)
+            line.original = line.normalized_original + f"={value} ({addr})"
 
 
 class AsmProcessorAArch64(AsmProcessor):
@@ -1795,6 +1777,7 @@ class Line:
     scorable_line: str
     line_num: Optional[int] = None
     branch_target: Optional[int] = None
+    data_pool_addr: Optional[int] = None
     source_filename: Optional[str] = None
     source_line_num: Optional[int] = None
     source_lines: List[str] = field(default_factory=list)
@@ -1855,6 +1838,14 @@ def process(dump: str, config: Config) -> List[Line]:
                 source_line_num = int(tail.partition(" ")[0])
             source_lines.append(row)
             continue
+
+        # If the instructions loads a data pool symbol, extract the address of
+        # the symbol.
+        data_pool_addr = None
+        pool_match = re.search(ARM32_LOAD_POOL_PATTERN, row)
+        if pool_match:
+            offset = pool_match.group(3).split(" ")[0][1:]
+            data_pool_addr = int(offset, 16)
 
         m_comment = re.search(arch.re_comment, row)
         comment = m_comment[0] if m_comment else None
@@ -1946,6 +1937,7 @@ def process(dump: str, config: Config) -> List[Line]:
                 scorable_line=scorable_line,
                 line_num=line_num,
                 branch_target=branch_target,
+                data_pool_addr=data_pool_addr,
                 source_filename=source_filename,
                 source_line_num=source_line_num,
                 source_lines=source_lines,
