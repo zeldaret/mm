@@ -3207,7 +3207,7 @@ asm/non_matchings/code/code_80192BE0/func_80193774.s,func_80193774,0x80193774,0x
 asm/non_matchings/code/code_80192BE0/func_8019380C.s,func_8019380C,0x8019380C,0x13
 asm/non_matchings/code/code_80192BE0/func_80193858.s,func_80193858,0x80193858,0x9
 asm/non_matchings/code/code_80192BE0/func_8019387C.s,func_8019387C,0x8019387C,0x9
-asm/non_matchings/code/code_80192BE0/func_801938A0.s,func_801938A0,0x801938A0,0xC
+asm/non_matchings/code/code_80192BE0/Audio_QueueCmdS8.s,Audio_QueueCmdS8,0x801938A0,0xC
 asm/non_matchings/code/code_80192BE0/func_801938D0.s,func_801938D0,0x801938D0,0xC
 asm/non_matchings/code/code_80192BE0/func_80193900.s,func_80193900,0x80193900,0x24
 asm/non_matchings/code/code_80192BE0/func_80193990.s,func_80193990,0x80193990,0x6
@@ -3436,7 +3436,7 @@ asm/non_matchings/code/code_8019AF00/func_801A0868.s,func_801A0868,0x801A0868,0x
 asm/non_matchings/code/code_8019AF00/func_801A09D4.s,func_801A09D4,0x801A09D4,0xA7
 asm/non_matchings/code/code_8019AF00/Audio_ClearSariaBgm.s,Audio_ClearSariaBgm,0x801A0C70,0x8
 asm/non_matchings/code/code_8019AF00/Audio_ClearSariaBgmAtPos.s,Audio_ClearSariaBgmAtPos,0x801A0C90,0x8
-asm/non_matchings/code/code_8019AF00/func_801A0CB0.s,func_801A0CB0,0x801A0CB0,0x65
+asm/non_matchings/code/code_8019AF00/Audio_SplitBgmChannels.s,Audio_SplitBgmChannels,0x801A0CB0,0x65
 asm/non_matchings/code/code_8019AF00/func_801A0E44.s,func_801A0E44,0x801A0E44,0x113
 asm/non_matchings/code/code_8019AF00/func_801A1290.s,func_801A1290,0x801A1290,0x2E
 asm/non_matchings/code/code_8019AF00/func_801A1348.s,func_801A1348,0x801A1348,0x1D
@@ -3568,7 +3568,7 @@ asm/non_matchings/code/code_801A5BD0/func_801A7720.s,func_801A7720,0x801A7720,0x
 asm/non_matchings/code/code_801A5BD0/func_801A7794.s,func_801A7794,0x801A7794,0x25
 asm/non_matchings/code/code_801A5BD0/func_801A7828.s,func_801A7828,0x801A7828,0x15
 asm/non_matchings/code/code_801A5BD0/func_801A787C.s,func_801A787C,0x801A787C,0x1A
-asm/non_matchings/code/code_801A5BD0/func_801A78E4.s,func_801A78E4,0x801A78E4,0x1A
+asm/non_matchings/code/code_801A5BD0/Audio_IsSfxPlaying.s,Audio_IsSfxPlaying,0x801A78E4,0x1A
 asm/non_matchings/code/code_801A5BD0/func_801A794C.s,func_801A794C,0x801A794C,0x71
 asm/non_matchings/code/code_801A7B10/func_801A7B10.s,func_801A7B10,0x801A7B10,0x7D
 asm/non_matchings/code/code_801A7B10/func_801A7D04.s,func_801A7D04,0x801A7D04,0x20
@@ -3579,7 +3579,7 @@ asm/non_matchings/code/code_801A7B10/func_801A8A50.s,func_801A8A50,0x801A8A50,0x
 asm/non_matchings/code/code_801A7B10/func_801A8ABC.s,func_801A8ABC,0x801A8ABC,0x16
 asm/non_matchings/code/code_801A7B10/func_801A8B14.s,func_801A8B14,0x801A8B14,0x6
 asm/non_matchings/code/code_801A7B10/func_801A8B2C.s,func_801A8B2C,0x801A8B2C,0x29
-asm/non_matchings/code/code_801A7B10/func_801A8BD0.s,func_801A8BD0,0x801A8BD0,0x63
+asm/non_matchings/code/code_801A7B10/Audio_SetVolumeScale.s,Audio_SetVolumeScale,0x801A8BD0,0x63
 asm/non_matchings/code/code_801A7B10/func_801A8D5C.s,func_801A8D5C,0x801A8D5C,0x283
 asm/non_matchings/code/code_801A7B10/func_801A9768.s,func_801A9768,0x801A9768,0x31
 asm/non_matchings/code/code_801A7B10/func_801A982C.s,func_801A982C,0x801A982C,0x63
