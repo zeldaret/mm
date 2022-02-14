@@ -21,7 +21,9 @@
         <Texture Name="object_dns_Tex_001E68" OutName="tex_001E68" Format="rgba16" Width="32" Height="32" Offset="0x1E68" />
         <Texture Name="object_dns_Tex_002668" OutName="tex_002668" Format="rgba16" Width="16" Height="16" Offset="0x2668" />
         <Texture Name="object_dns_Tex_002868" OutName="tex_002868" Format="rgba16" Width="8" Height="8" Offset="0x2868" />
-        <!-- <Blob Name="object_dns_Blob_0028E8" Size="0x180" Offset="0x28E8" /> -->
+        <Texture Name="object_dns_Tex_0028E8" OutName="tex_0028E8" Format="rgba16" Width="8" Height="8" Offset="0x28E8" />
+        <Texture Name="object_dns_Tex_002968" OutName="tex_002968" Format="rgba16" Width="8" Height="8" Offset="0x2968" />
+        <Texture Name="object_dns_Tex_0029E8" OutName="tex_0029E8" Format="rgba16" Width="8" Height="8" Offset="0x29E8" />
         <DList Name="object_dns_DL_002C48" Offset="0x2C48" />
         <Limb Name="object_dns_Standardlimb_002D18" Type="Standard" Offset="0x2D18" />
         <Limb Name="object_dns_Standardlimb_002D24" Type="Standard" Offset="0x2D24" />

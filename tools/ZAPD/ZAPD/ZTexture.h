@@ -40,20 +40,21 @@ protected:
 	void PrepareBitmapPalette8();
 
 	void PrepareRawDataFromFile(const fs::path& inFolder);
-	void PrepareRawDataRGBA16(const fs::path& rgbaPath);
-	void PrepareRawDataRGBA32(const fs::path& rgbaPath);
-	void PrepareRawDataGrayscale4(const fs::path& grayPath);
-	void PrepareRawDataGrayscale8(const fs::path& grayPath);
-	void PrepareRawDataGrayscaleAlpha4(const fs::path& grayAlphaPath);
-	void PrepareRawDataGrayscaleAlpha8(const fs::path& grayAlphaPath);
-	void PrepareRawDataGrayscaleAlpha16(const fs::path& grayAlphaPath);
-	void PrepareRawDataPalette4(const fs::path& palPath);
-	void PrepareRawDataPalette8(const fs::path& palPath);
+	void PrepareRawDataRGBA16();
+	void PrepareRawDataRGBA32();
+	void PrepareRawDataGrayscale4();
+	void PrepareRawDataGrayscale8();
+	void PrepareRawDataGrayscaleAlpha4();
+	void PrepareRawDataGrayscaleAlpha8();
+	void PrepareRawDataGrayscaleAlpha16();
+	void PrepareRawDataPalette4();
+	void PrepareRawDataPalette8();
 
 public:
 	ZTexture(ZFile* nParent);
 
 	bool isPalette = false;
+	bool dWordAligned = true;
 
 	void ExtractFromBinary(uint32_t nRawDataIndex, int32_t nWidth, int32_t nHeight,
 	                       TextureType nType, bool nIsPalette);
