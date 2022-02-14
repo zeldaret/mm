@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_grass.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -15,10 +16,10 @@ void ObjGrass_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrass_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjGrass_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-static ObjGrassStruct1* D_809AADA0[4];
-static f32 D_809AADB0[4];
-static ObjGrassStruct1_1* D_809AADC0[20];
-static f32 D_809AAE10[20];
+ObjGrassStruct1* D_809AADA0[4];
+f32 D_809AADB0[4];
+ObjGrassStruct1_1* D_809AADC0[20];
+f32 D_809AAE10[20];
 
 #include "overlays/ovl_Obj_Grass/ovl_Obj_Grass.c"
 
@@ -54,6 +55,15 @@ static ColliderCylinderInit sCylinderInit = {
     { 6, 44, 0, { 0, 0, 0 } },
 };
 
+Vec3f D_809AAB4C[] = {
+    { 0.0f, 0.707099974155f, 0.707099974155f },
+    { 0.707099974155f, 0.707099974155f, 0.0f },
+    { 0.0f, 0.707099974155f, -0.707099974155f },
+    { -0.707099974155f, 0.707099974155f, 0.0f },
+};
+
+s16 D_809AAB7C[] = { 0x6C, 0x66, 0x60, 0x54, 0x42, 0x37, 0x2A, 0x26 };
+
 s32 func_809A9110(GlobalContext* globalCtx, Vec3f* arg1) {
     f32 sp2C;
     Vec3f sp20;
@@ -76,8 +86,8 @@ s32 func_809A9110(GlobalContext* globalCtx, Vec3f* arg1) {
 void func_809A91FC(MtxF* matrix) {
     s32 i;
     MtxF* temp = Matrix_GetCurrentState();
-    f32* tmp = (f32*)&temp->mf[0];
-    f32* tmp2 = (f32*)&matrix->mf[0];
+    f32* tmp = &temp->mf[0][0];
+    f32* tmp2 = &matrix->mf[0][0];
 
     for (i = 0; i < 16; i++) {
         *tmp++ += *tmp2++;
@@ -92,13 +102,6 @@ void func_809A92D0(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
 
 #ifdef NON_MATCHING
 void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
-    static Vec3f D_809AAB4C[] = {
-        { 0.0f, 0.707099974155f, 0.707099974155f },
-        { 0.707099974155f, 0.707099974155f, 0.0f },
-        { 0.0f, 0.707099974155f, -0.707099974155f },
-        { -0.707099974155f, 0.707099974155f, 0.0f },
-    };
-    static s16 D_809AAB7C[] = { 0x6C, 0x66, 0x60, 0x54, 0x42, 0x37, 0x2A, 0x26 };
     Vec3f spBC;
     Vec3f spB0;
     s32 i;
@@ -113,7 +116,7 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, D_040527F0);
+                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0527F0);
 
         spB0.x = ptr->unk_00.x + (D_809AAB4C[i].x * 16.0f);
         spB0.y = (ptr->unk_00.y + (D_809AAB4C[i].y * 16.0f)) + 10.0f;
@@ -124,17 +127,10 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, D_040528B0);
+                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0528B0);
     }
 }
 #else
-static Vec3f D_809AAB4C[] = {
-    { 0.0f, 0.707099974155f, 0.707099974155f },
-    { 0.707099974155f, 0.707099974155f, 0.0f },
-    { 0.0f, 0.707099974155f, -0.707099974155f },
-    { -0.707099974155f, 0.707099974155f, 0.0f },
-};
-static s16 D_809AAB7C[] = { 0x6C, 0x66, 0x60, 0x54, 0x42, 0x37, 0x2A, 0x26 };
 void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass/func_809A9314.s")
 #endif
@@ -167,9 +163,9 @@ void ObjGrass_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3298); i++) {
-        ObjGrassUnkStruct** ptr = &this->unk_3298[i];
+        ObjGrassCarry** ptr = &this->unk_3298[i];
 
-        if ((*ptr) != NULL) {
+        if (*ptr != NULL) {
             (*ptr)->unk_190 = 0;
             *ptr = NULL;
         }
@@ -199,6 +195,7 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
     s32 count;
     ObjGrassStruct1* ptr;
     ObjGrassStruct1_1* ptr2;
+    ObjGrassStruct2* ptr3;
 
     for (i = 0; i < ARRAY_COUNT(D_809AADC0); i++) {
         D_809AADC0[i] = NULL;
@@ -214,22 +211,23 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
         ptr = &this->unk_144[i];
 
         for (j = 0; j < ptr->unk_FC; j++) {
-            ptr->unk_0C[j].unk_0F &= ~2;
+            ptr->unk_0C[j].unk_0F &= (u16)~2;
         }
     }
 
     for (i = 0; i < this->unk_2944; i++) {
         ptr = &this->unk_144[i];
-
         temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_00, &player->actor.world.pos);
+        count = 0;
 
-        for (count = 0, j = 0; count < ARRAY_COUNT(D_809AADB0); count++, j++) {
+        for (j = 0; count < ARRAY_COUNT(D_809AADB0); j++) {
             if (temp_f0 > D_809AADB0[j]) {
                 break;
             }
+            count++;
         }
 
-        if (count < 4) {
+        if ((count + 1) < ARRAY_COUNT(D_809AADB0)) {
             for (x = count + 1; x != 0; x--) {
                 D_809AADB0[x + 1] = D_809AADB0[x];
                 D_809AADA0[x + 1] = D_809AADA0[x];
@@ -245,35 +243,37 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
     for (i = 0; i < this->unk_2944; i++) {
         ptr = D_809AADA0[i];
 
-        if (ptr != NULL) {
-            for (j = 0; j < ptr->unk_FC; j++) {
-                if (!(ptr->unk_0C[j].unk_0F & 4)) {
-                    temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_0C[j].unk_00, &player->actor.world.pos);
+        if (D_809AADA0[i] != NULL) {
+            for (j = 0; j < ptr->unk_FC; j++, ptr2++) {
+                if (ptr->unk_0C[i].unk_0F & 4) {
+                    continue;
+                }
 
-                    count = 0;
-                    for (x = 0; x < ARRAY_COUNT(D_809AAE10); x++) {
-                        if (temp_f0 > D_809AAE10[x]) {
-                            break;
-                        }
-                        count++;
+                temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_0C[i].unk_00, &player->actor.world.pos);
+
+                count = 0;
+                for (x = 0; x < ARRAY_COUNT(D_809AAE10); x++) {
+                    if (temp_f0 > D_809AAE10[x]) {
+                        break;
+                    }
+                    count++;
+                }
+
+                if ((count + 1) < ARRAY_COUNT(D_809AAE10)) {
+                    for (y = count + 1; y > 0; y--) {
+                        D_809AAE10[y + 1] = D_809AAE10[y];
+                        D_809AADC0[y + 1] = D_809AADC0[y];
                     }
 
-                    if (count < 20) {
-                        for (y = count + 1; y != 0; y--) {
-                            D_809AAE10[y + 1] = D_809AAE10[y];
-                            D_809AADC0[y + 1] = D_809AADC0[y];
-                        }
+                    D_809AAE10[x] = temp_f0;
+                    D_809AADC0[x] = &ptr->unk_0C[j];
 
-                        D_809AAE10[x] = temp_f0;
-                        D_809AADC0[x] = &ptr->unk_0C[j];
+                    if (temp_f0 < 2500.0f) {
+                        s16 yaw = player->actor.shape.rot.y -
+                                  Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[i].unk_00);
 
-                        if (temp_f0 < 2500.0f) {
-                            s16 yaw = player->actor.shape.rot.y -
-                                      Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[j].unk_00);
-
-                            if (ABS_ALT(yaw) < 0x2000) {
-                                this->unk_3294 = &ptr->unk_0C[j].unk_00;
-                            }
+                        if (ABS_ALT(yaw) < 0x2000) {
+                            this->unk_3294 = &ptr->unk_0C[i].unk_00;
                         }
                     }
                 }
@@ -282,22 +282,21 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        ObjGrassStruct2* ptr = &this->unk_2948[i];
+        this->unk_2948[i].collider.base.acFlags &= (u16)~AC_HIT;
+        this->unk_2948[i].collider.base.ocFlags1 &= (u16)~OC1_HIT;
 
-        ptr->collider.base.acFlags &= ~AC_HIT;
-        ptr->collider.base.ocFlags1 &= ~OC1_HIT;
-
+        ptr3 = &this->unk_2948[i];
         ptr2 = D_809AADC0[i];
         if (ptr2 != NULL) {
-            ptr->collider.dim.pos.x = ptr2->unk_00.x;
-            ptr->collider.dim.pos.y = ptr2->unk_00.y;
-            ptr->collider.dim.pos.z = ptr2->unk_00.z;
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &ptr->collider.base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &ptr->collider.base);
+            ptr3->collider.dim.pos.x = ptr2->unk_00.x;
+            ptr3->collider.dim.pos.y = ptr2->unk_00.y;
+            ptr3->collider.dim.pos.z = ptr2->unk_00.z;
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &ptr3->collider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &ptr3->collider.base);
             ptr2->unk_0F |= 2;
-            ptr->unk_4C = ptr2;
+            ptr3->unk_4C = ptr2;
         } else {
-            ptr->unk_4C = NULL;
+            ptr3->unk_4C = NULL;
         }
     }
 }
@@ -354,7 +353,7 @@ void func_809A9DB8(ObjGrass* this) {
     sp6C[7] = (spA4 - temp_f20) * sp94 * sp90 * temp_f16 * 0.0015f;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2F88); i++) {
-        ptr = (f32*)&this->unk_2F88[i].mf[0];
+        ptr = &this->unk_2F88[i].mf[0][0];
 
         tempf1 = sp6C[(i + 0) & 7];
         tempf2 = sp6C[(i + 1) & 7];

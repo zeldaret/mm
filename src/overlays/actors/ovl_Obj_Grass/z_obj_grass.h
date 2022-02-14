@@ -2,6 +2,7 @@
 #define Z_OBJ_GRASS_H
 
 #include "global.h"
+#include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 
 struct ObjGrass;
 
@@ -26,11 +27,6 @@ typedef struct {
     /* 0x4C */ ObjGrassStruct1_1* unk_4C;
 } ObjGrassStruct2; // size = 0x50
 
-typedef struct {
-    /* 0x000 */ UNK_TYPE1 unk_00[0x190];
-    /* 0x190 */ s32 unk_190;
-} ObjGrassUnkStruct;
-
 typedef struct ObjGrass {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ObjGrassStruct1 unk_144[40];
@@ -43,7 +39,7 @@ typedef struct ObjGrass {
     /* 0x328E */ s16 unk_328E;
     /* 0x3290 */ s16 unk_3290;
     /* 0x3294 */ Vec3f* unk_3294;
-    /* 0x3298 */ ObjGrassUnkStruct* unk_3298[2];
+    /* 0x3298 */ ObjGrassCarry* unk_3298[2];
 } ObjGrass; // size = 0x32A0
 
 extern const ActorInit Obj_Grass_InitVars;
