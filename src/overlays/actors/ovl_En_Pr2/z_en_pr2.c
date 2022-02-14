@@ -6,8 +6,9 @@
 
 #include "z_en_pr2.h"
 #include "objects/object_pr/object_pr.h"
+#include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
-#define FLAGS 0x00000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
 #define THIS ((EnPr2*)thisx)
 
@@ -92,13 +93,17 @@ const ActorInit En_Pr2_InitVars = {
     (ActorFunc)EnPr2_Draw,
 };
 
-typedef struct {
-    Actor actor;
-    char unk144[0xA];
-    s16 unk_14E;
-    char unk150[0xA];
-    s16 unk_15A;
-} TempStruct;
+static AnimationHeader* sAnimations[] = {
+    &object_pr_Anim_004340,
+    &object_pr_Anim_004274,
+    &object_pr_Anim_003904,
+};
+
+u8 D_80A75C38[] = { 0, 0, 2, 0 };
+
+s16 D_80A75C3C[] = {
+    0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
+};
 
 void EnPr2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPr2* this = THIS;
@@ -146,7 +151,7 @@ void EnPr2_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((TempStruct*)parent)->unk_15A;
+                    this->unk_1C8 = ((EnEncount1*)parent)->unk_15A;
                     this->path = func_8013D648(globalCtx, this->unk_1C8, 0x3F);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
@@ -183,8 +188,8 @@ void EnPr2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.parent != NULL) {
         Actor* parent = this->actor.parent;
 
-        if ((parent->update != NULL) && (((TempStruct*)parent)->unk_14E > 0)) {
-            ((TempStruct*)parent)->unk_14E--;
+        if ((parent->update != NULL) && (((EnEncount1*)parent)->unk_14E > 0)) {
+            ((EnEncount1*)parent)->unk_14E--;
         }
     }
 }
@@ -236,25 +241,14 @@ void func_80A7436C(EnPr2* this, s16 arg1) {
 }
 
 void func_80A74510(EnPr2* this, s32 arg0) {
-    static AnimationHeader* D_80A75C2C[] = {
-        &object_pr_Anim_004340,
-        &object_pr_Anim_004274,
-        &object_pr_Anim_003904,
-    };
-    static u8 D_80A75C38[] = {
-        0,
-        0,
-        2,
-        0,
-    };
     f32 sp34 = 1.0f;
 
     this->unk_210 = arg0;
-    this->unk_1F8 = Animation_GetLastFrame(D_80A75C2C[arg0]);
+    this->unk_1F8 = Animation_GetLastFrame(sAnimations[arg0]);
     if (this->unk_210 == 3) {
         sp34 = 0.0f;
     }
-    Animation_Change(&this->skelAnime, D_80A75C2C[arg0], sp34, 0.0f, this->unk_1F8, D_80A75C38[arg0], 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[arg0], sp34, 0.0f, this->unk_1F8, D_80A75C38[arg0], 0.0f);
 }
 
 void func_80A745C4(EnPr2* this) {
@@ -265,7 +259,7 @@ void func_80A745C4(EnPr2* this) {
 
 void func_80A745FC(EnPr2* this, GlobalContext* globalCtx) {
     f32 x, y, z;
-    f32 sqrt;
+    f32 sqrtXYZ;
 
     if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 200.0f) {
         SkelAnime_Update(&this->skelAnime);
@@ -296,9 +290,9 @@ void func_80A745FC(EnPr2* this, GlobalContext* globalCtx) {
     x = this->actor.world.pos.x - this->unk_21C.x;
     y = this->actor.world.pos.y - this->unk_21C.y;
     z = this->actor.world.pos.z - this->unk_21C.z;
-    sqrt = sqrtf(SQ(x) + SQ(y) + SQ(z));
+    sqrtXYZ = sqrtf(SQ(x) + SQ(y) + SQ(z));
 
-    if (sqrt < (Rand_ZeroFloat(20.0f) + 15.0f)) {
+    if (sqrtXYZ < (Rand_ZeroFloat(20.0f) + 15.0f)) {
         this->unk_1D0++;
         Math_Vec3f_Copy(&this->unk_228, &this->actor.world.pos);
         if (this->unk_1D0 >= this->path->count) {
@@ -324,16 +318,16 @@ void func_80A748E8(EnPr2* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 temp_f12;
     f32 temp_f2;
-    f32 sqrt;
-    s32 sp4C = 0;
-    s32 sp48 = 0;
+    f32 sqrtXZ;
+    s32 sp4C = false;
+    s32 sp48 = false;
     Vec3f sp3C;
 
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
 
     if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 200.0f) {
-        sp48 = 1;
+        sp48 = true;
         SkelAnime_Update(&this->skelAnime);
     }
 
@@ -347,7 +341,7 @@ void func_80A748E8(EnPr2* this, GlobalContext* globalCtx) {
         switch (this->unk_1E0) {
             case 1:
                 if (this->unk_1DC == 0) {
-                    sp4C = 1;
+                    sp4C = true;
                     func_80A74DEC(this, globalCtx);
                 } else if (!func_80A7429C(this, globalCtx) && (this->unk_1F4 == 255)) {
                     this->unk_1F4 = 254;
@@ -358,20 +352,20 @@ void func_80A748E8(EnPr2* this, GlobalContext* globalCtx) {
                 if (this->unk_1DE == 0) {
                     temp_f2 = player->actor.world.pos.x - this->unk_228.x;
                     temp_f12 = player->actor.world.pos.z - this->unk_228.z;
-                    sqrt = sqrtf(SQ(temp_f2) + SQ(temp_f12));
+                    sqrtXZ = sqrtf(SQ(temp_f2) + SQ(temp_f12));
 
-                    if ((sp48 != 0) && (player->stateFlags1 & 0x8000000) && (sqrt < this->unk_208)) {
-                        sp4C = 1;
+                    if (sp48 && (player->stateFlags1 & 0x8000000) && (sqrtXZ < this->unk_208)) {
+                        sp4C = true;
                         func_80A74DEC(this, globalCtx);
                     }
                 } else {
                     temp_f2 = this->actor.world.pos.x - this->unk_228.x;
                     temp_f12 = this->actor.world.pos.z - this->unk_228.z;
-                    sqrt = sqrtf(SQ(temp_f2) + SQ(temp_f12));
+                    sqrtXZ = sqrtf(SQ(temp_f2) + SQ(temp_f12));
 
-                    if (sqrt > 20.0f) {
+                    if (sqrtXZ > 20.0f) {
                         this->unk_1DE = 5;
-                        sp4C = 1;
+                        sp4C = true;
                         this->unk_1DC = 0;
                         Math_Vec3f_Copy(&this->unk_21C, &this->unk_228);
                         Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.3f, 0.2f);
@@ -380,11 +374,11 @@ void func_80A748E8(EnPr2* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        if (sp4C == 0) {
+        if (!sp4C) {
             this->unk_21C.y = this->actor.world.pos.y;
             if (this->unk_1DA != 0) {
-                if ((Rand_ZeroOne() < 0.3f) && (this->unk_1D6 == 0)) {
-                    this->unk_1D6 = 1;
+                if ((Rand_ZeroOne() < 0.3f) && !this->unk_1D6) {
+                    this->unk_1D6 = true;
                 }
 
                 Math_ApproachZeroF(&this->actor.speedXZ, 0.1f, 0.2f);
@@ -468,8 +462,8 @@ void func_80A74E90(EnPr2* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
         }
 
-        if ((Rand_ZeroOne() < 0.3f) && (this->unk_1D6 == 0)) {
-            this->unk_1D6 = 1;
+        if ((Rand_ZeroOne() < 0.3f) && !this->unk_1D6) {
+            this->unk_1D6 = true;
             this->unk_20C = Rand_ZeroFloat(30.0f);
         }
 
@@ -480,9 +474,9 @@ void func_80A74E90(EnPr2* this, GlobalContext* globalCtx) {
         if (this->unk_1E0 == 2) {
             f32 temp_f2 = this->actor.world.pos.x - this->unk_228.x;
             f32 temp_f12 = this->actor.world.pos.z - this->unk_228.z;
-            f32 sqrt = sqrtf(SQ(temp_f2) + SQ(temp_f12));
+            f32 sqrtXZ = sqrtf(SQ(temp_f2) + SQ(temp_f12));
 
-            if (this->unk_208 < sqrt) {
+            if (this->unk_208 < sqrtXZ) {
                 this->unk_1DE = 20;
                 func_80A74888(this);
                 return;
@@ -518,8 +512,8 @@ void func_80A74E90(EnPr2* this, GlobalContext* globalCtx) {
 
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
-    this->actor.flags |= 0x08000000;
-    this->actor.flags &= ~1;
+    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->unk_1E0 < 10) {
         func_80A74510(this, 2);
     } else {
@@ -572,8 +566,8 @@ void func_80A75310(EnPr2* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->actor.shape.rot.z, this->unk_1E4, 5, 10000, 1000);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_1E6, 5, 10000, 1000);
 
-        if ((Rand_ZeroOne() < 0.3f) && (this->unk_1D6 == 0)) {
-            this->unk_1D6 = 1;
+        if ((Rand_ZeroOne() < 0.3f) && !this->unk_1D6) {
+            this->unk_1D6 = true;
         }
 
         if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
@@ -611,10 +605,6 @@ void func_80A75310(EnPr2* this, GlobalContext* globalCtx) {
 }
 
 void func_80A755D8(EnPr2* this, GlobalContext* globalCtx) {
-    static s16 D_80A75C3C[] = {
-        0x10 * 0, 0x10 * 1, 0x10 * 2,  0x10 * 3,  0x10 * 4,  0x10 * 5,  0x10 * 6,  0x10 * 7,
-        0x10 * 8, 0x10 * 9, 0x10 * 10, 0x10 * 11, 0x10 * 12, 0x10 * 13, 0x10 * 14, 0x10 * 15,
-    };
     s32 temp_v0;
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -669,13 +659,13 @@ void EnPr2_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0, 10.0f, 20.0f, 0x1F);
 
-    if (this->unk_1D6 != 0) {
+    if (this->unk_1D6) {
         s32 i;
         Vec3f sp58;
         f32 rand;
 
         Math_Vec3f_Copy(&sp58, &this->unk_270);
-        this->unk_1D6 = 0;
+        this->unk_1D6 = false;
 
         sp58.x += randPlusMinusPoint5Scaled(20.0f);
         sp58.y += randPlusMinusPoint5Scaled(5.0f);
