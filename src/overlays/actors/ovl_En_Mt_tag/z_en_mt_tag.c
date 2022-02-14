@@ -198,7 +198,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, GlobalContext* globalCtx) {
     highestCurrentCheckpoint = -1;
     currentCheckpoints[0] = EnMttag_GetCurrentCheckpoint(&player->actor, globalCtx, &upcomingCheckpoints[0],
                                                          &perpendicularPointsX[0], &perpendicularPointsZ[0]);
-    for (i = 1; i < 5; i++) {
+    for (i = 1; i < ARRAY_COUNT(this->raceGorons) + 1; i++) {
         currentCheckpoints[i] =
             EnMttag_GetCurrentCheckpoint(&this->raceGorons[i - 1]->actor, globalCtx, &upcomingCheckpoints[i],
                                          &perpendicularPointsX[i], &perpendicularPointsZ[i]);
@@ -207,7 +207,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, GlobalContext* globalCtx) {
         }
     }
 
-    for (i = 1; i < 5; i++) {
+    for (i = 1; i < ARRAY_COUNT(this->raceGorons) + 1; i++) {
         rg = this->raceGorons[i - 1];
 
         // Because of the bug described in EnMttag_GetCurrentCheckpoint, these values may not be initialized.
@@ -339,7 +339,7 @@ s32 EnMttag_IsAnyRaceGoronInFinishLine(EnMttag* this) {
     s32 ret = false;
     s32 i;
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->raceGorons); i++) {
         if ((EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos)) &&
             (this->raceGorons[i]->actor.update != NULL)) {
             ret = true;
@@ -414,9 +414,8 @@ void EnMttag_RaceFinish(EnMttag* this, GlobalContext* globalCtx) {
  * reaching the goal from behind.
  */
 void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
-    u8 talkState;
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    talkState = Message_GetState(&globalCtx->msgCtx);
     if (((talkState == 5 && func_80147624(globalCtx)) || talkState == 2)) {
         if (this->shouldRestartRace) {
             globalCtx->nextEntranceIndex = 0xD010;
@@ -436,10 +435,10 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
             func_800B7298(globalCtx, &this->actor, 7);
             Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.doubleMagic * 48) + 48);
 
-            gSaveContext.eventInf[1] &= 0xFE;
-            gSaveContext.eventInf[1] &= 0xFD;
-            gSaveContext.eventInf[1] &= 0xFB;
-            gSaveContext.eventInf[1] &= 0xF7;
+            gSaveContext.eventInf[1] &= (u8)~1;
+            gSaveContext.eventInf[1] &= (u8)~2;
+            gSaveContext.eventInf[1] &= (u8)~4;
+            gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[2] = ((gSaveContext.eventInf[2] & 0xF) + 1) | (gSaveContext.eventInf[2] & 0xF0);
         } else {
             EnMttag_ExitRace(globalCtx, 2, 2);
@@ -459,7 +458,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
             func_8019F230();
             gSaveContext.unk_3DD0[4] = 0;
             EnMttag_ExitRace(globalCtx, 2, 2);
-            gSaveContext.eventInf[1] &= 0xF7;
+            gSaveContext.eventInf[1] &= (u8)~8;
             gSaveContext.eventInf[1] |= 4;
             Actor_MarkForDeath(&this->actor);
         } else {
@@ -467,7 +466,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
             func_8019F208();
             func_801477B4(globalCtx);
             func_800B7298(globalCtx, &this->actor, 6);
-            gSaveContext.eventInf[1] &= 0xF7;
+            gSaveContext.eventInf[1] &= (u8)~8;
             this->timer = 100;
             this->actionFunc = EnMttag_Race;
         }
@@ -484,10 +483,10 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->raceInitialized = false;
         this->timer = 100;
 
-        gSaveContext.eventInf[1] &= 0xFE;
-        gSaveContext.eventInf[1] &= 0xFD;
-        gSaveContext.eventInf[1] &= 0xFB;
-        gSaveContext.eventInf[1] &= 0xF7;
+        gSaveContext.eventInf[1] &= (u8)~1;
+        gSaveContext.eventInf[1] &= (u8)~2;
+        gSaveContext.eventInf[1] &= (u8)~4;
+        gSaveContext.eventInf[1] &= (u8)~8;
 
         if (!(gSaveContext.weekEventReg[12] & 2)) {
             this->actionFunc = EnMttag_ShowIntroCutscene;
