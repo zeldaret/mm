@@ -100,17 +100,17 @@ After naming the animations, the end result will look something like this:
 
 Once again, we can run `./extract_assets.py -s objects/object_dns` to extract the object, and we can update the animation names in `z_en_dns.c` to use our new names like so:
 ```c
-static ActorAnimationEntryS sAnimations[] = {
-    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, -4 },
-    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, 0, -4 },
-    { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, 2, 0 },
-    { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, 2, 0 },
-    { &gKingsChamberDekuGuardRunLoopAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardDanceAnim, 1.0f, 0, -1, 2, 0 },
-    { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, 2, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKingsChamberDekuGuardRunLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardDanceAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 ```
 
