@@ -25,6 +25,7 @@ void func_80A1AA14(BgNumaHana* this);
 void func_80A1AE08(BgNumaHana* this);
 void func_80A1AA38(BgNumaHana* this);
 void func_80A1AAE8(BgNumaHana* this);
+void func_80A1ABD8(BgNumaHana* this);
 
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
@@ -91,7 +92,11 @@ s32 func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx) {
 void func_80A1A56C(BgNumaHana* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1A56C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1A750.s")
+void func_80A1A750(s16* arg0, s16* arg1, f32* arg2, f32 arg3) {
+    *arg1 += 0x32C8;
+    Math_StepToF(arg2, 0.0f, arg3);
+    *arg0 += (s16)(Math_SinS(*arg1) * *arg2);
+}
 
 void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -123,9 +128,9 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
         this->unk_328 = 0x2000;
         this->unk_32A = 0x2000;
-        this->unk_32C = 0;
-        this->unk_32E = 0;
-        this->unk_330 = 0;
+        this->unk_32C.x = 0;
+        this->unk_32C.y = 0;
+        this->unk_32C.z = 0;
         this->unk_334 = 0.0f;
         this->unk_338 = -0x4000;
         this->unk_33A = 0;
@@ -179,7 +184,10 @@ void func_80A1AA4C(BgNumaHana* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AAE8.s")
+void func_80A1AAE8(BgNumaHana* this) {
+    this->actionFunc = func_80A1AB00;
+    this->unk_33E = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AB00.s")
 
@@ -197,7 +205,7 @@ void func_80A1AE08(BgNumaHana* this) {
 
 void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y += this->unk_33C;
-    this->unk_328 = this->unk_32A + this->unk_32E;
+    this->unk_328 = this->unk_32A + this->unk_32C.y;
     func_80A1A56C(this);
     func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
