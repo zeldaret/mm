@@ -184,7 +184,7 @@ s32 EnMttag_GetCurrentCheckpoint(Actor* actor, GlobalContext* globalCtx, s32* up
  * This function also has the side effect of updating the number of checkpoints
  * ahead of the player each Race Goron is.
  */
-s32 EnMttag_IsPlayerDramaticallyBehindAndUpdateRaceGoronCheckpoints(EnMttag* this, GlobalContext* globalCtx) {
+s32 EnMttag_UpdateCheckPoints(EnMttag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnRg* rg;
     s32 currentCheckpoints[5];
@@ -383,8 +383,7 @@ void EnMttag_Race(EnMttag* this, GlobalContext* globalCtx) {
 
             EnMttag_ShowFalseStartMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
-        } else if ((EnMttag_IsPlayerDramaticallyBehindAndUpdateRaceGoronCheckpoints(this, globalCtx)) &&
-                   (this->timer == 0)) {
+        } else if ((EnMttag_UpdateCheckPoints(this, globalCtx)) && (this->timer == 0)) {
             EnMttag_ShowCantWinMessage(this, globalCtx);
             gSaveContext.eventInf[1] |= 8;
         }
