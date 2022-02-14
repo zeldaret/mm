@@ -12,7 +12,7 @@ typedef void (*BgNumaHanaActionFunc)(struct BgNumaHana*, GlobalContext*);
 typedef struct BgNumaHana {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ FireObj unk_15C;
-    /* 0x1E8 */ ColliderCylinder unk_1E8;
+    /* 0x1E8 */ ColliderCylinder collider;
     /* 0x234 */ BgNumaHanaActionFunc actionFunc;
     /* 0x238 */ char unk_238[0xF0];
     /* 0x328 */ s16 unk_328;

@@ -102,8 +102,8 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600A740);
     FireObj_Init(globalCtx, &this->unk_15C, &D_80A1B28C, &this->dyna.actor);
-    Collider_InitCylinder(globalCtx, &this->unk_1E8);
-    Collider_SetCylinder(globalCtx, &this->unk_1E8, &this->dyna.actor, &D_80A1B260);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A1B260);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     if (func_80A1A500(this, globalCtx) == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
@@ -141,7 +141,7 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     if (!(this->dyna.actor.params & 1)) {
         FireObj_Destroy(globalCtx, &this->unk_15C);
-        Collider_DestroyCylinder(globalCtx, &this->unk_1E8);
+        Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
 
@@ -169,6 +169,29 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AE1C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/BgNumaHana_Update.s")
+void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    BgNumaHana* this = THIS;
+    s32 temp;
+    Vec3f sp28;
+
+    temp = this->dyna.actor.params & 1;
+    if (temp == 0) {
+        sp28.x = this->dyna.actor.world.pos.x;
+        sp28.y = this->dyna.actor.world.pos.y + 10.5f;
+        sp28.z = this->dyna.actor.world.pos.z;
+        FireObj_SetPosition(&this->unk_15C, &sp28);
+        FireObj_Update(globalCtx, &this->unk_15C, &this->dyna.actor);
+    }
+
+    this->actionFunc(this, globalCtx);
+
+    if (temp == 0) {
+        this->dyna.actor.child->shape.rot = this->dyna.actor.shape.rot;
+        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/BgNumaHana_Draw.s")
