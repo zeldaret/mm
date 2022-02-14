@@ -76,8 +76,16 @@ extern CollisionHeader D_06009FE0;
 extern CollisionHeader D_0600A740;
 extern UNK_TYPE D_0600B928;
 
-Actor* func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1A500.s")
+s32 func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx) {
+    Actor* child;
+
+    child =
+        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_BG_NUMA_HANA,
+                           this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                           this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 1);
+
+    return child != NULL;
+}
 
 void func_80A1A56C(BgNumaHana* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1A56C.s")
@@ -105,7 +113,7 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A1B260);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    if (func_80A1A500(this, globalCtx) == NULL) {
+    if (!func_80A1A500(this, globalCtx)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
