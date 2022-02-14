@@ -1359,8 +1359,7 @@ beginseg
     name "ovl_En_Insect"
     compress
     include "build/src/overlays/actors/ovl_En_Insect/z_en_insect.o"
-    include "build/data/ovl_En_Insect/ovl_En_Insect.data.o"
-    include "build/data/ovl_En_Insect/ovl_En_Insect.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Insect/ovl_En_Insect_reloc.o"
 endseg
 
 beginseg
