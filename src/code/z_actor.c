@@ -3919,8 +3919,8 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         false, // determines whether to use line connecting to next point in calculations
     };
     s32 isRightSideOfAdjacentLines[2] = {
-        false, // determines whether srcPos is on the right side of the line connecting the closest point to the previous point
-        false, // determines whether srcPos is on the right side of the line connecting the closest point to the next point
+        false, // determines whether srcPos is on the right side of the line from prev to curr point
+        false, // determines whether srcPos is on the right side of the line from curr to next point
     };
     Vec3f closestPoint;
     Vec3f closestPos[2];
@@ -3959,7 +3959,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         closestPointPrev.z = (points + numPoints - 1)->z;
     }
     if ((closestPointIndex != 0) || isPathLoop) {
-        // Use the adjacent line 
+        // Use the adjacent line
         useAdjacentLines[0] =
             Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPointPrev.x, closestPointPrev.z, closestPoint.x,
                                      closestPoint.z, &closestPos[0].x, &closestPos[0].z, &distSq);
@@ -3989,17 +3989,17 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
      */
     if (isPathLoop) {
         isRightSideOfAdjacentLines[0] = ((closestPointPrev.x - srcPos->x) * (closestPoint.z - srcPos->z)) <
-                         ((closestPointPrev.z - srcPos->z) * (closestPoint.x - srcPos->x));
+                                        ((closestPointPrev.z - srcPos->z) * (closestPoint.x - srcPos->x));
 
         isRightSideOfAdjacentLines[1] = ((closestPointNext.z - srcPos->z) * (closestPoint.x - srcPos->x)) <
-                         ((closestPoint.z - srcPos->z) * (closestPointNext.x - srcPos->x));
+                                        ((closestPoint.z - srcPos->z) * (closestPointNext.x - srcPos->x));
 
         for (i = 0; i < ARRAY_COUNT(loopDistSq); i++) {
             if (useAdjacentLines[i]) {
-                // Get distSq from srcPos to closestPos (same value as distSq but this is saved for logic later in the function)
+                // Get distSq from srcPos to closestPos
                 loopDistSq[i] = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, closestPos[i].x, closestPos[i].z);
             } else {
-                // The closest Pos is not contained within the line-segment 
+                // The closest Pos is not contained within the line-segment
                 loopDistSq[i] = SQ(40000.0f);
             }
         }
@@ -4024,20 +4024,20 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
                 dstPos->z = (closestPos[1].z + closestPos[0].z) * 0.5f;
             }
         } else if (loopDistSq[1] < loopDistSq[0]) {
-            // Use closest position along the line in the loop connecting the closest point and the point immediately next in the point list
+            // Use closest position along the line in the loop connecting the closest point and the next point
             dstPos->x = closestPos[1].x;
             dstPos->z = closestPos[1].z;
         } else {
-            // Use closest position along the ling in the loop connecting the closest point and the point immediately previous in the point list
+            // Use closest position along the ling in the loop connecting the closest point and the prev point
             dstPos->x = closestPos[0].x;
             dstPos->z = closestPos[0].z;
         }
     } else if (useAdjacentLines[0]) {
-        // Use closest position along line segment connecting the closest point and the point immediately previous in the point list
+        // Use closest position along line segment connecting the closest point and the prev point
         dstPos->x = closestPos[0].x;
         dstPos->z = closestPos[0].z;
     } else if (useAdjacentLines[1]) {
-        // Use closest position along line segment connecting the closest point and the point immediately next in the point list
+        // Use closest position along line segment connecting the closest point and the next point
         dstPos->x = closestPos[1].x;
         dstPos->z = closestPos[1].z;
     } else if (isPathLoop && ((((closestPointPrev.x - srcPos->x) * (closestPointNext.z - srcPos->z)) <
@@ -4046,7 +4046,7 @@ void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3
         dstPos->x = srcPos->x;
         dstPos->z = srcPos->z;
     } else {
-        // The closest point and the closest position are the same (srcPos is near the outer region of a corner in the path)
+        // The closest point and the closest position are the same (srcPos is near the outer region of a corner)
         dstPos->x = closestPoint.x;
         dstPos->z = closestPoint.z;
     }
