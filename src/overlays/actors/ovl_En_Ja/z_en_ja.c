@@ -81,7 +81,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, 0 },
     { &object_boj_Anim_002734, 1.0f, 0, -1, 0, -4 }, { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, -4 },
     { &object_boj_Anim_004078, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
@@ -97,7 +97,7 @@ s32 func_80BC192C(EnJa* this, s32 arg1) {
 
     if (arg1 != this->unk_36C) {
         this->unk_36C = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
         this->unk_344 = this->skelAnime.playSpeed;
     }
 
@@ -666,7 +666,7 @@ void func_80BC3154(EnJa* this, EnJaStruct* ptr) {
         ptr->unk_00.y = (((65.0f - temp_f0) * this->unk_204.y) + (temp_f0 * this->unk_228.y)) / 65.0f;
         ptr->unk_00.z = (((65.0f - temp_f0) * this->unk_204.z) + (temp_f0 * this->unk_228.z)) / 65.0f;
 
-        temp_f0 = temp_f0 - 32.5f;
+        temp_f0 -= 32.5f;
         temp_f0 = SQ(temp_f0);
 
         ptr->unk_00.y += -0.11360947f * temp_f0 + 120.0f;
@@ -677,7 +677,7 @@ void func_80BC3154(EnJa* this, EnJaStruct* ptr) {
         ptr->unk_00.y = (((89.0f - temp_f0) * this->unk_21C.y) + (temp_f0 * this->unk_210.y)) / 89.0f;
         ptr->unk_00.z = (((89.0f - temp_f0) * this->unk_21C.z) + (temp_f0 * this->unk_210.z)) / 89.0f;
 
-        temp_f0 = temp_f0 - 44.5f;
+        temp_f0 -= 44.5f;
         temp_f0 = SQ(temp_f0);
 
         ptr->unk_00.y += -0.08079788f * temp_f0 + 160.0f;
