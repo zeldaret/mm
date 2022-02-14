@@ -209,13 +209,13 @@ void func_80143A54(void) {
 
 void func_80143AC4(void) {
     // Unconfirmed: "Link the Goron Claims His Reservation: 4:30 PM"
-    gSaveContext.save.weekEventReg[55] &= (u8)~0x02;
+    gSaveContext.save.weekEventReg[55] &= (u8)~2;
     // Unconfirmed: "Postman fleeing town"
-    gSaveContext.save.weekEventReg[90] &= (u8)~0x01;
+    gSaveContext.save.weekEventReg[90] &= (u8)~1;
     // Unconfirmed: "Postman is about to flee"
     gSaveContext.save.weekEventReg[89] &= (u8)~0x40;
     // Unconfirmed: "Postman has delivered priority mail"
-    gSaveContext.save.weekEventReg[89] &= (u8)~0x08;
+    gSaveContext.save.weekEventReg[89] &= (u8)~8;
     // Unconfirmed: "Postman showing priority mail to Madame"
     gSaveContext.save.weekEventReg[85] &= (u8)~0x80;
 }
@@ -458,7 +458,7 @@ void Sram_IncrementDay(void) {
     // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
     gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
     // Unconfirmed: "Bombers Hide & Seek in Progress"
-    gSaveContext.save.weekEventReg[85] &= (u8)~0x02;
+    gSaveContext.save.weekEventReg[85] &= (u8)~2;
 }
 
 u16 Sram_CalcChecksum(void* data, size_t count) {
@@ -567,17 +567,17 @@ SavePlayerData sSaveDefaultPlayerData = {
     { '\0', '\0', '\0', '\0', '\0', '\0' },             // newf
     0,                                                  // deaths
     { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "        "
-    0x0030,                                             // healthCapacity
-    0x0030,                                             // health
-    0x00,                                               // magicLevel
+    0x30,                                             // healthCapacity
+    0x30,                                             // health
+    0,                                               // magicLevel
     0x30,                                               // magic
-    0x0000,                                             // rupees
-    0x0000,                                             // swordHealth
-    0x0000,                                             // tatlTimer
-    0x00,                                               // magicAcquired
-    0x00,                                               // doubleMagic
-    0x00,                                               // doubleDefense
-    0x00,                                               // unk_1F
+    0,                                             // rupees
+    0,                                             // swordHealth
+    0,                                             // tatlTimer
+    0,                                               // magicAcquired
+    0,                                               // doubleMagic
+    0,                                               // doubleDefense
+    0,                                               // unk_1F
     0xFF,                                               // unk_20
     0x0000,                                             // owlActivationFlags
     0xFF,                                               // unk_24
@@ -669,19 +669,19 @@ SavePlayerData sSaveDebugPlayerData = {
     { 'Z', 'E', 'L', 'D', 'A', '3' },                   // newf
     0x0000,                                             // deaths
     { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "LINK    "
-    0x0080,                                             // healthCapacity
-    0x0080,                                             // health
-    0x00,                                               // magicLevel
+    0x80,                                             // healthCapacity
+    0x80,                                             // health
+    0,                                               // magicLevel
     0x30,                                               // magic
-    0x0032,                                             // rupees
-    0x0064,                                             // swordHealth
-    0x0000,                                             // tatlTimer
-    0x01,                                               // magicAcquired
-    0x00,                                               // doubleMagic
-    0x00,                                               // doubleDefense
-    0x00,                                               // unk_1F
+    0x32,                                             // rupees
+    0x64,                                             // swordHealth
+    0,                                             // tatlTimer
+    1,                                               // magicAcquired
+    0,                                               // doubleMagic
+    0,                                               // doubleDefense
+    0,                                               // unk_1F
     0xFF,                                               // unk_20
-    0x0000,                                             // owlActivationFlags
+    0,                                             // owlActivationFlags
     0xFF,                                               // unk_24
     SCENE_SPOT00,                                       // savedSceneNum
 };
