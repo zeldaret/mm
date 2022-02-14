@@ -8,7 +8,7 @@
 #include "objects/object_numa_obj/object_numa_obj.h"
 #include "objects/object_syokudai/object_syokudai.h"
 
-#define FLAGS 0x00000410
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((BgNumaHana*)thisx)
 
