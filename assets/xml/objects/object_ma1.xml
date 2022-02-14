@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_ma1" Segment="6">
-        <DList Name="object_ma1_DL_0003B0" Offset="0x3B0" />
+        <DList Name="object_ma1_DL_0003B0" Offset="0x3B0" /> <!-- Bow -->
         <Texture Name="object_ma1_TLUT_0005E0" OutName="tlut_0005E0" Format="rgba16" Width="16" Height="16" Offset="0x5E0" />
         <Texture Name="object_ma1_Tex_0007E0" OutName="tex_0007E0" Format="ci8" Width="16" Height="16" Offset="0x7E0" />
         <Texture Name="object_ma1_Tex_0008E0" OutName="tex_0008E0" Format="ci8" Width="8" Height="8" Offset="0x8E0" />
-        <DList Name="object_ma1_DL_000A20" Offset="0xA20" />
+        <DList Name="object_ma1_DL_000A20" Offset="0xA20" /> <!-- Box -->
         <Texture Name="object_ma1_Tex_000AD0" OutName="tex_000AD0" Format="rgba16" Width="32" Height="64" Offset="0xAD0" />
         <Animation Name="object_ma1_Anim_002A8C" Offset="0x2A8C" />
-        <DList Name="object_ma1_DL_0043A0" Offset="0x43A0" />
+        <DList Name="object_ma1_DL_0043A0" Offset="0x43A0" /> <!-- Sleeping -->
         <Texture Name="object_ma1_TLUT_004CF8" OutName="tlut_004CF8" Format="rgba16" Width="16" Height="16" Offset="0x4CF8" />
         <Texture Name="object_ma1_Tex_004EF8" OutName="tex_004EF8" Format="ci8" Width="16" Height="16" Offset="0x4EF8" />
         <Texture Name="object_ma1_Tex_004FF8" OutName="tex_004FF8" Format="ci8" Width="8" Height="8" Offset="0x4FF8" />
@@ -54,7 +54,15 @@
         <Texture Name="object_ma1_Tex_00FA48" OutName="tex_00FA48" Format="ci8" Width="16" Height="16" Offset="0xFA48" />
         <Texture Name="object_ma1_Tex_00FB48" OutName="tex_00FB48" Format="ci8" Width="64" Height="16" Offset="0xFB48" />
         <Texture Name="object_ma1_Tex_00FF48" OutName="tex_00FF48" Format="ci8" Width="8" Height="16" Offset="0xFF48" />
-        <!-- <Blob Name="object_ma1_Blob_00FFC8" Size="0x3800" Offset="0xFFC8" /> -->
+        <Texture Name="object_ma1_Tex_00FFC8" OutName="tex_00FFC8" Format="rgba16" Width="32" Height="32" Offset="0xFFC8" />
+        <Texture Name="object_ma1_Tex_0107C8" OutName="tex_0107C8" Format="rgba16" Width="32" Height="32" Offset="0x107C8" />
+        <Texture Name="object_ma1_Tex_010FC8" OutName="tex_010FC8" Format="rgba16" Width="32" Height="32" Offset="0x10FC8" />
+        <Texture Name="object_ma1_Tex_0117C8" OutName="tex_0117C8" Format="rgba16" Width="32" Height="32" Offset="0x117C8" />
+        <Texture Name="object_ma1_Tex_011FC8" OutName="tex_011FC8" Format="rgba16" Width="32" Height="32" Offset="0x11FC8" />
+        <Texture Name="object_ma1_Tex_0127C8" OutName="tex_0127C8" Format="rgba16" Width="32" Height="16" Offset="0x127C8" />
+        <Texture Name="object_ma1_Tex_012BC8" OutName="tex_012BC8" Format="rgba16" Width="32" Height="16" Offset="0x12BC8" />
+        <Texture Name="object_ma1_Tex_012FC8" OutName="tex_012FC8" Format="rgba16" Width="32" Height="16" Offset="0x12FC8" />
+        <Texture Name="object_ma1_Tex_0133C8" OutName="tex_0133C8" Format="rgba16" Width="32" Height="16" Offset="0x133C8" />
         <Limb Name="object_ma1_Standardlimb_0137C8" Type="Standard" Offset="0x137C8" />
         <Limb Name="object_ma1_Standardlimb_0137D4" Type="Standard" Offset="0x137D4" />
         <Limb Name="object_ma1_Standardlimb_0137E0" Type="Standard" Offset="0x137E0" />
