@@ -25,7 +25,7 @@ typedef struct EnGgStruct {
 
 typedef struct EnGg {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ ColliderCylinder copllider;
+    /* 0x0144 */ ColliderCylinder collider;
     /* 0x0190 */ SkelAnime skelAnime;
     /* 0x01D4 */ EnGgActionFunc actionFunc;
     /* 0x01D8 */ Vec3s unk_1D8;
