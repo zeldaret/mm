@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_delf/object_delf.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar00*)thisx)
 
@@ -32,7 +32,7 @@ const ActorInit Dm_Char00_InitVars = {
     (ActorFunc)DmChar00_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, 0, 0.0f },
     { &object_delf_Anim_004FF4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
@@ -120,7 +120,21 @@ static ActorAnimationEntry sAnimations[] = {
     { &object_delf_Anim_000E44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
 };
 
-void func_80AA5580(SkelAnime* skelAnime, ActorAnimationEntry* animation, u16 idx) {
+DmChar00Struct D_80AA77A8[] = {
+    { 250.0f, 255.0f, 230.0f, 255.0f },
+    { 63.0f, 18.0f, 93.0f, 255.0f },
+    { 255.0f, 235.0f, 220.0f, 255.0f },
+};
+
+DmChar00Struct D_80AA77D8[] = {
+    { 220.0f, 160.0f, 80.0f, 255.0f },
+    { 250.0f, 40.0f, 10.0f, 255.0f },
+    { 255.0f, 235.0f, 220.0f, 255.0f },
+};
+
+Vec3f D_80AA7808 = { 0.0f, 0.0f, 0.0f };
+
+void func_80AA5580(SkelAnime* skelAnime, AnimationInfo* animation, u16 idx) {
     f32 phi_f2;
 
     animation += idx;
@@ -510,16 +524,6 @@ void func_80AA5EBC(DmChar00* this, GlobalContext* globalCtx) {
 }
 
 void DmChar00_Init(Actor* thisx, GlobalContext* globalCtx) {
-    static DmChar00Struct D_80AA77A8[] = {
-        { 250.0f, 255.0f, 230.0f, 255.0f },
-        { 63.0f, 18.0f, 93.0f, 255.0f },
-        { 255.0f, 235.0f, 220.0f, 255.0f },
-    };
-    static DmChar00Struct D_80AA77D8[] = {
-        { 220.0f, 160.0f, 80.0f, 255.0f },
-        { 250.0f, 40.0f, 10.0f, 255.0f },
-        { 255.0f, 235.0f, 220.0f, 255.0f },
-    };
     s32 pad;
     DmChar00* this = THIS;
 
@@ -888,9 +892,8 @@ void DmChar00_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80AA62FC(this, globalCtx);
 }
 
-s32 func_80AA6A6C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx,
-                  Gfx** gfx) {
-    static Vec3f D_80AA7808 = { 0.0f, 0.0f, 0.0f };
+s32 DmChar00_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                              Actor* thisx, Gfx** gfx) {
     DmChar00* this = THIS;
     f32 sp28;
     Vec3f sp1C;
@@ -941,8 +944,8 @@ void DmChar00_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                    (u8)(s8)this->unk_250.unk_08, (u8)(s8)((f32)phi_a0 * 1));
     gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
 
-    POLY_XLU_DISP = SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80AA6A6C, NULL,
-                                   &this->actor, POLY_XLU_DISP);
+    POLY_XLU_DISP = SkelAnime_Draw(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   DmChar00_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
