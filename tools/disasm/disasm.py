@@ -24,7 +24,7 @@ parser.add_argument(
     dest="files",
     nargs="+",
     required=False,
-    help="Optional list of files to diassemble separated by a space. This is a whitelist, all files will be skipped besides the ones listed here if used."
+    help="Optional list of files to diassemble separated by a space. This is a whitelist, all files will be skipped besides the ones listed here if used.",
 )
 
 args = parser.parse_args()
@@ -2206,14 +2206,18 @@ for segment in files_spec:
     full_file_list[segment[0]] = new
 
 if args.full:
+    new_spec = []
     for segment in files_spec:
+        if args.files and not any(
+            [file_name in segment[0] for file_name in args.files]
+        ):
+            continue
         for offset, name in segment[4].items():
-            if args.files and not any([file_name in name for file_name in args.files]):
-                continue
-
             if name == "":
                 name = f"{segment[2]}_{offset:08X}"
             segment[4][offset] = name
+        new_spec.append(segment)
+    files_spec = new_spec
 else:
     # Prune
     old_file_count = sum([len(f[4].keys()) for f in files_spec])
@@ -2560,9 +2564,9 @@ for file in Path(ASM_OUT).glob("**/*.s"):
                     # TODO hack: getting the address from a comment
                     first_block_split = late_rodata[0][1].split(" */ .")
                     vaddr = None
-                    if first_block_split[1].startswith(
-                        "float"
-                    ) or first_block_split[1].startswith("double"):
+                    if first_block_split[1].startswith("float") or first_block_split[
+                        1
+                    ].startswith("double"):
                         vaddr = first_block_split[0].split(" ")[-2]
                     else:
                         vaddr = first_block_split[0].split(" ")[-1]
@@ -2589,7 +2593,9 @@ for file in Path(ASM_OUT).glob("**/*.s"):
                     ]:
                         # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
                         # comparatively tiny functions, can we swat these programmatically?
-                        late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
+                        late_rodata_alignment = (
+                            f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
+                        )
 
             rdata_out = ""
             if rdata is not None:
