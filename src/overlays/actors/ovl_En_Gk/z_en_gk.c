@@ -347,7 +347,8 @@ void func_80B50B38(EnGk* this, GlobalContext* globalCtx) {
 
         default:
             temp = this->unk_2E2;
-            if (--temp >= 3) {
+            temp--;
+            if (temp >= 3) {
                 this->unk_2E0 = 0;
                 this->unk_2E2 = temp;
             } else if (temp == 0) {
@@ -421,14 +422,14 @@ s32 func_80B50ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
 
     *arg2 = sp7C;
 
-    if ((arg4 == 0) && (arg5 == 0)) {
+    if (!arg4 && !arg5) {
         arg3->x = sp68.x;
         arg3->y = sp68.y;
         arg3->z = sp68.z;
         return true;
     }
 
-    if (arg5 != 0) {
+    if (arg5) {
         sp68.z = arg0;
         sp68.y = arg1;
     }
@@ -498,9 +499,9 @@ s32 func_80B5123C(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B51308(EnGk* this, GlobalContext* globalCtx) {
     s16 sp1E = this->skelAnime.curFrame;
-    s16 frame = Animation_GetLastFrame(sAnimations[this->unk_31A].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_31A].animation);
 
-    if ((this->unk_2E4 == 7) && (sp1E == frame)) {
+    if ((this->unk_2E4 == 7) && (sp1E == lastFrame)) {
         this->unk_2E4 = 8;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 8);
     }
@@ -508,9 +509,9 @@ void func_80B51308(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B51398(EnGk* this, GlobalContext* globalCtx) {
     s16 sp1E = this->skelAnime.curFrame;
-    s16 frame = Animation_GetLastFrame(sAnimations[9].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[9].animation);
 
-    if ((this->unk_2E4 == 9) && (sp1E == frame)) {
+    if ((this->unk_2E4 == 9) && (sp1E == lastFrame)) {
         this->unk_2E4 = 10;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
     }
@@ -608,9 +609,9 @@ void func_80B51510(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B51698(EnGk* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 frame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
 
-    if (sp26 == frame) {
+    if (sp26 == lastFrame) {
         switch (this->unk_2E4) {
             case 0:
                 this->unk_2E4 = 2;
@@ -629,17 +630,17 @@ void func_80B51698(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B51760(EnGk* this, GlobalContext* globalCtx) {
     s16 sp2E = this->skelAnime.curFrame;
-    s16 frame;
+    s16 lastFrame;
 
     if (this->unk_2E4 == 11) {
-        frame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
-        if (sp2E == frame) {
+        lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
+        if (sp2E == lastFrame) {
             this->unk_2E4 = 5;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_2E4);
         }
     } else if (this->unk_2E4 == 10) {
-        frame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
-        if (sp2E == frame) {
+        lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
+        if (sp2E == lastFrame) {
             this->unk_2E4 = 11;
             Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_2E4);
         }
@@ -895,9 +896,9 @@ void func_80B5216C(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B521E8(EnGk* this, GlobalContext* globalCtx) {
     s16 sp1E = this->skelAnime.curFrame;
-    s16 frame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
 
-    if (sp1E == frame) {
+    if (sp1E == lastFrame) {
         this->unk_2E4 = 1;
         Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
         this->actionFunc = func_80B5227C;
@@ -906,9 +907,9 @@ void func_80B521E8(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B5227C(EnGk* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 frame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
 
-    if ((sp26 + 1) == frame) {
+    if ((sp26 + 1) == lastFrame) {
         func_800B14D4(globalCtx, 20.0f, &this->actor.home.pos);
         this->unk_350 = 60;
         if (!(this->unk_1E4 & 0x80)) {
@@ -1177,18 +1178,18 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     s32 phi_v0;
     s32 phi_v1;
 
-    if (limbIndex != 9) {
-        if (limbIndex == 18) {
+    switch (limbIndex) {
+        case 18:
             if (this->unk_1E4 & 8) {
-                phi_v1 = 1;
+                phi_v1 = true;
             } else {
-                phi_v1 = 0;
+                phi_v1 = false;
             }
 
             if (this->unk_34E != 0) {
-                phi_v0 = 1;
+                phi_v0 = true;
             } else {
-                phi_v0 = 0;
+                phi_v0 = false;
             }
             func_80B50ED4(this->unk_31E + this->unk_322 + 0x4000,
                           this->unk_320 + this->unk_324 + this->actor.shape.rot.y + 0x4000, &this->unk_328,
@@ -1203,31 +1204,33 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
             Matrix_InsertZRotation_s(this->unk_334.z, MTXMODE_APPLY);
 
             Matrix_StatePush();
-        }
-    } else {
-        if (this->unk_1E4 & 8) {
-            phi_v1 = 1;
-        } else {
-            phi_v1 = 0;
-        }
+            break;
 
-        if (this->unk_34E != 0) {
-            phi_v0 = 1;
-        } else {
-            phi_v0 = 0;
-        }
-        func_80B50ED4(this->unk_322 + 0x4000, this->unk_324 + this->actor.shape.rot.y + 0x4000, &this->unk_33C,
-                      &this->unk_348, phi_v0, phi_v1);
+        case 9:
+            if (this->unk_1E4 & 8) {
+                phi_v1 = true;
+            } else {
+                phi_v1 = false;
+            }
 
-        Matrix_StatePop();
+            if (this->unk_34E != 0) {
+                phi_v0 = true;
+            } else {
+                phi_v0 = false;
+            }
+            func_80B50ED4(this->unk_322 + 0x4000, this->unk_324 + this->actor.shape.rot.y + 0x4000, &this->unk_33C,
+                          &this->unk_348, phi_v0, phi_v1);
 
-        Matrix_InsertTranslation(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
-        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_348.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_348.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_348.z, MTXMODE_APPLY);
+            Matrix_StatePop();
 
-        Matrix_StatePush();
+            Matrix_InsertTranslation(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
+            Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+            Matrix_RotateY(this->unk_348.y, MTXMODE_APPLY);
+            Matrix_InsertXRotation_s(this->unk_348.x, MTXMODE_APPLY);
+            Matrix_InsertZRotation_s(this->unk_348.z, MTXMODE_APPLY);
+
+            Matrix_StatePush();
+            break;
     }
 }
 
