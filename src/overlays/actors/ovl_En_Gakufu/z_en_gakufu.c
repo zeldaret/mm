@@ -123,7 +123,7 @@ void EnGakufu_ProcessNotes(EnGakufu* this) {
 void EnGakufu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGakufu* this = THIS;
 
-    this->songIndex = 23;
+    this->songIndex = OCARINA_SONG_TERMINA_WALL;
     EnGakufu_ProcessNotes(this);
     Actor_SetScale(&this->actor, 1.0f);
 
