@@ -9202,7 +9202,7 @@
     0x809CF394:("EnMttag_CheckPlayerCheatStatus",),
     0x809CF444:("EnMttag_AreFourRaceGoronsPresent",),
     0x809CF4EC:("EnMttag_GetCurrentCheckpoint",),
-    0x809CF67C:("EnMttag_IsPlayerDramaticallyBehindAndUpdateRaceGoronCheckpoints",),
+    0x809CF67C:("EnMttag_UpdateCheckpoints",),
     0x809CF848:("EnMttag_ExitRace",),
     0x809CF8EC:("EnMttag_ShowFalseStartMessage",),
     0x809CF950:("EnMttag_ShowCantWinMessage",),
