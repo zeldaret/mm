@@ -234,7 +234,7 @@ s32 EnMttag_IsPlayerDramaticallyBehindAndUpdateRaceGoronCheckpoints(EnMttag* thi
 s32 EnMttag_ExitRace(GlobalContext* globalCtx, s32 arg1, s32 nextTransition) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     globalCtx->nextEntranceIndex = 0xD020;
-    if ((gSaveContext.weekEventReg[0x21] & 0x80)) {
+    if ((gSaveContext.weekEventReg[33] & 0x80)) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {
@@ -288,7 +288,7 @@ void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx) {
  */
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        gSaveContext.weekEventReg[0xC] |= 2;
+        gSaveContext.weekEventReg[12] |= 2;
         this->actionFunc = EnMttag_RaceStart;
     }
 }
@@ -422,7 +422,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
         if (this->shouldRestartRace) {
             globalCtx->nextEntranceIndex = 0xD010;
 
-            if (gSaveContext.weekEventReg[0x21] & 0x80) {
+            if (gSaveContext.weekEventReg[33] & 0x80) {
                 // Spring
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -490,7 +490,7 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.eventInf[1] &= 0xFB;
         gSaveContext.eventInf[1] &= 0xF7;
 
-        if (!(gSaveContext.weekEventReg[0xC] & 2)) {
+        if (!(gSaveContext.weekEventReg[12] & 2)) {
             this->actionFunc = EnMttag_ShowIntroCutscene;
         } else {
             s32 requiredScopeTemp;
