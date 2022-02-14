@@ -41,15 +41,6 @@ typedef struct {
     /* 0x1C */ u32 tempCollectFlags;
 } RespawnData; // size = 0x20
 
-
-typedef struct {
-    /* 0x00 */ u32 chest;
-    /* 0x04 */ u32 swch0;
-    /* 0x08 */ u32 swch1;
-    /* 0x0C */ u32 clearedRoom;
-    /* 0x10 */ u32 collectible;
-} CycleSceneFlags; // size = 0x14
-
 typedef struct {
     /* 0x00 */ u32 chest;
     /* 0x04 */ u32 swch0;
