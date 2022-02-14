@@ -23,7 +23,7 @@ typedef struct EnAl {
     /* 0x036C */ Vec3f unk_36C;
     /* 0x0378 */ Vec3s unk_378;
     /* 0x037E */ Vec3s jointTable[27];
-    /* 0x0420 */ Vec3s morphTabke[27];
+    /* 0x0420 */ Vec3s morphTable[27];
     /* 0x04C2 */ u16 unk_4C2;
     /* 0x04C4 */ u16 unk_4C4;
     /* 0x04C8 */ f32 unk_4C8;

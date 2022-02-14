@@ -107,7 +107,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &object_al_Anim_000C54, 1.0f, 0, -1, 0, -4 }, { &object_al_Anim_00DBE0, 1.0f, 0, -1, 0, 0 },
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, 0, -4 }, { &object_al_Anim_00ACA0, 1.0f, 0, -1, 2, 0 },
     { &object_al_Anim_00ACA0, -1.0f, 0, -1, 2, 0 }, { &object_al_Anim_00CA28, 1.0f, 0, -1, 0, -4 },
@@ -165,7 +165,7 @@ s32 func_80BDE27C(EnAl* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_4F8 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
         this->unk_4C8 = this->skelAnime.playSpeed;
     }
 
@@ -769,7 +769,7 @@ void EnAl_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAl* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_al_Skel_00A0D8, NULL, this->jointTable, this->morphTabke,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_al_Skel_00A0D8, NULL, this->jointTable, this->morphTable,
                        27);
     this->unk_4F8 = -1;
     func_80BDE27C(this, 1);
@@ -857,7 +857,7 @@ void EnAl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnAl_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnAl* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -898,7 +898,7 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertTranslation(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnAl_OverrideLimbDraw, EnAl_PostLimbDraw,
-                                       EnAl_TransformDraw, &this->actor);
+                                       EnAl_TransformLimbDraw, &this->actor);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             Matrix_SetCurrentState(&this->unk_190[i]);

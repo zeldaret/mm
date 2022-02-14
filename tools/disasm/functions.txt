@@ -16031,7 +16031,7 @@
     0x80BDF86C:("EnAl_Update",),
     0x80BDF914:("EnAl_OverrideLimbDraw",),
     0x80BDF950:("EnAl_PostLimbDraw",),
-    0x80BDFA34:("EnAl_TransformDraw",),
+    0x80BDFA34:("EnAl_TransformLimbDraw",),
     0x80BDFB30:("EnAl_Draw",),
     0x80BE04E0:("func_80BE04E0",),
     0x80BE0590:("func_80BE0590",),
