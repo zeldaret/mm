@@ -37,15 +37,17 @@
         <Texture Name="object_zov_Tex_013478" OutName="tex_013478" Format="rgba16" Width="8" Height="16" Offset="0x13478" />
         <Texture Name="object_zov_Tex_013578" OutName="tex_013578" Format="ci8" Width="8" Height="8" Offset="0x13578" />
         <Texture Name="object_zov_Tex_0135B8" OutName="tex_0135B8" Format="ci8" Width="8" Height="8" Offset="0x135B8" />
-        <!-- <Blob Name="object_zov_Blob_0135F8" Size="0x400" Offset="0x135F8" /> -->
+        <Texture Name="object_zov_Tex_0135F8" OutName="tex_0135F8" Format="ci8" Width="32" Height="32" Offset="0x135F8" />
         <Texture Name="object_zov_Tex_0139F8" OutName="tex_0139F8" Format="ci8" Width="16" Height="16" Offset="0x139F8" />
         <Texture Name="object_zov_Tex_013AF8" OutName="tex_013AF8" Format="ci8" Width="8" Height="8" Offset="0x13AF8" />
         <Texture Name="object_zov_Tex_013B38" OutName="tex_013B38" Format="ci8" Width="16" Height="16" Offset="0x13B38" />
-        <!-- <Blob Name="object_zov_Blob_013C38" Size="0x400" Offset="0x13C38" /> -->
+        <Texture Name="object_zov_Tex_013C38" OutName="tex_013C38" Format="ci8" Width="32" Height="32" Offset="0x13C38" />
         <Texture Name="object_zov_Tex_014038" OutName="tex_014038" Format="ci8" Width="16" Height="16" Offset="0x14038" />
-        <!-- <Blob Name="object_zov_Blob_014138" Size="0x800" Offset="0x14138" /> -->
+        <Texture Name="object_zov_Tex_014138" OutName="tex_014138" Format="ci8" Width="32" Height="32" Offset="0x14138" />
+        <Texture Name="object_zov_Tex_014538" OutName="tex_014538" Format="ci8" Width="32" Height="32" Offset="0x14538" />
         <Texture Name="object_zov_Tex_014938" OutName="tex_014938" Format="ci8" Width="32" Height="32" Offset="0x14938" />
-        <!-- <Blob Name="object_zov_Blob_014D38" Size="0x800" Offset="0x14D38" /> -->
+        <!-- <Blob Name="object_zov_Blob_014D38" Size="0x400" Offset="0x14D38" /> -->
+        <Texture Name="object_zov_Tex_015138" OutName="tex_015138" Format="ci8" Width="32" Height="32" Offset="0x15138" />
         <Texture Name="object_zov_Tex_015538" OutName="tex_015538" Format="ci8" Width="8" Height="8" Offset="0x15538" />
         <Texture Name="object_zov_Tex_015578" OutName="tex_015578" Format="ci8" Width="16" Height="16" Offset="0x15578" />
         <Texture Name="object_zov_Tex_015678" OutName="tex_015678" Format="ci8" Width="16" Height="16" Offset="0x15678" />
