@@ -52,7 +52,7 @@ public:
 	void ExtractResources();
 	void BuildSourceFile();
 	void AddResource(ZResource* res);
-	ZResource* FindResource(uint32_t rawDataIndex);
+	ZResource* FindResource(offset_t rawDataIndex);
 	std::vector<ZResource*> GetResourcesOfType(ZResourceType resType);
 
 	Declaration* AddDeclaration(offset_t address, DeclarationAlignment alignment, size_t size,

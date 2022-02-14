@@ -1,4 +1,5 @@
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
     info->type = type;
@@ -417,7 +418,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
         gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
-        gSPDisplayList(dl++, D_04029CB0);
+        gSPDisplayList(dl++, gameplay_keep_DL_029CB0);
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
@@ -433,7 +434,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
                     gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(dl++, D_04029CF0);
+                    gSPDisplayList(dl++, gameplay_keep_DL_029CF0);
                 }
             }
 
