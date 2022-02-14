@@ -5,6 +5,8 @@
  */
 
 #include "z_bg_numa_hana.h"
+#include "objects/object_numa_obj/object_numa_obj.h"
+#include "objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS 0x00000410
 
@@ -75,13 +77,6 @@ static InitChainEntry D_80A1B2A8[] = {
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06009FE0;
-extern CollisionHeader D_0600A740;
-extern Gfx D_0600AB88[];
-extern Gfx D_0600BE58[];
-extern Gfx D_0600B928[];
-extern Gfx D_06000870[];
-
 s32 func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx) {
     Actor* child;
 
@@ -143,13 +138,13 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, D_80A1B2A8);
     DynaPolyActor_Init(&this->dyna, 3);
     if (temp == 1) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06009FE0);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_numa_obj_Colheader_009FE0);
         func_80A1AA14(this);
         this->dyna.actor.draw = NULL;
         return;
     }
 
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600A740);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_numa_obj_Colheader_00A740);
     FireObj_Init(globalCtx, &this->unk_15C, &D_80A1B28C, &this->dyna.actor);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A1B260);
@@ -359,7 +354,7 @@ void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_0600B928);
+    gSPDisplayList(POLY_OPA_DISP++, object_numa_obj_DL_00B928);
 
     for (i = 0; i < 6; i++) {
         phi_s1 = &this->unk_238[i];
@@ -368,12 +363,12 @@ void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_SetStateRotationAndTranslation(phi_s1->unk_00.x, phi_s1->unk_00.y, phi_s1->unk_00.z, &phi_s1->unk_0C);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0600AB88);
+        gSPDisplayList(POLY_OPA_DISP++, object_numa_obj_DL_00AB88);
 
         Matrix_SetStateRotationAndTranslation(phi_s2->unk_00.x, phi_s2->unk_00.y, phi_s2->unk_00.z, &phi_s2->unk_0C);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0600BE58);
+        gSPDisplayList(POLY_OPA_DISP++, object_numa_obj_DL_00BE58);
     }
 
     objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_SYOKUDAI);
@@ -383,7 +378,7 @@ void BgNumaHana_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_Scale(1.5f, 1.5f, 1.5f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[objectIndex].segment);
-        gSPDisplayList(POLY_OPA_DISP++, D_06000870);
+        gSPDisplayList(POLY_OPA_DISP++, gObjectSyokudaiTypeNoSwitchDL);
     }
 
     FireObj_Draw(globalCtx, &this->unk_15C);
