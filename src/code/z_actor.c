@@ -2017,7 +2017,7 @@ s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRa
                     player->getItemDirection = absYawDiff;
 
                     if ((getItemId > GI_NONE) && (getItemId < GI_MAX)) {
-                        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[1]);
+                        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[1]);
                     }
 
                     return true;

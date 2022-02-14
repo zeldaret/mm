@@ -3037,7 +3037,7 @@
     0x8016A02C:("func_8016A02C",),
     0x8016A0AC:("Play_IsUnderwater",),
     0x8016A168:("func_8016A168",),
-    0x8016A178:("func_8016A178",),
+    0x8016A178:("Play_AssignPlayerActorCsIdsFromScene",),
     0x8016A268:("func_8016A268",),
     0x8016A2C8:("Play_Init",),
     0x8016AC10:("func_8016AC10",),

@@ -2905,7 +2905,7 @@ s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw);
 s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos);
 
 s32 func_8016A168(void);
-void func_8016A178(GameState* gameState, s32 cutscene);
+void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 cutscene);
 void func_8016A268(GameState* gameState, s16 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5);
 void Play_Init(GameState* gameState);
 // void func_8016AC10(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
@@ -3068,7 +3068,7 @@ void Sched_HandleAudioCancel(SchedContext* sched);
 void Sched_HandleGfxCancel(SchedContext* sched);
 void Sched_QueueTask(SchedContext* sched, OSScTask* task);
 void Sched_Yield(SchedContext* sched);
-s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s32 gameState);
+s32 Sched_Schedule(SchedContext* sched, OSScTask** spTask, OSScTask** dpTask, s32 state);
 void Sched_TaskUpdateFramebuffer(SchedContext* sched, OSScTask* task);
 void Sched_NotifyDone(SchedContext* sched, OSScTask* task);
 void Sched_RunTask(SchedContext* sched, OSScTask* spTask, OSScTask* dpTask);

@@ -287,7 +287,7 @@ s32 func_8016A02C(GameState* gameState, Actor* actor, s16* yaw) {
  *
  * @param[in] globalCtx GlobalContext
  * @param[in] pos position to test
- * @return True if inside a waterbox and not above a void.
+ * @return true if inside a waterbox and not above a void.
  */
 s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos) {
     WaterBox* waterBox;
@@ -297,7 +297,6 @@ s32 Play_IsUnderwater(GlobalContext* globalCtx, Vec3f* pos) {
 
     waterSurfacePos = *pos;
 
-    // == true required to match.
     if ((WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, waterSurfacePos.x, waterSurfacePos.z, &waterSurfacePos.y,
                               &waterBox) == true) &&
         (pos->y < waterSurfacePos.y) &&
@@ -316,22 +315,21 @@ s32 func_8016A168(void) {
 
 // List of cutscene numbers.
 extern s16 D_801D0D64[];
-// s16 D_801D0D64[] = { 0xFFFD, 0xFFFE, 0xFFFC, 0xFFFB, 0xFFF9, 0xFFF5, 0xFFF8, 0xFFF7, 0xFFFA, 0xFFF0 };
 // s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
 
 // Used by Player
 /**
- * Sets the cutscene numbers in globalCtx->unk_1879C.
- * Set to -1 by default. If there is an ActorCutscene where unk4 matches the appropriate element of D_801D0D64 (and
- * possibly change its priority for the zeroth one)
+ * Extract the common actor cutscene ids from a scene and set the cutscene ids in globalCtx->playerActorCsIds.
+ * Set to -1 by default. If there is an ActorCutscene where unk4 matches the appropriate element of D_801D0D64, set the
+ * corresponding playerActorCsId (and possibly change its priority for the zeroth one)
  */
-void func_8016A178(GameState* gameState, s32 cutscene) {
+void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 cutscene) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     s32 i;
-    s16* phi_s3 = globalCtx->unk_1879C;
+    s16* phi_s3 = globalCtx->playerActorCsIds;
     s16* phi_s1 = D_801D0D64;
 
-    for (i = 0; i < ARRAY_COUNT(globalCtx->unk_1879C); i++, phi_s3++, phi_s1++) {
+    for (i = 0; i < ARRAY_COUNT(globalCtx->playerActorCsIds); i++, phi_s3++, phi_s1++) {
         ActorCutscene* actorCutscene;
         s32 currCutscene;
 
@@ -341,8 +339,8 @@ void func_8016A178(GameState* gameState, s32 cutscene) {
             actorCutscene = ActorCutscene_GetCutscene(currCutscene);
 
             if (actorCutscene->unk4 == *phi_s1) {
-                if ((actorCutscene->unk4 == -3) && (actorCutscene->priority == 0x2BC)) {
-                    actorCutscene->priority = 0x226;
+                if ((actorCutscene->unk4 == -3) && (actorCutscene->priority == 700)) { // override ocarina cs priority
+                    actorCutscene->priority = 550;
                 }
                 *phi_s3 = currCutscene;
                 break;

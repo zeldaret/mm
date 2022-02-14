@@ -265,7 +265,7 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997FF0(EnGs* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->actor, globalCtx->unk_1879C[0], -1, 1)) {
+    if (func_8013E2D4(&this->actor, globalCtx->playerActorCsIds[0], -1, 1)) {
         func_80998040(this, globalCtx);
     }
 }
@@ -342,7 +342,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
 
 void func_80998300(EnGs* this, GlobalContext* globalCtx) {
     if (this->actor.cutscene != -1) {
-        ActorCutscene_Stop(globalCtx->unk_1879C[0]);
+        ActorCutscene_Stop(globalCtx->playerActorCsIds[0]);
     }
 }
 

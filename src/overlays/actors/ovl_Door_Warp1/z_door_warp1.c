@@ -375,7 +375,7 @@ void func_808B93A0(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B94A4(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (!func_808B866C(this, globalCtx) && (ActorCutscene_GetCurrentIndex() != globalCtx->unk_1879C[8])) {
+    if (!func_808B866C(this, globalCtx) && (ActorCutscene_GetCurrentIndex() != globalCtx->playerActorCsIds[8])) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
     func_808BB8D4(this, globalCtx, 1);
@@ -383,10 +383,10 @@ void func_808B94A4(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9524(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[9])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[9]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[9]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[9], NULL);
         DoorWarp1_SetupAction(this, func_808B958C);
     }
 }
@@ -455,10 +455,10 @@ void func_808B977C(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9840(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[9])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[9]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[9]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[9], NULL);
         DoorWarp1_SetupAction(this, func_808B98A8);
     }
 }
@@ -615,10 +615,10 @@ void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[9])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[9]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[9]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[9], NULL);
         Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f,
                              Animation_GetLastFrame(&object_warp1_Anim_001374.common),
