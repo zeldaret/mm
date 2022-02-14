@@ -153,9 +153,12 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AA14.s")
+void func_80A1AA14(BgNumaHana* this) {
+    this->actionFunc = func_80A1AA28;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AA28.s")
+void func_80A1AA28(BgNumaHana* this, GlobalContext* globalCtx) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1AA38.s")
 
