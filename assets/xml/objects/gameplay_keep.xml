@@ -873,8 +873,11 @@
         <Texture Name="gameplay_keep_Tex_01F740" OutName="tex_01F740" Format="ia4" Width="16" Height="16" Offset="0x1F740" />
         <Texture Name="gameplay_keep_Tex_01F7C0" OutName="tex_01F7C0" Format="ia8" Width="16" Height="16" Offset="0x1F7C0" />
         <Texture Name="gameplay_keep_Tex_01F8C0" OutName="tex_01F8C0" Format="ia8" Width="16" Height="24" Offset="0x1F8C0" />
-        <DList Name="gameplay_keep_DL_01FA40" Offset="0x1FA40" />
-        <Texture Name="gameplay_keep_Tex_01FBE0" OutName="tex_01FBE0" Format="rgba16" Width="32" Height="32" Offset="0x1FBE0" />
+
+        <!-- Boulder Fragments -->
+        <DList Name="gBoulderFragmentsDL" Offset="0x1FA40" />
+        <Texture Name="gBoulderFragmentsTex" OutName="boulder_fragments" Format="rgba16" Width="32" Height="32" Offset="0x1FBE0" />
+
         <Animation Name="gameplay_keep_Anim_0204B4" Offset="0x204B4" />
         <Animation Name="gameplay_keep_Anim_0205A0" Offset="0x205A0" />
         <Animation Name="gameplay_keep_Anim_020658" Offset="0x20658" />
@@ -898,7 +901,7 @@
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
         <Collision Name="gameplay_keep_Colheader_023100" Offset="0x23100" />
         <DList Name="gameplay_keep_DL_023130" Offset="0x23130" />
-        <DList Name="gameplay_keep_DL_023210" Offset="0x23210" />
+        <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
         <DList Name="gameplay_keep_DL_023348" Offset="0x23348" />
         <DList Name="gameplay_keep_DL_0233B8" Offset="0x233B8" />
@@ -996,7 +999,7 @@
         <Skeleton Name="gameplay_keep_Skel_02F028" Type="Flex" LimbType="Standard" Offset="0x2F028" />
         <Animation Name="gameplay_keep_Anim_02F0EC" Offset="0x2F0EC" />
         <Texture Name="gameplay_keep_Tex_02F100" OutName="tex_02F100" Format="i8" Width="64" Height="64" Offset="0x2F100" />
-        <DList Name="gameplay_keep_DL_030100" Offset="0x30100" />
+        <DList Name="gameplay_keep_DL_030100" Offset="0x30100" /> <!-- Floor shockwave ring -->
         <DList Name="gameplay_keep_DL_0301B0" Offset="0x301B0" />
         <Texture Name="gameplay_keep_Tex_030270" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
         <Texture Name="gameplay_keep_Tex_030670" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
@@ -1038,15 +1041,15 @@
         <Texture Name="gameplay_keep_Tex_0367B0" OutName="tex_0367B0" Format="i8" Width="64" Height="64" Offset="0x367B0" />
         <DList Name="gameplay_keep_DL_0377B0" Offset="0x377B0" />
         <DList Name="gameplay_keep_DL_037850" Offset="0x37850" />
-        <Texture Name="gameplay_keep_Tex_0378F0" OutName="tex_0378F0" Format="i8" Width="32" Height="40" Offset="0x378F0" />
-        <Texture Name="gameplay_keep_Tex_037DF0" OutName="tex_037DF0" Format="i8" Width="32" Height="40" Offset="0x37DF0" />
-        <Texture Name="gameplay_keep_Tex_0382F0" OutName="tex_0382F0" Format="i8" Width="32" Height="40" Offset="0x382F0" />
-        <Texture Name="gameplay_keep_Tex_0387F0" OutName="tex_0387F0" Format="i8" Width="32" Height="40" Offset="0x387F0" />
-        <Texture Name="gameplay_keep_Tex_038CF0" OutName="tex_038CF0" Format="i8" Width="32" Height="40" Offset="0x38CF0" />
-        <Texture Name="gameplay_keep_Tex_0391F0" OutName="tex_0391F0" Format="i8" Width="32" Height="40" Offset="0x391F0" />
-        <Texture Name="gameplay_keep_Tex_0396F0" OutName="tex_0396F0" Format="i8" Width="32" Height="40" Offset="0x396F0" />
-        <Texture Name="gameplay_keep_Tex_039BF0" OutName="tex_039BF0" Format="i8" Width="32" Height="40" Offset="0x39BF0" />
-        <DList Name="gameplay_keep_DL_03A0F0" Offset="0x3A0F0" />
+        <Texture Name="gExplosionSplashTex1" OutName="tex_0378F0" Format="i8" Width="32" Height="40" Offset="0x378F0" />
+        <Texture Name="gExplosionSplashTex2" OutName="tex_037DF0" Format="i8" Width="32" Height="40" Offset="0x37DF0" />
+        <Texture Name="gExplosionSplashTex3" OutName="tex_0382F0" Format="i8" Width="32" Height="40" Offset="0x382F0" />
+        <Texture Name="gExplosionSplashTex4" OutName="tex_0387F0" Format="i8" Width="32" Height="40" Offset="0x387F0" />
+        <Texture Name="gExplosionSplashTex5" OutName="tex_038CF0" Format="i8" Width="32" Height="40" Offset="0x38CF0" />
+        <Texture Name="gExplosionSplashTex6" OutName="tex_0391F0" Format="i8" Width="32" Height="40" Offset="0x391F0" />
+        <Texture Name="gExplosionSplashTex7" OutName="tex_0396F0" Format="i8" Width="32" Height="40" Offset="0x396F0" />
+        <Texture Name="gExplosionSplashTex8" OutName="tex_039BF0" Format="i8" Width="32" Height="40" Offset="0x39BF0" />
+        <DList Name="gExplosionSplashDL" Offset="0x3A0F0" />
         <Texture Name="gameplay_keep_Tex_03A190" OutName="tex_03A190" Format="ia8" Width="32" Height="32" Offset="0x3A190" />
         <Texture Name="gameplay_keep_Tex_03A590" OutName="tex_03A590" Format="ia8" Width="32" Height="32" Offset="0x3A590" />
         <Texture Name="gameplay_keep_Tex_03A990" OutName="tex_03A990" Format="ia8" Width="32" Height="32" Offset="0x3A990" />
@@ -1313,15 +1316,18 @@
         <Texture Name="gameplay_keep_Tex_077A40" OutName="tex_077A40" Format="ia8" Width="32" Height="128" Offset="0x77A40" />
         <DList Name="gameplay_keep_DL_078A80" Offset="0x78A80" />
         <Texture Name="gameplay_keep_Tex_078B10" OutName="tex_078B10" Format="rgba16" Width="32" Height="64" Offset="0x78B10" />
-        <Texture Name="gameplay_keep_Tex_079B10" OutName="tex_079B10" Format="i4" Width="64" Height="31" Offset="0x79B10" />
-        <Texture Name="gameplay_keep_Tex_079EF0" OutName="tex_079EF0" Format="i4" Width="64" Height="16" Offset="0x79EF0" />
-        <Texture Name="gameplay_keep_Tex_07A0F0" OutName="tex_07A0F0" Format="i4" Width="64" Height="17" Offset="0x7A0F0" />
-        <Texture Name="gameplay_keep_Tex_07A310" OutName="tex_07A310" Format="i4" Width="64" Height="31" Offset="0x7A310" />
-        <Texture Name="gameplay_keep_Tex_07A6F0" OutName="tex_07A6F0" Format="i4" Width="64" Height="16" Offset="0x7A6F0" />
-        <Texture Name="gameplay_keep_Tex_07A8F0" OutName="tex_07A8F0" Format="i4" Width="64" Height="17" Offset="0x7A8F0" />
-        <DList Name="gameplay_keep_DL_07AB10" Offset="0x7AB10" />
+
+        <!-- Sun Textures. These should be 64x64, but they get broken into pieces in gSunDL, and ZAPD cannot currently handle that. -->
+        <Texture Name="gSun1Tex" OutName="sun_1" Format="i4" Width="64" Height="31" Offset="0x79B10" />
+        <Texture Name="gSun2Tex" OutName="sun_2" Format="i4" Width="64" Height="16" Offset="0x79EF0" />
+        <Texture Name="gSun3Tex" OutName="sun_3" Format="i4" Width="64" Height="17" Offset="0x7A0F0" />
+        <Texture Name="gSunEvening1Tex" OutName="sun_evening_1" Format="i4" Width="64" Height="31" Offset="0x7A310" />
+        <Texture Name="gSunEvening2Tex" OutName="sun_evening_2" Format="i4" Width="64" Height="16" Offset="0x7A6F0" />
+        <Texture Name="gSunEvening3Tex" OutName="sun_evening_3" Format="i4" Width="64" Height="17" Offset="0x7A8F0" />
+        
+        <DList Name="gameplay_keep_DL_07AB10" Offset="0x7AB10" /> <!-- sun (sparkles when small) displaylist -->
         <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
-        <DList Name="gameplay_keep_DL_07AB70" Offset="0x7AB70" />
+        <DList Name="gSunDL" Offset="0x7AB70" />
         <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
         <DList Name="gameplay_keep_DL_07AFB0" Offset="0x7AFB0" />
         <DList Name="gameplay_keep_DL_07B0B8" Offset="0x7B0B8" />
@@ -1399,14 +1405,14 @@
         <Texture Name="gameplay_keep_Tex_08CEE0" OutName="tex_08CEE0" Format="ci8" Width="32" Height="32" Offset="0x8CEE0" />
         <Texture Name="gameplay_keep_Tex_08D2E0" OutName="tex_08D2E0" Format="rgba16" Width="8" Height="16" Offset="0x8D2E0" />
         <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
-        <Texture Name="gameplay_keep_Tex_08DBE0" OutName="tex_08DBE0" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
-        <Texture Name="gameplay_keep_Tex_08DFE0" OutName="tex_08DFE0" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
-        <Texture Name="gameplay_keep_Tex_08E3E0" OutName="tex_08E3E0" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
-        <Texture Name="gameplay_keep_Tex_08E7E0" OutName="tex_08E7E0" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
-        <Texture Name="gameplay_keep_Tex_08EBE0" OutName="tex_08EBE0" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
-        <Texture Name="gameplay_keep_Tex_08EFE0" OutName="tex_08EFE0" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
-        <Texture Name="gameplay_keep_Tex_08F3E0" OutName="tex_08F3E0" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
-        <Texture Name="gameplay_keep_Tex_08F7E0" OutName="tex_08F7E0" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        <Texture Name="gDust1Tex" OutName="tex_08DBE0" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
+        <Texture Name="gDust2Tex" OutName="tex_08DFE0" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
+        <Texture Name="gDust3Tex" OutName="tex_08E3E0" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
+        <Texture Name="gDust4Tex" OutName="tex_08E7E0" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
+        <Texture Name="gDust5Tex" OutName="tex_08EBE0" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
+        <Texture Name="gDust6Tex" OutName="tex_08EFE0" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
+        <Texture Name="gDust7Tex" OutName="tex_08F3E0" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
+        <Texture Name="gDust8Tex" OutName="tex_08F7E0" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
         <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
