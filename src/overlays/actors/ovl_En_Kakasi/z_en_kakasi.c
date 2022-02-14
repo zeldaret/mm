@@ -132,8 +132,10 @@ static AnimationHeader* kakasiAnimations[] = {
     &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
-                           ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+};
 
 void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
@@ -619,7 +621,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
         func_8096FAAC(this, globalCtx);
         func_8096FBB8(this, globalCtx);
 
-        if (globalCtx->msgCtx.unk1202A == 4) { // song failed
+        if (globalCtx->msgCtx.ocarinaMode == 4) { // song failed
             this->unk190 = 0;
             this->unkCounter1A4 = 0;
             ActorCutscene_Stop(this->actorCutscenes[0]);
@@ -633,7 +635,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
             this->actionFunc = EnKakasi_RegularDialogue;
 
-        } else if (globalCtx->msgCtx.unk1202A == 3) { // song success
+        } else if (globalCtx->msgCtx.ocarinaMode == 3) { // song success
             this->postTeachTimer = 30;
             this->skelanime.playSpeed = 2.0f;
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -656,7 +658,7 @@ void EnKakasi_PostSongLearnTwirl(EnKakasi* this, GlobalContext* globalCtx) {
 
 void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     ActorCutscene_Stop(this->actorCutscenes[0]);
-    globalCtx->msgCtx.unk1202A = 4;
+    globalCtx->msgCtx.ocarinaMode = 4;
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
@@ -1033,9 +1035,9 @@ void EnKakasi_SetupIdleUnderground(EnKakasi* this) {
 
 void EnKakasi_IdleUnderground(EnKakasi* this, GlobalContext* globalCtx) {
     if ((gSaveContext.weekEventReg[79] & 0x8) && this->actor.xzDistToPlayer < this->songSummonDist &&
-        (BREG(1) != 0 || globalCtx->msgCtx.unk1202A == 0xD)) {
+        (BREG(1) != 0 || globalCtx->msgCtx.ocarinaMode == 0xD)) {
         this->actor.flags &= ~0x8000000;
-        globalCtx->msgCtx.unk1202A = 4;
+        globalCtx->msgCtx.ocarinaMode = 4;
         this->actionFunc = EnKakasi_SetupRiseOutOfGround;
     }
 }

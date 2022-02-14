@@ -17,9 +17,9 @@
 #include "scheduler.h"
 #include "xstdio.h"
 
-#include "bgm.h"
 #include "color.h"
 #include "ichain.h"
+#include "sequence.h"
 #include "sfx.h"
 
 #include "z64actor.h"
@@ -34,6 +34,7 @@
 #include "z64light.h"
 #include "z64math.h"
 #include "z64object.h"
+#include "z64ocarina.h"
 #include "z64player.h"
 #include "z64scene.h"
 #include "z64save.h"
@@ -708,7 +709,7 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ u16 unk_0;
-    /* 0x02 */ u16 unk_2;
+    /* 0x02 */ u16 timeIncrement;
     /* 0x04 */ f32 unk_4;
     /* 0x08 */ f32 unk_8;
     /* 0x0C */ f32 unk_C;
@@ -855,15 +856,15 @@ typedef struct {
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
-    /* 0x11F22 */ u8 unk11F22;
+    /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
-    /* 0x1202A */ u16 unk1202A;
-    /* 0x1202C */ UNK_TYPE1 pad1202C[0x2];
+    /* 0x1202A */ u16 ocarinaMode;
+    /* 0x1202C */ u16 ocarinaAction;
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
@@ -871,7 +872,11 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
     /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0x21];
+    /* 0x12049 */ UNK_TYPE1 pad12049[0xB];
+    /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
+    /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
+    /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
+    /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
@@ -1368,30 +1373,6 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
-
-typedef struct EnHy {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE1 unk_144[0x8];
-    /* 0x14C */ SkelAnime skelAnime;
-    /* 0x190 */ s8 unk190;
-    /* 0x191 */ s8 unk191;
-    /* 0x192 */ s8 unk192;
-    /* 0x193 */ s8 animObjIndex;
-    /* 0x194 */ ColliderCylinder collider;
-    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0x4];
-    /* 0x1E4 */ Path* path;
-    /* 0x1E8 */ s16 curPoint;
-    /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
-    /* 0x1EC */ Vec3f leftFootPos;
-    /* 0x1F8 */ Vec3f rightFootPos;
-    /* 0x204 */ u8 isLeftFootOnGround;
-    /* 0x205 */ u8 isRightFootOnGround;
-    /* 0x206 */ Vec3s jointTable[16];
-    /* 0x266 */ Vec3s morphTable[16];
-    /* 0x2C6 */ UNK_TYPE1 unk_2C6[0x120];
-    /* 0x3E6 */ s16 eyeTexIndex;
-    /* 0x3E8 */ s16 blinkTimer;
-} EnHy;
 
 typedef struct {
     /* 0x0 */ u8 unk0;

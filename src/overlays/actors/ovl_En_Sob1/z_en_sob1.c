@@ -54,10 +54,10 @@ s32 EnSob1_TakeItemOffShelf(EnSob1* this);
 s32 EnSob1_ReturnItemToShelf(EnSob1* this);
 s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 
-static ActorAnimationEntryS sAnimationsBombShopkeeper[] = {
-    { &object_rs_Anim_009120, 2.0f, 0, -1, 0, 20 },
-    { &object_rs_Anim_008268, 1.0f, 0, -1, 2, 0 },
-    { &object_rs_Anim_0087BC, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimationsBombShopkeeper[] = {
+    { &object_rs_Anim_009120, 2.0f, 0, -1, ANIMMODE_LOOP, 20 },
+    { &object_rs_Anim_008268, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_rs_Anim_0087BC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Sob1_InitVars = {
@@ -152,17 +152,17 @@ static Vec3f sPosOffset[] = {
     { 0.0f, -4.0f, 0.0f },
 };
 
-void EnSob1_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
+void EnSob1_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
     f32 frameCount;
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animationSeg);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }
-    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                     animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                     animations->mode, animations->morphFrames);
 }
 
 void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
@@ -436,7 +436,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -927,7 +927,7 @@ void EnSob1_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnSob1* this) {
     Player* player = GET_PLAYER(globalCtx);
 
     Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
@@ -1067,7 +1067,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
