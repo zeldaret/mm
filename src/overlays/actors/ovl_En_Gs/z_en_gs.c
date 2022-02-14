@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gs.h"
+#include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x02000019
@@ -35,10 +36,6 @@ s32 func_80998F9C(EnGs* this, GlobalContext* globalCtx);
 s32 func_809995A4(EnGs* this, GlobalContext* globalCtx);
 void func_80999A8C(EnGs* this, GlobalContext* globalCtx);
 void func_80999AC0(EnGs* this);
-
-extern Gfx D_06000950[];
-extern Gfx D_060009D0[];
-extern Gfx D_06000A60[];
 
 const ActorInit En_Gs_InitVars = {
     ACTOR_EN_GS,
@@ -115,7 +112,7 @@ s8 func_80997A90(s16 arg0, s16 arg1) {
     if ((arg0 == 0) || ((arg0 != 1) && (arg0 != 2) && (arg0 == 3))) {
         phi_v1 = 0;
     } else {
-        phi_v1 = (gSaveContext.roomInf[126][1] >> (arg1 * 3)) & 7;
+        phi_v1 = (gSaveContext.unk_EC4 >> (arg1 * 3)) & 7;
     }
     return phi_v1;
 }
@@ -276,7 +273,7 @@ void func_80998040(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
-    switch (globalCtx->msgCtx.unk1202A) {
+    switch (globalCtx->msgCtx.ocarinaMode) {
         case 3:
             switch (globalCtx->msgCtx.unk1202E) {
                 case 7:
@@ -391,8 +388,8 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
-        gSaveContext.roomInf[126][1] =
-            (gSaveContext.roomInf[126][1] & ~(7 << (this->unk_198 * 3))) | ((this->unk_194 & 7) << (this->unk_198 * 3));
+        gSaveContext.unk_EC4 =
+            ((u32)gSaveContext.unk_EC4 & ~(7 << (this->unk_198 * 3))) | ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {
@@ -453,7 +450,7 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
-                if (((gSaveContext.roomInf[126][1] >> (i * 3)) & 7) != (u32)this->unk_194) {
+                if (((gSaveContext.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
                     phi_v0 = 0;
                 }
             }
@@ -1008,7 +1005,7 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGs* this = THIS;
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, globalCtx);
@@ -1085,10 +1082,10 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000950);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000950);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_1FA.r, this->unk_1FA.g, this->unk_1FA.b, 255);
-    gSPDisplayList(POLY_OPA_DISP++, D_060009D0);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000A60);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_0009D0);
+    gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000A60);
 
     Matrix_StatePop();
 
