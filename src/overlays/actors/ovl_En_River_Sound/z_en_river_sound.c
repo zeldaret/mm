@@ -27,15 +27,14 @@ const ActorInit En_River_Sound_InitVars = {
 };
 
 void EnRiverSound_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
     EnRiverSound* this = THIS;
-    s32 params = this->actor.params;
     Path* path;
     s32 pathIndex;
-    s32 pad[2];
 
     this->playSound = 0;
-    pathIndex = (params >> 8) & 0xFF;
-    this->actor.params = params & 0xFF;
+    pathIndex = RS_GET_PATH_INDEX(&this->actor);
+    this->actor.params = RS_GET_TYPE(&this->actor);
     if (pathIndex == 0xFF) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -54,7 +53,7 @@ void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&eye, &globalCtx->view.eye);
 
-    if (this->actor.params < 0xFD) {
+    if (this->actor.params < RS_RIVER_DEFAULT_LOW_FREQ) {
         Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, true);
     } else {
         Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &eye, worldPos, false);
@@ -66,7 +65,7 @@ void EnRiverSound_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->soundFreqIndex == 0) {
-            this->soundFreqIndex = this->actor.params - 0xFD;
+            this->soundFreqIndex = this->actor.params - RS_RIVER_DEFAULT_LOW_FREQ;
         } else {
             this->soundFreqIndex--;
         }
@@ -84,7 +83,7 @@ void EnRiverSound_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnRiverSound* this = THIS;
     s16 params = this->actor.params;
 
-    if (params < 0xFD) {
+    if (params < RS_RIVER_DEFAULT_LOW_FREQ) {
         Actor_PlaySfxAtPos(&this->actor, gAudioEnvironmentalSfx[params]);
     } else {
         Audio_PlaySfxForRiver(&this->actor.projectedPos, freqScale[this->soundFreqIndex]);
