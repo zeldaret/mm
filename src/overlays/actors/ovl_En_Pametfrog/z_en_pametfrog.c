@@ -683,7 +683,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, 0);
+        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);

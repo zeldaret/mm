@@ -298,24 +298,6 @@ typedef enum {
 } ActorType;
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ f32 startFrame;
-    /* 0x0C */ f32 frameCount;
-    /* 0x10 */ u8 mode;
-    /* 0x14 */ f32 morphFrames;
-} ActorAnimationEntry; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ s16 frame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 transitionRate;
-} ActorAnimationEntryS; // size = 0x10
-
-typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 unkC;
     /* 0x10 */ Color_RGBA8 color;

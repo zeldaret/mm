@@ -1316,15 +1316,18 @@
         <Texture Name="gameplay_keep_Tex_077A40" OutName="tex_077A40" Format="ia8" Width="32" Height="128" Offset="0x77A40" />
         <DList Name="gameplay_keep_DL_078A80" Offset="0x78A80" />
         <Texture Name="gameplay_keep_Tex_078B10" OutName="tex_078B10" Format="rgba16" Width="32" Height="64" Offset="0x78B10" />
-        <Texture Name="gameplay_keep_Tex_079B10" OutName="tex_079B10" Format="i4" Width="64" Height="31" Offset="0x79B10" />
-        <Texture Name="gameplay_keep_Tex_079EF0" OutName="tex_079EF0" Format="i4" Width="64" Height="16" Offset="0x79EF0" />
-        <Texture Name="gameplay_keep_Tex_07A0F0" OutName="tex_07A0F0" Format="i4" Width="64" Height="17" Offset="0x7A0F0" />
-        <Texture Name="gameplay_keep_Tex_07A310" OutName="tex_07A310" Format="i4" Width="64" Height="31" Offset="0x7A310" />
-        <Texture Name="gameplay_keep_Tex_07A6F0" OutName="tex_07A6F0" Format="i4" Width="64" Height="16" Offset="0x7A6F0" />
-        <Texture Name="gameplay_keep_Tex_07A8F0" OutName="tex_07A8F0" Format="i4" Width="64" Height="17" Offset="0x7A8F0" />
+
+        <!-- Sun Textures. These should be 64x64, but they get broken into pieces in gSunDL, and ZAPD cannot currently handle that. -->
+        <Texture Name="gSun1Tex" OutName="sun_1" Format="i4" Width="64" Height="31" Offset="0x79B10" />
+        <Texture Name="gSun2Tex" OutName="sun_2" Format="i4" Width="64" Height="16" Offset="0x79EF0" />
+        <Texture Name="gSun3Tex" OutName="sun_3" Format="i4" Width="64" Height="17" Offset="0x7A0F0" />
+        <Texture Name="gSunEvening1Tex" OutName="sun_evening_1" Format="i4" Width="64" Height="31" Offset="0x7A310" />
+        <Texture Name="gSunEvening2Tex" OutName="sun_evening_2" Format="i4" Width="64" Height="16" Offset="0x7A6F0" />
+        <Texture Name="gSunEvening3Tex" OutName="sun_evening_3" Format="i4" Width="64" Height="17" Offset="0x7A8F0" />
+        
         <DList Name="gameplay_keep_DL_07AB10" Offset="0x7AB10" /> <!-- sun (sparkles when small) displaylist -->
         <DList Name="gameplay_keep_DL_07AB58" Offset="0x7AB58" />
-        <DList Name="gameplay_keep_DL_07AB70" Offset="0x7AB70" />
+        <DList Name="gSunDL" Offset="0x7AB70" />
         <DList Name="gZTargetLockOnTriangleDL" Offset="0x7AE00" />
         <DList Name="gameplay_keep_DL_07AFB0" Offset="0x7AFB0" />
         <DList Name="gameplay_keep_DL_07B0B8" Offset="0x7B0B8" />

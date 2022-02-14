@@ -523,7 +523,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
 
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_079B10));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
         gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
 
         for (i = 0; i < globalCtx->envCtx.unk_F2[3]; i++) {
