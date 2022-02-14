@@ -433,6 +433,10 @@ animdict = {
     "D_801D1DE0": "gIdentityMtx",
     "D_801D1E20": "gIdentityMtxF",
 
+    # Structs
+    "ActorAnimationEntry": "AnimationInfo",
+    "ActorAnimationEntryS": "AnimationInfoS",
+
     "ICHAIN_F32_DIV1000(minVelocityY,": "ICHAIN_F32_DIV1000(terminalVelocity,",
     "ICHAIN_F32(minVelocityY,": "ICHAIN_F32(terminalVelocity,",
 }
