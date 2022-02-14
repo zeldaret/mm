@@ -25,8 +25,8 @@ void func_80B9D508(ObjHunsui* this, GlobalContext* globalCtx);
 void func_80B9D714(ObjHunsui* this, GlobalContext* globalCtx);
 void func_80B9DA60(Actor* thisx, GlobalContext* globalCtx);
 
-static AnimatedMaterial* D_80B9DED0;
-static AnimatedMaterial* D_80B9DED4;
+AnimatedMaterial* D_80B9DED0;
+AnimatedMaterial* D_80B9DED4;
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
@@ -34,14 +34,14 @@ typedef struct {
     /* 0x02 */ u8 unk_02;
 } ObjHansuiBssStruct; // size = 0x3
 
-static ObjHansuiBssStruct D_80B9DED8;
+ObjHansuiBssStruct D_80B9DED8;
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
 } ObjHansuiStruct; // size = 0x2
 
-static ObjHansuiStruct D_80B9DC70[] = {
+ObjHansuiStruct D_80B9DC70[] = {
     { 1, 1 }, { 1, 0 }, { 2, 3 }, { 2, 1 }, { 2, 2 }, { 2, 0 }, { 3, 7 },
     { 3, 3 }, { 3, 5 }, { 3, 1 }, { 3, 6 }, { 3, 2 }, { 3, 4 }, { 3, 0 },
 };
