@@ -22,7 +22,6 @@ void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx);
 void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx);
 void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Bg_Numa_Hana_InitVars = {
     ACTOR_BG_NUMA_HANA,
     ACTORCAT_BG,
@@ -37,10 +36,30 @@ const ActorInit Bg_Numa_Hana_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A1B260 = {
-    { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK2, { 0x00000000, 0x00, 0x00 }, { 0x01CBFBB6, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_METAL,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x01CBFBB6, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 18, 16, 0, { 0, 0, 0 } },
 };
+
+static FireObjInitParams D_80A1B28C = {
+    0.00405000010505f, 0.0500000007451f, 3, 1, 0, 0, 0,
+};
+
+static s16 D_80A1B29C[] = { 0x0000, 0x2AAA, 0x5555, 0x8000, 0xAAAA, 0xD555 };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A1B2A8[] = {
@@ -49,11 +68,6 @@ static InitChainEntry D_80A1B2A8[] = {
     ICHAIN_F32(uncullZoneScale, 800, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 600, ICHAIN_STOP),
 };
-
-#endif
-
-extern ColliderCylinderInit D_80A1B260;
-extern InitChainEntry D_80A1B2A8[];
 
 extern UNK_TYPE D_06009FE0;
 extern UNK_TYPE D_0600B928;
