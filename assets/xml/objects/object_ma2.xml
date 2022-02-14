@@ -6,7 +6,7 @@
         <Animation Name="object_ma2_Anim_003D54" Offset="0x3D54" />
         <Animation Name="object_ma2_Anim_004370" Offset="0x4370" />
         <Animation Name="object_ma2_Anim_005314" Offset="0x5314" />
-        <DList Name="object_ma2_DL_005430" Offset="0x5430" />
+        <DList Name="gCremiaWoodenBox" Offset="0x5430" />
         <Texture Name="object_ma2_Tex_0054E0" OutName="tex_0054E0" Format="rgba16" Width="32" Height="64" Offset="0x54E0" />
         <Animation Name="object_ma2_Anim_0070EC" Offset="0x70EC" />
         <Animation Name="object_ma2_Anim_007E28" Offset="0x7E28" />
@@ -48,7 +48,16 @@
         <Texture Name="object_ma2_Tex_0113D8" OutName="tex_0113D8" Format="ci8" Width="16" Height="16" Offset="0x113D8" />
         <Texture Name="object_ma2_Tex_0114D8" OutName="tex_0114D8" Format="rgba16" Width="16" Height="32" Offset="0x114D8" />
         <Texture Name="object_ma2_Tex_0118D8" OutName="tex_0118D8" Format="rgba16" Width="16" Height="16" Offset="0x118D8" />
-        <!-- <Blob Name="object_ma2_Blob_011AD8" Size="0x4000" Offset="0x11AD8" /> -->
+        <Texture Name="object_ma2_Tex_011AD8" OutName="tex_011AD8" Format="rgba16" Width="32" Height="32" Offset="0x11AD8" />
+        <Texture Name="object_ma2_Tex_0122D8" OutName="tex_0122D8" Format="rgba16" Width="32" Height="32" Offset="0x122D8" />
+        <Texture Name="object_ma2_Tex_012AD8" OutName="tex_012AD8" Format="rgba16" Width="32" Height="32" Offset="0x12AD8" />
+        <Texture Name="object_ma2_Tex_0132D8" OutName="tex_0132D8" Format="rgba16" Width="32" Height="32" Offset="0x132D8" />
+        <Texture Name="object_ma2_Tex_013AD8" OutName="tex_013AD8" Format="rgba16" Width="32" Height="32" Offset="0x13AD8" />
+        <Texture Name="object_ma2_Tex_0142D8" OutName="tex_0142D8" Format="rgba16" Width="32" Height="32" Offset="0x142D8" />
+        <Texture Name="object_ma2_Tex_014AD8" OutName="tex_014AD8" Format="rgba16" Width="32" Height="16" Offset="0x14AD8" />
+        <Texture Name="object_ma2_Tex_014ED8" OutName="tex_014ED8" Format="rgba16" Width="32" Height="16" Offset="0x14ED8" />
+        <Texture Name="object_ma2_Tex_0152D8" OutName="tex_0152D8" Format="rgba16" Width="32" Height="16" Offset="0x152D8" />
+        <Texture Name="object_ma2_Tex_0156D8" OutName="tex_0156D8" Format="rgba16" Width="32" Height="16" Offset="0x156D8" />
         <Limb Name="object_ma2_Standardlimb_015AD8" Type="Standard" Offset="0x15AD8" />
         <Limb Name="object_ma2_Standardlimb_015AE4" Type="Standard" Offset="0x15AE4" />
         <Limb Name="object_ma2_Standardlimb_015AF0" Type="Standard" Offset="0x15AF0" />

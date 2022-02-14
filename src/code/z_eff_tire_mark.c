@@ -1,4 +1,5 @@
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f32 arg3, s16 arg4,
                    CollisionPoly* colPoly, s32 arg6) {
@@ -233,7 +234,7 @@ void EffectTireMark_Draw(void* thisx, GraphicsContext* gfxCtx) {
             POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP++, 0x2C);
             gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
 
-            gDPLoadTextureBlock(POLY_OPA_DISP++, D_04014570, G_IM_FMT_I, G_IM_SIZ_8b, 64, 32, 0,
+            gDPLoadTextureBlock(POLY_OPA_DISP++, gameplay_keep_Tex_014570, G_IM_FMT_I, G_IM_SIZ_8b, 64, 32, 0,
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, 6, 5, G_TX_NOLOD, G_TX_NOLOD);
 
             gDPSetCombineLERP(POLY_OPA_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
