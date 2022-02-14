@@ -56,20 +56,33 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, 0 },
-    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0026B8, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_004D08, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0071F4, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_007960, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_008588, 1.0f, 0, -1, 2, 0 },
-    { &object_dnp_Anim_00A900, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00B754, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_00674C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_006B74, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_012428, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, 0 },
-    { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_00923C, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00125C, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_001C1C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_00625C, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0026B8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_004D08, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0071F4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_007960, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_008588, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_00A900, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00B754, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_00674C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_006B74, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_012428, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_00923C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00125C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_001C1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_00625C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 static s32 D_80B3DE58[] = {
@@ -122,7 +135,7 @@ s32 func_80B3CC38(EnDnp* this, s32 arg1) {
 
     if (arg1 != this->unk_340) {
         this->unk_340 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;
@@ -352,7 +365,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
-    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !func_80114F2C(0x17) &&
+    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
                 !(gSaveContext.weekEventReg[23] & 0x20)) ||
                ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);
