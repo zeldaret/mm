@@ -73,17 +73,17 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, 0, -4 },
-    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, 0, -4 },
-    { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, 2, 0 },
-    { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, 2, 0 },
-    { &gKingsChamberDekuGuardRunLoopAnim, 1.0f, 0, -1, 0, 0 },
-    { &gKingsChamberDekuGuardDanceAnim, 1.0f, 0, -1, 2, 0 },
-    { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, 2, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKingsChamberDekuGuardRunLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKingsChamberDekuGuardDanceAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 void func_8092C5C0(EnDns* this) {
@@ -98,7 +98,7 @@ void func_8092C5C0(EnDns* this) {
 
 s32 func_8092C63C(EnDns* this, s32 arg1) {
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case EN_DNS_ANIMATION_IDLE_1:
@@ -125,7 +125,7 @@ s32 func_8092C63C(EnDns* this, s32 arg1) {
 
     if (phi_v1) {
         this->animationIndex = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;
