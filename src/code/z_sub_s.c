@@ -205,7 +205,26 @@ Actor* SubS_FindNearestActor(Actor* actor, GlobalContext* globalCtx, u8 actorCat
     return closestActor;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BC6C.s")
+s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations, s32 index) {
+    s32 endFrame;
+    s32 startFrame;
+
+    animations += index;
+    endFrame = animations->frameCount;
+    if (animations->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(&animations->animation->common);
+    }
+    startFrame = animations->startFrame;
+    if (startFrame >= endFrame || startFrame < 0) {
+        return false;
+    }
+    if (animations->playSpeed < 0.0f) {
+        SWAP(s32, endFrame, startFrame);
+    }
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, startFrame, endFrame, animations->mode,
+                     animations->morphFrames);
+    return true;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013BD40.s")
 
@@ -262,7 +281,17 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
     return actor;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D9C8.s")
+s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 limbRotTableLen) {
+    s32 i;
+    u32 frames = globalCtx->gameplayFrames;
+
+    for (i = 0; i < limbRotTableLen; i++) {
+        limbRotTableY[i] = (i * 50 + 0x814) * frames;
+        limbRotTableZ[i] = (i * 50 + 0x940) * frames;
+    }
+
+    return true;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013DB90.s")
 
@@ -282,7 +311,34 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E0A4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E1C8.s")
+void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex,
+                                     s32* curIndex) {
+    AnimationSpeedInfo* animation = &animations[nextIndex];
+    f32 startFrame = skelAnime->curFrame;
+    f32 endFrame;
+    f32 morphFrames;
+
+    if ((*curIndex < 0) || (nextIndex == *curIndex)) {
+        morphFrames = 0.0f;
+        if (*curIndex < 0) {
+            startFrame = 0.0f;
+        }
+    } else {
+        morphFrames = animation->morphFrames;
+        if (nextIndex != *curIndex) {
+            startFrame = 0.0f;
+        }
+    }
+    if (animation->playSpeed >= 0.0f) {
+        endFrame = Animation_GetLastFrame(&animation->animation->common);
+    } else {
+        startFrame = Animation_GetLastFrame(&animation->animation->common);
+        endFrame = 0.0f;
+    }
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, startFrame, endFrame, animation->mode,
+                     morphFrames);
+    *curIndex = nextIndex;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E2D4.s")
 

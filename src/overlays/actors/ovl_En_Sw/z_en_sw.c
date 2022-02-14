@@ -134,11 +134,11 @@ static DamageTable sDamageTable2 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_st_Anim_000304, 1.0f, 0, -1, 3, 0 },
-    { &object_st_Anim_000304, 1.0f, 0, -1, 3, -4 },
-    { &object_st_Anim_0055A8, 1.0f, 0, -1, 1, -4 },
-    { &object_st_Anim_005B98, 1.0f, 0, -1, 1, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
+    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
 };
 
 void func_808D8940(EnSw* this, GlobalContext* globalCtx) {
@@ -275,7 +275,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, 0);
+    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
@@ -676,7 +676,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             this->actor.flags &= ~1;
             if (!ENSW_GET_3(&this->actor)) {
-                func_8013BC6C(&this->skelAnime, sAnimations, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
@@ -1159,7 +1159,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_Init(globalCtx, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
                        30);
-        func_8013BC6C(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
