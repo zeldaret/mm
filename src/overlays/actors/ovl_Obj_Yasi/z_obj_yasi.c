@@ -20,7 +20,7 @@ const ActorInit Obj_Yasi_InitVars = {
     ACTOR_OBJ_YASI,
     ACTORCAT_PROP,
     FLAGS,
-    OBJECT_OBJECT_UNSET_YASI,
+    OBJECT_OBJ_YASI,
     sizeof(ObjYasi),
     (ActorFunc)ObjYasi_Init,
     (ActorFunc)ObjYasi_Destroy,

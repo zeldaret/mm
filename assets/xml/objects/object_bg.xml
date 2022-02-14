@@ -74,7 +74,9 @@
         <DList Name="object_bg_DL_00F350" Offset="0xF350" />
         <DList Name="object_bg_DL_00F4E8" Offset="0xF4E8" />
         <Texture Name="object_bg_TLUT_00F6F0" OutName="tlut_00F6F0" Format="rgba16" Width="16" Height="16" Offset="0xF6F0" />
-        <!-- <Blob Name="object_bg_Blob_00F8F0" Size="0xC00" Offset="0xF8F0" /> -->
+        <Texture Name="object_bg_Tex_00F8F0" OutName="tex_00F8F0" Format="ci8" Width="32" Height="32" Offset="0xF8F0" />
+        <Texture Name="object_bg_Tex_00FCF0" OutName="tex_00FCF0" Format="ci8" Width="32" Height="32" Offset="0xFCF0" />
+        <Texture Name="object_bg_Tex_0100F0" OutName="tex_0100F0" Format="ci8" Width="32" Height="32" Offset="0x100F0" />
         <Texture Name="object_bg_Tex_0104F0" OutName="tex_0104F0" Format="ci8" Width="16" Height="32" Offset="0x104F0" />
         <Texture Name="object_bg_Tex_0106F0" OutName="tex_0106F0" Format="ci8" Width="16" Height="16" Offset="0x106F0" />
         <Texture Name="object_bg_Tex_0107F0" OutName="tex_0107F0" Format="ci8" Width="64" Height="32" Offset="0x107F0" />

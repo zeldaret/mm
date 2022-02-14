@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_iknin_susceil.h"
+#include "objects/object_ikninside_obj/object_ikninside_obj.h"
 
 #define FLAGS 0x00000030
 
@@ -25,10 +26,6 @@ void func_80C0ACE8(BgIkninSusceil* this, GlobalContext* globalCtx);
 void func_80C0AD44(BgIkninSusceil* this);
 void func_80C0AD64(BgIkninSusceil* this, GlobalContext* globalCtx);
 void func_80C0AE5C(BgIkninSusceil* this, GlobalContext* globalCtx);
-
-extern CollisionHeader D_0600CBAC;
-extern AnimatedMaterial D_0600C670;
-extern Gfx D_0600C308[];
 
 const ActorInit Bg_Iknin_Susceil_InitVars = {
     ACTOR_BG_IKNIN_SUSCEIL,
@@ -116,8 +113,8 @@ void BgIkninSusceil_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600CBAC);
-    this->animatedTexture = Lib_SegmentedToVirtual(&D_0600C670);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ikninside_obj_Colheader_00CBAC);
+    this->animatedTexture = Lib_SegmentedToVirtual(object_ikninside_obj_Matanimheader_00C670);
     func_80C0AC74(this);
 }
 
@@ -260,5 +257,5 @@ void BgIkninSusceil_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgIkninSusceil* this = THIS;
 
     AnimatedMat_Draw(globalCtx, this->animatedTexture);
-    Gfx_DrawDListOpa(globalCtx, D_0600C308);
+    Gfx_DrawDListOpa(globalCtx, object_ikninside_obj_DL_00C308);
 }
