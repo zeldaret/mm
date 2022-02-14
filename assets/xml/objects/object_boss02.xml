@@ -8,7 +8,7 @@
         <Texture Name="object_boss02_TLUT_000340" OutName="tlut_000340" Format="rgba16" Width="4" Height="4" Offset="0x340" />
         <Texture Name="object_boss02_TLUT_000360" OutName="tlut_000360" Format="rgba16" Width="4" Height="4" Offset="0x360" />
         <Texture Name="object_boss02_TLUT_000380" OutName="tlut_000380" Format="rgba16" Width="4" Height="4" Offset="0x380" />
-        <!-- <Blob Name="object_boss02_Blob_0003A0" Size="0x800" Offset="0x3A0" /> -->
+        <Texture Name="object_boss02_Tex_0003A0" OutName="tex_0003A0" Format="ci4" Width="64" Height="64" Offset="0x3A0" />
         <Texture Name="object_boss02_Tex_000BA0" OutName="tex_000BA0" Format="rgba16" Width="32" Height="32" Offset="0xBA0" />
         <Texture Name="object_boss02_Tex_0013A0" OutName="tex_0013A0" Format="ci4" Width="64" Height="64" Offset="0x13A0" />
         <Texture Name="object_boss02_Tex_001BA0" OutName="tex_001BA0" Format="ci4" Width="64" Height="64" Offset="0x1BA0" />
@@ -17,7 +17,7 @@
         <Texture Name="object_boss02_Tex_002FA0" OutName="tex_002FA0" Format="ci4" Width="64" Height="64" Offset="0x2FA0" />
         <Texture Name="object_boss02_Tex_0037A0" OutName="tex_0037A0" Format="rgba16" Width="16" Height="16" Offset="0x37A0" />
         <Texture Name="object_boss02_Tex_0039A0" OutName="tex_0039A0" Format="rgba16" Width="32" Height="32" Offset="0x39A0" />
-        <!-- <Blob Name="object_boss02_Blob_0041A0" Size="0x810" Offset="0x41A0" /> -->
+        <Texture Name="object_boss02_Tex_0041A0" OutName="tex_0041A0" Format="ci4" Width="64" Height="64" Offset="0x41A0" />
         <Animation Name="object_boss02_Anim_004A1C" Offset="0x4A1C" />
         <DList Name="object_boss02_DL_006160" Offset="0x6160" />
         <DList Name="object_boss02_DL_006820" Offset="0x6820" />
@@ -33,7 +33,7 @@
         <DList Name="object_boss02_DL_007D18" Offset="0x7D18" />
         <Texture Name="object_boss02_TLUT_007E30" OutName="tlut_007E30" Format="rgba16" Width="4" Height="4" Offset="0x7E30" />
         <Texture Name="object_boss02_Tex_007E50" OutName="tex_007E50" Format="ci4" Width="64" Height="64" Offset="0x7E50" />
-        <!-- <Blob Name="object_boss02_Blob_008650" Size="0x1400" Offset="0x8650" /> -->
+        <Texture Name="object_boss02_Tex_008650" OutName="tex_008650" Format="ia8" Width="128" Height="40" Offset="0x8650" />
         <Limb Name="object_boss02_Standardlimb_009A50" Type="Standard" Offset="0x9A50" />
         <Limb Name="object_boss02_Standardlimb_009A5C" Type="Standard" Offset="0x9A5C" />
         <Limb Name="object_boss02_Standardlimb_009A68" Type="Standard" Offset="0x9A68" />
