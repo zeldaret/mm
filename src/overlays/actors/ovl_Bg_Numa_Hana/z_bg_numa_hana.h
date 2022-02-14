@@ -9,12 +9,19 @@ struct BgNumaHana;
 
 typedef void (*BgNumaHanaActionFunc)(struct BgNumaHana*, GlobalContext*);
 
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3s unk_0C;
+    /* 0x12 */ char unk_12[0x2];
+} UnkBgNumaHanaStruct; // size = 0x14
+
 typedef struct BgNumaHana {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ FireObj unk_15C;
     /* 0x1E8 */ ColliderCylinder collider;
     /* 0x234 */ BgNumaHanaActionFunc actionFunc;
-    /* 0x238 */ char unk_238[0xF0];
+    /* 0x238 */ UnkBgNumaHanaStruct unk_238[6];
+    /* 0x2B0 */ UnkBgNumaHanaStruct unk_2B0[6];
     /* 0x328 */ s16 unk_328;
     /* 0x32A */ s16 unk_32A;
     /* 0x32C */ s16 unk_32C;

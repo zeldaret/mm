@@ -90,8 +90,39 @@ s32 func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx) {
     return child != NULL;
 }
 
-void func_80A1A56C(BgNumaHana* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Numa_Hana/func_80A1A56C.s")
+void func_80A1A56C(BgNumaHana* this) {
+    f32 temp_f20;
+    f32 temp_f24;
+    f32 temp_f26;
+    s16 temp_s1;
+    UnkBgNumaHanaStruct* phi_s2;
+    UnkBgNumaHanaStruct* phi_s5;
+    s32 i;
+
+    temp_f24 = this->dyna.actor.world.pos.y + -10.0f;
+    temp_s1 = this->unk_328 - 0x2000;
+    temp_f20 = (Math_CosS(temp_s1) * 77.42784f) + 74.95192f;
+    temp_f26 = (Math_SinS(this->unk_328) * 77.42784f) + this->dyna.actor.world.pos.y + -64.74976f;
+    for (i = 0; i < 6; i++) {
+        phi_s2 = &this->unk_238[i];
+        phi_s5 = &this->unk_2B0[i];
+        temp_s1 = D_80A1B29C[i] + this->dyna.actor.shape.rot.y + 0x1555;
+
+        phi_s2->unk_00.x = (Math_SinS(temp_s1) * 74.95192f) + this->dyna.actor.world.pos.x;
+        phi_s2->unk_00.y = temp_f24;
+        phi_s2->unk_00.z = (Math_CosS(temp_s1) * 74.95192f) + this->dyna.actor.world.pos.z;
+        phi_s2->unk_0C.x = this->dyna.actor.shape.rot.x;
+        phi_s2->unk_0C.y = temp_s1 - 0x4000;
+        phi_s2->unk_0C.z = this->dyna.actor.shape.rot.z + this->unk_328;
+
+        phi_s5->unk_00.x = (Math_SinS(temp_s1) * temp_f20) + this->dyna.actor.world.pos.x;
+        phi_s5->unk_00.y = temp_f26;
+        phi_s5->unk_00.z = (Math_CosS(temp_s1) * temp_f20) + this->dyna.actor.world.pos.z;
+        phi_s5->unk_0C.x = phi_s2->unk_0C.x;
+        phi_s5->unk_0C.y = phi_s2->unk_0C.y;
+        phi_s5->unk_0C.z = phi_s2->unk_0C.z + this->unk_338;
+    }
+}
 
 void func_80A1A750(s16* arg0, s16* arg1, f32* arg2, f32 arg3) {
     *arg1 += 0x32C8;
