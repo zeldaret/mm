@@ -17,9 +17,9 @@
 #include "scheduler.h"
 #include "xstdio.h"
 
-#include "bgm.h"
 #include "color.h"
 #include "ichain.h"
+#include "sequence.h"
 #include "sfx.h"
 
 #include "z64actor.h"
@@ -34,6 +34,7 @@
 #include "z64light.h"
 #include "z64math.h"
 #include "z64object.h"
+#include "z64ocarina.h"
 #include "z64player.h"
 #include "z64scene.h"
 #include "z64save.h"
