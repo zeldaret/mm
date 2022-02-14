@@ -7,7 +7,7 @@
 #include "z_obj_snowball2.h"
 #include "objects/object_goroiwa/object_goroiwa.h"
 
-#define FLAGS 0x00800000
+#define FLAGS (ACTOR_FLAG_800000)
 
 #define THIS ((ObjSnowball2*)thisx)
 
@@ -65,18 +65,18 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static Color_RGBA8 D_80B3A914 = { 250, 250, 250, 255 };
+Color_RGBA8 D_80B3A914 = { 250, 250, 250, 255 };
 
-static Color_RGBA8 D_80B3A918 = { 180, 180, 180, 255 };
+Color_RGBA8 D_80B3A918 = { 180, 180, 180, 255 };
 
-static Gfx* D_80B3A91C[] = {
+Gfx* D_80B3A91C[] = {
     object_goroiwa_DL_0072F0,
     object_goroiwa_DL_0077D0,
     object_goroiwa_DL_007C60,
     object_goroiwa_DL_007C60,
 };
 
-static Vec3f D_80B3A92C = { 0.0f, 0.3f, 0.0f };
+Vec3f D_80B3A92C = { 0.0f, 0.3f, 0.0f };
 
 void func_80B38E20(ObjSnowball2* this) {
     Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x,
@@ -336,7 +336,7 @@ void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80B39C78(ObjSnowball2* this) {
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->unk_1AD = 0;
     this->actionFunc = func_80B39C9C;
 }
@@ -352,7 +352,7 @@ void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.room = -1;
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         if (func_800A817C(ENOBJSNOWBALL2_GET_3F(&this->actor))) {
             func_80B38E88(this, globalCtx);
         }
@@ -379,7 +379,7 @@ void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
             if ((this->actor.bgCheckFlags & 1) &&
                 (DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL)) {
                 this->unk_1AD = 1;
-                this->actor.flags &= ~0x10;
+                this->actor.flags &= ~ACTOR_FLAG_10;
             }
         }
 
@@ -390,7 +390,7 @@ void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, GET_PLAYER(globalCtx)->actor.world.rot.y)) >=
                         0x5556) {
-                        Actor_PickUp(&this->actor, globalCtx, 0, 36.0f, 30.0f);
+                        Actor_PickUp(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
                     }
                 }
             }
@@ -524,7 +524,7 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
 void func_80B3A498(ObjSnowball2* this) {
     this->actor.home.pos.x = this->actor.world.pos.x;
     this->unk_1AC = 46;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actor.home.pos.y = this->actor.world.pos.y + this->actor.depthInWater;
     this->actor.home.pos.z = this->actor.world.pos.z;
     this->actor.world.pos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
@@ -532,8 +532,6 @@ void func_80B3A498(ObjSnowball2* this) {
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80B3A500;
 }
-
-void func_80B39638(GlobalContext* globalCtx, Vec3f* arg1);
 
 void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx) {
     f32 phi_f0;
