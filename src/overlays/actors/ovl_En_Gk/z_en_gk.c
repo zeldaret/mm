@@ -102,7 +102,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &object_gk_Anim_00787C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_gk_Anim_007DC4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
     { &object_gk_Anim_0092C0, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_gk_Anim_005EDC, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_gk_Anim_009638, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_gk_Anim_008774, 1.0f, 0.0f, 0.0f, 0, 0.0f },
@@ -272,7 +272,7 @@ s32 func_80B50854(EnGk* this, GlobalContext* globalCtx) {
         (globalCtx->msgCtx.unk1202E == 1)) {
         Flags_SetSwitch(globalCtx, ENGK_GET_3F00(&this->actor));
         this->unk_2E4 = 3;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
         this->actionFunc = func_80B521E8;
         return true;
     }
@@ -503,7 +503,7 @@ void func_80B51308(EnGk* this, GlobalContext* globalCtx) {
 
     if ((this->unk_2E4 == 7) && (sp1E == lastFrame)) {
         this->unk_2E4 = 8;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 8);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 8);
     }
 }
 
@@ -513,7 +513,7 @@ void func_80B51398(EnGk* this, GlobalContext* globalCtx) {
 
     if ((this->unk_2E4 == 9) && (sp1E == lastFrame)) {
         this->unk_2E4 = 10;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 10);
     }
 }
 
@@ -593,7 +593,7 @@ void func_80B51510(EnGk* this, GlobalContext* globalCtx) {
                     Flags_SetSwitch(globalCtx, ENGK_GET_3F00(&this->actor));
                     break;
             }
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_31A);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_31A);
         }
 
         if (this->unk_31A == 7) {
@@ -615,13 +615,13 @@ void func_80B51698(EnGk* this, GlobalContext* globalCtx) {
         switch (this->unk_2E4) {
             case 0:
                 this->unk_2E4 = 2;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
                 this->actionFunc = func_80B5216C;
                 break;
 
             case 2:
                 this->unk_2E4 = 0;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                 this->actionFunc = func_80B5202C;
                 break;
         }
@@ -636,13 +636,13 @@ void func_80B51760(EnGk* this, GlobalContext* globalCtx) {
         lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
         if (sp2E == lastFrame) {
             this->unk_2E4 = 5;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_2E4);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_2E4);
         }
     } else if (this->unk_2E4 == 10) {
         lastFrame = Animation_GetLastFrame(sAnimations[this->unk_2E4].animation);
         if (sp2E == lastFrame) {
             this->unk_2E4 = 11;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_2E4);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_2E4);
         }
     } else {
         if (Flags_GetSwitch(globalCtx, ENGK_GET_3F00(&this->actor))) {
@@ -708,7 +708,7 @@ void func_80B51970(EnGk* this, GlobalContext* globalCtx) {
         if (this->unk_2E4 != 10) {
             if (this->unk_2E4 != 9) {
                 this->unk_2E4 = 9;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 9);
             } else {
                 func_80B51398(this, globalCtx);
             }
@@ -775,7 +775,7 @@ void func_80B51B40(EnGk* this, GlobalContext* globalCtx) {
         if (this->unk_2E4 != 10) {
             if (this->unk_2E4 != 9) {
                 this->unk_2E4 = 9;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 9);
             } else {
                 func_80B51398(this, globalCtx);
             }
@@ -794,7 +794,7 @@ void func_80B51D9C(EnGk* this, GlobalContext* globalCtx) {
         if (this->unk_1E4 & 4) {
             this->unk_1E4 &= ~4;
             this->unk_2E4 = 6;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
             this->actionFunc = func_80B51EA4;
         } else {
             this->unk_1E4 |= 4;
@@ -900,7 +900,7 @@ void func_80B521E8(EnGk* this, GlobalContext* globalCtx) {
 
     if (sp1E == lastFrame) {
         this->unk_2E4 = 1;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
         this->actionFunc = func_80B5227C;
     }
 }
@@ -1035,7 +1035,7 @@ void EnGk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (ENGK_GET_F(&this->actor) == ENGK_F_1) {
         this->unk_2E4 = 5;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
         if (globalCtx->sceneNum == SCENE_17SETUGEN2) {
             if (Flags_GetSwitch(globalCtx, ENGK_GET_3F00(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
@@ -1073,7 +1073,7 @@ void EnGk_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_318 = this->actor.cutscene;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         this->actionFunc = func_80B5202C;
     } else {
         this->actionFunc = func_80B52654;
