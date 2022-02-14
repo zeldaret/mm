@@ -106,15 +106,23 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80A8B2D8[] = {
-    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, -4 },
-    { &object_tru_Anim_0108AC, 1.0f, 0, -1, 2, -4 }, { &object_tru_Anim_009348, 1.0f, 0, -1, 2, 0 },
-    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, 0 },
-    { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_014728, 1.0f, 0, -1, 2, 0 },
-    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, 2, 0 },  { &object_tru_Anim_007FA0, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_016B4C, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_011F88, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_003698, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_002BD8, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS D_80A8B2D8[] = {
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_0108AC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_009348, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_014728, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_007FA0, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_016B4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_011F88, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_003698, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_002BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
@@ -418,7 +426,7 @@ s32 func_80A86924(EnTru* this, s32 arg1) {
 
     if (arg1 != this->unk_37C) {
         this->unk_37C = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80A8B2D8, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A8B2D8, arg1);
         this->unk_358 = this->skelAnime.playSpeed;
     }
 

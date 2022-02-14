@@ -40,14 +40,14 @@ const ActorInit En_Hgo_InitVars = {
     (ActorFunc)EnHgo_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -128,7 +128,7 @@ void func_80BD0434(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD049C(EnHgo* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BD04E0;
 }
 
@@ -255,28 +255,28 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
             switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
                 case 1:
                     this->unk_218 = 0;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                     break;
                 case 2:
                     this->actor.draw = EnHgo_Draw;
                     this->unk_218 = 1;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                     break;
                 case 3:
                     this->unk_218 = 2;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
                     break;
                 case 4:
                     this->unk_218 = 3;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     break;
                 case 5:
                     this->unk_218 = 4;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                     break;
                 case 6:
                     this->unk_218 = 5;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -292,11 +292,11 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
                     break;
                 case 2:
                     this->unk_218 = 3;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     break;
                 case 5:
                     this->unk_218 = 6;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
             }
         }
 

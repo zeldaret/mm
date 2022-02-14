@@ -60,17 +60,27 @@ const ActorInit En_Railgibud_InitVars = {
     (ActorFunc)EnRailgibud_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_rd_Anim_006678, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_006B08, 0.5f, 0.0f, 0.0f, 3, 0.0f },
-    { &object_rd_Anim_006EEC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0073A4, 0.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &object_rd_Anim_007BBC, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_0081A8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_009298, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_009900, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &object_rd_Anim_00A450, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_00ABE0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_0113EC, 0.4f, 0.0f, 0.0f, 1, -8.0f }, { &object_rd_Anim_01216C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_0118D8, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_011DB8, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_00A450, 3.0f, 0.0f, 0.0f, 2, -6.0f }, { &object_rd_Anim_005DF4, 1.0f, 0.0f, 0.0f, 2, -8.0f },
-    { &object_rd_Anim_0061E4, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_rd_Anim_001600, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_rd_Anim_0009C4, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_rd_Anim_000F1C, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_rd_Anim_006678, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_006B08, 0.5f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 0.0f },
+    { &object_rd_Anim_006EEC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_0073A4, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_007BBC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_0081A8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_009298, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_009900, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_00A450, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_00ABE0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_0113EC, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -8.0f },
+    { &object_rd_Anim_01216C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_0118D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_011DB8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_00A450, 3.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -6.0f },
+    { &object_rd_Anim_005DF4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_0061E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_001600, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_rd_Anim_0009C4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_rd_Anim_000F1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -219,7 +229,7 @@ void EnRailgibud_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BA57A8(EnRailgibud* this) {
     this->actor.speedXZ = 0.6f;
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 10);
     this->actionFunc = func_80BA57F8;
 }
 
@@ -267,7 +277,7 @@ void func_80BA57F8(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA59F0(EnRailgibud* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 9);
     this->actionFunc = func_80BA5A34;
 }
 
@@ -287,7 +297,7 @@ void func_80BA5A34(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA5AF0(EnRailgibud* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
     if (this->actionFunc == func_80BA5A34) {
         this->unk_3F2 = 80;
@@ -343,7 +353,7 @@ void func_80BA5B64(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA5DBC(EnRailgibud* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
     this->actor.flags &= ~1;
     this->unk_3F2 = 0;
     this->unk_3F0 = 0;
@@ -361,9 +371,9 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
             sp34 = func_80BA7088(this, globalCtx);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (sp34 == 1)) {
                 this->unk_3F0 = 1;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
             } else if (!(player->stateFlags2 & 0x80)) {
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
                 this->unk_3F0 = 2;
                 this->unk_3F2 = 0;
@@ -392,7 +402,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
                     player->stateFlags2 &= ~0x80;
                     player->unk_AE8 = 100;
                 }
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 this->actor.flags |= 1;
                 this->unk_3F0 = 2;
                 this->unk_3F2 = 0;
@@ -412,7 +422,7 @@ void func_80BA5E18(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6054(EnRailgibud* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 7);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->actor.speedXZ = -2.0f;
     this->actionFunc = func_80BA60B0;
@@ -434,7 +444,7 @@ void func_80BA60B0(EnRailgibud* this, GlobalContext* globalCtx) {
 
 void func_80BA6158(EnRailgibud* this) {
     this->unk_3F2 = 0;
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 10);
     this->actionFunc = func_80BA61A0;
 }
 
@@ -451,7 +461,7 @@ void func_80BA61A0(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6284(EnRailgibud* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 10);
     this->actor.speedXZ = 0.4f;
     this->actionFunc = func_80BA62D4;
 }
@@ -483,7 +493,7 @@ void func_80BA62D4(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6440(EnRailgibud* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 7);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->unk_3F2 = 0;
     this->unk_3F4 = 0;
@@ -536,7 +546,7 @@ void func_80BA6604(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA6664(EnRailgibud* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
     this->actor.flags &= ~1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->unk_3F2 = 0;
@@ -1051,37 +1061,37 @@ s32 func_80BA7DC8(EnRailgibud* this, GlobalContext* globalCtx) {
             switch (globalCtx->csCtx.npcActions[sp2C]->unk0) {
                 case 1:
                     this->unk_3F0 = 9;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 9);
                     break;
 
                 case 2:
                     this->unk_3F0 = 15;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_WEAKENED2);
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 15);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 15);
                     break;
 
                 case 3:
                     this->unk_3F0 = 17;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 17);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 17);
                     break;
 
                 case 4:
                     this->unk_3F0 = 18;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 18);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 18);
                     break;
 
                 case 5:
                     this->unk_3F0 = 10;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 10);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 10);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             if (this->unk_3F0 == 15) {
                 this->unk_3F0 = 16;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 16);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 16);
             } else if (this->unk_3F0 == 18) {
                 this->unk_3F0 = 19;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 19);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 19);
                 func_80BA7D14(this);
             }
         }

@@ -109,19 +109,19 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static struct_80B8E1A8 sAnimationInfo[] = {
-    { &object_ma2_Anim_00A174, 1.0f, 0, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, 0, -6.0f },  //
-    { &object_ma2_Anim_00AF7C, 1.0f, 2, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, 2, -6.0f },  //
-    { &object_ma2_Anim_000CC0, 1.0f, 0, 0.0f }, { &object_ma2_Anim_000CC0, 1.0f, 0, -6.0f },  //
-    { &object_ma2_Anim_016720, 1.0f, 0, 0.0f }, { &object_ma2_Anim_016720, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_005314, 1.0f, 0, 0.0f }, { &object_ma2_Anim_005314, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_0093E8, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0093E8, 1.0f, 0, -10.0f }, //
-    { &object_ma2_Anim_007E28, 1.0f, 0, 0.0f }, { &object_ma2_Anim_007E28, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_0070EC, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0070EC, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_003D54, 1.0f, 0, 0.0f }, { &object_ma2_Anim_003D54, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_001FD0, 1.0f, 0, 0.0f }, { &object_ma2_Anim_001FD0, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_0030B4, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0030B4, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_004370, 1.0f, 0, 0.0f }, { &object_ma2_Anim_004370, 1.0f, 0, -8.0f },  //
+static AnimationSpeedInfo sAnimationInfo[] = {
+    { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, -6.0f },  //
+    { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, -6.0f },  //
+    { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, -6.0f },  //
+    { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, -10.0f }, //
+    { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, -8.0f },  //
 };
 
 static TexturePtr sMouthTextures[] = {
@@ -1265,9 +1265,9 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animationSeg), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {

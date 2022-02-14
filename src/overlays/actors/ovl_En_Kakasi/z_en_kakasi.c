@@ -132,8 +132,10 @@ static AnimationHeader* kakasiAnimations[] = {
     &object_ka_Anim_00686C, &object_ka_Anim_0081A4, &object_ka_Anim_000214,
 };
 
-static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
-                           ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
+};
 
 void EnKakasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnKakasi* this = THIS;
