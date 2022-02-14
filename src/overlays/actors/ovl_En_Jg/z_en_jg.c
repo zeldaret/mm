@@ -484,14 +484,14 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
 
         temp = this->textId;
         if ((temp == 0xDBB) || (temp == 0xDBC)) {
-            if (!(gSaveContext.weekEventReg[0x18] & 0x80)) {
+            if (!(gSaveContext.weekEventReg[24] & 0x80)) {
                 // The player hasn't talked to the Goron Child at least once, so they can't learn
                 // the Lullaby Intro. End the current conversation with the player.
                 globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
-            } else if (((gSaveContext.weekEventReg[0x18] & 0x40)) ||
+            } else if (((gSaveContext.weekEventReg[24] & 0x40)) ||
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
                 // The player already has the Lullaby or Lullaby Intro, so say "I'm counting on you"
                 this->textId = EnJg_GetNextTextId(this);
@@ -691,7 +691,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
     } else {
         this->csAction = 99;
         this->freezeTimer = 1000;
-        gSaveContext.weekEventReg[0x18] |= 0x40;
+        gSaveContext.weekEventReg[24] |= 0x40;
         this->actionFunc = EnJg_Idle;
     }
 }
@@ -821,7 +821,7 @@ s32 EnJg_GetNextTextId(EnJg* this) {
             return 0xDDC; // Everyone would accept you
 
         case 0xDDC: // Everyone would accept you
-            gSaveContext.weekEventReg[0x4D] |= 0x80;
+            gSaveContext.weekEventReg[77] |= 0x80;
             return 0xDDD; // Think it over slowly
 
         default:
@@ -839,7 +839,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
 
     if (!EN_JG_IS_IN_GORON_SHRINE(&this->actor)) {
         if (player->transformation == PLAYER_FORM_GORON) {
-            if ((gSaveContext.weekEventReg[0x18] & 0x10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
+            if ((gSaveContext.weekEventReg[24] & 0x10) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
                 // The player has already talked as a Goron at least once.
                 return 0xDBC; // Following me won't do you any good
@@ -849,7 +849,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
             return 0xDB6; // "Hunh???"
         }
 
-        if (gSaveContext.weekEventReg[0x18] & 0x20) {
+        if (gSaveContext.weekEventReg[24] & 0x20) {
             // The player has already talked as a non-Goron at least once.
             return 0xDB5; // This is our problem (repeat)
         }
@@ -859,7 +859,7 @@ s32 EnJg_GetStartingConversationTextId(EnJg* this, GlobalContext* globalCtx) {
     }
 
     if (player->transformation == PLAYER_FORM_GORON) {
-        if (gSaveContext.weekEventReg[0x4D] & 0x80) {
+        if (gSaveContext.weekEventReg[77] & 0x80) {
             // The player has heard the Goron Shrine cheer as a Goron at least once.
             return 0xDDE; // Come back after entering the race
         }
@@ -899,9 +899,9 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, GlobalContext* 
         if (this->textId == 0xDAC) {
             this->action = EN_JG_ACTION_FIRST_THAW;
         } else if (this->textId == 0xDAE) {
-            gSaveContext.weekEventReg[0x18] |= 0x20;
+            gSaveContext.weekEventReg[24] |= 0x20;
         } else if (this->textId == 0xDB6) {
-            gSaveContext.weekEventReg[0x18] |= 0x10;
+            gSaveContext.weekEventReg[24] |= 0x10;
         }
 
         func_801518B0(globalCtx, this->textId, &this->actor);
