@@ -95,11 +95,11 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_fr_Anim_001534, 1.0f, 0, -1, 0, 0 },
-    { &object_fr_Anim_001534, 1.0f, 0, -1, 0, -4 },
-    { &object_fr_Anim_0011C0, 1.0f, 0, -1, 0, -4 },
-    { &object_fr_Anim_0007BC, 1.0f, 0, -1, 2, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_fr_Anim_0011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_fr_Anim_0007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
 s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
@@ -111,11 +111,11 @@ s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].transitionRate);
+        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
+                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].morphFrames);
     }
     return ret;
 }

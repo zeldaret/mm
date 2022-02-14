@@ -47,10 +47,10 @@ const ActorInit En_Syateki_Man_InitVars = {
     (ActorFunc)EnSyatekiMan_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_shn_Anim_00D9D0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_shn_Anim_00DFEC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_shn_Anim_00D2F8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_shn_Anim_00D9D0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_shn_Anim_00DFEC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_shn_Anim_00D2F8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
 
 static s16 D_809C91C8[] = {
@@ -207,7 +207,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp22;
 
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
         sp22 = Text_GetFaceReaction(globalCtx, 0x31);
         if (sp22 != 0) {
             Message_StartTextbox(globalCtx, sp22, &this->actor);
@@ -410,7 +410,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.animation == &object_shn_Anim_00D2F8) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         }
     }
 }

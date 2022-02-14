@@ -397,7 +397,7 @@ An actor with SkelAnime has three structs in the Actor struct that handle it: on
 There are two different sorts of SkelAnime, although for decompilation purposes there is not much difference between them. Looking at the prototype of `SkelAnime_InitFlex` from `functions.h` (or even the definition in `z_skelanime.c`), 
 ```C
 void SkelAnime_InitFlex(GlobalContext* globalCtx, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg,
-                      AnimationHeader* animationSeg, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
+                      AnimationHeader* animation, Vec3s* jointTable, Vec3s* morphTable, s32 limbCount);
 ```
 we can read off the types of the various arguments:
 - The `SkelAnime` struct is at `this + 0x144`
