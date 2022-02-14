@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ending_hero3.h"
+#include "objects/object_toryo/object_toryo.h"
 
 #define FLAGS 0x00000009
 
@@ -30,9 +31,6 @@ const ActorInit En_Ending_Hero3_InitVars = {
     (ActorFunc)EnEndingHero3_Draw,
 };
 
-extern FlexSkeletonHeader D_06007150;
-extern AnimationHeader D_06000E50;
-
 void EnEndingHero3_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero3* this = THIS;
 
@@ -40,7 +38,8 @@ void EnEndingHero3_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50,
+                       this->jointTable, this->morphTable, 17);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C23518(this);
 }

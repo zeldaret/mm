@@ -7,6 +7,8 @@
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
 #include "z_en_fish2.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_fb/object_fb.h"
 
 #define FLAGS 0x00000019
 
@@ -39,13 +41,6 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx);
 void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2);
 void func_80B2AF80(EnFish2* this, GlobalContext* globalCtx);
 void func_80B2B180(EnFish2* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060006D8;
-extern AnimationHeader D_060007D4;
-extern AnimationHeader D_06000ACC;
-extern AnimationHeader D_06001174;
-extern AnimationHeader D_060013AC;
-extern FlexSkeletonHeader D_06006190;
 
 static s32 D_80B2B2E0 = 0;
 static s32 D_80B2B2E4 = 0;
@@ -109,7 +104,8 @@ static f32 D_80B2B380[] = { 0.019f, 0.033f };
 
 void func_80B28370(EnFish2* this, s32 arg0) {
     static AnimationHeader* D_80B2B388[] = {
-        &D_060013AC, &D_060007D4, &D_060006D8, &D_060006D8, &D_06001174, &D_06000ACC,
+        &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
+        &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
     };
     static u8 D_80B2B3A0[] = { 0, 0, 2, 2, 2, 2 };
     f32 sp34;
@@ -161,8 +157,8 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->actor.params == 0) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006190, &D_060013AC, this->jointTable, this->morphTable,
-                           24);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC,
+                           this->jointTable, this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
             if (gSaveContext.weekEventReg[81] & 0x10) {
@@ -1095,12 +1091,12 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            u32 phi_v0;
+            TexturePtr phi_v0;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = &D_04091CE0;
+                phi_v0 = gameplay_keep_Tex_091CE0;
             } else {
-                phi_v0 = &D_04091BE0;
+                phi_v0 = gameplay_keep_Tex_091BE0;
             }
 
             ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
@@ -1172,7 +1168,7 @@ void func_80B2B180(EnFish2* this, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_OPA_DISP++, 150, 150, 150, 0);
             gSPSegment(POLY_OPA_DISP++, 0x08, ptr->unk_20);
-            gSPDisplayList(POLY_OPA_DISP++, D_040301B0);
+            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0301B0);
         }
     }
 
