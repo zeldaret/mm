@@ -181,7 +181,7 @@ u16 func_80B50410(EnGk* this, GlobalContext* globalCtx) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.weekEventReg[41] & 4)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!(gSaveContext.weekEventReg[41] & 8) || func_80114E90()) {
+                    if (!(gSaveContext.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     gSaveContext.weekEventReg[41] |= 4;
@@ -192,7 +192,7 @@ u16 func_80B50410(EnGk* this, GlobalContext* globalCtx) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!(gSaveContext.weekEventReg[41] & 8) || func_80114E90()) {
+                if (!(gSaveContext.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 gSaveContext.weekEventReg[41] |= 4;
@@ -268,7 +268,7 @@ s32 func_80B50854(EnGk* this, GlobalContext* globalCtx) {
         this->unk_1E4 &= ~0x40;
     }
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
         (globalCtx->msgCtx.unk1202E == 1)) {
         Flags_SetSwitch(globalCtx, ENGK_GET_3F00(&this->actor));
         this->unk_2E4 = 3;
@@ -521,7 +521,7 @@ void func_80B51410(EnGk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->actor.xzDistToPlayer < 100.0f) {
-        if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
+        if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
             (globalCtx->msgCtx.unk1202E == 0xE)) {
             this->unk_1E4 |= 0x20;
         }
@@ -876,7 +876,7 @@ void func_80B5202C(EnGk* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_1E4 & 2) {
-            if ((globalCtx->msgCtx.unk1202A != 1) && (globalCtx->msgCtx.unk1202A != 3) &&
+            if ((globalCtx->msgCtx.ocarinaMode != 1) && (globalCtx->msgCtx.ocarinaMode != 3) &&
                 (globalCtx->csCtx.state == 0)) {
                 func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
             }
@@ -888,7 +888,7 @@ void func_80B5202C(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B5216C(EnGk* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80B51698;
     }
