@@ -45,10 +45,13 @@ const ActorInit En_Aob_01_InitVars = {
     (ActorFunc)EnAob01_Draw,
 };
 
-static ActorAnimationEntry D_809C3790[6] = {
-    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_0068B4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_aob_Anim_00700C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_0058EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_aob_Anim_006040, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, 0, -6.0f },
+static AnimationInfo D_809C3790[6] = {
+    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_aob_Anim_0068B4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_aob_Anim_00700C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_aob_Anim_0058EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_aob_Anim_006040, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -150,7 +153,7 @@ s32 func_809C1424(EnAob01* this) {
     if (this->unk_43C == 1) {
         if (curFrame == lastFrame) {
             this->unk_43C = 2;
-            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 2);
             return true;
         }
     } else if (this->unk_43C == 2) {
@@ -166,13 +169,13 @@ s32 func_809C14D0(EnAob01* this) {
     if ((this->unk_43C == 0) || (this->unk_43C == 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 3;
-            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 3);
             return true;
         }
     } else if (this->unk_43C == 3) {
         if (curFrame == lastFrame) {
             this->unk_43C = 4;
-            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 4);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 4);
             return true;
         }
     } else if (this->unk_43C == 4) {
@@ -188,7 +191,7 @@ s32 func_809C15BC(EnAob01* this) {
     if ((this->unk_43C != 0) && (this->unk_43C != 5)) {
         if (curFrame == lastFrame) {
             this->unk_43C = 5;
-            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 5);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 5);
             return true;
         }
     } else {
@@ -330,7 +333,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 |= 0x40;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
             break;
 
         case 0x3525:
@@ -345,7 +348,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 0x40;
                 this->unk_2D2 |= 0x10;
                 this->unk_43C = 1;
-                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -360,7 +363,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 |= 4;
             this->unk_2D2 |= 0x10;
             this->unk_43C = 1;
-            Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
             break;
 
         case 0x3527:
@@ -372,7 +375,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -380,7 +383,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x3537;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
                 break;
             }
 
@@ -394,7 +397,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 &= ~2;
                 func_801159EC(-this->unk_434);
                 func_800B7298(globalCtx, NULL, 7);
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_809C1C9C;
                 return;
@@ -455,7 +458,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
             }
         }
     } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_210 = 0;
         this->actionFunc = func_809C2060;
@@ -483,7 +486,7 @@ void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->unk_2E0.y, 0, 4, 1000, 1);
     }
     func_809C10B0(this, 3);
-    func_8013D9C8(globalCtx, this->unk_2F8, this->unk_318, 0x10);
+    SubS_FillLimbRotTables(globalCtx, this->unk_2F8, this->unk_318, ARRAY_COUNT(this->unk_2F8));
     func_809C165C(this, globalCtx);
     if (player->stateFlags1 & 0x20) {
         func_809C1124();
@@ -552,7 +555,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 0x10;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
                 func_801518B0(globalCtx, 0x354B, &this->actor);
             }
             this->unk_2D2 &= ~8;
@@ -578,7 +581,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 &= ~0x40;
             if (this->unk_2D2 & 0x10) {
                 this->unk_2D2 &= ~0x10;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_809C2060;
             } else {
@@ -731,7 +734,7 @@ void func_809C28B8(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_210 = 0x352D;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
-                Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
                 break;
         }
 
@@ -748,7 +751,7 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
     if (func_809C15BC(this)) {
         if ((sp2F == 5) && func_80147624(globalCtx)) {
             this->unk_434 = 0;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
         }
 
@@ -927,7 +930,7 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_43C = 0;
-    Actor_ChangeAnimation(&this->skelAnime, D_809C3790, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 0);
     Actor_SetScale(&this->actor, 0.01f);
 
     switch (gSaveContext.eventInf[0] & 7) {
@@ -979,10 +982,10 @@ void EnAob01_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                              Actor* thisx) {
     EnAob01* this = THIS;
-    UNK_TYPE sp38[] = {
-        &object_aob_Tex_000658,
-        &object_aob_Tex_000E58,
-        &object_aob_Tex_001658,
+    TexturePtr sp38[] = {
+        object_aob_Tex_000658,
+        object_aob_Tex_000E58,
+        object_aob_Tex_001658,
     };
 
     if (limbIndex == 15) {
@@ -1023,7 +1026,7 @@ void EnAob01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 }
 
-void EnAob01_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnAob01_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -1040,8 +1043,9 @@ void EnAob01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 50, 80, 0, 0));
     gDPPipeSync(POLY_OPA_DISP++);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnAob01_OverrideLimbDraw, EnAob01_PostLimbDraw, EnAob01_UnkDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnAob01_OverrideLimbDraw, EnAob01_PostLimbDraw,
+                                   EnAob01_TransformLimbDraw, &this->actor);
 
     if (this->actor.draw != NULL) {
         func_8012C2DC(globalCtx->state.gfxCtx);
