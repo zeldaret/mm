@@ -31,9 +31,9 @@ typedef struct BgNumaHana {
     /* 0x328 */ s16 petalZRotation;
     /* 0x32A */ s16 innerPetalZRotation;
     /* 0x32C */ s16 innerPetalZRotationalVelocity;
-    /* 0x32E */ s16 unk_32E; // gets added to contibute to overall petal rotation
-    /* 0x330 */ s16 unk_330;
-    /* 0x334 */ f32 unk_334;
+    /* 0x32E */ s16 settleZRotation;
+    /* 0x330 */ s16 settleAngle;
+    /* 0x334 */ f32 settleScale;
     /* 0x338 */ s16 outerPetalZRotation;
     /* 0x33A */ s16 outerPetalZRotationalVelocity;
     /* 0x33C */ s16 flowerRotationalVelocity;
