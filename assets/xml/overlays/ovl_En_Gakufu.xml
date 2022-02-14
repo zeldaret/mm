@@ -1,10 +1,8 @@
 <Root>
     <File Name="ovl_En_Gakufu" BaseAddress="0x80AFC960" RangeStart="0x8D0" RangeEnd="0x950">
-
         <Array Name="gGakufuButtonIdxVtx" Count="4" Offset="0x8D0">
             <Vtx/>
         </Array>
         <DList Name="gGakufuButtonIdxDL" Offset="0x910"/>
-
     </File>
 </Root>
