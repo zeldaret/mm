@@ -643,8 +643,6 @@ beginseg
     pad_text
     include "build/asm/code/code_8019AEC0.text.o" // handwritten
     include "build/src/code/audio/code_8019AF00.o"
-    include "build/data/code/code_8019AF00.data.o"
-    include "build/data/code/code_8019AF00.bss.o"
     include "build/src/code/audio/code_801A4EB0.o"
     include "build/data/code/code_801A4EB0.data.o"
     include "build/src/code/audio/code_801A51F0.o"
@@ -1359,8 +1357,7 @@ beginseg
     name "ovl_En_Insect"
     compress
     include "build/src/overlays/actors/ovl_En_Insect/z_en_insect.o"
-    include "build/data/ovl_En_Insect/ovl_En_Insect.data.o"
-    include "build/data/ovl_En_Insect/ovl_En_Insect.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Insect/ovl_En_Insect_reloc.o"
 endseg
 
 beginseg
