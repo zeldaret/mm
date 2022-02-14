@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_tobira01.h"
+#include "objects/object_spot11_obj/object_spot11_obj.h"
 
 #define FLAGS 0x00000030
 
@@ -26,9 +27,6 @@ const ActorInit Bg_Tobira01_InitVars = {
     (ActorFunc)BgTobira01_Update,
     (ActorFunc)BgTobira01_Draw,
 };
-
-extern Gfx D_06000088[];
-extern CollisionHeader D_060011C0;
 
 void BgTobira01_Open(BgTobira01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -80,7 +78,7 @@ void BgTobira01_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_060011C0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_spot11_obj_Colheader_0011C0);
     gSaveContext.weekEventReg[88] &= (u8)~0x40;
     Actor_SetScale(&this->dyna.actor, 1.0f);
     this->timer2 = gSaveContext.isNight;
@@ -107,7 +105,7 @@ void BgTobira01_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000088);
+    gSPDisplayList(POLY_OPA_DISP++, object_spot11_obj_DL_000088);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
