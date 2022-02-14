@@ -41,7 +41,7 @@ const ActorInit En_Baba_InitVars = {
     (ActorFunc)EnBaba_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &object_bba_Anim_005DC4, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_bba_Anim_006550, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_bba_Anim_006B10, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_bba_Anim_005154, 1.0f, 0.0f, 0.0f, 2, 0.0f },
     { &object_bba_Anim_0058B8, 1.0f, 0.0f, 0.0f, 0, 0.0f }, { &object_bba_Anim_004910, 1.0f, 0.0f, 0.0f, 0, 0.0f },
@@ -137,6 +137,7 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
                     this->unk_1E0 = 0x2A33;
                     break;
                 }
+
                 this->unk_40A |= 1;
                 this->unk_1E0 = 0x2A32;
                 break;
@@ -147,7 +148,7 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
                     this->unk_1E0 = 0x2A37;
                     break;
                 } else {
-                    this->unk_40A = this->unk_40A | 1;
+                    this->unk_40A |= 1;
                     this->unk_1E0 = 0x2A38;
                 }
                 break;
@@ -293,7 +294,7 @@ void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
         Math_SmoothStepToS(&this->unk_2EA.y, 0, 4, 1000, 1);
     }
 
-    func_8013D9C8(globalCtx, this->unk_302, this->unk_326, ARRAY_COUNT(this->unk_302));
+    SubS_FillLimbRotTables(globalCtx, this->unk_302, this->unk_326, ARRAY_COUNT(this->unk_302));
 
     if (this->unk_40A & 2) {
         func_80BA8C90(this, globalCtx);
@@ -418,7 +419,7 @@ void func_80BA93AC(EnBaba* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
         Enemy_StartFinishingBlow(globalCtx, &this->actor);
         this->unk_40A |= 4;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_40C);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_40C);
         this->actionFunc = func_80BA9CD4;
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);
@@ -435,7 +436,7 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
     if (globalCtx->sceneNum == SCENE_BOMYA) {
         this->unk_40A |= 2;
         this->unk_40C = 1;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
         this->actionFunc = func_80BA9758;
     } else if (globalCtx->sceneNum == SCENE_BACKTOWN) {
         if ((ENBABA_GET_C000(&this->actor) == ENBABA_C000_0) && (gSaveContext.entranceIndex != 0xD670) &&
@@ -448,7 +449,7 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
 
             this->unk_404 = 50;
             this->unk_40C = 2;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
             this->actionFunc = func_80BA9B80;
         } else if ((ENBABA_GET_C000(&this->actor) == ENBABA_C000_1) && (gSaveContext.entranceIndex == 0xD670)) {
             if (gSaveContext.weekEventReg[81] & 2) {
@@ -463,7 +464,7 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
                 this->unk_40C = 1;
             }
 
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_40C);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_40C);
             this->unk_40A |= 8;
             this->actionFunc = func_80BA9758;
         } else {
@@ -475,22 +476,22 @@ void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
         if (ENBABA_GET_C000(&this->actor) == ENBABA_C000_2) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_40C = 5;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
             this->actionFunc = func_80BA9E00;
         } else if ((ENBABA_GET_3F00(&this->actor)) != ENBABA_3F00_3F) {
             this->unk_40C = 2;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
             this->actionFunc = func_80BA9E10;
         } else {
             this->unk_40C = 0;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
             this->actionFunc = func_80BA9E48;
         }
     }
 }
 
 void func_80BA9758(EnBaba* this, GlobalContext* globalCtx) {
-    if ((this->unk_40A & 8) || (this->unk_144 != 0) || func_80BA8820(this, globalCtx)) {
+    if ((this->unk_40A & 8) || (this->unk_144 != NULL) || func_80BA8820(this, globalCtx)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             func_80BA886C(this, globalCtx);
             if (this->unk_40A & 8) {
@@ -510,7 +511,7 @@ void func_80BA9848(EnBaba* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (((temp_v0 == 5) || (temp_v0 == 6)) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80BA9B80;
     }
@@ -524,7 +525,7 @@ void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx) {
         if (func_80147624(globalCtx)) {
             if (this->unk_40A & 1) {
                 this->unk_40A &= ~1;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 if (this->unk_40A & 8) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
@@ -543,7 +544,7 @@ void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx) {
                 }
             } else if (this->unk_40A & 0x20) {
                 this->unk_40A &= ~0x20;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BA9AB8;
             } else {
@@ -621,7 +622,7 @@ void func_80BA9CD4(EnBaba* this, GlobalContext* globalCtx) {
 
         if (sp2E == sp2C) {
             this->unk_40C = 4;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
         }
     } else {
         if ((gSaveContext.weekEventReg[79] & 0x40) && (DECR(this->unk_404) == 0)) {
@@ -756,7 +757,7 @@ void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
             sp40.x = sp40.y = sp40.z = 0.3f;
             func_800BC620(&sp4C, &sp40, 255, globalCtx);
         }
-    }
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
 }
