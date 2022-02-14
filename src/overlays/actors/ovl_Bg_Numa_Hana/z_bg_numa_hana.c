@@ -78,10 +78,10 @@ static InitChainEntry sInitChain[] = {
 s32 func_80A1A500(BgNumaHana* this, GlobalContext* globalCtx) {
     Actor* child;
 
-    child =
-        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_BG_NUMA_HANA,
-                           this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                           this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 1);
+    child = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_BG_NUMA_HANA,
+                               this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                               this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
+                               BG_NUMA_HANA_TYPE_COLLISION);
 
     return child != NULL;
 }
@@ -129,13 +129,13 @@ void func_80A1A750(s16* arg0, s16* arg1, f32* arg2, f32 arg3) {
 void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     DynaPolyActor* child;
-    s32 temp;
+    s32 type;
     BgNumaHana* this = THIS;
 
-    temp = this->dyna.actor.params & 1;
+    type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 3);
-    if (temp == 1) {
+    if (type == BG_NUMA_HANA_TYPE_COLLISION) {
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_numa_obj_Colheader_009FE0);
         func_80A1AA14(this);
         this->dyna.actor.draw = NULL;
@@ -144,8 +144,8 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_numa_obj_Colheader_00A740);
     FireObj_Init(globalCtx, &this->fire, &sFireObjInit, &this->dyna.actor);
-    Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_InitCylinder(globalCtx, &this->torchCollider);
+    Collider_SetCylinder(globalCtx, &this->torchCollider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     if (!func_80A1A500(this, globalCtx)) {
         Actor_MarkForDeath(&this->dyna.actor);
@@ -165,12 +165,12 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_33C = 0x147;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 210.0f;
         FireObj_SetState2(&this->fire, 0.05f, 2);
-        Flags_SetSwitch(globalCtx, BG_NUMA_HAMA_SWITCH_FLAG(&this->dyna.actor));
+        Flags_SetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
         func_80A1AE08(this);
     } else {
         child = (DynaPolyActor*)this->dyna.actor.child;
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, child->bgId);
-        Flags_UnsetSwitch(globalCtx, BG_NUMA_HAMA_SWITCH_FLAG(&this->dyna.actor));
+        Flags_UnsetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
         func_80A1AA38(this);
     }
 
@@ -181,9 +181,9 @@ void BgNumaHana_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgNumaHana* this = THIS;
 
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-    if (!(this->dyna.actor.params & 1)) {
+    if (BG_NUMA_HANA_GET_TYPE(&this->dyna.actor) == BG_NUMA_HANA_TYPE_VISUAL) {
         FireObj_Destroy(globalCtx, &this->fire);
-        Collider_DestroyCylinder(globalCtx, &this->collider);
+        Collider_DestroyCylinder(globalCtx, &this->torchCollider);
     }
 }
 
@@ -204,7 +204,7 @@ void func_80A1AA4C(BgNumaHana* this, GlobalContext* globalCtx) {
         if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
             gSaveContext.weekEventReg[12] |= 1;
-            Flags_SetSwitch(globalCtx, BG_NUMA_HAMA_SWITCH_FLAG(&this->dyna.actor));
+            Flags_SetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             func_80A1AAE8(this);
         } else {
             ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -317,25 +317,25 @@ void func_80A1AE1C(BgNumaHana* this, GlobalContext* globalCtx) {
 void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgNumaHana* this = THIS;
-    s32 temp;
-    Vec3f sp28;
+    s32 type;
+    Vec3f firePos;
 
-    temp = this->dyna.actor.params & 1;
-    if (temp == 0) {
-        sp28.x = this->dyna.actor.world.pos.x;
-        sp28.y = this->dyna.actor.world.pos.y + 10.5f;
-        sp28.z = this->dyna.actor.world.pos.z;
-        FireObj_SetPosition(&this->fire, &sp28);
+    type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
+    if (type == BG_NUMA_HANA_TYPE_VISUAL) {
+        firePos.x = this->dyna.actor.world.pos.x;
+        firePos.y = this->dyna.actor.world.pos.y + 10.5f;
+        firePos.z = this->dyna.actor.world.pos.z;
+        FireObj_SetPosition(&this->fire, &firePos);
         FireObj_Update(globalCtx, &this->fire, &this->dyna.actor);
     }
 
     this->actionFunc(this, globalCtx);
 
-    if (temp == 0) {
+    if (type == BG_NUMA_HANA_TYPE_VISUAL) {
         this->dyna.actor.child->shape.rot = this->dyna.actor.shape.rot;
-        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        Collider_UpdateCylinder(&this->dyna.actor, &this->torchCollider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->torchCollider.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->torchCollider.base);
     }
 }
 

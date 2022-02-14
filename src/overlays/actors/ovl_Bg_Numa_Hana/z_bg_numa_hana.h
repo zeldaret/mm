@@ -3,7 +3,13 @@
 
 #include "global.h"
 
-#define BG_NUMA_HAMA_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+#define BG_NUMA_HANA_GET_TYPE(thisx) ((thisx)->params & 1)
+#define BG_NUMA_HANA_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0x7F)
+
+typedef enum {
+    /* 0 */ BG_NUMA_HANA_TYPE_VISUAL,
+    /* 1 */ BG_NUMA_HANA_TYPE_COLLISION,
+} BgNumaHanaType;
 
 struct BgNumaHana;
 
@@ -18,7 +24,7 @@ typedef struct {
 typedef struct BgNumaHana {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ FireObj fire;
-    /* 0x1E8 */ ColliderCylinder collider;
+    /* 0x1E8 */ ColliderCylinder torchCollider;
     /* 0x234 */ BgNumaHanaActionFunc actionFunc;
     /* 0x238 */ UnkBgNumaHanaStruct unk_238[6];
     /* 0x2B0 */ UnkBgNumaHanaStruct unk_2B0[6];
