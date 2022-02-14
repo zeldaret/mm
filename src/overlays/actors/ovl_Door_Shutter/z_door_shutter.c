@@ -56,7 +56,7 @@ typedef struct {
     /* 0x3 */ u8 index2;
 } ShutterObjectInfo; // size = 0x4
 
-static ShutterObjectInfo D_808A2180[] = {
+ShutterObjectInfo D_808A2180[] = {
     { OBJECT_BDOOR, 0, 0 },       { GAMEPLAY_KEEP, 1, 1 },        { OBJECT_NUMA_OBJ, 2, 2 },
     { OBJECT_HAKUGIN_OBJ, 3, 3 }, { OBJECT_DBLUE_OBJECT, 4, 4 },  { OBJECT_IKANA_OBJ, 5, 5 },
     { OBJECT_REDEAD_OBJ, 6, 6 },  { OBJECT_IKNINSIDE_OBJ, 7, 7 }, { OBJECT_LAST_OBJ, 11, 11 },
@@ -72,7 +72,7 @@ typedef struct {
     /* 0xB */ u8 unk_0B;
 } ShutterInfo; // size = 0xC
 
-static ShutterInfo D_808A21B0[] = {
+ShutterInfo D_808A21B0[] = {
     { object_bdoor_DL_0000C0, NULL, 130, 12, 50, 15 },
     { gameplay_keep_DL_077990, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
     { object_numa_obj_DL_007150, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
@@ -87,7 +87,7 @@ static ShutterInfo D_808A21B0[] = {
     { object_last_obj_DL_0039C0, gameplay_keep_DL_078A80, 130, 12, 20, 15 },
 };
 
-static s8 D_808A2240[] = {
+s8 D_808A2240[] = {
     -1, -1, -1, -1, -1, 0, -1, -1,
 };
 
@@ -103,7 +103,7 @@ typedef struct {
     /* 0x02 */ u8 index;
 } ShutterSceneInfo; // size = 0x4
 
-static ShutterSceneInfo D_808A2258[] = {
+ShutterSceneInfo D_808A2258[] = {
     { SCENE_MITURIN, 2 },   { SCENE_HAKUGIN, 3 },   { SCENE_SEA, 4 },
     { SCENE_INISIE_N, 5 },  { SCENE_INISIE_R, 5 },  { SCENE_REDEAD, 6 },
     { SCENE_IKNINSIDE, 7 }, { SCENE_CASTLE, 7 },    { SCENE_RANDOM, 9 },
@@ -118,9 +118,18 @@ typedef struct {
     /* 0x04 */ u8 index;
 } BossDoorInfo; // size = 0x6
 
-static BossDoorInfo D_808A22A0[] = {
+BossDoorInfo D_808A22A0[] = {
     { SCENE_MITURIN, SCENE_MITURIN_BS, 1 }, { SCENE_HAKUGIN, SCENE_HAKUGIN_BS, 2 }, { SCENE_SEA, SCENE_SEA_BS, 3 },
     { SCENE_INISIE_N, SCENE_INISIE_BS, 4 }, { SCENE_INISIE_R, SCENE_INISIE_BS, 4 }, { -1, -1, 0 },
+};
+
+Vec3f D_808A22C4 = { 120.0f, 0.0f, 0.0f };
+
+Vec3f D_808A22D0 = { -90.0f, 0.0f, 0.0f };
+
+TexturePtr D_808A22DC[] = {
+    object_bdoor_Tex_006BA0, object_bdoor_Tex_005BA0, object_bdoor_Tex_0005C0,
+    object_bdoor_Tex_004BA0, object_bdoor_Tex_003BA0,
 };
 
 void DoorShutter_SetupAction(DoorShutter* this, DoorShutterActionFunc actionFunc) {
@@ -364,12 +373,12 @@ void func_808A1090(DoorShutter* this, GlobalContext* globalCtx) {
                 }
             } else if (this->unk_166 != 0) {
                 if (this->doorType == 5) {
-                    if (!CHECK_DUNGEON_ITEM(0)) {
+                    if (!CHECK_DUNGEON_ITEM(0, gSaveContext.mapIndex)) {
                         player->doorType = -1;
                         this->actor.textId = 0x1803;
                     }
                     player->doorTimer += 10;
-                } else if (DUNGEON_KEY_COUNT <= 0) {
+                } else if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) <= 0) {
                     player->doorType = -1;
                     this->actor.textId = 0x1802;
                 } else {
@@ -401,8 +410,6 @@ void func_808A1288(DoorShutter* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808A1340(DoorShutter* this, GlobalContext* globalCtx) {
-    static Vec3f D_808A22C4 = { 120.0f, 0.0f, 0.0f };
-    static Vec3f D_808A22D0 = { -90.0f, 0.0f, 0.0f };
     Vec3f sp2C;
 
     if (this->actor.velocity.y == 0.0f) {
@@ -656,8 +663,6 @@ s32 func_808A1D68(DoorShutter* this, GlobalContext* globalCtx) {
 }
 
 void DoorShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_808A22DC[] = { object_bdoor_Tex_006BA0, object_bdoor_Tex_005BA0, object_bdoor_Tex_0005C0,
-                                       object_bdoor_Tex_004BA0, object_bdoor_Tex_003BA0 };
     s32 pad;
     DoorShutter* this = THIS;
     ShutterInfo* sp44;
