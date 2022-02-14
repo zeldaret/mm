@@ -28,16 +28,16 @@ typedef struct BgNumaHana {
     /* 0x234 */ BgNumaHanaActionFunc actionFunc;
     /* 0x238 */ WoodenFlowerPetalPosRot innerPetalPosRot[6];
     /* 0x2B0 */ WoodenFlowerPetalPosRot outerPetalPosRot[6];
-    /* 0x328 */ s16 overallPetalZRot;
-    /* 0x32A */ s16 unk_32A; // gets added to contribute to overall petal rotation
-    /* 0x32C */ s16 unk_32C;
+    /* 0x328 */ s16 petalZRotation;
+    /* 0x32A */ s16 innerPetalZRotation;
+    /* 0x32C */ s16 innerPetalZRotationalVelocity;
     /* 0x32E */ s16 unk_32E; // gets added to contibute to overall petal rotation
     /* 0x330 */ s16 unk_330;
     /* 0x334 */ f32 unk_334;
-    /* 0x338 */ s16 extraOuterPetalZRot;
-    /* 0x33A */ s16 unk_33A;
-    /* 0x33C */ s16 unk_33C; // flower's rotational velocity
-    /* 0x33E */ s16 unk_33E; // jostle timer?
+    /* 0x338 */ s16 outerPetalZRotation;
+    /* 0x33A */ s16 outerPetalZRotationalVelocity;
+    /* 0x33C */ s16 flowerRotationalVelocity;
+    /* 0x33E */ s16 transitionTimer;
 } BgNumaHana; // size = 0x340
 
 extern const ActorInit Bg_Numa_Hana_InitVars;

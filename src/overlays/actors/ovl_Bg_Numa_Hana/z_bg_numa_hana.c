@@ -96,9 +96,9 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
     s32 i;
 
     innerPetalYPos = this->dyna.actor.world.pos.y + -10.0f;
-    angle = this->overallPetalZRot - 0x2000;
+    angle = this->petalZRotation - 0x2000;
     outerPetalPosScale = (Math_CosS(angle) * 77.42784f) + 74.95192f;
-    outerPetalYPos = (Math_SinS(this->overallPetalZRot) * 77.42784f) + this->dyna.actor.world.pos.y + -64.74976f;
+    outerPetalYPos = (Math_SinS(this->petalZRotation) * 77.42784f) + this->dyna.actor.world.pos.y + -64.74976f;
 
     for (i = 0; i < ARRAY_COUNT(this->innerPetalPosRot); i++) {
         innerPetalPosRot = &this->innerPetalPosRot[i];
@@ -110,14 +110,14 @@ void BgNumaHana_UpdatePetalPosRots(BgNumaHana* this) {
         innerPetalPosRot->pos.z = (Math_CosS(angle) * 74.95192f) + this->dyna.actor.world.pos.z;
         innerPetalPosRot->rot.x = this->dyna.actor.shape.rot.x;
         innerPetalPosRot->rot.y = angle - 0x4000;
-        innerPetalPosRot->rot.z = this->dyna.actor.shape.rot.z + this->overallPetalZRot;
+        innerPetalPosRot->rot.z = this->dyna.actor.shape.rot.z + this->petalZRotation;
 
         outerPetalPosRot->pos.x = (Math_SinS(angle) * outerPetalPosScale) + this->dyna.actor.world.pos.x;
         outerPetalPosRot->pos.y = outerPetalYPos;
         outerPetalPosRot->pos.z = (Math_CosS(angle) * outerPetalPosScale) + this->dyna.actor.world.pos.z;
         outerPetalPosRot->rot.x = innerPetalPosRot->rot.x;
         outerPetalPosRot->rot.y = innerPetalPosRot->rot.y;
-        outerPetalPosRot->rot.z = innerPetalPosRot->rot.z + this->extraOuterPetalZRot;
+        outerPetalPosRot->rot.z = innerPetalPosRot->rot.z + this->outerPetalZRotation;
     }
 }
 
@@ -155,15 +155,15 @@ void BgNumaHana_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (gSaveContext.weekEventReg[12] & 1) {
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->overallPetalZRot = 0x2000;
-        this->unk_32A = 0x2000;
-        this->unk_32C = 0;
+        this->petalZRotation = 0x2000;
+        this->innerPetalZRotation = 0x2000;
+        this->innerPetalZRotationalVelocity = 0;
         this->unk_32E = 0;
         this->unk_330 = 0;
         this->unk_334 = 0.0f;
-        this->extraOuterPetalZRot = -0x4000;
-        this->unk_33A = 0;
-        this->unk_33C = 0x147;
+        this->outerPetalZRotation = -0x4000;
+        this->outerPetalZRotationalVelocity = 0;
+        this->flowerRotationalVelocity = 0x147;
         this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 210.0f;
         FireObj_SetState2(&this->fire, 0.05f, 2);
         Flags_SetSwitch(globalCtx, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
@@ -215,57 +215,57 @@ void BgNumaHana_ClosedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
 
 void func_80A1AAE8(BgNumaHana* this) {
     this->actionFunc = func_80A1AB00;
-    this->unk_33E = 0;
+    this->transitionTimer = 0;
 }
 
 void func_80A1AB00(BgNumaHana* this, GlobalContext* globalCtx) {
-    Math_StepToS(&this->unk_32C, 0xF0, 0xE);
-    if (Math_ScaledStepToS(&this->unk_32A, 0x2000, this->unk_32C)) {
-        if (this->unk_33E >= 11) {
+    Math_StepToS(&this->innerPetalZRotationalVelocity, 0xF0, 0xE);
+    if (Math_ScaledStepToS(&this->innerPetalZRotation, 0x2000, this->innerPetalZRotationalVelocity)) {
+        if (this->transitionTimer >= 11) {
             func_80A1ABD8(this);
         } else {
-            if (this->unk_33E <= 0) {
+            if (this->transitionTimer <= 0) {
                 this->unk_32E = 0;
                 this->unk_330 = 0;
                 this->unk_334 = 420.0f;
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
-            this->unk_33E++;
+            this->transitionTimer++;
         }
     } else {
         func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
     }
 
     func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 20.0f);
-    this->overallPetalZRot = this->unk_32A + this->unk_32E;
+    this->petalZRotation = this->innerPetalZRotation + this->unk_32E;
     BgNumaHana_UpdatePetalPosRots(this);
 }
 
 void func_80A1ABD8(BgNumaHana* this) {
     this->actionFunc = func_80A1ABF0;
-    this->unk_33E = 0;
+    this->transitionTimer = 0;
 }
 
 void func_80A1ABF0(BgNumaHana* this, GlobalContext* globalCtx) {
-    Math_StepToS(&this->unk_33A, 0xF0, 0xE);
-    if (Math_ScaledStepToS(&this->extraOuterPetalZRot, -0x4000, this->unk_33A)) {
-        if (this->unk_33E >= 11) {
+    Math_StepToS(&this->outerPetalZRotationalVelocity, 0xF0, 0xE);
+    if (Math_ScaledStepToS(&this->outerPetalZRotation, -0x4000, this->outerPetalZRotationalVelocity)) {
+        if (this->transitionTimer >= 11) {
             func_80A1ACCC(this);
         } else {
-            if (this->unk_33E <= 0) {
+            if (this->transitionTimer <= 0) {
                 this->unk_32E = 0;
                 this->unk_330 = 0x5120;
                 this->unk_334 = 130.0f;
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_STOP);
             }
-            this->unk_33E++;
+            this->transitionTimer++;
         }
     } else {
         func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
     }
 
     func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 7.0f);
-    this->overallPetalZRot = this->unk_32A + this->unk_32E;
+    this->petalZRotation = this->innerPetalZRotation + this->unk_32E;
     BgNumaHana_UpdatePetalPosRots(this);
 }
 
@@ -278,23 +278,23 @@ void func_80A1ACE0(BgNumaHana* this, GlobalContext* globalCtx) {
     DynaPolyActor* child;
 
     func_80A1A750(&this->unk_32E, &this->unk_330, &this->unk_334, 10.0f);
-    this->overallPetalZRot = this->unk_32A + this->unk_32E;
-    Math_StepToS(&this->unk_33C, 0x111, 0xA);
-    this->dyna.actor.shape.rot.y += this->unk_33C;
+    this->petalZRotation = this->innerPetalZRotation + this->unk_32E;
+    Math_StepToS(&this->flowerRotationalVelocity, 0x111, 0xA);
+    this->dyna.actor.shape.rot.y += this->flowerRotationalVelocity;
     Math_StepToF(&this->dyna.actor.velocity.y, 3.0f, 0.3f);
     if (Math_StepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y + 210.0f,
                      this->dyna.actor.velocity.y)) {
         child = (DynaPolyActor*)this->dyna.actor.child;
         func_800C6314(globalCtx, &globalCtx->colCtx.dyna, child->bgId);
         func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
-        this->overallPetalZRot = 0x2000;
-        this->unk_32A = 0x2000;
-        this->unk_32C = 0;
+        this->petalZRotation = 0x2000;
+        this->innerPetalZRotation = 0x2000;
+        this->innerPetalZRotationalVelocity = 0;
         this->unk_32E = 0;
         this->unk_330 = 0;
-        this->extraOuterPetalZRot = -0x4000;
-        this->unk_33A = 0;
-        this->unk_33C = 0x147;
+        this->outerPetalZRotation = -0x4000;
+        this->outerPetalZRotationalVelocity = 0;
+        this->flowerRotationalVelocity = 0x147;
         this->unk_334 = 0.0f;
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         BgNumaHana_SetupOpenedIdle(this);
@@ -309,8 +309,8 @@ void BgNumaHana_SetupOpenedIdle(BgNumaHana* this) {
 }
 
 void BgNumaHana_OpenedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
-    this->dyna.actor.shape.rot.y += this->unk_33C;
-    this->overallPetalZRot = this->unk_32A + this->unk_32E;
+    this->dyna.actor.shape.rot.y += this->flowerRotationalVelocity;
+    this->petalZRotation = this->innerPetalZRotation + this->unk_32E;
     BgNumaHana_UpdatePetalPosRots(this);
     func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
