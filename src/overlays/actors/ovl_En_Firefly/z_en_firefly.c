@@ -6,6 +6,7 @@
 
 #include "z_en_firefly.h"
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
+#include "objects/object_firefly/object_firefly.h"
 
 #define FLAGS 0x00005005
 
@@ -119,16 +120,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 4000, ICHAIN_STOP),
 };
 
-extern AnimationHeader D_0600017C;
-extern SkeletonHeader D_060018B8;
-extern Gfx D_06001678[];
-
 void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFirefly* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060018B8, &D_0600017C, this->jointTable, this->morphTable, 28);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_firefly_Skel_0018B8, &object_firefly_Anim_00017C,
+                   this->jointTable, this->morphTable, 28);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -331,7 +329,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, GlobalContext* globalCtx) {
 void EnFirefly_SetupFall(EnFirefly* this, GlobalContext* globalCtx) {
     this->timer = 40;
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &D_0600017C, 0.0f, 6.0f, 6.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_firefly_Anim_00017C, 0.0f, 6.0f, 6.0f, 2, 0.0f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FFLY_DEAD);
     this->actor.flags |= 0x10;
 
@@ -757,7 +755,7 @@ void EnFirefly_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     EnFirefly* this = THIS;
 
     if ((this->currentType != KEESE_FIRE) && (limbIndex == 27)) {
-        gSPDisplayList((*gfx)++, D_06001678);
+        gSPDisplayList((*gfx)++, object_firefly_DL_001678);
     } else if ((this->unk_2F4 != globalCtx->gameplayFrames) &&
                ((this->auraType == KEESE_AURA_FIRE) || (this->auraType == KEESE_AURA_ICE)) &&
                ((limbIndex == 15) || (limbIndex == 21))) {
