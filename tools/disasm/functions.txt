@@ -12782,7 +12782,7 @@
     0x80AFCB94:("EnGakufu_DisplayOnTimer",),
     0x80AFCBD4:("EnGakufu_WaitForTimer",),
     0x80AFCC14:("EnGakufu_DoNothing",),
-    0x80AFCC24:("EnGakufu_IsWithinRange",),
+    0x80AFCC24:("EnGakufu_IsPlayerInRange",),
     0x80AFCC58:("EnGakufu_GiveReward",),
     0x80AFCD44:("func_80AFCD44",),
     0x80AFCDC8:("func_80AFCDC8",),

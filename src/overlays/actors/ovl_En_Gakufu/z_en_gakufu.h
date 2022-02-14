@@ -17,7 +17,7 @@ typedef enum {
 typedef struct EnGakufu {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 songIndex;
-    /* 0x148 */ u8 buttonIdx[8];
+    /* 0x148 */ u8 buttonIndex[8];
     /* 0x150 */ EnGakufuActionFunc actionFunc;
 } EnGakufu; // size = 0x154
 
