@@ -181,7 +181,7 @@ void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
     Vec3f focus;
 
     SkelAnime_Update(&this->skelAnime);
-    if (SubS_IsAngleDiffLessThanOrEqualToThreshold(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
+    if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         focus.x = player->actor.world.pos.x;
         focus.y = player->bodyPartsPos[7].y + 3.0f;
         focus.z = player->actor.world.pos.z;

@@ -2515,7 +2515,7 @@ void func_8013CD64(Vec3f* arg0, Vec3f* arg1, u8* arg2, f32 arg3, u8 arg4, u8* ar
 void func_8013CF04(Actor* actor, GraphicsContext** gfxCtxPtr, u8* arg2);
 s16 func_8013D0E0(s16* arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5);
 s32 func_8013D2E0(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, Vec3s* arg3, Vec3s* arg4, Vec3s* arg5, u16* arg6);
-s32 SubS_IsAngleDiffLessThanOrEqualToThreshold(s16 angleA, s16 threshold, s16 angleB);
+s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 Path* func_8013D648(GlobalContext* globalCtx, s16 arg1, s16 arg2);
 s32 func_8013D68C(Path* path, s32 arg1, Vec3f* arg2);
 s16 func_8013D720(Vec3f* arg0, Vec3f* arg1, f32* arg2);

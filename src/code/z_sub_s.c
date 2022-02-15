@@ -250,7 +250,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D2E0.s")
 
-s32 SubS_IsAngleDiffLessThanOrEqualToThreshold(s16 angleA, s16 threshold, s16 angleB) {
+s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
 }
 
@@ -386,7 +386,7 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
     i = 0;
 
     while (cs != -1) {
-        // Note: Inifinite loop if cutscenesLen is less then possible additional cutscenes
+        // Note: Inifinite loop if cutscenesLen is less than possible additional cutscenes
         if (i < cutscenesLen) {
             cutscenes[i] = cs;
             cs = ActorCutscene_GetAdditionalCutscene(cs);

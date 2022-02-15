@@ -486,7 +486,7 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
     }
     SkelAnime_Update(&this->skelAnime);
     if (!(this->flags1 & 4) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
-        if (SubS_IsAngleDiffLessThanOrEqualToThreshold(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer)) {
+        if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer)) {
             sp30.x = player->actor.world.pos.x;
             sp30.y = player->bodyPartsPos[7].y + 3.0f;
             sp30.z = player->actor.world.pos.z;
