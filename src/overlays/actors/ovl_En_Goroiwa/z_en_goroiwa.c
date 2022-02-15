@@ -1358,7 +1358,7 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
             ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
 
             if (ptr->unk_10 <= 0.0f) {
-                Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, 0);
+                Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, MTXMODE_NEW);
                 Matrix_MultiplyVector3fByState(&D_80942E6C, &spB8);
                 temp_f20 = this->unk_1DC * 0.9f;
 

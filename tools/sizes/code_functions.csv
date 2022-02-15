@@ -391,7 +391,7 @@ asm/non_matchings/code/z_actor/func_800BD9A0.s,func_800BD9A0,0x800BD9A0,0x10
 asm/non_matchings/code/z_actor/func_800BD9E0.s,func_800BD9E0,0x800BD9E0,0x30
 asm/non_matchings/code/z_actor/func_800BDAA0.s,func_800BDAA0,0x800BDAA0,0x33
 asm/non_matchings/code/z_actor/func_800BDB6C.s,func_800BDB6C,0x800BDB6C,0x3C
-asm/non_matchings/code/z_actor/Actor_ChangeAnimation.s,Actor_ChangeAnimation,0x800BDC5C,0x26
+asm/non_matchings/code/z_actor/Actor_ChangeAnimationByInfo.s,Actor_ChangeAnimationByInfo,0x800BDC5C,0x26
 asm/non_matchings/code/z_actor/func_800BDCF4.s,func_800BDCF4,0x800BDCF4,0xAF
 asm/non_matchings/code/z_actor/Actor_Noop.s,Actor_Noop,0x800BDFB0,0x4
 asm/non_matchings/code/z_actor/Gfx_DrawDListOpa.s,Gfx_DrawDListOpa,0x800BDFC0,0x1F
@@ -2183,7 +2183,7 @@ asm/non_matchings/code/z_sub_s/func_8013B6B0.s,func_8013B6B0,0x8013B6B0,0x72
 asm/non_matchings/code/z_sub_s/func_8013B878.s,func_8013B878,0x8013B878,0xAF
 asm/non_matchings/code/z_sub_s/func_8013BB34.s,func_8013BB34,0x8013BB34,0x12
 asm/non_matchings/code/z_sub_s/SubS_FindNearestActor.s,SubS_FindNearestActor,0x8013BB7C,0x3C
-asm/non_matchings/code/z_sub_s/func_8013BC6C.s,func_8013BC6C,0x8013BC6C,0x35
+asm/non_matchings/code/z_sub_s/SubS_ChangeAnimationByInfoS.s,SubS_ChangeAnimationByInfoS,0x8013BC6C,0x35
 asm/non_matchings/code/z_sub_s/func_8013BD40.s,func_8013BD40,0x8013BD40,0x67
 asm/non_matchings/code/z_sub_s/func_8013BEDC.s,func_8013BEDC,0x8013BEDC,0x63
 asm/non_matchings/code/z_sub_s/func_8013C068.s,func_8013C068,0x8013C068,0x16F
@@ -2204,7 +2204,7 @@ asm/non_matchings/code/z_sub_s/func_8013D83C.s,func_8013D83C,0x8013D83C,0x28
 asm/non_matchings/code/z_sub_s/func_8013D8DC.s,func_8013D8DC,0x8013D8DC,0x12
 asm/non_matchings/code/z_sub_s/func_8013D924.s,func_8013D924,0x8013D924,0xF
 asm/non_matchings/code/z_sub_s/SubS_FindActor.s,SubS_FindActor,0x8013D960,0x1A
-asm/non_matchings/code/z_sub_s/func_8013D9C8.s,func_8013D9C8,0x8013D9C8,0x72
+asm/non_matchings/code/z_sub_s/SubS_FillLimbRotTables.s,SubS_FillLimbRotTables,0x8013D9C8,0x72
 asm/non_matchings/code/z_sub_s/func_8013DB90.s,func_8013DB90,0x8013DB90,0x2C
 asm/non_matchings/code/z_sub_s/func_8013DC40.s,func_8013DC40,0x8013DC40,0x23
 asm/non_matchings/code/z_sub_s/func_8013DCCC.s,func_8013DCCC,0x8013DCCC,0x5
@@ -2214,7 +2214,7 @@ asm/non_matchings/code/z_sub_s/func_8013DF3C.s,func_8013DF3C,0x8013DF3C,0x46
 asm/non_matchings/code/z_sub_s/func_8013E054.s,func_8013E054,0x8013E054,0xA
 asm/non_matchings/code/z_sub_s/func_8013E07C.s,func_8013E07C,0x8013E07C,0xA
 asm/non_matchings/code/z_sub_s/func_8013E0A4.s,func_8013E0A4,0x8013E0A4,0x49
-asm/non_matchings/code/z_sub_s/func_8013E1C8.s,func_8013E1C8,0x8013E1C8,0x43
+asm/non_matchings/code/z_sub_s/SubS_ChangeAnimationBySpeedInfo.s,SubS_ChangeAnimationBySpeedInfo,0x8013E1C8,0x43
 asm/non_matchings/code/z_sub_s/func_8013E2D4.s,func_8013E2D4,0x8013E2D4,0x39
 asm/non_matchings/code/z_sub_s/func_8013E3B8.s,func_8013E3B8,0x8013E3B8,0x3E
 asm/non_matchings/code/z_sub_s/func_8013E4B0.s,func_8013E4B0,0x8013E4B0,0x47
