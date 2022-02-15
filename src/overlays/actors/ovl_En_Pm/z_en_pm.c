@@ -702,7 +702,7 @@ s32 func_80AF86F0(EnPm* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((this->unk_356 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_8013AED4(&this->unk_356, 0, 7);
+        SubS_UpdateFlags(&this->unk_356, 0, 7);
         this->unk_398 = 0;
         this->unk_378 = 0;
         this->unk_37C = NULL;
@@ -1041,7 +1041,7 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 break;
 
             default:
-                func_8013AED4(&this->unk_356, 3, 7);
+                SubS_UpdateFlags(&this->unk_356, 3, 7);
                 func_80AF7E98(this, 0);
                 if (gSaveContext.weekEventReg[90] & 8) {
                     this->unk_356 |= 0x800;
@@ -1138,7 +1138,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROOM_CARTAIN);
                 Flags_SetSwitch(globalCtx, 0);
                 this->unk_36C = 20;
-                func_8013AED4(&this->unk_356, 3, 7);
+                SubS_UpdateFlags(&this->unk_356, 3, 7);
                 func_80AF7E98(this, 3);
                 break;
 
@@ -1168,7 +1168,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
                 if (arg2->unk0 == 0x1D) {
                     this->actor.world.rot.y = BINANG_ROT180(this->actor.world.rot.y);
                 }
-                func_8013AED4(&this->unk_356, 3, 7);
+                SubS_UpdateFlags(&this->unk_356, 3, 7);
                 this->unk_356 |= 0x9000;
                 func_80AF7E98(this, 3);
                 break;
@@ -1197,7 +1197,7 @@ s32 func_80AF992C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80AFB8EC);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80AFB8F8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    func_8013AED4(&this->unk_356, 3, 7);
+    SubS_UpdateFlags(&this->unk_356, 3, 7);
     this->actor.targetMode = 6;
     this->actor.gravity = -1.0f;
     this->unk_368 = 80.0f;
@@ -1215,7 +1215,7 @@ s32 func_80AF9A0C(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_AN)) {
-        func_8013AED4(&this->unk_356, 3, 7);
+        SubS_UpdateFlags(&this->unk_356, 3, 7);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
         if (this->unk_258 != 0) {
@@ -1233,7 +1233,7 @@ s32 func_80AF9AB0(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_TEST3)) {
-        func_8013AED4(&this->unk_356, 3, 7);
+        SubS_UpdateFlags(&this->unk_356, 3, 7);
         this->unk_356 |= 0x20;
         this->unk_356 |= 0x9000;
         if (this->unk_258 != 0) {
@@ -1251,7 +1251,7 @@ s32 func_80AF9B54(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     if (func_80AF8ED4(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_AL)) {
-        func_8013AED4(&this->unk_356, 3, 7);
+        SubS_UpdateFlags(&this->unk_356, 3, 7);
         this->unk_356 |= 0x9000;
         this->unk_356 |= 0x20;
         if (this->unk_258 != 0) {
@@ -1552,9 +1552,9 @@ s32 func_80AFA334(EnPm* this, GlobalContext* globalCtx) {
         case 24:
             temp_v0 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
             if (ABS_ALT(temp_v0) < 0x4000) {
-                func_8013AED4(&this->unk_356, 3, 7);
+                SubS_UpdateFlags(&this->unk_356, 3, 7);
             } else {
-                func_8013AED4(&this->unk_356, 0, 7);
+                SubS_UpdateFlags(&this->unk_356, 0, 7);
             }
             break;
 
@@ -1723,7 +1723,7 @@ void func_80AFA5FC(EnPm* this, GlobalContext* globalCtx) {
     Vec3f sp2C;
 
     if (func_8010BF58(&this->actor, globalCtx, this->unk_25C, this->unk_37C, &this->unk_264)) {
-        func_8013AED4(&this->unk_356, 3, 7);
+        SubS_UpdateFlags(&this->unk_356, 3, 7);
         this->unk_356 &= ~0x20;
         this->unk_356 |= 0x200;
         this->actor.child = NULL;

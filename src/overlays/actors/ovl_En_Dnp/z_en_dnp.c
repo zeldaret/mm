@@ -202,12 +202,12 @@ s32 func_80B3CF60(EnDnp* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((this->unk_322 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_8013AED4(&this->unk_322, 0, 7);
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
     } else if (!(gSaveContext.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
-        func_8013AED4(&this->unk_322, 0, 7);
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
         this->unk_32E = 0;
@@ -227,12 +227,12 @@ s32 func_80B3D044(EnDnp* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~1;
             this->unk_324 = 0xFF;
         }
-        func_8013AED4(&this->unk_322, 0, 7);
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actionFunc = func_80B3D11C;
         ret = true;
     } else if (this->unk_322 & 0x200) {
         this->actor.flags |= 1;
-        func_8013AED4(&this->unk_322, 3, 7);
+        SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 &= ~(0x200 | 0x10);
         this->actionFunc = func_80B3D2D4;
     }
@@ -311,7 +311,7 @@ void func_80B3D338(EnDnp* this, GlobalContext* globalCtx) {
 
 void func_80B3D3F8(EnDnp* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, D_80B3DE58, NULL, &this->unk_328)) {
-        func_8013AED4(&this->unk_322, 3, 7);
+        SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;
     } else {
@@ -324,7 +324,7 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
             this->actor.flags |= 1;
-            func_8013AED4(&this->unk_322, 3, 7);
+            SubS_UpdateFlags(&this->unk_322, 3, 7);
             this->unk_322 &= ~0x10;
             this->unk_322 |= 0x400;
             this->actor.scale.x = 0.0085f;
@@ -360,7 +360,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (ENDNP_GET_7(&this->actor) == ENDNP_GET_7_1) {
         this->actor.flags &= ~1;
         Actor_SetScale(&this->actor, 0.00085000007f);
-        func_8013AED4(&this->unk_322, 0, 7);
+        SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.cutscene = 0x10;
@@ -369,7 +369,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
                 !(gSaveContext.weekEventReg[23] & 0x20)) ||
                ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);
-        func_8013AED4(&this->unk_322, 3, 7);
+        SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
         if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;

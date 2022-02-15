@@ -2174,7 +2174,7 @@ asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFl
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
 asm/non_matchings/code/z_sub_s/func_8013AD6C.s,func_8013AD6C,0x8013AD6C,0xC
 asm/non_matchings/code/z_sub_s/func_8013AD9C.s,func_8013AD9C,0x8013AD9C,0x4E
-asm/non_matchings/code/z_sub_s/func_8013AED4.s,func_8013AED4,0x8013AED4,0xB
+asm/non_matchings/code/z_sub_s/SubS_UpdateFlags.s,SubS_UpdateFlags,0x8013AED4,0xB
 asm/non_matchings/code/z_sub_s/func_8013AF00.s,func_8013AF00,0x8013AF00,0x44
 asm/non_matchings/code/z_sub_s/func_8013B010.s,func_8013B010,0x8013B010,0x2E
 asm/non_matchings/code/z_sub_s/func_8013B0C8.s,func_8013B0C8,0x8013B0C8,0xA2

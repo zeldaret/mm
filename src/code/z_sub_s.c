@@ -154,7 +154,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD9C.s")
 
-void func_8013AED4(u16* flags, u16 setBits, u16 unsetBits) {
+void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
     *flags = (*flags & ~unsetBits) | setBits;
 }
 

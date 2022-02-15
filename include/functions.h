@@ -2494,7 +2494,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 idx, void** skelet
 Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, TransformLimbDraw transformLimbDraw, Actor* actor, Gfx* gfx);
 s32 func_8013AD6C(GlobalContext* globalCtx);
 s32 func_8013AD9C(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 arg5);
-void func_8013AED4(u16* flags, u16 setBits, u16 unsetBits);
+void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
 void func_8013AF00(f32* arg0, s32 arg1, s32 arg2);
 s32 func_8013B010(f32* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, f32* arg6);
 void func_8013B0C8(s32 arg0, f32 arg1, s32 arg2, f32* arg3, f32* arg4);

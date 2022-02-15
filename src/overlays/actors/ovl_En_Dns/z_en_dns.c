@@ -214,7 +214,7 @@ s32 func_8092CAD0(EnDns* this, GlobalContext* globalCtx) {
 
     if (this->unk_2C6 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_8013AED4(&this->unk_2C6, 0, 7);
+            SubS_UpdateFlags(&this->unk_2C6, 0, 7);
             this->unk_2C6 &= ~0x10;
             if (ENDNS_GET_4000(&this->actor)) {
                 this->unk_2F0 = 0.0f;
@@ -239,14 +239,14 @@ s32 func_8092CB98(EnDns* this, GlobalContext* globalCtx) {
         if (!(this->unk_2C6 & 0x80)) {
             this->unk_2C8 = func_8092CA74(this);
             this->actor.flags &= ~0x1;
-            func_8013AED4(&this->unk_2C6, 0, 7);
+            SubS_UpdateFlags(&this->unk_2C6, 0, 7);
             this->unk_2C6 |= 0x80;
             this->unk_1D8 = 0xFF;
         }
         phi_v1 = 1;
     } else if (this->unk_2C6 & 0x80) {
         this->actor.flags |= 1;
-        func_8013AED4(&this->unk_2C6, 3, 7);
+        SubS_UpdateFlags(&this->unk_2C6, 3, 7);
         this->unk_2C6 &= ~0x80;
     }
     return phi_v1;
@@ -386,7 +386,7 @@ void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
         if (!(gSaveContext.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) && func_8092CC68(globalCtx)) {
             player->stateFlags1 |= 0x20;
             this->unk_2C6 |= 0x100;
-            func_8013AED4(&this->unk_2C6, 4, 7);
+            SubS_UpdateFlags(&this->unk_2C6, 4, 7);
             play_sound(NA_SE_SY_FOUND);
             gSaveContext.eventInf[1] |= 0x20;
             this->unk_2F4 = func_8092CCEC;
@@ -439,7 +439,7 @@ void func_8092D4D8(EnDns* this, GlobalContext* globalCtx) {
             func_8092C63C(this, 2);
         }
     } else if (func_8010BF58(&this->actor, globalCtx, this->unk_1E0, this->unk_2F4, &this->unk_1DC)) {
-        func_8013AED4(&this->unk_2C6, 3, 7);
+        SubS_UpdateFlags(&this->unk_2C6, 3, 7);
         this->unk_2F4 = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
             if (!(gSaveContext.eventInf[1] & 0x20)) {
@@ -498,7 +498,7 @@ void EnDns_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -0.8f;
     this->unk_2D2 = 0;
     this->unk_2C6 = 0;
-    func_8013AED4(&this->unk_2C6, 3, 7);
+    SubS_UpdateFlags(&this->unk_2C6, 3, 7);
     this->unk_2C6 |= (0x40 | 0x10);
     this->unk_2C6 |= 0x200;
     if (gSaveContext.weekEventReg[9] & 0x80) {

@@ -2660,7 +2660,7 @@
     0x8013AB00:("SubS_DrawTransformFlex",),
     0x8013AD6C:("func_8013AD6C",),
     0x8013AD9C:("func_8013AD9C",),
-    0x8013AED4:("func_8013AED4",),
+    0x8013AED4:("SubS_UpdateFlags",),
     0x8013AF00:("func_8013AF00",),
     0x8013B010:("func_8013B010",),
     0x8013B0C8:("func_8013B0C8",),
