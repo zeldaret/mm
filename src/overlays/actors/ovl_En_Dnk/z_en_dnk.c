@@ -93,25 +93,43 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, 0 },       { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, -4 },
-    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, 0, -4 },    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, 0, -4 },
-    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, 2, 0 },     { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, 2, -4 },
-    { &object_dnk_Anim_000894, 1.0f, 0, -1, 2, -4 },      { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, 0, 0 },
-    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, 0, -4 },    { &object_dnk_Anim_0006CC, 1.0f, 0, -1, 0, -4 },
-    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, 2, 0 },
-    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, 2, -4 },
-    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, 2, -4 },
-    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, 0, 0 },  { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, 0, -4 },
-    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, 0, 0 },  { &object_hintnuts_Anim_003128, 1.0f, 0, -1, 0, -4 },
-    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, 0, -4 }, { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, 0, -4 },
-    { &object_dekunuts_Anim_000168, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_00259C, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, 2, 0 },  { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_002BD4, 1.0f, 0, -1, 2, -4 }, { &object_dekunuts_Anim_002DD4, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_002FA4, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_003180, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, 0, 0 },  { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, 0, -4 },
-    { &object_dekunuts_Anim_0033E4, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_003780, 1.0f, 0, -1, 0, 0 },
-    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_002950, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnk_Anim_000894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnk_Anim_0006CC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_00259C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002BD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002DD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002FA4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_003180, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_0033E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_002950, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
@@ -124,14 +142,14 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
             sp30 = true;
             frameCount = sAnimations[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
+                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
             }
-            frame = sAnimations[animIndex].frame;
+            frame = sAnimations[animIndex].startFrame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                             frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
+            Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed, frame,
+                             frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].morphFrames);
         }
     }
     return sp30;

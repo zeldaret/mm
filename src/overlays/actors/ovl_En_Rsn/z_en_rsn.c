@@ -30,10 +30,10 @@ const ActorInit En_Rsn_InitVars = {
     (ActorFunc)EnRsn_Draw,
 };
 
-static ActorAnimationEntry animations[] = { { &object_rs_Anim_00788C, 1.0f, 0.0f, 0.0f, 0, 0.0f } };
+static AnimationInfo sAnimations[] = { { &object_rs_Anim_00788C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnimation(&this->skelAnime, animations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80C25D84;
 }
 
