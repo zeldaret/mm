@@ -223,6 +223,7 @@ void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaI
     return (devAddr - dmaDevAddr) + dma->ramAddr;
 }
 
+// This string does not appear to belong in context to any function between the previous string and the next string
 const char D_801E030C[] = "TYPE %d:ID %d is not External Map.\n";
 
 void AudioLoad_InitSampleDmaBuffers(s32 numNotes) {
@@ -1534,7 +1535,7 @@ AudioAsyncLoad* AudioLoad_StartAsyncLoad(uintptr_t devAddr, void* ramAddr, size_
     } else if (nChunks == 1) {
         asyncLoad->chunkSize = size;
     } else {
-        asyncLoad->chunkSize = (((s32)size / nChunks) + 0xFF) & ~0xFF;
+        asyncLoad->chunkSize = ALIGN256((s32)size / nChunks);
         if (asyncLoad->chunkSize < 0x100) {
             asyncLoad->chunkSize = 0x100;
         }
