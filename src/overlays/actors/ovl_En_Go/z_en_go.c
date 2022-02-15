@@ -1464,7 +1464,7 @@ void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
         Collider_InitAndSetSphere(globalCtx, &this->colliderSphere, &this->actor, &sSphereInit);
         Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit2);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        Effect_Add(globalCtx, &this->unk_3E8, 4, 0, 0, sp38);
+        Effect_Add(globalCtx, &this->unk_3E8, 4, 0, 0, &sp38);
 
         this->actor.targetMode = 1;
         this->unk_3A4 = 0.01f;
