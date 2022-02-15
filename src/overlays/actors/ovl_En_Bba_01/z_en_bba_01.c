@@ -9,7 +9,7 @@
  * below).
  *
  * The draw functions also use different limbs than expected, which results in, for example, EnBba01's right arm and bag
- * following the player instead of her head toroso.
+ * following the player instead of her head and torso.
  */
 
 #include "z_en_bba_01.h"
