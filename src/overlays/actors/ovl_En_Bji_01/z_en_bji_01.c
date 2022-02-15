@@ -341,8 +341,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->animationIndex = -1;
 
     Actor_SetScale(&this->actor, 0.01f);
-    func_8013E3B8(&this->actor, this->cutscenes,
-                  ARRAY_COUNT(this->cutscenes)); /* initializes all elements of cutscenes to -1 */
+    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
     switch (gSaveContext.entranceIndex) {

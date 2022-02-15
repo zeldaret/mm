@@ -340,7 +340,7 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     *curIndex = nextIndex;
 }
 
-s32 func_8013E2D4(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
+s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
     s32 isStarted = false;
 
     if ((curCutscene != -1) && (ActorCutscene_GetCurrentIndex() == curCutscene)) {
@@ -362,10 +362,11 @@ s32 func_8013E2D4(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
     } else {
         ActorCutscene_SetIntentToPlay(nextCutscene);
     }
+
     return isStarted;
 }
 
-s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
+s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
     s16 cs;
     s32 i;
 
@@ -377,14 +378,14 @@ s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
     i = 0;
 
     while (cs != -1) {
-        // Note: cutscenesLen must not be less then possibile additional cutscenes
-        // otherwise this is an infinite loop
+        // Note: if cutscenesLen is less then possibile additional cutscenes this is an infinite loop
         if (i < cutscenesLen) {
             cutscenes[i] = cs;
             cs = ActorCutscene_GetAdditionalCutscene(cs);
             i++;
         }
     }
+    
     return i;
 }
 

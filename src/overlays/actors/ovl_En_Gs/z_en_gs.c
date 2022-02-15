@@ -156,7 +156,7 @@ void EnGs_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1F4 = this->unk_1FA;
     Math_Vec3f_Copy(&this->unk_1B0[0], &D_801C5DB0);
     Math_Vec3f_Copy(&this->unk_1B0[1], &D_801C5DB0);
-    func_8013E3B8(&this->actor, &this->unk_212, 2);
+    SubS_FillCutscenesList(&this->actor, &this->unk_212, 2);
     func_801A5080(0);
     if (this->actor.params == ENGS_1) {
         Actor_SetScale(&this->actor, 0.15f);
@@ -262,7 +262,7 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997FF0(EnGs* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->actor, globalCtx->unk_1879C[0], -1, 1)) {
+    if (SubS_StartActorCutscene(&this->actor, globalCtx->unk_1879C[0], -1, SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, globalCtx);
     }
 }
@@ -380,7 +380,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
     EnGs* gossipStone;
     Vec3f sp38;
 
-    if (func_8013E2D4(&this->actor, this->unk_212, -1, 0)) {
+    if (SubS_StartActorCutscene(&this->actor, this->unk_212, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         Player* player = GET_PLAYER(globalCtx);
 
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);

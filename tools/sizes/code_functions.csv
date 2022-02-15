@@ -2215,8 +2215,8 @@ asm/non_matchings/code/z_sub_s/func_8013E054.s,func_8013E054,0x8013E054,0xA
 asm/non_matchings/code/z_sub_s/func_8013E07C.s,func_8013E07C,0x8013E07C,0xA
 asm/non_matchings/code/z_sub_s/func_8013E0A4.s,func_8013E0A4,0x8013E0A4,0x49
 asm/non_matchings/code/z_sub_s/SubS_ChangeAnimationBySpeedInfo.s,SubS_ChangeAnimationBySpeedInfo,0x8013E1C8,0x43
-asm/non_matchings/code/z_sub_s/func_8013E2D4.s,func_8013E2D4,0x8013E2D4,0x39
-asm/non_matchings/code/z_sub_s/func_8013E3B8.s,func_8013E3B8,0x8013E3B8,0x3E
+asm/non_matchings/code/z_sub_s/SubS_StartActorCutscene.s,SubS_StartActorCutscene,0x8013E2D4,0x39
+asm/non_matchings/code/z_sub_s/SubS_FillCutscenesList.s,SubS_FillCutscenesList,0x8013E3B8,0x3E
 asm/non_matchings/code/z_sub_s/func_8013E4B0.s,func_8013E4B0,0x8013E4B0,0x47
 asm/non_matchings/code/z_sub_s/func_8013E5CC.s,func_8013E5CC,0x8013E5CC,0x1D
 asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x8013E640,0x42

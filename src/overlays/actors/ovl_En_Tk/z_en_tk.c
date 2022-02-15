@@ -248,7 +248,7 @@ void EnTk_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.flags |= 0x10;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 0, &this->unk_2D4);
-    func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
 
     switch (this->unk_2B0) {
         case 4:
@@ -711,7 +711,8 @@ void func_80AEDBEC(EnTk* this, GlobalContext* globalCtx) {
 }
 
 void func_80AEDC4C(EnTk* this, GlobalContext* globalCtx) {
-    if ((this->actor.params >= 0) && func_8013E2D4(&this->actor, this->cutscenes[1], this->actor.params, 0)) {
+    if ((this->actor.params >= 0) && SubS_StartActorCutscene(&this->actor, this->cutscenes[1], this->actor.params,
+                                                             SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         this->unk_2E8 = ActorCutscene_GetLength(this->cutscenes[1]);
         func_80151938(globalCtx, 0x1411);
         func_80AEDCBC(this, globalCtx);
@@ -899,7 +900,7 @@ void func_80AEE2A8(EnTk* this, GlobalContext* globalCtx) {
 }
 
 void func_80AEE2C0(EnTk* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->actor, this->cutscenes[0], 0x7C, 0)) {
+    if (SubS_StartActorCutscene(&this->actor, this->cutscenes[0], 0x7C, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         func_80AEE374(this, globalCtx);
     }
 }
@@ -995,12 +996,12 @@ void func_80AEE6B8(EnTk* this, GlobalContext* globalCtx) {
             ActorCutscene_Stop(this->cutscenes[0]);
             func_801477B4(globalCtx);
             func_80AEDBEC(this, globalCtx);
-        } else if (func_8013E2D4(&this->actor, 0x7C, this->cutscenes[0], 0)) {
+        } else if (SubS_StartActorCutscene(&this->actor, 0x7C, this->cutscenes[0], SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
             this->unk_310 = 3;
             func_80AEDE10(this, globalCtx);
             this->unk_2CA &= ~0x20;
         }
-    } else if (func_8013E2D4(&this->actor, 0x7C, this->cutscenes[0], 0)) {
+    } else if (SubS_StartActorCutscene(&this->actor, 0x7C, this->cutscenes[0], SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         this->unk_310 = 4;
         func_80AEDE10(this, globalCtx);
     }
