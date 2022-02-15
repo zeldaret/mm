@@ -250,7 +250,9 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D2E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D5E8.s")
+s32 func_8013D5E8(s16 angA, s16 max, s16 angB) {
+    return (ABS_ALT(BINANG_SUB(angB, angA)) <= max) ? true : false;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D648.s")
 
