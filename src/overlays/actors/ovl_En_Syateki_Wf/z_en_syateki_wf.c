@@ -24,6 +24,7 @@ void func_80A2075C(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A201CC(EnSyatekiWf* this);
+void func_80A2030C(EnSyatekiWf* this);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -102,11 +103,11 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     temp = 0;
-    if (((this->actor.params & 0xFF00) >> 8) > 0) {
+    if (EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor) > 0) {
         do {
             temp++;
             path = &globalCtx->setupPathList[path->unk1];
-        } while (temp < ((this->actor.params & 0xFF00) >> 8));
+        } while (temp < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor));
     }
 
     if (path == NULL) {
@@ -150,12 +151,11 @@ void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->unk_300);
 }
 
+void func_80A200E0(EnSyatekiWf* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A200E0.s")
 
 void func_80A201CC(EnSyatekiWf* this) {
-    EnSyatekiMan* syatekiMan;
-
-    syatekiMan = (EnSyatekiMan*)this->actor.parent;
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     this->actor.speedXZ = 0.0f;
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
@@ -164,11 +164,23 @@ void func_80A201CC(EnSyatekiWf* this) {
     this->actor.draw = NULL;
     this->unk_2A4 = 1;
     this->unk_298 = 0;
-    syatekiMan->unk_276 &= ~(1 << ((this->actor.params & 0xFF00) >> 8));
+    syatekiMan->unk_276 &= ~(1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor));
     this->actionFunc = func_80A20284;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20284.s")
+void func_80A20284(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan;
+
+    if (this->actor.parent != NULL) {
+        syatekiMan = (EnSyatekiMan*)this->actor.parent;
+        if ((syatekiMan->unk_26A == 1) && (this->unk_298 == 1)) {
+            func_80A200E0(this);
+            func_80A2030C(this);
+        } else if (syatekiMan->unk_276 & (1 << EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor))) {
+            this->unk_298 = 1;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A2030C.s")
 
