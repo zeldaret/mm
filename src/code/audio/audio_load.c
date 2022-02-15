@@ -379,7 +379,7 @@ void AudioLoad_InitTable(AudioTable* table, uintptr_t romAddr, u16 unkMediumPara
 }
 
 SoundFontData* AudioLoad_SyncLoadSeqFonts(s32 seqId, u32* outDefaultFontId) {
-    char pad[0x8];
+    s32 pad[2];
     s32 index;
     SoundFontData* fontData;
     s32 numFonts;
@@ -1802,12 +1802,12 @@ void AudioLoad_RelocateFontAndPreloadSamples(s32 fontId, SoundFontData* mem, Aud
         switch (async) {
             case false:
                 if (sample->medium == MEDIUM_UNK) {
-                    AudioLoad_SyncDmaUnkMedium((u32)sample->sampleAddr, sampleRamAddr, sample->size,
+                    AudioLoad_SyncDmaUnkMedium((uintptr_t)sample->sampleAddr, sampleRamAddr, sample->size,
                                                gAudioContext.sampleBankTable->unkMediumParam);
                     sample->sampleAddr = sampleRamAddr;
                     sample->medium = MEDIUM_RAM;
                 } else {
-                    AudioLoad_SyncDma((u32)sample->sampleAddr, sampleRamAddr, sample->size, sample->medium);
+                    AudioLoad_SyncDma((uintptr_t)sample->sampleAddr, sampleRamAddr, sample->size, sample->medium);
                     sample->sampleAddr = sampleRamAddr;
                     sample->medium = MEDIUM_RAM;
                 }
@@ -1820,7 +1820,7 @@ void AudioLoad_RelocateFontAndPreloadSamples(s32 fontId, SoundFontData* mem, Aud
                 preload->ramAddr = sampleRamAddr;
                 preload->encodedInfo = (gAudioContext.preloadSampleStackTop << 24) | 0xFFFFFF;
                 preload->isFree = false;
-                preload->endAndMediumKey = (u32)sample->sampleAddr + sample->size + sample->medium;
+                preload->endAndMediumKey = (uintptr_t)sample->sampleAddr + sample->size + sample->medium;
                 gAudioContext.preloadSampleStackTop++;
                 break;
         }
@@ -1831,8 +1831,8 @@ void AudioLoad_RelocateFontAndPreloadSamples(s32 fontId, SoundFontData* mem, Aud
         topPreload = &gAudioContext.preloadSampleStack[gAudioContext.preloadSampleStackTop - 1];
         sample = topPreload->sample;
         nChunks = (sample->size >> 12) + 1;
-        AudioLoad_StartAsyncLoad((u32)sample->sampleAddr, topPreload->ramAddr, sample->size, sample->medium, nChunks,
-                                 &gAudioContext.preloadSampleQueue, topPreload->encodedInfo);
+        AudioLoad_StartAsyncLoad((uintptr_t)sample->sampleAddr, topPreload->ramAddr, sample->size, sample->medium,
+                                 nChunks, &gAudioContext.preloadSampleQueue, topPreload->encodedInfo);
     }
 }
 
@@ -1861,7 +1861,7 @@ s32 AudioLoad_ProcessSamplePreloads(s32 resetStatus) {
 
         if (preload->isFree == false) {
             sample = preload->sample;
-            key = (u32)sample->sampleAddr + sample->size + sample->medium;
+            key = (uintptr_t)sample->sampleAddr + sample->size + sample->medium;
             if (key == preload->endAndMediumKey) {
                 // Change storage for sample to the preloaded version.
                 sample->sampleAddr = preload->ramAddr;
@@ -1884,12 +1884,12 @@ s32 AudioLoad_ProcessSamplePreloads(s32 resetStatus) {
 
             sample = preload->sample;
             nChunks = (sample->size >> 12) + 1;
-            key = (u32)sample->sampleAddr + sample->size + sample->medium;
+            key = (uintptr_t)sample->sampleAddr + sample->size + sample->medium;
             if (key != preload->endAndMediumKey) {
                 preload->isFree = true;
                 gAudioContext.preloadSampleStackTop--;
             } else {
-                AudioLoad_StartAsyncLoad((u32)sample->sampleAddr, preload->ramAddr, sample->size, sample->medium,
+                AudioLoad_StartAsyncLoad((uintptr_t)sample->sampleAddr, preload->ramAddr, sample->size, sample->medium,
                                          nChunks, &gAudioContext.preloadSampleQueue, preload->encodedInfo);
                 break;
             }
@@ -2058,12 +2058,12 @@ void AudioLoad_PreloadSamplesForFont(s32 fontId, s32 async, AudioRelocInfo* relo
         switch (async) {
             case false:
                 if (sample->medium == MEDIUM_UNK) {
-                    AudioLoad_SyncDmaUnkMedium((u32)sample->sampleAddr, addr, sample->size,
+                    AudioLoad_SyncDmaUnkMedium((uintptr_t)sample->sampleAddr, addr, sample->size,
                                                gAudioContext.sampleBankTable->unkMediumParam);
                     sample->sampleAddr = addr;
                     sample->medium = MEDIUM_RAM;
                 } else {
-                    AudioLoad_SyncDma((u32)sample->sampleAddr, addr, sample->size, sample->medium);
+                    AudioLoad_SyncDma((uintptr_t)sample->sampleAddr, addr, sample->size, sample->medium);
                     sample->sampleAddr = addr;
                     sample->medium = MEDIUM_RAM;
                 }
@@ -2075,7 +2075,7 @@ void AudioLoad_PreloadSamplesForFont(s32 fontId, s32 async, AudioRelocInfo* relo
                 preload->ramAddr = addr;
                 preload->encodedInfo = (gAudioContext.preloadSampleStackTop << 24) | 0xFFFFFF;
                 preload->isFree = false;
-                preload->endAndMediumKey = (u32)sample->sampleAddr + sample->size + sample->medium;
+                preload->endAndMediumKey = (uintptr_t)sample->sampleAddr + sample->size + sample->medium;
                 gAudioContext.preloadSampleStackTop++;
                 break;
         }
@@ -2086,8 +2086,8 @@ void AudioLoad_PreloadSamplesForFont(s32 fontId, s32 async, AudioRelocInfo* relo
         topPreload = &gAudioContext.preloadSampleStack[gAudioContext.preloadSampleStackTop - 1];
         sample = topPreload->sample;
         nChunks = (sample->size >> 12) + 1;
-        AudioLoad_StartAsyncLoad((u32)sample->sampleAddr, topPreload->ramAddr, sample->size, sample->medium, nChunks,
-                                 &gAudioContext.preloadSampleQueue, topPreload->encodedInfo);
+        AudioLoad_StartAsyncLoad((uintptr_t)sample->sampleAddr, topPreload->ramAddr, sample->size, sample->medium,
+                                 nChunks, &gAudioContext.preloadSampleQueue, topPreload->encodedInfo);
     }
 }
 

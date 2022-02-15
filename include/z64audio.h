@@ -821,7 +821,7 @@ typedef struct {
     /* 0x10 */ u8* ramAddr;
     /* 0x14 */ s32 status;
     /* 0x18 */ size_t bytesRemaining;
-    /* 0x1C */ s8* isDone;
+    /* 0x1C */ s8* isDone; // TODO: rename in OoT and sync up here. This is an external status while (s32 status) is an internal status
     /* 0x20 */ SoundFontSample sample;
     /* 0x30 */ OSMesgQueue msgqueue;
     /* 0x48 */ OSMesg msg;
