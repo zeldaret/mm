@@ -940,7 +940,7 @@ void AudioHeap_Init(void) {
         osAiSetFrequency(gAudioContext.audioBufferParameters.samplingFreq);
 
     gAudioContext.audioBufferParameters.samplesPerFrameTarget =
-        ((gAudioContext.audioBufferParameters.samplingFreq / gAudioContext.refreshRate) + 0xF) & 0xFFF0;
+        ALIGN16(gAudioContext.audioBufferParameters.samplingFreq / gAudioContext.refreshRate);
     gAudioContext.audioBufferParameters.minAiBufferLength =
         gAudioContext.audioBufferParameters.samplesPerFrameTarget - 0x10;
     gAudioContext.audioBufferParameters.maxAiBufferLength =
@@ -1038,7 +1038,7 @@ void AudioHeap_Init(void) {
                                                            gAudioContext.numNotes * sizeof(NoteSubEu));
 
     // Initialize audio binary interface command list buffer
-    for (j = 0; j < 2; j++) {
+    for (j = 0; j < ARRAY_COUNT(gAudioContext.abiCmdBufs); j++) {
         gAudioContext.abiCmdBufs[j] =
             AudioHeap_AllocDmaMemoryZeroed(&gAudioContext.miscPool, gAudioContext.maxAudioCmds * sizeof(u64));
     }
