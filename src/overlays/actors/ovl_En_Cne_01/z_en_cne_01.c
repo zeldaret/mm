@@ -169,13 +169,13 @@ void EnCne01_FaceForward(EnHy* this, GlobalContext* globalCtx) {
 
 void EnCne01_Talk(EnHy* this, GlobalContext* globalCtx) {
     s16 yaw;
-    u8 talkstate;
+    u8 talkState;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
-    talkstate = Message_GetState(&globalCtx->msgCtx);
-    this->inMsgState3 = (talkstate == 3) ? true : false;
+    talkState = Message_GetState(&globalCtx->msgCtx);
+    this->inMsgState3 = (talkState == 3) ? true : false;
 
-    switch (talkstate) {
+    switch (talkState) {
         case 0:
             yaw = ABS_ALT(this->actor.shape.rot.y - this->actor.yawTowardsPlayer);
             if (yaw < 0x64) {

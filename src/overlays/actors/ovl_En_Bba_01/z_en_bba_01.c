@@ -2,6 +2,14 @@
  * File: z_en_bba_01.c
  * Overlay: ovl_En_Bba_01
  * Description: Unused Bomb Shop Lady NPC
+ *
+ * Note: This actor was probably written with OOT's object_bba's skeleton in mind, and so this actor is very bugged.
+ *
+ * The main offender is that gBbaSkel has 18 limbs, while the system used (EnHy) expects 16 (see @bug in FinishInit
+ * below).
+ *
+ * The draw functions also use different limbs than expected, which results in, for example, EnBba01's right arm and bag
+ * following the player instead of her head toroso.
  */
 
 #include "z_en_bba_01.h"
@@ -146,7 +154,7 @@ s32 func_809CC270(EnBba01* this, GlobalContext* globalCtx) {
 
 void EnBba01_FinishInit(EnHy* this, GlobalContext* globalCtx) {
     //! @bug: gBbaSkel does not match EnHy's skeleton assumptions.
-    //! Main offender is that gBbaSkel has 18 limbs, while EnHy expects 16
+    //! Since gBbaSkel has more limbs than expected, joint and morph tables will overflow
     if (EnHy_Init(this, globalCtx, &gBbaSkel, ENHY_ANIMATION_BBA_6)) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnBba01_Draw;
@@ -171,13 +179,13 @@ void EnBba01_FaceFoward(EnHy* this, GlobalContext* globalCtx) {
 
 void EnBba01_Talk(EnHy* this, GlobalContext* globalCtx) {
     s16 yaw;
-    u8 talkstate;
+    u8 talkState;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
-    talkstate = Message_GetState(&globalCtx->msgCtx);
-    this->inMsgState3 = (talkstate == 3) ? true : false;
+    talkState = Message_GetState(&globalCtx->msgCtx);
+    this->inMsgState3 = (talkState == 3) ? true : false;
 
-    switch (talkstate) {
+    switch (talkState) {
         case 0:
             yaw = ABS_ALT(this->actor.shape.rot.y - this->actor.yawTowardsPlayer);
             if (yaw < 0x64) {
