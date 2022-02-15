@@ -22,7 +22,7 @@ void EnYb_SetupLeaving(EnYb* this, GlobalContext* globalCtx);
 
 void EnYb_UpdateAnimation(EnYb* this, GlobalContext* globalCtx);
 void EnYb_FinishTeachingCutscene(EnYb* this);
-void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx);
+void EnYb_Disappear(EnYb* this, GlobalContext* globalCtx);
 void EnYb_ReceiveMask(EnYb* this, GlobalContext* globalCtx);
 void EnYb_Talk(EnYb* this, GlobalContext* globalCtx);
 void EnYb_TeachingDance(EnYb* this, GlobalContext* globalCtx);
@@ -93,7 +93,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actionFunc = EnYb_Idle;
-    this->currentAnimIndex = 3; // gets overwritten in EnYb_SetAnimation later
+    this->currentAnimIndex = 3; // gets overwritten to 2 in EnYb_SetAnimation later
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
@@ -114,7 +114,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     // between midnight and morning start spawned
     if (gSaveContext.time < CLOCK_TIME(6, 0)) {
         this->alpha = 255;
-    } else { // else (night 6pm to midnight): wait to spawn
+    } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
         this->actionFunc = EnYb_WaitForMidnight;
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -148,7 +148,6 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx
 
     if (this->alpha > 0) {
         if (this->currentAnimIndex == 2) {
-            // regalloc without temp
             f32 tempScale = (((27.0f - this->shadowPos.y) + this->actor.world.pos.y) * ((1 / 2.25f) * 0.001f)) + 0.01f;
             this->actor.scale.x = tempScale;
         }
@@ -168,19 +167,15 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx
     }
 }
 
-/**
- * weird animation changing function
- * only gets called from init with static variables though: (animIndex: 2, animMode: 0, transitionRate: 0.0f)
- */
 void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 animMode, f32 transitionRate) {
     if (animIndex >= 0 && animIndex < 3) {
-        if (animIndex != this->currentAnimIndex || animMode != 0) {
+        if (animIndex != this->currentAnimIndex || animMode != ANIMMODE_LOOP) {
             if (animIndex > 0) {
-                if (animMode == 0) {
+                if (animMode == ANIMMODE_LOOP) {
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
                 } else {
-                    // unused case, (only called once with animMode = 0)
+                    // unused case, (only called once with animMode = ANIMMODE_LOOP)
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
                                          Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
                 }
@@ -236,7 +231,7 @@ void EnYb_EnableProximityMusic(EnYb* this) {
     func_800B9084(&this->actor);
 }
 
-void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx) {
+void EnYb_Disappear(EnYb* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp60;
     s32 i;
@@ -294,7 +289,7 @@ void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x147D: // I am counting on you
                 func_801477B4(globalCtx);
-                this->actionFunc = EnYb_Leaving;
+                this->actionFunc = EnYb_Disappear;
                 gSaveContext.weekEventReg[82] |= 0x4;
                 break;
             case 0x147C: // Spread my dance across the world

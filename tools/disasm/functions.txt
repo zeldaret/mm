@@ -16386,7 +16386,7 @@
     0x80BFA67C:("EnYb_FinishTeachingCutscene",),
     0x80BFA6E0:("EnYb_ChangeCutscene",),
     0x80BFA710:("EnYb_EnableProximityMusic",),
-    0x80BFA730:("EnYb_Leaving",),
+    0x80BFA730:("EnYb_Disappear",),
     0x80BFA868:("EnYb_SetupLeaving",),
     0x80BFA91C:("EnYb_ReceiveMask",),
     0x80BFA9D4:("EnYb_Talk",),
