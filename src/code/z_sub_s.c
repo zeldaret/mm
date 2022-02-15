@@ -262,9 +262,13 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D83C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D8DC.s")
+s8 SubS_IsObjectLoaded(s8 index, GlobalContext* globalCtx) {
+    return !Object_IsLoaded(&globalCtx->objectCtx, index) ? false : true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D924.s")
+s8 SubS_GetObjectIndex(s16 id, GlobalContext* globalCtx) {
+    return Object_GetIndex(&globalCtx->objectCtx, id);
+}
 
 /**
  * Finds the first actor instance of a specified Id and category.

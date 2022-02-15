@@ -112,10 +112,10 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
 s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
     s32 isInitialized = false;
 
-    if ((func_8013D8DC(enHy->animObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->headObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->skelUpperObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->skelLowerObjIndex, globalCtx) == true)) {
+    if ((SubS_IsObjectLoaded(enHy->animObjIndex, globalCtx) == true) &&
+        (SubS_IsObjectLoaded(enHy->headObjIndex, globalCtx) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, globalCtx) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, globalCtx) == true)) {
         enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);

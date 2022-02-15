@@ -249,7 +249,7 @@ s32 func_8094E0F8(EnGm* this, GlobalContext* globalCtx) {
 
     if ((this->unk_260 != globalCtx->roomCtx.currRoom.num) && (globalCtx->roomCtx.unk31 == 0)) {
         this->unk_260 = globalCtx->roomCtx.currRoom.num;
-        this->unk_262 = func_8013D924(0x248, globalCtx);
+        this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, globalCtx);
         this->actor.draw = NULL;
         this->unk_3FC = 1;
     }
@@ -258,7 +258,7 @@ s32 func_8094E0F8(EnGm* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if ((this->unk_262 < 0) || !func_8013D8DC(this->unk_262, globalCtx)) {
+    if ((this->unk_262 < 0) || !SubS_IsObjectLoaded(this->unk_262, globalCtx)) {
         ret = true;
     } else {
         this->actor.draw = EnGm_Draw;

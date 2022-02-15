@@ -198,10 +198,10 @@ void EnCne01_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnCne01* this = THIS;
 
-    this->enHy.animObjIndex = func_8013D924(OBJECT_OS_ANIME, globalCtx);
-    this->enHy.headObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
-    this->enHy.skelUpperObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
-    this->enHy.skelLowerObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
+    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_OS_ANIME, globalCtx);
+    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_CNE, globalCtx);
+    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_CNE, globalCtx);
+    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_CNE, globalCtx);
 
     if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
         (this->enHy.skelLowerObjIndex < 0)) {

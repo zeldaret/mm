@@ -1451,8 +1451,8 @@ void func_80A146CC(EnGo* this, GlobalContext* globalCtx) {
 void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
     s32 sp38[2] = { 0x0000003E, 0x00000F64 };
 
-    if ((this->unk_288 < 0) || func_8013D8DC(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
-        func_8013D8DC(this->unk_289, globalCtx)) {
+    if ((this->unk_288 < 0) || SubS_IsObjectLoaded(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
+        SubS_IsObjectLoaded(this->unk_289, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
                            this->morphTable, 18);
@@ -1464,7 +1464,7 @@ void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
         Collider_InitAndSetSphere(globalCtx, &this->colliderSphere, &this->actor, &sSphereInit);
         Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit2);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        Effect_Add(globalCtx, &this->unk_3E8, 4, 0, 0, &sp38);
+        Effect_Add(globalCtx, &this->unk_3E8, 4, 0, 0, sp38);
 
         this->actor.targetMode = 1;
         this->unk_3A4 = 0.01f;
@@ -1885,8 +1885,8 @@ void func_80A157C4(EnGo* this, GlobalContext* globalCtx) {
 void EnGo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGo* this = THIS;
 
-    this->unk_288 = func_8013D924(OBJECT_TAISOU, globalCtx);
-    this->unk_289 = func_8013D924(OBJECT_HAKUGIN_DEMO, globalCtx);
+    this->unk_288 = SubS_GetObjectIndex(OBJECT_TAISOU, globalCtx);
+    this->unk_289 = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, globalCtx);
     this->actionFunc = func_80A14798;
 }
 
