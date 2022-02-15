@@ -51,7 +51,7 @@
         <Texture Name="gBbaTLUT" OutName="bba_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6B20" />
 
         <!-- Unused Textures -->
-        <!-- These are just be exact copies of the used textures -->
+        <!-- These are just exact copies of the used textures -->
         <Texture Name="gBbaUnusedHairSkinTex" OutName="bba_unused_hair_skin" Format="ci8" Width="32" Height="32" Offset="0x6D20" TlutOffset="0x6B20" />
         <Texture Name="gBbaUnusedEarTex" OutName="bba_unused_ear" Format="ci8" Width="8" Height="8" Offset="0x7120" TlutOffset="0x6B20" />
         <Texture Name="gBbaUnusedNostrilTex" OutName="bba_unused_nostril" Format="ci8" Width="8" Height="8" Offset="0x7160" TlutOffset="0x6B20" />
