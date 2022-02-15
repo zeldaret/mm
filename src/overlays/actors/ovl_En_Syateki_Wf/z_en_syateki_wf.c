@@ -152,7 +152,21 @@ void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A200E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A201CC.s")
+void func_80A201CC(EnSyatekiWf* this) {
+    EnSyatekiMan* syatekiMan;
+
+    syatekiMan = (EnSyatekiMan*)this->actor.parent;
+    this->actor.speedXZ = 0.0f;
+    this->actor.world = this->actor.home;
+    this->actor.prevPos = this->actor.home.pos;
+    this->actor.shape.rot = this->actor.world.rot;
+    this->actor.colChkInfo.health = 2;
+    this->actor.draw = NULL;
+    this->unk_2A4 = 1;
+    this->unk_298 = 0;
+    syatekiMan->unk_276 &= ~(1 << ((this->actor.params & 0xFF00) >> 8));
+    this->actionFunc = func_80A20284;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20284.s")
 
