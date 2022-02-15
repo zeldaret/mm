@@ -7,7 +7,7 @@
 #include "z_en_bba_01.h"
 #include "objects/object_bba/object_bba.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBba01*)thisx)
 
@@ -145,7 +145,9 @@ s32 func_809CC270(EnBba01* this, GlobalContext* globalCtx) {
 }
 
 void EnBba01_FinishInit(EnHy* this, GlobalContext* globalCtx) {
-    if (EnHy_Init(this, globalCtx, &object_bba_Skel_005EF0, ENHY_ANIMATION_BBA_6)) {
+    //! @bug: gBbaSkel does not match EnHy's skeleton assumptions.
+    //! Main offender is that gBbaSkel has 18 limbs, while EnHy expects 16
+    if (EnHy_Init(this, globalCtx, &gBbaSkel, ENHY_ANIMATION_BBA_6)) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;
@@ -245,30 +247,31 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->enHy.headObjIndex].segment);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.headObjIndex].segment);
         gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
-    if (limbIndex == 15) {
+    if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->enHy.headRot.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->enHy.headRot.x, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 8) {
+    if (limbIndex == BBA_LIMB_BAG) {
         Matrix_InsertXRotation_s(-this->enHy.torsoRot.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 15) && this->enHy.inMsgState3 && ((globalCtx->state.frames % 2) == 0)) {
+    if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 &&
+        ((globalCtx->state.frames % 2) == 0)) {
         Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
+    if ((limbIndex == BBA_LIMB_BAG) || (limbIndex == BBA_LIMB_TORSO) || (limbIndex == BBA_LIMB_LEFT_FOREARM)) {
         rot->y += (s16)(Math_SinS(this->enHy.limbRotTableY[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->enHy.limbRotTableZ[limbIndex]) * 200.0f);
     }
@@ -281,14 +284,14 @@ void EnBba01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 7) {
+    if (limbIndex == BBA_LIMB_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
         gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.actor.focus.pos);
     }
 }

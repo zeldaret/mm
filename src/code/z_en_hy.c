@@ -18,7 +18,7 @@ static AnimationInfoS sAnimations[] = {
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_bba_Anim_005DC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
