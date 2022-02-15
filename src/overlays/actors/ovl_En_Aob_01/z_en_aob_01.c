@@ -471,7 +471,7 @@ void func_809C1EC8(EnAob01* this, GlobalContext* globalCtx) {
     Vec3f sp30;
 
     SkelAnime_Update(&this->skelAnime);
-    if (SubS_AngleDiffLessThanOrEqualToThreshold(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer)) {
+    if (SubS_IsAngleDiffLessThanOrEqualToThreshold(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer)) {
         sp30.x = player->actor.world.pos.x;
         sp30.y = player->bodyPartsPos[7].y + 3.0f;
         sp30.z = player->actor.world.pos.z;

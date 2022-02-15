@@ -2681,7 +2681,7 @@
     0x8013CF04:("func_8013CF04",),
     0x8013D0E0:("func_8013D0E0",),
     0x8013D2E0:("func_8013D2E0",),
-    0x8013D5E8:("SubS_AngleDiffLessThanOrEqualToThreshold",),
+    0x8013D5E8:("SubS_IsAngleDiffLessThanOrEqualToThreshold",),
     0x8013D648:("func_8013D648",),
     0x8013D68C:("func_8013D68C",),
     0x8013D720:("func_8013D720",),

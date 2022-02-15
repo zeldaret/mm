@@ -2195,7 +2195,7 @@ asm/non_matchings/code/z_sub_s/func_8013CD64.s,func_8013CD64,0x8013CD64,0x68
 asm/non_matchings/code/z_sub_s/func_8013CF04.s,func_8013CF04,0x8013CF04,0x77
 asm/non_matchings/code/z_sub_s/func_8013D0E0.s,func_8013D0E0,0x8013D0E0,0x80
 asm/non_matchings/code/z_sub_s/func_8013D2E0.s,func_8013D2E0,0x8013D2E0,0xC2
-asm/non_matchings/code/z_sub_s/SubS_AngleDiffLessThanOrEqualToThreshold.s,SubS_AngleDiffLessThanOrEqualToThreshold,0x8013D5E8,0x18
+asm/non_matchings/code/z_sub_s/SubS_IsAngleDiffLessThanOrEqualToThreshold.s,SubS_IsAngleDiffLessThanOrEqualToThreshold,0x8013D5E8,0x18
 asm/non_matchings/code/z_sub_s/func_8013D648.s,func_8013D648,0x8013D648,0x11
 asm/non_matchings/code/z_sub_s/func_8013D68C.s,func_8013D68C,0x8013D68C,0x25
 asm/non_matchings/code/z_sub_s/func_8013D720.s,func_8013D720,0x8013D720,0x12

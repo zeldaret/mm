@@ -247,7 +247,7 @@ void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
     if (this->unk23D == 0) {
         this->unk494 = SkelAnime_Update(&this->skelAnime);
     }
-    if (SubS_AngleDiffLessThanOrEqualToThreshold(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
+    if (SubS_IsAngleDiffLessThanOrEqualToThreshold(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         sp30.x = player->actor.world.pos.x;
         sp30.y = player->bodyPartsPos[7].y + 3.0f;
         sp30.z = player->actor.world.pos.z;

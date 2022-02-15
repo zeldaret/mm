@@ -250,7 +250,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D2E0.s")
 
-s32 SubS_AngleDiffLessThanOrEqualToThreshold(s16 angleA, s16 threshold, s16 angleB) {
+s32 SubS_IsAngleDiffLessThanOrEqualToThreshold(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
 }
 

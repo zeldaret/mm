@@ -98,8 +98,8 @@ void EnCne01_UpdateModel(EnCne01* this, GlobalContext* globalCtx) {
     Vec3f focus;
 
     EnHy_UpdateSkelAnime(&this->enHy, globalCtx);
-    if (SubS_AngleDiffLessThanOrEqualToThreshold(this->enHy.actor.shape.rot.y, 0x36B0,
-                                                 this->enHy.actor.yawTowardsPlayer)) {
+    if (SubS_IsAngleDiffLessThanOrEqualToThreshold(this->enHy.actor.shape.rot.y, 0x36B0,
+                                                   this->enHy.actor.yawTowardsPlayer)) {
         focus.x = player->actor.world.pos.x;
         focus.y = player->bodyPartsPos[7].y + 3.0f;
         focus.z = player->actor.world.pos.z;
