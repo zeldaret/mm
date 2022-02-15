@@ -5,6 +5,7 @@
  */
 
 #include "z_en_syateki_wf.h"
+#include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
 #define FLAGS 0x08000030
 
@@ -22,15 +23,9 @@ void func_80A206DC(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A2075C(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A201CC(EnSyatekiWf* this);
 
 #if 0
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A20E74 = {
-    { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-    { 40, 60, 0, { 0, 0, 0 } },
-};
-
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A20E50[1] = {
     {
@@ -39,11 +34,21 @@ static ColliderJntSphElementInit D_80A20E50[1] = {
     },
 };
 
+
+// static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit D_80A20E74 = {
+    { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
+    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    { 40, 60, 0, { 0, 0, 0 } },
+};
+
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A20EA0 = {
     { COLTYPE_HIT5, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
     1, D_80A20E50, // sJntSphElementsInit,
 };
+
+static ColliderJntSphElementInit* D_80A20EAC = &D_80A20E50;
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A20EB0 = {
@@ -72,17 +77,78 @@ static InitChainEntry D_80A20FBC[] = {
 
 #endif
 
-extern ColliderCylinderInit D_80A20E74;
 extern ColliderJntSphElementInit D_80A20E50[1];
+extern ColliderCylinderInit D_80A20E74;
 extern ColliderJntSphInit D_80A20EA0;
+extern ColliderJntSphElementInit* D_80A20EAC;
 extern ColliderCylinderInit D_80A20EB0;
 extern InitChainEntry D_80A20FBC[];
 
-extern UNK_TYPE D_0600A3CC;
+extern FlexSkeletonHeader D_060095D0;
+extern AnimationHeader D_0600A3CC;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/EnSyatekiWf_Init.s")
+void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnSyatekiWf* this = THIS;
+    Path* path;
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+    s32 temp;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/EnSyatekiWf_Destroy.s")
+    path = syatekiMan->path;
+    if (path->unk2 != 2) {
+        do {
+            path = &globalCtx->setupPathList[path->unk1];
+        } while (path->unk2 != 2);
+    }
+
+    temp = 0;
+    if (((this->actor.params & 0xFF00) >> 8) > 0) {
+        do {
+            temp++;
+            path = &globalCtx->setupPathList[path->unk1];
+        } while (temp < ((this->actor.params & 0xFF00) >> 8));
+    }
+
+    if (path == NULL) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    this->unk_2A0 = Lib_SegmentedToVirtual(path->points);
+    this->unk_2A4 = 1;
+    this->unk_2A6 = path->count;
+
+    Actor_ProcessInitChain(&this->actor, D_80A20FBC);
+    this->unk_29C = 0;
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
+    this->actor.focus.pos = this->actor.world.pos;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->actor.colChkInfo.health = 2;
+    this->actor.colChkInfo.cylRadius = 50;
+    this->actor.colChkInfo.cylHeight = 100;
+    this->unk_2B0 = 0;
+    this->unk_2AC = 10.0f;
+
+    Collider_InitCylinder(globalCtx, &this->unk_2B4);
+    Collider_SetCylinder(globalCtx, &this->unk_2B4, &this->actor, &D_80A20E74);
+    Collider_InitCylinder(globalCtx, &this->unk_300);
+    Collider_SetCylinder(globalCtx, &this->unk_300, &this->actor, &D_80A20EB0);
+    Collider_InitJntSph(globalCtx, &this->unk_34C);
+    Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &D_80A20EA0, &this->unk_36C);
+    this->unk_34C.elements->dim.worldSphere.radius = D_80A20EAC->dim.modelSphere.radius;
+
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060095D0, &D_0600A3CC, this->jointTable, this->morphTable, 22);
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actor.hintId = 0x4C;
+
+    func_80A201CC(this);
+}
+
+void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiWf* this = THIS;
+    Collider_DestroyCylinder(globalCtx, &this->unk_2B4);
+    Collider_DestroyCylinder(globalCtx, &this->unk_300);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A200E0.s")
 
