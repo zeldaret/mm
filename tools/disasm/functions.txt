@@ -9789,7 +9789,7 @@
     0x80A1A360:("ObjRaillift_DrawDekuFlowerPlatformColorful",),
     0x80A1A500:("BgNumaHana_SpawnOpenFlowerCollisionChild",),
     0x80A1A56C:("BgNumaHana_UpdatePetalPosRots",),
-    0x80A1A750:("BgNumaHana_SettlePetals",),
+    0x80A1A750:("BgNumaHana_UpdateSettleRotation",),
     0x80A1A7CC:("BgNumaHana_Init",),
     0x80A1A9AC:("BgNumaHana_Destroy",),
     0x80A1AA14:("BgNumaHana_SetupDoNothing",),

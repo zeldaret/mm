@@ -20,7 +20,7 @@
         <Texture Name="object_numa_obj_Tex_0085A0" OutName="tex_0085A0" Format="rgba16" Width="32" Height="64" Offset="0x85A0" />
 
         <!-- Wooden Flower -->
-        <Collision Name="gWoodenFlowerOpenFlowerCol" Offset="0x9FE0" />
+        <Collision Name="gWoodenFlowerOpenedFlowerCol" Offset="0x9FE0" />
         <Collision Name="gWoodenFlowerClosedFlowerCol" Offset="0xA740" />
         <DList Name="gWoodenFlowerEmpty1DL" Offset="0xAB80" /> <!-- Original name might be "m2_N_HANAin_modelT", may have originally been for transparency? -->
         <DList Name="gWoodenFlowerInnerPetalDL" Offset="0xAB88" />
