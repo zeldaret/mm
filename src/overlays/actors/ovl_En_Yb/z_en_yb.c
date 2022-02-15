@@ -97,7 +97,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    EnYb_SetAnimation(globalCtx, this, 2, 0, 0.0f);
+    EnYb_SetAnimation(globalCtx, this, 2, ANIMMODE_LOOP, 0.0f);
 
     tempCutscene = this->actor.cutscene;
     for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
@@ -173,11 +173,13 @@ void EnYb_SetAnimation(GlobalContext* globalCtx, EnYb* this, s16 animIndex, u8 a
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
+                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                         transitionRate);
                 } else {
                     // unused case, (only called once with animMode = ANIMMODE_LOOP)
                     LinkAnimation_Change(globalCtx, &this->skelAnime, gLinkAnimations[animIndex - 1], 1.0f, 0.0f,
-                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), 0, transitionRate);
+                                         Animation_GetLastFrame(gLinkAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                         transitionRate);
                 }
             } else {
                 // unused case, (only called once with animIndex = 2)
