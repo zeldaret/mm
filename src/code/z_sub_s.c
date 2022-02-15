@@ -386,7 +386,7 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
     i = 0;
 
     while (cs != -1) {
-        // Note: Inifinite loop if cutscenesLen is less than possible additional cutscenes
+        // Note: Infinite loop if cutscenesLen is less than possible additional cutscenes
         if (i < cutscenesLen) {
             cutscenes[i] = cs;
             cs = ActorCutscene_GetAdditionalCutscene(cs);
