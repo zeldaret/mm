@@ -3,7 +3,7 @@
  * Description: Unused System for NPCs (includes animation, door interaction, blinking, pathing, and collider helpers)
  */
 
-#include "z_en_hy.h"
+#include "z_en_hy_code.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_aob/object_aob.h"
 #include "objects/object_bba/object_bba.h"

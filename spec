@@ -467,7 +467,7 @@ beginseg
     include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
-    include "build/src/code/z_en_hy.o"
+    include "build/src/code/z_en_hy_code.o"
     include "build/src/code/z_face_reaction.o"
     include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
