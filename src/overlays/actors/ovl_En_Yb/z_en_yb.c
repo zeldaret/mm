@@ -140,7 +140,7 @@ void func_80BFA2FC(GlobalContext* globalCtx) {
 }
 
 /**
- * custom shadow draw function of type ActorShadowFunc
+ * Custom shadow draw function of type ActorShadowFunc.
  */
 void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, GlobalContext* globalCtx) {
     Vec3f oldPos;
@@ -230,7 +230,7 @@ void EnYb_ChangeCutscene(EnYb* this, s16 cutsceneId) {
 }
 
 /**
- * sets a flag that enables the kamaro dancing proximity music at night
+ * Sets a flag that enables the Kamaro dancing proximity music at night.
  */
 void EnYb_EnableProximityMusic(EnYb* this) {
     func_800B9084(&this->actor);
@@ -246,10 +246,10 @@ void EnYb_Leaving(EnYb* this, GlobalContext* globalCtx) {
         sp60.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
         sp60.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
         sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
-        func_800B3030(globalCtx, &sp60, &D_80BFB2E8, &D_80BFB2E8, 0x64, 0, 2);
+        func_800B3030(globalCtx, &sp60, &D_80BFB2E8, &D_80BFB2E8, 100, 0, 2);
     }
 
-    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x14, NA_SE_EN_EXTINCT);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EN_EXTINCT);
     if (this->alpha > 10) {
         this->alpha -= 10;
     } else {
