@@ -123,7 +123,7 @@ void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    this->unk21C = 0;
+    this->state = 0;
     func_80A67A34(this);
 }
 
@@ -136,7 +136,7 @@ void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80A67A34(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
-    this->unk21C = 0;
+    this->state = 0;
     this->actionFunc = func_80A67AA8;
 }
 
@@ -181,16 +181,17 @@ void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx) {
 void func_80A67C48(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
-    this->unk224 = Rand_S16Offset(1, 3);
+    this->waitTimer = Rand_S16Offset(1, 3);
     this->unk238.y = 10000.0f;
     if (Rand_ZeroOne() < 0.5f) {
         this->unk238.y = -10000.0f;
     }
     this->unk21A = 10;
-    this->unk21C = 1;
+    this->state = WAITING_STATE;
     this->actionFunc = func_80A67D0C;
 }
 
+// Something to do with the pausing
 void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx) {
     s16 randOffset;
 
@@ -198,24 +199,24 @@ void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx) {
     Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
     if ((func_801690CC(globalCtx) == 0) && (D_80A6862C == 0) && (this->unk21A == 0)) {
         this->unk21A = 10;
-        switch (this->unk224) {
+        switch (this->waitTimer) {
             case 0:
             case 1:
             case 2:
             case 3:
             case 4:
-                this->unk224++;
+                this->waitTimer++;
                 this->unk238.y *= -1.0f;
                 break;
             case 5:
                 this->unk238.y = 0.0f;
                 randOffset = Rand_S16Offset(1, 2);
                 this->unk21A = 0;
-                this->unk224 += randOffset;
+                this->waitTimer += randOffset;
                 break;
             case 6:
                 if (fabsf(this->unk238.y - this->headRotation.y) < 10.0f) {
-                    this->unk224 = 10;
+                    this->waitTimer = 10;
                     this->unk238.x = 4000.0f;
                     this->unk21A = 5;
                 }
@@ -223,27 +224,27 @@ void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx) {
             case 7:
                 if (fabsf(this->unk238.y - this->headRotation.y) < 10.0f) {
                     this->unk238.z = 4000.0f;
-                    this->unk224++;
+                    this->waitTimer++;
                 }
                 break;
             case 8:
-                this->unk224 = 10;
+                this->waitTimer = 10;
                 this->unk21A = 20;
                 this->unk238.z = -8000.0f;
                 break;
             case 10:
                 Math_Vec3f_Copy(&this->unk238, &gZeroVec3f);
-                this->unk224 = 11;
+                this->waitTimer = 11;
                 break;
             case 11:
                 if ((fabsf(this->headRotation.x) < 30.0f) && (fabsf(this->headRotation.y) < 30.0f) &&
                     (fabsf(this->headRotation.z) < 30.0f)) {
-                    this->unk224 = 0xC;
+                    this->waitTimer = 12;
                 }
                 break;
         }
-        if (this->unk224 == 12) {
-            this->unk224 = 0;
+        if (this->waitTimer == 12) {
+            this->waitTimer = 0;
             func_80A67A34(this);
         }
     }
@@ -252,7 +253,7 @@ void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx) {
 void func_80A67F30(EnLookNuts* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 2.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
-    this->unk21C = 2;
+    this->state = 2;
     this->unk21A = 0x12C;
     func_801518B0(globalCtx, 0x833, &this->actor);
     this->actionFunc = func_80A67FC4;
@@ -260,7 +261,7 @@ void func_80A67F30(EnLookNuts* this, GlobalContext* globalCtx) {
 
 void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if ((Animation_OnFrame(&this->skelAnime, 1.0f) != 0) || (Animation_OnFrame(&this->skelAnime, 5.0f) != 0)) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
     }
     this->actor.speedXZ = 4.0f;
@@ -274,7 +275,7 @@ void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx) {
 void func_80A68080(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
-    this->unk21C = 3;
+    this->state = 3;
     this->actionFunc = func_80A680FC;
 }
 
@@ -287,7 +288,7 @@ void func_80A680FC(EnLookNuts* this, GlobalContext* globalCtx) {
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(globalCtx);
         globalCtx->sceneLoadFlag = 0x14;
-        gSaveContext.weekEventReg[0x11] |= 4;
+        gSaveContext.weekEventReg[17] |= 4;
     }
 }
 
@@ -314,7 +315,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     Actor_MoveWithGravity(&this->actor);
     if (D_80A6862C == 0) {
-        if ((this->unk21C < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
+        if ((this->state < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
             effectVelOffset = D_80A68650;
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
             effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
@@ -339,7 +340,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
                 Player* player = GET_PLAYER(globalCtx);
                 if (!(player->stateFlags3 & 0x100) && !func_801690CC(globalCtx)) {
                     Math_Vec3f_Copy(&this->unk238, &gZeroVec3f);
-                    this->unk21C = 2;
+                    this->state = 2;
                     play_sound(NA_SE_SY_FOUND);
                     func_800B7298(globalCtx, &this->actor, 0x1A);
                     D_80A6862C = 1;
