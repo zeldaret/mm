@@ -1,7 +1,6 @@
 ﻿<Root>
     <!-- Object for Bomb Shop Lady -->
     <File Name="object_bba" Segment="6">
-
         <!-- DLists -->
         <DList Name="gBbaUpperLegsDL" Offset="0x2A80" />
         <DList Name="gBbaRightHandDL" Offset="0x2B70" />
