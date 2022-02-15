@@ -130,7 +130,7 @@ void EnAni_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (GET_ANI_TYPE(thisx) == ANI_TYPE_TREE_HANGING) {
         Animation_Change(&this->skelAnime, &gAniTreeHangingAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gAniTreeHangingAnim), 2, 0.0f);
+                         Animation_GetLastFrame(&gAniTreeHangingAnim), ANIMMODE_ONCE, 0.0f);
         this->actionFunc = EnAni_HangInTree;
         this->actor.velocity.y = 0.0f;
         this->actor.terminalVelocity = 0.0f;
@@ -195,7 +195,7 @@ void EnAni_FallOverInPain(EnAni* this, GlobalContext* globalCtx) {
         this->blinkFunc = EnAni_WaitForEyeOpen;
         this->actionFunc = EnAni_IdleInPain;
         Animation_Change(&this->skelAnime, &gAniHoldingFootWrithingInPainAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gAniHoldingFootWrithingInPainAnim), 0, 0.0f);
+                         Animation_GetLastFrame(&gAniHoldingFootWrithingInPainAnim), ANIMMODE_LOOP, 0.0f);
     }
 }
 
@@ -203,7 +203,7 @@ void EnAni_LandOnFoot(EnAni* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->actionFunc = EnAni_FallOverInPain;
         Animation_Change(&this->skelAnime, &gAniFallOverHoldingFootAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gAniFallOverHoldingFootAnim), 2, 0.0f);
+                         Animation_GetLastFrame(&gAniFallOverHoldingFootAnim), ANIMMODE_ONCE, 0.0f);
     }
 }
 
@@ -217,7 +217,7 @@ void EnAni_FallToGround(EnAni* this, GlobalContext* globalCtx) {
         this->actor.velocity.x = 0.0f;
         this->actor.velocity.z = 0.0f;
         // the animation gets cut short, (first 16 frames only) only the landing part is seen
-        Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 1.0f, 0.0f, 16.0f, ANIMMODE_ONCE, 0.0f);
         this->stateFlags |= ANI_STATE_WRITHING;
         quakeValue = Quake_Add(globalCtx->cameraPtrs[0], 3);
         Quake_SetSpeed(quakeValue, 0x6978);
@@ -239,7 +239,7 @@ void EnAni_LoseBalance(EnAni* this, GlobalContext* globalCtx) {
         this->actor.velocity.y = 0.0f;
         this->actor.velocity.z = -4.0f;
         // frame count : 0.0f, only first frame, rest is handled in next action func
-        Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 0.0f, 0.0f, 0.0f, 2, 5.0f);
+        Animation_Change(&this->skelAnime, &gAniLandingThenStandingUpAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 5.0f);
         this->actionFunc = EnAni_FallToGround;
         gSaveContext.eventInf[1] |= 0x10;
     }
@@ -267,7 +267,7 @@ void EnAni_HangInTree(EnAni* this, GlobalContext* globalCtx) {
         this->stateFlags |= ANI_STATE_FALLING;
         this->actionFunc = EnAni_LoseBalance;
         Animation_Change(&this->skelAnime, &gAniTreeHangLosingBalanceAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gAniTreeHangLosingBalanceAnim), 2, -5.0f);
+                         Animation_GetLastFrame(&gAniTreeHangLosingBalanceAnim), ANIMMODE_ONCE, -5.0f);
     }
 }
 
