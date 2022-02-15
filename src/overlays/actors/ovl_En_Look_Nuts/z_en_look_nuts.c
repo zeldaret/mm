@@ -6,7 +6,7 @@
 
 #include "z_en_look_nuts.h"
 
-#define FLAGS 0x80000000
+#define FLAGS ACTOR_FLAG_80000000
 
 #define THIS ((EnLookNuts*)thisx)
 
@@ -15,7 +15,14 @@ void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+void func_80A67A34(EnLookNuts* this);
+void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx);
+void func_80A67C48(EnLookNuts* this);
+void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx);
+void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx);
+void func_80A68080(EnLookNuts* this);
+void func_80A680FC(EnLookNuts* this, GlobalContext* globalCtx);
+
 const ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
     ACTORCAT_NPC,
@@ -28,15 +35,29 @@ const ActorInit En_Look_Nuts_InitVars = {
     (ActorFunc)EnLookNuts_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A68600 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 20, 50, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A68630 = {
+s32 D_80A6862C = 0;
+
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(1, 0xF),
     /* Deku Stick     */ DMG_ENTRY(1, 0xF),
     /* Horse trample  */ DMG_ENTRY(1, 0xF),
@@ -71,34 +92,282 @@ static DamageTable D_80A68630 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-#endif
+Vec3f D_80A68650 = { 0.0f, 0.0f, 0.0f };
 
-extern ColliderCylinderInit D_80A68600;
-extern DamageTable D_80A68630;
+static TexturePtr sEyeTextures[] = { gDekuPalaceGuardEyeOpenTex, gDekuPalaceGuardEyeHalfTex,
+                                     gDekuPalaceGuardEyeClosedTex };
 
-extern UNK_TYPE D_06000430;
-extern UNK_TYPE D_06002B6C;
+void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnLookNuts* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Init.s")
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, &object_dnk_Anim_000430, this->jointTable,
+                   this->morphTable, 0xB);
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actor.colChkInfo.damageTable = &sDamageTable;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->actor.targetMode = 1;
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    this->actor.flags |= 0x08000000;
+    this->unk220 = (this->actor.params >> 7) & 0x1F;
+    this->unk21E = this->actor.params & 0x7F;
+    this->spawnIndex = (this->actor.params >> 0xC) & 0xF;
+    if (this->unk21E == 0x7F) {
+        this->unk21E = -1;
+    }
+    if ((this->unk21E >= 0) && (Flags_GetSwitch(globalCtx, this->unk21E) != 0)) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    if (this->unk220 == 0x1F) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+    this->unk21C = 0;
+    func_80A67A34(this);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Destroy.s")
+void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnLookNuts* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67A34.s")
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67AA8.s")
+void func_80A67A34(EnLookNuts* this) {
+    Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
+    this->unk21C = 0;
+    this->actionFunc = func_80A67AA8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67C48.s")
+void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx) {
+    f32 sp34;
+    f32 sp30;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67D0C.s")
+    sp34 = 0.0f;
+    SkelAnime_Update(&this->skelAnime);
+    if (func_801690CC(globalCtx) != 0) {
+        this->actor.speedXZ = 0.0f;
+        return;
+    }
+    this->actor.speedXZ = 2.0f;
+    if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+    }
+    if (D_80A6862C != 0) {
+        Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
+        return;
+    }
+    this->path = func_8013D648(globalCtx, this->unk220, 0x1F);
+    if (this->path != 0) {
+        sp34 = func_8013D83C(this->path, this->unk214, &this->actor.world.pos, &sp30);
+    }
+    if (sp30 < 10.0f) {
+        if (this->path != 0) {
+            this->unk214++;
+            if (this->unk214 >= this->path->count) {
+                this->unk214 = 0;
+            }
+            if (Rand_ZeroOne() < 0.6f) {
+                func_80A67C48(this);
+                return;
+            }
+        }
+    }
+    Math_SmoothStepToS(&this->actor.shape.rot.y, sp34, 1, 0x1388, 0);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67F30.s")
+void func_80A67C48(EnLookNuts* this) {
+    Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
+    this->unk224 = Rand_S16Offset(1, 3);
+    this->unk238.y = 10000.0f;
+    if (Rand_ZeroOne() < 0.5f) {
+        this->unk238.y = -10000.0f;
+    }
+    this->unk21A = 10;
+    this->unk21C = 1;
+    this->actionFunc = func_80A67D0C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A67FC4.s")
+void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx) {
+    s16 randOffset;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A68080.s")
+    SkelAnime_Update(&this->skelAnime);
+    Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
+    if ((func_801690CC(globalCtx) == 0) && (D_80A6862C == 0) && (this->unk21A == 0)) {
+        this->unk21A = 10;
+        switch (this->unk224) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this->unk224++;
+                this->unk238.y *= -1.0f;
+                break;
+            case 5:
+                this->unk238.y = 0.0f;
+                randOffset = Rand_S16Offset(1, 2);
+                this->unk21A = 0;
+                this->unk224 += randOffset;
+                break;
+            case 6:
+                if (fabsf(this->unk238.y - this->headRotation.y) < 10.0f) {
+                    this->unk224 = 10;
+                    this->unk238.x = 4000.0f;
+                    this->unk21A = 5;
+                }
+                break;
+            case 7:
+                if (fabsf(this->unk238.y - this->headRotation.y) < 10.0f) {
+                    this->unk238.z = 4000.0f;
+                    this->unk224++;
+                }
+                break;
+            case 8:
+                this->unk224 = 10;
+                this->unk21A = 20;
+                this->unk238.z = -8000.0f;
+                break;
+            case 10:
+                Math_Vec3f_Copy(&this->unk238, &gZeroVec3f);
+                this->unk224 = 11;
+                break;
+            case 11:
+                if ((fabsf(this->headRotation.x) < 30.0f) && (fabsf(this->headRotation.y) < 30.0f) &&
+                    (fabsf(this->headRotation.z) < 30.0f)) {
+                    this->unk224 = 0xC;
+                }
+                break;
+        }
+        if (this->unk224 == 12) {
+            this->unk224 = 0;
+            func_80A67A34(this);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/func_80A680FC.s")
+void func_80A67F30(EnLookNuts* this, GlobalContext* globalCtx) {
+    Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 2.0f, 0.0f,
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
+    this->unk21C = 2;
+    this->unk21A = 0x12C;
+    func_801518B0(globalCtx, 0x833, &this->actor);
+    this->actionFunc = func_80A67FC4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Update.s")
+void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    if ((Animation_OnFrame(&this->skelAnime, 1.0f) != 0) || (Animation_OnFrame(&this->skelAnime, 5.0f) != 0)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+    }
+    this->actor.speedXZ = 4.0f;
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
+    if ((this->actor.xzDistToPlayer < 70.0f) || (this->unk21A == 0)) {
+        this->actor.speedXZ = 0.0f;
+        func_80A68080(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Look_Nuts/EnLookNuts_Draw.s")
+void func_80A68080(EnLookNuts* this) {
+    Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
+                     Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
+    this->unk21C = 3;
+    this->actionFunc = func_80A680FC;
+}
+
+void func_80A680FC(EnLookNuts* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        func_801477B4(globalCtx);
+        globalCtx->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
+        gSaveContext.nextCutsceneIndex = 0;
+        Scene_SetExitFade(globalCtx);
+        globalCtx->sceneLoadFlag = 0x14;
+        gSaveContext.weekEventReg[0x11] |= 4;
+    }
+}
+
+void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnLookNuts* this = THIS;
+    s32 pad;
+    Vec3f effectVelOffset;
+    Vec3f effectPos;
+    Vec3f effectVel;
+
+    if (this->blinkTimer == 0) {
+        this->eyeState++;
+        if (this->eyeState >= 3) {
+            this->eyeState = 0;
+            this->blinkTimer = (s16)Rand_ZeroFloat(60.0f) + 0x14;
+        }
+    }
+    this->actionFunc(this, globalCtx);
+    if (this->blinkTimer != 0) {
+        this->blinkTimer--;
+    }
+    if (this->unk21A != 0) {
+        this->unk21A--;
+    }
+    Actor_MoveWithGravity(&this->actor);
+    if (D_80A6862C == 0) {
+        if ((this->unk21C < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
+            effectVelOffset = D_80A68650;
+            Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
+            effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
+            effectPos.y += 30.0f;
+            effectPos.z += Math_CosS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
+            Matrix_StatePush();
+            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+            effectVelOffset.z = 20.0f;
+            Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
+            Matrix_StatePop();
+            if (this->isPlayerDetected == false) {
+                s16 drawFlag = 1;
+                if (gSaveContext.isNight) {
+                    drawFlag = 0;
+                }
+                if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
+                    EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50,
+                                                 &this->isPlayerDetected, drawFlag);
+                }
+            }
+            if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
+                Player* player = GET_PLAYER(globalCtx);
+                if (!(player->stateFlags3 & 0x100) && !func_801690CC(globalCtx)) {
+                    Math_Vec3f_Copy(&this->unk238, &gZeroVec3f);
+                    this->unk21C = 2;
+                    play_sound(NA_SE_SY_FOUND);
+                    func_800B7298(globalCtx, &this->actor, 0x1A);
+                    D_80A6862C = 1;
+                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
+                    this->actor.gravity = 0.0f;
+                    func_80A67F30(this, globalCtx);
+                } else {
+                    this->isPlayerDetected = false;
+                }
+            }
+        }
+        Math_ApproachF(&this->headRotation.x, this->unk238.x, 1.0f, 3000.0f);
+        Math_ApproachF(&this->headRotation.y, this->unk238.y, 1.0f, 6000.0f);
+        Math_ApproachF(&this->headRotation.z, this->unk238.z, 1.0f, 2000.0f);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
+
+void EnLookNuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnLookNuts* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
