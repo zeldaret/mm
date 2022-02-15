@@ -340,9 +340,53 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     *curIndex = nextIndex;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E2D4.s")
+s32 func_8013E2D4(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
+    s32 isStarted = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E3B8.s")
+    if ((curCutscene != -1) && (ActorCutscene_GetCurrentIndex() == curCutscene)) {
+        ActorCutscene_Stop(curCutscene);
+        ActorCutscene_SetIntentToPlay(nextCutscene);
+    } else if (ActorCutscene_GetCanPlayNext(nextCutscene)) {
+        switch (type) {
+            case SUBS_CUTSCENE_SET_UNK_LINK_FIELDS:
+                ActorCutscene_StartAndSetUnkLinkFields(nextCutscene, actor);
+                break;
+            case SUBS_CUTSCENE_NORMAL:
+                ActorCutscene_Start(nextCutscene, actor);
+                break;
+            case SUBS_CUTSCENE_SET_FLAG:
+                ActorCutscene_StartAndSetFlag(nextCutscene, actor);
+                break;
+        }
+        isStarted = true;
+    } else {
+        ActorCutscene_SetIntentToPlay(nextCutscene);
+    }
+    return isStarted;
+}
+
+s32 func_8013E3B8(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
+    s16 cs;
+    s32 i;
+
+    for (i = 0; i < cutscenesLen; i++) {
+        cutscenes[i] = -1;
+    }
+
+    cs = actor->cutscene;
+    i = 0;
+
+    while (cs != -1) {
+        // Note: cutscenesLen must not be less then possibile additional cutscenes
+        // otherwise this is an infinite loop
+        if (i < cutscenesLen) {
+            cutscenes[i] = cs;
+            cs = ActorCutscene_GetAdditionalCutscene(cs);
+            i++;
+        }
+    }
+    return i;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E4B0.s")
 
