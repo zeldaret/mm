@@ -131,16 +131,25 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_in_Anim_001D10, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_001D10, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_014F8C, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_014F8C, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_000CB0, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_0003B4, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_001BE0, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_015918, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_01C0B0, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01C0B0, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_01A140, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01A140, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_01B904, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01B904, 1.0f, 0, -1, 0, -4 },
-    { &object_in_Anim_01B3C4, 1.0f, 0, -1, 0, 0 },  { &object_in_Anim_01B3C4, 0.0f, 0, -1, 2, 0 },
-    { &object_in_Anim_01B3C4, 1.0f, 0, -1, 0, -4 }, { &object_in_Anim_019EB4, 1.0f, 0, -1, 2, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_in_Anim_014F8C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_000CB0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_0003B4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_001BE0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_015918, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_01C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_in_Anim_01C0B0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_01A140, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_in_Anim_01A140, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_01B904, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_in_Anim_01B904, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_01B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_in_Anim_01B3C4, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_in_Anim_01B3C4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_in_Anim_019EB4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
 static u16 D_808F6C0C[] = {
@@ -155,11 +164,11 @@ s32 func_808F30B0(SkelAnime* skelAnime, s16 animIndex) {
         ret = true;
         frameCount = sAnimations[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
+            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                         sAnimations[animIndex].frame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].transitionRate);
+        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
+                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
+                         sAnimations[animIndex].morphFrames);
     }
     return ret;
 }
@@ -254,7 +263,7 @@ void func_808F3414(EnIn* this, GlobalContext* globalCtx) {
     }
     func_808F322C(this, 3);
     func_808F3178(this, globalCtx);
-    func_8013D9C8(globalCtx, this->unk376, this->unk39E, 20);
+    SubS_FillLimbRotTables(globalCtx, this->unk376, this->unk39E, ARRAY_COUNT(this->unk376));
 }
 
 void func_808F35AC(EnIn* this, GlobalContext* globalCtx) {
@@ -748,7 +757,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
-                            if (func_80114E90()) {
+                            if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
@@ -894,7 +903,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x347E:
                     func_808F35D8(this, globalCtx);
-                    if (func_80114E90()) {
+                    if (Interface_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
@@ -1000,7 +1009,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
-                            if (func_80114E90()) {
+                            if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
@@ -1098,7 +1107,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x34A1:
                     func_808F35D8(this, globalCtx);
-                    if (func_80114E90()) {
+                    if (Interface_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
                         Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
                         ret = true;
