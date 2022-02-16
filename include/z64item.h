@@ -349,7 +349,11 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ GID_BOTTLE,
+    /* 0x02 */ GID_02 = 0x02,
+    /* 0x03 */ GID_03,
     /* 0x0A */ GID_COMPASS = 0x0A,
+    /* 0x0E */ GID_0E = 0x0E,
+    /* 0x0F */ GID_0F,
     /* 0x10 */ GID_MASK_ALL_NIGHT = 0x10,
     /* 0x11 */ GID_NUTS,
     /* 0x17 */ GID_BOMB_BAG_20 = 0x17,
@@ -367,11 +371,19 @@ typedef enum {
     /* 0x31 */ GID_POTION_RED,
     /* 0x32 */ GID_POTION_BLUE,
     /* 0x33 */ GID_SHIELD_MIRROR,
-    /* 0x3B */ GID_FAIRY = 0x3B,
+    /* 0x3A */ GID_3A = 0x3A,
+    /* 0x3B */ GID_FAIRY,
+    /* 0x3E */ GID_3E = 0x3E,
+    /* 0x44 */ GID_44 = 0x44,
+    /* 0x45 */ GID_45,
     /* 0x55 */ GID_SWORD_KOKIRI = 0x55,
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
-    /* 0x68 */ GID_SWORD_GREAT_FAIRY
+    /* 0x68 */ GID_SWORD_GREAT_FAIRY,
+    /* 0x6A */ GID_6A = 0x6A,
+    /* 0x6B */ GID_6B,
+    /* 0x70 */ GID_70 = 0x70,
+    /* 0x71 */ GID_71,
 } GetItemDrawID;
 
 // TODO: fill

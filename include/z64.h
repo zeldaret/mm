@@ -17,9 +17,9 @@
 #include "scheduler.h"
 #include "xstdio.h"
 
-#include "bgm.h"
 #include "color.h"
 #include "ichain.h"
+#include "sequence.h"
 #include "sfx.h"
 
 #include "z64actor.h"
@@ -34,6 +34,7 @@
 #include "z64light.h"
 #include "z64math.h"
 #include "z64object.h"
+#include "z64ocarina.h"
 #include "z64player.h"
 #include "z64scene.h"
 #include "z64save.h"
@@ -1372,30 +1373,6 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18; // Usually setted to Player's position or Player's focus
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
-
-typedef struct EnHy {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE1 unk_144[0x8];
-    /* 0x14C */ SkelAnime skelAnime;
-    /* 0x190 */ s8 unk190;
-    /* 0x191 */ s8 unk191;
-    /* 0x192 */ s8 unk192;
-    /* 0x193 */ s8 animObjIndex;
-    /* 0x194 */ ColliderCylinder collider;
-    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0x4];
-    /* 0x1E4 */ Path* path;
-    /* 0x1E8 */ s16 curPoint;
-    /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
-    /* 0x1EC */ Vec3f leftFootPos;
-    /* 0x1F8 */ Vec3f rightFootPos;
-    /* 0x204 */ u8 isLeftFootOnGround;
-    /* 0x205 */ u8 isRightFootOnGround;
-    /* 0x206 */ Vec3s jointTable[16];
-    /* 0x266 */ Vec3s morphTable[16];
-    /* 0x2C6 */ UNK_TYPE1 unk_2C6[0x120];
-    /* 0x3E6 */ s16 eyeTexIndex;
-    /* 0x3E8 */ s16 blinkTimer;
-} EnHy;
 
 typedef struct {
     /* 0x0 */ u8 unk0;
