@@ -18,7 +18,7 @@ typedef void (*BgNumaHanaActionFunc)(struct BgNumaHana*, GlobalContext*);
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3s rot;
-    /* 0x12 */ UNK_TYPE unk_12[0x2];
+    /* 0x12 */ UNK_TYPE1 unk_12[0x2];
 } WoodenFlowerPetalPosRot; // size = 0x14
 
 typedef struct BgNumaHana {

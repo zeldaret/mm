@@ -238,7 +238,7 @@ void BgNumaHana_SetupUnfoldInnerPetals(BgNumaHana* this) {
  * parts of the petals that are closest to the stalk.
  */
 void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, GlobalContext* globalCtx) {
-    Math_StepToS(&this->innerPetalZRotationalVelocity, 0xF0, 0xE);
+    Math_StepToS(&this->innerPetalZRotationalVelocity, 240, 14);
     if (Math_ScaledStepToS(&this->innerPetalZRotation, 0x2000, this->innerPetalZRotationalVelocity)) {
         if (this->transitionTimer >= 11) {
             BgNumaHana_SetupUnfoldOuterPetals(this);
@@ -270,7 +270,7 @@ void BgNumaHana_SetupUnfoldOuterPetals(BgNumaHana* this) {
  * parts of the petals that are furthest to the stalk.
  */
 void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, GlobalContext* globalCtx) {
-    Math_StepToS(&this->outerPetalZRotationalVelocity, 0xF0, 0xE);
+    Math_StepToS(&this->outerPetalZRotationalVelocity, 240, 14);
     if (Math_ScaledStepToS(&this->outerPetalZRotation, -0x4000, this->outerPetalZRotationalVelocity)) {
         if (this->transitionTimer >= 11) {
             BgNumaHana_SetupRaiseFlower(this);
@@ -352,10 +352,9 @@ void BgNumaHana_OpenedIdle(BgNumaHana* this, GlobalContext* globalCtx) {
 void BgNumaHana_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgNumaHana* this = THIS;
-    s32 type;
+    s32 type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Vec3f firePos;
 
-    type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     if (type == BG_NUMA_HANA_TYPE_NORMAL) {
         firePos.x = this->dyna.actor.world.pos.x;
         firePos.y = this->dyna.actor.world.pos.y + 10.5f;
