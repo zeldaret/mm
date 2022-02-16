@@ -122,7 +122,7 @@ s32 EnCne01_TestIsTalking(EnCne01* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->enHy.actor, &globalCtx->state)) {
         isTalking = true;
-        this->enHy.textId = 0x10B9; // Invalid textId, produdes empty textbox
+        this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
         this->enHy.tmpFocusTarget = this->enHy.focusTarget;
         this->enHy.tmpHeadRot = this->enHy.headRot;
         this->enHy.tmpTorsoRot = this->enHy.torsoRot;
