@@ -3,7 +3,10 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+#include "objects/object_ani/object_ani.h"
 #include "objects/object_fsn/object_fsn.h"
+
+#define ENOSSAN_LIMB_MAX MAX(FSN_LIMB_MAX + 1, 16)
 
 struct EnOssan;
 
@@ -50,8 +53,8 @@ typedef struct EnOssan {
     /* 0x2CC */ Vec3s unk2CC; // Set but never used
     /* 0x2D2 */ s16 limbRotTableY[19];
     /* 0x2F8 */ s16 limbRotTableZ[19];
-    /* 0x31E */ Vec3s jointTable[19];
-    /* 0x390 */ Vec3s morphTable[19];
+    /* 0x31E */ Vec3s jointTable[ENOSSAN_LIMB_MAX];
+    /* 0x390 */ Vec3s morphTable[ENOSSAN_LIMB_MAX];
     /* 0x402 */ s16 animationIndex;
     /* 0x404 */ Vec3s headRotPartTimeWorker;
     /* 0x40A */ u16 flags;

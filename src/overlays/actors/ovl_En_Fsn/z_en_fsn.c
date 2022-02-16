@@ -1405,7 +1405,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable,
-                       this->morphTable, 19);
+                       this->morphTable, ENFSN_LIMB_MAX);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~1;

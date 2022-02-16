@@ -6,7 +6,6 @@
 
 #include "z_en_ossan.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_ani/object_ani.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
@@ -1345,7 +1344,7 @@ void EnOssan_Blink(EnOssan* this) {
 
 void EnOssan_CuriosityShopMan_Init(EnOssan* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable,
-                       this->morphTable, 19);
+                       this->morphTable, ENOSSAN_LIMB_MAX);
     this->actor.draw = EnOssan_CuriosityShopMan_Draw;
 }
 
