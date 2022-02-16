@@ -5,10 +5,9 @@
  */
 
 #include "z_en_fsn.h"
-#include "objects/object_fsn/object_fsn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -400,14 +399,14 @@ s32 EnFsn_TestCancelOption(EnFsn* this, GlobalContext* globalCtx, Input* input) 
 }
 
 void EnFsn_UpdateCursorPos(EnFsn* this, GlobalContext* globalCtx) {
-    s16 sp2E;
-    s16 sp2C;
+    s16 x;
+    s16 y;
     f32 xOffset = 0.0f;
     f32 yOffset = 17.0f;
 
-    Actor_GetScreenPos(globalCtx, &this->items[this->cursorIdx]->actor, &sp2E, &sp2C);
-    this->cursorPos.x = sp2E + xOffset;
-    this->cursorPos.y = sp2C + yOffset;
+    Actor_GetScreenPos(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
+    this->cursorPos.x = x + xOffset;
+    this->cursorPos.y = y + yOffset;
     this->cursorPos.z = 1.2f;
 }
 
@@ -689,21 +688,21 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
         this->stickAnimTween = this->arrowAnimTween = 0.0f;
     }
     this->blinkTimer = 20;
-    this->animationIdx = 4;
+    this->animationIndex = 4;
     this->eyeTextureIdx = 0;
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     this->actionFunc = EnFsn_Idle;
 }
 
 void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->animationIdx == 4) {
+    if (this->animationIndex == 4) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
         if (curFrame == frameCount) {
-            this->animationIdx = 5;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = 5;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         }
         return;
     }
@@ -736,29 +735,29 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
-        this->animationIdx = 11;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+        this->animationIndex = 11;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     } else {
-        if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
+        if (this->animationIndex == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
-            this->animationIdx = 5;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = 5;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
-            this->animationIdx = 12;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = 12;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else {
-            if (this->animationIdx == 12) {
+            if (this->animationIndex == 12) {
                 if (curFrame == frameCount) {
-                    this->animationIdx = 5;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+                    this->animationIndex = 5;
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -1406,8 +1405,8 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->eyeTextureIdx = 0;
         this->actor.flags |= 1;
         this->actor.targetMode = 0;
-        this->animationIdx = 0;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+        this->animationIndex = 0;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         this->actionFunc = EnFsn_IdleBackroom;
     }
 }
@@ -1439,7 +1438,10 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnFsn_DrawCursor(EnFsn* this, GlobalContext* globalCtx, f32 x, f32 y, f32 z, u8 drawCursor) {
-    s32 ulx, uly, lrx, lry;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
     f32 w;
     s32 dsdx;
     s32 pad;
@@ -1465,9 +1467,14 @@ void EnFsn_DrawCursor(EnFsn* this, GlobalContext* globalCtx, f32 x, f32 y, f32 z
 void EnFsn_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                        f32 dy) {
     f32 unk;
-    s32 ulx, uly, lrx, lry;
-    f32 w, h;
-    s32 dsdx, dtdy;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
+    f32 w;
+    f32 h;
+    s32 dsdx;
+    s32 dtdy;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1548,18 +1555,18 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     s16 tmp;
     s32 limbRotTableIdx;
 
-    if (limbIndex == 16) {
+    if (limbIndex == FSN_LIMB_HEAD) {
         Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
     }
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         switch (limbIndex) {
-            case 8:
+            case FSN_LIMB_TORSO:
                 limbRotTableIdx = 0;
                 break;
-            case 11:
+            case FSN_LIMB_LEFT_HAND:
                 limbRotTableIdx = 1;
                 break;
-            case 16:
+            case FSN_LIMB_HEAD:
                 limbRotTableIdx = 2;
                 break;
             default:
@@ -1573,7 +1580,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
             rot->z += tmp;
         }
     }
-    if (limbIndex == 17) {
+    if (limbIndex == FSN_LIMB_TOUPEE) {
         *dList = NULL;
     }
     return false;
@@ -1582,7 +1589,7 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFsn* this = THIS;
 
-    if (limbIndex == 16) {
+    if (limbIndex == FSN_LIMB_HEAD) {
         this->actor.focus.pos.x = this->actor.world.pos.x;
         this->actor.focus.pos.y = this->actor.world.pos.y + 60.0f;
         this->actor.focus.pos.z = this->actor.world.pos.z;
@@ -1599,7 +1606,7 @@ void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFsn* this = THIS;
     s16 i;
-    
+
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C5B0(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));

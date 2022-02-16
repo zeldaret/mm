@@ -8,7 +8,7 @@
 #include "objects/object_trt/object_trt.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
 #define THIS ((EnTrt*)thisx)
 
@@ -22,11 +22,11 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx);
-s32 EnTrt_ReturnItemToShelf(EnTrt* this);
 void EnTrt_ResetItemPosition(EnTrt* this);
+void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx);
+s32 EnTrt_ReturnItemToShelf(EnTrt* this);
 s32 EnTrt_FacingShopkeeperDialogResult(EnTrt* this, GlobalContext* globalCtx);
 s32 EnTrt_TakeItemOffShelf(EnTrt* this);
-void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx);
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx);
@@ -786,7 +786,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         this->timer = 40;
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 1);
-        this->animationIdx = 1;
+        this->animationIndex = 1;
         this->actionFunc = EnTrt_IdleAwake;
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
     }
@@ -832,7 +832,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
-        this->animationIdx = 2;
+        this->animationIndex = 2;
         this->sleepSoundTimer = 10;
         this->actor.textId = 0;
         this->actionFunc = EnTrt_IdleSleeping;
@@ -852,10 +852,10 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
-        if (this->animationIdx != 5) {
+        if (this->animationIndex != 5) {
             if (curFrame == animLastFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
-                this->animationIdx = 3;
+                this->animationIndex = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
@@ -870,7 +870,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
         func_801518B0(globalCtx, this->textId, &this->actor);
-        this->animationIdx = 5;
+        this->animationIndex = 5;
         switch (this->textId) {
             case 0x834:
                 if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) &&
@@ -911,7 +911,7 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (DECR(this->timer) == 0) {
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
-            this->animationIdx = 4;
+            this->animationIndex = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
@@ -921,7 +921,7 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
         func_801518B0(globalCtx, this->textId, &this->actor);
-        this->animationIdx = 5;
+        this->animationIndex = 5;
         this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
     }
 }
@@ -1539,7 +1539,10 @@ void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z, u8 drawCursor) {
-    s32 ulx, uly, lrx, lry;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
     f32 w;
     s32 dsdx;
     s32 pad;
@@ -1565,11 +1568,16 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
 void EnTrt_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                        f32 dy) {
     f32 unk;
-    s32 ulx, uly, lrx, lry;
-    f32 w, h;
-    s32 dsdx, dtdy;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
+    f32 w;
+    f32 h;
+    s32 dsdx;
+    s32 dtdy;
 
-    ((void)"../z_en_trt.c"); // Unreferenced
+    ((void)"../z_en_trt.c");
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1595,7 +1603,7 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
     s32 drawStickRightPrompt = this->stickLeftPrompt.isEnabled;
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
-    ((void)"../z_en_trt.c"); // Unreferenced
+    ((void)"../z_en_trt.c");
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawStickRightPrompt || drawStickLeftPrompt) {

@@ -2,8 +2,8 @@
 #define Z_EN_OSSAN_H
 
 #include "global.h"
-
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+#include "objects/object_fsn/object_fsn.h"
 
 struct EnOssan;
 
@@ -52,7 +52,7 @@ typedef struct EnOssan {
     /* 0x2F8 */ s16 limbRotTableZ[19];
     /* 0x31E */ Vec3s jointTable[19];
     /* 0x390 */ Vec3s morphTable[19];
-    /* 0x402 */ s16 animationIdx;
+    /* 0x402 */ s16 animationIndex;
     /* 0x404 */ Vec3s headRotPartTimeWorker;
     /* 0x40A */ u16 flags;
 } EnOssan; // size = 0x40C

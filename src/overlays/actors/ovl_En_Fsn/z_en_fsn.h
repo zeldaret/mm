@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "overlays/actors/ovl_En_GirlA/z_en_girla.h"
+#include "objects/object_fsn/object_fsn.h"
 
 #define ENFSN_IS_BACKROOM(thisx) ((thisx)->params & 1)
 #define ENFSN_IS_SHOP(thisx) (!((thisx)->params & 1))
@@ -63,7 +64,7 @@ typedef struct EnFsn {
     /* 0x444 */ u8 arrowAnimState;
     /* 0x445 */ u8 stickAnimState;
     /* 0x448 */ f32 shopItemSelectedTween;
-    /* 0x44C */ s16 animationIdx;
+    /* 0x44C */ s16 animationIndex;
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
 

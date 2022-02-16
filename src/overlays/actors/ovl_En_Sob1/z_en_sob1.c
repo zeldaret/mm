@@ -12,7 +12,7 @@
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
 
 #define THIS ((EnSob1*)thisx)
 
@@ -20,13 +20,15 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx);
-void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx);
-void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_ZoraShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_GoronShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_BombShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_ZoraShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_GoronShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_BombShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx);
+
+
 void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx);
@@ -139,10 +141,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EnSob1ActionFunc sInitFuncs[] = {
-    EnSob1_InitZoraShopkeeper,
-    EnSob1_InitGoronShopkeeper,
-    EnSob1_InitBombShopkeeper,
-    EnSob1_InitGoronShopkeeper,
+    EnSob1_ZoraShopkeeper_Init,
+    EnSob1_GoronShopkeeper_Init,
+    EnSob1_BombShopkeeper_Init,
+    EnSob1_GoronShopkeeper_Init,
 };
 
 static Vec3f sPosOffset[] = {
@@ -329,7 +331,7 @@ u16 EnSob1_GetGoodbye(EnSob1* this) {
     return 0x64C;
 }
 
-void EnSob1_EndInteractionBombShop(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_BombShopkeeper_EndInteraction(EnSob1* this, GlobalContext* globalCtx) {
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
@@ -451,7 +453,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
 s32 EnSob1_TestEndInteraction(EnSob1* this, GlobalContext* globalCtx, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         if (this->shopType == BOMB_SHOP) {
-            EnSob1_EndInteractionBombShop(this, globalCtx);
+            EnSob1_BombShopkeeper_EndInteraction(this, globalCtx);
         } else {
             EnSob1_EndInteraction(globalCtx, this);
         }
@@ -625,7 +627,7 @@ s32 EnSob1_FacingShopkeeperDialogResult(EnSob1* this, GlobalContext* globalCtx) 
         case 1:
             func_8019F230();
             if (this->shopType == BOMB_SHOP) {
-                EnSob1_EndInteractionBombShop(this, globalCtx);
+                EnSob1_BombShopkeeper_EndInteraction(this, globalCtx);
             } else {
                 EnSob1_EndInteraction(globalCtx, this);
             }
@@ -1320,29 +1322,29 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_ZoraShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
     Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f,
                      Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
-    this->actor.draw = EnSob1_DrawZoraShopkeeper;
+    this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
-void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_GoronShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
                        this->morphTable, 18);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
     Animation_Change(&this->skelAnime, &object_mastergolon_Anim_0000FC, 1.0f, 0.0f,
                      Animation_GetLastFrame(&object_mastergolon_Anim_0000FC), 0, 0.0f);
-    this->actor.draw = EnSob1_DrawGoronShopkeeper;
+    this->actor.draw = EnSob1_GoronShopkeeper_Draw;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
-void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_BombShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, this->jointTable,
                        this->morphTable, 16);
-    this->actor.draw = EnSob1_DrawBombShopkeeper;
+    this->actor.draw = EnSob1_BombShopkeeper_Draw;
     this->changeObjectFunc = NULL;
     this->skelAnime.playSpeed = 2.0f;
 }
@@ -1470,7 +1472,10 @@ void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32 z, u8 drawCursor) {
-    s32 ulx, uly, lrx, lry;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
     f32 w;
     s32 dsdx;
     s32 pad;
@@ -1496,11 +1501,16 @@ void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32
 void EnSob1_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                         f32 dy) {
     f32 unk;
-    s32 ulx, uly, lrx, lry;
-    f32 w, h;
-    s32 dsdx, dtdy;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
+    f32 w;
+    f32 h;
+    s32 dsdx;
+    s32 dtdy;
 
-    ((void)"../z_en_soB1.c"); // Unreferenced
+    ((void)"../z_en_soB1.c");
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1526,7 +1536,7 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
     s32 drawStickRightPrompt = this->stickLeftPrompt.isEnabled;
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
-    ((void)"../z_en_soB1.c"); // Unreferenced
+    ((void)"../z_en_soB1.c");
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawStickRightPrompt || drawStickLeftPrompt) {
@@ -1578,7 +1588,7 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnSob1_ZoraShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                           Actor* thisx) {
     EnSob1* this = THIS;
 
@@ -1588,7 +1598,7 @@ s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbInde
     return false;
 }
 
-s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnSob1_BombShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                           Actor* thisx) {
     EnSob1* this = THIS;
 
@@ -1598,7 +1608,7 @@ s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbInde
     return false;
 }
 
-void EnSob1_PostLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSob1_BombShopkeeper_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 11) {
         gSPDisplayList(POLY_OPA_DISP++, object_rs_DL_000970);
@@ -1616,7 +1626,7 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
     return dList;
 }
 
-void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+void EnSob1_ZoraShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sZoraShopkeeperEyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
     EnSob1* this = THIS;
     s32 pad;
@@ -1628,7 +1638,7 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x0C, EnSob1_EndDList(globalCtx->state.gfxCtx));
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sZoraShopkeeperEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnSob1_OverrideLimbDrawZoraShopkeeper, NULL, &this->actor);
+                          EnSob1_ZoraShopkeeper_OverrideLimbDraw, NULL, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
@@ -1639,7 +1649,7 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+void EnSob1_GoronShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sGoronShopkeeperEyeTextures[] = { object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38,
                                                         object_oF1d_map_Tex_011038 };
     EnSob1* this = THIS;
@@ -1661,7 +1671,7 @@ void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+void EnSob1_BombShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1* this = THIS;
     s32 pad;
     u32 frames;
@@ -1671,7 +1681,7 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_rs_Tex_005458));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnSob1_OverrideLimbDrawBombShopkeeper, EnSob1_PostLimbDrawBombShopkeeper, &this->actor);
+                          EnSob1_BombShopkeeper_OverrideLimbDraw, EnSob1_BombShopkeeper_PostLimbDraw, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
