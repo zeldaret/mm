@@ -62,8 +62,8 @@ void EnDrs_Setup(EnDrs* this, GlobalContext* globalCtx) {
 
     if ((this->moonMaskObjBankIndex >= 0) && func_8013D8DC(this->moonMaskObjBankIndex, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable, this->morphTable,
-                           WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
+                           this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
         SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimations, 0);
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
