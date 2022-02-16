@@ -2,19 +2,19 @@
     <File Name="object_drs" Segment="6">
         <Animation Name="gWeddingDressMannequinIdleAnim" Offset="0x1C" />
         <DList Name="gWeddingDressMannequinDL" Offset="0x3120" />
-        <DList Name="gWeddingDressMannequinFrontDL" Offset="0x3EA8" />
-        <DList Name="gWeddingDressMannequinUnusedDL" Offset="0x3F80" />
-        <Texture Name="WeddingDressMannequinWoodTex" OutName="drs_wood" Format="rgba16" Width="16" Height="16" Offset="0x4008" />
-        <Texture Name="WeddingDressMannequinWoodCornerTex" OutName="drs_wood_corner" Format="rgba16" Width="16" Height="16" Offset="0x4208" />
-        <Texture Name="WeddingDressMannequinShoulderGradientTex" OutName="drs_shoulder_gradient" Format="i8" Width="8" Height="8" Offset="0x4408" />
-        <Texture Name="WeddingDressMannequinPatternTex" OutName="drs_pattern" Format="i8" Width="32" Height="32" Offset="0x4448" />
-        <Texture Name="WeddingDressMannequinVineTex" OutName="drs_vine" Format="rgba16" Width="32" Height="16" Offset="0x4848" />
-        <Texture Name="WeddingDressMannequinFlowerTex" OutName="drs_flower" Format="rgba16" Width="16" Height="16" Offset="0x4C48" />
-        <Texture Name="WeddingDressMannequinFabricHighlightsTex" OutName="drs_fabric_highlight" Format="i8" Width="32" Height="64" Offset="0x4E48" />
-        <Texture Name="WeddingDressMannequinFabricSheerTex" OutName="drs_fabric_sheer" Format="i8" Width="32" Height="32" Offset="0x5648" />
-        <Limb Name="WeddingDressMannequinLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB" Offset="0x5A48" />
-        <Limb Name="WeddingDressMannequinMaskLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_MASK_LIMB" Offset="0x5A54" />
-        <Limb Name="WeddingDressMannequinPatternLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_PATTERN_LIMB" Offset="0x5A60" />
-        <Skeleton Name="WeddingDressMannequinSkel" Type="Flex" LimbType="Standard" LimbNone="WEDDING_DRESS_MANNEQUIN_NONE_LIMB" LimbMax="WEDDING_DRESS_MANNEQUIN_MAX_LIMB" EnumName="WeddingDressMannequinLimbs" Offset="0x5A78" />
+        <DList Name="gWeddingDressMannequinPatternDL" Offset="0x3EA8" />
+        <DList Name="gWeddingDressMannequinMaskDL" Offset="0x3F80" />
+        <Texture Name="gWeddingDressMannequinWoodTex" OutName="drs_wood" Format="rgba16" Width="16" Height="16" Offset="0x4008" />
+        <Texture Name="gWeddingDressMannequinWoodCornerTex" OutName="drs_wood_corner" Format="rgba16" Width="16" Height="16" Offset="0x4208" />
+        <Texture Name="gWeddingDressMannequinShoulderGradientTex" OutName="drs_shoulder_gradient" Format="i8" Width="8" Height="8" Offset="0x4408" />
+        <Texture Name="gWeddingDressMannequinPatternTex" OutName="drs_pattern" Format="i8" Width="32" Height="32" Offset="0x4448" />
+        <Texture Name="gWeddingDressMannequinVineTex" OutName="drs_vine" Format="rgba16" Width="32" Height="16" Offset="0x4848" />
+        <Texture Name="gWeddingDressMannequinFlowerTex" OutName="drs_flower" Format="rgba16" Width="16" Height="16" Offset="0x4C48" />
+        <Texture Name="gWeddingDressMannequinFabricHighlightsTex" OutName="drs_fabric_highlight" Format="i8" Width="32" Height="64" Offset="0x4E48" />
+        <Texture Name="gWeddingDressMannequinFabricSheerTex" OutName="drs_fabric_sheer" Format="i8" Width="32" Height="32" Offset="0x5648" />
+        <Limb Name="gWeddingDressMannequinLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB" Offset="0x5A48" />
+        <Limb Name="gWeddingDressMannequinMaskLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_MASK_LIMB" Offset="0x5A54" />
+        <Limb Name="gWeddingDressMannequinPatternLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_PATTERN_LIMB" Offset="0x5A60" />
+        <Skeleton Name="gWeddingDressMannequinSkel" Type="Flex" LimbType="Standard" LimbNone="WEDDING_DRESS_MANNEQUIN_NONE_LIMB" LimbMax="WEDDING_DRESS_MANNEQUIN_MAX_LIMB" EnumName="WeddingDressMannequinLimbs" Offset="0x5A78" />
     </File>
 </Root>

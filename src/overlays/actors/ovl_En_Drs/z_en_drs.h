@@ -5,8 +5,6 @@
 #include "objects/object_drs/object_drs.h"
 #include "objects/object_msmo/object_msmo.h"
 
-#define DRS_COUPLES_MASK_CS_FLAG gSaveContext.weekEventReg[0x57] & 2
-
 struct EnDrs;
 
 typedef void (*EnDrsActionFunc)(struct EnDrs*, GlobalContext*);
@@ -18,7 +16,7 @@ typedef struct EnDrs {
     /* 0x18C */ ColliderCylinder collider;
     /* 0x1D8 */ Vec3s jointTable[WEDDING_DRESS_MANNEQUIN_MAX_LIMB];
     /* 0x1F0 */ Vec3s morphTable[WEDDING_DRESS_MANNEQUIN_MAX_LIMB];
-    /* 0x208 */ s8 MoonMaskObjBankIndex;
+    /* 0x208 */ s8 moonMaskObjBankIndex;
 } EnDrs; // size = 0x20C */
 
 extern const ActorInit En_Drs_InitVars;

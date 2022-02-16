@@ -1,9 +1,9 @@
 ﻿<Root>
     <File Name="object_msmo" Segment="6">
         <DList Name="gMoonMaskDL" Offset="0xE70" />
-        <Texture Name="MoonMaskEyeTex" OutName="msmo_eye" Format="i8" Width="16" Height="16" Offset="0x1320" />
-        <Texture Name="MoonMaskPatternTex" OutName="msmo_pattern" Format="i8" Width="16" Height="16" Offset="0x1420" />
-        <Texture Name="MoonMaskSilverTex" OutName="msmo_silver" Format="i8" Width="16" Height="16" Offset="0x1520" />
-        <Texture Name="MoonMaskGoldTex" OutName="msmo_gold" Format="i4" Width="16" Height="16" Offset="0x1620" />
+        <Texture Name="gMoonMaskEyeTex" OutName="msmo_eye" Format="i8" Width="16" Height="16" Offset="0x1320" />
+        <Texture Name="gMoonMaskPatternTex" OutName="msmo_pattern" Format="i8" Width="16" Height="16" Offset="0x1420" />
+        <Texture Name="gMoonMaskSilverTex" OutName="msmo_silver" Format="i8" Width="16" Height="16" Offset="0x1520" />
+        <Texture Name="gMoonMaskGoldTex" OutName="msmo_gold" Format="i4" Width="16" Height="16" Offset="0x1620" />
     </File>
 </Root>
