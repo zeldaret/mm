@@ -10,8 +10,6 @@
 
 #define THIS ((EnDrs*)thisx)
 
-#define DRS_COUPLES_MASK_CS_FLAG gSaveContext.weekEventReg[0x57] & 2
-
 void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -52,7 +50,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimations = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, 0, 0 };
+static AnimationInfoS sAnimations = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
 void EnDrs_CollisionUpdate(EnDrs* this, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -109,7 +107,7 @@ void EnDrs_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
     // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
     // after that it will no longer be rendered.
-    if (!(DRS_COUPLES_MASK_CS_FLAG) && (limbIndex == WEDDING_DRESS_MANNEQUIN_MASK_LIMB)) {
+    if (!(gSaveContext.weekEventReg[87] & 2) && (limbIndex == WEDDING_DRESS_MANNEQUIN_MASK_LIMB)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[temp].segment);
         gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);
