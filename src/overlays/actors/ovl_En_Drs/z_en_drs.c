@@ -58,14 +58,13 @@ void EnDrs_CollisionUpdate(EnDrs* this, GlobalContext* globalCtx) {
 }
 
 void EnDrs_Setup(EnDrs* this, GlobalContext* globalCtx) {
-    s32 pad;
-    SkelAnime* temp = &this->skelAnime;
+    s32 pad[2];
 
     if ((this->moonMaskObjBankIndex >= 0) && func_8013D8DC(this->moonMaskObjBankIndex, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_InitFlex(globalCtx, temp, &gWeddingDressMannequinSkel, NULL, this->jointTable, this->morphTable,
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable, this->morphTable,
                            WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
-        SubS_ChangeAnimationByInfoS(temp, &sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimations, 0);
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
         Actor_SetScale(&this->actor, 0.01f);
