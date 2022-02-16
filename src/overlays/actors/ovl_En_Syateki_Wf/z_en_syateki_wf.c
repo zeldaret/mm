@@ -84,6 +84,7 @@ extern ColliderCylinderInit D_80A20E74;
 extern ColliderJntSphInit D_80A20EA0;
 extern ColliderJntSphElementInit* D_80A20EAC;
 extern ColliderCylinderInit D_80A20EB0;
+extern AnimationInfo D_80A20F14;
 extern InitChainEntry D_80A20FBC[];
 
 extern FlexSkeletonHeader D_060095D0;
@@ -197,7 +198,13 @@ void func_80A20320(EnSyatekiWf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20378.s")
+void func_80A20378(EnSyatekiWf* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 1);
+    this->actor.speedXZ = 10.0f;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actor.draw = EnSyatekiWf_Draw;
+    this->actionFunc = func_80A203DC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A203DC.s")
 
