@@ -25,6 +25,7 @@ void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A201CC(EnSyatekiWf* this);
 void func_80A2030C(EnSyatekiWf* this);
+void func_80A20378(EnSyatekiWf* this);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -182,9 +183,19 @@ void func_80A20284(EnSyatekiWf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A2030C.s")
+void func_80A2030C(EnSyatekiWf* this) {
+    this->actionFunc = func_80A20320;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20320.s")
+void func_80A20320(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    if (this->unk_29C >= 11) {
+        Actor_PlaySfxAtPos(this->actor.parent, NA_SE_EN_WOLFOS_APPEAR);
+        this->unk_29C = 0;
+        func_80A20378(this);
+    } else {
+        this->unk_29C++;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20378.s")
 
