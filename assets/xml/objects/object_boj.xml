@@ -3,16 +3,16 @@
         <Animation Name="object_boj_Anim_00041C" Offset="0x41C" />
         <Animation Name="object_boj_Anim_0004D0" Offset="0x4D0" />
         <Animation Name="object_boj_Anim_00071C" Offset="0x71C" />
-        <Animation Name="object_boj_Anim_0008C0" Offset="0x8C0" />
-        <Animation Name="object_boj_Anim_000AC4" Offset="0xAC4" />
+        <Animation Name="object_boj_Anim_0008C0" Offset="0x8C0" /> <!-- object_ginko_floorsmacking_anim -->
+        <Animation Name="object_boj_Anim_000AC4" Offset="0xAC4" /> <!-- object_ginko_advertising_anim -->
         <Animation Name="object_boj_Anim_001494" Offset="0x1494" />
         <Animation Name="object_boj_Anim_001908" Offset="0x1908" />
         <Animation Name="object_boj_Anim_002734" Offset="0x2734" />
         <Animation Name="object_boj_Anim_0033B0" Offset="0x33B0" />
         <Animation Name="object_boj_Anim_004078" Offset="0x4078" />
-        <Animation Name="object_boj_Anim_0043F0" Offset="0x43F0" />
-        <Animation Name="object_boj_Anim_004A7C" Offset="0x4A7C" />
-        <Animation Name="object_boj_Anim_004F40" Offset="0x4F40" />
+        <Animation Name="object_boj_Anim_0043F0" Offset="0x43F0" /> <!-- object_ginko_sitting_anim -->
+        <Animation Name="object_boj_Anim_004A7C" Offset="0x4A7C" /> <!-- object_ginko_amazed_anim -->
+        <Animation Name="object_boj_Anim_004F40" Offset="0x4F40" /> <!-- object_ginko_stamp_reach_anim -->
         <Animation Name="object_boj_Anim_005CE4" Offset="0x5CE4" />
         <Animation Name="object_boj_Anim_005D9C" Offset="0x5D9C" />
         <Texture Name="object_boj_TLUT_005DB0" OutName="tlut_005DB0" Format="rgba16" Width="16" Height="16" Offset="0x5DB0" />
@@ -49,7 +49,7 @@
         <Texture Name="object_boj_Tex_009E00" OutName="tex_009E00" Format="ci8" Width="16" Height="16" Offset="0x9E00" />
         <Texture Name="object_boj_Tex_009F00" OutName="tex_009F00" Format="ci8" Width="16" Height="16" Offset="0x9F00" />
         <DList Name="object_boj_DL_00AF90" Offset="0xAF90" />
-        <DList Name="object_boj_DL_00B1D8" Offset="0xB1D8" />
+        <DList Name="object_boj_DL_00B1D8" Offset="0xB1D8" /> <!-- object_ginko_limb15_dlist -->
         <DList Name="object_boj_DL_00B3E8" Offset="0xB3E8" />
         <DList Name="object_boj_DL_00B660" Offset="0xB660" />
         <DList Name="object_boj_DL_00B878" Offset="0xB878" />
@@ -73,7 +73,7 @@
         <Limb Name="object_boj_Standardlimb_00C1E0" Type="Standard" Offset="0xC1E0" />
         <Limb Name="object_boj_Standardlimb_00C1EC" Type="Standard" Offset="0xC1EC" />
         <Limb Name="object_boj_Standardlimb_00C1F8" Type="Standard" Offset="0xC1F8" />
-        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" Offset="0xC240" />
+        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" Offset="0xC240" /> <!-- object_ginko_skeleton -->
         <Animation Name="object_boj_Anim_00DED8" Offset="0xDED8" />
         <Animation Name="object_boj_Anim_00F920" Offset="0xF920" />
         <Animation Name="object_boj_Anim_00FC1C" Offset="0xFC1C" />

@@ -5,6 +5,8 @@
  */
 
 #include "z_en_trt.h"
+#include "objects/object_trt/object_trt.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000009
 
@@ -62,29 +64,17 @@ void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
 void EnTrt_NodOff(EnTrt* this);
 
-extern UNK_TYPE D_0401F740;
-extern UNK_TYPE D_0401F8C0;
-extern UNK_TYPE D_0401F7C0;
-extern FlexSkeletonHeader D_0600FEF0;
-extern AnimationHeader D_0600FD34;
-extern AnimationHeader D_0600DE68;
-extern AnimationHeader D_06002224;
-extern AnimationHeader D_06001EF4;
-extern AnimationHeader D_060030EC;
-extern AnimationHeader D_0600D52C;
-extern AnimationHeader D_06002CB0;
-extern AnimationHeader D_0600EE98;
-extern AnimationHeader D_06003D78;
-extern AnimationHeader D_06000A44;
-extern TexturePtr D_0600B0B8;
-extern TexturePtr D_0600B8B8;
-extern TexturePtr D_0600C0B8;
-
-static ActorAnimationEntryS sAnimations[] = {
-    { &D_0600DE68, 1.0f, 0, -1, 2, 0 }, { &D_0600EE98, 1.0f, 0, -1, 2, 0 }, { &D_0600FD34, 1.0f, 0, -1, 0, 0 },
-    { &D_060030EC, 1.0f, 0, -1, 2, 0 }, { &D_06003D78, 1.0f, 0, -1, 2, 0 }, { &D_0600D52C, 1.0f, 0, -1, 0, 0 },
-    { &D_06000A44, 1.0f, 0, -1, 0, 0 }, { &D_06001EF4, 1.0f, 0, -1, 0, 0 }, { &D_06002224, 1.0f, 0, -1, 0, 0 },
-    { &D_06002CB0, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt_InitVars = {
@@ -107,17 +97,17 @@ static ShopItem sShop[] = {
     { SI_POTION_BLUE, { -12, 32, -36 } },
 };
 
-void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
+void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
     f32 frameCount;
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animationSeg);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }
-    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                     animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                     animations->mode, animations->morphFrames);
 }
 
 s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
@@ -214,7 +204,7 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -357,7 +347,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
@@ -397,12 +387,12 @@ void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x88F) {
-            if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
+            if (Interface_HasEmptyBottle() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
@@ -418,7 +408,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 EnTrt_SetupStartShopping(globalCtx, this, 0);
             } else if (gSaveContext.weekEventReg[0x54] & 0x40) {
                 this->textId = 0x83B;
-                if (func_80114F2C(ITEM_POTION_RED)) {
+                if (Interface_HasItemInBottle(ITEM_POTION_RED)) {
                     EnTrt_SetupStartShopping(globalCtx, this, false);
                 } else {
                     this->actionFunc = EnTrt_TryToGiveRedPotion;
@@ -647,7 +637,7 @@ void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
     Player* player = GET_PLAYER(globalCtx);
 
     Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
@@ -730,7 +720,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
                 }
             }
         } else if (talkState == 5 && func_80147624(globalCtx)) {
-            if (!func_80114E90()) {
+            if (!Interface_HasEmptyBottle()) {
                 play_sound(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(globalCtx, this, 0x846);
             } else {
@@ -852,7 +842,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
-    s16 animLastFrame = Animation_GetLastFrame(&D_060030EC) / (s16)this->skelAnime.playSpeed;
+    s16 animLastFrame = Animation_GetLastFrame(&object_trt_Anim_0030EC) / (s16)this->skelAnime.playSpeed;
 
     if (this->cutsceneState == ENTRT_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
@@ -941,7 +931,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 
     this->blinkFunc = EnTrt_Blink;
     if (talkState == 6 && func_80147624(globalCtx)) {
-        if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
+        if (Interface_HasEmptyBottle() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -960,12 +950,12 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->textId == 0x83C) {
-            if (func_80114E90()) {
+            if (Interface_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
@@ -1453,7 +1443,7 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600FEF0, &D_0600FD34, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_trt_Skel_00FEF0, &object_trt_Anim_00FD34, NULL, NULL, 0);
     if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
         this->actor.draw = NULL;
     } else {
@@ -1559,8 +1549,8 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, &D_0401F740, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
-                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
+                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w + -12.0f) * 4.0f;
@@ -1611,7 +1601,7 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F8C0);
+        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F8C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPLoadSync(OVERLAY_DISP++);
@@ -1632,7 +1622,7 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
                               this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, &D_0401F7C0);
+        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F7C0);
         gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
                    G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
         gDPLoadSync(OVERLAY_DISP++);
@@ -1741,7 +1731,7 @@ s32 EnTrt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (limbIndex == 14) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1762,7 +1752,7 @@ void EnTrt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
 }
 
-void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnTrt_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt* this = THIS;
 
     if (limbIndex == 21) {
@@ -1775,7 +1765,7 @@ void EnTrt_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { &D_0600B0B8, &D_0600B8B8, &D_0600C0B8 };
+    static TexturePtr sEyeTextures[] = { object_trt_Tex_00B0B8, object_trt_Tex_00B8B8, object_trt_Tex_00C0B8 };
     EnTrt* this = THIS;
     s32 pad;
 
@@ -1784,8 +1774,9 @@ void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTextureIdx]));
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  EnTrt_OverrideLimbDraw, EnTrt_PostLimbDraw, EnTrt_UnkActorDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, EnTrt_OverrideLimbDraw, EnTrt_PostLimbDraw,
+                                   EnTrt_TransformLimbDraw, &this->actor);
     EnTrt_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnTrt_DrawStickDirectionPrompt(globalCtx, this);
 

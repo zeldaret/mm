@@ -152,11 +152,15 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_st_Anim_000304, 1.0f, 0, -1, 0, 0 },  { &object_st_Anim_005B98, 1.0f, 0, -1, 2, -4 },
-    { &object_st_Anim_000304, 4.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 1.0f, 0, -1, 0, -4 },
-    { &object_st_Anim_0055A8, 1.0f, 0, -1, 2, -4 }, { &object_st_Anim_000304, 8.0f, 0, -1, 0, -4 },
-    { &object_st_Anim_000304, 6.0f, 0, -1, 2, -4 }, { &object_st_Anim_005B98, 2.0f, 0, -1, 0, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_000304, 4.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_000304, 8.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_st_Anim_000304, 6.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_st_Anim_005B98, 2.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 void func_808A5050(EnSt* this, GlobalContext* globalCtx) {
@@ -452,7 +456,7 @@ void func_808A60E0(EnSt* this) {
     sp1C = this->skelAnime.curFrame / (this->skelAnime.animLength - 1.0f);
 
     if (sp1C == 1.0f) {
-        func_8013BC6C(&this->skelAnime, sAnimations, idx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, idx);
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
@@ -504,7 +508,7 @@ void func_808A6220(EnSt* this, GlobalContext* globalCtx) {
 }
 
 void func_808A63E8(EnSt* this) {
-    func_8013BC6C(&this->skelAnime, sAnimations, 3);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
     this->unk_2C8 = 1.0f;
     func_808A5D7C(this);
     this->unk_30C = 0;
@@ -517,7 +521,7 @@ void func_808A63E8(EnSt* this) {
 
 void func_808A6468(EnSt* this, GlobalContext* globalCtx) {
     func_808A5050(this, globalCtx);
-    func_8013BC6C(&this->skelAnime, sAnimations, 4);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 4);
     this->unk_18C |= (0x8 | 0x4);
     this->unk_18C &= ~(0x10 | 0x2);
     this->unk_2C8 = -1.0f;
@@ -534,7 +538,7 @@ void func_808A6468(EnSt* this, GlobalContext* globalCtx) {
 void func_808A650C(EnSt* this) {
     s32 idx = (this->unk_2C8 > 0.0f) ? 2 : 6;
 
-    func_8013BC6C(&this->skelAnime, sAnimations, idx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, idx);
     this->unk_2CC = 0.0f;
     this->unk_2D4 = 0.0f;
     this->unk_2D8 = 0.0f;
@@ -601,7 +605,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
                     this->unk_314 = 20;
                     this->unk_312 = 0;
                     Actor_SetColorFilter(&this->actor, 0x4000, 200, 0, this->unk_314);
-                    func_8013BC6C(&this->skelAnime, sAnimations, 1);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 1);
                     this->unk_18C |= 8;
                     this->actionFunc = func_808A6D84;
                     this->unk_2C8 = -1.0f;
@@ -611,7 +615,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
             if (ENST_GET_3F(&this->actor) != ENST_3F_63) {
                 Flags_SetSwitch(globalCtx, ENST_GET_3F(&this->actor));
             }
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
 
             this->actor.flags &= ~1;
@@ -642,7 +646,7 @@ s32 func_808A6580(EnSt* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_18E != 10) {
-                func_8013BC6C(&this->skelAnime, sAnimations, 7);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 7);
                 this->unk_2CC = 0.0f;
                 this->unk_2D4 = 0.0f;
                 this->actor.gravity = -1.0f;
@@ -688,7 +692,7 @@ void func_808A6A78(EnSt* this, GlobalContext* globalCtx) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 8.0f);
         SkelAnime_Init(globalCtx, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
                        30);
-        func_8013BC6C(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
 
         Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
         Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
@@ -719,7 +723,7 @@ void func_808A6C04(EnSt* this, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
 
     if ((this->unk_18C & 8) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_8013BC6C(&this->skelAnime, sAnimations, 3);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
         this->unk_18C &= ~8;
     } else if ((this->unk_310 == 0) && func_808A5F28(this, globalCtx) && !func_808A6064(this)) {
         func_808A650C(this);
@@ -761,7 +765,7 @@ void func_808A6E24(EnSt* this, GlobalContext* globalCtx) {
         }
 
         if (count == ARRAY_COUNT(this->unk_31C)) {
-            func_8013BC6C(&this->skelAnime, sAnimations, 7);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 7);
             this->unk_18E = 1;
             this->unk_2CC = 0.0f;
             this->unk_2D4 = 0.0f;

@@ -1,4 +1,6 @@
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_gi_hearts/object_gi_hearts.h"
 
 #define FLAGS 0x00000000
 
@@ -693,12 +695,12 @@ void EnItem00_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-UNK_PTR D_801ADF30[5] = {
-    &D_04061FC0, // Green rupee
-    &D_04061FE0, // Blue rupee
-    &D_04062000, // Red rupee
-    &D_04062040, // Orange rupee
-    &D_04062020  // Purple rupee
+TexturePtr D_801ADF30[] = {
+    gameplay_keep_Tex_061FC0, // Green rupee
+    gameplay_keep_Tex_061FE0, // Blue rupee
+    gameplay_keep_Tex_062000, // Red rupee
+    gameplay_keep_Tex_062040, // Orange rupee
+    gameplay_keep_Tex_062020  // Purple rupee
 };
 
 void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx) {
@@ -720,24 +722,24 @@ void EnItem00_DrawRupee(EnItem00* this, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_801ADF30[iconNb]));
 
-    gSPDisplayList(POLY_OPA_DISP++, &D_040622C0); // TODO symbol
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0); // TODO symbol
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-UNK_PTR D_801ADF44[12] = {
-    &D_0405E6F0, // Heart (Not used)
-    &D_0405CEF0, // Bombs (A), Bombs (0)
-    &D_0405BEF0, // Arrows (10)
-    &D_0405B6F0, // Arrows (30)
-    &D_0405C6F0, // Arrows (40), Arrows (50)
-    &D_0405CEF0, // Bombs (B)
-    &D_040607C0, // Nuts (1), Nuts (10)
-    &D_04060FC0, // Sticks (1)
-    &D_040617C0, // Magic (Large)
-    &D_0405FFC0, // Magic (Small)
+TexturePtr D_801ADF44[12] = {
+    gameplay_keep_Tex_05E6F0, // Heart (Not used)
+    gameplay_keep_Tex_05CEF0, // Bombs (A), Bombs (0)
+    gameplay_keep_Tex_05BEF0, // Arrows (10)
+    gameplay_keep_Tex_05B6F0, // Arrows (30)
+    gameplay_keep_Tex_05C6F0, // Arrows (40), Arrows (50)
+    gameplay_keep_Tex_05CEF0, // Bombs (B)
+    gameplay_keep_Tex_0607C0, // Nuts (1), Nuts (10)
+    gameplay_keep_Tex_060FC0, // Sticks (1)
+    gameplay_keep_Tex_0617C0, // Magic (Large)
+    gameplay_keep_Tex_05FFC0, // Magic (Small)
     NULL,
-    &D_0405F7C0 // Small Key
+    gameplay_keep_Tex_05F7C0 // Small Key
 };
 
 void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx) {
@@ -764,13 +766,10 @@ void EnItem00_DrawSprite(EnItem00* this, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-    gSPDisplayList(POLY_OPA_DISP++, D_0405F6F0);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-
-extern Gfx D_06001290[];
-extern Gfx D_06001470[];
 
 void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
     s32 pad;
@@ -784,8 +783,8 @@ void EnItem00_DrawHeartContainer(EnItem00* actor, GlobalContext* globalCtx) {
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-        gSPDisplayList(POLY_XLU_DISP++, D_06001290);
-        gSPDisplayList(POLY_XLU_DISP++, D_06001470);
+        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001290);
+        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001470);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -801,7 +800,7 @@ void EnItem00_DrawHeartPiece(EnItem00* this, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
 
-    gSPDisplayList(POLY_XLU_DISP++, D_0405AAB0);
+    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_05AAB0);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -858,7 +857,7 @@ Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 param
             spawnedActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                                        spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
             if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
         } else {
             spawnedActor =
@@ -866,7 +865,7 @@ Actor* Item_DropCollectible(GlobalContext* globalCtx, Vec3f* spawnPos, u32 param
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
             if (param20000 == 0) {
                 if (!Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F)) {
-                    Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 }
             }
         }
@@ -924,7 +923,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 para
                             spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) & 0x7F) << 9) | 7);
         }
         if (Flags_GetCollectible(globalCtx, (param7F00 >> 8) & 0x7F) == 0) {
-            Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
         }
     } else {
         params = func_800A7650(params & 0xFF);
@@ -1080,7 +1079,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
             if (gSaveContext.health <= 0x10) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
                             spawnPos->z, 0, 0, 0, 2);
-                Audio_PlaySoundAtPosition(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 

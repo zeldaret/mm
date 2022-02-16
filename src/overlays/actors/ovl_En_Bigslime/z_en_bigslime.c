@@ -7,6 +7,7 @@
 #include "z_en_bigslime.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000235
 
@@ -307,7 +308,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
 };
 
-void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
+void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx2) {
     // gSaveContext.weekEventReg[KEY] = VALUE
     // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
@@ -316,8 +317,8 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
         (33 << 8) | 0x01, // Southern Swamp Frog Returned
         (33 << 8) | 0x02, // Laundry Pool Frog Returned
     };
+    GlobalContext* globalCtx = globalCtx2;
     EnBigslime* this = THIS;
-    GlobalContext* globalCtx2 = globalCtx;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -341,7 +342,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
-            Actor_Spawn(&globalCtx2->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
                         this->actor.params);
         }
@@ -354,7 +355,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.home.pos.y = GBT_ROOM_5_MAX_Y - 75.0f;
         this->actor.home.pos.z = GBT_ROOM_5_CENTER_Z;
         for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
-            this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&globalCtx2->actorCtx, &this->actor, globalCtx,
+            this->minislime[i] = (EnMinislime*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx,
                                                                   ACTOR_EN_MINISLIME, 0.0f, 0.0f, 0.0f, 0, 0, 0, i);
             if (this->minislime[i] == NULL) {
                 for (i = i - 1; i >= 0; i--) {
@@ -388,7 +389,7 @@ void EnBigslime_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Collider_DestroyCylinder(globalCtx, &this->gekkoCollider);
-    func_801A72CC(&this->gekkoProjectedPos);
+    Audio_StopSfxByPos(&this->gekkoProjectedPos);
 }
 
 void EnBigslime_DynamicVtxCopyState(EnBigslime* this) {
@@ -894,7 +895,7 @@ void EnBigslime_SetTargetVtxFromPreFrozen(EnBigslime* this) {
  * Plays the standard Gekko sound effects without reverb
  */
 void EnBigslime_GekkoSfxOutsideBigslime(EnBigslime* this, u16 sfxId) {
-    func_8019F1C0(&this->gekkoProjectedPos, sfxId);
+    Audio_PlaySfxAtPos(&this->gekkoProjectedPos, sfxId);
 }
 
 /**
@@ -2436,7 +2437,7 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
     worldPos = &this->actor.world.pos;
     dustPos.z = (Math_CosS(yawReverse) * 20.0f) + this->actor.world.pos.z;
 
-    Audio_PlaySoundAtPosition(globalCtx, worldPos, 40, NA_SE_EN_NPC_APPEAR);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, worldPos, 40, NA_SE_EN_NPC_APPEAR);
 
     // dust cloud where the red frog appears
     func_800B0DE0(globalCtx, &dustPos, &gZeroVec3f, &gZeroVec3f, &dustPrimColor, &dustEnvColor, 500, 50);
@@ -2905,9 +2906,9 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* shadowDL
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
+void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx2) {
     EnMinislime* minislime;
-    GlobalContext* globalCtx2 = globalCtx;
+    GlobalContext* globalCtx = globalCtx2;
     s32 pad;
     s32 currIndex;
     s32 i;
@@ -2933,8 +2934,8 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
         minislime = this->minislime[indices[i]];
-        lights = LightContext_NewLights(&globalCtx2->lightCtx, globalCtx->state.gfxCtx);
-        Lights_BindAll(lights, globalCtx2->lightCtx.listHead, &minislime->actor.world.pos, globalCtx);
+        lights = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
+        Lights_BindAll(lights, globalCtx->lightCtx.listHead, &minislime->actor.world.pos, globalCtx);
         Lights_Draw(lights, globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
         func_800B8118(&minislime->actor, globalCtx, 0);
@@ -2945,7 +2946,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, &gMinislimeNormalDL);
         if (minislime->frozenAlpha > 0) {
-            Matrix_InsertTranslation(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, 1);
+            Matrix_InsertTranslation(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(0.1f, minislime->frozenScale, 0.1f, MTXMODE_APPLY);
             AnimatedMat_Draw(globalCtx, this->minislimeFrozenTexAnim);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->frozenAlpha);
@@ -3099,7 +3100,7 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
         func_800AE5A0(globalCtx);
     }
 
-    EnBigslime_SetSysMatrix(&gekkoPos, globalCtx, D_04076BC0, this->gekkoScale * (550.0f / 7.0f),
+    EnBigslime_SetSysMatrix(&gekkoPos, globalCtx, gCircleShadowDL, this->gekkoScale * (550.0f / 7.0f),
                             this->gekkoScale * (550.0f / 7.0f), 0.0f, 0, 255.0f);
 
     if (this->minislimeState != MINISLIME_INACTIVE_STATE) {

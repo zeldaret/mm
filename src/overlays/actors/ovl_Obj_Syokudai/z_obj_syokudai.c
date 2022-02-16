@@ -7,6 +7,7 @@
 #include "z_obj_syokudai.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "objects/object_syokudai/object_syokudai.h"
 
 #define FLAGS 0x00000410
 
@@ -16,10 +17,6 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_060003A0[]; // sObjectSyokudaiTypeSwitchCausesFlameDL
-extern Gfx D_06000870[]; // sObjectSyokudaiTypeNoSwitchDL
-extern Gfx D_06000B90[]; // sObjectSyokudaiTypeFlameCausesSwitchDL
 
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
@@ -82,7 +79,11 @@ static InitChainEntry sInitChain[] = {
 
 static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
 
-static Gfx* sDLists[] = { D_060003A0, D_06000B90, D_06000870 };
+static Gfx* sDLists[] = {
+    gObjectSyokudaiTypeSwitchCausesFlameDL,
+    gObjectSyokudaiTypeFlameCausesSwitchDL,
+    gObjectSyokudaiTypeNoSwitchDL,
+};
 
 static s32 sNumLitTorchesInGroup;
 
@@ -209,7 +210,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     if (interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
-                            func_8019F1C0(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
+                            Audio_PlaySfxAtPos(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
@@ -220,7 +221,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderHurtboxActor->params = 0;
-                            ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
+                            ((EnArrow*)flameColliderHurtboxActor)->collider.info.toucher.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&

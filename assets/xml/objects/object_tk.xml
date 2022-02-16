@@ -12,7 +12,9 @@
         <Texture Name="object_tk_Tex_004210" OutName="tex_004210" Format="ci8" Width="8" Height="8" Offset="0x4210" />
         <Texture Name="object_tk_Tex_004250" OutName="tex_004250" Format="ci8" Width="8" Height="8" Offset="0x4250" />
         <Texture Name="object_tk_Tex_004290" OutName="tex_004290" Format="ci8" Width="16" Height="16" Offset="0x4290" />
-        <!-- <Blob Name="object_tk_Blob_004390" Size="0x1800" Offset="0x4390" /> -->
+        <Texture Name="object_tk_Tex_004390" OutName="tex_004390" Format="rgba16" Width="32" Height="32" Offset="0x4390" />
+        <Texture Name="object_tk_Tex_004B90" OutName="tex_004B90" Format="rgba16" Width="32" Height="32" Offset="0x4B90" />
+        <Texture Name="object_tk_Tex_005390" OutName="tex_005390" Format="rgba16" Width="32" Height="32" Offset="0x5390" />
         <Texture Name="object_tk_Tex_005B90" OutName="tex_005B90" Format="ci8" Width="16" Height="16" Offset="0x5B90" />
         <Texture Name="object_tk_Tex_005C90" OutName="tex_005C90" Format="ci8" Width="16" Height="16" Offset="0x5C90" />
         <!-- <Blob Name="object_tk_Blob_005D90" Size="0x180" Offset="0x5D90" /> -->
