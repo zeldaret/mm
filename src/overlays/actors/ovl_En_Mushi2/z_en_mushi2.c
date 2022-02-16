@@ -6,6 +6,7 @@
 
 #include "overlays/actors/ovl_Obj_Bean/z_obj_bean.h"
 #include "z_en_mushi2.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -30,8 +31,6 @@ void func_80A6AE14(EnMushi2* this);
 void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx);
 void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, GlobalContext* globalCtx);
-
-extern SkeletonHeader D_040527A0;
 
 const ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
@@ -125,7 +124,7 @@ s32 func_80A68860(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 sp40;
     CollisionPoly* sp3C;
-    f32 temp_f0 = func_800C411C(&globalCtx->colCtx, &sp3C, &sp40, &this->actor, &this->actor.world.pos);
+    f32 temp_f0 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &sp3C, &sp40, &this->actor, &this->actor.world.pos);
     WaterBox* sp34;
     f32 sp30;
 
@@ -133,11 +132,12 @@ s32 func_80A68860(EnMushi2* this, GlobalContext* globalCtx) {
         return true;
     }
 
-    return func_800CA1E8(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp30, &sp34);
+    return WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                  &sp30, &sp34);
 }
 
 s32 func_80A68910(EnMushi2* this, GlobalContext* globalCtx) {
-    Actor* bean = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* bean = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     f32 minDistSq = SQ(100.0f);
     s32 ret = false;
     f32 temp_f0;
@@ -198,14 +198,14 @@ void func_80A68B6C(EnMushi2* this) {
 }
 
 s32 func_80A68BA0(EnMushi2* this) {
-    return (D_80A6B994 > 3) && this->unk_34C == 0;
+    return (D_80A6B994 > 3) && this->unk_34C == NULL;
 }
 
 void func_80A68BC8(EnMushi2* this) {
     if (this->unk_36C > 0) {
         this->unk_36C--;
     } else {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_MUSI_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MUSI_WALK);
 
         this->unk_36C = 3.0f / CLAMP_MIN(this->skelAnime.playSpeed, 0.12f);
         if (this->unk_36C < 2) {
@@ -218,7 +218,7 @@ s32 func_80A68C5C(Vec3f* arg0, Vec3f* arg1) {
     f32 temp_f0 = Math3D_Vec3fMagnitude(arg0);
 
     if (temp_f0 < 0.005f) {
-        Math_Vec3f_Copy(arg0, &D_801D15B0);
+        Math_Vec3f_Copy(arg0, &gZeroVec3f);
         return false;
     } else {
         arg1->x = arg0->x * (1.0f / temp_f0);
@@ -279,7 +279,7 @@ void func_80A68ED8(EnMushi2* this) {
     this->actor.velocity.x = this->actor.speedXZ * this->unk_328.x;
     this->actor.velocity.y = this->actor.speedXZ * this->unk_328.y;
     this->actor.velocity.z = this->actor.speedXZ * this->unk_328.z;
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
 }
 
 void func_80A68F24(EnMushi2* this) {
@@ -320,7 +320,7 @@ s32 func_80A68F9C(EnMushi2* this, s16 arg1) {
     matrix->mf[3][2] = 0.0f;
     matrix->mf[3][3] = 0.0f;
 
-    Matrix_RotateY(arg1, 1);
+    Matrix_RotateY(arg1, MTXMODE_APPLY);
 
     this->unk_310.x = matrix->mf[0][0];
     this->unk_310.y = matrix->mf[0][1];
@@ -367,7 +367,7 @@ s32 func_80A690C4(EnMushi2* this, s16 arg1) {
     matrix->mf[3][2] = 0.0f;
     matrix->mf[3][3] = 0.0f;
 
-    Matrix_InsertXRotation_s(arg1, 1);
+    Matrix_InsertXRotation_s(arg1, MTXMODE_APPLY);
 
     this->unk_310.x = matrix->mf[0][0];
     this->unk_310.y = matrix->mf[0][1];
@@ -446,7 +446,7 @@ void func_80A69424(EnMushi2* this, GlobalContext* globalCtx) {
 s32 func_80A69468(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp68;
-    Vec3f sp5C;
+    Vec3f posB;
     Vec3f sp50;
     f32 x;
     f32 y;
@@ -462,12 +462,12 @@ s32 func_80A69468(EnMushi2* this, GlobalContext* globalCtx) {
     y = (this->unk_328.y * 4.0f);
     z = (this->unk_328.z * 4.0f);
 
-    sp5C.x = (x + sp50.x) + this->actor.world.pos.x;
-    sp5C.y = (y + sp50.y) + this->actor.world.pos.y;
-    sp5C.z = (z + sp50.z) + this->actor.world.pos.z;
+    posB.x = (x + sp50.x) + this->actor.world.pos.x;
+    posB.y = (y + sp50.y) + this->actor.world.pos.y;
+    posB.z = (z + sp50.z) + this->actor.world.pos.z;
 
-    if (func_800C55C4(&globalCtx->colCtx, &this->actor.prevPos, &sp5C, &this->unk_33C, &this->unk_334, 1, 1, 1, 1,
-                      &this->unk_338)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.prevPos, &posB, &this->unk_33C, &this->poly, true,
+                                true, true, true, &this->polyBgId)) {
         this->unk_30C |= 6;
         return true;
     }
@@ -476,18 +476,19 @@ s32 func_80A69468(EnMushi2* this, GlobalContext* globalCtx) {
 
 s32 func_80A6958C(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
-    Vec3f sp48;
-    Vec3f sp3C;
+    Vec3f posA;
+    Vec3f posB;
 
-    sp48.x = (2.0f * this->unk_31C.x) + this->actor.world.pos.x;
-    sp48.y = (2.0f * this->unk_31C.y) + this->actor.world.pos.y;
-    sp48.z = (2.0f * this->unk_31C.z) + this->actor.world.pos.z;
+    posA.x = (2.0f * this->unk_31C.x) + this->actor.world.pos.x;
+    posA.y = (2.0f * this->unk_31C.y) + this->actor.world.pos.y;
+    posA.z = (2.0f * this->unk_31C.z) + this->actor.world.pos.z;
 
-    sp3C.x = (this->unk_31C.x * -4.0f) + this->actor.world.pos.x;
-    sp3C.y = (this->unk_31C.y * -4.0f) + this->actor.world.pos.y;
-    sp3C.z = (this->unk_31C.z * -4.0f) + this->actor.world.pos.z;
+    posB.x = (this->unk_31C.x * -4.0f) + this->actor.world.pos.x;
+    posB.y = (this->unk_31C.y * -4.0f) + this->actor.world.pos.y;
+    posB.z = (this->unk_31C.z * -4.0f) + this->actor.world.pos.z;
 
-    if (func_800C55C4(&globalCtx->colCtx, &sp48, &sp3C, &this->unk_33C, &this->unk_334, 1, 1, 1, 1, &this->unk_338)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &this->unk_33C, &this->poly, true, true, true, true,
+                                &this->polyBgId)) {
         this->unk_30C |= 0xA;
         return true;
     }
@@ -496,21 +497,22 @@ s32 func_80A6958C(EnMushi2* this, GlobalContext* globalCtx) {
 
 s32 func_80A6969C(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
-    Vec3f sp50;
-    Vec3f sp44;
+    Vec3f posA;
+    Vec3f posB;
     Vec3f sp38;
 
     sp38.x = this->unk_31C.x * -4.0f;
     sp38.y = this->unk_31C.y * -4.0f;
     sp38.z = this->unk_31C.z * -4.0f;
 
-    Math_Vec3f_Sum(&sp38, &this->actor.world.pos, &sp50);
+    Math_Vec3f_Sum(&sp38, &this->actor.world.pos, &posA);
 
-    sp44.x = this->actor.prevPos.x + sp38.x + (this->unk_328.x * -4.0f);
-    sp44.y = this->actor.prevPos.y + sp38.y + (this->unk_328.y * -4.0f);
-    sp44.z = this->actor.prevPos.z + sp38.z + (this->unk_328.z * -4.0f);
+    posB.x = this->actor.prevPos.x + sp38.x + (this->unk_328.x * -4.0f);
+    posB.y = this->actor.prevPos.y + sp38.y + (this->unk_328.y * -4.0f);
+    posB.z = this->actor.prevPos.z + sp38.z + (this->unk_328.z * -4.0f);
 
-    if (func_800C55C4(&globalCtx->colCtx, &sp50, &sp44, &this->unk_33C, &this->unk_334, 1, 1, 1, 1, &this->unk_338)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &posA, &posB, &this->unk_33C, &this->poly, true, true, true, true,
+                                &this->polyBgId)) {
         this->unk_30C |= (0x10 | 0x2);
         return true;
     }
@@ -519,8 +521,8 @@ s32 func_80A6969C(EnMushi2* this, GlobalContext* globalCtx) {
 
 void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
-    s32 sp38 = this->unk_334;
-    s32 sp34 = this->unk_338;
+    CollisionPoly* poly = this->poly;
+    s32 bgId = this->polyBgId;
 
     if (!(this->unk_30C & (0x10 | 0x4))) {
         WaterBox* sp30;
@@ -531,8 +533,8 @@ void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
             func_80A6969C(this, globalCtx);
         }
 
-        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
-                          &sp30)) {
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                   &sp2C, &sp30)) {
             this->actor.depthInWater = sp2C - this->actor.world.pos.y;
             if (this->actor.depthInWater >= 1.0f) {
                 this->unk_30C |= 0x20;
@@ -547,11 +549,11 @@ void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
 
     if (this->unk_30C & 4) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_33C);
-        if (func_80A691EC(this, this->unk_334, 0.4f) == 1) {
+        if (func_80A691EC(this, this->poly, 0.4f) == 1) {
             this->unk_30C &= ~0x4;
         }
     } else if (this->unk_30C & 0x10) {
-        if (func_80A691EC(this, this->unk_334, 0.4f) == 1) {
+        if (func_80A691EC(this, this->poly, 0.4f) == 1) {
             this->unk_30C &= ~0x10;
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_33C);
         } else {
@@ -560,13 +562,13 @@ void func_80A697C4(EnMushi2* this, GlobalContext* globalCtx) {
     } else if (this->unk_30C & 8) {
         if (!(this->unk_30C & 0x20)) {
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_33C);
-            func_80A691EC(this, this->unk_334, -1.0f);
+            func_80A691EC(this, this->poly, -1.0f);
         }
     } else if (!(this->unk_30C & 2)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
         Math_Vec3f_Copy(&this->unk_33C, &this->actor.prevPos);
-        this->unk_334 = sp38;
-        this->unk_338 = sp34;
+        this->poly = poly;
+        this->polyBgId = bgId;
     }
 }
 
@@ -580,7 +582,7 @@ s32 func_80A699E4(EnMushi2* this, GlobalContext* globalCtx) {
         f32 y = (2.0f * this->unk_328.y) + this->actor.world.pos.y;
         f32 z = (2.0f * this->unk_328.z) + this->actor.world.pos.z;
 
-        if (func_800CA1E8(globalCtx, &globalCtx->colCtx, x, z, &sp3C, &sp40) && (y <= sp3C)) {
+        if (WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, x, z, &sp3C, &sp40) && (y <= sp3C)) {
             return true;
         }
     }
@@ -603,11 +605,11 @@ void func_80A69ADC(Actor* thisx) {
         sp44 = Math3D_SignedDistanceFromPlane(
             this->unk_310.x, this->unk_310.y, this->unk_310.z,
             func_80A69AA8(this->unk_310.x, this->unk_310.y, this->unk_310.z, &this->actor.world.pos),
-            &bean->actor.world.pos);
+            &bean->dyna.actor.world.pos);
         sp40 = Math3D_SignedDistanceFromPlane(
             this->unk_328.x, this->unk_328.y, this->unk_328.z,
             func_80A69AA8(this->unk_328.x, this->unk_328.y, this->unk_328.z, &this->actor.world.pos),
-            &bean->actor.world.pos);
+            &bean->dyna.actor.world.pos);
         sp3C = Math3D_XZLength(sp44, sp40);
 
         if (fabsf(sp3C) > 0.1f) {
@@ -649,11 +651,11 @@ void func_80A69D3C(EnMushi2* this) {
         sp40 = Math3D_SignedDistanceFromPlane(
             this->unk_310.x, this->unk_310.y, this->unk_310.z,
             func_80A69AA8(this->unk_310.x, this->unk_310.y, this->unk_310.z, &this->actor.world.pos),
-            &this->unk_34C->actor.world.pos);
+            &this->unk_34C->dyna.actor.world.pos);
         sp3C = Math3D_SignedDistanceFromPlane(
             this->unk_328.x, this->unk_328.y, this->unk_328.z,
             func_80A69AA8(this->unk_328.x, this->unk_328.y, this->unk_328.z, &this->actor.world.pos),
-            &this->unk_34C->actor.world.pos);
+            &this->unk_34C->dyna.actor.world.pos);
         sp38 = Math3D_XZLengthSquared(sp40, sp3C);
 
         if (fabsf(sp38) > 0.010000001f) {
@@ -676,13 +678,13 @@ void func_80A69D3C(EnMushi2* this) {
 
 s32 func_80A69EE4(EnMushi2* this, GlobalContext* globalCtx) {
     s32 pad;
-    WaterBox* sp30;
-    f32 sp2C;
-    s32 sp28;
+    WaterBox* waterBox;
+    f32 waterSurface;
+    s32 bgId;
 
-    if (func_800C9EBC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C, &sp30,
-                      &sp28) &&
-        (this->actor.world.pos.y < sp2C)) {
+    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                &waterSurface, &waterBox, &bgId) &&
+        (this->actor.world.pos.y < waterSurface)) {
         return true;
     }
     return false;
@@ -748,8 +750,9 @@ void EnMushi2_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_040527A0, &D_0405140C, this->jointTable, this->morphTable, 24);
-    Animation_Change(&this->skelAnime, &D_0405140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gameplay_keep_Skel_0527A0, &gameplay_keep_Anim_05140C,
+                   this->jointTable, this->morphTable, 24);
+    Animation_Change(&this->skelAnime, &gameplay_keep_Anim_05140C, 1.0f, 0.0f, 0.0f, 1, 0.0f);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     func_80A68808(this);
@@ -786,7 +789,7 @@ void EnMushi2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80A6A300(EnMushi2* this) {
     this->unk_368 = 100;
     this->actor.gravity = -0.25f;
-    this->actor.minVelocityY = -3.5f;
+    this->actor.terminalVelocity = -3.5f;
     this->unk_370 = Rand_S16Offset(-1000, 2000);
     this->skelAnime.playSpeed = 1.5f;
     this->actionFunc = func_80A6A36C;
@@ -798,7 +801,7 @@ void func_80A6A36C(EnMushi2* this, GlobalContext* globalCtx) {
 
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
     this->actor.velocity.y -= this->actor.velocity.y * D_80A6BA14[ENMUSHI2_GET_3(&this->actor)];
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80A69424(this, globalCtx);
     this->actor.shape.rot.y += this->unk_370;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -819,7 +822,7 @@ void func_80A6A36C(EnMushi2* this, GlobalContext* globalCtx) {
     } else if (this->actor.bgCheckFlags & 0x20) {
         func_80A6AAA4(this);
     } else if (this->actor.bgCheckFlags & 1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_WALK);
         func_80A68F24(this);
         func_80A691EC(this, this->actor.floorPoly, -1.0f);
         func_80A69388(this);
@@ -837,7 +840,7 @@ void func_80A6A508(Actor* thisx) {
     }
 
     this->unk_368 = Rand_S16Offset(10, 30);
-    if (this->unk_34C == 0) {
+    if (this->unk_34C == NULL) {
         func_80A69CE0(thisx);
     } else {
         func_80A69ADC(thisx);
@@ -946,7 +949,7 @@ void func_80A6A9E4(EnMushi2* this, GlobalContext* globalCtx) {
 
 void func_80A6AAA4(EnMushi2* this) {
     this->actor.velocity.y = -1.2f;
-    this->actor.minVelocityY = -1.2f;
+    this->actor.terminalVelocity = -1.2f;
     this->actor.gravity = -0.5f;
     this->unk_368 = Rand_S16Offset(120, 50);
     this->unk_36E = 0;
@@ -964,7 +967,7 @@ void func_80A6AB08(EnMushi2* this, GlobalContext* globalCtx) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 0.02f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80A69424(this, globalCtx);
     Math_StepToF(&this->actor.world.pos.y, this->actor.world.pos.y + this->actor.depthInWater, 2.8f);
     this->skelAnime.playSpeed = this->unk_368 * 0.018f;
@@ -1010,7 +1013,7 @@ void func_80A6AE14(EnMushi2* this) {
     this->unk_30C &= ~1;
     this->unk_368 = 100;
     this->actor.velocity.y = 0.0f;
-    this->actor.minVelocityY = -0.8f;
+    this->actor.terminalVelocity = -0.8f;
     this->actor.gravity = -0.04f;
     func_80A68B6C(this);
     this->actionFunc = func_80A6AE7C;
@@ -1026,7 +1029,7 @@ void func_80A6AE7C(EnMushi2* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y += (s16)((Rand_ZeroOne() - 0.5f) * 2000.0f);
     this->actor.gravity = -0.04f - (Rand_ZeroOne() * 0.02f);
     this->actor.velocity.y *= 0.95f;
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_80A69424(this, globalCtx);
     temp_f2 = this->actor.scale.x - (1.0f / 20000.0f);
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
@@ -1045,7 +1048,7 @@ void func_80A6B078(EnMushi2* this) {
     this->unk_30C &= ~1;
     this->unk_368 = 50;
     this->skelAnime.playSpeed = 1.9f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_STALTURA_BOUND);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
     func_80A68B6C(this);
     this->actionFunc = func_80A6B0D8;
 }
@@ -1083,8 +1086,8 @@ void func_80A6B0D8(EnMushi2* this, GlobalContext* globalCtx) {
         Vec3f sp48;
         s32 sp44 = 0;
 
-        if (this->unk_334 != 0) {
-            u32 temp_v0 = func_800C99D4(&globalCtx->colCtx, this->unk_334, this->unk_338);
+        if (this->poly != NULL) {
+            u32 temp_v0 = func_800C99D4(&globalCtx->colCtx, this->poly, this->polyBgId);
             if ((temp_v0 == 5) || (temp_v0 == 14) || (temp_v0 == 15)) {
                 sp44 = 1;
             }
@@ -1092,7 +1095,7 @@ void func_80A6B0D8(EnMushi2* this, GlobalContext* globalCtx) {
         sp48.x = (this->unk_328.x * -0.6f) + (this->unk_31C.x * 0.1f);
         sp48.y = (this->unk_328.y * -0.6f) + (this->unk_31C.y * 0.1f);
         sp48.z = (this->unk_328.z * -0.6f) + (this->unk_31C.z * 0.1f);
-        func_800B0E48(globalCtx, &this->actor.world.pos, &sp48, &D_801D15B0, &D_80A6B984[sp44], &D_80A6B98C[sp44],
+        func_800B0E48(globalCtx, &this->actor.world.pos, &sp48, &gZeroVec3f, &D_80A6B984[sp44], &D_80A6B98C[sp44],
                       (Rand_ZeroOne() * 5.0f) + 8.0f, (Rand_ZeroOne() * 5.0f) + 8.0f);
     }
 
@@ -1115,7 +1118,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 phi_f0;
     s32 temp;
 
-    if ((this->unk_34C != NULL) && (this->unk_34C->actor.update == NULL)) {
+    if ((this->unk_34C != NULL) && (this->unk_34C->dyna.actor.update == NULL)) {
         this->unk_34C = NULL;
     }
 
@@ -1134,7 +1137,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_36A--;
     }
 
-    if ((this->unk_34C != 0) && ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824)) &&
+    if ((this->unk_34C != NULL) && ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824)) &&
         (this->unk_354 < SQ(3.0f))) {
         this->unk_30C |= 0x80;
         func_80A6B078(this);
@@ -1151,8 +1154,8 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_358 = 1.0f;
     }
 
-    temp = this->unk_338;
-    if ((temp != 50) &&
+    temp = this->polyBgId;
+    if ((temp != BGCHECK_SCENE) &&
         ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824) ||
          (this->actionFunc == func_80A6A9E4) || (this->actionFunc == func_80A6B0D8)) &&
         BgCheck2_UpdateActorAttachedToMesh(&globalCtx->colCtx, temp, &this->actor)) {
@@ -1173,16 +1176,15 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_80A68BC8(this);
         }
 
-        if (this->unk_34C != 0) {
+        if (this->unk_34C != NULL) {
             sp4C = 0.0f;
 
-            this->unk_354 = Math3D_DistanceSquared(&this->actor.world.pos, &this->unk_34C->actor.world.pos);
+            this->unk_354 = Math3D_Vec3fDistSq(&this->actor.world.pos, &this->unk_34C->dyna.actor.world.pos);
             if (this->unk_354 < this->unk_350) {
-                f32 dist = Math3D_NormalizedSignedDistanceFromPlane(
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.x),
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.y),
-                    COLPOLY_GET_NORMAL(this->unk_34C->actor.floorPoly->normal.z), this->unk_34C->actor.floorPoly->dist,
-                    &this->actor.world.pos);
+                f32 dist = Math3D_DistPlaneToPos(COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.x),
+                                                 COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.y),
+                                                 COLPOLY_GET_NORMAL(this->unk_34C->dyna.actor.floorPoly->normal.z),
+                                                 this->unk_34C->dyna.actor.floorPoly->dist, &this->actor.world.pos);
 
                 if (fabsf(dist) < 3.0f) {
                     sp4C = 1.9f;
@@ -1201,7 +1203,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
                  !(this->unk_358 > 0.999f) || !(this->unk_354 < SQ(20.0f)))) {
                 s32 phi_v0 = true;
 
-                if (this->unk_34C == 0) {
+                if (this->unk_34C == NULL) {
                     this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
                 } else {
                     this->collider.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
@@ -1222,7 +1224,7 @@ void EnMushi2_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if ((this->unk_30C & 1) && func_80A68DD4(this, globalCtx)) {
-            func_800B8A1C(&this->actor, globalCtx, GI_MAX, 60.0f, 30.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_MAX, 60.0f, 30.0f);
         }
     }
 }

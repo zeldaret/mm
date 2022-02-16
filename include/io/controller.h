@@ -99,8 +99,8 @@
 
 typedef struct {
     /* 0x00 */ u32 ramarray[15];
-    /* 0x3C */ u32 pifstatus;
-} OSPifRam;
+    /* 0x3C */ u32 status;
+} OSPifRam; // size = 0x40
 
 
 typedef struct {
@@ -152,5 +152,12 @@ extern u8 __osContLastPoll;
 extern u8 __osMaxControllers;
 // extern OSMesgQueue D_8009CF38;
 // extern OSMesg D_8009CF50;
+
+typedef struct {
+    /* 0x00 */ OSContPad cur;
+    /* 0x06 */ OSContPad prev;
+    /* 0x0C */ OSContPad press; // X/Y store delta from last frame
+    /* 0x12 */ OSContPad rel; // X/Y store adjusted
+} Input; // size = 0x18
 
 #endif

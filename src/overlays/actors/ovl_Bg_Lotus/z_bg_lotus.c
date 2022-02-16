@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_lotus.h"
+#include "objects/object_lotus/object_lotus.h"
 
 #define FLAGS 0x00000000
 
@@ -35,19 +36,16 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06000A20; // Lilypad collision
-extern Gfx D_06000040[];           // Lilypad model
-
 void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
     s32 pad;
-    s32 sp2C;
+    s32 bgId;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000A20);
-    this->dyna.actor.floorHeight =
-        func_800C411C(&globalCtx->colCtx, &thisx->floorPoly, &sp2C, &this->dyna.actor, &this->dyna.actor.world.pos);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_lotus_Colheader_000A20);
+    this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &thisx->floorPoly, &bgId,
+                                                               &this->dyna.actor, &this->dyna.actor.world.pos);
     this->timer2 = 96;
     this->dyna.actor.world.rot.y = Rand_Next() >> 0x10;
     this->actionFunc = BgLotus_Wait;
@@ -56,7 +54,7 @@ void BgLotus_Init(Actor* thisx, GlobalContext* globalCtx) {
 void BgLotus_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgLotus* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void BgLotus_SetScaleXZ(BgLotus* this) {
@@ -167,11 +165,11 @@ void BgLotus_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     WaterBox* waterBox;
 
-    func_800CA1E8(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
-                  &this->height, &waterBox);
+    WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
+                           &this->height, &waterBox);
     this->actionFunc(this, globalCtx);
 }
 
 void BgLotus_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000040);
+    Gfx_DrawDListOpa(globalCtx, object_lotus_DL_000040);
 }

@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_tokei_step.h"
+#include "objects/object_tokei_step/object_tokei_step.h"
 
 #define FLAGS 0x00400010
 
@@ -37,11 +38,11 @@ const ActorInit Obj_Tokei_Step_InitVars = {
     (ActorFunc)ObjTokeiStep_Draw,
 };
 
-static f32 panelXOffsets[] = { -105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f };
+static f32 sPanelXOffsets[] = { -105.0f, -90.0f, -75.0f, -60.0f, -45.0f, -30.0f, -15.0f };
 
-static f32 dustSpawnXOffsets[] = { -60.0f, -40.0f, -20.0f, 0.0f, 20.0f, 40.0f, 60.0f };
+static f32 sDustSpawnXOffsets[] = { -60.0f, -40.0f, -20.0f, 0.0f, 20.0f, 40.0f, 60.0f };
 
-static Vec3f dustEffectAccel = { 0.0f, 0.3f, 0.0f };
+static Vec3f sDustEffectAccel = { 0.0f, 0.3f, 0.0f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -50,27 +51,22 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_06000088[];
-extern CollisionHeader D_06000968;
-
 void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
-    MtxF* sysMatrix;
+    MtxF* mtx = Matrix_GetCurrentState();
 
-    sysMatrix = Matrix_GetCurrentState();
-    sysMatrix->wx = panel->pos.x;
-    sysMatrix->wy = panel->pos.y;
-    sysMatrix->wz = panel->pos.z;
+    mtx->wx = panel->pos.x;
+    mtx->wy = panel->pos.y;
+    mtx->wz = panel->pos.z;
 }
 
 void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
     s32 pad[2];
-    s16 quake;
+    s16 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
 
-    quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
-    Quake_SetSpeed(quake, 0x4E20);
+    Quake_SetSpeed(quake, 20000);
     Quake_SetQuakeValues(quake, 1, 0, 0, 0);
     Quake_SetCountdown(quake, 7);
-    func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 0x78, 0x14, 0xA);
+    func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
 
 void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, GlobalContext* globalCtx) {
@@ -79,17 +75,17 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, Global
     Vec3f dustSpawnOffset;
     Vec3f dustSpawnPos;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, 0);
+    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     dustSpawnOffset.y = 115.0f;
     dustSpawnOffset.z = -10.0f;
     for (i = 0; i < 7; i++) {
-        dustSpawnOffset.x = dustSpawnXOffsets[i];
+        dustSpawnOffset.x = sDustSpawnXOffsets[i];
         Matrix_MultiplyVector3fByState(&dustSpawnOffset, &dustSpawnPos);
         dustSpawnPos.x += panel->pos.x;
         dustSpawnPos.y += panel->pos.y;
         dustSpawnPos.z += panel->pos.z;
-        func_800B1210(globalCtx, &dustSpawnPos, &D_801D15B0, &dustEffectAccel, (s32)((Rand_ZeroOne() * 40.0f) + 80.0f),
+        func_800B1210(globalCtx, &dustSpawnPos, &gZeroVec3f, &sDustEffectAccel, (s32)((Rand_ZeroOne() * 40.0f) + 80.0f),
                       (s32)((Rand_ZeroOne() * 20.0f) + 50.0f));
     }
 }
@@ -105,7 +101,7 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
 
     panelOffset.x = 0.0f;
     panelOffset.y = 0.0f;
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         panelOffset.z = i * -20.0f;
         Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
@@ -123,9 +119,9 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     panelOffset.x = 0.0f;
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
-        panelOffset.y = panelXOffsets[i];
+        panelOffset.y = sPanelXOffsets[i];
         panelOffset.z = i * -20.0f;
         Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
     }
@@ -135,7 +131,7 @@ void ObjTokeiStep_InitTimers(ObjTokeiStep* this) {
     s32 i;
 
     this->panels[0].startFallingTimer = 0;
-    for (i = 1; i < 7; i++) {
+    for (i = 1; i < ARRAY_COUNT(this->panels); i++) {
         this->panels[i].startFallingTimer = 10;
     }
 }
@@ -145,25 +141,25 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
     s32 i;
     ObjTokeiStepPanel* panel;
     f32 finalPosY;
-    s32 isOpen = 1;
-    s32 prevBounced = 1;
+    s32 isOpen = true;
+    s32 hasPrevBounced = true;
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
-        if (prevBounced && panel->startFallingTimer > 0) {
+        if (hasPrevBounced && (panel->startFallingTimer > 0)) {
             panel->startFallingTimer--;
-            isOpen = 0;
+            isOpen = false;
         }
-        if (prevBounced && panel->numBounces < 3 && panel->startFallingTimer <= 0) {
-            finalPosY = panelXOffsets[i] + this->dyna.actor.world.pos.y;
+        if (hasPrevBounced && (panel->numBounces < 3) && (panel->startFallingTimer <= 0)) {
+            finalPosY = sPanelXOffsets[i] + this->dyna.actor.world.pos.y;
             if (!panel->hasSoundPlayed) {
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
                 panel->hasSoundPlayed = true;
             }
             panel->posChangeY += -2.5f;
             panel->posChangeY *= 0.83f;
             panel->pos.y += panel->posChangeY;
-            isOpen = 0;
+            isOpen = false;
             if (panel->pos.y < finalPosY) {
                 panel->numBounces++;
                 if (panel->numBounces >= 3) {
@@ -186,7 +182,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        prevBounced = panel->numBounces > 0;
+        hasPrevBounced = panel->numBounces > 0;
     }
     return isOpen;
 }
@@ -196,16 +192,17 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    if ((globalCtx->sceneNum == 0x6F) && (gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk_12 == 0)) {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000968);
+    if ((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
+        (globalCtx->csCtx.unk_12 == 0)) {
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
-    } else if (!((CURRENT_DAY != 3) || (gSaveContext.time >= 0x4000)) || gSaveContext.day >= 4) {
+    } else if (((CURRENT_DAY == 3) && (gSaveContext.time < CLOCK_TIME(6, 0))) || (gSaveContext.day >= 4)) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
         ObjTokeiStep_SetupDoNothingOpen(this);
     } else {
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000968);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupDoNothing(this);
     }
@@ -214,7 +211,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {
@@ -226,7 +223,7 @@ void ObjTokeiStep_BeginOpen(ObjTokeiStep* this, GlobalContext* globalCtx) {
 
     if (func_800EE29C(globalCtx, 0x86)) {
         action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x86)];
-        if ((globalCtx->csCtx.frames == (*action).startFrame) && action->unk0) {
+        if ((action->startFrame == globalCtx->csCtx.frames) && (action->unk0 != 0)) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
             ObjTokeiStep_SetupOpen(this);
         }
@@ -269,12 +266,12 @@ void ObjTokeiStep_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
-    func_800BDFC0(globalCtx, D_06000088);
+    Gfx_DrawDListOpa(globalCtx, gClocktowerPanelDL);
 }
 
 void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
-    int i;
+    s32 i;
     ObjTokeiStepPanel* panel;
     Gfx* gfx;
 
@@ -282,11 +279,11 @@ void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {
     gfx = POLY_OPA_DISP;
     gSPDisplayList(gfx++, &sSetupDL[6 * 0x19]);
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         ObjTokeiStep_SetSysMatrix(panel);
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(gfx++, D_06000088);
+        gSPDisplayList(gfx++, gClocktowerPanelDL);
     }
     POLY_OPA_DISP = gfx;
     CLOSE_DISPS(globalCtx->state.gfxCtx);

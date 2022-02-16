@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
@@ -31,7 +32,7 @@ s32 DmaMgr_DMARomToRam(uintptr_t rom, void* ram, size_t size) {
                 goto END;
             }
 
-            osRecvMesg(&queue, NULL, 1);
+            osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
             size -= buffSize;
             rom = rom + buffSize;
             ram = (u8*)ram + buffSize;
@@ -47,7 +48,7 @@ s32 DmaMgr_DMARomToRam(uintptr_t rom, void* ram, size_t size) {
         goto END;
     }
 
-    osRecvMesg(&queue, NULL, 1);
+    osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
 
     osInvalDCache(ram, size);
 
@@ -210,23 +211,19 @@ s32 DmaMgr_SendRequest0(void* vramStart, uintptr_t vromStart, size_t size) {
 }
 
 void DmaMgr_Start(void) {
-    DmaEntry* iter;
-    u32 idx;
-
     DmaMgr_DMARomToRam(SEGMENT_ROM_START(dmadata), dmadata, SEGMENT_ROM_SIZE(dmadata));
 
-dummy_label:;
+    {
+        DmaEntry* iter = dmadata;
+        u32 idx = 0;
 
-    iter = dmadata;
-    idx = 0;
-    while (iter->vromEnd != 0) {
-        iter++;
-        idx++;
+        while (iter->vromEnd != 0) {
+            iter++;
+            idx++;
+        }
+
+        numDmaEntries = idx;
     }
-
-    numDmaEntries = idx;
-
-dummy_label_2:;
 
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
     StackCheck_Init(&sDmaMgrStackInfo, sDmaMgrStack, sDmaMgrStack + sizeof(sDmaMgrStack), 0, 0x100, "dmamgr");

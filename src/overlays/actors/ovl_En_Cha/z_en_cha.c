@@ -5,6 +5,7 @@
  */
 
 #include "z_en_cha.h"
+#include "objects/object_cha/object_cha.h"
 
 #define FLAGS 0x00000000
 
@@ -49,9 +50,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 40, 0, { 0, 0, 0 } },
 };
 
-extern Gfx D_06000710[];
-extern Gfx D_06000958[];
-
 void EnCha_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
     s32 pad;
@@ -86,12 +84,12 @@ void EnCha_Ring(EnCha* this, GlobalContext* globalCtx) {
 
 void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[60] & 4) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         gSaveContext.weekEventReg[60] &= 0xFB;
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_DOOR_BELL);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
         if (!(gSaveContext.weekEventReg[51] & 4)) {
             gSaveContext.weekEventReg[51] |= 4;
@@ -103,22 +101,22 @@ void EnCha_Idle(EnCha* this, GlobalContext* globalCtx) {
     this->actor.home.rot.z *= 0.96f;
 }
 
-void EnCha_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnCha_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     EnCha* this = THIS;
-    GlobalContext* globalCtx2 = globalCtx;
 
-    CollisionCheck_SetOC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);
-    if ((this->actor.shape.rot.z >= -0x1F3F) && (this->actor.shape.rot.z < 0x1F40)) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx2->colChkCtx, &this->collider.base);
+    if ((this->actor.shape.rot.z > -0x1F40) && (this->actor.shape.rot.z < 0x1F40)) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
 void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnCha* this = THIS;
 
-    func_800BDFC0(globalCtx, D_06000710);
+    Gfx_DrawDListOpa(globalCtx, object_cha_DL_000710);
     Matrix_InsertTranslation(-1094.0f, 4950.0f, 9.0f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->actor.home.rot.x, 1);
-    func_800BDFC0(globalCtx, D_06000958);
+    Matrix_InsertXRotation_s(this->actor.home.rot.x, MTXMODE_APPLY);
+    Gfx_DrawDListOpa(globalCtx, object_cha_DL_000958);
 }

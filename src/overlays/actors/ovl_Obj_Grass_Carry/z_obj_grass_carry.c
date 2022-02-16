@@ -1,7 +1,7 @@
 /*
  * File: z_obj_grass_carry.c
  * Overlay: ovl_Obj_Grass_Carry
- * Description:
+ * Description: Grass that the player is holding (spawned by Obj_Grass_Unit)
  */
 
 #include "z_obj_grass_carry.h"
@@ -37,7 +37,7 @@ static ColliderCylinderInit D_809ABBD0 = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809ABC4C[] = {
     ICHAIN_F32_DIV1000(gravity, -3200, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -17000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -17000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_STOP),
 };
 

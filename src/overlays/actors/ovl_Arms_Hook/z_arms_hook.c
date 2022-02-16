@@ -5,6 +5,8 @@
  */
 
 #include "z_arms_hook.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_link_child/object_link_child.h"
 
 #define FLAGS 0x00000030
 
@@ -50,8 +52,6 @@ static ColliderQuadInit D_808C1BC0 = {
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-extern Gfx D_0601D960[];
-
 void ArmsHook_SetupAction(ArmsHook* this, ArmsHookActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -77,7 +77,7 @@ void ArmsHook_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void ArmsHook_Wait(ArmsHook* this, GlobalContext* globalCtx) {
     if (this->actor.parent == NULL) {
         ArmsHook_SetupAction(this, ArmsHook_Shoot);
-        func_800B6C04(&this->actor, 20.0f);
+        Actor_SetSpeeds(&this->actor, 20.0f);
         this->actor.parent = &GET_PLAYER(globalCtx)->actor;
         this->timer = 26;
     }
@@ -90,7 +90,7 @@ void func_808C1154(ArmsHook* this) {
 
 s32 ArmsHook_AttachToPlayer(ArmsHook* this, Player* player) {
     player->actor.child = &this->actor;
-    player->leftHandActor = &this->actor;
+    player->heldActor = &this->actor;
     if (this->actor.child != NULL) {
         player->actor.parent = this->actor.child = NULL;
         return 1;
@@ -149,7 +149,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
             }
         }
         this->timer = 0;
-        func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
+        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
 
         return;
     }
@@ -232,40 +232,43 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
         }
     } else {
         CollisionPoly* poly;
-        u32 bgId;
-        Vec3f sp78;
+        s32 bgId;
+        Vec3f posResult;
         Vec3f prevFrameDiff;
         Vec3f sp60;
 
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &prevFrameDiff);
         Math_Vec3f_Sum(&this->unk1E0, &prevFrameDiff, &this->unk1E0);
         this->actor.shape.rot.x = Math_FAtan2F(this->actor.speedXZ, -this->actor.velocity.y);
         sp60.x = this->unk1EC.x - (this->unk1E0.x - this->unk1EC.x);
         sp60.y = this->unk1EC.y - (this->unk1E0.y - this->unk1EC.y);
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);
-        if (func_800C55C4(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &bgId) != 0 &&
-            (func_800B90AC(globalCtx, &this->actor, poly, bgId, &sp78) == 0 ||
-             func_800C576C(&globalCtx->colCtx, &sp60, &this->unk1E0, &sp78, &poly, 1, 1, 1, 1, &bgId) != 0)) {
-            f32 sp5C = poly->normal.x * (1 / SHT_MAX);
-            f32 sp58 = poly->normal.z * (1 / SHT_MAX);
+        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true, true,
+                                    &bgId) &&
+            (func_800B90AC(globalCtx, &this->actor, poly, bgId, &posResult) == 0 ||
+             BgCheck_ProjectileLineTest(&globalCtx->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true,
+                                        true, &bgId))) {
+            f32 nx = COLPOLY_GET_NORMAL(poly->normal.x);
+            f32 nz = COLPOLY_GET_NORMAL(poly->normal.z);
 
-            Math_Vec3f_Copy(&this->actor.world.pos, &sp78);
-            this->actor.world.pos.x += 10.0f * sp5C;
-            this->actor.world.pos.z += 10.0f * sp58;
+            Math_Vec3f_Copy(&this->actor.world.pos, &posResult);
+            this->actor.world.pos.x += 10.0f * nx;
+            this->actor.world.pos.z += 10.0f * nz;
             this->timer = 1;
-            if (func_800C9CEC(&globalCtx->colCtx, poly, bgId)) {
+            if (SurfaceType_IsHookshotSurface(&globalCtx->colCtx, poly, bgId)) {
                 {
                     DynaPolyActor* dynaPolyActor;
-                    if (bgId != 0x32 && (dynaPolyActor = BgCheck_GetActorOfMesh(&globalCtx->colCtx, bgId)) != NULL) {
+                    if (bgId != BGCHECK_SCENE &&
+                        (dynaPolyActor = DynaPoly_GetActor(&globalCtx->colCtx, bgId)) != NULL) {
                         ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                     }
                 }
                 func_808C1154(this);
-                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
+                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
             } else {
                 CollisionCheck_SpawnShieldParticlesMetal(globalCtx, &this->actor.world.pos);
-                func_8019F1C0(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
+                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else {
             if (CHECK_BTN_ANY(CONTROLLER1(globalCtx)->press.button,
@@ -321,7 +324,7 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_80122868(globalCtx, player);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_0601D960);
+        gSPDisplayList(POLY_OPA_DISP++, object_link_child_DL_01D960);
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Math_Vec3f_Diff(&player->rightHandWorld.pos, &this->actor.world.pos, &sp68);
@@ -332,7 +335,7 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
         f0 = sqrtf(SQ(sp68.y) + sp48);
         Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_040008D0);
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0008D0);
         func_801229A0(globalCtx, player);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);

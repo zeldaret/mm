@@ -5,6 +5,8 @@
  */
 
 #include "z_en_encount2.h"
+#include "objects/object_fusen/object_fusen.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -97,19 +99,15 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-extern Gfx D_06000A00[];
-extern Gfx D_06000D78[];
-extern CollisionHeader D_06002420;
-
 void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     s32 pad;
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    BgCheck_RelocateMeshHeader(&D_06002420, &colHeader);
-    this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
-    ActorShape_Init(&this->dyna.actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    CollisionHeader_GetVirtual(&object_fusen_Colheader_002420, &colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
@@ -139,7 +137,7 @@ void EnEncount2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnEncount2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
@@ -172,7 +170,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
         EnEncount2_InitParticles(this, &curPos, 10);
     }
 
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);
     this->deathTimer = 30;
     this->actionFunc = EnEncount2_Die;
 }
@@ -180,7 +178,7 @@ void EnEncount2_Popped(EnEncount2* this, GlobalContext* globalCtx) {
 void EnEncount2_Die(EnEncount2* this, GlobalContext* globalCtx) {
     if (this->deathTimer == 0) {
         if (this->switchFlag >= 0) {
-            Actor_SetSwitchFlag(globalCtx, this->switchFlag);
+            Flags_SetSwitch(globalCtx, this->switchFlag);
         }
         Actor_MarkForDeath(&this->dyna.actor);
     }
@@ -193,10 +191,10 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
     DECR(this->deathTimer);
 
     this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
-    Actor_SetHeight(&this->dyna.actor, 30.0f);
+    Actor_SetFocus(&this->dyna.actor, 30.0f);
     Actor_SetScale(&this->dyna.actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+    Actor_MoveWithGravity(&this->dyna.actor);
     EnEncount2_UpdateParticles(this, globalCtx);
 
     if (!this->isPopped) {
@@ -209,8 +207,8 @@ void EnEncount2_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnEncount2_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEncount2* this = THIS;
     if (this->isPopped != true) {
-        func_800BDFC0(globalCtx, D_06000A00);
-        func_800BDFC0(globalCtx, D_06000D78);
+        Gfx_DrawDListOpa(globalCtx, object_fusen_DL_000A00);
+        Gfx_DrawDListOpa(globalCtx, object_fusen_DL_000D78);
     }
     EnEncount2_DrawParticles(this, globalCtx);
 }
@@ -279,16 +277,16 @@ void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx) {
             Matrix_InsertTranslation(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&D_04079B10));
-            gSPDisplayList(POLY_XLU_DISP++, D_0407AB10);
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
-            Matrix_InsertMatrix(&globalCtx->mf_187FC, MTXMODE_APPLY);
+            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
             Matrix_InsertZRotation_f(DEGTORAD(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_0407AB58);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
         }
     }
     CLOSE_DISPS(gfxCtx);

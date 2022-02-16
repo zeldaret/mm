@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bji_01.h"
+#include "objects/object_bji/object_bji.h"
 
 #define FLAGS 0x00000019
 
@@ -26,17 +27,9 @@ void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
-
-extern AnimationHeader D_06000FDC;
-extern AnimationHeader D_06005B58;
-extern AnimationHeader D_06000AB0;
-extern AnimationHeader D_0600066C;
-extern void* D_060049F0[];
-extern void* D_06004E70[];
-extern void* D_06005270[];
-extern FlexSkeletonHeader D_0600578C;
+s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* thisx);
+void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 const ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
@@ -71,11 +64,11 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 /* Animations struct */
-static struct_80B8E1A8 D_809CDC7C[] = {
-    { &D_06000FDC, 1.0f, 0, 0.0f },  /* Looking through telescope */
-    { &D_06005B58, 1.0f, 0, 10.0f }, /* Breathing? Unused? */
-    { &D_06000AB0, 1.0f, 0, 0.0f },  /* Talking */
-    { &D_0600066C, 1.0f, 2, -5.0f }, /* Scratching chin? */
+static AnimationSpeedInfo D_809CDC7C[] = {
+    { &object_bji_Anim_000FDC, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Looking through telescope */
+    { &object_bji_Anim_005B58, 1.0f, ANIMMODE_LOOP, 10.0f }, /* Breathing? Unused? */
+    { &object_bji_Anim_000AB0, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Talking */
+    { &object_bji_Anim_00066C, 1.0f, ANIMMODE_ONCE, -5.0f }, /* Scratching chin? */
 };
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
@@ -91,7 +84,7 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
 }
@@ -105,8 +98,8 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~0x10000;
         }
     }
-    if (func_800B84D0(&this->actor, globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_809CD028(this, globalCtx);
     } else {
@@ -116,10 +109,9 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
                 return;
             }
         } else {
-            this->moonsTear =
-                (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+            this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
         }
-        func_800B8500(&this->actor, globalCtx, 60.0f, 10.0f, 0);
+        func_800B8500(&this->actor, globalCtx, 60.0f, 10.0f, EXCH_ITEM_NONE);
     }
 }
 
@@ -144,7 +136,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     }
                     break;
                 case PLAYER_FORM_HUMAN:
-                    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEI) {
+                    if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
                     } else if (gSaveContext.weekEventReg[74] & 0x10) {
                         this->textId = 0x5F6;
@@ -172,7 +164,8 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                     } else {
                         this->textId = 0x5F1;
                     }
-                    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+                    func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                                  EXCH_ITEM_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;
@@ -200,12 +193,12 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
     }
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = EnBji01_DialogueHandler;
 }
 
 void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
-    switch (func_80152498(&globalCtx->msgCtx)) {
+    switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
             func_809CCDE0(this, globalCtx);
@@ -246,7 +239,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                 this->actor.flags &= ~0x10000;
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x5DE:
-                        func_8013E1C8(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
                         func_80151938(globalCtx, 0x5DF);
                         break;
                     case 0x5E4:
@@ -297,7 +290,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
     }
     if ((this->animationIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-        func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     }
 }
 
@@ -315,7 +308,7 @@ void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = func_809CD70C;
 }
 
@@ -323,7 +316,7 @@ void func_809CD70C(EnBji01* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
     func_809CCDE0(this, globalCtx);
     if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
-        func_800B86C8(&this->moonsTear->actor, globalCtx, &this->actor); /* Z-Target the Moon's Tear? */
+        Actor_ChangeFocus(&this->moonsTear->actor, globalCtx, &this->actor); /* Z-Target the Moon's Tear? */
         this->actionFunc = func_809CD77C;
     }
 }
@@ -337,9 +330,9 @@ void func_809CD77C(EnBji01* this, GlobalContext* globalCtx) {
 void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBji01* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable,
-                       BJI_LIMB_MAX);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bji_Skel_00578C, &object_bji_Anim_000FDC, this->jointTable,
+                       this->morphTable, BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -350,8 +343,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     func_8013E3B8(&this->actor, this->cutscenes,
                   ARRAY_COUNT(this->cutscenes)); /* initializes all elements of cutscenes to -1 */
-    this->moonsTear =
-        (ObjMoonStone*)func_ActorCategoryIterateById(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
+    this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
     switch (gSaveContext.entranceIndex) {
         case 0x4C00: /* Observatory from ECT */
@@ -396,7 +388,7 @@ void EnBji01_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Actor_SetHeight(&this->actor, 40.0f);
+    Actor_SetFocus(&this->actor, 40.0f);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
@@ -442,7 +434,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
+    static TexturePtr sEyeTextures[] = { object_bji_Tex_0049F0, object_bji_Tex_004E70, object_bji_Tex_005270 };
     EnBji01* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

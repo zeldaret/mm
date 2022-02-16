@@ -204,7 +204,7 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
         colHeader->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(colHeader->waterBoxes);
     }
 
-    BgCheck_Init(&globalCtx->colCtx, globalCtx, colHeader);
+    BgCheck_Allocate(&globalCtx->colCtx, globalCtx, colHeader);
 }
 
 // SceneTableEntry Header Command 0x04: Room List
@@ -388,17 +388,17 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     }
 
     if (cmd->timeSettings.unk6 != 0xFF) {
-        globalCtx->envCtx.unk_2 = cmd->timeSettings.unk6;
+        globalCtx->envCtx.timeIncrement = cmd->timeSettings.unk6;
     } else {
-        globalCtx->envCtx.unk_2 = 0;
+        globalCtx->envCtx.timeIncrement = 0;
     }
 
-    if ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.unk_2 != 0)) {
-        globalCtx->envCtx.unk_2 = 5;
+    if ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.timeIncrement != 0)) {
+        globalCtx->envCtx.timeIncrement = 5;
     }
 
-    if (gSaveContext.unk_3F58 == 0) {
-        REG(15) = globalCtx->envCtx.unk_2;
+    if (gSaveContext.sunsSongState == SUNSSONG_INACTIVE) {
+        REG(15) = globalCtx->envCtx.timeIncrement;
     }
 
     dayTime = gSaveContext.time;
@@ -408,17 +408,20 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     dayTime = gSaveContext.time;
     globalCtx->envCtx.unk_C = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
-    if (globalCtx->envCtx.unk_2 == 0 && gSaveContext.cutscene < 0xFFF0) {
+    if (globalCtx->envCtx.timeIncrement == 0 && gSaveContext.cutscene < 0xFFF0) {
         gSaveContext.environmentTime = gSaveContext.time;
 
-        if (gSaveContext.environmentTime >= 0x2AAA && gSaveContext.environmentTime < 0x4555) {
-            gSaveContext.environmentTime = 0x3555;
-        } else if (gSaveContext.environmentTime >= 0x4555 && gSaveContext.environmentTime < 0x5555) {
-            gSaveContext.environmentTime = 0x5555;
-        } else if (gSaveContext.environmentTime >= 0xAAAA && gSaveContext.environmentTime < 0xB555) {
-            gSaveContext.environmentTime = 0xB555;
-        } else if (gSaveContext.environmentTime >= 0xC000 && gSaveContext.environmentTime < 0xCAAA) {
-            gSaveContext.environmentTime = 0xCAAA;
+        if (gSaveContext.environmentTime >= CLOCK_TIME(4, 0) && gSaveContext.environmentTime < CLOCK_TIME(6, 30)) {
+            gSaveContext.environmentTime = CLOCK_TIME(5, 0);
+        } else if (gSaveContext.environmentTime >= CLOCK_TIME(6, 30) &&
+                   gSaveContext.environmentTime < CLOCK_TIME(8, 0)) {
+            gSaveContext.environmentTime = CLOCK_TIME(8, 0);
+        } else if (gSaveContext.environmentTime >= CLOCK_TIME(16, 0) &&
+                   gSaveContext.environmentTime < CLOCK_TIME(17, 0)) {
+            gSaveContext.environmentTime = CLOCK_TIME(17, 0);
+        } else if (gSaveContext.environmentTime >= CLOCK_TIME(18, 0) &&
+                   gSaveContext.environmentTime < CLOCK_TIME(19, 0)) {
+            gSaveContext.environmentTime = CLOCK_TIME(19, 0);
         }
     }
 }
@@ -449,7 +452,7 @@ void Scene_HeaderCmdSoundSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->soundCtx.seqIndex = cmd->soundSettings.musicSeq;
     globalCtx->soundCtx.nightSeqIndex = cmd->soundSettings.nighttimeSFX;
 
-    if (gSaveContext.seqIndex == 0xFF || func_801A8A50(0) == 0x57) {
+    if (gSaveContext.seqIndex == (u8)NA_BGM_DISABLED || func_801A8A50(0) == NA_BGM_FINAL_HOURS) {
         audio_setBGM(cmd->soundSettings.bgmId);
     }
 }

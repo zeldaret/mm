@@ -53,6 +53,8 @@
 #define SP_DMEM_START  0x04000000
 #define SP_DMEM_SIZE   0x1000
 
+#define TMEM_SIZE 0x1000
+
 #define SP_MEM_ADDR_REG   0x04040000
 #define SP_DRAM_ADDR_REG  0x04040004
 #define SP_RD_LEN_REG     0x04040008
@@ -96,6 +98,7 @@
 #define SI_STATUS_INTERRUPT     (1 << 12)
 
 #define PIF_RAM_START  0x1FC007C0
+#define PIF_RAM_SIZE   0x40
 
 #define MI_INIT_MODE_REG  0x04300000
 #define MI_MODE_REG       MI_INIT_MODE_REG

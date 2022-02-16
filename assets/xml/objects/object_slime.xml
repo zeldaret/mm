@@ -1,0 +1,14 @@
+﻿<Root>
+    <File Name="object_slime" Segment="6">
+        <DList Name="object_slime_DL_0004C0" Offset="0x4C0" />
+        <DList Name="object_slime_DL_000650" Offset="0x650" />
+        <TextureAnimation Name="object_slime_Matanimheader_000828" Offset="0x828" />
+        <DList Name="object_slime_DL_000A10" Offset="0xA10" />
+        <DList Name="object_slime_DL_000B68" Offset="0xB68" />
+        <Texture Name="object_slime_Tex_000B70" OutName="tex_000B70" Format="rgba16" Width="16" Height="16" Offset="0xB70" />
+        <Texture Name="object_slime_Tex_000D70" OutName="tex_000D70" Format="rgba16" Width="16" Height="16" Offset="0xD70" />
+        <!-- <Blob Name="object_slime_Blob_000F70" Size="0x300" Offset="0xF70" /> -->
+        <Texture Name="object_slime_Tex_001270" OutName="tex_001270" Format="i4" Width="32" Height="32" Offset="0x1270" />
+        <Texture Name="object_slime_Tex_001470" OutName="tex_001470" Format="i4" Width="64" Height="64" Offset="0x1470" />
+    </File>
+</Root>

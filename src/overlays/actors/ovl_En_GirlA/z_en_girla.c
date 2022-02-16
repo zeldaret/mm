@@ -185,7 +185,7 @@ void EnGirlA_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -195,7 +195,7 @@ s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -208,7 +208,7 @@ s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
     if (!(gSaveContext.weekEventReg[53] & 8)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (!(gSaveContext.weekEventReg[53] & 0x10)) {
@@ -366,7 +366,7 @@ s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -579,7 +579,7 @@ void EnGirlA_Update2(EnGirlA* this, GlobalContext* globalCtx) {
     this->actor.shape.shadowScale = 4.0f;
     EnGirlA_TrySetMaskItemDescription(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 5.0f);
+    Actor_SetFocus(&this->actor, 5.0f);
     this->actor.shape.rot.x = 0;
     if (this->isSelected) {
         this->rotY += 0x1F4;

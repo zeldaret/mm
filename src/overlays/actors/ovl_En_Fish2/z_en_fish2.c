@@ -7,6 +7,8 @@
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
 #include "z_en_fish2.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_fb/object_fb.h"
 
 #define FLAGS 0x00000019
 
@@ -39,13 +41,6 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx);
 void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2);
 void func_80B2AF80(EnFish2* this, GlobalContext* globalCtx);
 void func_80B2B180(EnFish2* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060006D8;
-extern AnimationHeader D_060007D4;
-extern AnimationHeader D_06000ACC;
-extern AnimationHeader D_06001174;
-extern AnimationHeader D_060013AC;
-extern FlexSkeletonHeader D_06006190;
 
 static s32 D_80B2B2E0 = 0;
 static s32 D_80B2B2E4 = 0;
@@ -109,7 +104,8 @@ static f32 D_80B2B380[] = { 0.019f, 0.033f };
 
 void func_80B28370(EnFish2* this, s32 arg0) {
     static AnimationHeader* D_80B2B388[] = {
-        &D_060013AC, &D_060007D4, &D_060006D8, &D_060006D8, &D_06001174, &D_06000ACC,
+        &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
+        &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
     };
     static u8 D_80B2B3A0[] = { 0, 0, 2, 2, 2, 2 };
     f32 sp34;
@@ -160,9 +156,9 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
     D_80B2B2F0++;
 
     if (this->actor.params == 0) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006190, &D_060013AC, this->jointTable, this->morphTable,
-                           24);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC,
+                           this->jointTable, this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
             if (gSaveContext.weekEventReg[81] & 0x10) {
@@ -268,7 +264,7 @@ s32 func_80B288E8(EnFish2* this, Vec3f vec, s32 arg2) {
 }
 
 s32 func_80B2899C(EnFish2* this, GlobalContext* globalCtx) {
-    if (func_800C5A64(&globalCtx->colCtx, &this->unk_2F4, this->unk_33C, &this->actor)) {
+    if (BgCheck_SphVsFirstWall(&globalCtx->colCtx, &this->unk_2F4, this->unk_33C)) {
         return true;
     }
 
@@ -294,8 +290,8 @@ void func_80B289DC(EnFish2* this, GlobalContext* globalCtx) {
                 this->actor.velocity.y = 0.0f;
                 this->actor.gravity = 0.0f;
             }
-        } else if (func_800CA1AC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &this->unk_334, &sp2C)) {
+        } else if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                        &this->unk_334, &sp2C)) {
             if ((this->unk_334 != BGCHECK_Y_MIN) && (this->actor.world.pos.y < (this->unk_334 - this->unk_2D8))) {
                 this->actor.velocity.y = this->actor.world.rot.x * 0.001f * -0.1f;
                 if (this->actionFunc == func_80B297FC) {
@@ -328,10 +324,10 @@ void func_80B28B5C(EnFish2* this) {
 }
 
 void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
-    Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* itemAction = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     WaterBox* waterbox;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80B29128(this);
         return;
     }
@@ -373,8 +369,9 @@ void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->unk_334 == BGCHECK_Y_MIN) && !func_800CA1AC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x,
-                                                           this->actor.world.pos.z, &this->unk_334, &waterbox)) {
+    if ((this->unk_334 == BGCHECK_Y_MIN) &&
+        !WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                              &this->unk_334, &waterbox)) {
         this->unk_334 = this->actor.world.pos.y;
     }
 
@@ -437,7 +434,7 @@ void func_80B29128(EnFish2* this) {
 }
 
 void func_80B2913C(EnFish2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B28B5C(this);
     }
@@ -532,7 +529,7 @@ void func_80B2951C(EnFish2* this) {
     Actor_MarkForDeath(this->unk_350);
     this->unk_350 = NULL;
     D_80B2B2F4 = &this->actor;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_M_EAT);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_M_EAT);
     this->actionFunc = func_80B295A4;
 }
 
@@ -641,7 +638,7 @@ void func_80B297FC(EnFish2* this, GlobalContext* globalCtx) {
                 }
 
                 this->unk_2B6 = 4;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FISH_GROW_UP);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_GROW_UP);
                 this->unk_2C4++;
             }
             break;
@@ -746,7 +743,7 @@ void func_80B297FC(EnFish2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B29E5C(EnFish2* this, GlobalContext* globalCtx) {
-    Actor* prop = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (prop != NULL) {
         if (prop->id != ACTOR_EN_FISH2) {
@@ -892,7 +889,7 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
         if (temp_v0 != NULL) {
             temp_v0->speedXZ = 4.0f;
             temp_v0->velocity.y = 15.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
             gSaveContext.weekEventReg[81] &= (u8)~0x10;
             gSaveContext.weekEventReg[81] &= (u8)~0x20;
             gSaveContext.weekEventReg[81] &= (u8)~0x40;
@@ -906,12 +903,12 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
         (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 31.0f))) {
         WaterBox* sp78;
 
-        if (func_800CA1AC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                          &this->unk_334, &sp78)) {
+        if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                 &this->unk_334, &sp78)) {
             Vec3f sp6C;
             s32 i;
 
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
 
             for (i = 0; i < 10; i++) {
                 Math_Vec3f_Copy(&sp6C, &this->actor.world.pos);
@@ -936,8 +933,8 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     static f32 D_80B2B3A8[] = {
         0.0f, 40.0f, -40.0f, 0.0f, 0.0f, 0.0f,
     };
-    EnFish2* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnFish2* this = THIS;
 
     if ((this->actionFunc != func_80B295A4) && (this->actor.params != 1)) {
         SkelAnime_Update(&this->skelAnime);
@@ -957,7 +954,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 0);
+    Actor_SetFocus(&this->actor, 0);
 
     if (this->actor.params != 1) {
         WaterBox* sp6C;
@@ -989,7 +986,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_2F4.z += (Math_CosS(this->actor.world.rot.y) * 25.0f) - this->unk_330;
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0, 15.0f, 10.0f, 7);
 
         if (this->actor.params != 2) {
@@ -999,8 +996,8 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 this->actor.world.pos.y = this->unk_2D4 + 0.1f;
             }
 
-            if (func_800CA1AC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                              &this->unk_334, &sp6C)) {
+            if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                     &this->unk_334, &sp6C)) {
                 if ((this->unk_334 != BGCHECK_Y_MIN) && (this->unk_334 - this->unk_2D8 < this->actor.world.pos.y)) {
                     this->actor.world.pos.y = this->unk_334 - this->unk_2D8;
                 }
@@ -1012,8 +1009,8 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 f32 phi_f20 = 0;
                 WaterBox* sp4C;
 
-                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                  &this->unk_334, &sp4C)) {
+                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x,
+                                         this->actor.world.pos.z, &this->unk_334, &sp4C)) {
                     phi_f20 = D_80B2B3A8[temp_s0_2] + (this->unk_334 - this->unk_2D8);
                     phi_f2 = D_80B2B3A8[temp_s0_2 + 1] + this->unk_2D4;
                 }
@@ -1057,7 +1054,7 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         Matrix_StatePush();
-        Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
@@ -1068,11 +1065,11 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == 14) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_318);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_318);
     }
 
     if (limbIndex == 17) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &this->unk_300);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_300);
     }
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
@@ -1094,12 +1091,12 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            u32 phi_v0;
+            TexturePtr phi_v0;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = &D_04091CE0;
+                phi_v0 = gameplay_keep_Tex_091CE0;
             } else {
-                phi_v0 = &D_04091BE0;
+                phi_v0 = gameplay_keep_Tex_091BE0;
             }
 
             ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
@@ -1136,7 +1133,7 @@ void func_80B2AF80(EnFish2* this, GlobalContext* globalCtx) {
                 ptr->unk_04.y += 1.0f + ((Rand_ZeroOne() - 0.3f) * 1.2f);
                 ptr->unk_04.z += (0.3f + (Rand_ZeroOne() * 0.5f)) - 0.55f;
                 sp8C = ptr->unk_04.y;
-                if (!func_800CA1AC(globalCtx, &globalCtx->colCtx, ptr->unk_04.x, ptr->unk_04.z, &sp8C, &sp90)) {
+                if (!WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, ptr->unk_04.x, ptr->unk_04.z, &sp8C, &sp90)) {
                     ptr->unk_00 = 0;
                 } else if (sp8C < ptr->unk_04.y) {
                     Vec3f sp7C;
@@ -1171,7 +1168,7 @@ void func_80B2B180(EnFish2* this, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_OPA_DISP++, 150, 150, 150, 0);
             gSPSegment(POLY_OPA_DISP++, 0x08, ptr->unk_20);
-            gSPDisplayList(POLY_OPA_DISP++, D_040301B0);
+            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0301B0);
         }
     }
 

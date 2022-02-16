@@ -1,7 +1,7 @@
 /*
  * File: z_obj_danpeilift.c
  * Overlay: ovl_Obj_Danpeilift
- * Description: Deku Shrine & Snowhead Temple Elevator
+ * Description: Deku Shrine & Snowhead Temple floating blocks
  */
 
 #include "z_obj_danpeilift.h"
@@ -20,7 +20,7 @@ const ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
     ACTORCAT_BG,
     FLAGS,
-    OBJECT_OBJECT_UNSET_DANPEILIFT,
+    OBJECT_OBJ_DANPEILIFT,
     sizeof(ObjDanpeilift),
     (ActorFunc)ObjDanpeilift_Init,
     (ActorFunc)ObjDanpeilift_Destroy,

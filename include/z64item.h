@@ -57,7 +57,7 @@ typedef enum {
     /* 0x07 */ SLOT_BOMBCHU,
     /* 0x08 */ SLOT_STICK,
     /* 0x09 */ SLOT_NUT,
-    /* 0x0A */ SLOT_BEAN,
+    /* 0x0A */ SLOT_MAGIC_BEANS,
     /* 0x0B */ SLOT_TRADE_KEY_MAMA,
     /* 0x0C */ SLOT_POWDER_KEG,
     /* 0x0D */ SLOT_PICTO_BOX,
@@ -85,7 +85,7 @@ typedef enum {
     /* 0x23 */ SLOT_MASK_GORON,
     /* 0x24 */ SLOT_MASK_ROMANI,
     /* 0x25 */ SLOT_MASK_CIRCUS_LEADER,
-    /* 0x26 */ SLOT_MASK_KAFEI,
+    /* 0x26 */ SLOT_MASK_KAFEIS_MASK,
     /* 0x27 */ SLOT_MASK_COUPLE,
     /* 0x28 */ SLOT_MASK_TRUTH,
     /* 0x29 */ SLOT_MASK_ZORA,
@@ -109,7 +109,7 @@ typedef enum {
     /* 0x07 */ ITEM_BOMBCHU,
     /* 0x08 */ ITEM_STICK,
     /* 0x09 */ ITEM_NUT,
-    /* 0x0A */ ITEM_BEAN,
+    /* 0x0A */ ITEM_MAGIC_BEANS,
     /* 0x0B */ ITEM_SLINGSHOT,
     /* 0x0C */ ITEM_POWDER_KEG,
     /* 0x0D */ ITEM_PICTO_BOX,
@@ -146,7 +146,7 @@ typedef enum {
     /* 0x2C */ ITEM_DEED_OCEAN,
     /* 0x2D */ ITEM_ROOM_KEY,
     /* 0x2E */ ITEM_LETTER_MAMA,
-    /* 0x2F */ ITEM_LETTER_KAFEI,
+    /* 0x2F */ ITEM_LETTER_TO_KAFEI,
     /* 0x30 */ ITEM_PENDANT_MEMORIES,
     /* 0x31 */ ITEM_TINGLE_MAP,
     /* 0x32 */ ITEM_MASK_DEKU,
@@ -154,7 +154,7 @@ typedef enum {
     /* 0x34 */ ITEM_MASK_ZORA,
     /* 0x35 */ ITEM_MASK_FIERCE_DEITY,
     /* 0x36 */ ITEM_MASK_TRUTH,
-    /* 0x37 */ ITEM_MASK_KAFEI,
+    /* 0x37 */ ITEM_MASK_KAFEIS_MASK,
     /* 0x38 */ ITEM_MASK_ALL_NIGHT,
     /* 0x39 */ ITEM_MASK_BUNNY,
     /* 0x3A */ ITEM_MASK_KEATON,
@@ -275,6 +275,7 @@ typedef enum {
     /* 0x07 */ GI_RUPEE_HUGE,
     /* 0x08 */ GI_WALLET_ADULT,
     /* 0x09 */ GI_WALLET_GIANT,
+    /* 0x0A */ GI_RECOVERY_HEART,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
@@ -294,9 +295,11 @@ typedef enum {
     /* 0x2A */ GI_NUTS_10 = 0x2A,
     /* 0x32 */ GI_SHIELD_HERO = 0x32,
     /* 0x33 */ GI_SHIELD_MIRROR,
+    /* 0x35 */ GI_MAGIC_BEANS = 0x35,
     /* 0x3C */ GI_KEY_SMALL = 0x3C,
     /* 0x3E */ GI_MAP = 0x3E,
     /* 0x3F */ GI_COMPASS,
+    /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
     /* 0x5B */ GI_POTION_RED = 0x5B,
     /* 0x5C */ GI_POTION_GREEN,
@@ -308,7 +311,7 @@ typedef enum {
     /* 0x7A */ GI_MASK_ZORA,
     /* 0x7B */ GI_MASK_FIERCE_DEITY,
     /* 0x7C */ GI_MASK_TRUTH,
-    /* 0x7D */ GI_MASK_KAFEI,
+    /* 0x7D */ GI_MASK_KAFEIS_MASK,
     /* 0x7E */ GI_MASK_ALL_NIGHT,
     /* 0x7F */ GI_MASK_BUNNY,
     /* 0x80 */ GI_MASK_KEATON,
@@ -327,6 +330,7 @@ typedef enum {
     /* 0x8D */ GI_MASK_BLAST,
     /* 0x8E */ GI_MASK_SCENTS,
     /* 0x8F */ GI_MASK_GIANT,
+    /* 0x92 */ GI_MILK = 0x92,
     /* 0x96 */ GI_MOON_TEAR = 0x96,
     /* 0x97 */ GI_DEED_LAND,
     /* 0x98 */ GI_DEED_SWAMP,
@@ -339,12 +343,17 @@ typedef enum {
     /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
     /* 0xA1 */ GI_LETTER_TO_MAMA = 0xA1,
     /* 0xA9 */ GI_BOTTLE = 0xA9,
+    /* 0xAB */ GI_PENDANT_OF_MEMORIES = 0xAB,
     /* 0xBA */ GI_MAX = 0xBA
 } GetItemID;
 
 typedef enum {
     /* 0x00 */ GID_BOTTLE,
+    /* 0x02 */ GID_02 = 0x02,
+    /* 0x03 */ GID_03,
     /* 0x0A */ GID_COMPASS = 0x0A,
+    /* 0x0E */ GID_0E = 0x0E,
+    /* 0x0F */ GID_0F,
     /* 0x10 */ GID_MASK_ALL_NIGHT = 0x10,
     /* 0x11 */ GID_NUTS,
     /* 0x17 */ GID_BOMB_BAG_20 = 0x17,
@@ -362,11 +371,28 @@ typedef enum {
     /* 0x31 */ GID_POTION_RED,
     /* 0x32 */ GID_POTION_BLUE,
     /* 0x33 */ GID_SHIELD_MIRROR,
-    /* 0x3B */ GID_FAIRY = 0x3B,
+    /* 0x3A */ GID_3A = 0x3A,
+    /* 0x3B */ GID_FAIRY,
+    /* 0x3E */ GID_3E = 0x3E,
+    /* 0x44 */ GID_44 = 0x44,
+    /* 0x45 */ GID_45,
     /* 0x55 */ GID_SWORD_KOKIRI = 0x55,
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
-    /* 0x68 */ GID_SWORD_GREAT_FAIRY
+    /* 0x68 */ GID_SWORD_GREAT_FAIRY,
+    /* 0x6A */ GID_6A = 0x6A,
+    /* 0x6B */ GID_6B,
+    /* 0x70 */ GID_70 = 0x70,
+    /* 0x71 */ GID_71,
 } GetItemDrawID;
+
+// TODO: fill
+typedef enum {
+    /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
+    /* 0x00 */ EXCH_ITEM_NONE,
+    /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
+    /* 0x2A */ EXCH_ITEM_2A = 0x2A, // MOON_TEAR?
+    /* 0x2E */ EXCH_ITEM_2E = 0x2E
+} ExchangeItemID;
 
 #endif

@@ -10,6 +10,8 @@
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "z_en_fu.h"
+#include "objects/object_mu/object_mu.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x0A000019
 
@@ -54,16 +56,6 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len);
 void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len);
 void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len);
 
-extern AnimationHeader D_06001F74;
-extern AnimationHeader D_06002F64;
-extern AnimationHeader D_06004904;
-extern AnimationHeader D_06005304;
-extern AnimationHeader D_060053E0;
-extern Gfx D_0600B0A0[];
-extern Gfx D_0600B0E0[];
-extern FlexSkeletonHeader D_0600B2B0;
-extern AnimationHeader D_0600BAC4;
-
 const ActorInit En_Fu_InitVars = {
     ACTOR_EN_FU,
     ACTORCAT_NPC,
@@ -82,11 +74,14 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &D_060053E0, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06001F74, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_06002F64, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06004904, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_06005304, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &D_06005304, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &D_0600BAC4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -188,7 +183,7 @@ void func_809619D0(EnFu* this, GlobalContext* globalCtx) {
 void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFu* this = THIS;
-    Actor* fuKaiten = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuKaiten = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuKaiten != NULL) {
         if (fuKaiten->id == ACTOR_BG_FU_KAITEN) {
@@ -199,9 +194,9 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (fuKaiten != NULL) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 36.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B2B0, &D_06001F74, this->jointTable, this->morphTable,
-                           21);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, &object_mu_Anim_001F74,
+                           this->jointTable, this->morphTable, 21);
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -257,14 +252,14 @@ s32 func_80961D10(EnFu* this) {
 }
 
 void func_80961D7C(GlobalContext* globalCtx) {
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         if ((explosive->id == ACTOR_EN_BOM) && (explosive->bgCheckFlags & 1)) {
             EnBom* bomb = (EnBom*)explosive;
 
             if (bomb->actor.floorBgId != BGCHECK_SCENE) {
-                DynaPolyActor* fuKago = BgCheck_GetActorOfMesh(&globalCtx->colCtx, bomb->actor.floorBgId);
+                DynaPolyActor* fuKago = DynaPoly_GetActor(&globalCtx->colCtx, bomb->actor.floorBgId);
 
                 if ((fuKago != NULL) && (fuKago->actor.id == ACTOR_EN_FU_KAGO)) {
                     Math_SmoothStepToF(&bomb->actor.world.pos.x, fuKago->actor.world.pos.x, 0.1f, 1.0f, 0.5f);
@@ -277,7 +272,7 @@ void func_80961D7C(GlobalContext* globalCtx) {
 }
 
 void func_80961E88(GlobalContext* globalCtx) {
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
 
     while (explosive != NULL) {
         Actor_MarkForDeath(explosive);
@@ -286,7 +281,7 @@ void func_80961E88(GlobalContext* globalCtx) {
 }
 
 void func_80961EC8(GlobalContext* globalCtx) {
-    Actor* fuMato = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuMato = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuMato != NULL) {
         if (fuMato->id == ACTOR_EN_FU_MATO) {
@@ -297,7 +292,7 @@ void func_80961EC8(GlobalContext* globalCtx) {
 }
 
 void func_80961F00(GlobalContext* globalCtx) {
-    Actor* fuKago = globalCtx->actorCtx.actorList[ACTORCAT_BG].first;
+    Actor* fuKago = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (fuKago != NULL) {
         if (fuKago->id == ACTOR_EN_FU_KAGO) {
@@ -377,7 +372,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_809622FC(EnFu* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -388,7 +383,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
         this->actor.flags |= 0x10000;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
                 if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
@@ -542,8 +537,8 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
-                func_800BDC5C(&this->skelAnime, sAnimations, 3);
-                func_801A2BB8(0x25);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
                         func_80961EC8(globalCtx);
@@ -583,7 +578,7 @@ void func_809628BC(EnFu* this) {
 }
 
 void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
-    u8 sp27 = func_80152498(&globalCtx->msgCtx);
+    u8 sp27 = Message_GetState(&globalCtx->msgCtx);
 
     switch (sp27) {
         case 0:
@@ -641,10 +636,10 @@ void func_80962A10(EnFu* this, GlobalContext* globalCtx) {
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
     this->unk_53C = 0;
-    if ((fuKaiten->rotationSpeed < 300) || (fuKaiten->bouceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 300) || (fuKaiten->bounceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 300, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -678,11 +673,11 @@ void func_80962BCC(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 30.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bounceHeight < 30.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 100, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
         Math_SmoothStepToF(&fuKaiten->elevation, 10.0f, 0.1f, 1.0f, 1.0f);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 30.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 30.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -710,10 +705,10 @@ void func_80962D60(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bouceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
+    if ((fuKaiten->rotationSpeed < 100) || (fuKaiten->bounceHeight < 40.0f) || (fuKaiten->bounceSpeed < 600)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 100, 10, 5, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 600, 20, 10, 10);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 40.0f, 0.1f, 1.0f, 1.0f);
         return;
     }
 
@@ -805,7 +800,7 @@ void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
             func_801A2C20();
             gSaveContext.unk_3DE0[4] = 0;
             gSaveContext.unk_3DD0[4] = 5;
-            func_801A3098(0x922);
+            func_801A3098(NA_BGM_GET_ITEM | 0x900);
             func_8011B4E0(globalCtx, 1);
             this->unk_54A = 3;
             func_809632D0(this);
@@ -846,8 +841,8 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
     static s32 D_80964C24 = 0;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((this->unk_54A == 0) && (((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
-                                 ((func_80152498(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
+    if ((this->unk_54A == 0) && (((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
+                                 ((Message_GetState(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
         func_801477B4(globalCtx);
         this->unk_54A = 2;
         D_80964C24 = 1;
@@ -858,11 +853,11 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
         D_80964C24 = 1;
     }
 
-    if ((fuKaiten->rotationSpeed != 0) || (fuKaiten->bounceSpeed != 0) || (fuKaiten->bouceHeight > 0.0f) ||
+    if ((fuKaiten->rotationSpeed != 0) || (fuKaiten->bounceSpeed != 0) || (fuKaiten->bounceHeight > 0.0f) ||
         !func_809638F8(globalCtx)) {
         Math_SmoothStepToS(&fuKaiten->rotationSpeed, 0, 10, 10, 5);
         Math_SmoothStepToS(&fuKaiten->bounceSpeed, 0, 10, 15, 5);
-        Math_SmoothStepToF(&fuKaiten->bouceHeight, 0.0f, 0.1f, 1.0f, 1.0f);
+        Math_SmoothStepToF(&fuKaiten->bounceHeight, 0.0f, 0.1f, 1.0f, 1.0f);
         Math_SmoothStepToF(&fuKaiten->elevation, 0.0f, 0.1f, 1.0f, 1.0f);
         func_80962EBC(this, globalCtx);
     } else if (D_80964C24 == 1) {
@@ -884,9 +879,9 @@ void func_80963560(EnFu* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         func_80963610(this);
     } else if ((this->unk_552 == 0x2880) && !(gSaveContext.weekEventReg[22] & 0x80)) {
-        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     }
     this->actor.child->freezeTimer = 10;
 }
@@ -899,7 +894,7 @@ void func_80963610(EnFu* this) {
 void func_80963630(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
             (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             if (gSaveContext.weekEventReg[22] & 0x40) {
@@ -940,7 +935,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
         player->stateFlags1 &= ~0x20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, globalCtx, 500.0f, -1);
+        func_800B85E0(&this->actor, globalCtx, 500.0f, EXCH_ITEM_MINUS1);
     }
 }
 
@@ -962,7 +957,7 @@ s32 func_80963810(GlobalContext* globalCtx, Vec3f pos) {
     }
 
     globalCtx->actorCtx.unk268 = 1;
-    func_800B6F20(globalCtx, globalCtx->actorCtx.pad26C, phi_f0, sp22);
+    func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, phi_f0, sp22);
 
     if (sp28 < 80.0f) {
         return true;
@@ -1181,7 +1176,7 @@ void func_80963FF8(EnFu* this, GlobalContext* globalCtx) {
 
     if (player->stateFlags1 & 0x100000) {
         globalCtx->actorCtx.unk268 = 1;
-        globalCtx->actorCtx.unk278 = 0x8000;
+        globalCtx->actorCtx.unk_26C.press.button = 0x8000;
     } else {
         globalCtx->actorCtx.unk268 = 1;
     }
@@ -1219,7 +1214,7 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 break;
 
             case 0x2840:
@@ -1245,21 +1240,21 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                func_800BDC5C(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                 break;
 
             case 0x2860:
-                func_800BDC5C(&this->skelAnime, sAnimations, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                 break;
 
             case 0x285F:
-                func_800BDC5C(&this->skelAnime, sAnimations, 6);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                func_800BDC5C(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
                 break;
         }
     }
@@ -1340,7 +1335,7 @@ void EnFu_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     func_809642E0(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     func_8096209C(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
     SkelAnime_Update(&this->skelAnime);
@@ -1459,17 +1454,17 @@ void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk_36 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, D_0600B0A0);
+                gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
             Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_0600B0E0);
+            gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
         }
     }
 
