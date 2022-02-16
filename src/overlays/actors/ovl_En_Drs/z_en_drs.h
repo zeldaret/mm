@@ -14,8 +14,8 @@ typedef struct EnDrs {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnDrsActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[WEDDING_DRESS_MANNEQUIN_MAX_LIMB];
-    /* 0x1F0 */ Vec3s morphTable[WEDDING_DRESS_MANNEQUIN_MAX_LIMB];
+    /* 0x1D8 */ Vec3s jointTable[WEDDING_DRESS_MANNEQUIN_LIMB_MAX];
+    /* 0x1F0 */ Vec3s morphTable[WEDDING_DRESS_MANNEQUIN_LIMB_MAX];
     /* 0x208 */ s8 moonMaskObjBankIndex;
 } EnDrs; // size = 0x20C */
 

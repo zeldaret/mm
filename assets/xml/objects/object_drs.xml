@@ -14,8 +14,8 @@
         <Texture Name="gWeddingDressMannequinFabricHighlightsTex" OutName="fabric_highlight" Format="i8" Width="32" Height="64" Offset="0x4E48" />
         <Texture Name="gWeddingDressMannequinFabricSheerTex" OutName="fabric_sheer" Format="i8" Width="32" Height="32" Offset="0x5648" />
         <Limb Name="gWeddingDressMannequinLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB" Offset="0x5A48" />
-        <Limb Name="gWeddingDressMannequinMaskLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_MASK_LIMB" Offset="0x5A54" />
-        <Limb Name="gWeddingDressMannequinPatternLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_PATTERN_LIMB" Offset="0x5A60" />
-        <Skeleton Name="gWeddingDressMannequinSkel" Type="Flex" LimbType="Standard" LimbNone="WEDDING_DRESS_MANNEQUIN_NONE_LIMB" LimbMax="WEDDING_DRESS_MANNEQUIN_MAX_LIMB" EnumName="WeddingDressMannequinLimbs" Offset="0x5A78" />
+        <Limb Name="gWeddingDressMannequinMaskLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB_MASK" Offset="0x5A54" />
+        <Limb Name="gWeddingDressMannequinPatternLimb" Type="Standard" EnumName="WEDDING_DRESS_MANNEQUIN_LIMB_PATTERN" Offset="0x5A60" />
+        <Skeleton Name="gWeddingDressMannequinSkel" Type="Flex" LimbType="Standard" LimbNone="WEDDING_DRESS_MANNEQUIN_LIMB_NONE" LimbMax="WEDDING_DRESS_MANNEQUIN_LIMB_MAX" EnumName="WeddingDressMannequinLimbs" Offset="0x5A78" />
     </File>
 </Root>
