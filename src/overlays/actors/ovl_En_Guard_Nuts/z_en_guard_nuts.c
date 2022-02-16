@@ -73,7 +73,11 @@ static AnimationHeader* sAnimations[] = {
 
 static u8 sAnimModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
-static TexturePtr sEyeTextures[] = { gDekuPalaceGuardEyeOpenTex, gDekuPalaceGuardEyeHalfTex, gDekuPalaceGuardEyeClosedTex };
+static TexturePtr sEyeTextures[] = {
+    gDekuPalaceGuardEyeOpenTex,
+    gDekuPalaceGuardEyeHalfTex,
+    gDekuPalaceGuardEyeClosedTex,
+};
 
 void EnGuardNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGuardNuts* this = THIS;
