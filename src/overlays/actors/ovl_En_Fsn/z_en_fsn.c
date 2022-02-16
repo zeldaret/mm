@@ -46,6 +46,23 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx);
 
+typedef enum {
+    /* 00 */ FSN_ANIMATION_IDLE,
+    /* 01 */ FSN_ANIMATION_SCRATCH_BACK,
+    /* 02 */ FSN_ANIMATION_TURN_AROUND_FORWARD,
+    /* 03 */ FSN_ANIMATION_TURN_AROUND_REVERSE,
+    /* 04 */ FSN_ANIMATION_HANDS_ON_COUNTER_START,
+    /* 05 */ FSN_ANIMATION_HANDS_ON_COUNTER_LOOP,
+    /* 06 */ FSN_ANIMATION_HAND_ON_FACE_START,
+    /* 07 */ FSN_ANIMATION_HAND_ON_FACE_LOOP,
+    /* 08 */ FSN_ANIMATION_LEAN_FORWARD_START,
+    /* 09 */ FSN_ANIMATION_LEAN_FORWARD_LOOP,
+    /* 10 */ FSN_ANIMATION_SLAM_COUNTER_START,
+    /* 11 */ FSN_ANIMATION_SLAM_COUNTER_LOOP,
+    /* 12 */ FSN_ANIMATION_MAKE_OFFER,
+    /* 13 */ FSN_ANIMATION_MAX
+} FsnAnimation;
+
 const ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
     ACTORCAT_NPC,
@@ -688,7 +705,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
         this->stickAnimTween = this->arrowAnimTween = 0.0f;
     }
     this->blinkTimer = 20;
-    this->animationIndex = 4;
+    this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_START;
     this->eyeTextureIdx = 0;
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     this->actionFunc = EnFsn_Idle;
@@ -697,11 +714,11 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->animationIndex == 4) {
+    if (this->animationIndex == FSN_ANIMATION_HANDS_ON_COUNTER_START) {
         s16 curFrame = this->skelAnime.curFrame;
         s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
         if (curFrame == frameCount) {
-            this->animationIndex = 5;
+            this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         }
         return;
@@ -739,24 +756,24 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
-        this->animationIndex = 11;
+        this->animationIndex = FSN_ANIMATION_SLAM_COUNTER_LOOP;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     } else {
-        if (this->animationIndex == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
+        if (this->animationIndex == FSN_ANIMATION_SLAM_COUNTER_LOOP && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
-            this->animationIndex = 5;
+            this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
-            this->animationIndex = 12;
+            this->animationIndex = FSN_ANIMATION_MAKE_OFFER;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else {
-            if (this->animationIndex == 12) {
+            if (this->animationIndex == FSN_ANIMATION_MAKE_OFFER) {
                 if (curFrame == frameCount) {
-                    this->animationIndex = 5;
+                    this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
@@ -1405,7 +1422,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->eyeTextureIdx = 0;
         this->actor.flags |= 1;
         this->actor.targetMode = 0;
-        this->animationIndex = 0;
+        this->animationIndex = FSN_ANIMATION_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         this->actionFunc = EnFsn_IdleBackroom;
     }

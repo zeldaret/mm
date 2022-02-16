@@ -54,6 +54,23 @@ void EnOssan_GetCutscenes(EnOssan* this, GlobalContext* globalCtx);
 s32 EnOssan_ReturnItemToShelf(EnOssan* this);
 s32 EnOssan_TakeItemOffShelf(EnOssan* this);
 
+typedef enum {
+    /* 00 */ FSN_ANIMATION_IDLE,
+    /* 01 */ FSN_ANIMATION_SCRATCH_BACK,
+    /* 02 */ FSN_ANIMATION_TURN_AROUND_FORWARD,
+    /* 03 */ FSN_ANIMATION_TURN_AROUND_REVERSE,
+    /* 04 */ FSN_ANIMATION_HANDS_ON_COUNTER_START,
+    /* 05 */ FSN_ANIMATION_HANDS_ON_COUNTER_LOOP,
+    /* 06 */ FSN_ANIMATION_HAND_ON_FACE_START,
+    /* 07 */ FSN_ANIMATION_HAND_ON_FACE_LOOP,
+    /* 08 */ FSN_ANIMATION_LEAN_FORWARD_START,
+    /* 09 */ FSN_ANIMATION_LEAN_FORWARD_LOOP,
+    /* 10 */ FSN_ANIMATION_SLAM_COUNTER_START,
+    /* 11 */ FSN_ANIMATION_SLAM_COUNTER_LOOP,
+    /* 12 */ FSN_ANIMATION_MAKE_OFFER,
+    /* 13 */ FSN_ANIMATION_MAX
+} FsnAnimation;
+
 const ActorInit En_Ossan_InitVars = {
     ACTOR_EN_OSSAN,
     ACTORCAT_NPC,
@@ -355,7 +372,7 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 frameCount = Animation_GetLastFrame(animations[this->animationIndex].animation);
 
-    if (this->animationIndex == 3) {
+    if (this->animationIndex == FSN_ANIMATION_TURN_AROUND_REVERSE) {
         frameCount = 0;
     }
     if (this->cutsceneState == ENOSSAN_CUTSCENESTATE_WAITING) {
@@ -369,39 +386,39 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     if (this->actor.params == ENOSSAN_CURIOSITY_SHOP_MAN) {
         if (curFrame == frameCount) {
             switch (this->animationIndex) {
-                case 1:
-                    this->animationIndex = 2;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 2);
+                case FSN_ANIMATION_SCRATCH_BACK:
+                    this->animationIndex = FSN_ANIMATION_TURN_AROUND_FORWARD;
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIMATION_TURN_AROUND_FORWARD);
                     break;
-                case 2:
+                case FSN_ANIMATION_TURN_AROUND_FORWARD:
                     EnOssan_SetHaveMet(this);
                     this->textId = EnOssan_CuriosityShopMan_GetWelcome(this, globalCtx);
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, this->animationIndex);
                     break;
-                case 4:
-                case 6:
-                case 8:
-                case 10:
+                case FSN_ANIMATION_HANDS_ON_COUNTER_START:
+                case FSN_ANIMATION_HAND_ON_FACE_START:
+                case FSN_ANIMATION_LEAN_FORWARD_START:
+                case FSN_ANIMATION_SLAM_COUNTER_START:
                     this->animationIndex++;
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, this->animationIndex);
                     func_801518B0(globalCtx, this->textId, &this->actor);
                     EnOssan_SetupStartShopping(globalCtx, this, false);
                     break;
-                case 5:
-                case 7:
-                case 9:
-                case 11:
-                    this->animationIndex = 3;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 3);
+                case FSN_ANIMATION_HANDS_ON_COUNTER_LOOP:
+                case FSN_ANIMATION_HAND_ON_FACE_LOOP:
+                case FSN_ANIMATION_LEAN_FORWARD_LOOP:
+                case FSN_ANIMATION_SLAM_COUNTER_LOOP:
+                    this->animationIndex = FSN_ANIMATION_TURN_AROUND_REVERSE;
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIMATION_TURN_AROUND_REVERSE);
                     break;
-                case 3:
-                    this->animationIndex = 1;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
+                case FSN_ANIMATION_TURN_AROUND_REVERSE:
+                    this->animationIndex = FSN_ANIMATION_SCRATCH_BACK;
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIMATION_SCRATCH_BACK);
                     EnOssan_SetupAction(this, EnOssan_Idle);
                     break;
                 default:
-                    this->animationIndex = 1;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
+                    this->animationIndex = FSN_ANIMATION_SCRATCH_BACK;
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, FSN_ANIMATION_SCRATCH_BACK);
                     EnOssan_SetupAction(this, EnOssan_Idle);
                     break;
             }
@@ -547,7 +564,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
         this->animationIndex = 9;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 9);
     }
-    if (this->animationIndex == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
+    if ((this->animationIndex == FSN_ANIMATION_SLAM_COUNTER_LOOP) && Animation_OnFrame(&this->skelAnime, 18.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
     }
 }
@@ -1343,31 +1360,31 @@ u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, GlobalContext* globalCtx)
     u16 textId = Text_GetFaceReaction(globalCtx, 0x2F);
 
     if (textId != 0) {
-        this->animationIndex = 4;
+        this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_START;
         this->flags |= END_INTERACTION;
         return textId;
     }
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            this->animationIndex = 10;
+            this->animationIndex = FSN_ANIMATION_SLAM_COUNTER_START;
             if (gSaveContext.weekEventReg[0x12] & 0x10) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_ZORA:
-            this->animationIndex = 8;
+            this->animationIndex = FSN_ANIMATION_LEAN_FORWARD_START;
             if (gSaveContext.weekEventReg[0x12] & 8) {
                 return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
         case PLAYER_FORM_GORON:
-            this->animationIndex = 6;
+            this->animationIndex = FSN_ANIMATION_HAND_ON_FACE_START;
             if (gSaveContext.weekEventReg[0x12] & 4) {
                 return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
     }
-    this->animationIndex = 4;
+    this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_START;
     return sWelcomeHumanTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
 }
 
@@ -1490,7 +1507,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
         this->shopItemSelectedTween = 0.0f;
 
         Actor_SetScale(&this->actor, sActorScales[this->actor.params]);
-        this->animationIndex = 1;
+        this->animationIndex = (FSN_ANIMATION_SCRATCH_BACK | 1);
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations[this->actor.params], 1);
         EnOssan_SpawnShopItems(this, globalCtx, shopItems);
         this->blinkTimer = 20;
