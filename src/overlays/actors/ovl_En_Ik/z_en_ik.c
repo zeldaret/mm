@@ -342,14 +342,14 @@ void func_80929AF8(EnIk* this) {
     this->unk_304 = 1.0f;
     this->unk_2F6 = 0x50;
     this->actor.flags &= -0x401;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0x50);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0x50);
 }
 
 void func_80929B6C(EnIk* this, GlobalContext* globalCtx) {
     if (this->unk_2F5 == 0xA) {
         this->unk_2F5 = 0;
         this->unk_304 = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, &this->unk_310, 0xD, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, &this->unk_310, 0xD, 2, 0.3f, 0.2f);
         this->actor.flags |= 0x400;
     }
 }
@@ -427,7 +427,7 @@ void func_80929F20(EnIk* this, GlobalContext* globalCtx) {
             func_80929E2C(this, globalCtx);
         }
     } else if ((this->colliderCylinder.base.acFlags & 2)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
         func_801A2E54(0x38);
         this->actor.hintId = 0x35;
         this->colliderCylinder.base.acFlags &= ~2;
@@ -448,7 +448,7 @@ void func_8092A020(EnIk* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 16.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_WALK);
     }
     temp_a1 = this->actor.wallYaw - this->actor.shape.rot.y;
     if ((this->actor.bgCheckFlags & 8) && (ABS_ALT(temp_a1) >= 0x4000)) {
@@ -465,7 +465,7 @@ void func_8092A020(EnIk* this, GlobalContext* globalCtx) {
 
 void func_8092A124(EnIk* this) {
     Animation_MorphToLoop(&this->skelAnime, &D_060057F4, -4.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_TWINROBA_SHOOT_VOICE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TWINROBA_SHOOT_VOICE);
     this->actor.speedXZ = 2.5f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = func_8092A188;
@@ -476,7 +476,7 @@ void func_8092A188(EnIk* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if ((Animation_OnFrame(&this->skelAnime, 2.0f) != 0) || (Animation_OnFrame(&this->skelAnime, 9.0f) != 0)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_WALK);
     }
     temp_a1 = this->actor.wallYaw - this->actor.shape.rot.y;
     if ((this->actor.bgCheckFlags & 8) && (ABS_ALT(temp_a1) >= 0x4000)) {
@@ -514,12 +514,12 @@ void func_8092A33C(EnIk* this, GlobalContext* globalCtx) {
     this->unk_2F6++;
     if (!(this->skelAnime.curFrame < 7.0f) || (func_80929C80(this, globalCtx) == 0)) {
         if (Animation_OnFrame(&this->skelAnime, 15.0f) != 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
         } else if (Animation_OnFrame(&this->skelAnime, 21.0f) != 0) {
             sp2C.x = (Math_SinS((this->actor.shape.rot.y + 0x6A4)) * 70.0f) + this->actor.world.pos.x;
             sp2C.z = (Math_CosS((this->actor.shape.rot.y + 0x6A4)) * 70.0f) + this->actor.world.pos.z;
             sp2C.y = this->actor.world.pos.y;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_HIT_GND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_HIT_GND);
             func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 0x19, 5);
             func_8013ECE0(this->actor.xyzDistToPlayerSq, 0xB4, 0x14, 0x64);
             CollisionCheck_SpawnShieldParticles(globalCtx, &sp2C);
@@ -545,7 +545,7 @@ void func_8092A33C(EnIk* this, GlobalContext* globalCtx) {
 
 void func_8092A570(EnIk* this) {
     Animation_PlayOnce(&this->skelAnime, &D_06001ABC);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_PULLOUT);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_PULLOUT);
     this->actionFunc = func_8092A5BC;
 }
 
@@ -575,7 +575,7 @@ void func_8092A754(EnIk* this, GlobalContext* globalCtx) {
 
     this->unk_2F6++;
     if ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 13.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
     }
     if (((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 9.0f)) ||
         ((this->skelAnime.curFrame > 12.0f) && (this->skelAnime.curFrame < 20.0f))) {
@@ -619,7 +619,7 @@ void func_8092A8D8(EnIk* this) {
 void func_8092A994(EnIk* this, GlobalContext* globalCtx) {
     this->unk_2F6++;
     if (Animation_OnFrame(&this->skelAnime, 13.0f) != 0) {
-        Audio_PlayActorSound2(&this->actor, 0x3929U);
+        Actor_PlaySfxAtPos(&this->actor, 0x3929U);
     }
     if ((this->skelAnime.curFrame > 12.0f) && (this->skelAnime.curFrame < 20.0f)) {
         this->colliderQuad.base.atFlags |= 1;
@@ -702,7 +702,7 @@ void func_8092ADB4(EnIk* this) {
     this->actor.speedXZ = 0.0f;
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06004A04, -4.0f);
     this->unk_2F6 = 0x18;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_DEAD);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_DEAD);
     this->actionFunc = func_8092AE14;
 }
 
@@ -713,7 +713,7 @@ void func_8092AE14(EnIk* this, GlobalContext* globalCtx) {
     this->unk_2FC = 0xC;
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->unk_2F6 == 0x18) {
-            func_800F0590(globalCtx, &this->actor.world.pos, 0x23, 0x321F);
+            SoundSource_PlaySfxEachFrameAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x23, 0x321F);
             if (1) {}
         }
         if (this->unk_2F6 != 0) {
@@ -737,7 +737,7 @@ void func_8092AE14(EnIk* this, GlobalContext* globalCtx) {
         return;
     }
     if (Animation_OnFrame(&this->skelAnime, 23.0f) != 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_WALK);
     }
 }
 
@@ -810,11 +810,11 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
     } else if (((this->colliderCylinder.base.acFlags & 2) != 0)) {
         sp2C = 0;
-        func_800BE258(&this->actor, &this->colliderCylinder.info);
+        Actor_SetDropFlag(&this->actor, &this->colliderCylinder.info);
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         if ((this->actor.colChkInfo.damageEffect != 0xF) &&
             ((this->unk_2F5 != 0xA) || ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3) == 0))) {
-            func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 0xC);
+            Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 0xC);
             this->unk_2FC = 0xC;
             func_80929B6C(this, globalCtx);
             this->colliderQuad.base.atFlags &= ~AT_ON;
@@ -831,7 +831,7 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
                 this->unk_2F4 = 1;
                 this->colliderCylinder.base.colType = 3;
                 this->actor.colChkInfo.damageTable = &D_8092C140;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_ARMOR_OFF_DEMO);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_OFF_DEMO);
                 func_8092B03C(this);
             } else if (this->unk_2F4) {
                 if (this->actor.colChkInfo.damageEffect == 3) {
@@ -849,7 +849,7 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
                     } else if (this->actor.colChkInfo.damageEffect == 4) {
                         func_80929BEC(this, globalCtx);
                     }
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_DAMAGE);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_DAMAGE);
                     if (this->actor.colChkInfo.health != 0) {
                         func_8092AC4C(this, 1);
                     } else {
@@ -857,8 +857,8 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
                     }
                 }
             } else {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_IRONNACK_DAMAGE);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_DAMAGE);
                 if (this->actor.colChkInfo.damageEffect == 4) {
                     func_80929BEC(this, globalCtx);
                 }
@@ -887,10 +887,10 @@ void func_8092B46C(EnIk* this, GlobalContext* globalCtx) {
                     sp68.x = randPlusMinusPoint5Scaled(20.0f) + ptr->unk_04.x;
                     sp68.y = Rand_ZeroFloat(20.0f) + ptr->unk_04.y;
                     sp68.z = randPlusMinusPoint5Scaled(20.0f) + ptr->unk_04.z;
-                    func_800B3030(globalCtx, &sp68, &D_801D15B0, &D_801D15B0, 0x28, 7, 2);
+                    func_800B3030(globalCtx, &sp68, &gZeroVec3f, &gZeroVec3f, 0x28, 7, 2);
                 }
 
-                Audio_PlaySoundAtPosition(globalCtx, &ptr->unk_04, 11, 0x3878);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 11, 0x3878);
             }
         }
     }
@@ -907,7 +907,7 @@ void EnIk_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->colliderCylinder.base.acFlags &= ~2;
     }
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 75.0f, 30.0f, 30.0f, 0x1D);
     this->actor.focus.rot.y = this->actor.shape.rot.y;
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);

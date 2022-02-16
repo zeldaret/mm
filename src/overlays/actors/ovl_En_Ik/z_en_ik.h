@@ -7,39 +7,6 @@ struct EnIk;
 
 typedef void (*EnIkActionFunc)(struct EnIk*, GlobalContext*);
 
-typedef enum {
-    /* 0x00 */ IK_LIMB_NONE,
-    /* 0x01 */ IK_LIMB_WAIST,
-    /* 0x02 */ IK_LIMB_R_LOWER_PLATE,
-    /* 0x03 */ IK_LIMB_R_LEG,
-    /* 0x04 */ IK_LIMB_R_FOOT,
-    /* 0x05 */ IK_LIMB_L_LOWER_PLATE,
-    /* 0x06 */ IK_LIMB_L_LEG,
-    /* 0x07 */ IK_LIMB_L_FOOT,
-    /* 0x08 */ IK_LIMB_XXX,
-    /* 0x09 */ IK_LIMB_XXX,
-    /* 0x0A */ IK_LIMB_XXX,
-    /* 0x0B */ IK_LIMB_HELMET,
-    /* 0x0C */ IK_LIMB_HEAD,
-    /* 0x0D */ IK_LIMB_R_UPPER_ARM,
-    /* 0x0E */ IK_LIMB_R_FORARM,
-    /* 0x0F */ IK_LIMB_R_HAND_ROOT,
-    /* 0x10 */ IK_LIMB_AXE,
-    /* 0x11 */ IK_LIMB_R_HAND,
-    /* 0x12 */ IK_LIMB_L_UPPER_ARM,
-    /* 0x13 */ IK_LIMB_L_FOREARM,
-    /* 0x14 */ IK_LIMB_L_HAND,
-    /* 0x15 */ IK_LIMB_L_SHOULDER_PLATE,
-    /* 0x16 */ IK_LIMB_L_UNDER_SHOULDER,
-    /* 0x17 */ IK_LIMB_R_SHOULDER_PLATE,
-    /* 0x18 */ IK_LIMB_R_UNDER_SHOULDER,
-    /* 0x19 */ IK_LIMB_CHEST_PLATE,
-    /* 0x1A */ IK_LIMB_BACK_PLATE,
-    /* 0x1B */ IK_LIMB_TORSO,
-    /* 0x1C */ IK_LIMB_WAIST,
-    /* 0x1C */ IK_LIMB_MAX,
-} EnIkLimb;
-
 typedef struct {
     /* 0x00 */ char unk_00[0x4];
     /* 0x04 */ Vec3f unk_04;
