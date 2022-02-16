@@ -133,14 +133,13 @@ void EnGuardNuts_Wait(EnGuardNuts* this, GlobalContext* globalCtx) {
         func_80ABB540(this);
         return;
     }
-    // From what I can tell this is when you enter from behind the entrance guards
     if (yawDiff > 0x6000) {
         D_80ABBE20 = 2;
     }
     if (player->transformation == PLAYER_FORM_DEKU) {
         // this is the palace of...
         this->textId = 0;
-        if ((gSaveContext.weekEventReg[17] & 4) && (!this->unk224)) {
+        if ((gSaveContext.weekEventReg[17] & 4) && (!this->hasCompletedConversation)) {
             // I told you not to enter!!
             this->textId = 7;
         } else if (gSaveContext.weekEventReg[12] & 0x40) {
@@ -184,7 +183,7 @@ void func_80ABB540(EnGuardNuts* this) {
     EnGuardNuts_ChangeAnim(this, WALK_ANIM);
     this->unk23A.y = 0;
     this->unk23A.x = this->unk23A.y;
-    this->unk214 = 16;
+    this->timer = 16;
     this->unk21C = 1;
     this->actionFunc = func_80ABB590;
 }
@@ -225,7 +224,7 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
                     if (D_80ABBE38[this->textId] == 2) {
                         D_80ABBE20 = 1;
                     }
-                    this->unk214 = 16;
+                    this->timer = 16;
                 }
             } else if (this->textId != 3) {
                 this->unk23A.x = 0;
@@ -240,12 +239,12 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
         }
     } else if ((Message_GetState(&globalCtx->msgCtx) >= 3) && (D_80ABBE20 == 0)) {
         if ((this->textId == 0) || (this->textId == 3) || (this->textId >= 7)) {
-            if (this->unk214 == 0) {
-                this->unk214 = 2;
+            if (this->timer == 0) {
+                this->timer = 2;
                 this->unk23A.y ^= 0x2000;
             }
-        } else if (this->unk214 == 0) {
-            this->unk214 = 2;
+        } else if (this->timer == 0) {
+            this->timer = 2;
             this->unk23A.x ^= 0x2000;
         }
     }
@@ -292,7 +291,7 @@ void EnGuardNuts_Unburrow(EnGuardNuts* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
             D_80ABBE20 = 0;
             if (this->textId == 9) {
-                this->unk224 = true;
+                this->hasCompletedConversation = true;
             }
             this->actor.flags &= ~ACTOR_FLAG_8000000;
             EnGuardNuts_SetupWait(this);
@@ -324,8 +323,8 @@ void EnGuardNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->blinkTimer != 0) {
         this->blinkTimer--;
     }
-    if (this->unk214 != 0) {
-        this->unk214--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -359,7 +358,7 @@ void EnGuardNuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnGuardNuts_OverrideLimbDraw,
                       NULL, &this->actor);
-    Matrix_InsertTranslation(this->unk228.x, this->actor.floorHeight, this->unk228.z, 0);
+    Matrix_InsertTranslation(this->unk228.x, this->actor.floorHeight, this->unk228.z, MTXMODE_NEW);
     Matrix_Scale(0.015f, 0.015f, 0.015f, 1);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

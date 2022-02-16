@@ -23,12 +23,12 @@ typedef struct EnGuardNuts {
     /* 0x20C */ EnGuardNutsActionFunc actionFunc;
     /* 0x210 */ s16 eyeState;
     /* 0x212 */ s16 blinkTimer;
-    /* 0x214 */ s16 unk214;
+    /* 0x214 */ s16 timer;
     /* 0x218 */ s32 animIndex;
     /* 0x21C */ s16 unk21C;
     /* 0x21E */ s16 unk21E;
     /* 0x220 */ s32 textId;
-    /* 0x224 */ u8 unk224;
+    /* 0x224 */ u8 hasCompletedConversation; // Flag set when player has gone through all text.
     /* 0x228 */ Vec3f unk228;
     /* 0x234 */ Vec3s headRot;
     /* 0x23A */ Vec3s unk23A;

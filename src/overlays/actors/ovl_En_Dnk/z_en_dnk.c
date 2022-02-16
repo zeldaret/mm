@@ -94,16 +94,16 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
     { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnk_Anim_000894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnk_Anim_0006CC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardHappyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
     { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
