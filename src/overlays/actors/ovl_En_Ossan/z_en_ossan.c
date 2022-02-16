@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ossan.h"
+#include "objects/object_fsn/object_fsn.h"
 
 #define FLAGS 0x00000019
 
@@ -86,11 +87,13 @@ const ActorInit En_Ossan_InitVars = {
 };
 
 static ActorAnimationEntryS sAnimationsCuriosityShopMan[] = {
-    { &D_06012C34, 1.0f, 0, -1, 0, 0 },  { &D_060131FC, 1.0f, 0, -1, 0, 0 }, { &D_0600C58C, 1.0f, 0, -1, 2, 0 },
-    { &D_0600C58C, -1.0f, 0, -1, 2, 0 }, { &D_0600E3EC, 1.0f, 0, -1, 2, 0 }, { &D_0600F00C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600CB3C, 1.0f, 0, -1, 2, 0 },  { &D_0600D354, 1.0f, 0, -1, 0, 0 }, { &D_060138B0, 1.0f, 0, -1, 2, 0 },
-    { &D_0601430C, 1.0f, 0, -1, 0, 0 },  { &D_0600B9D8, 1.0f, 0, -1, 2, 0 }, { &D_0600C26C, 1.0f, 0, -1, 0, 0 },
-    { &D_0600DE34, 1.0f, 0, -1, 2, 0 },
+    { &gFsnIdleAnim, 1.0f, 0, -1, 0, 0 }, { &gFsnScratchBackAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnTurnAroundAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnTurnAroundAnim, -1.0f, 0, -1, 2, 0 },
+    { &gFsnHandsOnCounterStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnHandsOnCounterLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnHandOnFaceStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnHandOnFaceLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnLeanForwardStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnLeanForwardLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnSlamCounterStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnSlamCounterLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnMakeOfferAnim, 1.0f, 0, -1, 2, 0 },
 };
 
 static ActorAnimationEntryS sAnimationsPartTimeWorker[] = {

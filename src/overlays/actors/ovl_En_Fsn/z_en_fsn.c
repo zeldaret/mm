@@ -59,13 +59,13 @@ const ActorInit En_Fsn_InitVars = {
 };
 
 static ActorAnimationEntryS sAnimations[] = {
-    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 },
-    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
+    { &gFsnIdleAnim, 1.0f, 0, -1, 0, 0 }, { &gFsnScratchBackAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnTurnAroundAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnTurnAroundAnim, -1.0f, 0, -1, 2, 0 },
+    { &gFsnHandsOnCounterStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnHandsOnCounterLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnHandOnFaceStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnHandOnFaceLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnLeanForwardStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnLeanForwardLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnSlamCounterStartAnim, 1.0f, 0, -1, 2, 0 }, { &gFsnSlamCounterLoopAnim, 1.0f, 0, -1, 0, 0 },
+    { &gFsnMakeOfferAnim, 1.0f, 0, -1, 2, 0 },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -1380,7 +1380,7 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &object_fsn_Anim_012C34, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable,
                        this->morphTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
