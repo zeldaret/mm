@@ -464,8 +464,32 @@ void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20CF4.s")
+s32 func_80A20CF4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20D10.s")
+void func_80A20D10(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnSyatekiWf* this = THIS;
+    Vec3f sp18;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/EnSyatekiWf_Draw.s")
+    Collider_UpdateSpheres(limbIndex, &this->unk_34C);
+    if (limbIndex == 6) {
+        Matrix_MultiplyVector3fByState(&D_80A20FD0, &sp18);
+        this->unk_300.dim.pos.x = sp18.x;
+        this->unk_300.dim.pos.y = sp18.y;
+        this->unk_300.dim.pos.z = sp18.z;
+    }
+}
+
+void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiWf* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A20FDC[this->unk_2B0]));
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_80A20CF4, func_80A20D10, &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
