@@ -6,6 +6,7 @@
 
 #include "z_en_syateki_wf.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
+#include "objects/object_wf/object_wf.h"
 
 #define FLAGS 0x08000030
 
@@ -119,13 +120,10 @@ const ActorInit En_Syateki_Wf_InitVars = {
 
 // static AnimationInfoS sAnimations[] = {
 static AnimationInfo D_80A20F14[] = {
-    { (AnimationHeader*)0x0600A3CC, 2.0f, 0.0f, 0.0f, 0, -1.0f },
-    { (AnimationHeader*)0x06005700, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { (AnimationHeader*)0x06005700, 1.0f, 0.0f, 4.0f, 2, 1.0f },
-    { (AnimationHeader*)0x06005700, 1.0f, 4.0f, 8.0f, 2, 1.0f },
-    { (AnimationHeader*)0x06004A90, 1.0f, 0.0f, 0.0f, 2, -1.0f },
-    { (AnimationHeader*)0x06009A50, 1.0f, 0.0f, 0.0f, 2, 8.0f },
-    { (AnimationHeader*)0x060053D0, 1.0f, 0.0f, 0.0f, 2, -1.0f },
+    { &object_wf_Anim_00A3CC, 2.0f, 0.0f, 0.0f, 0, -1.0f }, { &object_wf_Anim_005700, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { &object_wf_Anim_005700, 1.0f, 0.0f, 4.0f, 2, 1.0f },  { &object_wf_Anim_005700, 1.0f, 4.0f, 8.0f, 2, 1.0f },
+    { &object_wf_Anim_004A90, 1.0f, 0.0f, 0.0f, 2, -1.0f }, { &object_wf_Anim_009A50, 1.0f, 0.0f, 0.0f, 2, 8.0f },
+    { &object_wf_Anim_0053D0, 1.0f, 0.0f, 0.0f, 2, -1.0f },
 };
 
 // static InitChainEntry sInitChain[] = {
@@ -138,15 +136,12 @@ static Vec3f D_80A20FC4 = { 0.0f, 0.5f, 0.0f };
 
 static Vec3f D_80A20FD0 = { 1200.0f, 0.0f, 0.0f };
 
-static void* D_80A20FDC[] = {
-    (void*)0x06007AA8,
-    (void*)0x060082A8,
-    (void*)0x060084A8,
-    (void*)0x060082A8,
+static TexturePtr D_80A20FDC[] = {
+    object_wf_Tex_007AA8,
+    object_wf_Tex_0082A8,
+    object_wf_Tex_0084A8,
+    object_wf_Tex_0082A8,
 };
-
-extern FlexSkeletonHeader D_060095D0;
-extern AnimationHeader D_0600A3CC;
 
 void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -198,7 +193,8 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &D_80A20EA0, &this->unk_36C);
     this->unk_34C.elements->dim.worldSphere.radius = D_80A20EA0.elements[0].dim.modelSphere.radius;
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060095D0, &D_0600A3CC, this->jointTable, this->morphTable, 22);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_0095D0, &object_wf_Anim_00A3CC, this->jointTable,
+                       this->morphTable, 22);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.hintId = 0x4C;
 
