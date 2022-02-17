@@ -200,7 +200,7 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiWf* this = THIS;
-    
+
     Collider_DestroyCylinder(globalCtx, &this->unk_2B4);
     Collider_DestroyCylinder(globalCtx, &this->unk_300);
 }
