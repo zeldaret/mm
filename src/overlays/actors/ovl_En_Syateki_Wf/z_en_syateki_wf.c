@@ -379,7 +379,17 @@ void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20858.s")
+void func_80A20858(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    this->unk_298 = 0;
+    this->actor.speedXZ = 0.0f;
+    EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 5, 2);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 6);
+    syatekiMan->unk_280 += 100;
+    this->actionFunc = func_80A208F8;
+}
 
 void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx) {
     s32 pad;
