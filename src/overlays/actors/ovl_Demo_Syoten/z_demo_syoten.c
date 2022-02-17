@@ -199,13 +199,8 @@ void func_80C168D0(DemoSyoten* this, GlobalContext* globalCtx) {
     }
 }
 
-typedef struct {
-    /* 0x00 */ char unk00[0xF];
-    /* 0x0F */ s8 unk_0F;
-} DemoSyotenStruct; // size = 0x10
-
 void func_80C16974(f32 arg0) {
-    DemoSyotenStruct* temp_v0 = Lib_SegmentedToVirtual(&object_syotenVtx_0018C0);
+    Vtx* vtx = Lib_SegmentedToVirtual(&object_syotenVtx_0018C0);
     u8 sp20[3];
     s32 i;
 
@@ -215,8 +210,8 @@ void func_80C16974(f32 arg0) {
     sp20[1] = (s8)(152.0f * arg0);
     sp20[2] = (s8)(255.0f * arg0);
 
-    for (i = 0; i < ARRAY_COUNT(D_80C177D0); i++, temp_v0++) {
-        temp_v0->unk_0F = sp20[D_80C177D0[i]];
+    for (i = 0; i < ARRAY_COUNT(D_80C177D0); i++, vtx++) {
+        vtx->v.cn[3] = sp20[D_80C177D0[i]];
     }
 }
 
