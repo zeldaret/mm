@@ -92,7 +92,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-Vec3f D_80A68650 = { 0.0f, 0.0f, 0.0f };
+Vec3f effectVecInitialize = { 0.0f, 0.0f, 0.0f };
 
 static TexturePtr sEyeTextures[] = { gDekuPalaceGuardEyeOpenTex, gDekuPalaceGuardEyeHalfTex,
                                      gDekuPalaceGuardEyeClosedTex };
@@ -323,7 +323,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     if (D_80A6862C == 0) {
         if ((this->state < 2) && (this->actor.xzDistToPlayer < 320.0f) && (this->actor.playerHeightRel < 80.0f)) {
-            effectVelOffset = D_80A68650;
+            effectVelOffset = effectVecInitialize;
             Math_Vec3f_Copy(&effectPos, &this->actor.world.pos);
             effectPos.x += Math_SinS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
             effectPos.y += 30.0f;
