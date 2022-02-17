@@ -522,7 +522,7 @@ void func_80B975F8(EnZot* this, GlobalContext* globalCtx) {
 void func_80B9765C(EnZot* this, GlobalContext* globalCtx) {
     func_80B96D4C(this);
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        s32 pad;
+        s32 requiredScopeTemp;
         
         switch(globalCtx->msgCtx.unk11F04) {
             case 0x1262:
