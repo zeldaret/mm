@@ -31,8 +31,7 @@ void func_80A20670(EnSyatekiWf* this);
 void func_80A2079C(EnSyatekiWf* this);
 void func_80A20710(EnSyatekiWf* this);
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_80A20E50[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -46,8 +45,7 @@ static ColliderJntSphElementInit D_80A20E50[1] = {
     },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A20E74 = {
+static ColliderCylinderInit sCylinderInit1 = {
     {
         COLTYPE_HIT5,
         AT_NONE,
@@ -67,8 +65,7 @@ static ColliderCylinderInit D_80A20E74 = {
     { 40, 60, 0, { 0, 0, 0 } },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80A20EA0 = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_HIT5,
         AT_ON | AT_TYPE_ENEMY,
@@ -78,11 +75,10 @@ static ColliderJntSphInit D_80A20EA0 = {
         COLSHAPE_JNTSPH,
     },
     1,
-    D_80A20E50, // sJntSphElementsInit,
+    sJntSphElementsInit,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A20EB0 = {
+static ColliderCylinderInit sCylinderInit2 = {
     {
         COLTYPE_HIT5,
         AT_NONE,
@@ -118,16 +114,14 @@ const ActorInit En_Syateki_Wf_InitVars = {
     (ActorFunc)EnSyatekiWf_Draw,
 };
 
-// static AnimationInfoS sAnimations[] = {
-static AnimationInfo D_80A20F14[] = {
+static AnimationInfo sAnimations[] = {
     { &object_wf_Anim_00A3CC, 2.0f, 0.0f, 0.0f, 0, -1.0f }, { &object_wf_Anim_005700, 1.0f, 0.0f, 0.0f, 0, -8.0f },
     { &object_wf_Anim_005700, 1.0f, 0.0f, 4.0f, 2, 1.0f },  { &object_wf_Anim_005700, 1.0f, 4.0f, 8.0f, 2, 1.0f },
     { &object_wf_Anim_004A90, 1.0f, 0.0f, 0.0f, 2, -1.0f }, { &object_wf_Anim_009A50, 1.0f, 0.0f, 0.0f, 2, 8.0f },
     { &object_wf_Anim_0053D0, 1.0f, 0.0f, 0.0f, 2, -1.0f },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80A20FBC[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
@@ -174,7 +168,7 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2A4 = 1;
     this->unk_2A6 = path->count;
 
-    Actor_ProcessInitChain(&this->actor, D_80A20FBC);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_29C = 0;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     this->actor.focus.pos = this->actor.world.pos;
@@ -186,12 +180,12 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2AC = 10.0f;
 
     Collider_InitCylinder(globalCtx, &this->unk_2B4);
-    Collider_SetCylinder(globalCtx, &this->unk_2B4, &this->actor, &D_80A20E74);
+    Collider_SetCylinder(globalCtx, &this->unk_2B4, &this->actor, &sCylinderInit1);
     Collider_InitCylinder(globalCtx, &this->unk_300);
-    Collider_SetCylinder(globalCtx, &this->unk_300, &this->actor, &D_80A20EB0);
+    Collider_SetCylinder(globalCtx, &this->unk_300, &this->actor, &sCylinderInit2);
     Collider_InitJntSph(globalCtx, &this->unk_34C);
-    Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &D_80A20EA0, &this->unk_36C);
-    this->unk_34C.elements->dim.worldSphere.radius = D_80A20EA0.elements[0].dim.modelSphere.radius;
+    Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &sJntSphInit, &this->unk_36C);
+    this->unk_34C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wf_Skel_0095D0, &object_wf_Anim_00A3CC, this->jointTable,
                        this->morphTable, 22);
@@ -265,7 +259,7 @@ void func_80A20320(EnSyatekiWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A20378(EnSyatekiWf* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actor.speedXZ = 10.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.draw = EnSyatekiWf_Draw;
@@ -336,7 +330,7 @@ void func_80A20670(EnSyatekiWf* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.velocity.y = 20.0f;
     this->actor.speedXZ = 5.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
     this->actionFunc = func_80A206DC;
 }
 
@@ -348,7 +342,7 @@ void func_80A206DC(EnSyatekiWf* this, GlobalContext* globalCtx) {
 
 void func_80A20710(EnSyatekiWf* this) {
     this->actor.speedXZ = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
     this->actionFunc = func_80A2075C;
 }
 
@@ -362,7 +356,7 @@ void func_80A2079C(EnSyatekiWf* this) {
     this->unk_29A = 0x28;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 5);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
     this->actionFunc = func_80A20800;
 }
 
@@ -382,7 +376,7 @@ void func_80A20858(EnSyatekiWf* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
     EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 5, 2);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_DEAD);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 6);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
     syatekiMan->unk_280 += 100;
     this->actionFunc = func_80A208F8;
 }
