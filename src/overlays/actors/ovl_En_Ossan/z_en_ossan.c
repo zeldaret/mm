@@ -1506,7 +1506,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
         this->shopItemSelectedTween = 0.0f;
 
         Actor_SetScale(&this->actor, sActorScales[this->actor.params]);
-        this->animationIndex = (FSN_ANIMATION_SCRATCH_BACK | 1);
+        this->animationIndex = 1; // FSN_ANIMATION_SCRATCH_BACK and 
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations[this->actor.params], 1);
         EnOssan_SpawnShopItems(this, globalCtx, shopItems);
         this->blinkTimer = 20;
