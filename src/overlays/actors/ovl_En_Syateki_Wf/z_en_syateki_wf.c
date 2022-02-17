@@ -307,9 +307,22 @@ void func_80A2075C(EnSyatekiWf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A2079C.s")
+void func_80A2079C(EnSyatekiWf* this) {
+    this->unk_29A = 0x28;
+    this->actor.speedXZ = 0.0f;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 5);
+    this->actionFunc = func_80A20800;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20800.s")
+void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        this->unk_29A--;
+        if (this->unk_29A == 0) {
+            func_80A20378(this);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20858.s")
 

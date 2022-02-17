@@ -17,7 +17,7 @@ typedef struct EnSyatekiWf {
     /* 0x290 */ char unk_290[0x4];
     /* 0x294 */ EnSyatekiWfActionFunc actionFunc;
     /* 0x298 */ s16 unk_298;
-    /* 0x29A */ char unk_29A[0x2];
+    /* 0x29A */ s16 unk_29A;
     /* 0x29C */ s16 unk_29C;
     /* 0x29E */ char unk_29E[0x2];
     /* 0x2A0 */ Vec3s* unk_2A0;
