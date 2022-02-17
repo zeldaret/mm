@@ -3107,8 +3107,7 @@ beginseg
     name "ovl_En_Mm3"
     compress
     include "build/src/overlays/actors/ovl_En_Mm3/z_en_mm3.o"
-    include "build/data/ovl_En_Mm3/ovl_En_Mm3.data.o"
-    include "build/data/ovl_En_Mm3/ovl_En_Mm3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mm3/ovl_En_Mm3_reloc.o"
 endseg
 
 beginseg
