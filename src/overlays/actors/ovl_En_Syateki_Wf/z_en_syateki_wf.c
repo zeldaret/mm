@@ -89,6 +89,7 @@ extern ColliderJntSphElementInit* D_80A20EAC;
 extern ColliderCylinderInit D_80A20EB0;
 extern AnimationInfo D_80A20F14;
 extern InitChainEntry D_80A20FBC[];
+extern Vec3f D_80A20FC4;
 
 extern FlexSkeletonHeader D_060095D0;
 extern AnimationHeader D_0600A3CC;
@@ -326,7 +327,27 @@ void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20858.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A208F8.s")
+void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    s32 pad;
+
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        func_80A201CC(this);
+    } else {
+        Vec3f sp68;
+        Vec3f sp5C = D_80A20FC4;
+        s32 temp_s0 = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame;
+
+        if (temp_s0 >= 0) {
+            do {
+                sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
+                sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
+                sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                func_800B3030(globalCtx, &sp68, &sp5C, &sp5C, 0x64, 0, 2);
+                temp_s0--;
+            } while (temp_s0 >= 0);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/EnSyatekiWf_Update.s")
 
