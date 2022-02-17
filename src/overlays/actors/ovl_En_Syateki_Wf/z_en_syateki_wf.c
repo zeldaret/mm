@@ -133,7 +133,7 @@ static Vec3f D_80A20FC4 = { 0.0f, 0.5f, 0.0f };
 
 static Vec3f D_80A20FD0 = { 1200.0f, 0.0f, 0.0f };
 
-static TexturePtr D_80A20FDC[] = {
+static TexturePtr sEyeTextures[] = {
     object_wf_Tex_007AA8,
     object_wf_Tex_0082A8,
     object_wf_Tex_0084A8,
@@ -179,7 +179,7 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.health = 2;
     this->actor.colChkInfo.cylRadius = 50;
     this->actor.colChkInfo.cylHeight = 100;
-    this->unk_2B0 = 0;
+    this->eyeIndex = 0;
     this->unk_2AC = 10.0f;
 
     Collider_InitCylinder(globalCtx, &this->unk_2B4);
@@ -394,16 +394,13 @@ void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx) {
     } else {
         Vec3f sp68;
         Vec3f sp5C = D_80A20FC4;
-        s32 temp_s0 = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame;
+        s32 i;
 
-        if (temp_s0 >= 0) {
-            do {
-                sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-                sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
-                func_800B3030(globalCtx, &sp68, &sp5C, &sp5C, 0x64, 0, 2);
-                temp_s0--;
-            } while (temp_s0 >= 0);
+        for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i--) {
+            sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
+            sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
+            sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+            func_800B3030(globalCtx, &sp68, &sp5C, &sp5C, 0x64, 0, 2);
         }
     }
 }
@@ -420,17 +417,18 @@ void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 32.0f, 30.0f, 60.0f, 5);
     this->actionFunc(this, globalCtx);
 
-    if ((this->actor.bgCheckFlags & 3) != 0) {
+    if (this->actor.bgCheckFlags & 3) {
         func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 1, 0x3E8, 0);
         Math_SmoothStepToS(&this->actor.shape.rot.z, 0, 1, 0x3E8, 0);
     }
 
-    if ((this->unk_2B4.base.acFlags & 2) || (this->unk_300.base.acFlags & 2) || (this->unk_34C.base.acFlags & 2)) {
-        this->unk_2B4.base.acFlags &= ~2;
-        this->unk_300.base.acFlags &= ~2;
-        this->unk_34C.base.acFlags &= ~2;
+    if ((this->unk_2B4.base.acFlags & AC_HIT) || (this->unk_300.base.acFlags & AC_HIT) ||
+        (this->unk_34C.base.acFlags & AC_HIT)) {
+        this->unk_2B4.base.acFlags &= ~AC_HIT;
+        this->unk_300.base.acFlags &= ~AC_HIT;
+        this->unk_34C.base.acFlags &= ~AC_HIT;
         this->actor.colChkInfo.health -= 2;
         if (this->actor.colChkInfo.health == 0) {
             func_801A3098(NA_BGM_GET_ITEM | 0x900);
@@ -450,12 +448,12 @@ void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.focus.pos.y += 25.0f;
     }
 
-    if (this->unk_2B0 == 0) {
+    if (this->eyeIndex == 0) {
         if ((Rand_ZeroOne() < 0.2f) && ((globalCtx->gameplayFrames & 3) == 0) && (this->actor.colorFilterTimer == 0)) {
-            this->unk_2B0++;
+            this->eyeIndex++;
         }
     } else {
-        this->unk_2B0 = (this->unk_2B0 + 1) & 3;
+        this->eyeIndex = (this->eyeIndex + 1) & 3;
     }
 }
 
@@ -483,7 +481,7 @@ void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A20FDC[this->unk_2B0]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnSyatekiWf_OverrideLimbDraw, EnSyatekiWf_PostLimbDraw, &this->actor);
 
