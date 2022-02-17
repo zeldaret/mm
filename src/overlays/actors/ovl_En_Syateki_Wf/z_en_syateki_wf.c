@@ -115,10 +115,13 @@ const ActorInit En_Syateki_Wf_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_wf_Anim_00A3CC, 2.0f, 0.0f, 0.0f, 0, -1.0f }, { &object_wf_Anim_005700, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_wf_Anim_005700, 1.0f, 0.0f, 4.0f, 2, 1.0f },  { &object_wf_Anim_005700, 1.0f, 4.0f, 8.0f, 2, 1.0f },
-    { &object_wf_Anim_004A90, 1.0f, 0.0f, 0.0f, 2, -1.0f }, { &object_wf_Anim_009A50, 1.0f, 0.0f, 0.0f, 2, 8.0f },
-    { &object_wf_Anim_0053D0, 1.0f, 0.0f, 0.0f, 2, -1.0f },
+    { &object_wf_Anim_00A3CC, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &object_wf_Anim_005700, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_wf_Anim_005700, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
+    { &object_wf_Anim_005700, 1.0f, 4.0f, 8.0f, ANIMMODE_ONCE, 1.0f },
+    { &object_wf_Anim_004A90, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_wf_Anim_009A50, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 8.0f },
+    { &object_wf_Anim_0053D0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
 static InitChainEntry sInitChain[] = {
