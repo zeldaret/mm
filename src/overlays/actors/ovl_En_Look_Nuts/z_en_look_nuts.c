@@ -112,6 +112,7 @@ void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
+
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
     }
@@ -123,6 +124,7 @@ void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
+
     this->state = PATROLLING_STATE;
     EnLookNuts_SetupPatrol(this);
 }
@@ -149,18 +151,22 @@ void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 0.0f;
         return;
     }
+
     this->actor.speedXZ = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
     }
+
     if (D_80A6862C != 0) {
         Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
         return;
     }
+
     this->path = func_8013D648(globalCtx, this->pathLocation, 0x1F);
     if (this->path != 0) {
         sp34 = func_8013D83C(this->path, this->pathPointCounter, &this->actor.world.pos, &sp30);
     }
+
     if (sp30 < 10.0f) {
         if (this->path != 0) {
             this->pathPointCounter++;
@@ -182,6 +188,7 @@ void EnLookNuts_SetupStandAndWait(EnLookNuts* this) {
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
     this->waitTimer = Rand_S16Offset(1, 3);
     this->unk238.y = 10000.0f;
+
     if (Rand_ZeroOne() < 0.5f) {
         this->unk238.y = -10000.0f;
     }
@@ -263,6 +270,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
     }
+
     this->actor.speedXZ = 4.0f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((this->actor.xzDistToPlayer < 70.0f) || (this->unk21A == 0)) {
@@ -335,8 +343,10 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
                                                  &this->isPlayerDetected, drawFlag);
                 }
             }
+
             if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
                 Player* player = GET_PLAYER(globalCtx);
+
                 if (!(player->stateFlags3 & 0x100) && !func_801690CC(globalCtx)) {
                     Math_Vec3f_Copy(&this->unk238, &gZeroVec3f);
                     this->state = RUNNING_TO_PLAYER_STATE;
