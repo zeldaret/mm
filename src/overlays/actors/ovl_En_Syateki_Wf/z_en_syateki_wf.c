@@ -26,6 +26,8 @@ void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A201CC(EnSyatekiWf* this);
 void func_80A2030C(EnSyatekiWf* this);
 void func_80A20378(EnSyatekiWf* this);
+void func_80A20670(EnSyatekiWf* this);
+void func_80A2079C(EnSyatekiWf* this);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -218,7 +220,65 @@ void func_80A20378(EnSyatekiWf* this) {
     this->actionFunc = func_80A203DC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A203DC.s")
+void func_80A203DC(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    Vec3f sp54;
+    f32 sp50;
+    s16 temp_v0;
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    if (syatekiMan->unk_26A != 1) {
+        func_80A201CC(this);
+    }
+
+    sp54.x = this->unk_2A0[this->unk_2A4].x;
+    sp54.y = this->unk_2A0[this->unk_2A4].y;
+    sp54.z = this->unk_2A0[this->unk_2A4].z;
+    temp_v0 = (this->actor.wallYaw - this->actor.world.rot.y) + 0x8000;
+
+    if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & 8) {
+            if ((ABS(temp_v0) < 0x1555) && (this->actor.wallPoly != this->actor.floorPoly)) {
+                func_80A20670(this);
+                return;
+            }
+        }
+
+        if (this->actor.bgCheckFlags & 4) {
+            this->actor.velocity.y = 2.0f;
+        }
+
+        sp50 = Math_Vec3f_DistXZ(&this->actor.world.pos, &sp54);
+        this->unk_2A8 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp54);
+
+        if (sp50 > 15.0f) {
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2A8, 5, 0x3000, 0x100);
+            this->actor.shape.rot.y = this->actor.world.rot.y;
+            if (sp50 < 50.0f) {
+                if (this->actor.speedXZ > 3.0f) {
+                    this->actor.speedXZ = this->actor.speedXZ - 0.5f;
+                } else {
+                    this->actor.speedXZ = this->actor.speedXZ;
+                }
+            }
+        } else {
+            if (this->unk_2A4 < (this->unk_2A6 - 1)) {
+                if (this->unk_2A4 == ((this->actor.params & 0xF0) >> 4)) {
+                    func_80A2079C(this);
+                }
+
+                this->unk_2A4++;
+            } else {
+                this->unk_298 = 0;
+                this->unk_2A4 = 1;
+                func_80A201CC(this);
+            }
+        }
+
+        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+            Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 10.0f, 3, 2.0f, 0, 0, 0);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20670.s")
 

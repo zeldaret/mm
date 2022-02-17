@@ -23,7 +23,8 @@ typedef struct EnSyatekiWf {
     /* 0x2A0 */ Vec3s* unk_2A0;
     /* 0x2A4 */ s16 unk_2A4;
     /* 0x2A6 */ s16 unk_2A6;
-    /* 0x2A8 */ char unk_2A8[0x4];
+    /* 0x2A8 */ s16 unk_2A8;
+    /* 0x2A8 */ char unk_2AA[0x2];
     /* 0x2AC */ f32 unk_2AC;
     /* 0x2B0 */ s8 unk_2B0;
     /* 0x2B1 */ char unk_2B1[0x3];
