@@ -301,7 +301,11 @@ void func_80A20710(EnSyatekiWf* this) {
     this->actionFunc = func_80A2075C;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A2075C.s")
+void func_80A2075C(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        func_80A20378(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A2079C.s")
 
