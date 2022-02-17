@@ -190,7 +190,7 @@ void EnLookNuts_SetupStandAndWait(EnLookNuts* this) {
     this->actionFunc = EnLookNuts_StandAndWait;
 }
 
-// Patrol Guards will stand in place and wait for a maximum of ~12 frames. 
+// Patrol Guards will stand in place and wait for a maximum of ~12 frames.
 void EnLookNuts_StandAndWait(EnLookNuts* this, GlobalContext* globalCtx) {
     s16 randOffset;
 
