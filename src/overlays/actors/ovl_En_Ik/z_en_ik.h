@@ -2,13 +2,14 @@
 #define Z_EN_IK_H
 
 #include "global.h"
+#include "objects/object_ik/object_ik.h"
 
 struct EnIk;
 
 typedef void (*EnIkActionFunc)(struct EnIk*, GlobalContext*);
 
 typedef struct {
-    /* 0x00 */ char unk_00[0x4];
+    /* 0x00 */ Gfx* unk_00;
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
     /* 0x1C */ Vec3s unk_1C;
@@ -33,7 +34,7 @@ typedef struct EnIk {
     /* 0x0304 */ f32 unk_304;
     /* 0x0308 */ f32 unk_308;
     /* 0x030C */ f32 unk_30C;
-    /* 0x0310 */ Vec3f unk_310;
+    /* 0x0310 */ Vec3f unk_310[8];
     /* 0x031C */ char unk_31C[0x90];
     /* 0x03AC */ ColliderCylinder colliderCylinder; // size = 0x4C
     /* 0x03F8 */ ColliderQuad colliderQuad; // size = 0x80
