@@ -280,7 +280,13 @@ void func_80A203DC(EnSyatekiWf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20670.s")
+void func_80A20670(EnSyatekiWf* this) {
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
+    this->actor.velocity.y = 20.0f;
+    this->actor.speedXZ = 5.0f;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 2);
+    this->actionFunc = func_80A206DC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A206DC.s")
 
