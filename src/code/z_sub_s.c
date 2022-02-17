@@ -289,11 +289,11 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
     return actor;
 }
 
-s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 limbRotTableLen) {
+s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
     s32 i;
     u32 frames = globalCtx->gameplayFrames;
 
-    for (i = 0; i < limbRotTableLen; i++) {
+    for (i = 0; i < numLimbs; i++) {
         limbRotTableY[i] = (i * 50 + 0x814) * frames;
         limbRotTableZ[i] = (i * 50 + 0x940) * frames;
     }
@@ -374,11 +374,11 @@ s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32
     return isStarted;
 }
 
-s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
+s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
     s16 cs;
     s32 i;
 
-    for (i = 0; i < cutscenesLen; i++) {
+    for (i = 0; i < numCutscenes; i++) {
         cutscenes[i] = -1;
     }
 
@@ -386,8 +386,8 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 cutscenesLen) {
     i = 0;
 
     while (cs != -1) {
-        // Note: Infinite loop if cutscenesLen is less than possible additional cutscenes
-        if (i < cutscenesLen) {
+        // Note: Infinite loop if numCutscenes is less than possible additional cutscenes
+        if (i < numCutscenes) {
             cutscenes[i] = cs;
             cs = ActorCutscene_GetAdditionalCutscene(cs);
             i++;
