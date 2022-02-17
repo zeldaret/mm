@@ -354,7 +354,7 @@ void func_80A2075C(EnSyatekiWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2079C(EnSyatekiWf* this) {
-    this->unk_29A = 0x28;
+    this->unk_29A = 40;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
