@@ -153,8 +153,20 @@ void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->unk_300);
 }
 
-void func_80A200E0(EnSyatekiWf* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A200E0.s")
+void func_80A200E0(EnSyatekiWf* this) {
+    Vec3f sp24;
+    s16 temp;
+
+    this->actor.world.pos.x = this->unk_2A0[0].x;
+    this->actor.world.pos.y = this->unk_2A0[0].y;
+    this->actor.world.pos.z = this->unk_2A0[0].z;
+    sp24.x = this->unk_2A0[this->unk_2A4].x;
+    sp24.y = this->unk_2A0[this->unk_2A4].y;
+    sp24.z = this->unk_2A0[this->unk_2A4].z;
+    temp = Math_Vec3f_Yaw(&this->actor.world.pos, &sp24);
+    this->actor.shape.rot.y = temp;
+    this->actor.world.rot.y = temp;
+}
 
 void func_80A201CC(EnSyatekiWf* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
