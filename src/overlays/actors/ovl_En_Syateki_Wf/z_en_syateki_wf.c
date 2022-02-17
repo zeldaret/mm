@@ -28,6 +28,7 @@ void func_80A2030C(EnSyatekiWf* this);
 void func_80A20378(EnSyatekiWf* this);
 void func_80A20670(EnSyatekiWf* this);
 void func_80A2079C(EnSyatekiWf* this);
+void func_80A20710(EnSyatekiWf* this);
 
 #if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
@@ -288,9 +289,17 @@ void func_80A20670(EnSyatekiWf* this) {
     this->actionFunc = func_80A206DC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A206DC.s")
+void func_80A206DC(EnSyatekiWf* this, GlobalContext* globalCtx) {
+    if (this->actor.bgCheckFlags & 2) {
+        func_80A20710(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20710.s")
+void func_80A20710(EnSyatekiWf* this) {
+    this->actor.speedXZ = 0.0f;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 3);
+    this->actionFunc = func_80A2075C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A2075C.s")
 
