@@ -30,37 +30,80 @@ void func_80A20670(EnSyatekiWf* this);
 void func_80A2079C(EnSyatekiWf* this);
 void func_80A20710(EnSyatekiWf* this);
 
-#if 0
 // static ColliderJntSphElementInit sJntSphElementsInit[1] = {
 static ColliderJntSphElementInit D_80A20E50[1] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 17, { { 800, 0, 0 }, 25 }, 100 },
     },
 };
 
-
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A20E74 = {
-    { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    {
+        COLTYPE_HIT5,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 40, 60, 0, { 0, 0, 0 } },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_80A20EA0 = {
-    { COLTYPE_HIT5, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_80A20E50, // sJntSphElementsInit,
+    {
+        COLTYPE_HIT5,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    D_80A20E50, // sJntSphElementsInit,
 };
-
-static ColliderJntSphElementInit* D_80A20EAC = &D_80A20E50;
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A20EB0 = {
-    { COLTYPE_HIT5, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    {
+        COLTYPE_HIT5,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 15, 20, -15, { 0, 0, 0 } },
 };
+
+static Vec3f D_80A20EDC = { 0.0f, 20.0f, 0.0f };
+
+static Vec3f D_80A20EE8 = { 0.0f, 0.0f, 0.0f };
 
 const ActorInit En_Syateki_Wf_InitVars = {
     ACTOR_EN_SYATEKI_WF,
@@ -74,22 +117,33 @@ const ActorInit En_Syateki_Wf_InitVars = {
     (ActorFunc)EnSyatekiWf_Draw,
 };
 
+// static AnimationInfoS sAnimations[] = {
+static AnimationInfo D_80A20F14[] = {
+    { (AnimationHeader*)0x0600A3CC, 2.0f, 0.0f, 0.0f, 0, -1.0f },
+    { (AnimationHeader*)0x06005700, 1.0f, 0.0f, 0.0f, 0, -8.0f },
+    { (AnimationHeader*)0x06005700, 1.0f, 0.0f, 4.0f, 2, 1.0f },
+    { (AnimationHeader*)0x06005700, 1.0f, 4.0f, 8.0f, 2, 1.0f },
+    { (AnimationHeader*)0x06004A90, 1.0f, 0.0f, 0.0f, 2, -1.0f },
+    { (AnimationHeader*)0x06009A50, 1.0f, 0.0f, 0.0f, 2, 8.0f },
+    { (AnimationHeader*)0x060053D0, 1.0f, 0.0f, 0.0f, 2, -1.0f },
+};
+
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A20FBC[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 
-#endif
+static Vec3f D_80A20FC4 = { 0.0f, 0.5f, 0.0f };
 
-extern ColliderJntSphElementInit D_80A20E50[1];
-extern ColliderCylinderInit D_80A20E74;
-extern ColliderJntSphInit D_80A20EA0;
-extern ColliderJntSphElementInit* D_80A20EAC;
-extern ColliderCylinderInit D_80A20EB0;
-extern AnimationInfo D_80A20F14;
-extern InitChainEntry D_80A20FBC[];
-extern Vec3f D_80A20FC4;
+static Vec3f D_80A20FD0 = { 1200.0f, 0.0f, 0.0f };
+
+static void* D_80A20FDC[] = {
+    (void*)0x06007AA8,
+    (void*)0x060082A8,
+    (void*)0x060084A8,
+    (void*)0x060082A8,
+};
 
 extern FlexSkeletonHeader D_060095D0;
 extern AnimationHeader D_0600A3CC;
@@ -142,7 +196,7 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->unk_300, &this->actor, &D_80A20EB0);
     Collider_InitJntSph(globalCtx, &this->unk_34C);
     Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &D_80A20EA0, &this->unk_36C);
-    this->unk_34C.elements->dim.worldSphere.radius = D_80A20EAC->dim.modelSphere.radius;
+    this->unk_34C.elements->dim.worldSphere.radius = D_80A20EA0.elements[0].dim.modelSphere.radius;
 
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060095D0, &D_0600A3CC, this->jointTable, this->morphTable, 22);
     Actor_SetScale(&this->actor, 0.01f);
@@ -215,7 +269,7 @@ void func_80A20320(EnSyatekiWf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A20378(EnSyatekiWf* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 1);
     this->actor.speedXZ = 10.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.draw = EnSyatekiWf_Draw;
@@ -286,7 +340,7 @@ void func_80A20670(EnSyatekiWf* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.velocity.y = 20.0f;
     this->actor.speedXZ = 5.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 2);
     this->actionFunc = func_80A206DC;
 }
 
@@ -298,7 +352,7 @@ void func_80A206DC(EnSyatekiWf* this, GlobalContext* globalCtx) {
 
 void func_80A20710(EnSyatekiWf* this) {
     this->actor.speedXZ = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 3);
     this->actionFunc = func_80A2075C;
 }
 
@@ -312,7 +366,7 @@ void func_80A2079C(EnSyatekiWf* this) {
     this->unk_29A = 0x28;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A20F14, 5);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A20F14, 5);
     this->actionFunc = func_80A20800;
 }
 
