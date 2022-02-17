@@ -413,7 +413,56 @@ void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/EnSyatekiWf_Update.s")
+void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnSyatekiWf* this = THIS;
+
+    if (this->actionFunc != func_80A20284) {
+        SkelAnime_Update(&this->skelAnime);
+    }
+
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 32.0f, 30.0f, 60.0f, 5);
+    this->actionFunc(this, globalCtx);
+
+    if ((this->actor.bgCheckFlags & 3) != 0) {
+        func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
+    } else {
+        Math_SmoothStepToS(&this->actor.shape.rot.x, 0, 1, 0x3E8, 0);
+        Math_SmoothStepToS(&this->actor.shape.rot.z, 0, 1, 0x3E8, 0);
+    }
+
+    if ((this->unk_2B4.base.acFlags & 2) || (this->unk_300.base.acFlags & 2) || (this->unk_34C.base.acFlags & 2)) {
+        this->unk_2B4.base.acFlags &= ~2;
+        this->unk_300.base.acFlags &= ~2;
+        this->unk_34C.base.acFlags &= ~2;
+        this->actor.colChkInfo.health -= 2;
+        if (this->actor.colChkInfo.health == 0) {
+            func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            func_80A20858(this, globalCtx);
+        } else {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_80A20EDC, &D_80A20EE8, 3, 0);
+        }
+    }
+
+    Collider_UpdateCylinder(&this->actor, &this->unk_2B4);
+    if ((this->actionFunc != func_80A20284) && (this->actionFunc != func_80A208F8) && (this->actor.draw != NULL)) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_300.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_2B4.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_34C.base);
+        this->actor.focus.pos = this->actor.world.pos;
+        this->actor.focus.pos.y += 25.0f;
+    }
+
+    if (this->unk_2B0 == 0) {
+        if ((Rand_ZeroOne() < 0.2f) && ((globalCtx->gameplayFrames & 3) == 0) && (this->actor.colorFilterTimer == 0)) {
+            this->unk_2B0++;
+        }
+    } else {
+        this->unk_2B0 = (this->unk_2B0 + 1) & 3;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Wf/func_80A20CF4.s")
 

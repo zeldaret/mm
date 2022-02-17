@@ -26,7 +26,7 @@ typedef struct EnSyatekiWf {
     /* 0x2A8 */ s16 unk_2A8;
     /* 0x2A8 */ char unk_2AA[0x2];
     /* 0x2AC */ f32 unk_2AC;
-    /* 0x2B0 */ s8 unk_2B0;
+    /* 0x2B0 */ u8 unk_2B0;
     /* 0x2B1 */ char unk_2B1[0x3];
     /* 0x2B4 */ ColliderCylinder unk_2B4;
     /* 0x300 */ ColliderCylinder unk_300;
