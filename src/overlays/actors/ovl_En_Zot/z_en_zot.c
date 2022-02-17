@@ -520,20 +520,21 @@ void func_80B975F8(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B9765C(EnZot* this, GlobalContext* globalCtx) {
-    if (1) {
-        do { } while (0); }
-
     func_80B96D4C(this);
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        u16 temp = globalCtx->msgCtx.unk11F04;
-        u32 temp2;
-
-        if ((temp == 0x1262) || (temp == 0x1267) || (temp == 0x126A) || (temp == 0x126B)) {
-            temp2 = temp;
-            func_80151938(globalCtx, temp2 + 1);
-        } else {
-            func_801477B4(globalCtx);
-            this->actionFunc = func_80B97708;
+        s32 pad;
+        
+        switch(globalCtx->msgCtx.unk11F04) {
+            case 0x1262:
+            case 0x1267:
+            case 0x126A:
+            case 0x126B:
+                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                break;
+            default:
+                func_801477B4(globalCtx);
+                this->actionFunc = func_80B97708;
+                break;
         }
     }
 }

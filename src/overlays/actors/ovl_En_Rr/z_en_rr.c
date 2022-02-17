@@ -875,7 +875,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f spA4;
     f32 temp_f20;
 
-    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, 256);
+    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, 4 * sizeof(Mtx));
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 

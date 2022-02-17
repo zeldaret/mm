@@ -1024,8 +1024,8 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
         if ((this->actor.flags & 0x40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, globalCtx);
             Actor_GetScreenPos(globalCtx, &this->actor, &sp2E, &sp2C);
-            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > 320) || (sp2C < 0) ||
-                (sp2C > 240)) {
+            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
+                (sp2C > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
             } else if (this->unk_21C > 0) {
                 func_800BC848(&this->actor, globalCtx, this->unk_21C, this->unk_21E);

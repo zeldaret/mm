@@ -904,7 +904,7 @@ void EnTrt2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     }
 }
 
-void EnTrt2_UnkDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnTrt2_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTrt2* this = THIS;
 
     if (limbIndex == 21) {
@@ -934,7 +934,7 @@ void func_80AD56E8(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnTrt2_OverrideLimbDraw, EnTrt2_PostLimbDraw,
-                                   EnTrt2_UnkDraw, &this->actor);
+                                   EnTrt2_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

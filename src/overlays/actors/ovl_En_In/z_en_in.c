@@ -1208,7 +1208,6 @@ s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
 s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     s16 rotDiff;
     s16 yawDiff;
-    s16 yawDiffA;
     Player* player;
 
     if (*arg3 == 4) {
@@ -1253,9 +1252,8 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
     if (!func_800B8934(globalCtx, &this->actor)) {
         return 0;
     }
-    yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
-    yawDiffA = ABS_ALT(yawDiff);
-    if (yawDiffA >= 0x4300) {
+    yawDiff = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
+    if (yawDiff >= 0x4300) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isTargeted) {
