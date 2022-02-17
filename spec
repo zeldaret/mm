@@ -5245,8 +5245,7 @@ beginseg
     name "ovl_Demo_Syoten"
     compress
     include "build/src/overlays/actors/ovl_Demo_Syoten/z_demo_syoten.o"
-    include "build/data/ovl_Demo_Syoten/ovl_Demo_Syoten.data.o"
-    include "build/data/ovl_Demo_Syoten/ovl_Demo_Syoten.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Syoten/ovl_Demo_Syoten_reloc.o"
 endseg
 
 beginseg

@@ -341,4 +341,6 @@ typedef struct AnimationSpeedInfo {
     /* 0x0C */ f32 morphFrames;
 } AnimationSpeedInfo; // size = 0x10
 
+typedef s32 (*UnkKeyframeFunction)(struct GlobalContext* globalCtx, UNK_TYPE arg1, s32 arg2, UNK_TYPE arg3, UNK_TYPE arg4, struct Actor* thisx);
+
 #endif

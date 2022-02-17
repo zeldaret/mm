@@ -31,6 +31,7 @@ typedef struct {
     /* 0x04 */ u16 endFrame;
     /* 0x06 */ u16 unk6;
     /* 0x08 */ u16 unk8;
+    /* 0x0A */ u16 unkA;
     /* 0x0C */ Vec3i unk0C;
     /* 0x18 */ Vec3i unk18;
     /* 0x24 */ UNK_TYPE1 unk24[0xC];
