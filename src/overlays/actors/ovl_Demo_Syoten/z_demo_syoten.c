@@ -73,9 +73,9 @@ void DemoSyoten_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (DEMOSYOTEN_GET_F(&this->actor)) {
         case DEMOSYOTEN_F_0:
-            func_80183430((void*)this->unk_144, (void*)&object_syoten_Blob_001328, (void*)&object_syoten_Blob_00023C,
-                          this->unk_174, this->unk_2A6, 0);
-            func_801835EC((void*)this->unk_144, (void*)&object_syoten_Blob_00023C);
+            func_80183430(this->unk_144, &object_syoten_Blob_001328, &object_syoten_Blob_00023C, this->unk_174,
+                          this->unk_2A6, 0);
+            func_801835EC(this->unk_144, &object_syoten_Blob_00023C);
             this->actor.draw = NULL;
             this->actionFunc = func_80C16A74;
             this->actor.child = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EFF_DUST,
@@ -131,7 +131,7 @@ void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DemoSyoten* this = THIS;
 
     if (DEMOSYOTEN_GET_F(&this->actor) == DEMOSYOTEN_F_0) {
-        func_8018349C((void*)this->unk_144);
+        func_8018349C(this->unk_144);
     }
 }
 
@@ -226,7 +226,7 @@ void func_80C16A64(DemoSyoten* this, GlobalContext* globalCtx) {
 void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx) {
     u16 temp_a0;
 
-    func_80183DE0((void*)this->unk_144);
+    func_80183DE0(this->unk_144);
     if (func_800EE29C(globalCtx, this->unk_3F0)) {
         if ((globalCtx->csCtx.frames >= 160) && (globalCtx->csCtx.frames < 322)) {
             func_800B9010(&this->actor, NA_SE_EV_IKANA_SOUL_LV - SFX_FLAG);
@@ -494,7 +494,7 @@ void func_80C173B4(Actor* thisx, GlobalContext* globalCtx) {
     if (matrix != NULL) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-        func_8018450C(globalCtx, (void*)this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
+        func_8018450C(globalCtx, this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
     }
 }
 
