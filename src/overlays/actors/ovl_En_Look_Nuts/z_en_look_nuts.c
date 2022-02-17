@@ -15,13 +15,13 @@ void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnLookNuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A67A34(EnLookNuts* this);
-void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx);
-void func_80A67C48(EnLookNuts* this);
-void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx);
-void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx);
-void func_80A68080(EnLookNuts* this);
-void func_80A680FC(EnLookNuts* this, GlobalContext* globalCtx);
+void EnLookNuts_SetupPatrol(EnLookNuts* this);
+void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx);
+void EnLookNuts_SetupStandAndWait(EnLookNuts* this);
+void EnLookNuts_StandAndWait(EnLookNuts* this, GlobalContext* globalCtx);
+void EnLookNuts_RunToPlayer(EnLookNuts* this, GlobalContext* globalCtx);
+void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
+void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, GlobalContext* globalCtx);
 
 const ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
@@ -101,30 +101,30 @@ void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnLookNuts* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, &object_dnk_Anim_000430, this->jointTable,
-                   this->morphTable, 0xB);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardDigAnim, this->jointTable,
+                   this->morphTable, OBJECT_DNK_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 1;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.flags |= 0x08000000;
-    this->unk220 = (this->actor.params >> 7) & 0x1F;
-    this->unk21E = this->actor.params & 0x7F;
-    this->spawnIndex = (this->actor.params >> 0xC) & 0xF;
-    if (this->unk21E == 0x7F) {
-        this->unk21E = -1;
+    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
+    this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
+    this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
+    if (this->switchFlag == 0x7F) {
+        this->switchFlag = -1;
     }
-    if ((this->unk21E >= 0) && (Flags_GetSwitch(globalCtx, this->unk21E) != 0)) {
+    if ((this->switchFlag >= 0) && (Flags_GetSwitch(globalCtx, this->switchFlag) != 0)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    if (this->unk220 == 0x1F) {
+    if (this->pathLocation == 0x1F) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-    this->state = 0;
-    func_80A67A34(this);
+    this->state = PATROLLING_STATE;
+    EnLookNuts_SetupPatrol(this);
 }
 
 void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -133,18 +133,17 @@ void EnLookNuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80A67A34(EnLookNuts* this) {
+void EnLookNuts_SetupPatrol(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
-    this->state = 0;
-    this->actionFunc = func_80A67AA8;
+    this->state = PATROLLING_STATE;
+    this->actionFunc = EnLookNuts_Patrol;
 }
 
-void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx) {
-    f32 sp34;
+void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
+    f32 sp34 = 0.0f;
     f32 sp30;
 
-    sp34 = 0.0f;
     SkelAnime_Update(&this->skelAnime);
     if (func_801690CC(globalCtx) != 0) {
         this->actor.speedXZ = 0.0f;
@@ -158,18 +157,18 @@ void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx) {
         Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
         return;
     }
-    this->path = func_8013D648(globalCtx, this->unk220, 0x1F);
+    this->path = func_8013D648(globalCtx, this->pathLocation, 0x1F);
     if (this->path != 0) {
-        sp34 = func_8013D83C(this->path, this->unk214, &this->actor.world.pos, &sp30);
+        sp34 = func_8013D83C(this->path, this->pathPointCounter, &this->actor.world.pos, &sp30);
     }
     if (sp30 < 10.0f) {
         if (this->path != 0) {
-            this->unk214++;
-            if (this->unk214 >= this->path->count) {
-                this->unk214 = 0;
+            this->pathPointCounter++;
+            if (this->pathPointCounter >= this->path->count) {
+                this->pathPointCounter = 0;
             }
             if (Rand_ZeroOne() < 0.6f) {
-                func_80A67C48(this);
+                EnLookNuts_SetupStandAndWait(this);
                 return;
             }
         }
@@ -178,7 +177,7 @@ void func_80A67AA8(EnLookNuts* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
-void func_80A67C48(EnLookNuts* this) {
+void EnLookNuts_SetupStandAndWait(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
     this->waitTimer = Rand_S16Offset(1, 3);
@@ -188,11 +187,11 @@ void func_80A67C48(EnLookNuts* this) {
     }
     this->unk21A = 10;
     this->state = WAITING_STATE;
-    this->actionFunc = func_80A67D0C;
+    this->actionFunc = EnLookNuts_StandAndWait;
 }
 
-// Something to do with the pausing
-void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx) {
+// Patrol Guards will stand in place and wait for a maximum of ~12 frames. 
+void EnLookNuts_StandAndWait(EnLookNuts* this, GlobalContext* globalCtx) {
     s16 randOffset;
 
     SkelAnime_Update(&this->skelAnime);
@@ -245,21 +244,21 @@ void func_80A67D0C(EnLookNuts* this, GlobalContext* globalCtx) {
         }
         if (this->waitTimer == 12) {
             this->waitTimer = 0;
-            func_80A67A34(this);
+            EnLookNuts_SetupPatrol(this);
         }
     }
 }
 
-void func_80A67F30(EnLookNuts* this, GlobalContext* globalCtx) {
+void EnLookNuts_DetectedPlayer(EnLookNuts* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 2.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
-    this->state = 2;
+    this->state = RUNNING_TO_PLAYER_STATE;
     this->unk21A = 0x12C;
     func_801518B0(globalCtx, 0x833, &this->actor);
-    this->actionFunc = func_80A67FC4;
+    this->actionFunc = EnLookNuts_RunToPlayer;
 }
 
-void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx) {
+void EnLookNuts_RunToPlayer(EnLookNuts* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
@@ -268,18 +267,18 @@ void func_80A67FC4(EnLookNuts* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((this->actor.xzDistToPlayer < 70.0f) || (this->unk21A == 0)) {
         this->actor.speedXZ = 0.0f;
-        func_80A68080(this);
+        EnLookNuts_SetupSendPlayerToSpawn(this);
     }
 }
 
-void func_80A68080(EnLookNuts* this) {
+void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
-    this->state = 3;
-    this->actionFunc = func_80A680FC;
+    this->state = CAUGHT_PLAYER_STATE;
+    this->actionFunc = EnLookNuts_SendPlayerToSpawn;
 }
 
-void func_80A680FC(EnLookNuts* this, GlobalContext* globalCtx) {
+void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
@@ -340,13 +339,13 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
                 Player* player = GET_PLAYER(globalCtx);
                 if (!(player->stateFlags3 & 0x100) && !func_801690CC(globalCtx)) {
                     Math_Vec3f_Copy(&this->unk238, &gZeroVec3f);
-                    this->state = 2;
+                    this->state = RUNNING_TO_PLAYER_STATE;
                     play_sound(NA_SE_SY_FOUND);
                     func_800B7298(globalCtx, &this->actor, 0x1A);
                     D_80A6862C = 1;
                     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
-                    func_80A67F30(this, globalCtx);
+                    EnLookNuts_DetectedPlayer(this, globalCtx);
                 } else {
                     this->isPlayerDetected = false;
                 }
