@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 #include "objects/object_wf/object_wf.h"
 
-#define FLAGS 0x08000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnSyatekiWf*)thisx)
 
@@ -17,19 +17,19 @@ void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A201CC(EnSyatekiWf* this);
 void func_80A20284(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A2030C(EnSyatekiWf* this);
 void func_80A20320(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A20378(EnSyatekiWf* this);
 void func_80A203DC(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A20670(EnSyatekiWf* this);
 void func_80A206DC(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A20710(EnSyatekiWf* this);
 void func_80A2075C(EnSyatekiWf* this, GlobalContext* globalCtx);
+void func_80A2079C(EnSyatekiWf* this);
 void func_80A20800(EnSyatekiWf* this, GlobalContext* globalCtx);
 void func_80A208F8(EnSyatekiWf* this, GlobalContext* globalCtx);
-void func_80A201CC(EnSyatekiWf* this);
-void func_80A2030C(EnSyatekiWf* this);
-void func_80A20378(EnSyatekiWf* this);
-void func_80A20670(EnSyatekiWf* this);
-void func_80A2079C(EnSyatekiWf* this);
-void func_80A20710(EnSyatekiWf* this);
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
@@ -200,6 +200,7 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnSyatekiWf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiWf* this = THIS;
+    
     Collider_DestroyCylinder(globalCtx, &this->unk_2B4);
     Collider_DestroyCylinder(globalCtx, &this->unk_300);
 }
@@ -221,6 +222,7 @@ void func_80A200E0(EnSyatekiWf* this) {
 
 void func_80A201CC(EnSyatekiWf* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
     this->actor.speedXZ = 0.0f;
     this->actor.world = this->actor.home;
     this->actor.prevPos = this->actor.home.pos;
@@ -311,7 +313,7 @@ void func_80A203DC(EnSyatekiWf* this, GlobalContext* globalCtx) {
             }
         } else {
             if (this->unk_2A4 < (this->unk_2A6 - 1)) {
-                if (this->unk_2A4 == ((this->actor.params & 0xF0) >> 4)) {
+                if (this->unk_2A4 == EN_SYATEKI_WF_GET_PARAM_F0(&this->actor)) {
                     func_80A2079C(this);
                 }
 
@@ -457,11 +459,12 @@ void EnSyatekiWf_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-s32 func_80A20CF4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnSyatekiWf_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                 Actor* thisx) {
     return false;
 }
 
-void func_80A20D10(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSyatekiWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnSyatekiWf* this = THIS;
     Vec3f sp18;
 
@@ -482,7 +485,7 @@ void EnSyatekiWf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A20FDC[this->unk_2B0]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80A20CF4, func_80A20D10, &this->actor);
+                          EnSyatekiWf_OverrideLimbDraw, EnSyatekiWf_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
