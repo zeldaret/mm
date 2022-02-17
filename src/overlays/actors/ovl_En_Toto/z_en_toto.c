@@ -184,14 +184,14 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    if (globalCtx->sceneNum == 0x15 && (gSaveContext.time >= 0x4000 && gSaveContext.time < 0xE555)) {
+    if (globalCtx->sceneNum == SCENE_MILK_BAR && (gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < CLOCK_TIME(21, 30))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zm_Skel_00A978,
-                       ((globalCtx->sceneNum == 0x12) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
+                       ((globalCtx->sceneNum == SCENE_SONCHONOIE) ? &object_zm_Anim_003AA8 : &object_zm_Anim_00C880),
                        this->jointTable, this->morphTable, 18);
     func_80BA36C0(this, globalCtx, 0);
     this->actor.shape.rot.x = 0;
@@ -219,7 +219,7 @@ void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
 void func_80BA3930(EnToto* this, GlobalContext* globalCtx) {
     AnimationHeader* animationHeader = &object_zm_Anim_00C880;
 
-    if (globalCtx->sceneNum == 0x12) {
+    if (globalCtx->sceneNum == SCENE_SONCHONOIE) {
         animationHeader = &object_zm_Anim_003AA8;
     }
     Animation_MorphToLoop(&this->skelAnime, animationHeader, -4.0f);
@@ -241,7 +241,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     func_80BA383C(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BA36C0(this, globalCtx, 1);
-        if (globalCtx->sceneNum != 0x12) {
+        if (globalCtx->sceneNum != SCENE_SONCHONOIE) {
             Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);
         } else if (player->transformation == PLAYER_FORM_DEKU) {
             Flags_SetSwitch(globalCtx, this->actor.home.rot.x);
@@ -250,8 +250,9 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((globalCtx->sceneNum == 0x15 && !(gSaveContext.time >= 0x4000 && gSaveContext.time < 0xED02)) ||
-        (globalCtx->sceneNum != 0x15 && func_80BA397C(this, 0x2000))) {
+    //! @TODO: 0xED02 nor 0xED01 does not match CLOCK_TIME macro
+    if ((globalCtx->sceneNum == SCENE_MILK_BAR && !(gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < 0xED02)) ||
+        (globalCtx->sceneNum != SCENE_MILK_BAR && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= 0x10000;
@@ -259,7 +260,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         } else {
             this->actor.flags &= ~0x10000;
             func_800B8614(&this->actor, globalCtx, 50.0f);
-            if (globalCtx->sceneNum == 0x12) {
+            if (globalCtx->sceneNum == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(globalCtx, this->actor.home.rot.x)) {
                         this->text = D_80BA5068;
@@ -283,7 +284,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA3BFC(EnToto* this, GlobalContext* globalCtx) {
-    if (globalCtx->sceneNum == 0x12) {
+    if (globalCtx->sceneNum == SCENE_SONCHONOIE) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f);
         this->unk2B4 = 0;
     } else {
@@ -503,7 +504,6 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnTotoUnkStruct2* temp_s0;
     s32 i;
-    u16 tmp;
 
     func_80BA3C88(this);
     if (player->actor.world.pos.z > -270.0f) {
@@ -527,8 +527,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            tmp = gSaveContext.playerForm; // Needed for regalloc possible FAKE MATCH
-                            func_801518B0(globalCtx, D_80BA50DC[tmp - 1].unk2, NULL);
+                            func_801518B0(globalCtx, D_80BA50DC[((void)0, gSaveContext.playerForm) - 1].unk2, NULL);
                         }
                     }
                     return 0;
