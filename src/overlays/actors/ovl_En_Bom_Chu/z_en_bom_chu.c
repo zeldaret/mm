@@ -81,7 +81,21 @@ void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F75D0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F77E4.s")
+void func_808F77E4(EnBomChu* this) {
+    MtxF mf;
+
+    mf.xx = this->unk_164.x;
+    mf.xy = this->unk_164.y;
+    mf.xz = this->unk_164.z;
+    mf.yx = this->unk_158.x;
+    mf.yy = this->unk_158.y;
+    mf.yz = this->unk_158.z;
+    mf.zx = this->unk_14C.x;
+    mf.zy = this->unk_14C.y;
+    mf.zz = this->unk_14C.z;
+    func_8018219C(&mf, &this->actor.world.rot, 0);
+    this->actor.world.rot.x = -this->actor.world.rot.x;
+}
 
 void func_808F7868(EnBomChu* this, GlobalContext* globalCtx) {
     Player* player;
