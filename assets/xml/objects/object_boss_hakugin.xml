@@ -33,7 +33,7 @@
         <DList Name="object_boss_hakugin_DL_010500" Offset="0x10500" />
         <Texture Name="object_boss_hakugin_Tex_010560" OutName="tex_010560" Format="rgba16" Width="36" Height="36" Offset="0x10560" />
         <DList Name="object_boss_hakugin_DL_011100" Offset="0x11100" />
-        <DList Name="object_boss_hakugin_DL_011178" Offset="0x11178" />
+        <DList Name="object_boss_hakugin_DL_011178" Offset="0x11178" /> <!-- Stalactite -->
         <DList Name="object_boss_hakugin_DL_011208" Offset="0x11208" />
         <DList Name="object_boss_hakugin_DL_011278" Offset="0x11278" />
         <Texture Name="object_boss_hakugin_Tex_011290" OutName="tex_011290" Format="i4" Width="32" Height="96" Offset="0x11290" />

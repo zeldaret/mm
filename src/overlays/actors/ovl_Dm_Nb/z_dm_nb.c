@@ -5,6 +5,7 @@
  */
 
 #include "z_dm_nb.h"
+#include "objects/object_nb/object_nb.h"
 
 #define FLAGS 0x00000009
 
@@ -27,17 +28,14 @@ const ActorInit Dm_Nb_InitVars = {
     (ActorFunc)DmNb_Draw,
 };
 
-extern AnimationHeader D_06000990;
-extern FlexSkeletonHeader D_06008C40;
-
-static ActorAnimationEntryS D_80C1E200[] = { &D_06000990, 1.0f, 0, -1, 0, 0 };
+static AnimationInfoS D_80C1E200[] = { &object_nb_Anim_000990, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
 s32 func_80C1DED0(DmNb* this, s32 arg1) {
-    s32 ret = 0;
+    s32 ret = false;
 
     if (arg1 != this->unk1F0) {
         this->unk1F0 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80C1E200, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80C1E200, arg1);
     }
     return ret;
 }
@@ -72,7 +70,8 @@ void DmNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmNb* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008C40, NULL, this->jointTable, this->morphTable, 8);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable,
+                       8);
     this->unk1F0 = -1;
     func_80C1DED0(this, 0);
     this->actor.flags &= ~1;
