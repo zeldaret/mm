@@ -327,7 +327,27 @@ void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7FD0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F8080.s")
+void func_808F8080(EnBomChu* this, GlobalContext* globalCtx, f32 y, s32 arg3) {
+    s32 pad;
+    Vec3f pos;
+
+    pos.x = this->actor.world.pos.x;
+    pos.y = y;
+    pos.z = this->actor.world.pos.z;
+
+    EffectSsGRipple_Spawn(globalCtx, &pos, 70, 500, 0);
+
+    if (arg3 != 0) {
+        EffectSsGRipple_Spawn(globalCtx, &pos, 70, 500, 4);
+        EffectSsGRipple_Spawn(globalCtx, &pos, 70, 500, 8);
+    } else {
+        pos.x -= this->unk_14C.x * 10.0f;
+        pos.z -= this->unk_14C.z * 10.0f;
+    }
+
+    pos.y += 5.0f;
+    EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 1, 450);
+}
 
 void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
     Vec3f sp74;
