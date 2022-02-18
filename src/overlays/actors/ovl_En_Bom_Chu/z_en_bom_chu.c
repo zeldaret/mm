@@ -169,7 +169,15 @@ void func_808F7868(EnBomChu* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7944.s")
+s32 func_808F7944(GlobalContext* globalCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
+                  s32* bgId) {
+    if ((BgCheck_EntityLineTest1(&globalCtx->colCtx, posA, posB, posResult, poly, 1, 1, 1, 1, bgId)) &&
+        ((func_800C9A4C(&globalCtx->colCtx, *poly, *bgId) & 0x30) == 0)) {
+        return 1;
+    }
+
+    return 0;
+}
 
 void func_808F79D4(EnBomChu* this) {
     func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
