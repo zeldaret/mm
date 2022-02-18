@@ -407,6 +407,9 @@ animdict = {
     "func_8013BC6C": "SubS_ChangeAnimationByInfoS",
     "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo",
     "func_8013D9C8": "SubS_FillLimbRotTables",
+    "func_80114E90": "Interface_HasEmptyBottle",
+    "func_80114F2C": "Interface_HasItemInBottle",
+    "func_80123C90": "Player_SetEquipmentData",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",
@@ -445,6 +448,9 @@ animdict = {
     "player->unk_394": "player->csMode",
     "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
+    "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
+    "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
+    "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
 
     # Variables
     "D_0407D590": "gGameplayKeepDrawFlameDL",
