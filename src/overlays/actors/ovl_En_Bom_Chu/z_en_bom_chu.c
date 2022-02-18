@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bom_chu.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 
 #define FLAGS 0x00000010
 
@@ -119,7 +120,32 @@ void func_808F79D4(EnBomChu* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7A84.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7E74.s")
+void func_808F7E74(EnBomChu* this, GlobalContext* globalCtx) {
+    EnBom* bomb;
+    s32 i;
+
+    bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
+                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+
+    this->unk_148 = 1;
+    this->unk_149 = 0;
+
+    if (bomb != NULL) {
+        bomb->timer = 0;
+    }
+
+    this->unk_14A = 1;
+    this->actor.speedXZ = 0.0f;
+
+    if (this->actor.depthInWater > 0.0f) {
+        for (i = 0; i < 40; i++) {
+            EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, 1.0f, 5.0f, 30.0f, 0.25f);
+        }
+    }
+
+    this->actor.draw = NULL;
+    this->actionFunc = func_808F7FA0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7FA0.s")
 

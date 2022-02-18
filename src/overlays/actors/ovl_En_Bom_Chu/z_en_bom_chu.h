@@ -10,8 +10,8 @@ typedef void (*EnBomChuActionFunc)(struct EnBomChu*, GlobalContext*);
 typedef struct EnBomChu {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnBomChuActionFunc actionFunc;
-    /* 0x148 */ s8 unk_148;
-    /* 0x149 */ s8 unk_149;
+    /* 0x148 */ u8 unk_148;
+    /* 0x149 */ u8 unk_149;
     /* 0x14A */ s16 unk_14A;
     /* 0x14C */ Vec3f unk_14C;
     /* 0x158 */ Vec3f unk_158;
