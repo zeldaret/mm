@@ -447,9 +447,9 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_MoveWithoutGravity(&this->actor);
-    this->unk_188.dim.worldSphere.center.x = (s16)this->actor.world.pos.x;
-    this->unk_188.dim.worldSphere.center.y = (s16)this->actor.world.pos.y;
-    this->unk_188.dim.worldSphere.center.z = (s16)this->actor.world.pos.z;
+    this->unk_188.dim.worldSphere.center.x = this->actor.world.pos.x;
+    this->unk_188.dim.worldSphere.center.y = this->actor.world.pos.y;
+    this->unk_188.dim.worldSphere.center.z = this->actor.world.pos.z;
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_188.base);
     if (this->actionFunc != func_808F7868) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_188.base);
@@ -460,8 +460,8 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.z = this->actor.world.pos.z + (20.0f * this->unk_158.z);
 
     if (this->unk_149 != 0) {
-        this->unk_170 = (5.0f + (Rand_ZeroOne() * 3.0f)) *
-                        Math_SinS((s16)(((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->unk_14A));
+        this->unk_170 =
+            (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->unk_14A));
         func_808F7FD0(this, &D_808F8938, &sp54);
         func_808F7FD0(this, &D_808F8944, &sp48);
         EffectBlure_AddVertex(Effect_GetByIndex(this->unk_180), &sp54, &sp48);
