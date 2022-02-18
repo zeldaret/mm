@@ -16,7 +16,7 @@ typedef struct EnBomChu {
     /* 0x14C */ Vec3f unk_14C;
     /* 0x158 */ Vec3f unk_158;
     /* 0x164 */ Vec3f unk_164;
-    /* 0x170 */ char unk_170[0x4];
+    /* 0x170 */ f32 unk_170;
     /* 0x174 */ f32 unk_174;
     /* 0x178 */ char unk_178[0x4];
     /* 0x17C */ f32 unk_17C;

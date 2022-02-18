@@ -329,7 +329,64 @@ void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F8080.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F818C.s")
+void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
+    Vec3f sp74;
+    Vec3f posA;
+    Vec3f posB;
+    Vec3f sp50;
+    s16 yaw;
+    f32 sin;
+    f32 cos;
+    f32 tempX;
+    CollisionPoly* sp3C = NULL;
+    s32 bgId = 0x32;
+    s32 sp34;
+
+    Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
+    Math_Vec3f_Copy(&sp50, &this->unk_158);
+    yaw = this->actor.shape.rot.y;
+    BgCheck2_UpdateActorAttachedToMesh(&globalCtx->colCtx, this->actor.floorBgId, &this->actor);
+
+    if (yaw != this->actor.shape.rot.y) {
+        yaw = this->actor.shape.rot.y - yaw;
+
+        sin = Math_SinS(yaw);
+        cos = Math_CosS(yaw);
+
+        tempX = this->unk_14C.x;
+        this->unk_14C.x = (this->unk_14C.z * sin) + (cos * tempX);
+        this->unk_14C.z = (this->unk_14C.z * cos) - (sin * tempX);
+
+        tempX = this->unk_158.x;
+        this->unk_158.x = (this->unk_158.z * sin) + (cos * tempX);
+        this->unk_158.z = (this->unk_158.z * cos) - (sin * tempX);
+
+        tempX = this->unk_164.x;
+        this->unk_164.x = (this->unk_164.z * sin) + (cos * tempX);
+        this->unk_164.z = (this->unk_164.z * cos) - (sin * tempX);
+    }
+
+    posA.x = sp74.x + (2.0f * sp50.x);
+    posA.y = sp74.y + (2.0f * sp50.y);
+    posA.z = sp74.z + (2.0f * sp50.z);
+
+    posB.x = this->actor.world.pos.x + (2.0f * this->unk_158.x);
+    posB.y = this->actor.world.pos.y + (2.0f * this->unk_158.y);
+    posB.z = this->actor.world.pos.z + (2.0f * this->unk_158.z);
+
+    if (func_808F7944(globalCtx, &posA, &posB, &sp74, &sp3C, &bgId) != 0) {
+        sp34 = func_808F75D0(this, sp3C, globalCtx);
+        Math_Vec3f_Copy(&this->actor.world.pos, &sp74);
+        this->actor.floorBgId = bgId;
+        this->actor.speedXZ = 0.0f;
+        if (sp34 != 0) {
+            func_808F77E4(this);
+            this->actor.shape.rot.x = -this->actor.world.rot.x;
+            this->actor.shape.rot.y = this->actor.world.rot.y;
+            this->actor.shape.rot.z = this->actor.world.rot.z;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Update.s")
 
