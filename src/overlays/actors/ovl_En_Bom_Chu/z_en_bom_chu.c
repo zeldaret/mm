@@ -83,7 +83,7 @@ void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     Effect_Add(globalCtx, &this->blure2Index, 2, 0, 0, &sBlureInit);
     this->timer = 120;
     this->actor.room = -1;
-    this->unk_148 = 1;
+    this->shouldTimerCountDown = true;
     this->unk_174 = 0.0f;
     this->actionFunc = func_808F7868;
 }
@@ -179,7 +179,7 @@ void func_808F7868(EnBomChu* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = player->actor.shape.rot.y;
         this->actor.flags |= ACTOR_FLAG_1;
         func_800B8EF4(globalCtx, &this->actor);
-        this->unk_149 = 1;
+        this->isMoving = true;
         this->actor.speedXZ = 8.0f;
         this->unk_17C = 8.0f;
         func_808F79D4(this);
@@ -300,7 +300,7 @@ void func_808F7A84(EnBomChu* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.z = this->actor.world.rot.z;
     }
 
-    if (this->unk_149 != 0) {
+    if (this->isMoving) {
         func_800B8F98(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
     }
 
@@ -316,8 +316,8 @@ void func_808F7E74(EnBomChu* this, GlobalContext* globalCtx) {
     bomb = (EnBom*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
 
-    this->unk_148 = 1;
-    this->unk_149 = 0;
+    this->shouldTimerCountDown = true;
+    this->isMoving = false;
 
     if (bomb != NULL) {
         bomb->timer = 0;
@@ -446,7 +446,7 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_808F818C(this, globalCtx);
     }
 
-    if (this->unk_148 != 0) {
+    if (this->shouldTimerCountDown) {
         this->timer--;
     }
 
@@ -471,7 +471,7 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y = this->actor.world.pos.y + (20.0f * this->axisUp.y);
     this->actor.focus.pos.z = this->actor.world.pos.z + (20.0f * this->axisUp.z);
 
-    if (this->unk_149 != 0) {
+    if (this->isMoving) {
         this->visualJitter =
             (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->timer));
         func_808F7FD0(this, &sBlureP1Model, &sp54);
