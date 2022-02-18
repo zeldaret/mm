@@ -37,8 +37,7 @@ const ActorInit En_Bom_Chu_InitVars = {
     (ActorFunc)EnBomChu_Draw,
 };
 
-// static ColliderSphereInit sSphereInit = {
-static ColliderSphereInit D_808F88E0 = {
+static ColliderSphereInit sSphereInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -58,31 +57,30 @@ static ColliderSphereInit D_808F88E0 = {
     { 1, { { 0, 0, 0 }, 13 }, 100 },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_808F890C[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000 * BOMBCHU_SCALE, ICHAIN_STOP),
 };
 
-static EffectBlureInit2 D_808F8914 = {
+static EffectBlureInit2 sBlureInit = {
     0, 0, 0, { 250, 0, 0, 250 }, { 200, 0, 0, 130 }, { 150, 0, 0, 100 }, { 100, 0, 0, 50 }, 16,
     0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
 };
 
-static Vec3f D_808F8938 = { 0.0f, 7.0f, -6.0f };
+static Vec3f sBlureP1Model = { 0.0f, 7.0f, -6.0f };
 
-static Vec3f D_808F8944 = { 12.0f, 0.0f, -5.0f };
+static Vec3f sBlureP2LeftModel = { 12.0f, 0.0f, -5.0f };
 
-static Vec3f D_808F8950 = { -12.0f, 0.0f, -5.0f };
+static Vec3f sBlureP2RightModel = { -12.0f, 0.0f, -5.0f };
 
 void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBomChu* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_808F890C);
-    Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &D_808F88E0);
-    this->collider.dim.worldSphere.radius = D_808F88E0.dim.modelSphere.radius;
-    Effect_Add(globalCtx, &this->blure1Index, 2, 0, 0, &D_808F8914);
-    Effect_Add(globalCtx, &this->blure2Index, 2, 0, 0, &D_808F8914);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
+    this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
+    Effect_Add(globalCtx, &this->blure1Index, 2, 0, 0, &sBlureInit);
+    Effect_Add(globalCtx, &this->blure2Index, 2, 0, 0, &sBlureInit);
     this->timer = 0x78;
     this->actor.room = -1;
     this->unk_148 = 1;
@@ -476,10 +474,10 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_149 != 0) {
         this->visualJitter =
             (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->timer));
-        func_808F7FD0(this, &D_808F8938, &sp54);
-        func_808F7FD0(this, &D_808F8944, &sp48);
+        func_808F7FD0(this, &sBlureP1Model, &sp54);
+        func_808F7FD0(this, &sBlureP2LeftModel, &sp48);
         EffectBlure_AddVertex(Effect_GetByIndex(this->blure1Index), &sp54, &sp48);
-        func_808F7FD0(this, &D_808F8950, &sp48);
+        func_808F7FD0(this, &sBlureP2RightModel, &sp48);
         EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &sp54, &sp48);
 
         waterY = this->actor.world.pos.y;

@@ -17,7 +17,7 @@ typedef struct EnBomChu {
     /* 0x158 */ Vec3f axisUp;
     /* 0x164 */ Vec3f axisLeft;
     /* 0x170 */ f32 visualJitter;
-    /* 0x174 */ f32 unk_174;
+    /* 0x174 */ f32 unk_174; // set but never used
     /* 0x178 */ UNK_TYPE1 unk_178[0x4];
     /* 0x17C */ f32 unk_17C;
     /* 0x180 */ s32 blure1Index;
