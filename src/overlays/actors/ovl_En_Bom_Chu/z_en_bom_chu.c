@@ -6,6 +6,7 @@
 
 #include "z_en_bom_chu.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS 0x00000010
 
@@ -71,8 +72,6 @@ static Vec3f D_808F8938 = { 0.0f, 7.0f, -6.0f };
 static Vec3f D_808F8944 = { 12.0f, 0.0f, -5.0f };
 
 static Vec3f D_808F8950 = { -12.0f, 0.0f, -5.0f };
-
-extern Gfx D_04016360[];
 
 void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBomChu* this = THIS;
@@ -541,7 +540,7 @@ void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx) {
                    (s32)(colorIntensity * -35.0f) + 35, 255);
     Matrix_InsertTranslation(this->unk_170 * 100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_04016360);
+    gSPDisplayList(POLY_OPA_DISP++, gBombchuDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
