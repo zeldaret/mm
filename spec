@@ -1294,7 +1294,6 @@ beginseg
     name "ovl_En_Bom_Chu"
     compress
     include "build/src/overlays/actors/ovl_En_Bom_Chu/z_en_bom_chu.o"
-    include "build/data/ovl_En_Bom_Chu/ovl_En_Bom_Chu.data.o"
     include "build/data/ovl_En_Bom_Chu/ovl_En_Bom_Chu.reloc.o"
 endseg
 

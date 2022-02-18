@@ -22,7 +22,6 @@ void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx);
 void func_808F79D4(EnBomChu* this);
 void func_808F7E74(EnBomChu* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Bom_Chu_InitVars = {
     ACTOR_EN_BOM_CHU,
     ACTORCAT_EXPLOSIVES,
@@ -37,8 +36,22 @@ const ActorInit En_Bom_Chu_InitVars = {
 
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_808F88E0 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_1 | OC1_TYPE_2, OC2_TYPE_2, COLSHAPE_SPHERE, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_1 | OC1_TYPE_2,
+        OC2_TYPE_2,
+        COLSHAPE_SPHERE,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 1, { { 0, 0, 0 }, 13 }, 100 },
 };
 
@@ -48,16 +61,16 @@ static InitChainEntry D_808F890C[] = {
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-#endif
+static EffectBlureInit2 D_808F8914 = {
+    0, 0, 0, { 250, 0, 0, 250 }, { 200, 0, 0, 130 }, { 150, 0, 0, 100 }, { 100, 0, 0, 50 }, 16,
+    0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
+};
 
-extern ColliderSphereInit D_808F88E0;
-extern InitChainEntry D_808F890C[];
-extern s16 D_808F8908;
-extern s16 D_808F890A;
-extern EffectBlureInit1 D_808F8914;
-extern Vec3f D_808F8938;
-extern Vec3f D_808F8944;
-extern Vec3f D_808F8950;
+static Vec3f D_808F8938 = { 0.0f, 7.0f, -6.0f };
+
+static Vec3f D_808F8944 = { 12.0f, 0.0f, -5.0f };
+
+static Vec3f D_808F8950 = { -12.0f, 0.0f, -5.0f };
 
 extern Gfx D_04016360[];
 
@@ -66,7 +79,7 @@ void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_808F890C);
     Collider_InitAndSetSphere(globalCtx, &this->unk_188, &this->actor, &D_808F88E0);
-    this->unk_188.dim.worldSphere.radius = D_808F8908;
+    this->unk_188.dim.worldSphere.radius = D_808F88E0.dim.modelSphere.radius;
     Effect_Add(globalCtx, &this->unk_180, 2, 0, 0, &D_808F8914);
     Effect_Add(globalCtx, &this->unk_184, 2, 0, 0, &D_808F8914);
     this->unk_14A = 0x78;
