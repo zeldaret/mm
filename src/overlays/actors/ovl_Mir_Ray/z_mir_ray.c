@@ -2,6 +2,7 @@
  * File: z_mir_ray.c
  * Overlay: ovl_Mir_Ray
  * Description: Reflectible light ray (unused, somewhat broken)
+ * Note: This actor is unchanged from OoT, and will not work correctly
  */
 
 #include "z_mir_ray.h"
@@ -100,6 +101,9 @@ static ColliderJntSphInit sJntSphInit = {
     1,
     sJntSphElementsInit,
 };
+
+// Note: this data is unchanged from OoT and hardcoded for Spirit Temple, so the actor will not work at all without
+// modification.
 
 MirRayDataEntry sMirRayData[] = {
     {
