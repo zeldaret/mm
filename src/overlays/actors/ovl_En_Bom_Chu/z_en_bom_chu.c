@@ -59,6 +59,8 @@ extern Vec3f D_808F8938;
 extern Vec3f D_808F8944;
 extern Vec3f D_808F8950;
 
+extern Gfx D_04016360[];
+
 void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBomChu* this = THIS;
 
@@ -121,7 +123,7 @@ s32 func_808F75D0(EnBomChu* this, CollisionPoly* floorPoly, GlobalContext* globa
     }
 
     Math_Vec3f_Scale(&vec, 1.0f / magnitude);
-    Matrix_InsertRotationAroundUnitVector_f(angle, &vec, 0);
+    Matrix_InsertRotationAroundUnitVector_f(angle, &vec, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->unk_164, &vec);
     Math_Vec3f_Copy(&this->unk_164, &vec);
     Math3D_CrossProduct(&this->unk_164, &normal, &this->unk_14C);
@@ -495,4 +497,38 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Draw.s")
+void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnBomChu* this = THIS;
+    f32 colorIntensity;
+    s32 blinkHalfPeriod;
+    s32 blinkTime;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    func_800B8050(&this->actor, globalCtx, 0);
+
+    if (this->unk_14A >= 40) {
+        blinkTime = this->unk_14A % 20;
+        blinkHalfPeriod = 10;
+    } else if (this->unk_14A >= 10) {
+        blinkTime = this->unk_14A % 10;
+        blinkHalfPeriod = 5;
+    } else {
+        blinkTime = this->unk_14A & 1;
+        blinkHalfPeriod = 1;
+    }
+
+    if (blinkTime > blinkHalfPeriod) {
+        blinkTime = 2 * blinkHalfPeriod - blinkTime;
+    }
+
+    colorIntensity = blinkTime / (f32)blinkHalfPeriod;
+    gDPSetEnvColor(POLY_OPA_DISP++, (s32)(colorIntensity * 209.0f) + 9, (s32)(colorIntensity * 34.0f) + 9,
+                   (s32)(colorIntensity * -35.0f) + 35, 255);
+    Matrix_InsertTranslation(this->unk_170 * 100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, D_04016360);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
