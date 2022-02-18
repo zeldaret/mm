@@ -325,7 +325,16 @@ void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7FD0.s")
+void func_808F7FD0(EnBomChu* this, Vec3f* posModel, Vec3f* dest) {
+    f32 x = posModel->x + this->unk_170;
+
+    dest->x = this->actor.world.pos.x + (this->unk_164.x * x) + (this->unk_158.x * posModel->y) +
+              (this->unk_14C.x * posModel->z);
+    dest->y = this->actor.world.pos.y + (this->unk_164.y * x) + (this->unk_158.y * posModel->y) +
+              (this->unk_14C.y * posModel->z);
+    dest->z = this->actor.world.pos.z + (this->unk_164.z * x) + (this->unk_158.z * posModel->y) +
+              (this->unk_14C.z * posModel->z);
+}
 
 void func_808F8080(EnBomChu* this, GlobalContext* globalCtx, f32 y, s32 arg3) {
     s32 pad;
