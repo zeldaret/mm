@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS ACTOR_FLAG_10
 
 #define THIS ((EnBomChu*)thisx)
 
@@ -20,10 +20,10 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_808F7868(EnBomChu* this, GlobalContext* globalCtx);
-void func_808F7A84(EnBomChu* this, GlobalContext* globalCtx);
-void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx);
 void func_808F79D4(EnBomChu* this);
+void func_808F7A84(EnBomChu* this, GlobalContext* globalCtx);
 void func_808F7E74(EnBomChu* this, GlobalContext* globalCtx);
+void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx);
 
 const ActorInit En_Bom_Chu_InitVars = {
     ACTOR_EN_BOM_CHU,
@@ -81,7 +81,7 @@ void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
     Effect_Add(globalCtx, &this->blure1Index, 2, 0, 0, &sBlureInit);
     Effect_Add(globalCtx, &this->blure2Index, 2, 0, 0, &sBlureInit);
-    this->timer = 0x78;
+    this->timer = 120;
     this->actor.room = -1;
     this->unk_148 = 1;
     this->unk_174 = 0.0f;
