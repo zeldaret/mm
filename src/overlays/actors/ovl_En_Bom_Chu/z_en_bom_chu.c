@@ -49,8 +49,24 @@ static InitChainEntry D_808F890C[] = {
 
 extern ColliderSphereInit D_808F88E0;
 extern InitChainEntry D_808F890C[];
+extern s16 D_808F8908;
+extern s16 D_808F890A;
+extern EffectBlureInit1 D_808F8914;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Init.s")
+void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnBomChu* this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, D_808F890C);
+    Collider_InitAndSetSphere(globalCtx, &this->unk_188, &this->actor, &D_808F88E0);
+    this->unk_188.dim.worldSphere.radius = D_808F8908;
+    Effect_Add(globalCtx, &this->unk_180, 2, 0, 0, &D_808F8914);
+    Effect_Add(globalCtx, &this->unk_184, 2, 0, 0, &D_808F8914);
+    this->unk_14A = 0x78;
+    this->actor.room = -1;
+    this->unk_148 = 1;
+    this->unk_174 = 0.0f;
+    this->actionFunc = func_808F7868;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Destroy.s")
 
