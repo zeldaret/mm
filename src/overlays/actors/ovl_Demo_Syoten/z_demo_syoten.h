@@ -20,19 +20,11 @@ enum {
     /* 4 */ DEMOSYOTEN_F_4
 };
 
-typedef struct {
-    /* 0x00 */ UNK_TYPE1 unk00[0x1];
-    /* 0x01 */ u8 count;
-    /* 0x02 */ UNK_TYPE1 unk2[0x16];
-} DemoSyotenStruct2; // almost certainly wrong, just filling space
-
 typedef struct DemoSyoten {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ UNK_TYPE1 unk_144[0x18];
-    /* 0x015C */ DemoSyotenStruct2* unk_15C;
-    /* 0x0160 */ UNK_TYPE1 unk160[0x14];
+    /* 0x0144 */ SkeletonInfo unk_144;
     /* 0x0174 */ Vec3s unk_174[51];
-    /* 0x02A6 */ Vec3s unk_2A6[51];
+    /* 0x02A6 */ s16 unk_2A6[153];
     /* 0x03D8 */ f32 unk_3D8;
     /* 0x03DC */ Gfx* unk_3DC;
     /* 0x03E0 */ AnimatedMaterial* unk_3E0;
