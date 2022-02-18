@@ -48,30 +48,21 @@ void func_8092B098(EnIk* this, GlobalContext* globalCtx);
 void func_8092B1B4(EnIk* this, GlobalContext* globalCtx);
 void func_8092B46C(EnIk* this, GlobalContext* globalCtx);
 
-Gfx* D_8092BFA0[] = { object_ik_DL_00CF08 };
-
-// s32 D_8092BFA4[] = { 0x00000000, 0x0600A5D8, 0x00000000, 0x0600A6D0, 0x7FFF0000, 0x0600A820, 0x40000000,
-//                      0x0600A780, 0xC0000000, 0x00000000, 0x40000000, 0x00000000, 0xC0000000 };
-
 typedef struct {
-    s16 unk00;
-    Gfx* unk04;
+    Gfx* unk00;
+    s16 unk04;
 } EnIkUnkStruct;
 
-EnIkUnkStruct D_8092BFA4[] = {
-    { 0x0000, object_ik_DL_00A5D8 },
-    { 0x0000, object_ik_DL_00A6D0 },
-    { 0x7FFF, object_ik_DL_00A820 },
-    { 0x4000, object_ik_DL_00A780 },
-    { 0xC000, NULL },
-    { 0x4000, NULL },
-    { 0xC000, NULL },
+EnIkUnkStruct D_8092BFA0[] = {
+    { object_ik_DL_00CF08, 0x0000 }, { object_ik_DL_00A5D8, 0x0000 }, { object_ik_DL_00A6D0, 0x7FFF },
+    { object_ik_DL_00A820, 0x4000 }, { object_ik_DL_00A780, 0xc000 }, { ((void*)0), 0x4000 },
+    { ((void*)0), 0xC000 },
 };
 
 static Gfx* D_8092BFD8[3][3] = {
-    { &object_ik_DL_00D038, &object_ik_DL_00D050, &object_ik_DL_00D068 },
-    { &object_ik_DL_00D080, &object_ik_DL_00D098, &object_ik_DL_00D098 },
-    { &object_ik_DL_00D0B0, &object_ik_DL_00D0C8, &object_ik_DL_00D0C8 },
+    { object_ik_DL_00D038, object_ik_DL_00D050, object_ik_DL_00D068 },
+    { object_ik_DL_00D080, object_ik_DL_00D098, object_ik_DL_00D098 },
+    { object_ik_DL_00D0B0, object_ik_DL_00D0C8, object_ik_DL_00D0C8 },
 };
 
 const ActorInit En_Ik_InitVars = {
@@ -258,11 +249,11 @@ static s32 D_8092C198 = 0;
 
 Vec3f D_8092C19C[] = { 0.0f, 0.5f, 0.0f };
 
-// s32 D_8092C1A8[] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00FFFFFF, 0xFFFFFFFF, 0xFFFF0305, 0x04060102, 0xFFFF0000 };
+// s32 D_8092C1A8[] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00FFFFFF, 0xFFFFFFFF, 0xFFFF0305, 0x04060102, 0xFFFF0000
+// };
 
 s8 D_8092C1A8[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0xFF, 0xFF,
                     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x03, 0x05, 0x04, 0x06, 0x01, 0x02, 0xFF, 0xFF, 0x00, 0x00 };
-
 
 // s32 D_8092C1C8[] = { 0x44FA0000, 0xC3480000, 0xC5A28000 };
 
@@ -987,81 +978,108 @@ s32 func_8092B900(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092B93C.s")
-// void func_8092B93C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-//     EnIk* this = THIS;
-//     s32 sp80;
-//     s16 sp76;
-//     Vec3f sp68;
-//     Vec3f sp5C;
-//     Vec3f sp50;
-//     Vec3f sp44;
-//     EnIkStruct* temp_v1;
-//     EnIkStruct* temp_v1_2;
-//     GraphicsContext* temp_a1;
-//     MtxF* temp_v0;
+void func_8092B93C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnIk* this = THIS;
+    s32 sp80 = D_8092C1A8[limbIndex];
+    Gfx* tmp;
+    EnIkStruct* ptr;
+    s16 sp76;
+    Vec3f sp68;
+    Vec3f sp5C;
+    Vec3f sp50;
+    Vec3f sp44;
+    MtxF* temp_v0;
 
-//     sp80 = D_8092C1A8[limbIndex];
-//     if (this->unk_2F4 == 1) {
-//         if (D_8092C1A8[limbIndex] > 0) {
-//             temp_v0 = Matrix_GetCurrentState();
-//             this->unk_550[sp80].unk_04.x = temp_v0->mf[3][0];
-//             temp_v1 = &this->unk_550[sp80];
-//             temp_v1->unk_04.y = temp_v0->mf[3][1];
-//             temp_v1->unk_04.z = temp_v0->mf[3][2];
-//             func_8018219C(temp_v0, &temp_v1->unk_1C, 0);
-//             temp_v1->unk_24 = 1;
-//             // temp_a0_2 = (Rand_Next() >> 0x13) + this->actor.shape.rot.y + *(D_8092BFA4 + (sp80 * 8));
-//             sp76 = (Rand_Next() >> 0x13) + this->actor.shape.rot.y + &D_8092BFA4[sp80];
-//             temp_v1->unk_10.x = Math_SinS(sp76) * 5.0f;
-//             temp_v1->unk_10.y = 6.0f;
-//             temp_v1->unk_10.z = Math_CosS(sp76) * 5.0f;
-//             temp_v1->unk_00 = *dList;
-//         }
-//         if (limbIndex == 29) {
-//             this->unk_2F4 |= 2;
-//         }
-//     }
-//     if (limbIndex == 1) {
-//         Matrix_GetStateTranslation(&this->actor.focus.pos);
-//         this->colliderCylinder.dim.pos.x = this->actor.focus.pos.x;
-//         this->colliderCylinder.dim.pos.y = this->actor.world.pos.y;
-//         this->colliderCylinder.dim.pos.z = this->actor.focus.pos.z;
-//     }
-//     if ((limbIndex == 0x11) && (this->unk_2F6 != this->unk_2F8) &&
-//         ((this->actionFunc == func_8092A33C) || (this->actionFunc == func_8092A754) ||
-//          (this->actionFunc == func_8092A994))) {
-//         Math_Vec3f_Copy(&sp68, this->colliderQuad.dim.quad);
-//         Math_Vec3f_Copy(&sp5C, &this->colliderQuad.dim.quad[1]);
-//         Matrix_MultiplyVector3fByState(D_8092C1C8, &sp50);
-//         Matrix_MultiplyVector3fByState(D_8092C1D4, &sp44);
-//         Collider_SetQuadVertices(&this->colliderQuad, &sp44, &sp50, &sp68, &sp5C);
-//         if ((this->colliderQuad.base.atFlags & 1) != 0) {
-//             EffectBlure_AddVertex(Effect_GetByIndex(this->unk_300), &sp50, &sp44);
-//         }
-//         this->unk_2F8 = this->unk_2F6;
-//     }
-//     if (D_8092C1E0[limbIndex] != -1) {
-//         Matrix_GetStateTranslation(&this->unk_310[D_8092C1E0[limbIndex]]);
-//     }
-//     if ((sp80 == 0) || ((sp80 != -1) && (this->unk_2F4 == 0) && (D_8092BFA0[sp80]))) {
-//         // temp_a1 = globalCtx->state.gfxCtx;
-//         // temp_v1_2 = (sp80 * 8) + D_8092BFA0;
-//         // temp_s0 = temp_a1->polyXlu.p;
-//         OPEN_DISPS(globalCtx->state.gfxCtx);
-//         // temp_s0->words.w0 = 0xDA380003;
-//         // sp3C = temp_a1;
-//         // sp28 = temp_v1_2;
-//         // temp_s0->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-//         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-//         // temp_s0->unk8 = 0xDE000000;
-//         // temp_s0->unkC = (Gfx *) temp_v1_2->unk0;
-//         // temp_a1->polyXlu.p = temp_s0 + 0x10;
-//         gSPDisplayList(POLY_XLU_DISP++, D_8092BFA0[sp80]);
-//         CLOSE_DISPS(globalCtx->state.gfxCtx);
-//     }
-// }
+    if (this->unk_2F4 == 1) {
+        if (sp80 > 0) {
+            ptr = &this->unk_550[sp80];
+            temp_v0 = Matrix_GetCurrentState();
+            ptr->unk_04.x = temp_v0->mf[3][0];
+            ptr->unk_04.y = temp_v0->mf[3][1];
+            ptr->unk_04.z = temp_v0->mf[3][2];
+            func_8018219C(temp_v0, &ptr->unk_1C, 0);
+            ptr->unk_24 = 1;
+            sp76 = D_8092BFA0[sp80].unk04 + ((Rand_Next() >> 0x13) + this->actor.shape.rot.y);
+            ptr->unk_10.x = Math_SinS(sp76) * 5.0f;
+            ptr->unk_10.y = 6.0f;
+            ptr->unk_10.z = Math_CosS(sp76) * 5.0f;
+            ptr->unk_00 = *dList;
+        }
+        if (limbIndex == 29) {
+            this->unk_2F4 |= 2;
+        }
+    }
+
+    if (limbIndex == 1) {
+        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        this->colliderCylinder.dim.pos.x = this->actor.focus.pos.x;
+        this->colliderCylinder.dim.pos.y = this->actor.world.pos.y;
+        this->colliderCylinder.dim.pos.z = this->actor.focus.pos.z;
+    }
+
+    if ((limbIndex == 0x11) && (this->unk_2F8 != this->unk_2F6) &&
+        ((this->actionFunc == func_8092A33C) || (this->actionFunc == func_8092A754) ||
+         (this->actionFunc == func_8092A994))) {
+        Math_Vec3f_Copy(&sp68, this->colliderQuad.dim.quad);
+        Math_Vec3f_Copy(&sp5C, &this->colliderQuad.dim.quad[1]);
+        Matrix_MultiplyVector3fByState(D_8092C1C8, &sp50);
+        Matrix_MultiplyVector3fByState(D_8092C1D4, &sp44);
+        Collider_SetQuadVertices(&this->colliderQuad, &sp44, &sp50, &sp68, &sp5C);
+        if ((this->colliderQuad.base.atFlags & 1)) {
+            EffectBlure_AddVertex(Effect_GetByIndex(this->unk_300), &sp50, &sp44);
+        }
+        this->unk_2F8 = this->unk_2F6;
+    }
+
+    if (D_8092C1E0[limbIndex] != -1) {
+        Matrix_GetStateTranslation(&this->unk_310[D_8092C1E0[limbIndex]]);
+    }
+
+    if ((sp80 == 0) || ((sp80 != -1) && (this->unk_2F4 == 0) && (D_8092BFA0[sp80].unk00 != 0))) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        tmp = POLY_XLU_DISP;
+
+        gSPMatrix(&tmp[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&tmp[1], D_8092BFA0[sp80].unk00);
+        POLY_XLU_DISP = &tmp[2];
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092BC6C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/EnIk_Draw.s")
+void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnIk* this = THIS;
+    Gfx* gfx;
+    Gfx** temp_v1_2;
+    s32 pad;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_800B8050(&this->actor, globalCtx, 0);
+    func_800B8118(&this->actor, globalCtx, 0);
+    gfx = POLY_XLU_DISP;
+    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    POLY_XLU_DISP = &gfx[1];
+    gfx = POLY_OPA_DISP;
+    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    temp_v1_2 = D_8092BFD8[this->actor.params];
+    gSPSegment(&gfx[1], 0x08, temp_v1_2[0]);
+    gSPSegment(&gfx[2], 0x09, temp_v1_2[1]);
+    gSPSegment(&gfx[3], 0x0A, temp_v1_2[2]);
+    POLY_OPA_DISP = &gfx[4];
+    
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_8092B900, func_8092B93C, &this->actor);
+    func_8092BC6C(this, globalCtx);
+    if (this->actor.colorFilterTimer != 0) {
+        func_800AE5A0(globalCtx);
+    }
+    func_800BC620(&this->actor.focus.pos, D_8092C200, 255, globalCtx);
+    func_800BE680(globalCtx, &this->actor, this->unk_310, 0xD, this->unk_308, this->unk_30C, this->unk_304,
+                  this->unk_2F5);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}

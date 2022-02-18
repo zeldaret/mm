@@ -35,7 +35,7 @@ typedef struct EnIk {
     /* 0x0308 */ f32 unk_308;
     /* 0x030C */ f32 unk_30C;
     /* 0x0310 */ Vec3f unk_310[8];
-    /* 0x031C */ char unk_31C[0x90];
+    /* 0x031C */ char unk_31C[0x3C];
     /* 0x03AC */ ColliderCylinder colliderCylinder; // size = 0x4C
     /* 0x03F8 */ ColliderQuad colliderQuad; // size = 0x80
     /* 0x0478 */ ColliderTris colliderTris; // size = 0x20
