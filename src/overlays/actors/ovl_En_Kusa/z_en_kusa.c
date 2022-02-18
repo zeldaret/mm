@@ -113,7 +113,6 @@ static InitChainEntry sInitChain[] = {
 
 /**
  * @brief Applies a "swaying" motion of the provided matrix
- *
  * @param[in]     matrix  Matrix to update the current state
  */
 void EnAm_ApplySway(MtxF* matrix) {
@@ -213,11 +212,9 @@ void EnKusa_Sway(void) {
 /**
  * @brief Detects if a bush is able to snap to the floor. BgCheck_EntityRaycastFloor5 will give the intersect point
  *        if no poit is found, a false value is returned.
- *
  * @param this
  * @param globalCtx
  * @param yOffset offset of Y coordinate, can be positive or negative.
- *
  * @return true/false if the bush is able to snap to the floor and is above BGCHECK_Y_MIN
  */
 s32 EnKusa_SnapToFloor(EnKusa* this, GlobalContext* globalCtx, f32 yOffset) {
@@ -250,7 +247,7 @@ void EnKusa_DropCollectible(EnKusa* this, GlobalContext* globalCtx) {
             Item_DropCollectibleRandom(globalCtx, NULL, &this->actor.world.pos,
                                        KUSA_GET_RAND_COLLECTIBLE_ID(&this->actor) * 0x10);
         }
-    } else if (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_REGROW_GRASS) {
+    } else if (GET_KUSA_TYPE(&this->actor) == ENKUSA_TYPE_REGROWING_GRASS) {
         Item_DropCollectible(globalCtx, &this->actor.world.pos, 3);
     } else {
         collectible = func_800A8150(KUSA_GET_PARAMS_3F(&this->actor));
@@ -270,7 +267,6 @@ void EnKusa_UpdateVelY(EnKusa* this) {
 
 /**
  * @brief Scales a vector down by provided scale factor
- *
  * @param vec   vector to be scaled
  * @param scaleFactor   scale factor to be applied to vector
  */
@@ -564,7 +560,7 @@ void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
                 break;
 
-            case ENKUSA_TYPE_REGROW_GRASS:
+            case ENKUSA_TYPE_REGROWING_GRASS:
                 EnKusa_SetupUprootedWaitRegrow(this);
                 this->actor.shape.shadowDraw = NULL;
                 break;
@@ -597,8 +593,8 @@ void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         }
         EnKusa_UpdateVelY(this);
-        Math_StepToS(&rotSpeedX, rotSpeedXtarget, 0x1F4);
-        Math_StepToS(&rotSpeedY, rotSpeedYtarget, 0xAA);
+        Math_StepToS(&rotSpeedX, rotSpeedXtarget, 500);
+        Math_StepToS(&rotSpeedY, rotSpeedYtarget, 170);
         this->actor.shape.rot.x += rotSpeedX;
         this->actor.shape.rot.y += rotSpeedY;
         EnKusa_RandScaleVecToZero(&this->actor.velocity, 0.05f);
@@ -616,7 +612,7 @@ void EnKusa_SetupCut(EnKusa* this) {
         case ENKUSA_TYPE_GRASS_2:
             this->actionFunc = EnKusa_DoNothing;
             break;
-        case ENKUSA_TYPE_REGROW_GRASS:
+        case ENKUSA_TYPE_REGROWING_GRASS:
             this->actionFunc = EnKusa_CutWaitRegrow;
             break;
     }
@@ -660,9 +656,9 @@ void EnKusa_SetupRegrow(EnKusa* this) {
 }
 
 void EnKusa_Regrow(EnKusa* this, GlobalContext* globalCtx) {
-    s32 isFullyGrown;
+    s32 isFullyGrown = 1;
 
-    isFullyGrown = Math_StepToF(&this->actor.scale.y, 0.4f, 0.014f) & 1;
+    isFullyGrown &= Math_StepToF(&this->actor.scale.y, 0.4f, 0.014f);
     isFullyGrown &= Math_StepToF(&this->actor.scale.x, 0.4f, 0.011f);
     this->actor.scale.z = this->actor.scale.x;
     if (isFullyGrown) {

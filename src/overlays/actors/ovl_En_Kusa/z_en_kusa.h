@@ -9,7 +9,7 @@ typedef void (*EnKusaActionFunc)(struct EnKusa*, GlobalContext*);
 
 typedef enum {
     /* 0 */ ENKUSA_TYPE_BUSH,
-    /* 1 */ ENKUSA_TYPE_REGROW_GRASS,
+    /* 1 */ ENKUSA_TYPE_REGROWING_GRASS,
     /* 2 */ ENKUSA_TYPE_GRASS,
     /* 3 */ ENKUSA_TYPE_GRASS_2
 } EnKusaType;
