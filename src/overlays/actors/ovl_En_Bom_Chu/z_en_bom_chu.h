@@ -19,7 +19,7 @@ typedef struct EnBomChu {
     /* 0x170 */ f32 visualJitter;
     /* 0x174 */ f32 unk_174; // set but never used
     /* 0x178 */ UNK_TYPE1 unk_178[0x4];
-    /* 0x17C */ f32 unk_17C; // like a copy of speedXZ? "movingSpeedXZ"?
+    /* 0x17C */ f32 movingSpeed;
     /* 0x180 */ s32 blure1Index;
     /* 0x184 */ s32 blure2Index;
     /* 0x188 */ ColliderSphere collider;

@@ -181,7 +181,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, GlobalContext* globalCtx) {
         func_800B8EF4(globalCtx, &this->actor);
         this->isMoving = true;
         this->actor.speedXZ = 8.0f;
-        this->unk_17C = 8.0f;
+        this->movingSpeed = 8.0f;
         EnBomChu_SetupMove(this);
     }
 }
@@ -226,8 +226,8 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     bgIdUpDown = bgIdSide = 0x32;
     sp70 = 0;
 
-    this->actor.speedXZ = this->unk_17C;
-    lineLength = 2.0f * this->unk_17C;
+    this->actor.speedXZ = this->movingSpeed;
+    lineLength = 2.0f * this->movingSpeed;
 
     if ((this->timer == 0) || (this->collider.base.acFlags & AC_HIT) || (this->collider.base.ocFlags1 & OC1_HIT)) {
         EnBomChu_Explode(this, globalCtx);
@@ -305,7 +305,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.speedXZ != 0.0f) {
-        this->unk_17C = this->actor.speedXZ;
+        this->movingSpeed = this->actor.speedXZ;
     }
 }
 
