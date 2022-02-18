@@ -206,13 +206,13 @@ void EnZoraegg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80B319A8(GlobalContext* globalCtx) {
-    return gSaveContext.roomInf[globalCtx->sceneNum][5] & 7;
+    return gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 7;
 }
 
 void func_80B319D0(GlobalContext* globalCtx, s32 arg1) {
     if ((arg1 < 8) && (arg1 >= 0)) {
-        gSaveContext.roomInf[globalCtx->sceneNum][5] &= ~7;
-        gSaveContext.roomInf[globalCtx->sceneNum][5] |= arg1;
+        gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 &= ~7;
+        gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 |= arg1;
     }
 }
 
