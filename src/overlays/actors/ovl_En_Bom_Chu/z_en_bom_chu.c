@@ -68,7 +68,13 @@ void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = func_808F7868;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Destroy.s")
+void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnBomChu* this = THIS;
+
+    Effect_Destroy(globalCtx, this->unk_180);
+    Effect_Destroy(globalCtx, this->unk_184);
+    Collider_DestroySphere(globalCtx, &this->unk_188);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F75D0.s")
 
