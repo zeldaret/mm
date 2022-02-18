@@ -147,7 +147,11 @@ void func_808F7E74(EnBomChu* this, GlobalContext* globalCtx) {
     this->actionFunc = func_808F7FA0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7FA0.s")
+void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx) {
+    if (this->unk_14A == 0) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7FD0.s")
 
