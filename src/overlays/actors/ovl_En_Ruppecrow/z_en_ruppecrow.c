@@ -367,7 +367,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, GlobalContext* globalCtx) {
 s32 EnRuppecrow_CheckPlayedMatchingSong(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (globalCtx->msgCtx.unk1202A == 0x3) {
+    if (globalCtx->msgCtx.ocarinaMode == 0x3) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
                 if (globalCtx->msgCtx.unk1202E == OCARINA_SONG_SONATA) {

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_rsn.h"
+#include "objects/object_rs/object_rs.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -29,15 +30,10 @@ const ActorInit En_Rsn_InitVars = {
     (ActorFunc)EnRsn_Draw,
 };
 
-extern FlexSkeletonHeader D_06009220;
-extern AnimationHeader D_06009120;
-extern AnimationHeader D_0600788C;
-extern Gfx D_06005458[];
-
-static ActorAnimationEntry animations[] = { { &D_0600788C, 1.0f, 0.0f, 0.0f, 0x00, 0.0f } };
+static AnimationInfo sAnimations[] = { { &object_rs_Anim_00788C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnimation(&this->skelAnime, animations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80C25D84;
 }
 
@@ -48,7 +44,7 @@ void EnRsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRsn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06009220, &D_06009120, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, NULL, NULL, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     func_80C25D40(this);
 }
@@ -93,7 +89,7 @@ void EnRsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C5B0(globalCtx->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_06005458));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_rs_Tex_005458));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

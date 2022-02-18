@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_haka_tomb.h"
+#include "objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -21,9 +22,6 @@ void func_80BD6754(BgHakaTomb* this);
 void func_80BD6768(BgHakaTomb* this, GlobalContext* globalCtx);
 void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, GlobalContext* globalCtx);
-
-extern CollisionHeader D_06000EE8[];
-extern Gfx D_060007B0[];
 
 const ActorInit Bg_Haka_Tomb_InitVars = {
     ACTOR_BG_HAKA_TOMB,
@@ -48,7 +46,7 @@ void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, D_06000EE8);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_haka_obj_Colheader_000EE8);
     func_8013E3B8(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     func_80BD6624(this);
 }
@@ -128,5 +126,5 @@ void BgHakaTomb_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaTomb_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_060007B0);
+    Gfx_DrawDListOpa(globalCtx, object_haka_obj_DL_0007B0);
 }

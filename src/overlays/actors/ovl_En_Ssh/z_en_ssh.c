@@ -653,7 +653,7 @@ void EnSsh_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
     this->initialYaw = this->actor.world.rot.y;
     EnSsh_SetupAction(this, EnSsh_Start);
-    if (func_8012F22C(globalCtx->sceneNum) >= 30) {
+    if (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30) {
         Actor_MarkForDeath(&this->actor);
     }
 }

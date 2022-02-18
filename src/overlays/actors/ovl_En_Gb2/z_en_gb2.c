@@ -370,8 +370,8 @@ void func_80B0FE7C(GlobalContext* globalCtx) {
 }
 
 void func_80B0FEBC(EnGb2* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.unk1202A == 3) && (globalCtx->msgCtx.unk1202E == 7)) {
-        globalCtx->msgCtx.unk1202A = 4;
+    if ((globalCtx->msgCtx.ocarinaMode == 3) && (globalCtx->msgCtx.unk1202E == 7)) {
+        globalCtx->msgCtx.ocarinaMode = 4;
         gSaveContext.eventInf[4] |= 0x80;
         this->unk_26E = 0x14D1;
         this->unk_288 = 10;
@@ -391,7 +391,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
             if (this->unk_26C & 2) {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
@@ -431,7 +431,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
                 case 0:
                     func_8019F208();
                     func_801159EC(-this->unk_288);
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
                     this->actionFunc = func_80B11344;
@@ -553,7 +553,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
             if (this->unk_26C & 2) {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_26C &= ~2;
                 if (this->unk_26E == 0x14DD) {
@@ -583,7 +583,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
                 } else {
                     func_8019F208();
                     func_801159EC(-this->unk_288);
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
                     this->actionFunc = func_80B11344;
@@ -749,7 +749,7 @@ void func_80B10E98(EnGb2* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
@@ -792,7 +792,7 @@ void func_80B11048(EnGb2* this, GlobalContext* globalCtx) {
 void func_80B110F8(EnGb2* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_26C & 2) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_26C &= ~2;
             this->actionFunc = func_80B10A48;

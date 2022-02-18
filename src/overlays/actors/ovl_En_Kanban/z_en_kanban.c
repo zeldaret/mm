@@ -825,13 +825,13 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             switch (this->ocarinaFlag) {
                 case 0:
-                    if (globalCtx->msgCtx.unk1202A == 1) {
+                    if (globalCtx->msgCtx.ocarinaMode == 1) {
                         this->ocarinaFlag = 1;
                     }
                     break;
 
                 case 1:
-                    if ((globalCtx->msgCtx.unk1202A == 4) && (globalCtx->msgCtx.unk1202E == 7)) {
+                    if ((globalCtx->msgCtx.ocarinaMode == 4) && (globalCtx->msgCtx.unk1202E == 7)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
                         play_sound(NA_SE_SY_TRE_BOX_APPEAR);

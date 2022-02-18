@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dg.h"
+#include "objects/object_dog/object_dog.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -35,17 +36,6 @@ void func_8098BA64(EnDg* this, GlobalContext* globalCtx);
 void func_8098BB10(EnDg* this, GlobalContext* globalCtx);
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx);
 void func_8098BC54(EnDg* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000998;
-extern AnimationHeader D_06001048;
-extern AnimationHeader D_06001348;
-extern AnimationHeader D_06001560;
-extern AnimationHeader D_060017C0;
-extern AnimationHeader D_06001A84;
-extern AnimationHeader D_06001BD8;
-extern AnimationHeader D_06001FB0;
-extern AnimationHeader D_060021C8;
-extern FlexSkeletonHeader D_060080F0;
 
 const ActorInit En_Dg_InitVars = {
     ACTOR_EN_DG,
@@ -139,31 +129,41 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &D_060021C8, 1.0f, 0, -1, 0, 0 },   { &D_060021C8, 1.0f, 0, -1, 0, -6 },  { &D_06001BD8, 1.0f, 0, -1, 0, 0 },
-    { &D_06000998, 1.0f, 0, -1, 0, -6 },  { &D_06001FB0, 1.0f, 0, -1, 2, -6 },  { &D_06001FB0, 1.0f, 0, -1, 4, -6 },
-    { &D_06001048, 1.0f, 0, -1, 2, -6 },  { &D_06001348, 1.0f, 0, -1, 0, -6 },  { &D_06001048, 1.0f, 0, 27, 2, -6 },
-    { &D_06001048, 1.0f, 28, -1, 2, -6 }, { &D_06001048, 1.0f, 54, 54, 2, -6 }, { &D_060021C8, -1.5f, -1, 0, 0, -6 },
-    { &D_06001560, 1.0f, 0, -1, 2, 0 },   { &D_06001A84, 1.2f, 0, -1, 2, 0 },   { &D_060017C0, 1.2f, 0, -1, 2, 0 },
-    { &D_060021C8, 0.5f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_000998, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001348, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 54, 54, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_0021C8, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001560, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_001A84, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0017C0, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0021C8, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) {
+void func_80989140(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
     f32 frameCount;
 
     arg1 += arg2;
     if (arg1->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(arg1->animationSeg);
+        frameCount = Animation_GetLastFrame(arg1->animation);
     } else {
         frameCount = arg1->frameCount;
     }
 
-    Animation_Change(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame, frameCount,
-                     arg1->mode, arg1->transitionRate);
+    Animation_Change(skelAnime, arg1->animation, arg1->playSpeed + (BREG(88) * 0.1f), arg1->startFrame, frameCount,
+                     arg1->mode, arg1->morphFrames);
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
@@ -699,7 +699,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_8098AC34;
             } else {
                 func_80989140(&this->skelAnime, sAnimations, 11);
-                sAnimations[11].playbackSpeed = -1.0f;
+                sAnimations[11].playSpeed = -1.0f;
                 this->actionFunc = func_8098B198;
             }
         }
@@ -774,7 +774,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
 
     if (sp26 < 9) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            sAnimations[14].playbackSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+            sAnimations[14].playSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
         }
         func_80989864(this, globalCtx);
     } else {
@@ -782,7 +782,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
             f32 rand = randPlusMinusPoint5Scaled(1.5f);
 
-            sAnimations[14].playbackSpeed = 1.2f;
+            sAnimations[14].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
             this->actor.speedXZ = 8.0f + rand;
         } else if (sp26 >= 0x15) {
@@ -1117,7 +1117,8 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, NULL, this->jointTable, this->morphTable,
+                       13);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);

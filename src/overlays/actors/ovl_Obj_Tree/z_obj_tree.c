@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_tree.h"
+#include "objects/object_tree/object_tree.h"
 
 #define FLAGS (ACTOR_FLAG_2000000)
 
@@ -88,10 +89,6 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit2 sColchkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-extern Gfx D_06000680[];
-extern Gfx D_060007C8[];
-extern CollisionHeader D_06001B2C;
-
 void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjTree* this = THIS;
@@ -103,7 +100,7 @@ void ObjTree_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
-        CollisionHeader_GetVirtual(&D_06001B2C, &colHeader);
+        CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 
@@ -190,11 +187,11 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000680);
+    gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_000680);
 
     Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
+    gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_0007C8);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_mm.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -216,6 +217,6 @@ void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateY(-rotY, MTXMODE_APPLY);
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, &D_04055628);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

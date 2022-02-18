@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ending_hero2.h"
+#include "objects/object_bai/object_bai.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -30,9 +31,6 @@ const ActorInit En_Ending_Hero2_InitVars = {
     (ActorFunc)EnEndingHero2_Draw,
 };
 
-extern FlexSkeletonHeader D_06007908;
-extern AnimationHeader D_060011C0;
-
 void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero2* this = THIS;
 
@@ -40,7 +38,8 @@ void EnEndingHero2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->jointTable, this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable,
+                       this->morphTable, 20);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C232E8(this);
 }

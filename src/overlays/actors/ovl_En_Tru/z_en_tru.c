@@ -69,6 +69,7 @@ const ActorInit En_Tru_InitVars = {
 };
 
 #include "overlays/ovl_En_Tru/ovl_En_Tru.c"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 static Vec3f D_80A8B250 = { 0.0f, 0.02f, 0.0f };
 
@@ -79,8 +80,8 @@ static Color_RGBA8 D_80A8B25C[] = {
 
 static f32 D_80A8B274[] = { 60.0f, 255.0f, 60.0f };
 
-static UNK_TYPE D_80A8B280[] = {
-    &D_0408F7E0, &D_0408F3E0, &D_0408EFE0, &D_0408EBE0, &D_0408E7E0, &D_0408E3E0, &D_0408DFE0, &D_0408DBE0,
+static TexturePtr D_80A8B280[] = {
+    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
 };
 
 static ColliderSphereInit sSphereInit = {
@@ -105,15 +106,23 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80A8B2D8[] = {
-    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, -4 },
-    { &object_tru_Anim_0108AC, 1.0f, 0, -1, 2, -4 }, { &object_tru_Anim_009348, 1.0f, 0, -1, 2, 0 },
-    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, 0 },
-    { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_014728, 1.0f, 0, -1, 2, 0 },
-    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, 2, 0 },  { &object_tru_Anim_007FA0, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_016B4C, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_011F88, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_003698, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_002BD8, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS D_80A8B2D8[] = {
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_0108AC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_009348, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_014728, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_007FA0, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_016B4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_011F88, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_003698, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_002BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
@@ -417,7 +426,7 @@ s32 func_80A86924(EnTru* this, s32 arg1) {
 
     if (arg1 != this->unk_37C) {
         this->unk_37C = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80A8B2D8, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A8B2D8, arg1);
         this->unk_358 = this->skelAnime.playSpeed;
     }
 
@@ -1235,10 +1244,10 @@ void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
 
 void EnTru_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr D_80A8B408[] = {
-        &object_tru_Tex_018FA0,
-        &object_tru_Tex_0197A0,
-        &object_tru_Tex_019FA0,
-        &object_tru_Tex_0197A0,
+        object_tru_Tex_018FA0,
+        object_tru_Tex_0197A0,
+        object_tru_Tex_019FA0,
+        object_tru_Tex_0197A0,
     };
     s32 pad;
     EnTru* this = THIS;

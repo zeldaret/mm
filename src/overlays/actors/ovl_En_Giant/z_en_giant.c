@@ -5,7 +5,6 @@
  */
 
 #include "z_en_giant.h"
-#include "objects/object_giant/object_giant.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -19,6 +18,59 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx);
 void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx);
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx);
+
+#define GIANT_TYPE_IS_NOT_TERMINA_FIELD(type) (type > GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_TERMINA_FIELD(type) (type <= GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS)
+#define GIANT_TYPE_IS_CHAMBER_OR_ENDING(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING && type <= GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING)
+#define GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE)
+
+/**
+ * These values are used to index into sAnimations to pick the appropriate animation.
+ */
+typedef enum {
+    /*  0 */ GIANT_ANIMATION_LOOK_UP_START,
+    /*  1 */ GIANT_ANIMATION_LOOK_UP_LOOP,
+    /*  2 */ GIANT_ANIMATION_FALLING_OVER,
+    /*  3 */ GIANT_ANIMATION_RAISED_ARMS_START,
+    /*  4 */ GIANT_ANIMATION_RAISED_ARMS_LOOP,
+    /*  5 */ GIANT_ANIMATION_STRUGGLE_START,
+    /*  6 */ GIANT_ANIMATION_STRUGGLE_LOOP,
+    /*  7 */ GIANT_ANIMATION_IDLE_LOOP,
+    /*  8 */ GIANT_ANIMATION_WALKING_LOOP,
+    /*  9 */ GIANT_ANIMATION_BIG_CALL_START,
+    /* 10 */ GIANT_ANIMATION_BIG_CALL_LOOP,
+    /* 11 */ GIANT_ANIMATION_BIG_CALL_END,
+    /* 12 */ GIANT_ANIMATION_SMALL_CALL_START,
+    /* 13 */ GIANT_ANIMATION_SMALL_CALL_LOOP,
+    /* 14 */ GIANT_ANIMATION_SMALL_CALL_END,
+    /* 15 */ GIANT_ANIMATION_MAX
+} GiantAnimationIndex;
+
+/**
+ * Used as values for csAction. The UNKNOWN ones are never used in-game.
+ */
+typedef enum {
+    /*  0 */ GIANT_CS_ACTION_NONE,
+    /*  1 */ GIANT_CS_ACTION_IDLE,
+    /*  2 */ GIANT_CS_ACTION_WALKING,
+    /*  3 */ GIANT_CS_ACTION_LOOKING_UP,
+    /*  4 */ GIANT_CS_ACTION_RAISING_ARMS,
+    /*  5 */ GIANT_CS_ACTION_STRUGGLING,
+    /*  6 */ GIANT_CS_ACTION_FALLING_OVER,
+    /*  7 */ GIANT_CS_ACTION_IDLE_FADE_IN,
+    /*  8 */ GIANT_CS_ACTION_TALKING,
+    /*  9 */ GIANT_CS_ACTION_DONE_TALKING,
+    /* 10 */ GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER,
+    /* 11 */ GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER,
+    /* 12 */ GIANT_CS_ACTION_UNKNOWN_12,
+    /* 13 */ GIANT_CS_ACTION_UNKNOWN_13,
+    /* 14 */ GIANT_CS_ACTION_UNKNOWN_14,
+    /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
+} GiantCsActionIndex;
 
 const ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,

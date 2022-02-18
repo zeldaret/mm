@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_fu_kaiten.h"
+#include "objects/object_fu_kaiten/object_fu_kaiten.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -27,9 +28,6 @@ const ActorInit Bg_Fu_Kaiten_InitVars = {
     (ActorFunc)BgFuKaiten_Draw,
 };
 
-extern Gfx D_060005D0[];
-extern CollisionHeader D_06002D30;
-
 void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgFuKaiten* this = THIS;
@@ -37,7 +35,7 @@ void BgFuKaiten_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(thisx, 1.0);
     DynaPolyActor_Init(&this->dyna, 3);
-    CollisionHeader_GetVirtual(&D_06002D30, &header);
+    CollisionHeader_GetVirtual(&object_fu_kaiten_Colheader_002D30, &header);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, header);
 
     this->bounceHeight = 0.0;
@@ -82,6 +80,6 @@ void BgFuKaiten_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_060005D0);
+    gSPDisplayList(POLY_OPA_DISP++, object_fu_kaiten_DL_0005D0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

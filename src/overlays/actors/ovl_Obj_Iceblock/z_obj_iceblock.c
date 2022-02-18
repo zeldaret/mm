@@ -934,7 +934,7 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (D_80A26E7C == NULL) {
-        D_80A26E7C = Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_000328);
+        D_80A26E7C = Lib_SegmentedToVirtual(object_ice_block_Matanimheader_000328);
     }
 
     if (!(this->unk_1B0 & 8)) {
@@ -1510,7 +1510,7 @@ void func_80A26B64(ObjIceblock* this, GlobalContext* globalCtx) {
 void func_80A26B74(ObjIceblock* this, GlobalContext* globalCtx) {
     Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0001A0);
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
         Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0007F0);
     }
 }
@@ -1539,7 +1539,7 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
     }
 
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 20.0f,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);

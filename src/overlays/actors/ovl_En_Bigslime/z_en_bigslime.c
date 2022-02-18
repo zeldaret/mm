@@ -7,6 +7,7 @@
 #include "z_en_bigslime.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
@@ -3099,7 +3100,7 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
         func_800AE5A0(globalCtx);
     }
 
-    EnBigslime_SetSysMatrix(&gekkoPos, globalCtx, D_04076BC0, this->gekkoScale * (550.0f / 7.0f),
+    EnBigslime_SetSysMatrix(&gekkoPos, globalCtx, gCircleShadowDL, this->gekkoScale * (550.0f / 7.0f),
                             this->gekkoScale * (550.0f / 7.0f), 0.0f, 0, 255.0f);
 
     if (this->minislimeState != MINISLIME_INACTIVE_STATE) {

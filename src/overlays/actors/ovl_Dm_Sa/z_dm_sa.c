@@ -5,6 +5,7 @@
  */
 
 #include "z_dm_sa.h"
+#include "objects/object_stk/object_stk.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -29,15 +30,12 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Draw,
 };
 
-extern FlexSkeletonHeader D_06013328;
-extern AnimationHeader D_0600CC94;
+static AnimationInfo D_80A2ED00[] = { { &object_stk_Anim_00CC94, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 } };
 
-static ActorAnimationEntry D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, 0, 0 } };
-
-void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) {
+void func_80A2E960(SkelAnime* arg0, AnimationInfo* animations, u16 index) {
     f32 frameCount;
-    animations += index;
 
+    animations += index;
     if (animations->frameCount < 0.0f) {
         frameCount = Animation_GetLastFrame(animations->animation);
     } else {
@@ -54,7 +52,7 @@ void DmSa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->alpha = 0xFF;
     this->actor.targetArrowOffset = 3000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013328, NULL, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_stk_Skel_013328, NULL, NULL, NULL, 0);
     func_80A2E960(&this->skelAnime, D_80A2ED00, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmSa_DoNothing;

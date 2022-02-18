@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hgdoor.h"
+#include "objects/object_hgdoor/object_hgdoor.h"
 
 #define FLAGS (ACTOR_FLAG_100000)
 
@@ -24,13 +25,6 @@ void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx);
 void func_80BD4460(ObjHgdoor* this);
 void func_80BD4478(ObjHgdoor* this, GlobalContext* globalCtx);
 s32 func_80BD44D0(ObjHgdoor* this, GlobalContext* globalCtx);
-
-extern CollisionHeader D_06001D10;
-extern CollisionHeader D_060018C0;
-extern Gfx D_06001AB0[];
-extern Gfx D_06001BA8[];
-extern Gfx D_06001670[];
-extern Gfx D_06001768[];
 
 const ActorInit Obj_Hgdoor_InitVars = {
     ACTOR_OBJ_HGDOOR,
@@ -80,9 +74,9 @@ void ObjHgdoor_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, 1);
     if (OBJHGDOOR_IS_RIGHT_DOOR(&this->dyna.actor)) {
-        CollisionHeader_GetVirtual(&D_06001D10, &header);
+        CollisionHeader_GetVirtual(&object_hgdoor_Colheader_001D10, &header);
     } else {
-        CollisionHeader_GetVirtual(&D_060018C0, &header);
+        CollisionHeader_GetVirtual(&object_hgdoor_Colheader_0018C0, &header);
     }
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, header);
     this->rotation = 0;
@@ -203,11 +197,11 @@ void ObjHgdoor_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     if (OBJHGDOOR_IS_RIGHT_DOOR(thisx)) {
-        gSPDisplayList(POLY_OPA_DISP++, D_06001AB0);
-        gSPDisplayList(POLY_OPA_DISP++, D_06001BA8);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001AB0);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001BA8);
     } else {
-        gSPDisplayList(POLY_OPA_DISP++, D_06001670);
-        gSPDisplayList(POLY_OPA_DISP++, D_06001768);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001670);
+        gSPDisplayList(POLY_OPA_DISP++, object_hgdoor_DL_001768);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

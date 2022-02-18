@@ -5,6 +5,7 @@
  */
 
 #include "z_en_daiku.h"
+#include "objects/object_daiku/object_daiku.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -19,22 +20,6 @@ void func_80943820(EnDaiku* this);
 void func_80943BC0(EnDaiku* this);
 void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx);
 void func_809438F8(EnDaiku* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000600;
-extern AnimationHeader D_06000C44;
-extern AnimationHeader D_06001114;
-extern AnimationHeader D_06002FA0;
-extern FlexSkeletonHeader D_0600A850;
-extern AnimationHeader D_0600ACD0;
-extern AnimationHeader D_0600B690;
-extern AnimationHeader D_0600BEAC;
-extern AnimationHeader D_0600C234;
-extern AnimationHeader D_0600C92C;
-extern Gfx D_06006D70[];
-extern Gfx D_06006E80[];
-extern Gfx D_06006FB0[];
-extern Gfx D_060070C0[];
-extern Gfx D_06008EC8[];
 
 const ActorInit En_Daiku_InitVars = {
     ACTOR_EN_DAIKU,
@@ -108,18 +93,18 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_27E = this->unk_278 * 4 + 4;
 
         case ENDAIKU_PARAMS_FF_1:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable,
-                               this->morphTable, 17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0,
+                               this->jointTable, this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_2:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_0600B690, this->jointTable,
-                               this->morphTable, 17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_00B690,
+                               this->jointTable, this->morphTable, 17);
             break;
 
         case ENDAIKU_PARAMS_FF_3:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06001114, this->jointTable,
-                               this->morphTable, 17);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_001114,
+                               this->jointTable, this->morphTable, 17);
             break;
     }
 
@@ -134,8 +119,9 @@ void EnDaiku_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_8094373C(EnDaiku* this, s32 arg1) {
     static AnimationHeader* D_809440A4[] = {
-        &D_06002FA0, &D_0600ACD0, &D_0600C92C, &D_06000C44, &D_0600C234,
-        &D_06000600, &D_06001114, &D_0600B690, &D_0600BEAC,
+        &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C,
+        &object_daiku_Anim_000C44, &object_daiku_Anim_00C234, &object_daiku_Anim_000600,
+        &object_daiku_Anim_001114, &object_daiku_Anim_00B690, &object_daiku_Anim_00BEAC,
     };
     static u8 D_809440C8[] = {
         0, 0, 0, 0, 2, 0, 0, 2, 2,
@@ -309,7 +295,12 @@ s32 EnDaiku_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 }
 
 void EnDaiku_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Gfx* D_809440D4[] = { D_060070C0, D_06006FB0, D_06006E80, D_06006D70 };
+    static Gfx* D_809440D4[] = {
+        object_daiku_DL_0070C0,
+        object_daiku_DL_006FB0,
+        object_daiku_DL_006E80,
+        object_daiku_DL_006D70,
+    };
     EnDaiku* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -319,7 +310,7 @@ void EnDaiku_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if ((this->unk_278 == ENDAIKU_PARAMS_FF_3) && (limbIndex == 8)) {
-        gSPDisplayList(POLY_OPA_DISP++, D_06008EC8);
+        gSPDisplayList(POLY_OPA_DISP++, object_daiku_DL_008EC8);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

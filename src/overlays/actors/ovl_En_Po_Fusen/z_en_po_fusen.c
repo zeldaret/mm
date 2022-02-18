@@ -6,6 +6,7 @@
 
 #include "z_en_po_fusen.h"
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
+#include "objects/object_po_fusen/object_po_fusen.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
@@ -27,9 +28,6 @@ void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                Actor* thisx);
-
-extern AnimationHeader D_06000040;
-extern FlexSkeletonHeader D_060024F0;
 
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
@@ -111,7 +109,8 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(globalCtx, &this->anime, &D_060024F0, &D_06000040, this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040,
+                       this->jointTable, this->morphTable, 10);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 

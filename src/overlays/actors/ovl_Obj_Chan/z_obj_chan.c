@@ -23,7 +23,7 @@ const ActorInit Obj_Chan_InitVars = {
     ACTOR_OBJ_CHAN,
     ACTORCAT_BG,
     FLAGS,
-    OBJECT_OBJECT_UNSET_CHAN,
+    OBJECT_OBJ_CHAN,
     sizeof(ObjChan),
     (ActorFunc)ObjChan_Init,
     (ActorFunc)ObjChan_Destroy,

@@ -5,6 +5,7 @@
  */
 
 #include "z_door_ana.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
 #define FLAGS (ACTOR_FLAG_2000000)
 
@@ -208,5 +209,5 @@ void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListXlu(globalCtx, D_05000C40);
+    Gfx_DrawDListXlu(globalCtx, gameplay_field_keep_DL_000C40);
 }

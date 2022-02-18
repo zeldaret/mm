@@ -5,6 +5,7 @@
  */
 
 #include "z_en_nnh.h"
+#include "objects/object_nnh/object_nnh.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -51,8 +52,6 @@ static ColliderCylinderInit sCylinderInit = {
     },
     { 20, 50, 0, { 0, 0, 0 } },
 };
-
-extern Gfx D_06001510[];
 
 void EnNnh_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNnh* this = THIS;
@@ -110,5 +109,5 @@ void EnNnh_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(gfxCtx);
     gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, D_06001510);
+    gSPDisplayList(gfxCtx->polyOpa.p++, object_nnh_DL_001510);
 }
