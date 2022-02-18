@@ -14,6 +14,7 @@ void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Draw(Actor* thisx, GlobalContext* globalCtx);
+
 void EnDrs_Idle(EnDrs* this, GlobalContext* globalCtx);
 
 const ActorInit En_Drs_InitVars = {
