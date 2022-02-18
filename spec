@@ -3549,8 +3549,7 @@ beginseg
     name "ovl_En_Fu_Mato"
     compress
     include "build/src/overlays/actors/ovl_En_Fu_Mato/z_en_fu_mato.o"
-    include "build/data/ovl_En_Fu_Mato/ovl_En_Fu_Mato.data.o"
-    include "build/data/ovl_En_Fu_Mato/ovl_En_Fu_Mato.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fu_Mato/ovl_En_Fu_Mato_reloc.o"
 endseg
 
 beginseg
