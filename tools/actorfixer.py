@@ -396,6 +396,9 @@ animdict = {
     "func_80114E90": "Interface_HasEmptyBottle",
     "func_80114F2C": "Interface_HasItemInBottle",
     "func_80123C90": "Player_SetEquipmentData",
+    "Quake2_ClearType": "Distortion_ClearType",
+    "Quake2_SetType": "Distortion_SetType",
+    "Quake2_SetCountdown": "Distortion_SetCountdown",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",

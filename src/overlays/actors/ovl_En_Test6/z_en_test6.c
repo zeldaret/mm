@@ -402,7 +402,7 @@ void func_80A916F0(EnTest6* this, GlobalContext* globalCtx) {
     ActorCutscene_Stop(globalCtx->unk_1879C[8]);
     func_800B7298(globalCtx, NULL, 6);
     func_80A90C34();
-    Quake2_ClearType(0x20);
+    Distortion_ClearType(0x20);
     Actor_MarkForDeath(&this->actor);
 }
 
@@ -468,8 +468,8 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
                     }
                 }
                 func_80A90C08(0x78);
-                Quake2_SetType(0x20);
-                Quake2_SetCountdown(0x50);
+                Distortion_SetType(0x20);
+                Distortion_SetCountdown(0x50);
                 globalCtx->unk_18844 = 1;
                 this->unk_274 = 95;
             }
@@ -523,7 +523,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
             if (this->unk_27A == 10) {
                 this->unk_14C = 0.1f;
                 func_80A90C34();
-                Quake2_ClearType(0x20);
+                Distortion_ClearType(0x20);
                 globalCtx->unk_18844 = 0;
                 if (this->unk_254 != NULL) {
                     ZeldaArena_Free(this->unk_254);
@@ -625,7 +625,7 @@ void func_80A92118(EnTest6* this, GlobalContext* globalCtx) {
     ActorCutscene_Stop(globalCtx->unk_1879C[8]);
     func_800B7298(globalCtx, NULL, 6);
     func_80A90C34();
-    Quake2_ClearType(0x20);
+    Distortion_ClearType(0x20);
     Actor_MarkForDeath(&this->actor);
 }
 
@@ -696,8 +696,8 @@ void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
 
         case 115:
             func_80A90C08(0x14);
-            Quake2_SetType(0x20);
-            Quake2_SetCountdown(90);
+            Distortion_SetType(0x20);
+            Distortion_SetCountdown(90);
             this->unk_274 = 2;
             break;
 
@@ -727,7 +727,7 @@ void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
         case 14:
         case 15:
             func_80A90C08(0x32);
-            Quake2_ClearType(0x20);
+            Distortion_ClearType(0x20);
             this->unk_274 = 0;
             break;
 
@@ -1288,7 +1288,7 @@ void func_80A939E8(EnTest6* this, GlobalContext* globalCtx2) {
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023210);
+                    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
                 }
             }
             Lights_PointSetPosition(&this->lights[0].info, player->actor.world.pos.x, player->actor.world.pos.y - 10.0f,
