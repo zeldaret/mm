@@ -28,7 +28,7 @@ const ActorInit En_Osn_InitVars = {
     (ActorFunc)EnOsn_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
+static AnimationInfo sAnimations[] = {
     { &object_osn_Anim_0201BC, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_002F74, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_osn_Anim_0037C4, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_004320, 1.0f, 0.0f, 0.0f, 0, 0.0f },
     { &object_osn_Anim_004C8C, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &object_osn_Anim_0094E4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
@@ -171,7 +171,7 @@ void func_80AD0998(EnOsn* this) {
 
     if (this->unk_1EC == 0x12 && curFrame == lastFrame) {
         this->unk_1EC = 0x13;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0x13);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0x13);
     }
 }
 
@@ -181,7 +181,7 @@ void func_80AD0A24(EnOsn* this) {
 
     if (this->unk_1EC == 0x15 && curFrame == lastFrame) {
         this->unk_1EC = 0x16;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0x16);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0x16);
     }
 }
 
@@ -593,7 +593,7 @@ void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
     u32 sp1C = Flags_GetSwitch(globalCtx, 0);
     this->cutscene = this->actor.cutscene;
 
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     if (sp1C == 0) {
         this->actionFunc = func_80AD16A8;
     } else {
@@ -713,7 +713,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
                     this->unk_1EC = 0;
                     break;
             }
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_1EC);
         }
 
         if ((this->unk_1EC == 5) && (globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 0xB) &&
@@ -797,13 +797,13 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         case 1:
             this->unk_1EC = 0xF;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             break;
 
         case 2:
             this->unk_1EC = 0x10;
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, this->unk_1EC);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->unk_1EC);
             this->actionFunc = EnOsn_Idle;
             break;
 
