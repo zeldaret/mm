@@ -55,6 +55,9 @@ extern InitChainEntry D_808F890C[];
 extern s16 D_808F8908;
 extern s16 D_808F890A;
 extern EffectBlureInit1 D_808F8914;
+extern Vec3f D_808F8938;
+extern Vec3f D_808F8944;
+extern Vec3f D_808F8950;
 
 void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBomChu* this = THIS;
@@ -417,6 +420,79 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Update.s")
+void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnBomChu* this = THIS;
+    Vec3f sp54;
+    Vec3f sp48;
+    WaterBox* waterBox;
+    f32 waterY;
+
+    if (this->actor.floorBgId != 0x32) {
+        func_808F818C(this, globalCtx);
+    }
+
+    if (this->unk_148 != 0) {
+        this->unk_14A--;
+    }
+
+    this->actionFunc(this, globalCtx);
+
+    if ((this->actionFunc != func_808F7FA0) &&
+        (SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
+        func_808F7E74(this, globalCtx);
+        return;
+    }
+
+    Actor_MoveWithoutGravity(&this->actor);
+    this->unk_188.dim.worldSphere.center.x = (s16)this->actor.world.pos.x;
+    this->unk_188.dim.worldSphere.center.y = (s16)this->actor.world.pos.y;
+    this->unk_188.dim.worldSphere.center.z = (s16)this->actor.world.pos.z;
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_188.base);
+    if (this->actionFunc != func_808F7868) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_188.base);
+    }
+
+    this->actor.focus.pos.x = this->actor.world.pos.x + (20.0f * this->unk_158.x);
+    this->actor.focus.pos.y = this->actor.world.pos.y + (20.0f * this->unk_158.y);
+    this->actor.focus.pos.z = this->actor.world.pos.z + (20.0f * this->unk_158.z);
+
+    if (this->unk_149 != 0) {
+        this->unk_170 = (5.0f + (Rand_ZeroOne() * 3.0f)) *
+                        Math_SinS((s16)(((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->unk_14A));
+        func_808F7FD0(this, &D_808F8938, &sp54);
+        func_808F7FD0(this, &D_808F8944, &sp48);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_180), &sp54, &sp48);
+        func_808F7FD0(this, &D_808F8950, &sp48);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_184), &sp54, &sp48);
+
+        waterY = this->actor.world.pos.y;
+
+        if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                 &waterY, &waterBox) != 0) {
+            this->actor.depthInWater = waterY - this->actor.world.pos.y;
+
+            if (this->actor.depthInWater < 0.0f) {
+                if (this->actor.bgCheckFlags & 0x20) {
+                    func_808F8080(this, globalCtx, waterY, 1);
+                }
+
+                this->actor.bgCheckFlags &= ~0x20;
+                return;
+            }
+
+            if (!(this->actor.bgCheckFlags & 0x20) && (this->unk_14A != 120)) {
+                func_808F8080(this, globalCtx, waterY, 1);
+            } else {
+                EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, 0.0f, 3.0f, 15.0f, 0.25f);
+            }
+
+            this->actor.bgCheckFlags |= 0x20;
+        } else {
+            this->actor.bgCheckFlags &= ~0x20;
+            this->actor.depthInWater = -32000.0f;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/EnBomChu_Draw.s")
