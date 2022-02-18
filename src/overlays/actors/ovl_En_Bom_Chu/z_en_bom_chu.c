@@ -193,7 +193,104 @@ void func_808F79D4(EnBomChu* this) {
     this->actionFunc = func_808F7A84;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7A84.s")
+void func_808F7A84(EnBomChu* this, GlobalContext* globalCtx) {
+    CollisionPoly* polySide = NULL;
+    CollisionPoly* polyUpDown = NULL;
+    s32 bgIdSide;
+    s32 bgIdUpDown;
+    s32 i;
+    s32 sp70;
+    f32 lineLength;
+    Vec3f posA;
+    Vec3f posB;
+    Vec3f posSide;
+    Vec3f posUpDown;
+
+    bgIdUpDown = bgIdSide = 0x32;
+    sp70 = 0;
+
+    this->actor.speedXZ = this->unk_17C;
+    lineLength = 2.0f * this->unk_17C;
+
+    if ((this->unk_14A == 0) || (this->unk_188.base.acFlags & AC_HIT) || (this->unk_188.base.ocFlags1 & OC1_HIT)) {
+        func_808F7E74(this, globalCtx);
+        return;
+    }
+
+    posA.x = this->actor.world.pos.x + (this->unk_158.x * 2.0f);
+    posA.y = this->actor.world.pos.y + (this->unk_158.y * 2.0f);
+    posA.z = this->actor.world.pos.z + (this->unk_158.z * 2.0f);
+
+    posB.x = this->actor.world.pos.x - (this->unk_158.x * 4.0f);
+    posB.y = this->actor.world.pos.y - (this->unk_158.y * 4.0f);
+    posB.z = this->actor.world.pos.z - (this->unk_158.z * 4.0f);
+
+    if (func_808F7944(globalCtx, &posA, &posB, &posUpDown, &polyUpDown, &bgIdUpDown)) {
+        posB.x = (this->unk_14C.x * lineLength) + posA.x;
+        posB.y = (this->unk_14C.y * lineLength) + posA.y;
+        posB.z = (this->unk_14C.z * lineLength) + posA.z;
+
+        if (func_808F7944(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
+            sp70 = func_808F75D0(this, polySide, globalCtx);
+            Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
+            this->actor.floorBgId = bgIdSide;
+            this->actor.speedXZ = 0.0f;
+        } else {
+            if (this->actor.floorPoly != polyUpDown) {
+                sp70 = func_808F75D0(this, polyUpDown, globalCtx);
+            }
+
+            Math_Vec3f_Copy(&this->actor.world.pos, &posUpDown);
+            this->actor.floorBgId = bgIdUpDown;
+        }
+    } else {
+        this->actor.speedXZ = 0.0f;
+        lineLength *= 3.0f;
+        Math_Vec3f_Copy(&posA, &posB);
+
+        for (i = 0; i < 3; i++) {
+            if (i == 0) {
+                posB.x = posA.x - (this->unk_14C.x * lineLength);
+                posB.y = posA.y - (this->unk_14C.y * lineLength);
+                posB.z = posA.z - (this->unk_14C.z * lineLength);
+            } else if (i == 1) {
+                posB.x = posA.x + (this->unk_164.x * lineLength);
+                posB.y = posA.y + (this->unk_164.y * lineLength);
+                posB.z = posA.z + (this->unk_164.z * lineLength);
+            } else {
+                posB.x = posA.x - (this->unk_164.x * lineLength);
+                posB.y = posA.y - (this->unk_164.y * lineLength);
+                posB.z = posA.z - (this->unk_164.z * lineLength);
+            }
+
+            if (func_808F7944(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
+                sp70 = func_808F75D0(this, polySide, globalCtx);
+                Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
+                this->actor.floorBgId = bgIdSide;
+                break;
+            }
+        }
+
+        if (i == 3) {
+            func_808F7E74(this, globalCtx);
+        }
+    }
+
+    if (sp70 != 0) {
+        func_808F77E4(this);
+        this->actor.shape.rot.x = -this->actor.world.rot.x;
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        this->actor.shape.rot.z = this->actor.world.rot.z;
+    }
+
+    if (this->unk_149 != 0) {
+        func_800B8F98(&this->actor, NA_SE_IT_BOMBCHU_MOVE - SFX_FLAG);
+    }
+
+    if (this->actor.speedXZ != 0.0f) {
+        this->unk_17C = this->actor.speedXZ;
+    }
+}
 
 void func_808F7E74(EnBomChu* this, GlobalContext* globalCtx) {
     EnBom* bomb;
