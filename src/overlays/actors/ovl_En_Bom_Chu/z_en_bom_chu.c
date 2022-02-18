@@ -18,6 +18,8 @@ void EnBomChu_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_808F7868(EnBomChu* this, GlobalContext* globalCtx);
 void func_808F7A84(EnBomChu* this, GlobalContext* globalCtx);
 void func_808F7FA0(EnBomChu* this, GlobalContext* globalCtx);
+void func_808F79D4(EnBomChu* this);
+void func_808F7E74(EnBomChu* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Bom_Chu_InitVars = {
@@ -80,7 +82,24 @@ void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F77E4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7868.s")
+void func_808F7868(EnBomChu* this, GlobalContext* globalCtx) {
+    Player* player;
+
+    if (this->unk_14A == 0) {
+        func_808F7E74(this, globalCtx);
+    } else if (Actor_HasNoParent(&this->actor, globalCtx)) {
+        player = GET_PLAYER(globalCtx);
+        Math_Vec3f_Copy(&this->actor.world.pos, &player->actor.world.pos);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+        this->actor.shape.rot.y = player->actor.shape.rot.y;
+        this->actor.flags |= ACTOR_FLAG_1;
+        func_800B8EF4(globalCtx, &this->actor);
+        this->unk_149 = 1;
+        this->actor.speedXZ = 8.0f;
+        this->unk_17C = 8.0f;
+        func_808F79D4(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7944.s")
 

@@ -11,11 +11,12 @@ typedef struct EnBomChu {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnBomChuActionFunc actionFunc;
     /* 0x148 */ s8 unk_148;
-    /* 0x149 */ char unk_149[0x1];
+    /* 0x149 */ s8 unk_149;
     /* 0x14A */ s16 unk_14A;
     /* 0x14C */ char unk_14C[0x28];
     /* 0x174 */ f32 unk_174;
-    /* 0x178 */ char pad178[0x8];
+    /* 0x178 */ char pad178[0x4];
+    /* 0x17C */ f32 unk_17C;
     /* 0x180 */ s32 unk_180;
     /* 0x184 */ s32 unk_184;
     /* 0x188 */ ColliderSphere unk_188;
