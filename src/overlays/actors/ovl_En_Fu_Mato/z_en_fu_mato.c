@@ -58,8 +58,10 @@ static ColliderSphereInit sSphereInit = {
     { 0, { { 0, 0, 0 }, 200 }, 100 },
 };
 
-Gfx* D_80ACF63C[] = { object_fu_mato_DL_001C80, object_fu_mato_DL_001D68, object_fu_mato_DL_001E50,
-                      object_fu_mato_DL_001F38, object_fu_mato_DL_002020, object_fu_mato_DL_002108 };
+Gfx* D_80ACF63C[] = {
+    object_fu_mato_DL_001C80, object_fu_mato_DL_001D68, object_fu_mato_DL_001E50,
+    object_fu_mato_DL_001F38, object_fu_mato_DL_002020, object_fu_mato_DL_002108,
+};
 
 Vec2f D_80ACF654[] = {
     { -1.0f, -1.73f }, { 1.0f, -1.73f }, { 2.0f, 0.0f }, { 1.0f, 1.73f }, { -1.0f, 1.73f }, { -2.0f, 0.0f },
