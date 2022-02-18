@@ -79,7 +79,60 @@ void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroySphere(globalCtx, &this->unk_188);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F75D0.s")
+s32 func_808F75D0(EnBomChu* this, CollisionPoly* floorPoly, GlobalContext* globalCtx) {
+    Vec3f normal;
+    Vec3f vec;
+    f32 angle;
+    f32 magnitude;
+    f32 normDotUp;
+
+    this->actor.floorPoly = floorPoly;
+
+    if (floorPoly != NULL) {
+        normal.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
+        normal.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
+        normal.z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
+    } else {
+        func_808F7E74(this, globalCtx);
+        return 0;
+    }
+
+    normDotUp = DOTXYZ(normal, this->unk_158);
+
+    if (fabsf(normDotUp) >= 0.999f) {
+        return 0;
+    }
+
+    angle = func_80086C48(normDotUp);
+    if (angle < 0.001f) {
+        return 0;
+    }
+
+    Math3D_CrossProduct(&this->unk_158, &normal, &vec);
+
+    magnitude = Math3D_Vec3fMagnitude(&vec);
+
+    if (magnitude < 0.001f) {
+        func_808F7E74(this, globalCtx);
+        return 0;
+    }
+
+    Math_Vec3f_Scale(&vec, 1.0f / magnitude);
+    Matrix_InsertRotationAroundUnitVector_f(angle, &vec, 0);
+    Matrix_MultiplyVector3fByState(&this->unk_164, &vec);
+    Math_Vec3f_Copy(&this->unk_164, &vec);
+    Math3D_CrossProduct(&this->unk_164, &normal, &this->unk_14C);
+
+    magnitude = Math3D_Vec3fMagnitude(&this->unk_14C);
+    if (magnitude < 0.001f) {
+        func_808F7E74(this, globalCtx);
+        return 0;
+    }
+
+    Math_Vec3f_Scale(&this->unk_14C, 1.0f / magnitude);
+    Math_Vec3f_Copy(&this->unk_158, &normal);
+    return 1;
+}
 
 void func_808F77E4(EnBomChu* this) {
     MtxF mf;
