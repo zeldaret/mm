@@ -357,7 +357,7 @@ void EnBomChu_ModelToWorld(EnBomChu* this, Vec3f* posModel, Vec3f* dest) {
               (this->axisForwards.z * posModel->z);
 }
 
-void EnBomChu_SpawnRipplesAndSplashes(EnBomChu* this, GlobalContext* globalCtx, f32 y, s32 arg3) {
+void EnBomChu_SpawnRipplesAndSplashes(EnBomChu* this, GlobalContext* globalCtx, f32 y, s32 spawnExtraRipples) {
     s32 pad;
     Vec3f pos;
 
@@ -367,7 +367,7 @@ void EnBomChu_SpawnRipplesAndSplashes(EnBomChu* this, GlobalContext* globalCtx, 
 
     EffectSsGRipple_Spawn(globalCtx, &pos, 70, 500, 0);
 
-    if (arg3 != 0) {
+    if (spawnExtraRipples) {
         EffectSsGRipple_Spawn(globalCtx, &pos, 70, 500, 4);
         EffectSsGRipple_Spawn(globalCtx, &pos, 70, 500, 8);
     } else {
@@ -487,12 +487,12 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
         waterY = this->actor.world.pos.y;
 
         if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
-                                 &waterY, &waterBox) != 0) {
+                                 &waterY, &waterBox)) {
             this->actor.depthInWater = waterY - this->actor.world.pos.y;
 
             if (this->actor.depthInWater < 0.0f) {
                 if (this->actor.bgCheckFlags & 0x20) {
-                    EnBomChu_SpawnRipplesAndSplashes(this, globalCtx, waterY, 1);
+                    EnBomChu_SpawnRipplesAndSplashes(this, globalCtx, waterY, true);
                 }
 
                 this->actor.bgCheckFlags &= ~0x20;
@@ -500,7 +500,7 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             if (!(this->actor.bgCheckFlags & 0x20) && (this->timer != 120)) {
-                EnBomChu_SpawnRipplesAndSplashes(this, globalCtx, waterY, 1);
+                EnBomChu_SpawnRipplesAndSplashes(this, globalCtx, waterY, true);
             } else {
                 EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, 0.0f, 3.0f, 15.0f, 0.25f);
             }
