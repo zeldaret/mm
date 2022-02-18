@@ -103,7 +103,19 @@ void func_808F7868(EnBomChu* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7944.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F79D4.s")
+void func_808F79D4(EnBomChu* this) {
+    func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_158);
+    Matrix_GetStateTranslationAndScaledZ(1.0f, &this->unk_14C);
+    Matrix_GetStateTranslationAndScaledX(1.0f, &this->unk_164);
+    this->actor.world.rot.x = -this->actor.shape.rot.x;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actor.world.rot.z = this->actor.shape.rot.z;
+    this->actionFunc = func_808F7A84;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bom_Chu/func_808F7A84.s")
 
