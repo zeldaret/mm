@@ -3,7 +3,7 @@
  * Description: Unused System for NPCs (includes animation, door interaction, blinking, pathing, and collider helpers)
  */
 
-#include "z_en_hy.h"
+#include "z_en_hy_code.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_aob/object_aob.h"
 #include "objects/object_bba/object_bba.h"
@@ -18,7 +18,7 @@ static AnimationInfoS sAnimations[] = {
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_bba_Anim_005DC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
