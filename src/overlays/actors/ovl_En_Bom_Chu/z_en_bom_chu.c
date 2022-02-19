@@ -157,12 +157,15 @@ void func_808F77E4(EnBomChu* this) {
     mf.xx = this->axisLeft.x;
     mf.xy = this->axisLeft.y;
     mf.xz = this->axisLeft.z;
+
     mf.yx = this->axisUp.x;
     mf.yy = this->axisUp.y;
     mf.yz = this->axisUp.z;
+
     mf.zx = this->axisForwards.x;
     mf.zy = this->axisForwards.y;
     mf.zz = this->axisForwards.z;
+
     func_8018219C(&mf, &this->actor.world.rot, 0);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
@@ -223,7 +226,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     Vec3f posSide;
     Vec3f posUpDown;
 
-    bgIdUpDown = bgIdSide = 0x32;
+    bgIdUpDown = bgIdSide = BGCHECK_SCENE;
     sp70 = 0;
 
     this->actor.speedXZ = this->movingSpeed;
@@ -243,6 +246,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     posB.z = this->actor.world.pos.z - (this->axisUp.z * 4.0f);
 
     if (func_808F7944(globalCtx, &posA, &posB, &posUpDown, &polyUpDown, &bgIdUpDown)) {
+        // forwards
         posB.x = (this->axisForwards.x * lineLength) + posA.x;
         posB.y = (this->axisForwards.y * lineLength) + posA.y;
         posB.z = (this->axisForwards.z * lineLength) + posA.z;
@@ -267,14 +271,17 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
 
         for (i = 0; i < 3; i++) {
             if (i == 0) {
+                // backwards
                 posB.x = posA.x - (this->axisForwards.x * lineLength);
                 posB.y = posA.y - (this->axisForwards.y * lineLength);
                 posB.z = posA.z - (this->axisForwards.z * lineLength);
             } else if (i == 1) {
+                // left
                 posB.x = posA.x + (this->axisLeft.x * lineLength);
                 posB.y = posA.y + (this->axisLeft.y * lineLength);
                 posB.z = posA.z + (this->axisLeft.z * lineLength);
             } else {
+                // right
                 posB.x = posA.x - (this->axisLeft.x * lineLength);
                 posB.y = posA.y - (this->axisLeft.y * lineLength);
                 posB.z = posA.z - (this->axisLeft.z * lineLength);
@@ -289,6 +296,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
         }
 
         if (i == 3) {
+            // no collision nearby
             EnBomChu_Explode(this, globalCtx);
         }
     }
@@ -389,7 +397,7 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
     f32 cos;
     f32 tempX;
     CollisionPoly* sp3C = NULL;
-    s32 bgId = 0x32;
+    s32 bgId = BGCHECK_SCENE;
     s32 sp34;
 
     Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
@@ -424,7 +432,7 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
     posB.y = this->actor.world.pos.y + (2.0f * this->axisUp.y);
     posB.z = this->actor.world.pos.z + (2.0f * this->axisUp.z);
 
-    if (func_808F7944(globalCtx, &posA, &posB, &sp74, &sp3C, &bgId) != 0) {
+    if (func_808F7944(globalCtx, &posA, &posB, &sp74, &sp3C, &bgId)) {
         sp34 = EnBomChu_UpdateFloorPoly(this, sp3C, globalCtx);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp74);
         this->actor.floorBgId = bgId;
@@ -441,12 +449,12 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
 void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnBomChu* this = THIS;
-    Vec3f sp54;
-    Vec3f sp48;
+    Vec3f blureP1;
+    Vec3f blureP2;
     WaterBox* waterBox;
     f32 waterY;
 
-    if (this->actor.floorBgId != 0x32) {
+    if (this->actor.floorBgId != BGCHECK_SCENE) {
         func_808F818C(this, globalCtx);
     }
 
@@ -463,9 +471,11 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Actor_MoveWithoutGravity(&this->actor);
+
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = this->actor.world.pos.y;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
+
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     if (this->actionFunc != EnBomChu_WaitForRelease) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -478,11 +488,13 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->isMoving) {
         this->visualJitter =
             (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->timer));
-        EnBomChu_ModelToWorld(this, &sBlureP1Model, &sp54);
-        EnBomChu_ModelToWorld(this, &sBlureP2LeftModel, &sp48);
-        EffectBlure_AddVertex(Effect_GetByIndex(this->blure1Index), &sp54, &sp48);
-        EnBomChu_ModelToWorld(this, &sBlureP2RightModel, &sp48);
-        EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &sp54, &sp48);
+        EnBomChu_ModelToWorld(this, &sBlureP1Model, &blureP1);
+
+        EnBomChu_ModelToWorld(this, &sBlureP2LeftModel, &blureP2);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->blure1Index), &blureP1, &blureP2);
+
+        EnBomChu_ModelToWorld(this, &sBlureP2RightModel, &blureP2);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &blureP1, &blureP2);
 
         waterY = this->actor.world.pos.y;
 
