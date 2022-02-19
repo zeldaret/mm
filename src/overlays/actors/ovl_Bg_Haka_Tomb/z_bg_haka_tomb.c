@@ -83,15 +83,15 @@ void func_80BD66AC(BgHakaTomb* this, GlobalContext* globalCtx) {
     s16 temp;
 
     if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= 9;
+        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     }
     if (!func_80BD6638(&temp, this->cutscenes, 1) && (temp < 0) && Flags_GetClear(globalCtx, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= 1;
+        this->dyna.actor.flags |= ACTOR_FLAG_1;
         if (this->dyna.actor.isTargeted) {
             func_80BD6754(this);
         }
     } else {
-        this->dyna.actor.flags &= ~1;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_1;
     }
 }
 

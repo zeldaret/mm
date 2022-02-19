@@ -402,6 +402,7 @@ animdict = {
     "func_8013D8DC": "SubS_IsObjectLoaded",
     "func_8013D924": "SubS_GetObjectIndex",
     "func_8013D5E8": "SubS_AngleDiffLessEqual",
+    "func_8012F22C": "Inventory_GetSkullTokenCount",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",

@@ -10,7 +10,7 @@
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGo*)thisx)
 
@@ -712,7 +712,7 @@ s32 func_80A12954(EnGo* this, GlobalContext* globalCtx) {
         (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
         (globalCtx->csCtx.unk_12 == 0)) {
         if (this->unk_3F0 == 0) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_394 = 255;
             this->unk_3F0 = 1;
             this->unk_18C = this->actionFunc;
@@ -720,7 +720,7 @@ s32 func_80A12954(EnGo* this, GlobalContext* globalCtx) {
         SubS_UpdateFlags(&this->unk_390, 0, 7);
         this->actionFunc = func_80A14FC8;
     } else if (this->unk_3F0 != 0) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_394 = 255;
         this->unk_3F0 = 0;
         SubS_UpdateFlags(&this->unk_390, 3, 7);
@@ -1286,7 +1286,7 @@ void func_80A14018(EnGo* this, GlobalContext* globalCtx) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166B0, &sp2C);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp2C);
     }
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_3EC = 0;
     this->unk_390 = 0;
@@ -1301,7 +1301,7 @@ void func_80A14104(EnGo* this, GlobalContext* globalCtx) {
     func_80A12C48(this, globalCtx, D_80A166D4[ENGO_GET_70(&this->actor) % 2]);
     temp = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->skelAnime.curFrame = temp;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_3EC = 0;
     this->unk_390 = 0;
@@ -1331,7 +1331,7 @@ void func_80A1428C(EnGo* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     if (this->unk_284 != NULL) {
-        this->actor.flags &= ~0x2000000;
+        this->actor.flags &= ~ACTOR_FLAG_2000000;
         func_8013C8B8(this->unk_284, 0, &sp24);
         temp = Math_Vec3f_Yaw(&sp30, &sp24);
         this->actor.shape.rot.y = temp;
@@ -1437,7 +1437,7 @@ void func_80A146CC(EnGo* this, GlobalContext* globalCtx) {
     func_80A12C48(this, globalCtx, 0);
     this->unk_3A4 *= 5.0f;
     Actor_SetScale(&this->actor, this->unk_3A4);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.targetMode = 3;
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
@@ -1758,8 +1758,8 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
     if ((this->unk_390 & 0x1000) && (this->actor.colChkInfo.damageEffect == 0xF)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
-        this->actor.flags &= ~0x10;
-        this->actor.flags |= 0x2000000;
+        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_2000000;
 
         func_80A118F8(this->unk_3F8, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
