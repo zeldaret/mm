@@ -390,7 +390,7 @@ void EnBomChu_SpawnRipplesAndSplashes(EnBomChu* this, GlobalContext* globalCtx, 
     EffectSsGSplash_Spawn(globalCtx, &pos, NULL, NULL, 1, 450);
 }
 
-void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
+void EnBomChu_HandleNonSceneCollision(EnBomChu* this, GlobalContext* globalCtx) {
     Vec3f originalWorldPos;
     Vec3f posA;
     Vec3f posB;
@@ -440,6 +440,7 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->actor.world.pos, &originalWorldPos);
         this->actor.floorBgId = bgId;
         this->actor.speedXZ = 0.0f;
+
         if (isFloorPolyValid) {
             EnBomChu_UpdateRotation(this);
             this->actor.shape.rot.x = -this->actor.world.rot.x;
@@ -458,7 +459,7 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 waterY;
 
     if (this->actor.floorBgId != BGCHECK_SCENE) {
-        func_808F818C(this, globalCtx);
+        EnBomChu_HandleNonSceneCollision(this, globalCtx);
     }
 
     if (this->shouldTimerCountDown) {

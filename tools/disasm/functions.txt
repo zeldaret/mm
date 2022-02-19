@@ -6759,7 +6759,7 @@
     0x808F7FA0:("EnBomChu_WaitForDeath",),
     0x808F7FD0:("EnBomChu_ModelToWorld",),
     0x808F8080:("EnBomChu_SpawnRipplesAndSplashes",),
-    0x808F818C:("func_808F818C",),
+    0x808F818C:("EnBomChu_HandleNonSceneCollision",),
     0x808F83B8:("EnBomChu_Update",),
     0x808F8714:("EnBomChu_Draw",),
     0x808F8AA0:("func_808F8AA0",),
