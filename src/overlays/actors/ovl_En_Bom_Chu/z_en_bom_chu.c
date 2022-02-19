@@ -151,7 +151,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
     return 1;
 }
 
-void func_808F77E4(EnBomChu* this) {
+void EnBomChu_UpdateRotation(EnBomChu* this) {
     MtxF mf;
 
     mf.xx = this->axisLeft.x;
@@ -189,14 +189,14 @@ void EnBomChu_WaitForRelease(EnBomChu* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808F7944(GlobalContext* globalCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult, CollisionPoly** poly,
-                  s32* bgId) {
-    if ((BgCheck_EntityLineTest1(&globalCtx->colCtx, posA, posB, posResult, poly, 1, 1, 1, 1, bgId)) &&
-        ((func_800C9A4C(&globalCtx->colCtx, *poly, *bgId) & 0x30) == 0)) {
-        return 1;
+s32 EnBomChu_IsOnCollisionPoly(GlobalContext* globalCtx, Vec3f* posA, Vec3f* posB, Vec3f* posResult,
+                               CollisionPoly** poly, s32* bgId) {
+    if ((BgCheck_EntityLineTest1(&globalCtx->colCtx, posA, posB, posResult, poly, true, true, true, true, bgId)) &&
+        (!(func_800C9A4C(&globalCtx->colCtx, *poly, *bgId) & 0x30))) {
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 void EnBomChu_SetupMove(EnBomChu* this) {
@@ -245,13 +245,13 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     posB.y = this->actor.world.pos.y - (this->axisUp.y * 4.0f);
     posB.z = this->actor.world.pos.z - (this->axisUp.z * 4.0f);
 
-    if (func_808F7944(globalCtx, &posA, &posB, &posUpDown, &polyUpDown, &bgIdUpDown)) {
+    if (EnBomChu_IsOnCollisionPoly(globalCtx, &posA, &posB, &posUpDown, &polyUpDown, &bgIdUpDown)) {
         // forwards
         posB.x = (this->axisForwards.x * lineLength) + posA.x;
         posB.y = (this->axisForwards.y * lineLength) + posA.y;
         posB.z = (this->axisForwards.z * lineLength) + posA.z;
 
-        if (func_808F7944(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
+        if (EnBomChu_IsOnCollisionPoly(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
             sp70 = EnBomChu_UpdateFloorPoly(this, polySide, globalCtx);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
@@ -287,7 +287,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
                 posB.z = posA.z - (this->axisLeft.z * lineLength);
             }
 
-            if (func_808F7944(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
+            if (EnBomChu_IsOnCollisionPoly(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
                 sp70 = EnBomChu_UpdateFloorPoly(this, polySide, globalCtx);
                 Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
                 this->actor.floorBgId = bgIdSide;
@@ -302,7 +302,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     }
 
     if (sp70 != 0) {
-        func_808F77E4(this);
+        EnBomChu_UpdateRotation(this);
         this->actor.shape.rot.x = -this->actor.world.rot.x;
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.shape.rot.z = this->actor.world.rot.z;
@@ -388,20 +388,20 @@ void EnBomChu_SpawnRipplesAndSplashes(EnBomChu* this, GlobalContext* globalCtx, 
 }
 
 void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
-    Vec3f sp74;
+    Vec3f originalWorldPos;
     Vec3f posA;
     Vec3f posB;
-    Vec3f sp50;
+    Vec3f originalAxisUp;
     s16 yaw;
     f32 sin;
     f32 cos;
     f32 tempX;
-    CollisionPoly* sp3C = NULL;
+    CollisionPoly* poly = NULL;
     s32 bgId = BGCHECK_SCENE;
     s32 sp34;
 
-    Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
-    Math_Vec3f_Copy(&sp50, &this->axisUp);
+    Math_Vec3f_Copy(&originalWorldPos, &this->actor.world.pos);
+    Math_Vec3f_Copy(&originalAxisUp, &this->axisUp);
     yaw = this->actor.shape.rot.y;
     BgCheck2_UpdateActorAttachedToMesh(&globalCtx->colCtx, this->actor.floorBgId, &this->actor);
 
@@ -424,21 +424,21 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
         this->axisLeft.z = (this->axisLeft.z * cos) - (sin * tempX);
     }
 
-    posA.x = sp74.x + (2.0f * sp50.x);
-    posA.y = sp74.y + (2.0f * sp50.y);
-    posA.z = sp74.z + (2.0f * sp50.z);
+    posA.x = originalWorldPos.x + (2.0f * originalAxisUp.x);
+    posA.y = originalWorldPos.y + (2.0f * originalAxisUp.y);
+    posA.z = originalWorldPos.z + (2.0f * originalAxisUp.z);
 
     posB.x = this->actor.world.pos.x + (2.0f * this->axisUp.x);
     posB.y = this->actor.world.pos.y + (2.0f * this->axisUp.y);
     posB.z = this->actor.world.pos.z + (2.0f * this->axisUp.z);
 
-    if (func_808F7944(globalCtx, &posA, &posB, &sp74, &sp3C, &bgId)) {
-        sp34 = EnBomChu_UpdateFloorPoly(this, sp3C, globalCtx);
-        Math_Vec3f_Copy(&this->actor.world.pos, &sp74);
+    if (EnBomChu_IsOnCollisionPoly(globalCtx, &posA, &posB, &originalWorldPos, &poly, &bgId)) {
+        sp34 = EnBomChu_UpdateFloorPoly(this, poly, globalCtx);
+        Math_Vec3f_Copy(&this->actor.world.pos, &originalWorldPos);
         this->actor.floorBgId = bgId;
         this->actor.speedXZ = 0.0f;
         if (sp34 != 0) {
-            func_808F77E4(this);
+            EnBomChu_UpdateRotation(this);
             this->actor.shape.rot.x = -this->actor.world.rot.x;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->actor.shape.rot.z = this->actor.world.rot.z;
