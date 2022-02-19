@@ -2071,8 +2071,9 @@ void AudioOcarina_MemoryGameSetNumNotes(u8 minigameRound) {
 
 /**
  * Unused remnant of OoT, Id 14 now represent Goron Lullaby Intro instead of the OoT ocarina memory game
+ *
  */
-#define OCARINA_SONG_MEMORYGAME OCARINA_SONG_GORON_LULLABY_INTRO
+#define OCARINA_SONG_MEMORYGAME 14
 s32 AudioOcarina_MemoryGameGenerateNotes(void) {
     u32 randButtonIndex;
     u8 randPitch;
@@ -2088,6 +2089,7 @@ s32 AudioOcarina_MemoryGameGenerateNotes(void) {
         randPitch = sButtonToPitchMap[(randButtonIndex + 1) % ARRAY_COUNT(sButtonToPitchMap)];
     }
 
+    //! @bug calling this function in MM will overwrite Goron Lullaby Intro
     sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].pitch = randPitch;
     sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].length = 45;
     sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].volume = 0x50;
