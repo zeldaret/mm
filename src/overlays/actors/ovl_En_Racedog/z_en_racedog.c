@@ -106,7 +106,13 @@ void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
                      arg1->mode, arg1->morphFrames);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B246F4.s")
+void func_80B246F4(EnRacedog* this, GlobalContext* globalCtx) {
+    this->collider.dim.pos.x = this->actor.world.pos.x;
+    this->collider.dim.pos.y = this->actor.world.pos.y;
+    this->collider.dim.pos.z = this->actor.world.pos.z;
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B2478C.s")
 
