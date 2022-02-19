@@ -1449,7 +1449,11 @@ void func_80A146CC(EnGo* this, GlobalContext* globalCtx) {
 }
 
 void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
-    s32 sp38[2] = { 0x0000003E, 0x00000F64 };
+    EffectTireMarkInit sp38 = {
+        0,
+        62,
+        { 0, 0, 15, 100 },
+    };
 
     if ((this->unk_288 < 0) || func_8013D8DC(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
         func_8013D8DC(this->unk_289, globalCtx)) {
@@ -1464,7 +1468,7 @@ void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
         Collider_InitAndSetSphere(globalCtx, &this->colliderSphere, &this->actor, &sSphereInit);
         Collider_InitAndSetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit2);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-        Effect_Add(globalCtx, &this->unk_3E8, 4, 0, 0, &sp38);
+        Effect_Add(globalCtx, &this->unk_3E8, EFFECT_TIRE_MARK, 0, 0, &sp38);
 
         this->actor.targetMode = 1;
         this->unk_3A4 = 0.01f;

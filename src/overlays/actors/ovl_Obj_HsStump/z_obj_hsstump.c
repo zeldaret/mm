@@ -106,7 +106,7 @@ void ObjHsStump_Appear(ObjHsStump* this, GlobalContext* globalCtx) {
             iceSmokeVelOffset.x = 1.0f;
             iceSmokeVelOffset.y = 0.5f;
             iceSmokeVelOffset.z = 0.0f;
-            
+
             angleDeg = (360.0f / numDirections);
             angleBrad = (s32)(angleDeg * (0x10000 / 360.0f));
 
