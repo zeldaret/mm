@@ -357,18 +357,18 @@ void EnBomChu_WaitForDeath(EnBomChu* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Transform coordinates from model space to world space, according to current orientation.
- * `posModel` is expected to already be at world scale (1/100 compared to model scale)
+ * Transform coordinates from actor coordinate space to world space, according to current orientation.
+ * `offset` is expected to already be at world scale.
  */
-void EnBomChu_ModelToWorld(EnBomChu* this, Vec3f* posModel, Vec3f* dest) {
-    f32 x = posModel->x + this->visualJitter;
+void EnBomChu_ActorCoordsToWorld(EnBomChu* this, Vec3f* offset, Vec3f* pos) {
+    f32 x = offset->x + this->visualJitter;
 
-    dest->x = this->actor.world.pos.x + (this->axisLeft.x * x) + (this->axisUp.x * posModel->y) +
-              (this->axisForwards.x * posModel->z);
-    dest->y = this->actor.world.pos.y + (this->axisLeft.y * x) + (this->axisUp.y * posModel->y) +
-              (this->axisForwards.y * posModel->z);
-    dest->z = this->actor.world.pos.z + (this->axisLeft.z * x) + (this->axisUp.z * posModel->y) +
-              (this->axisForwards.z * posModel->z);
+    pos->x = this->actor.world.pos.x + (this->axisLeft.x * x) + (this->axisUp.x * offset->y) +
+             (this->axisForwards.x * offset->z);
+    pos->y = this->actor.world.pos.y + (this->axisLeft.y * x) + (this->axisUp.y * offset->y) +
+             (this->axisForwards.y * offset->z);
+    pos->z = this->actor.world.pos.z + (this->axisLeft.z * x) + (this->axisUp.z * offset->y) +
+             (this->axisForwards.z * offset->z);
 }
 
 void EnBomChu_SpawnRipplesAndSplashes(EnBomChu* this, GlobalContext* globalCtx, f32 y, s32 spawnExtraRipples) {
@@ -454,9 +454,9 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, GlobalContext* globalCtx) 
 }
 
 void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
-    static Vec3f sBlureP1Model = { 0.0f, 7.0f, -6.0f };
-    static Vec3f sBlureP2LeftModel = { 12.0f, 0.0f, -5.0f };
-    static Vec3f sBlureP2RightModel = { -12.0f, 0.0f, -5.0f };
+    static Vec3f sBlureP1Offset = { 0.0f, 7.0f, -6.0f };
+    static Vec3f sBlureP2LeftOffset = { 12.0f, 0.0f, -5.0f };
+    static Vec3f sBlureP2RightOffset = { -12.0f, 0.0f, -5.0f };
     s32 pad;
     EnBomChu* this = THIS;
     Vec3f blureP1;
@@ -498,12 +498,12 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->isMoving) {
         this->visualJitter =
             (5.0f + (Rand_ZeroOne() * 3.0f)) * Math_SinS((((s32)(Rand_ZeroOne() * 512.0f) + 0x3000) * this->timer));
-        EnBomChu_ModelToWorld(this, &sBlureP1Model, &blureP1);
+        EnBomChu_ActorCoordsToWorld(this, &sBlureP1Offset, &blureP1);
 
-        EnBomChu_ModelToWorld(this, &sBlureP2LeftModel, &blureP2);
+        EnBomChu_ActorCoordsToWorld(this, &sBlureP2LeftOffset, &blureP2);
         EffectBlure_AddVertex(Effect_GetByIndex(this->blure1Index), &blureP1, &blureP2);
 
-        EnBomChu_ModelToWorld(this, &sBlureP2RightModel, &blureP2);
+        EnBomChu_ActorCoordsToWorld(this, &sBlureP2RightOffset, &blureP2);
         EffectBlure_AddVertex(Effect_GetByIndex(this->blure2Index), &blureP1, &blureP2);
 
         waterY = this->actor.world.pos.y;
