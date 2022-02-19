@@ -411,7 +411,7 @@ void func_808F3B40(EnIn* this, GlobalContext* globalCtx) {
         textId = gSaveContext.day != 3 ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
     }
 }
 
@@ -435,7 +435,7 @@ void func_808F3C40(EnIn* this, GlobalContext* globalCtx) {
         textId = gSaveContext.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
     } else {
-        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
     }
 }
 
@@ -759,7 +759,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
-                                Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                                Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -905,7 +905,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F35D8(this, globalCtx);
                     if (Interface_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
-                        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x347F);
@@ -1011,7 +1011,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
-                                Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                                Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
                                 func_801159EC(-globalCtx->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -1109,7 +1109,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_808F35D8(this, globalCtx);
                     if (Interface_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
-                        Actor_PickUp(&this->actor, globalCtx, 0x92, 500.0f, 100.0f);
+                        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A2);
