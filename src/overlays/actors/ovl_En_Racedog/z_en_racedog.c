@@ -101,8 +101,9 @@ extern f32 D_80B25F14;
 extern D_80B25D90_s D_80B25D90[];
 extern Vec3f D_80B26000;
 
-extern UNK_TYPE D_06000618;
+extern Gfx D_06000618[];
 extern UNK_TYPE D_060080F0;
+extern Gfx D_06000550[];
 
 void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
     f32 frameCount;
@@ -205,8 +206,35 @@ void func_80B2583C(EnRacedog* this) {
     }
 }
 
-void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B258D8.s")
+void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
+    Vec3s sp48 = gZeroVec3s;
+    s32 phi_v0;
+
+    if (this->unk_290 == this->unk_292) {
+        phi_v0 = 1;
+    } else {
+        phi_v0 = 0;
+    }
+
+    if (phi_v0 != 0) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        func_8012C28C(globalCtx->state.gfxCtx);
+        func_80B2583C(this);
+        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
+                                              this->actor.world.pos.z, &sp48);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->unk_2BC, 0, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, 255, this->unk_2C0, 0, 255);
+        Matrix_Scale(this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, MTXMODE_APPLY);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, D_06000618);
+        gSPDisplayList(POLY_OPA_DISP++, D_06000550);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 s32 func_80B25A74(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     return false;
