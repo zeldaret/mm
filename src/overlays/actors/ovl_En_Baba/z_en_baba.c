@@ -42,11 +42,11 @@ const ActorInit En_Baba_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_bba_Anim_005DC4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, 
+    { &object_bba_Anim_005DC4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_bba_Anim_006550, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_bba_Anim_006B10, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, 
+    { &object_bba_Anim_006B10, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_bba_Anim_005154, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_bba_Anim_0058B8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, 
+    { &object_bba_Anim_0058B8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     { &object_bba_Anim_004910, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
