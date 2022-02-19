@@ -147,7 +147,7 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spA0);
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
-    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, 1, 1, 1, 1, &spB8,
+    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, true, true, true, true, &spB8,
                                 &this->dyna.actor)) {
         this->dyna.actor.world.pos.x = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.x) * 1.9f) + sp88.x;
         this->dyna.actor.world.pos.y = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.y) * 1.9f) + sp88.y;

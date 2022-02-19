@@ -151,8 +151,8 @@ s32 EnSsh_CheckCeilingPos(EnSsh* this, GlobalContext* globalCtx) {
     posB.x = this->actor.world.pos.x;
     posB.y = this->actor.world.pos.y + 1000.0f;
     posB.z = this->actor.world.pos.z;
-    if (!BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &posB, &this->ceilingPos, &poly, 0, 0, 1,
-                                 1, &bgId)) {
+    if (!BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &posB, &this->ceilingPos, &poly, false, false, true,
+                                 true, &bgId)) {
         return false;
     }
     return true;

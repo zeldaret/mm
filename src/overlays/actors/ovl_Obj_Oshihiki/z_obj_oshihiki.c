@@ -345,7 +345,7 @@ s32 ObjOshihiki_CheckWall(GlobalContext* globalCtx, s16 angle, f32 direction, Ob
         faceVtxNext.y = faceVtx.y;
         faceVtxNext.z = (maxDist * cs) + faceVtx.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &faceVtx, &faceVtxNext, &posResult, &outPoly, 1, 0, 0, 1, &bgId,
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &faceVtx, &faceVtxNext, &posResult, &outPoly, true, false, false, true, &bgId,
                                     &this->dyna.actor, 0.0f)) {
             return true;
         }

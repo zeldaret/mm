@@ -276,7 +276,7 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp48, &sp60,
-                                                               &colPoly, 1, 0, 0, 1, &sp44)) {
+                                                               &colPoly, true, false, false, true, &sp44)) {
                     func_80C0113C(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp48);
                     this->unk_2B0 = Rand_S16Offset(30, 50);
@@ -295,8 +295,8 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
                 Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, 1, 0, 0,
-                                            1, &sp44)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, true, false, false,
+                                            true, &sp44)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80C0113C(this, 20, 1.0f);
@@ -556,7 +556,7 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     sp74.y += 20.0f;
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, 1, 0, 0, 1, &sp60)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, true, false, false, true, &sp60)) {
         s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 

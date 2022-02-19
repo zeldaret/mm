@@ -797,8 +797,8 @@ void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
 
             for (i = 1; i >= 0; i--) {
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70, 1,
-                                            1, 0, 1, &sp6C)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70, true,
+                                            true, false, true, &sp6C)) {
                     func_800BBFB0(globalCtx, &sp74, 0.0f, 1, 300, 150, 1);
                     func_80897258(globalCtx, this, &sp74, 0.0f, 1.5f);
                 }
