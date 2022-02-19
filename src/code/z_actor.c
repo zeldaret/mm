@@ -3405,7 +3405,8 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
                     if (((phi_s2) || (phi_s2_2)) && (func_800B83BC(actor, temp_f0_2))) {
                         if (func_800BB59C(globalCtx, actor)) {
                             if (((!BgCheck_CameraLineTest1(&globalCtx->colCtx, &player->actor.focus.pos,
-                                                           &actor->focus.pos, &sp70, &sp80, 1, 1, 1, 1, &sp7C)) ||
+                                                           &actor->focus.pos, &sp70, &sp80, true, true, true, true,
+                                                           &sp7C)) ||
                                  (SurfaceType_IsIgnoredByProjectiles(&globalCtx->colCtx, sp80, sp7C)))) {
                                 if (actor->targetPriority != 0) {
                                     if ((phi_s2 != 0) && (actor->targetPriority < D_801ED8D4)) {

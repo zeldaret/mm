@@ -184,7 +184,8 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    if (globalCtx->sceneNum == SCENE_MILK_BAR && (gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < CLOCK_TIME(21, 30))) {
+    if (globalCtx->sceneNum == SCENE_MILK_BAR &&
+        (gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < CLOCK_TIME(21, 30))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -251,7 +252,8 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
     }
 
     //! @TODO: 0xED02 nor 0xED01 does not match CLOCK_TIME macro
-    if ((globalCtx->sceneNum == SCENE_MILK_BAR && !(gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < 0xED02)) ||
+    if ((globalCtx->sceneNum == SCENE_MILK_BAR &&
+         !(gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < 0xED02)) ||
         (globalCtx->sceneNum != SCENE_MILK_BAR && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
