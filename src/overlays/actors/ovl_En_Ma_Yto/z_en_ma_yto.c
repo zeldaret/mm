@@ -1464,7 +1464,7 @@ void EnMaYto_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.weekEventReg[22] & 1)) { // Alieans defeated
+    if (this->type == MA_YTO_TYPE_BARN && (gSaveContext.weekEventReg[22] & 1)) { // Aliens defeated
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gCremiaWoodenBox);
     }
