@@ -9,7 +9,7 @@
         <Animation Name="object_ik_Anim_00391C" Offset="0x391C" />
         <Animation Name="object_ik_Anim_004A04" Offset="0x4A04" />
         <Animation Name="object_ik_Anim_005254" Offset="0x5254" />
-        <Animation Name="object_ik_Anim_0057F4" Offset="0x57F4" />
+        <Animation Name="object_ik_Anim_0057F4" Offset="0x57F4" /> <!-- Running? -->
         <Animation Name="object_ik_Anim_006294" Offset="0x6294" />
         <!-- <Blob Name="object_ik_Blob_006730" Size="0x5A0" Offset="0x6730" /> -->
         <!-- <Blob Name="object_ik_Blob_007120" Size="0x11A0" Offset="0x7120" /> -->
