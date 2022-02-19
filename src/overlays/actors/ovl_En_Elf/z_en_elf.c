@@ -7,7 +7,7 @@
 #include "z_en_elf.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnElf*)thisx)
 
@@ -905,13 +905,13 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
 
         if ((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 0) &&
             (globalCtx->csCtx.unk_12 == 0) &&
-            ((globalCtx->csCtx.frames == 0x95) || (globalCtx->csCtx.frames == 0x17D) ||
-             (globalCtx->csCtx.frames == 0x24F))) {
+            ((globalCtx->csCtx.frames == 149) || (globalCtx->csCtx.frames == 381) ||
+             (globalCtx->csCtx.frames == 591))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
         if ((globalCtx->sceneNum == SCENE_SECOM) && (gSaveContext.sceneSetupIndex == 0) &&
-            (globalCtx->csCtx.unk_12 == 4) && (globalCtx->csCtx.frames == 0x5F)) {
+            (globalCtx->csCtx.unk_12 == 4) && (globalCtx->csCtx.frames == 95)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
     } else {

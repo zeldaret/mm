@@ -12,7 +12,7 @@
 #include "objects/object_ikninside_obj/object_ikninside_obj.h"
 #include "objects/object_danpei_object/object_danpei_object.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((DoorSpiral*)thisx)
 
@@ -125,7 +125,7 @@ s32 DoorSpiral_SetSpiralType(DoorSpiral* this, GlobalContext* globalCtx) {
             this->spiralType = SPIRAL_WOODFALL_TEMPLE_ALT;
         }
 
-        this->actor.flags |= 0x10000000;
+        this->actor.flags |= ACTOR_FLAG_10000000;
     }
 
     DoorSpiral_SetupAction(this, DoorSpiral_Wait);

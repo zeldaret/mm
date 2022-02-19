@@ -927,7 +927,7 @@ void EnRailgibud_CheckForGibdoMask(EnRailgibud* this, GlobalContext* globalCtx) 
     if ((this->actionFunc != EnRailgibud_Grab) && (this->actionFunc != EnRailgibud_Damage) &&
         (this->actionFunc != EnRailgibud_GrabFail) && (this->actionFunc != EnRailgibud_TurnAwayAndShakeHead) &&
         (this->actionFunc != EnRailgibud_Dead)) {
-        if ((this->actor.flags & (ACTOR_FLAG_4 | ACTOR_FLAG_1)) == 5) {
+        if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_1 | ACTOR_FLAG_4))) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
                 this->actor.flags &= ~(ACTOR_FLAG_4 | ACTOR_FLAG_1);
                 this->actor.flags |= (ACTOR_FLAG_8 | ACTOR_FLAG_1);
@@ -960,7 +960,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
             this->textId = 0x13B2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
-        } else if (((this->actor.flags & (ACTOR_FLAG_8 | ACTOR_FLAG_1)) == 9) &&
+        } else if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_1 | ACTOR_FLAG_8)) &&
                    !(this->collider.base.acFlags & AC_HIT)) {
             func_800B8614(&this->actor, globalCtx, 100.0f);
         }
