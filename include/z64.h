@@ -722,7 +722,7 @@ typedef struct {
     /* 0x80 */ OSMesg unk_80;
     /* 0x84 */ f32 unk_84;
     /* 0x88 */ f32 unk_88;
-    /* 0x8C */ LightSettingsAdjustments lightAdjustments;
+    /* 0x8C */ EnvLightSettings lightSettings;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
