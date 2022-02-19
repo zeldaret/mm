@@ -19,6 +19,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
 s32 func_80B25490(EnRacedog* this, f32* arg1);
+void func_80B24E14(EnRacedog* this);
 
 typedef struct {
     f32 unk_00;
@@ -206,7 +207,21 @@ void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24CB4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24E14.s")
+void func_80B24E14(EnRacedog* this) {
+    if (this->unk_290 % 2) {
+        D_80B25D88[this->unk_290].unk_0E =
+            (((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & 0xF0) >> 4) + 0x3539;
+    } else {
+        D_80B25D88[this->unk_290].unk_0E = ((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & 0xF) + 0x3539;
+    }
+
+    if ((D_80B25D88[this->unk_290].unk_0E >= 0x3547) || (D_80B25D88[this->unk_290].unk_0E < 0x3539)) {
+        D_80B25D88[this->unk_290].unk_0E = 0x353E;
+    }
+    if (D_80B25D88[this->unk_290].unk_0E == 0x3547) {
+        D_80B25D88[this->unk_290].unk_0E = 0x3538;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24F08.s")
 
