@@ -228,8 +228,8 @@ void EnFsn_UpdateCollider(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleLookToShopkeeperBuyingCutscene(EnFsn* this) {
-    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING && this->lookToShopkeeperBuyingCutscene != this->cutscene &&
-        this->actor.textId == 0x29CE) {
+    if ((this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) &&
+        (this->lookToShopkeeperBuyingCutscene != this->cutscene) && (this->actor.textId == 0x29CE)) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
@@ -884,6 +884,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
         func_8011552C(globalCtx, 6);
         if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
             u32 trueTmp = true;
+
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -996,7 +997,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        if (this->isSelling == true && this->items[this->cursorIdx]->getItemId == GI_MASK_ALL_NIGHT) {
+        if ((this->isSelling == true) && (this->items[this->cursorIdx]->getItemId == GI_MASK_ALL_NIGHT)) {
             func_80151BB4(globalCtx, 45);
             func_80151BB4(globalCtx, 3);
         }
@@ -1407,8 +1408,8 @@ void EnFsn_Blink(EnFsn* this) {
 }
 
 void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnFsn* this = THIS;
     s32 pad;
+    EnFsn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable, this->morphTable,
@@ -1576,7 +1577,6 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, GlobalContext* globalCtx) {
 
 s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFsn* this = THIS;
-    s16 tmp;
     s32 limbRotTableIdx;
 
     if (limbIndex == FSN_LIMB_HEAD) {
@@ -1598,10 +1598,8 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
                 break;
         }
         if (limbRotTableIdx < 9) {
-            tmp = (s32)(Math_SinS(this->limbRotYTable[limbRotTableIdx]) * 200.0f);
-            rot->y += tmp;
-            tmp = (s32)(Math_CosS(this->limbRotZTable[limbRotTableIdx]) * 200.0f);
-            rot->z += tmp;
+            rot->y += (s16)(Math_SinS(this->limbRotYTable[limbRotTableIdx]) * 200.0f);
+            rot->z += (s16)(Math_CosS(this->limbRotZTable[limbRotTableIdx]) * 200.0f);
         }
     }
     if (limbIndex == FSN_LIMB_TOUPEE) {

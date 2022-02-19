@@ -564,8 +564,8 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
             return;
         }
     }
-    if (talkState == 10 && this->actor.params == ENOSSAN_PART_TIME_WORKER &&
-        player->transformation == PLAYER_FORM_ZORA && func_80147624(globalCtx)) {
+    if ((talkState == 10) && (this->actor.params == ENOSSAN_PART_TIME_WORKER) &&
+        (player->transformation == PLAYER_FORM_ZORA) && func_80147624(globalCtx)) {
         this->animationIndex = 9;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 9);
     }
@@ -581,7 +581,7 @@ s32 EnOssan_FacingShopkeeperDialogResult(EnOssan* this, GlobalContext* globalCtx
     switch (globalCtx->msgCtx.choiceIndex) {
         case 0:
             func_8019F208();
-            if (this->actor.params == ENOSSAN_PART_TIME_WORKER && player->transformation == PLAYER_FORM_ZORA) {
+            if ((this->actor.params == ENOSSAN_PART_TIME_WORKER) && (player->transformation == PLAYER_FORM_ZORA)) {
                 this->animationIndex = 9;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 9);
             }
