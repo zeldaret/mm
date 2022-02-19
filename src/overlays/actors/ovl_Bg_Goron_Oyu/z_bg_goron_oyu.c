@@ -7,7 +7,7 @@
 #include "z_bg_goron_oyu.h"
 #include "objects/object_oyu/object_oyu.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgGoronOyu*)thisx)
 

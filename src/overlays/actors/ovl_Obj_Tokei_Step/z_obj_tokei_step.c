@@ -7,7 +7,7 @@
 #include "z_obj_tokei_step.h"
 #include "objects/object_tokei_step/object_tokei_step.h"
 
-#define FLAGS 0x00400010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 
 #define THIS ((ObjTokeiStep*)thisx)
 
@@ -250,7 +250,7 @@ void ObjTokeiStep_Open(ObjTokeiStep* this, GlobalContext* globalCtx) {
 }
 
 void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep* this) {
-    this->dyna.actor.flags &= ~0x10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
     this->actionFunc = ObjTokeiStep_DoNothingOpen;
 }
 

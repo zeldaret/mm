@@ -7,7 +7,7 @@
 #include "z_en_poh.h"
 #include "objects/object_po/object_po.h"
 
-#define FLAGS 0x00001205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
 
 #define THIS ((EnPoh*)thisx)
 
@@ -363,7 +363,7 @@ void func_80B2D07C(EnPoh* this, GlobalContext* globalCtx) {
 
 void func_80B2D0E8(EnPoh* this) {
     this->unk_197 = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Animation_PlayOnceSetSpeed(&this->skelAnime, &object_po_Anim_0011C4, 0.0f);
     this->actionFunc = func_80B2D140;
 }
@@ -372,7 +372,7 @@ void func_80B2D140(EnPoh* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk_197 = 255;
         this->unk_190 = Rand_S16Offset(700, 300);
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         func_80B2CB60(this);
     } else if (this->skelAnime.curFrame > 10.0f) {
         this->unk_197 = (this->skelAnime.curFrame - 10.0f) * 0.05f * 255.0f;
@@ -389,7 +389,7 @@ void func_80B2D2C0(EnPoh* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->unk_18E = 0;
     this->actor.hintId = 0xFF;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80B2D300;
 }
 
@@ -571,13 +571,13 @@ void func_80B2DC50(EnPoh* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = this->unk_3D8.wy;
     this->actor.world.pos.z = this->unk_3D8.wz;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actor.gravity = -1.0f;
     this->actor.shape.yOffset = 1500.0f;
     this->actor.world.pos.y -= 15.0f;
     this->actor.shape.rot.x = -0x8000;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 8);
-    this->actor.flags &= ~(0x4 | 0x1);
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
     this->actionFunc = func_80B2DD2C;
 }
 
@@ -647,7 +647,7 @@ void func_80B2E1D8(EnPoh* this) {
     Actor_SetFocus(&this->actor, -10.0f);
     this->unk_18E = 200;
     this->unk_18D = 32;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80B2E230;
 }
 
@@ -811,7 +811,7 @@ void EnPoh_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     if ((this->actionFunc == func_80B2CF28) && (this->unk_18E < 10)) {
-        this->actor.flags |= 0x1000000;
+        this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderSph.base);
     }
 
