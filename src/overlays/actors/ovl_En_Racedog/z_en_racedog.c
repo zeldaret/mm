@@ -17,6 +17,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
+s32 func_80B25490(EnRacedog* this, f32* arg1);
 
 #if 0
 const ActorInit En_Racedog_InitVars = {
@@ -109,6 +110,8 @@ extern D_80B25D90_s D_80B25D90[];
 extern Vec3f D_80B26000;
 extern Vec3f D_80B25FF4;
 extern D_80B25E70_s D_80B25E70;
+extern f32 D_80B25E78[];
+extern s16 D_80B25D40;
 
 extern Gfx D_06000618[];
 extern UNK_TYPE D_060080F0;
@@ -166,7 +169,20 @@ void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B252F8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B2538C.s")
+void func_80B2538C(EnRacedog* this) {
+    if (func_80B25490(this, D_80B25E78) && this->unk_29C == 2) {
+        D_80B25D40++;
+        if (D_80B25D40 == 1) {
+            Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
+            play_sound(NA_SE_SY_START_SHOT);
+        }
+
+        this->unk_29C = 3;
+        if (this->unk_290 == this->unk_292) {
+            gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (D_80B25D40 * 8);
+        }
+    }
+}
 
 void func_80B25448(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
