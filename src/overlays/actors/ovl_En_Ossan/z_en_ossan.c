@@ -1550,7 +1550,7 @@ void EnOssan_DrawCursor(GlobalContext* globalCtx, EnOssan* this, f32 x, f32 y, f
     f32 w;
     s32 dsdx;
 
-    ((void)"../z_en_oB1.c");
+    (void)"../z_en_oB1.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawCursor != 0) {
@@ -1582,7 +1582,7 @@ void EnOssan_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f
     s32 dsdx;
     s32 dtdy;
 
-    ((void)"../z_en_oB1.c");
+    (void)"../z_en_oB1.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1608,7 +1608,7 @@ void EnOssan_DrawStickDirectionPrompts(GlobalContext* globalCtx, EnOssan* this) 
     s32 drawStickRightPrompt = this->stickLeftPrompt.isEnabled;
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
-    ((void)"../z_en_oB1.c");
+    (void)"../z_en_oB1.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawStickRightPrompt || drawStickLeftPrompt) {
@@ -1703,8 +1703,8 @@ void EnOssan_PartTimeWorker_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex
 
 void EnOssan_CuriosityShopMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sEyeTextures[] = { gFsnEyeOpenTex, gFsnEyeHalfTex, gFsnEyeClosedTex };
-    EnOssan* this = THIS;
     s32 pad;
+    EnOssan* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
@@ -1718,8 +1718,8 @@ void EnOssan_CuriosityShopMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnOssan_PartTimeWorker_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sEyeTextures[] = { object_ani_Tex_006498, object_ani_Tex_006B18, object_ani_Tex_006F18 };
-    EnOssan* this = THIS;
     s32 pad;
+    EnOssan* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
