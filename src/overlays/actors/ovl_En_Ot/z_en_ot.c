@@ -1048,7 +1048,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gfx = func_8012C7FC(POLY_XLU_DISP);
 
-    gSPSetOtherMode(&gfx[0], G_SETOTHERMODE_H, 4, 4, 0x00000080);
+    gDPSetDither(&gfx[0], G_CD_NOISE);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                       0);
     gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);
