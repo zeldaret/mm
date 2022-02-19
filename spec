@@ -3267,9 +3267,7 @@ beginseg
     name "ovl_Dm_Char01"
     compress
     include "build/src/overlays/actors/ovl_Dm_Char01/z_dm_char01.o"
-    include "build/data/ovl_Dm_Char01/ovl_Dm_Char01.data.o"
-    include "build/data/ovl_Dm_Char01/ovl_Dm_Char01.bss.o"
-    include "build/data/ovl_Dm_Char01/ovl_Dm_Char01.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Char01/ovl_Dm_Char01_reloc.o"
 endseg
 
 beginseg
