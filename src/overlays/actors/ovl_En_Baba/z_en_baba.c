@@ -745,7 +745,7 @@ void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnBaba_OverrideLimbDraw, EnBaba_PostLimbDraw,
-                                       EnBaba_TransformDraw, &this->actor);
+                                       EnBaba_TransformLimbDraw, &this->actor);
 
         if (this->unk_40A & 0x80) {
             if ((this->unk_40C == 3) || (this->unk_40C == 4)) {
