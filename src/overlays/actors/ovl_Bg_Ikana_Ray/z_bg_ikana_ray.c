@@ -69,7 +69,7 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, collision, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collision);
 
-    this->animatedTextures = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ikana_obj_Matanimheader_001228);
+    this->animatedTextures = Lib_SegmentedToVirtual(object_ikana_obj_Matanimheader_001228);
 
     if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
         BgIkanaRay_SetActivated(this);

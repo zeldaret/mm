@@ -176,7 +176,7 @@ void func_809619D0(EnFu* this, GlobalContext* globalCtx) {
     }
 
     this->unk_520 = path->count;
-    this->unk_538 = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    this->unk_538 = Lib_SegmentedToVirtual(path->points);
     func_809616E0(this, globalCtx);
 }
 

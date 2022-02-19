@@ -917,7 +917,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
         if (this->unk_234 != NULL) {
-            sp48 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+            sp48 = Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp3C, &sp48[this->unk_234->count - 2]);
             Math_Vec3s_ToVec3f(&sp30, &sp48[this->unk_234->count - 1]);
             this->actor.shape.shadowDraw = NULL;
@@ -948,7 +948,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if ((sp50 != NULL) && (sp50->actor.update != NULL)) {
         if (this->unk_234 != 0) {
-            sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+            sp4C = Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
             Math_Vec3s_ToVec3f(&sp34, &sp4C[1]);
             Math_Vec3f_Copy(&this->unk_26C, &sp40);
@@ -1072,7 +1072,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     }
 
     if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {
-        sp30 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+        sp30 = Lib_SegmentedToVirtual(this->unk_234->points);
         Math_Vec3s_ToVec3f(&sp40, &sp30[0]);
         Math_Vec3s_ToVec3f(&sp34, &sp30[1]);
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
@@ -1125,7 +1125,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     }
 
     if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {
-        sp30 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+        sp30 = Lib_SegmentedToVirtual(this->unk_234->points);
         Math_Vec3s_ToVec3f(&sp40, &sp30[this->unk_234->count - 1]);
         Math_Vec3s_ToVec3f(&sp34, &sp30[this->unk_234->count - 2]);
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp34, &sp40);

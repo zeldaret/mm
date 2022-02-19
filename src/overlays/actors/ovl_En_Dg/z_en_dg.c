@@ -206,7 +206,7 @@ void func_8098933C(EnDg* this, Vec3f* arg1) {
 }
 
 s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
-    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(arg1->points);
+    Vec3s* sp5C = Lib_SegmentedToVirtual(arg1->points);
     s32 count = arg1->count;
     s32 idx = arg2;
     s32 sp50 = false;
@@ -243,7 +243,7 @@ s16 func_809895B4(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     f32 diffZ;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[idx];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;

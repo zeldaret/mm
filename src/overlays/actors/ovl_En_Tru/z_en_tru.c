@@ -722,7 +722,7 @@ s32 func_80A87400(EnTru* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, 30.0f, 0.2f, 1000.0f);
 
     if (this->path != NULL) {
-        sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+        sp4C = Lib_SegmentedToVirtual(this->path->points);
         if (func_8013BD40(&this->actor, this->path, this->unk_384)) {
             if (this->unk_384 > this->unk_384 + 1) {
                 this->unk_384 = this->path->count - 2;

@@ -906,7 +906,7 @@ s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if ((actor != NULL) && (actor->update != NULL)) {
         if (this->unk_234 != NULL) {
-            sp48 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+            sp48 = Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp3C, &sp48[this->unk_234->count - 2]);
             Math_Vec3s_ToVec3f(&sp30, &sp48[this->unk_234->count - 1]);
             this->actor.shape.shadowDraw = NULL;
@@ -937,7 +937,7 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if ((sp50 != NULL) && (sp50->actor.update != NULL)) {
         if (this->unk_234 != NULL) {
-            sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+            sp4C = Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
             Math_Vec3s_ToVec3f(&sp34, &sp4C[1]);
             Math_Vec3f_Copy(&this->unk_278, &sp40);
@@ -1079,7 +1079,7 @@ s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     }
 
     if (this->unk_234 != NULL) {
-        sp48 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+        sp48 = Lib_SegmentedToVirtual(this->unk_234->points);
         Math_Vec3s_ToVec3f(&sp3C, &sp48[this->unk_234->count - 2]);
         Math_Vec3s_ToVec3f(&sp30, &sp48[this->unk_234->count - 1]);
         this->actor.shape.shadowDraw = NULL;

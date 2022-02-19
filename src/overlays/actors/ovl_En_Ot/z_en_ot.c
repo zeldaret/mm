@@ -1038,7 +1038,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    AnimatedMat_Draw(globalCtx, (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnOt_PostLimbDraw, &this->actor);
     Matrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);

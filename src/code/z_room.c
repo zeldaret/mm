@@ -29,7 +29,7 @@ void Room_DrawType0Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     }
 
     mesh = &room->mesh->type0;
-    meshParams = (RoomMeshType0Params*)Lib_SegmentedToVirtual(mesh->paramsStart);
+    meshParams = Lib_SegmentedToVirtual(mesh->paramsStart);
     for (i = 0; i < mesh->count; i++) {
         if ((flags & 1) && (meshParams->opaqueDl != NULL)) {
             gSPDisplayList(gfxCtx->polyOpa.p++, meshParams->opaqueDl);

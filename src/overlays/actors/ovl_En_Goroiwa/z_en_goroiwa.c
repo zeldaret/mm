@@ -992,7 +992,7 @@ void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.shadowAlpha = 200;
     func_8093EB58(this, globalCtx);
 
-    this->unk_1D0 = (Vec3s*)Lib_SegmentedToVirtual(sp2C->points);
+    this->unk_1D0 = Lib_SegmentedToVirtual(sp2C->points);
 
     func_8093EE18(this, globalCtx);
     func_8093EE64(this, this->actor.home.rot.y);

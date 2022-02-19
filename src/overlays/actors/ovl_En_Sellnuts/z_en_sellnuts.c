@@ -892,7 +892,7 @@ void func_80ADCD3C(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
-    Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 count = path->count;
     s32 var = arg2;
     s32 ret = false;
@@ -929,7 +929,7 @@ f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
     Vec3s* points;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[arg1];
         sp20.x = points->x;
         sp20.y = points->y;

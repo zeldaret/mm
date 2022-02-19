@@ -67,7 +67,7 @@ void func_80B965D0(EnZot* this, GlobalContext* globalCtx) {
     s32 i;
 
     if ((this->path != NULL) && (this->path->count >= 5)) {
-        Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+        Vec3s* points = Lib_SegmentedToVirtual(this->path->points);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++, points++) {
             if (this->unk_2D8[i] == NULL) {
