@@ -406,7 +406,7 @@ void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* cs
 void Cutscene_Command_PlayAmbienceSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         // Audio_PlayNatureAmbienceSequence
-        // nightSeqIndex is be natureAmbienceId
+        // nightSeqIndex is natureAmbienceId
         func_801A4A28(globalCtx->soundCtx.nightSeqIndex);
     }
 }
