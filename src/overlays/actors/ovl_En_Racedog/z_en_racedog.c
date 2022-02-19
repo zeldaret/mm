@@ -201,7 +201,11 @@ void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Destroy.s")
+void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnRacedog* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24C14.s")
 
