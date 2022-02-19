@@ -483,8 +483,7 @@ void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 phi_f0 = 968.0f;
             }
 
-            globalCtx->envCtx.lightSettings.fogNear =
-                (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
+            globalCtx->envCtx.lightSettings.fogNear = (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
 
             globalCtx->envCtx.lightSettings.ambientColor[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.ambientColor[0]) * this->unk_204;

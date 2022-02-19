@@ -197,7 +197,8 @@ void func_80AA884C(DmChar01* this, GlobalContext* globalCtx) {
 
 void func_80AA88A8(DmChar01* this, GlobalContext* globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, 0x87)) {
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x87)]->startFrame) {
+        if (globalCtx->csCtx.frames ==
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x87)]->startFrame) {
             D_80AAAE24 = 1;
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }

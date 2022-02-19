@@ -552,7 +552,7 @@ void DmChar00_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80AA62FC(DmChar00* this, GlobalContext* globalCtx) {
     u16 sp26 = DMCHAR00_GET(&this->actor) + 0x71;
-    u32 temp_v0;
+    s32 temp_v0;
     s32 pad;
 
     if (Cutscene_CheckActorAction(globalCtx, sp26)) {
@@ -853,7 +853,8 @@ void func_80AA62FC(DmChar00* this, GlobalContext* globalCtx) {
 void func_80AA67F8(DmChar00* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((globalCtx->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.currentCsIndex == 1)) {
+    if ((globalCtx->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) &&
+        (globalCtx->csCtx.currentCsIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
             func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);

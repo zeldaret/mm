@@ -426,10 +426,12 @@ void func_80B324B0(EnZoraegg* this, GlobalContext* globalCtx) {
                 Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
                 this->unk_1EA &= ~4;
             }
-        } else if (Cutscene_CheckActorAction(globalCtx, this->unk_1F0) &&
-                   (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0)]->action == 4)) {
-            Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004E04);
-            this->unk_1EA |= 4;
+        } else {
+            if (Cutscene_CheckActorAction(globalCtx, this->unk_1F0) &&
+                (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0)]->action == 4)) {
+                Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004E04);
+                this->unk_1EA |= 4;
+            }
         }
 
         Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0));

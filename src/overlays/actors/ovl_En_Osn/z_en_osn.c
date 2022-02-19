@@ -638,7 +638,7 @@ void func_80AD1634(EnOsn* this, GlobalContext* globalCtx) {
 
 void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
     u8 pad;
-    u32 temp_v0;
+    s32 temp_v0;
 
     if (Cutscene_CheckActorAction(globalCtx, 0x82)) {
         temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x82);
