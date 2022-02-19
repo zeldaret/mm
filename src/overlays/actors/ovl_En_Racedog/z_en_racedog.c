@@ -110,7 +110,17 @@ void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B2478C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B248B8.s")
+void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
+    f32 sp20;
+    f32 sp1C;
+
+    if (this->actor.floorPoly != NULL) {
+        sp20 = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
+        sp1C = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
+
+        arg1->x = -Math_Acot2F(1.0f, -sp1C * sp20);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Init.s")
 
