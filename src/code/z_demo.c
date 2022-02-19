@@ -995,9 +995,9 @@ s32 Cutscene_CountNormalMasks(void) {
 
 void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     static s32 D_801BB160 = CS_TEXTBOX_TYPE_DEFAULT;
-    u8 dialogState; // sp27
+    u8 dialogState;
     s32 pad;
-    u16 originalCsFrames; // sp1E
+    u16 originalCsFrames;
     s32 pad2;
 
     if ((cmd->startFrame >= csCtx->frames) || ((cmd->endFrame < csCtx->frames))) {
