@@ -477,7 +477,7 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
                 break;
 
             case 8:
-                if (activeSequence != 0xFFFF) {
+                if (seqId != NA_BGM_DISABLED) {
                     // Audio_PlayBgmForDayScene
                     func_801A25E4(activeSequence, dayMinusOne);
                 }
