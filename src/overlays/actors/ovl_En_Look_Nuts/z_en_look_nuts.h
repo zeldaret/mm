@@ -13,10 +13,10 @@ typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, GlobalContext*);
 #define LOOKNUTS_GET_PATROL_LOCATION(thisx) (((thisx)->params >> 0x7) & 0x1F)
 
 typedef enum {
-    /* 0x01 */ PATROLLING_STATE,
-    /* 0x01 */ WAITING_STATE,
-    /* 0x02 */ RUNNING_TO_PLAYER_STATE,
-    /* 0x03 */ CAUGHT_PLAYER_STATE,
+    /* 0x01 */ PALACE_GUARD_PATROLLING,
+    /* 0x01 */ PALACE_GUARD_WAITING,
+    /* 0x02 */ PALACE_GUARD_RUNNING_TO_PLAYER,
+    /* 0x03 */ PALACE_GUARD_CAUGHT_PLAYER,
 } PalaceGuardState;
 
 typedef struct EnLookNuts {
@@ -26,10 +26,10 @@ typedef struct EnLookNuts {
     /* 0x01CA */ Vec3s morphTable[OBJECT_DNK_LIMB_MAX];
     /* 0x020C */ EnLookNutsActionFunc actionFunc;
     /* 0x0210 */ Path *path;
-    /* 0x0214 */ s16 pathPointCounter; // Counts the point where the deku guard is in it's path 
+    /* 0x0214 */ s16 currentPathIndex; // Index for the point where the deku guard is in its path 
     /* 0x0216 */ s16 eyeState;
-    /* 0x0218 */ s16 blinkTimer;
-    /* 0x021A */ s16 unk21A;
+    /* 0x0218 */ s16 blinkTimer; 
+    /* 0x021A */ s16 eventTimer; // Timer to trigger when another event within the actor will happen
     /* 0x021C */ s16 state;
     /* 0x021E */ s16 switchFlag;
     /* 0x0220 */ s16 pathLocation; // determines area where a patrol guard will go
@@ -38,7 +38,7 @@ typedef struct EnLookNuts {
     /* 0x0226 */ s16 spawnIndex;
     /* 0x0228 */ s32 pad228; // Unused, but needed for padding
     /* 0x022C */ Vec3f headRotation;
-    /* 0x0238 */ Vec3f unk238;
+    /* 0x0238 */ Vec3f headRotationTarget; // Target value for head rotation to be at
     /* 0x0244 */ ColliderCylinder collider;
 } EnLookNuts; // size = 0x290
 
