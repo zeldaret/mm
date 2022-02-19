@@ -2023,7 +2023,7 @@ void func_801229A0(GlobalContext* globalCtx, Player* player);
 void func_80122F28(Player* player, GlobalContext* globalCtx, Actor* actor);
 s32 func_80122F9C(GlobalContext* globalCtx);
 s32 func_80122FCC(GlobalContext* globalCtx);
-// void func_8012300C(void);
+void func_8012300C(GlobalContext* globalCtx, s32 arg1);
 void func_8012301C(s32 iParm1, GlobalContext* globalCtx);
 void func_80123140(GlobalContext* globalCtx, Player* param_2);
 u32 func_80123358(GlobalContext* globalCtx, Player* player);
