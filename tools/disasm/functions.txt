@@ -11530,7 +11530,7 @@
     0x80AA67F8:("func_80AA67F8",),
     0x80AA695C:("func_80AA695C",),
     0x80AA6A04:("DmChar00_Update",),
-    0x80AA6A6C:("func_80AA6A6C",),
+    0x80AA6A6C:("DmChar00_OverrideLimbDraw",),
     0x80AA6B34:("DmChar00_Draw",),
     0x80AA81E0:("DmChar01_Init",),
     0x80AA8660:("DmChar01_Destroy",),
