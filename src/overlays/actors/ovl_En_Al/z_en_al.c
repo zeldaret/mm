@@ -473,7 +473,7 @@ s32 func_80BDEC2C(EnAl* this, GlobalContext* globalCtx) {
             this->unk_4C2 |= 0x1000;
             this->unk_4F4 = player->exchangeItemId;
         }
-        func_8013AED4(&this->unk_4C2, 0, 7);
+        SubS_UpdateFlags(&this->unk_4C2, 0, 7);
         this->unk_4E6 = 0;
         this->unk_4EC = 0;
         this->actor.child = this->unk_368;
@@ -629,7 +629,7 @@ s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if ((sp20 != NULL) && (sp20->update != NULL) && (temp_v0 != NULL) && (temp_v0->update != NULL)) {
         func_80BDE27C(this, 0);
-        func_8013AED4(&this->unk_4C2, 3, 7);
+        SubS_UpdateFlags(&this->unk_4C2, 3, 7);
         this->unk_368 = sp20;
         this->unk_4C2 |= 0x20;
         ret = true;
@@ -638,7 +638,7 @@ s32 func_80BDF244(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80BDF308(EnAl* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    func_8013AED4(&this->unk_4C2, 3, 7);
+    SubS_UpdateFlags(&this->unk_4C2, 3, 7);
 
     switch (arg2->unk0) {
         case 1:
@@ -708,9 +708,9 @@ void func_80BDF414(EnAl* this, GlobalContext* globalCtx) {
     temp_v0 = this->actor.world.rot.y - this->actor.yawTowardsPlayer;
     if (((this->unk_4EA == 0) && (ABS_ALT(temp_v0) >= 0x5800)) ||
         ((this->unk_4EA == 5) && (ABS_ALT(temp_v0) >= 0x5800)) || (this->unk_4EA == 2)) {
-        func_8013AED4(&this->unk_4C2, 3, 7);
+        SubS_UpdateFlags(&this->unk_4C2, 3, 7);
     } else {
-        func_8013AED4(&this->unk_4C2, 0, 7);
+        SubS_UpdateFlags(&this->unk_4C2, 0, 7);
     }
 }
 
@@ -753,7 +753,7 @@ void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx) {
 
 void func_80BDF6C4(EnAl* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, this->unk_360, this->unk_4EC, &this->unk_364)) {
-        func_8013AED4(&this->unk_4C2, 3, 7);
+        SubS_UpdateFlags(&this->unk_4C2, 3, 7);
         this->unk_4C2 &= ~0x20;
         this->unk_4C2 |= 0x200;
         this->actor.child = NULL;
