@@ -82,18 +82,18 @@ static AnimationInfoS sAnimationsCuriosityShopMan[] = {
 };
 
 static AnimationInfoS sAnimationsPartTimeWorker[] = {
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_ani_Anim_009D34, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_ani_Anim_00A460, 1.0f, 0, -1, ANIMMODE_ONCE, -5 },
-    { &object_ani_Anim_00A460, 1.0f, 0, -1, ANIMMODE_LOOP, -5 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_ani_Anim_009D34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -10 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gAniStandingNormalAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gAniHandBehindHeadApologyAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -5 },
+    { &gAniHandBehindHeadApologyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -5 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gAniStandingNormalAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static s16 sObjectIds[] = { OBJECT_FSN, OBJECT_ANI };
@@ -1331,7 +1331,7 @@ void EnOssan_InitCuriosityShopMan(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_InitPartTimeWorker(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ani_Skel_0028A0, &object_ani_Anim_009D34, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gAniSkeleton, &gAniStandingNormalAnim, this->jointTable,
                        this->morphTable, 16);
     this->actor.draw = EnOssan_DrawPartTimeWorker;
 }
@@ -1690,7 +1690,7 @@ void EnOssan_DrawCuriosityShopMan(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOssan_DrawPartTimeWorker(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { object_ani_Tex_006498, object_ani_Tex_006B18, object_ani_Tex_006F18 };
+    static TexturePtr sEyeTextures[] = { gAniOpenEyeTex, gAniClosingEyeTex, gAniClosedEyeTex };
     EnOssan* this = THIS;
     s32 pad;
 

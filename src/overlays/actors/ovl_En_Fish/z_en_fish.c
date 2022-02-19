@@ -882,7 +882,7 @@ void func_8091F5A4(Actor* thisx, GlobalContext* globalCtx) {
                 func_8091D904(this);
             }
         } else if (func_8091DDF4(this, globalCtx)) {
-            Actor_PickUp(&this->actor, globalCtx, 0xBA, 80.0f, 25.0f);
+            Actor_PickUp(&this->actor, globalCtx, GI_MAX, 80.0f, 25.0f);
         }
     }
 }
