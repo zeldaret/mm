@@ -6,7 +6,7 @@
 
 #include "z_bg_kin2_bombwall.h"
 
-#define FLAGS 0x10000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_10000000)
 
 #define THIS ((BgKin2Bombwall*)thisx)
 

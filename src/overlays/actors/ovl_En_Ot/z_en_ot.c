@@ -9,7 +9,7 @@
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnOt*)thisx)
 
@@ -141,8 +141,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_33C = ENOT_GET_C000(&this->actor);
     if (this->unk_33C == 0) {
         D_80B5E880 = this;
-        this->actor.flags |= 0x8000000;
-        this->actor.flags &= ~(0x8 | 0x1);
+        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.update = func_80B5DB6C;
         this->actor.draw = NULL;
         return;
@@ -265,8 +265,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         case 3:
             if (!(gSaveContext.save.weekEventReg[26] & 8)) {
-                this->actor.flags |= 0x8000000;
-                this->actor.flags &= ~(0x8 | 0x1);
+                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 Actor_SetScale(&this->actor, 0.0064999997f);
                 this->collider.dim.radius *= 0.5f;
                 this->collider.dim.height *= 0.5f;
@@ -412,10 +412,10 @@ void func_80B5C25C(EnOt* this, GlobalContext* globalCtx) {
         this->unk_360->unk_32C |= 0x100;
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIdx);
         SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIdx);
-        this->actor.flags |= 0x8000000;
-        this->actor.flags &= ~(0x8 | 0x1);
-        this->unk_360->actor.flags |= 0x8000000;
-        this->unk_360->actor.flags &= ~(0x8 | 0x1);
+        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->unk_360->actor.flags |= ACTOR_FLAG_8000000;
+        this->unk_360->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80B5C9A8(this->unk_360, globalCtx);
         func_80B5C3B8(this, globalCtx);
     }
@@ -605,14 +605,14 @@ void func_80B5CB0C(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CBA0(EnOt* this, GlobalContext* globalCtx) {
-    this->actor.flags |= 0x10000;
+    this->actor.flags |= ACTOR_FLAG_10000;
     func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
     this->actionFunc = func_80B5CBEC;
 }
 
 void func_80B5CBEC(EnOt* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80B5CC88(this, globalCtx);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
@@ -692,10 +692,10 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
     if (this->unk_32C & 0x800) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
     } else {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         if ((player->actor.bgCheckFlags & 1) && !func_801242B4(player) && (this->actor.xzDistToPlayer < 130.0f)) {
             func_800B8614(&this->actor, globalCtx, 130.0f);
         }
@@ -892,8 +892,8 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
-    this->actor.flags |= 0x8000000;
-    this->actor.flags &= ~(0x8 | 0x1);
+    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Flags_SetSwitch(globalCtx, ENOT_GET_3F80(&this->actor));
     this->actionFunc = func_80B5D750;
 }
@@ -918,8 +918,8 @@ void func_80B5D750(EnOt* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_32C & 1) && (this->actor.xzDistToPlayer <= 180.0f)) {
-        this->actor.flags &= ~0x8000000;
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         if (D_80B5E884 != 0) {
             func_80B5C9A8(this, globalCtx);
         } else {
@@ -939,7 +939,7 @@ void EnOt_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if (this->actor.bgCheckFlags & 0x20) {
         if (DECR(this->unk_354) == 0) {
-            if (this->actor.flags & 0x40) {
+            if (this->actor.flags & ACTOR_FLAG_40) {
                 s32 i;
 
                 for (i = 0; i < 2; i++) {
@@ -1048,7 +1048,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gfx = func_8012C7FC(POLY_XLU_DISP);
 
-    gSPSetOtherMode(&gfx[0], G_SETOTHERMODE_H, 4, 4, 0x00000080);
+    gDPSetDither(&gfx[0], G_CD_NOISE);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                       0);
     gSPDisplayList(&gfx[2], gameplay_keep_DL_029CB0);

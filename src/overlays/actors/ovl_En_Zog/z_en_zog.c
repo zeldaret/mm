@@ -7,7 +7,7 @@
 #include "z_en_zog.h"
 #include "objects/object_zog/object_zog.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnZog*)thisx)
 
@@ -256,7 +256,7 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->actor.flags |= 0x10000;
+    this->actor.flags |= ACTOR_FLAG_10000;
     this->actor.home.rot.z = 0;
     if (ENZOG_GET_F(&this->actor) != ENZOG_F_2) {
         for (i = 0; i < 5; i++) {
@@ -268,8 +268,8 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (gSaveContext.save.weekEventReg[88] & 0x10)) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
-        this->actor.flags |= 0x2000000;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_31C = 2;
         this->unk_31E = 0;
 
@@ -644,7 +644,7 @@ void func_80B9461C(EnZog* this, GlobalContext* globalCtx) {
     if (!func_80B93EA0(this, globalCtx)) {
         this->actor.textId = 0x103C;
         this->actionFunc = func_80B9451C;
-        this->actor.flags |= 0x2000000;
+        this->actor.flags |= ACTOR_FLAG_2000000;
         gSaveContext.save.weekEventReg[91] |= 2;
     }
 
@@ -746,7 +746,7 @@ void func_80B94A00(EnZog* this, GlobalContext* globalCtx) {
 
     if (func_80B93BE0(this, globalCtx)) {
         this->actionFunc = func_80B948A8;
-        this->actor.flags |= 0x2000000;
+        this->actor.flags |= ACTOR_FLAG_2000000;
         if (gSaveContext.save.weekEventReg[29] & 0x20) {
             this->actor.textId = 0x1009;
         } else {
@@ -882,7 +882,7 @@ void func_80B94E34(EnZog* this, GlobalContext* globalCtx) {
     }
 
     if (ABS_ALT(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0x5000) {
-        Actor_PickUp(&this->actor, globalCtx, 0, 60.0f, 40.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_NONE, 60.0f, 40.0f);
     }
 
     if (this->unk_324 > 0) {
@@ -937,7 +937,7 @@ void func_80B95128(EnZog* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         gSaveContext.save.weekEventReg[91] |= 1;
     } else {
         func_800B8614(&this->actor, globalCtx, 150.0f);

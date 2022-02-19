@@ -7,7 +7,7 @@
 #include "z_bg_kin2_fence.h"
 #include "objects/object_kin2_obj/object_kin2_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgKin2Fence*)thisx)
 
@@ -122,16 +122,16 @@ static InitChainEntry sInitChain[] = {
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     ColliderJntSphElement* elements = this->collider.elements;
 
-    if (elements[0].info.bumperFlags & 2) {
+    if (elements[0].info.bumperFlags & BUMP_HIT) {
         return 0;
     }
-    if (elements[1].info.bumperFlags & 2) {
+    if (elements[1].info.bumperFlags & BUMP_HIT) {
         return 1;
     }
-    if (elements[2].info.bumperFlags & 2) {
+    if (elements[2].info.bumperFlags & BUMP_HIT) {
         return 2;
     }
-    if (elements[3].info.bumperFlags & 2) {
+    if (elements[3].info.bumperFlags & BUMP_HIT) {
         return 3;
     }
     return -1;

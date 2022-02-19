@@ -7,7 +7,7 @@
 #include "z_bg_tobira01.h"
 #include "objects/object_spot11_obj/object_spot11_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgTobira01*)thisx)
 

@@ -6,7 +6,7 @@
 
 #include "z_en_giant.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnGiant*)thisx)
 
@@ -183,7 +183,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.save.weekEventReg[0x19] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[25] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }

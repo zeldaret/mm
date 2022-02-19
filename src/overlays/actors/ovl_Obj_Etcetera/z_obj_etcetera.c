@@ -7,7 +7,7 @@
 #include "z_obj_etcetera.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjEtcetera*)thisx)
 

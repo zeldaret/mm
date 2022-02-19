@@ -7,7 +7,7 @@
 #include "z_en_thiefbird.h"
 #include "objects/object_thiefbird/object_thiefbird.h"
 
-#define FLAGS 0x80001205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnThiefbird*)thisx)
 
@@ -447,7 +447,7 @@ void func_80C11454(EnThiefbird* this) {
     this->unk_3D8 = 0.5f;
     this->unk_3DC = 0.75f;
     this->unk_3D4 = 1.0f;
-    this->actor.flags &= ~0x200;
+    this->actor.flags &= ~ACTOR_FLAG_200;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
@@ -456,7 +456,7 @@ void func_80C114C0(EnThiefbird* this, GlobalContext* globalCtx) {
         this->unk_18C = 0;
         this->unk_3D4 = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_350, 11, 2, 0.2f, 0.2f);
-        this->actor.flags |= 0x200;
+        this->actor.flags |= ACTOR_FLAG_200;
     }
 }
 
@@ -599,7 +599,7 @@ void func_80C11C60(EnThiefbird* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->unk_192 = 0x1C00;
     this->actionFunc = func_80C11D14;
 }
@@ -630,7 +630,7 @@ void func_80C11D14(EnThiefbird* this, GlobalContext* globalCtx) {
 }
 
 void func_80C11DC0(EnThiefbird* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80C11DF0;
     this->actor.gravity = -0.5f;
 }
@@ -777,7 +777,7 @@ void func_80C12378(EnThiefbird* this, GlobalContext* globalCtx) {
 
 void func_80C1242C(EnThiefbird* this) {
     Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000278, 2.0f, 0.0f, 0.0f, 0, -4.0f);
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->collider.base.acFlags |= AC_ON;
     this->actionFunc = func_80C124B0;
     this->actor.speedXZ = 12.0f;
@@ -822,7 +822,7 @@ void func_80C124B0(EnThiefbird* this, GlobalContext* globalCtx) {
 }
 
 void func_80C126A8(EnThiefbird* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80C126D8;
 }
@@ -840,7 +840,7 @@ void func_80C12744(EnThiefbird* this) {
     Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000604, 1.0f, 0.0f, 0.0f, 1, -4.0f);
     this->unk_190 = 0;
     this->collider.base.acFlags |= AC_ON;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_80C127F4;
     this->actor.speedXZ = 4.0f;
     this->skelAnime.playSpeed = 3.0f;
@@ -906,7 +906,7 @@ void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx) {
 
         Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 4, 0x800, 0x80);
         if (this->unk_194 == 0) {
-            this->actor.flags &= ~0x10;
+            this->actor.flags &= ~ACTOR_FLAG_10;
             func_80C11538(this);
         }
     }
@@ -924,7 +924,7 @@ void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
         this->unk_194 = 0;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            if (this->collider.elements[i].info.bumperFlags & 2) {
+            if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
                 break;
             }
         }

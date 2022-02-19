@@ -6,7 +6,7 @@
 
 #include "z_en_weather_tag.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnWeatherTag*)thisx)
 
@@ -67,7 +67,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pathID;
 
     // flag: is targetable. Should do nothing as not set by default above
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 
     switch (WEATHER_TAG_TYPE(this)) {
         case WEATHERTAG_TYPE_UNK0:
@@ -77,7 +77,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (gSaveContext.save.weekEventReg[0x34] & 0x20) { // if cleared STT
+            if (gSaveContext.save.weekEventReg[52] & 0x20) { // if cleared STT
                 Actor_MarkForDeath(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);

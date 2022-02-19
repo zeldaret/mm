@@ -7,7 +7,7 @@
 #include "z_en_zot.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnZot*)thisx)
 
@@ -154,7 +154,7 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
             break;
 
         case 8:
-            this->actor.flags |= 0x2000000;
+            this->actor.flags |= ACTOR_FLAG_2000000;
             this->actionFunc = func_80B98CA8;
             func_80B96BEC(this, 5, 0);
             break;
@@ -484,7 +484,7 @@ void func_80B973BC(EnZot* this, GlobalContext* globalCtx) {
             case 0x1279:
                 func_801477B4(globalCtx);
                 func_80B965D0(this, globalCtx);
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
                 if ((this->actor.cutscene != -1) && !(this->unk_2F2 & 1)) {
@@ -559,7 +559,7 @@ void func_80B97708(EnZot* this, GlobalContext* globalCtx) {
 
     if (phi_v1 != 0) {
         gSaveContext.save.weekEventReg[29] |= 0x10;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         if (phi_v1 == 5) {
             if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
                 this->actor.textId = 0x126E;
@@ -939,7 +939,7 @@ void func_80B9854C(EnZot* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     } else {
         Actor_PickUp(&this->actor, globalCtx, this->unk_2D4, 10000.0f, 50.0f);
@@ -1051,7 +1051,7 @@ void func_80B98728(EnZot* this, GlobalContext* globalCtx) {
                     default:
                         func_801477B4(globalCtx);
                         this->actionFunc = func_80B98998;
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;
                 }
             }
@@ -1123,7 +1123,7 @@ void func_80B98AD0(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         if (gSaveContext.save.weekEventReg[41] & 0x20) {
             func_801518B0(globalCtx, 0x12B7, &this->actor);
             this->actionFunc = func_80B98AD0;
@@ -1141,7 +1141,7 @@ void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.ocarinaMode = 4;
         func_8019B544(0xFFFF);
         this->actionFunc = func_80B98BF4;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 120.0f);
     } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B98AD0;

@@ -866,7 +866,8 @@ typedef struct {
     /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
+    /* 0x12070 */ s32 unk12070;
+    /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
