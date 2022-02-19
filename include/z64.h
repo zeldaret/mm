@@ -731,10 +731,10 @@ typedef struct {
     /* 0xC0 */ u8 unk_C0;
     /* 0xC1 */ u8 unk_C1;
     /* 0xC2 */ u8 unk_C2;
-    /* 0xC3 */ u8 unk_C3;
+    /* 0xC3 */ u8 lightSettingOverride;
     /* 0xC4 */ LightSettings unk_C4;
     /* 0xDA */ u16 unk_DA;
-    /* 0xDC */ f32 unk_DC;
+    /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 unk_E0;
     /* 0xE1 */ u8 unk_E1;
     /* 0xE2 */ s8 unk_E2;

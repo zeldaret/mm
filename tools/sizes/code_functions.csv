@@ -1252,7 +1252,7 @@ asm/non_matchings/code/z_kankyo/func_800FAAB4.s,func_800FAAB4,0x800FAAB4,0x5B
 asm/non_matchings/code/z_kankyo/func_800FAC20.s,func_800FAC20,0x800FAC20,0xD5
 asm/non_matchings/code/z_kankyo/func_800FAF74.s,func_800FAF74,0x800FAF74,0x27
 asm/non_matchings/code/z_kankyo/func_800FB010.s,func_800FB010,0x800FB010,0xC4
-asm/non_matchings/code/z_kankyo/Kankyo_AddLightningBolts.s,Kankyo_AddLightningBolts,0x800FB320,0x1A
+asm/non_matchings/code/z_kankyo/Environment_AddLightningBolts.s,Environment_AddLightningBolts,0x800FB320,0x1A
 asm/non_matchings/code/z_kankyo/func_800FB388.s,func_800FB388,0x800FB388,0xF4
 asm/non_matchings/code/z_kankyo/func_800FB758.s,func_800FB758,0x800FB758,0x97
 asm/non_matchings/code/z_kankyo/func_800FB9B4.s,func_800FB9B4,0x800FB9B4,0xC2

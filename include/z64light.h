@@ -23,7 +23,7 @@ typedef struct {
     /* 0x12 */ s16 fogColor[3];
     /* 0x18 */ s16 fogNear;
     /* 0x1A */ s16 fogFar;
-} LightSettingsAdjustments;  // size = 0x1C
+} EnvLightSettings; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 x;

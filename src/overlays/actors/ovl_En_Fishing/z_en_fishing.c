@@ -5306,7 +5306,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             D_8090CD4C = 0;
             sCameraId = MAIN_CAM;
             func_800F6834(globalCtx, 0);
-            globalCtx->envCtx.lightAdjustments.fogNear = 0;
+            globalCtx->envCtx.lightSettings.fogNear = 0;
             player->unk_B28 = -5;
             D_80917200 = 5;
             break;
@@ -5346,7 +5346,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                 sCameraId = MAIN_CAM;
                 D_8090CD50 = 30;
                 func_800F6834(globalCtx, 0);
-                globalCtx->envCtx.lightAdjustments.fogNear = 0;
+                globalCtx->envCtx.lightSettings.fogNear = 0;
             }
             break;
 
@@ -5449,7 +5449,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                         D_8090CD54 = 0;
                         D_809171F6 = 20;
                         func_800F6834(globalCtx, 0);
-                        globalCtx->envCtx.lightAdjustments.fogNear = 0;
+                        globalCtx->envCtx.lightSettings.fogNear = 0;
                     }
                 }
             }
@@ -5466,13 +5466,13 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         if (sCameraEye.y <= (WATER_SURFACE_Y(globalCtx) + 1.0f)) {
             func_800F6834(globalCtx, 1);
             if (D_809171CA != 0) {
-                globalCtx->envCtx.lightAdjustments.fogNear = -0xB2;
+                globalCtx->envCtx.lightSettings.fogNear = -0xB2;
             } else {
-                globalCtx->envCtx.lightAdjustments.fogNear = -0x2E;
+                globalCtx->envCtx.lightSettings.fogNear = -0x2E;
             }
         } else {
             func_800F6834(globalCtx, 0);
-            globalCtx->envCtx.lightAdjustments.fogNear = 0;
+            globalCtx->envCtx.lightSettings.fogNear = 0;
         }
     }
 
@@ -5556,8 +5556,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         Math_ApproachZeroF(&D_8090CCD8, 1.0f, 2.0f);
     }
 
-    globalCtx->envCtx.lightAdjustments.diffuseColor1[0] = globalCtx->envCtx.lightAdjustments.diffuseColor1[1] =
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[2] = D_8090CCD8;
+    globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.diffuseColor1[1] =
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] = D_8090CCD8;
 
     if ((u8)D_8090CCD0 > 0) {
         s32 pad;

@@ -1738,7 +1738,7 @@
     0x800FAC20:("func_800FAC20",),
     0x800FAF74:("func_800FAF74",),
     0x800FB010:("func_800FB010",),
-    0x800FB320:("Kankyo_AddLightningBolts",),
+    0x800FB320:("Environment_AddLightningBolts",),
     0x800FB388:("func_800FB388",),
     0x800FB758:("func_800FB758",),
     0x800FB9B4:("func_800FB9B4",),

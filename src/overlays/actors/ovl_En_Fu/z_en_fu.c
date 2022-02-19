@@ -968,46 +968,46 @@ s32 func_80963810(GlobalContext* globalCtx, Vec3f pos) {
 s32 func_809638F8(GlobalContext* globalCtx) {
     s32 ret = true;
 
-    if (globalCtx->envCtx.lightAdjustments.diffuseColor1[0] > 25) {
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[0] > 25) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] -= 25;
         ret = false;
     } else {
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[0] = 0;
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] = 0;
     }
 
-    if (globalCtx->envCtx.lightAdjustments.diffuseColor1[1] > 25) {
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[1] > 25) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] -= 25;
         ret = false;
     } else {
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[1] = 0;
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] = 0;
     }
 
-    if (globalCtx->envCtx.lightAdjustments.diffuseColor1[2] > 25) {
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[2] > 25) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] -= 25;
         ret = false;
     } else {
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[2] = 0;
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] = 0;
     }
 
-    if (globalCtx->envCtx.lightAdjustments.ambientColor[0] > 25) {
-        globalCtx->envCtx.lightAdjustments.ambientColor[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[0] > 25) {
+        globalCtx->envCtx.lightSettings.ambientColor[0] -= 25;
         ret = false;
     } else {
-        globalCtx->envCtx.lightAdjustments.ambientColor[0] = 0;
+        globalCtx->envCtx.lightSettings.ambientColor[0] = 0;
     }
 
-    if (globalCtx->envCtx.lightAdjustments.ambientColor[1] > 25) {
-        globalCtx->envCtx.lightAdjustments.ambientColor[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[1] > 25) {
+        globalCtx->envCtx.lightSettings.ambientColor[1] -= 25;
         ret = false;
     } else {
-        globalCtx->envCtx.lightAdjustments.ambientColor[1] = 0;
+        globalCtx->envCtx.lightSettings.ambientColor[1] = 0;
     }
 
-    if (globalCtx->envCtx.lightAdjustments.ambientColor[2] > 25) {
-        globalCtx->envCtx.lightAdjustments.ambientColor[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[2] > 25) {
+        globalCtx->envCtx.lightSettings.ambientColor[2] -= 25;
         ret = false;
     } else {
-        globalCtx->envCtx.lightAdjustments.ambientColor[2] = 0;
+        globalCtx->envCtx.lightSettings.ambientColor[2] = 0;
     }
     return ret;
 }

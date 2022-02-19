@@ -18,7 +18,7 @@ u8 sCutsceneStoredPlayerForm = 0;
 
 // bss
 #ifndef NON_MATCHING
-static u16 activeSequence;
+static u16 seqId;
 #endif
 s16 sCutsceneQuakeIndex;
 struct_801F4D48 sCutsceneCameraInfo;
@@ -150,13 +150,13 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         case 0x2:
             if (isStartFrame) {
                 func_801A47DC(0xF, 0, 0);
-                Kankyo_AddLightningBolts(globalCtx, 3);
+                Environment_AddLightningBolts(globalCtx, 3);
                 D_801F4E68 = 1;
             }
             break;
         case 0x3:
-            if (globalCtx->envCtx.lightAdjustments.fogFar < 12800) {
-                globalCtx->envCtx.lightAdjustments.fogFar += 35;
+            if (globalCtx->envCtx.lightSettings.fogFar < 12800) {
+                globalCtx->envCtx.lightSettings.fogFar += 35;
             }
             break;
         case 0x4:
@@ -216,16 +216,16 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0xD:
             if (globalCtx->state.frames & 8) {
-                if (globalCtx->envCtx.lightAdjustments.ambientColor[0] < 40) {
-                    globalCtx->envCtx.lightAdjustments.ambientColor[0] += 2;
-                    globalCtx->envCtx.lightAdjustments.diffuseColor1[1] -= 3;
-                    globalCtx->envCtx.lightAdjustments.diffuseColor1[2] -= 3;
+                if (globalCtx->envCtx.lightSettings.ambientColor[0] < 40) {
+                    globalCtx->envCtx.lightSettings.ambientColor[0] += 2;
+                    globalCtx->envCtx.lightSettings.diffuseColor1[1] -= 3;
+                    globalCtx->envCtx.lightSettings.diffuseColor1[2] -= 3;
                 }
             } else {
-                if (globalCtx->envCtx.lightAdjustments.ambientColor[0] > 2) {
-                    globalCtx->envCtx.lightAdjustments.ambientColor[0] -= 2;
-                    globalCtx->envCtx.lightAdjustments.diffuseColor1[1] += 3;
-                    globalCtx->envCtx.lightAdjustments.diffuseColor1[2] += 3;
+                if (globalCtx->envCtx.lightSettings.ambientColor[0] > 2) {
+                    globalCtx->envCtx.lightSettings.ambientColor[0] -= 2;
+                    globalCtx->envCtx.lightSettings.diffuseColor1[1] += 3;
+                    globalCtx->envCtx.lightSettings.diffuseColor1[2] += 3;
                 }
             }
             break;
@@ -431,7 +431,7 @@ void func_800EAD7C(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 // needs in-function static bss
 // audio related
 void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
-    static u16 activeSequence;
+    static u16 seqId;
     u8 dayMinusOne;
 
     if (csCtx->frames == cmd->startFrame) {
@@ -473,13 +473,13 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 7:
                 // Audio_GetActiveSequence
-                activeSequence = func_801A8A50(0);
+                seqId = func_801A8A50(0);
                 break;
 
             case 8:
                 if (seqId != NA_BGM_DISABLED) {
                     // Audio_PlayBgmForDayScene
-                    func_801A25E4(activeSequence, dayMinusOne);
+                    func_801A25E4(seqId, dayMinusOne);
                 }
                 break;
         }
@@ -499,7 +499,7 @@ void Cutscene_Command_FadeAmbienceSequence(GlobalContext* globalCtx, CutsceneCon
 }
 
 // Command 0x190: Rumble
-void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, CsRumble* cmd) {
+void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdRumble* cmd) {
     switch (cmd->type) {
         case 1:
             if (csCtx->frames == cmd->startFrame) {
@@ -1264,8 +1264,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_Rumble(globalCtx, csCtx, (CsRumble*)cutscenePtr);
-                    cutscenePtr += sizeof(CsRumble);
+                    Cutscene_Command_Rumble(globalCtx, csCtx, (CsCmdRumble*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdRumble);
                 }
                 break;
 

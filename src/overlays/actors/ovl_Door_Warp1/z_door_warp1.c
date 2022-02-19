@@ -177,10 +177,10 @@ void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_1DC);
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_1F0);
 
-    for (i = 0; i < ARRAY_COUNT(globalCtx->envCtx.lightAdjustments.diffuseColor1); i++) {
-        globalCtx->envCtx.lightAdjustments.diffuseColor1[i] = 0;
-        globalCtx->envCtx.lightAdjustments.fogColor[i] = globalCtx->envCtx.lightAdjustments.diffuseColor1[i];
-        globalCtx->envCtx.lightAdjustments.ambientColor[i] = globalCtx->envCtx.lightAdjustments.diffuseColor1[i];
+    for (i = 0; i < ARRAY_COUNT(globalCtx->envCtx.lightSettings.diffuseColor1); i++) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[i] = 0;
+        globalCtx->envCtx.lightSettings.fogColor[i] = globalCtx->envCtx.lightSettings.diffuseColor1[i];
+        globalCtx->envCtx.lightSettings.ambientColor[i] = globalCtx->envCtx.lightSettings.diffuseColor1[i];
     }
 
     if (this->unk_1D3 != 0) {
@@ -863,13 +863,13 @@ void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx) {
         temp_f16 = -255.0f * temp_f0;
 
         for (i = 0; i < 3; i++) {
-            globalCtx->envCtx.lightAdjustments.diffuseColor1[i] = temp_f16;
-            globalCtx->envCtx.lightAdjustments.fogColor[i] = temp_f16;
-            globalCtx->envCtx.lightAdjustments.ambientColor[i] = temp_f16;
+            globalCtx->envCtx.lightSettings.diffuseColor1[i] = temp_f16;
+            globalCtx->envCtx.lightSettings.fogColor[i] = temp_f16;
+            globalCtx->envCtx.lightSettings.ambientColor[i] = temp_f16;
         }
 
-        globalCtx->envCtx.lightAdjustments.fogNear = -500.0f * temp_f0;
-        if (globalCtx->envCtx.lightAdjustments.fogNear < -300) {
+        globalCtx->envCtx.lightSettings.fogNear = -500.0f * temp_f0;
+        if (globalCtx->envCtx.lightSettings.fogNear < -300) {
             globalCtx->roomCtx.currRoom.segment = NULL;
         }
     }

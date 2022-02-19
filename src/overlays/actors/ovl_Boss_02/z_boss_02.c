@@ -1286,17 +1286,17 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
     if (D_809E0434 != NULL) {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = 0;
-        globalCtx->envCtx.unk_C3 = 1;
+        globalCtx->envCtx.lightSettingOverride = 1;
         globalCtx->skyboxId = 1;
     } else if (D_809E0422 == 0) {
         this->unk_1D74 = 0.0f;
         D_801F4E30 = this->unk_1D7C;
-        globalCtx->envCtx.unk_C3 = 0;
+        globalCtx->envCtx.lightSettingOverride = 0;
         globalCtx->skyboxId = 2;
     } else {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = ((KREG(24) * 0.1f) + 1.0f) * this->unk_1D7C;
-        globalCtx->envCtx.unk_C3 = 1;
+        globalCtx->envCtx.lightSettingOverride = 1;
         globalCtx->skyboxId = 1;
     }
 
@@ -1784,7 +1784,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         Actor_SetScale(&player->actor, this->unk_1D70);
     }
 
-    globalCtx->envCtx.lightAdjustments.fogNear = this->unk_1D74;
+    globalCtx->envCtx.lightSettings.fogNear = this->unk_1D74;
 
     if (sp57) {
         D_809E0422 = 1 - D_809E0422;
