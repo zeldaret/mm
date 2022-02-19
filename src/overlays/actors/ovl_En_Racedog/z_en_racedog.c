@@ -180,7 +180,30 @@ void func_80B256BC(EnRacedog* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B2583C.s")
+void func_80B2583C(EnRacedog* this) {
+    s16 phi_v1;
+
+    if (this->unk_288 >= 7) {
+        this->unk_2BC -= 0x10;
+        this->unk_2C0 += 8;
+        this->unk_2C4 += 0.05f;
+    } else {
+        this->unk_2BC += 0x10;
+        this->unk_2C0 -= 8;
+        this->unk_2C4 -= 0.05f;
+    }
+
+    if (this->unk_288 == 0) {
+        phi_v1 = 0;
+    } else {
+        this->unk_288--;
+        phi_v1 = this->unk_288;
+    }
+
+    if (phi_v1 == 0) {
+        this->unk_288 = 0xC;
+    }
+}
 
 void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B258D8.s")
