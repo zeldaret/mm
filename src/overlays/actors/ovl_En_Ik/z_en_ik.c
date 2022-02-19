@@ -1048,7 +1048,48 @@ void func_8092B93C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Ik/func_8092BC6C.s")
+void func_8092BC6C(EnIk *this, GlobalContext *globalCtx) {
+    Gfx* gfxOpa;
+    Gfx* gfxXlu;
+    s32 sp54;
+    EnIkStruct* ptr;
+    s32 i;
+ 
+    if (this->unk_2F4 == 3) {
+        sp54 = 0;
+
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        gfxOpa = POLY_OPA_DISP;
+        gfxXlu = POLY_XLU_DISP;
+
+        for (i = 0; i < ARRAY_COUNT(this->unk_550); i++) {
+            ptr = &this->unk_550[i];
+            if (ptr->unk_24 != 0) {
+                Matrix_SetStateRotationAndTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, &ptr->unk_1C);
+                Matrix_Scale(0.012f, 0.012f, 0.012f, 1);
+                
+                gSPMatrix(gfxOpa++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(gfxOpa++, ptr->unk_00);
+
+                if (D_8092BFA0[i].unk00 != NULL) {
+                    gSPMatrix(gfxXlu++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                    gSPDisplayList(gfxXlu++, D_8092BFA0[i].unk00);
+                }
+            } else {
+                sp54++;
+            }
+        }
+
+        if (sp54 == ARRAY_COUNT(this->unk_550)) {
+            this->unk_2F4 = 5;
+        }
+
+        POLY_XLU_DISP = gfxXlu;
+        POLY_OPA_DISP = gfxOpa;
+        
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnIk* this = THIS;
@@ -1070,7 +1111,7 @@ void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(&gfx[2], 0x09, temp_v1_2[1]);
     gSPSegment(&gfx[3], 0x0A, temp_v1_2[2]);
     POLY_OPA_DISP = &gfx[4];
-    
+
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_8092B900, func_8092B93C, &this->actor);
     func_8092BC6C(this, globalCtx);
