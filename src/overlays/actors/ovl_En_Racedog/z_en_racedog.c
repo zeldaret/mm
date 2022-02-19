@@ -92,7 +92,19 @@ extern InitChainEntry D_80B25FF0[];
 extern UNK_TYPE D_06000618;
 extern UNK_TYPE D_060080F0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24630.s")
+void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
+    f32 frameCount;
+
+    arg1 += arg2;
+    if (arg1->frameCount < 0) {
+        frameCount = Animation_GetLastFrame(arg1->animation);
+    } else {
+        frameCount = arg1->frameCount;
+    }
+
+    Animation_Change(skelAnime, arg1->animation, arg1->playSpeed + (BREG(88) * 0.1f), arg1->startFrame, frameCount,
+                     arg1->mode, arg1->morphFrames);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B246F4.s")
 
