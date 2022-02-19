@@ -5,6 +5,7 @@
  */
 
 #include "z_en_racedog.h"
+#include "objects/object_dog/object_dog.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
@@ -19,7 +20,15 @@ void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
 s32 func_80B25490(EnRacedog* this, f32* arg1);
 
-#if 0
+typedef struct {
+    f32 unk_00;
+    f32 unk_04;
+    s16 unk_08;
+    s16 unk_0A;
+    s16 unk_0C;
+    s16 unk_0E;
+} UnkRacedogStruct;
+
 const ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
     ACTORCAT_NPC,
@@ -32,10 +41,53 @@ const ActorInit En_Racedog_InitVars = {
     (ActorFunc)EnRacedog_Draw,
 };
 
+static s16 D_80B25D40 = 0;
+
+static s16 D_80B25D44 = -1;
+
+static s16 D_80B25D48 = 0;
+
+static s16 D_80B25D4C = -1;
+
+static f32 D_80B25D50[] = {
+    0.0f, 0.0f, 5.0f, 5.5f, 5.0f, 5.0f, 5.5f, 5.0f, 4.5f, 5.5f, 6.0f, 4.0f, 4.0f, 6.0f,
+};
+
+static UnkRacedogStruct D_80B25D88[] = {
+    { -1.0f, 1.20000004768f, 3, 0, 9, 0x3539 },  { -1.0f, 1.20000004768f, 1, 1, 9, 0x353A },
+    { -1.0f, 1.20000004768f, 5, 2, 10, 0x353B }, { -1.0f, 1.20000004768f, 2, 3, 9, 0x353C },
+    { -1.0f, 1.20000004768f, 4, 4, 8, 0x353D },  { -1.0f, 1.20000004768f, 2, 5, 9, 0x353E },
+    { -1.0f, 1.20000004768f, 3, 6, 9, 0x353F },  { -1.0f, 1.20000004768f, 1, 7, 9, 0x3540 },
+    { -1.0f, 1.20000004768f, 1, 8, 9, 0x3541 },  { -1.0f, 1.20000004768f, 6, 9, 8, 0x3542 },
+    { -1.0f, 1.20000004768f, 2, 10, 9, 0x3543 }, { -1.0f, 1.20000004768f, 3, 11, 9, 0x3544 },
+    { -1.0f, 1.20000004768f, 1, 12, 9, 0x3545 }, { -1.0f, 1.20000004768f, 4, 13, 8, 0x3546 },
+};
+
+static UnkRacedogStruct D_80B25E68 = { -1.0f, 1.0, 0, -1, 0, 0x353E };
+
+// Maybe XZ vectors?
+static f32 D_80B25E78[] = {
+    -3914.0f, 1283.0f, -3747.0f, 1104.0f, -3717.0f, 1169.0f, -3897.0f, 1308.0f,
+};
+
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80B25E98 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 13, 19, 0, { 0, 0, 0 } },
 };
 
@@ -78,42 +130,33 @@ static DamageTable D_80B25ED0 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+static AnimationInfoS D_80B25EF0[] = {
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_000998, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001348, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 54, 54, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_0021C8, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001560, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_001A84, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0017C0, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0021C8, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+};
+
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B25FF0[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-#endif
+static Vec3f D_80B25FF4 = { 0.0f, 0.0f, 0.0f };
 
-typedef struct {
-    s16 unk_00;
-    s16 unk_02;
-    s16 unk_04;
-    s16 unk_06;
-    f32 unk_08;
-    f32 unk_0C;
-} D_80B25D90_s;
-
-typedef struct {
-    s16 unk_00;
-    s16 unk_02;
-    s16 unk_04;
-    s16 unk_06;
-} D_80B25E70_s;
-
-extern ColliderCylinderInit D_80B25E98;
-extern CollisionCheckInfoInit2 D_80B25EC4;
-extern DamageTable D_80B25ED0;
-extern InitChainEntry D_80B25FF0[];
-extern f32 D_80B25F14;
-extern D_80B25D90_s D_80B25D90[];
-extern Vec3f D_80B26000;
-extern Vec3f D_80B25FF4;
-extern D_80B25E70_s D_80B25E70;
-extern f32 D_80B25E78[];
-extern s16 D_80B25D40;
-extern s16 D_80B25D44;
-extern s16 D_80B25D4C;
+static Vec3f D_80B26000 = { 0.0f, 20.0f, 0.0f };
 
 extern Gfx D_06000618[];
 extern UNK_TYPE D_060080F0;
@@ -201,9 +244,9 @@ void func_80B2538C(EnRacedog* this) {
 
 void func_80B25448(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
-        D_80B25F14 = 0.9f;
+        D_80B25EF0[2].playSpeed = 0.9f;
     } else {
-        D_80B25F14 = 1.0f;
+        D_80B25EF0[2].playSpeed = 1.0f;
     }
 }
 
@@ -236,7 +279,7 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp2C;
 
     sp2C = D_80B25FF4;
-    this->unk_292 = D_80B25E70.unk_02;
+    this->unk_292 = D_80B25E68.unk_0A;
 
     this->actionFunc(this, globalCtx);
 
@@ -337,7 +380,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    switch (D_80B25D90[this->unk_290].unk_00) {
+    switch (D_80B25D88[this->unk_290].unk_08) {
         case 3:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
