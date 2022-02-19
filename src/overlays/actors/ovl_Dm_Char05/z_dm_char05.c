@@ -7,7 +7,7 @@
 #include "z_dm_char05.h"
 #include "objects/object_dmask/object_dmask.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar05*)thisx)
 
@@ -47,16 +47,16 @@ const ActorInit Dm_Char05_InitVars = {
     (ActorFunc)DmChar05_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_dmask_Anim_001090, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_dmask_Anim_004288, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_dmask_Anim_0001A8, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_dmask_Anim_00017C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_dmask_Anim_0011A0, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_dmask_Anim_0013A4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_dmask_Anim_001090, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dmask_Anim_004288, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dmask_Anim_0001A8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dmask_Anim_00017C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dmask_Anim_0011A0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_dmask_Anim_0013A4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-void func_80AAC5A0(SkelAnime* skelAnime, ActorAnimationEntry* animation, u16 arg2) {
+void func_80AAC5A0(SkelAnime* skelAnime, AnimationInfo* animation, u16 arg2) {
     f32 phi_f2;
 
     animation += arg2;

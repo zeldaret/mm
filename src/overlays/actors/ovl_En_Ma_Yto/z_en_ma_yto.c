@@ -7,7 +7,7 @@
 #include "z_en_ma_yto.h"
 #include "objects/object_ma2/object_ma2.h"
 
-#define FLAGS 0x02100009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMaYto*)thisx)
 
@@ -109,19 +109,19 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static struct_80B8E1A8 sAnimationInfo[] = {
-    { &object_ma2_Anim_00A174, 1.0f, 0, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, 0, -6.0f },  //
-    { &object_ma2_Anim_00AF7C, 1.0f, 2, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, 2, -6.0f },  //
-    { &object_ma2_Anim_000CC0, 1.0f, 0, 0.0f }, { &object_ma2_Anim_000CC0, 1.0f, 0, -6.0f },  //
-    { &object_ma2_Anim_016720, 1.0f, 0, 0.0f }, { &object_ma2_Anim_016720, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_005314, 1.0f, 0, 0.0f }, { &object_ma2_Anim_005314, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_0093E8, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0093E8, 1.0f, 0, -10.0f }, //
-    { &object_ma2_Anim_007E28, 1.0f, 0, 0.0f }, { &object_ma2_Anim_007E28, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_0070EC, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0070EC, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_003D54, 1.0f, 0, 0.0f }, { &object_ma2_Anim_003D54, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_001FD0, 1.0f, 0, 0.0f }, { &object_ma2_Anim_001FD0, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_0030B4, 1.0f, 0, 0.0f }, { &object_ma2_Anim_0030B4, 1.0f, 0, -8.0f },  //
-    { &object_ma2_Anim_004370, 1.0f, 0, 0.0f }, { &object_ma2_Anim_004370, 1.0f, 0, -8.0f },  //
+static AnimationSpeedInfo sAnimationInfo[] = {
+    { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_00A174, 1.0f, ANIMMODE_LOOP, -6.0f },  //
+    { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_ma2_Anim_00AF7C, 1.0f, ANIMMODE_ONCE, -6.0f },  //
+    { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_000CC0, 1.0f, ANIMMODE_LOOP, -6.0f },  //
+    { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_016720, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_005314, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0093E8, 1.0f, ANIMMODE_LOOP, -10.0f }, //
+    { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_007E28, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0070EC, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_003D54, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_001FD0, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_0030B4, 1.0f, ANIMMODE_LOOP, -8.0f },  //
+    { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_ma2_Anim_004370, 1.0f, ANIMMODE_LOOP, -8.0f },  //
 };
 
 static TexturePtr sMouthTextures[] = {
@@ -282,7 +282,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, GlobalContext* globalCtx) {
             break;
 
         case MA_YTO_TYPE_4:
-            this->actor.flags |= 0x10;
+            this->actor.flags |= ACTOR_FLAG_10;
             EnMaYto_SetupWarmFuzzyFeelingCs(this);
             break;
 
@@ -882,10 +882,10 @@ void EnMaYto_SetupAfterMilkRunInit(EnMaYto* this) {
 }
 
 void EnMaYto_AfterMilkRunInit(EnMaYto* this, GlobalContext* globalCtx) {
-    this->actor.flags |= 0x10000;
+    this->actor.flags |= ACTOR_FLAG_10000;
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
 
         if (gSaveContext.weekEventReg[52] & 1) { // if (ProtectedCremia)
             func_801518B0(globalCtx, 0x33C1, &this->actor);
@@ -896,7 +896,7 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, GlobalContext* globalCtx) {
             func_801518B0(globalCtx, 0x33C0, &this->actor);
             this->textId = 0x33C0;
             // Attempted Cremia Cart Ride
-            gSaveContext.weekEventReg[14] |= 0x1;
+            gSaveContext.weekEventReg[14] |= 1;
             this->unk310 = 4;
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
             func_80151BB4(globalCtx, 6);
@@ -978,7 +978,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, GlobalContext* globalCtx) {
             func_801518B0(globalCtx, 0x33C3, &this->actor);
             this->textId = 0x33C3;
             // Attempted Cremia Cart Ride
-            gSaveContext.weekEventReg[14] |= 0x1;
+            gSaveContext.weekEventReg[14] |= 1;
             this->unk310 = 3;
             func_80151BB4(globalCtx, 0x20);
             func_80151BB4(globalCtx, 0x1F);
@@ -990,7 +990,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, GlobalContext* globalCtx) {
             func_801518B0(globalCtx, 0x33D0, &this->actor);
             this->textId = 0x33D0;
             // Attempted Cremia Cart Ride
-            gSaveContext.weekEventReg[14] |= 0x1;
+            gSaveContext.weekEventReg[14] |= 1;
             this->unk310 = 3;
             func_80151BB4(globalCtx, 6);
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
@@ -1265,9 +1265,9 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 void EnMaYto_ChangeAnim(EnMaYto* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animationSeg), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, GlobalContext* globalCtx) {
@@ -1360,13 +1360,13 @@ void EnMaYto_InitFaceExpression(EnMaYto* this) {
 s32 EnMaYto_HasSpokeToPlayerToday(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.weekEventReg[13] & 0x4) {
+            if (gSaveContext.weekEventReg[13] & 4) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.weekEventReg[13] & 0x8) {
+            if (gSaveContext.weekEventReg[13] & 8) {
                 return true;
             }
             break;
@@ -1389,12 +1389,12 @@ s32 EnMaYto_HasSpokeToPlayer(void) {
             }
 
         case 2:
-            if (gSaveContext.weekEventReg[13] & 0x8) {
+            if (gSaveContext.weekEventReg[13] & 8) {
                 return true;
             }
 
         case 1:
-            if (gSaveContext.weekEventReg[13] & 0x4) {
+            if (gSaveContext.weekEventReg[13] & 4) {
                 return true;
             }
     }
@@ -1404,11 +1404,11 @@ s32 EnMaYto_HasSpokeToPlayer(void) {
 void EnMaYto_SetTalkedFlag(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.weekEventReg[13] |= 0x4;
+            gSaveContext.weekEventReg[13] |= 4;
             break;
 
         case 2:
-            gSaveContext.weekEventReg[13] |= 0x8;
+            gSaveContext.weekEventReg[13] |= 8;
             break;
 
         case 3:

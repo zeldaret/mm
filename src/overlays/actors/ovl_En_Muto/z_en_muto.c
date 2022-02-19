@@ -7,7 +7,7 @@
 #include "z_en_muto.h"
 #include "objects/object_toryo/object_toryo.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnMuto*)thisx)
 
@@ -101,7 +101,7 @@ void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = { &object_toryo_Anim_000E50, &object_toryo_Anim_000E50 };
-    static u8 sAnimationModes[] = { 0, 2 };
+    static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_ONCE };
 
     this->animIndex = animIndex;
     this->frameIndex = Animation_GetLastFrame(&sAnimations[animIndex]->common);

@@ -8,7 +8,7 @@
 #include "objects/object_trt/object_trt.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnTrt*)thisx)
 
@@ -64,12 +64,17 @@ void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
 void EnTrt_NodOff(EnTrt* this);
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_trt_Anim_00DE68, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00EE98, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_00FD34, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_0030EC, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_003D78, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00D52C, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_000A44, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_001EF4, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_002224, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_002CB0, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt_InitVars = {
@@ -92,17 +97,17 @@ static ShopItem sShop[] = {
     { SI_POTION_BLUE, { -12, 32, -36 } },
 };
 
-void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
+void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
     f32 frameCount;
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animationSeg);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }
-    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                     animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                     animations->mode, animations->morphFrames);
 }
 
 s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
@@ -1528,7 +1533,7 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
         this->flags |= ENTRT_GIVEN_MUSHROOM;
     }
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx) {

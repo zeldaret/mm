@@ -7,7 +7,7 @@
 #include "z_en_ma4.h"
 #include "objects/object_ma1/object_ma1.h"
 
-#define FLAGS 0x02000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMa4*)thisx)
 
@@ -112,33 +112,33 @@ void EnMa4_UpdateEyes(EnMa4* this) {
     }
 }
 
-static struct_80B8E1A8 sAnimationInfo[] = {
-    { &object_ma1_Anim_009E58, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_009E58, 1.0f, 0, -6.0f }, // Idle anim
-    { &object_ma1_Anim_002A8C, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_002A8C, 1.0f, 0, -6.0f }, // Looking around anim
-    { &object_ma1_Anim_018948, 1.0f, 2, 0.0f },
-    { &object_ma1_Anim_018948, 1.0f, 2, -6.0f }, // Starts holding hands anim
-    { &object_ma1_Anim_01B76C, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_01B76C, 1.0f, 0, -6.0f }, // Holnding hands anim
-    { &object_ma1_Anim_007328, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_007328, 1.0f, 0, -6.0f }, // Walking anim
-    { &object_ma1_Anim_014088, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_014088, 1.0f, 0, -6.0f }, //
-    { &object_ma1_Anim_015B7C, 1.0f, 2, 0.0f },
-    { &object_ma1_Anim_015B7C, 1.0f, 2, -6.0f }, // Shoot arrow anim
-    { &object_ma1_Anim_007D98, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_007D98, 1.0f, 0, -6.0f }, // Sitting anim
-    { &object_ma1_Anim_00852C, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_00852C, 1.0f, 0, -6.0f }, // Sitting traumatized anim
-    { &object_ma1_Anim_008F6C, 1.0f, 0, 0.0f },
-    { &object_ma1_Anim_008F6C, 1.0f, 0, -6.0f }, // Sitting sad anim
+static AnimationSpeedInfo sAnimationInfo[] = {
+    { &object_ma1_Anim_009E58, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_009E58, 1.0f, ANIMMODE_LOOP, -6.0f }, // Idle anim
+    { &object_ma1_Anim_002A8C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_002A8C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Looking around anim
+    { &object_ma1_Anim_018948, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_ma1_Anim_018948, 1.0f, ANIMMODE_ONCE, -6.0f }, // Starts holding hands anim
+    { &object_ma1_Anim_01B76C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_01B76C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Holnding hands anim
+    { &object_ma1_Anim_007328, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_007328, 1.0f, ANIMMODE_LOOP, -6.0f }, // Walking anim
+    { &object_ma1_Anim_014088, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_014088, 1.0f, ANIMMODE_LOOP, -6.0f }, //
+    { &object_ma1_Anim_015B7C, 1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_ma1_Anim_015B7C, 1.0f, ANIMMODE_ONCE, -6.0f }, // Shoot arrow anim
+    { &object_ma1_Anim_007D98, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_007D98, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting anim
+    { &object_ma1_Anim_00852C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_00852C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting traumatized anim
+    { &object_ma1_Anim_008F6C, 1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_ma1_Anim_008F6C, 1.0f, ANIMMODE_LOOP, -6.0f }, // Sitting sad anim
 };
 
 void EnMa4_ChangeAnim(EnMa4* this, s32 index) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[index].animationSeg, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[index].animationSeg), sAnimationInfo[index].mode,
-                     sAnimationInfo[index].transitionRate);
+    Animation_Change(&this->skelAnime, sAnimationInfo[index].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationInfo[index].animation), sAnimationInfo[index].mode,
+                     sAnimationInfo[index].morphFrames);
 }
 
 void func_80ABDD9C(EnMa4* this, GlobalContext* globalCtx) {
@@ -240,7 +240,7 @@ void EnMa4_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMa4* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    gSaveContext.weekEventReg[8] &= (u8)~0x01;
+    gSaveContext.weekEventReg[8] &= (u8)~1;
 }
 
 // Running in circles in the ranch
@@ -332,7 +332,7 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
     s16 yaw = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if ((this->state == MA4_STATE_AFTERHORSEBACKGAME) || (this->state == MA4_STATE_AFTERDESCRIBETHEMCS)) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
     } else if (this->type != MA4_TYPE_ALIENS_WON) {
         EnMa4_RunInCircles(this, globalCtx);
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -694,7 +694,7 @@ void EnMa4_InitHorsebackGame(EnMa4* this, GlobalContext* globalCtx) {
 
     globalCtx->interfaceCtx.unk_280 = 1;
     func_8010E9F0(4, 0);
-    gSaveContext.weekEventReg[8] |= 0x01;
+    gSaveContext.weekEventReg[8] |= 1;
     func_80112AFC(globalCtx);
     player->stateFlags1 |= 0x20;
     this->actionFunc = EnMa4_SetupHorsebackGameWait;
@@ -730,7 +730,7 @@ void EnMa4_HorsebackGameWait(EnMa4* this, GlobalContext* globalCtx) {
 }
 
 void EnMa4_SetupHorsebackGameEnd(EnMa4* this, GlobalContext* globalCtx) {
-    gSaveContext.weekEventReg[8] &= (u8)~0x01;
+    gSaveContext.weekEventReg[8] &= (u8)~1;
     this->actionFunc = EnMa4_HorsebackGameEnd;
     Audio_QueueSeqCmd(NA_BGM_STOP);
     Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
@@ -846,12 +846,12 @@ void EnMa4_SetupEndEponasSongCs(EnMa4* this) {
 void EnMa4_EndEponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    this->actor.flags |= 0x10000;
+    this->actor.flags |= ACTOR_FLAG_10000;
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         player->stateFlags1 &= ~0x20;
         func_801518B0(globalCtx, 0x334C, &this->actor);
         this->textId = 0x334C;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
         func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
@@ -922,12 +922,12 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
                     }
                 }
                 this->state = MA4_STATE_DEFAULT;
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
             } else if (this->state == MA4_STATE_AFTERDESCRIBETHEMCS) {
                 // "Cremia doesn't believe me..."
                 func_801518B0(globalCtx, 0x3340, &this->actor);
                 this->textId = 0x3340;
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
             }
             break;
 
@@ -964,7 +964,7 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
                     }
                 }
                 this->state = MA4_STATE_DEFAULT;
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
             }
             break;
 
@@ -992,7 +992,7 @@ void EnMa4_StartDialogue(EnMa4* this, GlobalContext* globalCtx) {
                     }
                 }
                 this->state = MA4_STATE_DEFAULT;
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
             }
             break;
 

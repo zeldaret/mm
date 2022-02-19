@@ -7,7 +7,7 @@
 #include "z_en_dnp.h"
 #include "objects/object_dnp/object_dnp.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnDnp*)thisx)
 
@@ -56,20 +56,33 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, 0 },
-    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0026B8, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_004D08, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_0071F4, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_007960, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_008588, 1.0f, 0, -1, 2, 0 },
-    { &object_dnp_Anim_00A900, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00B754, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_00674C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, 2, -4 }, { &object_dnp_Anim_006B74, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_012428, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, 0 },
-    { &object_dnp_Anim_00B324, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, 0, 0 },  { &object_dnp_Anim_00923C, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, 0, -4 }, { &object_dnp_Anim_00125C, 1.0f, 0, -1, 2, -4 },
-    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_001C1C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, 2, 0 },  { &object_dnp_Anim_00625C, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dnp_Anim_0007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0026B8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_004D08, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0071F4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_007960, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_008588, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_00A900, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00AEB8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00B754, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_00674C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00BAD8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_006B74, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_012428, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnp_Anim_00923C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_009AA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_00125C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnp_Anim_0017F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_001C1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnp_Anim_0057AC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnp_Anim_00625C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 static s32 D_80B3DE58[] = {
@@ -122,7 +135,7 @@ s32 func_80B3CC38(EnDnp* this, s32 arg1) {
 
     if (arg1 != this->unk_340) {
         this->unk_340 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
     }
 
     return ret;
@@ -211,14 +224,14 @@ s32 func_80B3D044(EnDnp* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_324 = 0xFF;
         }
         func_8013AED4(&this->unk_322, 0, 7);
         this->actionFunc = func_80B3D11C;
         ret = true;
     } else if (this->unk_322 & 0x200) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         func_8013AED4(&this->unk_322, 3, 7);
         this->unk_322 &= ~(0x200 | 0x10);
         this->actionFunc = func_80B3D2D4;
@@ -310,7 +323,7 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             func_8013AED4(&this->unk_322, 3, 7);
             this->unk_322 &= ~0x10;
             this->unk_322 |= 0x400;
@@ -345,7 +358,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_322 |= (0x100 | 0x80 | 0x10);
     this->actor.gravity = -1.0f;
     if (ENDNP_GET_7(&this->actor) == ENDNP_GET_7_1) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.00085000007f);
         func_8013AED4(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;

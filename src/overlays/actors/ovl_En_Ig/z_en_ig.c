@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_dai/object_dai.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnIg*)thisx)
 
@@ -112,12 +112,17 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dai_Anim_0048B4, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_0048B4, 1.0f, 0, -1, 0, -4 },
-    { &object_dai_Anim_005100, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_005100, 1.0f, 0, -1, 0, -4 },
-    { &object_dai_Anim_0010F8, 1.0f, 0, -1, 2, 0 }, { &object_dai_Anim_001E44, 1.0f, 0, -1, 0, -4 },
-    { &object_dai_Anim_0014BC, 1.0f, 0, -1, 2, 0 }, { &object_dai_Anim_003CAC, 1.0f, 0, -1, 2, -4 },
-    { &object_dai_Anim_0040E0, 1.0f, 0, -1, 0, 0 }, { &object_dai_Anim_0040E0, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dai_Anim_0048B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dai_Anim_0048B4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dai_Anim_005100, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dai_Anim_005100, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dai_Anim_0010F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dai_Anim_001E44, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dai_Anim_0014BC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dai_Anim_003CAC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dai_Anim_0040E0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dai_Anim_0040E0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 Actor* func_80BF1150(EnIg* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId) {
@@ -201,7 +206,7 @@ s32 func_80BF1284(EnIg* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_3FC = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
         this->unk_3D4 = this->skelAnime.playSpeed;
     }
 
@@ -538,7 +543,7 @@ s32 func_80BF1DF4(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
             this->unk_3E0 = arg2->unk8 - arg2->unk4;
             this->unk_3E2 = sp56 - arg2->unk4;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_3D0 |= 0x100;
             func_80BF1284(this, 3);
             this->actor.gravity = 0.0f;
@@ -647,7 +652,7 @@ s32 func_80BF2368(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->actor.targetMode = 0;
     this->unk_3D0 = 0;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
 
     switch (arg2->unk0) {
         case 5:
@@ -843,11 +848,11 @@ void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx) {
     if (!func_80133038(globalCtx, D_80BF3260, &sp20) ||
         ((this->unk_298.unk0 != sp20.unk0) && !func_80BF2368(this, globalCtx, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         sp20.unk0 = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
     this->unk_2A8 = func_80BF146C(this, globalCtx);
     this->unk_298.unk0 = sp20.unk0;

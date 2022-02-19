@@ -7,7 +7,7 @@
 #include "z_en_zo.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnZo*)thisx)
 
@@ -91,11 +91,14 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &gZoraIdleAnim, 1.0f, 0, -1, 0, 0 },       { &gZoraIdleAnim, 1.0f, 0, -1, 0, -4 },
-    { &gZoraSurfacingAnim, 1.0f, 0, -1, 0, -4 }, { &gZoraHandsOnHipsTappingFootAnim, 1.0f, 0, -1, 0, -4 },
-    { &gZoraArmsOpenAnim, 1.0f, 0, -1, 0, -4 },  { &gZoraThrowRupeeAnim, 1.0f, 0, -1, 0, -4 },
-    { &gZoraWalkAnim, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gZoraIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraSurfacingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraHandsOnHipsTappingFootAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraArmsOpenAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraThrowRupeeAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gZoraWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
@@ -110,11 +113,11 @@ s32 EnZo_SetAnimation(SkelAnime* skelAnime, s16 index) {
         didChange = true;
         frameCount = sAnimations[index].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[index].animationSeg);
+            frameCount = Animation_GetLastFrame(sAnimations[index].animation);
         }
-        Animation_Change(skelAnime, sAnimations[index].animationSeg, sAnimations[index].playbackSpeed,
-                         sAnimations[index].frame, frameCount, sAnimations[index].mode,
-                         sAnimations[index].transitionRate);
+        Animation_Change(skelAnime, sAnimations[index].animation, sAnimations[index].playSpeed,
+                         sAnimations[index].startFrame, frameCount, sAnimations[index].mode,
+                         sAnimations[index].morphFrames);
     }
     return didChange;
 }
@@ -196,7 +199,7 @@ void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
     }
 
     EnZo_Blink(this, 3);
-    func_8013D9C8(globalCtx, this->limbRotY, this->limbRotZ, 20);
+    SubS_FillLimbRotTables(globalCtx, this->limbRotY, this->limbRotZ, 20);
 }
 
 void EnZo_Walk(EnZo* this, GlobalContext* globalCtx) {

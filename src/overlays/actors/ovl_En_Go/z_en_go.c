@@ -10,7 +10,7 @@
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGo*)thisx)
 
@@ -186,20 +186,31 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, 0 },     { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, -4 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },     { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, -4 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, 0 },    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, -4 },    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, 2, -4 },
-    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, 0, 0 },     { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, 2, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 
-    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_0016C8, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_00283C, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_007764, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_002C48, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, 0, 0 },       { &object_taisou_Anim_005790, 1.0f, 0, -1, 0, 0 },
+    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_0016C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_00283C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_007764, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_002C48, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_005790, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 
-    { &object_hakugin_demo_Anim_001420, 1.0f, 0, -1, 2, 0 }, { &object_hakugin_demo_Anim_001A4C, 1.0f, 0, -1, 0, -4 },
-    { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, 2, 0 }, { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, 0, -4 },
+    { &object_hakugin_demo_Anim_001420, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_hakugin_demo_Anim_001A4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 EnGoStruct* func_80A10FD0(EnGoStruct ptr[], Vec3f arg1, Vec3f arg2, Vec3f arg3, f32 arg4, f32 arg5, s32 arg6) {
@@ -701,7 +712,7 @@ s32 func_80A12954(EnGo* this, GlobalContext* globalCtx) {
         (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
         (globalCtx->csCtx.unk_12 == 0)) {
         if (this->unk_3F0 == 0) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_394 = 255;
             this->unk_3F0 = 1;
             this->unk_18C = this->actionFunc;
@@ -709,7 +720,7 @@ s32 func_80A12954(EnGo* this, GlobalContext* globalCtx) {
         func_8013AED4(&this->unk_390, 0, 7);
         this->actionFunc = func_80A14FC8;
     } else if (this->unk_3F0 != 0) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_394 = 255;
         this->unk_3F0 = 0;
         func_8013AED4(&this->unk_390, 3, 7);
@@ -768,7 +779,7 @@ s32 func_80A12B78(EnGo* this, GlobalContext* globalCtx) {
 s32 func_80A12C48(EnGo* this, GlobalContext* globalCtx, s32 arg2) {
     s8 objIdx = this->actor.objBankIndex;
     s8 objIdx2 = -1;
-    s32 ret = 0;
+    s32 ret = false;
 
     if ((arg2 >= 18) && (this->unk_289 >= 0)) {
         objIdx2 = this->unk_289;
@@ -781,7 +792,7 @@ s32 func_80A12C48(EnGo* this, GlobalContext* globalCtx, s32 arg2) {
     if (objIdx2 >= 0) {
         gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objIdx2].segment);
         this->unk_3DC = arg2;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg2);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
         this->unk_398 = this->skelAnime.playSpeed;
         gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[objIdx].segment);
     }
@@ -1275,7 +1286,7 @@ void func_80A14018(EnGo* this, GlobalContext* globalCtx) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166B0, &sp2C);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp2C);
     }
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_3EC = 0;
     this->unk_390 = 0;
@@ -1290,7 +1301,7 @@ void func_80A14104(EnGo* this, GlobalContext* globalCtx) {
     func_80A12C48(this, globalCtx, D_80A166D4[ENGO_GET_70(&this->actor) % 2]);
     temp = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->skelAnime.curFrame = temp;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_3EC = 0;
     this->unk_390 = 0;
@@ -1320,7 +1331,7 @@ void func_80A1428C(EnGo* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     if (this->unk_284 != NULL) {
-        this->actor.flags &= ~0x2000000;
+        this->actor.flags &= ~ACTOR_FLAG_2000000;
         func_8013C8B8(this->unk_284, 0, &sp24);
         temp = Math_Vec3f_Yaw(&sp30, &sp24);
         this->actor.shape.rot.y = temp;
@@ -1426,7 +1437,7 @@ void func_80A146CC(EnGo* this, GlobalContext* globalCtx) {
     func_80A12C48(this, globalCtx, 0);
     this->unk_3A4 *= 5.0f;
     Actor_SetScale(&this->actor, this->unk_3A4);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.targetMode = 3;
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
@@ -1579,7 +1590,7 @@ void func_80A14B30(EnGo* this, GlobalContext* globalCtx) {
         this->actor.shape.yOffset = 0.0f;
     }
 
-    func_8013D9C8(globalCtx, &this->unk_3CE[0], &this->unk_3C8[0], 3);
+    SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
     Math_ApproachS(&this->actor.shape.rot.y, sp26, 4, 0x2AA8);
 }
 
@@ -1733,7 +1744,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
                 }
             }
 
-            func_8013D9C8(globalCtx, this->unk_3CE, this->unk_3C8, 3);
+            SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
             func_800EDF24(&this->actor, globalCtx, sp2C);
         }
     }
@@ -1747,8 +1758,8 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
     if ((this->unk_390 & 0x1000) && (this->actor.colChkInfo.damageEffect == 0xF)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
-        this->actor.flags &= ~0x10;
-        this->actor.flags |= 0x2000000;
+        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_2000000;
 
         func_80A118F8(this->unk_3F8, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
@@ -1853,7 +1864,7 @@ void func_80A157C4(EnGo* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
         }
-        func_8013D9C8(globalCtx, this->unk_3CE, this->unk_3C8, 3);
+        SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
         return;
     }
 
