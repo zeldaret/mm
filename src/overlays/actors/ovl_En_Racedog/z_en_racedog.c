@@ -88,6 +88,7 @@ extern ColliderCylinderInit D_80B25E98;
 extern CollisionCheckInfoInit2 D_80B25EC4;
 extern DamageTable D_80B25ED0;
 extern InitChainEntry D_80B25FF0[];
+extern f32 D_80B25F14;
 
 extern UNK_TYPE D_06000618;
 extern UNK_TYPE D_060080F0;
@@ -146,7 +147,13 @@ void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B2538C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25448.s")
+void func_80B25448(EnRacedog* this) {
+    if (this->actor.speedXZ < 3.0f) {
+        D_80B25F14 = 0.9f;
+    } else {
+        D_80B25F14 = 1.0f;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25490.s")
 
