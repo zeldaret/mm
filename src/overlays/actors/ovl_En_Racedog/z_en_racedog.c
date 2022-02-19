@@ -99,6 +99,7 @@ extern DamageTable D_80B25ED0;
 extern InitChainEntry D_80B25FF0[];
 extern f32 D_80B25F14;
 extern D_80B25D90_s D_80B25D90[];
+extern Vec3f D_80B26000;
 
 extern UNK_TYPE D_06000618;
 extern UNK_TYPE D_060080F0;
@@ -181,13 +182,28 @@ void func_80B256BC(EnRacedog* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B2583C.s")
 
+void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B258D8.s")
 
-s32 func_80B25A74(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25A74.s")
+s32 func_80B25A74(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return false;
+}
 
-void func_80B25A90(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25A90.s")
+void func_80B25A90(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    s32 pad;
+    EnRacedog* this = THIS;
+    Vec3f sp1C;
+
+    sp1C = D_80B26000;
+
+    if (limbIndex == 5) {
+        Matrix_MultiplyVector3fByState(&sp1C, &this->actor.focus.pos);
+    }
+
+    if (limbIndex == 12) {
+        func_80B258D8(this, globalCtx);
+    }
+}
 
 void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnRacedog* this = THIS;
