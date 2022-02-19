@@ -103,7 +103,7 @@ typedef struct {
     /* 0x7 */ u8 unk7;
     /* 0x8 */ u8 unk8;
     /* 0x9 */ UNK_TYPE1 pad9[0x3];
-} CsRumble; // size = 0xC
+} CutsceneRumble; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u16 unk0;
