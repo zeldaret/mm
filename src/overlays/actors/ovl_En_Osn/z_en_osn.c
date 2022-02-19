@@ -371,11 +371,11 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
                 return 0x1FCD;
             }
             this->unk_1EA |= 8;
-            if (gSaveContext.save.weekEventReg[0x4C] & 0x20) {
+            if (gSaveContext.save.weekEventReg[76] & 0x20) {
                 return 0x1FC8;
             }
 
-            gSaveContext.save.weekEventReg[0x4C] |= 0x20;
+            gSaveContext.save.weekEventReg[76] |= 0x20;
             return 0x1FCE;
         }
 
@@ -389,10 +389,10 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
                 return 0x1FCD;
             }
             this->unk_1EA |= 0x10;
-            if (gSaveContext.save.weekEventReg[0x4C] & 0x40) {
+            if (gSaveContext.save.weekEventReg[76] & 0x40) {
                 return 0x1FC8;
             }
-            gSaveContext.save.weekEventReg[0x4C] |= 0x40;
+            gSaveContext.save.weekEventReg[76] |= 0x40;
             return 0x1FD0;
         }
 
