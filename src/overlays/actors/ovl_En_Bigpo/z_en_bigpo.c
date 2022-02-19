@@ -1359,10 +1359,6 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-/*
- * this matches without OPENDISPS but with it has stack issues,
- *  might be able to find an alternative match with the macros, so far no success
- */
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = THIS;
     f32 magnitude;
