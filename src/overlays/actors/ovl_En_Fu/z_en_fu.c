@@ -230,8 +230,8 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnFu* this = THIS;
 
-    gSaveContext.weekEventReg[63] &= (u8)~1;
-    gSaveContext.weekEventReg[8] &= (u8)~1;
+    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+    gSaveContext.save.weekEventReg[8] &= (u8)~1;
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -532,8 +532,8 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x287D:
-                gSaveContext.weekEventReg[63] |= 1;
-                gSaveContext.weekEventReg[63] &= (u8)~2;
+                gSaveContext.save.weekEventReg[63] |= 1;
+                gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
@@ -605,8 +605,8 @@ void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
                     case 0x2884:
                     case 0x2887:
                     case 0x288A:
-                        gSaveContext.weekEventReg[63] &= (u8)~1;
-                        gSaveContext.weekEventReg[63] &= (u8)~2;
+                        gSaveContext.save.weekEventReg[63] &= (u8)~1;
+                        gSaveContext.save.weekEventReg[63] &= (u8)~2;
                         func_809622FC(this);
                         break;
 

@@ -66,7 +66,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (DMCHAR01_GET(&this->dyna.actor)) {
         case DMCHAR01_0:
-            if (gSaveContext.weekEventReg[20] & 2) {
+            if (gSaveContext.save.weekEventReg[20] & 2) {
                 this->unk_34C = 2;
                 this->actionFunc = func_80AA8F1C;
                 break;
@@ -96,7 +96,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case DMCHAR01_1:
-            if ((gSaveContext.weekEventReg[20] & 2) || (gSaveContext.sceneSetupIndex == 1)) {
+            if ((gSaveContext.save.weekEventReg[20] & 2) || (gSaveContext.sceneSetupIndex == 1)) {
                 this->unk_34C = 1;
                 this->actionFunc = func_80AA8F1C;
             } else {
@@ -106,7 +106,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         case DMCHAR01_2:
             this->unk_34C = 0;
-            if (!(gSaveContext.weekEventReg[20] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[20] & 1)) {
                 this->unk_34C = 1;
                 this->dyna.actor.world.pos.y -= 400.0f;
             }
@@ -122,7 +122,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
         case DMCHAR01_3:
             this->dyna.actor.world.rot.y += 0x8000;
             this->dyna.actor.shape.rot.y += 0x8000;
-            if (!(gSaveContext.weekEventReg[20] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[20] & 1)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -132,7 +132,7 @@ void DmChar01_Init(Actor* thisx, GlobalContext* globalCtx) {
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_mtoride_Colheader_00FE5C);
 
             this->unk_34D = true;
-            if (!(gSaveContext.weekEventReg[20] & 2)) {
+            if (!(gSaveContext.save.weekEventReg[20] & 2)) {
                 this->actionFunc = func_80AA9020;
                 this->dyna.actor.world.pos.y -= 120.0f;
             } else {
@@ -158,7 +158,7 @@ void func_80AA8698(DmChar01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Player* player2 = GET_PLAYER(globalCtx);
 
-    if (gSaveContext.weekEventReg[20] & 1) {
+    if (gSaveContext.save.weekEventReg[20] & 1) {
         return;
     }
 
@@ -178,7 +178,7 @@ void func_80AA8698(DmChar01* this, GlobalContext* globalCtx) {
 
         if ((player2->actor.world.pos.x > -40.0f) && (player2->actor.world.pos.x < 40.0f) &&
             (player2->actor.world.pos.z > 1000.0f) && (player2->actor.world.pos.z < 1078.0f)) {
-            gSaveContext.weekEventReg[20] |= 1;
+            gSaveContext.save.weekEventReg[20] |= 1;
             this->actionFunc = func_80AA884C;
         }
     }
@@ -343,7 +343,7 @@ void func_80AA9020(DmChar01* this, GlobalContext* globalCtx) {
         CsCmdActorAction* temp_v1 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x87)];
 
         if ((temp_v1->startFrame == globalCtx->csCtx.frames) && (temp_v1->unk0 == 2)) {
-            gSaveContext.weekEventReg[20] |= 2;
+            gSaveContext.save.weekEventReg[20] |= 2;
             this->actionFunc = func_80AA90AC;
         }
     }

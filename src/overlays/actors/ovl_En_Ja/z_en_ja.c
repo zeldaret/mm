@@ -291,7 +291,7 @@ void func_80BC2150(EnJa* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
+    u32* unk_14 = &gSaveContext.save.daySpeed;
     struct_80133038_arg2 sp18;
 
     this->unk_35C = REG(15) + *unk_14;

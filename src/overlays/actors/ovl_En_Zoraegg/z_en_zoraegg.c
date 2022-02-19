@@ -118,7 +118,7 @@ void EnZoraegg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ENZORAEGG_1F_7:
         case ENZORAEGG_1F_8:
         case ENZORAEGG_1F_9:
-            if (gSaveContext.weekEventReg[19] & 0x40) {
+            if (gSaveContext.save.weekEventReg[19] & 0x40) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -131,7 +131,7 @@ void EnZoraegg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ENZORAEGG_1F_14:
         case ENZORAEGG_1F_15:
         case ENZORAEGG_1F_16:
-            if (!(gSaveContext.weekEventReg[19] & 0x40)) {
+            if (!(gSaveContext.save.weekEventReg[19] & 0x40)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -206,13 +206,13 @@ void EnZoraegg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80B319A8(GlobalContext* globalCtx) {
-    return gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 7;
+    return gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 7;
 }
 
 void func_80B319D0(GlobalContext* globalCtx, s32 arg1) {
     if ((arg1 < 8) && (arg1 >= 0)) {
-        gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 &= ~7;
-        gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 |= arg1;
+        gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 &= ~7;
+        gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 |= arg1;
     }
 }
 
@@ -473,7 +473,7 @@ void func_80B326F4(EnZoraegg* this, GlobalContext* globalCtx) {
                          Animation_GetLastFrame(&object_zoraegg_Anim_004D20), 2, 5.0f);
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32644;
-        gSaveContext.weekEventReg[19] |= 0x40;
+        gSaveContext.save.weekEventReg[19] |= 0x40;
         this->unk_1EC = 2;
         this->unk_1EE = 100;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_2);
