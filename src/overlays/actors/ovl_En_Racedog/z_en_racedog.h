@@ -10,7 +10,8 @@ typedef void (*EnRacedogActionFunc)(struct EnRacedog*, GlobalContext*);
 typedef struct EnRacedog {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnRacedogActionFunc actionFunc;
-    /* 0x148 */ char unk_148[0x48];
+    /* 0x148 */ char unk_148[0x4];
+    /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ char unk_1DC[0xC];
     /* 0x1E8 */ s32 unk_1E8;

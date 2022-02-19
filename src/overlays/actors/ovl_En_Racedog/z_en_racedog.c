@@ -159,7 +159,13 @@ void func_80B25448(EnRacedog* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B255AC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B256BC.s")
+void func_80B256BC(EnRacedog* this) {
+    s16 curFrame = this->skelAnime.curFrame;
+
+    if ((curFrame == 1) || (curFrame == 7)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Update.s")
 
