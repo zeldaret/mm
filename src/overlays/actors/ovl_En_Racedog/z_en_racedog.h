@@ -20,7 +20,9 @@ typedef struct EnRacedog {
     /* 0x292 */ s16 unk_292;
     /* 0x294 */ char unk_294[0x8];
     /* 0x29C */ s16 unk_29C;
-    /* 0x29E */ char unk_29E[0x2A];
+    /* 0x29E */ char unk_29E[0xE];
+    /* 0x2AC */ f32 unk_2AC;
+    /* 0x2B0 */ char unk_2B8[0x18];
 } EnRacedog; // size = 0x2C8
 
 extern const ActorInit En_Racedog_InitVars;

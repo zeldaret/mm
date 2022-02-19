@@ -84,11 +84,21 @@ static InitChainEntry D_80B25FF0[] = {
 
 #endif
 
+typedef struct {
+    s16 unk_00;
+    s16 unk_02;
+    s16 unk_04;
+    s16 unk_06;
+    f32 unk_08;
+    f32 unk_0C;
+} D_80B25D90_s;
+
 extern ColliderCylinderInit D_80B25E98;
 extern CollisionCheckInfoInit2 D_80B25EC4;
 extern DamageTable D_80B25ED0;
 extern InitChainEntry D_80B25FF0[];
 extern f32 D_80B25F14;
+extern D_80B25D90_s D_80B25D90[];
 
 extern UNK_TYPE D_06000618;
 extern UNK_TYPE D_060080F0;
@@ -173,8 +183,52 @@ void func_80B256BC(EnRacedog* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B258D8.s")
 
+s32 func_80B25A74(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25A74.s")
 
+void func_80B25A90(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25A90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Draw.s")
+void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnRacedog* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    switch (D_80B25D90[this->unk_290].unk_00) {
+        case 3:
+            gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
+            break;
+        case 1:
+            gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 0);
+            break;
+        case 5:
+            gDPSetEnvColor(POLY_OPA_DISP++, 79, 79, 143, 0);
+            break;
+        case 6:
+            gDPSetEnvColor(POLY_OPA_DISP++, 255, 207, 47, 0);
+            break;
+        case 4:
+            gDPSetEnvColor(POLY_OPA_DISP++, 143, 79, 47, 0);
+            break;
+        case 2:
+            gDPSetEnvColor(POLY_OPA_DISP++, 143, 143, 143, 0);
+            break;
+        default:
+            gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
+            break;
+    }
+
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateStateAroundXAxis(this->unk_2AC);
+    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_80B25A74, func_80B25A90, &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
