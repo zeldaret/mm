@@ -574,7 +574,7 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
             this->unk_1EA |= 0x20;
     }
 
-    func_801518B0(globalCtx, this->unk_1F4, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_1F4, &this->actor);
 }
 
 void func_80AD1398(EnOsn* this) {
@@ -615,7 +615,7 @@ void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     } else {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_1F4 = func_80AD0E10(this, globalCtx);
-            func_801518B0(globalCtx, this->unk_1F4, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_1F4, &this->actor);
             this->actionFunc = func_80AD19A0;
         } else if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
                    (temp_v1 > -0x4000)) {
@@ -640,12 +640,12 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
     u8 pad;
     u32 temp_v0;
 
-    if (func_800EE29C(globalCtx, 0x82)) {
-        temp_v0 = func_800EE200(globalCtx, 0x82);
+    if (Cutscene_CheckActorAction(globalCtx, 0x82)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x82);
         this->unk_1F0 = 0;
-        if (this->unk_1ED != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
-            this->unk_1ED = globalCtx->csCtx.npcActions[temp_v0]->unk0;
-            switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+        if (this->unk_1ED != globalCtx->csCtx.actorActions[temp_v0]->action) {
+            this->unk_1ED = globalCtx->csCtx.actorActions[temp_v0]->action;
+            switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
                 case 1:
                     this->unk_1EC = 2;
                     break;
@@ -735,7 +735,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
              (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     } else {
         this->unk_1F0 = 1;
         this->unk_1ED = 0x63;

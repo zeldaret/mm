@@ -1173,8 +1173,8 @@ void EnRailgibud_SinkIntoGround(EnRailgibud* this, GlobalContext* globalCtx) {
 s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        actionIndex = func_800EE200(globalCtx, this->actorActionCommand);
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand);
         if (this->csAction != globalCtx->csCtx.actorActions[actionIndex]->action) {
             this->csAction = globalCtx->csCtx.actorActions[actionIndex]->action;
             switch (globalCtx->csCtx.actorActions[actionIndex]->action) {

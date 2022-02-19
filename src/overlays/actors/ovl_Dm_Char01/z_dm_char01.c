@@ -196,8 +196,8 @@ void func_80AA884C(DmChar01* this, GlobalContext* globalCtx) {
 }
 
 void func_80AA88A8(DmChar01* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x87)) {
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x87)]->startFrame) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x87)) {
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x87)]->startFrame) {
             D_80AAAE24 = 1;
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_FORT_RISING);
         }
@@ -339,10 +339,10 @@ void func_80AA8F2C(DmChar01* this, GlobalContext* globalCtx) {
 }
 
 void func_80AA9020(DmChar01* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x87)) {
-        CsCmdActorAction* temp_v1 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x87)];
+    if (Cutscene_CheckActorAction(globalCtx, 0x87)) {
+        CsCmdActorAction* temp_v1 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x87)];
 
-        if ((temp_v1->startFrame == globalCtx->csCtx.frames) && (temp_v1->unk0 == 2)) {
+        if ((temp_v1->startFrame == globalCtx->csCtx.frames) && (temp_v1->action == 2)) {
             gSaveContext.weekEventReg[20] |= 2;
             this->actionFunc = func_80AA90AC;
         }

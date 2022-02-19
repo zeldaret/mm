@@ -232,9 +232,9 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
         this->unk_2D4 = this->actor.yawTowardsPlayer;
         this->unk_290 = this->actor.yawTowardsPlayer;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            func_801518B0(globalCtx, D_809C618C[0], &this->actor);
+            Message_StartTextbox(globalCtx, D_809C618C[0], &this->actor);
         } else {
-            func_801518B0(globalCtx, D_809C6198[0], &this->actor);
+            Message_StartTextbox(globalCtx, D_809C6198[0], &this->actor);
         }
     }
 
@@ -406,7 +406,7 @@ void func_809C5524(EnBomBowlMan* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x72F;
     }
     func_809C493C(this, 3, 1.0f);
-    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
     this->actionFunc = func_809C5598;
 }
 
@@ -585,10 +585,10 @@ void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
                     this->unk_2C0 = 5;
-                    func_801518B0(globalCtx, D_809C618C[this->unk_2C0], &this->actor);
+                    Message_StartTextbox(globalCtx, D_809C618C[this->unk_2C0], &this->actor);
                 } else {
                     this->unk_2C0 = 3;
-                    func_801518B0(globalCtx, D_809C6198[this->unk_2C0], &this->actor);
+                    Message_StartTextbox(globalCtx, D_809C6198[this->unk_2C0], &this->actor);
                 }
                 this->unk_29C = 0;
                 this->actionFunc = func_809C4DA4;
