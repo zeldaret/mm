@@ -96,6 +96,9 @@ void EnBomChu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroySphere(globalCtx, &this->collider);
 }
 
+/**
+ * Returns true if floorPoly is valid for the Bombchu to move on, false otherwise.
+ */
 s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalContext* globalCtx) {
     Vec3f normal;
     Vec3f vec;
@@ -111,18 +114,18 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
         normal.z = COLPOLY_GET_NORMAL(floorPoly->normal.z);
     } else {
         EnBomChu_Explode(this, globalCtx);
-        return 0;
+        return false;
     }
 
     normDotUp = DOTXYZ(normal, this->axisUp);
 
     if (fabsf(normDotUp) >= 0.999f) {
-        return 0;
+        return false;
     }
 
     angle = func_80086C48(normDotUp);
     if (angle < 0.001f) {
-        return 0;
+        return false;
     }
 
     Math3D_CrossProduct(&this->axisUp, &normal, &vec);
@@ -131,7 +134,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
 
     if (magnitude < 0.001f) {
         EnBomChu_Explode(this, globalCtx);
-        return 0;
+        return false;
     }
 
     Math_Vec3f_Scale(&vec, 1.0f / magnitude);
@@ -143,12 +146,12 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
     magnitude = Math3D_Vec3fMagnitude(&this->axisForwards);
     if (magnitude < 0.001f) {
         EnBomChu_Explode(this, globalCtx);
-        return 0;
+        return false;
     }
 
     Math_Vec3f_Scale(&this->axisForwards, 1.0f / magnitude);
     Math_Vec3f_Copy(&this->axisUp, &normal);
-    return 1;
+    return true;
 }
 
 void EnBomChu_UpdateRotation(EnBomChu* this) {
@@ -219,7 +222,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     s32 bgIdSide;
     s32 bgIdUpDown;
     s32 i;
-    s32 sp70;
+    s32 isFloorPolyValid;
     f32 lineLength;
     Vec3f posA;
     Vec3f posB;
@@ -227,7 +230,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
     Vec3f posUpDown;
 
     bgIdUpDown = bgIdSide = BGCHECK_SCENE;
-    sp70 = 0;
+    isFloorPolyValid = false;
 
     this->actor.speedXZ = this->movingSpeed;
     lineLength = 2.0f * this->movingSpeed;
@@ -252,13 +255,13 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
         posB.z = (this->axisForwards.z * lineLength) + posA.z;
 
         if (EnBomChu_IsOnCollisionPoly(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-            sp70 = EnBomChu_UpdateFloorPoly(this, polySide, globalCtx);
+            isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, polySide, globalCtx);
             Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
             this->actor.floorBgId = bgIdSide;
             this->actor.speedXZ = 0.0f;
         } else {
             if (this->actor.floorPoly != polyUpDown) {
-                sp70 = EnBomChu_UpdateFloorPoly(this, polyUpDown, globalCtx);
+                isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, polyUpDown, globalCtx);
             }
 
             Math_Vec3f_Copy(&this->actor.world.pos, &posUpDown);
@@ -288,7 +291,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
             }
 
             if (EnBomChu_IsOnCollisionPoly(globalCtx, &posA, &posB, &posSide, &polySide, &bgIdSide)) {
-                sp70 = EnBomChu_UpdateFloorPoly(this, polySide, globalCtx);
+                isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, polySide, globalCtx);
                 Math_Vec3f_Copy(&this->actor.world.pos, &posSide);
                 this->actor.floorBgId = bgIdSide;
                 break;
@@ -301,7 +304,7 @@ void EnBomChu_Move(EnBomChu* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (sp70 != 0) {
+    if (isFloorPolyValid) {
         EnBomChu_UpdateRotation(this);
         this->actor.shape.rot.x = -this->actor.world.rot.x;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -398,7 +401,7 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
     f32 tempX;
     CollisionPoly* poly = NULL;
     s32 bgId = BGCHECK_SCENE;
-    s32 sp34;
+    s32 isFloorPolyValid;
 
     Math_Vec3f_Copy(&originalWorldPos, &this->actor.world.pos);
     Math_Vec3f_Copy(&originalAxisUp, &this->axisUp);
@@ -433,11 +436,11 @@ void func_808F818C(EnBomChu* this, GlobalContext* globalCtx) {
     posB.z = this->actor.world.pos.z + (2.0f * this->axisUp.z);
 
     if (EnBomChu_IsOnCollisionPoly(globalCtx, &posA, &posB, &originalWorldPos, &poly, &bgId)) {
-        sp34 = EnBomChu_UpdateFloorPoly(this, poly, globalCtx);
+        isFloorPolyValid = EnBomChu_UpdateFloorPoly(this, poly, globalCtx);
         Math_Vec3f_Copy(&this->actor.world.pos, &originalWorldPos);
         this->actor.floorBgId = bgId;
         this->actor.speedXZ = 0.0f;
-        if (sp34 != 0) {
+        if (isFloorPolyValid) {
             EnBomChu_UpdateRotation(this);
             this->actor.shape.rot.x = -this->actor.world.rot.x;
             this->actor.shape.rot.y = this->actor.world.rot.y;
