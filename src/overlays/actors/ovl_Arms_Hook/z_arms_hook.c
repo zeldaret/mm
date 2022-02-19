@@ -107,7 +107,7 @@ void ArmsHook_DetachHookFromActor(ArmsHook* this) {
 
 s32 ArmsHook_CheckForCancel(ArmsHook* this) {
     Player* player = (Player*)this->actor.parent;
-    if (func_801240C8(player)) {
+    if (Player_HoldsHookshot(player)) {
         if ((player->heldItemActionParam != player->itemActionParam) || ((player->actor.flags & 0x100)) ||
             ((player->stateFlags1 & 0x4000080))) {
             this->timer = 0;
@@ -128,7 +128,7 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
 void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((this->actor.parent == NULL) || (!func_801240C8(player))) {
+    if ((this->actor.parent == NULL) || (!Player_HoldsHookshot(player))) {
         ArmsHook_DetachHookFromActor(this);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -312,13 +312,13 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_MultiplyVector3fByState(&D_808C1C10, &this->unk1E0);
             Matrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
             Matrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
-            this->unk1C4 = 0;
+            this->weaponInfo.active = 0;
         } else {
             Matrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk1E0);
             Matrix_MultiplyVector3fByState(&D_808C1C40, &sp5C);
             Matrix_MultiplyVector3fByState(&D_808C1C4C, &sp50);
         }
-        func_80126440(globalCtx, &this->collider.base, &this->unk1C4, &sp5C, &sp50);
+        func_80126440(globalCtx, &this->collider, &this->weaponInfo, &sp5C, &sp50);
         func_8012C28C(globalCtx->state.gfxCtx);
         func_80122868(globalCtx, player);
 

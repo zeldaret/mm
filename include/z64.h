@@ -611,7 +611,7 @@ typedef struct {
     /* 0x214 */ u16 unk_214;
     /* 0x218 */ f32 unk_218;
     /* 0x21C */ s16 unk_21C;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21E */ s16 unk_21E; // do_action label index for the b button
     /* 0x220 */ s16 unk_220;
     /* 0x222 */ s16 unk_222;
     /* 0x224 */ s16 unk_224;
@@ -884,7 +884,10 @@ typedef struct {
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
     /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
+    /* 0x120B2 */ UNK_TYPE1 pad120B2[0xA];
+    /* 0x120BC */ u16 unk_120BC;
+    /* 0x120BE */ UNK_TYPE1 unk_120BE[0x2];
+    /* 0x120C0 */ UNK_TYPE1 unk_120C0[0x14];
     /* 0x120D4 */ UNK_TYPE2 unk120D4;
     /* 0x120D6 */ UNK_TYPE2 unk120D6;
     /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
@@ -1308,7 +1311,7 @@ struct GlobalContext {
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
     /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
-    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
+    /* 0x18794 */ s32 (*unk_18794)(GlobalContext*, Player*, s32, s32);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
@@ -1335,7 +1338,7 @@ struct GlobalContext {
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
-    /* 0x1887C */ s8 unk_1887C;
+    /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
     /* 0x1887F */ u8 unk_1887F;
@@ -1379,6 +1382,14 @@ typedef struct {
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
+
+typedef struct PlayerLib_80122744_arg1 {
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ s8 unk_02;
+    /* 0x03 */ s8 unk_03;
+    /* 0x04 */ Vec3s* unk_04;
+} PlayerLib_80122744_arg1; // size = 0x08
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 

@@ -141,6 +141,32 @@ typedef enum {
     /* 0xFD */ PLAYER_AP_MAX = 0xFD
 } PlayerActionParam;
 
+typedef enum {
+    /* 0x00 */ PLAYER_LIMB_NONE,
+    /* 0x01 */ PLAYER_LIMB_ROOT,
+    /* 0x02 */ PLAYER_LIMB_WAIST,
+    /* 0x03 */ PLAYER_LIMB_LOWER,
+    /* 0x04 */ PLAYER_LIMB_R_THIGH,
+    /* 0x05 */ PLAYER_LIMB_R_SHIN,
+    /* 0x06 */ PLAYER_LIMB_R_FOOT,
+    /* 0x07 */ PLAYER_LIMB_L_THIGH,
+    /* 0x08 */ PLAYER_LIMB_L_SHIN,
+    /* 0x09 */ PLAYER_LIMB_L_FOOT,
+    /* 0x0A */ PLAYER_LIMB_UPPER,
+    /* 0x0B */ PLAYER_LIMB_HEAD,
+    /* 0x0C */ PLAYER_LIMB_HAT,
+    /* 0x0D */ PLAYER_LIMB_COLLAR,
+    /* 0x0E */ PLAYER_LIMB_L_SHOULDER,
+    /* 0x0F */ PLAYER_LIMB_L_FOREARM,
+    /* 0x10 */ PLAYER_LIMB_L_HAND,
+    /* 0x11 */ PLAYER_LIMB_R_SHOULDER,
+    /* 0x12 */ PLAYER_LIMB_R_FOREARM,
+    /* 0x13 */ PLAYER_LIMB_R_HAND,
+    /* 0x14 */ PLAYER_LIMB_SHEATH,
+    /* 0x15 */ PLAYER_LIMB_TORSO,
+    /* 0x16 */ PLAYER_LIMB_MAX
+} PlayerLimb;
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
@@ -187,6 +213,219 @@ typedef struct {
 
 
 typedef void (*PlayerFuncD58)(struct GlobalContext*, struct Player*);
+
+
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ char unk_02[2]; // probably alignment padding
+    /* 0x04 */ MtxF unk_04;
+} struct_80122D44_arg1_unk_04; // size = 0x44
+
+typedef struct {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ char unk_02[2]; // probably alignment padding
+    /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
+} struct_80122D44_arg1; // size >= 0x114
+
+// 
+#define PLAYER_STATE1_1          (1 << 0)
+// 
+#define PLAYER_STATE1_2          (1 << 1)
+// 
+#define PLAYER_STATE1_4          (1 << 2)
+// 
+#define PLAYER_STATE1_8          (1 << 3)
+// 
+#define PLAYER_STATE1_10         (1 << 4)
+// 
+#define PLAYER_STATE1_20         (1 << 5)
+// 
+#define PLAYER_STATE1_40         (1 << 6)
+// 
+#define PLAYER_STATE1_80         (1 << 7)
+// 
+#define PLAYER_STATE1_100        (1 << 8)
+// 
+#define PLAYER_STATE1_200        (1 << 9)
+// 
+#define PLAYER_STATE1_400        (1 << 10)
+// 
+#define PLAYER_STATE1_800        (1 << 11)
+// 
+#define PLAYER_STATE1_1000       (1 << 12)
+// 
+#define PLAYER_STATE1_2000       (1 << 13)
+// 
+#define PLAYER_STATE1_4000       (1 << 14)
+// 
+#define PLAYER_STATE1_8000       (1 << 15)
+// 
+#define PLAYER_STATE1_10000      (1 << 16)
+// 
+#define PLAYER_STATE1_20000      (1 << 17)
+// 
+#define PLAYER_STATE1_40000      (1 << 18)
+// 
+#define PLAYER_STATE1_80000      (1 << 19)
+// 
+#define PLAYER_STATE1_100000     (1 << 20)
+// 
+#define PLAYER_STATE1_200000     (1 << 21)
+// 
+#define PLAYER_STATE1_400000     (1 << 22)
+// 
+#define PLAYER_STATE1_800000     (1 << 23)
+// 
+#define PLAYER_STATE1_1000000    (1 << 24)
+// 
+#define PLAYER_STATE1_2000000    (1 << 25)
+// 
+#define PLAYER_STATE1_4000000    (1 << 26)
+// 
+#define PLAYER_STATE1_8000000    (1 << 27)
+// 
+#define PLAYER_STATE1_10000000   (1 << 28)
+// 
+#define PLAYER_STATE1_20000000   (1 << 29)
+// 
+#define PLAYER_STATE1_40000000   (1 << 30)
+// 
+#define PLAYER_STATE1_80000000   (1 << 31)
+
+
+// 
+#define PLAYER_STATE2_1          (1 << 0)
+// 
+#define PLAYER_STATE2_2          (1 << 1)
+// 
+#define PLAYER_STATE2_4          (1 << 2)
+// 
+#define PLAYER_STATE2_8          (1 << 3)
+// 
+#define PLAYER_STATE2_10         (1 << 4)
+// 
+#define PLAYER_STATE2_20         (1 << 5)
+// 
+#define PLAYER_STATE2_40         (1 << 6)
+// 
+#define PLAYER_STATE2_80         (1 << 7)
+// 
+#define PLAYER_STATE2_100        (1 << 8)
+// 
+#define PLAYER_STATE2_200        (1 << 9)
+// 
+#define PLAYER_STATE2_400        (1 << 10)
+// 
+#define PLAYER_STATE2_800        (1 << 11)
+// 
+#define PLAYER_STATE2_1000       (1 << 12)
+// 
+#define PLAYER_STATE2_2000       (1 << 13)
+// 
+#define PLAYER_STATE2_4000       (1 << 14)
+// 
+#define PLAYER_STATE2_8000       (1 << 15)
+// 
+#define PLAYER_STATE2_10000      (1 << 16)
+// 
+#define PLAYER_STATE2_20000      (1 << 17)
+// 
+#define PLAYER_STATE2_40000      (1 << 18)
+// 
+#define PLAYER_STATE2_80000      (1 << 19)
+// 
+#define PLAYER_STATE2_100000     (1 << 20)
+// 
+#define PLAYER_STATE2_200000     (1 << 21)
+// 
+#define PLAYER_STATE2_400000     (1 << 22)
+// 
+#define PLAYER_STATE2_800000     (1 << 23)
+// 
+#define PLAYER_STATE2_1000000    (1 << 24)
+// 
+#define PLAYER_STATE2_2000000    (1 << 25)
+// 
+#define PLAYER_STATE2_4000000    (1 << 26)
+// 
+#define PLAYER_STATE2_8000000    (1 << 27)
+// 
+#define PLAYER_STATE2_10000000   (1 << 28)
+// 
+#define PLAYER_STATE2_20000000   (1 << 29)
+// 
+#define PLAYER_STATE2_40000000   (1 << 30)
+// 
+#define PLAYER_STATE2_80000000   (1 << 31)
+
+
+// 
+#define PLAYER_STATE3_1          (1 << 0)
+// 
+#define PLAYER_STATE3_2          (1 << 1)
+// 
+#define PLAYER_STATE3_4          (1 << 2)
+// 
+#define PLAYER_STATE3_8          (1 << 3)
+// 
+#define PLAYER_STATE3_10         (1 << 4)
+// 
+#define PLAYER_STATE3_20         (1 << 5)
+// 
+#define PLAYER_STATE3_40         (1 << 6)
+// 
+#define PLAYER_STATE3_80         (1 << 7)
+// 
+#define PLAYER_STATE3_100        (1 << 8)
+// 
+#define PLAYER_STATE3_200        (1 << 9)
+// 
+#define PLAYER_STATE3_400        (1 << 10)
+// 
+#define PLAYER_STATE3_800        (1 << 11)
+// 
+#define PLAYER_STATE3_1000       (1 << 12)
+// 
+#define PLAYER_STATE3_2000       (1 << 13)
+// 
+#define PLAYER_STATE3_4000       (1 << 14)
+// 
+#define PLAYER_STATE3_8000       (1 << 15)
+// 
+#define PLAYER_STATE3_10000      (1 << 16)
+// 
+#define PLAYER_STATE3_20000      (1 << 17)
+// 
+#define PLAYER_STATE3_40000      (1 << 18)
+// 
+#define PLAYER_STATE3_80000      (1 << 19)
+// 
+#define PLAYER_STATE3_100000     (1 << 20)
+// 
+#define PLAYER_STATE3_200000     (1 << 21)
+// 
+#define PLAYER_STATE3_400000     (1 << 22)
+// 
+#define PLAYER_STATE3_800000     (1 << 23)
+// 
+#define PLAYER_STATE3_1000000    (1 << 24)
+// 
+#define PLAYER_STATE3_2000000    (1 << 25)
+// 
+#define PLAYER_STATE3_4000000    (1 << 26)
+// 
+#define PLAYER_STATE3_8000000    (1 << 27)
+// 
+#define PLAYER_STATE3_10000000   (1 << 28)
+// 
+#define PLAYER_STATE3_20000000   (1 << 29)
+// 
+#define PLAYER_STATE3_40000000   (1 << 30)
+// 
+#define PLAYER_STATE3_80000000   (1 << 31)
+
 
 
 typedef struct Player {
@@ -267,7 +506,7 @@ typedef struct Player {
     /* 0x38C */ s8 mountSide;
     /* 0x390 */ Actor* rideActor;
     /* 0x394 */ u8 csMode;
-    /* 0x395 */ u8 unk_395;
+    /* 0x395 */ u8 unk_395; // prevCsMode?
     /* 0x396 */ u8 unk_396;
     /* 0x397 */ u8 unk_397;
     /* 0x398 */ Actor* unk_398;
@@ -283,7 +522,8 @@ typedef struct Player {
     /* 0x3CC */ s16 unk_3CC;
     /* 0x3CE */ s8 unk_3CE;
     /* 0x3CF */ u8 unk_3CF;
-    /* 0x3D0 */ char unk_3D0[0x148];
+    /* 0x3D0 */ struct_80122D44_arg1 unk_3D0;
+    /* 0x404 */ UNK_TYPE1 unk_404[0x34];
     /* 0x518 */ ColliderCylinder cylinder;
     /* 0x564 */ ColliderQuad swordQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;

@@ -247,7 +247,7 @@ f32 DoorSpiral_GetDistFromPlayer(GlobalContext* globalCtx, DoorSpiral* this, f32
 s32 DoorSpiral_PlayerShouldClimb(DoorSpiral* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!Player_InCsMode(&globalCtx->state)) {
+    if (!Player_InCsMode(globalCtx)) {
         SpiralInfo* spiralInfo = &sSpiralInfo[this->spiralType];
         f32 dist =
             DoorSpiral_GetDistFromPlayer(globalCtx, this, 0.0f, spiralInfo->spiralWidth, spiralInfo->spiralHeight);
@@ -286,7 +286,7 @@ void DoorSpiral_Wait(DoorSpiral* this, GlobalContext* globalCtx) {
         transition = GET_TRANSITION_ID_PARAM(this);
         player->doorNext = ((u16)globalCtx->doorCtx.transitionActorList[transition].params) >> 10;
 
-        func_80122F28(player, globalCtx, &this->actor);
+        func_80122F28(player);
     }
 }
 

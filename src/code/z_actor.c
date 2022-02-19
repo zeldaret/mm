@@ -1858,7 +1858,7 @@ s32 func_800B8500(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
     Player* player = GET_PLAYER(globalCtx);
 
     if ((player->actor.flags & ACTOR_FLAG_100) ||
-        ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(&globalCtx->state)) ||
+        ((exchangeItemId > EXCH_ITEM_NONE) && Player_InCsMode(globalCtx)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || ((actor->xzDistToPlayer > player->targetActorDistance)) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1934,7 +1934,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
 s32 func_800B874C(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(&globalCtx->state) ||
+    if ((player->actor.flags & ACTOR_FLAG_20000000) || Player_InCsMode(globalCtx) ||
         (yRange < fabsf(actor->playerHeightRel)) || ((player->unk_A94 < actor->xzDistToPlayer)) ||
         (xzRange < actor->xzDistToPlayer)) {
         return false;
@@ -2206,8 +2206,8 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4) {
-    if (func_800C99D4(&globalCtx->colCtx, polygon, index) == 8) {
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* poly, s32 bgId, s32 arg4) {
+    if (func_800C99D4(&globalCtx->colCtx, poly, bgId) == 8) {
         return true;
     }
 

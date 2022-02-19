@@ -4,12 +4,12 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     size_t size;
 
     objectCtx->status[objectCtx->num].id = id;
-    size = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
+    size = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
     if (1) {}
 
     if (size != 0) {
-        DmaMgr_SendRequest0(objectCtx->status[objectCtx->num].segment, objectFileTable[id].vromStart, size);
+        DmaMgr_SendRequest0(objectCtx->status[objectCtx->num].segment, gObjectTable[id].vromStart, size);
     }
 
     if (objectCtx->num < OBJECT_EXCHANGE_BANK_MAX - 1) {
@@ -67,7 +67,7 @@ void Object_UpdateBank(ObjectContext* objectCtx) {
             s32 id = -status->id;
 
             if (status->dmaReq.vromAddr == 0) {
-                objectFile = &objectFileTable[id];
+                objectFile = &gObjectTable[id];
                 size = objectFile->vromEnd - objectFile->vromStart;
 
                 if (size == 0) {
@@ -113,13 +113,13 @@ void Object_LoadAll(ObjectContext* objectCtx) {
 
     for (i = 0; i < objectCtx->num; i++) {
         id = objectCtx->status[i].id;
-        vromSize = objectFileTable[id].vromEnd - objectFileTable[id].vromStart;
+        vromSize = gObjectTable[id].vromEnd - gObjectTable[id].vromStart;
 
         if (vromSize == 0) {
             continue;
         }
 
-        DmaMgr_SendRequest0(objectCtx->status[i].segment, objectFileTable[id].vromStart, vromSize);
+        DmaMgr_SendRequest0(objectCtx->status[i].segment, gObjectTable[id].vromStart, vromSize);
     }
 }
 
@@ -131,7 +131,7 @@ void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id) {
     objectCtx->status[iParm2].id = -id;
     objectCtx->status[iParm2].dmaReq.vromAddr = 0;
 
-    fileTableEntry = &objectFileTable[id];
+    fileTableEntry = &gObjectTable[id];
     vromSize = fileTableEntry->vromEnd - fileTableEntry->vromStart;
 
     // TODO: UB to cast void to u32

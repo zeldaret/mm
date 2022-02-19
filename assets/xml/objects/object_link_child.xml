@@ -128,7 +128,26 @@
         <Mtx Name="object_link_child_Mtx_01DB00" Offset="0x1DB00" />
         <DList Name="object_link_child_DL_01DB40" Offset="0x1DB40" />
         <DList Name="object_link_child_DL_01DB60" Offset="0x1DB60" />
-        <!-- <Blob Name="object_link_child_Blob_01DB88" Size="0x1B0" Offset="0x1DB88" /> -->
+        <DList Name="object_link_child_DL_01DBC8" Offset="0x1DBC8" />
+        <DList Name="object_link_child_DL_01DC18" Offset="0x1DC18" />
+
+        <DList Name="object_link_child_DL_01DC28" Offset="0x1DC28" />
+        <DList Name="object_link_child_DL_01DC38" Offset="0x1DC38" />
+        <DList Name="object_link_child_DL_01DC48" Offset="0x1DC48" />
+        <DList Name="object_link_child_DL_01DC58" Offset="0x1DC58" />
+        <DList Name="object_link_child_DL_01DC68" Offset="0x1DC68" />
+        <DList Name="object_link_child_DL_01DC78" Offset="0x1DC78" />
+        <DList Name="object_link_child_DL_01DC88" Offset="0x1DC88" />
+        <DList Name="object_link_child_DL_01DC98" Offset="0x1DC98" />
+        <DList Name="object_link_child_DL_01DCA8" Offset="0x1DCA8" />
+        <DList Name="object_link_child_DL_01DCC0" Offset="0x1DCC0" />
+        <DList Name="object_link_child_DL_01DCD8" Offset="0x1DCD8" />
+        <DList Name="object_link_child_DL_01DCE8" Offset="0x1DCE8" />
+        <DList Name="object_link_child_DL_01DCF8" Offset="0x1DCF8" />
+        <DList Name="object_link_child_DL_01DD08" Offset="0x1DD08" />
+        <DList Name="object_link_child_DL_01DD18" Offset="0x1DD18" />
+        <DList Name="object_link_child_DL_01DD28" Offset="0x1DD28" />
+
         <DList Name="object_link_child_DL_01DFA8" Offset="0x1DFA8" />
         <Limb Name="object_link_child_Lodlimb_01E0A0" Type="LOD" Offset="0x1E0A0" />
         <Limb Name="object_link_child_Lodlimb_01E0B0" Type="LOD" Offset="0x1E0B0" />
