@@ -367,10 +367,10 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
 void Cutscene_Command_SetLighting(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdEnvLighting* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         if (cmd->setting != 0x20) {
-            globalCtx->envCtx.unk_C3 = cmd->setting - 1;
-            globalCtx->envCtx.unk_DC = 1.0f;
+            globalCtx->envCtx.lightSettingOverride = cmd->setting - 1;
+            globalCtx->envCtx.lightBlend = 1.0f;
         } else {
-            globalCtx->envCtx.unk_C3 = 0xFF;
+            globalCtx->envCtx.lightSettingOverride = 0xFF;
         }
     }
 }
