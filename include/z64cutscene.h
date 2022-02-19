@@ -93,7 +93,7 @@ typedef enum {
     /*      4 */ CS_TEXTBOX_TYPE_BOSSES_REMAINS,
     /*      5 */ CS_TEXTBOX_TYPE_ALL_NORMAL_MASKS,
     /* 0xFFFF */ CS_TEXTBOX_TYPE_NONE = 0xFFFF
-} CsTextboxType;
+} CutsceneTextboxType;
 
 typedef struct {
     /* 0x0 */ u16 type;
