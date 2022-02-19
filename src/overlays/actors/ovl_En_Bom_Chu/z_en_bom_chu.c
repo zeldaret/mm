@@ -79,8 +79,10 @@ void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
-    Effect_Add(globalCtx, &this->blure1Index, 2, 0, 0, &sBlureInit);
-    Effect_Add(globalCtx, &this->blure2Index, 2, 0, 0, &sBlureInit);
+
+    Effect_Add(globalCtx, &this->blure1Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
+    Effect_Add(globalCtx, &this->blure2Index, EFFECT_BLURE2, 0, 0, &sBlureInit);
+
     this->timer = 120;
     this->actor.room = -1;
     this->shouldTimerCountDown = true;
@@ -108,6 +110,8 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
 
     this->actor.floorPoly = floorPoly;
 
+    // This NULL check means if the player releases a Bombchu
+    // out of bounds, the game will not crash, unlike OoT.
     if (floorPoly != NULL) {
         normal.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
         normal.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
@@ -182,9 +186,11 @@ void EnBomChu_WaitForRelease(EnBomChu* this, GlobalContext* globalCtx) {
         player = GET_PLAYER(globalCtx);
         Math_Vec3f_Copy(&this->actor.world.pos, &player->actor.world.pos);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+
         this->actor.shape.rot.y = player->actor.shape.rot.y;
         this->actor.flags |= ACTOR_FLAG_1;
         func_800B8EF4(globalCtx, &this->actor);
+
         this->isMoving = true;
         this->actor.speedXZ = 8.0f;
         this->movingSpeed = 8.0f;
@@ -204,12 +210,15 @@ s32 EnBomChu_IsOnCollisionPoly(GlobalContext* globalCtx, Vec3f* posA, Vec3f* pos
 
 void EnBomChu_SetupMove(EnBomChu* this) {
     func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
+
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+
     Matrix_GetStateTranslationAndScaledY(1.0f, &this->axisUp);
     Matrix_GetStateTranslationAndScaledZ(1.0f, &this->axisForwards);
     Matrix_GetStateTranslationAndScaledX(1.0f, &this->axisLeft);
+
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.z = this->actor.shape.rot.z;
