@@ -112,6 +112,8 @@ extern Vec3f D_80B25FF4;
 extern D_80B25E70_s D_80B25E70;
 extern f32 D_80B25E78[];
 extern s16 D_80B25D40;
+extern s16 D_80B25D44;
+extern s16 D_80B25D4C;
 
 extern Gfx D_06000618[];
 extern UNK_TYPE D_060080F0;
@@ -167,7 +169,20 @@ void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B251EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B252F8.s")
+void func_80B252F8(EnRacedog* this) {
+    if ((this->unk_1E8 >= 9) && (this->unk_29C == 0)) {
+        this->unk_29C = 1;
+    }
+
+    if ((this->unk_1E8 >= 0xB) && (this->unk_29C == 1)) {
+        this->unk_29C = 2;
+    }
+
+    if (((this->unk_1E8 >= D_80B25D44) || (this->unk_29C <= 0)) && (this->unk_1E8 > D_80B25D44)) {
+        D_80B25D44 = this->unk_1E8;
+        D_80B25D4C = this->unk_290;
+    }
+}
 
 void func_80B2538C(EnRacedog* this) {
     if (func_80B25490(this, D_80B25E78) && this->unk_29C == 2) {
