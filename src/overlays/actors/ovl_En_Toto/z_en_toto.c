@@ -251,7 +251,7 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         return;
     }
 
-    //! @TODO: 0xED02 nor 0xED01 does not match CLOCK_TIME macro
+    //! @TODO: 0xED02 nor 0xED01 match CLOCK_TIME macro
     if ((globalCtx->sceneNum == SCENE_MILK_BAR &&
          !(gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < 0xED02)) ||
         (globalCtx->sceneNum != SCENE_MILK_BAR && func_80BA397C(this, 0x2000))) {
