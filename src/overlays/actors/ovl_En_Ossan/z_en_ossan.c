@@ -54,6 +54,12 @@ s32 EnOssan_ReturnItemToShelf(EnOssan* this);
 s32 EnOssan_TakeItemOffShelf(EnOssan* this);
 
 typedef enum {
+    /* 0 */ ENOSSAN_CUTSCENESTATE_STOPPED,
+    /* 1 */ ENOSSAN_CUTSCENESTATE_WAITING,
+    /* 2 */ ENOSSAN_CUTSCENESTATE_PLAYING
+} EnOssanCutsceneState;
+
+typedef enum {
     /* 00 */ FSN_ANIMATION_IDLE,
     /* 01 */ FSN_ANIMATION_SCRATCH_BACK,
     /* 02 */ FSN_ANIMATION_TURN_AROUND_FORWARD,
@@ -1343,8 +1349,8 @@ void EnOssan_Blink(EnOssan* this) {
 }
 
 void EnOssan_CuriosityShopMan_Init(EnOssan* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable,
-                       this->morphTable, ENOSSAN_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable, this->morphTable,
+                       ENOSSAN_LIMB_MAX);
     this->actor.draw = EnOssan_CuriosityShopMan_Draw;
 }
 
@@ -1506,7 +1512,7 @@ void EnOssan_InitShop(EnOssan* this, GlobalContext* globalCtx) {
         this->shopItemSelectedTween = 0.0f;
 
         Actor_SetScale(&this->actor, sActorScales[this->actor.params]);
-        this->animationIndex = 1; // FSN_ANIMATION_SCRATCH_BACK and 
+        this->animationIndex = 1; // FSN_ANIMATION_SCRATCH_BACK and
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations[this->actor.params], 1);
         EnOssan_SpawnShopItems(this, globalCtx, shopItems);
         this->blinkTimer = 20;
@@ -1661,7 +1667,7 @@ void EnOssan_DrawStickDirectionPrompts(GlobalContext* globalCtx, EnOssan* this) 
 }
 
 s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos,
-                                             Vec3s* rot, Actor* thisx) {
+                                              Vec3s* rot, Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == FSN_LIMB_HEAD) {
@@ -1670,8 +1676,8 @@ s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limb
     return false;
 }
 
-s32 EnOssan_PartTimeWorker_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                           Actor* thisx) {
+s32 EnOssan_PartTimeWorker_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos,
+                                            Vec3s* rot, Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == 15) {
@@ -1682,7 +1688,7 @@ s32 EnOssan_PartTimeWorker_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIn
 }
 
 void EnOssan_CuriosityShopMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                                          Actor* thisx) {
+                                           Actor* thisx) {
     EnOssan* this = THIS;
 
     if (limbIndex == FSN_LIMB_PELVIS || limbIndex == FSN_LIMB_LEFT_UPPER_ARM || limbIndex == FSN_LIMB_RIGHT_UPPER_ARM) {
@@ -1692,7 +1698,7 @@ void EnOssan_CuriosityShopMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbInd
 }
 
 void EnOssan_PartTimeWorker_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                                        Actor* thisx) {
+                                         Actor* thisx) {
     static Vec3f sPartTimeWorkerFocusOffset = { 800.0f, 500.0f, 0.0f };
     EnOssan* this = THIS;
 
@@ -1710,7 +1716,8 @@ void EnOssan_CuriosityShopMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnOssan_CuriosityShopMan_OverrideLimbDraw, EnOssan_CuriosityShopMan_PostLimbDraw, &this->actor);
+                          EnOssan_CuriosityShopMan_OverrideLimbDraw, EnOssan_CuriosityShopMan_PostLimbDraw,
+                          &this->actor);
     EnOssan_DrawCursor(globalCtx, this, this->cursorPos.x, this->cursorPos.y, this->cursorPos.z, this->drawCursor);
     EnOssan_DrawStickDirectionPrompts(globalCtx, this);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

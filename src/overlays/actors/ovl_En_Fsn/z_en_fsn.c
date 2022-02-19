@@ -47,6 +47,12 @@ void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx);
 
 typedef enum {
+    /* 0 */ ENFSN_CUTSCENESTATE_STOPPED,
+    /* 1 */ ENFSN_CUTSCENESTATE_WAITING,
+    /* 2 */ ENFSN_CUTSCENESTATE_PLAYING
+} EnFsnCutsceneState;
+
+typedef enum {
     /* 00 */ FSN_ANIMATION_IDLE,
     /* 01 */ FSN_ANIMATION_SCRATCH_BACK,
     /* 02 */ FSN_ANIMATION_TURN_AROUND_FORWARD,
@@ -203,7 +209,8 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) && this->cutsceneState == 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) &&
+        this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
@@ -221,7 +228,7 @@ void EnFsn_UpdateCollider(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleLookToShopkeeperBuyingCutscene(EnFsn* this) {
-    if (this->cutsceneState == 2 && this->lookToShopkeeperBuyingCutscene != this->cutscene &&
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING && this->lookToShopkeeperBuyingCutscene != this->cutscene &&
         this->actor.textId == 0x29CE) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -229,11 +236,11 @@ void EnFsn_HandleLookToShopkeeperBuyingCutscene(EnFsn* this) {
         }
         this->cutscene = this->lookToShopkeeperBuyingCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_Start(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -378,9 +385,9 @@ void EnFsn_SpawnShopItems(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_EndInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
     globalCtx->msgCtx.msgMode = 0x43;
@@ -730,13 +737,13 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutsceneState = 1;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
         }
         this->actor.textId = EnFsn_GetWelcome(globalCtx);
         func_801518B0(globalCtx, this->actor.textId, &this->actor);
@@ -790,10 +797,10 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_BeginInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             if (Player_GetMask(globalCtx) == PLAYER_MASK_NONE) {
                 func_8011552C(globalCtx, 16);
                 if (EnFsn_HasItemsToSell()) {
@@ -955,9 +962,9 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
                 func_8019F208();
                 globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                if (this->cutsceneState == 2) {
+                if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
-                    this->cutsceneState = 0;
+                    this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
                 }
                 switch (this->price) {
                     case 5:
@@ -1041,10 +1048,10 @@ void EnFsn_ResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_ResumeShoppingInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             if (!this->isSelling) {
                 this->actionFunc = EnFsn_AskCanBuyMore;
             } else if (this->actor.textId != 0x29D6) {
@@ -1066,18 +1073,18 @@ void EnFsn_ResumeShoppingInteraction(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_LookToShelf(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene) != 0) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             EnFsn_UpdateCursorPos(this, globalCtx);
             this->actionFunc = EnFsn_BrowseShelf;
             func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
@@ -1114,18 +1121,18 @@ void EnFsn_BrowseShelf(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShopkeeperFromShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = true;
             this->actor.textId = 0x29D6;
@@ -1145,9 +1152,9 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             func_8019F208();
             gSaveContext.weekEventReg[0x21] |= 4;
         case CANBUY_RESULT_SUCCESS_1:
-            if (this->cutsceneState == 2) {
+            if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
-                this->cutsceneState = 0;
+                this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
             }
             func_8019F208();
             item = this->items[this->cursorIdx];
@@ -1228,10 +1235,10 @@ void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -1274,10 +1281,10 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -1404,8 +1411,8 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable,
-                       this->morphTable, ENFSN_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable, this->morphTable,
+                       ENFSN_LIMB_MAX);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~1;

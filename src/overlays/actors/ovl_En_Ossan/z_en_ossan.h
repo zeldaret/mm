@@ -71,12 +71,6 @@ typedef enum {
     /* 1 */ ENOSSAN_PART_TIME_WORKER
 } EnOssanWorker;
 
-typedef enum {
-    /* 0 */ ENOSSAN_CUTSCENESTATE_STOPPED,
-    /* 1 */ ENOSSAN_CUTSCENESTATE_WAITING,
-    /* 2 */ ENOSSAN_CUTSCENESTATE_PLAYING
-} EnOssanCutsceneState;
-
 extern const ActorInit En_Ossan_InitVars;
 
 #endif // Z_EN_OSSAN_H
