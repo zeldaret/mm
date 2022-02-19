@@ -67,12 +67,6 @@ static EffectBlureInit2 sBlureInit = {
     0, 0, 0, { 0, 0, 0, 0 },     { 0, 0, 0, 0 },
 };
 
-static Vec3f sBlureP1Model = { 0.0f, 7.0f, -6.0f };
-
-static Vec3f sBlureP2LeftModel = { 12.0f, 0.0f, -5.0f };
-
-static Vec3f sBlureP2RightModel = { -12.0f, 0.0f, -5.0f };
-
 void EnBomChu_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBomChu* this = THIS;
 
@@ -110,8 +104,8 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
 
     this->actor.floorPoly = floorPoly;
 
-    // This NULL check means if the player releases a Bombchu
-    // out of bounds, the game will not crash, unlike OoT.
+    // This NULL check means if the player releases a Bombchu out of bounds,
+    // the game will not crash, unlike OoT.
     if (floorPoly != NULL) {
         normal.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
         normal.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
@@ -424,16 +418,16 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, GlobalContext* globalCtx) 
         cos = Math_CosS(yaw);
 
         tempX = this->axisForwards.x;
-        this->axisForwards.x = (this->axisForwards.z * sin) + (cos * tempX);
-        this->axisForwards.z = (this->axisForwards.z * cos) - (sin * tempX);
+        this->axisForwards.x = (sin * this->axisForwards.z) + (cos * tempX);
+        this->axisForwards.z = (cos * this->axisForwards.z) - (sin * tempX);
 
         tempX = this->axisUp.x;
-        this->axisUp.x = (this->axisUp.z * sin) + (cos * tempX);
-        this->axisUp.z = (this->axisUp.z * cos) - (sin * tempX);
+        this->axisUp.x = (sin * this->axisUp.z) + (cos * tempX);
+        this->axisUp.z = (cos * this->axisUp.z) - (sin * tempX);
 
         tempX = this->axisLeft.x;
-        this->axisLeft.x = (this->axisLeft.z * sin) + (cos * tempX);
-        this->axisLeft.z = (this->axisLeft.z * cos) - (sin * tempX);
+        this->axisLeft.x = (sin * this->axisLeft.z) + (cos * tempX);
+        this->axisLeft.z = (cos * this->axisLeft.z) - (sin * tempX);
     }
 
     posA.x = originalWorldPos.x + (2.0f * originalAxisUp.x);
@@ -460,6 +454,9 @@ void EnBomChu_HandleNonSceneCollision(EnBomChu* this, GlobalContext* globalCtx) 
 }
 
 void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
+    static Vec3f sBlureP1Model = { 0.0f, 7.0f, -6.0f };
+    static Vec3f sBlureP2LeftModel = { 12.0f, 0.0f, -5.0f };
+    static Vec3f sBlureP2RightModel = { -12.0f, 0.0f, -5.0f };
     s32 pad;
     EnBomChu* this = THIS;
     Vec3f blureP1;
@@ -533,7 +530,7 @@ void EnBomChu_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->actor.bgCheckFlags |= 0x20;
         } else {
             this->actor.bgCheckFlags &= ~0x20;
-            this->actor.depthInWater = -32000.0f;
+            this->actor.depthInWater = BGCHECK_Y_MIN;
         }
     }
 }
