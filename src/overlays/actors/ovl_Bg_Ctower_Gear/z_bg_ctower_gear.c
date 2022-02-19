@@ -7,7 +7,7 @@
 #include "z_bg_ctower_gear.h"
 #include "objects/object_ctower_rot/object_ctower_rot.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgCtowerGear*)thisx)
 

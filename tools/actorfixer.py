@@ -409,6 +409,7 @@ animdict = {
     "func_80114E90": "Interface_HasEmptyBottle",
     "func_80114F2C": "Interface_HasItemInBottle",
     "func_80123C90": "Player_SetEquipmentData",
+    "func_8012F22C": "Inventory_GetSkullTokenCount",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",

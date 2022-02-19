@@ -11,7 +11,7 @@
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnGeg*)thisx)
 
@@ -444,10 +444,10 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
             }
             Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             this->unk_230 |= 4;
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, globalCtx, 300.0f);
         }
     } else {
@@ -469,9 +469,9 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
             Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
             this->unk_230 &= ~8;
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, globalCtx, 300.0f);
             this->unk_230 |= 8;
         }
@@ -773,9 +773,9 @@ void func_80BB30B4(EnGeg* this, GlobalContext* globalCtx) {
         }
         Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     } else if (this->actor.xzDistToPlayer < 150.0f) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 150.0f);
     }
 }

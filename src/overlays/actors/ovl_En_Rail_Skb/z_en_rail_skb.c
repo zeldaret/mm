@@ -8,7 +8,7 @@
 #include "z_en_rail_skb.h"
 #include "objects/object_skb/object_skb.h"
 
-#define FLAGS 0x00000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
 #define THIS ((EnRailSkb*)thisx)
 
@@ -298,7 +298,7 @@ void EnRailSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) &&
         (globalCtx->csCtx.currentCsIndex == 0)) {
-        this->actor.flags |= 0x100000;
+        this->actor.flags |= ACTOR_FLAG_100000;
     }
 
     func_80B70FA0(this);
@@ -429,7 +429,7 @@ void func_80B713A4(EnRailSkb* this, GlobalContext* globalCtx) {
 
 void func_80B71488(EnRailSkb* this) {
     this->unk_402 |= 0x40;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->unk_2E0 != 0) {
         this->unk_2E4 = this->unk_2E0 - 1;
     } else {
@@ -452,7 +452,7 @@ void func_80B7151C(EnRailSkb* this) {
     this->actor.shape.yOffset = -5000.0f;
     this->actor.colChkInfo.health = 2;
     this->unk_402 = 0;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->actor.draw = EnRailSkb_Draw;
     this->actor.shape.shadowAlpha = 0;
@@ -667,7 +667,7 @@ void func_80B71DF0(EnRailSkb* this) {
         this->actor.shape.yOffset = -5000.0f;
         this->actor.colChkInfo.health = 2;
         this->unk_402 = 0;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnRailSkb_Draw;
         this->actor.shape.shadowAlpha = 0;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -823,9 +823,9 @@ void func_80B72190(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B723F8(EnRailSkb* this) {
-    this->actor.flags &= ~(4 | 1);
-    this->actor.flags |= (8 | 1);
-    this->actor.flags |= 0x100000;
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->actor.flags |= ACTOR_FLAG_100000;
     this->actor.hintId = 0xFF;
     this->actor.textId = 0;
 }
@@ -924,17 +924,17 @@ void func_80B72880(EnRailSkb* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80B70FF8) || (this->actionFunc == func_80B716A8)) {
         if (this->actionFunc != func_80B716A8) {
             if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-                this->actor.flags &= ~(4 | 1);
-                this->actor.flags |= (8 | 1);
-                this->actor.flags |= 0x100000;
+                this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                this->actor.flags |= ACTOR_FLAG_100000;
                 this->actor.hintId = 0xFF;
                 this->actor.textId = 0;
                 func_80B71650(this);
             }
         } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAIN) {
-            this->actor.flags &= ~(8 | 1);
-            this->actor.flags &= ~0x100000;
-            this->actor.flags |= 5;
+            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+            this->actor.flags &= ~ACTOR_FLAG_100000;
+            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
             this->actor.hintId = 0x55;
             this->actor.textId = 0;
             func_80B70FA0(this);

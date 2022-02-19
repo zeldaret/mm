@@ -7,7 +7,7 @@
 #include "z_bg_haka_curtain.h"
 #include "objects/object_haka_obj/object_haka_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgHakaCurtain*)thisx)
 

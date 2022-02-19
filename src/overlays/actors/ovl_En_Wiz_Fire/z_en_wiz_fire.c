@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS 0x08000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -70,7 +70,7 @@ void EnWizFire_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 3;
     this->unk_172 = 10;
     this->unk_1FC = 255.0f;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 
     if (!func_8012405C(globalCtx)) {
         this->collider.info.toucher.dmgFlags = 0x20000000;
@@ -700,7 +700,8 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
 
         Matrix_StatePop();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, 0);
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+                                 MTXMODE_NEW);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,

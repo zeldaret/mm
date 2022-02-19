@@ -7,7 +7,7 @@
 #include "z_boss_04.h"
 #include "objects/object_boss04/object_boss04.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
@@ -231,7 +231,7 @@ void Boss04_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_809EC544(Boss04* this) {
     this->actionFunc = func_809EC568;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
@@ -521,7 +521,7 @@ void func_809ED224(Boss04* this) {
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     func_801A2ED8();
     this->unk_1F6 = 10;
 }
@@ -542,7 +542,7 @@ void func_809ED2A0(Boss04* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1F8 == 3) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_700 = 0.0f;
         this->unk_6FC = 0.0f;
         this->unk_6F8 = 0.0f;
@@ -747,9 +747,9 @@ void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
         func_809ED45C(this, globalCtx);
         if (this->unk_2CC > 3000.0f) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
         } else {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         }
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);

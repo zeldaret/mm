@@ -13,7 +13,7 @@
 #include "objects/object_mu/object_mu.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x0A000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnFu*)thisx)
 
@@ -201,7 +201,7 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.gravity = -0.2f;
         this->actor.shape.rot.y += 0x4000;
         this->actor.world.rot = this->actor.shape.rot;
@@ -230,8 +230,8 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnFu* this = THIS;
 
-    gSaveContext.weekEventReg[63] &= (u8)~0x1;
-    gSaveContext.weekEventReg[8] &= (u8)~0x1;
+    gSaveContext.weekEventReg[63] &= (u8)~1;
+    gSaveContext.weekEventReg[8] &= (u8)~1;
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -380,7 +380,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk_54A == 2) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
@@ -409,7 +409,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
                 Message_StartTextbox(globalCtx, 0x2889, &this->actor);
                 this->unk_552 = 0x2889;
             }
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
             player->stateFlags1 &= ~0x20;
             this->unk_54A = 1;
         } else {
@@ -532,8 +532,8 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x287D:
-                gSaveContext.weekEventReg[63] |= 0x1;
-                gSaveContext.weekEventReg[63] &= (u8)~0x2;
+                gSaveContext.weekEventReg[63] |= 1;
+                gSaveContext.weekEventReg[63] &= (u8)~2;
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
@@ -605,8 +605,8 @@ void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
                     case 0x2884:
                     case 0x2887:
                     case 0x288A:
-                        gSaveContext.weekEventReg[63] &= (u8)~0x1;
-                        gSaveContext.weekEventReg[63] &= (u8)~0x2;
+                        gSaveContext.weekEventReg[63] &= (u8)~1;
+                        gSaveContext.weekEventReg[63] &= (u8)~2;
                         func_809622FC(this);
                         break;
 
@@ -737,7 +737,7 @@ void func_80962EBC(EnFu* this, GlobalContext* globalCtx) {
 
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     gSaveContext.weekEventReg[8] |= 1;
     this->actionFunc = func_80962F4C;
 }
@@ -825,7 +825,7 @@ void func_809632D0(EnFu* this) {
         Interface_ChangeAlpha(50);
     }
 
-    gSaveContext.weekEventReg[8] &= (u8)~0x1;
+    gSaveContext.weekEventReg[8] &= (u8)~1;
 
     if (this->unk_2D4 != NULL) {
         BgFuMizu* mizu = this->unk_2D4;
@@ -833,7 +833,7 @@ void func_809632D0(EnFu* this) {
         mizu->unk_160 = 0;
     }
 
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80963350;
 }
 
@@ -913,7 +913,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
             this->unk_552 = 0x287F;
         }
 
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actor.child->freezeTimer = 0;
         func_809628BC(this);
 

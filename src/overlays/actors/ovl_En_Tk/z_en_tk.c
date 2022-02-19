@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_tk/object_tk.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnTk*)thisx)
 
@@ -218,7 +218,7 @@ void EnTk_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2B0 == 1) || (this->unk_2B0 == 3)) {
-        this->actor.flags &= ~(0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.update = func_80AEF2C8;
         this->actor.draw = NULL;
         return;
@@ -246,7 +246,7 @@ void EnTk_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.gravity = -1.0f;
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 0, &this->unk_2D4);
     func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
 
@@ -359,9 +359,9 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
 
     if (!temp4 && (this->unk_3CC != 0)) {
         this->actor.draw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
     } else if (temp4 && (this->unk_3CC == 0)) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnTk_Draw;
     }
 
@@ -369,7 +369,7 @@ void func_80AECB6C(EnTk* this, GlobalContext* globalCtx) {
     func_80AECE0C(this, globalCtx);
 
     if (this->unk_3CE & 8) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.draw = NULL;
     }
 }
@@ -689,7 +689,7 @@ void func_80AED940(EnTk* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2CA &= ~0x80;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_80AEDE10(this, globalCtx);
@@ -740,7 +740,7 @@ void func_80AEDD4C(EnTk* this, GlobalContext* globalCtx) {
 void func_80AEDDA0(EnTk* this, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
-    this->actor.flags |= 0x10000;
+    this->actor.flags |= ACTOR_FLAG_10000;
     this->unk_2CA |= 0x80;
     this->actionFunc = func_80AED940;
 }

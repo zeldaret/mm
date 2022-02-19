@@ -10,7 +10,7 @@
 #include "objects/object_boss02/object_boss02.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss02*)thisx)
 
@@ -563,7 +563,7 @@ void Boss02_Init(Actor* thisx, GlobalContext* globalCtx) {
         globalCtx->specialEffects = (void*)D_809E0438;
         this->actor.update = func_809DC78C;
         this->actor.draw = func_809DD0A8;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_1D70 = 0.00999999977648f;
         if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x20) || (D_809E0434 != NULL)) {
             this->unk_1D20 = 0;
@@ -732,7 +732,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_INBOSS_ROAR_OLD);
         }
 
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         if (this->unk_0195 != 0) {
             this->actor.world.rot.z = Math_SinS(this->unk_014C * 0x1200) * 0xE00;
         } else {
@@ -1152,9 +1152,9 @@ void func_809DC218(Actor* thisx, GlobalContext* globalCtx) {
 
         if ((this->actor.focus.pos.y < BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp20, &sp24)) ||
             (D_809E0422 != 0)) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         } else {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
         }
     }
 }
@@ -1771,7 +1771,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             func_80169AFC(globalCtx, this->unk_1D22, 0);
             this->unk_1D22 = 0;
             Cutscene_End(globalCtx, &globalCtx->csCtx);
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             player->stateFlags1 &= ~0x100;
             this->unk_1D70 = 0.01f;
             func_80165690();
@@ -2165,7 +2165,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
                 this->unk_1D22 = 0;
                 Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
-                this->actor.flags |= 1;
+                this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_1D20 = 0;
                 D_809E0424->unk_0144 = D_809E0428->unk_0144 = 3;
                 D_809E0424->unk_0146[0] = D_809E0428->unk_0146[0] = 60;
@@ -2227,7 +2227,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
                 Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->unk_1D20 = 0;
-                this->actor.flags |= 1;
+                this->actor.flags |= ACTOR_FLAG_1;
                 sp68->unk_0144 = 10;
                 if ((D_809E0424->unk_0144 >= 10) && (D_809E0428->unk_0144 >= 10)) {
                     f32 phi_f0;

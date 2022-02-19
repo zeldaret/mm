@@ -7,7 +7,7 @@
 #include "z_en_minislime.h"
 #include "overlays/actors/ovl_En_Bigslime/z_en_bigslime.h"
 
-#define FLAGS 0x00000235
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnMinislime*)thisx)
 
@@ -121,7 +121,7 @@ static DamageTable sDamageTable = {
 void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMinislime* this = THIS;
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->id = this->actor.params;
@@ -506,8 +506,8 @@ void EnMinislime_SetupMoveToBigslime(EnMinislime* this) {
     }
     this->frozenAlpha = 0;
 
-    if ((this->actor.flags & 0x2000) == 0x2000) {
-        this->actor.flags &= ~0x2000;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        this->actor.flags &= ~ACTOR_FLAG_2000;
     }
     this->actionFunc = EnMinislime_MoveToBigslime;
 }
@@ -562,8 +562,8 @@ void EnMinislime_SetupDefeatIdle(EnMinislime* this) {
     }
 
     this->frozenAlpha = 0;
-    if ((this->actor.flags & 0x2000) == 0x2000) {
-        this->actor.flags &= ~0x2000;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 
     this->actor.shape.rot.x = 0;
@@ -630,8 +630,8 @@ void EnMinislime_SetupMoveToGekko(EnMinislime* this) {
     this->actor.velocity.y = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    if ((this->actor.flags & 0x2000) == 0x2000) {
-        this->actor.flags &= ~0x2000;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 
     this->actionFunc = EnMinislime_MoveToGekko;
@@ -720,7 +720,7 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else if ((this->actor.params == MINISLIME_FORM_BIGSLIME) && (this->actionFunc != EnMinislime_MoveToBigslime)) {
         EnMinislime_SetupMoveToBigslime(this);
     } else {
-        if ((this->actor.flags & 0x2000) == 0x2000) {
+        if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
             this->collider.base.acFlags &= ~AC_HIT;
             return;
         }

@@ -7,7 +7,7 @@
 #include "z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnBom*)thisx)
 
@@ -169,7 +169,7 @@ void EnBom_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider2.elements[0].dim.worldSphere.center.y = this->actor.world.pos.y;
     this->collider2.elements[0].dim.worldSphere.center.z = this->actor.world.pos.z;
 
-    this->actor.flags |= 0x100000;
+    this->actor.flags |= ACTOR_FLAG_100000;
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actionFunc = func_808714D4;
@@ -301,7 +301,7 @@ void func_808714D4(EnBom* this, GlobalContext* globalCtx) {
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->actionFunc = func_80871058;
         this->actor.room = globalCtx->roomCtx.currRoom.num;
-        this->actor.flags &= ~0x100000;
+        this->actor.flags &= ~ACTOR_FLAG_100000;
         this->actor.bgCheckFlags &= ~1;
         Math_Vec3s_ToVec3f(&this->actor.prevPos, &this->actor.home.rot);
         if (this->isPowderKeg) {
@@ -337,7 +337,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
     Color_RGBA8 sp80;
 
     if (this->collider2.elements->dim.modelSphere.radius == 0) {
-        this->actor.flags |= 0x20;
+        this->actor.flags |= ACTOR_FLAG_20;
         func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 

@@ -7,7 +7,7 @@
 #include "z_en_dnp.h"
 #include "objects/object_dnp/object_dnp.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnDnp*)thisx)
 
@@ -224,14 +224,14 @@ s32 func_80B3D044(EnDnp* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state != 0) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_324 = 0xFF;
         }
         func_8013AED4(&this->unk_322, 0, 7);
         this->actionFunc = func_80B3D11C;
         ret = true;
     } else if (this->unk_322 & 0x200) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         func_8013AED4(&this->unk_322, 3, 7);
         this->unk_322 &= ~(0x200 | 0x10);
         this->actionFunc = func_80B3D2D4;
@@ -323,7 +323,7 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             func_8013AED4(&this->unk_322, 3, 7);
             this->unk_322 &= ~0x10;
             this->unk_322 |= 0x400;
@@ -358,7 +358,7 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_322 |= (0x100 | 0x80 | 0x10);
     this->actor.gravity = -1.0f;
     if (ENDNP_GET_7(&this->actor) == ENDNP_GET_7_1) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.00085000007f);
         func_8013AED4(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;
