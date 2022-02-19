@@ -193,7 +193,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
         animatedMaterialsVirtualized = sTrue;
     }
 
-    this->actor.colChkInfo.mass = 0xFA; // not heavy (heavy = 0xFE)
+    this->actor.colChkInfo.mass = 250; // not heavy (heavy = 0xFE/252)
     this->unk1EC = this->actor.world.pos.y;
     this->unk1F0 = (this->actor.shape.rot.x <= 0) ? (200.0f) : (this->actor.shape.rot.x * 40.0f * 0.1f);
     this->actor.shape.rot.x = 0;
