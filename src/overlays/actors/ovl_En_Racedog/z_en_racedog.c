@@ -178,7 +178,18 @@ void func_80B25448(EnRacedog* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25490.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B255AC.s")
+void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx) {
+    s16 curFrame = this->skelAnime.curFrame;
+    s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
+    Vec3f sp38;
+
+    if (((this->unk_290 + curFrame) % mod) == 0) {
+        sp38.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
+        sp38.y = this->actor.world.pos.y;
+        sp38.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 300, 0, true);
+    }
+}
 
 void func_80B256BC(EnRacedog* this) {
     s16 curFrame = this->skelAnime.curFrame;
@@ -244,13 +255,7 @@ void func_80B2583C(EnRacedog* this) {
 
 void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
     Vec3s sp48 = gZeroVec3s;
-    s32 phi_v0;
-
-    if (this->unk_290 == this->unk_292) {
-        phi_v0 = 1;
-    } else {
-        phi_v0 = 0;
-    }
+    s32 phi_v0 = (this->unk_290 == this->unk_292) ? 1 : 0;
 
     if (phi_v0 != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
