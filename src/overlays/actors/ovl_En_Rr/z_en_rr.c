@@ -7,7 +7,7 @@
 #include "z_en_rr.h"
 #include "objects/object_rr/object_rr.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnRr*)thisx)
 
@@ -195,7 +195,7 @@ void func_808FA11C(EnRr* this) {
     this->unk_220 = 0.85f;
     this->unk_224 = 1.2750001f;
     this->unk_21C = 1.0f;
-    this->actor.flags &= ~0x400;
+    this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
@@ -208,7 +208,7 @@ void func_808FA19C(EnRr* this, GlobalContext* globalCtx) {
         this->unk_21C = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_234, 20, 2, this->actor.scale.y * 23.333334f,
                               this->actor.scale.y * 20.000002f);
-        this->actor.flags |= 0x400;
+        this->actor.flags |= ACTOR_FLAG_400;
     }
 }
 
@@ -267,7 +267,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     this->unk_1EA = 100;
     this->unk_1FC = 20;
     this->collider1.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_1F0 = 8;
     this->unk_1E1 = 0;
     this->actor.speedXZ = 0.0f;
@@ -298,7 +298,7 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
     if (player->stateFlags2 & 0x80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_1F0 = 110;
         this->unk_1F6 = 2500;
         this->unk_210 = 0.0f;
@@ -415,7 +415,7 @@ void func_808FA910(EnRr* this) {
 
     this->actionFunc = func_808FB42C;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_DEAD);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void func_808FA9CC(EnRr* this) {

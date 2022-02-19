@@ -7,7 +7,7 @@
 #include "z_dm_char05.h"
 #include "objects/object_dmask/object_dmask.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar05*)thisx)
 

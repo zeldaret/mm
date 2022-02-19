@@ -7,7 +7,7 @@
 #include "z_en_sw.h"
 #include "objects/object_st/object_st.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSw*)thisx)
 
@@ -674,7 +674,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             if (!ENSW_GET_3(&this->actor)) {
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
             }
@@ -1185,8 +1185,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;
@@ -1206,8 +1206,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 #include "objects/object_po_fusen/object_po_fusen.h"
 
-#define FLAGS 0x80100030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnPoFusen*)thisx)
 

@@ -87,7 +87,7 @@ void BgIkanaRay_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
     this->actor.draw = NULL;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = BgIkanaRay_UpdateCheckForActivation;
 }
 
@@ -99,7 +99,7 @@ void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, GlobalContext* global
 
 void BgIkanaRay_SetActivated(BgIkanaRay* this) {
     this->actor.draw = BgIkanaRay_Draw;
-    this->actor.flags &= ~0x10;
+    this->actor.flags &= ~ACTOR_FLAG_10;
     this->actionFunc = BgIkanaRay_UpdateActivated;
 }
 

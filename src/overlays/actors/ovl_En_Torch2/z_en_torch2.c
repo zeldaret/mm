@@ -7,7 +7,7 @@
 #include "z_en_torch2.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnTorch2*)thisx)
 
@@ -75,9 +75,9 @@ void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
     // params: which form Link is in (e.g. human, deku, etc.)
     params = this->actor.params;
     if (params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= 0x4000000; // Can press switch
+        this->actor.flags |= ACTOR_FLAG_4000000; // Can press switch
         if (params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= 0x20000; // Can press heavy switches
+            this->actor.flags |= ACTOR_FLAG_20000; // Can press heavy switches
         }
     }
     this->framesUntilNextState = 20;

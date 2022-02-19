@@ -8,7 +8,7 @@
 #include "objects/object_bigpo/object_bigpo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00001215
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -283,7 +283,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext)
 }
 
 void EnBigpo_InitWellBigpo(EnBigpo* this) {
-    this->actor.flags &= ~0x1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
     this->actionFunc = EnBigpo_WellWaitForProximity;
     this->fireRadius = 200.0f;
 }
@@ -483,7 +483,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->rotVelocity = 0x2000;
     this->idleTimer = 32;
-    this->actor.flags &= ~0x1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
@@ -544,7 +544,7 @@ void EnBigpo_SetupIdleFlying(EnBigpo* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
-    this->actor.flags |= 0x1; // targetable ON
+    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
     this->actionFunc = EnBigpo_IdleFlying;
 }
 
@@ -745,7 +745,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(0x1 | 0x4); // targetable OFF, enemy music OFF
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~0x400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
@@ -813,8 +813,8 @@ void EnBigpo_ScoopSoulAppearing(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
     this->savedHeight = this->actor.world.pos.y;
     Actor_SetFocus(&this->actor, -10.0f);
-    this->idleTimer = 400;    // 20 seconds
-    this->actor.flags |= 0x1; // targetable ON
+    this->idleTimer = 400;             // 20 seconds
+    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
     this->actionFunc = EnBigpo_ScoopSoulIdle;
 }
 
@@ -833,7 +833,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this) {
-    this->actor.flags &= ~(0x1 | 0x10000); // targetable OFF and unknown OFF
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10000); // targetable OFF and unknown OFF
     this->actionFunc = EnBigpo_ScoopSoulFadingAway;
 }
 
@@ -845,7 +845,7 @@ void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_InitDampeMainPo(EnBigpo* this) {
-    this->actor.flags &= ~0x1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
     this->actionFunc = EnBigpo_SelectRandomFireLocations;
 }
 
@@ -891,7 +891,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
                     randomFirePo->actor.update = EnBigpo_UpdateFire;
                     func_800BC154(globalCtx, &globalCtx->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
                     randomFirePo->unk20C = fireIndex;
-                    randomFirePo->actor.flags &= ~0x1; // targetable OFF
+                    randomFirePo->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
                     // make invisible by size: 0
                     Actor_SetScale(&randomFirePo->actor, 0);
 
@@ -1124,7 +1124,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
         }
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
-            this->actor.flags &= ~0x1; // targetable OFF
+            this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
@@ -1153,7 +1153,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ColliderCylinder* thisCollider;
 
-    if ((this->actor.flags & 0x2000) == 0x2000) {
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
         this->hoverHeightCycleTimer = 0;
         this->savedHeight = this->actor.world.pos.y;
     }
