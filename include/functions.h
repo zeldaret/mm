@@ -1543,7 +1543,7 @@ void func_800FAAB4(GlobalContext* globalCtx, u8 arg1);
 // void func_800FAC20(void);
 // void func_800FAF74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5);
 // void func_800FB010(void);
-void Kankyo_AddLightningBolts(GlobalContext* globalCtx, u8 param_2);
+void Environment_AddLightningBolts(GlobalContext* globalCtx, u8 num);
 // void func_800FB388(void);
 void func_800FB758(GlobalContext* globalCtx);
 // void func_800FB9B4(void);
