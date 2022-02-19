@@ -391,7 +391,7 @@ s32 func_80BF19A0(EnIg* this, GlobalContext* globalCtx) {
 
     if (this->unk_3D0 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_8013AED4(&this->unk_3D0, 0, 7);
+            SubS_UpdateFlags(&this->unk_3D0, 0, 7);
             this->unk_3F6 = 0;
             this->unk_3F8 = NULL;
             this->actor.child = this->unk_2A8;
@@ -500,7 +500,7 @@ s32 func_80BF1D78(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if (func_80BF1C44(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_AN)) {
         func_80BF1284(this, 0);
-        func_8013AED4(&this->unk_3D0, 3, 7);
+        SubS_UpdateFlags(&this->unk_3D0, 3, 7);
         this->unk_3D0 |= 0x20;
         this->unk_3D0 |= 0x100;
         sp2C = true;
@@ -593,7 +593,7 @@ s32 func_80BF1FA8(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
         this->unk_3D0 &= ~0x8;
         this->unk_3D0 &= ~0x10;
-        func_8013AED4(&this->unk_3D0, 3, 7);
+        SubS_UpdateFlags(&this->unk_3D0, 3, 7);
         this->unk_3D0 |= 0x100;
         func_80BF1284(this, 2);
         this->actor.gravity = -1.0f;
@@ -629,7 +629,7 @@ s32 func_80BF219C(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             case 2:
                 this->actor.home.rot.y = this->actor.world.rot.y;
                 this->actor.home.rot.y += 0x8000;
-                func_8013AED4(&this->unk_3D0, 3, 7);
+                SubS_UpdateFlags(&this->unk_3D0, 3, 7);
                 this->unk_3D0 |= 0x100;
                 func_80BF1284(this, 1);
                 break;
@@ -637,7 +637,7 @@ s32 func_80BF219C(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
             case 4:
                 this->actor.world.rot.y += 0x8000;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                func_8013AED4(&this->unk_3D0, 3, 7);
+                SubS_UpdateFlags(&this->unk_3D0, 3, 7);
                 this->unk_3D0 |= 0x100;
                 func_80BF1284(this, 8);
                 break;
@@ -800,7 +800,7 @@ s32 func_80BF293C(EnIg* this, GlobalContext* globalCtx) {
             func_80BF1284(this, 7);
         }
     } else if ((this->unk_3FC == 7) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_8013AED4(&this->unk_3D0, 3, 7);
+        SubS_UpdateFlags(&this->unk_3D0, 3, 7);
         func_80BF1284(this, 9);
     }
     return true;
@@ -865,7 +865,7 @@ void func_80BF2BD4(EnIg* this, GlobalContext* globalCtx) {
     Vec3f sp2C;
 
     if (func_8010BF58(&this->actor, globalCtx, this->unk_298.unk4, this->unk_3F8, &this->unk_298.unk8)) {
-        func_8013AED4(&this->unk_3D0, 3, 7);
+        SubS_UpdateFlags(&this->unk_3D0, 3, 7);
         this->unk_3D0 &= ~0x20;
         this->unk_3D0 |= 0x200;
         this->unk_3EE = 20;

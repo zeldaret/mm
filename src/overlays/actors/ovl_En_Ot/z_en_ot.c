@@ -162,7 +162,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.rot.z = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
-    func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIdx);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->lightInfo);
@@ -301,20 +301,20 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 
 void func_80B5BDA8(EnOt* this, GlobalContext* globalCtx) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
-    func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->actionFunc = func_80B5BE04;
 }
 
 void func_80B5BE04(EnOt* this, GlobalContext* globalCtx) {
     switch (this->unk_388) {
         case 0:
-            if (func_8013E2D4(&this->actor, this->cutscenes[2], -1, 0)) {
+            if (SubS_StartActorCutscene(&this->actor, this->cutscenes[2], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
                 func_80B5BF60(this, globalCtx);
             }
             break;
 
         case 1:
-            if (func_8013E2D4(&this->actor, this->cutscenes[3], -1, 0)) {
+            if (SubS_StartActorCutscene(&this->actor, this->cutscenes[3], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
                 func_80B5BF60(this, globalCtx);
             }
             break;
@@ -591,7 +591,7 @@ void func_80B5CA30(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CAD0(EnOt* this, GlobalContext* globalCtx) {
-    func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes) / 2);
+    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes) / 2);
     this->actionFunc = func_80B5CB0C;
 }
 
@@ -626,7 +626,7 @@ void func_80B5CC88(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5CCA0(EnOt* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->actor, this->cutscenes[0], 0x7C, 1)) {
+    if (SubS_StartActorCutscene(&this->actor, this->cutscenes[0], 0x7C, SUBS_CUTSCENE_NORMAL)) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags2 |= 0x20000000;

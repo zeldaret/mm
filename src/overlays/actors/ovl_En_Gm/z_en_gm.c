@@ -249,7 +249,7 @@ s32 func_8094E0F8(EnGm* this, GlobalContext* globalCtx) {
 
     if ((this->unk_260 != globalCtx->roomCtx.currRoom.num) && (globalCtx->roomCtx.unk31 == 0)) {
         this->unk_260 = globalCtx->roomCtx.currRoom.num;
-        this->unk_262 = func_8013D924(0x248, globalCtx);
+        this->unk_262 = SubS_GetObjectIndex(OBJECT_IN2, globalCtx);
         this->actor.draw = NULL;
         this->unk_3FC = 1;
     }
@@ -258,7 +258,7 @@ s32 func_8094E0F8(EnGm* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if ((this->unk_262 < 0) || !func_8013D8DC(this->unk_262, globalCtx)) {
+    if ((this->unk_262 < 0) || !SubS_IsObjectLoaded(this->unk_262, globalCtx)) {
         ret = true;
     } else {
         this->actor.draw = EnGm_Draw;
@@ -652,7 +652,7 @@ s32 func_8094EE84(EnGm* this, GlobalContext* globalCtx) {
 
     if (this->unk_3A4 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_8013AED4(&this->unk_3A4, 0, 7);
+            SubS_UpdateFlags(&this->unk_3A4, 0, 7);
             this->unk_3E0 = 0;
             this->unk_3E4 = NULL;
             this->actor.child = this->unk_268;
@@ -999,7 +999,7 @@ s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         this->unk_250 = (this->unk_254 / this->unk_24C) + 2;
         this->unk_3A4 &= ~0x8;
         this->unk_3A4 &= ~0x10;
-        func_8013AED4(&this->unk_3A4, 3, 7);
+        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
         func_8094E054(this, globalCtx, 7);
@@ -1016,7 +1016,7 @@ s32 func_8094FCC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     if (func_8094F7D0(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_TAB)) {
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D90);
-            func_8013AED4(&this->unk_3A4, 3, 7);
+            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
             func_8094E054(this, globalCtx, 0);
         } else {
             func_8094E054(this, globalCtx, 9);
@@ -1034,7 +1034,7 @@ s32 func_8094FD88(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if (func_8094F7D0(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL)) {
         func_8094E054(this, globalCtx, 11);
-        func_8013AED4(&this->unk_3A4, 3, 7);
+        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
         ret = true;
@@ -1049,7 +1049,7 @@ s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     al = func_8094DEE0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AL);
     if (func_8094F7D0(this, globalCtx, arg2, ACTORCAT_NPC, ACTOR_EN_TOTO) && (al != NULL) && (al->update != NULL)) {
         func_8094E054(this, globalCtx, 11);
-        func_8013AED4(&this->unk_3A4, 3, 7);
+        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_268 = al;
         if (!(gSaveContext.weekEventReg[86] & 0x20)) {
             this->unk_3C8 = 2;
@@ -1086,7 +1086,7 @@ s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D9C);
-            func_8013AED4(&this->unk_3A4, 3, 7);
+            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
             this->unk_3C8 = 4;
             this->unk_3CA = 4;
             this->unk_3CC = 8;
@@ -1113,7 +1113,7 @@ s32 func_80950088(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DA8);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DB4);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    func_8013AED4(&this->unk_3A4, 3, 7);
+    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
     this->unk_3A4 |= (0x2000 | 0x100);
     this->unk_3A4 |= 0x200;
     func_8094E054(this, globalCtx, 12);
@@ -1128,7 +1128,7 @@ s32 func_80950120(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DBC);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DC8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    func_8013AED4(&this->unk_3A4, 3, 7);
+    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
     this->unk_3A4 |= (0x800 | 0x100);
     this->unk_3A4 |= 0x200;
     func_8094E054(this, globalCtx, 4);
@@ -1144,7 +1144,7 @@ s32 func_809501B8(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DDC);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     this->actor.targetMode = 6;
-    func_8013AED4(&this->unk_3A4, 3, 7);
+    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
     this->unk_3A4 |= (0x1000 | 0x100);
     this->unk_3A4 |= 0x200;
     this->unk_3C8 = 3;
@@ -1251,7 +1251,7 @@ s32 func_809503F8(EnGm* this, GlobalContext* globalCtx) {
     if (this->unk_3E8 == 9) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-            func_8013AED4(&this->unk_3A4, 3, 7);
+            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
             func_8094E054(this, globalCtx, 0);
         } else {
             AnimationContext_SetMoveActor(globalCtx, &this->actor, &this->skelAnime, 1.0f);
@@ -1283,7 +1283,7 @@ s32 func_80950490(EnGm* this, GlobalContext* globalCtx) {
         case 9:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-                func_8013AED4(&this->unk_3A4, 3, 7);
+                SubS_UpdateFlags(&this->unk_3A4, 3, 7);
                 this->unk_3C8 = 4;
                 this->unk_3CA = 4;
                 this->unk_3CC = 8;
@@ -1518,7 +1518,7 @@ void func_80950DB8(EnGm* this, GlobalContext* globalCtx) {
     Actor* al;
 
     if (func_8010BF58(&this->actor, globalCtx, this->unk_264, this->unk_3E4, &this->unk_25C)) {
-        func_8013AED4(&this->unk_3A4, 3, 7);
+        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         al = func_8094DEE0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
             this->unk_268 = al;

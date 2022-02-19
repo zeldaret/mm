@@ -104,7 +104,7 @@ void EnBba01_UpdateModel(EnBba01* this, GlobalContext* globalCtx) {
     Vec3f focus;
 
     EnHy_UpdateSkelAnime(&this->enHy, globalCtx);
-    if (func_8013D5E8(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
+    if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
         focus.x = player->actor.world.pos.x;
         focus.y = player->bodyPartsPos[7].y + 3.0f;
         focus.z = player->actor.world.pos.z;
@@ -206,10 +206,10 @@ void EnBba01_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnBba01* this = THIS;
 
-    this->enHy.animObjIndex = func_8013D924(OBJECT_BBA, globalCtx);
-    this->enHy.headObjIndex = func_8013D924(OBJECT_BBA, globalCtx);
-    this->enHy.skelUpperObjIndex = func_8013D924(OBJECT_BBA, globalCtx);
-    this->enHy.skelLowerObjIndex = func_8013D924(OBJECT_BBA, globalCtx);
+    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
+    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
+    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
+    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_BBA, globalCtx);
 
     if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
         (this->enHy.skelLowerObjIndex < 0)) {
