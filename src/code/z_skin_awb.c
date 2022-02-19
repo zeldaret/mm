@@ -41,8 +41,8 @@ void Skin_InitAnimatedLimb(GameState* gameState, Skin* skin, s32 limbIndex) {
 }
 
 /**
- * Initialises a skin skeleton to looping animation, dynamically allocating the frame tables,
- * and dynamically allocating and initializing the Vtx and SkinLimbVtx buffers for its animated limbs
+ * Initializes a skin skeleton to looping animation, dynamically allocating the frame tables,
+ * and dynamically allocating and initialising the Vtx and SkinLimbVtx buffers for its animated limbs
  */
 void Skin_Init(GameState* gameState, Skin* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader) {
     s32 limbCount;
