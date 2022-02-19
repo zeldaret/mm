@@ -1020,8 +1020,8 @@ void func_80145698(SramContext* sramCtx) {
 
 // Verifies save and use backup if corrupted?
 #ifdef NON_EQUIVALENT
-void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
-    s32 pad;
+void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
+    FileChooseContext* fileChooseCtx = fileChooseCtx2;
     u16 sp7A;
     // u16 sp78;
     u16 sp76;
@@ -1047,7 +1047,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
         D_801F6AF2 = gSaveContext.unk_3F3F;
         sp64 = 0;
 
-        for (sp76 = 0; sp76 < 5; sp76++) {
+        for (sp76 = 0; sp76 < 5; sp76++, sp64 += 2) {
             bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
 
             phi_s2 = false;
@@ -1063,23 +1063,21 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                 fileChooseCtx->unk_24468[sp76] = 0;
                 if (phi_s2) {
                     bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64 & 0xFFu]); // TODO: Needed?
+                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                 } else {
+                    //Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                     Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                     temp_s2 = gSaveContext.save.checksum;
                     gSaveContext.save.checksum = 0;
                     temp_v0_2 = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
-                    if (sramCtx && sramCtx && sramCtx) {} // TODO: Needed?
                     gSaveContext.save.checksum = temp_s2;
 
                     if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s2 != temp_v0_2)) {
                         sp6E = 1;
-                        if ((gSaveContext.save.playerData.newf[0] == 'Z') &&
-                            (gSaveContext.save.playerData.newf[1] == 'E')) {
-                            if (temp_v0_2) {} // TODO: Needed?
-                            phi_s2 = false;
+                        if (CHECK_NEWF2(gSaveContext.save.playerData.newf)) {
                         }
 
+                        phi_s2 = false;
                         if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                             phi_s2 = true;
                         }
@@ -1119,7 +1117,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                     fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
                     fileChooseCtx->unk_24468[sp76] = gSaveContext.save.isOwlSave;
                     fileChooseCtx->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                    fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(UPG_WALLET);
+                    fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(4);
 
                     for (sp7A = 0, phi_a0 = 0; sp7A < ARRAY_COUNT(gSaveContext.save.inventory.masks); sp7A++) {
                         if (gSaveContext.save.inventory.masks[(s32)sp7A] != 0xFF) {
@@ -1134,7 +1132,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                 if (sp6E == 1) {
                     Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
                     func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
-                } else if (!sp6E) { // TODO: == 0?
+                } else if (sp6E == 0) { // TODO: == 0?
                     temp_s2 = gSaveContext.save.checksum;
                     if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                         phi_s2_3 = 1;
@@ -1159,7 +1157,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                     if (phi_s2) {
                         bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
                         Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf,
-                                   D_801C6870[sp64] & 0xFFFFFFFFFFFFFFFF); // TODO: Needed?
+                                   D_801C6870[sp64]); // TODO: Needed?
                     } else {
                         Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                         temp_s2 = gSaveContext.save.checksum;
@@ -1214,7 +1212,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                         fileChooseCtx->unk_24460[sp76] = gSaveContext.save.day;
                         fileChooseCtx->unk_24468[sp76] = gSaveContext.save.isOwlSave;
                         fileChooseCtx->rupees[sp76] = gSaveContext.save.playerData.rupees;
-                        fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(UPG_WALLET);
+                        fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(4);
 
                         for (sp7A = 0, phi_a0 = 0; sp7A < ARRAY_COUNT(gSaveContext.save.inventory.masks); sp7A++) {
                             if (gSaveContext.save.inventory.masks[(s32)sp7A] != 0xFF) {
@@ -1235,8 +1233,9 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                             phi_s2_3 = 1;
                         } else {
                             Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
-                            gSaveContext.save.checksum = 0;
                             phi_s2_3 = gSaveContext.save.checksum;
+                            gSaveContext.save.checksum = 0;
+                            //phi_s2_3 = gSaveContext.save.checksum;
                             sp7A = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
                         }
 
@@ -1273,8 +1272,6 @@ void func_801457CC(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
                 }
                 func_801A3D98(gSaveContext.options.audioSetting);
             }
-
-            sp64 += 2;
         }
 
         gSaveContext.save.time = D_801F6AF0;
