@@ -22,9 +22,10 @@ typedef struct EnRacedog {
     /* 0x292 */ s16 unk_292;
     /* 0x294 */ char unk_294[0x8];
     /* 0x29C */ s16 unk_29C;
-    /* 0x29E */ char unk_29E[0xE];
-    /* 0x2AC */ f32 unk_2AC;
-    /* 0x2B0 */ char unk_2B0[0xC];
+    /* 0x29E */ char unk_29E[0x2];
+    /* 0x2A0 */ Vec3f unk_2A0;
+    /* 0x2AC */ Vec3f unk_2AC;
+    /* 0x2B0 */ char unk_2B8[0x4];
     /* 0x2BC */ s32 unk_2BC;
     /* 0x2C0 */ s32 unk_2C0;
     /* 0x2C4 */ f32 unk_2C4;

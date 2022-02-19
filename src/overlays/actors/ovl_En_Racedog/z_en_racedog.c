@@ -93,6 +93,13 @@ typedef struct {
     f32 unk_0C;
 } D_80B25D90_s;
 
+typedef struct {
+    s16 unk_00;
+    s16 unk_02;
+    s16 unk_04;
+    s16 unk_06;
+} D_80B25E70_s;
+
 extern ColliderCylinderInit D_80B25E98;
 extern CollisionCheckInfoInit2 D_80B25EC4;
 extern DamageTable D_80B25ED0;
@@ -100,6 +107,8 @@ extern InitChainEntry D_80B25FF0[];
 extern f32 D_80B25F14;
 extern D_80B25D90_s D_80B25D90[];
 extern Vec3f D_80B26000;
+extern Vec3f D_80B25FF4;
+extern D_80B25E70_s D_80B25E70;
 
 extern Gfx D_06000618[];
 extern UNK_TYPE D_060080F0;
@@ -179,7 +188,34 @@ void func_80B256BC(EnRacedog* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Update.s")
+void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnRacedog* this = THIS;
+    Vec3f sp2C;
+
+    sp2C = D_80B25FF4;
+    this->unk_292 = D_80B25E70.unk_02;
+
+    this->actionFunc(this, globalCtx);
+
+    func_80B246F4(this, globalCtx);
+    func_80B248B8(this, &sp2C);
+    Math_ApproachF(&this->unk_2AC.x, sp2C.x, 0.2f, 0.1f);
+
+    if (this->unk_2A0.x > 0.0f) {
+        if ((this->unk_2AC.x < 0.0f) && (this->unk_2AC.x > -0.1f)) {
+            this->skelAnime.curFrame = 4.0f;
+            this->actor.velocity.y = 5.5f;
+        }
+    }
+
+    if (!(this->actor.bgCheckFlags & 1)) {
+        this->skelAnime.curFrame = 0.0f;
+    }
+
+    this->unk_2A0 = this->unk_2AC;
+    SkelAnime_Update(&this->skelAnime);
+}
 
 void func_80B2583C(EnRacedog* this) {
     s16 phi_v1;
@@ -290,7 +326,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(this->unk_2AC);
+    Matrix_RotateStateAroundXAxis(this->unk_2AC.x);
     Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
