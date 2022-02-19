@@ -1298,19 +1298,19 @@ s32 func_801242DC(GlobalContext* globalCtx) {
 
 #ifdef NON_MATCHING
 void func_80124420(Player* player) {
+    f32 pad;
     s16 sp2C;
     s16 sp28;
     s16 sp26;
-    f32 sp20;
 
-    D_801F59D0.unk_6 = D_801F59D0.unk_6 - (D_801F59D0.unk_6 >> 3);
-    D_801F59D0.unk_8 = D_801F59D0.unk_8 - (D_801F59D0.unk_8 >> 3);
-    D_801F59D0.unk_6 = D_801F59D0.unk_6 + (-D_801F59D0.unk_0 >> 2);
-    D_801F59D0.unk_8 = D_801F59D0.unk_8 + (-D_801F59D0.unk_2 >> 2);
+    D_801F59D0.unk_6 -= D_801F59D0.unk_6 >> 3;
+    D_801F59D0.unk_8 -= D_801F59D0.unk_8 >> 3;
+    D_801F59D0.unk_6 += (-D_801F59D0.unk_0) >> 2;
+    D_801F59D0.unk_8 += (-D_801F59D0.unk_2) >> 2;
 
-    sp26 = BINANG_SUB(player->actor.world.rot.y, player->actor.shape.rot.y);
-    sp28 = ((player->actor.speedXZ * -200.0f * Math_CosS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f));
-    sp2C = ((player->actor.speedXZ * 100.0f * Math_SinS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f));
+    sp26 = player->actor.world.rot.y - player->actor.shape.rot.y;
+    sp28 = (player->actor.speedXZ * -200.0f * Math_CosS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
+    sp2C = (player->actor.speedXZ * 100.0f * Math_SinS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
 
     D_801F59D0.unk_6 += sp28 >> 2;
     D_801F59D0.unk_8 += sp2C >> 2;
@@ -1691,14 +1691,14 @@ void func_8012536C(void) {
         D_801C0958 = false;
     }
 }
-#ifdef NON_MATCHING
+
 // draws zora shield (?)
 void func_801253A4(GlobalContext* globalCtx, Player* player) {
     u8* phi_a0;
     Vtx* sp30;
     Gfx* dl;
-    s32 i;
     f32 sp28; // scale
+    s32 i;
 
     sp28 = player->unk_B62 * 0.19607843f;
 
@@ -1708,12 +1708,14 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
     Matrix_Scale(sp28, sp28, sp28, 1);
 
     // clang-format off
-    sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
+    sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210), phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
     // clang-format on
 
     for (i = 0; i < 80; i++) {
         // Editing the Vtxs in object itself
-        sp30[i].v.cn[3] = (phi_a0[i] * player->unk_B62) >> 8;
+        (*sp30).v.cn[3] = ((*phi_a0) * player->unk_B62) >> 8;
+        sp30++;
+        phi_a0++;
     }
 
     dl = POLY_XLU_DISP;
@@ -1725,9 +1727,6 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801253A4.s")
-#endif
 
 void func_80125500(GlobalContext* globalCtx, Player* player, s32 limbIndex, Vec3f* pos, Vec3s* rot) {
     if (limbIndex == PLAYER_LIMB_L_THIGH) {
@@ -2636,8 +2635,6 @@ Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
 void func_80127594(GlobalContext* globalCtx, Player* player);
 #endif
 
-#ifdef NON_MATCHING
-// regalloc
 void func_801278F8(GlobalContext* globalCtx, Player* player) {
     static Gfx D_801C0BC0[] = {
         gsDPSetEnvColor(0, 0, 0, 255),
@@ -2650,48 +2647,35 @@ void func_801278F8(GlobalContext* globalCtx, Player* player) {
                               GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
         gsSPEndDisplayList(),
     };
-    s32 phi_a0;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (player->unk_B60 != 0) {
+        s32 phi_a0;
+
         gSegments[0xA] = PHYSICAL_TO_VIRTUAL2(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 
-        if ((player->unk_B60 < 11) != 0) {
-            phi_a0 = (player->unk_B60 / 10.0f) * 255.0f;
+        if (player->unk_B60 < 11) {
+            phi_a0 = (player->unk_B60 / 10.0f) * 255;
         } else {
-            phi_a0 = 0xFF;
+            phi_a0 = 255;
         }
 
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, phi_a0);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)phi_a0);
 
         gSPDisplayList(POLY_OPA_DISP++, object_mask_bakuretu_DL_000440);
 
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BD0);
 
-        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0xFF - phi_a0);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, (u8)(255 - phi_a0));
     } else {
         gSPSegment(POLY_OPA_DISP++, 0x09, D_801C0BC0);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-Gfx D_801C0BC0[] = {
-    gsDPSetEnvColor(0, 0, 0, 255),
-    gsSPEndDisplayList(),
-};
-Gfx D_801C0BD0[] = {
-    gsDPSetRenderMode(AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          G_RM_FOG_SHADE_A,
-                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
-                          GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)),
-    gsSPEndDisplayList(),
-};
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801278F8.s")
-#endif
 
 Vec3f D_801C0BE0 = { 0.0f, 0.3f, 0.0f };
 Vec3f D_801C0BEC = { 0.0f, -0.025f, 0.0f };
@@ -2825,13 +2809,11 @@ void func_80127A60(GlobalContext* globalCtx) {
 void func_80127B64(struct_801F58B0 arg0[], s32 count, Vec3f* arg2) {
     s32 i;
 
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < count; i++, arg0++) {
         Math_Vec3f_Copy(&arg0->unk_00, arg2);
         Math_Vec3f_Copy(&arg0->unk_0C, &gZeroVec3f);
-        // maybe fake match?
-        arg0++;
-        arg0[-1].unk_18 = 0;
-        arg0[-1].unk_1A = 0;
+        arg0->unk_18 = 0;
+        arg0->unk_1A = 0;
     }
 }
 
