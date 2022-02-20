@@ -8,7 +8,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_dekunuts/object_dekunuts.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnDekunuts*)thisx)
 
@@ -130,7 +130,7 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->collider.base.colType = COLTYPE_NONE;
         this->collider.info.bumperFlags |= (BUMP_NO_HITMARK | BUMP_NO_SWORD_SFX | BUMP_NO_DAMAGE | BUMP_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
@@ -372,7 +372,7 @@ void func_808BDE7C(EnDekunuts* this) {
     this->actor.colChkInfo.mass = 50;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->actor.world.rot.x = 0;
-    this->actor.flags |= 0x20;
+    this->actor.flags |= ACTOR_FLAG_20;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BDEF8;
 }
@@ -435,7 +435,7 @@ void func_808BDFB8(EnDekunuts* this, GlobalContext* globalCtx) {
     if ((this->unk_18D == 0) && (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 20.0f) &&
         (fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 2.0f)) {
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-        this->actor.flags &= ~0x20;
+        this->actor.flags &= ~ACTOR_FLAG_20;
         this->actor.speedXZ = 0.0f;
         func_808BDC9C(this);
     } else if (this->unk_190 == 0) {

@@ -9,7 +9,7 @@
 #include "objects/object_hintnuts/object_hintnuts.h"
 #include "objects/object_dekunuts/object_dekunuts.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDnk*)thisx)
 
@@ -170,7 +170,7 @@ s32 func_80A515C4(EnDnk* this) {
 }
 
 void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
-    if (func_8013D8DC(this->unk_28E, globalCtx) == 1) {
+    if (SubS_IsObjectLoaded(this->unk_28E, globalCtx) == true) {
         gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
@@ -200,12 +200,12 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
-            this->actor.flags &= ~1;
-            this->actor.flags |= (0x10 | 0x20);
+            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
             this->actionFunc = func_80A51890;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnDnk_DoNothing;
             Actor_SetScale(&this->actor, 0.01f);
         }
@@ -227,15 +227,15 @@ void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_28E = -1;
     switch (ENDNK_GET_3(&this->actor)) {
         case ENDNK_GET_3_1:
-            this->unk_28E = func_8013D924(0x12B, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_HINTNUTS, globalCtx);
             break;
 
         case ENDNK_GET_3_0:
-            this->unk_28E = func_8013D924(0x135, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DNK, globalCtx);
             break;
 
         case ENDNK_GET_3_2:
-            this->unk_28E = func_8013D924(0x40, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DEKUNUTS, globalCtx);
             break;
     }
 
