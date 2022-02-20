@@ -112,14 +112,14 @@ void ObjHakaisi_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, sp7C);
     this->unk_19A = 0;
     this->unk_198 = 0;
-    this->unk_190 = OBJHAKAISI_GET_FF00(thisx);
+    this->switchFlag = OBJHAKAISI_GET_SWITCHFLAG(thisx);
     this->unk_196 = this->dyna.actor.cutscene;
 
-    if (this->unk_190 == 0xFF) {
-        this->unk_190 = -1;
+    if (this->switchFlag == 0xFF) {
+        this->switchFlag = -1;
     }
 
-    if ((this->unk_190 != -1) && Flags_GetSwitch(globalCtx, this->unk_190)) {
+    if ((this->switchFlag != -1) && Flags_GetSwitch(globalCtx, this->switchFlag)) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 
@@ -224,7 +224,7 @@ void func_80B14648(ObjHakaisi* this, GlobalContext* globalCtx) {
         func_80B14A24(this, globalCtx, this->unk_160[this->unk_194]);
         func_80B14A24(this, globalCtx, this->unk_160[this->unk_194]);
         func_80B14B6C(this, globalCtx, this->unk_160[this->unk_194], 70);
-        Flags_SetSwitch(globalCtx, this->unk_190);
+        Flags_SetSwitch(globalCtx, this->switchFlag);
         this->dyna.actor.draw = NULL;
         func_80B149A8(this);
     }
