@@ -5,10 +5,10 @@
         <Animation Name="gDekuPalaceGuardHappyAnim" Offset="0x6CC" /> <!-- Original named: dnk_happy -->
         <Animation Name="gDekuPalaceGuardJumpAnim" Offset="0x894" /> <!-- Original named: dnk_jump -->
         <Animation Name="gDekuPalaceGuardStartAnim" Offset="0xB70" /> <!-- Original named: dnk_start -->
-        <Texture Name="object_dnk_Tex_000B80" OutName="tex_000B80" Format="rgba16" Width="32" Height="32" Offset="0xB80" />
-        <Texture Name="object_dnk_Tex_001380" OutName="tex_001380" Format="rgba16" Width="16" Height="16" Offset="0x1380" />
-        <Texture Name="object_dnk_Tex_001580" OutName="tex_001580" Format="rgba16" Width="8" Height="8" Offset="0x1580" />
-        <Texture Name="object_dnk_Tex_001600" OutName="tex_001600" Format="rgba16" Width="8" Height="8" Offset="0x1600" />
+        <Texture Name="gDekuPalaceGuardLeafTorsoTex" OutName="deku_palace_guard_leaf_torso" Format="rgba16" Width="32" Height="32" Offset="0xB80" />
+        <Texture Name="gDekuPalaceGuardFootTex" OutName="deku_palace_guard_foot" Format="rgba16" Width="16" Height="16" Offset="0x1380" />
+        <Texture Name="gDekuPalaceGuardHeadTex" OutName="deku_palace_guard_head" Format="rgba16" Width="8" Height="8" Offset="0x1580" />
+        <Texture Name="gDekuPalaceGuardMouthTex" OutName="deku_palace_guard_mouth" Format="rgba16" Width="8" Height="8" Offset="0x1600" />
         <Texture Name="gDekuPalaceGuardEyeOpenTex" OutName="deku_palace_guard_eye_open" Format="rgba16" Width="8" Height="8" Offset="0x1680" />
         <Texture Name="gDekuPalaceGuardEyeHalfTex" OutName="deku_palace_guard_eye_half" Format="rgba16" Width="8" Height="8" Offset="0x1700" />
         <Texture Name="gDekuPalaceGuardEyeClosedTex" OutName="deku_palace_guard_eye_closed" Format="rgba16" Width="8" Height="8" Offset="0x1780" />
