@@ -7,7 +7,7 @@
 #include "z_en_zo.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnZo*)thisx)
 
@@ -19,8 +19,6 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx);
 void EnZo_TreadWater(EnZo* this, GlobalContext* globalCtx);
 void EnZo_DoNothing(EnZo* this, GlobalContext* globalCtx);
-
-typedef enum { ZO_DMG_EFF_NONE } EnZoDamageEffect;
 
 const ActorInit En_Zo_InitVars = {
     ACTOR_EN_ZO,
@@ -57,38 +55,38 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku Stick     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Horse trample  */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Explosives     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Zora boomerang */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Normal arrow   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Hookshot       */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Goron punch    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Sword          */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Goron pound    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Fire arrow     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Ice arrow      */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Light arrow    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Goron spikes   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku spin      */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku bubble    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Deku launch    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Zora barrier   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Normal shield  */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Light ray      */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Thrown object  */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Zora punch     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Spin attack    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Sword beam     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Normal Roll    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Unblockable    */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
-    /* Powder Keg     */ DMG_ENTRY(0, ZO_DMG_EFF_NONE),
+    /* Deku Nut       */ DMG_ENTRY(0, 0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0),
+    /* Horse trample  */ DMG_ENTRY(0, 0),
+    /* Explosives     */ DMG_ENTRY(0, 0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0),
+    /* Normal arrow   */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0),
+    /* Hookshot       */ DMG_ENTRY(0, 0),
+    /* Goron punch    */ DMG_ENTRY(0, 0),
+    /* Sword          */ DMG_ENTRY(0, 0),
+    /* Goron pound    */ DMG_ENTRY(0, 0),
+    /* Fire arrow     */ DMG_ENTRY(0, 0),
+    /* Ice arrow      */ DMG_ENTRY(0, 0),
+    /* Light arrow    */ DMG_ENTRY(0, 0),
+    /* Goron spikes   */ DMG_ENTRY(0, 0),
+    /* Deku spin      */ DMG_ENTRY(0, 0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0),
+    /* Deku launch    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0),
+    /* Normal shield  */ DMG_ENTRY(0, 0),
+    /* Light ray      */ DMG_ENTRY(0, 0),
+    /* Thrown object  */ DMG_ENTRY(0, 0),
+    /* Zora punch     */ DMG_ENTRY(0, 0),
+    /* Spin attack    */ DMG_ENTRY(0, 0),
+    /* Sword beam     */ DMG_ENTRY(0, 0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0),
+    /* Unblockable    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
 static AnimationInfoS sAnimations[] = {
@@ -181,7 +179,7 @@ void EnZo_LookAtPlayer(EnZo* this, GlobalContext* globalCtx) {
     Vec3f focus;
 
     SkelAnime_Update(&this->skelAnime);
-    if (func_8013D5E8(this->actor.shape.rot.y, 10000, this->actor.yawTowardsPlayer)) {
+    if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         focus.x = player->actor.world.pos.x;
         focus.y = player->bodyPartsPos[7].y + 3.0f;
         focus.z = player->actor.world.pos.z;
