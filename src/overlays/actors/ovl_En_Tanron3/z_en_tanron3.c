@@ -8,9 +8,15 @@
 #include "overlays/actors/ovl_Boss_03/z_boss_03.h"
 #include "objects/object_boss03/object_boss03.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron3*)thisx)
+
+#define WORK_TIMER_PICK_NEW_DEVIATION 0
+#define WORK_TIMER_DIE 0
+#define WORK_TIMER_OUT_OF_WATER 1
+#define WORK_TIMER_ATTACK 2
+#define WORK_TIMER_WAIT 2
 
 void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -107,11 +113,11 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
     Collider_InitAndSetCylinder(globalCtx, &this->atCollider, &this->actor, &sCylinderInit);
     Collider_InitAndSetCylinder(globalCtx, &this->acCollider, &this->actor, &sCylinderInit);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_boss03_Skel_00DA20, &object_boss03_Anim_00DAAC,
-                       this->jointTable, this->morphTable, 10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSmallFishSkel, &gGyorgSmallFishSwimAnim, this->jointTable,
+                       this->morphTable, GYORG_SMALL_FISH_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.02f);
     EnTanron3_SetupLive(this, globalCtx);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->currentRotationAngle = Rand_ZeroFloat(500000.0f);
     this->waterSurfaceYPos = 430.0f;
     sGyorg = (Boss03*)this->actor.parent;
@@ -142,10 +148,10 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
 
 void EnTanron3_SetupLive(EnTanron3* this, GlobalContext* globalCtx) {
     this->actionFunc = EnTanron3_Live;
-    Animation_MorphToLoop(&this->skelAnime, &object_boss03_Anim_00DAAC, -10.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gGyorgSmallFishSwimAnim, -10.0f);
     this->rotationStep = 0;
     this->rotationScale = 5;
-    this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] = 50;
+    this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = 50;
     this->actor.speedXZ = 5.0f;
     this->speedMaxStep = 0.5f;
     this->deviation.x = randPlusMinusPoint5Scaled(500.0f);
@@ -176,13 +182,13 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
     if ((player->actor.bgCheckFlags & 1) && player->actor.shape.feetPos[0].y >= 438.0f) {
         // Player is standing on the central platform, so stop chasing them
         this->isNonHostile = true;
-    } else if (this->isNonHostile && this->workTimer[TANRON3_WORK_TIMER_WAIT] == 0 && !(this->timer & 0x1F)) {
+    } else if (this->isNonHostile && this->workTimer[WORK_TIMER_WAIT] == 0 && !(this->timer & 0x1F)) {
         xDistance = this->targetPos.x - player->actor.world.pos.x;
         zDistance = this->targetPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
             // Player is in the water and close enough, so start chasing them
             this->isNonHostile = false;
-            this->workTimer[TANRON3_WORK_TIMER_ATTACK] = 150;
+            this->workTimer[WORK_TIMER_ATTACK] = 150;
         }
     }
 
@@ -204,8 +210,8 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
 
                 // If the player gets eaten by Gyorg, or if the attack timer ran out,
                 // stop chasing the player for a little bit.
-                if (this->workTimer[TANRON3_WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & 0x80)) {
-                    this->workTimer[TANRON3_WORK_TIMER_WAIT] = 150;
+                if (this->workTimer[WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & 0x80)) {
+                    this->workTimer[WORK_TIMER_WAIT] = 150;
                     this->isNonHostile = true;
                 }
                 break;
@@ -234,9 +240,9 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        if (this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] == 0) {
-            if (this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] == 0 && this->actor.speedXZ > 1.0f) {
-                this->workTimer[TANRON3_WORK_TIMER_PICK_NEW_DEVIATION] = Rand_ZeroFloat(20.0f);
+        if (this->workTimer[WORK_TIMER_OUT_OF_WATER] == 0) {
+            if (this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0 && this->actor.speedXZ > 1.0f) {
+                this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = Rand_ZeroFloat(20.0f);
                 this->deviation.x = randPlusMinusPoint5Scaled(100.0f);
                 this->deviation.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
                 this->deviation.z = randPlusMinusPoint5Scaled(100.0f);
@@ -266,7 +272,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 // Fish is above water but hasn't touched land before
                 this->actor.gravity = -1.0f;
                 this->targetPosWithDeviation.y = this->waterSurfaceYPos - 50.0f;
-                this->workTimer[TANRON3_WORK_TIMER_OUT_OF_WATER] = 25;
+                this->workTimer[WORK_TIMER_OUT_OF_WATER] = 25;
                 Math_ApproachS(&this->actor.world.rot.x, 0x3000, 5, 0xBD0);
                 if (this->actor.bgCheckFlags & 8) {
                     this->actor.speedXZ = 0.0f;
@@ -318,9 +324,9 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
     }
 
     this->currentRotationAngle += this->nextRotationAngle;
-    this->trunkRotation = Math_SinS(this->currentRotationAngle) * 5000.0f;
-    this->bodyRotation = Math_SinS(this->currentRotationAngle + 0x6978) * 5000.0f;
     this->tailRotation = Math_SinS(this->currentRotationAngle) * 5000.0f;
+    this->bodyRotation = Math_SinS(this->currentRotationAngle + 0x6978) * 5000.0f;
+    this->trunkRotation = Math_SinS(this->currentRotationAngle) * 5000.0f;
     if (!this->isBeached) {
         this->actor.shape.rot = this->actor.world.rot;
     }
@@ -338,14 +344,14 @@ void EnTanron3_SetupDie(EnTanron3* this, GlobalContext* globalCtx) {
     zDistance = this->actor.world.pos.z - player->actor.world.pos.z;
     this->actor.world.rot.x = Math_FAtan2F(sqrtf(SQ(xDistance) + SQ(zDistance)), -yDistance);
     this->actor.world.rot.y = Math_FAtan2F(zDistance, xDistance);
-    this->workTimer[TANRON3_WORK_TIMER_DIE] = 6;
+    this->workTimer[WORK_TIMER_DIE] = 6;
     this->actor.speedXZ = 10.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_DEAD);
 }
 
 void EnTanron3_Die(EnTanron3* this, GlobalContext* globalCtx) {
     Actor_MoveWithoutGravityReverse(&this->actor);
-    if (this->workTimer[TANRON3_WORK_TIMER_DIE] == 0) {
+    if (this->workTimer[WORK_TIMER_DIE] == 0) {
         EnTanron3_SpawnBubbles(this, globalCtx);
         Actor_MarkForDeath(&this->actor);
         if (Rand_ZeroOne() < 0.3f) {
@@ -418,7 +424,7 @@ void EnTanron3_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((s8)sGyorg->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Die) {
         EnTanron3_SetupDie(this, globalCtx);
-        this->workTimer[TANRON3_WORK_TIMER_DIE] = 0;
+        this->workTimer[WORK_TIMER_DIE] = 0;
     }
 }
 
@@ -426,15 +432,18 @@ s32 EnTanron3_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
                                Actor* thisx) {
     EnTanron3* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == GYORG_SMALL_FISH_LIMB_ROOT) {
         rot->y += this->bodyRotation;
     }
-    if (limbIndex == 3) {
-        rot->y += this->tailRotation;
-    }
-    if (limbIndex == 4) {
+
+    if (limbIndex == GYORG_SMALL_FISH_LIMB_TRUNK_ROOT) {
         rot->y += this->trunkRotation;
     }
+
+    if (limbIndex == GYORG_SMALL_FISH_LIMB_TAIL_FIN) {
+        rot->y += this->tailRotation;
+    }
+
     return false;
 }
 
@@ -442,6 +451,7 @@ void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron3* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C28C(globalCtx->state.gfxCtx);
     if ((this->fogTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
@@ -449,5 +459,6 @@ void EnTanron3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnTanron3_OverrideLimbDraw, NULL, &this->actor);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

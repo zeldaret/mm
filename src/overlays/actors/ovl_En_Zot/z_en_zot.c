@@ -7,7 +7,7 @@
 #include "z_en_zot.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnZot*)thisx)
 
@@ -86,8 +86,7 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80B97100;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zo_Skel_00D208, &object_zo_Anim_004248, this->jointTable,
-                       this->morphTable, 20);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
     Animation_PlayLoop(&this->skelAnime, &object_zo_Anim_00DE20);
     this->unk_2F0 = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -155,7 +154,7 @@ void EnZot_Init(Actor* thisx, GlobalContext* globalCtx2) {
             break;
 
         case 8:
-            this->actor.flags |= 0x2000000;
+            this->actor.flags |= ACTOR_FLAG_2000000;
             this->actionFunc = func_80B98CA8;
             func_80B96BEC(this, 5, 0);
             break;
@@ -236,7 +235,7 @@ void EnZot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
     static AnimationHeader* sAnimations[] = {
-        &object_zo_Anim_00DE20, &object_zo_Anim_002898, &object_zo_Anim_00F4E8, &object_zo_Anim_00E400,
+        &object_zo_Anim_00DE20, &gZoraWalkAnim,         &object_zo_Anim_00F4E8, &object_zo_Anim_00E400,
         &object_zo_Anim_00FDF0, &object_zo_Anim_010B18, &object_zo_Anim_011424, &object_zo_Anim_00EDF0,
         &object_zo_Anim_00DF54, &object_zo_Anim_00DF54,
     };
@@ -485,7 +484,7 @@ void func_80B973BC(EnZot* this, GlobalContext* globalCtx) {
             case 0x1279:
                 func_801477B4(globalCtx);
                 func_80B965D0(this, globalCtx);
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
                 if ((this->actor.cutscene != -1) && !(this->unk_2F2 & 1)) {
@@ -560,7 +559,7 @@ void func_80B97708(EnZot* this, GlobalContext* globalCtx) {
 
     if (phi_v1 != 0) {
         gSaveContext.weekEventReg[29] |= 0x10;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         if (phi_v1 == 5) {
             if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
                 this->actor.textId = 0x126E;
@@ -940,7 +939,7 @@ void func_80B9854C(EnZot* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
     } else {
         Actor_PickUp(&this->actor, globalCtx, this->unk_2D4, 10000.0f, 50.0f);
@@ -1052,7 +1051,7 @@ void func_80B98728(EnZot* this, GlobalContext* globalCtx) {
                     default:
                         func_801477B4(globalCtx);
                         this->actionFunc = func_80B98998;
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;
                 }
             }
@@ -1124,7 +1123,7 @@ void func_80B98AD0(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         if (gSaveContext.weekEventReg[41] & 0x20) {
             func_801518B0(globalCtx, 0x12B7, &this->actor);
             this->actionFunc = func_80B98AD0;
@@ -1139,10 +1138,10 @@ void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
     if (func_800B8718(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk1202A = 4;
+        globalCtx->msgCtx.ocarinaMode = 4;
         func_8019B544(0xFFFF);
         this->actionFunc = func_80B98BF4;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 120.0f);
     } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B98AD0;
@@ -1386,9 +1385,9 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
 void EnZot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     TexturePtr sp4C[] = {
-        object_zo_Tex_0050A0,
-        object_zo_Tex_0058A0,
-        object_zo_Tex_0060A0,
+        gZoraEyeOpenTex,
+        gZoraEyeHalfTex,
+        gZoraEyeClosedTex,
     };
     EnZot* this = THIS;
 

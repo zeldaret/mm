@@ -7,6 +7,8 @@ struct ObjHunsui;
 
 typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui*, GlobalContext*);
 
+#define OBJHUNSUI_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
+
 typedef struct ObjHunsui {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ char unk_144[0x18];

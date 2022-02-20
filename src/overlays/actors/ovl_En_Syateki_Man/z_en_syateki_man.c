@@ -7,7 +7,7 @@
 #include "z_en_syateki_man.h"
 #include "objects/object_shn/object_shn.h"
 
-#define FLAGS 0x08000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -47,10 +47,10 @@ const ActorInit En_Syateki_Man_InitVars = {
     (ActorFunc)EnSyatekiMan_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_shn_Anim_00D9D0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_shn_Anim_00DFEC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &object_shn_Anim_00D2F8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_shn_Anim_00D9D0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_shn_Anim_00DFEC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_shn_Anim_00D2F8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
 
 static s16 D_809C91C8[] = {
@@ -207,7 +207,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp22;
 
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
         sp22 = Text_GetFaceReaction(globalCtx, 0x31);
         if (sp22 != 0) {
             func_801518B0(globalCtx, sp22, &this->actor);
@@ -271,7 +271,7 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 func_801159EC(-20);
                 gSaveContext.weekEventReg[63] |= 1;
                 gSaveContext.weekEventReg[63] &= (u8)~2;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_26A = 7;
                 player->stateFlags1 |= 0x20;
@@ -320,7 +320,7 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
             case 0xA2B:
             case 0xA2C:
             case 0xA35:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 func_80112AFC(globalCtx);
@@ -353,7 +353,7 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 break;
 
             case 0xA34:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
@@ -388,7 +388,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
         case 6:
             if (func_80147624(globalCtx)) {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->stateFlags1 &= ~0x20;
                 gSaveContext.weekEventReg[63] &= (u8)~1;
@@ -410,7 +410,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.animation == &object_shn_Anim_00D2F8) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         }
     }
 }
@@ -628,7 +628,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                         this->unk_284 = 0x400;
                     }
                 } else {
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     player->actor.freezeTimer = 0;
                     this->unk_26A = 7;
@@ -641,7 +641,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
             case 0x3FE:
             case 0x400:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 this->unk_27E = 0;
@@ -688,7 +688,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
             case 0x405:
             case 0x406:
             case 0x407:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
@@ -782,7 +782,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
             this->unk_284 = 0xA37;
         }
         player->stateFlags1 &= ~0x20;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
         this->actionFunc = func_809C6E30;
@@ -844,7 +844,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, 0x408, &this->actor);
         this->unk_284 = 0x408;
         player->stateFlags1 &= ~0x20;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
         this->actionFunc = func_809C7990;
@@ -974,8 +974,8 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_274 = 0;
         this->unk_276 = 0;
         if (this->unk_270 <= 0) {
-            if ((s32)((gSaveContext.roomInf[127][6] & 0xFFFF0000) >> 0x10) < this->unk_280) {
-                gSaveContext.roomInf[127][6] = ((gSaveContext.roomInf[127][6]) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
+            if ((s32)((gSaveContext.unk_EF4 & 0xFFFF0000) >> 0x10) < this->unk_280) {
+                gSaveContext.unk_EF4 = ((gSaveContext.unk_EF4) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
             }
             this->unk_270 = 15;
             if (this->unk_280 >= 0x848) {
@@ -1164,8 +1164,8 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
         if ((this->unk_270 <= 0) && (globalCtx->interfaceCtx.unk_286 == 0)) {
             Flags_SetAllTreasure(globalCtx, this->unk_280);
             this->unk_270 = 15;
-            if (((s32)(gSaveContext.roomInf[127][6] & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
-                if ((s32)(gSaveContext.roomInf[127][6] & 0xFFFF) < this->unk_280) {
+            if (((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
+                if ((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) {
                     if (!(gSaveContext.weekEventReg[59] & 0x20)) {
                         func_801518B0(globalCtx, 0x407, &this->actor);
                         this->unk_284 = 0x407;
@@ -1180,7 +1180,7 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, 0x406, &this->actor);
                     this->unk_284 = 0x406;
                 }
-                gSaveContext.roomInf[127][6] = (gSaveContext.roomInf[127][6] & 0xFFFF0000) | (this->unk_280 & 0xFFFF);
+                gSaveContext.unk_EF4 = (gSaveContext.unk_EF4 & 0xFFFF0000) | (this->unk_280 & 0xFFFF);
                 this->unk_26A = 6;
             } else {
                 if (CURRENT_DAY != 3) {
