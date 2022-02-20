@@ -1552,7 +1552,7 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gSelectionCursorTex, G_IM_FMT_IA, 16, 16, 0,
                                G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
@@ -1609,7 +1609,7 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPLoadTextureBlock(OVERLAY_DISP++, gameplay_keep_Tex_01F8C0, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
+        gDPLoadTextureBlock(OVERLAY_DISP++, gArrowCursorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
         if (drawStickRightPrompt) {
@@ -1624,7 +1624,7 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
                               this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPLoadTextureBlock(OVERLAY_DISP++, gameplay_keep_Tex_01F7C0, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
+        gDPLoadTextureBlock(OVERLAY_DISP++, gControlStickTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
                             G_TX_NOLOD);
         if (drawStickRightPrompt) {
