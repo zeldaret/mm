@@ -1651,9 +1651,9 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         case 0:
             if (player->stateFlags1 & 0x100) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
-                this->unk_1D22 = func_801694DC(globalCtx);
-                func_80169590(globalCtx, 0, 1);
-                func_80169590(globalCtx, this->unk_1D22, 7);
+                this->unk_1D22 = Play_CreateSubCamera(globalCtx);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                Play_CameraChangeStatus(globalCtx, this->unk_1D22, 7);
                 func_8016566C(150);
                 this->unk_1D14 = 0;
                 this->unk_1D5C = 0.0f;
@@ -2048,7 +2048,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         this->unk_1D54 = Math_SinS(this->unk_1D14 * 1512) * this->unk_1D58;
         Matrix_InsertZRotation_f(this->unk_1D54, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_1D3C);
-        func_8016981C(globalCtx, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
+        Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
         ShrinkWindow_SetLetterboxTarget(0x1B);
     }
 }
@@ -2078,9 +2078,9 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
                 break;
             }
             Cutscene_Start(globalCtx, &globalCtx->csCtx);
-            this->unk_1D22 = func_801694DC(globalCtx);
-            func_80169590(globalCtx, 0, 1);
-            func_80169590(globalCtx, this->unk_1D22, 7);
+            this->unk_1D22 = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+            Play_CameraChangeStatus(globalCtx, this->unk_1D22, 7);
             this->unk_1D20 = 2;
             this->unk_1D1C = 0;
 
@@ -2176,9 +2176,9 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
         case 100:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
-                this->unk_1D22 = func_801694DC(globalCtx);
-                func_80169590(globalCtx, 0, 1);
-                func_80169590(globalCtx, this->unk_1D22, 7);
+                this->unk_1D22 = Play_CreateSubCamera(globalCtx);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                Play_CameraChangeStatus(globalCtx, this->unk_1D22, 7);
                 this->unk_1D20 = 101;
                 this->unk_1D1C = 0;
                 this->unk_1D5C = 1.0f;
@@ -2260,7 +2260,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
     if ((this->unk_1D20 != 0) && (this->unk_1D22 != 0)) {
         sp5C = this->unk_1D24;
         sp5C.y += sp58 * D_809DF5B0;
-        func_8016981C(globalCtx, this->unk_1D22, &this->unk_1D30, &sp5C, &this->unk_1D3C);
+        Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &sp5C, &this->unk_1D3C);
         this->unk_1D3C.z = this->unk_1D3C.x = 0.0f;
         this->unk_1D3C.y = 1.0f;
         ShrinkWindow_SetLetterboxTarget(0x1B);

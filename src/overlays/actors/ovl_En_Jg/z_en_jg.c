@@ -383,13 +383,13 @@ void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx) {
                 // Focus on a specifc Goron for these lines
                 this->shrineGoron = EnJg_GetShrineGoronToFocusOn(globalCtx, this->focusedShrineGoronParam);
                 ActorCutscene_Start(this->cutscene, this->shrineGoron);
-                func_800E0308(globalCtx->cameraPtrs[0], this->shrineGoron);
+                Camera_SetTargetActor(globalCtx->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
 
             default:
                 // Focus on the whole group for these lines
                 ActorCutscene_Start(this->cutscene, &this->actor);
-                func_800E0308(globalCtx->cameraPtrs[0], this->shrineGoron);
+                Camera_SetTargetActor(globalCtx->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
         }
         this->actionFunc = EnJg_GoronShrineTalk;

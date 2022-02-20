@@ -75,12 +75,10 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_AllocateAndLoad.s")
 
-#ifdef NON_MATCHING
 s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
-    size_t size;
-
-    // XXX: this should use a branch-likely
     if (roomCtx->unk31 == 0) {
+        s32 size;
+
         roomCtx->prevRoom = roomCtx->currRoom;
         roomCtx->currRoom.num = index;
         roomCtx->currRoom.segment = NULL;
@@ -101,9 +99,6 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32
 
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_StartRoomTransition.s")
-#endif
 
 s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
     if (roomCtx->unk31 == 1) {

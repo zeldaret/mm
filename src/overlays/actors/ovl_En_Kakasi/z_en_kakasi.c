@@ -259,7 +259,7 @@ void EnKakasi_CheckPlayerPosition(EnKakasi* this, GlobalContext* globalCtx) {
  * something to do with cutscene camera?
  */
 void func_8096FAAC(EnKakasi* this, GlobalContext* globalCtx) {
-    if (this->cutsceneCamId != MAIN_CAM) {
+    if (this->cutsceneCamId != CAM_ID_MAIN) {
         Math_ApproachF(&this->unk214.x, this->unk238.x, 0.4f, 4.0f);
         Math_ApproachF(&this->unk214.y, this->unk238.y, 0.4f, 4.0f);
         Math_ApproachF(&this->unk214.z, this->unk238.z, 0.4f, 4.0f);
@@ -271,7 +271,7 @@ void func_8096FAAC(EnKakasi* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->unk20C, this->unk210, 0.3f, 10.0f);
 
         Play_CameraSetAtEye(globalCtx, this->cutsceneCamId, &this->unk220, &this->unk214);
-        func_80169940(globalCtx, this->cutsceneCamId, this->unk20C);
+        Play_CameraSetFov(globalCtx, this->cutsceneCamId, this->unk20C);
     }
 }
 
@@ -550,7 +550,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
     this->actor.textId = 0x1646;
     Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
-    this->cutsceneCamId = MAIN_CAM;
+    this->cutsceneCamId = CAM_ID_MAIN;
     this->unk20C = 0.0f;
     this->unk210 = 60.0f;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_TWIRL);
@@ -628,7 +628,7 @@ void EnKakasi_TeachingSong(EnKakasi* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_YASE_DEAD);
             if (this) {}
             this->unkState196 = 2;
-            this->cutsceneCamId = MAIN_CAM;
+            this->cutsceneCamId = CAM_ID_MAIN;
             this->actor.textId = 0x1647;
             this->unkState1A8 = 2;
             this->unkMsgState1AC = 5;
@@ -662,7 +662,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCt
     this->unk190 = 0;
     this->unkCounter1A4 = 0;
     EnKakasi_SetAnimation(this, ENKAKASI_ANIM_HOPPING_REGULAR);
-    this->cutsceneCamId = MAIN_CAM;
+    this->cutsceneCamId = CAM_ID_MAIN;
     this->unkMsgState1AC = 5;
     this->unkState1A8 = 1;
     this->actionFunc = EnKakasi_PostSongLearnDialogue;
@@ -720,7 +720,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         this->unkState1A8 = 1;
     }
 
-    if (this->cutsceneCamId != MAIN_CAM) {
+    if (this->cutsceneCamId != CAM_ID_MAIN) {
         this->unk22C.y = this->actor.home.pos.y + 50.0f;
         EnKakasi_CheckPlayerPosition(this, globalCtx);
         this->unk238.x = D_80971FA0[this->unk190].x;
@@ -974,7 +974,7 @@ void EnKakasi_DiggingAway(EnKakasi* this, GlobalContext* globalCtx) {
     Vec3f tempunk238;
     Vec3f tempWorldPos;
 
-    if (this->cutsceneCamId != MAIN_CAM) {
+    if (this->cutsceneCamId != CAM_ID_MAIN) {
         this->unk22C.y = this->actor.home.pos.y + 50.0f;
         this->unk238.x = D_80972030.x;
         this->unk238.y = D_80972030.y;
@@ -1127,7 +1127,7 @@ void EnKakasi_Update(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk1BC.x != 0.0f || this->unk1BC.z != 0.0f) {
             Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk1BC);
             this->actor.focus.pos.y += 10.0f;
-            if (this->cutsceneCamId == MAIN_CAM) {
+            if (this->cutsceneCamId == CAM_ID_MAIN) {
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             } else {
                 Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.home.rot);

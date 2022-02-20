@@ -7,7 +7,7 @@
 #include "z_en_cne_01.h"
 #include "objects/object_cne/object_cne.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8 | ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnCne01*)thisx)
 
@@ -19,8 +19,6 @@ void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnCne01_Walk(EnHy* this, GlobalContext* globalCtx);
 void EnCne01_FaceForward(EnHy* this, GlobalContext* globalCtx);
 void EnCne01_Talk(EnHy* this, GlobalContext* globalCtx);
-
-typedef enum { CNE01_DMG_EFF_NONE } EnCne01DamageEffect;
 
 const ActorInit En_Cne_01_InitVars = {
     ACTOR_EN_CNE_01,
@@ -57,48 +55,48 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Deku Stick     */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Horse trample  */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Explosives     */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Zora boomerang */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Normal arrow   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Hookshot       */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Goron punch    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Sword          */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Goron pound    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Fire arrow     */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Ice arrow      */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Light arrow    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Goron spikes   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Deku spin      */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Deku bubble    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Deku launch    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Zora barrier   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Normal shield  */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Light ray      */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Thrown object  */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Zora punch     */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Spin attack    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Sword beam     */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Normal Roll    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Unblockable    */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
-    /* Powder Keg     */ DMG_ENTRY(0, CNE01_DMG_EFF_NONE),
+    /* Deku Nut       */ DMG_ENTRY(0, 0),
+    /* Deku Stick     */ DMG_ENTRY(0, 0),
+    /* Horse trample  */ DMG_ENTRY(0, 0),
+    /* Explosives     */ DMG_ENTRY(0, 0),
+    /* Zora boomerang */ DMG_ENTRY(0, 0),
+    /* Normal arrow   */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0),
+    /* Hookshot       */ DMG_ENTRY(0, 0),
+    /* Goron punch    */ DMG_ENTRY(0, 0),
+    /* Sword          */ DMG_ENTRY(0, 0),
+    /* Goron pound    */ DMG_ENTRY(0, 0),
+    /* Fire arrow     */ DMG_ENTRY(0, 0),
+    /* Ice arrow      */ DMG_ENTRY(0, 0),
+    /* Light arrow    */ DMG_ENTRY(0, 0),
+    /* Goron spikes   */ DMG_ENTRY(0, 0),
+    /* Deku spin      */ DMG_ENTRY(0, 0),
+    /* Deku bubble    */ DMG_ENTRY(0, 0),
+    /* Deku launch    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0),
+    /* Zora barrier   */ DMG_ENTRY(0, 0),
+    /* Normal shield  */ DMG_ENTRY(0, 0),
+    /* Light ray      */ DMG_ENTRY(0, 0),
+    /* Thrown object  */ DMG_ENTRY(0, 0),
+    /* Zora punch     */ DMG_ENTRY(0, 0),
+    /* Spin attack    */ DMG_ENTRY(0, 0),
+    /* Sword beam     */ DMG_ENTRY(0, 0),
+    /* Normal Roll    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0),
+    /* Unblockable    */ DMG_ENTRY(0, 0),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0),
+    /* Powder Keg     */ DMG_ENTRY(0, 0),
 };
 
-static u16 D_809CBF58[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
+u16 D_809CBF58[] = { 4000, 4, 1, 3, 6000, 4, 1, 6, 4000, 4, 1, 3, 6000, 4, 1, 6 };
 
 void EnCne01_UpdateModel(EnCne01* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f focus;
 
     EnHy_UpdateSkelAnime(&this->enHy, globalCtx);
-    if (func_8013D5E8(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
+    if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
         focus.x = player->actor.world.pos.x;
         focus.y = player->bodyPartsPos[7].y + 3.0f;
         focus.z = player->actor.world.pos.z;
@@ -122,7 +120,7 @@ s32 EnCne01_TestIsTalking(EnCne01* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->enHy.actor, &globalCtx->state)) {
         isTalking = true;
-        this->enHy.textId = 0x10B9;
+        this->enHy.textId = 0x10B9; // Invalid textId, produces empty textbox
         this->enHy.tmpFocusTarget = this->enHy.focusTarget;
         this->enHy.tmpHeadRot = this->enHy.headRot;
         this->enHy.tmpTorsoRot = this->enHy.torsoRot;
@@ -169,13 +167,13 @@ void EnCne01_FaceForward(EnHy* this, GlobalContext* globalCtx) {
 
 void EnCne01_Talk(EnHy* this, GlobalContext* globalCtx) {
     s16 yaw;
-    u8 talkstate;
+    u8 talkState;
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xFA0, 1);
-    talkstate = Message_GetState(&globalCtx->msgCtx);
-    this->inMsgState3 = (talkstate == 3) ? true : false;
+    talkState = Message_GetState(&globalCtx->msgCtx);
+    this->inMsgState3 = (talkState == 3) ? true : false;
 
-    switch (talkstate) {
+    switch (talkState) {
         case 0:
             yaw = ABS_ALT(this->actor.shape.rot.y - this->actor.yawTowardsPlayer);
             if (yaw < 0x64) {
@@ -198,10 +196,10 @@ void EnCne01_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnCne01* this = THIS;
 
-    this->enHy.animObjIndex = func_8013D924(OBJECT_OS_ANIME, globalCtx);
-    this->enHy.headObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
-    this->enHy.skelUpperObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
-    this->enHy.skelLowerObjIndex = func_8013D924(OBJECT_CNE, globalCtx);
+    this->enHy.animObjIndex = SubS_GetObjectIndex(OBJECT_OS_ANIME, globalCtx);
+    this->enHy.headObjIndex = SubS_GetObjectIndex(OBJECT_CNE, globalCtx);
+    this->enHy.skelUpperObjIndex = SubS_GetObjectIndex(OBJECT_CNE, globalCtx);
+    this->enHy.skelLowerObjIndex = SubS_GetObjectIndex(OBJECT_CNE, globalCtx);
 
     if ((this->enHy.animObjIndex < 0) || (this->enHy.headObjIndex < 0) || (this->enHy.skelUpperObjIndex < 0) ||
         (this->enHy.skelLowerObjIndex < 0)) {

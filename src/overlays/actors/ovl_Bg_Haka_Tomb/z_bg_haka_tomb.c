@@ -47,7 +47,7 @@ void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_haka_obj_Colheader_000EE8);
-    func_8013E3B8(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     func_80BD6624(this);
 }
 
@@ -100,7 +100,7 @@ void func_80BD6754(BgHakaTomb* this) {
 }
 
 void func_80BD6768(BgHakaTomb* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->dyna.actor, this->cutscenes[0], -1, 0)) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         BgHakaTomb_SetupDoNothing(this);
     }
 }

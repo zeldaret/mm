@@ -466,7 +466,7 @@ beginseg
     include "build/data/code/z_eff_footmark.data.o"
     include "build/src/code/z_sound_source.o"
     include "build/src/code/z_elf_message.o"
-    include "build/src/code/z_en_hy.o"
+    include "build/src/code/z_en_hy_code.o"
     include "build/src/code/z_face_reaction.o"
     include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
@@ -928,8 +928,7 @@ beginseg
     name "ovl_Door_Shutter"
     compress
     include "build/src/overlays/actors/ovl_Door_Shutter/z_door_shutter.o"
-    include "build/data/ovl_Door_Shutter/ovl_Door_Shutter.data.o"
-    include "build/data/ovl_Door_Shutter/ovl_Door_Shutter.reloc.o"
+    include "build/src/overlays/actors/ovl_Door_Shutter/ovl_Door_Shutter_reloc.o"
 endseg
 
 beginseg
@@ -2477,8 +2476,7 @@ beginseg
     name "ovl_En_Bba_01"
     compress
     include "build/src/overlays/actors/ovl_En_Bba_01/z_en_bba_01.o"
-    include "build/data/ovl_En_Bba_01/ovl_En_Bba_01.data.o"
-    include "build/data/ovl_En_Bba_01/ovl_En_Bba_01.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bba_01/ovl_En_Bba_01_reloc.o"
 endseg
 
 beginseg
