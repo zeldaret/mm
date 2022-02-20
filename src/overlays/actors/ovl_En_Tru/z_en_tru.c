@@ -7,7 +7,7 @@
 #include "z_en_tru.h"
 #include "objects/object_tru/object_tru.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -687,7 +687,7 @@ s32 func_80A872AC(EnTru* this, GlobalContext* globalCtx) {
             this->unk_390 = 0;
             this->unk_364 = 0;
             this->unk_354 = func_80A871E0(this, globalCtx);
-            func_8013AED4(&this->unk_34E, 0, 7);
+            SubS_UpdateFlags(&this->unk_34E, 0, 7);
             this->actionFunc = func_80A881E0;
             ret = true;
         }
@@ -1035,7 +1035,7 @@ s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (ret == true) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.draw = NULL;
         this->unk_378 = NULL;
         this->unk_34E = 0;
@@ -1048,15 +1048,15 @@ void func_80A87FD0(EnTru* this, GlobalContext* globalCtx) {
     if (this->actor.draw != NULL) {
         if ((this->unk_34E & 0x80) || (gSaveContext.weekEventReg[16] & 0x10)) {
             if (func_80A873B8(this)) {
-                func_8013AED4(&this->unk_34E, 3, 7);
+                SubS_UpdateFlags(&this->unk_34E, 3, 7);
             } else {
-                func_8013AED4(&this->unk_34E, 0, 7);
+                SubS_UpdateFlags(&this->unk_34E, 0, 7);
             }
         } else if (this->unk_34E & 0x40) {
             if (func_80A873B8(this)) {
-                func_8013AED4(&this->unk_34E, 3, 7);
+                SubS_UpdateFlags(&this->unk_34E, 3, 7);
             } else {
-                func_8013AED4(&this->unk_34E, 0, 7);
+                SubS_UpdateFlags(&this->unk_34E, 0, 7);
             }
 
             if ((this->unk_37C == 2) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -1070,13 +1070,13 @@ void func_80A87FD0(EnTru* this, GlobalContext* globalCtx) {
             }
         } else if (!(gSaveContext.weekEventReg[16] & 0x10) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
                    (this->actor.xzDistToPlayer < 140.0f)) {
-            func_8013AED4(&this->unk_34E, 4, 7);
+            SubS_UpdateFlags(&this->unk_34E, 4, 7);
             this->unk_34E |= 0x1040;
             this->unk_362 = Rand_S16Offset(40, 20);
         } else if (func_80A873B8(this)) {
-            func_8013AED4(&this->unk_34E, 3, 7);
+            SubS_UpdateFlags(&this->unk_34E, 3, 7);
         } else {
-            func_8013AED4(&this->unk_34E, 0, 7);
+            SubS_UpdateFlags(&this->unk_34E, 0, 7);
         }
     }
 }
@@ -1102,11 +1102,11 @@ void func_80A881E0(EnTru* this, GlobalContext* globalCtx) {
             func_80A86924(this, 6);
         }
 
-        func_8013AED4(&this->unk_34E, 0, 7);
+        SubS_UpdateFlags(&this->unk_34E, 0, 7);
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~0x100;
+        this->actor.flags &= ~ACTOR_FLAG_100;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }

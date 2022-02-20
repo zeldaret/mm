@@ -393,6 +393,16 @@ animdict = {
     "func_8013BC6C": "SubS_ChangeAnimationByInfoS",
     "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo",
     "func_8013D9C8": "SubS_FillLimbRotTables",
+    "func_80114E90": "Interface_HasEmptyBottle",
+    "func_80114F2C": "Interface_HasItemInBottle",
+    "func_80123C90": "Player_SetEquipmentData",
+    "func_8013E2D4": "SubS_StartActorCutscene",
+    "func_8013E3B8": "SubS_FillCutscenesList",
+    "func_8013AED4": "SubS_UpdateFlags",
+    "func_8013D8DC": "SubS_IsObjectLoaded",
+    "func_8013D924": "SubS_GetObjectIndex",
+    "func_8013D5E8": "SubS_AngleDiffLessEqual",
+    "func_8012F22C": "Inventory_GetSkullTokenCount",
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",
@@ -425,6 +435,9 @@ animdict = {
     "player->unk_394": "player->csMode",
     "player->unk_A87": "player->exchangeItemId",
     "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
+    "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
+    "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
+    "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
 
     # Variables
     "D_0407D590": "gGameplayKeepDrawFlameDL",
