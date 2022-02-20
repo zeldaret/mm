@@ -730,7 +730,8 @@ void func_80962D60(EnFu* this, GlobalContext* globalCtx) {
 void func_80962EBC(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 != 0) {
         if (this->actor.cutscene != -1) {
-            func_800DFB14(globalCtx->cameraPtrs[MAIN_CAM], ActorCutscene_GetCutscene(this->actor.cutscene)->unk4);
+            Camera_ChangeDataIdx(globalCtx->cameraPtrs[CAM_ID_MAIN],
+                                 ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
         }
     }
 }
@@ -1163,11 +1164,11 @@ void func_80963F44(EnFu* this, GlobalContext* globalCtx) {
 
 void func_80963F88(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 == 1) {
-        func_800DFAC8(globalCtx->cameraPtrs[MAIN_CAM], 75);
+        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 75);
         globalCtx->unk_1887E = 0;
     } else if (this->unk_542 == 2) {
         globalCtx->unk_1887D = 0;
-        func_800DFAC8(globalCtx->cameraPtrs[MAIN_CAM], 75);
+        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 75);
     }
 }
 
@@ -1421,7 +1422,7 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len) {
 
 void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
-    s16 activeCam = func_800DFC68(GET_ACTIVE_CAM(globalCtx));
+    s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
     s32 i;
 
     for (i = 0; i < len; i++, ptr++) {
@@ -1434,7 +1435,7 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             ptr->unk_08.z += 2.0f * Math_CosS(ptr->unk_2C);
             Matrix_StatePush();
             Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_RotateY(activeCam, MTXMODE_APPLY);
+            Matrix_RotateY(yaw, MTXMODE_APPLY);
             Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
             Matrix_StatePop();
             ptr->unk_2C += 6000;

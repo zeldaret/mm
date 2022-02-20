@@ -2898,7 +2898,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
         sp118 = (player->actor.speedXZ * 0.3f) + 0.25f;
     }
 
-    if ((D_80917200 != 0) || (sCameraId != MAIN_CAM) ||
+    if ((D_80917200 != 0) || (sCameraId != CAM_ID_MAIN) ||
         ((player->actor.world.pos.z > 1150.0f) && (this->unk_150 != 100))) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     } else {
@@ -4359,7 +4359,7 @@ void EnFishing_UpdatePondProps(GlobalContext* globalCtx) {
         prop++;
     }
 
-    if (sCameraId == MAIN_CAM) {
+    if (sCameraId == CAM_ID_MAIN) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &sFishingMain->collider.base);
     }
 }
@@ -5184,10 +5184,10 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             break;
 
         case 1:
-            sCameraId = func_801694DC(globalCtx);
-            func_80169590(globalCtx, MAIN_CAM, 1);
-            func_80169590(globalCtx, sCameraId, 7);
-            camera = Play_GetCamera(globalCtx, MAIN_CAM);
+            sCameraId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+            Play_CameraChangeStatus(globalCtx, sCameraId, 7);
+            camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
             sCameraEye.y = camera->eye.y;
             sCameraEye.z = camera->eye.z;
@@ -5294,7 +5294,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             break;
 
         case 3: {
-            Camera* camera = Play_GetCamera(globalCtx, MAIN_CAM);
+            Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
             camera->eye = sCameraEye;
             camera->eyeNext = sCameraEye;
@@ -5303,7 +5303,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             func_80169AFC(globalCtx, sCameraId, 0);
             func_800EA0EC(globalCtx, &globalCtx->csCtx);
             D_8090CD4C = 0;
-            sCameraId = MAIN_CAM;
+            sCameraId = CAM_ID_MAIN;
             func_800F6834(globalCtx, 0);
             globalCtx->envCtx.unk_8C.fogNear = 0;
             player->unk_B28 = -5;
@@ -5312,11 +5312,11 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
         case 10:
             func_800EA0D4(globalCtx, &globalCtx->csCtx);
-            sCameraId = func_801694DC(globalCtx);
-            func_80169590(globalCtx, MAIN_CAM, 1);
-            func_80169590(globalCtx, sCameraId, 7);
+            sCameraId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+            Play_CameraChangeStatus(globalCtx, sCameraId, 7);
             func_800B7298(globalCtx, &this->actor, 4);
-            camera = Play_GetCamera(globalCtx, MAIN_CAM);
+            camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
             sCameraEye.y = camera->eye.y;
             sCameraEye.z = camera->eye.z;
@@ -5333,7 +5333,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             player->actor.speedXZ = 0.0f;
 
             if (!Message_GetState(&globalCtx->msgCtx)) {
-                camera = Play_GetCamera(globalCtx, MAIN_CAM);
+                camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                 camera->eye = sCameraEye;
                 camera->eyeNext = sCameraEye;
@@ -5342,7 +5342,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 D_8090CD4C = 0;
-                sCameraId = MAIN_CAM;
+                sCameraId = CAM_ID_MAIN;
                 D_8090CD50 = 30;
                 func_800F6834(globalCtx, 0);
                 globalCtx->envCtx.unk_8C.fogNear = 0;
@@ -5351,11 +5351,11 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
         case 20:
             func_800EA0D4(globalCtx, &globalCtx->csCtx);
-            sCameraId = func_801694DC(globalCtx);
-            func_80169590(globalCtx, MAIN_CAM, 1);
-            func_80169590(globalCtx, sCameraId, 7);
+            sCameraId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+            Play_CameraChangeStatus(globalCtx, sCameraId, 7);
             func_800B7298(globalCtx, &this->actor, 4);
-            camera = Play_GetCamera(globalCtx, MAIN_CAM);
+            camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
             sCameraEye.y = camera->eye.y;
             sCameraEye.z = camera->eye.z;
@@ -5427,7 +5427,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             if (D_8090CD50 == 0) {
                 if ((Message_GetState(&globalCtx->msgCtx) == 4) || !Message_GetState(&globalCtx->msgCtx)) {
                     if (func_80147624(globalCtx)) {
-                        Camera* camera = Play_GetCamera(globalCtx, MAIN_CAM);
+                        Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                         func_801477B4(globalCtx);
                         if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -5442,7 +5442,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                         func_800EA0EC(globalCtx, &globalCtx->csCtx);
                         func_800B7298(globalCtx, &this->actor, 6); // arg2 changed from 7 to 6 in MM
                         D_8090CD4C = 0;
-                        sCameraId = MAIN_CAM;
+                        sCameraId = CAM_ID_MAIN;
                         player->unk_B28 = -5;
                         D_80917200 = 5;
                         D_8090CD54 = 0;
@@ -5458,7 +5458,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             break;
     }
 
-    if (sCameraId != MAIN_CAM) {
+    if (sCameraId != CAM_ID_MAIN) {
         Play_CameraSetAtEye(globalCtx, sCameraId, &sCameraAt, &sCameraEye);
         Math_ApproachF(&D_80911F4C, 1.0f, 1.0f, 0.02f);
 
@@ -5560,7 +5560,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((u8)D_8090CCD0 > 0) {
         s32 pad;
-        Camera* camera = Play_GetCamera(globalCtx, MAIN_CAM);
+        Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
         s16 i;
         s32 pad1;
         Vec3f pos;
@@ -5570,7 +5570,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
         rot.x = 1.6707964f;
         rot.y = 1.0f;
-        rot.z = (func_800DFC68(camera) * -(M_PI / 32768)) + rot.y;
+        rot.z = (Camera_GetInputDirYaw(camera) * -(M_PI / 32768)) + rot.y;
 
         for (i = 0; i < (u8)D_8090CCD0; i++) {
             pos.x = randPlusMinusPoint5Scaled(700.0f) + globalCtx->view.eye.x;
