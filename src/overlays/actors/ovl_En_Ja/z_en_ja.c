@@ -116,7 +116,7 @@ s32 func_80BC19FC(EnJa* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((this->unk_340 & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_8013AED4(&this->unk_340, 0, 7);
+        SubS_UpdateFlags(&this->unk_340, 0, 7);
         this->actionFunc = func_80BC22F4;
         ret = true;
     }
@@ -235,7 +235,7 @@ s32 func_80BC1FC8(EnJa* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     s32 ret = false;
 
     if (func_80BC1AE0(this, globalCtx)) {
-        func_8013AED4(&this->unk_340, 3, 7);
+        SubS_UpdateFlags(&this->unk_340, 3, 7);
         this->unk_340 |= 0x10;
         func_80BC192C(this, 5);
         func_80BC2EA4(this);
@@ -253,7 +253,7 @@ s32 func_80BC203C(EnJa* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         } else {
             func_80BC192C(this, 4);
         }
-        func_8013AED4(&this->unk_340, 3, 7);
+        SubS_UpdateFlags(&this->unk_340, 3, 7);
         this->actor.shape.shadowDraw = NULL;
         this->unk_340 |= 0x50;
         ret = true;
@@ -328,7 +328,7 @@ s32* func_80BC2274(EnJa* this, GlobalContext* globalCtx) {
 void func_80BC22F4(EnJa* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, func_80BC2274(this, globalCtx), this->unk_368, &this->unk_1D8.unk_04)) {
         this->unk_340 &= ~8;
-        func_8013AED4(&this->unk_340, 3, 7);
+        SubS_UpdateFlags(&this->unk_340, 3, 7);
         this->unk_1D8.unk_04 = 0;
         this->unk_340 |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -350,7 +350,7 @@ void EnJa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 0;
     this->actor.uncullZoneForward = 800.0f;
     this->actor.gravity = 0.0f;
-    func_8013AED4(&this->unk_340, 0, 7);
+    SubS_UpdateFlags(&this->unk_340, 0, 7);
     this->unk_340 |= 0x10;
     this->unk_1D8.unk_00 = 0;
     this->unk_368 = NULL;

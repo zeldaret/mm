@@ -1368,6 +1368,13 @@ typedef struct {
     /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
 
+
+typedef enum {
+    /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
+    /* 1 */ SUBS_CUTSCENE_NORMAL,
+    /* 2 */ SUBS_CUTSCENE_SET_FLAG
+} SubSCutsceneType;
+
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
