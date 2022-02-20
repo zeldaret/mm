@@ -104,6 +104,7 @@ typedef enum {
 	/* 40 */ SI_SWORD_GILDED,
 	/* 41 */ SI_SHIELD_HERO_4,
 	/* 42 */ SI_SHIELD_MIRROR,
+    /* 43 */ SI_MAX
 } EnGirlAShopItemId;
 
 extern const ActorInit En_GirlA_InitVars;

@@ -160,7 +160,7 @@ void EnGirlA_InitObjIndex(EnGirlA* this, GlobalContext* globalCtx) {
     s16 params = this->actor.params;
 
     //! @bug: Condition is impossible, && should be an ||
-    if (params > SI_SHIELD_MIRROR && params < SI_POTION_RED_1) {
+    if (params >= SI_MAX && params < SI_POTION_RED_1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
