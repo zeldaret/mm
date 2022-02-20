@@ -87,7 +87,10 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-ActorAnimationEntryS D_80BE1AD0[] = { { 0x06000758, 1.0f, 0, -1, 0, 0 }, { 0x060086AC, 1.0f, 0, -1, 0, 0 } };
+AnimationInfoS D_80BE1AD0[] = {
+    { &object_tab_Anim_000758, 1.0f, 0, -1, 0, 0 },
+    { &object_tab_Anim_0086AC, 1.0f, 0, -1, 0, 0 },
+};
 
 Vec3f D_80BE1AF0 = { -28.0f, -8.0f, -195.0f };
 
@@ -142,7 +145,7 @@ s32 func_80BE05BC(EnTab* this, s32 arg1) {
 
     if (phi_v0) {
         this->unk_32C = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80BE1AD0, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BE1AD0, arg1);
         this->unk_300 = this->skelAnime.playSpeed;
     }
     return ret;
@@ -170,7 +173,7 @@ s32 func_80BE06DC(EnTab* this, GlobalContext* globalCtx) {
 
     if (this->unk_2FC & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_8013AED4(&this->unk_2FC, 0, 7);
+            SubS_UpdateFlags(&this->unk_2FC, 0, 7);
             ret = true;
             this->unk_320 = 0;
             this->unk_328 = NULL;
@@ -280,7 +283,7 @@ s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
         Math_Vec3f_Copy(&sp44, &actor->world.pos);
         sp2E = Math_Vec3f_Yaw(&sp38, &sp44);
 
-        if (this->unk_338 != 0) {
+        if (this->unk_338) {
             sp30 = arg2;
         } else {
             sp30 = arg2 * 0.5f;
@@ -290,7 +293,7 @@ s32 func_80BE0C04(EnTab* this, Actor* actor, f32 arg2) {
         }
 
         if (DECR(this->unk_322) == 0) {
-            this->unk_338 ^= 1;
+            this->unk_338 ^= true;
             this->unk_322 = Rand_S16Offset(60, 60);
         }
     }
@@ -359,7 +362,7 @@ s32 func_80BE0F04(EnTab* this, GlobalContext* globalCtx, struct_80133038_arg2* a
         Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1AFC);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         this->actor.targetMode = 0;
-        func_8013AED4(&this->unk_2FC, 3, 7);
+        SubS_UpdateFlags(&this->unk_2FC, 3, 7);
         this->unk_2FC |= (0x40 | 0x20);
         this->unk_30C = 30;
         this->unk_1E4 = sp28;
@@ -376,7 +379,7 @@ s32 func_80BE0FC4(EnTab* this, GlobalContext* globalCtx, struct_80133038_arg2* a
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1B10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     this->actor.targetMode = 6;
-    func_8013AED4(&this->unk_2FC, 3, 7);
+    SubS_UpdateFlags(&this->unk_2FC, 3, 7);
     this->unk_2FC |= (0x40 | 0x20);
     this->unk_30C = 0x50;
     func_80BE05BC(this, 1);
@@ -479,7 +482,7 @@ void func_80BE1348(EnTab* this, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     if (func_8010BF58(&this->actor, globalCtx, func_80BE0E04(this, globalCtx), this->unk_328, &this->unk_1DC)) {
-        func_8013AED4(&this->unk_2FC, 3, 7);
+        SubS_UpdateFlags(&this->unk_2FC, 3, 7);
         this->unk_2FC &= ~8;
         this->unk_2FC |= 0x40;
         this->unk_324 = 20;
