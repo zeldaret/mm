@@ -78,8 +78,8 @@ static ColliderCylinderInit sCylinderInit2 = {
 
 typedef struct {
     /* 0x00 */ ColliderCylinderInit* collider;
-    /* 0x04 */ void (*unk_04)(Actor*, Lights*, GlobalContext*);
-    /* 0x08 */ void (*unk_08)(Actor*, GlobalContext*);
+    /* 0x04 */ ActorShadowFunc unk_04;
+    /* 0x08 */ ActorFunc unk_08;
     /* 0x0C */ s32 (*unk_0C)(Actor*);
 } ObjBombiwaStruct2;
 
@@ -258,17 +258,17 @@ void func_80939994(GlobalContext* globalCtx, Vec3f* arg1) {
         spAC.z += arg1->z;
 
         if (i >= 14) {
-            phi_v0 = 0x21;
+            phi_v0 = 33;
             life = 60;
         } else if (i >= 12) {
-            phi_v0 = 0x41;
+            phi_v0 = 65;
             life = 60;
         } else {
             life = 40;
             if (Rand_ZeroOne() < 0.7f) {
-                phi_v0 = 0x40;
+                phi_v0 = 64;
             } else {
-                phi_v0 = 0x20;
+                phi_v0 = 32;
             }
         }
         EffectSsKakera_Spawn(globalCtx, &spAC, &spA0, &spAC, -450, phi_v0, 15, 0, 0, i, 1, 0, life, -1, OBJECT_BOMBIWA,
@@ -305,17 +305,17 @@ void func_80939C50(GlobalContext* globalCtx, Vec3f* arg1) {
         spBC.z += arg1->z;
 
         if (i == 0) {
-            phi_v0 = 0x21;
+            phi_v0 = 33;
             phi_s0 = 60;
         } else if (i == 1) {
-            phi_v0 = 0x41;
+            phi_v0 = 65;
             phi_s0 = 60;
         } else {
             phi_s0 = 40;
             if (Rand_ZeroOne() < 0.7f) {
-                phi_v0 = 0x40;
+                phi_v0 = 64;
             } else {
-                phi_v0 = 0x20;
+                phi_v0 = 32;
             }
         }
         EffectSsKakera_Spawn(globalCtx, &spBC, &spB0, &spBC, -450, phi_v0, 15, 0, 0, D_8093A9E0[i], 1, 0, phi_s0, -1,
