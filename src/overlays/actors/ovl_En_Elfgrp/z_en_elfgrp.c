@@ -61,14 +61,14 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnElfgrp* this = THIS;
     s32 sp24;
 
-    this->unk_147 = ENELFGRP_GET(&this->actor);
+    this->unk_147 = STRAY_FAIRY_TYPE(&this->actor);
     this->unk_148 = 0;
     this->unk_14A = 0;
     this->actor.focus.pos.y += 40.0f;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
     switch (this->unk_147) {
-        case ENELFGRP_1:
+        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
         case ENELFGRP_2:
         case ENELFGRP_3:
         case ENELFGRP_4:
@@ -90,7 +90,7 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx) {
                 this->actionFunc = func_80A3A398;
 
                 switch (this->unk_147) {
-                    case ENELFGRP_1:
+                    case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
                         if (gSaveContext.weekEventReg[23] & 2) {
                             func_80A396B0(this, 1);
                         } else {
@@ -133,7 +133,7 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         default:
             sp24 = func_80A39C1C(globalCtx, 0);
-            this->unk_146 = ENELFGRP_1;
+            this->unk_146 = STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN;
             if (sp24 >= 25) {
                 this->actionFunc = func_80A3A520;
                 if ((this->actor.home.rot.z != 0) && Flags_GetSwitch(globalCtx, this->actor.home.rot.z)) {
@@ -255,11 +255,11 @@ void func_80A39DC8(EnElfgrp* this, GlobalContext* globalCtx, s32 arg2, s32 arg3)
     if (arg3 == 0) {
         sp6C = this->actor.world.pos;
         sp6C.y += 20.0f;
-        temp = ((this->unk_147 & 7) << 6) | 1;
+        temp = ((this->unk_147 & 7) << 6) | STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN;
     } else {
         sp6C = player->actor.world.pos;
         sp6C.y += 20.0f;
-        temp = ((this->unk_147 & 7) << 6) | 8;
+        temp = ((this->unk_147 & 7) << 6) | STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN;
     }
 
     for (i = 0; i < arg2; i++) {
@@ -281,7 +281,8 @@ s32 func_80A39F50(GlobalContext* globalCtx) {
 
     while (itemAction != NULL) {
         if ((itemAction->id != ACTOR_EN_ELFORG) ||
-            ((ENELFGRP_GET(itemAction) != ENELFGRP_1) && (ENELFGRP_GET(itemAction) != ENELFGRP_8))) {
+            ((STRAY_FAIRY_TYPE(itemAction) != STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN) &&
+             (STRAY_FAIRY_TYPE(itemAction) != STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN))) {
             itemAction = itemAction->next;
             continue;
         }
@@ -303,7 +304,8 @@ s32 func_80A39FBC(GlobalContext* globalCtx) {
 
     while (itemAction != NULL) {
         if ((itemAction->id != ACTOR_EN_ELFORG) ||
-            ((ENELFGRP_GET(itemAction) != ENELFGRP_1) && (ENELFGRP_GET(itemAction) != ENELFGRP_8))) {
+            ((STRAY_FAIRY_TYPE(itemAction) != STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN) &&
+             (STRAY_FAIRY_TYPE(itemAction) != STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN))) {
             itemAction = itemAction->next;
             continue;
         }
@@ -330,7 +332,8 @@ void func_80A3A044(GlobalContext* globalCtx) {
 
     while (itemAction != NULL) {
         if ((itemAction->id != ACTOR_EN_ELFORG) ||
-            ((ENELFGRP_GET(itemAction) != ENELFGRP_1) && (ENELFGRP_GET(itemAction) != ENELFGRP_8))) {
+            ((STRAY_FAIRY_TYPE(itemAction) != STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN) &&
+             (STRAY_FAIRY_TYPE(itemAction) != STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN))) {
             itemAction = itemAction->next;
             continue;
         }
@@ -353,10 +356,10 @@ void func_80A3A0AC(EnElfgrp* this, GlobalContext* globalCtx) {
 void func_80A3A0F4(EnElfgrp* this, GlobalContext* globalCtx) {
     if (this->unk_144 == 10) {
         play_sound(NA_SE_SY_WHITE_OUT_T);
-        if (ENELFGRP_GET(&this->actor) < ENELFGRP_4) {
+        if (STRAY_FAIRY_TYPE(&this->actor) < ENELFGRP_4) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0,
-                        ENELFGRP_GET(&this->actor) + ENELFGRP_4);
+                        STRAY_FAIRY_TYPE(&this->actor) + ENELFGRP_4);
         } else {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0, 4);

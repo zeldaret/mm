@@ -12,11 +12,9 @@ typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, GlobalContext*);
 
 enum {
     /* 0 */ ENELFGRP_0,
-    /* 1 */ ENELFGRP_1,
-    /* 2 */ ENELFGRP_2,
+    /* 2 */ ENELFGRP_2 = 2,
     /* 3 */ ENELFGRP_3,
     /* 4 */ ENELFGRP_4,
-    /* 8 */ ENELFGRP_8 = 8,
 };
 
 typedef struct EnElfgrp {
