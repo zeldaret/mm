@@ -1684,7 +1684,7 @@ s32 EnOssan_PartTimeWorker_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIn
                                             Vec3s* rot, Actor* thisx) {
     EnOssan* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == ANI_LIMB_HEAD) {
         Matrix_InsertXRotation_s(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
     }
@@ -1706,7 +1706,7 @@ void EnOssan_PartTimeWorker_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex
     static Vec3f sPartTimeWorkerFocusOffset = { 800.0f, 500.0f, 0.0f };
     EnOssan* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == ANI_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
     }
 }
