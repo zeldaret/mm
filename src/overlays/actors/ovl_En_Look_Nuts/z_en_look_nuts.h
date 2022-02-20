@@ -12,13 +12,6 @@ typedef void (*EnLookNutsActionFunc)(struct EnLookNuts*, GlobalContext*);
 #define LOOKNUTS_GET_SCENE_FLAG(thisx) ((thisx)->params & 0x7F)
 #define LOOKNUTS_GET_PATROL_LOCATION(thisx) (((thisx)->params >> 0x7) & 0x1F)
 
-typedef enum {
-    /* 0x01 */ PALACE_GUARD_PATROLLING,
-    /* 0x01 */ PALACE_GUARD_WAITING,
-    /* 0x02 */ PALACE_GUARD_RUNNING_TO_PLAYER,
-    /* 0x03 */ PALACE_GUARD_CAUGHT_PLAYER,
-} PalaceGuardState;
-
 typedef struct EnLookNuts {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;

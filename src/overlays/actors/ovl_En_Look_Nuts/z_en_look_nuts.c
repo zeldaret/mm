@@ -92,6 +92,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
+typedef enum {
+    /* 0x01 */ PALACE_GUARD_PATROLLING,
+    /* 0x01 */ PALACE_GUARD_WAITING,
+    /* 0x02 */ PALACE_GUARD_RUNNING_TO_PLAYER,
+    /* 0x03 */ PALACE_GUARD_CAUGHT_PLAYER,
+} PalaceGuardState;
+
 void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnLookNuts* this = THIS;
 
