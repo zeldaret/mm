@@ -7,7 +7,7 @@
 #include "z_en_mag.h"
 #include "objects/object_mag/object_mag.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnMag*)thisx)
 
