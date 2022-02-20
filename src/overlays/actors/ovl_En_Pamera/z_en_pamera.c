@@ -9,7 +9,7 @@
 #include "../ovl_En_Door/z_en_door.h"
 #include "objects/object_pamera/object_pamera.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnPamera*)thisx)
 
@@ -232,7 +232,7 @@ void EnPamera_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BD8700(EnPamera* this) {
     this->hideInisdeTimer = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BD8758;
 }
@@ -241,7 +241,8 @@ void func_80BD8758(EnPamera* this, GlobalContext* globalCtx) {
     if (this->hideInisdeTimer++ > 1800) {
         if (ActorCutscene_GetCanPlayNext(this->cutscenes[0]) && (this->cutscenes[0] != -1)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[0], &this->actor);
-            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[0])), &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[0])),
+                                   &this->actor);
             this->actor.speedXZ = 1.5f;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
             this->actor.shape.rot.y = this->actor.home.rot.y;
@@ -273,7 +274,7 @@ void func_80BD8758(EnPamera* this, GlobalContext* globalCtx) {
 
 void func_80BD8908(EnPamera* this) {
     this->actor.draw = EnPamera_Draw;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80BD8964;
 }
@@ -427,7 +428,8 @@ void func_80BD90AC(EnPamera* this, GlobalContext* globalCtx) {
           (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 200.0f)))) {
         if ((ActorCutscene_GetCanPlayNext(this->cutscenes[1])) && ((this->cutscenes[1] != -1))) {
             ActorCutscene_StartAndSetUnkLinkFields(this->cutscenes[1], &this->actor);
-            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[1])), &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->cutscenes[1])),
+                                   &this->actor);
             EnPamera_LookDownWell(this);
         } else if (this->cutscenes[1] != -1) {
             ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -563,8 +565,8 @@ void EnPamera_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BD9840(EnPamera* this, GlobalContext* globalCtx) {
     this->actor.update = func_80BDA344;
-    this->actor.flags |= 0x2000000;
-    this->actor.flags |= 0x100000;
+    this->actor.flags |= ACTOR_FLAG_2000000;
+    this->actor.flags |= ACTOR_FLAG_100000;
     if ((gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.weekEventReg[52] & 0x20)) {
         func_80BD9E60(this);
         func_80BD9938(this);
@@ -581,7 +583,7 @@ void func_80BD9840(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD9904(EnPamera* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = &func_80BD9928;
 }
 
@@ -702,7 +704,7 @@ s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx) {
                 case 2:
                     if (this->actor.draw == NULL) {
                         this->actor.draw = EnPamera_Draw;
-                        this->actor.flags |= 1;
+                        this->actor.flags |= ACTOR_FLAG_1;
                     }
                     func_80BD9EE0(this);
                     break;

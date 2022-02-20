@@ -154,7 +154,9 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD9C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AED4.s")
+void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
+    *flags = (*flags & ~unsetBits) | setBits;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AF00.s")
 
@@ -248,7 +250,9 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D2E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D5E8.s")
+s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
+    return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D648.s")
 
@@ -260,9 +264,13 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animations
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D83C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D8DC.s")
+s8 SubS_IsObjectLoaded(s8 index, GlobalContext* globalCtx) {
+    return !Object_IsLoaded(&globalCtx->objectCtx, index) ? false : true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D924.s")
+s8 SubS_GetObjectIndex(s16 id, GlobalContext* globalCtx) {
+    return Object_GetIndex(&globalCtx->objectCtx, id);
+}
 
 /**
  * Finds the first actor instance of a specified Id and category.
@@ -281,11 +289,11 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
     return actor;
 }
 
-s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 limbRotTableLen) {
+s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
     s32 i;
     u32 frames = globalCtx->gameplayFrames;
 
-    for (i = 0; i < limbRotTableLen; i++) {
+    for (i = 0; i < numLimbs; i++) {
         limbRotTableY[i] = (i * 50 + 0x814) * frames;
         limbRotTableZ[i] = (i * 50 + 0x940) * frames;
     }
@@ -340,9 +348,54 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     *curIndex = nextIndex;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E2D4.s")
+s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
+    s32 isStarted = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E3B8.s")
+    if ((curCutscene != -1) && (ActorCutscene_GetCurrentIndex() == curCutscene)) {
+        ActorCutscene_Stop(curCutscene);
+        ActorCutscene_SetIntentToPlay(nextCutscene);
+    } else if (ActorCutscene_GetCanPlayNext(nextCutscene)) {
+        switch (type) {
+            case SUBS_CUTSCENE_SET_UNK_LINK_FIELDS:
+                ActorCutscene_StartAndSetUnkLinkFields(nextCutscene, actor);
+                break;
+            case SUBS_CUTSCENE_NORMAL:
+                ActorCutscene_Start(nextCutscene, actor);
+                break;
+            case SUBS_CUTSCENE_SET_FLAG:
+                ActorCutscene_StartAndSetFlag(nextCutscene, actor);
+                break;
+        }
+        isStarted = true;
+    } else {
+        ActorCutscene_SetIntentToPlay(nextCutscene);
+    }
+
+    return isStarted;
+}
+
+s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
+    s16 cs;
+    s32 i;
+
+    for (i = 0; i < numCutscenes; i++) {
+        cutscenes[i] = -1;
+    }
+
+    cs = actor->cutscene;
+    i = 0;
+
+    while (cs != -1) {
+        // Note: Infinite loop if numCutscenes is less than possible additional cutscenes
+        if (i < numCutscenes) {
+            cutscenes[i] = cs;
+            cs = ActorCutscene_GetAdditionalCutscene(cs);
+            i++;
+        }
+    }
+
+    return i;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E4B0.s")
 
