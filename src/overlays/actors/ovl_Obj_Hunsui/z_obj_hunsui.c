@@ -213,7 +213,7 @@ void ObjHunsui_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     D_80B9DED0 = Lib_SegmentedToVirtual(object_hunsui_Matanimheader_000BF0);
     D_80B9DED4 = Lib_SegmentedToVirtual(object_hunsui_Matanimheader_001888);
-    func_8013E3B8(&this->dyna.actor, &this->unk_170, 1);
+    SubS_FillCutscenesList(&this->dyna.actor, &this->unk_170, 1);
     this->unk_18C = 0;
 
     switch (this->unk_160) {
@@ -326,7 +326,7 @@ void ObjHunsui_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if ((this->unk_172 & 0x40) && func_8013E2D4(&this->dyna.actor, this->unk_17C, -1, 0)) {
+    if ((this->unk_172 & 0x40) && SubS_StartActorCutscene(&this->dyna.actor, this->unk_17C, -1, 0)) {
         this->unk_172 &= ~0x40;
     }
 
