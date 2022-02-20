@@ -6,7 +6,7 @@
 
 #include "z_en_look_nuts.h"
 
-#define FLAGS ACTOR_FLAG_80000000
+#define FLAGS (ACTOR_FLAG_80000000)
 
 #define THIS ((EnLookNuts*)thisx)
 

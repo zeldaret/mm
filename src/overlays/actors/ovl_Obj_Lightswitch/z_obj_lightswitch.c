@@ -7,7 +7,7 @@
 #include "z_obj_lightswitch.h"
 #include "objects/object_lightswitch/object_lightswitch.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjLightswitch*)thisx)
 
