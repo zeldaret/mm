@@ -234,9 +234,9 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-} _struct_D_80B31350_0x28;
+} ObjSpiderTentStruct;
 
-_struct_D_80B31350_0x28 D_80B31350[] = {
+ObjSpiderTentStruct D_80B31350[] = {
     {
         &object_spidertent_DL_000070,
         &object_spidertent_Colheader_0011AC,
@@ -245,7 +245,7 @@ _struct_D_80B31350_0x28 D_80B31350[] = {
         1.3f,
         40.0f,
         -3.8f,
-        14400.0f,
+        SQ(120.0f),
         240.0f,
         200.0f,
     },
@@ -257,7 +257,7 @@ _struct_D_80B31350_0x28 D_80B31350[] = {
         0.9f,
         30.0f,
         -2.8f,
-        7744.0f,
+        SQ(88.0f),
         176.0f,
         168.0f,
     },
@@ -272,9 +272,9 @@ typedef struct {
     /* 0x0F */ s8 unk_0F;
     /* 0x10 */ Color_RGBA8 unk_10;
     /* 0x14 */ Color_RGBA8 unk_14;
-} _struct_D_80B313A0_0x18;
+} ObjSpidertentStruct2;
 
-_struct_D_80B313A0_0x18 D_80B313A0[] = {
+ObjSpidertentStruct2 D_80B313A0[] = {
     {
         -20.0f,
         6.0f,
@@ -331,7 +331,7 @@ s32 func_80B2FB10(Vec3f* arg0, Vec3f* arg1) {
     f32 temp_f0 = Math3D_LengthSquared(arg0);
     f32 temp_f2;
 
-    if (temp_f0 < 9.999999e-9f) {
+    if (temp_f0 < (SQ(1.0e-5) - 1)) {
         return false;
     }
     temp_f2 = 1.0f / sqrtf(temp_f0);
@@ -448,7 +448,7 @@ s32 func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
 
 void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triNorm, Vec3f* arg3, f32 arg4, s32 arg5) {
     ObjSpidertent* this = THIS;
-    _struct_D_80B31350_0x28* spE0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
+    ObjSpidertentStruct* spE0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     f32 temp_f24;
     f32 phi_f22;
     s32 i;
@@ -460,7 +460,7 @@ void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triN
     Vec3f sp94;
     Vec3f sp88;
     f32 temp_f2;
-    _struct_D_80B313A0_0x18* sp80 = &D_80B313A0[arg5];
+    ObjSpidertentStruct2* sp80 = &D_80B313A0[arg5];
 
     spAC.x = triNorm->plane.normal.x;
     spAC.y = triNorm->plane.normal.y;
@@ -474,7 +474,7 @@ void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triN
 
     if (func_80B2FB10(&sp88, &spA0)) {
         phi_f22 = 0.0f;
-        temp_f24 = 6.2831855f / sp80->unk_0F;
+        temp_f24 = (2 * M_PI) / sp80->unk_0F;
 
         for (i = 0; i < sp80->unk_0F; i++) {
             temp_f2 = (Rand_ZeroOne() * temp_f24) + phi_f22;
@@ -553,7 +553,7 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjSpidertent* this = THIS;
     s32 temp_s1 = OBJSPIDERTENT_GET_1(&this->dyna.actor);
-    _struct_D_80B31350_0x28* ptr = &D_80B31350[temp_s1];
+    ObjSpidertentStruct* ptr = &D_80B31350[temp_s1];
     ColliderTrisElementInit* element;
     Vec3f sp70[3];
     Vec3f sp64;
@@ -613,7 +613,7 @@ void func_80B307E0(ObjSpidertent* this) {
 void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx) {
     s32 phi_s4;
     s32 i;
-    _struct_D_80B31350_0x28* ptr2 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
+    ObjSpidertentStruct* ptr2 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     Vec3f sp70;
     Vec3s* hitPos;
     ColliderTrisElement* ptr;
@@ -696,10 +696,10 @@ void func_80B30AD4(ObjSpidertent* this) {
 
 #ifdef NON_MATCHING
 void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
-    _struct_D_80B31350_0x28* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
+    ObjSpidertentStruct* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
     TriNorm* triNorm;
     s32 i, j;
-    _struct_D_80B313A0_0x18* ptr;
+    ObjSpidertentStruct2* ptr;
     Vec3f sp60;
     f32 sp5C;
 
@@ -725,7 +725,7 @@ void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_3C5 > 1) {
-            this->unk_3C5 -= 1;
+            this->unk_3C5--;
         } else {
             this->unk_3C5 = 0;
         }
@@ -737,13 +737,13 @@ void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_3C3 < 255) {
-            this->unk_3C3 += 1;
+            this->unk_3C3++;
         } else {
             this->unk_3C3 = 255;
         }
 
         if (this->unk_3C4 < 255) {
-            this->unk_3C4 += 1;
+            this->unk_3C4++;
         } else {
             this->unk_3C4 = 255;
         }
