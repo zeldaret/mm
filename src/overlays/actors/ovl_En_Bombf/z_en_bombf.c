@@ -82,13 +82,6 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-Vec3f D_808AFB80 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_808AFB8C = { 0.0f, 0.1f, 0.0f };
-Vec3f D_808AFB98 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_808AFBA4 = { 0.0f, 0.6f, 0.0f };
-
-Color_RGBA8 D_808AFBB0 = { 255, 255, 255, 255 };
-
 void EnBombf_SetupAction(EnBombf* this, EnBombfActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -157,7 +150,7 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
     if (this->unk_204 >= 1.0f) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
             bombf = (EnBombf*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOMBF, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
             if (bombf != NULL) {
                 func_800B8C20(&this->actor, &bombf->actor, globalCtx);
                 this->timer = 180;
@@ -178,7 +171,7 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
             this->colliderCylinder.base.acFlags &= ~AC_HIT;
             if (this->colliderCylinder.base.ac->category != ACTORCAT_BOSS) {
                 bombf = (EnBombf*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOMBF, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
                 if (bombf != NULL) {
                     bombf->unk_1F8 = 1;
                     bombf->timer = 0;
@@ -190,7 +183,7 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
         } else {
             if (func_80123F48(globalCtx, &this->actor.world.pos, 30.0f, 50.0f)) {
                 bombf = (EnBombf*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOMBF, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
                 if (bombf != NULL) {
                     bombf->timer = 100;
                     this->timer = 180;
@@ -316,12 +309,12 @@ void func_808AEFD4(EnBombf* this, GlobalContext* globalCtx) {
 }
 
 void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
-    Vec3f sp8C = D_808AFB80;
-    Vec3f sp80 = D_808AFB8C;
-    Vec3f sp74 = D_808AFB98;
+    Vec3f sp8C = { 0.0f, 0.0f, 0.0f };
+    Vec3f sp80 = { 0.0f, 0.1f, 0.0f };
+    Vec3f sp74 = { 0.0f, 0.0f, 0.0f };
     Vec3f sp68;
-    Vec3f sp5C = D_808AFBA4;
-    Color_RGBA8 sp58 = D_808AFBB0;
+    Vec3f sp5C = { 0.0f, 0.6f, 0.0f };
+    Color_RGBA8 sp58 = { 255, 255, 255, 255 };
     EnBombf* this = THIS;
     s32 pad;
 
@@ -380,7 +373,7 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
             sp68 = this->actor.world.pos;
             sp68.y += 25.0f;
 
-            if (this->timer < 0x7F) {
+            if (this->timer < 127) {
                 if ((globalCtx->gameplayFrames % 2) == 0) {
                     EffectSsGSpk_SpawnFuse(globalCtx, &this->actor, &sp68, &sp8C, &sp74);
                 }
@@ -422,7 +415,7 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
                 func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
 
-                ENBOMBF_GET(&this->actor) = ENBOMBF_1;
+                this->actor.params = ENBOMBF_1;
                 this->timer = 10;
                 this->actor.flags |= ACTOR_FLAG_20;
 
