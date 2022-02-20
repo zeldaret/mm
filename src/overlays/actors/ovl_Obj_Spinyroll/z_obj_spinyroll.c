@@ -280,7 +280,8 @@ void func_80A1DFA0(ObjSpinyroll* this) {
 #ifdef NON_MATCHING
 // globalCtx not in s reg, something with ptr->unk_F0 = temp_s1; line
 s32 func_80A1E074(ObjSpinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32 arg3) {
-    s32 i s32 j;
+    s32 i;
+    s32 j;
     ObjSpinyrollStruct2* ptr = &this->unk_3A4;
     f32 temp_f0;
     f32 temp_f20;
