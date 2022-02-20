@@ -234,9 +234,9 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-} ObjSpiderTentStruct;
+} ObjSpidertentStruct;
 
-ObjSpiderTentStruct D_80B31350[] = {
+ObjSpidertentStruct D_80B31350[] = {
     {
         &object_spidertent_DL_000070,
         &object_spidertent_Colheader_0011AC,
@@ -331,7 +331,7 @@ s32 func_80B2FB10(Vec3f* arg0, Vec3f* arg1) {
     f32 temp_f0 = Math3D_LengthSquared(arg0);
     f32 temp_f2;
 
-    if (temp_f0 < (SQ(1.0e-5) - 1)) {
+    if (temp_f0 < 9.999999e-9f) {
         return false;
     }
     temp_f2 = 1.0f / sqrtf(temp_f0);
