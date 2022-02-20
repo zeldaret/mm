@@ -7,7 +7,7 @@
 #include "z_en_niw.h"
 #include "objects/object_niw/object_niw.h"
 
-#define FLAGS 0x00800010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnNiw*)thisx)
 
@@ -118,7 +118,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->niwType = this->actor.params;
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->actor.flags |= 0x1; // targetable ON
+    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
@@ -146,7 +146,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
         this->sfxTimer1 = 30;
         this->unkTimer250 = 30;
-        this->actor.flags &= ~0x1; // targetable OFF
+        this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->unknownState28E = 4;
         this->actionFunc = EnNiw_Held;
         this->actor.speedXZ = 0.0f;
@@ -342,7 +342,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M); // crow
             this->sfxTimer1 = 30;
             this->unkTimer250 = 30;
-            this->actor.flags &= ~0x1; // targetable OFF
+            this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
             this->unknownState28E = 4;
             this->actor.speedXZ = 0.0f;
             this->actionFunc = EnNiw_Held;
@@ -438,7 +438,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.z = 0;
             rotZ = this->actor.shape.rot.z;
             this->unknownState28E = 5;
-            this->actor.flags |= 0x1; // targetable ON
+            this->actor.flags |= ACTOR_FLAG_1; // targetable ON
             this->actionFunc = EnNiw_Thrown;
             this->actor.shape.rot.y = rotZ;
             this->actor.shape.rot.x = rotZ;
@@ -456,7 +456,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.x = rotZ;
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         Math_Vec3f_Copy(&this->unk2BC, &vec3fcopy);
-        this->actor.flags |= 0x1; // targetable ON
+        this->actor.flags |= ACTOR_FLAG_1; // targetable ON
         this->actionFunc = EnNiw_Thrown;
     }
     func_80891320(this, globalCtx, 2);
@@ -494,7 +494,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         this->sfxTimer1 = 30;
         this->unk2EC = 0;
         this->unkTimer250 = 30;
-        this->actor.flags &= ~0x1; // targetable OFF
+        this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->unknownState28E = 4;
         this->actionFunc = EnNiw_Held;
         this->actor.speedXZ = 0.0f;
@@ -605,7 +605,7 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
     if (this->unkTimer252 == 0) {
         this->unkTimer252 = 10;
         this->yawTowardsPlayer = this->actor.yawTowardsPlayer;
-        this->actor.flags &= ~0x1; // targetable OFF
+        this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
         this->unknownState28E = 3;
         this->actionFunc = EnNiw_CuccoStorm;
     }
@@ -742,7 +742,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad2[9];
     s16 temp29C;
     f32 featherScale;
-    f32 camResult;
+    f32 viewAtToEyeNormY;
     f32 floorHeight;
     f32 dist = 20.0f;
     s32 pad3;
@@ -808,17 +808,19 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 60.0f, 0x1F);
 
+    // if cucco is off the map?
     if (this->actor.floorHeight <= BGCHECK_Y_MIN || this->actor.floorHeight >= BGCHECK_Y_MAX) {
-        // if cucco is off the map?
-        Vec3f camera;
-        camera.x = globalCtx->view.at.x - globalCtx->view.eye.x;
-        camera.y = globalCtx->view.at.y - globalCtx->view.eye.y;
-        camera.z = globalCtx->view.at.z - globalCtx->view.eye.z;
-        camResult = camera.y / sqrtf(SQXYZ(camera));
+        Vec3f viewAtToEye;
+
+        // Direction vector for the direction the camera is facing
+        viewAtToEye.x = globalCtx->view.at.x - globalCtx->view.eye.x;
+        viewAtToEye.y = globalCtx->view.at.y - globalCtx->view.eye.y;
+        viewAtToEye.z = globalCtx->view.at.z - globalCtx->view.eye.z;
+        viewAtToEyeNormY = viewAtToEye.y / sqrtf(SQXYZ(viewAtToEye));
 
         this->actor.world.pos.x = this->actor.home.pos.x;
         this->actor.world.pos.z = this->actor.home.pos.z;
-        this->actor.world.pos.y = (this->actor.home.pos.y + globalCtx->view.eye.y) + (camResult * 160.0f);
+        this->actor.world.pos.y = (this->actor.home.pos.y + globalCtx->view.eye.y) + (viewAtToEyeNormY * 160.0f);
 
         if (this->actor.world.pos.y < this->actor.home.pos.y) {
             this->actor.world.pos.y = this->actor.home.pos.y + 300.0f;
