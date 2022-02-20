@@ -6,7 +6,7 @@
 
 #include "z_en_stop_heishi.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnStopheishi*)thisx)
 
