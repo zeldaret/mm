@@ -10,8 +10,8 @@ typedef void (*EnVmActionFunc)(struct EnVm*, GlobalContext*);
 #define ENVM_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
 #define ENVM_FF00_0 0
-#define ENVM_FF00_FF 0xFF
 #define ENVM_FF00_5 5
+#define ENVM_FF00_FF 0xFF
 
 typedef struct EnVm {
     /* 0x0000 */ Actor actor;

@@ -303,7 +303,7 @@ void func_808CC820(EnVm* this, GlobalContext* globalCtx) {
         }
     } else {
         this->unk_214--;
-        if (this->unk_214 < 301) {
+        if (this->unk_214 <= 300) {
             Math_ApproachS(&this->unk_218, this->actor.yawTowardsPlayer - this->actor.shape.rot.y, 0xA, 0xDAC);
             Math_ApproachS(&this->unk_216, sp32, 0xA, 0xDAC);
 
@@ -450,7 +450,7 @@ void EnVm_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    this->unk_212 += 0xC;
+    this->unk_212 += 12;
 
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderJntSph.base);
     if (this->actionFunc != func_808CCCF0) {
@@ -496,7 +496,7 @@ void EnVm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
             this->unk_210 = 1;
         }
 
-        sp50.x = (Math_CosS(this->actor.shape.rot.y + this->unk_218) * 5.0f) + this->unk_234.x;
+        sp50.x = this->unk_234.x + (Math_CosS(this->actor.shape.rot.y + this->unk_218) * 5.0f);
         sp50.y = this->unk_234.y;
         sp50.z = this->unk_234.z - (Math_SinS(this->actor.shape.rot.y + this->unk_218) * 5.0f);
 
