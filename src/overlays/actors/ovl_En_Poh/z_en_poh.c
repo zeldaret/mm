@@ -404,7 +404,7 @@ void func_80B2D300(EnPoh* this, GlobalContext* globalCtx) {
 
     this->unk_18E++;
     if (this->unk_18E < 8) {
-        sp38 = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
+        sp38 = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
         if (this->unk_18E < 5) {
             sp3A = (this->unk_18E * 0x1000) - 0x4000;
             sp44.y = (Math_SinS(sp3A) * 23.0f) + (this->actor.world.pos.y + 40.0f);
@@ -1006,7 +1006,8 @@ void func_80B2F37C(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 170, 255, this->unk_197);
         gDPSetEnvColor(POLY_XLU_DISP++, this->unk_194, this->unk_195, this->unk_196, 255);
 
-        Matrix_InsertYRotation_f((func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x8000) * (M_PI / 32768), MTXMODE_APPLY);
+        Matrix_InsertYRotation_f((Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000) * (M_PI / 32768),
+                                 MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_po_DL_003850);

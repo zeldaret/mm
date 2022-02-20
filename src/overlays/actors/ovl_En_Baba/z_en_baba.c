@@ -42,12 +42,12 @@ const ActorInit En_Baba_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_bba_Anim_005DC4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_bba_Anim_006550, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_bba_Anim_006B10, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_bba_Anim_005154, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_bba_Anim_0058B8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_bba_Anim_004910, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaWalkingHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaKnockedOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gBbaLyingDownAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gBbaWalkingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -281,7 +281,8 @@ void func_80BA8DF4(EnBaba* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (func_8013D5E8(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer) && !(this->unk_40A & 4)) {
+    if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x36B0, this->actor.yawTowardsPlayer) &&
+        !(this->unk_40A & 4)) {
         sp30.x = player->actor.world.pos.x;
         sp30.y = player->bodyPartsPos[7].y + 3.0f;
         sp30.z = player->actor.world.pos.z;
@@ -429,7 +430,7 @@ void func_80BA93AC(EnBaba* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA9480(EnBaba* this, GlobalContext* globalCtx) {
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bba_Skel_005EF0, &object_bba_Anim_006B10, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gBbaSkel, &gBbaWalkingHoldingBagAnim, this->jointTable,
                        this->morphTable, 0x12);
 
     this->actor.draw = EnBaba_Draw;
@@ -741,7 +742,7 @@ void EnBaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         func_8012C5B0(globalCtx->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&object_bba_Tex_0092A0));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBbaEyeTex));
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnBaba_OverrideLimbDraw, EnBaba_PostLimbDraw,

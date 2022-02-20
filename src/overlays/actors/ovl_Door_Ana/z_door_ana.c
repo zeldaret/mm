@@ -205,7 +205,7 @@ void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorAna* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
