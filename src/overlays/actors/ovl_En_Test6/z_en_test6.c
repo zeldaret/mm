@@ -418,7 +418,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
     f32 sp4C;
     Camera* temp_s3 = Play_GetCamera(globalCtx, this->unk_284);
 
-    sp78 = Play_GetCamera(globalCtx, MAIN_CAM);
+    sp78 = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
     switch (this->unk_274) {
         case 90:
@@ -500,7 +500,7 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
             }
 
             for (i = 0; i < ARRAY_COUNT(this->unk_20C); i++) {
-                temp_s0 += 0x2AAA;
+                temp_s0 += 0x10000 / ARRAY_COUNT(this->unk_20C);
                 if (player) {}
                 this->unk_20C[i].x = (Math_SinS(temp_s0) * this->unk_150) + player->actor.world.pos.x;
                 this->unk_20C[i].y = player->actor.world.pos.y;
@@ -756,9 +756,9 @@ void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
     } else if (this->unk_27A < 16) {
         sp46 = ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]);
 
-        func_8016981C(globalCtx, sp46, &this->unk_258, &this->unk_264, &D_80A9405C);
-        func_80169940(globalCtx, sp46, this->unk_270);
-        func_80169988(globalCtx, sp46, 0);
+        Play_CameraSetAtEyeUp(globalCtx, sp46, &this->unk_258, &this->unk_264, &D_80A9405C);
+        Play_CameraSetFov(globalCtx, sp46, this->unk_270);
+        Play_CameraSetRoll(globalCtx, sp46, 0);
     }
 
     switch (this->unk_27A) {
