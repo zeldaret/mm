@@ -113,6 +113,7 @@ static InitChainEntry sInitChain[] = {
 
 /**
  * @brief Applies a "swaying" motion of the provided matrix
+ * 
  * @param[in]     matrix  Matrix to update the current state
  */
 void EnAm_ApplySway(MtxF* matrix) {
@@ -212,6 +213,7 @@ void EnKusa_Sway(void) {
 /**
  * @brief Detects if a bush is able to snap to the floor. BgCheck_EntityRaycastFloor5 will give the intersect point
  *        if no poit is found, a false value is returned.
+ * 
  * @param this
  * @param globalCtx
  * @param yOffset offset of Y coordinate, can be positive or negative.
@@ -267,6 +269,7 @@ void EnKusa_UpdateVelY(EnKusa* this) {
 
 /**
  * @brief Scales a vector down by provided scale factor
+ * 
  * @param vec   vector to be scaled
  * @param scaleFactor   scale factor to be applied to vector
  */
