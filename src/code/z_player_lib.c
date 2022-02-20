@@ -1117,8 +1117,8 @@ void func_80123E90(GlobalContext* globalCtx, Actor* actor) {
     player->unk_730 = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
-    func_800DFD78(Play_GetCamera(globalCtx, MAIN_CAM), 8, actor);
-    Camera_ChangeMode(Play_GetCamera(globalCtx, MAIN_CAM), 9);
+    func_800DFD78(Play_GetCamera(globalCtx, CAM_ID_MAIN), 8, actor);
+    Camera_ChangeMode(Play_GetCamera(globalCtx, CAM_ID_MAIN), 9);
 }
 
 s32 func_80123F14(GlobalContext* globalCtx) {

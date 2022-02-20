@@ -6,7 +6,7 @@
 
 #include "z_en_guard_nuts.h"
 
-#define FLAGS 0x80100009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGuardNuts*)thisx)
 

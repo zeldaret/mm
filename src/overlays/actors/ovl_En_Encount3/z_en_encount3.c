@@ -6,7 +6,7 @@
 
 #include "z_en_encount3.h"
 
-#define FLAGS 0x08000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnEncount3*)thisx)
 

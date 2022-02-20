@@ -8,7 +8,7 @@
 #include "objects/object_bigpo/object_bigpo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00001215
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -271,7 +271,7 @@ void EnBigpo_UpdateSpin(EnBigpo* this) {
 void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext) {
     Camera* subCam;
 
-    if (this->cutsceneSubCamId != SUBCAM_FREE) {
+    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
         subCam = Play_GetCamera(globalContext, this->cutsceneSubCamId);
         subCam->eye.y -= this->actor.velocity.y;
         if (this->actor.velocity.y > 0.0f) {
@@ -283,7 +283,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, GlobalContext* globalContext)
 }
 
 void EnBigpo_InitWellBigpo(EnBigpo* this) {
-    this->actor.flags &= ~0x1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
     this->actionFunc = EnBigpo_WellWaitForProximity;
     this->fireRadius = 200.0f;
 }
@@ -332,7 +332,7 @@ void EnBigpo_SpawnCutsceneStage1(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.scale.y = 0.015f;
     this->actor.scale.z = 0.0f;
 
-    if (this->cutsceneSubCamId != SUBCAM_FREE) {
+    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
         Vec3f subCamEye;
 
         subCamEye.x = ((this->actor.world.pos.x - this->fires[0].pos.x) * 1.8f) + this->actor.world.pos.x;
@@ -460,8 +460,8 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, GlobalContext* globalCtx) {
     this->idleTimer--;
     if (this->idleTimer == 0) {
         subCam = Play_GetCamera(globalCtx, this->cutsceneSubCamId);
-        Play_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
-        this->cutsceneSubCamId = SUBCAM_FREE;
+        Play_CameraSetAtEye(globalCtx, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        this->cutsceneSubCamId = CAM_ID_MAIN;
         if (this->actor.params == ENBIGPO_SUMMONED) {
             dampe = SubS_FindActor(globalCtx, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
@@ -483,7 +483,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->rotVelocity = 0x2000;
     this->idleTimer = 32;
-    this->actor.flags &= ~0x1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
@@ -544,7 +544,7 @@ void EnBigpo_SetupIdleFlying(EnBigpo* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
-    this->actor.flags |= 0x1; // targetable ON
+    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
     this->actionFunc = EnBigpo_IdleFlying;
 }
 
@@ -683,25 +683,25 @@ void EnBigpo_SetupDeath(EnBigpo* this) {
 void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
     Vec3f tempVec;
     f32 unkTemp2; // dont really know what these unktemps are doing
-    s16 cam;
+    s16 camYaw;
     s16 unkTemp;
     s16 modifiedTimer;
 
     this->idleTimer++;
     if (this->idleTimer < 8) {
-        cam = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
+        camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x4800;
         if (this->idleTimer < 5) {
             unkTemp = (this->idleTimer << 0xC) - 0x4000;
             // 1.4.0...1 is NOT 1.4, the rodata demands it
             tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
-            tempVec.x = (Math_SinS(cam) * unkTemp2) + this->actor.world.pos.x;
-            tempVec.z = (Math_CosS(cam) * unkTemp2) + this->actor.world.pos.z;
+            tempVec.x = (Math_SinS(camYaw) * unkTemp2) + this->actor.world.pos.x;
+            tempVec.z = (Math_CosS(camYaw) * unkTemp2) + this->actor.world.pos.z;
 
         } else {
             tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * 1.4000001f);
-            tempVec.x = (Math_SinS(cam) * 32.2f) + this->actor.world.pos.x;
-            tempVec.z = (Math_CosS(cam) * 32.2f) + this->actor.world.pos.z;
+            tempVec.x = (Math_SinS(camYaw) * 32.2f) + this->actor.world.pos.x;
+            tempVec.z = (Math_CosS(camYaw) * 32.2f) + this->actor.world.pos.z;
         }
 
         // not sure what we're turning this into, but its based on the timer
@@ -745,7 +745,7 @@ void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
     this->actor.world.pos.y -= 15.0f;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_MISC);
-    this->actor.flags &= ~(0x1 | 0x4); // targetable OFF, enemy music OFF
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4); // targetable OFF, enemy music OFF
     this->actor.bgCheckFlags &= ~0x400;
     this->actionFunc = EnBigpo_LanternFalling;
 }
@@ -813,8 +813,8 @@ void EnBigpo_ScoopSoulAppearing(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
     this->savedHeight = this->actor.world.pos.y;
     Actor_SetFocus(&this->actor, -10.0f);
-    this->idleTimer = 400;    // 20 seconds
-    this->actor.flags |= 0x1; // targetable ON
+    this->idleTimer = 400;             // 20 seconds
+    this->actor.flags |= ACTOR_FLAG_1; // targetable ON
     this->actionFunc = EnBigpo_ScoopSoulIdle;
 }
 
@@ -833,7 +833,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this) {
-    this->actor.flags &= ~(0x1 | 0x10000); // targetable OFF and unknown OFF
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10000); // targetable OFF and unknown OFF
     this->actionFunc = EnBigpo_ScoopSoulFadingAway;
 }
 
@@ -845,7 +845,7 @@ void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, GlobalContext* globalCtx) {
 }
 
 void EnBigpo_InitDampeMainPo(EnBigpo* this) {
-    this->actor.flags &= ~0x1; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
     this->actionFunc = EnBigpo_SelectRandomFireLocations;
 }
 
@@ -891,7 +891,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, GlobalContext* globalCtx) 
                     randomFirePo->actor.update = EnBigpo_UpdateFire;
                     func_800BC154(globalCtx, &globalCtx->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
                     randomFirePo->unk20C = fireIndex;
-                    randomFirePo->actor.flags &= ~0x1; // targetable OFF
+                    randomFirePo->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
                     // make invisible by size: 0
                     Actor_SetScale(&randomFirePo->actor, 0);
 
@@ -955,7 +955,7 @@ void EnBigpo_SetupFlameCirclePositions(EnBigpo* this, GlobalContext* globalCtx) 
     }
 
     // Setup sub camera
-    if (this->cutsceneSubCamId != SUBCAM_FREE) {
+    if (this->cutsceneSubCamId != CAM_ID_MAIN) {
         subCamEye.x = (Math_SinS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.x;
         subCamEye.y = this->actor.world.pos.y + 150.0f;
         subCamEye.z = (Math_CosS(this->actor.yawTowardsPlayer) * 360.0f) + this->actor.world.pos.z;
@@ -1124,7 +1124,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
         }
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
-            this->actor.flags &= ~0x1; // targetable OFF
+            this->actor.flags &= ~ACTOR_FLAG_1; // targetable OFF
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             if (this->actor.params == ENBIGPO_SUMMONED) { // dampe type
@@ -1153,7 +1153,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ColliderCylinder* thisCollider;
 
-    if ((this->actor.flags & 0x2000) == 0x2000) {
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
         this->hoverHeightCycleTimer = 0;
         this->savedHeight = this->actor.world.pos.y;
     }
@@ -1219,7 +1219,7 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnBigpo_UpdateFire(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = THIS;
 
-    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
     this->actionFunc(this, globalCtx);
 }
 
@@ -1350,7 +1350,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
                               this->actor.world.pos.z, this->mainColor.r, this->mainColor.g, this->mainColor.b,
                               this->mainColor.a * 2);
 
-    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1430,7 +1430,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), MTXMODE_NEW);
+    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_NEW);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         fireRadius = 500;

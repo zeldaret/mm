@@ -7,7 +7,7 @@
 #include "z_en_tite.h"
 #include "objects/object_tite/object_tite.h"
 
-#define FLAGS 0x00000205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
 #define THIS ((EnTite*)thisx)
 
@@ -161,7 +161,7 @@ void EnTite_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.params == ENTITE_MINUS_3) {
         this->actor.params = ENTITE_MINUS_2;
         this->unk_2BE = 240;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.shape.yOffset = -3000.0f;
         this->actor.shape.shadowDraw = NULL;
         func_80895A10(this);
@@ -271,7 +271,7 @@ void func_80893DD4(EnTite* this) {
     this->unk_2CC = 0.75f;
     this->unk_2C4 = 1.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
-    this->actor.flags &= ~0x200;
+    this->actor.flags &= ~ACTOR_FLAG_200;
 }
 
 void func_80893E54(EnTite* this, GlobalContext* globalCtx) {
@@ -280,7 +280,7 @@ void func_80893E54(EnTite* this, GlobalContext* globalCtx) {
         this->collider.base.colType = COLTYPE_HIT6;
         this->unk_2C4 = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, 9, 2, 0.2f, 0.2f);
-        this->actor.flags |= 0x200;
+        this->actor.flags |= ACTOR_FLAG_200;
     }
 }
 
@@ -350,7 +350,7 @@ void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.velocity.y = 10.0f;
     } else {
         this->actor.velocity.y = 8.0f;
@@ -382,7 +382,7 @@ void func_808942B4(EnTite* this, GlobalContext* globalCtx) {
             }
         }
     } else if (!(this->collider.base.atFlags & AT_HIT)) {
-        this->actor.flags |= 0x1000000;
+        this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     } else {
         this->collider.base.atFlags &= ~AT_HIT;
@@ -633,8 +633,8 @@ void func_80895020(EnTite* this, GlobalContext* globalCtx) {
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.colorFilterTimer = 0;
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
-    this->actor.flags &= ~1;
-    this->actor.flags |= 0x10;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->unk_2BA = 1;
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, this->unk_2BE);
     this->unk_2BC = 25;
@@ -778,7 +778,7 @@ void func_80895738(EnTite* this, GlobalContext* globalCtx) {
     } else if (this->unk_2BC > 0) {
         this->unk_2BC--;
         Math_StepToF(&this->actor.speedXZ, 10.0f, 0.3f);
-        this->actor.flags |= 0x1000000;
+        this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         if (!func_80893A34(this, globalCtx)) {
             this->unk_2BC = 0;
@@ -921,7 +921,7 @@ void func_80895E28(EnTite* this, GlobalContext* globalCtx) {
     func_800B0DE0(globalCtx, &sp44, &sp38, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
 
     if (Math_StepToF(&this->actor.shape.yOffset, 0.0f, 200.0f)) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->collider.base.acFlags |= AC_ON;
         func_808945EC(this);
@@ -1013,7 +1013,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
     } else if ((this->actor.bgCheckFlags & 1) && (this->collider.base.acFlags & AC_ON) &&
                (this->actor.colChkInfo.health != 0) && (globalCtx->actorCtx.unk2 != 0) &&
                (this->actor.xyzDistToPlayerSq < SQ(200.0f))) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         if (this->actor.shape.yOffset < 0.0f) {
             this->actor.shape.yOffset = 0.0f;
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
