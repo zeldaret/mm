@@ -385,7 +385,7 @@ s32 func_8094E52C(EnGm* this, GlobalContext* globalCtx) {
             if (!(gSaveContext.weekEventReg[86] & 0x40) && (this->unk_3E0 == 2)) {
                 ActorCutscene_Stop(sp2A);
             } else {
-                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
             }
             this->unk_3E0++;
             ret = true;
@@ -393,7 +393,8 @@ s32 func_8094E52C(EnGm* this, GlobalContext* globalCtx) {
 
         case 1:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
+                                      this->actor.child);
             }
             this->unk_3E0++;
             ret = true;
@@ -453,7 +454,7 @@ s32 func_8094E69C(EnGm* this, GlobalContext* globalCtx) {
                 case 4:
                 case 6:
                     camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp4A));
-                    func_800E0308(camera, &this->actor);
+                    Camera_SetTargetActor(camera, &this->actor);
                     this->unk_3E0++;
                     ret = true;
             }
@@ -464,7 +465,7 @@ s32 func_8094E69C(EnGm* this, GlobalContext* globalCtx) {
         case 7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp4A));
-                func_800E0308(camera, this->actor.child);
+                Camera_SetTargetActor(camera, this->actor.child);
             }
             this->unk_3E0++;
             ret = true;

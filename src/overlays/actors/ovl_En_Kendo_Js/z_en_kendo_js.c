@@ -667,7 +667,8 @@ void func_80B27774(EnKendoJs* this, GlobalContext* globalCtx) {
 
 void func_80B2783C(EnKendoJs* this, GlobalContext* globalCtx) {
     if (this->actor.cutscene != -1) {
-        func_800DFB14(globalCtx->cameraPtrs[MAIN_CAM], ActorCutscene_GetCutscene(this->actor.cutscene)->unk4);
+        Camera_ChangeDataIdx(globalCtx->cameraPtrs[CAM_ID_MAIN],
+                             ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
     }
 }
 

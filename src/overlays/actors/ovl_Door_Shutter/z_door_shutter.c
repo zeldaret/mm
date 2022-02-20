@@ -405,7 +405,7 @@ void func_808A1288(DoorShutter* this, GlobalContext* globalCtx) {
         this->unk_164 = sp38;
         this->unk_168 = 0.0f;
 
-        func_800DFFAC(globalCtx->cameraPtrs[MAIN_CAM], &this->actor, player->unk_3BA, this->unk_168, 12, sp34, 10);
+        func_800DFFAC(globalCtx->cameraPtrs[CAM_ID_MAIN], &this->actor, player->unk_3BA, this->unk_168, 12, sp34, 10);
     }
 }
 

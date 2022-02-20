@@ -1045,7 +1045,7 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
 }
 
 void func_80A136B8(GlobalContext* globalCtx, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, MAIN_CAM), 3);
+    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, CAM_ID_MAIN), 3);
 
     Quake_SetCountdown(sp26, arg3);
     Quake_SetSpeed(sp26, arg1);
