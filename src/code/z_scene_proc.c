@@ -405,7 +405,7 @@ void AnimatedMat_DrawMain(GlobalContext* globalCtx, AnimatedMaterial* matAnim, f
             segmentAbs = ((segment < 0) ? -segment : segment) + 7;
             matAnimDrawHandlers[matAnim->type](globalCtx, segmentAbs, Lib_SegmentedToVirtual(matAnim->params));
             matAnim++;
-        } while (segment > -1);
+        } while (segment >= 0);
     }
 }
 
