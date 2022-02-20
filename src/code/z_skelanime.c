@@ -8,10 +8,10 @@ s32 LinkAnimation_Once(GlobalContext* globalCtx, SkelAnime* skelAnime);
 s32 SkelAnime_LoopFull(SkelAnime* skelAnime);
 s32 SkelAnime_LoopPartial(SkelAnime* skelAnime);
 s32 SkelAnime_Once(SkelAnime* skelAnime);
-void Animation_PlayLoop(SkelAnime* skelAnime, AnimationHeader* animationSeg);
+void Animation_PlayLoop(SkelAnime* skelAnime, AnimationHeader* animation);
 void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* pos, s16 angle);
-void LinkAnimation_Change(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* linkAnimetionEntrySeg,
-                          f32 playbackSpeed, f32 frame, f32 frameCount, u8 animationMode, f32 transitionRate);
+void LinkAnimation_Change(GlobalContext* globalCtx, SkelAnime* skelAnime, LinkAnimationHeader* animation, f32 playSpeed,
+                          f32 frame, f32 frameCount, u8 animationMode, f32 morphFrames);
 void SkelAnime_CopyFrameTable(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
 
 static AnimationEntryCallback sAnimationLoadDone[] = {
@@ -1074,13 +1074,13 @@ void AnimationContext_SetCopyFalse(GlobalContext* globalCtx, s32 vecCount, Vec3s
 /**
  * Requests moving an actor according to the translation of its root limb
  */
-void AnimationContext_SetMoveActor(GlobalContext* globalCtx, Actor* actor, SkelAnime* skelAnime, f32 actor3) {
+void AnimationContext_SetMoveActor(GlobalContext* globalCtx, Actor* actor, SkelAnime* skelAnime, f32 arg3) {
     AnimationEntry* entry = AnimationContext_AddEntry(&globalCtx->animationCtx, ANIMENTRY_MOVEACTOR);
 
     if (entry != NULL) {
         entry->data.move.actor = actor;
         entry->data.move.skelAnime = skelAnime;
-        entry->data.move.unk08 = actor3;
+        entry->data.move.unk08 = arg3;
     }
 }
 
@@ -1829,8 +1829,8 @@ void Animation_PlayOnce(SkelAnime* skelAnime, AnimationHeader* animation) {
  * animation. Negative morph frames start the new animation immediately, modified by the pose immediately before the
  * animation change.
  */
-void Animation_MorphToPlayOnce(SkelAnime* skelAnime, AnimationHeader* animationSeg, f32 morphFrames) {
-    Animation_Change(skelAnime, animationSeg, 1.0f, 0, Animation_GetLastFrame(&animationSeg->common), ANIMMODE_ONCE,
+void Animation_MorphToPlayOnce(SkelAnime* skelAnime, AnimationHeader* animation, f32 morphFrames) {
+    Animation_Change(skelAnime, animation, 1.0f, 0, Animation_GetLastFrame(&animation->common), ANIMMODE_ONCE,
                      morphFrames);
 }
 
@@ -1862,9 +1862,9 @@ void Animation_MorphToLoop(SkelAnime* skelAnime, AnimationHeader* animation, f32
 /**
  * Immediately changes to an animation that loops at the specified speed.
  */
-void Animation_PlayLoopSetSpeed(SkelAnime* skelAnime, AnimationHeader* animation, f32 playbackSpeed) {
-    Animation_Change(skelAnime, animation, playbackSpeed, 0.0f, Animation_GetLastFrame(&animation->common),
-                     ANIMMODE_LOOP, 0.0f);
+void Animation_PlayLoopSetSpeed(SkelAnime* skelAnime, AnimationHeader* animation, f32 playSpeed) {
+    Animation_Change(skelAnime, animation, playSpeed, 0.0f, Animation_GetLastFrame(&animation->common), ANIMMODE_LOOP,
+                     0.0f);
 }
 
 /**
