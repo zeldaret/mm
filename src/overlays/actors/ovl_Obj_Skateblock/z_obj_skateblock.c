@@ -43,7 +43,7 @@ s32 D_80A22A10 = 0;
 
 s32 D_80A22A14 = 0;
 
-TexturePtr D_80A22A18 = NULL;
+AnimatedMaterial* D_80A22A18 = NULL;
 
 Vec2f D_80A22A1C[] = {
     { -300.0f, 300.0f }, { 300.0f, 300.0f }, { -300.0f, -300.0f }, { 300.0f, -300.0f }, { 0.0f, 0.0f },
@@ -494,13 +494,13 @@ void ObjSkateblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gameplay_dangeon_keep_Colheader_007498);
-    if (D_80A22A18 == 0) {
+    if (D_80A22A18 == NULL) {
         D_80A22A18 = Lib_SegmentedToVirtual(gameplay_dangeon_keep_Matanimheader_01B370);
     }
     func_80A22308(this);
     this->unk_1C0 = D_80A22A14;
     D_80A22A14++;
-    D_80A22A14 &= (1 << 5) - 1;
+    D_80A22A14 &= 0x1F;
 }
 
 void ObjSkateblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
