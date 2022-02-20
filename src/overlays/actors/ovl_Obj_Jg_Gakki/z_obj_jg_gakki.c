@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_jg_gakki.h"
+#include "objects/object_jg/object_jg.h"
 
-#define FLAGS 0x00000020
+#define FLAGS (ACTOR_FLAG_20)
 
 #define THIS ((ObjJgGakki*)thisx)
 
@@ -27,22 +28,19 @@ const ActorInit Obj_Jg_Gakki_InitVars = {
     (ActorFunc)ObjJgGakki_Draw,
 };
 
-extern AnimationHeader D_0601B1E8; // gGoronElderDrumAnim
-extern SkeletonHeader D_0601B210;  // gGoronElderDrumSkel
-
 void ObjJgGakki_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     ObjJgGakki* this = THIS;
-    f32 frameCount = Animation_GetLastFrame(&D_0601B1E8);
+    f32 frameCount = Animation_GetLastFrame(&gGoronElderDrumTakeOutAnim);
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_0601B210, NULL, NULL, NULL, 0);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gGoronElderDrumSkel, NULL, NULL, NULL, 0);
 
     if (((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7)) &&
         (globalCtx->csCtx.unk_12 == 0)) {
-        Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, frameCount, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, frameCount, frameCount, 2, 0.0f);
     } else if ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA)) {
-        Animation_Change(&this->skelAnime, &D_0601B1E8, 1.0f, 0.0f, frameCount, 2, 0.0f);
+        Animation_Change(&this->skelAnime, &gGoronElderDrumTakeOutAnim, 1.0f, 0.0f, frameCount, 2, 0.0f);
     } else {
         Actor_MarkForDeath(&this->actor);
     }

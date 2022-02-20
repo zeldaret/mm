@@ -120,7 +120,8 @@ void EnTuboTrap_SpawnEffectsOnLand(EnTuboTrap* this, GlobalContext* globalCtx) {
             arg5 = 0x20;
         }
         EffectSsKakera_Spawn(globalCtx, &pos, &vel, actorPos, -0xF0, arg5, 0x14, 0, 0,
-                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP, D_05018090);
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x3C, -1, GAMEPLAY_DANGEON_KEEP,
+                             gameplay_dangeon_keep_DL_018090);
     }
 
     func_800BBFB0(globalCtx, actorPos, 30.0f, 4, 0x14, 0x32, 0);
@@ -165,7 +166,8 @@ void EnTuboTrap_SpawnEffectsInWater(EnTuboTrap* this, GlobalContext* globalCtx) 
         }
 
         EffectSsKakera_Spawn(globalCtx, &pos, &vel, actorPos, -0xAA, arg5, 0x32, 5, 0,
-                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x46, -1, GAMEPLAY_DANGEON_KEEP, D_05018090);
+                             ((Rand_ZeroOne() * 85.0f) + 15.0f), 0, 0, 0x46, -1, GAMEPLAY_DANGEON_KEEP,
+                             gameplay_dangeon_keep_DL_018090);
     }
 }
 
@@ -236,7 +238,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, GlobalContext* globalCtx) {
         if ((startingRotation == 0) || (this->actor.playerHeightRel <= (startingRotation * 10.0f))) {
             func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_ENEMY);
             currentHeight = this->actor.world.pos.y;
-            this->actor.flags |= 0x11; // always update and can target
+            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10); // always update and can target
 
             transformationHeight = sTransformationHeight[player->transformation];
 

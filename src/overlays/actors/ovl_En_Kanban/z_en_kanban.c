@@ -8,7 +8,7 @@
 #include "objects/object_kanban/object_kanban.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnKanban*)thisx)
 
@@ -146,7 +146,7 @@ void EnKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     if (this->actor.params != ENKANBAN_PIECE) {
         this->actor.targetMode = 0;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_19A = Rand_ZeroFloat(1.9f);
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -230,7 +230,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             if (this->zTargetTimer == 1) {
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
             }
 
             if (this->partFlags == 0xFFFF) {
@@ -381,8 +381,8 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
                             piece->direction = -1;
                         }
                         piece->airTimer = 100;
-                        piece->actor.flags &= ~1;
-                        piece->actor.flags |= 0x2000000;
+                        piece->actor.flags &= ~ACTOR_FLAG_1;
+                        piece->actor.flags |= ACTOR_FLAG_2000000;
                         this->cutMarkTimer = 5;
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SWORD_STRIKE);
                     }
@@ -397,7 +397,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 
             if (this->actor.xzDistToPlayer > 500.0f) {
-                this->actor.flags |= 1;
+                this->actor.flags |= ACTOR_FLAG_1;
                 this->partFlags = 0xFFFF;
             }
 
@@ -825,13 +825,13 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             switch (this->ocarinaFlag) {
                 case 0:
-                    if (globalCtx->msgCtx.unk1202A == 1) {
+                    if (globalCtx->msgCtx.ocarinaMode == 1) {
                         this->ocarinaFlag = 1;
                     }
                     break;
 
                 case 1:
-                    if ((globalCtx->msgCtx.unk1202A == 4) && (globalCtx->msgCtx.unk1202E == 7)) {
+                    if ((globalCtx->msgCtx.ocarinaMode == 4) && (globalCtx->msgCtx.unk1202E == 7)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
                         play_sound(NA_SE_SY_TRE_BOX_APPEAR);
@@ -875,7 +875,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
                 ((pDiff + yDiff + rDiff + this->spinRot.x + this->spinRot.z) == 0) && (this->floorRot.x == 0.0f) &&
                 (this->floorRot.z == 0.0f)) {
                 signpost->partFlags |= this->partFlags;
-                signpost->actor.flags |= 1;
+                signpost->actor.flags |= ACTOR_FLAG_1;
                 Actor_MarkForDeath(&this->actor);
                 return;
             }

@@ -5,8 +5,10 @@
  */
 
 #include "z_en_minifrog.h"
+#include "objects/object_fr/object_fr.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnMinifrog*)thisx)
 
@@ -23,12 +25,6 @@ void EnMinifrog_SetupNextFrogInit(EnMinifrog* this, GlobalContext* globalCtx);
 void EnMinifrog_UpdateMissingFrog(Actor* thisx, GlobalContext* globalCtx);
 void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx);
 void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060007BC;
-extern AnimationHeader D_06001534;
-extern FlexSkeletonHeader D_0600B538;
-extern UNK_TYPE4 D_060059A0;
-extern UNK_TYPE4 D_06005BA0;
 
 const ActorInit En_Minifrog_InitVars = {
     ACTOR_EN_MINIFROG,
@@ -65,9 +61,9 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 12, 14, MASS_IMMOVABLE };
 
 // sEyeTextures???
-static UNK_TYPE4* D_808A4D74[] = {
-    &D_060059A0,
-    &D_06005BA0,
+static TexturePtr D_808A4D74[] = {
+    object_fr_Tex_0059A0,
+    object_fr_Tex_005BA0,
 };
 
 // gSaveContext.weekEventReg[KEY] = VALUE
@@ -92,7 +88,8 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B538, &D_06001534, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fr_Skel_00B538, &object_fr_Anim_001534, this->jointTable,
+                       this->morphTable, 24);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -133,14 +130,14 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             // Not spoken to MINIFROG_YELLOW
             if (!(gSaveContext.weekEventReg[34] & 1)) {
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
             }
 
             this->actor.home.rot.x = this->actor.home.rot.z = 0;
             this->frog = NULL;
         } else {
             this->frog = EnMinifrog_GetFrog(globalCtx);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
 
             // Frog has been returned
             if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
@@ -180,7 +177,7 @@ EnMinifrog* EnMinifrog_GetFrog(GlobalContext* globalCtx) {
 void EnMinifrog_SetJumpState(EnMinifrog* this) {
     if (this->jumpState == MINIFROG_STATE_GROUND) {
         this->jumpState = MINIFROG_STATE_JUMP;
-        Animation_Change(&this->skelAnime, &D_060007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
+        Animation_Change(&this->skelAnime, &object_fr_Anim_0007BC, 1.0f, 0.0f, 7.0f, 2, -5.0f);
     }
 }
 
@@ -207,7 +204,7 @@ void EnMinifrog_Jump(EnMinifrog* this) {
         case MINIFROG_STATE_AIR:
             if (this->actor.bgCheckFlags & 1) {
                 this->jumpState = MINIFROG_STATE_GROUND;
-                Animation_MorphToLoop(&this->skelAnime, &D_06001534, -2.5f);
+                Animation_MorphToLoop(&this->skelAnime, &object_fr_Anim_001534, -2.5f);
                 SkelAnime_Update(&this->skelAnime);
             }
             break;
@@ -227,22 +224,22 @@ void EnMinifrog_TurnToMissingFrog(EnMinifrog* this) {
 static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
 static Color_RGBA8 sEnvColor = { 80, 80, 80, 255 };
 
-void EnMinifrog_SetCamera(EnMinifrog* this, GlobalContext* globalCtx) {
+void EnMinifrog_SpawnDust(EnMinifrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f vec5;
     Vec3f vel;
     Vec3f accel;
     s16 yaw;
     s16 pitch;
-    Vec3f eye;
+    Vec3f eye = GET_ACTIVE_CAM(globalCtx)->eye;
     s32 i;
 
-    eye = GET_ACTIVE_CAM(globalCtx)->eye;
     yaw = Math_Vec3f_Yaw(&eye, &this->actor.world.pos);
     pitch = -Math_Vec3f_Pitch(&eye, &this->actor.world.pos);
     vec5.x = this->actor.world.pos.x - (5.0f * Math_SinS(yaw) * Math_CosS(pitch));
     vec5.y = this->actor.world.pos.y - (5.0f * Math_SinS(pitch));
     vec5.z = this->actor.world.pos.z - (5.0f * Math_CosS(yaw) * Math_CosS(pitch));
+
     for (i = 0; i < 5; i++) {
         vel.x = randPlusMinusPoint5Scaled(4.0f);
         vel.y = randPlusMinusPoint5Scaled(4.0f);
@@ -287,7 +284,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             case 0xD85: // "I understand. I shall head for the mountains immediately."
             default:
                 func_801477B4(globalCtx);
-                EnMinifrog_SetCamera(this, globalCtx);
+                EnMinifrog_SpawnDust(this, globalCtx);
                 SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
@@ -413,7 +410,7 @@ void EnMinifrog_NextFrogReturned(EnMinifrog* this, GlobalContext* globalCtx) {
         this->actionFunc = EnMinifrog_ContinueChoirCutscene;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        globalCtx->setPlayerTalkAnim(globalCtx, &D_0400DEA8, 0);
+        globalCtx->setPlayerTalkAnim(globalCtx, &gameplay_keep_Linkanim_00DEA8, 0);
     }
 }
 
@@ -444,7 +441,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, GlobalContext* globalCtx) {
         this->flags &= ~0x100;
         this->flags &= ~(0x2 << MINIFROG_YELLOW | 0x2 << MINIFROG_CYAN | 0x2 << MINIFROG_PINK | 0x2 << MINIFROG_BLUE |
                          0x2 << MINIFROG_WHITE);
-        globalCtx->setPlayerTalkAnim(globalCtx, &D_0400DEA8, 0);
+        globalCtx->setPlayerTalkAnim(globalCtx, &gameplay_keep_Linkanim_00DEA8, 0);
     } else if (this->timer <= 0) {
         this->actionFunc = EnMinifrog_NextFrogReturned;
         this->timer = 30;
@@ -464,7 +461,7 @@ void EnMinifrog_BeginChoirCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
         this->timer = 5;
         func_801A1F00(3, NA_BGM_FROG_SONG);
         this->flags |= 0x100;
-        globalCtx->setPlayerTalkAnim(globalCtx, &D_0400E2A8, 0);
+        globalCtx->setPlayerTalkAnim(globalCtx, &gameplay_keep_Linkanim_00E2A8, 0);
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -487,7 +484,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
@@ -520,7 +517,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
                     case 0xD76: // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it looks like
                                 // you've lost a little weight..."
                         func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         gSaveContext.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
                         break;
                     case 0xD78: // "Unfortunately, it seems not all of our members have gathered."
@@ -552,7 +549,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
                     default:
                         func_801477B4(globalCtx);
                         this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;
                 }
             }
@@ -575,7 +572,8 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
             func_801518B0(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
-               (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) || ((this->actor.flags & 0x10000) == 0x10000)) &&
+               (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) ||
+                CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) &&
                Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO) {
         func_800B8614(&this->actor, globalCtx, 160.0f);
     }

@@ -6,8 +6,9 @@
 
 #include "z_en_elfbub.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
+#include "objects/object_bubble/object_bubble.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnElfbub*)thisx)
 
@@ -51,8 +52,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-extern Gfx D_06001000[];
-
 void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnElfbub* this = THIS;
     Actor* childActor;
@@ -83,7 +82,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void EnElfbub_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -162,7 +161,7 @@ void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Matrix_InsertZRotation_s(this->zRot * -1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06001000);
+    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

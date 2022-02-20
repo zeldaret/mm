@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_ending.h"
+#include "objects/object_ending_obj/object_ending_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjEnding*)thisx)
 
@@ -26,14 +27,9 @@ const ActorInit Obj_Ending_InitVars = {
     (ActorFunc)ObjEnding_Draw,
 };
 
-extern Gfx D_060003D0[];
-extern Gfx D_060031A0[];
-extern Gfx D_06003440[];
-extern AnimatedMaterial D_06001FF8;
-
 static ObjEndingModelInfo sModelInfo[] = {
-    { { D_06003440, D_060031A0 }, NULL },
-    { { NULL, D_060003D0 }, &D_06001FF8 },
+    { { object_ending_obj_DL_003440, object_ending_obj_DL_0031A0 }, NULL },
+    { { NULL, object_ending_obj_DL_0003D0 }, object_ending_obj_Matanimheader_001FF8 },
 };
 
 static InitChainEntry sInitChain[] = {

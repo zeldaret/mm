@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBomjimb*)thisx)
 
@@ -897,13 +897,12 @@ void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjimb_D_80C03250, gEnBomjimb_D_80C03250,
     };
     static TexturePtr D_80C03274[] = {
-        &object_cs_Tex_00C520,
-        &object_cs_Tex_00CD20,
-        &object_cs_Tex_00D520,
+        object_cs_Tex_00C520,
+        object_cs_Tex_00CD20,
+        object_cs_Tex_00D520,
     };
     static TexturePtr D_80C03280[] = {
-        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
-        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
+        object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
     EnBomjimb* this = THIS;
 

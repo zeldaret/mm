@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00100000
+#define FLAGS (ACTOR_FLAG_100000)
 
 #define THIS ((EnColMan*)thisx)
 
@@ -146,8 +146,8 @@ void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globa
 
 void func_80AFDF60(EnColMan* this) {
     this->actor.draw = func_80AFE584;
-    this->actor.flags |= 0x10;
-    this->actor.flags |= 0x20;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_20;
     this->type = EN_COL_MAN_FALLING_ROCK;
     this->actionFunc = func_80AFDFB4;
     this->actor.shape.shadowScale = 5.0f;
@@ -246,7 +246,7 @@ void func_80AFE4AC(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&gameplay_keep_Tex_05E6F0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -268,7 +268,7 @@ void func_80AFE650(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&gameplay_keep_Tex_05CEF0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05CEF0));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

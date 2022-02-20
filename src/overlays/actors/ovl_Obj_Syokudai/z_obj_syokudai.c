@@ -7,8 +7,9 @@
 #include "z_obj_syokudai.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "objects/object_syokudai/object_syokudai.h"
 
-#define FLAGS 0x00000410
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((ObjSyokudai*)thisx)
 
@@ -16,10 +17,6 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_060003A0[]; // sObjectSyokudaiTypeSwitchCausesFlameDL
-extern Gfx D_06000870[]; // sObjectSyokudaiTypeNoSwitchDL
-extern Gfx D_06000B90[]; // sObjectSyokudaiTypeFlameCausesSwitchDL
 
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
@@ -82,7 +79,11 @@ static InitChainEntry sInitChain[] = {
 
 static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
 
-static Gfx* sDLists[] = { D_060003A0, D_06000B90, D_06000870 };
+static Gfx* sDLists[] = {
+    gObjectSyokudaiTypeSwitchCausesFlameDL,
+    gObjectSyokudaiTypeFlameCausesSwitchDL,
+    gObjectSyokudaiTypeNoSwitchDL,
+};
 
 static s32 sNumLitTorchesInGroup;
 
@@ -220,7 +221,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderHurtboxActor->params = 0;
-                            ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
+                            ((EnArrow*)flameColliderHurtboxActor)->collider.info.toucher.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&
@@ -312,7 +313,8 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         Matrix_InsertTranslation(0.0f, OBJ_SYOKUDAI_FLAME_HEIGHT, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y), MTXMODE_APPLY);
+        Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y),
+                       MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);

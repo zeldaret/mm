@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_haka_curtain.h"
+#include "objects/object_haka_obj/object_haka_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgHakaCurtain*)thisx)
 
@@ -44,15 +45,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern CollisionHeader D_06001588;
-extern Gfx D_06001410[];
-
 void BgHakaCurtain_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06001588);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_haka_obj_Colheader_001588);
     if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
         func_80B6DE80(this);
         return;
@@ -137,5 +135,5 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaCurtain_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_06001410);
+    Gfx_DrawDListOpa(globalCtx, object_haka_obj_DL_001410);
 }

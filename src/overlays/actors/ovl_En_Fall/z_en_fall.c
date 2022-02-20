@@ -4,14 +4,15 @@
  * Description: The moon and related effects, along with the Moon's Tear that falls from its eye.
  *
  * This actor handles mutliple types of moon as well as a variety of effects. Specifically, it handles:
- * - A high-detail moon, used in Termina Field, the Clock Tower, and a few cutscenes
- * - A high-detail open-mouthed moon, used in the cutscene prior to warping to the moon's interior.
- * - An enlarged high-detail moon, used for when the moon is crashing.
- * - A low-detail moon, used everywhere else. Its object file is named "Lodmoon".
- * - The Moon's Tear that can be seen falling from the telescope, along with its associated fire trail.
- * - The ball of fire that surrounds the moon when it is crashing.
- * - The debris that rises from the ground as the moon is crashing.
- * - The ring of fire that expands outward when the moon is almost done crashing.
+ * - Moon: A high-detail moon, used in Termina Field, the Clock Tower, and a few cutscenes.
+ * - StoppedClosedMouthMoon: A high-detail moon, used in the Clock Tower after the Giants stop the moon from crashing.
+ * - StoppedOpenMouthMoon: A high-detail open-mouthed moon, used in the cutscene prior to warping to the moon.
+ * - CrashingMoon: An enlarged high-detail moon, used for when the moon is crashing.
+ * - LodMoon: A low-detail moon, used everywhere else.
+ * - MoonsTear: The Moon's Tear that can be seen falling from the telescope, along with its associated fire trail.
+ * - Fireball: The ball of fire that surrounds the moon when it is crashing.
+ * - RisingDebris: The debris that rises from the ground as the moon is crashing.
+ * - FireRing: The ring of fire that expands outward when the moon is almost done crashing.
  */
 
 #include "z_en_fall.h"
@@ -20,9 +21,12 @@
 #include "objects/object_lodmoon/object_lodmoon.h"
 #include "objects/object_moonston/object_moonston.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnFall*)thisx)
+
+#define FLAG_FIRE_BALL_INTENSIFIES (1 << 0)
+#define FLAG_FIRE_RING_APPEARS (1 << 1)
 
 void EnFall_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -35,20 +39,20 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
 void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, GlobalContext* globalCtx);
 void EnFall_Moon_PerformDefaultActions(EnFall* this, GlobalContext* globalCtx);
 void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx);
-void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnFall_Fireball_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_RisingDebris_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_OpenMouthMoon_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_LodMoon_DrawWithoutLerp(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx);
-void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnFall_Fireball_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 typedef struct {
-    u8 dListIndex;
+    u8 modelIndex;
     Vec3f pos;
     Vec3f velocity;
     Vec3s rot;
@@ -87,14 +91,17 @@ void EnFall_Moon_AdjustScaleAndPosition(EnFall* this, GlobalContext* globalCtx) 
             Actor_SetScale(&this->actor, this->scale * 1.2f);
             this->actor.world.pos.y = this->actor.home.pos.y;
             break;
+
         case 1:
             Actor_SetScale(&this->actor, this->scale * 2.4f);
             this->actor.world.pos.y = this->actor.home.pos.y;
             break;
+
         case 2:
             Actor_SetScale(&this->actor, this->scale * 3.6f);
             this->actor.world.pos.y = this->actor.home.pos.y;
             break;
+
         case 3:
             Actor_SetScale(&this->actor, this->scale * 3.6f);
             if (EN_FALL_TYPE(&this->actor) == EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER) {
@@ -112,7 +119,7 @@ void EnFall_RisingDebris_ResetParticles(EnFall* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        debrisParticles[i].dListIndex = 3;
+        debrisParticles[i].modelIndex = 3;
     }
     this->activeDebrisParticleCount = 0;
 }
@@ -130,15 +137,19 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 1:
             this->scale = 0.08f;
             break;
+
         case 2:
             this->scale = 0.04f;
             break;
+
         case 3:
             this->scale = 0.02f;
             break;
+
         case 4:
             this->scale = 0.01f;
             break;
+
         default:
             this->scale = 0.16f;
             break;
@@ -150,12 +161,15 @@ void EnFall_Init(Actor* thisx, GlobalContext* globalCtx) {
         case EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER:
             objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_LODMOON);
             break;
+
         case EN_FALL_TYPE_MOONS_TEAR:
             objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_MOONSTON);
             break;
+
         case EN_FALL_TYPE_STOPPED_MOON_OPEN_MOUTH:
             objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_FALL2);
             break;
+
         default:
             objectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_FALL);
             break;
@@ -199,36 +213,41 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale);
                 break;
+
             case EN_FALL_TYPE_STOPPED_MOON_CLOSED_MOUTH:
                 this->actor.draw = EnFall_Moon_Draw;
                 this->actionFunc = EnFall_StoppedClosedMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
-                if (!(gSaveContext.weekEventReg[0x19] & 2)) {
+                if (!(gSaveContext.weekEventReg[25] & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
+
             case EN_FALL_TYPE_CLOCK_TOWER_MOON:
                 this->actionFunc = EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 this->actor.draw = EnFall_Moon_Draw;
-                if (gSaveContext.weekEventReg[0x19] & 2) {
+                if (gSaveContext.weekEventReg[25] & 2) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
+
             case EN_FALL_TYPE_CRASHING_MOON:
                 this->actor.draw = EnFall_Moon_Draw;
                 Actor_SetScale(&this->actor, this->scale * 5.3999996f);
                 this->actionFunc = EnFall_CrashingMoon_PerformCutsceneActions;
                 break;
+
             case EN_FALL_TYPE_CRASH_FIRE_BALL:
-                this->actor.update = EnFall_FireBall_Update;
-                this->actor.draw = EnFall_FireBall_Draw;
+                this->actor.update = EnFall_Fireball_Update;
+                this->actor.draw = EnFall_Fireball_Draw;
                 this->scale = 1.0f;
                 this->actor.shape.rot.z = 0;
-                this->fireBallIntensity = 0.0f;
-                this->fireBallAlpha = 100;
+                this->fireballIntensity = 0.0f;
+                this->fireballAlpha = 100;
                 this->actor.shape.rot.x = this->actor.shape.rot.z;
                 break;
+
             case EN_FALL_TYPE_CRASH_RISING_DEBRIS:
                 this->actor.update = EnFall_RisingDebris_Update;
                 this->actor.draw = EnFall_RisingDebris_Draw;
@@ -237,12 +256,14 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 Actor_SetScale(&this->actor, 1.0f);
                 this->actor.shape.rot.x = 0;
                 break;
+
             case EN_FALL_TYPE_LODMOON_NO_LERP:
                 this->actor.draw = EnFall_LodMoon_DrawWithoutLerp;
                 this->dayStartTime = CLOCK_TIME(6, 0);
                 this->currentDay = CURRENT_DAY;
                 EnFall_Moon_AdjustScaleAndPosition(this, globalCtx);
                 break;
+
             case EN_FALL_TYPE_LODMOON:
             case EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER:
                 this->actor.draw = EnFall_LodMoon_DrawWithLerp;
@@ -250,6 +271,7 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                 this->currentDay = CURRENT_DAY;
                 EnFall_Moon_AdjustScaleAndPosition(this, globalCtx);
                 break;
+
             case EN_FALL_TYPE_MOONS_TEAR:
                 this->actor.update = EnFall_Update;
                 this->actor.draw = NULL;
@@ -264,17 +286,21 @@ void EnFall_Setup(EnFall* this, GlobalContext* globalCtx) {
                     Actor_MarkForDeath(&this->actor);
                 }
                 break;
+
             case EN_FALL_TYPE_STOPPED_MOON_OPEN_MOUTH:
                 this->actor.draw = NULL;
                 this->actionFunc = EnFall_StoppedOpenMouthMoon_PerformCutsceneActions;
                 Actor_SetScale(&this->actor, this->scale * 3.0f);
                 break;
+
             case EN_FALL_TYPE_CRASH_FIRE_RING:
                 this->actor.update = EnFall_FireRing_Update;
                 this->actor.draw = EnFall_FireRing_Draw;
                 Actor_SetScale(&this->actor, 0.2f);
                 break;
+
             default:
+                // used for EN_FALL_TYPE_TERMINA_FIELD_MOON and anything else that isn't in the enum
                 this->actor.draw = EnFall_Moon_Draw;
                 this->dayStartTime = CLOCK_TIME(6, 0);
                 this->currentDay = CURRENT_DAY;
@@ -294,10 +320,11 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
                     sGiantsCutsceneState += 2;
                 }
                 break;
+
             case 2:
                 if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) &&
                     CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-                    if (gSaveContext.weekEventReg[0x5D] & 4) {
+                    if (gSaveContext.weekEventReg[93] & 4) {
                         if (ActorCutscene_GetCanPlayNext(0xC)) {
                             ActorCutscene_Start(0xC, &this->actor);
                             sGiantsCutsceneState++;
@@ -306,7 +333,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
                         }
                     } else if (ActorCutscene_GetCanPlayNext(0xB)) {
                         ActorCutscene_Start(0xB, &this->actor);
-                        gSaveContext.weekEventReg[0x5D] |= 4;
+                        gSaveContext.weekEventReg[93] |= 4;
                         sGiantsCutsceneState++;
                     } else {
                         ActorCutscene_SetIntentToPlay(0xB);
@@ -320,6 +347,7 @@ void EnFall_CrashingMoon_HandleGiantsCutscene(EnFall* this, GlobalContext* globa
                     sGiantsCutsceneState = 9;
                 }
                 break;
+
             case 9:
                 globalCtx->csCtx.frames--;
                 break;
@@ -351,11 +379,12 @@ void EnFall_StoppedOpenMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCont
                 if (this->eyeGlowIntensity == 0.0f) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_EYE_FLASH);
                 }
-                this->eyeGlowIntensity += 0.033333335f;
+                this->eyeGlowIntensity += 1 / 30.0f;
                 if (this->eyeGlowIntensity > 1.0f) {
                     this->eyeGlowIntensity = 1.0f;
                 }
                 break;
+
             case 4:
                 this->actor.draw = EnFall_OpenMouthMoon_Draw;
                 break;
@@ -369,6 +398,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
             case 2:
                 func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x85));
                 break;
+
             case 4:
                 this->actor.draw = NULL;
                 break;
@@ -382,9 +412,11 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
                     case 1060:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
+
                     case 1089:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
+
                     case 1303:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
@@ -393,14 +425,17 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, GlobalCo
                     func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
                 break;
+
             case 1:
                 switch (globalCtx->csCtx.frames) {
                     case 561:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MOON_SCREAM1);
                         break;
+
                     case 590:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MOON_CRY);
                         break;
+
                     case 737:
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SLIP_MOON);
                         break;
@@ -420,9 +455,7 @@ void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, Glo
 }
 
 /**
- * This is rarely used in the final game. One example of where it *is* used
- * is when the moon is crashing; there is a second, smaller moon hidden within
- * the larger moon that uses this action function.
+ * Used by the Moon in Termina Field, as well as all LodMoons.
  */
 void EnFall_Moon_PerformDefaultActions(EnFall* this, GlobalContext* globalCtx) {
     u16 currentDay;
@@ -467,7 +500,7 @@ void EnFall_MoonsTear_Initialize(EnFall* this) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
 }
 
-void EnFall_DoNothing(EnFall* this, GlobalContext* globalCtx) {
+void EnFall_MoonsTear_DoNothing(EnFall* this, GlobalContext* globalCtx) {
 }
 
 void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
@@ -481,14 +514,14 @@ void EnFall_MoonsTear_Fall(EnFall* this, GlobalContext* globalCtx) {
     if (this->actor.draw != NULL) {
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ) <= 0.0f) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_BOUND_1);
-            gSaveContext.weekEventReg[0x4A] |= 0x80;
-            gSaveContext.weekEventReg[0x4A] |= 0x20;
+            gSaveContext.weekEventReg[74] |= 0x80;
+            gSaveContext.weekEventReg[74] |= 0x20;
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
             this->actor.draw = NULL;
-            this->actionFunc = EnFall_DoNothing;
+            this->actionFunc = EnFall_MoonsTear_DoNothing;
         } else {
             func_800B9010(&this->actor, NA_SE_EV_MOONSTONE_FALL - SFX_FLAG);
         }
@@ -504,7 +537,7 @@ void EnFall_Update(Actor* thisx, GlobalContext* globalCtx) {
  * Updates the alpha for every vertex in the fire ball so that some parts of
  * the sphere are more transparent or opaque than others.
  */
-void EnFall_FireBall_SetPerVertexAlpha(f32 fireBallAlpha) {
+void EnFall_Fireball_SetPerVertexAlpha(f32 fireballAlpha) {
     static u8 sAlphaTableIndex[] = {
         4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 3, 0, 1, 1, 1, 4, 0, 4, 0, 1, 1, 1, 3, 0, 3, 0, 1, 1, 1, 4, 4, 1,
         1, 0, 4, 4, 0, 1, 1, 1, 1, 1, 1, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 1, 1, 1, 4, 0, 4, 4, 0, 4, 4, 1, 1, 1, 1,
@@ -516,24 +549,24 @@ void EnFall_FireBall_SetPerVertexAlpha(f32 fireBallAlpha) {
 
     s32 pad;
     u8 perVertexAlphaTable[5];
-    Vtx* vertices = Lib_SegmentedToVirtual(&object_fall_Vtx_0004C0);
+    Vtx* vertices = Lib_SegmentedToVirtual(gMoonFireballVtx);
     s32 i;
 
-    if (fireBallAlpha > 1.0f) {
-        fireBallAlpha = 1.0f;
+    if (fireballAlpha > 1.0f) {
+        fireballAlpha = 1.0f;
     }
     perVertexAlphaTable[0] = 0;
-    perVertexAlphaTable[1] = (s8)(255.0f * fireBallAlpha);
-    perVertexAlphaTable[2] = (s8)(155.0f * fireBallAlpha);
-    perVertexAlphaTable[3] = (s8)(104.0f * fireBallAlpha);
-    perVertexAlphaTable[4] = (s8)(54.0f * fireBallAlpha);
+    perVertexAlphaTable[1] = (s8)(255.0f * fireballAlpha);
+    perVertexAlphaTable[2] = (s8)(155.0f * fireballAlpha);
+    perVertexAlphaTable[3] = (s8)(104.0f * fireballAlpha);
+    perVertexAlphaTable[4] = (s8)(54.0f * fireballAlpha);
 
     for (i = 0; i < ARRAY_COUNT(sAlphaTableIndex); i++, vertices++) {
         vertices->v.cn[3] = perVertexAlphaTable[sAlphaTableIndex[i]];
     }
 }
 
-void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
+void EnFall_Fireball_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
     if (globalCtx->sceneNum == SCENE_00KEIKOKU && gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 2) {
@@ -541,11 +574,11 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (func_800EE29C(globalCtx, 0x1C2)) {
-        this->actor.draw = EnFall_FireBall_Draw;
-        if (this->flags & EN_FALL_FLAG_FIRE_BALL_INTENSIFIES) {
-            this->fireBallIntensity += 0.01f;
-            if (this->fireBallIntensity > 1.0f) {
-                this->fireBallIntensity = 1.0f;
+        this->actor.draw = EnFall_Fireball_Draw;
+        if (this->flags & FLAG_FIRE_BALL_INTENSIFIES) {
+            this->fireballIntensity += 0.01f;
+            if (this->fireballIntensity > 1.0f) {
+                this->fireballIntensity = 1.0f;
             }
         }
         func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x1C2));
@@ -553,29 +586,33 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
         switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0) {
             default:
                 this->actor.draw = NULL;
-                this->fireBallAlpha = 0;
+                this->fireballAlpha = 0;
                 break;
+
             case 2:
-                if (this->fireBallAlpha < 100) {
-                    this->fireBallAlpha += 4;
+                if (this->fireballAlpha < 100) {
+                    this->fireballAlpha += 4;
                 }
-                if (this->fireBallAlpha > 100) {
-                    this->fireBallAlpha = 100;
+                if (this->fireballAlpha > 100) {
+                    this->fireballAlpha = 100;
                 }
-                EnFall_FireBall_SetPerVertexAlpha(this->fireBallAlpha * 0.01f);
+                EnFall_Fireball_SetPerVertexAlpha(this->fireballAlpha * 0.01f);
                 break;
+
             case 3:
-                if (this->fireBallAlpha > 0) {
-                    this->fireBallAlpha -= 2;
+                if (this->fireballAlpha > 0) {
+                    this->fireballAlpha -= 2;
                 }
-                if (this->fireBallAlpha < 0) {
-                    this->fireBallAlpha = 0;
+                if (this->fireballAlpha < 0) {
+                    this->fireballAlpha = 0;
                 }
-                EnFall_FireBall_SetPerVertexAlpha(this->fireBallAlpha * 0.01f);
+                EnFall_Fireball_SetPerVertexAlpha(this->fireballAlpha * 0.01f);
                 break;
+
             case 4:
-                this->flags |= EN_FALL_FLAG_FIRE_BALL_INTENSIFIES;
+                this->flags |= FLAG_FIRE_BALL_INTENSIFIES;
                 break;
+
             case 5:
                 break;
         }
@@ -583,7 +620,7 @@ void EnFall_FireBall_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.draw = NULL;
     }
 
-    if (func_800EE29C(globalCtx, 0x1C2) && this->fireBallAlpha > 0) {
+    if (func_800EE29C(globalCtx, 0x1C2) && this->fireballAlpha > 0) {
         func_8019F128(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
     }
     Actor_SetScale(&this->actor, this->scale * 1.74f);
@@ -593,7 +630,7 @@ void EnFall_RisingDebris_UpdateParticles(EnFall* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        if (debrisParticles[i].dListIndex < 3) {
+        if (debrisParticles[i].modelIndex < 3) {
             debrisParticles[i].pos.x += debrisParticles[i].velocity.x;
             debrisParticles[i].pos.y += debrisParticles[i].velocity.y;
             debrisParticles[i].pos.z += debrisParticles[i].velocity.z;
@@ -601,7 +638,7 @@ void EnFall_RisingDebris_UpdateParticles(EnFall* this) {
             debrisParticles[i].rot.y += 0xC8;
             debrisParticles[i].rot.z += 0x12C;
             if ((this->actor.world.pos.y + 3000.0f) < debrisParticles[i].pos.y) {
-                debrisParticles[i].dListIndex = 3;
+                debrisParticles[i].modelIndex = 3;
                 this->activeDebrisParticleCount--;
             }
         }
@@ -614,8 +651,8 @@ s32 EnFall_RisingDebris_InitializeParticles(EnFall* this) {
     f32 scale;
 
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        if (debrisParticles[i].dListIndex >= 3) {
-            debrisParticles[i].dListIndex = (s32)Rand_ZeroFloat(3.0f);
+        if (debrisParticles[i].modelIndex >= 3) {
+            debrisParticles[i].modelIndex = (s32)Rand_ZeroFloat(3.0f);
             debrisParticles[i].pos.x = this->actor.world.pos.x;
             debrisParticles[i].pos.y = this->actor.world.pos.y;
             debrisParticles[i].pos.z = this->actor.world.pos.z;
@@ -658,13 +695,13 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnFall* this = THIS;
 
     if (func_800EE29C(globalCtx, 0x1C2) && globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1C2)]->unk0 == 5) {
-        if (!(this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS)) {
+        if (!(this->flags & FLAG_FIRE_RING_APPEARS)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_DM_RING_EXPLOSION);
         }
-        this->flags |= EN_FALL_FLAG_FIRE_RING_APPEARS;
+        this->flags |= FLAG_FIRE_RING_APPEARS;
     }
-    if (this->flags & EN_FALL_FLAG_FIRE_RING_APPEARS) {
-        this->fireRingAlpha += 0.033333335f;
+    if (this->flags & FLAG_FIRE_RING_APPEARS) {
+        this->fireRingAlpha += 1 / 30.0f;
         if (this->fireRingAlpha > 1.0f) {
             this->fireRingAlpha = 1.0f;
         }
@@ -679,6 +716,10 @@ void EnFall_FireRing_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Used for all closed-mouth high-detail moons, including
+ * StoppedClosedMouthMoon and CrashingMoon.
+ */
 void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     // This offsets the moon's focus so that the Moon's Tear actually falls
     // out of its eye when looking at it through the telescope.
@@ -691,9 +732,11 @@ void EnFall_Moon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Matrix_MultiplyVector3fByState(sFocusOffset, &this->actor.focus.pos);
+
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, object_fall_DL_0077F0);
+
+    gSPDisplayList(POLY_OPA_DISP++, gMoonDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -706,9 +749,11 @@ void EnFall_OpenMouthMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, object_fall2_DL_002970);
+
+    gSPDisplayList(POLY_OPA_DISP++, gOpenMouthMoonDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -722,14 +767,17 @@ void EnFall_LodMoon_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
     POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 20, 25, 30, 0, 0x3E7, 0x3200);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_SHADING_SMOOTH);
+
     primColor = (this->eyeGlowIntensity * 200.0f) + 40.0f;
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, primColor, primColor, primColor, 255);
-    gSPDisplayList(POLY_OPA_DISP++, object_lodmoon_DL_0010E0);
+
+    gSPDisplayList(POLY_OPA_DISP++, gLodmoonEyesDL);
     gSPLoadGeometryMode(POLY_OPA_DISP++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_LIGHTING | G_SHADING_SMOOTH);
-    gSPDisplayList(POLY_OPA_DISP++, object_lodmoon_DL_001158);
+    gSPDisplayList(POLY_OPA_DISP++, gLodmoonMoonDL);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -759,57 +807,63 @@ void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertXRotation_s(thisx->shape.rot.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(thisx->shape.rot.z, MTXMODE_APPLY);
     }
+
     EnFall_LodMoon_Draw(thisx, globalCtx);
 }
 
-void EnFall_FireBall_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnFall_Fireball_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFall* this = THIS;
     u32 gameplayFrames = globalCtx->gameplayFrames;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    this->fireBallYTexScroll1 += (s32)(4.0f + (this->fireBallIntensity * 12.0f));
-    this->fireBallYTexScroll2 += (s32)(2.0f + (this->fireBallIntensity * 6.0f));
+
+    this->fireballYTexScroll1 += (s32)(4.0f + (this->fireballIntensity * 12.0f));
+    this->fireballYTexScroll2 += (s32)(2.0f + (this->fireballIntensity * 6.0f));
+
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80,
-                    (s32)(((1.0f - this->fireBallIntensity) * 160.0f) + (255.0f * this->fireBallIntensity)),
-                    (s32)((70.0f * (1.0f - this->fireBallIntensity)) + (255.0f * this->fireBallIntensity)),
-                    (s32)(70.0f * (1.0f - this->fireBallIntensity)), 255);
+                    (s32)(((1.0f - this->fireballIntensity) * 160.0f) + (255.0f * this->fireballIntensity)),
+                    (s32)((70.0f * (1.0f - this->fireballIntensity)) + (255.0f * this->fireballIntensity)),
+                    (s32)(70.0f * (1.0f - this->fireballIntensity)), 255);
     gDPSetEnvColor(
-        POLY_XLU_DISP++, (s32)(((1.0f - this->fireBallIntensity) * 50.0f) + (200.0f * this->fireBallIntensity)),
-        (s32)(20.0f * (1.0f - this->fireBallIntensity)), (s32)(20.0f * (1.0f - this->fireBallIntensity)), 255);
+        POLY_XLU_DISP++, (s32)(((1.0f - this->fireballIntensity) * 50.0f) + (200.0f * this->fireballIntensity)),
+        (s32)(20.0f * (1.0f - this->fireballIntensity)), (s32)(20.0f * (1.0f - this->fireballIntensity)), 255);
 
-    // Glowing sphere of fire
+    // For the glowing sphere of fire
     gSPSegment(POLY_XLU_DISP++, 0x09,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->fireBallYTexScroll2, 64, 64, 1,
-                                -gameplayFrames, -this->fireBallYTexScroll1, 64, 64));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames, -this->fireballYTexScroll2, 64, 64, 1,
+                                -gameplayFrames, -this->fireballYTexScroll1, 64, 64));
 
-    // "Flecks" of fire
+    // For the "flecks" of fire around the fireball
     gSPSegment(POLY_XLU_DISP++, 0x0A,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->fireBallYTexScroll1, 64, 64, 1,
-                                -gameplayFrames * 2, -this->fireBallYTexScroll1, 64, 64));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, gameplayFrames * 2, -this->fireballYTexScroll1, 64, 64, 1,
+                                -gameplayFrames * 2, -this->fireballYTexScroll1, 64, 64));
 
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
-    gSPDisplayList(POLY_XLU_DISP++, object_fall_DL_0011D0);
+    gSPDisplayList(POLY_XLU_DISP++, gMoonFireballDL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static Gfx* sDebrisDLists[] = { object_fall_DL_000220, object_fall_DL_000428, object_fall_DL_000498 };
+    static Gfx* sDebrisModelDLists[] = { gMoonDebrisModel1DL, gMoonDebrisModel2DL, gMoonDebrisModel3DL };
     EnFall* this = THIS;
     f32 scale = this->scale * 0.06f;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
+
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, object_fall_DL_000198);
+    gSPDisplayList(POLY_OPA_DISP++, gMoonDebrisMaterialDL);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
+
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
-        if (debrisParticles[i].dListIndex < 3) {
+        if (debrisParticles[i].modelIndex < 3) {
             Matrix_InsertTranslation(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z,
                                      MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
@@ -817,9 +871,10 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                   MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, sDebrisDLists[debrisParticles[i].dListIndex]);
+            gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisParticles[i].modelIndex]);
         }
     }
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -832,13 +887,18 @@ void EnFall_FireRing_Draw(Actor* thisx, GlobalContext* globalCtx) {
             this->fireRingAlpha = 1.0f;
         }
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_fall_Matanimheader_004E38));
+
+        AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(gMoonFireRingTexAnim));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C2DC(globalCtx->state.gfxCtx);
+
         gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
         gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
+
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(this->fireRingAlpha * 255.0f));
-        gSPDisplayList(POLY_XLU_DISP++, object_fall_DL_003C30);
+
+        gSPDisplayList(POLY_XLU_DISP++, gMoonFireRingDL);
+
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
@@ -847,13 +907,18 @@ void EnFall_MoonsTear_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_moonston_Matanimheader_001220));
+
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gFallingMoonsTearTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_OPA_DISP++, object_moonston_DL_000400);
+
+    gSPDisplayList(POLY_OPA_DISP++, gFallingMoonsTearDL);
+
     Matrix_Scale(3.0f, 3.0f, 6.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    gSPDisplayList(POLY_XLU_DISP++, object_moonston_DL_0004C8);
+
+    gSPDisplayList(POLY_XLU_DISP++, gFallingMoonsTearFireDL);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_moon_stone.h"
+#include "objects/object_gi_reserve00/object_gi_reserve00.h"
 
-#define FLAGS 0x00100010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
 #define THIS ((ObjMoonStone*)thisx)
 
@@ -36,10 +37,6 @@ const ActorInit Obj_Moon_Stone_InitVars = {
     (ActorFunc)ObjMoonStone_Draw,
 };
 
-extern AnimatedMaterial D_06001C60;
-extern Gfx D_06000D78[];
-extern Gfx D_06000C80[];
-
 void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMoonStone* this = THIS;
 
@@ -50,7 +47,7 @@ void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y += 10.0f;
     if (this->unk194 == 0) {
         this->actor.colChkInfo.health = 0;
-        this->actor.flags |= 9;
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80C0662C(this);
     } else {
         if ((gSaveContext.weekEventReg[74] & 0x40) == 0) {
@@ -58,7 +55,7 @@ void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, -1);
             }
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             func_80C0673C(this);
         } else {
             Actor_MarkForDeath(&this->actor);
@@ -153,11 +150,11 @@ void ObjMoonStone_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001C60));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_gi_reserve00_Matanimheader_001C60));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000D78);
+    gSPDisplayList(POLY_OPA_DISP++, object_gi_reserve00_DL_000D78);
     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06000C80);
+    gSPDisplayList(POLY_XLU_DISP++, object_gi_reserve00_DL_000C80);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

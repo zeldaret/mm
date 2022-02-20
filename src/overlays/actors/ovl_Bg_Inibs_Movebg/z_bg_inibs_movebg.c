@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_inibs_movebg.h"
+#include "objects/object_inibs_object/object_inibs_object.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgInibsMovebg*)thisx)
 
@@ -26,15 +27,9 @@ const ActorInit Bg_Inibs_Movebg_InitVars = {
     (ActorFunc)BgInibsMovebg_Draw,
 };
 
-extern Gfx D_06001C10[];
-extern Gfx D_06001DC0[];
-extern AnimatedMaterial D_06002598;
-extern Gfx D_06006140[];
-extern Gfx D_060062D8[];
-extern AnimatedMaterial D_06006858;
-Gfx* D_80B96560[] = { D_060062D8, D_06001DC0 };
-Gfx* D_80B96568[] = { D_06006140, D_06001C10 };
-AnimatedMaterial* D_80B96570[] = { &D_06006858, &D_06002598 };
+Gfx* D_80B96560[] = { object_inibs_object_DL_0062D8, object_inibs_object_DL_001DC0 };
+Gfx* D_80B96568[] = { object_inibs_object_DL_006140, object_inibs_object_DL_001C10 };
+AnimatedMaterial* D_80B96570[] = { object_inibs_object_Matanimheader_006858, object_inibs_object_Matanimheader_002598 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),

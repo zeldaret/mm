@@ -5,7 +5,9 @@
  */
 
 #include "z_en_torch2.h"
-#define FLAGS 0x00000010
+#include "objects/gameplay_keep/gameplay_keep.h"
+
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnTorch2*)thisx)
 
@@ -43,11 +45,11 @@ static InitChainEntry sInitChain[] = {
 // Shells for each of Link's different forms
 // (Playing elegy as Fierce Deity puts down a human shell)
 static Gfx* sShellDLists[] = {
-    D_0401C430, // Human
-    D_04048DF0, // Zora
-    D_04089070, // Deku
-    D_04057B10, // Goron
-    D_0401C430, // Human
+    gameplay_keep_DL_01C430, // Human
+    gameplay_keep_DL_048DF0, // Zora
+    gameplay_keep_DL_089070, // Deku
+    gameplay_keep_DL_057B10, // Goron
+    gameplay_keep_DL_01C430, // Human
 };
 
 void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -60,9 +62,9 @@ void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
     // params: which form Link is in (e.g. human, deku, etc.)
     params = this->actor.params;
     if (params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= 0x4000000; // Can press switch
+        this->actor.flags |= ACTOR_FLAG_4000000; // Can press switch
         if (params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= 0x20000; // Can press heavy switches
+            this->actor.flags |= ACTOR_FLAG_20000; // Can press heavy switches
         }
     }
     this->framesUntilNextState = 20;
