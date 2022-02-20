@@ -115,19 +115,6 @@ static AnimationInfo sAnimations[] = {
 Color_RGBA8 D_80B533A0 = { 255, 255, 255, 255 };
 Color_RGBA8 D_80B533A4 = { 50, 150, 150, 0 };
 
-Vec3f D_80B533A8 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_80B533B4 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_80B533C0 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_80B533CC = { 1100.0f, -100.0f, 0.0f };
-Vec3f D_80B533D8 = { 1100.0f, -100.0f, 0.0f };
-
-TexturePtr D_80B533E4[] = {
-    object_gk_Tex_00F720,
-    object_gk_Tex_00FF20,
-    object_gk_Tex_010720,
-    object_gk_Tex_010F20,
-};
-
 u16 func_80B50410(EnGk* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -1113,11 +1100,11 @@ s32 EnGk_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
 void EnGk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnGk* this = THIS;
-    Vec3f sp58 = D_80B533A8;
-    Vec3f sp4C = D_80B533B4;
-    Vec3f sp40 = D_80B533C0;
-    Vec3f sp34 = D_80B533CC;
-    Vec3f sp28 = D_80B533D8;
+    Vec3f sp58 = { 0.0f, 0.0f, 0.0f };
+    Vec3f sp4C = { 0.0f, 0.0f, 0.0f };
+    Vec3f sp40 = { 0.0f, 0.0f, 0.0f };
+    Vec3f sp34 = { 1100.0f, -100.0f, 0.0f };
+    Vec3f sp28 = { 1100.0f, -100.0f, 0.0f };
     f32 phi_f0;
 
     sp34.x = 1100.0f;
@@ -1233,6 +1220,13 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
             break;
     }
 }
+
+TexturePtr D_80B533E4[] = {
+    object_gk_Tex_00F720,
+    object_gk_Tex_00FF20,
+    object_gk_Tex_010720,
+    object_gk_Tex_010F20,
+};
 
 void EnGk_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
