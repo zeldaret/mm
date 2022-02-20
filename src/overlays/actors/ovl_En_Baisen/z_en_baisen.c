@@ -7,7 +7,7 @@
 #include "z_en_baisen.h"
 #include "objects/object_bai/object_bai.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBaisen*)thisx)
 
@@ -59,7 +59,7 @@ static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6
 
 static AnimationHeader* D_80BE8E4C[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
 
-static u8 animModes[] = { 0, 0 };
+static u8 animModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;

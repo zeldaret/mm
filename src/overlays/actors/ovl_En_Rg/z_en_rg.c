@@ -118,9 +118,9 @@ s32 D_80BF57E4[][4] = {
     { 56, 34, 44, 41 }, { 60, 38, 50, 45 }, { 67, 42, 55, 49 }, { 74, 47, 61, 54 },
 };
 
-ActorAnimationEntryS D_80BF5914[] = {
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, 0 },
+AnimationInfoS D_80BF5914[] = {
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 TexturePtr D_80BF5934[] = {
@@ -303,7 +303,7 @@ s32 func_80BF409C(EnRg* this, s32 arg1) {
 
     if (arg1 != this->unk_334) {
         this->unk_334 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80BF5914, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BF5914, arg1);
         this->unk_314 = this->skelAnime.playSpeed;
     }
     return ret;
@@ -677,7 +677,7 @@ void func_80BF4EBC(EnRg* this, GlobalContext* globalCtx) {
             this->unk_318 = Rand_S16Offset(0, 20);
         }
     }
-    func_8013D9C8(globalCtx, this->unk_32E, this->unk_328, ARRAY_COUNT(this->unk_328));
+    SubS_FillLimbRotTables(globalCtx, this->unk_32E, this->unk_328, ARRAY_COUNT(this->unk_328));
 }
 
 void func_80BF4FC4(EnRg* this, GlobalContext* globalCtx) {
@@ -757,7 +757,7 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
-        func_8013AED4(&this->unk_310, 3, 7);
+        SubS_UpdateFlags(&this->unk_310, 3, 7);
 
         if (!(gSaveContext.weekEventReg[12] & 2)) {
             this->unk_318 = Rand_S16Offset(30, 30);
