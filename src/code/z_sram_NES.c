@@ -1065,7 +1065,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                     bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
                     Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                 } else {
-                    //Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                    // Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                     Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                     temp_s2 = gSaveContext.save.checksum;
                     gSaveContext.save.checksum = 0;
@@ -1074,8 +1074,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
                     if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (temp_s2 != temp_v0_2)) {
                         sp6E = 1;
-                        if (CHECK_NEWF2(gSaveContext.save.playerData.newf)) {
-                        }
+                        if (CHECK_NEWF2(gSaveContext.save.playerData.newf)) {}
 
                         phi_s2 = false;
                         if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
@@ -1235,7 +1234,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                             Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
                             phi_s2_3 = gSaveContext.save.checksum;
                             gSaveContext.save.checksum = 0;
-                            //phi_s2_3 = gSaveContext.save.checksum;
+                            // phi_s2_3 = gSaveContext.save.checksum;
                             sp7A = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
                         }
 
