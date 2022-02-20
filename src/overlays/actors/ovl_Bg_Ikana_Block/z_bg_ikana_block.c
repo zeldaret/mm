@@ -6,7 +6,7 @@
 
 #include "z_bg_ikana_block.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIkanaBlock*)thisx)
 

@@ -8,7 +8,7 @@
 #include "z_en_bomjima.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBomjima*)thisx)
 
@@ -125,7 +125,7 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
                        this->morphTable, 21);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    gSaveContext.weekEventReg[83] &= (u8)~0x4;
+    gSaveContext.weekEventReg[83] &= (u8)~4;
     this->actor.targetMode = 0;
     this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
     this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
@@ -469,8 +469,8 @@ void func_80BFF03C(EnBomjima* this, GlobalContext* globalCtx) {
     } else {
         player->stateFlags1 &= ~0x20;
         gSaveContext.weekEventReg[83] &= (u8)~4;
-        this->actor.world.rot.y = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
-        this->unk_2DC = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
+        this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
+        this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D4[0], &this->actor);
         func_80BFF120(this);
     }
