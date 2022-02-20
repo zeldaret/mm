@@ -7,7 +7,7 @@
 #include "z_en_daiku.h"
 #include "objects/object_daiku/object_daiku.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDaiku*)thisx)
 
@@ -76,7 +76,7 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.radius = 30;
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
-        this->actor.flags |= 0x8000000;
+        this->actor.flags |= ACTOR_FLAG_8000000;
         if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
