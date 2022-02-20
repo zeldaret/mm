@@ -2899,6 +2899,9 @@ _DW({									\
 	gsSPSetOtherMode(G_SETOTHERMODE_H, G_MDSFT_ALPHADITHER, 2, mode)
 #endif
 
+ #define gDPSetDither(pkt, mode) \
+    gSPSetOtherMode(pkt, G_SETOTHERMODE_H, G_MDSFT_ALPHADITHER, 4, mode)
+
 /* 'blendmask' is not supported anymore.
  * The bits are reserved for future use.
  * Fri May 26 13:45:55 PDT 1995

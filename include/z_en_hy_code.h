@@ -1,12 +1,14 @@
-#ifndef Z_EN_HY_H
-#define Z_EN_HY_H
+#ifndef Z_EN_HY_CODE_H
+#define Z_EN_HY_CODE_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 struct EnHy;
 
 #define ENHY_LIMB_MAX 16
 
+//! TODO: Better animaion enum names when animations are documented
 typedef enum {
     /*  0 */ ENHY_ANIMATION_AOB_0,
     /*  1 */ ENHY_ANIMATION_BOJ_1,
@@ -74,12 +76,12 @@ extern s8 gEnHyBodyPartsIndex[];
 extern u8 gEnHyShadowSize[];
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex);
-struct EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx);
+EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx);
 void EnHy_ChangeObjectAndAnim(EnHy* enHy, GlobalContext* globalCtx, s16 animIndex);
 s32 EnHy_UpdateSkelAnime(EnHy* enHy, GlobalContext* globalCtx);
 void EnHy_Blink(EnHy* enHy, s32 arg1);
 s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex);
-void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, struct EnDoor* door, s16 arg3, s16 arg4);
+void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, EnDoor* door, s16 arg3, s16 arg4);
 s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5);
 s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3);
 s32 EnHy_SetPointFowards(EnHy* enHy, GlobalContext* globalCtx, f32 gravity, s16 animIndex);
@@ -89,4 +91,4 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget);
 void EnHy_UpdateCollider(EnHy* enHy, GlobalContext* globalCtx);
 s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThreshold);
 
-#endif // Z_EN_HY_H
+#endif // Z_EN_HY_CODE_H
