@@ -7,13 +7,11 @@ struct EnTanron5;
 
 #define ENTANRON5_GET(thisx) ((thisx)->params)
 
-enum {
-    /* 000 */ ENTANRON5_0,
-    /* 100 */ ENTANRON5_100 = 100,
-    /* 107 */ ENTANRON5_107 = 107,
-    /* 108 */ ENTANRON5_108 = 108,
-    /* 110 */ ENTANRON5_110 = 110,
-};
+#define ENTANRON5_0 0
+#define ENTANRON5_100 100
+#define ENTANRON5_107 107
+#define ENTANRON5_108 108
+#define ENTANRON5_110 110
 
 typedef struct EnTanron5 {
     /* 0x000 */ Actor actor;

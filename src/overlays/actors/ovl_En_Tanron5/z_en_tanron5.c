@@ -85,9 +85,9 @@ typedef struct {
     /* 0x18 */ Vec3f unk_18;
     /* 0x24 */ u8 unk_24;
     /* 0x26 */ s16 unk_26;
-    /* 0x28 */ char unk28[0x4];
+    /* 0x28 */ UNK_TYPE1 unk28[0x4];
     /* 0x2C */ s16 unk_2C;
-    /* 0x2E */ char unk2E[0x6];
+    /* 0x2E */ UNK_TYPE1 unk2E[0x6];
     /* 0x34 */ f32 unk_34;
     /* 0x38 */ f32 unk_38;
 } EnTanron5Effect; // size = 0x3C
