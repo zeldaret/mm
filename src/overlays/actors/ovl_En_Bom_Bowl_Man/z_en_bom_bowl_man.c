@@ -249,8 +249,8 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
             case 0:
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
-                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_2D0)),
-                              &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_2D0)),
+                                      &this->unk_2D8[0]->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
                 func_809C493C(this, 17, 1.0f);
@@ -580,7 +580,7 @@ void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 Player* player = GET_PLAYER(globalCtx);
 
                 func_801477B4(globalCtx);
-                func_800E0308(sp28, &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(sp28, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -595,7 +595,7 @@ void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx) {
             } else {
                 s32 idx = D_809C6100 - 1;
 
-                func_800E0308(sp28, &this->unk_2D8[1 + idx]->actor);
+                Camera_SetTargetActor(sp28, &this->unk_2D8[1 + idx]->actor);
             }
         }
     }

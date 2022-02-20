@@ -308,8 +308,8 @@ void EnAni_Update(Actor* thisx, GlobalContext* globalCtx) {
         } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
             this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-            func_800E02AC(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->actor.cutscene)),
-                          &this->actor);
+            Camera_SetToTrackActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->actor.cutscene)),
+                                   &this->actor);
         } else {
             ActorCutscene_SetIntentToPlay(this->actor.cutscene);
         }
