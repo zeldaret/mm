@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 #include "objects/object_skb/object_skb.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSkb*)thisx)
 
@@ -49,14 +49,20 @@ void func_809964A0(EnSkb* this, GlobalContext* globalCtx);
 s32 func_80996594(EnSkb* this, GlobalContext* globalCtx);
 void func_80996BEC(EnSkb* this, GlobalContext* globalCtx);
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_skb_Anim_0064E0, 1.0f, 0.0f, 0.0f, 0, -4.0 },  { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -1.0f },
-    { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, 3, 4.0f },  { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, 2, -4.0 },
-    { &object_skb_Anim_00270C, 1.0f, 0.0f, 0.0f, 2, -4.0 },  { &object_skb_Anim_00697C, 1.0f, 0.0f, 0.0f, 0, -4.0 },
-    { &object_skb_Anim_006D90, 1.0f, 0.0f, 0.0f, 0, -4.0 },  { &object_skb_Anim_001D1C, 1.0f, 0.0f, 0.0f, 0, -4.0 },
-    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, 2, -16.0f },
-    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, 2, -8.0f }, { &object_skb_Anim_0015EC, 1.0f, 0.0f, 0.0f, 2, -4.0 },
-    { &object_skb_Anim_0009E4, 1.0f, 0.0f, 0.0f, 0, -4.0 },
+static AnimationInfo sAnimations[] = {
+    { &object_skb_Anim_0064E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
+    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &object_skb_Anim_00270C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &object_skb_Anim_00697C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &object_skb_Anim_006D90, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &object_skb_Anim_001D1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
+    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -16.0f },
+    { &object_skb_Anim_002AC8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &object_skb_Anim_0015EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0 },
+    { &object_skb_Anim_0009E4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0 },
 };
 
 static Vec3f D_80997468[] = {
@@ -225,7 +231,7 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.floorHeight = this->actor.world.pos.y;
 
     if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 0)) {
-        this->actor.flags |= 0x100000;
+        this->actor.flags |= ACTOR_FLAG_100000;
     }
 
     switch (this->unk_3D6) {
@@ -242,7 +248,7 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         default:
-            this->actor.flags &= ~0x100000;
+            this->actor.flags &= ~ACTOR_FLAG_100000;
             this->actor.hintId = 0x55;
             func_8099495C(this, globalCtx);
             break;
@@ -281,8 +287,8 @@ void func_80994DA8(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80994E2C(EnSkb* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
-    this->actor.flags &= ~1;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->unk_3D0 = 0;
     this->unk_3DE = 0;
@@ -294,7 +300,7 @@ void func_80994E94(EnSkb* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     } else {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
 
     Math_ApproachZeroF(&this->actor.shape.yOffset, 1.0f, 800.0f);
@@ -336,7 +342,7 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
         if (this->unk_3E0 == 1) {
             func_801518B0(globalCtx, 0x13F8, &this->actor);
             if (this->unk_3DE == 2) {
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 11);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
             }
         } else {
             func_801518B0(globalCtx, 0x13F6, &this->actor);
@@ -345,8 +351,8 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80995190;
         this->actor.speedXZ = 0.0f;
     } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CAPTAIN) {
-        this->actor.flags |= (0x4 | 0x1);
-        this->actor.flags &= ~(0x8 | 0x1);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.hintId = 0x55;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_80995A30(this);
@@ -368,7 +374,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             if (func_80147624(globalCtx)) {
                 func_801518B0(globalCtx, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 11);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
                 }
             }
             break;
@@ -382,8 +388,8 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80995244(EnSkb* this, GlobalContext* globalCtx) {
-    this->actor.flags &= ~(0x8 | 0x1);
-    this->actor.flags |= (0x4 | 0x1);
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
     this->unk_3E2 = 0;
 
     switch (this->unk_3DE) {
@@ -406,7 +412,7 @@ void func_80995244(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809952D8(EnSkb* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_3DE = 9;
     this->actionFunc = func_8099533C;
@@ -417,8 +423,8 @@ void func_809952D8(EnSkb* this) {
 
 void func_8099533C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
@@ -428,7 +434,7 @@ void func_8099533C(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809953E8(EnSkb* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_3DE = 10;
     this->actionFunc = func_8099544C;
@@ -439,8 +445,8 @@ void func_809953E8(EnSkb* this) {
 
 void func_8099544C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = 0x55;
@@ -450,7 +456,7 @@ void func_8099544C(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809954F8(EnSkb* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 7);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_3DE = 11;
     this->actionFunc = func_8099556C;
@@ -476,8 +482,8 @@ void func_8099556C(EnSkb* this, GlobalContext* globalCtx) {
 
     this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 20000.0f;
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80994F7C(this, globalCtx);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
                (this->skelAnime.curFrame > 24.0f) && (this->skelAnime.curFrame < 28.0f)) {
@@ -493,14 +499,14 @@ void func_8099571C(EnSkb* this) {
     this->unk_3DC = 0;
     this->actor.shape.shadowScale = 0.0f;
     if (this->unk_3DE == 9) {
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 8);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 8);
         this->actor.speedXZ = 2.4f;
         this->actor.gravity = -1.0f;
         this->actor.velocity.y = 3.0f;
     } else if (this->unk_3DE == 0xA) {
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 8);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 8);
     } else if (this->unk_3DE == 0xB) {
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 9);
         this->actor.speedXZ = 3.2f;
         this->actor.gravity = -1.0f;
         this->actor.velocity.y = 2.0f;
@@ -532,7 +538,7 @@ void func_809958F4(EnSkb* this) {
     Animation_Change(&this->skelAnime, &object_skb_Anim_003584, -1.0f, Animation_GetLastFrame(&object_skb_Anim_003584),
                      0.0f, 2, -4.0f);
     this->unk_3E4 = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->unk_3DE = 1;
@@ -554,7 +560,7 @@ void func_8099599C(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80995A30(EnSkb* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actor.speedXZ = 1.6f;
     this->unk_3DA = 0;
     this->unk_3DE = 2;
@@ -563,11 +569,11 @@ void func_80995A30(EnSkb* this) {
 
 void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(0x4 | 0x1);
-        this->actor.flags |= (0x8 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.hintId = 0xFF;
         this->actor.colChkInfo.mass = MASS_HEAVY;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 12);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 12);
         func_8099504C(this);
         return;
     }
@@ -579,7 +585,7 @@ void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_3DA, 1, 0x2EE, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, 0x3830);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_WALK);
     }
 
     if ((this->actor.xzDistToPlayer > 800.0f) || func_80996594(this, globalCtx)) {
@@ -590,7 +596,7 @@ void func_80995A8C(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80995C24(EnSkb* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->actor.speedXZ = 0.0f;
     this->unk_3DE = 3;
@@ -675,17 +681,17 @@ void func_80995E64(EnSkb* this, GlobalContext* globalCtx) {
 void func_80995F98(EnSkb* this) {
     if ((this->unk_3DE == 9) || (this->unk_3DE == 0xA)) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 8);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 8);
         this->actor.gravity = -1.0f;
         this->actor.speedXZ = 1.0f;
     } else if (this->unk_3DE == 0xB) {
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 9);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 9);
         this->actor.speedXZ = 3.2f;
         this->actor.velocity.y = 2.0f;
         this->actor.gravity = -1.0f;
     } else {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
         if (this->actor.bgCheckFlags & 1) {
             this->actor.speedXZ = -4.0f;
         }
@@ -721,13 +727,13 @@ void func_809960AC(EnSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_809961E4(EnSkb* this, GlobalContext* globalCtx) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
     this->unk_3D8 |= 0x40;
     if (this->actor.bgCheckFlags & 1) {
         this->actor.speedXZ = -6.0f;
     }
     this->unk_3E4 = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
     this->unk_3DE = 7;
     this->actionFunc = func_80996284;
@@ -753,7 +759,7 @@ void func_8099630C(EnSkb* this, GlobalContext* globalCtx) {
         this->unk_22C = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
         } else {
@@ -775,7 +781,7 @@ void func_809963D8(EnSkb* this, GlobalContext* globalCtx) {
         this->unk_22C = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
         } else {
@@ -787,7 +793,7 @@ void func_809963D8(EnSkb* this, GlobalContext* globalCtx) {
 void func_80996474(EnSkb* this) {
     this->unk_3D0 = 0;
     this->actor.draw = NULL;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_809964A0;
 }
 
@@ -946,7 +952,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     this->unk_230 = 0.5f;
                     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     func_809963C4(this);
                     break;
 
@@ -962,7 +968,7 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
 
                 case 13:
                     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     func_80995F98(this);
                     break;
             }

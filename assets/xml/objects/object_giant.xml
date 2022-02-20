@@ -51,24 +51,24 @@
         <Texture Name="gGiantBeardTex" OutName="giant_beard" Format="rgba16" Width="16" Height="16" Offset="0x76C0" />
 
         <!-- Giant Limbs -->
-        <Limb Name="gGiantHeadLimb" Type="Standard" Offset="0x78C0" />
-        <Limb Name="gGiantLeftThighLimb" Type="Standard" Offset="0x78CC" />
-        <Limb Name="gGiantLeftShinLimb" Type="Standard" Offset="0x78D8" />
-        <Limb Name="gGiantLeftFootLimb" Type="Standard" Offset="0x78E4" />
-        <Limb Name="gGiantRightThighLimb" Type="Standard" Offset="0x78F0" />
-        <Limb Name="gGiantRightShinLimb" Type="Standard" Offset="0x78FC" />
-        <Limb Name="gGiantRightFootLimb" Type="Standard" Offset="0x7908" />
-        <Limb Name="gGiantLeftShoulderLimb" Type="Standard" Offset="0x7914" />
-        <Limb Name="gGiantLeftUpperArmLimb" Type="Standard" Offset="0x7920" />
-        <Limb Name="gGiantLeftForearmLimb" Type="Standard" Offset="0x792C" />
-        <Limb Name="gGiantLeftHandLimb" Type="Standard" Offset="0x7938" />
-        <Limb Name="gGiantRightShoulderLimb" Type="Standard" Offset="0x7944" />
-        <Limb Name="gGiantRightUpperArmLimb" Type="Standard" Offset="0x7950" />
-        <Limb Name="gGiantRightForearmLimb" Type="Standard" Offset="0x795C" />
-        <Limb Name="gGiantRightHandLimb" Type="Standard" Offset="0x7968" />
+        <Limb Name="gGiantHeadLimb" Type="Standard" EnumName="GIANT_LIMB_HEAD" Offset="0x78C0" />
+        <Limb Name="gGiantLeftThighLimb" Type="Standard" EnumName="GIANT_LIMB_LEFT_THIGH" Offset="0x78CC" />
+        <Limb Name="gGiantLeftShinLimb" Type="Standard" EnumName="GIANT_LIMB_LEFT_SHIN" Offset="0x78D8" />
+        <Limb Name="gGiantLeftFootLimb" Type="Standard" EnumName="GIANT_LIMB_LEFT_FOOT" Offset="0x78E4" />
+        <Limb Name="gGiantRightThighLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_THIGH" Offset="0x78F0" />
+        <Limb Name="gGiantRightShinLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_SHIN" Offset="0x78FC" />
+        <Limb Name="gGiantRightFootLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_FOOT" Offset="0x7908" />
+        <Limb Name="gGiantLeftShoulderLimb" Type="Standard" EnumName="GIANT_LIMB_LEFT_SHOULDER" Offset="0x7914" />
+        <Limb Name="gGiantLeftUpperArmLimb" Type="Standard" EnumName="GIANT_LIMB_LEFT_UPPER_ARM" Offset="0x7920" />
+        <Limb Name="gGiantLeftForearmLimb" Type="Standard" EnumName="GIANT_LIMB_LEFT_FOREARM" Offset="0x792C" />
+        <Limb Name="gGiantLeftHandLimb" Type="Standard" EnumName="GIANT_LIMB_LEFT_HAND" Offset="0x7938" />
+        <Limb Name="gGiantRightShoulderLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_SHOULDER" Offset="0x7944" />
+        <Limb Name="gGiantRightUpperArmLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_UPPER_ARM" Offset="0x7950" />
+        <Limb Name="gGiantRightForearmLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_FOREARM" Offset="0x795C" />
+        <Limb Name="gGiantRightHandLimb" Type="Standard" EnumName="GIANT_LIMB_RIGHT_HAND" Offset="0x7968" />
 
         <!-- Giant Skeleton -->
-        <Skeleton Name="gGiantSkel" Type="Flex" LimbType="Standard" Offset="0x79B0" />
+        <Skeleton Name="gGiantSkel" Type="Flex" LimbType="Standard" LimbNone="GIANT_LIMB_NONE" LimbMax="GIANT_LIMB_MAX" EnumName="EnGiantLimbs" Offset="0x79B0" />
 
         <!-- Giant Animations -->
         <Animation Name="gGiantLookUpStartAnim" Offset="0x8394" /> <!-- Original name is "kyo_kaoage" ("raising face") -->

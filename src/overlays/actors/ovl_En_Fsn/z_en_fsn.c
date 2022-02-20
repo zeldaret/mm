@@ -8,7 +8,7 @@
 #include "objects/object_fsn/object_fsn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -59,14 +59,20 @@ const ActorInit En_Fsn_InitVars = {
     (ActorFunc)EnFsn_Draw,
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 },
-    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_fsn_Anim_012C34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_0131FC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00C58C, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00F00C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00D354, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_01430C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00C26C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -125,7 +131,7 @@ u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
     switch (this->textId) {
         case 0:
-            if (!(gSaveContext.weekEventReg[0x50] & 0x10)) {
+            if (!(gSaveContext.weekEventReg[80] & 0x10)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -138,7 +144,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
                 this->flags |= ENFSN_GIVE_ITEM;
                 this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
-                gSaveContext.weekEventReg[0x50] |= 0x10;
+                gSaveContext.weekEventReg[80] |= 0x10;
                 this->textId = 0x29F1;
                 break;
             } else {
@@ -158,7 +164,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
-            gSaveContext.weekEventReg[0x50] |= 0x10;
+            gSaveContext.weekEventReg[80] |= 0x10;
             this->textId = 0x29F1;
             break;
         case 0x29F1:
@@ -272,8 +278,8 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
 }
 
 s16 EnFsn_GetThirdDayItemId(void) {
-    if (!(gSaveContext.weekEventReg[0x21] & 4) && CURRENT_DAY == 3) {
-        if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+    if (!(gSaveContext.weekEventReg[33] & 4) && CURRENT_DAY == 3) {
+        if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
             return SI_BOMB_BAG_30_1;
         }
         return SI_MASK_ALL_NIGHT;
@@ -305,7 +311,7 @@ s32 EnFsn_HasItemsToSell(void) {
         return false;
     } else {
         if (((gSaveContext.stolenItems & 0xFF000000) >> 0x18) || ((gSaveContext.stolenItems & 0xFF0000) >> 0x10) ||
-            !(gSaveContext.weekEventReg[0x21] & 4)) {
+            !(gSaveContext.weekEventReg[33] & 4)) {
             return true;
         }
         return false;
@@ -411,9 +417,9 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, GlobalContext* globalCtx) {
             func_8019F208();
             if (CURRENT_DAY != 3) {
                 this->actor.textId = 0x29FB;
-            } else if (gSaveContext.weekEventReg[0x21] & 4) {
+            } else if (gSaveContext.weekEventReg[33] & 4) {
                 this->actor.textId = 0x29FF;
-            } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+            } else if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
                 this->actor.textId = 0x29D7;
             } else {
                 this->actor.textId = 0x29D8;
@@ -687,7 +693,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
     this->blinkTimer = 20;
     this->animationIdx = 4;
     this->eyeTextureIdx = 0;
-    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     this->actionFunc = EnFsn_Idle;
 }
 
@@ -696,10 +702,10 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
     if (this->animationIdx == 4) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         }
         return;
     }
@@ -732,12 +738,12 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
         this->animationIdx = 11;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     } else {
         if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -745,16 +751,16 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
             this->animationIdx = 12;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else {
             if (this->animationIdx == 12) {
                 if (curFrame == frameCount) {
                     this->animationIdx = 5;
-                    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -835,9 +841,9 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
                     func_801518B0(globalCtx, this->actor.textId, &this->actor);
                     break;
                 case 0x29D2:
-                    if (gSaveContext.weekEventReg[0x21] & 4) {
+                    if (gSaveContext.weekEventReg[33] & 4) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+                    } else if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;
@@ -1123,7 +1129,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
-            gSaveContext.weekEventReg[0x21] |= 4;
+            gSaveContext.weekEventReg[33] |= 4;
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == 2) {
                 ActorCutscene_Stop(this->cutscene);
@@ -1388,11 +1394,11 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
                        this->morphTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, globalCtx);
     } else {
-        if ((gSaveContext.weekEventReg[0x21] & 8) || (gSaveContext.weekEventReg[0x4F] & 0x40)) {
+        if ((gSaveContext.weekEventReg[33] & 8) || (gSaveContext.weekEventReg[79] & 0x40)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -1400,10 +1406,10 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
         this->eyeTextureIdx = 0;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.targetMode = 0;
         this->animationIdx = 0;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         this->actionFunc = EnFsn_IdleBackroom;
     }
 }
@@ -1420,7 +1426,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
-    func_8013D9C8(globalCtx, this->limbRotYTable, this->limbRotZTable, 19);
+    SubS_FillLimbRotTables(globalCtx, this->limbRotYTable, this->limbRotZTable, ARRAY_COUNT(this->limbRotYTable));
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {
         EnFsn_UpdateJoystickInputState(this, globalCtx);

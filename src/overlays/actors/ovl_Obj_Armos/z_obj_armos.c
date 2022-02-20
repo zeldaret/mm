@@ -6,7 +6,7 @@
 
 #include "z_obj_armos.h"
 
-#define FLAGS 0x04000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
 
 #define THIS ((ObjArmos*)thisx)
 
