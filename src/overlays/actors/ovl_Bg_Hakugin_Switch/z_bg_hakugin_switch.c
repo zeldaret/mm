@@ -6,7 +6,7 @@
 
 #include "z_bg_hakugin_switch.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgHakuginSwitch*)thisx)
 

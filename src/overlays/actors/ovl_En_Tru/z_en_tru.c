@@ -7,7 +7,7 @@
 #include "z_en_tru.h"
 #include "objects/object_tru/object_tru.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTru*)thisx)
 
@@ -106,15 +106,23 @@ static ColliderSphereInit sSphereInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 20, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80A8B2D8[] = {
-    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, -4 },
-    { &object_tru_Anim_0108AC, 1.0f, 0, -1, 2, -4 }, { &object_tru_Anim_009348, 1.0f, 0, -1, 2, 0 },
-    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, 0 },
-    { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_014728, 1.0f, 0, -1, 2, 0 },
-    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, 2, 0 },  { &object_tru_Anim_007FA0, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_016B4C, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_011F88, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_003698, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_002BD8, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS D_80A8B2D8[] = {
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_0108AC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_009348, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_014728, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_007FA0, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_016B4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_011F88, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_003698, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_002BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static Vec3f D_80A8B3D8 = { 0.0f, 24.0f, 16.0f };
@@ -418,7 +426,7 @@ s32 func_80A86924(EnTru* this, s32 arg1) {
 
     if (arg1 != this->unk_37C) {
         this->unk_37C = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80A8B2D8, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A8B2D8, arg1);
         this->unk_358 = this->skelAnime.playSpeed;
     }
 
@@ -679,7 +687,7 @@ s32 func_80A872AC(EnTru* this, GlobalContext* globalCtx) {
             this->unk_390 = 0;
             this->unk_364 = 0;
             this->unk_354 = func_80A871E0(this, globalCtx);
-            func_8013AED4(&this->unk_34E, 0, 7);
+            SubS_UpdateFlags(&this->unk_34E, 0, 7);
             this->actionFunc = func_80A881E0;
             ret = true;
         }
@@ -931,7 +939,7 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
 
         case 1:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                sp3E = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
+                sp3E = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
                 Math_Vec3f_Copy(&sp4C, &gZeroVec3f);
                 sp4C.z = 40.0f;
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp3E, &sp4C, &sp40);
@@ -1027,7 +1035,7 @@ s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (ret == true) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.draw = NULL;
         this->unk_378 = NULL;
         this->unk_34E = 0;
@@ -1040,15 +1048,15 @@ void func_80A87FD0(EnTru* this, GlobalContext* globalCtx) {
     if (this->actor.draw != NULL) {
         if ((this->unk_34E & 0x80) || (gSaveContext.weekEventReg[16] & 0x10)) {
             if (func_80A873B8(this)) {
-                func_8013AED4(&this->unk_34E, 3, 7);
+                SubS_UpdateFlags(&this->unk_34E, 3, 7);
             } else {
-                func_8013AED4(&this->unk_34E, 0, 7);
+                SubS_UpdateFlags(&this->unk_34E, 0, 7);
             }
         } else if (this->unk_34E & 0x40) {
             if (func_80A873B8(this)) {
-                func_8013AED4(&this->unk_34E, 3, 7);
+                SubS_UpdateFlags(&this->unk_34E, 3, 7);
             } else {
-                func_8013AED4(&this->unk_34E, 0, 7);
+                SubS_UpdateFlags(&this->unk_34E, 0, 7);
             }
 
             if ((this->unk_37C == 2) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -1062,13 +1070,13 @@ void func_80A87FD0(EnTru* this, GlobalContext* globalCtx) {
             }
         } else if (!(gSaveContext.weekEventReg[16] & 0x10) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
                    (this->actor.xzDistToPlayer < 140.0f)) {
-            func_8013AED4(&this->unk_34E, 4, 7);
+            SubS_UpdateFlags(&this->unk_34E, 4, 7);
             this->unk_34E |= 0x1040;
             this->unk_362 = Rand_S16Offset(40, 20);
         } else if (func_80A873B8(this)) {
-            func_8013AED4(&this->unk_34E, 3, 7);
+            SubS_UpdateFlags(&this->unk_34E, 3, 7);
         } else {
-            func_8013AED4(&this->unk_34E, 0, 7);
+            SubS_UpdateFlags(&this->unk_34E, 0, 7);
         }
     }
 }
@@ -1094,11 +1102,11 @@ void func_80A881E0(EnTru* this, GlobalContext* globalCtx) {
             func_80A86924(this, 6);
         }
 
-        func_8013AED4(&this->unk_34E, 0, 7);
+        SubS_UpdateFlags(&this->unk_34E, 0, 7);
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
-        this->actor.flags &= ~0x100;
+        this->actor.flags &= ~ACTOR_FLAG_100;
         this->unk_1E8 = 0;
         this->actionFunc = func_80A87FD0;
     }

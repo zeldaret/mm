@@ -1279,7 +1279,7 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
  * Sets the current and new inputs.
  */
 void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 magnitude, s16 baseYaw) {
-    s16 relativeYaw = baseYaw - func_800DFC68(GET_ACTIVE_CAM(globalCtx));
+    s16 relativeYaw = baseYaw - Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
 
     input->cur.stick_x = -Math_SinS(relativeYaw) * magnitude;
     input->rel.stick_x = input->cur.stick_x;
@@ -1341,7 +1341,7 @@ void Actor_SetCameraHorseSetting(GlobalContext* globalCtx, Player* player) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
-            func_800DFAC8(Play_GetCamera(globalCtx, MAIN_CAM), 4);
+            func_800DFAC8(Play_GetCamera(globalCtx, CAM_ID_MAIN), 4);
         }
     }
 }
@@ -2233,11 +2233,11 @@ void func_800B9120(ActorContext* actorCtx) {
 
 void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry) {
     ActorOverlay* overlayEntry;
-    u32* cycleFlags;
+    CycleSceneFlags* cycleFlags;
     s32 i;
 
     gSaveContext.weekEventReg[92] |= 0x80;
-    cycleFlags = gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
+    cycleFlags = &gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
@@ -2251,14 +2251,14 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
         overlayEntry++;
     }
 
-    actorCtx->flags.chest = cycleFlags[0];
-    actorCtx->flags.switches[0] = cycleFlags[1];
-    actorCtx->flags.switches[1] = cycleFlags[2];
+    actorCtx->flags.chest = cycleFlags->chest;
+    actorCtx->flags.switches[0] = cycleFlags->swch0;
+    actorCtx->flags.switches[1] = cycleFlags->swch1;
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
-        cycleFlags = gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
+        cycleFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
-    actorCtx->flags.collectible[0] = cycleFlags[4];
-    actorCtx->flags.clearedRoom = cycleFlags[3];
+    actorCtx->flags.collectible[0] = cycleFlags->collectible;
+    actorCtx->flags.clearedRoom = cycleFlags->clearedRoom;
 
     TitleCard_ContextInit(&globalCtx->state, &actorCtx->titleCtxt);
     func_800B6468(globalCtx);
@@ -3329,7 +3329,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
 
     if ((player != NULL) && (actor == player->unk_730)) {
         func_80123DA4(player);
-        Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCameraIndex(globalCtx)), 0);
+        Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCamId(globalCtx)), 0);
     }
 
     if (actor == actorCtx->targetContext.arrowPointedActor) {
@@ -4252,7 +4252,7 @@ s16 func_800BDB6C(Actor* actor, GlobalContext* globalCtx, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnimation(SkelAnime* skelAnime, ActorAnimationEntry* animation, s32 index) {
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animation, s32 index) {
     f32 frameCount;
 
     animation += index;
@@ -4575,7 +4575,8 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                 }
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f, 1);
+                Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f,
+                             MTXMODE_APPLY);
 
                 sp74 = effectAlpha * 255.0f;
 
@@ -4674,7 +4675,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 for (i = 0; i < arg3; i++) {
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
@@ -4685,7 +4686,7 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
                     gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0234F0);
 
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
-                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), 1);
+                    Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
                     temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
                     temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
                     temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;

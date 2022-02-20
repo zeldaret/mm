@@ -1,31 +1,56 @@
 ﻿<Root>
+    <!--
+        Contains the high-detail moon used in cutscenes and in Termina Field,
+        the debris that rises from the ground as the moon is crashing, the
+        ball of fire that surrounds the moon when it is crashing, and the ring
+        of fire that expands outward when the moon is almost done crashing.
+    -->
     <File Name="object_fall" Segment="6">
-        <DList Name="object_fall_DL_000190" Offset="0x190" />
-        <DList Name="object_fall_DL_000198" Offset="0x198" />
-        <DList Name="object_fall_DL_000220" Offset="0x220" />
-        <Texture Name="object_fall_Tex_000260" OutName="tex_000260" Format="i8" Width="16" Height="16" Offset="0x260" />
-        <DList Name="object_fall_DL_000420" Offset="0x420" />
-        <DList Name="object_fall_DL_000428" Offset="0x428" />
-        <DList Name="object_fall_DL_000490" Offset="0x490" />
-        <DList Name="object_fall_DL_000498" Offset="0x498" />
-        <Array Name="object_fall_Vtx_0004C0" Count="209" Offset="0x4C0">
+        <!-- Debris -->
+        <DList Name="gMoonEmptyDL1" Offset="0x190" /> <!-- Was likely going to be used with gMoonDebrisModel1DL before they made all debris use the same material -->
+        <DList Name="gMoonDebrisMaterialDL" Offset="0x198" />
+        <DList Name="gMoonDebrisModel1DL" Offset="0x220" />
+        <Texture Name="gMoonDebrisTex" OutName="moon_debris" Format="i8" Width="16" Height="16" Offset="0x260" />
+        <DList Name="gMoonEmptyDL2" Offset="0x420" /> <!-- Was likely going to be used with gMoonDebrisModel2DL before they made all debris use the same material -->
+        <DList Name="gMoonDebrisModel2DL" Offset="0x428" />
+        <DList Name="gMoonEmptyDL3" Offset="0x490" /> <!-- Was likely going to be used with gMoonDebrisModel3DL before they made all debris use the same material -->
+        <DList Name="gMoonDebrisModel3DL" Offset="0x498" />\
+
+        <!-- Fireball Vertices -->
+        <Array Name="gMoonFireballVtx" Count="209" Offset="0x4C0">
             <Vtx/>
         </Array>
-        <DList Name="object_fall_DL_0011D0" Offset="0x11D0" />
-        <Texture Name="object_fall_Tex_001688" OutName="tex_001688" Format="i8" Width="64" Height="64" Offset="0x1688" />
-        <Texture Name="object_fall_Tex_002688" OutName="tex_002688" Format="i4" Width="64" Height="64" Offset="0x2688" />
-        <Texture Name="object_fall_Tex_002E88" OutName="tex_002E88" Format="i4" Width="64" Height="64" Offset="0x2E88" />
-        <DList Name="object_fall_DL_003C30" Offset="0x3C30" />
-        <Texture Name="object_fall_Tex_003E28" OutName="tex_003E28" Format="i8" Width="32" Height="64" Offset="0x3E28" />
-        <Texture Name="object_fall_Tex_004628" OutName="tex_004628" Format="i8" Width="32" Height="64" Offset="0x4628" />
-        <TextureAnimation Name="object_fall_Matanimheader_004E38" Offset="0x4E38" />
-        <TextureAnimation Name="object_fall_Matanimheader_004E58" Offset="0x4E58" />
-        <DList Name="object_fall_DL_0077F0" Offset="0x77F0" />
-        <Texture Name="object_fall_TLUT_0082F8" OutName="tlut_0082F8" Format="rgba16" Width="4" Height="4" Offset="0x82F8" />
-        <Texture Name="object_fall_TLUT_008318" OutName="tlut_008318" Format="rgba16" Width="4" Height="4" Offset="0x8318" />
-        <Texture Name="object_fall_Tex_008338" OutName="tex_008338" Format="rgba16" Width="32" Height="32" Offset="0x8338" />
-        <Texture Name="object_fall_Tex_008B38" OutName="tex_008B38" Format="rgba16" Width="64" Height="32" Offset="0x8B38" />
-        <Texture Name="object_fall_Tex_009B38" OutName="tex_009B38" Format="ci4" Width="64" Height="64" Offset="0x9B38" />
-        <Texture Name="object_fall_Tex_00A338" OutName="tex_00A338" Format="ci4" Width="64" Height="64" Offset="0xA338" />
+        
+        <!-- Fireball DisplayList -->
+        <DList Name="gMoonFireballDL" Offset="0x11D0" />
+
+        <!-- Fireball Textures -->
+        <Texture Name="gMoonFireballFlecksTex" OutName="moon_fireball_flecks" Format="i8" Width="64" Height="64" Offset="0x1688" />
+        <Texture Name="gMoonFireballFlamesTex" OutName="moon_fireball_flames" Format="i4" Width="64" Height="64" Offset="0x2688" />
+        <Texture Name="gMoonFireballMaskTex" OutName="moon_fireball_mask" Format="i4" Width="64" Height="64" Offset="0x2E88" />
+
+        <!-- Fire Ring DisplayList -->
+        <DList Name="gMoonFireRingDL" Offset="0x3C30" />
+
+        <!-- Fire Ring Textures -->
+        <Texture Name="gMoonFireRingFlamesTex" OutName="moon_fire_ring_flames" Format="i8" Width="32" Height="64" Offset="0x3E28" />
+        <Texture Name="gMoonFireRingMaskTex" OutName="moon_fire_ring_mask" Format="i8" Width="32" Height="64" Offset="0x4628" />
+
+        <!-- Fire Ring Texture Animation -->
+        <TextureAnimation Name="gMoonFireRingTexAnim" Offset="0x4E38" />
+
+        <!-- Unused Fireball Texture Animation -->
+        <TextureAnimation Name="gMoonUnusedFireballTexAnim" Offset="0x4E58" /> <!-- Almost certainly scrapped for just doing the TwoTexScrolls manually in EnFall_Fireball_Draw -->
+
+        <!-- Moon DisplayList -->
+        <DList Name="gMoonDL" Offset="0x77F0" />
+
+        <!-- Moon Textures -->
+        <Texture Name="gMoonFarSideTLUT" OutName="moon_far_side_tlut" Format="rgba16" Width="4" Height="4" Offset="0x82F8" />
+        <Texture Name="gMoonFaceTLUT" OutName="moon_face_tlut" Format="rgba16" Width="4" Height="4" Offset="0x8318" />
+        <Texture Name="gMoonEyeTex" OutName="moon_eye" Format="rgba16" Width="32" Height="32" Offset="0x8338" />
+        <Texture Name="gMoonTeethTex" OutName="moon_teeth" Format="rgba16" Width="64" Height="32" Offset="0x8B38" />
+        <Texture Name="gMoonFarSideTex" OutName="moon_far_side" Format="ci4" Width="64" Height="64" Offset="0x9B38" />
+        <Texture Name="gMoonFaceTex" OutName="moon_face" Format="ci4" Width="64" Height="64" Offset="0xA338" />
     </File>
 </Root>

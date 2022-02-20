@@ -362,8 +362,8 @@ s32 func_80B2FB94(Vec3f* arg0, f32 arg1, TriNorm* triNorm, Vec3f* arg3, f32* arg
     sp3C.y = arg0->y - temp_f2;
     sp3C.z = arg0->z - temp_f16;
 
-    if (func_8017D2FC(triNorm->plane.normal.x, triNorm->plane.normal.y, triNorm->plane.normal.z,
-                      triNorm->plane.originDist, &sp48, &sp3C, arg3, 0)) {
+    if (Math3D_LineSegVsPlane(triNorm->plane.normal.x, triNorm->plane.normal.y, triNorm->plane.normal.z,
+                              triNorm->plane.originDist, &sp48, &sp3C, arg3, 0)) {
         temp_f0_2 = Math3D_Vec3fDistSq(arg0, arg3);
         temp_f2_2 = SQ(arg1) - temp_f0_2;
         if (SQ(arg1) < temp_f0_2) {
