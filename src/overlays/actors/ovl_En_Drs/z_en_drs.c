@@ -61,7 +61,7 @@ void EnDrs_CollisionUpdate(EnDrs* this, GlobalContext* globalCtx) {
 void EnDrs_Setup(EnDrs* this, GlobalContext* globalCtx) {
     s32 pad[2];
 
-    if ((this->moonMaskObjBankIndex >= 0) && func_8013D8DC(this->moonMaskObjBankIndex, globalCtx)) {
+    if ((this->moonMaskObjBankIndex >= 0) && SubS_IsObjectLoaded(this->moonMaskObjBankIndex, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
                            this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
@@ -80,7 +80,7 @@ void EnDrs_Idle(EnDrs* this, GlobalContext* globalCtx) {
 void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDrs* this = THIS;
 
-    this->moonMaskObjBankIndex = func_8013D924(OBJECT_MSMO, globalCtx);
+    this->moonMaskObjBankIndex = SubS_GetObjectIndex(OBJECT_MSMO, globalCtx);
     this->actionFunc = EnDrs_Setup;
 }
 
@@ -100,9 +100,9 @@ void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnDrs_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDrs_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDrs* this = THIS;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GlobalContext* globalCtx = globalCtx2;
     s8 temp = this->moonMaskObjBankIndex;
     s8 temp2 = this->actor.objBankIndex;
 
