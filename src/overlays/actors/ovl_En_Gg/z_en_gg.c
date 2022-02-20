@@ -106,17 +106,6 @@ static AnimationInfo sAnimations[] = {
     { &object_gg_Anim_00D99C, 1.0f, 0.0f, 0.0f, 2, 0.0f },   { &object_gg_Anim_00E2A4, 1.0f, 0.0f, 0.0f, 0, 0.0f },
 };
 
-Vec3f D_80B36DD8 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_80B36DE4 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_80B36DF0 = { 1800.0f, 300.0f, 200.0f };
-
-TexturePtr D_80B36DFC[] = {
-    object_gg_Tex_009260,
-    object_gg_Tex_009660,
-    object_gg_Tex_009A60,
-    object_gg_Tex_009E60,
-};
-
 void func_80B34F70(EnGg* this) {
     this->actor.focus.pos.x = this->actor.world.pos.x;
     this->actor.focus.pos.y = this->actor.world.pos.y + 80.0f;
@@ -756,9 +745,10 @@ s32 EnGg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnGg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
+    static Vec3f D_80B36DF0 = { 1800.0f, 300.0f, 200.0f };
     EnGg* this = THIS;
-    Vec3f sp30 = D_80B36DD8;
-    Vec3f sp24 = D_80B36DE4;
+    Vec3f sp30 = { 0.0f, 0.0f, 0.0f };
+    Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
 
     if (this->unk_2DA == 14) {
         sp30.y = 3.0f;
@@ -782,6 +772,13 @@ void EnGg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         Matrix_StatePop();
     }
 }
+
+TexturePtr D_80B36DFC[] = {
+    object_gg_Tex_009260,
+    object_gg_Tex_009660,
+    object_gg_Tex_009A60,
+    object_gg_Tex_009E60,
+};
 
 void EnGg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
