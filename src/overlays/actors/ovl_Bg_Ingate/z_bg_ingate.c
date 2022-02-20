@@ -121,7 +121,7 @@ s32 func_80953BEC(BgIngate* this) {
 }
 
 s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
-    Camera* camera = Play_GetCamera(globalCtx, MAIN_CAM);
+    Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
     if (gSaveContext.eventInf[3] & 0x20) {
         func_800B7298(globalCtx, &this->dyna.actor, 7);
@@ -135,7 +135,7 @@ s32 func_80953DA8(BgIngate* this, GlobalContext* globalCtx) {
 }
 
 void func_80953E38(GlobalContext* globalCtx) {
-    func_800DFAC8(Play_GetCamera(globalCtx, MAIN_CAM), 1);
+    func_800DFAC8(Play_GetCamera(globalCtx, CAM_ID_MAIN), 1);
 
     if (!(gSaveContext.eventInf[3] & 0x20)) {
         gSaveContext.eventInf[4] &= (u8)~2;
@@ -176,7 +176,7 @@ void func_80953F8C(BgIngate* this, GlobalContext* globalCtx) {
 
 void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Camera* camera = Play_GetCamera(globalCtx, MAIN_CAM);
+    Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
     if (!(gSaveContext.eventInf[4] & 1)) {
 
