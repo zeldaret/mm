@@ -6,7 +6,7 @@
 
 #include "z_en_egblock.h"
 
-#define FLAGS 0x08000000
+#define FLAGS (ACTOR_FLAG_8000000)
 
 #define THIS ((EnEgblock*)thisx)
 
