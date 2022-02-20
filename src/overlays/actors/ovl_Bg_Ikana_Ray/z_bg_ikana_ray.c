@@ -71,7 +71,7 @@ void BgIkanaRay_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->animatedTextures = Lib_SegmentedToVirtual(object_ikana_obj_Matanimheader_001228);
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
+    if (Flags_GetSwitch(globalCtx, BGIKANARAY_GET_SWITCH_FLAG(&this->actor))) {
         BgIkanaRay_SetActivated(this);
     } else {
         BgIkanaRay_SetDeactivated(this);
@@ -92,7 +92,7 @@ void BgIkanaRay_SetDeactivated(BgIkanaRay* this) {
 }
 
 void BgIkanaRay_UpdateCheckForActivation(BgIkanaRay* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
+    if (Flags_GetSwitch(globalCtx, BGIKANARAY_GET_SWITCH_FLAG(&this->actor))) {
         BgIkanaRay_SetActivated(this);
     }
 }

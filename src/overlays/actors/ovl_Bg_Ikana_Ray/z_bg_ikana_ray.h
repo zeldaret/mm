@@ -7,6 +7,8 @@ struct BgIkanaRay;
 
 typedef void (*BgIkanaRayActionFunc)(struct BgIkanaRay*, GlobalContext*);
 
+#define BGIKANARAY_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+
 typedef struct BgIkanaRay {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collision;
