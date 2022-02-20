@@ -6,7 +6,7 @@
 
 #include "z_en_snowman.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSnowman*)thisx)
 
