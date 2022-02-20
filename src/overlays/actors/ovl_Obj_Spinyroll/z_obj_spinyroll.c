@@ -124,9 +124,13 @@ static ColliderTrisInit sTrisInit = {
 
 f32 D_80A1F1B8[] = { 1.0f, 2.0f, 4.0f };
 
-f32 D_80A1F1C4[] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f };
+f32 D_80A1F1C4[] = {
+    1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f,
+};
 
-s16 D_80A1F1E4[] = { 1, 10, 20, 30, 40, 50, 60, 70 };
+s16 D_80A1F1E4[] = {
+    1, 10, 20, 30, 40, 50, 60, 70,
+};
 
 f32 D_80A1F1F4[] = { 30.0f, -30.0f };
 
@@ -159,7 +163,8 @@ void func_80A1DAAC(Vec3f* arg0, Vec3f* arg1, s16 arg2) {
 
 void func_80A1DB2C(Actor* thisx) {
     ObjSpinyroll* this = THIS;
-    s32 i, j;
+    s32 i;
+    s32 j;
     s32 params = OBJSPINYROLL_GET_C000(&this->dyna.actor);
     Vec3f sp7C[3];
     Vec3f sp70;
@@ -255,7 +260,8 @@ s32 func_80A1DEB8(ObjSpinyroll* this) {
 void func_80A1DFA0(ObjSpinyroll* this) {
     f32 temp_f0;
     f32 phi_f12;
-    s32 i, j;
+    s32 i;
+    s32 j;
     f32 temp_f2;
 
     this->unk_3A4.unk_F4 = (s32)(D_80A1F1B8[OBJSPINYROLL_GET_C000(&this->dyna.actor)] * 120.0f * (1.0f / 58)) + 2;
@@ -274,7 +280,7 @@ void func_80A1DFA0(ObjSpinyroll* this) {
 #ifdef NON_MATCHING
 // globalCtx not in s reg, something with ptr->unk_F0 = temp_s1; line
 s32 func_80A1E074(ObjSpinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s32 arg3) {
-    s32 i, j;
+    s32 i s32 j;
     ObjSpinyrollStruct2* ptr = &this->unk_3A4;
     f32 temp_f0;
     f32 temp_f20;
@@ -355,6 +361,7 @@ s32 func_80A1E394(CollisionContext* colCtx, f32* arg1, CollisionPoly** polyOut, 
                   ObjSpinyroll* this) {
     return BgCheck_EntityCheckCeiling(colCtx, arg1, arg4, 24.0f, polyOut, bgId, &this->dyna.actor);
 }
+
 #ifdef NON_MATCHING
 s32 func_80A1E3D8(ObjSpinyroll* this, GlobalContext* globalCtx, f32* arg2, s32 arg3) {
     f32 temp_f20;
@@ -442,7 +449,7 @@ DynaPolyActor* func_80A1E694(ObjSpinyroll* this, GlobalContext* globalCtx) {
 s32 func_80A1E6D4(ObjSpinyroll* this, GlobalContext* globalCtx) {
     DynaPolyActor* temp_v0 = func_80A1E694(this, globalCtx);
 
-    if ((temp_v0 != NULL) && (Math3D_Vec3fDistSq(&temp_v0->actor.world.pos, &temp_v0->actor.prevPos) > 0.0001f)) {
+    if ((temp_v0 != NULL) && (Math3D_Vec3fDistSq(&temp_v0->actor.world.pos, &temp_v0->actor.prevPos) > SQ(0.01f))) {
         return true;
     }
     return false;
@@ -497,10 +504,10 @@ void ObjSpinyroll_Init(Actor* thisx, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->unk_4AC[0]);
 
     if ((sp34->x == sp30->x) && (sp34->y != sp30->y) && (sp34->z == sp30->z)) {
-        this->unk_49C = 1;
+        this->unk_49C = true;
     } else if (((sp34->x != sp30->x) && (sp34->y == sp30->y) && (sp34->z == sp30->z)) ||
                ((sp34->x == sp30->x) && (sp34->y == sp30->y) && (sp34->z != sp30->z))) {
-        this->unk_49C = 0;
+        this->unk_49C = false;
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
@@ -555,7 +562,7 @@ void func_80A1EAAC(ObjSpinyroll* this) {
 
 void func_80A1EAE0(ObjSpinyroll* this, GlobalContext* globalCtx) {
     if (Math_ScaledStepToS(&this->unk_4DA, this->unk_4DC, 0x6E)) {
-        if (this->unk_49C == 0) {
+        if (!this->unk_49C) {
             func_80A1EB40(this);
         } else {
             func_80A1ECC0(this);
