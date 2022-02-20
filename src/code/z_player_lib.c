@@ -1308,7 +1308,7 @@ void func_80124420(Player* player) {
     D_801F59D0.unk_6 += (-D_801F59D0.unk_0) >> 2;
     D_801F59D0.unk_8 += (-D_801F59D0.unk_2) >> 2;
 
-    sp26 = player->actor.world.rot.y - player->actor.shape.rot.y;
+    sp26 = BINANG_SUB(player->actor.world.rot.y, player->actor.shape.rot.y);
     sp28 = (player->actor.speedXZ * -200.0f * Math_CosS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
     sp2C = (player->actor.speedXZ * 100.0f * Math_SinS(sp26)) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f);
 
@@ -1713,7 +1713,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
 
     for (i = 0; i < 80; i++) {
         // Editing the Vtxs in object itself
-        (*sp30).v.cn[3] = ((*phi_a0) * player->unk_B62) >> 8;
+        sp30->v.cn[3] = (*phi_a0 * player->unk_B62) >> 8;
         sp30++;
         phi_a0++;
     }
