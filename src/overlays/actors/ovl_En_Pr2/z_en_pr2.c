@@ -6,6 +6,7 @@
 
 #include "z_en_pr2.h"
 #include "objects/object_pr/object_pr.h"
+#include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
@@ -104,14 +105,6 @@ s16 D_80A75C3C[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
 };
 
-typedef struct {
-    Actor actor;
-    char unk144[0xA];
-    s16 unk_14E;
-    char unk150[0xA];
-    s16 unk_15A;
-} TempStruct;
-
 void EnPr2_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnPr2* this = THIS;
 
@@ -158,7 +151,7 @@ void EnPr2_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((TempStruct*)parent)->unk_15A;
+                    this->unk_1C8 = ((EnEncount1*)parent)->unk_15A;
                     this->path = func_8013D648(globalCtx, this->unk_1C8, 0x3F);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
@@ -195,8 +188,8 @@ void EnPr2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.parent != NULL) {
         Actor* parent = this->actor.parent;
 
-        if ((parent->update != NULL) && (((TempStruct*)parent)->unk_14E > 0)) {
-            ((TempStruct*)parent)->unk_14E--;
+        if ((parent->update != NULL) && (((EnEncount1*)parent)->unk_14E > 0)) {
+            ((EnEncount1*)parent)->unk_14E--;
         }
     }
 }
@@ -265,7 +258,9 @@ void func_80A745C4(EnPr2* this) {
 }
 
 void func_80A745FC(EnPr2* this, GlobalContext* globalCtx) {
-    f32 x, y, z;
+    f32 x;
+    f32 y;
+    f32 z;
     f32 sqrtXYZ;
 
     if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 200.0f) {
