@@ -147,7 +147,7 @@ void EnFirefly_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->auraType = KEESE_AURA_ICE;
         this->collider.info.toucher.effect = 2; // Freeze
         this->actor.hintId = 0x56;              // Ice Keese
-        this->maxAltitude = this->actor.home.pos.y + 100.0f;
+        this->maxAltitude = this->actor.home.pos.why + 100.0f;
         this->actionFunc = EnFirefly_FlyIdle;
     } else {
         this->auraType = KEESE_AURA_NONE;
