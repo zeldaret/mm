@@ -528,8 +528,8 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
             normalVec[1] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.y);
             normalVec[2] = COLPOLY_GET_NORMAL(reflection[i].reflectionPoly->normal.z);
 
-            if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist, &vecB,
-                              &vecD, &sp118, 1)) {
+            if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
+                                      &vecB, &vecD, &sp118, 1)) {
 
                 reflection[i].pos.x = sp118.x;
                 reflection[i].pos.y = sp118.y;
@@ -560,8 +560,8 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
                         reflection[i].mtx.zw = reflection[i].mtx.wx = reflection[i].mtx.wy = reflection[i].mtx.wz =
                             0.0f;
 
-                if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist, &sp10C,
-                                  &sp100, &intersection, 1)) {
+                if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
+                                          &sp10C, &sp100, &intersection, 1)) {
                     reflection[i].mtx.xx = intersection.x - sp118.x;
                     reflection[i].mtx.xy = intersection.y - sp118.y;
                     reflection[i].mtx.xz = intersection.z - sp118.z;
@@ -575,8 +575,8 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
                 sp100.y = (spE8[1] * 4.0f) + sp10C.y;
                 sp100.z = (spE8[2] * 4.0f) + sp10C.z;
 
-                if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist, &sp10C,
-                                  &sp100, &intersection, 1)) {
+                if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
+                                          &sp10C, &sp100, &intersection, 1)) {
                     reflection[i].mtx.yx = intersection.x - sp118.x;
                     reflection[i].mtx.yy = intersection.y - sp118.y;
                     reflection[i].mtx.yz = intersection.z - sp118.z;
