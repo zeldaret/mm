@@ -879,7 +879,8 @@ typedef struct {
     /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
+    /* 0x12070 */ s32 unk12070;
+    /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
@@ -1379,6 +1380,13 @@ typedef struct {
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
+
+
+typedef enum {
+    /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
+    /* 1 */ SUBS_CUTSCENE_NORMAL,
+    /* 2 */ SUBS_CUTSCENE_SET_FLAG
+} SubSCutsceneType;
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 

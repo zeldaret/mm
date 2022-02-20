@@ -10,7 +10,7 @@
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGo*)thisx)
 
@@ -672,7 +672,7 @@ s32 func_80A12774(EnGo* this, GlobalContext* globalCtx) {
         this->unk_390 |= 0x20;
     }
 
-    func_8013AED4(&this->unk_390, 0, 7);
+    SubS_UpdateFlags(&this->unk_390, 0, 7);
     this->unk_3C0 = 0;
     this->unk_3C4 = 0;
     this->unk_18C = this->actionFunc;
@@ -712,18 +712,18 @@ s32 func_80A12954(EnGo* this, GlobalContext* globalCtx) {
         (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
         (globalCtx->csCtx.unk_12 == 0)) {
         if (this->unk_3F0 == 0) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_394 = 255;
             this->unk_3F0 = 1;
             this->unk_18C = this->actionFunc;
         }
-        func_8013AED4(&this->unk_390, 0, 7);
+        SubS_UpdateFlags(&this->unk_390, 0, 7);
         this->actionFunc = func_80A14FC8;
     } else if (this->unk_3F0 != 0) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_394 = 255;
         this->unk_3F0 = 0;
-        func_8013AED4(&this->unk_390, 3, 7);
+        SubS_UpdateFlags(&this->unk_390, 3, 7);
         this->actionFunc = this->unk_18C;
     }
 
@@ -941,20 +941,20 @@ void func_80A132C8(EnGo* this, GlobalContext* globalCtx) {
     s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
-        func_8013AED4(&this->unk_390, 3, 7);
+        SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(temp_v1) >= 0x1C70) ||
                (gSaveContext.weekEventReg[21] & 4) || (gSaveContext.weekEventReg[21] & 8)) {
-        func_8013AED4(&this->unk_390, 3, 7);
+        SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else {
-        func_8013AED4(&this->unk_390, 4, 7);
+        SubS_UpdateFlags(&this->unk_390, 4, 7);
     }
 }
 
 void func_80A133A8(EnGo* this, GlobalContext* globalCtx) {
     if (gSaveContext.weekEventReg[21] & 8) {
-        func_8013AED4(&this->unk_390, 3, 7);
+        SubS_UpdateFlags(&this->unk_390, 3, 7);
     } else {
-        func_8013AED4(&this->unk_390, 4, 7);
+        SubS_UpdateFlags(&this->unk_390, 4, 7);
     }
 }
 
@@ -1286,7 +1286,7 @@ void func_80A14018(EnGo* this, GlobalContext* globalCtx) {
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80A166B0, &sp2C);
         Math_Vec3f_Copy(&this->actor.world.pos, &sp2C);
     }
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_3EC = 0;
     this->unk_390 = 0;
@@ -1301,7 +1301,7 @@ void func_80A14104(EnGo* this, GlobalContext* globalCtx) {
     func_80A12C48(this, globalCtx, D_80A166D4[ENGO_GET_70(&this->actor) % 2]);
     temp = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->skelAnime.curFrame = temp;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_3EC = 0;
     this->unk_390 = 0;
@@ -1331,7 +1331,7 @@ void func_80A1428C(EnGo* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     if (this->unk_284 != NULL) {
-        this->actor.flags &= ~0x2000000;
+        this->actor.flags &= ~ACTOR_FLAG_2000000;
         func_8013C8B8(this->unk_284, 0, &sp24);
         temp = Math_Vec3f_Yaw(&sp30, &sp24);
         this->actor.shape.rot.y = temp;
@@ -1348,7 +1348,7 @@ void func_80A14324(EnGo* this, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
-    func_8013AED4(&this->unk_390, 3, 7);
+    SubS_UpdateFlags(&this->unk_390, 3, 7);
     this->unk_3EC = 0;
     this->unk_390 |= 0x40;
     this->unk_3BC = 0;
@@ -1362,7 +1362,7 @@ void func_80A143A8(EnGo* this, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
-    func_8013AED4(&this->unk_390, 3, 7);
+    SubS_UpdateFlags(&this->unk_390, 3, 7);
     this->unk_3EC = 0;
     this->unk_390 |= 0x40;
     this->unk_390 |= 0x20;
@@ -1437,11 +1437,11 @@ void func_80A146CC(EnGo* this, GlobalContext* globalCtx) {
     func_80A12C48(this, globalCtx, 0);
     this->unk_3A4 *= 5.0f;
     Actor_SetScale(&this->actor, this->unk_3A4);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.targetMode = 3;
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
-    func_8013AED4(&this->unk_390, 3, 7);
+    SubS_UpdateFlags(&this->unk_390, 3, 7);
     this->unk_390 |= 0x40;
     this->unk_390 |= 0x20;
     this->unk_3D8 = func_80A13E80;
@@ -1451,8 +1451,8 @@ void func_80A146CC(EnGo* this, GlobalContext* globalCtx) {
 void func_80A14798(EnGo* this, GlobalContext* globalCtx) {
     s32 sp38[2] = { 0x0000003E, 0x00000F64 };
 
-    if ((this->unk_288 < 0) || func_8013D8DC(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
-        func_8013D8DC(this->unk_289, globalCtx)) {
+    if ((this->unk_288 < 0) || SubS_IsObjectLoaded(this->unk_288, globalCtx) || (this->unk_289 < 0) ||
+        SubS_IsObjectLoaded(this->unk_289, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
                            this->morphTable, 18);
@@ -1511,7 +1511,7 @@ void func_80A149B0(EnGo* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GORON_CHEER - SFX_FLAG);
     } else if (ENGO_GET_F(&this->actor) != ENGO_F_8) {
         if (func_80A1222C(this, globalCtx)) {
-            func_8013AED4(&this->unk_390, 0, 7);
+            SubS_UpdateFlags(&this->unk_390, 0, 7);
             this->unk_3EC = 1;
             this->actionFunc = func_80A14B30;
         } else if (ENGO_GET_F(&this->actor) == ENGO_F_4) {
@@ -1526,9 +1526,9 @@ void func_80A149B0(EnGo* this, GlobalContext* globalCtx) {
             }
         } else if (ENGO_GET_F(&this->actor) == ENGO_F_1) {
             if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
-                func_8013AED4(&this->unk_390, 3, 7);
+                SubS_UpdateFlags(&this->unk_390, 3, 7);
             } else {
-                func_8013AED4(&this->unk_390, 0, 7);
+                SubS_UpdateFlags(&this->unk_390, 0, 7);
             }
         }
     }
@@ -1579,7 +1579,7 @@ void func_80A14B30(EnGo* this, GlobalContext* globalCtx) {
             }
             this->unk_3AE += 0x400;
             this->actor.shape.yOffset = (this->actor.scale.y / this->unk_3A4) * 14.0f;
-            func_8013AED4(&this->unk_390, 3, 7);
+            SubS_UpdateFlags(&this->unk_390, 3, 7);
         }
     } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
                (this->unk_3EC != 0)) {
@@ -1621,7 +1621,7 @@ void func_80A14EB0(EnGo* this, GlobalContext* globalCtx) {
         ActorCutscene_Stop(this->actor.cutscene);
         func_80A143A8(this, globalCtx);
         if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (ENGO_GET_70(&this->actor) == ENGO_70_1)) {
-            func_8013AED4(&this->unk_390, 4, 7);
+            SubS_UpdateFlags(&this->unk_390, 4, 7);
             func_80A143A8(sp24, globalCtx);
             sp24->actionFunc = func_80A149B0;
         }
@@ -1758,8 +1758,8 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
     if ((this->unk_390 & 0x1000) && (this->actor.colChkInfo.damageEffect == 0xF)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
-        this->actor.flags &= ~0x10;
-        this->actor.flags |= 0x2000000;
+        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_2000000;
 
         func_80A118F8(this->unk_3F8, this->actor.world.pos);
         this->actor.shape.rot.x = 0;
@@ -1876,7 +1876,7 @@ void func_80A157C4(EnGo* this, GlobalContext* globalCtx) {
     }
 
     this->unk_390 &= ~0x8;
-    func_8013AED4(&this->unk_390, 3, 7);
+    SubS_UpdateFlags(&this->unk_390, 3, 7);
     this->unk_28C = 0;
     this->unk_390 |= 0x40;
     this->actionFunc = this->unk_18C;
@@ -1885,8 +1885,8 @@ void func_80A157C4(EnGo* this, GlobalContext* globalCtx) {
 void EnGo_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnGo* this = THIS;
 
-    this->unk_288 = func_8013D924(OBJECT_TAISOU, globalCtx);
-    this->unk_289 = func_8013D924(OBJECT_HAKUGIN_DEMO, globalCtx);
+    this->unk_288 = SubS_GetObjectIndex(OBJECT_TAISOU, globalCtx);
+    this->unk_289 = SubS_GetObjectIndex(OBJECT_HAKUGIN_DEMO, globalCtx);
     this->actionFunc = func_80A14798;
 }
 

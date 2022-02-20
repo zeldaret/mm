@@ -7,7 +7,7 @@
 #include "z_en_baguo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnBaguo*)thisx)
 
@@ -146,8 +146,8 @@ void EnBaguo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.yOffset = -3000.0f;
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.flags |= 0x8000000;
-    this->actor.flags &= ~1;
+    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags |= AC_HARD;
     this->actionFunc = EnBaguo_UndergroundIdle;
 }
@@ -165,8 +165,8 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
-        this->actor.flags &= ~0x8000000;
-        this->actor.flags |= 1;
+        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -293,8 +293,8 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, GlobalContext* globalCtx) {
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
-        this->actor.flags |= 0x8000000;
-        this->actor.flags &= ~1;
+        this->actor.flags |= ACTOR_FLAG_8000000;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionFunc = EnBaguo_UndergroundIdle;
     }
 }
@@ -352,8 +352,8 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_DEAD);
 
                 this->timer = 30;
-                this->actor.flags |= 0x8000000;
-                this->actor.flags &= ~1;
+                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 Actor_SetScale(&this->actor, 0.0f);
                 this->collider.elements->dim.scale = 3.0f;
                 this->collider.elements->info.toucher.damage = 8;
