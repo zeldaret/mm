@@ -7,7 +7,7 @@
 #include "z_en_sb.h"
 #include "objects/object_sb/object_sb.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSb*)thisx)
 
@@ -109,14 +109,14 @@ void EnSb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.colChkInfo.mass = 0xA;
+    this->actor.colChkInfo.mass = 10;
     this->actor.colChkInfo.health = 2;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_sb_Skel_002BF0, &object_sb_Anim_000194, this->jointTable,
                        this->morphTable, 9);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->isDead = false;
-    this->actor.colChkInfo.mass = 0x5A;
+    this->actor.colChkInfo.mass = 90;
     this->actor.shape.rot.y = 0;
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = -0.35f;

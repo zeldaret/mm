@@ -6,7 +6,7 @@
 
 #include "z_obj_hakaisi.h"
 
-#define FLAGS 0x00000029
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_20)
 
 #define THIS ((ObjHakaisi*)thisx)
 

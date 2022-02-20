@@ -7,7 +7,7 @@
 #include "z_en_dai.h"
 #include "objects/object_dai/object_dai.h"
 
-#define FLAGS 0x02000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDai*)thisx)
 
@@ -130,16 +130,20 @@ s32 func_80B3E5B4(EnDai* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80B3E5DC(EnDai* this, s32 arg1) {
-    static ActorAnimationEntryS D_80B3FBFC[] = {
-        { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, 0 },  { &object_dai_Anim_0079E4, 1.0f, 0, -1, 0, -4 },
-        { &object_dai_Anim_007354, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_000CEC, 1.0f, 0, -1, 2, -4 },
-        { &object_dai_Anim_0069DC, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, 0 },
-        { &object_dai_Anim_00563C, 1.0f, 0, -1, 2, -4 }, { &object_dai_Anim_002E58, 1.0f, 0, -1, 0, -4 },
-        { &object_dai_Anim_006590, 1.0f, 0, -1, 2, -4 },
+    static AnimationInfoS D_80B3FBFC[] = {
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_000CEC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_0069DC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+        { &object_dai_Anim_002E58, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &object_dai_Anim_006590, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     };
 
     s32 phi_v1 = false;
-    s32 ret = 0;
+    s32 ret = false;
 
     switch (arg1) {
         case 0:
@@ -165,7 +169,7 @@ s32 func_80B3E5DC(EnDai* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_A70 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80B3FBFC, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80B3FBFC, arg1);
     }
 
     return ret;
@@ -202,7 +206,7 @@ s32 func_80B3E7C8(EnDai* this, GlobalContext* globalCtx) {
 
     if (this->unk_1CE & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_8013AED4(&this->unk_1CE, 0, 7);
+            SubS_UpdateFlags(&this->unk_1CE, 0, 7);
             this->actionFunc = func_80B3EF90;
             ret = true;
         }
@@ -409,7 +413,7 @@ void func_80B3EE8C(EnDai* this, GlobalContext* globalCtx) {
 void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.unk1202A == 3) &&
+    if ((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
         (globalCtx->msgCtx.unk1202E == 1)) {
         func_80B3E5DC(this, 1);
         this->actionFunc = func_80B3EE8C;
@@ -424,7 +428,7 @@ void func_80B3EEDC(EnDai* this, GlobalContext* globalCtx) {
 
 void func_80B3EF90(EnDai* this, GlobalContext* globalCtx) {
     if (func_8010BF58(&this->actor, globalCtx, D_80B3FC8C, NULL, &this->unk_1D0)) {
-        func_8013AED4(&this->unk_1CE, 3, 7);
+        SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1D0 = 0;
         this->actionFunc = func_80B3F00C;
     } else {
@@ -523,7 +527,7 @@ void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1D6 = 0;
 
     if (gSaveContext.weekEventReg[33] & 0x80) {
-        func_8013AED4(&this->unk_1CE, 3, 7);
+        SubS_UpdateFlags(&this->unk_1CE, 3, 7);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;
         this->actionFunc = func_80B3F00C;
@@ -536,7 +540,7 @@ void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_1CD = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_1CE |= (0x100 | 0x20);
     this->unk_1CE |= 0x80;
     this->actionFunc = func_80B3EEDC;

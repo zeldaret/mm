@@ -12,7 +12,7 @@
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnSob1*)thisx)
 
@@ -54,10 +54,10 @@ s32 EnSob1_TakeItemOffShelf(EnSob1* this);
 s32 EnSob1_ReturnItemToShelf(EnSob1* this);
 s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 
-static ActorAnimationEntryS sAnimationsBombShopkeeper[] = {
-    { &object_rs_Anim_009120, 2.0f, 0, -1, 0, 20 },
-    { &object_rs_Anim_008268, 1.0f, 0, -1, 2, 0 },
-    { &object_rs_Anim_0087BC, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimationsBombShopkeeper[] = {
+    { &object_rs_Anim_009120, 2.0f, 0, -1, ANIMMODE_LOOP, 20 },
+    { &object_rs_Anim_008268, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_rs_Anim_0087BC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Sob1_InitVars = {
@@ -152,17 +152,17 @@ static Vec3f sPosOffset[] = {
     { 0.0f, -4.0f, 0.0f },
 };
 
-void EnSob1_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
+void EnSob1_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
     f32 frameCount;
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animationSeg);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }
-    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                     animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                     animations->mode, animations->morphFrames);
 }
 
 void EnSob1_SetupAction(EnSob1* this, EnSob1ActionFunc action) {
@@ -186,7 +186,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
     if (this->shopType == BOMB_SHOP) {
         if (gSaveContext.day == 1 && gSaveContext.time >= CLOCK_TIME(6, 00)) {
             return 0x648;
-        } else if (gSaveContext.weekEventReg[0x21] & 8) {
+        } else if (gSaveContext.weekEventReg[33] & 8) {
             return 0x649;
         } else {
             return 0x64A;
@@ -256,58 +256,58 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (gSaveContext.weekEventReg[0x39] & 0x10) {
+                if (gSaveContext.weekEventReg[57] & 0x10) {
                     return 0x12CF;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x10;
+                gSaveContext.weekEventReg[57] |= 0x10;
                 return 0x12CE;
             case PLAYER_FORM_DEKU:
-                if (gSaveContext.weekEventReg[0x39] & 0x20) {
+                if (gSaveContext.weekEventReg[57] & 0x20) {
                     return 0x12D1;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x20;
+                gSaveContext.weekEventReg[57] |= 0x20;
                 return 0x12D0;
             case PLAYER_FORM_GORON:
-                if (gSaveContext.weekEventReg[0x39] & 0x40) {
+                if (gSaveContext.weekEventReg[57] & 0x40) {
                     return 0x12D3;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x40;
+                gSaveContext.weekEventReg[57] |= 0x40;
                 return 0x12D2;
             case PLAYER_FORM_ZORA:
-                if (gSaveContext.weekEventReg[0x39] & 0x80) {
+                if (gSaveContext.weekEventReg[57] & 0x80) {
                     return 0x12D5;
                 }
-                gSaveContext.weekEventReg[0x39] |= 0x80;
+                gSaveContext.weekEventReg[57] |= 0x80;
                 return 0x12D4;
             default:
                 return 0x12CE;
         }
     } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.weekEventReg[0x3A] & 4) {
+            if (gSaveContext.weekEventReg[58] & 4) {
                 return 0xBB9;
             }
-            gSaveContext.weekEventReg[0x3A] |= 4;
+            gSaveContext.weekEventReg[58] |= 4;
             return 0xBB8;
         } else {
-            if (gSaveContext.weekEventReg[0x3A] & 8) {
+            if (gSaveContext.weekEventReg[58] & 8) {
                 return 0xBBB;
             }
-            gSaveContext.weekEventReg[0x3A] |= 8;
+            gSaveContext.weekEventReg[58] |= 8;
             return 0xBBA;
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.weekEventReg[0x3A] & 0x10) {
+            if (gSaveContext.weekEventReg[58] & 0x10) {
                 return 0xBBD;
             }
-            gSaveContext.weekEventReg[0x3A] |= 0x10;
+            gSaveContext.weekEventReg[58] |= 0x10;
             return 0xBBC;
         } else {
-            if (gSaveContext.weekEventReg[0x3A] & 0x20) {
+            if (gSaveContext.weekEventReg[58] & 0x20) {
                 return 0xBBF;
             }
-            gSaveContext.weekEventReg[0x3A] |= 0x20;
+            gSaveContext.weekEventReg[58] |= 0x20;
             return 0xBBE;
         }
     }
@@ -382,7 +382,7 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->shopType = ZORA_SHOP;
             break;
         case GORON_SHOP:
-            if (gSaveContext.weekEventReg[0x21] & 0x80) {
+            if (gSaveContext.weekEventReg[33] & 0x80) {
                 this->shopType = GORON_SHOP_SPRING;
             } else {
                 this->shopType = GORON_SHOP;
@@ -436,7 +436,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
         this->cutsceneState = ENSOB1_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -927,7 +927,7 @@ void EnSob1_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnSob1* this) {
     Player* player = GET_PLAYER(globalCtx);
 
     Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
@@ -1067,7 +1067,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
         if (this->cutsceneState == ENSOB1_CUTSCENESTATE_STOPPED) {
@@ -1356,7 +1356,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
     u32 maxColor = 255;
 
     if (EnSob1_AreObjectsLoaded(this, globalCtx)) {
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.objBankIndex = this->objIndices[0];
         Actor_SetObjectDependency(globalCtx, &this->actor);
         posOffset = &sPosOffset[this->shopType];
@@ -1364,7 +1364,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->actor.world.pos.y += posOffset->y;
         this->actor.world.pos.z += posOffset->z;
         shopItems = sShops[this->shopType];
-        if ((this->shopType == BOMB_SHOP) && (gSaveContext.weekEventReg[0x21] & 8)) {
+        if ((this->shopType == BOMB_SHOP) && (gSaveContext.weekEventReg[33] & 8)) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
@@ -1447,7 +1447,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this2->blinkTimer = 20;
         this2->eyeTexIndex = 0;
         this->blinkFunc = EnSob1_WaitForBlink;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
     }
 }
 
