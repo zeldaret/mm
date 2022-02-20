@@ -9,7 +9,7 @@
 #include "objects/object_stk2/object_stk2.h"
 #include "objects/object_stk3/object_stk3.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((DmStk*)thisx)
 
@@ -102,43 +102,79 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0070DC, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_00D830, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_00055C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00130C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_00C270, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00CBB8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_01AA80, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01D07C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_016910, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_018ED0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_01DDE0, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01EF50, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0035C8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0049C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0259F4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0266C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_026CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01C114, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_004580, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01F9E4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_029A04, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_02AD54, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0110B4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_011FB0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_012A58, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0141E4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_00E6EC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00EEC0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_027CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_028F28, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_03323C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_031210, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0322FC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_032AE0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_03021C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_036964, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_037B94, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03A8F8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_034FD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_005F44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk3_Anim_002CD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_0039F0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk3_Anim_004554, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_0051C0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk3_Anim_001374, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_001EDC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0070DC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00D830, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00055C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00130C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00C270, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00CBB8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_01AA80, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01D07C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_016910, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_018ED0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_01DDE0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01EF50, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0035C8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_0049C8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0259F4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_0266C8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_026CF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01C114, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_004580, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01F9E4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_029A04, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02AD54, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0110B4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_011FB0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_012A58, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_0141E4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00E6EC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00EEC0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_027CF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_028F28, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_03323C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_031210, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0322FC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_032AE0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_03021C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_036964, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_037B94, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_03A8F8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_034FD8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_005F44, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk3_Anim_002CD8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_0039F0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk3_Anim_004554, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_0051C0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk3_Anim_001374, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_001EDC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
@@ -158,8 +194,7 @@ void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, ActorAnimationEntry* animation,
-                   u16 index) {
+void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
     func_80A9FDB0(this, globalCtx);
 
     animation += index;
@@ -314,7 +349,7 @@ void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
 
         case 785:
             func_8019F128(NA_SE_SY_STALKIDS_PSYCHO);
-            func_8019FE74(&D_801D6654, 0.0f, 150);
+            func_8019FE74(&gSfxVolume, 0.0f, 150);
             break;
 
         case 560:
@@ -344,7 +379,7 @@ void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 650:
-            func_8019FE74(&D_801D6654, 0.0f, 80);
+            func_8019FE74(&gSfxVolume, 0.0f, 80);
             break;
 
         case 265:
@@ -1442,7 +1477,7 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state == 0) {
         func_80AA1AF8(this, globalCtx);
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_328++;
         if (this->unk_328 > 800) {
             this->unk_328 = 0;
@@ -1460,7 +1495,7 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         func_80AA1AF8(this, globalCtx);
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
 
         if (this->unk_2E0 == 33) {
             this->actor.targetArrowOffset = 3100.0f;
@@ -1530,7 +1565,7 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
                 break;
         }
 
-        if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.unk11F22 != 0) &&
+        if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) &&
             (globalCtx->msgCtx.unk11F04 == 0x5E6) && !FrameAdvance_IsEnabled(globalCtx) &&
             (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) &&
             (globalCtx->csCtx.state == 0)) {

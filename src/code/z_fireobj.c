@@ -157,7 +157,7 @@ void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
         gDPSetEnvColor(POLY_XLU_DISP++, lightParams->envColor.r, lightParams->envColor.g, lightParams->envColor.b, 0);
 
         vec.x = 0;
-        vec.y = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
+        vec.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
         vec.z = 0;
         Matrix_SetStateRotationAndTranslation(fire->position.x, fire->position.y, fire->position.z, &vec);
         Matrix_Scale(fire->xScale, fire->yScale, 1.0f, MTXMODE_APPLY);
@@ -236,13 +236,13 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor) {
 
     FireObj_UpdateStateTransitions(globalCtx, fire);
     if (fire->state == 3) {
-        if ((fire->collision.base.acFlags & 2) && (fire->collision.info.acHitInfo->toucher.dmgFlags & 0x800)) {
+        if ((fire->collision.base.acFlags & AC_HIT) && (fire->collision.info.acHitInfo->toucher.dmgFlags & 0x800)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, 0);
         }
-    } else if ((fire->collision.base.acFlags & 2) && (arrow->actor.update != NULL) &&
+    } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
-        arrow->unk_1C0 = 0x800;
+        arrow->collider.info.toucher.dmgFlags = 0x800;
     }
     fire->collision.dim.pos.x = fire->position.x;
     fire->collision.dim.pos.y = fire->position.y;

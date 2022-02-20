@@ -9,7 +9,7 @@
 #include "objects/object_hintnuts/object_hintnuts.h"
 #include "objects/object_dekunuts/object_dekunuts.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDnk*)thisx)
 
@@ -93,25 +93,43 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, 0 },       { &object_dnk_Anim_000B70, 1.0f, 0, -1, 2, -4 },
-    { &object_dnk_Anim_002A08, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_00031C, 1.0f, 0, -1, 0, -4 },
-    { &object_dnk_Anim_000430, 1.0f, -1, -1, 2, 0 },      { &object_dnk_Anim_000430, 1.0f, 0, -1, 2, -4 },
-    { &object_dnk_Anim_000894, 1.0f, 0, -1, 2, -4 },      { &object_dnk_Anim_002B6C, 1.0f, 0, -1, 0, 0 },
-    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, 0, -4 },      { &object_dnk_Anim_0006CC, 1.0f, 0, -1, 0, -4 },
-    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, 2, 0 },
-    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, 2, -4 },
-    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, 2, -4 }, { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, 2, -4 },
-    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, 0, 0 },  { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, 0, -4 },
-    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, 0, 0 },  { &object_hintnuts_Anim_003128, 1.0f, 0, -1, 0, -4 },
-    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, 0, -4 }, { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, 0, -4 },
-    { &object_dekunuts_Anim_000168, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_00259C, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, 2, 0 },  { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_002BD4, 1.0f, 0, -1, 2, -4 }, { &object_dekunuts_Anim_002DD4, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_002FA4, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_003180, 1.0f, 0, -1, 2, -4 },
-    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, 0, 0 },  { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, 0, -4 },
-    { &object_dekunuts_Anim_0033E4, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_003780, 1.0f, 0, -1, 0, 0 },
-    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, 0, -4 }, { &object_dekunuts_Anim_002950, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnk_Anim_002A08, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnk_Anim_00031C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnk_Anim_000430, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnk_Anim_000430, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnk_Anim_000894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnk_Anim_0006CC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_0026C4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002B90, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_hintnuts_Anim_002F7C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_hintnuts_Anim_003128, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_0029BC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_hintnuts_Anim_002E84, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_00259C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dekunuts_Anim_002A5C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002BD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002DD4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_002FA4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_003180, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dekunuts_Anim_00326C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_0033E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dekunuts_Anim_003780, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dekunuts_Anim_002950, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
@@ -124,14 +142,14 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
             sp30 = true;
             frameCount = sAnimations[animIndex].frameCount;
             if (frameCount < 0) {
-                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animationSeg);
+                frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
             }
-            frame = sAnimations[animIndex].frame;
+            frame = sAnimations[animIndex].startFrame;
             if (frame < 0) {
                 frame = frameCount;
             }
-            Animation_Change(skelAnime, sAnimations[animIndex].animationSeg, sAnimations[animIndex].playbackSpeed,
-                             frame, frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].transitionRate);
+            Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed, frame,
+                             frameCount, sAnimations[animIndex].mode, sAnimations[animIndex].morphFrames);
         }
     }
     return sp30;
@@ -152,7 +170,7 @@ s32 func_80A515C4(EnDnk* this) {
 }
 
 void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
-    if (func_8013D8DC(this->unk_28E, globalCtx) == 1) {
+    if (SubS_IsObjectLoaded(this->unk_28E, globalCtx) == true) {
         gSegments[0x06] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_28E].segment);
         this->actor.draw = func_80A52018;
         this->actor.objBankIndex = this->unk_28E;
@@ -182,12 +200,12 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
-            this->actor.flags &= ~1;
-            this->actor.flags |= (0x10 | 0x20);
+            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
             this->actionFunc = func_80A51890;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->actionFunc = EnDnk_DoNothing;
             Actor_SetScale(&this->actor, 0.01f);
         }
@@ -209,15 +227,15 @@ void EnDnk_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_28E = -1;
     switch (ENDNK_GET_3(&this->actor)) {
         case ENDNK_GET_3_1:
-            this->unk_28E = func_8013D924(0x12B, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_HINTNUTS, globalCtx);
             break;
 
         case ENDNK_GET_3_0:
-            this->unk_28E = func_8013D924(0x135, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DNK, globalCtx);
             break;
 
         case ENDNK_GET_3_2:
-            this->unk_28E = func_8013D924(0x40, globalCtx);
+            this->unk_28E = SubS_GetObjectIndex(OBJECT_DEKUNUTS, globalCtx);
             break;
     }
 
