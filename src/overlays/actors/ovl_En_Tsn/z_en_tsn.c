@@ -114,7 +114,7 @@ void func_80ADFCEC(EnTsn* this, GlobalContext* globalCtx) {
     this->unk_1D8 = func_80ADFCA0(globalCtx);
     this->unk_220 = 0;
 
-    if (this->unk_1D8 == 0) {
+    if (this->unk_1D8 == NULL) {
         Actor_MarkForDeath(&this->actor);
     } else if ((ENTSN_GET_F(&this->actor)) == ENTSN_F_1) {
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 6);
