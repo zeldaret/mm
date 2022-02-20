@@ -1,7 +1,7 @@
 # Draw functions
 
-Up: [Contents](contents.md)
-Previous: [The rest of the functions in the actor](other_functions.md)
+- Up: [Contents](contents.md)
+- Previous: [The rest of the functions in the actor](other_functions.md)
 
 Draw functions behave completely differently from the other functions in an actor. They often use a lot of macros.
 
