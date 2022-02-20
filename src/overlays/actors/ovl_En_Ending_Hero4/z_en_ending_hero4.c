@@ -7,7 +7,7 @@
 #include "z_en_ending_hero4.h"
 #include "objects/object_sdn/object_sdn.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero4*)thisx)
 
@@ -34,7 +34,7 @@ const ActorInit En_Ending_Hero4_InitVars = {
 void EnEndingHero4_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero4* this = THIS;
 
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
