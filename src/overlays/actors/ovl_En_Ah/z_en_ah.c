@@ -66,7 +66,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS sAnimations[] = {
+static AnimationInfoS sAnimations[] = {
     { &object_ah_Anim_001860, 1.0f, 0, -1, 0, 0 }, { &object_ah_Anim_001860, 1.0f, 0, -1, 0, -4 },
     { &object_ah_Anim_002280, 1.0f, 0, -1, 2, 0 }, { &object_ah_Anim_000968, 1.0f, 0, -1, 0, -4 },
     { &object_ah_Anim_000DDC, 1.0f, 0, -1, 0, 0 },
@@ -129,7 +129,7 @@ s32 func_80BD2B0C(EnAh* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_300 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, sAnimations, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg1);
         this->unk_2DC = this->skelAnime.playSpeed;
     }
     return ret;
@@ -145,7 +145,7 @@ s32 func_80BD2BE8(EnAh* this, GlobalContext* globalCtx) {
 
     if (this->unk_2D8 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_8013AED4(&this->unk_2D8, 0, 7);
+            SubS_UpdateFlags(&this->unk_2D8, 0, 7);
             ret = true;
             this->unk_2D8 |= 8;
             this->actionFunc = func_80BD3768;
@@ -366,7 +366,7 @@ s32 func_80BD3374(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3EC4.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     func_80BD2B0C(this, 0);
-    func_8013AED4(&this->unk_2D8, 3, 7);
+    SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= 0x40;
     return true;
 }
@@ -378,7 +378,7 @@ s32 func_80BD33FC(EnAh* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3ED8.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     func_80BD2B0C(this, 4);
-    func_8013AED4(&this->unk_2D8, 3, 7);
+    SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= (0x40 | 0x10);
     return true;
 }
@@ -439,9 +439,9 @@ s32 func_80BD35BC(EnAh* this, GlobalContext* globalCtx) {
             temp = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
             temp2 = ABS_ALT(temp);
             if (temp2 < 0x3800) {
-                func_8013AED4(&this->unk_2D8, 3, 7);
+                SubS_UpdateFlags(&this->unk_2D8, 3, 7);
             } else {
-                func_8013AED4(&this->unk_2D8, 0, 7);
+                SubS_UpdateFlags(&this->unk_2D8, 0, 7);
             }
             return false;
     }
@@ -477,7 +477,7 @@ void func_80BD3768(EnAh* this, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     if (func_8010BF58(&this->actor, globalCtx, func_80BD3294(this, globalCtx), NULL, &this->unk_1E0)) {
-        func_8013AED4(&this->unk_2D8, 3, 7);
+        SubS_UpdateFlags(&this->unk_2D8, 3, 7);
         this->unk_2D8 &= ~8;
         this->unk_2D8 |= 0x80;
         this->unk_2F4 = 20;
