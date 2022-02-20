@@ -523,6 +523,7 @@ void EnOsk_Draw(Actor* thisx, GlobalContext* globalCtx) {
         s16 sp62;
         s16 sp60;
         Vec3f sp54;
+
         sp54 = GET_ACTIVE_CAM(globalCtx)->eye;
 
         sp62 = Math_Vec3f_Yaw(&sp54, &this->actor.focus.pos);
