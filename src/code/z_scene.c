@@ -14,7 +14,7 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
 
     if (objectCtx->num < OBJECT_EXCHANGE_BANK_MAX - 1) {
         objectCtx->status[objectCtx->num + 1].segment =
-            (void*)ALIGN16((u32)objectCtx->status[objectCtx->num].segment + size);
+            ALIGN16((u32)objectCtx->status[objectCtx->num].segment + size);
     }
 
     objectCtx->num++;
@@ -179,7 +179,7 @@ void Scene_HeaderCmdActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->unk_18858 = Lib_SegmentedToVirtual(cmd->csCameraList.segment);
+    globalCtx->csCamData = Lib_SegmentedToVirtual(cmd->csCameraList.segment);
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header
@@ -375,8 +375,8 @@ void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x12: Skybox Disables
 void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->envCtx.unk_15 = cmd->skyboxDisables.unk4;
-    globalCtx->envCtx.unk_16 = cmd->skyboxDisables.unk5;
+    globalCtx->envCtx.skyboxDisabled = cmd->skyboxDisables.unk4;
+    globalCtx->envCtx.sunMoonDisabled = cmd->skyboxDisables.unk5;
 }
 
 // SceneTableEntry Header Command 0x10: Time Settings

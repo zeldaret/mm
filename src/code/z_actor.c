@@ -1279,7 +1279,7 @@ f32 Actor_HeightDiff(Actor* actor1, Actor* actor2) {
  * Sets the current and new inputs.
  */
 void func_800B6F20(GlobalContext* globalCtx, Input* input, f32 magnitude, s16 baseYaw) {
-    s16 relativeYaw = baseYaw - func_800DFC68(GET_ACTIVE_CAM(globalCtx));
+    s16 relativeYaw = baseYaw - Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
 
     input->cur.stick_x = -Math_SinS(relativeYaw) * magnitude;
     input->rel.stick_x = input->cur.stick_x;
@@ -1341,7 +1341,7 @@ void Actor_SetCameraHorseSetting(GlobalContext* globalCtx, Player* player) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
-            func_800DFAC8(Play_GetCamera(globalCtx, MAIN_CAM), 4);
+            func_800DFAC8(Play_GetCamera(globalCtx, CAM_ID_MAIN), 4);
         }
     }
 }
@@ -3329,7 +3329,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, GlobalContext* globalC
 
     if ((player != NULL) && (actor == player->unk_730)) {
         func_80123DA4(player);
-        Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCameraIndex(globalCtx)), 0);
+        Camera_ChangeMode(Play_GetCamera(globalCtx, Play_GetActiveCamId(globalCtx)), 0);
     }
 
     if (actor == actorCtx->targetContext.arrowPointedActor) {

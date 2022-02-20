@@ -469,8 +469,8 @@ void func_80BFF03C(EnBomjima* this, GlobalContext* globalCtx) {
     } else {
         player->stateFlags1 &= ~0x20;
         gSaveContext.weekEventReg[83] &= (u8)~4;
-        this->actor.world.rot.y = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
-        this->unk_2DC = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
+        this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
+        this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D4[0], &this->actor);
         func_80BFF120(this);
     }

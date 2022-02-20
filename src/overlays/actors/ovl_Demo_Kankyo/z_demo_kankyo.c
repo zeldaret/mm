@@ -518,7 +518,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f screenPos;
 
     // if not underwater
-    if (!(globalCtx->cameraPtrs[MAIN_CAM]->flags2 & 0x100)) {
+    if (!(globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
