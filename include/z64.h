@@ -883,7 +883,8 @@ typedef struct {
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x30];
+    /* 0x120B0 */ u8 unk120B0;
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
     /* 0x120D4 */ UNK_TYPE2 unk120D4;
