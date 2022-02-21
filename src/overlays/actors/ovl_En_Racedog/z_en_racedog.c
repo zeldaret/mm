@@ -358,7 +358,26 @@ void func_80B24E14(EnRacedog* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24F08.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B251EC.s")
+void func_80B251EC(EnRacedog* this) {
+    f32 temp;
+
+    if (D_80B25D88[this->unk_290].unk_00 == -1.0f) {
+        if (D_80B25D48 < 100.0f) {
+            D_80B25D88[this->unk_290].unk_00 = 200.0f / (200.0f - D_80B25D48);
+        } else {
+            D_80B25D88[this->unk_290].unk_00 = 2.0f;
+        }
+    }
+
+    if (D_80B25D88[this->unk_290].unk_0E < 0x3542) {
+        temp = D_80B25D88[this->unk_290].unk_00;
+        this->unk_298 = temp * D_80B25D50[D_80B25D88[this->unk_290].unk_08][1];
+    }
+
+    if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+        this->unk_298 *= D_80B25D88[this->unk_290].unk_04;
+    }
+}
 
 void func_80B252F8(EnRacedog* this) {
     if ((this->unk_1E8 >= 9) && (this->unk_29C == 0)) {
