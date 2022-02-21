@@ -235,6 +235,17 @@ u8 D_801BFF90[PLAYER_FORM_MAX] = {
 };
 #endif
 
+extern u8 D_801BFF98[PLAYER_FORM_MAX];
+#if 0
+u8 D_801BFF98[PLAYER_FORM_MAX] = {
+    1, // PLAYER_FORM_FIERCE_DEITY
+    3, // PLAYER_FORM_GORON
+    2, // PLAYER_FORM_ZORA
+    0, // PLAYER_FORM_DEKU
+    1, // PLAYER_FORM_HUMAN
+};
+#endif
+
 extern Gfx** sPlayerDListGroups[];
 
 void func_801239AC(Player* player) {
@@ -379,29 +390,84 @@ s32 func_80123F2C(GlobalContext* globalCtx, s32 ammo) {
     return 1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123F48.s")
+s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRange, f32 yRange) {
+    Player* this = GET_PLAYER(globalCtx);
+    Vec3f diff;
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124020.s")
+    if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
+        Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
+        return ((SQ(diff.x) + SQ(diff.z)) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_GetMask.s")
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_RemoveMask.s")
+u8 Player_GetStrength(void) {
+    return D_801BFF98[(void)0, gSaveContext.playerForm];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012405C.s")
+u8 Player_GetMask(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124088.s")
+    return player->currentMask;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801240C8.s")
+void Player_RemoveMask(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801240DC.s")
+    player->currentMask = PLAYER_MASK_NONE;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124110.s")
+s32 Player_HasMirrorShieldEquipped(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124148.s")
+    return player->transformation == PLAYER_FORM_HUMAN && player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124168.s")
+s32 Player_HasMirrorShieldSetToDraw(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124190.s")
+    return player->transformation == PLAYER_FORM_HUMAN && player->rightHandType == 8 &&
+           player->currentShield == PLAYER_SHIELD_MIRROR_SHIELD;
+}
+
+s32 Player_HoldsHookshot(Player* player) {
+    return player->itemActionParam == PLAYER_AP_HOOKSHOT;
+}
+
+s32 func_801240DC(Player* player) {
+    return Player_HoldsHookshot(player) && player->heldActor == NULL;
+}
+
+s32 func_80124110(Player* player, s32 actionParam) {
+    s32 temp_v0 = actionParam - PLAYER_AP_UNK_2;
+
+    if (((player->transformation != PLAYER_FORM_GORON) &&
+         ((actionParam - PLAYER_AP_UNK_2) > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2))) &&
+        ((actionParam - PLAYER_AP_UNK_2) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_UNK_2))) {
+        return temp_v0;
+    }
+
+    return 0;
+}
+
+s32 func_80124148(Player* player) {
+    return func_80124110(player, player->itemActionParam);
+}
+
+s32 Player_ActionToMeleeWeapon(s32 actionParam) {
+    s32 sword = actionParam - PLAYER_AP_UNK_2;
+
+    if ((sword > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (sword <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
+        return sword;
+    }
+    return 0;
+}
+
+s32 Player_GetMeleeWeaponHeld(Player* player) {
+    return Player_ActionToMeleeWeapon(player->itemActionParam);
+}
 
 s32 Player_HoldsTwoHandedWeapon(Player* player) {
     // Relies on two-handed weapons to be contiguous
@@ -412,13 +478,35 @@ s32 Player_HoldsTwoHandedWeapon(Player* player) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801241E0.s")
+s32 Player_ActionToBottle(Player* player, s32 actionParam) {
+    s32 bottle = actionParam - PLAYER_AP_BOTTLE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012420C.s")
+    // Relies on bottle-related action params to be contiguous
+    if ((bottle >= (PLAYER_AP_BOTTLE - PLAYER_AP_BOTTLE)) && (bottle <= (PLAYER_AP_BOTTLE_FAIRY - PLAYER_AP_BOTTLE))) {
+        return bottle;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012422C.s")
+    return -1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_GetExplosiveHeld.s")
+s32 Player_GetBottleHeld(Player* Player) {
+    return Player_ActionToBottle(Player, Player->itemActionParam);
+}
+
+s32 Player_ActionToExplosive(Player* player, s32 actionParam) {
+    s32 explosive = actionParam - PLAYER_AP_BOMB;
+
+    // Relies on explosive-related action params to be contiguous
+    if ((explosive >= (PLAYER_AP_BOMB - PLAYER_AP_BOMB)) && (explosive <= (PLAYER_AP_BOMBCHU - PLAYER_AP_BOMB))) {
+        return explosive;
+    }
+
+    return -1;
+}
+
+s32 Player_GetExplosiveHeld(Player* player) {
+    return Player_ActionToExplosive(player, player->itemActionParam);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
 

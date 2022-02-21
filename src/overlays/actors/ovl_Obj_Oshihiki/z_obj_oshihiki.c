@@ -84,7 +84,7 @@ s32 ObjOshihiki_StrongEnough(ObjOshihiki* this, GlobalContext* globalCtx) {
         return true;
     }
 
-    if (func_80124020() >= 2) {
+    if (Player_GetStrength() >= 2) {
         return true;
     }
     return false;

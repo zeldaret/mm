@@ -1035,8 +1035,8 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
                 this->unk_402 |= 1;
 
             case 15:
-                if ((player->swordAnimation == 4) || (player->swordAnimation == 11) || (player->swordAnimation == 22) ||
-                    (player->swordAnimation == 23)) {
+                if ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 11) || (player->meleeWeaponAnimation == 22) ||
+                    (player->meleeWeaponAnimation == 23)) {
                     this->unk_402 |= 1;
                 }
 
