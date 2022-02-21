@@ -104,8 +104,8 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
 
     this->actor.floorPoly = floorPoly;
 
-    // This NULL check means if the player releases a Bombchu out of bounds,
-    // the game will not crash, unlike OoT.
+    // This NULL check means if the player releases a Bombchu with no collision
+    // below them, the game will not crash, unlike OoT.
     if (floorPoly != NULL) {
         normal.x = COLPOLY_GET_NORMAL(floorPoly->normal.x);
         normal.y = COLPOLY_GET_NORMAL(floorPoly->normal.y);
