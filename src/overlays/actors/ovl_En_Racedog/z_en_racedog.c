@@ -207,7 +207,26 @@ void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24C14.s")
+void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx) {
+    s16 phi_v1;
+
+    if (this->unk_28A == 0) {
+        phi_v1 = 0;
+    } else {
+        this->unk_28A--;
+        phi_v1 = this->unk_28A;
+    }
+
+    if (phi_v1 == 0) {
+        this->unk_28A = Rand_S16Offset(50, 50);
+        if (this->unk_28C == 0) {
+            play_sound(NA_SE_SY_START_SHOT);
+        }
+
+        func_80B24630(&this->skelAnime, D_80B25EF0, 2);
+        this->actionFunc = func_80B24CB4;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24CB4.s")
 
