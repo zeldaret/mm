@@ -8,7 +8,7 @@
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGs*)thisx)
 
@@ -156,7 +156,7 @@ void EnGs_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1F4 = this->unk_1FA;
     Math_Vec3f_Copy(&this->unk_1B0[0], &D_801C5DB0);
     Math_Vec3f_Copy(&this->unk_1B0[1], &D_801C5DB0);
-    func_8013E3B8(&this->actor, &this->unk_212, 2);
+    SubS_FillCutscenesList(&this->actor, this->unk_212, ARRAY_COUNT(this->unk_212));
     func_801A5080(0);
     if (this->actor.params == ENGS_1) {
         Actor_SetScale(&this->actor, 0.15f);
@@ -262,7 +262,7 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997FF0(EnGs* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->actor, globalCtx->playerActorCsIds[0], -1, 1)) {
+    if (SubS_StartActorCutscene(&this->actor, globalCtx->playerActorCsIds[0], -1, SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, globalCtx);
     }
 }
@@ -380,7 +380,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
     EnGs* gossipStone;
     Vec3f sp38;
 
-    if (func_8013E2D4(&this->actor, this->unk_212, -1, 0)) {
+    if (SubS_StartActorCutscene(&this->actor, this->unk_212[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         Player* player = GET_PLAYER(globalCtx);
 
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -446,7 +446,7 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
         if ((this->unk_19C == 5) && (this->unk_194 != 0)) {
             s32 i;
 
-            ActorCutscene_Stop(this->unk_212);
+            ActorCutscene_Stop(this->unk_212[0]);
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
@@ -1021,7 +1021,7 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
         s16 sp2E;
         s16 sp2C;
 
-        if ((this->actor.flags & 0x40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
+        if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, globalCtx);
             Actor_GetScreenPos(globalCtx, &this->actor, &sp2E, &sp2C);
             if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > 320) || (sp2C < 0) ||

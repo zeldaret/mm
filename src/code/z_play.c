@@ -74,41 +74,41 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169474.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801694DC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CreateSubCamera.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCameraIndex.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetActiveCamId.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169590.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeStatus.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169600.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearCamera.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169668.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_ClearAllSubCameras.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCamera.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEye.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_8016981C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetAtEyeUp.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169940.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetFov.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169988.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraSetRoll.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801699D4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CopyCamera.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169A50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169AC0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraChangeSetting.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169AFC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BC4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_CameraGetUID.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169BF8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169C64.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataSetting.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169C84.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_GetCsCamDataVec3s.s")
 
 /**
  * Converts the number of a scene to its "original" equivalent, the default version of the area which the player first

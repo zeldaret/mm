@@ -255,9 +255,12 @@ void EffectSS_DrawAllParticles(GlobalContext* globalCtx) {
 
     for (i = 0; i < sEffectSsInfo.size; i++) {
         if (sEffectSsInfo.data_table[i].life > -1) {
-            if ((sEffectSsInfo.data_table[i].pos.x > 32000.0f) || (sEffectSsInfo.data_table[i].pos.x < -32000.0f) ||
-                (sEffectSsInfo.data_table[i].pos.y > 32000.0f) || (sEffectSsInfo.data_table[i].pos.y < -32000.0f) ||
-                (sEffectSsInfo.data_table[i].pos.z > 32000.0f) || (sEffectSsInfo.data_table[i].pos.z < -32000.0f)) {
+            if ((sEffectSsInfo.data_table[i].pos.x > BGCHECK_Y_MAX) ||
+                (sEffectSsInfo.data_table[i].pos.x < BGCHECK_Y_MIN) ||
+                (sEffectSsInfo.data_table[i].pos.y > BGCHECK_Y_MAX) ||
+                (sEffectSsInfo.data_table[i].pos.y < BGCHECK_Y_MIN) ||
+                (sEffectSsInfo.data_table[i].pos.z > BGCHECK_Y_MAX) ||
+                (sEffectSsInfo.data_table[i].pos.z < BGCHECK_Y_MIN)) {
                 EffectSS_Delete(&sEffectSsInfo.data_table[i]);
             } else {
                 EffectSS_DrawParticle(globalCtx, i);

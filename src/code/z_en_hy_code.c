@@ -3,7 +3,7 @@
  * Description: Unused System for NPCs (includes animation, door interaction, blinking, pathing, and collider helpers)
  */
 
-#include "z_en_hy.h"
+#include "z_en_hy_code.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_aob/object_aob.h"
 #include "objects/object_bba/object_bba.h"
@@ -18,7 +18,7 @@ static AnimationInfoS sAnimations[] = {
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_bba_Anim_005DC4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -112,10 +112,10 @@ void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex) {
 s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex) {
     s32 isInitialized = false;
 
-    if ((func_8013D8DC(enHy->animObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->headObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->skelUpperObjIndex, globalCtx) == true) &&
-        (func_8013D8DC(enHy->skelLowerObjIndex, globalCtx) == true)) {
+    if ((SubS_IsObjectLoaded(enHy->animObjIndex, globalCtx) == true) &&
+        (SubS_IsObjectLoaded(enHy->headObjIndex, globalCtx) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelUpperObjIndex, globalCtx) == true) &&
+        (SubS_IsObjectLoaded(enHy->skelLowerObjIndex, globalCtx) == true)) {
         enHy->actor.objBankIndex = enHy->skelLowerObjIndex;
         isInitialized = true;
         ActorShape_Init(&enHy->actor.shape, 0.0f, NULL, 0.0f);
