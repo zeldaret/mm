@@ -757,7 +757,7 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
-        func_8013AED4(&this->unk_310, 3, 7);
+        SubS_UpdateFlags(&this->unk_310, 3, 7);
 
         if (!(gSaveContext.weekEventReg[12] & 2)) {
             this->unk_318 = Rand_S16Offset(30, 30);
