@@ -188,6 +188,203 @@ typedef struct {
 
 typedef void (*PlayerFuncD58)(struct GlobalContext*, struct Player*);
 
+// 
+#define PLAYER_STATE1_1          (1 << 0)
+// 
+#define PLAYER_STATE1_2          (1 << 1)
+// 
+#define PLAYER_STATE1_4          (1 << 2)
+// 
+#define PLAYER_STATE1_8          (1 << 3)
+// 
+#define PLAYER_STATE1_10         (1 << 4)
+// 
+#define PLAYER_STATE1_20         (1 << 5)
+// 
+#define PLAYER_STATE1_40         (1 << 6)
+// 
+#define PLAYER_STATE1_80         (1 << 7)
+// 
+#define PLAYER_STATE1_100        (1 << 8)
+// 
+#define PLAYER_STATE1_200        (1 << 9)
+// 
+#define PLAYER_STATE1_400        (1 << 10)
+// 
+#define PLAYER_STATE1_800        (1 << 11)
+// 
+#define PLAYER_STATE1_1000       (1 << 12)
+// 
+#define PLAYER_STATE1_2000       (1 << 13)
+// 
+#define PLAYER_STATE1_4000       (1 << 14)
+// 
+#define PLAYER_STATE1_8000       (1 << 15)
+// 
+#define PLAYER_STATE1_10000      (1 << 16)
+// 
+#define PLAYER_STATE1_20000      (1 << 17)
+// 
+#define PLAYER_STATE1_40000      (1 << 18)
+// 
+#define PLAYER_STATE1_80000      (1 << 19)
+// 
+#define PLAYER_STATE1_100000     (1 << 20)
+// 
+#define PLAYER_STATE1_200000     (1 << 21)
+// 
+#define PLAYER_STATE1_400000     (1 << 22)
+// 
+#define PLAYER_STATE1_800000     (1 << 23)
+// 
+#define PLAYER_STATE1_1000000    (1 << 24)
+// 
+#define PLAYER_STATE1_2000000    (1 << 25)
+// 
+#define PLAYER_STATE1_4000000    (1 << 26)
+// 
+#define PLAYER_STATE1_8000000    (1 << 27)
+// 
+#define PLAYER_STATE1_10000000   (1 << 28)
+// 
+#define PLAYER_STATE1_20000000   (1 << 29)
+// 
+#define PLAYER_STATE1_40000000   (1 << 30)
+// 
+#define PLAYER_STATE1_80000000   (1 << 31)
+
+
+// 
+#define PLAYER_STATE2_1          (1 << 0)
+// 
+#define PLAYER_STATE2_2          (1 << 1)
+// 
+#define PLAYER_STATE2_4          (1 << 2)
+// 
+#define PLAYER_STATE2_8          (1 << 3)
+// 
+#define PLAYER_STATE2_10         (1 << 4)
+// 
+#define PLAYER_STATE2_20         (1 << 5)
+// 
+#define PLAYER_STATE2_40         (1 << 6)
+// 
+#define PLAYER_STATE2_80         (1 << 7)
+// 
+#define PLAYER_STATE2_100        (1 << 8)
+// 
+#define PLAYER_STATE2_200        (1 << 9)
+// 
+#define PLAYER_STATE2_400        (1 << 10)
+// 
+#define PLAYER_STATE2_800        (1 << 11)
+// 
+#define PLAYER_STATE2_1000       (1 << 12)
+// 
+#define PLAYER_STATE2_2000       (1 << 13)
+// 
+#define PLAYER_STATE2_4000       (1 << 14)
+// 
+#define PLAYER_STATE2_8000       (1 << 15)
+// 
+#define PLAYER_STATE2_10000      (1 << 16)
+// 
+#define PLAYER_STATE2_20000      (1 << 17)
+// 
+#define PLAYER_STATE2_40000      (1 << 18)
+// 
+#define PLAYER_STATE2_80000      (1 << 19)
+// 
+#define PLAYER_STATE2_100000     (1 << 20)
+// 
+#define PLAYER_STATE2_200000     (1 << 21)
+// 
+#define PLAYER_STATE2_400000     (1 << 22)
+// 
+#define PLAYER_STATE2_800000     (1 << 23)
+// 
+#define PLAYER_STATE2_1000000    (1 << 24)
+// 
+#define PLAYER_STATE2_2000000    (1 << 25)
+// 
+#define PLAYER_STATE2_4000000    (1 << 26)
+// 
+#define PLAYER_STATE2_8000000    (1 << 27)
+// 
+#define PLAYER_STATE2_10000000   (1 << 28)
+// 
+#define PLAYER_STATE2_20000000   (1 << 29)
+// 
+#define PLAYER_STATE2_40000000   (1 << 30)
+// 
+#define PLAYER_STATE2_80000000   (1 << 31)
+
+
+// 
+#define PLAYER_STATE3_1          (1 << 0)
+// 
+#define PLAYER_STATE3_2          (1 << 1)
+// 
+#define PLAYER_STATE3_4          (1 << 2)
+// 
+#define PLAYER_STATE3_8          (1 << 3)
+// 
+#define PLAYER_STATE3_10         (1 << 4)
+// 
+#define PLAYER_STATE3_20         (1 << 5)
+// 
+#define PLAYER_STATE3_40         (1 << 6)
+// 
+#define PLAYER_STATE3_80         (1 << 7)
+// 
+#define PLAYER_STATE3_100        (1 << 8)
+// 
+#define PLAYER_STATE3_200        (1 << 9)
+// 
+#define PLAYER_STATE3_400        (1 << 10)
+// 
+#define PLAYER_STATE3_800        (1 << 11)
+// 
+#define PLAYER_STATE3_1000       (1 << 12)
+// 
+#define PLAYER_STATE3_2000       (1 << 13)
+// 
+#define PLAYER_STATE3_4000       (1 << 14)
+// 
+#define PLAYER_STATE3_8000       (1 << 15)
+// 
+#define PLAYER_STATE3_10000      (1 << 16)
+// 
+#define PLAYER_STATE3_20000      (1 << 17)
+// 
+#define PLAYER_STATE3_40000      (1 << 18)
+// 
+#define PLAYER_STATE3_80000      (1 << 19)
+// 
+#define PLAYER_STATE3_100000     (1 << 20)
+// 
+#define PLAYER_STATE3_200000     (1 << 21)
+// 
+#define PLAYER_STATE3_400000     (1 << 22)
+// 
+#define PLAYER_STATE3_800000     (1 << 23)
+// 
+#define PLAYER_STATE3_1000000    (1 << 24)
+// 
+#define PLAYER_STATE3_2000000    (1 << 25)
+// 
+#define PLAYER_STATE3_4000000    (1 << 26)
+// 
+#define PLAYER_STATE3_8000000    (1 << 27)
+// 
+#define PLAYER_STATE3_10000000   (1 << 28)
+// 
+#define PLAYER_STATE3_20000000   (1 << 29)
+// 
+#define PLAYER_STATE3_40000000   (1 << 30)
+// 
+#define PLAYER_STATE3_80000000   (1 << 31)
+
 
 typedef struct Player {
     /* 0x000 */ Actor actor;
