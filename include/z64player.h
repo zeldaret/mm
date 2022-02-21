@@ -525,13 +525,13 @@ typedef struct Player {
     /* 0x3D0 */ struct_80122D44_arg1 unk_3D0;
     /* 0x404 */ UNK_TYPE1 unk_404[0x34];
     /* 0x518 */ ColliderCylinder cylinder;
-    /* 0x564 */ ColliderQuad swordQuads[2];
+    /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
     /* 0x730 */ Actor* unk_730;
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
-    /* 0x73C */ s32 blureEffectIndex[3];
+    /* 0x73C */ s32 meleeWeaponEffectIndex[3];
     /* 0x748 */ char unk_748[0x320];
     /* 0xA68 */ PlayerAgeProperties* ageProperties; // repurposed as "transformation properties"?
     /* 0xA6C */ u32 stateFlags1;
@@ -569,8 +569,8 @@ typedef struct Player {
     /* 0xAD4 */ s16 currentYaw;
     /* 0xAD6 */ s16 targetYaw;
     /* 0xAD8 */ u16 unk_AD8;
-    /* 0xADA */ s8 swordAnimation;
-    /* 0xADB */ s8 swordState;
+    /* 0xADA */ s8 meleeWeaponAnimation;
+    /* 0xADB */ s8 meleeWeaponState;
     /* 0xADC */ s8 unk_ADC;
     /* 0xADD */ s8 unk_ADD;
     /* 0xADE */ u8 unk_ADE;
@@ -630,7 +630,7 @@ typedef struct Player {
     /* 0xB92 */ s16 unk_B92;
     /* 0xB94 */ s16 unk_B94;
     /* 0xB96 */ s16 unk_B96;
-    /* 0xB98 */ WeaponInfo swordInfo[3];
+    /* 0xB98 */ WeaponInfo meleeWeaponInfo[3];
     /* 0xBEC */ Vec3f bodyPartsPos[18];
     /* 0xCC4 */ MtxF mf_CC4;
     /* 0xD04 */ MtxF shieldMf;

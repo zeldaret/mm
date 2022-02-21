@@ -355,7 +355,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
                 return 0;
             }
 
-            if ((player->swordState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             break;
@@ -365,7 +365,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
                 return 0;
             }
 
-            if ((player->swordState != 0) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             break;
@@ -375,14 +375,14 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
                 return 0;
             }
 
-            if ((player->swordState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             this->unk_28E = 0;
             break;
 
         case 3:
-            if ((this->unk_28E == 1) && ((player->swordAnimation == 4) || (player->swordAnimation == 6))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 6))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -394,7 +394,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 4:
-            if ((this->unk_28E == 1) && ((player->swordAnimation == 0) || (player->swordAnimation == 2))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == 0) || (player->meleeWeaponAnimation == 2))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -406,7 +406,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if ((this->unk_28E == 1) && (player->swordAnimation == 12)) {
+            if ((this->unk_28E == 1) && (player->meleeWeaponAnimation == 12)) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -418,7 +418,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if ((this->unk_28E == 1) && ((player->swordAnimation == 17) || (player->swordAnimation == 20))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == 17) || (player->meleeWeaponAnimation == 20))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -448,7 +448,7 @@ s32 func_80B26F6C(EnKendoJs* this, GlobalContext* globalCtx) {
 
     switch (this->unk_288) {
         case 0x271D:
-            if (Player_GetSwordHeld(player)) {
+            if (Player_GetMeleeWeaponHeld(player) != 0) {
                 func_801518B0(globalCtx, 0x272A, &this->actor);
                 this->unk_288 = 0x272A;
                 return true;
@@ -611,12 +611,12 @@ void func_80B274BC(EnKendoJs* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_28E == 1) {
-        if ((player->swordAnimation == 17) || (player->swordAnimation == 20)) {
+        if ((player->meleeWeaponAnimation == 17) || (player->meleeWeaponAnimation == 20)) {
             globalCtx->interfaceCtx.unk_25C = 3;
             if (gSaveContext.minigameScore >= 27) {
                 player->stateFlags1 |= 0x20;
             }
-        } else if (player->swordAnimation == 12) {
+        } else if (player->meleeWeaponAnimation == 12) {
             globalCtx->interfaceCtx.unk_25C = 2;
         } else {
             globalCtx->interfaceCtx.unk_25C = 1;

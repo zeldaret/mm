@@ -1139,7 +1139,7 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
     s32 pad;
 
     if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
-        Math_Vec3f_Diff(&this->swordInfo[0].tip, pos, &diff);
+        Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
         return ((SQ(diff.x) + SQ(diff.z)) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
 
@@ -1199,7 +1199,7 @@ s32 func_80124148(Player* player) {
     return func_80124110(player, player->itemActionParam);
 }
 
-s32 Player_ActionToSword(s32 actionParam) {
+s32 Player_ActionToMeleeWeapon(s32 actionParam) {
     s32 sword = actionParam - PLAYER_AP_UNK_2;
 
     if ((sword > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (sword <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
@@ -1208,8 +1208,8 @@ s32 Player_ActionToSword(s32 actionParam) {
     return 0;
 }
 
-s32 Player_GetSwordHeld(Player* player) {
-    return Player_ActionToSword(player->itemActionParam);
+s32 Player_GetMeleeWeaponHeld(Player* player) {
+    return Player_ActionToMeleeWeapon(player->itemActionParam);
 }
 
 s32 Player_HoldsTwoHandedWeapon(Player* player) {
@@ -1756,7 +1756,7 @@ s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     if (limbIndex == PLAYER_LIMB_ROOT) {
         D_801F59F4 = (s32)player->leftHandType;
         D_801F59F8 = (s32)player->rightHandType;
-        D_801F59DC = &player->swordInfo[2].base;
+        D_801F59DC = &player->meleeWeaponInfo[2].base;
         if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
             if (!(player->skelAnime.moveFlags & 4) || (player->skelAnime.moveFlags & 1)) {
                 pos->x *= player->ageProperties->unk_08;
@@ -2257,24 +2257,24 @@ void func_8012669C(GlobalContext* globalCtx, Player* player, Vec3f* arg2, Vec3f*
     Matrix_MultiplyVector3fByState(arg2, &sp3C);
     Matrix_MultiplyVector3fByState(arg3, &sp30);
 
-    if (player->swordState != 0) {
-        if (func_80126440(globalCtx, NULL, &player->swordInfo[0], &sp3C, &sp30) &&
+    if (player->meleeWeaponState != 0) {
+        if (func_80126440(globalCtx, NULL, &player->meleeWeaponInfo[0], &sp3C, &sp30) &&
             (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & PLAYER_STATE1_400000))) {
-            EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[0]), &player->swordInfo[0].tip,
-                                  &player->swordInfo[0].base);
+            EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
+                                  &player->meleeWeaponInfo[0].base);
         }
-        if ((player->swordState > 0) &&
-            ((player->swordAnimation < 0x1E) || (player->stateFlags2 & PLAYER_STATE2_20000))) {
+        if ((player->meleeWeaponState > 0) &&
+            ((player->meleeWeaponAnimation < 0x1E) || (player->stateFlags2 & PLAYER_STATE2_20000))) {
             Matrix_MultiplyVector3fByState(&arg2[1], &sp3C);
             Matrix_MultiplyVector3fByState(&arg3[1], &sp30);
-            func_80126440(globalCtx, &player->swordQuads[0], &player->swordInfo[1], &sp3C, &sp30);
+            func_80126440(globalCtx, &player->meleeWeaponQuads[0], &player->meleeWeaponInfo[1], &sp3C, &sp30);
             Matrix_MultiplyVector3fByState(&arg2[2], &sp3C);
             Matrix_MultiplyVector3fByState(&arg3[2], &sp30);
-            func_80126440(globalCtx, &player->swordQuads[1], &player->swordInfo[2], &sp3C, &sp30);
+            func_80126440(globalCtx, &player->meleeWeaponQuads[1], &player->meleeWeaponInfo[2], &sp3C, &sp30);
         }
     } else {
-        Math_Vec3f_Copy(&player->swordInfo[0].tip, &sp3C);
-        Math_Vec3f_Copy(&player->swordInfo[0].base, &sp30);
+        Math_Vec3f_Copy(&player->meleeWeaponInfo[0].tip, &sp3C);
+        Math_Vec3f_Copy(&player->meleeWeaponInfo[0].base, &sp30);
     }
 }
 
@@ -2335,7 +2335,7 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
 
 void func_80126AB4(Player* player, Vec3f** arg1) {
     if ((player->transformation == PLAYER_FORM_GORON) || (player->actor.id == ACTOR_EN_TEST3)) {
-        Math_Vec3f_Copy(&player->unk_AF0[1], &player->swordInfo[0].base);
+        Math_Vec3f_Copy(&player->unk_AF0[1], &player->meleeWeaponInfo[0].base);
         *arg1 = D_801C09B8;
         return;
     }
@@ -2412,8 +2412,8 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
 
                 gSPDisplayList(POLY_OPA_DISP++, D_801C0AB4[arg2]);
 
-                if ((player->swordState != 0) && ((((player->swordAnimation == 0x1B)) && (arg2 == 0)) ||
-                                                  ((player->swordAnimation == 0x1C) && (arg2 != 0)))) {
+                if ((player->meleeWeaponState != 0) && ((((player->meleeWeaponAnimation == 0x1B)) && (arg2 == 0)) ||
+                                                  ((player->meleeWeaponAnimation == 0x1C) && (arg2 != 0)))) {
                     func_8012669C(globalCtx, player, D_801C0A00, D_801C09DC);
                 }
                 Matrix_StatePop();
@@ -2453,10 +2453,10 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
             Matrix_MultiplyVector3fByState(&D_801C0AC4[arg2], &sp58);
             Matrix_MultiplyVector3fByState(&D_801C0ADC[arg2], &sp4C);
 
-            if (func_80126440(globalCtx, NULL, &player->swordInfo[arg2], &sp58, &sp4C) &&
+            if (func_80126440(globalCtx, NULL, &player->meleeWeaponInfo[arg2], &sp58, &sp4C) &&
                 (player->stateFlags1 & PLAYER_STATE1_8000000)) {
-                EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[arg2]), &player->swordInfo[arg2].tip,
-                                      &player->swordInfo[arg2].base);
+                EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[arg2]), &player->meleeWeaponInfo[arg2].tip,
+                                      &player->meleeWeaponInfo[arg2].base);
             }
             Matrix_StatePop();
 
@@ -3320,12 +3320,12 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                     ((player->transformation != PLAYER_FORM_ZORA) &&
                      ((player->heldItemActionParam == 7) ||
-                      ((player->swordState != 0) && ((player->swordAnimation != 0x19)) &&
-                       (player->swordAnimation != 0x1A))))) {
+                      ((player->meleeWeaponState != 0) && ((player->meleeWeaponAnimation != 0x19)) &&
+                       (player->meleeWeaponAnimation != 0x1A))))) {
                     if (player->heldItemActionParam == 7) {
                         D_801C0994->x = player->unk_B08[1] * 5000.0f;
                     } else {
-                        D_801C0994->x = D_801C0D78[Player_GetSwordHeld(player)];
+                        D_801C0994->x = D_801C0D78[Player_GetMeleeWeaponHeld(player)];
                     }
                     func_80126B8C(globalCtx, player);
                 }
@@ -3392,7 +3392,7 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                         func_80124CC4(globalCtx, player, 77600.0f);
                     }
                 }
-            } else if ((player->swordState != 0) && (player->swordAnimation == 0x19)) {
+            } else if ((player->meleeWeaponState != 0) && (player->meleeWeaponAnimation == 0x19)) {
                 func_80126B8C(globalCtx, player);
             }
             if ((player->unk_B2A != 0) || ((func_800B7118(player) == 0) && (sp224 != NULL))) {
@@ -3631,18 +3631,18 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
     } else if ((limbIndex == PLAYER_LIMB_HAT) && (player->stateFlags3 & PLAYER_STATE3_100000)) {
         Matrix_GetStateTranslationAndScaledX(3000.0f, &sp5C);
         Matrix_GetStateTranslationAndScaledX(2300.0f, &sp50);
-        if (func_80126440(globalCtx, NULL, player->swordInfo, &sp5C, &sp50) != 0) {
-            EffectBlure_AddVertex(Effect_GetByIndex(player->blureEffectIndex[0]), &player->swordInfo[0].tip,
-                                  &player->swordInfo[0].base);
+        if (func_80126440(globalCtx, NULL, player->meleeWeaponInfo, &sp5C, &sp50) != 0) {
+            EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
+                                  &player->meleeWeaponInfo[0].base);
         }
     } else if (limbIndex == PLAYER_LIMB_R_SHIN) {
-        if ((player->swordState != 0) && (((player->swordAnimation == 0x1D)) || (player->swordAnimation == 0x12) ||
-                                          (player->swordAnimation == 0x15))) {
+        if ((player->meleeWeaponState != 0) && (((player->meleeWeaponAnimation == 0x1D)) || (player->meleeWeaponAnimation == 0x12) ||
+                                          (player->meleeWeaponAnimation == 0x15))) {
             func_8012669C(globalCtx, player, D_801C0A48, D_801C0A24);
         }
     } else if (limbIndex == PLAYER_LIMB_WAIST) {
-        if ((player->swordState != 0) && (player->swordAnimation == 0x1A)) {
-            Math_Vec3f_Copy(&player->unk_AF0[1], &player->swordInfo[0].base);
+        if ((player->meleeWeaponState != 0) && (player->meleeWeaponAnimation == 0x1A)) {
+            Math_Vec3f_Copy(&player->unk_AF0[1], &player->meleeWeaponInfo[0].base);
             func_8012669C(globalCtx, player, D_801C0A90, D_801C0A6C);
         }
     } else if (limbIndex == PLAYER_LIMB_SHEATH) {
