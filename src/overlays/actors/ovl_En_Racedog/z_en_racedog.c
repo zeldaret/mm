@@ -50,8 +50,8 @@ static s16 D_80B25D48 = 0;
 
 static s16 D_80B25D4C = -1;
 
-static f32 D_80B25D50[] = {
-    0.0f, 0.0f, 5.0f, 5.5f, 5.0f, 5.0f, 5.5f, 5.0f, 4.5f, 5.5f, 6.0f, 4.0f, 4.0f, 6.0f,
+static f32 D_80B25D50[][2] = {
+    { 0.0f, 0.0f }, { 5.0f, 5.5f }, { 5.0f, 5.0f }, { 5.5f, 5.0f }, { 4.5f, 5.5f }, { 6.0f, 4.0f }, { 4.0f, 6.0f },
 };
 
 static UnkRacedogStruct D_80B25D88[] = {
@@ -160,7 +160,7 @@ static Vec3f D_80B25FF4 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_80B26000 = { 0.0f, 20.0f, 0.0f };
 
 extern Gfx D_06000618[];
-extern UNK_TYPE D_060080F0;
+extern FlexSkeletonHeader D_060080F0;
 extern Gfx D_06000550[];
 
 void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
@@ -199,7 +199,54 @@ void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/EnRacedog_Init.s")
+void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnRacedog* this = THIS;
+    ColliderCylinder* collider = &this->collider;
+
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
+    Collider_InitCylinder(globalCtx, collider);
+    Collider_SetCylinder(globalCtx, collider, &this->actor, &D_80B25E98);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80B25ED0, &D_80B25EC4);
+
+    Actor_ProcessInitChain(&this->actor, D_80B25FF0);
+    this->unk_1E0 = func_8013D648(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    Actor_SetScale(&this->actor, 0.0075f);
+    this->actor.gravity = -3.0f;
+    if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
+        this->unk_290 = ENRACEDOG_GET_INDEX(&this->actor);
+    } else {
+        Actor_MarkForDeath(&this->actor);
+    }
+
+    this->unk_2BC = 0xFF;
+    this->unk_2C0 = 0x32;
+    this->unk_288 = 0xC;
+    this->unk_2A0.x = 0.0f;
+    this->unk_2A0.y = 0.0f;
+    this->unk_2A0.z = 0.0f;
+    this->unk_2C4 = 1.0f;
+    if ((D_80B25D88[this->unk_290].unk_0E >= 0x353F) && (this->unk_290 == (s16)Rand_ZeroFloat(20.0f))) {
+        this->unk_28C = 5;
+    } else {
+        this->unk_28C = 0;
+    }
+
+    this->unk_28A = 60;
+    this->unk_28A += this->unk_28C;
+    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][0];
+    this->unk_29C = 0;
+    this->unk_2B8 = -1;
+
+    func_80B24E14(this);
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_20;
+    D_80B25E68 = D_80B25D88[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
+    this->unk_292 = D_80B25E68.unk_0A;
+    func_80B24630(&this->skelAnime, D_80B25EF0, 0);
+    D_80B25EF0->playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
+    this->actionFunc = func_80B24C14;
+}
 
 void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnRacedog* this = THIS;

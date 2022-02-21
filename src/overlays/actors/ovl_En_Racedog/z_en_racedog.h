@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define ENRACEDOG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
+#define ENRACEDOG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+
 struct EnRacedog;
 
 typedef void (*EnRacedogActionFunc)(struct EnRacedog*, GlobalContext*);
@@ -31,7 +34,7 @@ typedef struct EnRacedog {
     /* 0x29E */ char unk_29E[0x2];
     /* 0x2A0 */ Vec3f unk_2A0;
     /* 0x2AC */ Vec3f unk_2AC;
-    /* 0x2B0 */ s32 unk_2BB;
+    /* 0x2B8 */ s32 unk_2B8;
     /* 0x2BC */ s32 unk_2BC;
     /* 0x2C0 */ s32 unk_2C0;
     /* 0x2C4 */ f32 unk_2C4;
