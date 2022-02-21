@@ -23,9 +23,9 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx);
 void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx);
 
 typedef enum {
-    CHEAT_NO_CHEATING,
-    CHEAT_FALSE_START,
-    CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND,
+    GORON_RACE_CHEAT_NO_CHEATING,
+    GORON_RACE_CHEAT_FALSE_START,
+    GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND,
 } PlayerCheatStatus;
 
 const ActorInit En_Mt_tag_InitVars = {
@@ -44,24 +44,24 @@ static s32 sStartingCheckpointPerSceneExitIndex[] = {
     0, 0, 0, 0, 1, 9, 12, 16, 19, 22, 26, 29, 30, 32, 34, 36, 39, 42, 45,
 };
 
-// The Y-positions here are never used by any part of this actor. They're probably entirely arbitrary.
+// The Y-positions here are never used by any part of this actor.
 static Vec3f sCheckpointPositions[] = {
-    { -105.0, 1000.0, -240.0 },   { -1751.0, 1000.0, -240.0 },  { -3138.0, 1000.0, -74.0 },
-    { -4617.0, 1000.0, 277.0 },   { -5060.0, 1000.0, 388.0 },   { -5412.0, 1000.0, 573.0 },
-    { -5523.0, 1000.0, 1035.0 },  { -5393.0, 1000.0, 1405.0 },  { -5060.0, 1000.0, 1553.0 },
-    { -3933.0, 1000.0, 1479.0 },  { -3212.0, 1000.0, 1461.0 },  { -2805.0, 1000.0, 1645.0 },
-    { -2638.0, 1000.0, 2071.0 },  { -2823.0, 1000.0, 2422.0 },  { -3212.0, 1000.0, 2607.0 },
-    { -3785.0, 1000.0, 2977.0 },  { -4321.0, 1000.0, 3501.0 },  { -4654.0, 1000.0, 4185.0 },
-    { -4802.0, 1000.0, 4779.0 },  { -4672.0, 1000.0, 5426.0 },  { -4339.0, 1000.0, 6037.0 },
-    { -3748.0, 1000.0, 6314.0 },  { -2749.0, 1000.0, 6478.0 },  { -2453.0, 1000.0, 6922.0 },
-    { -2269.0, 1000.0, 7754.0 },  { -2453.0, 1000.0, 8309.0 },  { -3008.0, 1000.0, 8438.0 },
-    { -3304.0, 1000.0, 8179.0 },  { -3600.0, 1000.0, 7606.0 },  { -3600.0, 1000.0, 6885.0 },
-    { -3618.0, 1000.0, 4392.0 },  { -3600.0, 1000.0, 3855.0 },  { -3396.0, 1000.0, 3189.0 },
-    { -3396.0, 1000.0, 2283.0 },  { -3600.0, 1000.0, 818.0 },   { -3803.0, 1000.0, -88.0 },
-    { -4543.0, 1000.0, -2457.0 }, { -4543.0, 1000.0, -2938.0 }, { -4543.0, 1000.0, -3530.0 },
-    { -4284.0, 1000.0, -4333.0 }, { -3581.0, 1000.0, -4795.0 }, { -2805.0, 1000.0, -4850.0 },
-    { -1825.0, 1000.0, -4703.0 }, { -1326.0, 1000.0, -4166.0 }, { -1122.0, 1000.0, -3186.0 },
-    { -1085.0, 1000.0, -2059.0 }, { -1067.0, 1000.0, -912.0 },
+    { -105.0f, 1000.0f, -240.0f },   { -1751.0f, 1000.0f, -240.0f },  { -3138.0f, 1000.0f, -74.0f },
+    { -4617.0f, 1000.0f, 277.0f },   { -5060.0f, 1000.0f, 388.0f },   { -5412.0f, 1000.0f, 573.0f },
+    { -5523.0f, 1000.0f, 1035.0f },  { -5393.0f, 1000.0f, 1405.0f },  { -5060.0f, 1000.0f, 1553.0f },
+    { -3933.0f, 1000.0f, 1479.0f },  { -3212.0f, 1000.0f, 1461.0f },  { -2805.0f, 1000.0f, 1645.0f },
+    { -2638.0f, 1000.0f, 2071.0f },  { -2823.0f, 1000.0f, 2422.0f },  { -3212.0f, 1000.0f, 2607.0f },
+    { -3785.0f, 1000.0f, 2977.0f },  { -4321.0f, 1000.0f, 3501.0f },  { -4654.0f, 1000.0f, 4185.0f },
+    { -4802.0f, 1000.0f, 4779.0f },  { -4672.0f, 1000.0f, 5426.0f },  { -4339.0f, 1000.0f, 6037.0f },
+    { -3748.0f, 1000.0f, 6314.0f },  { -2749.0f, 1000.0f, 6478.0f },  { -2453.0f, 1000.0f, 6922.0f },
+    { -2269.0f, 1000.0f, 7754.0f },  { -2453.0f, 1000.0f, 8309.0f },  { -3008.0f, 1000.0f, 8438.0f },
+    { -3304.0f, 1000.0f, 8179.0f },  { -3600.0f, 1000.0f, 7606.0f },  { -3600.0f, 1000.0f, 6885.0f },
+    { -3618.0f, 1000.0f, 4392.0f },  { -3600.0f, 1000.0f, 3855.0f },  { -3396.0f, 1000.0f, 3189.0f },
+    { -3396.0f, 1000.0f, 2283.0f },  { -3600.0f, 1000.0f, 818.0f },   { -3803.0f, 1000.0f, -88.0f },
+    { -4543.0f, 1000.0f, -2457.0f }, { -4543.0f, 1000.0f, -2938.0f }, { -4543.0f, 1000.0f, -3530.0f },
+    { -4284.0f, 1000.0f, -4333.0f }, { -3581.0f, 1000.0f, -4795.0f }, { -2805.0f, 1000.0f, -4850.0f },
+    { -1825.0f, 1000.0f, -4703.0f }, { -1326.0f, 1000.0f, -4166.0f }, { -1122.0f, 1000.0f, -3186.0f },
+    { -1085.0f, 1000.0f, -2059.0f }, { -1067.0f, 1000.0f, -912.0f },
 };
 
 /**
@@ -80,7 +80,7 @@ s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
     if (!(gSaveContext.eventInf[1] & 1)) {
         if (Math3D_XZBoundCheck(-466.0f, -386.0f, -687.0f, 193.0f, pos->x, pos->z)) {
             // The race hasn't started yet, but the player is beyond the starting line.
-            return CHEAT_FALSE_START;
+            return GORON_RACE_CHEAT_FALSE_START;
         }
     } else if (Math3D_XZBoundCheck(-1127.0f, -1007.0f, -867.0f, -787.0f, pos->x, pos->z)) {
         // The goal is actually quite close to the start, just behind a large wall.
@@ -88,9 +88,9 @@ s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
         // in normal play; it can only be reached by climbing the wall somehow. Perhaps they
         // were worried that players would find a way to climb the wall with a glitch, or
         // perhaps they just wanted to punish people using cheat codes.
-        return CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND;
+        return GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND;
     }
-    return CHEAT_NO_CHEATING;
+    return GORON_RACE_CHEAT_NO_CHEATING;
 }
 
 /**
@@ -101,7 +101,7 @@ s32 EnMttag_CheckPlayerCheatStatus(Vec3f* pos) {
 s32 EnMttag_AreFourRaceGoronsPresent(EnMttag* this, GlobalContext* globalCtx) {
     Actor* actor = NULL;
     s32 i = 0;
-    s32 ret;
+    s32 areGoronsPresent;
 
     do {
         actor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_RG);
@@ -113,15 +113,15 @@ s32 EnMttag_AreFourRaceGoronsPresent(EnMttag* this, GlobalContext* globalCtx) {
         }
 
         actor = actor->next;
-    } while (i < 4);
+    } while (i < ARRAY_COUNT(this->raceGorons));
 
-    if (i < 4) {
-        ret = false;
+    if (i < ARRAY_COUNT(this->raceGorons)) {
+        areGoronsPresent = false;
     } else {
-        ret = true;
+        areGoronsPresent = true;
     }
 
-    return ret;
+    return areGoronsPresent;
 }
 
 /**
@@ -193,7 +193,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, GlobalContext* globalCtx) {
     f32 perpendicularPointsZ[5];
     s32 highestCurrentCheckpoint;
     s32 i;
-    s32 ret = false;
+    s32 playerIsLikelyToLose = false;
 
     highestCurrentCheckpoint = -1;
     currentCheckpoints[0] = EnMttag_GetCurrentCheckpoint(&player->actor, globalCtx, &upcomingCheckpoints[0],
@@ -221,10 +221,10 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, GlobalContext* globalCtx) {
 
     if ((currentCheckpoints[0] > 0) && (currentCheckpoints[0] < highestCurrentCheckpoint) &&
         (player->actor.bgCheckFlags & 1) && ((highestCurrentCheckpoint - currentCheckpoints[0]) >= 24)) {
-        ret = true;
+        playerIsLikelyToLose = true;
     }
 
-    return ret;
+    return playerIsLikelyToLose;
 }
 
 /**
@@ -303,8 +303,8 @@ void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx) {
 
     if (this->raceInitialized == true) {
         playerCheatStatus = EnMttag_CheckPlayerCheatStatus(&player->actor.world.pos);
-        if (playerCheatStatus != CHEAT_NO_CHEATING) {
-            if (playerCheatStatus == CHEAT_FALSE_START) {
+        if (playerCheatStatus != GORON_RACE_CHEAT_NO_CHEATING) {
+            if (playerCheatStatus == GORON_RACE_CHEAT_FALSE_START) {
                 this->shouldRestartRace = true;
             } else {
                 this->shouldRestartRace = false;
@@ -336,17 +336,17 @@ void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx) {
  * Returns true if any Race Goron is in the finish line.
  */
 s32 EnMttag_IsAnyRaceGoronInFinishLine(EnMttag* this) {
-    s32 ret = false;
+    s32 isAnyRaceGoronFinished = false;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->raceGorons); i++) {
         if ((EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos)) &&
             (this->raceGorons[i]->actor.update != NULL)) {
-            ret = true;
+            isAnyRaceGoronFinished = true;
             break;
         }
     }
-    return ret;
+    return isAnyRaceGoronFinished;
 }
 
 /**
@@ -374,8 +374,8 @@ void EnMttag_Race(EnMttag* this, GlobalContext* globalCtx) {
         this->actionFunc = EnMttag_RaceFinish;
     } else {
         playerCheatStatus = EnMttag_CheckPlayerCheatStatus(playerPos);
-        if (playerCheatStatus != CHEAT_NO_CHEATING) {
-            if (playerCheatStatus == CHEAT_FALSE_START) {
+        if (playerCheatStatus != GORON_RACE_CHEAT_NO_CHEATING) {
+            if (playerCheatStatus == GORON_RACE_CHEAT_FALSE_START) {
                 this->shouldRestartRace = true;
             } else {
                 this->shouldRestartRace = false;
