@@ -2008,6 +2008,7 @@ f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
 void Path_CopyLastPoint(Path* path, Vec3f* dest);
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx);
 s32 FrameAdvance_Update(FrameAdvanceContext* frameAdvCtx, Input* input);
+
 void func_801226E0(GlobalContext* globalCtx, s8 arg1);
 void func_80122744(GlobalContext* globalCtx, UNK_PTR arg1, u32 arg2, Vec3s* arg3);
 s32 func_80122760(GlobalContext* globalCtx, UNK_PTR arg1, f32 arg2);
@@ -2108,6 +2109,7 @@ void func_8012697C(GlobalContext* globalCtx, Player* player);
 // void func_80128640(void);
 // void func_80128B74(void);
 // void func_80128BD0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE1 param_5, UNK_TYPE4 param_6);
+
 void PreNMI_Stop(PreNMIContext* prenmiCtx);
 void PreNMI_Update(PreNMIContext* prenmiCtx);
 void PreNMI_Draw(PreNMIContext* prenmiCtx);
