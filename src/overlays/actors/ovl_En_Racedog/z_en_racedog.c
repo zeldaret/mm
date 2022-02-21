@@ -26,6 +26,7 @@ void func_80B2538C(EnRacedog* this);
 void func_80B25448(EnRacedog* this);
 void func_80B256BC(EnRacedog* this);
 void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx);
+void func_80B251EC(EnRacedog* this);
 
 typedef struct {
     f32 unk_00;
@@ -356,7 +357,62 @@ void func_80B24E14(EnRacedog* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24F08.s")
+void func_80B24F08(EnRacedog* this) {
+    s32 temp_a0;
+    s32 temp_v1;
+
+    temp_v1 = this->unk_1E0->count;
+
+    if (this->unk_2B8 < this->unk_1E8) {
+        this->unk_2B8 = this->unk_1E8;
+        if (this->unk_1E8 == 0) {
+            this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][0];
+        } else {
+            temp_a0 = temp_v1 / 4;
+            if (this->unk_1E8 < temp_a0) {
+                if (D_80B25D88[this->unk_290].unk_08 == 5) {
+                    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][0] + randPlusMinusPoint5Scaled(1.0f);
+                } else {
+                    this->unk_298 = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                }
+
+                if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+                    this->unk_298 *= D_80B25D88[this->unk_290].unk_04;
+                }
+            } else if (this->unk_1E8 < (temp_a0 * 3)) {
+                if (this->unk_1E8 < D_80B25D88[this->unk_290].unk_0C) {
+                    this->unk_298 = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                } else {
+                    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][1] + randPlusMinusPoint5Scaled(1.0f);
+
+                    if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+                        this->unk_298 *= D_80B25D88[this->unk_290].unk_04;
+                    }
+                }
+            } else if (this->unk_1E8 < temp_v1) {
+                func_80B251EC(this);
+            } else {
+                this->unk_298 = randPlusMinusPoint5Scaled(1.0f) + 5.0f;
+            }
+        }
+    }
+
+    if ((this->unk_1E8 != 0) || (this->unk_29C != 0)) {
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+    }
+
+    Math_ApproachF(&this->actor.speedXZ, this->unk_298, 0.5f, 3.0f);
+
+    if (this->unk_290 == this->unk_292) {
+        if (this->actor.speedXZ > 7.5f) {
+            this->actor.speedXZ = 7.5f;
+        }
+    } else {
+        if (this->actor.speedXZ > 7.0f) {
+            this->actor.speedXZ = 7.0f;
+        }
+    }
+}
 
 void func_80B251EC(EnRacedog* this) {
     f32 temp;
