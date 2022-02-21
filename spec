@@ -5063,8 +5063,7 @@ beginseg
     name "ovl_En_Bombers"
     compress
     include "build/src/overlays/actors/ovl_En_Bombers/z_en_bombers.o"
-    include "build/data/ovl_En_Bombers/ovl_En_Bombers.data.o"
-    include "build/data/ovl_En_Bombers/ovl_En_Bombers.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bombers/ovl_En_Bombers_reloc.o"
 endseg
 
 beginseg
