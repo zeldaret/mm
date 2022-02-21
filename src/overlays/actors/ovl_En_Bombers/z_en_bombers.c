@@ -489,7 +489,8 @@ void EnBombers_Update(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
 
-s32 func_80C045B4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnBombers_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                               Actor* thisx) {
     EnBombers* this = THIS;
 
     if (limbIndex == 15) {
@@ -522,7 +523,7 @@ void EnBombers_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     Scene_SetRenderModeXlu(globalCtx, 0, 1);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80C045B4, NULL, &this->actor);
+                          EnBombers_OverrideLimbDraw, NULL, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
