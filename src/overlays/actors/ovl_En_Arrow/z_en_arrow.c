@@ -550,7 +550,7 @@ void EnArrow_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->unk_263 != 0) ||
         ((this->actor.params >= ENARROW_0) && ((this->actor.params == ENARROW_7) || (player->unk_D57 != 0))) ||
-        !func_80123358(globalCtx, player)) {
+        !Player_InBlockingCsMode(globalCtx, player)) {
         this->actionFunc(this, globalCtx);
     }
 
