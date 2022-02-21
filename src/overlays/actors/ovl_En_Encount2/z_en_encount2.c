@@ -8,7 +8,7 @@
 #include "objects/object_fusen/object_fusen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnEncount2*)thisx)
 
@@ -277,7 +277,7 @@ void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx) {
             Matrix_InsertTranslation(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_079B10));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
