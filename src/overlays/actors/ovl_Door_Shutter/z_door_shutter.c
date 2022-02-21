@@ -288,7 +288,7 @@ f32 func_808A0D90(GlobalContext* globalCtx, DoorShutter* this, f32 arg2, f32 arg
 s32 func_808A0E28(DoorShutter* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!Player_InCsMode(&globalCtx->state)) {
+    if (!Player_InCsMode(globalCtx)) {
         ShutterInfo* shutterInfo = &D_808A21B0[this->unk_164];
         f32 temp_f0 = func_808A0D90(globalCtx, this, 0.0f, shutterInfo->unk_0A, shutterInfo->unk_0B);
 
@@ -646,7 +646,7 @@ s32 func_808A1D68(DoorShutter* this, GlobalContext* globalCtx) {
     s32 temp_a0;
     s32 temp_a1;
 
-    if (Player_InCsMode(&globalCtx->state)) {
+    if (Player_InCsMode(globalCtx)) {
         return true;
     }
 

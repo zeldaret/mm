@@ -5,11 +5,34 @@
 
 #include "objects/object_mask_meoto/object_mask_meoto.h"
 
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ Vec3f unk_0C;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ s16 unk_1A;
+} struct_801F58B0; // size = 0x1C
+
+extern struct_801F58B0 D_801F58B0[3][3];
+
+extern s32 D_801F59C8[2];
+
 extern s32 D_801F59E0;
 
 extern Vec3f D_801F59E8;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801226E0.s")
+void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
+
+s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
+    if (arg1 == 0) {
+        func_80169E6C(globalCtx, 0, 0xBFF);
+        if (globalCtx->sceneNum == SCENE_KAKUSIANA) {
+            return 1;
+        }
+    }
+
+    gSaveContext.respawn[0].data = 0;
+    return arg1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122744.s")
 
@@ -19,9 +42,54 @@ extern Vec3f D_801F59E8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229A0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229EC.s")
+void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229FC.s")
+extern s16 D_801BFDA0[PLAYER_MASK_MAX - 1];
+#if 0
+s16 D_801BFDA0[PLAYER_MASK_MAX - 1] = {
+    OBJECT_MASK_TRUTH,  OBJECT_MASK_KERFAY,  OBJECT_MASK_YOFUKASI, OBJECT_MASK_RABIT,   OBJECT_MASK_KI_TAN,
+    OBJECT_MASK_JSON,   OBJECT_MASK_ROMERNY, OBJECT_MASK_ZACHO,    OBJECT_MASK_POSTHAT, OBJECT_MASK_MEOTO,
+    OBJECT_MASK_BIGELF, OBJECT_MASK_GIBUDO,  OBJECT_MASK_GERO,     OBJECT_MASK_DANCER,  OBJECT_MASK_SKJ,
+    OBJECT_MASK_STONE,  OBJECT_MASK_BREE,    OBJECT_MASK_BAKURETU, OBJECT_MASK_BU_SAN,  OBJECT_MASK_KYOJIN,
+    OBJECT_MASK_BOY,    OBJECT_MASK_GORON,   OBJECT_MASK_ZORA,     OBJECT_MASK_NUTS,
+};
+#endif
+
+// Load mask?
+void func_801229FC(Player* player) {
+    if (player->maskObjectLoading == 1) {
+        // TODO: check if player->maskId is unsigned
+        s16 objectId = D_801BFDA0[(u8)player->maskId - 1];
+
+        osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
+        DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
+                               gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
+                               &player->maskObjectLoadQueue, NULL);
+        player->maskObjectLoading++;
+    } else if (player->maskObjectLoading == 2) {
+        if (osRecvMesg(&player->maskObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
+            player->maskObjectLoading = 0;
+
+            if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
+                s32 i;
+
+                for (i = 0; i < ARRAY_COUNT(D_801F58B0); i++) {
+                    func_80127B64(D_801F58B0[i], ARRAY_COUNT(D_801F58B0[i]), &player->bodyPartsPos[7]);
+                }
+            }
+        }
+    } else if ((player->currentMask != PLAYER_MASK_NONE) && (player->currentMask != (u8)player->maskId)) {
+        player->maskObjectLoading = 1;
+        player->maskId = player->currentMask;
+    } else if (player->currentMask == PLAYER_MASK_CIRCUS_LEADER) {
+        s32 i;
+
+        for (i = 0; i < ARRAY_COUNT(D_801F59C8); i++) {
+            D_801F59C8[i] += Rand_S16Offset(4, 23) + (s32)(fabsf(player->linearVelocity) * 50.0f);
+        }
+    }
+}
 
 void func_80122BA4(GlobalContext* globalCtx, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha) {
     if (arg2 == arg1->unk_00) {
@@ -181,6 +249,7 @@ s32 func_80123434(Player* player) {
     return player->stateFlags1 & (PLAYER_STATE1_40000000 | PLAYER_STATE1_20000 | PLAYER_STATE1_10000);
 }
 
+// Unused
 s32 func_80123448(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -266,6 +335,21 @@ u8 D_801BFF98[PLAYER_FORM_MAX] = {
     2, // PLAYER_FORM_ZORA
     0, // PLAYER_FORM_DEKU
     1, // PLAYER_FORM_HUMAN
+};
+#endif
+
+typedef struct {
+    /* 0x00 */ u8 flag;
+    /* 0x02 */ u16 textId;
+} TextTriggerEntry; // size = 0x04
+
+extern TextTriggerEntry D_801BFFA0[];
+#if 0
+TextTriggerEntry D_801BFFA0[] = {
+    { 1, 0x26FC },
+    { 2, 0x26FD },
+    { 0, 0 },
+    { 2, 0x26FD },
 };
 #endif
 
@@ -535,11 +619,64 @@ s32 Player_GetExplosiveHeld(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801242B4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801242DC.s")
+s32 func_801242DC(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    TextTriggerEntry* triggerEntry;
+    s32 sp1C;
+
+    if (globalCtx->roomCtx.currRoom.unk2 == 3) {
+        sp1C = 0;
+    } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
+        sp1C = 3;
+    } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
+        if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
+            (player->actor.bgCheckFlags & 1)) {
+            sp1C = 1;
+        } else {
+            sp1C = 2;
+        }
+    } else {
+        return 0;
+    }
+
+    triggerEntry = &D_801BFFA0[sp1C];
+    if (!Player_InCsMode(globalCtx)) {
+        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (sp1C == 0)) {
+            func_801518B0(globalCtx, triggerEntry->textId, NULL);
+            gSaveContext.textTriggerFlags |= triggerEntry->flag;
+        }
+    }
+
+    return sp1C + 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124618.s")
+void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
+    s32 currentFrame = curFrame;
+    f32 temp_f0;
+    f32 temp_f14;
+    f32 progress;
+    s16 temp_v1;
+
+    do {
+        temp_v1 = arg0[1].unk_0;
+        arg0++;
+    } while (temp_v1 < currentFrame);
+
+    temp_f0 = arg0[-1].unk_0;
+
+    progress = (curFrame - temp_f0) / (((f32)temp_v1) - temp_f0);
+
+    temp_f14 = arg0[-1].unk_2.x;
+    arg2->x = LERPIMP(temp_f14, arg0->unk_2.x, progress) * 0.01f;
+
+    temp_f14 = arg0[-1].unk_2.y;
+    arg2->y = LERPIMP(temp_f14, arg0->unk_2.y, progress) * 0.01f;
+
+    temp_f14 = arg0[-1].unk_2.z;
+    arg2->z = LERPIMP(temp_f14, arg0->unk_2.z, progress) * 0.01f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801246F4.s")
 
@@ -733,7 +870,7 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801271B0.s")
 
 s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 maskId) {
-    if (!player->maskObjectLoading && (maskId == (u8)player->maskId)) {
+    if ((player->maskObjectLoading == 0) && (maskId == (u8)player->maskId)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x0A, player->maskObjectSegment);

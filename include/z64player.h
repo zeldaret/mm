@@ -202,6 +202,14 @@ typedef struct {
     /* 0x04 */ struct_80122D44_arg1_unk_04 unk_04[4];
 } struct_80122D44_arg1; // size >= 0x114
 
+typedef struct struct_80122744_arg1 {
+    /* 0x00 */ s8 unk_00;
+    /* 0x01 */ s8 unk_01;
+    /* 0x02 */ s8 unk_02;
+    /* 0x03 */ s8 unk_03;
+    /* 0x04 */ Vec3s* unk_04;
+} struct_80122744_arg1; // size = 0x08
+
 // 
 #define PLAYER_STATE1_1          (1 << 0)
 // 

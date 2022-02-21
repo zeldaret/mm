@@ -461,14 +461,14 @@ s32 func_80BA42BC(EnToto* this, GlobalContext* globalCtx) {
             }
         }
     }
-    func_80122744(globalCtx, this->unk2BC, phi_s0, end - phi_s0);
+    func_80122744(globalCtx, &this->unk_2BC, phi_s0, end - phi_s0);
     this->spotlights = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DM_CHAR07, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0xF02);
     return 0;
 }
 
 s32 func_80BA43F4(EnToto* this, GlobalContext* globalCtx) {
     func_80BA3C88(this);
-    if (func_80122760(globalCtx, this->unk2BC, 60.0f)) {
+    if (func_80122760(globalCtx, &this->unk_2BC, 60.0f)) {
         func_800B7298(globalCtx, NULL, 0x13);
         return func_80BA4204(this, globalCtx);
     }
