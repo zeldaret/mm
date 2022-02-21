@@ -1392,13 +1392,13 @@ typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 
-#define struct_8013DF3C_arg1_RETURN_TO_START (1 << 0) // 0x01
-#define struct_8013DF3C_arg1_SWITCH_DIRECTION (1 << 1) // 0x02
-#define struct_8013DF3C_arg1_MOVE_BACKWARDS (1 << 3) // 0x08
-#define struct_8013DF3C_arg1_REACHED_POINT_PERMANENT (1 << 4) // 0x10
-#define struct_8013DF3C_arg1_REACHED_END_PERMANENT (1 << 5) // 0x20
-#define struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY (1 << 6)// 0x40
-#define struct_8013DF3C_arg1_REACHED_END_TEMPORARY (1 << 7) //0x80
+#define struct_8013DF3C_arg1_RETURN_TO_START (1 << 0)
+#define struct_8013DF3C_arg1_SWITCH_DIRECTION (1 << 1)
+#define struct_8013DF3C_arg1_MOVE_BACKWARDS (1 << 3)
+#define struct_8013DF3C_arg1_REACHED_POINT_PERMANENT (1 << 4)
+#define struct_8013DF3C_arg1_REACHED_END_PERMANENT (1 << 5)
+#define struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY (1 << 6)
+#define struct_8013DF3C_arg1_REACHED_END_TEMPORARY (1 << 7)
 
 #define struct_8013DF3C_arg1_REACHED_TEMPORARY \
     (struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY | struct_8013DF3C_arg1_REACHED_END_TEMPORARY)

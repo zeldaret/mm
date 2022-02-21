@@ -322,8 +322,7 @@ void func_8013DCE0(GlobalContext* globalCtx, Vec3f* worldPos, Actor* actor, stru
     } else if (endPointIndex > 0) {
         arg3->endPointIndex = endPointIndex;
     } else {
-        //! @bug: endPointIndex is negative, so subtracting causes arg3->endPointIndex to be past the end of the
-        //! array
+        //! @bug: endPointIndex is negative, subtraction causes result to be past the end
         arg3->endPointIndex = (arg3->count - endPointIndex) - 1;
     }
     arg3->curPointIndex = curPointIndex;
