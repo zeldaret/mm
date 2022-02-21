@@ -185,7 +185,30 @@ void func_80B246F4(EnRacedog* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B2478C.s")
+s16 func_80B2478C(Path* path, s32 arg1, Vec3f* pos, f32* arg3) {
+    Vec3s* point;
+    f32 phi_f14;
+    f32 sp1C;
+    f32 xDiff;
+    f32 zDiff;
+
+    if (path != NULL) {
+        point = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        point = &point[arg1];
+        phi_f14 = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
+        sp1C = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
+        xDiff = point->x - pos->x;
+        zDiff = point->z - pos->z;
+    } else {
+        phi_f14 = 0.0f;
+        sp1C = 0.0f;
+        xDiff = 0.0f;
+        zDiff = 0.0f;
+    }
+
+    *arg3 = SQ(xDiff) + SQ(zDiff);
+    return Math_Acot2F(sp1C, phi_f14) * 10430.378f;
+}
 
 void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
     f32 sp20;
