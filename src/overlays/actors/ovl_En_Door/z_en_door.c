@@ -327,22 +327,18 @@ void func_80866A5C(EnDoor* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
 void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     static s32 D_80867BC0[4];
-
-    Player* player;
+    Player* player = GET_PLAYER(globalCtx);
     Vec3f playerPosRelToDoor;
-    struct_80133038_arg2 sp30;
     s16 temp_a2;
     s16 yawDiff;
     s32 temp_a1_2;
     s32 temp_t0;
     u8 temp_a1;
-    // s16 baseTextId;
+    s32 pad;
 
-    player = GET_PLAYER(globalCtx);
-    if ((Actor_ProcessTalkRequest(&this->dyna.actor, globalCtx) != 0) && (this->dyna.actor.textId == 0x1821)) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state) && (this->dyna.actor.textId == 0x1821)) {
         D_80867BC0[0] = 1;
     }
     if (this->unk_1A1 != 0) {
@@ -357,7 +353,7 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
     } else if (this->unk_1A7 != 0) {
         this->actionFunc = func_80866F94;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DOOR_OPEN);
-    } else if (!Player_InCsMode(globalCtx)) {
+    } else if (!Player_InCsMode(&globalCtx->state)) {
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &playerPosRelToDoor, &player->actor.world.pos);
         if ((D_80867BC0[0] != 0) || ((fabsf(playerPosRelToDoor.y) < 20.0f) && (fabsf(playerPosRelToDoor.x) < 20.0f) &&
                                      (fabsf(playerPosRelToDoor.z) < 50.0f))) {
@@ -365,43 +361,47 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
             if (playerPosRelToDoor.z > 0.0f) {
                 yawDiff = (0x8000 - yawDiff);
             }
-            if (ABS(yawDiff) < 0x3000) {
+            if (ABS_ALT(yawDiff) < 0x3000) {
                 player->doorType = 1;
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->dyna.actor;
                 if (this->unk_1A6 != 0) {
-                    if (gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex] <= 0) {
+                    if (gSaveContext.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
                         player->doorType = -1;
                         this->dyna.actor.textId = 0x1802;
                     } else {
                         player->doorTimer = 10;
                     }
-                } else {
-                    if (this->unk_1A4 == 4) {
-                        player->doorType = -1;
-                        this->dyna.actor.textId = 0x1800;
-                    } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
-                        temp_t0 = (globalCtx->actorCtx.unkC & 0x2AA) >> 1;
-                        temp_a2 = D_801AED48[this->switchFlag & 7];
-                        temp_a1_2 = globalCtx->actorCtx.unkC & 0x155;
-                        if (((this->unk_1A4 == 0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
-                            ((this->unk_1A4 == 2) && ((temp_a2 & temp_a1_2) == 0)) ||
-                            ((this->unk_1A4 == 3) && ((temp_a2 & temp_t0) == 0))) {
-                            s16 baseTextId = 0x182D;
-                            if (this->unk_1A4 == 3) {
-                                baseTextId = 0x180D;
-                            } else if (this->unk_1A4 == 2) {
-                                baseTextId = 0x181D;
-                            }
-                            player->doorType = -1;
-                            this->dyna.actor.textId = baseTextId + ((this->switchFlag >> 3) & 0xF);
-                        }
-                    } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
-                        if (func_80133038(globalCtx, D_8086778C[this->switchFlag], &sp30) != 0) {
-                            this->dyna.actor.textId = sp30.unk0 + 0x1800;
+                } else if (this->unk_1A4 == 4) {
+                    player->doorType = -1;
+                    this->dyna.actor.textId = 0x1800;
+                } else if ((this->unk_1A4 == 0) || (this->unk_1A4 == 2) || (this->unk_1A4 == 3)) {
+                    s32 textIdOffset;
 
-                            player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0)) ? 5 : -1;
+                    temp_t0 = (globalCtx->actorCtx.unkC & 0x2AA) >> 1;
+                    temp_a2 = D_801AED48[this->switchFlag & 7];
+                    temp_a1_2 = globalCtx->actorCtx.unkC & 0x155;
+                    textIdOffset = (this->switchFlag >> 3) & 0xF;
+                    if (((this->unk_1A4 == 0) && (((temp_t0 | temp_a1_2) & temp_a2) == 0)) ||
+                        ((this->unk_1A4 == 2) && ((temp_a2 & temp_a1_2) == 0)) ||
+                        ((this->unk_1A4 == 3) && ((temp_a2 & temp_t0) == 0))) {
+                        s16 baseTextId = 0x182D;
+
+                        if (this->unk_1A4 == 3) {
+                            baseTextId = 0x180D;
+                        } else if (this->unk_1A4 == 2) {
+                            baseTextId = 0x181D;
                         }
+                        player->doorType = -1;
+                        this->dyna.actor.textId = baseTextId + textIdOffset;
+                    }
+                } else if ((this->unk_1A4 == 5) && (playerPosRelToDoor.z > 0.0f)) {
+                    struct_80133038_arg2 sp30;
+
+                    if (func_80133038(globalCtx, D_8086778C[this->switchFlag], &sp30) != 0) {
+                        this->dyna.actor.textId = sp30.unk0 + 0x1800;
+
+                        player->doorType = ((this->dyna.actor.textId == 0x1821) && (D_80867BC0[0] != 0)) ? 5 : -1;
                     }
                 }
                 func_80122F28(player);
@@ -412,9 +412,6 @@ void func_80866B20(EnDoor* this, GlobalContext* globalCtx) {
         }
     }
 }
-#endif
-static s32 D_80867BC0[4];
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Door/func_80866B20.s")
 
 void func_80866F94(EnDoor* this, GlobalContext* globalCtx) {
     s32 direction;
