@@ -94,7 +94,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(0x708, MTXMODE_APPLY);
     Matrix_InsertTranslation(0.0f, 0.0f, -z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    AnimatedMat_Draw(globalCtx, &ovl_Oceff_Wipe6_Matanimheader_000338);
+    AnimatedMat_Draw(globalCtx, ovl_Oceff_Wipe6_Matanimheader_000338);
     gSPDisplayList(POLY_XLU_DISP++, gOceff6DL);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
