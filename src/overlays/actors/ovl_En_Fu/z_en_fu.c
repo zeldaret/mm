@@ -13,7 +13,7 @@
 #include "objects/object_mu/object_mu.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x0A000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnFu*)thisx)
 
@@ -74,11 +74,14 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, 0, -8.0f }, { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_mu_Anim_0053E0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_001F74, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_002F64, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_mu_Anim_004904, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_mu_Anim_005304, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_mu_Anim_00BAC4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -198,7 +201,7 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         Actor_SetScale(&this->actor, 0.01f);
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.gravity = -0.2f;
         this->actor.shape.rot.y += 0x4000;
         this->actor.world.rot = this->actor.shape.rot;
@@ -227,8 +230,8 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnFu* this = THIS;
 
-    gSaveContext.weekEventReg[63] &= (u8)~0x1;
-    gSaveContext.weekEventReg[8] &= (u8)~0x1;
+    gSaveContext.weekEventReg[63] &= (u8)~1;
+    gSaveContext.weekEventReg[8] &= (u8)~1;
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -369,7 +372,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_809622FC(EnFu* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -377,7 +380,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk_54A == 2) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
@@ -406,7 +409,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
                 func_801518B0(globalCtx, 0x2889, &this->actor);
                 this->unk_552 = 0x2889;
             }
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
             player->stateFlags1 &= ~0x20;
             this->unk_54A = 1;
         } else {
@@ -529,12 +532,12 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x287D:
-                gSaveContext.weekEventReg[63] |= 0x1;
-                gSaveContext.weekEventReg[63] &= (u8)~0x2;
+                gSaveContext.weekEventReg[63] |= 1;
+                gSaveContext.weekEventReg[63] &= (u8)~2;
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                 func_801A2BB8(NA_BGM_MINI_GAME_2);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -602,8 +605,8 @@ void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
                     case 0x2884:
                     case 0x2887:
                     case 0x288A:
-                        gSaveContext.weekEventReg[63] &= (u8)~0x1;
-                        gSaveContext.weekEventReg[63] &= (u8)~0x2;
+                        gSaveContext.weekEventReg[63] &= (u8)~1;
+                        gSaveContext.weekEventReg[63] &= (u8)~2;
                         func_809622FC(this);
                         break;
 
@@ -727,14 +730,15 @@ void func_80962D60(EnFu* this, GlobalContext* globalCtx) {
 void func_80962EBC(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 != 0) {
         if (this->actor.cutscene != -1) {
-            func_800DFB14(globalCtx->cameraPtrs[MAIN_CAM], ActorCutscene_GetCutscene(this->actor.cutscene)->unk4);
+            Camera_ChangeDataIdx(globalCtx->cameraPtrs[CAM_ID_MAIN],
+                                 ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
         }
     }
 }
 
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     gSaveContext.weekEventReg[8] |= 1;
     this->actionFunc = func_80962F4C;
 }
@@ -822,7 +826,7 @@ void func_809632D0(EnFu* this) {
         Interface_ChangeAlpha(50);
     }
 
-    gSaveContext.weekEventReg[8] &= (u8)~0x1;
+    gSaveContext.weekEventReg[8] &= (u8)~1;
 
     if (this->unk_2D4 != NULL) {
         BgFuMizu* mizu = this->unk_2D4;
@@ -830,7 +834,7 @@ void func_809632D0(EnFu* this) {
         mizu->unk_160 = 0;
     }
 
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80963350;
 }
 
@@ -910,7 +914,7 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
             this->unk_552 = 0x287F;
         }
 
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actor.child->freezeTimer = 0;
         func_809628BC(this);
 
@@ -1160,11 +1164,11 @@ void func_80963F44(EnFu* this, GlobalContext* globalCtx) {
 
 void func_80963F88(EnFu* this, GlobalContext* globalCtx) {
     if (this->unk_542 == 1) {
-        func_800DFAC8(globalCtx->cameraPtrs[MAIN_CAM], 75);
+        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 75);
         globalCtx->unk_1887E = 0;
     } else if (this->unk_542 == 2) {
         globalCtx->unk_1887D = 0;
-        func_800DFAC8(globalCtx->cameraPtrs[MAIN_CAM], 75);
+        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 75);
     }
 }
 
@@ -1211,7 +1215,7 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                 break;
 
             case 0x2840:
@@ -1237,21 +1241,21 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                 break;
 
             case 0x2860:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                 break;
 
             case 0x285F:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
                 break;
         }
     }
@@ -1418,7 +1422,7 @@ void func_80964694(EnFu* this, EnFuUnkStruct* ptr, Vec3f* arg2, s32 len) {
 
 void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
-    s16 activeCam = func_800DFC68(GET_ACTIVE_CAM(globalCtx));
+    s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
     s32 i;
 
     for (i = 0; i < len; i++, ptr++) {
@@ -1431,7 +1435,7 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             ptr->unk_08.z += 2.0f * Math_CosS(ptr->unk_2C);
             Matrix_StatePush();
             Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_RotateY(activeCam, MTXMODE_APPLY);
+            Matrix_RotateY(yaw, MTXMODE_APPLY);
             Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
             Matrix_StatePop();
             ptr->unk_2C += 6000;

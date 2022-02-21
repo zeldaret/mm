@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for actors in Woodfall Temple (doors, staircases, the wooden flower, poisoned/purified water) -->
     <File Name="object_numa_obj" Segment="6">
         <DList Name="object_numa_obj_DL_0007A0" Offset="0x7A0" />
         <DList Name="object_numa_obj_DL_0007A8" Offset="0x7A8" />
@@ -17,21 +18,24 @@
         <Texture Name="object_numa_obj_Tex_0072B0" OutName="tex_0072B0" Format="rgba16" Width="32" Height="64" Offset="0x72B0" />
         <DList Name="object_numa_obj_DL_008440" Offset="0x8440" />
         <Texture Name="object_numa_obj_Tex_0085A0" OutName="tex_0085A0" Format="rgba16" Width="32" Height="64" Offset="0x85A0" />
-        <Collision Name="object_numa_obj_Colheader_009FE0" Offset="0x9FE0" />
-        <Collision Name="object_numa_obj_Colheader_00A740" Offset="0xA740" />
-        <DList Name="object_numa_obj_DL_00AB80" Offset="0xAB80" />
-        <DList Name="object_numa_obj_DL_00AB88" Offset="0xAB88" />
-        <DList Name="object_numa_obj_DL_00B920" Offset="0xB920" />
-        <DList Name="object_numa_obj_DL_00B928" Offset="0xB928" />
-        <DList Name="object_numa_obj_DL_00BE50" Offset="0xBE50" />
-        <DList Name="object_numa_obj_DL_00BE58" Offset="0xBE58" />
-        <Texture Name="object_numa_obj_Tex_00BFD0" OutName="tex_00BFD0" Format="rgba16" Width="32" Height="32" Offset="0xBFD0" />
-        <Texture Name="object_numa_obj_Tex_00C7D0" OutName="tex_00C7D0" Format="rgba16" Width="32" Height="64" Offset="0xC7D0" />
-        <Texture Name="object_numa_obj_Tex_00D7D0" OutName="tex_00D7D0" Format="rgba16" Width="32" Height="64" Offset="0xD7D0" />
-        <Texture Name="object_numa_obj_Tex_00E7D0" OutName="tex_00E7D0" Format="rgba16" Width="32" Height="64" Offset="0xE7D0" />
-        <Texture Name="object_numa_obj_Tex_00F7D0" OutName="tex_00F7D0" Format="rgba16" Width="32" Height="64" Offset="0xF7D0" />
-        <Texture Name="object_numa_obj_Tex_0107D0" OutName="tex_0107D0" Format="rgba16" Width="32" Height="64" Offset="0x107D0" />
-        <Texture Name="object_numa_obj_Tex_0117D0" OutName="tex_0117D0" Format="rgba16" Width="32" Height="64" Offset="0x117D0" />
+
+        <!-- Wooden Flower -->
+        <Collision Name="gWoodenFlowerOpenedFlowerCol" Offset="0x9FE0" />
+        <Collision Name="gWoodenFlowerClosedFlowerCol" Offset="0xA740" />
+        <DList Name="gWoodenFlowerEmpty1DL" Offset="0xAB80" /> <!-- Original name might be "m2_N_HANAin_modelT", may have originally been for transparency? -->
+        <DList Name="gWoodenFlowerInnerPetalDL" Offset="0xAB88" />
+        <DList Name="gWoodenFlowerEmpty2DL" Offset="0xB920" /> <!-- Original name might be "m2_N_HANAkuki_modelT", may have originally been for transparency? -->
+        <DList Name="gWoodenFlowerStalkDL" Offset="0xB928" />
+        <DList Name="gWoodenFlowerEmpty3DL" Offset="0xBE50" /> <!-- Original name might be "m2_N_HANAout_modelT", may have originally been for transparency? -->
+        <DList Name="gWoodenFlowerOuterPetalDL" Offset="0xBE58" />
+        <Texture Name="gWoodenFlowerPetalSidesTex" OutName="wooden_flower_petal_sides" Format="rgba16" Width="32" Height="32" Offset="0xBFD0" />
+        <Texture Name="gWoodenFlowerInnerPetalTopTex" OutName="wooden_flower_inner_petal_top" Format="rgba16" Width="32" Height="64" Offset="0xC7D0" />
+        <Texture Name="gWoodenFlowerInnerPetalBottomTex" OutName="wooden_flower_inner_petal_bottom" Format="rgba16" Width="32" Height="64" Offset="0xD7D0" />
+        <Texture Name="gWoodenFlowerStalkTopTex" OutName="wooden_flower_stalk_top" Format="rgba16" Width="32" Height="64" Offset="0xE7D0" />
+        <Texture Name="gWoodenFlowerStalkSidesTex" OutName="wooden_flower_stalk_sides" Format="rgba16" Width="32" Height="64" Offset="0xF7D0" />
+        <Texture Name="gWoodenFlowerOuterPetalTopTex" OutName="wooden_flower_outer_petal_top" Format="rgba16" Width="32" Height="64" Offset="0x107D0" />
+        <Texture Name="gWoodenFlowerOuterPetalBottomTex" OutName="wooden_flower_outer_petal_bottom" Format="rgba16" Width="32" Height="64" Offset="0x117D0" />
+
         <Collision Name="object_numa_obj_Colheader_012818" Offset="0x12818" />
         <DList Name="object_numa_obj_DL_0128E0" Offset="0x128E0" />
         <DList Name="object_numa_obj_DL_0129C0" Offset="0x129C0" />

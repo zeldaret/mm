@@ -7,7 +7,7 @@
 #include "z_obj_visiblock.h"
 #include "objects/object_visiblock/object_visiblock.h"
 
-#define FLAGS 0x00000080
+#define FLAGS (ACTOR_FLAG_80)
 
 #define THIS ((ObjVisiblock*)thisx)
 
