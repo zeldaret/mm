@@ -1,6 +1,13 @@
 #include "global.h"
 
+#include "objects/object_link_goron/object_link_goron.h"
+#include "objects/object_link_zora/object_link_zora.h"
+
+#include "objects/object_mask_meoto/object_mask_meoto.h"
+
 extern s32 D_801F59E0;
+
+extern Vec3f D_801F59E8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801226E0.s")
 
@@ -16,7 +23,23 @@ extern s32 D_801F59E0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229FC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122BA4.s")
+void func_80122BA4(GlobalContext* globalCtx, struct_80122D44_arg1* arg1, s32 arg2, s32 alpha) {
+    if (arg2 == arg1->unk_00) {
+        s32 index;
+
+        arg1->unk_01--;
+        if (arg1->unk_01 < 0) {
+            arg1->unk_01 = 3;
+        }
+
+        index = arg1->unk_01;
+        arg1->unk_04[index].unk_00 = arg1->unk_00;
+        arg1->unk_04[index].unk_01 = alpha;
+        Matrix_CopyCurrentState(&arg1->unk_04[index].unk_04);
+
+        arg1->unk_00 = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
 
@@ -524,22 +547,78 @@ s32 Player_GetExplosiveHeld(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124CC4.s")
 
+extern s32 D_801C0958;
+#if 0
+s32 D_801C0958 = false;
+#endif
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124F18.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124FF0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801251C4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125318.s")
+void func_80125318(Vec3f* arg0, Vec3s* arg1) {
+    arg0->x = 0.0f;
+    arg0->y = 0.0f;
+    arg0->z = 0.0f;
+    arg1->x = 0;
+    arg1->y = 0;
+    arg1->z = 0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125340.s")
+void func_80125340(void) {
+    Matrix_StatePush();
+    D_801C0958 = true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012536C.s")
+void func_8012536C(void) {
+    if (D_801C0958) {
+        Matrix_StatePop();
+        D_801C0958 = false;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801253A4.s")
+// draws zora shield (?)
+void func_801253A4(GlobalContext* globalCtx, Player* player) {
+    u8* phi_a0;
+    Vtx* sp30;
+    Gfx* dl;
+    f32 sp28; // scale
+    s32 i;
+
+    sp28 = player->unk_B62 * 0.19607843f;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_zora_Matanimheader_012A80));
+    Matrix_Scale(sp28, sp28, sp28, 1);
+
+    // clang-format off
+    sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210), phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
+    // clang-format on
+
+    // ARRAY_COUNT(object_link_zora_Vtx_011210)
+    for (i = 0; i < 80; i++) {
+        // Editing the Vtxs in object itself
+        sp30->v.cn[3] = (*phi_a0 * player->unk_B62) >> 8;
+        sp30++;
+        phi_a0++;
+    }
+
+    dl = POLY_XLU_DISP;
+
+    gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(&dl[1], object_link_zora_DL_011760);
+
+    POLY_XLU_DISP = &dl[2];
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125500.s")
 
+s32 func_80125580(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125580.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80125CE0.s")
@@ -548,17 +627,102 @@ s32 Player_GetExplosiveHeld(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801262C8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801263FC.s")
+// unused
+s32 func_801263FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
+    Player* player = (Player*)actor;
+
+    if (!func_80125580(globalCtx, limbIndex, dList, pos, rot, actor)) {
+        *dList = NULL;
+    }
+
+    return false;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126440.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801265C8.s")
+extern u8 D_801C096C[PLAYER_SHIELD_MAX];
+#if 0
+u8 D_801C096C[PLAYER_SHIELD_MAX] = {
+    COLTYPE_METAL,
+    COLTYPE_METAL,
+    COLTYPE_METAL,
+};
+#endif
+
+void func_801265C8(GlobalContext* globalCtx, Player* player, ColliderQuad* arg2, Vec3f arg3[4]) {
+    if (player->stateFlags1 & PLAYER_STATE1_400000) {
+        Vec3f sp4C;
+        Vec3f sp40;
+        Vec3f sp34;
+        Vec3f sp28;
+
+        player->shieldQuad.base.colType = D_801C096C[player->currentShield];
+        Matrix_MultiplyVector3fByState(&arg3[0], &sp28);
+        Matrix_MultiplyVector3fByState(&arg3[1], &sp34);
+        Matrix_MultiplyVector3fByState(&arg3[2], &sp40);
+        Matrix_MultiplyVector3fByState(&arg3[3], &sp4C);
+        Collider_SetQuadVertices(arg2, &sp28, &sp34, &sp40, &sp4C);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &arg2->base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &arg2->base);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012669C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126808.s")
+void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* refPos, s32 drawIdPlusOne) {
+    f32 sp34;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012697C.s")
+    if (player->stateFlags3 & PLAYER_STATE3_4000000) {
+        sp34 = 6.0f;
+    } else {
+        sp34 = 14.0f;
+    }
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(player->giObjectSegment);
+
+    gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
+
+    Matrix_InsertTranslation((Math_SinS(player->actor.shape.rot.y) * 3.3f) + refPos->x, refPos->y + sp34,
+                             (Math_CosS(player->actor.shape.rot.y) * 3.3f) + refPos->z, MTXMODE_NEW);
+    Matrix_InsertRotation(0, (globalCtx->gameplayFrames * 1000), 0, MTXMODE_APPLY);
+    Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
+    GetItem_Draw(globalCtx, drawIdPlusOne - 1);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
+    if (!player->giObjectLoading || (osRecvMesg(&player->giObjectLoadQueue, NULL, 0) == 0)) {
+        Vec3f refPos;
+        s32 drawIdPlusOne;
+
+        player->giObjectLoading = false;
+        if ((player->actor.id == ACTOR_EN_TEST3) ||
+            ((player->transformation == PLAYER_FORM_DEKU) && (player->stateFlags1 & PLAYER_STATE1_400))) {
+            refPos.x = player->actor.world.pos.x;
+            refPos.z = player->actor.world.pos.z;
+            if (player->actor.id == ACTOR_EN_TEST3) {
+                if (player->stateFlags1 & PLAYER_STATE1_400) {
+                    refPos.y = player->actor.world.pos.y + 30.0f;
+                } else {
+                    refPos.x = player->bodyPartsPos[0xC].x;
+                    refPos.y = player->bodyPartsPos[0xC].y - 6.0f;
+                    refPos.z = player->bodyPartsPos[0xC].z;
+                }
+            } else {
+                refPos.y = player->actor.world.pos.y + 28.0f;
+            }
+        } else {
+            Math_Vec3f_Copy(&refPos, &D_801F59E8);
+        }
+
+        drawIdPlusOne = ABS_ALT(player->unk_B2A);
+        Player_DrawGetItemImpl(globalCtx, player, &refPos, drawIdPlusOne);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80126AB4.s")
 
@@ -568,11 +732,36 @@ s32 Player_GetExplosiveHeld(Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801271B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127438.s")
+s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 maskId) {
+    if (!player->maskObjectLoading && (maskId == (u8)player->maskId)) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127488.s")
+        gSPSegment(POLY_OPA_DISP++, 0x0A, player->maskObjectSegment);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012754C.s")
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+
+        return true;
+    }
+
+    return false;
+}
+
+void func_80127488(GlobalContext* globalCtx, Player* player, u8 alpha) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, alpha);
+    gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_011AB8);
+
+    func_80122BA4(globalCtx, &player->unk_3D0, 3, alpha);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_8012754C(GlobalContext* globalCtx, Player* player) {
+    gSegments[0xA] = PHYSICAL_TO_VIRTUAL(player->maskObjectSegment);
+    AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
 
