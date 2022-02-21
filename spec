@@ -2491,8 +2491,11 @@ beginseg
     name "ovl_Bg_Spdweb"
     compress
     include "build/src/overlays/actors/ovl_Bg_Spdweb/z_bg_spdweb.o"
-    include "build/data/ovl_Bg_Spdweb/ovl_Bg_Spdweb.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Bg_Spdweb/ovl_Bg_Spdweb_reloc.o"
+#else
     include "build/data/ovl_Bg_Spdweb/ovl_Bg_Spdweb.reloc.o"
+#endif
 endseg
 
 beginseg
