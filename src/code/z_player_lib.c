@@ -2584,10 +2584,10 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
             Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(D_04091BE0)] + SEGMENT_OFFSET(D_04091BE0));
+            gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(gameplay_keep_Tex_091BE0)] + SEGMENT_OFFSET(gameplay_keep_Tex_091BE0));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
-            gSPDisplayList(&gfx[4], D_040301B0);
+            gSPDisplayList(&gfx[4], gameplay_keep_DL_0301B0);
             gSPPopMatrix(&gfx[5], G_MTX_MODELVIEW);
 
             Matrix_StatePop();
