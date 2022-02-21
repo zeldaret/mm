@@ -320,8 +320,8 @@ extern s16 D_801D0D64[];
 // Used by Player
 /**
  * Extract the common actor cutscene ids from a scene and set the cutscene ids in globalCtx->playerActorCsIds.
- * Set to -1 by default. If there is an ActorCutscene where unk4 matches the appropriate element of D_801D0D64, set the
- * corresponding playerActorCsId (and possibly change its priority for the zeroth one)
+ * Set to -1 by default. If there is an ActorCutscene where csCamSceneDataId matches the appropriate element of
+ * D_801D0D64, set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
  */
 void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 cutscene) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
@@ -338,8 +338,9 @@ void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 cutscene) {
         for (currCutscene = cutscene; currCutscene != -1; currCutscene = actorCutscene->additionalCutscene) {
             actorCutscene = ActorCutscene_GetCutscene(currCutscene);
 
-            if (actorCutscene->unk4 == *phi_s1) {
-                if ((actorCutscene->unk4 == -3) && (actorCutscene->priority == 700)) { // override ocarina cs priority
+            if (actorCutscene->csCamSceneDataId == *phi_s1) {
+                if ((actorCutscene->csCamSceneDataId == -3) &&
+                    (actorCutscene->priority == 700)) { // override ocarina cs priority
                     actorCutscene->priority = 550;
                 }
                 *phi_s3 = currCutscene;
