@@ -853,27 +853,27 @@ s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     temp_s1->gravity = 0.0f;
     Math_SmoothStepToF(&temp_s1->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
 
-    sp50.x = arg1->unk_20.x - temp_s1->world.pos.x;
-    sp50.y = arg1->unk_20.y - temp_s1->world.pos.y;
-    sp50.z = arg1->unk_20.z - temp_s1->world.pos.z;
+    sp50.x = arg1->curPoint.x - temp_s1->world.pos.x;
+    sp50.y = arg1->curPoint.y - temp_s1->world.pos.y;
+    sp50.z = arg1->curPoint.z - temp_s1->world.pos.z;
 
-    sp44.x = arg1->unk_20.x - arg1->unk_38.x;
-    sp44.y = arg1->unk_20.y - arg1->unk_38.y;
-    sp44.z = arg1->unk_20.z - arg1->unk_38.z;
+    sp44.x = arg1->curPoint.x - arg1->prevPoint.x;
+    sp44.y = arg1->curPoint.y - arg1->prevPoint.y;
+    sp44.z = arg1->curPoint.z - arg1->prevPoint.z;
 
     temp = Math3D_Parallel(&sp50, &sp44);
-    if ((arg1->unk_4C < SQ(temp_s1->speedXZ)) || (temp <= 0.0f)) {
+    if ((arg1->distSqToCurPointXZ < SQ(temp_s1->speedXZ)) || (temp <= 0.0f)) {
         ret = true;
     } else {
-        temp = SQ(temp_s1->speedXZ) / arg1->unk_50;
-        sp34 = ABS(arg1->unk_54.x - temp_s1->world.rot.x);
+        temp = SQ(temp_s1->speedXZ) / arg1->distSqToCurPoint;
+        sp34 = ABS(arg1->rotToCurPoint.x - temp_s1->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
-        sp34 = ABS(arg1->unk_54.y - temp_s1->world.rot.y);
+        sp34 = ABS(arg1->rotToCurPoint.y - temp_s1->world.rot.y);
 
-        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->unk_54.x, 1, sp2C, 0);
+        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->rotToCurPoint.x, 1, sp2C, 0);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
-        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->unk_54.y, 1, sp2C, 0);
+        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->rotToCurPoint.y, 1, sp2C, 0);
         Math_SmoothStepToS(&temp_s1->shape.rot.y, temp_s1->world.rot.y, 2, sp2C, 0);
     }
 
@@ -886,9 +886,9 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     func_8013DCE0(globalCtx, &this->unk_330, &this->actor, &this->unk_2C0, globalCtx->setupPathList, this->unk_346, 0,
                   0, this->unk_340, 0);
     this->unk_32C = 0;
-    this->unk_2C0.unk_2C.x = 0.0f;
-    this->unk_2C0.unk_2C.y = 0.0f;
-    this->unk_2C0.unk_2C.z = 0.0f;
+    this->unk_2C0.pointOffset.x = 0.0f;
+    this->unk_2C0.pointOffset.y = 0.0f;
+    this->unk_2C0.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
@@ -905,11 +905,11 @@ void func_80B5D750(EnOt* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_330);
 
-    if (this->unk_2C0.unk_1C & 0x40) {
+    if (this->unk_2C0.flags & struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY) {
         this->unk_32C |= 2;
     }
 
-    if (this->unk_2C0.unk_1C & 0x80) {
+    if (this->unk_2C0.flags & struct_8013DF3C_arg1_REACHED_END_TEMPORARY) {
         this->unk_32C |= 1;
     }
 

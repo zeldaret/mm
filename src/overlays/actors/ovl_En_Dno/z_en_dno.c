@@ -693,8 +693,8 @@ void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
                   ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
     func_8013DF3C(globalCtx, &this->unk_340);
 
-    this->actor.world.rot.y = this->unk_340.unk_54.y;
-    this->actor.world.rot.x = this->unk_340.unk_54.x;
+    this->actor.world.rot.y = this->unk_340.rotToCurPoint.y;
+    this->actor.world.rot.x = this->unk_340.rotToCurPoint.x;
 
     Flags_SetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor));
     this->actionFunc = func_80A730A0;
@@ -729,18 +729,18 @@ s32 func_80A72D8C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
         }
     }
 
-    if (arg1->unk_50 < SQ(actor->speedXZ)) {
+    if (arg1->distSqToCurPoint < SQ(actor->speedXZ)) {
         ret = true;
     } else {
-        sp38 = actor->speedXZ / sqrtf(arg1->unk_4C);
-        sp2C = ABS(arg1->unk_54.x - actor->world.rot.x);
+        sp38 = actor->speedXZ / sqrtf(arg1->distSqToCurPointXZ);
+        sp2C = ABS(arg1->rotToCurPoint.x - actor->world.rot.x);
         temp_v0_2 = sp2C;
         temp_v0_2 *= sp38;
         temp_v0_2 += 0x71C;
-        sp2C = ABS(arg1->unk_54.y - actor->world.rot.y);
+        sp2C = ABS(arg1->rotToCurPoint.y - actor->world.rot.y);
 
-        Math_ScaledStepToS(&actor->world.rot.x, arg1->unk_54.x, temp_v0_2);
-        Math_ScaledStepToS(&actor->world.rot.y, arg1->unk_54.y, (s32)(sp2C * sp38) + 0x71C);
+        Math_ScaledStepToS(&actor->world.rot.x, arg1->rotToCurPoint.x, temp_v0_2);
+        Math_ScaledStepToS(&actor->world.rot.y, arg1->rotToCurPoint.y, (s32)(sp2C * sp38) + 0x71C);
     }
 
     return ret;
@@ -790,9 +790,9 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
 
     func_8013DE04(globalCtx, &this->unk_340, func_8013DF3C, func_80A72D8C, func_80A72FAC, func_8013E0A4);
     this->unk_45C += 6553;
-    this->unk_340.unk_2C.x = 0.0f;
-    this->unk_340.unk_2C.y = 0.0f;
-    this->unk_340.unk_2C.z = 0.0f;
+    this->unk_340.pointOffset.x = 0.0f;
+    this->unk_340.pointOffset.y = 0.0f;
+    this->unk_340.pointOffset.z = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_334);
     temp_f10 = (4.0f + Math_SinS(this->unk_3AE)) * Math_SinS(this->unk_3AC);
     this->actor.world.pos.y += temp_f10;
@@ -801,8 +801,8 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     func_80A715DC(this, globalCtx);
     func_800B9010(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
-    if (this->unk_340.unk_1C & 0x20) {
-        Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_340.unk_20);
+    if (this->unk_340.flags & struct_8013DF3C_arg1_REACHED_END_PERMANENT) {
+        Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_340.curPoint);
         this->actor.speedXZ = 0.0f;
         this->actor.velocity.x = 0.0f;
         this->actor.velocity.y = 0.0f;

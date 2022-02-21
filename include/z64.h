@@ -1392,32 +1392,47 @@ typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 
+#define struct_8013DF3C_arg1_RETURN_TO_START (1 << 0) // 0x01
+#define struct_8013DF3C_arg1_SWITCH_DIRECTION (1 << 1) // 0x02
+#define struct_8013DF3C_arg1_MOVE_BACKWARDS (1 << 3) // 0x08
+#define struct_8013DF3C_arg1_REACHED_POINT_PERMANENT (1 << 4) // 0x10
+#define struct_8013DF3C_arg1_REACHED_END_PERMANENT (1 << 5) // 0x20
+#define struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY (1 << 6)// 0x40
+#define struct_8013DF3C_arg1_REACHED_END_TEMPORARY (1 << 7) //0x80
+
+#define struct_8013DF3C_arg1_REACHED_TEMPORARY \
+    (struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY | struct_8013DF3C_arg1_REACHED_END_TEMPORARY)
+#define struct_8013DF3C_arg1_REACHED_POINT \
+    (struct_8013DF3C_arg1_REACHED_POINT_PERMANENT | struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY)
+#define struct_8013DF3C_arg1_REACHED_END \
+    (struct_8013DF3C_arg1_REACHED_END_PERMANENT | struct_8013DF3C_arg1_REACHED_END_TEMPORARY)
+
 struct struct_8013DF3C_arg1;
-typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
-typedef s32 (*struct_8013DF3C_arg1_unk_func2)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+typedef void (*struct_8013DF3C_arg1_ComputeFunc)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+typedef s32 (*struct_8013DF3C_arg1_UpdateFunc)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
 
 typedef struct struct_8013DF3C_arg1 {
     /* 0x00 */ Path* setupPathList;
     /* 0x04 */ s32 pathIndex;
     /* 0x08 */ Vec3s* points;
     /* 0x0C */ s32 count;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ u8 unk_1C;
-    /* 0x1D */ u8 unk_1D;
-    /* 0x20 */ Vec3f unk_20;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
-    /* 0x44 */ Vec3f* unk_44;
+    /* 0x10 */ s32 curPointIndex;
+    /* 0x14 */ s32 begPointIndex;
+    /* 0x18 */ s32 endPointIndex;
+    /* 0x1C */ u8 flags;
+    /* 0x1D */ u8 prevFlags;
+    /* 0x20 */ Vec3f curPoint;
+    /* 0x2C */ Vec3f pointOffset;
+    /* 0x38 */ Vec3f prevPoint;
+    /* 0x44 */ Vec3f* worldPos;
     /* 0x48 */ Actor* actor;
-    /* 0x4C */ f32 unk_4C;
-    /* 0x50 */ f32 unk_50;
-    /* 0x54 */ Vec3s unk_54;
-    /* 0x5C */ struct_8013DF3C_arg1_unk_func1 unk_5C;
-    /* 0x60 */ struct_8013DF3C_arg1_unk_func2 unk_60;
-    /* 0x64 */ struct_8013DF3C_arg1_unk_func2 unk_64;
-    /* 0x68 */ struct_8013DF3C_arg1_unk_func2 unk_68;
+    /* 0x4C */ f32 distSqToCurPointXZ;
+    /* 0x50 */ f32 distSqToCurPoint;
+    /* 0x54 */ Vec3s rotToCurPoint;
+    /* 0x5C */ struct_8013DF3C_arg1_ComputeFunc computePointInfoFunc; // ComputePointInfo
+    /* 0x60 */ struct_8013DF3C_arg1_UpdateFunc updateActorInfoFunc; // UpdateActorInfo / Return true if should setNextPoint, false if the actor should move forward
+    /* 0x64 */ struct_8013DF3C_arg1_UpdateFunc moveFunc; // Move / Return true if should compute and update again
+    /* 0x68 */ struct_8013DF3C_arg1_UpdateFunc setNextPointFunc; // SetNextPoint / Return true if should compute and update again
 } struct_8013DF3C_arg1; // size = 0x6C
 
 typedef struct {
