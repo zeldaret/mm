@@ -87,7 +87,8 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_InsertTranslation(activeCamEye.x + quakeOffset.x, activeCamEye.y + quakeOffset.y, activeCamEye.z + quakeOffset.z, MTXMODE_NEW);
+    Matrix_InsertTranslation(activeCamEye.x + quakeOffset.x, activeCamEye.y + quakeOffset.y,
+                             activeCamEye.z + quakeOffset.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
     Matrix_InsertXRotation_s(0x708, MTXMODE_APPLY);
