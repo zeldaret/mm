@@ -34,18 +34,18 @@ void OceffWipe6_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, 1.0f);
     this->counter = 0;
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    this->actor.world.pos = ACTIVE_CAM->eye;
 }
 
 void OceffWipe6_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     func_80115D5C(&globalCtx->state);
-    globalCtx->msgCtx.unk_120B0 = 0;
+    globalCtx->msgCtx.pad12080[0x30] = 0;
 }
 
 void OceffWipe6_Update(Actor* thisx, GlobalContext* globalCtx) {
     OceffWipe6* this = THIS;
 
-    this->actor.world.pos = GET_ACTIVE_CAM(globalCtx)->eye;
+    this->actor.world.pos = ACTIVE_CAM->eye;
     if (this->counter < 100) {
         this->counter++;
     } else {
@@ -64,8 +64,8 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f quakeOffset;
     s32 pad2;
 
-    eye = GET_ACTIVE_CAM(globalCtx)->eye;
-    Camera_GetQuakeOffset(&vec, GET_ACTIVE_CAM(globalCtx));
+    activeCamEye = ACTIVE_CAM->eye;
+    Camera_GetQuakeOffset(&quakeOffset, ACTIVE_CAM);
 
     if (this->counter < 32) {
         counter = this->counter;
@@ -87,7 +87,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    SysMatrix_InsertTranslation(eye.x + vec.x, eye.y + vec.y, eye.z + vec.z, MTXMODE_NEW);
+    SysMatrix_InsertTranslation(activeCamEye.x + quakeOffset.x, activeCamEye.y + quakeOffset.y, activeCamEye.z + quakeOffset.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     SysMatrix_NormalizeXYZ(&globalCtx->mf_187FC);
     SysMatrix_InsertXRotation_s(0x708, MTXMODE_APPLY);
