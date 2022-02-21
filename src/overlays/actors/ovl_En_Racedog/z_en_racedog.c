@@ -20,6 +20,12 @@ void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
 s32 func_80B25490(EnRacedog* this, f32* arg1);
 void func_80B24E14(EnRacedog* this);
+void func_80B24F08(EnRacedog* this);
+void func_80B252F8(EnRacedog* this);
+void func_80B2538C(EnRacedog* this);
+void func_80B25448(EnRacedog* this);
+void func_80B256BC(EnRacedog* this);
+void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx);
 
 typedef struct {
     f32 unk_00;
@@ -298,7 +304,41 @@ void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B24CB4.s")
+void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
+    s16 phi_a1;
+    f32 sp30;
+
+    this->collider.dim.radius = 15;
+    if (this->unk_1E0 != 0) {
+        phi_a1 = func_80B2478C(this->unk_1E0, this->unk_1E8, &this->actor.world.pos, &sp30);
+        if (this->actor.bgCheckFlags & 8) {
+            phi_a1 = this->actor.wallYaw;
+        }
+
+        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+
+        if (sp30 <= 2500.0f) {
+            this->unk_1E8++;
+            if (this->unk_1E8 >= (this->unk_1E0->count - 1)) {
+                this->unk_1E8 = 0;
+            }
+        }
+
+        func_80B24F08(this);
+        if ((this->unk_1E8 >= ((this->unk_1E0->count / 4) * 3)) && (this->unk_290 == D_80B25D4C)) {
+            D_80B25D48++;
+        }
+
+        func_80B252F8(this);
+        func_80B2538C(this);
+        Actor_MoveWithGravity(&this->actor);
+    }
+
+    func_80B25448(this);
+    func_80B256BC(this);
+    func_80B255AC(this, globalCtx);
+}
 
 void func_80B24E14(EnRacedog* this) {
     if (this->unk_290 % 2) {
