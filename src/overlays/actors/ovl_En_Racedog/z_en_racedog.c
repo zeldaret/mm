@@ -73,13 +73,11 @@ static UnkRacedogStruct D_80B25D88[] = {
 
 static UnkRacedogStruct D_80B25E68 = { -1.0f, 1.0, 0, -1, 0, 0x353E };
 
-// Maybe XZ vectors?
 static f32 D_80B25E78[] = {
     -3914.0f, 1283.0f, -3747.0f, 1104.0f, -3717.0f, 1169.0f, -3897.0f, 1308.0f,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B25E98 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_NONE,
@@ -99,11 +97,9 @@ static ColliderCylinderInit D_80B25E98 = {
     { 13, 19, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80B25EC4 = { 0, 0, 0, 0, 1 };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, 1 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80B25ED0 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0x0),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -157,18 +153,13 @@ static AnimationInfoS D_80B25EF0[] = {
     { &object_dog_Anim_0021C8, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B25FF0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
 static Vec3f D_80B25FF4 = { 0.0f, 0.0f, 0.0f };
 
 static Vec3f D_80B26000 = { 0.0f, 20.0f, 0.0f };
-
-extern Gfx D_06000618[];
-extern FlexSkeletonHeader D_060080F0;
-extern Gfx D_06000550[];
 
 void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
     f32 frameCount;
@@ -234,12 +225,13 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderCylinder* collider = &this->collider;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060080F0, NULL, this->jointTable, this->morphTable, 13);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, NULL, this->jointTable, this->morphTable,
+                       13);
     Collider_InitCylinder(globalCtx, collider);
-    Collider_SetCylinder(globalCtx, collider, &this->actor, &D_80B25E98);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_80B25ED0, &D_80B25EC4);
+    Collider_SetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    Actor_ProcessInitChain(&this->actor, D_80B25FF0);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_1E0 = func_8013D648(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
@@ -607,8 +599,8 @@ void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_OPA_DISP++, 255, this->unk_2C0, 0, 255);
         Matrix_Scale(this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_06000618);
-        gSPDisplayList(POLY_OPA_DISP++, D_06000550);
+        gSPDisplayList(POLY_OPA_DISP++, object_dog_DL_000618);
+        gSPDisplayList(POLY_OPA_DISP++, object_dog_DL_000550);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
