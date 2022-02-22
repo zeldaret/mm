@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define ENRACEDOG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
+#define ENRACEDOG_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENRACEDOG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
 
 struct EnRacedog;

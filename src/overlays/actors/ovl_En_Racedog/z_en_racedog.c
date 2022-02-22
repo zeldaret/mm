@@ -231,8 +231,8 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1E0 = func_8013D648(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
-    if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
-        this->unk_290 = ENRACEDOG_GET_INDEX(&this->actor);
+    if (ENRACEDOG_GET_3E0(&this->actor) < 14) {
+        this->unk_290 = ENRACEDOG_GET_3E0(&this->actor);
     } else {
         Actor_MarkForDeath(&this->actor);
     }
