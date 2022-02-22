@@ -59,10 +59,10 @@ s32 func_80122760(GlobalContext* globalCtx, struct_80122744_arg1* arg1, f32 arg2
             arg1->unk_01++;
         }
 
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 void func_80122868(GlobalContext* globalCtx, Player* player) {
@@ -155,8 +155,8 @@ void func_80122BA4(GlobalContext* globalCtx, struct_80122D44_arg1* arg1, s32 arg
 
         index = arg1->unk_01;
         arg1->unk_04[index].unk_00 = arg1->unk_00;
-        arg1->unk_04[index].unk_01 = alpha;
-        Matrix_CopyCurrentState(&arg1->unk_04[index].unk_04);
+        arg1->unk_04[index].alpha = alpha;
+        Matrix_CopyCurrentState(&arg1->unk_04[index].mf);
 
         arg1->unk_00 = 0;
     }
@@ -169,12 +169,12 @@ void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
 
     for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
         // Can't be `temp_v1->unk_01 != 0`
-        if (temp_v1->unk_01) {
+        if (temp_v1->alpha) {
             phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
-            if (phi_a1 >= temp_v1->unk_01) {
-                temp_v1->unk_01 = 0;
+            if (phi_a1 >= temp_v1->alpha) {
+                temp_v1->alpha = 0;
             } else {
-                temp_v1->unk_01 -= phi_a1;
+                temp_v1->alpha -= phi_a1;
             }
         }
     }
@@ -182,7 +182,7 @@ void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
 
 typedef struct {
     /* 0x0 */ Color_RGB8 color;
-    /* 0x4 */ Gfx* dlist;
+    /* 0x4 */ Gfx* dList;
 } struct_801BFDD0; // size = 0x08
 
 extern struct_801BFDD0 D_801BFDD0[];
@@ -203,9 +203,9 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
-        if ((phi_s2->unk_01 != 0) && (phi_s2->unk_01 != 0xFF)) {
+        if ((phi_s2->alpha != 0) && (phi_s2->alpha != 255)) {
             temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
-            Matrix_SetCurrentState(&phi_s2->unk_04);
+            Matrix_SetCurrentState(&phi_s2->mf);
 
             gDPPipeSync(POLY_XLU_DISP++);
 
@@ -215,12 +215,12 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
             }
 
             Scene_SetRenderModeXlu(globalCtx, 1, 2);
-            gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->color.r, temp_s3->color.g, temp_s3->color.b, phi_s2->unk_01);
+            gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->color.r, temp_s3->color.g, temp_s3->color.b, phi_s2->alpha);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, temp_s3->dlist);
+            gSPDisplayList(POLY_XLU_DISP++, temp_s3->dList);
         }
 
         phi_s2++;
@@ -311,7 +311,7 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
     player->unk_AE7++;
 
     if (player->unk_AE7 == 2) {
-        s16 objectId = gLinkFormObjectIndexes[((void)0, gSaveContext.playerForm)];
+        s16 objectId = gPlayerFormObjectIndexes[((void)0, gSaveContext.playerForm)];
 
         gActorOverlayTable->initInfo->objectId = objectId;
         func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
@@ -417,7 +417,7 @@ s32 func_80123448(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == 0));
+           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == NULL));
 }
 
 s32 func_801234B0(Player* player) {
@@ -586,7 +586,7 @@ void func_801239AC(Player* player) {
 }
 
 void Player_SetModels(Player* player, s32 modelGroup) {
-    u8* aux;
+    u8* playerModelTypes;
 
     D_801F59E0 = player->transformation * 2;
     player->leftHandType = gPlayerModelTypes[modelGroup][1];
@@ -599,12 +599,12 @@ void Player_SetModels(Player* player, s32 modelGroup) {
         }
     }
 
-    aux = gPlayerModelTypes[modelGroup];
+    playerModelTypes = gPlayerModelTypes[modelGroup];
 
-    player->leftHandDLists = &sPlayerDListGroups[aux[1]][D_801F59E0];
-    player->rightHandDLists = &sPlayerDListGroups[aux[2]][D_801F59E0];
-    player->sheathDLists = &sPlayerDListGroups[aux[3]][D_801F59E0];
-    player->waistDLists = &sPlayerDListGroups[aux[4]][D_801F59E0];
+    player->leftHandDLists = &sPlayerDListGroups[playerModelTypes[1]][D_801F59E0];
+    player->rightHandDLists = &sPlayerDListGroups[playerModelTypes[2]][D_801F59E0];
+    player->sheathDLists = &sPlayerDListGroups[playerModelTypes[3]][D_801F59E0];
+    player->waistDLists = &sPlayerDListGroups[playerModelTypes[4]][D_801F59E0];
 
     func_801239AC(player);
 }
@@ -710,7 +710,7 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
 
     if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
         Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
-        return (SQ(diff.x) + SQ(diff.z) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
+        return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
 
     return false;
@@ -937,7 +937,7 @@ void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f
     arg5->z = (Math_CosS(arg3) * sp30) + arg2->z;
 
     Math_Vec3f_Diff(arg5, arg4, &sp44);
-    sp40 = sqrtf(SQ(sp44.x) + SQ(sp44.z));
+    sp40 = sqrtf(SQXZ(sp44));
 
     sp3C = (sp40 <= 1.0f) ? arg3 : Math_FAtan2F(sp44.z, sp44.x);
     sp40 = (Math_CosS(sp3C - arg3) * sp40) + arg8;
@@ -991,7 +991,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_zora_Matanimheader_012A80));
-    Matrix_Scale(sp28, sp28, sp28, 1);
+    Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
 
     // clang-format off
     sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);

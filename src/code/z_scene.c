@@ -163,7 +163,7 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->objectCtx.num = loadedCount;
     globalCtx->objectCtx.spawnedObjectCount = loadedCount;
     playerForm = gSaveContext.playerForm;
-    playerObjectId = gLinkFormObjectIndexes[playerForm];
+    playerObjectId = gPlayerFormObjectIndexes[playerForm];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&globalCtx->objectCtx, playerObjectId);
 

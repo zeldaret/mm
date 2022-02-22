@@ -1148,7 +1148,7 @@ s32 Camera_GetInputDirYaw(Camera* camera);
 s16 Camera_GetCamDirPitch(Camera* camera);
 s16 Camera_GetCamDirYaw(Camera* camera);
 void func_800DFD04(Camera* camera, s32 arg1, s32 arg2, s32 arg3);
-void func_800DFD78(Camera* camera, UNK_TYPE arg1, Actor* actor);
+void func_800DFD78(Camera* camera, s32 paramFlag, void* value);
 // UNK_TYPE4 func_800DFEF0(s32 param_1, u16 param_2);
 // UNK_TYPE4 func_800DFF18(Camera* iParm1, UNK_TYPE2 uParm2);
 // UNK_TYPE4 func_800DFF34(s32 param_1);
