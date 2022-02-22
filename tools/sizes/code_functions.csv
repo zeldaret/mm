@@ -2401,11 +2401,11 @@ asm/non_matchings/code/z_message_nes/func_8015B198.s,func_8015B198,0x8015B198,0x
 asm/non_matchings/code/z_message_staff/func_8015E750.s,func_8015E750,0x8015E750,0x27
 asm/non_matchings/code/z_message_staff/func_8015E7EC.s,func_8015E7EC,0x8015E7EC,0x42F
 asm/non_matchings/code/z_message_staff/func_8015F8A8.s,func_8015F8A8,0x8015F8A8,0x47A
-asm/non_matchings/code/z_player_call/func_80160A90.s,func_80160A90,0x80160A90,0x1A
-asm/non_matchings/code/z_player_call/func_80160AF8.s,func_80160AF8,0x80160AF8,0x12
-asm/non_matchings/code/z_player_call/func_80160B40.s,func_80160B40,0x80160B40,0x10
-asm/non_matchings/code/z_player_call/func_80160B80.s,func_80160B80,0x80160B80,0x10
-asm/non_matchings/code/z_player_call/func_80160BC0.s,func_80160BC0,0x80160BC0,0x10
+asm/non_matchings/code/z_player_call/PlayerCall_InitFuncPtrs.s,PlayerCall_InitFuncPtrs,0x80160A90,0x1A
+asm/non_matchings/code/z_player_call/PlayerCall_Init.s,PlayerCall_Init,0x80160AF8,0x12
+asm/non_matchings/code/z_player_call/PlayerCall_Destroy.s,PlayerCall_Destroy,0x80160B40,0x10
+asm/non_matchings/code/z_player_call/PlayerCall_Update.s,PlayerCall_Update,0x80160B80,0x10
+asm/non_matchings/code/z_player_call/PlayerCall_Draw.s,PlayerCall_Draw,0x80160BC0,0x10
 asm/non_matchings/code/z_shrink_window/ShrinkWindow_SetLetterboxTarget.s,ShrinkWindow_SetLetterboxTarget,0x80160C00,0x5
 asm/non_matchings/code/z_shrink_window/ShrinkWindow_GetLetterboxTarget.s,ShrinkWindow_GetLetterboxTarget,0x80160C14,0x5
 asm/non_matchings/code/z_shrink_window/ShrinkWindow_SetLetterboxMagnitude.s,ShrinkWindow_SetLetterboxMagnitude,0x80160C28,0x5
