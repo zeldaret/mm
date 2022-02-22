@@ -18,15 +18,15 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
-s32 func_80B25490(EnRacedog* this, f32* arg1);
 void func_80B24E14(EnRacedog* this);
 void func_80B24F08(EnRacedog* this);
+void func_80B251EC(EnRacedog* this);
 void func_80B252F8(EnRacedog* this);
 void func_80B2538C(EnRacedog* this);
 void func_80B25448(EnRacedog* this);
-void func_80B256BC(EnRacedog* this);
+s32 func_80B25490(EnRacedog* this, f32* arg1);
 void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx);
-void func_80B251EC(EnRacedog* this);
+void func_80B256BC(EnRacedog* this);
 
 typedef struct {
     f32 unk_00;
