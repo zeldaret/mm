@@ -2721,11 +2721,7 @@ void func_801588D0(GlobalContext* globalCtx, s16 param_2);
 // void func_8015E750(void);
 void func_8015E7EC(GlobalContext* globalCtx, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
-// void PlayerCall_InitFuncPtrs(void);
-// void PlayerCall_Init(void);
-// void PlayerCall_Destroy(void);
-// void PlayerCall_Update(void);
-// void PlayerCall_Draw(void);
+
 void ShrinkWindow_SetLetterboxTarget(s32 target);
 s32 ShrinkWindow_GetLetterboxTarget(void);
 void ShrinkWindow_SetLetterboxMagnitude(s32 magnitude);
