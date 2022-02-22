@@ -592,8 +592,9 @@ void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowUnkStruct* ar
             sp30 = this->actor.params < ENARROW_6;
             if (this->unk_264 == 0) {
                 sp30 &= func_80126440(globalCtx, &this->collider, &this->unk_244, &sp40, &sp34);
-            } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) && (sp40.z == this->unk_244.tip.z) &&
-                       (sp34.x == this->unk_244.base.x) && (sp34.y == this->unk_244.base.y) && (sp34.z == this->unk_244.base.z)) {
+            } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) &&
+                       (sp40.z == this->unk_244.tip.z) && (sp34.x == this->unk_244.base.x) &&
+                       (sp34.y == this->unk_244.base.y) && (sp34.z == this->unk_244.base.z)) {
                 sp30 = false;
             }
             if (sp30) {

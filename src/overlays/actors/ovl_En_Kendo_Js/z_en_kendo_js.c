@@ -355,7 +355,8 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) ||
+                (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             break;
@@ -375,7 +376,8 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
                 return 0;
             }
 
-            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) || (player->stateFlags2 & 0x80000)) {
+            if ((player->meleeWeaponState != 0) || (player->stateFlags3 & 0x8000000) ||
+                (player->stateFlags2 & 0x80000)) {
                 return 1;
             }
             this->unk_28E = 0;
@@ -418,7 +420,8 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == 17) || (player->meleeWeaponAnimation == 20))) {
+            if ((this->unk_28E == 1) &&
+                ((player->meleeWeaponAnimation == 17) || (player->meleeWeaponAnimation == 20))) {
                 this->unk_28E = 0;
                 return 0;
             }

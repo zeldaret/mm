@@ -369,7 +369,7 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
     REG(38) = bootRegs[7];
     REG(39) = bootRegs[8];
     REG(43) = bootRegs[9];
-    REG(45) = bootRegs[10];
+    R_RUN_SPEED_LIMIT = bootRegs[10];
     REG(68) = bootRegs[11];
     REG(69) = bootRegs[12];
     IREG(66) = bootRegs[13];
@@ -379,7 +379,7 @@ void func_80123140(GlobalContext* globalCtx, Player* player) {
     MREG(95) = bootRegs[17];
 
     if (globalCtx->roomCtx.currRoom.unk3 == 2) {
-        REG(45) = 0x1F4;
+        R_RUN_SPEED_LIMIT = 500;
     }
 
     if ((player->actor.id == ACTOR_PLAYER) && (player->transformation == PLAYER_FORM_FIERCE_DEITY)) {
