@@ -7,7 +7,7 @@
 #include "z_en_rsn.h"
 #include "objects/object_rs/object_rs.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnRsn*)thisx)
 
@@ -45,7 +45,7 @@ void EnRsn_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, NULL, NULL, 0);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     func_80C25D40(this);
 }
 
