@@ -157,10 +157,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-static Vec3f D_80B25FF4 = { 0.0f, 0.0f, 0.0f };
-
-static Vec3f D_80B26000 = { 0.0f, 20.0f, 0.0f };
-
 void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
     f32 frameCount;
 
@@ -531,9 +527,8 @@ void func_80B256BC(EnRacedog* this) {
 void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnRacedog* this = THIS;
-    Vec3f sp2C;
+    Vec3f sp2C = { 0.0f, 0.0f, 0.0f };
 
-    sp2C = D_80B25FF4;
     this->unk_292 = D_80B25E68.unk_0A;
 
     this->actionFunc(this, globalCtx);
@@ -613,9 +608,7 @@ s32 func_80B25A74(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80B25A90(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnRacedog* this = THIS;
-    Vec3f sp1C;
-
-    sp1C = D_80B26000;
+    Vec3f sp1C = { 0.0f, 20.0f, 0.0f };
 
     if (limbIndex == 5) {
         Matrix_MultiplyVector3fByState(&sp1C, &this->actor.focus.pos);
