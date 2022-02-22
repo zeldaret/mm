@@ -817,7 +817,7 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B5D37C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+s32 func_80B5D37C(GlobalContext* globalCtx, ActorPathing* arg1) {
     s32 pad;
     EnOt* temp_s0 = (EnOt*)arg1->actor;
     f32 sp24;
@@ -838,7 +838,7 @@ s32 func_80B5D37C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     return false;
 }
 
-s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+s32 func_80B5D470(GlobalContext* globalCtx, ActorPathing* arg1) {
     s32 pad;
     s32 ret;
     Actor* temp_s1 = arg1->actor;
@@ -883,8 +883,8 @@ s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
 void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     func_80B5B2E0(globalCtx, &this->actor.world.pos, this->unk_346, &this->unk_348, &this->unk_340);
     Math_Vec3f_Copy(&this->unk_330, &this->actor.world.pos);
-    func_8013DCE0(globalCtx, &this->unk_330, &this->actor, &this->unk_2C0, globalCtx->setupPathList, this->unk_346, 0,
-                  0, this->unk_340, 0);
+    SubS_ActorPathing_Init(globalCtx, &this->unk_330, &this->actor, &this->unk_2C0, globalCtx->setupPathList,
+                           this->unk_346, 0, 0, this->unk_340, 0);
     this->unk_32C = 0;
     this->unk_2C0.pointOffset.x = 0.0f;
     this->unk_2C0.pointOffset.y = 0.0f;
@@ -900,16 +900,17 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5D750(EnOt* this, GlobalContext* globalCtx) {
     if (!(this->unk_32C & 1) && !(this->unk_32C & 2)) {
-        func_8013DE04(globalCtx, &this->unk_2C0, func_8013DF3C, func_80B5D470, func_80B5D37C, func_8013E0A4);
+        SubS_ActorPathing_Update(globalCtx, &this->unk_2C0, SubS_ActorPathing_ComputePointInfo, func_80B5D470,
+                                 func_80B5D37C, SubS_ActorPathing_SetNextPoint);
     }
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_330);
 
-    if (this->unk_2C0.flags & struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY) {
+    if (this->unk_2C0.flags & ACTOR_PATHING_REACHED_POINT_TEMPORARY) {
         this->unk_32C |= 2;
     }
 
-    if (this->unk_2C0.flags & struct_8013DF3C_arg1_REACHED_END_TEMPORARY) {
+    if (this->unk_2C0.flags & ACTOR_PATHING_REACHED_END_TEMPORARY) {
         this->unk_32C |= 1;
     }
 

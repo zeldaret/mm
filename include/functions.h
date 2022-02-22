@@ -2527,12 +2527,12 @@ Actor* SubS_FindActor(GlobalContext* globalCtx, Actor* actorListStart, u8 actorC
 s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs);
 s32 func_8013DB90(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2);
 s32 func_8013DC40(Path* arg0, s32 arg1, s32 arg2, Vec3f* arg3);
-void func_8013DCE0(GlobalContext* globalCtx, Vec3f* worldPos, Actor* actor, struct_8013DF3C_arg1* arg3, Path* paths, s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex, u8 flags);
-s32 func_8013DE04(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1, struct_8013DF3C_arg1_ComputeFunc computePointInfoFunc, struct_8013DF3C_arg1_UpdateFunc updateActorInfoFunc, struct_8013DF3C_arg1_UpdateFunc moveFunc, struct_8013DF3C_arg1_UpdateFunc setNextPointFunc);
-void func_8013DF3C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
-s32 func_8013E054(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
-s32 func_8013E07C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
-s32 func_8013E0A4(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1);
+void SubS_ActorPathing_Init(GlobalContext* globalCtx, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath, Path* paths, s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex, u8 flags);
+s32 SubS_ActorPathing_Update(GlobalContext* globalCtx, ActorPathing* actorPath, ActorPathingComputeFunc computePointInfoFunc, ActorPathingUpdateFunc updateActorInfoFunc, ActorPathingUpdateFunc moveFunc, ActorPathingUpdateFunc setNextPointFunc);
+void SubS_ActorPathing_ComputePointInfo(GlobalContext* globalCtx, ActorPathing* actorPath);
+s32 SubS_ActorPathing_MoveWithGravity(GlobalContext* globalCtx, ActorPathing* actorPath);
+s32 SubS_ActorPathing_MoveWithoutGravityReverse(GlobalContext* globalCtx, ActorPathing* actorPath);
+s32 SubS_ActorPathing_SetNextPoint(GlobalContext* globalCtx, ActorPathing* actorPath);
 void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex, s32* curIndex);
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type);
 s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes);

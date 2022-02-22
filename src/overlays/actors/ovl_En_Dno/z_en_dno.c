@@ -689,9 +689,9 @@ void func_80A72C04(EnDno* this, GlobalContext* globalCtx) {
     this->actor.flags |= ACTOR_FLAG_8000000;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
-    func_8013DCE0(globalCtx, &this->unk_334, &this->actor, &this->unk_340, globalCtx->setupPathList,
-                  ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
-    func_8013DF3C(globalCtx, &this->unk_340);
+    SubS_ActorPathing_Init(globalCtx, &this->unk_334, &this->actor, &this->unk_340, globalCtx->setupPathList,
+                           ENDNO_GET_7F(&this->actor), 1, 0, 1, 0);
+    SubS_ActorPathing_ComputePointInfo(globalCtx, &this->unk_340);
 
     this->actor.world.rot.y = this->unk_340.rotToCurPoint.y;
     this->actor.world.rot.x = this->unk_340.rotToCurPoint.x;
@@ -706,7 +706,7 @@ void func_80A72CF8(EnDno* this, GlobalContext* globalCtx) {
                        this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x201);
 }
 
-s32 func_80A72D8C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+s32 func_80A72D8C(GlobalContext* globalCtx, ActorPathing* arg1) {
     Actor* actor = arg1->actor;
     s32 pad;
     s32 ret = false;
@@ -746,7 +746,7 @@ s32 func_80A72D8C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     return ret;
 }
 
-s32 func_80A72FAC(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+s32 func_80A72FAC(GlobalContext* globalCtx, ActorPathing* arg1) {
     Actor* actor = arg1->actor;
     EnDno* dno = (EnDno*)actor;
     f32 sp24 = Math_CosS(-actor->world.rot.x) * actor->speedXZ;
@@ -788,7 +788,8 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
         }
     }
 
-    func_8013DE04(globalCtx, &this->unk_340, func_8013DF3C, func_80A72D8C, func_80A72FAC, func_8013E0A4);
+    SubS_ActorPathing_Update(globalCtx, &this->unk_340, SubS_ActorPathing_ComputePointInfo, func_80A72D8C,
+                             func_80A72FAC, SubS_ActorPathing_SetNextPoint);
     this->unk_45C += 6553;
     this->unk_340.pointOffset.x = 0.0f;
     this->unk_340.pointOffset.y = 0.0f;
@@ -801,7 +802,7 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     func_80A715DC(this, globalCtx);
     func_800B9010(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
-    if (this->unk_340.flags & struct_8013DF3C_arg1_REACHED_END_PERMANENT) {
+    if (this->unk_340.flags & ACTOR_PATHING_REACHED_END_PERMANENT) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_340.curPoint);
         this->actor.speedXZ = 0.0f;
         this->actor.velocity.x = 0.0f;

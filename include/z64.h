@@ -1392,26 +1392,26 @@ typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 
-#define struct_8013DF3C_arg1_RETURN_TO_START (1 << 0)
-#define struct_8013DF3C_arg1_SWITCH_DIRECTION (1 << 1)
-#define struct_8013DF3C_arg1_MOVE_BACKWARDS (1 << 3)
-#define struct_8013DF3C_arg1_REACHED_POINT_PERMANENT (1 << 4)
-#define struct_8013DF3C_arg1_REACHED_END_PERMANENT (1 << 5)
-#define struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY (1 << 6)
-#define struct_8013DF3C_arg1_REACHED_END_TEMPORARY (1 << 7)
+#define ACTOR_PATHING_RETURN_TO_START (1 << 0)
+#define ACTOR_PATHING_SWITCH_DIRECTION (1 << 1)
+#define ACTOR_PATHING_MOVE_BACKWARDS (1 << 3)
+#define ACTOR_PATHING_REACHED_POINT_PERMANENT (1 << 4)
+#define ACTOR_PATHING_REACHED_END_PERMANENT (1 << 5)
+#define ACTOR_PATHING_REACHED_POINT_TEMPORARY (1 << 6)
+#define ACTOR_PATHING_REACHED_END_TEMPORARY (1 << 7)
 
-#define struct_8013DF3C_arg1_REACHED_TEMPORARY \
-    (struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY | struct_8013DF3C_arg1_REACHED_END_TEMPORARY)
-#define struct_8013DF3C_arg1_REACHED_POINT \
-    (struct_8013DF3C_arg1_REACHED_POINT_PERMANENT | struct_8013DF3C_arg1_REACHED_POINT_TEMPORARY)
-#define struct_8013DF3C_arg1_REACHED_END \
-    (struct_8013DF3C_arg1_REACHED_END_PERMANENT | struct_8013DF3C_arg1_REACHED_END_TEMPORARY)
+#define ACTOR_PATHING_REACHED_TEMPORARY \
+    (ACTOR_PATHING_REACHED_POINT_TEMPORARY | ACTOR_PATHING_REACHED_END_TEMPORARY)
+#define ACTOR_PATHING_REACHED_POINT \
+    (ACTOR_PATHING_REACHED_POINT_PERMANENT | ACTOR_PATHING_REACHED_POINT_TEMPORARY)
+#define ACTOR_PATHING_REACHED_END \
+    (ACTOR_PATHING_REACHED_END_PERMANENT | ACTOR_PATHING_REACHED_END_TEMPORARY)
 
-struct struct_8013DF3C_arg1;
-typedef void (*struct_8013DF3C_arg1_ComputeFunc)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
-typedef s32 (*struct_8013DF3C_arg1_UpdateFunc)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
+struct ActorPathing;
+typedef void (*ActorPathingComputeFunc)(struct GlobalContext*, struct ActorPathing*);
+typedef s32 (*ActorPathingUpdateFunc)(struct GlobalContext*, struct ActorPathing*);
 
-typedef struct struct_8013DF3C_arg1 {
+typedef struct ActorPathing {
     /* 0x00 */ Path* setupPathList;
     /* 0x04 */ s32 pathIndex;
     /* 0x08 */ Vec3s* points;
@@ -1429,11 +1429,11 @@ typedef struct struct_8013DF3C_arg1 {
     /* 0x4C */ f32 distSqToCurPointXZ;
     /* 0x50 */ f32 distSqToCurPoint;
     /* 0x54 */ Vec3s rotToCurPoint;
-    /* 0x5C */ struct_8013DF3C_arg1_ComputeFunc computePointInfoFunc; // ComputePointInfo
-    /* 0x60 */ struct_8013DF3C_arg1_UpdateFunc updateActorInfoFunc; // UpdateActorInfo / Return true if should setNextPoint, false if the actor should move forward
-    /* 0x64 */ struct_8013DF3C_arg1_UpdateFunc moveFunc; // Move / Return true if should compute and update again
-    /* 0x68 */ struct_8013DF3C_arg1_UpdateFunc setNextPointFunc; // SetNextPoint / Return true if should compute and update again
-} struct_8013DF3C_arg1; // size = 0x6C
+    /* 0x5C */ ActorPathingComputeFunc computePointInfoFunc;
+    /* 0x60 */ ActorPathingUpdateFunc updateActorInfoFunc; // Return true if should setNextPoint, false if the actor should move forward
+    /* 0x64 */ ActorPathingUpdateFunc moveFunc; // Return true if should compute and update again
+    /* 0x68 */ ActorPathingUpdateFunc setNextPointFunc; // Return true if should compute and update again
+} ActorPathing; // size = 0x6C
 
 typedef struct {
     /* 0x00 */ u32 type;
