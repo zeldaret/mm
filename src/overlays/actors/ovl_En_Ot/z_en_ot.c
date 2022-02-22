@@ -817,31 +817,27 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B5D37C(GlobalContext* globalCtx, ActorPathing* arg1) {
-    s32 pad;
-    EnOt* temp_s0 = (EnOt*)arg1->actor;
-    f32 sp24;
-    f32 sp20;
+s32 func_80B5D37C(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor* thisx = actorPath->actor;
+    EnOt* this = (EnOt*)thisx;
+    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
+    f32 sp20 = gFramerateDivisorHalf;
 
-    sp24 = Math_CosS(temp_s0->actor.world.rot.x * -1) * temp_s0->actor.speedXZ;
-    sp20 = gFramerateDivisorHalf;
+    thisx->velocity.x = Math_SinS(thisx->world.rot.y) * sp24;
+    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speedXZ;
+    thisx->velocity.z = Math_CosS(thisx->world.rot.y) * sp24;
 
-    temp_s0->actor.velocity.x = Math_SinS(temp_s0->actor.world.rot.y) * sp24;
-    temp_s0->actor.velocity.y = Math_SinS(temp_s0->actor.world.rot.x * -1) * temp_s0->actor.speedXZ;
-    do {
-        temp_s0->actor.velocity.z = Math_CosS(temp_s0->actor.world.rot.y) * sp24;
-        temp_s0->unk_330.x += (temp_s0->actor.velocity.x * sp20) + temp_s0->actor.colChkInfo.displacement.x;
-        temp_s0->unk_330.y += (temp_s0->actor.velocity.y * sp20) + temp_s0->actor.colChkInfo.displacement.y;
-    } while (0);
-    temp_s0->unk_330.z += (temp_s0->actor.velocity.z * sp20) + temp_s0->actor.colChkInfo.displacement.z;
+    this->unk_330.x += (thisx->velocity.x * sp20) + thisx->colChkInfo.displacement.x;
+    this->unk_330.y += (thisx->velocity.y * sp20) + thisx->colChkInfo.displacement.y;
+    this->unk_330.z += (thisx->velocity.z * sp20) + thisx->colChkInfo.displacement.z;
 
     return false;
 }
 
-s32 func_80B5D470(GlobalContext* globalCtx, ActorPathing* arg1) {
+s32 func_80B5D470(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor* thisx = actorPath->actor;
+    s32 ret = false;
     s32 pad;
-    s32 ret;
-    Actor* temp_s1 = arg1->actor;
     Vec3f sp50;
     Vec3f sp44;
     f32 temp;
@@ -849,32 +845,31 @@ s32 func_80B5D470(GlobalContext* globalCtx, ActorPathing* arg1) {
     s32 sp30;
     s32 sp34;
 
-    ret = false;
-    temp_s1->gravity = 0.0f;
-    Math_SmoothStepToF(&temp_s1->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
+    thisx->gravity = 0.0f;
+    Math_SmoothStepToF(&thisx->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
 
-    sp50.x = arg1->curPoint.x - temp_s1->world.pos.x;
-    sp50.y = arg1->curPoint.y - temp_s1->world.pos.y;
-    sp50.z = arg1->curPoint.z - temp_s1->world.pos.z;
+    sp50.x = actorPath->curPoint.x - thisx->world.pos.x;
+    sp50.y = actorPath->curPoint.y - thisx->world.pos.y;
+    sp50.z = actorPath->curPoint.z - thisx->world.pos.z;
 
-    sp44.x = arg1->curPoint.x - arg1->prevPoint.x;
-    sp44.y = arg1->curPoint.y - arg1->prevPoint.y;
-    sp44.z = arg1->curPoint.z - arg1->prevPoint.z;
+    sp44.x = actorPath->curPoint.x - actorPath->prevPoint.x;
+    sp44.y = actorPath->curPoint.y - actorPath->prevPoint.y;
+    sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
     temp = Math3D_Parallel(&sp50, &sp44);
-    if ((arg1->distSqToCurPointXZ < SQ(temp_s1->speedXZ)) || (temp <= 0.0f)) {
+    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speedXZ)) || (temp <= 0.0f)) {
         ret = true;
     } else {
-        temp = SQ(temp_s1->speedXZ) / arg1->distSqToCurPoint;
-        sp34 = ABS(arg1->rotToCurPoint.x - temp_s1->world.rot.x);
+        temp = SQ(thisx->speedXZ) / actorPath->distSqToCurPoint;
+        sp34 = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
-        sp34 = ABS(arg1->rotToCurPoint.y - temp_s1->world.rot.y);
+        sp34 = ABS(actorPath->rotToCurPoint.y - thisx->world.rot.y);
 
-        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->rotToCurPoint.x, 1, sp2C, 0);
+        Math_SmoothStepToS(&thisx->world.rot.x, actorPath->rotToCurPoint.x, 1, sp2C, 0);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
-        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->rotToCurPoint.y, 1, sp2C, 0);
-        Math_SmoothStepToS(&temp_s1->shape.rot.y, temp_s1->world.rot.y, 2, sp2C, 0);
+        Math_SmoothStepToS(&thisx->world.rot.y, actorPath->rotToCurPoint.y, 1, sp2C, 0);
+        Math_SmoothStepToS(&thisx->shape.rot.y, thisx->world.rot.y, 2, sp2C, 0);
     }
 
     return ret;
@@ -883,12 +878,12 @@ s32 func_80B5D470(GlobalContext* globalCtx, ActorPathing* arg1) {
 void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     func_80B5B2E0(globalCtx, &this->actor.world.pos, this->unk_346, &this->unk_348, &this->unk_340);
     Math_Vec3f_Copy(&this->unk_330, &this->actor.world.pos);
-    SubS_ActorPathing_Init(globalCtx, &this->unk_330, &this->actor, &this->unk_2C0, globalCtx->setupPathList,
+    SubS_ActorPathing_Init(globalCtx, &this->unk_330, &this->actor, &this->actorPath, globalCtx->setupPathList,
                            this->unk_346, 0, 0, this->unk_340, 0);
     this->unk_32C = 0;
-    this->unk_2C0.pointOffset.x = 0.0f;
-    this->unk_2C0.pointOffset.y = 0.0f;
-    this->unk_2C0.pointOffset.z = 0.0f;
+    this->actorPath.pointOffset.x = 0.0f;
+    this->actorPath.pointOffset.y = 0.0f;
+    this->actorPath.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
@@ -900,17 +895,17 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5D750(EnOt* this, GlobalContext* globalCtx) {
     if (!(this->unk_32C & 1) && !(this->unk_32C & 2)) {
-        SubS_ActorPathing_Update(globalCtx, &this->unk_2C0, SubS_ActorPathing_ComputePointInfo, func_80B5D470,
+        SubS_ActorPathing_Update(globalCtx, &this->actorPath, SubS_ActorPathing_ComputePointInfo, func_80B5D470,
                                  func_80B5D37C, SubS_ActorPathing_SetNextPoint);
     }
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_330);
 
-    if (this->unk_2C0.flags & ACTOR_PATHING_REACHED_POINT_TEMPORARY) {
+    if (this->actorPath.flags & ACTOR_PATHING_REACHED_POINT_TEMPORARY) {
         this->unk_32C |= 2;
     }
 
-    if (this->unk_2C0.flags & ACTOR_PATHING_REACHED_END_TEMPORARY) {
+    if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_TEMPORARY) {
         this->unk_32C |= 1;
     }
 
