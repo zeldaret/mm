@@ -244,6 +244,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2A0.y = 0.0f;
     this->unk_2A0.z = 0.0f;
     this->unk_2C4 = 1.0f;
+    
     if ((D_80B25D88[this->unk_290].unk_0E >= 0x353F) && (this->unk_290 == (s16)Rand_ZeroFloat(20.0f))) {
         this->unk_28C = 5;
     } else {
@@ -347,9 +348,7 @@ void func_80B24E14(EnRacedog* this) {
 
 void func_80B24F08(EnRacedog* this) {
     s32 temp_a0;
-    s32 temp_v1;
-
-    temp_v1 = this->unk_1E0->count;
+    s32 temp_v1 = this->unk_1E0->count;
 
     if (this->unk_2B8 < this->unk_1E8) {
         this->unk_2B8 = this->unk_1E8;
