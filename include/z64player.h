@@ -25,6 +25,14 @@ typedef enum {
 } PlayerBoots;
 
 typedef enum {
+    /* 0x00 */ PLAYER_STRENGTH_DEKU,
+    /* 0x01 */ PLAYER_STRENGTH_HUMAN,
+    /* 0x02 */ PLAYER_STRENGTH_ZORA,
+    /* 0x03 */ PLAYER_STRENGTH_GORON,
+    /* 0x04 */ PLAYER_STRENGTH_MAX
+}PlayerStrength;
+
+typedef enum {
     /* 0x00 */ PLAYER_FORM_FIERCE_DEITY,
     /* 0x01 */ PLAYER_FORM_GORON,
     /* 0x02 */ PLAYER_FORM_ZORA,
@@ -264,7 +272,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE1_2000000    (1 << 25)
 // 
 #define PLAYER_STATE1_4000000    (1 << 26)
-// 
+// Swimming?
 #define PLAYER_STATE1_8000000    (1 << 27)
 // 
 #define PLAYER_STATE1_10000000   (1 << 28)
@@ -458,7 +466,7 @@ typedef struct Player {
     /* 0x1DC */ OSMesgQueue giObjectLoadQueue;
     /* 0x1F4 */ OSMesg giObjectLoadMsg;
     /* 0x1F8 */ void* giObjectSegment;
-    /* 0x1FC */ u8 maskObjectLoading;
+    /* 0x1FC */ u8 maskObjectLoadState;
     /* 0x1FD */ s8 maskId;
     /* 0x200 */ DmaRequest maskDmaRequest;
     /* 0x220 */ OSMesgQueue maskObjectLoadQueue;

@@ -1709,7 +1709,7 @@ asm/non_matchings/code/z_player_lib/Player_InCsMode.s,Player_InCsMode,0x801233E4
 asm/non_matchings/code/z_player_lib/func_80123420.s,func_80123420,0x80123420,0x5
 asm/non_matchings/code/z_player_lib/func_80123434.s,func_80123434,0x80123434,0x5
 asm/non_matchings/code/z_player_lib/func_80123448.s,func_80123448,0x80123448,0x1A
-asm/non_matchings/code/z_player_lib/func_801234B0.s,func_801234B0,0x801234B0,0x9
+asm/non_matchings/code/z_player_lib/Player_IsGoronOrDeku.s,Player_IsGoronOrDeku,0x801234B0,0x9
 asm/non_matchings/code/z_player_lib/func_801234D4.s,func_801234D4,0x801234D4,0x2F
 asm/non_matchings/code/z_player_lib/func_80123590.s,func_80123590,0x80123590,0x13
 asm/non_matchings/code/z_player_lib/func_801235DC.s,func_801235DC,0x801235DC,0x1C

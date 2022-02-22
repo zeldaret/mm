@@ -98,9 +98,9 @@ void func_801229A0(GlobalContext* globalCtx, Player* player) {
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
 
-extern s16 D_801BFDA0[PLAYER_MASK_MAX - 1];
+extern s16 sMaskObjectIds[PLAYER_MASK_MAX - 1];
 #if 0
-s16 D_801BFDA0[PLAYER_MASK_MAX - 1] = {
+s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
     OBJECT_MASK_TRUTH,  OBJECT_MASK_KERFAY,  OBJECT_MASK_YOFUKASI, OBJECT_MASK_RABIT,   OBJECT_MASK_KI_TAN,
     OBJECT_MASK_JSON,   OBJECT_MASK_ROMERNY, OBJECT_MASK_ZACHO,    OBJECT_MASK_POSTHAT, OBJECT_MASK_MEOTO,
     OBJECT_MASK_BIGELF, OBJECT_MASK_GIBUDO,  OBJECT_MASK_GERO,     OBJECT_MASK_DANCER,  OBJECT_MASK_SKJ,
@@ -109,20 +109,19 @@ s16 D_801BFDA0[PLAYER_MASK_MAX - 1] = {
 };
 #endif
 
-// Load mask?
+// Load mask object?
 void func_801229FC(Player* player) {
-    if (player->maskObjectLoading == 1) {
-        // TODO: check if player->maskId is unsigned
-        s16 objectId = D_801BFDA0[(u8)player->maskId - 1];
+    if (player->maskObjectLoadState == 1) {
+        s16 objectId = sMaskObjectIds[(u8)player->maskId - 1];
 
         osCreateMesgQueue(&player->maskObjectLoadQueue, &player->maskObjectLoadMsg, 1);
         DmaMgr_SendRequestImpl(&player->maskDmaRequest, player->maskObjectSegment, gObjectTable[objectId].vromStart,
                                gObjectTable[objectId].vromEnd - gObjectTable[objectId].vromStart, 0,
                                &player->maskObjectLoadQueue, NULL);
-        player->maskObjectLoading++;
-    } else if (player->maskObjectLoading == 2) {
+        player->maskObjectLoadState++;
+    } else if (player->maskObjectLoadState == 2) {
         if (osRecvMesg(&player->maskObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0) {
-            player->maskObjectLoading = 0;
+            player->maskObjectLoadState = 0;
 
             if (player->currentMask == PLAYER_MASK_GREAT_FAIRY) {
                 s32 i;
@@ -133,7 +132,7 @@ void func_801229FC(Player* player) {
             }
         }
     } else if ((player->currentMask != PLAYER_MASK_NONE) && (player->currentMask != (u8)player->maskId)) {
-        player->maskObjectLoading = 1;
+        player->maskObjectLoadState = 1;
         player->maskId = player->currentMask;
     } else if (player->currentMask == PLAYER_MASK_CIRCUS_LEADER) {
         s32 i;
@@ -229,9 +228,9 @@ void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-extern u8 D_801BFDE8[PLAYER_MASK_MAX - 1];
+extern u8 sMaskItemIds[PLAYER_MASK_MAX - 1];
 #if 0
-u8 D_801BFDE8[PLAYER_MASK_MAX - 1] = {
+u8 sMaskItemIds[PLAYER_MASK_MAX - 1] = {
     ITEM_MASK_TRUTH,         // PLAYER_MASK_TRUTH
     ITEM_MASK_KAFEIS_MASK,   // PLAYER_MASK_KAFEIS_MASK
     ITEM_MASK_ALL_NIGHT,     // PLAYER_MASK_ALL_NIGHT
@@ -260,7 +259,7 @@ u8 D_801BFDE8[PLAYER_MASK_MAX - 1] = {
 #endif
 
 u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
-    return D_801BFDE8[maskIdMinusOne];
+    return sMaskItemIds[maskIdMinusOne];
 }
 
 u8 Player_GetCurMaskItemId(GlobalContext* globalCtx) {
@@ -420,7 +419,9 @@ s32 func_80123448(GlobalContext* globalCtx) {
            (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->unk_730 == NULL));
 }
 
-s32 func_801234B0(Player* player) {
+// TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
+// Hypothesis: this function checks if the current form would crouch when he tries to use the shield
+s32 Player_IsGoronOrDeku(Player* player) {
     return player->transformation == PLAYER_FORM_GORON || player->transformation == PLAYER_FORM_DEKU;
 }
 
@@ -516,7 +517,7 @@ extern u8 sActionModelGroups[];
 s32 Player_ActionToModelGroup(Player* player, s32 actionParam) {
     s32 modelGroup = sActionModelGroups[actionParam];
 
-    if ((modelGroup == 2) && func_801234B0(player)) {
+    if ((modelGroup == 2) && Player_IsGoronOrDeku(player)) {
         return 1;
     }
     return modelGroup;
@@ -533,14 +534,14 @@ u8 D_801BFF90[PLAYER_FORM_MAX] = {
 };
 #endif
 
-extern u8 D_801BFF98[PLAYER_FORM_MAX];
+extern u8 sPlayerStrengths[PLAYER_FORM_MAX];
 #if 0
-u8 D_801BFF98[PLAYER_FORM_MAX] = {
-    1, // PLAYER_FORM_FIERCE_DEITY
-    3, // PLAYER_FORM_GORON
-    2, // PLAYER_FORM_ZORA
-    0, // PLAYER_FORM_DEKU
-    1, // PLAYER_FORM_HUMAN
+u8 sPlayerStrengths[PLAYER_FORM_MAX] = {
+    PLAYER_STRENGTH_HUMAN, // PLAYER_FORM_FIERCE_DEITY
+    PLAYER_STRENGTH_GORON, // PLAYER_FORM_GORON
+    PLAYER_STRENGTH_ZORA,  // PLAYER_FORM_ZORA
+    PLAYER_STRENGTH_DEKU,  // PLAYER_FORM_DEKU
+    PLAYER_STRENGTH_HUMAN, // PLAYER_FORM_HUMAN
 };
 #endif
 
@@ -565,7 +566,7 @@ void func_801239AC(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
         if ((player->heldItemActionParam < 0) || (player->heldItemActionParam == player->itemActionParam)) {
             if (!Player_HoldsTwoHandedWeapon(player)) {
-                if (!func_801234B0(player)) {
+                if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
                     player->rightHandType = 8;
                     player->rightHandDLists = &sPlayerDListGroups[8][D_801F59E0];
@@ -717,7 +718,7 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
 }
 
 u8 Player_GetStrength(void) {
-    return D_801BFF98[(void)0, gSaveContext.playerForm];
+    return sPlayerStrengths[(void)0, gSaveContext.playerForm];
 }
 
 u8 Player_GetMask(GlobalContext* globalCtx) {
@@ -771,10 +772,10 @@ s32 func_80124148(Player* player) {
 }
 
 s32 Player_ActionToMeleeWeapon(s32 actionParam) {
-    s32 sword = actionParam - PLAYER_AP_UNK_2;
+    s32 weapon = actionParam - PLAYER_AP_UNK_2;
 
-    if ((sword > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (sword <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
-        return sword;
+    if ((weapon > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) && (weapon <= (PLAYER_AP_UNK_8 - PLAYER_AP_UNK_2))) {
+        return weapon;
     }
     return 0;
 }
@@ -1131,8 +1132,9 @@ void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801271B0.s")
 
-s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 maskId) {
-    if ((player->maskObjectLoading == 0) && (maskId == (u8)player->maskId)) {
+// Player_SetMaskSegment?
+s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 currentMask) {
+    if ((player->maskObjectLoadState == 0) && (currentMask == (u8)player->maskId)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x0A, player->maskObjectSegment);

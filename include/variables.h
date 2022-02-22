@@ -1170,14 +1170,11 @@ extern UNK_PTR D_801BF5C0;
 // extern UNK_TYPE1 D_801BFD94;
 // extern UNK_TYPE2 D_801BFD98;
 
-// extern UNK_TYPE1 D_801BFDA0;
 // extern UNK_TYPE1 D_801BFDD0;
-// extern UNK_TYPE1 D_801BFDE8;
 // extern UNK_TYPE1 D_801BFE00;
 // extern UNK_TYPE1 D_801BFE14;
 // extern UNK_TYPE2 D_801BFF34;
 // extern UNK_TYPE1 D_801BFF90;
-// extern UNK_TYPE1 D_801BFF98;
 // extern UNK_TYPE1 D_801BFFA0;
 extern u8 gPlayerModelTypes[][5];
 // extern UNK_TYPE1 D_801BFFFC;

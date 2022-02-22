@@ -2033,7 +2033,7 @@ s32 Player_InCsMode(GlobalContext* globalCtx);
 s32 func_80123420(Player* player);
 s32 func_80123434(Player* player);
 s32 func_80123448(GlobalContext* globalCtx);
-s32 func_801234B0(Player* player);
+s32 Player_IsGoronOrDeku(Player* player);
 s32 func_801234D4(GlobalContext* globalCtx);
 s32 func_80123590(GlobalContext* globalCtx, Actor* actor);
 s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2);
