@@ -1590,9 +1590,7 @@ beginseg
     name "ovl_En_Sda"
     compress
     include "build/src/overlays/actors/ovl_En_Sda/z_en_sda.o"
-    include "build/data/ovl_En_Sda/ovl_En_Sda.data.o"
-    include "build/data/ovl_En_Sda/ovl_En_Sda.bss.o"
-    include "build/data/ovl_En_Sda/ovl_En_Sda.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Sda/ovl_En_Sda_reloc.o"
 endseg
 
 beginseg
