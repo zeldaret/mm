@@ -604,11 +604,12 @@ void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B25A74(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnRacedog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                               Actor* thisx) {
     return false;
 }
 
-void func_80B25A90(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnRacedog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnRacedog* this = THIS;
     Vec3f sp1C = { 0.0f, 20.0f, 0.0f };
@@ -661,7 +662,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80B25A74, func_80B25A90, &this->actor);
+                          EnRacedog_OverrideLimbDraw, EnRacedog_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
