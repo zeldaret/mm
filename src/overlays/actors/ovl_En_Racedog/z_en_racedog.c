@@ -473,7 +473,47 @@ void func_80B25448(EnRacedog* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Racedog/func_80B25490.s")
+s32 func_80B25490(EnRacedog* this, f32* arg1) {
+    f32 xDistToTopFront;
+    f32 zDistToTopFront;
+    f32 xDistToBottomFront;
+    f32 xDistToBottomBack;
+    f32 zDistToBottomBack;
+    f32 zDistToBottomFront;
+    f32 zDistToTopBack;
+    f32 xDistToTopBack;
+    f32 temp_f0;
+    f32 temp;
+
+    xDistToTopFront = this->actor.world.pos.x - arg1[0];
+    zDistToTopFront = this->actor.world.pos.z - arg1[1];
+    xDistToBottomFront = this->actor.world.pos.x - arg1[2];
+    zDistToBottomFront = this->actor.world.pos.z - arg1[3];
+    xDistToBottomBack = this->actor.world.pos.x - arg1[4];
+    zDistToBottomBack = this->actor.world.pos.z - arg1[5];
+    xDistToTopBack = this->actor.world.pos.x - arg1[6];
+    zDistToTopBack = this->actor.world.pos.z - arg1[7];
+
+    temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
+    temp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
+    if (temp_f0 * temp < 0.0f) {
+        return 0;
+    }
+
+    temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
+    temp = ((xDistToBottomBack * zDistToTopBack) - (xDistToTopBack * zDistToBottomBack));
+    if (temp_f0 * temp < 0.0f) {
+        return 0;
+    }
+
+    temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
+    temp = ((xDistToTopBack * zDistToTopFront) - (xDistToTopFront * zDistToTopBack));
+    if (temp_f0 * temp < 0.0f) {
+        return 0;
+    }
+
+    return 1;
+}
 
 void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
