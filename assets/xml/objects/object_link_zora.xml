@@ -63,7 +63,6 @@
         <Array Name="object_link_zora_U8_011710" Count="80" Offset="0x011710">
             <Scalar Type="x8"/>
         </Array>
-        <!-- <Blob Name="object_link_zora_Blob_011710" Size="0x50" Offset="0x11710" /> -->
 
         <DList Name="object_link_zora_DL_011760" Offset="0x11760" />
         <DList Name="object_link_zora_DL_011A58" Offset="0x11A58" />

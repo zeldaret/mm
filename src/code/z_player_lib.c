@@ -259,15 +259,15 @@ u8 D_801BFDE8[PLAYER_MASK_MAX - 1] = {
 };
 #endif
 
-u8 func_80122ED8(s32 maskIdMinusOne) {
+u8 Player_MaskIdToItemId(s32 maskIdMinusOne) {
     return D_801BFDE8[maskIdMinusOne];
 }
 
-u8 Player_CurMaskToItemId(GlobalContext* globalCtx) {
+u8 Player_GetCurMaskItemId(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->currentMask != PLAYER_MASK_NONE) {
-        return func_80122ED8(player->currentMask - 1);
+        return Player_MaskIdToItemId(player->currentMask - 1);
     }
 
     return ITEM_NONE;
@@ -332,7 +332,7 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
 
 extern s16 D_801BFE14[][18];
 
-// OoT's Player_SetBootData?
+// OoT's Player_SetBootData
 void func_80123140(GlobalContext* globalCtx, Player* player) {
     s16* bootRegs;
     s32 currentBoots;
@@ -441,9 +441,10 @@ s32 func_80123590(GlobalContext* globalCtx, Actor* actor) {
         player->heldActor = NULL;
         player->actor.child = NULL;
         player->stateFlags1 &= ~PLAYER_STATE1_800;
-        return 1;
+        return true;
     }
-    return 0;
+
+    return false;
 }
 
 s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
@@ -709,7 +710,7 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
 
     if ((this->itemActionParam == PLAYER_AP_STICK) && (this->unk_B28 != 0)) {
         Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
-        return ((SQ(diff.x) + SQ(diff.z)) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
+        return (SQ(diff.x) + SQ(diff.z) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
 
     return false;
@@ -725,6 +726,7 @@ u8 Player_GetMask(GlobalContext* globalCtx) {
     return player->currentMask;
 }
 
+// Unused
 void Player_RemoveMask(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -976,7 +978,7 @@ void func_8012536C(void) {
     }
 }
 
-// draws zora shield (?)
+// Draws zora shield
 void func_801253A4(GlobalContext* globalCtx, Player* player) {
     u8* phi_a0;
     Vtx* sp30;
@@ -984,7 +986,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
     f32 sp28; // scale
     s32 i;
 
-    sp28 = player->unk_B62 * 0.19607843f;
+    sp28 = player->unk_B62 * (10.0f / 51.0f);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -992,7 +994,7 @@ void func_801253A4(GlobalContext* globalCtx, Player* player) {
     Matrix_Scale(sp28, sp28, sp28, 1);
 
     // clang-format off
-    sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210), phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
+    sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
     // clang-format on
 
     // ARRAY_COUNT(object_link_zora_Vtx_011210)
