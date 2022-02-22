@@ -1,7 +1,11 @@
 /*
  * File: z_en_racedog.c
  * Overlay: ovl_En_Racedog
- * Description: Racetrack Dog
+ * Description: The dogs that run around the racetrack during the dog race.
+ *
+ * Note that the dogs milling about the Doggy Racetrack prior to and after the
+ * race are actually En_Dg. This actor is solely concerned with the dogs that
+ * actually perform the race by running around the track.
  */
 
 #include "z_en_racedog.h"
@@ -244,7 +248,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2A0.y = 0.0f;
     this->unk_2A0.z = 0.0f;
     this->unk_2C4 = 1.0f;
-    
+
     if ((D_80B25D88[this->unk_290].unk_0E >= 0x353F) && (this->unk_290 == (s16)Rand_ZeroFloat(20.0f))) {
         this->unk_28C = 5;
     } else {
