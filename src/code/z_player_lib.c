@@ -34,13 +34,66 @@ s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     return arg1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122744.s")
+s32 func_80122744(GlobalContext* globalCtx, struct_80122744_arg1* arg1, u32 arg2, Vec3s* arg3) {
+    arg1->unk_00 = arg2;
+    arg1->unk_01 = 0;
+    arg1->unk_04 = arg3;
+    return 1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122760.s")
+s32 func_80122760(GlobalContext* globalCtx, struct_80122744_arg1* arg1, f32 arg2) {
+    if (arg1->unk_01 < arg1->unk_00) {
+        Player* player = GET_PLAYER(globalCtx);
+        Vec3f sp30;
+        s32 pad;
+        s16 yaw;
+        f32 distXZ;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122868.s")
+        Math_Vec3s_ToVec3f(&sp30, &arg1->unk_04[arg1->unk_01]);
+        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &sp30);
+        func_800B6F20(globalCtx, &globalCtx->actorCtx.unk_26C, arg2, yaw);
+        globalCtx->actorCtx.unk268 = 1;
+        distXZ = Math_Vec3f_DistXZ(&player->actor.world.pos, &sp30);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801229A0.s")
+        if ((fabsf(player->actor.world.pos.y - sp30.y) < 50.0f) && (distXZ < arg2)) {
+            arg1->unk_01++;
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
+
+void func_80122868(GlobalContext* globalCtx, Player* player) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if (player->invincibilityTimer > 0) {
+        s32 phi_v0 = 50 - player->invincibilityTimer;
+
+        phi_v0 = CLAMP(phi_v0, 8, 40);
+
+        player->unk_B5F += phi_v0;
+        POLY_OPA_DISP =
+            Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 0, 0, 4000 - (s32)(Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+    } else if (gSaveContext.unk_1016 != 0) {
+        player->unk_B5F += 10;
+        POLY_OPA_DISP =
+            Gfx_SetFog(POLY_OPA_DISP, 0, 0, 255, 0, 0, 4000 - (s32)(Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_801229A0(GlobalContext* globalCtx, Player* player) {
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if ((gSaveContext.unk_1016 != 0) || (player->invincibilityTimer > 0)) {
+        POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 void func_801229EC(UNK_TYPE arg0, UNK_TYPE arg1) {
 }
@@ -109,9 +162,72 @@ void func_80122BA4(GlobalContext* globalCtx, struct_80122D44_arg1* arg1, s32 arg
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122C20.s")
+void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+    struct_80122D44_arg1_unk_04* temp_v1 = &arg1->unk_04[0];
+    s32 phi_a1;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122D44.s")
+    for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
+        // Can't be `temp_v1->unk_01 != 0`
+        if (temp_v1->unk_01) {
+            phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+            if (phi_a1 >= temp_v1->unk_01) {
+                temp_v1->unk_01 = 0;
+            } else {
+                temp_v1->unk_01 -= phi_a1;
+            }
+        }
+    }
+}
+
+typedef struct {
+    /* 0x0 */ Color_RGB8 color;
+    /* 0x4 */ Gfx* dlist;
+} struct_801BFDD0; // size = 0x08
+
+extern struct_801BFDD0 D_801BFDD0[];
+#if 0
+struct_801BFDD0 D_801BFDD0[] = {
+    { { 180, 200, 255 }, object_link_goron_DL_00BDD8 },
+    { { 155, 0, 0 }, object_link_goron_DL_014690 },
+    { { 255, 0, 0 }, object_link_goron_DL_011AB8 },
+};
+#endif
+
+void func_80122D44(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
+    struct_801BFDD0* temp_s3;
+    struct_80122D44_arg1_unk_04* phi_s2 = arg1->unk_04;
+    s32 phi_s6 = false;
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    for (i = 0; i != ARRAY_COUNT(arg1->unk_04); i++) {
+        if ((phi_s2->unk_01 != 0) && (phi_s2->unk_01 != 0xFF)) {
+            temp_s3 = &D_801BFDD0[phi_s2->unk_00 - 1];
+            Matrix_SetCurrentState(&phi_s2->unk_04);
+
+            gDPPipeSync(POLY_XLU_DISP++);
+
+            if (!phi_s6 && phi_s2->unk_00 == 2) {
+                AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_goron_Matanimheader_013138));
+                phi_s6 = true;
+            }
+
+            Scene_SetRenderModeXlu(globalCtx, 1, 2);
+            gDPSetEnvColor(POLY_XLU_DISP++, temp_s3->color.r, temp_s3->color.g, temp_s3->color.b, phi_s2->unk_01);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            gSPDisplayList(POLY_XLU_DISP++, temp_s3->dlist);
+        }
+
+        phi_s2++;
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 extern u8 D_801BFDE8[PLAYER_MASK_MAX - 1];
 #if 0
@@ -157,15 +273,62 @@ u8 Player_CurMaskToItemId(GlobalContext* globalCtx) {
     return ITEM_NONE;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122F28.s")
+void func_80122F28(Player* player) {
+    if ((player->actor.category == ACTORCAT_PLAYER) &&
+        (!(player->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_800000 | PLAYER_STATE1_200000 |
+                                  PLAYER_STATE1_800 | PLAYER_STATE1_400))) &&
+        (!(player->stateFlags2 & PLAYER_STATE2_1))) {
+        if (player->doorType < 0) {
+            ActorCutscene_SetIntentToPlay(0x7C);
+        } else {
+            ActorCutscene_SetIntentToPlay(0x7D);
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122F9C.s")
+s32 func_80122F9C(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80122FCC.s")
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && player->unk_AE7 == 2;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012300C.s")
+s32 func_80122FCC(GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012301C.s")
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
+}
+
+void func_8012300C(GlobalContext* globalCtx, s32 arg1) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    player->unk_B2B = arg1;
+}
+
+void func_8012301C(Player* player, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    s32 pad;
+
+    player->unk_AE7++;
+
+    if (player->unk_AE7 == 2) {
+        s16 objectId = gLinkFormObjectIndexes[((void)0, gSaveContext.playerForm)];
+
+        gActorOverlayTable->initInfo->objectId = objectId;
+        func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
+        player->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_KEEP);
+    } else if (player->unk_AE7 >= 3) {
+        s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, gActorOverlayTable->initInfo->objectId);
+
+        if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
+            player->actor.objBankIndex = objBankIndex;
+            player->actor.shape.rot.z = gSaveContext.playerForm + 1;
+            player->actor.init = func_80160AF8;
+            player->actor.update = func_80160B80;
+            player->actor.draw = func_80160BC0;
+            gSaveContext.equippedMask = 0;
+        }
+    }
+}
 
 extern s16 D_801BFE14[][18];
 
@@ -301,7 +464,49 @@ s32 func_801235DC(GlobalContext* globalCtx, f32 arg1, s16 arg2) {
     return false;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012364C.s")
+s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
+    if (arg2 >= 4) {
+        return ITEM_NONE;
+    }
+
+    if (arg2 == 0) {
+        s32 item = Inventory_GetBtnBItem(globalCtx);
+
+        if (item >= ITEM_FD) {
+            return item;
+        }
+
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.unk_21E == 0x18)) {
+            return ITEM_F0;
+        }
+
+        if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.unk_21E == 0x1A)) {
+            return ITEM_F1;
+        }
+
+        if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.unk_21E == 0x19)) {
+            return ITEM_F2;
+        }
+
+        return item;
+    }
+
+    if (arg2 == 1) {
+        return (gSaveContext.buttonStatus[1] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][1]
+               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][1]
+                                                              : ITEM_NONE;
+    }
+
+    if (arg2 == 2) {
+        return (gSaveContext.buttonStatus[2] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][2]
+               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][2]
+                                                              : ITEM_NONE;
+    }
+
+    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][3]
+           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][3]
+                                                          : ITEM_NONE;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123810.s")
 
@@ -615,9 +820,19 @@ s32 Player_GetExplosiveHeld(Player* player) {
     return Player_ActionToExplosive(player, player->itemActionParam);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
+s32 func_80124278(Actor* actor, s32 arg1) {
+    s32 phi_v1 = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801242B4.s")
+    // Fake match?
+    if ((arg1 == 1) || ((phi_v1 = arg1 - 3, (phi_v1 >= 0)) && (phi_v1 < 4))) {
+        return phi_v1;
+    }
+    return -1;
+}
+
+s32 func_801242B4(Player* player) {
+    return (player->stateFlags1 & PLAYER_STATE1_8000000) && player->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER;
+}
 
 s32 func_801242DC(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -689,9 +904,54 @@ extern s32 D_801C0958;
 s32 D_801C0958 = false;
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124F18.s")
+void func_80124F18(s16* arg0, f32* arg1, s16 arg2, f32 arg3, f32 arg4) {
+    f32 phi_f12;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124FF0.s")
+    if (*arg0 < arg2) {
+        *arg1 += arg3;
+    } else {
+        *arg1 -= arg3;
+    }
+
+    *arg1 = CLAMP(*arg1, -arg4, arg4);
+    *arg0 += (s16)*arg1;
+    if (((arg2 - *arg0) * (s16)*arg1) < 0) {
+        *arg0 = arg2;
+    }
+}
+
+void func_80124FF0(f32 arg0, s16 arg1, Vec3f* arg2, s16 arg3, Vec3f* arg4, Vec3f* arg5, s16* arg6, f32* arg7, f32 arg8,
+                   s16 arg9, s16* arg10, f32* arg11, s32 arg12) {
+    Vec3f sp44;
+    f32 sp40;
+    s16 temp_v0;
+    s16 sp3C;
+    f32 temp_f14;
+    f32 sp34 = Math_CosS(arg1) * arg0;
+    f32 sp30 = Math_SinS(arg1) * -arg0;
+
+    arg5->x = (Math_SinS(arg3) * sp30) + arg2->x;
+    arg5->y = arg2->y + sp34;
+    arg5->z = (Math_CosS(arg3) * sp30) + arg2->z;
+
+    Math_Vec3f_Diff(arg5, arg4, &sp44);
+    sp40 = sqrtf(SQ(sp44.x) + SQ(sp44.z));
+
+    sp3C = (sp40 <= 1.0f) ? arg3 : Math_FAtan2F(sp44.z, sp44.x);
+    sp40 = (Math_CosS(sp3C - arg3) * sp40) + arg8;
+
+    if (ABS_ALT(BINANG_SUB(sp3C, arg3)) > 0x4000) {
+        sp3C = BINANG_ROT180(sp3C);
+    }
+    sp3C = sp3C - arg3;
+
+    temp_v0 = Math_FAtan2F(sp44.y, sp40);
+    temp_v0 = CLAMP(temp_v0, (s16)-arg9, arg9);
+    // fake match?
+    if (sp3C) {}
+
+    func_80124F18(arg6, arg7, temp_v0, 20.0f, 2000.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801251C4.s")
 
@@ -832,7 +1092,7 @@ void Player_DrawGetItemImpl(GlobalContext* globalCtx, Player* player, Vec3f* ref
 }
 
 void Player_DrawGetItem(GlobalContext* globalCtx, Player* player) {
-    if (!player->giObjectLoading || (osRecvMesg(&player->giObjectLoadQueue, NULL, 0) == 0)) {
+    if (!player->giObjectLoading || (osRecvMesg(&player->giObjectLoadQueue, NULL, OS_MESG_NOBLOCK) == 0)) {
         Vec3f refPos;
         s32 drawIdPlusOne;
 

@@ -261,6 +261,10 @@ typedef enum {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEA_HORSE_CAUGHT,
+    /* 0xF0 */ ITEM_F0 = 0xF0,
+    /* 0xF1 */ ITEM_F1,
+    /* 0xF2 */ ITEM_F2,
+    /* 0xFD */ ITEM_FD = 0xFD,
     /* 0xFF */ ITEM_NONE = 0xFF
 } ItemID;
 
