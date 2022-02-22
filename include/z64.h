@@ -1,5 +1,5 @@
-#ifndef _Z64_H_
-#define _Z64_H_
+#ifndef Z64_H
+#define Z64_H
 
 #include "libc/math.h"
 #include "libc/stdarg.h"
@@ -611,7 +611,7 @@ typedef struct {
     /* 0x214 */ u16 unk_214;
     /* 0x218 */ f32 unk_218;
     /* 0x21C */ s16 unk_21C;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21E */ s16 unk_21E; // do_action label index for the b button
     /* 0x220 */ s16 unk_220;
     /* 0x222 */ s16 unk_222;
     /* 0x224 */ s16 unk_224;
@@ -1309,7 +1309,7 @@ struct GlobalContext {
     /* 0x18788 */ void (*talkWithPlayer)(struct GlobalContext* globalCtx, Actor* actor);
     /* 0x1878C */ void (*unk_1878C)(struct GlobalContext* globalCtx);
     /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
-    /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
+    /* 0x18794 */ s32 (*unk_18794)(GlobalContext*, Player*, s32, s32);
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
     /* 0x1879C */ s16 unk_1879C[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
@@ -1336,7 +1336,7 @@ struct GlobalContext {
     /* 0x18876 */ s16 unk_18876;
     /* 0x18878 */ s16 bgCoverAlpha;
     /* 0x1887A */ u16 nextEntranceIndex;
-    /* 0x1887C */ s8 unk_1887C;
+    /* 0x1887C */ s8 unk_1887C; // shootingGalleryStatus?
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
     /* 0x1887F */ u8 unk_1887F;

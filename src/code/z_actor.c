@@ -2206,8 +2206,8 @@ void func_800B9098(Actor* actor) {
     actor->audioFlags |= 0x40;
 }
 
-s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4) {
-    if (func_800C99D4(&globalCtx->colCtx, polygon, index) == 8) {
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* poly, s32 bgId, s32 arg4) {
+    if (func_800C99D4(&globalCtx->colCtx, poly, bgId) == 8) {
         return true;
     }
 

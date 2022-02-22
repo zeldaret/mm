@@ -1,5 +1,5 @@
-#ifndef _FUNCTIONS_H_
-#define _FUNCTIONS_H_
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 #include "z64.h"
 
@@ -566,9 +566,9 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
 void EffectSsBubble_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 yPosOffset, f32 yPosRandScale, f32 xzPosRandScale, f32 scale);
 void EffectSsGRipple_Spawn(GlobalContext* globalCtx, Vec3f* pos, s16 radius, s16 radiusMax, s16 life);
 void EffectSsGSplash_Spawn(GlobalContext* globalCtx, Vec3f* pos, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 type, s16 scale);
-// void EffectSsGFire_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2);
+void EffectSsGFire_Spawn(GlobalContext* globalCtx, Vec3f* pos);
 // void EffectSsLightning_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, Color_RGBA8* pzParm3, Color_RGBA8* pzParm4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
-// void EffectSsDtBubble_SpawnColorProfile(UNK_TYPE4 param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, UNK_TYPE2 param_5, UNK_TYPE2 param_6, UNK_TYPE2 param_7, UNK_TYPE2 param_8);
+void EffectSsDtBubble_SpawnColorProfile(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 life, s16 colorProfile, s16 randXZ);
 void EffectSsDtBubble_SpawnCustomColor(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s16 life, s16 randXZ);
 void EffectSsHahen_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 unused, s16 scale, s16 objId, s16 life, Gfx* dList);
 void EffectSsHahen_SpawnBurst(GlobalContext* globalCtx, Vec3f* pos, f32 burstScale, s16 unused, s16 scale, s16 randScaleRange, s16 count, s16 objId, s16 life, Gfx* dList);
@@ -742,7 +742,7 @@ void func_800B9010(Actor* actor, u16 sfxId);
 void func_800B9038(Actor* actor, s32 timer);
 void func_800B9084(Actor* actor);
 void func_800B9098(Actor* actor);
-s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* polygon, s32 index, s32 arg4);
+s32 func_800B90AC(GlobalContext* globalCtx, Actor* actor, CollisionPoly* poly, s32 bgId, s32 arg4);
 void func_800B90F4(GlobalContext* globalCtx);
 void func_800B9120(ActorContext* actorCtx);
 void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEntry* actorEntry);
@@ -2006,6 +2006,7 @@ void func_80121FC4(GlobalContext* globalCtx);
 Path* Path_GetByIndex(GlobalContext* globalCtx, s16 index, s16 max);
 f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
 void Path_CopyLastPoint(Path* path, Vec3f* dest);
+
 void FrameAdvance_Init(FrameAdvanceContext* frameAdvCtx);
 s32 FrameAdvance_Update(FrameAdvanceContext* frameAdvCtx, Input* input);
 
@@ -2077,7 +2078,7 @@ void func_80125500(GlobalContext* globalCtx, Player* player, s32 limbIndex, Vec3
 s32 func_80125D4C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
 s32 func_801262C8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
 s32 func_801263FC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor);
-s32 func_80126440(GlobalContext* globalCtx, Collider* param_2, s32* param_3, Vec3f* param_4, Vec3f* param_5);
+s32 func_80126440(GlobalContext* globalCtx, ColliderQuad* collider, WeaponInfo* weaponInfo, Vec3f* arg3, Vec3f* arg4);
 void Player_DrawGetItem(GlobalContext* globalCtx, Player* player);
 void func_80126B8C(GlobalContext* globalCtx, Player* player);
 s32 func_80127438(GlobalContext* globalCtx, Player* player, s32 maskId);

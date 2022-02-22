@@ -581,7 +581,7 @@ void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowUnkStruct* ar
 
     Matrix_MultiplyVector3fByState(&arg2->unk_48, &this->unk_234);
     if (func_8088ACE0 == this->actionFunc) {
-        if (this->unk_244 == 0) {
+        if (!this->unk_244.active) {
             sp4C = arg2->unk_00;
         } else {
             sp4C = arg2->unk_18[globalCtx->gameplayFrames % 2];
@@ -591,9 +591,9 @@ void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowUnkStruct* ar
         if (this->actor.params < ENARROW_8) {
             sp30 = this->actor.params < ENARROW_6;
             if (this->unk_264 == 0) {
-                sp30 &= func_80126440(globalCtx, &this->collider.base, &this->unk_244, &sp40, &sp34);
-            } else if (sp30 && (sp40.x == this->unk_248) && (sp40.y == this->unk_24C) && (sp40.z == this->unk_250) &&
-                       (sp34.x == this->unk_254) && (sp34.y == this->unk_258) && (sp34.z == this->unk_25C)) {
+                sp30 &= func_80126440(globalCtx, &this->collider, &this->unk_244, &sp40, &sp34);
+            } else if (sp30 && (sp40.x == this->unk_244.tip.x) && (sp40.y == this->unk_244.tip.y) && (sp40.z == this->unk_244.tip.z) &&
+                       (sp34.x == this->unk_244.base.x) && (sp34.y == this->unk_244.base.y) && (sp34.z == this->unk_244.base.z)) {
                 sp30 = false;
             }
             if (sp30) {
