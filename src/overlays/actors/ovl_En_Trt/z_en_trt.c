@@ -1221,9 +1221,7 @@ void EnTrt_UpdateCursorAnim(EnTrt* this) {
 void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-
-    // POSSIBLY FAKE
-    s32 maxColor = 255;
+    s32 maxColor = 255; // POSSIBLY FAKE
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
