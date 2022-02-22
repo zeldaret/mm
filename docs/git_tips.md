@@ -10,13 +10,13 @@ When developing in a large project such as this one, it is a good idea to use br
 
 To create a new branch on the command line there are a couple of different ways:
 
-- The first way is creating a branch first then navigating to the branch
+- The first way is to first create a branch
 
   ```bash
-  git checkout <branch-name>
+  git branch <branch-name>
   ```
 
-  This will create a branch, but will not put you in that branch. To navigate into the branch you will need to "checkout" the branch by entering
+  The previous command has made the new branch, but you are still on master. To navigate to the new branch you will need to "checkout" the branch by entering
 
   ```bash
   git checkout <branch-name>
@@ -30,7 +30,7 @@ To create a new branch on the command line there are a couple of different ways:
 
     This will create a new branch from whatever branch you were on
 
-<mark>IMPORTANT</mark> - When making new branches it is recommended to do this off of the master/main branch
+<mark>IMPORTANT</mark> - When making new branches it is recommended to do this from the master/main branch
 
 ## Remote Repositories
 
@@ -85,6 +85,36 @@ Switched to branch <branch-name>
 
 $ git merge master
 ```
+
+### Resolving Merge Conflicts
+
+Merge conflicts are bound to happen at some point. When merging you will be notified if there are any conflicts. To resolve them, open the files that have conflicts and the sections will have indications of where the conflicts are. In VS Code, the conflict areas will appear in highlighted sections
+
+![Merge Conflict](images/merge_conflict.png)
+
+Inspect the differences and choose to Accept the current change (Typically what you currently have), accept the incoming change from the merge, or accept both changes. Once that is done save the file and add it to the merge commit.
+
+If you prefer the command line, you can run
+
+```bash
+git status
+```
+
+to get a list of all the files with a conflict. With those results, to see what the differences are in the files you can run:
+
+```bash
+git diff <file-path>
+```
+
+You will need to open the conflicted file in a text editor (Vim/emacs/vscode) to fix the file.
+
+If things get too complicated there is always the emergency parachute to pull and abort the entire merge process:
+
+```bash
+git merge --abort
+```
+
+Executing this command will exit from the merge process and return the branch to the state before the merge began.
 
 ## Stashing Changes For Later
 
