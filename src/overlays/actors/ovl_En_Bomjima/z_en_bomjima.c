@@ -74,32 +74,19 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-static u16 D_80C00A44[] = {
-    0x0719,
-    0x071A,
-    0x071B,
-    0x0708,
+u16 D_80C00A44[] = { 0x0719, 0x071A, 0x071B, 0x0708 };
+
+u16 D_80C00A4C[] = { 0x0739, 0x073A, 0x073B, 0x0000 };
+
+u16 D_80C00A54[] = {
+    0x0739, 0x073A, 0x073B, 0x0714, 0x0709, 0x070A, 0x070B, 0x070C, 0x070D, 0x070E, 0x070F, 0x0712, 0x0713,
 };
 
-static u16 D_80C00A4C[] = {
-    0x0739,
-    0x073A,
-    0x073B,
-    0x0000,
+u16 D_80C00A70[] = {
+    0x0739, 0x073A, 0x073B, 0x0759, 0x0753, 0x0754, 0x0755, 0x0756, 0x070D, 0x0757, 0x0758, 0x0712, 0x0713,
 };
 
-static u16 D_80C00A54[] = { 0x0739, 0x073A, 0x073B, 0x0714, 0x0709, 0x070A, 0x070B,
-                            0x070C, 0x070D, 0x070E, 0x070F, 0x0712, 0x0713 };
-
-static u16 D_80C00A70[] = { 0x0739, 0x073A, 0x073B, 0x0759, 0x0753, 0x0754, 0x0755,
-                            0x0756, 0x070D, 0x0757, 0x0758, 0x0712, 0x0713 };
-
-static u16 D_80C00A8C[] = {
-    0x0736,
-    0x0737,
-    0x0738,
-    0x074E,
-};
+u16 D_80C00A8C[] = { 0x0736, 0x0737, 0x0738, 0x074E };
 
 static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_0064B8, &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
@@ -109,9 +96,13 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0, &object_cs_Anim_0031C4,
 };
 
-static u8 D_80C00AE4[] = {
+u8 D_80C00AE4[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x00, 0x00,
     0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00,
+};
+
+s16 D_80C00AF8[] = {
+    0x4000, 0x003C, 0x4000, 0x001E, 0xC000, 0x001E, 0xC000, 0x003C,
 };
 
 void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -640,21 +631,7 @@ void func_80BFF6CC(EnBomjima* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-// Data indexing is wrong
-
-typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-} EnBombjimaStruct;
-
 void func_80BFF754(EnBomjima* this, GlobalContext* globalCtx) {
-    static EnBombjimaStruct D_80C00AF8[] = {
-        { 0x4000, 0x003C },
-        { 0x4000, 0x001E },
-        { 0xC000, 0x001E },
-        { 0xC000, 0x003C },
-    };
     Player* player = GET_PLAYER(globalCtx);
     Vec3f spA0;
     EnBombal* temp_s3;
@@ -688,13 +665,12 @@ void func_80BFF754(EnBomjima* this, GlobalContext* globalCtx) {
         temp_s3 = (EnBombal*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_BOMJIMA, spA0.x,
                                                 spA0.y, spA0.z, 0, 0, 0, i + 32);
         if (temp_s3 != NULL) {
-            s32 idx1 = (i * 2) - 1;
-            s32 idx2 = i * 2;
+            s32 index = (i * 2) - 2;
 
             Math_Vec3f_Copy(&spA0, &this->actor.world.pos);
 
-            spA0.x += Math_SinS(D_80C00AF8[idx1 - 1].unk_00 + this->actor.world.rot.y) * D_80C00AF8[idx2].unk_02;
-            spA0.z += Math_CosS(D_80C00AF8[idx2].unk_00 + this->actor.world.rot.y) * D_80C00AF8[idx2].unk_02;
+            spA0.x += Math_SinS(D_80C00AF8[(i * 2) - 2] + this->actor.world.rot.y) * D_80C00AF8[index + 1];
+            spA0.z += Math_CosS(D_80C00AF8[index] + this->actor.world.rot.y) * D_80C00AF8[index + 1];
 
             Math_Vec3f_Copy(&temp_s3->unk_2A4, &spA0);
         }
@@ -704,15 +680,6 @@ void func_80BFF754(EnBomjima* this, GlobalContext* globalCtx) {
     ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D4[1], &this->actor);
     this->actionFunc = func_80BFF9B0;
 }
-#else
-static s16 D_80C00AF8[][2] = {
-    { 0x4000, 0x003C },
-    { 0x4000, 0x001E },
-    { 0xC000, 0x001E },
-    { 0xC000, 0x003C },
-};
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bomjima/func_80BFF754.s")
-#endif
 
 void func_80BFF9B0(EnBomjima* this, GlobalContext* globalCtx) {
     if (D_80C009F0 >= 4) {
