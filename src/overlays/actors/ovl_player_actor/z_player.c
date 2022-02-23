@@ -12,6 +12,11 @@ extern UNK_TYPE D_06008860;
 extern UNK_TYPE D_0600BDD8;
 extern UNK_TYPE D_060178D0;
 
+void Player_Init(Actor* thisx, GlobalContext* globalCtx);
+void Player_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void Player_Update(Actor* thisx, GlobalContext* globalCtx);
+void Player_Draw(Actor* thisx, GlobalContext* globalCtx);
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DA90.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_player_actor/func_8082DABC.s")
