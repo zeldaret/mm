@@ -21,6 +21,7 @@ void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
 void func_809CA71C(EnSyatekiCrow* this);
 void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx);
 void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx);
+void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Syateki_Crow_InitVars = {
@@ -209,9 +210,20 @@ void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAAF8.s")
+void func_809CAAF8(EnSyatekiCrow* this) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx);
+    syatekiMan->unk_280 += 60;
+    this->unk_1C2 = 0;
+    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.velocity.y = 0.0f;
+    Animation_Change(&this->skelAnime, &D_060000F0, 0.4f, 0.0f, 0.0f, 1, -3.0f);
+    this->actor.bgCheckFlags &= ~1;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    this->actionFunc = func_809CABC0;
+}
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CABC0.s")
 
 void func_809CACD0(EnSyatekiCrow* this, GlobalContext* globalCtx);
