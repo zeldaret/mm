@@ -100,7 +100,11 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_809CA5D4(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Destroy.s")
+void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiCrow* this = THIS;
+
+    Collider_DestroyJntSph(globalCtx, &this->unk_23C);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA5D4.s")
 
