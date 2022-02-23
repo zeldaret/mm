@@ -31,7 +31,7 @@ typedef struct EnIk {
     /* 0x02F6 */ s16 unk_2F6;
     /* 0x02F8 */ s16 unk_2F8;
     /* 0x02FA */ s16 unk_2FA;
-    /* 0x02FC */ s16 unk_2FC;
+    /* 0x02FC */ s16 invincibilityFrames;
     // /* 0x02FE */ char unk_2FE[0x2];
     /* 0x0300 */ s32 effectIndex;
     /* 0x0304 */ f32 effectAlpha;

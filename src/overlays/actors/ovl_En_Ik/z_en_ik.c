@@ -54,7 +54,7 @@ typedef struct {
 
 EnIkUnkStruct D_8092BFA0[] = {
     { object_ik_DL_00CF08, 0x0000 }, { object_ik_DL_00A5D8, 0x0000 }, { object_ik_DL_00A6D0, 0x7FFF },
-    { object_ik_DL_00A820, 0x4000 }, { object_ik_DL_00A780, 0xc000 }, { ((void*)0), 0x4000 },
+    { object_ik_DL_00A820, 0x4000 }, { object_ik_DL_00A780, 0xC000 }, { ((void*)0), 0x4000 },
     { ((void*)0), 0xC000 },
 };
 
@@ -309,7 +309,7 @@ void func_80929B6C(EnIk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80929BEC(EnIk* this, GlobalContext* globalCtx) {
+void EnIk_HitArmor(EnIk* this, GlobalContext* globalCtx) {
     this->effectAlpha = 4.0f;
     this->effectScale = 0.65f;
     this->drawEffect = 20;
@@ -344,7 +344,7 @@ s32 func_80929D04(EnIk* this) {
             }
             func_8092A680(this);
             return 1;
-        } else if ((this->unk_2F4 != 0) || ((phi_v1 >= 0x4001) && (Rand_ZeroOne() < 0.1f))) {
+        } else if ((this->unk_2F4 != 0) || ((phi_v1 > 0x4000) && (Rand_ZeroOne() < 0.1f))) {
             func_8092A8D8(this);
             return 1;
         }
@@ -382,12 +382,12 @@ void func_80929F20(EnIk* this, GlobalContext* globalCtx) {
         if (this->unk_2F6 == 0) {
             func_80929E2C(this, globalCtx);
         }
-    } else if ((this->colliderCylinder.base.acFlags & 2)) {
+    } else if ((this->colliderCylinder.base.acFlags & AC_HIT)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
-        func_801A2E54(0x38);
+        func_801A2E54(NA_BGM_MINI_BOSS);
         this->actor.hintId = 0x35;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
-        this->unk_2FC = 0xC;
+        this->invincibilityFrames = 12;
         func_80929FC8(this);
     }
 }
@@ -477,8 +477,8 @@ void func_8092A33C(EnIk* this, GlobalContext* globalCtx) {
             sp2C.z = (Math_CosS((this->actor.shape.rot.y + 0x6A4)) * 70.0f) + this->actor.world.pos.z;
             sp2C.y = this->actor.world.pos.y;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_HIT_GND);
-            func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 0x19, 5);
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 0xB4, 0x14, 0x64);
+            func_800DFD04(globalCtx->cameraPtrs[globalCtx->activeCamera], 2, 25, 5);
+            func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
             CollisionCheck_SpawnShieldParticles(globalCtx, &sp2C);
         }
 
@@ -579,12 +579,12 @@ void func_8092A8D8(EnIk* this) {
 void func_8092A994(EnIk* this, GlobalContext* globalCtx) {
     this->unk_2F6++;
     if (Animation_OnFrame(&this->skelAnime, 13.0f) != 0) {
-        Actor_PlaySfxAtPos(&this->actor, 0x3929U);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
     }
     if ((this->skelAnime.curFrame > 12.0f) && (this->skelAnime.curFrame < 20.0f)) {
         this->colliderQuad.base.atFlags |= 1;
     } else {
-        this->colliderQuad.base.atFlags &= 0xFFFE;
+        this->colliderQuad.base.atFlags &= ~AT_ON;
     }
     this->actor.shape.rot.y += this->actor.world.rot.z;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -655,7 +655,7 @@ void func_8092ACFC(EnIk* this, GlobalContext* globalCtx) {
         }
     } else {
         this->actor.colorFilterTimer = 12;
-        this->unk_2FC = 12;
+        this->invincibilityFrames = 12;
     }
 }
 
@@ -671,7 +671,7 @@ void func_8092AE14(EnIk* this, GlobalContext* globalCtx) {
     s32 phi_s0;
     Vec3f sp60;
 
-    this->unk_2FC = 12;
+    this->invincibilityFrames = 12;
     if (SkelAnime_Update(&this->skelAnime) != 0) {
         if (this->unk_2F6 == 0x18) {
             SoundSource_PlaySfxEachFrameAtFixedWorldPos(globalCtx, &this->actor.world.pos, 35,
@@ -679,14 +679,14 @@ void func_8092AE14(EnIk* this, GlobalContext* globalCtx) {
             if (1) {}
         }
         if (this->unk_2F6 != 0) {
-            this->unk_2F6 -= 1;
+            this->unk_2F6--;
             phi_s0 = 6 - (this->unk_2F6 >> 2);
             if (phi_s0 >= 0) {
                 do {
                     sp60.x = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.x;
                     sp60.z = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.z;
                     sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
-                    func_800B3030(globalCtx, &sp60, &D_8092C19C, &D_8092C19C, 0x64, 0, 2);
+                    func_800B3030(globalCtx, &sp60, &D_8092C19C, &D_8092C19C, 100, 0, 2);
                     phi_s0--;
                 } while (phi_s0 >= 0);
             }
@@ -704,7 +704,7 @@ void func_8092AE14(EnIk* this, GlobalContext* globalCtx) {
 }
 
 void func_8092AFB4(EnIk* this) {
-    this->unk_2FC = 0;
+    this->invincibilityFrames = 0;
     this->actionFunc = func_8092AFD4;
     this->actor.speedXZ = 0.0f;
 }
@@ -735,7 +735,7 @@ void func_8092B03C(EnIk* this) {
 void func_8092B098(EnIk* this, GlobalContext* globalCtx) {
     Vec3f unkVec;
 
-    this->unk_2FC = 0xC;
+    this->invincibilityFrames = 12;
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene) != 0) {
         if (this->actor.cutscene != -1) {
             ActorCutscene_StartAndSetFlag(this->actor.cutscene, &this->actor);
@@ -770,14 +770,14 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
         }
         this->colliderTris.base.acFlags &= ~AC_BOUNCED;
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
-    } else if (((this->colliderCylinder.base.acFlags & 2) != 0)) {
+    } else if (((this->colliderCylinder.base.acFlags & AC_HIT) != 0)) {
         sp2C = 0;
         Actor_SetDropFlag(&this->actor, &this->colliderCylinder.info);
         this->colliderCylinder.base.acFlags &= ~AC_HIT;
         if ((this->actor.colChkInfo.damageEffect != 15) &&
-            ((this->drawEffect != 0xA) || ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3) == 0))) {
+            ((this->drawEffect != 10) || ((this->colliderCylinder.info.acHitInfo->toucher.dmgFlags & 0xDB0B3) == 0))) {
             Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 12);
-            this->unk_2FC = 0xC;
+            this->invincibilityFrames = 12;
             func_80929B6C(this, globalCtx);
             this->colliderQuad.base.atFlags &= ~AT_ON;
             if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -801,7 +801,7 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
                     func_8092AFB4(this);
                     if (this->actor.colChkInfo.health == 0) {
                         this->unk_2F6 = 3;
-                        this->unk_2FC = 0xC;
+                        this->invincibilityFrames = 12;
                     }
                 } else {
                     if (this->actor.colChkInfo.damageEffect == 2) {
@@ -809,7 +809,7 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
                         this->effectScale = 0.65f;
                         this->drawEffect = 0;
                     } else if (this->actor.colChkInfo.damageEffect == 4) {
-                        func_80929BEC(this, globalCtx);
+                        EnIk_HitArmor(this, globalCtx);
                     }
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_DAMAGE);
                     if (this->actor.colChkInfo.health != 0) {
@@ -822,7 +822,7 @@ void func_8092B1B4(EnIk* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_ARMOR_HIT);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_IRONNACK_DAMAGE);
                 if (this->actor.colChkInfo.damageEffect == 4) {
-                    func_80929BEC(this, globalCtx);
+                    EnIk_HitArmor(this, globalCtx);
                 }
             }
         }
@@ -849,10 +849,10 @@ void func_8092B46C(EnIk* this, GlobalContext* globalCtx) {
                     sp68.x = randPlusMinusPoint5Scaled(20.0f) + ptr->unk_04.x;
                     sp68.y = Rand_ZeroFloat(20.0f) + ptr->unk_04.y;
                     sp68.z = randPlusMinusPoint5Scaled(20.0f) + ptr->unk_04.z;
-                    func_800B3030(globalCtx, &sp68, &gZeroVec3f, &gZeroVec3f, 0x28, 7, 2);
+                    func_800B3030(globalCtx, &sp68, &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
                 }
 
-                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 11, 0x3878);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &ptr->unk_04, 11, NA_SE_EN_EXTINCT);
             }
         }
     }
@@ -865,20 +865,20 @@ void EnIk_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->actionFunc != func_8092B098) {
         func_8092B1B4(this, globalCtx);
     } else {
-        this->colliderTris.base.acFlags &= ~128;
-        this->colliderCylinder.base.acFlags &= ~2;
+        this->colliderTris.base.acFlags &= ~0x80;
+        this->colliderCylinder.base.acFlags &= ~AC_HIT;
     }
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 75.0f, 30.0f, 30.0f, 0x1D);
     this->actor.focus.rot.y = this->actor.shape.rot.y;
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
-    if (this->unk_2FC == 0) {
+    if (this->invincibilityFrames == 0) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
     } else {
-        this->unk_2FC--;
+        this->invincibilityFrames--;
     }
-    if (this->colliderQuad.base.atFlags & 1) {
+    if (this->colliderQuad.base.atFlags & AT_ON) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderQuad.base);
     }
     if (this->actionFunc == func_8092ABD8) {
@@ -976,7 +976,7 @@ void EnIk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         this->colliderCylinder.dim.pos.z = this->actor.focus.pos.z;
     }
 
-    if ((limbIndex == 0x11) && (this->unk_2F8 != this->unk_2F6) &&
+    if ((limbIndex == 17) && (this->unk_2F8 != this->unk_2F6) &&
         ((this->actionFunc == func_8092A33C) || (this->actionFunc == func_8092A754) ||
          (this->actionFunc == func_8092A994))) {
         Math_Vec3f_Copy(&sp68, this->colliderQuad.dim.quad);

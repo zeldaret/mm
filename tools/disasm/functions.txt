@@ -7076,7 +7076,7 @@
     0x80929A98:("EnIk_Destroy",),
     0x80929AF8:("func_80929AF8",),
     0x80929B6C:("func_80929B6C",),
-    0x80929BEC:("func_80929BEC",),
+    0x80929BEC:("EnIk_HitArmor",),
     0x80929C80:("func_80929C80",),
     0x80929D04:("func_80929D04",),
     0x80929E2C:("func_80929E2C",),
