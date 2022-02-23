@@ -56,7 +56,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 50, 50, 0, { 0, 0, 0 } },
 };
 
-s32 D_80ABBE1C = 0;
+s32 sGuardCount = 0;
 
 s32 D_80ABBE20 = 0;
 
@@ -104,8 +104,8 @@ void EnGuardNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.015f);
     Math_Vec3f_Copy(&this->guardPos, &this->actor.world.pos);
-    this->guardCount = D_80ABBE1C;
-    D_80ABBE1C++;
+    this->guardNumber = sGuardCount;
+    sGuardCount++;
 
     // If you have returned deku princess guards will init burrowed.
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {

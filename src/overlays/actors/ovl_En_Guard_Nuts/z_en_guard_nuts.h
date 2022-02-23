@@ -19,7 +19,7 @@ typedef struct EnGuardNuts {
     /* 0x214 */ s16 timer;
     /* 0x218 */ s32 animIndex;
     /* 0x21C */ s16 state;
-    /* 0x21E */ s16 guardCount; // Unused - Counter for how many guards have spawned
+    /* 0x21E */ s16 guardNumber; // Unused - Number used to identify guard
     /* 0x220 */ s32 guardTextIndex;
     /* 0x224 */ u8 hasCompletedConversation; // Flag set when player has gone through all text.
     /* 0x228 */ Vec3f guardPos;
