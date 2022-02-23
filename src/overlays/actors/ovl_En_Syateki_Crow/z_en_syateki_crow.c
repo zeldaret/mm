@@ -169,7 +169,45 @@ void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA8E4.s")
+void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+    Vec3f sp34;
+    f32 sp30;
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    if (syatekiMan->unk_26A != 1) {
+        func_809CA5D4(this);
+        return;
+    }
+
+    sp34.x = this->unk_1C8[this->unk_1CC].x;
+    sp34.y = this->unk_1C8[this->unk_1CC].y;
+    sp34.z = this->unk_1C8[this->unk_1CC].z;
+
+    sp30 = Math_Vec3f_DistXZ(&this->actor.world.pos, &sp34);
+    this->unk_1C0 = Math_Vec3f_Yaw(&this->actor.world.pos, &sp34);
+    this->unk_1BE = Math_Vec3f_Pitch(&this->actor.world.pos, &sp34);
+
+    if (sp30 > 100.0f) {
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_1C0, 5, 0x3000, 0x100);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_1BE, 5, 0x3000, 0x100);
+        this->actor.world.rot.x = -this->actor.shape.rot.x;
+    } else {
+        if (this->unk_1CC < (this->unk_1CE - 1)) {
+            this->unk_1CC++;
+        } else {
+            this->unk_1C2 = 0;
+            syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
+            func_809CA5D4(this);
+        }
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+    this->actor.shape.yOffset = (fabsf(this->skelAnime.curFrame - 3.0f) * 150.0f) + 1700.0f;
+    if ((syatekiMan->unk_26C % 90) == 0) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAAF8.s")
 
