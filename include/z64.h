@@ -171,8 +171,8 @@ typedef struct FireObjColors {
 typedef struct FireObjLightParams {
     /* 0x0 */ s16 radius;
     /* 0x2 */ Color_RGB8 color;
-    /* 0x5 */ Color_RGB8 randMultiplier
-} FireObjLightParams;
+    /* 0x5 */ Color_RGB8 randMultiplier;
+} FireObjLightParams; // size = 0x8
 
 #define FONT_CHAR_TEX_WIDTH  16
 #define FONT_CHAR_TEX_HEIGHT 16
