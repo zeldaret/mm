@@ -6,6 +6,7 @@
 
 #include "z_en_syateki_crow.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
+#include "objects/object_crow/object_crow.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
@@ -65,9 +66,6 @@ static Vec3f D_809CB0CC = { 0.0f, 0.0f, 0.0f };
 
 static Vec3f D_809CB0D8 = { 2500.0f, 0.0f, 0.0f };
 
-extern FlexSkeletonHeader D_060010C0;
-extern AnimationHeader D_060000F0;
-
 void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnSyatekiCrow* this = THIS;
@@ -87,7 +85,7 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     Actor_ProcessInitChain(&this->actor, D_809CB0B0);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->jointTable, this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0, this->jointTable, this->morphTable, 9);
     Collider_InitJntSph(globalCtx, &this->unk_23C);
     Collider_SetJntSph(globalCtx, &this->unk_23C, &this->actor, &D_809CB0A0, &this->unk_25C);
     this->unk_23C.elements->dim.worldSphere.radius = D_809CB0A0.elements[0].dim.modelSphere.radius;
@@ -218,7 +216,7 @@ void func_809CAAF8(EnSyatekiCrow* this) {
     this->unk_1C2 = 0;
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &D_060000F0, 0.4f, 0.0f, 0.0f, 1, -3.0f);
+    Animation_Change(&this->skelAnime, &object_crow_Anim_0000F0, 0.4f, 0.0f, 0.0f, 1, -3.0f);
     this->actor.bgCheckFlags &= ~1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
