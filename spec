@@ -2455,7 +2455,6 @@ beginseg
     name "ovl_En_Syateki_Crow"
     compress
     include "build/src/overlays/actors/ovl_En_Syateki_Crow/z_en_syateki_crow.o"
-    include "build/data/ovl_En_Syateki_Crow/ovl_En_Syateki_Crow.data.o"
     include "build/data/ovl_En_Syateki_Crow/ovl_En_Syateki_Crow.reloc.o"
 endseg
 

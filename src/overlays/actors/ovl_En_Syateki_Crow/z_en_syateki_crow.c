@@ -23,7 +23,8 @@ void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx);
 void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx);
 void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx);
 
-#if 0
+static Vec3f D_809CB050 = { 0.0f, 0.0f, 0.0f };
+
 const ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
     ACTORCAT_ENEMY,
@@ -58,15 +59,11 @@ static InitChainEntry D_809CB0B0[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
-#endif
+static Vec3f D_809CB0C0 = { 0.0f, 20.0f, 0.0f };
 
-extern ColliderJntSphElementInit D_809CB07C[1];
-extern ColliderJntSphInit D_809CB0A0;
-extern InitChainEntry D_809CB0B0[];
-extern Vec3f D_809CB050;
-extern Vec3f D_809CB0D8;
-extern Vec3f D_809CB0C0;
-extern Vec3f D_809CB0CC;
+static Vec3f D_809CB0CC = { 0.0f, 0.0f, 0.0f };
+
+static Vec3f D_809CB0D8 = { 2500.0f, 0.0f, 0.0f };
 
 extern FlexSkeletonHeader D_060010C0;
 extern AnimationHeader D_060000F0;
