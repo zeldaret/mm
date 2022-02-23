@@ -18,7 +18,8 @@ void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809CA5D4(EnSyatekiCrow* this);
 void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
-void func_809CA71C(EnSyatekiCrow* arg0);
+void func_809CA71C(EnSyatekiCrow* this);
+void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Syateki_Crow_InitVars = {
@@ -135,7 +136,25 @@ void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA71C.s")
+void func_809CA71C(EnSyatekiCrow* this) {
+    Vec3f sp24;
+    s16 temp;
+
+    this->actor.world.pos.x = this->unk_1C8[0].x;
+    this->actor.world.pos.y = this->unk_1C8[0].y;
+    this->actor.world.pos.z = this->unk_1C8[0].z;
+    sp24.x = this->unk_1C8[this->unk_1CC].x;
+    sp24.y = this->unk_1C8[this->unk_1CC].y;
+    sp24.z = this->unk_1C8[this->unk_1CC].z;
+    temp = Math_Vec3f_Yaw(&this->actor.world.pos, &sp24);
+    this->actor.world.rot.y = temp;
+    this->actor.shape.rot.y = temp;
+    temp = Math_Vec3f_Pitch(&this->actor.world.pos, &sp24);
+    this->actor.shape.rot.x = temp;
+    this->actor.world.rot.x = temp;
+    this->actor.draw = EnSyatekiCrow_Draw;
+    this->actionFunc = func_809CA840;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA840.s")
 
