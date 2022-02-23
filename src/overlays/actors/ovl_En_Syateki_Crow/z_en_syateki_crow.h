@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define EN_SYATEKI_CROW_GET_PARAM_F(thisx) ((thisx)->params & 0xF)
+#define EN_SYATEKI_CROW_GET_PARAM_F0(thisx) (((thisx)->params & 0xF0) >> 4)
 #define EN_SYATEKI_CROW_GET_PARAM_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 struct EnSyatekiCrow;
