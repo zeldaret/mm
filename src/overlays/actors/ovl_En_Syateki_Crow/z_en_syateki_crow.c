@@ -64,6 +64,9 @@ extern ColliderJntSphElementInit D_809CB07C[1];
 extern ColliderJntSphInit D_809CB0A0;
 extern InitChainEntry D_809CB0B0[];
 extern Vec3f D_809CB050;
+extern void* D_809CB0AC;
+extern Vec3f D_809CB0C0;
+extern Vec3f D_809CB0CC;
 
 extern FlexSkeletonHeader D_060010C0;
 extern AnimationHeader D_060000F0;
@@ -247,8 +250,23 @@ void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     this->unk_1C4++;
 }
 
-void func_809CACD0(EnSyatekiCrow* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CACD0.s")
+void func_809CACD0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+    if (this->actionFunc == func_809CA8E4) {
+        if (this->unk_23C.base.acFlags & AC_HIT) {
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            this->unk_1C4 = 0;
+            this->unk_23C.base.acFlags &= ~AC_HIT;
+            EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_809CB0C0, &D_809CB0CC, 5, 1);
+            func_809CAAF8(this);
+        } else {
+            this->unk_23C.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
+            this->unk_23C.elements->dim.worldSphere.center.y =
+                D_809CB0A0.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
+            this->unk_23C.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_23C.base);
+        }
+    }
+}
 
 void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiCrow* this = THIS;
