@@ -5,6 +5,7 @@
  */
 
 #include "z_en_syateki_crow.h"
+#include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
@@ -14,6 +15,8 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
+
+void func_809CA5D4(EnSyatekiCrow* this);
 
 #if 0
 const ActorInit En_Syateki_Crow_InitVars = {
@@ -56,9 +59,46 @@ extern ColliderJntSphElementInit D_809CB07C[1];
 extern ColliderJntSphInit D_809CB0A0;
 extern InitChainEntry D_809CB0B0[];
 
-extern UNK_TYPE D_060000F0;
+extern FlexSkeletonHeader D_060010C0;
+extern AnimationHeader D_060000F0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Init.s")
+void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnSyatekiCrow* this = THIS;
+    Path* path;
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+    s32 temp;
+
+    path = syatekiMan->path;
+    while (path->unk2 != 0) {
+        path = &globalCtx->setupPathList[path->unk1];
+    }
+
+    temp = 0;
+    while (temp < EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor)) {
+        temp++;
+        path = &globalCtx->setupPathList[path->unk1];
+    }
+
+    Actor_ProcessInitChain(&this->actor, D_809CB0B0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060010C0, &D_060000F0, this->jointTable, this->morphTable, 9);
+    Collider_InitJntSph(globalCtx, &this->unk_23C);
+    Collider_SetJntSph(globalCtx, &this->unk_23C, &this->actor, &D_809CB0A0, &this->unk_25C);
+    this->unk_23C.elements->dim.worldSphere.radius = D_809CB0A0.elements[0].dim.modelSphere.radius;
+    ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
+
+    if ((path == NULL) || (EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor) >= 0x80)) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    this->unk_1C8 = Lib_SegmentedToVirtual(path->points);
+    this->unk_1CC = 1;
+    this->unk_1CE = path->count;
+    this->unk_1C4 = 0x14;
+    this->unk_1BC = 0;
+    func_809CA5D4(this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Destroy.s")
 
