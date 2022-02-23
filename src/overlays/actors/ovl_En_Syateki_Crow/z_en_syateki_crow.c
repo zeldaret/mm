@@ -17,6 +17,7 @@ void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809CA5D4(EnSyatekiCrow* this);
+void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Syateki_Crow_InitVars = {
@@ -106,7 +107,17 @@ void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->unk_23C);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA5D4.s")
+void func_809CA5D4(EnSyatekiCrow* this) {
+    Actor_SetScale(&this->actor, 0.03f);
+    this->actor.speedXZ = 0.0f;
+    this->actor.gravity = 0.0f;
+    this->actor.world = this->actor.home;
+    this->actor.prevPos = this->actor.home.pos;
+    this->actor.shape.rot = this->actor.world.rot;
+    this->unk_1CC = 1;
+    this->actor.draw = NULL;
+    this->actionFunc = func_809CA67C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA67C.s")
 
