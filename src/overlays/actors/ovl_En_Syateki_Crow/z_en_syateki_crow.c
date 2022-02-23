@@ -282,8 +282,16 @@ void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_809CACD0(this, globalCtx);
 }
 
+s32 func_809CAE5C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAE5C.s")
 
+void func_809CAF2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAF2C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Draw.s")
+void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiCrow* this = THIS;
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_809CAE5C, func_809CAF2C, &this->actor);
+}
