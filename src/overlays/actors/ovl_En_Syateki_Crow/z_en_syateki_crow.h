@@ -15,7 +15,8 @@ typedef struct EnSyatekiCrow {
     /* 0x174 */ SkelAnime skelAnime;
     /* 0x1B8 */ EnSyatekiCrowActionFunc actionFunc;
     /* 0x1BC */ s16 unk_1BC;
-    /* 0x1BE */ char unk_1BE[0x6];
+    /* 0x1BE */ char unk_1BE[0x4];
+    /* 0x1C2 */ s16 unk_1C2;
     /* 0x1C4 */ s16 unk_1C4;
     /* 0x1C6 */ char unk_1C6[0x2];
     /* 0x1C8 */ Vec3s* unk_1C8;

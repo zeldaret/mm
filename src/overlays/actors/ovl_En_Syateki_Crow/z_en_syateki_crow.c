@@ -18,6 +18,7 @@ void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809CA5D4(EnSyatekiCrow* this);
 void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
+void func_809CA71C(EnSyatekiCrow* arg0);
 
 #if 0
 const ActorInit En_Syateki_Crow_InitVars = {
@@ -119,7 +120,20 @@ void func_809CA5D4(EnSyatekiCrow* this) {
     this->actionFunc = func_809CA67C;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA67C.s")
+void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    if ((syatekiMan->unk_26A == 1) && (this->unk_1C2 == 1) &&
+        (syatekiMan->unk_274 & (1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor)))) {
+        func_809CA71C(this);
+    } else if (syatekiMan->unk_26A != 1) {
+        this->unk_1C2 = 1;
+    }
+
+    if ((syatekiMan->unk_274 == 0) && (syatekiMan->unk_274 == 0)) {
+        this->unk_1C2 = 1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CA71C.s")
 
