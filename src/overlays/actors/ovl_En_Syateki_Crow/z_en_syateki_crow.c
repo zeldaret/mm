@@ -282,8 +282,17 @@ void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_809CACD0(this, globalCtx);
 }
 
-s32 func_809CAE5C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAE5C.s")
+s32 func_809CAE5C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnSyatekiCrow* this = THIS;
+
+    if (limbIndex == 7) {
+        rot->y += (s16)(3072.0f * sin_rad(this->skelAnime.curFrame * 0.7853982f));
+    } else if (limbIndex == 8) {
+        rot->y += (s16)(5120.0f * sin_rad((this->skelAnime.curFrame + 2.5f) * 0.7853982f));
+    }
+
+    return false;
+}
 
 void func_809CAF2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAF2C.s")
