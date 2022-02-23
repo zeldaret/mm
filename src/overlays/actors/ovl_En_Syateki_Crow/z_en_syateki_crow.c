@@ -38,22 +38,34 @@ const ActorInit En_Syateki_Crow_InitVars = {
     (ActorFunc)EnSyatekiCrow_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_809CB07C[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 1, { { 0, 60, 0 }, 50 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_809CB0A0 = {
-    { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    1, D_809CB07C, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit = {
+    {
+        COLTYPE_HIT3,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    sJntSphElementsInit,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_809CB0B0[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 3000, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, 88, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
@@ -84,11 +96,12 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
-    Actor_ProcessInitChain(&this->actor, D_809CB0B0);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0, this->jointTable, this->morphTable, 9);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0,
+                       this->jointTable, this->morphTable, 9);
     Collider_InitJntSph(globalCtx, &this->unk_23C);
-    Collider_SetJntSph(globalCtx, &this->unk_23C, &this->actor, &D_809CB0A0, &this->unk_25C);
-    this->unk_23C.elements->dim.worldSphere.radius = D_809CB0A0.elements[0].dim.modelSphere.radius;
+    Collider_SetJntSph(globalCtx, &this->unk_23C, &this->actor, &sJntSphInit, &this->unk_25C);
+    this->unk_23C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     if ((path == NULL) || (EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor) >= 0x80)) {
@@ -256,7 +269,7 @@ void func_809CACD0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
         } else {
             this->unk_23C.elements->dim.worldSphere.center.x = this->actor.world.pos.x;
             this->unk_23C.elements->dim.worldSphere.center.y =
-                D_809CB0A0.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
+                sJntSphInit.elements[0].dim.modelSphere.center.y + this->actor.world.pos.y;
             this->unk_23C.elements->dim.worldSphere.center.z = this->actor.world.pos.z;
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_23C.base);
         }
