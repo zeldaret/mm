@@ -64,7 +64,7 @@ extern ColliderJntSphElementInit D_809CB07C[1];
 extern ColliderJntSphInit D_809CB0A0;
 extern InitChainEntry D_809CB0B0[];
 extern Vec3f D_809CB050;
-extern void* D_809CB0AC;
+extern Vec3f D_809CB0D8;
 extern Vec3f D_809CB0C0;
 extern Vec3f D_809CB0CC;
 
@@ -294,8 +294,19 @@ s32 func_809CAE5C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_809CAF2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAF2C.s")
+void func_809CAF2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnSyatekiCrow* this = THIS;
+    Vec3f* sp1C;
+
+    if (limbIndex == 2) {
+        Matrix_MultiplyVector3fByState(&D_809CB0D8, &this->unk_144[0]);
+        this->unk_144[0].y -= 20.0f;
+    } else if ((limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8)) {
+        sp1C = &this->unk_144[(limbIndex >> 1) - 1];
+        Matrix_MultiplyVector3fByState(&D_809CB050, sp1C);
+        sp1C->y -= 20.0f;
+    }
+}
 
 void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiCrow* this = THIS;

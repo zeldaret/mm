@@ -13,7 +13,7 @@ typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow*, GlobalContext*);
 
 typedef struct EnSyatekiCrow {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x30];
+    /* 0x144 */ Vec3f unk_144[4];
     /* 0x174 */ SkelAnime skelAnime;
     /* 0x1B8 */ EnSyatekiCrowActionFunc actionFunc;
     /* 0x1BC */ s16 unk_1BC;
