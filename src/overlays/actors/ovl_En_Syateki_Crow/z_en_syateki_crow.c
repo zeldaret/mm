@@ -63,6 +63,7 @@ static InitChainEntry D_809CB0B0[] = {
 extern ColliderJntSphElementInit D_809CB07C[1];
 extern ColliderJntSphInit D_809CB0A0;
 extern InitChainEntry D_809CB0B0[];
+extern Vec3f D_809CB050;
 
 extern FlexSkeletonHeader D_060010C0;
 extern AnimationHeader D_060000F0;
@@ -224,7 +225,27 @@ void func_809CAAF8(EnSyatekiCrow* this) {
     this->actionFunc = func_809CABC0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CABC0.s")
+void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    this->actor.colorFilterTimer = 40;
+
+    if ((this->actor.colorFilterParams & 0x4000) != 0) {
+        Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
+        this->actor.shape.rot.z += 0x1780;
+    }
+
+    if (this->unk_1C4 >= 0x15) {
+        func_800B3030(globalCtx, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0,
+                      0);
+        syatekiMan->unk_27A++;
+        syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
+        func_809CA5D4(this);
+    }
+
+    this->unk_1C4++;
+}
 
 void func_809CACD0(EnSyatekiCrow* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CACD0.s")
