@@ -21,7 +21,6 @@ typedef struct EnSyatekiCrow {
     /* 0x1C0 */ s16 unk_1C0;
     /* 0x1C2 */ s16 unk_1C2;
     /* 0x1C4 */ s16 unk_1C4;
-    /* 0x1C6 */ char unk_1C6[0x2];
     /* 0x1C8 */ Vec3s* unk_1C8;
     /* 0x1CC */ s16 unk_1CC;
     /* 0x1CE */ s16 unk_1CE;
