@@ -205,14 +205,12 @@ void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_1BE, 5, 0x3000, 0x100);
         this->actor.world.rot.x = -this->actor.shape.rot.x;
+    } else if (this->unk_1CC < (this->unk_1CE - 1)) {
+        this->unk_1CC++;
     } else {
-        if (this->unk_1CC < (this->unk_1CE - 1)) {
-            this->unk_1CC++;
-        } else {
-            this->unk_1C2 = 0;
-            syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
-            func_809CA5D4(this);
-        }
+        this->unk_1C2 = 0;
+        syatekiMan->unk_274 &= ~(1 << EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor));
+        func_809CA5D4(this);
     }
 
     SkelAnime_Update(&this->skelAnime);
