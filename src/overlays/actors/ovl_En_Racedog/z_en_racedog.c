@@ -28,7 +28,7 @@ void func_80B251EC(EnRacedog* this);
 void func_80B252F8(EnRacedog* this);
 void func_80B2538C(EnRacedog* this);
 void func_80B25448(EnRacedog* this);
-s32 func_80B25490(EnRacedog* this, f32* arg1);
+s32 func_80B25490(EnRacedog* this, Vec2f* arg1);
 void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B256BC(EnRacedog* this);
 
@@ -77,8 +77,11 @@ static UnkRacedogStruct D_80B25D88[] = {
 
 static UnkRacedogStruct D_80B25E68 = { -1.0f, 1.0, 0, -1, 0, 0x353E };
 
-static f32 D_80B25E78[] = {
-    -3914.0f, 1283.0f, -3747.0f, 1104.0f, -3717.0f, 1169.0f, -3897.0f, 1308.0f,
+static Vec2f D_80B25E78[] = {
+    { -3914.0f, 1283.0f },
+    { -3747.0f, 1104.0f },
+    { -3717.0f, 1169.0f },
+    { -3897.0f, 1308.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -464,7 +467,7 @@ void func_80B25448(EnRacedog* this) {
     }
 }
 
-s32 func_80B25490(EnRacedog* this, f32* arg1) {
+s32 func_80B25490(EnRacedog* this, Vec2f* arg1) {
     f32 xDistToTopFront;
     f32 zDistToTopFront;
     f32 xDistToBottomFront;
@@ -476,14 +479,14 @@ s32 func_80B25490(EnRacedog* this, f32* arg1) {
     f32 temp_f0;
     f32 temp;
 
-    xDistToTopFront = this->actor.world.pos.x - arg1[0];
-    zDistToTopFront = this->actor.world.pos.z - arg1[1];
-    xDistToBottomFront = this->actor.world.pos.x - arg1[2];
-    zDistToBottomFront = this->actor.world.pos.z - arg1[3];
-    xDistToBottomBack = this->actor.world.pos.x - arg1[4];
-    zDistToBottomBack = this->actor.world.pos.z - arg1[5];
-    xDistToTopBack = this->actor.world.pos.x - arg1[6];
-    zDistToTopBack = this->actor.world.pos.z - arg1[7];
+    xDistToTopFront = this->actor.world.pos.x - arg1[0].x;
+    zDistToTopFront = this->actor.world.pos.z - arg1[0].y;
+    xDistToBottomFront = this->actor.world.pos.x - arg1[1].x;
+    zDistToBottomFront = this->actor.world.pos.z - arg1[1].y;
+    xDistToBottomBack = this->actor.world.pos.x - arg1[2].x;
+    zDistToBottomBack = this->actor.world.pos.z - arg1[2].y;
+    xDistToTopBack = this->actor.world.pos.x - arg1[3].x;
+    zDistToTopBack = this->actor.world.pos.z - arg1[3].y;
 
     temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     temp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
@@ -582,9 +585,9 @@ void func_80B2583C(EnRacedog* this) {
 
 void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
     Vec3s sp48 = gZeroVec3s;
-    s32 phi_v0 = (this->unk_290 == this->unk_292) ? 1 : 0;
+    s32 phi_v0 = (this->unk_290 == this->unk_292) ? true : false;
 
-    if (phi_v0 != 0) {
+    if (phi_v0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
