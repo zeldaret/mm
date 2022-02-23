@@ -30,7 +30,7 @@ typedef enum {
     /* 0x02 */ PLAYER_STRENGTH_ZORA,
     /* 0x03 */ PLAYER_STRENGTH_GORON,
     /* 0x04 */ PLAYER_STRENGTH_MAX
-}PlayerStrength;
+} PlayerStrength;
 
 typedef enum {
     /* 0x00 */ PLAYER_FORM_FIERCE_DEITY,
@@ -185,7 +185,6 @@ typedef struct {
     /* 0xCC */ LinkAnimationHeader* unk_CC[2];
     /* 0xD4 */ LinkAnimationHeader* unk_D4[2];
 } PlayerAgeProperties; // size = 0xDC
-
 
 typedef struct {
     /* 0x00 */ s32 active;

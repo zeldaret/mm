@@ -75,11 +75,11 @@ void func_80122868(GlobalContext* globalCtx, Player* player) {
 
         player->unk_B5F += phi_v0;
         POLY_OPA_DISP =
-            Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 0, 0, 4000 - (s32)(Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+            Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 0, 0, 4000 - (s32)(Math_CosS(player->unk_B5F << 8) * 2000.0f));
     } else if (gSaveContext.unk_1016 != 0) {
         player->unk_B5F += 10;
         POLY_OPA_DISP =
-            Gfx_SetFog(POLY_OPA_DISP, 0, 0, 255, 0, 0, 4000 - (s32)(Math_CosS((player->unk_B5F << 8)) * 2000.0f));
+            Gfx_SetFog(POLY_OPA_DISP, 0, 0, 255, 0, 0, 4000 - (s32)(Math_CosS(player->unk_B5F << 8) * 2000.0f));
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -169,7 +169,7 @@ void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
         // Can't be `temp_v1->unk_01 != 0`
         if (temp_v1->alpha) {
-            phi_a1 = temp_v1->unk_00 == 3 ? 0x55 : 0x33;
+            phi_a1 = temp_v1->unk_00 == 3 ? (255 / 3) : (255 / 5);
             if (phi_a1 >= temp_v1->alpha) {
                 temp_v1->alpha = 0;
             } else {
@@ -312,11 +312,11 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
     if (player->unk_AE7 == 2) {
         s16 objectId = gPlayerFormObjectIndexes[((void)0, gSaveContext.playerForm)];
 
-        gActorOverlayTable->initInfo->objectId = objectId;
+        gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
         player->actor.objBankIndex = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_KEEP);
     } else if (player->unk_AE7 >= 3) {
-        s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, gActorOverlayTable->initInfo->objectId);
+        s32 objBankIndex = Object_GetIndex(&globalCtx->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
             player->actor.objBankIndex = objBankIndex;
@@ -324,7 +324,7 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
             player->actor.init = func_80160AF8;
             player->actor.update = func_80160B80;
             player->actor.draw = func_80160BC0;
-            gSaveContext.equippedMask = 0;
+            gSaveContext.equippedMask = PLAYER_MASK_NONE;
         }
     }
 }
@@ -494,19 +494,19 @@ s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[1] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][1]
-               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][1]
+        return (gSaveContext.buttonStatus[1] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
+               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
                                                               : ITEM_NONE;
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[2] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][2]
-               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][2]
+        return (gSaveContext.buttonStatus[2] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
+               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
                                                               : ITEM_NONE;
     }
 
-    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][3]
-           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][3]
+    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
+           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
                                                           : ITEM_NONE;
 }
 
@@ -595,7 +595,7 @@ void Player_SetModels(Player* player, s32 modelGroup) {
     player->sheathType = gPlayerModelTypes[modelGroup][3];
 
     if (player->sheathType == 14) {
-        if (gSaveContext.equips.buttonItems[CUR_FORM][0] == ITEM_NONE) {
+        if (gSaveContext.equips.buttonItems[CUR_FORM][EQUIP_SLOT_B] == ITEM_NONE) {
             player->sheathType = 15;
         }
     }
@@ -619,10 +619,11 @@ void Player_SetModelGroup(Player* player, s32 modelGroup) {
         player->modelAnimType = gPlayerModelTypes[modelGroup][0];
     }
 
-    if ((player->modelAnimType < 3) &&
-        ((((player->transformation != PLAYER_FORM_FIERCE_DEITY)) && (player->transformation != PLAYER_FORM_HUMAN)) ||
-         (player->currentShield == PLAYER_SHIELD_NONE))) {
-        player->modelAnimType = 0;
+    if (player->modelAnimType < 3) {
+        if (((player->transformation != PLAYER_FORM_FIERCE_DEITY) && (player->transformation != PLAYER_FORM_HUMAN)) ||
+            (player->currentShield == PLAYER_SHIELD_NONE)) {
+            player->modelAnimType = 0;
+        }
     }
 
     Player_SetModels(player, modelGroup);
@@ -649,11 +650,11 @@ void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
     }
 }
 
-void func_80123D50(GlobalContext* globalCtx, Player* player, s32 item, s32 actionParam) {
-    func_80114FD0(globalCtx, item, player->heldItemButton);
+void func_80123D50(GlobalContext* globalCtx, Player* player, s32 itemId, s32 actionParam) {
+    func_80114FD0(globalCtx, itemId, player->heldItemButton);
 
-    if (item != ITEM_BOTTLE) {
-        player->heldItemId = item;
+    if (itemId != ITEM_BOTTLE) {
+        player->heldItemId = itemId;
         player->itemActionParam = actionParam;
     }
 
@@ -678,6 +679,7 @@ void func_80123DC0(Player* player) {
         player->stateFlags1 &=
             ~(PLAYER_STATE1_40000000 | PLAYER_STATE1_20000 | PLAYER_STATE1_10000 | PLAYER_STATE1_8000);
     }
+
     func_80123DA4(player);
 }
 
@@ -758,10 +760,11 @@ s32 func_801240DC(Player* player) {
 s32 func_80124110(Player* player, s32 actionParam) {
     s32 temp_v0 = actionParam - PLAYER_AP_UNK_2;
 
-    if (((player->transformation != PLAYER_FORM_GORON) &&
-         ((actionParam - PLAYER_AP_UNK_2) > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2))) &&
-        ((actionParam - PLAYER_AP_UNK_2) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_UNK_2))) {
-        return temp_v0;
+    if (player->transformation != PLAYER_FORM_GORON) {
+        if (((actionParam - PLAYER_AP_UNK_2) > (PLAYER_AP_UNK_2 - PLAYER_AP_UNK_2)) &&
+            ((actionParam - PLAYER_AP_UNK_2) < (PLAYER_AP_SWORD_GREAT_FAIRY - PLAYER_AP_UNK_2))) {
+            return temp_v0;
+        }
     }
 
     return 0;
@@ -830,6 +833,7 @@ s32 func_80124278(Actor* actor, s32 arg1) {
     if ((arg1 == 1) || ((phi_v1 = arg1 - 3, (phi_v1 >= 0)) && (phi_v1 < 4))) {
         return phi_v1;
     }
+
     return -1;
 }
 
@@ -884,7 +888,7 @@ void func_80124618(struct_80124618 arg0[], f32 curFrame, Vec3f* arg2) {
 
     temp_f0 = arg0[-1].unk_0;
 
-    progress = (curFrame - temp_f0) / (((f32)temp_v1) - temp_f0);
+    progress = (curFrame - temp_f0) / (temp_v1 - temp_f0);
 
     temp_f14 = arg0[-1].unk_2.x;
     arg2->x = LERPIMP(temp_f14, arg0->unk_2.x, progress) * 0.01f;
@@ -982,27 +986,27 @@ void func_8012536C(void) {
 // Draws zora shield
 void func_801253A4(GlobalContext* globalCtx, Player* player) {
     u8* phi_a0;
-    Vtx* sp30;
+    Vtx* vtx;
     Gfx* dl;
-    f32 sp28; // scale
+    f32 scale;
     s32 i;
 
-    sp28 = player->unk_B62 * (10.0f / 51.0f);
+    scale = player->unk_B62 * (10.0f / 51.0f);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_link_zora_Matanimheader_012A80));
-    Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
+    Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
     // clang-format off
-    sp30 = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
+    vtx = Lib_SegmentedToVirtual(&object_link_zora_Vtx_011210); phi_a0 = Lib_SegmentedToVirtual(&object_link_zora_U8_011710);
     // clang-format on
 
     // ARRAY_COUNT(object_link_zora_Vtx_011210)
     for (i = 0; i < 80; i++) {
         // Editing the Vtxs in object itself
-        sp30->v.cn[3] = (*phi_a0 * player->unk_B62) >> 8;
-        sp30++;
+        vtx->v.cn[3] = (*phi_a0 * player->unk_B62) >> 8;
+        vtx++;
         phi_a0++;
     }
 
