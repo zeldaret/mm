@@ -157,16 +157,22 @@ typedef struct {
     /* 0x4 */ f32 dynamicSizeStep;
     /* 0x8 */ u8 state;
     /* 0x9 */ u8 sizeGrowsCos2;
-    /* 0xA */ u8 unkA;
+    /* 0xA */ u8 colorsIndex;
     /* 0xB */ u8 flags;
-    /* 0xC */ u8 unkC;
+    /* 0xC */ u8 lightParamsIndex;
 } FireObjInitParams; // size = 0xD
 
-typedef struct {
+typedef struct FireObjColors {
     /* 0x0 */ Color_RGBA8 primColor;
-    /* 0x4 */ u8 unk4;
+    /* 0x4 */ u8 lod;
     /* 0x5 */ Color_RGB8 envColor;
-} FireObjLightParams; // size = 0x8
+} FireObjColors; // size = 0x8
+
+typedef struct FireObjLightParams {
+    /* 0x0 */ s16 radius;
+    /* 0x2 */ Color_RGB8 color;
+    /* 0x5 */ Color_RGB8 randMultiplier
+} FireObjLightParams;
 
 #define FONT_CHAR_TEX_WIDTH  16
 #define FONT_CHAR_TEX_HEIGHT 16
@@ -1179,7 +1185,7 @@ typedef enum {
 struct FireObjLight {
     /* 0x00 */ LightNode* light;
     /* 0x04 */ LightInfoPositional lightInfo;
-    /* 0x12 */ u8 unk12;
+    /* 0x12 */ u8 lightParamsIndex;
 }; // size = 0x13
 
 #define OS_SC_RETRACE_MSG       1
@@ -1230,7 +1236,7 @@ struct FireObj {
     /* 0x24 */ u8 state; // 0 - growing, 1 - shrinking, 2 - fully lit, 3 - not lit
     /* 0x25 */ u8 sizeGrowsCos2;
     /* 0x26 */ u8 unk26;
-    /* 0x27 */ u8 unk27;
+    /* 0x27 */ u8 colorsIndex;
     /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
     /* 0x29 */ UNK_TYPE1 pad29[0x1];
     /* 0x2A */ s16 ignitionDelay;

@@ -29,13 +29,13 @@ ColliderCylinderInit sFireObjCollisionInit = {
     { 18, 67, 0, { 0, 0, 0 } },
 };
 
-FireObjLightParams sFireObjLightParams[2] = {
-    { 255, 255, 0, 255, 128, 255, 0, 0 },
-    { 0, 200, 128, 128, 0, 127, 127, 0 },
+FireObjColors sFireObjColors[] = {
+    { { 255, 255, 0, 255 }, 128, { 255, 0, 0 } },
 };
 
-void FireObj_InitLight(GlobalContext* globalCtx, FireObjLight* light, u8* param_3, Vec3f* pos);
-void FireObj_UpdateLight(GlobalContext* globalCtx, FireObjLight* light, FireObj* fire);
+FireObjLightParams sFireObjLightParams[] = {
+    { 200, { 128, 128, 0 }, { 127, 127, 0 } },
+};
 
 void FireObj_InitWithParams(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* init) {
     fire->size = init->size;
@@ -43,7 +43,7 @@ void FireObj_InitWithParams(GlobalContext* globalCtx, FireObj* fire, FireObjInit
     fire->dynamicSizeStep = init->dynamicSizeStep;
     fire->state = init->state;
     fire->sizeGrowsCos2 = init->sizeGrowsCos2;
-    fire->unk27 = init->unkA;
+    fire->colorsIndex = init->colorsIndex;
     fire->flags = init->flags;
     fire->xScale = 0.0f;
     fire->yScale = 0.0f;
@@ -53,7 +53,7 @@ void FireObj_InitWithParams(GlobalContext* globalCtx, FireObj* fire, FireObjInit
 }
 
 void FireObj_SetState(FireObj* fire, f32 dynamicSizeStep, u8 newState) {
-    fire->state = newState & 0xFF;
+    fire->state = newState;
     if (fire->state == FIRE_STATE_3) {
         fire->yScale = 0.0f;
         fire->xScale = 0.0f;
@@ -75,11 +75,11 @@ void FireObj_StepSize(FireObj* fire) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_2);
         }
     } else if ((fire->state == FIRE_STATE_1) && (Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep) != 0)) {
-        FireObj_SetState(fire, fire->dynamicSizeStep, 3);
+        FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
     if (fire->sizeGrowsCos2 == 1) {
         if ((fire->state == FIRE_STATE_0) || (fire->state == FIRE_STATE_1)) {
-            fire->xScale = (1.0f - Math_CosS((fire->dynamicSize * fire->dynamicSize * 16384.0f))) * fire->size;
+            fire->xScale = (1.0f - Math_CosS(SQ(fire->dynamicSize) * 16384.0f)) * fire->size;
             fire->yScale = fire->dynamicSize * fire->size;
         } else {
             fire->yScale = fire->dynamicSize * fire->size;
@@ -96,7 +96,7 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
     Player* player = GET_PLAYER(globalCtx);
     WaterBox* waterBox;
     f32 waterY;
-    s32 sp40 = 0;
+    s32 sp40 = false;
     u8 nextState;
     Vec3f dist;
 
@@ -115,16 +115,16 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
     }
     if ((fire->flags & 1) && (fire->state != FIRE_STATE_3) &&
         WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
-        ((fire->yScale * ((void)0, 6500.0f)) < (waterY - fire->position.y))) { // Fake but IDK what else
+        (waterY - fire->position.y) > (6500.0f * fire->yScale)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
     if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {
         Math_Vec3f_Diff(&player->swordInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < 400.0f) {
-            sp40 = 1;
+            sp40 = true;
         }
     }
-    if (sp40 != 0) {
+    if (sp40) {
         if (fire->state == FIRE_STATE_3) {
             if (player->unk_B28 > 0) {
                 FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_0);
@@ -140,7 +140,7 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
 
 void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
     s32 pad;
-    FireObjLightParams* lightParams = &sFireObjLightParams[fire->unk27];
+    FireObjColors* fireColors = &sFireObjColors[fire->colorsIndex];
 
     if (fire->state != FIRE_STATE_3) {
         Vec3s vec;
@@ -151,10 +151,10 @@ void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
             POLY_XLU_DISP++, 0x08,
             Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (fire->unk26 * -20) & 511, 32, 128));
 
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, lightParams->unk4, lightParams->primColor.r, lightParams->primColor.g,
-                        lightParams->primColor.b, lightParams->primColor.a);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, fireColors->lod, fireColors->primColor.r, fireColors->primColor.g,
+                        fireColors->primColor.b, fireColors->primColor.a);
 
-        gDPSetEnvColor(POLY_XLU_DISP++, lightParams->envColor.r, lightParams->envColor.g, lightParams->envColor.b, 0);
+        gDPSetEnvColor(POLY_XLU_DISP++, fireColors->envColor.r, fireColors->envColor.g, fireColors->envColor.b, 0);
 
         vec.x = 0;
         vec.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
@@ -168,28 +168,21 @@ void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-// Accesses data incorrectly
-void FireObj_InitLight(GlobalContext* globalCtx, FireObjLight* light, u8* param_3, Vec3f* pos) {
-    FireObjLightParams* objectParams = &sFireObjLightParams[*param_3];
+void FireObj_InitLight(GlobalContext* globalCtx, FireObjLight* light, u8* paramsIndex, Vec3f* pos) {
+    FireObjLightParams* objectParams = &sFireObjLightParams[*paramsIndex];
 
-    Lights_PointGlowSetInfo(&light->lightInfo, pos->x, pos->y, pos->z, objectParams->primColor.g,
-                            objectParams->primColor.b, objectParams->primColor.a, objectParams->primColor.r);
+    Lights_PointGlowSetInfo((LightInfo*)&light->lightInfo, pos->x, pos->y, pos->z, objectParams->color.r,
+                            objectParams->color.g, objectParams->color.b, objectParams->radius);
     light->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, (LightInfo*)&light->lightInfo);
-    light->unk12 = *param_3;
+    light->lightParamsIndex = *paramsIndex;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_InitLight.s")
-#endif
 
 void FireObj_DestroyLight(GlobalContext* globalCtx, FireObjLight* light) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, light->light);
 }
 
-#ifdef NON_EQUIVALENT
-// Accesses data incorrectly
 void FireObj_UpdateLight(GlobalContext* globalCtx, FireObjLight* light, FireObj* fire) {
-    FireObjLightParams* lightParams = &sFireObjLightParams[light->unk12];
+    FireObjLightParams* lightParams = &sFireObjLightParams[light->lightParamsIndex];
     s16 radius;
 
     if (fire->state == FIRE_STATE_3) {
@@ -199,14 +192,11 @@ void FireObj_UpdateLight(GlobalContext* globalCtx, FireObjLight* light, FireObj*
 
         Lights_PointGlowSetInfo((LightInfo*)&light->lightInfo, fire->position.x,
                                 (fire->position.y + (fire->yScale * 6500.0f)), fire->position.z,
-                                ((s32)(Rand_ZeroOne() * lightParams->envColor.r) + lightParams->primColor.b),
-                                ((s32)(Rand_ZeroOne() * lightParams->envColor.g) + lightParams->primColor.a),
-                                ((s32)(Rand_ZeroOne() * lightParams->envColor.b) + lightParams->unk4), radius);
+                                ((s32)(Rand_ZeroOne() * lightParams->randMultiplier.r) + lightParams->color.r),
+                                ((s32)(Rand_ZeroOne() * lightParams->randMultiplier.g) + lightParams->color.g),
+                                ((s32)(Rand_ZeroOne() * lightParams->randMultiplier.b) + lightParams->color.b), radius);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fireobj/FireObj_UpdateLight.s")
-#endif
 
 void FireObj_Init(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* init, Actor* actor) {
     FireObj* fire2 = fire;
@@ -218,7 +208,7 @@ void FireObj_Init(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* in
     fire2->collision.dim.radius = (fire->size * 4000.0f) + 2.5f;
     fire2->collision.dim.height = fire->size * 16000.0f;
     fire->collision.dim.yShift = fire->size * -1728.0f;
-    FireObj_InitLight(globalCtx, &fire->light, &init->unkC, &fire->position);
+    FireObj_InitLight(globalCtx, &fire->light, &init->lightParamsIndex, &fire->position);
 }
 
 void FireObj_Destroy(GlobalContext* globalCtx, FireObj* fire) {
@@ -235,9 +225,9 @@ void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor) {
     EnArrow* arrow = (EnArrow*)fire->collision.base.ac;
 
     FireObj_UpdateStateTransitions(globalCtx, fire);
-    if (fire->state == 3) {
+    if (fire->state == FIRE_STATE_3) {
         if ((fire->collision.base.acFlags & AC_HIT) && (fire->collision.info.acHitInfo->toucher.dmgFlags & 0x800)) {
-            FireObj_SetState(fire, fire->dynamicSizeStep, 0);
+            FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_0);
         }
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
