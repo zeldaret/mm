@@ -290,7 +290,8 @@ void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_809CACD0(this, globalCtx);
 }
 
-s32 func_809CAE5C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnSyatekiCrow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                   Actor* thisx) {
     EnSyatekiCrow* this = THIS;
 
     if (limbIndex == 7) {
@@ -302,7 +303,7 @@ s32 func_809CAE5C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_809CAF2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSyatekiCrow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnSyatekiCrow* this = THIS;
     Vec3f* sp1C;
 
@@ -321,5 +322,5 @@ void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_809CAE5C, func_809CAF2C, &this->actor);
+                          EnSyatekiCrow_OverrideLimbDraw, EnSyatekiCrow_PostLimbDraw, &this->actor);
 }
