@@ -211,11 +211,25 @@ void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAAF8.s")
 
+void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CABC0.s")
 
+void func_809CACD0(EnSyatekiCrow* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CACD0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/EnSyatekiCrow_Update.s")
+void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiCrow* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+
+    if (this->actionFunc != func_809CABC0) {
+        Actor_MoveWithoutGravity(&this->actor);
+    } else {
+        Actor_MoveWithGravity(&this->actor);
+    }
+
+    func_809CACD0(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Crow/func_809CAE5C.s")
 
