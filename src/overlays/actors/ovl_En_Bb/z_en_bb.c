@@ -243,8 +243,19 @@ void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808C254C(EnBb* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C254C.s")
+void func_808C254C(EnBb* this) {
+    Animation_PlayLoop(&this->skelAnime, &D_06000444);
+    this->collider.base.atFlags |= AT_ON;
+    this->unk_250 = 0x8C;
+    this->collider.base.acFlags |= AC_ON;
+    this->actor.speedXZ = 2.0f;
+    this->unk_268 = 0.0f;
+    this->unk_264 = 0.0f;
+    this->actor.gravity = -2.0f;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DOWN);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actionFunc = func_808C25E0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C25E0.s")
 
@@ -276,7 +287,7 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
-        if ((this->unk_24D != 0xA) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+        if ((this->unk_24D != 10) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
             this->unk_268 = 0.0f;
             this->unk_264 = 0.0f;
@@ -303,7 +314,7 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
             if (this->actor.colChkInfo.damageEffect == 4) {
                 this->unk_26C = 4.0f;
                 this->unk_270 = 0.4f;
-                this->unk_24D = 0x14;
+                this->unk_24D = 20;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                             this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_SMALL_LIGHT_RAYS);
@@ -365,7 +376,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->unk_26C > 0.0f) {
-            if (this->unk_24D != 0xA) {
+            if (this->unk_24D != 10) {
                 Math_StepToF(&this->unk_26C, 0.0f, 0.05f);
                 this->unk_270 = (this->unk_26C + 1.0f) * 0.2f;
                 this->unk_270 = CLAMP_MAX(this->unk_270, 0.4f);
