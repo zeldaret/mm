@@ -130,14 +130,28 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroySphere(globalCtx, &this->collider);
 }
 
+void func_808C1E94(EnBb* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1E94.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F00.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F74.s")
 
-void func_808C1FF4(EnBb* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1FF4.s")
+void func_808C1FF4(EnBb* this) {
+    SkelAnime_Update(&this->skelAnime);
+    if (this->actor.floorHeight > BGCHECK_Y_MIN) {
+        Math_StepToF(&this->actor.world.pos.y, this->actor.floorHeight + this->unk_25C, 0.5f);
+    }
+
+    this->actor.world.pos.y += Math_CosS(this->unk_256);
+    this->unk_256 += 0x826;
+    Math_StepToF(&this->unk_268, 0.8f, 0.1f);
+    Math_StepToF(&this->unk_264, 1.0f, 0.1f);
+    func_808C1E94(this);
+    Math_StepToF(&this->actor.speedXZ, this->unk_258, 0.5f);
+    Math_ApproachS(&this->actor.shape.rot.y, this->unk_254, 5, 0x3E8);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+}
 
 void func_808C20D4(EnBb* this) {
     if (this->actionFunc != func_808C2238) {
