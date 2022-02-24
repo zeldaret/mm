@@ -15,7 +15,13 @@ typedef struct EnBb {
     /* 0x188 */ Vec3s jointTable[16];
     /* 0x1E8 */ Vec3s morphTable[16];
     /* 0x248 */ EnBbActionFunc actionFunc;
-    /* 0x24C */ char unk_24C[0x14];
+    /* 0x24C */ char unk_24C[0x4];
+    /* 0x250 */ s16 unk_250;
+    /* 0x252 */ s16 unk_252;
+    /* 0x254 */ s16 unk_254;
+    /* 0x256 */ s16 unk_256;
+    /* 0x258 */ f32 unk_258;
+    /* 0x25C */ f32 unk_25C;
     /* 0x260 */ f32 unk_260;
     /* 0x264 */ f32 unk_264;
     /* 0x268 */ f32 unk_268;

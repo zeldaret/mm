@@ -23,6 +23,7 @@ void func_808C2BD0(EnBb* this, GlobalContext* globalCtx);
 void func_808C2CB4(EnBb* this, GlobalContext* globalCtx);
 void func_808C2D78(EnBb* this, GlobalContext* globalCtx);
 void func_808C20D4(EnBb* this);
+void func_808C2238(EnBb* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Bb_InitVars = {
@@ -136,7 +137,32 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1FF4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C20D4.s")
+void func_808C20D4(EnBb* this) {
+    if (this->actionFunc != func_808C2238) {
+        Animation_PlayLoop(&this->skelAnime, &D_06000444);
+    }
+
+    if (this->actionFunc == func_808C23EC) {
+        this->unk_252 = 0x28;
+    } else {
+        this->unk_252 = 0;
+    }
+
+    this->unk_250 = (s32)Rand_ZeroFloat(20.0f) + 0x28;
+    this->actor.gravity = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->unk_25C = (Math_CosS(this->unk_256) * 10.0f) + 30.0f;
+    this->unk_254 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+
+    if ((this->actor.xzDistToPlayer < (this->unk_260 + 120.0f)) ||
+        (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
+        this->unk_254 += (s16)(Rand_Next() >> 0x11);
+    }
+
+    this->collider.base.atFlags |= AT_ON;
+    this->unk_258 = Rand_ZeroFloat(1.5f) + 1.0f;
+    this->actionFunc = func_808C2238;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2238.s")
 
