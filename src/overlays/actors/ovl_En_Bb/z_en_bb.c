@@ -108,7 +108,7 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &D_808C37A0);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_808C37CC, &D_808C37EC);
-    
+
     this->unk_268 = 0.8f;
     this->unk_264 = 1.0f;
     this->actor.world.pos.y += 50.0f;
@@ -122,7 +122,11 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_808C20D4(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/EnBb_Destroy.s")
+void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnBb* this = THIS;
+
+    Collider_DestroySphere(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1E94.s")
 
