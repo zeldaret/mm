@@ -413,7 +413,19 @@ void func_808C2BD0(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2C38.s")
+void func_808C2C38(EnBb* this) {
+    this->actor.draw = NULL;
+    this->unk_24C = 0;
+    this->unk_26C = 0.0f;
+    Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
+    this->actor.shape.rot.x = 0;
+    this->actor.world.pos.y += 50.0f;
+    this->unk_250 = 0xC8;
+    this->actor.speedXZ = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->actor.gravity = 0.0f;
+    this->actionFunc = func_808C2CB4;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2CB4.s")
 
