@@ -154,20 +154,20 @@ void func_808C1E94(EnBb* this) {
 }
 
 void func_808C1F00(EnBb* this) {
-    this->unk_24D = 10;
-    this->unk_270 = 0.4f;
-    this->unk_274 = 0.6f;
+    this->drawDmgEffType = 10;
+    this->drawDmgEffScale = 0.4f;
+    this->drawDmgEffFrozenSteamScale = 0.6f;
     this->unk_250 = 0x50;
-    this->unk_26C = 1.0f;
+    this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_808C1F74(EnBb* this, GlobalContext* globalCtx) {
-    if (this->unk_24D == 10) {
-        this->unk_24D = 0;
-        this->unk_26C = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_278, 5, 2, 0.2f, 0.15f);
+    if (this->drawDmgEffType == 10) {
+        this->drawDmgEffType = 0;
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.2f, 0.15f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -329,8 +329,8 @@ void func_808C272C(EnBb* this, GlobalContext* globalCtx) {
     this->actor.gravity = -1.5f;
 
     temp = &this->unk_2B4[0];
-    for (i = 0; i < 5; i++, temp++) {
-        Math_Vec3f_Diff(&this->unk_278[i], &this->actor.world.pos, &sp70);
+    for (i = 0; i < ARRAY_COUNT(this->limbPos); i++, temp++) {
+        Math_Vec3f_Diff(&this->limbPos[i], &this->actor.world.pos, &sp70);
         temp_f0 = Math3D_Vec3fMagnitude(&sp70);
         if (temp_f0 > 1.0f) {
             temp_f0 = 2.5f / temp_f0;
@@ -353,16 +353,16 @@ void func_808C28CC(EnBb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.z, 0x4000, 4, 0x1000, 0x400);
 
     if (this->unk_250 == 0) {
-        for (i = 0; i < 5; i++) {
-            func_800B3030(globalCtx, &this->unk_278[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->unk_278[i], 11, NA_SE_EN_EXTINCT);
+        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
+            func_800B3030(globalCtx, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->limbPos[i], 11, NA_SE_EN_EXTINCT);
         }
 
         func_808C2C38(this);
     } else {
-        for (i = 0; i < 5; i++) {
-            Math_Vec3f_Sum(&this->unk_278[i], &this->unk_2B4[i], &this->unk_278[i]);
-            this->unk_2B4[i].y = this->unk_2B4[i].y + this->actor.gravity;
+        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
+            Math_Vec3f_Sum(&this->limbPos[i], &this->unk_2B4[i], &this->limbPos[i]);
+            this->unk_2B4[i].y += this->actor.gravity;
         }
     }
 }
@@ -374,9 +374,9 @@ void func_808C2A00(EnBb* this) {
 
     if (this->actor.colChkInfo.damageEffect == 5) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-        this->unk_24D = 32;
-        this->unk_26C = 2.0f;
-        this->unk_270 = 0.4f;
+        this->drawDmgEffType = 32;
+        this->drawDmgEffAlpha = 2.0f;
+        this->drawDmgEffScale = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == 1) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
         this->actor.speedXZ = 0.0f;
@@ -424,7 +424,7 @@ void func_808C2BD0(EnBb* this, GlobalContext* globalCtx) {
 void func_808C2C38(EnBb* this) {
     this->actor.draw = NULL;
     this->unk_24C = 0;
-    this->unk_26C = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.shape.rot.x = 0;
     this->actor.world.pos.y += 50.0f;
@@ -476,7 +476,7 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
-        if ((this->unk_24D != 10) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+        if ((this->drawDmgEffType != 10) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
             this->unk_268 = 0.0f;
             this->unk_264 = 0.0f;
@@ -501,9 +501,9 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
             }
 
             if (this->actor.colChkInfo.damageEffect == 4) {
-                this->unk_26C = 4.0f;
-                this->unk_270 = 0.4f;
-                this->unk_24D = 20;
+                this->drawDmgEffAlpha = 4.0f;
+                this->drawDmgEffScale = 0.4f;
+                this->drawDmgEffType = 20;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                             this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_SMALL_LIGHT_RAYS);
@@ -564,12 +564,12 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
 
-        if (this->unk_26C > 0.0f) {
-            if (this->unk_24D != 10) {
-                Math_StepToF(&this->unk_26C, 0.0f, 0.05f);
-                this->unk_270 = (this->unk_26C + 1.0f) * 0.2f;
-                this->unk_270 = CLAMP_MAX(this->unk_270, 0.4f);
-            } else if (!Math_StepToF(&this->unk_274, 0.4f, 0.01f)) {
+        if (this->drawDmgEffAlpha > 0.0f) {
+            if (this->drawDmgEffType != 10) {
+                Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+                this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
+                this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
+            } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.4f, 0.01f)) {
                 func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
@@ -595,17 +595,17 @@ void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if (this->unk_24C == 0) {
         if (D_808C37FC[limbIndex] != -1) {
             if (D_808C37FC[limbIndex] == 0) {
-                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->unk_278[0]);
+                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[0]);
             } else if (D_808C37FC[limbIndex] == 3) {
-                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->unk_278[3]);
-                Matrix_MultiplyVector3fByState(&D_808C380C, &this->unk_278[4]);
+                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[3]);
+                Matrix_MultiplyVector3fByState(&D_808C380C, &this->limbPos[4]);
             } else {
-                Matrix_GetStateTranslation(&this->unk_278[D_808C37FC[limbIndex]]);
+                Matrix_GetStateTranslation(&this->limbPos[D_808C37FC[limbIndex]]);
             }
         }
     } else if (this->unk_24C > 0) {
         if (D_808C37FC[limbIndex] != -1) {
-            Matrix_GetStateTranslation(&this->unk_278[D_808C37FC[limbIndex]]);
+            Matrix_GetStateTranslation(&this->limbPos[D_808C37FC[limbIndex]]);
         }
 
         if (limbIndex == 15) {
@@ -616,9 +616,9 @@ void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             temp_v0_4 = Matrix_GetCurrentState();
-            temp_v0_4->mf[3][0] = this->unk_278[D_808C37FC[limbIndex]].x;
-            temp_v0_4->mf[3][1] = this->unk_278[D_808C37FC[limbIndex]].y;
-            temp_v0_4->mf[3][2] = this->unk_278[D_808C37FC[limbIndex]].z;
+            temp_v0_4->mf[3][0] = this->limbPos[D_808C37FC[limbIndex]].x;
+            temp_v0_4->mf[3][1] = this->limbPos[D_808C37FC[limbIndex]].y;
+            temp_v0_4->mf[3][2] = this->limbPos[D_808C37FC[limbIndex]].z;
             Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -660,8 +660,8 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
-    func_800BE680(globalCtx, &this->actor, this->unk_278, 5, this->unk_270, this->unk_274, this->unk_26C,
-                  this->unk_24D);
+    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                  this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

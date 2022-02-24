@@ -16,7 +16,7 @@ typedef struct EnBb {
     /* 0x1E8 */ Vec3s morphTable[16];
     /* 0x248 */ EnBbActionFunc actionFunc;
     /* 0x24C */ s8 unk_24C;
-    /* 0x24D */ u8 unk_24D;
+    /* 0x24D */ u8 drawDmgEffType;
     /* 0x24E */ UNK_TYPE1 unk_24E[0x2];
     /* 0x250 */ s16 unk_250;
     /* 0x252 */ s16 unk_252;
@@ -27,10 +27,10 @@ typedef struct EnBb {
     /* 0x260 */ f32 unk_260;
     /* 0x264 */ f32 unk_264;
     /* 0x268 */ f32 unk_268;
-    /* 0x26C */ f32 unk_26C;
-    /* 0x270 */ f32 unk_270;
-    /* 0x274 */ f32 unk_274;
-    /* 0x278 */ Vec3f unk_278[5];
+    /* 0x26C */ f32 drawDmgEffAlpha;
+    /* 0x270 */ f32 drawDmgEffScale;
+    /* 0x274 */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x278 */ Vec3f limbPos[5];
     /* 0x2B4 */ Vec3f unk_2B4[5];
     /* 0x2F0 */ Gfx* unk_2F0;
     /* 0x2F4 */ ColliderSphere collider;
