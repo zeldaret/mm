@@ -25,6 +25,7 @@ void func_808C2D78(EnBb* this, GlobalContext* globalCtx);
 void func_808C20D4(EnBb* this);
 void func_808C2238(EnBb* this, GlobalContext* globalCtx);
 void func_808C2344(EnBb* this);
+void func_808C2C38(EnBb* this);
 
 #if 0
 const ActorInit En_Bb_InitVars = {
@@ -337,7 +338,26 @@ void func_808C272C(EnBb* this, GlobalContext* globalCtx) {
     this->actionFunc = func_808C28CC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C28CC.s")
+void func_808C28CC(EnBb* this, GlobalContext* globalCtx) {
+    s32 i;
+
+    this->unk_250--;
+    Math_SmoothStepToS(&this->actor.world.rot.z, 0x4000, 4, 0x1000, 0x400);
+
+    if (this->unk_250 == 0) {
+        for (i = 0; i < 5; i++) {
+            func_800B3030(globalCtx, &this->unk_278[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->unk_278[i], 11, NA_SE_EN_EXTINCT);
+        }
+
+        func_808C2C38(this);
+    } else {
+        for (i = 0; i < 5; i++) {
+            Math_Vec3f_Sum(&this->unk_278[i], &this->unk_2B4[i], &this->unk_278[i]);
+            this->unk_2B4[i].y = this->unk_2B4[i].y + this->actor.gravity;
+        }
+    }
+}
 
 void func_808C2A00(EnBb* this) {
     this->collider.base.acFlags &= ~AC_ON;
