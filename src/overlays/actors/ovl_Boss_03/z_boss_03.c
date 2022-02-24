@@ -121,11 +121,34 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2B8C.s")
 
-void func_809E2C1C(s32 arg0, s32 arg1, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2C1C.s")
 
-f32 func_809E2C3C(void);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2C3C.s")
+extern s32 D_809EC034; // sRandSeed0
+extern s32 D_809EC038; // sRandSeed1
+extern s32 D_809EC03C; // sRandSeed2
+
+// Boss03_SeedRand(s32 seed0, s32 seed1, s32 seed2)
+void func_809E2C1C(s32 seed0, s32 seed1, s32 seed2) {
+    D_809EC034 = seed0;
+    D_809EC038 = seed1;
+    D_809EC03C = seed2;
+}
+
+// Boss03_RandZeroOne
+f32 func_809E2C3C(void) {
+    f32 rand;
+
+    // Wichmann-Hill algorithm
+    D_809EC034 = (D_809EC034 * 171) % 30269;
+    D_809EC038 = (D_809EC038 * 172) % 30307;
+    D_809EC03C = (D_809EC03C * 170) % 30323;
+
+    rand = (D_809EC034 / 30269.0f) + (D_809EC038 / 30307.0f) + (D_809EC03C / 30323.0f);
+    while (rand >= 1.0f) {
+        rand -= 1.0f;
+    }
+
+    return fabsf(rand);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2D64.s")
 
