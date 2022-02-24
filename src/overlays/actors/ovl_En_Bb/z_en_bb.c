@@ -130,8 +130,19 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroySphere(globalCtx, &this->collider);
 }
 
-void func_808C1E94(EnBb* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1E94.s")
+void func_808C1E94(EnBb* this) {
+    s16 temp_v1;
+
+    if (this->actor.bgCheckFlags & 8) {
+        temp_v1 = this->actor.shape.rot.y - this->actor.wallYaw;
+        if (ABS_ALT(temp_v1) >= 0x4001) {
+            this->actor.shape.rot.y = ((this->actor.wallYaw * 2) - this->actor.shape.rot.y) - 0x8000;
+        }
+
+        this->unk_254 = this->actor.shape.rot.y;
+        this->actor.bgCheckFlags &= ~8;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F00.s")
 
