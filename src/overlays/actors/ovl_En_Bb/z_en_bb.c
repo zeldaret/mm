@@ -154,8 +154,14 @@ void func_808C1F00(EnBb* this) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
-void func_808C1F74(EnBb* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F74.s")
+void func_808C1F74(EnBb* this, GlobalContext* globalCtx) {
+    if (this->unk_24D == 10) {
+        this->unk_24D = 0;
+        this->unk_26C = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_278, 5, 2, 0.2f, 0.15f);
+        this->actor.flags |= ACTOR_FLAG_200;
+    }
+}
 
 void func_808C1FF4(EnBb* this) {
     SkelAnime_Update(&this->skelAnime);
