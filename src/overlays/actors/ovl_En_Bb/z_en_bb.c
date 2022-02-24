@@ -435,7 +435,17 @@ void func_808C2CB4(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2CF0.s")
+void func_808C2CF0(EnBb* this) {
+    Animation_PlayLoop(&this->skelAnime, &D_06000184);
+    this->actor.draw = EnBb_Draw;
+    this->actor.scale.x = 0.0f;
+    this->actor.scale.y = 0.015f;
+    this->actor.scale.z = 0.0f;
+    this->unk_264 = 1.0f;
+    this->unk_268 = 0.8f;
+    this->actor.colChkInfo.health = D_808C37EC.health;
+    this->actionFunc = func_808C2D78;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2D78.s")
 
