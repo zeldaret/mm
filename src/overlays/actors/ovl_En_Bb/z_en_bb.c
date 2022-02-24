@@ -270,7 +270,37 @@ void func_808C254C(EnBb* this) {
     this->actionFunc = func_808C25E0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C25E0.s")
+void func_808C25E0(EnBb* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    func_808C1E94(this);
+    if (this->actor.bgCheckFlags & 1) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        if (this->unk_250 == 0) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_UP);
+            func_808C20D4(this);
+            return;
+        }
+
+        if (this->actor.velocity.y < -14.0f) {
+            this->actor.velocity.y *= -0.7f;
+        } else {
+            this->actor.velocity.y = 10.0f;
+        }
+
+        this->actor.bgCheckFlags &= ~1;
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, (s16)(this->actor.yawTowardsPlayer + 0x8000), 0xBB8);
+    }
+
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+    }
+
+    if (this->unk_250 > 0) {
+        this->unk_250--;
+    }
+}
 
 void func_808C272C(EnBb* this, GlobalContext* globalCtx) {
     Vec3f* temp;
