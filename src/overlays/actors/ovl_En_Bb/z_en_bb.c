@@ -22,6 +22,7 @@ void func_808C2B1C(EnBb* this, GlobalContext* globalCtx);
 void func_808C2BD0(EnBb* this, GlobalContext* globalCtx);
 void func_808C2CB4(EnBb* this, GlobalContext* globalCtx);
 void func_808C2D78(EnBb* this, GlobalContext* globalCtx);
+void func_808C20D4(EnBb* this);
 
 #if 0
 const ActorInit En_Bb_InitVars = {
@@ -96,9 +97,30 @@ extern CollisionCheckInfoInit D_808C37EC;
 extern InitChainEntry D_808C37F4[];
 
 extern UNK_TYPE D_06000184;
-extern UNK_TYPE D_06000444;
+extern AnimationHeader D_06000444;
+extern SkeletonHeader D_06001A30;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/EnBb_Init.s")
+void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnBb* this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, D_808C37F4);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06001A30, &D_06000444, this->jointTable, this->morphTable, 16);
+    Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &D_808C37A0);
+    ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_808C37CC, &D_808C37EC);
+    
+    this->unk_268 = 0.8f;
+    this->unk_264 = 1.0f;
+    this->actor.world.pos.y += 50.0f;
+
+    if (EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) == 0xFF) {
+        this->unk_260 = 200.0f;
+    } else {
+        this->unk_260 = EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) * 4.0f;
+    }
+
+    func_808C20D4(this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/EnBb_Destroy.s")
 
