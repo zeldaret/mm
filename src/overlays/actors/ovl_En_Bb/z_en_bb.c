@@ -144,8 +144,15 @@ void func_808C1E94(EnBb* this) {
     }
 }
 
-void func_808C1F00(EnBb* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F00.s")
+void func_808C1F00(EnBb* this) {
+    this->unk_24D = 10;
+    this->unk_270 = 0.4f;
+    this->unk_274 = 0.6f;
+    this->unk_250 = 0x50;
+    this->unk_26C = 1.0f;
+    this->actor.flags &= ~ACTOR_FLAG_200;
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+}
 
 void func_808C1F74(EnBb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F74.s")
@@ -303,7 +310,7 @@ void func_808C2A00(EnBb* this) {
 
     if (this->actor.colChkInfo.damageEffect == 5) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-        this->unk_24D = 0x20;
+        this->unk_24D = 32;
         this->unk_26C = 2.0f;
         this->unk_270 = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == 1) {
