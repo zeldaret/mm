@@ -5,6 +5,8 @@
  */
 
 #include "z_en_bb.h"
+#include "objects/object_bb/object_bb.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
@@ -15,18 +17,18 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBb_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_808C20D4(EnBb* this);
+void func_808C2238(EnBb* this, GlobalContext* globalCtx);
+void func_808C2344(EnBb* this);
 void func_808C23EC(EnBb* this, GlobalContext* globalCtx);
 void func_808C25E0(EnBb* this, GlobalContext* globalCtx);
 void func_808C28CC(EnBb* this, GlobalContext* globalCtx);
 void func_808C2B1C(EnBb* this, GlobalContext* globalCtx);
 void func_808C2BD0(EnBb* this, GlobalContext* globalCtx);
-void func_808C2CB4(EnBb* this, GlobalContext* globalCtx);
-void func_808C2D78(EnBb* this, GlobalContext* globalCtx);
-void func_808C20D4(EnBb* this);
-void func_808C2238(EnBb* this, GlobalContext* globalCtx);
-void func_808C2344(EnBb* this);
 void func_808C2C38(EnBb* this);
+void func_808C2CB4(EnBb* this, GlobalContext* globalCtx);
 void func_808C2CF0(EnBb* this);
+void func_808C2D78(EnBb* this, GlobalContext* globalCtx);
 
 const ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,
@@ -40,8 +42,7 @@ const ActorInit En_Bb_InitVars = {
     (ActorFunc)EnBb_Draw,
 };
 
-// static ColliderSphereInit sSphereInit = {
-static ColliderSphereInit D_808C37A0 = {
+static ColliderSphereInit sSphereInit = {
     {
         COLTYPE_HIT3,
         AT_NONE | AT_TYPE_ENEMY,
@@ -61,8 +62,7 @@ static ColliderSphereInit D_808C37A0 = {
     { 0, { { 0, 0, 0 }, 20 }, 100 },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_808C37CC = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -97,11 +97,9 @@ static DamageTable D_808C37CC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_808C37EC = { 2, 20, 40, 50 };
+static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_808C37F4[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 28, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
@@ -112,19 +110,15 @@ static s8 D_808C37FC[] = {
 
 static Vec3f D_808C380C = { 1000.0f, -700.0f, 0.0f };
 
-extern AnimationHeader D_06000184;
-extern AnimationHeader D_06000444;
-extern SkeletonHeader D_06001A30;
-extern Gfx D_0407D590[];
-
 void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_808C37F4);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06001A30, &D_06000444, this->jointTable, this->morphTable, 16);
-    Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &D_808C37A0);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_bb_Skel_001A30, &object_bb_Anim_000444, this->jointTable,
+                   this->morphTable, 16);
+    Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_808C37CC, &D_808C37EC);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     this->unk_268 = 0.8f;
     this->unk_264 = 1.0f;
@@ -196,7 +190,7 @@ void func_808C1FF4(EnBb* this) {
 
 void func_808C20D4(EnBb* this) {
     if (this->actionFunc != func_808C2238) {
-        Animation_PlayLoop(&this->skelAnime, &D_06000444);
+        Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000444);
     }
 
     if (this->actionFunc == func_808C23EC) {
@@ -242,7 +236,7 @@ void func_808C2238(EnBb* this, GlobalContext* globalCtx) {
 }
 
 void func_808C2344(EnBb* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06000184);
+    Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000184);
     this->unk_250 = (s32)Rand_ZeroFloat(20.0f) + 0x3C;
     this->unk_25C = (Math_CosS(this->unk_256) * 10.0f) + 30.0f;
     this->unk_254 = this->actor.yawTowardsPlayer;
@@ -272,7 +266,7 @@ void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
 }
 
 void func_808C254C(EnBb* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06000444);
+    Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000444);
     this->collider.base.atFlags |= AT_ON;
     this->unk_250 = 0x8C;
     this->collider.base.acFlags |= AC_ON;
@@ -449,14 +443,14 @@ void func_808C2CB4(EnBb* this, GlobalContext* globalCtx) {
 }
 
 void func_808C2CF0(EnBb* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06000184);
+    Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000184);
     this->actor.draw = EnBb_Draw;
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.015f;
     this->actor.scale.z = 0.0f;
     this->unk_264 = 1.0f;
     this->unk_268 = 0.8f;
-    this->actor.colChkInfo.health = D_808C37EC.health;
+    this->actor.colChkInfo.health = sColChkInfoInit.health;
     this->actionFunc = func_808C2D78;
 }
 
@@ -663,7 +657,7 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                     (globalCtx->gameplayFrames * -20) & 0x1FF, 32, 128));
         currentMatrixState->mf[3][1] -= 47.0f * this->unk_268;
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
     func_800BE680(globalCtx, &this->actor, this->unk_278, 5, this->unk_270, this->unk_274, this->unk_26C,

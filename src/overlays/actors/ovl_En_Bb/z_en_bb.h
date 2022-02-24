@@ -17,7 +17,7 @@ typedef struct EnBb {
     /* 0x248 */ EnBbActionFunc actionFunc;
     /* 0x24C */ s8 unk_24C;
     /* 0x24D */ u8 unk_24D;
-    /* 0x24E */ char unk_24E[0x2];
+    /* 0x24E */ UNK_TYPE1 unk_24E[0x2];
     /* 0x250 */ s16 unk_250;
     /* 0x252 */ s16 unk_252;
     /* 0x254 */ s16 unk_254;
