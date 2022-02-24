@@ -5,7 +5,6 @@
  */
 
 #include "z_en_bb.h"
-#include "objects/object_bb/object_bb.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
@@ -114,8 +113,8 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_bb_Skel_001A30, &object_bb_Anim_000444, this->jointTable,
-                   this->morphTable, 16);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable,
+                   this->morphTable, BUBBLE_LIMB_MAX);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -190,7 +189,7 @@ void func_808C1FF4(EnBb* this) {
 
 void func_808C20D4(EnBb* this) {
     if (this->actionFunc != func_808C2238) {
-        Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000444);
+        Animation_PlayLoop(&this->skelAnime, &gBubbleFlyingAnim);
     }
 
     if (this->actionFunc == func_808C23EC) {
@@ -236,7 +235,7 @@ void func_808C2238(EnBb* this, GlobalContext* globalCtx) {
 }
 
 void func_808C2344(EnBb* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000184);
+    Animation_PlayLoop(&this->skelAnime, &gBubbleAttackAnim);
     this->unk_250 = (s32)Rand_ZeroFloat(20.0f) + 0x3C;
     this->unk_25C = (Math_CosS(this->unk_256) * 10.0f) + 30.0f;
     this->unk_254 = this->actor.yawTowardsPlayer;
@@ -266,7 +265,7 @@ void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
 }
 
 void func_808C254C(EnBb* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000444);
+    Animation_PlayLoop(&this->skelAnime, &gBubbleFlyingAnim);
     this->collider.base.atFlags |= AT_ON;
     this->unk_250 = 0x8C;
     this->collider.base.acFlags |= AC_ON;
@@ -443,7 +442,7 @@ void func_808C2CB4(EnBb* this, GlobalContext* globalCtx) {
 }
 
 void func_808C2CF0(EnBb* this) {
-    Animation_PlayLoop(&this->skelAnime, &object_bb_Anim_000184);
+    Animation_PlayLoop(&this->skelAnime, &gBubbleAttackAnim);
     this->actor.draw = EnBb_Draw;
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.015f;
@@ -608,7 +607,7 @@ void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             Matrix_GetStateTranslation(&this->limbPos[D_808C37FC[limbIndex]]);
         }
 
-        if (limbIndex == 15) {
+        if (limbIndex == BUBBLE_LIMB_CRANIUM) {
             this->unk_24C = -1;
         }
     } else {

@@ -1,37 +1,37 @@
 ﻿<Root>
     <File Name="object_bb" Segment="6">
-        <Animation Name="object_bb_Anim_000184" Offset="0x184" />
+        <Animation Name="gBubbleAttackAnim" Offset="0x184" /> <!-- Original name is "bb_atack" -->
         <Animation Name="object_bb_Anim_0002AC" Offset="0x2AC" />
-        <Animation Name="object_bb_Anim_000444" Offset="0x444" />
-        <DList Name="object_bb_DL_000C20" Offset="0xC20" />
-        <DList Name="object_bb_DL_000CB0" Offset="0xCB0" />
-        <DList Name="object_bb_DL_000D40" Offset="0xD40" />
-        <DList Name="object_bb_DL_000E08" Offset="0xE08" />
-        <DList Name="object_bb_DL_001100" Offset="0x1100" />
-        <DList Name="object_bb_DL_001190" Offset="0x1190" />
-        <Texture Name="object_bb_Tex_001220" OutName="tex_001220" Format="rgba16" Width="16" Height="16" Offset="0x1220" />
-        <Texture Name="object_bb_Tex_001420" OutName="tex_001420" Format="rgba16" Width="8" Height="8" Offset="0x1420" />
-        <Texture Name="object_bb_Tex_0014A0" OutName="tex_0014A0" Format="rgba16" Width="4" Height="4" Offset="0x14A0" />
-        <Texture Name="object_bb_Tex_0014C0" OutName="tex_0014C0" Format="rgba16" Width="8" Height="8" Offset="0x14C0" />
-        <Texture Name="object_bb_Tex_001540" OutName="tex_001540" Format="rgba16" Width="8" Height="8" Offset="0x1540" />
-        <Texture Name="object_bb_Tex_0015C0" OutName="tex_0015C0" Format="rgba16" Width="8" Height="8" Offset="0x15C0" />
-        <Texture Name="object_bb_Tex_001640" OutName="tex_001640" Format="rgba16" Width="16" Height="8" Offset="0x1640" />
-        <Texture Name="object_bb_Tex_001740" OutName="tex_001740" Format="rgba16" Width="16" Height="16" Offset="0x1740" />
-        <Limb Name="object_bb_Standardlimb_001940" Type="Standard" EnumName="OBJECT_BB_LIMB_01" Offset="0x1940" />
-        <Limb Name="object_bb_Standardlimb_00194C" Type="Standard" EnumName="OBJECT_BB_LIMB_02" Offset="0x194C" />
-        <Limb Name="object_bb_Standardlimb_001958" Type="Standard" EnumName="OBJECT_BB_LIMB_03" Offset="0x1958" />
-        <Limb Name="object_bb_Standardlimb_001964" Type="Standard" EnumName="OBJECT_BB_LIMB_04" Offset="0x1964" />
-        <Limb Name="object_bb_Standardlimb_001970" Type="Standard" EnumName="OBJECT_BB_LIMB_05" Offset="0x1970" />
-        <Limb Name="object_bb_Standardlimb_00197C" Type="Standard" EnumName="OBJECT_BB_LIMB_06" Offset="0x197C" />
-        <Limb Name="object_bb_Standardlimb_001988" Type="Standard" EnumName="OBJECT_BB_LIMB_07" Offset="0x1988" />
-        <Limb Name="object_bb_Standardlimb_001994" Type="Standard" EnumName="OBJECT_BB_LIMB_08" Offset="0x1994" />
-        <Limb Name="object_bb_Standardlimb_0019A0" Type="Standard" EnumName="OBJECT_BB_LIMB_09" Offset="0x19A0" />
-        <Limb Name="object_bb_Standardlimb_0019AC" Type="Standard" EnumName="OBJECT_BB_LIMB_0A" Offset="0x19AC" />
-        <Limb Name="object_bb_Standardlimb_0019B8" Type="Standard" EnumName="OBJECT_BB_LIMB_0B" Offset="0x19B8" />
-        <Limb Name="object_bb_Standardlimb_0019C4" Type="Standard" EnumName="OBJECT_BB_LIMB_0C" Offset="0x19C4" />
-        <Limb Name="object_bb_Standardlimb_0019D0" Type="Standard" EnumName="OBJECT_BB_LIMB_0D" Offset="0x19D0" />
-        <Limb Name="object_bb_Standardlimb_0019DC" Type="Standard" EnumName="OBJECT_BB_LIMB_0E" Offset="0x19DC" />
-        <Limb Name="object_bb_Standardlimb_0019E8" Type="Standard" EnumName="OBJECT_BB_LIMB_0F" Offset="0x19E8" />
-        <Skeleton Name="object_bb_Skel_001A30" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BB_LIMB_NONE" LimbMax="OBJECT_BB_LIMB_MAX" EnumName="object_bb_Limbs" Offset="0x1A30" />
+        <Animation Name="gBubbleFlyingAnim" Offset="0x444" /> <!-- Original name is "bb_fly" -->
+        <DList Name="gBubbleLeftWingFlapDL" Offset="0xC20" />
+        <DList Name="gBubbleLeftWingArmDL" Offset="0xCB0" />
+        <DList Name="gBubbleJawDL" Offset="0xD40" />
+        <DList Name="gBubbleCraniumDL" Offset="0xE08" />
+        <DList Name="gBubbleRightWingArmDL" Offset="0x1100" />
+        <DList Name="gBubbleRightWingFlapDL" Offset="0x1190" />
+        <Texture Name="gBubbleEyeSocketBottomTex" OutName="eye_socket_bottom" Format="rgba16" Width="16" Height="16" Offset="0x1220" />
+        <Texture Name="gBubbleNostrilTex" OutName="nostril" Format="rgba16" Width="8" Height="8" Offset="0x1420" />
+        <Texture Name="gBubbleEyeSocketTopAndJawTex" OutName="eye_socket_top_and_jaw" Format="rgba16" Width="4" Height="4" Offset="0x14A0" />
+        <Texture Name="gBubbleCraniumTopTex" OutName="cranium_top" Format="rgba16" Width="8" Height="8" Offset="0x14C0" />
+        <Texture Name="gBubbleCraniumSidesAndBackTex" OutName="cranium_sides_and_back" Format="rgba16" Width="8" Height="8" Offset="0x1540" />
+        <Texture Name="gBubbleEyeGlowTex" OutName="eye_glow" Format="rgba16" Width="8" Height="8" Offset="0x15C0" />
+        <Texture Name="gBubbleWingArmTex" OutName="wing_arm" Format="rgba16" Width="16" Height="8" Offset="0x1640" />
+        <Texture Name="gBubbleWingFlapTex" OutName="wing_flap" Format="rgba16" Width="16" Height="16" Offset="0x1740" />
+        <Limb Name="gBubbleRootLimb" Type="Standard" EnumName="BUBBLE_LIMB_ROOT" Offset="0x1940" />
+        <Limb Name="gBubbleHeadRootLimb" Type="Standard" EnumName="BUBBLE_LIMB_HEAD_ROOT" Offset="0x194C" />
+        <Limb Name="gBubbleJawRootLimb" Type="Standard" EnumName="BUBBLE_LIMB_JAW_ROOT" Offset="0x1958" />
+        <Limb Name="gBubbleJawLimb" Type="Standard" EnumName="BUBBLE_LIMB_JAW" Offset="0x1964" />
+        <Limb Name="object_bb_Standardlimb_001970" Type="Standard" EnumName="BUBBLE_LIMB_UNK_5" Offset="0x1970" />
+        <Limb Name="object_bb_Standardlimb_00197C" Type="Standard" EnumName="BUBBLE_LIMB_UNK_6" Offset="0x197C" />
+        <Limb Name="gBubbleLeftWingFlapRootLimb" Type="Standard" EnumName="BUBBLE_LIMB_LEFT_WING_FLAP_ROOT" Offset="0x1988" />
+        <Limb Name="gBubbleLeftWingFlapLimb" Type="Standard" EnumName="BUBBLE_LIMB_LEFT_WING_FLAP" Offset="0x1994" />
+        <Limb Name="gBubbleLeftWingArmLimb" Type="Standard" EnumName="BUBBLE_LIMB_LEFT_WING_ARM" Offset="0x19A0" />
+        <Limb Name="object_bb_Standardlimb_0019AC" Type="Standard" EnumName="BUBBLE_LIMB_UNK_A" Offset="0x19AC" />
+        <Limb Name="object_bb_Standardlimb_0019B8" Type="Standard" EnumName="BUBBLE_LIMB_UNK_B" Offset="0x19B8" />
+        <Limb Name="gBubbleRightWingFlapRootLimb" Type="Standard" EnumName="BUBBLE_LIMB_RIGHT_WING_FLAP_ROOT" Offset="0x19C4" />
+        <Limb Name="gBubbleRightWingFlapLimb" Type="Standard" EnumName="BUBBLE_LIMB_RIGHT_WING_FLAP" Offset="0x19D0" />
+        <Limb Name="gBubbleRightWingArmLimb" Type="Standard" EnumName="BUBBLE_LIMB_RIGHT_WING_ARM" Offset="0x19DC" />
+        <Limb Name="gBubbleCraniumLimb" Type="Standard" EnumName="BUBBLE_LIMB_CRANIUM" Offset="0x19E8" />
+        <Skeleton Name="gBubbleSkel" Type="Normal" LimbType="Standard" LimbNone="BUBBLE_LIMB_NONE" LimbMax="BUBBLE_LIMB_MAX" EnumName="BubbleLimbs" Offset="0x1A30" />
     </File>
 </Root>
