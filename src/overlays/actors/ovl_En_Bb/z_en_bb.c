@@ -99,6 +99,8 @@ extern ColliderSphereInit D_808C37A0;
 extern DamageTable D_808C37CC;
 extern CollisionCheckInfoInit D_808C37EC;
 extern InitChainEntry D_808C37F4[];
+extern s8 D_808C37FC[];
+extern Vec3f D_808C380C;
 
 extern AnimationHeader D_06000184;
 extern AnimationHeader D_06000444;
@@ -581,8 +583,47 @@ s32 func_808C32EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C3324.s")
+void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    s32 pad;
+    EnBb* this = THIS;
+    MtxF* temp_v0_4;
+
+    if (this->unk_24C == 0) {
+        if (D_808C37FC[limbIndex] != -1) {
+            if (D_808C37FC[limbIndex] == 0) {
+                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->unk_278[0]);
+            } else if (D_808C37FC[limbIndex] == 3) {
+                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->unk_278[3]);
+                Matrix_MultiplyVector3fByState(&D_808C380C, &this->unk_278[4]);
+            } else {
+                Matrix_GetStateTranslation(&this->unk_278[D_808C37FC[limbIndex]]);
+            }
+        }
+    } else if (this->unk_24C > 0) {
+        if (D_808C37FC[limbIndex] != -1) {
+            Matrix_GetStateTranslation(&this->unk_278[D_808C37FC[limbIndex]]);
+        }
+
+        if (limbIndex == 15) {
+            this->unk_24C = -1;
+        }
+    } else {
+        if (D_808C37FC[limbIndex] != -1) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            temp_v0_4 = Matrix_GetCurrentState();
+            temp_v0_4->mf[3][0] = this->unk_278[D_808C37FC[limbIndex]].x;
+            temp_v0_4->mf[3][1] = this->unk_278[D_808C37FC[limbIndex]].y;
+            temp_v0_4->mf[3][2] = this->unk_278[D_808C37FC[limbIndex]].z;
+            Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, this->unk_2F0);
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
 
 void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
