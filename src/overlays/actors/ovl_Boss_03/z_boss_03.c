@@ -102,7 +102,12 @@ extern UNK_TYPE D_06009554;
 extern UNK_TYPE D_060099D0;
 extern UNK_TYPE D_06009C14;
 extern UNK_TYPE D_06009CF8;
-extern UNK_TYPE D_0600A6C8;
+extern AnimationHeader D_0600A6C8;
+
+void func_809E8810(Actor* thisx, GlobalContext* globalCtx);
+void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx);
+
+void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2760.s")
 
@@ -116,17 +121,123 @@ extern UNK_TYPE D_0600A6C8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2B8C.s")
 
+void func_809E2C1C(s32 arg0, s32 arg1, s32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2C1C.s")
 
+f32 func_809E2C3C(void);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2C3C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2D64.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2DA0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Init.s")
+extern u8 D_809E9842;
+extern Vec3f D_809E8FE8;
+extern Boss03* D_809EC030;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Destroy.s")
+typedef struct {
+    /* 0x000 */ s8 unk_000;
+    /* 0x001 */ UNK_TYPE1 unk_001[0x03];
+    /* 0x004 */ UNK_TYPE1 unk_004[0x40];
+} struct_809E9858; // size = 0x44
+
+extern struct_809E9858 D_809E9858[150];
+
+#ifdef NON_EQUIVALENT
+void Boss03_Init(Actor* thisx, GlobalContext* globalCtx) {
+    Vec3f sp70;
+    s32 phi_s2;
+    s32 phi_s3;
+    s32 phi_s1;
+    s32 phi_s4;
+    Boss03* this = (Boss03* ) thisx;
+    s32 i;
+    s32 j;
+
+    if ((gSaveContext.weekEventReg[0x37] & 0x80) != 0) {
+        // ACTOR_DOOR_WARP1
+        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 0x38, 0.0f, 440.0f, 200.0f, 0, 0, 0, 1);
+        // ACTOR_ITEM_B_HEART
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x3A, 0.0f, 440.0f, 0.0f, 0, 0, 0, 0);
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    if (this->actor.params == 0x23) {
+        this->actor.update = func_809E8810;
+        this->actor.draw = func_809E8BEC;
+
+        this->unk_240 = Rand_ZeroFloat(1000.0f);
+
+        this->actor.scale.x = Rand_ZeroFloat(0.0075f) + 0.027f;
+        this->actor.scale.y = 0.02f;
+        this->actor.scale.z = 0.015f;
+
+        phi_s2 = 0;
+        phi_s3 = 0;
+        phi_s1 = 0;
+        for (i = 0; i < 6; i++) {
+            this->jointTable[i].x = Math_SinS((this->unk_240 * 0x100) + phi_s2) * 3000.0f;
+            this->jointTable[i].y = Math_SinS((this->unk_240 * 0x180) + phi_s3) * 2000.0f;
+            this->jointTable[i].z = Math_SinS((this->unk_240 * 0x10) + phi_s1) * 4000.0f;
+
+            phi_s2 += 0x3A98; // 15000
+            phi_s3 += 0x4E20; // 20000
+            phi_s1 += 0x4A38; // 19000
+        }
+
+        this->actor.flags &= ~1;
+        return;
+    }
+
+    this->actor.world.pos = D_809E8FE8;
+
+    func_809E2C1C(1, 0x71A5, 0x263A);
+
+    //for (phi_s4 = 0; phi_s4 < 5; phi_s4++) 
+    for (phi_s4 = 0; (unsigned int) (phi_s4 < 5); phi_s4++)
+    {
+        Matrix_InsertYRotation_f((func_809E2C3C() * 3.1415927f * 0.2f) + (1.2566371f * phi_s4), 0);
+        Matrix_GetStateTranslationAndScaledZ((func_809E2C3C() * 800.0f) + 400.0f, &sp70);
+        // ACTOR_BOSS_03
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x12B, sp70.x, sp70.y, sp70.z, 0, (s16) (func_809E2C3C() * 65536.0f), 0, 0x23);
+    }
+
+    D_809EC030 = this;
+
+    globalCtx->specialEffects = D_809E9858;
+
+    for (j = 0; j < ARRAY_COUNT(D_809E9858); j++) {
+        D_809E9858[j].unk_000 = 0;
+    }
+
+    this->actor.targetMode = 5;
+    this->actor.colChkInfo.mass = 0xFE;
+    this->actor.colChkInfo.health = 0xA;
+    Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &D_809E8F14, this->unk_34C);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &D_809E8FD8, this->unk_3EC);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSkel, &D_0600A6C8, this->jointTable, this->morphTable, GYORG_LIMB_MAX);
+    Actor_SetScale(&this->actor, 0.2f);
+
+    if ((gGameInfo->data[0x520] != 0) || ((gSaveContext.eventInf[5] & 0x40) != 0)) {
+        this->actionFunc = func_809E344C;
+        D_809E9842 = 0;
+        Audio_QueueSeqCmd(0x100100FF);
+    } else {
+        func_809E4E2C(this, globalCtx);
+        D_809E9842 = 1;
+    }
+
+    this->unk_252 = -1;
+    this->unk_258 = 430.0f;
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Init.s")
+#endif
+
+void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    Boss03* this = THIS;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E344C.s")
 
