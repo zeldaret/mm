@@ -28,7 +28,6 @@ void func_808C2344(EnBb* this);
 void func_808C2C38(EnBb* this);
 void func_808C2CF0(EnBb* this);
 
-#if 0
 const ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,
     ACTORCAT_ENEMY,
@@ -43,8 +42,22 @@ const ActorInit En_Bb_InitVars = {
 
 // static ColliderSphereInit sSphereInit = {
 static ColliderSphereInit D_808C37A0 = {
-    { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_SPHERE, },
-    { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+    {
+        COLTYPE_HIT3,
+        AT_NONE | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_SPHERE,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0xF7CFFFFF, 0x00, 0x08 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 0, { { 0, 0, 0 }, 20 }, 100 },
 };
 
@@ -93,14 +106,11 @@ static InitChainEntry D_808C37F4[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
-#endif
+static s8 D_808C37FC[] = {
+    -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
+};
 
-extern ColliderSphereInit D_808C37A0;
-extern DamageTable D_808C37CC;
-extern CollisionCheckInfoInit D_808C37EC;
-extern InitChainEntry D_808C37F4[];
-extern s8 D_808C37FC[];
-extern Vec3f D_808C380C;
+static Vec3f D_808C380C = { 1000.0f, -700.0f, 0.0f };
 
 extern AnimationHeader D_06000184;
 extern AnimationHeader D_06000444;
