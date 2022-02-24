@@ -319,7 +319,7 @@ void EnIk_HitArmor(EnIk* this, GlobalContext* globalCtx) {
 
 s32 func_80929C80(EnIk* this, GlobalContext* globalCtx) {
     if ((this->unk_2F4 != 0) && (this->actionFunc != func_8092ABD8) &&
-        (func_800BE184(globalCtx, &this->actor, 100.0f, 10000, 16384, this->actor.shape.rot.y) != 0)) {
+        (func_800BE184(globalCtx, &this->actor, 100.0f, 0x2710, 0x4000, this->actor.shape.rot.y) != 0)) {
         func_8092AB50(this);
         return true;
     }
