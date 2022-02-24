@@ -220,7 +220,26 @@ void func_808C2344(EnBb* this) {
     this->actionFunc = func_808C23EC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C23EC.s")
+void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
+    this->unk_254 = this->actor.yawTowardsPlayer;
+    func_808C1FF4(this);
+
+    if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_MOUTH);
+    } else if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 7.0f))) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_LAUGH);
+    }
+
+    this->unk_250--;
+
+    if (((this->unk_260 + 120.0f) < this->actor.xzDistToPlayer) || (this->unk_250 == 0) ||
+        (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
+        (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 400.0f)) {
+        func_808C20D4(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C254C.s")
 
