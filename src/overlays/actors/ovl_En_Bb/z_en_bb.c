@@ -24,6 +24,7 @@ void func_808C2CB4(EnBb* this, GlobalContext* globalCtx);
 void func_808C2D78(EnBb* this, GlobalContext* globalCtx);
 void func_808C20D4(EnBb* this);
 void func_808C2238(EnBb* this, GlobalContext* globalCtx);
+void func_808C2344(EnBb* this);
 
 #if 0
 const ActorInit En_Bb_InitVars = {
@@ -135,6 +136,7 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F74.s")
 
+void func_808C1FF4(EnBb* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1FF4.s")
 
 void func_808C20D4(EnBb* this) {
@@ -164,7 +166,25 @@ void func_808C20D4(EnBb* this) {
     this->actionFunc = func_808C2238;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2238.s")
+void func_808C2238(EnBb* this, GlobalContext* globalCtx) {
+    func_808C1FF4(this);
+
+    if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_LAUGH);
+    }
+
+    DECR(this->unk_252);
+    this->unk_250--;
+
+    if ((this->unk_252 == 0) && (this->actor.xzDistToPlayer < this->unk_260) &&
+        (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
+        func_808C2344(this);
+    } else if (this->unk_250 == 0) {
+        func_808C20D4(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2344.s")
 
