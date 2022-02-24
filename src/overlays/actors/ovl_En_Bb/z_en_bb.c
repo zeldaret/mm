@@ -98,7 +98,7 @@ extern DamageTable D_808C37CC;
 extern CollisionCheckInfoInit D_808C37EC;
 extern InitChainEntry D_808C37F4[];
 
-extern UNK_TYPE D_06000184;
+extern AnimationHeader D_06000184;
 extern AnimationHeader D_06000444;
 extern SkeletonHeader D_06001A30;
 
@@ -211,7 +211,14 @@ void func_808C2238(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2344.s")
+void func_808C2344(EnBb* this) {
+    Animation_PlayLoop(&this->skelAnime, &D_06000184);
+    this->unk_250 = (s32)Rand_ZeroFloat(20.0f) + 0x3C;
+    this->unk_25C = (Math_CosS(this->unk_256) * 10.0f) + 30.0f;
+    this->unk_254 = this->actor.yawTowardsPlayer;
+    this->unk_258 = Rand_ZeroFloat(1.5f) + 4.0f;
+    this->actionFunc = func_808C23EC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C23EC.s")
 
