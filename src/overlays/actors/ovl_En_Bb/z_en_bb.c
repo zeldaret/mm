@@ -283,6 +283,7 @@ void func_808C272C(EnBb* this, GlobalContext* globalCtx) {
         if (temp_f0 > 1.0f) {
             temp_f0 = 2.5f / temp_f0;
         }
+
         temp->x = sp70.x * temp_f0;
         temp->z = sp70.z * temp_f0;
         temp->y = Rand_ZeroFloat(3.5f) + 10.0f;
@@ -300,8 +301,15 @@ void func_808C2A00(EnBb* this);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2B1C.s")
 
-void func_808C2B94(EnBb* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2B94.s")
+void func_808C2B94(EnBb* this) {
+    this->actor.speedXZ = 0.0f;
+    if (this->actor.velocity.y > 0.0f) {
+        this->actor.velocity.y = 0.0f;
+    }
+
+    this->actor.gravity = -2.0f;
+    this->actionFunc = func_808C2BD0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2BD0.s")
 
