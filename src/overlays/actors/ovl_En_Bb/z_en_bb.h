@@ -32,7 +32,7 @@ typedef struct EnBb {
     /* 0x274 */ f32 unk_274;
     /* 0x278 */ Vec3f unk_278[5];
     /* 0x2B4 */ Vec3f unk_2B4[5];
-    /* 0x2F0 */ char unk_2F0[0x4];
+    /* 0x2F0 */ Gfx* unk_2F0;
     /* 0x2F4 */ ColliderSphere collider;
 } EnBb; // size = 0x34C
 

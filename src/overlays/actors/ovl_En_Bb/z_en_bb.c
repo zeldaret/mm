@@ -570,8 +570,16 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808C32EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C32EC.s")
+s32 func_808C32EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnBb* this = THIS;
+
+    if (this->unk_24C == -1) {
+        this->unk_2F0 = *dList;
+        *dList = NULL;
+    }
+
+    return false;
+}
 
 void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C3324.s")
