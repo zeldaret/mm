@@ -259,8 +259,39 @@ void func_808C254C(EnBb* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C25E0.s")
 
-void func_808C272C(EnBb* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C272C.s")
+void func_808C272C(EnBb* this, GlobalContext* globalCtx) {
+    Vec3f* temp;
+    Vec3f sp70;
+    f32 temp_f0;
+    s32 i;
+
+    func_800BE568(&this->actor, &this->collider);
+    this->unk_250 = 0xF;
+    this->actor.shape.rot.x += 0x4E20;
+    this->actor.speedXZ = 0.0f;
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
+    Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x70);
+    this->actor.velocity.y = 0.0f;
+    this->actor.speedXZ = 0.0f;
+    this->unk_24C = 1;
+    this->actor.gravity = -1.5f;
+
+    temp = &this->unk_2B4[0];
+    for (i = 0; i < 5; i++, temp++) {
+        Math_Vec3f_Diff(&this->unk_278[i], &this->actor.world.pos, &sp70);
+        temp_f0 = Math3D_Vec3fMagnitude(&sp70);
+        if (temp_f0 > 1.0f) {
+            temp_f0 = 2.5f / temp_f0;
+        }
+        temp->x = sp70.x * temp_f0;
+        temp->z = sp70.z * temp_f0;
+        temp->y = Rand_ZeroFloat(3.5f) + 10.0f;
+    }
+
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actionFunc = func_808C28CC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C28CC.s")
 
