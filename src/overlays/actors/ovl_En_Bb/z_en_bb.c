@@ -296,8 +296,29 @@ void func_808C272C(EnBb* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C28CC.s")
 
-void func_808C2A00(EnBb* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2A00.s")
+void func_808C2A00(EnBb* this) {
+    this->collider.base.acFlags &= ~AC_ON;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
+    func_800BE568(&this->actor, &this->collider);
+
+    if (this->actor.colChkInfo.damageEffect == 5) {
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        this->unk_24D = 0x20;
+        this->unk_26C = 2.0f;
+        this->unk_270 = 0.4f;
+    } else if (this->actor.colChkInfo.damageEffect == 1) {
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
+        this->actor.speedXZ = 0.0f;
+    } else if (this->actor.colChkInfo.damageEffect == 0xE) {
+        this->actor.speedXZ = 0.0f;
+    } else {
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+        this->actor.speedXZ = 7.0f;
+    }
+
+    this->actor.gravity = -1.0f;
+    this->actionFunc = func_808C2B1C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2B1C.s")
 
