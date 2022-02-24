@@ -447,7 +447,22 @@ void func_808C2CF0(EnBb* this) {
     this->actionFunc = func_808C2D78;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2D78.s")
+void func_808C2D78(EnBb* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    this->actor.shape.rot.y += 0x1F00;
+
+    if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.0005f)) {
+        this->actor.flags &= ~ACTOR_FLAG_10;
+        this->actor.flags |= ACTOR_FLAG_1;
+        this->collider.base.acFlags |= AC_ON;
+        this->collider.base.atFlags |= AT_ON;
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+        func_808C20D4(this);
+    }
+
+    this->actor.scale.z = this->actor.scale.x;
+    this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
+}
 
 void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
