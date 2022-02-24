@@ -103,6 +103,7 @@ extern InitChainEntry D_808C37F4[];
 extern AnimationHeader D_06000184;
 extern AnimationHeader D_06000444;
 extern SkeletonHeader D_06001A30;
+extern Gfx D_0407D590[];
 
 void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
@@ -569,8 +570,45 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+s32 func_808C32EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C32EC.s")
 
+void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C3324.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/EnBb_Draw.s")
+void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnBb* this = THIS;
+    MtxF* currentMatrixState;
+    Gfx* gfx;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gfx = POLY_OPA_DISP;
+    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    POLY_OPA_DISP = &gfx[1];
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808C32EC, func_808C3324,
+                      &this->actor);
+
+    if (this->unk_264 > 0.0f) {
+        currentMatrixState = Matrix_GetCurrentState();
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        Matrix_RotateY(
+            ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
+            MTXMODE_APPLY);
+        Matrix_Scale(this->unk_264, this->unk_268, 1.0f, MTXMODE_APPLY);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
+        gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 0);
+        gSPSegment(POLY_XLU_DISP++, 0x08,
+                   Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
+                                    (globalCtx->gameplayFrames * -20) & 0x1FF, 32, 128));
+        currentMatrixState->mf[3][1] -= 47.0f * this->unk_268;
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+    }
+
+    func_800BE680(globalCtx, &this->actor, this->unk_278, 5, this->unk_270, this->unk_274, this->unk_26C,
+                  this->unk_24D);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
