@@ -383,7 +383,12 @@ void func_808C2A00(EnBb* this) {
     this->actionFunc = func_808C2B1C;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2B1C.s")
+void func_808C2B1C(EnBb* this, GlobalContext* globalCtx) {
+    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
+        func_808C254C(this);
+    }
+}
 
 void func_808C2B94(EnBb* this) {
     this->actor.speedXZ = 0.0f;
