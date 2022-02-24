@@ -528,10 +528,9 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
     return false;
 }
 
-#ifdef NON_MATCHING
-// Stack
 void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     f32 temp;
+    f32 tmp2;
     f32 sp7C;
     Vec3f sp70;
     Vec3f sp64;
@@ -541,7 +540,8 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
         sp7C = this->unk_1C0;
     } else {
         temp = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
-        this->unk_1C0 = temp / this->unk_1DC;
+        tmp2 = temp / this->unk_1DC;
+        this->unk_1C0 = tmp2;
         sp7C = this->unk_1C0;
     }
 
@@ -567,9 +567,6 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     Matrix_CopyCurrentState(&sp24);
     func_8018219C(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/func_8093FAA4.s")
-#endif
 
 void func_8093FC00(EnGoroiwa* this) {
     s32 params = ENGOROIWA_GET_300(&this->actor);
@@ -1431,8 +1428,6 @@ void func_80942604(EnGoroiwa* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// stack for params and colCtx
 void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGoroiwa* this = THIS;
@@ -1442,6 +1437,8 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp50;
     f32 sp4C;
     s32 sp48 = true;
+    u32 temp_v0_2;
+    CollisionPoly* tmp;
 
     if (!(player->stateFlags1 & (0x30000000 | 0x80 | 0x40))) {
         if (this->unk_1CC > 0) {
@@ -1459,8 +1456,9 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
             sp5C = true;
 
             if (this->actor.flags & ACTOR_FLAG_40) {
-                if (this->actor.floorPoly != NULL) {
-                    u32 temp_v0_2 = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+                tmp = this->actor.floorPoly;
+                if (tmp != NULL) {
+                    temp_v0_2 = func_800C99D4(&globalCtx->colCtx, tmp, this->actor.floorBgId);
 
                     if ((temp_v0_2 == 14) || (temp_v0_2 == 15)) {
                         if (!(this->unk_1E5 & 0x40)) {
@@ -1549,9 +1547,6 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/EnGoroiwa_Update.s")
-#endif
 
 void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
     s32 pad;

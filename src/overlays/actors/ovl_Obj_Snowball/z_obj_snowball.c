@@ -228,8 +228,8 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
 
         scale = ((Rand_ZeroOne() * 15.0f) + 30.0f) * this->unk_20C;
 
-        EffectSsKakera_Spawn(globalCtx, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1, OBJECT_GOROIWA,
-                             temp_s2);
+        EffectSsKakera_Spawn(globalCtx, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1,
+                             OBJECT_GOROIWA, temp_s2);
         if ((this->unk_210 == 0) && (temp_s7 >= 3)) {
             spFC.x += (Rand_ZeroOne() * 120.0f) - 60.0f;
             spFC.y += Rand_ZeroOne() * 80.0f;
