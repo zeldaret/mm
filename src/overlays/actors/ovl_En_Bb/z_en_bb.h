@@ -25,7 +25,7 @@ typedef struct EnBb {
     /* 0x256 */ s16 unk_256;
     /* 0x258 */ f32 unk_258;
     /* 0x25C */ f32 unk_25C;
-    /* 0x260 */ f32 unk_260;
+    /* 0x260 */ f32 attackRange;
     /* 0x264 */ f32 unk_264;
     /* 0x268 */ f32 unk_268;
     /* 0x26C */ f32 drawDmgEffAlpha;

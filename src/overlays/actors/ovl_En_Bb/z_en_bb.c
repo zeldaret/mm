@@ -113,8 +113,8 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable,
-                   this->morphTable, BUBBLE_LIMB_MAX);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable, this->morphTable,
+                   BUBBLE_LIMB_MAX);
     Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -124,9 +124,9 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.world.pos.y += 50.0f;
 
     if (EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) == 0xFF) {
-        this->unk_260 = 200.0f;
+        this->attackRange = 200.0f;
     } else {
-        this->unk_260 = EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) * 4.0f;
+        this->attackRange = EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) * 4.0f;
     }
 
     func_808C20D4(this);
@@ -204,7 +204,7 @@ void func_808C20D4(EnBb* this) {
     this->unk_25C = (Math_CosS(this->unk_256) * 10.0f) + 30.0f;
     this->unk_254 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
 
-    if ((this->actor.xzDistToPlayer < (this->unk_260 + 120.0f)) ||
+    if ((this->actor.xzDistToPlayer < (this->attackRange + 120.0f)) ||
         (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 300.0f)) {
         this->unk_254 += (s16)(Rand_Next() >> 0x11);
     }
@@ -226,7 +226,7 @@ void func_808C2238(EnBb* this, GlobalContext* globalCtx) {
     DECR(this->unk_252);
     this->unk_250--;
 
-    if ((this->unk_252 == 0) && (this->actor.xzDistToPlayer < this->unk_260) &&
+    if ((this->unk_252 == 0) && (this->actor.xzDistToPlayer < this->attackRange) &&
         (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
         func_808C2344(this);
     } else if (this->unk_250 == 0) {
@@ -257,7 +257,7 @@ void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
 
     this->unk_250--;
 
-    if (((this->unk_260 + 120.0f) < this->actor.xzDistToPlayer) || (this->unk_250 == 0) ||
+    if (((this->attackRange + 120.0f) < this->actor.xzDistToPlayer) || (this->unk_250 == 0) ||
         (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) ||
         (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 400.0f)) {
         func_808C20D4(this);
