@@ -144,8 +144,10 @@ void func_808C1E94(EnBb* this) {
     }
 }
 
+void func_808C1F00(EnBb* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F00.s")
 
+void func_808C1F74(EnBb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C1F74.s")
 
 void func_808C1FF4(EnBb* this) {
@@ -241,18 +243,22 @@ void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
+void func_808C254C(EnBb* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C254C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C25E0.s")
 
+void func_808C272C(EnBb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C272C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C28CC.s")
 
+void func_808C2A00(EnBb* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2A00.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2B1C.s")
 
+void func_808C2B94(EnBb* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2B94.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2BD0.s")
@@ -265,8 +271,68 @@ void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2D78.s")
 
-void func_808C2E34(EnBb* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2E34.s")
+void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
+        this->collider.base.atFlags &= ~AT_ON;
+        if ((this->unk_24D != 0xA) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            Actor_SetDropFlag(&this->actor, &this->collider.info);
+            this->unk_268 = 0.0f;
+            this->unk_264 = 0.0f;
+            func_808C1F74(this, globalCtx);
+
+            if (Actor_ApplyDamage(&this->actor) == 0) {
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            }
+
+            if (this->actor.colChkInfo.damageEffect == 3) {
+                func_808C1F00(this);
+                if (this->actor.colChkInfo.health == 0) {
+                    this->unk_250 = 3;
+                    this->collider.base.acFlags &= ~AC_ON;
+                }
+
+                func_808C2B94(this);
+            } else if (this->actor.colChkInfo.health == 0) {
+                func_808C272C(this, globalCtx);
+            } else {
+                func_808C2A00(this);
+            }
+
+            if (this->actor.colChkInfo.damageEffect == 4) {
+                this->unk_26C = 4.0f;
+                this->unk_270 = 0.4f;
+                this->unk_24D = 0x14;
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
+                            this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_SMALL_LIGHT_RAYS);
+            }
+        }
+    } else {
+        if (this->collider.base.atFlags & AT_BOUNCED) {
+            this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
+            if (this->actionFunc != func_808C25E0) {
+                this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
+                this->actor.shape.rot.y = this->actor.world.rot.y;
+                func_808C254C(this);
+            }
+        } else if (this->collider.base.atFlags & AT_HIT) {
+            this->collider.base.atFlags &= ~AT_HIT;
+            this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
+            this->actor.shape.rot.y = this->actor.world.rot.y;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_BITE);
+
+            if (this->unk_264 > 0.0f) {
+                gSaveContext.unk_1016 = 0x4B0;
+            }
+
+            if (this->actionFunc == func_808C23EC) {
+                func_808C20D4(this);
+            }
+        }
+    }
+}
 
 void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
