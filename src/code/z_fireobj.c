@@ -192,9 +192,9 @@ void FireObj_UpdateLight(GlobalContext* globalCtx, FireObjLight* light, FireObj*
 
         Lights_PointGlowSetInfo((LightInfo*)&light->lightInfo, fire->position.x,
                                 (fire->position.y + (fire->yScale * 6500.0f)), fire->position.z,
-                                ((s32)(Rand_ZeroOne() * lightParams->randMultiplier.r) + lightParams->color.r),
-                                ((s32)(Rand_ZeroOne() * lightParams->randMultiplier.g) + lightParams->color.g),
-                                ((s32)(Rand_ZeroOne() * lightParams->randMultiplier.b) + lightParams->color.b), radius);
+                                ((s32)(Rand_ZeroOne() * lightParams->maxColorAdj.r) + lightParams->color.r),
+                                ((s32)(Rand_ZeroOne() * lightParams->maxColorAdj.g) + lightParams->color.g),
+                                ((s32)(Rand_ZeroOne() * lightParams->maxColorAdj.b) + lightParams->color.b), radius);
     }
 }
 
