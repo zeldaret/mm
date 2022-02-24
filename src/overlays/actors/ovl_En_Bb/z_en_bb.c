@@ -26,6 +26,7 @@ void func_808C20D4(EnBb* this);
 void func_808C2238(EnBb* this, GlobalContext* globalCtx);
 void func_808C2344(EnBb* this);
 void func_808C2C38(EnBb* this);
+void func_808C2CF0(EnBb* this);
 
 #if 0
 const ActorInit En_Bb_InitVars = {
@@ -427,7 +428,12 @@ void func_808C2C38(EnBb* this) {
     this->actionFunc = func_808C2CB4;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2CB4.s")
+void func_808C2CB4(EnBb* this, GlobalContext* globalCtx) {
+    this->unk_250--;
+    if (this->unk_250 == 0) {
+        func_808C2CF0(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2CF0.s")
 
