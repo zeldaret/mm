@@ -265,9 +265,50 @@ void func_808C23EC(EnBb* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2D78.s")
 
+void func_808C2E34(EnBb* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2E34.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/EnBb_Update.s")
+void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnBb* this = THIS;
+
+    func_808C2E34(this, globalCtx);
+    this->actionFunc(this, globalCtx);
+    if ((this->actionFunc != func_808C28CC) && (this->actionFunc != func_808C2CB4)) {
+        Actor_MoveWithGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 40.0f, 7U);
+
+        this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
+        this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 15.0f;
+        this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
+        this->collider.dim.worldSphere.radius = this->unk_264 * 30.0f;
+        this->collider.dim.worldSphere.radius = CLAMP_MIN(this->collider.dim.worldSphere.radius, 20);
+
+        Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.dim.worldSphere.center);
+
+        if (this->collider.base.atFlags & AT_ON) {
+            this->actor.flags |= ACTOR_FLAG_1000000;
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->collider.base.acFlags & AC_ON) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->collider.base.ocFlags1 & OC1_ON) {
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->unk_26C > 0.0f) {
+            if (this->unk_24D != 0xA) {
+                Math_StepToF(&this->unk_26C, 0.0f, 0.05f);
+                this->unk_270 = (this->unk_26C + 1.0f) * 0.2f;
+                this->unk_270 = CLAMP_MAX(this->unk_270, 0.4f);
+            } else if (!Math_StepToF(&this->unk_274, 0.4f, 0.01f)) {
+                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C32EC.s")
 

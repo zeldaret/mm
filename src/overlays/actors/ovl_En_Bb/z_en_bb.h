@@ -15,7 +15,9 @@ typedef struct EnBb {
     /* 0x188 */ Vec3s jointTable[16];
     /* 0x1E8 */ Vec3s morphTable[16];
     /* 0x248 */ EnBbActionFunc actionFunc;
-    /* 0x24C */ char unk_24C[0x4];
+    /* 0x24C */ char unk_24C[0x1];
+    /* 0x24D */ u8 unk_24D;
+    /* 0x24E */ char unk_24E[0x2];
     /* 0x250 */ s16 unk_250;
     /* 0x252 */ s16 unk_252;
     /* 0x254 */ s16 unk_254;
@@ -25,7 +27,10 @@ typedef struct EnBb {
     /* 0x260 */ f32 unk_260;
     /* 0x264 */ f32 unk_264;
     /* 0x268 */ f32 unk_268;
-    /* 0x26C */ char pad_26C[0x88];
+    /* 0x26C */ f32 unk_26C;
+    /* 0x270 */ f32 unk_270;
+    /* 0x274 */ f32 unk_274;
+    /* 0x26C */ char pad_26C[0x7C];
     /* 0x2F4 */ ColliderSphere collider;
 } EnBb; // size = 0x34C
 
