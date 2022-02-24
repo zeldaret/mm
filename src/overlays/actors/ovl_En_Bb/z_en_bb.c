@@ -400,7 +400,18 @@ void func_808C2B94(EnBb* this) {
     this->actionFunc = func_808C2BD0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2BD0.s")
+void func_808C2BD0(EnBb* this, GlobalContext* globalCtx) {
+    DECR(this->unk_250);
+
+    if (this->unk_250 == 0) {
+        func_808C1F74(this, globalCtx);
+        if (this->actor.colChkInfo.health == 0) {
+            func_808C272C(this, globalCtx);
+        } else {
+            func_808C254C(this);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bb/func_808C2C38.s")
 
