@@ -47,6 +47,7 @@ void func_809E38EC(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2);
 void func_809E4180(Boss03* this, GlobalContext* globalCtx);
+void func_809E4910(Boss03* this, GlobalContext* globalCtx);
 
 
 /* bss */
@@ -885,7 +886,39 @@ void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4674.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E475C.s")
+void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
+    f32 temp_f0;
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (this->unk_24E != 0) {
+        func_809E2760(&this->actor.projectedPos, 0x32AB);
+    }
+
+    Math_ApproachS(&this->unk_2A0, Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x000A, this->unk_274, 0) * -0.7f, 5, 0x0200);
+    Math_ApproachS(&this->unk_274, 0x0800, 1, 0x0100);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x1000);
+    Math_ApproachS(&this->actor.world.rot.x, 0, 0x000A, 0x0200);
+    Math_ApproachS(&this->actor.shape.rot.x, 0, 0x000A, 0x0200);
+
+    temp_f0 = this->unk_258 - 70.0f;
+    if (temp_f0 < this->actor.world.pos.y) {
+        Math_ApproachF(&this->actor.world.pos.y, temp_f0, 0.05f, 5.0f);
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+
+    if ((this->unk_258 < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
+        if (this->unk_24C == 0) {
+            func_809E4910(this, globalCtx);
+        }
+    } else if (player->actor.world.pos.y <= this->unk_258) {
+        func_809E344C(this, globalCtx);
+        this->unk_24E = 0x14;
+    }
+
+    Math_ApproachF(&this->actor.speedXZ, -3.0f, 1.0f, 0.5f);
+    Actor_MoveWithoutGravityReverse(&this->actor);
+}
 
 void func_809E4910(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
