@@ -670,7 +670,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
 void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
     this->actionFunc = func_809E3D98;
     Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -15.0f);
-    this->unk_24C = 0x0064;
+    this->unk_24C = 0x64;
     this->unk_2C4 = 0.0f;
     this->unk_2B8 = 0.0f;
     this->unk_242 = arg2;
@@ -764,7 +764,101 @@ void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
     this->skelAnime.playSpeed = 1.0f;
 }
 
+#ifdef NON_EQUIVALENT
+// float regalloc
+void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Input* input = CONTROLLER1(globalCtx);
+    // SkelAnime* sp2C;                                /* compiler-managed */
+    f32 temp_f2;
+    f32 temp;
+    f32 temp_f18;
+    f32 temp_f0;
+    f32 temp_f12;
+
+    this->unk_2BD = 1;
+    this->unk_25C = 0xF;
+
+    if (this->unk_24C == 0x5A) {
+        func_8016566C(0x00000096U);
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+    Matrix_RotateY(this->actor.world.rot.y, 1);
+    temp_f2 = this->unk_268.x - this->actor.world.pos.x;
+    temp = this->unk_268.y - this->actor.world.pos.y;
+    temp_f18 = this->unk_268.z - this->actor.world.pos.z;
+
+    temp_f12 = sqrtf(SQ(temp_f2) + SQ(temp_f18));
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0xA, this->unk_274);
+    Math_ApproachS(&this->unk_2A0, Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f, 5, 0x100);
+    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+
+    switch (this->unk_242) {
+        case 0x0:
+            Math_ApproachF(&this->actor.speedXZ, 10.0f, 1.0f, 1.0f);
+            if (temp_f12 < 100.0f) {
+                this->unk_242 = 1;
+                Animation_MorphToLoop(&this->skelAnime, &D_06009C14, -15.0f);
+            }
+            break;
+
+        case 0x1:
+            Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f);
+            Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 5.0f);
+            break;
+    }
+
+    Actor_MoveWithoutGravityReverse(&this->actor);
+    Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
+
+    if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        if (this->unk_24C != 0) {
+            this->unk_24C--;
+        }
+        if (this->unk_24C != 0) {
+            this->unk_24C--;
+        }
+    }
+
+    if (this->unk_24C == 0) {
+        if (&this->actor == player->actor.parent) {
+            player->unk_AE8 = 0x65;
+            player->actor.parent = NULL;
+            player->csMode = 0;
+            func_80165690();
+            func_800B8D50(globalCtx, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
+        }
+
+        func_809E344C(this, globalCtx);
+        this->unk_24E = Rand_ZeroFloat(100.0f) + 200.0f;
+        return;
+    }
+
+    player->actor.world.pos = this->unk_2AC;
+    temp_f0 = Math_SinS(this->unk_240 * 0x2000);
+
+    Math_ApproachS(&this->unk_2A8, temp_f0 * 2000.0f, 2, 0x3000);
+    player->actor.shape.rot.x = 0x4000;
+    player->actor.world.rot.x = player->actor.shape.rot.x;
+
+    player->actor.world.rot.y = player->actor.shape.rot.y = this->unk_2A2.y;
+    if (this->unk_24C < 5) {
+        Math_ApproachS(&this->unk_2A8, 0x3200, 2, 0x1800);
+        Math_ApproachF(&this->unk_2C4, 100.0f, 1.0f, 100.0f);
+    } else {
+        Math_ApproachF(&this->unk_2C4, -300.0f, 1.0f, 5.0f);
+        if ((this->unk_240 % 8) == 0) {
+            func_809E2760(&this->actor.projectedPos, 0x3960U);
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E421C.s")
+#endif
 
 #ifdef NON_EQUIVALENT
 // Maybe equivalent?
