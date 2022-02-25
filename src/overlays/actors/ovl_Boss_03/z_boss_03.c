@@ -1050,9 +1050,93 @@ void func_809E65F4(Boss03* this, GlobalContext* globalCtx) {
     this->unk_530 = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6640.s")
+#ifdef NON_MATCHING
+void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
+    s16 temp_v1_2;
+    Player* player = GET_PLAYER(globalCtx);
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E69A4.s")
+    SkelAnime_Update(&this->skelAnime);
+    this->unk_530++;
+    switch (this->unk_534) {
+    case 0x0:
+        if (ActorCutscene_GetCurrentIndex() == -1) {
+            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            func_800B7298(globalCtx, &this->actor, 1);
+            this->subCamId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, 0, 1);
+            Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
+            this->unk_534 = 1;
+            this->unk_2BE = 3000;
+
+        case 0x1:
+            if (player->actor.world.pos.y < 437.0f) {
+                player->actor.world.pos.z = 500.0f;
+                player->actor.world.pos.x = 500.0f;
+            }
+
+            this->actor.shape.rot.z = 0;
+            this->actor.world.pos.z = 1000.0f;
+            this->actor.world.pos.x = 1000.0f;
+            this->actor.world.pos.y = 200.0f;
+            this->actor.shape.rot.x = this->actor.shape.rot.z;
+
+            this->actor.shape.rot.y = (this->actor.world.rot.y = Math_FAtan2F(-1000.0f, -(1000.0f)));
+            this->unk_260 = 0.0f;
+
+            temp_v1_2 = this->actor.world.rot.y + 0x8000;
+            player->actor.world.rot.y = temp_v1_2;
+            player->actor.shape.rot.y = temp_v1_2;
+
+            Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+            Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, 1);
+            Matrix_GetStateTranslationAndScaledZ(340.0f, &this->unk_538);
+
+            this->unk_544.x = this->actor.world.pos.x;
+            this->unk_544.y = this->actor.world.pos.y;
+            this->unk_544.z = this->actor.world.pos.z;
+
+            Math_ApproachS(&this->unk_2BE, -0x0FA0, 0x000A, 0x0046);
+
+            if (this->unk_530 >= 0x3D) {
+                Math_ApproachS(&this->unk_2A8, 0x3200, 5, 0x0500);
+                if ((this->unk_530 >= 0x5A) && (this->unk_530 < 0x82)) {
+                    if ((this->unk_530 & 1) != 0) {
+                        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 0x23F, this->actor.world.pos.x - 110.0f, this->actor.world.pos.y - 20.0f, this->actor.world.pos.z - 110.0f, 0, this->actor.shape.rot.y, 0, 0);
+                        this->unk_252 += 1;
+                    }
+                    if ((this->unk_530 & 7) == 0) {
+                        Actor_PlaySfxAtPos(&this->actor, 0x3AD6);
+                    }
+                }
+            }
+
+            if (this->unk_530 >= 0x96) {
+                Camera* temp_v0_2;
+
+                temp_v0_2 = Play_GetCamera(globalCtx, 0);
+                temp_v0_2->eye = this->unk_538;
+                temp_v0_2->eyeNext = this->unk_538;
+                temp_v0_2->at = this->unk_544;
+
+                func_80169AFC(globalCtx, this->subCamId, 0);
+                this->subCamId = 0;
+                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                func_800B7298(globalCtx, &this->actor, 6);
+                func_809E344C(this, globalCtx);
+                this->unk_24E = 0x0032;
+            }
+        }
+        break;
+    }
+
+    if (this->subCamId != 0) {
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->unk_544, &this->unk_538);
+    }
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6640.s")
+#endif
+
 void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 

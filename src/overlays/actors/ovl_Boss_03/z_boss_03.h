@@ -62,7 +62,7 @@ typedef struct Boss03 {
     /* 0x02B8 */ f32 unk_2B8;
     /* 0x02BC */ s8 unk_2BC;
     /* 0x02BD */ s8 unk_2BD;
-    /* 0x02BE */ UNK_TYPE1 unk_2BE[0x02];
+    /* 0x02BE */ s16 unk_2BE;
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
     /* 0x02C0 */ f32 unk_2C4;
     /* 0x02C8 */ UNK_TYPE1 unk_2C8[0x0C];
@@ -80,10 +80,12 @@ typedef struct Boss03 {
     /* 0x03CC */ ColliderJntSph collider2;
     /* 0x03EC */ ColliderJntSphElement unk_3EC[5];
     /* 0x052C */ f32 unk_52C;
-    /* 0x0530 */ s32 unk_530;
+    /* 0x0530 */ u32 unk_530;
     /* 0x0534 */ s16 unk_534;
-    /* 0x0536 */ UNK_TYPE1 unk_536[0x02];
-    /* 0x0538 */ UNK_TYPE1 unk_538[0x44];
+    /* 0x0536 */ s16 subCamId;
+    /* 0x0538 */ Vec3f unk_538;
+    /* 0x0544 */ Vec3f unk_544;
+    /* 0x0550 */ UNK_TYPE1 unk_550[0x2C];
 } Boss03; // size = 0x57C
 
 extern const ActorInit Boss_03_InitVars;
