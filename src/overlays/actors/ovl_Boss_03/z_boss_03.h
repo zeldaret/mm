@@ -60,7 +60,8 @@ typedef struct Boss03 {
     /* 0x02AC */ Vec3f unk_2AC;
     /* 0x02B8 */ f32 unk_2B8;
     /* 0x02BC */ s8 unk_2BC;
-    /* 0x02BD */ UNK_TYPE1 unk_2BD[0x03];
+    /* 0x02BD */ s8 unk_2BD;
+    /* 0x02BE */ UNK_TYPE1 unk_2BE[0x02];
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
     /* 0x02C0 */ f32 unk_2C4;
     /* 0x02C8 */ UNK_TYPE1 unk_2C8[0x0C];

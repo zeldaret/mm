@@ -6,6 +6,7 @@
 
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
+#include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -43,6 +44,8 @@ void func_809E81E4(GlobalContext* globalCtx);
 
 
 void func_809E38EC(Boss03* this, GlobalContext* globalCtx);
+
+void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2);
 
 
 /* bss */
@@ -584,7 +587,84 @@ void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
     this->unk_27C = 1.0f;
 }
 
+#ifdef NON_EQUIVALENT
+void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 temp_f2;
+    f32 temp3;
+    f32 temp_f18;
+    f32 temp;
+
+    this->unk_2BD = 1;
+    SkelAnime_Update(&this->skelAnime);
+
+    temp_f2 = player->actor.world.pos.x - this->actor.world.pos.x;
+    temp3 = ((player->actor.world.pos.y - this->actor.world.pos.y) + 50.0f);
+    temp_f18 = player->actor.world.pos.z - this->actor.world.pos.z;
+
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp3), 0x000A, this->unk_274);
+    temp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0x000A, this->unk_274, 0) * -0.5f;
+    Math_ApproachS(&this->unk_2A0, temp, 5, 0x0100);
+
+    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x0100);
+    Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Actor_MoveWithoutGravityReverse(&this->actor);
+    Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
+
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->unk_24C == 0)) {
+        if (&this->actor == player->actor.parent) {
+            player->unk_AE8 = 0x65;
+            player->actor.parent = NULL;
+            player->csMode = 0;
+        }
+        func_809E344C(this, globalCtx);
+        this->unk_24E = 0x0064;
+    } else {
+        Vec3f sp50;
+        f32 temp_f12;
+        f32 phi_f2;
+        f32 sp44;
+        u8 sp43;
+
+        if ((this->unk_258 - 80.0f) < player->actor.world.pos.y) {
+            sp43 = 1;
+            phi_f2 = 100.0f;
+            sp44 = 50.0f;
+        } else {
+            sp43 = 0;
+            phi_f2 = 200.0f;
+            sp44 = 100.0f;
+        }
+
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+        Matrix_RotateY(this->actor.world.rot.y, 1);
+        Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
+
+        temp_f12 = sqrtf(SQ(sp50.x - player->actor.world.pos.x) + SQ(sp50.z - player->actor.world.pos.z));
+        if (temp_f12 < (2.0f * phi_f2)) {
+            Math_ApproachS(&this->unk_2A8, 0x3200, 2, 0x1800);
+            this->unk_278 = 25.0f;
+            this->unk_27C = 5.0f;
+            this->skelAnime.playSpeed = 2.5f;
+        }
+
+        if (temp_f12 < phi_f2) {
+            func_809E3D34(this, globalCtx, sp43);
+            if (sp43 != 0) {
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x, this->unk_258, player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+                func_809E2760(&this->actor.projectedPos, 0x3942U);
+            }
+            func_809E2760(&this->actor.projectedPos, 0x3943U);
+        }
+    }
+
+    func_809E2DA0(this, globalCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E3968.s")
+#endif
 
 void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
     this->actionFunc = func_809E3D98;
