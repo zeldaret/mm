@@ -240,12 +240,12 @@ void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
 
-    if ((this->actor.colorFilterParams & 0x4000) != 0) {
+    if (this->actor.colorFilterParams & 0x4000) {
         Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
         this->actor.shape.rot.z += 0x1780;
     }
 
-    if (this->unk_1C4 >= 0x15) {
+    if (this->unk_1C4 > 20) {
         func_800B3030(globalCtx, &this->actor.world.pos, &D_809CB050, &D_809CB050, this->actor.scale.x * 10000.0f, 0,
                       0);
         syatekiMan->unk_27A++;
