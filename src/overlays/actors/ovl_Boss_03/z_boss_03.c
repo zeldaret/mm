@@ -119,6 +119,7 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2AB4.s")
 
+void func_809E2B8C(s32 arg0, ColliderJntSph* collider, Vec3f* arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2B8C.s")
 
 
@@ -308,6 +309,7 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E69A4.s")
 
+void func_809E6A38(Boss03* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6A38.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6B70.s")
@@ -320,11 +322,78 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E7920.s")
 
-s32 func_809E79C4(GlobalContext* arg0, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Actor* arg5);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E79C4.s")
+// overrideLimbDraw
+s32 func_809E79C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    Boss03* this = THIS;
 
-void func_809E7AA8(GlobalContext* arg0, s32 arg1, Gfx** arg2, Vec3s* arg3, Actor* arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E7AA8.s")
+    if ((limbIndex == GYORG_LIMB_UPPER_TRUNK) || (limbIndex == GYORG_LIMB_LOWER_TRUNK) || (limbIndex == GYORG_LIMB_TAIL)) {
+        rot->y += this->unk_2A0;
+    }
+    if (limbIndex == GYORG_LIMB_UPPER_RIGHT_FIN) {
+        rot->y += this->unk_29E;
+    }
+    if (limbIndex == GYORG_LIMB_LOWER_RIGHT_FIN) {
+        rot->y += (s16)(2 * this->unk_29E);
+    }
+    if (limbIndex == GYORG_LIMB_UPPER_LEFT_FIN) {
+        rot->y -= this->unk_29C;
+    }
+    if (limbIndex == GYORG_LIMB_LOWER_LEFT_FIN) {
+        rot->y -= (s16)(2 * this->unk_29C);
+    }
+    if (limbIndex == GYORG_LIMB_JAW) {
+        rot->z += this->unk_2A8;
+    }
+
+    return false;
+}
+
+extern Vec3f D_809E9148;
+extern s8 D_809E9128[];
+extern s8 D_809E9136[];
+
+extern UNK_TYPE D_809E91A8;
+
+extern Vec3f D_809E9154[];
+
+extern Vec3f D_809E91B4;
+
+// postLimbDraw
+void func_809E7AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    Boss03* this = THIS;
+    s8* temp_t8;
+    s8 temp_a3;
+    Vec3f sp68;
+    Player* player = GET_PLAYER(globalCtx);
+    MtxF sp24;
+
+    if (limbIndex == 2) {
+        limbIndex = limbIndex;
+        Matrix_MultiplyVector3fByState(&D_809E9148, &this->actor.focus.pos);
+    }
+
+    temp_t8 = &D_809E9128[limbIndex];
+    temp_a3 = *temp_t8;
+    if (temp_a3 >= 0) {
+        Matrix_MultiplyVector3fByState(&D_809E9154[temp_a3], &sp68);
+        if (temp_a3 < 2) {
+            if ((this->actionFunc == func_809E6A38) && (this->unk_258 < player->actor.world.pos.y)) {
+                func_809E2B8C(temp_a3, &this->collider1, &D_809E91A8);
+            } else {
+                func_809E2B8C(temp_a3, &this->collider1, &sp68);
+            }
+        } else {
+            func_809E2B8C(temp_a3 - 2, &this->collider2, &sp68);
+        }
+    }
+
+    if (temp_t8 == D_809E9136) {
+        D_809E91B4.x = this->unk_2C4 + 300.0f;
+        Matrix_MultiplyVector3fByState(&D_809E91B4, &this->unk_2AC);
+        Matrix_CopyCurrentState(&sp24);
+        func_8018219C(&sp24, &this->unk_2A2, 0);
+    }
+}
 
 void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
