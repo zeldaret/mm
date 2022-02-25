@@ -101,7 +101,7 @@ extern UNK_TYPE D_06007EC8;
 extern UNK_TYPE D_06009554;
 extern UNK_TYPE D_060099D0;
 extern UNK_TYPE D_06009C14;
-extern UNK_TYPE D_06009CF8;
+extern AnimationHeader D_06009CF8;
 extern AnimationHeader D_0600A6C8;
 
 void func_809E8810(Actor* thisx, GlobalContext* globalCtx);
@@ -290,7 +290,11 @@ void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4C90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4E2C.s")
+void func_809E4E2C(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809E4E80;
+    Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -10.0f);
+    this->skelAnime.playSpeed = 2.0f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4E80.s")
 
@@ -316,11 +320,34 @@ void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E7920.s")
 
+s32 func_809E79C4(GlobalContext* arg0, s32 arg1, Gfx** arg2, Vec3f* arg3, Vec3s* arg4, Actor* arg5);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E79C4.s")
 
+void func_809E7AA8(GlobalContext* arg0, s32 arg1, Gfx** arg2, Vec3s* arg3, Actor* arg4);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E7AA8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Draw.s")
+void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    Boss03* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    if (this->unk_2D5 == 0) {
+        if ((this->unk_25E & 1) != 0) {
+            POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
+        }
+        Matrix_InsertYRotation_f(this->unk_260, MTXMODE_APPLY);
+        Matrix_InsertTranslation(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
+        SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_809E79C4, func_809E7AA8, &this->actor);
+        POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
+    }
+
+    this->unk_2BC = 0;
+    func_809E81E4(globalCtx);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E7D00.s")
 

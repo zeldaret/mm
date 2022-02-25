@@ -22,7 +22,17 @@ typedef struct Boss03 {
     /* 0x0253 */ UNK_TYPE1 unk_253[0x01];
     /* 0x0254 */ UNK_TYPE1 unk_254[0x01];
     /* 0x0258 */ f32 unk_258;
-    /* 0x025C */ UNK_TYPE1 unk_25C[0xC8];
+    /* 0x025C */ UNK_TYPE1 unk_25C[0x02];
+    /* 0x025E */ s16 unk_25E;
+    /* 0x0260 */ f32 unk_260;
+    /* 0x0260 */ UNK_TYPE1 unk_264[0x58];
+    /* 0x02BC */ s8 unk_2BC;
+    /* 0x02BD */ UNK_TYPE1 unk_2BD[0x03];
+    /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x14];
+    /* 0x02D4 */ UNK_TYPE1 unk_2D4[0x01];
+    /* 0x02D5 */ u8 unk_2D5;
+    /* 0x02D6 */ UNK_TYPE1 unk_2D6[0x02];
+    /* 0x02D8 */ UNK_TYPE1 unk_2D8[0x4C];
     /* 0x0324 */ s16 unk_324;
     /* 0x0326 */ UNK_TYPE1 unk_326[0x2];
     /* 0x0328 */ Boss03ActionFunc actionFunc;
