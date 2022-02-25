@@ -370,10 +370,30 @@ UNK_TYPE D_809E8FF4[0x42] = {
     0x00000000, 0x00000000, 0x00000000,
 };
 
-Color_RGBA8 D_809E90FC = { 0x3C, 0x32, 0x14, 0xFF };
-Color_RGBA8 D_809E9100 = { 0x28, 0x1E, 0x1E, 0xFF };
+Color_RGBA8 D_809E90FC = { 60, 50, 20, 255 };
+Color_RGBA8 D_809E9100 = { 40, 30, 30, 255 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2DA0.s")
+void func_809E2DA0(Boss03* this, GlobalContext* globalCtx) {
+    if (this->unk_2AC.y < 80.0f) {
+        u8 i;
+        Vec3f spA0;
+        Vec3f sp94;
+        Vec3f sp88;
+
+        for (i = 0; i < 5; i++) {
+            sp94.x = randPlusMinusPoint5Scaled(10.0f);
+            sp94.y = Rand_ZeroFloat(2.0f) + 2.0f;
+            sp94.z = randPlusMinusPoint5Scaled(10.0f);
+            sp88.y = -0.075f;
+            sp88.z = 0.0f;
+            sp88.x = 0.0f;
+            spA0.y = Rand_ZeroFloat(20.0f) + 5.0f;
+            spA0.z = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.z;
+            spA0.x = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.x;
+            func_800B0EB0(globalCtx, &spA0, &sp94, &sp88, &D_809E90FC, &D_809E9100, Rand_ZeroFloat(200.0f) + 400.0f, 10, Rand_ZeroFloat(10.0f) + 25.0f);
+        }
+    }
+}
 
 void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03* this = THIS;
