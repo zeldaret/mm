@@ -46,6 +46,7 @@ void func_809E81E4(GlobalContext* globalCtx);
 void func_809E38EC(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2);
+void func_809E4180(Boss03* this, GlobalContext* globalCtx);
 
 
 /* bss */
@@ -675,7 +676,76 @@ void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
     this->unk_242 = arg2;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E3D98.s")
+void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 temp_f2;
+    f32 temp;
+    f32 temp_f18;
+    Actor* new_var;
+
+    this->skelAnime.playSpeed = 2.0f;
+    this->unk_27C = 2.0f;
+    this->unk_276 = 0x1000;
+    this->unk_2BD = 1;
+    this->unk_278 = 15.0f;
+    this->actor.flags &= -2;
+    SkelAnime_Update(&this->skelAnime);
+
+    temp_f2 = player->actor.world.pos.x - this->actor.world.pos.x;
+    temp = player->actor.world.pos.y - this->actor.world.pos.y;
+    temp_f18 = player->actor.world.pos.z - this->actor.world.pos.z;
+
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp), 0xA, this->unk_274);
+    Math_ApproachS(&this->unk_2A0, (Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f), 5, 0x100);
+    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
+    Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Actor_MoveWithoutGravityReverse(&this->actor);
+    Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
+
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->unk_24C == 0)) {
+        if (&this->actor == player->actor.parent) {
+            player->unk_AE8 = 0x65;
+            player->actor.parent = NULL;
+            player->csMode = 0;
+            func_80165690();
+        }
+        func_809E344C(this, globalCtx);
+    } else {
+        f32 phi_f0;
+
+        Math_ApproachF(&player->actor.world.pos.x, this->unk_2AC.x, 1.0f, this->unk_2B8);
+        Math_ApproachF(&player->actor.world.pos.y, this->unk_2AC.y, 1.0f, this->unk_2B8);
+        Math_ApproachF(&player->actor.world.pos.z, this->unk_2AC.z, 1.0f, this->unk_2B8);
+
+        if (this->unk_242 != 0) {
+            phi_f0 = 10.0f;
+        } else {
+            phi_f0 = 2.0f;
+        }
+
+        Math_ApproachF(&this->unk_2B8, 100.0f, 1.0f, phi_f0);
+
+        if (this->unk_2B8 > 30.0f) {
+            // fake match
+            if (((new_var = &this->actor) != player->actor.parent) && (globalCtx->grabPlayer(globalCtx, player) != 0)) {
+                player->actor.parent = &this->actor;
+                Audio_PlaySfxGeneral(0x6805, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+                func_809E4180(this, globalCtx);
+            }
+        } else {
+            Math_ApproachS(&this->unk_2A8, 0x3200, 2, 3072.0f * phi_f0);
+        }
+
+        Math_ApproachS(&player->actor.world.rot.x, 0x4000, 1, 0x400);
+        Math_ApproachS(&player->actor.shape.rot.x, 0x4000, 1, 0x400);
+        Math_ApproachS(&player->actor.world.rot.y, this->unk_2A2.y, 1, 0x400);
+        Math_ApproachS(&player->actor.shape.rot.y, this->unk_2A2.y, 1, 0x400);
+    }
+
+    func_809E2DA0(this, globalCtx);
+}
 
 void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
     s16 temp;

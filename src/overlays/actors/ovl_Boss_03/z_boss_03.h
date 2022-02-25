@@ -31,7 +31,7 @@ typedef struct Boss03 {
     /* 0x018C */ Vec3s jointTable[GYORG_LIMB_MAX];
     /* 0x01E6 */ Vec3s morphTable[GYORG_LIMB_MAX];
     /* 0x0240 */ s16 unk_240;
-    /* 0x0242 */ s8 unk_242;
+    /* 0x0242 */ u8 unk_242;
     /* 0x0243 */ UNK_TYPE1 unk_243[0x01];
     /* 0x0244 */ UNK_TYPE1 unk_244[0x08];
     /* 0x024C */ s16 unk_24C;
