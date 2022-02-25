@@ -41,8 +41,10 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E81E4(GlobalContext* globalCtx);
 
+/* data */
+
+extern Vec3f D_809E8EA0;
 #if 0
-extern UNK_TYPE D_809E8EA0[3];
 
 const ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,
@@ -136,7 +138,13 @@ extern Vec3f D_809E91B4;
 
 extern void* D_809E91C0[];
 
+/* data */
 
+
+/* bss */
+
+
+/* bss */
 
 
 extern UNK_TYPE D_06007EB0;
@@ -156,7 +164,29 @@ void func_809E2760(Vec3f* arg0, u16 sfxId) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2880.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E299C.s")
+void func_809E299C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity) {
+    Vec3f accel = D_809E8EA0;
+    f32 temp_f2;
+    GyorgEffect* effects = globalCtx->specialEffects;
+    s16 i;
+
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
+        if ((effects->type == 0) || (effects->type == 1)) {
+            effects->type = 3;
+            effects->pos = *pos;
+            effects->velocity = *velocity;
+            effects->accel = accel;
+            temp_f2 = Rand_ZeroFloat(0.02f) + 0.02f;
+            effects->unk_34.y = temp_f2;
+            effects->unk_34.x = temp_f2;
+            effects->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            effects->unk_02 = Rand_ZeroFloat(100.0f);
+            return;
+        }
+
+        effects++;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2AB4.s")
 
@@ -218,13 +248,7 @@ Actor* func_809E2D64(GlobalContext* globalCtx) {
 extern u8 D_809E9842;
 extern Boss03* D_809EC030;
 
-typedef struct {
-    /* 0x000 */ s8 unk_000;
-    /* 0x001 */ UNK_TYPE1 unk_001[0x03];
-    /* 0x004 */ UNK_TYPE1 unk_004[0x40];
-} struct_809E9858; // size = 0x44
-
-extern struct_809E9858 D_809E9858[150];
+extern GyorgEffect D_809E9858[GYORG_EFFECT_COUNT];
 
 void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03* this = THIS;
@@ -276,7 +300,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     globalCtx->specialEffects = D_809E9858;
 
     for (i = 0; i < ARRAY_COUNT(D_809E9858); i++) {
-        D_809E9858[i].unk_000 = 0;
+        D_809E9858[i].type = 0;
     }
 
     this->actor.targetMode = 5;

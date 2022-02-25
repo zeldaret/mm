@@ -86,10 +86,10 @@ static ColliderCylinderInit sUnusedCylinderInit = {
 };
 
 void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
-    UnkTanron3Effect* effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
+    GyorgEffect* effectPtr = (GyorgEffect*)globalCtx->specialEffects;
     s16 i;
 
-    for (i = 0; i < 150; i++, effectPtr++) {
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++, effectPtr++) {
         if ((effectPtr->type == 0) || (effectPtr->type == 1)) {
             effectPtr->type = 2;
             effectPtr->pos = *effectPos;

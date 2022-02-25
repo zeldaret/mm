@@ -8,6 +8,19 @@ struct Boss03;
 
 typedef void (*Boss03ActionFunc)(struct Boss03*, GlobalContext*);
 
+typedef struct {
+    /* 0x00 */ u8 type;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3f accel;
+    /* 0x28 */ char unk_28[0xC];
+    /* 0x34 */ Vec3f unk_34;
+    /* 0x40 */ char unk_40[0x4];
+} GyorgEffect;
+
+#define GYORG_EFFECT_COUNT 150
+
 typedef struct Boss03 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ UNK_TYPE1 unk_144[0x04];
