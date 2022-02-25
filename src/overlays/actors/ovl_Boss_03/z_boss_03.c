@@ -1156,7 +1156,36 @@ void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
     this->unk_240 = 0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6A38.s")
+void func_809E6A38(Boss03* this, GlobalContext* globalCtx) {
+    this->actor.hintId = 0x29;
+
+    if (this->unk_240 >= 0x10) {
+        func_809E2760(&this->actor.projectedPos, 0x301BU);
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+
+    if ((this->unk_258 + 30.0f) < this->actor.world.pos.y) {
+        this->actor.gravity = -2.0f;
+        Actor_MoveWithGravity(&this->actor);
+        if (this->actor.bgCheckFlags & 2) {
+            play_sound(0x181A);
+            func_800BC848(&this->actor, globalCtx, 10, 10);
+        }
+    } else {
+        Math_ApproachS(&this->actor.shape.rot.z, -0x6000, 0x000A, 0x0900);
+        Math_ApproachS(&this->actor.world.rot.x, 0x0800, 0x000A, 0x1000);
+        this->actor.shape.rot.x = this->actor.world.rot.x;
+        Math_ApproachF(&this->actor.world.pos.y, 100.0f, 0.05f, 5.0f);
+        Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 1.5f);
+        Actor_MoveWithoutGravityReverse(&this->actor);
+    }
+
+    if (this->unk_250 == 0) {
+        func_809E344C(this, globalCtx);
+    }
+}
+
 
 void func_809E6B70(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &D_06009554, -10.0f);
