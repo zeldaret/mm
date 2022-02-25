@@ -38,6 +38,8 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
 void func_809E81E4(GlobalContext* globalCtx);
 
 #if 0
+extern UNK_TYPE D_809E8EA0[3];
+
 const ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,
     ACTORCAT_BOSS,
@@ -65,7 +67,7 @@ static ColliderJntSphElementInit D_809E8ECC[2] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809E8F14 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    2, D_809E8ECC, // sJntSphElementsInit,
+    ARRAY_COUNT(D_809E8ECC), D_809E8ECC, // sJntSphElementsInit,
 };
 
 // static ColliderJntSphElementInit sJntSphElementsInit[5] = {
@@ -95,7 +97,7 @@ static ColliderJntSphElementInit D_809E8F24[5] = {
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_809E8FD8 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    5, D_809E8F24, // sJntSphElementsInit,
+    ARRAY_COUNT(D_809E8F24), D_809E8F24, // sJntSphElementsInit,
 };
 
 #endif
@@ -105,17 +107,46 @@ extern ColliderJntSphInit D_809E8F14;
 extern ColliderJntSphElementInit D_809E8F24[5];
 extern ColliderJntSphInit D_809E8FD8;
 
+extern Vec3f D_809E8FE8;
+
+#if 0
+extern UNK_TYPE D_809E8FF4[66];
+#endif
+
+extern Color_RGBA8 D_809E90FC;
+extern Color_RGBA8 D_809E9100;
+
+extern Vec3f D_809E9104[];
+
+extern s8 D_809E9128[];
+
+extern s8 D_809E9136[];
+
+extern Vec3f D_809E9148;
+
+extern Vec3f D_809E9154[];
+
+extern Vec3f D_809E91A8;
+
+extern Vec3f D_809E91B4;
+
+extern void* D_809E91C0[];
+
+
+
+
 extern UNK_TYPE D_06007EB0;
 extern UNK_TYPE D_06007EC8;
-extern UNK_TYPE D_06009554;
+extern AnimationHeader D_06009554;
 extern UNK_TYPE D_060099D0;
 extern UNK_TYPE D_06009C14;
 extern AnimationHeader D_06009CF8;
 extern AnimationHeader D_0600A6C8;
 
 
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2760.s")
+void func_809E2760(Vec3f* arg0, u16 sfxId) {
+    func_8019F420(arg0, sfxId);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2788.s")
 
@@ -125,8 +156,16 @@ extern AnimationHeader D_0600A6C8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2AB4.s")
 
-void func_809E2B8C(s32 arg0, ColliderJntSph* collider, Vec3f* arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2B8C.s")
+void func_809E2B8C(s32 arg0, ColliderJntSph* collider, Vec3f* arg2) {
+    ColliderJntSphElement* temp_v1;
+
+    collider->elements[arg0].dim.worldSphere.center.x = arg2->x;
+    collider->elements[arg0].dim.worldSphere.center.y = arg2->y;
+    collider->elements[arg0].dim.worldSphere.center.z = arg2->z;
+
+    temp_v1 = &collider->elements[arg0];
+    temp_v1->dim.worldSphere.radius = temp_v1->dim.scale * temp_v1->dim.modelSphere.radius;
+}
 
 
 extern s32 D_809EC034; // sRandSeed0
@@ -157,12 +196,22 @@ f32 func_809E2C3C(void) {
     return fabsf(rand);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2D64.s")
+Actor* func_809E2D64(GlobalContext* globalCtx) {
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
+
+    while (actor != NULL) {
+        if (actor->id == ACTOR_BG_DBLUE_MOVEBG) {
+            return actor;
+        }
+        actor = actor->next;
+    }
+
+    return NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2DA0.s")
 
 extern u8 D_809E9842;
-extern Vec3f D_809E8FE8;
 extern Boss03* D_809EC030;
 
 typedef struct {
@@ -251,19 +300,59 @@ void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E344C.s")
+void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (player->actor.world.pos.y < 540.0f) {
+        this->actionFunc = func_809E34B8;
+        Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -15.0f);
+        this->unk_274 = 0;
+        this->actor.flags |= 1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E34B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E38EC.s")
+void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809E3968;
+    Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -10.0f);
+    this->unk_24C = 0x0064;
+    this->unk_276 = 0x1000;
+    this->skelAnime.playSpeed = 1.5f;
+    this->unk_278 = 10.0f;
+    this->unk_27C = 1.0f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E3968.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E3D34.s")
+void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
+    this->actionFunc = func_809E3D98;
+    Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -15.0f);
+    this->unk_24C = 0x0064;
+    this->unk_2C4 = 0.0f;
+    this->unk_2B8 = 0.0f;
+    this->unk_242 = arg2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E3D98.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4180.s")
+void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
+    s16 temp;
+    Vec3f sp20;
+
+    this->actionFunc = func_809E421C;
+    temp = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
+    Matrix_RotateY(temp, 0);
+    sp20.x = 0.0f;
+    sp20.y = 200.0f;
+    sp20.z = 700.0f;
+    Matrix_MultiplyVector3fByState(&sp20, &this->unk_268);
+    this->unk_276 = 0x0800;
+    this->unk_242 = 0;
+    this->unk_24C = 0x0064;
+    this->skelAnime.playSpeed = 1.0f;
+}
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E421C.s")
 
@@ -271,11 +360,23 @@ void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E475C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4910.s")
+void func_809E4910(Boss03* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    this->actionFunc = func_809E497C;
+    Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -15.0f);
+    this->unk_268 = player->actor.world.pos;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E497C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4C34.s")
+void func_809E4C34(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809E4C90;
+    this->actor.gravity = -2.0f;
+    this->actor.velocity.y = 30.0f;
+    this->actor.speedXZ = 25.0f;
+    func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4C90.s")
 
@@ -287,7 +388,16 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4E80.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E5ADC.s")
+void func_809E5ADC(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809E5B64;
+    Animation_MorphToLoop(&this->skelAnime, &D_06009554, -10.0f);
+    this->unk_52C = Animation_GetLastFrame(&D_06009554);
+    Audio_QueueSeqCmd(0x100100FF);
+    this->unk_24C = 0;
+    this->unk_242 = 0;
+    this->unk_534 = 0;
+    this->actor.flags &= ~1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E5B64.s")
 
@@ -336,15 +446,6 @@ s32 func_809E79C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-extern Vec3f D_809E9148;
-extern s8 D_809E9128[];
-extern s8 D_809E9136[];
-
-extern Vec3f D_809E91A8;
-
-extern Vec3f D_809E9154[];
-
-extern Vec3f D_809E91B4;
 
 // postLimbDraw
 void func_809E7AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
