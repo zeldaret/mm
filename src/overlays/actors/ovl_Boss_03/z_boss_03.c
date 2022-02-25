@@ -43,8 +43,7 @@ void func_809E81E4(GlobalContext* globalCtx);
 
 /* data */
 
-extern Vec3f D_809E8EA0;
-#if 0
+Vec3f D_809E8EA0 = {0.0f, -1.0f, 0.0f};
 
 const ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,
@@ -58,8 +57,7 @@ const ActorInit Boss_03_InitVars = {
     (ActorFunc)Boss03_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[2] = {
-static ColliderJntSphElementInit D_809E8ECC[2] = {
+static ColliderJntSphElementInit sJntSphElementsInit1[2] = {
     {
         { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
         { 0, { { 0, 0, 0 }, 70 }, 100 },
@@ -70,14 +68,12 @@ static ColliderJntSphElementInit D_809E8ECC[2] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_809E8F14 = {
+static ColliderJntSphInit sJntSphInit1 = {
     { COLTYPE_HIT3, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(D_809E8ECC), D_809E8ECC, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit1), sJntSphElementsInit1,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[5] = {
-static ColliderJntSphElementInit D_809E8F24[5] = {
+static ColliderJntSphElementInit sJntSphElementsInit2[5] = {
     {
         { ELEMTYPE_UNK3, { 0xF7CFFFFF, 0x00, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
         { 2, { { 0, 0, 0 }, 20 }, 100 },
@@ -100,48 +96,157 @@ static ColliderJntSphElementInit D_809E8F24[5] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_809E8FD8 = {
+static ColliderJntSphInit sJntSphInit2 = {
     { COLTYPE_METAL, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    ARRAY_COUNT(D_809E8F24), D_809E8F24, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit2), sJntSphElementsInit2,
 };
 
-#endif
+Vec3f D_809E8FE8 = { 1216.0f, 140.0f, -1161.0f };
 
-extern ColliderJntSphElementInit D_809E8ECC[2];
-extern ColliderJntSphInit D_809E8F14;
-extern ColliderJntSphElementInit D_809E8F24[5];
-extern ColliderJntSphInit D_809E8FD8;
+UNK_TYPE D_809E8FF4[0x42] = {
+    0x43828000,
+0x430C0000,
+0xC47A0000,
+0xC3FC0000,
+0x42F00000,
+0xC49F8000,
+0xC490A000,
+0x42A00000,
+0xC4510000,
+0xC47F0000,
+0x42F00000,
+0x43BE8000,
+0xC2080000,
+0x42F00000,
+0x4497A000,
+0x4448C000,
+0x42A00000,
+0x449C4000,
+0x448EE000,
+0x42F00000,
+0x44174000,
+0x44998000,
+0x430C0000,
+0xC3740000,
+0x44980000,
+0x430C0000,
+0xC4912000,
+0x43828000,
+0x430C0000,
+0xC47A0000,
+0xC3FC0000,
+0x42F00000,
+0xC45E8000,
+0xC490A000,
+0x42A00000,
+0xC4510000,
+0xC47F0000,
+0x42F00000,
+0x43BE8000,
+0xC2080000,
+0x42F00000,
+0x4497A000,
+0x4448C000,
+0x42A00000,
+0x449C4000,
+0x448EE000,
+0x42F00000,
+0x44174000,
+0x44998000,
+0x430C0000,
+0xC3740000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+0x00000000,
+};
 
-extern Vec3f D_809E8FE8;
+Color_RGBA8 D_809E90FC = { 0x3C, 0x32, 0x14, 0xFF };
+Color_RGBA8 D_809E9100 = { 0x28, 0x1E, 0x1E, 0xFF };
 
-#if 0
-extern UNK_TYPE D_809E8FF4[66];
-#endif
+Vec3f D_809E9104[] = {
+    { 770.0f, 200.0f, 720.0f },
+    { 831.0f, 200.0f, -570.0f },
+    { 0.0f, 450.0f, 0.0f },
+};
 
-extern Color_RGBA8 D_809E90FC;
-extern Color_RGBA8 D_809E9100;
+s8 D_809E9128[] = { -1, -1, 0, -1, 4, 5, 6, -1, 2, -1, -1, 3, -1, -1 , 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, };
 
-extern Vec3f D_809E9104[];
+Vec3f D_809E9148 = { 600.0f, -100.0f, 0.0f };
+Vec3f D_809E9154[] = {
+    { 450.0f, 0.0f, 0.0f },
+    { 140.0f, -60.0f, 0.0f },
+    { 350.0f, 0.0f, 0.0f },
+    { 350.0f, 0.0f, 0.0f },
+    { 100.0f, 0.0f, 0.0f },
+    { 150.0f, 0.0f, 0.0f },
+    { 500.0f, 0.0f, 0.0f },
+};
 
-extern s8 D_809E9128[];
+Vec3f D_809E91A8 = { 100000.0f, 100000.0f, 100000.0f };
+Vec3f D_809E91B4 = { 300.0f, -100.0f, -200.0f };
 
-extern s8 D_809E9136[];
-
-extern Vec3f D_809E9148;
-
-extern Vec3f D_809E9154[];
-
-extern Vec3f D_809E91A8;
-
-extern Vec3f D_809E91B4;
-
-extern void* D_809E91C0[];
+Gfx* D_809E91C0[] = {
+    gGyorgSeaweedTopDL,
+    gGyorgSeaweedPiece5DL,
+    gGyorgSeaweedPiece4DL,
+    gGyorgSeaweedPiece3DL,
+    gGyorgSeaweedPiece2DL,
+    gGyorgSeaweedPiece1DL,
+};
 
 /* data */
 
 
 /* bss */
+
+#if 0
+glabel D_809E9840
+/* 000000 809E9840 */ .space 0x1
+
+glabel D_809E9841
+/* 000001 809E9841 */ .space 0x1
+#endif
+
+// glabel D_809E9842
+// /* 000002 809E9842 */ .space 0x6
+extern u8 D_809E9842;
+
+#if 0
+glabel D_809E9848
+/* 000008 809E9848 */ .space 0x10
+#endif
+
+// glabel D_809E9858
+// /* 000018 809E9858 */ .space 0x27D8
+extern GyorgEffect D_809E9858[GYORG_EFFECT_COUNT];
+
+// glabel D_809EC030
+// /* 0027F0 809EC030 */ .space 0x4
+extern Boss03* D_809EC030;
+
+// glabel D_809EC034
+// /* 0027F4 809EC034 */ .space 0x4
+extern s32 D_809EC034; // sRandSeed0
+
+// glabel D_809EC038
+// /* 0027F8 809EC038 */ .space 0x4
+extern s32 D_809EC038; // sRandSeed1
+
+// glabel D_809EC03C
+// /* 0027FC 809EC03C */ .space 0x4
+extern s32 D_809EC03C; // sRandSeed2
 
 
 /* bss */
@@ -202,10 +307,6 @@ void func_809E2B8C(s32 arg0, ColliderJntSph* collider, Vec3f* arg2) {
 }
 
 
-extern s32 D_809EC034; // sRandSeed0
-extern s32 D_809EC038; // sRandSeed1
-extern s32 D_809EC03C; // sRandSeed2
-
 // Boss03_SeedRand(s32 seed0, s32 seed1, s32 seed2)
 void func_809E2C1C(s32 seed0, s32 seed1, s32 seed2) {
     D_809EC034 = seed0;
@@ -244,11 +345,6 @@ Actor* func_809E2D64(GlobalContext* globalCtx) {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2DA0.s")
-
-extern u8 D_809E9842;
-extern Boss03* D_809EC030;
-
-extern GyorgEffect D_809E9858[GYORG_EFFECT_COUNT];
 
 void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03* this = THIS;
@@ -306,8 +402,8 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.targetMode = 5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
-    Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &D_809E8F14, this->unk_34C);
-    Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &D_809E8FD8, this->unk_3EC);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->unk_34C);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->unk_3EC);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSkel, &D_0600A6C8, this->jointTable, this->morphTable, GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
@@ -580,7 +676,7 @@ void func_809E7AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         }
     }
 
-    if (temp_t8 == D_809E9136) {
+    if (limbIndex == 0xE) {
         D_809E91B4.x = this->unk_2C4 + 300.0f;
         Matrix_MultiplyVector3fByState(&D_809E91B4, &this->unk_2AC);
         Matrix_CopyCurrentState(&sp24);
