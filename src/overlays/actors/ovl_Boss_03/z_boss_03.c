@@ -167,18 +167,20 @@ typedef struct {
 
 extern struct_809E9858 D_809E9858[150];
 
-#ifdef NON_EQUIVALENT
-void Boss03_Init(Actor* thisx, GlobalContext* globalCtx) {
-    Vec3f sp70;
-    s32 phi_s2;
-    s32 phi_s3;
-    s32 phi_s1;
-    s32 phi_s4;
+//#ifdef NON_EQUIVALENT
+#if 1
+
+void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    // s32 phi_s2;
+    // s32 phi_s3;
+    // s32 phi_s1;
     Boss03* this = (Boss03* ) thisx;
     s32 i;
-    s32 j;
+    GlobalContext* globalCtx = globalCtx2;
+    Vec3f sp70;
+    // u32 phi_s4;
 
-    if ((gSaveContext.weekEventReg[0x37] & 0x80) != 0) {
+    if ((gSaveContext.weekEventReg[0x37] & 0x80)) {
         // ACTOR_DOOR_WARP1
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 0x38, 0.0f, 440.0f, 200.0f, 0, 0, 0, 1);
         // ACTOR_ITEM_B_HEART
@@ -186,7 +188,6 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
-
     if (this->actor.params == 0x23) {
         this->actor.update = func_809E8810;
         this->actor.draw = func_809E8BEC;
@@ -196,18 +197,18 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.scale.x = Rand_ZeroFloat(0.0075f) + 0.027f;
         this->actor.scale.y = 0.02f;
         this->actor.scale.z = 0.015f;
-
-        phi_s2 = 0;
-        phi_s3 = 0;
-        phi_s1 = 0;
+        // phi_s4 = 0x180;
+        // phi_s2 = 0;
+        // phi_s3 = 0;
+        // phi_s1 = 0;
         for (i = 0; i < 6; i++) {
-            this->jointTable[i].x = Math_SinS((this->unk_240 * 0x100) + phi_s2) * 3000.0f;
-            this->jointTable[i].y = Math_SinS((this->unk_240 * 0x180) + phi_s3) * 2000.0f;
-            this->jointTable[i].z = Math_SinS((this->unk_240 * 0x10) + phi_s1) * 4000.0f;
+            this->jointTable[i].x = Math_SinS((this->unk_240 * 0x100) + i * 0x3a98) * 3000.0f;
+            this->jointTable[i].y = Math_SinS((this->unk_240 * 0x180) + i * 0x4e20) * 2000.0f;
+            this->jointTable[i].z = Math_SinS((this->unk_240 * 0x10) + i * 0x4a38) * 4000.0f;
 
-            phi_s2 += 0x3A98; // 15000
-            phi_s3 += 0x4E20; // 20000
-            phi_s1 += 0x4A38; // 19000
+            // phi_s2 += 0x3A98; // 15000
+            // phi_s3 += 0x4E20; // 20000
+            // phi_s1 += 0x4A38; // 19000
         }
 
         this->actor.flags &= ~1;
@@ -219,9 +220,9 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_809E2C1C(1, 0x71A5, 0x263A);
 
     //for (phi_s4 = 0; phi_s4 < 5; phi_s4++) 
-    for (phi_s4 = 0; (unsigned int) (phi_s4 < 5); phi_s4++)
+    for (i = 0; i < 5; i++)
     {
-        Matrix_InsertYRotation_f((func_809E2C3C() * 3.1415927f * 0.2f) + (1.2566371f * phi_s4), 0);
+        Matrix_InsertYRotation_f((func_809E2C3C() * 3.1415927f * 0.2f) + (1.2566371f * i), 0);
         Matrix_GetStateTranslationAndScaledZ((func_809E2C3C() * 800.0f) + 400.0f, &sp70);
         // ACTOR_BOSS_03
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x12B, sp70.x, sp70.y, sp70.z, 0, (s16) (func_809E2C3C() * 65536.0f), 0, 0x23);
@@ -231,8 +232,8 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     globalCtx->specialEffects = D_809E9858;
 
-    for (j = 0; j < ARRAY_COUNT(D_809E9858); j++) {
-        D_809E9858[j].unk_000 = 0;
+    for (i = 0; i < ARRAY_COUNT(D_809E9858); i++) {
+        D_809E9858[i].unk_000 = 0;
     }
 
     this->actor.targetMode = 5;
