@@ -46,6 +46,7 @@ void func_809E81E4(GlobalContext* globalCtx);
 /* bss */
 
 #if 0
+// maybe u8?
 glabel D_809E9840
 /* 000000 809E9840 */ .space 0x1
 
@@ -98,9 +99,50 @@ void func_809E2760(Vec3f* arg0, u16 sfxId) {
     func_8019F420(arg0, sfxId);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2788.s")
+void func_809E2788(GlobalContext* globalCtx, Vec3f* pos) {
+    s16 i;
+    GyorgEffect* effects = globalCtx->specialEffects;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2880.s")
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
+        if ((effects->type == 0) || (effects->type == 1)) {
+            effects->type = 4;
+            effects->pos = *pos;
+            effects->unk_34.x = 0.1f;
+            effects->unk_34.y = 0.4f;
+            effects->velocity = gZeroVec3f;
+            effects->accel = gZeroVec3f;
+            effects->unk_2C = 0x0096;
+            effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
+            return;
+        }
+
+        effects++;
+    }
+}
+
+void func_809E2880(GlobalContext* globalCtx, Vec3f* pos) {
+    s16 i;
+    GyorgEffect* effects = globalCtx->specialEffects;
+
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
+        if ((effects->type == 0) || (effects->type == 1)) {
+            effects->type = 2;
+            effects->pos = *pos;
+            effects->velocity = gZeroVec3f;
+            effects->accel = gZeroVec3f;
+            effects->accel.y = -2.0f;
+            effects->unk_34.x = 0.1f;
+            effects->unk_34.y = 0.0f;
+            effects->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            effects->unk_02 = Rand_ZeroFloat(100.0f);
+            effects->velocity.x = randPlusMinusPoint5Scaled(25.0f);
+            effects->velocity.z = randPlusMinusPoint5Scaled(25.0f);
+            return;
+        }
+
+        effects++;
+    }
+}
 
 void func_809E299C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity) {
     Vec3f accel = { 0.0f, -1.0f, 0.0f };
@@ -126,8 +168,25 @@ void func_809E299C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity) {
     }
 }
 
+void func_809E2AB4(GlobalContext* globalCtx, Vec3f* pos) {
+    s16 i;
+    GyorgEffect* effects = globalCtx->specialEffects;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E2AB4.s")
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
+        if (effects->type == 0) {
+            effects->type = 1;
+            effects->pos = *pos;
+            effects->velocity = gZeroVec3f;
+            effects->accel = gZeroVec3f;
+            effects->accel.y = 0.2f;
+            effects->unk_34.x = Rand_ZeroFloat(0.3f) + 0.2f;
+            effects->unk_02 = 0;
+            return;
+        }
+
+        effects++;
+    }
+}
 
 void func_809E2B8C(s32 arg0, ColliderJntSph* collider, Vec3f* arg2) {
     ColliderJntSphElement* temp_v1;
