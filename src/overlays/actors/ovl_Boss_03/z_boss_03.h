@@ -39,7 +39,8 @@ typedef struct Boss03 {
     /* 0x0250 */ s16 unk_250;
     /* 0x0252 */ s8 unk_252; // number of Tanron3 fish that are currently alive, maybe "numSmallFishAlive"?
     /* 0x0253 */ u8 unk_253;
-    /* 0x0254 */ UNK_TYPE1 unk_254[0x01];
+    /* 0x0254 */ s16 unk_254;
+    /* 0x0256 */ UNK_TYPE1 unk_256[0x02];
     /* 0x0258 */ f32 unk_258;
     /* 0x025C */ s16 unk_25C;
     /* 0x025E */ s16 unk_25E;

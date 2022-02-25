@@ -984,7 +984,37 @@ void func_809E4C34(Boss03* this, GlobalContext* globalCtx) {
     func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4C90.s")
+void func_809E4C90(Boss03* this, GlobalContext* globalCtx) {
+    this->unk_254 = 0;
+    func_809E2760(&this->actor.projectedPos, 0x324EU);
+
+    this->skelAnime.playSpeed = 2.0f;
+    SkelAnime_Update(&this->skelAnime);
+
+    Math_ApproachS(&this->actor.world.rot.x, this->actor.velocity.y * -300.0f, 2, 0x2000);
+    this->actor.shape.rot.x = this->actor.world.rot.x;
+
+    Actor_MoveWithGravity(&this->actor);
+    if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y < this->unk_258 + 50.0f)) {
+        this->unk_254 = 2;
+        this->actor.gravity = 0.0f;
+        Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
+        if (this->actor.velocity.y == 0.0f) {
+            func_809E344C(this, globalCtx);
+            this->unk_24E = 0x32;
+        }
+    } else {
+        s16 i;
+        Vec3f sp30;
+
+        for (i = 0; i < 3; i++) {
+            sp30.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(150.0f);
+            sp30.y = this->actor.world.pos.y;
+            sp30.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(150.0f);
+            func_809E2880(globalCtx, &sp30);
+        }
+    }
+}
 
 void func_809E4E2C(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E4E80;
