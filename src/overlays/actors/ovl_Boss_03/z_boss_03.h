@@ -19,13 +19,13 @@ typedef struct Boss03 {
     /* 0x0243 */ UNK_TYPE1 unk_243[0x01];
     /* 0x0244 */ UNK_TYPE1 unk_244[0x08];
     /* 0x024C */ s16 unk_24C;
-    /* 0x024E */ UNK_TYPE1 unk_24E[0x02];
-    /* 0x0250 */ UNK_TYPE1 unk_250[0x02];
+    /* 0x024E */ s16 unk_24E;
+    /* 0x0250 */ s16 unk_250;
     /* 0x0252 */ s8 unk_252; // number of Tanron3 fish that are currently alive, maybe "numSmallFishAlive"?
-    /* 0x0253 */ UNK_TYPE1 unk_253[0x01];
+    /* 0x0253 */ u8 unk_253;
     /* 0x0254 */ UNK_TYPE1 unk_254[0x01];
     /* 0x0258 */ f32 unk_258;
-    /* 0x025C */ UNK_TYPE1 unk_25C[0x02];
+    /* 0x025C */ s16 unk_25C;
     /* 0x025E */ s16 unk_25E;
     /* 0x0260 */ f32 unk_260;
     /* 0x0264 */ UNK_TYPE1 unk_264[0x04];
@@ -51,7 +51,9 @@ typedef struct Boss03 {
     /* 0x02D4 */ UNK_TYPE1 unk_2D4[0x01];
     /* 0x02D5 */ u8 unk_2D5;
     /* 0x02D6 */ UNK_TYPE1 unk_2D6[0x02];
-    /* 0x02D8 */ UNK_TYPE1 unk_2D8[0x4C];
+    /* 0x02D8 */ UNK_TYPE1 unk_2D8[0x04];
+    /* 0x02DC */ Vec3f unk_2DC[UNK_SIZE];
+    /* 0x02E8 */ UNK_TYPE1 unk_2E8[0x3C];
     /* 0x0324 */ s16 unk_324;
     /* 0x0326 */ UNK_TYPE1 unk_326[0x2];
     /* 0x0328 */ Boss03ActionFunc actionFunc;
@@ -60,7 +62,7 @@ typedef struct Boss03 {
     /* 0x03CC */ ColliderJntSph collider2;
     /* 0x03EC */ ColliderJntSphElement unk_3EC[5];
     /* 0x052C */ f32 unk_52C;
-    /* 0x0530 */ UNK_TYPE1 unk_530[0x4];
+    /* 0x0530 */ s32 unk_530;
     /* 0x0534 */ s16 unk_534;
     /* 0x0536 */ UNK_TYPE1 unk_536[0x02];
     /* 0x0538 */ UNK_TYPE1 unk_538[0x44];

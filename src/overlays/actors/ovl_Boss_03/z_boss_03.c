@@ -29,6 +29,10 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx);
 void func_809E6640(Boss03* this, GlobalContext* globalCtx);
 void func_809E6BC0(Boss03* this, GlobalContext* globalCtx);
 
+void func_809E6A38(Boss03* this, GlobalContext* globalCtx);
+
+
+
 
 void func_809E8810(Actor* thisx, GlobalContext* globalCtx);
 void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx);
@@ -138,8 +142,8 @@ extern void* D_809E91C0[];
 extern UNK_TYPE D_06007EB0;
 extern UNK_TYPE D_06007EC8;
 extern AnimationHeader D_06009554;
-extern UNK_TYPE D_060099D0;
-extern UNK_TYPE D_06009C14;
+extern AnimationHeader D_060099D0;
+extern AnimationHeader D_06009C14;
 extern AnimationHeader D_06009CF8;
 extern AnimationHeader D_0600A6C8;
 
@@ -356,7 +360,30 @@ void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E421C.s")
 
+#ifdef NON_EQUIVALENT
+// Maybe equivalent?
+void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
+    f32 temp_f0;
+
+    this->actionFunc = func_809E475C;
+    Animation_MorphToLoop(&this->skelAnime, &D_06009C14, -15.0f);
+    this->unk_24C = Rand_ZeroFloat(30.0f) + 80.0f;
+    this->unk_24E = 0x0032;
+    this->unk_274 = 0;
+
+    temp_f0 = sqrtf(SQXZ(this->actor.world.pos));
+    if (temp_f0 > 600.0f) {
+        if (Rand_ZeroOne() < 0.5f) {
+            this->unk_242 = 1;
+            return;
+        }
+        // if (((!(&this->actor)) && (!(&this->actor))) && (!(&this->actor))) {}
+    }
+    this->unk_242 = 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4674.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E475C.s")
 
@@ -401,24 +428,77 @@ void func_809E5ADC(Boss03* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E5B64.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E65F4.s")
+void func_809E65F4(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = func_809E6640;
+    Animation_MorphToLoop(&this->skelAnime, &D_06009C14, -15.0f);
+    this->unk_534 = 0;
+    this->unk_530 = 0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6640.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E69A4.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E69A4.s")
+void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-void func_809E6A38(Boss03* this, GlobalContext* globalCtx);
+    if (this->actionFunc != func_809E6A38) {
+        Animation_MorphToLoop(&this->skelAnime, &D_060099D0, -15.0f);
+        this->unk_250 = 0x00C8;
+        this->actionFunc = func_809E6A38;
+    }
+
+    if (&this->actor == player->actor.parent) {
+        player->unk_AE8 = 0x0065;
+        player->actor.parent = NULL;
+        player->csMode = 0;
+        func_80165690();
+    }
+
+    this->unk_240 = 0;
+}
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6A38.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6B70.s")
+void func_809E6B70(Boss03* this, GlobalContext* globalCtx) {
+    Animation_MorphToLoop(&this->skelAnime, &D_06009554, -10.0f);
+    this->actionFunc = func_809E6BC0;
+    this->unk_24C = 0x001E;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6BC0.s")
+void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
+    this->unk_25C = 0x000F;
+    SkelAnime_Update(&this->skelAnime);
+    Math_ApproachS(&this->unk_2A8, ((Math_SinS(this->unk_240 * 0x2000) * 3000.0f) + 0x3000), 2, 0x3000);
+    Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 10.0f);
+    if (this->unk_24C == 0) {
+        if ((s8)this->actor.colChkInfo.health < 6) {
+            if (this->unk_253 == 0) {
+                this->unk_253++;
+                func_809E65F4(this, globalCtx);
+                return;
+            }
+        }
+        func_809E344C(this, globalCtx);
+        this->unk_24E = 0x0064;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6CB4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E7920.s")
+void func_809E7920(GlobalContext* globalCtx, s16 objectId) {
+    s32 temp_v0 = Object_GetIndex(&globalCtx->objectCtx, objectId);
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[temp_v0].segment);
+
+    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[temp_v0].segment);
+    gSPSegment(POLY_XLU_DISP++, 0x06, globalCtx->objectCtx.status[temp_v0].segment);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 // overrideLimbDraw
 s32 func_809E79C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -513,4 +593,43 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E8810.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E8BEC.s")
+void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx) {
+    Boss03* this = THIS;
+    s16 i;
+    // Why 10 when this uses the first 6 elements?
+    Mtx* mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Mtx) * 10);
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
+
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
+    Matrix_RotateY(this->actor.shape.rot.y, 1);
+    Matrix_InsertZRotation_s(0x4000, 1);
+    // The indices looks a bit random...
+    Matrix_RotateY(this->jointTable[5].x * -5.0f * 0.1f, 1);
+    Matrix_InsertXRotation_s(this->jointTable[3].y * -5.0f * 0.1f, 1);
+    Matrix_InsertZRotation_s(this->jointTable[2].z * 6.0f * 0.1f, 1);
+
+    for (i = 0; i < 6; i++) {
+        Matrix_RotateY(this->jointTable[i].x + this->morphTable[i].x, 1);
+        Matrix_InsertXRotation_s(this->jointTable[i].y + this->morphTable[i].y, 1);
+        Matrix_InsertZRotation_s(this->jointTable[i].z + this->morphTable[i].z, 1);
+
+        Matrix_ToMtx(mtx);
+
+        gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        gSPDisplayList(POLY_OPA_DISP++, D_809E91C0[i]);
+
+        Matrix_GetStateTranslation(&this->unk_2DC[i]);
+        Matrix_InsertTranslation(4000.0f, 0.0f, 0.0f, 1);
+
+        mtx++;
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
