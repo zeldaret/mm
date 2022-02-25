@@ -42,6 +42,8 @@ void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
 void func_809E81E4(GlobalContext* globalCtx);
 
 
+void func_809E38EC(Boss03* this, GlobalContext* globalCtx);
+
 
 /* bss */
 
@@ -487,7 +489,90 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+#ifdef NON_EQUIVALENT
+// float regalloc
+void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    // s32 pad[6];
+    s32 pad0;
+    s32 pad1;
+    s32 pad2;
+    s32 pad3;
+    s32 pad4;
+    s32 pad5;
+    f32 temp_f12;
+    f32 temp_f20;
+    f32 temp_f22;
+    f32 temp;
+    s16 i;
+
+    func_809E2760(&this->actor.projectedPos, 0x32AB);
+    this->unk_276 = 0x0800;
+    this->skelAnime.playSpeed = 1.0f;
+    this->unk_27C = 1.0f;
+    this->unk_278 = 10.0f;
+
+    SkelAnime_Update(&this->skelAnime);
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+    Matrix_RotateY(this->actor.world.rot.y, 1);
+
+    temp_f20 = this->unk_268.x - this->actor.world.pos.x;
+    temp_f22 = this->unk_268.z - this->actor.world.pos.z;
+    temp = this->unk_268.y - this->actor.world.pos.y;
+    temp_f12 = sqrtf(SQ(temp_f20) + SQ(temp_f22));
+
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0x000A, this->unk_274);
+    Math_ApproachS(&this->unk_2A0, Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0x000A, this->unk_274, 0) * -0.5f, 5, 0x0100);
+    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x0100);
+    Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+
+    if ((this->unk_250 == 0) && (this->actor.bgCheckFlags & 8)) {
+        Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
+        this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
+        this->unk_250 = 0x003C;
+        this->unk_24C = Rand_ZeroFloat(60.0f) + 60.0f;
+        this->unk_274 = 0x0100;
+    }
+
+    if (this->unk_250 == 0) {
+        if ((temp_f12 < 100.0f) || (this->unk_24C == 0)) {
+
+            for (i = 0; i < 200; i++) {
+                if ((!temp_f20) && (!temp_f20)) {}
+                this->unk_268.x = randPlusMinusPoint5Scaled(2500.0f);
+                this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
+                this->unk_268.z = randPlusMinusPoint5Scaled(2500.0f);
+                if (sqrtf(SQ(this->unk_268.x - this->actor.world.pos.x) + SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f) {
+                    break;
+                }
+            }
+
+            this->unk_274 = 0x0100;
+            this->unk_24C = Rand_ZeroFloat(60.0f) + 60.0f;
+        }
+    }
+
+    Actor_MoveWithoutGravityReverse(&this->actor);
+    Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
+
+    if (this->unk_24E == 0) {
+        if ((this->unk_258 < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
+            func_809E4674(this, globalCtx);
+        } else if ((player->transformation != 1) && (player->transformation != 3)) {
+            if (gGameInfo->data[0x526] == 0) {
+                func_809E38EC(this, globalCtx);
+            } else if (this->unk_252 <= 0) {
+                func_809E38EC(this, globalCtx);
+            }
+        }
+    }
+}
+#else
+void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E34B8.s")
+#endif
 
 void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E3968;
