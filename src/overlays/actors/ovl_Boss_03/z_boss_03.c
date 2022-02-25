@@ -49,6 +49,7 @@ void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2);
 void func_809E4180(Boss03* this, GlobalContext* globalCtx);
 void func_809E4910(Boss03* this, GlobalContext* globalCtx);
 
+void func_809E4C34(Boss03* this, GlobalContext* globalCtx);
 
 /* bss */
 
@@ -928,7 +929,52 @@ void func_809E4910(Boss03* this, GlobalContext* globalCtx) {
     this->unk_268 = player->actor.world.pos;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E497C.s")
+void func_809E497C(Boss03* this, GlobalContext* globalCtx) {
+    f32 temp_f14;
+    f32 sp50;
+    f32 temp_f12;
+    Player* player = GET_PLAYER(globalCtx);
+    s16 temp_a1;
+
+    this->skelAnime.playSpeed = 2.0f;
+    SkelAnime_Update(&this->skelAnime);
+    func_809E2760(&this->actor.projectedPos, 0x322DU);
+
+    temp_f14 = this->unk_268.x - this->actor.world.pos.x;
+    sp50 = (this->unk_268.y - this->actor.world.pos.y) - 50.0f;
+    temp_f12 = this->unk_268.z - this->actor.world.pos.z;
+
+    Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(temp_f12, temp_f14), 0xA, 0x1000);
+
+    temp_a1 = Math_FAtan2F(sqrtf(SQ(temp_f14) + SQ(temp_f12)), -sp50);
+    Math_ApproachS(&this->actor.world.rot.x, temp_a1, 0xA, 0x1000);
+
+    this->actor.shape.rot = this->actor.world.rot;
+
+    Math_ApproachF(&this->actor.speedXZ, 25.0f, 1.0f, 3.0f);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Actor_MoveWithoutGravityReverse(&this->actor);
+
+    if (this->actor.speedXZ >= 20.0f) {
+        if (this->unk_242 == 1) {
+            if (sqrtf(SQXZ(this->actor.world.pos)) < 700.0f) {
+                func_809E4C34(this, globalCtx);
+                return;
+            }
+        }
+
+        if (this->actor.bgCheckFlags & 8) {
+            play_sound(0x185CU);
+            func_800BC848(&this->actor, globalCtx, 20, 15);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x0170, 0.0f, this->unk_258, 0.0f, 0, 0, 0x96, 0x30C);
+            if ((this->unk_258 < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
+                func_800B8D50(globalCtx, NULL, 7.0f, Math_FAtan2F(player->actor.world.pos.z, player->actor.world.pos.x), 7.0f, 0);
+            }
+            func_809E344C(this, globalCtx);
+            this->unk_24E = 0x0032;
+        }
+    }
+}
 
 void func_809E4C34(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E4C90;
