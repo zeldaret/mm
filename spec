@@ -4453,8 +4453,11 @@ beginseg
     name "ovl_Mir_Ray3"
     compress
     include "build/src/overlays/actors/ovl_Mir_Ray3/z_mir_ray3.o"
-    include "build/data/ovl_Mir_Ray3/ovl_Mir_Ray3.data.o"
+#ifdef NON_EQUIVALENT
+    include "build/src/overlays/actors/ovl_Mir_Ray3/ovl_Mir_Ray3_reloc.o"
+#else
     include "build/data/ovl_Mir_Ray3/ovl_Mir_Ray3.reloc.o"
+#endif
 endseg
 
 beginseg
