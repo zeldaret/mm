@@ -4114,7 +4114,7 @@ u16 func_800C9844(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
 }
 
 /**
- * CamData get camPosData
+ * CamData get data
  */
 Vec3s* BgCheck_GetBgCamDataVec3s(CollisionContext* colCtx, s32 camId, s32 bgId) {
     CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
@@ -4131,7 +4131,7 @@ Vec3s* BgCheck_GetBgCamDataVec3s(CollisionContext* colCtx, s32 camId, s32 bgId) 
 }
 
 /**
- * SurfaceType Get camPosData
+ * SurfaceType Get data
  */
 Vec3s* SurfaceType_GetCamPosData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "objects/object_syokudai/object_syokudai.h"
 
-#define FLAGS 0x00000410
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((ObjSyokudai*)thisx)
 
@@ -221,7 +221,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderHurtboxActor->params = 0;
-                            ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
+                            ((EnArrow*)flameColliderHurtboxActor)->collider.info.toucher.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&

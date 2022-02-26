@@ -7,7 +7,7 @@
 #include "z_en_dinofos.h"
 #include "objects/object_dinofos/object_dinofos.h"
 
-#define FLAGS 0x00000435
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnDinofos*)thisx)
 
@@ -295,7 +295,7 @@ void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (thisx->cutscene == -1) {
         func_8089B7B0(this);
     } else {
-        this->actor.flags |= 0x100000;
+        this->actor.flags |= ACTOR_FLAG_100000;
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = 0.0f;
         D_8089E34C = thisx->cutscene;
@@ -382,7 +382,7 @@ void func_8089AC70(EnDinofos* this) {
     this->unk_2B8 = 0.82500005f;
     this->unk_2B0 = 1.0f;
     this->unk_290 = 80;
-    this->actor.flags &= ~0x400;
+    this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
@@ -392,7 +392,7 @@ void func_8089ACEC(EnDinofos* this, GlobalContext* globalCtx) {
         this->colliderJntSph.base.colType = COLTYPE_HIT0;
         this->unk_2B0 = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D4, 12, 2, 0.3f, 0.2f);
-        this->actor.flags |= 0x400;
+        this->actor.flags |= ACTOR_FLAG_400;
     }
 }
 
@@ -584,7 +584,7 @@ void func_8089B72C(EnDinofos* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         func_8089ABF4(this, globalCtx);
-        this->actor.flags &= ~0x00100000;
+        this->actor.flags &= ~ACTOR_FLAG_100000;
         this->actor.cutscene = -1;
         func_8089B7B0(this);
     }
@@ -1128,7 +1128,7 @@ void func_8089CF70(EnDinofos* this, GlobalContext* globalCtx) {
 
 void func_8089CFAC(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_00ABD0);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;

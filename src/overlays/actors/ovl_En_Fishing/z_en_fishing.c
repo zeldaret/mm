@@ -9,7 +9,7 @@
 #include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnFishing*)thisx)
 
@@ -2834,7 +2834,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, GlobalContext* globalCtx) {
 
     if (this->unk_1CB == 0) {
         if (this->unk_1CC == 0) {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
 
             if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
                 D_8090CCF8 = D_809171CC;
@@ -2844,7 +2844,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, GlobalContext* globalCtx) {
             }
         } else {
             this->unk_1CC--;
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         }
     } else if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->unk_1CB = 0;
@@ -2901,9 +2901,9 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((D_80917200 != 0) || (sCameraId != CAM_ID_MAIN) ||
         ((player->actor.world.pos.z > 1150.0f) && (this->unk_150 != 100))) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
     } else {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         if (D_8090CD14 != 0) {
             if (D_80917202 == 0) {
                 this->actor.focus.pos = sLurePos;
@@ -3113,7 +3113,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
             if (D_80917206 == 2) {
                 func_809038A4(this, input);
             } else {
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
             }
             break;
 
@@ -3150,7 +3150,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 if (D_80917206 == 2) {
                     func_809038A4(this, input);
                 } else {
-                    this->actor.flags &= ~1;
+                    this->actor.flags &= ~ACTOR_FLAG_1;
                 }
             }
             break;
@@ -3193,7 +3193,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_1AC.z = Rand_ZeroFloat(50.0f);
             }
 
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             break;
 
         case -2:
@@ -3232,7 +3232,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 }
 
                 Math_ApproachF(&this->unk_1A8, 2048.0f, 1.0f, 128.0f);
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
             }
             break;
 
@@ -5085,9 +5085,9 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((D_8090CD04 != 0) || Message_GetState(&globalCtx->msgCtx)) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
     } else {
-        this->actor.flags |= 0x21;
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_20);
     }
 
     if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&globalCtx->msgCtx)) {

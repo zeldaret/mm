@@ -7,7 +7,7 @@
 #include "z_obj_funen.h"
 #include "objects/object_funen/object_funen.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjFunen*)thisx)
 

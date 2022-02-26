@@ -496,12 +496,12 @@ typedef struct {
 } MinimapChest; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ s16 setting;
-    /* 0x00 */ s16 numData;
-    /* 0x00 */ Vec3s* data;
-} CsCameraEntry;
+    /* 0x0 */ s16 setting;
+    /* 0x2 */ s16 numData;
+    /* 0x4 */ Vec3s* data;
+} CsCamData; // size = 0x8
 
-typedef CsCameraEntry CsCamData;
+typedef CsCamData CsCameraEntry; // TODO: Remove once ZAPD updates its structs
 
 typedef union {
     /* Command: N/A  */ SCmdBase              base;

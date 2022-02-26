@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_po_sisters/object_po_sisters.h"
 
-#define FLAGS 0x00005015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
 
 #define THIS ((EnPoSisters*)thisx)
 
@@ -173,7 +173,7 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_80B1BCF0(this, globalCtx);
             func_80B1C2E8(this);
         } else {
-            this->actor.flags &= ~(0x4000 | 0x200);
+            this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
             this->collider.info.elemType = ELEMTYPE_UNK4;
             this->collider.info.bumper.dmgFlags |= (0x40000 | 0x1);
             this->collider.base.ocFlags1 = OC1_NONE;
@@ -481,7 +481,7 @@ void func_80B1B3A8(EnPoSisters* this) {
 void func_80B1B444(EnPoSisters* this, GlobalContext* globalCtx) {
     s32 temp_f18;
 
-    if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & 0x8000)) {
+    if (SkelAnime_Update(&this->skelAnime) && !(this->actor.flags & ACTOR_FLAG_8000)) {
         if (this->actor.colChkInfo.health != 0) {
             if (this->unk_18C != 0) {
                 func_80B1B5B4(this);
@@ -611,7 +611,7 @@ void func_80B1BA3C(EnPoSisters* this) {
     this->actor.speedXZ = 0.0f;
     this->actor.world.pos.y += 42.0f;
     this->actor.shape.yOffset = -6000.0f;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_191 = 0;
     this->actionFunc = func_80B1BA90;
 }
@@ -703,7 +703,7 @@ void func_80B1BE4C(EnPoSisters* this, s32 arg1) {
     Vec3f sp34;
 
     this->actor.draw = NULL;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_194 = 100;
     this->unk_191 = 0x20;
     this->collider.base.colType = COLTYPE_HIT3;
@@ -749,7 +749,7 @@ void func_80B1C030(EnPoSisters* this) {
     this->unk_192 = 300;
     this->unk_194 = 3;
     this->unk_191 |= (0x8 | 0x1);
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = func_80B1C0A4;
 }
 
@@ -821,7 +821,7 @@ void func_80B1C2E8(EnPoSisters* this) {
 void func_80B1C340(EnPoSisters* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk_229 = 255;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_191 |= (0x10 | 0x8);
         if (this->unk_18C == 0) {
             func_80B1BE4C(this, globalCtx);
@@ -945,7 +945,7 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->actionFunc == func_80B1B168) {
-            this->actor.flags |= 0x1000000;
+            this->actor.flags |= ACTOR_FLAG_1000000;
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
 

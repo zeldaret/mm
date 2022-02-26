@@ -9,7 +9,7 @@
 #include "objects/object_bigslime/object_bigslime.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000235
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnBigslime*)thisx)
 
@@ -371,7 +371,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->bigslimeFrozenTexAnim = Lib_SegmentedToVirtual(&gBigslimeFrozenTexAnim);
         this->iceShardTexAnim = Lib_SegmentedToVirtual(&gBigslimeIceShardTexAnim);
         this->actor.world.pos.y = GBT_ROOM_5_MIN_Y;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.shape.shadowAlpha = 255;
         this->gekkoScale = 0.007f;
         this->actor.shape.rot.y = 0;
@@ -763,8 +763,8 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslime_SetPlayerParams(this, globalCtx);
     EnBigslime_EndCutscene(this, globalCtx);
     this->actor.colChkInfo.mass = 50;
-    this->actor.flags &= ~(0x1 | 0x400);
-    this->actor.flags |= 0x200;
+    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_400);
+    this->actor.flags |= ACTOR_FLAG_200;
     this->actor.hintId = 95;
     this->gekkoRot.x = 0;
     this->gekkoRot.y = 0;
@@ -913,7 +913,7 @@ void EnBigslime_GekkoFreeze(EnBigslime* this) {
     this->unk_38C = 0.75f;
     this->unk_390 = 1.125f;
     this->unk_388 = 1.0f;
-    this->actor.flags &= ~0x200;
+    this->actor.flags &= ~ACTOR_FLAG_200;
 }
 
 void EnBigslime_GekkoThaw(EnBigslime* this, GlobalContext* globalCtx) {
@@ -923,7 +923,7 @@ void EnBigslime_GekkoThaw(EnBigslime* this, GlobalContext* globalCtx) {
         this->gekkoCollider.info.elemType = ELEMTYPE_UNK1;
         this->unk_388 = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
-        this->actor.flags |= 0x200;
+        this->actor.flags |= ACTOR_FLAG_200;
     }
 }
 
@@ -1000,7 +1000,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         if (this->callTimer == 0) {
             EnBigslime_EndCutscene(this, globalCtx);
             this->formBigslimeTimer = 2;
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             EnBigslime_SetupIdleNoticePlayer(this);
         }
     } else if (this->isAnimUpdate) {
@@ -1030,7 +1030,7 @@ void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.acFlags |= AC_ON;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~0x200;
+    this->actor.flags &= ~ACTOR_FLAG_200;
     this->actionFunc = EnBigslime_MoveOnCeiling;
 }
 
@@ -2039,7 +2039,7 @@ void EnBigslime_JumpGekko(EnBigslime* this, GlobalContext* globalCtx) {
 
     if (this->actor.bgCheckFlags & 1) {
         this->gekkoCollider.base.acFlags |= AC_ON;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
 
     this->jumpTimer--;
@@ -2176,8 +2176,8 @@ void EnBigslime_SetupDamageGekko(EnBigslime* this, s32 isNotFrozen) {
     }
 
     EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_DAMAGE);
-    if ((this->actor.flags & 0x2000) == 0x2000) {
-        this->actor.flags &= ~0x2000;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 
     this->actionFunc = EnBigslime_DamageGekko;
@@ -2350,7 +2350,7 @@ void EnBigslime_SetupCutsceneDefeat(EnBigslime* this, GlobalContext* globalCtx) 
         this->minislime[i]->actor.params = MINISLIME_DEFEAT_IDLE;
     }
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     EnBigslime_GekkoThaw(this, globalCtx);
     this->actionFunc = EnBigslime_CutsceneDefeat;
 }
@@ -2946,7 +2946,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx2) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, &gMinislimeNormalDL);
         if (minislime->frozenAlpha > 0) {
-            Matrix_InsertTranslation(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, 1);
+            Matrix_InsertTranslation(0.0f, (0.1f - minislime->frozenScale) * -4000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(0.1f, minislime->frozenScale, 0.1f, MTXMODE_APPLY);
             AnimatedMat_Draw(globalCtx, this->minislimeFrozenTexAnim);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->frozenAlpha);

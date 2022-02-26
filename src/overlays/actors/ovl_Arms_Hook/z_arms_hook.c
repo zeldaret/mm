@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_link_child/object_link_child.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ArmsHook*)thisx)
 
@@ -108,7 +108,7 @@ void ArmsHook_DetachHookFromActor(ArmsHook* this) {
 s32 ArmsHook_CheckForCancel(ArmsHook* this) {
     Player* player = (Player*)this->actor.parent;
     if (func_801240C8(player)) {
-        if ((player->heldItemActionParam != player->itemActionParam) || ((player->actor.flags & 0x100)) ||
+        if ((player->heldItemActionParam != player->itemActionParam) || ((player->actor.flags & ACTOR_FLAG_100)) ||
             ((player->stateFlags1 & 0x4000080))) {
             this->timer = 0;
             ArmsHook_DetachHookFromActor(this);
@@ -171,6 +171,7 @@ void ArmsHook_Shoot(ArmsHook* this, GlobalContext* globalCtx) {
                 if (this->actor.child != NULL) {
                     f32 sp94 = Actor_DistanceBetweenActors(&this->actor, grabbed);
                     f32 sp90 = sqrtf(SQXYZ(this->unk1FC));
+                    
                     Math_Vec3f_Diff(&grabbed->world.pos, &this->unk1FC, &this->actor.world.pos);
                     if (50.0f < (sp94 - sp90)) {
                         ArmsHook_DetachHookFromActor(this);
