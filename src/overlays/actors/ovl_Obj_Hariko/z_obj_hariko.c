@@ -6,7 +6,7 @@
 
 #include "z_obj_hariko.h"
 
-#define FLAGS 0x02000020
+#define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((ObjHariko*)thisx)
 

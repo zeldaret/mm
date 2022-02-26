@@ -10,7 +10,8 @@ typedef void (*EnMarutaActionFunc)(struct EnMaruta*, GlobalContext*);
 typedef struct EnMaruta {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ EnMarutaActionFunc actionFunc;
-    /* 0x0148 */ char unk_148[0xDC];
+    /* 0x0148 */ char unk_148[0xD8];
+    /* 0x0220 */ s16 unk_220;
 } EnMaruta; // size = 0x224
 
 extern const ActorInit En_Maruta_InitVars;
