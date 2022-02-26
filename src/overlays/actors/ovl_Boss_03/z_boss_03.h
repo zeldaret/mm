@@ -19,7 +19,7 @@ typedef struct {
     /* 0x2E */ s16 unk_2E;
     /* 0x30 */ UNK_TYPE1 unk_30[0x4];
     /* 0x34 */ Vec3f unk_34;
-    /* 0x40 */ UNK_TYPE1 unk_40[0x4];
+    /* 0x40 */ f32 unk_40;
 } GyorgEffect; // size = 0x44
 
 #define GYORG_EFFECT_COUNT 150

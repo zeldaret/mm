@@ -1204,6 +1204,7 @@ void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+void func_809E6CB4(Boss03* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6CB4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Update.s")
@@ -1321,7 +1322,96 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E7D00.s")
+void func_809E7D00(GlobalContext* arg0) {
+    GyorgEffect* effects = arg0->specialEffects;
+    s16 i;
+    Vec3f sp94;
+    Vec3f sp88;
+
+    for (i = 0; i < 150; i++, effects++) {
+        f32 phi_f0;
+
+        if (effects->type == 0) {
+            continue;
+        }
+
+        effects->unk_02++;
+
+        effects->pos.x += effects->velocity.x;
+        effects->pos.y += effects->velocity.y;
+        effects->pos.z += effects->velocity.z;
+
+        effects->velocity.y += effects->accel.y;
+
+        if ((effects->unk_02 & 6) != 0) {
+            phi_f0 = 80.0f;
+        } else {
+            phi_f0 = 200.0f;
+        }
+        Math_ApproachF(&effects->unk_40, phi_f0, 1.0f, 80.0f);
+
+        if (effects->type == 2) {
+            effects->unk_34.z += 0.15f;
+            Math_ApproachF(&effects->unk_34.x, 0.03f, 0.5f, 0.005f);
+            Math_ApproachF(&effects->unk_34.y, 0.5f, 0.5f, 0.02f);
+
+            if (effects->pos.y <= 430.0f) {
+                effects->type = 0U;
+                effects->pos.y = 430.0f;
+                EffectSsGRipple_Spawn(arg0, &effects->pos, 0, 80, 0);
+            } else if (effects->pos.y <= 440.0f) {
+                s16 j;
+
+                effects->type = 4U;
+                effects->pos.y = 440.0f;
+                effects->unk_34.x = 0.1f;
+                effects->unk_34.y = 0.6f;
+                effects->velocity = gZeroVec3f;
+                effects->accel = gZeroVec3f;
+                effects->unk_2C = 0x0096;
+                effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
+
+                for (j = 0; j < 4; j++) {
+                    Matrix_InsertYRotation_f((2.0f * (j * 3.1415927f)) / 6.0f, 0);
+                    sp94.x = 0.0f;
+                    sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
+                    sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
+                    Matrix_MultiplyVector3fByState(&sp94, &sp88);
+                    func_809E299C(arg0, &effects->pos, &sp88);
+                }
+            }
+        } else if (effects->type == 3) {
+            effects->unk_34.z += 0.15f;
+            if (effects->velocity.y < -8.0f) {
+                effects->velocity.y = -8.0f;
+            }
+            if ((effects->velocity.y < 0.0f) && (effects->pos.y <= 440.0f)) {
+                effects->type = 4;
+                effects->pos.y = 440.0f;
+                effects->unk_34.x = 0.05f;
+                effects->unk_34.y = 0.2f;
+                effects->velocity = gZeroVec3f;
+                effects->accel = gZeroVec3f;
+                effects->unk_2C = 0x96;
+                effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
+            }
+        } else if (effects->type == 4) {
+            Math_ApproachF(&effects->unk_34.x, effects->unk_34.y, 0.1f, 0.6f);
+            effects->unk_2C -= effects->unk_2E;
+            if (effects->unk_2C <= 0) {
+                effects->unk_2C = 0;
+                effects->type = 0U;
+            }
+        } else if (effects->type == 1) {
+            if (effects->velocity.y > 5.0f) {
+                effects->velocity.y = 5.0f;
+            }
+            if (D_809EC030->unk_258 < effects->pos.y) {
+                effects->type = 0;
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E81E4.s")
 
