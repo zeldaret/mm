@@ -721,8 +721,8 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
 
             Math_Vec3f_Sum(&sp100, &sp10C, &sp100);
             EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_s2, phi_s0, 30, 0, 0,
-                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1, OBJECT_GOROIWA,
-                                 phi_s1);
+                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1,
+                                 OBJECT_GOROIWA, phi_s1);
             if (this->unk_1E6 == 0) {
                 sp100.x += ((Rand_ZeroOne() * 1200.0f) - 600.0f) * this->actor.scale.x;
                 sp100.y += ((Rand_ZeroOne() * 1400.0f) - 600.0f) * this->actor.scale.y;

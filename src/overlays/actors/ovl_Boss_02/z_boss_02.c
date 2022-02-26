@@ -1396,9 +1396,9 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     spA0 = 0.0f;
     for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++, mtxIter++) {
         if (this->unk_0195 != 0) {
-            phi_v0 = (D_809DF5E4[i+1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
+            phi_v0 = (D_809DF5E4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         } else {
-            phi_v0 = (D_809DF5B4[i+1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
+            phi_v0 = (D_809DF5B4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         }
 
         if ((i == 21) && (this->unk_0144 < 20)) {
@@ -1932,8 +1932,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         }
         {
             f32 tmp = D_809E0422 ? 3150.0f : 0.0f;
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, tmp, 0, 0, 0, 0,
-                        D_809E0422);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, tmp, 0, 0, 0, 0, D_809E0422);
         }
 
         temp_a0_5 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
