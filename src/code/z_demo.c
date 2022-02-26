@@ -60,9 +60,9 @@ typedef void (*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* 
 
 CutsceneStateHandler sCsStateHandlers1[] = {
     Cutscene_DoNothing, // CS_STATE_0
-    func_800EA258, // CS_STATE_1
+    func_800EA258,      // CS_STATE_1
     Cutscene_DoNothing, // CS_STATE_2
-    func_800ED9C4, // CS_STATE_3
+    func_800ED9C4,      // CS_STATE_3
     Cutscene_DoNothing, // CS_STATE_4
 };
 
@@ -74,10 +74,10 @@ void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
 CutsceneStateHandler sCsStateHandlers2[] = {
     Cutscene_DoNothing, // CS_STATE_0
-    func_800EA2B8, // CS_STATE_1
-    func_800ED980, // CS_STATE_2
-    func_800EDA04, // CS_STATE_3
-    func_800ED980, // CS_STATE_4
+    func_800EA2B8,      // CS_STATE_1
+    func_800ED980,      // CS_STATE_2
+    func_800EDA04,      // CS_STATE_3
+    func_800ED980,      // CS_STATE_4
 };
 
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
