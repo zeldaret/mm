@@ -1322,8 +1322,8 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void func_809E7D00(GlobalContext* arg0) {
-    GyorgEffect* effects = arg0->specialEffects;
+void func_809E7D00(GlobalContext* globalCtx) {
+    GyorgEffect* effects = globalCtx->specialEffects;
     s16 i;
     Vec3f sp94;
     Vec3f sp88;
@@ -1358,7 +1358,7 @@ void func_809E7D00(GlobalContext* arg0) {
             if (effects->pos.y <= 430.0f) {
                 effects->type = 0U;
                 effects->pos.y = 430.0f;
-                EffectSsGRipple_Spawn(arg0, &effects->pos, 0, 80, 0);
+                EffectSsGRipple_Spawn(globalCtx, &effects->pos, 0, 80, 0);
             } else if (effects->pos.y <= 440.0f) {
                 s16 j;
 
@@ -1377,7 +1377,7 @@ void func_809E7D00(GlobalContext* arg0) {
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
                     Matrix_MultiplyVector3fByState(&sp94, &sp88);
-                    func_809E299C(arg0, &effects->pos, &sp88);
+                    func_809E299C(globalCtx, &effects->pos, &sp88);
                 }
             }
         } else if (effects->type == 3) {
@@ -1415,7 +1415,97 @@ void func_809E7D00(GlobalContext* arg0) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E81E4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E8810.s")
+void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
+    Boss03* this = THIS;
+    s16 i;
+    s16 pad;
+    s16 phi_s0;
+    u8 phi_s3;
+    Player* player = GET_PLAYER(globalCtx);
+    Boss03* temp_v1_2;
+    f32 temp_f0;
+    f32 temp_f14;
+    f32 temp_f20;
+    f32 temp_f2;
+    f32 temp_f22;
+
+    phi_s3 = 0;
+    this->unk_240++;
+
+    for (i = 0; i < 6; i++) {
+        temp_f20 = player->actor.world.pos.x - this->unk_2DC[i].x;
+        temp_f2 =  player->actor.world.pos.y - this->unk_2DC[i].y;
+        temp_f22 = player->actor.world.pos.z - this->unk_2DC[i].z;
+        temp_f0 = sqrtf(SQ(temp_f20) + SQ(temp_f2) + SQ(temp_f22));
+        temp_f14 = (player->actor.speedXZ * 3.0f) + 70.0f;
+
+        if ((player->actor.bgCheckFlags & 1) != 0) {
+            phi_s0 = 0;
+        } else {
+            phi_s0 = player->actor.speedXZ * 16.0f;
+            if (phi_s0 >= 0x1001) {
+                phi_s0 = 0x1000;
+            } else if (phi_s0 < 0x100) {
+                phi_s0 = 0x100;
+            }
+        }
+
+        if (temp_f0 < temp_f14) {
+            Math_ApproachS(&this->morphTable[i].x, (temp_f14 - temp_f0) * 200.0f, 0xA, phi_s0);
+            if (phi_s0 != 0) {
+                phi_s3 |= 1;
+            }
+        }
+    }
+
+    if ((phi_s3 & 1) != 0) {
+        Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0x14, 0x800);
+    }
+
+    temp_v1_2 = D_809EC030;
+    if (temp_v1_2->actor.world.pos.y - 40.0f < temp_v1_2->unk_258) {
+
+        for (i = 0; i < 6; i++) {
+            temp_v1_2 = D_809EC030;
+
+            temp_f20 = temp_v1_2->actor.world.pos.x - this->unk_2DC[i].x;
+            temp_f2 = temp_v1_2->actor.world.pos.y - this->unk_2DC[i].y;
+            temp_f22 = temp_v1_2->actor.world.pos.z - this->unk_2DC[i].z;
+
+            temp_f0 = sqrtf(SQ(temp_f20) + SQ(temp_f2) + SQ(temp_f22));
+
+            if ((i == 0) && (temp_f0 > 400.0f)) {
+                break;
+            }
+
+            phi_s0 = (temp_v1_2->actor.speedXZ * 16.0f);
+            temp_f14 = (temp_v1_2->actor.speedXZ * 5.0f) + 150.0f;
+            if (phi_s0 >= 0x1001) {
+                phi_s0 = 0x1000;
+            } else if (phi_s0 < 0x100) {
+                phi_s0 = 0x0100;
+            }
+
+            if (temp_f0 < temp_f14) {
+                Math_ApproachS(&this->morphTable[i].x, (temp_f14 - temp_f0) * 200.0f, 0xA, phi_s0);
+                if (phi_s0 != 0) {
+                    phi_s3 |= 2;
+                }
+            }
+
+        }
+
+        if ((phi_s3 & 2) != 0) {
+            Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0x14, 0x800);
+        }
+    }
+
+    if (phi_s3 == 0) {
+        for (i = 0; i < 6; i++) {
+            Math_ApproachS(&this->morphTable[i].x, 0, 0x14, 0x80);
+        }
+    }
+}
 
 Gfx* D_809E91C0[] = {
     gGyorgSeaweedTopDL,    gGyorgSeaweedPiece5DL, gGyorgSeaweedPiece4DL,
