@@ -1050,9 +1050,7 @@ void func_809E65F4(Boss03* this, GlobalContext* globalCtx) {
     this->unk_530 = 0;
 }
 
-#ifdef NON_MATCHING
 void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
-    s16 temp_v1_2;
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
@@ -1080,12 +1078,10 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
             this->actor.world.pos.y = 200.0f;
             this->actor.shape.rot.x = this->actor.shape.rot.z;
 
-            this->actor.shape.rot.y = (this->actor.world.rot.y = Math_FAtan2F(-1000.0f, -(1000.0f)));
+            this->actor.shape.rot.y = this->actor.world.rot.y = Math_FAtan2F(-this->actor.world.pos.x, -this->actor.world.pos.x);
             this->unk_260 = 0.0f;
 
-            temp_v1_2 = this->actor.world.rot.y + 0x8000;
-            player->actor.world.rot.y = temp_v1_2;
-            player->actor.shape.rot.y = temp_v1_2;
+            player->actor.shape.rot.y = player->actor.world.rot.y = this->actor.world.rot.y + 0x8000;
 
             Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
             Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, 1);
@@ -1095,7 +1091,7 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
             this->unk_544.y = this->actor.world.pos.y;
             this->unk_544.z = this->actor.world.pos.z;
 
-            Math_ApproachS(&this->unk_2BE, -0x0FA0, 0x000A, 0x0046);
+            Math_ApproachS(&this->unk_2BE, -4000, 10, 70);
 
             if (this->unk_530 >= 0x3D) {
                 Math_ApproachS(&this->unk_2A8, 0x3200, 5, 0x0500);
@@ -1133,9 +1129,6 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
         Play_CameraSetAtEye(globalCtx, this->subCamId, &this->unk_544, &this->unk_538);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6640.s")
-#endif
 
 void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
