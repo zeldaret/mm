@@ -721,7 +721,7 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
 
             Math_Vec3f_Sum(&sp100, &sp10C, &sp100);
             EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_s2, phi_s0, 30, 0, 0,
-                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1, 0xEF,
+                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1, OBJECT_GOROIWA,
                                  phi_s1);
             if (this->unk_1E6 == 0) {
                 sp100.x += ((Rand_ZeroOne() * 1200.0f) - 600.0f) * this->actor.scale.x;
@@ -804,7 +804,7 @@ void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGB
         }
 
         EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_fp, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 100.0f) + 170.0f) * arg5, spC8, 0, 0x36, -1, 0xEF, phi_s7);
+                             ((Rand_ZeroOne() * 100.0f) + 170.0f) * arg5, spC8, 0, 0x36, -1, OBJECT_GOROIWA, phi_s7);
 
         for (j = 0; j < 2; j++) {
             spE8.x = (((Rand_ZeroOne() * 1000.0f) - 500.0f) * arg5) + sp100.x;
@@ -879,7 +879,7 @@ void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA
         }
 
         EffectSsKakera_Spawn(globalCtx, &spE8, &spDC, &spE8, phi_s2, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 150.0f) + 250.0f) * arg5, phi_s3, 0, 0x36, -1, 0xEF, phi_s1);
+                             ((Rand_ZeroOne() * 150.0f) + 250.0f) * arg5, phi_s3, 0, 0x36, -1, OBJECT_GOROIWA, phi_s1);
 
         spE8.x += ((Rand_ZeroOne() * 800.0f) - 400.0f) * arg5;
         spE8.y += ((Rand_ZeroOne() * 800.0f) - 250.0f) * arg5;
