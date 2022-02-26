@@ -894,7 +894,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_2E0 = 5;
             this->actionFunc = func_80AA1714;
         } else {
-            if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlayingCs(globalCtx)) {
+            if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->unk_32C = 2;

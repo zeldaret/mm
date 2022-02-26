@@ -59,11 +59,11 @@ void Cutscene_End(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 typedef void (*CutsceneStateHandler)(GlobalContext* globalCtx, CutsceneContext* csCtx);
 
 CutsceneStateHandler sCsStateHandlers1[] = {
-    /* CS_STATE_0 */ Cutscene_DoNothing,
-    /* CS_STATE_1 */ func_800EA258,
-    /* CS_STATE_2 */ Cutscene_DoNothing,
-    /* CS_STATE_3 */ func_800ED9C4,
-    /* CS_STATE_4 */ Cutscene_DoNothing,
+    Cutscene_DoNothing, // CS_STATE_0
+    func_800EA258, // CS_STATE_1
+    Cutscene_DoNothing, // CS_STATE_2
+    func_800ED9C4, // CS_STATE_3
+    Cutscene_DoNothing, // CS_STATE_4
 };
 
 void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -73,11 +73,11 @@ void Cutscene_Update1(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 CutsceneStateHandler sCsStateHandlers2[] = {
-    /* CS_STATE_0 */ Cutscene_DoNothing,
-    /* CS_STATE_1 */ func_800EA2B8,
-    /* CS_STATE_2 */ func_800ED980,
-    /* CS_STATE_3 */ func_800EDA04,
-    /* CS_STATE_4 */ func_800ED980,
+    Cutscene_DoNothing, // CS_STATE_0
+    func_800EA2B8, // CS_STATE_1
+    func_800ED980, // CS_STATE_2
+    func_800EDA04, // CS_STATE_3
+    func_800ED980, // CS_STATE_4
 };
 
 void Cutscene_Update2(GlobalContext* globalCtx, CutsceneContext* csCtx) {
@@ -376,21 +376,21 @@ void Cutscene_Command_SetLighting(GlobalContext* globalCtx, CutsceneContext* csC
 }
 
 // Command 0x12C: Play Background Music or Fanfare
-void Cutscene_Command_PlaySequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicChange* cmd) {
+void Cutscene_Command_PlaySequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         func_801A2C88(cmd->sequence - 1);
     }
 }
 
 // Command 0x12D: Stop Background Music or Fanfare
-void Cutscene_Command_StopSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicChange* cmd) {
+void Cutscene_Command_StopSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         func_801A2D54(cmd->sequence - 1);
     }
 }
 
 // Command 0x9C: Fade Background Music or Fanfare over duration
-void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicFade* cmd) {
+void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceFade* cmd) {
     if ((csCtx->frames == cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
@@ -448,27 +448,27 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 
             case 2:
                 // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_0);
-                func_801A246C(0, 0);
+                func_801A246C(SEQ_PLAYER_BGM_MAIN, 0);
                 break;
 
             case 3:
                 // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_2);
-                func_801A246C(0, 2);
+                func_801A246C(SEQ_PLAYER_BGM_MAIN, 2);
                 break;
 
             case 4:
                 // func_801A246C(SEQ_PLAYER_NATURE, TYPE_1);
-                func_801A246C(4, 1);
+                func_801A246C(SEQ_PLAYER_NATURE, 1);
                 break;
 
             case 5:
                 // func_801A246C(SEQ_PLAYER_NATURE, TYPE_0);
-                func_801A246C(4, 0);
+                func_801A246C(SEQ_PLAYER_NATURE, 0);
                 break;
 
             case 6:
                 // func_801A246C(SEQ_PLAYER_NATURE, TYPE_2);
-                func_801A246C(4, 2);
+                func_801A246C(SEQ_PLAYER_NATURE, 2);
                 break;
 
             case 7:
@@ -1192,8 +1192,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_PlaySequence(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdMusicChange);
+                    Cutscene_Command_PlaySequence(globalCtx, csCtx, (CsCmdSequenceChange*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdSequenceChange);
                 }
                 break;
 
@@ -1201,8 +1201,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_StopSequence(globalCtx, csCtx, (CsCmdMusicChange*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdMusicChange);
+                    Cutscene_Command_StopSequence(globalCtx, csCtx, (CsCmdSequenceChange*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdSequenceChange);
                 }
                 break;
 
@@ -1210,8 +1210,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    Cutscene_Command_FadeSequence(globalCtx, csCtx, (CsCmdMusicFade*)cutscenePtr);
-                    cutscenePtr += sizeof(CsCmdMusicFade);
+                    Cutscene_Command_FadeSequence(globalCtx, csCtx, (CsCmdSequenceFade*)cutscenePtr);
+                    cutscenePtr += sizeof(CsCmdSequenceFade);
                 }
                 break;
 
@@ -1629,6 +1629,6 @@ s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd) {
     return false;
 }
 
-u8 Cutscene_IsPlayingCs(GlobalContext* globalCtx) {
+u8 Cutscene_IsPlaying(GlobalContext* globalCtx) {
     return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != CS_STATE_0;
 }

@@ -423,7 +423,7 @@ animdict = {
     "func_800EE1D8": "Cutscene_GetSceneSetupIndex",
     "func_800EE200": "Cutscene_GetActorActionIndex",
     "func_800EE29C": "Cutscene_CheckActorAction",
-    "func_800EE2F4": "Cutscene_IsPlayingCs",
+    "func_800EE2F4": "Cutscene_IsPlaying",
     "func_801343C0": "SkelAnime_DrawTransformFlexOpa",
     "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
     "func_8013AB00": "SubS_DrawTransformFlex",

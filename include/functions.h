@@ -1412,7 +1412,7 @@ void Cutscene_ActorTranslateXZAndYawSmooth(Actor* actor, GlobalContext* globalCt
 s32 Cutscene_GetSceneSetupIndex(GlobalContext* globalCtx);
 s32 Cutscene_GetActorActionIndex(GlobalContext* globalCtx, u16 actorActionCmd);
 s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd);
-u8 Cutscene_IsPlayingCs(GlobalContext* globalCtx);
+u8 Cutscene_IsPlaying(GlobalContext* globalCtx);
 
 void GetItem_Draw(GlobalContext* globalCtx, s16 index);
 void func_800EE364(GlobalContext* globalCtx, s16 index);

@@ -1581,7 +1581,7 @@
     0x800EE1D8:("Cutscene_GetSceneSetupIndex",),
     0x800EE200:("Cutscene_GetActorActionIndex",),
     0x800EE29C:("Cutscene_CheckActorAction",),
-    0x800EE2F4:("Cutscene_IsPlayingCs",),
+    0x800EE2F4:("Cutscene_IsPlaying",),
     0x800EE320:("GetItem_Draw",),
     0x800EE364:("func_800EE364",),
     0x800EE400:("func_800EE400",),

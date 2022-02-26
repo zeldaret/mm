@@ -527,7 +527,7 @@ void DmChar00_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     DmChar00* this = THIS;
 
-    if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlayingCs(globalCtx)) {
+    if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
         Actor_MarkForDeath(thisx);
     }
 

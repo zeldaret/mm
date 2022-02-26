@@ -1095,7 +1095,7 @@ asm/non_matchings/code/z_demo/Cutscene_ActorTranslateXZAndYawSmooth.s,Cutscene_A
 asm/non_matchings/code/z_demo/Cutscene_GetSceneSetupIndex.s,Cutscene_GetSceneSetupIndex,0x800EE1D8,0xA
 asm/non_matchings/code/z_demo/Cutscene_GetActorActionIndex.s,Cutscene_GetActorActionIndex,0x800EE200,0x27
 asm/non_matchings/code/z_demo/Cutscene_CheckActorAction.s,Cutscene_CheckActorAction,0x800EE29C,0x16
-asm/non_matchings/code/z_demo/Cutscene_IsPlayingCs.s,Cutscene_IsPlayingCs,0x800EE2F4,0xB
+asm/non_matchings/code/z_demo/Cutscene_IsPlaying.s,Cutscene_IsPlaying,0x800EE2F4,0xB
 asm/non_matchings/code/z_draw/GetItem_Draw.s,GetItem_Draw,0x800EE320,0x11
 asm/non_matchings/code/z_draw/func_800EE364.s,func_800EE364,0x800EE364,0x27
 asm/non_matchings/code/z_draw/func_800EE400.s,func_800EE400,0x800EE400,0x7F

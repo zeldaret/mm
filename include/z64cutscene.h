@@ -66,7 +66,7 @@ typedef struct {
     /* 0x2 */ u16 startFrame;
     /* 0x4 */ u16 endFrame;
     /* 0x6 */ u16 unk_06;
-} CsCmdMusicChange; // size = 0x8
+} CsCmdSequenceChange; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u16 type;
@@ -74,7 +74,7 @@ typedef struct {
     /* 0x4 */ u16 endFrame;
     /* 0x6 */ u16 unk_06;
     /* 0x8 */ u32 unk_08;
-} CsCmdMusicFade; // size = 0xC
+} CsCmdSequenceFade; // size = 0xC
 
 typedef struct {
     /* 0x0 */ u16 base;
