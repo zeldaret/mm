@@ -7,7 +7,7 @@
 #include "z_en_kame.h"
 #include "objects/object_tl/object_tl.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnKame*)thisx)
 
@@ -169,7 +169,7 @@ void func_80AD6F9C(EnKame* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_2A2 = 80;
-    this->actor.flags &= ~0x400;
+    this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
@@ -179,7 +179,7 @@ void func_80AD7018(EnKame* this, GlobalContext* globalCtx) {
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 10, 2, 0.3f, 0.2f);
-        this->actor.flags |= 0x400;
+        this->actor.flags |= ACTOR_FLAG_400;
     }
 }
 
@@ -320,7 +320,7 @@ void func_80AD76CC(EnKame* this) {
         Math_Vec3f_Copy(&this->unk_2BC, &this->actor.home.pos);
         this->unk_29E = 0;
     }
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_80AD7798;
 }
 
@@ -388,7 +388,7 @@ void func_80AD7948(EnKame* this, GlobalContext* globalCtx) {
             this->unk_2AC -= 0.1f;
             this->collider.base.atFlags &= ~AT_ON;
             if (this->unk_2AC < 0.5f) {
-                this->actor.flags &= ~0x10;
+                this->actor.flags &= ~ACTOR_FLAG_10;
                 func_80AD7B18(this);
             }
         } else {
@@ -438,7 +438,7 @@ void func_80AD7C54(EnKame* this) {
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.atFlags &= ~(AT_BOUNCED | AT_HIT);
-    this->actor.flags &= ~0x10;
+    this->actor.flags &= ~ACTOR_FLAG_10;
     this->actor.shape.rot.z = 0;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_REVERSE);
     this->actionFunc = func_80AD7D40;
@@ -555,8 +555,8 @@ void func_80AD8148(EnKame* this, GlobalContext* globalCtx) {
         }
     }
     this->actor.bgCheckFlags &= ~0x1;
-    this->actor.flags &= ~0x1;
-    this->actor.flags |= 0x10;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PAMET_DEAD);
     this->unk_29E = 0;
     this->actionFunc = func_80AD825C;
@@ -684,7 +684,7 @@ void func_80AD84C0(EnKame* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((globalCtx->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < 40000.0f) &&
+    if ((globalCtx->actorCtx.unk2 != 0) && (this->actor.xyzDistToPlayerSq < SQ(200.0f)) &&
         (this->collider.base.acFlags & AC_ON)) {
         func_80AD7018(this, globalCtx);
         func_80AD7C54(this);

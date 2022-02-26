@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "objects/object_dodongo/object_dodongo.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnDodongo*)thisx)
 
@@ -420,7 +420,7 @@ void func_80876CAC(EnDodongo* this) {
     this->drawDmgEffFrozenSteamScale = 1.125f;
     this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->actor.flags &= ~0x400;
+    this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 80);
 }
 
@@ -433,7 +433,7 @@ void func_80876D28(EnDodongo* this, GlobalContext* globalCtx) {
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, &this->limbPos[0], 9, 2, this->unk_334 * 0.3f,
                               this->unk_334 * 0.2f);
-        this->actor.flags |= 0x400;
+        this->actor.flags |= ACTOR_FLAG_400;
     }
 }
 
@@ -694,7 +694,7 @@ void func_80877D90(EnDodongo* this, GlobalContext* globalCtx) {
 
 void func_80877DE0(EnDodongo* this) {
     Animation_Change(&this->skelAnime, &object_dodongo_Anim_0028F0, -1.0f, 35.0f, 0.0f, 2, -4.0f);
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->timer = 25;
     this->actionFunc = func_80877E60;
     this->actor.speedXZ = 0.0f;
@@ -734,7 +734,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
             Actor_MarkForDeath(this->actor.child);
             this->actor.child = NULL;
         }
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
     } else if (this->skelAnime.playSpeed > -0.5f) {
         this->timer--;
         if (this->timer == 10) {
@@ -845,7 +845,7 @@ void func_80878424(EnDodongo* this, GlobalContext* globalCtx) {
     sp20.z = this->collider1Elements[2].dim.worldSphere.center.z;
     func_80876930(this, globalCtx, &sp20);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-    this->actor.flags |= 0x1000000;
+    this->actor.flags |= ACTOR_FLAG_1000000;
 }
 
 void func_80878594(EnDodongo* this) {
@@ -895,7 +895,7 @@ void func_80878724(EnDodongo* this) {
     this->timer = 0;
     this->unk_304 = 0;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DEAD);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
     this->actionFunc = func_808787B0;

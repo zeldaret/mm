@@ -371,7 +371,7 @@ void Math_Vec3f_DistXYZAndStoreNormDiff(Vec3f* a, Vec3f* b, f32 scale, Vec3f* de
 f32 Math_Vec3f_DistXYZ(Vec3f* a, Vec3f* b) {
     Vec3f diff;
     Math_Vec3f_Diff(b, a, &diff);
-    return sqrtf(SQ(diff.x) + SQ(diff.y) + SQ(diff.z));
+    return sqrtf(SQXYZ(diff));
 }
 
 f32 Math_Vec3f_DistXYZAndStoreDiff(Vec3f* a, Vec3f* b, Vec3f* dest) {

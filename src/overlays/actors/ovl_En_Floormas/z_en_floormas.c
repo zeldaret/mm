@@ -7,7 +7,7 @@
 #include "z_en_floormas.h"
 #include "objects/object_wallmaster/object_wallmaster.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnFloormas*)thisx)
 
@@ -164,13 +164,13 @@ void EnFloormas_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.params = ENFLOORMAS_GET_7FFF(&this->actor);
 
     if (params != 0) {
-        this->actor.flags |= 0x80;
+        this->actor.flags |= ACTOR_FLAG_80;
         this->actor.draw = func_808D3754;
     }
 
     if (this->actor.params == ENFLOORMAS_GET_7FFF_10) {
         this->actor.draw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionFunc = func_808D2AA8;
         return;
     }
@@ -239,7 +239,7 @@ void func_808D09CC(EnFloormas* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;
-    this->actor.flags &= ~(0x400 | 0x200);
+    this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_400);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
@@ -251,9 +251,9 @@ void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2,
                               this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
-            this->actor.flags |= 0x400;
+            this->actor.flags |= ACTOR_FLAG_400;
         } else {
-            this->actor.flags |= 0x200;
+            this->actor.flags |= ACTOR_FLAG_200;
         }
     }
 }
@@ -558,8 +558,8 @@ void func_808D19D4(EnFloormas* this) {
     this->actor.colorFilterTimer = 0;
     this->drawDmgEffAlpha = 0.0f;
     Actor_SetScale(&this->actor, 0.004f);
-    this->actor.flags |= 0x10;
-    if ((this->actor.flags & 0x80) == 0x80) {
+    this->actor.flags |= ACTOR_FLAG_10;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
         this->actor.draw = func_808D3754;
     } else {
         this->actor.draw = EnFloormas_Draw;
@@ -573,8 +573,8 @@ void func_808D19D4(EnFloormas* this) {
                      Animation_GetLastFrame(&object_wallmaster_Anim_0019CC.common), 2, 0.0f);
     this->collider.dim.radius = sCylinderInit.dim.radius * 0.6f;
     this->collider.dim.height = sCylinderInit.dim.height * 0.6f;
-    this->actor.flags &= ~0x400;
-    this->actor.flags |= 0x200;
+    this->actor.flags &= ~ACTOR_FLAG_400;
+    this->actor.flags |= ACTOR_FLAG_200;
     this->actor.colChkInfo.health = 1;
     this->actor.speedXZ = 4.0f;
     this->actor.velocity.y = 7.0f;
@@ -584,7 +584,7 @@ void func_808D19D4(EnFloormas* this) {
 void func_808D1B44(EnFloormas* this, GlobalContext* globalCtx) {
     if (this->actor.bgCheckFlags & 1) {
         if (SkelAnime_Update(&this->skelAnime)) {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->unk_194 = 50;
             func_808D0C14(this);
         }
@@ -717,7 +717,7 @@ void func_808D217C(EnFloormas* this, Player* player) {
     u8 playerForm;
 
     Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 1.0f, 36.0f, 45.0f, 2, -3.0f);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
@@ -761,7 +761,7 @@ void func_808D22C8(EnFloormas* this, GlobalContext* globalCtx) {
 
         this->actor.shape.rot.x = 0;
         this->actor.velocity.y = 6.0f;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.speedXZ = -3.0f;
         func_808D1740(this);
     } else if ((this->unk_190 % 20) == 0) {
@@ -873,11 +873,11 @@ void func_808D2764(EnFloormas* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->actor.scale.x >= 0.01f) {
-            this->actor.flags &= ~0x10;
+            this->actor.flags &= ~ACTOR_FLAG_10;
             func_808D0908(this);
             this->actor.params = ENFLOORMAS_GET_7FFF_0;
-            this->actor.flags &= ~0x200;
-            this->actor.flags |= 0x400;
+            this->actor.flags &= ~ACTOR_FLAG_200;
+            this->actor.flags |= ACTOR_FLAG_400;
             this->actor.colChkInfo.health = sColChkInfoInit.health;
             func_808D0C14(this);
         } else if (this->unk_18E == 0) {
@@ -904,7 +904,7 @@ void func_808D2A20(EnFloormas* this) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actor.draw = NULL;
-        this->actor.flags &= ~(0x10 | 0x1);
+        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
         this->actionFunc = func_808D2AA8;
     }
 }
@@ -1030,7 +1030,7 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FLOORMASTER_SM_DEAD);
                     }
                     Enemy_StartFinishingBlow(globalCtx, &this->actor);
-                    this->actor.flags &= ~1;
+                    this->actor.flags &= ~ACTOR_FLAG_1;
                 } else if (this->actor.colChkInfo.damage != 0) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_DAMAGE);
                 }
@@ -1108,7 +1108,7 @@ void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, this->actor.scale.x * 3000.0f, 0.0f, 0x1D);
             Collider_UpdateCylinder(&this->actor, &this->collider);
             if (this->actionFunc == func_808D1650) {
-                this->actor.flags |= 0x1000000;
+                this->actor.flags |= ACTOR_FLAG_1000000;
                 CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             }
 

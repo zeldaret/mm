@@ -6,7 +6,7 @@
 
 #include "z_en_test6.h"
 
-#define FLAGS 0x02200030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnTest6*)thisx)
 

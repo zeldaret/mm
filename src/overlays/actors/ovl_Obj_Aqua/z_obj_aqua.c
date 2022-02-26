@@ -7,7 +7,7 @@
 #include "z_obj_aqua.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjAqua*)thisx)
 
@@ -268,7 +268,7 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjAqua* this = THIS;
     s32 framesTemp;
     s32 pad;
-    s16 yaw = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
+    s16 yaw = Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
     s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
