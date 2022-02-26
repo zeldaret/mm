@@ -17,9 +17,13 @@ void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8099AC58(EnCrow* this);
 void func_8099AC8C(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B098(EnCrow* this);
 void func_8099B0CC(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B318(EnCrow* this, GlobalContext* globalCtx);
 void func_8099B584(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B6AC(EnCrow* this);
 void func_8099B6C4(EnCrow* this, GlobalContext* globalCtx);
+void func_8099B8EC(EnCrow* this);
 void func_8099B838(EnCrow* this, GlobalContext* globalCtx);
 void func_8099B9E8(EnCrow* this, GlobalContext* globalCtx);
 
@@ -103,7 +107,7 @@ static DamageTable D_8099C0AC = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-s32 D_8099C0CC = 0;
+static s32 D_8099C0CC = 0;
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8099C0D0[] = {
@@ -119,17 +123,14 @@ extern CollisionCheckInfoInit D_8099C0A4;
 extern DamageTable D_8099C0AC;
 extern InitChainEntry D_8099C0D0[];
 
-extern UNK_TYPE D_060000F0;
-
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/EnCrow_Init.s")
 void EnCrow_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnCrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, D_8099C0D0);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &D_060000F0, &this->unk194, &this->unk1CA,
-                       9);
-    Collider_InitAndSetJntSph(globalCtx, &this->unk200, &this->actor, &D_8099C094, &this->unk220);
-    this->unk200.elements->dim.worldSphere.radius = D_8099C094.elements[0].dim.modelSphere.radius;
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0,
+                       this->jointTable, this->morphTable, 9);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_8099C094, &this->unk220);
+    this->collider.elements->dim.worldSphere.radius = D_8099C094.elements[0].dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_8099C0AC, &D_8099C0A4);
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
     D_8099C0CC = 0;
@@ -142,44 +143,292 @@ void EnCrow_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnCrow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnCrow* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->unk200);
+    Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
 void func_8099AC58(EnCrow* this) {
-    this->unk18E = 0x64;
-    this->unk200.base.acFlags |= 1;
+    this->timer = 100;
+    this->collider.base.acFlags |= 1;
     this->actionFunc = func_8099AC8C;
     this->skelAnime.playSpeed = 1.0f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099AC8C.s")
+void func_8099AC8C(EnCrow* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 sp38;
+    s32 skelanimeUpdated;
+    s16 temp;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B098.s")
+    SkelAnime_Update(&this->skelAnime);
+    skelanimeUpdated = Animation_OnFrame(&this->skelAnime, 0.0f);
+    this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B0CC.s")
+    if ((this->actor.parent != NULL) && ((this->actor.parent->home.rot.z) == 0)) {
+        this->actor.home.pos.x = this->actor.parent->world.pos.x;
+        this->actor.home.pos.z = this->actor.parent->world.pos.z;
+        sp38 = Actor_XZDistanceToPoint(&this->actor, &this->actor.parent->world.pos);
+    } else {
+        sp38 = 450.0f;
+        this->actor.flags |= 1;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B318.s")
+    if ((this->actor.bgCheckFlags & 8) != 0) {
+        this->unk192 = this->actor.wallYaw;
+    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+        this->unk192 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B384.s")
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk192, 5, 0x300, (s16)0x10) == 0) && (skelanimeUpdated) &&
+        (Rand_ZeroOne() < 0.1f)) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B584.s")
+        temp = (Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
+        if (temp > 0) {
+            this->unk192 += Rand_S16Offset(0x1000, 0x1000);
+        } else {
+            this->unk192 -= Rand_S16Offset(0x1000, 0x1000);
+        }
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B6AC.s")
+    if ((this->actor.depthInWater > -40.0f) || ((this->actor.bgCheckFlags & 1) != 0)) {
+        this->unk190 = -0x1000;
+    } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 50.0f)) {
+        this->unk190 = -Rand_S16Offset(0x800, 0x800);
+    } else if (this->actor.world.pos.y > (this->actor.home.pos.y + 50.0f)) {
+        this->unk190 = Rand_S16Offset(0x800, 0x800);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B6C4.s")
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk190, 0xA, 0x100, 8) == 0) && skelanimeUpdated &&
+        (Rand_ZeroOne() < 0.1f)) {
+        if (this->actor.home.pos.y < this->actor.world.pos.y) {
+            this->unk190 -= Rand_S16Offset(0x400, 0x400);
+        } else {
+            this->unk190 += Rand_S16Offset(0x400, 0x400);
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B778.s")
+        this->unk190 = CLAMP(this->unk190, -0x1000, 0x1000);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B838.s")
+    if ((this->actor.bgCheckFlags & 1) != 0) {
+        Math_ScaledStepToS(&this->actor.shape.rot.x, -0x100, 0x400);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Crow/func_8099B8EC.s")
+    DECR(this->timer);
+    if ((this->timer == 0) &&
+        (((this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000)) || (sp38 < 300.0f)) &&
+        (this->actor.depthInWater < -40.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
+        if (sp38 < this->actor.xzDistToPlayer) {
+            this->actor.child = this->actor.parent;
+        } else {
+            this->actor.child = &player->actor;
+        }
+        func_8099B098(this);
+    }
+}
+
+void func_8099B098(EnCrow* this) {
+    this->timer = 0x12C;
+    this->actionFunc = func_8099B0CC;
+    this->actor.speedXZ = 4.0f;
+    this->skelAnime.playSpeed = 2.0f;
+}
+
+void func_8099B0CC(EnCrow* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 facingPlayer;
+    Vec3f pos;
+    s16 target;
+    s16 phi_a1;
+
+    SkelAnime_Update(&this->skelAnime);
+    DECR(this->timer);
+    facingPlayer = Actor_ActorAIsFacingActorB(&this->actor, this->actor.child, 0x2800);
+    if (facingPlayer) {
+        if (&player->actor == this->actor.child) {
+            pos.y = this->actor.child->world.pos.y + 20.0f;
+        } else {
+            pos.y = this->actor.child->world.pos.y + 40.0f;
+        }
+        pos.x = this->actor.child->world.pos.x;
+        pos.z = this->actor.child->world.pos.z;
+        target = Actor_PitchToPoint(&this->actor, &pos);
+        phi_a1 = CLAMP(target, -0x3000, 0x3000);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, phi_a1, 2, 0x400, (s16)0x40);
+    } else {
+        Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 2, 0x100, (s16)0x10);
+    }
+
+    if ((facingPlayer) || (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) > 80.0f)) {
+        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.child), 4, 0xC00,
+                           0xC0);
+    }
+    if (((this->timer == 0) || (((&player->actor) != this->actor.child) && (this->actor.child->home.rot.z != 0)) ||
+         (&player->actor == this->actor.child) &&
+             ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (player->stateFlags1 & 0x800000)) ||
+         (this->collider.base.atFlags & 2) || (this->actor.bgCheckFlags & 9)) ||
+        this->actor.depthInWater > (-40.0f)) {
+
+        if (this->collider.base.atFlags & AT_HIT) {
+            this->collider.base.atFlags &= ~AT_HIT;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_ATTACK);
+        }
+        func_8099AC58(this);
+    }
+}
+
+void func_8099B318(EnCrow* this, GlobalContext* globalCtx) {
+    if (this->unk18C == 0xA) {
+        this->unk18C = 0;
+        this->unk290 = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk260, 4, 2, 0.2f, 0.2f);
+    }
+}
+
+void func_8099B384(EnCrow* this, GlobalContext* globalCtx) {
+    f32 temp;
+
+    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.velocity.y = 0.0f;
+    Animation_Change(&this->skelAnime, &object_crow_Anim_0000F0, 0.4f, 0.0f, 0.0f, 1, -3.0f);
+    this->actor.shape.yOffset = 0.0f;
+    this->actor.targetArrowOffset = 0.0f;
+    this->actor.bgCheckFlags &= ~1;
+    temp = (this->actor.scale.x * 100.0f);
+    this->actor.world.pos.y += 20.0f * temp;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    if (this->actor.colChkInfo.damageEffect == 3) {
+        this->unk18C = 0xA;
+        this->unk290 = 1.0f;
+        this->unk298 = 0.75f;
+        this->unk294 = 0.5f;
+    } else if (this->actor.colChkInfo.damageEffect == 4) {
+        this->unk18C = 0x14;
+        this->unk290 = 4.0f;
+        this->unk294 = 0.5f;
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xA2, this->collider.elements->info.bumper.hitPos.x,
+                    this->collider.elements->info.bumper.hitPos.y, this->collider.elements->info.bumper.hitPos.z, 0, 0,
+                    0, 3);
+    } else if (this->actor.colChkInfo.damageEffect == 2) {
+        this->unk18C = 0;
+        this->unk290 = 4.0f;
+        this->unk294 = 0.5f;
+    }
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 0x28);
+    if ((this->actor.flags & 0x8000) != 0) {
+        this->actor.speedXZ = 0.0f;
+    }
+    this->collider.base.acFlags &= ~1;
+    this->actor.flags |= 0x10;
+
+    this->actionFunc = func_8099B584;
+}
+
+void func_8099B584(EnCrow* this, GlobalContext* globalCtx) {
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    this->actor.colorFilterTimer = 40;
+
+    if (!(this->actor.flags & 0x8000)) {
+        if (this->unk18C != 0xA) {
+            Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
+            this->actor.shape.rot.z += 0x1780;
+        }
+        if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
+            func_8099B318(this, globalCtx);
+            func_800B3030(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.x * 10000.0f,
+                          0, 0);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0xBU, NA_SE_EN_EXTINCT);
+
+            if (this->actor.parent != NULL) {
+                Actor_MarkForDeath(&this->actor);
+                return;
+            }
+            func_8099B6AC(this);
+        }
+    }
+}
+
+void func_8099B6AC(EnCrow* this) {
+    this->actor.colorFilterTimer = 0;
+    this->actionFunc = func_8099B6C4;
+}
+
+void func_8099B6C4(EnCrow* this, GlobalContext* globalCtx) {
+    f32 stepScale;
+
+    if (this->actor.params != 0) {
+        stepScale = 0.006f;
+    } else {
+        stepScale = 0.002f;
+    }
+    if (Math_StepToF(&this->actor.scale.x, 0.0f, stepScale) != 0) {
+        if (this->actor.params == 0) {
+            D_8099C0CC++;
+            Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x80);
+        } else {
+            Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x90);
+        }
+        func_8099B8EC(this);
+    }
+    this->actor.scale.z = this->actor.scale.y = this->actor.scale.x;
+}
+
+void func_8099B778(EnCrow* this) {
+    this->timer = 0x64;
+    this->unk190 = -0x1000;
+    this->actor.speedXZ = 3.5f;
+    this->unk192 = this->actor.yawTowardsPlayer + 0x8000;
+    this->skelAnime.playSpeed = 2.0f;
+    if (this->actor.colChkInfo.damageEffect == 1) {
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+    } else {
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+    }
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    this->actionFunc = func_8099B838;
+}
+
+void func_8099B838(EnCrow* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    if ((this->actor.bgCheckFlags & 8) != 0) {
+        this->unk192 = this->actor.wallYaw;
+    } else {
+        this->unk192 = this->actor.yawTowardsPlayer + 0x8000;
+    }
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk192, 3, 0xC00, 0xC0);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk190, 5, 0x100, 0x10);
+    DECR(this->timer);
+    if (this->timer == 0) {
+        func_8099AC58(this);
+    }
+}
+
+void func_8099B8EC(EnCrow* this) {
+    if (D_8099C0CC == 0xA) {
+        this->actor.params = 1;
+        D_8099C0CC = 0;
+        this->collider.elements->dim.worldSphere.radius =
+            (D_8099C094.elements->dim.modelSphere.radius * 0.03f * 100.0f);
+    } else {
+        this->actor.params = 0;
+        this->collider.elements->dim.worldSphere.radius = D_8099C094.elements->dim.modelSphere.radius;
+    }
+    Animation_PlayLoop(&this->skelAnime, &object_crow_Anim_0000F0);
+    Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.z = 0;
+    this->timer = 0x12C;
+    this->actor.draw = NULL;
+    this->actor.shape.yOffset = 2000.0f;
+    this->actionFunc = func_8099B9E8;
+    this->actor.targetArrowOffset = (f32)(2000); // Possible bug with the float here
+    this->unk290 = 0.0f;
+}
 
 void func_8099B9E8(EnCrow* this, GlobalContext* globalCtx) {
-    s16 temp_v0;
     f32 phi_f0;
 
-    DECR(this->unk18E);
-    if (this->unk18E == 0) {
+    DECR(this->timer);
+    if (this->timer == 0) {
         SkelAnime_Update(&this->skelAnime);
         this->actor.draw = EnCrow_Draw;
         if (this->actor.params != 0) {
@@ -200,9 +449,9 @@ void func_8099B9E8(EnCrow* this, GlobalContext* globalCtx) {
 
 void func_8099BAB4(EnCrow* this, GlobalContext* globalCtx) {
 
-    if (this->unk200.base.acFlags & 2) {
-        this->unk200.base.acFlags &= ~AT_HIT;
-        Actor_SetDropFlag(&this->actor, &this->unk200.elements->info);
+    if (this->collider.base.acFlags & 2) {
+        this->collider.base.acFlags &= ~AT_HIT;
+        Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
 
         if (this->actor.colChkInfo.damageEffect == 1) {
             func_8099B778(this);

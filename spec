@@ -2193,7 +2193,7 @@ beginseg
     name "ovl_En_Crow"
     compress
     include "build/src/overlays/actors/ovl_En_Crow/z_en_crow.o"
-    include "build/data/ovl_En_Crow/ovl_En_Crow.data.o"
+    // include "build/data/ovl_En_Crow/ovl_En_Crow.data.o"
     include "build/data/ovl_En_Crow/ovl_En_Crow.reloc.o"
 endseg
 
