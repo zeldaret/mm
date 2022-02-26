@@ -443,7 +443,7 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
         switch (cmd->base) {
             case 1:
                 // func_801A246C(SEQ_PLAYER_BGM_MAIN, TYPE_1);
-                func_801A246C(0, 1);
+                func_801A246C(SEQ_PLAYER_BGM_MAIN, 1);
                 break;
 
             case 2:
