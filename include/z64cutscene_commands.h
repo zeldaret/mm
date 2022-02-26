@@ -517,7 +517,7 @@
  *   0000015F eeeeeeee
  *   size = 0x8
  */
-#define CS_SCENE_UNK_15F_LIST(entries) { CS_CMD_15F }, { CMD_W(entries) }
+#define CS_CHOOSE_CREDITS_SCENES_LIST(entries) { CS_CMD_CHOOSE_CREDITS_SCENES }, { CMD_W(entries) }
 
 /**
  * ARGS
@@ -527,7 +527,7 @@
  *   mmmmssss eeeeUUUU
  *   size = 0x08
  */
-#define CS_SCENE_UNK_15F(base, startFrame, endFrame) \
+#define CS_CHOOSE_CREDITS_SCENES(base, startFrame, endFrame) \
     { CMD_HH(base, startFrame) }, { CMD_HH(endFrame, endFrame) }
 
 

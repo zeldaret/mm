@@ -153,7 +153,7 @@ typedef enum {
     /* 0x134 */ CS_CMD_PLAYAMBIENCE,
     /* 0x135 */ CS_CMD_FADEAMBIENCE,
     /* 0x15E */ CS_CMD_TERMINATOR = 0x15E,
-    /* 0x15F */ CS_CMD_15F,
+    /* 0x15F */ CS_CMD_CHOOSE_CREDITS_SCENES,
     /* 0x190 */ CS_CMD_RUMBLE = 0x190
 } CutsceneCmd;
 

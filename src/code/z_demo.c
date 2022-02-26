@@ -645,9 +645,8 @@ void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCt
     }
 }
 
-// Command 0x15F:
-// Related to credits?
-void func_800EB6F8(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
+// Command 0x15F: Chooses between a cutscene or a rotating mask depending if the played has the corresponding mask
+void Cutscene_Command_ChooseCreditsScenes(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (func_801A3950(0, true) != 0xFF)) {
         switch (cmd->base) {
             case 1:
@@ -1315,11 +1314,11 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 }
                 break;
 
-            case CS_CMD_15F:
+            case CS_CMD_CHOOSE_CREDITS_SCENES:
                 bcopy(cutscenePtr, &cmdEntries, 4);
                 cutscenePtr += 4;
                 for (j = 0; j < cmdEntries; j++) {
-                    func_800EB6F8(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
+                    Cutscene_Command_ChooseCreditsScenes(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
                 }
                 break;

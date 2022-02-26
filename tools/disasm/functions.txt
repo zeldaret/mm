@@ -1557,7 +1557,7 @@
     0x800EB1DC:("Cutscene_Command_SetTime",),
     0x800EB364:("Cutscene_TerminatorImpl",),
     0x800EB4B4:("Cutscene_Command_Terminator",),
-    0x800EB6F8:("func_800EB6F8",),
+    0x800EB6F8:("Cutscene_Command_ChooseCreditsScenes",),
     0x800EBB68:("Cutscene_Command_MotionBlur",),
     0x800EBCD0:("Cutscene_Command_GiveTatlToPlayer",),
     0x800EBD60:("Cutscene_Command_TransitionFX",),
