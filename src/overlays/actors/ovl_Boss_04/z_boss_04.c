@@ -400,7 +400,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     if (this->unk_70A != 0) {
         Vec3f sp50;
 
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         if (this->unk_748 != 0) {
             this->unk_748--;
         }

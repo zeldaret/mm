@@ -2049,7 +2049,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         Matrix_InsertZRotation_f(this->unk_1D54, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_1D3C);
         Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
     }
 }
 #else
@@ -2263,6 +2263,6 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
         Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &sp5C, &this->unk_1D3C);
         this->unk_1D3C.z = this->unk_1D3C.x = 0.0f;
         this->unk_1D3C.y = 1.0f;
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
     }
 }

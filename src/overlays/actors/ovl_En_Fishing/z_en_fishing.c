@@ -5201,7 +5201,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             // fallthrough
 
         case 2:
-            ShrinkWindow_SetLetterboxTarget(0x1B);
+            ShrinkWindow_SetLetterboxTarget(27);
 
             spFC.x = sLurePos.x - player->actor.world.pos.x;
             spFC.z = sLurePos.z - player->actor.world.pos.z;

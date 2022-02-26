@@ -339,7 +339,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_A00 != 0) {
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         Play_CameraSetAtEye(globalCtx, this->unk_A00, &this->unk_A10, &this->unk_A04);
     }
 }
