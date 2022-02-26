@@ -51,7 +51,10 @@ typedef struct Boss03 {
     /* 0x0276 */ s16 unk_276;
     /* 0x0278 */ f32 unk_278;
     /* 0x027C */ f32 unk_27C;
-    /* 0x0280 */ UNK_TYPE1 unk_280[0x1C];
+    /* 0x0280 */ UNK_TYPE1 unk_280[0x10];
+    /* 0x0290 */ s8 unk_290;
+    /* 0x0291 */ UNK_TYPE1 unk_291[0x03];
+    /* 0x0294 */ UNK_TYPE1 unk_294[0x08];
     /* 0x029C */ s16 unk_29C;
     /* 0x029E */ s16 unk_29E;
     /* 0x02A0 */ s16 unk_2A0;
@@ -65,7 +68,9 @@ typedef struct Boss03 {
     /* 0x02BE */ s16 unk_2BE;
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
     /* 0x02C0 */ f32 unk_2C4;
-    /* 0x02C8 */ UNK_TYPE1 unk_2C8[0x0C];
+    /* 0x02C8 */ UNK_TYPE1 unk_2C8[0x04];
+    /* 0x02CC */ f32 unk_2CC;
+    /* 0x02D0 */ UNK_TYPE1 unk_2D0[0x04];
     /* 0x02D4 */ UNK_TYPE1 unk_2D4[0x01];
     /* 0x02D5 */ u8 unk_2D5;
     /* 0x02D6 */ UNK_TYPE1 unk_2D6[0x02];
@@ -85,7 +90,11 @@ typedef struct Boss03 {
     /* 0x0536 */ s16 subCamId;
     /* 0x0538 */ Vec3f unk_538;
     /* 0x0544 */ Vec3f unk_544;
-    /* 0x0550 */ UNK_TYPE1 unk_550[0x2C];
+    /* 0x0550 */ UNK_TYPE1 unk_550[0x0C];
+    /* 0x055C */ Vec3f unk_55C;
+    /* 0x0568 */ f32 unk_568;
+    /* 0x056C */ UNK_TYPE1 unk_56C[0x0C];
+    /* 0x0578 */ f32 unk_578;
 } Boss03; // size = 0x57C
 
 extern const ActorInit Boss_03_InitVars;

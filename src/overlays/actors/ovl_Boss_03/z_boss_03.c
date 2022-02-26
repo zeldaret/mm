@@ -1028,7 +1028,287 @@ Vec3f D_809E9104[] = {
     { 0.0f, 450.0f, 0.0f },
 };
 
+#ifdef NON_EQUIVALENT
+// It may be equivalent, but there are too many differences in the diff to really tell
+void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
+    s16 phi_s0;
+    Vec3f sp70;
+
+    f32 temp_f2;
+    f32 temp;
+    f32 temp_f18;
+
+    f32 sp5C;
+    s16 sp5A;
+    f32 phi_f2;
+    s16 sp56;
+    Player* player;
+    f32 temp_f12;
+
+    sp56 = 0;
+    player = GET_PLAYER(globalCtx);
+    this->unk_254 = 0;
+    this->unk_530 += 1;
+    this->unk_290 = 0;
+    sp5A = 0x04BC;
+
+    switch (this->unk_534) {
+    case 0x0:
+        if (player->actor.world.pos.y < 1350.0f) {
+            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            func_800B7298(globalCtx, &this->actor, 7U);
+            this->subCamId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, 0, 1);
+            Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
+            this->actor.world.rot.y = -0x7B30;
+            this->unk_2CC = 1850.0f;
+
+            this->actor.world.pos.x = 1400.0f;
+            this->actor.world.pos.y = 130.0f;
+            this->actor.world.pos.z = 1400.0f;
+
+            player->actor.shape.rot.y = 0;
+            player->actor.world.pos.y = 1850.0f;
+            player->actor.world.rot.y = player->actor.shape.rot.y;
+
+            this->unk_544.y = 1850.0f + 30.0f;
+            this->unk_534 = 1;
+            this->unk_530 = 0;
+            this->actor.flags &= ~1;
+            this->unk_2D5 = 1;
+            this->unk_578 = gGameInfo->data[0x4EE] + 60.0f;
+
+        case 0x1:
+            player->actor.world.pos.z = 0.0f;
+            player->actor.world.pos.x = 0.0f;
+            player->actor.speedXZ = 0.0f;
+
+            this->unk_538.x = 100.0f;
+            this->unk_538.y = 540.0f;
+
+            this->unk_538.z = player->actor.world.pos.z + 100.0f;
+            this->unk_544.x = player->actor.world.pos.x;
+
+            Math_ApproachF(&this->unk_544.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
+            this->unk_544.z = player->actor.world.pos.z;
+            if (this->unk_530 >= 0x0000006AU) {
+                this->unk_534 = 2;
+                this->unk_530 = 0;
+                this->unk_240 = 0;
+                func_8016566C(0x00000096U);
+                this->unk_578 = 80.0f;
+            case 0x2:
+                Actor_PlaySfxAtPos(&this->actor, 0x3140U);
+
+                temp_f2 =  D_809E9104[this->unk_242].x - this->actor.world.pos.x;
+                temp =     D_809E9104[this->unk_242].y - this->actor.world.pos.y;
+                temp_f18 = D_809E9104[this->unk_242].z - this->actor.world.pos.z;
+
+                temp_f12 = sqrtf((temp_f2 * temp_f2) + (temp_f18 * temp_f18));
+                Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0x000A, this->unk_274);
+                Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0x000A, this->unk_274);
+                Math_ApproachS(&this->unk_274, 0x0200, 1, 0x0010);
+
+                if ((this->unk_530 >= 0x0000001FU) && (this->unk_530 < 0x00000032U)) {
+                    sp56 = 2;
+                }
+
+                if ((this->unk_530 == 0x28) || (this->unk_530 == (gGameInfo->data[0x53B] + 0x10E))) {
+                    Actor_PlaySfxAtPos(&this->actor, 0x389CU);
+                }
+
+                if (this->unk_530 >= 0x00000033U) {
+                    Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, 0.1f);
+                }
+
+                if (this->unk_242 < 2) {
+                    if (temp_f12 < 100.0f) {
+                        this->unk_242++;
+                        this->unk_274 = 0;
+                        if ((this->unk_242 & 0xFF) >= 2) {
+                            this->unk_530 = 0x00000064;
+                        }
+                    }
+                    this->unk_278 = 5.0f;
+                } else {
+                    this->unk_278 = 0.0f;
+                    sp56 = 1;
+                    if ((this->actor.speedXZ == 0.0f) && ((u32) this->unk_530 >= 0x000000E7U)) {
+                        this->unk_534 = 3;
+                        this->unk_530 = 0;
+                    }
+                    //if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
+                    if (this->unk_530 == 0xA5) {
+                        Actor_PlaySfxAtPos(&this->actor, 0x38C5U);
+                    }
+                    if (this->unk_530 == 0xB4) {
+                        Actor_PlaySfxAtPos(&this->actor, 0x389CU);
+                    }
+                }
+            }
+        }
+        break;
+    case 0x3:
+        func_809E2760(&this->actor.projectedPos, 0x322DU);
+        sp5A = 0x1970;
+        Math_ApproachF(&this->actor.speedXZ, 15.0f, 1.0f, 2.0f);
+        if (this->unk_530 >= 0x00000015U) {
+            this->unk_534 = 4;
+            this->unk_530 = 0;
+        }
+        break;
+    case 0x4:
+        player->actor.world.rot.y = player->actor.shape.rot.y = 0;
+
+        if (this->unk_530 == 5) {
+            func_800B7298(globalCtx, &this->actor, 8U);
+        }
+
+        this->unk_538.x = player->actor.world.pos.x + 30.0f;
+        this->unk_538.y = gGameInfo->data[0x971] + ((player->actor.world.pos.y + Player_GetHeight(player)) - 4.0f);
+        this->unk_538.z = player->actor.world.pos.z - 30.0f;
+
+        this->unk_544.x = player->actor.world.pos.x;
+        this->unk_544.y = gGameInfo->data[0x972] + (((player->actor.world.pos.y + Player_GetHeight(player)) - 18.0f) + 6.0f);
+        this->unk_544.z = player->actor.world.pos.z;
+
+        if (player->transformation == 0) {
+            this->unk_538.y -= 60.0f;
+            this->unk_544.y -= 35.0f;
+        }
+
+        this->unk_578 = 60.0f;
+        if (this->unk_530 == 0x10) {
+            this->unk_534 = 5;
+            this->unk_530 = 0;
+            this->unk_2D5 = 0;
+            this->actor.speedXZ = -200.0f;
+            Actor_MoveWithoutGravityReverse(&this->actor);
+            this->actor.world.pos.y = this->unk_258 - 150.0f;
+            func_80165690();
+        case 0x5:
+            SkelAnime_Update(&this->skelAnime);
+            this->actor.speedXZ = 20.0f;
+            Actor_MoveWithoutGravityReverse(&this->actor);
+            player->actor.shape.rot.y = -0x1470;
+            player->actor.world.rot.y = player->actor.shape.rot.y;
+
+            this->unk_538.x = ((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f;
+            this->unk_538.y = (player->actor.world.pos.y + 40.0f) + 10.0f;
+            this->unk_538.z = ((player->actor.world.pos.z - 30.0f) + 160.0f) + 300.0f;
+
+            this->unk_544.x = this->actor.world.pos.x;
+            this->unk_544.y = this->actor.world.pos.y - 100.0f;
+            this->unk_544.z = this->actor.world.pos.z;
+
+            if (this->unk_530 == 0xA) {
+                this->actor.velocity.y = 30.0f;
+                this->unk_534 = 6;
+                this->unk_530 = 0;
+                this->actor.gravity = -1.5f;
+                this->actor.speedXZ = 20.0f;
+                Audio_QueueSeqCmd(0x0000801BU);
+                Actor_PlaySfxAtPos(&this->actor, 0x3941U);
+                this->skelAnime.playSpeed = 1.0f;
+            }
+        }
+        break;
+
+    case 0x6:
+        Actor_PlaySfxAtPos(&this->actor, 0x324EU);
+
+        if (this->unk_530 == 0x1E) {
+            TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&D_06007EC8), 0xA0, 0xB4, 0x80, 0x28);
+        }
+
+        //if ((this && this) && this) {}
+
+        if ((this->unk_530 < 0x00000018U) || (this->unk_530 >= 0x0000005AU)) {
+            SkelAnime_Update(&this->skelAnime);
+            Math_ApproachS(&this->actor.world.rot.x, this->actor.velocity.y * -300.0f, 3, 0x1000);
+            Actor_MoveWithGravity(&this->actor);
+            if ((this->actor.velocity.y <= 0.0f) && (this->actor.world.pos.y < (this->unk_258 + 50.0f))) {
+                this->unk_254 = 2;
+                this->actor.gravity = 0.0f;
+                Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
+                Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.5f);
+            } else {
+                for (phi_s0 = 0; phi_s0 < 3; phi_s0++) {
+                    sp70.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.x;
+                    sp70.y = this->actor.world.pos.y;
+                    sp70.z = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.z;
+
+                    func_809E2880(globalCtx, &sp70);
+                }
+
+                this->unk_55C.x = this->actor.world.pos.x;
+                this->unk_55C.y = this->actor.world.pos.y - 100.0f;
+                this->unk_55C.z = this->actor.world.pos.z;
+            }
+        } else {
+            Math_ApproachF(&this->unk_538.x, (((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f) - 90.0f, 0.05f, 3.0f);
+            Math_ApproachF(&this->unk_538.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
+            Math_ApproachF(&this->unk_538.z, ((player->actor.world.pos.z - 30.0f) + 160.0f + 300.0f) - 90.0f, 0.05f, 3.0f);
+            Math_ApproachF(&this->unk_568, 90.0f, 0.05f, 3.0f);
+        }
+
+        Math_ApproachF(&this->unk_544.x, this->unk_55C.x, 0.5f, 100.0f);
+        Math_ApproachF(&this->unk_544.y, this->unk_55C.y + this->unk_568, 0.5f, 100.0f);
+        Math_ApproachF(&this->unk_544.z, this->unk_55C.z, 0.5f, 100.0f);
+
+        if (this->unk_530 == 0x91) {
+            Camera* temp_v0_4;
+
+            temp_v0_4 = Play_GetCamera(globalCtx, 0);
+            temp_v0_4->eye = this->unk_538;
+            temp_v0_4->eyeNext = this->unk_538;
+            temp_v0_4->at = this->unk_544;
+            func_80169AFC(globalCtx, this->subCamId, 0);
+            func_800EA0EC(globalCtx, &globalCtx->csCtx);
+            func_800B7298(globalCtx, &this->actor, 6U);
+            this->subCamId = 0;
+            func_809E344C(this, globalCtx);
+            this->unk_24E = 0x0032;
+            gSaveContext.eventInf[5] |= 0x40;
+        }
+        break;
+    }
+
+    this->actor.shape.rot = this->actor.world.rot;
+
+    if ((this->unk_534 == 2) || (this->unk_534 == 3)) {
+        Actor_MoveWithoutGravityReverse(&this->actor);
+        phi_f2 = this->actor.speedXZ * 0.02f;
+        if (phi_f2 > 0.12f) {
+            phi_f2 = 0.12f;
+        }
+
+        sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
+        //if (&player->actor.world) {}
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
+        Matrix_RotateY(this->actor.world.rot.y, 1);
+        Matrix_InsertYRotation_f(sp5C, 1);
+        Matrix_InsertXRotation_s(this->actor.world.rot.x, 1);
+        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->unk_544);
+
+        this->unk_538 = this->actor.world.pos;
+
+        for (phi_s0 = 0; phi_s0 < sp56; phi_s0++) {
+            sp70.x = randPlusMinusPoint5Scaled(100.0f) + this->unk_544.x;
+            sp70.y = (randPlusMinusPoint5Scaled(100.0f) + this->unk_544.y) - 150.0f;
+            sp70.z = randPlusMinusPoint5Scaled(100.0f) + this->unk_544.z;
+            func_809E2AB4(globalCtx, &sp70);
+        }
+    }
+
+    if (this->subCamId != 0) {
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->unk_544, &this->unk_538);
+        Play_CameraSetFov(globalCtx, this->subCamId, this->unk_578);
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4E80.s")
+#endif
 
 void func_809E5ADC(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E5B64;
