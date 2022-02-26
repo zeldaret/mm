@@ -115,22 +115,22 @@
  * enters.
  */
 s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
-    // Inverted Stone Tower Temple  -> Stone Tower Temple
+    // Inverted Stone Tower Temple -> Stone Tower Temple
     if (sceneNum == SCENE_INISIE_R) {
         return SCENE_INISIE_N;
     }
 
-    // Purified Southern Swamp      -> Poisoned Sothern Swamp
+    // Purified Southern Swamp -> Poisoned Sothern Swamp
     if (sceneNum == SCENE_20SICHITAI2) {
         return SCENE_20SICHITAI;
     }
 
-    // Spring Mountain Village      -> Winter Mountain Village
+    // Spring Mountain Village -> Winter Mountain Village
     if (sceneNum == SCENE_10YUKIYAMANOMURA2) {
         return SCENE_10YUKIYAMANOMURA;
     }
 
-    // Spring Goron Village         -> Winter Goron Village
+    // Spring Goron Village -> Winter Goron Village
     if (sceneNum == SCENE_11GORONNOSATO2) {
         return SCENE_11GORONNOSATO;
     }
@@ -140,7 +140,7 @@ s16 Play_GetOriginalSceneNumber(s16 sceneNum) {
         return SCENE_17SETUGEN;
     }
 
-    // Inverted Stone Tower         -> Stone Tower
+    // Inverted Stone Tower -> Stone Tower
     if (sceneNum == SCENE_F41) {
         return SCENE_F40;
     }
@@ -313,37 +313,38 @@ s32 func_8016A168(void) {
     return D_801D0D50;
 }
 
-// List of cutscene numbers.
+// A mapping from playerActorCsIds to sGlobalCamDataSettings indices.
 extern s16 D_801D0D64[];
 // s16 D_801D0D64[] = { -3, -2, -4, -5, -7, -11, -8, -9, -6, -16 };
 
 // Used by Player
 /**
- * Extract the common actor cutscene ids from a scene and set the cutscene ids in globalCtx->playerActorCsIds.
- * Set to -1 by default. If there is an ActorCutscene where csCamSceneDataId matches the appropriate element of
- * D_801D0D64, set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
+ * Extract the common actor cutscene ids used by Player from the scene and set the actor cutscene ids in
+ * globalCtx->playerActorCsIds. If a playerActorCsId is not present in the scene, then that particular id is set
+ * to -1. Otherwise, if there is an ActorCutscene where csCamSceneDataId matches the appropriate element of D_801D0D64,
+ * set the corresponding playerActorCsId (and possibly change its priority for the zeroth one)
  */
-void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 cutscene) {
+void Play_AssignPlayerActorCsIdsFromScene(GameState* gameState, s32 startActorCsId) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
     s32 i;
-    s16* phi_s3 = globalCtx->playerActorCsIds;
+    s16* curPlayerActorCsId = globalCtx->playerActorCsIds;
     s16* phi_s1 = D_801D0D64;
 
-    for (i = 0; i < ARRAY_COUNT(globalCtx->playerActorCsIds); i++, phi_s3++, phi_s1++) {
+    for (i = 0; i < ARRAY_COUNT(globalCtx->playerActorCsIds); i++, curPlayerActorCsId++, phi_s1++) {
         ActorCutscene* actorCutscene;
-        s32 currCutscene;
+        s32 curActorCsId;
 
-        *phi_s3 = -1;
+        *curPlayerActorCsId = -1;
 
-        for (currCutscene = cutscene; currCutscene != -1; currCutscene = actorCutscene->additionalCutscene) {
-            actorCutscene = ActorCutscene_GetCutscene(currCutscene);
+        for (curActorCsId = startActorCsId; curActorCsId != -1; curActorCsId = actorCutscene->additionalCutscene) {
+            actorCutscene = ActorCutscene_GetCutscene(curActorCsId);
 
             if (actorCutscene->csCamSceneDataId == *phi_s1) {
                 if ((actorCutscene->csCamSceneDataId == -3) &&
                     (actorCutscene->priority == 700)) { // override ocarina cs priority
                     actorCutscene->priority = 550;
                 }
-                *phi_s3 = currCutscene;
+                *curPlayerActorCsId = curActorCsId;
                 break;
             }
         }
