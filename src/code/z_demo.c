@@ -149,7 +149,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x2:
             if (isStartFrame) {
-                func_801A47DC(0xF, 0, 0);
+                func_801A47DC(NATURE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(globalCtx, 3);
                 D_801F4E68 = 1;
             }
