@@ -27,7 +27,7 @@ typedef struct EnSkb {
     /* 0x02E0 */ Vec3s jointTable[20];
     /* 0x0358 */ Vec3s morphTable[20];
     /* 0x03D0 */ s16 unk_3D0;
-    /* 0x03D2 */ s16 unk_3D2;
+    /* 0x03D2 */ s16 drawDmgEffTimer;
     /* 0x03D4 */ s16 unk_3D4;
     /* 0x03D6 */ s16 unk_3D6;
     /* 0x03D8 */ s16 unk_3D8;

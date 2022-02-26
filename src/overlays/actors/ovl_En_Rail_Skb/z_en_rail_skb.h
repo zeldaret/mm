@@ -29,7 +29,7 @@ typedef struct EnRailSkb {
     /* 0x2F4 */ Vec3s jointTable[20];
     /* 0x36C */ Vec3s morphTable[20];
     /* 0x3E4 */ UNK_TYPE1 unk3E4[0xC];
-    /* 0x3F0 */ s16 unk_3F0;
+    /* 0x3F0 */ s16 drawDmgEffTimer;
     /* 0x3F2 */ s16 unk_3F2;
     /* 0x3F4 */ s16 unk_3F4;
     /* 0x3F6 */ s16 unk_3F6;

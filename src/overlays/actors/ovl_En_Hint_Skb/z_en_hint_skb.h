@@ -25,7 +25,7 @@ typedef struct EnHintSkb {
     /* 0x03DC */ s16 unk_3DC;
     /* 0x03DE */ s16 unk_3DE;
     /* 0x03E0 */ s16 unk_3E0;
-    /* 0x03E2 */ s16 unk_3E2;
+    /* 0x03E2 */ s16 drawDmgEffTimer;
     /* 0x03E4 */ s16 unk_3E4;
     /* 0x03E6 */ u16 unk_3E6;
     /* 0x03E8 */ u8 unk_3E8;

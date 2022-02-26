@@ -227,7 +227,7 @@ void EnFz_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->unk_BA4 = 0;
+    this->drawDmgEffTimer = 0;
     this->drawDmgEffScale = 0.0f;
     this->drawDmgEffAlpha = 0.0f;
     func_80932784(this, globalCtx);
@@ -415,7 +415,7 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
             this->collider1.base.acFlags &= ~AC_HIT;
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:
-                    this->unk_BA4 = 0x28;
+                    this->drawDmgEffTimer = 40;
                     this->drawDmgEffAlpha = 1.0f;
 
                 case 15:
@@ -772,14 +772,14 @@ void func_80933B38(EnFz* this, GlobalContext* globalCtx) {
 }
 
 void func_80933B48(EnFz* this, GlobalContext* globalCtx) {
-    if (this->unk_BA4 != 0) {
-        if (this->unk_BA4 > 0) {
-            this->unk_BA4--;
+    if (this->drawDmgEffTimer != 0) {
+        if (this->drawDmgEffTimer > 0) {
+            this->drawDmgEffTimer--;
         }
 
-        if (this->unk_BA4 < 20) {
+        if (this->drawDmgEffTimer < 20) {
             Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
-            this->drawDmgEffAlpha = this->unk_BA4 * 0.05f;
+            this->drawDmgEffAlpha = this->drawDmgEffTimer * 0.05f;
         } else {
             Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
         }
@@ -861,7 +861,7 @@ void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80934464(this, globalCtx);
 
-    if (this->unk_BA4 > 0) {
+    if (this->drawDmgEffTimer > 0) {
         s32 pad2[6];
         Vec3f limbPos[2];
         s32 pad3;
