@@ -7,7 +7,7 @@
 #include "z_obj_raillift.h"
 #include "objects/object_raillift/object_raillift.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjRaillift*)thisx)
 

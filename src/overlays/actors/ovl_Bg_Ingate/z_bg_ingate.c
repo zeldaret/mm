@@ -6,7 +6,7 @@
 
 #include "z_bg_ingate.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgIngate*)thisx)
 
