@@ -140,6 +140,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
         isStartFrame = true;
     }
 
+    // TODO: consider creating an enum for this when we understand what each value does
     switch (cmd->base) {
         case 0x1:
             if (isStartFrame) {
@@ -1125,6 +1126,7 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
 }
 
 #ifdef NON_MATCHING
+// Some stack issues, and a few instructions in the "wrong" places
 void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
     s16 phi_s0;
@@ -1452,6 +1454,7 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 
 #ifdef NON_MATCHING
 // HandleFlags?
+// regalloc
 void func_800EDBE0(GlobalContext* globalCtx) {
     CutsceneEntry* temp_a3;
     s16 sp2A;
