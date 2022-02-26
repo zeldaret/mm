@@ -172,16 +172,16 @@ typedef struct {
 } CutsceneEntry; // size = 0x8
 
 typedef struct {
-    /* 0x00 */ u8            sceneCsCount;
-    /* 0x04 */ CutsceneData* csData;
-    /* 0x08 */ u8            state;
-    /* 0x0C */ f32           unk_0C;
-    /* 0x10 */ u16           frames;
-    /* 0x12 */ u16           currentCsIndex;
-    /* 0x14 */ s32           csCamId;
-    /* 0x18 */ u16           unk_18;
-    /* 0x1A */ u8            unk_1A;
-    /* 0x1B */ u8            unk_1B;
+    /* 0x00 */ u8                   sceneCsCount;
+    /* 0x04 */ CutsceneData*        csData;
+    /* 0x08 */ u8                   state;
+    /* 0x0C */ f32                  unk_0C;
+    /* 0x10 */ u16                  frames;
+    /* 0x12 */ u16                  currentCsIndex;
+    /* 0x14 */ s32                  csCamId;
+    /* 0x18 */ u16                  unk_18;
+    /* 0x1A */ u8                   unk_1A;
+    /* 0x1B */ u8                   unk_1B;
     /* 0x1C */ CutsceneCameraPoint* atPoints;
     /* 0x20 */ CutsceneCameraPoint* eyePoints;
     /* 0x24 */ CsCmdActorAction*    playerAction;

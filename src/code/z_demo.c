@@ -865,7 +865,7 @@ void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* cs
             case 4:
             case 8:
                 globalCtx->envCtx.screenFillColor[0] = 0;
-                globalCtx->envCtx.screenFillColor[1] = 0xFF;
+                globalCtx->envCtx.screenFillColor[1] = 255;
                 globalCtx->envCtx.screenFillColor[2] = 0;
                 if (cmd->base == 4) {
                     globalCtx->envCtx.screenFillColor[3] = (1.0f - temp_f0) * 255.0f;
@@ -1105,12 +1105,13 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     }
 }
 
+// Related to actorActions. Maybe a generic actorAction setter?
 void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
     s32 i;
     s32 count;
 
     bcopy(*cutscenePtr, &count, sizeof(s32));
-    *cutscenePtr += 4;
+    *cutscenePtr += sizeof(s32);
 
     for (i = 0; i < count; i++) {
         CsCmdActorAction* actorAction = *(CsCmdActorAction**)cutscenePtr;
@@ -1154,7 +1155,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             break;
         }
 
-        if (((cmdType >= 0x64) && (cmdType < 0x96)) || (cmdType == 0xC9) || ((cmdType >= 0x1C2) && (cmdType < 0x258))) {
+        if (((cmdType >= 100) && (cmdType < 150)) || (cmdType == 201) || ((cmdType >= 450) && (cmdType < 600))) {
             for (phi_s0 = 0; phi_s0 < ARRAY_COUNT(D_801F4DC8); phi_s0++) {
                 if ((u16)cmdType == D_801F4DC8[phi_s0]) {
                     func_800ECD7C(csCtx, &cutscenePtr, phi_s0);
@@ -1630,5 +1631,5 @@ s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd) {
 }
 
 u8 Cutscene_IsPlaying(GlobalContext* globalCtx) {
-    return gSaveContext.cutsceneTrigger != 0 || globalCtx->csCtx.state != CS_STATE_0;
+    return (gSaveContext.cutsceneTrigger != 0) || (globalCtx->csCtx.state != CS_STATE_0);
 }

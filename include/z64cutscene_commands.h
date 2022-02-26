@@ -78,7 +78,7 @@
     CS_TEXT_DISPLAY_TEXTBOX(messageId, startFrame, endFrame, CS_TEXTBOX_TYPE_3, topOptionBranch, bottomOptionBranch)
 
 /**
- * If Player has the 4 bosses remains then alternativeMessageId is used, otherwise defaultMessageId is used
+ * If Player has all 4 bosses' remains then alternativeMessageId is used, otherwise defaultMessageId is used
  * ARGS
  *   s16 defaultMessageId (d), s16 startFrame (s), s16 endFrame (e), s16 alternativeMessageId (a)
  * FORMAT
