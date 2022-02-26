@@ -53,6 +53,7 @@ void func_809E4C34(Boss03* this, GlobalContext* globalCtx);
 
 /* bss */
 
+extern u8 D_809E9840;
 #if 0
 // maybe u8?
 glabel D_809E9840
@@ -66,6 +67,7 @@ glabel D_809E9841
 // /* 000002 809E9842 */ .space 0x6
 extern u8 D_809E9842;
 
+extern Vec3f D_809E9848;
 #if 0
 glabel D_809E9848
 /* 000008 809E9848 */ .space 0x10
@@ -1321,7 +1323,210 @@ void func_809E5ADC(Boss03* this, GlobalContext* globalCtx) {
     this->actor.flags &= ~1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E5B64.s")
+void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
+    s16 phi_v0;
+    Vec3f sp90;
+    Vec3f sp84;
+    Vec3f sp78;
+    float new_var2;
+    float new_var;
+    s32 pad;
+    f32 pad2;
+    f32 sp64;
+    Camera* sp60;
+    Player* player; // sp5C
+    f32 sp4C;                                       /* compiler-managed */
+
+    sp60 = Play_GetCamera(globalCtx, 0);
+    new_var = 0.0f;
+    player = GET_PLAYER(globalCtx);
+    sp64 = this->actor.scale.x * 5.0f;
+
+    this->unk_530 += 1;
+
+    switch (this->unk_534) {
+        case 0:
+        if (ActorCutscene_GetCurrentIndex() == -1) {
+            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            func_800B7298(globalCtx, &this->actor, 1U);
+            this->subCamId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, 0, 1);
+            Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
+            this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
+            if ((this->unk_258 < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
+                player->actor.world.pos.x = 0.0f;
+                player->actor.world.pos.z = -200.0f;
+            }
+
+        case 1:
+            this->unk_530 = 0;
+            this->unk_534 = 2;
+            this->unk_538.x = sp60->eye.x;
+            this->unk_538.y = sp60->eye.y;
+            this->unk_538.z = sp60->eye.z;
+            this->unk_544.x = sp60->at.x;
+            this->unk_544.y = sp60->at.y;
+            this->unk_544.z = sp60->at.z;
+
+            //this->unk_568 = Math_Acot2F(this->unk_538.z - this->actor.world.pos.z, this->unk_538.x - this->actor.world.pos.x);
+            new_var2 = this->unk_538.x - this->actor.world.pos.x;
+            this->unk_568 = Math_Acot2F(this->unk_538.z - this->actor.world.pos.z, new_var2);
+
+            this->unk_570 = 0.0f;
+            this->unk_56C = 0.0f;
+
+        case 2:
+            sp90.x = 0.0f;
+            sp90.y = (50.0f * sp64) + 150.0f;
+            sp90.z = (400.0f * sp64) + 300.0f;
+
+            this->unk_55C.x = this->actor.world.pos.x;
+            this->unk_55C.y = this->actor.world.pos.y;
+            this->unk_55C.z = this->actor.world.pos.z;
+
+            this->unk_568 += this->unk_56C;
+            Matrix_InsertYRotation_f(this->unk_568, 0);
+            Matrix_MultiplyVector3fByState(&sp90, &this->unk_550);
+
+            this->unk_550.x += this->actor.world.pos.x;
+            this->unk_550.y += this->unk_258;
+            this->unk_550.z += this->actor.world.pos.z;
+
+            sp4C = 40.0f + new_var;
+            Math_ApproachF(&this->unk_538.x, this->unk_550.x, 0.1f, sp4C);
+            Math_ApproachF(&this->unk_538.y, this->unk_550.y, 0.1f, sp4C);
+            Math_ApproachF(&this->unk_538.z, this->unk_550.z, 0.1f, sp4C);
+            sp4C = 70.0f + new_var;
+            Math_ApproachF(&this->unk_544.x, this->unk_55C.x, 0.1f, sp4C);
+            Math_ApproachF(&this->unk_544.y, this->unk_55C.y, 0.1f, sp4C);
+            Math_ApproachF(&this->unk_544.z, this->unk_55C.z, 0.1f, sp4C);
+        }
+        break;
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+
+    switch (this->unk_242) {
+    case 0x0:
+        Math_ApproachF(&this->actor.world.pos.y, Math_SinS(this->unk_240 * 0x1000) * 80.0f + this->unk_258, 1.0f, 10.0f);
+        this->actor.shape.rot.z += 0x100;
+        Matrix_RotateY(this->unk_2BE, 0);
+        Matrix_GetStateTranslationAndScaledZ(500.0f, &sp84);
+        Math_ApproachF(&this->actor.world.pos.x, sp84.x, 0.1f, 5.0f);
+        Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
+
+        if (Animation_OnFrame(&this->skelAnime, this->unk_52C) != 0) {
+            Actor_PlaySfxAtPos(&this->actor, 0x395AU);
+        }
+        if (Animation_OnFrame(&this->skelAnime, this->unk_52C * 0.5f) != 0) {
+            Actor_PlaySfxAtPos(&this->actor, 0x3959U);
+        }
+
+        if ((this->unk_24C == 0) && ((this->unk_258 - 100.0f) < this->actor.world.pos.y)) {
+            this->unk_24C = Rand_ZeroFloat(15.0f) + 15.0f;
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x0170, this->actor.world.pos.x, this->unk_258, this->actor.world.pos.z, 0, 0, 0x00000078, 0x00000309);
+
+            if (this->actionFunc == func_809E5B64) {
+                if ((D_809E9840 & 1) != 0) {
+                    func_809E2760(&this->actor.projectedPos, 0x3941U);
+                } else {
+                    func_809E2760(&this->actor.projectedPos, 0x3942U);
+                }
+                D_809E9840++;
+            }
+
+            this->unk_284 = this->actor.world.pos.x;;
+            this->unk_288 = this->unk_258;;
+            this->unk_28C = this->actor.world.pos.z;;
+
+            this->unk_280 = 0x001B;
+            if ((fabsf(this->actor.world.pos.x - sp84.x) < 5.0f) && (fabsf(this->actor.world.pos.z - sp84.z) < 5.0f)) {
+                this->unk_242 = 1;
+                this->actor.gravity = -2.0f;
+                this->actor.velocity.y = 25.0f;
+                this->actor.speedXZ = 10.0f;
+                this->actor.world.rot.y = this->unk_2BE + 0x8000;
+                this->unk_240 = 0;
+                Actor_PlaySfxAtPos(&this->actor, 0x395AU);
+            }
+        }
+        Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
+        break;
+    case 0x1:
+        if (this->unk_240 == 0x96) {
+            Audio_QueueSeqCmd(0x00008021U);
+        }
+        Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
+        Math_ApproachF(&this->actor.scale.x, 0.01f, 0.05f, 0.001f);
+        Actor_SetScale(&this->actor, this->actor.scale.x);
+        if (this->actor.velocity.y < 0.0f) {
+            if (this->actor.world.pos.y < 440.0f + (100.0f * sp64)) {
+                this->actor.world.pos.y = 440.0f + (100.0f * sp64);
+                this->actor.velocity.y = ((Rand_ZeroFloat(10.0f) + 7.5f) * sp64) + 7.5f;
+                this->actor.speedXZ = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
+                if (Rand_ZeroOne() < 0.5f) {
+                    this->unk_2D6 = ((s16) randPlusMinusPoint5Scaled(500.0f) + this->unk_2D6) + 0x8000;
+                }
+                if (Rand_ZeroOne() < 0.5f) {
+                    this->unk_2DA = ((s16) randPlusMinusPoint5Scaled(500.0f) + this->unk_2DA) + 0x8000;
+                }
+                if (Rand_ZeroOne() < 0.5f) {
+                    this->unk_2D8 = Rand_ZeroFloat(65536.0f);
+                }
+                this->actor.world.rot.y = Math_FAtan2F(-this->actor.world.pos.z, -this->actor.world.pos.x);
+                func_809E2760(&this->actor.projectedPos, 0x3947U);
+                func_809E2760(&this->actor.projectedPos, 0x3958U);
+            }
+        }
+        Math_ApproachS(&this->actor.shape.rot.y, this->unk_2D8, 3, 0x0500);
+        Math_ApproachS(&this->actor.shape.rot.x, this->unk_2D6, 3, 0x0A00);
+        Math_ApproachS(&this->actor.shape.rot.z, this->unk_2DA, 3, 0x0A00);
+        sp4C = 150.0f * sp64;
+        phi_v0 = 0;
+        while (phi_v0 < 1) {
+            sp78.x = randPlusMinusPoint5Scaled(sp4C) + this->actor.world.pos.x;
+            sp78.y = this->actor.world.pos.y;
+            sp78.z = randPlusMinusPoint5Scaled(sp4C) + this->actor.world.pos.z;
+            func_809E2880(globalCtx, &sp78);
+            phi_v0 = phi_v0 + 1;
+        }
+        Actor_MoveWithGravity(&this->actor);
+        if (this->actor.scale.x <= 0.0111f) {
+            this->unk_242 = 2;
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 0x0038, 0.0f, 440.0f, 200.0f, 0, 0, 0, 1);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x003A, this->actor.focus.pos.x, 440.0f, this->actor.focus.pos.z, 0, 0, 0, 0);
+            this->unk_530 = 0;
+            Actor_SetScale(&this->actor, 0.0f);
+            Audio_StopSfxByPos(&this->actor.projectedPos);
+        }
+        break;
+    case 0x2:
+        Math_ApproachZeroF(&this->unk_56C, 1.0f, 0.0005f);
+        if (this->unk_530 == 0x3C) {
+            sp60 = Play_GetCamera(globalCtx, 0);
+            sp60->eye = this->unk_538;
+            sp60->eyeNext = this->unk_538;
+            sp60->at = this->unk_544;
+            func_80169AFC(globalCtx, this->subCamId, 0);
+            this->subCamId = 0;
+            func_800EA0EC(globalCtx, &globalCtx->csCtx);
+            func_800B7298(globalCtx, &this->actor, 6U);
+            this->unk_534 = 3;
+            func_80165690();
+            func_809E2760(&this->actor.projectedPos, 0x3952U);
+            func_809E2760(&D_809E9848, 0x3952U);
+        }
+        break;
+
+    case 0x3:
+        this->actor.world.pos.y = 5000.0f;
+        break;
+    }
+
+    if (this->subCamId != 0) {
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->unk_544, &this->unk_538);
+    }
+}
 
 void func_809E65F4(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E6640;

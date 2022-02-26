@@ -51,7 +51,11 @@ typedef struct Boss03 {
     /* 0x0276 */ s16 unk_276;
     /* 0x0278 */ f32 unk_278;
     /* 0x027C */ f32 unk_27C;
-    /* 0x0280 */ UNK_TYPE1 unk_280[0x10];
+    /* 0x0280 */ s16 unk_280;
+    /* 0x0282 */ UNK_TYPE1 unk_282[0x02];
+    /* 0x0284 */ f32 unk_284; // Maybe a Vec3f
+    /* 0x0288 */ f32 unk_288;
+    /* 0x028C */ f32 unk_28C;
     /* 0x0290 */ s8 unk_290;
     /* 0x0291 */ UNK_TYPE1 unk_291[0x03];
     /* 0x0294 */ UNK_TYPE1 unk_294[0x08];
@@ -73,8 +77,9 @@ typedef struct Boss03 {
     /* 0x02D0 */ UNK_TYPE1 unk_2D0[0x04];
     /* 0x02D4 */ UNK_TYPE1 unk_2D4[0x01];
     /* 0x02D5 */ u8 unk_2D5;
-    /* 0x02D6 */ UNK_TYPE1 unk_2D6[0x02];
-    /* 0x02D8 */ UNK_TYPE1 unk_2D8[0x04];
+    /* 0x02D6 */ s16 unk_2D6;
+    /* 0x02D8 */ s16 unk_2D8;
+    /* 0x02DA */ s16 unk_2DA;
     /* 0x02DC */ Vec3f unk_2DC[UNK_SIZE];
     /* 0x02E8 */ UNK_TYPE1 unk_2E8[0x3C];
     /* 0x0324 */ s16 unk_324;
@@ -90,10 +95,12 @@ typedef struct Boss03 {
     /* 0x0536 */ s16 subCamId;
     /* 0x0538 */ Vec3f unk_538;
     /* 0x0544 */ Vec3f unk_544;
-    /* 0x0550 */ UNK_TYPE1 unk_550[0x0C];
+    /* 0x0550 */ Vec3f unk_550;
     /* 0x055C */ Vec3f unk_55C;
     /* 0x0568 */ f32 unk_568;
-    /* 0x056C */ UNK_TYPE1 unk_56C[0x0C];
+    /* 0x056C */ f32 unk_56C;
+    /* 0x0570 */ f32 unk_570;
+    /* 0x0574 */ UNK_TYPE1 unk_574[0x04];
     /* 0x0578 */ f32 unk_578;
 } Boss03; // size = 0x57C
 
