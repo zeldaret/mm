@@ -6,7 +6,7 @@
 
 #include "z_elf_msg6.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ElfMsg6*)thisx)
 

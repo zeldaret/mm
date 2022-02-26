@@ -6,7 +6,7 @@
 
 #include "z_en_okuta.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnOkuta*)thisx)
 
