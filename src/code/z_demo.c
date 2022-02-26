@@ -392,12 +392,12 @@ void Cutscene_Command_StopSequence(GlobalContext* globalCtx, CutsceneContext* cs
 // Command 0x9C: Fade Background Music or Fanfare over duration
 void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdMusicFade* cmd) {
     if ((csCtx->frames == cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
-        u8 frameCount = cmd->endFrame - cmd->startFrame;
+        u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
         if (cmd->type == 2) {
-            Audio_QueueSeqCmd((frameCount << 0x10) | 0x110000FF);
+            Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x110000FF);
         } else {
-            Audio_QueueSeqCmd((frameCount << 0x10) | NA_BGM_STOP);
+            Audio_QueueSeqCmd((fadeTimer << 0x10) | NA_BGM_STOP);
         }
     }
 }
