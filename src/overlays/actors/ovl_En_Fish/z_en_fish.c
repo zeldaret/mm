@@ -401,12 +401,12 @@ void func_8091E34C(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_24C = 1.2f;
     } else if (sp38 != 0) {
         if ((globalCtx->state.frames & 0x10) == 0) {
-            s16 temp = SUB16(thisx->shape.rot.y, this->unk_274);
+            s16 temp = BINANG_SUB(thisx->shape.rot.y, this->unk_274);
 
             if (temp < 0) {
-                this->unk_26A = SUB16(this->unk_274, 0x4000);
+                this->unk_26A = BINANG_SUB(this->unk_274, 0x4000);
             } else {
-                this->unk_26A = ADD16(this->unk_274, 0x4000);
+                this->unk_26A = BINANG_ADD(this->unk_274, 0x4000);
             }
         } else {
             this->unk_26A = BINANG_ROT180(this->unk_274);
@@ -461,9 +461,9 @@ void func_8091E658(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_24C = 1.0f;
     } else {
         if ((globalCtx->state.frames & 0x40) == 0) {
-            sp32 = ADD16(thisx->yawTowardsPlayer, 0x9000);
+            sp32 = BINANG_ADD(thisx->yawTowardsPlayer, 0x9000);
         } else {
-            sp32 = ADD16(thisx->yawTowardsPlayer, 0x7000);
+            sp32 = BINANG_ADD(thisx->yawTowardsPlayer, 0x7000);
         }
 
         sp38.x = (Math_SinS(sp32) * 20.0f) + player->actor.world.pos.x;
@@ -575,9 +575,9 @@ void func_8091EAF0(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_270 = ((Math_SinS(this->unk_244) * 1333.0f) + (Math_SinS(this->unk_246) * 667.0f)) * Rand_ZeroOne();
 
     if (this->unk_270 >= 0) {
-        this->unk_26A = ADD16(this->actor.world.rot.y, 0x4000);
+        this->unk_26A = BINANG_ADD(this->actor.world.rot.y, 0x4000);
     } else {
-        this->unk_26A = SUB16(this->actor.world.rot.y, 0x4000);
+        this->unk_26A = BINANG_SUB(this->actor.world.rot.y, 0x4000);
         this->unk_270 = -this->unk_270;
     }
 
@@ -724,7 +724,7 @@ void func_8091EFE8(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_26C = 0;
     this->unk_26A = this->actor.home.rot.y;
 
-    temp_v0_2 = SUB16(this->unk_268, this->actor.shape.rot.x);
+    temp_v0_2 = BINANG_SUB(this->unk_268, this->actor.shape.rot.x);
     temp_v0_2 = ABS_ALT(temp_v0_2);
 
     temp_v0_2 = temp_v0_2 / 11;
@@ -846,7 +846,7 @@ void func_8091F5A4(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unkFunc == NULL) || (this->unkFunc(&this->actor, globalCtx), (this->actor.update != NULL))) {
-        if ((ABS_ALT(SUB16(this->unk_26A, this->actor.shape.rot.y)) > 0x3000) && (this->unk_270 > 1000)) {
+        if ((ABS_ALT(BINANG_SUB(this->unk_26A, this->actor.shape.rot.y)) > 0x3000) && (this->unk_270 > 1000)) {
             this->skelAnime.playSpeed += this->unk_24C;
         }
         SkelAnime_Update(&this->skelAnime);

@@ -787,7 +787,7 @@ void func_8095C1C8(EnOwl* this, GlobalContext* globalCtx) {
     if (this->actionFlags & 1) {
         this->unk_3EA = 3;
         EnOwl_ChangeMode(this, func_8095C09C, func_8095C484, &this->skelAnime1, &object_owl_Anim_001168, 0.0f);
-        this->unk_3EC = ADD16(this->actor.world.rot.y, 0x4000);
+        this->unk_3EC = BINANG_ADD(this->actor.world.rot.y, 0x4000);
         this->unk_3E4 = this->actor.world.pos.y;
         this->actor.velocity.y = 2.0f;
     }

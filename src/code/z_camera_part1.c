@@ -166,7 +166,7 @@ Vec3f* Camera_Vec3sToVec3f(Vec3f* dest, Vec3s* src) {
  * Returns the difference between two angles and scales the difference up
  */
 s16 Camera_AngleDiffAndScale(s16 angle1, s16 angle2, f32 scale) {
-    return SUB16(angle1, angle2) * scale;
+    return BINANG_SUB(angle1, angle2) * scale;
 }
 
 // TODO: docs - not explicity a function in OoT, but is implicitely
@@ -905,7 +905,7 @@ f32 func_800CCCEC(Camera* camera, s16 arg1) {
             }
         }
     } else {
-        sp22 = SUB16(sp5C.rot.y, 0x4000);
+        sp22 = BINANG_SUB(sp5C.rot.y, 0x4000);
         sp70.x = (Math_SinS(sp22) * 50.0f) + sp7C.x;
         sp70.y = sp7C.y;
         sp70.z = (Math_CosS(sp22) * 50.0f) + sp7C.z;

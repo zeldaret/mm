@@ -235,7 +235,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
                     for (i = 0; i < 5; i++) {
                         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WIZ_FIRE, this->actor.world.pos.x,
                                     this->actor.world.pos.y, this->actor.world.pos.z, 0, phi_s0, 0, 1);
-                        phi_s0 += ADD16((s32)randPlusMinusPoint5Scaled(0x1000), 0x3333);
+                        phi_s0 += BINANG_ADD((s32)randPlusMinusPoint5Scaled(0x1000), 0x3333);
                     }
 
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);

@@ -479,7 +479,7 @@ void func_808A6220(EnSt* this, GlobalContext* globalCtx) {
         Collider_UpdateCylinder(&this->actor, &this->collider2);
         Collider_UpdateCylinder(&this->actor, &this->collider3);
         Collider_UpdateCylinder(&this->actor, &this->collider4);
-        if ((s16)ABS_ALT(SUB16(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x4E00) {
+        if ((s16)ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x4E00) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider3.base);
         } else {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);

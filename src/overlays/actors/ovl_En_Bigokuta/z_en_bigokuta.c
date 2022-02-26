@@ -139,11 +139,11 @@ void EnBigokuta_SetupCutsceneCamera(EnBigokuta* this, GlobalContext* globalCtx, 
     this->camId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
     Play_CameraSetAtEye(globalCtx, this->camId, at, eye);
 
-    angle = SUB16(Actor_YawToPoint(&this->actor, eye), this->actor.home.rot.y);
+    angle = BINANG_SUB(Actor_YawToPoint(&this->actor, eye), this->actor.home.rot.y);
     if (angle > 0) {
-        angle = ADD16(this->actor.home.rot.y, 0x1800);
+        angle = BINANG_ADD(this->actor.home.rot.y, 0x1800);
     } else {
-        angle = SUB16(this->actor.home.rot.y, 0x1800);
+        angle = BINANG_SUB(this->actor.home.rot.y, 0x1800);
     }
 
     this->camEye.x = (Math_SinS(angle) * 250.0f) + this->camAt.x;
@@ -239,7 +239,7 @@ void EnBigokuta_SetupRise(EnBigokuta* this, GlobalContext* globalCtx) {
         splashPos.x = Math_SinS(angle) * 70.0f + this->actor.world.pos.x;
         splashPos.z = Math_CosS(angle) * 70.0f + this->actor.world.pos.z;
         EffectSsGSplash_Spawn(globalCtx, &splashPos, NULL, NULL, 0, Rand_S16Offset(1000, 200));
-        angle = ADD16(angle, 0x2000);
+        angle = BINANG_ADD(angle, 0x2000);
     }
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_LAND);
     this->actionFunc = EnBigokuta_RiseOutOfWater;
@@ -329,7 +329,7 @@ void EnBigokuta_SuckInPlayer(EnBigokuta* this, GlobalContext* globalCtx) {
 
         Math_Vec3f_Copy(&player->actor.world.pos, &this->playerHoldPos);
         Math_Vec3f_Copy(&this->playerPos, &player->actor.world.pos);
-        player->actor.shape.rot.y += SUB16(this->actor.shape.rot.y, rotY);
+        player->actor.shape.rot.y += BINANG_SUB(this->actor.shape.rot.y, rotY);
     } else {
         Math_Vec3f_Copy(&this->playerPos, &player->actor.world.pos);
         player->actor.velocity.y = 0.0f;

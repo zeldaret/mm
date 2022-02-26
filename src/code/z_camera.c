@@ -555,7 +555,7 @@ s32 Camera_Normal3(Camera* camera) {
 
         D_801EDC30[camera->camId].yaw = D_801EDC30[camera->camId].pitch = D_801EDC30[camera->camId].unk_64 = 0;
         D_801EDC30[camera->camId].swingUpdateRate = fixedData->yawUpdateRateInv;
-        dynamicData->yawUpdateRate = SUB16(BINANG_ROT180(camera->trackActorPosRot.rot.y), sp70.yaw) * (1.0f / 6.0f);
+        dynamicData->yawUpdateRate = BINANG_SUB(BINANG_ROT180(camera->trackActorPosRot.rot.y), sp70.yaw) * (1.0f / 6.0f);
         dynamicData->distTimer = 0;
         dynamicData->is1200 = 1200;
 
@@ -627,10 +627,10 @@ s32 Camera_Normal3(Camera* camera) {
     }
 
     if (fixedData->flags & NORM3_FLG_80) {
-        sp62 = SUB16(camera->trackActor->focus.rot.y, BINANG_ROT180(sp68.yaw));
+        sp62 = BINANG_SUB(camera->trackActor->focus.rot.y, BINANG_ROT180(sp68.yaw));
         temp_f2 = 1.0f;
     } else {
-        sp62 = SUB16(playerPosRot->rot.y, BINANG_ROT180(sp68.yaw));
+        sp62 = BINANG_SUB(playerPosRot->rot.y, BINANG_ROT180(sp68.yaw));
         OLib_Vec3fToVecSphGeo(&sp78, &camera->trackActorOffset);
         phi_v1_2 = playerPosRot->rot.y - sp78.yaw;
         if (phi_v1_2 < 0) {
@@ -1009,9 +1009,9 @@ s32 Camera_Parallel1(Camera* camera) {
             case (PARA1_FLG_4 | PARA1_FLG_2):
                 if (dynamicData->unk_24 == 1) {
                     OLib_Vec3fDiffToVecSphGeo(&sp88, &dynamicData->unk_10, &spA4);
-                    dynamicData->unk_1E = ((ABS(SUB16(sp88.yaw, sp80.yaw)) < 0x3A98) || Camera_IsClimbingLedge(camera))
+                    dynamicData->unk_1E = ((ABS(BINANG_SUB(sp88.yaw, sp80.yaw)) < 0x3A98) || Camera_IsClimbingLedge(camera))
                                               ? sp80.yaw
-                                              : sp80.yaw + (s16)((SUB16(sp88.yaw, sp80.yaw) >> 2) * 3);
+                                              : sp80.yaw + (s16)((BINANG_SUB(sp88.yaw, sp80.yaw) >> 2) * 3);
                 }
                 dynamicData->unk_20 = fixedData->unk_20;
                 break;
@@ -1123,10 +1123,10 @@ s32 Camera_Parallel1(Camera* camera) {
             }
 
             tangle = ((dynamicData->unk_22 + 1) * dynamicData->unk_22) >> 1;
-            sp90.yaw = sp80.yaw + ((SUB16(dynamicData->unk_1E, sp80.yaw) / tangle) * dynamicData->unk_22);
-            phi_a0 = ((fixedData->unk_26 & PARA1_FLG_1) ? SUB16(dynamicData->unk_20, dynamicData->unk_1C)
+            sp90.yaw = sp80.yaw + ((BINANG_SUB(dynamicData->unk_1E, sp80.yaw) / tangle) * dynamicData->unk_22);
+            phi_a0 = ((fixedData->unk_26 & PARA1_FLG_1) ? BINANG_SUB(dynamicData->unk_20, dynamicData->unk_1C)
                                                         : dynamicData->unk_20);
-            new_var2 = SUB16(phi_a0, sp80.pitch);
+            new_var2 = BINANG_SUB(phi_a0, sp80.pitch);
             sp90.pitch = sp80.pitch + ((new_var2 / tangle) * dynamicData->unk_22);
             sp90.r = camera->dist;
             dynamicData->unk_22--;
@@ -1303,7 +1303,7 @@ s32 Camera_Jump2(Camera* camera) {
             dynamicData->unk_0A = -1;
         }
 
-        yawDiff = SUB16(BINANG_ROT180(sp2C->rot.y), spA4.yaw);
+        yawDiff = BINANG_SUB(BINANG_ROT180(sp2C->rot.y), spA4.yaw);
         dynamicData->unk_06 = ((yawDiff / 6) / 4) * 3;
         if (fixedData->unk_20 & JUMP2_FLG_2) {
             dynamicData->unk_08 = 10;
@@ -1340,7 +1340,7 @@ s32 Camera_Jump2(Camera* camera) {
         spB4.r = temp_f16;
     }
 
-    yawDiff = SUB16(BINANG_ROT180(sp2C->rot.y), spB4.yaw);
+    yawDiff = BINANG_SUB(BINANG_ROT180(sp2C->rot.y), spB4.yaw);
     if (dynamicData->unk_0C != 0) {
         dynamicData->unk_04 = BINANG_ROT180(sp2C->rot.y);
         dynamicData->unk_0C--;
@@ -2823,7 +2823,7 @@ s32 Camera_KeepOn4(Camera* camera) {
             switch (fixedData->unk_1C & (KEEP4_FLG_8 | KEEP4_FLG_4 | KEEP4_FLG_2)) {
                 case KEEP4_FLG_2:
                     spA2 = DEGF_TO_BINANG(fixedData->unk_08);
-                    spA0 = SUB16(BINANG_ROT180(sp38->rot.y), spA8.yaw) < 0
+                    spA0 = BINANG_SUB(BINANG_ROT180(sp38->rot.y), spA8.yaw) < 0
                                ? BINANG_ROT180(sp38->rot.y) + DEGF_TO_BINANG(fixedData->unk_0C)
                                : BINANG_ROT180(sp38->rot.y) - DEGF_TO_BINANG(fixedData->unk_0C);
                     break;
@@ -2844,7 +2844,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                     if (camera->target != NULL) {
                         Actor_GetWorldPosShapeRot(&sp60, camera->target);
                         spA2 = DEGF_TO_BINANG(fixedData->unk_08) - sp60.rot.x;
-                        spA0 = (SUB16(BINANG_ROT180(sp60.rot.y), spA8.yaw) > 0)
+                        spA0 = (BINANG_SUB(BINANG_ROT180(sp60.rot.y), spA8.yaw) > 0)
                                    ? BINANG_ROT180(sp60.rot.y) + DEGF_TO_BINANG(fixedData->unk_0C)
                                    : BINANG_ROT180(sp60.rot.y) - DEGF_TO_BINANG(fixedData->unk_0C);
 
@@ -2857,7 +2857,7 @@ s32 Camera_KeepOn4(Camera* camera) {
                         Actor_GetWorld(&sp4C, camera->target);
                         spA2 = DEGF_TO_BINANG(fixedData->unk_08);
                         sp9E = Camera_CalcXZAngle(&sp4C.pos, &sp38->pos);
-                        spA0 = (SUB16(sp9E, spA8.yaw) > 0) ? sp9E + DEGF_TO_BINANG(fixedData->unk_0C)
+                        spA0 = (BINANG_SUB(sp9E, spA8.yaw) > 0) ? sp9E + DEGF_TO_BINANG(fixedData->unk_0C)
                                                            : sp9E - DEGF_TO_BINANG(fixedData->unk_0C);
                         spCC[1] = camera->target;
                         sp9C++;
@@ -3366,8 +3366,8 @@ s32 Camera_Subj1(Camera* camera) {
         VEC3F_LERPIMPDST(at, at, &sp90, temp_f0);
 
         sp54 = ((tsph.r - sp7C.r) * (1.0f / 6.0f));
-        sp4E = SUB16(tsph.pitch, sp7C.yaw) * (1.0f / 6.0f);
-        sp4C = SUB16(tsph.yaw, sp7C.pitch) * (1.0f / 6.0f);
+        sp4E = BINANG_SUB(tsph.pitch, sp7C.yaw) * (1.0f / 6.0f);
+        sp4C = BINANG_SUB(tsph.yaw, sp7C.pitch) * (1.0f / 6.0f);
 
         sp74.r = Camera_LERPCeilF((dynamicData->unk_08 * sp54) + sp7C.r, sp74.r, 0.5f, 1.0f);
         sp74.yaw = Camera_LERPCeilS(sp7C.yaw + (sp4E * dynamicData->unk_08), sp74.yaw, 0.5f, 5);
@@ -4771,7 +4771,7 @@ s32 Camera_Special5(Camera* camera) {
             OLib_VecSphAddToVec3f(&sp7C.pos, &spA8.pos, &sp6C);
             func_800CBC84(camera, at, &sp7C, 0);
             OLib_Vec3fToVecSphGeo(&sp6C, &sp7C.norm);
-            spA4 = SUB16(playerPosRot->rot.y, sp6C.yaw);
+            spA4 = BINANG_SUB(playerPosRot->rot.y, sp6C.yaw);
             sp74.r = fixedData->eyeDist;
             rand = Rand_ZeroOne();
             sp74.yaw = BINANG_ROT180(playerPosRot->rot.y) +

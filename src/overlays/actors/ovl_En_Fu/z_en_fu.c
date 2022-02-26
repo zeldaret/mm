@@ -340,7 +340,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_53C & 2) {
-        s16 rotY = SUB16(this->actor.shape.rot.y, 0x8000);
+        s16 rotY = BINANG_SUB(this->actor.shape.rot.y, 0x8000);
 
         func_80961F38(globalCtx, &this->unk_514, this->unk_52A, rotY, 0x38E3, 0x5555);
     } else {
@@ -419,7 +419,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
     } else {
         func_800B8614(&this->actor, globalCtx, 100.0f);
     }
-    Math_SmoothStepToS(&this->actor.shape.rot.y, SUB16(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
 }
 
 void func_80962588(EnFu* this, GlobalContext* globalCtx) {
@@ -1202,7 +1202,7 @@ void func_809640D8(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_8096413C(EnFu* this, GlobalContext* globalCtx) {
-    Math_SmoothStepToS(&this->actor.shape.rot.y, SUB16(this->actor.yawTowardsPlayer, 0x4000), 5, 1000, 100);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.yawTowardsPlayer, 0x4000), 5, 1000, 100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 }
 
