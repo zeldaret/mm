@@ -492,9 +492,9 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 // Command 0x12F: Fade Ambience music
 void Cutscene_Command_FadeAmbienceSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame && csCtx->frames < cmd->endFrame) {
-        u8 frameCount = cmd->endFrame - cmd->startFrame;
+        u8 fadeTimer = cmd->endFrame - cmd->startFrame;
 
-        Audio_QueueSeqCmd((frameCount << 0x10) | 0x140000FF);
+        Audio_QueueSeqCmd((fadeTimer << 0x10) | 0x140000FF);
     }
 }
 
