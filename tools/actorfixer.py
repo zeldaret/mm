@@ -247,6 +247,8 @@ animdict = {
     "BgCheck_CreateVertexFromVec3f": "BgCheck_Vec3fToVec3s",
     "BgCheck_PolygonGetMinY": "CollisionPoly_GetMinY",
     "BgCheck_PolygonGetNormal": "CollisionPoly_GetNormalF",
+    "BcCheck3_BgActorInit": "DynaPolyActor_Init",
+    "BgCheck3_LoadMesh": "DynaPolyActor_LoadMesh",
     "func_800C01B8": "CollisionPoly_GetPointDistanceFromPlane",
     "BgCheck_CreateTriNormFromPolygon": "CollisionPoly_GetVertices",
     "func_800C02C0": "CollisionPoly_GetVerticesByBgId",
@@ -379,7 +381,6 @@ animdict = {
     "func_8017F9C0": "Math3D_XZInSphere",
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
-
     "func_800DFB14": "Camera_ChangeDataIdx",
     "func_800DFC68": "Camera_GetInputDirYaw",
     "func_800DFCB4": "Camera_GetCamDirPitch",
@@ -387,7 +388,6 @@ animdict = {
     "func_800E0308": "Camera_SetTargetActor",
     "func_800E031C": "Camera_GetWaterYPos",
     "func_800E02AC": "Camera_SetToTrackActor",
-
     "func_801694DC": "Play_CreateSubCamera",
     "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
     "func_80169590": "Play_CameraChangeStatus",
@@ -401,9 +401,7 @@ animdict = {
     "func_80169BC4": "Play_CameraGetUID",
     "func_80169C64": "Play_GetCsCamDataSetting",
     "func_80169C84": "Play_GetCsCamDataVec3s",
-
     "func_8017D2FC": "Math3D_LineSegVsPlane",
-
     "func_8013A7C0": "SubS_FindDoor",
     "func_8013E640": "SubS_FindActorCustom",
     "func_ActorCategoryIterateById": "SubS_FindActor",
@@ -459,6 +457,7 @@ animdict = {
     "skelAnime.prevFrameRot": "skelAnime.prevRot",
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
+
     "actor.minVelocityY": "actor.terminalVelocity",
     "actor.yDistToWater": "actor.depthInWater",
     "actor.yDistToPlayer": "actor.playerHeightRel",
@@ -485,12 +484,13 @@ animdict = {
     "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
     "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
 
-    # Variables
-    "D_0407D590": "gGameplayKeepDrawFlameDL",
-    "D_801D15B0": "gZeroVec3f",
-    "D_801D15BC": "gZeroVec3s",
-    "D_801D1DE0": "gIdentityMtx",
-    "D_801D1E20": "gIdentityMtxF",
+    "D_801D15B0" : "gZeroVec3f",
+    "D_801D15BC" : "gZeroVec3s",
+    "D_801D1DE0" : "gIdentityMtx",
+    "D_801D1E20" : "gIdentityMtxF",
+    "D_04020658" : "gameplay_keep_Anim_020658",
+    "D_04022B28" : "gDoorSkel",
+    "D_04023100" : "gDoorCol",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
@@ -534,20 +534,20 @@ def replace_anim_all(repo):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename
-                replace_anim(file)                
+                replace_anim(file)
 
     for subdir, dirs, files in os.walk(repo + os.sep + 'data'):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-                
+
     for subdir, dirs, files in os.walk(repo + os.sep + 'docs'):
         for filename in files:
             if(filename.endswith('.md')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-              
+
     for subdir, dirs, files in os.walk(repo + os.sep + 'tools' + os.sep + 'sizes'):
         for filename in files:
             if(filename.endswith('.csv')):
