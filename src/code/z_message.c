@@ -18,7 +18,7 @@ extern s16 D_801F6B1E;
 extern s16 D_801F6B20;
 extern s16 D_801F6B22;
 
-
+#ifdef NON_MATCHING
 void func_80147564(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     
@@ -41,8 +41,12 @@ void func_80147564(GlobalContext *globalCtx) {
     D_801F6B22 = 0xA;
     D_801F6B20 = 0xA;
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147564.s")
+#endif
 
 
+#ifdef NON_MATCHING
 //Message_ShouldAdvance
 s32 func_80147624(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -61,6 +65,9 @@ s32 func_80147624(GlobalContext *globalCtx) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A) ||  CHECK_BTN_ALL(controller->press.button,BTN_B) || CHECK_BTN_ALL(controller->press.button, BTN_CUP);
     }
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147624.s")
+#endif
 
 #ifdef NON_MATCHING
 
@@ -76,11 +83,11 @@ s32 func_80147734(GlobalContext *globalCtx) {
             ||  CHECK_BTN_ALL(controller->press.button, BTN_CUP);
     }
 }
-
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147734.s")
 #endif
 
+#ifdef NON_MATCHING
 void func_801477B4(GlobalContext *globalCtx) {
     MessageContext *msgCtx;
 
@@ -92,6 +99,9 @@ void func_801477B4(GlobalContext *globalCtx) {
         play_sound(0U);
     }
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801477B4.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147818.s")
 
@@ -99,6 +109,7 @@ void func_801477B4(GlobalContext *globalCtx) {
  
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
 
+#ifdef NON_MATCHING
 void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
     static s16 held = 0;
     MessageContext *msgCtx = &globalCtx->msgCtx;
@@ -130,6 +141,10 @@ void func_80148B98(GlobalContext *globalCtx, u8 bParm2) {
         }
     }
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148B98.s")
+#endif
+
 
 void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
     MessageContext* msgCtx;
@@ -158,15 +173,14 @@ void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
 
-
-//Message_FindMessageSegment(globalCtx, textId)
+//Message_FindMessage(globalCtx, textId)
 void func_80149EBC(GlobalContext *globalCtx, u16 textId) {
-    char* foundSegment;
-    char* nextSegment;
+    const char* foundSegment;
+    const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    UnkMsgStruct* msgEntry = &msgCtx->unk12080[0];
-    char* segment = msgEntry->segment;
+    MessageTableEntry* msgEntry = msgCtx->messageEntryTable;
+    const char* segment = msgEntry->segment;
 
     while(msgEntry->textId != 0xFFFF){
         if (msgEntry->textId == textId) {
@@ -180,7 +194,7 @@ void func_80149EBC(GlobalContext *globalCtx, u16 textId) {
         msgEntry++;
     }
 
-    msgEntry = &msgCtx->unk12080[0];
+    msgEntry = msgCtx->messageEntryTable;
     foundSegment = msgEntry->segment;
     msgEntry++;
     nextSegment = msgEntry->segment;
@@ -198,24 +212,24 @@ void func_80149EBC(GlobalContext *globalCtx, u16 textId) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014C70C.s")
 
-void func_8014CC14(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 arg4) {
+void func_8014CC14(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s32 temp1 = *offset;
     f32 temp2 = *arg3;
 
     
     Font_LoadChar(globalCtx, codePointIndex, temp1);
-    msgCtx->unk11F24[arg4] = codePointIndex; 
+    msgCtx->unk11F24[decodedBufPos] = codePointIndex; 
     temp1 += 128;
     temp2 += (16.0f * msgCtx->unk12098);
     *offset = temp1;
     *arg3 = temp2;
 }
 
-void func_8014CCB4(GlobalContext* globalCtx, s16* arg1, s32* arg2, f32* arg3) {
+void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    s16 t = *arg1;
-    s32 k = *arg2;
+    s16 t = *decodedBufPos;
+    s32 k = *offset;
     f32 f = *arg3;
 
     Font_LoadChar(globalCtx, 0x838BU, k);
@@ -232,8 +246,8 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* arg1, s32* arg2, f32* arg3) {
 
     //k = (k + 10);
     f += 16.0f * msgCtx->unk12098 * 3.0f;
-    *arg1 = t;
-    *arg2 = k;
+    *decodedBufPos = t;
+    *offset = k;
     *arg3 = f;
 }
 
@@ -319,7 +333,6 @@ void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
     globalCtx->msgCtx.ocarinaMode = 0;
 }
 
-
 void func_80151938(GlobalContext* globalCtx, u16 textId) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
@@ -378,7 +391,6 @@ void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     }
 }
 
-
 extern u16 D_801C6B28[];
 
 void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
@@ -399,7 +411,6 @@ void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
         }
     }
 }
-
 
 extern u16 D_801C6AB8[];
 //extern ? D_801C6B28;
@@ -457,6 +468,10 @@ void func_80152C64(View *view) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
 
+<<<<<<< HEAD
+=======
+#if 0
+>>>>>>> z_message_nes & z_message_staff progress
 
 s16 D_801D02D8[15] = {
     ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
@@ -469,6 +484,11 @@ s16 D_801D02D8[15] = {
     ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect 
 };
 s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
+<<<<<<< HEAD
+=======
+
+#endif
+>>>>>>> z_message_nes & z_message_staff progress
 
 
 //Spawn song effect?
@@ -529,7 +549,7 @@ void func_80156758(GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015680C.s")
 
 void func_801586A4(GlobalContext *globalCtx) {
-    globalCtx->msgCtx.unk12084 = &D_801C6B98;
+    globalCtx->msgCtx.messageEntryTableNes = &D_801C6B98;
     globalCtx->msgCtx.unk1208C = &D_801CFB08;
 }
 

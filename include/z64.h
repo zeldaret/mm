@@ -172,7 +172,7 @@ typedef struct {
     } msgBuf;
     /* 0x11D80 */ u8* messageStart;
     /* 0x11D84 */ u8* messageEnd;
-    /* 0x11D88 */ u8 unk_11D88;
+    /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
 } Font; // size = 0x11D8C
 
 // Game Info aka. Static Context
@@ -834,11 +834,12 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-typedef struct UnkMsgStruct{
+typedef struct MessageTableEntry{
     /* 0x0000 */ u16 textId;
-    /* 0x0002 */ u16 typePos;
+    /* 0x0002 */ u8 typePos;
+    /* 0x0003 */ u8 pad3;
     /* 0x0004 */ const char* segment;
-} UnkMsgStruct; // size = 0x8;
+} MessageTableEntry; // size = 0x8;
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -856,7 +857,7 @@ typedef struct {
     /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F24 */ u16 unk11F24[0x67];
+    /* 0x11F23 */ u16 unk11F24[0x67]; //messageBufDecoded?
     /* 0x11FF2 */ u16 unk11FF2;
     /* 0x11FF4 */ s16 unk11FF4;
     /* 0x11FF6 */ s16 unk11FF6;
@@ -899,15 +900,15 @@ typedef struct {
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UnkMsgStruct** unk12080;
-    /* 0x12084 */ UNK_PTR unk12084;
+    /* 0x12080 */ MessageTableEntry* messageEntryTable;
+    /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
     /* 0x12088 */ UNK_TYPE4 unk12088;
-    /* 0x1208C */ UNK_PTR unk1208C;
+    /* 0x1208C */ MessageTableEntry* unk1208C;
     /* 0x12090 */ s16 unk12090;
     /* 0x12092 */ s16 unk12092;
     /* 0x12094 */ s8 unk12094;
     /* 0x12095 */ UNK_TYPE1 unk12096[0x2];
-    /* 0x12098 */ f32 unk12098;
+    /* 0x12098 */ f32 unk12098; // Text_Scale?
     /* 0x1209C */ s16 unk1209C;
     /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
     /* 0x120A0 */ s32 unk120A0;
