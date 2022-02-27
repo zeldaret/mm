@@ -1043,6 +1043,9 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     } else {
     else_label:
         if (csCtx->frames >= cmd->endFrame) {
+            // The Textbox command can changee the current cutscene frame, mainly to prevent advancing the cutscene when
+            // a textbox that is expected to be closed by the user is still open.
+
             originalCsFrames = csCtx->frames;
             dialogState = Message_GetState(&globalCtx->msgCtx);
             if (dialogState != 2 && dialogState != 0 && dialogState != 7 && dialogState != 8) {
