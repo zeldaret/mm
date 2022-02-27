@@ -575,7 +575,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808C32EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnBb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBb* this = THIS;
 
     if (this->unk_24C == -1) {
@@ -586,7 +586,7 @@ s32 func_808C32EC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_808C3324(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnBb* this = THIS;
     MtxF* temp_v0_4;
@@ -639,8 +639,8 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gfx = POLY_OPA_DISP;
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
     POLY_OPA_DISP = &gfx[1];
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808C32EC, func_808C3324,
-                      &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBb_OverrideLimbDraw,
+                      EnBb_PostLimbDraw, &this->actor);
 
     if (this->unk_264 > 0.0f) {
         currentMatrixState = Matrix_GetCurrentState();
