@@ -79,7 +79,7 @@ void FireObj_StepSize(FireObj* fire) {
     }
     if (fire->sizeGrowsCos2 == 1) {
         if ((fire->state == FIRE_STATE_0) || (fire->state == FIRE_STATE_1)) {
-            fire->xScale = (1.0f - Math_CosS(SQ(fire->dynamicSize) * 16384.0f)) * fire->size;
+            fire->xScale = (1.0f - Math_CosS(SQ(fire->dynamicSize) * SQ(128.0f))) * fire->size;
             fire->yScale = fire->dynamicSize * fire->size;
         } else {
             fire->yScale = fire->dynamicSize * fire->size;
@@ -115,7 +115,7 @@ void FireObj_UpdateStateTransitions(GlobalContext* globalCtx, FireObj* fire) {
     }
     if ((fire->flags & 1) && (fire->state != FIRE_STATE_3) &&
         WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
-        (waterY - fire->position.y) > (6500.0f * fire->yScale)) {
+        (waterY - fire->position.y > 6500.0f * fire->yScale)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
     }
     if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {

@@ -578,9 +578,9 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_InsertTranslation(0.0f, 0.0f, -1112.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, maxColor, (u8)((140.0f * sp68) + 115.0f), spD3);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 155, 255, maxColor, (u8)((140.0f * sp68) + 115.0f), spD3);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018CF0);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018DE0);
         ;
     }
@@ -603,7 +603,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             func_809F2120(1, 0x71A5, 0x263A);
 
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 230);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 128, 255, 255, 0, 230);
 
             for (i = 0; i < ARRAY_COUNT(D_809F4370); i++) {
                 if ((fabsf(D_809F4370[i].x - 32.0f) < 30.0f) && (fabsf(D_809F4370[i].y - 32.0f) < 30.0f)) {
@@ -621,7 +621,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                         Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
 
-                    Matrix_Scale(-0.0019999999f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);
+                    Matrix_Scale(-0.02f / 10.0f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
