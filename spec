@@ -1104,9 +1104,7 @@ beginseg
     name "ovl_En_Wood02"
     compress
     include "build/src/overlays/actors/ovl_En_Wood02/z_en_wood02.o"
-    include "build/data/ovl_En_Wood02/ovl_En_Wood02.data.o"
-    include "build/data/ovl_En_Wood02/ovl_En_Wood02.bss.o"
-    include "build/data/ovl_En_Wood02/ovl_En_Wood02.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wood02/ovl_En_Wood02_reloc.o"
 endseg
 
 beginseg
