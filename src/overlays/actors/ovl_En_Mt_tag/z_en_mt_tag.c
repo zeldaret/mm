@@ -336,17 +336,17 @@ void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx) {
  * Returns true if any Race Goron is over the finish line.
  */
 s32 EnMttag_IsAnyRaceGoronOverFinishLine(EnMttag* this) {
-    s32 isAnyRaceGoronFinished = false;
+    s32 isAnyRaceGoronOverFinishLine = false;
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->raceGorons); i++) {
         if ((EnMttag_IsInFinishLine(&this->raceGorons[i]->actor.world.pos)) &&
             (this->raceGorons[i]->actor.update != NULL)) {
-            isAnyRaceGoronFinished = true;
+            isAnyRaceGoronOverFinishLine = true;
             break;
         }
     }
-    return isAnyRaceGoronFinished;
+    return isAnyRaceGoronOverFinishLine;
 }
 
 /**
