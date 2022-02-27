@@ -376,21 +376,21 @@ void Cutscene_Command_SetLighting(GlobalContext* globalCtx, CutsceneContext* csC
     }
 }
 
-// Command 0x12C: Play Background Music or Fanfare
+// Command 0x12C: Plays a sequence (Background music or Fanfare)
 void Cutscene_Command_PlaySequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         func_801A2C88(cmd->sequence - 1);
     }
 }
 
-// Command 0x12D: Stop Background Music or Fanfare
+// Command 0x12D: Stops a sequence (Background music or Fanfare)
 void Cutscene_Command_StopSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceChange* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         func_801A2D54(cmd->sequence - 1);
     }
 }
 
-// Command 0x9C: Fade Background Music or Fanfare over duration
+// Command 0x9C: Fade a sequence (Background music or Fanfare) over duration
 void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdSequenceFade* cmd) {
     if ((csCtx->frames == cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
@@ -403,7 +403,7 @@ void Cutscene_Command_FadeSequence(GlobalContext* globalCtx, CutsceneContext* cs
     }
 }
 
-// Command 0x12E: Play Ambience music
+// Command 0x12E: Play Ambience sequence
 void Cutscene_Command_PlayAmbienceSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame) {
         // Audio_PlayNatureAmbienceSequence
@@ -490,7 +490,7 @@ void func_800EADB0(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/func_800EADB0.s")
 #endif
 
-// Command 0x12F: Fade Ambience music
+// Command 0x12F: Fade Ambience sequence
 void Cutscene_Command_FadeAmbienceSequence(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (csCtx->frames == cmd->startFrame && csCtx->frames < cmd->endFrame) {
         u8 fadeTimer = cmd->endFrame - cmd->startFrame;
@@ -994,6 +994,7 @@ s32 Cutscene_CountNormalMasks(void) {
     return count;
 }
 
+// Command 0xA: Textbox
 void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdTextbox* cmd) {
     static s32 D_801BB160 = CS_TEXTBOX_TYPE_DEFAULT;
     u8 dialogState;
@@ -1127,6 +1128,32 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
 
 #ifdef NON_MATCHING
 // Some stack issues, and a few instructions in the "wrong" places
+/**
+ * Loops over the cutscene data itself (`cutscenePtr`), applying the effects of each command instantaneity (for most
+ * commands).
+ *
+ * The cutscene data is a semi-structured array of words, which is made up of
+ * - A beginning, which contains the amount of command lists of this cutscene and the ending frame (see
+ * `CS_BEGIN_CUTSCENE`).
+ * - Any amount of cutscene command lists, which one one contains sub commands of the corresponding type.
+ * - A end marker (see `CS_END`).
+ *
+ * This function iterates over each command list until either it has processed the amount of command lists stated on
+ * `CS_BEGIN_CUTSCENE` or until it finds a end marker.
+ *
+ * A command list is a pair of words containing the command type and a count of how many subcommands this list has (N).
+ * Then this list is followed by N subcommands of the said type.
+ * (Camera is a notable exception, instead of a subcommand count, it has the size in bytes of the subcommand).
+ *
+ * For most command lists types (except actorActions and Camera commands):
+ * - For each command list found, read the amount of subcommands and loop over them, passing each one to the
+ * corresponding function which handles the command, applying its effects and checking the frame range stored in the
+ * command.
+ *
+ * This function is invoked on each cutscene frame update.
+ *
+ * TODO: consider changing the type of `cutscenePtr` to `uintptr_t` when this function matches.
+ */
 void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr) {
     s32 i;
     s16 phi_s0;
@@ -1139,24 +1166,30 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     s16 phi_s0_23;
     CsCmdBase* cmd;
 
-    bcopy(cutscenePtr, &totalEntries, 4);
-    cutscenePtr += 4;
-    bcopy(cutscenePtr, &cutsceneEndFrame, 4);
-    cutscenePtr += 4;
+    // Read the command list count and the ending frame for this cutscene
+    bcopy(cutscenePtr, &totalEntries, sizeof(s32));
+    cutscenePtr += sizeof(s32);
+    bcopy(cutscenePtr, &cutsceneEndFrame, sizeof(s32));
+    cutscenePtr += sizeof(s32);
 
     if (((u16)cutsceneEndFrame < csCtx->frames) && (globalCtx->sceneLoadFlag != 0x14) && (csCtx->state != CS_STATE_4)) {
         csCtx->state = CS_STATE_3;
         return;
     }
 
+    // Loop over every command list
     for (i = 0; i < totalEntries; i++) {
-        bcopy(cutscenePtr, &cmdType, 4);
-        cutscenePtr += 4;
+        // Read the command type of the current command list.
+        bcopy(cutscenePtr, &cmdType, sizeof(u32));
+        cutscenePtr += sizeof(u32);
 
+        // TODO: This should probably be added to the CutsceneCmd enum. Consider doing it when this function matches.
         if (cmdType == 0xFFFFFFFF) {
             break;
         }
 
+        // Check special cases of command types. This are generic ActorActions
+        // Ranges: [0x64, 0x96), 0xC9, [0x1C2, 0x258)
         if (((cmdType >= 100) && (cmdType < 150)) || (cmdType == 201) || ((cmdType >= 450) && (cmdType < 600))) {
             for (phi_s0 = 0; phi_s0 < ARRAY_COUNT(D_801F4DC8); phi_s0++) {
                 if ((u16)cmdType == D_801F4DC8[phi_s0]) {
@@ -1174,8 +1207,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 
         switch (cmdType) {
             case CS_CMD_MISC:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_Misc(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1183,8 +1216,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_SET_LIGHTING:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_SetLighting(globalCtx, csCtx, (CsCmdEnvLighting*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdEnvLighting);
@@ -1192,8 +1225,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_PLAYSEQ:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_PlaySequence(globalCtx, csCtx, (CsCmdSequenceChange*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdSequenceChange);
@@ -1201,8 +1234,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_STOPSEQ:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_StopSequence(globalCtx, csCtx, (CsCmdSequenceChange*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdSequenceChange);
@@ -1210,8 +1243,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_FADESEQ:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_FadeSequence(globalCtx, csCtx, (CsCmdSequenceFade*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdSequenceFade);
@@ -1219,8 +1252,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_PLAYAMBIENCE:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_PlayAmbienceSequence(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1228,8 +1261,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_FADEAMBIENCE:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_FadeAmbienceSequence(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1237,8 +1270,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_130:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     func_800EAD48(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1246,8 +1279,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_131:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     func_800EAD7C(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1255,8 +1288,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_132:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     func_800EADB0(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1264,8 +1297,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_RUMBLE:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_Rumble(globalCtx, csCtx, (CsCmdRumble*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdRumble);
@@ -1273,8 +1306,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_FADESCREEN:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_FadeColorScreen(globalCtx, csCtx, (CsCmdFadeScreen*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdFadeScreen);
@@ -1282,8 +1315,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_SETTIME:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_SetTime(globalCtx, csCtx, (CsCmdDayTime*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdDayTime);
@@ -1291,8 +1324,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_SET_PLAYER_ACTION:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
                     if ((csCtx->frames >= cmd->startFrame) && (csCtx->frames < cmd->endFrame)) {
@@ -1307,8 +1340,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_TERMINATOR:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_Terminator(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1316,8 +1349,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_CHOOSE_CREDITS_SCENES:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_ChooseCreditsScenes(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1325,8 +1358,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_TEXTBOX:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     cmd = (CsCmdBase*)cutscenePtr;
                     if (cmd->base != 0xFFFF) {
@@ -1337,8 +1370,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_SCENE_TRANS_FX:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_TransitionFX(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1346,8 +1379,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_MOTIONBLUR:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_MotionBlur(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1355,8 +1388,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             case CS_CMD_GIVETATL:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     Cutscene_Command_GiveTatlToPlayer(globalCtx, csCtx, (CsCmdBase*)cutscenePtr);
                     cutscenePtr += sizeof(CsCmdBase);
@@ -1367,8 +1400,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                 break;
 
             default:
-                bcopy(cutscenePtr, &cmdEntries, 4);
-                cutscenePtr += 4;
+                bcopy(cutscenePtr, &cmdEntries, sizeof(s32));
+                cutscenePtr += sizeof(s32);
                 for (j = 0; j < cmdEntries; j++) {
                     cutscenePtr += sizeof(CsCmdBase);
                 }

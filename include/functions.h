@@ -2711,7 +2711,7 @@ void ShrinkWindow_Draw(GraphicsContext* gfxCtx);
 void func_8016119C(Camera* camera, struct_801F4D48* arg1);
 // void func_8016122C(void);
 // void func_801612B8(void);
-void func_80161998(UNK_PTR arg0, struct_801F4D48* arg1);
+s32 func_80161998(UNK_PTR arg0, struct_801F4D48* arg1);
 // s32 func_80161BAC(void);
 void func_80161BE0(s16 arg0);
 void func_80161C0C(void);
