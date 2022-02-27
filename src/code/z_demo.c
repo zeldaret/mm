@@ -1050,7 +1050,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 
             originalCsFrames = csCtx->frames;
             dialogState = Message_GetState(&globalCtx->msgCtx);
-            if (dialogState != 2 && dialogState != 0 && dialogState != 7 && dialogState != 8) {
+            if ((dialogState != 2) && (dialogState != 0) && (dialogState != 7) && (dialogState != 8)) {
                 csCtx->frames--;
                 if (dialogState == 4 && func_80147624(globalCtx)) {
                     if (globalCtx->msgCtx.choiceIndex == 0) {
