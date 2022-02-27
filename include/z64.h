@@ -1184,7 +1184,7 @@ typedef enum {
 
 struct FireObjLight {
     /* 0x00 */ LightNode* light;
-    /* 0x04 */ LightInfoPositional lightInfo;
+    /* 0x04 */ LightInfo lightInfo;
     /* 0x12 */ u8 lightParamsIndex;
 }; // size = 0x13
 

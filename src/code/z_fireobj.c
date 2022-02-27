@@ -171,9 +171,9 @@ void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
 void FireObj_InitLight(GlobalContext* globalCtx, FireObjLight* light, u8* paramsIndex, Vec3f* pos) {
     FireObjLightParams* objectParams = &sFireObjLightParams[*paramsIndex];
 
-    Lights_PointGlowSetInfo((LightInfo*)&light->lightInfo, pos->x, pos->y, pos->z, objectParams->color.r,
+    Lights_PointGlowSetInfo(&light->lightInfo, pos->x, pos->y, pos->z, objectParams->color.r,
                             objectParams->color.g, objectParams->color.b, objectParams->radius);
-    light->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, (LightInfo*)&light->lightInfo);
+    light->light = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &light->lightInfo);
     light->lightParamsIndex = *paramsIndex;
 }
 
@@ -186,11 +186,11 @@ void FireObj_UpdateLight(GlobalContext* globalCtx, FireObjLight* light, FireObj*
     s16 radius;
 
     if (fire->state == FIRE_STATE_3) {
-        Lights_PointSetColorAndRadius((LightInfo*)&light->lightInfo, 0, 0, 0, -1);
+        Lights_PointSetColorAndRadius(&light->lightInfo, 0, 0, 0, -1);
     } else {
         radius = ((fire->yScale * 140.0f * fire->sizeInv) + 60.0f);
 
-        Lights_PointGlowSetInfo((LightInfo*)&light->lightInfo, fire->position.x,
+        Lights_PointGlowSetInfo(&light->lightInfo, fire->position.x,
                                 (fire->position.y + (fire->yScale * 6500.0f)), fire->position.z,
                                 ((s32)(Rand_ZeroOne() * lightParams->maxColorAdj.r) + lightParams->color.r),
                                 ((s32)(Rand_ZeroOne() * lightParams->maxColorAdj.g) + lightParams->color.g),

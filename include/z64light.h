@@ -57,11 +57,6 @@ typedef struct Lights {
     /* 0x08 */ Lightsn l;
 } Lights; // size = 0x80
 
-typedef struct LightInfoPositional {
-    /* 0x0 */ u8 type;
-    /* 0x2 */ LightPoint params;
-} LightInfoPositional; // size = 0xE
-
 typedef struct LightNode {
     /* 0x0 */ LightInfo* info;
     /* 0x4 */ struct LightNode* prev;
