@@ -271,8 +271,8 @@ void func_80BCF93C(EnHg* this) {
 }
 
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x1E4)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1E4);
+    if (Cutscene_CheckActorAction(globalCtx, 484)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 484);
 
         if (this->cutscenes[3] != globalCtx->csCtx.actorActions[actionIndex]->action) {
             this->cutscenes[3] = globalCtx->csCtx.actorActions[actionIndex]->action;

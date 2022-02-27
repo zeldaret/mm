@@ -130,8 +130,8 @@ void func_80BD433C(ObjHgdoor* this) {
 void func_80BD4358(ObjHgdoor* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1E3)) {
-        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1E3);
+    if (Cutscene_CheckActorAction(globalCtx, 483)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 483);
         if (this->unk166 != globalCtx->csCtx.actorActions[actionIndex]->action) {
             this->unk166 = globalCtx->csCtx.actorActions[actionIndex]->action;
             switch (globalCtx->csCtx.actorActions[actionIndex]->action) {

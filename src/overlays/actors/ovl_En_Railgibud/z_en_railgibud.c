@@ -1123,27 +1123,27 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx) 
 void EnRailgibud_InitActorActionCommand(EnRailgibud* this) {
     switch (ENRAILGIBUD_GET_CUTSCENE_TYPE(&this->actor)) {
         case 1:
-            this->actorActionCommand = 0x207;
+            this->actorActionCommand = 519;
             break;
 
         case 2:
-            this->actorActionCommand = 0x208;
+            this->actorActionCommand = 520;
             break;
 
         case 3:
-            this->actorActionCommand = 0x209;
+            this->actorActionCommand = 521;
             break;
 
         case 4:
-            this->actorActionCommand = 0x20A;
+            this->actorActionCommand = 522;
             break;
 
         case 5:
-            this->actorActionCommand = 0x20B;
+            this->actorActionCommand = 523;
             break;
 
         default:
-            this->actorActionCommand = 0x207;
+            this->actorActionCommand = 519;
             break;
     }
 }

@@ -551,7 +551,7 @@ void DmChar00_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80AA62FC(DmChar00* this, GlobalContext* globalCtx) {
-    u16 sp26 = DMCHAR00_GET(&this->actor) + 0x71;
+    u16 sp26 = DMCHAR00_GET(&this->actor) + 113;
     s32 temp_v0;
     s32 pad;
 

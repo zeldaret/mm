@@ -253,13 +253,13 @@ void func_80BBB354(EnZos* this, GlobalContext* globalCtx) {
 void func_80BBB414(EnZos* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1F5)) {
-        s16 temp = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1F5)]->action;
+    if (Cutscene_CheckActorAction(globalCtx, 501)) {
+        s16 action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 501)]->action;
 
-        if (temp != this->unk_2BA) {
-            this->unk_2BA = temp;
+        if (action != this->unk_2BA) {
+            this->unk_2BA = action;
 
-            switch (temp) {
+            switch (action) {
                 case 1:
                     func_80BBAE84(this, 1, 0);
                     break;
@@ -645,8 +645,8 @@ void func_80BBC298(EnZos* this, GlobalContext* globalCtx) {
         this->unk_2BC = 999;
     }
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x203)) {
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x203)]->action == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 515)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 515)]->action == 1) {
             this->actionFunc = func_80BBC37C;
             this->unk_2BC = -1;
         }
@@ -658,8 +658,8 @@ void func_80BBC298(EnZos* this, GlobalContext* globalCtx) {
 
 void func_80BBC37C(EnZos* this, GlobalContext* globalCtx) {
     func_80BBAFFC(this, globalCtx);
-    if (Cutscene_CheckActorAction(globalCtx, 0x203) &&
-        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x203)]->action == 3)) {
+    if (Cutscene_CheckActorAction(globalCtx, 515) &&
+        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 515)]->action == 3)) {
         this->actionFunc = func_80BBC298;
     }
 }

@@ -447,8 +447,8 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
     s32 sp2C = 0;
     s32 sp28;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1D8)) {
-        sp2C = Cutscene_GetActorActionIndex(globalCtx, 0x1D8);
+    if (Cutscene_CheckActorAction(globalCtx, 472)) {
+        sp2C = Cutscene_GetActorActionIndex(globalCtx, 472);
         sp28 = globalCtx->csCtx.actorActions[sp2C]->action;
         if (this->unk_1CC != (u8)sp28) {
             func_80B3E5DC(this, D_80B3FE38[sp28]);

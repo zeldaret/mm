@@ -282,8 +282,8 @@ s32 func_808B900C(DoorWarp1* this, GlobalContext* globalCtx) {
     s32 index;
     u8 ret = false;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x239)) {
-        index = Cutscene_GetActorActionIndex(globalCtx, 0x239);
+    if (Cutscene_CheckActorAction(globalCtx, 569)) {
+        index = Cutscene_GetActorActionIndex(globalCtx, 569);
 
         if (this->unk_208 != globalCtx->csCtx.actorActions[index]->action) {
             this->unk_208 = globalCtx->csCtx.actorActions[index]->action;

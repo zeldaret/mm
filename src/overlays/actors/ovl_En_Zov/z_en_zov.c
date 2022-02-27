@@ -328,11 +328,11 @@ void func_80BD19FC(EnZov* this, GlobalContext* globalCtx) {
 s32 func_80BD1AE0(EnZov* this, GlobalContext* globalCtx) {
     func_80BD1764(this);
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1F8)) {
-        s16 temp_v1 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1F8)]->action;
+    if (Cutscene_CheckActorAction(globalCtx, 504)) {
+        s16 action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 504)]->action;
 
-        if (temp_v1 != this->unk_326) {
-            this->unk_326 = temp_v1;
+        if (action != this->unk_326) {
+            this->unk_326 = action;
             switch (this->unk_326) {
                 case 1:
                     func_80BD1570(this, 0, 0);
@@ -367,7 +367,7 @@ void func_80BD1BF0(EnZov* this, GlobalContext* globalCtx) {
 
 void func_80BD1C38(EnZov* this, GlobalContext* globalCtx) {
     if (func_80BD1AE0(this, globalCtx)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 0x1F8));
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 504));
     }
 }
 

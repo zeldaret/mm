@@ -1633,23 +1633,23 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
     s32 sp38[] = {
         0, 2, 6, 20, 18, 5, 5, 15,
     };
-    u16 sp36 = 0;
+    u16 actorActionCmd = 0;
     s32 sp30;
     u32 sp2C;
 
     switch (ENGO_GET_70(&this->actor)) {
         case ENGO_70_0:
-            sp36 = 0x80;
+            actorActionCmd = 128;
             break;
 
         case ENGO_70_1:
-            sp36 = 0x81;
+            actorActionCmd = 129;
             break;
     }
 
-    if ((sp36 == 0x80) || (sp36 == 0x81)) {
-        if (Cutscene_CheckActorAction(globalCtx, sp36)) {
-            sp2C = Cutscene_GetActorActionIndex(globalCtx, sp36);
+    if ((actorActionCmd == 128) || (actorActionCmd == 129)) {
+        if (Cutscene_CheckActorAction(globalCtx, actorActionCmd)) {
+            sp2C = Cutscene_GetActorActionIndex(globalCtx, actorActionCmd);
             sp30 = globalCtx->csCtx.actorActions[sp2C]->action;
 
             if (this->unk_394 != (u8)sp30) {
@@ -1699,7 +1699,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
                     break;
             }
 
-            if (sp36 == 0x80) {
+            if (actorActionCmd == 128) {
                 switch (globalCtx->csCtx.frames) {
                     case 55:
                     case 100:
@@ -1723,7 +1723,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
                         break;
                 }
-            } else if (sp36 == 0x81) {
+            } else if (actorActionCmd == 129) {
                 switch (globalCtx->csCtx.frames) {
                     case 360:
                     case 390:

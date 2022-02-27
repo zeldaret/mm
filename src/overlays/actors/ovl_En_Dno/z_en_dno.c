@@ -856,8 +856,8 @@ void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
     u8 sp33 = true;
     s32 temp_v0;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1DB)) {
-        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x1DB);
+    if (Cutscene_CheckActorAction(globalCtx, 475)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 475);
         if (this->unk_468 != globalCtx->csCtx.actorActions[temp_v0]->action) {
             switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
                 case 1:

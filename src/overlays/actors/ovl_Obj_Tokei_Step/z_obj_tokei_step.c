@@ -221,8 +221,8 @@ void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {
 void ObjTokeiStep_BeginOpen(ObjTokeiStep* this, GlobalContext* globalCtx) {
     CsCmdActorAction* action;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x86)) {
-        action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x86)];
+    if (Cutscene_CheckActorAction(globalCtx, 134)) {
+        action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 134)];
 
         if ((action->startFrame == globalCtx->csCtx.frames) && (action->action != 0)) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;

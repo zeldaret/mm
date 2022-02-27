@@ -51,8 +51,8 @@ void func_80C1DF18(DmNb* this, GlobalContext* globalCtx) {
             this->unk1F8 = 1;
             this->unk1F4 = this->unk1F0;
         }
-        if (Cutscene_CheckActorAction(globalCtx, 0x232)) {
-            actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x232);
+        if (Cutscene_CheckActorAction(globalCtx, 562)) {
+            actionIndex = Cutscene_GetActorActionIndex(globalCtx, 562);
             actionUnk0 = globalCtx->csCtx.actorActions[actionIndex]->action;
             if (this->unk1EC != (actionUnk0 & 0xFF)) {
                 this->unk1EC = actionUnk0;

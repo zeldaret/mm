@@ -1551,8 +1551,8 @@ void func_80950F2C(EnGm* this, GlobalContext* globalCtx) {
     s32 sp2C;
     s16 yaw;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x20E)) {
-        sp2C = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20E)]->action;
+    if (Cutscene_CheckActorAction(globalCtx, 526)) {
+        sp2C = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 526)]->action;
         if (this->unk_259 != (sp2C & 0xFF)) {
             if (sp2C == 3) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);

@@ -1024,8 +1024,8 @@ void EnMaYto_SetupWarmFuzzyFeelingCs(EnMaYto* this) {
 static u16 D_80B915F0 = 99;
 
 void EnMaYto_WarmFuzzyFeelingCs(EnMaYto* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x22C)) {
-        s32 csActionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x22C);
+    if (Cutscene_CheckActorAction(globalCtx, 556)) {
+        s32 csActionIndex = Cutscene_GetActorActionIndex(globalCtx, 556);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[csActionIndex]->startFrame) {
             u16 action = globalCtx->csCtx.actorActions[csActionIndex]->action;

@@ -459,9 +459,9 @@ s32 func_80B93EA0(EnZog* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1D7)) {
-        sp3E = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1D7)]->action;
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 0x1D7));
+    if (Cutscene_CheckActorAction(globalCtx, 471)) {
+        sp3E = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 471)]->action;
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 471));
 
         switch (this->unk_306) {
             case 2:

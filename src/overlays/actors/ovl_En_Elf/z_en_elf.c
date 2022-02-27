@@ -854,8 +854,8 @@ void func_8088E60C(EnElf* this, GlobalContext* globalCtx) {
         glowLightRadius = 0;
     }
 
-    if (Cutscene_CheckActorAction(globalCtx, 0xC9)) {
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0xC9)]->action == 6) {
+    if (Cutscene_CheckActorAction(globalCtx, 201)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 201)]->action == 6) {
             glowLightRadius = 0;
         }
     }
@@ -888,8 +888,8 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
     func_8088E5A8(this, globalCtx);
     xScale = 0.0f;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0xC9)) {
-        sp38 = Cutscene_GetActorActionIndex(globalCtx, 0xC9);
+    if (Cutscene_CheckActorAction(globalCtx, 201)) {
+        sp38 = Cutscene_GetActorActionIndex(globalCtx, 201);
         func_808908D0(&nextPos, globalCtx, sp38);
         this->actor.shape.rot.y = globalCtx->csCtx.actorActions[sp38]->urot.y;
         this->actor.shape.rot.x = globalCtx->csCtx.actorActions[sp38]->urot.x;
@@ -1107,8 +1107,8 @@ void func_8088F214(EnElf* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (globalCtx->csCtx.state != 0) {
-        if (Cutscene_CheckActorAction(globalCtx, 0xC9)) {
-            switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0xC9)]->action) {
+        if (Cutscene_CheckActorAction(globalCtx, 201)) {
+            switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 201)]->action) {
                 case 4:
                     sp34 = 7;
                     break;
@@ -1577,8 +1577,8 @@ void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (player->currentMask != PLAYER_MASK_GIANT) {
         if (!(this->fairyFlags & 8) &&
-            (!Cutscene_CheckActorAction(globalCtx, 0xC9) ||
-             (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0xC9)]->action != 6)) &&
+            (!Cutscene_CheckActorAction(globalCtx, 201) ||
+             (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 201)]->action != 6)) &&
             (!(player->stateFlags1 & 0x100000) || (kREG(90) < this->actor.projectedPos.z))) {
             Gfx* dListHead = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 4);
             f32 alphaScale;

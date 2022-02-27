@@ -802,8 +802,8 @@ void EnMa4_SetupEponasSongCs(EnMa4* this) {
 
 static u16 D_80AC0260 = 99;
 void EnMa4_EponasSongCs(EnMa4* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x78) != 0) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x78);
+    if (Cutscene_CheckActorAction(globalCtx, 120)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 120);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
             if (globalCtx->csCtx.actorActions[actionIndex]->action != D_80AC0260) {

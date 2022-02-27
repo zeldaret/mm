@@ -1078,8 +1078,8 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 temp_v0;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x6B)) {
-        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x6B);
+    if (Cutscene_CheckActorAction(globalCtx, 107)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 107);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
             if (this->unk_334 != globalCtx->csCtx.actorActions[temp_v0]->action) {
@@ -1658,8 +1658,8 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_005870);
 
-                if (Cutscene_CheckActorAction(globalCtx, 0x201) &&
-                    (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x201)]->action == 2) &&
+                if (Cutscene_CheckActorAction(globalCtx, 513) &&
+                    (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
                     (this->unk_337 >= 0)) {
                     Matrix_StatePush();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);

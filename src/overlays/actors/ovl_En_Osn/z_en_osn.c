@@ -638,14 +638,14 @@ void func_80AD1634(EnOsn* this, GlobalContext* globalCtx) {
 
 void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
     u8 pad;
-    s32 temp_v0;
+    s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x82)) {
-        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x82);
+    if (Cutscene_CheckActorAction(globalCtx, 130)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 130);
         this->unk_1F0 = 0;
-        if (this->unk_1ED != globalCtx->csCtx.actorActions[temp_v0]->action) {
-            this->unk_1ED = globalCtx->csCtx.actorActions[temp_v0]->action;
-            switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
+        if (this->unk_1ED != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk_1ED = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_1EC = 2;
                     break;
@@ -735,7 +735,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
              (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
     } else {
         this->unk_1F0 = 1;
         this->unk_1ED = 0x63;

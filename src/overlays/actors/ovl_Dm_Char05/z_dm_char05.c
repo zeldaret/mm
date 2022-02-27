@@ -177,8 +177,8 @@ void func_80AAC990(DmChar05* this, GlobalContext* globalCtx) {
 }
 
 void func_80AAC9DC(DmChar05* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x6D) != 0) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x6D);
+    if (Cutscene_CheckActorAction(globalCtx, 109) != 0) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 109);
 
         if (globalCtx->csCtx.actorActions[actionIndex]->action == 4) {
             this->unk_18E = 1;
@@ -199,8 +199,8 @@ void func_80AACA98(DmChar05* this, GlobalContext* globalCtx) {
 }
 
 void func_80AACAE4(DmChar05* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x234)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x234);
+    if (Cutscene_CheckActorAction(globalCtx, 564)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 564);
 
         if (globalCtx->csCtx.actorActions[actionIndex]->action == 2) {
             if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
@@ -277,8 +277,8 @@ void func_80AACD1C(DmChar05* this, GlobalContext* globalCtx) {
 }
 
 void func_80AACD68(DmChar05* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x1D9)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1D9);
+    if (Cutscene_CheckActorAction(globalCtx, 473)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 473);
 
         this->unk_18E = 1;
         this->unk_190.x = globalCtx->csCtx.actorActions[actionIndex]->startPos.x;
@@ -297,8 +297,8 @@ void func_80AACE10(DmChar05* this, GlobalContext* globalCtx) {
 }
 
 void func_80AACE5C(DmChar05* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x206)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x206);
+    if (Cutscene_CheckActorAction(globalCtx, 518)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 518);
 
         this->unk_18E = 1;
         this->unk_190.x = globalCtx->csCtx.actorActions[actionIndex]->startPos.x;
@@ -313,8 +313,8 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
 
     switch (DMCHAR05_GET(&this->actor)) {
         case DMCHAR05_0:
-            if (Cutscene_CheckActorAction(globalCtx, 0x6D)) {
-                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x6D);
+            if (Cutscene_CheckActorAction(globalCtx, 109)) {
+                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 109);
 
                 if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
                     switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
@@ -356,8 +356,8 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
             break;
 
         case DMCHAR05_1:
-            if (Cutscene_CheckActorAction(globalCtx, 0x1D9)) {
-                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1D9);
+            if (Cutscene_CheckActorAction(globalCtx, 473)) {
+                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 473);
 
                 if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
                     switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
@@ -400,8 +400,8 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
             break;
 
         case DMCHAR05_2:
-            if (Cutscene_CheckActorAction(globalCtx, 0x206)) {
-                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x206);
+            if (Cutscene_CheckActorAction(globalCtx, 518)) {
+                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 518);
 
                 if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
                     switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
@@ -443,8 +443,8 @@ void func_80AACF04(DmChar05* this, GlobalContext* globalCtx) {
             break;
 
         case DMCHAR05_3:
-            if (Cutscene_CheckActorAction(globalCtx, 0x22F)) {
-                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x22F);
+            if (Cutscene_CheckActorAction(globalCtx, 559)) {
+                actionIndex = Cutscene_GetActorActionIndex(globalCtx, 559);
 
                 if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
                     switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
@@ -513,8 +513,8 @@ void func_80AAD450(DmChar05* this, GlobalContext* globalCtx) {
 
 void func_80AAD4A8(DmChar05* this, GlobalContext* globalCtx) {
     if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x6D) &&
-            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x6D)]->action == 3)) {
+        if (Cutscene_CheckActorAction(globalCtx, 109) &&
+            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 109)]->action == 3)) {
             if (Animation_OnFrame(&this->skelAnime, 14.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_0);
             } else if (Animation_OnFrame(&this->skelAnime, 19.0f)) {
@@ -522,15 +522,15 @@ void func_80AAD4A8(DmChar05* this, GlobalContext* globalCtx) {
             }
         }
     } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_1) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x1D9)) {
-            if ((globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1D9)]->action == 3) &&
+        if (Cutscene_CheckActorAction(globalCtx, 473)) {
+            if ((globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 473)]->action == 3) &&
                 Animation_OnFrame(&this->skelAnime, 5.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_SAND);
             }
         }
     } else if (DMCHAR05_GET(&this->actor) == DMCHAR05_2) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x206) &&
-            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x206)]->action == 2)) {
+        if (Cutscene_CheckActorAction(globalCtx, 518) &&
+            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 518)]->action == 2)) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_MASK_BOUND_0);
             }
@@ -568,25 +568,25 @@ void DmChar05_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
     func_80AACF04(this, globalCtx);
-    if (Cutscene_CheckActorAction(globalCtx, 0x6D)) {
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x6D)]->action == 3) {
+    if (Cutscene_CheckActorAction(globalCtx, 109)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 109)]->action == 3) {
             SkelAnime_Update(&this->skelAnime);
         }
-    } else if (Cutscene_CheckActorAction(globalCtx, 0x1D9)) {
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1D9)]->action == 3) {
+    } else if (Cutscene_CheckActorAction(globalCtx, 473)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 473)]->action == 3) {
             SkelAnime_Update(&this->skelAnime);
         }
-    } else if (Cutscene_CheckActorAction(globalCtx, 0x206)) {
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x206)]->action == 2) {
+    } else if (Cutscene_CheckActorAction(globalCtx, 518)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 518)]->action == 2) {
             SkelAnime_Update(&this->skelAnime);
         }
-    } else if (Cutscene_CheckActorAction(globalCtx, 0x22F)) {
-        if ((globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x22F)]->action == 2) ||
-            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x22F)]->action == 3)) {
+    } else if (Cutscene_CheckActorAction(globalCtx, 559)) {
+        if ((globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 559)]->action == 2) ||
+            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 559)]->action == 3)) {
             SkelAnime_Update(&this->skelAnime);
         }
 
-        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x22F)]->action == 4) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 559)]->action == 4) {
             this->actor.world.rot.y += 0x258;
             this->actor.shape.rot.y += 0x258;
         }
@@ -608,8 +608,8 @@ void func_80AAD998(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
 
     if (this->unk_18E == 0) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x6D) &&
-            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x6D)]->action != 1)) {
+        if (Cutscene_CheckActorAction(globalCtx, 109) &&
+            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 109)]->action != 1)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             func_8012C28C(globalCtx->state.gfxCtx);
@@ -629,8 +629,8 @@ void func_80AADA90(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
     if (this->unk_18E == 0) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x1D9) &&
-            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1D9)]->action != 1)) {
+        if (Cutscene_CheckActorAction(globalCtx, 473) &&
+            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 473)]->action != 1)) {
             func_8012C28C(globalCtx->state.gfxCtx);
             SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               DmChar05_OverrideLimbDraw, DmChar05_PostLimbDraw, &this->actor);
@@ -644,8 +644,8 @@ void func_80AADB4C(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
 
     if (this->unk_18E == 0) {
-        if (Cutscene_CheckActorAction(globalCtx, 0x206) &&
-            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x206)]->action != 1)) {
+        if (Cutscene_CheckActorAction(globalCtx, 518) &&
+            (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 518)]->action != 1)) {
             func_8012C28C(globalCtx->state.gfxCtx);
             SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, NULL, &this->actor);
@@ -660,8 +660,8 @@ void func_80AADC00(Actor* thisx, GlobalContext* globalCtx) {
     DmChar05* this = THIS;
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x22F)) {
-        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x22F);
+    if (Cutscene_CheckActorAction(globalCtx, 559)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 559);
 
         if ((globalCtx->csCtx.actorActions[actionIndex]->action != 1) &&
             (globalCtx->csCtx.actorActions[actionIndex]->action != 4)) {

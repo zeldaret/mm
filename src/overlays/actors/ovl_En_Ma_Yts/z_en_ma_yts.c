@@ -381,8 +381,8 @@ void EnMaYts_SetupEndCreditsHandler(EnMaYts* this) {
 
 static u16 D_80B8E32C = 99;
 void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, 0x78)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x78);
+    if (Cutscene_CheckActorAction(globalCtx, 120)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 120);
 
         if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[actionIndex]->startFrame) {
             if (globalCtx->csCtx.actorActions[actionIndex]->action != D_80B8E32C) {

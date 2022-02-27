@@ -75,7 +75,7 @@ void func_80B31590(EnZoraegg* this) {
 void EnZoraegg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnZoraegg* this = THIS;
-    u16 sp40[] = { 0x01C9, 0x01CA, 0x01CB, 0x01CC, 0x01CD, 0x01CE, 0x01D0 };
+    u16 sp40[] = { 457, 458, 459, 460, 461, 462, 464 };
 
     Actor_SetScale(&this->actor, 0.006f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_zoraegg_Skel_004C90, &object_zoraegg_Anim_005098,
@@ -162,7 +162,7 @@ void EnZoraegg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ENZORAEGG_1F_7:
         case ENZORAEGG_1F_8:
         case ENZORAEGG_1F_9:
-            this->unk_1F0 = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_3];
+            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_3];
             Animation_PlayOnce(&this->skelAnime, &object_zoraegg_Anim_001E08);
             this->unk_1EC = 1;
             this->unk_1EE = 0;
@@ -181,7 +181,7 @@ void EnZoraegg_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ENZORAEGG_1F_14:
         case ENZORAEGG_1F_15:
         case ENZORAEGG_1F_16:
-            this->unk_1F0 = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_10];
+            this->actorActionCmd = sp40[(ENZORAEGG_GET_1F(&this->actor)) - ENZORAEGG_1F_10];
             this->unk_1EC = 2;
             this->actionFunc = func_80B324B0;
             Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
@@ -419,22 +419,25 @@ void func_80B32390(EnZoraegg* this, GlobalContext* globalCtx) {
 void func_80B324B0(EnZoraegg* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_1F0)) {
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCmd)) {
         if (this->unk_1EA & 4) {
-            if (Cutscene_CheckActorAction(globalCtx, this->unk_1F0) &&
-                (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0)]->action == 3)) {
+            if (Cutscene_CheckActorAction(globalCtx, this->actorActionCmd) &&
+                (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd)]->action ==
+                 3)) {
                 Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004FE4);
                 this->unk_1EA &= ~4;
             }
         } else {
-            if (Cutscene_CheckActorAction(globalCtx, this->unk_1F0) &&
-                (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0)]->action == 4)) {
+            if (Cutscene_CheckActorAction(globalCtx, this->actorActionCmd) &&
+                (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd)]->action ==
+                 4)) {
                 Animation_PlayLoop(&this->skelAnime, &object_zoraegg_Anim_004E04);
                 this->unk_1EA |= 4;
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0));
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
+                                      Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd));
 
         if ((this->unk_1EA & 4) && Animation_OnFrame(&this->skelAnime, this->unk_1E4)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
@@ -453,10 +456,11 @@ void func_80B32644(EnZoraegg* this, GlobalContext* globalCtx) {
         this->unk_1EA |= 2;
     }
 
-    if (!Cutscene_CheckActorAction(globalCtx, this->unk_1F0)) {
+    if (!Cutscene_CheckActorAction(globalCtx, this->actorActionCmd)) {
         this->actionFunc = func_80B324B0;
     } else {
-        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0));
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
+                                      Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd));
 
         if (this->unk_1EE > 25) {
             this->unk_1EE -= 25;
@@ -469,8 +473,8 @@ void func_80B32644(EnZoraegg* this, GlobalContext* globalCtx) {
 void func_80B326F4(EnZoraegg* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_1F0) &&
-        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0)]->action == 3)) {
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCmd) &&
+        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd)]->action == 3)) {
         Animation_Change(&this->skelAnime, &object_zoraegg_Anim_004D20, 1.0f, 0.0f,
                          Animation_GetLastFrame(&object_zoraegg_Anim_004D20), 2, 5.0f);
         this->unk_1E8 = 0;
@@ -481,7 +485,8 @@ void func_80B326F4(EnZoraegg* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_2);
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0));
+    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
+                                  Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_1);
@@ -504,7 +509,8 @@ void func_80B32820(EnZoraegg* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0));
+    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
+                                  Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 16.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_KIDS_SWIM_0);
@@ -538,7 +544,8 @@ void func_80B32928(EnZoraegg* this, GlobalContext* globalCtx) {
         }
     }
 
-    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0));
+    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
+                                  Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd));
 
     if (Animation_OnFrame(&this->skelAnime, 97.0f) || Animation_OnFrame(&this->skelAnime, 101.0f) ||
         Animation_OnFrame(&this->skelAnime, 105.0f)) {
@@ -547,8 +554,8 @@ void func_80B32928(EnZoraegg* this, GlobalContext* globalCtx) {
 }
 
 void func_80B32A88(EnZoraegg* this, GlobalContext* globalCtx) {
-    if (Cutscene_CheckActorAction(globalCtx, this->unk_1F0) &&
-        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_1F0)]->action == 2)) {
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCmd) &&
+        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCmd)]->action == 2)) {
         this->unk_1E8 = 0;
         this->actionFunc = func_80B32928;
     }

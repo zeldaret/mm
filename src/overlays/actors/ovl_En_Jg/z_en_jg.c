@@ -622,8 +622,8 @@ void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx) {
 void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1D6)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1D6);
+    if (Cutscene_CheckActorAction(globalCtx, 470)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 470);
 
         if (this->csAction != globalCtx->csCtx.actorActions[actionIndex]->action) {
             this->csAction = globalCtx->csCtx.actorActions[actionIndex]->action;

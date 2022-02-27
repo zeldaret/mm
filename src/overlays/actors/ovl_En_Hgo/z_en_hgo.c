@@ -248,8 +248,8 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
 s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
     s32 actionIndex;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1E6)) {
-        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1E6);
+    if (Cutscene_CheckActorAction(globalCtx, 486)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 486);
         if (this->unk_316 != globalCtx->csCtx.actorActions[actionIndex]->action) {
             this->unk_316 = globalCtx->csCtx.actorActions[actionIndex]->action;
             switch (globalCtx->csCtx.actorActions[actionIndex]->action) {

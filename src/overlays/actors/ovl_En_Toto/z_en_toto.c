@@ -674,9 +674,8 @@ s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
-    CsCmdActorAction* action;
+    CsCmdActorAction* action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 525)];
 
-    action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x20D)];
     if (this->unk2B5 != action->action) {
         this->unk2B5 = action->action;
         if (this->unk2B5 != 4) {

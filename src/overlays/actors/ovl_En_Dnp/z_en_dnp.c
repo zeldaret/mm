@@ -253,8 +253,8 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
         gSaveContext.weekEventReg[29] |= 0x40;
     }
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x65)) {
-        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 0x65);
+    if (Cutscene_CheckActorAction(globalCtx, 101)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 101);
         val = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_324 != (u8)val) {
             func_80B3CC38(this, D_80B3DE74[val]);

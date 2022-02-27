@@ -165,20 +165,20 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C6;
+            this->actorActionCommand = 454;
             break;
         case GIANT_TYPE_SWAMP_TERMINA_FIELD:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C7;
+            this->actorActionCommand = 455;
             break;
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C8;
+            this->actorActionCommand = 456;
             break;
         default:
-            this->actorActionCommand = 0x1C5;
+            this->actorActionCommand = 453;
             break;
     }
 

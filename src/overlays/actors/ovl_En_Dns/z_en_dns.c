@@ -210,16 +210,16 @@ s32* func_8092C9BC(EnDns* this, GlobalContext* globalCtx) {
 s32 func_8092CA74(EnDns* this) {
     switch (ENDNS_GET_7(&this->actor)) {
         case ENDNS_GET_7_0:
-            return 0x1D1;
+            return 465;
 
         case ENDNS_GET_7_1:
-            return 0x1D2;
+            return 466;
 
         case ENDNS_GET_7_2:
-            return 0x1D3;
+            return 467;
 
         case ENDNS_GET_7_3:
-            return 0x1D4;
+            return 468;
     }
 
     return 0;

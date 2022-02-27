@@ -125,8 +125,8 @@ void BgHakaCurtain_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgHakaCurtain* this = THIS;
     CsCmdActorAction* actorAction;
 
-    if (Cutscene_CheckActorAction(globalCtx, 0x1D5)) {
-        actorAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x1D5)];
+    if (Cutscene_CheckActorAction(globalCtx, 469)) {
+        actorAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 469)];
         if (actorAction->startFrame == globalCtx->csCtx.frames && actorAction->action == 2) {
             func_80B6DD80(this);
         }
