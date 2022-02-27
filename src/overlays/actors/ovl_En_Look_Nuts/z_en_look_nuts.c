@@ -96,7 +96,7 @@ typedef enum {
     /* 0x01 */ PALACE_GUARD_PATROLLING,
     /* 0x01 */ PALACE_GUARD_WAITING,
     /* 0x02 */ PALACE_GUARD_RUNNING_TO_PLAYER,
-    /* 0x03 */ PALACE_GUARD_CAUGHT_PLAYER,
+    /* 0x03 */ PALACE_GUARD_CAUGHT_PLAYER
 } PalaceGuardState;
 
 void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -118,7 +118,7 @@ void EnLookNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
     }
-    if ((this->switchFlag >= 0) && (Flags_GetSwitch(globalCtx, this->switchFlag) != 0)) {
+    if ((this->switchFlag >= 0) && (Flags_GetSwitch(globalCtx, this->switchFlag))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -165,12 +165,12 @@ void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
     }
 
     this->path = func_8013D648(globalCtx, this->pathLocation, 0x1F);
-    if (this->path != 0) {
+    if (this->path != NULL) {
         sp34 = func_8013D83C(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
     }
 
     if (sp30 < 10.0f) {
-        if (this->path != 0) {
+        if (this->path != NULL) {
             this->currentPathIndex++;
             if (this->currentPathIndex >= this->path->count) {
                 this->currentPathIndex = 0;
@@ -304,8 +304,8 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, GlobalContext* globalCtx) {
 static Vec3f effectVecInitialize = { 0.0f, 0.0f, 0.0f };
 
 void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnLookNuts* this = THIS;
     s32 pad;
+    EnLookNuts* this = THIS;
     Vec3f effectVelOffset;
     Vec3f effectPos;
     Vec3f effectVel;
@@ -337,7 +337,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             effectVelOffset.z = 20.0f;
             Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
             Matrix_StatePop();
-            if (this->isPlayerDetected == false) {
+            if (!this->isPlayerDetected) {
                 s16 drawFlag = 1;
                 if (gSaveContext.isNight) {
                     drawFlag = 0;
@@ -374,8 +374,11 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-static TexturePtr sEyeTextures[] = { gDekuPalaceGuardEyeOpenTex, gDekuPalaceGuardEyeHalfTex,
-                                     gDekuPalaceGuardEyeClosedTex };
+static TexturePtr sEyeTextures[] = {
+    gDekuPalaceGuardEyeOpenTex,
+    gDekuPalaceGuardEyeHalfTex,
+    gDekuPalaceGuardEyeClosedTex,
+};
 
 void EnLookNuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnLookNuts* this = THIS;
