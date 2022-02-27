@@ -775,8 +775,6 @@ beginseg
     name "ovl_En_Door"
     compress
     include "build/src/overlays/actors/ovl_En_Door/z_en_door.o"
-    include "build/data/ovl_En_Door/ovl_En_Door.data.o"
-    include "build/data/ovl_En_Door/ovl_En_Door.bss.o"
     include "build/data/ovl_En_Door/ovl_En_Door.reloc.o"
 endseg
 
