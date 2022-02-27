@@ -122,6 +122,7 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
+// Command 0x96: Miscellaneous commands.
 void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801BB15C = 0xFFFF;
     Player* player = GET_PLAYER(globalCtx2);
@@ -588,7 +589,7 @@ void Cutscene_TerminatorImpl(GlobalContext* globalCtx, CutsceneContext* csCtx, C
     }
 }
 
-// Command 0x15E:
+// Command 0x15E
 void Cutscene_Command_Terminator(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if (cmd->base == 1) {
         if (csCtx->frames == cmd->startFrame) {
@@ -816,6 +817,7 @@ void Cutscene_Command_GiveTatlToPlayer(GlobalContext* globalCtx, CutsceneContext
 
 #ifdef NON_MATCHING
 // regalloc
+// Command 0x98
 void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
         f32 temp_f0;
@@ -1138,7 +1140,8 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
  * The cutscene data is a semi-structured array of words, which is made up of
  * - A beginning, which contains the amount of command lists of this cutscene and the ending frame (see
  * `CS_BEGIN_CUTSCENE`).
- * - Any amount of cutscene command lists, which one one contains sub commands of the corresponding type.
+ * - Any amount of cutscene command lists (which should be the number specified in the beginning), each one of which
+ * contains sub commands of the corresponding type.
  * - A end marker (see `CS_END`).
  *
  * This function iterates over each command list until either it has processed the amount of command lists stated on
