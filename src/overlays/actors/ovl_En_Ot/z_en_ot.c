@@ -817,7 +817,7 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B5D37C(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 EnOt_ActorPathing_Move(GlobalContext* globalCtx, ActorPathing* actorPath) {
     Actor* thisx = actorPath->actor;
     EnOt* this = (EnOt*)thisx;
     f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
@@ -834,7 +834,7 @@ s32 func_80B5D37C(GlobalContext* globalCtx, ActorPathing* actorPath) {
     return false;
 }
 
-s32 func_80B5D470(GlobalContext* globalCtx, ActorPathing* actorPath) {
+s32 EnOt_ActorPathing_UpdateActorInfo(GlobalContext* globalCtx, ActorPathing* actorPath) {
     Actor* thisx = actorPath->actor;
     s32 ret = false;
     s32 pad;
@@ -895,8 +895,9 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5D750(EnOt* this, GlobalContext* globalCtx) {
     if (!(this->unk_32C & 1) && !(this->unk_32C & 2)) {
-        SubS_ActorPathing_Update(globalCtx, &this->actorPath, SubS_ActorPathing_ComputePointInfo, func_80B5D470,
-                                 func_80B5D37C, SubS_ActorPathing_SetNextPoint);
+        SubS_ActorPathing_Update(globalCtx, &this->actorPath, SubS_ActorPathing_ComputePointInfo,
+                                 EnOt_ActorPathing_UpdateActorInfo, EnOt_ActorPathing_Move,
+                                 SubS_ActorPathing_SetNextPoint);
     }
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_330);

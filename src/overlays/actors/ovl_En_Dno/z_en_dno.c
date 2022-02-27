@@ -706,8 +706,8 @@ void func_80A72CF8(EnDno* this, GlobalContext* globalCtx) {
                        this->actor.floorHeight, this->actor.world.pos.z, 0, 0, 0, 0x201);
 }
 
-s32 func_80A72D8C(GlobalContext* globalCtx, ActorPathing* arg1) {
-    Actor* thisx = arg1->actor;
+s32 EnDno_ActorPathing_UpdateActorInfo(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor* thisx = actorPath->actor;
     s32 pad;
     s32 ret = false;
     f32 sp38;
@@ -729,25 +729,25 @@ s32 func_80A72D8C(GlobalContext* globalCtx, ActorPathing* arg1) {
         }
     }
 
-    if (arg1->distSqToCurPoint < SQ(thisx->speedXZ)) {
+    if (actorPath->distSqToCurPoint < SQ(thisx->speedXZ)) {
         ret = true;
     } else {
-        sp38 = thisx->speedXZ / sqrtf(arg1->distSqToCurPointXZ);
-        sp2C = ABS(arg1->rotToCurPoint.x - thisx->world.rot.x);
+        sp38 = thisx->speedXZ / sqrtf(actorPath->distSqToCurPointXZ);
+        sp2C = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         temp_v0_2 = sp2C;
         temp_v0_2 *= sp38;
         temp_v0_2 += 0x71C;
-        sp2C = ABS(arg1->rotToCurPoint.y - thisx->world.rot.y);
+        sp2C = ABS(actorPath->rotToCurPoint.y - thisx->world.rot.y);
 
-        Math_ScaledStepToS(&thisx->world.rot.x, arg1->rotToCurPoint.x, temp_v0_2);
-        Math_ScaledStepToS(&thisx->world.rot.y, arg1->rotToCurPoint.y, (s32)(sp2C * sp38) + 0x71C);
+        Math_ScaledStepToS(&thisx->world.rot.x, actorPath->rotToCurPoint.x, temp_v0_2);
+        Math_ScaledStepToS(&thisx->world.rot.y, actorPath->rotToCurPoint.y, (s32)(sp2C * sp38) + 0x71C);
     }
 
     return ret;
 }
 
-s32 func_80A72FAC(GlobalContext* globalCtx, ActorPathing* arg1) {
-    Actor* thisx = arg1->actor;
+s32 EnDno_ActorPathing_Move(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor* thisx = actorPath->actor;
     EnDno* this = (EnDno*)thisx;
     f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
     f32 sp20 = gFramerateDivisorHalf;
@@ -788,8 +788,9 @@ void func_80A730A0(EnDno* this, GlobalContext* globalCtx) {
         }
     }
 
-    SubS_ActorPathing_Update(globalCtx, &this->actorPath, SubS_ActorPathing_ComputePointInfo, func_80A72D8C,
-                             func_80A72FAC, SubS_ActorPathing_SetNextPoint);
+    SubS_ActorPathing_Update(globalCtx, &this->actorPath, SubS_ActorPathing_ComputePointInfo,
+                             EnDno_ActorPathing_UpdateActorInfo, EnDno_ActorPathing_Move,
+                             SubS_ActorPathing_SetNextPoint);
     this->unk_45C += 6553;
     this->actorPath.pointOffset.x = 0.0f;
     this->actorPath.pointOffset.y = 0.0f;
