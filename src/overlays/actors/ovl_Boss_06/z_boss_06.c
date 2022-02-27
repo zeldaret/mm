@@ -520,8 +520,8 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     temp_v0 = gSaveContext.time;
-    if (temp_v0 > 0x8000) {
-        temp_v0 = (0xFFFF - temp_v0);
+    if (temp_v0 > CLOCK_TIME(12, 0)) {
+        temp_v0 = 0xFFFF - temp_v0;
     }
     sp68 = (f32)temp_v0 / 0x8000;
     spD3 = ((10.0f * sp68) + 105.0f) * this->unk_19C;
