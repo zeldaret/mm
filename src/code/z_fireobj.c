@@ -79,7 +79,7 @@ void FireObj_StepSize(FireObj* fire) {
     }
     if (fire->sizeGrowsCos2 == 1) {
         if ((fire->state == FIRE_STATE_0) || (fire->state == FIRE_STATE_1)) {
-            fire->xScale = (1.0f - Math_CosS(SQ(fire->dynamicSize) * SQ(128.0f))) * fire->size;
+            fire->xScale = (1.0f - Math_CosS(SQ(fire->dynamicSize) * 0x4000)) * fire->size;
             fire->yScale = fire->dynamicSize * fire->size;
         } else {
             fire->yScale = fire->dynamicSize * fire->size;
