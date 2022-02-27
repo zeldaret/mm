@@ -9209,7 +9209,7 @@
     0x809CF9A0:("EnMttag_ShowIntroCutscene",),
     0x809CFA00:("EnMttag_WaitForIntroCutsceneToEnd",),
     0x809CFA54:("EnMttag_RaceStart",),
-    0x809CFBC4:("EnMttag_IsAnyRaceGoronInFinishLine",),
+    0x809CFBC4:("EnMttag_IsAnyRaceGoronOverFinishLine",),
     0x809CFC38:("EnMttag_Race",),
     0x809CFD98:("EnMttag_RaceFinish",),
     0x809CFE28:("EnMttag_PotentiallyRestartRace",),

@@ -333,9 +333,9 @@ void EnMttag_RaceStart(EnMttag* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Returns true if any Race Goron is in the finish line.
+ * Returns true if any Race Goron is over the finish line.
  */
-s32 EnMttag_IsAnyRaceGoronInFinishLine(EnMttag* this) {
+s32 EnMttag_IsAnyRaceGoronOverFinishLine(EnMttag* this) {
     s32 isAnyRaceGoronFinished = false;
     s32 i;
 
@@ -365,7 +365,7 @@ void EnMttag_Race(EnMttag* this, GlobalContext* globalCtx) {
         this->timer = 55;
         gSaveContext.eventInf[1] |= 2;
         this->actionFunc = EnMttag_RaceFinish;
-    } else if (EnMttag_IsAnyRaceGoronInFinishLine(this)) {
+    } else if (EnMttag_IsAnyRaceGoronOverFinishLine(this)) {
         gSaveContext.unk_3DD0[4] = 6;
         play_sound(NA_SE_SY_START_SHOT);
         Audio_QueueSeqCmd(NA_BGM_GORON_GOAL | 0x8000);
