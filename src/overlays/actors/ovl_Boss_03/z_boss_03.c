@@ -100,7 +100,7 @@ extern s32 D_809EC03C; // sRandSeed2
 /* bss */
 
 
-extern UNK_TYPE D_06007EB0;
+extern Gfx D_06007EB0[];
 extern UNK_TYPE D_06007EC8;
 extern AnimationHeader D_06009554;
 extern AnimationHeader D_060099D0;
@@ -2205,7 +2205,272 @@ void func_809E7D00(GlobalContext* globalCtx) {
     }
 }
 
+extern UNK_TYPE D_06007E50[];
+extern Gfx D_060042B0[];
+extern UNK_TYPE D_0408DBE0[];
+extern UNK_TYPE D_06004260[];
+extern Gfx D_060042F8[];
+
+#if 0
+void func_809E81E4(GlobalContext* globalCtx) {
+    void* spA4;
+    /*
+    Gfx* sp8C;
+    Gfx* sp84;
+    Gfx* sp74;
+    Gfx* sp6C;
+    Gfx* sp5C;
+    Gfx* temp_v0;
+    Gfx* temp_v0_10;
+    Gfx* temp_v0_11;
+    Gfx* temp_v0_12;
+    Gfx* temp_v0_13;
+    Gfx* temp_v0_14;
+    Gfx* temp_v0_15;
+    Gfx* temp_v0_16;
+    Gfx* temp_v0_17;
+    Gfx* temp_v0_2;
+    Gfx* temp_v0_3;
+    Gfx* temp_v0_4;
+    Gfx* temp_v0_5;
+    Gfx* temp_v0_7;
+    Gfx* temp_v0_8;
+    Gfx* temp_v0_9;
+    Gfx* temp_v1;
+    */
+    //GraphicsContext* temp_s0;
+    GyorgEffect* phi_s1;
+    s16 phi_s3;
+    u8 phi_s4;
+
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    spA4 = globalCtx->specialEffects;
+
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    phi_s1 = spA4;
+
+    phi_s4 = 0;
+    phi_s3 = 0;
+    while (phi_s3 < 0x00000096) {
+        if (phi_s1->type == 1) {
+
+            if (phi_s4 == 0) {
+                /*
+                temp_v0 = temp_s0->polyOpa.p;
+                temp_s0->polyOpa.p = temp_v0 + 8;
+                temp_v0->words.w1 = (u32) &D_06007E50;
+                temp_v0->words.w0 = 0xDE000000;
+                */
+                gSPDisplayList(POLY_OPA_DISP++, D_06007E50);
+
+                /*
+                temp_v0_2 = temp_s0->polyOpa.p;
+                temp_s0->polyOpa.p = temp_v0_2 + 8;
+                temp_v0_2->words.w1 = -1;
+                temp_v0_2->words.w0 = 0xFA000000;
+                */
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
+
+                /*
+                temp_v0_3 = temp_s0->polyOpa.p;
+                temp_s0->polyOpa.p = temp_v0_3 + 8;
+                temp_v0_3->words.w1 = 0x96969600;
+                temp_v0_3->words.w0 = 0xFB000000;
+                */
+                gDPSetEnvColor(POLY_OPA_DISP++, 150, 150, 150, 0);
+
+                phi_s4 = 1;
+            }
+
+            Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
+            Matrix_Scale(phi_s1->unk_34.x, phi_s1->unk_34.x, 1.0f, 1);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+
+            /*
+            temp_v0_4 = temp_s0->polyOpa.p;
+            temp_s0->polyOpa.p = temp_v0_4 + 8;
+            temp_v0_4->words.w0 = 0xDA380003;
+            sp8C = temp_v0_4;
+            sp8C->words.w1 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+            */
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            /*
+            temp_v0_5 = temp_s0->polyOpa.p;
+            temp_s0->polyOpa.p = temp_v0_5 + 8;
+            temp_v0_5->words.w0 = 0xDE000000;
+            temp_v0_5->words.w1 = (u32) sp48;
+            */
+            gSPDisplayList(POLY_OPA_DISP++, D_06007EB0);
+        }
+        phi_s3++;
+        phi_s1++;
+    }
+
+    func_809E7920(globalCtx, 0x0182);
+
+    phi_s1 = spA4;
+
+    phi_s4 = 0;
+
+    phi_s3 = 0;
+    while (phi_s3 < 0x00000096) {
+        if ((phi_s1->type == 2) || (phi_s1->type == 3)) {
+
+            if (phi_s4 == 0) {
+                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+
+                /*
+                temp_v0_7 = temp_s0->polyXlu.p;
+                temp_s0->polyXlu.p = temp_v0_7 + 8;
+                temp_v0_7->words.w0 = 0xDB060020;
+                sp84 = temp_v0_7;
+                sp84->words.w1 = Lib_SegmentedToVirtual(&D_0408DBE0);
+                */
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0408DBE0));
+
+                /*
+                temp_v0_8 = temp_s0->polyXlu.p;
+                temp_s0->polyXlu.p = temp_v0_8 + 8;
+                temp_v0_8->words.w1 = (u32) &D_06004260;
+                temp_v0_8->words.w0 = 0xDE000000;
+                */
+                gSPDisplayList(POLY_XLU_DISP++, D_06004260);
+
+                /*
+                temp_v0_9 = temp_s0->polyXlu.p;
+                temp_s0->polyXlu.p = temp_v0_9 + 8;
+                temp_v0_9->words.w1 = 0xFAFAFF00;
+                temp_v0_9->words.w0 = 0xFB000000;
+                */
+                gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
+
+                phi_s4++;
+            }
+
+            /*
+            temp_v1 = temp_s0->polyXlu.p;
+            temp_s0->polyXlu.p = temp_v1 + 8;
+            temp_v1->words.w0 = 0xFA000000;
+            temp_f0 = phi_s1->unk_40;
+            temp_v1->words.w1 = (((u32) (temp_f0 + 55.0f) & 0xFF) << 0x10) | ((u32) temp_f0 << 0x18) | 0xE196;
+            */
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, phi_s1->unk_40, (u8)((phi_s1->unk_40 + 55.0f)), 0xE1, 0x96);
+
+            Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
+            if (phi_s1->type == 2) {
+                Matrix_InsertYRotation_f((f32) Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * 0.0000958738f, 1);
+            } else {
+                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            }
+            Matrix_Scale(phi_s1->unk_34.x, phi_s1->unk_34.y, 1.0f, 1);
+            Matrix_InsertZRotation_f(phi_s1->unk_34.z, 1);
+
+            /*
+            temp_v0_10 = temp_s0->polyXlu.p;
+            temp_s0->polyXlu.p = temp_v0_10 + 8;
+            temp_v0_10->words.w0 = 0xDA380003;
+            sp74 = temp_v0_10;
+            sp74->words.w1 = Matrix_NewMtx(temp_s0);
+            */
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            /*
+            temp_v0_11 = temp_s0->polyXlu.p;
+            temp_s0->polyXlu.p = temp_v0_11 + 8;
+            temp_v0_11->words.w0 = 0xDE000000;
+            temp_v0_11->words.w1 = (u32) sp4C;
+            */
+            gSPDisplayList(POLY_XLU_DISP++, D_060042B0);
+        }
+        phi_s3 = phi_s3 + 1;
+        phi_s1 += 0x44;
+    }
+
+    phi_s1 = spA4;
+
+    phi_s4 = 0;
+
+    phi_s3 = 0;
+    while (phi_s3 < 0x00000096) {
+        if (phi_s1->type == 4) {
+            if (phi_s4 == 0) {
+                func_8012C448(globalCtx->state.gfxCtx);
+
+                /*
+                temp_v0_12 = temp_s0->polyXlu.p;
+                temp_s0->polyXlu.p = temp_v0_12 + 8;
+                temp_v0_12->words.w0 = 0xDB060020;
+                sp6C = temp_v0_12;
+                sp6C->words.w1 = Lib_SegmentedToVirtual(&D_0408DBE0);
+                */
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0408DBE0));
+
+                /*
+                temp_v0_13 = temp_s0->polyXlu.p;
+                temp_s0->polyXlu.p = temp_v0_13 + 8;
+                temp_v0_13->words.w1 = 0xFAFAFF00;
+                temp_v0_13->words.w0 = 0xFB000000;
+                */
+                gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
+
+                /*
+                temp_v0_14 = temp_s0->polyXlu.p;
+                temp_s0->polyXlu.p = temp_v0_14 + 8;
+                temp_v0_14->words.w1 = (u32) &D_06004260;
+                temp_v0_14->words.w0 = 0xDE000000;
+                */
+                gSPDisplayList(POLY_XLU_DISP++, D_06004260);
+
+                phi_s4++;
+            }
+
+            /*
+            temp_v0_15 = temp_s0->polyXlu.p;
+            temp_s0->polyXlu.p = temp_v0_15 + 8;
+            temp_v0_15->words.w0 = 0xFA000000;
+            temp_f8 = (s32) phi_s1->unk_40;
+            temp_v0_15->words.w1 = ((((s16) temp_f8 + 0x37) & 0xFF) << 0x10) | ((s16) temp_f8 << 0x18) | 0xE100 | (phi_s1->unk_2C & 0xFF);
+            */
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)phi_s1->unk_40, ((s16) phi_s1->unk_40 + 0x37) & 0xFF , 0xE1, (phi_s1->unk_2C & 0xFF));
+
+            Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
+
+            Matrix_Scale(phi_s1->unk_34.x, 1.0f, phi_s1->unk_34.x, 1);
+            Matrix_InsertYRotation_f(phi_s1->unk_34.z, 1);
+
+            /*
+            temp_v0_16 = temp_s0->polyXlu.p;
+            temp_s0->polyXlu.p = temp_v0_16 + 8;
+            temp_v0_16->words.w0 = 0xDA380003;
+            sp5C = temp_v0_16;
+            sp5C->words.w1 = Matrix_NewMtx(temp_s0);
+            */
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            /*
+            temp_v0_17 = temp_s0->polyXlu.p;
+            temp_s0->polyXlu.p = temp_v0_17 + 8;
+            temp_v0_17->words.w0 = 0xDE000000;
+            temp_v0_17->words.w1 = (u32) sp4C;
+            */
+            gSPDisplayList(POLY_XLU_DISP++, D_060042F8);
+        }
+        phi_s3 = phi_s3 + 1;
+        phi_s1 += 0x44;
+    }
+
+    func_809E7920(globalCtx, 0x015C);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E81E4.s")
+#endif
 
 void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
