@@ -369,6 +369,7 @@ static ColliderJntSphInit sJntSphInit2 = {
 
 Vec3f D_809E8FE8 = { 1216.0f, 140.0f, -1161.0f };
 
+// Unused. No idea what it can be. Doesn't look like textures or anything similar
 UNK_TYPE D_809E8FF4[0x42] = {
     0x43828000, 0x430C0000, 0xC47A0000, 0xC3FC0000, 0x42F00000, 0xC49F8000, 0xC490A000, 0x42A00000, 0xC4510000,
     0xC47F0000, 0x42F00000, 0x43BE8000, 0xC2080000, 0x42F00000, 0x4497A000, 0x4448C000, 0x42A00000, 0x449C4000,
@@ -1582,7 +1583,7 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
                 Math_ApproachS(&this->unk_2A8, 0x3200, 5, 0x0500);
                 if ((this->unk_530 >= 0x5A) && (this->unk_530 < 0x82)) {
                     if ((this->unk_530 & 1) != 0) {
-                        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 0x23F, this->actor.world.pos.x - 110.0f, this->actor.world.pos.y - 20.0f, this->actor.world.pos.z - 110.0f, 0, this->actor.shape.rot.y, 0, 0);
+                        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON3, this->actor.world.pos.x - 110.0f, this->actor.world.pos.y - 20.0f, this->actor.world.pos.z - 110.0f, 0, this->actor.shape.rot.y, 0, 0);
                         this->unk_252 += 1;
                     }
                     if ((this->unk_530 & 7) == 0) {
@@ -1689,8 +1690,112 @@ void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809E6CB4(Boss03* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E6CB4.s")
+void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
+    ColliderInfo* hitbox;
+    u8 sp4B = true;
+    Player* player = GET_PLAYER(globalCtx);
+    s32 i;
+    s32 phi_v1;
+    u32 phi_v0;
+    Boss03ActionFunc new_var = func_809E6A38;
+
+    if (((gGameInfo->data[0x4F4] + (this->unk_258 - 50.0f)) < player->actor.world.pos.y) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
+        sp4B = false;
+    }
+
+    if (this->unk_258 < player->actor.world.pos.y) {
+        for (i = 0; i < 2; i++) {
+            if (this->collider1.elements[i].info.toucherFlags & TOUCH_HIT) {
+                this->collider1.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+                player->unk_B84 = this->actor.shape.rot.y;
+                player->unk_B80 = 20.0f;
+            }
+        }
+
+        for (i = 0; i < 5; i++) {
+            if (this->collider2.elements[i].info.toucherFlags & TOUCH_HIT) {
+                this->collider2.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+                player->unk_B84 = this->actor.shape.rot.y;
+                player->unk_B80 = 20.0f;
+            }
+        }
+    }
+
+    if (this->unk_25C == 0) {
+        if ((this->actionFunc == new_var) && sp4B) {
+            for (i = 0; i < 5; i++) {
+                if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
+                    hitbox = this->collider2.elements[i].info.acHitInfo;
+                    this->collider2.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                    this->unk_25C = 0xF;
+                    this->unk_25E = 0xF;
+ 
+                    // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH | DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
+                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302) ? this->collider2.elements[i].info.acHitInfo->toucher.damage : 0;
+
+                    phi_v1 = phi_v0;
+                    if (phi_v0 < 1) {
+                        phi_v1 = 1;
+                    }
+                    this->actor.colChkInfo.health -= phi_v1;
+
+                    if ((s8)this->actor.colChkInfo.health <= 0) {
+                        func_809E2760(&D_809E9848, 0x3946U);
+                        func_809E2760(&D_809E9848, 0x3953U);
+                        func_809E5ADC(this, globalCtx);
+                        Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                    } else {
+                        func_809E6B70(this, globalCtx);
+                        func_809E2760(&this->actor.projectedPos, 0x3945U);
+                    }
+                    return;
+                }
+            }
+        }
+
+        for (i = 0; i < 2; i++) {
+            if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
+                hitbox = this->collider1.elements[i].info.acHitInfo;
+                this->collider1.elements[i].info.bumperFlags &= ~BUMP_HIT;
+                this->unk_25C = 0xF;
+
+                if (this->actionFunc != new_var) {
+                    func_809E69A4(this, globalCtx);
+                    func_809E2760(&this->actor.projectedPos, 0x3945U);
+                    if (&this->actor == player->actor.parent) {
+                        player->unk_AE8 = 0x65;
+                        player->actor.parent = NULL;
+                        player->csMode = 0;
+                        func_80165690();
+                    }
+                    continue;
+                }
+
+                if (sp4B) {
+                    this->unk_25E = 0xF;
+                    // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH | DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
+                    phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302) ? (this->collider1.elements[i].info.acHitInfo->toucher.damage) : 0;
+
+                    phi_v1 = phi_v0;
+                    if (phi_v0 < 1) {
+                        phi_v1 = 1;
+                    }
+                    this->actor.colChkInfo.health -= phi_v1;
+                    if ((s8)this->actor.colChkInfo.health <= 0) {
+                        func_809E2760(&D_809E9848, 0x3946U);
+                        func_809E2760(&D_809E9848, 0x3953U);
+                        Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                        func_809E5ADC(this, globalCtx);
+                    } else {
+                        func_809E6B70(this, globalCtx);
+                        func_809E2760(&this->actor.projectedPos, 0x3945U);
+                    }
+                }
+                return;
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Update.s")
 
