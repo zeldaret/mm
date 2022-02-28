@@ -2052,7 +2052,7 @@ s32 func_80124020(void);
 u8 Player_GetMask(GlobalContext* globalCtx);
 void Player_RemoveMask(GlobalContext* globalCtx);
 s32 func_8012405C(GlobalContext* globalCtx);
-// void func_80124088(void);
+s32 func_80124088(GlobalContext* globalCtx);
 s32 func_801240C8(Player* player);
 // void func_801240DC(void);
 // void func_80124110(void);
