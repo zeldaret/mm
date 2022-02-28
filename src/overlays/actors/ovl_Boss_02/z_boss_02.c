@@ -1932,6 +1932,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         }
         {
             f32 tmp = D_809E0422 ? 3150.0f : 0.0f;
+            
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, tmp, 0, 0, 0, 0, D_809E0422);
         }
 
