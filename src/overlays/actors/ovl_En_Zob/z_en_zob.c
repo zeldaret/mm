@@ -249,7 +249,7 @@ void func_80B9FA3C(EnZob* this, GlobalContext* globalCtx) {
         func_80B9F7E4(this, 4, 2);
     }
 
-    func_801518B0(globalCtx, textId, &this->actor);
+    Message_StartTextbox(globalCtx, textId, &this->actor);
 }
 
 void func_80B9FC0C(EnZob* this) {
@@ -278,19 +278,19 @@ void func_80B9FCA0(EnZob* this, GlobalContext* globalCtx) {
 }
 
 void func_80B9FD24(EnZob* this, GlobalContext* globalCtx) {
-    u32 temp_v0;
-    s16 temp;
+    s32 actionIndex;
+    s16 action;
 
     func_80B9F86C(this);
 
-    if (func_800EE29C(globalCtx, 500)) {
+    if (Cutscene_CheckActorAction(globalCtx, 500)) {
         this->unk_30E = -1;
-        temp_v0 = func_800EE200(globalCtx, 500);
-        temp = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 500);
+        action = globalCtx->csCtx.actorActions[actionIndex]->action;
 
-        if (temp != this->unk_310) {
-            this->unk_310 = temp;
-            switch (temp) {
+        if (action != this->unk_310) {
+            this->unk_310 = action;
+            switch (action) {
                 case 1:
                     func_80B9F7E4(this, 8, 0);
                     break;
@@ -304,12 +304,12 @@ void func_80B9FD24(EnZob* this, GlobalContext* globalCtx) {
 }
 
 void func_80B9FDDC(EnZob* this, GlobalContext* globalCtx) {
-    func_801518B0(globalCtx, 0x120C, &this->actor);
+    Message_StartTextbox(globalCtx, 0x120C, &this->actor);
     this->actionFunc = func_80BA00BC;
 }
 
 void func_80B9FE1C(EnZob* this, GlobalContext* globalCtx) {
-    func_801518B0(globalCtx, 0x1211, &this->actor);
+    Message_StartTextbox(globalCtx, 0x1211, &this->actor);
     this->actionFunc = func_80BA00BC;
 }
 
@@ -537,7 +537,7 @@ void func_80BA0610(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_801518B0(globalCtx, 0x120D, &this->actor);
+        Message_StartTextbox(globalCtx, 0x120D, &this->actor);
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, 2);
         func_80B9FC70(this, 0);
@@ -549,7 +549,7 @@ void func_80BA0610(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80BA06BC(EnZob* this, GlobalContext* globalCtx) {
     func_80B9FD24(this, globalCtx);
-    if (!func_800EE29C(globalCtx, 500)) {
+    if (!Cutscene_CheckActorAction(globalCtx, 500)) {
         this->actionFunc = func_80BA0610;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_80BA0610(this, globalCtx);
@@ -564,10 +564,10 @@ void func_80BA0728(EnZob* this, GlobalContext* globalCtx) {
 
     if (func_800B8718(&this->actor, &globalCtx->state)) {
         if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-            func_801518B0(globalCtx, 0x1208, NULL);
+            Message_StartTextbox(globalCtx, 0x1208, NULL);
             gSaveContext.weekEventReg[30] |= 8;
         } else {
-            func_801518B0(globalCtx, 0x1216, NULL);
+            Message_StartTextbox(globalCtx, 0x1216, NULL);
         }
         this->actionFunc = func_80BA00BC;
         this->unk_304 = 1;
@@ -577,7 +577,7 @@ void func_80BA0728(EnZob* this, GlobalContext* globalCtx) {
     } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BA0374;
         func_80B9FA3C(this, globalCtx);
-    } else if (func_800EE29C(globalCtx, 500)) {
+    } else if (Cutscene_CheckActorAction(globalCtx, 500)) {
         this->actionFunc = func_80BA06BC;
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
                Player_IsFacingActor(&this->actor, 0x3000, globalCtx) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
@@ -615,7 +615,7 @@ void func_80BA08E8(EnZob* this, GlobalContext* globalCtx) {
         func_80B9F7E4(this, 5, 2);
     }
 
-    func_801518B0(globalCtx, textId, &this->actor);
+    Message_StartTextbox(globalCtx, textId, &this->actor);
 }
 
 void func_80BA09E0(EnZob* this, GlobalContext* globalCtx) {
@@ -683,8 +683,8 @@ void func_80BA0C14(EnZob* this, GlobalContext* globalCtx) {
         this->unk_312 = 999;
     }
 
-    if (func_800EE29C(globalCtx, 0x203)) {
-        if (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x203)]->unk0 == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 515)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 515)]->action == 1) {
             this->actionFunc = func_80BA0CF4;
             this->unk_312 = -1;
         }
@@ -696,7 +696,8 @@ void func_80BA0C14(EnZob* this, GlobalContext* globalCtx) {
 
 void func_80BA0CF4(EnZob* this, GlobalContext* globalCtx) {
     func_80B9F86C(this);
-    if (func_800EE29C(globalCtx, 0x203) && (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x203)]->unk0 == 2)) {
+    if (Cutscene_CheckActorAction(globalCtx, 515) &&
+        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 515)]->action == 2)) {
         this->actionFunc = func_80BA0C14;
     }
 }

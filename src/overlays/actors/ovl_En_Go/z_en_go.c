@@ -1635,7 +1635,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
     };
     u16 actorActionCmd = 0;
     s32 sp30;
-    u32 sp2C;
+    s32 actionIndex;
 
     switch (ENGO_GET_70(&this->actor)) {
         case ENGO_70_0:
@@ -1649,8 +1649,8 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
 
     if ((actorActionCmd == 128) || (actorActionCmd == 129)) {
         if (Cutscene_CheckActorAction(globalCtx, actorActionCmd)) {
-            sp2C = Cutscene_GetActorActionIndex(globalCtx, actorActionCmd);
-            sp30 = globalCtx->csCtx.actorActions[sp2C]->action;
+            actionIndex = Cutscene_GetActorActionIndex(globalCtx, actorActionCmd);
+            sp30 = globalCtx->csCtx.actorActions[actionIndex]->action;
 
             if (this->unk_394 != (u8)sp30) {
                 this->unk_394 = sp30;
@@ -1745,7 +1745,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
             }
 
             SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
-            Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, sp2C);
+            Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         }
     }
 }
