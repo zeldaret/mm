@@ -1136,29 +1136,28 @@ void func_800ECD7C(CutsceneContext* csCtx, u8** cutscenePtr, s16 index) {
 #ifdef NON_MATCHING
 // Some stack issues, and a few instructions in the "wrong" places
 /**
- * Loops over the cutscene data itself (`cutscenePtr`), applying the effects of each command instantaneity (for most
+ * Loops over the cutscene data itself (`cutscenePtr`), applying the effects of each command instantaneously (for most
  * commands).
  *
- * The cutscene data is a semi-structured array of words, which is made up of
- * - A beginning, which contains the amount of command lists of this cutscene and the ending frame (see
+ * The cutscene data is an irregularly-structured array of words, which is made up of
+ * - A beginning, which contains the number of command lists of this cutscene and the ending frame (see
  * `CS_BEGIN_CUTSCENE`).
- * - Any amount of cutscene command lists (which should be the number specified in the beginning), each one of which
- * contains sub commands of the corresponding type.
+ * - Any number of cutscene command lists (which should be the number specified in the beginning), each one of which
+ * contains commands of the corresponding category.
  * - A end marker (see `CS_END`).
  *
- * This function iterates over each command list until either it has processed the amount of command lists stated on
+ * This function iterates over each command list until either it has processed the number of command lists stated on
  * `CS_BEGIN_CUTSCENE` or until it finds a end marker.
  *
- * A command list is a pair of words containing the command type and a count of how many subcommands this list has (N).
- * Then this list is followed by N subcommands of the said type.
- * (Camera is a notable exception, instead of a subcommand count, it has the size in bytes of the subcommand).
+ * A command list starts with a pair of words containing the command category and a count of how many commands this list
+ * has (N). This is followed by N commands of the said category. (The exception is Camera, which has the length of the
+ * list in bytes instead of the number of commands).
  *
- * For most command lists types (except actorActions and Camera commands):
- * - For each command list found, read the amount of subcommands and loop over them, passing each one to the
- * corresponding function which handles the command, applying its effects and checking the frame range stored in the
- * command.
+ * For most command lists categories (all but the actorActions and Camera commands):
+ * - For each command list found, read the number of commands and loop over them, passing each one to the corresponding
+ * function which handles the command, applying its effects and checking the frame range stored in the command.
  *
- * This function is invoked on each cutscene frame update.
+ * This function is invoked once per frame that a cutscene is active.
  *
  * TODO: consider changing the type of `cutscenePtr` to `uintptr_t` when this function matches.
  */
