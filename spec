@@ -4436,9 +4436,7 @@ beginseg
     name "ovl_Obj_Hunsui"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hunsui/z_obj_hunsui.o"
-    include "build/data/ovl_Obj_Hunsui/ovl_Obj_Hunsui.data.o"
-    include "build/data/ovl_Obj_Hunsui/ovl_Obj_Hunsui.bss.o"
-    include "build/data/ovl_Obj_Hunsui/ovl_Obj_Hunsui.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hunsui/ovl_Obj_Hunsui_reloc.o"
 endseg
 
 beginseg
