@@ -2126,8 +2126,7 @@ beginseg
     name "ovl_Obj_Comb"
     compress
     include "build/src/overlays/actors/ovl_Obj_Comb/z_obj_comb.o"
-    include "build/data/ovl_Obj_Comb/ovl_Obj_Comb.data.o"
-    include "build/data/ovl_Obj_Comb/ovl_Obj_Comb.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Comb/ovl_Obj_Comb_reloc.o"
 endseg
 
 beginseg
