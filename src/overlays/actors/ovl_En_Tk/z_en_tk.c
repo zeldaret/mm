@@ -383,7 +383,7 @@ void func_80AECE0C(EnTk* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
-    EnDoor* sp4C4;
+    EnDoor* door;
     f32 spA0[265];
     Vec3f sp94;
     Vec3f sp88;
@@ -436,7 +436,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
         this->unk_3D4 = sp7C;
     }
 
-    sp4C4 = NULL;
+    door = NULL;
     if (!(this->unk_2CA & 0xC00)) {
         door1 = NULL;
     label:
@@ -447,7 +447,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
                     if (ABS(BINANG_SUB(Actor_YawToPoint(&this->actor, &door1->world.pos), this->actor.shape.rot.y)) <=
                         0x2000) {
                         this->unk_2CA |= 0x400;
-                        sp4C4 = (EnDoor*)door1;
+                        door = (EnDoor*)door1;
                         break;
                     }
                 }
@@ -460,7 +460,7 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
             door2 = SubS_FindActor(globalCtx, door2, ACTORCAT_DOOR, ACTOR_EN_DOOR);
             if (door2 != NULL) {
                 if (Actor_XZDistanceBetweenActors(&this->actor, door2) <= 160.0f) {
-                    sp4C4 = (EnDoor*)door2;
+                    door = (EnDoor*)door2;
                     break;
                 }
                 door2 = door2->next;
@@ -468,19 +468,19 @@ s32 func_80AECE60(EnTk* this, GlobalContext* globalCtx) {
         } while (door2 != NULL);
     }
 
-    if ((sp4C4 != NULL) && (this->unk_2CA & 0x400)) {
+    if ((door != NULL) && (this->unk_2CA & 0x400)) {
         Vec3f sp5C;
 
-        Actor_OffsetOfPointInActorCoords(&this->actor, &sp5C, &sp4C4->actor.world.pos);
-        sp4C4->unk_1A7 = 2;
+        Actor_OffsetOfPointInActorCoords(&this->actor, &sp5C, &door->dyna.actor.world.pos);
+        door->unk_1A7 = 2;
         if (sp5C.z < -20.0f) {
             this->unk_2CA &= ~0x400;
             this->unk_2CA |= 0x800;
         }
     }
 
-    if (sp4C4 != NULL) {
-        if ((this->unk_2CA & 0x800) && (sp4C4->unk_1A7 == 0)) {
+    if (door != NULL) {
+        if ((this->unk_2CA & 0x800) && (door->unk_1A7 == 0)) {
             this->unk_2CA &= ~0x800;
         }
     }
