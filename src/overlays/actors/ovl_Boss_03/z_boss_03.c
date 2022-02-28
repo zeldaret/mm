@@ -51,14 +51,18 @@ void func_809E4910(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E4C34(Boss03* this, GlobalContext* globalCtx);
 
+void func_809E7D00(GlobalContext* globalCtx);
+
 /* bss */
 
 extern u8 D_809E9840;
 #if 0
-// maybe u8?
 glabel D_809E9840
 /* 000000 809E9840 */ .space 0x1
+#endif
 
+extern u8 D_809E9841; // Maybe in-function static?
+#if 0
 glabel D_809E9841
 /* 000001 809E9841 */ .space 0x1
 #endif
@@ -536,16 +540,16 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
 
-    if ((this->unk_250 == 0) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->unk_24C[2] == 0) && (this->actor.bgCheckFlags & 8)) {
         Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
         this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
-        this->unk_250 = 0x003C;
-        this->unk_24C = Rand_ZeroFloat(60.0f) + 60.0f;
+        this->unk_24C[2] = 0x003C;
+        this->unk_24C[0] = Rand_ZeroFloat(60.0f) + 60.0f;
         this->unk_274 = 0x0100;
     }
 
-    if (this->unk_250 == 0) {
-        if ((temp_f12 < 100.0f) || (this->unk_24C == 0)) {
+    if (this->unk_24C[2] == 0) {
+        if ((temp_f12 < 100.0f) || (this->unk_24C[0] == 0)) {
 
             for (i = 0; i < 200; i++) {
                 if ((!temp_f20) && (!temp_f20)) {}
@@ -558,7 +562,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
             }
 
             this->unk_274 = 0x0100;
-            this->unk_24C = Rand_ZeroFloat(60.0f) + 60.0f;
+            this->unk_24C[0] = Rand_ZeroFloat(60.0f) + 60.0f;
         }
     }
 
@@ -566,7 +570,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    if (this->unk_24E == 0) {
+    if (this->unk_24C[1] == 0) {
         if ((this->unk_258 < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
             func_809E4674(this, globalCtx);
         } else if ((player->transformation != 1) && (player->transformation != 3)) {
@@ -586,7 +590,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
 void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E3968;
     Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -10.0f);
-    this->unk_24C = 0x0064;
+    this->unk_24C[0] = 0x0064;
     this->unk_276 = 0x1000;
     this->skelAnime.playSpeed = 1.5f;
     this->unk_278 = 10.0f;
@@ -619,14 +623,14 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->unk_24C == 0)) {
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->unk_24C[0] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 0x65;
             player->actor.parent = NULL;
             player->csMode = 0;
         }
         func_809E344C(this, globalCtx);
-        this->unk_24E = 0x0064;
+        this->unk_24C[1] = 0x0064;
     } else {
         Vec3f sp50;
         f32 temp_f12;
@@ -675,7 +679,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
 void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
     this->actionFunc = func_809E3D98;
     Animation_MorphToLoop(&this->skelAnime, &D_06009CF8, -15.0f);
-    this->unk_24C = 0x64;
+    this->unk_24C[0] = 0x64;
     this->unk_2C4 = 0.0f;
     this->unk_2B8 = 0.0f;
     this->unk_242 = arg2;
@@ -709,7 +713,7 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->unk_24C == 0)) {
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->unk_24C[0] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 0x65;
             player->actor.parent = NULL;
@@ -765,7 +769,7 @@ void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
     Matrix_MultiplyVector3fByState(&sp20, &this->unk_268);
     this->unk_276 = 0x0800;
     this->unk_242 = 0;
-    this->unk_24C = 0x0064;
+    this->unk_24C[0] = 0x0064;
     this->skelAnime.playSpeed = 1.0f;
 }
 
@@ -784,7 +788,7 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     this->unk_2BD = 1;
     this->unk_25C = 0xF;
 
-    if (this->unk_24C == 0x5A) {
+    if (this->unk_24C[0] == 0x5A) {
         func_8016566C(0x00000096U);
     }
 
@@ -821,15 +825,15 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
     if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        if (this->unk_24C != 0) {
-            this->unk_24C--;
+        if (this->unk_24C[0] != 0) {
+            this->unk_24C[0]--;
         }
-        if (this->unk_24C != 0) {
-            this->unk_24C--;
+        if (this->unk_24C[0] != 0) {
+            this->unk_24C[0]--;
         }
     }
 
-    if (this->unk_24C == 0) {
+    if (this->unk_24C[0] == 0) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 0x65;
             player->actor.parent = NULL;
@@ -839,7 +843,7 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
         }
 
         func_809E344C(this, globalCtx);
-        this->unk_24E = Rand_ZeroFloat(100.0f) + 200.0f;
+        this->unk_24C[1] = Rand_ZeroFloat(100.0f) + 200.0f;
         return;
     }
 
@@ -851,7 +855,7 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     player->actor.world.rot.x = player->actor.shape.rot.x;
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->unk_2A2.y;
-    if (this->unk_24C < 5) {
+    if (this->unk_24C[0] < 5) {
         Math_ApproachS(&this->unk_2A8, 0x3200, 2, 0x1800);
         Math_ApproachF(&this->unk_2C4, 100.0f, 1.0f, 100.0f);
     } else {
@@ -872,8 +876,8 @@ void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
 
     this->actionFunc = func_809E475C;
     Animation_MorphToLoop(&this->skelAnime, &D_06009C14, -15.0f);
-    this->unk_24C = Rand_ZeroFloat(30.0f) + 80.0f;
-    this->unk_24E = 0x0032;
+    this->unk_24C[0] = Rand_ZeroFloat(30.0f) + 80.0f;
+    this->unk_24C[1] = 0x0032;
     this->unk_274 = 0;
 
     temp_f0 = sqrtf(SQXZ(this->actor.world.pos));
@@ -894,7 +898,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->unk_24E != 0) {
+    if (this->unk_24C[1] != 0) {
         func_809E2760(&this->actor.projectedPos, 0x32AB);
     }
 
@@ -912,12 +916,12 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((this->unk_258 < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
-        if (this->unk_24C == 0) {
+        if (this->unk_24C[0] == 0) {
             func_809E4910(this, globalCtx);
         }
     } else if (player->actor.world.pos.y <= this->unk_258) {
         func_809E344C(this, globalCtx);
-        this->unk_24E = 0x14;
+        this->unk_24C[1] = 0x14;
     }
 
     Math_ApproachF(&this->actor.speedXZ, -3.0f, 1.0f, 0.5f);
@@ -974,7 +978,7 @@ void func_809E497C(Boss03* this, GlobalContext* globalCtx) {
                 func_800B8D50(globalCtx, NULL, 7.0f, Math_FAtan2F(player->actor.world.pos.z, player->actor.world.pos.x), 7.0f, 0);
             }
             func_809E344C(this, globalCtx);
-            this->unk_24E = 0x0032;
+            this->unk_24C[1] = 0x0032;
         }
     }
 }
@@ -1004,7 +1008,7 @@ void func_809E4C90(Boss03* this, GlobalContext* globalCtx) {
         Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
         if (this->actor.velocity.y == 0.0f) {
             func_809E344C(this, globalCtx);
-            this->unk_24E = 0x32;
+            this->unk_24C[1] = 0x32;
         }
     } else {
         s16 i;
@@ -1064,7 +1068,7 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
             Play_CameraChangeStatus(globalCtx, 0, 1);
             Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
             this->actor.world.rot.y = -0x7B30;
-            this->unk_2CC = 1850.0f;
+            this->unk_2C8.y = 1850.0f;
 
             this->actor.world.pos.x = 1400.0f;
             this->actor.world.pos.y = 130.0f;
@@ -1271,7 +1275,7 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
             func_800B7298(globalCtx, &this->actor, 6U);
             this->subCamId = 0;
             func_809E344C(this, globalCtx);
-            this->unk_24E = 0x0032;
+            this->unk_24C[1] = 0x0032;
             gSaveContext.eventInf[5] |= 0x40;
         }
         break;
@@ -1318,7 +1322,7 @@ void func_809E5ADC(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &D_06009554, -10.0f);
     this->unk_52C = Animation_GetLastFrame(&D_06009554);
     Audio_QueueSeqCmd(0x100100FF);
-    this->unk_24C = 0;
+    this->unk_24C[0] = 0;
     this->unk_242 = 0;
     this->unk_534 = 0;
     this->actor.flags &= ~1;
@@ -1423,8 +1427,8 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, 0x3959U);
         }
 
-        if ((this->unk_24C == 0) && ((this->unk_258 - 100.0f) < this->actor.world.pos.y)) {
-            this->unk_24C = Rand_ZeroFloat(15.0f) + 15.0f;
+        if ((this->unk_24C[0] == 0) && ((this->unk_258 - 100.0f) < this->actor.world.pos.y)) {
+            this->unk_24C[0] = Rand_ZeroFloat(15.0f) + 15.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x0170, this->actor.world.pos.x, this->unk_258, this->actor.world.pos.z, 0, 0, 0x00000078, 0x00000309);
 
             if (this->actionFunc == func_809E5B64) {
@@ -1605,7 +1609,7 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 func_809E344C(this, globalCtx);
-                this->unk_24E = 0x0032;
+                this->unk_24C[1] = 0x0032;
             }
         }
         break;
@@ -1621,7 +1625,7 @@ void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
 
     if (this->actionFunc != func_809E6A38) {
         Animation_MorphToLoop(&this->skelAnime, &D_060099D0, -15.0f);
-        this->unk_250 = 0x00C8;
+        this->unk_24C[2] = 0x00C8;
         this->actionFunc = func_809E6A38;
     }
 
@@ -1660,7 +1664,7 @@ void func_809E6A38(Boss03* this, GlobalContext* globalCtx) {
         Actor_MoveWithoutGravityReverse(&this->actor);
     }
 
-    if (this->unk_250 == 0) {
+    if (this->unk_24C[2] == 0) {
         func_809E344C(this, globalCtx);
     }
 }
@@ -1669,7 +1673,7 @@ void func_809E6A38(Boss03* this, GlobalContext* globalCtx) {
 void func_809E6B70(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &D_06009554, -10.0f);
     this->actionFunc = func_809E6BC0;
-    this->unk_24C = 0x001E;
+    this->unk_24C[0] = 0x001E;
 }
 
 void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
@@ -1677,7 +1681,7 @@ void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachS(&this->unk_2A8, ((Math_SinS(this->unk_240 * 0x2000) * 3000.0f) + 0x3000), 2, 0x3000);
     Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 10.0f);
-    if (this->unk_24C == 0) {
+    if (this->unk_24C[0] == 0) {
         if ((s8)this->actor.colChkInfo.health < 6) {
             if (this->unk_253 == 0) {
                 this->unk_253++;
@@ -1686,7 +1690,7 @@ void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
             }
         }
         func_809E344C(this, globalCtx);
-        this->unk_24E = 0x0064;
+        this->unk_24C[1] = 0x0064;
     }
 }
 
@@ -1704,7 +1708,7 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_258 < player->actor.world.pos.y) {
-        for (i = 0; i < 2; i++) {
+        for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit1); i++) {
             if (this->collider1.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->collider1.elements[i].info.toucherFlags &= ~TOUCH_HIT;
                 player->unk_B84 = this->actor.shape.rot.y;
@@ -1712,7 +1716,7 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
             }
         }
 
-        for (i = 0; i < 5; i++) {
+        for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit2); i++) {
             if (this->collider2.elements[i].info.toucherFlags & TOUCH_HIT) {
                 this->collider2.elements[i].info.toucherFlags &= ~TOUCH_HIT;
                 player->unk_B84 = this->actor.shape.rot.y;
@@ -1723,13 +1727,13 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
 
     if (this->unk_25C == 0) {
         if ((this->actionFunc == new_var) && sp4B) {
-            for (i = 0; i < 5; i++) {
+            for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit2); i++) {
                 if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
                     hitbox = this->collider2.elements[i].info.acHitInfo;
                     this->collider2.elements[i].info.bumperFlags &= ~BUMP_HIT;
                     this->unk_25C = 0xF;
                     this->unk_25E = 0xF;
- 
+
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH | DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
                     phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302) ? this->collider2.elements[i].info.acHitInfo->toucher.damage : 0;
 
@@ -1753,7 +1757,7 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
             }
         }
 
-        for (i = 0; i < 2; i++) {
+        for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit1); i++) {
             if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
                 hitbox = this->collider1.elements[i].info.acHitInfo;
                 this->collider1.elements[i].info.bumperFlags &= ~BUMP_HIT;
@@ -1773,6 +1777,7 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
 
                 if (sp4B) {
                     this->unk_25E = 0xF;
+
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH | DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
                     phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302) ? (this->collider1.elements[i].info.acHitInfo->toucher.damage) : 0;
 
@@ -1797,7 +1802,204 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+#ifdef NON_EQUIVALENT
+void Boss03_Update(Actor* thisx, GlobalContext* globalCtx) {
+    Boss03* this = (Boss03* ) thisx;
+    Player* player; // sp88
+    Actor* temp_v0_4;
+    Vec3f sp78;
+    Vec3f sp6C;
+    Vec3f sp60;
+    s16 sp5E;
+    f32 sp58;
+    s32 phi_s0;
+
+    player = GET_PLAYER(globalCtx);
+    this->actor.hintId = 0x28;
+
+    if ((D_809E9842 == 0) && (player->actor.world.pos.y < 445.0f)) {
+        D_809E9842 = 1;
+        D_809E9841 = 5;
+    }
+
+    if (gGameInfo->data[0x51F] == 0) {
+        this->unk_290 = 1;
+        this->unk_240 += 1;
+        this->unk_2BC = 1;
+        this->unk_2BD = 0;
+
+        Math_Vec3f_Copy(&D_809E9848, &this->actor.projectedPos);
+
+        for (phi_s0 = 0; phi_s0 != 3; phi_s0++) {
+            if (this->unk_24C[phi_s0] != 0) {
+                this->unk_24C[phi_s0]--;
+            }
+        }
+
+        if (this->unk_324 != 0) {
+            this->unk_324--;
+        }
+
+        if (this->unk_25C != 0) {
+            this->unk_25C--;
+        }
+
+        if (this->unk_25E != 0) {
+            this->unk_25E--;
+        }
+
+        this->actionFunc(this, globalCtx);
+
+        if (this->actionFunc != func_809E5B64) {
+            Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x800);
+            this->actor.world.pos.y -= 100.0f;
+            this->actor.prevPos.y -= 100.0f;
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 150.0f, 100.0f, 5U);
+            this->actor.world.pos.y += 100.0f;
+            this->actor.prevPos.y += 100.0f;
+        }
+    }
+
+    if ((this->actionFunc != func_809E5B64) && (this->unk_2D5 == 0)) {
+        if (((this->actor.world.pos.y < this->unk_258 + 50.0f) && (this->unk_258 + 50.0f <= this->actor.prevPos.y)) || ((this->unk_258 - 50.0f < this->actor.world.pos.y) && (this->actor.prevPos.y <= this->unk_258 - 50.0f))) {
+            if ((this->actor.velocity.y < 0.0f) && (this->actionFunc != func_809E5B64)) {
+                Actor_PlaySfxAtPos(&this->actor, 0x3942U);
+            }
+
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x0170, this->actor.world.pos.x, this->unk_258, this->actor.world.pos.z, 0, 0, 0x00000078, 0x00000309);
+            this->unk_280 = 0x001B;
+            this->unk_284 = this->actor.world.pos.x;
+            this->unk_288 = this->unk_258;
+            this->unk_28C = this->actor.world.pos.z;
+        }
+    }
+
+    if (this->actionFunc != func_809E5B64) {
+        if ((this->actionFunc == func_809E6A38) || (this->actionFunc == func_809E6BC0)) {
+            this->collider2.base.colType = 3;
+        } else {
+            this->collider2.base.colType = 9;
+        }
+
+        func_809E6CB4(this, globalCtx);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+
+        if (player->transformation == 4) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+        }
+
+        if (this->unk_2BD == 0) {
+            if (player->transformation != 4) {
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+            }
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+        }
+
+        if ((this->actionFunc != func_809E6A38) && (this->unk_2BD == 0)) {
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+        }
+    }
+
+    temp_v0_4 = func_809E2D64(globalCtx);
+    if (temp_v0_4 != NULL) {
+        temp_v0_4->world.pos.y = this->unk_258;
+    }
+
+    Math_ApproachZeroF(&this->unk_260, 0.1f, 0.05f);
+
+    if (this->unk_290 != 0) {
+        this->unk_294 = this->unk_294 + 0.1f;
+        this->unk_298 = this->unk_298 + 0.12f;
+        this->unk_29C = __sinf(this->unk_294) * 1280.0f;
+        this->unk_29E = __sinf(this->unk_298) * 1280.0f;
+    } else {
+        Math_ApproachS(&this->unk_29E, 0, 0xA, 0x100);
+        Math_ApproachS(&this->unk_29C, 0, 0xA, 0x100);
+    }
+
+    Math_ApproachS(&this->unk_2A0, 0, 0xA, 0x100);
+    Math_ApproachS(&this->unk_2A8, 0, 0xA, 0x200);
+
+    if ((this->unk_240 & 1) == 0) {
+        for (phi_s0 = 0; phi_s0 < this->unk_254; phi_s0++) {
+            sp6C.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
+            sp6C.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
+            sp6C.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
+            func_809E2AB4(globalCtx, &sp6C);
+        }
+    }
+
+    this->unk_254 = 1;
+    func_809E7D00(globalCtx);
+ 
+    if (D_809E9841 != 0) {
+        D_809E9841--;
+        if (D_809E9841 == 0) {
+            Audio_QueueSeqCmd(0x0000801BU);
+        }
+    }
+
+    if (this->actionFunc != func_809E3D98) {
+        Math_ApproachS(&player->actor.world.rot.x, 0, 1, 0x80);
+        Math_ApproachS(&player->actor.shape.rot.x, 0, 1, 0x80);
+    }
+
+    if ((this->unk_258 < player->actor.world.pos.y) && (this->unk_2C8.y <= this->unk_258)) {
+        this->unk_2D4 = 0x14;
+    }
+
+    if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
+        if (this->unk_2D4 != 0) {
+            this->unk_2D4--;
+            sp78.x = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.x;
+            sp78.y = 440.0f;
+            sp78.z = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.z;
+            func_809E2788(globalCtx, &sp78);
+        }
+    }
+
+    this->unk_2C8 = player->actor.world.pos;
+
+    if (this->unk_258 < this->actor.world.pos.y) {
+        func_8019F540(0);
+    } else {
+        func_8019F540(1);
+    }
+
+    if (this->unk_280 != 0) {
+        this->unk_280--;
+    }
+
+    if ((this->unk_280 == 1) || (this->unk_280 == 5) || (this->unk_280 == 9)) {
+        sp5E = 0;
+        sp58 = 0.0f;
+        phi_s0 = 0;
+
+        while (phi_s0 < 0x14) {
+            Matrix_InsertYRotation_f(sp58, 0);
+            Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &sp60);
+            sp60.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
+            sp60.y = 440.0f;
+            sp60.z += this->unk_28C + randPlusMinusPoint5Scaled(40.0f);
+
+            if (sqrtf(SQ(sp60.x) + SQ(sp60.z)) < 355.0f) {
+                func_809E2880(globalCtx, &sp60);
+                phi_s0++;
+            }
+
+            sp58 += 0.12566371f;
+            if (sp5E >= 0x32) {
+                return;
+            }
+            sp5E += 1;
+        }
+    }
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Update.s")
+#endif
 
 void func_809E7920(GlobalContext* globalCtx, s16 objectId) {
     s32 temp_v0 = Object_GetIndex(&globalCtx->objectCtx, objectId);

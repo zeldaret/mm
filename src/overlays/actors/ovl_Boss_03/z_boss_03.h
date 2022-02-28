@@ -34,9 +34,7 @@ typedef struct Boss03 {
     /* 0x0242 */ u8 unk_242;
     /* 0x0243 */ UNK_TYPE1 unk_243[0x01];
     /* 0x0244 */ UNK_TYPE1 unk_244[0x08];
-    /* 0x024C */ s16 unk_24C;
-    /* 0x024E */ s16 unk_24E;
-    /* 0x0250 */ s16 unk_250;
+    /* 0x024C */ s16 unk_24C[3];
     /* 0x0252 */ s8 unk_252; // number of Tanron3 fish that are currently alive, maybe "numSmallFishAlive"?
     /* 0x0253 */ u8 unk_253;
     /* 0x0254 */ s16 unk_254;
@@ -56,9 +54,10 @@ typedef struct Boss03 {
     /* 0x0284 */ f32 unk_284; // Maybe a Vec3f
     /* 0x0288 */ f32 unk_288;
     /* 0x028C */ f32 unk_28C;
-    /* 0x0290 */ s8 unk_290;
+    /* 0x0290 */ u8 unk_290;
     /* 0x0291 */ UNK_TYPE1 unk_291[0x03];
-    /* 0x0294 */ UNK_TYPE1 unk_294[0x08];
+    /* 0x0294 */ f32 unk_294;
+    /* 0x0298 */ f32 unk_298;
     /* 0x029C */ s16 unk_29C;
     /* 0x029E */ s16 unk_29E;
     /* 0x02A0 */ s16 unk_2A0;
@@ -68,14 +67,12 @@ typedef struct Boss03 {
     /* 0x02AC */ Vec3f unk_2AC;
     /* 0x02B8 */ f32 unk_2B8;
     /* 0x02BC */ s8 unk_2BC;
-    /* 0x02BD */ s8 unk_2BD;
+    /* 0x02BD */ u8 unk_2BD;
     /* 0x02BE */ s16 unk_2BE;
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
     /* 0x02C0 */ f32 unk_2C4;
-    /* 0x02C8 */ UNK_TYPE1 unk_2C8[0x04];
-    /* 0x02CC */ f32 unk_2CC;
-    /* 0x02D0 */ UNK_TYPE1 unk_2D0[0x04];
-    /* 0x02D4 */ UNK_TYPE1 unk_2D4[0x01];
+    /* 0x02C8 */ Vec3f unk_2C8;
+    /* 0x02D4 */ u8 unk_2D4;
     /* 0x02D5 */ u8 unk_2D5;
     /* 0x02D6 */ s16 unk_2D6;
     /* 0x02D8 */ s16 unk_2D8;
