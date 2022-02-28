@@ -122,6 +122,8 @@ void func_800EA2B8(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     }
 }
 
+/* Start of command handling section */
+
 // Command 0x96: Miscellaneous commands.
 void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, CsCmdBase* cmd) {
     static u16 D_801BB15C = 0xFFFF;
@@ -1419,6 +1421,8 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
 #endif
 
+/* End of actor utilities section */
+
 void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (gSaveContext.cutscene >= 0xFFF0) {
         csCtx->frames++;
@@ -1554,6 +1558,8 @@ void Cutscene_LoadCutsceneData(GlobalContext* globalCtx, u8 csIndex) {
     gSaveContext.cutsceneTrigger = 1;
 }
 
+/* Start of actor utilities section */
+
 /**
  * Interpolates the actor's position based on the corresponding actor action's position
  * and the current cutscene frame
@@ -1675,3 +1681,5 @@ s32 Cutscene_CheckActorAction(GlobalContext* globalCtx, u16 actorActionCmd) {
 u8 Cutscene_IsPlaying(GlobalContext* globalCtx) {
     return (gSaveContext.cutsceneTrigger != 0) || (globalCtx->csCtx.state != CS_STATE_0);
 }
+
+/* End of actor utilities section */
