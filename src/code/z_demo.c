@@ -134,7 +134,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
     SceneTableEntry* loadedScene;
     u16 time;
 
-    if ((csCtx->frames < cmd->startFrame) || (csCtx->frames >= cmd->endFrame && cmd->endFrame != cmd->startFrame)) {
+    if ((csCtx->frames < cmd->startFrame) || ((csCtx->frames >= cmd->endFrame) && (cmd->endFrame != cmd->startFrame))) {
         return;
     }
 
@@ -512,9 +512,10 @@ void Cutscene_Command_Rumble(GlobalContext* globalCtx, CutsceneContext* csCtx, C
             break;
 
         case 2:
-            if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames) &&
-                ((csCtx->frames == cmd->startFrame) || (globalCtx->state.frames % 64) == 0)) {
-                func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+            if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
+                if ((csCtx->frames == cmd->startFrame) || (globalCtx->state.frames % 64 == 0)) {
+                    func_8013ECE0(0.0f, cmd->unk6, cmd->unk7, cmd->unk8);
+                }
             }
             break;
     }
@@ -807,13 +808,15 @@ void Cutscene_Command_MotionBlur(GlobalContext* globalCtx, CutsceneContext* csCt
 void Cutscene_Command_GiveTatlToPlayer(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((csCtx->frames == cmd->startFrame) && (cmd->base == 1)) {
-        gSaveContext.hasTatl = true;
-        if (player->tatlActor != NULL) {
-            return;
+    if (csCtx->frames == cmd->startFrame) {
+        if (cmd->base == 1) {
+            gSaveContext.hasTatl = true;
+            if (player->tatlActor != NULL) {
+                return;
+            }
+            player->tatlActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, player->actor.world.pos.x,
+                                            player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
         }
-        player->tatlActor = Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ELF, player->actor.world.pos.x,
-                                        player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
     }
 }
 
@@ -919,12 +922,12 @@ void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* cs
 s32 Cutscene_Command_Camera(GlobalContext* globalCtx, u8* cmd) {
     s32 sp1C = 0;
 
-    bcopy(cmd, &sp1C, 4);
-    cmd += 4;
+    bcopy(cmd, &sp1C, sizeof(s32));
+    cmd += sizeof(s32);
     if (func_8016A168() == 0) {
         func_80161998(cmd, &sCutsceneCameraInfo);
     }
-    return sp1C + 4;
+    return sp1C + sizeof(s32);
 }
 
 /**
@@ -1460,7 +1463,7 @@ void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
         gSaveContext.cutscene = 0xFFFD;
     }
 
-    if (gSaveContext.cutscene >= 0xFFF0 && csCtx->state == CS_STATE_0) {
+    if ((gSaveContext.cutscene >= 0xFFF0) && (csCtx->state == CS_STATE_0)) {
         s16 i;
 
         D_801BB124 = 0;
