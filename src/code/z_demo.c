@@ -1420,7 +1420,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
 #endif
 
-/* End of actor utilities section */
+/* End of command handling section */
 
 void func_800ED980(GlobalContext* globalCtx, CutsceneContext* csCtx) {
     if (gSaveContext.cutscene >= 0xFFF0) {
