@@ -346,7 +346,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
 
         case 0x26:
-            // Seems to be used to trigger "Dawn of the New Day"
+            // Seems to be used to trigger "Dawn of A New Day"
 
             gSaveContext.day = 9;
 
