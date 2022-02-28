@@ -194,7 +194,7 @@ s16 func_80B2478C(Path* path, s32 arg1, Vec3f* pos, f32* arg3) {
     f32 zDiff;
 
     if (path != NULL) {
-        point = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        point = Lib_SegmentedToVirtual(path->points);
         point = &point[arg1];
         phi_f14 = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
         sp1C = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
@@ -208,7 +208,7 @@ s16 func_80B2478C(Path* path, s32 arg1, Vec3f* pos, f32* arg3) {
     }
 
     *arg3 = SQ(xDiff) + SQ(zDiff);
-    return Math_Acot2F(sp1C, phi_f14) * 10430.378f;
+    return RADF_TO_BINANG(Math_Acot2F(sp1C, phi_f14));
 }
 
 void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
@@ -492,22 +492,22 @@ s32 func_80B25490(EnRacedog* this, Vec2f* arg1) {
     temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     temp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
     if (temp_f0 * temp < 0.0f) {
-        return 0;
+        return false;
     }
 
     temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     temp = ((xDistToBottomBack * zDistToTopBack) - (xDistToTopBack * zDistToBottomBack));
     if (temp_f0 * temp < 0.0f) {
-        return 0;
+        return false;
     }
 
     temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     temp = ((xDistToTopBack * zDistToTopFront) - (xDistToTopFront * zDistToTopBack));
     if (temp_f0 * temp < 0.0f) {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx) {
