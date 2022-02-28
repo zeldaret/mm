@@ -61,21 +61,21 @@ s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
 EnDoor* EnHy_FindNearestDoor(Actor* actor, GlobalContext* globalCtx) {
     EnDoor* nearestDoor = NULL;
     Actor* doorIter = NULL;
-    EnDoor* door;
     f32 dist;
+    EnDoor* door;
     s32 isSetup = false;
     f32 minDist = 0.0f;
 
     do {
         doorIter = SubS_FindActor(globalCtx, doorIter, ACTORCAT_DOOR, ACTOR_EN_DOOR);
         door = (EnDoor*)doorIter;
-        dist = Actor_DistanceBetweenActors(actor, &door->actor);
+        dist = Actor_DistanceBetweenActors(actor, &door->dyna.actor);
         if (!isSetup || (dist < minDist)) {
             nearestDoor = door;
             minDist = dist;
             isSetup = true;
         }
-        doorIter = door->actor.next;
+        doorIter = door->dyna.actor.next;
     } while (doorIter != NULL);
 
     if (1) {}
@@ -130,20 +130,20 @@ s32 EnHy_Init(EnHy* enHy, GlobalContext* globalCtx, FlexSkeletonHeader* skeleton
 
 void func_800F0BB4(EnHy* enHy, GlobalContext* globalCtx, EnDoor* door, s16 arg3, s16 arg4) {
     s32 pad;
-    s8 sp3B;
+    s8 animIndex;
     Vec3f offset;
     f32 phi_f0;
 
-    Actor_OffsetOfPointInActorCoords(&door->actor, &offset, &enHy->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&door->dyna.actor, &offset, &enHy->actor.world.pos);
     phi_f0 = (offset.z >= 0.0f) ? 1.0f : -1.0f;
-    sp3B = ((s8)phi_f0 < 0) ? 0 : 2;
-    EnHy_ChangeObjectAndAnim(enHy, globalCtx, (sp3B == 0) ? arg3 : arg4);
+    animIndex = ((s8)phi_f0 < 0) ? 0 : 2;
+    EnHy_ChangeObjectAndAnim(enHy, globalCtx, (animIndex == 0) ? arg3 : arg4);
     enHy->skelAnime.baseTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.prevTransl = *enHy->skelAnime.jointTable;
     enHy->skelAnime.moveFlags |= 3;
     AnimationContext_SetMoveActor(globalCtx, &enHy->actor, &enHy->skelAnime, 1.0f);
     door->unk_1A1 = 1;
-    door->unk_1A0 = sp3B;
+    door->animIndex = animIndex;
 }
 
 s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3, s16 arg4, f32 arg5) {
@@ -157,7 +157,7 @@ s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3
         if (door != NULL) {
             ret = true;
             func_800F0BB4(enHy, globalCtx, door, arg3, arg4);
-            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->actor.world.pos);
+            yaw = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
             enHy->actor.world.pos.x += arg5 * Math_SinS(yaw);
             enHy->actor.world.pos.z += arg5 * Math_CosS(yaw);
             enHy->actor.world.rot.y = -yaw;
@@ -179,7 +179,7 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
         if (door != NULL) {
             ret = true;
             func_800F0BB4(enHy, globalCtx, door, arg2, arg3);
-            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->actor.world.pos);
+            enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->dyna.actor.world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
             enHy->actor.flags &= ~ACTOR_FLAG_1;
