@@ -81,7 +81,7 @@ void func_809E2788(GlobalContext* globalCtx, Vec3f* pos) {
             effects->unk_34.y = 0.4f;
             effects->velocity = gZeroVec3f;
             effects->accel = gZeroVec3f;
-            effects->unk_2C = 0x96;
+            effects->alpha = 150;
             effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
             return;
         }
@@ -1593,13 +1593,13 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
                     Math_ApproachS(&this->unk_2BE, -4000, 10, 70);
 
                     if (this->unk_530 >= 0x3D) {
-                        Math_ApproachS(&this->unk_2A8, 0x3200, 5, 0x0500);
+                        Math_ApproachS(&this->unk_2A8, 0x3200, 5, 0x500);
                         if ((this->unk_530 >= 0x5A) && (this->unk_530 < 0x82)) {
                             if ((this->unk_530 & 1) != 0) {
                                 Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON3,
                                                    this->actor.world.pos.x - 110.0f, this->actor.world.pos.y - 20.0f,
                                                    this->actor.world.pos.z - 110.0f, 0, this->actor.shape.rot.y, 0, 0);
-                                this->unk_252 += 1;
+                                this->unk_252++;
                             }
                             if ((this->unk_530 & 7) == 0) {
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
@@ -1636,12 +1636,12 @@ void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
 
     if (this->actionFunc != func_809E6A38) {
         Animation_MorphToLoop(&this->skelAnime, &gGyorgStunnedAnim, -15.0f);
-        this->unk_24C[2] = 0x00C8;
+        this->unk_24C[2] = 0xC8;
         this->actionFunc = func_809E6A38;
     }
 
     if (&this->actor == player->actor.parent) {
-        player->unk_AE8 = 0x0065;
+        player->unk_AE8 = 0x65;
         player->actor.parent = NULL;
         player->csMode = 0;
         func_80165690();
@@ -2179,7 +2179,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                 effects->unk_34.y = 0.6f;
                 effects->velocity = gZeroVec3f;
                 effects->accel = gZeroVec3f;
-                effects->unk_2C = 0x96;
+                effects->alpha = 150;
                 effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
@@ -2193,9 +2193,11 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
             }
         } else if (effects->type == 3) {
             effects->unk_34.z += 0.15f;
+
             if (effects->velocity.y < -8.0f) {
                 effects->velocity.y = -8.0f;
             }
+
             if ((effects->velocity.y < 0.0f) && (effects->pos.y <= 440.0f)) {
                 effects->type = 4;
                 effects->pos.y = 440.0f;
@@ -2203,14 +2205,15 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                 effects->unk_34.y = 0.2f;
                 effects->velocity = gZeroVec3f;
                 effects->accel = gZeroVec3f;
-                effects->unk_2C = 0x96;
+                effects->alpha = 150;
                 effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
             }
         } else if (effects->type == 4) {
             Math_ApproachF(&effects->unk_34.x, effects->unk_34.y, 0.1f, 0.6f);
-            effects->unk_2C -= effects->unk_2E;
-            if (effects->unk_2C <= 0) {
-                effects->unk_2C = 0;
+
+            effects->alpha -= effects->unk_2E;
+            if (effects->alpha <= 0) {
+                effects->alpha = 0;
                 effects->type = 0;
             }
         } else if (effects->type == 1) {
@@ -2313,7 +2316,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             }
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)eff->unk_40, ((void)0, ((s16)eff->unk_40) + 55), 225,
-                            eff->unk_2C);
+                            eff->alpha);
 
             Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 

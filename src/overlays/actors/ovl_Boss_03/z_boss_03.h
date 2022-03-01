@@ -15,10 +15,10 @@ typedef struct {
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f accel;
     /* 0x28 */ UNK_TYPE1 unk_28[0x4];
-    /* 0x2C */ s16 unk_2C;
+    /* 0x2C */ s16 alpha;
     /* 0x2E */ s16 unk_2E;
     /* 0x30 */ UNK_TYPE1 unk_30[0x4];
-    /* 0x34 */ Vec3f unk_34;
+    /* 0x34 */ Vec3f unk_34; // it may not be a Vec3f
     /* 0x40 */ f32 unk_40;
 } GyorgEffect; // size = 0x44
 
