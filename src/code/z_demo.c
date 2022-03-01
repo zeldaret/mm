@@ -822,8 +822,6 @@ void Cutscene_Command_GiveTatlToPlayer(GlobalContext* globalCtx, CutsceneContext
     }
 }
 
-#ifdef NON_MATCHING
-// regalloc
 // Command 0x98
 void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* csCtx, CsCmdBase* cmd) {
     if ((csCtx->frames >= cmd->startFrame) && (cmd->endFrame >= csCtx->frames)) {
@@ -902,23 +900,20 @@ void Cutscene_Command_TransitionFX(GlobalContext* globalCtx, CutsceneContext* cs
 
             case 12:
                 globalCtx->envCtx.screenFillColor[0] = (160.0f * (1.0f - temp_f0));
-                globalCtx->envCtx.screenFillColor[1] = (160.0f * (1.0f - temp_f0));
-                globalCtx->envCtx.screenFillColor[2] = (u16)(160.0f * (1.0f - temp_f0));
+                globalCtx->envCtx.screenFillColor[1] = globalCtx->envCtx.screenFillColor[0];
+                globalCtx->envCtx.screenFillColor[2] = globalCtx->envCtx.screenFillColor[0];
                 globalCtx->envCtx.screenFillColor[3] = 255;
                 break;
 
             case 13:
                 globalCtx->envCtx.screenFillColor[0] = (160.0f * temp_f0);
-                globalCtx->envCtx.screenFillColor[1] = (160.0f * temp_f0);
-                globalCtx->envCtx.screenFillColor[2] = (160.0f * temp_f0);
+                globalCtx->envCtx.screenFillColor[1] = globalCtx->envCtx.screenFillColor[0];
+                globalCtx->envCtx.screenFillColor[2] = globalCtx->envCtx.screenFillColor[0];
                 globalCtx->envCtx.screenFillColor[3] = 255;
                 break;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_Command_TransitionFX.s")
-#endif
 
 // Command 0x5A: Camera
 s32 Cutscene_Command_Camera(GlobalContext* globalCtx, u8* cmd) {
