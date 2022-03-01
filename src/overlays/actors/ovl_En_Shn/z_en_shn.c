@@ -298,7 +298,7 @@ s32 func_80AE68F0(EnShn* this, GlobalContext* globalCtx) {
                 this->unk_1D8 |= 0x100;
                 this->unk_2E4 = player->exchangeItemId;
             }
-            func_8013AED4(&this->unk_1D8, 0, 7);
+            SubS_UpdateFlags(&this->unk_1D8, 0, 7);
             this->unk_1DC = func_80AE6880(this, globalCtx);
             this->unk_2C6 = 0;
             if (gSaveContext.weekEventReg[23] & 8) {
@@ -326,7 +326,7 @@ void func_80AE6A64(EnShn* this, GlobalContext* globalCtx) {
     Vec3f shnPos;
 
     if (func_8010BF58(&this->actor, globalCtx, this->unk_1DC, this->unk_2D8, &this->unk_1E0)) {
-        func_8013AED4(&this->unk_1D8, 3, 7);
+        SubS_UpdateFlags(&this->unk_1D8, 3, 7);
         this->unk_1D8 &= ~8;
         this->unk_1D8 |= 0x20;
         this->unk_2CA = 20;
@@ -359,10 +359,10 @@ void EnShn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2D8 = 0;
     this->unk_1D8 = 0;
     if (gSaveContext.entranceIndex != 0xA820) {
-        func_8013AED4(&this->unk_1D8, 3, 7);
+        SubS_UpdateFlags(&this->unk_1D8, 3, 7);
         this->unk_2BE = 0;
     } else {
-        func_8013AED4(&this->unk_1D8, 4, 7);
+        SubS_UpdateFlags(&this->unk_1D8, 4, 7);
         this->unk_2BE = 1;
     }
     this->actionFunc = func_80AE69E8;
