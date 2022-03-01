@@ -7,6 +7,8 @@
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_water_effect/object_water_effect.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -37,7 +39,7 @@ void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
 
-void func_809E81E4(GlobalContext* globalCtx);
+void Boss03_DrawEffects(GlobalContext* globalCtx);
 
 void func_809E38EC(Boss03* this, GlobalContext* globalCtx);
 
@@ -49,7 +51,7 @@ void func_809E4C34(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E4674(Boss03* this, GlobalContext* globalCtx);
 
-void func_809E7D00(GlobalContext* globalCtx);
+void Boss03_UpdateEffects(GlobalContext* globalCtx);
 
 u8 D_809E9840;
 u8 D_809E9841;
@@ -60,14 +62,8 @@ Vec3f D_809E9848;
 GyorgEffect sGyorgEffects[GYORG_EFFECT_COUNT];
 Boss03* sGyorgInstance;
 
-extern Gfx D_06007EB0[];
 extern UNK_TYPE D_06007EC8;
 extern AnimationHeader D_06009C14;
-extern UNK_TYPE D_06007E50[];
-extern Gfx D_060042B0[];
-extern UNK_TYPE D_0408DBE0[];
-extern UNK_TYPE D_06004260[];
-extern Gfx D_060042F8[];
 
 void func_809E2760(Vec3f* projectedPos, u16 sfxId) {
     func_8019F420(projectedPos, sfxId);
@@ -1957,7 +1953,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     this->unk_254 = 1;
-    func_809E7D00(globalCtx);
+    Boss03_UpdateEffects(globalCtx);
 
     if (D_809E9841 != 0) {
         D_809E9841--;
@@ -2129,17 +2125,17 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_2BC = 0;
-    func_809E81E4(globalCtx);
+
+    Boss03_DrawEffects(globalCtx);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-// Boss03_UpdateEffects
-void func_809E7D00(GlobalContext* globalCtx) {
+void Boss03_UpdateEffects(GlobalContext* globalCtx) {
     GyorgEffect* effects = globalCtx->specialEffects;
     s16 i;
     Vec3f sp94;
-    Vec3f sp88;
+    Vec3f velocity;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, effects++) {
         f32 phi_f0;
@@ -2161,10 +2157,12 @@ void func_809E7D00(GlobalContext* globalCtx) {
         } else {
             phi_f0 = 200.0f;
         }
+
         Math_ApproachF(&effects->unk_40, phi_f0, 1.0f, 80.0f);
 
         if (effects->type == 2) {
             effects->unk_34.z += 0.15f;
+
             Math_ApproachF(&effects->unk_34.x, 0.03f, 0.5f, 0.005f);
             Math_ApproachF(&effects->unk_34.y, 0.5f, 0.5f, 0.02f);
 
@@ -2189,8 +2187,8 @@ void func_809E7D00(GlobalContext* globalCtx) {
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
-                    Matrix_MultiplyVector3fByState(&sp94, &sp88);
-                    func_809E299C(globalCtx, &effects->pos, &sp88);
+                    Matrix_MultiplyVector3fByState(&sp94, &velocity);
+                    func_809E299C(globalCtx, &effects->pos, &velocity);
                 }
             }
         } else if (effects->type == 3) {
@@ -2213,7 +2211,7 @@ void func_809E7D00(GlobalContext* globalCtx) {
             effects->unk_2C -= effects->unk_2E;
             if (effects->unk_2C <= 0) {
                 effects->unk_2C = 0;
-                effects->type = 0U;
+                effects->type = 0;
             }
         } else if (effects->type == 1) {
             if (effects->velocity.y > 5.0f) {
@@ -2226,120 +2224,105 @@ void func_809E7D00(GlobalContext* globalCtx) {
     }
 }
 
-// Boss03_DrawEffects
-void func_809E81E4(GlobalContext* globalCtx) {
-    u8 phi_s4;
-    s16 phi_s3;
-    GraphicsContext* gfxCtx;
+void Boss03_DrawEffects(GlobalContext* globalCtx) {
+    u8 flag = false;
+    s16 i;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     s32 pad;
-    GyorgEffect* phi_s1;
-    GyorgEffect* spA4;
-
-    gfxCtx = globalCtx->state.gfxCtx;
-    phi_s1 = globalCtx->specialEffects;
-
-    spA4 = phi_s1;
-    phi_s4 = 0;
+    GyorgEffect* eff = globalCtx->specialEffects;
+    GyorgEffect* effFirst = eff;
 
     OPEN_DISPS(gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
     func_8012C28C(gfxCtx);
 
-
-    for (phi_s3 = 0; phi_s3 < 150; phi_s3++) {
-        if (phi_s1->type == 1) {
-
-            if (phi_s4 == 0) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06007E50);
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
+        if (eff->type == 1) {
+            if (!flag) {
+                gSPDisplayList(POLY_OPA_DISP++, gGyorgBubbleMaterialDL);
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
                 gDPSetEnvColor(POLY_OPA_DISP++, 150, 150, 150, 0);
 
-                phi_s4 = 1;
+                flag = true;
             }
 
-            Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
-            Matrix_Scale(phi_s1->unk_34.x, phi_s1->unk_34.x, 1.0f, 1);
+            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
+            Matrix_Scale(eff->unk_34.x, eff->unk_34.x, 1.0f, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_06007EB0);
+            gSPDisplayList(POLY_OPA_DISP++, gGyorgBubbleModelDL);
         }
-        phi_s1++;
     }
 
-    phi_s1 = spA4;
-
-    if (!phi_s1) {}
+    eff = effFirst;
 
     func_809E7920(globalCtx, OBJECT_WATER_EFFECT);
 
-    phi_s4 = 0;
+    flag = false;
 
-    for (phi_s3 = 0; phi_s3 < 150; phi_s3++) {
-        if ((phi_s1->type == 2) || (phi_s1->type == 3)) {
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
+        if ((eff->type == 2) || (eff->type == 3)) {
 
-            if (phi_s4 == 0) {
+            if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0408DBE0));
-                gSPDisplayList(POLY_XLU_DISP++, D_06004260);
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
+                gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
 
-                phi_s4++;
+                flag++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)phi_s1->unk_40, (u8)((((void)0, phi_s1->unk_40) + 55.0f)), 0xE1,
-                            0x96);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)eff->unk_40, (u8)((((void)0, eff->unk_40) + 55.0f)), 225,
+                            150);
 
-            Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
+            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
-            if (phi_s1->type == 2) {
+            if (eff->type == 2) {
                 Matrix_InsertYRotation_f(
-                    Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * 0.0000958738f, 1);
+                    Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * (M_PI / 0x8000), MTXMODE_APPLY);
             } else {
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             }
 
-            Matrix_Scale(phi_s1->unk_34.x, phi_s1->unk_34.y, 1.0f, 1);
-            Matrix_InsertZRotation_f(phi_s1->unk_34.z, 1);
+            Matrix_Scale(eff->unk_34.x, eff->unk_34.y, 1.0f, MTXMODE_APPLY);
+            Matrix_InsertZRotation_f(eff->unk_34.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060042B0);
+            gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
         }
-        phi_s1++;
     }
 
-    phi_s1 = spA4;
+    eff = effFirst;
 
-    phi_s4 = 0;
+    flag = false;
 
-    for (phi_s3 = 0; phi_s3 < 150; phi_s3++) {
-        if (phi_s1->type == 4) {
-            if (phi_s4 == 0) {
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
+        if (eff->type == 4) {
+            if (!flag) {
                 func_8012C448(gfxCtx);
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0408DBE0));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust1Tex));
                 gDPSetEnvColor(POLY_XLU_DISP++, 250, 250, 255, 0);
-                gSPDisplayList(POLY_XLU_DISP++, D_06004260);
+                gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_004260);
 
-                phi_s4++;
+                flag++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)phi_s1->unk_40, ((void)0, ((s16)phi_s1->unk_40) + 0x37), 0xE1,
-                            (phi_s1->unk_2C));
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)eff->unk_40, ((void)0, ((s16)eff->unk_40) + 55), 225,
+                            eff->unk_2C);
 
-            Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
+            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
-            Matrix_Scale(phi_s1->unk_34.x, 1.0f, phi_s1->unk_34.x, 1);
-            Matrix_InsertYRotation_f(phi_s1->unk_34.z, 1);
+            Matrix_Scale(eff->unk_34.x, 1.0f, eff->unk_34.x, MTXMODE_APPLY);
+            Matrix_InsertYRotation_f(eff->unk_34.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_060042F8);
+            gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
         }
-
-        phi_s1++;
     }
 
     func_809E7920(globalCtx, OBJECT_BOSS03);
