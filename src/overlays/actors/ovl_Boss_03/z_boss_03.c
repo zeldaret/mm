@@ -85,7 +85,7 @@ void func_809E2788(GlobalContext* globalCtx, Vec3f* pos) {
             effects->unk_34.y = 0.4f;
             effects->velocity = gZeroVec3f;
             effects->accel = gZeroVec3f;
-            effects->unk_2C = 0x0096;
+            effects->unk_2C = 0x96;
             effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
             return;
         }
@@ -2134,13 +2134,14 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+// Boss03_UpdateEffects
 void func_809E7D00(GlobalContext* globalCtx) {
     GyorgEffect* effects = globalCtx->specialEffects;
     s16 i;
     Vec3f sp94;
     Vec3f sp88;
 
-    for (i = 0; i < 150; i++, effects++) {
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++, effects++) {
         f32 phi_f0;
 
         if (effects->type == 0) {
@@ -2174,17 +2175,17 @@ void func_809E7D00(GlobalContext* globalCtx) {
             } else if (effects->pos.y <= 440.0f) {
                 s16 j;
 
-                effects->type = 4U;
+                effects->type = 4;
                 effects->pos.y = 440.0f;
                 effects->unk_34.x = 0.1f;
                 effects->unk_34.y = 0.6f;
                 effects->velocity = gZeroVec3f;
                 effects->accel = gZeroVec3f;
-                effects->unk_2C = 0x0096;
+                effects->unk_2C = 0x96;
                 effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
-                    Matrix_InsertYRotation_f((2.0f * (j * 3.1415927f)) / 6.0f, 0);
+                    Matrix_InsertYRotation_f((2.0f * (j * M_PI)) / 6.0f, 0);
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
@@ -2225,28 +2226,26 @@ void func_809E7D00(GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// regalloc
-void func_809E81E4(GlobalContext* globalCtx2) {
-    GraphicsContext* gfxCtx;
-    GlobalContext* globalCtx = globalCtx2;
-    s16 phi_s3;
+// Boss03_DrawEffects
+void func_809E81E4(GlobalContext* globalCtx) {
     u8 phi_s4;
+    s16 phi_s3;
+    GraphicsContext* gfxCtx;
+    s32 pad;
     GyorgEffect* phi_s1;
     GyorgEffect* spA4;
-    s32 pad;
 
     gfxCtx = globalCtx->state.gfxCtx;
-    spA4 = globalCtx->specialEffects;
+    phi_s1 = globalCtx->specialEffects;
 
-    phi_s1 = spA4;
+    spA4 = phi_s1;
     phi_s4 = 0;
 
-    func_8012C2DC(gfxCtx);
+    OPEN_DISPS(gfxCtx);
 
+    func_8012C2DC(globalCtx->state.gfxCtx);
     func_8012C28C(gfxCtx);
 
-    OPEN_DISPS(gfxCtx);
 
     for (phi_s3 = 0; phi_s3 < 150; phi_s3++) {
         if (phi_s1->type == 1) {
@@ -2274,7 +2273,7 @@ void func_809E81E4(GlobalContext* globalCtx2) {
 
     if (!phi_s1) {}
 
-    func_809E7920(globalCtx, 0x0182);
+    func_809E7920(globalCtx, OBJECT_WATER_EFFECT);
 
     phi_s4 = 0;
 
@@ -2291,7 +2290,7 @@ void func_809E81E4(GlobalContext* globalCtx2) {
                 phi_s4++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)phi_s1->unk_40, (u8)((phi_s1->unk_40 + ((void)0, 55.0f))), 0xE1,
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)phi_s1->unk_40, (u8)((((void)0, phi_s1->unk_40) + 55.0f)), 0xE1,
                             0x96);
 
             Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
@@ -2343,13 +2342,10 @@ void func_809E81E4(GlobalContext* globalCtx2) {
         phi_s1++;
     }
 
-    func_809E7920(globalCtx, 0x015C);
+    func_809E7920(globalCtx, OBJECT_BOSS03);
 
     CLOSE_DISPS(gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E81E4.s")
-#endif
 
 void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
