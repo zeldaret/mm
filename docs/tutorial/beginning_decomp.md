@@ -1,6 +1,6 @@
 # Beginning decompilation: the Init function and the Actor struct
 
-Up: [Contents](contents.md)
+- Up: [Contents](contents.md)
 
 Open the C file and the H file with your actor's name from the appropriate directory in `src/overlays/actors/`. These will be the main files we work with. We will be using EnRecepgirl (the rather forward Mayor's receptionist in the Mayor's residence in East Clock Town) as our example: it is a nice simple NPC with most of the common features of an NPC.
 
@@ -96,9 +96,9 @@ It is currently divided into six sections as follows:
 
 3. These are prototypes for the "main four" functions that almost every actor has. You add more functions here if they need to be declared above their first use.
 
-5. `if`'d-out section containing the `InitVars` and a few other common pieces of data. This can be ignored until we import the data.
+4. `if`'d-out section containing the `InitVars` and a few other common pieces of data. This can be ignored until we import the data.
 
-4. A set of `extern`s. These refer to the data in the previous section, and, data that comes from other files, usually in the actor's corresponding object file. The latter point to addresses in the ROM where assets are stored (usually collision data, animations or display lists). Once the corresponding object files have been decompiled, these will simply be replaced by including the object file (see [Object Decompilation](object_decomp.md) for how this process works). These symbols have been automatically extracted from the MIPS code. There may turn out to be some that were not caught by the script, in which case they need to be placed in the file called `undefined_syms.txt` in the root directory of the project. Ask in Discord for how to do this: it is simple, but rare enough to not be worth covering here.
+5. A set of `extern`s. These refer to the data in the previous section, and, data that comes from other files, usually in the actor's corresponding object file. The latter point to addresses in the ROM where assets are stored (usually collision data, animations or display lists). These can simply be replaced by including the object file (see [Object Decompilation](object_decomp.md) for how this process works).
 
 6. List of functions. Each `#pragma GLOBAL_ASM` is letting the compiler use the corresponding assembly file while we do not have decompiled C code for that function. The majority of the decompilation work is converting these functions into C that it looks like a human wrote.
 

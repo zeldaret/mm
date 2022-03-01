@@ -7,7 +7,7 @@
 #include "z_en_syateki_man.h"
 #include "objects/object_shn/object_shn.h"
 
-#define FLAGS 0x08000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -782,7 +782,7 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
             this->unk_284 = 0xA37;
         }
         player->stateFlags1 &= ~0x20;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
         this->actionFunc = func_809C6E30;
@@ -844,7 +844,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
         func_801518B0(globalCtx, 0x408, &this->actor);
         this->unk_284 = 0x408;
         player->stateFlags1 &= ~0x20;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
         this->actionFunc = func_809C7990;

@@ -196,7 +196,7 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_168 = D_80A2B8DC[this->unk_160];
     this->unk_16C = D_80A2B93C[this->unk_160];
 
-    func_8013E3B8(&this->dyna.actor, this->unk_1B6, ARRAY_COUNT(this->unk_1B6));
+    SubS_FillCutscenesList(&this->dyna.actor, this->unk_1B6, ARRAY_COUNT(this->unk_1B6));
 
     switch (this->unk_160) {
         case 1:
@@ -723,7 +723,7 @@ void BgDblueMovebg_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     if (this->unk_172 & 8) {
-        if (func_8013E2D4(&this->dyna.actor, this->unk_1D2, -1, 0)) {
+        if (SubS_StartActorCutscene(&this->dyna.actor, this->unk_1D2, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
             this->unk_172 &= ~8;
         }
     }
