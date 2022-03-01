@@ -116,7 +116,8 @@ void EnCrow_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnCrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
+                       OBJECT_CROW_LIMB_MAX);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderItems);
     this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -136,7 +137,7 @@ void EnCrow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnCrow_SetupFlyIdle(EnCrow* this) {
     this->timer = 100;
-    this->collider.base.acFlags |= 1;
+    this->collider.base.acFlags |= AC_ON;
     this->actionFunc = EnCrow_FlyIdle;
     this->skelAnime.playSpeed = 1.0f;
 }
@@ -157,16 +158,16 @@ void EnCrow_FlyIdle(EnCrow* this, GlobalContext* globalCtx) {
         sp38 = Actor_XZDistanceToPoint(&this->actor, &this->actor.parent->world.pos);
     } else {
         sp38 = 450.0f;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
 
-    if ((this->actor.bgCheckFlags & 8) != 0) {
+    if (this->actor.bgCheckFlags & 8) {
         this->aimRotY = this->actor.wallYaw;
     } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
         this->aimRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->aimRotY, 5, 0x300, (s16)0x10) == 0) && (skelanimeUpdated) &&
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->aimRotY, 5, 0x300, 0x10) == 0) && (skelanimeUpdated) &&
         (Rand_ZeroOne() < 0.1f)) {
 
         temp = (Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
@@ -178,7 +179,7 @@ void EnCrow_FlyIdle(EnCrow* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 
-    if ((this->actor.depthInWater > -40.0f) || ((this->actor.bgCheckFlags & 1) != 0)) {
+    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
         this->aimRotX = -0x1000;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 50.0f)) {
         this->aimRotX = -Rand_S16Offset(0x800, 0x800);
@@ -254,7 +255,7 @@ void EnCrow_DiveAttack(EnCrow* this, GlobalContext* globalCtx) {
     if (((this->timer == 0) || ((&player->actor != this->actor.child) && (this->actor.child->home.rot.z != 0)) ||
          ((&player->actor == this->actor.child) &&
           ((Player_GetMask(globalCtx) == PLAYER_MASK_STONE) || (player->stateFlags1 & 0x800000))) ||
-         ((this->collider.base.atFlags & 2) || (this->actor.bgCheckFlags & 9))) ||
+         ((this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 9))) ||
         (this->actor.depthInWater > -40.0f)) {
 
         if (this->collider.base.atFlags & AT_HIT) {
@@ -297,15 +298,15 @@ void EnCrow_SetupDamaged(EnCrow* this, GlobalContext* globalCtx) {
         this->steamScale = 0.5f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.elements->info.bumper.hitPos.x,
                     this->collider.elements->info.bumper.hitPos.y, this->collider.elements->info.bumper.hitPos.z, 0, 0,
-                    0, 3);
+                    0, CLEAR_TAG_SMALL_LIGHT_RAYS);
     } else if (this->actor.colChkInfo.damageEffect == 2) {
         this->deathMode = 0; // Fire arrows
         this->effectAlpha = 4.0f;
         this->steamScale = 0.5f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 0x28);
-    if ((this->actor.flags & 0x8000) != 0) {
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    if ((this->actor.flags & ACTOR_FLAG_8000) != 0) {
         this->actor.speedXZ = 0.0f;
     }
 
@@ -319,7 +320,7 @@ void EnCrow_Damaged(EnCrow* this, GlobalContext* globalCtx) {
     Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
 
-    if (!(this->actor.flags & 0x8000)) {
+    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
         if (this->deathMode != 10) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
             this->actor.shape.rot.z += 0x1780;
@@ -328,7 +329,7 @@ void EnCrow_Damaged(EnCrow* this, GlobalContext* globalCtx) {
             EnCrow_CheckIfFrozen(this, globalCtx);
             func_800B3030(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.x * 10000.0f,
                           0, 0);
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0xBU, NA_SE_EN_EXTINCT);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
 
             if (this->actor.parent != NULL) {
                 Actor_MarkForDeath(&this->actor);
@@ -401,8 +402,7 @@ void EnCrow_SetupRespawn(EnCrow* this) {
     if (D_8099C0CC == 10) {
         this->actor.params = 1;
         D_8099C0CC = 0;
-        this->collider.elements->dim.worldSphere.radius =
-            (sJntSphInit.elements->dim.modelSphere.radius * 0.03f * 100.0f);
+        this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius * 0.03f * 100.0f;
     } else {
         this->actor.params = 0;
         this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
@@ -485,7 +485,7 @@ void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
             height = 0.0f;
             Actor_MoveWithGravity(&this->actor);
         }
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f * scale, 25.0f * scale, 50.0f * scale, 7U);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f * scale, 25.0f * scale, 50.0f * scale, 7);
     } else {
         height = 0.0f;
     }
@@ -506,7 +506,7 @@ void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetFocus(&this->actor, height);
 
-    if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f) != 0)) {
+    if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
     if (this->effectAlpha > 0.0f) {
@@ -531,9 +531,9 @@ s32 EnCrow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     EnCrow* this = (EnCrow*)thisx;
 
     if (this->actor.colChkInfo.health != 0) {
-        if (limbIndex == 7) {
+        if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
             rot->y += (s16)(0xC00 * sin_rad(this->skelAnime.curFrame * (M_PI / 4)));
-        } else if (limbIndex == 8) {
+        } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
             rot->y += (s16)(0x1400 * sin_rad((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
         }
     }
@@ -543,11 +543,12 @@ s32 EnCrow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 void EnCrow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnCrow* this = (EnCrow*)thisx;
 
-    if (limbIndex == 2) {
+    if (limbIndex == OBJECT_CROW_LIMB_BODY) {
         Matrix_GetStateTranslationAndScaledX(2500.0f, this->bodyPartsPos);
         return;
     }
-    if ((limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8)) {
+    if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||
+        (limbIndex == OBJECT_CROW_LIMB_TAIL)) {
         Matrix_GetStateTranslation(&this->bodyPartsPos[(limbIndex >> 1) - 1]);
     }
 }
@@ -558,6 +559,7 @@ void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCrow_OverrideLimbDraw, EnCrow_PostLimbDraw, &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, 4, this->actor.scale.x * 100.0f * this->steamScale,
-                  this->effectScale, this->effectAlpha, this->deathMode);
+    func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                  this->actor.scale.x * 100.0f * this->steamScale, this->effectScale, this->effectAlpha,
+                  this->deathMode);
 }
