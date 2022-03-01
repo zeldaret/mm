@@ -1803,16 +1803,18 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
 }
 
 #ifdef NON_EQUIVALENT
-void Boss03_Update(Actor* thisx, GlobalContext* globalCtx) {
-    Boss03* this = (Boss03* ) thisx;
-    Player* player; // sp88
+// High posibility of being equivalent
+void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    Boss03* this = (Boss03*) thisx;
     Actor* temp_v0_4;
+    Player* player; // sp88
+    s32 phi_s0;
     Vec3f sp78;
     Vec3f sp6C;
     Vec3f sp60;
     s16 sp5E;
     f32 sp58;
-    s32 phi_s0;
 
     player = GET_PLAYER(globalCtx);
     this->actor.hintId = 0x28;
@@ -1823,9 +1825,9 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (gGameInfo->data[0x51F] == 0) {
-        this->unk_290 = 1;
-        this->unk_240 += 1;
-        this->unk_2BC = 1;
+        this->unk_240++;
+        this->unk_2BC = this->unk_290 = 1;
+
         this->unk_2BD = 0;
 
         Math_Vec3f_Copy(&D_809E9848, &this->actor.projectedPos);
@@ -1973,11 +1975,9 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_280 == 1) || (this->unk_280 == 5) || (this->unk_280 == 9)) {
-        sp5E = 0;
         sp58 = 0.0f;
-        phi_s0 = 0;
 
-        while (phi_s0 < 0x14) {
+        for (sp5E = 0, phi_s0 = 0; (phi_s0 < 20); sp5E++) {
             Matrix_InsertYRotation_f(sp58, 0);
             Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &sp60);
             sp60.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
@@ -1990,10 +1990,9 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             sp58 += 0.12566371f;
-            if (sp5E >= 0x32) {
-                return;
+            if (sp5E >= 50) {
+                break;
             }
-            sp5E += 1;
         }
     }
 }
