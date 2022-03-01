@@ -111,6 +111,15 @@ s16 sMaskObjectIds[PLAYER_MASK_MAX - 1] = {
 
 // Load mask object?
 void func_801229FC(Player* player) {
+    /**
+     * Notes:
+     * 
+     * player->maskObjectLoadState seem to be able to take 3 possible values
+     * - 0: The mask object is loaded.
+     * - 1: The mask object must be changed (and the DMA request has not been sent yet)
+     * - 2: Waiting for the DMA request to complete.
+     */
+
     if (player->maskObjectLoadState == 1) {
         s16 objectId = sMaskObjectIds[(u8)player->maskId - 1];
 
@@ -983,8 +992,7 @@ void func_8012536C(void) {
     }
 }
 
-// Draws zora shield
-void func_801253A4(GlobalContext* globalCtx, Player* player) {
+void Player_DrawZoraShield(GlobalContext* globalCtx, Player* player) {
     u8* phi_a0;
     Vtx* vtx;
     Gfx* dl;
