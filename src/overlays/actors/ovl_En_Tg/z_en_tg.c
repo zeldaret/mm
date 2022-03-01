@@ -16,6 +16,7 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
+// void func_8098F800(SkelAnime* skelAnime, ?, s32)
 
 #if 0
 const ActorInit En_Tg_InitVars = {
@@ -83,7 +84,8 @@ extern CollisionCheckInfoInit2 D_809901EC;
 extern DamageTable D_809901F8;
 
 extern UNK_TYPE D_0600B0E0;
-extern UNK_TYPE D_0600B2B0;
+extern UNK_TYPE D_80990218;
+extern FlexSkeletonHeader D_0600B2B0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 
@@ -91,7 +93,20 @@ extern UNK_TYPE D_0600B2B0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F928.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Init.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Init.s")
+void EnTg_Init(Actor *thisx, GlobalContext *globalCtx) {
+    EnTg* this = THIS;
+
+    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B2B0, NULL, this->jointTable, this->morphTable, 21);
+    func_8098F800(&this->skelAnime, &D_80990218, 0);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_809901C0);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, &D_809901F8, &D_809901EC);
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actionFunc = func_8098FA70;
+    this->actor.gravity = -4.0f;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Destroy.s")
 
