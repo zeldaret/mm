@@ -8,6 +8,8 @@ struct Boss03;
 
 typedef void (*Boss03ActionFunc)(struct Boss03*, GlobalContext*);
 
+#define GYORG_WORK_TIMER_MAX 3
+
 typedef struct {
     /* 0x00 */ u8 type;
     /* 0x02 */ s16 unk_02;
@@ -34,7 +36,7 @@ typedef struct Boss03 {
     /* 0x0242 */ u8 unk_242;
     /* 0x0243 */ UNK_TYPE1 unk_243[0x01];
     /* 0x0244 */ UNK_TYPE1 unk_244[0x08];
-    /* 0x024C */ s16 unk_24C[3];
+    /* 0x024C */ s16 workTimer[GYORG_WORK_TIMER_MAX];
     /* 0x0252 */ s8 unk_252; // number of Tanron3 fish that are currently alive, maybe "numSmallFishAlive"?
     /* 0x0253 */ u8 unk_253;
     /* 0x0254 */ s16 unk_254;
