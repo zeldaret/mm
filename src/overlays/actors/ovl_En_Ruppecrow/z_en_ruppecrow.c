@@ -440,7 +440,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &object_crow_Anim_0000F0, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
+    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
@@ -627,8 +627,8 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnRuppecrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0, this->joinTable,
-                       this->morphTable, ENRUPPECROW_LIMB_COUNT);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->joinTable, this->morphTable,
+                       ENRUPPECROW_LIMB_COUNT);
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     Collider_InitJntSph(globalCtx, &this->collider);
