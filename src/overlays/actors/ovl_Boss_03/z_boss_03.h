@@ -38,7 +38,6 @@ typedef struct Boss03 {
     /* 0x0252 */ s8 unk_252; // number of Tanron3 fish that are currently alive, maybe "numSmallFishAlive"?
     /* 0x0253 */ u8 unk_253;
     /* 0x0254 */ s16 unk_254;
-    /* 0x0256 */ UNK_TYPE1 unk_256[0x02];
     /* 0x0258 */ f32 unk_258;
     /* 0x025C */ s16 unk_25C;
     /* 0x025E */ s16 unk_25E;
@@ -50,12 +49,10 @@ typedef struct Boss03 {
     /* 0x0278 */ f32 unk_278;
     /* 0x027C */ f32 unk_27C;
     /* 0x0280 */ s16 unk_280;
-    /* 0x0282 */ UNK_TYPE1 unk_282[0x02];
     /* 0x0284 */ f32 unk_284; // Maybe a Vec3f
     /* 0x0288 */ f32 unk_288;
     /* 0x028C */ f32 unk_28C;
     /* 0x0290 */ u8 unk_290;
-    /* 0x0291 */ UNK_TYPE1 unk_291[0x03];
     /* 0x0294 */ f32 unk_294;
     /* 0x0298 */ f32 unk_298;
     /* 0x029C */ s16 unk_29C;
@@ -63,7 +60,6 @@ typedef struct Boss03 {
     /* 0x02A0 */ s16 unk_2A0;
     /* 0x02A2 */ Vec3s unk_2A2;
     /* 0x02A8 */ s16 unk_2A8;
-    /* 0x02AA */ UNK_TYPE1 unk_2AA[0x02];
     /* 0x02AC */ Vec3f unk_2AC;
     /* 0x02B8 */ f32 unk_2B8;
     /* 0x02BC */ s8 unk_2BC;
@@ -77,15 +73,13 @@ typedef struct Boss03 {
     /* 0x02D6 */ s16 unk_2D6;
     /* 0x02D8 */ s16 unk_2D8;
     /* 0x02DA */ s16 unk_2DA;
-    /* 0x02DC */ Vec3f unk_2DC[UNK_SIZE];
-    /* 0x02E8 */ UNK_TYPE1 unk_2E8[0x3C];
+    /* 0x02DC */ Vec3f unk_2DC[6];
     /* 0x0324 */ s16 unk_324;
-    /* 0x0326 */ UNK_TYPE1 unk_326[0x2];
     /* 0x0328 */ Boss03ActionFunc actionFunc;
     /* 0x032C */ ColliderJntSph collider1;
-    /* 0x034C */ ColliderJntSphElement unk_34C[2];
+    /* 0x034C */ ColliderJntSphElement colliderElements1[2];
     /* 0x03CC */ ColliderJntSph collider2;
-    /* 0x03EC */ ColliderJntSphElement unk_3EC[5];
+    /* 0x03EC */ ColliderJntSphElement colliderElements2[5];
     /* 0x052C */ f32 unk_52C;
     /* 0x0530 */ u32 unk_530;
     /* 0x0534 */ s16 unk_534;
@@ -96,9 +90,9 @@ typedef struct Boss03 {
     /* 0x055C */ Vec3f unk_55C;
     /* 0x0568 */ f32 unk_568;
     /* 0x056C */ f32 unk_56C;
-    /* 0x0570 */ f32 unk_570;
+    /* 0x0570 */ f32 unk_570; // set but not used
     /* 0x0574 */ UNK_TYPE1 unk_574[0x04];
-    /* 0x0578 */ f32 unk_578;
+    /* 0x0578 */ f32 cameraFov;
 } Boss03; // size = 0x57C
 
 extern const ActorInit Boss_03_InitVars;
