@@ -53,47 +53,17 @@ void func_809E7D00(GlobalContext* globalCtx);
 
 /* bss */
 
-extern u8 D_809E9840;
-#if 0
-glabel D_809E9840
-/* 000000 809E9840 */ .space 0x1
-#endif
+u8 D_809E9840;
 
-extern u8 D_809E9841; // Maybe in-function static?
-#if 0
-glabel D_809E9841
-/* 000001 809E9841 */ .space 0x1
-#endif
+u8 D_809E9841;
 
-// glabel D_809E9842
-// /* 000002 809E9842 */ .space 0x6
-extern u8 D_809E9842;
+u8 D_809E9842;
 
-extern Vec3f D_809E9848;
-#if 0
-glabel D_809E9848
-/* 000008 809E9848 */ .space 0x10
-#endif
+Vec3f D_809E9848;
 
-// glabel D_809E9858
-// /* 000018 809E9858 */ .space 0x27D8
-extern GyorgEffect D_809E9858[GYORG_EFFECT_COUNT];
+GyorgEffect D_809E9858[GYORG_EFFECT_COUNT];
 
-// glabel D_809EC030
-// /* 0027F0 809EC030 */ .space 0x4
-extern Boss03* D_809EC030;
-
-// glabel D_809EC034
-// /* 0027F4 809EC034 */ .space 0x4
-extern s32 D_809EC034; // sRandSeed0
-
-// glabel D_809EC038
-// /* 0027F8 809EC038 */ .space 0x4
-extern s32 D_809EC038; // sRandSeed1
-
-// glabel D_809EC03C
-// /* 0027FC 809EC03C */ .space 0x4
-extern s32 D_809EC03C; // sRandSeed2
+Boss03* D_809EC030;
 
 /* bss */
 
@@ -208,6 +178,11 @@ void func_809E2B8C(s32 arg0, ColliderJntSph* collider, Vec3f* arg2) {
     temp_v1 = &collider->elements[arg0];
     temp_v1->dim.worldSphere.radius = temp_v1->dim.scale * temp_v1->dim.modelSphere.radius;
 }
+
+
+s32 D_809EC034; // sRandSeed0
+s32 D_809EC038; // sRandSeed1
+s32 D_809EC03C; // sRandSeed2
 
 // Boss03_SeedRand(s32 seed0, s32 seed1, s32 seed2)
 void func_809E2C1C(s32 seed0, s32 seed1, s32 seed2) {
