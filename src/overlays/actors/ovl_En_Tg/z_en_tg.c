@@ -16,7 +16,6 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
-// void func_8098F800(SkelAnime* skelAnime, ?, s32)
 
 #if 0
 const ActorInit En_Tg_InitVars = {
@@ -88,6 +87,22 @@ extern UNK_TYPE D_80990218;
 extern FlexSkeletonHeader D_0600B2B0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
+// void func_8098F800(SkelAnime *skelAnime, s32 arg1, s16 arg2) {
+//     s16 temp_v0;
+//     void *temp_s0;
+//     s16 phi_f0;
+
+//     temp_s0 = arg1 + (arg2 * 0x10);
+//     temp_v0 = temp_s0->unkA;
+//     if ((s32) temp_v0 < 0) {
+//         // s16 Animation_GetLastFrame(void* animation);
+//         phi_f0 = (f32) Animation_GetLastFrame(LegacyAnimationHeader *)temp_s0->unk0);
+//     } else {
+//         phi_f0 = (f32) temp_v0;
+//     }
+//     // void Animation_Change(SkelAnime* skelAnime, AnimationHeader* animation, f32 playSpeed, f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
+//     Animation_Change(skelAnime, (AnimationHeader*) temp_s0->unk0, (f32) temp_s0->unk4, (f32) temp_s0->unk8, (f32) phi_f0, (u8) (s32) temp_s0->unkC, (f32) temp_s0->unkE);
+// }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
 
@@ -116,6 +131,29 @@ void EnTg_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
+// void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
+//     f32 sp28;
+//     Vec3f sp24;
+//     s16 phi_v1;
+
+//     this->actor.shape.rot.y = this->actor.shape.rot.y + gGameInfo->data[0x600] + 0x258;
+//     this->unk30 = (unaligned s32) this->unkBC;
+//     this->actor.world.rot.z = (s16) (u16) this->actor.shape.rot.z;
+//     if (this->unk2EC == 0) {
+//         phi_v1 = 0;
+//     } else {
+//         this->unk2EC = (s16) (this->unk2EC - 1);
+//         phi_v1 = this->unk2EC;
+//     }
+//     if (phi_v1 == 0) {
+//         this->unk2EC = 0xC;
+//         sp24.x = (f32) this->actor.world.pos.x;
+//         sp24.y = (f32) this->actor.world.pos.y;
+//         sp24.z = (f32) this->actor.world.pos.z;
+//         sp28 += 62.0f;
+//         func_8098FD50(this + 0x2F0, &sp24, 0xA);
+//     }
+// }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
 
