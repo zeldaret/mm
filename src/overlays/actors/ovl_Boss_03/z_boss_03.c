@@ -51,6 +51,9 @@ void func_809E4910(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E4C34(Boss03* this, GlobalContext* globalCtx);
 
+
+void func_809E4674(Boss03* this, GlobalContext* globalCtx);
+
 void func_809E7D00(GlobalContext* globalCtx);
 
 /* bss */
@@ -568,9 +571,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
                 this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
                 this->unk_268.z = randPlusMinusPoint5Scaled(2500.0f);
 
-                //if (sqrtf(SQ(this->unk_268.x - this->actor.world.pos.x) + SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f) 
-                if (sqrtf(SQ((new_var = this->unk_268.x) - this->actor.world.pos.x) + SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f)
-                {
+                if (sqrtf(SQ(this->unk_268.x - this->actor.world.pos.x) + SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f) {
                     break;
                 }
             }
@@ -611,13 +612,21 @@ void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
     this->unk_27C = 1.0f;
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
+// float regalloc
 void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 temp_f2;
     f32 temp3;
     f32 temp_f18;
+
     f32 temp;
+
+    Vec3f sp50;
+    f32 temp_f12;
+    f32 phi_f2;
+    f32 sp44;
+    u8 sp43;
 
     this->unk_2BD = 1;
     SkelAnime_Update(&this->skelAnime);
@@ -628,7 +637,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp3), 0x000A, this->unk_274);
     temp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0x000A, this->unk_274, 0) * -0.5f;
-    Math_ApproachS(&this->unk_2A0, temp, 5, 0x0100);
+    Math_ApproachS(&this->unk_2A0, temp, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x0100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
@@ -643,14 +652,10 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
             player->actor.parent = NULL;
             player->csMode = 0;
         }
+
         func_809E344C(this, globalCtx);
         this->unk_24C[1] = 0x0064;
     } else {
-        Vec3f sp50;
-        f32 temp_f12;
-        f32 phi_f2;
-        f32 sp44;
-        u8 sp43;
 
         if ((this->unk_258 - 80.0f) < player->actor.world.pos.y) {
             sp43 = 1;
@@ -667,6 +672,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
         Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
 
         temp_f12 = sqrtf(SQ(sp50.x - player->actor.world.pos.x) + SQ(sp50.z - player->actor.world.pos.z));
+
         if (temp_f12 < (2.0f * phi_f2)) {
             Math_ApproachS(&this->unk_2A8, 0x3200, 2, 0x1800);
             this->unk_278 = 25.0f;
@@ -787,12 +793,11 @@ void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
     this->skelAnime.playSpeed = 1.0f;
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 // float regalloc
 void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Input* input = CONTROLLER1(globalCtx);
-    // SkelAnime* sp2C;                                /* compiler-managed */
     f32 temp_f2;
     f32 temp;
     f32 temp_f18;
@@ -809,6 +814,7 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
     Matrix_RotateY(this->actor.world.rot.y, 1);
+
     temp_f2 = this->unk_268.x - this->actor.world.pos.x;
     temp = this->unk_268.y - this->actor.world.pos.y;
     temp_f18 = this->unk_268.z - this->actor.world.pos.z;
@@ -883,30 +889,23 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E421C.s")
 #endif
 
-#ifdef NON_EQUIVALENT
-// Maybe equivalent?
 void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
-    f32 temp_f0;
-
     this->actionFunc = func_809E475C;
     Animation_MorphToLoop(&this->skelAnime, &D_06009C14, -15.0f);
     this->unk_24C[0] = Rand_ZeroFloat(30.0f) + 80.0f;
-    this->unk_24C[1] = 0x0032;
+    this->unk_24C[1] = 0x32;
     this->unk_274 = 0;
 
-    temp_f0 = sqrtf(SQXZ(this->actor.world.pos));
-    if (temp_f0 > 600.0f) {
+    if (sqrtf(SQXZ(this->actor.world.pos)) > 600.0f) {
         if (Rand_ZeroOne() < 0.5f) {
             this->unk_242 = 1;
-            return;
+        } else {
+            this->unk_242 = 0;
         }
-        // if (((!(&this->actor)) && (!(&this->actor))) && (!(&this->actor))) {}
+    } else {
+        this->unk_242 = 0;
     }
-    this->unk_242 = 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E4674.s")
-#endif
 
 void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
@@ -1118,6 +1117,7 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
                 this->unk_240 = 0;
                 func_8016566C(0x00000096U);
                 this->unk_578 = 80.0f;
+
             case 0x2:
                 Actor_PlaySfxAtPos(&this->actor, 0x3140U);
 
@@ -1169,6 +1169,7 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
             }
         }
         break;
+
     case 0x3:
         func_809E2760(&this->actor.projectedPos, 0x322DU);
         sp5A = 0x1970;
@@ -1207,6 +1208,7 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
             Actor_MoveWithoutGravityReverse(&this->actor);
             this->actor.world.pos.y = this->unk_258 - 150.0f;
             func_80165690();
+
         case 0x5:
             SkelAnime_Update(&this->skelAnime);
             this->actor.speedXZ = 20.0f;
@@ -1244,7 +1246,7 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
 
         //if ((this && this) && this) {}
 
-        if ((this->unk_530 < 0x00000018U) || (this->unk_530 >= 0x0000005AU)) {
+        if ((this->unk_530 < 0x18) || (this->unk_530 >= 0x5A)) {
             SkelAnime_Update(&this->skelAnime);
             Math_ApproachS(&this->actor.world.rot.x, this->actor.velocity.y * -300.0f, 3, 0x1000);
             Actor_MoveWithGravity(&this->actor);
@@ -1816,8 +1818,8 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-// High posibility of being equivalent
+#ifdef NON_MATCHING
+// regalloc and few instructions pushed a bit below from where they should be
 void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss03* this = (Boss03*) thisx;
@@ -2293,7 +2295,7 @@ void func_809E81E4(GlobalContext* globalCtx2) {
                 phi_s4++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8) phi_s1->unk_40, (u8)((phi_s1->unk_40 + (0, 55.0f))), 0xE1, 0x96);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8) phi_s1->unk_40, (u8)((phi_s1->unk_40 + ((void)0, 55.0f))), 0xE1, 0x96);
 
             Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
 
@@ -2329,7 +2331,7 @@ void func_809E81E4(GlobalContext* globalCtx2) {
                 phi_s4++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)phi_s1->unk_40, (0, ((s16) phi_s1->unk_40) + 0x37) , 0xE1, (phi_s1->unk_2C));
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)phi_s1->unk_40, ((void)0, ((s16) phi_s1->unk_40) + 0x37) , 0xE1, (phi_s1->unk_2C));
 
             Matrix_InsertTranslation(phi_s1->pos.x, phi_s1->pos.y, phi_s1->pos.z, 0);
 
