@@ -2514,7 +2514,11 @@ beginseg
     name "ovl_Boss_03"
     compress
     include "build/src/overlays/actors/ovl_Boss_03/z_boss_03.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Boss_03/ovl_Boss_03_reloc.o"
+#else
     include "build/data/ovl_Boss_03/ovl_Boss_03.reloc.o"
+#endif
 endseg
 
 beginseg

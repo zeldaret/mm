@@ -32,7 +32,7 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx);
 void func_809E6640(Boss03* this, GlobalContext* globalCtx);
 void func_809E6BC0(Boss03* this, GlobalContext* globalCtx);
 
-void func_809E6A38(Boss03* this, GlobalContext* globalCtx);
+void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E8810(Actor* thisx, GlobalContext* globalCtx);
 void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx);
@@ -462,6 +462,12 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+/*
+#ifndef NON_MATCHING
+#define NON_MATCHING
+#endif
+*/
+
 #ifdef NON_MATCHING
 // float regalloc
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
@@ -485,7 +491,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
 
     func_809E2760(&this->actor.projectedPos, 0x32AB);
 
-    this->unk_276 = 0x0800;
+    this->unk_276 = 0x800;
     this->skelAnime.playSpeed = 1.0f;
     this->unk_27C = 1.0f;
     this->unk_278 = 10.0f;
@@ -508,16 +514,16 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
             -0.5f,
         5, 0x0100);
 
-    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x0100);
+    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->unk_24C[2] == 0) && (this->actor.bgCheckFlags & 8)) {
         Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
         this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
-        this->unk_24C[2] = 0x003C;
+        this->unk_24C[2] = 0x3C;
         this->unk_24C[0] = Rand_ZeroFloat(60.0f) + 60.0f;
-        this->unk_274 = 0x0100;
+        this->unk_274 = 0x100;
     }
 
     if (this->unk_24C[2] == 0) {
@@ -535,7 +541,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
                 }
             }
 
-            this->unk_274 = 0x0100;
+            this->unk_274 = 0x100;
             this->unk_24C[0] = Rand_ZeroFloat(60.0f) + 60.0f;
         }
     }
@@ -635,7 +641,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
         temp_f12 = sqrtf(SQ(sp50.x - player->actor.world.pos.x) + SQ(sp50.z - player->actor.world.pos.z));
 
         if (temp_f12 < (2.0f * phi_f2)) {
-            Math_ApproachS(&this->unk_2A8, 0x3200, 2, 0x1800);
+            Math_ApproachS(&this->jawZRot, 0x3200, 2, 0x1800);
             this->unk_278 = 25.0f;
             this->unk_27C = 5.0f;
             this->skelAnime.playSpeed = 2.5f;
@@ -730,7 +736,8 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
                 func_809E4180(this, globalCtx);
             }
         } else {
-            Math_ApproachS(&this->unk_2A8, 0x3200, 2, 3072.0f * phi_f0);
+            //Math_ApproachS(&this->jawZRot, 0x3200, 2, 3072.0f * phi_f0);
+            Math_ApproachS(&this->jawZRot, 0x3200, 2, 0xC00 * phi_f0);
         }
 
         Math_ApproachS(&player->actor.world.rot.x, 0x4000, 1, 0x400);
@@ -753,7 +760,7 @@ void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
     sp20.y = 200.0f;
     sp20.z = 700.0f;
     Matrix_MultiplyVector3fByState(&sp20, &this->unk_268);
-    this->unk_276 = 0x0800;
+    this->unk_276 = 0x800;
     this->unk_242 = 0;
     this->unk_24C[0] = 0x0064;
     this->skelAnime.playSpeed = 1.0f;
@@ -839,13 +846,13 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     player->actor.world.pos = this->unk_2AC;
     temp_f0 = Math_SinS(this->unk_240 * 0x2000);
 
-    Math_ApproachS(&this->unk_2A8, temp_f0 * 2000.0f, 2, 0x3000);
+    Math_ApproachS(&this->jawZRot, temp_f0 * 2000.0f, 2, 0x3000);
     player->actor.shape.rot.x = 0x4000;
     player->actor.world.rot.x = player->actor.shape.rot.x;
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->unk_2A2.y;
     if (this->unk_24C[0] < 5) {
-        Math_ApproachS(&this->unk_2A8, 0x3200, 2, 0x1800);
+        Math_ApproachS(&this->jawZRot, 0x3200, 2, 0x1800);
         Math_ApproachF(&this->unk_2C4, 100.0f, 1.0f, 100.0f);
     } else {
         Math_ApproachF(&this->unk_2C4, -300.0f, 1.0f, 5.0f);
@@ -888,7 +895,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
         &this->unk_2A0,
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x000A, this->unk_274, 0) * -0.7f, 5,
         0x0200);
-    Math_ApproachS(&this->unk_274, 0x0800, 1, 0x0100);
+    Math_ApproachS(&this->unk_274, 0x800, 1, 0x100);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x1000);
     Math_ApproachS(&this->actor.world.rot.x, 0, 0x000A, 0x0200);
     Math_ApproachS(&this->actor.shape.rot.x, 0, 0x000A, 0x0200);
@@ -1597,7 +1604,7 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
                     Math_ApproachS(&this->unk_2BE, -4000, 10, 70);
 
                     if (this->unk_530 >= 0x3D) {
-                        Math_ApproachS(&this->unk_2A8, 0x3200, 5, 0x500);
+                        Math_ApproachS(&this->jawZRot, 0x3200, 5, 0x500);
                         if ((this->unk_530 >= 0x5A) && (this->unk_530 < 0x82)) {
                             if ((this->unk_530 & 1) != 0) {
                                 Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON3,
@@ -1635,13 +1642,13 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_SetupStunned(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->actionFunc != func_809E6A38) {
+    if (this->actionFunc != Boss03_Stunned) {
         Animation_MorphToLoop(&this->skelAnime, &gGyorgStunnedAnim, -15.0f);
         this->unk_24C[2] = 0xC8;
-        this->actionFunc = func_809E6A38;
+        this->actionFunc = Boss03_Stunned;
     }
 
     if (&this->actor == player->actor.parent) {
@@ -1654,7 +1661,7 @@ void func_809E69A4(Boss03* this, GlobalContext* globalCtx) {
     this->unk_240 = 0;
 }
 
-void func_809E6A38(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx) {
     this->actor.hintId = 0x29;
 
     if (this->unk_240 >= 0x10) {
@@ -1671,9 +1678,10 @@ void func_809E6A38(Boss03* this, GlobalContext* globalCtx) {
             func_800BC848(&this->actor, globalCtx, 10, 10);
         }
     } else {
-        Math_ApproachS(&this->actor.shape.rot.z, -0x6000, 0x000A, 0x0900);
-        Math_ApproachS(&this->actor.world.rot.x, 0x0800, 0x000A, 0x1000);
+        Math_ApproachS(&this->actor.shape.rot.z, -0x6000, 0xA, 0x900);
+        Math_ApproachS(&this->actor.world.rot.x, 0x800, 0xA, 0x1000);
         this->actor.shape.rot.x = this->actor.world.rot.x;
+
         Math_ApproachF(&this->actor.world.pos.y, 100.0f, 0.05f, 5.0f);
         Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 1.5f);
         Actor_MoveWithoutGravityReverse(&this->actor);
@@ -1693,7 +1701,7 @@ void func_809E6B70(Boss03* this, GlobalContext* globalCtx) {
 void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
     this->unk_25C = 0x000F;
     SkelAnime_Update(&this->skelAnime);
-    Math_ApproachS(&this->unk_2A8, ((Math_SinS(this->unk_240 * 0x2000) * 3000.0f) + 0x3000), 2, 0x3000);
+    Math_ApproachS(&this->jawZRot, ((Math_SinS(this->unk_240 * 0x2000) * 3000.0f) + 0x3000), 2, 0x3000);
     Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 10.0f);
     if (this->unk_24C[0] == 0) {
         if ((s8)this->actor.colChkInfo.health < 6) {
@@ -1715,7 +1723,7 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
     s32 i;
     s32 phi_v1;
     u32 phi_v0;
-    Boss03ActionFunc new_var = func_809E6A38;
+    Boss03ActionFunc stunnedActionFunc = Boss03_Stunned;
 
     if (((KREG(20) + (this->unk_258 - 50.0f)) < player->actor.world.pos.y) &&
         (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
@@ -1741,7 +1749,7 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_25C == 0) {
-        if ((this->actionFunc == new_var) && sp4B) {
+        if ((this->actionFunc == stunnedActionFunc) && sp4B) {
             for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit2); i++) {
                 if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
                     hitbox = this->collider2.elements[i].info.acHitInfo;
@@ -1781,15 +1789,17 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
                 this->collider1.elements[i].info.bumperFlags &= ~BUMP_HIT;
                 this->unk_25C = 0xF;
 
-                if (this->actionFunc != new_var) {
-                    func_809E69A4(this, globalCtx);
+                if (this->actionFunc != stunnedActionFunc) {
+                    Boss03_SetupStunned(this, globalCtx);
                     func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
+
                     if (&this->actor == player->actor.parent) {
                         player->unk_AE8 = 0x65;
                         player->actor.parent = NULL;
                         player->csMode = 0;
                         func_80165690();
                     }
+
                     continue;
                 }
 
@@ -1900,13 +1910,14 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (this->actionFunc != func_809E5B64) {
-        if ((this->actionFunc == func_809E6A38) || (this->actionFunc == func_809E6BC0)) {
+        if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == func_809E6BC0)) {
             this->collider2.base.colType = 3;
         } else {
             this->collider2.base.colType = 9;
         }
 
         func_809E6CB4(this, globalCtx);
+
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
 
         if (player->transformation == PLAYER_FORM_HUMAN) {
@@ -1921,7 +1932,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         }
 
-        if ((this->actionFunc != func_809E6A38) && (this->unk_2BD == 0)) {
+        if ((this->actionFunc != Boss03_Stunned) && (this->unk_2BD == 0)) {
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         }
@@ -1937,15 +1948,15 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->unk_290 != 0) {
         this->unk_294 = this->unk_294 + 0.1f;
         this->unk_298 = this->unk_298 + 0.12f;
-        this->unk_29C = __sinf(this->unk_294) * 1280.0f;
-        this->unk_29E = __sinf(this->unk_298) * 1280.0f;
+        this->leftFinYRot = __sinf(this->unk_294) * 1280.0f;
+        this->rightFinYRot = __sinf(this->unk_298) * 1280.0f;
     } else {
-        Math_ApproachS(&this->unk_29E, 0, 0xA, 0x100);
-        Math_ApproachS(&this->unk_29C, 0, 0xA, 0x100);
+        Math_ApproachS(&this->rightFinYRot, 0, 0xA, 0x100);
+        Math_ApproachS(&this->leftFinYRot, 0, 0xA, 0x100);
     }
 
     Math_ApproachS(&this->unk_2A0, 0, 0xA, 0x100);
-    Math_ApproachS(&this->unk_2A8, 0, 0xA, 0x200);
+    Math_ApproachS(&this->jawZRot, 0, 0xA, 0x200);
 
     if ((this->unk_240 & 1) == 0) {
         for (phi_s0 = 0; phi_s0 < this->unk_254; phi_s0++) {
@@ -2044,19 +2055,19 @@ s32 Boss03_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         rot->y += this->unk_2A0;
     }
     if (limbIndex == GYORG_LIMB_UPPER_RIGHT_FIN) {
-        rot->y += this->unk_29E;
+        rot->y += this->rightFinYRot;
     }
     if (limbIndex == GYORG_LIMB_LOWER_RIGHT_FIN) {
-        rot->y += (s16)(2 * this->unk_29E);
+        rot->y += (s16)(2 * this->rightFinYRot);
     }
     if (limbIndex == GYORG_LIMB_UPPER_LEFT_FIN) {
-        rot->y -= this->unk_29C;
+        rot->y -= this->leftFinYRot;
     }
     if (limbIndex == GYORG_LIMB_LOWER_LEFT_FIN) {
-        rot->y -= (s16)(2 * this->unk_29C);
+        rot->y -= (s16)(2 * this->leftFinYRot);
     }
     if (limbIndex == GYORG_LIMB_JAW) {
-        rot->z += this->unk_2A8;
+        rot->z += this->jawZRot;
     }
 
     return false;
@@ -2089,7 +2100,7 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     if (temp_a3 >= 0) {
         Matrix_MultiplyVector3fByState(&D_809E9154[temp_a3], &sp68);
         if (temp_a3 < 2) {
-            if ((this->actionFunc == func_809E6A38) && (this->unk_258 < player->actor.world.pos.y)) {
+            if ((this->actionFunc == Boss03_Stunned) && (this->unk_258 < player->actor.world.pos.y)) {
                 func_809E2B8C(temp_a3, &this->collider1, &D_809E91A8);
             } else {
                 func_809E2B8C(temp_a3, &this->collider1, &sp68);
@@ -2108,6 +2119,370 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         func_8018219C(&mf, &this->unk_2A2, 0);
     }
 }
+
+#define NOT_DEBUG_PRINT 1
+
+#ifndef NOT_DEBUG_PRINT
+#define BOOLSTR(x) ((x) ? "true" : "false")
+
+void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printer) {
+    s32 x;
+    s32 y;
+    s32 i;
+    s32 initial_x = 27+1;
+    s32 initial_Y = 3 + 4;
+    uintptr_t actionFuncReloc;
+
+    x = initial_x;
+    y = initial_Y;
+
+    GfxPrint_SetColor(printer, 255, 255, 255, 255);
+
+
+
+    GfxPrint_SetPos(printer, 1, 1);
+    GfxPrint_Printf(printer, "health:%i", this->actor.colChkInfo.health);
+
+
+    GfxPrint_SetPos(printer, x, 1);
+    GfxPrint_Printf(printer, "530:%X", this->unk_530);
+
+
+
+    GfxPrint_SetPos(printer, x-7, ++y);
+    actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)func_809E2760 + SEGMENT_START(ovl_Boss_03);
+    switch (actionFuncReloc & 0x0000FFFF) {
+        case 0x6A38:
+            GfxPrint_Printf(printer, "actionFunc:Stunned");
+            break;
+
+        default:
+            GfxPrint_Printf(printer, "actionFunc:%X", actionFuncReloc & 0x0000FFFF);
+            break;
+    }
+
+    //GfxPrint_SetPos(printer, x, ++y);
+    //GfxPrint_Printf(printer, "240:%X", this->unk_240);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "242:%X", this->unk_242);
+
+    GfxPrint_SetPos(printer, x-3, ++y);
+    GfxPrint_Printf(printer, "24C[0]:%X", this->unk_24C[0]);
+
+    GfxPrint_SetPos(printer, x-3, ++y);
+    GfxPrint_Printf(printer, "24C[1]:%X", this->unk_24C[1]);
+
+    GfxPrint_SetPos(printer, x-3, ++y);
+    GfxPrint_Printf(printer, "24C[2]:%X", this->unk_24C[2]);
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "252:%X", this->unk_252);
+    #endif
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "253:%X", this->unk_253);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "254:%X", this->unk_254);
+
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "258:%f", this->unk_258);
+    #endif
+
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "25C:%X", this->unk_25C);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "25E:%X", this->unk_25E);
+
+    #if 0
+    GfxPrint_SetPos(printer, x-1, ++y);
+    GfxPrint_Printf(printer, "rotY:%f", this->unk_260);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "268.x:%f", this->unk_268.x);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "268.y:%f", this->unk_268.y);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "268.z:%f", this->unk_268.z);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "274:%X", this->unk_274);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "276:%X", this->unk_276);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "278:%f", this->unk_278);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "27C:%f", this->unk_27C);
+    #endif
+
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "! 280:%X", this->unk_280);
+
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "284:%f", this->unk_284);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "288:%f", this->unk_288);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "28C:%f", this->unk_28C);
+    #endif
+
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "290:%X", this->unk_290);
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "294:%f", this->unk_294);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "298:%f", this->unk_298);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-8, ++y);
+    GfxPrint_Printf(printer, "leftFinYRot:%i", this->leftFinYRot);
+
+    GfxPrint_SetPos(printer, x-9, ++y);
+    GfxPrint_Printf(printer, "rightFinYRot:%i", this->rightFinYRot);
+    #endif
+
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2A0:%X", this->unk_2A0);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2A2.x:%i", this->unk_2A2.x);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2A2.y:%i", this->unk_2A2.y);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2A2.z:%i", this->unk_2A2.z);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-4, ++y);
+    GfxPrint_Printf(printer, "jawZRot:%X", this->jawZRot);
+    #endif
+
+
+    #if 0
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2AC.x:%f", this->unk_2AC.x);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2AC.y:%f", this->unk_2AC.y);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2AC.z:%f", this->unk_2AC.z);
+    #endif
+
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2B8:%f", this->unk_2B8);
+    #endif
+
+
+
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2BC:%X", this->unk_2BC);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2BD:%X", this->unk_2BD);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2BE:%i", this->unk_2BE);
+
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2C4:%f", this->unk_2C4);
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2C8.x:%f", this->unk_2C8.x);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2C8.y:%f", this->unk_2C8.y);
+
+    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_Printf(printer, "2C8.z:%f", this->unk_2C8.z);
+    #endif
+
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2D4:%X", this->unk_2D4);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2D5:%X", this->unk_2D5);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2D6:%i", this->unk_2D6);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2D8:%X", this->unk_2D8);
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2DA:%i", this->unk_2DA);
+
+
+
+
+    x = 1;
+    y = initial_Y;
+
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "324:%X", this->unk_324);
+
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "52C:%f", this->unk_52C);
+
+
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "534:%X", this->unk_534);
+
+    #if 0
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "subCamId:%X", this->subCamId);
+    #endif
+
+
+    #if 0
+    // Vec3fs
+    for (i = 0x538; i < 0x568; i += 4) {
+        GfxPrint_SetPos(printer, x, ++y);
+        GfxPrint_Printf(printer, "%X:%f", i, ((f32*)(this))[i/4]);
+
+        if (y > 28) {
+            return;
+        }
+    }
+    #endif
+
+
+    for (i = 0x568; i < 0x57C; i += 4) {
+        if (i == 0x574) {
+            continue;
+        }
+        GfxPrint_SetPos(printer, x, ++y);
+        GfxPrint_Printf(printer, "%X:%f", i, ((f32*)(this))[i/4]);
+
+        if (y > 28) {
+            return;
+        }
+    }
+
+
+
+
+#if 0
+
+    y = 20;
+
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "Flags:");
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "   8 4 2 1");
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "1  %i %i %i %i", (this->flags & 0x08)>>3, (this->flags & 0x04)>>2, (this->flags & 0x02)>>1, this->flags & 0x01);
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "2  %i %i %i %i", (this->flags & 0x80)>>7, (this->flags & 0x40)>>6, (this->flags & 0x20)>>5, (this->flags & 0x10)>>4);
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "3  %i %i %i %i", (this->flags & 0x800)>>11, (this->flags & 0x400)>>10, (this->flags & 0x200)>>9, (this->flags & 0x100)>>8);
+    GfxPrint_SetPos(printer, 1, ++y);
+    GfxPrint_Printf(printer, "4      %i %i", (this->flags & 0x2000)>>13, (this->flags & 0x1000)>>12);
+
+    y = 0;
+    for (i = 0; i < 16; i++) {
+        static char* flagsMap[] = {
+            "OBJ_UM_FLAG_0001",
+            "OBJ_UM_FLAG_MOVING",
+            "OBJ_UM_FLAG_0004",
+            "OBJ_UM_FLAG_WAITING",
+            "OBJ_UM_FLAG_0010",
+            "OBJ_UM_FLAG_DRAWN_FLOOR",
+            "OBJ_UM_FLAG_0040",
+            "OBJ_UM_FLAG_PLAYING_MINIGAME",
+            "OBJ_UM_FLAG_0100",
+            "OBJ_UM_FLAG_0200",
+            "OBJ_UM_FLAG_0400",
+            "OBJ_UM_FLAG_0800",
+            "OBJ_UM_FLAG_1000",
+            "OBJ_UM_FLAG_MINIGAME_FINISHED",
+        };
+
+        if (this->flags & (1 << i)) {
+            GfxPrint_SetPos(printer, 1, ++y);
+            GfxPrint_Printf(printer, "%s", &flagsMap[i][7]);
+        }
+    }
+#endif
+}
+
+void Boss03_DrawStruct(Boss03* this, GlobalContext* globalCtx) {
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GfxPrint printer;
+    Gfx* gfxRef;
+    Gfx* gfx;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C4C0(gfxCtx);
+
+    GfxPrint_Init(&printer);
+
+    gfxRef = POLY_OPA_DISP;
+    gfx = Graph_GfxPlusOne(gfxRef);
+    gSPDisplayList(OVERLAY_DISP++, gfx);
+
+    GfxPrint_Open(&printer, gfx);
+
+    Boss03_PrintStruct(this, globalCtx, &printer);
+
+    gfx = GfxPrint_Close(&printer);
+
+    gSPEndDisplayList(gfx++);
+    Graph_BranchDlist(gfxRef, gfx);
+    POLY_OPA_DISP = gfx;
+
+    GfxPrint_Destroy(&printer);
+
+    CLOSE_DISPS(gfxCtx);
+}
+#endif
+
 
 void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
@@ -2131,6 +2506,11 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2BC = 0;
 
     Boss03_DrawEffects(globalCtx);
+
+
+#ifndef NOT_DEBUG_PRINT
+    Boss03_DrawStruct(this, globalCtx);
+#endif
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

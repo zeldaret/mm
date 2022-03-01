@@ -2400,6 +2400,12 @@ u32 D_801AED58[] = {
     0x10000282, 0x00000002, 0x300002C2, 0x100006C2, 0x00000002, 0x100002C2,
 };
 
+// #define MODDING
+
+#ifdef MODDING
+#include "overlays/gamestates/ovl_select/z_select.h"
+#endif
+
 void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     s32 i;
     Actor* actor;
@@ -2493,6 +2499,53 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
     TitleCard_Update(&globalCtx->state, &actorCtx->titleCtxt);
     func_800B6474(globalCtx);
     DynaPoly_UpdateBgActorTransforms(globalCtx, &globalCtx->colCtx.dyna);
+
+
+#ifdef MODDING
+    {
+        s32 i;
+
+        for (i = 0; i < ITEM_BOW_ARROW_FIRE; i++) {
+            INV_CONTENT(i) = i;
+        }
+        for (i = 0; i < ARRAY_COUNT(gSaveContext.inventory.ammo); i++) {
+            gSaveContext.inventory.ammo[i] = 50;
+        }
+
+        gSaveContext.inventory.items[SLOT_BOTTLE_1] = ITEM_FAIRY;
+        gSaveContext.inventory.items[SLOT_BOTTLE_2] = ITEM_FAIRY;
+        gSaveContext.inventory.items[SLOT_BOTTLE_3] = ITEM_FAIRY;
+        gSaveContext.inventory.items[SLOT_BOTTLE_4] = ITEM_FAIRY;
+        gSaveContext.inventory.items[SLOT_BOTTLE_5] = ITEM_FAIRY;
+        gSaveContext.inventory.items[SLOT_BOTTLE_6] = ITEM_FAIRY;
+
+
+        //gSaveContext.equips.equipment = 0xFFFF;
+        gSaveContext.inventory.questItems = 0xFFFFFFFF;
+
+
+        gSaveContext.healthCapacity = 0x10*20;
+        gSaveContext.health = 0x10*20;
+        //gSaveContext.magicLevel = 48;
+        gSaveContext.magic = 48*2;
+        gSaveContext.doubleDefense = true;
+        gSaveContext.doubleMagic = true;
+        gSaveContext.rupees = 99;
+    }
+
+    {
+        Input* input = CONTROLLER1(globalCtx);
+
+
+        if (CHECK_BTN_ALL(input->press.button, BTN_Z) &&
+            CHECK_BTN_ALL(input->cur.button, BTN_L | BTN_R)) {
+            gSaveContext.gameMode = 0;
+            SET_NEXT_GAMESTATE(&globalCtx->state, Select_Init, SelectContext);
+            globalCtx->state.running = false;
+        }
+
+    }
+#endif
 }
 
 void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
