@@ -502,24 +502,31 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 // float regalloc
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
-    Player* player = GET_PLAYER(globalCtx);
+    f32 new_var;
     // s32 pad[6];
-    s32 pad0;
+    //s32 pad0;
     s32 pad1;
     s32 pad2;
     s32 pad3;
     s32 pad4;
     s32 pad5;
-    f32 temp_f12;
-    f32 temp_f20;
-    f32 temp_f22;
-    f32 temp;
+    Player* player = GET_PLAYER(globalCtx);
+    s32 pad6;
+
     s16 i;
+    f32 temp_f12;
+
+    f32 temp_f20;
+    f32 temp;
+    f32 temp_f22;
+
+
 
     func_809E2760(&this->actor.projectedPos, 0x32AB);
+
     this->unk_276 = 0x0800;
     this->skelAnime.playSpeed = 1.0f;
     this->unk_27C = 1.0f;
@@ -530,12 +537,16 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Matrix_RotateY(this->actor.world.rot.y, 1);
 
     temp_f20 = this->unk_268.x - this->actor.world.pos.x;
-    temp_f22 = this->unk_268.z - this->actor.world.pos.z;
     temp = this->unk_268.y - this->actor.world.pos.y;
+    temp_f22 = this->unk_268.z - this->actor.world.pos.z;
+
     temp_f12 = sqrtf(SQ(temp_f20) + SQ(temp_f22));
 
+
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0x000A, this->unk_274);
+
     Math_ApproachS(&this->unk_2A0, Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0x000A, this->unk_274, 0) * -0.5f, 5, 0x0100);
+
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x0100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
@@ -556,7 +567,10 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
                 this->unk_268.x = randPlusMinusPoint5Scaled(2500.0f);
                 this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
                 this->unk_268.z = randPlusMinusPoint5Scaled(2500.0f);
-                if (sqrtf(SQ(this->unk_268.x - this->actor.world.pos.x) + SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f) {
+
+                //if (sqrtf(SQ(this->unk_268.x - this->actor.world.pos.x) + SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f) 
+                if (sqrtf(SQ((new_var = this->unk_268.x) - this->actor.world.pos.x) + SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f)
+                {
                     break;
                 }
             }
@@ -2211,6 +2225,7 @@ extern UNK_TYPE D_06004260[];
 extern Gfx D_060042F8[];
 
 #ifdef NON_MATCHING
+// regalloc
 void func_809E81E4(GlobalContext* globalCtx2) {
     GraphicsContext* gfxCtx;
     GlobalContext* globalCtx = globalCtx2;
