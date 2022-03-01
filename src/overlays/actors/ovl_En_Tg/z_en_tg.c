@@ -108,7 +108,12 @@ void EnTg_Init(Actor *thisx, GlobalContext *globalCtx) {
     this->actor.gravity = -4.0f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Destroy.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Destroy.s")
+void EnTg_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+    EnTg* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
 
