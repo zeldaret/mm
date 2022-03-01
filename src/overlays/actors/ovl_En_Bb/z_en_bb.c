@@ -119,8 +119,8 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->unk_268 = 0.8f;
-    this->unk_264 = 1.0f;
+    this->flameHeight = 0.8f;
+    this->flameWidth = 1.0f;
     this->actor.world.pos.y += 50.0f;
 
     if (EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) == 0xFF) {
@@ -179,8 +179,8 @@ void func_808C1FF4(EnBb* this) {
 
     this->actor.world.pos.y += Math_CosS(this->unk_256);
     this->unk_256 += 0x826;
-    Math_StepToF(&this->unk_268, 0.8f, 0.1f);
-    Math_StepToF(&this->unk_264, 1.0f, 0.1f);
+    Math_StepToF(&this->flameHeight, 0.8f, 0.1f);
+    Math_StepToF(&this->flameWidth, 1.0f, 0.1f);
     func_808C1E94(this);
     Math_StepToF(&this->actor.speedXZ, this->unk_258, 0.5f);
     Math_ApproachS(&this->actor.shape.rot.y, this->unk_254, 5, 0x3E8);
@@ -270,8 +270,8 @@ void func_808C254C(EnBb* this) {
     this->unk_250 = 0x8C;
     this->collider.base.acFlags |= AC_ON;
     this->actor.speedXZ = 2.0f;
-    this->unk_268 = 0.0f;
-    this->unk_264 = 0.0f;
+    this->flameHeight = 0.0f;
+    this->flameWidth = 0.0f;
     this->actor.gravity = -2.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DOWN);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -447,8 +447,8 @@ void func_808C2CF0(EnBb* this) {
     this->actor.scale.x = 0.0f;
     this->actor.scale.y = 0.015f;
     this->actor.scale.z = 0.0f;
-    this->unk_264 = 1.0f;
-    this->unk_268 = 0.8f;
+    this->flameWidth = 1.0f;
+    this->flameHeight = 0.8f;
     this->actor.colChkInfo.health = sColChkInfoInit.health;
     this->actionFunc = func_808C2D78;
 }
@@ -477,8 +477,8 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
         this->collider.base.atFlags &= ~AT_ON;
         if ((this->drawDmgEffType != 10) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
-            this->unk_268 = 0.0f;
-            this->unk_264 = 0.0f;
+            this->flameHeight = 0.0f;
+            this->flameWidth = 0.0f;
             func_808C1F74(this, globalCtx);
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -522,7 +522,7 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_BITE);
 
-            if (this->unk_264 > 0.0f) {
+            if (this->flameWidth > 0.0f) {
                 gSaveContext.unk_1016 = 0x4B0;
             }
 
@@ -545,7 +545,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
         this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 15.0f;
         this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
-        this->collider.dim.worldSphere.radius = this->unk_264 * 30.0f;
+        this->collider.dim.worldSphere.radius = this->flameWidth * 30.0f;
         this->collider.dim.worldSphere.radius = CLAMP_MIN(this->collider.dim.worldSphere.radius, 20);
 
         Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.dim.worldSphere.center);
@@ -642,19 +642,19 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBb_OverrideLimbDraw,
                       EnBb_PostLimbDraw, &this->actor);
 
-    if (this->unk_264 > 0.0f) {
+    if (this->flameWidth > 0.0f) {
         currentMatrixState = Matrix_GetCurrentState();
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_RotateY(
             ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
             MTXMODE_APPLY);
-        Matrix_Scale(this->unk_264, this->unk_268, 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(this->flameWidth, this->flameHeight, 1.0f, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 255, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 0);
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                     (globalCtx->gameplayFrames * -20) & 0x1FF, 32, 128));
-        currentMatrixState->mf[3][1] -= 47.0f * this->unk_268;
+        currentMatrixState->mf[3][1] -= 47.0f * this->flameHeight;
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
