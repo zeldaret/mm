@@ -22,8 +22,8 @@ void EnBb_SetupAttack(EnBb* this);
 void EnBb_Attack(EnBb* this, GlobalContext* globalCtx);
 void EnBb_Down(EnBb* this, GlobalContext* globalCtx);
 void EnBb_Dead(EnBb* this, GlobalContext* globalCtx);
-void func_808C2B1C(EnBb* this, GlobalContext* globalCtx);
-void func_808C2BD0(EnBb* this, GlobalContext* globalCtx);
+void EnBb_Damage(EnBb* this, GlobalContext* globalCtx);
+void EnBb_Frozen(EnBb* this, GlobalContext* globalCtx);
 void EnBb_SetupWaitForRevive(EnBb* this);
 void EnBb_WaitForRevive(EnBb* this, GlobalContext* globalCtx);
 void EnBb_SetupRevive(EnBb* this);
@@ -161,7 +161,7 @@ void EnBb_TurnAwayFromWall(EnBb* this) {
     }
 }
 
-void func_808C1F00(EnBb* this) {
+void EnBb_Freeze(EnBb* this) {
     this->drawDmgEffType = 10;
     this->drawDmgEffScale = 0.4f;
     this->drawDmgEffFrozenSteamScale = 0.6f;
@@ -171,7 +171,7 @@ void func_808C1F00(EnBb* this) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
-void func_808C1F74(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Thaw(EnBb* this, GlobalContext* globalCtx) {
     if (this->drawDmgEffType == 10) {
         this->drawDmgEffType = 0;
         this->drawDmgEffAlpha = 0.0f;
@@ -180,7 +180,7 @@ void func_808C1F74(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808C1FF4(EnBb* this) {
+void EnBb_UpdateStateForFlying(EnBb* this) {
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
         Math_StepToF(&this->actor.world.pos.y, this->actor.floorHeight + this->flyHeightMod, 0.5f);
@@ -224,7 +224,7 @@ void EnBb_SetupFlyIdle(EnBb* this) {
 }
 
 void EnBb_FlyIdle(EnBb* this, GlobalContext* globalCtx) {
-    func_808C1FF4(this);
+    EnBb_UpdateStateForFlying(this);
 
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
@@ -254,7 +254,7 @@ void EnBb_SetupAttack(EnBb* this) {
 
 void EnBb_Attack(EnBb* this, GlobalContext* globalCtx) {
     this->targetYRotation = this->actor.yawTowardsPlayer;
-    func_808C1FF4(this);
+    EnBb_UpdateStateForFlying(this);
 
     if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_MOUTH);
@@ -375,7 +375,7 @@ void EnBb_Dead(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808C2A00(EnBb* this) {
+void EnBb_SetupDamage(EnBb* this) {
     this->collider.base.acFlags &= ~AC_ON;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
     func_800BE568(&this->actor, &this->collider);
@@ -396,31 +396,31 @@ void func_808C2A00(EnBb* this) {
     }
 
     this->actor.gravity = -1.0f;
-    this->actionFunc = func_808C2B1C;
+    this->actionFunc = EnBb_Damage;
 }
 
-void func_808C2B1C(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Damage(EnBb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
         EnBb_SetupDown(this);
     }
 }
 
-void func_808C2B94(EnBb* this) {
+void EnBb_SetupFrozen(EnBb* this) {
     this->actor.speedXZ = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
 
     this->actor.gravity = -2.0f;
-    this->actionFunc = func_808C2BD0;
+    this->actionFunc = EnBb_Frozen;
 }
 
-void func_808C2BD0(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_Frozen(EnBb* this, GlobalContext* globalCtx) {
     DECR(this->timer);
 
     if (this->timer == 0) {
-        func_808C1F74(this, globalCtx);
+        EnBb_Thaw(this, globalCtx);
         if (this->actor.colChkInfo.health == 0) {
             EnBb_SetupDead(this, globalCtx);
         } else {
@@ -479,7 +479,7 @@ void EnBb_Revive(EnBb* this, GlobalContext* globalCtx) {
     this->actor.scale.y = ((0.01f - this->actor.scale.x) * 0.5f) + 0.01f;
 }
 
-void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
+void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
@@ -488,24 +488,24 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
             this->flameScaleY = 0.0f;
             this->flameScaleX = 0.0f;
-            func_808C1F74(this, globalCtx);
+            EnBb_Thaw(this, globalCtx);
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
             }
 
             if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_ICE_ARROW) {
-                func_808C1F00(this);
+                EnBb_Freeze(this);
                 if (this->actor.colChkInfo.health == 0) {
                     this->timer = 3;
                     this->collider.base.acFlags &= ~AC_ON;
                 }
 
-                func_808C2B94(this);
+                EnBb_SetupFrozen(this);
             } else if (this->actor.colChkInfo.health == 0) {
                 EnBb_SetupDead(this, globalCtx);
             } else {
-                func_808C2A00(this);
+                EnBb_SetupDamage(this);
             }
 
             if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_LIGHT_ARROW) {
@@ -545,7 +545,7 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
 void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
 
-    func_808C2E34(this, globalCtx);
+    EnBb_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != EnBb_Dead) && (this->actionFunc != EnBb_WaitForRevive)) {
         Actor_MoveWithGravity(&this->actor);
