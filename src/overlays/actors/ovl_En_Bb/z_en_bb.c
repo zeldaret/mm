@@ -61,39 +61,48 @@ static ColliderSphereInit sSphereInit = {
     { 0, { { 0, 0, 0 }, 20 }, 100 },
 };
 
+typedef enum {
+    /* 0x0 */ EN_BB_DMGEFF_NONE,
+    /* 0x1 */ EN_BB_DMGEFF_STUN,
+    /* 0x3 */ EN_BB_DMGEFF_ICE_ARROW = 0x3,
+    /* 0x4 */ EN_BB_DMGEFF_LIGHT_ARROW,
+    /* 0x5 */ EN_BB_DMGEFF_ZORA_MAGIC,
+    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE,
+} EnBbDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0xE),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x0),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_BB_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, EN_BB_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Ice arrow      */ DMG_ENTRY(2, EN_BB_DMGEFF_ICE_ARROW),
+    /* Light arrow    */ DMG_ENTRY(2, EN_BB_DMGEFF_LIGHT_ARROW),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_BB_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_BB_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_BB_DMGEFF_ZORA_MAGIC),
+    /* Normal shield  */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_BB_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_BB_DMGEFF_NONE),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
@@ -371,15 +380,15 @@ void func_808C2A00(EnBb* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
     func_800BE568(&this->actor, &this->collider);
 
-    if (this->actor.colChkInfo.damageEffect == 5) {
+    if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_ZORA_MAGIC) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
         this->drawDmgEffType = 32;
         this->drawDmgEffAlpha = 2.0f;
         this->drawDmgEffScale = 0.4f;
-    } else if (this->actor.colChkInfo.damageEffect == 1) {
+    } else if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_STUN) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
         this->actor.speedXZ = 0.0f;
-    } else if (this->actor.colChkInfo.damageEffect == 0xE) {
+    } else if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_HOOKSHOT) {
         this->actor.speedXZ = 0.0f;
     } else {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
@@ -485,7 +494,7 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
             }
 
-            if (this->actor.colChkInfo.damageEffect == 3) {
+            if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_ICE_ARROW) {
                 func_808C1F00(this);
                 if (this->actor.colChkInfo.health == 0) {
                     this->unk_250 = 3;
@@ -499,7 +508,7 @@ void func_808C2E34(EnBb* this, GlobalContext* globalCtx) {
                 func_808C2A00(this);
             }
 
-            if (this->actor.colChkInfo.damageEffect == 4) {
+            if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_LIGHT_ARROW) {
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffScale = 0.4f;
                 this->drawDmgEffType = 20;
