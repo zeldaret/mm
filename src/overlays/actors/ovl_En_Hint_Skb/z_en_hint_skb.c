@@ -707,8 +707,8 @@ void func_80C20E90(EnHintSkb* this, GlobalContext* globalCtx) {
                 this->unk_3E8 |= 1;
 
             case 15:
-                if ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 11) || (player->meleeWeaponAnimation == 22) ||
-                    (player->meleeWeaponAnimation == 23)) {
+                if ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 11) ||
+                    (player->meleeWeaponAnimation == 22) || (player->meleeWeaponAnimation == 23)) {
                     this->unk_3E8 |= 1;
                 }
 

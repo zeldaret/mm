@@ -1397,8 +1397,9 @@ Gfx D_801C0860[] = {
 };
 
 static TexturePtr sEyesTextures[] = {
-    object_link_child_Tex_000000, object_link_child_Tex_000800, object_link_child_Tex_001000, object_link_child_Tex_001800,
-    object_link_child_Tex_002000, object_link_child_Tex_002800, object_link_child_Tex_003000, object_link_child_Tex_003800,
+    object_link_child_Tex_000000, object_link_child_Tex_000800, object_link_child_Tex_001000,
+    object_link_child_Tex_001800, object_link_child_Tex_002000, object_link_child_Tex_002800,
+    object_link_child_Tex_003000, object_link_child_Tex_003800,
 };
 
 static TexturePtr sMouthTextures[] = {
@@ -2413,7 +2414,7 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
                 gSPDisplayList(POLY_OPA_DISP++, D_801C0AB4[arg2]);
 
                 if ((player->meleeWeaponState != 0) && ((((player->meleeWeaponAnimation == 0x1B)) && (arg2 == 0)) ||
-                                                  ((player->meleeWeaponAnimation == 0x1C) && (arg2 != 0)))) {
+                                                        ((player->meleeWeaponAnimation == 0x1C) && (arg2 != 0)))) {
                     func_8012669C(globalCtx, player, D_801C0A00, D_801C09DC);
                 }
                 Matrix_StatePop();
@@ -2455,8 +2456,8 @@ void func_80126BD0(GlobalContext* globalCtx, Player* player, s32 arg2) {
 
             if (func_80126440(globalCtx, NULL, &player->meleeWeaponInfo[arg2], &sp58, &sp4C) &&
                 (player->stateFlags1 & PLAYER_STATE1_8000000)) {
-                EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[arg2]), &player->meleeWeaponInfo[arg2].tip,
-                                      &player->meleeWeaponInfo[arg2].base);
+                EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[arg2]),
+                                      &player->meleeWeaponInfo[arg2].tip, &player->meleeWeaponInfo[arg2].base);
             }
             Matrix_StatePop();
 
@@ -2546,17 +2547,10 @@ void func_8012754C(GlobalContext* globalCtx, Player* player) {
     AnimatedMat_DrawOpa(globalCtx, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
-#ifdef NON_EQUIVALENT
 void func_80127594(GlobalContext* globalCtx, Actor* actor) {
     static Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
-    Player* player = (Player*)actor;
     Gfx* gfx;
-    f32 temp_f0;
-    f32 temp_f20;
-    f32 temp_f22;
-    s32 phi_v0;
-    s16 phi_s0;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -2564,7 +2558,8 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
     gfx = POLY_XLU_DISP;
 
     for (i = 0; i < ARRAY_COUNT(D_801C0B90); i++) {
-        temp_f22 = (D_801F59C8[i] / 400.0f) * 0.1f;
+        f32 temp_f22 = (D_801F59C8[i] / 400.0f) * 0.1f;
+
         Matrix_MultiplyVector3fByState(&D_801C0B90[i], &D_801F59B0[i]);
 
         if (1) {}
@@ -2579,12 +2574,14 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
             } else {
                 phi_f20 = temp_f22;
             }
+
             Matrix_StatePush();
             Matrix_InsertTranslation(D_801F59B0[i].x, D_801F59B0[i].y, D_801F59B0[i].z, 0);
             Matrix_Scale(phi_f20, temp_f22, phi_f20, 1);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08, gSegments[SEGMENT_NUMBER(gameplay_keep_Tex_091BE0)] + SEGMENT_OFFSET(gameplay_keep_Tex_091BE0));
+            gSPSegment(&gfx[1], 0x08,
+                       gSegments[SEGMENT_NUMBER(gameplay_keep_Tex_091BE0)] + SEGMENT_OFFSET(gameplay_keep_Tex_091BE0));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
             gSPDisplayList(&gfx[4], gameplay_keep_DL_0301B0);
@@ -2594,8 +2591,11 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
 
             gfx = &gfx[6];
         } else {
-            temp_f0 = sqrtf(SQ(player->actor.velocity.x) + SQ(player->actor.velocity.z));
-            phi_s0 = temp_f0 * 2000.0f;
+            Player* player = (Player*)actor;
+            f32 temp_f0 = sqrtf(SQ(player->actor.velocity.x) + SQ(player->actor.velocity.z));
+            s16 phi_s0 = temp_f0 * 2000.0f;
+            f32 temp_f20;
+
             D_801C0BA8.y = temp_f0 * 0.4f;
             D_801C0BB4.y = -0.3f;
 
@@ -2603,14 +2603,8 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
                 phi_s0 = 0x3E80;
             }
 
-            if (i != 0) {
-                phi_v0 = phi_s0;
-            } else {
-                phi_v0 = -phi_s0;
-            }
+            phi_s0 = player->actor.focus.rot.y + ((i != 0) ? phi_s0 : -phi_s0);
             temp_f20 = temp_f0 * 0.2f;
-
-            phi_s0 = player->actor.focus.rot.y + phi_v0;
 
             if (temp_f20 > 4.0f) {
                 temp_f20 = 4.0f;
@@ -2628,12 +2622,6 @@ void func_80127594(GlobalContext* globalCtx, Actor* actor) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-Vec3f D_801C0BA8 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_801C0BB4 = { 0.0f, 0.0f, 0.0f };
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127594.s")
-void func_80127594(GlobalContext* globalCtx, Player* player);
-#endif
 
 void func_801278F8(GlobalContext* globalCtx, Player* player) {
     static Gfx D_801C0BC0[] = {
@@ -3636,8 +3624,9 @@ void func_80128BD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** 
                                   &player->meleeWeaponInfo[0].base);
         }
     } else if (limbIndex == PLAYER_LIMB_R_SHIN) {
-        if ((player->meleeWeaponState != 0) && (((player->meleeWeaponAnimation == 0x1D)) || (player->meleeWeaponAnimation == 0x12) ||
-                                          (player->meleeWeaponAnimation == 0x15))) {
+        if ((player->meleeWeaponState != 0) &&
+            (((player->meleeWeaponAnimation == 0x1D)) || (player->meleeWeaponAnimation == 0x12) ||
+             (player->meleeWeaponAnimation == 0x15))) {
             func_8012669C(globalCtx, player, D_801C0A48, D_801C0A24);
         }
     } else if (limbIndex == PLAYER_LIMB_WAIST) {

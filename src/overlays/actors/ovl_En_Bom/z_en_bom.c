@@ -501,7 +501,8 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
                                                                (this->collider1.base.oc->category == ACTORCAT_BOSS)))) {
                 this->timer = 0;
                 thisx->shape.rot.z = 0;
-            } else if ((this->timer > 100) && (Player_IsBurningStickInRange(globalCtx, &thisx->world.pos, 30.0f, 50.0f))) {
+            } else if ((this->timer > 100) &&
+                       (Player_IsBurningStickInRange(globalCtx, &thisx->world.pos, 30.0f, 50.0f))) {
                 this->timer = 100;
             }
 
