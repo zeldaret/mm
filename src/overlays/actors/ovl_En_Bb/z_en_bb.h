@@ -23,11 +23,11 @@ typedef struct EnBb {
     /* 0x252 */ s16 unk_252;
     /* 0x254 */ s16 unk_254;
     /* 0x256 */ s16 unk_256;
-    /* 0x258 */ f32 unk_258;
-    /* 0x25C */ f32 unk_25C;
+    /* 0x258 */ f32 maxSpeed;
+    /* 0x25C */ f32 flyHeightMod;
     /* 0x260 */ f32 attackRange;
-    /* 0x264 */ f32 flameWidth;
-    /* 0x268 */ f32 flameHeight;
+    /* 0x264 */ f32 flameScaleX;
+    /* 0x268 */ f32 flameScaleY;
     /* 0x26C */ f32 drawDmgEffAlpha;
     /* 0x270 */ f32 drawDmgEffScale;
     /* 0x274 */ f32 drawDmgEffFrozenSteamScale;
