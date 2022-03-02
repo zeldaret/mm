@@ -132,30 +132,37 @@ void EnTg_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
 // void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
-//     f32 sp28;
 //     Vec3f sp24;
-//     s16 phi_v1;
+//     int phi_v1 = 0;
 
-//     this->actor.shape.rot.y = this->actor.shape.rot.y + gGameInfo->data[0x600] + 0x258;
-//     this->unk30 = (unaligned s32) this->unkBC;
-//     this->actor.world.rot.z = (s16) (u16) this->actor.shape.rot.z;
+//     this->actor.shape.rot.y += gGameInfo->data[0x600] + 0x258;
+//     this->actor.world.rot = this->actor.shape.rot;
+//     this->actor.world.rot.z = this->actor.shape.rot.z;
 //     if (this->unk2EC == 0) {
 //         phi_v1 = 0;
 //     } else {
-//         this->unk2EC = (s16) (this->unk2EC - 1);
+//         this->unk2EC -= 1;
 //         phi_v1 = this->unk2EC;
 //     }
 //     if (phi_v1 == 0) {
 //         this->unk2EC = 0xC;
-//         sp24.x = (f32) this->actor.world.pos.x;
-//         sp24.y = (f32) this->actor.world.pos.y;
-//         sp24.z = (f32) this->actor.world.pos.z;
-//         sp28 += 62.0f;
-//         func_8098FD50(this + 0x2F0, &sp24, 0xA);
+//         sp24.x = this->actor.world.pos.x;
+//         sp24.y = this->actor.world.pos.y;
+//         sp24.z = this->actor.world.pos.z;
+//         func_8098FD50(&this->unk2F0, &sp24, 0xA);
 //     }
 // }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
+void EnTg_Update(Actor *thisx, GlobalContext *globalCtx) {
+    EnTg* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4U);
+    func_8098F928(this, globalCtx);
+    func_8098FEA8(globalCtx, &this->unk2F0, 0xA);
+    func_8098F8A8(this, globalCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBB4.s")
 
