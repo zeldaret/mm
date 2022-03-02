@@ -19,10 +19,10 @@ typedef struct EnBb {
     /* 0x24C */ s8 unk_24C;
     /* 0x24D */ u8 drawDmgEffType;
     /* 0x24E */ UNK_TYPE1 unk_24E[0x2];
-    /* 0x250 */ s16 unk_250;
-    /* 0x252 */ s16 unk_252;
-    /* 0x254 */ s16 unk_254;
-    /* 0x256 */ s16 unk_256;
+    /* 0x250 */ s16 timer;
+    /* 0x252 */ s16 attackWaitTimer;
+    /* 0x254 */ s16 targetYRotation;
+    /* 0x256 */ s16 bobPhase;
     /* 0x258 */ f32 maxSpeed;
     /* 0x25C */ f32 flyHeightMod;
     /* 0x260 */ f32 attackRange;
