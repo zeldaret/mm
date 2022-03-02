@@ -106,7 +106,10 @@ extern FlexSkeletonHeader D_0600B2B0;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F928.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F928.s")
+void func_8098F928(EnTg* this, GlobalContext *globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+}
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Init.s")
 void EnTg_Init(Actor *thisx, GlobalContext *globalCtx) {
