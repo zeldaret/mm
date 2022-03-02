@@ -16,6 +16,7 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
+void func_8098FEA8(GlobalContext *globalCtx, EnTgIdk *arg1, s32 arg2);
 
 #if 0
 const ActorInit En_Tg_InitVars = {
@@ -85,6 +86,7 @@ extern DamageTable D_809901F8;
 extern UNK_TYPE D_0600B0E0;
 extern UNK_TYPE D_80990218;
 extern FlexSkeletonHeader D_0600B2B0;
+extern Vec3f D_8099024C;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 // void func_8098F800(SkelAnime *skelAnime, s32 arg1, s16 arg2) {
@@ -175,6 +177,44 @@ void EnTg_Update(Actor *thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
+//    temp_s2 = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
+void func_8098FEA8(GlobalContext *globalCtx, EnTgIdk *arg1, s32 arg2) {
+    Vec3f sp44;
+    s16 temp_s2;
+    s32 phi_v1;
+    s32 i = 0;
+
+    sp44.x = D_8099024C.x;
+    sp44.y = D_8099024C.y;
+    sp44.z = D_8099024C.z;
+    temp_s2 = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
+    if (arg2 > 0) {
+        do {
+            if (arg1->unk0 == 1) {
+                arg1->unk1 -= 1;
+                if (arg1->unk1 == 0) {
+                    phi_v1 = 0;
+                } else {
+                    phi_v1 = arg1->unk1 & 0xFF;
+                }
+                if (phi_v1 == 0) {
+                    arg1->unk0 = 0U;
+                }
+                arg1->unk14.x = (f32) (arg1->unk14.y + arg1->unk30);
+                arg1->unk14.y = (f32) (arg1->unk14.x + (2.0f * Math_SinS(arg1->unk38)));
+                arg1->unk14.z = (f32) (arg1->unk14.z + (2.0f * Math_CosS(arg1->unk38)));
+                Matrix_StatePush();
+                Matrix_InsertTranslation(arg1->unk14.x, arg1->unk14.y, arg1->unk14.z, 0);
+                Matrix_RotateY(temp_s2, 1);
+                Matrix_MultiplyVector3fByState(&sp44, &arg1->unk14);
+                Matrix_StatePop();
+                arg1->unk38 = (s16) (arg1->unk38 + 0x1770);
+            }
+            arg1 += 0x3C;
+            i += 1;
+        } while (i != arg2);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8099000C.s")
