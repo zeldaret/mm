@@ -3889,9 +3889,7 @@ beginseg
     name "ovl_Bg_Hakugin_Switch"
     compress
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Switch/z_bg_hakugin_switch.o"
-    include "build/data/ovl_Bg_Hakugin_Switch/ovl_Bg_Hakugin_Switch.data.o"
-    include "build/data/ovl_Bg_Hakugin_Switch/ovl_Bg_Hakugin_Switch.bss.o"
-    include "build/data/ovl_Bg_Hakugin_Switch/ovl_Bg_Hakugin_Switch.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Hakugin_Switch/ovl_Bg_Hakugin_Switch_reloc.o"
 endseg
 
 beginseg
