@@ -38,7 +38,7 @@ typedef struct Boss03 {
     /* 0x0244 */ UNK_TYPE1 unk_244[0x08];
     /* 0x024C */ s16 workTimer[GYORG_WORK_TIMER_MAX];
     /* 0x0252 */ s8 unk_252; // number of Tanron3 fish that are currently alive, maybe "numSmallFishAlive"?
-    /* 0x0253 */ u8 unk_253;
+    /* 0x0253 */ u8 hasSpwanedSmallFishes; // Tanron
     /* 0x0254 */ s16 unk_254;
     /* 0x0258 */ f32 waterHeight; // always 430.0f
     /* 0x025C */ s16 unk_25C;
@@ -64,14 +64,14 @@ typedef struct Boss03 {
     /* 0x02A8 */ s16 jawZRot;
     /* 0x02AC */ Vec3f unk_2AC; // used to grab player?
     /* 0x02B8 */ f32 unk_2B8;
-    /* 0x02BC */ s8 unk_2BC;
-    /* 0x02BD */ u8 unk_2BD;
+    /* 0x02BC */ s8 unk_2BC; // set but not used
+    /* 0x02BD */ u8 unk_2BD; // playerUnderwater
     /* 0x02BE */ s16 unk_2BE;
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
     /* 0x02C0 */ f32 unk_2C4;
     /* 0x02C8 */ Vec3f unk_2C8; //set to player.world.pos
     /* 0x02D4 */ u8 unk_2D4;
-    /* 0x02D5 */ u8 unk_2D5;
+    /* 0x02D5 */ u8 unk_2D5; // flag
     /* 0x02D6 */ s16 unk_2D6; // used as target for this->actor.shape.rot.x
     /* 0x02D8 */ s16 unk_2D8; // used as target for this->actor.shape.rot.y
     /* 0x02DA */ s16 unk_2DA; // used as target for this->actor.shape.rot.z
@@ -82,14 +82,14 @@ typedef struct Boss03 {
     /* 0x034C */ ColliderJntSphElement colliderElements1[2];
     /* 0x03CC */ ColliderJntSph collider2;
     /* 0x03EC */ ColliderJntSphElement colliderElements2[5];
-    /* 0x052C */ f32 unk_52C; // floppingAnimLastFrame?
-    /* 0x0530 */ u32 unk_530;
-    /* 0x0534 */ s16 unk_534;
+    /* 0x052C */ f32 floppingAnimLastFrame;
+    /* 0x0530 */ u32 csTimer;
+    /* 0x0534 */ s16 csState;
     /* 0x0536 */ s16 subCamId;
-    /* 0x0538 */ Vec3f unk_538;
-    /* 0x0544 */ Vec3f unk_544;
-    /* 0x0550 */ Vec3f unk_550;
-    /* 0x055C */ Vec3f unk_55C;
+    /* 0x0538 */ Vec3f subCamEye;
+    /* 0x0544 */ Vec3f subCamAt;
+    /* 0x0550 */ Vec3f subCamTargetEye;
+    /* 0x055C */ Vec3f subCamTargetAt;
     /* 0x0568 */ f32 unk_568;
     /* 0x056C */ f32 unk_56C;
     /* 0x0570 */ f32 unk_570; // set but not used
@@ -97,6 +97,7 @@ typedef struct Boss03 {
     /* 0x0578 */ f32 cameraFov;
 } Boss03; // size = 0x57C
 
-extern const ActorInit Boss_03_InitVars;
+#define GYORG_PARAM_DEFAULT (0)
+#define GYORG_PARAM_SEAWEED (0x23)
 
 #endif // Z_BOSS_03_H

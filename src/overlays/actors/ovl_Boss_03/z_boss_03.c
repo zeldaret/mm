@@ -29,31 +29,31 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx);
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
 void func_809E3968(Boss03* this, GlobalContext* globalCtx);
 void func_809E3D98(Boss03* this, GlobalContext* globalCtx);
-void func_809E421C(Boss03* this, GlobalContext* globalCtx);
+void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx);
 void func_809E475C(Boss03* this, GlobalContext* globalCtx);
-void func_809E497C(Boss03* this, GlobalContext* globalCtx);
-void func_809E4C90(Boss03* this, GlobalContext* globalCtx);
-void func_809E4E80(Boss03* this, GlobalContext* globalCtx);
-void func_809E5B64(Boss03* this, GlobalContext* globalCtx);
-void func_809E6640(Boss03* this, GlobalContext* globalCtx);
-void func_809E6BC0(Boss03* this, GlobalContext* globalCtx);
+void Boss03_Charge(Boss03* this, GlobalContext* globalCtx);
+void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx);
+void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx);
+void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx);
+void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx);
 
 void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E8810(Actor* thisx, GlobalContext* globalCtx);
 void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809E4E2C(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx);
 
 void Boss03_DrawEffects(GlobalContext* globalCtx);
 
 void func_809E38EC(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2);
-void func_809E4180(Boss03* this, GlobalContext* globalCtx);
-void func_809E4910(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx);
 
-void func_809E4C34(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupJumpOverPlatform(Boss03* this, GlobalContext* globalCtx);
 
 void func_809E4674(Boss03* this, GlobalContext* globalCtx);
 
@@ -71,7 +71,7 @@ Boss03* sGyorgInstance;
 extern UNK_TYPE D_06007EC8;
 extern AnimationHeader D_06009C14;
 
-void func_809E2760(Vec3f* projectedPos, u16 sfxId) {
+void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
     func_8019F420(projectedPos, sfxId);
 }
 
@@ -390,8 +390,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         return;
     }
 
-    // TODO: make a macro / enum
-    if (this->actor.params == 0x23) {
+    if (this->actor.params == GYORG_PARAM_SEAWEED) {
         this->actor.update = func_809E8810;
         this->actor.draw = func_809E8BEC;
 
@@ -420,7 +419,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_InsertYRotation_f((Boss03_RandZeroOne() * 3.1415927f * 0.2f) + (1.2566371f * i), 0);
         Matrix_GetStateTranslationAndScaledZ((Boss03_RandZeroOne() * 800.0f) + 400.0f, &sp70);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_03, sp70.x, sp70.y, sp70.z, 0,
-                    Boss03_RandZeroOne() * 0x10000, 0, 0x23);
+                    Boss03_RandZeroOne() * 0x10000, 0, GYORG_PARAM_SEAWEED);
     }
 
     sGyorgInstance = this;
@@ -445,7 +444,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         D_809E9842 = 0;
         Audio_QueueSeqCmd(0x100100FF);
     } else {
-        func_809E4E2C(this, globalCtx);
+        Boss03_SetupIntroCutscene(this, globalCtx);
         D_809E9842 = 1;
     }
 
@@ -476,7 +475,6 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
 
 #ifdef NON_MATCHING
 // float regalloc
-// post eat
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     f32 new_var;
     // s32 pad[6];
@@ -496,7 +494,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     f32 temp;
     f32 temp_f22;
 
-    func_809E2760(&this->actor.projectedPos, 0x32AB);
+    Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_WAIT_OLD - SFX_FLAG);
 
     this->unk_276 = 0x800;
     this->skelAnime.playSpeed = 1.0f;
@@ -513,7 +511,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
 
     temp_f12 = sqrtf(SQ(temp_f20) + SQ(temp_f22));
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0x000A, this->unk_274);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0xA, this->unk_274);
 
     Math_ApproachS(
         &this->unk_2A0,
@@ -600,7 +598,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     f32 sp44;
     u8 sp43;
 
-    this->unk_2BD = 1;
+    this->unk_2BD = true;
     SkelAnime_Update(&this->skelAnime);
 
     temp_f2 = player->actor.world.pos.x - this->actor.world.pos.x;
@@ -659,9 +657,9 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
             if (sp43 != 0) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x,
                             this->waterHeight, player->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
-                func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
+                Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
             }
-            func_809E2760(&this->actor.projectedPos, NA_SE_EN_UTSUBO_EAT);
+            Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_UTSUBO_EAT);
         }
     }
 
@@ -690,9 +688,10 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
     this->skelAnime.playSpeed = 2.0f;
     this->unk_27C = 2.0f;
     this->unk_276 = 0x1000;
-    this->unk_2BD = 1;
+    this->unk_2BD = true;
     this->unk_278 = 15.0f;
     this->actor.flags &= -2;
+
     SkelAnime_Update(&this->skelAnime);
 
     temp_f2 = player->actor.world.pos.x - this->actor.world.pos.x;
@@ -719,6 +718,7 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
             player->csMode = 0;
             func_80165690();
         }
+
         func_809E344C(this, globalCtx);
     } else {
         f32 phi_f0;
@@ -740,7 +740,7 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
             if (((new_var = &this->actor) != player->actor.parent) && (globalCtx->grabPlayer(globalCtx, player) != 0)) {
                 player->actor.parent = &this->actor;
                 Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
-                func_809E4180(this, globalCtx);
+                Boss03_SetupChewPlayer(this, globalCtx);
             }
         } else {
             //Math_ApproachS(&this->jawZRot, 0x3200, 2, 3072.0f * phi_f0);
@@ -756,17 +756,20 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
     func_809E2DA0(this, globalCtx);
 }
 
-void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     s16 temp;
     Vec3f sp20;
 
-    this->actionFunc = func_809E421C;
+    this->actionFunc = Boss03_ChewPlayer;
+
     temp = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
     Matrix_RotateY(temp, 0);
+
     sp20.x = 0.0f;
     sp20.y = 200.0f;
     sp20.z = 700.0f;
     Matrix_MultiplyVector3fByState(&sp20, &this->unk_268);
+
     this->unk_276 = 0x800;
     this->unk_242 = 0;
     this->workTimer[0] = 100;
@@ -775,8 +778,7 @@ void func_809E4180(Boss03* this, GlobalContext* globalCtx) {
 
 #ifdef NON_MATCHING
 // float regalloc
-// eating player
-void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Input* input = CONTROLLER1(globalCtx);
     f32 temp_f2;
@@ -785,8 +787,8 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     f32 temp_f12;
 
-    this->unk_2BD = 1;
-    this->unk_25C = 0xF;
+    this->unk_2BD = true;
+    this->unk_25C = 15;
 
     if (this->workTimer[0] == 90) {
         func_8016566C(0x96);
@@ -865,12 +867,12 @@ void func_809E421C(Boss03* this, GlobalContext* globalCtx) {
     } else {
         Math_ApproachF(&this->unk_2C4, -300.0f, 1.0f, 5.0f);
         if ((this->unk_240 % 8) == 0) {
-            func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_BITE_OLD);
+            Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_BITE_OLD);
         }
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E421C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_ChewPlayer.s")
 #endif
 
 void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
@@ -896,7 +898,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->workTimer[1] != 0) {
-        func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_WAIT_OLD - SFX_FLAG);
+        Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_WAIT_OLD - SFX_FLAG);
     }
 
     Math_ApproachS(
@@ -905,8 +907,8 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
         0x0200);
     Math_ApproachS(&this->unk_274, 0x800, 1, 0x100);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x1000);
-    Math_ApproachS(&this->actor.world.rot.x, 0, 0x000A, 0x0200);
-    Math_ApproachS(&this->actor.shape.rot.x, 0, 0x000A, 0x0200);
+    Math_ApproachS(&this->actor.world.rot.x, 0, 0xA, 0x200);
+    Math_ApproachS(&this->actor.shape.rot.x, 0, 0xA, 0x200);
 
     temp_f0 = this->waterHeight - 70.0f;
     if (temp_f0 < this->actor.world.pos.y) {
@@ -917,7 +919,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
 
     if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
         if (this->workTimer[0] == 0) {
-            func_809E4910(this, globalCtx);
+            Boss03_SetupCharge(this, globalCtx);
         }
     } else if (player->actor.world.pos.y <= this->waterHeight) {
         func_809E344C(this, globalCtx);
@@ -928,15 +930,18 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     Actor_MoveWithoutGravityReverse(&this->actor);
 }
 
-void func_809E4910(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    this->actionFunc = func_809E497C;
+    this->actionFunc = Boss03_Charge;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
     this->unk_268 = player->actor.world.pos;
 }
 
-void func_809E497C(Boss03* this, GlobalContext* globalCtx) {
+/**
+ * Gyorg charges against the platform
+ */
+void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f14;
     f32 sp50;
     f32 temp_f12;
@@ -945,7 +950,7 @@ void func_809E497C(Boss03* this, GlobalContext* globalCtx) {
 
     this->skelAnime.playSpeed = 2.0f;
     SkelAnime_Update(&this->skelAnime);
-    func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
+    Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
 
     temp_f14 = this->unk_268.x - this->actor.world.pos.x;
     sp50 = (this->unk_268.y - this->actor.world.pos.y) - 50.0f;
@@ -963,17 +968,20 @@ void func_809E497C(Boss03* this, GlobalContext* globalCtx) {
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     if (this->actor.speedXZ >= 20.0f) {
+
+        // Jump over platform
         if (this->unk_242 == 1) {
             if (sqrtf(SQXZ(this->actor.world.pos)) < 700.0f) {
-                func_809E4C34(this, globalCtx);
+                Boss03_SetupJumpOverPlatform(this, globalCtx);
                 return;
             }
         }
 
+        // Attack platform
         if (this->actor.bgCheckFlags & 8) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, globalCtx, 20, 15);
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0x0170, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96, 0x30C);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96, ENWATEREFFECT_780);
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
                 func_800B8D50(globalCtx, NULL, 7.0f, Math_FAtan2F(player->actor.world.pos.z, player->actor.world.pos.x),
                               7.0f, 0);
@@ -984,17 +992,17 @@ void func_809E497C(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809E4C34(Boss03* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_809E4C90;
+void Boss03_SetupJumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = Boss03_JumpOverPlatform;
     this->actor.gravity = -2.0f;
     this->actor.velocity.y = 30.0f;
     this->actor.speedXZ = 25.0f;
-    func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
+    Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
 }
 
-void func_809E4C90(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
     this->unk_254 = 0;
-    func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
+    Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
     this->skelAnime.playSpeed = 2.0f;
     SkelAnime_Update(&this->skelAnime);
@@ -1024,8 +1032,8 @@ void func_809E4C90(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809E4E2C(Boss03* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_809E4E80;
+void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = Boss03_IntroCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -10.0f);
     this->skelAnime.playSpeed = 2.0f;
 }
@@ -1036,7 +1044,7 @@ Vec3f D_809E9104[] = {
     { 0.0f, 450.0f, 0.0f },
 };
 
-void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     s16 phi_s0;
     Vec3f sp70;
 
@@ -1056,11 +1064,11 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
     sp56 = 0;
     player = GET_PLAYER(globalCtx);
     this->unk_254 = 0;
-    this->unk_530 += 1;
+    this->csTimer += 1;
     this->unk_290 = 0;
     sp5A = 0x4BC;
 
-    switch (this->unk_534) {
+    switch (this->csState) {
         case 0x0:
             if (player->actor.world.pos.y < 1350.0f) {
                 func_800EA0D4(globalCtx, &globalCtx->csCtx);
@@ -1079,11 +1087,11 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
                 player->actor.world.pos.y = 1850.0f;
                 player->actor.world.rot.y = player->actor.shape.rot.y;
 
-                this->unk_544.y = player->actor.world.pos.y + 30.0f;
-                this->unk_534 = 1;
-                this->unk_530 = 0;
+                this->subCamAt.y = player->actor.world.pos.y + 30.0f;
+                this->csState = 1;
+                this->csTimer = 0;
                 this->actor.flags &= ~1;
-                this->unk_2D5 = 1;
+                this->unk_2D5 = true;
 
                 this->cameraFov = KREG(14) + 60.0f;
 
@@ -1092,17 +1100,17 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
                     player->actor.world.pos.x = 0.0f;
                     player->actor.speedXZ = 0.0f;
 
-                    this->unk_538.x = 100.0f;
-                    this->unk_538.y = 540.0f;
+                    this->subCamEye.x = 100.0f;
+                    this->subCamEye.y = 540.0f;
 
-                    this->unk_538.z = player->actor.world.pos.z + 100.0f;
-                    this->unk_544.x = player->actor.world.pos.x;
+                    this->subCamEye.z = player->actor.world.pos.z + 100.0f;
+                    this->subCamAt.x = player->actor.world.pos.x;
 
-                    Math_ApproachF(&this->unk_544.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
-                    this->unk_544.z = player->actor.world.pos.z;
-                    if (this->unk_530 >= 0x6A) {
-                        this->unk_534 = 2;
-                        this->unk_530 = 0;
+                    Math_ApproachF(&this->subCamAt.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
+                    this->subCamAt.z = player->actor.world.pos.z;
+                    if (this->csTimer >= 0x6A) {
+                        this->csState = 2;
+                        this->csTimer = 0;
                         this->unk_240 = 0;
                         func_8016566C(0x96);
                         this->cameraFov = 80.0f;
@@ -1120,40 +1128,38 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
                                            this->unk_274);
                             Math_ApproachS(&this->unk_274, 0x200, 1, 0x10);
 
-                            if ((this->unk_530 >= 0x1F) && (this->unk_530 < 0x32)) {
+                            if ((this->csTimer >= 0x1F) && (this->csTimer < 0x32)) {
                                 sp56 = 2;
                             }
 
-                            if ((this->unk_530 == 0x28) || (this->unk_530 == (KREG(91) + 0x10E))) {
+                            if ((this->csTimer == 0x28) || (this->csTimer == (KREG(91) + 0x10E))) {
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                             }
 
-                            if (this->unk_530 >= 0x33) {
+                            if (this->csTimer >= 0x33) {
                                 Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, 0.1f);
                             }
 
                             if (this->unk_242 < 2) {
-                                //if (1) { } if (1) { } if (1) { }
                                 if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < 100.0f) {
                                     this->unk_242++;
                                     this->unk_274 = 0;
                                     if (this->unk_242 >= 2) {
-                                        this->unk_530 = 0x64;
+                                        this->csTimer = 0x64;
                                     }
                                 }
                                 this->unk_278 = 5.0f;
                             } else {
                                 this->unk_278 = 0.0f;
                                 sp56 = 1;
-                                if ((this->actor.speedXZ == 0.0f) && ((u32)this->unk_530 >= 0xE7)) {
-                                    this->unk_534 = 3;
-                                    this->unk_530 = 0;
+                                if ((this->actor.speedXZ == 0.0f) && ((u32)this->csTimer >= 0xE7)) {
+                                    this->csState = 3;
+                                    this->csTimer = 0;
                                 }
-                                // if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
-                                if (this->unk_530 == 0xA5) {
+                                if (this->csTimer == 0xA5) {
                                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_MID);
                                 }
-                                if (this->unk_530 == 0xB4) {
+                                if (this->csTimer == 0xB4) {
                                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                                 }
                             }
@@ -1162,43 +1168,41 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
             break;
 
         case 0x3:
-            func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
+            Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
             sp5A = 0x1970;
             Math_ApproachF(&this->actor.speedXZ, 15.0f, 1.0f, 2.0f);
-            if (this->unk_530 >= 0x15) {
-                this->unk_534 = 4;
-                this->unk_530 = 0;
+            if (this->csTimer >= 0x15) {
+                this->csState = 4;
+                this->csTimer = 0;
             }
             break;
 
         case 0x4:
             player->actor.world.rot.y = player->actor.shape.rot.y = 0;
 
-            if (this->unk_530 == 5) {
+            if (this->csTimer == 5) {
                 func_800B7298(globalCtx, &this->actor, 8);
             }
 
-            //if (1) { } if (1) { } if (1) { } if (1) { }
+            this->subCamEye.x = player->actor.world.pos.x + 30.0f;
+            this->subCamEye.y = ((player->actor.world.pos.y + Player_GetHeight(player)) - 4.0f) + BREG(17);
+            this->subCamEye.z = player->actor.world.pos.z - 30.0f;
 
-            this->unk_538.x = player->actor.world.pos.x + 30.0f;
-            this->unk_538.y = ((player->actor.world.pos.y + Player_GetHeight(player)) - 4.0f) + BREG(17);
-            this->unk_538.z = player->actor.world.pos.z - 30.0f;
-
-            this->unk_544.x = player->actor.world.pos.x;
-            this->unk_544.y =
+            this->subCamAt.x = player->actor.world.pos.x;
+            this->subCamAt.y =
                 (((player->actor.world.pos.y + Player_GetHeight(player)) - 18.0f) + 6.0f) + BREG(18);
-            this->unk_544.z = player->actor.world.pos.z;
+            this->subCamAt.z = player->actor.world.pos.z;
 
             if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-                this->unk_538.y -= 60.0f;
-                this->unk_544.y -= 35.0f;
+                this->subCamEye.y -= 60.0f;
+                this->subCamAt.y -= 35.0f;
             }
 
             this->cameraFov = 60.0f;
-            if (this->unk_530 == 0x10) {
-                this->unk_534 = 5;
-                this->unk_530 = 0;
-                this->unk_2D5 = 0;
+            if (this->csTimer == 0x10) {
+                this->csState = 5;
+                this->csTimer = 0;
+                this->unk_2D5 = false;
                 this->actor.speedXZ = -200.0f;
                 Actor_MoveWithoutGravityReverse(&this->actor);
                 this->actor.world.pos.y = this->waterHeight - 150.0f;
@@ -1211,18 +1215,18 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
                     player->actor.shape.rot.y = -0x1470;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
 
-                    this->unk_538.x = ((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f;
-                    this->unk_538.y = (player->actor.world.pos.y + 40.0f) + 10.0f;
-                    this->unk_538.z = ((player->actor.world.pos.z - 30.0f) + 160.0f) + 300.0f;
+                    this->subCamEye.x = ((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f;
+                    this->subCamEye.y = (player->actor.world.pos.y + 40.0f) + 10.0f;
+                    this->subCamEye.z = ((player->actor.world.pos.z - 30.0f) + 160.0f) + 300.0f;
 
-                    this->unk_544.x = this->actor.world.pos.x;
-                    this->unk_544.y = this->actor.world.pos.y - 100.0f;
-                    this->unk_544.z = this->actor.world.pos.z;
+                    this->subCamAt.x = this->actor.world.pos.x;
+                    this->subCamAt.y = this->actor.world.pos.y - 100.0f;
+                    this->subCamAt.z = this->actor.world.pos.z;
 
-                    if (this->unk_530 == 0xA) {
+                    if (this->csTimer == 0xA) {
                         this->actor.velocity.y = 30.0f;
-                        this->unk_534 = 6;
-                        this->unk_530 = 0;
+                        this->csState = 6;
+                        this->csTimer = 0;
                         this->actor.gravity = -1.5f;
                         this->actor.speedXZ = 20.0f;
                         Audio_QueueSeqCmd(0x801B);
@@ -1235,14 +1239,12 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
         case 0x6:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
-            if (this->unk_530 == 0x1E) {
+            if (this->csTimer == 0x1E) {
                 TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
                                        Lib_SegmentedToVirtual(&D_06007EC8), 160, 180, 128, 40);
             }
 
-            // if ((this && this) && this) {}
-
-            if ((this->unk_530 < 0x18) || (this->unk_530 >= 0x5A)) {
+            if ((this->csTimer < 0x18) || (this->csTimer >= 0x5A)) {
                 SkelAnime_Update(&this->skelAnime);
                 Math_ApproachS(&this->actor.world.rot.x, this->actor.velocity.y * -300.0f, 3, 0x1000);
                 Actor_MoveWithGravity(&this->actor);
@@ -1262,31 +1264,31 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
                         func_809E2880(globalCtx, &sp70);
                     }
 
-                    this->unk_55C.x = this->actor.world.pos.x;
-                    this->unk_55C.y = this->actor.world.pos.y - 100.0f;
-                    this->unk_55C.z = this->actor.world.pos.z;
+                    this->subCamTargetAt.x = this->actor.world.pos.x;
+                    this->subCamTargetAt.y = this->actor.world.pos.y - 100.0f;
+                    this->subCamTargetAt.z = this->actor.world.pos.z;
                 }
             } else {
-                Math_ApproachF(&this->unk_538.x, (((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f) - 90.0f,
+                Math_ApproachF(&this->subCamEye.x, (((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f) - 90.0f,
                                0.05f, 3.0f);
-                Math_ApproachF(&this->unk_538.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
-                Math_ApproachF(&this->unk_538.z, ((player->actor.world.pos.z - 30.0f) + 160.0f + 300.0f) - 90.0f, 0.05f,
+                Math_ApproachF(&this->subCamEye.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
+                Math_ApproachF(&this->subCamEye.z, ((player->actor.world.pos.z - 30.0f) + 160.0f + 300.0f) - 90.0f, 0.05f,
                                3.0f);
                 Math_ApproachF(&this->unk_568, 90.0f, 0.05f, 3.0f);
             }
 
-            Math_ApproachF(&this->unk_544.x, this->unk_55C.x, 0.5f, 100.0f);
-            Math_ApproachF(&this->unk_544.y, this->unk_55C.y + this->unk_568, 0.5f, 100.0f);
-            Math_ApproachF(&this->unk_544.z, this->unk_55C.z, 0.5f, 100.0f);
+            Math_ApproachF(&this->subCamAt.x, this->subCamTargetAt.x, 0.5f, 100.0f);
+            Math_ApproachF(&this->subCamAt.y, this->subCamTargetAt.y + this->unk_568, 0.5f, 100.0f);
+            Math_ApproachF(&this->subCamAt.z, this->subCamTargetAt.z, 0.5f, 100.0f);
 
-            if (this->unk_530 == 0x91) {
+            if (this->csTimer == 0x91) {
                 Camera* temp_v0_4;
 
                 temp_v0_4 = Play_GetCamera(globalCtx, 0);
 
-                temp_v0_4->eye = this->unk_538;
-                temp_v0_4->eyeNext = this->unk_538;
-                temp_v0_4->at = this->unk_544;
+                temp_v0_4->eye = this->subCamEye;
+                temp_v0_4->eyeNext = this->subCamEye;
+                temp_v0_4->at = this->subCamAt;
                 func_80169AFC(globalCtx, this->subCamId, 0);
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
@@ -1300,7 +1302,7 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
 
     this->actor.shape.rot = this->actor.world.rot;
 
-    if ((this->unk_534 == 2) || (this->unk_534 == 3)) {
+    if ((this->csState == 2) || (this->csState == 3)) {
         Actor_MoveWithoutGravityReverse(&this->actor);
         phi_f2 = this->actor.speedXZ * 0.02f;
         if (phi_f2 > 0.12f) {
@@ -1308,41 +1310,40 @@ void func_809E4E80(Boss03* this, GlobalContext* globalCtx) {
         }
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
-        // if (&player->actor.world) {}
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
         Matrix_RotateY(this->actor.world.rot.y, 1);
         Matrix_InsertYRotation_f(sp5C, 1);
         Matrix_InsertXRotation_s(this->actor.world.rot.x, 1);
-        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->unk_544);
+        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->subCamAt);
 
-        this->unk_538 = this->actor.world.pos;
+        this->subCamEye = this->actor.world.pos;
 
         for (phi_s0 = 0; phi_s0 < sp56; phi_s0++) {
-            sp70.x = randPlusMinusPoint5Scaled(100.0f) + this->unk_544.x;
-            sp70.y = (randPlusMinusPoint5Scaled(100.0f) + this->unk_544.y) - 150.0f;
-            sp70.z = randPlusMinusPoint5Scaled(100.0f) + this->unk_544.z;
+            sp70.x = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.x;
+            sp70.y = (randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.y) - 150.0f;
+            sp70.z = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.z;
             func_809E2AB4(globalCtx, &sp70);
         }
     }
 
     if (this->subCamId != 0) {
-        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->unk_544, &this->unk_538);
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
         Play_CameraSetFov(globalCtx, this->subCamId, this->cameraFov);
     }
 }
 
-void func_809E5ADC(Boss03* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_809E5B64;
+void Boss03_SetupDeathCutscene(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = Boss03_DeathCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
-    this->unk_52C = Animation_GetLastFrame(&gGyorgFloppingAnim);
+    this->floppingAnimLastFrame = Animation_GetLastFrame(&gGyorgFloppingAnim);
     Audio_QueueSeqCmd(0x100100FF);
     this->workTimer[0] = 0;
     this->unk_242 = 0;
-    this->unk_534 = 0;
+    this->csState = 0;
     this->actor.flags &= ~1;
 }
 
-void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     s16 i;
     Vec3f sp90;
     Vec3f sp84;
@@ -1360,9 +1361,9 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
     player = GET_PLAYER(globalCtx);
     sp64 = this->actor.scale.x * 5.0f;
 
-    this->unk_530++;
+    this->csTimer++;
 
-    switch (this->unk_534) {
+    switch (this->csState) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 func_800EA0D4(globalCtx, &globalCtx->csCtx);
@@ -1377,19 +1378,19 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
                 }
 
                 case 1:
-                    this->unk_530 = 0;
-                    this->unk_534 = 2;
-                    this->unk_538.x = camera->eye.x;
-                    this->unk_538.y = camera->eye.y;
-                    this->unk_538.z = camera->eye.z;
-                    this->unk_544.x = camera->at.x;
-                    this->unk_544.y = camera->at.y;
-                    this->unk_544.z = camera->at.z;
+                    this->csTimer = 0;
+                    this->csState = 2;
+                    this->subCamEye.x = camera->eye.x;
+                    this->subCamEye.y = camera->eye.y;
+                    this->subCamEye.z = camera->eye.z;
+                    this->subCamAt.x = camera->at.x;
+                    this->subCamAt.y = camera->at.y;
+                    this->subCamAt.z = camera->at.z;
 
-                    // this->unk_568 = Math_Acot2F(this->unk_538.z - this->actor.world.pos.z, this->unk_538.x -
+                    // this->unk_568 = Math_Acot2F(this->subCamEye.z - this->actor.world.pos.z, this->subCamEye.x -
                     // this->actor.world.pos.x);
-                    new_var2 = this->unk_538.x - this->actor.world.pos.x;
-                    this->unk_568 = Math_Acot2F(this->unk_538.z - this->actor.world.pos.z, new_var2);
+                    new_var2 = this->subCamEye.x - this->actor.world.pos.x;
+                    this->unk_568 = Math_Acot2F(this->subCamEye.z - this->actor.world.pos.z, new_var2);
 
                     this->unk_570 = 0.0f;
                     this->unk_56C = 0.0f;
@@ -1399,26 +1400,26 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
                     sp90.y = (50.0f * sp64) + 150.0f;
                     sp90.z = (400.0f * sp64) + 300.0f;
 
-                    this->unk_55C.x = this->actor.world.pos.x;
-                    this->unk_55C.y = this->actor.world.pos.y;
-                    this->unk_55C.z = this->actor.world.pos.z;
+                    this->subCamTargetAt.x = this->actor.world.pos.x;
+                    this->subCamTargetAt.y = this->actor.world.pos.y;
+                    this->subCamTargetAt.z = this->actor.world.pos.z;
 
                     this->unk_568 += this->unk_56C;
                     Matrix_InsertYRotation_f(this->unk_568, 0);
-                    Matrix_MultiplyVector3fByState(&sp90, &this->unk_550);
+                    Matrix_MultiplyVector3fByState(&sp90, &this->subCamTargetEye);
 
-                    this->unk_550.x += this->actor.world.pos.x;
-                    this->unk_550.y += this->waterHeight;
-                    this->unk_550.z += this->actor.world.pos.z;
+                    this->subCamTargetEye.x += this->actor.world.pos.x;
+                    this->subCamTargetEye.y += this->waterHeight;
+                    this->subCamTargetEye.z += this->actor.world.pos.z;
 
                     sp4C = 40.0f + new_var;
-                    Math_ApproachF(&this->unk_538.x, this->unk_550.x, 0.1f, sp4C);
-                    Math_ApproachF(&this->unk_538.y, this->unk_550.y, 0.1f, sp4C);
-                    Math_ApproachF(&this->unk_538.z, this->unk_550.z, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamEye.x, this->subCamTargetEye.x, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamEye.y, this->subCamTargetEye.y, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamEye.z, this->subCamTargetEye.z, 0.1f, sp4C);
                     sp4C = 70.0f + new_var;
-                    Math_ApproachF(&this->unk_544.x, this->unk_55C.x, 0.1f, sp4C);
-                    Math_ApproachF(&this->unk_544.y, this->unk_55C.y, 0.1f, sp4C);
-                    Math_ApproachF(&this->unk_544.z, this->unk_55C.z, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamAt.x, this->subCamTargetAt.x, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamAt.y, this->subCamTargetAt.y, 0.1f, sp4C);
+                    Math_ApproachF(&this->subCamAt.z, this->subCamTargetAt.z, 0.1f, sp4C);
             }
             break;
     }
@@ -1435,10 +1436,10 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.world.pos.x, sp84.x, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
 
-            if (Animation_OnFrame(&this->skelAnime, this->unk_52C) != 0) {
+            if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame) != 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
             }
-            if (Animation_OnFrame(&this->skelAnime, this->unk_52C * 0.5f) != 0) {
+            if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame * 0.5f) != 0) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
             }
 
@@ -1447,11 +1448,11 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
                             this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
-                if (this->actionFunc == func_809E5B64) {
+                if (this->actionFunc == Boss03_DeathCutscene) {
                     if ((D_809E9840 & 1) != 0) {
-                        func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
+                        Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
                     } else {
-                        func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
+                        Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
                     }
                     D_809E9840++;
                 }
@@ -1502,8 +1503,8 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
 
                     this->actor.world.rot.y = Math_FAtan2F(-this->actor.world.pos.z, -this->actor.world.pos.x);
 
-                    func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_BOUND_OLD);
-                    func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_BOUND2_OLD);
+                    Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_BOUND_OLD);
+                    Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_BOUND2_OLD);
                 }
             }
 
@@ -1527,7 +1528,7 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
                                    ENDOORWARP1_FF_1);
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_B_HEART, this->actor.focus.pos.x, PLATFORM_HEIGHT,
                             this->actor.focus.pos.z, 0, 0, 0, 0);
-                this->unk_530 = 0;
+                this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
                 Audio_StopSfxByPos(&this->actor.projectedPos);
             }
@@ -1535,19 +1536,19 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
 
         case 0x2:
             Math_ApproachZeroF(&this->unk_56C, 1.0f, 0.0005f);
-            if (this->unk_530 == 0x3C) {
+            if (this->csTimer == 0x3C) {
                 camera = Play_GetCamera(globalCtx, 0);
-                camera->eye = this->unk_538;
-                camera->eyeNext = this->unk_538;
-                camera->at = this->unk_544;
+                camera->eye = this->subCamEye;
+                camera->eyeNext = this->subCamEye;
+                camera->at = this->subCamAt;
                 func_80169AFC(globalCtx, this->subCamId, 0);
                 this->subCamId = 0;
                 func_800EA0EC(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
-                this->unk_534 = 3;
+                this->csState = 3;
                 func_80165690();
-                func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
-                func_809E2760(&D_809E9848, NA_SE_EN_KONB_INIT_OLD);
+                Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_INIT_OLD);
+                Boss03_PlayUnderwaterSfx(&D_809E9848, NA_SE_EN_KONB_INIT_OLD);
             }
             break;
 
@@ -1557,23 +1558,23 @@ void func_809E5B64(Boss03* this, GlobalContext* globalCtx) {
     }
 
     if (this->subCamId != 0) {
-        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->unk_544, &this->unk_538);
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
-void func_809E65F4(Boss03* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_809E6640;
+void Boss03_SetupSpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = Boss03_SpawnSmallFishesCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgBackingUpAnim, -15.0f);
-    this->unk_534 = 0;
-    this->unk_530 = 0;
+    this->csState = 0;
+    this->csTimer = 0;
 }
 
-void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     SkelAnime_Update(&this->skelAnime);
-    this->unk_530++;
-    switch (this->unk_534) {
+    this->csTimer++;
+    switch (this->csState) {
         case 0x0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 func_800EA0D4(globalCtx, &globalCtx->csCtx);
@@ -1581,7 +1582,7 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
                 this->subCamId = Play_CreateSubCamera(globalCtx);
                 Play_CameraChangeStatus(globalCtx, 0, 1);
                 Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
-                this->unk_534 = 1;
+                this->csState = 1;
                 this->unk_2BE = 3000;
 
                 case 0x1:
@@ -1605,36 +1606,36 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
                     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                              0);
                     Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, 1);
-                    Matrix_GetStateTranslationAndScaledZ(340.0f, &this->unk_538);
+                    Matrix_GetStateTranslationAndScaledZ(340.0f, &this->subCamEye);
 
-                    this->unk_544.x = this->actor.world.pos.x;
-                    this->unk_544.y = this->actor.world.pos.y;
-                    this->unk_544.z = this->actor.world.pos.z;
+                    this->subCamAt.x = this->actor.world.pos.x;
+                    this->subCamAt.y = this->actor.world.pos.y;
+                    this->subCamAt.z = this->actor.world.pos.z;
 
                     Math_ApproachS(&this->unk_2BE, -4000, 10, 70);
 
-                    if (this->unk_530 >= 0x3D) {
+                    if (this->csTimer >= 0x3D) {
                         Math_ApproachS(&this->jawZRot, 0x3200, 5, 0x500);
-                        if ((this->unk_530 >= 0x5A) && (this->unk_530 < 0x82)) {
-                            if ((this->unk_530 & 1) != 0) {
+                        if ((this->csTimer >= 0x5A) && (this->csTimer < 0x82)) {
+                            if ((this->csTimer & 1) != 0) {
                                 Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON3,
                                                    this->actor.world.pos.x - 110.0f, this->actor.world.pos.y - 20.0f,
                                                    this->actor.world.pos.z - 110.0f, 0, this->actor.shape.rot.y, 0, 0);
                                 this->unk_252++;
                             }
-                            if ((this->unk_530 & 7) == 0) {
+                            if ((this->csTimer & 7) == 0) {
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
                             }
                         }
                     }
 
-                    if (this->unk_530 >= 0x96) {
+                    if (this->csTimer >= 0x96) {
                         Camera* temp_v0_2;
 
                         temp_v0_2 = Play_GetCamera(globalCtx, 0);
-                        temp_v0_2->eye = this->unk_538;
-                        temp_v0_2->eyeNext = this->unk_538;
-                        temp_v0_2->at = this->unk_544;
+                        temp_v0_2->eye = this->subCamEye;
+                        temp_v0_2->eyeNext = this->subCamEye;
+                        temp_v0_2->at = this->subCamAt;
 
                         func_80169AFC(globalCtx, this->subCamId, 0);
                         this->subCamId = 0;
@@ -1648,7 +1649,7 @@ void func_809E6640(Boss03* this, GlobalContext* globalCtx) {
     }
 
     if (this->subCamId != 0) {
-        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->unk_544, &this->unk_538);
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -1675,7 +1676,7 @@ void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx) {
     this->actor.hintId = 0x29;
 
     if (this->unk_240 >= 0x10) {
-        func_809E2760(&this->actor.projectedPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
+        Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -1702,25 +1703,29 @@ void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809E6B70(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_SetupDamaged(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
-    this->actionFunc = func_809E6BC0;
+    this->actionFunc = Boss03_Damaged;
     this->workTimer[0] = 30;
 }
 
-void func_809E6BC0(Boss03* this, GlobalContext* globalCtx) {
-    this->unk_25C = 0x000F;
+void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
+    this->unk_25C = 15;
+
     SkelAnime_Update(&this->skelAnime);
+
     Math_ApproachS(&this->jawZRot, ((Math_SinS(this->unk_240 * 0x2000) * 3000.0f) + 0x3000), 2, 0x3000);
     Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 10.0f);
+
     if (this->workTimer[0] == 0) {
         if ((s8)this->actor.colChkInfo.health < 6) {
-            if (this->unk_253 == 0) {
-                this->unk_253++;
-                func_809E65F4(this, globalCtx);
+            if (!this->hasSpwanedSmallFishes) {
+                this->hasSpwanedSmallFishes++;
+                Boss03_SetupSpawnSmallFishesCutscene(this, globalCtx);
                 return;
             }
         }
+
         func_809E344C(this, globalCtx);
         this->workTimer[1] = 100;
     }
@@ -1764,7 +1769,7 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
                 if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
                     hitbox = this->collider2.elements[i].info.acHitInfo;
                     this->collider2.elements[i].info.bumperFlags &= ~BUMP_HIT;
-                    this->unk_25C = 0xF;
+                    this->unk_25C = 15;
                     this->unk_25E = 0xF;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
@@ -1780,13 +1785,13 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
                     this->actor.colChkInfo.health -= phi_v1;
 
                     if ((s8)this->actor.colChkInfo.health <= 0) {
-                        func_809E2760(&D_809E9848, NA_SE_EN_KONB_DEAD_OLD);
-                        func_809E2760(&D_809E9848, NA_SE_EN_KONB_DEAD2_OLD);
-                        func_809E5ADC(this, globalCtx);
+                        Boss03_PlayUnderwaterSfx(&D_809E9848, NA_SE_EN_KONB_DEAD_OLD);
+                        Boss03_PlayUnderwaterSfx(&D_809E9848, NA_SE_EN_KONB_DEAD2_OLD);
+                        Boss03_SetupDeathCutscene(this, globalCtx);
                         Enemy_StartFinishingBlow(globalCtx, &this->actor);
                     } else {
-                        func_809E6B70(this, globalCtx);
-                        func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
+                        Boss03_SetupDamaged(this, globalCtx);
+                        Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
                     }
                     return;
                 }
@@ -1797,11 +1802,11 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
             if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
                 hitbox = this->collider1.elements[i].info.acHitInfo;
                 this->collider1.elements[i].info.bumperFlags &= ~BUMP_HIT;
-                this->unk_25C = 0xF;
+                this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {
                     Boss03_SetupStunned(this, globalCtx);
-                    func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
+                    Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
 
                     if (&this->actor == player->actor.parent) {
                         player->unk_AE8 = 101;
@@ -1828,13 +1833,13 @@ void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
                     }
                     this->actor.colChkInfo.health -= phi_v1;
                     if ((s8)this->actor.colChkInfo.health <= 0) {
-                        func_809E2760(&D_809E9848, NA_SE_EN_KONB_DEAD_OLD);
-                        func_809E2760(&D_809E9848, NA_SE_EN_KONB_DEAD2_OLD);
+                        Boss03_PlayUnderwaterSfx(&D_809E9848, NA_SE_EN_KONB_DEAD_OLD);
+                        Boss03_PlayUnderwaterSfx(&D_809E9848, NA_SE_EN_KONB_DEAD2_OLD);
                         Enemy_StartFinishingBlow(globalCtx, &this->actor);
-                        func_809E5ADC(this, globalCtx);
+                        Boss03_SetupDeathCutscene(this, globalCtx);
                     } else {
-                        func_809E6B70(this, globalCtx);
-                        func_809E2760(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
+                        Boss03_SetupDamaged(this, globalCtx);
+                        Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_DAMAGE_OLD);
                     }
                 }
                 return;
@@ -1869,7 +1874,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_240++;
         this->unk_2BC = this->unk_290 = 1;
 
-        this->unk_2BD = 0;
+        this->unk_2BD = false;
 
         Math_Vec3f_Copy(&D_809E9848, &this->actor.projectedPos);
 
@@ -1893,7 +1898,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         this->actionFunc(this, globalCtx);
 
-        if (this->actionFunc != func_809E5B64) {
+        if (this->actionFunc != Boss03_DeathCutscene) {
             Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x800);
             this->actor.world.pos.y -= 100.0f;
             this->actor.prevPos.y -= 100.0f;
@@ -1903,10 +1908,10 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    if ((this->actionFunc != func_809E5B64) && (this->unk_2D5 == 0)) {
+    if ((this->actionFunc != Boss03_DeathCutscene) && (!this->unk_2D5)) {
         if (((this->actor.world.pos.y < this->waterHeight + 50.0f) && (this->waterHeight + 50.0f <= this->actor.prevPos.y)) ||
             ((this->waterHeight - 50.0f < this->actor.world.pos.y) && (this->actor.prevPos.y <= this->waterHeight - 50.0f))) {
-            if ((this->actor.velocity.y < 0.0f) && (this->actionFunc != func_809E5B64)) {
+            if ((this->actor.velocity.y < 0.0f) && (this->actionFunc != Boss03_DeathCutscene)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_SINK_OLD);
             }
 
@@ -1919,11 +1924,11 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    if (this->actionFunc != func_809E5B64) {
-        if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == func_809E6BC0)) {
-            this->collider2.base.colType = 3;
+    if (this->actionFunc != Boss03_DeathCutscene) {
+        if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == Boss03_Damaged)) {
+            this->collider2.base.colType = COLTYPE_HIT3;
         } else {
-            this->collider2.base.colType = 9;
+            this->collider2.base.colType = COLTYPE_METAL;
         }
 
         func_809E6CB4(this, globalCtx);
@@ -1934,7 +1939,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
         }
 
-        if (this->unk_2BD == 0) {
+        if (!this->unk_2BD) {
             if (player->transformation != PLAYER_FORM_HUMAN) {
                 CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
             }
@@ -1942,7 +1947,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         }
 
-        if ((this->actionFunc != Boss03_Stunned) && (this->unk_2BD == 0)) {
+        if ((this->actionFunc != Boss03_Stunned) && (!this->unk_2BD)) {
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
             CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         }
@@ -1993,7 +1998,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if ((this->waterHeight < player->actor.world.pos.y) && (this->unk_2C8.y <= this->waterHeight)) {
-        this->unk_2D4 = 0x14;
+        this->unk_2D4 = 20;
     }
 
     if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
@@ -2044,7 +2049,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Update.s")
 #endif
 
-void func_809E7920(GlobalContext* globalCtx, s16 objectId) {
+void Boss03_SetObject(GlobalContext* globalCtx, s16 objectId) {
     s32 objectIndex = Object_GetIndex(&globalCtx->objectCtx, objectId);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -2154,20 +2159,57 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_Printf(printer, "health:%i", this->actor.colChkInfo.health);
 
 
-    GfxPrint_SetPos(printer, x, 1);
-    GfxPrint_Printf(printer, "530:%X", this->unk_530);
+    if (this->actionFunc == Boss03_SpawnSmallFishesCutscene || this->actionFunc == Boss03_DeathCutscene || this->actionFunc == Boss03_IntroCutscene) {
+        GfxPrint_SetPos(printer, x-4, 0);
+        GfxPrint_Printf(printer, "csState:%i", this->csState);
+
+        GfxPrint_SetPos(printer, x-4, 1);
+        GfxPrint_Printf(printer, "csTimer:%i", this->csTimer);
+    }
 
 
 
-    GfxPrint_SetPos(printer, x-7, ++y);
-    actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)func_809E2760 + SEGMENT_START(ovl_Boss_03);
+
+    GfxPrint_SetPos(printer, x-12, ++y);
+    actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)Boss03_PlayUnderwaterSfx + SEGMENT_START(ovl_Boss_03);
     if (this->actionFunc == Boss03_Stunned) {
         GfxPrint_Printf(printer, "actionFunc:Stunned");
+
+    } else if (this->actionFunc == func_809E34B8) {
+        GfxPrint_Printf(printer, "actionFunc:? TakeDecision");
+
+    } else if (this->actionFunc == func_809E475C) {
+        GfxPrint_Printf(printer, "actionFunc:? PreparingPreAttack");
+    } else if (this->actionFunc == Boss03_Charge) {
+        GfxPrint_Printf(printer, "actionFunc:Charge");
+    } else if (this->actionFunc == Boss03_JumpOverPlatform) {
+        GfxPrint_Printf(printer, "actionFunc:Jump");
+
+    } else if (this->actionFunc == func_809E3968) {
+        GfxPrint_Printf(printer, "actionFunc:? 3968 Water");
     } else if (this->actionFunc == func_809E3D98) {
-        GfxPrint_Printf(printer, "actionFunc:Hungry");
+        GfxPrint_Printf(printer, "actionFunc:? Hungry");
+    } else if (this->actionFunc == Boss03_ChewPlayer) {
+        GfxPrint_Printf(printer, "actionFunc:ChewPlayer");
+
+    } else if (this->actionFunc == func_809E344C) {
+        GfxPrint_Printf(printer, "actionFunc:WaitForPlayer");
+
+    } else if (this->actionFunc == Boss03_IntroCutscene) {
+        GfxPrint_Printf(printer, "actionFunc:IntroCs");
+    } else if (this->actionFunc == Boss03_DeathCutscene) {
+        GfxPrint_Printf(printer, "actionFunc:DeathCs");
+    } else if (this->actionFunc == Boss03_SpawnSmallFishesCutscene) {
+        GfxPrint_Printf(printer, "actionFunc:SpawnTanronCs");
+
+    } else if (this->actionFunc == Boss03_Damaged) {
+        GfxPrint_Printf(printer, "actionFunc:Damaged");
+
+
     } else {
-        GfxPrint_Printf(printer, "actionFunc:%X", actionFuncReloc & 0x0000FFFF);
+        GfxPrint_Printf(printer, "wot  actionFunc:%X", actionFuncReloc & 0x0000FFFF);
     }
+
 
     //GfxPrint_SetPos(printer, x, ++y);
     //GfxPrint_Printf(printer, "240:%X", this->unk_240);
@@ -2189,8 +2231,10 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_Printf(printer, "252:%X", this->unk_252);
     #endif
 
-    GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "253:%X", this->unk_253);
+    #if 0
+    GfxPrint_SetPos(printer, x-18, ++y);
+    GfxPrint_Printf(printer, "hasSpwanedSmallFishes:%X", this->hasSpwanedSmallFishes);
+    #endif
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "254:%X", this->unk_254);
@@ -2324,8 +2368,8 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BC:%X", this->unk_2BC);
 
-    GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "2BD:%X", this->unk_2BD);
+    GfxPrint_SetPos(printer, x-13, ++y);
+    GfxPrint_Printf(printer, "playerUnderwater:%s", BOOLSTR(this->unk_2BD));
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BE:%i", this->unk_2BE);
@@ -2352,7 +2396,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_Printf(printer, "2D4:%X", this->unk_2D4);
 
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "2D5:%X", this->unk_2D5);
+    GfxPrint_Printf(printer, "2D5:%s", BOOLSTR(this->unk_2D5));
 
 
     #if 0
@@ -2374,7 +2418,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     #if 0
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "52C:%f", this->unk_52C);
+    GfxPrint_Printf(printer, "52C:%f", this->floppingAnimLastFrame);
     #endif
 
 
@@ -2382,9 +2426,6 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     x = 1;
     y = initial_Y;
-
-    GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "534:%X", this->unk_534);
 
     y++;
 
@@ -2407,6 +2448,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     #endif
 
 
+    #if 0
     for (i = 0x568; i < 0x57C; i += 4) {
         if (i == 0x574) {
             continue;
@@ -2418,6 +2460,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
             return;
         }
     }
+    #endif
 
 
 
@@ -2543,7 +2586,7 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    if (this->unk_2D5 == 0) {
+    if (!this->unk_2D5) {
         if ((this->unk_25E % 2) != 0) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
         }
@@ -2698,7 +2741,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
 
     eff = effFirst;
 
-    func_809E7920(globalCtx, OBJECT_WATER_EFFECT);
+    Boss03_SetObject(globalCtx, OBJECT_WATER_EFFECT);
 
     flag = false;
 
@@ -2764,7 +2807,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
         }
     }
 
-    func_809E7920(globalCtx, OBJECT_BOSS03);
+    Boss03_SetObject(globalCtx, OBJECT_BOSS03);
 
     CLOSE_DISPS(gfxCtx);
 }

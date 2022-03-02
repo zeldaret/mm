@@ -2537,11 +2537,16 @@ void Actor_UpdateAll(GlobalContext* globalCtx, ActorContext* actorCtx) {
         Input* input = CONTROLLER1(globalCtx);
 
 
-        if (CHECK_BTN_ALL(input->press.button, BTN_Z) &&
-            CHECK_BTN_ALL(input->cur.button, BTN_L | BTN_R)) {
-            gSaveContext.gameMode = 0;
-            SET_NEXT_GAMESTATE(&globalCtx->state, Select_Init, SelectContext);
-            globalCtx->state.running = false;
+        if (CHECK_BTN_ALL(input->press.button, BTN_Z)) {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_L | BTN_R)) {
+                gSaveContext.gameMode = 0;
+                SET_NEXT_GAMESTATE(&globalCtx->state, Select_Init, SelectContext);
+                globalCtx->state.running = false;
+            }
+        } else {
+            if (CHECK_BTN_ALL(input->cur.button, BTN_L)) {
+                player->actor.velocity.y = 6.0f;
+            }
         }
 
     }
