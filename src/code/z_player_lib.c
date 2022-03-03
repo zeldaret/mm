@@ -2835,21 +2835,19 @@ void func_80127BE8(GlobalContext* arg0, Vec3f* arg1) {
 
 void func_80127DA4(GlobalContext* globalCtx, struct_801F58B0 arg1[], struct_80128388_arg1 arg2[], s32 arg3, Vec3f* arg4,
                    Vec3f* arg5, u32* arg6) {
-    f32 f0;
+    struct_801F58B0* phi_s1 = &arg1[1];
     Vec3f spB0;
     Vec3f spA4;
     f32 f22;
     f32 f28;
     f32 f24;
     f32 f20;
+    f32 f0;
+    f32 sp8C = -1.0f;
+    s32 i;
     s16 s0;
     s16 s2;
-    f32 sp8C;
-    s32 i;
-    struct_801F58B0* phi_s1;
 
-    phi_s1 = &arg1[1];
-    sp8C = -1.0f;
     Math_Vec3f_Copy(&arg1->unk_00, arg4);
     Math_Vec3f_Diff(arg5, arg4, &spB0);
     arg1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
@@ -2895,7 +2893,6 @@ void func_80127DA4(GlobalContext* globalCtx, struct_801F58B0 arg1[], struct_8012
 
         s2 = phi_s1->unk_18 - arg1->unk_18;
         s2 = CLAMP(s2, -arg2->unk_18, arg2->unk_18);
-
         phi_s1->unk_18 = arg1->unk_18 + s2;
 
         s0 = phi_s1->unk_1A - arg1->unk_1A;
@@ -2973,18 +2970,13 @@ void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2
 
 void func_801284A0(GlobalContext* globalCtx, Player* player) {
     s32 pad;
-    Mtx* sp90;
+    Mtx* sp90 = GRAPH_ALLOC(globalCtx->state.gfxCtx, 6 * sizeof(Mtx));
     Vec3f sp84;
     Vec3f sp78;
-    Vec3f* iter;
-    Vec3f* iter2;
-    u32 sp6C;
+    Vec3f* iter = D_801C0C0C;
+    Vec3f* iter2 = D_801C0C30;
+    u32 sp6C = globalCtx->gameplayFrames;
     s32 i;
-
-    sp90 = GRAPH_ALLOC(globalCtx->state.gfxCtx, 6 * sizeof(Mtx));
-    iter = D_801C0C0C;
-    iter2 = D_801C0C30;
-    sp6C = globalCtx->gameplayFrames;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -3001,7 +2993,7 @@ void func_801284A0(GlobalContext* globalCtx, Player* player) {
         sp6C += 11;
 
         Matrix_StatePush();
-        Matrix_InsertTranslation(iter->x, iter->y, iter->z, 1);
+        Matrix_InsertTranslation(iter->x, iter->y, iter->z, MTXMODE_APPLY);
         func_80128388(D_801F58B0[i], D_801C0C54, 3, &sp90);
         Matrix_StatePop();
         iter++;
