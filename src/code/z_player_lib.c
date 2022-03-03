@@ -2971,17 +2971,19 @@ void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2
     }
 }
 
-#ifdef NON_EQUIVALENT
-// Not sure about equivalency
 void func_801284A0(GlobalContext* globalCtx, Player* player) {
+    s32 pad;
     Mtx* sp90;
     Vec3f sp84;
     Vec3f sp78;
+    Vec3f* iter;
+    Vec3f* iter2;
     u32 sp6C;
-    Mtx* temp_v0;
     s32 i;
 
     sp90 = GRAPH_ALLOC(globalCtx->state.gfxCtx, 6 * sizeof(Mtx));
+    iter = D_801C0C0C;
+    iter2 = D_801C0C30;
     sp6C = globalCtx->gameplayFrames;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -2989,27 +2991,25 @@ void func_801284A0(GlobalContext* globalCtx, Player* player) {
     gSPSegment(POLY_OPA_DISP++, 0x0B, sp90);
 
     Matrix_MultiplyVector3fByState(&D_801C0C00, &D_801C0C54[1].unk_08);
-    Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C54[1].unk_08);
+    Math_Vec3f_Lerp(&player->bodyPartsPos[7], &player->bodyPartsPos[0], 0.2f, &D_801C0C54[2].unk_08);
 
     for (i = 0; i < ARRAY_COUNT(D_801C0C0C); i++) {
-        Matrix_MultiplyVector3fByState(&D_801C0C0C[i], &sp84);
-        Matrix_MultiplyVector3fByState(&D_801C0C30[i], &sp78);
+        Matrix_MultiplyVector3fByState(iter, &sp84);
+        Matrix_MultiplyVector3fByState(iter2, &sp78);
 
         func_80127DA4(globalCtx, D_801F58B0[i], D_801C0C54, 3, &sp84, &sp78, &sp6C);
         sp6C += 11;
 
         Matrix_StatePush();
-        Matrix_InsertTranslation(D_801C0C0C[i].x, D_801C0C0C[i].y, D_801C0C0C[i].z, 1);
+        Matrix_InsertTranslation(iter->x, iter->y, iter->z, 1);
         func_80128388(D_801F58B0[i], D_801C0C54, 3, &sp90);
         Matrix_StatePop();
+        iter++;
+        iter2++;
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-void func_801284A0(GlobalContext* globalCtx, Player* player);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801284A0.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 // Looks equivalent
