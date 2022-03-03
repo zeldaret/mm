@@ -476,23 +476,12 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // float regalloc
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
-    f32 new_var;
-    // s32 pad[6];
-    // s32 pad0;
-    s32 pad1;
-    s32 pad2;
-    s32 pad3;
-    s32 pad4;
-    s32 pad5;
-    Player* player = GET_PLAYER(globalCtx);
-    s32 pad6;
+    f32 temp_f20;
+    f32 temp_f2;
+    f32 temp_f22;
 
     s16 i;
-    f32 temp_f12;
-
-    f32 temp_f20;
-    f32 temp;
-    f32 temp_f22;
+    Player* player = GET_PLAYER(globalCtx);
 
     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_WAIT_OLD - SFX_FLAG);
 
@@ -506,18 +495,16 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Matrix_RotateY(this->actor.world.rot.y, 1);
 
     temp_f20 = this->unk_268.x - this->actor.world.pos.x;
-    temp = this->unk_268.y - this->actor.world.pos.y;
+    temp_f2 = this->unk_268.y - this->actor.world.pos.y;
     temp_f22 = this->unk_268.z - this->actor.world.pos.z;
 
-    temp_f12 = sqrtf(SQ(temp_f20) + SQ(temp_f22));
-
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0xA, this->unk_274);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f20) + SQ(temp_f22)), -temp_f2), 0xA, this->unk_274);
 
     Math_ApproachS(
         &this->unk_2A0,
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0x000A, this->unk_274, 0) *
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0xA, this->unk_274, 0) *
             -0.5f,
-        5, 0x0100);
+        5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
@@ -532,7 +519,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     }
 
     if (this->workTimer[2] == 0) {
-        if ((temp_f12 < 100.0f) || (this->workTimer[0] == 0)) {
+        if ((sqrtf(SQ(temp_f20) + SQ(temp_f22)) < 100.0f) || (this->workTimer[0] == 0)) {
 
             for (i = 0; i < 200; i++) {
                 if ((!temp_f20) && (!temp_f20)) {}
@@ -776,16 +763,14 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     this->skelAnime.playSpeed = 1.0f;
 }
 
-#ifdef NON_MATCHING
-// float regalloc
 void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Input* input = CONTROLLER1(globalCtx);
-    f32 temp_f2;
-    f32 temp;
-    f32 temp_f18;
     f32 temp_f0;
-    f32 temp_f12;
+    f32 temp_f2;
+    f32 temp_f16;
+    f32 temp_f18;
+    s32 pad;
 
     this->unk_2BD = true;
     this->unk_25C = 15;
@@ -799,11 +784,10 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     Matrix_RotateY(this->actor.world.rot.y, 1);
 
     temp_f2 = this->unk_268.x - this->actor.world.pos.x;
-    temp = this->unk_268.y - this->actor.world.pos.y;
+    temp_f16 = this->unk_268.y - this->actor.world.pos.y;
     temp_f18 = this->unk_268.z - this->actor.world.pos.z;
 
-    temp_f12 = sqrtf(SQ(temp_f2) + SQ(temp_f18));
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(temp_f12, -temp), 0xA, this->unk_274);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA, this->unk_274);
     Math_ApproachS(
         &this->unk_2A0,
         Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f, 5,
@@ -814,7 +798,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     switch (this->unk_242) {
         case 0x0:
             Math_ApproachF(&this->actor.speedXZ, 10.0f, 1.0f, 1.0f);
-            if (temp_f12 < 100.0f) {
+            if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < 100.0f) {
                 this->unk_242 = 1;
                 Animation_MorphToLoop(&this->skelAnime, &D_06009C14, -15.0f);
             }
@@ -871,9 +855,6 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_ChewPlayer.s")
-#endif
 
 void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E475C;
@@ -1047,12 +1028,10 @@ Vec3f D_809E9104[] = {
 void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     s16 phi_s0;
     Vec3f sp70;
-
     f32 temp_f2;
     f32 temp_f16;
     f32 temp_f18;
     s32 pad;
-
     f32 sp5C;
     s16 sp5A;
     s16 new_var;
@@ -1132,7 +1111,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                                 sp56 = 2;
                             }
 
-                            if ((this->csTimer == 0x28) || (this->csTimer == (KREG(91) + 0x10E))) {
+                            if ((this->csTimer == 0x28) || (this->csTimer == (u32)(KREG(91) + 0x10E))) {
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                             }
 
@@ -1863,6 +1842,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     f32 sp58;
 
     player = GET_PLAYER(globalCtx);
+
     this->actor.hintId = 0x28;
 
     if ((D_809E9842 == 0) && (player->actor.world.pos.y < 445.0f)) {
@@ -1902,7 +1882,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             Math_ApproachS(&this->actor.shape.rot.z, 0, 0xA, 0x800);
             this->actor.world.pos.y -= 100.0f;
             this->actor.prevPos.y -= 100.0f;
-            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 150.0f, 100.0f, 5U);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 50.0f, 150.0f, 100.0f, 5);
             this->actor.world.pos.y += 100.0f;
             this->actor.prevPos.y += 100.0f;
         }
@@ -1917,6 +1897,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
                         this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+
             this->unk_280 = 0x1B;
             this->unk_284 = this->actor.world.pos.x;
             this->unk_288 = this->waterHeight;
@@ -1961,8 +1942,8 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Math_ApproachZeroF(&this->unk_260, 0.1f, 0.05f);
 
     if (this->unk_290 != 0) {
-        this->unk_294 = this->unk_294 + 0.1f;
-        this->unk_298 = this->unk_298 + 0.12f;
+        this->unk_294 += 0.1f;
+        this->unk_298 += 0.12f;
         this->leftFinYRot = __sinf(this->unk_294) * 1280.0f;
         this->rightFinYRot = __sinf(this->unk_298) * 1280.0f;
     } else {
@@ -1988,7 +1969,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (D_809E9841 != 0) {
         D_809E9841--;
         if (D_809E9841 == 0) {
-            Audio_QueueSeqCmd(0x0000801BU);
+            Audio_QueueSeqCmd(0x801B);
         }
     }
 
