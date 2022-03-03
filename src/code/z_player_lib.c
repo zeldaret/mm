@@ -42,7 +42,7 @@ typedef struct {
 
 struct_801F58B0 D_801F58B0[3][3];
 
-UNK_TYPE D_801F59AC;
+UNK_TYPE D_801F59AC; // Padding? Can be deleted and still match
 
 Vec3f D_801F59B0[2];
 
