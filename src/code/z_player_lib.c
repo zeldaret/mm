@@ -2833,165 +2833,116 @@ void func_80127BE8(GlobalContext* arg0, Vec3f* arg1) {
     EffectSsKiraKira_SpawnDispersed(arg0, &sp2C, &D_801C0BE0, &D_801C0BEC, &D_801C0BF8, &D_801C0BFC, -0x32, 0xB);
 }
 
-#ifdef NON_EQUIVALENT
-// Maybe equivalent?
 void func_80127DA4(GlobalContext* globalCtx, struct_801F58B0 arg1[], struct_80128388_arg1 arg2[], s32 arg3, Vec3f* arg4,
                    Vec3f* arg5, u32* arg6) {
-    struct_801F58B0* sp78;
-    f32 temp_f0;
-    f32 temp_f20_2;
-    f32 temp_f20_3;
-    f32 temp_f20_4;
-    f32 temp_f20_5;
-    f32 temp_f20_6;
-    f32 temp_f22;
-    f32 temp_f22_2;
+    f32 f0;
     Vec3f spB0;
     Vec3f spA4;
+    f32 f22;
+    f32 f28;
+    f32 f24;
+    f32 f20;
+    s16 s0;
+    s16 s2;
     f32 sp8C;
-    f32 temp_f24;
-    f32 temp_f24_2;
-    f32 temp_f28;
-    s16 temp_s0;
-    s16 temp_s2_2;
-    s16 temp_s0_2;
-    s16 temp_s2_3;
-    struct_801F58B0* phi_s3;
+    s32 i;
     struct_801F58B0* phi_s1;
-    struct_80128388_arg1* phi_s4;
-    f32 phi_f20;
-    s32 phi_s5;
 
+    phi_s1 = &arg1[1];
     sp8C = -1.0f;
     Math_Vec3f_Copy(&arg1->unk_00, arg4);
     Math_Vec3f_Diff(arg5, arg4, &spB0);
     arg1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
     arg1->unk_1A = Math_FAtan2F(sqrtf(SQ(spB0.x) + SQ(spB0.z)), spB0.y);
-    phi_s3 = arg1;
-    phi_s1 = &arg1[1];
-    phi_s4 = &arg2[1];
-    phi_s5 = 1;
-    if (arg3 >= 2) {
-        do {
-            sp78 = phi_s3 + 1;
-            if ((globalCtx->actorCtx.unk5 & 8) != 0) {
-                if ((*arg6 & 0x20) != 0) {
-                    sp8C = -0.2f;
-                } else {
-                    sp8C = 0.2f;
-                }
+    i = 1;
+    arg2 += 1;
 
-                *arg6 += 0x16;
-                if ((*arg6 & 1) == 0) {
-                    func_80127BE8(globalCtx, &phi_s1->unk_00);
-                }
-            }
-            Math_Vec3f_Sum(&phi_s1->unk_00, &phi_s1->unk_0C, &phi_s1->unk_00);
-
-            temp_f0 = Math_Vec3f_DistXYZAndStoreDiff(&phi_s3->unk_00, &phi_s1->unk_00, &spB0);
-            temp_f28 = temp_f0 - phi_s4->unk_00;
-            if (temp_f0 == 0.0f) {
-                spB0.x = 0.0f;
-                spB0.y = 0.0f;
-                spB0.z = phi_s4->unk_00;
-            }
-            phi_f20 = sqrtf(SQ(spB0.x) + SQ(spB0.z));
-
-            if (phi_f20 > 4.0f) {
-                phi_s1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
-
-                if (ABS_ALT((s16)(phi_s1->unk_18 - phi_s3->unk_18)) > 0x4000) {
-                    phi_s1->unk_18 = (s16)(phi_s1->unk_18 + 0x8000);
-                    phi_f20 = -phi_f20;
-                }
-            }
-
-            phi_s1->unk_1A = Math_FAtan2F(phi_f20, spB0.y);
-
-            temp_s2_2 = phi_s1->unk_18 - phi_s3->unk_18;
-            if (temp_s2_2 < -phi_s4->unk_18) {
-                // phi_s2 = (s32) phi_s4->unk_18 * -0x10000;
-                temp_s2_3 = -phi_s4->unk_18;
+    while (i < arg3) {
+        if ((globalCtx->actorCtx.unk5 & 8) != 0) {
+            if ((*arg6 & 0x20) != 0) {
+                sp8C = -0.2f;
             } else {
-                // phi_v0_2 = temp_s2_2;
-                // if ((s32) phi_s4->unk_18 < (s32) temp_s2_2) {
-                //    phi_v0_2 = phi_s4->unk_18;
-                //}
-                // phi_v0_2 = CLAMP_MAX(temp_s2_2, phi_s4->unk_18);
-                //
-                // phi_s2 = phi_v0_2 << 0x10;
-                temp_s2_3 = CLAMP_MAX(temp_s2_2, phi_s4->unk_18) ^ 0;
-            }
-            // temp_s2_3 = phi_s2 >> 0x10;
-
-            phi_s1->unk_18 = (s16)(phi_s3->unk_18 + temp_s2_3);
-            // temp_a2 = phi_s3->unk_1A;
-            // temp_v1_3 = phi_s4->unk_1A;
-            temp_s0 = phi_s1->unk_1A - phi_s3->unk_1A;
-            if (temp_s0 < -phi_s4->unk_1A) {
-                // phi_s0 = (s32) phi_s4->unk_1A * -0x10000;
-                temp_s0_2 = -phi_s4->unk_1A;
-            } else {
-                // phi_v0_3 = temp_s0;
-                // if ((s32) phi_s4->unk_1A < (s32) temp_s0) {
-                //    phi_v0_3 = phi_s4->unk_1A;
-                //}
-
-                // phi_v0_3 = CLAMP_MAX(temp_s0, phi_s4->unk_1A);
-                // phi_s0 = phi_v0_3 << 0x10;
-                temp_s0_2 = CLAMP_MAX(temp_s0, phi_s4->unk_1A) ^ 0;
-            }
-            // temp_s0_2 = phi_s0 >> 0x10;
-
-            phi_s1->unk_1A = (s16)(phi_s3->unk_1A + temp_s0_2);
-            temp_f20_2 = Math_CosS(phi_s1->unk_1A) * phi_s4->unk_00;
-            spA4.x = Math_SinS(phi_s1->unk_18) * temp_f20_2;
-            spA4.y = Math_CosS(phi_s1->unk_18) * temp_f20_2;
-            spA4.z = Math_SinS(phi_s1->unk_1A) * phi_s4->unk_00;
-            Math_Vec3f_Sum(&phi_s3->unk_00, &spA4, &phi_s1->unk_00);
-            phi_s1->unk_0C.x = (f32)(phi_s1->unk_0C.x * 0.9f);
-            phi_s1->unk_0C.z = (f32)(phi_s1->unk_0C.z * 0.9f);
-            temp_f22 = Math_CosS((s16)temp_s0_2) * temp_f28;
-            temp_f24 = Math_SinS((s16)temp_s0_2) * temp_f28;
-            phi_s1->unk_0C.y = phi_s1->unk_0C.y + sp8C;
-
-            if ((globalCtx->actorCtx.unk5 & 8) != 0) {
-                phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -0.8f, 0.8f);
-            } else {
-                phi_s1->unk_0C.y = phi_s1->unk_0C.y;
-                temp_f20_3 = Math_SinS(phi_s3->unk_1A);
-                phi_s1->unk_0C.y += (((temp_f22 * Math_CosS(phi_s3->unk_1A)) + (temp_f24 * temp_f20_3)) * 0.2f);
-
-                phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -2.0f, 4.0f);
+                sp8C = 0.2f;
             }
 
-            temp_f20_4 = (temp_f24 * Math_CosS(phi_s3->unk_1A)) - (Math_SinS(phi_s3->unk_1A) * temp_f22);
-            temp_f22_2 = Math_CosS((s16)temp_s2_3) * temp_f20_4;
-            temp_f24_2 = Math_SinS((s16)temp_s2_3) * temp_f20_4;
-            temp_f20_5 = Math_SinS(phi_s3->unk_18);
-            phi_s1->unk_0C.x = (f32)(phi_s1->unk_0C.x +
-                                     (((temp_f24_2 * Math_CosS(phi_s3->unk_18)) - (temp_f22_2 * temp_f20_5)) * 0.1f));
+            *arg6 += 0x16;
+            if ((*arg6 & 1) == 0) {
+                func_80127BE8(globalCtx, &phi_s1->unk_00);
+            }
+        }
+        Math_Vec3f_Sum(&phi_s1->unk_00, &phi_s1->unk_0C, &phi_s1->unk_00);
 
-            phi_s1->unk_0C.x = CLAMP(phi_s1->unk_0C.x, -4.0f, 4.0f);
+        f0 = Math_Vec3f_DistXYZAndStoreDiff(&arg1->unk_00, &phi_s1->unk_00, &spB0);
+        f28 = f0 - arg2->unk_00;
+        if (f0 == 0.0f) {
+            spB0.x = 0.0f;
+            spB0.y = arg2->unk_00;
+            spB0.z = 0.0f;
+        }
+        f20 = sqrtf(SQ(spB0.x) + SQ(spB0.z));
 
-            temp_f20_6 = Math_SinS(phi_s3->unk_18);
-            phi_s1->unk_0C.z = (f32)(phi_s1->unk_0C.z +
-                                     (((temp_f22_2 * Math_CosS(phi_s3->unk_18)) + (temp_f24_2 * temp_f20_6)) * -0.1f));
+        if (f20 > 4.0f) {
+            phi_s1->unk_18 = Math_FAtan2F(spB0.z, spB0.x);
+            s2 = phi_s1->unk_18 - arg1->unk_18;
 
-            phi_s1->unk_0C.z = CLAMP(phi_s1->unk_0C.z, -4.0f, 4.0f);
+            if (ABS_ALT(s2) > 0x4000) {
+                phi_s1->unk_18 = (s16)(phi_s1->unk_18 + 0x8000);
+                f20 = -f20;
+            }
+        }
 
-            phi_s3 = sp78;
-            phi_s5++;
-            phi_s1++;
-            phi_s4++;
-        } while (phi_s5 < arg3);
+        phi_s1->unk_1A = Math_FAtan2F(f20, spB0.y);
+
+        s2 = phi_s1->unk_18 - arg1->unk_18;
+        s2 = CLAMP(s2, -arg2->unk_18, arg2->unk_18);
+
+        phi_s1->unk_18 = arg1->unk_18 + s2;
+
+        s0 = phi_s1->unk_1A - arg1->unk_1A;
+        s0 = CLAMP(s0, -arg2->unk_1A, arg2->unk_1A);
+        phi_s1->unk_1A = arg1->unk_1A + s0;
+
+        f20 = Math_CosS(phi_s1->unk_1A) * arg2->unk_00;
+        spA4.x = Math_SinS(phi_s1->unk_18) * f20;
+        spA4.z = Math_CosS(phi_s1->unk_18) * f20;
+        spA4.y = Math_SinS(phi_s1->unk_1A) * arg2->unk_00;
+        Math_Vec3f_Sum(&arg1->unk_00, &spA4, &phi_s1->unk_00);
+        phi_s1->unk_0C.x *= 0.9f;
+        phi_s1->unk_0C.z *= 0.9f;
+
+        f22 = Math_CosS(s0) * f28;
+        f24 = Math_SinS(s0) * f28;
+        phi_s1->unk_0C.y += sp8C;
+
+        if ((globalCtx->actorCtx.unk5 & 8) != 0) {
+            phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -0.8f, 0.8f);
+        } else {
+            phi_s1->unk_0C.y = phi_s1->unk_0C.y;
+            f20 = Math_SinS(arg1->unk_1A);
+            phi_s1->unk_0C.y += (((f22 * Math_CosS(arg1->unk_1A)) + (f24 * f20)) * 0.2f);
+            phi_s1->unk_0C.y = CLAMP(phi_s1->unk_0C.y, -2.0f, 4.0f);
+        }
+
+        f20 = (f24 * Math_CosS(arg1->unk_1A)) - (Math_SinS(arg1->unk_1A) * f22);
+        f22 = Math_CosS(s2) * f20;
+        f24 = Math_SinS(s2) * f20;
+
+        f20 = Math_SinS(arg1->unk_18);
+
+        phi_s1->unk_0C.x += (((f24 * Math_CosS(arg1->unk_18)) - (f22 * f20)) * 0.1f);
+        phi_s1->unk_0C.x = CLAMP(phi_s1->unk_0C.x, -4.0f, 4.0f);
+
+        f20 = Math_SinS(arg1->unk_18);
+
+        phi_s1->unk_0C.z += (((f22 * Math_CosS(arg1->unk_18)) + (f24 * f20)) * -0.1f);
+        phi_s1->unk_0C.z = CLAMP(phi_s1->unk_0C.z, -4.0f, 4.0f);
+
+        arg1++;
+        phi_s1++;
+        i++;
+        arg2++;
     }
 }
-#else
-void func_80127DA4(GlobalContext* globalCtx, struct_801F58B0 arg1[], struct_80128388_arg1 arg2[], s32, Vec3f*, Vec3f*,
-                   u32*);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80127DA4.s")
-#endif
 
 void func_80128388(struct_801F58B0 arg0[], struct_80128388_arg1 arg1[], s32 arg2, Mtx** arg3) {
     struct_801F58B0* phi_s1 = &arg0[1];
