@@ -1222,7 +1222,7 @@ Gfx* Gfx_PrimColor(GraphicsContext* gfxCtx, s32 lodfrac, s32 r, s32 g, s32 b, s3
     return displayList;
 }
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 // Regalloc differences, minor reorderings
 void func_8012CF0C(GraphicsContext* gfxCtx, s32 clearFb, s32 clearZb, u8 r, u8 g, u8 b) {
     Gfx* masterGfx;
