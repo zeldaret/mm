@@ -14,7 +14,19 @@
 
 #define THIS ((Boss03*)thisx)
 
+#define WORK_TIMER_CHEW 0
+#define WORK_TIMER_DAMAGED 0
+#define WORK_TIMER_UNK0_C 0
+#define WORK_TIMER_UNK0_D 0
+#define WORK_TIMER_UNK0_E 0
+#define WORK_TIMER_UNK0_F 0
+#define WORK_TIMER_UNK0_G 0 // used on DeathCutscene
+
+#define WORK_TIMER_UNK1_A 1
+#define WORK_TIMER_UNK1_B 1
+
 #define WORK_TIMER_STUNNED 2
+#define WORK_TIMER_UNK2_B 2
 
 // The Y position when standing on the platform.
 #define PLATFORM_HEIGHT (440.0f)
@@ -77,90 +89,90 @@ void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
 
 void func_809E2788(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
-    GyorgEffect* effects = globalCtx->specialEffects;
+    GyorgEffect* eff = globalCtx->specialEffects;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
-        if ((effects->type == 0) || (effects->type == 1)) {
-            effects->type = 4;
-            effects->pos = *pos;
-            effects->unk_34.x = 0.1f;
-            effects->unk_34.y = 0.4f;
-            effects->velocity = gZeroVec3f;
-            effects->accel = gZeroVec3f;
-            effects->alpha = 150;
-            effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
+        if ((eff->type == GYORG_EFFECT_NONE) || (eff->type == GYORG_EFFECT_BUBBLE)) {
+            eff->type = GYORG_EFFECT_4;
+            eff->pos = *pos;
+            eff->unk_34.x = 0.1f;
+            eff->unk_34.y = 0.4f;
+            eff->velocity = gZeroVec3f;
+            eff->accel = gZeroVec3f;
+            eff->alpha = 150;
+            eff->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
             return;
         }
 
-        effects++;
+        eff++;
     }
 }
 
 void func_809E2880(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
-    GyorgEffect* effects = globalCtx->specialEffects;
+    GyorgEffect* eff = globalCtx->specialEffects;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
-        if ((effects->type == 0) || (effects->type == 1)) {
-            effects->type = 2;
-            effects->pos = *pos;
-            effects->velocity = gZeroVec3f;
-            effects->accel = gZeroVec3f;
-            effects->accel.y = -2.0f;
-            effects->unk_34.x = 0.1f;
-            effects->unk_34.y = 0.0f;
-            effects->unk_34.z = Rand_ZeroFloat(2 * M_PI);
-            effects->unk_02 = Rand_ZeroFloat(100.0f);
-            effects->velocity.x = randPlusMinusPoint5Scaled(25.0f);
-            effects->velocity.z = randPlusMinusPoint5Scaled(25.0f);
+        if ((eff->type == GYORG_EFFECT_NONE) || (eff->type == GYORG_EFFECT_BUBBLE)) {
+            eff->type = GYORG_EFFECT_2;
+            eff->pos = *pos;
+            eff->velocity = gZeroVec3f;
+            eff->accel = gZeroVec3f;
+            eff->accel.y = -2.0f;
+            eff->unk_34.x = 0.1f;
+            eff->unk_34.y = 0.0f;
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_02 = Rand_ZeroFloat(100.0f);
+            eff->velocity.x = randPlusMinusPoint5Scaled(25.0f);
+            eff->velocity.z = randPlusMinusPoint5Scaled(25.0f);
             return;
         }
 
-        effects++;
+        eff++;
     }
 }
 
 void func_809E299C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity) {
     Vec3f accel = { 0.0f, -1.0f, 0.0f };
     f32 temp_f2;
-    GyorgEffect* effects = globalCtx->specialEffects;
+    GyorgEffect* eff = globalCtx->specialEffects;
     s16 i;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
-        if ((effects->type == 0) || (effects->type == 1)) {
-            effects->type = 3;
-            effects->pos = *pos;
-            effects->velocity = *velocity;
-            effects->accel = accel;
+        if ((eff->type == GYORG_EFFECT_NONE) || (eff->type == GYORG_EFFECT_BUBBLE)) {
+            eff->type = GYORG_EFFECT_3;
+            eff->pos = *pos;
+            eff->velocity = *velocity;
+            eff->accel = accel;
             temp_f2 = Rand_ZeroFloat(0.02f) + 0.02f;
-            effects->unk_34.y = temp_f2;
-            effects->unk_34.x = temp_f2;
-            effects->unk_34.z = Rand_ZeroFloat(2 * M_PI);
-            effects->unk_02 = Rand_ZeroFloat(100.0f);
+            eff->unk_34.y = temp_f2;
+            eff->unk_34.x = temp_f2;
+            eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
+            eff->unk_02 = Rand_ZeroFloat(100.0f);
             return;
         }
 
-        effects++;
+        eff++;
     }
 }
 
-void func_809E2AB4(GlobalContext* globalCtx, Vec3f* pos) {
+void Boss03_SpawnEffectBubble(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
-    GyorgEffect* effects = globalCtx->specialEffects;
+    GyorgEffect* eff = globalCtx->specialEffects;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
-        if (effects->type == 0) {
-            effects->type = 1;
-            effects->pos = *pos;
-            effects->velocity = gZeroVec3f;
-            effects->accel = gZeroVec3f;
-            effects->accel.y = 0.2f;
-            effects->unk_34.x = Rand_ZeroFloat(0.3f) + 0.2f;
-            effects->unk_02 = 0;
+        if (eff->type == GYORG_EFFECT_NONE) {
+            eff->type = GYORG_EFFECT_BUBBLE;
+            eff->pos = *pos;
+            eff->velocity = gZeroVec3f;
+            eff->accel = gZeroVec3f;
+            eff->accel.y = 0.2f;
+            eff->unk_34.x = Rand_ZeroFloat(0.3f) + 0.2f;
+            eff->unk_02 = 0;
             return;
         }
 
-        effects++;
+        eff++;
     }
 }
 
@@ -202,7 +214,7 @@ f32 Boss03_RandZeroOne(void) {
     return fabsf(rand);
 }
 
-Actor* func_809E2D64(GlobalContext* globalCtx) {
+Actor* Boss03_FindActorDblueMovebg(GlobalContext* globalCtx) {
     Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
     while (actor != NULL) {
@@ -356,21 +368,21 @@ Color_RGBA8 D_809E9100 = { 40, 30, 30, 255 };
 void func_809E2DA0(Boss03* this, GlobalContext* globalCtx) {
     if (this->unk_2AC.y < 80.0f) {
         u8 i;
-        Vec3f spA0;
-        Vec3f sp94;
-        Vec3f sp88;
+        Vec3f pos;
+        Vec3f velocity;
+        Vec3f accel;
 
         for (i = 0; i < 5; i++) {
-            sp94.x = randPlusMinusPoint5Scaled(10.0f);
-            sp94.y = Rand_ZeroFloat(2.0f) + 2.0f;
-            sp94.z = randPlusMinusPoint5Scaled(10.0f);
-            sp88.y = -0.075f;
-            sp88.z = 0.0f;
-            sp88.x = 0.0f;
-            spA0.y = Rand_ZeroFloat(20.0f) + 5.0f;
-            spA0.z = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.z;
-            spA0.x = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.x;
-            func_800B0EB0(globalCtx, &spA0, &sp94, &sp88, &D_809E90FC, &D_809E9100, Rand_ZeroFloat(200.0f) + 400.0f, 10,
+            velocity.x = randPlusMinusPoint5Scaled(10.0f);
+            velocity.y = Rand_ZeroFloat(2.0f) + 2.0f;
+            velocity.z = randPlusMinusPoint5Scaled(10.0f);
+            accel.y = -0.075f;
+            accel.z = 0.0f;
+            accel.x = 0.0f;
+            pos.y = Rand_ZeroFloat(20.0f) + 5.0f;
+            pos.z = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.z;
+            pos.x = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.x;
+            func_800B0EB0(globalCtx, &pos, &velocity, &accel, &D_809E90FC, &D_809E9100, Rand_ZeroFloat(200.0f) + 400.0f, 10,
                           Rand_ZeroFloat(10.0f) + 25.0f);
         }
     }
@@ -427,7 +439,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     globalCtx->specialEffects = sGyorgEffects;
 
     for (i = 0; i < ARRAY_COUNT(sGyorgEffects); i++) {
-        sGyorgEffects[i].type = 0;
+        sGyorgEffects[i].type = GYORG_EFFECT_NONE;
     }
 
     this->actor.targetMode = 5;
@@ -510,16 +522,16 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
 
-    if ((this->workTimer[2] == 0) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->workTimer[WORK_TIMER_UNK2_B] == 0) && (this->actor.bgCheckFlags & 8)) {
         Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
         this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
-        this->workTimer[2] = 60;
-        this->workTimer[0] = Rand_ZeroFloat(60.0f) + 60.0f;
+        this->workTimer[WORK_TIMER_UNK2_B] = 60;
+        this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(60.0f) + 60.0f;
         this->unk_274 = 0x100;
     }
 
-    if (this->workTimer[2] == 0) {
-        if ((sqrtf(SQ(temp_f20) + SQ(temp_f22)) < 100.0f) || (this->workTimer[0] == 0)) {
+    if (this->workTimer[WORK_TIMER_UNK2_B] == 0) {
+        if ((sqrtf(SQ(temp_f20) + SQ(temp_f22)) < 100.0f) || (this->workTimer[WORK_TIMER_UNK0_C] == 0)) {
 
             for (i = 0; i < 200; i++) {
                 if ((!temp_f20) && (!temp_f20)) {}
@@ -534,7 +546,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
             }
 
             this->unk_274 = 0x100;
-            this->workTimer[0] = Rand_ZeroFloat(60.0f) + 60.0f;
+            this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(60.0f) + 60.0f;
         }
     }
 
@@ -542,7 +554,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    if (this->workTimer[1] == 0) {
+    if (this->workTimer[WORK_TIMER_UNK1_A] == 0) {
         if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
             func_809E4674(this, globalCtx);
         } else if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU)) {
@@ -562,7 +574,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
 void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E3968;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -10.0f);
-    this->workTimer[0] = 100;
+    this->workTimer[WORK_TIMER_UNK0_D] = 100;
     this->unk_276 = 0x1000;
     this->skelAnime.playSpeed = 1.5f;
     this->unk_278 = 10.0f;
@@ -605,7 +617,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->workTimer[0] == 0)) {
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->workTimer[WORK_TIMER_UNK0_D] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -613,7 +625,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
         }
 
         func_809E344C(this, globalCtx);
-        this->workTimer[1] = 100;
+        this->workTimer[WORK_TIMER_UNK1_A] = 100;
     } else {
 
         if ((this->waterHeight - 80.0f) < player->actor.world.pos.y) {
@@ -659,7 +671,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
 void func_809E3D34(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
     this->actionFunc = func_809E3D98;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
-    this->workTimer[0] = 100;
+    this->workTimer[WORK_TIMER_UNK0_E] = 100;
     this->unk_2C4 = 0.0f;
     this->unk_2B8 = 0.0f;
     this->unk_242 = arg2;
@@ -698,7 +710,7 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->workTimer[0] == 0)) {
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= 438.0f)) || (this->workTimer[WORK_TIMER_UNK0_E] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -759,7 +771,7 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
     this->unk_276 = 0x800;
     this->unk_242 = 0;
-    this->workTimer[0] = 100;
+    this->workTimer[WORK_TIMER_CHEW] = 100;
     this->skelAnime.playSpeed = 1.0f;
 }
 
@@ -775,7 +787,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     this->unk_2BD = true;
     this->unk_25C = 15;
 
-    if (this->workTimer[0] == 90) {
+    if (this->workTimer[WORK_TIMER_CHEW] == 90) {
         func_8016566C(0x96);
     }
 
@@ -815,15 +827,15 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
     if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        if (this->workTimer[0] != 0) {
-            this->workTimer[0]--;
+        if (this->workTimer[WORK_TIMER_CHEW] != 0) {
+            this->workTimer[WORK_TIMER_CHEW]--;
         }
-        if (this->workTimer[0] != 0) {
-            this->workTimer[0]--;
+        if (this->workTimer[WORK_TIMER_CHEW] != 0) {
+            this->workTimer[WORK_TIMER_CHEW]--;
         }
     }
 
-    if (this->workTimer[0] == 0) {
+    if (this->workTimer[WORK_TIMER_CHEW] == 0) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -833,7 +845,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
         }
 
         func_809E344C(this, globalCtx);
-        this->workTimer[1] = Rand_ZeroFloat(100.0f) + 200.0f;
+        this->workTimer[WORK_TIMER_UNK1_A] = Rand_ZeroFloat(100.0f) + 200.0f;
         return;
     }
 
@@ -845,7 +857,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     player->actor.world.rot.x = player->actor.shape.rot.x;
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->unk_2A2.y;
-    if (this->workTimer[0] < 5) {
+    if (this->workTimer[WORK_TIMER_CHEW] < 5) {
         Math_ApproachS(&this->jawZRot, 0x3200, 2, 0x1800);
         Math_ApproachF(&this->unk_2C4, 100.0f, 1.0f, 100.0f);
     } else {
@@ -859,8 +871,8 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = func_809E475C;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgBackingUpAnim, -15.0f);
-    this->workTimer[0] = Rand_ZeroFloat(30.0f) + 80.0f;
-    this->workTimer[1] = 50;
+    this->workTimer[WORK_TIMER_UNK0_F] = Rand_ZeroFloat(30.0f) + 80.0f;
+    this->workTimer[WORK_TIMER_UNK1_B] = 50;
     this->unk_274 = 0;
 
     if (sqrtf(SQXZ(this->actor.world.pos)) > 600.0f) {
@@ -878,14 +890,14 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->workTimer[1] != 0) {
+    if (this->workTimer[WORK_TIMER_UNK1_B] != 0) {
         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_WAIT_OLD - SFX_FLAG);
     }
 
     Math_ApproachS(
         &this->unk_2A0,
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x000A, this->unk_274, 0) * -0.7f, 5,
-        0x0200);
+        0x200);
     Math_ApproachS(&this->unk_274, 0x800, 1, 0x100);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x1000);
     Math_ApproachS(&this->actor.world.rot.x, 0, 0xA, 0x200);
@@ -899,12 +911,12 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
-        if (this->workTimer[0] == 0) {
+        if (this->workTimer[WORK_TIMER_UNK0_F] == 0) {
             Boss03_SetupCharge(this, globalCtx);
         }
     } else if (player->actor.world.pos.y <= this->waterHeight) {
         func_809E344C(this, globalCtx);
-        this->workTimer[1] = 20;
+        this->workTimer[WORK_TIMER_UNK1_A] = 20;
     }
 
     Math_ApproachF(&this->actor.speedXZ, -3.0f, 1.0f, 0.5f);
@@ -968,7 +980,7 @@ void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
                               7.0f, 0);
             }
             func_809E344C(this, globalCtx);
-            this->workTimer[1] = 50;
+            this->workTimer[WORK_TIMER_UNK1_A] = 50;
         }
     }
 }
@@ -998,7 +1010,7 @@ void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
         Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
         if (this->actor.velocity.y == 0.0f) {
             func_809E344C(this, globalCtx);
-            this->workTimer[1] = 50;
+            this->workTimer[WORK_TIMER_UNK1_A] = 50;
         }
     } else {
         s16 i;
@@ -1273,7 +1285,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->subCamId = 0;
                 func_809E344C(this, globalCtx);
-                this->workTimer[1] = 50;
+                this->workTimer[WORK_TIMER_UNK1_A] = 50;
                 gSaveContext.eventInf[5] |= 0x40;
             }
             break;
@@ -1301,7 +1313,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             sp70.x = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.x;
             sp70.y = (randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.y) - 150.0f;
             sp70.z = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.z;
-            func_809E2AB4(globalCtx, &sp70);
+            Boss03_SpawnEffectBubble(globalCtx, &sp70);
         }
     }
 
@@ -1316,7 +1328,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
     this->floppingAnimLastFrame = Animation_GetLastFrame(&gGyorgFloppingAnim);
     Audio_QueueSeqCmd(0x100100FF);
-    this->workTimer[0] = 0;
+    this->workTimer[WORK_TIMER_UNK0_G] = 0;
     this->unk_242 = 0;
     this->csState = 0;
     this->actor.flags &= ~1;
@@ -1422,8 +1434,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
             }
 
-            if ((this->workTimer[0] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
-                this->workTimer[0] = Rand_ZeroFloat(15.0f) + 15.0f;
+            if ((this->workTimer[WORK_TIMER_UNK0_G] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
+                this->workTimer[WORK_TIMER_UNK0_G] = Rand_ZeroFloat(15.0f) + 15.0f;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
                             this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
@@ -1621,7 +1633,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                         func_800EA0EC(globalCtx, &globalCtx->csCtx);
                         func_800B7298(globalCtx, &this->actor, 6);
                         func_809E344C(this, globalCtx);
-                        this->workTimer[1] = 50;
+                        this->workTimer[WORK_TIMER_UNK1_A] = 50;
                     }
             }
             break;
@@ -1654,7 +1666,7 @@ void Boss03_SetupStunned(Boss03* this, GlobalContext* globalCtx) {
 void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx) {
     this->actor.hintId = 0x29;
 
-    if (this->unk_240 >= 0x10) {
+    if (this->unk_240 >= 16) {
         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_COMMON_WEAKENED - SFX_FLAG);
     }
 
@@ -1685,7 +1697,7 @@ void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx) {
 void Boss03_SetupDamaged(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
     this->actionFunc = Boss03_Damaged;
-    this->workTimer[0] = 30;
+    this->workTimer[WORK_TIMER_DAMAGED] = 30;
 }
 
 void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
@@ -1696,7 +1708,7 @@ void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->jawZRot, ((Math_SinS(this->unk_240 * 0x2000) * 3000.0f) + 0x3000), 2, 0x3000);
     Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 10.0f);
 
-    if (this->workTimer[0] == 0) {
+    if (this->workTimer[WORK_TIMER_DAMAGED] == 0) {
         if ((s8)this->actor.colChkInfo.health < 6) {
             if (!this->hasSpwanedSmallFishes) {
                 this->hasSpwanedSmallFishes++;
@@ -1706,7 +1718,7 @@ void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
         }
 
         func_809E344C(this, globalCtx);
-        this->workTimer[1] = 100;
+        this->workTimer[WORK_TIMER_UNK1_A] = 100;
     }
 }
 
@@ -1934,7 +1946,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    temp_v0_4 = func_809E2D64(globalCtx);
+    temp_v0_4 = Boss03_FindActorDblueMovebg(globalCtx);
     if (temp_v0_4 != NULL) {
         temp_v0_4->world.pos.y = this->waterHeight;
     }
@@ -1954,12 +1966,12 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Math_ApproachS(&this->unk_2A0, 0, 0xA, 0x100);
     Math_ApproachS(&this->jawZRot, 0, 0xA, 0x200);
 
-    if ((this->unk_240 & 1) == 0) {
+    if ((this->unk_240 % 2) == 0) {
         for (phi_s0 = 0; phi_s0 < this->unk_254; phi_s0++) {
             sp6C.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
             sp6C.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
             sp6C.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
-            func_809E2AB4(globalCtx, &sp6C);
+            Boss03_SpawnEffectBubble(globalCtx, &sp6C);
         }
     }
 
@@ -2192,20 +2204,78 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     }
 
 
+    if (this->actionFunc == Boss03_ChewPlayer) {
+        GfxPrint_SetPos(printer, x-7, ++y);
+        GfxPrint_Printf(printer, "work[CHEW]:%i", this->workTimer[WORK_TIMER_CHEW]);
+    } else if (this->actionFunc == Boss03_Damaged) {
+        GfxPrint_SetPos(printer, x-10, ++y);
+        GfxPrint_Printf(printer, "work[DAMAGED]:%i", this->workTimer[WORK_TIMER_DAMAGED]);
+
+    } else if (this->actionFunc == func_809E3968) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK0_D]:%i", this->workTimer[WORK_TIMER_UNK0_D]);
+    } else if (this->actionFunc == func_809E3D98) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK0_E]:%i", this->workTimer[WORK_TIMER_UNK0_E]);
+    } else if (this->actionFunc == func_809E475C) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK0_F]:%i", this->workTimer[WORK_TIMER_UNK0_F]);
+
+    } else if (this->actionFunc == Boss03_DeathCutscene) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK0_G]:%i", this->workTimer[WORK_TIMER_UNK0_G]);
+
+    } else if (this->actionFunc == func_809E34B8) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK0_C]:%i", this->workTimer[WORK_TIMER_UNK0_C]);
+
+    } else {
+        #if 0
+        if (this->workTimer[0] != 0) {
+            GfxPrint_SetPos(printer, x-6, ++y);
+            GfxPrint_Printf(printer, "! work[0]:%i", this->workTimer[0]);
+        }
+        #endif
+    }
+
+    if (this->actionFunc == func_809E34B8) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK1_A]:%i", this->workTimer[WORK_TIMER_UNK1_A]);
+    } else if (this->actionFunc == func_809E475C) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK1_B]:%i", this->workTimer[WORK_TIMER_UNK1_B]);
+    } else {
+        #if 0
+        if (this->workTimer[1] != 0) {
+            GfxPrint_SetPos(printer, x-6, ++y);
+            GfxPrint_Printf(printer, "! work[1]:%i", this->workTimer[1]);
+        }
+        #endif
+    }
+
+    if (this->actionFunc == Boss03_Stunned) {
+        GfxPrint_SetPos(printer, x-10, ++y);
+        GfxPrint_Printf(printer, "work[STUNNED]:%i", this->workTimer[WORK_TIMER_STUNNED]);
+    } else if (this->actionFunc == func_809E34B8) {
+        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_Printf(printer, "work[UNK2_B]:%i", this->workTimer[WORK_TIMER_UNK2_B]);
+    } else {
+        #if 0
+        if (this->workTimer[2] != 0) {
+            GfxPrint_SetPos(printer, x-6, ++y);
+            GfxPrint_Printf(printer, "! work[2]:%i", this->workTimer[2]);
+        }
+        #endif
+    }
+
+
+
     //GfxPrint_SetPos(printer, x, ++y);
     //GfxPrint_Printf(printer, "240:%X", this->unk_240);
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "242:%X", this->unk_242);
 
-    GfxPrint_SetPos(printer, x-4, ++y);
-    GfxPrint_Printf(printer, "work[0]:%X", this->workTimer[0]);
-
-    GfxPrint_SetPos(printer, x-4, ++y);
-    GfxPrint_Printf(printer, "work[1]:%X", this->workTimer[1]);
-
-    GfxPrint_SetPos(printer, x-4, ++y);
-    GfxPrint_Printf(printer, "work[2]:%X", this->workTimer[2]);
 
     #if 0
     GfxPrint_SetPos(printer, x, ++y);
@@ -2481,6 +2551,27 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
         #endif
     }
 
+    {
+        GyorgEffect* eff = globalCtx->specialEffects;
+        s32 i;
+        s32 effCount[5] = { 0 };
+
+        x = 1;
+        y = initial_Y-1;
+
+
+        for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
+            if (eff[i].type != GYORG_EFFECT_NONE) {
+                effCount[eff[i].type]++;
+
+            }
+        }
+
+        for (i = 1; i < ARRAY_COUNT(effCount); i++) {
+            GfxPrint_SetPos(printer, x, ++y);
+            GfxPrint_Printf(printer, "type:%i count:%i", i, effCount[i]);
+        }
+    }
 
 
 #if 0
@@ -2600,7 +2691,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, effects++) {
         f32 phi_f0;
 
-        if (effects->type == 0) {
+        if (effects->type == GYORG_EFFECT_NONE) {
             continue;
         }
 
@@ -2620,20 +2711,20 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
 
         Math_ApproachF(&effects->unk_40, phi_f0, 1.0f, 80.0f);
 
-        if (effects->type == 2) {
+        if (effects->type == GYORG_EFFECT_2) {
             effects->unk_34.z += 0.15f;
 
             Math_ApproachF(&effects->unk_34.x, 0.03f, 0.5f, 0.005f);
             Math_ApproachF(&effects->unk_34.y, 0.5f, 0.5f, 0.02f);
 
             if (effects->pos.y <= WATER_HEIGHT) {
-                effects->type = 0;
+                effects->type = GYORG_EFFECT_NONE;
                 effects->pos.y = WATER_HEIGHT;
                 EffectSsGRipple_Spawn(globalCtx, &effects->pos, 0, 80, 0);
             } else if (effects->pos.y <= PLATFORM_HEIGHT) {
                 s16 j;
 
-                effects->type = 4;
+                effects->type = GYORG_EFFECT_4;
                 effects->pos.y = PLATFORM_HEIGHT;
                 effects->unk_34.x = 0.1f;
                 effects->unk_34.y = 0.6f;
@@ -2651,7 +2742,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                     func_809E299C(globalCtx, &effects->pos, &velocity);
                 }
             }
-        } else if (effects->type == 3) {
+        } else if (effects->type == GYORG_EFFECT_3) {
             effects->unk_34.z += 0.15f;
 
             if (effects->velocity.y < -8.0f) {
@@ -2659,7 +2750,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
             }
 
             if ((effects->velocity.y < 0.0f) && (effects->pos.y <= PLATFORM_HEIGHT)) {
-                effects->type = 4;
+                effects->type = GYORG_EFFECT_4;
                 effects->pos.y = PLATFORM_HEIGHT;
                 effects->unk_34.x = 0.05f;
                 effects->unk_34.y = 0.2f;
@@ -2668,20 +2759,20 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                 effects->alpha = 150;
                 effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
             }
-        } else if (effects->type == 4) {
+        } else if (effects->type == GYORG_EFFECT_4) {
             Math_ApproachF(&effects->unk_34.x, effects->unk_34.y, 0.1f, 0.6f);
 
             effects->alpha -= effects->unk_2E;
             if (effects->alpha <= 0) {
                 effects->alpha = 0;
-                effects->type = 0;
+                effects->type = GYORG_EFFECT_NONE;
             }
-        } else if (effects->type == 1) {
+        } else if (effects->type == GYORG_EFFECT_BUBBLE) {
             if (effects->velocity.y > 5.0f) {
                 effects->velocity.y = 5.0f;
             }
             if (sGyorgInstance->waterHeight < effects->pos.y) {
-                effects->type = 0;
+                effects->type = GYORG_EFFECT_NONE;
             }
         }
     }
@@ -2701,7 +2792,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     func_8012C28C(gfxCtx);
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
-        if (eff->type == 1) {
+        if (eff->type == GYORG_EFFECT_BUBBLE) {
             if (!flag) {
                 gSPDisplayList(POLY_OPA_DISP++, gGyorgBubbleMaterialDL);
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -2727,7 +2818,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     flag = false;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
-        if ((eff->type == 2) || (eff->type == 3)) {
+        if ((eff->type == GYORG_EFFECT_2) || (eff->type == GYORG_EFFECT_3)) {
 
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
@@ -2744,7 +2835,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
 
             Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
-            if (eff->type == 2) {
+            if (eff->type == GYORG_EFFECT_2) {
                 Matrix_InsertYRotation_f(
                     Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * (M_PI / 0x8000), MTXMODE_APPLY);
             } else {
@@ -2764,7 +2855,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     flag = false;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
-        if (eff->type == 4) {
+        if (eff->type == GYORG_EFFECT_4) {
             if (!flag) {
                 func_8012C448(gfxCtx);
 

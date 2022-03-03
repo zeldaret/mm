@@ -90,8 +90,8 @@ void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
     s16 i;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, effectPtr++) {
-        if ((effectPtr->type == 0) || (effectPtr->type == 1)) {
-            effectPtr->type = 2;
+        if ((effectPtr->type == GYORG_EFFECT_NONE) || (effectPtr->type == GYORG_EFFECT_BUBBLE)) {
+            effectPtr->type = GYORG_EFFECT_2;
             effectPtr->pos = *effectPos;
             effectPtr->velocity = *sZeroVec;
             effectPtr->accel = *sZeroVec;

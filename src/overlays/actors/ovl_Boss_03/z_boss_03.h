@@ -26,6 +26,14 @@ typedef struct {
 
 #define GYORG_EFFECT_COUNT 150
 
+typedef enum {
+    /* 0 */ GYORG_EFFECT_NONE,
+    /* 1 */ GYORG_EFFECT_BUBBLE,
+    /* 2 */ GYORG_EFFECT_2, // water drop
+    /* 3 */ GYORG_EFFECT_3, // water drop
+    /* 4 */ GYORG_EFFECT_4,
+} GyorgEffectType;
+
 typedef struct Boss03 {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ UNK_TYPE1 unk_144[0x04];
@@ -39,7 +47,7 @@ typedef struct Boss03 {
     /* 0x024C */ s16 workTimer[GYORG_WORK_TIMER_MAX];
     /* 0x0252 */ s8 unk_252; // number of Tanron3 fish that are currently alive, maybe "numSmallFishAlive"?
     /* 0x0253 */ u8 hasSpwanedSmallFishes; // Tanron
-    /* 0x0254 */ s16 unk_254;
+    /* 0x0254 */ s16 unk_254; // new bubbles spawn count?
     /* 0x0258 */ f32 waterHeight; // always 430.0f
     /* 0x025C */ s16 unk_25C;
     /* 0x025E */ s16 unk_25E;
@@ -96,7 +104,7 @@ typedef struct Boss03 {
     /* 0x0574 */ UNK_TYPE1 unk_574[0x04];
     /* 0x0578 */ f32 cameraFov;
 } Boss03; // size = 0x57C
-
+ 
 #define GYORG_PARAM_DEFAULT (0)
 #define GYORG_PARAM_SEAWEED (0x23)
 
