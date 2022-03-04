@@ -14,10 +14,10 @@ u8 D_801D06F0[4][8] = { { 0x52, 0x75, 0x70, 0x65, 0x65, 0x28, 0x73, 0x29}, //EN 
                         };
 
 // rupeesTextLength
-u8 D_801D0710[4] = {8,8,5,8}; 
+u8 D_801D0710[4] = {8,8,5,8};
 
 //TextArea
-char D_801D0714[11][16] = {  
+char D_801D0714[11][16] = {
                                     "Great Bay Coast",
                                     "Zora Cape",
                                     "Snowhead",
@@ -41,7 +41,7 @@ extern u8 D_801D0710[4];
 extern u8 D_801D0714[11][16];
 extern s16 D_801D07C4[11];
 
-void Message_FindMessageNES(GlobalContext *globalCtx, u16 textId) {
+void Message_FindMessageNES(GlobalContext* globalCtx, u16 textId) {
     const char* foundSegment;
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -49,13 +49,13 @@ void Message_FindMessageNES(GlobalContext *globalCtx, u16 textId) {
     MessageTableEntry* msgEntry = (MessageTableEntry*)msgCtx->messageEntryTableNes;
     const char* segment = msgEntry->segment;
 
-    while(msgEntry->textId != 0xFFFF){
-        if(msgEntry->textId == textId){
+    while (msgEntry->textId != 0xFFFF) {
+        if (msgEntry->textId == textId) {
             foundSegment = msgEntry->segment;
             msgEntry++;
             nextSegment = msgEntry->segment;
             font->messageStart = foundSegment - segment;
-            font->messageEnd =  nextSegment - foundSegment;
+            font->messageEnd = nextSegment - foundSegment;
             return;
         }
         msgEntry++;
@@ -68,19 +68,19 @@ void Message_FindMessageNES(GlobalContext *globalCtx, u16 textId) {
     font->messageEnd = nextSegment - foundSegment;
 }
 
-void Message_LoadCharNES(GlobalContext *globalCtx, u8 codePointIndex, s32 *offset, f32 *arg3, s16 decodedBufPos) {
-    MessageContext *msgCtx = &globalCtx->msgCtx;
+void Message_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
     s32 temp1 = *offset;
     f32 temp2 = *arg3;
     Font_LoadCharNES(globalCtx, codePointIndex, temp1);
-    ((u8*)msgCtx->decodedBuffer)[decodedBufPos] = codePointIndex; //Nasty
+    ((u8*)msgCtx->decodedBuffer)[decodedBufPos] = codePointIndex; // Nasty
     temp1 += FONT_CHAR_TEX_SIZE;
     temp2 += (16.0f * msgCtx->unk12098);
     *offset = temp1;
     *arg3 = temp2;
 }
 
-void Message_LoadPluralRupeesNES(GlobalContext *globalCtx, s16 *decodedBufPos, s32 *offset, f32 *arg3) {
+void Message_LoadPluralRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
@@ -118,8 +118,8 @@ void Message_LoadPluralRupeesNES(GlobalContext *globalCtx, s16 *decodedBufPos, s
     *arg3 = f;
 }
 
-void Message_LoadLocalizedRupeesNES(GlobalContext *globalCtx, s16 *decodedBufPos, s32 *offset, f32 *arg3) {
-    MessageContext *msgCtx = &globalCtx->msgCtx;
+void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
@@ -127,21 +127,21 @@ void Message_LoadLocalizedRupeesNES(GlobalContext *globalCtx, s16 *decodedBufPos
 
     ((u8*)msgCtx->decodedBuffer)[p] = 0x20;
     p = p + 1;
-    for(j = 0; j < D_801D0710[gSaveContext.language-1]; j++){
+    for (j = 0; j < D_801D0710[gSaveContext.language - 1]; j++) {
         Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.language - 1][j], o);
         ((u8*)msgCtx->decodedBuffer)[p] = D_801D06F0[gSaveContext.language - 1][j];
-        o += FONT_CHAR_TEX_SIZE; 
+        o += FONT_CHAR_TEX_SIZE;
         p++;
     }
-    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.language-1] + 1);
+    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.language - 1] + 1);
     p--;
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
 }
 
-void Message_LoadRupeesNES(GlobalContext *globalCtx, s16 *decodedBufPos, s32 *offset, f32 *arg3, s16 singular) {
-    MessageContext *msgCtx = &globalCtx->msgCtx;
+void Message_LoadRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3, s16 singular) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
@@ -181,8 +181,8 @@ void Message_LoadRupeesNES(GlobalContext *globalCtx, s16 *decodedBufPos, s32 *of
     *arg3 = f;
 }
 
-void Message_LoadTimeNES(GlobalContext *globalCtx, u8 arg1, s32 *offset, f32 *arg3, s16 *decodedBufPos) {
-    MessageContext *msgCtx = &globalCtx->msgCtx;
+void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg3;
@@ -192,33 +192,33 @@ void Message_LoadTimeNES(GlobalContext *globalCtx, u8 arg1, s32 *offset, f32 *ar
     s32 day;
     s16 i;
 
-    if(arg1 == 0xCF){
-        dayTime = 0x40000 - (((day = gSaveContext.day)%5) << 16) - (u16)(-0x4000 + gSaveContext.time);
-    }else{
-        dayTime =  0x10000 - (u16)(-0x4000 + gSaveContext.time);
+    if (arg1 == 0xCF) {
+        dayTime = 0x40000 - (((day = gSaveContext.day) % 5) << 16) - (u16)(-0x4000 + gSaveContext.time);
+    } else {
+        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.time);
     }
     timeInSeconds = dayTime * (24.0f * 60.0f / 0x10000);
 
     digits[0] = 0;
-    digits[1] =  (timeInSeconds / 60.0f);
-    while(digits[1] >= 10){
-        digits[0]++; 
+    digits[1] = (timeInSeconds / 60.0f);
+    while (digits[1] >= 10) {
+        digits[0]++;
         digits[1] -= 10;
     }
 
     digits[2] = 0;
     digits[3] = (s32)timeInSeconds % 60;
-    while (digits[3] >= 10){
+    while (digits[3] >= 10) {
         digits[2]++;
         digits[3] -= 10;
     }
-    
-    for(i = 0; i < 4; i++){
+
+    for (i = 0; i < 4; i++) {
         Font_LoadCharNES(globalCtx, digits[i] + '0', o);
         o += FONT_CHAR_TEX_SIZE;
         ((u8*)msgCtx->decodedBuffer)[p] = digits[i] + '0';
         p++;
-        if(i == 1){
+        if (i == 1) {
             Font_LoadCharNES(globalCtx, ':', o);
             o += FONT_CHAR_TEX_SIZE;
             ((u8*)msgCtx->decodedBuffer)[p] = ':';
@@ -232,9 +232,8 @@ void Message_LoadTimeNES(GlobalContext *globalCtx, u8 arg1, s32 *offset, f32 *ar
     *arg3 = f;
 }
 
-void Message_LoadAreaTextNES(GlobalContext *globalCtx, s32 *offset, f32 *arg2, s16 *decodedBufPos)
-{
-    MessageContext *msgCtx = &globalCtx->msgCtx;
+void Message_LoadAreaTextNES(GlobalContext* globalCtx, s32* offset, f32* arg2, s16* decodedBufPos) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
     f32 f = *arg2;
@@ -242,24 +241,24 @@ void Message_LoadAreaTextNES(GlobalContext *globalCtx, s32 *offset, f32 *arg2, s
     u8 currentChar;
     s16 currentArea;
     s16 stringLimit;
-    
-    if((func_8010A0A4(globalCtx) != 0) || (globalCtx->sceneNum == SCENE_SECOM)){
+
+    if ((func_8010A0A4(globalCtx) != 0) || (globalCtx->sceneNum == SCENE_SECOM)) {
         currentArea = 10;
-    }else{
-        currentArea =  globalCtx->pauseCtx.unk_238[4];
+    } else {
+        currentArea = globalCtx->pauseCtx.unk_238[4];
     }
     stringLimit = D_801D07C4[currentArea];
-    
-    for (i = 0; i < stringLimit; i++){
-        ((u8 *)msgCtx->decodedBuffer)[p] = D_801D0714[currentArea][i]; 
-        currentChar = ((u8 *)msgCtx->decodedBuffer)[p];
-        if (currentChar != ' '){
+
+    for (i = 0; i < stringLimit; i++) {
+        ((u8*)msgCtx->decodedBuffer)[p] = D_801D0714[currentArea][i];
+        currentChar = ((u8*)msgCtx->decodedBuffer)[p];
+        if (currentChar != ' ') {
             Font_LoadCharNES(globalCtx, D_801D0714[currentArea][i], o);
             o += FONT_CHAR_TEX_SIZE;
         }
-        currentChar =((u8 *) msgCtx->decodedBuffer)[p];
+        currentChar = ((u8*)msgCtx->decodedBuffer)[p];
         p++;
-        f += (  D_801D0470[currentChar - ' '] * msgCtx->unk12098);
+        f += (D_801D0470[currentChar - ' '] * msgCtx->unk12098);
     }
     p--;
     f += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
@@ -267,7 +266,6 @@ void Message_LoadAreaTextNES(GlobalContext *globalCtx, s32 *offset, f32 *arg2, s
     *offset = o;
     *arg2 = f;
 }
-
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/func_80159438.s")
 
