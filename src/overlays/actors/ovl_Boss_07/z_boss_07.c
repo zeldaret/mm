@@ -502,7 +502,6 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss07* this = THIS;
     s32 i;
-    f32 whipScale = 1.0;
 
     if (this->actor.params == MAJORA_STATIC) {
         this->actor.update = Boss07_Static_Update;
@@ -531,7 +530,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         this->actor.gravity = -2.5f;
 
-        if (this->actor.params >= MAJORA_REMAINS) {
+        if (thisx->params >= MAJORA_REMAINS) {
             this->actor.update = Boss07_Remains_Update;
             this->actor.draw = Boss07_Remains_Draw;
             if (1) {}
@@ -646,7 +645,7 @@ void Boss07_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 Boss07_Wrath_SetupIntro(this, globalCtx);
             } else {
                 Boss07_Wrath_SetupIdle(this, globalCtx, 50);
-                this->whipScale = whipScale;
+                this->whipScale = 1.0;
                 Audio_QueueSeqCmd(0x8069);
             }
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_060335F0, &D_0603CBD0, this->jointTable,
