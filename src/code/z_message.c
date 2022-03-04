@@ -371,10 +371,8 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     MessageContext *msgCtx = &globalCtx->msgCtx;
-    u32 temp = 0x1E;
     
     msgCtx->unk11F10 = 0;
     func_80150D08(globalCtx, textId);
@@ -394,16 +392,13 @@ void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     }
     else{
         XREG(74) = 0x42;
-        XREG(75) = temp;
+        XREG(75) = 0x1E;
         XREG(77) = 0x3C;
         XREG(76) = 0x1C;
         msgCtx->unk11F1A[0] = (msgCtx->unk11F1A[1] = (msgCtx->unk11F1A[2] = 0));
         Interface_ChangeAlpha(1U);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151A68.s")
-#endif
 
 void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
