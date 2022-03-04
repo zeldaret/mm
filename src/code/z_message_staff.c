@@ -1,7 +1,7 @@
 #include "global.h"
 
 //Message_FindMessageStaff(globalCtx, textId)
-void func_8015E750(GlobalContext *globalCtx, u16 textId) {
+void Message_FindMessageStaff(GlobalContext *globalCtx, u16 textId) {
     const char* foundSegment;
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;

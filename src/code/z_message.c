@@ -1,10 +1,25 @@
 #include "global.h"
 
-void func_80147520(void) {
-    D_801CFC98 = 0xFF;
-    D_801CFCA4[0] = D_801CFCA4[1] = D_801CFCA4[2] = D_801CFCA4[3]= D_801CFCA4[4] = D_801CFCA4[5] = D_801CFCA4[6] = D_801CFCA4[7]  = D_801CFCA4[8] = 0;
-}
+#if 0
 
+s16 D_801D02D8[15] = {
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
+    ACTOR_OCEFF_WIPE,  ACTOR_OCEFF_WIPE7, // Song of Time Effect, Song of Healing Effect
+    ACTOR_OCEFF_WIPE2, ACTOR_OCEFF_WIPE6, // Epona's Song Effect, Song of Soaring Effect
+    ACTOR_OCEFF_STORM, ACTOR_OCEFF_SPOT,  // Song of Storms Effect II [?], Sun's Song Effect
+    ACTOR_OCEFF_WIPE, ACTOR_OCEFF_WIPE,   // Song of Time Effect, Song of Time Effect
+    ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect 
+};
+s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
+
+#endif
+
+extern u16 D_801C6AB8[];
+extern u16 D_801C6B28[];
+extern s16 D_801D02D8[];
+extern s32 D_801D02F8[];
 extern s16 D_801F6B0C;
 extern s16 D_801F6B0E;
 extern s16 D_801F6B10;
@@ -17,6 +32,14 @@ extern s16 D_801F6B1C;
 extern s16 D_801F6B1E;
 extern s16 D_801F6B20;
 extern s16 D_801F6B22;
+
+
+void func_80147520(void) {
+    D_801CFC98 = 0xFF;
+    D_801CFCA4[0] = D_801CFCA4[1] = D_801CFCA4[2] = D_801CFCA4[3]= D_801CFCA4[4] = D_801CFCA4[5] = D_801CFCA4[6] = D_801CFCA4[7]  = D_801CFCA4[8] = 0;
+}
+
+
 
 #ifdef NON_MATCHING
 void func_80147564(GlobalContext *globalCtx) {
@@ -174,7 +197,7 @@ void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
 
 //Message_FindMessage(globalCtx, textId)
-void func_80149EBC(GlobalContext *globalCtx, u16 textId) {
+void Message_FindMessage(GlobalContext *globalCtx, u16 textId) {
     const char* foundSegment;
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -212,7 +235,7 @@ void func_80149EBC(GlobalContext *globalCtx, u16 textId) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014C70C.s")
 
-void func_8014CC14(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
+void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s32 temp1 = *offset;
     f32 temp2 = *arg3;
@@ -226,6 +249,7 @@ void func_8014CC14(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f3
     *arg3 = temp2;
 }
 
+//Message_LoadRupees JPN ? 
 void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f32* arg3) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s16 t = *decodedBufPos;
@@ -311,6 +335,7 @@ void func_8014D62C(GlobalContext *arg0, s32 *arg1, f32 *arg2, s16 *arg3) {
     *arg2 = sp3C + ((f32) (temp_s6 - 1) * (16.0f * arg0->msgCtx.unk12098));
 }
 */
+
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D62C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")
@@ -391,13 +416,12 @@ void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     }
 }
 
-extern u16 D_801C6B28[];
 
 void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     u8 temp = uParm2;
 
-    if (CHECK_QUEST_ITEM(18)) { // CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)
+    if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
@@ -412,8 +436,6 @@ void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
     }
 }
 
-extern u16 D_801C6AB8[];
-//extern ? D_801C6B28;
 
 u32 func_80151C9C(GlobalContext *globalCtx) {
     MessageContext* msgCtx;
@@ -430,7 +452,7 @@ u32 func_80151C9C(GlobalContext *globalCtx) {
         if (((gSaveContext.weekEventReg[ D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]>>8]) & (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]) == 0) {
             flag = gSaveContext.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]>>8];
             gSaveContext.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]>>8] = flag | (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
-            if((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && (CHECK_QUEST_ITEM(0x12))){ // CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)
+            if((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK))){
                 func_80151938(globalCtx, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
                 play_sound(NA_SE_SY_SCHEDULE_WRITE);
                 return 1;
@@ -468,8 +490,6 @@ void func_80152C64(View *view) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
 
-<<<<<<< HEAD
-=======
 #if 0
 >>>>>>> z_message_nes & z_message_staff progress
 
@@ -484,12 +504,8 @@ s16 D_801D02D8[15] = {
     ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect 
 };
 s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
-<<<<<<< HEAD
-=======
 
 #endif
->>>>>>> z_message_nes & z_message_staff progress
-
 
 //Spawn song effect?
 void func_80152EC0(GlobalContext *globalCtx) {
