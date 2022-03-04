@@ -903,7 +903,7 @@ typedef struct {
     /* 0x12080 */ MessageTableEntry* messageEntryTable;
     /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
     /* 0x12088 */ UNK_TYPE4 unk12088;
-    /* 0x1208C */ MessageTableEntry* unk1208C;
+    /* 0x1208C */ MessageTableEntry* messageTableStaff;
     /* 0x12090 */ s16 unk12090;
     /* 0x12092 */ s16 unk12092;
     /* 0x12094 */ s8 unk12094;

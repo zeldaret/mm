@@ -6,7 +6,7 @@ void Message_FindMessageStaff(GlobalContext *globalCtx, u16 textId) {
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = msgCtx->unk1208C;
+    MessageTableEntry* msgEntry = msgCtx->messageTableStaff;
     const char* segment = msgEntry->segment;
 
      while(msgEntry->textId != 0xFFFF){

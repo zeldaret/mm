@@ -257,18 +257,17 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
     f32 f = *arg3;
 
     Font_LoadChar(globalCtx, 0x838BU, k);
-    k += 0x80;
+    k += FONT_CHAR_TEX_SIZE;
     msgCtx->unk11F24[t] = 0x838B;
     t += 1;
     Font_LoadChar(globalCtx, 0x8373U, k);
-    k += 0x80;
+    k += FONT_CHAR_TEX_SIZE;
     msgCtx->unk11F24[t] = 0x8373;
     t += 1;
     Font_LoadChar(globalCtx, 0x815CU, k);
-    k += 0x80;
+    k += FONT_CHAR_TEX_SIZE;
     msgCtx->unk11F24[t] = 0x815C;
 
-    //k = (k + 10);
     f += 16.0f * msgCtx->unk12098 * 3.0f;
     *decodedBufPos = t;
     *offset = k;
@@ -281,9 +280,9 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D304.s")
 
-/*
-extern ? D_801D0188;
-extern ? D_801D0250;
+#ifdef NON_EQUIVALENT
+extern u16* D_801D0188;
+extern s16* D_801D0250;
 
 void func_8014D62C(GlobalContext *arg0, s32 *arg1, f32 *arg2, s16 *arg3) {
     f32 sp3C;
@@ -334,9 +333,9 @@ void func_8014D62C(GlobalContext *arg0, s32 *arg1, f32 *arg2, s16 *arg3) {
     *arg1 = phi_s2_2;
     *arg2 = sp3C + ((f32) (temp_s6 - 1) * (16.0f * arg0->msgCtx.unk12098));
 }
-*/
-
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D62C.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")
 
@@ -398,15 +397,15 @@ void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     msgCtx->unk12024 = 0;
     msgCtx->unk1203C = (msgCtx->unk1203A = (msgCtx->unk1201E = 0));
     msgCtx->unk12023 = 0x1E;
-    if ((((s32) msgCtx->unk11F04) >= 0x1BB2) && (((s32) msgCtx->unk11F04) < 0x1BB7))
-    {
+
+    //Day/Dawn/Night.. Messages
+    if ((((s32) msgCtx->unk11F04) >= 0x1BB2) && (((s32) msgCtx->unk11F04) < 0x1BB7)){
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;
         XREG(76) = 0x44;
     }
-    else
-    {
+    else{
         XREG(74) = 0x42;
         XREG(75) = temp;
         XREG(77) = 0x3C;
@@ -428,7 +427,6 @@ void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
         }
     }
     else if (uParm2 >= 20) {
-        //temp = uParm2;
         if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
@@ -553,6 +551,8 @@ void func_80156758(GlobalContext *globalCtx) {
     OPEN_DISPS(gfxCtx);
     nextDisplayList = Graph_GfxPlusOne(_polyOpa = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
+
+    //((globalCtx->msgCtx.currentTextId != 0x5E6) || Play_InCS(globalCtx) == 0)
     if ((globalCtx->msgCtx.unk11F04 != 0x5E6) || (func_801690CC(globalCtx) == 0)) {
         func_801541D4(globalCtx, &nextDisplayList);
     }
@@ -565,8 +565,8 @@ void func_80156758(GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015680C.s")
 
 void func_801586A4(GlobalContext *globalCtx) {
-    globalCtx->msgCtx.messageEntryTableNes = &D_801C6B98;
-    globalCtx->msgCtx.unk1208C = &D_801CFB08;
+    globalCtx->msgCtx.messageEntryTableNes = D_801C6B98;
+    globalCtx->msgCtx.messageTableStaff = D_801CFB08;
 }
 
 void Message_Init(GlobalContext *globalCtx) {
