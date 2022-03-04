@@ -107,7 +107,14 @@ extern Vec3f D_8099024C;// = { 0.0f, 0.0f, 0.0f };
 //     temp_s0->unk4, (f32) temp_s0->unk8, (f32) phi_f0, (u8) (s32) temp_s0->unkC, (f32) temp_s0->unkE);
 // }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
+void func_8098F8A8(EnTg* this, GlobalContext* globalCtx) {
+    this->collider.dim.pos.x = (s16) this->actor.world.pos.x;
+    this->collider.dim.pos.y = (s16) this->actor.world.pos.y;
+    this->collider.dim.pos.z = (s16) this->actor.world.pos.z;
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+}
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F928.s")
 void func_8098F928(EnTg* this, GlobalContext* globalCtx) {
