@@ -381,7 +381,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if (globalCtx->msgCtx.unk11F04 == 0x80B) {
+            if (globalCtx->msgCtx.currentTextId == 0x80B) {
                 switch (this->unk_32C) {
                     case 16:
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
@@ -405,7 +405,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            switch (globalCtx->msgCtx.unk11F04) {
+            switch (globalCtx->msgCtx.currentTextId) {
                 case 0x80B:
                     switch (this->unk_32C) {
                         case 16:
@@ -572,7 +572,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
         case 1:
         case 2:
         case 3:
-            if (((globalCtx->msgCtx.unk11F04 == 0x800) || (globalCtx->msgCtx.unk11F04 == 0x801)) &&
+            if (((globalCtx->msgCtx.currentTextId == 0x800) || (globalCtx->msgCtx.currentTextId == 0x801)) &&
                 (this->unk_32C == 8)) {
                 Math_SmoothStepToF(&this->unk_454, 1.0f, 1.0f, 0.1f, 0.01f);
                 if (this->skelAnime.curFrame <= 23.0f) {
@@ -596,7 +596,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            switch (globalCtx->msgCtx.unk11F04) {
+            switch (globalCtx->msgCtx.currentTextId) {
                 case 0x800:
                 case 0x801:
                     if (Message_ShouldAdvance(globalCtx)) {

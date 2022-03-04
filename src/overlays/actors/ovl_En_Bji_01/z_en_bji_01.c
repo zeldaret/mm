@@ -237,7 +237,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
         case 5:
             if (Message_ShouldAdvance(globalCtx) != 0) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x5DE:
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
                         func_80151938(globalCtx, 0x5DF);
@@ -259,7 +259,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                     case 0x5EE:
                     case 0x5F2:
                     case 0x5F5:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
                     case 0x5F0:
                     case 0x5F6:

@@ -842,7 +842,7 @@ typedef struct {
     /* 0x11EF4 */ char unk_11EF4[0x4];
     /* 0x11EF8 */ UNK_PTR unk11EF8;
     /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x8];
-    /* 0x11F04 */ u16 unk11F04;
+    /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
@@ -852,7 +852,7 @@ typedef struct {
     /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F24 */ u16 unk11F24[0x67]; //messageBufDecoded?
+    /* 0x11F24 */ u16 decodedBuffer[0x67];
     /* 0x11FF2 */ u16 unk11FF2;
     /* 0x11FF4 */ s16 unk11FF4;
     /* 0x11FF6 */ s16 unk11FF6;

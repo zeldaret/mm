@@ -821,7 +821,7 @@ void func_80A12DF4(EnGo* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A12E80(EnGo* this, GlobalContext* globalCtx) {
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
     Player* player = GET_PLAYER(globalCtx);
 
     if (ENGO_GET_F(&this->actor) != ENGO_F_4) {

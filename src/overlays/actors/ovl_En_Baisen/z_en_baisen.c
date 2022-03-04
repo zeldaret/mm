@@ -196,8 +196,8 @@ void func_80BE89D8(EnBaisen* this, GlobalContext* globalCtx) {
             EnBaisen_ChangeAnimation(this, 0);
         }
     }
-    if ((globalCtx->msgCtx.unk11F04 == 0x2AC6) || (globalCtx->msgCtx.unk11F04 == 0x2AC7) ||
-        (globalCtx->msgCtx.unk11F04 == 0x2AC8)) {
+    if ((globalCtx->msgCtx.currentTextId == 0x2AC6) || (globalCtx->msgCtx.currentTextId == 0x2AC7) ||
+        (globalCtx->msgCtx.currentTextId == 0x2AC8)) {
         this->skelAnime.playSpeed = 0.0f;
         this->unk29E = this->actor.yawTowardsPlayer;
     }

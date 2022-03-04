@@ -262,7 +262,7 @@ void func_80BD187C(EnZov* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
             if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x1022:
                         func_80151938(globalCtx, 0x1023);
                         break;
@@ -412,14 +412,14 @@ void func_80BD1DB8(EnZov* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x1033:
             case 0x1034:
             case 0x1035:
             case 0x1036:
             case 0x1037:
             case 0x1038:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1039:

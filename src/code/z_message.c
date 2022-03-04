@@ -71,7 +71,6 @@ void func_80147564(GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147564.s")
 #endif
 
-//Message_ShouldAdvance
 s32 Message_ShouldAdvance(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Input* controller = CONTROLLER1(globalCtx);
@@ -90,7 +89,6 @@ s32 Message_ShouldAdvance(GlobalContext *globalCtx) {
     }
 }
 
-//Message_ShouldAdvance_Silent
 s32 Message_ShouldAdvance_Silent(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Input* controller = CONTROLLER1(globalCtx);
@@ -185,7 +183,6 @@ void func_80148CBC(GlobalContext *globalCtx, UNK_PTR puParm2, u8 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
 
-//Message_FindMessage(globalCtx, textId)
 void Message_FindMessage(GlobalContext *globalCtx, u16 textId) {
     const char* foundSegment;
     const char* nextSegment;
@@ -231,7 +228,7 @@ void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset,
 
     
     Font_LoadChar(globalCtx, codePointIndex, temp1);
-    msgCtx->unk11F24[decodedBufPos] = codePointIndex; 
+    msgCtx->decodedBuffer[decodedBufPos] = codePointIndex; 
     temp1 += 128;
     temp2 += (16.0f * msgCtx->unk12098);
     *offset = temp1;
@@ -247,15 +244,15 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
 
     Font_LoadChar(globalCtx, 0x838BU, k);
     k += FONT_CHAR_TEX_SIZE;
-    msgCtx->unk11F24[t] = 0x838B;
+    msgCtx->decodedBuffer[t] = 0x838B;
     t += 1;
     Font_LoadChar(globalCtx, 0x8373U, k);
     k += FONT_CHAR_TEX_SIZE;
-    msgCtx->unk11F24[t] = 0x8373;
+    msgCtx->decodedBuffer[t] = 0x8373;
     t += 1;
     Font_LoadChar(globalCtx, 0x815CU, k);
     k += FONT_CHAR_TEX_SIZE;
-    msgCtx->unk11F24[t] = 0x815C;
+    msgCtx->decodedBuffer[t] = 0x815C;
 
     f += 16.0f * msgCtx->unk12098 * 3.0f;
     *decodedBufPos = t;
@@ -306,7 +303,7 @@ void func_8014D62C(GlobalContext *arg0, s32 *arg1, f32 *arg2, s16 *arg3) {
         phi_s2 = temp_s2;
         do {
             temp_v0 = (phi_v0 * 0x12) + &D_801D0188 + (phi_s0 * 2);
-            (arg0 + 0x4908 + (phi_s1 * 2))->unk11F24 = (u16) *temp_v0;
+            (arg0 + 0x4908 + (phi_s1 * 2))->decodedBuffer = (u16) *temp_v0;
             Font_LoadChar(arg0, *temp_v0, phi_s2);
             temp_s0 = phi_s0 + 1;
             temp_s1_2 = phi_s1 + 1;
@@ -389,7 +386,7 @@ void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     msgCtx->unk12023 = 0x1E;
 
     //Day/Dawn/Night.. Messages
-    if ((((s32) msgCtx->unk11F04) >= 0x1BB2) && (((s32) msgCtx->unk11F04) < 0x1BB7)){
+    if ((((s32) msgCtx->currentTextId) >= 0x1BB2) && (((s32) msgCtx->currentTextId) < 0x1BB7)){
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;
@@ -527,8 +524,8 @@ void func_80156758(GlobalContext *globalCtx) {
     nextDisplayList = Graph_GfxPlusOne(_polyOpa = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
-    //((globalCtx->msgCtx.currentTextId != 0x5E6) || Play_InCS(globalCtx) == 0)
-    if ((globalCtx->msgCtx.unk11F04 != 0x5E6) || (func_801690CC(globalCtx) == 0)) {
+    //((globalCtx->msgCtx.currentTextId != 0x5E6) || Play_InCSMode(globalCtx) == 0)
+    if ((globalCtx->msgCtx.currentTextId != 0x5E6) || (func_801690CC(globalCtx) == 0)) {
         func_801541D4(globalCtx, &nextDisplayList);
     }
     gSPEndDisplayList(nextDisplayList++);
@@ -552,7 +549,7 @@ void Message_Init(GlobalContext *globalCtx) {
     globalCtx->msgCtx.ocarinaMode = 0;
     messageCtx->msgMode = 0;
     messageCtx->unk11F10 = 0;
-    messageCtx->unk11F04 = 0;
+    messageCtx->currentTextId = 0;
     messageCtx->unk12020 = 0;
     messageCtx->choiceIndex = 0;
     messageCtx->ocarinaAction = messageCtx->unk11FF2 = 0;

@@ -218,7 +218,7 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
         case 5:
         case 6:
             if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x20D0:
                         func_80997D14(this, globalCtx);
                         break;

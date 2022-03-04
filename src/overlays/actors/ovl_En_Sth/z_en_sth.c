@@ -314,9 +314,9 @@ void func_80B67540(EnSth* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
             if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x1134:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1132:
@@ -495,16 +495,16 @@ void func_80B67C1C(EnSth* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x90C:
                 func_80B670A4(this, 2);
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x916:
             case 0x919:
                 func_80B670A4(this, 3);
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x8FC:
@@ -512,7 +512,7 @@ void func_80B67C1C(EnSth* this, GlobalContext* globalCtx) {
             case 0x900:
             case 0x90A:
             case 0x90D:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x901:

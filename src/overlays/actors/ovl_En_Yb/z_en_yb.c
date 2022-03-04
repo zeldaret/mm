@@ -288,7 +288,7 @@ void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
 
     if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
-        switch (globalCtx->msgCtx.unk11F04) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x147D: // I am counting on you
                 func_801477B4(globalCtx);
                 this->actionFunc = EnYb_Disappear;

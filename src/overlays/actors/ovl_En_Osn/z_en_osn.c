@@ -894,7 +894,7 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_1FA == 0xFF) {
         func_8012C28C(globalCtx->state.gfxCtx);
         if ((this->unk_1EC == 0xB) || (this->unk_1EC == 0xC) || (this->unk_1EC == 0x17) ||
-            (globalCtx->msgCtx.unk11F04 == 0x1FCA)) {
+            (globalCtx->msgCtx.currentTextId == 0x1FCA)) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD258C));
             gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
         } else if ((this->unk_1EC == 7) || (this->unk_1EC == 3) || (this->unk_1EC == 0xD)) {

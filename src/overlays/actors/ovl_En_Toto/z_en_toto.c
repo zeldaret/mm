@@ -207,7 +207,7 @@ void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime) && this->actionFuncIndex == 1 &&
         this->skelAnime.animation != &object_zm_Anim_000C80) {
-        if (globalCtx->msgCtx.unk11F04 != 0x2A98 && globalCtx->msgCtx.unk11F04 != 0x2A99) {
+        if (globalCtx->msgCtx.currentTextId != 0x2A98 && globalCtx->msgCtx.currentTextId != 0x2A99) {
             if (this->unk2B4 & 1 || Rand_ZeroOne() > 0.5f) {
                 this->unk2B4 = (this->unk2B4 + 1) & 3;
             }

@@ -482,7 +482,7 @@ void func_80B418C4(EnKgy* this, GlobalContext* globalCtx) {
     func_80B4163C(this, globalCtx);
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
         (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx) &&
-        ((globalCtx->msgCtx.unk11F04 == 0xC4E) || (globalCtx->msgCtx.unk11F04 == 0xC4F))) {
+        ((globalCtx->msgCtx.currentTextId == 0xC4E) || (globalCtx->msgCtx.currentTextId == 0xC4F))) {
         func_801477B4(globalCtx);
         this->actor.textId = 0xC4F;
         func_80B413C8(this);
@@ -617,7 +617,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
         switch (Message_GetState(&globalCtx->msgCtx)) {
             case 4:
                 if (Message_ShouldAdvance(globalCtx)) {
-                    temp = globalCtx->msgCtx.unk11F04;
+                    temp = globalCtx->msgCtx.currentTextId;
 
                     switch (temp) {
                         case 0xC3B:
@@ -659,7 +659,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
 
             case 5:
                 if (Message_ShouldAdvance(globalCtx)) {
-                    temp = globalCtx->msgCtx.unk11F04;
+                    temp = globalCtx->msgCtx.currentTextId;
 
                     switch (temp) {
                         case 0xC35:
@@ -898,7 +898,7 @@ void func_80B427C8(EnKgy* this, GlobalContext* globalCtx) {
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
         (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        temp_a2 = globalCtx->msgCtx.unk11F04;
+        temp_a2 = globalCtx->msgCtx.currentTextId;
 
         switch (temp_a2) {
             case 0xC30:
@@ -970,7 +970,7 @@ void func_80B42A8C(EnKgy* this, GlobalContext* globalCtx) {
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
         (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        temp_a2 = globalCtx->msgCtx.unk11F04;
+        temp_a2 = globalCtx->msgCtx.currentTextId;
         switch (temp_a2) {
             case 0xC1D:
             case 0xC2D:

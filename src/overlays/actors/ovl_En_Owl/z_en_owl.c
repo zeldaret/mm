@@ -365,12 +365,12 @@ void func_8095AF2C(EnOwl* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
             if (Message_ShouldAdvance(globalCtx)) {
-                if (globalCtx->msgCtx.unk11F04 == 0xBFE) {
+                if (globalCtx->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
                     func_801477B4(globalCtx);
                     this->actionFunc = func_8095ABF0;
                 } else {
-                    func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                    func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 }
             }
             break;
@@ -608,7 +608,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
             if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0xBEC:
                         switch (globalCtx->msgCtx.choiceIndex) {
                             case 0:
@@ -647,7 +647,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
 
         case 5:
             if (Message_ShouldAdvance(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0xBEA:
                         gSaveContext.weekEventReg[9] |= 0x20;
                         func_80151938(globalCtx, 0xBEB);

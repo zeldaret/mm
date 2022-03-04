@@ -684,7 +684,7 @@ void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
     EnSsh_Bob(this, globalCtx);
 
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x904:
             case 0x905:
             case 0x906:
@@ -693,7 +693,7 @@ void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
             case 0x911:
             case 0x912:
             case 0x914:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             default:
