@@ -1345,7 +1345,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     f32 sp9C;
     f32 sp98;
 
-    mtxIter = mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(RSPMatrix) * 23);
+    mtxIter = mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Mtx) * 23);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
