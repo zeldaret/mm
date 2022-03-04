@@ -86,7 +86,7 @@ extern DamageTable D_809901F8;
 extern UNK_TYPE D_0600B0E0;
 extern UNK_TYPE D_80990218;
 extern FlexSkeletonHeader D_0600B2B0;
-extern Vec3f D_8099024C;
+extern Vec3f D_8099024C;// = { 0.0f, 0.0f, 0.0f };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 // void func_8098F800(SkelAnime *skelAnime, s32 ptr, s16 len) {
@@ -181,14 +181,14 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
 // Looks just like func_809647EC in z_en_fu.c
 void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
-    Vec3f sp44 = { 0.0f, 0.0f, 0.0f }; // or should be D_8099024C??
+    Vec3f sp44 = D_8099024C; // or just { 0.0f, 0.0f, 0.0f };
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
     s32 i;
 
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk0 == 1) {
             if (DECR(ptr->unk1) == 0) {
-                ptr->unk1 = false;
+                ptr->unk0 = 0U;
             }
             ptr->unk14.y += ptr->unk30;
             ptr->unk14.x += 2.0f * Math_SinS(ptr->unk38);
