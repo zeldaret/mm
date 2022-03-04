@@ -2823,7 +2823,7 @@
     0x80147520:("func_80147520",),
     0x80147564:("func_80147564",),
     0x80147624:("Message_ShouldAdvance",),
-    0x80147734:("Message_ShouldAdvance_Silent",),
+    0x80147734:("Message_ShouldAdvanceSilent",),
     0x801477B4:("func_801477B4",),
     0x80147818:("func_80147818",),
     0x80147F18:("func_80147F18",),

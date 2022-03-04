@@ -2625,7 +2625,7 @@ void func_80147198(SramContext* param_1);
 // void func_80147520(void);
 void func_80147564(GlobalContext* globalCtx);
 s32 Message_ShouldAdvance(GlobalContext* globalCtx);
-s32 Message_ShouldAdvance_Silent(GlobalContext* globalCtx);
+s32 Message_ShouldAdvanceSilent(GlobalContext* globalCtx);
 void func_801477B4(GlobalContext* globalCtx);
 void func_80147818(GlobalContext* globalCtx, UNK_PTR puParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4);
 // void func_80147F18(GlobalContext* globalCtx, UNK_PTR puParm2, UNK_TYPE4 uParm3, UNK_TYPE4 uParm4);

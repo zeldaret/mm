@@ -2337,7 +2337,7 @@ asm/non_matchings/code/z_sram_NES/Sram_nop8014750C.s,Sram_nop8014750C,0x8014750C
 asm/non_matchings/code/z_message/func_80147520.s,func_80147520,0x80147520,0x11
 asm/non_matchings/code/z_message/func_80147564.s,func_80147564,0x80147564,0x30
 asm/non_matchings/code/z_message/Message_ShouldAdvance.s,Message_ShouldAdvance,0x80147624,0x44
-asm/non_matchings/code/z_message/Message_ShouldAdvance_Silent.s,Message_ShouldAdvance_Silent,0x80147734,0x20
+asm/non_matchings/code/z_message/Message_ShouldAdvanceSilent.s,Message_ShouldAdvanceSilent,0x80147734,0x20
 asm/non_matchings/code/z_message/func_801477B4.s,func_801477B4,0x801477B4,0x19
 asm/non_matchings/code/z_message/func_80147818.s,func_80147818,0x80147818,0x1C0
 asm/non_matchings/code/z_message/func_80147F18.s,func_80147F18,0x80147F18,0x190
