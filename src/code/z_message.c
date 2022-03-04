@@ -449,7 +449,9 @@ void func_80152464(GlobalContext* globalCtx, u16 arg1) {
 
 void func_80152C64(View* view) {
     Viewport viewport;
+    // clang-format off
     viewport.bottomY = 0xF0;viewport.rightX = 0x140;
+    // clang-format on
     viewport.topY = 0;
     viewport.leftX = 0;
 
