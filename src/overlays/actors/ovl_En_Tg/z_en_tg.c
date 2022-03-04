@@ -16,7 +16,7 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
-void func_8098FEA8(GlobalContext *globalCtx, EnTgIdk *arg1, s32 arg2);
+void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
 
 #if 0
 const ActorInit En_Tg_InitVars = {
@@ -89,12 +89,12 @@ extern FlexSkeletonHeader D_0600B2B0;
 extern Vec3f D_8099024C;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
-// void func_8098F800(SkelAnime *skelAnime, s32 arg1, s16 arg2) {
+// void func_8098F800(SkelAnime *skelAnime, s32 ptr, s16 len) {
 //     s16 temp_v0;
 //     void *temp_s0;
 //     s16 phi_f0;
 
-//     temp_s0 = arg1 + (arg2 * 0x10);
+//     temp_s0 = ptr + (len * 0x10);
 //     temp_v0 = temp_s0->unkA;
 //     if ((s32) temp_v0 < 0) {
 //         // s16 Animation_GetLastFrame(void* animation);
@@ -102,19 +102,20 @@ extern Vec3f D_8099024C;
 //     } else {
 //         phi_f0 = (f32) temp_v0;
 //     }
-//     // void Animation_Change(SkelAnime* skelAnime, AnimationHeader* animation, f32 playSpeed, f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
-//     Animation_Change(skelAnime, (AnimationHeader*) temp_s0->unk0, (f32) temp_s0->unk4, (f32) temp_s0->unk8, (f32) phi_f0, (u8) (s32) temp_s0->unkC, (f32) temp_s0->unkE);
+//     // void Animation_Change(SkelAnime* skelAnime, AnimationHeader* animation, f32 playSpeed, f32 startFrame, f32
+//     endFrame, u8 mode, f32 morphFrames); Animation_Change(skelAnime, (AnimationHeader*) temp_s0->unk0, (f32)
+//     temp_s0->unk4, (f32) temp_s0->unk8, (f32) phi_f0, (u8) (s32) temp_s0->unkC, (f32) temp_s0->unkE);
 // }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F928.s")
-void func_8098F928(EnTg* this, GlobalContext *globalCtx) {
+void func_8098F928(EnTg* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Init.s")
-void EnTg_Init(Actor *thisx, GlobalContext *globalCtx) {
+void EnTg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
@@ -129,7 +130,7 @@ void EnTg_Init(Actor *thisx, GlobalContext *globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Destroy.s")
-void EnTg_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTg* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
@@ -159,7 +160,7 @@ void EnTg_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 // }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
-void EnTg_Update(Actor *thisx, GlobalContext *globalCtx) {
+void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTg* this = THIS;
 
     this->actionFunc(this, globalCtx);
@@ -178,42 +179,27 @@ void EnTg_Update(Actor *thisx, GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
-//    temp_s2 = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
-void func_8098FEA8(GlobalContext *globalCtx, EnTgIdk *arg1, s32 arg2) {
-    Vec3f sp44;
-    s16 temp_s2;
-    s32 phi_v1;
-    s32 i = 0;
+// Looks just like func_809647EC in z_en_fu.c
+void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
+    Vec3f sp44 = { 0.0f, 0.0f, 0.0f }; // or should be D_8099024C??
+    s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
+    s32 i;
 
-    sp44.x = D_8099024C.x;
-    sp44.y = D_8099024C.y;
-    sp44.z = D_8099024C.z;
-    temp_s2 = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
-    if (arg2 > 0) {
-        do {
-            if (arg1->unk0 == 1) {
-                arg1->unk1 -= 1;
-                if (arg1->unk1 == 0) {
-                    phi_v1 = 0;
-                } else {
-                    phi_v1 = arg1->unk1 & 0xFF;
-                }
-                if (phi_v1 == 0) {
-                    arg1->unk0 = 0U;
-                }
-                arg1->unk14.x = (f32) (arg1->unk14.y + arg1->unk30);
-                arg1->unk14.y = (f32) (arg1->unk14.x + (2.0f * Math_SinS(arg1->unk38)));
-                arg1->unk14.z = (f32) (arg1->unk14.z + (2.0f * Math_CosS(arg1->unk38)));
-                Matrix_StatePush();
-                Matrix_InsertTranslation(arg1->unk14.x, arg1->unk14.y, arg1->unk14.z, 0);
-                Matrix_RotateY(temp_s2, 1);
-                Matrix_MultiplyVector3fByState(&sp44, &arg1->unk14);
-                Matrix_StatePop();
-                arg1->unk38 = (s16) (arg1->unk38 + 0x1770);
+    for (i = 0; i < len; i++, ptr++) {
+        if (ptr->unk0 == 1) {
+            if (DECR(ptr->unk1) == 0) {
+                ptr->unk1 = false;
             }
-            arg1 += 0x3C;
-            i += 1;
-        } while (i != arg2);
+            ptr->unk14.y += ptr->unk30;
+            ptr->unk14.x += 2.0f * Math_SinS(ptr->unk38);
+            ptr->unk14.z += 2.0f * Math_CosS(ptr->unk38);
+            Matrix_StatePush();
+            Matrix_InsertTranslation(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
+            Matrix_RotateY(yaw, MTXMODE_APPLY);
+            Matrix_MultiplyVector3fByState(&sp44, &ptr->unk14);
+            Matrix_StatePop();
+            ptr->unk38 += 6000;
+        }
     }
 }
 

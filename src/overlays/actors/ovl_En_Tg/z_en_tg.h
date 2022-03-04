@@ -14,8 +14,9 @@ typedef struct EnTgIdk {
     /* 0x14 */ Vec3f unk14;
     /* 0x20 */ char unk20[0x10];
     /* 0x30 */ f32 unk30;
+    /* 0x34 */ f32 unk34;
     /* 0x38 */ s16 unk38;
-} EnTgIdk; // size = ???
+} EnTgIdk; // size = 0x48
 
 typedef struct EnTg {
     /* 0x0000 */ Actor actor;
@@ -27,7 +28,7 @@ typedef struct EnTg {
     /* 0x026E */ Vec3s morphTable[21];
     /* 0x02EC */ int unk2EC;
     /* 0x02F0 */ EnTgIdk unk2F0;
-    // /* 0x02FC */ UNK_TYPE1 unk2FC[0x24C];
+    /* 0x0338 */
 } EnTg; // size = 0x548
 
 extern const ActorInit En_Tg_InitVars;
