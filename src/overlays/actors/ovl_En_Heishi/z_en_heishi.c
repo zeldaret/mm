@@ -7,7 +7,7 @@
 #include "z_en_heishi.h"
 #include "objects/object_sdn/object_sdn.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnHeishi*)thisx)
 
