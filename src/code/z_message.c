@@ -42,7 +42,6 @@ void func_80147520(void) {
         D_801CFCA4[7] = D_801CFCA4[8] = 0;
 }
 
-#ifdef NON_MATCHING
 void func_80147564(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
 
@@ -65,9 +64,6 @@ void func_80147564(GlobalContext* globalCtx) {
     D_801F6B22 = 0xA;
     D_801F6B20 = 0xA;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147564.s")
-#endif
 
 s32 Message_ShouldAdvance(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
