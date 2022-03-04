@@ -663,7 +663,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1069)) {
+            if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1069)) {
                 this->unk_32C |= 4;
                 ActorCutscene_Stop(this->cutscenes[0]);
                 player->stateFlags2 &= ~0x20000000;
@@ -786,7 +786,7 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     default:
                     case 0x1068:

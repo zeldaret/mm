@@ -534,7 +534,7 @@ void func_80B717E0(EnRailSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80B71650(this);
             }
             break;
@@ -700,7 +700,7 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
         this->unk_3F2 = 1;
     }
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_400) {
             case 0x13EC:
                 Message_StartTextbox(globalCtx, 0x13ED, &this->actor);
@@ -753,7 +753,7 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80B72100(EnRailSkb* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
             Message_StartTextbox(globalCtx, 0x13F1, &this->actor);

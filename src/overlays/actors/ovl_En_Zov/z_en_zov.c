@@ -261,7 +261,7 @@ void func_80BD187C(EnZov* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x1022:
                         func_80151938(globalCtx, 0x1023);
@@ -411,7 +411,7 @@ void func_80BD1DB8(EnZov* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x1033:
             case 0x1034:

@@ -200,7 +200,7 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_Idle;
@@ -224,7 +224,7 @@ void EnCow_GiveMilkWait(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_GiveMilkWait;
@@ -233,7 +233,7 @@ void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (Interface_HasEmptyBottle()) {
             func_80151938(globalCtx, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;

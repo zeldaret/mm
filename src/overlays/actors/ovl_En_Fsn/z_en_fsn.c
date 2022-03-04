@@ -187,7 +187,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) && this->cutsceneState == 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx) && this->cutsceneState == 0) {
         Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
@@ -802,7 +802,7 @@ void EnFsn_StartBuying(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
-    if (talkState == 5 && func_80147624(globalCtx)) {
+    if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         switch (this->actor.textId) {
             case 0x29CC:
                 this->actor.textId = 0x29CD;
@@ -830,7 +830,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (this->actor.textId) {
                 case 0x29CC:
                     if (CURRENT_DAY != 3) {
@@ -861,7 +861,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
         }
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
+        if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
             u32 trueTmp = true;
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
@@ -935,7 +935,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
     Player* player = GET_PLAYER(globalCtx);
 
-    if (talkState == 4 && func_80147624(globalCtx)) {
+    if (talkState == 4 && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
@@ -1171,7 +1171,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_SetupEndInteraction(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
+    if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(globalCtx)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
@@ -1190,7 +1190,7 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx) {
 
     if (EnFsn_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnFsn_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
+        if (!EnFsn_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnFsn_HandleCanPlayerBuyItem(this, globalCtx);
@@ -1205,7 +1205,7 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
     }
@@ -1227,7 +1227,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
         }
     }
     if (talkState == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -1243,7 +1243,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
                     break;
             }
         }
-    } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
+    } else if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(globalCtx)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
@@ -1273,7 +1273,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
         }
     }
     if (talkState == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -1290,7 +1290,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
                     break;
             }
         }
-    } else if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
+    } else if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(globalCtx)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
@@ -1311,7 +1311,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) &&
-            (!func_80147624(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx)) &&
+            (!Message_ShouldAdvance(globalCtx) || !EnFsn_FacingShopkeeperDialogResult(this, globalCtx)) &&
             this->stickAccumX > 0) {
             cursorIdx = EnFsn_SetCursorIndexFromNeutral(this);
             if (cursorIdx != CURSOR_INVALID) {
@@ -1322,7 +1322,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
                 play_sound(NA_SE_SY_CURSOR);
             }
         }
-    } else if (talkState == 5 && func_80147624(globalCtx)) {
+    } else if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         this->actor.textId = 0x29D6;
         Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
         if (globalCtx) {}
@@ -1330,7 +1330,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_SetupEndInteractionImmediately(EnFsn* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         EnFsn_EndInteraction(this, globalCtx);
     }
 }
@@ -1346,7 +1346,7 @@ void EnFsn_IdleBackroom(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_ConverseBackroom(EnFsn* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->flags & ENFSN_END_CONVERSATION) {
             this->flags &= ~ENFSN_END_CONVERSATION;
             globalCtx->msgCtx.msgMode = 0x43;

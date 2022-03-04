@@ -238,7 +238,7 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->unk_2BC == 0) && (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((this->unk_2BC == 0) && (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         Player* player = GET_PLAYER(globalCtx);
         s32 pad;
         s32 sp28 = false;
@@ -411,7 +411,7 @@ void func_809C5524(EnBomBowlMan* this, GlobalContext* globalCtx) {
 }
 
 void func_809C5598(EnBomBowlMan* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         if ((this->actor.textId == 0x72F) || (this->actor.textId == 0x730)) {
             this->actor.textId = 0x731;

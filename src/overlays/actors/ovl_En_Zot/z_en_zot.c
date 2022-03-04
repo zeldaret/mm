@@ -378,7 +378,7 @@ void func_80B97110(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B97194(EnZot* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x125C:
             case 0x125F:
@@ -447,7 +447,7 @@ void func_80B973BC(EnZot* this, GlobalContext* globalCtx) {
     func_80B96D4C(this);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x126E:
             case 0x1270:
@@ -521,7 +521,7 @@ void func_80B975F8(EnZot* this, GlobalContext* globalCtx) {
 
 void func_80B9765C(EnZot* this, GlobalContext* globalCtx) {
     func_80B96D4C(this);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         s32 requiredScopeTemp;
 
         switch (globalCtx->msgCtx.unk11F04) {
@@ -658,7 +658,7 @@ void func_80B979DC(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B97A44(EnZot* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x1279:
             case 0x127C:
@@ -718,7 +718,7 @@ void func_80B97BF8(EnZot* this, GlobalContext* globalCtx) {
 void func_80B97C40(EnZot* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         this->actionFunc = func_80B97CC8;
     }
@@ -767,7 +767,7 @@ void func_80B97E4C(EnZot* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x128C:
                 this->unk_2F2 &= ~4;
@@ -979,7 +979,7 @@ void func_80B98728(EnZot* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1293)) {
+            if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1293)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
@@ -995,7 +995,7 @@ void func_80B98728(EnZot* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x1291:
                     case 0x1292:
@@ -1091,7 +1091,7 @@ void func_80B98A4C(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B98AD0(EnZot* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x12B1:
             case 0x12B4:
@@ -1213,7 +1213,7 @@ void func_80B98F94(EnZot* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x12BB:
                 this->unk_2F2 &= ~4;
@@ -1274,7 +1274,7 @@ void func_80B991E4(EnZot* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         u16 temp = globalCtx->msgCtx.unk11F04;
         u32 temp2;
 

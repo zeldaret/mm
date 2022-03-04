@@ -502,7 +502,7 @@ void EnSob1_SetupLookToShopkeeperFromShelf(GlobalContext* globalCtx, EnSob1* thi
 }
 
 void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         EnSob1_EndInteraction(globalCtx, this);
     }
 }
@@ -606,7 +606,7 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if ((talkState == 5) && (func_80147624(globalCtx)) &&
+    if ((talkState == 5) && (Message_ShouldAdvance(globalCtx)) &&
         (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
@@ -658,7 +658,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
             if (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
-                if (!func_80147624(globalCtx) || !EnSob1_FacingShopkeeperDialogResult(this, globalCtx)) {
+                if (!Message_ShouldAdvance(globalCtx) || !EnSob1_FacingShopkeeperDialogResult(this, globalCtx)) {
                     if (this->stickAccumX > 0) {
                         cursorIdx = EnSob1_SetCursorIndexFromNeutral(this, 2);
                         if (cursorIdx != CURSOR_INVALID) {
@@ -676,7 +676,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_TalkingToShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         EnSob1_StartShopping(globalCtx, this);
     }
 }
@@ -1019,7 +1019,7 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 
     if (EnSob1_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
+        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnSob1_HandleCanBuyItem(globalCtx, this);
@@ -1036,7 +1036,7 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_CannotBuy(EnSob1* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             this->actionFunc = this->tmpActionFunc;
             func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
         }
@@ -1046,7 +1046,7 @@ void EnSob1_CannotBuy(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_CanBuy(EnSob1* this, GlobalContext* globalCtx) {
     EnGirlA* item;
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1066,7 +1066,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
@@ -1085,7 +1085,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);

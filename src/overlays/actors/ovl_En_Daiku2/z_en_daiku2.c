@@ -292,7 +292,7 @@ void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
 
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         s32 day = gSaveContext.day - 1;
 
         func_801477B4(globalCtx);

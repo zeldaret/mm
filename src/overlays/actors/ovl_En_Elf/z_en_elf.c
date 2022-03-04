@@ -1360,7 +1360,7 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 if (globalCtx->msgCtx.unk11F04 == 0x202) {
                     switch (globalCtx->msgCtx.choiceIndex) {
                         case 0:
@@ -1386,7 +1386,7 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 576:
                         func_80151938(globalCtx, 0x245);

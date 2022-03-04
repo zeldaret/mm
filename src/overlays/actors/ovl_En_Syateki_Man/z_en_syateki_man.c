@@ -252,7 +252,7 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             if (!CUR_UPG_VALUE(UPG_QUIVER)) {
                 play_sound(NA_SE_SY_ERROR);
@@ -309,7 +309,7 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_284) {
             case 0xA28:
             case 0xA29:
@@ -387,7 +387,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->stateFlags1 &= ~0x20;
@@ -519,7 +519,7 @@ void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             if (!CUR_UPG_VALUE(UPG_QUIVER)) {
                 play_sound(NA_SE_SY_ERROR);
@@ -582,7 +582,7 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
 void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_284) {
             case 0x3E8:
             case 0x3E9:
@@ -721,7 +721,7 @@ void func_809C7990(EnSyatekiMan* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 gSaveContext.weekEventReg[63] &= (u8)~1;
                 gSaveContext.weekEventReg[63] &= (u8)~2;
                 player->stateFlags1 &= ~0x20;
@@ -832,7 +832,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (CURRENT_DAY != 3) {
-        if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
             player->stateFlags1 &= ~0x20;
             this->unk_280 = 0;
             this->unk_26A = 0;

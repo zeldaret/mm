@@ -834,12 +834,7 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-typedef struct MessageTableEntry{
-    /* 0x0000 */ u16 textId;
-    /* 0x0002 */ u8 typePos;
-    /* 0x0003 */ u8 pad3;
-    /* 0x0004 */ const char* segment;
-} MessageTableEntry; // size = 0x8;
+typedef struct MessageTableEntry MessageTableEntry;
 
 typedef struct {
     /* 0x00000 */ View view;
@@ -857,7 +852,7 @@ typedef struct {
     /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F23 */ u16 unk11F24[0x67]; //messageBufDecoded?
+    /* 0x11F24 */ u16 unk11F24[0x67]; //messageBufDecoded?
     /* 0x11FF2 */ u16 unk11FF2;
     /* 0x11FF4 */ s16 unk11FF4;
     /* 0x11FF6 */ s16 unk11FF6;
@@ -907,7 +902,7 @@ typedef struct {
     /* 0x12090 */ s16 unk12090;
     /* 0x12092 */ s16 unk12092;
     /* 0x12094 */ s8 unk12094;
-    /* 0x12095 */ UNK_TYPE1 unk12096[0x2];
+    /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
     /* 0x12098 */ f32 unk12098; // Text_Scale?
     /* 0x1209C */ s16 unk1209C;
     /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];

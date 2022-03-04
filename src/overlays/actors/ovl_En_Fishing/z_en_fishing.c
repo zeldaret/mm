@@ -1127,7 +1127,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 }
 
                 if ((effect->unk_2C >= 100) && (Message_GetState(&globalCtx->msgCtx) == 5)) {
-                    if (func_80147624(globalCtx) || Message_GetState(&globalCtx->msgCtx) == 0) {
+                    if (Message_ShouldAdvance(globalCtx) || Message_GetState(&globalCtx->msgCtx) == 0) {
                         func_801477B4(globalCtx);
                         func_801159EC(-50);
                         effect->unk_2C = -1;
@@ -3876,7 +3876,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 switch (this->unk_1CD) {
                     case 0:
                         if ((Message_GetState(&globalCtx->msgCtx) == 4) || Message_GetState(&globalCtx->msgCtx) == 0) {
-                            if (func_80147624(globalCtx)) {
+                            if (Message_ShouldAdvance(globalCtx)) {
                                 func_801477B4(globalCtx);
                                 if (globalCtx->msgCtx.choiceIndex == 0) {
                                     if (D_8090CCF0 == 0.0f) {
@@ -3907,7 +3907,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                     case 1:
                         if ((Message_GetState(&globalCtx->msgCtx) == 4) || Message_GetState(&globalCtx->msgCtx) == 0) {
-                            if (func_80147624(globalCtx)) {
+                            if (Message_ShouldAdvance(globalCtx)) {
                                 func_801477B4(globalCtx);
                                 if (globalCtx->msgCtx.choiceIndex != 0) {
                                     f32 temp1 = D_8090CCF0;
@@ -4736,7 +4736,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
 
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -4764,7 +4764,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 2:
-            if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
                 func_80151938(globalCtx, 0x407F);
                 this->unk_154 = 4;
@@ -4772,7 +4772,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
                 this->unk_154 = 0;
             }
@@ -4782,7 +4782,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 4:
-            if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
 
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -4799,7 +4799,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
 
                 globalCtx->interfaceCtx.unk_27E = 1;
@@ -4816,7 +4816,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
 
         case 10:
             if (D_8090CD0C != 0) {
-                if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+                if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
                     func_801477B4(globalCtx);
 
                     switch (globalCtx->msgCtx.choiceIndex) {
@@ -4832,7 +4832,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
                     }
                 }
             } else {
-                if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+                if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
                     func_801477B4(globalCtx);
 
                     switch (globalCtx->msgCtx.choiceIndex) {
@@ -4905,7 +4905,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
 
         case 11:
             if (((Message_GetState(&globalCtx->msgCtx) == 5) || Message_GetState(&globalCtx->msgCtx) == 0) &&
-                func_80147624(globalCtx)) {
+                Message_ShouldAdvance(globalCtx)) {
                 s32 getItemId;
 
                 func_801477B4(globalCtx);
@@ -4981,14 +4981,14 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 20:
-            if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
                 this->unk_154 = 0;
             }
             break;
 
         case 21:
-            if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
 
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -5030,7 +5030,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
 
         case 24:
             D_8090CCF4 = false;
-            if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+            if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
                 if (D_809171D0 == 0) {
                     this->unk_154 = 0;
                 } else {
@@ -5370,7 +5370,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             // fallthrough
 
         case 21:
-            if ((D_8090CD50 == 0) && func_80147624(globalCtx)) {
+            if ((D_8090CD50 == 0) && Message_ShouldAdvance(globalCtx)) {
                 D_8090CD4C = 22;
                 D_8090CD50 = 40;
                 // func_800B7298 call removed in MM
@@ -5427,7 +5427,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
             if (D_8090CD50 == 0) {
                 if ((Message_GetState(&globalCtx->msgCtx) == 4) || Message_GetState(&globalCtx->msgCtx) == 0) {
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                         func_801477B4(globalCtx);

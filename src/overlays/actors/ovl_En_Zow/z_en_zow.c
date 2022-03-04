@@ -463,7 +463,7 @@ void func_80BDD570(EnZow* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x12E8:
                     case 0x12E9:

@@ -1196,7 +1196,7 @@ s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             break;
         case 4:
         case 5:
-            if (func_80147624(globalCtx) && func_808F4414(globalCtx, this, arg2)) {
+            if (Message_ShouldAdvance(globalCtx) && func_808F4414(globalCtx, this, arg2)) {
                 func_801477B4(globalCtx);
                 ret = true;
             }

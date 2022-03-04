@@ -200,7 +200,7 @@ void func_80B67148(EnSth* this, GlobalContext* globalCtx) {
 void func_80B671A0(EnSth* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = func_80B67208;
         func_801477B4(globalCtx);
     }
@@ -313,7 +313,7 @@ void func_80B67540(EnSth* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x1134:
                         func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
@@ -403,7 +403,7 @@ void func_80B677BC(EnSth* this, GlobalContext* globalCtx) {
 void func_80B67838(EnSth* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = func_80B678A8;
         func_801477B4(globalCtx);
     }
@@ -494,7 +494,7 @@ void func_80B67C1C(EnSth* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x90C:
                 func_80B670A4(this, 2);

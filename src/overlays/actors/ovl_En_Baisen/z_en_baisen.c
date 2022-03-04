@@ -220,7 +220,7 @@ void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
             EnBaisen_ChangeAnimation(this, 0);
         }
     }
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "message_struct.h"
 
 /*
 
@@ -45,7 +46,7 @@ void Message_FindMessageNES(GlobalContext *globalCtx, u16 textId) {
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = msgCtx->messageEntryTableNes;
+    MessageTableEntry* msgEntry = (MessageTableEntry*)msgCtx->messageEntryTableNes;
     const char* segment = msgEntry->segment;
 
     while(msgEntry->textId != 0xFFFF){

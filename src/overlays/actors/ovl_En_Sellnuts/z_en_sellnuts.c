@@ -438,7 +438,7 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
             func_80151938(globalCtx, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
-    } else if ((msgState == 5) && func_80147624(globalCtx)) {
+    } else if ((msgState == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
             func_80151938(globalCtx, this->unk_340);
@@ -468,7 +468,7 @@ void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 6);
     }
 
-    if ((sp27 == 5) && func_80147624(globalCtx)) {
+    if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80ADBBEC;
@@ -497,7 +497,7 @@ void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBCE4(EnSellnuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
@@ -514,7 +514,7 @@ void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 0);
     }
 
-    if ((sp27 == 5) && func_80147624(globalCtx)) {
+    if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_338 &= ~2;
@@ -556,7 +556,7 @@ void func_80ADBE80(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBFA0(EnSellnuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->unk_34C == 0) {
@@ -719,7 +719,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -749,7 +749,7 @@ void func_80ADC7B4(EnSellnuts* this, GlobalContext* globalCtx) {
             }
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-    } else if ((this->unk_366 == 1) && (temp == 5) && func_80147624(globalCtx)) {
+    } else if ((this->unk_366 == 1) && (temp == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_366 = 0;

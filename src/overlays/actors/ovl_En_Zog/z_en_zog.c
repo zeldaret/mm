@@ -613,7 +613,7 @@ void func_80B943EC(EnZog* this, GlobalContext* globalCtx) {
 
 void func_80B94470(EnZog* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5) {
-        if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x103C)) {
+        if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x103C)) {
             func_801477B4(globalCtx);
             this->actionFunc = func_80B9451C;
             this->unk_300 = this->unk_302 = 0;
@@ -664,7 +664,7 @@ void func_80B946B4(EnZog* this, GlobalContext* globalCtx) {
 void func_80B946FC(EnZog* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
@@ -682,7 +682,7 @@ void func_80B946FC(EnZog* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x1008:
                         func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
@@ -827,7 +827,7 @@ void func_80B94D0C(EnZog* this, GlobalContext* globalCtx) {
         this->unk_31E = 0;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         this->unk_320 = 5;
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x1004:

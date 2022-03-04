@@ -372,7 +372,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 Message_StartTextbox(globalCtx, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
@@ -381,7 +381,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->actionFunc = func_80995244;
             }
             break;

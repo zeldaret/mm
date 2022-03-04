@@ -1,4 +1,5 @@
 #include "global.h"
+#include "message_struct.h"
 
 //Message_FindMessageStaff(globalCtx, textId)
 void Message_FindMessageStaff(GlobalContext *globalCtx, u16 textId) {
@@ -6,7 +7,7 @@ void Message_FindMessageStaff(GlobalContext *globalCtx, u16 textId) {
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = msgCtx->messageTableStaff;
+    MessageTableEntry* msgEntry = (MessageTableEntry*)msgCtx->messageTableStaff;
     const char* segment = msgEntry->segment;
 
      while(msgEntry->textId != 0xFFFF){

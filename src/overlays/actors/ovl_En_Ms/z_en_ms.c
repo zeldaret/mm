@@ -99,13 +99,13 @@ void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
 void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 6:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 this->actionFunc = EnMs_Wait;
             }
             break;
 
         case 5:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 func_801477B4(globalCtx);
                 Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
                              this->actor.playerHeightRel);
@@ -114,7 +114,7 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
             break;
 
         case 4:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0: // yes
                         func_801477B4(globalCtx);

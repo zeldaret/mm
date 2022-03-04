@@ -683,7 +683,7 @@ void EnSsh_Wait(EnSsh* this, GlobalContext* globalCtx) {
 void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
     EnSsh_Bob(this, globalCtx);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x904:
             case 0x905:

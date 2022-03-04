@@ -301,7 +301,7 @@ void func_80BBB574(EnZos* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x124B:
                 if (this->unk_2B8 == 9) {
@@ -386,7 +386,7 @@ void func_80BBB8AC(EnZos* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x1237:
                 player->exchangeItemId = 0;
@@ -582,7 +582,7 @@ void func_80BBC070(EnZos* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80BBAE84(this, 2, 0);
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80BBC14C;

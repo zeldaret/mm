@@ -207,7 +207,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
         case 4:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                 switch (globalCtx->msgCtx.choiceIndex) {
@@ -235,7 +235,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
         case 5:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x5DE:

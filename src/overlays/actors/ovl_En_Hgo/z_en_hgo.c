@@ -185,7 +185,7 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
             func_80BD06FC(this, globalCtx);
             break;
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80BD049C(this);
             }
     }
@@ -194,7 +194,7 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_314) {
             case 0x158F:
                 Message_StartTextbox(globalCtx, 0x1590, &this->actor);

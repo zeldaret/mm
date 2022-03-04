@@ -524,7 +524,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     EnOssan_RotateHead(this, globalCtx);
-    if (talkState == 5 && func_80147624(globalCtx)) {
+    if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             this->animationIdx = 1;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
@@ -542,7 +542,7 @@ void EnOssan_Hello(EnOssan* this, GlobalContext* globalCtx) {
         }
     }
     if (talkState == 10 && this->actor.params == ENOSSAN_PART_TIME_WORKER &&
-        player->transformation == PLAYER_FORM_ZORA && func_80147624(globalCtx)) {
+        player->transformation == PLAYER_FORM_ZORA && Message_ShouldAdvance(globalCtx)) {
         this->animationIdx = 9;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 9);
     }
@@ -593,7 +593,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
             if (!EnOssan_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) &&
-                (!func_80147624(globalCtx) || !EnOssan_FacingShopkeeperDialogResult(this, globalCtx))) {
+                (!Message_ShouldAdvance(globalCtx) || !EnOssan_FacingShopkeeperDialogResult(this, globalCtx))) {
                 if (this->stickAccumX < 0) {
                     cursorIdx = EnOssan_SetCursorIndexFromNeutral(this, 4);
                     if (cursorIdx != CURSOR_INVALID) {
@@ -626,7 +626,7 @@ void EnOssan_FaceShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_TalkToShopkeeper(EnOssan* this, GlobalContext* globalCtx) {
     AnimationInfoS* animations = sAnimations[this->actor.params];
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->animationIdx == 9 && this->actor.params == ENOSSAN_PART_TIME_WORKER) {
             this->animationIdx = 1;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, 1);
@@ -1014,7 +1014,7 @@ void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
 
     if (EnOssan_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnOssan_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
+        if (!EnOssan_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnOssan_HandleCanBuyItem(globalCtx, this);
@@ -1030,7 +1030,7 @@ void EnOssan_SelectItem(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_CannotBuy(EnOssan* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
     }
@@ -1039,7 +1039,7 @@ void EnOssan_CannotBuy(EnOssan* this, GlobalContext* globalCtx) {
 void EnOssan_CanBuy(EnOssan* this, GlobalContext* globalCtx) {
     EnGirlA* item;
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1059,7 +1059,7 @@ void EnOssan_BuyItemWithFanfare(EnOssan* this, GlobalContext* globalCtx) {
 }
 
 void EnOssan_SetupItemPurchased(EnOssan* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnOssan_SetupAction(this, EnOssan_ItemPurchased);
@@ -1081,7 +1081,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
 
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnOssan_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
@@ -1103,7 +1103,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
                 }
             }
         }
-    } else if (talkState == 5 && func_80147624(globalCtx)) {
+    } else if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         EnOssan_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);

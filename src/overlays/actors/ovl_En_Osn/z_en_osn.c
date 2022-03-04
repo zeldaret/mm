@@ -746,7 +746,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
-    if ((temp_v0 == 6 || temp_v0 == 5) && func_80147624(globalCtx)) {
+    if ((temp_v0 == 6 || temp_v0 == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_1EA & 0x20) {
             this->unk_1EA &= ~0x20;
             globalCtx->msgCtx.msgMode = 0x43;

@@ -259,7 +259,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
 
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         EnMinifrog_SetJumpState(this);
 
         switch (globalCtx->msgCtx.unk11F04) {
@@ -496,7 +496,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_Jump(this);
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0: // Yes
                         func_8019F208();
@@ -511,7 +511,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
             }
             break;
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 EnMinifrog_SetJumpState(this);
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0xD76: // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it looks like

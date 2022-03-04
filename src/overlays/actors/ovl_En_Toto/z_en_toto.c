@@ -408,7 +408,7 @@ s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA40D4(EnToto* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         return 1;
     }
     return 0;
@@ -422,7 +422,7 @@ s32 func_80BA4128(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 4 && Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             func_8019F230();
         } else {

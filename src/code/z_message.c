@@ -1,4 +1,5 @@
 #include "global.h"
+#include "message_struct.h"
 
 #if 0
 
@@ -32,6 +33,8 @@ extern s16 D_801F6B1C;
 extern s16 D_801F6B1E;
 extern s16 D_801F6B20;
 extern s16 D_801F6B22;
+extern MessageTableEntry D_801C6B98[];
+extern MessageTableEntry D_801CFB08[];
 
 
 void func_80147520(void) {
@@ -68,10 +71,8 @@ void func_80147564(GlobalContext *globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147564.s")
 #endif
 
-
-#ifdef NON_MATCHING
 //Message_ShouldAdvance
-s32 func_80147624(GlobalContext *globalCtx) {
+s32 Message_ShouldAdvance(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Input* controller = CONTROLLER1(globalCtx);
 
@@ -88,14 +89,9 @@ s32 func_80147624(GlobalContext *globalCtx) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A) ||  CHECK_BTN_ALL(controller->press.button,BTN_B) || CHECK_BTN_ALL(controller->press.button, BTN_CUP);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147624.s")
-#endif
-
-#ifdef NON_MATCHING
 
 //Message_ShouldAdvance_Silent
-s32 func_80147734(GlobalContext *globalCtx) {
+s32 Message_ShouldAdvance_Silent(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Input* controller = CONTROLLER1(globalCtx);
 
@@ -106,11 +102,7 @@ s32 func_80147734(GlobalContext *globalCtx) {
             ||  CHECK_BTN_ALL(controller->press.button, BTN_CUP);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147734.s")
-#endif
 
-#ifdef NON_MATCHING
 void func_801477B4(GlobalContext *globalCtx) {
     MessageContext *msgCtx;
 
@@ -122,9 +114,6 @@ void func_801477B4(GlobalContext *globalCtx) {
         play_sound(0U);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801477B4.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80147818.s")
 
@@ -202,7 +191,7 @@ void Message_FindMessage(GlobalContext *globalCtx, u16 textId) {
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = msgCtx->messageEntryTable;
+    MessageTableEntry* msgEntry = (MessageTableEntry*)msgCtx->messageEntryTable;
     const char* segment = msgEntry->segment;
 
     while(msgEntry->textId != 0xFFFF){
@@ -385,6 +374,7 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
     }
 }
 
+#ifdef NON_MATCHING
 void func_80151A68(GlobalContext *globalCtx, u16 textId) {
     MessageContext *msgCtx = &globalCtx->msgCtx;
     u32 temp = 0x1E;
@@ -414,7 +404,9 @@ void func_80151A68(GlobalContext *globalCtx, u16 textId) {
         Interface_ChangeAlpha(1U);
     }
 }
-
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151A68.s")
+#endif
 
 void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -488,27 +480,10 @@ void func_80152C64(View *view) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
 
-#if 0
->>>>>>> z_message_nes & z_message_staff progress
-
-s16 D_801D02D8[15] = {
-    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
-    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
-    ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
-    ACTOR_OCEFF_WIPE,  ACTOR_OCEFF_WIPE7, // Song of Time Effect, Song of Healing Effect
-    ACTOR_OCEFF_WIPE2, ACTOR_OCEFF_WIPE6, // Epona's Song Effect, Song of Soaring Effect
-    ACTOR_OCEFF_STORM, ACTOR_OCEFF_SPOT,  // Song of Storms Effect II [?], Sun's Song Effect
-    ACTOR_OCEFF_WIPE, ACTOR_OCEFF_WIPE,   // Song of Time Effect, Song of Time Effect
-    ACTOR_OCEFF_WIPE4                     // Scarecrow's Song Effect 
-};
-s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
-
-#endif
-
 //Spawn song effect?
 void func_80152EC0(GlobalContext *globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Actor* actor = (Actor*)PLAYER;
+    Actor* actor = (Actor*)GET_PLAYER(globalCtx);
     
     if(1){}
     if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) && ((msgCtx->ocarinaAction < 0x43) || (msgCtx->ocarinaAction >= 0x47))) {

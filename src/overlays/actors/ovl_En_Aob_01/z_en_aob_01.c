@@ -433,7 +433,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.rupees < 10) {
@@ -457,7 +457,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
                     break;
             }
         }
-    } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
+    } else if ((temp_v0 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_210 = 0;
@@ -561,7 +561,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 &= ~8;
         }
     } else if (sp2F == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             this->unk_2D2 &= ~0x40;
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
@@ -577,7 +577,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
             }
         }
     } else if (sp2F == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             this->unk_2D2 &= ~0x40;
             if (this->unk_2D2 & 0x10) {
                 this->unk_2D2 &= ~0x10;
@@ -588,7 +588,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
                 func_809C16DC(this, globalCtx);
             }
         }
-    } else if ((sp2F == 14) && func_80147624(globalCtx)) {
+    } else if ((sp2F == 14) && Message_ShouldAdvance(globalCtx)) {
         this->unk_2D2 &= ~0x40;
         this->unk_434 = globalCtx->msgCtx.bankRupeesSelected;
         func_809C16DC(this, globalCtx);
@@ -749,7 +749,7 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
     u8 sp2F = Message_GetState(&globalCtx->msgCtx);
 
     if (func_809C15BC(this)) {
-        if ((sp2F == 5) && func_80147624(globalCtx)) {
+        if ((sp2F == 5) && Message_ShouldAdvance(globalCtx)) {
             this->unk_434 = 0;
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -778,7 +778,7 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
 void func_809C2BE4(EnAob01* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
-    if (((temp_v0 == 5) || (temp_v0 == 6)) && func_80147624(globalCtx)) {
+    if (((temp_v0 == 5) || (temp_v0 == 6)) && Message_ShouldAdvance(globalCtx)) {
         if (gSaveContext.weekEventReg[63] & 2) {
             gSaveContext.weekEventReg[63] &= (u8)~2;
         }
@@ -819,7 +819,7 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((sp2F == 5) && func_80147624(globalCtx)) {
+    if ((sp2F == 5) && Message_ShouldAdvance(globalCtx)) {
         this->unk_2D2 &= ~0x40;
         this->unk_2D2 &= ~0x80;
         if (this->unk_434 >= 150) {

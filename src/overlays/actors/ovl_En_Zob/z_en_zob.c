@@ -368,7 +368,7 @@ void func_80BA00BC(EnZob* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1212)) {
+            if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1212)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 1:
                         func_8019F208();
@@ -386,7 +386,7 @@ void func_80BA00BC(EnZob* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x1208:
                     case 0x120E:
@@ -453,7 +453,7 @@ void func_80BA0374(EnZob* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1205)) {
+            if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1205)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
@@ -470,7 +470,7 @@ void func_80BA0374(EnZob* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x11F8:
                         gSaveContext.weekEventReg[30] |= 2;
@@ -631,7 +631,7 @@ void func_80BA0A04(EnZob* this, GlobalContext* globalCtx) {
 
     temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 2) {
-        if ((temp_v0 == 5) && func_80147624(globalCtx)) {
+        if ((temp_v0 == 5) && Message_ShouldAdvance(globalCtx)) {
             func_801477B4(globalCtx);
             this->actionFunc = func_80BA0AD8;
             this->unk_304 = 0;

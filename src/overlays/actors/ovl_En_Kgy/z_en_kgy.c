@@ -457,7 +457,7 @@ void func_80B4163C(EnKgy* this, GlobalContext* globalCtx) {
 
 void func_80B417B8(EnKgy* this, GlobalContext* globalCtx) {
     func_80B4163C(this, globalCtx);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B413C8(this);
         this->actor.flags &= ~ACTOR_FLAG_100;
@@ -481,7 +481,7 @@ void func_80B41858(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B418C4(EnKgy* this, GlobalContext* globalCtx) {
     func_80B4163C(this, globalCtx);
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx) &&
+        (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx) &&
         ((globalCtx->msgCtx.unk11F04 == 0xC4E) || (globalCtx->msgCtx.unk11F04 == 0xC4F))) {
         func_801477B4(globalCtx);
         this->actor.textId = 0xC4F;
@@ -616,7 +616,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && func_80B40E54(this) == 0) {
         switch (Message_GetState(&globalCtx->msgCtx)) {
             case 4:
-                if (func_80147624(globalCtx)) {
+                if (Message_ShouldAdvance(globalCtx)) {
                     temp = globalCtx->msgCtx.unk11F04;
 
                     switch (temp) {
@@ -658,7 +658,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                 break;
 
             case 5:
-                if (func_80147624(globalCtx)) {
+                if (Message_ShouldAdvance(globalCtx)) {
                     temp = globalCtx->msgCtx.unk11F04;
 
                     switch (temp) {
@@ -856,7 +856,7 @@ void func_80B425A0(EnKgy* this, GlobalContext* globalCtx) {
 void func_80B42660(EnKgy* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.focus.pos = this->unk_2A8;
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B413C8(this);
         this->actor.flags &= ~ACTOR_FLAG_100;
@@ -897,7 +897,7 @@ void func_80B427C8(EnKgy* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         temp_a2 = globalCtx->msgCtx.unk11F04;
 
         switch (temp_a2) {
@@ -969,7 +969,7 @@ void func_80B42A8C(EnKgy* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2E4 <= 0) && !(this->unk_29C & 2) && (func_80B40E54(this) == 0) &&
-        (Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        (Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         temp_a2 = globalCtx->msgCtx.unk11F04;
         switch (temp_a2) {
             case 0xC1D:

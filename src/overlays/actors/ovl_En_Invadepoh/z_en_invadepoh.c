@@ -3402,7 +3402,7 @@ void func_80B4ADB8(EnInvadepoh* this) {
 }
 
 void func_80B4ADCC(EnInvadepoh* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x3331) {
             if (gSaveContext.weekEventReg[22] & 2) {
                 EnInvadepoh_SetTextID(this, globalCtx, 0x3334);

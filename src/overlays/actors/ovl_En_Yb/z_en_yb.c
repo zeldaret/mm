@@ -287,7 +287,7 @@ void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     EnYb_UpdateAnimation(this, globalCtx);
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
         switch (globalCtx->msgCtx.unk11F04) {
             case 0x147D: // I am counting on you
                 func_801477B4(globalCtx);

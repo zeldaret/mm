@@ -415,7 +415,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                             break;
 
                         case 9:
-                            if (func_80147624(globalCtx)) {
+                            if (Message_ShouldAdvance(globalCtx)) {
                                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 10, &this->unk_32C);
                                 globalCtx->msgCtx.msgMode = 0x44;
                             }
@@ -432,13 +432,13 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0x80C:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         func_80151938(globalCtx, 0x80D);
                     }
                     break;
 
                 case 0x80D:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         func_80151938(globalCtx, 0x80E);
                     }
                     break;
@@ -450,20 +450,20 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 13, &this->unk_32C);
                         }
-                    } else if ((this->unk_32C == 13) && func_80147624(globalCtx)) {
+                    } else if ((this->unk_32C == 13) && Message_ShouldAdvance(globalCtx)) {
                         func_801477B4(globalCtx);
                         func_80A71B68(this, globalCtx);
                     }
                     break;
 
                 case 0x80F:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         func_80151938(globalCtx, 0x810);
                     }
                     break;
 
                 case 0x810:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         this->unk_3B0 |= 0x20;
                         func_801477B4(globalCtx);
                         func_80A71B68(this, globalCtx);
@@ -484,7 +484,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0x811:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         func_801477B4(globalCtx);
                         func_80A71B68(this, globalCtx);
                     }
@@ -599,7 +599,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
             switch (globalCtx->msgCtx.unk11F04) {
                 case 0x800:
                 case 0x801:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         globalCtx->msgCtx.msgMode = 0x44;
                         this->unk_452 = 1;
                         this->unk_454 = 0.0f;
@@ -608,7 +608,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0x802:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         if (INV_CONTENT(ITEM_MASK_SCENTS) == ITEM_MASK_SCENTS) {
                             this->unk_458 = GI_RUPEE_RED;
                         } else {
@@ -621,14 +621,14 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0x803:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         func_80A72AE4(this, globalCtx);
                     }
                     break;
 
                 case 0x804:
                     if (this->unk_32C == 14) {
-                        if (func_80147624(globalCtx)) {
+                        if (Message_ShouldAdvance(globalCtx)) {
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 5, &this->unk_32C);
                             if (!(this->unk_3B0 & 0x40)) {
                                 func_80A72CF8(this, globalCtx);
@@ -642,7 +642,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0x806:
-                    if (func_80147624(globalCtx)) {
+                    if (Message_ShouldAdvance(globalCtx)) {
                         func_80151938(globalCtx, 0x800);
                     }
                     break;

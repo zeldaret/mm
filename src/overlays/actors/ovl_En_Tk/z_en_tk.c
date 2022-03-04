@@ -579,7 +579,7 @@ void func_80AED610(EnTk* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x13FD:
                         this->unk_2CA |= 0x10;
@@ -828,7 +828,7 @@ void func_80AEDF5C(EnTk* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x1404:
                         this->unk_2CA |= 0x1000;
