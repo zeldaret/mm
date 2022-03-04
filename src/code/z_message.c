@@ -88,7 +88,7 @@ s32 Message_ShouldAdvance(GlobalContext* globalCtx) {
     }
 }
 
-s32 Message_ShouldAdvance_Silent(GlobalContext* globalCtx) {
+s32 Message_ShouldAdvanceSilent(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Input* controller = CONTROLLER1(globalCtx);
 
