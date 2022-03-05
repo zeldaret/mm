@@ -104,7 +104,7 @@ void func_801477B4(GlobalContext* globalCtx) {
         msgCtx->unk12023 = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
-        play_sound(0U);
+        play_sound(NA_SE_PL_WALK_GROUND - SFX_FLAG);
     }
 }
 
