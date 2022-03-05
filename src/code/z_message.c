@@ -219,7 +219,7 @@ void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset,
     f32 temp2 = *arg3;
 
     Font_LoadChar(globalCtx, codePointIndex, temp1);
-    msgCtx->decodedBuffer[decodedBufPos] = codePointIndex;
+    msgCtx->decodedBuffer.wchar[decodedBufPos] = codePointIndex;
     temp1 += 128;
     temp2 += (16.0f * msgCtx->unk12098);
     *offset = temp1;
@@ -235,15 +235,15 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
 
     Font_LoadChar(globalCtx, 0x838BU, k);
     k += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer[t] = 0x838B;
+    msgCtx->decodedBuffer.wchar[t] = 0x838B;
     t += 1;
     Font_LoadChar(globalCtx, 0x8373U, k);
     k += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer[t] = 0x8373;
+    msgCtx->decodedBuffer.wchar[t] = 0x8373;
     t += 1;
     Font_LoadChar(globalCtx, 0x815CU, k);
     k += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer[t] = 0x815C;
+    msgCtx->decodedBuffer.wchar[t] = 0x815C;
 
     f += 16.0f * msgCtx->unk12098 * 3.0f;
     *decodedBufPos = t;
