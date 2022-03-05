@@ -934,9 +934,9 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(globalCtx);
 
-                func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF, &player->unk_3C0,
-                              player->unk_3CC);
-                func_80169EFC(globalCtx);
+                Play_SetRespawnData(&globalCtx->state, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
+                                    &player->unk_3C0, player->unk_3CC);
+                func_80169EFC(&globalCtx->state);
 
                 if (0) {}
                 if (gSaveContext.time > CLOCK_TIME(18, 0) || gSaveContext.time < CLOCK_TIME(6, 0)) {
