@@ -10,7 +10,9 @@ typedef void (*EnTgActionFunc)(struct EnTg*, GlobalContext*);
 typedef struct EnTgIdk {
     /* 0x00 */ u8 unk0;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ char unk2[0x12];
+    /* 0x02 */ char unk2[0x2];
+    /* 0x04 */ f32 unk4;
+    /* 0x08 */ char unk8[0xC];
     /* 0x14 */ Vec3f unk14;
     /* 0x20 */ char unk20[0x10];
     /* 0x30 */ f32 unk30;
