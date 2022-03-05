@@ -5,8 +5,9 @@
  */
 
 #include "z_en_bji_01.h"
+#include "objects/object_bji/object_bji.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBji01*)thisx)
 
@@ -26,17 +27,9 @@ void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD70C(EnBji01* this, GlobalContext* globalCtx);
 void func_809CD77C(EnBji01* this, GlobalContext* globalCtx);
 
-s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
-void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
-
-extern AnimationHeader D_06000FDC;
-extern AnimationHeader D_06005B58;
-extern AnimationHeader D_06000AB0;
-extern AnimationHeader D_0600066C;
-extern void* D_060049F0[];
-extern void* D_06004E70[];
-extern void* D_06005270[];
-extern FlexSkeletonHeader D_0600578C;
+s32 EnBji01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* thisx);
+void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 const ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
@@ -71,11 +64,11 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 /* Animations struct */
-static struct_80B8E1A8 D_809CDC7C[] = {
-    { &D_06000FDC, 1.0f, 0, 0.0f },  /* Looking through telescope */
-    { &D_06005B58, 1.0f, 0, 10.0f }, /* Breathing? Unused? */
-    { &D_06000AB0, 1.0f, 0, 0.0f },  /* Talking */
-    { &D_0600066C, 1.0f, 2, -5.0f }, /* Scratching chin? */
+static AnimationSpeedInfo D_809CDC7C[] = {
+    { &object_bji_Anim_000FDC, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Looking through telescope */
+    { &object_bji_Anim_005B58, 1.0f, ANIMMODE_LOOP, 10.0f }, /* Breathing? Unused? */
+    { &object_bji_Anim_000AB0, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Talking */
+    { &object_bji_Anim_00066C, 1.0f, ANIMMODE_ONCE, -5.0f }, /* Scratching chin? */
 };
 
 void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
@@ -91,7 +84,7 @@ void func_809CCDE0(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CCE98(EnBji01* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 0, &this->animationIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
 }
@@ -100,13 +93,13 @@ void func_809CCEE8(EnBji01* this, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 0x444);
     if (this->actor.params == ENBJI01_PARAMS_DEFAULT) {
         if ((this->actor.xzDistToPlayer <= 60.0f) && (this->actor.playerHeightRel <= 10.0f)) {
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
         } else {
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
         }
     }
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         func_809CD028(this, globalCtx);
     } else {
@@ -190,7 +183,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                             tempDay = gSaveContext.day;
                             tempTimeBeforeMoonCrash =
                                 ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.time - 0x4000))) + 0x40000);
-                            if (tempTimeBeforeMoonCrash < 2730.6667f) { /* 1 hr */
+                            if (tempTimeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) { /* 1 hr */
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
@@ -200,7 +193,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
             }
             break;
     }
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = EnBji01_DialogueHandler;
 }
 
@@ -210,12 +203,12 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
             func_809CCDE0(this, globalCtx);
             if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
             }
             break;
         case 4:
             if (func_80147624(globalCtx) != 0) {
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
@@ -243,10 +236,10 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 5:
             if (func_80147624(globalCtx) != 0) {
-                this->actor.flags &= ~0x10000;
+                this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (globalCtx->msgCtx.unk11F04) {
                     case 0x5DE:
-                        func_8013E1C8(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 3, &this->animationIndex);
                         func_80151938(globalCtx, 0x5DF);
                         break;
                     case 0x5E4:
@@ -283,7 +276,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
                     case 0x5F7:
                     case 0x5F8:
                         func_801477B4(globalCtx);
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
                         func_809CCE98(this, globalCtx);
                         break;
@@ -292,12 +285,12 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             break;
         case 6:
             this->actor.params = ENBJI01_PARAMS_FINISHED_CONVERSATION;
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
             func_809CCE98(this, globalCtx);
             break;
     }
     if ((this->animationIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-        func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     }
 }
 
@@ -315,7 +308,7 @@ void EnBji01_DoNothing(EnBji01* this, GlobalContext* globalCtx) {
 }
 
 void func_809CD6C0(EnBji01* this, GlobalContext* globalCtx) {
-    func_8013E1C8(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_809CDC7C, 2, &this->animationIndex);
     this->actionFunc = func_809CD70C;
 }
 
@@ -338,8 +331,8 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBji01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600578C, &D_06000FDC, this->jointTable, this->morphTable,
-                       BJI_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bji_Skel_00578C, &object_bji_Anim_000FDC, this->jointTable,
+                       this->morphTable, BJI_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -348,8 +341,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->animationIndex = -1;
 
     Actor_SetScale(&this->actor, 0.01f);
-    func_8013E3B8(&this->actor, this->cutscenes,
-                  ARRAY_COUNT(this->cutscenes)); /* initializes all elements of cutscenes to -1 */
+    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     this->moonsTear = (ObjMoonStone*)SubS_FindActor(globalCtx, NULL, ACTORCAT_PROP, ACTOR_OBJ_MOON_STONE);
 
     switch (gSaveContext.entranceIndex) {
@@ -359,7 +351,7 @@ void EnBji01_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_809CCE98(this, globalCtx);
             break;
         case 0x4C20: /* Observatory from Termina Field telescope */
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_801A5BD0(0);
             Audio_QueueSeqCmd(0xE0000100);
             this->actor.params = ENBJI01_PARAMS_LOOKED_THROUGH_TELESCOPE;
@@ -441,7 +433,7 @@ void EnBji01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 }
 
 void EnBji01_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static void* sEyeTextures[] = { D_060049F0, D_06004E70, D_06005270 };
+    static TexturePtr sEyeTextures[] = { object_bji_Tex_0049F0, object_bji_Tex_004E70, object_bji_Tex_005270 };
     EnBji01* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

@@ -76,9 +76,9 @@ typedef struct {
     f32 data[5];
 } EnBox_PlaybackSpeed; // 0x14
 
-EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
+static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
 
-AnimationHeader* sAnimations[5] = {
+static AnimationHeader* sAnimations[5] = {
     &gBoxChestOpenAdultAnim, &gBoxChestOpenGoronAnim, &gBoxChestOpenAdultAnim,
     &gBoxChestOpenDekuAnim,  &gBoxChestOpenChildAnim,
 };
@@ -147,7 +147,7 @@ void func_80867C8C(func_80867BDC_a0* arg0, GlobalContext* globalCtx) {
             Matrix_InsertMatrix(&globalCtx->billboardMtxF, 1);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023210);
+            gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         }
         Matrix_StatePop();
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

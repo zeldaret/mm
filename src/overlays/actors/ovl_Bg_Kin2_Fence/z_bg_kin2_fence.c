@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_kin2_fence.h"
+#include "objects/object_kin2_obj/object_kin2_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgKin2Fence*)thisx)
 
@@ -118,22 +119,19 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-extern Gfx D_06000828[];
-extern CollisionHeader D_06000908;
-
 s32 BgKin2Fence_CheckHitMask(BgKin2Fence* this) {
     ColliderJntSphElement* elements = this->collider.elements;
 
-    if (elements[0].info.bumperFlags & 2) {
+    if (elements[0].info.bumperFlags & BUMP_HIT) {
         return 0;
     }
-    if (elements[1].info.bumperFlags & 2) {
+    if (elements[1].info.bumperFlags & BUMP_HIT) {
         return 1;
     }
-    if (elements[2].info.bumperFlags & 2) {
+    if (elements[2].info.bumperFlags & BUMP_HIT) {
         return 2;
     }
-    if (elements[3].info.bumperFlags & 2) {
+    if (elements[3].info.bumperFlags & BUMP_HIT) {
         return 3;
     }
     return -1;
@@ -159,7 +157,7 @@ void BgKin2Fence_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000908);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kin2_obj_Colheader_000908);
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->dyna.actor, &sJntSphInit, this->colliderElements);
     Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
@@ -272,5 +270,5 @@ void BgKin2Fence_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgKin2Fence_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, D_06000828);
+    Gfx_DrawDListOpa(globalCtx, object_kin2_obj_DL_000828);
 }

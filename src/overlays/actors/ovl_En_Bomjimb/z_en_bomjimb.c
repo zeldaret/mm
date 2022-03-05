@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBomjimb*)thisx)
 
@@ -661,7 +661,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     func_80C0113C(this, 21, 1.0f);
     if ((player->transformation != PLAYER_FORM_DEKU) && (player->transformation != PLAYER_FORM_HUMAN)) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -673,7 +673,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[73] & 0x10)) ||
         ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.weekEventReg[85] & 2))) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -683,7 +683,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     }
 
     idx = gSaveContext.unk_FE6;
-    func_801518B0(globalCtx, D_80C03230[idx], &this->actor);
+    Message_StartTextbox(globalCtx, D_80C03230[idx], &this->actor);
     idx = gSaveContext.unk_FE6;
     gSaveContext.unk_FE7[idx] = this->unk_2C8 + 1;
     gSaveContext.unk_FE6++;
@@ -897,13 +897,12 @@ void EnBomjimb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjimb_D_80C03250, gEnBomjimb_D_80C03250,
     };
     static TexturePtr D_80C03274[] = {
-        &object_cs_Tex_00C520,
-        &object_cs_Tex_00CD20,
-        &object_cs_Tex_00D520,
+        object_cs_Tex_00C520,
+        object_cs_Tex_00CD20,
+        object_cs_Tex_00D520,
     };
     static TexturePtr D_80C03280[] = {
-        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
-        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
+        object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
     EnBomjimb* this = THIS;
 

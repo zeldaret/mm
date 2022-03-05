@@ -7,7 +7,7 @@
 #include "z_en_zog.h"
 #include "objects/object_zog/object_zog.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnZog*)thisx)
 
@@ -65,9 +65,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-static TexturePtr D_80B958AC[] = { &object_zog_Tex_024750, &object_zog_Tex_024F50, &object_zog_Tex_025750 };
+static TexturePtr D_80B958AC[] = { object_zog_Tex_024750, object_zog_Tex_024F50, object_zog_Tex_025750 };
 
-static TexturePtr D_80B958B8[] = { &object_zog_Tex_025F50, &object_zog_Tex_026750 };
+static TexturePtr D_80B958B8[] = { object_zog_Tex_025F50, object_zog_Tex_026750 };
 
 static AnimationHeader* D_80B958C0[] = {
     &object_zog_Anim_00FC0C, &object_zog_Anim_0106B0, &object_zog_Anim_0166F4, &object_zog_Anim_017170,
@@ -206,7 +206,7 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA) &&
-        ((globalCtx->csCtx.unk_12 != 2) || (gSaveContext.sceneSetupIndex != 0) ||
+        ((globalCtx->csCtx.currentCsIndex != 2) || (gSaveContext.sceneSetupIndex != 0) ||
          (globalCtx->sceneNum != SCENE_30GYOSON))) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -256,7 +256,7 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->actor.flags |= 0x10000;
+    this->actor.flags |= ACTOR_FLAG_10000;
     this->actor.home.rot.z = 0;
     if (ENZOG_GET_F(&this->actor) != ENZOG_F_2) {
         for (i = 0; i < 5; i++) {
@@ -268,8 +268,8 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
     if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (gSaveContext.weekEventReg[88] & 0x10)) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
-        this->actor.flags |= 0x2000000;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags |= ACTOR_FLAG_2000000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_31C = 2;
         this->unk_31E = 0;
 
@@ -459,9 +459,9 @@ s32 func_80B93EA0(EnZog* this, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if (func_800EE29C(globalCtx, 0x1D7)) {
-        sp3E = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1D7)]->unk0;
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x1D7));
+    if (Cutscene_CheckActorAction(globalCtx, 471)) {
+        sp3E = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 471)]->action;
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 471));
 
         switch (this->unk_306) {
             case 2:
@@ -628,7 +628,7 @@ void func_80B9451C(EnZog* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
-    } else if ((globalCtx->msgCtx.unk1202A == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((globalCtx->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
@@ -644,7 +644,7 @@ void func_80B9461C(EnZog* this, GlobalContext* globalCtx) {
     if (!func_80B93EA0(this, globalCtx)) {
         this->actor.textId = 0x103C;
         this->actionFunc = func_80B9451C;
-        this->actor.flags |= 0x2000000;
+        this->actor.flags |= ACTOR_FLAG_2000000;
         gSaveContext.weekEventReg[91] |= 2;
     }
 
@@ -716,7 +716,7 @@ void func_80B948A8(EnZog* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
-    } else if ((globalCtx->msgCtx.unk1202A == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
+    } else if ((globalCtx->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
         if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
@@ -746,7 +746,7 @@ void func_80B94A00(EnZog* this, GlobalContext* globalCtx) {
 
     if (func_80B93BE0(this, globalCtx)) {
         this->actionFunc = func_80B948A8;
-        this->actor.flags |= 0x2000000;
+        this->actor.flags |= ACTOR_FLAG_2000000;
         if (gSaveContext.weekEventReg[29] & 0x20) {
             this->actor.textId = 0x1009;
         } else {
@@ -882,7 +882,7 @@ void func_80B94E34(EnZog* this, GlobalContext* globalCtx) {
     }
 
     if (ABS_ALT(this->actor.yawTowardsPlayer - this->actor.world.rot.y) > 0x5000) {
-        Actor_PickUp(&this->actor, globalCtx, 0, 60.0f, 40.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_NONE, 60.0f, 40.0f);
     }
 
     if (this->unk_324 > 0) {
@@ -937,7 +937,7 @@ void func_80B95128(EnZog* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         gSaveContext.weekEventReg[91] |= 1;
     } else {
         func_800B8614(&this->actor, globalCtx, 150.0f);
@@ -956,7 +956,7 @@ void EnZog_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 5);
-    if (func_800EE29C(globalCtx, 0x1D7) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1D7) && (ENZOG_GET_F(&this->actor) != ENZOG_F_2)) {
         this->actionFunc = func_80B9461C;
         this->actor.shape.yOffset = 0.0f;
     }
@@ -997,7 +997,7 @@ void EnZog_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B954C4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnZog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f D_80B959B8 = { 0.0f, 0.0f, 0.0f };
     EnZog* this = THIS;
 
@@ -1078,7 +1078,7 @@ void EnZog_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         POLY_OPA_DISP = &gfx[3];
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, NULL, func_80B954C4, &this->actor);
+                              this->skelAnime.dListCount, NULL, EnZog_PostLimbDraw, &this->actor);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

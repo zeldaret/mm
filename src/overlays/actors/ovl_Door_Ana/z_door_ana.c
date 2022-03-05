@@ -5,8 +5,9 @@
  */
 
 #include "z_door_ana.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS 0x02000000
+#define FLAGS (ACTOR_FLAG_2000000)
 
 #define THIS ((DoorAna*)thisx)
 
@@ -70,7 +71,7 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (grottoType == DOORANA_TYPE_HIDDEN) {
             Collider_InitAndSetCylinder(globalCtx, &this->bombCollider, &this->actor, &sCylinderInit);
         } else {
-            this->actor.flags |= 0x10; // always update
+            this->actor.flags |= ACTOR_FLAG_10; // always update
         }
 
         Actor_SetScale(&this->actor, 0);
@@ -98,9 +99,9 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
 
     if (grottoType == DOORANA_TYPE_UNK) {
         // in OOT decomp its marked as open with storms, but does not seem to open with storms in MM
-        if ((this->actor.xyzDistToPlayerSq < 40000.0f) && (EnvFlags_Get(globalCtx, 5))) {
+        if ((this->actor.xyzDistToPlayerSq < SQ(200.0f)) && (EnvFlags_Get(globalCtx, 5))) {
             grottoIsOpen = 1;
-            this->actor.flags &= ~0x10; // always update OFF
+            this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
         }
 
     } else {
@@ -204,9 +205,9 @@ void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorAna* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    Gfx_DrawDListXlu(globalCtx, D_05000C40);
+    Gfx_DrawDListXlu(globalCtx, gameplay_field_keep_DL_000C40);
 }

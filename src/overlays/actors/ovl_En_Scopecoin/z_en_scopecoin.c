@@ -5,8 +5,9 @@
  */
 
 #include "z_en_scopecoin.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnScopecoin*)thisx)
 
@@ -83,8 +84,10 @@ void EnScopecoin_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-static UNK_PTR D_80BFD280[] = { &D_04061FC0, &D_04061FE0, &D_04062000, &D_04062040,
-                                &D_04062020, &D_04062060, &D_04062000 };
+static TexturePtr D_80BFD280[] = {
+    gameplay_keep_Tex_061FC0, gameplay_keep_Tex_061FE0, gameplay_keep_Tex_062000, gameplay_keep_Tex_062040,
+    gameplay_keep_Tex_062020, gameplay_keep_Tex_062060, gameplay_keep_Tex_062000,
+};
 
 void EnScopecoin_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnScopecoin* this = THIS;
@@ -96,7 +99,7 @@ void EnScopecoin_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BFD280[this->unk148]));
-    gSPDisplayList(POLY_OPA_DISP++, D_040622C0);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0622C0);
 
     CLOSE_DISPS(gfxCtx);
 }

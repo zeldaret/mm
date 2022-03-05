@@ -43,7 +43,7 @@ typedef enum {
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
-    /* 0x19 */ QUEST_UNK_19, // Related to PictoBox
+    /* 0x19 */ QUEST_UNK_19 // Related to PictoBox
 } QuestItem;
 
 typedef enum {
@@ -301,6 +301,7 @@ typedef enum {
     /* 0x3D */ GI_KEY_BOSS,
     /* 0x3E */ GI_MAP,
     /* 0x3F */ GI_COMPASS,
+    /* 0x50 */ GI_50 = 0x50,
     /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
     /* 0x5A */ GI_BOTTLE,
@@ -358,7 +359,11 @@ typedef enum {
 
 typedef enum {
     /* 0x00 */ GID_BOTTLE,
+    /* 0x02 */ GID_02 = 0x02,
+    /* 0x03 */ GID_03,
     /* 0x0A */ GID_COMPASS = 0x0A,
+    /* 0x0E */ GID_0E = 0x0E,
+    /* 0x0F */ GID_0F,
     /* 0x10 */ GID_MASK_ALL_NIGHT = 0x10,
     /* 0x11 */ GID_NUTS,
     /* 0x17 */ GID_BOMB_BAG_20 = 0x17,
@@ -376,11 +381,19 @@ typedef enum {
     /* 0x31 */ GID_POTION_RED,
     /* 0x32 */ GID_POTION_BLUE,
     /* 0x33 */ GID_SHIELD_MIRROR,
-    /* 0x3B */ GID_FAIRY = 0x3B,
+    /* 0x3A */ GID_3A = 0x3A,
+    /* 0x3B */ GID_FAIRY,
+    /* 0x3E */ GID_3E = 0x3E,
+    /* 0x44 */ GID_44 = 0x44,
+    /* 0x45 */ GID_45,
     /* 0x55 */ GID_SWORD_KOKIRI = 0x55,
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
-    /* 0x68 */ GID_SWORD_GREAT_FAIRY
+    /* 0x68 */ GID_SWORD_GREAT_FAIRY,
+    /* 0x6A */ GID_6A = 0x6A,
+    /* 0x6B */ GID_6B,
+    /* 0x70 */ GID_70 = 0x70,
+    /* 0x71 */ GID_71,
 } GetItemDrawID;
 
 // TODO: fill
@@ -388,7 +401,8 @@ typedef enum {
     /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
     /* 0x00 */ EXCH_ITEM_NONE,
     /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
-    /* 0x2A */ EXCH_ITEM_2A = 0x2A // MOON_TEAR?
+    /* 0x2A */ EXCH_ITEM_2A = 0x2A, // MOON_TEAR?
+    /* 0x2E */ EXCH_ITEM_2E = 0x2E
 } ExchangeItemID;
 
 #endif

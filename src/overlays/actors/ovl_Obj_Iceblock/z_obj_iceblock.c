@@ -7,7 +7,7 @@
 #include "z_obj_iceblock.h"
 #include "objects/object_ice_block/object_ice_block.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjIceblock*)thisx)
 
@@ -670,7 +670,7 @@ void func_80A24B74(ObjIceblock* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp20;
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         if (1) {}
         sp20.x = this->dyna.actor.world.pos.x;
         sp20.y = this->unk_244;
@@ -687,7 +687,7 @@ void func_80A24BDC(ObjIceblock* this, GlobalContext* globalCtx, f32 arg2, f32 ar
     s16 phi_s0;
     s32 phi_s1 = 0;
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         sp88.y = this->unk_244;
         temp_f22 = 0x10000 / arg4;
 
@@ -723,7 +723,7 @@ void func_80A24DD0(ObjIceblock* this, GlobalContext* globalCtx) {
     }
 
     this->unk_2A2++;
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         if (this->unk_2A2 >= 0x2E) {
             phi_f22 = 1.0f;
         } else {
@@ -764,7 +764,7 @@ void func_80A2508C(ObjIceblock* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     s32 temp_v0;
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         temp_v0 = (s32)(this->dyna.actor.scale.y * 130.0f) - 3;
         if (temp_v0 > 0) {
             this->unk_2AC += temp_v0;
@@ -934,7 +934,7 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (D_80A26E7C == NULL) {
-        D_80A26E7C = Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_000328);
+        D_80A26E7C = Lib_SegmentedToVirtual(object_ice_block_Matanimheader_000328);
     }
 
     if (!(this->unk_1B0 & 8)) {
@@ -1008,7 +1008,7 @@ void func_80A2586C(ObjIceblock* this, GlobalContext* globalCtx) {
 
     func_80A2319C(this, this->dyna.actor.scale.x);
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         func_80A2339C(globalCtx, &this->dyna.actor.world.pos, (this->dyna.actor.scale.x + 0.05f) * 0.6666666f, 1.0f, 3);
     }
 }
@@ -1028,7 +1028,7 @@ void func_80A25994(ObjIceblock* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         func_80A2339C(globalCtx, &this->dyna.actor.world.pos, this->dyna.actor.scale.x, 1.2f, 15);
         if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
             sp30.x = this->dyna.actor.world.pos.x;
@@ -1180,7 +1180,7 @@ void func_80A25E50(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A2541C(this, globalCtx);
         func_80A25CF4(this);
     } else {
-        func_800B9010(&this->dyna.actor, 0xDF);
+        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 }
 
@@ -1266,7 +1266,7 @@ void func_80A26144(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {
-        func_800B9010(&this->dyna.actor, 0xDF);
+        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 
     func_80A24DD0(this, globalCtx);
@@ -1510,7 +1510,7 @@ void func_80A26B64(ObjIceblock* this, GlobalContext* globalCtx) {
 void func_80A26B74(ObjIceblock* this, GlobalContext* globalCtx) {
     Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0001A0);
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
         Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0007F0);
     }
 }
@@ -1539,7 +1539,7 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
     }
 
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 20.0f,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);

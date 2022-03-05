@@ -7,7 +7,7 @@
 #include "z_boss_04.h"
 #include "objects/object_boss04/object_boss04.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
@@ -231,7 +231,7 @@ void Boss04_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_809EC544(Boss04* this) {
     this->actionFunc = func_809EC568;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
@@ -259,10 +259,10 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    func_800EA0D4(globalCtx, &globalCtx->csCtx);
-                    this->unk_70A = func_801694DC(globalCtx);
-                    func_80169590(globalCtx, 0, 1);
-                    func_80169590(globalCtx, this->unk_70A, 7);
+                    Cutscene_Start(globalCtx, &globalCtx->csCtx);
+                    this->unk_70A = Play_CreateSubCamera(globalCtx);
+                    Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                    Play_CameraChangeStatus(globalCtx, this->unk_70A, 7);
                     func_800B7298(globalCtx, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
@@ -380,7 +380,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_704 > 140) {
-                Camera* sp5C = Play_GetCamera(globalCtx, MAIN_CAM);
+                Camera* sp5C = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                 this->unk_708 = 0;
                 func_809ECD00(this, globalCtx);
@@ -389,7 +389,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                 sp5C->at = this->unk_718;
                 func_80169AFC(globalCtx, this->unk_70A, 0);
                 this->unk_70A = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 func_80165690();
                 gSaveContext.eventInf[6] |= 1;
@@ -400,14 +400,14 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     if (this->unk_70A != 0) {
         Vec3f sp50;
 
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         if (this->unk_748 != 0) {
             this->unk_748--;
         }
         Math_Vec3f_Copy(&sp50, &this->unk_718);
         sp50.y += Math_SinS(this->unk_748 * 0x4000) * this->unk_748 * 1.5f;
         Play_CameraSetAtEye(globalCtx, this->unk_70A, &sp50, &this->unk_70C);
-        func_80169940(globalCtx, this->unk_70A, this->unk_744);
+        Play_CameraSetFov(globalCtx, this->unk_70A, this->unk_744);
         Math_ApproachF(&this->unk_744, 60.0f, 0.1f, 1.0f);
     }
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -521,7 +521,7 @@ void func_809ED224(Boss04* this) {
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     func_801A2ED8();
     this->unk_1F6 = 10;
 }
@@ -542,7 +542,7 @@ void func_809ED2A0(Boss04* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1F8 == 3) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_700 = 0.0f;
         this->unk_6FC = 0.0f;
         this->unk_6F8 = 0.0f;
@@ -747,9 +747,9 @@ void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
         func_809ED45C(this, globalCtx);
         if (this->unk_2CC > 3000.0f) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
         } else {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         }
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);

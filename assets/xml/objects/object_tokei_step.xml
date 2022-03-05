@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for the Clock Tower steps -->
     <File Name="object_tokei_step" Segment="6">
         <DList Name="gClocktowerPanelEmptyDL" Offset="0x80" />
         <DList Name="gClocktowerPanelDL" Offset="0x88" />
