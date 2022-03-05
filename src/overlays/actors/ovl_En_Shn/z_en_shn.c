@@ -119,7 +119,7 @@ Player* EnShn_GetPlayer(EnShn* this, GlobalContext* globalCtx) {
 }
 
 void func_80AE626C(EnShn* this) {
-    s32 topPad; // Vec3f Sandwhich
+    s32 topPad;
     Vec3f playerPos;
     Vec3f shnPos;
     s32 bottomPad;
@@ -235,7 +235,7 @@ s32 func_80AE6704(EnShn* thisx, GlobalContext* globalCtx) {
 
     switch (this->unk_2C6) {
         case 0:
-            if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH_PICTURE)) {
+            if (!CHECK_QUEST_ITEM(QUEST_UNK_19)) {
                 this->unk_2C6 = 6;
                 ret = 1;
             } else {
@@ -250,7 +250,7 @@ s32 func_80AE6704(EnShn* thisx, GlobalContext* globalCtx) {
             if (func_8013A4C4(D_80AE7258[this->unk_2C6])) {
                 this->unk_2C6 = 6;
                 ret = 1;
-                REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH_PICTURE);
+                REMOVE_QUEST_ITEM(QUEST_UNK_19);
             } else {
                 this->unk_2C6++;
             }
