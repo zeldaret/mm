@@ -22,28 +22,29 @@
         <Limb Name="object_box_Standardlimb_006678" Type="Standard" Offset="0x6678" />
         <Limb Name="object_box_Standardlimb_006684" Type="Standard" Offset="0x6684" />
         <Skeleton Name="gBoxChestSkel" Type="Normal" LimbType="Standard" Offset="0x66A0" />
-        <!-- <Blob Name="object_box_Blob_0066A8" Size="0x798" Offset="0x66A8" /> -->
+        <CurveAnimation Name="gBoxLight0CurveAnim" SkelOffset="0x7D78" Offset="0x6A20"/>
+        <CurveAnimation Name="gBoxLight1CurveAnim" SkelOffset="0x7D78" Offset="0x6E30"/>
         <Texture Name="gBoxLightTex" OutName="box_light_tex" Format="i8" Width="64" Height="32" Offset="0x6E40" />
         <DList Name="object_box_DL_007890" Offset="0x7890" />
         <DList Name="object_box_DL_007978" Offset="0x7978" />
         <DList Name="object_box_DL_007A40" Offset="0x7A40" />
         <DList Name="object_box_DL_007B08" Offset="0x7B08" />
         <DList Name="object_box_DL_007BD0" Offset="0x7BD0" />
-        <Limb Name="object_box_Standardlimb_007C98" Type="Standard" Offset="0x7C98" />
-        <Limb Name="object_box_Standardlimb_007CA4" Type="Standard" Offset="0x7CA4" />
-        <Limb Name="object_box_Standardlimb_007CB0" Type="Standard" Offset="0x7CB0" />
-        <Limb Name="object_box_Standardlimb_007CBC" Type="Standard" Offset="0x7CBC" />
-        <Limb Name="object_box_Standardlimb_007CC8" Type="Standard" Offset="0x7CC8" />
-        <Limb Name="object_box_Standardlimb_007CD4" Type="Standard" Offset="0x7CD4" />
-        <Limb Name="object_box_Standardlimb_007CE0" Type="Standard" Offset="0x7CE0" />
-        <Limb Name="object_box_Standardlimb_007CEC" Type="Standard" Offset="0x7CEC" />
-        <Limb Name="object_box_Standardlimb_007CF8" Type="Standard" Offset="0x7CF8" />
-        <Limb Name="object_box_Standardlimb_007D04" Type="Standard" Offset="0x7D04" />
-        <Limb Name="object_box_Standardlimb_007D10" Type="Standard" Offset="0x7D10" />
-        <Limb Name="object_box_Standardlimb_007D1C" Type="Standard" Offset="0x7D1C" />
-        <Limb Name="object_box_Standardlimb_007D28" Type="Standard" Offset="0x7D28" />
-        <Limb Name="object_box_Standardlimb_007D34" Type="Standard" Offset="0x7D34" />
-        <Skeleton Name="gBoxLightSkel" Type="Normal" LimbType="Standard" Offset="0x7D78" />
+        <Limb Name="object_box_Standardlimb_007C98" Type="Curve" Offset="0x7C98" />
+        <Limb Name="object_box_Standardlimb_007CA4" Type="Curve" Offset="0x7CA4" />
+        <Limb Name="object_box_Standardlimb_007CB0" Type="Curve" Offset="0x7CB0" />
+        <Limb Name="object_box_Standardlimb_007CBC" Type="Curve" Offset="0x7CBC" />
+        <Limb Name="object_box_Standardlimb_007CC8" Type="Curve" Offset="0x7CC8" />
+        <Limb Name="object_box_Standardlimb_007CD4" Type="Curve" Offset="0x7CD4" />
+        <Limb Name="object_box_Standardlimb_007CE0" Type="Curve" Offset="0x7CE0" />
+        <Limb Name="object_box_Standardlimb_007CEC" Type="Curve" Offset="0x7CEC" />
+        <Limb Name="object_box_Standardlimb_007CF8" Type="Curve" Offset="0x7CF8" />
+        <Limb Name="object_box_Standardlimb_007D04" Type="Curve" Offset="0x7D04" />
+        <Limb Name="object_box_Standardlimb_007D10" Type="Curve" Offset="0x7D10" />
+        <Limb Name="object_box_Standardlimb_007D1C" Type="Curve" Offset="0x7D1C" />
+        <Limb Name="object_box_Standardlimb_007D28" Type="Curve" Offset="0x7D28" />
+        <Limb Name="object_box_Standardlimb_007D34" Type="Curve" Offset="0x7D34" />
+        <Skeleton Name="gBoxLightCurveSkel" Type="Curve" LimbType="Curve" Offset="0x7D78" />
         <Animation Name="gBoxChestOpenGoronAnim" Offset="0x7E54" />
         <Animation Name="gBoxChestOpenDekuAnim" Offset="0x7F30" />
         <!-- <Blob Name="object_box_zeroes_unk_00007F40" Size="0xA0" Offset="0x7F40" /> -->
