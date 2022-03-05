@@ -3954,8 +3954,7 @@ beginseg
     name "ovl_En_Racedog"
     compress
     include "build/src/overlays/actors/ovl_En_Racedog/z_en_racedog.o"
-    include "build/data/ovl_En_Racedog/ovl_En_Racedog.data.o"
-    include "build/data/ovl_En_Racedog/ovl_En_Racedog.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Racedog/ovl_En_Racedog_reloc.o"
 endseg
 
 beginseg
