@@ -464,7 +464,7 @@ void func_80BA3434(Actor* thisx, GlobalContext* globalCtx) {
     ObjNozoki* this = THIS;
 
     if (this->unk_15C == 1) {
-        GetItem_Draw(globalCtx, GI_39);
+        GetItem_Draw(globalCtx, GID_39);
     } else {
         Gfx_DrawDListOpa(globalCtx, D_80BA34FC[this->unk_15C]);
     }
