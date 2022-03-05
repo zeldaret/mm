@@ -88,6 +88,7 @@ extern UNK_TYPE D_80990218;
 extern FlexSkeletonHeader D_0600B2B0;
 extern Vec3f D_8099024C;// = { 0.0f, 0.0f, 0.0f };
 
+void func_8098F800(SkelAnime *skelAnime, s32 ptr, s16 len);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 // void func_8098F800(SkelAnime *skelAnime, s32 ptr, s16 len) {
 //     s16 temp_v0;
@@ -177,11 +178,33 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_8098F8A8(this, globalCtx);
 }
 
+s32 func_8098FBB4(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBB4.s")
 
+void func_8098FBD0(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBD0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Draw.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Draw.s")
+void EnTg_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    EnTg* this = THIS;
+
+    GraphicsContext *gfxCtx;
+
+    Matrix_StatePush();
+    func_8099000C(globalCtx, &this->unk2F0, 0xA);
+    Matrix_StatePop();
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(globalCtx->state.gfxCtx, 0, 0x32, 0xA0, 0));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(globalCtx->state.gfxCtx, 0xFF, 0xFF, 0xFF, 0));
+
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, func_8098FBB4, func_8098FBD0, &this->actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
 
