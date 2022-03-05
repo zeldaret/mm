@@ -3879,8 +3879,7 @@ beginseg
     name "ovl_Obj_Hakaisi"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hakaisi/z_obj_hakaisi.o"
-    include "build/data/ovl_Obj_Hakaisi/ovl_Obj_Hakaisi.data.o"
-    include "build/data/ovl_Obj_Hakaisi/ovl_Obj_Hakaisi.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hakaisi/ovl_Obj_Hakaisi_reloc.o"
 endseg
 
 beginseg
