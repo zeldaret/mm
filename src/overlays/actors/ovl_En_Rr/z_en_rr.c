@@ -313,7 +313,7 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
         }
 
         if (sp34 && (Message_GetState(&globalCtx->msgCtx) == 0)) {
-            func_801518B0(globalCtx, 0xF6, NULL);
+            Message_StartTextbox(globalCtx, 0xF6, NULL);
         }
 
         if (this->actor.params == ENRR_0) {
