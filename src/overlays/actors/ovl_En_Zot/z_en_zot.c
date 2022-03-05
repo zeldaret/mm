@@ -524,12 +524,12 @@ void func_80B9765C(EnZot* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         s32 requiredScopeTemp;
 
-        switch (globalCtx->msgCtx.unk11F04) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x1262:
             case 0x1267:
             case 0x126A:
             case 0x126B:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
             default:
                 func_801477B4(globalCtx);

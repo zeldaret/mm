@@ -2687,7 +2687,7 @@ void Message_FindMessageNES(GlobalContext* globalCtx, u16 textId);
 void func_8015966C(GlobalContext* globalCtx, UNK_PTR puParm2, UNK_TYPE arg3);
 // void func_8015A144(void);
 void func_8015B198(GlobalContext* globalCtx);
-void Message_FindMessageStaff(GlobalContext *globalCtx, u16 textId);
+void Message_FindCreditsMessage(GlobalContext *globalCtx, u16 textId);
 void func_8015E7EC(GlobalContext* globalCtx, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
 

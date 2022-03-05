@@ -2884,7 +2884,7 @@
     0x80159438:("func_80159438",),
     0x8015966C:("func_8015966C",),
     0x8015B198:("func_8015B198",),
-    0x8015E750:("Message_FindMessageStaff",),
+    0x8015E750:("Message_FindCreditsMessage",),
     0x8015E7EC:("func_8015E7EC",),
     0x8015F8A8:("func_8015F8A8",),
     0x80160A90:("PlayerCall_InitFuncPtrs",),

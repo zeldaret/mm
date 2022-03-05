@@ -2398,7 +2398,7 @@ asm/non_matchings/code/z_message_nes/Message_LoadAreaTextNES.s,Message_LoadAreaT
 asm/non_matchings/code/z_message_nes/func_80159438.s,func_80159438,0x80159438,0x8D
 asm/non_matchings/code/z_message_nes/func_8015966C.s,func_8015966C,0x8015966C,0x6CB
 asm/non_matchings/code/z_message_nes/func_8015B198.s,func_8015B198,0x8015B198,0xD6E
-asm/non_matchings/code/z_message_staff/Message_FindMessageStaff.s,Message_FindMessageStaff,0x8015E750,0x27
+asm/non_matchings/code/z_message_staff/Message_FindCreditsMessage.s,Message_FindCreditsMessage,0x8015E750,0x27
 asm/non_matchings/code/z_message_staff/func_8015E7EC.s,func_8015E7EC,0x8015E7EC,0x42F
 asm/non_matchings/code/z_message_staff/func_8015F8A8.s,func_8015F8A8,0x8015F8A8,0x47A
 asm/non_matchings/code/z_player_call/PlayerCall_InitFuncPtrs.s,PlayerCall_InitFuncPtrs,0x80160A90,0x1A
