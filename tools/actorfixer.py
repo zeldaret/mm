@@ -504,8 +504,6 @@ animdict = {
     "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
     "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
     "globalCtx->msgCtx.unk11F04": "globalCtx->msgCtx.currentTextId",
-    "globalCtx->msgCtx.unk11F24": "globalCtx->msgCtx.decodedBuffer",
-    "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",
