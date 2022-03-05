@@ -330,7 +330,7 @@ void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
 
     func_80AD46F8(this);
     if (this->unk_3D8) {
-        func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
     } else if ((sp27 == 5) && func_80147624(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
@@ -342,7 +342,7 @@ void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
 
 void func_80AD3DA4(EnTrt2* this, GlobalContext* globalCtx) {
     this->actor.velocity.y = 0.0f;
-    func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
 
     if (this->unk_3A8 == 0x838) {
         this->unk_3B2 = 11;
@@ -367,7 +367,7 @@ void func_80AD3E34(EnTrt2* this, GlobalContext* globalCtx) {
         } else {
             gSaveContext.weekEventReg[85] |= 0x10;
             this->unk_3A8 = 0x88E;
-            func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
         }
     }
@@ -384,7 +384,7 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
             } else {
                 gSaveContext.weekEventReg[85] |= 0x10;
                 this->unk_3A8 = 0x88E;
-                func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
             }
         }
@@ -441,7 +441,7 @@ void func_80AD417C(EnTrt2* this, GlobalContext* globalCtx) {
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
-                func_801518B0(globalCtx, this->unk_3A8, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
             } else {
                 this->actor.textId = 0;
                 this->unk_3B2 = 15;

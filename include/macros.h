@@ -1,5 +1,5 @@
-#ifndef _MACROS_H_
-#define _MACROS_H_
+#ifndef MACROS_H
+#define MACROS_H
 
 #include "libc/stdint.h"
 #include "ultra64/convert.h"
@@ -21,8 +21,7 @@
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(globalCtx) ((globalCtx)->cameraPtrs[(globalCtx)->activeCamera])
-#define MAIN_CAM 0
-#define SUBCAM_FREE 0
+#define CAM_ID_MAIN 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \
@@ -50,8 +49,15 @@
 
 #define CURRENT_DAY (((void)0, gSaveContext.day) % 5)
 
-#define CLOCK_TIME(hr, min) ((s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60)))
+#define TIME_TO_MINUTES(time) (s32)((time) * ((24 * 60) / 0x10000))
+#define CLOCK_TIME(hr, min) (s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60))
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
+
+#define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000))
+#define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
+
+#define TIME_TO_MINUTES_ALT_F(time) ((time) / (24.0f * 60.0f / 0x10000))
+#define CLOCK_TIME_ALT_F(hr, min) (((hr) * 60.0f + (min)) / (24.0f * 60.0f / 0x10000))
 
 #define SLOT(item) gItemSlots[item]
 #define AMMO(item) gSaveContext.inventory.ammo[SLOT(item)]

@@ -259,10 +259,10 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    func_800EA0D4(globalCtx, &globalCtx->csCtx);
-                    this->unk_70A = func_801694DC(globalCtx);
-                    func_80169590(globalCtx, 0, 1);
-                    func_80169590(globalCtx, this->unk_70A, 7);
+                    Cutscene_Start(globalCtx, &globalCtx->csCtx);
+                    this->unk_70A = Play_CreateSubCamera(globalCtx);
+                    Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                    Play_CameraChangeStatus(globalCtx, this->unk_70A, 7);
                     func_800B7298(globalCtx, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
@@ -380,7 +380,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_704 > 140) {
-                Camera* sp5C = Play_GetCamera(globalCtx, MAIN_CAM);
+                Camera* sp5C = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                 this->unk_708 = 0;
                 func_809ECD00(this, globalCtx);
@@ -389,7 +389,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                 sp5C->at = this->unk_718;
                 func_80169AFC(globalCtx, this->unk_70A, 0);
                 this->unk_70A = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 func_80165690();
                 gSaveContext.eventInf[6] |= 1;
@@ -400,14 +400,14 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     if (this->unk_70A != 0) {
         Vec3f sp50;
 
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         if (this->unk_748 != 0) {
             this->unk_748--;
         }
         Math_Vec3f_Copy(&sp50, &this->unk_718);
         sp50.y += Math_SinS(this->unk_748 * 0x4000) * this->unk_748 * 1.5f;
         Play_CameraSetAtEye(globalCtx, this->unk_70A, &sp50, &this->unk_70C);
-        func_80169940(globalCtx, this->unk_70A, this->unk_744);
+        Play_CameraSetFov(globalCtx, this->unk_70A, this->unk_744);
         Math_ApproachF(&this->unk_744, 60.0f, 0.1f, 1.0f);
     }
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;

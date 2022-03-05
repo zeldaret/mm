@@ -247,6 +247,8 @@ animdict = {
     "BgCheck_CreateVertexFromVec3f": "BgCheck_Vec3fToVec3s",
     "BgCheck_PolygonGetMinY": "CollisionPoly_GetMinY",
     "BgCheck_PolygonGetNormal": "CollisionPoly_GetNormalF",
+    "BcCheck3_BgActorInit": "DynaPolyActor_Init",
+    "BgCheck3_LoadMesh": "DynaPolyActor_LoadMesh",
     "func_800C01B8": "CollisionPoly_GetPointDistanceFromPlane",
     "BgCheck_CreateTriNormFromPolygon": "CollisionPoly_GetVertices",
     "func_800C02C0": "CollisionPoly_GetVerticesByBgId",
@@ -379,6 +381,27 @@ animdict = {
     "func_8017F9C0": "Math3D_XZInSphere",
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
+    "func_800DFB14": "Camera_ChangeDataIdx",
+    "func_800DFC68": "Camera_GetInputDirYaw",
+    "func_800DFCB4": "Camera_GetCamDirPitch",
+    "func_800DFCDC": "Camera_GetCamDirYaw",
+    "func_800E0308": "Camera_SetTargetActor",
+    "func_800E031C": "Camera_GetWaterYPos",
+    "func_800E02AC": "Camera_SetToTrackActor",
+    "func_801694DC": "Play_CreateSubCamera",
+    "Play_GetActiveCameraIndex": "Play_GetActiveCamId",
+    "func_80169590": "Play_CameraChangeStatus",
+    "func_80169600": "Play_ClearCamera",
+    "func_80169668": "Play_ClearAllSubCameras",
+    "func_8016981C": "Play_CameraSetAtEyeUp",
+    "func_80169940": "Play_CameraSetFov",
+    "func_80169988": "Play_CameraSetRoll",
+    "func_801699D4": "Play_CopyCamera",
+    "func_80169AC0": "Play_CameraChangeSetting",
+    "func_80169BC4": "Play_CameraGetUID",
+    "func_80169C64": "Play_GetCsCamDataSetting",
+    "func_80169C84": "Play_GetCsCamDataVec3s",
+    "func_8017D2FC": "Math3D_LineSegVsPlane",
     "func_8013A7C0": "SubS_FindDoor",
     "func_8013E640": "SubS_FindActorCustom",
     "func_ActorCategoryIterateById": "SubS_FindActor",
@@ -386,6 +409,19 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
+    "func_800F5A8C": "Environment_LerpWeight",
+    "func_801A3F54": "Audio_SetCutsceneFlag",
+    "func_801518B0": "Message_StartTextbox",
+    "func_800EA0D4": "Cutscene_Start",
+    "func_800EA0EC": "Cutscene_End",
+    "func_800EDE34": "Cutscene_ActorTranslate",
+    "func_800EDF24": "Cutscene_ActorTranslateAndYaw",
+    "func_800EDF78": "Cutscene_ActorTranslateAndYawSmooth",
+    "func_800EE0CC": "Cutscene_ActorTranslateXZAndYawSmooth",
+    "func_800EE1D8": "Cutscene_GetSceneSetupIndex",
+    "func_800EE200": "Cutscene_GetActorActionIndex",
+    "func_800EE29C": "Cutscene_CheckActorAction",
+    "func_800EE2F4": "Cutscene_IsPlaying",
     "func_801343C0": "SkelAnime_DrawTransformFlexOpa",
     "func_80134148": "SkelAnime_DrawTransformFlexLimbOpa",
     "func_8013AB00": "SubS_DrawTransformFlex",
@@ -421,11 +457,20 @@ animdict = {
     "skelAnime.prevFrameRot": "skelAnime.prevRot",
     "skelAnime.prevFramePos": "skelAnime.prevTransl",
     "skelAnime.unk3E": "skelAnime.baseTransl",
+
     "actor.minVelocityY": "actor.terminalVelocity",
     "actor.yDistToWater": "actor.depthInWater",
     "actor.yDistToPlayer": "actor.playerHeightRel",
     "globalCtx->mf_187FC": "globalCtx->billboardMtxF",
     "globalCtx->projectionMatrix": "globalCtx->viewProjectionMtxF",
+    "csCtx.npcActions": "csCtx.actorActions",
+    "csCtx->npcActions": "csCtx->actorActions",
+    "csCtx.unk_12": "csCtx.currentCsIndex",
+    "globalCtx->envCtx.unk_8C": "globalCtx->envCtx.lightSettings",
+    "globalCtx->envCtx.unk_E5": "globalCtx->envCtx.fillScreen",
+    "globalCtx->envCtx.unk_E6": "globalCtx->envCtx.screenFillColor",
+    "globalCtx->envCtx.unk_C3": "globalCtx->envCtx.lightSettingOverride",
+    "globalCtx->envCtx.unk_DC": "globalCtx->envCtx.lightBlend",
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
     "player->unk_384": "player->getItemId",
@@ -433,18 +478,19 @@ animdict = {
     "player->unk_388": "player->interactRangeActor",
     "player->unk_38C": "player->mountSide",
     "player->unk_394": "player->csMode",
-    "player->unk_A87": "player->exchangeItemId",
     "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
+    "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
     "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
     "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
     "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
 
-    # Variables
-    "D_0407D590": "gGameplayKeepDrawFlameDL",
-    "D_801D15B0": "gZeroVec3f",
-    "D_801D15BC": "gZeroVec3s",
-    "D_801D1DE0": "gIdentityMtx",
-    "D_801D1E20": "gIdentityMtxF",
+    "D_801D15B0" : "gZeroVec3f",
+    "D_801D15BC" : "gZeroVec3s",
+    "D_801D1DE0" : "gIdentityMtx",
+    "D_801D1E20" : "gIdentityMtxF",
+    "D_04020658" : "gameplay_keep_Anim_020658",
+    "D_04022B28" : "gDoorSkel",
+    "D_04023100" : "gDoorCol",
 
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
@@ -488,20 +534,20 @@ def replace_anim_all(repo):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename
-                replace_anim(file)                
+                replace_anim(file)
 
     for subdir, dirs, files in os.walk(repo + os.sep + 'data'):
         for filename in files:
             if(filename.endswith('.s')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-                
+
     for subdir, dirs, files in os.walk(repo + os.sep + 'docs'):
         for filename in files:
             if(filename.endswith('.md')):
                 file = subdir + os.sep + filename
                 replace_anim(file)
-              
+
     for subdir, dirs, files in os.walk(repo + os.sep + 'tools' + os.sep + 'sizes'):
         for filename in files:
             if(filename.endswith('.csv')):

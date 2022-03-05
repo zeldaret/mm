@@ -24,9 +24,10 @@
         <Texture Name="object_tab_Tex_006328" OutName="tex_006328" Format="ci8" Width="8" Height="8" Offset="0x6328" />
         <Texture Name="object_tab_Tex_006368" OutName="tex_006368" Format="ci8" Width="8" Height="16" Offset="0x6368" />
         <Texture Name="object_tab_Tex_0063E8" OutName="tex_0063E8" Format="ci8" Width="8" Height="8" Offset="0x63E8" />
-        <!-- <Blob Name="object_tab_Blob_006428" Size="0x400" Offset="0x6428" /> -->
+        <Texture Name="object_tab_Tex_006428" OutName="tex_006428" Format="ci8" Width="32" Height="32" Offset="0x6428" />
         <Texture Name="object_tab_Tex_006828" OutName="tex_006828" Format="ci8" Width="16" Height="16" Offset="0x6828" />
-        <!-- <Blob Name="object_tab_Blob_006928" Size="0x800" Offset="0x6928" /> -->
+        <Texture Name="object_tab_Tex_006928" OutName="tex_006928" Format="ci8" Width="32" Height="32" Offset="0x6928" />
+        <Texture Name="object_tab_Tex_006D28" OutName="tex_006D28" Format="ci8" Width="32" Height="32" Offset="0x6D28" />
         <Texture Name="object_tab_Tex_007128" OutName="tex_007128" Format="ci8" Width="16" Height="16" Offset="0x7128" />
         <Texture Name="object_tab_Tex_007228" OutName="tex_007228" Format="ci8" Width="16" Height="16" Offset="0x7228" />
         <Texture Name="object_tab_Tex_007328" OutName="tex_007328" Format="i8" Width="32" Height="32" Offset="0x7328" />

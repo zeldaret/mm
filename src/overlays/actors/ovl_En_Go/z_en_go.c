@@ -537,7 +537,7 @@ s32 func_80A1222C(EnGo* this, GlobalContext* globalCtx) {
     if (((player->transformation == PLAYER_FORM_GORON) && (globalCtx->msgCtx.ocarinaMode == 3) &&
          (globalCtx->msgCtx.unk1202E == 1) && (this->unk_3EC == 0) && (this->actor.xzDistToPlayer < 400.0f)) ||
         (!(gSaveContext.weekEventReg[22] & 4) && (globalCtx->sceneNum == SCENE_16GORON_HOUSE) &&
-         (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (globalCtx->csCtx.unk_12 == 1))) {
+         (gSaveContext.sceneSetupIndex == 0) && (this->unk_3EC == 0) && (globalCtx->csCtx.currentCsIndex == 1))) {
         ret = true;
     }
     return ret;
@@ -710,7 +710,7 @@ s32 func_80A12868(EnGo* this, GlobalContext* globalCtx) {
 s32 func_80A12954(EnGo* this, GlobalContext* globalCtx) {
     if ((ENGO_GET_F(&this->actor) == ENGO_F_4) && (globalCtx->csCtx.state != 0) && (this->actor.draw != NULL) &&
         (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
-        (globalCtx->csCtx.unk_12 == 0)) {
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         if (this->unk_3F0 == 0) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_394 = 255;
@@ -1045,7 +1045,7 @@ s32 func_80A13564(EnGo* this, f32 arg1, f32 arg2, s32 arg3) {
 }
 
 void func_80A136B8(GlobalContext* globalCtx, s16 arg1, s16 arg2, s16 arg3) {
-    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, MAIN_CAM), 3);
+    s16 sp26 = Quake_Add(Play_GetCamera(globalCtx, CAM_ID_MAIN), 3);
 
     Quake_SetCountdown(sp26, arg3);
     Quake_SetSpeed(sp26, arg1);
@@ -1410,7 +1410,7 @@ void func_80A144F4(EnGo* this, GlobalContext* globalCtx) {
 void func_80A145AC(EnGo* this, GlobalContext* globalCtx) {
     if ((ENGO_GET_70(&this->actor) == ENGO_70_1) &&
         (((globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneSetupIndex == 1) &&
-          (globalCtx->csCtx.unk_12 == 0)) ||
+          (globalCtx->csCtx.currentCsIndex == 0)) ||
          !(gSaveContext.weekEventReg[21] & 8))) {
         this->actor.child = func_80A13400(this, globalCtx);
         this->actor.child->child = &this->actor;
@@ -1633,24 +1633,24 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
     s32 sp38[] = {
         0, 2, 6, 20, 18, 5, 5, 15,
     };
-    u16 sp36 = 0;
+    u16 actorActionCmd = 0;
     s32 sp30;
-    u32 sp2C;
+    s32 actionIndex;
 
     switch (ENGO_GET_70(&this->actor)) {
         case ENGO_70_0:
-            sp36 = 0x80;
+            actorActionCmd = 128;
             break;
 
         case ENGO_70_1:
-            sp36 = 0x81;
+            actorActionCmd = 129;
             break;
     }
 
-    if ((sp36 == 0x80) || (sp36 == 0x81)) {
-        if (func_800EE29C(globalCtx, sp36)) {
-            sp2C = func_800EE200(globalCtx, sp36);
-            sp30 = globalCtx->csCtx.npcActions[sp2C]->unk0;
+    if ((actorActionCmd == 128) || (actorActionCmd == 129)) {
+        if (Cutscene_CheckActorAction(globalCtx, actorActionCmd)) {
+            actionIndex = Cutscene_GetActorActionIndex(globalCtx, actorActionCmd);
+            sp30 = globalCtx->csCtx.actorActions[actionIndex]->action;
 
             if (this->unk_394 != (u8)sp30) {
                 this->unk_394 = sp30;
@@ -1699,7 +1699,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
                     break;
             }
 
-            if (sp36 == 0x80) {
+            if (actorActionCmd == 128) {
                 switch (globalCtx->csCtx.frames) {
                     case 55:
                     case 100:
@@ -1723,7 +1723,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_VOICE_EATFULL);
                         break;
                 }
-            } else if (sp36 == 0x81) {
+            } else if (actorActionCmd == 129) {
                 switch (globalCtx->csCtx.frames) {
                     case 360:
                     case 390:
@@ -1745,7 +1745,7 @@ void func_80A14FC8(EnGo* this, GlobalContext* globalCtx) {
             }
 
             SubS_FillLimbRotTables(globalCtx, this->unk_3CE, this->unk_3C8, ARRAY_COUNT(this->unk_3CE));
-            func_800EDF24(&this->actor, globalCtx, sp2C);
+            Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         }
     }
 }

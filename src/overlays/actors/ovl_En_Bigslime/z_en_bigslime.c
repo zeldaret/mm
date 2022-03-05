@@ -843,10 +843,10 @@ void EnBigslime_UpdateCameraFormingBigslime(EnBigslime* this, GlobalContext* glo
 void EnBigslime_EndCutscene(EnBigslime* this, GlobalContext* globalCtx) {
     Camera* subCam;
 
-    if (this->subCamId != MAIN_CAM) {
+    if (this->subCamId != CAM_ID_MAIN) {
         subCam = Play_GetCamera(globalCtx, this->subCamId);
-        Play_CameraSetAtEye(globalCtx, MAIN_CAM, &subCam->at, &subCam->eye);
-        this->subCamId = MAIN_CAM;
+        Play_CameraSetAtEye(globalCtx, CAM_ID_MAIN, &subCam->at, &subCam->eye);
+        this->subCamId = CAM_ID_MAIN;
         ActorCutscene_Stop(this->cutscene);
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
         func_800B724C(globalCtx, &this->actor, 6);
@@ -863,7 +863,7 @@ void EnBigslime_Scale(EnBigslime* this, s16 pitch, f32 xzScale, f32 yScale) {
  * Set the params used by the floor shockwave when bigslime shatters into minislime
  */
 void EnBigslime_InitShockwave(EnBigslime* this, GlobalContext* globalCtx) {
-    globalCtx->envCtx.unk_C3 = 3;
+    globalCtx->envCtx.lightSettingOverride = 3;
     Math_Vec3f_Copy(&this->frozenPos, &this->actor.world.pos);
     this->frozenPos.y = GBT_ROOM_5_MIN_Y;
     this->shockwaveAlpha = 235;
@@ -931,7 +931,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, GlobalContext* global
     Player* player = GET_PLAYER(globalCtx);
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
 
-    globalCtx->envCtx.unk_C3 = 4;
+    globalCtx->envCtx.lightSettingOverride = 4;
     Animation_PlayLoop(&this->skelAnime, &gGekkoLookAroundAnim);
 
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
@@ -1008,7 +1008,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         EnBigslime_UpdateCameraIntroCs(this, globalCtx, 25);
         func_801A2E54(0x38);
         EnBigslime_InitFallMinislime(this);
-        globalCtx->envCtx.unk_C3 = 0xFF;
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
         this->callTimer = 35;
         func_800B7298(globalCtx, &this->actor, 4);
     }
@@ -1019,7 +1019,7 @@ void EnBigslime_SetupMoveOnCeiling(EnBigslime* this) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 20.0f;
 
-    if (this->subCamId != MAIN_CAM) {
+    if (this->subCamId != CAM_ID_MAIN) {
         this->actor.speedXZ = 0.0f;
         this->ceilingMoveTimer = 20;
     } else {
@@ -1043,7 +1043,7 @@ void EnBigslime_MoveOnCeiling(EnBigslime* this, GlobalContext* globalCtx) {
     EnBigslime_Scale(this, pitch, 0.04f, 0.04f);
     EnBigslime_UpdateWavySurface(this);
 
-    if (this->subCamId != MAIN_CAM) {
+    if (this->subCamId != CAM_ID_MAIN) {
         if (this->ceilingMoveTimer == 0) {
             EnBigslime_EndCutscene(this, globalCtx);
             this->ceilingMoveTimer = 320;
@@ -1493,7 +1493,7 @@ void EnBigslime_Rise(EnBigslime* this, GlobalContext* globalCtx) {
 }
 
 void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalCtx) {
-    Camera* mainCam = Play_GetCamera(globalCtx, MAIN_CAM);
+    Camera* mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
     s16 yaw;
 
     Play_CameraSetAtEye(globalCtx, this->subCamId, &mainCam->at, &mainCam->eye);
@@ -1501,7 +1501,7 @@ void EnBigslime_SetupCutsceneGrabPlayer(EnBigslime* this, GlobalContext* globalC
     this->wavySurfaceTimer = 0;
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->actor.world.rot.y = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
-    yaw = func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - this->actor.world.rot.y;
+    yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.world.rot.y;
 
     if (yaw > 0x4000) {
         this->subCamYawGrabPlayer = -0x2000;
@@ -1988,7 +1988,7 @@ void EnBigslime_Melt(EnBigslime* this, GlobalContext* globalCtx) {
     if (this->meltCounter == 100) {
         EnBigslime_SetTargetVtxFromPreFrozen(this);
     } else if (this->meltCounter == 50) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 }
 
@@ -2423,7 +2423,7 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, GlobalContext* globalCtx) {
     Vec3f* worldPos;
     Vec3f dustPos;
     Vec3f hahenVel;
-    s16 yaw = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
+    s16 yaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
     s16 yawReverse = yaw + 0x8000;
     s32 i;
 
@@ -2582,7 +2582,7 @@ void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, GlobalContext* globa
                 if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ICE) {
                     EnMinislime* minislime;
 
-                    globalCtx->envCtx.unk_C3 = 2;
+                    globalCtx->envCtx.lightSettingOverride = 2;
                     EnBigslime_SetPlayerParams(this, globalCtx);
                     this->rotation = 0;
                     EnBigslime_SetupFreeze(this);
@@ -2772,8 +2772,8 @@ void EnBigslime_UpdateBigslime(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f vtxMax;
     Vec3f vtxMin;
 
-    if (globalCtx->envCtx.unk_C3 == 3) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+    if (globalCtx->envCtx.lightSettingOverride == 3) {
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 
     func_8019F540(1);
@@ -2817,8 +2817,8 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
     Player* player;
     s32 pad;
 
-    if (globalCtx->envCtx.unk_C3 == 3) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+    if (globalCtx->envCtx.lightSettingOverride == 3) {
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 
     func_8019F540(0);

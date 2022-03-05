@@ -1281,22 +1281,22 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
     Boss02* this = THIS;
 
     this->unk_01AC = D_809DF5B0;
-    globalCtx->envCtx.unk_EA = 0xD;
+    globalCtx->envCtx.sandstormState = 0xD;
 
     if (D_809E0434 != NULL) {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = 0;
-        globalCtx->envCtx.unk_C3 = 1;
+        globalCtx->envCtx.lightSettingOverride = 1;
         globalCtx->skyboxId = 1;
     } else if (D_809E0422 == 0) {
         this->unk_1D74 = 0.0f;
         D_801F4E30 = this->unk_1D7C;
-        globalCtx->envCtx.unk_C3 = 0;
+        globalCtx->envCtx.lightSettingOverride = 0;
         globalCtx->skyboxId = 2;
     } else {
         this->unk_1D74 = KREG(23) + -15.0f;
         D_801F4E30 = ((KREG(24) * 0.1f) + 1.0f) * this->unk_1D7C;
-        globalCtx->envCtx.unk_C3 = 1;
+        globalCtx->envCtx.lightSettingOverride = 1;
         globalCtx->skyboxId = 1;
     }
 
@@ -1650,10 +1650,10 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
     switch (this->unk_1D18) {
         case 0:
             if (player->stateFlags1 & 0x100) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
-                this->unk_1D22 = func_801694DC(globalCtx);
-                func_80169590(globalCtx, 0, 1);
-                func_80169590(globalCtx, this->unk_1D22, 7);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
+                this->unk_1D22 = Play_CreateSubCamera(globalCtx);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                Play_CameraChangeStatus(globalCtx, this->unk_1D22, 7);
                 func_8016566C(150);
                 this->unk_1D14 = 0;
                 this->unk_1D5C = 0.0f;
@@ -1770,7 +1770,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             this->unk_1D18 = 0;
             func_80169AFC(globalCtx, this->unk_1D22, 0);
             this->unk_1D22 = 0;
-            func_800EA0EC(globalCtx, &globalCtx->csCtx);
+            Cutscene_End(globalCtx, &globalCtx->csCtx);
             this->actor.flags |= ACTOR_FLAG_1;
             player->stateFlags1 &= ~0x100;
             this->unk_1D70 = 0.01f;
@@ -1784,7 +1784,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         Actor_SetScale(&player->actor, this->unk_1D70);
     }
 
-    globalCtx->envCtx.unk_8C.fogNear = this->unk_1D74;
+    globalCtx->envCtx.lightSettings.fogNear = this->unk_1D74;
 
     if (sp57) {
         D_809E0422 = 1 - D_809E0422;
@@ -2048,8 +2048,8 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         this->unk_1D54 = Math_SinS(this->unk_1D14 * 1512) * this->unk_1D58;
         Matrix_InsertZRotation_f(this->unk_1D54, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_1D3C);
-        func_8016981C(globalCtx, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
+        ShrinkWindow_SetLetterboxTarget(27);
     }
 }
 #else
@@ -2077,10 +2077,10 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             if ((gSaveContext.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
-            this->unk_1D22 = func_801694DC(globalCtx);
-            func_80169590(globalCtx, 0, 1);
-            func_80169590(globalCtx, this->unk_1D22, 7);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
+            this->unk_1D22 = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+            Play_CameraChangeStatus(globalCtx, this->unk_1D22, 7);
             this->unk_1D20 = 2;
             this->unk_1D1C = 0;
 
@@ -2163,7 +2163,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {
                 func_80169AFC(globalCtx, this->unk_1D22, 0);
                 this->unk_1D22 = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_1D20 = 0;
@@ -2175,10 +2175,10 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
 
         case 100:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
-                this->unk_1D22 = func_801694DC(globalCtx);
-                func_80169590(globalCtx, 0, 1);
-                func_80169590(globalCtx, this->unk_1D22, 7);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
+                this->unk_1D22 = Play_CreateSubCamera(globalCtx);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                Play_CameraChangeStatus(globalCtx, this->unk_1D22, 7);
                 this->unk_1D20 = 101;
                 this->unk_1D1C = 0;
                 this->unk_1D5C = 1.0f;
@@ -2224,7 +2224,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             if (this->unk_1D1C == 30) {
                 func_80169AFC(globalCtx, this->unk_1D22, 0);
                 this->unk_1D22 = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_1;
@@ -2260,9 +2260,9 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
     if ((this->unk_1D20 != 0) && (this->unk_1D22 != 0)) {
         sp5C = this->unk_1D24;
         sp5C.y += sp58 * D_809DF5B0;
-        func_8016981C(globalCtx, this->unk_1D22, &this->unk_1D30, &sp5C, &this->unk_1D3C);
+        Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &sp5C, &this->unk_1D3C);
         this->unk_1D3C.z = this->unk_1D3C.x = 0.0f;
         this->unk_1D3C.y = 1.0f;
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
     }
 }

@@ -26,12 +26,12 @@
         <DList Name="gameplay_field_keep_DL_003870" Offset="0x3870" />
         <DList Name="gameplay_field_keep_DL_003938" Offset="0x3938" />
         <Collision Name="gameplay_field_keep_Colheader_003A60" Offset="0x3A60" />
-        <DList Name="gameplay_field_keep_DL_003FD0" Offset="0x3FD0" />
-        <DList Name="gameplay_field_keep_DL_004050" Offset="0x4050" />
-        <DList Name="gameplay_field_keep_DL_004228" Offset="0x4228" />
+        <DList Name="gFieldWoodDoorFrameDL" Offset="0x3FD0" />
+        <DList Name="gFieldWoodDoorLeftDL" Offset="0x4050" />
+        <DList Name="gFieldWoodDoorRightDL" Offset="0x4228" />
         <Texture Name="gameplay_field_keep_Tex_004400" OutName="tex_004400" Format="rgba16" Width="16" Height="16" Offset="0x4400" />
         <Texture Name="gameplay_field_keep_Tex_004600" OutName="tex_004600" Format="rgba16" Width="16" Height="16" Offset="0x4600" />
-        <Texture Name="gameplay_field_keep_Tex_004800" OutName="tex_004800" Format="i4" Width="64" Height="128" Offset="0x4800" />
+        <Texture Name="gFieldWoodDoorTex" OutName="wood_door" Format="i4" Width="64" Height="128" Offset="0x4800" />
         <Texture Name="gameplay_field_keep_TLUT_005800" OutName="tlut_005800" Format="rgba16" Width="4" Height="4" Offset="0x5800" />
         <Texture Name="gameplay_field_keep_Tex_005828" OutName="tex_005828" Format="ci4" Width="64" Height="64" Offset="0x5828" />
         <DList Name="gameplay_field_keep_DL_0061E8" Offset="0x61E8" />

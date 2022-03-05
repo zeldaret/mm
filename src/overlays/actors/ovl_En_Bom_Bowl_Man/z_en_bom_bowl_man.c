@@ -232,9 +232,9 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
         this->unk_2D4 = this->actor.yawTowardsPlayer;
         this->unk_290 = this->actor.yawTowardsPlayer;
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            func_801518B0(globalCtx, D_809C618C[0], &this->actor);
+            Message_StartTextbox(globalCtx, D_809C618C[0], &this->actor);
         } else {
-            func_801518B0(globalCtx, D_809C6198[0], &this->actor);
+            Message_StartTextbox(globalCtx, D_809C6198[0], &this->actor);
         }
     }
 
@@ -249,8 +249,8 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
             case 0:
                 this->unk_2C0 = 1;
                 D_809C6104 = 1;
-                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_2D0)),
-                              &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(this->unk_2D0)),
+                                      &this->unk_2D8[0]->actor);
                 this->unk_2D4 = 0;
                 this->unk_2BC = 10;
                 func_809C493C(this, 17, 1.0f);
@@ -406,7 +406,7 @@ void func_809C5524(EnBomBowlMan* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x72F;
     }
     func_809C493C(this, 3, 1.0f);
-    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
     this->actionFunc = func_809C5598;
 }
 
@@ -580,22 +580,22 @@ void func_809C5BF4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 Player* player = GET_PLAYER(globalCtx);
 
                 func_801477B4(globalCtx);
-                func_800E0308(sp28, &this->unk_2D8[0]->actor);
+                Camera_SetTargetActor(sp28, &this->unk_2D8[0]->actor);
                 func_809C493C(this, 13, 1.0f);
                 D_809C6100 = 0;
                 if (player->transformation == PLAYER_FORM_HUMAN) {
                     this->unk_2C0 = 5;
-                    func_801518B0(globalCtx, D_809C618C[this->unk_2C0], &this->actor);
+                    Message_StartTextbox(globalCtx, D_809C618C[this->unk_2C0], &this->actor);
                 } else {
                     this->unk_2C0 = 3;
-                    func_801518B0(globalCtx, D_809C6198[this->unk_2C0], &this->actor);
+                    Message_StartTextbox(globalCtx, D_809C6198[this->unk_2C0], &this->actor);
                 }
                 this->unk_29C = 0;
                 this->actionFunc = func_809C4DA4;
             } else {
                 s32 idx = D_809C6100 - 1;
 
-                func_800E0308(sp28, &this->unk_2D8[1 + idx]->actor);
+                Camera_SetTargetActor(sp28, &this->unk_2D8[1 + idx]->actor);
             }
         }
     }
