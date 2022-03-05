@@ -1,16 +1,16 @@
 #include "global.h"
 #include "message_struct.h"
 
-/*
+#if 0
 
 //fontWidth
 extern f32 D_801D0470[159];
 
 //rupeesTextLocalization
-u8 D_801D06F0[4][8] = { { 0x52, 0x75, 0x70, 0x65, 0x65, 0x28, 0x73, 0x29}, //EN (rupee(s))
-                        { 0x52, 0x75, 0x62, 0x69, 0x6E, 0x28, 0x65, 0x29}, //DE (rubin(e))
-                        { 0x52, 0x75, 0x62, 0x69, 0x73, 0x00, 0x00, 0x00}, //FR (rubis)
-                        { 0x52, 0x75, 0x70, 0x69, 0x61, 0x28, 0x73, 0x29}  //ITA (rupia(s))
+u8 D_801D06F0[4][8] = { { "rupee(s)" }, //EN
+                        { "rubin(e)" }, //DE
+                        { "rubis"    }, //FR
+                        { "rupia(s)" }  //SPA 
                         };
 
 // rupeesTextLength
@@ -33,7 +33,8 @@ char D_801D0714[11][16] = {
 
 //TextAreaLength
 s16 D_801D07C4[11] = {15,9,8,16,10,9,8,14,12,11,8};
-*/
+
+#endif
 
 extern f32 D_801D0470[159];
 extern u8 D_801D06F0[4][8];
