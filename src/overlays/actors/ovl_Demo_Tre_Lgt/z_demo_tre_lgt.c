@@ -104,7 +104,8 @@ void DemoTreLgt_Animate(DemoTreLgt* this, GlobalContext* globalCtx) {
     if (curFrame < D_808E1490[this->animationType].unk4) {
         this->colorAlpha1 = 255;
     } else if (curFrame <= (D_808E1490[this->animationType].unk4 + D_808E1490[this->animationType].unk8)) {
-        this->colorAlpha1 = ((D_808E1490[this->animationType].unk4 - curFrame) / D_808E1490[this->animationType].unk8) * 255 + 255;
+        this->colorAlpha1 =
+            ((D_808E1490[this->animationType].unk4 - curFrame) / D_808E1490[this->animationType].unk8) * 255 + 255;
     } else {
         this->colorAlpha1 = 0;
     }
