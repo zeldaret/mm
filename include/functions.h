@@ -1144,7 +1144,7 @@ u32 Camera_ChangeDataIdx(Camera* camera, u32 camDataIdx);
 // void func_800DFC1C(void);
 // void func_800DFC40(void);
 s32 Camera_GetInputDirYaw(Camera* camera);
-// void func_800DFC90(void);
+void func_800DFC90(Vec3s* arg0, Camera* camera);
 s16 Camera_GetCamDirPitch(Camera* camera);
 s16 Camera_GetCamDirYaw(Camera* camera);
 void func_800DFD04(Camera* camera, s32 arg1, s32 arg2, s32 arg3);
