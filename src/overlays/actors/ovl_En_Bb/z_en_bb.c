@@ -532,7 +532,7 @@ void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_BITE);
 
             if (this->flameScaleX > 0.0f) {
-                gSaveContext.unk_1016 = 0x4B0;
+                gSaveContext.jinxTimer = 1200;
             }
 
             if (this->actionFunc == EnBb_Attack) {
