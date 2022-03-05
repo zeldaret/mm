@@ -529,7 +529,8 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            Message_StartTextbox(globalCtx, D_80BA50DC[((void)0, gSaveContext.playerForm) - 1].unk2, NULL);
+                            Message_StartTextbox(globalCtx, D_80BA50DC[((void)0, gSaveContext.playerForm) - 1].unk2,
+                                                 NULL);
                         }
                     }
                     return 0;
