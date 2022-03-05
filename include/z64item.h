@@ -296,6 +296,7 @@ typedef enum {
     /* 0x32 */ GI_SHIELD_HERO = 0x32,
     /* 0x33 */ GI_SHIELD_MIRROR,
     /* 0x35 */ GI_MAGIC_BEANS = 0x35,
+    /* 0x39 */ GI_39 = 0x39,
     /* 0x3C */ GI_KEY_SMALL = 0x3C,
     /* 0x3E */ GI_MAP = 0x3E,
     /* 0x3F */ GI_COMPASS,

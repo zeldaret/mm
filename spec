@@ -4467,9 +4467,7 @@ beginseg
     name "ovl_Obj_Nozoki"
     compress
     include "build/src/overlays/actors/ovl_Obj_Nozoki/z_obj_nozoki.o"
-    include "build/data/ovl_Obj_Nozoki/ovl_Obj_Nozoki.data.o"
-    include "build/data/ovl_Obj_Nozoki/ovl_Obj_Nozoki.bss.o"
-    include "build/data/ovl_Obj_Nozoki/ovl_Obj_Nozoki.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Nozoki/ovl_Obj_Nozoki_reloc.o"
 endseg
 
 beginseg
