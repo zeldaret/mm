@@ -112,7 +112,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
-static s8 D_808C37FC[] = {
+// Jaw = 0
+// Left webbing = 1
+// Right webbing = 2
+// Cranium = 3
+static s8 sLimbIndexToLimbPos[] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 
@@ -601,32 +605,32 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     MtxF* temp_v0_4;
 
     if (this->unk_24C == 0) {
-        if (D_808C37FC[limbIndex] != -1) {
-            if (D_808C37FC[limbIndex] == 0) {
+        if (sLimbIndexToLimbPos[limbIndex] != -1) {
+            if (sLimbIndexToLimbPos[limbIndex] == 0) {
                 Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[0]);
-            } else if (D_808C37FC[limbIndex] == 3) {
+            } else if (sLimbIndexToLimbPos[limbIndex] == 3) {
                 Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[3]);
                 Matrix_MultiplyVector3fByState(&D_808C380C, &this->limbPos[4]);
             } else {
-                Matrix_GetStateTranslation(&this->limbPos[D_808C37FC[limbIndex]]);
+                Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPos[limbIndex]]);
             }
         }
     } else if (this->unk_24C > 0) {
-        if (D_808C37FC[limbIndex] != -1) {
-            Matrix_GetStateTranslation(&this->limbPos[D_808C37FC[limbIndex]]);
+        if (sLimbIndexToLimbPos[limbIndex] != -1) {
+            Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPos[limbIndex]]);
         }
 
         if (limbIndex == BUBBLE_LIMB_CRANIUM) {
             this->unk_24C = -1;
         }
     } else {
-        if (D_808C37FC[limbIndex] != -1) {
+        if (sLimbIndexToLimbPos[limbIndex] != -1) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             temp_v0_4 = Matrix_GetCurrentState();
-            temp_v0_4->mf[3][0] = this->limbPos[D_808C37FC[limbIndex]].x;
-            temp_v0_4->mf[3][1] = this->limbPos[D_808C37FC[limbIndex]].y;
-            temp_v0_4->mf[3][2] = this->limbPos[D_808C37FC[limbIndex]].z;
+            temp_v0_4->mf[3][0] = this->limbPos[sLimbIndexToLimbPos[limbIndex]].x;
+            temp_v0_4->mf[3][1] = this->limbPos[sLimbIndexToLimbPos[limbIndex]].y;
+            temp_v0_4->mf[3][2] = this->limbPos[sLimbIndexToLimbPos[limbIndex]].z;
             Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
