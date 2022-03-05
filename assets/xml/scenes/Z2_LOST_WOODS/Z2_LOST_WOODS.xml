@@ -1,5 +1,5 @@
 <Root>
-    <File Name="Z2_LOST_WOODS" Segment="3" Game="MM">
+    <File Name="Z2_LOST_WOODS" Segment="2" Game="MM">
         <Texture Name="Z2_LOST_WOODSTex_00B9D0" Format="ia16" Width="64" Height="64" Offset="0xB9D0"/>
 
         <Scene Name="Z2_LOST_WOODS" Offset="0x0"/>

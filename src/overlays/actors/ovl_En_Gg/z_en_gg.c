@@ -256,7 +256,7 @@ void func_80B3556C(EnGg* this, GlobalContext* globalCtx) {
             func_80B35250(this);
         } else {
             this->actor.textId = func_80B357F0(this);
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
             this->actionFunc = func_80B352A4;
         }
     }
@@ -264,15 +264,15 @@ void func_80B3556C(EnGg* this, GlobalContext* globalCtx) {
 
 void func_80B35634(EnGg* this, GlobalContext* globalCtx) {
     s32 pad;
-    u32 temp_v0;
+    s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x77)) {
-        temp_v0 = func_800EE200(globalCtx, 0x77);
+    if (Cutscene_CheckActorAction(globalCtx, 119)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 119);
 
-        if (this->unk_2DB != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
-            this->unk_2DB = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+        if (this->unk_2DB != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk_2DB = globalCtx->csCtx.actorActions[actionIndex]->action;
 
-            switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_2DA = 0;
                     this->unk_2E6 = 0;
@@ -333,7 +333,7 @@ void func_80B35634(EnGg* this, GlobalContext* globalCtx) {
             func_80B358D8(this, globalCtx);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         this->actor.shape.yOffset = 0.0f;
     } else {
         this->unk_2DB = 99;
