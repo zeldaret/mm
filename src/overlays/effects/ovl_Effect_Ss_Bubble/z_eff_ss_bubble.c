@@ -28,7 +28,7 @@ u32 EffectSsBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     EffectSsBubbleInitParams* initParams = (EffectSsBubbleInitParams*)initParamsx;
 
     {
-        TexturePtr tex = (Rand_ZeroOne() < 0.5f) ? gameplay_keep_Tex_091BE0 : gameplay_keep_Tex_091CE0;
+        TexturePtr tex = (Rand_ZeroOne() < 0.5f) ? gEffBubble1Tex : gEffBubble2Tex;
 
         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
     }
@@ -58,7 +58,7 @@ void EffectSsBubble_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 150, 150, 150, 0);
     gSPSegment(POLY_OPA_DISP++, 0x08, this->gfx);
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0301B0);
+    gSPDisplayList(POLY_OPA_DISP++, gEffBubbleDL);
 
     CLOSE_DISPS(gfxCtx);
 }
