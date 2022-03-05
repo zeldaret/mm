@@ -90,6 +90,7 @@ extern UNK_TYPE D_0600B0A0;
 extern void* D_0405E6F0;
 extern FlexSkeletonHeader D_0600B2B0;
 extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
+extern Vec3f D_80990228; // = { 0.0f, 0.0f, 0.0f };
 
 void func_8098F800(SkelAnime* skelAnime, s32 ptr, s16 len);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
@@ -181,11 +182,24 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_8098F8A8(this, globalCtx);
 }
 
-s32 func_8098FBB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBB4.s")
+// s32 func_8098FBB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBB4.s")
+s32 func_8098FBB4(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
+    EnTg* this = THIS;
+    return 0;
+}
 
-void func_8098FBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBD0.s")
+// void func_8098FBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBD0.s")
+// void func_8098FBD0(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+//     EnTg* this = THIS;
+
+//     Vec3f sp18 = {0.0f,0.0f,0.0f};
+
+//     if (limbIndex == 9) {
+//         Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+//     }
+// }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Draw.s")
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
