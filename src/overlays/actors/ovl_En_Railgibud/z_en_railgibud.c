@@ -956,7 +956,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
     if ((this->textId == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->isInvincible = true;
-            func_801518B0(globalCtx, 0x13B2, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13B2, &this->actor);
             this->textId = 0x13B2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
@@ -968,7 +968,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
         switch (Message_GetState(&globalCtx->msgCtx)) {
             case 5:
                 if (func_80147624(globalCtx)) {
-                    func_801518B0(globalCtx, 0x13B3, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
                 }
                 break;
@@ -1123,27 +1123,27 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx) 
 void EnRailgibud_InitActorActionCommand(EnRailgibud* this) {
     switch (ENRAILGIBUD_GET_CUTSCENE_TYPE(&this->actor)) {
         case 1:
-            this->actorActionCommand = 0x207;
+            this->actorActionCommand = 519;
             break;
 
         case 2:
-            this->actorActionCommand = 0x208;
+            this->actorActionCommand = 520;
             break;
 
         case 3:
-            this->actorActionCommand = 0x209;
+            this->actorActionCommand = 521;
             break;
 
         case 4:
-            this->actorActionCommand = 0x20A;
+            this->actorActionCommand = 522;
             break;
 
         case 5:
-            this->actorActionCommand = 0x20B;
+            this->actorActionCommand = 523;
             break;
 
         default:
-            this->actorActionCommand = 0x207;
+            this->actorActionCommand = 519;
             break;
     }
 }
@@ -1171,13 +1171,13 @@ void EnRailgibud_SinkIntoGround(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
+    s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        actionIndex = func_800EE200(globalCtx, this->actorActionCommand);
-        if (this->csAction != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand);
+        if (this->csAction != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_IDLE;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_IDLE);
@@ -1236,7 +1236,7 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, GlobalContext* globalC
                 break;
         }
 
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return true;
     }
 
