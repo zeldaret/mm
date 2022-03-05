@@ -206,7 +206,7 @@ void func_80997DEC(EnGs* this, GlobalContext* globalCtx) {
 void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
-            func_801518B0(globalCtx, this->unk_210, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
             break;
 
         case 1:
@@ -533,10 +533,11 @@ s32 func_80998A48(EnGs* this, GlobalContext* globalCtx) {
     } else if (this->unk_19D == 1) {
         if (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7,
                           0) == 0.0f) {
-            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) && !Message_GetState(&globalCtx->msgCtx)) {
+            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) &&
+                Message_GetState(&globalCtx->msgCtx) == 0) {
                 this->unk_216 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
-                func_801518B0(globalCtx, 0x20D2, NULL);
+                Message_StartTextbox(globalCtx, 0x20D2, NULL);
             }
             this->unk_19A &= ~1;
             sp3C = 0;

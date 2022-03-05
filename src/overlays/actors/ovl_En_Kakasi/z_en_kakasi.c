@@ -549,7 +549,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
 
 void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
     this->actor.textId = 0x1646;
-    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
     this->cutsceneCamId = CAM_ID_MAIN;
     this->unk20C = 0.0f;
     this->unk210 = 60.0f;
@@ -682,7 +682,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         func_801477B4(globalCtx);
         func_800B7298(globalCtx, &this->actor, 0x56);
         this->actor.textId = 0x1648;
-        func_801518B0(globalCtx, (this->actor.textId), &this->actor);
+        Message_StartTextbox(globalCtx, (this->actor.textId), &this->actor);
         this->unkState1A8 = 0;
         this->unk190 = 1;
     }
