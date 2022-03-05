@@ -1214,7 +1214,7 @@ s32 func_808F5728(GlobalContext* globalCtx, EnIn* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 2) {
-        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
         *arg3 = 1;
         return 0;
     }

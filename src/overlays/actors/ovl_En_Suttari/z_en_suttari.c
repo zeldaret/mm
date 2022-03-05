@@ -372,7 +372,7 @@ void func_80BAAB78(EnSuttari* this, GlobalContext* globalCtx) {
                 break;
         }
     }
-    func_801518B0(globalCtx, this->textId, &this->actor);
+    Message_StartTextbox(globalCtx, this->textId, &this->actor);
 }
 
 void func_80BAAF1C(EnSuttari* this) {
@@ -892,7 +892,7 @@ void func_80BAC2FC(EnSuttari* this, GlobalContext* globalCtx) {
                     player->stateFlags1 |= 0x10000000;
                 }
                 this->textId = 0x2A30;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 this->actionFunc = func_80BAD2B4;
             }
             break;
@@ -1100,7 +1100,7 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
     this->unk428 = unkStruct.unk0;
     func_80BAC2FC(this, globalCtx);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, 0x2A3A, &this->actor);
+        Message_StartTextbox(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
         func_800B863C(&this->actor, globalCtx);
@@ -1132,7 +1132,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->cutscenes[1])) {
         ActorCutscene_Start(this->cutscenes[1], &this->actor);
         this->textId = 0x2A31;
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         this->flags1 |= 0x4000;
         Audio_QueueSeqCmd(NA_BGM_CHASE | 0x8000);
         this->actionFunc = func_80BAD380;
@@ -1234,7 +1234,7 @@ void func_80BAD5F8(EnSuttari* this, GlobalContext* globalCtx) {
     func_80BAB434(this);
     if ((this->flags1 & 0x20) && (this->unk430 == 0) && (unkStruct.unk0 != 7)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_801518B0(globalCtx, 0x2A02, &this->actor);
+            Message_StartTextbox(globalCtx, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
@@ -1272,7 +1272,7 @@ void func_80BAD7F8(EnSuttari* this, GlobalContext* globalCtx) {
         }
         if ((this->flags1 & 0x20) && (unkStruct.unk0 != 9)) {
             if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-                func_801518B0(globalCtx, 0x2A02, &this->actor);
+                Message_StartTextbox(globalCtx, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
                 func_800B863C(&this->actor, globalCtx);
@@ -1386,7 +1386,7 @@ void func_80BADE8C(EnSuttari* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_801518B0(globalCtx, 0x2A3A, &this->actor);
+        Message_StartTextbox(globalCtx, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;

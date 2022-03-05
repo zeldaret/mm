@@ -662,7 +662,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     func_80C0113C(this, 21, 1.0f);
     if ((player->transformation != PLAYER_FORM_DEKU) && (player->transformation != PLAYER_FORM_HUMAN)) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -674,7 +674,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[73] & 0x10)) ||
         ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.weekEventReg[85] & 2))) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -684,7 +684,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     }
 
     idx = gSaveContext.unk_FE6;
-    func_801518B0(globalCtx, D_80C03230[idx], &this->actor);
+    Message_StartTextbox(globalCtx, D_80C03230[idx], &this->actor);
     idx = gSaveContext.unk_FE6;
     gSaveContext.unk_FE7[idx] = this->unk_2C8 + 1;
     gSaveContext.unk_FE6++;

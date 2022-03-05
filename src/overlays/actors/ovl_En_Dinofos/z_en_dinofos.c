@@ -553,7 +553,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.curFrame > 35.0f) {
         if ((globalCtx->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
-            globalCtx->envCtx.unk_C3 = 11;
+            globalCtx->envCtx.lightSettingOverride = 11;
         }
 
         Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
@@ -564,7 +564,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -1054,7 +1054,7 @@ void func_8089CB10(EnDinofos* this, GlobalContext* globalCtx) {
     }
 
     if (globalCtx->sceneNum == SCENE_MITURIN) {
-        globalCtx->envCtx.unk_C3 = 11;
+        globalCtx->envCtx.lightSettingOverride = 11;
     }
 
     this->actionFunc = func_8089CBEC;
@@ -1115,7 +1115,7 @@ void func_8089CF00(EnDinofos* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_0017B8);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
     if (globalCtx->sceneNum == SCENE_MITURIN) {
-        globalCtx->envCtx.unk_C3 = 255;
+        globalCtx->envCtx.lightSettingOverride = 255;
     }
     this->actionFunc = func_8089CF70;
 }
@@ -1285,7 +1285,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
         func_8089ACEC(this, globalCtx);
         func_8089AD70(this);
         if (globalCtx->sceneNum == SCENE_MITURIN) {
-            globalCtx->envCtx.unk_C3 = 255;
+            globalCtx->envCtx.lightSettingOverride = 255;
         }
 
         this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);

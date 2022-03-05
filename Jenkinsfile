@@ -3,6 +3,10 @@ pipeline {
         label 'mm'
     }
 
+    options {
+        ansiColor('xterm')
+    }
+
     stages {
         stage('Check formatting') {
             steps {

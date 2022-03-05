@@ -378,16 +378,16 @@ void func_80989BF8(EnDg* this) {
 void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
     if (this->unk_286 == 21) {
         if (CURRENT_DAY == 1) {
-            func_801518B0(globalCtx, 0x91C, NULL);
+            Message_StartTextbox(globalCtx, 0x91C, NULL);
         } else {
-            func_801518B0(globalCtx, 0x91E, NULL);
+            Message_StartTextbox(globalCtx, 0x91E, NULL);
         }
     } else if ((this->unk_286 >= 0) && (this->unk_286 < 14)) {
-        func_801518B0(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
+        Message_StartTextbox(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
     } else if (this->unk_286 == 20) {
-        func_801518B0(globalCtx, 0x353D, NULL);
+        Message_StartTextbox(globalCtx, 0x353D, NULL);
     } else {
-        func_801518B0(globalCtx, 0x627, NULL);
+        Message_StartTextbox(globalCtx, 0x627, NULL);
     }
 }
 

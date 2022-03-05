@@ -713,7 +713,7 @@ void func_809756D0(EnSsh* this, GlobalContext* globalCtx) {
         phi_a1 = 0x910;
         gSaveContext.weekEventReg[34] |= 8;
     }
-    func_801518B0(globalCtx, phi_a1, &this->actor);
+    Message_StartTextbox(globalCtx, phi_a1, &this->actor);
 }
 
 void EnSsh_Idle(EnSsh* this, GlobalContext* globalCtx) {

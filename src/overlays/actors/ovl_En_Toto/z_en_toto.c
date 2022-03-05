@@ -382,7 +382,7 @@ s32 func_80BA3FB0(EnToto* this, GlobalContext* globalCtx) {
 
 s32 func_80BA3FCC(EnToto* this, GlobalContext* globalCtx) {
     if (DECR(this->unk2B1) == 0) {
-        func_801518B0(globalCtx, this->text->textId, NULL);
+        Message_StartTextbox(globalCtx, this->text->textId, NULL);
         return 1;
     }
     return 0;
@@ -439,7 +439,7 @@ s32 func_80BA4204(EnToto* this, GlobalContext* globalCtx) {
     if (DECR(this->unk2B1) == 0) {
         if (!ENTOTO_WEEK_EVENT_FLAGS) {
             temp_v1_2 = &D_80BA50DC[gSaveContext.playerForm - 1];
-            func_801518B0(globalCtx, (this->text->unk0 == 6) ? temp_v1_2->unk0 : temp_v1_2->unk4, NULL);
+            Message_StartTextbox(globalCtx, (this->text->unk0 == 6) ? temp_v1_2->unk0 : temp_v1_2->unk4, NULL);
         }
         return 1;
     }
@@ -529,7 +529,7 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            func_801518B0(globalCtx, D_80BA50DC[((void)0, gSaveContext.playerForm) - 1].unk2, NULL);
+                            Message_StartTextbox(globalCtx, D_80BA50DC[((void)0, gSaveContext.playerForm) - 1].unk2, NULL);
                         }
                     }
                     return 0;
@@ -675,11 +675,10 @@ s32 func_80BA4C44(EnToto* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA4CB4(EnToto* this, GlobalContext* globalCtx) {
-    CsCmdActorAction* action;
+    CsCmdActorAction* action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 525)];
 
-    action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x20D)];
-    if (this->unk2B5 != action->unk0) {
-        this->unk2B5 = action->unk0;
+    if (this->unk2B5 != action->action) {
+        this->unk2B5 = action->action;
         if (this->unk2B5 != 4) {
             if (this->unk2B5 == 3) {
                 Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_001DF0, -4.0f);
@@ -708,7 +707,7 @@ void EnToto_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnToto* this = THIS;
     s32 pad;
 
-    if (func_800EE29C(globalCtx, 0x20D)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x20D)) {
         func_80BA4CB4(this, globalCtx);
     } else {
         D_80BA51B8[this->actionFuncIndex](this, globalCtx);
