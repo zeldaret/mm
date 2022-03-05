@@ -452,7 +452,8 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) && (globalCtx->envCtx.unk_F2[2] == 0)) {
+            if ((gSaveContext.time >= CLOCK_TIME(7, 0)) && (gSaveContext.time < CLOCK_TIME(17, 30)) &&
+                (globalCtx->envCtx.unk_F2[2] == 0)) {
 
                 D_801BDBB0 = 1;
                 func_800FD78C(globalCtx);
@@ -485,7 +486,7 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
     if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) && (globalCtx->msgCtx.unk11F04 == 0x5E6) &&
-        (!FrameAdvance_IsEnabled(globalCtx)) && (globalCtx->sceneLoadFlag == 0) &&
+        (!FrameAdvance_IsEnabled(&globalCtx->state)) && (globalCtx->sceneLoadFlag == 0) &&
         (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
         oldTime = gSaveContext.time;

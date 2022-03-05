@@ -299,7 +299,7 @@ void func_809CD634(EnBji01* this, GlobalContext* globalCtx) {
     Audio_QueueSeqCmd(0xE0000101);
     globalCtx->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
     gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
-    func_80169EFC(globalCtx); /* Load new entrance? */
+    func_80169EFC(&globalCtx->state); /* Load new entrance? */
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnBji01_DoNothing;
 }

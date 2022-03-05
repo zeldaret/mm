@@ -262,7 +262,7 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997FF0(EnGs* this, GlobalContext* globalCtx) {
-    if (SubS_StartActorCutscene(&this->actor, globalCtx->unk_1879C[0], -1, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartActorCutscene(&this->actor, globalCtx->playerActorCsIds[0], -1, SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, globalCtx);
     }
 }
@@ -339,7 +339,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
 
 void func_80998300(EnGs* this, GlobalContext* globalCtx) {
     if (this->actor.cutscene != -1) {
-        ActorCutscene_Stop(globalCtx->unk_1879C[0]);
+        ActorCutscene_Stop(globalCtx->playerActorCsIds[0]);
     }
 }
 
@@ -1025,8 +1025,8 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
         if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, globalCtx);
             Actor_GetScreenPos(globalCtx, &this->actor, &sp2E, &sp2C);
-            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > 320) || (sp2C < 0) ||
-                (sp2C > 240)) {
+            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
+                (sp2C > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
             } else if (this->unk_21C > 0) {
                 func_800BC848(&this->actor, globalCtx, this->unk_21C, this->unk_21E);

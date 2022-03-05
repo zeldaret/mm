@@ -1624,8 +1624,7 @@ beginseg
     name "ovl_Bg_Ingate"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ingate/z_bg_ingate.o"
-    include "build/data/ovl_Bg_Ingate/ovl_Bg_Ingate.data.o"
-    include "build/data/ovl_Bg_Ingate/ovl_Bg_Ingate.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Ingate/ovl_Bg_Ingate_reloc.o"
 endseg
 
 beginseg
@@ -3093,8 +3092,7 @@ beginseg
     name "ovl_En_Mm3"
     compress
     include "build/src/overlays/actors/ovl_En_Mm3/z_en_mm3.o"
-    include "build/data/ovl_En_Mm3/ovl_En_Mm3.data.o"
-    include "build/data/ovl_En_Mm3/ovl_En_Mm3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mm3/ovl_En_Mm3_reloc.o"
 endseg
 
 beginseg
@@ -3124,8 +3122,7 @@ beginseg
     name "ovl_En_Prz"
     compress
     include "build/src/overlays/actors/ovl_En_Prz/z_en_prz.o"
-    include "build/data/ovl_En_Prz/ovl_En_Prz.data.o"
-    include "build/data/ovl_En_Prz/ovl_En_Prz.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Prz/ovl_En_Prz_reloc.o"
 endseg
 
 beginseg
@@ -3659,8 +3656,7 @@ beginseg
     name "ovl_En_Shn"
     compress
     include "build/src/overlays/actors/ovl_En_Shn/z_en_shn.o"
-    include "build/data/ovl_En_Shn/ovl_En_Shn.data.o"
-    include "build/data/ovl_En_Shn/ovl_En_Shn.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Shn/ovl_En_Shn_reloc.o"
 endseg
 
 beginseg
