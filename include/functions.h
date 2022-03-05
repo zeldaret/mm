@@ -2690,11 +2690,7 @@ void func_801588D0(GlobalContext* globalCtx, s16 param_2);
 // void func_8015E750(void);
 void func_8015E7EC(GlobalContext* globalCtx, UNK_PTR puParm2);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
-// void func_80160A90(void);
-// void func_80160AF8(void);
-// void func_80160B40(void);
-// void func_80160B80(void);
-// void func_80160BC0(void);
+
 void ShrinkWindow_SetLetterboxTarget(s32 target);
 s32 ShrinkWindow_GetLetterboxTarget(void);
 void ShrinkWindow_SetLetterboxMagnitude(s32 magnitude);

@@ -562,7 +562,7 @@
             0x801C5E30 : "z_vr_box",
             0x801C5FC0 : "z_sram_NES",
             0x801D0470 : "z_message_nes",
-            0x801D0B50 : "",
+            0x801D0B50 : "z_player_call",
             0x801D0B70 : "z_kaleido_manager",
             0x801D0BB0 : "",
             0x801D0C80 : "z_fbdemo",
