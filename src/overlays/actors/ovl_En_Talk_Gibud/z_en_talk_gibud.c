@@ -625,52 +625,52 @@ void EnTalkGibud_Revive(EnTalkGibud* this, GlobalContext* globalCtx) {
 void EnTalkGibud_GetTextIdForRequestedItem(EnTalkGibud* this, GlobalContext* globalCtx) {
     switch (this->requestedItemIndex) {
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION:
-            func_801518B0(globalCtx, 0x138C, &this->actor);
+            Message_StartTextbox(globalCtx, 0x138C, &this->actor);
             this->textId = 0x138C;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BEANS:
-            func_801518B0(globalCtx, 0x138D, &this->actor);
+            Message_StartTextbox(globalCtx, 0x138D, &this->actor);
             this->textId = 0x138D;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_SPRING_WATER:
-            func_801518B0(globalCtx, 0x138E, &this->actor);
+            Message_StartTextbox(globalCtx, 0x138E, &this->actor);
             this->textId = 0x138E;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_FISH:
-            func_801518B0(globalCtx, 0x138F, &this->actor);
+            Message_StartTextbox(globalCtx, 0x138F, &this->actor);
             this->textId = 0x138F;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BUGS:
-            func_801518B0(globalCtx, 0x1390, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1390, &this->actor);
             this->textId = 0x1390;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_DEKU_NUTS:
-            func_801518B0(globalCtx, 0x1391, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1391, &this->actor);
             this->textId = 0x1391;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BOMBS:
-            func_801518B0(globalCtx, 0x1392, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1392, &this->actor);
             this->textId = 0x1392;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_HOT_SPRING_WATER:
-            func_801518B0(globalCtx, 0x1393, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1393, &this->actor);
             this->textId = 0x1393;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BIG_POE:
-            func_801518B0(globalCtx, 0x1394, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1394, &this->actor);
             this->textId = 0x1394;
             break;
 
         case EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK:
-            func_801518B0(globalCtx, 0x1395, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1395, &this->actor);
             this->textId = 0x1395;
             break;
     }
@@ -694,7 +694,7 @@ void EnTalkGibud_GetNextTextBoxId(EnTalkGibud* this, GlobalContext* globalCtx) {
             case 0x1394:
             case 0x1395:
                 // Prompts the player to choose an item
-                func_801518B0(globalCtx, 0xFF, &this->actor);
+                Message_StartTextbox(globalCtx, 0xFF, &this->actor);
                 this->textId = 0xFF;
                 break;
         }
@@ -750,7 +750,7 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, GlobalContext* globalCtx)
             }
             func_801477B4(globalCtx);
         } else if (this->itemActionParam < PLAYER_AP_NONE) {
-            func_801518B0(globalCtx, 0x1389, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1389, &this->actor);
             this->textId = 0x1389;
         }
     }
@@ -771,7 +771,7 @@ void EnTalkGibud_SetupPassiveIdle(EnTalkGibud* this) {
 void EnTalkGibud_PassiveIdle(EnTalkGibud* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->isTalking = true;
-        func_801518B0(globalCtx, 0x1388, &this->actor);
+        Message_StartTextbox(globalCtx, 0x1388, &this->actor);
         this->textId = 0x1388;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnTalkGibud_SetupTalk(this);

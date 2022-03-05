@@ -882,8 +882,8 @@
         <Animation Name="gameplay_keep_Anim_0205A0" Offset="0x205A0" />
         <Animation Name="gameplay_keep_Anim_020658" Offset="0x20658" />
         <DList Name="gameplay_keep_DL_020B30" Offset="0x20B30" />
-        <DList Name="gameplay_keep_DL_020BB8" Offset="0x20BB8" />
-        <DList Name="gameplay_keep_DL_020D00" Offset="0x20D00" />
+        <DList Name="gDoorLeftDL" Offset="0x20BB8" />
+        <DList Name="gDoorRightDL" Offset="0x20D00" />
         <Texture Name="gameplay_keep_Tex_020E38" OutName="tex_020E38" Format="rgba16" Width="32" Height="64" Offset="0x20E38" />
         <DList Name="gameplay_keep_DL_0221B8" Offset="0x221B8" />
         <Texture Name="gameplay_keep_Tex_0222E8" OutName="tex_0222E8" Format="i4" Width="32" Height="64" Offset="0x222E8" />
@@ -892,14 +892,14 @@
         <Limb Name="gameplay_keep_Standardlimb_022AF4" Type="Standard" Offset="0x22AF4" />
         <Limb Name="gameplay_keep_Standardlimb_022B00" Type="Standard" Offset="0x22B00" />
         <Limb Name="gameplay_keep_Standardlimb_022B0C" Type="Standard" Offset="0x22B0C" />
-        <Skeleton Name="gameplay_keep_Skel_022B28" Type="Normal" LimbType="Standard" Offset="0x22B28" />
+        <Skeleton Name="gDoorSkel" Type="Normal" LimbType="Standard" Offset="0x22B28" />
         <Animation Name="gameplay_keep_Anim_022BE8" Offset="0x22BE8" />
         <Animation Name="gameplay_keep_Anim_022CA8" Offset="0x22CA8" />
         <Animation Name="gameplay_keep_Anim_022D90" Offset="0x22D90" />
         <Animation Name="gameplay_keep_Anim_022E68" Offset="0x22E68" />
         <Blob Name="gameplay_keep_zeroes_unk_00022E78" Size="0xA8" Offset="0x22E78" />
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
-        <Collision Name="gameplay_keep_Colheader_023100" Offset="0x23100" />
+        <Collision Name="gDoorCol" Offset="0x23100" />
         <DList Name="gameplay_keep_DL_023130" Offset="0x23130" />
         <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />

@@ -335,7 +335,7 @@ void EnSob1_BombShopkeeper_EndInteraction(EnSob1* this, GlobalContext* globalCtx
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
     this->goodbyeTextId = EnSob1_GetGoodbye(this);
-    func_801518B0(globalCtx, this->goodbyeTextId, &this->actor);
+    Message_StartTextbox(globalCtx, this->goodbyeTextId, &this->actor);
     EnSob1_SetupAction(this, EnSob1_EndingInteraction);
 }
 
@@ -532,7 +532,7 @@ void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx) {
         }
         player->stateFlags2 |= 0x20000000;
         this->welcomeTextId = EnSob1_GetWelcome(this, globalCtx);
-        func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
+        Message_StartTextbox(globalCtx, this->welcomeTextId, &this->actor);
         if (ENSOB1_GET_SHOPTYPE(&this->actor) == BOMB_SHOP) {
             this->headRotTarget = -0x2000;
         }
@@ -790,7 +790,7 @@ void EnSob1_Walking(EnSob1* this, GlobalContext* globalCtx) {
         }
         player->stateFlags2 |= 0x20000000;
         this->welcomeTextId = EnSob1_GetWelcome(this, globalCtx);
-        func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
+        Message_StartTextbox(globalCtx, this->welcomeTextId, &this->actor);
         this->wasTalkedToWhileWalking = true;
     } else {
         if ((player->actor.world.pos.x >= this->posXZRange.xMin &&
@@ -1092,7 +1092,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
         item->restockFunc(globalCtx, item);
         player->actor.shape.rot.y += 0x8000;
         player->stateFlags2 |= 0x20000000;
-        func_801518B0(globalCtx, this->welcomeTextId, &this->actor);
+        Message_StartTextbox(globalCtx, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(globalCtx, this, true);
         func_800B85E0(&this->actor, globalCtx, 200.0f, EXCH_ITEM_MINUS1);
     }

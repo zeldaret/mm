@@ -422,7 +422,7 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
                 case FSN_ANIMATION_SLAM_COUNTER_START:
                     this->animationIndex++;
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, animations, this->animationIndex);
-                    func_801518B0(globalCtx, this->textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->textId, &this->actor);
                     EnOssan_SetupStartShopping(globalCtx, this, false);
                     break;
                 case FSN_ANIMATION_HANDS_ON_COUNTER_LOOP:
@@ -447,7 +447,7 @@ void EnOssan_BeginInteraction(EnOssan* this, GlobalContext* globalCtx) {
     } else {
         EnOssan_SetHaveMet(this);
         this->textId = EnOssan_PartTimerWorker_GetWelcome(this, globalCtx);
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, false);
     }
 }
@@ -1130,7 +1130,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
                         player->stateFlags2 |= 0x20000000;
-                        func_801518B0(globalCtx, this->textId, &this->actor);
+                        Message_StartTextbox(globalCtx, this->textId, &this->actor);
                         EnOssan_SetupStartShopping(globalCtx, this, true);
                         func_800B85E0(&this->actor, globalCtx, 100.0f, EXCH_ITEM_MINUS1);
                         break;
@@ -1148,7 +1148,7 @@ void EnOssan_ContinueShopping(EnOssan* this, GlobalContext* globalCtx) {
         item->restockFunc(globalCtx, item);
         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
         player->stateFlags2 |= 0x20000000;
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         EnOssan_SetupStartShopping(globalCtx, this, true);
         func_800B85E0(&this->actor, globalCtx, 100.0f, EXCH_ITEM_MINUS1);
     }
