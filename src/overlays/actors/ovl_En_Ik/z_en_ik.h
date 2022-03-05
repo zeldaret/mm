@@ -23,8 +23,8 @@ typedef struct {
 typedef struct EnIk {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s jointTable[30];
-    /* 0x023C */ Vec3s morphTable[30];
+    /* 0x0188 */ Vec3s jointTable[IRON_KNUCKLE_LIMB_MAX];
+    /* 0x023C */ Vec3s morphTable[IRON_KNUCKLE_LIMB_MAX];
     /* 0x02F0 */ EnIkActionFunc actionFunc;
     /* 0x02F4 */ u8 unk_2F4;
     /* 0x02F5 */ u8 drawEffect;

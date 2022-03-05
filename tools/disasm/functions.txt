@@ -7100,7 +7100,7 @@
     0x8092ABD8:("func_8092ABD8",),
     0x8092AC4C:("func_8092AC4C",),
     0x8092ACFC:("func_8092ACFC",),
-    0x8092ADB4:("func_8092ADB4",),
+    0x8092ADB4:("EnIk_SetupDeath",),
     0x8092AE14:("func_8092AE14",),
     0x8092AFB4:("func_8092AFB4",),
     0x8092AFD4:("func_8092AFD4",),
