@@ -67,7 +67,7 @@ void func_80B965D0(EnZot* this, GlobalContext* globalCtx) {
     s32 i;
 
     if ((this->path != NULL) && (this->path->count >= 5)) {
-        Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+        Vec3s* points = Lib_SegmentedToVirtual(this->path->points);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++, points++) {
             if (this->unk_2D8[i] == NULL) {
@@ -520,20 +520,21 @@ void func_80B975F8(EnZot* this, GlobalContext* globalCtx) {
 }
 
 void func_80B9765C(EnZot* this, GlobalContext* globalCtx) {
-    if (1) {
-        do { } while (0); }
-
     func_80B96D4C(this);
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        u16 temp = globalCtx->msgCtx.unk11F04;
-        u32 temp2;
+        s32 requiredScopeTemp;
 
-        if ((temp == 0x1262) || (temp == 0x1267) || (temp == 0x126A) || (temp == 0x126B)) {
-            temp2 = temp;
-            func_80151938(globalCtx, temp2 + 1);
-        } else {
-            func_801477B4(globalCtx);
-            this->actionFunc = func_80B97708;
+        switch (globalCtx->msgCtx.unk11F04) {
+            case 0x1262:
+            case 0x1267:
+            case 0x126A:
+            case 0x126B:
+                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                break;
+            default:
+                func_801477B4(globalCtx);
+                this->actionFunc = func_80B97708;
+                break;
         }
     }
 }
