@@ -12,7 +12,7 @@
         <DList Name="object_numa_obj_DL_004448" Offset="0x4448" />
         <DList Name="object_numa_obj_DL_0051B0" Offset="0x51B0" />
         <DList Name="object_numa_obj_DL_0051B8" Offset="0x51B8" />
-        <DList Name="object_numa_obj_DL_005DF0" Offset="0x5DF0" />
+        <DList Name="gWoodfallDoorDL" Offset="0x5DF0" />
         <Texture Name="object_numa_obj_Tex_005FC0" OutName="tex_005FC0" Format="rgba16" Width="32" Height="64" Offset="0x5FC0" />
         <DList Name="object_numa_obj_DL_007150" Offset="0x7150" />
         <Texture Name="object_numa_obj_Tex_0072B0" OutName="tex_0072B0" Format="rgba16" Width="32" Height="64" Offset="0x72B0" />

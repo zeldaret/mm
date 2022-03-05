@@ -722,7 +722,7 @@ s32 func_80A87400(EnTru* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, 30.0f, 0.2f, 1000.0f);
 
     if (this->path != NULL) {
-        sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+        sp4C = Lib_SegmentedToVirtual(this->path->points);
         if (func_8013BD40(&this->actor, this->path, this->unk_384)) {
             if (this->unk_384 > this->unk_384 + 1) {
                 this->unk_384 = this->path->count - 2;
@@ -944,7 +944,7 @@ s32 func_80A87B48(Actor* thisx, GlobalContext* globalCtx) {
                 sp4C.z = 40.0f;
                 Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, sp3E, &sp4C, &sp40);
                 func_80A85620(this->unk_394, &sp40, 2.0f, 0.08f, 60.0f);
-                func_8016A268(globalCtx, 1, 160, 160, 160, 0);
+                func_8016A268(&globalCtx->state, 1, 160, 160, 160, 0);
                 this->unk_370 = 20;
                 this->unk_372 = 10;
                 this->unk_364++;

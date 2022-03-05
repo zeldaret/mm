@@ -296,7 +296,8 @@ void EnRailSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_3F8 = 0;
     }
 
-    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 0)) {
+    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) &&
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -489,11 +490,11 @@ void func_80B716A8(EnRailSkb* this, GlobalContext* globalCtx) {
         this->unk_3FE = 1;
         func_80B71D8C(this, globalCtx, func_80B723F8);
         if (!func_80B7285C(this)) {
-            func_801518B0(globalCtx, 0x13EC, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13EC, &this->actor);
             this->unk_400 = 0x13EC;
             func_80B72830(this, 1);
         } else {
-            func_801518B0(globalCtx, 0x13F5, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F5, &this->actor);
             this->unk_400 = 0x13F5;
         }
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 12);
@@ -563,8 +564,8 @@ void func_80B71910(EnRailSkb* this) {
 }
 
 void func_80B71954(EnRailSkb* this, GlobalContext* globalCtx) {
-    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
-    f32 sp30 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
+    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
+    f32 sp30 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, sp36, 1, 0x71C, 0xB6);
     this->actor.world.rot = this->actor.shape.rot;
@@ -581,24 +582,24 @@ void func_80B71A08(EnRailSkb* this) {
 }
 
 void func_80B71A58(EnRailSkb* this, GlobalContext* globalCtx) {
-    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
+    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
-        if (this->unk_2E8 < this->unk_22C->actor.colChkInfo.health) {
-            this->unk_22C->actor.colChkInfo.health--;
+        if (this->unk_2E8 < this->unk_22C->dyna.actor.colChkInfo.health) {
+            this->unk_22C->dyna.actor.colChkInfo.health--;
         } else {
-            this->unk_22C->actor.colChkInfo.health--;
+            this->unk_22C->dyna.actor.colChkInfo.health--;
             func_80B71B6C(this);
         }
     }
 
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        if (this->unk_2E8 < this->unk_22C->actor.colChkInfo.health) {
-            this->unk_22C->actor.colChkInfo.health--;
+        if (this->unk_2E8 < this->unk_22C->dyna.actor.colChkInfo.health) {
+            this->unk_22C->dyna.actor.colChkInfo.health--;
         } else {
-            this->unk_22C->actor.colChkInfo.health--;
+            this->unk_22C->dyna.actor.colChkInfo.health--;
             func_80B71B6C(this);
         }
     }
@@ -615,7 +616,7 @@ void func_80B71B6C(EnRailSkb* this) {
 void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
-    f32 sp34 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
+    f32 sp34 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
 
     if (this->unk_3F2 > 0) {
         this->unk_3F2--;
@@ -623,15 +624,15 @@ void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y,
-                       Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos), 1, 0x71C, 0xB6);
+                       Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos), 1, 0x71C, 0xB6);
 
-    if ((this->actor.bgCheckFlags & 1) && (this->unk_22C->actor.colChkInfo.health == 0)) {
+    if ((this->actor.bgCheckFlags & 1) && (this->unk_22C->dyna.actor.colChkInfo.health == 0)) {
         Actor_MoveWithGravity(&this->actor);
     } else {
         this->actor.velocity.y += this->actor.gravity;
         this->actor.world.pos.y += this->actor.velocity.y;
-        Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_22C->actor.world.pos.x, 0.6f, 1.6f, 0.1f);
-        Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_22C->actor.world.pos.z, 0.6f, 1.6f, 0.1f);
+        Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_22C->dyna.actor.world.pos.x, 0.6f, 1.6f, 0.1f);
+        Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_22C->dyna.actor.world.pos.z, 0.6f, 1.6f, 0.1f);
     }
 
     if (this->actor.bgCheckFlags & 2) {
@@ -702,34 +703,34 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         switch (this->unk_400) {
             case 0x13EC:
-                func_801518B0(globalCtx, 0x13ED, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13ED, &this->actor);
                 this->unk_400 = 0x13ED;
                 break;
 
             case 0x13ED:
-                func_801518B0(globalCtx, 0x13EE, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13EE, &this->actor);
                 this->unk_400 = 0x13EE;
                 break;
 
             case 0x13EE:
-                func_801518B0(globalCtx, 0x13EF, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13EF, &this->actor);
                 this->unk_400 = 0x13EF;
                 break;
 
             case 0x13EF:
             case 0x13F5:
-                func_801518B0(globalCtx, 0x13F0, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F0, &this->actor);
                 this->unk_400 = 0x13F0;
                 break;
 
             case 0x13F1:
-                func_801518B0(globalCtx, 0x13F2, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F2, &this->actor);
                 this->unk_400 = 0x13F2;
                 break;
 
             case 0x13F2:
                 if (this->unk_3FC == 1) {
-                    func_801518B0(globalCtx, 0x13F4, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x13F4, &this->actor);
                     this->unk_400 = 0x13F4;
                 } else {
                     func_801477B4(globalCtx);
@@ -738,7 +739,7 @@ void func_80B71F3C(EnRailSkb* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x13F3:
-                func_801518B0(globalCtx, 0x13F2, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F2, &this->actor);
                 this->unk_400 = 0x13F2;
                 this->unk_3FC = 1;
                 break;
@@ -755,11 +756,11 @@ void func_80B72100(EnRailSkb* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
-            func_801518B0(globalCtx, 0x13F1, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F1, &this->actor);
             this->unk_400 = 0x13F1;
         } else {
             func_8019F208();
-            func_801518B0(globalCtx, 0x13F3, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F3, &this->actor);
             this->unk_400 = 0x13F3;
         }
     }
