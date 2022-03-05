@@ -51,7 +51,7 @@ typedef struct EnDno {
     /* 0x458 */ s32 unk_458;
     /* 0x45C */ s16 unk_45C;
     /* 0x460 */ Actor* unk_460;
-    /* 0x464 */ u16 unk_464;
+    /* 0x464 */ u16 textId;
     /* 0x466 */ s16 unk_466;
     /* 0x468 */ u8 unk_468;
 } EnDno; // size = 0x46C

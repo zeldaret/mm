@@ -334,19 +334,19 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
 void func_80A71E54(EnDno* this, GlobalContext* globalCtx) {
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
         if (gSaveContext.weekEventReg[27] & 1) {
-            this->unk_464 = 0x811;
+            this->textId = 0x811;
         } else {
-            this->unk_464 = 0x80F;
+            this->textId = 0x80F;
             gSaveContext.weekEventReg[27] |= 1;
         }
     } else if (gSaveContext.weekEventReg[26] & 0x80) {
-        this->unk_464 = 0x80B;
+        this->textId = 0x80B;
     } else {
-        this->unk_464 = 0x80C;
+        this->textId = 0x80C;
         gSaveContext.weekEventReg[26] |= 0x80;
     }
 
-    if (this->unk_464 != 0x811) {
+    if (this->textId != 0x811) {
         this->unk_3B0 |= 0x10;
     } else {
         this->unk_3B0 &= ~0x10;
@@ -361,12 +361,12 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
         case 0:
             if (!(this->unk_3B0 & 0x10) ||
                 Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xE38)) {
-                switch (this->unk_464) {
+                switch (this->textId) {
                     case 0x80B:
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 16, &this->unk_32C);
 
                     case 0x811:
-                        func_801518B0(globalCtx, this->unk_464, &this->actor);
+                        Message_StartTextbox(globalCtx, this->textId, &this->actor);
                         break;
 
                     case 0x80C:
@@ -375,7 +375,7 @@ void func_80A71F18(EnDno* this, GlobalContext* globalCtx) {
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 4, &this->unk_32C);
                         } else if ((this->unk_32C == 4) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 11, &this->unk_32C);
-                            func_801518B0(globalCtx, this->unk_464, &this->actor);
+                            Message_StartTextbox(globalCtx, this->textId, &this->actor);
                         }
                         break;
                 }
@@ -548,11 +548,11 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                         }
                     } else if ((this->unk_32C == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         if (Flags_GetSwitch(globalCtx, ENDNO_GET_3F80(&this->actor))) {
-                            func_801518B0(globalCtx, 0x801, &this->actor);
+                            Message_StartTextbox(globalCtx, 0x801, &this->actor);
                         } else if (Player_GetMask(globalCtx) == PLAYER_MASK_SCENTS) {
-                            func_801518B0(globalCtx, 0x806, &this->actor);
+                            Message_StartTextbox(globalCtx, 0x806, &this->actor);
                         } else {
-                            func_801518B0(globalCtx, 0x800, &this->actor);
+                            Message_StartTextbox(globalCtx, 0x800, &this->actor);
                         }
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 14, &this->unk_32C);
                     }
@@ -561,12 +561,12 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
                 case 2:
                     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2D8)) {
                         gSaveContext.weekEventReg[93] |= 2;
-                        func_801518B0(globalCtx, 0x802, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x802, &this->actor);
                     }
                     break;
 
                 case 3:
-                    func_801518B0(globalCtx, 0x804, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x804, &this->actor);
                     break;
             }
             break;
@@ -590,7 +590,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
 
                 if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 12, &this->unk_32C);
-                    func_801518B0(globalCtx, 0x803, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x803, &this->actor);
                 }
             }
             break;
@@ -856,12 +856,12 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx) {
 void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
     s32 phi_a2;
     u8 sp33 = true;
-    u32 temp_v0;
+    s32 temp_v0;
 
-    if (func_800EE29C(globalCtx, 0x1DB)) {
-        temp_v0 = func_800EE200(globalCtx, 0x1DB);
-        if (this->unk_468 != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
-            switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 475)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 475);
+        if (this->unk_468 != globalCtx->csCtx.actorActions[temp_v0]->action) {
+            switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
                 case 1:
                     phi_a2 = 13;
                     break;
@@ -880,7 +880,7 @@ void func_80A73408(EnDno* this, GlobalContext* globalCtx) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, phi_a2, &this->unk_32C);
             }
         }
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_32C == 17)) {
