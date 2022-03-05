@@ -74,7 +74,7 @@ void Message_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32* offse
     s32 temp1 = *offset;
     f32 temp2 = *arg3;
     Font_LoadCharNES(globalCtx, codePointIndex, temp1);
-    ((u8*)msgCtx->decodedBuffer)[decodedBufPos] = codePointIndex; // Nasty
+    ((u8*)msgCtx->decodedBuffer)[decodedBufPos] = codePointIndex;
     temp1 += FONT_CHAR_TEX_SIZE;
     temp2 += (16.0f * msgCtx->unk12098);
     *offset = temp1;
