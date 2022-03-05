@@ -254,7 +254,7 @@ s32 EnMttag_ExitRace(GlobalContext* globalCtx, s32 arg1, s32 nextTransition) {
  */
 void EnMttag_ShowFalseStartMessage(EnMttag* this, GlobalContext* globalCtx) {
     gSaveContext.unk_3DD0[4] = 0;
-    func_801518B0(globalCtx, 0xE95, NULL); // An entrant made a false start
+    Message_StartTextbox(globalCtx, 0xE95, NULL); // An entrant made a false start
     func_800B7298(globalCtx, &this->actor, 7);
     Audio_QueueSeqCmd(0x101400FF);
     this->actionFunc = EnMttag_PotentiallyRestartRace;
@@ -265,7 +265,7 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, GlobalContext* globalCtx) {
  * they probably can't win the race.
  */
 void EnMttag_ShowCantWinMessage(EnMttag* this, GlobalContext* globalCtx) {
-    func_801518B0(globalCtx, 0xE97, NULL); // You can't win now...
+    Message_StartTextbox(globalCtx, 0xE97, NULL); // You can't win now...
     func_800B7298(globalCtx, &this->actor, 7);
     this->actionFunc = EnMttag_HandleCantWinChoice;
 }
