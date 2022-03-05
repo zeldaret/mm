@@ -182,7 +182,7 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
 
         if (!(gSaveContext.eventInf[3] & 0x20) && (this->unk160 & 0x10) && (this->unk16C == 0)) {
             this->dyna.actor.textId = 0x9E3;
-            func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
+            Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
             this->unk160 &= ~0x10;
         }
 
@@ -192,7 +192,7 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
                 func_80953E38(globalCtx);
                 func_800B7298(globalCtx, &this->dyna.actor, 7);
                 this->dyna.actor.textId = 0x9E4;
-                func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
+                Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
                 this->unk16C += 1;
                 gSaveContext.weekEventReg[90] |= 0x40;
                 this->actionFunc = func_809543D4;
@@ -232,7 +232,7 @@ void func_809541B8(BgIngate* this, GlobalContext* globalCtx) {
             if (this->dyna.actor.playerHeightRel > 15.0f) {
                 func_800B7298(globalCtx, &this->dyna.actor, 7);
                 this->dyna.actor.textId = 0x9E6;
-                func_801518B0(globalCtx, this->dyna.actor.textId, NULL);
+                Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
                 this->actionFunc = func_809543D4;
             }
         }
