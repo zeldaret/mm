@@ -1359,10 +1359,6 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-/*
- * this matches without OPENDISPS but with it has stack issues,
- *  might be able to find an alternative match with the macros, so far no success
- */
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = THIS;
     f32 magnitude;
@@ -1381,42 +1377,41 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&vec1, &gZeroVec3f);
     }
 
-    {
-        GraphicsContext* gfx = globalCtx->state.gfxCtx;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        // fully visible OR fully transparent
-        if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
-            Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            dispHead = gfx->polyOpa.p;
-        } else {
-            Scene_SetRenderModeXlu(globalCtx, 1, 2);
-            dispHead = gfx->polyXlu.p;
-        }
-
-        gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
-
-        gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
-
-        Matrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
-        Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x, vec2.y + vec1.y, vec2.z + vec1.z,
-                                this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->lanternColor.a);
-
-        gDPSetEnvColor(&dispHead[2], this->lanternColor.r, this->lanternColor.g, this->lanternColor.b,
-                       this->mainColor.a);
-
-        gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-        gSPDisplayList(&dispHead[4], &gBigpoDrawLanternMainDL);
-
-        gSPDisplayList(&dispHead[5], &gBigpoDrawLanternPurpleTopDL);
-
-        // fully transparent OR fully invisible
-        if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
-            gfx->polyOpa.p = &dispHead[6];
-        } else {
-            gfx->polyXlu.p = &dispHead[6];
-        }
+    // fully visible OR fully transparent
+    if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
+        Scene_SetRenderModeXlu(globalCtx, 0, 1);
+        dispHead = POLY_OPA_DISP;
+    } else {
+        Scene_SetRenderModeXlu(globalCtx, 1, 2);
+        dispHead = POLY_XLU_DISP;
     }
+
+    gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
+
+    gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
+
+    Matrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
+    Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x, vec2.y + vec1.y, vec2.z + vec1.z,
+                            this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->lanternColor.a);
+
+    gDPSetEnvColor(&dispHead[2], this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->mainColor.a);
+
+    gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    gSPDisplayList(&dispHead[4], &gBigpoDrawLanternMainDL);
+
+    gSPDisplayList(&dispHead[5], &gBigpoDrawLanternPurpleTopDL);
+
+    // fully transparent OR fully invisible
+    if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
+        POLY_OPA_DISP = &dispHead[6];
+    } else {
+        POLY_XLU_DISP = &dispHead[6];
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
