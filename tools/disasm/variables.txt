@@ -9004,7 +9004,7 @@
     0x80979150:("D_80979150","f32","",0x4),
     0x80979560:("Effect_Ss_D_Fire_InitVars","UNK_TYPE1","",0x1),
     0x80979568:("D_80979568","UNK_TYPE1","",0x1),
-    0x80979AB0:("Effect_Ss_Bubble_InitVars","UNK_TYPE1","",0x1),
+    0x80979AB0:("Effect_Ss_Bubble_InitVars","UNK_TYPE1","",0x8),
     0x80979AB8:("D_80979AB8","UNK_TYPE1","",0x1),
     0x80979AD0:("D_80979AD0","f32","",0x4),
     0x80979AD4:("D_80979AD4","f32","",0x4),
