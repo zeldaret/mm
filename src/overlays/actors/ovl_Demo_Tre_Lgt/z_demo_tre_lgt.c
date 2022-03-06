@@ -146,9 +146,10 @@ s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelAnimeCurve* skelCu
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (globalCtx->state.frames * 2) % 256, 0, 64, 32, 1,
                                 (globalCtx->state.frames * -2) % 256, 0, 64, 32));
 
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_BOX_LIGHT_LIMB_01) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 180, this->colorAlpha1);
-    } else if (limbIndex == 13 || limbIndex == 7 || limbIndex == 4 || limbIndex == 10) {
+    } else if (limbIndex == OBJECT_BOX_LIGHT_LIMB_13 || limbIndex == OBJECT_BOX_LIGHT_LIMB_07 ||
+               limbIndex == OBJECT_BOX_LIGHT_LIMB_04 || limbIndex == OBJECT_BOX_LIGHT_LIMB_10) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 180, this->colorAlpha2);
     }
 

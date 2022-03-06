@@ -179,8 +179,8 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < ARRAY_COUNT(D_809EE1F8); i++) {
         spA8.x = D_809EE1F8[i].x + this->actor.world.pos.x;
         spA8.z = D_809EE1F8[i].z + this->actor.world.pos.z;
-        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &spA8, &spB4, &spC0, 1, 0, 0, 1,
-                                    &spA4)) {
+        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &spA8, &spB4, &spC0, true, false, false,
+                                    true, &spA4)) {
             if (i == 0) {
                 this->unk_6D8 = spB4.x;
             } else if (i == 1) {

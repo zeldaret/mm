@@ -280,7 +280,7 @@ void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (D_8089E364 == 0) {
         for (i = 0; i < ARRAY_COUNT(D_8089E33C); i++) {
-            D_8089E33C[i] = (Gfx*)Lib_SegmentedToVirtual(D_8089E33C[i]);
+            D_8089E33C[i] = Lib_SegmentedToVirtual(D_8089E33C[i]);
         }
         D_8089E364 = 1;
     }

@@ -628,7 +628,7 @@ void EnBox_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnBox* this = THIS;
     s32 pad;
 
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_BOX_CHEST_LIMB_01) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         if (this->type == ENBOX_TYPE_BIG_ORNATE) {
             gSPDisplayList((*gfx)++, &gBoxChestBaseOrnateDL);
@@ -641,7 +641,7 @@ void EnBox_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         } else {
             gSPDisplayList((*gfx)++, &gBoxChestBaseGildedDL);
         }
-    } else if (limbIndex == 3) {
+    } else if (limbIndex == OBJECT_BOX_CHEST_LIMB_03) {
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         if (this->type == ENBOX_TYPE_BIG_ORNATE) {
             gSPDisplayList((*gfx)++, &gBoxChestLidOrnateDL);

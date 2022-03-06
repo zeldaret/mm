@@ -510,7 +510,7 @@ s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     f32 diffZ;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[idx];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
@@ -691,7 +691,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     if ((sp48 == NULL) || (this->unk404 == NULL)) {
         return 0;
     }
-    sp28 = (Vec3s*)Lib_SegmentedToVirtual(this->unk404->points);
+    sp28 = Lib_SegmentedToVirtual(this->unk404->points);
     Math_Vec3s_ToVec3f(&sp38, &sp28[0]);
     Math_Vec3s_ToVec3f(&sp2C, &sp28[1]);
     this->unk434 = sp44 - unkStruct->unk4;

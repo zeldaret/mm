@@ -2016,7 +2016,7 @@ s32 Actor_PickUp(Actor* actor, GlobalContext* globalCtx, s32 getItemId, f32 xzRa
                     player->getItemDirection = absYawDiff;
 
                     if ((getItemId > GI_NONE) && (getItemId < GI_MAX)) {
-                        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[1]);
+                        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[1]);
                     }
 
                     return true;
@@ -2237,7 +2237,7 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     s32 i;
 
     gSaveContext.weekEventReg[92] |= 0x80;
-    cycleFlags = &gSaveContext.cycleSceneFlags[convert_scene_number_among_shared_scenes(globalCtx->sceneNum)];
+    cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
     ActorOverlayTable_Init();
@@ -3037,7 +3037,7 @@ void Actor_CleanupContext(ActorContext* actorCtx, GlobalContext* globalCtx) {
         actorCtx->absoluteSpace = NULL;
     }
 
-    func_80169D40(globalCtx);
+    Play_SaveCycleSceneFlags(&globalCtx->state);
     ActorOverlayTable_Cleanup();
 }
 
@@ -3405,7 +3405,8 @@ void func_800BB604(GameState* gameState, ActorContext* actorCtx, Player* player,
                     if (((phi_s2) || (phi_s2_2)) && (func_800B83BC(actor, temp_f0_2))) {
                         if (func_800BB59C(globalCtx, actor)) {
                             if (((!BgCheck_CameraLineTest1(&globalCtx->colCtx, &player->actor.focus.pos,
-                                                           &actor->focus.pos, &sp70, &sp80, 1, 1, 1, 1, &sp7C)) ||
+                                                           &actor->focus.pos, &sp70, &sp80, true, true, true, true,
+                                                           &sp7C)) ||
                                  (SurfaceType_IsIgnoredByProjectiles(&globalCtx->colCtx, sp80, sp7C)))) {
                                 if (actor->targetPriority != 0) {
                                     if ((phi_s2 != 0) && (actor->targetPriority < D_801ED8D4)) {

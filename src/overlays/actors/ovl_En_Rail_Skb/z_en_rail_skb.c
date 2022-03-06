@@ -564,8 +564,8 @@ void func_80B71910(EnRailSkb* this) {
 }
 
 void func_80B71954(EnRailSkb* this, GlobalContext* globalCtx) {
-    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
-    f32 sp30 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
+    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
+    f32 sp30 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, sp36, 1, 0x71C, 0xB6);
     this->actor.world.rot = this->actor.shape.rot;
@@ -582,24 +582,24 @@ void func_80B71A08(EnRailSkb* this) {
 }
 
 void func_80B71A58(EnRailSkb* this, GlobalContext* globalCtx) {
-    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
+    s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
-        if (this->unk_2E8 < this->unk_22C->actor.colChkInfo.health) {
-            this->unk_22C->actor.colChkInfo.health--;
+        if (this->unk_2E8 < this->unk_22C->dyna.actor.colChkInfo.health) {
+            this->unk_22C->dyna.actor.colChkInfo.health--;
         } else {
-            this->unk_22C->actor.colChkInfo.health--;
+            this->unk_22C->dyna.actor.colChkInfo.health--;
             func_80B71B6C(this);
         }
     }
 
     if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        if (this->unk_2E8 < this->unk_22C->actor.colChkInfo.health) {
-            this->unk_22C->actor.colChkInfo.health--;
+        if (this->unk_2E8 < this->unk_22C->dyna.actor.colChkInfo.health) {
+            this->unk_22C->dyna.actor.colChkInfo.health--;
         } else {
-            this->unk_22C->actor.colChkInfo.health--;
+            this->unk_22C->dyna.actor.colChkInfo.health--;
             func_80B71B6C(this);
         }
     }
@@ -616,7 +616,7 @@ void func_80B71B6C(EnRailSkb* this) {
 void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 i;
-    f32 sp34 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->actor.world.pos);
+    f32 sp34 = Math_Vec3f_DistXZ(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
 
     if (this->unk_3F2 > 0) {
         this->unk_3F2--;
@@ -624,15 +624,15 @@ void func_80B71BB8(EnRailSkb* this, GlobalContext* globalCtx) {
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y,
-                       Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->actor.world.pos), 1, 0x71C, 0xB6);
+                       Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos), 1, 0x71C, 0xB6);
 
-    if ((this->actor.bgCheckFlags & 1) && (this->unk_22C->actor.colChkInfo.health == 0)) {
+    if ((this->actor.bgCheckFlags & 1) && (this->unk_22C->dyna.actor.colChkInfo.health == 0)) {
         Actor_MoveWithGravity(&this->actor);
     } else {
         this->actor.velocity.y += this->actor.gravity;
         this->actor.world.pos.y += this->actor.velocity.y;
-        Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_22C->actor.world.pos.x, 0.6f, 1.6f, 0.1f);
-        Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_22C->actor.world.pos.z, 0.6f, 1.6f, 0.1f);
+        Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_22C->dyna.actor.world.pos.x, 0.6f, 1.6f, 0.1f);
+        Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_22C->dyna.actor.world.pos.z, 0.6f, 1.6f, 0.1f);
     }
 
     if (this->actor.bgCheckFlags & 2) {
