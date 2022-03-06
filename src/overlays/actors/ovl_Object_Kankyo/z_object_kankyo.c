@@ -349,10 +349,10 @@ void func_808DCBF8(ObjectKankyo* this, GlobalContext* globalCtx) {
 
     if (temp_f0 > 0.01f) {
         D_801F4E30 = 155.0f * temp_f0;
-        globalCtx->envCtx.unk_EA = 10;
+        globalCtx->envCtx.sandstormState = 10;
     } else {
         D_801F4E30 = 0;
-        globalCtx->envCtx.unk_EA = 10;
+        globalCtx->envCtx.sandstormState = 10;
     }
     func_808DC454(this, globalCtx);
 }
