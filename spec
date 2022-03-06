@@ -1642,8 +1642,7 @@ beginseg
     name "ovl_En_Attack_Niw"
     compress
     include "build/src/overlays/actors/ovl_En_Attack_Niw/z_en_attack_niw.o"
-    include "build/data/ovl_En_Attack_Niw/ovl_En_Attack_Niw.data.o"
-    include "build/data/ovl_En_Attack_Niw/ovl_En_Attack_Niw.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Attack_Niw/ovl_En_Attack_Niw_reloc.o"
 endseg
 
 beginseg
