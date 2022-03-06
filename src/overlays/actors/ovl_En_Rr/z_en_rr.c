@@ -5,8 +5,9 @@
  */
 
 #include "z_en_rr.h"
+#include "objects/object_rr/object_rr.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnRr*)thisx)
 
@@ -25,8 +26,6 @@ void func_808FB710(EnRr* this, GlobalContext* globalCtx);
 
 void func_808FAD1C(EnRr* this, GlobalContext* globalCtx);
 void func_808FB398(EnRr* this, GlobalContext* globalCtx);
-
-extern Gfx D_06000470[];
 
 const ActorInit En_Rr_InitVars = {
     ACTOR_EN_RR,
@@ -148,7 +147,7 @@ void EnRr_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider2);
-    Actor_SetHeight(&this->actor, this->actor.scale.y * 2000.0f);
+    Actor_SetFocus(&this->actor, this->actor.scale.y * 2000.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if ((this->actor.params == ENRR_2) || (this->actor.params == ENRR_3)) {
@@ -196,8 +195,8 @@ void func_808FA11C(EnRr* this) {
     this->unk_220 = 0.85f;
     this->unk_224 = 1.2750001f;
     this->unk_21C = 1.0f;
-    this->actor.flags &= ~0x400;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 80);
+    this->actor.flags &= ~ACTOR_FLAG_400;
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_808FA19C(EnRr* this, GlobalContext* globalCtx) {
@@ -207,15 +206,15 @@ void func_808FA19C(EnRr* this, GlobalContext* globalCtx) {
         this->collider1.base.colType = COLTYPE_HIT0;
         this->collider1.info.elemType = ELEMTYPE_UNK1;
         this->unk_21C = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, this->unk_234, 20, 2, this->actor.scale.y * 23.333334f,
-                      this->actor.scale.y * 20.000002f);
-        this->actor.flags |= 0x400;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_234, 20, 2, this->actor.scale.y * 23.333334f,
+                              this->actor.scale.y * 20.000002f);
+        this->actor.flags |= ACTOR_FLAG_400;
     }
 }
 
 void func_808FA238(EnRr* this, f32 arg1) {
     this->actor.speedXZ = arg1;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LIKE_WALK);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_WALK);
 }
 
 void func_808FA260(EnRr* this) {
@@ -236,7 +235,7 @@ void func_808FA260(EnRr* this) {
 
     this->actionFunc = func_808FB088;
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LIKE_UNARI);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_UNARI);
 }
 
 void func_808FA344(EnRr* this) {
@@ -268,7 +267,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     this->unk_1EA = 100;
     this->unk_1FC = 20;
     this->collider1.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_1F0 = 8;
     this->unk_1E1 = 0;
     this->actor.speedXZ = 0.0f;
@@ -286,7 +285,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     }
 
     this->actionFunc = func_808FB1C0;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SUISEN_DRINK);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SUISEN_DRINK);
 }
 
 void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
@@ -299,7 +298,7 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
     if (player->stateFlags2 & 0x80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_1F0 = 110;
         this->unk_1F6 = 2500;
         this->unk_210 = 0.0f;
@@ -308,13 +307,13 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
         if (((this->unk_1E2 == 0) && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) &&
             (CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD) == EQUIP_SHIELD)) {
             sp34 = true;
-            this->unk_1E2 = func_8012ED78(globalCtx, 1);
+            this->unk_1E2 = Inventory_DeleteEquipment(globalCtx, 1);
         } else {
             sp34 = false;
         }
 
-        if (sp34 && (func_80152498(&globalCtx->msgCtx) == 0)) {
-            func_801518B0(globalCtx, 0xF6, NULL);
+        if (sp34 && (Message_GetState(&globalCtx->msgCtx) == 0)) {
+            Message_StartTextbox(globalCtx, 0xF6, NULL);
         }
 
         if (this->actor.params == ENRR_0) {
@@ -331,7 +330,7 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
         player->actor.world.pos.z += sp30 * Math_CosS(this->actor.shape.rot.y);
 
         func_800B8D50(globalCtx, &this->actor, sp30, this->actor.shape.rot.y, sp2C, sp38);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_SUISEN_THROW);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SUISEN_THROW);
     }
 }
 
@@ -344,7 +343,7 @@ void func_808FA6B8(EnRr* this) {
     } else {
         this->unk_1EC = 40;
     }
-    func_800BCB70(&this->actor, 0x4000, 255, 0, this->unk_1EC);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, this->unk_1EC);
 
     this->unk_1E6 = 20;
     this->unk_1F6 = 2500;
@@ -360,7 +359,7 @@ void func_808FA6B8(EnRr* this) {
     }
 
     this->actionFunc = func_808FB398;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LIKE_DAMAGE);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_DAMAGE);
 }
 
 void func_808FA7AC(EnRr* this) {
@@ -405,7 +404,7 @@ void func_808FA910(EnRr* this) {
 
     this->unk_1E4 = 0;
     this->unk_214 = 0.0f;
-    func_800BCB70(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->unk_210 = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_324); i++) {
@@ -415,8 +414,8 @@ void func_808FA910(EnRr* this) {
     }
 
     this->actionFunc = func_808FB42C;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_LIKE_DEAD);
-    this->actor.flags &= ~1;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LIKE_DEAD);
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void func_808FA9CC(EnRr* this) {
@@ -465,7 +464,7 @@ s32 func_808FAA94(EnRr* this, GlobalContext* globalCtx) {
             return false;
         }
 
-        func_800BE258(&this->actor, &sp2C->info);
+        Actor_SetDropFlag(&this->actor, &sp2C->info);
         func_808FA4F4(this, globalCtx);
         func_808FA19C(this, globalCtx);
 
@@ -481,8 +480,8 @@ s32 func_808FAA94(EnRr* this, GlobalContext* globalCtx) {
                 func_808FA910(this);
             }
         } else if (this->actor.colChkInfo.damageEffect == 1) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
-            func_800BCB70(&this->actor, 0, 255, 0, 80);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+            Actor_SetColorFilter(&this->actor, 0, 255, 0, 80);
             this->unk_1EE = 80;
             func_808FA9CC(this);
         } else if (this->actor.colChkInfo.damageEffect == 3) {
@@ -630,7 +629,7 @@ void func_808FB1C0(EnRr* this, GlobalContext* globalCtx) {
 
     func_8013ECE0(this->actor.xyzDistToPlayerSq, 120, 2, 120);
     if (!(this->unk_1E4 & 7)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
     }
 
     player->unk_AE8 = 0;
@@ -721,7 +720,7 @@ void func_808FB42C(EnRr* this, GlobalContext* globalCtx) {
         sp74.y = this->actor.world.pos.y + 20.0f;
         sp74.z = this->actor.world.pos.z;
         func_800B3030(globalCtx, &sp74, &gZeroVec3f, &gZeroVec3f, 100, 0, 0);
-        Audio_PlaySoundAtPosition(globalCtx, &sp74, 11, NA_SE_EN_EXTINCT);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &sp74, 11, NA_SE_EN_EXTINCT);
     } else {
         temp_f20 = this->actor.scale.y * 66.66667f;
 
@@ -786,7 +785,7 @@ void EnRr_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_1F0--;
     }
 
-    Actor_SetHeight(&this->actor, this->actor.scale.y * 2000.0f);
+    Actor_SetFocus(&this->actor, this->actor.scale.y * 2000.0f);
     func_808FAE50(this, globalCtx);
 
     if (!func_808FAA94(this, globalCtx)) {
@@ -801,7 +800,7 @@ void EnRr_Update(Actor* thisx, GlobalContext* globalCtx) {
         Math_StepToF(&this->actor.speedXZ, 0.0f, 0.1f);
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider1.dim.radius, 0.0f, 0x5D);
     func_808FB794(this, globalCtx);
 
@@ -876,7 +875,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f spA4;
     f32 temp_f20;
 
-    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, 256);
+    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Mtx) * 4);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -931,7 +930,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
 
-    gSPDisplayList(POLY_OPA_DISP++, D_06000470);
+    gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
 
     func_800BE680(globalCtx, &this->actor, this->unk_234, ARRAY_COUNT(this->unk_234),
                   this->actor.scale.y * 66.66667f * this->unk_220, this->unk_224, this->unk_21C, this->unk_1E0);

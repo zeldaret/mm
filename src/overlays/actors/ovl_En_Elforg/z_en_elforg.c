@@ -7,7 +7,7 @@
 #include "z_en_elforg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnElforg*)thisx)
 
@@ -87,7 +87,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
             break;
         case STRAY_FAIRY_TYPE_COLLECTIBLE:
-            if (Actor_GetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor))) {
+            if (Flags_GetCollectible(globalCtx, STRAY_FAIRY_FLAG(&this->actor))) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -226,7 +226,7 @@ void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* homePos) {
     targetAngle += angleAdjustment;
     Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 4000, 1000);
     EnElforg_ApproachTargetSpeedXZ(this);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 /**
@@ -249,7 +249,7 @@ void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
         Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 10, 0x200, 0x80);
     }
     EnElforg_ApproachTargetSpeedXZ(this);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 }
 
 void func_80ACCBB8(EnElforg* this, GlobalContext* globalCtx) {
@@ -403,7 +403,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, GlobalContext* globalCtx) 
     EnElforg_CirclePlayer(this, globalCtx);
     player->actor.freezeTimer = 100;
     player->stateFlags1 |= 0x20000000;
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~0x20000000;
         Actor_MarkForDeath(&this->actor);
@@ -437,26 +437,26 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
     }
 
     scaledYDistance = this->actor.playerHeightRel - (this->actor.shape.yOffset * this->actor.scale.y);
-    if (!func_801233E4(globalCtx)) {
+    if (!Player_InCsMode(&globalCtx->state)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, globalCtx);
             func_80115908(globalCtx, 48);
             switch (STRAY_FAIRY_TYPE(&this->actor)) {
                 case STRAY_FAIRY_TYPE_COLLECTIBLE:
-                    Actor_SetCollectibleFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetCollectible(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
                 case STRAY_FAIRY_TYPE_CHEST:
-                    Actor_SetChestFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetTreasure(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
                 default:
-                    Actor_SetSwitchFlag(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
+                    Flags_SetSwitch(globalCtx, STRAY_FAIRY_FLAG(&this->actor));
                     break;
             }
 
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 100;
                 player->stateFlags1 |= 0x20000000;
-                func_801518B0(globalCtx, 0x579, NULL);
+                Message_StartTextbox(globalCtx, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
                 ActorCutscene_SetIntentToPlay(0x7C);
                 return;
@@ -464,7 +464,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
 
             if (func_8010A074(globalCtx)) {
                 gSaveContext.inventory.strayFairies[gSaveContext.unk_48C8]++;
-                func_801518B0(globalCtx, 0x11, NULL);
+                Message_StartTextbox(globalCtx, 0x11, NULL);
                 if (gSaveContext.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
                     func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
@@ -493,7 +493,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
 Actor* EnElforg_GetHoldingEnemy(EnElforg* this, GlobalContext* globalCtx) {
     Actor* enemy;
 
-    for (enemy = globalCtx->actorCtx.actorList[ACTORCAT_ENEMY].first; enemy != NULL; enemy = enemy->next) {
+    for (enemy = globalCtx->actorCtx.actorLists[ACTORCAT_ENEMY].first; enemy != NULL; enemy = enemy->next) {
         if ((enemy->home.pos.x == this->actor.home.pos.x) && (enemy->home.pos.y == this->actor.home.pos.y) &&
             (enemy->home.pos.z == this->actor.home.pos.z)) {
             return enemy;
@@ -509,7 +509,7 @@ void EnElforg_TrappedByEnemy(EnElforg* this, GlobalContext* globalCtx) {
         EnElforg_InitializeParams(this);
         this->actionFunc = EnElforg_FreeFloating;
         this->actor.draw = EnElforg_Draw;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
     } else {
         // The enemy is still alive, so have the Stray Fairy
         // track the enemy in case it's moving around.
@@ -542,7 +542,7 @@ void EnElforg_HiddenByCollider(EnElforg* this, GlobalContext* globalCtx) {
         this->actor.draw = EnElforg_Draw;
         this->actor.world.pos.y += 40.0f;
         this->actor.home.pos.y += 40.0f;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
     } else {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }

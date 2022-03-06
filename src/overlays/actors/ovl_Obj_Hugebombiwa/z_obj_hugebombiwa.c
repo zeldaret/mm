@@ -7,7 +7,7 @@
 #include "z_obj_hugebombiwa.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjHugebombiwa*)thisx)
 
@@ -358,8 +358,11 @@ void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A54BF0(this);
 }
 
-void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    ObjHugebombiwa* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_80A54BF0(ObjHugebombiwa* this) {
@@ -403,16 +406,16 @@ void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        Actor_SetSwitchFlag(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
+        Flags_SetSwitch(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
             ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_17SETUGEN2))) {
             gSaveContext.weekEventReg[19] |= 2;
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         } else {
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 80, NA_SE_EV_SNOWBALL_BROKEN);
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
@@ -437,7 +440,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
     Vec3f sp84;
 
     Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < 20; i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];
@@ -532,7 +535,7 @@ void func_80A55310(ObjHugebombiwa* this) {
     Vec3f sp84;
 
     Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < ARRAY_COUNT(this->unk_190); i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];
@@ -689,7 +692,7 @@ void func_80A55B34(Actor* thisx, GlobalContext* globalCtx) {
     EnHugebombiwaStruct* ptr;
 
     if ((this->actionFunc == func_80A54C04) || (this->actionFunc == func_80A54CEC)) {
-        func_800BDFC0(globalCtx, object_bombiwa_DL_001820);
+        Gfx_DrawDListOpa(globalCtx, object_bombiwa_DL_001820);
         return;
     }
 

@@ -6,7 +6,7 @@
 
 #include "z_en_talk.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnTalk*)thisx)
 
@@ -45,18 +45,18 @@ void EnTalk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BDE058(EnTalk* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         this->actionFunc = func_80BDE090;
     }
 }
 
 void func_80BDE090(EnTalk* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BDE058;
         return;
     }
 
-    if ((this->actor.xzDistToPlayer < 40.0f && Actor_IsLinkFacingActor(&this->actor, 0x3000, globalCtx)) ||
+    if ((this->actor.xzDistToPlayer < 40.0f && Player_IsFacingActor(&this->actor, 0x3000, globalCtx)) ||
         this->actor.isTargeted) {
         func_800B8614(&this->actor, globalCtx, 120.0f);
     }

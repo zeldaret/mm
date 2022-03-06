@@ -6,7 +6,7 @@
 
 #include "z_en_maruta.h"
 
-#define FLAGS 0x00000011
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
 
 #define THIS ((EnMaruta*)thisx)
 

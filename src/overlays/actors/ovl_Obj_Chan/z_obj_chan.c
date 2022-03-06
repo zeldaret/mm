@@ -13,7 +13,7 @@
 #include "objects/object_obj_chan/object_obj_chan.h"
 #include "objects/object_tsubo/object_tsubo.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjChan*)thisx)
 
@@ -31,7 +31,7 @@ const ActorInit Obj_Chan_InitVars = {
     ACTOR_OBJ_CHAN,
     ACTORCAT_BG,
     FLAGS,
-    OBJECT_OBJECT_UNSET_CHAN,
+    OBJECT_OBJ_CHAN,
     sizeof(ObjChan),
     (ActorFunc)ObjChan_Init,
     (ActorFunc)ObjChan_Destroy,

@@ -7,7 +7,7 @@
 #include "z_boss_04.h"
 #include "objects/object_boss04/object_boss04.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
@@ -156,7 +156,7 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s16 phi_s0_2;
     s32 pad;
 
-    if (Actor_GetRoomCleared(globalCtx, globalCtx->roomCtx.currRoom.num)) {
+    if (Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -179,8 +179,8 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < ARRAY_COUNT(D_809EE1F8); i++) {
         spA8.x = D_809EE1F8[i].x + this->actor.world.pos.x;
         spA8.z = D_809EE1F8[i].z + this->actor.world.pos.z;
-        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &spA8, &spB4, &spC0, 1, 0, 0, 1,
-                                    &spA4)) {
+        if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &spA8, &spB4, &spC0, true, false, false,
+                                    true, &spA4)) {
             if (i == 0) {
                 this->unk_6D8 = spB4.x;
             } else if (i == 1) {
@@ -231,7 +231,7 @@ void Boss04_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_809EC544(Boss04* this) {
     this->actionFunc = func_809EC568;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
@@ -259,10 +259,10 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    func_800EA0D4(globalCtx, &globalCtx->csCtx);
-                    this->unk_70A = func_801694DC(globalCtx);
-                    func_80169590(globalCtx, 0, 1);
-                    func_80169590(globalCtx, this->unk_70A, 7);
+                    Cutscene_Start(globalCtx, &globalCtx->csCtx);
+                    this->unk_70A = Play_CreateSubCamera(globalCtx);
+                    Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+                    Play_CameraChangeStatus(globalCtx, this->unk_70A, 7);
                     func_800B7298(globalCtx, &this->actor, 7);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
@@ -274,7 +274,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                     func_8016566C(150);
                     this->unk_744 = 60.0f;
 
-                    boss = globalCtx->actorCtx.actorList[ACTORCAT_BOSS].first;
+                    boss = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
                     while (boss != NULL) {
                         if (boss->id == ACTOR_EN_WATER_EFFECT) {
                             Actor_MarkForDeath(boss);
@@ -289,7 +289,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
         case 10:
             if (this->unk_704 == 3) {
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
                 this->unk_74A = 1;
             }
             this->unk_2D0 = 10000.0f;
@@ -319,7 +319,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
             }
 
         case 12:
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
             Math_ApproachF(&this->unk_718.x, this->actor.world.pos.x, 0.5f, 1000.0f);
             Math_ApproachF(&this->unk_718.y, this->actor.world.pos.y, 0.5f, 1000.0f);
             Math_ApproachF(&this->unk_718.z, this->actor.world.pos.z, 0.5f, 1000.0f);
@@ -331,7 +331,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                 this->unk_2DA = 10;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
                 this->unk_748 = 20;
             }
             break;
@@ -342,11 +342,11 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
             Matrix_GetStateTranslationAndScaledZ(-100.0f, &this->unk_70C);
 
             this->unk_70C.x += player->actor.world.pos.x;
-            this->unk_70C.y = func_800B6FC8(player) + player->actor.world.pos.y + 36.0f;
+            this->unk_70C.y = Player_GetHeight(player) + player->actor.world.pos.y + 36.0f;
             this->unk_70C.z += player->actor.world.pos.z;
 
             this->unk_718.x = player->actor.world.pos.x;
-            this->unk_718.y = (func_800B6FC8(player) + player->actor.world.pos.y) - 4.0f;
+            this->unk_718.y = (Player_GetHeight(player) + player->actor.world.pos.y) - 4.0f;
             this->unk_718.z = player->actor.world.pos.z;
 
             if (this->unk_704 >= 35) {
@@ -380,7 +380,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_704 > 140) {
-                Camera* sp5C = Play_GetCamera(globalCtx, MAIN_CAM);
+                Camera* sp5C = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                 this->unk_708 = 0;
                 func_809ECD00(this, globalCtx);
@@ -389,7 +389,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
                 sp5C->at = this->unk_718;
                 func_80169AFC(globalCtx, this->unk_70A, 0);
                 this->unk_70A = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 func_80165690();
                 gSaveContext.eventInf[6] |= 1;
@@ -400,14 +400,14 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     if (this->unk_70A != 0) {
         Vec3f sp50;
 
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         if (this->unk_748 != 0) {
             this->unk_748--;
         }
         Math_Vec3f_Copy(&sp50, &this->unk_718);
         sp50.y += Math_SinS(this->unk_748 * 0x4000) * this->unk_748 * 1.5f;
         Play_CameraSetAtEye(globalCtx, this->unk_70A, &sp50, &this->unk_70C);
-        func_80169940(globalCtx, this->unk_70A, this->unk_744);
+        Play_CameraSetFov(globalCtx, this->unk_70A, this->unk_744);
         Math_ApproachF(&this->unk_744, 60.0f, 0.1f, 1.0f);
     }
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -501,7 +501,7 @@ void func_809ECF58(Boss04* this, GlobalContext* globalCtx) {
             sp3C.y = this->actor.floorHeight + 2.0f;
             sp3C.z = this->actor.world.pos.z;
             EffectSsGRipple_Spawn(globalCtx, &sp3C, 1400, 500, 0);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_ATTACK - SFX_FLAG);
         }
     }
 
@@ -520,8 +520,8 @@ void func_809ED224(Boss04* this) {
     this->actor.speedXZ = 0.0f;
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_ME_DEAD);
-    this->actor.flags &= ~1;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DEAD);
+    this->actor.flags &= ~ACTOR_FLAG_1;
     func_801A2ED8();
     this->unk_1F6 = 10;
 }
@@ -542,7 +542,7 @@ void func_809ED2A0(Boss04* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1F8 == 3) {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_700 = 0.0f;
         this->unk_6FC = 0.0f;
         this->unk_6F8 = 0.0f;
@@ -551,7 +551,7 @@ void func_809ED2A0(Boss04* this, GlobalContext* globalCtx) {
     if ((this->unk_1F8 == 2) || (this->unk_1F8 == 5)) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                     this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_BIG_BOMB_EXPLOSION);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_IT_BIG_BOMB_EXPLOSION);
     }
 
     if (this->unk_1FA == 3) {
@@ -569,7 +569,7 @@ void func_809ED45C(Boss04* this, GlobalContext* globalCtx) {
 
     if ((this->unk_1FE == 0) && (this->collider1.elements[0].info.bumperFlags & BUMP_HIT)) {
         this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ME_DAMAGE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_DAMAGE);
         damage = this->actor.colChkInfo.damage;
         this->actor.colChkInfo.health = this->actor.colChkInfo.health - damage;
         if ((s8)this->actor.colChkInfo.health <= 0) {
@@ -706,7 +706,7 @@ void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         this->actionFunc(this, globalCtx);
 
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         this->actor.world.pos.y -= 100.0f;
         this->actor.prevPos.y -= 100.0f;
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 100.0f, 120.0f, 200.0f, 5);
@@ -747,9 +747,9 @@ void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
         func_809ED45C(this, globalCtx);
         if (this->unk_2CC > 3000.0f) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
         } else {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
         }
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
@@ -765,7 +765,7 @@ void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (this->unk_74A != 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_ME_EXIST - SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ME_EXIST - SFX_FLAG);
     }
 }
 

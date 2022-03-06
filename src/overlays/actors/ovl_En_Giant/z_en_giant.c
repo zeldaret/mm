@@ -5,9 +5,8 @@
  */
 
 #include "z_en_giant.h"
-#include "objects/object_giant/object_giant.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnGiant*)thisx)
 
@@ -19,6 +18,59 @@ void EnGiant_Draw(Actor* thisx, GlobalContext* globalCtx);
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx);
 void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* globalCtx);
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx);
+
+#define GIANT_TYPE_IS_NOT_TERMINA_FIELD(type) (type > GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_TERMINA_FIELD(type) (type <= GIANT_TYPE_OCEAN_TERMINA_FIELD)
+#define GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS)
+#define GIANT_TYPE_IS_CHAMBER_OR_ENDING(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING && type <= GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING)
+#define GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type) \
+    (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE)
+
+/**
+ * These values are used to index into sAnimations to pick the appropriate animation.
+ */
+typedef enum {
+    /*  0 */ GIANT_ANIMATION_LOOK_UP_START,
+    /*  1 */ GIANT_ANIMATION_LOOK_UP_LOOP,
+    /*  2 */ GIANT_ANIMATION_FALLING_OVER,
+    /*  3 */ GIANT_ANIMATION_RAISED_ARMS_START,
+    /*  4 */ GIANT_ANIMATION_RAISED_ARMS_LOOP,
+    /*  5 */ GIANT_ANIMATION_STRUGGLE_START,
+    /*  6 */ GIANT_ANIMATION_STRUGGLE_LOOP,
+    /*  7 */ GIANT_ANIMATION_IDLE_LOOP,
+    /*  8 */ GIANT_ANIMATION_WALKING_LOOP,
+    /*  9 */ GIANT_ANIMATION_BIG_CALL_START,
+    /* 10 */ GIANT_ANIMATION_BIG_CALL_LOOP,
+    /* 11 */ GIANT_ANIMATION_BIG_CALL_END,
+    /* 12 */ GIANT_ANIMATION_SMALL_CALL_START,
+    /* 13 */ GIANT_ANIMATION_SMALL_CALL_LOOP,
+    /* 14 */ GIANT_ANIMATION_SMALL_CALL_END,
+    /* 15 */ GIANT_ANIMATION_MAX
+} GiantAnimationIndex;
+
+/**
+ * Used as values for csAction. The UNKNOWN ones are never used in-game.
+ */
+typedef enum {
+    /*  0 */ GIANT_CS_ACTION_NONE,
+    /*  1 */ GIANT_CS_ACTION_IDLE,
+    /*  2 */ GIANT_CS_ACTION_WALKING,
+    /*  3 */ GIANT_CS_ACTION_LOOKING_UP,
+    /*  4 */ GIANT_CS_ACTION_RAISING_ARMS,
+    /*  5 */ GIANT_CS_ACTION_STRUGGLING,
+    /*  6 */ GIANT_CS_ACTION_FALLING_OVER,
+    /*  7 */ GIANT_CS_ACTION_IDLE_FADE_IN,
+    /*  8 */ GIANT_CS_ACTION_TALKING,
+    /*  9 */ GIANT_CS_ACTION_DONE_TALKING,
+    /* 10 */ GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER,
+    /* 11 */ GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER,
+    /* 12 */ GIANT_CS_ACTION_UNKNOWN_12,
+    /* 13 */ GIANT_CS_ACTION_UNKNOWN_13,
+    /* 14 */ GIANT_CS_ACTION_UNKNOWN_14,
+    /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
+} GiantCsActionIndex;
 
 const ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
@@ -107,31 +159,31 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.draw = NULL;
     this->alpha = 0;
     this->actor.velocity.y = -10.0f;
-    this->actor.minVelocityY = -10.0f;
+    this->actor.terminalVelocity = -10.0f;
     this->actor.gravity = -5.0f;
     switch (type) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C6;
+            this->actorActionCommand = 454;
             break;
         case GIANT_TYPE_SWAMP_TERMINA_FIELD:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C7;
+            this->actorActionCommand = 455;
             break;
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 0x1C8;
+            this->actorActionCommand = 456;
             break;
         default:
-            this->actorActionCommand = 0x1C5;
+            this->actorActionCommand = 453;
             break;
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.weekEventReg[0x19] & 2)) {
+        if (!(gSaveContext.weekEventReg[25] & 2)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -143,7 +195,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
                          Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), 2, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
     }
 
@@ -154,7 +206,7 @@ void EnGiant_Init(Actor* thisx, GlobalContext* globalCtx) {
                          Animation_GetLastFrame(&gGiantStruggleStartAnim), 0, 0.0f);
         this->actor.draw = EnGiant_Draw;
         this->actor.velocity.y = 0.0f;
-        this->actor.minVelocityY = 0.0f;
+        this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
         if (EnGiant_IsImprisoned(this)) {
             Actor_MarkForDeath(&this->actor);
@@ -318,10 +370,10 @@ void EnGiant_PlaySound(EnGiant* this) {
     if (this->actor.draw != NULL && this->alpha > 0) {
         if (this->animationId == GIANT_ANIMATION_WALKING_LOOP &&
             (Animation_OnFrame(&this->skelAnime, 40.0f) || Animation_OnFrame(&this->skelAnime, 100.0f))) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_WALK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
         if (this->animationId == GIANT_ANIMATION_FALLING_OVER && Animation_OnFrame(&this->skelAnime, 40.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
         if (this->sfxId != 0xFFFF &&
             ((this->animationId == GIANT_ANIMATION_BIG_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
@@ -336,20 +388,23 @@ void EnGiant_PlaySound(EnGiant* this) {
 }
 
 void EnGiant_UpdatePosition(EnGiant* this, GlobalContext* globalCtx, u32 actionIndex) {
-    CsCmdActorAction* actorAction = globalCtx->csCtx.npcActions[actionIndex];
-    f32 startPosY = actorAction->unk0C.y;
+    CsCmdActorAction* actorAction = globalCtx->csCtx.actorActions[actionIndex];
+    f32 startPosY = actorAction->startPos.y;
     s32 pad[2];
-    f32 endPosY = actorAction->unk18.y;
-    f32 scale = func_800F5A8C(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames, globalCtx);
+    f32 endPosY = actorAction->endPos.y;
+    f32 scale = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, globalCtx->csCtx.frames);
 
     this->actor.world.pos.y = ((endPosY - startPosY) * scale) + startPosY;
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        EnGiant_UpdatePosition(this, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
+        EnGiant_UpdatePosition(this, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand));
+        if (this->csAction !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
+            this->csAction =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]
+                    ->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -369,10 +424,14 @@ void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, GlobalContext* global
 void EnGiant_PerformCutsceneActions(EnGiant* this, GlobalContext* globalCtx) {
     this->actor.draw = EnGiant_Draw;
 
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->actorActionCommand));
-        if (this->csAction != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->actorActionCommand)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx,
+                                      Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand));
+        if (this->csAction !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]->action) {
+            this->csAction =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand)]
+                    ->action;
             EnGiant_ChangeAnimationBasedOnCsAction(this);
         }
         EnGiant_UpdateAlpha(this);
@@ -391,7 +450,7 @@ void EnGiant_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 blinkTimerTemp;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (this->blinkTimer == 0) {

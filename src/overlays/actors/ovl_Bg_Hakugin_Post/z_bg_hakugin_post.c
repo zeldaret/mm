@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_hakugin_post.h"
+#include "objects/object_hakugin_obj/object_hakugin_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgHakuginPost*)thisx)
 
@@ -31,13 +32,6 @@ void func_80A9D360(BgHakuginPost* this, GlobalContext* globalCtx);
 void func_80A9D3E4(BgHakuginPost* this);
 void func_80A9D434(BgHakuginPost* this, GlobalContext* globalCtx);
 void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_0600C1A8[];
-extern Gfx D_0600C568[];
-extern Gfx D_0600CA38[];
-extern Gfx D_0600CEC8[];
-extern Gfx D_0600D098[];
-extern CollisionHeader D_0600D3B0;
 
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
@@ -93,7 +87,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A9ACD0(BgHakuginPostUnkStruct* arg0) {
-    bzero((void*)arg0, sizeof(BgHakuginPostUnkStruct));
+    bzero(arg0, sizeof(BgHakuginPostUnkStruct));
 }
 
 void func_80A9ACF0(void) {
@@ -187,7 +181,7 @@ void func_80A9B160(BgHakuginPostUnkStruct* unkStruct, GlobalContext* globalCtx) 
         unkStruct->unk_0000[i].unk_24 = 0.0f;
         unkStruct->unk_0000[i].unk_34 = 1;
         if (D_80A9D880[unkStruct->unk_0000[i].unk_00].unk_04 != 0) {
-            Actor_UnsetSwitchFlag(globalCtx, unkStruct->unk_0000[i].unk_2E);
+            Flags_UnsetSwitch(globalCtx, unkStruct->unk_0000[i].unk_2E);
         }
     }
 }
@@ -261,7 +255,7 @@ void func_80A9B3BC(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (!(sp20 | sp1C)) {
-        Actor_SetSwitchFlag(globalCtx, sp28);
+        Flags_SetSwitch(globalCtx, sp28);
         this->unk_170 = true;
     } else {
         this->unk_170 = sp20;
@@ -290,9 +284,9 @@ void func_80A9B46C(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (!this->unk_170 && (sp28 == 1)) {
-        Actor_UnsetSwitchFlag(globalCtx, sp2C);
+        Flags_UnsetSwitch(globalCtx, sp2C);
     } else if (!this->unk_174 && (sp24 == 1)) {
-        Actor_UnsetSwitchFlag(globalCtx, sp30);
+        Flags_UnsetSwitch(globalCtx, sp30);
     }
 
     this->unk_170 = sp28;
@@ -682,9 +676,9 @@ void func_80A9C854(BgHakuginPost* this, GlobalContext* globalCtx) {
     }
 
     if (sp38) {
-        Actor_SetSwitchFlag(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_SetSwitch(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
     } else {
-        Actor_UnsetSwitchFlag(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
+        Flags_UnsetSwitch(globalCtx, this->dyna.actor.home.rot.x & 0x7F);
     }
 }
 
@@ -705,7 +699,7 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
         DynaPolyActor_Init(&this->dyna, 1);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600D3B0);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hakugin_obj_Colheader_00D3B0);
         func_80A9B3BC(this, globalCtx);
         func_80A9CA94(this);
     } else {
@@ -840,9 +834,9 @@ void func_80A9CE1C(BgHakuginPost* this, GlobalContext* globalCtx) {
                 temp = (s16)(this->dyna.actor.yawTowardsPlayer + 0x58F0);
                 D_80A9E028.unk_0000[i].unk_28 = ((s16)(player->actor.shape.rot.y - temp) / 3) + temp;
                 D_80A9E028.unk_0000[i].unk_34 = 2;
-                func_800B8E58(&player->actor, NA_SE_IT_HAMMER_HIT);
+                func_800B8E58(player, NA_SE_IT_HAMMER_HIT);
                 func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
-                Actor_SetSwitchFlag(globalCtx, D_80A9E028.unk_0000[i].unk_2E);
+                Flags_SetSwitch(globalCtx, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;
                 func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f,
                               D_80A9E028.unk_0000[i].unk_2A, D_80A9E028.unk_0000[i].unk_2C);
@@ -996,13 +990,14 @@ void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80A9D900[] = {
-        D_0600C1A8, D_0600C568, NULL, NULL, D_0600CA38, D_0600CEC8, NULL,
+        object_hakugin_obj_DL_00C1A8, object_hakugin_obj_DL_00C568, NULL, NULL,
+        object_hakugin_obj_DL_00CA38, object_hakugin_obj_DL_00CEC8, NULL,
     };
     static Gfx* D_80A9D91C[] = {
-        D_0600D098,
-        D_0600D098,
-        D_0600D098,
-        D_0600D098,
+        object_hakugin_obj_DL_00D098,
+        object_hakugin_obj_DL_00D098,
+        object_hakugin_obj_DL_00D098,
+        object_hakugin_obj_DL_00D098,
     };
     BgHakuginPost* this = THIS;
     BgHakuginPostUnkStruct1* unkStruct1;

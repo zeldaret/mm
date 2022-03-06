@@ -7,7 +7,7 @@
 #include "z_en_gb2.h"
 #include "objects/object_ps/object_ps.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnGb2*)thisx)
 
@@ -370,15 +370,15 @@ void func_80B0FE7C(GlobalContext* globalCtx) {
 }
 
 void func_80B0FEBC(EnGb2* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.unk1202A == 3) && (globalCtx->msgCtx.unk1202E == 7)) {
-        globalCtx->msgCtx.unk1202A = 4;
+    if ((globalCtx->msgCtx.ocarinaMode == 3) && (globalCtx->msgCtx.unk1202E == 7)) {
+        globalCtx->msgCtx.ocarinaMode = 4;
         gSaveContext.eventInf[4] |= 0x80;
         this->unk_26E = 0x14D1;
         this->unk_288 = 10;
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, this->unk_26E, &this->actor);
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
     } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isTargeted) {
         func_800B863C(&this->actor, globalCtx);
@@ -386,12 +386,12 @@ void func_80B0FEBC(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
             if (this->unk_26C & 2) {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_26E = 0x14D1;
                 this->unk_288 = 30;
@@ -400,7 +400,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_80B0FEBC;
             } else {
                 this->unk_26E = func_80B0F7FC(this);
-                func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             }
         }
     } else if ((temp_v0 == 4) && func_80147624(globalCtx)) {
@@ -411,11 +411,11 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_26E = 0x14D7;
                         this->unk_26C |= 2;
-                        func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                        Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
                     } else {
                         func_8019F208();
                         this->unk_26E = 0x14D8;
-                        func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                        Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
                     }
                     break;
 
@@ -423,7 +423,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
                     func_8019F230();
                     this->unk_26E = 0x14D6;
                     this->unk_26C |= 2;
-                    func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
                     break;
             }
         } else if (this->unk_26E == 0x14DA) {
@@ -431,7 +431,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
                 case 0:
                     func_8019F208();
                     func_801159EC(-this->unk_288);
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
                     this->actionFunc = func_80B11344;
@@ -441,7 +441,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
                     func_8019F230();
                     this->unk_26E = 0x14DB;
                     this->unk_26C |= 2;
-                    func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
                     break;
             }
         }
@@ -537,23 +537,23 @@ void func_80B10344(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B10584(EnGb2* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, this->unk_26E, &this->actor);
-        this->actor.flags &= ~0x10000;
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = func_80B10634;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 300.0f);
     }
 }
 
 void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
-    u8 temp_v0 = func_80152498(&globalCtx->msgCtx);
+    u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
         if (func_80147624(globalCtx)) {
             if (this->unk_26C & 2) {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_26C &= ~2;
                 if (this->unk_26E == 0x14DD) {
@@ -569,7 +569,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
                 }
             } else {
                 this->unk_26E = func_80B0F8F8(this);
-                func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             }
         }
     } else if ((temp_v0 == 4) && func_80147624(globalCtx)) {
@@ -579,11 +579,11 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
                     play_sound(NA_SE_SY_ERROR);
                     this->unk_26E = 0x14D7;
                     this->unk_26C |= 2;
-                    func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
                 } else {
                     func_8019F208();
                     func_801159EC(-this->unk_288);
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
                     this->actionFunc = func_80B11344;
@@ -594,7 +594,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
                 func_8019F230();
                 this->unk_26E = 0x14E3;
                 this->unk_26C |= 2;
-                func_801518B0(globalCtx, this->unk_26E, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
                 break;
         }
     }
@@ -632,13 +632,13 @@ void func_80B10924(EnGb2* this, GlobalContext* globalCtx) {
         }
         this->actionFunc = func_80B109DC;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, sp24, 300.0f, 300.0f);
+        Actor_PickUp(&this->actor, globalCtx, sp24, 300.0f, 300.0f);
     }
 }
 
 void func_80B109DC(EnGb2* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, this->unk_26E, &this->actor);
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10634;
     } else {
         func_800B85E0(&this->actor, globalCtx, 300.0f, -1);
@@ -663,12 +663,12 @@ void func_80B10A48(EnGb2* this, GlobalContext* globalCtx) {
             case ENGB2_7_2:
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
                 if (this->unk_26E == 0x14FB) {
-                    Actor_SetSwitchFlag(globalCtx, ENGB2_GET_7F8(&this->actor));
+                    Flags_SetSwitch(globalCtx, ENGB2_GET_7F8(&this->actor));
                     Actor_MarkForDeath(&this->actor);
                 } else {
                     this->actor.draw = NULL;
                     this->unk_26C |= 0x100;
-                    this->actor.flags &= ~1;
+                    this->actor.flags &= ~ACTOR_FLAG_1;
                     this->actionFunc = func_80B111AC;
                 }
                 break;
@@ -688,11 +688,11 @@ void func_80B10B5C(EnGb2* this, GlobalContext* globalCtx) {
 
     if (func_80B0FA48(this, globalCtx)) {
         this->unk_26C &= ~0x20;
-        if (func_800B84D0(&this->actor, globalCtx) && (this->unk_26C & 0x40)) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_26C & 0x40)) {
             if ((this->unk_26E == 0x14EE) || (this->unk_26E == 0x14F4)) {
                 this->unk_26C |= 2;
             }
-            func_801518B0(globalCtx, this->unk_26E, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             this->unk_290 = 1;
             this->unk_26C &= ~0x40;
             this->actionFunc = func_80B10DAC;
@@ -702,9 +702,9 @@ void func_80B10B5C(EnGb2* this, GlobalContext* globalCtx) {
         }
     } else {
         this->unk_26C &= ~0x40;
-        if (func_800B84D0(&this->actor, globalCtx) && (this->unk_26C & 0x20)) {
-            this->actor.flags &= ~0x10000;
-            func_801518B0(globalCtx, this->unk_26E, &this->actor);
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_26C & 0x20)) {
+            this->actor.flags &= ~ACTOR_FLAG_10000;
+            Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             if (this->unk_26E == 0x14EB) {
                 gSaveContext.weekEventReg[80] |= 0x40;
             } else if (this->unk_26E == 0x14EF) {
@@ -716,7 +716,7 @@ void func_80B10B5C(EnGb2* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80B10DAC;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             if (!(this->unk_26C & 0x80)) {
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 this->unk_26C |= 0x20;
                 func_800B8614(&this->actor, globalCtx, 300.0f);
             }
@@ -730,7 +730,7 @@ void func_80B10DAC(EnGb2* this, GlobalContext* globalCtx) {
             if (this->unk_290 != 2) {
                 this->actionFunc = func_80B10E98;
             } else {
-                Actor_SetSwitchFlag(globalCtx, ENGB2_GET_7F8(&this->actor));
+                Flags_SetSwitch(globalCtx, ENGB2_GET_7F8(&this->actor));
                 this->actionFunc = func_80B10868;
             }
         } else {
@@ -746,10 +746,10 @@ void func_80B10DAC(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B10E98(EnGb2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             if ((this->unk_26E != 0x14E8) && (this->unk_26E != 0x14EA)) {
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
@@ -766,7 +766,7 @@ void func_80B10E98(EnGb2* this, GlobalContext* globalCtx) {
             s32 temp;
 
             this->unk_26E = func_80B0FB24(this);
-            func_801518B0(globalCtx, this->unk_26E, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             temp = this->unk_26E;
             if ((temp == 0x14E7) || (temp == 0x14E9) || (temp == 0x14EC) || (temp == 0x14F0)) {
                 ActorCutscene_Stop(this->unk_282[this->unk_290]);
@@ -779,26 +779,26 @@ void func_80B10E98(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B11048(EnGb2* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x10000;
-        func_801518B0(globalCtx, this->unk_26E, &this->actor);
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+        this->actor.flags &= ~ACTOR_FLAG_10000;
+        Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10DAC;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 200.0f);
     }
 }
 
 void func_80B110F8(EnGb2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         if (this->unk_26C & 2) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_26C &= ~2;
             this->actionFunc = func_80B10A48;
         } else {
             this->unk_26E = func_80B0F97C(this);
-            func_801518B0(globalCtx, this->unk_26E, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
         }
     }
 }
@@ -840,11 +840,11 @@ void func_80B11268(EnGb2* this, GlobalContext* globalCtx) {
     if (globalCtx->roomCtx.currRoom.num == 1) {
         this->unk_290 = 0;
         this->unk_282[0] = this->actor.cutscene;
-        if (Actor_GetRoomCleared(globalCtx, 2) && Actor_GetRoomCleared(globalCtx, 3) &&
-            Actor_GetRoomCleared(globalCtx, 4) && Actor_GetRoomCleared(globalCtx, 5)) {
+        if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) && Flags_GetClear(globalCtx, 4) &&
+            Flags_GetClear(globalCtx, 5)) {
             this->unk_28A = 0xFF;
             this->unk_26C &= ~0x100;
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->actor.draw = EnGb2_Draw;
             this->unk_26E = 0x14F9;
             this->actionFunc = func_80B11048;
@@ -878,7 +878,7 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_ps_Skel_007230, &object_ps_Anim_00049C, this->jointTable,
                        this->morphTable, 12);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 35.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.01f);
@@ -898,8 +898,8 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             this->unk_28A = 255;
-            this->actor.flags |= 0x10;
-            this->actor.flags |= 0x2000000;
+            this->actor.flags |= ACTOR_FLAG_10;
+            this->actor.flags |= ACTOR_FLAG_2000000;
 
             if (gSaveContext.eventInf[4] & 0x40) {
                 func_80B0F728(this, globalCtx);
@@ -934,8 +934,8 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
 
-            if (Actor_GetRoomCleared(globalCtx, 2) && Actor_GetRoomCleared(globalCtx, 3) &&
-                Actor_GetRoomCleared(globalCtx, 4) && Actor_GetRoomCleared(globalCtx, 5)) {
+            if (Flags_GetClear(globalCtx, 2) && Flags_GetClear(globalCtx, 3) && Flags_GetClear(globalCtx, 4) &&
+                Flags_GetClear(globalCtx, 5)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -943,7 +943,7 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
             if (gSaveContext.weekEventReg[76] & 0x80) {
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 this->actionFunc = func_80B111AC;
             } else {
                 this->unk_28A = 255;

@@ -6,7 +6,7 @@
 
 #include "z_obj_roomtimer.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjRoomtimer*)thisx)
 
@@ -60,7 +60,7 @@ void func_80973CD8(ObjRoomtimer* this, GlobalContext* globalCtx) {
 }
 
 void func_80973D3C(ObjRoomtimer* this, GlobalContext* globalCtx) {
-    if (Actor_GetRoomClearedTemp(globalCtx, this->actor.room)) {
+    if (Flags_GetClearTemp(globalCtx, this->actor.room)) {
         if (this->actor.params != 0x1FF) {
             gSaveContext.unk_3DD0[4] = 5;
         }
@@ -68,15 +68,15 @@ void func_80973D3C(ObjRoomtimer* this, GlobalContext* globalCtx) {
         this->actionFunc = func_80973DE0;
     } else if (this->actor.params != 0x1FF && gSaveContext.unk_3DD0[4] == 0) {
         play_sound(NA_SE_OC_ABYSS);
-        func_80169EFC(globalCtx);
+        func_80169EFC(&globalCtx->state);
         Actor_MarkForDeath(&this->actor);
     }
 }
 
 void func_80973DE0(ObjRoomtimer* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        Actor_SetRoomCleared(globalCtx, this->actor.room);
-        Actor_SetSwitchFlag(globalCtx, this->switchFlag);
+        Flags_SetClear(globalCtx, this->actor.room);
+        Flags_SetSwitch(globalCtx, this->switchFlag);
         if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
             ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS 0x08000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -70,7 +70,7 @@ void EnWizFire_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 3;
     this->unk_172 = 10;
     this->unk_1FC = 255.0f;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 
     if (!func_8012405C(globalCtx)) {
         this->collider.info.toucher.dmgFlags = 0x20000000;
@@ -108,19 +108,19 @@ void EnWizFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnWizFire* this = THIS;
 
     if (this->unk_162 == 0) {
-        globalCtx->envCtx.unk_8C.fogColor[2] = 0;
-        globalCtx->envCtx.unk_8C.fogColor[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.fogColor[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.fogNear = globalCtx->envCtx.unk_8C.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogColor[2] = 0;
+        globalCtx->envCtx.lightSettings.fogColor[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogColor[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogNear = globalCtx->envCtx.lightSettings.fogColor[2];
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
@@ -238,13 +238,13 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
                         phi_s0 += BINANG_ADD((s32)randPlusMinusPoint5Scaled(0x1000), 0x3333);
                     }
 
-                    Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
                     this->unk_16A = Rand_S16Offset(70, 30);
                     if (this->unk_16A != 0) {
-                        Audio_PlayActorSound2(&this->actor, NA_SE_EN_WIZ_EXP - SFX_FLAG);
+                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_EXP - SFX_FLAG);
                     }
                 } else if (this->unk_16A != 0) {
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
                 Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
                 this->unk_168 = 0;
@@ -262,12 +262,12 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
                 this->unk_168 = 0;
                 this->unk_148 = 1;
-                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
 
         if (func_8012405C(globalCtx) && (this->collider.base.atFlags & AT_BOUNCED)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
             this->collider.base.atFlags &= ~(AT_TYPE_ENEMY | AT_BOUNCED | AT_HIT);
             this->collider.base.atFlags |= AT_TYPE_PLAYER;
             this->collider.info.toucher.dmgFlags = 0x20;
@@ -317,13 +317,13 @@ void func_80A49FD8(EnWizFire* this, GlobalContext* globalCtx) {
             if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
                 this->unk_168 = 0;
                 this->unk_148 = 1;
-                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
     }
 
     if (this->unk_168 != 0) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
     }
 }
 
@@ -361,7 +361,7 @@ void func_80A4A11C(EnWizFire* this, GlobalContext* globalCtx) {
             this->collider.dim.height = 30;
             this->collider.dim.yShift = 15;
             func_80A4BC74(this, &sp34, &sp40);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             return;
         }
 
@@ -382,11 +382,11 @@ void func_80A4A11C(EnWizFire* this, GlobalContext* globalCtx) {
                 D_80A4C1C0 = 1;
                 this->unk_148 = 1;
                 this->unk_16A = 0;
-                Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
         this->actor.world.pos.y = this->actor.floorHeight + 10.0f;
-        Actor_SetHeight(&this->actor, 0.0f);
+        Actor_SetFocus(&this->actor, 0.0f);
         return;
     }
 
@@ -394,7 +394,7 @@ void func_80A4A11C(EnWizFire* this, GlobalContext* globalCtx) {
 
     if (this->unk_166 == 1) {
         Math_ApproachZeroF(&this->unk_1F0, 0.046f, 0.001f);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
 
         if (this->unk_164 == 0) {
             if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) && (this->unk_1F0 < 0.05f)) {
@@ -483,37 +483,37 @@ void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 phi_f0 = 968.0f;
             }
 
-            globalCtx->envCtx.unk_8C.fogNear = (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
+            globalCtx->envCtx.lightSettings.fogNear = (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
 
-            globalCtx->envCtx.unk_8C.ambientColor[0] =
+            globalCtx->envCtx.lightSettings.ambientColor[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.ambientColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.ambientColor[1] =
+            globalCtx->envCtx.lightSettings.ambientColor[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.ambientColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.ambientColor[2] =
+            globalCtx->envCtx.lightSettings.ambientColor[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.ambientColor[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.diffuseColor1[0] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.diffuseColor1[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor1[1] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.diffuseColor1[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor1[2] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.diffuseColor1[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.diffuseColor2[0] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.diffuseColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor2[1] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.diffuseColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor2[2] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.diffuseColor[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.fogColor[0] =
+            globalCtx->envCtx.lightSettings.fogColor[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.fogColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.fogColor[1] =
+            globalCtx->envCtx.lightSettings.fogColor[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.fogColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.fogColor[2] =
+            globalCtx->envCtx.lightSettings.fogColor[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.fogColor[2]) * this->unk_204;
         }
     }
@@ -523,7 +523,7 @@ void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx2) {
     this->actionFunc(this, globalCtx);
 
     this->actor.shape.yOffset = 10.0f;
-    Actor_ApplyMovement(&this->actor);
+    Actor_UpdatePos(&this->actor);
 
     this->unk_178[0] = this->actor.world.pos;
 
@@ -597,7 +597,7 @@ void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
         if (this->unk_162 == 0) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_WIZ_LAUGH2);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_LAUGH2);
             if (player->invincibilityTimer > 0) {
                 player->invincibilityTimer += 40;
                 if (this->unk_166 != 0) {
@@ -699,7 +699,8 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
 
         Matrix_StatePop();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, 0);
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+                                 MTXMODE_NEW);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,

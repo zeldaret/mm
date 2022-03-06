@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00100000
+#define FLAGS (ACTOR_FLAG_100000)
 
 #define THIS ((EnColMan*)thisx)
 
@@ -73,11 +73,11 @@ void EnColMan_Init(Actor* thisx, GlobalContext* globalCtx) {
         case EN_COL_MAN_HEART_PIECE:
         case EN_COL_MAN_RECOVERY_HEART:
         default:
-            ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
+            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDD60(this);
             break;
         case EN_COL_MAN_FALLING_ROCK:
-            ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 10.0f);
+            ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDF60(this);
             break;
         case EN_COL_MAN_CUTSCENE_BOMB:
@@ -131,14 +131,14 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
     } else if (!(gSaveContext.weekEventReg[56] & 2)) {
-        func_800B8A1C(&this->actor, globalCtx, GI_HEART_PIECE, 40.0f, 40.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_RECOVERY_HEART, 40.0f, 40.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_RECOVERY_HEART, 40.0f, 40.0f);
     }
 }
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globalCtx) {
-    if (func_80152498(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
         gSaveContext.weekEventReg[56] |= 2;
         Actor_MarkForDeath(&this->actor);
     }
@@ -146,8 +146,8 @@ void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globa
 
 void func_80AFDF60(EnColMan* this) {
     this->actor.draw = func_80AFE584;
-    this->actor.flags |= 0x10;
-    this->actor.flags |= 0x20;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_20;
     this->type = EN_COL_MAN_FALLING_ROCK;
     this->actionFunc = func_80AFDFB4;
     this->actor.shape.shadowScale = 5.0f;
@@ -167,7 +167,7 @@ void func_80AFDFB4(EnColMan* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);
             this->actor.velocity.y = 12.0f + BREG(57) + Rand_ZeroFloat(5.0f);
             this->hasSetRandomValues = true;
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_ANSATSUSYA_ROCK);
             return;
         }
 
@@ -210,7 +210,7 @@ void func_80AFE25C(EnColMan* this, GlobalContext* globalCtx) {
             }
         }
 
-        Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -221,7 +221,7 @@ void EnColMan_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->actor, this->scale);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 30.0f, 30.0f, 0x1F);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -246,7 +246,7 @@ void func_80AFE4AC(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&gameplay_keep_Tex_05E6F0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -268,7 +268,7 @@ void func_80AFE650(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
     POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&gameplay_keep_Tex_05CEF0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05CEF0));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

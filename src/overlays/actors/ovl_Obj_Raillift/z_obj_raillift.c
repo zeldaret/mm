@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_raillift.h"
+#include "objects/object_raillift/object_raillift.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjRaillift*)thisx)
 
@@ -25,12 +26,6 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, GlobalContext* globalCtx);
 void ObjRaillift_Teleport(ObjRaillift* this, GlobalContext* globalCtx);
 void ObjRaillift_Wait(ObjRaillift* this, GlobalContext* globalCtx);
 void ObjRaillift_Move(ObjRaillift* this, GlobalContext* globalCtx);
-
-extern CollisionHeader D_06004FF8;
-extern CollisionHeader D_060048D0;
-extern Gfx D_06004BF0[];
-extern Gfx D_06000208[];
-extern Gfx D_060071B8[];
 
 const ActorInit Obj_Raillift_InitVars = {
     ACTOR_OBJ_RAILLIFT,
@@ -51,7 +46,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static CollisionHeader* sColHeaders[] = { &D_06004FF8, &D_060048D0 };
+static CollisionHeader* sColHeaders[] = { &object_raillift_Colheader_004FF8, &object_raillift_Colheader_0048D0 };
 
 void ObjRaillift_UpdatePosition(ObjRaillift* this, s32 idx) {
     Math_Vec3s_ToVec3f(&this->dyna.actor.world.pos, &this->points[idx]);
@@ -94,7 +89,7 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
-        this->points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        this->points = Lib_SegmentedToVirtual(path->points);
         ObjRaillift_UpdatePosition(this, this->curPoint);
         if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(globalCtx, OBJRAILLIFT_GET_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
@@ -226,7 +221,7 @@ void ObjRaillift_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 step;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->dyna.actor, 10.0f);
+    Actor_SetFocus(&this->dyna.actor, 10.0f);
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
@@ -275,7 +270,7 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx) {
                Gfx_TwoTexScrollEnvColor(globalCtx->state.gfxCtx, 0, globalCtx->gameplayFrames, 0, 32, 32, 1, 0, 0, 32,
                                         32, 0, 0, 0, 160));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06004BF0);
+    gSPDisplayList(POLY_OPA_DISP++, object_raillift_DL_004BF0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -283,12 +278,12 @@ void ObjRaillift_Draw(Actor* thisx, GlobalContext* globalCtx) {
 The non-colorful platforms are the ones found in Woodfall Temple
 */
 void ObjRaillift_DrawDekuFlowerPlatform(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_06000208);
+    Gfx_DrawDListOpa(globalCtx, object_raillift_DL_000208);
 }
 
 /*
 The colorful platforms are the ones found in Deku Palace
 */
 void ObjRaillift_DrawDekuFlowerPlatformColorful(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060071B8);
+    Gfx_DrawDListOpa(globalCtx, object_raillift_DL_0071B8);
 }

@@ -55,7 +55,7 @@ static ColliderTrisInit D_80B6FA08 = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80B6FA24[] = {
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),

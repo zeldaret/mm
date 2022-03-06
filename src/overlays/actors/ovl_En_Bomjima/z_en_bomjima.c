@@ -8,7 +8,7 @@
 #include "z_en_bomjima.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBomjima*)thisx)
 
@@ -120,12 +120,12 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 19.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
                        this->morphTable, 21);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    gSaveContext.weekEventReg[83] &= (u8)~0x4;
+    gSaveContext.weekEventReg[83] &= (u8)~4;
     this->actor.targetMode = 0;
     this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
     this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
@@ -216,21 +216,21 @@ void func_80BFE524(EnBomjima* this) {
     if ((this->unk_2EC == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2EC == 18) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
     if ((this->unk_2EC == 15) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
     if ((this->unk_2EC == 6) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_LAND);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
 
@@ -268,7 +268,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C,
-                                                               &sp50, 1, 0, 0, 1, &sp4C)) {
+                                                               &sp50, true, false, false, true, &sp4C)) {
                     func_80BFE494(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_2A4, &sp54);
                     this->unk_2BE = Rand_S16Offset(30, 50);
@@ -290,8 +290,8 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
                 sp60.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp60.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, 1, 0, 0, 1,
-                                            &sp4C)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, true,
+                                            false, false, true, &sp4C)) {
                     this->unk_2C0 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80BFE494(this, 19, 1.0f);
@@ -326,7 +326,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
 }
 
 void func_80BFEA94(EnBomjima* this, GlobalContext* globalCtx) {
-    Actor* actor = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (actor != NULL) {
         if (actor->id != ACTOR_EN_BOMBAL) {
@@ -379,7 +379,7 @@ void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx) {
         this->actor.textId = Text_GetFaceReaction(globalCtx, 0x11);
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2DC = this->actor.yawTowardsPlayer;
         func_80C00234(this);
         return;
@@ -405,7 +405,7 @@ void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx) {
             this->unk_2DC = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2F0->actor.world.pos);
             if (Animation_OnFrame(&this->skelAnime, 19.0f)) {
                 this->unk_2C0 = 5;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOMBERS_SHOT_BREATH);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMBERS_SHOT_BREATH);
             }
 
             if (this->unk_2C0 == 1) {
@@ -421,7 +421,7 @@ void func_80BFEB64(EnBomjima* this, GlobalContext* globalCtx) {
                 sp40.y = this->unk_2F0->actor.world.pos.y - randPlusMinusPoint5Scaled(40.0f);
                 sp40.z = (Math_CosS(sp3E) * (Rand_ZeroFloat(20.0f) + 40.0f)) + this->unk_2F0->actor.world.pos.z;
 
-                Audio_PlaySoundAtPosition(globalCtx, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
                 EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &sp40);
                 this->unk_2BC++;
 
@@ -469,8 +469,8 @@ void func_80BFF03C(EnBomjima* this, GlobalContext* globalCtx) {
     } else {
         player->stateFlags1 &= ~0x20;
         gSaveContext.weekEventReg[83] &= (u8)~4;
-        this->actor.world.rot.y = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
-        this->unk_2DC = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
+        this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
+        this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D4[0], &this->actor);
         func_80BFF120(this);
     }
@@ -498,7 +498,7 @@ void func_80BFF174(EnBomjima* this, GlobalContext* globalCtx) {
         this->actor.textId = Text_GetFaceReaction(globalCtx, 0x11);
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2DC = this->actor.yawTowardsPlayer;
         func_80C00234(this);
         return;
@@ -573,7 +573,7 @@ void func_80BFF430(EnBomjima* this, GlobalContext* globalCtx) {
         if (bombal != NULL) {
             bombal->unk_150 = 0.0f;
             bombal->unk_14C = this->unk_2F4;
-            func_800B86C8(&this->actor, globalCtx, &bombal->actor);
+            Actor_ChangeFocus(&this->actor, globalCtx, &bombal->actor);
             gSaveContext.weekEventReg[83] &= (u8)~4;
             func_80BFE65C(this);
             func_801477B4(globalCtx);
@@ -589,7 +589,7 @@ void func_80BFF4F4(EnBomjima* this) {
 }
 
 void func_80BFF52C(EnBomjima* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         if (globalCtx->msgCtx.choiceIndex == 0) {
             Player* player = GET_PLAYER(globalCtx);
@@ -632,7 +632,7 @@ void func_80BFF6CC(EnBomjima* this, GlobalContext* globalCtx) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (this->unk_2CC <= curFrame) {
-        if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
             func_801477B4(globalCtx);
             func_80BFE494(this, 1, 1.0f);
             this->actionFunc = func_80BFF754;
@@ -761,7 +761,7 @@ void func_80BFF9B0(EnBomjima* this, GlobalContext* globalCtx) {
 }
 
 void func_80BFFB40(EnBomjima* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80BFE494(this, 15, 1.0f);
         D_80C009F0 = 100;
@@ -868,7 +868,7 @@ void func_80BFFF54(EnBomjima* this, GlobalContext* globalCtx) {
 
     if (this->unk_2EC == 8) {
         if ((D_80C009F4 == 1) && Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_HUMAN_BOUND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
             D_80C009F4 = 2;
         }
 
@@ -905,7 +905,7 @@ void func_80C00168(EnBomjima* this, GlobalContext* globalCtx) {
         this->actor.textId = Text_GetFaceReaction(globalCtx, 0x11);
     }
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2DC = this->actor.yawTowardsPlayer;
         func_80C00234(this);
     } else {
@@ -945,7 +945,7 @@ void func_80C00284(EnBomjima* this, GlobalContext* globalCtx) {
         this->unk_28E = -6000;
     }
 
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         this->collider.dim.radius = 10;
         this->collider.dim.height = 30;
         if ((this->unk_2A0 == 4) || (this->unk_2CA == 1) || ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {
@@ -1044,9 +1044,9 @@ void EnBomjima_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     func_80BFE524(this);
-    Actor_SetHeight(&this->actor, 20.0f);
+    Actor_SetFocus(&this->actor, 20.0f);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Math_SmoothStepToS(&this->unk_28A, this->unk_290, 1, 5000, 0);
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 1000, 0);
     Math_SmoothStepToS(&this->unk_294, this->unk_29A, 1, 1000, 0);
@@ -1101,13 +1101,12 @@ void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjima_D_80C00B18, gEnBomjima_D_80C00B18,
     };
     static TexturePtr D_80C00B3C[] = {
-        &object_cs_Tex_00C520,
-        &object_cs_Tex_00CD20,
-        &object_cs_Tex_00D520,
+        object_cs_Tex_00C520,
+        object_cs_Tex_00CD20,
+        object_cs_Tex_00D520,
     };
     static TexturePtr D_80C00B48[] = {
-        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
-        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
+        object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
     EnBomjima* this = THIS;
 

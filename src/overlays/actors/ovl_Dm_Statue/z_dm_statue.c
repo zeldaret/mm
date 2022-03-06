@@ -5,8 +5,9 @@
  */
 
 #include "z_dm_statue.h"
+#include "objects/object_smtower/object_smtower.h"
 
-#define FLAGS 0x04000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000000)
 
 #define THIS ((DmStatue*)thisx)
 
@@ -27,9 +28,6 @@ const ActorInit Dm_Statue_InitVars = {
     (ActorFunc)DmStatue_Draw,
 };
 
-extern AnimatedMaterial D_06001788;
-extern Gfx D_06000520[];
-
 void DmStatue_Init(Actor* thisx, GlobalContext* globalCtx) {
     DmStatue* this = THIS;
 
@@ -43,6 +41,6 @@ void DmStatue_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DmStatue_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06001788));
-    func_800BE03C(globalCtx, D_06000520);
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_smtower_Matanimheader_001788));
+    Gfx_DrawDListXlu(globalCtx, object_smtower_DL_000520);
 }

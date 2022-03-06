@@ -7,7 +7,7 @@
 #include "z_obj_etcetera.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjEtcetera*)thisx)
 
@@ -52,8 +52,6 @@ static ColliderCylinderInit sCylinderInit = {
     },
     { 20, 14, 0, { 0, 0, 0 } },
 };
-
-extern ColliderCylinderInit D_80A7C790;
 
 static s16 objectIds[] = {
     GAMEPLAY_KEEP,
@@ -250,7 +248,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
-        Actor_SetObjectSegment(globalCtx, &this->dyna.actor);
+        Actor_SetObjectDependency(globalCtx, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, 1);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != 0) {
