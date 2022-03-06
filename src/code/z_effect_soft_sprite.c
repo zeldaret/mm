@@ -1,20 +1,22 @@
 #include "global.h"
 
+EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
+
 void EffectSS_Init(GlobalContext* globalCtx, s32 numEntries) {
     u32 i;
     EffectSs* effectsSs;
     EffectSsOverlay* overlay;
 
-    EffectSS2Info.data_table = (EffectSs*)THA_AllocEndAlign16(&globalCtx->state.heap, numEntries * sizeof(EffectSs));
-    EffectSS2Info.searchIndex = 0;
-    EffectSS2Info.size = numEntries;
+    sEffectSsInfo.data_table = (EffectSs*)THA_AllocEndAlign16(&globalCtx->state.heap, numEntries * sizeof(EffectSs));
+    sEffectSsInfo.searchIndex = 0;
+    sEffectSsInfo.size = numEntries;
 
-    for (effectsSs = &EffectSS2Info.data_table[0]; effectsSs < &EffectSS2Info.data_table[EffectSS2Info.size];
+    for (effectsSs = &sEffectSsInfo.data_table[0]; effectsSs < &sEffectSsInfo.data_table[sEffectSsInfo.size];
          effectsSs++) {
         EffectSS_ResetEntry(effectsSs);
     }
 
-    overlay = &particleOverlayTable[0];
+    overlay = &gParticleOverlayTable[0];
     for (i = 0; i < EFFECT_SS_MAX; i++) {
         overlay->loadedRamAddr = NULL;
         overlay++;
@@ -27,39 +29,40 @@ void EffectSS_Clear(GlobalContext* globalCtx) {
     EffectSsOverlay* overlay;
     void* addr;
 
-    EffectSS2Info.data_table = NULL;
-    EffectSS2Info.searchIndex = 0;
-    EffectSS2Info.size = 0;
+    sEffectSsInfo.data_table = NULL;
+    sEffectSsInfo.searchIndex = 0;
+    sEffectSsInfo.size = 0;
 
-    // This code is completely useless, as data_table was just set to NULL and size to 0
-    for (effectsSs = EffectSS2Info.data_table; effectsSs < EffectSS2Info.data_table + EffectSS2Info.size; effectsSs++) {
+    //! @bug: Effects left in the table are not properly deleted, as data_table was just set to NULL and size to 0
+    for (effectsSs = &sEffectSsInfo.data_table[0]; effectsSs < &sEffectSsInfo.data_table[sEffectSsInfo.size];
+         effectsSs++) {
         EffectSS_Delete(effectsSs);
     }
 
     // Free memory from loaded particle overlays
-    overlay = &particleOverlayTable[0];
+    overlay = &gParticleOverlayTable[0];
     for (i = 0; i < EFFECT_SS_MAX; i++) {
         addr = overlay->loadedRamAddr;
         if (addr != NULL) {
             ZeldaArena_Free(addr);
         }
 
-        overlay->loadedRamAddr = 0;
+        overlay->loadedRamAddr = NULL;
         overlay++;
     }
 }
 
 EffectSs* EffectSS_GetTable() {
-    return EffectSS2Info.data_table;
+    return sEffectSsInfo.data_table;
 }
 
 void EffectSS_Delete(EffectSs* effectSs) {
     if (effectSs->flags & 2) {
-        func_801A72CC(&effectSs->pos);
+        Audio_StopSfxByPos(&effectSs->pos);
     }
 
     if (effectSs->flags & 4) {
-        func_801A72CC(&effectSs->vec);
+        Audio_StopSfxByPos(&effectSs->vec);
     }
 
     EffectSS_ResetEntry(effectSs);
@@ -90,27 +93,27 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
     s32 foundFree;
     s32 i;
 
-    if (EffectSS2Info.searchIndex >= EffectSS2Info.size) {
-        EffectSS2Info.searchIndex = 0;
+    if (sEffectSsInfo.searchIndex >= sEffectSsInfo.size) {
+        sEffectSsInfo.searchIndex = 0;
     }
 
     // Search for a unused entry
-    i = EffectSS2Info.searchIndex;
+    i = sEffectSsInfo.searchIndex;
     foundFree = false;
     while (true) {
-        if (EffectSS2Info.data_table[i].life == -1) {
+        if (sEffectSsInfo.data_table[i].life == -1) {
             foundFree = true;
             break;
         }
 
         i++;
 
-        if (i >= EffectSS2Info.size) {
+        if (i >= sEffectSsInfo.size) {
             i = 0; // Loop around the whole table
         }
 
         // After a full loop, break out
-        if (i == EffectSS2Info.searchIndex) {
+        if (i == sEffectSsInfo.searchIndex) {
             break;
         }
     }
@@ -122,22 +125,22 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
 
     // If all slots are in use, search for a slot with a lower priority
     // Note that a lower priority is representend by a higher value
-    i = EffectSS2Info.searchIndex;
+    i = sEffectSsInfo.searchIndex;
     while (true) {
         // Equal priority should only be considered "lower" if flag 0 is set
-        if ((priority <= EffectSS2Info.data_table[i].priority) &&
-            !((priority == EffectSS2Info.data_table[i].priority) && (EffectSS2Info.data_table[i].flags & 1))) {
+        if ((priority <= sEffectSsInfo.data_table[i].priority) &&
+            !((priority == sEffectSsInfo.data_table[i].priority) && (sEffectSsInfo.data_table[i].flags & 1))) {
             break;
         }
 
         i++;
 
-        if (i >= EffectSS2Info.size) {
+        if (i >= sEffectSsInfo.size) {
             i = 0; // Loop around the whole table
         }
 
         // After a full loop, return 1 to indicate that we failed to find a suitable slot
-        if (i == EffectSS2Info.searchIndex) {
+        if (i == sEffectSsInfo.searchIndex) {
             return true;
         }
     }
@@ -149,10 +152,10 @@ s32 EffectSS_FindFreeSpace(s32 priority, s32* tableEntry) {
 void EffectSS_Copy(GlobalContext* globalCtx, EffectSs* effectsSs) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx) != true) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state) != true) {
         if (EffectSS_FindFreeSpace(effectsSs->priority, &index) == 0) {
-            EffectSS2Info.searchIndex = index + 1;
-            EffectSS2Info.data_table[index] = *effectsSs;
+            sEffectSsInfo.searchIndex = index + 1;
+            sEffectSsInfo.data_table[index] = *effectsSs;
         }
     }
 }
@@ -160,7 +163,7 @@ void EffectSS_Copy(GlobalContext* globalCtx, EffectSs* effectsSs) {
 void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* initData) {
     s32 index;
     u32 overlaySize;
-    EffectSsOverlay* entry = &particleOverlayTable[type];
+    EffectSsOverlay* entry = &gParticleOverlayTable[type];
     EffectSsInit* initInfo;
 
     if (EffectSS_FindFreeSpace(priority, &index) != 0) {
@@ -168,8 +171,8 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
         return;
     }
 
-    EffectSS2Info.searchIndex = index + 1;
-    overlaySize = (u32)entry->vramEnd - (u32)entry->vramStart;
+    sEffectSsInfo.searchIndex = index + 1;
+    overlaySize = VRAM_PTR_SIZE(entry);
 
     if (entry->vramStart == NULL) {
         initInfo = entry->initInfo;
@@ -184,27 +187,25 @@ void EffectSs_Spawn(GlobalContext* globalCtx, s32 type, s32 priority, void* init
             Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        initInfo = (void*)(u32)(
-            entry->initInfo != NULL
-                ? (EffectSsInit*)(-((u32)entry->vramStart - (u32)entry->loadedRamAddr) + (u32)entry->initInfo)
-                : NULL);
+        initInfo = (uintptr_t)(
+            (entry->initInfo != NULL) ? (void*)(-OVERLAY_RELOCATION_OFFSET(entry) + (uintptr_t)entry->initInfo) : NULL);
     }
 
     if (initInfo->init != NULL) {
         // Delete the previous effect in the slot, in case the slot wasn't free
-        EffectSS_Delete(&EffectSS2Info.data_table[index]);
+        EffectSS_Delete(&sEffectSsInfo.data_table[index]);
 
-        EffectSS2Info.data_table[index].type = type;
-        EffectSS2Info.data_table[index].priority = priority;
+        sEffectSsInfo.data_table[index].type = type;
+        sEffectSsInfo.data_table[index].priority = priority;
 
-        if (initInfo->init(globalCtx, index, &EffectSS2Info.data_table[index], initData) == 0) {
-            EffectSS_ResetEntry(&EffectSS2Info.data_table[index]);
+        if (initInfo->init(globalCtx, index, &sEffectSsInfo.data_table[index], initData) == 0) {
+            EffectSS_ResetEntry(&sEffectSsInfo.data_table[index]);
         }
     }
 }
 
 void EffectSS_UpdateParticle(GlobalContext* globalCtx, s32 index) {
-    EffectSs* particle = &EffectSS2Info.data_table[index];
+    EffectSs* particle = &sEffectSsInfo.data_table[index];
 
     if (particle->update != NULL) {
         particle->velocity.x += particle->accel.x;
@@ -222,23 +223,23 @@ void EffectSS_UpdateParticle(GlobalContext* globalCtx, s32 index) {
 void EffectSS_UpdateAllParticles(GlobalContext* globalCtx) {
     s32 i;
 
-    for (i = 0; i < EffectSS2Info.size; i++) {
-        if (EffectSS2Info.data_table[i].life > -1) {
-            EffectSS2Info.data_table[i].life--;
+    for (i = 0; i < sEffectSsInfo.size; i++) {
+        if (sEffectSsInfo.data_table[i].life > -1) {
+            sEffectSsInfo.data_table[i].life--;
 
-            if (EffectSS2Info.data_table[i].life < 0) {
-                EffectSS_Delete(&EffectSS2Info.data_table[i]);
+            if (sEffectSsInfo.data_table[i].life < 0) {
+                EffectSS_Delete(&sEffectSsInfo.data_table[i]);
             }
         }
 
-        if (EffectSS2Info.data_table[i].life > -1) {
+        if (sEffectSsInfo.data_table[i].life > -1) {
             EffectSS_UpdateParticle(globalCtx, i);
         }
     }
 }
 
 void EffectSS_DrawParticle(GlobalContext* globalCtx, s32 index) {
-    EffectSs* entry = &EffectSS2Info.data_table[index];
+    EffectSs* entry = &sEffectSsInfo.data_table[index];
 
     if (entry->draw != NULL) {
         entry->draw(globalCtx, index, entry);
@@ -252,12 +253,15 @@ void EffectSS_DrawAllParticles(GlobalContext* globalCtx) {
     Lights_BindAll(lights, globalCtx->lightCtx.listHead, NULL, globalCtx);
     Lights_Draw(lights, globalCtx->state.gfxCtx);
 
-    for (i = 0; i < EffectSS2Info.size; i++) {
-        if (EffectSS2Info.data_table[i].life > -1) {
-            if ((EffectSS2Info.data_table[i].pos.x > 32000.0f) || (EffectSS2Info.data_table[i].pos.x < -32000.0f) ||
-                (EffectSS2Info.data_table[i].pos.y > 32000.0f) || (EffectSS2Info.data_table[i].pos.y < -32000.0f) ||
-                (EffectSS2Info.data_table[i].pos.z > 32000.0f) || (EffectSS2Info.data_table[i].pos.z < -32000.0f)) {
-                EffectSS_Delete(&EffectSS2Info.data_table[i]);
+    for (i = 0; i < sEffectSsInfo.size; i++) {
+        if (sEffectSsInfo.data_table[i].life > -1) {
+            if ((sEffectSsInfo.data_table[i].pos.x > BGCHECK_Y_MAX) ||
+                (sEffectSsInfo.data_table[i].pos.x < BGCHECK_Y_MIN) ||
+                (sEffectSsInfo.data_table[i].pos.y > BGCHECK_Y_MAX) ||
+                (sEffectSsInfo.data_table[i].pos.y < BGCHECK_Y_MIN) ||
+                (sEffectSsInfo.data_table[i].pos.z > BGCHECK_Y_MAX) ||
+                (sEffectSsInfo.data_table[i].pos.z < BGCHECK_Y_MIN)) {
+                EffectSS_Delete(&sEffectSsInfo.data_table[i]);
             } else {
                 EffectSS_DrawParticle(globalCtx, i);
             }

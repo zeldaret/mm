@@ -5,8 +5,9 @@
  */
 
 #include "z_en_baisen.h"
+#include "objects/object_bai/object_bai.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBaisen*)thisx)
 
@@ -21,11 +22,6 @@ void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx);
 void func_80BE895C(EnBaisen* this, GlobalContext* globalCtx);
 void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx);
 void func_80BE89D8(EnBaisen* this, GlobalContext* globalCtx);
-
-extern FlexSkeletonHeader D_06007908;
-extern AnimationHeader D_060011C0;
-extern AnimationHeader D_060008B4;
-extern AnimationHeader D_06008198;
 
 const ActorInit En_Baisen_InitVars = {
     ACTOR_EN_BAISEN,
@@ -61,15 +57,16 @@ static ColliderCylinderInit sCylinderInit = {
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6 };
 
-static AnimationHeader* D_80BE8E4C[] = { &D_060011C0, &D_060008B4, &D_06008198 };
+static AnimationHeader* D_80BE8E4C[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
 
-static u8 animModes[] = { 0, 0 };
+static u8 animModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 void EnBaisen_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBaisen* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007908, &D_060011C0, this->jointTable, this->morphTable, 20);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bai_Skel_007908, &object_bai_Anim_0011C0, this->jointTable,
+                       this->morphTable, 20);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->paramCopy = this->actor.params;
     if (this->actor.params == 0) {
@@ -124,7 +121,7 @@ void func_80BE871C(EnBaisen* this) {
 }
 
 void func_80BE87B0(EnBaisen* this, GlobalContext* globalCtx) {
-    Actor* actorIterator = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    Actor* actorIterator = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorIterator != NULL) {
         if (actorIterator->id == ACTOR_EN_HEISHI) {
@@ -151,7 +148,7 @@ void func_80BE87FC(EnBaisen* this) {
 }
 
 void func_80BE887C(EnBaisen* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BE895C(this, globalCtx);
     } else {
         if (this->paramCopy != 0) {
@@ -176,7 +173,7 @@ void func_80BE895C(EnBaisen* this, GlobalContext* globalCtx) {
     if (this->unk2A4 != NULL) {
         this->unk290 = true;
         this->unk2AC = 1;
-        func_800B86C8(this->unk2A4, globalCtx, this->unk2A4);
+        Actor_ChangeFocus(this->unk2A4, globalCtx, this->unk2A4);
     }
     this->unk29C = 1;
     if (this->paramCopy == 0) {
@@ -223,7 +220,7 @@ void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
             EnBaisen_ChangeAnimation(this, 0);
         }
     }
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         this->textIdIndex++;
         if (this->textIdIndex < 6) {
@@ -233,7 +230,7 @@ void func_80BE8AAC(EnBaisen* this, GlobalContext* globalCtx) {
             } else {
                 this->unk2A4 = &this->actor;
             }
-            func_800B86C8(this->unk2A4, globalCtx, this->unk2A4);
+            Actor_ChangeFocus(this->unk2A4, globalCtx, this->unk2A4);
         } else {
             func_80BE87FC(this);
         }
@@ -254,13 +251,13 @@ void EnBaisen_Update(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Actor_SetScale(&this->actor, 0.01f);
     if (this->unk290) {
         func_80BE871C(this);
     }
-    Actor_SetHeight(&this->actor, 60.0f);
+    Actor_SetFocus(&this->actor, 60.0f);
     Math_SmoothStepToS(&this->headRotX, this->headRotXTarget, 1, 0xBB8, 0);
     Math_SmoothStepToS(&this->headRotY, this->headRotYTarget, 1, 0x3E8, 0);
     Collider_UpdateCylinder(&this->actor, &this->collider);

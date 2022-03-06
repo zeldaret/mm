@@ -37,22 +37,22 @@
         <Texture Name="object_ah_Tex_008570" OutName="tex_008570" Format="rgba16" Width="32" Height="32" Offset="0x8570" />
         <Texture Name="object_ah_Tex_008D70" OutName="tex_008D70" Format="rgba16" Width="32" Height="32" Offset="0x8D70" />
         <Texture Name="object_ah_Tex_009570" OutName="tex_009570" Format="rgba16" Width="32" Height="32" Offset="0x9570" />
-        <Limb Name="object_ah_Standardlimb_009D70" Type="Standard" Offset="0x9D70" />
-        <Limb Name="object_ah_Standardlimb_009D7C" Type="Standard" Offset="0x9D7C" />
-        <Limb Name="object_ah_Standardlimb_009D88" Type="Standard" Offset="0x9D88" />
-        <Limb Name="object_ah_Standardlimb_009D94" Type="Standard" Offset="0x9D94" />
-        <Limb Name="object_ah_Standardlimb_009DA0" Type="Standard" Offset="0x9DA0" />
-        <Limb Name="object_ah_Standardlimb_009DAC" Type="Standard" Offset="0x9DAC" />
-        <Limb Name="object_ah_Standardlimb_009DB8" Type="Standard" Offset="0x9DB8" />
-        <Limb Name="object_ah_Standardlimb_009DC4" Type="Standard" Offset="0x9DC4" />
-        <Limb Name="object_ah_Standardlimb_009DD0" Type="Standard" Offset="0x9DD0" />
-        <Limb Name="object_ah_Standardlimb_009DDC" Type="Standard" Offset="0x9DDC" />
-        <Limb Name="object_ah_Standardlimb_009DE8" Type="Standard" Offset="0x9DE8" />
-        <Limb Name="object_ah_Standardlimb_009DF4" Type="Standard" Offset="0x9DF4" />
-        <Limb Name="object_ah_Standardlimb_009E00" Type="Standard" Offset="0x9E00" />
-        <Limb Name="object_ah_Standardlimb_009E0C" Type="Standard" Offset="0x9E0C" />
-        <Limb Name="object_ah_Standardlimb_009E18" Type="Standard" Offset="0x9E18" />
-        <Limb Name="object_ah_Standardlimb_009E24" Type="Standard" Offset="0x9E24" />
-        <Skeleton Name="object_ah_Skel_009E70" Type="Flex" LimbType="Standard" Offset="0x9E70" />
+        <Limb Name="object_ah_Standardlimb_009D70" Type="Standard" EnumName="OBJECT_AH_LIMB_01" Offset="0x9D70" />
+        <Limb Name="object_ah_Standardlimb_009D7C" Type="Standard" EnumName="OBJECT_AH_LIMB_02" Offset="0x9D7C" />
+        <Limb Name="object_ah_Standardlimb_009D88" Type="Standard" EnumName="OBJECT_AH_LIMB_03" Offset="0x9D88" />
+        <Limb Name="object_ah_Standardlimb_009D94" Type="Standard" EnumName="OBJECT_AH_LIMB_04" Offset="0x9D94" />
+        <Limb Name="object_ah_Standardlimb_009DA0" Type="Standard" EnumName="OBJECT_AH_LIMB_05" Offset="0x9DA0" />
+        <Limb Name="object_ah_Standardlimb_009DAC" Type="Standard" EnumName="OBJECT_AH_LIMB_06" Offset="0x9DAC" />
+        <Limb Name="object_ah_Standardlimb_009DB8" Type="Standard" EnumName="OBJECT_AH_LIMB_07" Offset="0x9DB8" />
+        <Limb Name="object_ah_Standardlimb_009DC4" Type="Standard" EnumName="OBJECT_AH_LIMB_08" Offset="0x9DC4" />
+        <Limb Name="object_ah_Standardlimb_009DD0" Type="Standard" EnumName="OBJECT_AH_LIMB_09" Offset="0x9DD0" />
+        <Limb Name="object_ah_Standardlimb_009DDC" Type="Standard" EnumName="OBJECT_AH_LIMB_0A" Offset="0x9DDC" />
+        <Limb Name="object_ah_Standardlimb_009DE8" Type="Standard" EnumName="OBJECT_AH_LIMB_0B" Offset="0x9DE8" />
+        <Limb Name="object_ah_Standardlimb_009DF4" Type="Standard" EnumName="OBJECT_AH_LIMB_0C" Offset="0x9DF4" />
+        <Limb Name="object_ah_Standardlimb_009E00" Type="Standard" EnumName="OBJECT_AH_LIMB_0D" Offset="0x9E00" />
+        <Limb Name="object_ah_Standardlimb_009E0C" Type="Standard" EnumName="OBJECT_AH_LIMB_0E" Offset="0x9E0C" />
+        <Limb Name="object_ah_Standardlimb_009E18" Type="Standard" EnumName="OBJECT_AH_LIMB_0F" Offset="0x9E18" />
+        <Limb Name="object_ah_Standardlimb_009E24" Type="Standard" EnumName="OBJECT_AH_LIMB_10" Offset="0x9E24" />
+        <Skeleton Name="object_ah_Skel_009E70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AH_LIMB_NONE" LimbMax="OBJECT_AH_LIMB_MAX" EnumName="object_ah_Limbs" Offset="0x9E70" />
     </File>
 </Root>

@@ -6,7 +6,7 @@
 
 #include "z_tg_sw.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((TGSw*)thisx)
 
@@ -56,7 +56,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
     if (1) {}
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_ENEMY, ACTOR_EN_SW);
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_ENEMY, ACTOR_EN_SW);
         if (actor == NULL) {
             break;
         }
@@ -71,7 +71,7 @@ void TGSw_ActionExecuteOneShot(TGSw* this, GlobalContext* globalCtx) {
     actor = NULL;
 
     do {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_SW);
+        actor = SubS_FindActor(globalCtx, actor, ACTORCAT_NPC, ACTOR_EN_SW);
 
         if (actor == NULL) {
             break;

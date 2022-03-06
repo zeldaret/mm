@@ -6,7 +6,7 @@
 
 #include "z_en_tanron6.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnTanron6*)thisx)
 
@@ -69,7 +69,7 @@ void EnTanron6_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron6* this = THIS;
 
     this->actor.colChkInfo.mass = 10;
-    ActorShape_Init(&this->actor.shape, 0, func_800B3FC0, 19.0f);
+    ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 19.0f);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.targetMode = 6;
@@ -90,7 +90,7 @@ void EnTanron6_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron6* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 40.0f, 40.0f, 0x1D);
 }
 

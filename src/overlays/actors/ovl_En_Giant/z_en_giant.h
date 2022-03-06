@@ -2,13 +2,9 @@
 #define Z_EN_GIANT_H
 
 #include "global.h"
+#include "objects/object_giant/object_giant.h"
 
 #define GIANT_TYPE(thisx) ((thisx)->params & 0xF)
-#define GIANT_TYPE_IS_NOT_TERMINA_FIELD(type) (type > GIANT_TYPE_OCEAN_TERMINA_FIELD)
-#define GIANT_TYPE_IS_TERMINA_FIELD(type) (type <= GIANT_TYPE_OCEAN_TERMINA_FIELD)
-#define GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type) (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS)
-#define GIANT_TYPE_IS_CHAMBER_OR_ENDING(type) (type >= GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING && type <= GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING)
-#define GIANT_TYPE_IS_CLOCK_TOWER_FAILURE(type) (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE)
 
 /**
  * The giants are divided into types based on where in the game they appear.
@@ -42,50 +38,6 @@ typedef enum {
     /* 15 */ GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE,
 } GiantType;
 
-/**
- * These values are used to index into sAnimationTable to pick the appropriate animation.
- */
-typedef enum {
-    /*  0 */ GIANT_ANIMATION_LOOK_UP_START,
-    /*  1 */ GIANT_ANIMATION_LOOK_UP_LOOP,
-    /*  2 */ GIANT_ANIMATION_FALLING_OVER,
-    /*  3 */ GIANT_ANIMATION_RAISED_ARMS_START,
-    /*  4 */ GIANT_ANIMATION_RAISED_ARMS_LOOP,
-    /*  5 */ GIANT_ANIMATION_STRUGGLE_START,
-    /*  6 */ GIANT_ANIMATION_STRUGGLE_LOOP,
-    /*  7 */ GIANT_ANIMATION_IDLE_LOOP,
-    /*  8 */ GIANT_ANIMATION_WALKING_LOOP,
-    /*  9 */ GIANT_ANIMATION_BIG_CALL_START,
-    /* 10 */ GIANT_ANIMATION_BIG_CALL_LOOP,
-    /* 11 */ GIANT_ANIMATION_BIG_CALL_END,
-    /* 12 */ GIANT_ANIMATION_SMALL_CALL_START,
-    /* 13 */ GIANT_ANIMATION_SMALL_CALL_LOOP,
-    /* 14 */ GIANT_ANIMATION_SMALL_CALL_END,
-    /* 15 */ GIANT_ANIMATION_MAX
-} GiantAnimationIndex;
-
-/**
- * Used as values for csAction. The UNKNOWN ones are never used in-game.
- */
-typedef enum {
-    /*  0 */ GIANT_CS_ACTION_NONE,
-    /*  1 */ GIANT_CS_ACTION_IDLE,
-    /*  2 */ GIANT_CS_ACTION_WALKING,
-    /*  3 */ GIANT_CS_ACTION_LOOKING_UP,
-    /*  4 */ GIANT_CS_ACTION_RAISING_ARMS,
-    /*  5 */ GIANT_CS_ACTION_STRUGGLING,
-    /*  6 */ GIANT_CS_ACTION_FALLING_OVER,
-    /*  7 */ GIANT_CS_ACTION_IDLE_FADE_IN,
-    /*  8 */ GIANT_CS_ACTION_TALKING,
-    /*  9 */ GIANT_CS_ACTION_DONE_TALKING,
-    /* 10 */ GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER,
-    /* 11 */ GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER,
-    /* 12 */ GIANT_CS_ACTION_UNKNOWN_12,
-    /* 13 */ GIANT_CS_ACTION_UNKNOWN_13,
-    /* 14 */ GIANT_CS_ACTION_UNKNOWN_14,
-    /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
-} GiantCsActionIndex;
-
 struct EnGiant;
 
 typedef void (*EnGiantActionFunc)(struct EnGiant*, GlobalContext*);
@@ -93,14 +45,14 @@ typedef void (*EnGiantActionFunc)(struct EnGiant*, GlobalContext*);
 typedef struct EnGiant {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[16];
-    /* 0x1E8 */ Vec3s morphTable[16];
+    /* 0x188 */ Vec3s jointTable[GIANT_LIMB_MAX];
+    /* 0x1E8 */ Vec3s morphTable[GIANT_LIMB_MAX];
     /* 0x248 */ s16 animationId;
-    /* 0x24A */ u16 unk_24A;
+    /* 0x24A */ u16 actorActionCommand;
     /* 0x24C */ u16 csAction;
     /* 0x24E */ s16 alpha;
     /* 0x250 */ u16 sfxId;
-    /* 0x254 */ MtxF unk_254;
+    /* 0x254 */ MtxF headDrawMtxF;
     /* 0x294 */ s16 faceIndex;
     /* 0x296 */ s16 blinkTimer;
     /* 0x298 */ EnGiantActionFunc actionFunc;

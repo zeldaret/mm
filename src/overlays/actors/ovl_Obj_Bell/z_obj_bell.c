@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_bell.h"
+#include "objects/object_f52_obj/object_f52_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjBell*)thisx)
 
@@ -111,14 +112,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xE),
 };
 
-extern CollisionHeader D_06001BA8;
-extern Gfx D_06000570[]; // Bell post
-extern Gfx D_06000698[]; // Bell
-extern Gfx D_060007A8[]; // Bell Base
-extern Gfx D_06000840[]; // Bell Shadow
-extern Gfx D_060008D0[]; // Bell Hook
-extern Gfx D_06000960[]; // Bell Designs
-
 s32 func_80A35510(ObjBell* this, s32 arg1) {
     Vec3f bumperPos;
     Vec3f worldPos;
@@ -198,11 +191,11 @@ s32 func_80A357A8(ObjBell* this, GlobalContext* globalCtx) {
         this->unk_20E = 10;
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 15:
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGBELL);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 1);
                 break;
             case 14:
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BIGBELL);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BIGBELL);
                 func_80A35510(this, 2);
                 break;
             default:
@@ -233,10 +226,10 @@ void func_80A359B4(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000698);
-    gSPDisplayList(POLY_OPA_DISP++, D_060008D0);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000960);
-    gSPDisplayList(POLY_OPA_DISP++, D_060007A8);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000698);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_0008D0);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000960);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_0007A8);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -247,7 +240,7 @@ void func_80A35B18(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06000570);
+    gSPDisplayList(POLY_OPA_DISP++, object_f52_obj_DL_000570);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -257,7 +250,7 @@ void func_80A35BD4(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06000840);
+    gSPDisplayList(POLY_XLU_DISP++, object_f52_obj_DL_000840);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -265,7 +258,7 @@ void ObjBell_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBell* this = THIS;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06001BA8);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_f52_obj_Colheader_001BA8);
     Actor_SetScale(&this->dyna.actor, 0.08f);
     Collider_InitAndSetSphere(globalCtx, &this->collider1, &this->dyna.actor, &sCylinderInit1);
     Collider_InitAndSetSphere(globalCtx, &this->collider2, &this->dyna.actor, &sCylinderInit2);

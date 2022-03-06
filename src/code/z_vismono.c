@@ -1,4 +1,5 @@
 #include "global.h"
+#include "system_malloc.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_vismono/func_801418B0.s")
 

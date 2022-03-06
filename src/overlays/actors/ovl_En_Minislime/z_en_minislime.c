@@ -7,7 +7,7 @@
 #include "z_en_minislime.h"
 #include "overlays/actors/ovl_En_Bigslime/z_en_bigslime.h"
 
-#define FLAGS 0x00000235
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200)
 
 #define THIS ((EnMinislime*)thisx)
 
@@ -121,7 +121,7 @@ static DamageTable sDamageTable = {
 void EnMinislime_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMinislime* this = THIS;
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->id = this->actor.params;
@@ -202,7 +202,7 @@ void EnMinislime_AddIceShardEffect(EnMinislime* this) {
     }
 
     this->frozenAlpha = 0;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EV_ICE_BROKEN);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_BROKEN);
 }
 
 void EnMinislime_AddIceSmokeEffect(EnMinislime* this, GlobalContext* globalCtx) {
@@ -215,7 +215,7 @@ void EnMinislime_AddIceSmokeEffect(EnMinislime* this, GlobalContext* globalCtx) 
     vel.x = randPlusMinusPoint5Scaled(1.5f);
     vel.z = randPlusMinusPoint5Scaled(1.5f);
     vel.y = 2.0f;
-    EffectSsIceSmoke_Spawn(globalCtx, &pos, &vel, &D_801D15B0, 500);
+    EffectSsIceSmoke_Spawn(globalCtx, &pos, &vel, &gZeroVec3f, 500);
 }
 
 void EnMinislime_SetupDisappear(EnMinislime* this) {
@@ -391,7 +391,7 @@ void EnMinislime_SetupGrowAndShrink(EnMinislime* this) {
     this->actor.scale.x = 0.19f;
     this->actor.scale.y = 0.044999998f;
     this->actor.scale.z = 0.19f;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_JUMP2);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_JUMP2);
     this->actionFunc = EnMinislime_GrowAndShrink;
 }
 
@@ -453,7 +453,7 @@ void EnMinislime_Idle(EnMinislime* this, GlobalContext* globalCtx) {
 void EnMinislime_SetupBounce(EnMinislime* this) {
     this->actor.speedXZ = 0.0f;
     this->bounceTimer = (this->actionFunc == EnMinislime_GrowAndShrink) ? 1 : 4;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_SLIME_JUMP1);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_SLIME_JUMP1);
     this->actionFunc = EnMinislime_Bounce;
 }
 
@@ -506,8 +506,8 @@ void EnMinislime_SetupMoveToBigslime(EnMinislime* this) {
     }
     this->frozenAlpha = 0;
 
-    if ((this->actor.flags & 0x2000) == 0x2000) {
-        this->actor.flags &= ~0x2000;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        this->actor.flags &= ~ACTOR_FLAG_2000;
     }
     this->actionFunc = EnMinislime_MoveToBigslime;
 }
@@ -562,8 +562,8 @@ void EnMinislime_SetupDefeatIdle(EnMinislime* this) {
     }
 
     this->frozenAlpha = 0;
-    if ((this->actor.flags & 0x2000) == 0x2000) {
-        this->actor.flags &= ~0x2000;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 
     this->actor.shape.rot.x = 0;
@@ -630,8 +630,8 @@ void EnMinislime_SetupMoveToGekko(EnMinislime* this) {
     this->actor.velocity.y = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    if ((this->actor.flags & 0x2000) == 0x2000) {
-        this->actor.flags &= ~0x2000;
+    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 
     this->actionFunc = EnMinislime_MoveToGekko;
@@ -720,7 +720,7 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else if ((this->actor.params == MINISLIME_FORM_BIGSLIME) && (this->actionFunc != EnMinislime_MoveToBigslime)) {
         EnMinislime_SetupMoveToBigslime(this);
     } else {
-        if ((this->actor.flags & 0x2000) == 0x2000) {
+        if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
             this->collider.base.acFlags &= ~AC_HIT;
             return;
         }
@@ -736,9 +736,9 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->actionFunc != EnMinislime_Disappear) && (this->actionFunc != EnMinislime_Despawn)) {
         if (this->actionFunc == EnMinislime_MoveToBigslime) {
-            Actor_SetVelocityAndMoveXYRotation(&this->actor);
+            Actor_MoveWithoutGravity(&this->actor);
         } else {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
         }
 
         EnMinislime_CheckBackgroundCollision(this);

@@ -43,7 +43,7 @@ typedef enum {
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
-    /* 0x19 */ QUEST_UNK_19, // Related to PictoBox
+    /* 0x19 */ QUEST_UNK_19 // Related to PictoBox
 } QuestItem;
 
 typedef enum {
@@ -275,6 +275,7 @@ typedef enum {
     /* 0x07 */ GI_RUPEE_HUGE,
     /* 0x08 */ GI_WALLET_ADULT,
     /* 0x09 */ GI_WALLET_GIANT,
+    /* 0x0A */ GI_RECOVERY_HEART,
     /* 0x0C */ GI_HEART_PIECE = 0x0C,
     /* 0x0D */ GI_HEART_CONTAINER,
     /* 0x16 */ GI_BOMBS_10 = 0x16,
@@ -298,6 +299,8 @@ typedef enum {
     /* 0x3C */ GI_KEY_SMALL = 0x3C,
     /* 0x3E */ GI_MAP = 0x3E,
     /* 0x3F */ GI_COMPASS,
+    /* 0x50 */ GI_50 = 0x50,
+    /* 0x52 */ GI_SCALE_GOLD = 0x52, // Assumed, used in En_Fishing
     /* 0x59 */ GI_BOTTLE_POTION_RED = 0x59,
     /* 0x5B */ GI_POTION_RED = 0x5B,
     /* 0x5C */ GI_POTION_GREEN,
@@ -341,12 +344,17 @@ typedef enum {
     /* 0x9F */ GI_SHIELD_HERO_2, // Code that treats this as hero's shield is unused, so take with a grain of salt
     /* 0xA1 */ GI_LETTER_TO_MAMA = 0xA1,
     /* 0xA9 */ GI_BOTTLE = 0xA9,
+    /* 0xAB */ GI_PENDANT_OF_MEMORIES = 0xAB,
     /* 0xBA */ GI_MAX = 0xBA
 } GetItemID;
 
 typedef enum {
     /* 0x00 */ GID_BOTTLE,
+    /* 0x02 */ GID_02 = 0x02,
+    /* 0x03 */ GID_03,
     /* 0x0A */ GID_COMPASS = 0x0A,
+    /* 0x0E */ GID_0E = 0x0E,
+    /* 0x0F */ GID_0F,
     /* 0x10 */ GID_MASK_ALL_NIGHT = 0x10,
     /* 0x11 */ GID_NUTS,
     /* 0x17 */ GID_BOMB_BAG_20 = 0x17,
@@ -364,11 +372,29 @@ typedef enum {
     /* 0x31 */ GID_POTION_RED,
     /* 0x32 */ GID_POTION_BLUE,
     /* 0x33 */ GID_SHIELD_MIRROR,
-    /* 0x3B */ GID_FAIRY = 0x3B,
+    /* 0x3A */ GID_3A = 0x3A,
+    /* 0x3B */ GID_FAIRY,
+    /* 0x3E */ GID_3E = 0x3E,
+    /* 0x44 */ GID_44 = 0x44,
+    /* 0x45 */ GID_45,
     /* 0x55 */ GID_SWORD_KOKIRI = 0x55,
     /* 0x66 */ GID_SWORD_RAZOR = 0x66,
     /* 0x67 */ GID_SWORD_GILDED,
-    /* 0x68 */ GID_SWORD_GREAT_FAIRY
+    /* 0x68 */ GID_SWORD_GREAT_FAIRY,
+    /* 0x6A */ GID_6A = 0x6A,
+    /* 0x6B */ GID_6B,
+    /* 0x70 */ GID_70 = 0x70,
+    /* 0x71 */ GID_71,
 } GetItemDrawID;
+
+// TODO: fill
+typedef enum {
+    /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
+    /* 0x00 */ EXCH_ITEM_NONE,
+    /* 0x13 */ EXCH_ITEM_13 = 0x13,
+    /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
+    /* 0x2A */ EXCH_ITEM_2A = 0x2A, // MOON_TEAR?
+    /* 0x2E */ EXCH_ITEM_2E = 0x2E
+} ExchangeItemID;
 
 #endif

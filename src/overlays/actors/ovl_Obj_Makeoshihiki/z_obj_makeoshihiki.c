@@ -6,7 +6,7 @@
 
 #include "z_obj_makeoshihiki.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjMakeoshihiki*)thisx)
 
@@ -43,15 +43,15 @@ void ObjMakeoshihiki_SetSwitchFlags(ObjMakeoshihiki* this, GlobalContext* global
     switchFlag1 = OBJMAKEOSHIHIKI_GET_SWITCHFLAG_1(this);
 
     if (pathIndex & 2) {
-        Actor_SetSwitchFlag(globalCtx, switchFlag2);
+        Flags_SetSwitch(globalCtx, switchFlag2);
     } else {
-        Actor_UnsetSwitchFlag(globalCtx, switchFlag2);
+        Flags_UnsetSwitch(globalCtx, switchFlag2);
     }
 
     if (pathIndex & 1) {
-        Actor_SetSwitchFlag(globalCtx, switchFlag1);
+        Flags_SetSwitch(globalCtx, switchFlag1);
     } else {
-        Actor_UnsetSwitchFlag(globalCtx, switchFlag1);
+        Flags_UnsetSwitch(globalCtx, switchFlag1);
     }
 }
 

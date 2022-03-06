@@ -6,8 +6,10 @@
 
 #include "z_en_hakurock.h"
 #include "overlays/actors/ovl_Boss_Hakugin/z_boss_hakugin.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_boss_hakugin/object_boss_hakugin.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnHakurock*)thisx)
 
@@ -64,22 +66,19 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 0, 60, 60, MASS_IMMOVABLE };
 
-extern Gfx D_06011100[];
-
 // Stalactite
-extern Gfx D_06011178[];
 
 void EnHakurock_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHakurock* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 52.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 52.0f);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     if (this->actor.params == EN_HAKUROCK_TYPE_BOULDER) {
         this->actor.gravity = -1.5f;
     } else {
         this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
-        this->actor.minVelocityY = -100.0f;
+        this->actor.terminalVelocity = -100.0f;
         this->actor.gravity = -7.0f;
     }
     func_80B21FFC(this);
@@ -212,7 +211,7 @@ void func_80B221E8(EnHakurock* this, GlobalContext* globalCtx) {
 
     if (this->collider.base.atFlags & AT_HIT || ((this->counter == 0) && (this->collider.base.ocFlags1 & OC1_HIT)) ||
         ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f))) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
         func_80B21EA4(this, 0);
         func_80B21FFC(this);
     }
@@ -247,7 +246,7 @@ void func_80B2242C(EnHakurock* this, GlobalContext* globalCtx) {
         func_80B21FFC(this);
     } else if ((this->actor.bgCheckFlags & 1)) {
         func_80B21EA4(this, 2);
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_OBJECT_STICK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OBJECT_STICK);
         func_80B224C0(this);
     }
 }
@@ -322,7 +321,7 @@ void EnHakurock_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     rockParams = this->actor.params;
     if ((rockParams == EN_HAKUROCK_TYPE_BOULDER) || (rockParams == EN_HAKUROCK_TYPE_UNK_2)) {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, this->collider.dim.radius, 0.0f, 0x85);
         if (this->actor.floorHeight == BGCHECK_Y_MIN) {
             func_80B21FFC(this);
@@ -344,7 +343,7 @@ void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, &D_0406AB30);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
@@ -353,7 +352,7 @@ void EnHakurock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     Matrix_InsertTranslation(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06011100);
-    gSPDisplayList(POLY_OPA_DISP++, D_06011178);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011100);
+    gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011178);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

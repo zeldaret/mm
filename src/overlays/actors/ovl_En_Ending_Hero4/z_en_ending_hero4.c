@@ -5,8 +5,9 @@
  */
 
 #include "z_en_ending_hero4.h"
+#include "objects/object_sdn/object_sdn.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero4*)thisx)
 
@@ -30,18 +31,16 @@ const ActorInit En_Ending_Hero4_InitVars = {
     (ActorFunc)EnEndingHero4_Draw,
 };
 
-extern FlexSkeletonHeader D_0600D640;
-extern AnimationHeader D_06002A84;
-
 void EnEndingHero4_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero4* this = THIS;
 
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600D640, &D_06002A84, this->jointTable, this->morphTable, 17);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gSoldierSkeleton, &gSoldierCheerWithSpear, this->jointTable,
+                       this->morphTable, 17);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C23748(this);
 }
 
@@ -61,7 +60,7 @@ void EnEndingHero4_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero4* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
@@ -71,5 +70,5 @@ void EnEndingHero4_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          0, 0, &this->actor);
+                          NULL, NULL, &this->actor);
 }

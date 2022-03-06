@@ -5,9 +5,11 @@
  */
 
 #include "z_obj_syokudai.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "objects/object_syokudai/object_syokudai.h"
 
-#define FLAGS 0x00000410
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((ObjSyokudai*)thisx)
 
@@ -15,10 +17,6 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_060003A0[]; // sObjectSyokudaiTypeSwitchCausesFlameDL
-extern Gfx D_06000870[]; // sObjectSyokudaiTypeNoSwitchDL
-extern Gfx D_06000B90[]; // sObjectSyokudaiTypeFlameCausesSwitchDL
 
 const ActorInit Obj_Syokudai_InitVars = {
     ACTOR_OBJ_SYOKUDAI,
@@ -81,7 +79,11 @@ static InitChainEntry sInitChain[] = {
 
 static u8 sColTypes[] = { COLTYPE_METAL, COLTYPE_WOOD, COLTYPE_WOOD };
 
-static Gfx* sDLists[] = { D_060003A0, D_06000B90, D_06000870 };
+static Gfx* sDLists[] = {
+    gObjectSyokudaiTypeSwitchCausesFlameDL,
+    gObjectSyokudaiTypeFlameCausesSwitchDL,
+    gObjectSyokudaiTypeNoSwitchDL,
+};
 
 static s32 sNumLitTorchesInGroup;
 
@@ -115,7 +117,7 @@ void ObjSyokudai_Init(Actor* thisx, GlobalContext* globalCtx) {
         sNumLitTorchesInGroup = 0;
     }
     this->flameTexScroll = (u32)(Rand_ZeroOne() * OBJ_SYOKUDAI_SNUFF_DEFAULT);
-    Actor_SetHeight(thisx, 60.0f);
+    Actor_SetFocus(thisx, 60.0f);
 }
 
 void ObjSyokudai_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -145,7 +147,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
                 ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
                 if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
-                    Actor_SetSwitchFlag(globalCtx, switchFlag);
+                    Flags_SetSwitch(globalCtx, switchFlag);
                 }
             } else {
                 ActorCutscene_SetIntentToPlay(thisx->cutscene);
@@ -161,7 +163,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_OUT;
             if (type == OBJ_SYOKUDAI_TYPE_FLAME_CAUSES_SWITCH) {
-                Actor_UnsetSwitchFlag(globalCtx, switchFlag);
+                Flags_UnsetSwitch(globalCtx, switchFlag);
                 if (groupSize != 0) {
                     this->snuffTimer = OBJ_SYOKUDAI_SNUFF_GROUP_BY_WATER;
                 }
@@ -208,7 +210,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     if (interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
-                            func_8019F1C0(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
+                            Audio_PlaySfxAtPos(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
@@ -219,7 +221,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                             (flameColliderHurtboxActor->id == ACTOR_EN_ARROW)) {
 
                             flameColliderHurtboxActor->params = 0;
-                            ((EnArrow*)flameColliderHurtboxActor)->unk_1C0 = 0x800;
+                            ((EnArrow*)flameColliderHurtboxActor)->collider.info.toucher.dmgFlags = 0x800;
                         }
                     }
                     if ((this->snuffTimer > OBJ_SYOKUDAI_SNUFF_NEVER) &&
@@ -241,7 +243,7 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                         } else if (thisx->cutscene >= 0) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
-                            Actor_SetSwitchFlag(globalCtx, switchFlag);
+                            Flags_SetSwitch(globalCtx, switchFlag);
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         }
                     } else {
@@ -252,8 +254,8 @@ void ObjSyokudai_Update(Actor* thisx, GlobalContext* globalCtx2) {
                                 OBJ_SYOKUDAI_SNUFF_TIMER_INITIAL(groupSize) + OBJ_SYOKUDAI_SNUFF_TIMER_JUST_LIT_BONUS;
                         }
                     }
-                    func_801A5CFC(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                  &D_801DB4B8);
+                    Audio_PlaySfxGeneral(NA_SE_EV_FLAME_IGNITION, &thisx->projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                                         &D_801DB4B8);
                 }
             }
         }
@@ -311,10 +313,11 @@ void ObjSyokudai_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         Matrix_InsertTranslation(0.0f, OBJ_SYOKUDAI_FLAME_HEIGHT, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateY(BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y), MTXMODE_APPLY);
+        Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - thisx->shape.rot.y),
+                       MTXMODE_APPLY);
         Matrix_Scale(flameScale, flameScale, flameScale, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

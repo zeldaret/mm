@@ -1,7 +1,7 @@
 #include "global.h"
 
 QuakeRequest sQuakeRequest[4];
-Quake2Context sQuake2Context;
+DistortionContext sDistortionContext;
 
 static s16 sIsQuakeInitialized = true;
 static s16 sQuakeRequestCount = 0;
@@ -137,7 +137,7 @@ QuakeRequest* Quake_AddImpl(Camera* camera, u32 callbackIdx) {
 
     __osMemset(req, 0, sizeof(QuakeRequest));
     req->camera = camera;
-    req->cameraPtrsIdx = camera->thisIdx;
+    req->camId = camera->camId;
     req->callbackIdx = callbackIdx;
     req->isShakePerpendicular = true;
     req->randIdx = ((s16)(Rand_ZeroOne() * (f32)0x10000) & ~3) + idx;
@@ -326,10 +326,10 @@ s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
     for (idx = 0; idx < ARRAY_COUNT(sQuakeRequest); idx++) {
         req = &sQuakeRequest[idx];
         if (req->callbackIdx != 0) {
-            if (globalCtx->cameraPtrs[req->cameraPtrsIdx] == NULL) {
+            if (globalCtx->cameraPtrs[req->camId] == NULL) {
                 Quake_Remove(req);
             } else {
-                eq = (camera->thisIdx != req->camera->thisIdx);
+                eq = (camera->camId != req->camera->camId);
                 absSpeedDiv = ABS(req->speed) / (f32)0x8000;
                 if (sQuakeCallbacks[req->callbackIdx](req, &shake) == 0) {
                     Quake_Remove(req);
@@ -382,58 +382,62 @@ s16 Quake_Calc(Camera* camera, QuakeCamCalc* camData) {
     return ret;
 }
 
-void Quake2_Init(GlobalContext* globalCtx) {
-    sQuake2Context.globalCtx = globalCtx;
-    View_ClearQuake(&globalCtx->view);
-    sQuake2Context.type = 0;
-    sQuake2Context.countdown = 0;
-    sQuake2Context.state = QUAKE2_INACTIVE;
+void Distortion_Init(GlobalContext* globalCtx) {
+    sDistortionContext.globalCtx = globalCtx;
+    View_ClearDistortion(&globalCtx->view);
+    sDistortionContext.type = 0;
+    sDistortionContext.countdown = 0;
+    sDistortionContext.state = DISTORTION_INACTIVE;
 }
 
-void Quake2_SetCountdown(s16 countdown) {
-    sQuake2Context.countdown = countdown;
-    sQuake2Context.state = QUAKE2_SETUP;
+void Distortion_SetCountdown(s16 countdown) {
+    sDistortionContext.countdown = countdown;
+    sDistortionContext.state = DISTORTION_SETUP;
 }
 
-s16 Quake2_GetCountdown(void) {
-    return sQuake2Context.countdown;
+s16 Distortion_GetCountdown(void) {
+    return sDistortionContext.countdown;
 }
 
-s16 Quake2_GetType(void) {
-    return sQuake2Context.type;
+s16 Distortion_GetType(void) {
+    return sDistortionContext.type;
 }
 
-void Quake2_SetType(s32 type) {
-    if (sQuake2Context.type < type) {
-        sQuake2Context.type = type;
+void Distortion_SetType(s32 type) {
+    if (sDistortionContext.type < type) {
+        sDistortionContext.type = type;
     }
 }
 
-void Quake2_ClearType(s32 type) {
-    if (sQuake2Context.type == type) {
-        sQuake2Context.type = 0;
+void Distortion_ClearType(s32 type) {
+    if (sDistortionContext.type == type) {
+        sDistortionContext.type = 0;
     }
 }
 
-s32 Quake2_GetFloorQuake(Player* player) {
-    if (!SurfaceType_IsConveyor(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
-        return SurfaceType_GetConveyorSpeed(&sQuake2Context.globalCtx->colCtx, player->actor.floorPoly,
+/**
+ * Checks that the bg surface is an underwater conveyor type and if so, returns the conveyor speed
+ */
+s32 Distortion_GetUnderwaterCurrentSpeed(Player* player) {
+    if (SurfaceType_GetConveyorType(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
+                                    player->actor.floorBgId) == CONVEYOR_WATER) {
+        return SurfaceType_GetConveyorSpeed(&sDistortionContext.globalCtx->colCtx, player->actor.floorPoly,
                                             player->actor.floorBgId);
     }
     return 0;
 }
 
-void Quake2_Update(void) {
-    static s16 angle1 = 0x3F0;
-    static s16 angle2 = 0x156;
+void Distortion_Update(void) {
+    static s16 depthPhase = 0x3F0;
+    static s16 screenPlanePhase = 0x156;
     static s16 countdownMax = 1;
     f32 xyScaleFactor;
     f32 zScaleFactor;
     f32 speedScaleFactor;
     f32 countdownRatio;
     f32 waterYScaleFactor;
-    f32 angle1Speed;
-    f32 angle2Speed;
+    f32 depthPhaseStep;
+    f32 screenPlanePhaseStep;
     f32 rotX;
     f32 rotY;
     f32 rotZ;
@@ -442,181 +446,210 @@ void Quake2_Update(void) {
     f32 zScale;
     f32 speed;
     Player* player;
-    GlobalContext* globalCtx = sQuake2Context.globalCtx;
+    GlobalContext* globalCtx = sDistortionContext.globalCtx;
     PosRot playerPosRot;
     Camera* camera = GET_ACTIVE_CAM(globalCtx);
     f32 speedRatio = CLAMP_MAX(camera->speedRatio, 1.0f);
 
-    if (sQuake2Context.type != 0) {
-        if (sQuake2Context.type & 0x800) {
-            sQuake2Context.countdown = 2;
-            angle1 = 0x3F0;
-            angle2 = 0x156;
-            angle1Speed = 0.0f;
-            angle2Speed = 170.0f;
+    if (sDistortionContext.type != 0) {
+        if (sDistortionContext.type & 0x800) {
+            sDistortionContext.countdown = 2;
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
+
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 170.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = -0.01f;
             yScale = 0.01f;
             zScale = 0.0f;
+
             speed = 0.6f;
-            xyScaleFactor = zScaleFactor = sQuake2Context.countdown / 60.0f;
+            xyScaleFactor = zScaleFactor = sDistortionContext.countdown / 60.0f;
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 0x400) {
-            if (sQuake2Context.state == QUAKE2_SETUP) {
-                countdownMax = sQuake2Context.countdown;
-                angle1 = 0x3F0;
-                angle2 = 0x156;
+        } else if (sDistortionContext.type & 0x400) {
+            if (sDistortionContext.state == DISTORTION_SETUP) {
+                countdownMax = sDistortionContext.countdown;
+                depthPhase = 0x3F0;
+                screenPlanePhase = 0x156;
             }
 
-            angle1Speed = 0.0f;
-            angle2Speed = 50.0f / countdownMax;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 50.0f / countdownMax;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = 0.01f;
             yScale = 100.0f;
             zScale = 0.0f;
+
             speed = 0.4f;
-            xyScaleFactor = zScaleFactor = ((f32)countdownMax - sQuake2Context.countdown) / (f32)countdownMax;
+            xyScaleFactor = zScaleFactor = ((f32)countdownMax - sDistortionContext.countdown) / (f32)countdownMax;
             speedScaleFactor = 0.5f;
-        } else if (sQuake2Context.type & 0x200) {
-            if (sQuake2Context.state == QUAKE2_SETUP) {
-                countdownMax = sQuake2Context.countdown;
-                angle1 = 0x1FC;
-                angle2 = 0x156;
+        } else if (sDistortionContext.type & 0x200) {
+            if (sDistortionContext.state == DISTORTION_SETUP) {
+                countdownMax = sDistortionContext.countdown;
+                depthPhase = 0x1FC;
+                screenPlanePhase = 0x156;
             }
 
-            angle1Speed = -5.0f;
-            angle2Speed = 5.0f;
+            depthPhaseStep = -5.0f;
+            screenPlanePhaseStep = 5.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 2.0f;
+
             xScale = 0.3f;
             yScale = 0.3f;
             zScale = 0.0f;
+
             speed = 0.1f;
-            xyScaleFactor = zScaleFactor = ((f32)countdownMax - sQuake2Context.countdown) / (f32)countdownMax;
+            xyScaleFactor = zScaleFactor = ((f32)countdownMax - sDistortionContext.countdown) / (f32)countdownMax;
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 0x100) {
-            if (sQuake2Context.state == QUAKE2_SETUP) {
-                countdownMax = sQuake2Context.countdown;
-                angle1 = 0x2710;
-                angle2 = 0x3E8;
+        } else if (sDistortionContext.type & 0x100) {
+            if (sDistortionContext.state == DISTORTION_SETUP) {
+                countdownMax = sDistortionContext.countdown;
+                depthPhase = 0x2710;
+                screenPlanePhase = 0x3E8;
             }
 
-            angle1Speed = 0.0f;
-            angle2Speed = 150.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
+
             rotX = 0;
             rotY = 0;
             rotZ = 0.2f;
+
             xScale = 0.025f;
             yScale = 0.02f;
             zScale = 0.01f;
+
             speed = 1.5f;
-            if (sQuake2Context.countdown < 5) {
-                xyScaleFactor = zScaleFactor = ((f32)countdownMax - sQuake2Context.countdown) / (f32)countdownMax;
+            if (sDistortionContext.countdown < 5) {
+                xyScaleFactor = zScaleFactor = ((f32)countdownMax - sDistortionContext.countdown) / (f32)countdownMax;
             } else {
                 xyScaleFactor = zScaleFactor = 0.0f;
             }
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 0x80) {
-            if (sQuake2Context.state == QUAKE2_SETUP) {
-                countdownMax = sQuake2Context.countdown;
-                angle1 = 0x4B0;
-                angle2 = 0x7D0;
+        } else if (sDistortionContext.type & 0x80) {
+            if (sDistortionContext.state == DISTORTION_SETUP) {
+                countdownMax = sDistortionContext.countdown;
+                depthPhase = 0x4B0;
+                screenPlanePhase = 0x7D0;
             }
 
-            angle1Speed = 0.0f;
-            angle2Speed = 150.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
+
             rotX = 0;
             rotY = 0;
             rotZ = 0;
+
             xScale = 0.03f;
             yScale = 0.02f;
             zScale = 0.01f;
+
             speed = 1.5f;
-            xyScaleFactor = zScaleFactor = sQuake2Context.countdown / (f32)countdownMax;
+            xyScaleFactor = zScaleFactor = sDistortionContext.countdown / (f32)countdownMax;
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 0x40) {
-            if (sQuake2Context.state == QUAKE2_SETUP) {
-                countdownMax = sQuake2Context.countdown;
-                angle1 = 0x9C4;
-                angle2 = 0xBB8;
+        } else if (sDistortionContext.type & 0x40) {
+            if (sDistortionContext.state == DISTORTION_SETUP) {
+                countdownMax = sDistortionContext.countdown;
+                depthPhase = 0x9C4;
+                screenPlanePhase = 0xBB8;
             }
 
-            angle1Speed = 0.0f;
-            angle2Speed = 150.0f;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
+
             rotX = 0;
             rotY = 0;
             rotZ = 0;
+
             xScale = 0.03f;
             yScale = 0.03f;
             zScale = 0.01f;
+
             speed = 1.3f;
-            if (sQuake2Context.countdown < 4) {
-                xyScaleFactor = zScaleFactor = sQuake2Context.countdown / (f32)countdownMax;
+            if (sDistortionContext.countdown < 4) {
+                xyScaleFactor = zScaleFactor = sDistortionContext.countdown / (f32)countdownMax;
             } else {
                 xyScaleFactor = zScaleFactor = 0.0f;
             }
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 0x20) {
-            sQuake2Context.countdown = 2;
-            if (sQuake2Context.state == QUAKE2_SETUP) {
-                angle1 = 0x9C4;
-                angle2 = 0xBB8;
+        } else if (sDistortionContext.type & 0x20) {
+            sDistortionContext.countdown = 2;
+            if (sDistortionContext.state == DISTORTION_SETUP) {
+                depthPhase = 0x9C4;
+                screenPlanePhase = 0xBB8;
             }
 
-            angle1 += 0xB1;
-            angle2 -= 0x2B;
-            angle1Speed = -107.0f;
-            angle2Speed = 158.0f;
+            depthPhase += 0xB1;
+            screenPlanePhase -= 0x2B;
+
+            depthPhaseStep = -107.0f;
+            screenPlanePhaseStep = 158.0f;
+
             rotX = 0.2f;
             rotY = 1.7f;
             rotZ = -2.9f;
+
             xScale = -0.6f;
             yScale = -0.7f;
             zScale = 0.6f;
+
             speed = 0.2f;
             zScaleFactor = 1.0f;
             xyScaleFactor = 1.0f;
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 0x10) {
-            if (sQuake2Context.state == QUAKE2_SETUP) {
-                countdownMax = sQuake2Context.countdown;
-                angle1 = 0x760;
-                angle2 = 0x1BC;
+        } else if (sDistortionContext.type & 0x10) {
+            if (sDistortionContext.state == DISTORTION_SETUP) {
+                countdownMax = sDistortionContext.countdown;
+                depthPhase = 0x760;
+                screenPlanePhase = 0x1BC;
             }
 
-            angle1Speed = 248.0f;
-            angle2Speed = -90.0f;
+            depthPhaseStep = 248.0f;
+            screenPlanePhaseStep = -90.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = -0.4f;
             yScale = 0.4f;
             zScale = 0.2f;
+
             speed = 0.25f;
-            countdownRatio = sQuake2Context.countdown / (f32)countdownMax;
+            countdownRatio = sDistortionContext.countdown / (f32)countdownMax;
             zScaleFactor = xyScaleFactor = countdownRatio;
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 8) {
-            angle1 = 0x3F0;
-            angle2 = 0x156;
-            sQuake2Context.countdown = 2;
+        } else if (sDistortionContext.type & 8) {
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
+
+            sDistortionContext.countdown = 2;
             player = GET_PLAYER(globalCtx);
 
             if (&player->actor != NULL) {
-                func_800B8248(&playerPosRot, player);
+                Actor_GetWorldPosShapeRot(&playerPosRot, &player->actor);
             }
 
-            angle1Speed = 359.2f;
-            angle2Speed = -18.5f;
+            depthPhaseStep = 359.2f;
+            screenPlanePhaseStep = -18.5f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.3f;
-            switch (Quake2_GetFloorQuake(player)) {
+
+            switch (Distortion_GetUnderwaterCurrentSpeed(player)) {
                 case 3:
                     xScale = -0.06f;
                     yScale = 0.1f;
@@ -650,17 +683,20 @@ void Quake2_Update(void) {
             }
             zScaleFactor = -xyScaleFactor;
             speedScaleFactor = 1.0f;
-        } else if (sQuake2Context.type & 4) {
-            angle1 = 0x3F0;
-            angle2 = 0x156;
-            sQuake2Context.countdown = 2;
+        } else if (sDistortionContext.type & 4) {
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
+
+            sDistortionContext.countdown = 2;
             player = GET_PLAYER(globalCtx);
-            angle1Speed = 359.2f;
-            angle2Speed = -18.5f;
+
+            depthPhaseStep = 359.2f;
+            screenPlanePhaseStep = -18.5f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
-            switch (Quake2_GetFloorQuake(player)) {
+            switch (Distortion_GetUnderwaterCurrentSpeed(player)) {
                 case 3:
                     xScale = 0.12f;
                     yScale = 0.12f;
@@ -695,18 +731,23 @@ void Quake2_Update(void) {
 
             xyScaleFactor = speedScaleFactor = (waterYScaleFactor * 0.15f) + 0.35f + (speedRatio * 0.4f);
             zScaleFactor = 0.9f - xyScaleFactor;
-        } else if (sQuake2Context.type & 1) {
-            angle1 = 0x3F0;
-            angle2 = 0x156;
-            sQuake2Context.countdown = 2;
-            angle1Speed = 0.0f;
-            angle2Speed = 150.0f;
+        } else if (sDistortionContext.type & 1) {
+            // Gives a small mirage-like appearance
+            depthPhase = 0x3F0;
+            screenPlanePhase = 0x156;
+
+            sDistortionContext.countdown = 2;
+            depthPhaseStep = 0.0f;
+            screenPlanePhaseStep = 150.0f;
+
             rotX = 0.0f;
             rotY = 0.0f;
             rotZ = 0.0f;
+
             xScale = -0.01f;
             yScale = 0.01f;
             zScale = 0.01f;
+
             speed = 0.6f;
             speedScaleFactor = 1.0f;
             zScaleFactor = 1.0f;
@@ -715,26 +756,32 @@ void Quake2_Update(void) {
             return;
         }
 
-        angle1 += DEGF_TO_BINANG(angle1Speed);
-        angle2 += DEGF_TO_BINANG(angle2Speed);
-        View_SetQuakeRotation(&sQuake2Context.globalCtx->view, Math_CosS(angle1) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
-                              Math_SinS(angle1) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
-                              Math_SinS(angle2) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
-        View_SetQuakeScale(&sQuake2Context.globalCtx->view, (Math_SinS(angle2) * (xScale * xyScaleFactor)) + 1.0f,
-                           (Math_CosS(angle2) * (yScale * xyScaleFactor)) + 1.0f,
-                           (Math_CosS(angle1) * (zScale * zScaleFactor)) + 1.0f);
-        View_SetQuakeSpeed(&sQuake2Context.globalCtx->view, speed * speedScaleFactor);
-        sQuake2Context.state = QUAKE2_ACTIVE;
-    } else if (sQuake2Context.state != QUAKE2_INACTIVE) {
-        View_ClearQuake(&globalCtx->view);
-        sQuake2Context.state = QUAKE2_INACTIVE;
-        sQuake2Context.countdown = 0;
+        depthPhase += DEGF_TO_BINANG(depthPhaseStep);
+        screenPlanePhase += DEGF_TO_BINANG(screenPlanePhaseStep);
+
+        View_SetDistortionDirRot(&sDistortionContext.globalCtx->view,
+                                 Math_CosS(depthPhase) * (DEGF_TO_RADF(rotX) * xyScaleFactor),
+                                 Math_SinS(depthPhase) * (DEGF_TO_RADF(rotY) * xyScaleFactor),
+                                 Math_SinS(screenPlanePhase) * (DEGF_TO_RADF(rotZ) * zScaleFactor));
+        View_SetDistortionScale(&sDistortionContext.globalCtx->view,
+                                (Math_SinS(screenPlanePhase) * (xScale * xyScaleFactor)) + 1.0f,
+                                (Math_CosS(screenPlanePhase) * (yScale * xyScaleFactor)) + 1.0f,
+                                (Math_CosS(depthPhase) * (zScale * zScaleFactor)) + 1.0f);
+        View_SetDistortionSpeed(&sDistortionContext.globalCtx->view, speed * speedScaleFactor);
+
+        sDistortionContext.state = DISTORTION_ACTIVE;
+
+    } else if (sDistortionContext.state != DISTORTION_INACTIVE) {
+        View_ClearDistortion(&globalCtx->view);
+
+        sDistortionContext.state = DISTORTION_INACTIVE;
+        sDistortionContext.countdown = 0;
     }
 
-    if (sQuake2Context.countdown != 0) {
-        sQuake2Context.countdown--;
-        if (sQuake2Context.countdown == 0) {
-            sQuake2Context.type = 0;
+    if (sDistortionContext.countdown != 0) {
+        sDistortionContext.countdown--;
+        if (sDistortionContext.countdown == 0) {
+            sDistortionContext.type = 0;
         }
     }
 }
