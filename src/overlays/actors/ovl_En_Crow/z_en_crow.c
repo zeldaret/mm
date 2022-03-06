@@ -144,20 +144,20 @@ void EnCrow_SetupFlyIdle(EnCrow* this) {
 
 void EnCrow_FlyIdle(EnCrow* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    f32 sp38;
-    s32 skelanimeUpdated;
-    s16 temp;
+    f32 dist;
+    s32 onInitialAnimFrame;
+    s16 yaw;
 
     SkelAnime_Update(&this->skelAnime);
-    skelanimeUpdated = Animation_OnFrame(&this->skelAnime, 0.0f);
+    onInitialAnimFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
     this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
-    if ((this->actor.parent != NULL) && ((this->actor.parent->home.rot.z) == 0)) {
+    if ((this->actor.parent != NULL) && (this->actor.parent->home.rot.z == 0)) {
         this->actor.home.pos.x = this->actor.parent->world.pos.x;
         this->actor.home.pos.z = this->actor.parent->world.pos.z;
-        sp38 = Actor_XZDistanceToPoint(&this->actor, &this->actor.parent->world.pos);
+        dist = Actor_XZDistanceToPoint(&this->actor, &this->actor.parent->world.pos);
     } else {
-        sp38 = 450.0f;
+        dist = 450.0f;
         this->actor.flags |= ACTOR_FLAG_1;
     }
 
@@ -167,11 +167,11 @@ void EnCrow_FlyIdle(EnCrow* this, GlobalContext* globalCtx) {
         this->aimRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->aimRotY, 5, 0x300, 0x10) == 0) && (skelanimeUpdated) &&
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->aimRotY, 5, 0x300, 0x10) == 0) && onInitialAnimFrame &&
         (Rand_ZeroOne() < 0.1f)) {
 
-        temp = (Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
-        if (temp > 0) {
+        yaw = (Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
+        if (yaw > 0) {
             this->aimRotY += Rand_S16Offset(0x1000, 0x1000);
         } else {
             this->aimRotY -= Rand_S16Offset(0x1000, 0x1000);
@@ -187,7 +187,7 @@ void EnCrow_FlyIdle(EnCrow* this, GlobalContext* globalCtx) {
         this->aimRotX = Rand_S16Offset(0x800, 0x800);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.x, this->aimRotX, 0xA, 0x100, 8) == 0) && skelanimeUpdated &&
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.x, this->aimRotX, 0xA, 0x100, 8) == 0) && onInitialAnimFrame &&
         (Rand_ZeroOne() < 0.1f)) {
         if (this->actor.home.pos.y < this->actor.world.pos.y) {
             this->aimRotX -= Rand_S16Offset(0x400, 0x400);
@@ -198,15 +198,17 @@ void EnCrow_FlyIdle(EnCrow* this, GlobalContext* globalCtx) {
         this->aimRotX = CLAMP(this->aimRotX, -0x1000, 0x1000);
     }
 
-    if ((this->actor.bgCheckFlags & 1) != 0) {
+    if (this->actor.bgCheckFlags & 1) {
         Math_ScaledStepToS(&this->actor.shape.rot.x, -0x100, 0x400);
     }
 
-    DECR(this->timer);
+    if (this->timer != 0) {
+        this->timer--;
+    }
     if ((this->timer == 0) &&
-        (((this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000)) || (sp38 < 300.0f)) &&
+        (((this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000)) || (dist < 300.0f)) &&
         (this->actor.depthInWater < -40.0f) && (Player_GetMask(globalCtx) != PLAYER_MASK_STONE)) {
-        if (sp38 < this->actor.xzDistToPlayer) {
+        if (dist < this->actor.xzDistToPlayer) {
             this->actor.child = this->actor.parent;
         } else {
             this->actor.child = &player->actor;
@@ -224,16 +226,18 @@ void EnCrow_SetupDiveAttack(EnCrow* this) {
 
 void EnCrow_DiveAttack(EnCrow* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 facingPlayer;
+    s32 isFacingActor;
     Vec3f pos;
-    s16 target;
-    s16 phi_a1;
+    s16 pitch;
+    s16 pitchTarget;
 
     SkelAnime_Update(&this->skelAnime);
-    DECR(this->timer);
-    facingPlayer = Actor_ActorAIsFacingActorB(&this->actor, this->actor.child, 0x2800);
+    if (this->timer != 0) {
+        this->timer--;
+    }
+    isFacingActor = Actor_ActorAIsFacingActorB(&this->actor, this->actor.child, 0x2800);
 
-    if (facingPlayer) {
+    if (isFacingActor) {
         if (&player->actor == this->actor.child) {
             pos.y = this->actor.child->world.pos.y + 20.0f;
         } else {
@@ -241,14 +245,14 @@ void EnCrow_DiveAttack(EnCrow* this, GlobalContext* globalCtx) {
         }
         pos.x = this->actor.child->world.pos.x;
         pos.z = this->actor.child->world.pos.z;
-        target = Actor_PitchToPoint(&this->actor, &pos);
-        phi_a1 = CLAMP(target, -0x3000, 0x3000);
-        Math_SmoothStepToS(&this->actor.shape.rot.x, phi_a1, 2, 0x400, 64);
+        pitch = Actor_PitchToPoint(&this->actor, &pos);
+        pitchTarget = CLAMP(pitch, -0x3000, 0x3000);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, pitchTarget, 2, 0x400, 64);
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 2, 0x100, 16);
     }
 
-    if ((facingPlayer) || (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) > 80.0f)) {
+    if (isFacingActor || (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) > 80.0f)) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.child), 4, 0xC00,
                            0xC0);
     }
@@ -275,16 +279,16 @@ void EnCrow_CheckIfFrozen(EnCrow* this, GlobalContext* globalCtx) {
 }
 
 void EnCrow_SetupDamaged(EnCrow* this, GlobalContext* globalCtx) {
-    f32 temp;
+    f32 scale;
 
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, 1, -3.0f);
+    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
     this->actor.bgCheckFlags &= ~1;
-    temp = (this->actor.scale.x * 100.0f);
-    this->actor.world.pos.y += 20.0f * temp;
+    scale = (this->actor.scale.x * 100.0f);
+    this->actor.world.pos.y += 20.0f * scale;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
 
     if (this->actor.colChkInfo.damageEffect == 3) {
@@ -306,7 +310,7 @@ void EnCrow_SetupDamaged(EnCrow* this, GlobalContext* globalCtx) {
     }
 
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
-    if ((this->actor.flags & ACTOR_FLAG_8000) != 0) {
+    if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speedXZ = 0.0f;
     }
 
@@ -392,7 +396,10 @@ void EnCrow_TurnAway(EnCrow* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->aimRotY, 3, 0xC00, 0xC0);
     Math_SmoothStepToS(&this->actor.shape.rot.x, this->aimRotX, 5, 0x100, 0x10);
 
-    DECR(this->timer);
+    if (this->timer != 0) {
+        this->timer--;
+    }
+
     if (this->timer == 0) {
         EnCrow_SetupFlyIdle(this);
     }
@@ -422,7 +429,9 @@ void EnCrow_SetupRespawn(EnCrow* this) {
 void EnCrow_Respawn(EnCrow* this, GlobalContext* globalCtx) {
     f32 target;
 
-    DECR(this->timer);
+    if (this->timer != 0) {
+        this->timer--;
+    }
     if (this->timer == 0) {
         SkelAnime_Update(&this->skelAnime);
         this->actor.draw = EnCrow_Draw;
@@ -466,8 +475,8 @@ void EnCrow_UpdateDamage(EnCrow* this, GlobalContext* globalCtx) {
 }
 
 void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
-    EnCrow* this = (EnCrow*)thisx;
     f32 pad;
+    EnCrow* this = (EnCrow*)thisx;
     f32 height;
     f32 scale;
 
@@ -515,12 +524,10 @@ void EnCrow_Update(Actor* thisx, GlobalContext* globalCtx) {
             this->steamScale = (this->effectAlpha + 1.0f) * 0.25f;
             if (this->steamScale > 0.5f) {
                 this->steamScale = 0.5f;
-                return;
+            } else {
+                this->steamScale = this->steamScale;
             }
-            this->steamScale = this->steamScale;
-            return;
-        }
-        if (Math_StepToF(&this->effectScale, 0.5f, 0.0125f) == 0) {
+        } else if (Math_StepToF(&this->effectScale, 0.5f, 0.0125f) == 0) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
