@@ -120,7 +120,7 @@ static s8 sLimbIndexToLimbPos[] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 
-static Vec3f D_808C380C = { 1000.0f, -700.0f, 0.0f };
+static Vec3f sDuplicateCraniumLimbOffset = { 1000.0f, -700.0f, 0.0f };
 
 void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
@@ -337,10 +337,10 @@ void EnBb_SetupDead(EnBb* this, GlobalContext* globalCtx) {
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
     this->actor.speedXZ = 0.0f;
-    this->unk_24C = 1;
+    this->limbDrawStatus = 1;
     this->actor.gravity = -1.5f;
 
-    temp = &this->unk_2B4[0];
+    temp = &this->limbVelocity[0];
     for (i = 0; i < ARRAY_COUNT(this->limbPos); i++, temp++) {
         Math_Vec3f_Diff(&this->limbPos[i], &this->actor.world.pos, &sp70);
         temp_f0 = Math3D_Vec3fMagnitude(&sp70);
@@ -373,8 +373,8 @@ void EnBb_Dead(EnBb* this, GlobalContext* globalCtx) {
         EnBb_SetupWaitForRevive(this);
     } else {
         for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            Math_Vec3f_Sum(&this->limbPos[i], &this->unk_2B4[i], &this->limbPos[i]);
-            this->unk_2B4[i].y += this->actor.gravity;
+            Math_Vec3f_Sum(&this->limbPos[i], &this->limbVelocity[i], &this->limbPos[i]);
+            this->limbVelocity[i].y += this->actor.gravity;
         }
     }
 }
@@ -435,7 +435,7 @@ void EnBb_Frozen(EnBb* this, GlobalContext* globalCtx) {
 
 void EnBb_SetupWaitForRevive(EnBb* this) {
     this->actor.draw = NULL;
-    this->unk_24C = 0;
+    this->limbDrawStatus = 0;
     this->drawDmgEffAlpha = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.shape.rot.x = 0;
@@ -591,8 +591,8 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnBb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBb* this = THIS;
 
-    if (this->unk_24C == -1) {
-        this->unk_2F0 = *dList;
+    if (this->limbDrawStatus == -1) {
+        this->limbDList = *dList;
         *dList = NULL;
     }
 
@@ -604,24 +604,24 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnBb* this = THIS;
     MtxF* temp_v0_4;
 
-    if (this->unk_24C == 0) {
+    if (this->limbDrawStatus == 0) {
         if (sLimbIndexToLimbPos[limbIndex] != -1) {
             if (sLimbIndexToLimbPos[limbIndex] == 0) {
                 Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[0]);
             } else if (sLimbIndexToLimbPos[limbIndex] == 3) {
                 Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[3]);
-                Matrix_MultiplyVector3fByState(&D_808C380C, &this->limbPos[4]);
+                Matrix_MultiplyVector3fByState(&sDuplicateCraniumLimbOffset, &this->limbPos[4]);
             } else {
                 Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPos[limbIndex]]);
             }
         }
-    } else if (this->unk_24C > 0) {
+    } else if (this->limbDrawStatus > 0) {
         if (sLimbIndexToLimbPos[limbIndex] != -1) {
             Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPos[limbIndex]]);
         }
 
         if (limbIndex == BUBBLE_LIMB_CRANIUM) {
-            this->unk_24C = -1;
+            this->limbDrawStatus = -1;
         }
     } else {
         if (sLimbIndexToLimbPos[limbIndex] != -1) {
@@ -634,7 +634,7 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
             Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, this->unk_2F0);
+            gSPDisplayList(POLY_OPA_DISP++, this->limbDList);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }

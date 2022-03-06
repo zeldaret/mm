@@ -16,7 +16,7 @@ typedef struct EnBb {
     /* 0x188 */ Vec3s jointTable[BUBBLE_LIMB_MAX];
     /* 0x1E8 */ Vec3s morphTable[BUBBLE_LIMB_MAX];
     /* 0x248 */ EnBbActionFunc actionFunc;
-    /* 0x24C */ s8 unk_24C;
+    /* 0x24C */ s8 limbDrawStatus;
     /* 0x24D */ u8 drawDmgEffType;
     /* 0x24E */ UNK_TYPE1 unk_24E[0x2];
     /* 0x250 */ s16 timer;
@@ -32,8 +32,8 @@ typedef struct EnBb {
     /* 0x270 */ f32 drawDmgEffScale;
     /* 0x274 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x278 */ Vec3f limbPos[5];
-    /* 0x2B4 */ Vec3f unk_2B4[5];
-    /* 0x2F0 */ Gfx* unk_2F0;
+    /* 0x2B4 */ Vec3f limbVelocity[5];
+    /* 0x2F0 */ Gfx* limbDList;
     /* 0x2F4 */ ColliderSphere collider;
 } EnBb; // size = 0x34C
 
