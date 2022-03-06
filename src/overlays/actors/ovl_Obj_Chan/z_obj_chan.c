@@ -10,6 +10,7 @@
  */
 
 #include "z_obj_chan.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_obj_chan/object_obj_chan.h"
 #include "objects/object_tsubo/object_tsubo.h"
 
@@ -89,7 +90,7 @@ void ObjChan_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sObjChanCylinderInit);
-    func_8013E3B8(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     switch (OBJCHAN_SUBTYPE(this)) {
         case OBJCHAN_SUBTYPE_MAIN:
             this->rotation = this->actor.shape.rot.y;
@@ -227,7 +228,7 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
         }
     }
     this->actor.shape.rot.z = (Math_SinS(this->unk1D4) * this->unk1D0);
-    if ((this->stateFlags & OBJCHAN_STATE_START_CUTSCENE) && func_8013E2D4(&this->actor, this->cutscenes[0], -1, 0)) {
+    if ((this->stateFlags & OBJCHAN_STATE_START_CUTSCENE) && SubS_StartActorCutscene(&this->actor, this->cutscenes[0], -1, 0)) {
         this->stateFlags |= OBJCHAN_STATE_CUTSCENE;
         this->stateFlags &= ~OBJCHAN_STATE_START_CUTSCENE;
     }
@@ -255,7 +256,7 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
         }
     }
     if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) {
-        Actor_SetSwitchFlag(globalCtx, this->actor.params & 0x7F);
+        Flags_SetSwitch(globalCtx, this->actor.params & 0x7F);
     }
     if (Flags_GetSwitch(globalCtx, this->actor.params & 0x7F)) {
         if (!(this->stateFlags & OBJCHAN_STATE_FIRE_DELAY)) {
@@ -306,7 +307,7 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
     if (potBreaks) {
         func_80BBA488(this, globalCtx);
         ((ObjChan*)this->actor.parent)->pots[this->myPotIndex] = NULL;
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_CHANDELIER_BROKEN);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_CHANDELIER_BROKEN);
         func_80BB9A1C((ObjChan*)this->actor.parent, 40.0f);
         if (this->myPotIndex == 4) {
             temp_v0_2 = gSaveContext.weekEventReg[0x25];
@@ -421,7 +422,7 @@ void func_80BBA930(ObjChan* this, GlobalContext* globalCtx) {
 
     sp4C = globalCtx->gameplayFrames;
 
-    Matrix_RotateY(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000, MTXMODE_APPLY);
+    Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000, MTXMODE_APPLY);
     Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].x * this->flameSize,
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
     Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(this)], 0.0f, MTXMODE_APPLY);
