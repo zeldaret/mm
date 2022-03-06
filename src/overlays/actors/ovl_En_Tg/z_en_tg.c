@@ -80,37 +80,37 @@ static DamageTable D_809901F8 = {
 
 #endif
 
+// In data
 extern ColliderCylinderInit D_809901C0;
 extern CollisionCheckInfoInit2 D_809901EC;
 extern DamageTable D_809901F8;
 
-extern UNK_TYPE D_0600B0E0;
-extern UNK_TYPE D_80990218;
-extern UNK_TYPE D_0600B0A0;
+extern AnimationInfoS D_80990218;
+extern Vec3f D_80990228; // = { 0.0f, 0.0f, 0.0f };
+extern UNK_TYPE D_80990234; // from data
+extern UNK_TYPE D_80990240; // from data
+extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
+
+// Not in data?
 extern void* D_0405E6F0;
 extern FlexSkeletonHeader D_0600B2B0;
-extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
-extern Vec3f D_80990228; // = { 0.0f, 0.0f, 0.0f };
+extern UNK_TYPE D_0600B0A0;
+extern UNK_TYPE D_0600B0E0; //last
 
-void func_8098F800(SkelAnime* skelAnime, s32 ptr, s16 len);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
-// void func_8098F800(SkelAnime *skelAnime, s32 ptr, s16 len) {
-//     s16 temp_v0;
-//     void *temp_s0;
-//     s16 phi_f0;
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
+void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 idx) {
+    f32 phi_f0;
 
-//     temp_s0 = ptr + (len * 0x10);
-//     temp_v0 = temp_s0->unkA;
-//     if ((s32) temp_v0 < 0) {
-//         // s16 Animation_GetLastFrame(void* animation);
-//         phi_f0 = (f32) Animation_GetLastFrame(LegacyAnimationHeader *)temp_s0->unk0);
-//     } else {
-//         phi_f0 = (f32) temp_v0;
-//     }
-//     // void Animation_Change(SkelAnime* skelAnime, AnimationHeader* animation, f32 playSpeed, f32 startFrame, f32
-//     endFrame, u8 mode, f32 morphFrames); Animation_Change(skelAnime, (AnimationHeader*) temp_s0->unk0, (f32)
-//     temp_s0->unk4, (f32) temp_s0->unk8, (f32) phi_f0, (u8) (s32) temp_s0->unkC, (f32) temp_s0->unkE);
-// }
+    animation += idx;
+
+    if (animation->frameCount < 0) {
+        phi_f0 = (f32)Animation_GetLastFrame(animation->animation);
+    } else {
+        phi_f0 = animation->frameCount;
+    }
+    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f0,
+                     animation->mode, animation->morphFrames);
+}
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F8A8.s")
 void func_8098F8A8(EnTg* this, GlobalContext* globalCtx) {
@@ -184,14 +184,14 @@ void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 // s32 func_8098FBB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBB4.s")
-s32 func_8098FBB4(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
+s32 func_8098FBB4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
     return 0;
 }
 
 // void func_8098FBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBD0.s")
-void func_8098FBD0(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+void func_8098FBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnTg* this = THIS;
 
     Vec3f sp18 = D_80990228;
