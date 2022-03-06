@@ -25,13 +25,13 @@ typedef struct EnLookNuts {
     /* 0x021A */ s16 eventTimer; // Timer to trigger when another event within the actor will happen
     /* 0x021C */ s16 state;
     /* 0x021E */ s16 switchFlag;
-    /* 0x0220 */ s16 pathLocation; // determines area where a patrol guard will go
+    /* 0x0220 */ s16 pathLocation; // Determines path that a guard will patrol
     /* 0x0222 */ s16 isPlayerDetected;
     /* 0x0224 */ s16 waitTimer; // Timer for how long the deku guard will take a break for
     /* 0x0226 */ s16 spawnIndex;
-    /* 0x0228 */ s32 pad228; // Unused, but needed for padding
+    /* 0x0228 */ s32 pad228; // Unused necessary padding
     /* 0x022C */ Vec3f headRotation;
-    /* 0x0238 */ Vec3f headRotationTarget; // Target value for head rotation to be at
+    /* 0x0238 */ Vec3f headRotTarget; // Target value for head rotation
     /* 0x0244 */ ColliderCylinder collider;
 } EnLookNuts; // size = 0x290
 
