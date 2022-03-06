@@ -268,7 +268,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C,
-                                                               &sp50, 1, 0, 0, 1, &sp4C)) {
+                                                               &sp50, true, false, false, true, &sp4C)) {
                     func_80BFE494(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_2A4, &sp54);
                     this->unk_2BE = Rand_S16Offset(30, 50);
@@ -290,8 +290,8 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
                 sp60.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp60.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, 1, 0, 0, 1,
-                                            &sp4C)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, true,
+                                            false, false, true, &sp4C)) {
                     this->unk_2C0 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80BFE494(this, 19, 1.0f);
