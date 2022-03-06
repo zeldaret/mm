@@ -1417,8 +1417,8 @@
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
         <Texture Name="gameplay_keep_Tex_0913E0" OutName="tex_0913E0" Format="i8" Width="32" Height="64" Offset="0x913E0" />
-        <Texture Name="gEffBubble1Tex" OutName="tex_091BE0" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
-        <Texture Name="gEffBubble2Tex" OutName="tex_091CE0" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
+        <Texture Name="gEffBubble1Tex" OutName="eff_bubble_1" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
+        <Texture Name="gEffBubble2Tex" OutName="eff_bubble_2" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
         <Texture Name="gameplay_keep_Tex_091DE0" OutName="tex_091DE0" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
         <Texture Name="gameplay_keep_Tex_091FE0" OutName="tex_091FE0" Format="i4" Width="32" Height="32" Offset="0x91FE0" />
         <Texture Name="gameplay_keep_Tex_0921E0" OutName="tex_0921E0" Format="i4" Width="32" Height="32" Offset="0x921E0" />

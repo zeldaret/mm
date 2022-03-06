@@ -90,9 +90,9 @@ void EffectSsBubble_Update(GlobalContext* globalCtx2, u32 index, EffectSs* this)
         f32 rVecAdjAmplitude;
 
         BgCheck_EntityRaycastFloor2_1(globalCtx, &globalCtx->colCtx, &colPoly, &this->pos);
-        speed = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, colPoly, 0x32);
-        if ((speed != 0) && !SurfaceType_GetConveyorType(&globalCtx->colCtx, colPoly, 0x32)) {
-            direction = SurfaceType_GetConveyorDirection(&globalCtx->colCtx, colPoly, 0x32) << 0xA;
+        speed = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, colPoly, BGCHECK_SCENE);
+        if ((speed != 0) && !SurfaceType_GetConveyorType(&globalCtx->colCtx, colPoly, BGCHECK_SCENE)) {
+            direction = SurfaceType_GetConveyorDirection(&globalCtx->colCtx, colPoly, BGCHECK_SCENE) << 0xA;
             rVecAdjAmplitude = sVecAdjAmplitudes[speed - 1];
             this->rVecAdjX = Math_SinS(direction) * rVecAdjAmplitude;
             this->rVecAdjZ = Math_CosS(direction) * rVecAdjAmplitude;
