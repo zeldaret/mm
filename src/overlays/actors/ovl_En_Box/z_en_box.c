@@ -432,7 +432,7 @@ void func_80868B74(EnBox* this, GlobalContext* globalCtx) {
         } else {
             this->dyna.actor.world.pos.y += 1.25f;
         }
-        this->unk_1A0 += 1;
+        this->unk_1A0++;
         if (this->cutsceneIdxA != -1 && ActorCutscene_GetCurrentIndex() == this->cutsceneIdxA) {
             if (this->unk_1A0 == 2) {
                 func_800B724C(globalCtx, &this->dyna.actor, 4);
@@ -468,6 +468,7 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
             playbackSpeed = 1.5f;
         } else {
             u8 playerForm;
+
             playbackSpeedTable = sPlaybackSpeed;
             playerForm = gSaveContext.playerForm;
             animHeader = sAnimations[playerForm];
@@ -521,7 +522,7 @@ void EnBox_Open(EnBox* this, GlobalContext* globalCtx) {
 
     this->dyna.actor.flags &= ~ACTOR_FLAG_80;
 
-    if (SkelAnime_Update(&this->skelAnime) != 0) {
+    if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_1EC > 0) {
             if (this->unk_1EC < 120) {
                 this->unk_1EC++;

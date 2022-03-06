@@ -5,7 +5,7 @@
  */
 
 #include "z_demo_tre_lgt.h"
-#include "../ovl_En_Box/z_en_box.h"
+#include "overlays/actors/ovl_En_Box/z_en_box.h"
 #include "objects/object_box/object_box.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -58,12 +58,14 @@ static DemoTreLgtActionFunc sActionFuncs[] = {
 };
 
 void DemoTreLgt_Init(Actor* thisx, GlobalContext* globalCtx) {
-    DemoTreLgt* this = (DemoTreLgt*)thisx;
+    DemoTreLgt* this = THIS;
+
     SkelCurve_Init(globalCtx, &this->skelCurve, &gBoxLightCurveSkel, sBoxLightAnimations[0]);
     this->colorAlpha1 = 255;
     this->colorAlpha2 = 255;
     this->status = 0;
-    if (gSaveContext.playerForm == 0) {
+    //! @bug Zora Link should also use animationType 0
+    if (gSaveContext.playerForm == PLAYER_FORM_FIERCE_DEITY) {
         this->animationType = 0;
     } else {
         this->animationType = 1;
@@ -72,7 +74,7 @@ void DemoTreLgt_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void DemoTreLgt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    DemoTreLgt* this = (DemoTreLgt*)thisx;
+    DemoTreLgt* this = THIS;
 
     SkelCurve_Destroy(globalCtx, &this->skelCurve);
 }
@@ -123,20 +125,20 @@ void DemoTreLgt_Animate(DemoTreLgt* this, GlobalContext* globalCtx) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
         }
     }
-    if (SkelCurve_Update(globalCtx, &this->skelCurve) != 0) {
+    if (SkelCurve_Update(globalCtx, &this->skelCurve)) {
         Actor_MarkForDeath(&this->actor);
     }
 }
 
 void DemoTreLgt_Update(Actor* thisx, GlobalContext* globalCtx) {
-    DemoTreLgt* this = (DemoTreLgt*)thisx;
+    DemoTreLgt* this = THIS;
 
     sActionFuncs[this->action](this, globalCtx);
 }
 
 s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIndex, Actor* thisx) {
     s32 pad;
-    DemoTreLgt* this = (DemoTreLgt*)thisx;
+    DemoTreLgt* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -157,7 +159,7 @@ s32 DemoTreLgt_OverrideLimbDraw(GlobalContext* globalCtx, SkelAnimeCurve* skelCu
 
 void DemoTreLgt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    DemoTreLgt* this = (DemoTreLgt*)thisx;
+    DemoTreLgt* this = THIS;
 
     OPEN_DISPS(gfxCtx);
     if (this->action == DEMO_TRE_LGT_ACTION_ANIMATE) {
