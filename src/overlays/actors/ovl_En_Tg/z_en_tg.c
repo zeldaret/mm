@@ -191,15 +191,15 @@ s32 func_8098FBB4(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 
 // void func_8098FBD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FBD0.s")
-// void func_8098FBD0(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
-//     EnTg* this = THIS;
+void func_8098FBD0(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+    EnTg* this = THIS;
 
-//     Vec3f sp18 = {0.0f,0.0f,0.0f};
+    Vec3f sp18 = D_80990228;
 
-//     if (limbIndex == 9) {
-//         Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
-//     }
-// }
+    if (limbIndex == 9) {
+        Matrix_MultiplyVector3fByState(&sp18, &this->actor.focus.pos);
+    }
+}
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Draw.s")
 void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
