@@ -78,9 +78,9 @@ typedef struct {
 
 static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
 
-static AnimationHeader* sAnimations[5] = {
-    &gBoxChestOpenAdultAnim, &gBoxChestOpenGoronAnim, &gBoxChestOpenAdultAnim,
-    &gBoxChestOpenDekuAnim,  &gBoxChestOpenChildAnim,
+static AnimationHeader* sBigChestAnimations[5] = {
+    &gBoxBigChestOpenAdultAnim, &gBoxBigChestOpenGoronAnim, &gBoxBigChestOpenAdultAnim,
+    &gBoxBigChestOpenDekuAnim,  &gBoxBigChestOpenChildAnim,
 };
 
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {
@@ -195,7 +195,7 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     colHeader = NULL;
     animFrame = 0.0f;
-    animFrameEnd = Animation_GetLastFrame(&object_box_Anim_00043C);
+    animFrameEnd = Animation_GetLastFrame(&gBoxChestOpenAnim);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&gBoxChestCol, &colHeader);
@@ -280,9 +280,9 @@ void EnBox_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.shape.rot.y += 0x8000;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z = 0;
 
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gBoxChestSkel, &object_box_Anim_00043C, this->jointTable,
-                   this->morphTable, 5);
-    Animation_Change(&this->skelAnime, &object_box_Anim_00043C, 1.5f, animFrame, animFrameEnd, 2, 0.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gBoxChestSkel, &gBoxChestOpenAnim, this->jointTable, this->morphTable,
+                   5);
+    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, animFrame, animFrameEnd, 2, 0.0f);
     if (Actor_IsSmallChest(this)) {
         Actor_SetScale(&this->dyna.actor, 0.0075f);
         Actor_SetFocus(&this->dyna.actor, 20.0f);
@@ -464,14 +464,14 @@ void EnBox_WaitOpen(EnBox* this, GlobalContext* globalCtx) {
     if (this->unk_1EC != 0 && (this->cutsceneIdxB < 0 || ActorCutscene_GetCurrentIndex() == this->cutsceneIdxB ||
                                ActorCutscene_GetCurrentIndex() == -1)) {
         if (this->unk_1EC < 0) {
-            animHeader = &object_box_Anim_00043C;
+            animHeader = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;
         } else {
             u8 playerForm;
 
             playbackSpeedTable = sPlaybackSpeed;
             playerForm = gSaveContext.playerForm;
-            animHeader = sAnimations[playerForm];
+            animHeader = sBigChestAnimations[playerForm];
             playbackSpeed = playbackSpeedTable.data[playerForm];
         }
 

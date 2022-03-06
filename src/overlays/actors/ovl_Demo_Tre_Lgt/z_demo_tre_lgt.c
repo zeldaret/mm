@@ -48,8 +48,8 @@ const ActorInit Demo_Tre_Lgt_InitVars = {
 };
 
 static TransformUpdateIndex* sBoxLightAnimations[] = {
-    &gBoxLight0CurveAnim,
-    &gBoxLight1CurveAnim,
+    &gBoxLightAdultCurveAnim,
+    &gBoxLightChildCurveAnim,
 };
 
 static DemoTreLgtActionFunc sActionFuncs[] = {
