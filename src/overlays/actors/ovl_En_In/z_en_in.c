@@ -6,24 +6,11 @@
 
 #include "z_en_in.h"
 #include "objects/object_in/object_in.h"
+#include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnIn*)thisx)
-
-#define SET_FLAGS_FINISH_RACE                                                                   \
-    {                                                                                           \
-        gSaveContext.weekEventReg[92] &= (u8) ~(1 | 2 | 4);                                     \
-        gSaveContext.weekEventReg[92] =                                                         \
-            gSaveContext.weekEventReg[92] | (u8)(gSaveContext.weekEventReg[92] & ~(1 | 2 | 4)); \
-    }
-
-#define SET_FLAGS_START_RACE                                                                          \
-    {                                                                                                 \
-        gSaveContext.weekEventReg[92] &= (u8) ~(1 | 2 | 4);                                           \
-        gSaveContext.weekEventReg[92] =                                                               \
-            gSaveContext.weekEventReg[92] | (u8)((gSaveContext.weekEventReg[92] & ~(1 | 2 | 4)) | 1); \
-    }
 
 void EnIn_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnIn_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -345,7 +332,7 @@ void func_808F38F8(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F395C(EnIn* this, GlobalContext* globalCtx) {
-    if (this->unk4B0 == 0) {
+    if (this->unk4B0 == RACE_FLAG_END) {
         this->actionFunc = func_808F5A94;
     }
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
@@ -361,30 +348,30 @@ void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
     u16 textId = 0;
 
     if (gSaveContext.day != 3) {
-        switch (gSaveContext.weekEventReg[92] & (1 | 2 | 4)) {
-            case 2:
+        switch (gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) {
+            case RACE_FLAG_2:
                 textId = 0x347A;
                 break;
-            case 3:
+            case RACE_FLAG_3:
                 textId = 0x3476;
                 break;
         }
-        SET_FLAGS_FINISH_RACE;
+        SET_RACE_FLAGS(RACE_FLAG_END);
     } else {
-        switch (gSaveContext.weekEventReg[92] & (1 | 2 | 4)) {
-            case 2:
+        switch (gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) {
+            case RACE_FLAG_2:
                 textId = 0x349D;
                 break;
-            case 3:
+            case RACE_FLAG_3:
                 textId = 0x3499;
                 break;
         }
-        SET_FLAGS_FINISH_RACE;
+        SET_RACE_FLAGS(RACE_FLAG_END);
     }
     this->actor.flags |= ACTOR_FLAG_10000;
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
-    if (this->unk4B0 == 2) {
+    if (this->unk4B0 == RACE_FLAG_2) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
@@ -644,7 +631,7 @@ s32 func_808F4270(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
 s32 func_808F43E0(EnIn* this) {
     this->unk48C = 0;
     this->actor.textId = 0;
-    SET_FLAGS_FINISH_RACE;
+    SET_RACE_FLAGS(RACE_FLAG_END);
     return 0;
 }
 
@@ -826,7 +813,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3475:
-                    SET_FLAGS_START_RACE;
+                    SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk_1887F = 5;
@@ -1073,7 +1060,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = false;
                     break;
                 case 0x3475:
-                    SET_FLAGS_START_RACE;
+                    SET_RACE_FLAGS(RACE_FLAG_START);
                     func_800FD750(NA_BGM_HORSE);
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk_1887F = 5;
@@ -1331,7 +1318,7 @@ void func_808F5B58(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
-    if (this->unk4B0 == 0) {
+    if (this->unk4B0 == RACE_FLAG_END) {
         this->actionFunc = func_808F5B58;
     }
     if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.weekEventReg[63] & 0x40) ||
@@ -1343,7 +1330,7 @@ void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
         }
     }
     if (this->unk4A8 == 2) {
-        if (this->unk4B0 == 2) {
+        if (this->unk4B0 == RACE_FLAG_2) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
         } else {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
@@ -1376,7 +1363,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk48C = 0;
     this->unk4AC = 0;
     type = ENIN_GET_TYPE(thisx);
-    this->unk4B0 = gSaveContext.weekEventReg[92] & (1 | 2 | 4);
+    this->unk4B0 = gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4);
     if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == 4) {
         this->unk4AC |= 8;
     }
@@ -1397,20 +1384,20 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->path = func_8013D648(globalCtx, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2 ||
-                (gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 3) {
+            if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) == RACE_FLAG_2 ||
+                (gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) == RACE_FLAG_3) {
                 gSaveContext.weekEventReg[56] &= (u8)~8;
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
                 func_808F35AC(this, globalCtx);
                 this->unk23C = 0;
                 D_801BDAA0 = 0;
-                if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2) {
+                if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) == RACE_FLAG_2) {
                     func_808F30B0(&this->skelAnime, 6);
                 } else {
                     func_808F30B0(&this->skelAnime, 4);
                 }
-                if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 2) {
+                if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) == RACE_FLAG_2) {
                     this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
                 }
                 if (this->unk4AC & 8) {
@@ -1419,7 +1406,8 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                     this->actionFunc = func_808F5C98;
                 }
             } else {
-                if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) != 1) {
+                if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) !=
+                    RACE_FLAG_START) {
                     gSaveContext.weekEventReg[56] &= (u8)~8;
                     this->unk23C = 0;
                     this->unk4AC |= 2;

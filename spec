@@ -1298,8 +1298,7 @@ beginseg
     name "ovl_En_Horse_Game_Check"
     compress
     include "build/src/overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.o"
-    include "build/data/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.data.o"
-    include "build/data/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Horse_Game_Check/ovl_En_Horse_Game_Check_reloc.o"
 endseg
 
 beginseg
