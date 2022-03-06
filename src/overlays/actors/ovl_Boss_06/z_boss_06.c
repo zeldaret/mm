@@ -197,7 +197,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
                 break;
             }
 
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
             func_800B7298(globalCtx, &this->actor, 7);
             this->unk_A00 = Play_CreateSubCamera(globalCtx);
             Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
@@ -219,11 +219,11 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
         case 1:
             if (this->unk_1CA >= 10) {
                 Math_ApproachF(&this->unk_1E4, 30.0f, 0.2f, 1.0f);
-                globalCtx->envCtx.unk_E5 = 1;
-                globalCtx->envCtx.unk_E6[2] = 0;
-                globalCtx->envCtx.unk_E6[1] = 0;
-                globalCtx->envCtx.unk_E6[0] = 0;
-                globalCtx->envCtx.unk_E6[3] = this->unk_A2C;
+                globalCtx->envCtx.fillScreen = 1;
+                globalCtx->envCtx.screenFillColor[2] = 0;
+                globalCtx->envCtx.screenFillColor[1] = 0;
+                globalCtx->envCtx.screenFillColor[0] = 0;
+                globalCtx->envCtx.screenFillColor[3] = this->unk_A2C;
                 Math_ApproachF(&this->unk_A2C, 75.0f, 1.0f, 3.0f);
             }
 
@@ -232,7 +232,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_1CA >= 60) {
-                globalCtx->envCtx.unk_E5 = 0;
+                globalCtx->envCtx.fillScreen = 0;
                 this->unk_1C8 = 0;
                 this->unk_1DC = 0.0f;
                 this->unk_1D8 = 0.0f;
@@ -331,7 +331,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
                 func_809F2ED0(this, globalCtx);
                 func_80169AFC(globalCtx, this->unk_A00, 0);
                 this->unk_A00 = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 D_809F4970->unk_151 = 0;
             }
@@ -339,7 +339,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_A00 != 0) {
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         Play_CameraSetAtEye(globalCtx, this->unk_A00, &this->unk_A10, &this->unk_A04);
     }
 }

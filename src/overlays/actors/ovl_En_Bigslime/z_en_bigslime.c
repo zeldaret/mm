@@ -863,7 +863,7 @@ void EnBigslime_Scale(EnBigslime* this, s16 pitch, f32 xzScale, f32 yScale) {
  * Set the params used by the floor shockwave when bigslime shatters into minislime
  */
 void EnBigslime_InitShockwave(EnBigslime* this, GlobalContext* globalCtx) {
-    globalCtx->envCtx.unk_C3 = 3;
+    globalCtx->envCtx.lightSettingOverride = 3;
     Math_Vec3f_Copy(&this->frozenPos, &this->actor.world.pos);
     this->frozenPos.y = GBT_ROOM_5_MIN_Y;
     this->shockwaveAlpha = 235;
@@ -931,7 +931,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, GlobalContext* global
     Player* player = GET_PLAYER(globalCtx);
     Camera* subCam = Play_GetCamera(globalCtx, this->subCamId);
 
-    globalCtx->envCtx.unk_C3 = 4;
+    globalCtx->envCtx.lightSettingOverride = 4;
     Animation_PlayLoop(&this->skelAnime, &gGekkoLookAroundAnim);
 
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
@@ -1008,7 +1008,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, GlobalContext* globalCtx) {
         EnBigslime_UpdateCameraIntroCs(this, globalCtx, 25);
         func_801A2E54(0x38);
         EnBigslime_InitFallMinislime(this);
-        globalCtx->envCtx.unk_C3 = 0xFF;
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
         this->callTimer = 35;
         func_800B7298(globalCtx, &this->actor, 4);
     }
@@ -1988,7 +1988,7 @@ void EnBigslime_Melt(EnBigslime* this, GlobalContext* globalCtx) {
     if (this->meltCounter == 100) {
         EnBigslime_SetTargetVtxFromPreFrozen(this);
     } else if (this->meltCounter == 50) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 }
 
@@ -2582,7 +2582,7 @@ void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, GlobalContext* globa
                 if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ICE) {
                     EnMinislime* minislime;
 
-                    globalCtx->envCtx.unk_C3 = 2;
+                    globalCtx->envCtx.lightSettingOverride = 2;
                     EnBigslime_SetPlayerParams(this, globalCtx);
                     this->rotation = 0;
                     EnBigslime_SetupFreeze(this);
@@ -2773,8 +2773,8 @@ void EnBigslime_UpdateBigslime(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f vtxMax;
     Vec3f vtxMin;
 
-    if (globalCtx->envCtx.unk_C3 == 3) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+    if (globalCtx->envCtx.lightSettingOverride == 3) {
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 
     func_8019F540(1);
@@ -2818,8 +2818,8 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
     Player* player;
     s32 pad;
 
-    if (globalCtx->envCtx.unk_C3 == 3) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+    if (globalCtx->envCtx.lightSettingOverride == 3) {
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 
     func_8019F540(0);

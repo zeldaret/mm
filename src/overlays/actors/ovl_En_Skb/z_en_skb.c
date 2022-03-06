@@ -230,7 +230,8 @@ void EnSkb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_3D6 = ENSKB_GET_F0(&this->actor);
     this->actor.floorHeight = this->actor.world.pos.y;
 
-    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 0)) {
+    if ((globalCtx->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) &&
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -319,9 +320,9 @@ void func_80994F7C(EnSkb* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
-            func_801518B0(globalCtx, 0x13F8, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F8, &this->actor);
         } else {
-            func_801518B0(globalCtx, 0x13F6, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F6, &this->actor);
             this->unk_3E0 = 1;
         }
         this->actionFunc = func_80995190;
@@ -340,12 +341,12 @@ void func_80995068(EnSkb* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_3E2 = 1;
         if (this->unk_3E0 == 1) {
-            func_801518B0(globalCtx, 0x13F8, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F8, &this->actor);
             if (this->unk_3DE == 2) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
             }
         } else {
-            func_801518B0(globalCtx, 0x13F6, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13F6, &this->actor);
             this->unk_3E0 = 1;
         }
         this->actionFunc = func_80995190;
@@ -372,7 +373,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
 
         case 5:
             if (func_80147624(globalCtx)) {
-                func_801518B0(globalCtx, 0x13F7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
                 }
@@ -813,10 +814,10 @@ void func_809964DC(EnSkb* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80996544(EnSkbVec2f arg0, EnSkbVec2f arg1) {
+s32 func_80996544(Vec2f arg0, Vec2f arg1) {
     s32 ret;
 
-    if ((arg1.x * arg0.z) < (arg0.x * arg1.z)) {
+    if ((arg1.x * arg0.y) < (arg0.x * arg1.y)) {
         ret = 1;
     } else {
         ret = -1;
@@ -828,8 +829,8 @@ s32 func_80996544(EnSkbVec2f arg0, EnSkbVec2f arg1) {
 s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
     s32 temp_s2;
     s32 j;
-    EnSkbVec2f sp60;
-    EnSkbVec2f sp58;
+    Vec2f sp60;
+    Vec2f sp58;
     s32 sp54 = true;
     f32 worldZ;
     s32 i = 0;
@@ -839,9 +840,9 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
     worldX = this->actor.world.pos.x;
 
     sp60.x = D_80997468[0].z - worldZ;
-    sp60.z = D_80997468[0].x - worldX;
+    sp60.y = D_80997468[0].x - worldX;
     sp58.x = D_80997468[1].z - worldZ;
-    sp58.z = D_80997468[1].x - worldX;
+    sp58.y = D_80997468[1].x - worldX;
     j = 1;
     temp_s2 = func_80996544(sp60, sp58);
 
@@ -855,9 +856,9 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
             j = 0;
         }
         sp60.x = D_80997468[i].z - worldZ;
-        sp60.z = D_80997468[i].x - worldX;
+        sp60.y = D_80997468[i].x - worldX;
         sp58.x = D_80997468[j].z - worldZ;
-        sp58.z = D_80997468[j].x - worldX;
+        sp58.y = D_80997468[j].x - worldX;
         if (func_80996544(sp60, sp58) != temp_s2) {
             sp54 = false;
             break;

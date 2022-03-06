@@ -1,5 +1,5 @@
-#ifndef _Z64_H_
-#define _Z64_H_
+#ifndef Z64_H
+#define Z64_H
 
 #include "libc/math.h"
 #include "libc/stdarg.h"
@@ -107,24 +107,6 @@ typedef struct {
     /* 0x4 */ UNK_TYPE1 pad4[0x4];
     /* 0x8 */ CameraModeParams* modes;
 } CameraStateParams; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u8    sceneCsCount;
-    /* 0x04 */ void* segment;
-    /* 0x08 */ u8    state;
-    /* 0x0C */ f32   unk_0C;
-    /* 0x10 */ u16   frames;
-    /* 0x12 */ u16   unk_12;
-    /* 0x14 */ s32   unk_14;
-    /* 0x18 */ u16   unk_18;
-    /* 0x1A */ u8    unk_1A;
-    /* 0x1B */ u8    unk_1B;
-    /* 0x1C */ CutsceneCameraPoint* atPoints;
-    /* 0x20 */ CutsceneCameraPoint* eyePoints;
-    /* 0x24 */ CsCmdActorAction* linkAction;
-    /* 0x28 */ CsCmdActorAction* npcActions[10]; // "npcdemopnt"
-    /* 0x50 */ CutsceneEntry* sceneCsList;
-} CutsceneContext; // size = 0x54
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -740,7 +722,7 @@ typedef struct {
     /* 0x80 */ OSMesg unk_80;
     /* 0x84 */ f32 unk_84;
     /* 0x88 */ f32 unk_88;
-    /* 0x8C */ LightSettings2 unk_8C;
+    /* 0x8C */ EnvLightSettings lightSettings;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
@@ -749,18 +731,18 @@ typedef struct {
     /* 0xC0 */ u8 unk_C0;
     /* 0xC1 */ u8 unk_C1;
     /* 0xC2 */ u8 unk_C2;
-    /* 0xC3 */ u8 unk_C3;
+    /* 0xC3 */ u8 lightSettingOverride;
     /* 0xC4 */ LightSettings unk_C4;
     /* 0xDA */ u16 unk_DA;
-    /* 0xDC */ f32 unk_DC;
+    /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 unk_E0;
     /* 0xE1 */ u8 unk_E1;
     /* 0xE2 */ s8 unk_E2;
     /* 0xE3 */ u8 unk_E3; // modified by unused func in EnWeatherTag
     /* 0xE4 */ u8 unk_E4;
-    /* 0xE5 */ u8 unk_E5;
-    /* 0xE6 */ u8 unk_E6[4];
-    /* 0xEA */ u8 unk_EA;
+    /* 0xE5 */ u8 fillScreen;
+    /* 0xE6 */ u8 screenFillColor[4];
+    /* 0xEA */ u8 sandstormState;
     /* 0xEB */ u8 unk_EB;
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;
@@ -994,8 +976,6 @@ typedef void (*ColChkBloodFunc)(GlobalContext*, Collider*, Vec3f*);
 typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider*);
 typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
-typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
 
 typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
 
@@ -1311,7 +1291,7 @@ struct GlobalContext {
     /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
-    /* 0x1879C */ s16 unk_1879C[10];
+    /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
     /* 0x187FC */ MtxF billboardMtxF;
@@ -1339,7 +1319,7 @@ struct GlobalContext {
     /* 0x1887C */ s8 unk_1887C;
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
-    /* 0x1887F */ u8 unk_1887F;
+    /* 0x1887F */ u8 unk_1887F; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
     /* 0x18B20 */ u16 envFlags[20];
@@ -1511,5 +1491,28 @@ enum fram_mode {
     FRAM_MODE_READ,
     FRAM_MODE_STATUS
 };
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ UNK_TYPE1 unk_0E[0x02];
+    /* 0x10 */ UNK_TYPE1 unk_10[0x2C];
+    /* 0x3C */ UNK_TYPE1 unk_3C[0x01];
+    /* 0x3D */ u8 unk_3D;
+    /* 0x3E */ UNK_TYPE1 unk_3E[0x02];
+    /* 0x40 */ UNK_TYPE1 unk_40[0x2C];
+    /* 0x6C */ UNK_TYPE1 unk_6C[0x01];
+    /* 0x6D */ u8 unk_6D;
+    /* 0x6E */ UNK_TYPE1 unk_6E[0x02];
+    /* 0x70 */ UNK_PTR unk_70;
+    /* 0x74 */ UNK_PTR unk_74;
+    /* 0x78 */ UNK_PTR unk_78;
+    /* 0x7C */ Camera* camera;
+} struct_801F4D48; // size = 0x80
 
 #endif

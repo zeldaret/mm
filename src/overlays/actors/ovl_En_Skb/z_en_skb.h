@@ -9,11 +9,6 @@ typedef void (*EnSkbActionFunc)(struct EnSkb*, GlobalContext*);
 
 #define ENSKB_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 
-typedef struct {
-    f32 x;
-    f32 z;
-} EnSkbVec2f;
-
 typedef struct EnSkb {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;

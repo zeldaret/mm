@@ -240,8 +240,8 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     if (isItemFound) {
         func_801149A0(itemId2, slotId);
         this->unk_3E8 = object_thiefbird_DL_0033B0;
-        if (!Message_GetState(&globalCtx->msgCtx)) {
-            func_801518B0(globalCtx, 0xF4, NULL);
+        if (Message_GetState(&globalCtx->msgCtx) == 0) {
+            Message_StartTextbox(globalCtx, 0xF4, NULL);
         }
         itemId1 = ITEM_BOTTLE;
     } else if (phi_a3 != 0) {
@@ -264,8 +264,8 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
             this->unk_3E8 = D_80C13680[phi_a3 - 1];
         }
 
-        if (!Message_GetState(&globalCtx->msgCtx)) {
-            func_801518B0(globalCtx, 0xF5, NULL);
+        if (Message_GetState(&globalCtx->msgCtx) == 0) {
+            Message_StartTextbox(globalCtx, 0xF5, NULL);
         }
     } else {
         return false;

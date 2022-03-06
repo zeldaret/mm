@@ -1172,7 +1172,7 @@ typedef enum {
     /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
     /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
     /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
 
 #endif

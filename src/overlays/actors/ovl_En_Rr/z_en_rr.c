@@ -313,7 +313,7 @@ void func_808FA4F4(EnRr* this, GlobalContext* globalCtx) {
         }
 
         if (sp34 && (Message_GetState(&globalCtx->msgCtx) == 0)) {
-            func_801518B0(globalCtx, 0xF6, NULL);
+            Message_StartTextbox(globalCtx, 0xF6, NULL);
         }
 
         if (this->actor.params == ENRR_0) {
@@ -876,7 +876,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f spA4;
     f32 temp_f20;
 
-    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, 256);
+    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Mtx) * 4);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
