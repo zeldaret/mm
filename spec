@@ -1382,8 +1382,6 @@ beginseg
     name "ovl_Arrow_Fire"
     compress
     include "build/src/overlays/actors/ovl_Arrow_Fire/z_arrow_fire.o"
-    include "build/data/ovl_Arrow_Fire/ovl_Arrow_Fire.data.o"
-    include "build/data/ovl_Arrow_Fire/ovl_Arrow_Fire.bss.o"
     include "build/data/ovl_Arrow_Fire/ovl_Arrow_Fire.reloc.o"
 endseg
 
