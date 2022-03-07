@@ -94,7 +94,6 @@ void ArrowIce_LerpFiredPosition(Vec3f* firedPos, Vec3f* icePos, f32 scale) {
 
 void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
     f32 scale;
-    f32 offset;
     u16 timer;
 
     if (this->actor.projectedW < 50.0f) {
@@ -111,12 +110,12 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
         this->timer--;
 
         if (this->timer >= 8) {
-            offset = ((this->timer - 8) * (1.0f / 24.0f));
+            f32 offset = ((this->timer - 8) * (1.0f / 24.0f));
+            
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
             this->height += ((2.0f - this->height) * 0.1f);
             if (this->timer < 16) {
-                if (1) {}
                 this->alpha = ((this->timer * 35) - 280);
             }
         }
