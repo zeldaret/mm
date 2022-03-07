@@ -69,7 +69,7 @@ void ArrowLight_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_809243AC(ArrowLight* this, GlobalContext* globalCtx) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
-   
+
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -98,7 +98,7 @@ void ArrowLight_Lerp(Vec3f* firedPos, Vec3f* pos, f32 scale) {
 void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
     f32 scale;
     u16 timer;
-    
+
     if (this->actor.projectedW < 50.0f) {
         scale = 10.0f;
     } else if (this->actor.projectedW > 950.0f) {
@@ -113,7 +113,7 @@ void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
         this->timer--;
         if (this->timer >= 8) {
             f32 offset = (this->timer - 8) * (1.0f / 24.0f);
-            
+
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
             this->height = this->height + ((2.0f - this->height) * 0.1f);
@@ -141,13 +141,11 @@ void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
     }
 }
 
-
-
 void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
     s32 pad;
     s32 pad2;
-   
+
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -161,7 +159,7 @@ void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx) {
         this->height = 1.0f;
     }
 
-    ArrowLight_Lerp(&this->unk_14C,&this->actor.world.pos,0.05f);
+    ArrowLight_Lerp(&this->unk_14C, &this->actor.world.pos, 0.05f);
 
     if ((arrow->unk_261 & 1) != 0) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_LIGHT);
@@ -214,9 +212,7 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
         if (this->unk15C > 0.0f) {
             POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->unk15C * 30.0f) & 0xFF,
-                            (s32)(40.0f * this->unk15C) & 0xFF, 
-                            0, 
-                (s32)(150.0f * this->unk15C) & 0xFF);
+                            (s32)(40.0f * this->unk15C) & 0xFF, 0, (s32)(150.0f * this->unk15C) & 0xFF);
             gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
             gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
             gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);

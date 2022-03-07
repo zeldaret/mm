@@ -190,7 +190,7 @@ void FireArrow_Fly(ArrowFire* this, GlobalContext* globalCtx) {
     if (this->height < 1.0f) {
         this->height = 1.0f;
     }
-    
+
     FireArrow_Lerp(&this->firedPos, &this->actor.world.pos, 0.05f);
     if ((arrow->unk_261 & 1) != 0) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
@@ -254,9 +254,9 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
     arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->timer < 255)) {
-        
+
         matrixRefActor = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
-        
+
         OPEN_DISPS(globalCtx->state.gfxCtx);
         Matrix_InsertTranslation(matrixRefActor->world.pos.x, matrixRefActor->world.pos.y, matrixRefActor->world.pos.z,
                                  MTXMODE_NEW);
@@ -282,7 +282,7 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);
 
         Matrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);
-        
+
         if (this->timer != 0) {
             Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         } else {

@@ -111,7 +111,7 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
 
         if (this->timer >= 8) {
             f32 offset = ((this->timer - 8) * (1.0f / 24.0f));
-            
+
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
             this->height += ((2.0f - this->height) * 0.1f);
