@@ -16,7 +16,7 @@ void BgF40Switch_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Switch_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgF40Switch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80BC47B0(BgF40Switch* this, GlobalContext* globalCtx);
+void BgF40Switch_CheckAll(BgF40Switch* this, GlobalContext* globalCtx);
 void BgF40Switch_Unpress(BgF40Switch* this, GlobalContext* globalCtx);
 void BgF40Switch_IdlePressed(BgF40Switch* this, GlobalContext* globalCtx);
 void BgF40Switch_Press(BgF40Switch* this, GlobalContext* globalCtx);
@@ -41,7 +41,7 @@ u32 sBgF40SwitchLastUpdateFrame;
 /*
  * Updates all instances of this actor in the current room, unless it's already been called this frame.
  */
-void func_80BC47B0(BgF40Switch* this, GlobalContext* globalCtx) {
+void BgF40Switch_CheckAll(BgF40Switch* this, GlobalContext* globalCtx) {
     if (globalCtx->gameplayFrames != sBgF40SwitchLastUpdateFrame) {
         u32 pressedSwitchFlags[4] = { 0 };
         u32 pad;
@@ -181,7 +181,7 @@ void BgF40Switch_IdleUnpressed(BgF40Switch* this, GlobalContext* globalCtx) {
 void BgF40Switch_Update(Actor* thisx, GlobalContext* globalCtx) {
     BgF40Switch* this = THIS;
 
-    func_80BC47B0(this, globalCtx);
+    BgF40Switch_CheckAll(this, globalCtx);
     this->actionFunc(this, globalCtx);
 }
 

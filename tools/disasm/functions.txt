@@ -15531,7 +15531,7 @@
     0x80BC457C:("func_80BC457C",),
     0x80BC458C:("BgF40Block_Update",),
     0x80BC45CC:("BgF40Block_Draw",),
-    0x80BC47B0:("func_80BC47B0",),
+    0x80BC47B0:("BgF40Switch_CheckAll",),
     0x80BC4A3C:("BgF40Switch_Init",),
     0x80BC4AEC:("BgF40Switch_Destroy",),
     0x80BC4B20:("BgF40Switch_Unpress",),
