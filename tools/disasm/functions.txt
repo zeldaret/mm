@@ -7019,7 +7019,7 @@
     0x80924300:("ArrowLight_SetupAction",),
     0x8092430C:("ArrowLight_Init",),
     0x80924388:("ArrowLight_Destroy",),
-    0x809243AC:("func_809243AC",),
+    0x809243AC:("ArrowLight_Charge",),
     0x809244A0:("ArrowLight_Lerp",),
     0x809244F8:("ArrowLight_Hit",),
     0x809246C4:("ArrowLight_Fly",),

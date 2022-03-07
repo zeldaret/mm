@@ -249,20 +249,17 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ArrowFire* this = THIS;
     u32 frames = globalCtx->state.frames;
     s32 pad;
-    Actor* matrixRefActor;
 
     arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->timer < 255)) {
-
-        matrixRefActor = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
+        Actor* transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(matrixRefActor->world.pos.x, matrixRefActor->world.pos.y, matrixRefActor->world.pos.z,
-                                 MTXMODE_NEW);
-        Matrix_RotateY(matrixRefActor->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(matrixRefActor->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(matrixRefActor->shape.rot.z, MTXMODE_APPLY);
+        Matrix_InsertTranslation(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
+        Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
 
         Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
         if (this->blueingEffectMagnitude > 0.0f) {

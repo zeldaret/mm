@@ -1382,7 +1382,7 @@ beginseg
     name "ovl_Arrow_Fire"
     compress
     include "build/src/overlays/actors/ovl_Arrow_Fire/z_arrow_fire.o"
-    include "build/data/ovl_Arrow_Fire/ovl_Arrow_Fire.reloc.o"
+    include "build/src/overlays/actors/ovl_Arrow_Fire/ovl_Arrow_Fire_reloc.o"
 endseg
 
 beginseg
@@ -1396,9 +1396,7 @@ beginseg
     name "ovl_Arrow_Light"
     compress
     include "build/src/overlays/actors/ovl_Arrow_Light/z_arrow_light.o"
-    include "build/data/ovl_Arrow_Light/ovl_Arrow_Light.data.o"
-    include "build/data/ovl_Arrow_Light/ovl_Arrow_Light.bss.o"
-    include "build/data/ovl_Arrow_Light/ovl_Arrow_Light.reloc.o"
+    include "build/src/overlays/actors/ovl_Arrow_Light/ovl_Arrow_Light_reloc.o"
 endseg
 
 beginseg
