@@ -3,7 +3,7 @@
         <DList Name="object_bdoor_DL_0000C0" Offset="0xC0" />
         <DList Name="object_bdoor_DL_000400" Offset="0x400" />
         <DList Name="object_bdoor_DL_000530" Offset="0x530" />
-        <!-- <Blob Name="object_bdoor_Blob_0005C0" Size="0x1000" Offset="0x5C0" /> -->
+        <Texture Name="object_bdoor_Tex_0005C0" OutName="tex_0005C0" Format="rgba16" Width="32" Height="64" Offset="0x5C0" />
         <DList Name="object_bdoor_DL_001790" Offset="0x1790" />
         <DList Name="object_bdoor_DL_001850" Offset="0x1850" />
         <Texture Name="object_bdoor_Tex_001910" OutName="tex_001910" Format="rgba16" Width="32" Height="64" Offset="0x1910" />

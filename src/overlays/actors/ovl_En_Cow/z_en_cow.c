@@ -6,7 +6,7 @@
 
 #include "z_en_cow.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnCow*)thisx)
 
@@ -61,13 +61,6 @@ static ColliderCylinderInit sCylinderInit = {
 
 Vec3f D_8099D63C = { 0.0f, -1300.0f, 1100.0f };
 
-extern AnimationHeader D_060001CC;    // gCowBodyChewAnim
-extern FlexSkeletonHeader D_06004010; // gCowBodySkel
-extern AnimationHeader D_06004264;    // gCowBodyMoveHeadAnim
-extern AnimationHeader D_06004348;    // gCowTailIdleAnim
-extern FlexSkeletonHeader D_06004C30; // gCowTailSkel
-extern AnimationHeader D_06004E98;    // gCowTailSwishAnim
-
 void EnCow_RotatePoint(Vec3f* vec, s16 angle) {
     f32 x = (Math_CosS(angle) * vec->x) + (Math_SinS(angle) * vec->z);
 
@@ -108,14 +101,14 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnCow* this = THIS;
 
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 72.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 72.0f);
 
     switch (EN_COW_TYPE(thisx)) {
         case EN_COW_TYPE_DEFAULT:
         case EN_COW_TYPE_ABDUCTED:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004010, NULL, this->jointTable, this->morphTable,
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowSkel, NULL, this->jointTable, this->morphTable,
                                COW_LIMB_MAX);
-            Animation_PlayLoop(&this->skelAnime, &D_060001CC);
+            Animation_PlayLoop(&this->skelAnime, &gCowChewAnim);
 
             Collider_InitAndSetCylinder(globalCtx, &this->colliders[0], &this->actor, &sCylinderInit);
             Collider_InitAndSetCylinder(globalCtx, &this->colliders[1], &this->actor, &sCylinderInit);
@@ -141,9 +134,9 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
             func_801A5080(4);
             break;
         case EN_COW_TYPE_TAIL:
-            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004C30, NULL, this->jointTable, this->morphTable,
-                               COW_LIMB_MAX);
-            Animation_PlayLoop(&this->skelAnime, &D_06004348);
+            SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCowTailSkel, NULL, this->jointTable, this->morphTable,
+                               COW_TAIL_LIMB_MAX);
+            Animation_PlayLoop(&this->skelAnime, &gCowTailIdleAnim);
 
             this->actor.update = EnCow_UpdateTail;
             this->actor.draw = EnCow_DrawTail;
@@ -151,7 +144,7 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             EnCow_SetTailPos(this);
 
-            this->actor.flags &= ~EN_COW_FLAG_IS_TAIL;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->animationTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
             break;
     }
@@ -177,13 +170,13 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
         this->animationTimer--;
     } else {
         this->animationTimer = Rand_ZeroFloat(500.0f) + 40.0f;
-        Animation_Change(&this->skelAnime, &D_060001CC, 1.0f, this->skelAnime.curFrame,
-                         Animation_GetLastFrame(&D_060001CC), ANIMMODE_ONCE, 1.0f);
+        Animation_Change(&this->skelAnime, &gCowChewAnim, 1.0f, this->skelAnime.curFrame,
+                         Animation_GetLastFrame(&gCowChewAnim), ANIMMODE_ONCE, 1.0f);
     }
     if (this->actor.xzDistToPlayer < 150.0f) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
-            if (this->skelAnime.animation == &D_060001CC) {
+            if (this->skelAnime.animation == &gCowChewAnim) {
                 this->animationTimer = 0;
             }
         }
@@ -207,16 +200,16 @@ void EnCow_UpdateAnimation(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_TalkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        this->actor.flags &= ~0x10000;
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_Idle;
     }
 }
 
 void EnCow_GiveMilkEnd(EnCow* this, GlobalContext* globalCtx) {
-    if (func_800B867C(&this->actor, globalCtx)) {
-        this->actor.flags &= ~0x10000;
+    if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnCow_Idle;
     }
 }
@@ -226,22 +219,22 @@ void EnCow_GiveMilkWait(EnCow* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actionFunc = EnCow_GiveMilkEnd;
     } else {
-        func_800B8A1C(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
 void EnCow_GiveMilk(EnCow* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        this->actor.flags &= ~0x10000;
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_801477B4(globalCtx);
         this->actionFunc = EnCow_GiveMilkWait;
-        func_800B8A1C(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MILK, 10000.0f, 100.0f);
     }
 }
 
 void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        if (func_80114E90()) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        if (Interface_HasEmptyBottle()) {
             func_80151938(globalCtx, 0x32C9); // Text to give milk.
             this->actionFunc = EnCow_GiveMilk;
         } else {
@@ -252,7 +245,7 @@ void EnCow_CheckForEmptyBottle(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->actor.textId == 0x32C8) { // Text to give milk after playing Epona's Song.
             this->actionFunc = EnCow_CheckForEmptyBottle;
         } else if (this->actor.textId == 0x32C9) { // Text to give milk.
@@ -261,7 +254,7 @@ void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
             this->actionFunc = EnCow_TalkEnd;
         }
     } else {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 170.0f);
         this->actor.textId = 0x32C8; //! @bug textId is reset to this no matter the intial value
     }
@@ -270,16 +263,16 @@ void EnCow_Talk(EnCow* this, GlobalContext* globalCtx) {
 }
 
 void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.unk1202A == 0) || (globalCtx->msgCtx.unk1202A == 4)) {
+    if ((globalCtx->msgCtx.ocarinaMode == 0) || (globalCtx->msgCtx.ocarinaMode == 4)) {
         if (D_801BDAA4 != 0) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;
                 D_801BDAA4 = 0;
             } else if ((this->actor.xzDistToPlayer < 150.0f) &&
-                       ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
+                       ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 25000) {
                 D_801BDAA4 = 0;
                 this->actionFunc = EnCow_Talk;
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 170.0f);
                 this->actor.textId = 0x32C8; // Text to give milk after playing Epona's Song.
 
@@ -298,12 +291,12 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
         if (func_801A5100() == 4) {
             if (!(gSaveContext.weekEventReg[87] & 1)) {
                 gSaveContext.weekEventReg[87] |= 1;
-                if (func_80114E90()) {
+                if (Interface_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.
                 }
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, globalCtx, 170.0f);
                 this->actionFunc = EnCow_Talk;
             }
@@ -320,15 +313,15 @@ void EnCow_DoTail(EnCow* this, GlobalContext* globalCtx) {
         this->animationTimer--;
     } else {
         this->animationTimer = Rand_ZeroFloat(200.0f) + 40.0f;
-        Animation_Change(&this->skelAnime, &D_06004348, 1.0f, this->skelAnime.curFrame,
-                         Animation_GetLastFrame(&D_06004348), ANIMMODE_ONCE, 1.0f);
+        Animation_Change(&this->skelAnime, &gCowTailIdleAnim, 1.0f, this->skelAnime.curFrame,
+                         Animation_GetLastFrame(&gCowTailIdleAnim), ANIMMODE_ONCE, 1.0f);
     }
 
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) > 25000) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
-            if (this->skelAnime.animation == &D_06004348) {
+            if (this->skelAnime.animation == &gCowTailIdleAnim) {
                 this->animationTimer = 0;
             }
         }
@@ -345,17 +338,17 @@ void EnCow_Update(Actor* thisx, GlobalContext* globalCtx2) {
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[0].base);
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->colliders[1].base);
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->skelAnime.animation == &D_060001CC) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_COW_CRY);
-            Animation_Change(&this->skelAnime, &D_06004264, 1.0f, 0.0f, Animation_GetLastFrame(&D_06004264),
+        if (this->skelAnime.animation == &gCowChewAnim) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_COW_CRY);
+            Animation_Change(&this->skelAnime, &gCowMooAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowMooAnim),
                              ANIMMODE_ONCE, 1.0f);
         } else {
-            Animation_Change(&this->skelAnime, &D_060001CC, 1.0f, 0.0f, Animation_GetLastFrame(&D_060001CC),
+            Animation_Change(&this->skelAnime, &gCowChewAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowChewAnim),
                              ANIMMODE_LOOP, 1.0f);
         }
     }
@@ -391,11 +384,11 @@ void EnCow_UpdateTail(Actor* thisx, GlobalContext* globalCtx) {
     EnCow* this = THIS;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->skelAnime.animation == &D_06004348) {
-            Animation_Change(&this->skelAnime, &D_06004E98, 1.0f, 0.0f, Animation_GetLastFrame(&D_06004E98),
-                             ANIMMODE_ONCE, 1.0f);
+        if (this->skelAnime.animation == &gCowTailIdleAnim) {
+            Animation_Change(&this->skelAnime, &gCowTailSwishAnim, 1.0f, 0.0f,
+                             Animation_GetLastFrame(&gCowTailSwishAnim), ANIMMODE_ONCE, 1.0f);
         } else {
-            Animation_Change(&this->skelAnime, &D_06004348, 1.0f, 0.0f, Animation_GetLastFrame(&D_06004348),
+            Animation_Change(&this->skelAnime, &gCowTailIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gCowTailIdleAnim),
                              ANIMMODE_LOOP, 1.0f);
         }
     }

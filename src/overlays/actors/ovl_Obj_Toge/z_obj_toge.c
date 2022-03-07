@@ -6,7 +6,7 @@
 
 #include "z_obj_toge.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjToge*)thisx)
 
@@ -41,7 +41,7 @@ static ColliderCylinderInit D_809A4CB0 = {
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_809A4D14[] = {
-    ICHAIN_F32_DIV1000(minVelocityY, 0, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 150, ICHAIN_STOP),

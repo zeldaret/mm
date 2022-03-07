@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_aqua.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjAqua*)thisx)
 
@@ -57,7 +58,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_CONTINUE),          ICHAIN_VEC3S(world.rot, 0, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(minVelocityY, -4000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -900, ICHAIN_CONTINUE),   ICHAIN_F32_DIV1000(terminalVelocity, -4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
 };
@@ -65,8 +66,6 @@ static InitChainEntry sInitChain[] = {
 Vec3f D_80ACC308 = { 1.0f / 1000.0f, 7.0f / 10000.0f, 1.0f / 1000.0f };
 Vec3f D_80ACC314 = { 8.6f / 1000.0f, 8.0f / 10000.0f, 8.6f / 1000.0f };
 Vec3f D_80ACC320 = { 1.0f / 100.0f, 2.6f / 1000.0f, 1.0f / 100.0f };
-
-extern Gfx D_0407D590[];
 
 void func_80ACB6A0(ObjAqua* this, GlobalContext* globalCtx) {
     s32 pad;
@@ -115,7 +114,7 @@ void func_80ACB940(ObjAqua* this, GlobalContext* globalCtx) {
     effectPos.x = this->actor.world.pos.x + (effectVel.x * 40.0f);
     effectPos.y = this->actor.world.pos.y;
     effectPos.z = this->actor.world.pos.z + (effectVel.z * 40.0f);
-    EffectSsIceSmoke_Spawn(globalCtx, &effectPos, &effectVel, &D_801D15B0, (s32)(Rand_ZeroOne() * 24.0f) + 70);
+    EffectSsIceSmoke_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, (s32)(Rand_ZeroOne() * 24.0f) + 70);
 }
 
 void func_80ACBA10(ObjAqua* this) {
@@ -151,7 +150,7 @@ void ObjAqua_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.scale.z = 0.0009f;
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 60.0f);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     if (1) {};
     this->actor.shape.shadowAlpha = 140;
     this->alpha = 255;
@@ -181,11 +180,11 @@ void func_80ACBC8C(ObjAqua* this, GlobalContext* globalCtx) {
         if (this->actor.bgCheckFlags & 1) {
             func_80ACB7F4(this, globalCtx);
             func_80ACBA10(this);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_BOTTLE_WATERING);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOTTLE_WATERING);
             func_80ACBD34(this);
         } else {
             func_80ACB6A0(this, globalCtx);
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 0x28, NA_SE_EV_BOMB_DROP_WATER);
             Actor_MarkForDeath(&this->actor);
         }
     } else if (this->counter <= 0) {
@@ -255,7 +254,7 @@ void ObjAqua_Update(Actor* thisx, GlobalContext* globalCtx) {
             Math_Vec3f_StepTo(&this->actor.scale, &D_80ACC320, 0.0004f);
         }
         this->actor.velocity.y *= 0.9f;
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 12.0f, 4.0f, 0.0f, 5);
         if (this->actionFunc != func_80ACBDFC) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -269,7 +268,7 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjAqua* this = THIS;
     s32 framesTemp;
     s32 pad;
-    s16 yaw = func_800DFCDC(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
+    s16 yaw = Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
     s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -292,6 +291,6 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     Matrix_RotateY(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_0407D590);
+    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

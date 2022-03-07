@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_ghaka.h"
+#include "objects/object_ghaka/object_ghaka.h"
 
-#define FLAGS 0x00000029
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_20)
 
 #define THIS ((ObjGhaka*)thisx)
 
@@ -42,10 +43,6 @@ static InitChainEntry D_80B3C96C[] = {
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
-extern Gfx D_06001A20[];
-extern Gfx D_06001980[];
-extern CollisionHeader D_06003CD0;
-
 void func_80B3C260(ObjGhaka* this) {
     if (gSaveContext.weekEventReg[20] & 0x20) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;
@@ -75,7 +72,7 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
-    if (func_800B84D0(&this->dyna.actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         func_80B3C29C(this);
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {
@@ -97,11 +94,11 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
-    u8 talkState = func_80152498(&globalCtx->msgCtx);
+    u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState == 5) {
         if (func_80147624(globalCtx)) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             func_80B3C260(this);
         }
@@ -111,16 +108,16 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
                 case 0:
                     func_8019F208();
                     this->dyna.actor.textId = 0xCF5;
-                    func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+                    Message_StartTextbox(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
                     break;
                 case 1:
                     func_8019F208();
                     this->dyna.actor.textId = 0xCF7;
-                    func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+                    Message_StartTextbox(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
                     break;
                 case 2:
                     func_8019F230();
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_80B3C260(this);
             }
@@ -140,9 +137,9 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
         func_80B3C2C4(this, globalCtx);
         gSaveContext.weekEventReg[20] |= 0x20;
         func_80B3C260(this);
-        func_8019F1C0(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
+        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
     } else {
-        func_8019F1C0(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 
@@ -154,7 +151,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, D_80B3C96C);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, 1);
-    CollisionHeader_GetVirtual(&D_06003CD0, &colHeader);
+    CollisionHeader_GetVirtual(&object_ghaka_Colheader_003CD0, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
     if (this->dyna.actor.floorPoly == 0) {
@@ -185,9 +182,9 @@ void ObjGhaka_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06001A20);
+    gSPDisplayList(POLY_OPA_DISP++, object_ghaka_DL_001A20);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06001980);
+    gSPDisplayList(POLY_XLU_DISP++, object_ghaka_DL_001980);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

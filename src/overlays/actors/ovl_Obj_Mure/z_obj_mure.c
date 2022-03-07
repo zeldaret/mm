@@ -162,8 +162,8 @@ void ObjMure_SpawnActors0(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
-    GlobalContext* globalCtx2 = globalCtx;
+void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     Actor* actor = &this->actor;
     Vec3f spawnPos;
     s32 maxChildren = ObjMure_GetMaxChildSpawns(this);
@@ -172,7 +172,7 @@ void ObjMure_SpawnActors1(ObjMure* this, GlobalContext* globalCtx) {
     for (i = 0; i < maxChildren; i++) {
         ObjMure_GetSpawnPos(&spawnPos, &actor->world.pos, this->ptn, i);
         this->children[i] = Actor_SpawnAsChildAndCutscene(
-            &globalCtx->actorCtx, globalCtx, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z,
+            &globalCtx2->actorCtx, globalCtx, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z,
             actor->world.rot.x, actor->world.rot.y, actor->world.rot.z,
             (this->type == OBJMURE_TYPE_BUTTERFLY && i == 0) ? 1 : sSpawnParams[this->type], this->actor.cutscene,
             this->actor.unk20, NULL);
@@ -259,7 +259,7 @@ void ObjMure_InitialAction(ObjMure* this, GlobalContext* globalCtx) {
 void ObjMure_CulledState(ObjMure* this, GlobalContext* globalCtx) {
     if (fabsf(this->actor.projectedPos.z) < sZClip[this->type]) {
         this->actionFunc = ObjMure_ActiveState;
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         ObjMure_SpawnActors(this, globalCtx);
     }
 }
@@ -382,7 +382,7 @@ void ObjMure_ActiveState(ObjMure* this, GlobalContext* globalCtx) {
     ObjMure_CheckChildren(this, globalCtx);
     if (sZClip[this->type] + 40.0f <= fabsf(this->actor.projectedPos.z)) {
         this->actionFunc = ObjMure_CulledState;
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         ObjMure_KillActors(this, globalCtx);
     } else if (sTypeGroupBehaviorFunc[this->type] != NULL) {
         sTypeGroupBehaviorFunc[this->type](this, globalCtx);

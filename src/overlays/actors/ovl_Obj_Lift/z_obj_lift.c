@@ -6,7 +6,7 @@
 
 #include "z_obj_lift.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjLift*)thisx)
 
@@ -31,7 +31,7 @@ const ActorInit Obj_Lift_InitVars = {
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_8093DD84[] = {
     ICHAIN_F32_DIV1000(gravity, -600, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -15000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -15000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 350, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 350, ICHAIN_STOP),

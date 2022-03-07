@@ -7,7 +7,7 @@
 #include "z_door_ana.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS 0x02000000
+#define FLAGS (ACTOR_FLAG_2000000)
 
 #define THIS ((DoorAna*)thisx)
 
@@ -70,7 +70,7 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
             Collider_InitAndSetCylinder(globalCtx, &this->bombCollider, &this->actor, &sCylinderInit);
         } else {
-            this->actor.flags |= 0x10; // always update
+            this->actor.flags |= ACTOR_FLAG_10; // always update
         }
 
         Actor_SetScale(&this->actor, 0);
@@ -100,7 +100,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
         //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
         if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && EnvFlags_Get(globalCtx, 5)) {
             grottoIsOpen = true;
-            this->actor.flags &= ~0x10; // always update OFF
+            this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
         }
 
     } else {
@@ -138,7 +138,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(this);
 
-                func_80169E6C(globalCtx, 3, 0x4FF);
+                Play_SetupRespawnPoint(&globalCtx->state, 3, 0x4FF);
 
                 gSaveContext.respawn[3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[3].yaw = this->actor.home.rot.y;
@@ -192,9 +192,9 @@ void DoorAna_Update(Actor* thisx, GlobalContext* globalCtx) {
     DoorAna* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    this->actor.shape.rot.y = BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)));
+    this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
 }
 
 void DoorAna_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, gameplay_field_keep_DL_000C40);
+    Gfx_DrawDListXlu(globalCtx, gameplay_field_keep_DL_000C40);
 }

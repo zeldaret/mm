@@ -5,8 +5,9 @@
  */
 
 #include "z_en_stream.h"
+#include "objects/object_stream/object_stream.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnStream*)thisx)
 
@@ -32,8 +33,6 @@ const ActorInit En_Stream_InitVars = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 20, ICHAIN_STOP),
 };
-
-extern Gfx D_06000950[];
 
 void EnStream_SetupAction(EnStream* this, EnStreamActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -144,7 +143,7 @@ void EnStream_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(&gfx[1], 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, frames * 30, -multipliedFrames, 64, 64, 1, multipliedFrames,
                                 -multipliedFrames, 64, 64));
-    gSPDisplayList(&gfx[2], D_06000950);
+    gSPDisplayList(&gfx[2], gWaterVortexDL);
     POLY_XLU_DISP = &gfx[3];
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

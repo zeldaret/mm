@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_goron_oyu.h"
+#include "objects/object_oyu/object_oyu.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgGoronOyu*)thisx)
 
@@ -33,11 +34,6 @@ const ActorInit Bg_Goron_Oyu_InitVars = {
     (ActorFunc)BgGoronOyu_Update,
     (ActorFunc)BgGoronOyu_Draw,
 };
-
-extern Gfx D_06000080;
-extern Gfx D_06000158;
-extern AnimatedMaterial D_06000968;
-extern CollisionHeader D_06000988;
 
 void func_80B40080(BgGoronOyu* this) {
     this->unk_17E = 1;
@@ -78,7 +74,7 @@ void func_80B40160(BgGoronOyu* this, GlobalContext* globalCtx) {
         func_80B40080(this);
     }
 
-    func_8019F1C0(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfxAtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
@@ -95,8 +91,8 @@ void func_80B401F8(BgGoronOyu* this, GlobalContext* globalCtx) {
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        func_800B8A1C(&this->dyna.actor, globalCtx, 0xBA, this->dyna.actor.xzDistToPlayer,
-                      fabsf(this->dyna.actor.playerHeightRel));
+        Actor_PickUp(&this->dyna.actor, globalCtx, GI_MAX, this->dyna.actor.xzDistToPlayer,
+                     fabsf(this->dyna.actor.playerHeightRel));
     }
 }
 
@@ -133,7 +129,7 @@ void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
 
         if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos1) < this->waterBoxPos.y) {
             pos1.y = this->waterBoxPos.y + 10.0f;
-            EffectSsIceSmoke_Spawn(globalCtx, &pos1, &vel1, &D_801D15B0, scale);
+            EffectSsIceSmoke_Spawn(globalCtx, &pos1, &vel1, &gZeroVec3f, scale);
         }
         pos2.x = (Rand_ZeroOne() * this->waterBoxXLength) + this->waterBoxPos.x;
         pos2.y = this->waterBoxPos.y + 100.0f;
@@ -145,7 +141,7 @@ void BgGoronOyu_SpawnParticles(BgGoronOyu* this, GlobalContext* globalCtx) {
 
         if (BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &poly, &pos2) < this->waterBoxPos.y) {
             pos2.y = this->waterBoxPos.y + 10.0f;
-            EffectSsIceSmoke_Spawn(globalCtx, &pos2, &vel2, &D_801D15B0, scale);
+            EffectSsIceSmoke_Spawn(globalCtx, &pos2, &vel2, &gZeroVec3f, scale);
         }
     }
 }
@@ -157,7 +153,7 @@ void BgGoronOyu_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
     DynaPolyActor_Init(&this->dyna, 1);
-    CollisionHeader_GetVirtual(&D_06000988, &colHeader);
+    CollisionHeader_GetVirtual(&object_oyu_Colheader_000988, &colHeader);
 
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
 
@@ -188,9 +184,9 @@ void BgGoronOyu_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgGoronOyu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_06000968));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, &D_06000158);
-    gSPDisplayList(POLY_XLU_DISP++, &D_06000080);
+    gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
+    gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

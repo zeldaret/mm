@@ -6,7 +6,7 @@
 
 #include "z_en_bu.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnBu*)thisx)
 
@@ -44,7 +44,7 @@ void EnBu_DoNothing(EnBu* this, GlobalContext* globalCtx) {
 void EnBu_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBu* this = THIS;
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     this->actionFunc(this, globalCtx);
 }
 

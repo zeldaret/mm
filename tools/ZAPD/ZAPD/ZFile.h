@@ -52,7 +52,7 @@ public:
 	void ExtractResources();
 	void BuildSourceFile();
 	void AddResource(ZResource* res);
-	ZResource* FindResource(uint32_t rawDataIndex);
+	ZResource* FindResource(offset_t rawDataIndex);
 	std::vector<ZResource*> GetResourcesOfType(ZResourceType resType);
 
 	Declaration* AddDeclaration(offset_t address, DeclarationAlignment alignment, size_t size,
@@ -133,5 +133,5 @@ protected:
 
 	std::string ProcessTextureIntersections(const std::string& prefix);
 	void HandleUnaccountedData();
-	bool HandleUnaccountedAddress(uint32_t currentAddress, uint32_t lastAddr, uint32_t& lastSize);
+	bool HandleUnaccountedAddress(offset_t currentAddress, offset_t lastAddr, uint32_t& lastSize);
 };

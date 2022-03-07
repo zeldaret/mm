@@ -64,7 +64,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801514B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801518B0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_StartTextbox.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151938.s")
 
@@ -80,7 +80,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152464.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152498.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_GetState.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")
 

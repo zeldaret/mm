@@ -5,8 +5,9 @@
  */
 
 #include "z_en_ending_hero.h"
+#include "objects/object_dt/object_dt.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnEndingHero*)thisx)
 
@@ -30,26 +31,16 @@ const ActorInit En_Ending_Hero_InitVars = {
     (ActorFunc)EnEndingHero_Draw,
 };
 
-extern FlexSkeletonHeader D_0600B0CC;
-extern AnimationHeader D_06000BE0;
-extern UNK_PTR D_06007350[];
-extern UNK_PTR D_06009590[];
-extern UNK_PTR D_06009F90[];
-extern UNK_PTR D_0600A790[];
-extern UNK_PTR D_0600AB90[];
-extern UNK_PTR D_06007750[];
-extern UNK_PTR D_0600A390[];
-extern UNK_PTR D_0600A490[];
-
 void EnEndingHero_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
 
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B0CC, &D_06000BE0, this->jointTable, this->morphTable, 15);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_000BE0, this->jointTable,
+                       this->morphTable, 15);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     func_80C1E748(this);
 }
 
@@ -76,12 +67,18 @@ void EnEndingHero_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
 }
 
-static UNK_PTR D_80C1E970[] = { D_06007350, D_06009590, D_06009F90, D_0600A790, D_0600AB90 };
-static UNK_PTR D_80C1E984[] = { D_06007750, D_0600A390, D_0600A490 };
+static TexturePtr D_80C1E970[] = {
+    object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90, object_dt_Tex_00A790, object_dt_Tex_00AB90,
+};
+static TexturePtr D_80C1E984[] = {
+    object_dt_Tex_007750,
+    object_dt_Tex_00A390,
+    object_dt_Tex_00A490,
+};
 
 void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnEndingHero* this = THIS;
@@ -99,7 +96,7 @@ void EnEndingHero_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1E984[index]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          0, 0, &this->actor);
+                          NULL, NULL, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -6,8 +6,10 @@
 
 #include "z_en_daiku2.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "objects/object_daiku/object_daiku.h"
+#include "objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDaiku2*)thisx)
 
@@ -29,22 +31,6 @@ void func_80BE71A0(EnDaiku2* this);
 void func_80BE71D8(EnDaiku2* this, GlobalContext* globalCtx);
 void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06002134;
-extern AnimationHeader D_06002FA0;
-extern AnimationHeader D_0600ACD0;
-extern AnimationHeader D_0600C92C;
-extern AnimationHeader D_06000C44;
-extern AnimationHeader D_0600C234;
-extern AnimationHeader D_06000600;
-extern AnimationHeader D_06001114;
-extern AnimationHeader D_0600B690;
-extern AnimationHeader D_06001A24;
-extern AnimationHeader D_0600D328;
-extern FlexSkeletonHeader D_0600A850;
-extern Gfx D_06009638[];
-extern Gfx D_0600A390[];
-extern Gfx D_060009E0[];
 
 const ActorInit En_Daiku2_InitVars = {
     ACTOR_EN_DAIKU2,
@@ -95,8 +81,9 @@ void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 day = gSaveContext.day;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 40.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600A850, &D_06002FA0, this->jointTable, this->morphTable, 17);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0,
+                       this->jointTable, this->morphTable, 17);
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
@@ -135,8 +122,9 @@ void EnDaiku2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80BE6408(EnDaiku2* this, s32 arg1) {
     static AnimationHeader* sAnimations[] = {
-        &D_06002FA0, &D_0600ACD0, &D_0600C92C, &D_06000C44, &D_0600C234, &D_06000600,
-        &D_06001114, &D_0600B690, &D_06001A24, &D_06002134, &D_0600D328,
+        &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C, &object_daiku_Anim_000C44,
+        &object_daiku_Anim_00C234, &object_daiku_Anim_000600, &object_daiku_Anim_001114, &object_daiku_Anim_00B690,
+        &object_daiku_Anim_001A24, &object_daiku_Anim_002134, &object_daiku_Anim_00D328,
     };
     static u8 D_80BE7958[] = {
         0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0,
@@ -158,11 +146,11 @@ s32 func_80BE64C0(EnDaiku2* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-    bomb = (EnBom*)func_800BE0B8(globalCtx, &this->actor, -1, ACTORCAT_EXPLOSIVES, BREG(7) + 240.0f);
+    bomb = (EnBom*)Actor_FindNearby(globalCtx, &this->actor, -1, ACTORCAT_EXPLOSIVES, BREG(7) + 240.0f);
     Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
     if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && !Flags_GetSwitch(globalCtx, this->unk_278) && (bomb != NULL) &&
         (bomb->actor.id == ACTOR_EN_BOM)) {
-        if (bomb->unk_1F9 == 0) {
+        if (!bomb->isPowderKeg) {
             this->actor.textId = 0x32D3;
         } else {
             this->actor.textId = 0x32D4;
@@ -233,7 +221,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 
     this->actor.textId = sTextIds[this->unk_28A];
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80BE6B40(this, globalCtx);
         return;
     }
@@ -245,7 +233,7 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
 
     func_800B8614(&this->actor, globalCtx, 80.0f);
     if ((this->unk_276 == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EV_ROCK_BROKEN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
         for (i = 0; i < 10; i++) {
             Math_Vec3f_Copy(&sp70, &this->actor.world.pos);
@@ -274,8 +262,8 @@ void func_80BE66E4(EnDaiku2* this, GlobalContext* globalCtx) {
             if ((this->unk_276 == 5) || (this->unk_276 == 9)) {
                 func_80BE6408(this, 10);
             } else if ((this->unk_276 == 10) && (this->unk_284 <= sp9C)) {
-                this->unk_284 = Animation_GetLastFrame(&D_06002134);
-                Animation_Change(&this->skelAnime, &D_06002134, -1.0f, this->unk_284, 0.0f, 2, -4.0f);
+                this->unk_284 = Animation_GetLastFrame(&object_daiku_Anim_002134);
+                Animation_Change(&this->skelAnime, &object_daiku_Anim_002134, -1.0f, this->unk_284, 0.0f, 2, -4.0f);
                 this->unk_276 = 11;
             } else if ((this->unk_276 == 11) && (sp9C <= 0.0f)) {
                 func_80BE6408(this, 8);
@@ -304,7 +292,7 @@ void func_80BE6B40(EnDaiku2* this, GlobalContext* globalCtx) {
 
 void func_80BE6BC0(EnDaiku2* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0x0);
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         s32 day = gSaveContext.day - 1;
 
         func_801477B4(globalCtx);
@@ -342,7 +330,7 @@ void func_80BE6D40(EnDaiku2* this, GlobalContext* globalCtx) {
     s32 pad[3];
     s16 sp3A = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_268);
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
@@ -376,7 +364,7 @@ void func_80BE6EF0(EnDaiku2* this, GlobalContext* globalCtx) {
     Vec3f sp40;
     s16 var;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BE6BC0;
         return;
     }
@@ -460,8 +448,8 @@ void EnDaiku2_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, globalCtx);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_SetHeight(&this->actor, 65.0f);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_SetFocus(&this->actor, 65.0f);
+    Actor_MoveWithGravity(&this->actor);
     Math_ApproachF(&this->unk_260, this->unk_264, 0.3f, 2.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -479,11 +467,11 @@ void EnDaiku2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (limbIndex == 14) {
         Matrix_Scale(this->unk_260, this->unk_260, this->unk_260, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_06009638);
+        gSPDisplayList(POLY_OPA_DISP++, object_daiku_DL_009638);
     }
 
     if (limbIndex == 15) {
-        gSPDisplayList(POLY_OPA_DISP++, D_0600A390);
+        gSPDisplayList(POLY_OPA_DISP++, object_daiku_DL_00A390);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -569,7 +557,7 @@ void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
                 Matrix_Scale(particle->unk_30, particle->unk_30, particle->unk_30, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, D_060009E0);
+                gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_0009E0);
 
                 Matrix_StatePop();
             }
