@@ -76,8 +76,7 @@ void func_80BC47B0(BgF40Switch* this, GlobalContext* globalCtx) {
                     switchFlag = BGF40SWITCH_GET_SWITCHFLAG(actorAsSwitch);
                     if (switchFlag >= 0 && switchFlag < 0x80) {
                         pressedSwitchFlags[(switchFlag & ~0x1F) >> 5] |= 1 << (switchFlag & 0x1F);
-                        if (!actorAsSwitch->wasPressed &&
-                            actorAsSwitch->actionFunc == BgF40Switch_IdleUnpressed &&
+                        if (!actorAsSwitch->wasPressed && actorAsSwitch->actionFunc == BgF40Switch_IdleUnpressed &&
                             !Flags_GetSwitch(globalCtx, switchFlag)) {
                             actorAsSwitch->isInitiator = true;
                         }
