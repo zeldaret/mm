@@ -63,7 +63,8 @@ void DoorAna_SetupAction(DoorAna* this, DoorAnaActionFunc actionFunction) {
 
 void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
     DoorAna* this = THIS;
-    s32 grottoType = DOORANA_GET_TYPE(this);
+    s32 grottoType = DOORANA_GET_TYPE(&this->actor);
+
     this->actor.shape.rot.y = this->actor.shape.rot.z = 0;
 
     if (grottoType == DOORANA_TYPE_HIDDEN_STORMS || grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
@@ -85,7 +86,7 @@ void DoorAna_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DoorAna* this = THIS;
-    s32 grottoType = DOORANA_GET_TYPE(this);
+    s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (grottoType == DOORANA_TYPE_HIDDEN_BOMB) {
         Collider_DestroyCylinder(globalCtx, &this->bombCollider);
@@ -94,7 +95,7 @@ void DoorAna_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
     s32 grottoIsOpen = false;
-    u32 grottoType = DOORANA_GET_TYPE(this);
+    u32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (grottoType == DOORANA_TYPE_HIDDEN_STORMS) {
         //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
@@ -115,7 +116,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
     }
 
     if (grottoIsOpen) {
-        this->actor.params &= ~DOORANA_TYPE_BITRANGE;
+        DOORANA_SET_TYPE_VISIBLE(&this->actor);
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
         play_sound(NA_SE_SY_CORRECT_CHIME);
     }
@@ -125,18 +126,18 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
 
 void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 grottoType = DOORANA_GET_TYPE(this);
+    s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
         if (this->actor.targetMode != 0 && globalCtx->sceneLoadFlag == 0 && globalCtx->unk_18B4A == 0 &&
             (player->stateFlags1 & 0x80000000) && player->unk_AE7 == 0) {
 
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
-                s32 exitIndex = DOORANA_GET_EXIT_INDEX(this);
+                s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
 
                 globalCtx->nextEntranceIndex = globalCtx->setupExitList[exitIndex];
             } else {
-                s32 destinationIdx = DOORANA_GET_ENTRANCE(this);
+                s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
                 Play_SetupRespawnPoint(&globalCtx->state, 3, 0x4FF);
 
@@ -144,10 +145,10 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
                 gSaveContext.respawn[3].yaw = this->actor.home.rot.y;
 
                 // Stores item and chest flag that ACTOR_EN_TORCH uses for spawning the grotto chest
-                gSaveContext.respawn[3].data = DOORANA_GET_ITEMFLAGS(this);
+                gSaveContext.respawn[3].data = DOORANA_GET_ITEMFLAGS(&this->actor);
 
                 if (destinationIdx < 0) {
-                    destinationIdx = DOORANA_GET_EX_ENTRANCE(this);
+                    destinationIdx = DOORANA_GET_EX_ENTRANCE(&this->actor);
                 }
 
                 globalCtx->nextEntranceIndex = sEntranceIndexes[destinationIdx];
