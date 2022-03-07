@@ -189,10 +189,10 @@ void EnLookNuts_SetupStandAndWait(EnLookNuts* this) {
     Animation_Change(&this->skelAnime, &gDekuPalaceGuardWalkAnim, 1.0f, 0.0f,
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 2, -10.0f);
     this->waitTimer = Rand_S16Offset(1, 3);
-    this->headRotationTarget.y = 10000.0f;
+    this->headRotTarget.y = 10000.0f;
 
     if (Rand_ZeroOne() < 0.5f) {
-        this->headRotationTarget.y = -10000.0f;
+        this->headRotTarget.y = -10000.0f;
     }
     this->eventTimer = 10;
     this->state = PALACE_GUARD_WAITING;
@@ -214,34 +214,34 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, GlobalContext* globalCtx) {
             case 3:
             case 4:
                 this->waitTimer++;
-                this->headRotationTarget.y *= -1.0f;
+                this->headRotTarget.y *= -1.0f;
                 break;
             case 5:
-                this->headRotationTarget.y = 0.0f;
+                this->headRotTarget.y = 0.0f;
                 randOffset = Rand_S16Offset(1, 2);
                 this->eventTimer = 0;
                 this->waitTimer += randOffset;
                 break;
             case 6:
-                if (fabsf(this->headRotationTarget.y - this->headRotation.y) < 10.0f) {
+                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
                     this->waitTimer = 10;
-                    this->headRotationTarget.x = 4000.0f;
+                    this->headRotTarget.x = 4000.0f;
                     this->eventTimer = 5;
                 }
                 break;
             case 7:
-                if (fabsf(this->headRotationTarget.y - this->headRotation.y) < 10.0f) {
-                    this->headRotationTarget.z = 4000.0f;
+                if (fabsf(this->headRotTarget.y - this->headRotation.y) < 10.0f) {
+                    this->headRotTarget.z = 4000.0f;
                     this->waitTimer++;
                 }
                 break;
             case 8:
                 this->waitTimer = 10;
                 this->eventTimer = 20;
-                this->headRotationTarget.z = -8000.0f;
+                this->headRotTarget.z = -8000.0f;
                 break;
             case 10:
-                Math_Vec3f_Copy(&this->headRotationTarget, &gZeroVec3f);
+                Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                 this->waitTimer = 11;
                 break;
             case 11:
@@ -263,7 +263,7 @@ void EnLookNuts_DetectedPlayer(EnLookNuts* this, GlobalContext* globalCtx) {
                      Animation_GetLastFrame(&gDekuPalaceGuardWalkAnim), 0, -10.0f);
     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
     this->eventTimer = 300;
-    func_801518B0(globalCtx, 0x833, &this->actor);
+    Message_StartTextbox(globalCtx, 0x833, &this->actor);
     this->actionFunc = EnLookNuts_RunToPlayer;
 }
 
@@ -352,7 +352,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
                 Player* player = GET_PLAYER(globalCtx);
 
                 if (!(player->stateFlags3 & 0x100) && !func_801690CC(globalCtx)) {
-                    Math_Vec3f_Copy(&this->headRotationTarget, &gZeroVec3f);
+                    Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     play_sound(NA_SE_SY_FOUND);
                     func_800B7298(globalCtx, &this->actor, 0x1A);
@@ -365,9 +365,9 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
         }
-        Math_ApproachF(&this->headRotation.x, this->headRotationTarget.x, 1.0f, 3000.0f);
-        Math_ApproachF(&this->headRotation.y, this->headRotationTarget.y, 1.0f, 6000.0f);
-        Math_ApproachF(&this->headRotation.z, this->headRotationTarget.z, 1.0f, 2000.0f);
+        Math_ApproachF(&this->headRotation.x, this->headRotTarget.x, 1.0f, 3000.0f);
+        Math_ApproachF(&this->headRotation.y, this->headRotTarget.y, 1.0f, 6000.0f);
+        Math_ApproachF(&this->headRotation.z, this->headRotTarget.z, 1.0f, 2000.0f);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
