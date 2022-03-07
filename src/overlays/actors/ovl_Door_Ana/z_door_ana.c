@@ -116,7 +116,7 @@ void DoorAna_WaitClosed(DoorAna* this, GlobalContext* globalCtx) {
     }
 
     if (grottoIsOpen) {
-        DOORANA_SET_TYPE_VISIBLE(&this->actor);
+        DOORANA_SET_TYPE(&this->actor, DOORANA_TYPE_VISIBLE);
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
         play_sound(NA_SE_SY_CORRECT_CHIME);
     }

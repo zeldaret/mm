@@ -26,6 +26,6 @@ extern const ActorInit Door_Ana_InitVars;
 #define DOORANA_GET_EX_ENTRANCE(thisx) ((thisx)->home.rot.z + 1)
 #define DOORANA_GET_EXIT_INDEX(thisx) ((thisx)->params & 0x1F)
 #define DOORANA_GET_ITEMFLAGS(thisx) ((thisx)->params & 0xFF)
-#define DOORANA_SET_TYPE_VISIBLE(thisx) ((thisx)->params &= ~DOORANA_TYPE_BITMASK)
+#define DOORANA_SET_TYPE(thisx, t) ((thisx)->params = ((thisx)->params & ~DOORANA_TYPE_BITMASK) + (t))
 
 #endif // Z_DOOR_ANA_H
