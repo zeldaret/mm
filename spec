@@ -4531,8 +4531,11 @@ beginseg
     name "ovl_En_Tanron1"
     compress
     include "build/src/overlays/actors/ovl_En_Tanron1/z_en_tanron1.o"
-    include "build/data/ovl_En_Tanron1/ovl_En_Tanron1.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Tanron1/ovl_En_Tanron1_reloc.o"
+#else
     include "build/data/ovl_En_Tanron1/ovl_En_Tanron1.reloc.o"
+#endif
 endseg
 
 beginseg
