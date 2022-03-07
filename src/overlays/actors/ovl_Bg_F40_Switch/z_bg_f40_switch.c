@@ -49,9 +49,9 @@ void func_80BC47B0(BgF40Switch* this, GlobalContext* globalCtx) {
         s32 isPressed;
         Actor* actor;
         BgF40Switch* actorAsSwitch;
-        u32 unk40 = func_801233E4(globalCtx);
+        u32 inCsMode = Player_InCsMode(&globalCtx->state);
 
-        for (actor = globalCtx->actorCtx.actorList[ACTORCAT_SWITCH].first; actor != NULL; actor = actor->next) {
+        for (actor = globalCtx->actorCtx.actorLists[ACTORCAT_SWITCH].first; actor != NULL; actor = actor->next) {
             if (actor->id == ACTOR_BG_F40_SWITCH && actor->room == this->actor.actor.room && actor->update != NULL) {
                 actorAsSwitch = (BgF40Switch*)actor;
                 actorAsSwitch->wasPressed = actorAsSwitch->isPressed;
@@ -59,7 +59,7 @@ void func_80BC47B0(BgF40Switch* this, GlobalContext* globalCtx) {
                 if (actorAsSwitch->isPressed && actorAsSwitch->actionFunc == BgF40Switch_IdlePressed) {
                     // Switch is fully pressed - if there's nothing keeping it pressed, wait a short time before
                     // reverting to unpressed state.
-                    if (isPressed || unk40) {
+                    if (isPressed || inCsMode) {
                         actorAsSwitch->switchReleaseDelay = 6;
                     } else {
                         if (actorAsSwitch->switchReleaseDelay > 0) {
@@ -85,12 +85,12 @@ void func_80BC47B0(BgF40Switch* this, GlobalContext* globalCtx) {
                 }
             }
         }
-        for (actor = globalCtx->actorCtx.actorList[ACTORCAT_SWITCH].first; actor != NULL; actor = actor->next) {
+        for (actor = globalCtx->actorCtx.actorLists[ACTORCAT_SWITCH].first; actor != NULL; actor = actor->next) {
             if (actor->id == ACTOR_BG_F40_SWITCH && actor->room == this->actor.actor.room && actor->update != 0) {
                 switchFlag = BGF40SWITCH_GET_SWITCHFLAG((BgF40Switch*)actor);
                 if (switchFlag >= 0 && switchFlag < 0x80 && Flags_GetSwitch(globalCtx, switchFlag) &&
                     !(pressedSwitchFlags[(switchFlag & ~0x1F) >> 5] & (1 << (switchFlag & 0x1F)))) {
-                    Actor_UnsetSwitchFlag(globalCtx, switchFlag);
+                    Flags_UnsetSwitch(globalCtx, switchFlag);
                 }
             }
         }
@@ -129,7 +129,7 @@ void BgF40Switch_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void BgF40Switch_Unpress(BgF40Switch* this, GlobalContext* globalCtx) {
     this->actor.actor.scale.y += 0.0495f;
     if (this->actor.actor.scale.y >= 0.165f) {
-        Audio_PlayActorSound2(&this->actor.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
+        Actor_PlaySfxAtPos(&this->actor.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
         this->actionFunc = BgF40Switch_IdleUnpressed;
         this->actor.actor.scale.y = 0.165f;
     }
@@ -144,7 +144,7 @@ void BgF40Switch_IdlePressed(BgF40Switch* this, GlobalContext* globalCtx) {
 void BgF40Switch_Press(BgF40Switch* this, GlobalContext* globalCtx) {
     this->actor.actor.scale.y -= 0.0495f;
     if (this->actor.actor.scale.y <= 0.0165f) {
-        Audio_PlayActorSound2(&this->actor.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
+        Actor_PlaySfxAtPos(&this->actor.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
         func_8013ECE0(this->actor.actor.xyzDistToPlayerSq, 120, 20, 10);
         if (this->isInitiator) {
             ActorCutscene_Stop(this->actor.actor.cutscene);
@@ -160,13 +160,13 @@ void BgF40Switch_WaitToPress(BgF40Switch* this, GlobalContext* globalCtx) {
     if (!this->isInitiator || this->actor.actor.cutscene == -1) {
         this->actionFunc = BgF40Switch_Press;
         if (this->isInitiator) {
-            Actor_SetSwitchFlag(globalCtx, BGF40SWITCH_GET_SWITCHFLAG(this));
+            Flags_SetSwitch(globalCtx, BGF40SWITCH_GET_SWITCHFLAG(this));
         }
     } else if (ActorCutscene_GetCanPlayNext(this->actor.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.actor.cutscene, &this->actor.actor);
         this->actionFunc = BgF40Switch_Press;
         if (this->isInitiator) {
-            Actor_SetSwitchFlag(globalCtx, BGF40SWITCH_GET_SWITCHFLAG(this));
+            Flags_SetSwitch(globalCtx, BGF40SWITCH_GET_SWITCHFLAG(this));
         }
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.actor.cutscene);
@@ -189,6 +189,6 @@ void BgF40Switch_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgF40Switch_Draw(Actor* thisx, GlobalContext* globalCtx) {
     BgF40Switch* this = THIS;
 
-    func_800BDFC0(globalCtx, object_f40_switch_DL_000438);
-    func_800BDFC0(globalCtx, object_f40_switch_DL_000390);
+    Gfx_DrawDListOpa(globalCtx, object_f40_switch_DL_000438);
+    Gfx_DrawDListOpa(globalCtx, object_f40_switch_DL_000390);
 }
