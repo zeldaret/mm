@@ -228,7 +228,8 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
         }
     }
     this->actor.shape.rot.z = (Math_SinS(this->unk1D4) * this->unk1D0);
-    if ((this->stateFlags & OBJCHAN_STATE_START_CUTSCENE) && SubS_StartActorCutscene(&this->actor, this->cutscenes[0], -1, 0)) {
+    if ((this->stateFlags & OBJCHAN_STATE_START_CUTSCENE) &&
+        SubS_StartActorCutscene(&this->actor, this->cutscenes[0], -1, 0)) {
         this->stateFlags |= OBJCHAN_STATE_CUTSCENE;
         this->stateFlags &= ~OBJCHAN_STATE_START_CUTSCENE;
     }
@@ -246,9 +247,8 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
     for (i = 0; i < 5; i++) {
         temp = this->pots[i];
         if (temp != NULL) {
-            ObjChan_CalculatePotPosition(
-                &sp60, &sp58, &this->actor.world.pos, &this->actor.shape.rot,
-                (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
+            ObjChan_CalculatePotPosition(&sp60, &sp58, &this->actor.world.pos, &this->actor.shape.rot,
+                                         (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
             Math_Vec3f_Copy(&temp->actor.world.pos, (Vec3f*)&sp60);
             Math_Vec3s_Copy(&temp->actor.shape.rot, &this->actor.shape.rot);
             temp->actor.shape.rot.y = this->rotation;
@@ -422,15 +422,15 @@ void func_80BBA930(ObjChan* this, GlobalContext* globalCtx) {
 
     sp4C = globalCtx->gameplayFrames;
 
-    Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000, MTXMODE_APPLY);
+    Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000,
+                   MTXMODE_APPLY);
     Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].x * this->flameSize,
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
     Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(this)], 0.0f, MTXMODE_APPLY);
 
     dl = func_8012C2B4(POLY_XLU_DISP);
     gSPMatrix(dl, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-    gMoveWd(dl + 1, 6, 32,
-            Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0U, -sp4C * 20, 32, 128));
+    gMoveWd(dl + 1, 6, 32, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0U, -sp4C * 20, 32, 128));
     gDPSetPrimColor(dl + 2, 128, 128, 255, 255, 0, 255);
     gDPSetEnvColor(dl + 3, 255, 0, 0, 0);
     gSPDisplayList(dl + 4, &gGameplayKeepDrawFlameDL);
