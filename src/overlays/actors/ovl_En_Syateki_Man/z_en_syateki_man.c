@@ -5,8 +5,9 @@
  */
 
 #include "z_en_syateki_man.h"
+#include "objects/object_shn/object_shn.h"
 
-#define FLAGS 0x08000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -34,16 +35,6 @@ void func_809C8808(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C898C(EnSyatekiMan* this, GlobalContext* globalCtx);
 void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx);
 
-extern UNK_PTR D_06005AC8;
-extern UNK_PTR D_060062C8;
-extern AnimationHeader D_0600D2F8;
-extern AnimationHeader D_0600D9D0;
-extern AnimationHeader D_0600DFEC;
-extern FlexSkeletonHeader D_0600E7D0;
-extern Gfx D_0600F2D0[];
-extern UNK_PTR D_0600FB90;
-extern UNK_PTR D_06010390;
-
 const ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
     ACTORCAT_NPC,
@@ -56,10 +47,10 @@ const ActorInit En_Syateki_Man_InitVars = {
     (ActorFunc)EnSyatekiMan_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &D_0600D9D0, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600DFEC, 1.0f, 0.0f, 0.0f, 0, -8.0f },
-    { &D_0600D2F8, 1.0f, 0.0f, 0.0f, 2, -8.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_shn_Anim_00D9D0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_shn_Anim_00DFEC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &object_shn_Anim_00D2F8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
 };
 
 static s16 D_809C91C8[] = {
@@ -141,11 +132,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600DFEC, this->jointTable, this->morphTable,
-                           16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00DFEC, this->jointTable,
+                           this->morphTable, OBJECT_SHN_LIMB_MAX);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E7D0, &D_0600D9D0, this->jointTable, this->morphTable,
-                           16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00D9D0, this->jointTable,
+                           this->morphTable, OBJECT_SHN_LIMB_MAX);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -216,34 +207,34 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         u16 sp22;
 
-        Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
         sp22 = Text_GetFaceReaction(globalCtx, 0x31);
         if (sp22 != 0) {
-            func_801518B0(globalCtx, sp22, &this->actor);
+            Message_StartTextbox(globalCtx, sp22, &this->actor);
             this->unk_284 = sp22;
         } else if (player->transformation == PLAYER_FORM_HUMAN) {
             if (this->unk_282 == 0) {
                 this->unk_282 = 1;
-                func_801518B0(globalCtx, 0xA28, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA28, &this->actor);
                 this->unk_284 = 0xA28;
             } else {
-                func_801518B0(globalCtx, 0xA29, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA29, &this->actor);
                 this->unk_284 = 0xA29;
             }
         } else {
             switch (CURRENT_DAY) {
                 case 1:
-                    func_801518B0(globalCtx, 0xA38, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA38, &this->actor);
                     this->unk_284 = 0xA38;
                     break;
 
                 case 2:
-                    func_801518B0(globalCtx, 0xA39, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA39, &this->actor);
                     this->unk_284 = 0xA39;
                     break;
 
                 case 3:
-                    func_801518B0(globalCtx, 0xA3A, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA3A, &this->actor);
                     this->unk_284 = 0xA3A;
                     break;
             }
@@ -265,11 +256,11 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             if (!CUR_UPG_VALUE(UPG_QUIVER)) {
                 play_sound(NA_SE_SY_ERROR);
-                func_801518B0(globalCtx, 0xA30, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA30, &this->actor);
                 this->unk_284 = 0xA30;
             } else if (gSaveContext.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
-                func_801518B0(globalCtx, 0xA31, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA31, &this->actor);
                 this->unk_284 = 0xA31;
                 if (this->unk_26A == 4) {
                     gSaveContext.minigameState = 3;
@@ -280,7 +271,7 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 func_801159EC(-20);
                 gSaveContext.weekEventReg[63] |= 1;
                 gSaveContext.weekEventReg[63] &= (u8)~2;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_26A = 7;
                 player->stateFlags1 |= 0x20;
@@ -291,17 +282,17 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
             switch (CURRENT_DAY) {
                 case 1:
-                    func_801518B0(globalCtx, 0xA2D, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA2D, &this->actor);
                     this->unk_284 = 0xA2D;
                     break;
 
                 case 2:
-                    func_801518B0(globalCtx, 0xA2E, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA2E, &this->actor);
                     this->unk_284 = 0xA2E;
                     break;
 
                 case 3:
-                    func_801518B0(globalCtx, 0xA2F, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA2F, &this->actor);
                     this->unk_284 = 0xA2F;
                     break;
             }
@@ -322,14 +313,14 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
         switch (this->unk_284) {
             case 0xA28:
             case 0xA29:
-                func_801518B0(globalCtx, 0xA2A, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA2A, &this->actor);
                 this->unk_284 = 0xA2A;
                 break;
 
             case 0xA2B:
             case 0xA2C:
             case 0xA35:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 func_80112AFC(globalCtx);
@@ -350,19 +341,19 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     gSaveContext.minigameState = 3;
                     this->unk_26A = 0;
                 } else {
-                    func_801518B0(globalCtx, 0xA33, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA33, &this->actor);
                     this->unk_284 = 0xA33;
                 }
                 break;
 
             case 0xA33:
-                func_801518B0(globalCtx, 0xA2A, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA2A, &this->actor);
                 this->unk_284 = 0xA2A;
                 this->unk_26A = 4;
                 break;
 
             case 0xA34:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
@@ -397,7 +388,7 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
         case 6:
             if (func_80147624(globalCtx)) {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->stateFlags1 &= ~0x20;
                 gSaveContext.weekEventReg[63] &= (u8)~1;
@@ -417,9 +408,9 @@ void func_809C6E30(EnSyatekiMan* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (this->skelAnime.animation == &D_0600D2F8) {
+    if (this->skelAnime.animation == &object_shn_Anim_00D2F8) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
         }
     }
 }
@@ -431,18 +422,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 1)) {
                     this->unk_282 |= 1;
-                    func_801518B0(globalCtx, 0x3E8, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3E8, &this->actor);
                     this->unk_284 = 0x3E8;
                 } else {
-                    func_801518B0(globalCtx, 0x3E9, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3E9, &this->actor);
                     this->unk_284 = 0x3E9;
                 }
             } else if (!(this->unk_282 & 1)) {
                 this->unk_282 |= 1;
-                func_801518B0(globalCtx, 0x3EA, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EA, &this->actor);
                 this->unk_284 = 0x3EA;
             } else {
-                func_801518B0(globalCtx, 0x3EB, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EB, &this->actor);
                 this->unk_284 = 0x3EB;
             }
             break;
@@ -451,18 +442,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 2)) {
                     this->unk_282 |= 2;
-                    func_801518B0(globalCtx, 0x3EC, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3EC, &this->actor);
                     this->unk_284 = 0x3EC;
                 } else {
-                    func_801518B0(globalCtx, 0x3ED, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3ED, &this->actor);
                     this->unk_284 = 0x3ED;
                 }
             } else if (!(this->unk_282 & 2)) {
                 this->unk_282 |= 2;
-                func_801518B0(globalCtx, 0x3EE, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EE, &this->actor);
                 this->unk_284 = 0x3EE;
             } else {
-                func_801518B0(globalCtx, 0x3EF, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EF, &this->actor);
                 this->unk_284 = 0x3EF;
             }
             break;
@@ -471,18 +462,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 8)) {
                     this->unk_282 |= 8;
-                    func_801518B0(globalCtx, 0x3F0, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F0, &this->actor);
                     this->unk_284 = 0x3F0;
                 } else {
-                    func_801518B0(globalCtx, 0x3F1, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F1, &this->actor);
                     this->unk_284 = 0x3F1;
                 }
             } else if (!(this->unk_282 & 8)) {
                 this->unk_282 |= 8;
-                func_801518B0(globalCtx, 0x3F4, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F4, &this->actor);
                 this->unk_284 = 0x3F4;
             } else {
-                func_801518B0(globalCtx, 0x3F5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F5, &this->actor);
                 this->unk_284 = 0x3F5;
             }
             break;
@@ -491,18 +482,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 4)) {
                     this->unk_282 |= 4;
-                    func_801518B0(globalCtx, 0x3F2, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F2, &this->actor);
                     this->unk_284 = 0x3F2;
                 } else {
-                    func_801518B0(globalCtx, 0x3F3, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F3, &this->actor);
                     this->unk_284 = 0x3F3;
                 }
             } else if (!(this->unk_282 & 4)) {
                 this->unk_282 |= 4;
-                func_801518B0(globalCtx, 0x3F4, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F4, &this->actor);
                 this->unk_284 = 0x3F4;
             } else {
-                func_801518B0(globalCtx, 0x3F5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F5, &this->actor);
                 this->unk_284 = 0x3F5;
             }
             break;
@@ -514,7 +505,7 @@ void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
         u16 sp26 = Text_GetFaceReaction(globalCtx, 0x30);
 
         if (sp26 != 0) {
-            func_801518B0(globalCtx, sp26, &this->actor);
+            Message_StartTextbox(globalCtx, sp26, &this->actor);
             this->unk_284 = sp26;
         } else {
             func_809C6F98(this, globalCtx);
@@ -533,19 +524,19 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (!CUR_UPG_VALUE(UPG_QUIVER)) {
                 play_sound(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
-                    func_801518B0(globalCtx, 0x3F9, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F9, &this->actor);
                     this->unk_284 = 0x3F9;
                 } else {
-                    func_801518B0(globalCtx, 0x3FA, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FA, &this->actor);
                     this->unk_284 = 0x3FA;
                 }
             } else if (gSaveContext.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
-                    func_801518B0(globalCtx, 0x3FB, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FB, &this->actor);
                     this->unk_284 = 0x3FB;
                 } else {
-                    func_801518B0(globalCtx, 0x3FC, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FC, &this->actor);
                     this->unk_284 = 0x3FC;
                 }
 
@@ -560,10 +551,10 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 this->unk_26A = 2;
                 if (!(this->unk_282 & 0x10)) {
                     this->unk_282 |= 0x10;
-                    func_801518B0(globalCtx, 0x3FD, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FD, &this->actor);
                     this->unk_284 = 0x3FD;
                 } else {
-                    func_801518B0(globalCtx, 0x3FF, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FF, &this->actor);
                     this->unk_284 = 0x3FF;
                 }
                 gSaveContext.weekEventReg[63] |= 1;
@@ -572,10 +563,10 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
         } else {
             func_8019F230();
             if (CURRENT_DAY != 3) {
-                func_801518B0(globalCtx, 0x3F7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F7, &this->actor);
                 this->unk_284 = 0x3F7;
             } else {
-                func_801518B0(globalCtx, 0x3F8, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F8, &this->actor);
                 this->unk_284 = 0x3F8;
             }
 
@@ -597,32 +588,32 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
             case 0x3E9:
             case 0x3EA:
             case 0x3EB:
-                func_801518B0(globalCtx, 0x3F6, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F6, &this->actor);
                 this->unk_284 = 0x3F6;
                 break;
 
             case 0x3EC:
-                func_801518B0(globalCtx, 0x3ED, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3ED, &this->actor);
                 this->unk_284 = 0x3ED;
                 break;
 
             case 0x3EE:
-                func_801518B0(globalCtx, 0x3EF, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EF, &this->actor);
                 this->unk_284 = 0x3EF;
                 break;
 
             case 0x3F0:
-                func_801518B0(globalCtx, 0x3F1, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F1, &this->actor);
                 this->unk_284 = 0x3F1;
                 break;
 
             case 0x3F2:
-                func_801518B0(globalCtx, 0x3F3, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F3, &this->actor);
                 this->unk_284 = 0x3F3;
                 break;
 
             case 0x3F4:
-                func_801518B0(globalCtx, 0x3F5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F5, &this->actor);
                 this->unk_284 = 0x3F5;
                 break;
 
@@ -630,14 +621,14 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
             case 0x3FF:
                 if (this->unk_26A == 4) {
                     if (this->unk_284 == 0x3FD) {
-                        func_801518B0(globalCtx, 0x3FE, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x3FE, &this->actor);
                         this->unk_284 = 0x3FE;
                     } else {
-                        func_801518B0(globalCtx, 0x400, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x400, &this->actor);
                         this->unk_284 = 0x400;
                     }
                 } else {
-                    globalCtx->msgCtx.unk11F22 = 0x43;
+                    globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     player->actor.freezeTimer = 0;
                     this->unk_26A = 7;
@@ -650,7 +641,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
             case 0x3FE:
             case 0x400:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 this->unk_27E = 0;
@@ -669,7 +660,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     this->unk_26A = 0;
                     this->actionFunc = func_809C72D8;
                 } else {
-                    func_801518B0(globalCtx, 0x402, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x402, &this->actor);
                     this->unk_284 = 0x402;
                 }
                 break;
@@ -682,14 +673,14 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     this->unk_26A = 0;
                     this->actionFunc = func_809C72D8;
                 } else {
-                    func_801518B0(globalCtx, 0x404, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x404, &this->actor);
                     this->unk_284 = 0x404;
                 }
                 break;
 
             case 0x402:
             case 0x404:
-                func_801518B0(globalCtx, 0x3F6, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F6, &this->actor);
                 this->unk_284 = 0x3F6;
                 this->unk_26A = 4;
                 break;
@@ -697,7 +688,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
             case 0x405:
             case 0x406:
             case 0x407:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 player->actor.freezeTimer = 0;
                 gSaveContext.minigameState = 3;
@@ -784,14 +775,14 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((CURRENT_DAY == 3) && (gSaveContext.time > CLOCK_TIME(12, 00))) {
-            func_801518B0(globalCtx, 0xA36, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA36, &this->actor);
             this->unk_284 = 0xA36;
         } else {
-            func_801518B0(globalCtx, 0xA37, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA37, &this->actor);
             this->unk_284 = 0xA37;
         }
         player->stateFlags1 &= ~0x20;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
         this->actionFunc = func_809C6E30;
@@ -850,10 +841,10 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
             this->actionFunc = func_809C6810;
         }
     } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, 0x408, &this->actor);
+        Message_StartTextbox(globalCtx, 0x408, &this->actor);
         this->unk_284 = 0x408;
         player->stateFlags1 &= ~0x20;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         this->unk_280 = 0;
         this->unk_26A = 0;
         this->actionFunc = func_809C7990;
@@ -870,10 +861,10 @@ void func_809C7FFC(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 2;
         if (this->unk_282 != 2) {
             this->unk_282 = 2;
-            func_801518B0(globalCtx, 0xA2B, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA2B, &this->actor);
             this->unk_284 = 0xA2B;
         } else {
-            func_801518B0(globalCtx, 0xA2C, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA2C, &this->actor);
             this->unk_284 = 0xA2C;
         }
         this->actionFunc = func_809C6E30;
@@ -983,12 +974,12 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_274 = 0;
         this->unk_276 = 0;
         if (this->unk_270 <= 0) {
-            if ((s32)((gSaveContext.roomInf[127][6] & 0xFFFF0000) >> 0x10) < this->unk_280) {
-                gSaveContext.roomInf[127][6] = ((gSaveContext.roomInf[127][6]) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
+            if ((s32)((gSaveContext.unk_EF4 & 0xFFFF0000) >> 0x10) < this->unk_280) {
+                gSaveContext.unk_EF4 = ((gSaveContext.unk_EF4) & 0xFFFF) | ((u16)this->unk_280 << 0x10);
             }
             this->unk_270 = 15;
             if (this->unk_280 >= 0x848) {
-                func_801518B0(globalCtx, 0xA34, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA34, &this->actor);
                 this->unk_284 = 0xA34;
                 this->unk_26A = 6;
             } else if (this->unk_280 >= 0x7D0) {
@@ -1000,12 +991,12 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     this->actionFunc = func_809C6848;
                     return;
                 }
-                func_801518B0(globalCtx, 0xA35, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA35, &this->actor);
                 this->unk_284 = 0xA35;
                 this->unk_26A = 4;
                 this->unk_280 = 0;
             } else {
-                func_801518B0(globalCtx, 0xA32, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA32, &this->actor);
                 this->unk_284 = 0xA32;
                 this->unk_26A = 6;
             }
@@ -1056,10 +1047,10 @@ void func_809C8710(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (func_809C6720(globalCtx, sp24)) {
         if (this->unk_284 == 0x3FD) {
-            func_801518B0(globalCtx, 0x3FE, &this->actor);
+            Message_StartTextbox(globalCtx, 0x3FE, &this->actor);
             this->unk_284 = 0x3FE;
         } else {
-            func_801518B0(globalCtx, 0x400, &this->actor);
+            Message_StartTextbox(globalCtx, 0x400, &this->actor);
             this->unk_284 = 0x400;
         }
         this->unk_26A = 2;
@@ -1173,30 +1164,30 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
         if ((this->unk_270 <= 0) && (globalCtx->interfaceCtx.unk_286 == 0)) {
             Flags_SetAllTreasure(globalCtx, this->unk_280);
             this->unk_270 = 15;
-            if (((s32)(gSaveContext.roomInf[127][6] & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
-                if ((s32)(gSaveContext.roomInf[127][6] & 0xFFFF) < this->unk_280) {
+            if (((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
+                if ((s32)(gSaveContext.unk_EF4 & 0xFFFF) < this->unk_280) {
                     if (!(gSaveContext.weekEventReg[59] & 0x20)) {
-                        func_801518B0(globalCtx, 0x407, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x407, &this->actor);
                         this->unk_284 = 0x407;
                     } else if (this->unk_280 == 50) {
-                        func_801518B0(globalCtx, 0x405, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x405, &this->actor);
                         this->unk_284 = 0x405;
                     } else {
-                        func_801518B0(globalCtx, 0x407, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x407, &this->actor);
                         this->unk_284 = 0x407;
                     }
                 } else if (this->unk_280 == 50) {
-                    func_801518B0(globalCtx, 0x406, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x406, &this->actor);
                     this->unk_284 = 0x406;
                 }
-                gSaveContext.roomInf[127][6] = (gSaveContext.roomInf[127][6] & 0xFFFF0000) | (this->unk_280 & 0xFFFF);
+                gSaveContext.unk_EF4 = (gSaveContext.unk_EF4 & 0xFFFF0000) | (this->unk_280 & 0xFFFF);
                 this->unk_26A = 6;
             } else {
                 if (CURRENT_DAY != 3) {
-                    func_801518B0(globalCtx, 0x401, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x401, &this->actor);
                     this->unk_284 = 0x401;
                 } else {
-                    func_801518B0(globalCtx, 0x403, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x403, &this->actor);
                     this->unk_284 = 0x403;
                 }
                 this->unk_26A = 4;
@@ -1251,7 +1242,7 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     EnSyatekiMan* this = THIS;
 
     if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == 15)) {
-        *dList = D_0600F2D0;
+        *dList = object_shn_DL_00F2D0;
     }
 
     if (limbIndex == 15) {
@@ -1276,22 +1267,22 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 }
 
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static UNK_PTR D_809C94B8[] = {
-        &D_06005AC8,
-        &D_060062C8,
-        &D_060062C8,
+    static TexturePtr D_809C94B8[] = {
+        object_shn_Tex_005AC8,
+        object_shn_Tex_0062C8,
+        object_shn_Tex_0062C8,
     };
     EnSyatekiMan* this = THIS;
     s32 pad;
 
     if (globalCtx->sceneNum == SCENE_SYATEKI_MIZU) {
-        D_809C94B8[0] = &D_0600FB90;
-        D_809C94B8[1] = &D_06010390;
-        D_809C94B8[2] = &D_06010390;
+        D_809C94B8[0] = object_shn_Tex_00FB90;
+        D_809C94B8[1] = object_shn_Tex_010390;
+        D_809C94B8[2] = object_shn_Tex_010390;
     } else {
-        D_809C94B8[0] = &D_06005AC8;
-        D_809C94B8[1] = &D_060062C8;
-        D_809C94B8[2] = &D_060062C8;
+        D_809C94B8[0] = object_shn_Tex_005AC8;
+        D_809C94B8[1] = object_shn_Tex_0062C8;
+        D_809C94B8[2] = object_shn_Tex_0062C8;
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

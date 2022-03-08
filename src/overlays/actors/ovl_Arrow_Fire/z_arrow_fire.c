@@ -6,7 +6,7 @@
 
 #include "z_arrow_fire.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((ArrowFire*)thisx)
 

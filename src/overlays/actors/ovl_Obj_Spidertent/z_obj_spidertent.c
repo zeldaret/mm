@@ -6,7 +6,7 @@
 
 #include "z_obj_spidertent.h"
 
-#define FLAGS 0x10000000
+#define FLAGS (ACTOR_FLAG_10000000)
 
 #define THIS ((ObjSpidertent*)thisx)
 

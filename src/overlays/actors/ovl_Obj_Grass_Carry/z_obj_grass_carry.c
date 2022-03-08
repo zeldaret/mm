@@ -6,7 +6,7 @@
 
 #include "z_obj_grass_carry.h"
 
-#define FLAGS 0x00800030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_800000)
 
 #define THIS ((ObjGrassCarry*)thisx)
 

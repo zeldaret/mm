@@ -5,8 +5,9 @@
  */
 
 #include "z_en_dnq.h"
+#include "objects/object_dnq/object_dnq.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnDnq*)thisx)
 
@@ -16,24 +17,6 @@ void EnDnq_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDnq_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80A52FB8(EnDnq* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060006F0;
-extern AnimationHeader D_06000BF8;
-extern AnimationHeader D_06001100;
-extern AnimationHeader D_06001AEC;
-extern AnimationHeader D_06002690;
-extern AnimationHeader D_06003408;
-extern AnimationHeader D_06003DBC;
-extern AnimationHeader D_060047B8;
-extern AnimationHeader D_06004EA0;
-extern AnimationHeader D_06005284;
-extern AnimationHeader D_06005A14;
-extern AnimationHeader D_06005E18;
-extern AnimationHeader D_06006984;
-extern AnimationHeader D_06007528;
-extern AnimationHeader D_06008328;
-extern FlexSkeletonHeader D_0600EB48;
-extern AnimationHeader D_0600F504;
 
 static s32 D_80A53400[] = {
     0x00120100, 0x150E0899, 0x0C120F08, 0x9A0C0F08, 0x9B0C0F08, 0x9C0C1112, 0x01100E08, 0x980C1000, 0x00120200,
@@ -74,14 +57,27 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static ActorAnimationEntryS D_80A5349C[] = {
-    { &D_06008328, 1.0f, 0, -1, 0, 0 },  { &D_06008328, 1.0f, 0, -1, 0, -4 }, { &D_06007528, 1.0f, 0, -1, 2, -4 },
-    { &D_060006F0, 1.0f, 0, -1, 2, 0 },  { &D_06000BF8, 1.0f, 0, -1, 0, -4 }, { &D_06002690, 0.0f, 0, -1, 2, 0 },
-    { &D_06002690, 1.0f, 0, -1, 2, -4 }, { &D_06003408, 1.0f, 0, -1, 0, -4 }, { &D_06006984, 1.0f, 0, -1, 2, -4 },
-    { &D_06005E18, 1.0f, 0, -1, 2, -4 }, { &D_06005A14, 1.0f, 0, -1, 2, -4 }, { &D_06005284, 1.0f, 0, -1, 2, -4 },
-    { &D_06001AEC, 1.0f, 0, -1, 2, 0 },  { &D_06001100, 1.0f, 0, -1, 2, 0 },  { &D_06004EA0, 1.0f, 0, -1, 0, -4 },
-    { &D_0600F504, 1.0f, 0, -1, 0, -4 }, { &D_060047B8, 1.0f, 0, -1, 0, -4 }, { &D_06003DBC, 1.0f, 0, -1, 2, -4 },
-    { &D_06005A14, 1.0f, 0, -1, 0, -4 }, { &D_06003DBC, 1.0f, 0, -1, 0, -4 },
+static AnimationInfoS D_80A5349C[] = {
+    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnq_Anim_008328, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_007528, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_0006F0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_000BF8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_002690, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_002690, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_003408, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_006984, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005E18, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005284, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_001AEC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_001100, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnq_Anim_004EA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_00F504, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_0047B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnq_Anim_005A14, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnq_Anim_003DBC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
 void func_80A52530(GlobalContext* globalCtx, EnDnq* this) {
@@ -108,7 +104,7 @@ s32 func_80A5257C(EnDnq* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_398 = arg1;
-        ret = func_8013BC6C(&this->skelAnime, D_80A5349C, arg1);
+        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80A5349C, arg1);
     }
 
     return ret;
@@ -124,18 +120,18 @@ s32 func_80A52648(EnDnq* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state != 0) {
         if (!(this->unk_37C & 0x20)) {
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_1DC = 0xFF;
             this->unk_37C |= 0x20;
         }
-        func_8013AED4(&this->unk_37C, 0, 7);
+        SubS_UpdateFlags(&this->unk_37C, 0, 7);
         ret = true;
     } else {
         if (this->unk_37C & 0x20) {
-            this->actor.flags |= 1;
+            this->actor.flags |= ACTOR_FLAG_1;
             this->unk_1DC = 0xFF;
             this->unk_37C &= ~0x20;
-            func_8013AED4(&this->unk_37C, 3, 7);
+            SubS_UpdateFlags(&this->unk_37C, 3, 7);
         }
     }
 
@@ -325,7 +321,7 @@ s32 func_80A52D44(EnDnq* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((this->unk_37C & 7) && Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_8013AED4(&this->unk_37C, 0, 7);
+        SubS_UpdateFlags(&this->unk_37C, 0, 7);
         this->unk_380 = func_80A52CF8(this, globalCtx);
         this->actionFunc = func_80A52FB8;
         ret = true;
@@ -339,17 +335,17 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
     s16 yaw = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
     if (yaw <= 0x3800) {
-        func_8013AED4(&this->unk_37C, 3, 7);
+        SubS_UpdateFlags(&this->unk_37C, 3, 7);
     } else {
-        func_8013AED4(&this->unk_37C, 0, 7);
+        SubS_UpdateFlags(&this->unk_37C, 0, 7);
     }
 
     if (!(gSaveContext.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (func_80114F2C(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
+        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
             (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.weekEventReg[29] & 0x40)) {
-                func_801518B0(globalCtx, 0x969, NULL);
+                Message_StartTextbox(globalCtx, 0x969, NULL);
                 this->unk_384 = 200;
             }
         }
@@ -380,7 +376,7 @@ void func_80A52FB8(EnDnq* this, GlobalContext* globalCtx) {
     s16 sp2E = this->actor.yawTowardsPlayer;
 
     if (func_8010BF58(&this->actor, globalCtx, this->unk_380, NULL, &this->unk_1E0)) {
-        func_8013AED4(&this->unk_37C, 3, 7);
+        SubS_UpdateFlags(&this->unk_37C, 3, 7);
         this->unk_386 = 0;
         this->actionFunc = func_80A52DC8;
     } else {
@@ -392,12 +388,12 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     u32 temp_v1;
 
-    if (func_800EE29C(globalCtx, 0x69)) {
-        temp_v0 = func_800EE200(globalCtx, 0x69);
-        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 105)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 105);
+        temp_v1 = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_1DC != (u8)temp_v1) {
             func_80A5257C(this, D_80A535FC[temp_v1]);
             this->unk_1DC = temp_v1;
@@ -412,7 +408,7 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 
@@ -420,7 +416,8 @@ void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDnq* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600EB48, NULL, this->jointTable, this->morphTable, 33);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dnq_Skel_00EB48, NULL, this->jointTable, this->morphTable,
+                       33);
     this->unk_398 = -1;
     func_80A5257C(this, 0);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -429,7 +426,7 @@ void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     this->unk_386 = 0;
     this->unk_37C = 0;
-    func_8013AED4(&this->unk_37C, 3, 7);
+    SubS_UpdateFlags(&this->unk_37C, 3, 7);
     if (gSaveContext.weekEventReg[9] & 0x80) {
         this->unk_3A4 = 1;
     } else {

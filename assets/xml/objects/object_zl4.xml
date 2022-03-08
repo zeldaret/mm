@@ -51,24 +51,24 @@
         <DList Name="object_zl4_DL_00D778" Offset="0xD778" />
         <Texture Name="object_zl4_Tex_00D8B8" OutName="tex_00D8B8" Format="rgba16" Width="32" Height="16" Offset="0xD8B8" />
         <DList Name="object_zl4_DL_00DE08" Offset="0xDE08" />
-        <Limb Name="object_zl4_Standardlimb_00DF28" Type="Standard" Offset="0xDF28" />
-        <Limb Name="object_zl4_Standardlimb_00DF34" Type="Standard" Offset="0xDF34" />
-        <Limb Name="object_zl4_Standardlimb_00DF40" Type="Standard" Offset="0xDF40" />
-        <Limb Name="object_zl4_Standardlimb_00DF4C" Type="Standard" Offset="0xDF4C" />
-        <Limb Name="object_zl4_Standardlimb_00DF58" Type="Standard" Offset="0xDF58" />
-        <Limb Name="object_zl4_Standardlimb_00DF64" Type="Standard" Offset="0xDF64" />
-        <Limb Name="object_zl4_Standardlimb_00DF70" Type="Standard" Offset="0xDF70" />
-        <Limb Name="object_zl4_Standardlimb_00DF7C" Type="Standard" Offset="0xDF7C" />
-        <Limb Name="object_zl4_Standardlimb_00DF88" Type="Standard" Offset="0xDF88" />
-        <Limb Name="object_zl4_Standardlimb_00DF94" Type="Standard" Offset="0xDF94" />
-        <Limb Name="object_zl4_Standardlimb_00DFA0" Type="Standard" Offset="0xDFA0" />
-        <Limb Name="object_zl4_Standardlimb_00DFAC" Type="Standard" Offset="0xDFAC" />
-        <Limb Name="object_zl4_Standardlimb_00DFB8" Type="Standard" Offset="0xDFB8" />
-        <Limb Name="object_zl4_Standardlimb_00DFC4" Type="Standard" Offset="0xDFC4" />
-        <Limb Name="object_zl4_Standardlimb_00DFD0" Type="Standard" Offset="0xDFD0" />
-        <Limb Name="object_zl4_Standardlimb_00DFDC" Type="Standard" Offset="0xDFDC" />
-        <Limb Name="object_zl4_Standardlimb_00DFE8" Type="Standard" Offset="0xDFE8" />
-        <Skeleton Name="object_zl4_Skel_00E038" Type="Flex" LimbType="Standard" Offset="0xE038" />
+        <Limb Name="object_zl4_Standardlimb_00DF28" Type="Standard" EnumName="OBJECT_ZL4_LIMB_01" Offset="0xDF28" />
+        <Limb Name="object_zl4_Standardlimb_00DF34" Type="Standard" EnumName="OBJECT_ZL4_LIMB_02" Offset="0xDF34" />
+        <Limb Name="object_zl4_Standardlimb_00DF40" Type="Standard" EnumName="OBJECT_ZL4_LIMB_03" Offset="0xDF40" />
+        <Limb Name="object_zl4_Standardlimb_00DF4C" Type="Standard" EnumName="OBJECT_ZL4_LIMB_04" Offset="0xDF4C" />
+        <Limb Name="object_zl4_Standardlimb_00DF58" Type="Standard" EnumName="OBJECT_ZL4_LIMB_05" Offset="0xDF58" />
+        <Limb Name="object_zl4_Standardlimb_00DF64" Type="Standard" EnumName="OBJECT_ZL4_LIMB_06" Offset="0xDF64" />
+        <Limb Name="object_zl4_Standardlimb_00DF70" Type="Standard" EnumName="OBJECT_ZL4_LIMB_07" Offset="0xDF70" />
+        <Limb Name="object_zl4_Standardlimb_00DF7C" Type="Standard" EnumName="OBJECT_ZL4_LIMB_08" Offset="0xDF7C" />
+        <Limb Name="object_zl4_Standardlimb_00DF88" Type="Standard" EnumName="OBJECT_ZL4_LIMB_09" Offset="0xDF88" />
+        <Limb Name="object_zl4_Standardlimb_00DF94" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0A" Offset="0xDF94" />
+        <Limb Name="object_zl4_Standardlimb_00DFA0" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0B" Offset="0xDFA0" />
+        <Limb Name="object_zl4_Standardlimb_00DFAC" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0C" Offset="0xDFAC" />
+        <Limb Name="object_zl4_Standardlimb_00DFB8" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0D" Offset="0xDFB8" />
+        <Limb Name="object_zl4_Standardlimb_00DFC4" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0E" Offset="0xDFC4" />
+        <Limb Name="object_zl4_Standardlimb_00DFD0" Type="Standard" EnumName="OBJECT_ZL4_LIMB_0F" Offset="0xDFD0" />
+        <Limb Name="object_zl4_Standardlimb_00DFDC" Type="Standard" EnumName="OBJECT_ZL4_LIMB_10" Offset="0xDFDC" />
+        <Limb Name="object_zl4_Standardlimb_00DFE8" Type="Standard" EnumName="OBJECT_ZL4_LIMB_11" Offset="0xDFE8" />
+        <Skeleton Name="object_zl4_Skel_00E038" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZL4_LIMB_NONE" LimbMax="OBJECT_ZL4_LIMB_MAX" EnumName="object_zl4_Limbs" Offset="0xE038" />
         <Animation Name="object_zl4_Anim_00F250" Offset="0xF250" />
         <Animation Name="object_zl4_Anim_00FDC8" Offset="0xFDC8" />
         <Animation Name="object_zl4_Anim_010334" Offset="0x10334" />

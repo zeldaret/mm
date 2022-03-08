@@ -6,7 +6,7 @@
 
 #include "z_en_kujiya.h"
 
-#define FLAGS 0x08000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnKujiya*)thisx)
 

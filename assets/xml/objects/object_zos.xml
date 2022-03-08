@@ -35,31 +35,34 @@
         <Texture Name="object_zos_Tex_00FC98" OutName="tex_00FC98" Format="rgba16" Width="32" Height="32" Offset="0xFC98" />
         <Texture Name="object_zos_Tex_010498" OutName="tex_010498" Format="rgba16" Width="16" Height="32" Offset="0x10498" />
         <Texture Name="object_zos_Tex_010898" OutName="tex_010898" Format="rgba16" Width="8" Height="8" Offset="0x10898" />
-        <!-- <Blob Name="object_zos_Blob_010918" Size="0x1800" Offset="0x10918" /> -->
+        <Texture Name="object_zos_Tex_010918" OutName="tex_010918" Format="rgba16" Width="32" Height="32" Offset="0x10918" />
+        <Texture Name="object_zos_Tex_011118" OutName="tex_011118" Format="rgba16" Width="32" Height="32" Offset="0x11118" />
+        <Texture Name="object_zos_Tex_011918" OutName="tex_011918" Format="rgba16" Width="32" Height="32" Offset="0x11918" />
+        <!-- <Blob Name="object_zos_Blob_012118" Size="0xF70" Offset="0x12118" /> -->
         <DList Name="object_zos_DL_013088" Offset="0x13088" />
         <DList Name="object_zos_DL_0136E0" Offset="0x136E0" />
         <Texture Name="object_zos_Tex_013728" OutName="tex_013728" Format="rgba16" Width="32" Height="32" Offset="0x13728" />
         <Texture Name="object_zos_Tex_013F28" OutName="tex_013F28" Format="rgba16" Width="32" Height="32" Offset="0x13F28" />
         <Texture Name="object_zos_Tex_014728" OutName="tex_014728" Format="rgba16" Width="32" Height="32" Offset="0x14728" />
         <Texture Name="object_zos_Tex_014F28" OutName="tex_014F28" Format="rgba16" Width="16" Height="16" Offset="0x14F28" />
-        <Limb Name="object_zos_Standardlimb_015128" Type="Standard" Offset="0x15128" />
-        <Limb Name="object_zos_Standardlimb_015134" Type="Standard" Offset="0x15134" />
-        <Limb Name="object_zos_Standardlimb_015140" Type="Standard" Offset="0x15140" />
-        <Limb Name="object_zos_Standardlimb_01514C" Type="Standard" Offset="0x1514C" />
-        <Limb Name="object_zos_Standardlimb_015158" Type="Standard" Offset="0x15158" />
-        <Limb Name="object_zos_Standardlimb_015164" Type="Standard" Offset="0x15164" />
-        <Limb Name="object_zos_Standardlimb_015170" Type="Standard" Offset="0x15170" />
-        <Limb Name="object_zos_Standardlimb_01517C" Type="Standard" Offset="0x1517C" />
-        <Limb Name="object_zos_Standardlimb_015188" Type="Standard" Offset="0x15188" />
-        <Limb Name="object_zos_Standardlimb_015194" Type="Standard" Offset="0x15194" />
-        <Limb Name="object_zos_Standardlimb_0151A0" Type="Standard" Offset="0x151A0" />
-        <Limb Name="object_zos_Standardlimb_0151AC" Type="Standard" Offset="0x151AC" />
-        <Limb Name="object_zos_Standardlimb_0151B8" Type="Standard" Offset="0x151B8" />
-        <Limb Name="object_zos_Standardlimb_0151C4" Type="Standard" Offset="0x151C4" />
-        <Limb Name="object_zos_Standardlimb_0151D0" Type="Standard" Offset="0x151D0" />
-        <Limb Name="object_zos_Standardlimb_0151DC" Type="Standard" Offset="0x151DC" />
-        <Limb Name="object_zos_Standardlimb_0151E8" Type="Standard" Offset="0x151E8" />
-        <Skeleton Name="object_zos_Skel_015238" Type="Flex" LimbType="Standard" Offset="0x15238" />
+        <Limb Name="object_zos_Standardlimb_015128" Type="Standard" EnumName="OBJECT_ZOS_LIMB_01" Offset="0x15128" />
+        <Limb Name="object_zos_Standardlimb_015134" Type="Standard" EnumName="OBJECT_ZOS_LIMB_02" Offset="0x15134" />
+        <Limb Name="object_zos_Standardlimb_015140" Type="Standard" EnumName="OBJECT_ZOS_LIMB_03" Offset="0x15140" />
+        <Limb Name="object_zos_Standardlimb_01514C" Type="Standard" EnumName="OBJECT_ZOS_LIMB_04" Offset="0x1514C" />
+        <Limb Name="object_zos_Standardlimb_015158" Type="Standard" EnumName="OBJECT_ZOS_LIMB_05" Offset="0x15158" />
+        <Limb Name="object_zos_Standardlimb_015164" Type="Standard" EnumName="OBJECT_ZOS_LIMB_06" Offset="0x15164" />
+        <Limb Name="object_zos_Standardlimb_015170" Type="Standard" EnumName="OBJECT_ZOS_LIMB_07" Offset="0x15170" />
+        <Limb Name="object_zos_Standardlimb_01517C" Type="Standard" EnumName="OBJECT_ZOS_LIMB_08" Offset="0x1517C" />
+        <Limb Name="object_zos_Standardlimb_015188" Type="Standard" EnumName="OBJECT_ZOS_LIMB_09" Offset="0x15188" />
+        <Limb Name="object_zos_Standardlimb_015194" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0A" Offset="0x15194" />
+        <Limb Name="object_zos_Standardlimb_0151A0" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0B" Offset="0x151A0" />
+        <Limb Name="object_zos_Standardlimb_0151AC" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0C" Offset="0x151AC" />
+        <Limb Name="object_zos_Standardlimb_0151B8" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0D" Offset="0x151B8" />
+        <Limb Name="object_zos_Standardlimb_0151C4" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0E" Offset="0x151C4" />
+        <Limb Name="object_zos_Standardlimb_0151D0" Type="Standard" EnumName="OBJECT_ZOS_LIMB_0F" Offset="0x151D0" />
+        <Limb Name="object_zos_Standardlimb_0151DC" Type="Standard" EnumName="OBJECT_ZOS_LIMB_10" Offset="0x151DC" />
+        <Limb Name="object_zos_Standardlimb_0151E8" Type="Standard" EnumName="OBJECT_ZOS_LIMB_11" Offset="0x151E8" />
+        <Skeleton Name="object_zos_Skel_015238" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOS_LIMB_NONE" LimbMax="OBJECT_ZOS_LIMB_MAX" EnumName="object_zos_Limbs" Offset="0x15238" />
         <Animation Name="object_zos_Anim_01621C" Offset="0x1621C" />
         <Animation Name="object_zos_Anim_016980" Offset="0x16980" />
     </File>

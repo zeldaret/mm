@@ -6,7 +6,7 @@
 
 #include "z_bg_ikana_bombwall.h"
 
-#define FLAGS 0x10000000
+#define FLAGS (ACTOR_FLAG_10000000)
 
 #define THIS ((BgIkanaBombwall*)thisx)
 

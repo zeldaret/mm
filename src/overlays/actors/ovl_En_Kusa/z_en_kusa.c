@@ -6,7 +6,7 @@
 
 #include "z_en_kusa.h"
 
-#define FLAGS 0x00800010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnKusa*)thisx)
 
