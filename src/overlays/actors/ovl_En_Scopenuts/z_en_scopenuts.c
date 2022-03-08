@@ -17,15 +17,8 @@ void EnScopenuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnScopenuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80BCAFA8(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB078(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB1C8(EnScopenuts* this, GlobalContext* globalCtx);
-void func_80BCB230(EnScopenuts* this, GlobalContext* globalCtx);
-=======
-void func_80BCB078(EnScopenuts* this, GlobalContext* globalCtx);
-void func_80BCB1C8(EnScopenuts* this, GlobalContext* globalCtx);
->>>>>>> master
 void func_80BCB4DC(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB52C(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx);
@@ -37,14 +30,9 @@ void func_80BCBD28(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCBF0C(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCBFFC(EnScopenuts* this, GlobalContext* globalCtx);
 void func_80BCC288(EnScopenuts* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
-
-#if 0
-=======
 s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_);
 f32 func_80BCC448(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
->>>>>>> master
 const ActorInit En_Scopenuts_InitVars = {
     ACTOR_EN_SCOPENUTS,
     ACTORCAT_NPC,

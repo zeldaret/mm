@@ -17,13 +17,6 @@ void ObjHunsui_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHunsui_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B9CE64(ObjHunsui* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
-void func_80B9D120(ObjHunsui* this, GlobalContext* globalCtx);
-void func_80B9D508(ObjHunsui* this, GlobalContext* globalCtx);
-void func_80B9D714(ObjHunsui* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80B9D0FC(ObjHunsui* this, GlobalContext* globalCtx);
 void func_80B9D120(ObjHunsui* this, GlobalContext* globalCtx);
 void func_80B9D2BC(ObjHunsui* this, GlobalContext* globalCtx);
@@ -53,7 +46,6 @@ ObjHansuiStruct D_80B9DC70[] = {
     { 3, 3 }, { 3, 5 }, { 3, 1 }, { 3, 6 }, { 3, 2 }, { 3, 4 }, { 3, 0 },
 };
 
->>>>>>> master
 const ActorInit Obj_Hunsui_InitVars = {
     ACTOR_OBJ_HUNSUI,
     ACTORCAT_BG,

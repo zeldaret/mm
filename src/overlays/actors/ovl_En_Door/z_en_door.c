@@ -29,17 +29,6 @@ void EnDoor_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDoor_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80866A5C(EnDoor* this, GlobalContext* globalCtx);
-void func_80866B20(EnDoor* this, GlobalContext* globalCtx);
-void func_80866F94(EnDoor* this, GlobalContext* globalCtx);
-void func_8086704C(EnDoor* this, GlobalContext* globalCtx);
-void func_80867080(EnDoor* this, GlobalContext* globalCtx);
-void func_808670F0(EnDoor* this, GlobalContext* globalCtx);
-void func_80867144(EnDoor* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80866B20(EnDoor*, GlobalContext*);
 void func_8086704C(EnDoor*, GlobalContext*);
 void func_80866F94(EnDoor*, GlobalContext*);
@@ -149,7 +138,6 @@ void* D_8086778C[] = {
     &D_80867734, &D_8086773C, &D_80867744, &D_8086775C, &D_80867778, &D_8086777C, &D_80867780, &D_80867784,
 };
 
->>>>>>> master
 const ActorInit En_Door_InitVars = {
     ACTOR_EN_DOOR,
     ACTORCAT_DOOR,

@@ -16,17 +16,6 @@ void EnBigokuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80AC2CE8(EnBigokuta* this, GlobalContext* globalCtx);
-void func_80AC2EBC(EnBigokuta* this, GlobalContext* globalCtx);
-void func_80AC2F64(EnBigokuta* this, GlobalContext* globalCtx);
-void func_80AC31EC(EnBigokuta* this, GlobalContext* globalCtx);
-void func_80AC33C0(EnBigokuta* this, GlobalContext* globalCtx);
-void func_80AC34A8(EnBigokuta* this, GlobalContext* globalCtx);
-void func_80AC3650(EnBigokuta* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80AC2B4C(GlobalContext* globalCtx, EnBigokuta* this);
 void EnBigokuta_SetupIdle(EnBigokuta* this);
 void EnBigokuta_Idle(EnBigokuta* this, GlobalContext* globalCtx);
@@ -42,7 +31,6 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, GlobalContext* globalCtx);
 void EnBigokuta_SetupDeathEffects(EnBigokuta* this);
 void EnBigokuta_PlayDeathEffects(EnBigokuta* this, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit En_Bigokuta_InitVars = {
     ACTOR_EN_BIGOKUTA,
     ACTORCAT_BOSS,

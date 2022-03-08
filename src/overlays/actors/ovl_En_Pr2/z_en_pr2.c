@@ -17,16 +17,6 @@ void EnPr2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnPr2_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnPr2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80A745FC(EnPr2* this, GlobalContext* globalCtx);
-void func_80A748E8(EnPr2* this, GlobalContext* globalCtx);
-void func_80A74E90(EnPr2* this, GlobalContext* globalCtx);
-void func_80A75310(EnPr2* this, GlobalContext* globalCtx);
-
-#if 0
-// static DamageTable sDamageTable = {
-static DamageTable D_80A75BC0 = {
-=======
 void func_80A745C4(EnPr2* this);
 void func_80A745FC(EnPr2* this, GlobalContext* globalCtx);
 void func_80A74888(EnPr2* this);
@@ -37,7 +27,6 @@ void func_80A751B4(EnPr2* this);
 void func_80A75310(EnPr2* this, GlobalContext* globalCtx);
 
 static DamageTable sDamageTable = {
->>>>>>> master
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0x0),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),

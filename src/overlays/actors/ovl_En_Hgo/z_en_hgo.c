@@ -16,14 +16,6 @@ void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnHgo_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80BD0410(EnHgo* this, GlobalContext* globalCtx);
-void func_80BD0434(EnHgo* this, GlobalContext* globalCtx);
-void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx);
-void func_80BD0660(EnHgo* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80BD03EC(EnHgo* this);
 void func_80BD0410(EnHgo* this, GlobalContext* globalCtx);
 void func_80BD0434(EnHgo* this, GlobalContext* globalCtx);
@@ -36,7 +28,6 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx);
 s32 EnHgo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* pos, Actor* thisx);
 
->>>>>>> master
 const ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,

@@ -17,23 +17,15 @@ void EnSyatekiCrow_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiCrow_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
-=======
 void func_809CA5D4(EnSyatekiCrow* this);
 void func_809CA67C(EnSyatekiCrow* this, GlobalContext* globalCtx);
 void func_809CA71C(EnSyatekiCrow* this);
->>>>>>> master
 void func_809CA840(EnSyatekiCrow* this, GlobalContext* globalCtx);
 void func_809CA8E4(EnSyatekiCrow* this, GlobalContext* globalCtx);
 void func_809CABC0(EnSyatekiCrow* this, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-#if 0
-=======
 static Vec3f D_809CB050 = { 0.0f, 0.0f, 0.0f };
 
->>>>>>> master
 const ActorInit En_Syateki_Crow_InitVars = {
     ACTOR_EN_SYATEKI_CROW,
     ACTORCAT_ENEMY,

@@ -20,10 +20,6 @@ void DmChar00_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80AA67F8(DmChar00* this, GlobalContext* globalCtx);
 void func_80AA695C(DmChar00* this, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-#if 0
-=======
->>>>>>> master
 const ActorInit Dm_Char00_InitVars = {
     ACTOR_DM_CHAR00,
     ACTORCAT_ITEMACTION,

@@ -20,24 +20,6 @@ void EnJg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnJg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80B73F1C(EnJg* this, GlobalContext* globalCtx);
-void func_80B7406C(EnJg* this, GlobalContext* globalCtx);
-void func_80B7408C(EnJg* this, GlobalContext* globalCtx);
-void func_80B74134(EnJg* this, GlobalContext* globalCtx);
-void func_80B741F8(EnJg* this, GlobalContext* globalCtx);
-void func_80B742F8(EnJg* this, GlobalContext* globalCtx);
-void func_80B74440(EnJg* this, GlobalContext* globalCtx);
-void func_80B74550(EnJg* this, GlobalContext* globalCtx);
-void func_80B747C8(EnJg* this, GlobalContext* globalCtx);
-void func_80B74840(EnJg* this, GlobalContext* globalCtx);
-void func_80B749D0(EnJg* this, GlobalContext* globalCtx);
-void func_80B74AD8(EnJg* this, GlobalContext* globalCtx);
-void func_80B74B54(EnJg* this, GlobalContext* globalCtx);
-void func_80B74BC8(EnJg* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx);
 void EnJg_GoronShrineCheer(EnJg* this, GlobalContext* globalCtx);
 void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx);
@@ -82,7 +64,6 @@ typedef enum {
     /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
 } EnJgAction;
 
->>>>>>> master
 const ActorInit En_Jg_InitVars = {
     ACTOR_EN_JG,
     ACTORCAT_NPC,

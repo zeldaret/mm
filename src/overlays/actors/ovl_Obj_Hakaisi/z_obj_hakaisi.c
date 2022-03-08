@@ -16,16 +16,6 @@ void ObjHakaisi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHakaisi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHakaisi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80B14460(ObjHakaisi* this, GlobalContext* globalCtx);
-void func_80B14524(ObjHakaisi* this, GlobalContext* globalCtx);
-void func_80B1456C(ObjHakaisi* this, GlobalContext* globalCtx);
-void func_80B14648(ObjHakaisi* this, GlobalContext* globalCtx);
-void func_80B149C0(ObjHakaisi* this, GlobalContext* globalCtx);
-void func_80B15330(ObjHakaisi* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80B1444C(ObjHakaisi* this);
 void func_80B14460(ObjHakaisi* this, GlobalContext* globalCtx);
 void func_80B14510(ObjHakaisi* this);
@@ -47,7 +37,6 @@ void func_80B15330(ObjHakaisi* this, GlobalContext* globalCtx);
 void func_80B1544C(Actor* thisx, GlobalContext* globalCtx);
 void func_80B154A0(Actor* thisx, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit Obj_Hakaisi_InitVars = {
     ACTOR_OBJ_HAKAISI,
     ACTORCAT_PROP,

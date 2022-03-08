@@ -16,12 +16,9 @@ void BgIngate_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgIngate_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-=======
 Actor* BgIngate_FindActor(BgIngate* this, GlobalContext* globalCtx, u8 actorCat, s16 actorId);
 s32 func_80953BEC(BgIngate* this);
 void func_80953B40(BgIngate* this);
->>>>>>> master
 void func_80953F8C(BgIngate* this, GlobalContext* globalCtx);
 void func_80953F9C(BgIngate* this, GlobalContext* globalCtx);
 void func_809541B8(BgIngate* this, GlobalContext* globalCtx);
@@ -29,10 +26,6 @@ void func_809542A0(BgIngate* this, GlobalContext* globalCtx);
 void func_80954340(BgIngate* this, GlobalContext* globalCtx);
 void func_809543D4(BgIngate* this, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-#if 0
-=======
->>>>>>> master
 const ActorInit Bg_Ingate_InitVars = {
     ACTOR_BG_INGATE,
     ACTORCAT_BG,

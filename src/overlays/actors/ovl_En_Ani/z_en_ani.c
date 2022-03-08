@@ -24,13 +24,6 @@ void EnAni_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnAni_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_809679D0(EnAni* this, GlobalContext* globalCtx);
-void func_80967A48(EnAni* this, GlobalContext* globalCtx);
-void func_80967AB4(EnAni* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void EnAni_DefaultBlink(EnAni* this);
 void EnAni_WaitForEyeClose(EnAni* this);
 void EnAni_WaitForEyeOpen(EnAni* this);
@@ -46,7 +39,6 @@ void EnAni_IdleInPain(EnAni* this, GlobalContext* globalCtx);
 void EnAni_Talk(EnAni* this, GlobalContext* globalCtx);
 void EnAni_IdleStanding(EnAni* this, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit En_Ani_InitVars = {
     ACTOR_EN_ANI,
     ACTORCAT_NPC,

@@ -16,13 +16,6 @@ void ObjKzsaku_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjKzsaku_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80C08B7C(ObjKzsaku* this, GlobalContext* globalCtx);
-void func_80C08BD0(ObjKzsaku* this, GlobalContext* globalCtx);
-void func_80C08CB0(ObjKzsaku* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void ObjKzsaku_SetupIdle(ObjKzsaku* this);
 void func_80C08BBC(ObjKzsaku* this);
 void func_80C08C84(ObjKzsaku* this);
@@ -30,7 +23,6 @@ void ObjKzsaku_Idle(ObjKzsaku* this, GlobalContext* globalCtx);
 void ObjKzsaku_Rise(ObjKzsaku* this, GlobalContext* globalCtx);
 void func_80C08CB0(ObjKzsaku* this, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit Obj_Kzsaku_InitVars = {
     ACTOR_OBJ_KZSAKU,
     ACTORCAT_PROP,

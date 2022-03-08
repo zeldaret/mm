@@ -16,28 +16,6 @@ void ObjBean_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBean_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjBean_Update(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80937DEC(ObjBean* this, GlobalContext* globalCtx);
-void func_80937FC8(ObjBean* this, GlobalContext* globalCtx);
-void func_809381C4(ObjBean* this, GlobalContext* globalCtx);
-void func_80938298(ObjBean* this, GlobalContext* globalCtx);
-void func_80938358(ObjBean* this, GlobalContext* globalCtx);
-void func_809383D0(ObjBean* this, GlobalContext* globalCtx);
-void func_80938444(ObjBean* this, GlobalContext* globalCtx);
-void func_80938504(ObjBean* this, GlobalContext* globalCtx);
-void func_809385A8(ObjBean* this, GlobalContext* globalCtx);
-void func_8093868C(ObjBean* this, GlobalContext* globalCtx);
-void func_80938728(ObjBean* this, GlobalContext* globalCtx);
-void func_80938780(ObjBean* this, GlobalContext* globalCtx);
-void func_80938834(ObjBean* this, GlobalContext* globalCtx);
-void func_809388A8(ObjBean* this, GlobalContext* globalCtx);
-void func_80938958(ObjBean* this, GlobalContext* globalCtx);
-void func_809389BC(ObjBean* this, GlobalContext* globalCtx);
-void func_80938A5C(ObjBean* this, GlobalContext* globalCtx);
-void func_80938AD8(ObjBean* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80937C10(ObjBean* this);
 void func_80937C24(ObjBean* this);
 void func_80937CA0(ObjBean* this);
@@ -82,7 +60,6 @@ void func_80938C1C(Actor* thisx, GlobalContext* globalCtx);
 void func_80938E00(Actor* thisx, GlobalContext* globalCtx);
 void func_80938F50(Actor* thisx, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit Obj_Bean_InitVars = {
     ACTOR_OBJ_BEAN,
     ACTORCAT_BG,

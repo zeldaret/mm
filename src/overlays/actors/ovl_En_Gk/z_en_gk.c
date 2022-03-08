@@ -33,10 +33,6 @@ void func_80B5253C(EnGk* this, GlobalContext* globalCtx);
 void func_80B525E0(EnGk* this, GlobalContext* globalCtx);
 void func_80B52654(EnGk* this, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-#if 0
-=======
->>>>>>> master
 const ActorInit En_Gk_InitVars = {
     ACTOR_EN_GK,
     ACTORCAT_NPC,

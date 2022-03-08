@@ -16,14 +16,6 @@ void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx);
-void func_80B39FA8(ObjSnowball2* this, GlobalContext* globalCtx);
-void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx);
-void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80B38E20(ObjSnowball2* this);
 void func_80B39C78(ObjSnowball2* this);
 void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx);
@@ -34,7 +26,6 @@ void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx);
 void func_80B3A498(ObjSnowball2* this);
 void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
     ACTORCAT_PROP,

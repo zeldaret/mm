@@ -16,15 +16,6 @@ void EnMm3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMm3_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMm3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80A6F2C8(EnMm3* this, GlobalContext* globalCtx);
-void func_80A6F9DC(EnMm3* this, GlobalContext* globalCtx);
-void func_80A6FBFC(EnMm3* this, GlobalContext* globalCtx);
-void func_80A6FE30(EnMm3* this, GlobalContext* globalCtx);
-void func_80A6FEEC(EnMm3* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80A6F270(EnMm3* this);
 void func_80A6F2C8(EnMm3* this, GlobalContext* globalCtx);
 void func_80A6F9C8(EnMm3* this);
@@ -38,7 +29,6 @@ void func_80A6FEEC(EnMm3* this, GlobalContext* globalCtx);
 s32 func_80A6FFAC(EnMm3* this, GlobalContext* globalCtx);
 void func_80A70084(EnMm3* this, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,
     ACTORCAT_NPC,

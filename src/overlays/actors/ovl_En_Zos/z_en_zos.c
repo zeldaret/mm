@@ -16,10 +16,7 @@ void EnZos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-=======
 void func_80BBAE84(EnZos* this, s16 arg1, u8 arg2);
->>>>>>> master
 void func_80BBB2C4(EnZos* this, GlobalContext* globalCtx);
 void func_80BBB354(EnZos* this, GlobalContext* globalCtx);
 void func_80BBB4CC(EnZos* this, GlobalContext* globalCtx);
@@ -37,10 +34,6 @@ void func_80BBC24C(EnZos* this, GlobalContext* globalCtx);
 void func_80BBC298(EnZos* this, GlobalContext* globalCtx);
 void func_80BBC37C(EnZos* this, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-#if 0
-=======
->>>>>>> master
 const ActorInit En_Zos_InitVars = {
     ACTOR_EN_ZOS,
     ACTORCAT_NPC,

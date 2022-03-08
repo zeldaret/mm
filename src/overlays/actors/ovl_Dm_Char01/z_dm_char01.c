@@ -27,9 +27,6 @@ void func_80AA9020(DmChar01* this, GlobalContext* globalCtx);
 void func_80AA90AC(DmChar01* this, GlobalContext* globalCtx);
 void func_80AA90F4(DmChar01* this, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-#if 0
-=======
 s16 D_80AAAE20;
 s16 D_80AAAE22;
 s16 D_80AAAE24;
@@ -37,7 +34,6 @@ s16 D_80AAAE26;
 
 #include "overlays/ovl_Dm_Char01/ovl_Dm_Char01.c"
 
->>>>>>> master
 const ActorInit Dm_Char01_InitVars = {
     ACTOR_DM_CHAR01,
     ACTORCAT_ITEMACTION,

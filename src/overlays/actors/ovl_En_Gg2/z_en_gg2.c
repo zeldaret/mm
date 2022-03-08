@@ -24,14 +24,9 @@ void func_80B3B120(EnGg2* this, GlobalContext* globalCtx);
 void func_80B3B21C(EnGg2* this, GlobalContext* globalCtx);
 void func_80B3B294(EnGg2* this, GlobalContext* globalCtx);
 void func_80B3B5D4(EnGg2* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
-
-#if 0
-=======
 s32 func_80B3B648(EnGg2* this, Path* path, s32 arg2_);
 f32 func_80B3B7E4(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3);
 
->>>>>>> master
 const ActorInit En_Gg2_InitVars = {
     ACTOR_EN_GG2,
     ACTORCAT_NPC,

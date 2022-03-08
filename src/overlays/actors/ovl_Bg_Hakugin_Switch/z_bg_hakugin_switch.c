@@ -17,19 +17,6 @@ void BgHakuginSwitch_Update(Actor* thisx, GlobalContext* globalCtx);
 void BgHakuginSwitch_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B15A68(BgHakuginSwitch* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
-void func_80B15B74(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B15E78(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B15F88(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B160DC(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B161A0(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B162AC(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B16400(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B16520(BgHakuginSwitch* this, GlobalContext* globalCtx);
-void func_80B165E0(BgHakuginSwitch* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80B15B1C(BgHakuginSwitch* this, GlobalContext* globalCtx);
 void func_80B15B74(BgHakuginSwitch* this, GlobalContext* globalCtx);
 void func_80B15E0C(BgHakuginSwitch* this, GlobalContext* globalCtx);
@@ -50,7 +37,6 @@ void func_80B165E0(BgHakuginSwitch* this, GlobalContext* globalCtx);
 
 u32 D_80B16AF0;
 
->>>>>>> master
 const ActorInit Bg_Hakugin_Switch_InitVars = {
     ACTOR_BG_HAKUGIN_SWITCH,
     ACTORCAT_SWITCH,

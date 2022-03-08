@@ -20,17 +20,12 @@ void EnGg_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80B352A4(EnGg* this, GlobalContext* globalCtx);
 void func_80B35450(EnGg* this, GlobalContext* globalCtx);
 void func_80B3556C(EnGg* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
-
-#if 0
-=======
 u16 func_80B357F0(EnGg* this);
 void func_80B358D8(EnGg* this, GlobalContext* globalCtx);
 void func_80B359DC(EnGg* this, GlobalContext* globalCtx);
 void func_80B363E8(EnGgStruct* ptr, GlobalContext* globalCtx, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3);
 void func_80B364D4(EnGgStruct* ptr, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit En_Gg_InitVars = {
     ACTOR_EN_GG,
     ACTORCAT_NPC,

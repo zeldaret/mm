@@ -20,20 +20,13 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_80A2A1E0(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2A32C(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2A444(BgDblueMovebg* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
-=======
 void func_80A2A670(BgDblueMovebg* this, GlobalContext* globalCtx);
->>>>>>> master
 void func_80A2A688(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2A714(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2A7F8(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2AAB8(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2AED0(BgDblueMovebg* this, GlobalContext* globalCtx);
 void func_80A2B1A0(BgDblueMovebg* this, GlobalContext* globalCtx);
-<<<<<<< HEAD
-
-#if 0
-=======
 void func_80A2B274(Actor* thisx, GlobalContext* globalCtx);
 void func_80A2B308(Actor* thisx, GlobalContext* globalCtx);
 
@@ -51,7 +44,6 @@ u8 D_80A2B870[][2] = {
     { 0x03, 0x03 }, { 0x03, 0x05 }, { 0x03, 0x01 }, { 0x03, 0x06 }, { 0x03, 0x02 }, { 0x03, 0x04 }, { 0x03, 0x00 },
 };
 
->>>>>>> master
 const ActorInit Bg_Dblue_Movebg_InitVars = {
     ACTOR_BG_DBLUE_MOVEBG,
     ACTORCAT_BG,

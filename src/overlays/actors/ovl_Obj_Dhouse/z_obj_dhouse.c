@@ -16,13 +16,6 @@ void ObjDhouse_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjDhouse_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-void func_80B1391C(ObjDhouse* this, GlobalContext* globalCtx);
-void func_80B13940(ObjDhouse* this, GlobalContext* globalCtx);
-void func_80B139F4(ObjDhouse* this, GlobalContext* globalCtx);
-
-#if 0
-=======
 void func_80B12E7C(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3);
 void func_80B13170(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* ptr, ObjDhouseStruct3* ptr3);
 void func_80B13908(ObjDhouse* this);
@@ -34,7 +27,6 @@ void func_80B139F4(ObjDhouse* this, GlobalContext* globalCtx);
 void func_80B13C08(Actor* thisx, GlobalContext* globalCtx);
 void func_80B13E40(Actor* thisx, GlobalContext* globalCtx);
 
->>>>>>> master
 const ActorInit Obj_Dhouse_InitVars = {
     ACTOR_OBJ_DHOUSE,
     ACTORCAT_BG,

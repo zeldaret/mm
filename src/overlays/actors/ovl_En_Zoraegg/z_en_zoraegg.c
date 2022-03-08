@@ -17,10 +17,7 @@ void EnZoraegg_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnZoraegg_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnZoraegg_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-=======
 s32 func_80B319A8(GlobalContext* globalCtx);
->>>>>>> master
 void func_80B32084(EnZoraegg* this, GlobalContext* globalCtx);
 void func_80B32094(EnZoraegg* this, GlobalContext* globalCtx);
 void func_80B320E0(EnZoraegg* this, GlobalContext* globalCtx);
@@ -41,10 +38,6 @@ void func_80B32BB8(EnZoraegg* this, GlobalContext* globalCtx);
 void func_80B32C34(EnZoraegg* this, GlobalContext* globalCtx);
 void func_80B32D08(EnZoraegg* this, GlobalContext* globalCtx);
 
-<<<<<<< HEAD
-#if 0
-=======
->>>>>>> master
 const ActorInit En_Zoraegg_InitVars = {
     ACTOR_EN_ZORAEGG,
     ACTORCAT_ITEMACTION,
