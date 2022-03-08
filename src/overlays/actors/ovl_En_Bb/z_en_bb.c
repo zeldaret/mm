@@ -112,15 +112,21 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
-// Jaw = 0
-// Left webbing = 1
-// Right webbing = 2
-// Cranium = 3
-static s8 sLimbIndexToLimbPos[] = {
+/**
+ * This maps a given limb based on its limbIndex to its appropriate index
+ * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
+ * limb is not part of the bodyParts arrays.
+ */
+static s8 sLimbIndexToBodyPartsIndex[] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 
-static Vec3f sDuplicateCraniumLimbOffset = { 1000.0f, -700.0f, 0.0f };
+/**
+ * The last element of the bodyParts arrays is a duplicate of the cranium
+ * limb, which is then offset by a certain amount. There is no display list
+ * associated with this, so it is only used for effects.
+ */
+static Vec3f sDuplicateCraniumBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
 void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBb* this = THIS;
@@ -136,10 +142,10 @@ void EnBb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->flameScaleX = 1.0f;
     this->actor.world.pos.y += 50.0f;
 
-    if (EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) == 0xFF) {
+    if (EN_BB_ATTACK_RANGE(&this->actor) == 0xFF) {
         this->attackRange = 200.0f;
     } else {
-        this->attackRange = EN_BB_GET_RIGHT_SHIFT_8_PARAM(&this->actor) * 4.0f;
+        this->attackRange = EN_BB_ATTACK_RANGE(&this->actor) * 4.0f;
     }
 
     EnBb_SetupFlyIdle(this);
@@ -179,7 +185,8 @@ void EnBb_Thaw(EnBb* this, GlobalContext* globalCtx) {
     if (this->drawDmgEffType == 10) {
         this->drawDmgEffType = 0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.2f, 0.15f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f,
+                              0.15f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -337,12 +344,12 @@ void EnBb_SetupDead(EnBb* this, GlobalContext* globalCtx) {
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
     this->actor.speedXZ = 0.0f;
-    this->limbDrawStatus = 1;
+    this->bodyPartDrawStatus = 1;
     this->actor.gravity = -1.5f;
 
-    temp = &this->limbVelocity[0];
-    for (i = 0; i < ARRAY_COUNT(this->limbPos); i++, temp++) {
-        Math_Vec3f_Diff(&this->limbPos[i], &this->actor.world.pos, &sp70);
+    temp = &this->bodyPartsVelocity[0];
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++, temp++) {
+        Math_Vec3f_Diff(&this->bodyPartsPos[i], &this->actor.world.pos, &sp70);
         temp_f0 = Math3D_Vec3fMagnitude(&sp70);
         if (temp_f0 > 1.0f) {
             temp_f0 = 2.5f / temp_f0;
@@ -365,16 +372,16 @@ void EnBb_Dead(EnBb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.z, 0x4000, 4, 0x1000, 0x400);
 
     if (this->timer == 0) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            func_800B3030(globalCtx, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
-            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->limbPos[i], 11, NA_SE_EN_EXTINCT);
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            func_800B3030(globalCtx, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
         }
 
         EnBb_SetupWaitForRevive(this);
     } else {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            Math_Vec3f_Sum(&this->limbPos[i], &this->limbVelocity[i], &this->limbPos[i]);
-            this->limbVelocity[i].y += this->actor.gravity;
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);
+            this->bodyPartsVelocity[i].y += this->actor.gravity;
         }
     }
 }
@@ -435,7 +442,7 @@ void EnBb_Frozen(EnBb* this, GlobalContext* globalCtx) {
 
 void EnBb_SetupWaitForRevive(EnBb* this) {
     this->actor.draw = NULL;
-    this->limbDrawStatus = 0;
+    this->bodyPartDrawStatus = 0;
     this->drawDmgEffAlpha = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.shape.rot.x = 0;
@@ -591,7 +598,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnBb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBb* this = THIS;
 
-    if (this->limbDrawStatus == -1) {
+    if (this->bodyPartDrawStatus == -1) {
         this->limbDList = *dList;
         *dList = NULL;
     }
@@ -604,33 +611,33 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnBb* this = THIS;
     MtxF* temp_v0_4;
 
-    if (this->limbDrawStatus == 0) {
-        if (sLimbIndexToLimbPos[limbIndex] != -1) {
-            if (sLimbIndexToLimbPos[limbIndex] == 0) {
-                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[0]);
-            } else if (sLimbIndexToLimbPos[limbIndex] == 3) {
-                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[3]);
-                Matrix_MultiplyVector3fByState(&sDuplicateCraniumLimbOffset, &this->limbPos[4]);
+    if (this->bodyPartDrawStatus == 0) {
+        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
+            if (sLimbIndexToBodyPartsIndex[limbIndex] == 0) {
+                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->bodyPartsPos[0]);
+            } else if (sLimbIndexToBodyPartsIndex[limbIndex] == 3) {
+                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->bodyPartsPos[3]);
+                Matrix_MultiplyVector3fByState(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
             } else {
-                Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPos[limbIndex]]);
+                Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
             }
         }
-    } else if (this->limbDrawStatus > 0) {
-        if (sLimbIndexToLimbPos[limbIndex] != -1) {
-            Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPos[limbIndex]]);
+    } else if (this->bodyPartDrawStatus > 0) {
+        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
+            Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
         }
 
         if (limbIndex == BUBBLE_LIMB_CRANIUM) {
-            this->limbDrawStatus = -1;
+            this->bodyPartDrawStatus = -1;
         }
     } else {
-        if (sLimbIndexToLimbPos[limbIndex] != -1) {
+        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             temp_v0_4 = Matrix_GetCurrentState();
-            temp_v0_4->mf[3][0] = this->limbPos[sLimbIndexToLimbPos[limbIndex]].x;
-            temp_v0_4->mf[3][1] = this->limbPos[sLimbIndexToLimbPos[limbIndex]].y;
-            temp_v0_4->mf[3][2] = this->limbPos[sLimbIndexToLimbPos[limbIndex]].z;
+            temp_v0_4->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
+            temp_v0_4->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
+            temp_v0_4->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
             Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -672,7 +679,7 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), this->drawDmgEffScale,
                   this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
