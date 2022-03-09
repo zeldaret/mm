@@ -6113,7 +6113,7 @@
     0x808C1918:("ArmsHook_Draw",),
     0x808C1D40:("EnBb_Init",),
     0x808C1E68:("EnBb_Destroy",),
-    0x808C1E94:("EnBb_TurnAwayFromWall",),
+    0x808C1E94:("EnBb_CheckForWall",),
     0x808C1F00:("EnBb_Freeze",),
     0x808C1F74:("EnBb_Thaw",),
     0x808C1FF4:("EnBb_UpdateStateForFlying",),

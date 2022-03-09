@@ -29,6 +29,12 @@ void EnBb_WaitForRevive(EnBb* this, GlobalContext* globalCtx);
 void EnBb_SetupRevive(EnBb* this);
 void EnBb_Revive(EnBb* this, GlobalContext* globalCtx);
 
+typedef enum {
+    /* -1 */ BB_BODY_PART_DRAW_STATUS_BROKEN = -1,
+    /*  0 */ BB_BODY_PART_DRAW_STATUS_ALIVE,
+    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
+} EnBbBodyPartDrawStatus;
+
 const ActorInit En_Bb_InitVars = {
     ACTOR_EN_BB,
     ACTORCAT_ENEMY,
@@ -157,12 +163,17 @@ void EnBb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroySphere(globalCtx, &this->collider);
 }
 
-void EnBb_TurnAwayFromWall(EnBb* this) {
-    s16 temp_v1;
+/**
+ * Checks to see if the Bubble is touching a wall. If it is, and if the
+ * Bubble is facing directly "into" the wall, then rotate it away from
+ * the wall.
+ */
+void EnBb_CheckForWall(EnBb* this) {
+    s16 yawDiff;
 
     if (this->actor.bgCheckFlags & 8) {
-        temp_v1 = this->actor.shape.rot.y - this->actor.wallYaw;
-        if (ABS_ALT(temp_v1) >= 0x4001) {
+        yawDiff = this->actor.shape.rot.y - this->actor.wallYaw;
+        if (ABS_ALT(yawDiff) >= 0x4001) {
             this->actor.shape.rot.y = ((this->actor.wallYaw * 2) - this->actor.shape.rot.y) - 0x8000;
         }
 
@@ -191,6 +202,10 @@ void EnBb_Thaw(EnBb* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Updates certain variables that relate to flying like the Bubble's
+ * Y-position, bob phase, and flame scale.
+ */
 void EnBb_UpdateStateForFlying(EnBb* this) {
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
@@ -201,7 +216,7 @@ void EnBb_UpdateStateForFlying(EnBb* this) {
     this->bobPhase += 0x826;
     Math_StepToF(&this->flameScaleY, 0.8f, 0.1f);
     Math_StepToF(&this->flameScaleX, 1.0f, 0.1f);
-    EnBb_TurnAwayFromWall(this);
+    EnBb_CheckForWall(this);
     Math_StepToF(&this->actor.speedXZ, this->maxSpeed, 0.5f);
     Math_ApproachS(&this->actor.shape.rot.y, this->targetYRotation, 5, 0x3E8);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -234,6 +249,9 @@ void EnBb_SetupFlyIdle(EnBb* this) {
     this->actionFunc = EnBb_FlyIdle;
 }
 
+/**
+ * Makes the Bubble fly in circles around its home.
+ */
 void EnBb_FlyIdle(EnBb* this, GlobalContext* globalCtx) {
     EnBb_UpdateStateForFlying(this);
 
@@ -263,6 +281,9 @@ void EnBb_SetupAttack(EnBb* this) {
     this->actionFunc = EnBb_Attack;
 }
 
+/**
+ * Makes the Bubble actively move towards the player.
+ */
 void EnBb_Attack(EnBb* this, GlobalContext* globalCtx) {
     this->targetYRotation = this->actor.yawTowardsPlayer;
     EnBb_UpdateStateForFlying(this);
@@ -298,9 +319,13 @@ void EnBb_SetupDown(EnBb* this) {
     this->actionFunc = EnBb_Down;
 }
 
+/**
+ * Makes the Bubble hop along the ground.
+ */
 void EnBb_Down(EnBb* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    EnBb_TurnAwayFromWall(this);
+    EnBb_CheckForWall(this);
+
     if (this->actor.bgCheckFlags & 1) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         if (this->timer == 0) {
@@ -331,9 +356,9 @@ void EnBb_Down(EnBb* this, GlobalContext* globalCtx) {
 }
 
 void EnBb_SetupDead(EnBb* this, GlobalContext* globalCtx) {
-    Vec3f* temp;
-    Vec3f sp70;
-    f32 temp_f0;
+    Vec3f* bodyPartVelocity;
+    Vec3f posDiff;
+    f32 magnitude;
     s32 i;
 
     func_800BE568(&this->actor, &this->collider);
@@ -344,20 +369,20 @@ void EnBb_SetupDead(EnBb* this, GlobalContext* globalCtx) {
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
     this->actor.speedXZ = 0.0f;
-    this->bodyPartDrawStatus = 1;
+    this->bodyPartDrawStatus = BB_BODY_PART_DRAW_STATUS_DEAD;
     this->actor.gravity = -1.5f;
 
-    temp = &this->bodyPartsVelocity[0];
-    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++, temp++) {
-        Math_Vec3f_Diff(&this->bodyPartsPos[i], &this->actor.world.pos, &sp70);
-        temp_f0 = Math3D_Vec3fMagnitude(&sp70);
-        if (temp_f0 > 1.0f) {
-            temp_f0 = 2.5f / temp_f0;
+    bodyPartVelocity = &this->bodyPartsVelocity[0];
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++, bodyPartVelocity++) {
+        Math_Vec3f_Diff(&this->bodyPartsPos[i], &this->actor.world.pos, &posDiff);
+        magnitude = Math3D_Vec3fMagnitude(&posDiff);
+        if (magnitude > 1.0f) {
+            magnitude = 2.5f / magnitude;
         }
 
-        temp->x = sp70.x * temp_f0;
-        temp->z = sp70.z * temp_f0;
-        temp->y = Rand_ZeroFloat(3.5f) + 10.0f;
+        bodyPartVelocity->x = posDiff.x * magnitude;
+        bodyPartVelocity->z = posDiff.z * magnitude;
+        bodyPartVelocity->y = Rand_ZeroFloat(3.5f) + 10.0f;
     }
 
     this->actor.flags |= ACTOR_FLAG_10;
@@ -442,7 +467,7 @@ void EnBb_Frozen(EnBb* this, GlobalContext* globalCtx) {
 
 void EnBb_SetupWaitForRevive(EnBb* this) {
     this->actor.draw = NULL;
-    this->bodyPartDrawStatus = 0;
+    this->bodyPartDrawStatus = BB_BODY_PART_DRAW_STATUS_ALIVE;
     this->drawDmgEffAlpha = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.shape.rot.x = 0;
@@ -598,7 +623,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnBb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBb* this = THIS;
 
-    if (this->bodyPartDrawStatus == -1) {
+    if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_BROKEN) {
         this->limbDList = *dList;
         *dList = NULL;
     }
@@ -611,7 +636,7 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnBb* this = THIS;
     MtxF* temp_v0_4;
 
-    if (this->bodyPartDrawStatus == 0) {
+    if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             if (sLimbIndexToBodyPartsIndex[limbIndex] == 0) {
                 Matrix_GetStateTranslationAndScaledX(1000.0f, &this->bodyPartsPos[0]);
@@ -622,13 +647,13 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                 Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
             }
         }
-    } else if (this->bodyPartDrawStatus > 0) {
+    } else if (this->bodyPartDrawStatus > BB_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
         }
 
         if (limbIndex == BUBBLE_LIMB_CRANIUM) {
-            this->bodyPartDrawStatus = -1;
+            this->bodyPartDrawStatus = BB_BODY_PART_DRAW_STATUS_BROKEN;
         }
     } else {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
