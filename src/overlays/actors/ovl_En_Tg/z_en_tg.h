@@ -30,7 +30,7 @@ typedef struct EnTg {
     /* 0x026E */ Vec3s morphTable[21];
     /* 0x02EC */ s16 unk2EC;
     /* 0x02F0 */ EnTgIdk unk2F0;
-    /* 0x0338 */
+    /* 0x0338 */char unk338[0x258];
 } EnTg; // size = 0x548
 
 extern const ActorInit En_Tg_InitVars;

@@ -177,17 +177,16 @@ void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
     // f32 sp28;
     Vec3f sp24;
-    // s16 temp_v0;
-    s16 phi_v1;// = this->unk2EC;
+    s16 phi_v1;
 
     // temp_v0 = this->unk2EC;
     // this->actor.shape.rot.y = this->actor.shape.rot.y + gGameInfo->data[0x600] + 0x258;
     // this->actor.shape.rot.y += gGameInfo->data[0x600] + 0x258;
+    //  this->actor.shape.rot.y is at 0x0BE, "sh t0,0xbe"
     this->actor.shape.rot.y += sREG(0) + 0x258; // 0x258 = 600
+
     // this->unk30 = (unaligned s32) this->unkBC;
-    this->actor.world.rot.x = this->actor.shape.rot.x;
-    // this->actor.world.rot.y = this->actor.shape.rot.y;
-    // this->actor.world.rot.z = this->actor.shape.rot.z;
+    this->actor.world.rot = this->actor.shape.rot;
 
     if (this->unk2EC == 0) {
         phi_v1 = 0;
@@ -197,7 +196,7 @@ void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
     }
     if (phi_v1 == 0) {
         this->unk2EC = 0xC; // 0xC = 12
-        sp24.x = (f32) this->actor.world.pos.x;
+        sp24.x = this->actor.world.pos.x;
         sp24.y = (f32) this->actor.world.pos.y;
         sp24.z = (f32) this->actor.world.pos.z;
         // sp28 += 62.0f;
