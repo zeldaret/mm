@@ -38,13 +38,13 @@ typedef struct ObjSwitch {
     /* 0x0160 */ s16 floorSwitchReleaseTimer;
     /* 0x0162 */ s16 disableCrystalSwitchTimer;
     /* 0x0164 */ s8 eyeTexIndex;
-    /* 0x0165 */ s8 unk_165;
+    /* 0x0165 */ s8 sfxTimer;
     /* 0x0168 */ s32 crystalAnimTimer;
     /* 0x016C */ Color_RGB8 color;
-    /* 0x016F */ u8 unk_16F;
-    /* 0x0170 */ s8 unk_170;
+    /* 0x016F */ u8 collisionFlags;
+    /* 0x0170 */ s8 floorSwitchPlayerSnapState;
     /* 0x0171 */ s8 nextSwitchFlagState;
-    /* 0x0172 */ s8 unk_172;
+    /* 0x0172 */ s8 isPlayingCutscene;
     /* 0x0174 */ ObjSwitchSetupActionFunc setupFunc;
     union {
         struct {
