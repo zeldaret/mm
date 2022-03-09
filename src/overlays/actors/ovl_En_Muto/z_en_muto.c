@@ -5,8 +5,9 @@
  */
 
 #include "z_en_muto.h"
+#include "objects/object_toryo/object_toryo.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnMuto*)thisx)
 
@@ -22,9 +23,6 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx);
 void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx);
 void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx);
 s32 EnMuto_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-
-extern AnimationHeader D_06000E50;
-extern FlexSkeletonHeader D_06007150;
 
 const ActorInit En_Muto_InitVars = {
     ACTOR_EN_MUTO,
@@ -65,7 +63,8 @@ void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 40.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06007150, &D_06000E50, this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50,
+                       this->jointTable, this->morphTable, 17);
 
     this->isInMayorsRoom = this->actor.params;
     if (!this->isInMayorsRoom) {
@@ -101,8 +100,8 @@ void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
-    static AnimationHeader* sAnimations[] = { &D_06000E50, &D_06000E50 };
-    static u8 sAnimationModes[] = { 0, 2 };
+    static AnimationHeader* sAnimations[] = { &object_toryo_Anim_000E50, &object_toryo_Anim_000E50 };
+    static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_ONCE };
 
     this->animIndex = animIndex;
     this->frameIndex = Animation_GetLastFrame(&sAnimations[animIndex]->common);
@@ -135,7 +134,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
     this->actor.textId = sTextIds[this->textIdIndex];
 
     if (!this->isInMayorsRoom && (player = GET_PLAYER(globalCtx))->transformation == PLAYER_FORM_DEKU) {
-        if (!(gSaveContext.weekEventReg[0x58] & 8)) {
+        if (!(gSaveContext.weekEventReg[88] & 8)) {
             this->actor.textId = 0x62C;
         } else {
             this->actor.textId = 0x62B;
@@ -162,7 +161,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         }
     } else {
         this->textIdIndex = 0;
-        if (gSaveContext.weekEventReg[0x3C] & 8) {
+        if (gSaveContext.weekEventReg[60] & 8) {
             this->textIdIndex = 1;
         }
         if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLE) {

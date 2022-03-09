@@ -204,26 +204,26 @@ typedef struct SkelAnime {
 } SkelAnime; // size = 0x44
 
 typedef s32 (*OverrideLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                   struct Actor* actor);
+                                   struct Actor* thisx);
 
 typedef void (*PostLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                                struct Actor* actor);
+                                struct Actor* thisx);
 
 typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                struct Actor* actor, Gfx** gfx);
+                                struct Actor* thisx, Gfx** gfx);
 
 typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                             struct Actor* actor, Gfx** gfx);
+                             struct Actor* thisx, Gfx** gfx);
 
 typedef s32 (*OverrideLimbDrawFlex)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                    struct Actor* actor);
+                                    struct Actor* thisx);
 
 typedef void (*PostLimbDrawFlex)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList1, Gfx** dList2, Vec3s* rot,
-                                 struct Actor* actor);
+                                 struct Actor* thisx);
 
-typedef void (*UnkActorDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
+typedef void (*TransformLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* thisx);
 
-typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor, Gfx** gfx);
+typedef void (*TransformLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* thisx, Gfx** gfx);
 
 typedef void (*AnimationEntryCallback)(struct GlobalContext*, AnimationEntryData*);
 
@@ -316,11 +316,29 @@ typedef struct {
     /* 0x008 */ Gfx* unk_8;
 } Struct_800A5E28; // size = 0xC
 
-typedef struct struct_80B8E1A8 {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
+typedef struct {
+    /* 0x00 */ AnimationHeader* animation;
+    /* 0x04 */ f32 playSpeed;
+    /* 0x08 */ f32 startFrame;
+    /* 0x0C */ f32 frameCount;
+    /* 0x10 */ u8 mode;
+    /* 0x14 */ f32 morphFrames;
+} AnimationInfo; // size = 0x18
+
+typedef struct {
+    /* 0x00 */ AnimationHeader* animation;
+    /* 0x04 */ f32 playSpeed;
+    /* 0x08 */ s16 startFrame;
+    /* 0x0A */ s16 frameCount;
+    /* 0x0C */ u8 mode;
+    /* 0x0E */ s16 morphFrames;
+} AnimationInfoS; // size = 0x10
+
+typedef struct AnimationSpeedInfo {
+    /* 0x00 */ AnimationHeader* animation;
+    /* 0x04 */ f32 playSpeed;
     /* 0x08 */ u8 mode;
-    /* 0x0C */ f32 transitionRate;
-} struct_80B8E1A8; // size = 0x10
+    /* 0x0C */ f32 morphFrames;
+} AnimationSpeedInfo; // size = 0x10
 
 #endif

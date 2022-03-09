@@ -1,7 +1,7 @@
 # Draw functions
 
-Up: [Contents](contents.md)
-Previous: [The rest of the functions in the actor](other_functions.md)
+- Up: [Contents](contents.md)
+- Previous: [The rest of the functions in the actor](other_functions.md)
 
 Draw functions behave completely differently from the other functions in an actor. They often use a lot of macros.
 
@@ -34,7 +34,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
     sp30->polyOpa.p = temp_v1 + 8;
     temp_v1->words.w0 = 0xDB060020;
     temp_v1->words.w1 = (u32) D_80C106B0[this->unk_2AC];
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, (Actor *) this);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32) this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, (Actor *) this);
 }
 ```
 
@@ -107,7 +107,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -115,28 +115,28 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
 And this matches.
 
-The last two functions in the actor are used as arguments in `func_801343C0`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
+The last two functions in the actor are used as arguments in `SkelAnime_DrawTransformFlexOpa`. This is a `SkelAnime` function, except unlike the OoT ones, it has three function callback arguments instead of two: in `functions.h` or `z_skelanime.c`, we find
 ```C
-void func_801343C0(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
-                   OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, UnkActorDraw unkDraw, Actor* actor)
+void SkelAnime_DrawTransformFlexOpa(GlobalContext* globalCtx, void** skeleton, Vec3s* jointTable, s32 dListCount,
+                   OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, TransformLimbDrawOpa transformLimbDraw, Actor* actor)
 ```
 The typedefs of the callbacks it uses are in `z64animation.h`:
 ```C
-typedef s32 (*OverrideLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                struct Actor* actor);
+typedef s32 (*OverrideLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                struct Actor* thisx);
 
-typedef void (*PostLimbDraw)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                             struct Actor* actor);
+typedef void (*PostLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+                             struct Actor* thisx);
 
 [...]
 
-typedef void (*UnkActorDraw)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* actor);
+typedef void (*TransformLimbDrawOpa)(struct GlobalContext* globalCtx, s32 limbIndex, struct Actor* thisx);
 ```
 which is where mips2c got them from.
 
 In this case, only two of them are used, and it is these that are the last functions standing between us and a decompiled actor.
 
-## OverrideLimbDraw, PostLimbDraw, UnkActorDraw
+## OverrideLimbDraw, PostLimbDraw, TransformLimbDraw
 
 Well, we don't have a PostLimbDraw here, but as we see from the prototype, it's much the same as the OverrideLimbDraw but without the `pos` argument and no return value.
 ```C
@@ -159,7 +159,7 @@ s32 func_80C10558(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *p
 }
 ```
 
-As for the UnkActorDraw, it has a much simpler prototype. mips2c gives
+As for the TransformLimbDraw, it has a much simpler prototype. mips2c gives
 ```C
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {

@@ -7,7 +7,7 @@
 #include "z_en_ssh.h"
 #include "objects/object_ssh/object_ssh.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSsh*)thisx)
 
@@ -151,8 +151,8 @@ s32 EnSsh_CheckCeilingPos(EnSsh* this, GlobalContext* globalCtx) {
     posB.x = this->actor.world.pos.x;
     posB.y = this->actor.world.pos.y + 1000.0f;
     posB.z = this->actor.world.pos.z;
-    if (!BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &posB, &this->ceilingPos, &poly, 0, 0, 1,
-                                 1, &bgId)) {
+    if (!BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &posB, &this->ceilingPos, &poly, false,
+                                 false, true, true, &bgId)) {
         return false;
     }
     return true;
@@ -653,7 +653,7 @@ void EnSsh_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
     this->initialYaw = this->actor.world.rot.y;
     EnSsh_SetupAction(this, EnSsh_Start);
-    if (func_8012F22C(globalCtx->sceneNum) >= 30) {
+    if (Inventory_GetSkullTokenCount(globalCtx->sceneNum) >= 30) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -713,7 +713,7 @@ void func_809756D0(EnSsh* this, GlobalContext* globalCtx) {
         phi_a1 = 0x910;
         gSaveContext.weekEventReg[34] |= 8;
     }
-    func_801518B0(globalCtx, phi_a1, &this->actor);
+    Message_StartTextbox(globalCtx, phi_a1, &this->actor);
 }
 
 void EnSsh_Idle(EnSsh* this, GlobalContext* globalCtx) {

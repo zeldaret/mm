@@ -9,7 +9,7 @@
 #include "objects/object_fz/object_fz.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
 #define THIS ((EnFz*)thisx)
 
@@ -180,7 +180,7 @@ void EnFz_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_BC8 = 0;
     this->unk_BCF = 0;
     this->unk_BCC = 1;
@@ -266,7 +266,8 @@ void func_80932784(EnFz* this, GlobalContext* globalCtx) {
     sp44.z = 440.0f;
 
     Matrix_MultiplyVector3fByState(&sp44, &this->unk_22C);
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, 1, 0, 0, 1, &sp40)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true,
+                                &sp40)) {
         Math_Vec3f_Copy(&this->unk_22C, &sp50);
     }
 
@@ -472,7 +473,7 @@ void func_80933014(EnFz* this) {
 void func_809330D4(EnFz* this) {
     this->unk_BD6 = 2;
     this->unk_BCE = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80933104;
 }
 
@@ -543,7 +544,7 @@ void func_80933324(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933368;
 }
@@ -619,7 +620,7 @@ void func_809334B8(EnFz* this, GlobalContext* globalCtx) {
         sp58.y = this->actor.world.pos.y + 20.0f;
         sp58.z = this->actor.world.pos.z;
 
-        Matrix_RotateY(this->actor.shape.rot.y, 0);
+        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
         sp64.x = 0.0f;
         sp64.y = -2.0f;
@@ -653,7 +654,7 @@ void func_809336C0(EnFz* this, GlobalContext* globalCtx) {
     this->unk_BCC = 1;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_BD7 = 0;
     this->unk_BCA = 60;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_PROP);
@@ -671,7 +672,7 @@ void func_80933790(EnFz* this) {
     this->unk_BD6 = 3;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     this->unk_BBC = 0.0f;
     this->actionFunc = func_809337D4;
@@ -702,7 +703,7 @@ void func_8093389C(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_809338E0;
 }
@@ -736,7 +737,7 @@ void func_809338E0(EnFz* this, GlobalContext* globalCtx) {
     sp58.y = this->actor.world.pos.y + 20.0f;
     sp58.z = this->actor.world.pos.z;
 
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     sp64.x = 0.0f;
     sp64.y = -2.0f;
@@ -763,7 +764,7 @@ void func_80933AF4(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933B38;
 }

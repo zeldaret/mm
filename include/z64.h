@@ -1,5 +1,5 @@
-#ifndef _Z64_H_
-#define _Z64_H_
+#ifndef Z64_H
+#define Z64_H
 
 #include "libc/math.h"
 #include "libc/stdarg.h"
@@ -17,9 +17,9 @@
 #include "scheduler.h"
 #include "xstdio.h"
 
-#include "bgm.h"
 #include "color.h"
 #include "ichain.h"
+#include "sequence.h"
 #include "sfx.h"
 
 #include "z64actor.h"
@@ -34,6 +34,7 @@
 #include "z64light.h"
 #include "z64math.h"
 #include "z64object.h"
+#include "z64ocarina.h"
 #include "z64player.h"
 #include "z64scene.h"
 #include "z64save.h"
@@ -66,7 +67,7 @@
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority
     /* 0x2 */ s16 length;
-    /* 0x4 */ s16 unk4;
+    /* 0x4 */ s16 csCamSceneDataId; // Index of CsCameraEntry to use. Negative indices use sGlobalCamDataSettings. Indices 0 and above use CsCameraEntry from scene
     /* 0x6 */ s16 unk6;
     /* 0x8 */ s16 additionalCutscene;
     /* 0xA */ u8 sound;
@@ -106,24 +107,6 @@ typedef struct {
     /* 0x4 */ UNK_TYPE1 pad4[0x4];
     /* 0x8 */ CameraModeParams* modes;
 } CameraStateParams; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u8    sceneCsCount;
-    /* 0x04 */ void* segment;
-    /* 0x08 */ u8    state;
-    /* 0x0C */ f32   unk_0C;
-    /* 0x10 */ u16   frames;
-    /* 0x12 */ u16   unk_12;
-    /* 0x14 */ s32   unk_14;
-    /* 0x18 */ u16   unk_18;
-    /* 0x1A */ u8    unk_1A;
-    /* 0x1B */ u8    unk_1B;
-    /* 0x1C */ CutsceneCameraPoint* cameraFocus;
-    /* 0x20 */ CutsceneCameraPoint* cameraPosition;
-    /* 0x24 */ CsCmdActorAction* linkAction;
-    /* 0x28 */ CsCmdActorAction* npcActions[10]; // "npcdemopnt"
-    /* 0x50 */ CutsceneEntry* sceneCsList;
-} CutsceneContext; // size = 0x54
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -167,8 +150,10 @@ typedef struct {
     /* 0x5 */ Color_RGB8 envColor;
 } FireObjLightParams; // size = 0x8
 
+#define FONT_CHAR_TEX_WIDTH  16
+#define FONT_CHAR_TEX_HEIGHT 16
 //! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
-#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2)
+#define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
 // Font textures are loaded into here
 typedef struct {
@@ -492,13 +477,12 @@ typedef struct {
     /* 0x0E0 */ Mtx unkE0;
     /* 0x120 */ Mtx* projectionPtr;
     /* 0x124 */ Mtx* viewingPtr;
-    /* 0x128 */ Vec3f quakeRot;
-    /* 0x134 */ Vec3f quakeScale;
-    /* 0x140 */ f32 quakeSpeed;
-    /* 0x144 */ Vec3f currQuakeRot;
-    /* 0x150 */ Vec3f currQuakeScale;
+    /* 0x128 */ Vec3f distortionDirRot;
+    /* 0x134 */ Vec3f distortionScale;
+    /* 0x140 */ f32 distortionSpeed;
+    /* 0x144 */ Vec3f curDistortionDirRot;
+    /* 0x150 */ Vec3f curDistortionScale;
     /* 0x15C */ u16 normal;
-    /* 0x15E */ UNK_TYPE1 pad15E[0x2];
     /* 0x160 */ u32 flags; // bit 3: Render to an orthographic perspective
     /* 0x164 */ UNK_TYPE4 unk164;
 } View; // size = 0x168
@@ -707,7 +691,7 @@ typedef enum {
 
 typedef struct {
     /* 0x00 */ u16 unk_0;
-    /* 0x02 */ u16 unk_2;
+    /* 0x02 */ u16 timeIncrement;
     /* 0x04 */ f32 unk_4;
     /* 0x08 */ f32 unk_8;
     /* 0x0C */ f32 unk_C;
@@ -716,8 +700,8 @@ typedef struct {
     /* 0x12 */ u8 unk_12;
     /* 0x13 */ u8 unk_13;
     /* 0x14 */ u8 unk_14;
-    /* 0x15 */ u8 unk_15;
-    /* 0x16 */ u8 unk_16;
+    /* 0x15 */ u8 skyboxDisabled;
+    /* 0x16 */ u8 sunMoonDisabled;
     /* 0x17 */ u8 unk_17;
     /* 0x18 */ u8 unk_18;
     /* 0x19 */ u8 unk_19;
@@ -738,7 +722,7 @@ typedef struct {
     /* 0x80 */ OSMesg unk_80;
     /* 0x84 */ f32 unk_84;
     /* 0x88 */ f32 unk_88;
-    /* 0x8C */ LightSettings2 unk_8C;
+    /* 0x8C */ EnvLightSettings lightSettings;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
@@ -747,18 +731,18 @@ typedef struct {
     /* 0xC0 */ u8 unk_C0;
     /* 0xC1 */ u8 unk_C1;
     /* 0xC2 */ u8 unk_C2;
-    /* 0xC3 */ u8 unk_C3;
+    /* 0xC3 */ u8 lightSettingOverride;
     /* 0xC4 */ LightSettings unk_C4;
     /* 0xDA */ u16 unk_DA;
-    /* 0xDC */ f32 unk_DC;
+    /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 unk_E0;
     /* 0xE1 */ u8 unk_E1;
     /* 0xE2 */ s8 unk_E2;
     /* 0xE3 */ u8 unk_E3; // modified by unused func in EnWeatherTag
     /* 0xE4 */ u8 unk_E4;
-    /* 0xE5 */ u8 unk_E5;
-    /* 0xE6 */ u8 unk_E6[4];
-    /* 0xEA */ u8 unk_EA;
+    /* 0xE5 */ u8 fillScreen;
+    /* 0xE6 */ u8 screenFillColor[4];
+    /* 0xEA */ u8 sandstormState;
     /* 0xEB */ u8 unk_EB;
     /* 0xEC */ u8 unk_EC;
     /* 0xED */ u8 unk_ED;
@@ -854,15 +838,15 @@ typedef struct {
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
-    /* 0x11F22 */ u8 unk11F22;
+    /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
     /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
-    /* 0x1202A */ u16 unk1202A;
-    /* 0x1202C */ UNK_TYPE1 pad1202C[0x2];
+    /* 0x1202A */ u16 ocarinaMode;
+    /* 0x1202C */ u16 ocarinaAction;
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
@@ -870,10 +854,15 @@ typedef struct {
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
     /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0x21];
+    /* 0x12049 */ UNK_TYPE1 pad12049[0xB];
+    /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
+    /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
+    /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
+    /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
-    /* 0x12070 */ UNK_TYPE1 pad12070[0x8];
+    /* 0x12070 */ s32 unk12070;
+    /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
     /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
@@ -988,8 +977,6 @@ typedef void (*ColChkApplyFunc)(GlobalContext*, CollisionCheckContext*, Collider
 typedef void (*ColChkVsFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Collider*);
 typedef s32 (*ColChkLineFunc)(GlobalContext*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
-typedef void(*cutscene_update_func)(GlobalContext* globalCtx, CutsceneContext* cCtxt);
-
 typedef void(*draw_func)(GlobalContext* globalCtx, s16 index);
 
 typedef void(*room_draw_func)(GlobalContext* globalCtx, Room* room, u32 flags);
@@ -1064,7 +1051,7 @@ typedef struct Camera {
     /* 0x15E */ s16 animState;
     /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 timer;
-    /* 0x164 */ s16 thisIdx;
+    /* 0x164 */ s16 camId;
     /* 0x166 */ s16 prevCamDataIdx;
     /* 0x168 */ s16 unk168;
     /* 0x16A */ s16 unk16A;
@@ -1093,7 +1080,7 @@ typedef struct {
     /* 0x1A */ s16 speed;
     /* 0x1C */ s16 isShakePerpendicular;
     /* 0x1E */ s16 countdown;
-    /* 0x20 */ s16 cameraPtrsIdx;
+    /* 0x20 */ s16 camId;
 } QuakeRequest; // size = 0x24
 
 typedef struct {
@@ -1122,13 +1109,13 @@ typedef struct {
     /* 0x4 */ s32 type; // bitfield, highest set bit determines type
     /* 0x8 */ s16 countdown;
     /* 0xA */ s16 state;
-} Quake2Context; // size = 0xC
+} DistortionContext; // size = 0xC
 
 typedef enum {
-    QUAKE2_INACTIVE,
-    QUAKE2_ACTIVE,
-    QUAKE2_SETUP,
-} Quake2State;
+    /* 0 */ DISTORTION_INACTIVE,
+    /* 1 */ DISTORTION_ACTIVE,
+    /* 2 */ DISTORTION_SETUP,
+} DistortionState;
 
 typedef struct {
     /* 0x000 */ u8 controllers; // bit 0 is set if controller 1 is plugged in, etc.
@@ -1304,11 +1291,11 @@ struct GlobalContext {
     /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
-    /* 0x1879C */ s16 unk_1879C[10];
+    /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
     /* 0x187FC */ MtxF billboardMtxF;
-    /* 0x1883C */ Mtx* unk_1883C;
+    /* 0x1883C */ Mtx* billboardMtx;
     /* 0x18840 */ u32 gameplayFrames;
     /* 0x18844 */ u8 unk_18844;
     /* 0x18845 */ u8 unk_18845;
@@ -1317,7 +1304,7 @@ struct GlobalContext {
     /* 0x1884C */ RomFile* roomList;
     /* 0x18850 */ ActorEntry* linkActorEntry;
     /* 0x18854 */ ActorEntry* setupActorList;
-    /* 0x18858 */ void* unk_18858;
+    /* 0x18858 */ CsCamData* csCamData;
     /* 0x1885C */ EntranceEntry* setupEntranceList;
     /* 0x18860 */ u16* setupExitList;
     /* 0x18864 */ Path* setupPathList;
@@ -1332,7 +1319,7 @@ struct GlobalContext {
     /* 0x1887C */ s8 unk_1887C;
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
-    /* 0x1887F */ u8 unk_1887F;
+    /* 0x1887F */ u8 unk_1887F; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
     /* 0x18B20 */ u16 envFlags[20];
@@ -1368,35 +1355,18 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
 } struct_800BD888_arg1; // size = 0x28
 
-typedef struct EnHy {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ UNK_TYPE1 unk_144[0x8];
-    /* 0x14C */ SkelAnime skelAnime;
-    /* 0x190 */ s8 unk190;
-    /* 0x191 */ s8 unk191;
-    /* 0x192 */ s8 unk192;
-    /* 0x193 */ s8 animObjIndex;
-    /* 0x194 */ ColliderCylinder collider;
-    /* 0x1E0 */ UNK_TYPE1 unk_1E0[0x4];
-    /* 0x1E4 */ Path* path;
-    /* 0x1E8 */ s16 curPoint;
-    /* 0x1EA */ UNK_TYPE1 unk_1EA[0x2];
-    /* 0x1EC */ Vec3f leftFootPos;
-    /* 0x1F8 */ Vec3f rightFootPos;
-    /* 0x204 */ u8 isLeftFootOnGround;
-    /* 0x205 */ u8 isRightFootOnGround;
-    /* 0x206 */ Vec3s jointTable[16];
-    /* 0x266 */ Vec3s morphTable[16];
-    /* 0x2C6 */ UNK_TYPE1 unk_2C6[0x120];
-    /* 0x3E6 */ s16 eyeTexIndex;
-    /* 0x3E8 */ s16 blinkTimer;
-} EnHy;
-
 typedef struct {
     /* 0x0 */ u8 unk0;
     /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8;
+    /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
+
+
+typedef enum {
+    /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
+    /* 1 */ SUBS_CUTSCENE_NORMAL,
+    /* 2 */ SUBS_CUTSCENE_SET_FLAG
+} SubSCutsceneType;
 
 typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
 
@@ -1521,5 +1491,28 @@ enum fram_mode {
     FRAM_MODE_READ,
     FRAM_MODE_STATUS
 };
+
+typedef struct {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ UNK_TYPE1 unk_0E[0x02];
+    /* 0x10 */ UNK_TYPE1 unk_10[0x2C];
+    /* 0x3C */ UNK_TYPE1 unk_3C[0x01];
+    /* 0x3D */ u8 unk_3D;
+    /* 0x3E */ UNK_TYPE1 unk_3E[0x02];
+    /* 0x40 */ UNK_TYPE1 unk_40[0x2C];
+    /* 0x6C */ UNK_TYPE1 unk_6C[0x01];
+    /* 0x6D */ u8 unk_6D;
+    /* 0x6E */ UNK_TYPE1 unk_6E[0x02];
+    /* 0x70 */ UNK_PTR unk_70;
+    /* 0x74 */ UNK_PTR unk_74;
+    /* 0x78 */ UNK_PTR unk_78;
+    /* 0x7C */ Camera* camera;
+} struct_801F4D48; // size = 0x80
 
 #endif

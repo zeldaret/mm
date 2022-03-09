@@ -8,7 +8,7 @@
 #include "z_en_bomjima.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBomjima*)thisx)
 
@@ -125,7 +125,7 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
                        this->morphTable, 21);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    gSaveContext.weekEventReg[83] &= (u8)~0x4;
+    gSaveContext.weekEventReg[83] &= (u8)~4;
     this->actor.targetMode = 0;
     this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
     this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
@@ -268,7 +268,7 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C,
-                                                               &sp50, 1, 0, 0, 1, &sp4C)) {
+                                                               &sp50, true, false, false, true, &sp4C)) {
                     func_80BFE494(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_2A4, &sp54);
                     this->unk_2BE = Rand_S16Offset(30, 50);
@@ -290,8 +290,8 @@ void func_80BFE67C(EnBomjima* this, GlobalContext* globalCtx) {
                 sp60.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp60.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, 1, 0, 0, 1,
-                                            &sp4C)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C, &sp50, true,
+                                            false, false, true, &sp4C)) {
                     this->unk_2C0 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80BFE494(this, 19, 1.0f);
@@ -469,8 +469,8 @@ void func_80BFF03C(EnBomjima* this, GlobalContext* globalCtx) {
     } else {
         player->stateFlags1 &= ~0x20;
         gSaveContext.weekEventReg[83] &= (u8)~4;
-        this->actor.world.rot.y = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
-        this->unk_2DC = func_800DFCDC(GET_ACTIVE_CAM(globalCtx));
+        this->actor.world.rot.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
+        this->unk_2DC = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx));
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2D4[0], &this->actor);
         func_80BFF120(this);
     }
@@ -1101,13 +1101,12 @@ void EnBomjima_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gEnBomjima_D_80C00B18, gEnBomjima_D_80C00B18,
     };
     static TexturePtr D_80C00B3C[] = {
-        &object_cs_Tex_00C520,
-        &object_cs_Tex_00CD20,
-        &object_cs_Tex_00D520,
+        object_cs_Tex_00C520,
+        object_cs_Tex_00CD20,
+        object_cs_Tex_00D520,
     };
     static TexturePtr D_80C00B48[] = {
-        &object_cs_Tex_00E620, &object_cs_Tex_00EA20, &object_cs_Tex_00EE20,
-        &object_cs_Tex_00DD20, &object_cs_Tex_00F220,
+        object_cs_Tex_00E620, object_cs_Tex_00EA20, object_cs_Tex_00EE20, object_cs_Tex_00DD20, object_cs_Tex_00F220,
     };
     EnBomjima* this = THIS;
 

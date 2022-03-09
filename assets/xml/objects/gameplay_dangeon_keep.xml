@@ -50,8 +50,8 @@
         <Texture Name="gameplay_dangeon_keep_Tex_0162C0" OutName="tex_0162C0" Format="i8" Width="64" Height="64" Offset="0x162C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_0172C0" OutName="tex_0172C0" Format="rgba16" Width="32" Height="32" Offset="0x172C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_017AC0" OutName="tex_017AC0" Format="ia16" Width="4" Height="4" Offset="0x17AC0" />
-        <DList Name="gameplay_dangeon_keep_DL_017EA0" Offset="0x17EA0" />
-        <DList Name="gameplay_dangeon_keep_DL_018090" Offset="0x18090" />
+        <DList Name="gameplay_dangeon_keep_DL_017EA0" Offset="0x17EA0" /> <!-- pot displaylist -->
+        <DList Name="gameplay_dangeon_keep_DL_018090" Offset="0x18090" /> <!-- pot break shard displaylist -->
         <DList Name="gameplay_dangeon_keep_DL_0182A0" Offset="0x182A0" />
         <DList Name="gameplay_dangeon_keep_DL_0182A8" Offset="0x182A8" />
         <Texture Name="gameplay_dangeon_keep_Tex_018350" OutName="tex_018350" Format="i8" Width="64" Height="64" Offset="0x18350" />

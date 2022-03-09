@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_funen.h"
+#include "objects/object_funen/object_funen.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjFunen*)thisx)
 
@@ -18,8 +19,6 @@ const ActorInit Obj_Funen_InitVars = {
     OBJECT_FUNEN,          sizeof(ObjFunen),      (ActorFunc)ObjFunen_Init,
     (ActorFunc)Actor_Noop, (ActorFunc)Actor_Noop, (ActorFunc)ObjFunen_Draw,
 };
-
-extern Gfx D_060000D0[];
 
 f32 D_80A198D0[] = { 0.1f, 0.024390244f };
 
@@ -36,7 +35,7 @@ void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY((s16)(func_800DFCDC(GET_ACTIVE_CAM(globalCtx)) - 0x8000), MTXMODE_APPLY);
+    Matrix_RotateY((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - 0x8000), MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
 
@@ -44,6 +43,6 @@ void ObjFunen_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, temp, 0x20, 0x20, 1, 0, temp, 0x20, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, D_060000D0);
+    gSPDisplayList(POLY_XLU_DISP++, object_funen_DL_0000D0);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

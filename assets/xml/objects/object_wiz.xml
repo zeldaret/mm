@@ -78,25 +78,25 @@
         <Texture Name="object_wiz_Tex_00ACF0" OutName="tex_00ACF0" Format="rgba16" Width="16" Height="16" Offset="0xACF0" />
         <Texture Name="object_wiz_Tex_00AEF0" OutName="tex_00AEF0" Format="rgba16" Width="16" Height="16" Offset="0xAEF0" />
         <Texture Name="object_wiz_Tex_00B0F0" OutName="tex_00B0F0" Format="rgba16" Width="16" Height="8" Offset="0xB0F0" />
-        <Limb Name="object_wiz_Standardlimb_00B1F0" Type="Standard" Offset="0xB1F0" />
-        <Limb Name="object_wiz_Standardlimb_00B1FC" Type="Standard" Offset="0xB1FC" />
-        <Limb Name="object_wiz_Standardlimb_00B208" Type="Standard" Offset="0xB208" />
-        <Limb Name="object_wiz_Standardlimb_00B214" Type="Standard" Offset="0xB214" />
-        <Limb Name="object_wiz_Standardlimb_00B220" Type="Standard" Offset="0xB220" />
-        <Limb Name="object_wiz_Standardlimb_00B22C" Type="Standard" Offset="0xB22C" />
-        <Limb Name="object_wiz_Standardlimb_00B238" Type="Standard" Offset="0xB238" />
-        <Limb Name="object_wiz_Standardlimb_00B244" Type="Standard" Offset="0xB244" />
-        <Limb Name="object_wiz_Standardlimb_00B250" Type="Standard" Offset="0xB250" />
-        <Limb Name="object_wiz_Standardlimb_00B25C" Type="Standard" Offset="0xB25C" />
-        <Limb Name="object_wiz_Standardlimb_00B268" Type="Standard" Offset="0xB268" />
-        <Limb Name="object_wiz_Standardlimb_00B274" Type="Standard" Offset="0xB274" />
-        <Limb Name="object_wiz_Standardlimb_00B280" Type="Standard" Offset="0xB280" />
-        <Limb Name="object_wiz_Standardlimb_00B28C" Type="Standard" Offset="0xB28C" />
-        <Limb Name="object_wiz_Standardlimb_00B298" Type="Standard" Offset="0xB298" />
-        <Limb Name="object_wiz_Standardlimb_00B2A4" Type="Standard" Offset="0xB2A4" />
-        <Limb Name="object_wiz_Standardlimb_00B2B0" Type="Standard" Offset="0xB2B0" />
-        <Limb Name="object_wiz_Standardlimb_00B2BC" Type="Standard" Offset="0xB2BC" />
-        <Limb Name="object_wiz_Standardlimb_00B2C8" Type="Standard" Offset="0xB2C8" />
-        <Skeleton Name="object_wiz_Skel_00B320" Type="Flex" LimbType="Standard" Offset="0xB320" />
+        <Limb Name="object_wiz_Standardlimb_00B1F0" Type="Standard" EnumName="OBJECT_WIZ_LIMB_01" Offset="0xB1F0" />
+        <Limb Name="object_wiz_Standardlimb_00B1FC" Type="Standard" EnumName="OBJECT_WIZ_LIMB_02" Offset="0xB1FC" />
+        <Limb Name="object_wiz_Standardlimb_00B208" Type="Standard" EnumName="OBJECT_WIZ_LIMB_03" Offset="0xB208" />
+        <Limb Name="object_wiz_Standardlimb_00B214" Type="Standard" EnumName="OBJECT_WIZ_LIMB_04" Offset="0xB214" />
+        <Limb Name="object_wiz_Standardlimb_00B220" Type="Standard" EnumName="OBJECT_WIZ_LIMB_05" Offset="0xB220" />
+        <Limb Name="object_wiz_Standardlimb_00B22C" Type="Standard" EnumName="OBJECT_WIZ_LIMB_06" Offset="0xB22C" />
+        <Limb Name="object_wiz_Standardlimb_00B238" Type="Standard" EnumName="OBJECT_WIZ_LIMB_07" Offset="0xB238" />
+        <Limb Name="object_wiz_Standardlimb_00B244" Type="Standard" EnumName="OBJECT_WIZ_LIMB_08" Offset="0xB244" />
+        <Limb Name="object_wiz_Standardlimb_00B250" Type="Standard" EnumName="OBJECT_WIZ_LIMB_09" Offset="0xB250" />
+        <Limb Name="object_wiz_Standardlimb_00B25C" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0A" Offset="0xB25C" />
+        <Limb Name="object_wiz_Standardlimb_00B268" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0B" Offset="0xB268" />
+        <Limb Name="object_wiz_Standardlimb_00B274" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0C" Offset="0xB274" />
+        <Limb Name="object_wiz_Standardlimb_00B280" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0D" Offset="0xB280" />
+        <Limb Name="object_wiz_Standardlimb_00B28C" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0E" Offset="0xB28C" />
+        <Limb Name="object_wiz_Standardlimb_00B298" Type="Standard" EnumName="OBJECT_WIZ_LIMB_0F" Offset="0xB298" />
+        <Limb Name="object_wiz_Standardlimb_00B2A4" Type="Standard" EnumName="OBJECT_WIZ_LIMB_10" Offset="0xB2A4" />
+        <Limb Name="object_wiz_Standardlimb_00B2B0" Type="Standard" EnumName="OBJECT_WIZ_LIMB_11" Offset="0xB2B0" />
+        <Limb Name="object_wiz_Standardlimb_00B2BC" Type="Standard" EnumName="OBJECT_WIZ_LIMB_12" Offset="0xB2BC" />
+        <Limb Name="object_wiz_Standardlimb_00B2C8" Type="Standard" EnumName="OBJECT_WIZ_LIMB_13" Offset="0xB2C8" />
+        <Skeleton Name="object_wiz_Skel_00B320" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WIZ_LIMB_NONE" LimbMax="OBJECT_WIZ_LIMB_MAX" EnumName="object_wiz_Limbs" Offset="0xB320" />
     </File>
 </Root>

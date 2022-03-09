@@ -6,7 +6,7 @@
 
 #include "z_obj_danpeilift.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjDanpeilift*)thisx)
 
@@ -20,7 +20,7 @@ const ActorInit Obj_Danpeilift_InitVars = {
     ACTOR_OBJ_DANPEILIFT,
     ACTORCAT_BG,
     FLAGS,
-    OBJECT_OBJECT_UNSET_DANPEILIFT,
+    OBJECT_OBJ_DANPEILIFT,
     sizeof(ObjDanpeilift),
     (ActorFunc)ObjDanpeilift_Init,
     (ActorFunc)ObjDanpeilift_Destroy,

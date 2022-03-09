@@ -26,6 +26,12 @@ typedef enum {
     /* 4 */ OBJSWITCH_SUBTYPE_SYNC // Crystal type only, syncronizes all crystal fl
 } ObjSwitchSubType;
 
+#define OBJSWITCH_GET_33(thisx) ((thisx)->params & 0x33)
+#define OBJSWITCH_GET_7F00(thisx) (((thisx)->params >> 8) & 0x7F)
+
+#define OBJSWITCH_NORMAL_BLUE 0x20
+#define OBJSWITCH_INVERSE_BLUE 0x30
+
 typedef struct ObjSwitch {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ ObjSwitchActionFunc actionFunc;

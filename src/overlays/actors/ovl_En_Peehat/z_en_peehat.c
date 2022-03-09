@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_ph/object_ph.h"
 
-#define FLAGS 0x00000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
 #define THIS ((EnPeehat*)thisx)
 
@@ -297,7 +297,7 @@ void func_80897498(EnPeehat* this) {
 
 void func_80897520(EnPeehat* this, GlobalContext* globalCtx) {
     if (!gSaveContext.isNight) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->colliderSphere.base.acFlags |= AC_ON;
         if (this->actor.xzDistToPlayer < 740.0f) {
             func_80897648(this);
@@ -305,7 +305,7 @@ void func_80897520(EnPeehat* this, GlobalContext* globalCtx) {
             Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 10.0f);
         }
     } else {
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->colliderSphere.base.acFlags &= ~AC_ON;
         Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 50.0f);
         if (this->unk_2B0 != 0) {
@@ -797,8 +797,8 @@ void EnPeehat_Update(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
 
             for (i = 1; i >= 0; i--) {
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70, 1,
-                                            1, 0, 1, &sp6C)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &thisx->world.pos, &this->unk_2D4[i], &sp74, &sp70,
+                                            true, true, false, true, &sp6C)) {
                     func_800BBFB0(globalCtx, &sp74, 0.0f, 1, 300, 150, 1);
                     func_80897258(globalCtx, this, &sp74, 0.0f, 1.5f);
                 }
