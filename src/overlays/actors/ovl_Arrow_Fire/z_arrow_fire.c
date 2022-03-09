@@ -17,11 +17,7 @@ void ArrowFire_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void FireArrow_ChargeAndWait(ArrowFire* this, GlobalContext* globalCtx);
-void FireArrow_Hit(ArrowFire* this, GlobalContext* globalCtx);
 void FireArrow_Fly(ArrowFire* this, GlobalContext* globalCtx);
-
-void ArrowFire_SetupAction(ArrowFire* this, ArrowFireActionFunc actionFunc);
-void FireArrow_Lerp(Vec3f*, Vec3f*, f32);
 
 #include "overlays/ovl_Arrow_fire/ovl_Arrow_Fire.c"
 
@@ -143,7 +139,6 @@ void FireArrow_Hit(ArrowFire* this, GlobalContext* globalCtx) {
             offset = (this->timer - 8) * (1.0f / 24.0f);
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
-            this->height = this->height + ((2.0f - this->height) * 0.1f);
             if (this->timer < 16) {
                 this->alpha = (this->timer * 35) - 280;
             }
@@ -192,7 +187,7 @@ void FireArrow_Fly(ArrowFire* this, GlobalContext* globalCtx) {
     }
 
     FireArrow_Lerp(&this->firedPos, &this->actor.world.pos, 0.05f);
-    if ((arrow->unk_261 & 1) != 0) {
+    if (arrow->unk_261 & 1) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
         ArrowFire_SetupAction(this, FireArrow_Hit);
         this->timer = 32;
@@ -261,7 +256,7 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
 
-        Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
+        Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         if (this->blueingEffectMagnitude > 0.0f) {
             POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
 

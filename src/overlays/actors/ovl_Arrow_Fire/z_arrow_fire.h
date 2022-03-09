@@ -18,7 +18,7 @@ typedef struct ArrowFire {
     /* 0x25C */ s16 radius;
     /* 0x25E */ u16 timer;
     /* 0x260 */ u8 alpha;
-} ArrowFire; /* size = 0x264 */
+} ArrowFire; // size = 0x264
 
 
 extern const ActorInit Arrow_Fire_InitVars;

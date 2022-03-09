@@ -16,7 +16,7 @@ typedef struct ArrowLight {
     /* 0x158 */ f32 height;
     /* 0x15C */ f32 blueingEffectMagnitude;
     /* 0x160 */ ArrowLightActionFunc actionFunc;
-} ArrowLight; /* size = 0x164 */
+} ArrowLight; // size = 0x164
 
 
 extern const ActorInit Arrow_Light_InitVars;

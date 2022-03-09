@@ -17,10 +17,7 @@ void ArrowLight_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ArrowLight_Charge(ArrowLight* this, GlobalContext* globalCtx);
-void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx);
 void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx);
-
-void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc);
 
 #include "overlays/ovl_Arrow_Light/ovl_Arrow_Light.c"
 
@@ -48,6 +45,7 @@ static s32 sUnused;
 void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
+
 void ArrowLight_Init(Actor* thisx, GlobalContext* globalCtx) {
     ArrowLight* this = (ArrowLight*)thisx;
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -62,7 +60,7 @@ void ArrowLight_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void ArrowLight_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     func_80115D5C(&globalCtx->state);
-    (void)"消滅";
+    (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
 void ArrowLight_Charge(ArrowLight* this, GlobalContext* globalCtx) {
@@ -114,7 +112,7 @@ void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
 
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
-            this->height = this->height + ((2.0f - this->height) * 0.1f);
+            this->height = F32_LERPIMP(this->height, 2.0f, 0.1f);
             if (this->timer < 16) {
                 this->alpha = (this->timer * 35) - 280;
             }
@@ -141,8 +139,7 @@ void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
 
 void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
-    s32 pad;
-    s32 pad2;
+    s32 pad[2];
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
         Actor_MarkForDeath(&this->actor);
@@ -152,14 +149,14 @@ void ArrowLight_Fly(ArrowLight* this, GlobalContext* globalCtx) {
     this->actor.world.pos = arrow->actor.world.pos;
     this->actor.shape.rot = arrow->actor.shape.rot;
 
-    this->height = Math_Vec3f_DistXYZ(&this->firedPos, &this->actor.world.pos) * 0.041666668f;
+    this->height = Math_Vec3f_DistXYZ(&this->firedPos, &this->actor.world.pos) * (1.0f / 24.0f);
     if (this->height < 1.0f) {
         this->height = 1.0f;
     }
 
     ArrowLight_Lerp(&this->firedPos, &this->actor.world.pos, 0.05f);
 
-    if ((arrow->unk_261 & 1) != 0) {
+    if (arrow->unk_261 & 1) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_LIGHT);
         ArrowLight_SetupAction(this, ArrowLight_Hit);
         this->timer = 32;
@@ -191,7 +188,7 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u32 frames = globalCtx->state.frames;
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
-    if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->timer < 0xFF)) {
+    if ((arrow != NULL) && (arrow->actor.update != NULL) && (this->timer < 255)) {
         Actor* transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -200,7 +197,7 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateY(transform->shape.rot.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
-        Matrix_Scale(0.01f, 0.01f, 0.01f, 1);
+        Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         if (this->blueingEffectMagnitude > 0.0f) {
             POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->blueingEffectMagnitude * 30.0f) & 0xFF,
@@ -213,7 +210,7 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0xAA, this->alpha);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 0, 128);
 
         Matrix_InsertRotation(0x4000, 0, 0, MTXMODE_APPLY);

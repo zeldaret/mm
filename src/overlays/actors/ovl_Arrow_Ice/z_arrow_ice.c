@@ -17,7 +17,6 @@ void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx);
 void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void ArrowIce_Charge(ArrowIce* this, GlobalContext* globalCtx);
-void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx);
 void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx);
 
 #include "overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
@@ -114,7 +113,7 @@ void ArrowIce_Hit(ArrowIce* this, GlobalContext* globalCtx) {
 
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
-            this->height += ((2.0f - this->height) * 0.1f);
+            this->height = F32_LERPIMP(this->height, 2.0f, 0.1f);
             if (this->timer < 16) {
                 this->alpha = ((this->timer * 35) - 280);
             }
