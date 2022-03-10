@@ -129,7 +129,7 @@ s32 func_80B34FB4(EnGg* this, GlobalContext* globalCtx) {
     pitch = Math_Vec3f_Pitch(&sp34, &sp40);
 
     if ((this->actor.xzDistToPlayer < 250.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
-        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (gSaveContext.weekEventReg[19] & 0x80))) {
+        (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) || (gSaveContext.save.weekEventReg[19] & 0x80))) {
         Math_SmoothStepToS(&this->unk_2E8, pitch, 4, 0x2AA8, 1);
     } else {
         Math_SmoothStepToS(&this->unk_2E8, 0, 4, 0x2AA8, 1);
@@ -212,7 +212,7 @@ void func_80B352A4(EnGg* this, GlobalContext* globalCtx) {
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                 break;
         }
-        gSaveContext.weekEventReg[19] |= 0x80;
+        gSaveContext.save.weekEventReg[19] |= 0x80;
         this->actionFunc = func_80B3556C;
     } else if ((this->unk_2E6 == 0) && ((this->actor.textId == 0xCED) || (this->actor.textId == 0xCEE))) {
         if (sp26 < (lastFrame - 1)) {
@@ -225,7 +225,7 @@ void func_80B352A4(EnGg* this, GlobalContext* globalCtx) {
 }
 
 void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.weekEventReg[91] & 0x10) && (globalCtx->csCtx.state == 0)) {
+    if ((gSaveContext.save.weekEventReg[91] & 0x10) && (globalCtx->csCtx.state == 0)) {
         func_80B359DC(this, globalCtx);
     }
 
@@ -236,7 +236,7 @@ void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
         this->unk_308 = 1;
         this->actionFunc = func_80B352A4;
     } else if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.xzDistToPlayer > 50.0f)) {
-        if (gSaveContext.weekEventReg[19] & 0x80) {
+        if (gSaveContext.save.weekEventReg[19] & 0x80) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xCEE;
         } else if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
@@ -400,8 +400,8 @@ void func_80B359DC(EnGg* this, GlobalContext* globalCtx) {
 
         if ((player->transformation == PLAYER_FORM_HUMAN) && (globalCtx->msgCtx.ocarinaMode == 3) &&
             (globalCtx->msgCtx.unk1202E == 7)) {
-            if (!(gSaveContext.weekEventReg[19] & 0x80)) {
-                gSaveContext.weekEventReg[19] |= 0x80;
+            if (!(gSaveContext.save.weekEventReg[19] & 0x80)) {
+                gSaveContext.save.weekEventReg[19] |= 0x80;
             }
             this->unk_307 = true;
         }
@@ -661,9 +661,9 @@ void EnGg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    gSaveContext.weekEventReg[20] &= (u8)~4;
-    gSaveContext.weekEventReg[20] &= (u8)~8;
-    gSaveContext.weekEventReg[20] &= (u8)~0x10;
+    gSaveContext.save.weekEventReg[20] &= (u8)~4;
+    gSaveContext.save.weekEventReg[20] &= (u8)~8;
+    gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
     this->actor.flags &= ~ACTOR_FLAG_80;
     this->unk_310 = this->actor.home.pos.y;
     this->unk_2DC = this->actor.cutscene;
@@ -691,7 +691,7 @@ void EnGg_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
 
-    if (gSaveContext.weekEventReg[19] & 0x80) {
+    if (gSaveContext.save.weekEventReg[19] & 0x80) {
         if (globalCtx->csCtx.state == 0) {
             this->actor.flags |= ACTOR_FLAG_1;
         } else {
@@ -709,10 +709,10 @@ void EnGg_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80B35968(this, globalCtx);
     }
 
-    if (!(gSaveContext.weekEventReg[91] & 0x10) &&
-        ((gSaveContext.weekEventReg[19] & 0x80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
+    if (!(gSaveContext.save.weekEventReg[91] & 0x10) &&
+        ((gSaveContext.save.weekEventReg[19] & 0x80) || CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80) ||
          (this->unk_308 == 1))) {
-        gSaveContext.weekEventReg[91] |= 0x10;
+        gSaveContext.save.weekEventReg[91] |= 0x10;
     }
 
     this->actionFunc(this, globalCtx);
@@ -790,7 +790,7 @@ void EnGg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_344.unk_38(&this->unk_344, globalCtx);
     }
 
-    if (gSaveContext.weekEventReg[19] & 0x80) {
+    if (gSaveContext.save.weekEventReg[19] & 0x80) {
         func_8012C28C(globalCtx->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B36DFC[this->unk_2E2]));
