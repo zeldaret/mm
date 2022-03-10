@@ -1504,9 +1504,7 @@ beginseg
     name "ovl_Obj_Switch"
     compress
     include "build/src/overlays/actors/ovl_Obj_Switch/z_obj_switch.o"
-    include "build/data/ovl_Obj_Switch/ovl_Obj_Switch.data.o"
-    include "build/data/ovl_Obj_Switch/ovl_Obj_Switch.bss.o"
-    include "build/data/ovl_Obj_Switch/ovl_Obj_Switch.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Switch/ovl_Obj_Switch_reloc.o"
 endseg
 
 beginseg
