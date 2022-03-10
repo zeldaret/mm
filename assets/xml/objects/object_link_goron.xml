@@ -35,7 +35,7 @@
         <DList Name="object_link_goron_DL_00A0A0" Offset="0xA0A0" />
         <DList Name="object_link_goron_DL_00A220" Offset="0xA220" />
         <DList Name="object_link_goron_DL_00A500" Offset="0xA500" />
-        <DList Name="object_link_goron_DL_00BDD8" Offset="0xBDD8" />
+        <DList Name="gLinkGoronCurledDL" Offset="0xBDD8" />
         <DList Name="object_link_goron_DL_00C540" Offset="0xC540" />
         <Texture Name="object_link_goron_Tex_00C6B8" OutName="tex_00C6B8" Format="ci8" Width="32" Height="64" Offset="0xC6B8" />
         <Texture Name="object_link_goron_Tex_00CEB8" OutName="tex_00CEB8" Format="rgba16" Width="8" Height="16" Offset="0xCEB8" />
@@ -62,7 +62,7 @@
         <DList Name="object_link_goron_DL_011468" Offset="0x11468" />
         <Texture Name="object_link_goron_Tex_011628" OutName="tex_011628" Format="ci8" Width="16" Height="16" Offset="0x11628" />
         <Texture Name="object_link_goron_Tex_011728" OutName="tex_011728" Format="rgba16" Width="8" Height="32" Offset="0x11728" />
-        <DList Name="object_link_goron_DL_011AB8" Offset="0x11AB8" />
+        <DList Name="gLinkGoronGoronPunchEffectDL" Offset="0x11AB8" />
         <Texture Name="object_link_goron_Tex_011C10" OutName="tex_011C10" Format="i4" Width="32" Height="32" Offset="0x11C10" />
         <Texture Name="object_link_goron_Tex_011E10" OutName="tex_011E10" Format="i4" Width="64" Height="64" Offset="0x11E10" />
         <DList Name="object_link_goron_DL_0127B0" Offset="0x127B0" />
@@ -72,7 +72,7 @@
         <Texture Name="object_link_goron_Tex_013660" OutName="tex_013660" Format="i4" Width="64" Height="64" Offset="0x13660" />
         <Texture Name="object_link_goron_Tex_013E60" OutName="tex_013E60" Format="i4" Width="64" Height="64" Offset="0x13E60" />
         <TextureAnimation Name="object_link_goron_Matanimheader_014684" Offset="0x14684" />
-        <DList Name="object_link_goron_DL_014690" Offset="0x14690" />
+        <DList Name="gLinkGoronRollingSpikesAndEffectDL" Offset="0x14690" />
         <DList Name="object_link_goron_DL_016A88" Offset="0x16A88" />
         <DList Name="object_link_goron_DL_017180" Offset="0x17180" />
         <DList Name="object_link_goron_DL_017620" Offset="0x17620" />

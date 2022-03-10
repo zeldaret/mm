@@ -201,9 +201,9 @@ typedef struct {
 extern struct_801BFDD0 D_801BFDD0[];
 #if 0
 struct_801BFDD0 D_801BFDD0[] = {
-    { { 180, 200, 255 }, object_link_goron_DL_00BDD8 },
-    { { 155, 0, 0 }, object_link_goron_DL_014690 },
-    { { 255, 0, 0 }, object_link_goron_DL_011AB8 },
+    { { 180, 200, 255 }, gLinkGoronCurledDL },
+    { { 155, 0, 0 }, gLinkGoronRollingSpikesAndEffectDL },
+    { { 255, 0, 0 }, gLinkGoronGoronPunchEffectDL },
 };
 #endif
 
@@ -1169,7 +1169,7 @@ void func_80127488(GlobalContext* globalCtx, Player* player, u8 alpha) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, alpha);
-    gSPDisplayList(POLY_XLU_DISP++, object_link_goron_DL_011AB8);
+    gSPDisplayList(POLY_XLU_DISP++, gLinkGoronGoronPunchEffectDL);
 
     func_80122BA4(globalCtx, &player->unk_3D0, 3, alpha);
 
