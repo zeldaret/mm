@@ -99,7 +99,7 @@ void EnTanron4_FlyNearHome(EnTanron4* this, GlobalContext* globalCtx) {
     s16 zRot;
 
     // `timeInfluence` controls both the height of the seagulls and when they are visible.
-    // They fly higher in the sky as the night goes on, and they dissapear as dawn approaches
+    // They fly higher in the sky as the night goes on, and they dissapear as dawn approaches.
     if ((gSaveContext.time > CLOCK_TIME(20, 0)) || (gSaveContext.time < CLOCK_TIME(4, 0))) {
         Math_ApproachF(&this->timeInfluence, 1500.0f, 1.0f, 1.0f);
     } else {
