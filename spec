@@ -4592,9 +4592,7 @@ beginseg
     name "ovl_Bg_F40_Switch"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Switch/z_bg_f40_switch.o"
-    include "build/data/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch.data.o"
-    include "build/data/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch.bss.o"
-    include "build/data/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch_reloc.o"
 endseg
 
 beginseg
