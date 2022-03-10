@@ -30,8 +30,10 @@ void FileChoose_nop8080bc44(void) {
 void FileChoose_nop8080BC4C(FileChooseContext* this) {
 }
 
+void func_8080BC58(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BC58.s")
 
+void func_8080BDAC(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BDAC.s")
 
 void FileChoose_RenderView(FileChooseContext* this, f32 eyeX, f32 eyeY, f32 eyeZ) {
@@ -86,8 +88,10 @@ Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D284.s")
 
+void func_8080D2EC(FileChooseContext*);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D2EC.s")
 
+void func_8080D3D0(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D3D0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D40C.s")
@@ -98,6 +102,7 @@ Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808108DC.s")
 
+void func_80811CB8(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80811CB8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812460.s")
@@ -116,8 +121,10 @@ Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812D94.s")
 
+void func_80812E94(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812E94.s")
 
+void func_80812ED0(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812ED0.s")
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_UpdateAndDrawSkybox.s")
@@ -146,8 +153,146 @@ void FileChoose_UpdateAndDrawSkybox(FileChooseContext* this) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void FileChoose_Main(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_Main.s")
+// sScreenFillSetupDL
+extern Gfx D_80814510[];
+
+// State update/draws
+extern void* (*D_8081479C[])(GameState*);
+// void* (*D_8081479C[])(GameState*) = {
+//     func_8080BDAC,
+//     func_80811CB8,
+//     func_80812ED0,
+// };
+extern void (*D_808147A8[])(GameState*);
+// void (*D_808147A8[])(GameState*) = {
+//     func_8080BC58,
+//     func_8080D3D0,
+//     func_80812E94,
+// };
+
+extern void* D_808147B4[];
+// Please wait, Decide/Cancel, Decide/Save
+// void* D_808147B4[] = { 0x0100B2B0, 0x0100A030, 0x0100A930 };
+extern s16 D_808147C0[];
+// s16 D_808147C0[] = { 144, 144, 152 };
+extern s16 D_808147C8[];
+// s16 D_808147C8[] = { 90, 90, 86 };
+
+void FileChoose_Main(GameState* thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+    Input* input = &this->state.input[0];
+    s32 texIndex;
+    s32 pad;
+
+    func_8012CF0C(this->state.gfxCtx, 0, 1, 0, 0, 0);
+
+    OPEN_DISPS(this->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x01, this->staticSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x02, this->parameterSegment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, this->titleSegment);
+
+    // stickRelX
+    this->unk_24502 = input->rel.stick_x;
+    // stickRelY
+    this->unk_24504 = input->rel.stick_y;
+
+    if (this->unk_24502 < -30) {
+        // stickXDir
+        if (this->unk_244FE == -1) {
+            // inputTimerX
+            this->unk_244FA--;
+            if (this->unk_244FA < 0) {
+                this->unk_244FA = 2;
+            } else {
+                this->unk_24502 = 0;
+            }
+        } else {
+            this->unk_244FA = 10;
+            this->unk_244FE = -1;
+        }
+    } else if (this->unk_24502 > 30) {
+        if (this->unk_244FE == 1) {
+            this->unk_244FA--;
+            if (this->unk_244FA < 0) {
+                this->unk_244FA = 2;
+            } else {
+                this->unk_24502 = 0;
+            }
+        } else {
+            this->unk_244FA = 10;
+            this->unk_244FE = 1;
+        }
+    } else {
+        this->unk_244FE = 0;
+    }
+
+    if (this->unk_24504 < -30) {
+        // stickYDir
+        if (this->unk_24500 == -1) {
+            // inputTimerY
+            this->unk_244FC--;
+            if (this->unk_244FC < 0) {
+                this->unk_244FC = 2;
+            } else {
+                this->unk_24504 = 0;
+            }
+        } else {
+            this->unk_244FC = 10;
+            this->unk_24500 = -1;
+        }
+    } else if (this->unk_24504 > 30) {
+        if (this->unk_24500 == 1) {
+            this->unk_244FC--;
+            if (this->unk_244FC < 0) {
+                this->unk_244FC = 2;
+            } else {
+                this->unk_24504 = 0;
+            }
+        } else {
+            this->unk_244FC = 10;
+            this->unk_24500 = 1;
+        }
+    } else {
+        this->unk_24500 = 0;
+    }
+
+    // emptyFileTextAlpha ?
+    this->unk_244E8 = 0;
+
+    func_8080D2EC(this);
+    // menuMode
+    D_808147A8[this->unk_24484](&this->state);
+    FileChoose_UpdateAndDrawSkybox(this);
+    D_8081479C[this->unk_24484](&this->state);
+
+    func_8012C628(this->state.gfxCtx);
+
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                          PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 255, 255, this->unk_244E6);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+    if (this->sramCtx.status > 0) {
+        texIndex = 0;
+    } else if ((this->unk_24486 > 38) && (this->unk_24486 < 44)) {
+        texIndex = 2;
+    } else {
+        texIndex = 1;
+    }
+
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_808147B4[texIndex], G_IM_FMT_IA, G_IM_SIZ_8b, D_808147C0[texIndex], 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOLOD);
+
+    gSPTextureRectangle(POLY_OPA_DISP++, D_808147C8[texIndex] << 2, 204 << 2, (D_808147C8[texIndex] + D_808147C0[texIndex]) << 2, 
+                        (204 + 16) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gSPDisplayList(POLY_OPA_DISP++, D_80814510);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, this->unk_2450A);
+    gSPDisplayList(POLY_OPA_DISP++, D_0E000000.fillRect);
+
+    CLOSE_DISPS(this->state.gfxCtx);
+}
 
 // FileChoose_InitContext
 void func_80813908(GameState* thisx) {
