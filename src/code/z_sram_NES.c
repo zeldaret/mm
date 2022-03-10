@@ -237,8 +237,8 @@ void func_80143B0C(GlobalContext* globalCtx) {
         gSaveContext.save.playerData.deaths = 999;
     }
 
-    sceneNum = convert_scene_number_among_shared_scenes(globalCtx->sceneNum);
-    func_80169D40(globalCtx);
+    sceneNum = Play_GetOriginalSceneNumber(globalCtx->sceneNum);
+    Play_SaveCycleSceneFlags(&globalCtx->state);
 
     globalCtx->actorCtx.flags.chest &= D_801C5FC0[sceneNum][2];
     globalCtx->actorCtx.flags.switches[0] &= D_801C5FC0[sceneNum][0];

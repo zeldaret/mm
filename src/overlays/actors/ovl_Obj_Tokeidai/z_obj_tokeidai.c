@@ -452,7 +452,7 @@ void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, GlobalContext* glob
         if (((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
              (globalCtx->csCtx.currentCsIndex == 0)) ||
             ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 2) &&
-             (globalCtx->csCtx.unk_12 == 0))) {
+             (globalCtx->csCtx.currentCsIndex == 0))) {
             Audio_SetCutsceneFlag(false);
             gSaveContext.save.cutscene = 0;
             gSaveContext.nextCutsceneIndex = 0;
