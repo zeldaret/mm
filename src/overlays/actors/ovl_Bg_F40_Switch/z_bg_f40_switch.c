@@ -49,7 +49,7 @@ void BgF40Switch_CheckAll(BgF40Switch* this, GlobalContext* globalCtx) {
         s32 isPressed;
         Actor* actor;
         BgF40Switch* actorAsSwitch;
-        u32 inCsMode = Player_InCsMode(&globalCtx->state);
+        u32 inCsMode = Player_InCsMode(globalCtx);
 
         for (actor = globalCtx->actorCtx.actorLists[ACTORCAT_SWITCH].first; actor != NULL; actor = actor->next) {
             if (actor->id == ACTOR_BG_F40_SWITCH && actor->room == this->actor.actor.room && actor->update != NULL) {

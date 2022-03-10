@@ -318,9 +318,9 @@ void func_8091CBB4(EnButte* this, GlobalContext* globalCtx) {
     sp40 = 0.0f;
 
     if ((this->unk_24E != 0) && (this->unk_24C < 12)) {
-        sp48.x = player->swordInfo[0].tip.x + (Math_SinS(player->actor.shape.rot.y) * 10.0f);
-        sp48.y = player->swordInfo[0].tip.y;
-        sp48.z = player->swordInfo[0].tip.z + (Math_CosS(player->actor.shape.rot.y) * 10.0f);
+        sp48.x = player->meleeWeaponInfo[0].tip.x + (Math_SinS(player->actor.shape.rot.y) * 10.0f);
+        sp48.y = player->meleeWeaponInfo[0].tip.y;
+        sp48.z = player->meleeWeaponInfo[0].tip.z + (Math_CosS(player->actor.shape.rot.y) * 10.0f);
 
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &sp48);
         if (Math_ScaledStepToS(&this->actor.world.rot.y, yaw + (s32)(Rand_ZeroOne() * D_8091D3F0), 0x7D0)) {
@@ -332,10 +332,10 @@ void func_8091CBB4(EnButte* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (player->swordInfo[0].tip.y < player->actor.world.pos.y + 30.0f) {
+    if (player->meleeWeaponInfo[0].tip.y < player->actor.world.pos.y + 30.0f) {
         this->unk_25C = player->actor.world.pos.y + 30.0f;
     } else {
-        this->unk_25C = player->swordInfo[0].tip.y;
+        this->unk_25C = player->meleeWeaponInfo[0].tip.y;
     }
 
     func_8091C6B4(this);
@@ -356,7 +356,7 @@ void func_8091CBB4(EnButte* this, GlobalContext* globalCtx) {
         !(distSq < SQ(320.0f))) {
         func_8091C748(this);
     } else if ((distSq > SQ(240.0f)) &&
-               (Math3D_XZDistanceSquared(player->swordInfo[0].tip.x, player->swordInfo[0].tip.z,
+               (Math3D_XZDistanceSquared(player->meleeWeaponInfo[0].tip.x, player->meleeWeaponInfo[0].tip.z,
                                          this->actor.world.pos.x, this->actor.world.pos.z) < SQ(60.0f))) {
         func_8091CF64(this);
     }
@@ -413,7 +413,7 @@ void EnButte_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_258 += 0x600;
 
     if (ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) {
-        if (GET_PLAYER(globalCtx)->swordState == 0) {
+        if (GET_PLAYER(globalCtx)->meleeWeaponState == 0) {
             if (this->unk_252 > 0) {
                 this->unk_252--;
             }

@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
@@ -1456,7 +1457,7 @@ void func_800EDA04(GlobalContext* globalCtx, CutsceneContext* csCtx) {
 }
 
 void func_800EDA84(GlobalContext* globalCtx, CutsceneContext* csCtx) {
-    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(&globalCtx->state)) {
+    if ((gSaveContext.cutsceneTrigger != 0) && (csCtx->state == CS_STATE_0) && !Player_InCsMode(globalCtx)) {
         gSaveContext.cutscene = 0xFFFD;
     }
 

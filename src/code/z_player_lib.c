@@ -5,6 +5,11 @@
 
 #include "objects/object_mask_meoto/object_mask_meoto.h"
 
+void PlayerCall_Init(Actor* thisx, GlobalContext* globalCtx);
+void PlayerCall_Destroy(Actor* thisx, GlobalContext* globalCtx);
+void PlayerCall_Update(Actor* thisx, GlobalContext* globalCtx);
+void PlayerCall_Draw(Actor* thisx, GlobalContext* globalCtx);
+
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f unk_0C;
@@ -24,13 +29,13 @@ void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
 s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     if (arg1 == 0) {
-        func_80169E6C(globalCtx, 0, 0xBFF);
+        Play_SetupRespawnPoint(&globalCtx->state, RESPAWN_MODE_VOID_OUT, 0xBFF);
         if (globalCtx->sceneNum == SCENE_KAKUSIANA) {
             return 1;
         }
     }
 
-    gSaveContext.respawn[0].data = 0;
+    gSaveContext.respawn[RESPAWN_MODE_VOID_OUT].data = 0;
     return arg1;
 }
 
@@ -330,9 +335,9 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
         if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
             player->actor.objBankIndex = objBankIndex;
             player->actor.shape.rot.z = gSaveContext.playerForm + 1;
-            player->actor.init = func_80160AF8;
-            player->actor.update = func_80160B80;
-            player->actor.draw = func_80160BC0;
+            player->actor.init = PlayerCall_Init;
+            player->actor.update = PlayerCall_Update;
+            player->actor.draw = PlayerCall_Draw;
             gSaveContext.equippedMask = PLAYER_MASK_NONE;
         }
     }
@@ -873,7 +878,7 @@ s32 func_801242DC(GlobalContext* globalCtx) {
     triggerEntry = &D_801BFFA0[sp1C];
     if (!Player_InCsMode(globalCtx)) {
         if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (sp1C == 0)) {
-            func_801518B0(globalCtx, triggerEntry->textId, NULL);
+            Message_StartTextbox(globalCtx, triggerEntry->textId, NULL);
             gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
