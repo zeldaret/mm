@@ -350,28 +350,28 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[0] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[0] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[1] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[1] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[2] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[2] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[0] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[0] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[0] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[1] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[1] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[1] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[2] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[2] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[2] -= 25;
     }
 
     if (this->timer == 0) {
@@ -534,10 +534,10 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp80.x, sp80.y - 10.0f, sp80.z, 0, 0,
                             0, this->isPowderKeg);
                 func_800BC848(thisx, globalCtx, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
-                globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.diffuseColor1[1] =
-                    globalCtx->envCtx.unk_8C.diffuseColor1[2] = 250;
-                globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.ambientColor[1] =
-                    globalCtx->envCtx.unk_8C.ambientColor[2] = 250;
+                globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.diffuseColor1[1] =
+                    globalCtx->envCtx.lightSettings.diffuseColor1[2] = 250;
+                globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.ambientColor[1] =
+                    globalCtx->envCtx.lightSettings.ambientColor[2] = 250;
                 func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
                 thisx->params = ENBOM_1;
                 this->timer = 10;

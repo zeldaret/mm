@@ -907,7 +907,7 @@ s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if ((actor != NULL) && (actor->update != NULL)) {
         if (this->unk_234 != NULL) {
-            sp48 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+            sp48 = Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp3C, &sp48[this->unk_234->count - 2]);
             Math_Vec3s_ToVec3f(&sp30, &sp48[this->unk_234->count - 1]);
             this->actor.shape.shadowDraw = NULL;
@@ -938,7 +938,7 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     if ((door != NULL) && (door->dyna.actor.update != NULL)) {
         if (this->unk_234 != NULL) {
-            sp4C = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+            sp4C = Lib_SegmentedToVirtual(this->unk_234->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
             Math_Vec3s_ToVec3f(&sp34, &sp4C[1]);
             Math_Vec3f_Copy(&this->unk_278, &sp40);
@@ -1080,7 +1080,7 @@ s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     }
 
     if (this->unk_234 != NULL) {
-        sp48 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_234->points);
+        sp48 = Lib_SegmentedToVirtual(this->unk_234->points);
         Math_Vec3s_ToVec3f(&sp3C, &sp48[this->unk_234->count - 2]);
         Math_Vec3s_ToVec3f(&sp30, &sp48[this->unk_234->count - 1]);
         this->actor.shape.shadowDraw = NULL;
@@ -1551,8 +1551,8 @@ void func_80950F2C(EnGm* this, GlobalContext* globalCtx) {
     s32 sp2C;
     s16 yaw;
 
-    if (func_800EE29C(globalCtx, 0x20E)) {
-        sp2C = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x20E)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 526)) {
+        sp2C = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 526)]->action;
         if (this->unk_259 != (sp2C & 0xFF)) {
             if (sp2C == 3) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIR_ROLL);

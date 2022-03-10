@@ -43,7 +43,7 @@ typedef enum {
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK,
     /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
-    /* 0x19 */ QUEST_UNK_19, // Related to PictoBox
+    /* 0x19 */ QUEST_UNK_19 // Related to PictoBox
 } QuestItem;
 
 typedef enum {
@@ -395,6 +395,7 @@ typedef enum {
 typedef enum {
     /*   -1 */ EXCH_ITEM_MINUS1 = -1, // Unknown usage or function
     /* 0x00 */ EXCH_ITEM_NONE,
+    /* 0x13 */ EXCH_ITEM_13 = 0x13,
     /* 0x1E */ EXCH_ITEM_1E = 0x1E, // BOTTLE_MUSHROOM
     /* 0x2A */ EXCH_ITEM_2A = 0x2A, // MOON_TEAR?
     /* 0x2E */ EXCH_ITEM_2E = 0x2E

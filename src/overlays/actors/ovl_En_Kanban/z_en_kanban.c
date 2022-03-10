@@ -995,7 +995,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         f32 shadowAlpha;
 
         if (dayTime >= CLOCK_TIME(12, 0)) {
-            dayTime = (0xFFFF - dayTime) & 0xFFFF;
+            dayTime = 0xFFFF - dayTime;
         }
 
         shadowAlpha = (dayTime * 0.00275f) + 10.0f;
