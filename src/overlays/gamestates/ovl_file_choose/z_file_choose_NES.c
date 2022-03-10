@@ -16,6 +16,8 @@ extern UNK_TYPE D_010311F0;
 // there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
 extern GfxMasterList D_0E000000;
 
+extern s16 fileChooseSkyboxRotation;
+
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4); /* extern */
 
 void func_8080BC20(FileChooseContext* this) {
@@ -32,9 +34,37 @@ void FileChoose_nop8080BC4C(FileChooseContext* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BDAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_RenderView.s")
+void FileChoose_RenderView(FileChooseContext* this, f32 eyeX, f32 eyeY, f32 eyeZ) {
+    Vec3f eye;
+    Vec3f lookAt;
+    Vec3f up;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BE60.s")
+    eye.x = eyeX;
+    eye.y = eyeY;
+    eye.z = eyeZ;
+
+    lookAt.x = 
+    lookAt.y = 
+    lookAt.z = 
+    0.0f;
+
+    up.x = 
+    up.z = 0.0f;
+    up.y = 1.0f;
+
+    View_SetViewOrientation(&this->view, &eye, &lookAt, &up);
+    View_RenderView(&this->view, 0x7F);
+}
+
+// FileChoose_QuadTextureIA8
+Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
+    gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, width, height, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    gSP1Quadrangle(gfx++, point, point + 2, point + 3, point + 1, 0);
+
+    return gfx;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C040.s")
 
@@ -90,7 +120,31 @@ void FileChoose_nop8080BC4C(FileChooseContext* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812ED0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_UpdateAndDrawSkybox.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_UpdateAndDrawSkybox.s")
+void FileChoose_UpdateAndDrawSkybox(FileChooseContext* this) {
+    GraphicsContext* gfxCtx; // TODO: check if this temp is needed, or if it recasts thisx instead
+    f32 eyeX;
+    f32 eyeY;
+    f32 eyeZ;
+
+    gfxCtx = this->state.gfxCtx;
+    OPEN_DISPS(gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    eyeX = 1000.0f * Math_CosS(fileChooseSkyboxRotation) - 1000.0f * Math_SinS(fileChooseSkyboxRotation);
+    eyeY = -700.0f;
+    eyeZ =  1000.0f * Math_SinS(fileChooseSkyboxRotation) + 1000.0f * Math_CosS(fileChooseSkyboxRotation);
+
+    FileChoose_RenderView(this, eyeX, eyeY, eyeZ);
+    SkyboxDraw_Draw(&this->skyboxCtx, this->state.gfxCtx, 1, this->envCtx.unk_13, eyeX, -700.0f, eyeZ);
+
+    gDPSetTextureLUT(POLY_OPA_DISP++, G_TT_NONE);
+
+    fileChooseSkyboxRotation += -0xA;
+
+    CLOSE_DISPS(gfxCtx);
+}
 
 void FileChoose_Main(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/FileChoose_Main.s")
