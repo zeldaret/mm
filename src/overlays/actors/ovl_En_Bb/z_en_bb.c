@@ -183,7 +183,7 @@ void EnBb_CheckForWall(EnBb* this) {
 }
 
 void EnBb_Freeze(EnBb* this) {
-    this->drawDmgEffType = 10;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.4f;
     this->drawDmgEffFrozenSteamScale = 0.6f;
     this->timer = 80;
@@ -193,8 +193,8 @@ void EnBb_Freeze(EnBb* this) {
 }
 
 void EnBb_Thaw(EnBb* this, GlobalContext* globalCtx) {
-    if (this->drawDmgEffType == 10) {
-        this->drawDmgEffType = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f,
                               0.15f);
@@ -418,7 +418,7 @@ void EnBb_SetupDamage(EnBb* this) {
 
     if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_ZORA_MAGIC) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-        this->drawDmgEffType = 32;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffAlpha = 2.0f;
         this->drawDmgEffScale = 0.4f;
     } else if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_STUN) {
@@ -520,7 +520,8 @@ void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
-        if ((this->drawDmgEffType != 10) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+            (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetDropFlag(&this->actor, &this->collider.info);
             this->flameScaleY = 0.0f;
             this->flameScaleX = 0.0f;
@@ -547,7 +548,7 @@ void EnBb_UpdateDamage(EnBb* this, GlobalContext* globalCtx) {
             if (this->actor.colChkInfo.damageEffect == EN_BB_DMGEFF_LIGHT_ARROW) {
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffScale = 0.4f;
-                this->drawDmgEffType = 20;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                             this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                             CLEAR_TAG_SMALL_LIGHT_RAYS);
@@ -609,7 +610,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (this->drawDmgEffAlpha > 0.0f) {
-            if (this->drawDmgEffType != 10) {
+            if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
                 Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
@@ -704,8 +705,9 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     }
 
-    func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), this->drawDmgEffScale,
-                  this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
