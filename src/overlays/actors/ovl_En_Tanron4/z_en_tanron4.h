@@ -2,6 +2,7 @@
 #define Z_EN_TANRON4_H
 
 #include "global.h"
+#include "assets/objects/object_tanron4/object_tanron4.h"
 
 struct EnTanron4;
 
@@ -18,8 +19,8 @@ typedef struct EnTanron4 {
     /* 0x15C */ s16 rollTarget;
     /* 0x160 */ f32 timeInfluence;
     /* 0x164 */ SkelAnime skelAnime;
-    /* 0x1A8 */ Vec3s jointTable[11];
-    /* 0x1EA */ Vec3s morphTable[11];
+    /* 0x1A8 */ Vec3s jointTable[OBJECT_TANRON4_LIMB_MAX];
+    /* 0x1EA */ Vec3s morphTable[OBJECT_TANRON4_LIMB_MAX];
     /* 0x022C */ EnTanron4ActionFunc actionFunc;
 } EnTanron4; // size = 0x230
 
