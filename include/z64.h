@@ -140,15 +140,21 @@ typedef struct {
     /* 0x4 */ f32 dynamicSizeStep;
     /* 0x8 */ u8 state;
     /* 0x9 */ u8 sizeGrowsCos2;
-    /* 0xA */ u8 unkA;
+    /* 0xA */ u8 colorsIndex;
     /* 0xB */ u8 flags;
-    /* 0xC */ u8 unkC;
+    /* 0xC */ u8 lightParamsIndex;
 } FireObjInitParams; // size = 0xD
 
-typedef struct {
+typedef struct FireObjColors {
     /* 0x0 */ Color_RGBA8 primColor;
-    /* 0x4 */ u8 unk4;
+    /* 0x4 */ u8 lod;
     /* 0x5 */ Color_RGB8 envColor;
+} FireObjColors; // size = 0x8
+
+typedef struct FireObjLightParams {
+    /* 0x0 */ s16 radius;
+    /* 0x2 */ Color_RGB8 color;
+    /* 0x5 */ Color_RGB8 maxColorAdj;
 } FireObjLightParams; // size = 0x8
 
 #define FONT_CHAR_TEX_WIDTH  16
@@ -1159,8 +1165,8 @@ typedef enum {
 
 struct FireObjLight {
     /* 0x00 */ LightNode* light;
-    /* 0x04 */ LightInfoPositional lightInfo;
-    /* 0x12 */ u8 unk12;
+    /* 0x04 */ LightInfo lightInfo;
+    /* 0x12 */ u8 lightParamsIndex;
 }; // size = 0x13
 
 #define OS_SC_RETRACE_MSG       1
@@ -1211,7 +1217,7 @@ struct FireObj {
     /* 0x24 */ u8 state; // 0 - growing, 1 - shrinking, 2 - fully lit, 3 - not lit
     /* 0x25 */ u8 sizeGrowsCos2;
     /* 0x26 */ u8 unk26;
-    /* 0x27 */ u8 unk27;
+    /* 0x27 */ u8 colorsIndex;
     /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
     /* 0x29 */ UNK_TYPE1 pad29[0x1];
     /* 0x2A */ s16 ignitionDelay;
@@ -1292,7 +1298,7 @@ struct GlobalContext {
     /* 0x18790 */ void (*unk_18790)(struct GlobalContext* globalCtx, s16 arg1, Actor* actor);
     /* 0x18794 */ void* unk_18794; //! @TODO: Determine function prototype
     /* 0x18798 */ s32 (*setPlayerTalkAnim)(struct GlobalContext* globalCtx, void* talkAnim, s32 arg2);
-    /* 0x1879C */ s16 unk_1879C[10];
+    /* 0x1879C */ s16 playerActorCsIds[10];
     /* 0x187B0 */ MtxF viewProjectionMtxF;
     /* 0x187F0 */ Vec3f unk_187F0;
     /* 0x187FC */ MtxF billboardMtxF;
@@ -1320,7 +1326,7 @@ struct GlobalContext {
     /* 0x1887C */ s8 unk_1887C;
     /* 0x1887D */ s8 unk_1887D;
     /* 0x1887E */ s8 unk_1887E;
-    /* 0x1887F */ u8 unk_1887F;
+    /* 0x1887F */ u8 unk_1887F; // fadeTransition
     /* 0x18880 */ u8 unk_18880;
     /* 0x18884 */ CollisionCheckContext colChkCtx;
     /* 0x18B20 */ u16 envFlags[20];

@@ -409,6 +409,11 @@ animdict = {
     "func_800A81F0": "EffectBlure_AddVertex",
     "func_800A8514": "EffectBlure_AddSpace",
     "Effect_GetParams": "Effect_GetByIndex",
+    "convert_scene_number_among_shared_scenes": "Play_GetOriginalSceneNumber",
+    "func_80169D40": "Play_SaveCycleSceneFlags",
+    "func_80169DCC": "Play_SetRespawnData",
+    "func_80169E6C": "Play_SetupRespawnPoint",
+    "func_8016A0AC": "Play_IsUnderwater",
     "func_800F5A8C": "Environment_LerpWeight",
     "func_801A3F54": "Audio_SetCutsceneFlag",
     "func_801518B0": "Message_StartTextbox",
@@ -432,6 +437,7 @@ animdict = {
     "func_80114E90": "Interface_HasEmptyBottle",
     "func_80114F2C": "Interface_HasItemInBottle",
     "func_80123C90": "Player_SetEquipmentData",
+    "func_800BE680": "Actor_DrawDamageEffects",
     "func_8013E2D4": "SubS_StartActorCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
     "func_8013AED4": "SubS_UpdateFlags",
@@ -446,7 +452,7 @@ animdict = {
     "func_8013E07C": "SubS_ActorPathing_MoveWithoutGravityReverse",
     "func_8013E0A4": "SubS_ActorPathing_SetNextPoint",
 
-    # Structs members
+    # Struct members
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
     "skelAnime.initialFrame": "skelAnime.startFrame",

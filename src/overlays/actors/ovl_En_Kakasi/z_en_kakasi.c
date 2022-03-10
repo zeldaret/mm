@@ -46,9 +46,6 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx);
 
 void EnKakasi_SetupDialogue(EnKakasi* this);
 
-void EnKakasi_PostLimbDraw(struct GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
-                           struct Actor* thisx);
-
 static ColliderCylinderInit D_80971D80 = {
     {
         COLTYPE_NONE,
@@ -336,8 +333,8 @@ void EnKakasi_SetupIdleStanding(EnKakasi* this) {
 
 void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
     u32 saveContextDay = gSaveContext.day;
-    s16 passedValue1;
-    s16 passedValue2;
+    s16 x;
+    s16 y;
 
     // first talk to scarecrow dialogue
     this->actor.textId = 0x1644;
@@ -352,9 +349,9 @@ void EnKakasi_IdleStanding(EnKakasi* this, GlobalContext* globalCtx) {
         return;
     }
     if (globalCtx->actorCtx.unk5 & 0x4) {
-        Actor_GetScreenPos(globalCtx, &this->actor, &passedValue1, &passedValue2);
-        if (this->actor.projectedPos.z > -20.0f && passedValue1 > 0 && passedValue1 < 0x140 && passedValue2 > 0 &&
-            passedValue2 < 0xF0 && this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
+        Actor_GetScreenPos(globalCtx, &this->actor, &x, &y);
+        if (this->actor.projectedPos.z > -20.0f && x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT &&
+            this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
             // faster shaking
             EnKakasi_SetAnimation(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelanime.playSpeed = 2.0f;
@@ -934,9 +931,9 @@ void EnKakasi_DancingNightAway(EnKakasi* this, GlobalContext* globalCtx) {
             if (this->unk204 == 0) {
                 player = GET_PLAYER(globalCtx);
 
-                func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF, &player->unk_3C0,
-                              player->unk_3CC);
-                func_80169EFC(globalCtx);
+                Play_SetRespawnData(&globalCtx->state, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
+                                    &player->unk_3C0, player->unk_3CC);
+                func_80169EFC(&globalCtx->state);
 
                 if (0) {}
                 if (gSaveContext.time > CLOCK_TIME(18, 0) || gSaveContext.time < CLOCK_TIME(6, 0)) {

@@ -40,8 +40,6 @@ void func_80A732C8(EnDno* this, GlobalContext* globalCtx);
 s32 EnDno_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
-extern u8 D_801C20C0;
-
 static AnimationSpeedInfo sAnimations[] = {
     { &object_dno_Anim_000470, 1.0f, ANIMMODE_ONCE, 0.0f }, { &object_dno_Anim_0008F0, 1.0f, ANIMMODE_ONCE, 0.0f },
     { &object_dno_Anim_000F6C, 1.0f, ANIMMODE_LOOP, 0.0f }, { &object_dno_Anim_001A50, 1.0f, ANIMMODE_ONCE, 0.0f },
@@ -611,7 +609,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
 
                 case 0x802:
                     if (func_80147624(globalCtx)) {
-                        if (gSaveContext.inventory.items[D_801C20C0] == ITEM_MASK_SCENTS) {
+                        if (INV_CONTENT(ITEM_MASK_SCENTS) == ITEM_MASK_SCENTS) {
                             this->unk_458 = GI_RUPEE_RED;
                         } else {
                             this->unk_458 = GI_MASK_SCENTS;
