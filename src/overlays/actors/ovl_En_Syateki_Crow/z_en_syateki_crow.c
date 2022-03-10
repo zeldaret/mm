@@ -90,9 +90,7 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
-    temp = 0;
-    while (temp < EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor)) {
-        temp++;
+    for (temp = 0; temp < EN_SYATEKI_CROW_GET_PARAM_FF00(&this->actor); temp++) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 

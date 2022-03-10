@@ -29,6 +29,7 @@ void func_80A2BE54(EnSyatekiDekunuts* this);
 
 extern UNK_TYPE D_06001E50;
 extern SkeletonHeader D_06002468;
+extern AnimationHeader D_06002A5C;
 
 const ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
@@ -82,15 +83,8 @@ static InitChainEntry D_80A2CB90[] = {
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
 };
 
-static s32 D_80A2CB9C = 1;
-
-static Vec3f D_80A2CBA0 = { 0.0f, 20.0f, 0.0f };
-static Vec3f D_80A2CBAC = { 0.0f, 0.0f, 0.0f };
-static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
-static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
-
-/*
 void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    static s32 D_80A2CB9C = 1;
     EnSyatekiDekunuts* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
     s32 phi_v0;
@@ -115,9 +109,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
-    temp = 0;
-    while (temp < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor)) {
-        temp++;
+    for (temp = 0; temp < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor); temp++) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
@@ -130,8 +122,10 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, D_80A2CB90);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, &object_dekunuts_Anim_002A5C, this->jointTable,
-this->morphTable, 10); if (path == NULL) { Actor_MarkForDeath(&this->actor); return;
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, &D_06002A5C, this->jointTable, this->morphTable, 10);
+    if (path == NULL) {
+        Actor_MarkForDeath(&this->actor);
+        return;
     }
 
     this->unk_1E4 = Lib_SegmentedToVirtual(path->points);
@@ -142,9 +136,11 @@ this->morphTable, 10); if (path == NULL) { Actor_MarkForDeath(&this->actor); ret
     this->unk_1DA = 0;
     func_80A2BE54(this);
 }
-*/
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/EnSyatekiDekunuts_Init.s")
+static Vec3f D_80A2CBA0 = { 0.0f, 20.0f, 0.0f };
+static Vec3f D_80A2CBAC = { 0.0f, 0.0f, 0.0f };
+static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
+static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/EnSyatekiDekunuts_Destroy.s")
 

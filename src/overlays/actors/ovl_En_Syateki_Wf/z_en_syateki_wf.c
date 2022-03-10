@@ -152,9 +152,7 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
-    temp = 0;
-    while (temp < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor)) {
-        temp++;
+    for (temp = 0; temp < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor); temp++) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
