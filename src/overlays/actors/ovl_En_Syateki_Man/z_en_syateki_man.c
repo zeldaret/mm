@@ -132,11 +132,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00DFEC,
-                           this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00DFEC, this->jointTable,
+                           this->morphTable, OBJECT_SHN_LIMB_MAX);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_shn_Skel_00E7D0, &object_shn_Anim_00D9D0,
-                           this->jointTable, this->morphTable, 16);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00D9D0, this->jointTable,
+                           this->morphTable, OBJECT_SHN_LIMB_MAX);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -210,31 +210,31 @@ void func_809C6848(EnSyatekiMan* this, GlobalContext* globalCtx) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
         sp22 = Text_GetFaceReaction(globalCtx, 0x31);
         if (sp22 != 0) {
-            func_801518B0(globalCtx, sp22, &this->actor);
+            Message_StartTextbox(globalCtx, sp22, &this->actor);
             this->unk_284 = sp22;
         } else if (player->transformation == PLAYER_FORM_HUMAN) {
             if (this->unk_282 == 0) {
                 this->unk_282 = 1;
-                func_801518B0(globalCtx, 0xA28, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA28, &this->actor);
                 this->unk_284 = 0xA28;
             } else {
-                func_801518B0(globalCtx, 0xA29, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA29, &this->actor);
                 this->unk_284 = 0xA29;
             }
         } else {
             switch (CURRENT_DAY) {
                 case 1:
-                    func_801518B0(globalCtx, 0xA38, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA38, &this->actor);
                     this->unk_284 = 0xA38;
                     break;
 
                 case 2:
-                    func_801518B0(globalCtx, 0xA39, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA39, &this->actor);
                     this->unk_284 = 0xA39;
                     break;
 
                 case 3:
-                    func_801518B0(globalCtx, 0xA3A, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA3A, &this->actor);
                     this->unk_284 = 0xA3A;
                     break;
             }
@@ -256,11 +256,11 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             if (!CUR_UPG_VALUE(UPG_QUIVER)) {
                 play_sound(NA_SE_SY_ERROR);
-                func_801518B0(globalCtx, 0xA30, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA30, &this->actor);
                 this->unk_284 = 0xA30;
             } else if (gSaveContext.save.playerData.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
-                func_801518B0(globalCtx, 0xA31, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA31, &this->actor);
                 this->unk_284 = 0xA31;
                 if (this->unk_26A == 4) {
                     gSaveContext.minigameState = 3;
@@ -282,17 +282,17 @@ void func_809C6A04(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
             switch (CURRENT_DAY) {
                 case 1:
-                    func_801518B0(globalCtx, 0xA2D, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA2D, &this->actor);
                     this->unk_284 = 0xA2D;
                     break;
 
                 case 2:
-                    func_801518B0(globalCtx, 0xA2E, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA2E, &this->actor);
                     this->unk_284 = 0xA2E;
                     break;
 
                 case 3:
-                    func_801518B0(globalCtx, 0xA2F, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA2F, &this->actor);
                     this->unk_284 = 0xA2F;
                     break;
             }
@@ -313,7 +313,7 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
         switch (this->unk_284) {
             case 0xA28:
             case 0xA29:
-                func_801518B0(globalCtx, 0xA2A, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA2A, &this->actor);
                 this->unk_284 = 0xA2A;
                 break;
 
@@ -341,13 +341,13 @@ void func_809C6C2C(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     gSaveContext.minigameState = 3;
                     this->unk_26A = 0;
                 } else {
-                    func_801518B0(globalCtx, 0xA33, &this->actor);
+                    Message_StartTextbox(globalCtx, 0xA33, &this->actor);
                     this->unk_284 = 0xA33;
                 }
                 break;
 
             case 0xA33:
-                func_801518B0(globalCtx, 0xA2A, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA2A, &this->actor);
                 this->unk_284 = 0xA2A;
                 this->unk_26A = 4;
                 break;
@@ -422,18 +422,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 1)) {
                     this->unk_282 |= 1;
-                    func_801518B0(globalCtx, 0x3E8, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3E8, &this->actor);
                     this->unk_284 = 0x3E8;
                 } else {
-                    func_801518B0(globalCtx, 0x3E9, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3E9, &this->actor);
                     this->unk_284 = 0x3E9;
                 }
             } else if (!(this->unk_282 & 1)) {
                 this->unk_282 |= 1;
-                func_801518B0(globalCtx, 0x3EA, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EA, &this->actor);
                 this->unk_284 = 0x3EA;
             } else {
-                func_801518B0(globalCtx, 0x3EB, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EB, &this->actor);
                 this->unk_284 = 0x3EB;
             }
             break;
@@ -442,18 +442,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 2)) {
                     this->unk_282 |= 2;
-                    func_801518B0(globalCtx, 0x3EC, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3EC, &this->actor);
                     this->unk_284 = 0x3EC;
                 } else {
-                    func_801518B0(globalCtx, 0x3ED, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3ED, &this->actor);
                     this->unk_284 = 0x3ED;
                 }
             } else if (!(this->unk_282 & 2)) {
                 this->unk_282 |= 2;
-                func_801518B0(globalCtx, 0x3EE, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EE, &this->actor);
                 this->unk_284 = 0x3EE;
             } else {
-                func_801518B0(globalCtx, 0x3EF, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EF, &this->actor);
                 this->unk_284 = 0x3EF;
             }
             break;
@@ -462,18 +462,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 8)) {
                     this->unk_282 |= 8;
-                    func_801518B0(globalCtx, 0x3F0, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F0, &this->actor);
                     this->unk_284 = 0x3F0;
                 } else {
-                    func_801518B0(globalCtx, 0x3F1, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F1, &this->actor);
                     this->unk_284 = 0x3F1;
                 }
             } else if (!(this->unk_282 & 8)) {
                 this->unk_282 |= 8;
-                func_801518B0(globalCtx, 0x3F4, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F4, &this->actor);
                 this->unk_284 = 0x3F4;
             } else {
-                func_801518B0(globalCtx, 0x3F5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F5, &this->actor);
                 this->unk_284 = 0x3F5;
             }
             break;
@@ -482,18 +482,18 @@ void func_809C6F98(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (CURRENT_DAY != 3) {
                 if (!(this->unk_282 & 4)) {
                     this->unk_282 |= 4;
-                    func_801518B0(globalCtx, 0x3F2, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F2, &this->actor);
                     this->unk_284 = 0x3F2;
                 } else {
-                    func_801518B0(globalCtx, 0x3F3, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F3, &this->actor);
                     this->unk_284 = 0x3F3;
                 }
             } else if (!(this->unk_282 & 4)) {
                 this->unk_282 |= 4;
-                func_801518B0(globalCtx, 0x3F4, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F4, &this->actor);
                 this->unk_284 = 0x3F4;
             } else {
-                func_801518B0(globalCtx, 0x3F5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F5, &this->actor);
                 this->unk_284 = 0x3F5;
             }
             break;
@@ -505,7 +505,7 @@ void func_809C72D8(EnSyatekiMan* this, GlobalContext* globalCtx) {
         u16 sp26 = Text_GetFaceReaction(globalCtx, 0x30);
 
         if (sp26 != 0) {
-            func_801518B0(globalCtx, sp26, &this->actor);
+            Message_StartTextbox(globalCtx, sp26, &this->actor);
             this->unk_284 = sp26;
         } else {
             func_809C6F98(this, globalCtx);
@@ -524,19 +524,19 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (!CUR_UPG_VALUE(UPG_QUIVER)) {
                 play_sound(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
-                    func_801518B0(globalCtx, 0x3F9, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3F9, &this->actor);
                     this->unk_284 = 0x3F9;
                 } else {
-                    func_801518B0(globalCtx, 0x3FA, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FA, &this->actor);
                     this->unk_284 = 0x3FA;
                 }
             } else if (gSaveContext.save.playerData.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
-                    func_801518B0(globalCtx, 0x3FB, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FB, &this->actor);
                     this->unk_284 = 0x3FB;
                 } else {
-                    func_801518B0(globalCtx, 0x3FC, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FC, &this->actor);
                     this->unk_284 = 0x3FC;
                 }
 
@@ -551,10 +551,10 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
                 this->unk_26A = 2;
                 if (!(this->unk_282 & 0x10)) {
                     this->unk_282 |= 0x10;
-                    func_801518B0(globalCtx, 0x3FD, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FD, &this->actor);
                     this->unk_284 = 0x3FD;
                 } else {
-                    func_801518B0(globalCtx, 0x3FF, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x3FF, &this->actor);
                     this->unk_284 = 0x3FF;
                 }
                 gSaveContext.save.weekEventReg[63] |= 1;
@@ -563,10 +563,10 @@ void func_809C7380(EnSyatekiMan* this, GlobalContext* globalCtx) {
         } else {
             func_8019F230();
             if (CURRENT_DAY != 3) {
-                func_801518B0(globalCtx, 0x3F7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F7, &this->actor);
                 this->unk_284 = 0x3F7;
             } else {
-                func_801518B0(globalCtx, 0x3F8, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F8, &this->actor);
                 this->unk_284 = 0x3F8;
             }
 
@@ -588,32 +588,32 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
             case 0x3E9:
             case 0x3EA:
             case 0x3EB:
-                func_801518B0(globalCtx, 0x3F6, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F6, &this->actor);
                 this->unk_284 = 0x3F6;
                 break;
 
             case 0x3EC:
-                func_801518B0(globalCtx, 0x3ED, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3ED, &this->actor);
                 this->unk_284 = 0x3ED;
                 break;
 
             case 0x3EE:
-                func_801518B0(globalCtx, 0x3EF, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3EF, &this->actor);
                 this->unk_284 = 0x3EF;
                 break;
 
             case 0x3F0:
-                func_801518B0(globalCtx, 0x3F1, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F1, &this->actor);
                 this->unk_284 = 0x3F1;
                 break;
 
             case 0x3F2:
-                func_801518B0(globalCtx, 0x3F3, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F3, &this->actor);
                 this->unk_284 = 0x3F3;
                 break;
 
             case 0x3F4:
-                func_801518B0(globalCtx, 0x3F5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F5, &this->actor);
                 this->unk_284 = 0x3F5;
                 break;
 
@@ -621,10 +621,10 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
             case 0x3FF:
                 if (this->unk_26A == 4) {
                     if (this->unk_284 == 0x3FD) {
-                        func_801518B0(globalCtx, 0x3FE, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x3FE, &this->actor);
                         this->unk_284 = 0x3FE;
                     } else {
-                        func_801518B0(globalCtx, 0x400, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x400, &this->actor);
                         this->unk_284 = 0x400;
                     }
                 } else {
@@ -660,7 +660,7 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     this->unk_26A = 0;
                     this->actionFunc = func_809C72D8;
                 } else {
-                    func_801518B0(globalCtx, 0x402, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x402, &this->actor);
                     this->unk_284 = 0x402;
                 }
                 break;
@@ -673,14 +673,14 @@ void func_809C7620(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     this->unk_26A = 0;
                     this->actionFunc = func_809C72D8;
                 } else {
-                    func_801518B0(globalCtx, 0x404, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x404, &this->actor);
                     this->unk_284 = 0x404;
                 }
                 break;
 
             case 0x402:
             case 0x404:
-                func_801518B0(globalCtx, 0x3F6, &this->actor);
+                Message_StartTextbox(globalCtx, 0x3F6, &this->actor);
                 this->unk_284 = 0x3F6;
                 this->unk_26A = 4;
                 break;
@@ -775,10 +775,10 @@ void func_809C7C14(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if ((CURRENT_DAY == 3) && (gSaveContext.save.time > CLOCK_TIME(12, 0))) {
-            func_801518B0(globalCtx, 0xA36, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA36, &this->actor);
             this->unk_284 = 0xA36;
         } else {
-            func_801518B0(globalCtx, 0xA37, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA37, &this->actor);
             this->unk_284 = 0xA37;
         }
         player->stateFlags1 &= ~0x20;
@@ -841,7 +841,7 @@ void func_809C7EB4(EnSyatekiMan* this, GlobalContext* globalCtx) {
             this->actionFunc = func_809C6810;
         }
     } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, 0x408, &this->actor);
+        Message_StartTextbox(globalCtx, 0x408, &this->actor);
         this->unk_284 = 0x408;
         player->stateFlags1 &= ~0x20;
         this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -861,10 +861,10 @@ void func_809C7FFC(EnSyatekiMan* this, GlobalContext* globalCtx) {
         this->unk_26A = 2;
         if (this->unk_282 != 2) {
             this->unk_282 = 2;
-            func_801518B0(globalCtx, 0xA2B, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA2B, &this->actor);
             this->unk_284 = 0xA2B;
         } else {
-            func_801518B0(globalCtx, 0xA2C, &this->actor);
+            Message_StartTextbox(globalCtx, 0xA2C, &this->actor);
             this->unk_284 = 0xA2C;
         }
         this->actionFunc = func_809C6E30;
@@ -979,7 +979,7 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
             }
             this->unk_270 = 15;
             if (this->unk_280 >= 0x848) {
-                func_801518B0(globalCtx, 0xA34, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA34, &this->actor);
                 this->unk_284 = 0xA34;
                 this->unk_26A = 6;
             } else if (this->unk_280 >= 0x7D0) {
@@ -991,12 +991,12 @@ void func_809C8488(EnSyatekiMan* this, GlobalContext* globalCtx) {
                     this->actionFunc = func_809C6848;
                     return;
                 }
-                func_801518B0(globalCtx, 0xA35, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA35, &this->actor);
                 this->unk_284 = 0xA35;
                 this->unk_26A = 4;
                 this->unk_280 = 0;
             } else {
-                func_801518B0(globalCtx, 0xA32, &this->actor);
+                Message_StartTextbox(globalCtx, 0xA32, &this->actor);
                 this->unk_284 = 0xA32;
                 this->unk_26A = 6;
             }
@@ -1047,10 +1047,10 @@ void func_809C8710(EnSyatekiMan* this, GlobalContext* globalCtx) {
 
     if (func_809C6720(globalCtx, sp24)) {
         if (this->unk_284 == 0x3FD) {
-            func_801518B0(globalCtx, 0x3FE, &this->actor);
+            Message_StartTextbox(globalCtx, 0x3FE, &this->actor);
             this->unk_284 = 0x3FE;
         } else {
-            func_801518B0(globalCtx, 0x400, &this->actor);
+            Message_StartTextbox(globalCtx, 0x400, &this->actor);
             this->unk_284 = 0x400;
         }
         this->unk_26A = 2;
@@ -1167,27 +1167,27 @@ void func_809C8BF0(EnSyatekiMan* this, GlobalContext* globalCtx) {
             if (((s32)(gSaveContext.save.unk_EF4 & 0xFFFF) < this->unk_280) || (this->unk_280 == 50)) {
                 if ((s32)(gSaveContext.save.unk_EF4 & 0xFFFF) < this->unk_280) {
                     if (!(gSaveContext.save.weekEventReg[59] & 0x20)) {
-                        func_801518B0(globalCtx, 0x407, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x407, &this->actor);
                         this->unk_284 = 0x407;
                     } else if (this->unk_280 == 50) {
-                        func_801518B0(globalCtx, 0x405, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x405, &this->actor);
                         this->unk_284 = 0x405;
                     } else {
-                        func_801518B0(globalCtx, 0x407, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x407, &this->actor);
                         this->unk_284 = 0x407;
                     }
                 } else if (this->unk_280 == 50) {
-                    func_801518B0(globalCtx, 0x406, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x406, &this->actor);
                     this->unk_284 = 0x406;
                 }
                 gSaveContext.save.unk_EF4 = (gSaveContext.save.unk_EF4 & 0xFFFF0000) | (this->unk_280 & 0xFFFF);
                 this->unk_26A = 6;
             } else {
                 if (CURRENT_DAY != 3) {
-                    func_801518B0(globalCtx, 0x401, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x401, &this->actor);
                     this->unk_284 = 0x401;
                 } else {
-                    func_801518B0(globalCtx, 0x403, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x403, &this->actor);
                     this->unk_284 = 0x403;
                 }
                 this->unk_26A = 4;

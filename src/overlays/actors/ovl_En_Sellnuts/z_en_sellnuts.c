@@ -350,27 +350,27 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
                 case 0x60E:
                     gSaveContext.save.weekEventReg[17] |= 0x20;
                     gSaveContext.save.weekEventReg[86] |= 4;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x628:
                     gSaveContext.save.weekEventReg[77] |= 0x40;
                     gSaveContext.save.weekEventReg[86] |= 4;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x614:
                     gSaveContext.save.weekEventReg[17] |= 0x40;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x610:
                 case 0x616:
                 case 0x629:
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
@@ -488,7 +488,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, this->unk_340, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
@@ -699,7 +699,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_801518B0(globalCtx, this->unk_340, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
         if (this->unk_340 == 0x625) {
             this->unk_338 |= 1;
             this->actor.draw = EnSellnuts_Draw;
@@ -892,7 +892,7 @@ void func_80ADCD3C(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
-    Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 count = path->count;
     s32 var = arg2;
     s32 ret = false;
@@ -929,7 +929,7 @@ f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
     Vec3s* points;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[arg1];
         sp20.x = points->x;
         sp20.y = points->y;

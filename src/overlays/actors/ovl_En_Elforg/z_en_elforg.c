@@ -456,7 +456,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 100;
                 player->stateFlags1 |= 0x20000000;
-                func_801518B0(globalCtx, 0x579, NULL);
+                Message_StartTextbox(globalCtx, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
                 ActorCutscene_SetIntentToPlay(0x7C);
                 return;
@@ -464,7 +464,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
 
             if (func_8010A074(globalCtx)) {
                 gSaveContext.save.inventory.strayFairies[gSaveContext.unk_48C8]++;
-                func_801518B0(globalCtx, 0x11, NULL);
+                Message_StartTextbox(globalCtx, 0x11, NULL);
                 if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
                     func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }

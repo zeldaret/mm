@@ -195,7 +195,7 @@ void func_80B67148(EnSth* this, GlobalContext* globalCtx) {
     }
     val = D_80B6D1E8[day];
 
-    func_801518B0(globalCtx, val, &this->actor);
+    Message_StartTextbox(globalCtx, val, &this->actor);
 }
 
 void func_80B671A0(EnSth* this, GlobalContext* globalCtx) {
@@ -236,7 +236,7 @@ void func_80B672A4(EnSth* this, GlobalContext* globalCtx) {
     } else {
         sp1E = D_80B6D1F8[day];
     }
-    func_801518B0(globalCtx, sp1E, &this->actor);
+    Message_StartTextbox(globalCtx, sp1E, &this->actor);
 }
 
 void func_80B67348(EnSth* this, GlobalContext* globalCtx) {
@@ -274,7 +274,7 @@ void func_80B67348(EnSth* this, GlobalContext* globalCtx) {
                 }
                 break;
         }
-        func_801518B0(globalCtx, phi_a1, &this->actor);
+        Message_StartTextbox(globalCtx, phi_a1, &this->actor);
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     }
@@ -460,7 +460,7 @@ void func_80B67984(EnSth* this, GlobalContext* globalCtx) {
         sp1E = 0x8FC;
         gSaveContext.save.weekEventReg[34] |= 2;
     }
-    func_801518B0(globalCtx, sp1E, &this->actor);
+    Message_StartTextbox(globalCtx, sp1E, &this->actor);
 }
 
 void func_80B67AB4(EnSth* this, GlobalContext* globalCtx) {
@@ -469,7 +469,7 @@ void func_80B67AB4(EnSth* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80B67C1C;
         gSaveContext.save.weekEventReg[34] |= 0x40;
-        func_801518B0(globalCtx, 0x918, &this->actor);
+        Message_StartTextbox(globalCtx, 0x918, &this->actor);
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     }

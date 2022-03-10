@@ -43,11 +43,6 @@ const ActorInit En_Bigokuta_InitVars = {
     (ActorFunc)EnBigokuta_Draw,
 };
 
-typedef enum {
-    BIGOCTO_DRAWEFFECT_ICE = 10,
-    BIGOCTO_DRAWEFFECT_LIGHT_ORBS = 20,
-} EnBigokutaDrawEffect;
-
 static ColliderCylinderInit sShellCylinderInit = {
     {
         COLTYPE_HARD,
@@ -373,8 +368,8 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, GlobalContext* globalCtx) {
     if (this->timer != 0) {
         this->timer--;
         if (this->timer == 0) {
-            this->drawEffect = 0;
-            this->drawEffectAlpha = 0.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+            this->drawDmgEffAlpha = 0.0f;
             Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
             EnBigokuta_SetupDeathEffects(this);
         }
@@ -388,7 +383,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, GlobalContext* globalCtx) {
             player->stateFlags1 |= 0x20;
         }
 
-        if (this->drawEffect == BIGOCTO_DRAWEFFECT_ICE) {
+        if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->timer = 3;
         } else {
             EnBigokuta_SetupDeathEffects(this);
@@ -466,8 +461,8 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, GlobalContext* globalCtx) {
                 }
             }
 
-            if (this->drawEffectAlpha > 0.0f) {
-                this->drawEffectAlpha = this->actor.scale.y * 30.30303f;
+            if (this->drawDmgEffAlpha > 0.0f) {
+                this->drawDmgEffAlpha = this->actor.scale.y * 30.30303f;
             }
         }
     } else {
@@ -494,14 +489,14 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, GlobalContext* globalCtx) {
 
         if (this->bodyCollider.base.acFlags & AC_HIT) {
             if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x1000) { // Ice Arrow
-                this->drawEffect = BIGOCTO_DRAWEFFECT_ICE;
-                this->drawEffectScale = 1.2f;
-                this->drawEffectSteamScale = 1.8000001f;
-                this->drawEffectAlpha = 1.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+                this->drawDmgEffScale = 1.2f;
+                this->drawDmgEffFrozenSteamScale = 1.8000001f;
+                this->drawDmgEffAlpha = 1.0f;
             } else if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x2000) { // Light Arrow
-                this->drawEffect = BIGOCTO_DRAWEFFECT_LIGHT_ORBS;
-                this->drawEffectScale = 1.2f;
-                this->drawEffectAlpha = 4.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                this->drawDmgEffScale = 1.2f;
+                this->drawDmgEffAlpha = 4.0f;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                             this->bodyCollider.info.bumper.hitPos.x, this->bodyCollider.info.bumper.hitPos.y,
                             this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -546,12 +541,12 @@ void EnBigokuta_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetFocus(&this->actor, 82.5f);
     }
 
-    if (this->drawEffectAlpha > 0.0f) {
-        if (this->drawEffect != BIGOCTO_DRAWEFFECT_ICE) {
-            Math_StepToF(&this->drawEffectAlpha, 0.0f, 0.05f);
-            this->drawEffectScale = (this->drawEffectAlpha + 1.0f) * 0.6f;
-            this->drawEffectScale = CLAMP_MAX(this->drawEffectScale, 1.2f);
-        } else if (!Math_StepToF(&this->drawEffectSteamScale, 1.2f, 0.030000001f)) {
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -676,7 +671,8 @@ void EnBigokuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                this->skelAnime.dListCount, NULL, EnBigokuta_PostLimbDraw, &this->actor, &gfx[2]);
     }
 
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawEffectScale,
-                  this->drawEffectSteamScale, this->drawEffectAlpha, this->drawEffect);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

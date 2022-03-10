@@ -233,7 +233,7 @@ void func_80BA886C(EnBaba* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_1E0, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_1E0, &this->actor);
     if (this->unk_40A & 1) {
         if (this->unk_40A & 0x40) {
             this->unk_40A &= ~0x40;
@@ -603,7 +603,7 @@ void func_80BA9B80(EnBaba* this, GlobalContext* globalCtx) {
 
     if (this->unk_40A & 2) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_801518B0(globalCtx, 0x2A39, &this->actor); // "I'm sorry"
+            Message_StartTextbox(globalCtx, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = func_80BA9848;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);

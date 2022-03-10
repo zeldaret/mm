@@ -210,16 +210,16 @@ s32* func_8092C9BC(EnDns* this, GlobalContext* globalCtx) {
 s32 func_8092CA74(EnDns* this) {
     switch (ENDNS_GET_7(&this->actor)) {
         case ENDNS_GET_7_0:
-            return 0x1D1;
+            return 465;
 
         case ENDNS_GET_7_1:
-            return 0x1D2;
+            return 466;
 
         case ENDNS_GET_7_2:
-            return 0x1D3;
+            return 467;
 
         case ENDNS_GET_7_3:
-            return 0x1D4;
+            return 468;
     }
 
     return 0;
@@ -481,12 +481,12 @@ void func_8092D5E8(EnDns* this, GlobalContext* globalCtx) {
         EN_DNS_ANIMATION_SURPRISE_START,
         EN_DNS_ANIMATION_RUN_START,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     u32 temp_v1;
 
-    if (func_800EE29C(globalCtx, this->unk_2C8)) {
-        temp_v0 = func_800EE200(globalCtx, this->unk_2C8);
-        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_2C8)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, this->unk_2C8);
+        temp_v1 = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_1D8 != (u8)temp_v1) {
             func_8092C63C(this, D_8092DE0C[temp_v1]);
             this->unk_1D8 = temp_v1;
@@ -498,7 +498,7 @@ void func_8092D5E8(EnDns* this, GlobalContext* globalCtx) {
             func_8092C63C(this, this->animationIndex + 1);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 

@@ -53,7 +53,7 @@ typedef struct EnZoraegg {
     /* 0x01ED */ u8 unk_1ED;
     /* 0x01EE */ u8 unk_1EE;
     /* 0x01EF */ u8 unk_1EF;
-    /* 0x01F0 */ u16 unk_1F0;
+    /* 0x01F0 */ u16 actorActionCmd;
     /* 0x01F2 */ s16 unk_1F2;
     /* 0x01F4 */ s16 unk_1F4;
     /* 0x01F8 */ EnZoraeggActionFunc actionFunc;

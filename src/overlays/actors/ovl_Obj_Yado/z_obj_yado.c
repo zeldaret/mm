@@ -38,7 +38,7 @@ void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjYado* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    D_80C16470 = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_yado_obj_Matanimheader_0012E8);
+    D_80C16470 = Lib_SegmentedToVirtual(object_yado_obj_Matanimheader_0012E8);
     this->isNight = gSaveContext.save.isNight;
 }
 

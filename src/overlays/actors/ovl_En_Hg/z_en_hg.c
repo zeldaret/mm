@@ -156,10 +156,10 @@ void func_80BCF354(EnHg* this) {
 void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health == 1) {
         if ((this->actor.xzDistToPlayer < 200.0f && this->actor.playerHeightRel < 40.0f) &&
-            !func_800EE29C(globalCtx, 0x1E3)) {
+            !Cutscene_CheckActorAction(globalCtx, 0x1E3)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 0) &&
+        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.currentCsIndex == 0) &&
             (globalCtx->csCtx.frames == 20 || globalCtx->csCtx.frames == 60)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
@@ -176,7 +176,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && !Message_GetState(&globalCtx->msgCtx)) {
+    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&globalCtx->msgCtx) == 0) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
             Actor_MoveWithGravity(&this->actor);
@@ -217,7 +217,7 @@ void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx) {
 void func_80BCF710(EnHg* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_801518B0(globalCtx, 0x24F, &this->actor);
+            Message_StartTextbox(globalCtx, 0x24F, &this->actor);
         } else {
             func_800B8614(&this->actor, globalCtx, 80.0f);
         }
@@ -271,11 +271,12 @@ void func_80BCF93C(EnHg* this) {
 }
 
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x1E4)) {
-        u32 actionIndex = func_800EE200(globalCtx, 0x1E4);
-        if (this->cutscenes[3] != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->cutscenes[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 484)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 484);
+
+        if (this->cutscenes[3] != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->cutscenes[3] = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->currentAnimation = 0;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
@@ -336,7 +337,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                 }
                 break;
         }
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return;
     } else if (globalCtx->csCtx.state == 0) {
         func_80BCF354(this);

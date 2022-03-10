@@ -471,7 +471,7 @@ void EnMinifrog_EndChoir(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, 0xD7E, &this->actor); // "Let us do it again sometime."
+        Message_StartTextbox(globalCtx, 0xD7E, &this->actor); // "Let us do it again sometime."
         this->actionFunc = EnMinifrog_YellowFrogDialog;
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
@@ -565,11 +565,11 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
         if (!(gSaveContext.save.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
-            func_801518B0(globalCtx, 0xD76,
+            Message_StartTextbox(globalCtx, 0xD76,
                           &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it
                                          // looks like you've lost a little weight..."
         } else {
-            func_801518B0(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
+            Message_StartTextbox(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) ||

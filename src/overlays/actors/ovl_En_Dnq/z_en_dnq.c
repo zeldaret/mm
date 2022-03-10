@@ -345,7 +345,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
         if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
             (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
             if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
-                func_801518B0(globalCtx, 0x969, NULL);
+                Message_StartTextbox(globalCtx, 0x969, NULL);
                 this->unk_384 = 200;
             }
         }
@@ -388,12 +388,12 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     u32 temp_v1;
 
-    if (func_800EE29C(globalCtx, 0x69)) {
-        temp_v0 = func_800EE200(globalCtx, 0x69);
-        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 105)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 105);
+        temp_v1 = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_1DC != (u8)temp_v1) {
             func_80A5257C(this, D_80A535FC[temp_v1]);
             this->unk_1DC = temp_v1;
@@ -408,7 +408,7 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 

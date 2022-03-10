@@ -399,9 +399,9 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     func_80A41FA4(this, globalCtx);
                 } else {
                     gSaveContext.screenScale = 0.0f;
-                    func_80169DCC(globalCtx, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
-                                  &player->unk_3C0, player->unk_3CC);
-                    func_80169EFC(globalCtx);
+                    Play_SetRespawnData(&globalCtx->state, 0, Entrance_CreateIndexFromSpawn(0), player->unk_3CE, 0xBFF,
+                                        &player->unk_3C0, player->unk_3CC);
+                    func_80169EFC(&globalCtx->state);
                     if (player->stateFlags1 & 0x800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
@@ -440,16 +440,16 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                 if ((this->nextBellTime == CLOCK_TIME(0, 0)) &&
                     ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
                      (globalCtx->sceneNum == SCENE_CLOCKTOWER))) {
-                    s32 phi_v0;
+                    s32 playerParams;
                     u32 entranceIndex = gSaveContext.save.entranceIndex;
 
                     if ((globalCtx->actorCtx.unk5 & 2)) {
-                        phi_v0 = 0xCFF;
+                        playerParams = 0xCFF;
                     } else {
-                        phi_v0 = 0xBFF;
+                        playerParams = 0xBFF;
                     }
-                    func_80169DCC(globalCtx, 1, entranceIndex, player->unk_3CE, phi_v0, &player->unk_3C0,
-                                  player->unk_3CC);
+                    Play_SetRespawnData(&globalCtx->state, 1, entranceIndex, player->unk_3CE, playerParams,
+                                        &player->unk_3C0, player->unk_3CC);
 
                     if ((globalCtx->sceneNum == SCENE_TENMON_DAI) || (globalCtx->sceneNum == SCENE_00KEIKOKU)) {
                         globalCtx->nextEntranceIndex = 0x5400;

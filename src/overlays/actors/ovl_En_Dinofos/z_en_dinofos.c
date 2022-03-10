@@ -280,7 +280,7 @@ void EnDinofos_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (D_8089E364 == 0) {
         for (i = 0; i < ARRAY_COUNT(D_8089E33C); i++) {
-            D_8089E33C[i] = (Gfx*)Lib_SegmentedToVirtual(D_8089E33C[i]);
+            D_8089E33C[i] = Lib_SegmentedToVirtual(D_8089E33C[i]);
         }
         D_8089E364 = 1;
     }
@@ -376,22 +376,22 @@ void func_8089ABF4(EnDinofos* this, GlobalContext* globalCtx) {
 }
 
 void func_8089AC70(EnDinofos* this) {
-    this->unk_28A = 10;
-    this->unk_2B4 = 0.55f;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+    this->drawDmgEffScale = 0.55f;
     this->colliderJntSph.base.colType = COLTYPE_HIT3;
-    this->unk_2B8 = 0.82500005f;
-    this->unk_2B0 = 1.0f;
+    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffAlpha = 1.0f;
     this->unk_290 = 80;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_8089ACEC(EnDinofos* this, GlobalContext* globalCtx) {
-    if (this->unk_28A == 10) {
-        this->unk_28A = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->colliderJntSph.base.colType = COLTYPE_HIT0;
-        this->unk_2B0 = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D4, 12, 2, 0.3f, 0.2f);
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 12, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -553,7 +553,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
 
     if (this->skelAnime.curFrame > 35.0f) {
         if ((globalCtx->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 38.0f)) {
-            globalCtx->envCtx.unk_C3 = 11;
+            globalCtx->envCtx.lightSettingOverride = 11;
         }
 
         Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
@@ -564,7 +564,7 @@ void func_8089B580(EnDinofos* this, GlobalContext* globalCtx) {
     }
 
     if ((globalCtx->sceneNum == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
-        globalCtx->envCtx.unk_C3 = 0xFF;
+        globalCtx->envCtx.lightSettingOverride = 0xFF;
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -1048,13 +1048,13 @@ void func_8089CB10(EnDinofos* this, GlobalContext* globalCtx) {
 
     for (i = 6; i < ARRAY_COUNT(this->colliderJntSphElement); i++) {
         worldSphere = &this->colliderJntSph.elements[i].dim.worldSphere;
-        worldSphere->center.x = this->unk_34C.x;
-        worldSphere->center.y = this->unk_34C.y;
-        worldSphere->center.z = this->unk_34C.z;
+        worldSphere->center.x = this->limbPos[10].x;
+        worldSphere->center.y = this->limbPos[10].y;
+        worldSphere->center.z = this->limbPos[10].z;
     }
 
     if (globalCtx->sceneNum == SCENE_MITURIN) {
-        globalCtx->envCtx.unk_C3 = 11;
+        globalCtx->envCtx.lightSettingOverride = 11;
     }
 
     this->actionFunc = func_8089CBEC;
@@ -1086,7 +1086,7 @@ void func_8089CBEC(EnDinofos* this, GlobalContext* globalCtx) {
     sp7C.y = randPlusMinusPoint5Scaled(0.6f) + 1.4f;
     sp7C.z = 0.9f * temp_f22;
     func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
-    EffectSsDFire_Spawn(globalCtx, &this->unk_34C, &sp88, &sp7C, 30, 22, 255 - (temp_s0 * 20), 20, 3, 8);
+    EffectSsDFire_Spawn(globalCtx, &this->limbPos[10], &sp88, &sp7C, 30, 22, 255 - (temp_s0 * 20), 20, 3, 8);
 
     for (end = 6, i = 3; i > 0; i--) {
         if (this->unk_290 < (20 + -(i * 2))) {
@@ -1099,9 +1099,9 @@ void func_8089CBEC(EnDinofos* this, GlobalContext* globalCtx) {
         dim = &this->colliderJntSph.elements[i].dim;
         temp_s3 = (s32)(cos_rad((this->unk_290 + ((i - 5) << 1)) * (M_PI / 20)) * 0x2C00) + this->actor.shape.rot.y;
 
-        dim->worldSphere.center.x = (s32)(Math_SinS(temp_s3) * dim->modelSphere.center.z) + (s32)this->unk_34C.x;
-        dim->worldSphere.center.y = (s32)this->unk_34C.y + (s32)dim->modelSphere.center.y;
-        dim->worldSphere.center.z = (s32)(Math_CosS(temp_s3) * dim->modelSphere.center.z) + (s32)this->unk_34C.z;
+        dim->worldSphere.center.x = (s32)this->limbPos[10].x + (s32)(Math_SinS(temp_s3) * dim->modelSphere.center.z);
+        dim->worldSphere.center.y = (s32)this->limbPos[10].y + (s32)dim->modelSphere.center.y;
+        dim->worldSphere.center.z = (s32)this->limbPos[10].z + (s32)(Math_CosS(temp_s3) * dim->modelSphere.center.z);
     }
 
     if (this->unk_290 != 0) {
@@ -1115,7 +1115,7 @@ void func_8089CF00(EnDinofos* this, GlobalContext* globalCtx) {
     Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_0017B8);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
     if (globalCtx->sceneNum == SCENE_MITURIN) {
-        globalCtx->envCtx.unk_C3 = 255;
+        globalCtx->envCtx.lightSettingOverride = 255;
     }
     this->actionFunc = func_8089CF70;
 }
@@ -1151,8 +1151,8 @@ void func_8089D018(EnDinofos* this, GlobalContext* globalCtx) {
             this->unk_288 = temp_v0;
         }
 
-        if (this->unk_2B0 > 0.0f) {
-            this->unk_2B0 = this->unk_288 * (1.0f / 255.0f);
+        if (this->drawDmgEffAlpha > 0.0f) {
+            this->drawDmgEffAlpha = this->unk_288 * (1.0f / 255.0f);
         }
 
         this->actor.shape.shadowAlpha = this->unk_288;
@@ -1260,7 +1260,8 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
             return false;
         }
 
-        if ((this->unk_28A == 10) && (this->colliderJntSph.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+        if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
+            (this->colliderJntSph.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             return false;
         }
 
@@ -1285,7 +1286,7 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
         func_8089ACEC(this, globalCtx);
         func_8089AD70(this);
         if (globalCtx->sceneNum == SCENE_MITURIN) {
-            globalCtx->envCtx.unk_C3 = 255;
+            globalCtx->envCtx.lightSettingOverride = 255;
         }
 
         this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);
@@ -1311,22 +1312,22 @@ s32 func_8089D60C(EnDinofos* this, GlobalContext* globalCtx) {
         if (this->actor.colChkInfo.damageEffect == 5) {
             this->unk_290 = 40;
             Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-            this->unk_2B4 = 0.55f;
-            this->unk_2B0 = 2.0f;
-            this->unk_28A = 31;
+            this->drawDmgEffScale = 0.55f;
+            this->drawDmgEffAlpha = 2.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
             func_8089C784(this);
             return true;
         }
 
         if (this->actor.colChkInfo.damageEffect == 2) {
-            this->unk_2B0 = 4.0f;
-            this->unk_2B4 = 0.55f;
-            this->unk_28A = 0;
+            this->drawDmgEffAlpha = 4.0f;
+            this->drawDmgEffScale = 0.55f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         } else if (this->actor.colChkInfo.damageEffect == 4) {
-            this->unk_2B0 = 4.0f;
-            this->unk_2B4 = 0.55f;
-            this->unk_28A = 20;
+            this->drawDmgEffAlpha = 4.0f;
+            this->drawDmgEffScale = 0.55f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                         this->colliderJntSph.elements[i].info.bumper.hitPos.x,
                         this->colliderJntSph.elements[i].info.bumper.hitPos.y,
@@ -1359,7 +1360,7 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (this->actionFunc != func_8089C7B8) {
         if ((this->actor.depthInWater > 0.0f) && (this->actor.depthInWater < 10.0f)) {
             if (!((globalCtx->gameplayFrames % 4) & 1)) {
-                Math_Vec3f_Copy(&sp30, &this->unk_2D4[1 + (globalCtx->gameplayFrames % 4)]);
+                Math_Vec3f_Copy(&sp30, &this->limbPos[1 + (globalCtx->gameplayFrames % 4)]);
                 sp30.y = this->actor.world.pos.y + this->actor.depthInWater;
                 EffectSsGRipple_Spawn(globalCtx, &sp30, 100, 320, 0);
             }
@@ -1373,7 +1374,7 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Math_ScaledStepToS(&this->unk_28E, 0, 2000);
     }
 
-    Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk_304);
+    Math_Vec3f_Copy(&this->actor.focus.pos, &this->limbPos[4]);
     this->actor.focus.rot.y = this->actor.shape.rot.y + this->unk_28E;
     if (this->colliderJntSph.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderJntSph.base);
@@ -1388,12 +1389,12 @@ void EnDinofos_Update(Actor* thisx, GlobalContext* globalCtx2) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderQuad.base);
     }
 
-    if (this->unk_2B0 > 0.0f) {
-        if (this->unk_28A != 10) {
-            Math_StepToF(&this->unk_2B0, 0.0f, 0.05f);
-            this->unk_2B4 = (this->unk_2B0 + 1.0f) * (11.0f / 40.0f);
-            this->unk_2B4 = CLAMP_MAX(this->unk_2B4, 0.55f);
-        } else if (!Math_StepToF(&this->unk_2B8, 0.55f, 0.01375f)) {
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * (11.0f / 40.0f);
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1428,7 +1429,7 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
     if (D_8089E3B0[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->unk_2D4[D_8089E3B0[limbIndex]]);
+        Matrix_GetStateTranslation(&this->limbPos[D_8089E3B0[limbIndex]]);
     }
 
     if ((limbIndex == 14) && (this->unk_292 != this->unk_290) &&
@@ -1460,7 +1461,7 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             sp4C.x -= sp48->mf[3][0];
             sp4C.y -= sp48->mf[3][1];
             sp4C.z -= sp48->mf[3][2];
-            EffectSsDFire_Spawn(globalCtx, &this->unk_34C, &sp4C, &gZeroVec3f, 30, 22, 255 - (sp58 * 20), 20, 3, 8);
+            EffectSsDFire_Spawn(globalCtx, &this->limbPos[10], &sp4C, &gZeroVec3f, 30, 22, 255 - (sp58 * 20), 20, 3, 8);
             this->unk_292 = this->unk_290;
         }
     }
@@ -1495,8 +1496,8 @@ void EnDinofos_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                this->skelAnime.dListCount, func_8089DC4C, func_8089DC84, &this->actor, POLY_XLU_DISP);
     }
 
-    func_800BE680(globalCtx, &this->actor, this->unk_2D4, 12, this->unk_2B4, this->unk_2B8, this->unk_2B0,
-                  this->unk_28A);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

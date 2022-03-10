@@ -1136,8 +1136,8 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, GlobalContext* globalCtx) {
 
         // light arrows
         if (this->actor.colChkInfo.damageEffect == 4) {
-            this->unk21C = 4.0f;
-            this->unk220 = 1.0f;
+            this->drawDmgEffAlpha = 4.0f;
+            this->drawDmgEffScale = 1.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -1201,15 +1201,15 @@ void EnBigpo_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &thisCollider->base);
     }
 
-    if (this->unk21C > 0.0f) {
-        Math_StepToF(&this->unk21C, 0.0f, 0.05f);
+    if (this->drawDmgEffAlpha > 0.0f) {
+        Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
         if (this->mainColor.a != 255) { // NOT fully visible
             if (this->mainColor.a * (1.0f / 255.0f) < this->mainColor.a) {
-                this->unk21C = this->mainColor.a * (1.0f / 255.0f);
+                this->drawDmgEffAlpha = this->mainColor.a * (1.0f / 255.0f);
             }
         }
-        this->unk220 = ((this->unk21C + 1.0f) * 0.5f);
-        this->unk220 = CLAMP_MAX(this->unk220, 1.0f);
+        this->drawDmgEffScale = ((this->drawDmgEffAlpha + 1.0f) * 0.5f);
+        this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.0f);
     }
 }
 
@@ -1318,8 +1318,9 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // 71.428566f might be 500/7 context unknown
-    func_800BE680(globalCtx, &this->actor, this->limbPos, 9, this->actor.scale.x * 71.428566f * this->unk220, 0,
-                  this->unk21C, 0x14);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
+                            ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
     Matrix_SetCurrentState(&this->drawMtxF);
     EnBigpo_DrawLantern(&this->actor, globalCtx);
@@ -1359,10 +1360,6 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-/*
- * this matches without OPENDISPS but with it has stack issues,
- *  might be able to find an alternative match with the macros, so far no success
- */
 void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
     EnBigpo* this = THIS;
     f32 magnitude;
@@ -1381,42 +1378,41 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&vec1, &gZeroVec3f);
     }
 
-    {
-        GraphicsContext* gfx = globalCtx->state.gfxCtx;
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        // fully visible OR fully transparent
-        if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
-            Scene_SetRenderModeXlu(globalCtx, 0, 1);
-            dispHead = gfx->polyOpa.p;
-        } else {
-            Scene_SetRenderModeXlu(globalCtx, 1, 2);
-            dispHead = gfx->polyXlu.p;
-        }
-
-        gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
-
-        gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
-
-        Matrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
-        Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x, vec2.y + vec1.y, vec2.z + vec1.z,
-                                this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->lanternColor.a);
-
-        gDPSetEnvColor(&dispHead[2], this->lanternColor.r, this->lanternColor.g, this->lanternColor.b,
-                       this->mainColor.a);
-
-        gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-        gSPDisplayList(&dispHead[4], &gBigpoDrawLanternMainDL);
-
-        gSPDisplayList(&dispHead[5], &gBigpoDrawLanternPurpleTopDL);
-
-        // fully transparent OR fully invisible
-        if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
-            gfx->polyOpa.p = &dispHead[6];
-        } else {
-            gfx->polyXlu.p = &dispHead[6];
-        }
+    // fully visible OR fully transparent
+    if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
+        Scene_SetRenderModeXlu(globalCtx, 0, 1);
+        dispHead = POLY_OPA_DISP;
+    } else {
+        Scene_SetRenderModeXlu(globalCtx, 1, 2);
+        dispHead = POLY_XLU_DISP;
     }
+
+    gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
+
+    gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
+
+    Matrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
+    Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x, vec2.y + vec1.y, vec2.z + vec1.z,
+                            this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->lanternColor.a);
+
+    gDPSetEnvColor(&dispHead[2], this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->mainColor.a);
+
+    gSPMatrix(&dispHead[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    gSPDisplayList(&dispHead[4], &gBigpoDrawLanternMainDL);
+
+    gSPDisplayList(&dispHead[5], &gBigpoDrawLanternPurpleTopDL);
+
+    // fully transparent OR fully invisible
+    if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
+        POLY_OPA_DISP = &dispHead[6];
+    } else {
+        POLY_XLU_DISP = &dispHead[6];
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
 void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {

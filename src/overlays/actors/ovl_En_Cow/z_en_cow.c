@@ -269,7 +269,7 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;
                 D_801BDAA4 = 0;
             } else if ((this->actor.xzDistToPlayer < 150.0f) &&
-                       ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
+                       ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 25000) {
                 D_801BDAA4 = 0;
                 this->actionFunc = EnCow_Talk;
                 this->actor.flags |= ACTOR_FLAG_10000;

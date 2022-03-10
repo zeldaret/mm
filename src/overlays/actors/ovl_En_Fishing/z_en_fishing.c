@@ -1123,11 +1123,11 @@ void EnFishing_UpdateEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 }
 
                 if (effect->unk_2C == 30) {
-                    func_801518B0(globalCtx, 0x40B3, NULL);
+                    Message_StartTextbox(globalCtx, 0x40B3, NULL);
                 }
 
                 if ((effect->unk_2C >= 100) && (Message_GetState(&globalCtx->msgCtx) == 5)) {
-                    if (func_80147624(globalCtx) || !Message_GetState(&globalCtx->msgCtx)) {
+                    if (func_80147624(globalCtx) || Message_GetState(&globalCtx->msgCtx) == 0) {
                         func_801477B4(globalCtx);
                         func_801159EC(-50);
                         effect->unk_2C = -1;
@@ -3079,12 +3079,12 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_172[1] = 50;
             }
 
-            if (!Message_GetState(&globalCtx->msgCtx)) {
-                if ((gSaveContext.save.time >= 0xC000) && (gSaveContext.save.time <= 0xC01B)) {
+            if (Message_GetState(&globalCtx->msgCtx) == 0) {
+                if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && (gSaveContext.save.time <= 0xC01B)) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
-                if ((gSaveContext.save.time >= 0x3AAA) && (gSaveContext.save.time <= 0x3AC5)) {
+                if ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= 0x3AC5)) {
                     this->unk_150 = 7;
                     this->unk_172[3] = Rand_ZeroFloat(150.0f) + 200.0f;
                 }
@@ -3793,7 +3793,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 player->unk_B28 = 3;
                 func_8013EC44(0.0f, 1, 3, 1);
                 D_809171D8++;
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 D_8090CD4C = 100;
                 D_80911F48 = 45.0f;
                 D_8090CD14 = 5;
@@ -3875,7 +3875,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
             if (this->unk_172[0] <= 50) {
                 switch (this->unk_1CD) {
                     case 0:
-                        if ((Message_GetState(&globalCtx->msgCtx) == 4) || !Message_GetState(&globalCtx->msgCtx)) {
+                        if ((Message_GetState(&globalCtx->msgCtx) == 4) || Message_GetState(&globalCtx->msgCtx) == 0) {
                             if (func_80147624(globalCtx)) {
                                 func_801477B4(globalCtx);
                                 if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -3888,7 +3888,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                                                ((s16)this->unk_1A4 < (s16)D_8090CCF0)) {
                                         this->unk_1CD = 1;
                                         this->unk_172[0] = 0x3C;
-                                        func_801518B0(globalCtx, 0x4098, NULL);
+                                        Message_StartTextbox(globalCtx, 0x4098, NULL);
                                     } else {
                                         f32 temp1 = D_8090CCF0;
                                         s16 temp2 = D_809171D0;
@@ -3906,7 +3906,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                         }
                         break;
                     case 1:
-                        if ((Message_GetState(&globalCtx->msgCtx) == 4) || !Message_GetState(&globalCtx->msgCtx)) {
+                        if ((Message_GetState(&globalCtx->msgCtx) == 4) || Message_GetState(&globalCtx->msgCtx) == 0) {
                             if (func_80147624(globalCtx)) {
                                 func_801477B4(globalCtx);
                                 if (globalCtx->msgCtx.choiceIndex != 0) {
@@ -4904,7 +4904,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 11:
-            if (((Message_GetState(&globalCtx->msgCtx) == 5) || !Message_GetState(&globalCtx->msgCtx)) &&
+            if (((Message_GetState(&globalCtx->msgCtx) == 5) || Message_GetState(&globalCtx->msgCtx) == 0) &&
                 func_80147624(globalCtx)) {
                 s32 getItemId;
 
@@ -5007,7 +5007,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 22:
-            if (!Message_GetState(&globalCtx->msgCtx)) {
+            if (Message_GetState(&globalCtx->msgCtx) == 0) {
                 this->unk_154 = 0;
                 if (D_8090CD0C != 0) {
                     D_8090CD08 = 1;
@@ -5033,7 +5033,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
                 if (D_809171D0 == 0) {
                     this->unk_154 = 0;
                 } else {
-                    func_801518B0(globalCtx, 0x409C, NULL);
+                    Message_StartTextbox(globalCtx, 0x409C, NULL);
                     this->unk_154 = 20;
                 }
             }
@@ -5124,7 +5124,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         if ((sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) < 25.0f)) {
             D_8090CD08 = 0;
             D_8090CD0C = 1;
-            func_801518B0(globalCtx, 0x4087, NULL);
+            Message_StartTextbox(globalCtx, 0x4087, NULL);
         }
     }
 
@@ -5137,7 +5137,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
     if (D_8090CCFC != 0) {
         D_8090CCFC--;
         if (D_8090CCFC == 0) {
-            func_801518B0(globalCtx, D_809171DA, NULL);
+            Message_StartTextbox(globalCtx, D_809171DA, NULL);
         }
     }
 
@@ -5200,7 +5200,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             // fallthrough
 
         case 2:
-            ShrinkWindow_SetLetterboxTarget(0x1B);
+            ShrinkWindow_SetLetterboxTarget(27);
 
             spFC.x = sLurePos.x - player->actor.world.pos.x;
             spFC.z = sLurePos.z - player->actor.world.pos.z;
@@ -5301,17 +5301,17 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             camera->at = sCameraAt;
         }
             func_80169AFC(globalCtx, sCameraId, 0);
-            func_800EA0EC(globalCtx, &globalCtx->csCtx);
+            Cutscene_End(globalCtx, &globalCtx->csCtx);
             D_8090CD4C = 0;
             sCameraId = CAM_ID_MAIN;
             func_800F6834(globalCtx, 0);
-            globalCtx->envCtx.unk_8C.fogNear = 0;
+            globalCtx->envCtx.lightSettings.fogNear = 0;
             player->unk_B28 = -5;
             D_80917200 = 5;
             break;
 
         case 10:
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
             sCameraId = Play_CreateSubCamera(globalCtx);
             Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
             Play_CameraChangeStatus(globalCtx, sCameraId, 7);
@@ -5323,7 +5323,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             sCameraAt.x = camera->at.x;
             sCameraAt.y = camera->at.y;
             sCameraAt.z = camera->at.z;
-            func_801518B0(globalCtx, 0x409E, NULL);
+            Message_StartTextbox(globalCtx, 0x409E, NULL);
             D_8090CD4C = 11;
             func_8013EC44(0.0f, 150, 10, 10);
             // fallthrough
@@ -5332,25 +5332,25 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             player->actor.world.pos.z = 1360.0f;
             player->actor.speedXZ = 0.0f;
 
-            if (!Message_GetState(&globalCtx->msgCtx)) {
+            if (Message_GetState(&globalCtx->msgCtx) == 0) {
                 camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                 camera->eye = sCameraEye;
                 camera->eyeNext = sCameraEye;
                 camera->at = sCameraAt;
                 func_80169AFC(globalCtx, sCameraId, 0);
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 D_8090CD4C = 0;
                 sCameraId = CAM_ID_MAIN;
                 D_8090CD50 = 30;
                 func_800F6834(globalCtx, 0);
-                globalCtx->envCtx.unk_8C.fogNear = 0;
+                globalCtx->envCtx.lightSettings.fogNear = 0;
             }
             break;
 
         case 20:
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
             sCameraId = Play_CreateSubCamera(globalCtx);
             Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
             Play_CameraChangeStatus(globalCtx, sCameraId, 7);
@@ -5362,7 +5362,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             sCameraAt.x = camera->at.x;
             sCameraAt.y = camera->at.y;
             sCameraAt.z = camera->at.z;
-            func_801518B0(globalCtx, 0x409A, NULL);
+            Message_StartTextbox(globalCtx, 0x409A, NULL);
             D_8090CD4C = 21;
             D_80911F48 = 45.0f;
             D_8090CD50 = 10;
@@ -5425,7 +5425,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             if (D_8090CD50 == 0) {
-                if ((Message_GetState(&globalCtx->msgCtx) == 4) || !Message_GetState(&globalCtx->msgCtx)) {
+                if ((Message_GetState(&globalCtx->msgCtx) == 4) || Message_GetState(&globalCtx->msgCtx) == 0) {
                     if (func_80147624(globalCtx)) {
                         Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
@@ -5439,7 +5439,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                         camera->eyeNext = sCameraEye;
                         camera->at = sCameraAt;
                         func_80169AFC(globalCtx, sCameraId, 0);
-                        func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                        Cutscene_End(globalCtx, &globalCtx->csCtx);
                         func_800B7298(globalCtx, &this->actor, 6); // arg2 changed from 7 to 6 in MM
                         D_8090CD4C = 0;
                         sCameraId = CAM_ID_MAIN;
@@ -5448,7 +5448,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                         D_8090CD54 = 0;
                         D_809171F6 = 20;
                         func_800F6834(globalCtx, 0);
-                        globalCtx->envCtx.unk_8C.fogNear = 0;
+                        globalCtx->envCtx.lightSettings.fogNear = 0;
                     }
                 }
             }
@@ -5465,13 +5465,13 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         if (sCameraEye.y <= (WATER_SURFACE_Y(globalCtx) + 1.0f)) {
             func_800F6834(globalCtx, 1);
             if (D_809171CA != 0) {
-                globalCtx->envCtx.unk_8C.fogNear = -0xB2;
+                globalCtx->envCtx.lightSettings.fogNear = -0xB2;
             } else {
-                globalCtx->envCtx.unk_8C.fogNear = -0x2E;
+                globalCtx->envCtx.lightSettings.fogNear = -0x2E;
             }
         } else {
             func_800F6834(globalCtx, 0);
-            globalCtx->envCtx.unk_8C.fogNear = 0;
+            globalCtx->envCtx.lightSettings.fogNear = 0;
         }
     }
 
@@ -5517,7 +5517,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         D_809171CB--;
     }
 
-    if ((D_809171CB == 1) && !Message_GetState(&globalCtx->msgCtx) && ((D_8090CD00 & 0xFFF) == 0xFFF)) {
+    if ((D_809171CB == 1) && Message_GetState(&globalCtx->msgCtx) == 0 && ((D_8090CD00 & 0xFFF) == 0xFFF)) {
         D_809171CB = 200;
 
         if (Rand_ZeroOne() < 0.5f) {
@@ -5555,8 +5555,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         Math_ApproachZeroF(&D_8090CCD8, 1.0f, 2.0f);
     }
 
-    globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.diffuseColor1[1] =
-        globalCtx->envCtx.unk_8C.diffuseColor1[2] = D_8090CCD8;
+    globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.diffuseColor1[1] =
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] = D_8090CCD8;
 
     if ((u8)D_8090CCD0 > 0) {
         s32 pad;

@@ -62,7 +62,7 @@ void EnKgy_Init(Actor* thisx, GlobalContext* globalCtx) {
     Flags_UnsetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
     if (Flags_GetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor)) || (gSaveContext.save.weekEventReg[33] & 0x80)) {
         Flags_SetSwitch(globalCtx, ENKGY_GET_FE00(&this->actor) + 1);
-        globalCtx->envCtx.unk_C3 = 1;
+        globalCtx->envCtx.lightSettingOverride = 1;
         gSaveContext.save.weekEventReg[21] |= 1;
         if (!func_80B40D64(globalCtx)) {
             EnKgy_ChangeAnim(this, 4, 0, 0);
