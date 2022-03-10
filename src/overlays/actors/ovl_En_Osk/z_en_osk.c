@@ -205,10 +205,12 @@ void func_80BF609C(EnOsk* this, GlobalContext* globalCtx) {
 void func_80BF61EC(EnOsk* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (func_800EE29C(globalCtx, this->unk_258)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_258));
-        if (this->unk_256 != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_258)]->unk0) {
-            this->unk_256 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_258)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_258)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_258));
+        if (this->unk_256 !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_258)]->action) {
+            this->unk_256 =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_258)]->action;
             func_80BF5F70(this);
         }
         func_80BF609C(this, globalCtx);
@@ -329,10 +331,12 @@ void func_80BF656C(EnOsk* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800EE29C(globalCtx, this->unk_258)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_258));
-        if (this->unk_256 != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_258)]->unk0) {
-            this->unk_256 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_258)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_258)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_258));
+        if (this->unk_256 !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_258)]->action) {
+            this->unk_256 =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_258)]->action;
             func_80BF6314(this);
         }
         func_80BF6478(this);
@@ -466,10 +470,12 @@ void func_80BF6A20(EnOsk* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_800EE29C(globalCtx, this->unk_258)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, this->unk_258));
-        if (this->unk_256 != globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_258)]->unk0) {
-            this->unk_256 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_258)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_258)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, this->unk_258));
+        if (this->unk_256 !=
+            globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_258)]->action) {
+            this->unk_256 =
+                globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_258)]->action;
             func_80BF67A8(this);
         }
         func_80BF68E0(this);
