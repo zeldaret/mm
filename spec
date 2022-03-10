@@ -2509,11 +2509,7 @@ beginseg
     name "ovl_Boss_02"
     compress
     include "build/src/overlays/actors/ovl_Boss_02/z_boss_02.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_Boss_02/ovl_Boss_02_reloc.o"
-    #else
-        include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_Boss_02/ovl_Boss_02_reloc.o"
 endseg
 
 beginseg
@@ -3817,11 +3813,7 @@ beginseg
     name "ovl_Obj_Snowball"
     compress
     include "build/src/overlays/actors/ovl_Obj_Snowball/z_obj_snowball.o"
-#ifdef NON_MATCHING
-    include "build/src/overlays/actors/ovl_Obj_Snowball/ovl_obj_Snowball_reloc.o"
-#else
-    include "build/data/ovl_Obj_Snowball/ovl_Obj_Snowball.reloc.o"
-#endif
+    include "build/src/overlays/actors/ovl_Obj_Snowball/ovl_Obj_Snowball_reloc.o"
 endseg
 
 beginseg
@@ -5026,7 +5018,7 @@ beginseg
     name "ovl_En_Bomjima"
     compress
     include "build/src/overlays/actors/ovl_En_Bomjima/z_en_bomjima.o"
-    include "build/data/ovl_En_Bomjima/ovl_En_Bomjima.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bomjima/ovl_En_Bomjima_reloc.o"
 endseg
 
 beginseg

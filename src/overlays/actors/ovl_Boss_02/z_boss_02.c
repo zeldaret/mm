@@ -1320,8 +1320,6 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
     func_809DD934(this, globalCtx);
 }
 
-#ifdef NON_MATCHING
-// matrix stuff at the start?
 void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     static Gfx* D_809DFA9C[] = {
         object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
@@ -1332,12 +1330,12 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         object_boss02_DL_013210, object_boss02_DL_013590,
     };
     static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
-    Boss02* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    Boss02* this = THIS;
     s32 i;
     s32 idx;
-    RSPMatrix* matrix;
-    s32 pad;
+    Mtx* mtx;
+    Mtx* mtxIter;
     s32 phi_v0;
     f32 phi_f12;
     f32 spAC;
@@ -1347,7 +1345,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     f32 sp9C;
     f32 sp98;
 
-    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(RSPMatrix) * 23);
+    mtxIter = mtx = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Mtx) * 23);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1359,7 +1357,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_boss02_Tex_0041A0));
     }
 
-    gSPSegment(POLY_OPA_DISP++, 0x0D, matrix);
+    gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
     if (D_809E0422 == 0) {
         sp98 = -500.0f;
@@ -1396,11 +1394,11 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     spA4 = 0.0f;
     spA0 = 0.0f;
-    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++) {
+    for (i = 0; i < ARRAY_COUNT(D_809DFA9C); i++, mtxIter++) {
         if (this->unk_0195 != 0) {
-            phi_v0 = (D_809DF5E4[i] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
+            phi_v0 = (D_809DF5E4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         } else {
-            phi_v0 = (D_809DF5B4[i] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
+            phi_v0 = (D_809DF5B4[i + 1] + this->unk_014E) % ARRAY_COUNT(this->unk_01BC);
         }
 
         if ((i == 21) && (this->unk_0144 < 20)) {
@@ -1416,9 +1414,9 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(M_PI / 2, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(-(M_PI / 2));
-        Matrix_GetStateAsRSPMatrix(&matrix[i]);
+        Matrix_ToMtx(mtxIter);
 
-        gSPMatrix(POLY_OPA_DISP++, &matrix[i], G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, mtxIter, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if ((this->unk_0156 & 1) && (i >= this->unk_0158) && (this->unk_015A >= i)) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 0x384, 0x44B);
@@ -1443,7 +1441,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             Actor* child = this->actor.child;
 
             if (child != NULL) {
-                Matrix_GetStateTranslationAndScaledX(500.0f, &child->world.pos);
+                Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.child->world.pos);
             }
 
             func_809DA50C(1, &this->colliderSphere2, &this->unk_147C[i + 1]);
@@ -1464,18 +1462,6 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         func_809DA50C(21, &this->colliderSphere1, &D_809DFAF4);
     }
 }
-#else
-static Gfx* D_809DFA9C[] = {
-    object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
-    object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
-    object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
-    object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
-    object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
-    object_boss02_DL_013210, object_boss02_DL_013590,
-};
-static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/Boss02_Draw.s")
-#endif
 
 void func_809DD0A8(Actor* thisx, GlobalContext* globalCtx) {
     func_809DD2F8(globalCtx);
@@ -1634,8 +1620,6 @@ void func_809DD2F8(GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
-// Small ordering in the last loop
 void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s16 i;
@@ -1946,9 +1930,11 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
             }
             temp_a0_5 = temp_a0_5->next;
         }
+        {
+            f32 tmp = D_809E0422 ? 3150.0f : 0.0f;
 
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, D_809E0422 ? 3150.0f : 0.0f, 0, 0, 0, 0,
-                    D_809E0422);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_INIBS_MOVEBG, 0, tmp, 0, 0, 0, 0, D_809E0422);
+        }
 
         temp_a0_5 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
         while (temp_a0_5 != NULL) {
@@ -2052,9 +2038,6 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         ShrinkWindow_SetLetterboxTarget(27);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_02/func_809DD934.s")
-#endif
 
 void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
