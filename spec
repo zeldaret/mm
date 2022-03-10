@@ -4840,7 +4840,6 @@ beginseg
     name "ovl_En_Tanron4"
     compress
     include "build/src/overlays/actors/ovl_En_Tanron4/z_en_tanron4.o"
-    include "build/data/ovl_En_Tanron4/ovl_En_Tanron4.data.o"
     include "build/data/ovl_En_Tanron4/ovl_En_Tanron4.reloc.o"
 endseg
 
