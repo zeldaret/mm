@@ -310,9 +310,18 @@ void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C478.s")
+void func_80A2C478(EnSyatekiDekunuts* this) {
+    this->actionFunc = func_80A2C48C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C48C.s")
+void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    if (this->unk_1DA > 20) {
+        func_80A2BE54(this);
+        this->unk_1DA = 0;
+    } else {
+        this->unk_1DA++;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C4D0.s")
 
