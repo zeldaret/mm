@@ -87,20 +87,20 @@ void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
     func_8019F420(projectedPos, sfxId);
 }
 
-void func_809E2788(GlobalContext* globalCtx, Vec3f* pos) {
+void Boss03_SpawnEffectWetSpot(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
     GyorgEffect* eff = globalCtx->specialEffects;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
         if ((eff->type == GYORG_EFFECT_NONE) || (eff->type == GYORG_EFFECT_BUBBLE)) {
-            eff->type = GYORG_EFFECT_4;
+            eff->type = GYORG_EFFECT_WET_SPOT;
             eff->pos = *pos;
             eff->unk_34.x = 0.1f;
             eff->unk_34.y = 0.4f;
             eff->velocity = gZeroVec3f;
             eff->accel = gZeroVec3f;
             eff->alpha = 150;
-            eff->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
+            eff->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
             return;
         }
 
@@ -108,13 +108,13 @@ void func_809E2788(GlobalContext* globalCtx, Vec3f* pos) {
     }
 }
 
-void func_809E2880(GlobalContext* globalCtx, Vec3f* pos) {
+void Boss03_SpawnEffectDroplet(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
     GyorgEffect* eff = globalCtx->specialEffects;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
         if ((eff->type == GYORG_EFFECT_NONE) || (eff->type == GYORG_EFFECT_BUBBLE)) {
-            eff->type = GYORG_EFFECT_2;
+            eff->type = GYORG_EFFECT_DROPLET;
             eff->pos = *pos;
             eff->velocity = gZeroVec3f;
             eff->accel = gZeroVec3f;
@@ -132,7 +132,7 @@ void func_809E2880(GlobalContext* globalCtx, Vec3f* pos) {
     }
 }
 
-void func_809E299C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity) {
+void Boss03_SpawnEffectSplash(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity) {
     Vec3f accel = { 0.0f, -1.0f, 0.0f };
     f32 temp_f2;
     GyorgEffect* eff = globalCtx->specialEffects;
@@ -140,7 +140,7 @@ void func_809E299C(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity) {
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++) {
         if ((eff->type == GYORG_EFFECT_NONE) || (eff->type == GYORG_EFFECT_BUBBLE)) {
-            eff->type = GYORG_EFFECT_3;
+            eff->type = GYORG_EFFECT_SPLASH;
             eff->pos = *pos;
             eff->velocity = *velocity;
             eff->accel = accel;
@@ -419,7 +419,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->jointTable[i].z = Math_SinS((this->unk_240 * 0x10) + i * 19000) * 4000.0f;
         }
 
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         return;
     }
 
@@ -460,7 +460,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         D_809E9842 = 1;
     }
 
-    this->unk_252 = -1;
+    this->numSpawnedSmallFish = -1;
     this->waterHeight = WATER_HEIGHT;
 }
 
@@ -475,7 +475,7 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
         this->actionFunc = func_809E34B8;
         Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
         this->unk_274 = 0;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
     }
 }
 
@@ -513,7 +513,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f20) + SQ(temp_f22)), -temp_f2), 0xA, this->unk_274);
 
     Math_ApproachS(
-        &this->unk_2A0,
+        &this->bodyYRot,
         Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0xA, this->unk_274, 0) *
             -0.5f,
         5, 0x100);
@@ -560,7 +560,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
         } else if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU)) {
             if (KREG(70) == 0) {
                 func_809E38EC(this, globalCtx);
-            } else if (this->unk_252 <= 0) {
+            } else if (this->numSpawnedSmallFish <= 0) {
                 func_809E38EC(this, globalCtx);
             }
         }
@@ -608,7 +608,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
                    this->unk_274);
     temp =
         Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0x000A, this->unk_274, 0) * -0.5f;
-    Math_ApproachS(&this->unk_2A0, temp, 5, 0x100);
+    Math_ApproachS(&this->bodyYRot, temp, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x0100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
@@ -627,7 +627,6 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
         func_809E344C(this, globalCtx);
         this->workTimer[WORK_TIMER_UNK1_A] = 100;
     } else {
-
         if ((this->waterHeight - 80.0f) < player->actor.world.pos.y) {
             sp43 = 1;
             phi_f2 = 100.0f;
@@ -638,8 +637,8 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
             sp44 = 100.0f;
         }
 
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
-        Matrix_RotateY(this->actor.world.rot.y, 1);
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
 
         temp_f12 = sqrtf(SQ(sp50.x - player->actor.world.pos.x) + SQ(sp50.z - player->actor.world.pos.z));
@@ -689,7 +688,7 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
     this->unk_276 = 0x1000;
     this->unk_2BD = true;
     this->unk_278 = 15.0f;
-    this->actor.flags &= -2;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 
     SkelAnime_Update(&this->skelAnime);
 
@@ -700,7 +699,7 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp), 0xA,
                    this->unk_274);
     Math_ApproachS(
-        &this->unk_2A0,
+        &this->bodyYRot,
         (Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f),
         5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
@@ -742,7 +741,6 @@ void func_809E3D98(Boss03* this, GlobalContext* globalCtx) {
                 Boss03_SetupChewPlayer(this, globalCtx);
             }
         } else {
-            //Math_ApproachS(&this->jawZRot, 0x3200, 2, 3072.0f * phi_f0);
             Math_ApproachS(&this->jawZRot, 0x3200, 2, 0xC00 * phi_f0);
         }
 
@@ -801,7 +799,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA, this->unk_274);
     Math_ApproachS(
-        &this->unk_2A0,
+        &this->bodyYRot,
         Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f, 5,
         0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
@@ -895,7 +893,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     }
 
     Math_ApproachS(
-        &this->unk_2A0,
+        &this->bodyYRot,
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x000A, this->unk_274, 0) * -0.7f, 5,
         0x200);
     Math_ApproachS(&this->unk_274, 0x800, 1, 0x100);
@@ -994,7 +992,7 @@ void Boss03_SetupJumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
 }
 
 void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
-    this->unk_254 = 0;
+    this->bubbleEffectSpawnNum = 0;
     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
     this->skelAnime.playSpeed = 2.0f;
@@ -1005,7 +1003,7 @@ void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
 
     Actor_MoveWithGravity(&this->actor);
     if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y < this->waterHeight + 50.0f)) {
-        this->unk_254 = 2;
+        this->bubbleEffectSpawnNum = 2;
         this->actor.gravity = 0.0f;
         Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
         if (this->actor.velocity.y == 0.0f) {
@@ -1020,7 +1018,7 @@ void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
             sp30.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(150.0f);
             sp30.y = this->actor.world.pos.y;
             sp30.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(150.0f);
-            func_809E2880(globalCtx, &sp30);
+            Boss03_SpawnEffectDroplet(globalCtx, &sp30);
         }
     }
 }
@@ -1039,7 +1037,7 @@ Vec3f D_809E9104[] = {
 
 void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     s16 i;
-    Vec3f sp70;
+    Vec3f effectPos;
     f32 temp_f2;
     f32 temp_f16;
     f32 temp_f18;
@@ -1054,8 +1052,8 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
 
     sp56 = 0;
     player = GET_PLAYER(globalCtx);
-    this->unk_254 = 0;
-    this->csTimer += 1;
+    this->bubbleEffectSpawnNum = 0;
+    this->csTimer++;
     this->unk_290 = 0;
     sp5A = 0x4BC;
 
@@ -1068,7 +1066,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Play_CameraChangeStatus(globalCtx, 0, 1);
                 Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
                 this->actor.world.rot.y = -0x7B30;
-                this->unk_2C8.y = 1850.0f;
+                this->prevPlayerPos.y = 1850.0f;
 
                 this->actor.world.pos.x = 1400.0f;
                 this->actor.world.pos.y = 130.0f;
@@ -1081,7 +1079,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 this->subCamAt.y = player->actor.world.pos.y + 30.0f;
                 this->csState = 1;
                 this->csTimer = 0;
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_2D5 = true;
 
                 this->cameraFov = KREG(14) + 60.0f;
@@ -1099,7 +1097,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                     Math_ApproachF(&this->subCamAt.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
                     this->subCamAt.z = player->actor.world.pos.z;
-                    if (this->csTimer >= 0x6A) {
+                    if (this->csTimer >= 106) {
                         this->csState = 2;
                         this->csTimer = 0;
                         this->unk_240 = 0;
@@ -1119,15 +1117,15 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                                            this->unk_274);
                             Math_ApproachS(&this->unk_274, 0x200, 1, 0x10);
 
-                            if ((this->csTimer >= 0x1F) && (this->csTimer < 0x32)) {
+                            if ((this->csTimer >= 31) && (this->csTimer < 50)) {
                                 sp56 = 2;
                             }
 
-                            if ((this->csTimer == 0x28) || (this->csTimer == (u32)(KREG(91) + 0x10E))) {
+                            if ((this->csTimer == 40) || (this->csTimer == (u32)(KREG(91) + 270))) {
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                             }
 
-                            if (this->csTimer >= 0x33) {
+                            if (this->csTimer >= 51) {
                                 Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, 0.1f);
                             }
 
@@ -1136,21 +1134,21 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                                     this->unk_242++;
                                     this->unk_274 = 0;
                                     if (this->unk_242 >= 2) {
-                                        this->csTimer = 0x64;
+                                        this->csTimer = 100;
                                     }
                                 }
                                 this->unk_278 = 5.0f;
                             } else {
                                 this->unk_278 = 0.0f;
                                 sp56 = 1;
-                                if ((this->actor.speedXZ == 0.0f) && ((u32)this->csTimer >= 0xE7)) {
+                                if ((this->actor.speedXZ == 0.0f) && ((u32)this->csTimer >= 231)) {
                                     this->csState = 3;
                                     this->csTimer = 0;
                                 }
-                                if (this->csTimer == 0xA5) {
+                                if (this->csTimer == 165) {
                                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_MID);
                                 }
-                                if (this->csTimer == 0xB4) {
+                                if (this->csTimer == 180) {
                                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                                 }
                             }
@@ -1162,7 +1160,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
             sp5A = 0x1970;
             Math_ApproachF(&this->actor.speedXZ, 15.0f, 1.0f, 2.0f);
-            if (this->csTimer >= 0x15) {
+            if (this->csTimer >= 21) {
                 this->csState = 4;
                 this->csTimer = 0;
             }
@@ -1190,7 +1188,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             }
 
             this->cameraFov = 60.0f;
-            if (this->csTimer == 0x10) {
+            if (this->csTimer == 16) {
                 this->csState = 5;
                 this->csTimer = 0;
                 this->unk_2D5 = false;
@@ -1214,7 +1212,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->subCamAt.y = this->actor.world.pos.y - 100.0f;
                     this->subCamAt.z = this->actor.world.pos.z;
 
-                    if (this->csTimer == 0xA) {
+                    if (this->csTimer == 10) {
                         this->actor.velocity.y = 30.0f;
                         this->csState = 6;
                         this->csTimer = 0;
@@ -1230,17 +1228,17 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         case 0x6:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
-            if (this->csTimer == 0x1E) {
+            if (this->csTimer == 30) {
                 TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
                                        Lib_SegmentedToVirtual(&D_06007EC8), 160, 180, 128, 40);
             }
 
-            if ((this->csTimer < 0x18) || (this->csTimer >= 0x5A)) {
+            if ((this->csTimer < 24) || (this->csTimer >= 90)) {
                 SkelAnime_Update(&this->skelAnime);
                 Math_ApproachS(&this->actor.world.rot.x, this->actor.velocity.y * -300.0f, 3, 0x1000);
                 Actor_MoveWithGravity(&this->actor);
                 if ((this->actor.velocity.y <= 0.0f) && (this->actor.world.pos.y < (this->waterHeight + 50.0f))) {
-                    this->unk_254 = 2;
+                    this->bubbleEffectSpawnNum = 2;
                     this->actor.gravity = 0.0f;
                     Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
                     Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.5f);
@@ -1248,11 +1246,11 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                     if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
 
                     for (i = 0; i < 3; i++) {
-                        sp70.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.x;
-                        sp70.y = this->actor.world.pos.y;
-                        sp70.z = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.z;
+                        effectPos.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.x;
+                        effectPos.y = this->actor.world.pos.y;
+                        effectPos.z = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.z;
 
-                        func_809E2880(globalCtx, &sp70);
+                        Boss03_SpawnEffectDroplet(globalCtx, &effectPos);
                     }
 
                     this->subCamTargetAt.x = this->actor.world.pos.x;
@@ -1272,7 +1270,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->subCamAt.y, this->subCamTargetAt.y + this->unk_568, 0.5f, 100.0f);
             Math_ApproachF(&this->subCamAt.z, this->subCamTargetAt.z, 0.5f, 100.0f);
 
-            if (this->csTimer == 0x91) {
+            if (this->csTimer == 145) {
                 Camera* subCam;
 
                 subCam = Play_GetCamera(globalCtx, 0);
@@ -1313,10 +1311,11 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         this->subCamEye = this->actor.world.pos;
 
         for (i = 0; i < sp56; i++) {
-            sp70.x = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.x;
-            sp70.y = (randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.y) - 150.0f;
-            sp70.z = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.z;
-            Boss03_SpawnEffectBubble(globalCtx, &sp70);
+            effectPos.x = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.x;
+            effectPos.y = (randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.y) - 150.0f;
+            effectPos.z = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.z;
+
+            Boss03_SpawnEffectBubble(globalCtx, &effectPos);
         }
     }
 
@@ -1334,7 +1333,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     this->workTimer[WORK_TIMER_UNK0_G] = 0;
     this->unk_242 = 0;
     this->csState = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
@@ -1453,7 +1452,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 this->unk_288 = this->waterHeight;
                 this->unk_28C = this->actor.world.pos.z;
 
-                this->unk_280 = 0x1B;
+                this->unk_280 = 27;
                 if ((fabsf(this->actor.world.pos.x - sp84.x) < 5.0f) &&
                     (fabsf(this->actor.world.pos.z - sp84.z) < 5.0f)) {
                     this->unk_242 = 1;
@@ -1511,7 +1510,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 sp78.x = randPlusMinusPoint5Scaled(sp4C) + this->actor.world.pos.x;
                 sp78.y = this->actor.world.pos.y;
                 sp78.z = randPlusMinusPoint5Scaled(sp4C) + this->actor.world.pos.z;
-                func_809E2880(globalCtx, &sp78);
+                Boss03_SpawnEffectDroplet(globalCtx, &sp78);
             }
 
             Actor_MoveWithGravity(&this->actor);
@@ -1529,7 +1528,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
 
         case 0x2:
             Math_ApproachZeroF(&this->unk_56C, 1.0f, 0.0005f);
-            if (this->csTimer == 0x3C) {
+            if (this->csTimer == 60) {
                 camera = Play_GetCamera(globalCtx, 0);
                 camera->eye = this->subCamEye;
                 camera->eyeNext = this->subCamEye;
@@ -1607,28 +1606,28 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                     Math_ApproachS(&this->unk_2BE, -4000, 10, 70);
 
-                    if (this->csTimer >= 0x3D) {
+                    if (this->csTimer >= 61) {
                         Math_ApproachS(&this->jawZRot, 0x3200, 5, 0x500);
-                        if ((this->csTimer >= 0x5A) && (this->csTimer < 0x82)) {
-                            if ((this->csTimer & 1) != 0) {
+                        if ((this->csTimer >= 90) && (this->csTimer < 130)) {
+                            if ((this->csTimer % 2) != 0) {
                                 Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON3,
                                                    this->actor.world.pos.x - 110.0f, this->actor.world.pos.y - 20.0f,
                                                    this->actor.world.pos.z - 110.0f, 0, this->actor.shape.rot.y, 0, 0);
-                                this->unk_252++;
+                                this->numSpawnedSmallFish++;
                             }
-                            if ((this->csTimer & 7) == 0) {
+                            if ((this->csTimer % 8) == 0) {
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_MINI_APPEAR);
                             }
                         }
                     }
 
-                    if (this->csTimer >= 0x96) {
-                        Camera* temp_v0_2;
+                    if (this->csTimer >= 150) {
+                        Camera* subCam;
 
-                        temp_v0_2 = Play_GetCamera(globalCtx, 0);
-                        temp_v0_2->eye = this->subCamEye;
-                        temp_v0_2->eyeNext = this->subCamEye;
-                        temp_v0_2->at = this->subCamAt;
+                        subCam = Play_GetCamera(globalCtx, 0);
+                        subCam->eye = this->subCamEye;
+                        subCam->eyeNext = this->subCamEye;
+                        subCam->at = this->subCamAt;
 
                         func_80169AFC(globalCtx, this->subCamId, 0);
                         this->subCamId = 0;
@@ -1912,7 +1911,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
                         this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
-            this->unk_280 = 0x1B;
+            this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
             this->unk_288 = this->waterHeight;
             this->unk_28C = this->actor.world.pos.z;
@@ -1965,11 +1964,11 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Math_ApproachS(&this->leftFinYRot, 0, 0xA, 0x100);
     }
 
-    Math_ApproachS(&this->unk_2A0, 0, 0xA, 0x100);
+    Math_ApproachS(&this->bodyYRot, 0, 0xA, 0x100);
     Math_ApproachS(&this->jawZRot, 0, 0xA, 0x200);
 
     if ((this->unk_240 % 2) == 0) {
-        for (phi_s0 = 0; phi_s0 < this->unk_254; phi_s0++) {
+        for (phi_s0 = 0; phi_s0 < this->bubbleEffectSpawnNum; phi_s0++) {
             sp6C.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
             sp6C.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
             sp6C.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
@@ -1977,7 +1976,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    this->unk_254 = 1;
+    this->bubbleEffectSpawnNum = 1;
     Boss03_UpdateEffects(globalCtx);
 
     if (D_809E9841 != 0) {
@@ -1992,21 +1991,21 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         Math_ApproachS(&player->actor.shape.rot.x, 0, 1, 0x80);
     }
 
-    if ((this->waterHeight < player->actor.world.pos.y) && (this->unk_2C8.y <= this->waterHeight)) {
-        this->unk_2D4 = 20;
+    if ((this->waterHeight < player->actor.world.pos.y) && (this->prevPlayerPos.y <= this->waterHeight)) {
+        this->wetSpotEffectSpawnNum = 20;
     }
 
-    if (((player->actor.bgCheckFlags & 1) != 0) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
-        if (this->unk_2D4 != 0) {
-            this->unk_2D4--;
+    if ((player->actor.bgCheckFlags & 1)  && (player->actor.shape.feetPos[0].y >= 438.0f)) {
+        if (this->wetSpotEffectSpawnNum != 0) {
+            this->wetSpotEffectSpawnNum--;
             sp78.x = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.x;
             sp78.y = PLATFORM_HEIGHT;
             sp78.z = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.z;
-            func_809E2788(globalCtx, &sp78);
+            Boss03_SpawnEffectWetSpot(globalCtx, &sp78);
         }
     }
 
-    this->unk_2C8 = player->actor.world.pos;
+    this->prevPlayerPos = player->actor.world.pos;
 
     if (this->waterHeight < this->actor.world.pos.y) {
         func_8019F540(0);
@@ -2029,7 +2028,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             sp60.z += this->unk_28C + randPlusMinusPoint5Scaled(40.0f);
 
             if (sqrtf(SQ(sp60.x) + SQ(sp60.z)) < 355.0f) {
-                func_809E2880(globalCtx, &sp60);
+                Boss03_SpawnEffectDroplet(globalCtx, &sp60);
                 phi_s0++;
             }
 
@@ -2062,7 +2061,7 @@ s32 Boss03_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
     if ((limbIndex == GYORG_LIMB_UPPER_TRUNK) || (limbIndex == GYORG_LIMB_LOWER_TRUNK) ||
         (limbIndex == GYORG_LIMB_TAIL)) {
-        rot->y += this->unk_2A0;
+        rot->y += this->bodyYRot;
     }
     if (limbIndex == GYORG_LIMB_UPPER_RIGHT_FIN) {
         rot->y += this->rightFinYRot;
@@ -2149,7 +2148,6 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
 
-
     GfxPrint_SetPos(printer, 1, 1);
     GfxPrint_Printf(printer, "health:%i", this->actor.colChkInfo.health);
 
@@ -2161,8 +2159,6 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
         GfxPrint_SetPos(printer, x-4, 1);
         GfxPrint_Printf(printer, "csTimer:%i", this->csTimer);
     }
-
-
 
 
     GfxPrint_SetPos(printer, x-12, ++y);
@@ -2280,8 +2276,8 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
 
     #if 0
-    GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "252:%X", this->unk_252);
+    GfxPrint_SetPos(printer, x-16, ++y);
+    GfxPrint_Printf(printer, "numSpawnedSmallFish:%X", this->numSpawnedSmallFish);
     #endif
 
     #if 0
@@ -2289,9 +2285,10 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_Printf(printer, "hasSpwanedSmallFishes:%X", this->hasSpwanedSmallFishes);
     #endif
 
-    GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "254:%X", this->unk_254);
-
+    #if 0
+    GfxPrint_SetPos(printer, x-17, ++y);
+    GfxPrint_Printf(printer, "bubbleEffectSpawnNum:%X", this->bubbleEffectSpawnNum);
+    #endif
 
     #if 0
     GfxPrint_SetPos(printer, x-8, ++y);
@@ -2320,6 +2317,18 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "268.z:%f", this->unk_268.z);
     #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-12, ++y);
+    GfxPrint_Printf(printer, "prevPlayerPos.x:%f", this->prevPlayerPos.x);
+
+    GfxPrint_SetPos(printer, x-12, ++y);
+    GfxPrint_Printf(printer, "prevPlayerPos.y:%f", this->prevPlayerPos.y);
+
+    GfxPrint_SetPos(printer, x-12, ++y);
+    GfxPrint_Printf(printer, "prevPlayerPos.z:%f", this->prevPlayerPos.z);
+    #endif
+
 
     #if 0
     GfxPrint_SetPos(printer, x, ++y);
@@ -2377,8 +2386,8 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
 
     #if 0
-    GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "2A0:%X", this->unk_2A0);
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "bodyYRot:%X", this->bodyYRot);
     #endif
 
     #if 0
@@ -2421,8 +2430,8 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BC:%X", this->unk_2BC);
 
-    GfxPrint_SetPos(printer, x-13, ++y);
-    GfxPrint_Printf(printer, "playerUnderwater:%s", BOOLSTR(this->unk_2BD));
+    GfxPrint_SetPos(printer, x, ++y);
+    GfxPrint_Printf(printer, "2BD:%s", BOOLSTR(this->unk_2BD));
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BE:%i", this->unk_2BE);
@@ -2434,19 +2443,9 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     #endif
 
     #if 0
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "2C8.x:%f", this->unk_2C8.x);
-
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "2C8.y:%f", this->unk_2C8.y);
-
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "2C8.z:%f", this->unk_2C8.z);
+    GfxPrint_SetPos(printer, x-18, ++y);
+    GfxPrint_Printf(printer, "wetSpotEffectSpawnNum:%X", this->wetSpotEffectSpawnNum);
     #endif
-
-
-    GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "2D4:%X", this->unk_2D4);
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2D5:%s", BOOLSTR(this->unk_2D5));
@@ -2553,6 +2552,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
         #endif
     }
 
+#if 0
     {
         GyorgEffect* eff = globalCtx->specialEffects;
         s32 i;
@@ -2572,49 +2572,6 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
         for (i = 1; i < ARRAY_COUNT(effCount); i++) {
             GfxPrint_SetPos(printer, x, ++y);
             GfxPrint_Printf(printer, "type:%i count:%i", i, effCount[i]);
-        }
-    }
-
-
-#if 0
-
-    y = 20;
-
-    GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "Flags:");
-    GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "   8 4 2 1");
-    GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "1  %i %i %i %i", (this->flags & 0x08)>>3, (this->flags & 0x04)>>2, (this->flags & 0x02)>>1, this->flags & 0x01);
-    GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "2  %i %i %i %i", (this->flags & 0x80)>>7, (this->flags & 0x40)>>6, (this->flags & 0x20)>>5, (this->flags & 0x10)>>4);
-    GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "3  %i %i %i %i", (this->flags & 0x800)>>11, (this->flags & 0x400)>>10, (this->flags & 0x200)>>9, (this->flags & 0x100)>>8);
-    GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "4      %i %i", (this->flags & 0x2000)>>13, (this->flags & 0x1000)>>12);
-
-    y = 0;
-    for (i = 0; i < 16; i++) {
-        static char* flagsMap[] = {
-            "OBJ_UM_FLAG_0001",
-            "OBJ_UM_FLAG_MOVING",
-            "OBJ_UM_FLAG_0004",
-            "OBJ_UM_FLAG_WAITING",
-            "OBJ_UM_FLAG_0010",
-            "OBJ_UM_FLAG_DRAWN_FLOOR",
-            "OBJ_UM_FLAG_0040",
-            "OBJ_UM_FLAG_PLAYING_MINIGAME",
-            "OBJ_UM_FLAG_0100",
-            "OBJ_UM_FLAG_0200",
-            "OBJ_UM_FLAG_0400",
-            "OBJ_UM_FLAG_0800",
-            "OBJ_UM_FLAG_1000",
-            "OBJ_UM_FLAG_MINIGAME_FINISHED",
-        };
-
-        if (this->flags & (1 << i)) {
-            GfxPrint_SetPos(printer, 1, ++y);
-            GfxPrint_Printf(printer, "%s", &flagsMap[i][7]);
         }
     }
 #endif
@@ -2713,7 +2670,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
 
         Math_ApproachF(&effects->unk_40, phi_f0, 1.0f, 80.0f);
 
-        if (effects->type == GYORG_EFFECT_2) {
+        if (effects->type == GYORG_EFFECT_DROPLET) {
             effects->unk_34.z += 0.15f;
 
             Math_ApproachF(&effects->unk_34.x, 0.03f, 0.5f, 0.005f);
@@ -2726,14 +2683,14 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
             } else if (effects->pos.y <= PLATFORM_HEIGHT) {
                 s16 j;
 
-                effects->type = GYORG_EFFECT_4;
+                effects->type = GYORG_EFFECT_WET_SPOT;
                 effects->pos.y = PLATFORM_HEIGHT;
                 effects->unk_34.x = 0.1f;
                 effects->unk_34.y = 0.6f;
                 effects->velocity = gZeroVec3f;
                 effects->accel = gZeroVec3f;
                 effects->alpha = 150;
-                effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
+                effects->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
                     Matrix_InsertYRotation_f((2.0f * (j * M_PI)) / 6.0f, 0);
@@ -2741,10 +2698,10 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
                     Matrix_MultiplyVector3fByState(&sp94, &velocity);
-                    func_809E299C(globalCtx, &effects->pos, &velocity);
+                    Boss03_SpawnEffectSplash(globalCtx, &effects->pos, &velocity);
                 }
             }
-        } else if (effects->type == GYORG_EFFECT_3) {
+        } else if (effects->type == GYORG_EFFECT_SPLASH) {
             effects->unk_34.z += 0.15f;
 
             if (effects->velocity.y < -8.0f) {
@@ -2752,19 +2709,19 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
             }
 
             if ((effects->velocity.y < 0.0f) && (effects->pos.y <= PLATFORM_HEIGHT)) {
-                effects->type = GYORG_EFFECT_4;
+                effects->type = GYORG_EFFECT_WET_SPOT;
                 effects->pos.y = PLATFORM_HEIGHT;
                 effects->unk_34.x = 0.05f;
                 effects->unk_34.y = 0.2f;
                 effects->velocity = gZeroVec3f;
                 effects->accel = gZeroVec3f;
                 effects->alpha = 150;
-                effects->unk_2E = Rand_ZeroFloat(4.0f) + 5.0f;
+                effects->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
             }
-        } else if (effects->type == GYORG_EFFECT_4) {
+        } else if (effects->type == GYORG_EFFECT_WET_SPOT) {
             Math_ApproachF(&effects->unk_34.x, effects->unk_34.y, 0.1f, 0.6f);
 
-            effects->alpha -= effects->unk_2E;
+            effects->alpha -= effects->alphaDelta;
             if (effects->alpha <= 0) {
                 effects->alpha = 0;
                 effects->type = GYORG_EFFECT_NONE;
@@ -2820,7 +2777,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     flag = false;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
-        if ((eff->type == GYORG_EFFECT_2) || (eff->type == GYORG_EFFECT_3)) {
+        if ((eff->type == GYORG_EFFECT_DROPLET) || (eff->type == GYORG_EFFECT_SPLASH)) {
 
             if (!flag) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
@@ -2837,10 +2794,10 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
 
             Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
-            if (eff->type == GYORG_EFFECT_2) {
+            if (eff->type == GYORG_EFFECT_DROPLET) {
                 Matrix_InsertYRotation_f(
                     Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * (M_PI / 0x8000), MTXMODE_APPLY);
-            } else {
+            } else { // GYORG_EFFECT_SPLASH
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             }
 
@@ -2857,7 +2814,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     flag = false;
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, eff++) {
-        if (eff->type == GYORG_EFFECT_4) {
+        if (eff->type == GYORG_EFFECT_WET_SPOT) {
             if (!flag) {
                 func_8012C448(gfxCtx);
 

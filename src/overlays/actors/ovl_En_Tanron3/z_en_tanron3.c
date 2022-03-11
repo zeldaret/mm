@@ -91,7 +91,7 @@ void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
 
     for (i = 0; i < GYORG_EFFECT_COUNT; i++, effectPtr++) {
         if ((effectPtr->type == GYORG_EFFECT_NONE) || (effectPtr->type == GYORG_EFFECT_BUBBLE)) {
-            effectPtr->type = GYORG_EFFECT_2;
+            effectPtr->type = GYORG_EFFECT_DROPLET;
             effectPtr->pos = *effectPos;
             effectPtr->velocity = *sZeroVec;
             effectPtr->accel = *sZeroVec;
@@ -124,7 +124,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    sGyorg->unk_252--;
+    sGyorg->numSpawnedSmallFish--;
 }
 
 void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
