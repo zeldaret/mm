@@ -145,11 +145,6 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
     func_80A2BE54(this);
 }
 
-static Vec3f D_80A2CBA0 = { 0.0f, 20.0f, 0.0f };
-static Vec3f D_80A2CBAC = { 0.0f, 0.0f, 0.0f };
-static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
-static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
-
 void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiDekunuts* this = THIS;
 
@@ -323,8 +318,27 @@ void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A2C4D0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C4D0.s")
+void func_80A2C4D0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    static Vec3f D_80A2CBA0 = { 0.0f, 20.0f, 0.0f };
+    static Vec3f D_80A2CBAC = { 0.0f, 0.0f, 0.0f };
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
+        EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 2);
+        syatekiMan->unk_280 += 100;
+        syatekiMan->unk_26E++;
+    } else {
+        EffectSsExtra_Spawn(globalCtx, &this->actor.world.pos, &D_80A2CBA0, &D_80A2CBAC, 5, 0);
+        syatekiMan->unk_280 += 30;
+        syatekiMan->unk_278++;
+    }
+
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
+    this->unk_1E2 = 0;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 4);
+    this->unk_1D8 = 160;
+    this->actionFunc = func_80A2C5DC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C5DC.s")
 
@@ -354,6 +368,9 @@ void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 }
+
+static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
+static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C8A0.s")
 
