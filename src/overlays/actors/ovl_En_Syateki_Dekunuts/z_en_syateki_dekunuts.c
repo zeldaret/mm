@@ -142,7 +142,11 @@ static Vec3f D_80A2CBAC = { 0.0f, 0.0f, 0.0f };
 static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
 static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/EnSyatekiDekunuts_Destroy.s")
+void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiDekunuts* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2BE54.s")
 
