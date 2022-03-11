@@ -9,6 +9,12 @@
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4); /* extern */
 void func_801A4058(u16);
 
+
+
+extern Gfx D_010311F0[];
+extern Gfx D_01031408[];
+extern Gfx D_01031618[];
+
 extern UNK_TYPE D_01002800;
 extern UNK_TYPE D_01007980;
 extern UNK_TYPE D_0102A6B0;
@@ -52,11 +58,48 @@ void FileChoose_nop8080bc44(void) {
 void FileChoose_nop8080BC4C(FileChooseContext* this) {
 }
 
-void func_8080BC58(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BC58.s")
+void func_8080BC58(GameState* thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
 
-void func_8080BDAC(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080BDAC.s")
+    if (this->unk_24486 == 0) {
+        if (gSaveContext.option_id != 0xA51D) { // Magic number?
+            this->unk_24486++;
+        } else {
+            // TODO: defines for these
+            this->unk_24484 = 1;
+            this->unk_24486 = 0;
+            this->unk_244AC = 0;
+            this->unk_244AE = 1;
+        }
+    }
+    if (this->unk_24486 == 1) {
+        this->unk_2450A -= 40;
+        if (this->unk_2450A <= 0) {
+            this->unk_2450A = 0;
+            this->unk_24486++;
+        }
+    } else {
+        if (this->unk_24486 == 2) {
+            func_8080BC20(this);
+            return;
+        }
+        this->unk_2450A += 40;
+        if (this->unk_2450A >= 255) {
+            this->unk_2450A = 255;
+            this->unk_24484 = 1;
+            this->unk_24486 = 0;
+            this->unk_244AC = 0;
+            this->unk_244AE = 1;
+        }
+    }
+}
+
+void func_8080BDAC(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
+
+    func_8012C628(this->state.gfxCtx);
+    FileChoose_nop8080BC4C(this);
+}
 
 void FileChoose_RenderView(FileChooseContext* this, f32 eyeX, f32 eyeY, f32 eyeZ) {
     Vec3f eye;
@@ -90,6 +133,7 @@ Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
     return gfx;
 }
 
+void func_8080C040(FileChooseContext*);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C040.s")
 
 // FileChoose_SplitNumber // SplitDigits? ExtractDigits?
@@ -115,21 +159,58 @@ void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
     } while (true);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C29C.s")
+// Start of Config Mode Update Functions
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C324.s")
+void func_8080C29C(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
 
+    func_8080C040(this);
+    this->unk_2450A -= 40;
+    this->unk_24508 -= 20;
+    if (this->unk_24508 <= -94) {
+        this->unk_24508 = -94;
+        this->unk_24486 = 1;
+        this->unk_2450A = 0;
+    }
+}
+
+void func_8080C324(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
+
+    this->unk_244E6 += 20;
+    func_8080C040(this);
+
+    if (this->unk_244B6[0] >= 255) {
+        this->unk_244B6[0] = 255;
+        this->unk_244E6 = 255;
+        this->unk_244BA = 200;
+        this->unk_24486 = 2;
+    }
+}
+
+// (FileChooseContext* this);
+// (GameState* thisx) {
+//     FileChooseContext *this = (FileChooseContext*)thisx;
+
+void func_8080C3A8(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C3A8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D164.s")
+void func_8080D164(GameState* thisx) {
+}
 
+void func_8080D170(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D170.s")
 
+void func_8080D1BC(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D1BC.s")
 
+void func_8080D220(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D220.s")
 
+void func_8080D284(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D284.s")
+
+// End of Config Mode Update Functions
 
 extern s16 D_8081461C[];
 // s16 D_8081461C[] = { 70, 200 };
@@ -192,16 +273,6 @@ void func_8080A418(GameState* thisx);
 void func_8080A4A0(GameState* thisx);
 void func_8080A6BC(GameState* thisx);
 
-// This file
-void func_8080C29C(GameState* thisx);
-void func_8080C324(GameState* thisx);
-void func_8080C3A8(GameState* thisx);
-void func_8080D164(GameState* thisx);
-void func_8080D170(GameState* thisx);
-void func_8080D1BC(GameState* thisx);
-void func_8080D284(GameState* thisx);
-void func_8080D220(GameState* thisx);
-
 // gConfigModeUpdateFuncs
 extern void (*D_80814568[])(GameState*);
 // void (*D_80814568)(GameState*)[] = {
@@ -259,19 +330,129 @@ void func_8080D3D0(GameState* thisx) {
     D_80814568[this->unk_24486](&this->state);
 }
 
-void func_8080D40C(FileChooseContext* this); // May be thisx
+void func_8080D40C(GameState* this); // May be thisx
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D40C.s")
 
-void func_8080D6D4(FileChooseContext* this); // May be thisx
+void func_8080D6D4(GameState* this); // May be thisx
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D6D4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080F25C.s")
 
-void func_808108DC(FileChooseContext* this, u32); // May be thisx, probably a DList?
+void func_808108DC(GameState* thisx);
+// void func_808108DC(FileChooseContext* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808108DC.s")
 
-void func_80811CB8(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80811CB8.s")
+void func_80808F1C(GameState*);
+void func_8080BBFC(GameState*);
+
+// FileChoose_ConfigModeDraw
+void func_80811CB8(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
+
+    OPEN_DISPS(this->state.gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    func_8012C8AC(this->state.gfxCtx);
+    FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
+    // FileChoose_SetWindowVtx
+    func_8080D40C(&this->state);
+    // FileChoose_SetWindowContentVtx
+    func_8080D6D4(&this->state);
+
+    if ((this->unk_24486 != 36) && (this->unk_24486 != 35)) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+        Matrix_InsertTranslation(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
+        Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+
+        if (this->unk_2450C) {
+            Matrix_RotateStateAroundXAxis(this->unk_2450C / 100.0f);
+        }
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[32], 32, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_01031408);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_01031618);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+
+        // FileChoose_DrawWindowContents
+        func_808108DC(&this->state);
+    }
+
+    // draw name entry menu
+    if ((this->unk_24486 >= 34) && (this->unk_24486 <= 38)) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+        Matrix_InsertTranslation(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
+        Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+        Matrix_RotateStateAroundXAxis((this->unk_2450C - 314.0f) / 100.0f);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[32], 32, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_01031408);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_01031618);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+
+        // FileChoose_DrawNameEntry
+        func_80808F1C(&this->state);
+    }
+
+    // draw options menu
+    if ((this->unk_24486 >= 39) && (this->unk_24486 <= 43)) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+        Matrix_InsertTranslation(0.0f, 0.0f, -93.6f, MTXMODE_NEW);
+        Matrix_Scale(0.78f, 0.78f, 0.78f, MTXMODE_APPLY);
+        Matrix_RotateStateAroundXAxis((this->unk_2450C - 314.0f) / 100.0f);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[0], 32, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_010311F0);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[32], 32, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_01031408);
+
+        gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
+        gSPDisplayList(POLY_OPA_DISP++, D_01031618);
+
+        gDPPipeSync(POLY_OPA_DISP++);
+
+        // FileChoose_DrawOptions
+        func_8080BBFC(&this->state);
+    }
+    
+    gDPPipeSync(POLY_OPA_DISP++);
+    
+    FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
+    
+    CLOSE_DISPS(this->state.gfxCtx);
+}
 
 // FileChoose_FadeMainToSelect
 void func_80812460(GameState *thisx) {
@@ -556,10 +737,6 @@ void func_80812E94(GameState* thisx) {
     D_8081477C[this->unk_2448C](&this->state);
 }
 
-extern Gfx D_010311F0[];
-extern Gfx D_01031408[];
-extern Gfx D_01031618[];
-
 // SelectModeDraw
 void func_80812ED0(GameState* thisx) {
     FileChooseContext *this = (FileChooseContext*)thisx;
@@ -591,7 +768,7 @@ void func_80812ED0(GameState* thisx) {
     gSPVertex(POLY_OPA_DISP++, &this->unk_A4[64], 16, 0);
     gSPDisplayList(POLY_OPA_DISP++, D_01031618);
 
-    func_808108DC(this, 0x01020040);
+    func_808108DC(&this->state);
     gDPPipeSync(POLY_OPA_DISP++);
     FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
 
