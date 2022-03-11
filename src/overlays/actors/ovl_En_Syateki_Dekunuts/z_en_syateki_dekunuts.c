@@ -26,6 +26,7 @@ void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2BE54(EnSyatekiDekunuts* this);
+void func_80A2BFC4(EnSyatekiDekunuts* this);
 
 extern UNK_TYPE D_06001E50;
 extern SkeletonHeader D_06002468;
@@ -167,7 +168,20 @@ void func_80A2BE54(EnSyatekiDekunuts* this) {
     this->actionFunc = func_80A2BF18;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2BF18.s")
+void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    if ((syatekiMan->unk_26A == 1) && (this->unk_1E2 == 1) && ((syatekiMan->unk_272 & (1 << this->unk_1E8)) != 0)) {
+        func_80A2BFC4(this);
+    } else if (syatekiMan->unk_26A != 1) {
+        this->unk_1E2 = 1;
+    }
+
+    if ((syatekiMan->unk_272 == 0) && (syatekiMan->unk_274 == 0) &&
+        (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1)) {
+        this->unk_1E2 = 1;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2BFC4.s")
 
