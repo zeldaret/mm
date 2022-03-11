@@ -29,6 +29,7 @@ void func_80A2BE54(EnSyatekiDekunuts* this);
 void func_80A2BFC4(EnSyatekiDekunuts* this);
 void func_80A2C150(EnSyatekiDekunuts* this);
 void func_80A2C1AC(EnSyatekiDekunuts* this);
+void func_80A2C27C(EnSyatekiDekunuts* this);
 
 extern UNK_TYPE D_06001E50;
 extern SkeletonHeader D_06002468;
@@ -243,7 +244,17 @@ void func_80A2C1AC(EnSyatekiDekunuts* this) {
     this->actionFunc = func_80A2C208;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C208.s")
+void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        func_80A2C27C(this);
+    }
+
+    if (this->unk_1F0 == 1) {
+        Math_SmoothStepToS(&this->unk_1F2, -0x8000, 5, 0x1000, 0x100);
+    }
+
+    this->unk_1D8++;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C27C.s")
 
