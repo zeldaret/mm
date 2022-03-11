@@ -6,6 +6,9 @@
 
 #include "z_file_choose.h"
 
+void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4); /* extern */
+void func_801A4058(u16);
+
 extern UNK_TYPE D_01002800;
 extern UNK_TYPE D_01007980;
 extern UNK_TYPE D_0102A6B0;
@@ -17,7 +20,27 @@ extern GfxMasterList D_0E000000;
 
 extern s16 fileChooseSkyboxRotation;
 
-void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4); /* extern */
+extern u32 D_801C6798[];
+
+#define gSramSlotOffsets D_801C6798
+#define GET_NEWF(sramCtx, slotNum, index) (sramCtx->readBuff[gSramSlotOffsets[slotNum] + offsetof(SaveContext, newf[index])])
+#define SLOT_OCCUPIED(sramCtx, slotNum) \
+    ((GET_NEWF(sramCtx, slotNum, 0) == 'Z') || \
+     (GET_NEWF(sramCtx, slotNum, 1) == 'E') || \
+     (GET_NEWF(sramCtx, slotNum, 2) == 'L') || \
+     (GET_NEWF(sramCtx, slotNum, 3) == 'D') || \
+     (GET_NEWF(sramCtx, slotNum, 4) == 'A') || \
+     (GET_NEWF(sramCtx, slotNum, 5) == '3'))
+
+#define GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, index) (fileChooseCtx->newf[slotNum][index])
+#define FILE_CHOOSE_SLOT_OCCUPIED(fileChooseCtx, slotNum) \
+    ((GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 0) != 'Z') || \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 1) != 'E') || \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 2) != 'L') || \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 3) != 'D') || \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 4) != 'A') || \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 5) != '3'))
+
 
 void func_8080BC20(FileChooseContext* this) {
     this->unk_24486++;
@@ -69,7 +92,28 @@ Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C040.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C228.s")
+// FileChoose_SplitNumber // SplitDigits? ExtractDigits?
+void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
+    *hundreds = 0;
+    *tens = 0;
+    *ones = value;
+    
+    while (true) {              \
+        if ((*ones - 100) < 0) {\
+            break;              \
+        }                       \  
+        (*hundreds)++;          \
+        *ones -= 100;           \    
+    }
+
+    while (true) {              \
+        if ((*ones - 10) < 0) { \
+            break;              \
+        }                       \
+        (*tens)++;              \
+        *ones -= 10;            \
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C29C.s")
 
@@ -107,29 +151,267 @@ void func_808108DC(FileChooseContext* this, u32); // May be thisx, probably a DL
 void func_80811CB8(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80811CB8.s")
 
-void func_80812460(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812460.s")
+// FileChoose_FadeMainToSelect
+void func_80812460(GameState *thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
 
-void func_80812668(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812668.s")
+    for (i = 0; i < 3; i++) {
+        if (i != this->unk_24480) {
+            this->unk_244BC[i] -= 50;
+            this->unk_244DA[0] = 
+            this->unk_244DA[1] = 
+            this->unk_244E2 = 
+            this->unk_244BC[i];
 
-void func_80812760(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812760.s")
+            if (gSaveContext.unk_3F3F == 0) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->unk_244C8[i] =
+                    this->unk_244C2[i] = 
+                    this->unk_244BC[i];
+                    this->unk_244CE[i] -= 63;
+                }
+            } else {
+                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                    this->unk_244C8[i] = 
+                    this->unk_244C2[i] = 
+                    this->unk_244BC[i];
+                    this->unk_244CE[i] -= 63;
+                }
+            }
+        }
+    }
 
-void func_80812840(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812840.s")
+    this->unk_244B6[0] += -63;
+    this->unk_244B6[1] += 63;
+    this->unk_24498--;
 
-void func_80812980(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812980.s")
+    if (this->unk_24498 == 0) {
+        this->unk_24498 = 4;
+        this->unk_2448C++;
+        this->unk_24482 = 0;
+    }
+}
 
-void func_80812A6C(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812A6C.s")
 
-void func_80812D44(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812D44.s")
+extern s16 D_80814774[];
+// s16 D_80814774[] = { 0, 16, 32 };
 
-void func_80812D94(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_80812D94.s")
+// FileChoose_MoveSelectedFileToTop
+void func_80812668(GameState *thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+    s32 yStep;
+
+    yStep = ABS_ALT(this->unk_2449A[this->unk_24480] - D_80814774[this->unk_24480]) / this->unk_24498;
+    this->unk_2449A[this->unk_24480] += yStep;
+    this->unk_24498--;
+
+    if ((this->unk_24498 == 0) || (this->unk_2449A[this->unk_24480] == D_80814774[this->unk_24480])) {
+        this->unk_2449A[3] =
+        this->unk_2449A[4] = -24;
+        this->unk_24498 = 4;
+        this->unk_2448C++;
+    }
+}
+
+// FileChoose_FadeInFileInfo
+void func_80812760(GameState *thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+
+    this->unk_244D4[this->unk_24480] += 50;
+    this->unk_244C2[this->unk_24480] -= 100;
+
+    if (this->unk_244C2[this->unk_24480] <= 0) {
+        this->unk_244C2[this->unk_24480] = 0;
+    }
+    this->unk_24498--;
+
+    if (this->unk_24498 == 0) {
+        this->unk_244D4[this->unk_24480] = 200;
+        this->unk_24498 = 4;
+        this->unk_2448C++;
+    }
+
+    this->unk_244DE[0] =
+    this->unk_244DE[1] =
+    this->unk_244D4[this->unk_24480];
+}
+
+// FileChoose_ConfirmFile
+void func_80812840(GameState *thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+    Input* input = &this->state.input[0];
+
+    if (CHECK_BTN_ALL(input->press.button, BTN_START) || (CHECK_BTN_ALL(input->press.button, BTN_A))) {
+        if (this->unk_24482 == 0) {
+            func_8013ECE0(300.0f, 180, 20, 100);
+            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            this->unk_2448C = 6;
+            func_801A4058(0xF);
+        } else {
+            play_sound(NA_SE_SY_FSEL_CLOSE);
+            this->unk_2448C++;
+        }
+    } else if CHECK_BTN_ALL(input->press.button, BTN_B) {
+        play_sound(NA_SE_SY_FSEL_CLOSE);
+        this->unk_2448C++;
+        // return;
+    } else if (ABS_ALT(this->unk_24504) >= 30) {
+        play_sound(NA_SE_SY_FSEL_CURSOR);
+        this->unk_24482 ^= 1;
+    }
+}
+
+// FileChoose_FadeOutFileInfo
+void func_80812980(GameState *thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+
+    this->unk_244D4[this->unk_24480] -= 200 / 4;
+    this->unk_244C2[this->unk_24480] += 200 / 4;
+    this->unk_24498--;
+
+    if (this->unk_24498 == 0) {
+        this->unk_2449A[3] = this->unk_2449A[4] = 0;
+        this->unk_244C2[this->unk_24480] = 200;
+        this->unk_244D4[this->unk_24480] = 0;
+        this->unk_244AE = 0;
+        this->unk_24498 = 4;
+        this->unk_2448C++;
+    }
+    this->unk_244DA[2] =
+    this->unk_244DA[3] = 
+    this->unk_244D4[this->unk_24480];
+}
+
+// FileChoose_MoveSelectedFileToSlot
+void func_80812A6C(GameState* thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    s32 yStep;
+    s16 i;
+
+    yStep = ABS_ALT(this->unk_2449A[this->unk_24480]) / this->unk_24498;
+    this->unk_2449A[this->unk_24480] -= yStep;
+    
+    if (this->unk_2449A[this->unk_24480] <= 0) {
+        this->unk_2449A[this->unk_24480] = 0;
+    }
+
+    for (i = 0; i < 3; i++) {
+        if (i != this->unk_24480) {
+            this->unk_244BC[i] += 200 / 4;
+            
+            if (this->unk_244BC[i] >= 200) {
+                this->unk_244BC[i] = 200;
+            }
+
+            this->unk_244DA[0] = 
+            this->unk_244DA[1] = 
+            this->unk_244E2 = 
+            this->unk_244BC[i];
+
+            if (gSaveContext.unk_3F3F == 0) {
+                if (SLOT_OCCUPIED(sramCtx, i)) {
+                    this->unk_244C2[i] = 
+                    this->unk_244C8[i] =
+                    this->unk_244BC[i];
+                    this->unk_244CE[i] += 255 / 4;
+                }
+            } else {
+                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                    this->unk_244C2[i] = 
+                    this->unk_244C8[i] =
+                    this->unk_244BC[i];
+                    this->unk_244CE[i] += 255 / 4;
+                }
+            }
+        }
+    }
+
+    this->unk_244B6[0] -= 255 / 4;
+    this->unk_244B6[1] += 255 / 4;
+    this->unk_24498--;
+
+    if (this->unk_24498 == 0) {
+        this->unk_244B6[0] = 255;
+        this->unk_244B6[1] = 0;
+        this->unk_244AC = this->unk_244AE;
+        this->unk_24498 = 4;
+        this->unk_24484 = 1;
+        this->unk_24486 = 2;
+        this->unk_2448A = 2;
+        this->unk_2448C = 0;
+    }
+}
+
+// FileChoose_FadeOut
+void func_80812D44(GameState *thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+
+    this->unk_2450A += 40;
+    if (this->unk_2450A >= 0xFF) {
+        this->unk_2450A = 0xFF;
+        this->unk_2448C++;
+    }
+}
+
+void func_80144E78(FileChooseContext* fileChooseCtx, SramContext* sramCtx);
+
+// FileChoose_LoadGame
+void func_80812D94(GameState *thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+    u16 phi_v0;
+
+    gSaveContext.fileNum = this->unk_24480;
+    func_80144E78(this, &this->sramCtx);
+
+    gSaveContext.gameMode = 0;
+    
+    // TODO: Macro this properly everywhere
+    do { \
+        { \
+            GameState* state = (&this->state); \
+            state->running = false; \
+        } \
+        SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
+    } while (0);
+
+
+    gSaveContext.respawnFlag = 0;
+    gSaveContext.respawn[0].entranceIndex = 0xFFFF;
+    gSaveContext.seqIndex = 0xFF;
+    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.showTitleCard = 1;
+    gSaveContext.dogParams = 0;
+
+    phi_v0 = 0;
+    do {
+        gSaveContext.unk_3DD0[phi_v0++] = 0;
+    } while (phi_v0 < 7);
+
+    gSaveContext.unk_3F26 = 0x32;
+    gSaveContext.unk_3DC0 = 0;
+    gSaveContext.healthAccumulator = 0;
+    gSaveContext.unk_3F2C = 0;
+    gSaveContext.unk_3F46 = 0;
+    gSaveContext.environmentTime = 0;
+    gSaveContext.nextTransition = 0xFF;
+    gSaveContext.cutsceneTrigger = 0;
+    gSaveContext.unk_3F4D = 0;
+    gSaveContext.nextDayTime = 0xFFFF;
+    gSaveContext.unk_3DBB = 0;
+    gSaveContext.buttonStatus[0] = 0;
+    gSaveContext.buttonStatus[1] = 0;
+    gSaveContext.buttonStatus[2] = 0;
+    gSaveContext.buttonStatus[3] = 0;
+    gSaveContext.buttonStatus[4] = 0;
+    gSaveContext.unk_3F1E = 0;
+    gSaveContext.unk_3F20 = 0;
+    gSaveContext.unk_3F22 = 0;
+    gSaveContext.unk_3F24 = 0;
+    gSaveContext.tatlTimer = 0;
+}
 
 // gSelectModeUpdateFuncs
 extern void (*D_8081477C[])(GameState*);

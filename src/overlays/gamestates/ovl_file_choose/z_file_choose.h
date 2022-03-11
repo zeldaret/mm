@@ -24,7 +24,7 @@ typedef struct {
     /* 0x243E8 */ Vtx* unk_243E8;
     /* 0x243EC */ Vtx* unk_243EC;
     /* 0x243F0 */ Vtx* unk_243F0;
-    /* 0x243F4 */ u8   newf[6][4];
+    /* 0x243F4 */ u8   newf[4][6];
     /* 0x2440C */ u16  unk_2440C[4];
     /* 0x24414 */ u8   unk_24414[8][4];
     /* 0x24434 */ s16  healthCapacity[4];
@@ -63,7 +63,8 @@ typedef struct {
     /* 0x244C8 */ s16  unk_244C8[3];
     /* 0x244CE */ s16  unk_244CE[3];
     /* 0x244D4 */ s16  unk_244D4[3];
-    /* 0x244DA */ s16  unk_244DA[4];
+    /* 0x244DA */ s16  unk_244DA[2];
+    /* 0x244DA */ s16  unk_244DE[2]; // Is this part of the previous array?
     /* 0x244E2 */ s16  unk_244E2;
     /* 0x244E4 */ s16  unk_244E4;
     /* 0x244E6 */ s16  unk_244E6;
