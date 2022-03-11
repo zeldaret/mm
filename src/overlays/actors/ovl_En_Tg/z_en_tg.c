@@ -18,6 +18,7 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx);
 void func_8098FA70(EnTg* this, GlobalContext* globalCtx);
 void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
 void func_8099000C(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
+void func_8098FD50(EnTg *this, EnTgIdk *ptr, Vec3f *arg2, s32 arg3);
 
 #if 0
 const ActorInit En_Tg_InitVars = {
@@ -87,8 +88,8 @@ extern DamageTable D_809901F8;
 
 extern AnimationInfoS D_80990218;
 extern Vec3f D_80990228; // = { 0.0f, 0.0f, 0.0f };
-extern UNK_TYPE D_80990234; // from data
-extern UNK_TYPE D_80990240; // from data
+extern Vec3f D_80990234; // from data
+extern Vec3f D_80990240; // from data
 extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
 
 // Not in data?
@@ -216,7 +217,30 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
+void func_8098FD50(EnTg *this, EnTgIdk *ptr, Vec3f *arg2, s32 len) {
+    Vec3f sp2C = D_80990234;
+    Vec3f sp20 = D_80990240;
+    s32 i = 0;
+
+    while ((i < len) && (ptr->unk0 != 0)) {
+        i++;
+        ptr++;
+    }
+
+    if (i < len) {
+        ptr->unk0 = 1;
+        ptr->unk14 = *arg2;
+        ptr->unk2C = sp2C;
+        ptr->unk20 = sp20;
+        ptr->unk4 = 0.01f;
+
+        ptr->unk14.x += 4.0f * Math_SinS(this->actor.shape.rot.y);
+        ptr->unk14.z += 4.0f * Math_CosS(this->actor.shape.rot.y);
+        ptr->unk1 = 0x10;
+    }
+}
+
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
 // Looks just like func_809647EC in z_en_fu.c
@@ -230,7 +254,7 @@ void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
             if (DECR(ptr->unk1) == 0) {
                 ptr->unk0 = 0U;
             }
-            ptr->unk14.y += ptr->unk30;
+            ptr->unk14.y += ptr->unk2C.y;
             ptr->unk14.x += 2.0f * Math_SinS(ptr->unk38);
             ptr->unk14.z += 2.0f * Math_CosS(ptr->unk38);
             Matrix_StatePush();

@@ -14,9 +14,8 @@ typedef struct EnTgIdk {
     /* 0x04 */ f32 unk4;
     /* 0x08 */ char unk8[0xC];
     /* 0x14 */ Vec3f unk14;
-    /* 0x20 */ char unk20[0x10];
-    /* 0x30 */ f32 unk30;
-    /* 0x34 */ f32 unk34;
+    /* 0x20 */ Vec3f unk20;
+    /* 0x2C */ Vec3f unk2C;
     /* 0x38 */ s16 unk38;
 } EnTgIdk; // size = 0x48
 
