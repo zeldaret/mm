@@ -290,9 +290,9 @@ s32 EnSyatekiCrow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx*
                                    Actor* thisx) {
     EnSyatekiCrow* this = THIS;
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_CROW_LIMB_07) {
         rot->y += (s16)(3072.0f * sin_rad(this->skelAnime.curFrame * 0.7853982f));
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == OBJECT_CROW_LIMB_08) {
         rot->y += (s16)(5120.0f * sin_rad((this->skelAnime.curFrame + 2.5f) * 0.7853982f));
     }
 
@@ -303,10 +303,11 @@ void EnSyatekiCrow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     EnSyatekiCrow* this = THIS;
     Vec3f* sp1C;
 
-    if (limbIndex == 2) {
+    if (limbIndex == OBJECT_CROW_LIMB_02) {
         Matrix_MultiplyVector3fByState(&D_809CB0D8, &this->unk_144[0]);
         this->unk_144[0].y -= 20.0f;
-    } else if ((limbIndex == 4) || (limbIndex == 6) || (limbIndex == 8)) {
+    } else if ((limbIndex == OBJECT_CROW_LIMB_04) || (limbIndex == OBJECT_CROW_LIMB_06) ||
+               (limbIndex == OBJECT_CROW_LIMB_08)) {
         sp1C = &this->unk_144[(limbIndex >> 1) - 1];
         Matrix_MultiplyVector3fByState(&D_809CB050, sp1C);
         sp1C->y -= 20.0f;
