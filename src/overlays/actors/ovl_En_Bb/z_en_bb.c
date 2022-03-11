@@ -173,7 +173,7 @@ void EnBb_CheckForWall(EnBb* this) {
 
     if (this->actor.bgCheckFlags & 8) {
         yawDiff = this->actor.shape.rot.y - this->actor.wallYaw;
-        if (ABS_ALT(yawDiff) >= 0x4001) {
+        if (ABS_ALT(yawDiff) > 0x4000) {
             this->actor.shape.rot.y = ((this->actor.wallYaw * 2) - this->actor.shape.rot.y) - 0x8000;
         }
 
@@ -342,7 +342,7 @@ void EnBb_Down(EnBb* this, GlobalContext* globalCtx) {
 
         this->actor.bgCheckFlags &= ~1;
         Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
-        Math_ScaledStepToS(&this->actor.shape.rot.y, (s16)(this->actor.yawTowardsPlayer + 0x8000), 0xBB8);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(this->actor.yawTowardsPlayer, 0x8000), 0xBB8);
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -586,7 +586,7 @@ void EnBb_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     if ((this->actionFunc != EnBb_Dead) && (this->actionFunc != EnBb_WaitForRevive)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 40.0f, 7U);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 40.0f, 7);
 
         this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
         this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 15.0f;
@@ -635,7 +635,7 @@ s32 EnBb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnBb* this = THIS;
-    MtxF* temp_v0_4;
+    MtxF* currentMatrixState;
 
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
@@ -660,10 +660,10 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            temp_v0_4 = Matrix_GetCurrentState();
-            temp_v0_4->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
-            temp_v0_4->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
-            temp_v0_4->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
+            currentMatrixState = Matrix_GetCurrentState();
+            currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
+            currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
+            currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
             Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
