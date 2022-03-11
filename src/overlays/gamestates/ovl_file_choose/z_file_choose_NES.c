@@ -98,21 +98,21 @@ void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
     *tens = 0;
     *ones = value;
     
-    while (true) {              \
-        if ((*ones - 100) < 0) {\
-            break;              \
-        }                       \  
-        (*hundreds)++;          \
-        *ones -= 100;           \    
-    }
+    do {
+        if ((*ones - 100) < 0) {
+            break;
+        }  
+        (*hundreds)++;
+        *ones -= 100;
+    } while (true);
 
-    while (true) {              \
-        if ((*ones - 10) < 0) { \
-            break;              \
-        }                       \
-        (*tens)++;              \
-        *ones -= 10;            \
-    }
+    do {
+        if ((*ones - 10) < 0) {
+            break;
+        }
+        (*tens)++;
+        *ones -= 10;
+    } while (true);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C29C.s")
@@ -131,11 +131,133 @@ void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D284.s")
 
-void func_8080D2EC(FileChooseContext*);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D2EC.s")
+extern s16 D_8081461C[];
+// s16 D_8081461C[] = { 70, 200 };
 
-void func_8080D3D0(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D3D0.s")
+void func_8080D2EC(FileChooseContext *this) {
+    s32 step = ABS_ALT(this->unk_244EA[3] - D_8081461C[this->unk_244F2]) / this->unk_24528;
+
+    if (this->unk_244EA[3] >= D_8081461C[this->unk_244F2]) {
+        this->unk_244EA[3] -= step;
+    } else {
+        this->unk_244EA[3] += step;
+    }
+
+    this->unk_24528--;
+
+    if (this->unk_24528 == 0) {
+        this->unk_244EA[3] = D_8081461C[this->unk_244F2];
+        this->unk_24528 = 0x14;
+        this->unk_244F2 ^= 1;
+    }
+}
+
+// Nameset
+void func_80804010(GameState* thisx);
+void func_808041A0(GameState* thisx);
+void func_80804654(GameState* thisx);
+void func_808047D8(GameState* thisx);
+void func_8080489C(GameState* thisx);
+void func_80804DAC(GameState* thisx);
+void func_80804E74(GameState* thisx);
+void func_80804F98(GameState* thisx);
+void func_8080525C(GameState* thisx);
+void func_808052B0(GameState* thisx);
+void func_808054A4(GameState* thisx);
+void func_808055D0(GameState* thisx);
+void func_808058A4(GameState* thisx);
+void func_80805918(GameState* thisx);
+void func_80805A58(GameState* thisx);
+void func_80805B30(GameState* thisx);
+void func_80805C1C(GameState* thisx);
+void func_80806014(GameState* thisx);
+void func_80806148(GameState* thisx);
+void func_80806310(GameState* thisx);
+void func_808067E0(GameState* thisx);
+void func_80806BC8(GameState* thisx);
+void func_80806CA0(GameState* thisx);
+void func_80806E84(GameState* thisx);
+void func_80806F30(GameState* thisx);
+void func_808071E4(GameState* thisx);
+void func_80807390(GameState* thisx);
+void func_8080742C(GameState* thisx);
+void func_808074B4(GameState* thisx);
+void func_808077AC(GameState* thisx);
+
+// Copy/erase?
+void func_80809DF0(GameState* thisx);
+void func_80809EA0(GameState* thisx);
+void func_8080A3CC(GameState* thisx);
+void func_8080A418(GameState* thisx);
+void func_8080A4A0(GameState* thisx);
+void func_8080A6BC(GameState* thisx);
+
+// This file
+void func_8080C29C(GameState* thisx);
+void func_8080C324(GameState* thisx);
+void func_8080C3A8(GameState* thisx);
+void func_8080D164(GameState* thisx);
+void func_8080D170(GameState* thisx);
+void func_8080D1BC(GameState* thisx);
+void func_8080D284(GameState* thisx);
+void func_8080D220(GameState* thisx);
+
+// gConfigModeUpdateFuncs
+extern void (*D_80814568[])(GameState*);
+// void (*D_80814568)(GameState*)[] = {
+//     func_8080C29C,
+//     func_8080C324,
+//     func_8080C3A8,
+//     func_80804010,
+//     func_808041A0,
+//     func_80804654,
+//     func_808047D8,
+//     func_8080489C,
+//     func_80804DAC,
+//     func_80804E74,
+//     func_80804F98,
+//     func_8080525C,
+//     func_808052B0,
+//     func_808054A4,
+//     func_808055D0,
+//     func_808058A4,
+//     func_80805918,
+//     func_80805A58,
+//     func_80805B30,
+//     func_80805C1C,
+//     func_80806014,
+//     func_80806148,
+//     func_80806310,
+//     func_808067E0,
+//     func_80806BC8,
+//     func_80806CA0,
+//     func_80806E84,
+//     func_80806F30,
+//     func_808071E4,
+//     func_80807390,
+//     func_8080742C,
+//     func_808074B4,
+//     func_808077AC,
+//     func_8080D164,
+//     func_8080D1BC,
+//     func_80809DF0,
+//     func_80809EA0,
+//     func_8080A3CC,
+//     func_8080D284,
+//     func_8080D220,
+//     func_8080A418,
+//     func_8080A4A0,
+//     func_8080A6BC,
+//     func_8080D284,
+//     func_8080D170,
+// };
+
+// FileChoose_ConfigModeUpdate
+void func_8080D3D0(GameState* thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+
+    D_80814568[this->unk_24486](&this->state);
+}
 
 void func_8080D40C(FileChooseContext* this); // May be thisx
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D40C.s")
