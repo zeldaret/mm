@@ -19,7 +19,8 @@ typedef struct EnSyatekiDekunuts {
     /* 0x1D8 */ s16 unk_1D8;
     /* 0x1DA */ s16 unk_1DA;
     /* 0x1CD */ s16 unk_1DC;
-    /* 0x1DE */ char unk_1DE[0x6];
+    /* 0x1DE */ char unk_1DE[0x4];
+    /* 0x1E2 */ s16 unk_1E2;
     /* 0x1E4 */ Vec3s* unk_1E4;
     /* 0x1E8 */ s16 unk_1E8;
     /* 0x1EA */ s16 unk_1EA;

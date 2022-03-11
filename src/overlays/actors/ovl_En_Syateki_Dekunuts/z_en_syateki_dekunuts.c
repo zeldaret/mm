@@ -30,6 +30,7 @@ void func_80A2BE54(EnSyatekiDekunuts* this);
 extern UNK_TYPE D_06001E50;
 extern SkeletonHeader D_06002468;
 extern AnimationHeader D_06002A5C;
+extern AnimationHeader D_06003180;
 
 const ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
@@ -148,7 +149,23 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2BE54.s")
+void func_80A2BE54(EnSyatekiDekunuts* this) {
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_06003180, 0.0f);
+
+    this->actor.speedXZ = 0.0f;
+    this->actor.world = this->actor.home;
+    this->actor.prevPos = this->actor.home.pos;
+    this->actor.shape.rot = this->actor.world.rot;
+
+    this->unk_1D8 = 0;
+    this->unk_1DC = 0;
+
+    if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
+        this->unk_1E2 = 1;
+    }
+
+    this->actionFunc = func_80A2BF18;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2BF18.s")
 
