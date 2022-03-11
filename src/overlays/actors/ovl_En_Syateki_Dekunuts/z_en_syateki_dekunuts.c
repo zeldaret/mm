@@ -35,7 +35,7 @@ void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C3AC(EnSyatekiDekunuts* this);
 void func_80A2C478(EnSyatekiDekunuts* this);
 
-extern UNK_TYPE D_06001E50;
+extern Gfx D_06001E50[];
 extern SkeletonHeader D_06002468;
 extern AnimationHeader D_06002A5C;
 extern AnimationHeader D_06003180;
@@ -400,6 +400,35 @@ void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 }
 
+s32 func_80A2C8A0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C8A0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/EnSyatekiDekunuts_Draw.s")
+void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiDekunuts* this = THIS;
+    Vec3f temp_f20;
+    s32 i;
+
+    if (this->actionFunc != func_80A2BF18) {
+        SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A2C8A0, NULL,
+                          &this->actor);
+    }
+
+    if (this->unk_1EC == 1) {
+        for (i = 0; i < this->unk_1EA; i++) {
+            temp_f20.x = this->unk_1E4[i].x;
+            temp_f20.y = this->unk_1E4[i].y;
+            temp_f20.z = this->unk_1E4[i].z;
+
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            func_8012C28C(globalCtx->state.gfxCtx);
+            Matrix_InsertTranslation(temp_f20.x, temp_f20.y, temp_f20.z, MTXMODE_NEW);
+            Matrix_Scale(0.02f, 0.02f, 0.02f, 1);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, &D_06001E50);
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
