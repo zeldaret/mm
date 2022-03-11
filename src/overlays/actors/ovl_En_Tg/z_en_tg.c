@@ -175,9 +175,12 @@ void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 //     }
 // }
 void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
-    // f32 sp28;
-    Vec3f sp24;
+    // f32 new_var2;
+    // Vec3f idk;
     s16 phi_v1;
+    // s32 i;
+    Vec3f new_var3;
+    Vec3f sp24;
 
     // temp_v0 = this->unk2EC;
     // this->actor.shape.rot.y = this->actor.shape.rot.y + gGameInfo->data[0x600] + 0x258;
@@ -185,7 +188,6 @@ void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
     //  this->actor.shape.rot.y is at 0x0BE, "sh t0,0xbe"
     this->actor.shape.rot.y += sREG(0) + 0x258; // 0x258 = 600
 
-    // this->unk30 = (unaligned s32) this->unkBC;
     this->actor.world.rot = this->actor.shape.rot;
 
     if (this->unk2EC == 0) {
@@ -194,13 +196,22 @@ void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
         this->unk2EC -= 1;
         phi_v1 = this->unk2EC;
     }
+
     if (phi_v1 == 0) {
-        this->unk2EC = 0xC; // 0xC = 12
-        sp24.x = this->actor.world.pos.x;
-        sp24.y = (f32) this->actor.world.pos.y;
-        sp24.z = (f32) this->actor.world.pos.z;
-        // sp28 += 62.0f;
-        func_8098FD50(&this->unk2F0, &sp24, 0xA); // 0xA = 10
+        // this->unk2EC = 0xC; // 0xC = 12
+        // sp24.x = this->actor.world.pos.x;
+        // sp24.y = this->actor.world.pos.y;// + 62.0f;
+        // sp24.z = this->actor.world.pos.z + 62.0f;
+        // // sp28 += 62.0f;
+        // func_8098FD50(&this->unk2F0, &sp24, 0xA); // 0xA = 10
+
+        new_var3 = this->actor.world.pos;
+        sp24.x = new_var3.x;
+        // new_var2 = new_var3.y;
+        sp24.y = new_var3.y;//new_var2;
+        // new_var = this;
+        sp24.z = new_var3.z + 62.0f;
+        func_8098FD50(&this->unk2F0, &sp24, 0xA);
     }
 }
 
