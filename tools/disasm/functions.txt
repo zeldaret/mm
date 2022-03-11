@@ -10081,7 +10081,7 @@
     0x80A2C4D0:("func_80A2C4D0",),
     0x80A2C5DC:("func_80A2C5DC",),
     0x80A2C78C:("EnSyatekiDekunuts_Update",),
-    0x80A2C8A0:("func_80A2C8A0",),
+    0x80A2C8A0:("EnSyatekiDekunuts_OverrideLimbDraw",),
     0x80A2C8E8:("EnSyatekiDekunuts_Draw",),
     0x80A2CD10:("ElfMsg3_SetupAction",),
     0x80A2CD1C:("func_80A2CD1C",),

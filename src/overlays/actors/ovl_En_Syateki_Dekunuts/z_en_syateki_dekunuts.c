@@ -18,22 +18,22 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C2E0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
-void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2BE54(EnSyatekiDekunuts* this);
+void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2BFC4(EnSyatekiDekunuts* this);
+void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C150(EnSyatekiDekunuts* this);
+void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C1AC(EnSyatekiDekunuts* this);
+void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C27C(EnSyatekiDekunuts* this);
+void func_80A2C2E0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C3AC(EnSyatekiDekunuts* this);
+void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C478(EnSyatekiDekunuts* this);
+void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
+void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 
 const ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
@@ -47,8 +47,7 @@ const ActorInit En_Syateki_Dekunuts_InitVars = {
     (ActorFunc)EnSyatekiDekunuts_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A2CAB0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT6,
         AT_NONE,
@@ -70,7 +69,7 @@ static ColliderCylinderInit D_80A2CAB0 = {
 
 static Cylinder16 D_80A2CADC[] = { { 24, 40, 0, { 0, 0, 0 } } };
 
-static AnimationInfo D_80A2CAE8[] = {
+static AnimationInfo sAnimations[] = {
     { &object_dekunuts_Anim_003180, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &object_dekunuts_Anim_002A5C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &object_dekunuts_Anim_00326C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
@@ -80,8 +79,7 @@ static AnimationInfo D_80A2CAE8[] = {
     { &object_dekunuts_Anim_002DD4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80A2CB90[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 77, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, 0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2600, ICHAIN_STOP),
@@ -94,11 +92,11 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
     s32 phi_v0;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
-    s32 temp;
+    s32 i;
 
     path = syatekiMan->path;
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80A2CAB0);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
         Actor_SetScale(&this->actor, 0.01f);
@@ -113,7 +111,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
-    for (temp = 0; temp < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor); temp++) {
+    for (i = 0; i < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor); i++) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
@@ -124,7 +122,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_1EC = 0;
     }
 
-    Actor_ProcessInitChain(&this->actor, D_80A2CB90);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_002A5C,
                    this->jointTable, this->morphTable, 10);
@@ -233,7 +231,7 @@ void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 
 void func_80A2C1AC(EnSyatekiDekunuts* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = func_80A2C208;
@@ -252,7 +250,7 @@ void func_80A2C208(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2C27C(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
     if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
         this->actionFunc = func_80A2C2E0;
     } else {
@@ -283,7 +281,7 @@ void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80A2C3AC(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80A2C3F0;
 }
 
@@ -332,7 +330,7 @@ void func_80A2C4D0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->unk_1E2 = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
     this->unk_1D8 = 160;
     this->actionFunc = func_80A2C5DC;
 }
@@ -344,7 +342,7 @@ void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->unk_1D8 == 160) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 5);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
             this->unk_1D8--;
         } else if (this->unk_1D8 < 160) {
@@ -396,7 +394,8 @@ void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80A2C8A0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnSyatekiDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                       Actor* thisx) {
     EnSyatekiDekunuts* this = THIS;
 
     if ((limbIndex == 3) && (this->unk_1F0 == 1)) {
@@ -412,8 +411,8 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     if (this->actionFunc != func_80A2BF18) {
-        SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A2C8A0, NULL,
-                          &this->actor);
+        SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                          EnSyatekiDekunuts_OverrideLimbDraw, NULL, &this->actor);
     }
 
     if (this->unk_1EC == 1) {

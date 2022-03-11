@@ -145,14 +145,14 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiWf* this = THIS;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
-    s32 temp;
+    s32 i;
 
     path = syatekiMan->path;
     while (path->unk2 != 2) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
-    for (temp = 0; temp < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor); temp++) {
+    for (i = 0; i < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor); i++) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
