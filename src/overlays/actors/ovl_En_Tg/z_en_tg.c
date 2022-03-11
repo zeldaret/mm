@@ -149,69 +149,17 @@ void EnTg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FA70.s")
-// void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
-//     f32 sp28;
-//     ? sp24;
-//     s16 temp_v0;
-//     s16 phi_v1;
-
-//     temp_v0 = this->unk2EC;
-//     this->actor.shape.rot.y = this->actor.shape.rot.y + gGameInfo->data[0x600] + 0x258;
-//     this->unk30 = (unaligned s32) this->unkBC;
-//     this->actor.world.rot.z = (s16) (u16) this->actor.shape.rot.z;
-//     if (temp_v0 == 0) {
-//         phi_v1 = 0;
-//     } else {
-//         this->unk2EC = (s16) (temp_v0 - 1);
-//         phi_v1 = this->unk2EC;
-//     }
-//     if (phi_v1 == 0) {
-//         this->unk2EC = 0xC;
-//         sp24.unk0 = (f32) this->actor.world.pos.x;
-//         sp24.unk4 = (f32) this->actor.world.pos.y;
-//         sp24.unk8 = (f32) this->actor.world.pos.z;
-//         sp28 += 62.0f;
-//         func_8098FD50(&this->unk2F0, &sp24, 0xA);
-//     }
-// }
 void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
-    // f32 new_var2;
-    // Vec3f idk;
-    s16 phi_v1;
-    // s32 i;
-    Vec3f new_var3;
     Vec3f sp24;
 
-    // temp_v0 = this->unk2EC;
-    // this->actor.shape.rot.y = this->actor.shape.rot.y + gGameInfo->data[0x600] + 0x258;
-    // this->actor.shape.rot.y += gGameInfo->data[0x600] + 0x258;
-    //  this->actor.shape.rot.y is at 0x0BE, "sh t0,0xbe"
     this->actor.shape.rot.y += sREG(0) + 0x258; // 0x258 = 600
-
     this->actor.world.rot = this->actor.shape.rot;
 
-    if (this->unk2EC == 0) {
-        phi_v1 = 0;
-    } else {
-        this->unk2EC -= 1;
-        phi_v1 = this->unk2EC;
-    }
-
-    if (phi_v1 == 0) {
-        // this->unk2EC = 0xC; // 0xC = 12
-        // sp24.x = this->actor.world.pos.x;
-        // sp24.y = this->actor.world.pos.y;// + 62.0f;
-        // sp24.z = this->actor.world.pos.z + 62.0f;
-        // // sp28 += 62.0f;
-        // func_8098FD50(&this->unk2F0, &sp24, 0xA); // 0xA = 10
-
-        new_var3 = this->actor.world.pos;
-        sp24.x = new_var3.x;
-        // new_var2 = new_var3.y;
-        sp24.y = new_var3.y;//new_var2;
-        // new_var = this;
-        sp24.z = new_var3.z + 62.0f;
-        func_8098FD50(&this->unk2F0, &sp24, 0xA);
+    if (DECR(this->unk2EC) == 0) {
+        this->unk2EC = 0xC;
+        sp24 = this->actor.world.pos;
+        sp24.y += 62.0f;
+        func_8098FD50(this, &this->unk2F0, &sp24, 0xA);
     }
 }
 
