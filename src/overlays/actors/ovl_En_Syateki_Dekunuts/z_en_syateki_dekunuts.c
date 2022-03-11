@@ -400,8 +400,15 @@ void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80A2C8A0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C8A0.s")
+s32 func_80A2C8A0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnSyatekiDekunuts* this = THIS;
+
+    if ((limbIndex == 3) && (this->unk_1F0 == 1)) {
+        rot->z += this->unk_1F2;
+    }
+
+    return false;
+}
 
 void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiDekunuts* this = THIS;
