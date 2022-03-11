@@ -35,11 +35,6 @@ void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C3AC(EnSyatekiDekunuts* this);
 void func_80A2C478(EnSyatekiDekunuts* this);
 
-extern Gfx D_06001E50[];
-extern SkeletonHeader D_06002468;
-extern AnimationHeader D_06002A5C;
-extern AnimationHeader D_06003180;
-
 const ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
     ACTORCAT_ENEMY,
@@ -131,7 +126,8 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, D_80A2CB90);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06002468, &D_06002A5C, this->jointTable, this->morphTable, 10);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &object_dekunuts_Anim_002A5C,
+                   this->jointTable, this->morphTable, 10);
     if (path == NULL) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -153,7 +149,7 @@ void EnSyatekiDekunuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A2BE54(EnSyatekiDekunuts* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_06003180, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_dekunuts_Anim_003180, 0.0f);
 
     this->actor.speedXZ = 0.0f;
     this->actor.world = this->actor.home;
@@ -433,7 +429,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, &D_06001E50);
+            gSPDisplayList(POLY_OPA_DISP++, &object_dekunuts_DL_001E50);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
