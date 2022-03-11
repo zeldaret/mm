@@ -430,7 +430,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
             func_8012C28C(globalCtx->state.gfxCtx);
             Matrix_InsertTranslation(temp_f20.x, temp_f20.y, temp_f20.z, MTXMODE_NEW);
-            Matrix_Scale(0.02f, 0.02f, 0.02f, 1);
+            Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, &D_06001E50);

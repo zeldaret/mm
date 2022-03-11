@@ -19,7 +19,7 @@ typedef struct EnSyatekiDekunuts {
     /* 0x1D8 */ s16 unk_1D8;
     /* 0x1DA */ s16 unk_1DA;
     /* 0x1CD */ s16 unk_1DC;
-    /* 0x1DE */ char unk_1DE[0x4];
+    /* 0x1DE */ UNK_TYPE1 unk_1DE[0x4];
     /* 0x1E2 */ s16 unk_1E2;
     /* 0x1E4 */ Vec3s* unk_1E4;
     /* 0x1E8 */ s16 unk_1E8;
@@ -30,7 +30,7 @@ typedef struct EnSyatekiDekunuts {
     /* 0x1F2 */ s16 unk_1F2;
     /* 0x1F4 */ Vec3s jointTable[10];
     /* 0x230 */ Vec3s morphTable[10];
-    /* 0x26C */ char unk_26C[0x4];
+    /* 0x26C */ UNK_TYPE1 unk_26C[0x4];
 } EnSyatekiDekunuts; // size = 0x270
 
 extern const ActorInit En_Syateki_Dekunuts_InitVars;
