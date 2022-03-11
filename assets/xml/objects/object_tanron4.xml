@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for seagulls -->
     <File Name="object_tanron4" Segment="6">
         <!-- The glide animation goes unused, instead the flap animation is frozen while it glides-->
         <Animation Name="gSeagullGlideAnim" Offset="0x58" />
