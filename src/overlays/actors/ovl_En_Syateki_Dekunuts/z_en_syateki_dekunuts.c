@@ -187,17 +187,13 @@ void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
 
 void func_80A2BFC4(EnSyatekiDekunuts* this) {
     Vec3f sp14;
-    s32 pad;
-    Vec3f sp4;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     this->unk_1D8 = 0;
     sp14.x = this->unk_1E4[this->unk_1E8].x;
     sp14.y = this->unk_1E4[this->unk_1E8].y;
     sp14.z = this->unk_1E4[this->unk_1E8].z;
-    sp4 = sp14;
-    this->actor.prevPos = sp4;
-    this->actor.world.pos = sp4;
+    this->actor.world.pos = this->actor.prevPos = sp14;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->unk_1EE = 140 - (syatekiMan->unk_27C * 20);
@@ -239,7 +235,13 @@ void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C1AC.s")
+void func_80A2C1AC(EnSyatekiDekunuts* this) {
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 0);
+    this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
+    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+    this->actionFunc = func_80A2C208;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C208.s")
 
