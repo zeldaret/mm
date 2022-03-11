@@ -323,11 +323,37 @@ void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
+void func_80A2C4D0(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C4D0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C5DC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/EnSyatekiDekunuts_Update.s")
+void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnSyatekiDekunuts* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+
+    if ((this->actionFunc != func_80A2BF18) && (this->unk_1D8 < this->unk_1EE) && (this->unk_1D8 > 10)) {
+        if ((this->collider.base.acFlags & AC_HIT) && (this->unk_1E2 == 1)) {
+            if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) == 1) {
+                func_801A3098(NA_BGM_GET_ITEM | 0x900);
+            } else {
+                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            }
+
+            this->collider.base.acFlags &= ~AC_HIT;
+            func_80A2C4D0(this, globalCtx);
+        }
+
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    } else {
+        this->collider.base.acFlags &= ~AC_HIT;
+    }
+
+    SkelAnime_Update(&this->skelAnime);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C8A0.s")
 
