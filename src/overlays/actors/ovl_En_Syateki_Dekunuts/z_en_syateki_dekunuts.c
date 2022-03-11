@@ -32,6 +32,7 @@ void func_80A2C1AC(EnSyatekiDekunuts* this);
 void func_80A2C27C(EnSyatekiDekunuts* this);
 void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C3AC(EnSyatekiDekunuts* this);
+void func_80A2C478(EnSyatekiDekunuts* this);
 
 extern UNK_TYPE D_06001E50;
 extern SkeletonHeader D_06002468;
@@ -289,9 +290,25 @@ void func_80A2C33C(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C3AC.s")
+void func_80A2C3AC(EnSyatekiDekunuts* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 1);
+    this->actionFunc = func_80A2C3F0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C3F0.s")
+void func_80A2C3F0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    if (syatekiMan->unk_26A == 1) {
+        if (this->unk_1D8 > 160 && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+            this->unk_1D8 = 0;
+            func_80A2C150(this);
+        } else {
+            this->unk_1D8++;
+        }
+    } else {
+        func_80A2C478(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C478.s")
 
