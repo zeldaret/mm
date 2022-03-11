@@ -6,6 +6,7 @@
 
 #include "z_en_syateki_dekunuts.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
@@ -340,7 +341,37 @@ void func_80A2C4D0(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80A2C5DC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C5DC.s")
+void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
+    static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if (this->unk_1D8 == 160) {
+            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A2CAE8, 5);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
+            this->unk_1D8--;
+        } else if (this->unk_1D8 < 160) {
+            Vec3f sp40;
+
+            sp40.x = this->actor.world.pos.x;
+            sp40.y = this->actor.world.pos.y + 18.0f;
+            sp40.z = this->actor.world.pos.z;
+            EffectSsDeadDb_Spawn(globalCtx, &sp40, &gZeroVec3f, &gZeroVec3f, &D_80A2CBB8, &D_80A2CBBC, 200, 0, 13);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_EXTINCT);
+            sp40.y = this->actor.world.pos.y + 10.0f;
+            EffectSsHahen_SpawnBurst(globalCtx, &sp40, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
+
+            if (EN_SYATEKI_DEKUNUTS_GET_PARAM_F(&this->actor) != 1) {
+                syatekiMan->unk_272 &= ~(1 << this->unk_1E8);
+            }
+
+            func_80A2BE54(this);
+        }
+    } else if (this->unk_1D8 < 160) {
+        this->unk_1D8--;
+    }
+}
 
 void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -368,9 +399,6 @@ void EnSyatekiDekunuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 }
-
-static Color_RGBA8 D_80A2CBB8 = { 255, 255, 255, 255 };
-static Color_RGBA8 D_80A2CBBC = { 150, 150, 150, 0 };
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C8A0.s")
 
