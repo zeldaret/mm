@@ -183,7 +183,33 @@ void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2BFC4.s")
+
+void func_80A2BFC4(EnSyatekiDekunuts* this) {
+    Vec3f sp14;
+    s32 pad;
+    Vec3f sp4;
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    this->unk_1D8 = 0;
+    sp14.x = this->unk_1E4[this->unk_1E8].x;
+    sp14.y = this->unk_1E4[this->unk_1E8].y;
+    sp14.z = this->unk_1E4[this->unk_1E8].z;
+    sp4 = sp14;
+    this->actor.prevPos = sp4;
+    this->actor.world.pos = sp4;
+    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+    this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
+    this->unk_1EE = 140 - (syatekiMan->unk_27C * 20);
+
+    if ((syatekiMan->unk_27C  & 1) != 0) {
+        this->unk_1F0 = 1;
+        this->unk_1F2 = 0;
+    } else {
+        this->unk_1F0 = 0;
+    }
+
+    this->actionFunc = func_80A2C0F8;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C0F8.s")
 

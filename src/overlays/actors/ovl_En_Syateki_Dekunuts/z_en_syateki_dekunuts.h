@@ -25,7 +25,9 @@ typedef struct EnSyatekiDekunuts {
     /* 0x1E8 */ s16 unk_1E8;
     /* 0x1EA */ s16 unk_1EA;
     /* 0x1EC */ s16 unk_1EC;
-    /* 0x1EE */ char unk_1EE[0x6];
+    /* 0x1EE */ s16 unk_1EE;
+    /* 0x1F0 */ s16 unk_1F0;
+    /* 0x1F2 */ s16 unk_1F2;
     /* 0x1F4 */ Vec3s jointTable[10];
     /* 0x230 */ Vec3s morphTable[10];
     /* 0x26C */ char unk_26C[0x4];
