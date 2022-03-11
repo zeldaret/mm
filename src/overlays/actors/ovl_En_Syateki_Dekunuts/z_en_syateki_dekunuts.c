@@ -28,6 +28,7 @@ void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2BE54(EnSyatekiDekunuts* this);
 void func_80A2BFC4(EnSyatekiDekunuts* this);
 void func_80A2C150(EnSyatekiDekunuts* this);
+void func_80A2C1AC(EnSyatekiDekunuts* this);
 
 extern UNK_TYPE D_06001E50;
 extern SkeletonHeader D_06002468;
@@ -224,9 +225,19 @@ void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C150.s")
+void func_80A2C150(EnSyatekiDekunuts* this) {
+    this->unk_1D8 = 0;
+    this->actionFunc = func_80A2C168;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C168.s")
+void func_80A2C168(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    if (this->unk_1DA > 20) {
+        func_80A2C1AC(this);
+        this->unk_1DA = 0;
+    } else {
+        this->unk_1DA++;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C1AC.s")
 
