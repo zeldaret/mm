@@ -27,6 +27,7 @@ void func_80A2C48C(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2C5DC(EnSyatekiDekunuts* this, GlobalContext* globalCtx);
 void func_80A2BE54(EnSyatekiDekunuts* this);
 void func_80A2BFC4(EnSyatekiDekunuts* this);
+void func_80A2C150(EnSyatekiDekunuts* this);
 
 extern UNK_TYPE D_06001E50;
 extern SkeletonHeader D_06002468;
@@ -183,7 +184,6 @@ void func_80A2BF18(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
     }
 }
 
-
 void func_80A2BFC4(EnSyatekiDekunuts* this) {
     Vec3f sp14;
     s32 pad;
@@ -201,7 +201,7 @@ void func_80A2BFC4(EnSyatekiDekunuts* this) {
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->unk_1EE = 140 - (syatekiMan->unk_27C * 20);
 
-    if ((syatekiMan->unk_27C  & 1) != 0) {
+    if ((syatekiMan->unk_27C & 1) != 0) {
         this->unk_1F0 = 1;
         this->unk_1F2 = 0;
     } else {
@@ -211,7 +211,18 @@ void func_80A2BFC4(EnSyatekiDekunuts* this) {
     this->actionFunc = func_80A2C0F8;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C0F8.s")
+void func_80A2C0F8(EnSyatekiDekunuts* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan;
+
+    if (this->unk_1DA > 20) {
+        syatekiMan = (EnSyatekiMan*)this->actor.parent;
+        Actor_PlaySfxAtPos(&syatekiMan->actor, NA_SE_EN_NUTS_DAMAGE);
+        this->unk_1DA = 0;
+        func_80A2C150(this);
+    } else {
+        this->unk_1DA++;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Dekunuts/func_80A2C150.s")
 
