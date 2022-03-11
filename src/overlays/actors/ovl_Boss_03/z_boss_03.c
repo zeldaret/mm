@@ -1062,7 +1062,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     switch (this->csState) {
         case 0x0:
             if (player->actor.world.pos.y < 1350.0f) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 7);
                 this->subCamId = Play_CreateSubCamera(globalCtx);
                 Play_CameraChangeStatus(globalCtx, 0, 1);
@@ -1281,7 +1281,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 temp_v0_4->eyeNext = this->subCamEye;
                 temp_v0_4->at = this->subCamAt;
                 func_80169AFC(globalCtx, this->subCamId, 0);
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->subCamId = 0;
                 func_809E344C(this, globalCtx);
@@ -1357,7 +1357,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     switch (this->csState) {
         case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 1);
                 this->subCamId = Play_CreateSubCamera(globalCtx);
                 Play_CameraChangeStatus(globalCtx, 0, 1);
@@ -1534,7 +1534,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 camera->at = this->subCamAt;
                 func_80169AFC(globalCtx, this->subCamId, 0);
                 this->subCamId = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->csState = 3;
                 func_80165690();
@@ -1568,7 +1568,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
     switch (this->csState) {
         case 0x0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
-                func_800EA0D4(globalCtx, &globalCtx->csCtx);
+                Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 1);
                 this->subCamId = Play_CreateSubCamera(globalCtx);
                 Play_CameraChangeStatus(globalCtx, 0, 1);
@@ -1630,7 +1630,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                         func_80169AFC(globalCtx, this->subCamId, 0);
                         this->subCamId = 0;
-                        func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                        Cutscene_End(globalCtx, &globalCtx->csCtx);
                         func_800B7298(globalCtx, &this->actor, 6);
                         func_809E344C(this, globalCtx);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;
