@@ -1038,7 +1038,7 @@ Vec3f D_809E9104[] = {
 };
 
 void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
-    s16 phi_s0;
+    s16 i;
     Vec3f sp70;
     f32 temp_f2;
     f32 temp_f16;
@@ -1247,7 +1247,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 } else {
                     if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
 
-                    for (phi_s0 = 0; phi_s0 < 3; phi_s0++) {
+                    for (i = 0; i < 3; i++) {
                         sp70.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.x;
                         sp70.y = this->actor.world.pos.y;
                         sp70.z = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.z;
@@ -1273,18 +1273,21 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->subCamAt.z, this->subCamTargetAt.z, 0.5f, 100.0f);
 
             if (this->csTimer == 0x91) {
-                Camera* temp_v0_4;
+                Camera* subCam;
 
-                temp_v0_4 = Play_GetCamera(globalCtx, 0);
+                subCam = Play_GetCamera(globalCtx, 0);
 
-                temp_v0_4->eye = this->subCamEye;
-                temp_v0_4->eyeNext = this->subCamEye;
-                temp_v0_4->at = this->subCamAt;
+                subCam->eye = this->subCamEye;
+                subCam->eyeNext = this->subCamEye;
+                subCam->at = this->subCamAt;
+
                 func_80169AFC(globalCtx, this->subCamId, 0);
                 Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->subCamId = 0;
+
                 func_809E344C(this, globalCtx);
+
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
                 gSaveContext.eventInf[5] |= 0x40;
             }
@@ -1301,15 +1304,15 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         }
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
-        Matrix_RotateY(this->actor.world.rot.y, 1);
-        Matrix_InsertYRotation_f(sp5C, 1);
-        Matrix_InsertXRotation_s(this->actor.world.rot.x, 1);
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+        Matrix_InsertYRotation_f(sp5C, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(100.0f, &this->subCamAt);
 
         this->subCamEye = this->actor.world.pos;
 
-        for (phi_s0 = 0; phi_s0 < sp56; phi_s0++) {
+        for (i = 0; i < sp56; i++) {
             sp70.x = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.x;
             sp70.y = (randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.y) - 150.0f;
             sp70.z = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.z;
@@ -1378,8 +1381,6 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->subCamAt.y = camera->at.y;
                     this->subCamAt.z = camera->at.z;
 
-                    // this->unk_568 = Math_Acot2F(this->subCamEye.z - this->actor.world.pos.z, this->subCamEye.x -
-                    // this->actor.world.pos.x);
                     new_var2 = this->subCamEye.x - this->actor.world.pos.x;
                     this->unk_568 = Math_Acot2F(this->subCamEye.z - this->actor.world.pos.z, new_var2);
 
@@ -1396,7 +1397,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->subCamTargetAt.z = this->actor.world.pos.z;
 
                     this->unk_568 += this->unk_56C;
-                    Matrix_InsertYRotation_f(this->unk_568, 0);
+                    Matrix_InsertYRotation_f(this->unk_568, MTXMODE_NEW);
                     Matrix_MultiplyVector3fByState(&sp90, &this->subCamTargetEye);
 
                     this->subCamTargetEye.x += this->actor.world.pos.x;
@@ -1466,6 +1467,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             }
             Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
             break;
+
         case 0x1:
             if (this->unk_240 == 0x96) {
                 Audio_QueueSeqCmd(0x8021);
@@ -1846,7 +1848,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03* this = (Boss03*)thisx;
     Actor* temp_v0_4;
     Player* player; // sp88
-    s32 phi_s0;
+    s32 phi_s0; // i
     Vec3f sp78;
     Vec3f sp6C;
     Vec3f sp60;
@@ -2891,28 +2893,27 @@ void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
     s16 phi_s0;
     u8 phi_s3;
     Player* player = GET_PLAYER(globalCtx);
-    Boss03* temp_v1_2;
     f32 temp_f0;
     f32 temp_f14;
-    f32 temp_f20;
-    f32 temp_f2;
-    f32 temp_f22;
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
 
     phi_s3 = 0;
     this->unk_240++;
 
     for (i = 0; i < 6; i++) {
-        temp_f20 = player->actor.world.pos.x - this->unk_2DC[i].x;
-        temp_f2 = player->actor.world.pos.y - this->unk_2DC[i].y;
-        temp_f22 = player->actor.world.pos.z - this->unk_2DC[i].z;
-        temp_f0 = sqrtf(SQ(temp_f20) + SQ(temp_f2) + SQ(temp_f22));
-        temp_f14 = (player->actor.speedXZ * 3.0f) + 70.0f;
+        xDiff = player->actor.world.pos.x - this->unk_2DC[i].x;
+        yDiff = player->actor.world.pos.y - this->unk_2DC[i].y;
+        zDiff = player->actor.world.pos.z - this->unk_2DC[i].z;
+        temp_f0 = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
+        temp_f14 = player->actor.speedXZ * 3.0f + 70.0f;
 
-        if ((player->actor.bgCheckFlags & 1) != 0) {
+        if (player->actor.bgCheckFlags & 1) {
             phi_s0 = 0;
         } else {
             phi_s0 = player->actor.speedXZ * 16.0f;
-            if (phi_s0 >= 0x1001) {
+            if (phi_s0 > 0x1000) {
                 phi_s0 = 0x1000;
             } else if (phi_s0 < 0x100) {
                 phi_s0 = 0x100;
@@ -2927,29 +2928,25 @@ void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if ((phi_s3 & 1) != 0) {
-        Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0x14, 0x800);
+    if (phi_s3 & 1) {
+        Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(zDiff, xDiff), 0x14, 0x800);
     }
 
-    temp_v1_2 = sGyorgInstance;
-    if (temp_v1_2->actor.world.pos.y - 40.0f < temp_v1_2->waterHeight) {
-
+    if (sGyorgInstance->actor.world.pos.y - 40.0f < sGyorgInstance->waterHeight) {
         for (i = 0; i < 6; i++) {
-            temp_v1_2 = sGyorgInstance;
+            xDiff = sGyorgInstance->actor.world.pos.x - this->unk_2DC[i].x;
+            yDiff = sGyorgInstance->actor.world.pos.y - this->unk_2DC[i].y;
+            zDiff = sGyorgInstance->actor.world.pos.z - this->unk_2DC[i].z;
 
-            temp_f20 = temp_v1_2->actor.world.pos.x - this->unk_2DC[i].x;
-            temp_f2 = temp_v1_2->actor.world.pos.y - this->unk_2DC[i].y;
-            temp_f22 = temp_v1_2->actor.world.pos.z - this->unk_2DC[i].z;
-
-            temp_f0 = sqrtf(SQ(temp_f20) + SQ(temp_f2) + SQ(temp_f22));
+            temp_f0 = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
 
             if ((i == 0) && (temp_f0 > 400.0f)) {
                 break;
             }
 
-            phi_s0 = (temp_v1_2->actor.speedXZ * 16.0f);
-            temp_f14 = (temp_v1_2->actor.speedXZ * 5.0f) + 150.0f;
-            if (phi_s0 >= 0x1001) {
+            phi_s0 = sGyorgInstance->actor.speedXZ * 16.0f;
+            temp_f14 = sGyorgInstance->actor.speedXZ * 5.0f + 150.0f;
+            if (phi_s0 > 0x1000) {
                 phi_s0 = 0x1000;
             } else if (phi_s0 < 0x100) {
                 phi_s0 = 0x0100;
@@ -2963,8 +2960,8 @@ void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
 
-        if ((phi_s3 & 2) != 0) {
-            Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0x14, 0x800);
+        if (phi_s3 & 2) {
+            Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(zDiff, xDiff), 0x14, 0x800);
         }
     }
 
@@ -2992,19 +2989,19 @@ void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
-    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
-    Matrix_RotateY(this->actor.shape.rot.y, 1);
-    Matrix_InsertZRotation_s(0x4000, 1);
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
     // The indices looks a bit random...
-    Matrix_RotateY(this->jointTable[5].x * -5.0f * 0.1f, 1);
-    Matrix_InsertXRotation_s(this->jointTable[3].y * -5.0f * 0.1f, 1);
-    Matrix_InsertZRotation_s(this->jointTable[2].z * 6.0f * 0.1f, 1);
+    Matrix_RotateY(this->jointTable[5].x * -5.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_InsertXRotation_s(this->jointTable[3].y * -5.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->jointTable[2].z * 6.0f * 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < 6; i++) {
-        Matrix_RotateY(this->jointTable[i].x + this->morphTable[i].x, 1);
-        Matrix_InsertXRotation_s(this->jointTable[i].y + this->morphTable[i].y, 1);
-        Matrix_InsertZRotation_s(this->jointTable[i].z + this->morphTable[i].z, 1);
+        Matrix_RotateY(this->jointTable[i].x + this->morphTable[i].x, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->jointTable[i].y + this->morphTable[i].y, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->jointTable[i].z + this->morphTable[i].z, MTXMODE_APPLY);
 
         Matrix_ToMtx(mtx);
 
@@ -3013,7 +3010,7 @@ void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, D_809E91C0[i]);
 
         Matrix_GetStateTranslation(&this->unk_2DC[i]);
-        Matrix_InsertTranslation(4000.0f, 0.0f, 0.0f, 1);
+        Matrix_InsertTranslation(4000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
         mtx++;
     }
