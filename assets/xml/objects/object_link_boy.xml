@@ -55,27 +55,27 @@
         <Texture Name="object_link_boy_Tex_00B188" OutName="tex_00B188" Format="ci4" Width="64" Height="64" Offset="0xB188" />
         <!-- TODO this texture should be 50x75 but the u64 type of textures makes this not match currently -->
         <Texture Name="object_link_boy_Tex_00B988" OutName="tex_00B988" Format="rgba16" Width="50" Height="74" Offset="0xB988" />
-        <Limb Name="object_link_boy_Lodlimb_00D6D4" Type="LOD" Offset="0xD6D4" />
-        <Limb Name="object_link_boy_Lodlimb_00D6E4" Type="LOD" Offset="0xD6E4" />
-        <Limb Name="object_link_boy_Lodlimb_00D6F4" Type="LOD" Offset="0xD6F4" />
-        <Limb Name="object_link_boy_Lodlimb_00D704" Type="LOD" Offset="0xD704" />
-        <Limb Name="object_link_boy_Lodlimb_00D714" Type="LOD" Offset="0xD714" />
-        <Limb Name="object_link_boy_Lodlimb_00D724" Type="LOD" Offset="0xD724" />
-        <Limb Name="object_link_boy_Lodlimb_00D734" Type="LOD" Offset="0xD734" />
-        <Limb Name="object_link_boy_Lodlimb_00D744" Type="LOD" Offset="0xD744" />
-        <Limb Name="object_link_boy_Lodlimb_00D754" Type="LOD" Offset="0xD754" />
-        <Limb Name="object_link_boy_Lodlimb_00D764" Type="LOD" Offset="0xD764" />
-        <Limb Name="object_link_boy_Lodlimb_00D774" Type="LOD" Offset="0xD774" />
-        <Limb Name="object_link_boy_Lodlimb_00D784" Type="LOD" Offset="0xD784" />
-        <Limb Name="object_link_boy_Lodlimb_00D794" Type="LOD" Offset="0xD794" />
-        <Limb Name="object_link_boy_Lodlimb_00D7A4" Type="LOD" Offset="0xD7A4" />
-        <Limb Name="object_link_boy_Lodlimb_00D7B4" Type="LOD" Offset="0xD7B4" />
-        <Limb Name="object_link_boy_Lodlimb_00D7C4" Type="LOD" Offset="0xD7C4" />
-        <Limb Name="object_link_boy_Lodlimb_00D7D4" Type="LOD" Offset="0xD7D4" />
-        <Limb Name="object_link_boy_Lodlimb_00D7E4" Type="LOD" Offset="0xD7E4" />
-        <Limb Name="object_link_boy_Lodlimb_00D7F4" Type="LOD" Offset="0xD7F4" />
-        <Limb Name="object_link_boy_Lodlimb_00D804" Type="LOD" Offset="0xD804" />
-        <Limb Name="object_link_boy_Lodlimb_00D814" Type="LOD" Offset="0xD814" />
-        <Skeleton Name="object_link_boy_Skel_00D878" Type="Flex" LimbType="Standard" Offset="0xD878" />
+        <Limb Name="object_link_boy_Lodlimb_00D6D4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_01" Offset="0xD6D4" />
+        <Limb Name="object_link_boy_Lodlimb_00D6E4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_02" Offset="0xD6E4" />
+        <Limb Name="object_link_boy_Lodlimb_00D6F4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_03" Offset="0xD6F4" />
+        <Limb Name="object_link_boy_Lodlimb_00D704" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_04" Offset="0xD704" />
+        <Limb Name="object_link_boy_Lodlimb_00D714" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_05" Offset="0xD714" />
+        <Limb Name="object_link_boy_Lodlimb_00D724" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_06" Offset="0xD724" />
+        <Limb Name="object_link_boy_Lodlimb_00D734" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_07" Offset="0xD734" />
+        <Limb Name="object_link_boy_Lodlimb_00D744" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_08" Offset="0xD744" />
+        <Limb Name="object_link_boy_Lodlimb_00D754" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_09" Offset="0xD754" />
+        <Limb Name="object_link_boy_Lodlimb_00D764" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0A" Offset="0xD764" />
+        <Limb Name="object_link_boy_Lodlimb_00D774" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0B" Offset="0xD774" />
+        <Limb Name="object_link_boy_Lodlimb_00D784" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0C" Offset="0xD784" />
+        <Limb Name="object_link_boy_Lodlimb_00D794" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0D" Offset="0xD794" />
+        <Limb Name="object_link_boy_Lodlimb_00D7A4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0E" Offset="0xD7A4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7B4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0F" Offset="0xD7B4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7C4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_10" Offset="0xD7C4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7D4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_11" Offset="0xD7D4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7E4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_12" Offset="0xD7E4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7F4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_13" Offset="0xD7F4" />
+        <Limb Name="object_link_boy_Lodlimb_00D804" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_14" Offset="0xD804" />
+        <Limb Name="object_link_boy_Lodlimb_00D814" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_15" Offset="0xD814" />
+        <Skeleton Name="object_link_boy_Skel_00D878" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_BOY_LIMB_NONE" LimbMax="OBJECT_LINK_BOY_LIMB_MAX" EnumName="object_link_boy_Limbs" Offset="0xD878" />
     </File>
 </Root>

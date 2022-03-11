@@ -184,7 +184,8 @@ void EnToto_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    if (globalCtx->sceneNum == SCENE_MILK_BAR && (gSaveContext.time >= 0x4000 && gSaveContext.time < 0xE555)) {
+    if (globalCtx->sceneNum == SCENE_MILK_BAR &&
+        (gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < CLOCK_TIME(21, 30))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -250,7 +251,9 @@ void func_80BA39C8(EnToto* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((globalCtx->sceneNum == SCENE_MILK_BAR && !(gSaveContext.time >= 0x4000 && gSaveContext.time < 0xED02)) ||
+    //! @TODO: 0xED02 nor 0xED01 match CLOCK_TIME macro
+    if ((globalCtx->sceneNum == SCENE_MILK_BAR &&
+         !(gSaveContext.time >= CLOCK_TIME(6, 0) && gSaveContext.time < 0xED02)) ||
         (globalCtx->sceneNum != SCENE_MILK_BAR && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
@@ -503,7 +506,6 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnTotoUnkStruct2* temp_s0;
     s32 i;
-    u16 tmp;
 
     func_80BA3C88(this);
     if (player->actor.world.pos.z > -270.0f) {
@@ -527,8 +529,8 @@ s32 func_80BA4530(EnToto* this, GlobalContext* globalCtx) {
                     if (this->unk2B1 < 10) {
                         this->unk2B1++;
                         if (this->unk2B1 >= 10) {
-                            tmp = gSaveContext.playerForm; // Needed for regalloc possible FAKE MATCH
-                            Message_StartTextbox(globalCtx, D_80BA50DC[tmp - 1].unk2, NULL);
+                            Message_StartTextbox(globalCtx, D_80BA50DC[((void)0, gSaveContext.playerForm) - 1].unk2,
+                                                 NULL);
                         }
                     }
                     return 0;

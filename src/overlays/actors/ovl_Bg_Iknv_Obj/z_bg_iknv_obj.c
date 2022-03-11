@@ -162,7 +162,7 @@ void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
-    if (gSaveContext.time > 0xD000) {
+    if (gSaveContext.time > CLOCK_TIME(19, 30)) {
         this->actionFunc = func_80BD7ED8;
     }
     if ((this->dyna.actor.home.rot.x == 1) && !(gSaveContext.weekEventReg[58] & 0x80)) {
