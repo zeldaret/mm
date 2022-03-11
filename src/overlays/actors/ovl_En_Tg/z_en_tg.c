@@ -79,6 +79,12 @@ static DamageTable D_809901F8 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+AnimationInfoS D_80990218 = { (AnimationHeader *)0x060053E0, 1.0f, 0, -1, 0, 0 };
+Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
+Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
+
 #endif
 
 // In data
