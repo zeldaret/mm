@@ -82,7 +82,8 @@ static DamageTable D_809901F8 = {
 };
 
 // object_mu_Anim_0053E0 ?
-AnimationInfoS D_80990218 = { (AnimationHeader *)0x060053E0, 1.0f, 0, -1, 0, 0 };
+//AnimationInfoS D_80990218 = { (AnimationHeader *)0x060053E0, 1.0f, 0, -1, 0, 0 };
+AnimationInfoS D_80990218 = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
 Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f };
 Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
 Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
@@ -102,10 +103,10 @@ extern Vec3f D_80990240; // from data
 extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
 
 // Not in data?
-extern void* D_0405E6F0; // a texture pointer? gameplay_keep_Tex_05E6F0
-extern FlexSkeletonHeader D_0600B2B0; // object_mu_Skel_00B2B0 ?
-extern UNK_TYPE D_0600B0A0; // also texture? object_mu_DL_00B0A0
-extern UNK_TYPE D_0600B0E0; //last .... also object_mu_DL_00B0E0 ?
+// extern void* D_0405E6F0; // a texture pointer? gameplay_keep_Tex_05E6F0
+// extern FlexSkeletonHeader D_0600B2B0; // object_mu_Skel_00B2B0 ?
+// extern UNK_TYPE D_0600B0A0; // also texture? object_mu_DL_00B0A0
+// extern UNK_TYPE D_0600B0E0; //last .... also object_mu_DL_00B0E0 ?
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 idx) {
@@ -141,7 +142,7 @@ void EnTg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600B2B0, NULL, this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mu_Skel_00B2B0, NULL, this->jointTable, this->morphTable, 21);
     func_8098F800(&this->skelAnime, &D_80990218, 0);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_809901C0);
@@ -289,17 +290,17 @@ void func_8099000C(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk0 == 1) {
             if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, &D_0600B0A0);
+                gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
             Matrix_InsertTranslation(ptr->unk14.x, ptr->unk14.y, ptr->unk14.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk4, ptr->unk4, ptr->unk4, MTXMODE_APPLY);
 
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_0405E6F0));
+            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gameplay_keep_Tex_05E6F0));
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, &D_0600B0E0);
+            gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0E0);
         }
     }
 
