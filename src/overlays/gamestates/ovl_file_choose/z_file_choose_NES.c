@@ -1792,7 +1792,6 @@ void func_80812840(GameState *thisx) {
     } else if CHECK_BTN_ALL(input->press.button, BTN_B) {
         play_sound(NA_SE_SY_FSEL_CLOSE);
         this->unk_2448C++;
-        // return;
     } else if (ABS_ALT(this->unk_24504) >= 30) {
         play_sound(NA_SE_SY_FSEL_CURSOR);
         this->unk_24482 ^= 1;
@@ -1923,7 +1922,8 @@ void func_80812D94(GameState *thisx) {
 
     phi_v0 = 0;
     do {
-        gSaveContext.unk_3DD0[phi_v0++] = 0;
+        gSaveContext.unk_3DD0[phi_v0] = 0;
+        phi_v0++;
     } while (phi_v0 < 7);
 
     gSaveContext.unk_3F26 = 0x32;
