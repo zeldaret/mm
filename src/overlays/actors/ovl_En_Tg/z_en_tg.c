@@ -22,7 +22,6 @@ void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
 void func_8099000C(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len);
 void func_8098FD50(EnTg *this, EnTgIdk *ptr, Vec3f *arg2, s32 arg3);
 
-#if 0
 const ActorInit En_Tg_InitVars = {
     ACTOR_EN_TG,
     ACTORCAT_NPC,
@@ -83,30 +82,26 @@ static DamageTable D_809901F8 = {
 
 // object_mu_Anim_0053E0 ?
 //AnimationInfoS D_80990218 = { (AnimationHeader *)0x060053E0, 1.0f, 0, -1, 0, 0 };
-AnimationInfoS D_80990218 = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
-Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
-Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
-Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
-
-#endif
+static AnimationInfoS D_80990218 = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
+static Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f };
+static Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
+static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
+static Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
 
 // In data
-extern ColliderCylinderInit D_809901C0;
-extern CollisionCheckInfoInit2 D_809901EC;
-extern DamageTable D_809901F8;
+// extern ColliderCylinderInit D_809901C0;
+// extern CollisionCheckInfoInit2 D_809901EC;
+// extern DamageTable D_809901F8;
 
-extern AnimationInfoS D_80990218;
-extern Vec3f D_80990228; // = { 0.0f, 0.0f, 0.0f };
-extern Vec3f D_80990234; // from data
-extern Vec3f D_80990240; // from data
-extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
+// extern AnimationInfoS D_80990218;
+// extern Vec3f D_80990228; // = { 0.0f, 0.0f, 0.0f };
+// extern Vec3f D_80990234; // from data
+// extern Vec3f D_80990240; // from data
+// extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
 
-// Not in data?
-// extern void* D_0405E6F0; // a texture pointer? gameplay_keep_Tex_05E6F0
-// extern FlexSkeletonHeader D_0600B2B0; // object_mu_Skel_00B2B0 ?
-// extern UNK_TYPE D_0600B0A0; // also texture? object_mu_DL_00B0A0
-// extern UNK_TYPE D_0600B0E0; //last .... also object_mu_DL_00B0E0 ?
+/*
+glabel D_.*[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+[\n\s]
+*/
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 idx) {
@@ -174,6 +169,7 @@ void func_8098FA70(EnTg *this, GlobalContext *globalCtx) {
     }
 }
 
+
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/EnTg_Update.s")
 void EnTg_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTg* this = THIS;
@@ -227,6 +223,7 @@ void EnTg_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FD50.s")
 void func_8098FD50(EnTg *this, EnTgIdk *ptr, Vec3f *arg2, s32 len) {
     Vec3f sp2C = D_80990234;
@@ -251,11 +248,10 @@ void func_8098FD50(EnTg *this, EnTgIdk *ptr, Vec3f *arg2, s32 len) {
     }
 }
 
-
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098FEA8.s")
 // Looks just like func_809647EC in z_en_fu.c
 void func_8098FEA8(GlobalContext* globalCtx, EnTgIdk* ptr, s32 len) {
-    Vec3f sp44 = D_8099024C; // or just { 0.0f, 0.0f, 0.0f };
+    Vec3f sp44 = D_8099024C;
     s16 yaw = Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx));
     s32 i;
 
