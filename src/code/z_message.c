@@ -468,7 +468,7 @@ void func_80152EC0(GlobalContext* globalCtx) {
                         actor->world.pos.y, actor->world.pos.z, 0, 0, 0, D_801D02F8[msgCtx->songPlayed]);
             return;
         }
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, 0xF6, actor->world.pos.x, actor->world.pos.y, actor->world.pos.z,
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OCEFF_WIPE4, actor->world.pos.x, actor->world.pos.y, actor->world.pos.z,
                     0, 0, 0, 0);
     }
 }
@@ -495,21 +495,20 @@ void func_80153E7C(GlobalContext* globalCtx, void* arg1) {
 
 void func_80156758(GlobalContext* globalCtx) {
     Gfx* nextDisplayList;
-    Gfx* _polyOpa;
+    Gfx* polyOpa;
     GraphicsContext* gfxCtx;
 
     gfxCtx = globalCtx->state.gfxCtx;
     OPEN_DISPS(gfxCtx);
-    nextDisplayList = Graph_GfxPlusOne(_polyOpa = POLY_OPA_DISP);
+    nextDisplayList = Graph_GfxPlusOne(polyOpa = POLY_OPA_DISP);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
-    //((globalCtx->msgCtx.currentTextId != 0x5E6) || Play_InCSMode(globalCtx) == 0)
     if ((globalCtx->msgCtx.currentTextId != 0x5E6) || (func_801690CC(globalCtx) == 0)) {
         func_801541D4(globalCtx, &nextDisplayList);
     }
     gSPEndDisplayList(nextDisplayList++);
-    Graph_BranchDlist(_polyOpa, nextDisplayList);
-    gfxCtx->polyOpa.p = nextDisplayList;
+    Graph_BranchDlist(polyOpa, nextDisplayList);
+    POLY_OPA_DISP = nextDisplayList;
     CLOSE_DISPS(gfxCtx);
 }
 

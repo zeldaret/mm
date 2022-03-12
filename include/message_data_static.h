@@ -1,5 +1,6 @@
-#ifndef _MESSAGE_DATA_STATIC_H_
-#define _MESSAGE_DATA_STATIC_H_
+#ifndef MESSAGE_DATA_STATIC_H_
+#define MESSAGE_DATA_STATIC_H_
+
 #include "PR/ultratypes.h"
 
 struct MessageTableEntry{
