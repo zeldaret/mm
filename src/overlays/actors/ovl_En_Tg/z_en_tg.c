@@ -5,6 +5,8 @@
  */
 
 #include "z_en_tg.h"
+#include "objects/object_mu/object_mu.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -79,6 +81,7 @@ static DamageTable D_809901F8 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
+// object_mu_Anim_0053E0 ?
 AnimationInfoS D_80990218 = { (AnimationHeader *)0x060053E0, 1.0f, 0, -1, 0, 0 };
 Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f };
 Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
@@ -99,10 +102,10 @@ extern Vec3f D_80990240; // from data
 extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
 
 // Not in data?
-extern void* D_0405E6F0;
-extern FlexSkeletonHeader D_0600B2B0;
-extern UNK_TYPE D_0600B0A0;
-extern UNK_TYPE D_0600B0E0; //last
+extern void* D_0405E6F0; // a texture pointer? gameplay_keep_Tex_05E6F0
+extern FlexSkeletonHeader D_0600B2B0; // object_mu_Skel_00B2B0 ?
+extern UNK_TYPE D_0600B0A0; // also texture? object_mu_DL_00B0A0
+extern UNK_TYPE D_0600B0E0; //last .... also object_mu_DL_00B0E0 ?
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 idx) {
