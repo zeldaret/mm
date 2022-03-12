@@ -5,8 +5,10 @@
  */
 
 #include "z_en_kusa2.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00800010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnKusa2*)thisx)
 
@@ -280,7 +282,7 @@ void func_80A5BB40(EnKusa2* this, GlobalContext* globalCtx, s32 arg2) {
     f32 temp_f24;
     s16 temp_s0;
 
-    if (this->actor.flags & 0x40) {
+    if (this->actor.flags & ACTOR_FLAG_40) {
         for (i = 0; i <= arg2; i++) {
             temp_s0 = Rand_S16Offset(-16000, 32000) + this->actor.world.rot.y;
             temp_f20 = Math_SinS(temp_s0);
@@ -370,7 +372,7 @@ void func_80A5BF84(EnKusa2* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A5BFD8(EnKusa2* this, GlobalContext* globalCtx) {
-    if (this->collider.base.acFlags & 2) {
+    if (this->collider.base.acFlags & AC_HIT) {
         s32 pad;
 
         func_80A5CF44(this);
@@ -858,7 +860,7 @@ void EnKusa2_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!ENKUSA2_GET_1(&this->actor)) {
         this->actor.update = func_80A5E604;
         this->actor.draw = NULL;
-        this->actor.flags |= 0x20;
+        this->actor.flags |= ACTOR_FLAG_20;
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, 1);
         this->unk_1BE = 0;
         if (D_80A5EAEC != 0) {
@@ -1308,8 +1310,8 @@ void EnKusa2_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A5E6F0(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80A5EB68[] = {
-        D_040528B0,
-        D_040527F0,
+        gameplay_keep_DL_0528B0,
+        gameplay_keep_DL_0527F0,
     };
     EnKusa2* this = THIS;
     s32 i;
@@ -1341,7 +1343,7 @@ void func_80A5E80C(GlobalContext* globalCtx, s32 arg1) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, arg1);
-    gSPDisplayList(POLY_XLU_DISP++, D_05007938);
+    gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_007938);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1354,7 +1356,7 @@ void EnKusa2_Draw(Actor* thisx, GlobalContext* globalCtx) {
             (this->actor.projectedPos.z < 400.0f)) {
             func_80A5B954(&D_80A60908[this->unk_1CE], 0.0015f);
         }
-        Gfx_DrawDListOpa(globalCtx, D_050078A0);
+        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
     } else if (this->actor.projectedPos.z < 1300.0f) {
         func_80A5E80C(globalCtx, (1300.0f - this->actor.projectedPos.z) * 2.55f);
     }
@@ -1368,14 +1370,14 @@ void func_80A5E9B4(Actor* thisx, GlobalContext* globalCtx) {
     sp18.z = thisx->shape.rot.z + D_80A5EAFC.z;
     Matrix_SetStateRotationAndTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, &sp18);
     Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-    Gfx_DrawDListOpa(globalCtx, D_050078A0);
+    Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
 }
 
 void func_80A5EA48(Actor* thisx, GlobalContext* globalCtx) {
     EnKusa2* this = THIS;
 
     if (this->unk_1CF == 0xFF) {
-        Gfx_DrawDListOpa(globalCtx, D_050078A0);
+        Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
     } else {
         func_80A5E80C(globalCtx, this->unk_1CF);
     }

@@ -8,7 +8,7 @@
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 #include "objects/object_kibako/object_kibako.h"
 
-#define FLAGS 0x04000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
 
 #define THIS ((ObjKibako*)thisx)
 
@@ -133,8 +133,8 @@ void func_80926394(ObjKibako* this, GlobalContext* globalCtx) {
 }
 
 void ObjKibako_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    ObjKibako* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    ObjKibako* this = THIS;
     s32 whichBankIndex;
 
     whichBankIndex = KIBAKO_BANK_INDEX(thisx);
@@ -271,7 +271,7 @@ void ObjKibako_Idle(ObjKibako* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         ObjKibako_SetupHeld(this);
         this->actor.room = -1;
-        this->actor.colChkInfo.mass = 0x78;
+        this->actor.colChkInfo.mass = 120;
         if (func_800A817C(KIBAKO_COLLECTIBLE_ID(&this->actor))) {
             ObjKibako_SpawnCollectible(this, globalCtx);
         }
@@ -347,7 +347,7 @@ void ObjKibako_Held(ObjKibako* this, GlobalContext* globalCtx) {
         } else {
             Actor_MoveWithGravity(&this->actor);
             ObjKibako_SetupThrown(this);
-            this->actor.flags &= ~0x4000000;
+            this->actor.flags &= ~ACTOR_FLAG_4000000;
         }
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 18.0f, 15.0f, 0.0f, 0x45);
     } else {

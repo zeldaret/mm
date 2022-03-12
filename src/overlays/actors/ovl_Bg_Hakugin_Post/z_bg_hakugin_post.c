@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_hakugin_post.h"
+#include "objects/object_hakugin_obj/object_hakugin_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgHakuginPost*)thisx)
 
@@ -31,13 +32,6 @@ void func_80A9D360(BgHakuginPost* this, GlobalContext* globalCtx);
 void func_80A9D3E4(BgHakuginPost* this);
 void func_80A9D434(BgHakuginPost* this, GlobalContext* globalCtx);
 void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx);
-
-extern Gfx D_0600C1A8[];
-extern Gfx D_0600C568[];
-extern Gfx D_0600CA38[];
-extern Gfx D_0600CEC8[];
-extern Gfx D_0600D098[];
-extern CollisionHeader D_0600D3B0;
 
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
@@ -93,7 +87,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A9ACD0(BgHakuginPostUnkStruct* arg0) {
-    bzero((void*)arg0, sizeof(BgHakuginPostUnkStruct));
+    bzero(arg0, sizeof(BgHakuginPostUnkStruct));
 }
 
 void func_80A9ACF0(void) {
@@ -705,7 +699,7 @@ void BgHakuginPost_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
         DynaPolyActor_Init(&this->dyna, 1);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_0600D3B0);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hakugin_obj_Colheader_00D3B0);
         func_80A9B3BC(this, globalCtx);
         func_80A9CA94(this);
     } else {
@@ -996,13 +990,14 @@ void BgHakuginPost_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A9D61C(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80A9D900[] = {
-        D_0600C1A8, D_0600C568, NULL, NULL, D_0600CA38, D_0600CEC8, NULL,
+        object_hakugin_obj_DL_00C1A8, object_hakugin_obj_DL_00C568, NULL, NULL,
+        object_hakugin_obj_DL_00CA38, object_hakugin_obj_DL_00CEC8, NULL,
     };
     static Gfx* D_80A9D91C[] = {
-        D_0600D098,
-        D_0600D098,
-        D_0600D098,
-        D_0600D098,
+        object_hakugin_obj_DL_00D098,
+        object_hakugin_obj_DL_00D098,
+        object_hakugin_obj_DL_00D098,
+        object_hakugin_obj_DL_00D098,
     };
     BgHakuginPost* this = THIS;
     BgHakuginPostUnkStruct1* unkStruct1;

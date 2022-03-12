@@ -9,7 +9,7 @@
 #include "objects/object_tsubo/object_tsubo.h"
 #include "objects/object_racetsubo/object_racetsubo.h"
 
-#define FLAGS 0x04800010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000 | ACTOR_FLAG_4000000)
 
 #define THIS ((ObjTsubo*)thisx)
 

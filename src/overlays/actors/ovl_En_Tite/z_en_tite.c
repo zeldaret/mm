@@ -5,8 +5,9 @@
  */
 
 #include "z_en_tite.h"
+#include "objects/object_tite/object_tite.h"
 
-#define FLAGS 0x00000205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
 #define THIS ((EnTite*)thisx)
 
@@ -44,20 +45,6 @@ void func_80895AC0(EnTite* this, GlobalContext* globalCtx);
 void func_80895CB0(EnTite* this);
 void func_80895D08(EnTite* this, GlobalContext* globalCtx);
 void func_80895E28(EnTite* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060004F8;
-extern AnimationHeader D_0600069C;
-extern AnimationHeader D_0600083C;
-extern AnimationHeader D_06000A14;
-extern AnimationHeader D_06000C70;
-extern AnimationHeader D_060012E4;
-extern SkeletonHeader D_06003A20;
-extern UNK_PTR D_06001300;
-extern UNK_PTR D_06001700;
-extern UNK_PTR D_06001900;
-extern UNK_PTR D_06001B00;
-extern UNK_PTR D_06001F00;
-extern UNK_PTR D_06002100;
 
 const ActorInit En_Tite_InitVars = {
     ACTOR_EN_TITE,
@@ -128,9 +115,9 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 40, 40, MASS_HEAVY };
 
-static UNK_PTR D_80896B24[2][3] = {
-    { &D_06001300, &D_06001700, &D_06001900 },
-    { &D_06001B00, &D_06001F00, &D_06002100 },
+static TexturePtr D_80896B24[2][3] = {
+    { object_tite_Tex_001300, object_tite_Tex_001700, object_tite_Tex_001900 },
+    { object_tite_Tex_001B00, object_tite_Tex_001F00, object_tite_Tex_002100 },
 };
 
 static Color_RGBA8 D_80896B3C = { 250, 250, 250, 255 };
@@ -153,7 +140,8 @@ void EnTite_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 j;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06003A20, &D_060012E4, this->jointTable, this->morphTable, 25);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_tite_Skel_003A20, &object_tite_Anim_0012E4, this->jointTable,
+                   this->morphTable, 25);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     Actor_SetFocus(&this->actor, 20.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -173,7 +161,7 @@ void EnTite_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.params == ENTITE_MINUS_3) {
         this->actor.params = ENTITE_MINUS_2;
         this->unk_2BE = 240;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.shape.yOffset = -3000.0f;
         this->actor.shape.shadowDraw = NULL;
         func_80895A10(this);
@@ -283,7 +271,7 @@ void func_80893DD4(EnTite* this) {
     this->unk_2CC = 0.75f;
     this->unk_2C4 = 1.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
-    this->actor.flags &= ~0x200;
+    this->actor.flags &= ~ACTOR_FLAG_200;
 }
 
 void func_80893E54(EnTite* this, GlobalContext* globalCtx) {
@@ -292,12 +280,12 @@ void func_80893E54(EnTite* this, GlobalContext* globalCtx) {
         this->collider.base.colType = COLTYPE_HIT6;
         this->unk_2C4 = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, 9, 2, 0.2f, 0.2f);
-        this->actor.flags |= 0x200;
+        this->actor.flags |= ACTOR_FLAG_200;
     }
 }
 
 void func_80893ED4(EnTite* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_060012E4, 4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_tite_Anim_0012E4, 4.0f);
     this->unk_2BC = Rand_S16Offset(15, 30);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_80893F30;
@@ -315,7 +303,7 @@ void func_80893F30(EnTite* this, GlobalContext* globalCtx) {
 }
 
 void func_80893FD0(EnTite* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_0600083C);
+    Animation_PlayOnce(&this->skelAnime, &object_tite_Anim_00083C);
     this->actor.velocity.y = 0.0f;
     this->actor.speedXZ = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -333,7 +321,7 @@ void func_80894024(EnTite* this, GlobalContext* globalCtx) {
 }
 
 void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
-    Animation_PlayOnce(&this->skelAnime, &D_060004F8);
+    Animation_PlayOnce(&this->skelAnime, &object_tite_Anim_0004F8);
     if (!func_80893ADC(this)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_TEKU_JUMP);
     } else {
@@ -362,7 +350,7 @@ void func_8089408C(EnTite* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.velocity.y = 10.0f;
     } else {
         this->actor.velocity.y = 8.0f;
@@ -394,7 +382,7 @@ void func_808942B4(EnTite* this, GlobalContext* globalCtx) {
             }
         }
     } else if (!(this->collider.base.atFlags & AT_HIT)) {
-        this->actor.flags |= 0x1000000;
+        this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     } else {
         this->collider.base.atFlags &= ~AT_HIT;
@@ -403,7 +391,7 @@ void func_808942B4(EnTite* this, GlobalContext* globalCtx) {
 }
 
 void func_80894414(EnTite* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_0600069C);
+    Animation_PlayOnce(&this->skelAnime, &object_tite_Anim_00069C);
     this->actionFunc = func_80894454;
 }
 
@@ -441,7 +429,7 @@ void func_808945B4(EnTite* this, GlobalContext* globalCtx) {
 }
 
 void func_808945EC(EnTite* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06000A14);
+    Animation_PlayLoop(&this->skelAnime, &object_tite_Anim_000A14);
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actionFunc = func_80894638;
@@ -486,7 +474,7 @@ void func_80894638(EnTite* this, GlobalContext* globalCtx) {
 }
 
 void func_8089484C(EnTite* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000C70, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_tite_Anim_000C70, -3.0f);
     if (this->actionFunc != func_80894910) {
         this->unk_2B8 = Rand_S16Offset(1, 3);
     }
@@ -547,7 +535,7 @@ void func_80894910(EnTite* this, GlobalContext* globalCtx) {
 }
 
 void func_80894B2C(EnTite* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_060012E4, 4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_tite_Anim_0012E4, 4.0f);
     this->actor.speedXZ = -6.0f;
     this->actor.gravity = -1.0f;
     if (this->collider.base.ac != NULL) {
@@ -645,8 +633,8 @@ void func_80895020(EnTite* this, GlobalContext* globalCtx) {
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.colorFilterTimer = 0;
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_TEKU_DEAD);
-    this->actor.flags &= ~1;
-    this->actor.flags |= 0x10;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->unk_2BA = 1;
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, this->unk_2BE);
     this->unk_2BC = 25;
@@ -690,7 +678,7 @@ void func_808951B8(EnTite* this, GlobalContext* globalCtx) {
 }
 
 void func_808952EC(EnTite* this) {
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &D_06000A14, 1.5f);
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &object_tite_Anim_000A14, 1.5f);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_LAST1_GROW_HEAD);
     this->collider.base.acFlags &= ~AC_ON;
     func_80893A18(this);
@@ -790,7 +778,7 @@ void func_80895738(EnTite* this, GlobalContext* globalCtx) {
     } else if (this->unk_2BC > 0) {
         this->unk_2BC--;
         Math_StepToF(&this->actor.speedXZ, 10.0f, 0.3f);
-        this->actor.flags |= 0x1000000;
+        this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         if (!func_80893A34(this, globalCtx)) {
             this->unk_2BC = 0;
@@ -823,7 +811,7 @@ void func_80895A10(EnTite* this) {
     s32 pad;
     s16 rand;
 
-    Animation_Change(&this->skelAnime, &D_06000A14, 2.0f, 0.0f, 0.0f, 0, 4.0f);
+    Animation_Change(&this->skelAnime, &object_tite_Anim_000A14, 2.0f, 0.0f, 0.0f, 0, 4.0f);
     this->actor.speedXZ = 0.0f;
     rand = Rand_S16Offset(20, 20);
     this->unk_2BC = ((Rand_ZeroOne() < 0.5f) ? -1 : 1) * rand;
@@ -933,7 +921,7 @@ void func_80895E28(EnTite* this, GlobalContext* globalCtx) {
     func_800B0DE0(globalCtx, &sp44, &sp38, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
 
     if (Math_StepToF(&this->actor.shape.yOffset, 0.0f, 200.0f)) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->collider.base.acFlags |= AC_ON;
         func_808945EC(this);
@@ -1025,7 +1013,7 @@ void func_80895FF8(EnTite* this, GlobalContext* globalCtx) {
     } else if ((this->actor.bgCheckFlags & 1) && (this->collider.base.acFlags & AC_ON) &&
                (this->actor.colChkInfo.health != 0) && (globalCtx->actorCtx.unk2 != 0) &&
                (this->actor.xyzDistToPlayerSq < SQ(200.0f))) {
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         if (this->actor.shape.yOffset < 0.0f) {
             this->actor.shape.yOffset = 0.0f;
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;

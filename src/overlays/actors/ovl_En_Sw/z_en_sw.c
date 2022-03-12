@@ -5,8 +5,9 @@
  */
 
 #include "z_en_sw.h"
+#include "objects/object_st/object_st.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSw*)thisx)
 
@@ -26,21 +27,6 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx);
 void func_808DB100(EnSw* this, GlobalContext* globalCtx);
 void func_808DB25C(EnSw* this, GlobalContext* globalCtx);
 void func_808DB2E0(EnSw* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_06000304;
-extern Gfx D_06003FB0[];
-extern Gfx D_060043D8[];
-extern Gfx D_060045C0[];
-extern Gfx D_06004658[];
-extern Gfx D_060046F0[];
-extern Gfx D_06004788[];
-extern Gfx D_06004820[];
-extern Gfx D_060048B8[];
-extern Gfx D_06004950[];
-extern Gfx D_060049E8[];
-extern SkeletonHeader D_06005298;
-extern AnimationHeader D_060055A8;
-extern AnimationHeader D_06005B98;
 
 const ActorInit En_Sw_InitVars = {
     ACTOR_EN_SW,
@@ -148,11 +134,11 @@ static DamageTable sDamageTable2 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &D_06000304, 1.0f, 0, -1, 3, 0 },
-    { &D_06000304, 1.0f, 0, -1, 3, -4 },
-    { &D_060055A8, 1.0f, 0, -1, 1, -4 },
-    { &D_06005B98, 1.0f, 0, -1, 1, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
+    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
 };
 
 void func_808D8940(EnSw* this, GlobalContext* globalCtx) {
@@ -289,7 +275,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, 0);
+    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
@@ -688,9 +674,9 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             if (!ENSW_GET_3(&this->actor)) {
-                func_8013BC6C(&this->skelAnime, sAnimations, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
@@ -935,7 +921,7 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     f32 temp_f16;
 
-    sp44 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_1E4->points);
+    sp44 = Lib_SegmentedToVirtual(this->unk_1E4->points);
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
@@ -1171,8 +1157,9 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!func_808D9968(this, globalCtx)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-        SkelAnime_Init(globalCtx, &this->skelAnime, &D_06005298, NULL, this->jointTable, this->morphTable, 30);
-        func_8013BC6C(&this->skelAnime, sAnimations, 0);
+        SkelAnime_Init(globalCtx, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
+                       30);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
@@ -1198,8 +1185,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;
@@ -1219,8 +1206,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;
@@ -1276,43 +1263,43 @@ s32 EnSw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     if (ENSW_GET_3(&this->actor)) {
         switch (limbIndex) {
             case 23:
-                *dList = D_06004788;
+                *dList = object_st_DL_004788;
                 break;
 
             case 8:
-                *dList = D_060046F0;
+                *dList = object_st_DL_0046F0;
                 break;
 
             case 14:
-                *dList = D_06004658;
+                *dList = object_st_DL_004658;
                 break;
 
             case 11:
-                *dList = D_060045C0;
+                *dList = object_st_DL_0045C0;
                 break;
 
             case 26:
-                *dList = D_06004820;
+                *dList = object_st_DL_004820;
                 break;
 
             case 20:
-                *dList = D_060048B8;
+                *dList = object_st_DL_0048B8;
                 break;
 
             case 17:
-                *dList = D_06004950;
+                *dList = object_st_DL_004950;
                 break;
 
             case 29:
-                *dList = D_060049E8;
+                *dList = object_st_DL_0049E8;
                 break;
 
             case 5:
-                *dList = D_06003FB0;
+                *dList = object_st_DL_003FB0;
                 break;
 
             case 4:
-                *dList = D_060043D8;
+                *dList = object_st_DL_0043D8;
                 break;
         }
     }

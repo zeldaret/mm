@@ -18,7 +18,6 @@ struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
-struct EnDoor;
 
 typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
 
@@ -297,24 +296,6 @@ typedef enum {
     /* 0x0B */ ACTORCAT_CHEST,
     /* 0x0C */ ACTORCAT_MAX
 } ActorType;
-
-typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ f32 startFrame;
-    /* 0x0C */ f32 frameCount;
-    /* 0x10 */ u8 mode;
-    /* 0x14 */ f32 morphFrames;
-} ActorAnimationEntry; // size = 0x18
-
-typedef struct {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ s16 frame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 transitionRate;
-} ActorAnimationEntryS; // size = 0x10
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -1169,6 +1150,8 @@ typedef enum {
 #define ACTOR_FLAG_20000000      (1 << 29)
 // 
 #define ACTOR_FLAG_40000000      (1 << 30)
+// 
+#define ACTOR_FLAG_80000000      (1 << 31)
 
 typedef enum {
     /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
@@ -1177,7 +1160,7 @@ typedef enum {
     /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
     /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
     /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
 
 #endif
