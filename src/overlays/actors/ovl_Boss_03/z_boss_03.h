@@ -93,11 +93,11 @@ typedef struct Boss03 {
     /* 0x052C */ f32 floppingAnimLastFrame;
     /* 0x0530 */ u32 csTimer;
     /* 0x0534 */ s16 csState;
-    /* 0x0536 */ s16 subCamId;
-    /* 0x0538 */ Vec3f subCamEye;
-    /* 0x0544 */ Vec3f subCamAt;
-    /* 0x0550 */ Vec3f subCamTargetEye;
-    /* 0x055C */ Vec3f subCamTargetAt;
+    /* 0x0536 */ s16 csCamId;
+    /* 0x0538 */ Vec3f csCamEye;
+    /* 0x0544 */ Vec3f csCamAt;
+    /* 0x0550 */ Vec3f csCamTargetEye;
+    /* 0x055C */ Vec3f csCamTargetAt;
     /* 0x0568 */ f32 unk_568;
     /* 0x056C */ f32 unk_56C;
     /* 0x0570 */ f32 unk_570; // set but not used
