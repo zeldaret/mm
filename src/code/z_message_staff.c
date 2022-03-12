@@ -1,5 +1,5 @@
 #include "global.h"
-#include "message_struct.h"
+#include "message_data_static.h"
 
 void Message_FindCreditsMessage(GlobalContext* globalCtx, u16 textId) {
     const char* foundSegment;

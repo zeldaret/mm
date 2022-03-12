@@ -852,10 +852,7 @@ typedef struct {
     /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
     /* 0x11F23 */ UNK_TYPE1 pad11F23;
-    /* 0x11F24 */ union {
-        u8  schar[206];
-        u16 wchar[103];               
-    } decodedBuffer;
+    /* 0x11F24 */ u8 decodedBuffer[206];
     /* 0x11FF2 */ u16 unk11FF2;
     /* 0x11FF4 */ s16 unk11FF4;
     /* 0x11FF6 */ s16 unk11FF6;
