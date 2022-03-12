@@ -330,10 +330,168 @@ void func_8080D3D0(GameState* thisx) {
     D_80814568[this->unk_24486](&this->state);
 }
 
-void func_8080D40C(GameState* this); // May be thisx
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D40C.s")
+// FileChoose_SetWindowVtx
+void func_8080D40C(GameState* thisx) {
+    FileChooseContext* this = (FileChooseContext*)thisx;
+    s16 i;
+    s16 j;
+    s16 x;
+    s32 tmp;
+    s32 tmp2;
+    s32 tmp3;
 
-void func_8080D6D4(GameState* this); // May be thisx
+    // windowVtx
+    this->unk_A4 = GRAPH_ALLOC(this->state.gfxCtx, sizeof(Vtx) * 80);
+    // windowPos
+    tmp = this->unk_24508 - 90;
+
+    for (x = 0, i = 0; i < 4; i++) {
+        tmp += 0x40;
+        tmp2 = (i == 3) ? 0x30 : 0x40;
+
+        for (j = 0, tmp3 = 0x50; j < 5; j++, x += 4, tmp3 -= 0x20) {
+            this->unk_A4[x].v.ob[0] = this->unk_A4[x + 2].v.ob[0] = tmp;
+
+            this->unk_A4[x + 1].v.ob[0] = this->unk_A4[x + 3].v.ob[0] = tmp2 + tmp;
+
+            this->unk_A4[x].v.ob[1] = this->unk_A4[x + 1].v.ob[1] = tmp3;
+
+            this->unk_A4[x + 2].v.ob[1] = this->unk_A4[x + 3].v.ob[1] = tmp3 - 0x20;
+
+            this->unk_A4[x].v.ob[2] = this->unk_A4[x + 1].v.ob[2] = this->unk_A4[x + 2].v.ob[2] =
+                this->unk_A4[x + 3].v.ob[2] = 0;
+
+            this->unk_A4[x].v.flag = this->unk_A4[x + 1].v.flag = this->unk_A4[x + 2].v.flag =
+                this->unk_A4[x + 3].v.flag = 0;
+
+            this->unk_A4[x].v.tc[0] = this->unk_A4[x].v.tc[1] = this->unk_A4[x + 1].v.tc[1] =
+                this->unk_A4[x + 2].v.tc[0] = 0;
+
+            this->unk_A4[x + 1].v.tc[0] = this->unk_A4[x + 3].v.tc[0] = tmp2 * 0x20;
+
+            this->unk_A4[x + 2].v.tc[1] = this->unk_A4[x + 3].v.tc[1] = 0x400;
+
+            this->unk_A4[x].v.cn[0] = this->unk_A4[x + 2].v.cn[0] = this->unk_A4[x].v.cn[1] =
+                this->unk_A4[x + 2].v.cn[1] = this->unk_A4[x].v.cn[2] = this->unk_A4[x + 2].v.cn[2] =
+                    this->unk_A4[x + 1].v.cn[0] = this->unk_A4[x + 3].v.cn[0] = this->unk_A4[x + 1].v.cn[1] =
+                        this->unk_A4[x + 3].v.cn[1] = this->unk_A4[x + 1].v.cn[2] =
+                            this->unk_A4[x + 3].v.cn[2] = this->unk_A4[x].v.cn[3] =
+                                this->unk_A4[x + 2].v.cn[3] = this->unk_A4[x + 1].v.cn[3] =
+                                    this->unk_A4[x + 3].v.cn[3] = 255;
+        }
+    }
+}
+// void func_8080D40C(FileChooseContext *this) {
+//     Gfx *temp_v0;
+//     GraphicsContext *temp_v1;
+//     Vtx *temp_t5;
+//     Vtx *temp_t5_2;
+//     Vtx *temp_t5_3;
+//     Vtx *temp_t5_4;
+//     Vtx *temp_t5_5;
+//     s16 temp_a1;
+//     s16 temp_a2;
+//     s16 temp_a3;
+//     s16 temp_t1;
+//     s16 temp_t2;
+//     s16 temp_t3;
+//     s16 temp_t3_2;
+//     s16 temp_t4;
+//     s16 temp_v1_2;
+//     u16 temp_t0;
+//     u8 temp_t3_3;
+//     s16 phi_a3;
+//     s16 phi_a1;
+//     s16 phi_a2;
+//     s32 phi_v0;
+//     s16 phi_t0;
+//     s16 phi_v1;
+
+//     temp_v1 = this->state.gfxCtx;
+//     temp_v0 = temp_v1->polyOpa.d - 0x500;
+//     temp_v1->polyOpa.d = temp_v0;
+//     this->unk_A4 = (Vtx *) temp_v0;
+//     phi_a3 = 0;
+//     phi_a1 = this->unk_24508 - 0x5A;
+//     phi_a2 = 0;
+//     do {
+//         temp_a1 = phi_a1 + 0x40;
+//         phi_a1 = temp_a1;
+//         if (phi_a3 == 3) {
+//             phi_v0 = 0x30;
+//         } else {
+//             phi_v0 = 0x40;
+//         }
+//         temp_t4 = phi_v0 << 5;
+//         temp_t1 = phi_v0 + temp_a1;
+//         phi_t0 = 0x50;
+//         phi_v1 = 0;
+// loop_5:
+//         temp_t2 = phi_t0 - 0x20;
+//         this->unk_A4[phi_a2].unk20 = temp_a1;
+//         temp_v1_2 = phi_v1 + 1;
+//         this->unk_A4[phi_a2].v.ob[0] = temp_a1;
+//         temp_a2 = phi_a2 + 4;
+//         this->unk_A4[phi_a2].unk30 = temp_t1;
+//         this->unk_A4[phi_a2].unk10 = temp_t1;
+//         this->unk_A4[phi_a2].unk12 = phi_t0;
+//         this->unk_A4[phi_a2].v.ob[1] = phi_t0;
+//         this->unk_A4[phi_a2].unk32 = temp_t2;
+//         this->unk_A4[phi_a2].unk22 = temp_t2;
+//         this->unk_A4[phi_a2].unk34 = 0;
+//         temp_t5 = &this->unk_A4[phi_a2];
+//         temp_t3 = temp_t5->unk34;
+//         temp_t5->unk24 = temp_t3;
+//         this->unk_A4[phi_a2].unk14 = temp_t3;
+//         this->unk_A4[phi_a2].v.ob[2] = temp_t3;
+//         this->unk_A4[phi_a2].unk36 = 0;
+//         temp_t5_2 = &this->unk_A4[phi_a2];
+//         temp_t0 = temp_t5_2->unk36;
+//         temp_t5_2->unk26 = temp_t0;
+//         this->unk_A4[phi_a2].unk16 = temp_t0;
+//         this->unk_A4[phi_a2].v.flag = temp_t0;
+//         this->unk_A4[phi_a2].unk28 = 0;
+//         temp_t5_3 = &this->unk_A4[phi_a2];
+//         temp_t3_2 = temp_t5_3->unk28;
+//         temp_t5_3->unk1A = temp_t3_2;
+//         this->unk_A4[phi_a2].v.tc[1] = temp_t3_2;
+//         this->unk_A4[phi_a2].v.tc[0] = temp_t3_2;
+//         this->unk_A4[phi_a2].unk38 = temp_t4;
+//         this->unk_A4[phi_a2].unk18 = temp_t4;
+//         this->unk_A4[phi_a2].unk3A = 0x400;
+//         temp_t5_4 = &this->unk_A4[phi_a2];
+//         temp_t5_4->unk2A = (s16) temp_t5_4->unk3A;
+//         this->unk_A4[phi_a2].unk3F = 0xFF;
+//         temp_t5_5 = &this->unk_A4[phi_a2];
+//         temp_t3_3 = temp_t5_5->unk3F;
+//         temp_t5_5->unk1F = temp_t3_3;
+//         this->unk_A4[phi_a2].unk2F = temp_t3_3;
+//         this->unk_A4[phi_a2].v.cn[3] = temp_t3_3;
+//         this->unk_A4[phi_a2].unk3E = temp_t3_3;
+//         this->unk_A4[phi_a2].unk1E = temp_t3_3;
+//         this->unk_A4[phi_a2].unk3D = temp_t3_3;
+//         this->unk_A4[phi_a2].unk1D = temp_t3_3;
+//         this->unk_A4[phi_a2].unk3C = temp_t3_3;
+//         this->unk_A4[phi_a2].unk1C = temp_t3_3;
+//         this->unk_A4[phi_a2].unk2E = temp_t3_3;
+//         this->unk_A4[phi_a2].v.cn[2] = temp_t3_3;
+//         this->unk_A4[phi_a2].unk2D = temp_t3_3;
+//         this->unk_A4[phi_a2].v.cn[1] = temp_t3_3;
+//         this->unk_A4[phi_a2].unk2C = temp_t3_3;
+//         this->unk_A4[phi_a2].v.cn[0] = temp_t3_3;
+//         phi_a2 = temp_a2;
+//         phi_t0 = temp_t2;
+//         phi_v1 = temp_v1_2;
+//         phi_a2 = temp_a2;
+//         if ((s32) temp_v1_2 < 5) {
+//             goto loop_5;
+//         }
+//         temp_a3 = phi_a3 + 1;
+//         phi_a3 = temp_a3;
+//     } while ((s32) temp_a3 < 4);
+// }
+
+void func_8080D6D4(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D6D4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080F25C.s")
@@ -355,7 +513,7 @@ void func_80811CB8(GameState* thisx) {
 
     func_8012C8AC(this->state.gfxCtx);
     FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
-    // FileChoose_SetWindowVtx
+    // FileChoose_Setunk_A4
     func_8080D40C(&this->state);
     // FileChoose_SetWindowContentVtx
     func_8080D6D4(&this->state);
