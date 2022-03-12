@@ -40,12 +40,12 @@ extern u32 D_801C6798[];
 
 #define GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, index) (fileChooseCtx->newf[slotNum][index])
 #define FILE_CHOOSE_SLOT_OCCUPIED(fileChooseCtx, slotNum) \
-    ((GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 0) != 'Z') || \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 1) != 'E') || \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 2) != 'L') || \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 3) != 'D') || \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 4) != 'A') || \
-     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 5) != '3'))
+    ((GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 0) == 'Z') && \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 1) == 'E') && \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 2) == 'L') && \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 3) == 'D') && \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 4) == 'A') && \
+     (GET_FILE_CHOOSE_NEWF(fileChooseCtx, slotNum, 5) == '3'))
 
 
 void func_8080BC20(FileChooseContext* this) {
@@ -133,8 +133,43 @@ Gfx* func_8080BE60(Gfx* gfx, void* texture, s16 width, s16 height, s16 point) {
     return gfx;
 }
 
-void func_8080C040(FileChooseContext*);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C040.s")
+// FileChoose_FadeInMenuElements
+void func_8080C040(FileChooseContext* this) {
+    SramContext* sramCtx = &this->sramCtx;
+    s16 i;
+
+    this->unk_244B6[0] += 20;
+    this->unk_244BA += 0x10;
+
+    for (i = 0; i < 3; i++) {
+        this->unk_244BC[i] = this->unk_244BA;
+        if (gSaveContext.unk_3F3F == 0) {
+            if (SLOT_OCCUPIED(sramCtx, i)) {
+                this->unk_244C2[i] = 
+                this->unk_244C8[i] = 
+                this->unk_244BA;
+                this->unk_244CE[i] += 20;
+                if (this->unk_244CE[i] >= 255) {
+                    this->unk_244CE[i] = 255;
+                }
+            }
+        } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                this->unk_244C2[i] = 
+                this->unk_244C8[i] = 
+                this->unk_244BA;
+                this->unk_244CE[i] += 20;
+
+                if (this->unk_244CE[i] >= 255) {
+                    this->unk_244CE[i] = 255;
+                }
+            }
+    }
+
+    this->unk_244DA[0] =
+    this->unk_244DA[1] =
+    this->unk_244E2 =
+    this->unk_244BA;
+}
 
 // FileChoose_SplitNumber // SplitDigits? ExtractDigits?
 void func_8080C228(u16 value, u16* hundreds, u16* tens, u16* ones) {
@@ -381,118 +416,1125 @@ void func_8080D40C(GameState* thisx) {
         }
     }
 }
-// void func_8080D40C(FileChooseContext *this) {
-//     Gfx *temp_v0;
-//     GraphicsContext *temp_v1;
-//     Vtx *temp_t5;
-//     Vtx *temp_t5_2;
-//     Vtx *temp_t5_3;
-//     Vtx *temp_t5_4;
-//     Vtx *temp_t5_5;
-//     s16 temp_a1;
-//     s16 temp_a2;
-//     s16 temp_a3;
-//     s16 temp_t1;
-//     s16 temp_t2;
-//     s16 temp_t3;
-//     s16 temp_t3_2;
-//     s16 temp_t4;
-//     s16 temp_v1_2;
-//     u16 temp_t0;
-//     u8 temp_t3_3;
-//     s16 phi_a3;
-//     s16 phi_a1;
-//     s16 phi_a2;
-//     s32 phi_v0;
-//     s16 phi_t0;
-//     s16 phi_v1;
 
-//     temp_v1 = this->state.gfxCtx;
-//     temp_v0 = temp_v1->polyOpa.d - 0x500;
-//     temp_v1->polyOpa.d = temp_v0;
-//     this->unk_A4 = (Vtx *) temp_v0;
-//     phi_a3 = 0;
-//     phi_a1 = this->unk_24508 - 0x5A;
-//     phi_a2 = 0;
-//     do {
-//         temp_a1 = phi_a1 + 0x40;
-//         phi_a1 = temp_a1;
-//         if (phi_a3 == 3) {
-//             phi_v0 = 0x30;
-//         } else {
-//             phi_v0 = 0x40;
-//         }
-//         temp_t4 = phi_v0 << 5;
-//         temp_t1 = phi_v0 + temp_a1;
-//         phi_t0 = 0x50;
-//         phi_v1 = 0;
-// loop_5:
-//         temp_t2 = phi_t0 - 0x20;
-//         this->unk_A4[phi_a2].unk20 = temp_a1;
-//         temp_v1_2 = phi_v1 + 1;
-//         this->unk_A4[phi_a2].v.ob[0] = temp_a1;
-//         temp_a2 = phi_a2 + 4;
-//         this->unk_A4[phi_a2].unk30 = temp_t1;
-//         this->unk_A4[phi_a2].unk10 = temp_t1;
-//         this->unk_A4[phi_a2].unk12 = phi_t0;
-//         this->unk_A4[phi_a2].v.ob[1] = phi_t0;
-//         this->unk_A4[phi_a2].unk32 = temp_t2;
-//         this->unk_A4[phi_a2].unk22 = temp_t2;
-//         this->unk_A4[phi_a2].unk34 = 0;
-//         temp_t5 = &this->unk_A4[phi_a2];
-//         temp_t3 = temp_t5->unk34;
-//         temp_t5->unk24 = temp_t3;
-//         this->unk_A4[phi_a2].unk14 = temp_t3;
-//         this->unk_A4[phi_a2].v.ob[2] = temp_t3;
-//         this->unk_A4[phi_a2].unk36 = 0;
-//         temp_t5_2 = &this->unk_A4[phi_a2];
-//         temp_t0 = temp_t5_2->unk36;
-//         temp_t5_2->unk26 = temp_t0;
-//         this->unk_A4[phi_a2].unk16 = temp_t0;
-//         this->unk_A4[phi_a2].v.flag = temp_t0;
-//         this->unk_A4[phi_a2].unk28 = 0;
-//         temp_t5_3 = &this->unk_A4[phi_a2];
-//         temp_t3_2 = temp_t5_3->unk28;
-//         temp_t5_3->unk1A = temp_t3_2;
-//         this->unk_A4[phi_a2].v.tc[1] = temp_t3_2;
-//         this->unk_A4[phi_a2].v.tc[0] = temp_t3_2;
-//         this->unk_A4[phi_a2].unk38 = temp_t4;
-//         this->unk_A4[phi_a2].unk18 = temp_t4;
-//         this->unk_A4[phi_a2].unk3A = 0x400;
-//         temp_t5_4 = &this->unk_A4[phi_a2];
-//         temp_t5_4->unk2A = (s16) temp_t5_4->unk3A;
-//         this->unk_A4[phi_a2].unk3F = 0xFF;
-//         temp_t5_5 = &this->unk_A4[phi_a2];
-//         temp_t3_3 = temp_t5_5->unk3F;
-//         temp_t5_5->unk1F = temp_t3_3;
-//         this->unk_A4[phi_a2].unk2F = temp_t3_3;
-//         this->unk_A4[phi_a2].v.cn[3] = temp_t3_3;
-//         this->unk_A4[phi_a2].unk3E = temp_t3_3;
-//         this->unk_A4[phi_a2].unk1E = temp_t3_3;
-//         this->unk_A4[phi_a2].unk3D = temp_t3_3;
-//         this->unk_A4[phi_a2].unk1D = temp_t3_3;
-//         this->unk_A4[phi_a2].unk3C = temp_t3_3;
-//         this->unk_A4[phi_a2].unk1C = temp_t3_3;
-//         this->unk_A4[phi_a2].unk2E = temp_t3_3;
-//         this->unk_A4[phi_a2].v.cn[2] = temp_t3_3;
-//         this->unk_A4[phi_a2].unk2D = temp_t3_3;
-//         this->unk_A4[phi_a2].v.cn[1] = temp_t3_3;
-//         this->unk_A4[phi_a2].unk2C = temp_t3_3;
-//         this->unk_A4[phi_a2].v.cn[0] = temp_t3_3;
-//         phi_a2 = temp_a2;
-//         phi_t0 = temp_t2;
-//         phi_v1 = temp_v1_2;
-//         phi_a2 = temp_a2;
-//         if ((s32) temp_v1_2 < 5) {
-//             goto loop_5;
-//         }
-//         temp_a3 = phi_a3 + 1;
-//         phi_a3 = temp_a3;
-//     } while ((s32) temp_a3 < 4);
-// }
-
+// void func_8080D6D4(FileChooseContext* this);
 void func_8080D6D4(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D6D4.s")
+extern s16 D_80814280[];
+extern s16 D_80814538[];
+extern s16 D_80814554[];
+extern s16 D_80814620[];
+extern s16 D_80814628[];
+extern s16 D_80814630[];
+extern s16 D_80814638[];
+extern s16 D_80814644[];
+extern s16 D_8081464C[];
+extern s16 D_80814650[];
+
+// void func_8080D6D4(FileChooseContext *this) {
+//     s16 spAC;
+//     u16 spA8;
+//     u16 spA6;
+//     u16 spA4;
+//     s32 sp9C;
+//     s32 sp98;
+//     void *sp50;
+//     Gfx *temp_v0;
+//     GraphicsContext *temp_v1;
+//     Vtx *temp_a0;
+//     Vtx *temp_a0_10;
+//     Vtx *temp_a0_11;
+//     Vtx *temp_a0_12;
+//     Vtx *temp_a0_13;
+//     Vtx *temp_a0_14;
+//     Vtx *temp_a0_15;
+//     Vtx *temp_a0_16;
+//     Vtx *temp_a0_17;
+//     Vtx *temp_a0_18;
+//     Vtx *temp_a0_19;
+//     Vtx *temp_a0_20;
+//     Vtx *temp_a0_21;
+//     Vtx *temp_a0_22;
+//     Vtx *temp_a0_23;
+//     Vtx *temp_a0_24;
+//     Vtx *temp_a0_25;
+//     Vtx *temp_a0_26;
+//     Vtx *temp_a0_27;
+//     Vtx *temp_a0_28;
+//     Vtx *temp_a0_29;
+//     Vtx *temp_a0_2;
+//     Vtx *temp_a0_30;
+//     Vtx *temp_a0_31;
+//     Vtx *temp_a0_32;
+//     Vtx *temp_a0_33;
+//     Vtx *temp_a0_34;
+//     Vtx *temp_a0_35;
+//     Vtx *temp_a0_36;
+//     Vtx *temp_a0_37;
+//     Vtx *temp_a0_38;
+//     Vtx *temp_a0_39;
+//     Vtx *temp_a0_3;
+//     Vtx *temp_a0_40;
+//     Vtx *temp_a0_41;
+//     Vtx *temp_a0_42;
+//     Vtx *temp_a0_43;
+//     Vtx *temp_a0_44;
+//     Vtx *temp_a0_45;
+//     Vtx *temp_a0_46;
+//     Vtx *temp_a0_47;
+//     Vtx *temp_a0_48;
+//     Vtx *temp_a0_49;
+//     Vtx *temp_a0_4;
+//     Vtx *temp_a0_50;
+//     Vtx *temp_a0_51;
+//     Vtx *temp_a0_52;
+//     Vtx *temp_a0_53;
+//     Vtx *temp_a0_54;
+//     Vtx *temp_a0_55;
+//     Vtx *temp_a0_56;
+//     Vtx *temp_a0_57;
+//     Vtx *temp_a0_58;
+//     Vtx *temp_a0_59;
+//     Vtx *temp_a0_5;
+//     Vtx *temp_a0_60;
+//     Vtx *temp_a0_61;
+//     Vtx *temp_a0_62;
+//     Vtx *temp_a0_63;
+//     Vtx *temp_a0_64;
+//     Vtx *temp_a0_65;
+//     Vtx *temp_a0_66;
+//     Vtx *temp_a0_67;
+//     Vtx *temp_a0_68;
+//     Vtx *temp_a0_69;
+//     Vtx *temp_a0_6;
+//     Vtx *temp_a0_70;
+//     Vtx *temp_a0_71;
+//     Vtx *temp_a0_72;
+//     Vtx *temp_a0_73;
+//     Vtx *temp_a0_74;
+//     Vtx *temp_a0_75;
+//     Vtx *temp_a0_76;
+//     Vtx *temp_a0_77;
+//     Vtx *temp_a0_78;
+//     Vtx *temp_a0_79;
+//     Vtx *temp_a0_7;
+//     Vtx *temp_a0_80;
+//     Vtx *temp_a0_81;
+//     Vtx *temp_a0_82;
+//     Vtx *temp_a0_83;
+//     Vtx *temp_a0_84;
+//     Vtx *temp_a0_85;
+//     Vtx *temp_a0_8;
+//     Vtx *temp_a0_9;
+//     Vtx *temp_a1_20;
+//     Vtx *temp_a1_21;
+//     Vtx *temp_a1_4;
+//     Vtx *temp_a1_5;
+//     Vtx *temp_a1_6;
+//     Vtx *temp_a1_7;
+//     Vtx *temp_v0_4;
+//     Vtx *temp_v0_5;
+//     Vtx *temp_v0_6;
+//     Vtx *temp_v0_7;
+//     s16 *temp_a1_10;
+//     s16 *temp_a1_8;
+//     s16 *temp_a2_3;
+//     s16 *temp_a2_4;
+//     s16 *temp_t0;
+//     s16 *temp_t0_2;
+//     s16 temp_a1;
+//     s16 temp_a1_13;
+//     s16 temp_a1_14;
+//     s16 temp_a1_15;
+//     s16 temp_a1_16;
+//     s16 temp_a1_17;
+//     s16 temp_a1_18;
+//     s16 temp_a1_19;
+//     s16 temp_a1_3;
+//     s16 temp_a1_9;
+//     s16 temp_a2;
+//     s16 temp_a2_2;
+//     s16 temp_a2_5;
+//     s16 temp_a2_6;
+//     s16 temp_a2_7;
+//     s16 temp_a2_8;
+//     s16 temp_a2_9;
+//     s16 temp_a3;
+//     s16 temp_a3_2;
+//     s16 temp_a3_3;
+//     s16 temp_a3_4;
+//     s16 temp_a3_5;
+//     s16 temp_a3_6;
+//     s16 temp_a3_7;
+//     s16 temp_a3_8;
+//     s16 temp_a3_9;
+//     s16 temp_s1;
+//     s16 temp_s1_5;
+//     s16 temp_s4;
+//     s16 temp_s4_2;
+//     s16 temp_s4_3;
+//     s16 temp_s4_4;
+//     s16 temp_t2;
+//     s16 temp_t2_2;
+//     s16 temp_t3;
+//     s16 temp_t3_2;
+//     s16 temp_t3_3;
+//     s16 temp_t4;
+//     s16 temp_v0_2;
+//     s16 temp_v0_3;
+//     s16 temp_v0_8;
+//     s16 temp_v1_10;
+//     s16 temp_v1_11;
+//     s16 temp_v1_12;
+//     s16 temp_v1_13;
+//     s16 temp_v1_14;
+//     s16 temp_v1_15;
+//     s16 temp_v1_16;
+//     s16 temp_v1_17;
+//     s16 temp_v1_18;
+//     s16 temp_v1_19;
+//     s16 temp_v1_20;
+//     s16 temp_v1_21;
+//     s16 temp_v1_22;
+//     s16 temp_v1_23;
+//     s16 temp_v1_24;
+//     s16 temp_v1_25;
+//     s16 temp_v1_26;
+//     s16 temp_v1_27;
+//     s16 temp_v1_28;
+//     s16 temp_v1_29;
+//     s16 temp_v1_2;
+//     s16 temp_v1_30;
+//     s16 temp_v1_31;
+//     s16 temp_v1_32;
+//     s16 temp_v1_33;
+//     s16 temp_v1_34;
+//     s16 temp_v1_35;
+//     s16 temp_v1_36;
+//     s16 temp_v1_37;
+//     s16 temp_v1_38;
+//     s16 temp_v1_39;
+//     s16 temp_v1_3;
+//     s16 temp_v1_40;
+//     s16 temp_v1_41;
+//     s16 temp_v1_42;
+//     s16 temp_v1_43;
+//     s16 temp_v1_44;
+//     s16 temp_v1_45;
+//     s16 temp_v1_46;
+//     s16 temp_v1_47;
+//     s16 temp_v1_48;
+//     s16 temp_v1_49;
+//     s16 temp_v1_4;
+//     s16 temp_v1_50;
+//     s16 temp_v1_51;
+//     s16 temp_v1_52;
+//     s16 temp_v1_53;
+//     s16 temp_v1_54;
+//     s16 temp_v1_55;
+//     s16 temp_v1_56;
+//     s16 temp_v1_57;
+//     s16 temp_v1_58;
+//     s16 temp_v1_59;
+//     s16 temp_v1_60;
+//     s16 temp_v1_61;
+//     s16 temp_v1_62;
+//     s16 temp_v1_63;
+//     s16 temp_v1_64;
+//     s16 temp_v1_65;
+//     s16 temp_v1_66;
+//     s16 temp_v1_67;
+//     s16 temp_v1_68;
+//     s16 temp_v1_69;
+//     s16 temp_v1_6;
+//     s16 temp_v1_70;
+//     s16 temp_v1_71;
+//     s16 temp_v1_72;
+//     s16 temp_v1_73;
+//     s16 temp_v1_74;
+//     s16 temp_v1_75;
+//     s16 temp_v1_76;
+//     s16 temp_v1_77;
+//     s16 temp_v1_78;
+//     s16 temp_v1_79;
+//     s16 temp_v1_7;
+//     s16 temp_v1_80;
+//     s16 temp_v1_81;
+//     s16 temp_v1_82;
+//     s16 temp_v1_83;
+//     s16 temp_v1_84;
+//     s16 temp_v1_8;
+//     s16 temp_v1_9;
+//     s32 temp_a1_11;
+//     s32 temp_a1_12;
+//     s32 temp_s1_2;
+//     s32 temp_s1_3;
+//     s32 temp_s1_4;
+//     s32 temp_s3;
+//     s32 temp_s3_10;
+//     s32 temp_s3_11;
+//     s32 temp_s3_12;
+//     s32 temp_s3_13;
+//     s32 temp_s3_14;
+//     s32 temp_s3_2;
+//     s32 temp_s3_3;
+//     s32 temp_s3_4;
+//     s32 temp_s3_5;
+//     s32 temp_s3_6;
+//     s32 temp_s3_7;
+//     s32 temp_s3_8;
+//     s32 temp_s3_9;
+//     s32 temp_t1;
+//     u16 temp_a1_2;
+//     u8 temp_v1_5;
+//     s32 phi_t1;
+//     s16 phi_s1;
+//     s32 phi_s3;
+//     s16 phi_s4;
+//     s16 phi_a3;
+//     s32 phi_s3_2;
+//     s16 phi_s4_2;
+//     s32 phi_t0;
+//     s16 phi_s4_3;
+//     s16 phi_a3_2;
+//     s32 phi_s1_2;
+//     s32 phi_s3_3;
+//     u16 *phi_t2;
+//     s32 phi_s1_3;
+//     s32 phi_s3_4;
+//     s16 phi_a3_3;
+//     s16 phi_a3_4;
+//     s32 phi_s1_4;
+//     s32 phi_s3_5;
+//     s16 phi_s1_5;
+//     s32 phi_s3_6;
+//     s16 phi_t0_2;
+//     s16 phi_a3_5;
+//     s16 phi_s1_6;
+//     s32 phi_s3_7;
+//     s16 phi_a3_6;
+//     s32 phi_t0_3;
+//     s16 phi_a3_7;
+//     s32 phi_s3_8;
+//     s16 phi_s1_7;
+//     s32 phi_s3_9;
+//     s16 phi_a3_8;
+//     s32 phi_s3_10;
+//     s16 phi_s4_4;
+//     s32 phi_a1;
+//     s16 phi_s4_5;
+//     s32 phi_s3_11;
+//     s16 phi_s1_8;
+//     void *phi_s6;
+//     s16 phi_t6;
+//     s32 phi_t9;
+//     s32 phi_s3_12;
+
+//     // temp_v1 = this->state.gfxCtx;
+//     // temp_v0 = temp_v1->polyOpa.d - 0x3C00;
+//     // temp_v1->polyOpa.d = temp_v0;
+//     // this->unk_243E4 = (Vtx *) temp_v0;
+
+//     this->unk_243E4 = GRAPH_ALLOC(this->state.gfxCtx, 0x3C0 * sizeof(Vtx));
+
+
+
+//     for (phi_t1 = 0; phi_t1 < 0x3C0; phi_t1 += 4) {
+//         this->unk_243E4[phi_t1].v.ob[0] = this->unk_243E4[phi_t1 + 2].v.ob[0] = 0x12C;
+//         this->unk_243E4[phi_t1 + 1].v.ob[0] = this->unk_243E4[phi_t1 + 3].v.ob[0] =
+//             this->unk_243E4[phi_t1].v.ob[0] + 0x10;
+
+//         this->unk_243E4[phi_t1].v.ob[1] = this->unk_243E4[phi_t1 + 1].v.ob[1] = 0;
+//         this->unk_243E4[phi_t1 + 2].v.ob[1] = this->unk_243E4[phi_t1 + 3].v.ob[1] =
+//             this->unk_243E4[phi_t1].v.ob[1] - 0x10;
+
+//         this->unk_243E4[phi_t1].v.ob[2] = this->unk_243E4[phi_t1 + 1].v.ob[2] =
+//             this->unk_243E4[phi_t1 + 2].v.ob[2] = this->unk_243E4[phi_t1 + 3].v.ob[2] = 0;
+
+//         this->unk_243E4[phi_t1].v.flag = this->unk_243E4[phi_t1 + 1].v.flag =
+//             this->unk_243E4[phi_t1 + 2].v.flag = this->unk_243E4[phi_t1 + 3].v.flag = 0;
+
+//         this->unk_243E4[phi_t1].v.tc[0] = this->unk_243E4[phi_t1].v.tc[1] =
+//             this->unk_243E4[phi_t1 + 1].v.tc[1] = this->unk_243E4[phi_t1 + 2].v.tc[0] = 0;
+
+//         this->unk_243E4[phi_t1 + 1].v.tc[0] = this->unk_243E4[phi_t1 + 2].v.tc[1] =
+//             this->unk_243E4[phi_t1 + 3].v.tc[0] = this->unk_243E4[phi_t1 + 3].v.tc[1] = 0x200;
+
+//         this->unk_243E4[phi_t1].v.cn[0] = this->unk_243E4[phi_t1 + 1].v.cn[0] =
+//             this->unk_243E4[phi_t1 + 2].v.cn[0] = this->unk_243E4[phi_t1 + 3].v.cn[0] =
+//                 this->unk_243E4[phi_t1].v.cn[1] = this->unk_243E4[phi_t1 + 1].v.cn[1] =
+//                     this->unk_243E4[phi_t1 + 2].v.cn[1] = this->unk_243E4[phi_t1 + 3].v.cn[1] =
+//                         this->unk_243E4[phi_t1].v.cn[2] = this->unk_243E4[phi_t1 + 1].v.cn[2] =
+//                             this->unk_243E4[phi_t1 + 2].v.cn[2] = this->unk_243E4[phi_t1 + 3].v.cn[2] =
+//                                 this->unk_243E4[phi_t1].v.cn[3] = this->unk_243E4[phi_t1 + 1].v.cn[3] =
+//                                     this->unk_243E4[phi_t1 + 2].v.cn[3] =
+//                                         this->unk_243E4[phi_t1 + 3].v.cn[3] = 0xFF;
+//     }
+
+//     // phi_t1 = 0;
+//     // do {
+//     //     this->unk_243E4[phi_t1].unk20 = 0x12C;
+//     //     temp_t1 = (phi_t1 + 4) & 0xFFFF;
+//     //     temp_a0 = &this->unk_243E4[phi_t1];
+//     //     temp_a0->v.ob[0] = temp_a0->unk20;
+//     //     temp_a0_2 = &this->unk_243E4[phi_t1];
+//     //     temp_v1_2 = temp_a0_2->v.ob[0] + 0x10;
+//     //     temp_a0_2->unk30 = temp_v1_2;
+//     //     this->unk_243E4[phi_t1].unk10 = temp_v1_2;
+//     //     this->unk_243E4[phi_t1].unk12 = 0;
+//     //     temp_a0_3 = &this->unk_243E4[phi_t1];
+//     //     temp_a0_3->v.ob[1] = temp_a0_3->unk12;
+//     //     temp_a0_4 = &this->unk_243E4[phi_t1];
+//     //     temp_v1_3 = temp_a0_4->v.ob[1] - 0x10;
+//     //     temp_a0_4->unk32 = temp_v1_3;
+//     //     this->unk_243E4[phi_t1].unk22 = temp_v1_3;
+//     //     this->unk_243E4[phi_t1].unk34 = 0;
+//     //     temp_a0_5 = &this->unk_243E4[phi_t1];
+//     //     temp_a1 = temp_a0_5->unk34;
+//     //     temp_a0_5->unk24 = temp_a1;
+//     //     this->unk_243E4[phi_t1].unk14 = temp_a1;
+//     //     this->unk_243E4[phi_t1].v.ob[2] = temp_a1;
+//     //     this->unk_243E4[phi_t1].unk36 = 0;
+//     //     temp_a0_6 = &this->unk_243E4[phi_t1];
+//     //     temp_a1_2 = temp_a0_6->unk36;
+//     //     temp_a0_6->unk26 = temp_a1_2;
+//     //     this->unk_243E4[phi_t1].unk16 = temp_a1_2;
+//     //     this->unk_243E4[phi_t1].v.flag = temp_a1_2;
+//     //     this->unk_243E4[phi_t1].unk28 = 0;
+//     //     temp_a0_7 = &this->unk_243E4[phi_t1];
+//     //     temp_v1_4 = temp_a0_7->unk28;
+//     //     temp_a0_7->unk1A = temp_v1_4;
+//     //     this->unk_243E4[phi_t1].v.tc[1] = temp_v1_4;
+//     //     this->unk_243E4[phi_t1].v.tc[0] = temp_v1_4;
+//     //     this->unk_243E4[phi_t1].unk3A = 0x200;
+//     //     temp_a0_8 = &this->unk_243E4[phi_t1];
+//     //     temp_a1_3 = temp_a0_8->unk3A;
+//     //     temp_a0_8->unk38 = temp_a1_3;
+//     //     this->unk_243E4[phi_t1].unk2A = temp_a1_3;
+//     //     this->unk_243E4[phi_t1].unk18 = temp_a1_3;
+//     //     this->unk_243E4[phi_t1].unk3F = 0xFF;
+//     //     temp_a0_9 = &this->unk_243E4[phi_t1];
+//     //     temp_v1_5 = temp_a0_9->unk3F;
+//     //     temp_a0_9->unk2F = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk1F = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].v.cn[3] = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk3E = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk2E = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk1E = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].v.cn[2] = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk3D = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk2D = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk1D = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].v.cn[1] = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk3C = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk2C = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].unk1C = temp_v1_5;
+//     //     this->unk_243E4[phi_t1].v.cn[0] = temp_v1_5;
+//     //     phi_t1 = temp_t1;
+//     // } while (temp_t1 < 0x3C0);
+
+
+
+//     this->unk_243E4[0].v.ob[0] = this->unk_243E4[2].v.ob[0] = this->unk_24508;
+//     this->unk_243E4[1].v.ob[0] = this->unk_243E4[3].v.ob[0] = this->unk_243E4[0].v.ob[0] + 0x80;
+//     this->unk_243E4[0].v.ob[1] = this->unk_243E4[1].v.ob[1] = 0x48;
+//     this->unk_243E4[2].v.ob[1] = this->unk_243E4[3].v.ob[1] = this->unk_243E4[0].v.ob[1] - 0x10;
+//     this->unk_243E4[1].v.tc[0] = this->unk_243E4[3].v.tc[0] = 0x1000;
+
+
+// //     temp_v1_6 = this->unk_24508;
+// //     this->unk_243E4->unk20 = temp_v1_6;
+// //     this->unk_243E4->v.ob[0] = temp_v1_6;
+// //     temp_a1_4 = this->unk_243E4;
+// //     temp_v1_7 = temp_a1_4->v.ob[0] + 0x80;
+// //     temp_a1_4->unk30 = temp_v1_7;
+// //     this->unk_243E4->unk10 = temp_v1_7;
+// //     this->unk_243E4->unk12 = 0x48;
+// //     temp_a1_5 = this->unk_243E4;
+// //     temp_a1_5->v.ob[1] = temp_a1_5->unk12;
+// //     temp_a1_6 = this->unk_243E4;
+// //     temp_v1_8 = temp_a1_6->v.ob[1] - 0x10;
+// //     temp_a1_6->unk32 = temp_v1_8;
+// //     this->unk_243E4->unk22 = temp_v1_8;
+// //     this->unk_243E4->unk38 = 0x1000;
+// //     temp_a1_7 = this->unk_243E4;
+// //     temp_a1_7->unk18 = (s16) temp_a1_7->unk38;
+
+
+//     for (phi_a3 = 0, phi_s3 = 4; phi_a3 < 3; phi_a3++) {
+//         phi_s1 = this->unk_24508 - 6;
+
+//         for (phi_s4 = 0; phi_s4 < 7; phi_s4++, phi_s3 += 4) {
+//             this->unk_243E4[phi_s3].v.ob[0] = this->unk_243E4[phi_s3 + 2].v.ob[0] = phi_s1;
+//             this->unk_243E4[phi_s3 + 1].v.ob[0] = this->unk_243E4[phi_s3 + 3].v.ob[0] =
+//                 this->unk_243E4[phi_s3].v.ob[0] + D_80814538[phi_s4];
+
+//             this->unk_243E4[phi_s3].v.ob[1] = this->unk_243E4[phi_s3 + 1].v.ob[1] =
+//                 this->unk_24492[phi_a3] + 0x2C;
+
+//             this->unk_243E4[phi_s3 + 2].v.ob[1] = this->unk_243E4[phi_s3 + 3].v.ob[1] =
+//                 this->unk_243E4[phi_s3].v.ob[1] - 0x38;
+
+//             this->unk_243E4[phi_s3 + 1].v.tc[0] = this->unk_243E4[phi_s3 + 3].v.tc[0] =
+//                 D_80814538[phi_s4] << 5;
+//             this->unk_243E4[phi_s3 + 2].v.tc[1] = this->unk_243E4[phi_s3 + 3].v.tc[1] = 0x700;
+//             phi_s1 += D_80814538[phi_s4];
+//         }
+//     }
+
+
+// //     phi_a3 = 0;
+// //     phi_a3_2 = 0;
+// //     phi_a3_3 = 0;
+// //     phi_a3_5 = 0;
+// //     phi_a3_6 = 0;
+// //     phi_a3_7 = 0;
+// //     phi_a3_8 = 0;
+// //     phi_s3 = 4;
+// //     do {
+// //         phi_s1 = this->unk_24508 - 6;
+// //         phi_s4 = 0;
+// //         phi_s4_2 = 0;
+// //         phi_s4_3 = 0;
+// //         phi_s4_4 = 0;
+// // loop_4:
+// //         this->unk_243E4[phi_s3].unk20 = phi_s1;
+// //         temp_a1_8 = &D_80814538 + (phi_s4 * 2);
+// //         this->unk_243E4[phi_s3].v.ob[0] = phi_s1;
+// //         temp_s4 = phi_s4 + 1;
+// //         temp_a0_10 = &this->unk_243E4[phi_s3];
+// //         temp_v1_9 = *temp_a1_8 + temp_a0_10->v.ob[0];
+// //         temp_a0_10->unk30 = temp_v1_9;
+// //         temp_s3 = (phi_s3 + 4) & 0xFFFF;
+// //         this->unk_243E4[phi_s3].unk10 = temp_v1_9;
+// //         temp_v1_10 = this->unk_24492[phi_a3] + 0x2C;
+// //         this->unk_243E4[phi_s3].unk12 = temp_v1_10;
+// //         this->unk_243E4[phi_s3].v.ob[1] = temp_v1_10;
+// //         temp_a0_11 = &this->unk_243E4[phi_s3];
+// //         temp_v1_11 = temp_a0_11->v.ob[1] - 0x38;
+// //         temp_a0_11->unk32 = temp_v1_11;
+// //         this->unk_243E4[phi_s3].unk22 = temp_v1_11;
+// //         temp_v1_12 = *temp_a1_8 << 5;
+// //         this->unk_243E4[phi_s3].unk38 = temp_v1_12;
+// //         this->unk_243E4[phi_s3].unk18 = temp_v1_12;
+// //         this->unk_243E4[phi_s3].unk3A = 0x700;
+// //         temp_a0_12 = &this->unk_243E4[phi_s3];
+// //         temp_a0_12->unk2A = (s16) temp_a0_12->unk3A;
+// //         phi_s1 += *temp_a1_8;
+// //         phi_s3 = temp_s3;
+// //         phi_s4 = temp_s4;
+// //         phi_s3_2 = temp_s3;
+// //         phi_s3 = temp_s3;
+// //         if ((s32) temp_s4 < 7) {
+// //             goto loop_4;
+// //         }
+// //         temp_a3 = phi_a3 + 1;
+// //         phi_a3 = temp_a3;
+// //     } while ((s32) temp_a3 < 3);
+
+
+    
+//     temp_s1 = this->unk_24508 - 6;
+// //     temp_a1_9 = temp_s1 + 0x40;
+// //     temp_a2 = temp_s1 + 0x34;
+// //     temp_a3_2 = temp_s1 + 0xA9;
+//     phi_t0 = 0x2C;
+
+//     for (phi_s4_2 = 0; phi_s4_2 < 3; phi_s4_2++, phi_t0 -= 0x20) {
+
+//     }
+
+// //     do {
+// //         this->unk_243E4[phi_s3_2].unk20 = temp_s1;
+// //         temp_s3_2 = (phi_s3_2 + 0x10) & 0xFFFF;
+// //         this->unk_243E4[phi_s3_2].v.ob[0] = temp_s1;
+// //         temp_a0_13 = &this->unk_243E4[phi_s3_2];
+// //         temp_s4_2 = phi_s4_2 + 1;
+// //         temp_v1_13 = temp_a0_13->v.ob[0] + 0x40;
+// //         temp_a0_13->unk30 = temp_v1_13;
+// //         this->unk_243E4[phi_s3_2].unk10 = temp_v1_13;
+// //         temp_v1_14 = this->unk_2449A[phi_s4_2] + phi_t0;
+// //         this->unk_243E4[phi_s3_2].unk12 = temp_v1_14;
+// //         this->unk_243E4[phi_s3_2].v.ob[1] = temp_v1_14;
+// //         temp_a0_14 = &this->unk_243E4[phi_s3_2];
+// //         temp_v1_15 = temp_a0_14->v.ob[1] - 0x10;
+// //         temp_a0_14->unk32 = temp_v1_15;
+// //         this->unk_243E4[phi_s3_2].unk22 = temp_v1_15;
+// //         this->unk_243E4[phi_s3_2].unk38 = 0x800;
+// //         temp_a0_15 = &this->unk_243E4[phi_s3_2];
+// //         temp_a0_15->unk18 = (s16) temp_a0_15->unk38;
+// //         this->unk_243E4[phi_s3_2].unk60 = temp_a1_9;
+// //         this->unk_243E4[phi_s3_2].unk40 = temp_a1_9;
+// //         temp_a0_16 = &this->unk_243E4[phi_s3_2];
+// //         temp_v1_16 = temp_a0_16->unk40 + 0x6C;
+// //         temp_a0_16->unk70 = temp_v1_16;
+// //         this->unk_243E4[phi_s3_2].unk50 = temp_v1_16;
+// //         temp_v1_17 = this->unk_2449A[phi_s4_2] + phi_t0;
+// //         this->unk_243E4[phi_s3_2].unk52 = temp_v1_17;
+// //         this->unk_243E4[phi_s3_2].unk42 = temp_v1_17;
+// //         temp_a0_17 = &this->unk_243E4[phi_s3_2];
+// //         temp_v1_18 = temp_a0_17->unk42 - 0x10;
+// //         temp_a0_17->unk72 = temp_v1_18;
+// //         this->unk_243E4[phi_s3_2].unk62 = temp_v1_18;
+// //         this->unk_243E4[phi_s3_2].unk78 = 0xD80;
+// //         temp_a0_18 = &this->unk_243E4[phi_s3_2];
+// //         temp_a0_18->unk58 = (s16) temp_a0_18->unk78;
+// //         this->unk_243E4[phi_s3_2].unkA0 = temp_a2;
+// //         this->unk_243E4[phi_s3_2].unk80 = temp_a2;
+// //         temp_a0_19 = &this->unk_243E4[phi_s3_2];
+// //         temp_v1_19 = temp_a0_19->unk80 + 0x18;
+// //         temp_a0_19->unkB0 = temp_v1_19;
+// //         this->unk_243E4[phi_s3_2].unk90 = temp_v1_19;
+// //         temp_v1_20 = this->unk_2449A[phi_s4_2] + phi_t0;
+// //         this->unk_243E4[phi_s3_2].unk92 = temp_v1_20;
+// //         this->unk_243E4[phi_s3_2].unk82 = temp_v1_20;
+// //         temp_a0_20 = &this->unk_243E4[phi_s3_2];
+// //         temp_v1_21 = temp_a0_20->unk82 - 0x10;
+// //         temp_a0_20->unkB2 = temp_v1_21;
+// //         this->unk_243E4[phi_s3_2].unkA2 = temp_v1_21;
+// //         this->unk_243E4[phi_s3_2].unkB8 = 0x300;
+// //         temp_a0_21 = &this->unk_243E4[phi_s3_2];
+// //         temp_a0_21->unk98 = (s16) temp_a0_21->unkB8;
+// //         this->unk_243E4[phi_s3_2].unkE0 = temp_a3_2;
+// //         this->unk_243E4[phi_s3_2].unkC0 = temp_a3_2;
+// //         temp_a0_22 = &this->unk_243E4[phi_s3_2];
+// //         temp_v1_22 = temp_a0_22->unkC0 + 0x34;
+// //         temp_a0_22->unkF0 = temp_v1_22;
+// //         this->unk_243E4[phi_s3_2].unkD0 = temp_v1_22;
+// //         temp_v1_23 = this->unk_2449A[phi_s4_2] + phi_t0;
+// //         this->unk_243E4[phi_s3_2].unkD2 = temp_v1_23;
+// //         this->unk_243E4[phi_s3_2].unkC2 = temp_v1_23;
+// //         temp_a0_23 = &this->unk_243E4[phi_s3_2];
+// //         temp_v1_24 = temp_a0_23->unkC2 - 0x10;
+// //         temp_a0_23->unkF2 = temp_v1_24;
+// //         this->unk_243E4[phi_s3_2].unkE2 = temp_v1_24;
+// //         this->unk_243E4[phi_s3_2].unkF8 = 0x680;
+// //         temp_a0_24 = &this->unk_243E4[phi_s3_2];
+// //         temp_a0_24->unkD8 = (s16) temp_a0_24->unkF8;
+// //         phi_s3_2 = temp_s3_2;
+// //         phi_s4_2 = temp_s4_2;
+// //         phi_t0 += -0x10;
+// //         phi_s3_11 = temp_s3_2;
+// //     } while ((s32) temp_s4_2 < 3);
+
+
+
+
+// //     sp9C = 0x2C;
+
+// //     do {
+// //         phi_s3_3 = phi_s3_11;
+// //         phi_s3_12 = phi_s3_11;
+// //         if (gSaveContext.unk_3F3F != 0) {
+// //             spAC = phi_s4_3;
+// //             if ((this + phi_s4_3)->unk2446A != 0) {
+// //                 spAC = phi_s4_3 + 2;
+// //             }
+// //             temp_v0_2 = this->unk_24486;
+// //             phi_s1_2 = this->unk_24508 - 6;
+// //             if ((temp_v0_2 == 0x10) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->unk_244A6))) {
+// //                 sp98 = this->unk_24492[phi_s4_3] + 0x2C;
+// //             } else if (((temp_v0_2 == 0x11) || (temp_v0_2 == 0x12)) && (phi_s6 = this + (phi_s4_3 * 2) + 0x20000, (phi_s4_3 == this->unk_244A6))) {
+// //                 sp98 = this->unk_2449A[phi_s4_3] + sp9C;
+// //             } else {
+// //                 sp98 = this->unk_24492[phi_s4_3] + sp9C + this->unk_2449A[phi_s4_3];
+// //                 phi_s6 = this + (phi_s4_3 * 2) + 0x20000;
+// //             }
+// //             temp_t2 = sp98 - 2;
+// //             temp_a2_2 = temp_t2 - 1;
+// //             do {
+// //                 temp_a1_10 = &D_80814280 + ((this + (phi_s4_3 * 8) + phi_a3_2)->unk24414 * 2);
+// //                 temp_a3_3 = phi_a3_2 + 1;
+// //                 temp_v1_25 = *temp_a1_10 + phi_s1_2 + 0x4E;
+// //                 this->unk_243E4[phi_s3_3].unk20 = temp_v1_25;
+// //                 this->unk_243E4[phi_s3_3].v.ob[0] = temp_v1_25;
+// //                 temp_a0_25 = &this->unk_243E4[phi_s3_3];
+// //                 temp_s3_3 = (phi_s3_3 + 4) & 0xFFFF;
+// //                 temp_v1_26 = temp_a0_25->v.ob[0] + 0xB;
+// //                 temp_a0_25->unk30 = temp_v1_26;
+// //                 this->unk_243E4[phi_s3_3].unk10 = temp_v1_26;
+// //                 this->unk_243E4[phi_s3_3].unk12 = temp_t2;
+// //                 this->unk_243E4[phi_s3_3].v.ob[1] = temp_t2;
+// //                 temp_a0_26 = &this->unk_243E4[phi_s3_3];
+// //                 temp_v1_27 = temp_a0_26->v.ob[1] - 0xC;
+// //                 temp_a0_26->unk32 = temp_v1_27;
+// //                 this->unk_243E4[phi_s3_3].unk22 = temp_v1_27;
+// //                 temp_v1_28 = *temp_a1_10 + phi_s1_2 + 0x4F;
+// //                 this->unk_243E4[phi_s3_3].unk220 = temp_v1_28;
+// //                 this->unk_243E4[phi_s3_3].unk200 = temp_v1_28;
+// //                 temp_a0_27 = &this->unk_243E4[phi_s3_3];
+// //                 temp_v1_29 = temp_a0_27->unk200 + 0xB;
+// //                 temp_a0_27->unk230 = temp_v1_29;
+// //                 this->unk_243E4[phi_s3_3].unk210 = temp_v1_29;
+// //                 this->unk_243E4[phi_s3_3].unk212 = temp_a2_2;
+// //                 this->unk_243E4[phi_s3_3].unk202 = temp_a2_2;
+// //                 temp_a0_28 = &this->unk_243E4[phi_s3_3];
+// //                 temp_v1_30 = temp_a0_28->unk202 - 0xC;
+// //                 temp_a0_28->unk232 = temp_v1_30;
+// //                 this->unk_243E4[phi_s3_3].unk222 = temp_v1_30;
+// //                 phi_a3_2 = temp_a3_3;
+// //                 phi_s1_2 += 0xA;
+// //                 phi_s3_3 = temp_s3_3;
+// //             } while ((s32) temp_a3_3 < 8);
+// //             temp_s1_2 = this->unk_24508 + 0xE;
+// //             func_8080C228((u16) this->rupees[spAC], &spA4, &spA6, &spA8);
+// //             temp_t3 = sp98 - 0x18;
+// //             temp_t4 = temp_t3 - 1;
+// //             sp50 = this + spAC + 0x20000;
+// //             phi_t2 = &(&spA4)[*(&D_80814554 + (this->unk_24474[spAC] * 2))];
+// //             phi_s1_3 = temp_s1_2;
+// //             phi_s3_4 = (temp_s3_3 + 0x20) & 0xFFFF;
+// //             do {
+// //                 temp_a1_11 = phi_a3_3 * 2;
+// //                 temp_t0 = &D_80814628 + temp_a1_11;
+// //                 temp_v1_31 = *(&D_80814280 + (*phi_t2 * 2)) + phi_s1_3;
+// //                 this->unk_243E4[phi_s3_4].unk20 = temp_v1_31;
+// //                 temp_a2_3 = &D_80814630 + temp_a1_11;
+// //                 temp_a3_4 = phi_a3_3 + 1;
+// //                 this->unk_243E4[phi_s3_4].v.ob[0] = temp_v1_31;
+// //                 temp_a0_29 = &this->unk_243E4[phi_s3_4];
+// //                 temp_v1_32 = *temp_t0 + temp_a0_29->v.ob[0];
+// //                 temp_a0_29->unk30 = temp_v1_32;
+// //                 temp_s3_4 = (phi_s3_4 + 4) & 0xFFFF;
+// //                 this->unk_243E4[phi_s3_4].unk10 = temp_v1_32;
+// //                 this->unk_243E4[phi_s3_4].unk12 = temp_t3;
+// //                 this->unk_243E4[phi_s3_4].v.ob[1] = temp_t3;
+// //                 temp_a0_30 = &this->unk_243E4[phi_s3_4];
+// //                 temp_v1_33 = temp_a0_30->v.ob[1] - *temp_a2_3;
+// //                 temp_a0_30->unk32 = temp_v1_33;
+// //                 this->unk_243E4[phi_s3_4].unk22 = temp_v1_33;
+// //                 temp_a0_31 = &this->unk_243E4[phi_s3_4];
+// //                 temp_v1_34 = temp_a0_31->v.ob[0] + 1;
+// //                 temp_a0_31->unkE0 = temp_v1_34;
+// //                 this->unk_243E4[phi_s3_4].unkC0 = temp_v1_34;
+// //                 temp_a0_32 = &this->unk_243E4[phi_s3_4];
+// //                 temp_v1_35 = *temp_t0 + temp_a0_32->unkC0;
+// //                 temp_a0_32->unkF0 = temp_v1_35;
+// //                 this->unk_243E4[phi_s3_4].unkD0 = temp_v1_35;
+// //                 this->unk_243E4[phi_s3_4].unkD2 = temp_t4;
+// //                 this->unk_243E4[phi_s3_4].unkC2 = temp_t4;
+// //                 temp_a0_33 = &this->unk_243E4[phi_s3_4];
+// //                 temp_v1_36 = temp_a0_33->unkC2 - *temp_a2_3;
+// //                 temp_a0_33->unkF2 = temp_v1_36;
+// //                 this->unk_243E4[phi_s3_4].unkE2 = temp_v1_36;
+// //                 phi_t2 += 2;
+// //                 phi_s1_3 += *(&D_80814620 + temp_a1_11);
+// //                 phi_s3_4 = temp_s3_4;
+// //                 phi_a3_3 = temp_a3_4;
+// //             } while ((s32) temp_a3_4 < 3);
+// //             temp_s1_3 = this->unk_24508 + 0x2A;
+// //             func_8080C228((u16) this->unk_24478[spAC], &spA4, &spA6, &spA8);
+// //             temp_t2_2 = sp98 - 0x2A;
+// //             temp_t3_2 = temp_t2_2 - 1;
+// //             phi_a3_4 = 1;
+// //             phi_s1_4 = temp_s1_3;
+// //             phi_s3_5 = (temp_s3_4 + 0xC) & 0xFFFF;
+// //             do {
+// //                 temp_a1_12 = phi_a3_4 * 2;
+// //                 temp_t0_2 = &D_80814628 + temp_a1_12;
+// //                 temp_a2_4 = &D_80814630 + temp_a1_12;
+// //                 temp_v1_37 = *(&D_80814280 + ((sp + temp_a1_12)->unkA4 * 2)) + phi_s1_4;
+// //                 this->unk_243E4[phi_s3_5].unk20 = temp_v1_37;
+// //                 temp_a3_5 = phi_a3_4 + 1;
+// //                 this->unk_243E4[phi_s3_5].v.ob[0] = temp_v1_37;
+// //                 temp_a0_34 = &this->unk_243E4[phi_s3_5];
+// //                 temp_v1_38 = *temp_t0_2 + temp_a0_34->v.ob[0];
+// //                 temp_a0_34->unk30 = temp_v1_38;
+// //                 temp_s3_5 = (phi_s3_5 + 4) & 0xFFFF;
+// //                 this->unk_243E4[phi_s3_5].unk10 = temp_v1_38;
+// //                 this->unk_243E4[phi_s3_5].unk12 = temp_t2_2;
+// //                 this->unk_243E4[phi_s3_5].v.ob[1] = temp_t2_2;
+// //                 temp_a0_35 = &this->unk_243E4[phi_s3_5];
+// //                 temp_v1_39 = temp_a0_35->v.ob[1] - *temp_a2_4;
+// //                 temp_a0_35->unk32 = temp_v1_39;
+// //                 this->unk_243E4[phi_s3_5].unk22 = temp_v1_39;
+// //                 temp_a0_36 = &this->unk_243E4[phi_s3_5];
+// //                 temp_v1_40 = temp_a0_36->v.ob[0] + 1;
+// //                 temp_a0_36->unkA0 = temp_v1_40;
+// //                 this->unk_243E4[phi_s3_5].unk80 = temp_v1_40;
+// //                 temp_a0_37 = &this->unk_243E4[phi_s3_5];
+// //                 temp_v1_41 = *temp_t0_2 + temp_a0_37->unk80;
+// //                 temp_a0_37->unkB0 = temp_v1_41;
+// //                 this->unk_243E4[phi_s3_5].unk90 = temp_v1_41;
+// //                 this->unk_243E4[phi_s3_5].unk92 = temp_t3_2;
+// //                 this->unk_243E4[phi_s3_5].unk82 = temp_t3_2;
+// //                 temp_a0_38 = &this->unk_243E4[phi_s3_5];
+// //                 temp_v1_42 = temp_a0_38->unk82 - *temp_a2_4;
+// //                 temp_a0_38->unkB2 = temp_v1_42;
+// //                 this->unk_243E4[phi_s3_5].unkA2 = temp_v1_42;
+// //                 phi_a3_4 = temp_a3_5;
+// //                 phi_s1_4 += *(&D_80814620 + temp_a1_12);
+// //                 phi_s3_5 = temp_s3_5;
+// //             } while ((s32) temp_a3_5 < 3);
+// //             phi_s1_5 = this->unk_24508 + 0x3F;
+// //             phi_s3_6 = (temp_s3_5 + 8) & 0xFFFF;
+// //             phi_t0_2 = sp98 - 0x10;
+// //             do {
+// //                 this->unk_243E4[phi_s3_6].unk20 = phi_s1_5;
+// //                 this->unk_243E4[phi_s3_6].v.ob[0] = phi_s1_5;
+// //                 temp_s3_6 = (phi_s3_6 + 4) & 0xFFFF;
+// //                 temp_a0_39 = &this->unk_243E4[phi_s3_6];
+// //                 temp_v1_43 = temp_a0_39->v.ob[0] + 0xA;
+// //                 temp_a0_39->unk30 = temp_v1_43;
+// //                 this->unk_243E4[phi_s3_6].unk10 = temp_v1_43;
+// //                 this->unk_243E4[phi_s3_6].unk12 = phi_t0_2;
+// //                 this->unk_243E4[phi_s3_6].v.ob[1] = phi_t0_2;
+// //                 temp_a0_40 = &this->unk_243E4[phi_s3_6];
+// //                 temp_v1_44 = temp_a0_40->v.ob[1] - 0xA;
+// //                 temp_a0_40->unk32 = temp_v1_44;
+// //                 this->unk_243E4[phi_s3_6].unk22 = temp_v1_44;
+// //                 phi_s3_6 = temp_s3_6;
+// //                 phi_s3_7 = temp_s3_6;
+// //                 phi_s1_8 = phi_s1_5;
+// //                 if (phi_a3_5 == 9) {
+// //                     phi_s1_8 = this->unk_24508 + 0x36;
+// //                     phi_t0_2 += -8;
+// //                 }
+// //                 temp_a3_6 = phi_a3_5 + 1;
+// //                 phi_s1_5 = phi_s1_8 + 9;
+// //                 phi_a3_5 = temp_a3_6;
+// //             } while ((s32) temp_a3_6 < 0x14);
+// //             temp_a2_5 = sp98 - 0x20;
+// //             phi_s1_6 = this->unk_24508 + 0x40;
+// //             do {
+// //                 temp_a3_7 = phi_a3_6 + 1;
+// //                 this->unk_243E4[phi_s3_7].unk20 = phi_s1_6;
+// //                 this->unk_243E4[phi_s3_7].v.ob[0] = phi_s1_6;
+// //                 temp_a0_41 = &this->unk_243E4[phi_s3_7];
+// //                 temp_s3_7 = (phi_s3_7 + 4) & 0xFFFF;
+// //                 temp_v1_45 = temp_a0_41->v.ob[0] + 0x14;
+// //                 temp_a0_41->unk30 = temp_v1_45;
+// //                 this->unk_243E4[phi_s3_7].unk10 = temp_v1_45;
+// //                 this->unk_243E4[phi_s3_7].unk12 = temp_a2_5;
+// //                 this->unk_243E4[phi_s3_7].v.ob[1] = temp_a2_5;
+// //                 temp_a0_42 = &this->unk_243E4[phi_s3_7];
+// //                 temp_v1_46 = temp_a0_42->v.ob[1] - 0x14;
+// //                 temp_a0_42->unk32 = temp_v1_46;
+// //                 this->unk_243E4[phi_s3_7].unk22 = temp_v1_46;
+// //                 this->unk_243E4[phi_s3_7].unk3A = 0x400;
+// //                 temp_a0_43 = &this->unk_243E4[phi_s3_7];
+// //                 temp_a1_13 = temp_a0_43->unk3A;
+// //                 temp_a0_43->unk38 = temp_a1_13;
+// //                 this->unk_243E4[phi_s3_7].unk2A = temp_a1_13;
+// //                 this->unk_243E4[phi_s3_7].unk18 = temp_a1_13;
+// //                 phi_s1_6 += 0x18;
+// //                 phi_s3_7 = temp_s3_7;
+// //                 phi_a3_6 = temp_a3_7;
+// //             } while ((s32) temp_a3_7 < 4);
+// //             temp_v1_47 = this->unk_24508 - 1;
+// //             this->unk_243E4[temp_s3_7].unk20 = temp_v1_47;
+// //             this->unk_243E4[temp_s3_7].v.ob[0] = temp_v1_47;
+// //             temp_s3_8 = (temp_s3_7 + 4) & 0xFFFF;
+// //             temp_a0_44 = &this->unk_243E4[temp_s3_7];
+// //             temp_v1_48 = temp_a0_44->v.ob[0] + 0x10;
+// //             temp_a0_44->unk30 = temp_v1_48;
+// //             this->unk_243E4[temp_s3_7].unk10 = temp_v1_48;
+// //             temp_a1_14 = sp98 - 0x15;
+// //             this->unk_243E4[temp_s3_7].unk12 = temp_a1_14;
+// //             this->unk_243E4[temp_s3_7].v.ob[1] = temp_a1_14;
+// //             temp_a0_45 = &this->unk_243E4[temp_s3_7];
+// //             temp_v1_49 = temp_a0_45->v.ob[1] - 0x10;
+// //             temp_a0_45->unk32 = temp_v1_49;
+// //             this->unk_243E4[temp_s3_7].unk22 = temp_v1_49;
+// //             this->unk_243E4[temp_s3_7].unk38 = 0x200;
+// //             temp_a0_46 = &this->unk_243E4[temp_s3_7];
+// //             temp_a0_46->unk18 = (s16) temp_a0_46->unk38;
+// //             this->unk_243E4[temp_s3_7].unk3A = 0x200;
+// //             temp_a0_47 = &this->unk_243E4[temp_s3_7];
+// //             temp_a0_47->unk2A = (s16) temp_a0_47->unk3A;
+// //             temp_s3_9 = (temp_s3_8 + 4) & 0xFFFF;
+// //             temp_v1_50 = this->unk_24508 + 0x27;
+// //             this->unk_243E4[temp_s3_8].unk20 = temp_v1_50;
+// //             this->unk_243E4[temp_s3_8].v.ob[0] = temp_v1_50;
+// //             temp_a0_48 = &this->unk_243E4[temp_s3_8];
+// //             temp_v1_51 = temp_a0_48->v.ob[0] + 0x18;
+// //             temp_a0_48->unk30 = temp_v1_51;
+// //             this->unk_243E4[temp_s3_8].unk10 = temp_v1_51;
+// //             this->unk_243E4[temp_s3_8].unk12 = temp_a1_14;
+// //             this->unk_243E4[temp_s3_8].v.ob[1] = temp_a1_14;
+// //             temp_a0_49 = &this->unk_243E4[temp_s3_8];
+// //             temp_v1_52 = temp_a0_49->v.ob[1] - 0x10;
+// //             temp_a0_49->unk32 = temp_v1_52;
+// //             this->unk_243E4[temp_s3_8].unk22 = temp_v1_52;
+// //             this->unk_243E4[temp_s3_8].unk38 = 0x300;
+// //             temp_a0_50 = &this->unk_243E4[temp_s3_8];
+// //             temp_a0_50->unk18 = (s16) temp_a0_50->unk38;
+// //             this->unk_243E4[temp_s3_8].unk3A = 0x200;
+// //             temp_a0_51 = &this->unk_243E4[temp_s3_8];
+// //             temp_a0_51->unk2A = (s16) temp_a0_51->unk3A;
+// //             temp_s3_10 = (temp_s3_9 + 8) & 0xFFFF;
+// //             temp_v1_53 = this->unk_24508 - 0xA;
+// //             this->unk_243E4[temp_s3_9].unk20 = temp_v1_53;
+// //             this->unk_243E4[temp_s3_9].v.ob[0] = temp_v1_53;
+// //             temp_a0_52 = &this->unk_243E4[temp_s3_9];
+// //             temp_v1_54 = temp_a0_52->v.ob[0] + 0x40;
+// //             temp_a0_52->unk30 = temp_v1_54;
+// //             this->unk_243E4[temp_s3_9].unk10 = temp_v1_54;
+// //             temp_a2_6 = sp98 - 0x27;
+// //             this->unk_243E4[temp_s3_9].unk12 = temp_a2_6;
+// //             temp_a1_15 = temp_a2_6 - 1;
+// //             this->unk_243E4[temp_s3_9].v.ob[1] = temp_a2_6;
+// //             temp_a0_53 = &this->unk_243E4[temp_s3_9];
+// //             temp_v1_55 = temp_a0_53->v.ob[1] - 0x10;
+// //             temp_a0_53->unk32 = temp_v1_55;
+// //             this->unk_243E4[temp_s3_9].unk22 = temp_v1_55;
+// //             this->unk_243E4[temp_s3_9].unk38 = 0x800;
+// //             temp_a0_54 = &this->unk_243E4[temp_s3_9];
+// //             temp_a0_54->unk18 = (s16) temp_a0_54->unk38;
+// //             this->unk_243E4[temp_s3_9].unk3A = 0x200;
+// //             temp_a0_55 = &this->unk_243E4[temp_s3_9];
+// //             temp_a0_55->unk2A = (s16) temp_a0_55->unk3A;
+// //             temp_a0_56 = &this->unk_243E4[temp_s3_9];
+// //             temp_v1_56 = temp_a0_56->v.ob[0] + 1;
+// //             temp_a0_56->unk60 = temp_v1_56;
+// //             this->unk_243E4[temp_s3_9].unk40 = temp_v1_56;
+// //             temp_a0_57 = &this->unk_243E4[temp_s3_9];
+// //             temp_v1_57 = temp_a0_57->unk40 + 0x40;
+// //             temp_a0_57->unk70 = temp_v1_57;
+// //             this->unk_243E4[temp_s3_9].unk50 = temp_v1_57;
+// //             this->unk_243E4[temp_s3_9].unk52 = temp_a1_15;
+// //             this->unk_243E4[temp_s3_9].unk42 = temp_a1_15;
+// //             temp_a0_58 = &this->unk_243E4[temp_s3_9];
+// //             temp_v1_58 = temp_a0_58->unk42 - 0x10;
+// //             temp_a0_58->unk72 = temp_v1_58;
+// //             this->unk_243E4[temp_s3_9].unk62 = temp_v1_58;
+// //             this->unk_243E4[temp_s3_9].unk78 = 0x800;
+// //             temp_a0_59 = &this->unk_243E4[temp_s3_9];
+// //             temp_a0_59->unk58 = (s16) temp_a0_59->unk78;
+// //             this->unk_243E4[temp_s3_9].unk7A = 0x200;
+// //             temp_a0_60 = &this->unk_243E4[temp_s3_9];
+// //             temp_a0_60->unk6A = (s16) temp_a0_60->unk7A;
+// //             temp_v0_3 = this->unk_24486;
+// //             temp_s1_4 = this->unk_24508 + 0xA3;
+// //             if ((temp_v0_3 == 0x10) && (phi_s4_3 == this->unk_244A6)) {
+// //                 phi_t0_3 = phi_s6->unk4492 + 0x2C;
+// //             } else {
+// //                 if (((temp_v0_3 == 0x11) || (temp_v0_3 == 0x12)) && (phi_t9 = sp9C, (phi_s4_3 == this->unk_244A6))) {
+// //                     phi_t6 = phi_s6->unk449A;
+// //                 } else {
+// //                     phi_t6 = phi_s6->unk4492 + sp9C;
+// //                     phi_t9 = (s32) phi_s6->unk449A;
+// //                 }
+// //                 phi_t0_3 = phi_t6 + phi_t9;
+// //             }
+// //             temp_a1_16 = temp_s1_4 + 0xE;
+// //             this->unk_243E4[temp_s3_10].unk20 = temp_a1_16;
+// //             temp_a2_7 = phi_t0_3 - 2;
+// //             temp_t3_3 = phi_t0_3 - 0x2B;
+// //             this->unk_243E4[temp_s3_10].v.ob[0] = temp_a1_16;
+// //             temp_a0_61 = &this->unk_243E4[temp_s3_10];
+// //             temp_v1_59 = temp_a0_61->v.ob[0] + 0x18;
+// //             temp_a0_61->unk30 = temp_v1_59;
+// //             this->unk_243E4[temp_s3_10].unk10 = temp_v1_59;
+// //             this->unk_243E4[temp_s3_10].unk12 = temp_a2_7;
+// //             this->unk_243E4[temp_s3_10].v.ob[1] = temp_a2_7;
+// //             temp_a0_62 = &this->unk_243E4[temp_s3_10];
+// //             temp_v1_60 = temp_a0_62->v.ob[1] - 0xC;
+// //             temp_a0_62->unk32 = temp_v1_60;
+// //             this->unk_243E4[temp_s3_10].unk22 = temp_v1_60;
+// //             this->unk_243E4[temp_s3_10].unk38 = 0x300;
+// //             temp_a0_63 = &this->unk_243E4[temp_s3_10];
+// //             temp_a0_63->unk18 = (s16) temp_a0_63->unk38;
+// //             this->unk_243E4[temp_s3_10].unk3A = 0x180;
+// //             temp_a0_64 = &this->unk_243E4[temp_s3_10];
+// //             temp_a0_64->unk2A = (s16) temp_a0_64->unk3A;
+// //             phi_s3_8 = (temp_s3_10 + 4) & 0xFFFF;
+// //             do {
+// //                 temp_a1_17 = temp_s1_4 + phi_a3_7 + 2;
+// //                 this->unk_243E4[phi_s3_8].unk20 = temp_a1_17;
+// //                 temp_a2_8 = (phi_t0_3 - phi_a3_7) - 0x12;
+// //                 this->unk_243E4[phi_s3_8].v.ob[0] = temp_a1_17;
+// //                 temp_a3_8 = phi_a3_7 + 1;
+// //                 temp_a0_65 = &this->unk_243E4[phi_s3_8];
+// //                 temp_v1_61 = temp_a0_65->v.ob[0] + 0x30;
+// //                 temp_a0_65->unk30 = temp_v1_61;
+// //                 temp_s3_11 = (phi_s3_8 + 4) & 0xFFFF;
+// //                 this->unk_243E4[phi_s3_8].unk10 = temp_v1_61;
+// //                 this->unk_243E4[phi_s3_8].unk12 = temp_a2_8;
+// //                 this->unk_243E4[phi_s3_8].v.ob[1] = temp_a2_8;
+// //                 temp_a0_66 = &this->unk_243E4[phi_s3_8];
+// //                 temp_v1_62 = temp_a0_66->v.ob[1] - 0x18;
+// //                 temp_a0_66->unk32 = temp_v1_62;
+// //                 this->unk_243E4[phi_s3_8].unk22 = temp_v1_62;
+// //                 this->unk_243E4[phi_s3_8].unk38 = 0x600;
+// //                 temp_a0_67 = &this->unk_243E4[phi_s3_8];
+// //                 temp_a0_67->unk18 = (s16) temp_a0_67->unk38;
+// //                 this->unk_243E4[phi_s3_8].unk3A = 0x300;
+// //                 temp_a0_68 = &this->unk_243E4[phi_s3_8];
+// //                 temp_a0_68->unk2A = (s16) temp_a0_68->unk3A;
+// //                 phi_a3_7 = temp_a3_8;
+// //                 phi_s3_8 = temp_s3_11;
+// //                 phi_s3_9 = temp_s3_11;
+// //             } while ((s32) temp_a3_8 < 2);
+// //             temp_a2_9 = phi_t0_3 - 0x2A;
+// //             phi_s1_7 = temp_s1_4 + 6;
+// //             do {
+// //                 temp_a1_18 = phi_s1_7 + 1;
+// //                 this->unk_243E4[phi_s3_9].unk20 = phi_s1_7;
+// //                 temp_a3_9 = phi_a3_8 + 1;
+// //                 this->unk_243E4[phi_s3_9].v.ob[0] = phi_s1_7;
+// //                 temp_a0_69 = &this->unk_243E4[phi_s3_9];
+// //                 temp_s3_12 = (phi_s3_9 + 4) & 0xFFFF;
+// //                 temp_v1_63 = temp_a0_69->v.ob[0] + 0xC;
+// //                 temp_a0_69->unk30 = temp_v1_63;
+// //                 this->unk_243E4[phi_s3_9].unk10 = temp_v1_63;
+// //                 this->unk_243E4[phi_s3_9].unk12 = temp_a2_9;
+// //                 this->unk_243E4[phi_s3_9].v.ob[1] = temp_a2_9;
+// //                 temp_a0_70 = &this->unk_243E4[phi_s3_9];
+// //                 temp_v1_64 = temp_a0_70->v.ob[1] - 0xC;
+// //                 temp_a0_70->unk32 = temp_v1_64;
+// //                 this->unk_243E4[phi_s3_9].unk22 = temp_v1_64;
+// //                 this->unk_243E4[phi_s3_9].unk160 = temp_a1_18;
+// //                 this->unk_243E4[phi_s3_9].unk140 = temp_a1_18;
+// //                 temp_a0_71 = &this->unk_243E4[phi_s3_9];
+// //                 temp_v1_65 = temp_a0_71->unk140 + 0xC;
+// //                 temp_a0_71->unk170 = temp_v1_65;
+// //                 this->unk_243E4[phi_s3_9].unk150 = temp_v1_65;
+// //                 this->unk_243E4[phi_s3_9].unk152 = temp_t3_3;
+// //                 this->unk_243E4[phi_s3_9].unk142 = temp_t3_3;
+// //                 temp_a0_72 = &this->unk_243E4[phi_s3_9];
+// //                 temp_v1_66 = temp_a0_72->unk142 - 0xC;
+// //                 temp_a0_72->unk172 = temp_v1_66;
+// //                 this->unk_243E4[phi_s3_9].unk162 = temp_v1_66;
+// //                 phi_s1_7 += 8;
+// //                 phi_s3_9 = temp_s3_12;
+// //                 phi_a3_8 = temp_a3_9;
+// //             } while ((s32) temp_a3_9 < 5);
+// //             temp_v0_4 = &this->unk_243E4[temp_s3_11];
+// //             temp_v1_67 = temp_v0_4->unk80 + 3;
+// //             temp_v0_4->unkA0 = temp_v1_67;
+// //             this->unk_243E4[temp_s3_11].unk80 = temp_v1_67;
+// //             temp_v0_5 = &this->unk_243E4[temp_s3_11];
+// //             temp_v1_68 = temp_v0_5->unk80 + 0xC;
+// //             temp_v0_5->unkB0 = temp_v1_68;
+// //             this->unk_243E4[temp_s3_11].unk90 = temp_v1_68;
+// //             temp_v0_6 = &this->unk_243E4[temp_s3_11];
+// //             temp_v1_69 = temp_v0_6->unk80 + 1;
+// //             temp_v0_6->unk1E0 = temp_v1_69;
+// //             this->unk_243E4[temp_s3_11].unk1C0 = temp_v1_69;
+// //             temp_v0_7 = &this->unk_243E4[temp_s3_11];
+// //             temp_v1_70 = temp_v0_7->unk1C0 + 0xC;
+// //             temp_v0_7->unk1F0 = temp_v1_70;
+// //             this->unk_243E4[temp_s3_11].unk1D0 = temp_v1_70;
+// //             phi_s3_12 = (temp_s3_12 + 0x14) & 0xFFFF;
+// //         }
+// //         temp_s4_3 = phi_s4_3 + 1;
+// //         sp9C += -0x10;
+// //         phi_s4_3 = temp_s4_3;
+// //         phi_s3_10 = phi_s3_12;
+// //         phi_s3_11 = phi_s3_12;
+// //     } while ((s32) temp_s4_3 < 3);
+
+
+
+
+// //     temp_s1_5 = this->unk_24508 - 6;
+// //     phi_a1 = -0xC;
+
+
+
+// //     do {
+// //         this->unk_243E4[phi_s3_10].unk20 = temp_s1_5;
+// //         temp_s3_13 = (phi_s3_10 + 4) & 0xFFFF;
+// //         this->unk_243E4[phi_s3_10].v.ob[0] = temp_s1_5;
+// //         temp_s4_4 = phi_s4_4 + 1;
+// //         temp_a0_73 = &this->unk_243E4[phi_s3_10];
+// //         temp_v1_71 = temp_a0_73->v.ob[0] + 0x40;
+// //         temp_a0_73->unk30 = temp_v1_71;
+// //         this->unk_243E4[phi_s3_10].unk10 = temp_v1_71;
+// //         temp_v1_72 = (this + (phi_s4_4 * 2))->unk244A0 + phi_a1;
+// //         this->unk_243E4[phi_s3_10].unk12 = temp_v1_72;
+// //         this->unk_243E4[phi_s3_10].v.ob[1] = temp_v1_72;
+// //         temp_a0_74 = &this->unk_243E4[phi_s3_10];
+// //         temp_v1_73 = temp_a0_74->v.ob[1] - 0x10;
+// //         temp_a0_74->unk32 = temp_v1_73;
+// //         this->unk_243E4[phi_s3_10].unk22 = temp_v1_73;
+// //         this->unk_243E4[phi_s3_10].unk38 = 0x800;
+// //         temp_a0_75 = &this->unk_243E4[phi_s3_10];
+// //         temp_a0_75->unk18 = (s16) temp_a0_75->unk38;
+// //         phi_s3_10 = temp_s3_13;
+// //         phi_s4_4 = temp_s4_4;
+// //         phi_a1 += -0x10;
+// //     } while ((s32) temp_s4_4 < 2);
+
+
+
+// //     this->unk_243E4[temp_s3_13].unk20 = temp_s1_5;
+// //     temp_s3_14 = (temp_s3_13 + 4) & 0xFFFF;
+// //     this->unk_243E4[temp_s3_13].v.ob[0] = temp_s1_5;
+// //     temp_a0_76 = &this->unk_243E4[temp_s3_13];
+// //     temp_v1_74 = temp_a0_76->v.ob[0] + 0x40;
+// //     temp_a0_76->unk30 = temp_v1_74;
+// //     this->unk_243E4[temp_s3_13].unk10 = temp_v1_74;
+// //     temp_v1_75 = this->unk_2449A[5] - 0x34;
+// //     this->unk_243E4[temp_s3_13].unk12 = temp_v1_75;
+// //     this->unk_243E4[temp_s3_13].v.ob[1] = temp_v1_75;
+// //     temp_a0_77 = &this->unk_243E4[temp_s3_13];
+// //     temp_v1_76 = temp_a0_77->v.ob[1] - 0x10;
+// //     temp_a0_77->unk32 = temp_v1_76;
+// //     this->unk_243E4[temp_s3_13].unk22 = temp_v1_76;
+// //     this->unk_243E4[temp_s3_13].unk38 = 0x800;
+// //     temp_a0_78 = &this->unk_243E4[temp_s3_13];
+// //     temp_a0_78->unk18 = (s16) temp_a0_78->unk38;
+// //     temp_a1_19 = this->unk_24484;
+
+
+
+// //     if (((temp_a1_19 == 1) && ((s32) this->unk_24486 >= 2)) || ((temp_a1_19 == 2) && (this->unk_2448C == 3))) {
+// //         if (temp_a1_19 == 1) {
+// //             temp_v0_8 = this->unk_24486;
+// //             if ((temp_v0_8 == 4) || (temp_v0_8 == 7) || (temp_v0_8 == 0x16)) {
+// //                 phi_s4_5 = *(&D_80814644 + (this->unk_24480 * 2));
+// //             } else if ((temp_v0_8 == 0x19) || (temp_v0_8 == 0xC)) {
+// //                 phi_s4_5 = *(&D_8081464C + (this->unk_24480 * 2));
+// //             } else {
+// //                 phi_s4_5 = *(&D_80814638 + (this->unk_24480 * 2));
+// //             }
+// //         } else {
+// //             phi_s4_5 = *(&D_80814650 + (this->unk_24482 * 2));
+// //         }
+// //         temp_v1_77 = this->unk_24508 - 0xA;
+// //         this->unk_243E4[temp_s3_14].unk20 = temp_v1_77;
+// //         this->unk_243E4[temp_s3_14].v.ob[0] = temp_v1_77;
+// //         temp_a0_79 = &this->unk_243E4[temp_s3_14];
+// //         temp_v1_78 = temp_a0_79->v.ob[0] + 0x48;
+// //         temp_a0_79->unk30 = temp_v1_78;
+// //         this->unk_243E4[temp_s3_14].unk10 = temp_v1_78;
+// //         temp_a1_20 = this->unk_243E4;
+// //         temp_v1_79 = temp_a1_20[phi_s4_5].v.ob[1] + 4;
+// //         temp_a1_20[temp_s3_14].unk12 = temp_v1_79;
+// //         this->unk_243E4[temp_s3_14].v.ob[1] = temp_v1_79;
+// //         temp_a0_80 = &this->unk_243E4[temp_s3_14];
+// //         temp_v1_80 = temp_a0_80->v.ob[1] - 0x18;
+// //         temp_a0_80->unk32 = temp_v1_80;
+// //         this->unk_243E4[temp_s3_14].unk22 = temp_v1_80;
+// //         this->unk_243E4[temp_s3_14].unk38 = 0x900;
+// //         temp_a0_81 = &this->unk_243E4[temp_s3_14];
+// //         temp_a0_81->unk18 = (s16) temp_a0_81->unk38;
+// //         this->unk_243E4[temp_s3_14].unk3A = 0x300;
+// //         temp_a0_82 = &this->unk_243E4[temp_s3_14];
+// //         temp_a0_82->unk2A = (s16) temp_a0_82->unk3A;
+// //     }
+// //     temp_v1_81 = this->unk_24508 + 0x3A;
+// //     this->unk_243E4[temp_s3_14].unk60 = temp_v1_81;
+// //     this->unk_243E4[temp_s3_14].unk40 = temp_v1_81;
+// //     temp_a0_83 = &this->unk_243E4[temp_s3_14];
+// //     temp_v1_82 = temp_a0_83->unk40 + 0x80;
+// //     temp_a0_83->unk70 = temp_v1_82;
+// //     this->unk_243E4[temp_s3_14].unk50 = temp_v1_82;
+// //     temp_a1_21 = this->unk_243E4;
+// //     temp_v1_83 = temp_a1_21[*(&D_80814638 + (this->unk_244AA * 2))].v.ob[1];
+// //     temp_a1_21[temp_s3_14].unk52 = temp_v1_83;
+// //     this->unk_243E4[temp_s3_14].unk42 = temp_v1_83;
+// //     temp_a0_84 = &this->unk_243E4[temp_s3_14];
+// //     temp_v1_84 = temp_a0_84->unk42 - 0x10;
+// //     temp_a0_84->unk72 = temp_v1_84;
+// //     this->unk_243E4[temp_s3_14].unk62 = temp_v1_84;
+// //     this->unk_243E4[temp_s3_14].unk78 = 0x1000;
+// //     temp_a0_85 = &this->unk_243E4[temp_s3_14];
+// //     temp_a0_85->unk58 = (s16) temp_a0_85->unk78;
+// }
+
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080F25C.s")
 
@@ -513,7 +1555,7 @@ void func_80811CB8(GameState* thisx) {
 
     func_8012C8AC(this->state.gfxCtx);
     FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
-    // FileChoose_Setunk_A4
+    // FileChoose_SetWindowVtx
     func_8080D40C(&this->state);
     // FileChoose_SetWindowContentVtx
     func_8080D6D4(&this->state);
@@ -634,7 +1676,7 @@ void func_80812460(GameState *thisx) {
                     this->unk_244CE[i] -= 63;
                 }
             } else {
-                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
                     this->unk_244C8[i] = 
                     this->unk_244C2[i] = 
                     this->unk_244BC[i];
@@ -780,7 +1822,7 @@ void func_80812A6C(GameState* thisx) {
                     this->unk_244CE[i] += 255 / 4;
                 }
             } else {
-                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
+                if (FILE_CHOOSE_SLOT_OCCUPIED(this, i)) {
                     this->unk_244C2[i] = 
                     this->unk_244C8[i] =
                     this->unk_244BC[i];
@@ -905,8 +1947,8 @@ void func_80812ED0(GameState* thisx) {
 
     func_8012C8AC(this->state.gfxCtx);
     FileChoose_RenderView(this, 0.0f, 0.0f, 64.0f);
-    func_8080D40C(this);
-    func_8080D6D4(this);
+    func_8080D40C(&this->state);
+    func_8080D6D4(&this->state);
 
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244BA);
