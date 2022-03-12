@@ -194,7 +194,8 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     s16 i;
 
     if (arg1 == 0xCF) {
-        dayTime = 0x40000 - (((day = gSaveContext.day) % 5) << 16) - (u16)(-0x4000 + gSaveContext.time);
+        day = gSaveContext.day;
+        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.time);
     } else {
         dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.time);
     }
