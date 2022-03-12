@@ -206,7 +206,7 @@ void func_8098933C(EnDg* this, Vec3f* arg1) {
 }
 
 s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
-    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(arg1->points);
+    Vec3s* sp5C = Lib_SegmentedToVirtual(arg1->points);
     s32 count = arg1->count;
     s32 idx = arg2;
     s32 sp50 = false;
@@ -243,7 +243,7 @@ s16 func_809895B4(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     f32 diffZ;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[idx];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
@@ -378,16 +378,16 @@ void func_80989BF8(EnDg* this) {
 void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
     if (this->unk_286 == 21) {
         if (CURRENT_DAY == 1) {
-            func_801518B0(globalCtx, 0x91C, NULL);
+            Message_StartTextbox(globalCtx, 0x91C, NULL);
         } else {
-            func_801518B0(globalCtx, 0x91E, NULL);
+            Message_StartTextbox(globalCtx, 0x91E, NULL);
         }
     } else if ((this->unk_286 >= 0) && (this->unk_286 < 14)) {
-        func_801518B0(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
+        Message_StartTextbox(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
     } else if (this->unk_286 == 20) {
-        func_801518B0(globalCtx, 0x353D, NULL);
+        Message_StartTextbox(globalCtx, 0x353D, NULL);
     } else {
-        func_801518B0(globalCtx, 0x627, NULL);
+        Message_StartTextbox(globalCtx, 0x627, NULL);
     }
 }
 
