@@ -5,7 +5,7 @@
  *
  * This actor class is used for both the chandelier and its sub-components.
  * The distinction is made using the subtype actor parameter:
- *  -  0 for the main chandelier
+ *  -  0 for the chandelier itself
  *  -  1 for one of the 5 breakable pots that are attached to the chandelier
  */
 
@@ -25,7 +25,7 @@ void ObjChan_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjChan_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjChan_MainAction(ObjChan* this, GlobalContext* globalCtx);
+void ObjChan_ChandelierAction(ObjChan* this, GlobalContext* globalCtx);
 void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Chan_InitVars = {
@@ -64,14 +64,16 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjChan_InitMain(ObjChan* this, GlobalContext* globalCtx); /* static */
-void ObjChan_InitPot(ObjChan* this, GlobalContext* globalCtx);  /* static */
-void func_80BBA488(ObjChan* this, GlobalContext* globalCtx);    /* static */
-void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx);   /* static */
-void func_80BBA930(ObjChan* this, GlobalContext* globalCtx);    /* static */
+void ObjChan_InitChandelier(ObjChan* this, GlobalContext* globalCtx);
+void ObjChan_InitPot(ObjChan* this, GlobalContext* globalCtx);
+void ObjChan_CreateSmashParticles(ObjChan* this, GlobalContext* globalCtx);
+void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx);
+void ObjChan_DrawFire(ObjChan* this, GlobalContext* globalCtx);
 
-static Vec3f sObjChanFlameSize[2] = { { 0.159999996424f, 0.109999999404f, 1.0f },
-                                      { 0.129999995232f, 0.0900000035763f, 1.0f } };
+static Vec3f sObjChanFlameSize[2] = {
+    { 0.159999996424f, 0.109999999404f, 1.0f },
+    { 0.129999995232f, 0.0900000035763f, 1.0f },
+};
 static f32 sObjChanFlameYOffset[2] = { 1800, 1800 };
 static s32 sObjChanLoaded;
 
@@ -79,7 +81,7 @@ void ObjChan_Init(Actor* thisx, GlobalContext* globalCtx) {
     s16 temp_t2;
     ObjChan* this = THIS;
 
-    if (OBJCHAN_SUBTYPE(this) == OBJCHAN_SUBTYPE_MAIN) {
+    if (OBJCHAN_SUBTYPE(this) == OBJCHAN_SUBTYPE_CHANDELIER) {
         if (sObjChanLoaded) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -92,10 +94,10 @@ void ObjChan_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sObjChanCylinderInit);
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     switch (OBJCHAN_SUBTYPE(this)) {
-        case OBJCHAN_SUBTYPE_MAIN:
+        case OBJCHAN_SUBTYPE_CHANDELIER:
             this->rotation = this->actor.shape.rot.y;
             this->actor.shape.rot.y = 0;
-            ObjChan_InitMain(this, globalCtx);
+            ObjChan_InitChandelier(this, globalCtx);
             break;
         case OBJCHAN_SUBTYPE_POT:
             this->actor.draw = ObjChan_DrawPot;
@@ -117,7 +119,7 @@ u32 func_80BB9A1C(ObjChan* this, f32 arg1) {
     sp20 = Math_SinS(this->unk1D4) * this->unk1D0;
     temp_f6 = (Math_CosS(this->unk1D4) * 0.03834952f * this->unk1D0) + arg1;
     if (temp_f6 != 0.0f) {
-        this->unk1D4 = (s16)(s32)(func_80086B30(sp20 * 0.03834952f, temp_f6) * 10430.378f);
+        this->unk1D4 = RADF_TO_BINANG(func_80086B30(sp20 * 0.03834952f, temp_f6));
     } else if (sp20 >= 0.0f) {
         this->unk1D4 = 0x4000;
     } else {
@@ -148,7 +150,7 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
     childRotOut->y += childAngle;
 }
 
-void ObjChan_InitMain(ObjChan* this, GlobalContext* globalCtx) {
+void ObjChan_InitChandelier(ObjChan* this, GlobalContext* globalCtx) {
     s32 j;
     s32 i;
     ObjChan* temp_v0;
@@ -205,10 +207,10 @@ void ObjChan_InitMain(ObjChan* this, GlobalContext* globalCtx) {
     this->collider.dim.radius = 45;
     this->collider.dim.height = 60;
     this->collider.dim.yShift = -20;
-    this->actionFunc = ObjChan_MainAction;
+    this->actionFunc = ObjChan_ChandelierAction;
 }
 
-void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
+void ObjChan_ChandelierAction(ObjChan* thisx, GlobalContext* globalCtx) {
     ObjChan* this = thisx;
     ObjChan* temp;
     s32 i;
@@ -249,7 +251,7 @@ void ObjChan_MainAction(ObjChan* thisx, GlobalContext* globalCtx) {
         if (temp != NULL) {
             ObjChan_CalculatePotPosition(&sp60, &sp58, &this->actor.world.pos, &this->actor.shape.rot,
                                          (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
-            Math_Vec3f_Copy(&temp->actor.world.pos, (Vec3f*)&sp60);
+            Math_Vec3f_Copy(&temp->actor.world.pos, &sp60);
             Math_Vec3s_Copy(&temp->actor.shape.rot, &this->actor.shape.rot);
             temp->actor.shape.rot.y = this->rotation;
             Math_Vec3f_ToVec3s(&temp->collider.dim.pos, &temp->actor.world.pos);
@@ -292,8 +294,7 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
     s32 phi_v1;
 
     potBreaks = false;
-    if ((this->collider.base.acFlags & OBJCHAN_STATE_ON_FIRE) &&
-        (this->collider.info.acHitInfo->toucher.dmgFlags & 0x4004000)) {
+    if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x4004000)) {
         potBreaks = true;
     }
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {
@@ -305,7 +306,7 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
         }
     }
     if (potBreaks) {
-        func_80BBA488(this, globalCtx);
+        ObjChan_CreateSmashParticles(this, globalCtx);
         ((ObjChan*)this->actor.parent)->pots[this->myPotIndex] = NULL;
         SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_CHANDELIER_BROKEN);
         func_80BB9A1C((ObjChan*)this->actor.parent, 40.0f);
@@ -322,10 +323,7 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
     }
 }
 
-/**
- * Plays some kind of effect when a pot is smashed
- */
-void func_80BBA488(ObjChan* this, GlobalContext* globalCtx) {
+void ObjChan_CreateSmashParticles(ObjChan* this, GlobalContext* globalCtx) {
     short new_var = 0;
     s32 phi_s0;
     Vec3f spDC;
@@ -373,27 +371,27 @@ void ObjChan_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjChan* this = THIS;
-    Gfx* dl_opa;
-    Gfx* dl_xlu;
+    Gfx* opa;
+    Gfx* xlu;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     Matrix_RotateY(this->rotation, MTXMODE_APPLY);
 
-    dl_opa = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
-    gSPMatrix(dl_opa, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(dl_opa + 1, object_obj_chan_DL_000AF0);
-    POLY_OPA_DISP = dl_opa + 2;
+    opa = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+    gSPMatrix(&opa[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+    gSPDisplayList(&opa[1], object_obj_chan_DL_000AF0);
+    POLY_OPA_DISP = &opa[2];
 
-    dl_xlu = func_8012C2B4(POLY_XLU_DISP);
-    gSPMatrix(dl_xlu, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(dl_xlu + 1, object_obj_chan_DL_000A10);
-    POLY_XLU_DISP = dl_xlu + 2;
+    xlu = func_8012C2B4(POLY_XLU_DISP);
+    gSPMatrix(&xlu[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+    gSPDisplayList(&xlu[1], object_obj_chan_DL_000A10);
+    POLY_XLU_DISP = &xlu[2];
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     Matrix_StatePush();
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {
-        func_80BBA930(this, globalCtx);
+        ObjChan_DrawFire(this, globalCtx);
     }
     Matrix_StatePop();
 }
@@ -405,17 +403,17 @@ void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     dl = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
-    gSPMatrix(dl, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-    gSPDisplayList(dl + 1, object_obj_chan_DL_002358);
-    POLY_OPA_DISP = dl + 2;
+    gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+    gSPDisplayList(&dl[1], object_obj_chan_DL_002358);
+    POLY_OPA_DISP = &dl[2];
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {
-        func_80BBA930(this, globalCtx);
+        ObjChan_DrawFire(this, globalCtx);
     }
 }
 
-void func_80BBA930(ObjChan* this, GlobalContext* globalCtx) {
+void ObjChan_DrawFire(ObjChan* this, GlobalContext* globalCtx) {
     u32 sp4C;
     Gfx* dl;
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -429,12 +427,12 @@ void func_80BBA930(ObjChan* this, GlobalContext* globalCtx) {
     Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(this)], 0.0f, MTXMODE_APPLY);
 
     dl = func_8012C2B4(POLY_XLU_DISP);
-    gSPMatrix(dl, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
-    gMoveWd(dl + 1, 6, 32, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0U, -sp4C * 20, 32, 128));
-    gDPSetPrimColor(dl + 2, 128, 128, 255, 255, 0, 255);
-    gDPSetEnvColor(dl + 3, 255, 0, 0, 0);
-    gSPDisplayList(dl + 4, &gGameplayKeepDrawFlameDL);
-    POLY_XLU_DISP = dl + 5;
+    gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
+    gMoveWd(&dl[1], 6, 32, Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0U, -sp4C * 20, 32, 128));
+    gDPSetPrimColor(&dl[2], 128, 128, 255, 255, 0, 255);
+    gDPSetEnvColor(&dl[3], 255, 0, 0, 0);
+    gSPDisplayList(&dl[4], &gGameplayKeepDrawFlameDL);
+    POLY_XLU_DISP = &dl[5];
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

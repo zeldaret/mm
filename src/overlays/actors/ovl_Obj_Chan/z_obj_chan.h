@@ -6,7 +6,7 @@
 struct ObjChan;
 
 #define OBJCHAN_SUBTYPE(this) (((this)->actor.params >> 12) & 0xF)
-#define OBJCHAN_SUBTYPE_MAIN 0
+#define OBJCHAN_SUBTYPE_CHANDELIER 0
 #define OBJCHAN_SUBTYPE_POT 1
 
 /*** stateFlags ***/
