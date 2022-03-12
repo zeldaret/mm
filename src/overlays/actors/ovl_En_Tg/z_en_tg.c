@@ -80,28 +80,11 @@ static DamageTable D_809901F8 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-// object_mu_Anim_0053E0 ?
-//AnimationInfoS D_80990218 = { (AnimationHeader *)0x060053E0, 1.0f, 0, -1, 0, 0 };
 static AnimationInfoS D_80990218 = { &object_mu_Anim_0053E0, 1.0f, 0, -1, 0, 0 };
 static Vec3f D_80990228 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_80990234 = { 0.0f, 1.5f, 0.0f };
 static Vec3f D_80990240 = { 0.0f, 0.0f, 0.0f };
 static Vec3f D_8099024C = { 0.0f, 0.0f, 0.0f };
-
-// In data
-// extern ColliderCylinderInit D_809901C0;
-// extern CollisionCheckInfoInit2 D_809901EC;
-// extern DamageTable D_809901F8;
-
-// extern AnimationInfoS D_80990218;
-// extern Vec3f D_80990228; // = { 0.0f, 0.0f, 0.0f };
-// extern Vec3f D_80990234; // from data
-// extern Vec3f D_80990240; // from data
-// extern Vec3f D_8099024C; // = { 0.0f, 0.0f, 0.0f };
-
-/*
-glabel D_.*[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+.*\.word 0x00000000[\n\s]+[\n\s]
-*/
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tg/func_8098F800.s")
 void func_8098F800(SkelAnime* skelAnime, AnimationInfoS* animation, s16 idx) {
