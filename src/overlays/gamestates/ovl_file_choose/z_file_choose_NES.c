@@ -235,15 +235,48 @@ void func_8080D164(GameState* thisx) {
 
 void func_8080D170(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D170.s")
+// Requires in-function static data to match
+// void func_8080D170(GameState *thisx) {
+//     static s16 D_80814564 = 0;
+//     FileChooseContext *this = (FileChooseContext*)thisx;
 
-void func_8080D1BC(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D1BC.s")
+//     D_80814564 += 2;
+//     if (D_80814564 == 0xFE) {
+//         this->unk_24486 = this->unk_2448A;
+//         D_80814564 = 0;
+//     }
+// }
 
-void func_8080D220(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D220.s")
+void func_8080D1BC(GameState *thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
 
-void func_8080D284(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D284.s")
+    this->unk_2450C += 50.0f;
+    if (this->unk_2450C >= 314.0f) {
+        this->unk_2450C = 314.0f;
+        this->unk_24486 = 35;
+    }
+}
+
+void func_8080D220(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
+
+    this->unk_2450C += 50.0f;
+    if (this->unk_2450C >= 314.0f) {
+        this->unk_2450C = 314.0f;
+        this->unk_24486 = 40;
+    }
+}
+
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D284.s")
+void func_8080D284(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
+
+    this->unk_2450C += 50.0f;
+    if (this->unk_2450C >= 628.0f) {
+        this->unk_2450C = 0.0f;
+        this->unk_24486 = 2;
+    }
+}
 
 // End of Config Mode Update Functions
 
