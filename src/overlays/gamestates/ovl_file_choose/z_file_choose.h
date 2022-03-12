@@ -26,7 +26,7 @@ typedef struct {
     /* 0x243F0 */ Vtx* unk_243F0;
     /* 0x243F4 */ u8   newf[4][6];
     /* 0x2440C */ u16  unk_2440C[4];
-    /* 0x24414 */ u8   unk_24414[8][4];
+    /* 0x24414 */ u8   unk_24414[4][8];
     /* 0x24434 */ s16  healthCapacity[4];
     /* 0x2443C */ s16  health[4];
     /* 0x24444 */ u32  unk_24444[4];

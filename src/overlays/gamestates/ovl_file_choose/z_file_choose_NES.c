@@ -5,11 +5,10 @@
  */
 
 #include "z_file_choose.h"
+#include "overlays/gamestates/ovl_opening/z_opening.h"
 
 void func_801A3238(u8 playerIdx, u16 seqId, u8 fadeTimer, s8 arg3, s8 arg4); /* extern */
 void func_801A4058(u16);
-
-
 
 extern Gfx D_010311F0[];
 extern Gfx D_01031408[];
@@ -227,8 +226,163 @@ void func_8080C324(GameState* thisx) {
 // (GameState* thisx) {
 //     FileChooseContext *this = (FileChooseContext*)thisx;
 
-void func_8080C3A8(GameState* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080C3A8.s")
+extern u8 D_8081455C[];
+// u8 D_8081455C[] = { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E };
+
+// FileChoose_UpdateMainMenu
+void func_8080C3A8(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
+    SramContext* sramCtx = &this->sramCtx;
+    Input* input = &this->state.input[0];
+
+    if (CHECK_BTN_ALL(input->press.button, BTN_START) || CHECK_BTN_ALL(input->press.button, BTN_A)) {
+        if (this->unk_24480 < 3) {
+            if (gSaveContext.unk_3F3F == 0) {
+                if (!SLOT_OCCUPIED(sramCtx, this->unk_24480)) {
+                    play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                    this->unk_24486 = 34;
+                    this->unk_24510 = 99;
+                    this->unk_24512 = 0;
+                    if (gSaveContext.language != 0) {
+                        this->unk_24512 = 2;
+                    }
+                    this->unk_24518 = 0;
+                    this->unk_2451A = 0;
+                    this->unk_24516 = 0;
+                    this->unk_24514 = 0;
+                    this->unk_2451C = 0;
+                    this->unk_24506 = 120;
+                    this->unk_244E4 = 0;
+                    Lib_MemCpy(&this->unk_24414[this->unk_24480], &D_8081455C, 8);
+                } else {
+                    play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                    this->unk_24498 = 4;
+                    this->unk_2448C = 0;
+                    this->unk_2448E = this->unk_24480;
+                    this->unk_24484 = 2;
+                    this->unk_244AE = 1;
+                }
+            } else if (!FILE_CHOOSE_SLOT_OCCUPIED(this, this->unk_24480)) {
+                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                this->unk_24486 = 34;
+                this->unk_24510 = 99;
+                this->unk_24512 = 0;
+                if (gSaveContext.language != 0) {
+                    this->unk_24512 = 2;
+                }
+                this->unk_24518 = 0;
+                this->unk_2451A = 0;
+                this->unk_24516 = 0;
+                this->unk_24514 = 0;
+                this->unk_2451C = 0;
+                this->unk_24506 = 120;
+                this->unk_244E4 = 0;
+                Lib_MemCpy(&this->unk_24414[this->unk_24480], &D_8081455C, 8);
+            } else {
+                play_sound(NA_SE_SY_FSEL_DECIDE_L);
+                this->unk_24498 = 4;
+                this->unk_2448C = 0;
+                this->unk_2448E = this->unk_24480;
+                this->unk_24484 = 2;
+                this->unk_244AE = 1;
+            }
+        } else if (this->unk_244A8 == -1) {
+            play_sound(NA_SE_SY_FSEL_DECIDE_L);
+            this->unk_24488 = this->unk_24486;
+            if (this->unk_24480 == 3) {
+                this->unk_24486 = 3;
+                this->unk_244AE = 2;
+            } else if (this->unk_24480 == 4) {
+                this->unk_24486 = 21;
+                this->unk_244AE = 6;
+            } else {
+                this->unk_24486 = 39;
+                this->unk_24510 = 0;
+                this->unk_24518 = 0;
+                this->unk_2451A = 0;
+                this->unk_24514 = 0;
+                this->unk_2451C = 0;
+                this->unk_24506 = 120;
+            }
+            this->unk_24498 = 4;
+        } else {
+            play_sound(NA_SE_SY_FSEL_ERROR);
+        }
+    } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
+        gSaveContext.gameMode = 1;
+        STOP_GAMESTATE(&this->state);
+        SET_NEXT_GAMESTATE_TEST(&this->state, Opening_Init, OpeningContext);
+    } else {
+        if (ABS_ALT(this->unk_24504) > 30) {
+            play_sound(NA_SE_SY_FSEL_CURSOR);
+            if (this->unk_24504 > 30) {
+                this->unk_24480--;
+                if (this->unk_24480 == 2) {
+                    this->unk_24480 = 1;
+                }
+                if (this->unk_24480 < 0) {
+                    this->unk_24480 = 5;
+                }
+            } else {
+                this->unk_24480++;
+                if (this->unk_24480 == 2) {
+                    this->unk_24480 = 3;
+                }
+                if (this->unk_24480 >= 6) {
+                    this->unk_24480 = 0;
+                }
+            }
+        }
+        if (this->unk_24480 == 3) {
+            if (gSaveContext.unk_3F3F == 0) {
+                if (!SLOT_OCCUPIED(sramCtx, 0) && !SLOT_OCCUPIED(sramCtx, 1) && !SLOT_OCCUPIED(sramCtx, 2)) {
+                    this->unk_244AA = this->unk_24480;
+                    this->unk_244A8 = 0;
+                    this->unk_244E8 = 255;
+                } else if (SLOT_OCCUPIED(sramCtx, 0) && SLOT_OCCUPIED(sramCtx, 1) && SLOT_OCCUPIED(sramCtx, 2)) {
+                    this->unk_244AA = this->unk_24480;
+                    this->unk_244A8 = 2;
+                    this->unk_244E8 = 255;
+                } else {
+                    this->unk_244A8 = -1;
+                }
+            } else {
+                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
+                    this->unk_244AA = this->unk_24480;
+                    this->unk_244A8 = 0;
+                    this->unk_244E8 = 255;
+                } else if (FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && FILE_CHOOSE_SLOT_OCCUPIED(this, 1) && FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
+                    this->unk_244AA = this->unk_24480;
+                    this->unk_244A8 = 2;
+                    this->unk_244E8 = 255;
+                } else {
+                    this->unk_244A8 = -1;
+                }
+            }
+        } else if (this->unk_24480 == 4) {
+            if (gSaveContext.unk_3F3F == 0) {
+                if (!SLOT_OCCUPIED(sramCtx, 0) && !SLOT_OCCUPIED(sramCtx, 1) && !SLOT_OCCUPIED(sramCtx, 2)) {
+                    this->unk_244AA = this->unk_24480;
+                    this->unk_244A8 = 1;
+                    this->unk_244E8 = 255;
+                } else {
+                    this->unk_244A8 = -1;
+                }
+            } else {
+                if (!FILE_CHOOSE_SLOT_OCCUPIED(this, 0) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 1) && !FILE_CHOOSE_SLOT_OCCUPIED(this, 2)) {
+                this->unk_244AA = this->unk_24480;
+                this->unk_244A8 = 1;
+                this->unk_244E8 = 255;
+                } else {
+                    this->unk_244A8 = -1;
+                }
+            }
+        } else {
+            this->unk_244A8 = -1;
+        }
+    }
+}
+
 
 void func_8080D164(GameState* thisx) {
 }
@@ -1903,15 +2057,8 @@ void func_80812D94(GameState *thisx) {
 
     gSaveContext.gameMode = 0;
     
-    // TODO: Macro this properly everywhere
-    do { \
-        { \
-            GameState* state = (&this->state); \
-            state->running = false; \
-        } \
-        SET_NEXT_GAMESTATE(&this->state, Play_Init, GlobalContext);
-    } while (0);
-
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE_TEST(&this->state, Play_Init, GlobalContext);
 
     gSaveContext.respawnFlag = 0;
     gSaveContext.respawn[0].entranceIndex = 0xFFFF;
