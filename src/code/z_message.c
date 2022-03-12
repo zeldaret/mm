@@ -411,7 +411,7 @@ u32 func_80151C9C(GlobalContext* globalCtx) {
     u8 flag;
 
     msgCtx = &globalCtx->msgCtx;
-    while (1) {
+    while (true) {
         if (msgCtx->unk120B1 == 0) {
             return 0;
         }
