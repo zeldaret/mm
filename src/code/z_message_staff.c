@@ -6,7 +6,7 @@ void Message_FindCreditsMessage(GlobalContext* globalCtx, u16 textId) {
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = (MessageTableEntry*)msgCtx->messageTableStaff;
+    MessageTableEntry* msgEntry = msgCtx->messageTableStaff;
     const char* segment = msgEntry->segment;
 
     while (msgEntry->textId != 0xFFFF) {

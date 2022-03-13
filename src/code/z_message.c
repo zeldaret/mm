@@ -182,7 +182,7 @@ void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = (MessageTableEntry*)msgCtx->messageEntryTable;
+    MessageTableEntry* msgEntry = msgCtx->messageEntryTable;
     const char* segment = msgEntry->segment;
 
     while (msgEntry->textId != 0xFFFF) {
@@ -339,7 +339,7 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
 
     msgCtx->unk11F10 = 0;
-    func_80150D08(globalCtx, (u32)textId);
+    func_80150D08(globalCtx, textId);
     func_80150A84(globalCtx);
     msgCtx->msgMode = 5;
     msgCtx->unk12023 = 8;
@@ -374,7 +374,7 @@ void func_80151A68(GlobalContext* globalCtx, u16 textId) {
     msgCtx->unk12023 = 0x1E;
 
     // Day/Dawn/Night.. Messages
-    if ((((s32)msgCtx->currentTextId) >= 0x1BB2) && (((s32)msgCtx->currentTextId) < 0x1BB7)) {
+    if (((msgCtx->currentTextId) >= 0x1BB2) && ((msgCtx->currentTextId) < 0x1BB7)) {
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;
@@ -384,7 +384,7 @@ void func_80151A68(GlobalContext* globalCtx, u16 textId) {
         XREG(75) = 0x1E;
         XREG(77) = 0x3C;
         XREG(76) = 0x1C;
-        msgCtx->unk11F1A[0] = (msgCtx->unk11F1A[1] = (msgCtx->unk11F1A[2] = 0));
+        msgCtx->unk11F1A[0] = msgCtx->unk11F1A[1] = msgCtx->unk11F1A[2] = 0;
         Interface_ChangeAlpha(1U);
     }
 }

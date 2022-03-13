@@ -47,7 +47,7 @@ void Message_FindMessageNES(GlobalContext* globalCtx, u16 textId) {
     const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
-    MessageTableEntry* msgEntry = (MessageTableEntry*)msgCtx->messageEntryTableNes;
+    MessageTableEntry* msgEntry = msgCtx->messageEntryTableNes;
     const char* segment = msgEntry->segment;
 
     while (msgEntry->textId != 0xFFFF) {
