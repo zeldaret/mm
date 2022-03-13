@@ -1054,7 +1054,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
             dialogState = Message_GetState(&globalCtx->msgCtx);
             if ((dialogState != 2) && (dialogState != 0) && (dialogState != 7) && (dialogState != 8)) {
                 csCtx->frames--;
-                if ((dialogState == 4) && func_80147624(globalCtx)) {
+                if ((dialogState == 4) && Message_ShouldAdvance(globalCtx)) {
                     if (globalCtx->msgCtx.choiceIndex == 0) {
                         if (cmd->base == 0x33BD) {
                             func_8019F230();
@@ -1092,7 +1092,7 @@ void Cutscene_Command_Textbox(GlobalContext* globalCtx, CutsceneContext* csCtx, 
                     }
                 }
 
-                if (dialogState == 5 && func_80147624(globalCtx) != 0) {
+                if (dialogState == 5 && Message_ShouldAdvance(globalCtx) != 0) {
                     func_80152434(globalCtx, cmd->base);
                 }
             }
