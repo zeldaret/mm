@@ -14,19 +14,19 @@
 
 #define THIS ((Boss03*)thisx)
 
+#define WORK_TIMER_UNK0_A 0
 #define WORK_TIMER_CHEW 0
 #define WORK_TIMER_DAMAGED 0
-#define WORK_TIMER_UNK0_C 0
-#define WORK_TIMER_UNK0_D 0
 #define WORK_TIMER_CHASE 0
-#define WORK_TIMER_UNK0_F 0
+#define WORK_TIMER_CATCH 0
+#define WORK_TIMER_PREPARE_CHARGE 0
 #define WORK_TIMER_UNK0_G 0 // used on DeathCutscene
 
 #define WORK_TIMER_UNK1_A 1
 #define WORK_TIMER_UNK1_B 1
 
+#define WORK_TIMER_UNK2_A 2
 #define WORK_TIMER_STUNNED 2
-#define WORK_TIMER_UNK2_B 2
 
 // The Y position when standing on the platform.
 #define PLATFORM_HEIGHT (440.0f)
@@ -39,10 +39,10 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809E344C(Boss03* this, GlobalContext* globalCtx);
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
-void func_809E3968(Boss03* this, GlobalContext* globalCtx);
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx);
+void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx);
 void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx);
-void func_809E475C(Boss03* this, GlobalContext* globalCtx);
+void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx);
 void Boss03_Charge(Boss03* this, GlobalContext* globalCtx);
 void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx);
 void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx);
@@ -59,15 +59,15 @@ void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx);
 
 void Boss03_DrawEffects(GlobalContext* globalCtx);
 
-void func_809E38EC(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx);
 
-void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2);
+void Boss03_SetupCatchPlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2);
 void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx);
 void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx);
 
 void Boss03_SetupJumpOverPlatform(Boss03* this, GlobalContext* globalCtx);
 
-void func_809E4674(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx);
 
 void Boss03_UpdateEffects(GlobalContext* globalCtx);
 
@@ -532,16 +532,16 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
 
-    if ((this->workTimer[WORK_TIMER_UNK2_B] == 0) && (this->actor.bgCheckFlags & 8)) {
+    if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & 8)) {
         Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
         this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
-        this->workTimer[WORK_TIMER_UNK2_B] = 60;
-        this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(60.0f) + 60.0f;
+        this->workTimer[WORK_TIMER_UNK2_A] = 60;
+        this->workTimer[WORK_TIMER_UNK0_A] = Rand_ZeroFloat(60.0f) + 60.0f;
         this->unk_274 = 0x100;
     }
 
-    if (this->workTimer[WORK_TIMER_UNK2_B] == 0) {
-        if ((sqrtf(SQ(temp_f20) + SQ(temp_f22)) < 100.0f) || (this->workTimer[WORK_TIMER_UNK0_C] == 0)) {
+    if (this->workTimer[WORK_TIMER_UNK2_A] == 0) {
+        if ((sqrtf(SQ(temp_f20) + SQ(temp_f22)) < 100.0f) || (this->workTimer[WORK_TIMER_UNK0_A] == 0)) {
             for (i = 0; i < 200; i++) {
                 if ((!temp_f20) && (!temp_f20)) {}
                 this->unk_268.x = randPlusMinusPoint5Scaled(2500.0f);
@@ -555,7 +555,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
             }
 
             this->unk_274 = 0x100;
-            this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(60.0f) + 60.0f;
+            this->workTimer[WORK_TIMER_UNK0_A] = Rand_ZeroFloat(60.0f) + 60.0f;
         }
     }
 
@@ -566,12 +566,12 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     if (this->workTimer[WORK_TIMER_UNK1_A] == 0) {
         // Player is above water && Player is on the floor
         if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
-            func_809E4674(this, globalCtx);
+            Boss03_SetupPrepareCharge(this, globalCtx);
         } else if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU)) {
             if (KREG(70) == 0) {
-                func_809E38EC(this, globalCtx);
+                Boss03_SetupChasePlayer(this, globalCtx);
             } else if (this->numSpawnedSmallFish <= 0) {
-                func_809E38EC(this, globalCtx);
+                Boss03_SetupChasePlayer(this, globalCtx);
             }
         }
     }
@@ -581,10 +581,10 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E34B8.s")
 #endif
 
-void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_809E3968;
+void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = Boss03_ChasePlayer;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -10.0f);
-    this->workTimer[WORK_TIMER_UNK0_D] = 100;
+    this->workTimer[WORK_TIMER_CHASE] = 100;
     this->unk_276 = 0x1000;
     this->skelAnime.playSpeed = 1.5f;
     this->unk_278 = 10.0f;
@@ -594,9 +594,9 @@ void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // float regalloc
 /**
- * Approaches to Player until he is near enough, then start chasing him, unless he is back on the platform or the WORK_TIMER_UNK0_D runs out
+ * Approaches to Player until he is near enough, then start chasing him, unless he is back on the platform or the WORK_TIMER_CHASE runs out
  */
-void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 temp_f2;
     f32 temp3;
@@ -632,8 +632,8 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_UNK0_D timer runs out) -> Stop XXXXX (this actionFunc)
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_UNK0_D] == 0)) {
+    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CHASE timer runs out) -> Stop chasing
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_CHASE] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -668,7 +668,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
 
         // Near enough to Player?
         if (temp_f12 < phi_f2) {
-            Boss03_SetupChasePlayer(this, globalCtx, sp43);
+            Boss03_SetupCatchPlayer(this, globalCtx, sp43);
 
             if (sp43 != 0) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, player->actor.world.pos.x,
@@ -683,19 +683,19 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     Boss03_SpawnDust(this, globalCtx);
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E3968.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_ChasePlayer.s")
 #endif
 
-void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
-    this->actionFunc = Boss03_ChasePlayer;
+void Boss03_SetupCatchPlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
+    this->actionFunc = Boss03_CatchPlayer;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
-    this->workTimer[WORK_TIMER_CHASE] = 100;
+    this->workTimer[WORK_TIMER_CATCH] = 100;
     this->unk_2C4 = 0.0f;
     this->unk_2B8 = 0.0f;
     this->unk_242 = arg2;
 }
 
-void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 xDiff;
     f32 yDiff;
@@ -728,8 +728,8 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (chase timer runs out) -> Stop chasing Player
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_CHASE] == 0)) {
+    // If either (Player is on the floor && Player is above water) or (catch timer runs out) -> Stop trying to catch Player
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_CATCH] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -888,10 +888,10 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
-    this->actionFunc = func_809E475C;
+void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx) {
+    this->actionFunc = Boss03_PrepareCharge;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgBackingUpAnim, -15.0f);
-    this->workTimer[WORK_TIMER_UNK0_F] = Rand_ZeroFloat(30.0f) + 80.0f;
+    this->workTimer[WORK_TIMER_PREPARE_CHARGE] = Rand_ZeroFloat(30.0f) + 80.0f;
     this->workTimer[WORK_TIMER_UNK1_B] = 50;
     this->unk_274 = 0;
 
@@ -907,9 +907,9 @@ void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Slowly turns back while looking at Player during WORK_TIMER_UNK0_F frames, then prepares to charge against him
+ * Slowly turns back while looking at Player during WORK_TIMER_PREPARE_CHARGE frames, then prepares to charge against him
  */
-void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -936,7 +936,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
 
     // Player is above water && Player is on the floor
     if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
-        if (this->workTimer[WORK_TIMER_UNK0_F] == 0) {
+        if (this->workTimer[WORK_TIMER_PREPARE_CHARGE] == 0) {
             Boss03_SetupCharge(this, globalCtx);
         }
     } else if (player->actor.world.pos.y <= this->waterHeight) {
@@ -987,7 +987,6 @@ void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     if (this->actor.speedXZ >= 20.0f) {
-
         // Jump over platform
         if (this->unk_242 == 1) {
             if (sqrtf(SQXZ(this->actor.world.pos)) < 700.0f) {
@@ -2018,7 +2017,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    if (this->actionFunc != Boss03_ChasePlayer) {
+    if (this->actionFunc != Boss03_CatchPlayer) {
         Math_ApproachS(&player->actor.world.rot.x, 0, 1, 0x80);
         Math_ApproachS(&player->actor.shape.rot.x, 0, 1, 0x80);
     }
@@ -2203,17 +2202,17 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     } else if (this->actionFunc == func_809E34B8) {
         GfxPrint_Printf(printer, "actionFunc:? TakeDecision");
 
-    } else if (this->actionFunc == func_809E475C) {
-        GfxPrint_Printf(printer, "actionFunc:? PreparingPreAttack");
+    } else if (this->actionFunc == Boss03_PrepareCharge) {
+        GfxPrint_Printf(printer, "actionFunc:PrepareCharge");
     } else if (this->actionFunc == Boss03_Charge) {
         GfxPrint_Printf(printer, "actionFunc:Charge");
     } else if (this->actionFunc == Boss03_JumpOverPlatform) {
         GfxPrint_Printf(printer, "actionFunc:Jump");
 
-    } else if (this->actionFunc == func_809E3968) {
-        GfxPrint_Printf(printer, "actionFunc:? 3968 Water");
     } else if (this->actionFunc == Boss03_ChasePlayer) {
         GfxPrint_Printf(printer, "actionFunc:Chase");
+    } else if (this->actionFunc == Boss03_CatchPlayer) {
+        GfxPrint_Printf(printer, "actionFunc:Catch");
     } else if (this->actionFunc == Boss03_ChewPlayer) {
         GfxPrint_Printf(printer, "actionFunc:ChewPlayer");
 
@@ -2242,16 +2241,15 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     } else if (this->actionFunc == Boss03_Damaged) {
         GfxPrint_SetPos(printer, x-10, ++y);
         GfxPrint_Printf(printer, "work[DAMAGED]:%i", this->workTimer[WORK_TIMER_DAMAGED]);
-
-    } else if (this->actionFunc == func_809E3968) {
-        GfxPrint_SetPos(printer, x-9, ++y);
-        GfxPrint_Printf(printer, "work[UNK0_D]:%i", this->workTimer[WORK_TIMER_UNK0_D]);
     } else if (this->actionFunc == Boss03_ChasePlayer) {
         GfxPrint_SetPos(printer, x-8, ++y);
         GfxPrint_Printf(printer, "work[CHASE]:%i", this->workTimer[WORK_TIMER_CHASE]);
-    } else if (this->actionFunc == func_809E475C) {
-        GfxPrint_SetPos(printer, x-9, ++y);
-        GfxPrint_Printf(printer, "work[UNK0_F]:%i", this->workTimer[WORK_TIMER_UNK0_F]);
+    } else if (this->actionFunc == Boss03_CatchPlayer) {
+        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_Printf(printer, "work[CATCH]:%i", this->workTimer[WORK_TIMER_CATCH]);
+    } else if (this->actionFunc == Boss03_PrepareCharge) {
+        GfxPrint_SetPos(printer, x-17, ++y);
+        GfxPrint_Printf(printer, "work[PREPARE_CHARGE]:%i", this->workTimer[WORK_TIMER_PREPARE_CHARGE]);
 
     } else if (this->actionFunc == Boss03_DeathCutscene) {
         GfxPrint_SetPos(printer, x-9, ++y);
@@ -2259,7 +2257,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     } else if (this->actionFunc == func_809E34B8) {
         GfxPrint_SetPos(printer, x-9, ++y);
-        GfxPrint_Printf(printer, "work[UNK0_C]:%i", this->workTimer[WORK_TIMER_UNK0_C]);
+        GfxPrint_Printf(printer, "work[UNK0_A]:%i", this->workTimer[WORK_TIMER_UNK0_A]);
 
     } else {
         ++y;
@@ -2274,7 +2272,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     if (this->actionFunc == func_809E34B8) {
         GfxPrint_SetPos(printer, x-9, ++y);
         GfxPrint_Printf(printer, "work[UNK1_A]:%i", this->workTimer[WORK_TIMER_UNK1_A]);
-    } else if (this->actionFunc == func_809E475C) {
+    } else if (this->actionFunc == Boss03_PrepareCharge) {
         GfxPrint_SetPos(printer, x-9, ++y);
         GfxPrint_Printf(printer, "work[UNK1_B]:%i", this->workTimer[WORK_TIMER_UNK1_B]);
     } else {
@@ -2292,7 +2290,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
         GfxPrint_Printf(printer, "work[STUNNED]:%i", this->workTimer[WORK_TIMER_STUNNED]);
     } else if (this->actionFunc == func_809E34B8) {
         GfxPrint_SetPos(printer, x-9, ++y);
-        GfxPrint_Printf(printer, "work[UNK2_B]:%i", this->workTimer[WORK_TIMER_UNK2_B]);
+        GfxPrint_Printf(printer, "work[UNK2_A]:%i", this->workTimer[WORK_TIMER_UNK2_A]);
     } else {
         ++y;
         #if 0
