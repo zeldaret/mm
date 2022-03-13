@@ -291,9 +291,9 @@ s32 EnSyatekiCrow_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx*
     EnSyatekiCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_07) {
-        rot->y += (s16)(3072.0f * sin_rad(this->skelAnime.curFrame * 0.7853982f));
+        rot->y += (s16)(3072.0f * sin_rad(this->skelAnime.curFrame * (M_PI / 4)));
     } else if (limbIndex == OBJECT_CROW_LIMB_08) {
-        rot->y += (s16)(5120.0f * sin_rad((this->skelAnime.curFrame + 2.5f) * 0.7853982f));
+        rot->y += (s16)(5120.0f * sin_rad((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
     }
 
     return false;
