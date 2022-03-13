@@ -52,8 +52,8 @@ void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx);
 
 void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx);
 
-void func_809E8810(Actor* thisx, GlobalContext* globalCtx);
-void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx);
+void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx);
+void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx);
 
 void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx);
 
@@ -365,7 +365,10 @@ UNK_TYPE D_809E8FF4[0x42] = {
 Color_RGBA8 D_809E90FC = { 60, 50, 20, 255 };
 Color_RGBA8 D_809E9100 = { 40, 30, 30, 255 };
 
-void func_809E2DA0(Boss03* this, GlobalContext* globalCtx) {
+/**
+ * Used when chasing Player and Gyorg is near the underwater floor
+ */
+void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
     if (this->unk_2AC.y < 80.0f) {
         u8 i;
         Vec3f pos;
@@ -406,8 +409,8 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (this->actor.params == GYORG_PARAM_SEAWEED) {
-        this->actor.update = func_809E8810;
-        this->actor.draw = func_809E8BEC;
+        this->actor.update = Boss03_SeaweedUpdate;
+        this->actor.draw = Boss03_SeaweedDraw;
 
         this->unk_240 = Rand_ZeroFloat(1000.0f);
 
@@ -590,6 +593,9 @@ void func_809E38EC(Boss03* this, GlobalContext* globalCtx) {
 
 #ifdef NON_MATCHING
 // float regalloc
+/**
+ * Approaches to Player until he is near enough, then start chasing him, unless he is back on the platform or the WORK_TIMER_UNK0_D runs out
+ */
 void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 temp_f2;
@@ -619,12 +625,14 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
+    // 0.62831855f == M_PI / 5.0f?
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
+
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_UNK0_D timer runs out) -> Stop XXXXX
+    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_UNK0_D timer runs out) -> Stop XXXXX (this actionFunc)
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_UNK0_D] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
@@ -658,6 +666,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
             this->skelAnime.playSpeed = 2.5f;
         }
 
+        // Near enough to Player?
         if (temp_f12 < phi_f2) {
             Boss03_SetupChasePlayer(this, globalCtx, sp43);
 
@@ -671,7 +680,7 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
         }
     }
 
-    func_809E2DA0(this, globalCtx);
+    Boss03_SpawnDust(this, globalCtx);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E3968.s")
@@ -762,7 +771,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
         Math_ApproachS(&player->actor.shape.rot.y, this->unk_2A2.y, 1, 0x400);
     }
 
-    func_809E2DA0(this, globalCtx);
+    Boss03_SpawnDust(this, globalCtx);
 }
 
 void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
@@ -949,7 +958,7 @@ void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Gyorg charges against the platform
+ * Charge against the platform
  */
 void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f14;
@@ -1360,16 +1369,16 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     Vec3f sp90;
     Vec3f sp84;
     Vec3f sp78;
-    float new_var2;
-    float new_var;
+    f32 aux;
+    f32 aux2;
     s32 pad;
     f32 pad2;
     f32 sp64;
     Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
-    Player* player; // sp5C
+    Player* player;
     f32 sp4C;
 
-    new_var = 0.0f;
+    aux2 = 0.0f;
     player = GET_PLAYER(globalCtx);
     sp64 = this->actor.scale.x * 5.0f;
 
@@ -1401,8 +1410,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->csCamAt.y = camera->at.y;
                     this->csCamAt.z = camera->at.z;
 
-                    new_var2 = this->csCamEye.x - this->actor.world.pos.x;
-                    this->unk_568 = Math_Acot2F(this->csCamEye.z - this->actor.world.pos.z, new_var2);
+                    aux = this->csCamEye.x - this->actor.world.pos.x;
+                    this->unk_568 = Math_Acot2F(this->csCamEye.z - this->actor.world.pos.z, aux);
 
                     this->unk_570 = 0.0f;
                     this->unk_56C = 0.0f;
@@ -1424,11 +1433,11 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->csCamTargetEye.y += this->waterHeight;
                     this->csCamTargetEye.z += this->actor.world.pos.z;
 
-                    sp4C = 40.0f + new_var;
+                    sp4C = 40.0f + aux2;
                     Math_ApproachF(&this->csCamEye.x, this->csCamTargetEye.x, 0.1f, sp4C);
                     Math_ApproachF(&this->csCamEye.y, this->csCamTargetEye.y, 0.1f, sp4C);
                     Math_ApproachF(&this->csCamEye.z, this->csCamTargetEye.z, 0.1f, sp4C);
-                    sp4C = 70.0f + new_var;
+                    sp4C = 70.0f + aux2;
                     Math_ApproachF(&this->csCamAt.x, this->csCamTargetAt.x, 0.1f, sp4C);
                     Math_ApproachF(&this->csCamAt.y, this->csCamTargetAt.y, 0.1f, sp4C);
                     Math_ApproachF(&this->csCamAt.z, this->csCamTargetAt.z, 0.1f, sp4C);
@@ -1746,7 +1755,7 @@ void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809E6CB4(Boss03* this, GlobalContext* globalCtx) {
+void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
     ColliderInfo* hitbox;
     u8 sp4B = true;
     Player* player = GET_PLAYER(globalCtx);
@@ -1948,7 +1957,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             this->collider2.base.colType = COLTYPE_METAL;
         }
 
-        func_809E6CB4(this, globalCtx);
+        Boss03_UpdateCollision(this, globalCtx);
 
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
 
@@ -2871,7 +2880,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
+void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
     s16 i;
     s16 pad;
@@ -2963,7 +2972,7 @@ Gfx* D_809E91C0[] = {
     gGyorgSeaweedPiece3DL, gGyorgSeaweedPiece2DL, gGyorgSeaweedPiece1DL,
 };
 
-void func_809E8BEC(Actor* thisx, GlobalContext* globalCtx) {
+void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
     s16 i;
     // Why 10 Mtxs? This seems to only use the first 6 elements
