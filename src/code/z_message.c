@@ -115,7 +115,7 @@ void func_801477B4(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
 
 #ifdef NON_MATCHING
-void func_80148B98(GlobalContext* globalCtx, u8 bParm2) {
+void func_80148B98(GlobalContext* globalCtx, u8 arg1) {
     static s16 held = 0;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Input* curInput = CONTROLLER1(globalCtx);
@@ -134,8 +134,8 @@ void func_80148B98(GlobalContext* globalCtx, u8 bParm2) {
     else if ((curInput->rel.stick_y < -29) && held == 0) {
         held = 1;
         msgCtx->choiceIndex++;
-        if (msgCtx->choiceIndex > bParm2) {
-            msgCtx->choiceIndex = bParm2;
+        if (msgCtx->choiceIndex > arg1) {
+            msgCtx->choiceIndex = arg1;
         } else {
             play_sound(NA_SE_SY_CURSOR);
         }
@@ -385,21 +385,21 @@ void func_80151A68(GlobalContext* globalCtx, u16 textId) {
         XREG(77) = 0x3C;
         XREG(76) = 0x1C;
         msgCtx->unk11F1A[0] = msgCtx->unk11F1A[1] = msgCtx->unk11F1A[2] = 0;
-        Interface_ChangeAlpha(1U);
+        Interface_ChangeAlpha(1);
     }
 }
 
-void func_80151BB4(GlobalContext* globalCtx, u8 uParm2) {
+void func_80151BB4(GlobalContext* globalCtx, u8 arg1) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    u8 temp = uParm2;
+    u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
+        if (((gSaveContext.weekEventReg[D_801C6B28[arg1] >> 8]) & (u8)D_801C6B28[arg1]) == 0) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
-    } else if (uParm2 >= 20) {
-        if (((gSaveContext.weekEventReg[D_801C6B28[uParm2] >> 8]) & (u8)D_801C6B28[uParm2]) == 0) {
+    } else if (arg1 >= 20) {
+        if (((gSaveContext.weekEventReg[D_801C6B28[arg1] >> 8]) & (u8)D_801C6B28[arg1]) == 0) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
@@ -457,18 +457,18 @@ void func_80152C64(View* view) {
 // Spawn song effect?
 void func_80152EC0(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Actor* actor = (Actor*)GET_PLAYER(globalCtx);
+    Player* player = GET_PLAYER(globalCtx);
 
     if (1) {}
     if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) &&
         ((msgCtx->ocarinaAction < 0x43) || (msgCtx->ocarinaAction >= 0x47))) {
         msgCtx->unk120B0 = 1;
         if (msgCtx->songPlayed != 0x16) {
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, D_801D02D8[msgCtx->songPlayed], actor->world.pos.x,
-                        actor->world.pos.y, actor->world.pos.z, 0, 0, 0, D_801D02F8[msgCtx->songPlayed]);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, D_801D02D8[msgCtx->songPlayed], player->actor.world.pos.x,
+                        player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, D_801D02F8[msgCtx->songPlayed]);
             return;
         }
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OCEFF_WIPE4, actor->world.pos.x, actor->world.pos.y, actor->world.pos.z,
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OCEFF_WIPE4, player->actor.world.pos.x, player->actor.world.pos.y, player->actor.world.pos.z,
                     0, 0, 0, 0);
     }
 }
@@ -500,7 +500,8 @@ void func_80156758(GlobalContext* globalCtx) {
 
     gfxCtx = globalCtx->state.gfxCtx;
     OPEN_DISPS(gfxCtx);
-    nextDisplayList = Graph_GfxPlusOne(polyOpa = POLY_OPA_DISP);
+    polyOpa = POLY_OPA_DISP;
+    nextDisplayList = Graph_GfxPlusOne(polyOpa);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
     if ((globalCtx->msgCtx.currentTextId != 0x5E6) || (func_801690CC(globalCtx) == 0)) {

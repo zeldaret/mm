@@ -127,7 +127,7 @@ void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos
     u8 j;
 
     msgCtx->decodedBuffer.schar[p] = ' ';
-    p = p + 1;
+    p++;
     for (j = 0; j < D_801D0710[gSaveContext.language - 1]; j++) {
         Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.language - 1][j], o);
         msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.language - 1][j];
