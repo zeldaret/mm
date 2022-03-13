@@ -189,7 +189,7 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     f32 f = *arg3;
     u32 dayTime;
     s16 digits[4];
-    f32 timeInSeconds;
+    f32 timeInMinutes;
     s32 day;
     s16 i;
 
@@ -199,17 +199,17 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     } else {
         dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.time);
     }
-    timeInSeconds = dayTime * (24.0f * 60.0f / 0x10000);
+    timeInMinutes = TIME_TO_MINUTES_F(dayTime);
 
     digits[0] = 0;
-    digits[1] = (timeInSeconds / 60.0f);
+    digits[1] = (timeInMinutes / 60.0f);
     while (digits[1] >= 10) {
         digits[0]++;
         digits[1] -= 10;
     }
 
     digits[2] = 0;
-    digits[3] = (s32)timeInSeconds % 60;
+    digits[3] = (s32)timeInMinutes % 60;
     while (digits[3] >= 10) {
         digits[2]++;
         digits[3] -= 10;
