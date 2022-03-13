@@ -233,15 +233,15 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
     s32 k = *offset;
     f32 f = *arg3;
 
-    Font_LoadChar(globalCtx, 0x838BU, k);
+    Font_LoadChar(globalCtx, 0x838B , k); // 0x838b = ル in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x838B;
     t += 1;
-    Font_LoadChar(globalCtx, 0x8373U, k);
+    Font_LoadChar(globalCtx, 0x8373, k); // 0x8373 = ピ in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x8373;
     t += 1;
-    Font_LoadChar(globalCtx, 0x815CU, k);
+    Font_LoadChar(globalCtx, 0x815C, k); // Ox815C = ― in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x815C;
 

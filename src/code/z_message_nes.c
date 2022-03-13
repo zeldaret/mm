@@ -89,29 +89,29 @@ void Message_LoadPluralRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s
 
     msgCtx->decodedBuffer.schar[p] = 0x20;
     p++;
-    Font_LoadCharNES(globalCtx, 0x52U, o);
+    Font_LoadCharNES(globalCtx, 'R', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x52;
+    msgCtx->decodedBuffer.schar[p] = 'R';
     p++;
-    Font_LoadCharNES(globalCtx, 0x75U, o);
+    Font_LoadCharNES(globalCtx, 'u', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x75;
+    msgCtx->decodedBuffer.schar[p] = 'u';
     p++;
-    Font_LoadCharNES(globalCtx, 0x70U, o);
+    Font_LoadCharNES(globalCtx, 'p', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x70;
+    msgCtx->decodedBuffer.schar[p] = 'p';
     p++;
-    Font_LoadCharNES(globalCtx, 0x65U, o);
+    Font_LoadCharNES(globalCtx, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x65;
+    msgCtx->decodedBuffer.schar[p] = 'e';
     p++;
-    Font_LoadCharNES(globalCtx, 0x65U, o);
+    Font_LoadCharNES(globalCtx, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x65;
+    msgCtx->decodedBuffer.schar[p] = 'e';
     p++;
-    Font_LoadCharNES(globalCtx, 0x73U, o);
+    Font_LoadCharNES(globalCtx, 's', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x73;
+    msgCtx->decodedBuffer.schar[p] = 's';
 
     f += 16.0f * msgCtx->unk12098 * 6.0f;
     *decodedBufPos = p;
@@ -126,7 +126,7 @@ void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos
     f32 f = *arg3;
     u8 j;
 
-    msgCtx->decodedBuffer.schar[p] = 0x20;
+    msgCtx->decodedBuffer.schar[p] = ' ';
     p = p + 1;
     for (j = 0; j < D_801D0710[gSaveContext.language - 1]; j++) {
         Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.language - 1][j], o);
@@ -147,32 +147,32 @@ void Message_LoadRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* of
     s32 o = *offset;
     f32 f = *arg3;
 
-    msgCtx->decodedBuffer.schar[p] = 0x20;
+    msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
-    Font_LoadCharNES(globalCtx, 0x52U, o);
+    Font_LoadCharNES(globalCtx, 'R', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x52;
+    msgCtx->decodedBuffer.schar[p] = 'R';
     p++;
-    Font_LoadCharNES(globalCtx, 0x75U, o);
+    Font_LoadCharNES(globalCtx, 'u', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x75;
+    msgCtx->decodedBuffer.schar[p] = 'u';
     p++;
-    Font_LoadCharNES(globalCtx, 0x70U, o);
+    Font_LoadCharNES(globalCtx, 'p', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x70;
+    msgCtx->decodedBuffer.schar[p] = 'p';
     p++;
-    Font_LoadCharNES(globalCtx, 0x65U, o);
+    Font_LoadCharNES(globalCtx, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x65;
+    msgCtx->decodedBuffer.schar[p] = 'e';
     p++;
-    Font_LoadCharNES(globalCtx, 0x65U, o);
+    Font_LoadCharNES(globalCtx, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
-    msgCtx->decodedBuffer.schar[p] = 0x65;
+    msgCtx->decodedBuffer.schar[p] = 'e';
     if (singular != 1) {
         p++;
-        Font_LoadCharNES(globalCtx, 0x73U, o);
+        Font_LoadCharNES(globalCtx, 's', o);
         o += FONT_CHAR_TEX_SIZE;
-        msgCtx->decodedBuffer.schar[p] = 0x73;
+        msgCtx->decodedBuffer.schar[p] = 's';
         f += 16.0f * msgCtx->unk12098 * 6.0f;
     } else {
         f += 16.0f * msgCtx->unk12098 * 5.0f;
