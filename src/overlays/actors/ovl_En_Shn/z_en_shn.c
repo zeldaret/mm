@@ -186,8 +186,8 @@ void func_80AE6488(EnShn* this, GlobalContext* globalCtx) {
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
     Matrix_InsertTranslation(this->unk_2D4, 0.0f, 0.0f, 1);
     if ((&this->actor == player->targetActor) &&
-        ((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId >= 0x201)) && (tempMsgState == 3) &&
-        (this->msgState == 3)) {
+        ((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId >= 0x201)) &&
+        (tempMsgState == 3) && (this->msgState == 3)) {
         if (globalCtx->state.frames % 2 == 0) {
             if (this->unk_2D0 != 0.0f) {
                 this->unk_2D0 = 0.0f;

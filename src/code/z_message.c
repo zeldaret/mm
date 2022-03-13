@@ -233,7 +233,7 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
     s32 k = *offset;
     f32 f = *arg3;
 
-    Font_LoadChar(globalCtx, 0x838B , k); // 0x838b = ル in JISX0213
+    Font_LoadChar(globalCtx, 0x838B, k); // 0x838b = ル in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x838B;
     t += 1;
@@ -468,8 +468,8 @@ void func_80152EC0(GlobalContext* globalCtx) {
                         player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, D_801D02F8[msgCtx->songPlayed]);
             return;
         }
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OCEFF_WIPE4, player->actor.world.pos.x, player->actor.world.pos.y, player->actor.world.pos.z,
-                    0, 0, 0, 0);
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OCEFF_WIPE4, player->actor.world.pos.x,
+                    player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
     }
 }
 
