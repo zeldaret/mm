@@ -561,6 +561,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
     if (this->workTimer[WORK_TIMER_UNK1_A] == 0) {
+        // Player is above water && Player is on the floor
         if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
             func_809E4674(this, globalCtx);
         } else if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU)) {
@@ -610,19 +611,20 @@ void func_809E3968(Boss03* this, GlobalContext* globalCtx) {
     temp3 = ((player->actor.world.pos.y - this->actor.world.pos.y) + 50.0f);
     temp_f18 = player->actor.world.pos.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp3), 0x000A,
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp3), 0xA,
                    this->unk_274);
     temp =
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0x000A, this->unk_274, 0) * -0.5f;
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, temp, 5, 0x100);
 
-    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x0100);
+    Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
+    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_UNK0_D timer runs out) -> Stop XXXXX
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_UNK0_D] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
@@ -727,6 +729,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
         }
 
         func_809E344C(this, globalCtx);
+        // WORK_TIMER_UNK1_A wasn't set
     } else {
         f32 phi_f0;
 
@@ -853,6 +856,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
         func_809E344C(this, globalCtx);
         this->workTimer[WORK_TIMER_UNK1_A] = Rand_ZeroFloat(100.0f) + 200.0f;
+
         return;
     }
 
@@ -893,6 +897,9 @@ void func_809E4674(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Slowly turns back while looking at Player during WORK_TIMER_UNK0_F frames, then prepares to charge against him
+ */
 void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     Player* player = GET_PLAYER(globalCtx);
@@ -901,9 +908,10 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_WAIT_OLD - SFX_FLAG);
     }
 
+    // Rotate towards Player
     Math_ApproachS(
         &this->bodyYRot,
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x000A, this->unk_274, 0) * -0.7f, 5,
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, this->unk_274, 0) * -0.7f, 5,
         0x200);
     Math_ApproachS(&this->unk_274, 0x800, 1, 0x100);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x1000);
@@ -917,6 +925,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
+    // Player is above water && Player is on the floor
     if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
         if (this->workTimer[WORK_TIMER_UNK0_F] == 0) {
             Boss03_SetupCharge(this, globalCtx);
@@ -926,6 +935,7 @@ void func_809E475C(Boss03* this, GlobalContext* globalCtx) {
         this->workTimer[WORK_TIMER_UNK1_A] = 20;
     }
 
+    // Turns back slowly
     Math_ApproachF(&this->actor.speedXZ, -3.0f, 1.0f, 0.5f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 }
@@ -982,10 +992,13 @@ void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, globalCtx, 20, 15);
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96, ENWATEREFFECT_780);
+
+            // Player is above water && Player is on the floor
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
                 func_800B8D50(globalCtx, NULL, 7.0f, Math_FAtan2F(player->actor.world.pos.z, player->actor.world.pos.x),
                               7.0f, 0);
             }
+
             func_809E344C(this, globalCtx);
             this->workTimer[WORK_TIMER_UNK1_A] = 50;
         }
@@ -1290,8 +1303,8 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 this->csCamId = 0;
 
                 func_809E344C(this, globalCtx);
-
                 this->workTimer[WORK_TIMER_UNK1_A] = 50;
+
                 gSaveContext.eventInf[5] |= 0x40;
             }
             break;
@@ -1371,6 +1384,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Play_CameraChangeStatus(globalCtx, 0, 1);
                 Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
+
+                // Player is above water && Player is on the floor
                 if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
                     player->actor.world.pos.x = 0.0f;
                     player->actor.world.pos.z = -200.0f;
@@ -1446,7 +1461,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                             this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
-                    if ((D_809E9840 & 1) != 0) {
+                    if (D_809E9840 % 2 != 0) {
                         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
                     } else {
                         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
@@ -1639,6 +1654,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                         this->csCamId = 0;
                         Cutscene_End(globalCtx, &globalCtx->csCtx);
                         func_800B7298(globalCtx, &this->actor, 6);
+
                         func_809E344C(this, globalCtx);
                         this->workTimer[WORK_TIMER_UNK1_A] = 50;
                     }
@@ -1698,6 +1714,7 @@ void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx) {
 
     if (this->workTimer[WORK_TIMER_STUNNED] == 0) {
         func_809E344C(this, globalCtx);
+        // WORK_TIMER_UNK1_A wasn't set
     }
 }
 
@@ -2001,9 +2018,11 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->wetSpotEffectSpawnNum = 20;
     }
 
+    // Player is on the floor && Player is above water
     if ((player->actor.bgCheckFlags & 1)  && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) {
         if (this->wetSpotEffectSpawnNum != 0) {
             this->wetSpotEffectSpawnNum--;
+
             sp78.x = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.x;
             sp78.y = PLATFORM_HEIGHT;
             sp78.z = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.z;
@@ -2875,6 +2894,7 @@ void func_809E8810(Actor* thisx, GlobalContext* globalCtx) {
         temp_f0 = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
         temp_f14 = player->actor.speedXZ * 3.0f + 70.0f;
 
+        // Player is on the floor
         if (player->actor.bgCheckFlags & 1) {
             phi_s0 = 0;
         } else {
