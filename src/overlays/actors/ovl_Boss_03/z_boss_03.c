@@ -166,17 +166,16 @@ void Boss03_SpawnEffectBubble(GlobalContext* globalCtx, Vec3f* pos) {
     }
 }
 
-void func_809E2B8C(s32 index, ColliderJntSph* collider, Vec3f* arg2) {
-    ColliderJntSphElement* temp_v1;
+void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
+    ColliderJntSphElement* sphElement;
 
-    collider->elements[index].dim.worldSphere.center.x = arg2->x;
-    collider->elements[index].dim.worldSphere.center.y = arg2->y;
-    collider->elements[index].dim.worldSphere.center.z = arg2->z;
+    collider->elements[index].dim.worldSphere.center.x = sphereCenter->x;
+    collider->elements[index].dim.worldSphere.center.y = sphereCenter->y;
+    collider->elements[index].dim.worldSphere.center.z = sphereCenter->z;
 
-    temp_v1 = &collider->elements[index];
-    temp_v1->dim.worldSphere.radius = temp_v1->dim.scale * temp_v1->dim.modelSphere.radius;
+    sphElement = &collider->elements[index];
+    sphElement->dim.worldSphere.radius = sphElement->dim.scale * sphElement->dim.modelSphere.radius;
 }
-
 
 static s32 sRandSeed0;
 static s32 sRandSeed1;
@@ -239,7 +238,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 0, { { 0, 0, 0 }, 70 }, 100 },
+        { GYORG_LIMB_NONE, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
@@ -250,7 +249,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 1, { { 0, 0, 0 }, 50 }, 100 },
+        { GYORG_LIMB_ROOT, { { 0, 0, 0 }, 50 }, 100 },
     },
 };
 
@@ -277,7 +276,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 2, { { 0, 0, 0 }, 20 }, 100 },
+        { GYORG_LIMB_HEAD, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
@@ -288,7 +287,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 5, { { 0, 0, 0 }, 20 }, 100 },
+        { GYORG_LIMB_LOWER_TRUNK, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
         {
@@ -299,7 +298,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 6, { { 0, 0, 0 }, 70 }, 100 },
+        { GYORG_LIMB_TAIL, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
@@ -310,7 +309,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 7, { { 0, 0, 0 }, 70 }, 100 },
+        { GYORG_LIMB_RIGHT_FIN_ROOT, { { 0, 0, 0 }, 70 }, 100 },
     },
     {
         {
@@ -321,7 +320,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 8, { { 0, 0, 0 }, 30 }, 100 },
+        { GYORG_LIMB_UPPER_RIGHT_FIN, { { 0, 0, 0 }, 30 }, 100 },
     },
 };
 
@@ -340,16 +339,16 @@ static ColliderJntSphInit sJntSphInit2 = {
 
 Vec3f D_809E8FE8 = { 1216.0f, 140.0f, -1161.0f };
 
-// Unused. No idea what it can be. Doesn't look like textures or anything similar. Maybe floats?
-UNK_TYPE D_809E8FF4[0x42] = {
-    0x43828000, 0x430C0000, 0xC47A0000, 0xC3FC0000, 0x42F00000, 0xC49F8000, 0xC490A000, 0x42A00000, 0xC4510000,
-    0xC47F0000, 0x42F00000, 0x43BE8000, 0xC2080000, 0x42F00000, 0x4497A000, 0x4448C000, 0x42A00000, 0x449C4000,
-    0x448EE000, 0x42F00000, 0x44174000, 0x44998000, 0x430C0000, 0xC3740000, 0x44980000, 0x430C0000, 0xC4912000,
-    0x43828000, 0x430C0000, 0xC47A0000, 0xC3FC0000, 0x42F00000, 0xC45E8000, 0xC490A000, 0x42A00000, 0xC4510000,
-    0xC47F0000, 0x42F00000, 0x43BE8000, 0xC2080000, 0x42F00000, 0x4497A000, 0x4448C000, 0x42A00000, 0x449C4000,
-    0x448EE000, 0x42F00000, 0x44174000, 0x44998000, 0x430C0000, 0xC3740000, 0x00000000, 0x00000000, 0x00000000,
-    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-    0x00000000, 0x00000000, 0x00000000,
+// unused
+Vec3f D_809E8FF4[] = {
+    { 261.0f, 140.0f, -1000.0f }, { -504.0f, 120.0f, -1276.0f }, { -1157.0f, 80.0f, -836.0f },
+    { -1020.0f, 120.0f, 381.0f }, { -34.0f, 120.0f, 1213.0f },   { 803.0f, 80.0f, 1250.0f },
+    { 1143.0f, 120.0f, 605.0f },  { 1228.0f, 140.0f, -244.0f },  { 1216.0f, 140.0f, -1161.0f },
+    { 261.0f, 140.0f, -1000.0f }, { -504.0f, 120.0f, -890.0f },  { -1157.0f, 80.0f, -836.0f },
+    { -1020.0f, 120.0f, 381.0f }, { -34.0f, 120.0f, 1213.0f },   { 803.0f, 80.0f, 1250.0f },
+    { 1143.0f, 120.0f, 605.0f },  { 1228.0f, 140.0f, -244.0f },  { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },         { 0.0f, 0.0f, 0.0f },          { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },
 };
 
 Color_RGBA8 D_809E90FC = { 60, 50, 20, 255 };
@@ -378,8 +377,8 @@ void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
             pos.z = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.z;
             pos.x = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.x;
 
-            func_800B0EB0(globalCtx, &pos, &velocity, &accel, &D_809E90FC, &D_809E9100, Rand_ZeroFloat(200.0f) + 400.0f, 10,
-                          Rand_ZeroFloat(10.0f) + 25.0f);
+            func_800B0EB0(globalCtx, &pos, &velocity, &accel, &D_809E90FC, &D_809E9100, Rand_ZeroFloat(200.0f) + 400.0f,
+                          10, Rand_ZeroFloat(10.0f) + 25.0f);
         }
     }
 }
@@ -391,8 +390,8 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f sp70;
 
     if (gSaveContext.weekEventReg[55] & 0x80) {
-        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0,
-                           0, ENDOORWARP1_FF_1);
+        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT,
+                           200.0f, 0, 0, 0, ENDOORWARP1_FF_1);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
         Actor_MarkForDeath(&this->actor);
         return;
@@ -443,8 +442,8 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.colChkInfo.health = 10;
     Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->colliderElements1);
     Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->colliderElements2);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSkel, &gGyorgCrawlingAnim, this->jointTable, this->morphTable,
-                       GYORG_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSkel, &gGyorgCrawlingAnim, this->jointTable,
+                       this->morphTable, GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
     if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x40)) {
@@ -510,17 +509,17 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     temp_f2 = this->unk_268.y - this->actor.world.pos.y;
     temp_f22 = this->unk_268.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f20) + SQ(temp_f22)), -temp_f2), 0xA, this->unk_274);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f20) + SQ(temp_f22)), -temp_f2), 0xA,
+                   this->unk_274);
 
     Math_ApproachS(
         &this->bodyYRot,
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0xA, this->unk_274, 0) *
-            -0.5f,
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0xA, this->unk_274, 0) * -0.5f,
         5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & 8)) {
         Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
@@ -584,7 +583,8 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // float regalloc
 /**
- * Approaches to Player until he is near enough, then start chasing him, unless he is back on the platform or the WORK_TIMER_CHASE runs out
+ * Approaches to Player until he is near enough, then start chasing him, unless he is back on the platform or the
+ * WORK_TIMER_CHASE runs out
  */
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -609,21 +609,20 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp3), 0xA,
                    this->unk_274);
-    temp =
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f;
+    temp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, temp, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
-    // 0.62831855f == M_PI / 5.0f?
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
     // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CHASE timer runs out) -> Stop chasing
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_CHASE] == 0)) {
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) ||
+        (this->workTimer[WORK_TIMER_CHASE] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -643,7 +642,8 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
             sp44 = 100.0f;
         }
 
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                 MTXMODE_NEW);
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
 
@@ -705,12 +705,11 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     yDiff = player->actor.world.pos.y - this->actor.world.pos.y;
     zDiff = player->actor.world.pos.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
-                   this->unk_274);
-    Math_ApproachS(
-        &this->bodyYRot,
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f,
-        5, 0x100);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
+    Math_ApproachS(&this->bodyYRot,
+                   Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) *
+                       -0.5f,
+                   5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
@@ -718,8 +717,10 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (catch timer runs out) -> Stop trying to catch Player
-    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) || (this->workTimer[WORK_TIMER_CATCH] == 0)) {
+    // If either (Player is on the floor && Player is above water) or (catch timer runs out) -> Stop trying to catch
+    // Player
+    if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
+        (this->workTimer[WORK_TIMER_CATCH] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -748,7 +749,8 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
             // fake match
             if (((new_var = &this->actor) != player->actor.parent) && (globalCtx->grabPlayer(globalCtx, player) != 0)) {
                 player->actor.parent = &this->actor;
-                Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+                Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
+                                     &D_801DB4B8);
                 Boss03_SetupChewPlayer(this, globalCtx);
             }
         } else {
@@ -808,13 +810,14 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     temp_f16 = this->unk_268.y - this->actor.world.pos.y;
     temp_f18 = this->unk_268.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA, this->unk_274);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA,
+                   this->unk_274);
     Math_ApproachS(
         &this->bodyYRot,
         Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f, 5,
         0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     switch (this->unk_242) {
         case 0x0:
@@ -897,7 +900,8 @@ void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Slowly turns back while looking at Player during WORK_TIMER_PREPARE_CHARGE frames, then prepares to charge against him
+ * Slowly turns back while looking at Player during WORK_TIMER_PREPARE_CHARGE frames, then prepares to charge against
+ * him
  */
 void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
@@ -908,10 +912,10 @@ void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
     }
 
     // Rotate towards Player
-    Math_ApproachS(
-        &this->bodyYRot,
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, this->unk_274, 0) * -0.7f, 5,
-        0x200);
+    Math_ApproachS(&this->bodyYRot,
+                   Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, this->unk_274, 0) *
+                       -0.7f,
+                   5, 0x200);
     Math_ApproachS(&this->unk_274, 0x800, 1, 0x100);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0x1000);
     Math_ApproachS(&this->actor.world.rot.x, 0, 0xA, 0x200);
@@ -973,7 +977,7 @@ void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
     this->actor.shape.rot = this->actor.world.rot;
 
     Math_ApproachF(&this->actor.speedXZ, 25.0f, 1.0f, 3.0f);
-    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * 0.62831855f) * 10.0f * 0.01f, 0.5f, 1.0f);
+    Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
     Actor_MoveWithoutGravityReverse(&this->actor);
 
     if (this->actor.speedXZ >= 20.0f) {
@@ -989,7 +993,8 @@ void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
         if (this->actor.bgCheckFlags & 8) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
             func_800BC848(&this->actor, globalCtx, 20, 15);
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96, ENWATEREFFECT_780);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0,
+                        0x96, ENWATEREFFECT_780);
 
             // Player is above water && Player is on the floor
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
@@ -1129,7 +1134,8 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                             temp_f16 = D_809E9104[this->unk_242].y - this->actor.world.pos.y;
                             temp_f18 = D_809E9104[this->unk_242].z - this->actor.world.pos.z;
 
-                            Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA,
+                            Math_ApproachS(&this->actor.world.rot.x,
+                                           Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA,
                                            this->unk_274);
                             Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA,
                                            this->unk_274);
@@ -1196,8 +1202,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             this->csCamEye.z = player->actor.world.pos.z - 30.0f;
 
             this->csCamAt.x = player->actor.world.pos.x;
-            this->csCamAt.y =
-                (((player->actor.world.pos.y + Player_GetHeight(player)) - 18.0f) + 6.0f) + BREG(18);
+            this->csCamAt.y = (((player->actor.world.pos.y + Player_GetHeight(player)) - 18.0f) + 6.0f) + BREG(18);
             this->csCamAt.z = player->actor.world.pos.z;
 
             if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -1261,7 +1266,12 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                     Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
                     Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.5f);
                 } else {
-                    if (1) { } if (1) { } if (1) { } if (1) { } if (1) { } if (1) { }
+                    if (1) {}
+                    if (1) {}
+                    if (1) {}
+                    if (1) {}
+                    if (1) {}
+                    if (1) {}
 
                     for (i = 0; i < 3; i++) {
                         effectPos.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.x;
@@ -1279,8 +1289,8 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Math_ApproachF(&this->csCamEye.x, (((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f) - 90.0f,
                                0.05f, 3.0f);
                 Math_ApproachF(&this->csCamEye.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
-                Math_ApproachF(&this->csCamEye.z, ((player->actor.world.pos.z - 30.0f) + 160.0f + 300.0f) - 90.0f, 0.05f,
-                               3.0f);
+                Math_ApproachF(&this->csCamEye.z, ((player->actor.world.pos.z - 30.0f) + 160.0f + 300.0f) - 90.0f,
+                               0.05f, 3.0f);
                 Math_ApproachF(&this->unk_568, 90.0f, 0.05f, 3.0f);
             }
 
@@ -1319,7 +1329,8 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         }
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                                 MTXMODE_NEW);
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(sp5C, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
@@ -1438,8 +1449,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
 
     switch (this->unk_242) {
         case 0x0:
-            Math_ApproachF(&this->actor.world.pos.y, Math_SinS(this->unk_240 * 0x1000) * 80.0f + this->waterHeight, 1.0f,
-                           10.0f);
+            Math_ApproachF(&this->actor.world.pos.y, Math_SinS(this->unk_240 * 0x1000) * 80.0f + this->waterHeight,
+                           1.0f, 10.0f);
             this->actor.shape.rot.z += 0x100;
             Matrix_RotateY(this->unk_2BE, 0);
             Matrix_GetStateTranslationAndScaledZ(500.0f, &sp84);
@@ -1455,8 +1466,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
 
             if ((this->workTimer[WORK_TIMER_UNK0_G] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
                 this->workTimer[WORK_TIMER_UNK0_G] = Rand_ZeroFloat(15.0f) + 15.0f;
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                            this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x,
+                            this->waterHeight, this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
                     if (D_809E9840 % 2 != 0) {
@@ -1535,10 +1546,10 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             Actor_MoveWithGravity(&this->actor);
             if (this->actor.scale.x <= 0.0111f) {
                 this->unk_242 = 2;
-                Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT, 200.0f, 0, 0, 0,
-                                   ENDOORWARP1_FF_1);
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_B_HEART, this->actor.focus.pos.x, PLATFORM_HEIGHT,
-                            this->actor.focus.pos.z, 0, 0, 0, 0);
+                Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1, 0.0f,
+                                   PLATFORM_HEIGHT, 200.0f, 0, 0, 0, ENDOORWARP1_FF_1);
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_B_HEART, this->actor.focus.pos.x,
+                            PLATFORM_HEIGHT, this->actor.focus.pos.z, 0, 0, 0, 0);
                 this->csTimer = 0;
                 Actor_SetScale(&this->actor, 0.0f);
                 Audio_StopSfxByPos(&this->actor.projectedPos);
@@ -1868,7 +1879,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03* this = (Boss03*)thisx;
     Actor* temp_v0_4;
     Player* player; // sp88
-    s32 phi_s0; // i
+    s32 phi_s0;     // i
     Vec3f sp78;
     Vec3f sp6C;
     Vec3f sp60;
@@ -1923,14 +1934,16 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if ((this->actionFunc != Boss03_DeathCutscene) && (!this->unk_2D5)) {
-        if (((this->actor.world.pos.y < this->waterHeight + 50.0f) && (this->waterHeight + 50.0f <= this->actor.prevPos.y)) ||
-            ((this->waterHeight - 50.0f < this->actor.world.pos.y) && (this->actor.prevPos.y <= this->waterHeight - 50.0f))) {
+        if (((this->actor.world.pos.y < this->waterHeight + 50.0f) &&
+             (this->waterHeight + 50.0f <= this->actor.prevPos.y)) ||
+            ((this->waterHeight - 50.0f < this->actor.world.pos.y) &&
+             (this->actor.prevPos.y <= this->waterHeight - 50.0f))) {
             if ((this->actor.velocity.y < 0.0f) && (this->actionFunc != Boss03_DeathCutscene)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_SINK_OLD);
             }
 
-            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x, this->waterHeight,
-                        this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x,
+                        this->waterHeight, this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
             this->unk_280 = 27;
             this->unk_284 = this->actor.world.pos.x;
@@ -2017,7 +2030,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     // Player is on the floor && Player is above water
-    if ((player->actor.bgCheckFlags & 1)  && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) {
+    if ((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) {
         if (this->wetSpotEffectSpawnNum != 0) {
             this->wetSpotEffectSpawnNum--;
 
@@ -2079,7 +2092,8 @@ void Boss03_SetObject(GlobalContext* globalCtx, s16 objectId) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 Boss03_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 Boss03_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                            Actor* thisx) {
     Boss03* this = THIS;
 
     if ((limbIndex == GYORG_LIMB_UPPER_TRUNK) || (limbIndex == GYORG_LIMB_LOWER_TRUNK) ||
@@ -2105,8 +2119,29 @@ s32 Boss03_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     return false;
 }
 
-s8 D_809E9128[] = {
-    -1, -1, 0, -1, 4, 5, 6, -1, 2, -1, -1, 3, -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+/**
+ * Used to manually index the spheres elements of the two colliders
+ * Since there are two sets of ColliderJntSph, indices < 2 (ARRAY_COUNT(sJntSphElementsInit1)) refers to the first
+ * collider and indices >= 2 refers to the second one
+ */
+s8 sGyorgSphElementIndices[] = {
+    -1, // GYORG_LIMB_NONE,
+    -1, // GYORG_LIMB_ROOT,
+    0,  // GYORG_LIMB_HEAD,
+    -1, // GYORG_LIMB_BODY_ROOT,
+    4,  // GYORG_LIMB_UPPER_TRUNK,
+    5,  // GYORG_LIMB_LOWER_TRUNK,
+    6,  // GYORG_LIMB_TAIL,
+    -1, // GYORG_LIMB_RIGHT_FIN_ROOT,
+    2,  // GYORG_LIMB_UPPER_RIGHT_FIN,
+    -1, // GYORG_LIMB_LOWER_RIGHT_FIN,
+    -1, // GYORG_LIMB_LEFT_FIN_ROOT,
+    3,  // GYORG_LIMB_UPPER_LEFT_FIN,
+    -1, // GYORG_LIMB_LOWER_LEFT_FIN,
+    -1, // GYORG_LIMB_JAW_ROOT,
+    1,  // GYORG_LIMB_JAW,
+    -1, // GYORG_LIMB_MAX
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 };
 
 Vec3f D_809E9148 = { 600.0f, -100.0f, 0.0f };
@@ -2120,25 +2155,26 @@ Vec3f D_809E91B4 = { 300.0f, -100.0f, -200.0f };
 void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     Boss03* this = THIS;
     s32 pad;
-    s8 temp_a3;
-    Vec3f sp68;
+    s8 sphereElementIndex;
+    Vec3f spherePos;
     Player* player = GET_PLAYER(globalCtx);
 
     if (limbIndex == GYORG_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_809E9148, &this->actor.focus.pos);
     }
 
-    temp_a3 = D_809E9128[limbIndex];
-    if (temp_a3 >= 0) {
-        Matrix_MultiplyVector3fByState(&D_809E9154[temp_a3], &sp68);
-        if (temp_a3 < 2) {
+    sphereElementIndex = sGyorgSphElementIndices[limbIndex];
+    if (sphereElementIndex >= 0) {
+        Matrix_MultiplyVector3fByState(&D_809E9154[sphereElementIndex], &spherePos);
+
+        if (sphereElementIndex < 2) {
             if ((this->actionFunc == Boss03_Stunned) && (this->waterHeight < player->actor.world.pos.y)) {
-                func_809E2B8C(temp_a3, &this->collider1, &D_809E91A8);
+                Boss03_UpdateSphereElement(sphereElementIndex, &this->collider1, &D_809E91A8);
             } else {
-                func_809E2B8C(temp_a3, &this->collider1, &sp68);
+                Boss03_UpdateSphereElement(sphereElementIndex, &this->collider1, &spherePos);
             }
         } else {
-            func_809E2B8C(temp_a3 - 2, &this->collider2, &sp68);
+            Boss03_UpdateSphereElement(sphereElementIndex - 2, &this->collider2, &spherePos);
         }
     }
 
@@ -2161,7 +2197,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     s32 x;
     s32 y;
     s32 i;
-    s32 initial_x = 27+3;
+    s32 initial_x = 27 + 3;
     s32 initial_Y = 3 + 4;
     uintptr_t actionFuncReloc;
 
@@ -2170,21 +2206,19 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
-
     GfxPrint_SetPos(printer, 1, 1);
     GfxPrint_Printf(printer, "health:%i", this->actor.colChkInfo.health);
 
-
-    if (this->actionFunc == Boss03_SpawnSmallFishesCutscene || this->actionFunc == Boss03_DeathCutscene || this->actionFunc == Boss03_IntroCutscene) {
-        GfxPrint_SetPos(printer, x-4, 0);
+    if (this->actionFunc == Boss03_SpawnSmallFishesCutscene || this->actionFunc == Boss03_DeathCutscene ||
+        this->actionFunc == Boss03_IntroCutscene) {
+        GfxPrint_SetPos(printer, x - 4, 0);
         GfxPrint_Printf(printer, "csState:%i", this->csState);
 
-        GfxPrint_SetPos(printer, x-4, 1);
+        GfxPrint_SetPos(printer, x - 4, 1);
         GfxPrint_Printf(printer, "csTimer:%i", this->csTimer);
     }
 
-
-    GfxPrint_SetPos(printer, x-12, ++y);
+    GfxPrint_SetPos(printer, x - 12, ++y);
     actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)Boss03_PlayUnderwaterSfx + SEGMENT_START(ovl_Boss_03);
     if (this->actionFunc == Boss03_Stunned) {
         GfxPrint_Printf(printer, "actionFunc:Stunned");
@@ -2219,107 +2253,101 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     } else if (this->actionFunc == Boss03_Damaged) {
         GfxPrint_Printf(printer, "actionFunc:Damaged");
 
-
     } else {
         GfxPrint_Printf(printer, "wot  actionFunc:%X", actionFuncReloc & 0x0000FFFF);
     }
 
-
     if (this->actionFunc == Boss03_ChewPlayer) {
-        GfxPrint_SetPos(printer, x-7, ++y);
+        GfxPrint_SetPos(printer, x - 7, ++y);
         GfxPrint_Printf(printer, "work[CHEW]:%i", this->workTimer[WORK_TIMER_CHEW]);
     } else if (this->actionFunc == Boss03_Damaged) {
-        GfxPrint_SetPos(printer, x-10, ++y);
+        GfxPrint_SetPos(printer, x - 10, ++y);
         GfxPrint_Printf(printer, "work[DAMAGED]:%i", this->workTimer[WORK_TIMER_DAMAGED]);
     } else if (this->actionFunc == Boss03_ChasePlayer) {
-        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_SetPos(printer, x - 8, ++y);
         GfxPrint_Printf(printer, "work[CHASE]:%i", this->workTimer[WORK_TIMER_CHASE]);
     } else if (this->actionFunc == Boss03_CatchPlayer) {
-        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_SetPos(printer, x - 8, ++y);
         GfxPrint_Printf(printer, "work[CATCH]:%i", this->workTimer[WORK_TIMER_CATCH]);
     } else if (this->actionFunc == Boss03_PrepareCharge) {
-        GfxPrint_SetPos(printer, x-17, ++y);
+        GfxPrint_SetPos(printer, x - 17, ++y);
         GfxPrint_Printf(printer, "work[PREPARE_CHARGE]:%i", this->workTimer[WORK_TIMER_PREPARE_CHARGE]);
 
     } else if (this->actionFunc == Boss03_DeathCutscene) {
-        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_SetPos(printer, x - 9, ++y);
         GfxPrint_Printf(printer, "work[UNK0_G]:%i", this->workTimer[WORK_TIMER_UNK0_G]);
 
     } else if (this->actionFunc == func_809E34B8) {
-        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_SetPos(printer, x - 9, ++y);
         GfxPrint_Printf(printer, "work[UNK0_A]:%i", this->workTimer[WORK_TIMER_UNK0_A]);
 
     } else {
         ++y;
-        #if 0
+#if 0
         if (this->workTimer[0] != 0) {
             GfxPrint_SetPos(printer, x-6, ++y);
             GfxPrint_Printf(printer, "! work[0]:%i", this->workTimer[0]);
         }
-        #endif
+#endif
     }
 
     if (this->actionFunc == func_809E34B8) {
-        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_SetPos(printer, x - 9, ++y);
         GfxPrint_Printf(printer, "work[UNK1_A]:%i", this->workTimer[WORK_TIMER_UNK1_A]);
     } else if (this->actionFunc == Boss03_PrepareCharge) {
-        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_SetPos(printer, x - 9, ++y);
         GfxPrint_Printf(printer, "work[UNK1_B]:%i", this->workTimer[WORK_TIMER_UNK1_B]);
     } else {
         ++y;
-        #if 0
+#if 0
         if (this->workTimer[1] != 0) {
             GfxPrint_SetPos(printer, x-6, ++y);
             GfxPrint_Printf(printer, "! work[1]:%i", this->workTimer[1]);
         }
-        #endif
+#endif
     }
 
     if (this->actionFunc == Boss03_Stunned) {
-        GfxPrint_SetPos(printer, x-10, ++y);
+        GfxPrint_SetPos(printer, x - 10, ++y);
         GfxPrint_Printf(printer, "work[STUNNED]:%i", this->workTimer[WORK_TIMER_STUNNED]);
     } else if (this->actionFunc == func_809E34B8) {
-        GfxPrint_SetPos(printer, x-9, ++y);
+        GfxPrint_SetPos(printer, x - 9, ++y);
         GfxPrint_Printf(printer, "work[UNK2_A]:%i", this->workTimer[WORK_TIMER_UNK2_A]);
     } else {
         ++y;
-        #if 0
+#if 0
         if (this->workTimer[2] != 0) {
             GfxPrint_SetPos(printer, x-6, ++y);
             GfxPrint_Printf(printer, "! work[2]:%i", this->workTimer[2]);
         }
-        #endif
+#endif
     }
 
-
-
-    //GfxPrint_SetPos(printer, x, ++y);
-    //GfxPrint_Printf(printer, "240:%X", this->unk_240);
+    // GfxPrint_SetPos(printer, x, ++y);
+    // GfxPrint_Printf(printer, "240:%X", this->unk_240);
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "242:%X", this->unk_242);
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-16, ++y);
     GfxPrint_Printf(printer, "numSpawnedSmallFish:%X", this->numSpawnedSmallFish);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-18, ++y);
     GfxPrint_Printf(printer, "hasSpwanedSmallFishes:%X", this->hasSpwanedSmallFishes);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-17, ++y);
     GfxPrint_Printf(printer, "bubbleEffectSpawnNum:%X", this->bubbleEffectSpawnNum);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-8, ++y);
     GfxPrint_Printf(printer, "waterHeight:%f", this->waterHeight);
-    #endif
-
+#endif
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "25C:%X", this->unk_25C);
@@ -2327,12 +2355,12 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "25E:%X", this->unk_25E);
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-1, ++y);
     GfxPrint_Printf(printer, "rotY:%f", this->unk_260);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "268.x:%f", this->unk_268.x);
 
@@ -2341,9 +2369,9 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "268.z:%f", this->unk_268.z);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-12, ++y);
     GfxPrint_Printf(printer, "prevPlayerPos.x:%f", this->prevPlayerPos.x);
 
@@ -2352,33 +2380,30 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     GfxPrint_SetPos(printer, x-12, ++y);
     GfxPrint_Printf(printer, "prevPlayerPos.z:%f", this->prevPlayerPos.z);
-    #endif
+#endif
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "274:%X", this->unk_274);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "276:%X", this->unk_276);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "278:%f", this->unk_278);
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "27C:%f", this->unk_27C);
-    #endif
-
+#endif
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "280:%X", this->unk_280);
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "284:%f", this->unk_284);
 
@@ -2387,35 +2412,33 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "28C:%f", this->unk_28C);
-    #endif
-
+#endif
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "290:%X", this->unk_290);
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "294:%f", this->unk_294);
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "298:%f", this->unk_298);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-8, ++y);
     GfxPrint_Printf(printer, "leftFinYRot:%i", this->leftFinYRot);
 
     GfxPrint_SetPos(printer, x-9, ++y);
     GfxPrint_Printf(printer, "rightFinYRot:%i", this->rightFinYRot);
-    #endif
+#endif
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-5, ++y);
     GfxPrint_Printf(printer, "bodyYRot:%X", this->bodyYRot);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "2A2.x:%i", this->unk_2A2.x);
 
@@ -2424,15 +2447,14 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "2A2.z:%i", this->unk_2A2.z);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-4, ++y);
     GfxPrint_Printf(printer, "jawZRot:%X", this->jawZRot);
-    #endif
+#endif
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "2AC.x:%f", this->unk_2AC.x);
 
@@ -2441,16 +2463,12 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     GfxPrint_SetPos(printer, x-2, ++y);
     GfxPrint_Printf(printer, "2AC.z:%f", this->unk_2AC.z);
-    #endif
+#endif
 
-
-    #if 1
+#if 1
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2B8:%f", this->unk_2B8);
-    #endif
-
-
-
+#endif
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BC:%X", this->unk_2BC);
@@ -2461,22 +2479,20 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BE:%i", this->unk_2BE);
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2C4:%f", this->unk_2C4);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x-18, ++y);
     GfxPrint_Printf(printer, "wetSpotEffectSpawnNum:%X", this->wetSpotEffectSpawnNum);
-    #endif
+#endif
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2D5:%s", BOOLSTR(this->unk_2D5));
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2D6:%i", this->unk_2D6);
 
@@ -2485,34 +2501,29 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2DA:%i", this->unk_2DA);
-    #endif
+#endif
 
-
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "324:%X", this->unk_324);
-    #endif
+#endif
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "52C:%f", this->floppingAnimLastFrame);
-    #endif
-
-
-
+#endif
 
     x = 1;
     y = initial_Y;
 
     y++;
 
-    #if 0
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "csCamId:%X", this->csCamId);
-    #endif
+#endif
 
-
-    #if 0
+#if 0
     // Vec3fs
     for (i = 0x538; i < 0x568; i += 4) {
         GfxPrint_SetPos(printer, x, ++y);
@@ -2522,10 +2533,9 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
             return;
         }
     }
-    #endif
+#endif
 
-
-    #if 0
+#if 0
     for (i = 0x568; i < 0x57C; i += 4) {
         if (i == 0x574) {
             continue;
@@ -2537,11 +2547,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
             return;
         }
     }
-    #endif
-
-
-
-
+#endif
 
     x = 1;
     y = 28;
@@ -2555,7 +2561,6 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetPos(printer, x, --y);
     GfxPrint_Printf(printer, "pos.z:%f", this->actor.world.pos.z);
 
-
     {
         Player* player = GET_PLAYER(globalCtx);
 
@@ -2568,13 +2573,13 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
         GfxPrint_SetPos(printer, x, --y);
         GfxPrint_Printf(printer, "player.pos.z:%f", player->actor.world.pos.z);
 
-        #if 0
+#if 0
         GfxPrint_SetPos(printer, x, --y);
         GfxPrint_Printf(printer, "player.feetPos[0].y:%f", player->actor.shape.feetPos[0].y);
 
         GfxPrint_SetPos(printer, x, --y);
         GfxPrint_Printf(printer, "player.feetPos[1].y:%f", player->actor.shape.feetPos[1].y);
-        #endif
+#endif
     }
 
 #if 0
@@ -2634,7 +2639,6 @@ void Boss03_DrawStruct(Boss03* this, GlobalContext* globalCtx) {
 }
 #endif
 
-
 void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
 
@@ -2657,7 +2661,6 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2BC = 0;
 
     Boss03_DrawEffects(globalCtx);
-
 
 #ifndef NOT_DEBUG_PRINT
     Boss03_DrawStruct(this, globalCtx);
@@ -2814,14 +2817,14 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
                 flag++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)eff->unk_40, (u8)((((void)0, eff->unk_40) + 55.0f)), 225,
-                            150);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)eff->unk_40, (u8)((((void)0, eff->unk_40) + 55.0f)), 225, 150);
 
             Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_InsertYRotation_f(
-                    Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * (M_PI / 0x8000), MTXMODE_APPLY);
+                Matrix_InsertYRotation_f(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) *
+                                             (M_PI / 0x8000),
+                                         MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             }
