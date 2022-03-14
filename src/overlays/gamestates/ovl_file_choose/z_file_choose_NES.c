@@ -14,11 +14,11 @@ extern Gfx D_010311F0[];
 extern Gfx D_01031408[];
 extern Gfx D_01031618[];
 
-extern UNK_TYPE D_01002800;
-extern UNK_TYPE D_01007980;
-extern UNK_TYPE D_0102A6B0;
-extern UNK_TYPE D_0102B170;
-extern UNK_TYPE D_010310F0;
+extern void* D_01002800[];
+extern void* D_01007980[];
+extern void* D_0102A6B0[];
+extern void* D_0102B170[];
+extern void* D_010310F0[];
 
 // there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
 extern GfxMasterList D_0E000000;
@@ -421,7 +421,6 @@ void func_8080D220(GameState* thisx) {
     }
 }
 
-// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D284.s")
 void func_8080D284(GameState* thisx) {
     FileChooseContext *this = (FileChooseContext*)thisx;
 
@@ -608,7 +607,7 @@ void func_8080D40C(GameState* thisx) {
 void func_8080D6D4(GameState* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080D6D4.s")
 extern s16 D_80814280[];
-extern s16 D_80814538[];
+extern s16 D_80814538[]; // sFileInfoBoxPartWidths
 extern s16 D_80814554[];
 extern s16 D_80814620[];
 extern s16 D_80814628[];
@@ -1723,11 +1722,179 @@ extern s16 D_80814650[];
 // }
 
 
+void func_8080F25C(GameState*, s16);          /* extern */
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_8080F25C.s")
+
 
 void func_808108DC(GameState* thisx);
 // void func_808108DC(FileChooseContext* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808108DC.s")
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_file_choose/func_808108DC.s")
+extern void* D_010220B0[]; // gFileSelNameBoxTex
+extern void* D_010277B0[]; // gOptionsButtonTex // Array on PAL
+extern void* D_0102A030[]; // gFileSelDISKButtonTex in OoT
+extern void* D_0102AAB0[]; // gFileSelBigButtonHighlightTex
+extern s16 D_80814548[]; // sWindowContentColors
+extern void* D_80814704[]; // sFileInfoBoxTextures
+extern void* D_80814720[]; // sTitleLabels
+extern void* D_80814744[]; // sWarningLabels
+extern void* D_80814758[]; // sFileButtonTextures
+extern void* D_80814764[]; // sActionButtonTextures
+
+
+
+// void* D_80814704[] = {
+//     0x01022E30, 0x01023DF0, 0x01024DB0, 0x01025D70, 0x01026D30, 0x010287B0, 0x010293F0
+// };
+
+// void* D_80814720[] = {
+//     0x01004980, 0x01005180, 0x01002980, 0x01003180, 0x01003980, 0x01004180, 0x01005980, 0x01006180, 0x01006980
+// };
+
+// void* D_80814744[] = {
+//     0x01000000, 0x01000800, 0x01001000, 0x01001800, 0x01002000
+// };
+
+// void* D_80814758[] = {
+//     0x0101EFB0, 0x0101F7B0, 0x0101FFB0
+// };
+
+// void* D_80814764[] = {
+//     0x0101E7B0, 0x01020FB0, 0x010207B0, 0x01027FB0
+// };
+extern int ENVIRONMENT;
+extern int PRIMITIVE;
+extern int TEXEL0;
+
+void func_808108DC(GameState* thisx) {
+    FileChooseContext *this = (FileChooseContext*)thisx;
+    s16 phi_s0;
+    s16 phi_s6;
+    s16 phi_t2;
+    s16 phi_t3;
+
+    if (1) {}
+
+    OPEN_DISPS(this->state.gfxCtx);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244B6[0]);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+    gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[0], 4, 0);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AC], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244B6[1]);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814720[this->unk_244AE], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+
+    phi_s6 = 4;
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    for (phi_s0 = 0; phi_s0 < 3; phi_s0++, phi_s6 += 28) {
+        if (phi_s0 < 2) {
+            gDPPipeSync(POLY_OPA_DISP++);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244D4[phi_s0]);
+            gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[phi_s6], 28, 0);
+
+            for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 7; phi_t2++, phi_t3 += 4) {
+                if ((phi_t2 < 5) || ((this->unk_2446A[phi_s0] != 0) && (phi_t2 >= 5))) {
+                    gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814704[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, D_80814538[phi_t2], 56, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                    gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
+                }
+            }
+
+        }
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    for (phi_t2 = 0; phi_t2 < 3; phi_t2++, phi_s6 += 16) {
+        if (phi_t2 < 2) {
+            gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[phi_s6], 16, 0);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244BC[phi_t2]);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814758[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244C2[phi_t2]);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, D_010220B0, G_IM_FMT_IA, G_IM_SIZ_16b, 108, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSP1Quadrangle(POLY_OPA_DISP++, 4, 6, 7, 5, 0);
+
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244CE[phi_t2]);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, D_01002800, G_IM_FMT_IA, G_IM_SIZ_8b, 24, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
+
+            if (this->unk_2446A[phi_t2] != 0) {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, D_80814548[0], D_80814548[1], D_80814548[2], this->unk_244C2[phi_t2]);
+                gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102A030, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                gSP1Quadrangle(POLY_OPA_DISP++, 12, 14, 15, 13, 0);
+            }
+        }
+    }
+
+    for (phi_s0 = 0; phi_s0 < 2; phi_s0++) {
+        func_8080F25C(&this->state, phi_s0); // DrawFileInfo(this, fileIndex)
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+    gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+    gSPVertex(POLY_OPA_DISP++, &this->unk_243E4[0x3AC], 20, 0);
+
+    for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 2; phi_t2++, phi_t3 += 4) {
+        gDPPipeSync(POLY_OPA_DISP++);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244DA[phi_t2]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_t2], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    for (phi_t3 = 0, phi_t2 = 0; phi_t2 < 2; phi_t2++, phi_t3 += 4) {
+        phi_s6 = this->unk_244F6[phi_t2];
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244DE[phi_t2]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814764[phi_s6], G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, phi_t3, phi_t3 + 2, phi_t3 + 3, phi_t3 + 1, 0);
+    }
+
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244B0[0], this->unk_244B0[1], this->unk_244B0[2], this->unk_244E2);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, D_010277B0, G_IM_FMT_IA, G_IM_SIZ_16b, 64, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
+
+    if (((this->unk_24484 == 1) && ((this->unk_24486 == 2) || (this->unk_24486 == 4) || (this->unk_24486 == 7) || (this->unk_24486 == 12) || (this->unk_24486 == 22) || (this->unk_24486 == 25))) || ((this->unk_24484 == 2) && (this->unk_2448C == 3))) {
+        gDPPipeSync(POLY_OPA_DISP++);
+
+        gDPSetCombineLERP(POLY_OPA_DISP++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->unk_244EA[0], this->unk_244EA[1], this->unk_244EA[2], this->unk_244EA[3]);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_0102AAB0, G_IM_FMT_I, G_IM_SIZ_8b, 72, 24, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, 12, 14, 15, 13, 0);
+    }
+
+    if (this->unk_244A8 > -1) {
+        gDPPipeSync(POLY_OPA_DISP++);
+
+        gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, this->unk_244E8);
+        gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+        gDPLoadTextureBlock(POLY_OPA_DISP++, D_80814744[this->unk_244A8], G_IM_FMT_IA, G_IM_SIZ_8b, 128, 16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSP1Quadrangle(POLY_OPA_DISP++, 16, 18, 19, 17, 0);
+    }
+
+    gDPPipeSync(POLY_OPA_DISP++);
+
+    gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
+
+    CLOSE_DISPS(this->state.gfxCtx);
+}
 
 void func_80808F1C(GameState*);
 void func_8080BBFC(GameState*);

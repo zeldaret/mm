@@ -33,7 +33,8 @@ typedef struct {
     /* 0x24454 */ s8   unk_24454[4];
     /* 0x24458 */ u16  unk_24458[4];
     /* 0x24460 */ s16  unk_24460[4];
-    /* 0x24468 */ u8   unk_24468[4];
+    /* 0x24468 */ u8   unk_24468[2]; // May be 2 arrays of 2
+    /* 0x24468 */ u8   unk_2446A[2]; // May be 2 arrays of 2
     /* 0x2446C */ s16  rupees[4];
     /* 0x24474 */ u8   unk_24474[4];
     /* 0x24478 */ u8   unk_24478[4];
@@ -69,7 +70,7 @@ typedef struct {
     /* 0x244E4 */ s16  unk_244E4;
     /* 0x244E6 */ s16  unk_244E6;
     /* 0x244E8 */ s16  unk_244E8;
-    /* 0x244EA */ s16  unk_244EA[4];
+    /* 0x244EA */ s16  unk_244EA[4]; // last elt may be separate
     /* 0x244F2 */ s16  unk_244F2;
     /* 0x244F4 */ s16  unk_244F4;
     /* 0x244F6 */ s16  unk_244F6[2];

@@ -23,10 +23,10 @@
 #define GET_ACTIVE_CAM(globalCtx) ((globalCtx)->cameraPtrs[(globalCtx)->activeCamera])
 #define CAM_ID_MAIN 0
 
-#define STOP_GAMESTATE(curState)         \
-    do {                                 \
-        GameState* state = &this->state; \
-        state->running = false;     \
+#define STOP_GAMESTATE(curState)     \
+    do {                             \
+        GameState* state = curState; \
+        state->running = false;      \
     } while (0)
 
 #define SET_NEXT_GAMESTATE_TEST(curState, newInit, newStruct) \
