@@ -39,37 +39,30 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_809E344C(Boss03* this, GlobalContext* globalCtx);
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx);
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupCatchPlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2);
 void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx);
 void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx);
 void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx);
 void Boss03_Charge(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupJumpOverPlatform(Boss03* this, GlobalContext* globalCtx);
 void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx);
+void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx);
 void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx);
 void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx);
 void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx);
+void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx);
 void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx);
 
-void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx);
+void Boss03_UpdateEffects(GlobalContext* globalCtx);
+void Boss03_DrawEffects(GlobalContext* globalCtx);
 
 void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx);
-
-void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx);
-
-void Boss03_DrawEffects(GlobalContext* globalCtx);
-
-void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx);
-
-void Boss03_SetupCatchPlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2);
-void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx);
-void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx);
-
-void Boss03_SetupJumpOverPlatform(Boss03* this, GlobalContext* globalCtx);
-
-void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx);
-
-void Boss03_UpdateEffects(GlobalContext* globalCtx);
 
 u8 D_809E9840;
 u8 D_809E9841;
@@ -79,9 +72,6 @@ Vec3f D_809E9848;
 
 GyorgEffect sGyorgEffects[GYORG_EFFECT_COUNT];
 Boss03* sGyorgInstance;
-
-extern UNK_TYPE D_06007EC8;
-extern AnimationHeader D_06009C14;
 
 void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
     func_8019F420(projectedPos, sfxId);
@@ -239,7 +229,7 @@ const ActorInit Boss_03_InitVars = {
     (ActorFunc)Boss03_Draw,
 };
 
-static ColliderJntSphElementInit sJntSphElementsInit1[2] = {
+static ColliderJntSphElementInit sJntSphElementsInit1[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -277,7 +267,7 @@ static ColliderJntSphInit sJntSphInit1 = {
     sJntSphElementsInit1,
 };
 
-static ColliderJntSphElementInit sJntSphElementsInit2[5] = {
+static ColliderJntSphElementInit sJntSphElementsInit2[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -831,7 +821,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.speedXZ, 10.0f, 1.0f, 1.0f);
             if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < 100.0f) {
                 this->unk_242 = 1;
-                Animation_MorphToLoop(&this->skelAnime, &D_06009C14, -15.0f);
+                Animation_MorphToLoop(&this->skelAnime, &gGyorgBackingUpAnim, -15.0f);
             }
             break;
 
@@ -1258,7 +1248,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
 
             if (this->csTimer == 30) {
                 TitleCard_InitBossName(&globalCtx->state, &globalCtx->actorCtx.titleCtxt,
-                                       Lib_SegmentedToVirtual(&D_06007EC8), 160, 180, 128, 40);
+                                       Lib_SegmentedToVirtual(gGyorgTitleCardTex), 160, 180, 128, 40);
             }
 
             if ((this->csTimer < 24) || (this->csTimer >= 90)) {
