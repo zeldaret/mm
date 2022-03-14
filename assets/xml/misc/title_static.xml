@@ -73,9 +73,9 @@
 
         <Texture Name="gFileSelFile1ButtonENGTex" OutName="file_1_button_eng" Format="ia16" Width="64" Height="16" Offset="0x1EFB0"/>
 
-        <Texture Name="gFileSelFile2ButtonENGTex" OutName="file_2_button_ENG" Format="ia16" Width="64" Height="16" Offset="0x1F7B0"/>
+        <Texture Name="gFileSelFile2ButtonENGTex" OutName="file_2_button_eng" Format="ia16" Width="64" Height="16" Offset="0x1F7B0"/>
 
-        <Texture Name="gFileSelFile3ButtonENGTex" OutName="file_3_button_ENG" Format="ia16" Width="64" Height="16" Offset="0x1FFB0"/>
+        <Texture Name="gFileSelFile3ButtonENGTex" OutName="file_3_button_eng" Format="ia16" Width="64" Height="16" Offset="0x1FFB0"/>
 
         <Texture Name="gFileSelYesButtonENGTex" OutName="yes_button_eng" Format="ia16" Width="64" Height="16" Offset="0x207B0"/>
 
