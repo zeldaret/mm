@@ -358,7 +358,7 @@ Color_RGBA8 D_809E9100 = { 40, 30, 30, 255 };
  * Used when chasing Player and Gyorg is near the underwater floor
  */
 void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
-    if (this->unk_2AC.y < 80.0f) {
+    if (this->insideJawPos.y < 80.0f) {
         u8 i;
         Vec3f pos;
         Vec3f velocity;
@@ -374,8 +374,8 @@ void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
             accel.x = 0.0f;
 
             pos.y = Rand_ZeroFloat(20.0f) + 5.0f;
-            pos.z = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.z;
-            pos.x = randPlusMinusPoint5Scaled(150.0f) + this->unk_2AC.x;
+            pos.z = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.z;
+            pos.x = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.x;
 
             func_800B0EB0(globalCtx, &pos, &velocity, &accel, &D_809E90FC, &D_809E9100, Rand_ZeroFloat(200.0f) + 400.0f,
                           10, Rand_ZeroFloat(10.0f) + 25.0f);
@@ -409,9 +409,9 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
         // This bit is weird, why is it setting the first 6 elements of the joint table?
         for (i = 0; i < 6; i++) {
-            this->jointTable[i].x = Math_SinS((this->unk_240 * 0x100) + i * 15000) * 3000.0f;
-            this->jointTable[i].y = Math_SinS((this->unk_240 * 0x180) + i * 20000) * 2000.0f;
-            this->jointTable[i].z = Math_SinS((this->unk_240 * 0x10) + i * 19000) * 4000.0f;
+            this->jointTable[i].x = Math_SinS(this->unk_240 * 0x100 + i * 15000) * 3000.0f;
+            this->jointTable[i].y = Math_SinS(this->unk_240 * 0x180 + i * 20000) * 2000.0f;
+            this->jointTable[i].z = Math_SinS(this->unk_240 * 0x10 + i * 19000) * 4000.0f;
         }
 
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -423,10 +423,17 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03_SeedRand(1, 29093, 9786);
 
     for (i = 0; i < 5; i++) {
-        Matrix_InsertYRotation_f((Boss03_RandZeroOne() * 3.1415927f * 0.2f) + (1.2566371f * i), 0);
-        Matrix_GetStateTranslationAndScaledZ((Boss03_RandZeroOne() * 800.0f) + 400.0f, &sp70);
+        f32 rand;
+
+        rand = Boss03_RandZeroOne();
+        Matrix_InsertYRotation_f((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
+
+        rand = Boss03_RandZeroOne();
+        Matrix_GetStateTranslationAndScaledZ((rand * 800.0f) + 400.0f, &sp70);
+
+        rand = Boss03_RandZeroOne();
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_03, sp70.x, sp70.y, sp70.z, 0,
-                    Boss03_RandZeroOne() * 0x10000, 0, GYORG_PARAM_SEAWEED);
+                    rand * 0x10000, 0, GYORG_PARAM_SEAWEED);
     }
 
     sGyorgInstance = this;
@@ -446,6 +453,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
                        this->morphTable, GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
 
+    // gSaveContext.eventInf[5] & 0x40: intro cutscene already watched
     if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x40)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = 0;
@@ -583,7 +591,7 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // float regalloc
 /**
- * Approaches to Player until he is near enough, then start chasing him, unless he is back on the platform or the
+ * Approaches to Player until he is near enough, then try to catch him, unless he is back on the platform or the
  * WORK_TIMER_CHASE runs out
  */
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
@@ -733,9 +741,9 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     } else {
         f32 phi_f0;
 
-        Math_ApproachF(&player->actor.world.pos.x, this->unk_2AC.x, 1.0f, this->unk_2B8);
-        Math_ApproachF(&player->actor.world.pos.y, this->unk_2AC.y, 1.0f, this->unk_2B8);
-        Math_ApproachF(&player->actor.world.pos.z, this->unk_2AC.z, 1.0f, this->unk_2B8);
+        Math_ApproachF(&player->actor.world.pos.x, this->insideJawPos.x, 1.0f, this->unk_2B8);
+        Math_ApproachF(&player->actor.world.pos.y, this->insideJawPos.y, 1.0f, this->unk_2B8);
+        Math_ApproachF(&player->actor.world.pos.z, this->insideJawPos.z, 1.0f, this->unk_2B8);
 
         if (this->unk_242 != 0) {
             phi_f0 = 10.0f;
@@ -773,7 +781,7 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_ChewPlayer;
 
     temp = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
-    Matrix_RotateY(temp, 0);
+    Matrix_RotateY(temp, MTXMODE_NEW);
 
     sp20.x = 0.0f;
     sp20.y = 200.0f;
@@ -790,9 +798,9 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Input* input = CONTROLLER1(globalCtx);
     f32 temp_f0;
-    f32 temp_f2;
-    f32 temp_f16;
-    f32 temp_f18;
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
     s32 pad;
 
     this->unk_2BD = true;
@@ -803,18 +811,19 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     }
 
     SkelAnime_Update(&this->skelAnime);
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0);
-    Matrix_RotateY(this->actor.world.rot.y, 1);
 
-    temp_f2 = this->unk_268.x - this->actor.world.pos.x;
-    temp_f16 = this->unk_268.y - this->actor.world.pos.y;
-    temp_f18 = this->unk_268.z - this->actor.world.pos.z;
+    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA,
+    xDiff = this->unk_268.x - this->actor.world.pos.x;
+    yDiff = this->unk_268.y - this->actor.world.pos.y;
+    zDiff = this->unk_268.z - this->actor.world.pos.z;
+
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
                    this->unk_274);
     Math_ApproachS(
         &this->bodyYRot,
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f, 5,
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f, 5,
         0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
@@ -822,7 +831,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     switch (this->unk_242) {
         case 0x0:
             Math_ApproachF(&this->actor.speedXZ, 10.0f, 1.0f, 1.0f);
-            if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < 100.0f) {
+            if (sqrtf(SQ(xDiff) + SQ(zDiff)) < 100.0f) {
                 this->unk_242 = 1;
                 Animation_MorphToLoop(&this->skelAnime, &gGyorgBackingUpAnim, -15.0f);
             }
@@ -835,9 +844,11 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     }
 
     Actor_MoveWithoutGravityReverse(&this->actor);
+
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
+    // Mashing A or B reduces the time Gyorg is chewing Player
     if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
         if (this->workTimer[WORK_TIMER_CHEW] != 0) {
             this->workTimer[WORK_TIMER_CHEW]--;
@@ -862,7 +873,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
         return;
     }
 
-    player->actor.world.pos = this->unk_2AC;
+    player->actor.world.pos = this->insideJawPos;
     temp_f0 = Math_SinS(this->unk_240 * 0x2000);
 
     Math_ApproachS(&this->jawZRot, temp_f0 * 2000.0f, 2, 0x3000);
@@ -870,6 +881,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     player->actor.world.rot.x = player->actor.shape.rot.x;
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->unk_2A2.y;
+
     if (this->workTimer[WORK_TIMER_CHEW] < 5) {
         Math_ApproachS(&this->jawZRot, 0x3200, 2, 0x1800);
         Math_ApproachF(&this->unk_2C4, 100.0f, 1.0f, 100.0f);
@@ -1086,8 +1098,9 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 7);
                 this->csCamId = Play_CreateSubCamera(globalCtx);
-                Play_CameraChangeStatus(globalCtx, 0, 1);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
                 Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
+
                 this->actor.world.rot.y = -0x7B30;
                 this->prevPlayerPos.y = 1850.0f;
 
@@ -1120,6 +1133,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                     Math_ApproachF(&this->csCamAt.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
                     this->csCamAt.z = player->actor.world.pos.z;
+
                     if (this->csTimer >= 106) {
                         this->csState = 2;
                         this->csTimer = 0;
@@ -1141,7 +1155,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                                            this->unk_274);
                             Math_ApproachS(&this->unk_274, 0x200, 1, 0x10);
 
-                            if ((this->csTimer >= 31) && (this->csTimer < 50)) {
+                            if ((this->csTimer > 30) && (this->csTimer < 50)) {
                                 bubblesToSpawnNum = 2;
                             }
 
@@ -1165,7 +1179,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                             } else {
                                 this->unk_278 = 0.0f;
                                 bubblesToSpawnNum = 1;
-                                if ((this->actor.speedXZ == 0.0f) && (this->csTimer >= 231)) {
+                                if ((this->actor.speedXZ == 0.0f) && (this->csTimer > 230)) {
                                     this->csState = 3;
                                     this->csTimer = 0;
                                 }
@@ -1184,7 +1198,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
             sp5A = 0x1970;
             Math_ApproachF(&this->actor.speedXZ, 15.0f, 1.0f, 2.0f);
-            if (this->csTimer >= 21) {
+            if (this->csTimer > 20) {
                 this->csState = 4;
                 this->csTimer = 0;
             }
@@ -1390,7 +1404,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 1);
                 this->csCamId = Play_CreateSubCamera(globalCtx);
-                Play_CameraChangeStatus(globalCtx, 0, 1);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
                 Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
 
@@ -1602,7 +1616,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 1);
                 this->csCamId = Play_CreateSubCamera(globalCtx);
-                Play_CameraChangeStatus(globalCtx, 0, 1);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
                 Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
                 this->csState = 1;
                 this->unk_2BE = 3000;
@@ -2182,7 +2196,7 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         MtxF mf;
 
         D_809E91B4.x = this->unk_2C4 + 300.0f;
-        Matrix_MultiplyVector3fByState(&D_809E91B4, &this->unk_2AC);
+        Matrix_MultiplyVector3fByState(&D_809E91B4, &this->insideJawPos);
         Matrix_CopyCurrentState(&mf);
         func_8018219C(&mf, &this->unk_2A2, 0);
     }
@@ -2455,14 +2469,14 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
 #endif
 
 #if 0
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "2AC.x:%f", this->unk_2AC.x);
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "jawPos.x:%f", this->insideJawPos.x);
 
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "2AC.y:%f", this->unk_2AC.y);
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "jawPos.y:%f", this->insideJawPos.y);
 
-    GfxPrint_SetPos(printer, x-2, ++y);
-    GfxPrint_Printf(printer, "2AC.z:%f", this->unk_2AC.z);
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "jawPos.z:%f", this->insideJawPos.z);
 #endif
 
 #if 1

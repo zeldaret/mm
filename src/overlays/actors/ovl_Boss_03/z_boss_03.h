@@ -70,7 +70,7 @@ typedef struct Boss03 {
     /* 0x02A0 */ s16 bodyYRot; // body rot?
     /* 0x02A2 */ Vec3s unk_2A2;
     /* 0x02A8 */ s16 jawZRot;
-    /* 0x02AC */ Vec3f unk_2AC; // used to grab player?
+    /* 0x02AC */ Vec3f insideJawPos; // used to grab player
     /* 0x02B8 */ f32 unk_2B8;
     /* 0x02BC */ s8 unk_2BC; // set but not used
     /* 0x02BD */ u8 unk_2BD; // playerUnderwater?
