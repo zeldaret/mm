@@ -1500,9 +1500,7 @@ beginseg
     name "ovl_Obj_Switch"
     compress
     include "build/src/overlays/actors/ovl_Obj_Switch/z_obj_switch.o"
-    include "build/data/ovl_Obj_Switch/ovl_Obj_Switch.data.o"
-    include "build/data/ovl_Obj_Switch/ovl_Obj_Switch.bss.o"
-    include "build/data/ovl_Obj_Switch/ovl_Obj_Switch.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Switch/ovl_Obj_Switch_reloc.o"
 endseg
 
 beginseg
@@ -2505,11 +2503,7 @@ beginseg
     name "ovl_Boss_02"
     compress
     include "build/src/overlays/actors/ovl_Boss_02/z_boss_02.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_Boss_02/ovl_Boss_02_reloc.o"
-    #else
-        include "build/data/ovl_Boss_02/ovl_Boss_02.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_Boss_02/ovl_Boss_02_reloc.o"
 endseg
 
 beginseg
@@ -3813,11 +3807,7 @@ beginseg
     name "ovl_Obj_Snowball"
     compress
     include "build/src/overlays/actors/ovl_Obj_Snowball/z_obj_snowball.o"
-#ifdef NON_MATCHING
-    include "build/src/overlays/actors/ovl_Obj_Snowball/ovl_obj_Snowball_reloc.o"
-#else
-    include "build/data/ovl_Obj_Snowball/ovl_Obj_Snowball.reloc.o"
-#endif
+    include "build/src/overlays/actors/ovl_Obj_Snowball/ovl_Obj_Snowball_reloc.o"
 endseg
 
 beginseg
@@ -4596,9 +4586,7 @@ beginseg
     name "ovl_Bg_F40_Switch"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Switch/z_bg_f40_switch.o"
-    include "build/data/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch.data.o"
-    include "build/data/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch.bss.o"
-    include "build/data/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Switch/ovl_Bg_F40_Switch_reloc.o"
 endseg
 
 beginseg
@@ -4976,8 +4964,7 @@ beginseg
     name "ovl_En_Osk"
     compress
     include "build/src/overlays/actors/ovl_En_Osk/z_en_osk.o"
-    include "build/data/ovl_En_Osk/ovl_En_Osk.data.o"
-    include "build/data/ovl_En_Osk/ovl_En_Osk.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Osk/ovl_En_Osk_reloc.o"
 endseg
 
 beginseg
@@ -5022,7 +5009,7 @@ beginseg
     name "ovl_En_Bomjima"
     compress
     include "build/src/overlays/actors/ovl_En_Bomjima/z_en_bomjima.o"
-    include "build/data/ovl_En_Bomjima/ovl_En_Bomjima.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bomjima/ovl_En_Bomjima_reloc.o"
 endseg
 
 beginseg
