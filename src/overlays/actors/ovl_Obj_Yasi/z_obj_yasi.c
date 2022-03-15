@@ -16,8 +16,6 @@ void ObjYasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-// s32 D_80BB4D90[] = {0xC8580064, 0xB0FC0FA0, 0xB1000190, 0x31040320};
-
 const ActorInit Obj_Yasi_InitVars = {
     ACTOR_OBJ_YASI,
     ACTORCAT_PROP,
