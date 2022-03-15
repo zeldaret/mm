@@ -251,13 +251,76 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CFDC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D304.s")
+// Message_LoadTimeBeforeMoonCrash
+void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    s16 i;
+    s16 p = *decodedBufPos;
+    s32 o = *offset;
+    f32 f = *arg3;
+    u32 dayTime;
+    s16 digits[4];
+    s32 day;
+    f32 timeInMinutes;
 
+    if (arg1 == 0x20F) {
+        day = gSaveContext.day;
+        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.time);
+    } else {
+        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.time);
+    }
+    timeInMinutes = TIME_TO_MINUTES_F(dayTime);
+
+    digits[0] = 0;
+    digits[1] = (timeInMinutes / 60.0f);
+    while (digits[1] >= 10) {
+        digits[0]++;
+        digits[1] -= 10;
+    }
+
+    digits[2] = 0;
+    digits[3] = (s32)timeInMinutes % 60;
+    while (digits[3] >= 10) {
+        digits[2]++;
+        digits[3] -= 10;
+    }
+
+    for (i = 0; i < 4; i++) {
+        Font_LoadChar(globalCtx, digits[i] + 0x824F, o);
+        o += FONT_CHAR_TEX_SIZE;
+        msgCtx->decodedBuffer.wchar[p] = digits[i] + 0x824F;
+        p++;
+        if (i == 1) {
+            // Hours (時間)
+            Font_LoadChar(globalCtx, 0x8E9E, o);
+            o += FONT_CHAR_TEX_SIZE;
+            msgCtx->decodedBuffer.wchar[p] = 0x8E9E;
+            p++;
+            Font_LoadChar(globalCtx, 0x8AD4, o);
+            o += FONT_CHAR_TEX_SIZE;
+            msgCtx->decodedBuffer.wchar[p] = 0x8E9E;
+            p++;
+        } else if (i == 3) {
+            // Minutes (分)
+            Font_LoadChar(globalCtx, 0x95AA, o);
+            o += FONT_CHAR_TEX_SIZE;
+            msgCtx->decodedBuffer.wchar[p] = 0x95AA;
+        }
+    }
+    f += 7.0f * (16.0f * msgCtx->unk12098);
+    *decodedBufPos = p;
+    *offset = o;
+    *arg3 = f;
+}
+
+// JPN Area names
 extern u16 D_801D0188[11][9];
+// Area Names lengths
 extern s16 D_801D0250[11];
 
+// Message_LoadAreaText
 void func_8014D62C(GlobalContext* globalCtx, s32* offset, f32* arg2, s16* decodedBufPos) {
-    s16 *unk_238Ptr;
+    s16* unk_238Ptr;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s16 p = *decodedBufPos;
     s32 o = *offset;
@@ -265,27 +328,27 @@ void func_8014D62C(GlobalContext* globalCtx, s32* offset, f32* arg2, s16* decode
     s16 i;
     s16 currentArea;
     s16 stringLimit;
-    
+
     unk_238Ptr = globalCtx->pauseCtx.unk_238;
     if ((func_8010A0A4(globalCtx) != 0) || (globalCtx->sceneNum == SCENE_SECOM)) {
         currentArea = 10;
     } else {
         currentArea = unk_238Ptr[4];
     }
-    
+
     stringLimit = D_801D0250[currentArea];
-    if(stringLimit > 0){
+    if (stringLimit > 0) {
         i = 0;
-        do{
+        do {
             msgCtx->decodedBuffer.wchar[p] = D_801D0188[currentArea][i];
-            Font_LoadChar(globalCtx,  D_801D0188[currentArea][i], o);
+            Font_LoadChar(globalCtx, D_801D0188[currentArea][i], o);
             i++;
             p++;
             o += FONT_CHAR_TEX_SIZE;
-        }while(i < stringLimit);
+        } while (i < stringLimit);
     }
     p--;
-    f += (stringLimit - 1) *  (16.0f * msgCtx->unk12098);
+    f += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
     *decodedBufPos = p;
     *offset = o;
     *arg2 = f;

@@ -2497,7 +2497,7 @@ void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset,
 // void func_8014CCB4(void);
 // void func_8014CDF0(void);
 // void func_8014CFDC(void);
-void func_8014D304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
+void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos);
 // void func_8014D62C(void);
 // void func_8014D7B4(void);
 void func_80150A84(GlobalContext* globalCtx);
