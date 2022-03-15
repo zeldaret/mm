@@ -37,6 +37,7 @@ static InitChainEntry sInitChain[] = {
 
 void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjYasi* this = THIS;
+
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_obj_yasi_Colheader_001428);
@@ -51,6 +52,7 @@ void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjYasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjYasi* this = THIS;
+
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
@@ -74,23 +76,24 @@ void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     temp = (s16)(this->dyna.actor.shape.rot.x * 0.1f);
     this->dyna.actor.home.rot.x -= temp;
-    this->dyna.actor.shape.rot.x = this->dyna.actor.shape.rot.x +
-                                   ((s16)(this->dyna.actor.home.rot.x - ((s16)(this->dyna.actor.shape.rot.x * 0.08f))));
+    this->dyna.actor.shape.rot.x +=
+        ((s16)(this->dyna.actor.home.rot.x - ((s16)(this->dyna.actor.shape.rot.x * 0.08f))));
 }
 
 void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjYasi* this = THIS;
+
     Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             0);
+                             MTXMODE_NEW);
 
     if (this->dyna.actor.shape.rot.x != 0) {
-        Matrix_RotateY(this->dyna.actor.home.rot.y, 1);
-        Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, 1);
-        Matrix_RotateY((s16)(this->dyna.actor.shape.rot.y - this->dyna.actor.home.rot.y), 1);
+        Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateY((s16)(this->dyna.actor.shape.rot.y - this->dyna.actor.home.rot.y), MTXMODE_APPLY);
     } else {
-        Matrix_RotateY(this->dyna.actor.shape.rot.y, 1);
+        Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     }
 
-    Matrix_Scale(0.1f, 0.1f, 0.1f, 1);
+    Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Gfx_DrawDListOpa(globalCtx, object_obj_yasi_DL_000360);
 }
