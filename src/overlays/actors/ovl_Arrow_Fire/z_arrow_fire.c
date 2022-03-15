@@ -5,7 +5,7 @@
  */
 
 #include "z_arrow_fire.h"
-#include "../ovl_En_Arrow/z_en_arrow.h"
+#include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -57,10 +57,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-static s32 sUnused;
-
-// there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
-extern GfxMasterList D_0E000000;
+s32 sUnused;
 
 void ArrowFire_SetupAction(ArrowFire* this, ArrowFireActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -76,7 +73,7 @@ void ArrowFire_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->alpha = 160;
     this->timer = 0;
-    this->blueingEffectMagnitude = 0.0f;
+    this->screenFillIntensity = 0.0f;
     Collider_InitAndSetQuad(globalCtx, &this->collider1, &this->actor, &sQuadInit);
     Collider_InitAndSetQuad(globalCtx, &this->collider2, &this->actor, &sQuadInit);
 }
@@ -139,18 +136,19 @@ void FireArrow_Hit(ArrowFire* this, GlobalContext* globalCtx) {
             offset = (this->timer - 8) * (1.0f / 24.0f);
             offset = SQ(offset);
             this->radius = (((1.0f - offset) * scale) + 10.0f);
+            this->height = F32_LERPIMP(this->height, 2.0f, 0.1f);
             if (this->timer < 16) {
                 this->alpha = (this->timer * 35) - 280;
             }
         }
     }
     if (this->timer >= 9) {
-        if (this->blueingEffectMagnitude < 1.0f) {
-            this->blueingEffectMagnitude += 0.25f;
+        if (this->screenFillIntensity < 1.0f) {
+            this->screenFillIntensity += 0.25f;
         }
     } else {
-        if (this->blueingEffectMagnitude > 0.0f) {
-            this->blueingEffectMagnitude -= 0.125f;
+        if (this->screenFillIntensity > 0.0f) {
+            this->screenFillIntensity -= 0.125f;
         }
     }
     if (this->timer < 8) {
@@ -257,11 +255,11 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
 
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
-        if (this->blueingEffectMagnitude > 0.0f) {
+        if (this->screenFillIntensity > 0.0f) {
             POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->blueingEffectMagnitude * 40.0f) & 0xFF, 0, 0,
-                            (s32)(150.0f * this->blueingEffectMagnitude) & 0xFF);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->screenFillIntensity * 40.0f) & 0xFF, 0, 0,
+                            (s32)(150.0f * this->screenFillIntensity) & 0xFF);
 
             gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
             gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
@@ -289,8 +287,8 @@ void ArrowFire_Draw(Actor* thisx, GlobalContext* globalCtx) {
         FireArrow_SetQuadVerticies(this);
         gSPDisplayList(POLY_XLU_DISP++, gFireArrowMaterialDL);
         gSPDisplayList(POLY_XLU_DISP++,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 255 - ((frames * 2) & 255), 0, 64, 32, 1,
-                                        255 - (frames & 0xFF), 511 - ((frames * 10) & 511), 64, 64));
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 255 - ((frames * 2) % 256), 0, 64, 32, 1,
+                                        255 - (frames % 256), 511 - ((frames * 10) % 512), 64, 64));
         gSPDisplayList(POLY_XLU_DISP++, gFireArrowModelDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);

@@ -5,7 +5,7 @@
  */
 
 #include "z_arrow_light.h"
-#include "../ovl_En_Arrow/z_en_arrow.h"
+#include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
@@ -37,9 +37,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-// there are uses of D_0E000000.fillRect (appearing as D_0E0002E0) in this file
-extern GfxMasterList D_0E000000;
-
 static s32 sUnused;
 
 void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc) {
@@ -55,7 +52,7 @@ void ArrowLight_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->alpha = 130;
     this->timer = 0;
-    this->blueingEffectMagnitude = 0.0f;
+    this->screenFillIntensity = 0.0f;
 }
 
 void ArrowLight_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -119,12 +116,12 @@ void ArrowLight_Hit(ArrowLight* this, GlobalContext* globalCtx) {
         }
     }
     if (this->timer >= 9) {
-        if (this->blueingEffectMagnitude < 1.0f) {
-            this->blueingEffectMagnitude += 0.25f;
+        if (this->screenFillIntensity < 1.0f) {
+            this->screenFillIntensity += 0.25f;
         }
     } else {
-        if (this->blueingEffectMagnitude > 0.0f) {
-            this->blueingEffectMagnitude -= 0.125f;
+        if (this->screenFillIntensity > 0.0f) {
+            this->screenFillIntensity -= 0.125f;
         }
     }
     if (this->timer < 8) {
@@ -198,11 +195,11 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertXRotation_s(transform->shape.rot.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(transform->shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
-        if (this->blueingEffectMagnitude > 0.0f) {
+        if (this->screenFillIntensity > 0.0f) {
             POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->blueingEffectMagnitude * 30.0f) & 0xFF,
-                            (s32)(40.0f * this->blueingEffectMagnitude) & 0xFF, 0,
-                            (s32)(150.0f * this->blueingEffectMagnitude) & 0xFF);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->screenFillIntensity * 30.0f) & 0xFF,
+                            (s32)(40.0f * this->screenFillIntensity) & 0xFF, 0,
+                            (s32)(150.0f * this->screenFillIntensity) & 0xFF);
             gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
             gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
             gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
@@ -225,8 +222,8 @@ void ArrowLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightArrowMaterialDL);
         gSPDisplayList(POLY_XLU_DISP++,
-                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - ((frames * 5) & 511), 0, 4, 32, 1,
-                                        511 - ((frames * 10) & 511), 511 - ((frames * 30) & 511), 8, 16));
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - ((frames * 5) % 512), 0, 4, 32, 1,
+                                        511 - ((frames * 10) % 512), 511 - ((frames * 30) % 512), 8, 16));
         gSPDisplayList(POLY_XLU_DISP++, gLightArrowModelDL);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

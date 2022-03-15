@@ -13,7 +13,7 @@ typedef struct ArrowFire {
     /* 0x1C4 */ ColliderQuad collider2;
     /* 0x244 */ Vec3f firedPos;
     /* 0x250 */ f32 height;
-    /* 0x254 */ f32 blueingEffectMagnitude;
+    /* 0x254 */ f32 screenFillIntensity;
     /* 0x258 */ ArrowFireActionFunc actionFunc;
     /* 0x25C */ s16 radius;
     /* 0x25E */ u16 timer;

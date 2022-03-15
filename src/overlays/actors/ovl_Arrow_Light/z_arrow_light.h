@@ -14,7 +14,7 @@ typedef struct ArrowLight {
     /* 0x148 */ u8 alpha;
     /* 0x14C */ Vec3f firedPos;
     /* 0x158 */ f32 height;
-    /* 0x15C */ f32 blueingEffectMagnitude;
+    /* 0x15C */ f32 screenFillIntensity;
     /* 0x160 */ ArrowLightActionFunc actionFunc;
 } ArrowLight; // size = 0x164
 
