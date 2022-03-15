@@ -76,8 +76,7 @@ void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
     temp = (s16)(this->dyna.actor.shape.rot.x * 0.1f);
     this->dyna.actor.home.rot.x -= temp;
-    this->dyna.actor.shape.rot.x +=
-        ((s16)(this->dyna.actor.home.rot.x - ((s16)(this->dyna.actor.shape.rot.x * 0.08f))));
+    this->dyna.actor.shape.rot.x += BINANG_SUB(this->dyna.actor.home.rot.x, (s16)(this->dyna.actor.shape.rot.x * 0.08f));
 }
 
 void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
