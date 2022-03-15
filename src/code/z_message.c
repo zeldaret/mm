@@ -253,62 +253,43 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D304.s")
 
-#ifdef NON_EQUIVALENT
-extern u16* D_801D0188;
-extern s16* D_801D0250;
+extern u16 D_801D0188[11][9];
+extern s16 D_801D0250[11];
 
-void func_8014D62C(GlobalContext* arg0, s32* arg1, f32* arg2, s16* arg3) {
-    f32 sp3C;
-    s16 temp_s0;
-    s16 temp_s1;
-    s16 temp_s1_2;
-    s16 temp_s6;
-    s32 temp_s2;
-    s32 temp_s2_2;
-    u16* temp_v0;
-    s16 phi_v0;
-    s16 phi_s0;
-    s16 phi_s1;
-    s32 phi_s2;
-    s16 phi_s1_2;
-    s32 phi_s2_2;
-
-    temp_s1 = *arg3;
-    temp_s2 = *arg1;
-    sp3C = *arg2;
-    if ((func_8010A0A4(arg0) != 0) || (arg0->sceneNum == 0x4F)) {
-        phi_v0 = 0xA;
+void func_8014D62C(GlobalContext* globalCtx, s32* offset, f32* arg2, s16* decodedBufPos) {
+    s16 *unk_238Ptr;
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    s16 p = *decodedBufPos;
+    s32 o = *offset;
+    f32 f = *arg2;
+    s16 i;
+    s16 currentArea;
+    s16 stringLimit;
+    
+    unk_238Ptr = globalCtx->pauseCtx.unk_238;
+    if ((func_8010A0A4(globalCtx) != 0) || (globalCtx->sceneNum == SCENE_SECOM)) {
+        currentArea = 10;
     } else {
-        phi_v0 = arg0->pauseCtx.unk_238[4];
+        currentArea = unk_238Ptr[4];
     }
-    temp_s6 = *(&D_801D0250 + (phi_v0 * 2));
-    phi_s0 = 0;
-    phi_s1_2 = temp_s1;
-    phi_s2_2 = temp_s2;
-    if ((s32)temp_s6 > 0) {
-        phi_s1 = temp_s1;
-        phi_s2 = temp_s2;
-        do {
-            temp_v0 = (phi_v0 * 0x12) + &D_801D0188 + (phi_s0 * 2);
-            (arg0 + 0x4908 + (phi_s1 * 2))->decodedBuffer = (u16)*temp_v0;
-            Font_LoadChar(arg0, *temp_v0, phi_s2);
-            temp_s0 = phi_s0 + 1;
-            temp_s1_2 = phi_s1 + 1;
-            temp_s2_2 = phi_s2 + 0x80;
-            phi_s0 = temp_s0;
-            phi_s1 = temp_s1_2;
-            phi_s2 = temp_s2_2;
-            phi_s1_2 = temp_s1_2;
-            phi_s2_2 = temp_s2_2;
-        } while ((s32)temp_s0 < (s32)temp_s6);
+    
+    stringLimit = D_801D0250[currentArea];
+    if(stringLimit > 0){
+        i = 0;
+        do{
+            msgCtx->decodedBuffer.wchar[p] = D_801D0188[currentArea][i];
+            Font_LoadChar(globalCtx,  D_801D0188[currentArea][i], o);
+            i++;
+            p++;
+            o += FONT_CHAR_TEX_SIZE;
+        }while(i < stringLimit);
     }
-    *arg3 = phi_s1_2 - 1;
-    *arg1 = phi_s2_2;
-    *arg2 = sp3C + ((f32)(temp_s6 - 1) * (16.0f * arg0->msgCtx.unk12098));
+    p--;
+    f += (stringLimit - 1) *  (16.0f * msgCtx->unk12098);
+    *decodedBufPos = p;
+    *offset = o;
+    *arg2 = f;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D62C.s")
-#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")
 
