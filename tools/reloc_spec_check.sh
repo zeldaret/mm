@@ -14,7 +14,6 @@ BOLD="$(tput bold)"
 RED="$(tput setaf 1)"
 PURPLE="$(tput setaf 5)"
 WHITE="$(tput setaf 7)"
-LIGHT_RED="$(tput setaf 9)"
 BLINK="$(tput blink)"
 RST="$(tput sgr0)"
 
@@ -41,7 +40,7 @@ while read OVL_FOLDER; do
         OVL_WITH_EXTRACTED_RELOC="$(grep -F "$OVL_NAME".reloc spec)"
 
         if [ "$OVL_WITH_EXTRACTED_RELOC" != "" ]; then
-            echo "${BOLD} Matching overlay using extracted reloc on spec found: ${LIGHT_RED} ${OVL_FOLDER} ${RST}"
+            echo "${BOLD} Matching overlay using extracted reloc on spec found: ${RED} ${OVL_FOLDER} ${RST}"
             echo "    Don't forget to change the extracted reloc to the generated one on the spec, otherwise the matched overlay won't be shiftable"
             EXIT_CODE=1
         fi
@@ -55,7 +54,7 @@ while read OVL_FOLDER; do
         if [ "$FILES_WITH_NON_MATCHING" != "" ] && [ "$FILES_WITH_NON_EQUIVALENT" != "" ]; then
             # An overlay can't have both NON_MATCHINGs and NON_EQUIVALENTs, because relocs wouldn't be generated correctly
 
-            echo "${BOLD} Overlay with both NON_MATCHINGs and NON_EQUIVALENTs found: ${LIGHT_RED} ${OVL_FOLDER} ${RST}"
+            echo "${BOLD} Overlay with both NON_MATCHINGs and NON_EQUIVALENTs found: ${RED} ${OVL_FOLDER} ${RST}"
             echo "    Overlays can't have both NON_MATCHING and NON_EQUIVALENT because it breaks NON_MATCHING builds"
             echo "    As an alternative you could mark NON_MATCHING functions as NON_EQUIVALENT and add a comment mentioning it is actually equivalent"
             EXIT_CODE=1
@@ -70,7 +69,7 @@ while read OVL_FOLDER; do
             if [ "$NON_MATCHINGS_COUNT_OF_OVERLAY" != "$PRAGMAS_COUNT_OF_OVERLAY" ]; then
                 # If an overlay uses NON_MATCHING, then every function should be either matching or marked as NON_MATCHING
 
-                echo "${BOLD} Found an overlay with a differing number of NON_MATCHINGs and #pragma GLOBAL_ASM: ${LIGHT_RED} ${OVL_FOLDER} ${RST}"
+                echo "${BOLD} Found an overlay with a differing number of NON_MATCHINGs and #pragma GLOBAL_ASM: ${RED} ${OVL_FOLDER} ${RST}"
                 echo "    To use a NON_MATCHING check on an overlay, every function that does not match should verified to be equivalent"
                 echo "    But the amount of NON_MATCHING ifdefs and GLOBAL_ASM does no match, which may suggest not every function of this overlay may have been attempted"
                 EXIT_CODE=1
@@ -87,7 +86,7 @@ while read OVL_FOLDER; do
             if [ "$OVL_WITH_EXTRACTED_RELOC" == "" ] || [ "$OVL_WITH_GENERATED_RELOC" == "" ]; then
                 # Overlays with NON_MATCHINGs should have both relocs on the spec
 
-                echo "${BOLD} NON_MATCHING overlay missing either extracted or generated reloc on spec found: ${LIGHT_RED} ${OVL_FOLDER} ${RST}"
+                echo "${BOLD} NON_MATCHING overlay missing either extracted or generated reloc on spec found: ${RED} ${OVL_FOLDER} ${RST}"
                 echo "    Overlays with NON_MATCHING ifdefs must also add a NON_MATCHING ifdef on the spec to allow using the generated reloc on NON_MATCHING builds"
                 EXIT_CODE=1
             fi
@@ -102,7 +101,7 @@ while read OVL_FOLDER; do
             if [ "$OVL_WITH_GENERATED_RELOC" != "" ]; then
                 # Overlays with NON_EQUIVALENTs should not use a generated reloc
 
-                echo "${BOLD} NON_EQUIVALENT overlay with generated reloc on spec found: ${LIGHT_RED} ${OVL_FOLDER} ${RST}"
+                echo "${BOLD} NON_EQUIVALENT overlay with generated reloc on spec found: ${RED} ${OVL_FOLDER} ${RST}"
                 echo "    Overlays with NON_EQUIVALENT ifdefs can't use generated relocs"
                 EXIT_CODE=1
             fi
