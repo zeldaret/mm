@@ -7,7 +7,7 @@
 #include "z_bg_hakugin_post.h"
 #include "objects/object_hakugin_obj/object_hakugin_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((BgHakuginPost*)thisx)
 
@@ -87,7 +87,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A9ACD0(BgHakuginPostUnkStruct* arg0) {
-    bzero((void*)arg0, sizeof(BgHakuginPostUnkStruct));
+    bzero(arg0, sizeof(BgHakuginPostUnkStruct));
 }
 
 void func_80A9ACF0(void) {

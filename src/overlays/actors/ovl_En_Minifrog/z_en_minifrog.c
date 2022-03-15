@@ -8,7 +8,7 @@
 #include "objects/object_fr/object_fr.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnMinifrog*)thisx)
 
@@ -130,14 +130,14 @@ void EnMinifrog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             // Not spoken to MINIFROG_YELLOW
             if (!(gSaveContext.weekEventReg[34] & 1)) {
-                this->actor.flags |= 0x10000;
+                this->actor.flags |= ACTOR_FLAG_10000;
             }
 
             this->actor.home.rot.x = this->actor.home.rot.z = 0;
             this->frog = NULL;
         } else {
             this->frog = EnMinifrog_GetFrog(globalCtx);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
 
             // Frog has been returned
             if ((gSaveContext.weekEventReg[isFrogReturnedFlags[this->frogIndex] >> 8] &
@@ -224,22 +224,22 @@ void EnMinifrog_TurnToMissingFrog(EnMinifrog* this) {
 static Color_RGBA8 sPrimColor = { 255, 255, 255, 255 };
 static Color_RGBA8 sEnvColor = { 80, 80, 80, 255 };
 
-void EnMinifrog_SetCamera(EnMinifrog* this, GlobalContext* globalCtx) {
+void EnMinifrog_SpawnDust(EnMinifrog* this, GlobalContext* globalCtx) {
     Vec3f pos;
     Vec3f vec5;
     Vec3f vel;
     Vec3f accel;
     s16 yaw;
     s16 pitch;
-    Vec3f eye;
+    Vec3f eye = GET_ACTIVE_CAM(globalCtx)->eye;
     s32 i;
 
-    eye = GET_ACTIVE_CAM(globalCtx)->eye;
     yaw = Math_Vec3f_Yaw(&eye, &this->actor.world.pos);
     pitch = -Math_Vec3f_Pitch(&eye, &this->actor.world.pos);
     vec5.x = this->actor.world.pos.x - (5.0f * Math_SinS(yaw) * Math_CosS(pitch));
     vec5.y = this->actor.world.pos.y - (5.0f * Math_SinS(pitch));
     vec5.z = this->actor.world.pos.z - (5.0f * Math_CosS(yaw) * Math_CosS(pitch));
+
     for (i = 0; i < 5; i++) {
         vel.x = randPlusMinusPoint5Scaled(4.0f);
         vel.y = randPlusMinusPoint5Scaled(4.0f);
@@ -284,7 +284,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
             case 0xD85: // "I understand. I shall head for the mountains immediately."
             default:
                 func_801477B4(globalCtx);
-                EnMinifrog_SetCamera(this, globalCtx);
+                EnMinifrog_SpawnDust(this, globalCtx);
                 SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_NPC_FADEAWAY);
                 if (this->actor.cutscene != -1) {
                     if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
@@ -471,7 +471,7 @@ void EnMinifrog_EndChoir(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, 0xD7E, &this->actor); // "Let us do it again sometime."
+        Message_StartTextbox(globalCtx, 0xD7E, &this->actor); // "Let us do it again sometime."
         this->actionFunc = EnMinifrog_YellowFrogDialog;
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_MINUS1);
@@ -484,7 +484,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, EXCH_ITEM_NONE);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 10000.0f, 50.0f);
@@ -517,7 +517,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
                     case 0xD76: // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it looks like
                                 // you've lost a little weight..."
                         func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         gSaveContext.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
                         break;
                     case 0xD78: // "Unfortunately, it seems not all of our members have gathered."
@@ -549,7 +549,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
                     default:
                         func_801477B4(globalCtx);
                         this->actionFunc = EnMinifrog_SetupYellowFrogDialog;
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;
                 }
             }
@@ -565,14 +565,15 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnMinifrog_YellowFrogDialog;
         if (!(gSaveContext.weekEventReg[34] & 1)) { // Not spoken with MINIFROG_YELLOW
-            func_801518B0(globalCtx, 0xD76,
-                          &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it
-                                         // looks like you've lost a little weight..."
+            Message_StartTextbox(globalCtx, 0xD76,
+                                 &this->actor); // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken,
+                                                // but it looks like you've lost a little weight..."
         } else {
-            func_801518B0(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
+            Message_StartTextbox(globalCtx, 0xD7F, &this->actor); // "Well, if it isn't the great Don Gero."
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) &&
-               (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) || ((this->actor.flags & 0x10000) == 0x10000)) &&
+               (Player_IsFacingActor(&this->actor, 0x3000, globalCtx) ||
+                CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) &&
                Player_GetMask(globalCtx) == PLAYER_MASK_DON_GERO) {
         func_800B8614(&this->actor, globalCtx, 160.0f);
     }

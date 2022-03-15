@@ -30,13 +30,22 @@ const ActorInit En_Item00_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AT_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_CYLINDER },
-    { ELEMTYPE_UNK0,
-      { 0x00000000, 0x00, 0x00 },
-      { 0x00000010, 0x00, 0x00 },
-      TOUCH_NONE | TOUCH_SFX_NORMAL,
-      BUMP_ON,
-      OCELEM_NONE },
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AT_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000010, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
@@ -1130,7 +1139,7 @@ void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(&spawnedActor->actor, 0.0f);
                             spawnedActor->actionFunc = func_800A6780;
-                            spawnedActor->actor.flags = spawnedActor->actor.flags | 0x10;
+                            spawnedActor->actor.flags = spawnedActor->actor.flags | ACTOR_FLAG_10;
                             if ((spawnedActor->actor.params != ITEM00_SMALL_KEY) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_PIECE) &&
                                 (spawnedActor->actor.params != ITEM00_HEART_CONTAINER)) {

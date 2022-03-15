@@ -9,7 +9,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ishi/object_ishi.h"
 
-#define FLAGS 0x00800010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnIshi*)thisx)
 
@@ -255,7 +255,7 @@ void func_8095DABC(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &spCC, &spD8, &this->actor.world.pos, phi_v1, phi_v0, 30, 5, 0, D_8095F758[i],
-                             5, 2, 70, 0, 2, gameplay_field_keep_DL_006420);
+                             5, 2, 70, 0, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
     }
 }
 
@@ -310,9 +310,9 @@ void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
         sp3C = Item_DropCollectible(globalCtx, &this->actor.world.pos, temp | (ENISHI_GET_FE00(&this->actor) << 8));
         if (sp3C != NULL) {
             Matrix_StatePush();
-            Matrix_RotateY(this->actor.shape.rot.y, 0);
-            Matrix_InsertXRotation_s(this->actor.shape.rot.x, 1);
-            Matrix_InsertZRotation_s(this->actor.shape.rot.z, 1);
+            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
+            Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
             Matrix_GetStateTranslationAndScaledY(1.0f, &sp30);
             sp2C = Math3D_Parallel(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
@@ -444,7 +444,7 @@ void func_8095E5AC(EnIshi* this) {
 void func_8095E5C0(EnIshi* this, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_196)) {
         this->actor.objBankIndex = this->unk_196;
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         if (!ENISHI_GET_8(&this->actor)) {
             this->actor.draw = func_8095F61C;
         } else {
@@ -511,9 +511,9 @@ void func_8095E660(EnIshi* this, GlobalContext* globalCtx) {
 
         if ((this->actor.xzDistToPlayer < 90.0f) && (sp30 == 0)) {
             if (sp38 == 1) {
-                Actor_PickUp(&this->actor, globalCtx, 0, 80.0f, 20.0f);
+                Actor_PickUp(&this->actor, globalCtx, GI_NONE, 80.0f, 20.0f);
             } else {
-                Actor_PickUp(&this->actor, globalCtx, 0, 50.0f, 10.0f);
+                Actor_PickUp(&this->actor, globalCtx, GI_NONE, 50.0f, 10.0f);
             }
         }
     }
@@ -522,7 +522,7 @@ void func_8095E660(EnIshi* this, GlobalContext* globalCtx) {
 void func_8095E934(EnIshi* this) {
     this->actionFunc = func_8095E95C;
     this->actor.room = -1;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
 }
 
 void func_8095E95C(EnIshi* this, GlobalContext* globalCtx) {
@@ -652,7 +652,7 @@ void func_8095EBDC(EnIshi* this, GlobalContext* globalCtx) {
 }
 
 void func_8095F060(EnIshi* this) {
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     this->actionFunc = func_8095F0A4;
 }

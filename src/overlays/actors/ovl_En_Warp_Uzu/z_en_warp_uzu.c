@@ -7,7 +7,7 @@
 #include "z_en_warp_uzu.h"
 #include "objects/object_warp_uzu/object_warp_uzu.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnWarpUzu*)thisx)
 
@@ -113,7 +113,7 @@ void func_80A66278(EnWarpUzu* this, GlobalContext* globalCtx) {
 void func_80A66384(EnWarpUzu* this, GlobalContext* globalCtx) {
     globalCtx->nextEntranceIndex = 0x22A0;
     gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
-    func_80169EFC(globalCtx);
+    func_80169EFC(&globalCtx->state);
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnWarpUzu_DoNothing;
 }

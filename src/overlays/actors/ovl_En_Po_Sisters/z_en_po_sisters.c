@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_po_sisters/object_po_sisters.h"
 
-#define FLAGS (ACTOR_FLAG_4000 | ACTOR_FLAG_1000 | ACTOR_FLAG_10 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
 
 #define THIS ((EnPoSisters*)thisx)
 
@@ -189,7 +189,7 @@ void EnPoSisters_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnPoSisters_SpawnMegClones(this, globalCtx);
             func_80B1C2E8(this);
         } else {
-            this->actor.flags &= ~(ACTOR_FLAG_4000 | ACTOR_FLAG_200);
+            this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_4000);
             this->collider.info.elemType = ELEMTYPE_UNK4;
             this->collider.info.bumper.dmgFlags |= (0x40000 | 0x1);
             this->collider.base.ocFlags1 = OC1_NONE;
@@ -904,8 +904,8 @@ void func_80B1C408(EnPoSisters* this, GlobalContext* globalCtx) {
                 }
 
                 if (this->actor.colChkInfo.damageEffect == 4) {
-                    this->unk_2F0 = 4.0f;
-                    this->unk_2F4 = 0.5f;
+                    this->drawDmgEffAlpha = 4.0f;
+                    this->drawDmgEffScale = 0.5f;
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                 this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
                                 this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -954,18 +954,17 @@ void EnPoSisters_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.shadowAlpha = this->color.a;
     Actor_SetFocus(&this->actor, 40.0f);
 
-    // ??
-    if (this->unk_2F0 > 0.0f) {
-        Math_StepToF(&this->unk_2F0, 0.0f, 0.05f);
+    if (this->drawDmgEffAlpha > 0.0f) {
+        Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
         if (this->color.a != 255) {
             alpha = this->color.a * (1.0f / 255);
             if (alpha < this->color.a) {
-                this->unk_2F0 = alpha;
+                this->drawDmgEffAlpha = alpha;
             }
         }
 
-        this->unk_2F4 = (this->unk_2F0 + 1.0f) * 0.25f;
-        this->unk_2F4 = CLAMP_MAX(this->unk_2F4, 0.5f);
+        this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
+        this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
     }
 
     if (this->poSisterFlags & (PO_SISTER_FLAG_UPDATE_BGCHECK_INFO | PO_SISTER_FLAG_MATCH_PLAYER_HEIGHT | PO_SISTER_FLAG_CHECK_Z_TARGET | PO_SISTER_FLAG_UPDATE_SHAPE_ROT | PO_SISTER_FLAG_CHECK_AC)) {
@@ -1202,7 +1201,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, flameColor->r, flameColor->g, flameColor->b, phi_s5);
 
         Matrix_InsertTranslation(this->fireLoc[i].x, this->fireLoc[i].y, this->fireLoc[i].z, MTXMODE_NEW);
-        Matrix_InsertRotation(0, BINANG_ROT180(func_800DFCDC(GET_ACTIVE_CAM(globalCtx))), 0, MTXMODE_APPLY);
+        Matrix_InsertRotation(0, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), 0, MTXMODE_APPLY);
 
         if (this->actionFunc == EnPoSister_DeathStage1) {
             f32 phi_f0;
@@ -1218,10 +1217,11 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // todo float convert
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
-                  this->actor.scale.x * 142.857131958f * this->unk_2F4, 0.0f, this->unk_2F0, 20);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                  this->actor.scale.x * 142.857131958f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                   //this->actor.scale.x * (1.0f/7 * 1000.0f ) * this->unk_2F4, 0.0f, this->unk_2F0, 20);
                   //this->actor.scale.x * (1000.0f/7.0f ) * this->unk_2F4, 0.0f, this->unk_2F0, 20);
+                            ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

@@ -6,7 +6,7 @@
 
 #include "z_en_mm2.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnMm2*)thisx)
 
@@ -64,7 +64,7 @@ void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
  */
 void EnMm2_WaitForRead(EnMm2* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, 0x277B, &this->actor);
+        Message_StartTextbox(globalCtx, 0x277B, &this->actor);
         this->actionFunc = EnMm2_Reading;
     } else if ((this->actor.xzDistToPlayer < 60.0f) && (Player_IsFacingActor(&this->actor, 0x3000, globalCtx))) {
         func_800B8614(&this->actor, globalCtx, 110.0f);

@@ -43,9 +43,8 @@ typedef struct EnPoSisters {
     /* 0x022C */ Vec3f fireLoc[8];
     /* 0x028C */ Vec3f limbPos[8];
     /* 0x02EC */ f32 megDistToPlayer;
-    // these two are linked, reason they are separate is unknown
-    /* 0x02F0 */ f32 unk_2F0; // from alpha?
-    /* 0x02F4 */ f32 unk_2F4; // used as scale in limbs draw
+    /* 0x02F0 */ f32 drawDmgEffAlpha;
+    /* 0x02F4 */ f32 drawDmgEffScale;
     /* 0x02F8 */ LightNode* lightNode;
     /* 0x02FC */ LightInfo lightInfo;
     /* 0x030C */ ColliderCylinder collider;

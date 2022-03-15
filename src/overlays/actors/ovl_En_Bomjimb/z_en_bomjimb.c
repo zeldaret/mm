@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBomjimb*)thisx)
 
@@ -276,7 +276,7 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp48, &sp60,
-                                                               &colPoly, 1, 0, 0, 1, &sp44)) {
+                                                               &colPoly, true, false, false, true, &sp44)) {
                     func_80C0113C(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp48);
                     this->unk_2B0 = Rand_S16Offset(30, 50);
@@ -295,8 +295,8 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
                 Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, 1, 0, 0,
-                                            1, &sp44)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, true,
+                                            false, false, true, &sp44)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80C0113C(this, 20, 1.0f);
@@ -556,7 +556,8 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     sp74.y += 20.0f;
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, 1, 0, 0, 1, &sp60)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, true, false, false,
+                                true, &sp60)) {
         s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 
@@ -661,7 +662,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     func_80C0113C(this, 21, 1.0f);
     if ((player->transformation != PLAYER_FORM_DEKU) && (player->transformation != PLAYER_FORM_HUMAN)) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -673,7 +674,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[73] & 0x10)) ||
         ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.weekEventReg[85] & 2))) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -683,7 +684,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     }
 
     idx = gSaveContext.unk_FE6;
-    func_801518B0(globalCtx, D_80C03230[idx], &this->actor);
+    Message_StartTextbox(globalCtx, D_80C03230[idx], &this->actor);
     idx = gSaveContext.unk_FE6;
     gSaveContext.unk_FE7[idx] = this->unk_2C8 + 1;
     gSaveContext.unk_FE6++;

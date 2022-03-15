@@ -8,7 +8,7 @@
 #include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x000000B0
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80)
 
 #define THIS ((EnDnb*)thisx)
 
@@ -107,7 +107,7 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 1);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
 
-    alloc = (s16*)Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
+    alloc = Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         func_80A4FDD0(&this->particles[i], this, alloc, i);
     }

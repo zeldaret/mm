@@ -6,7 +6,7 @@
 
 #include "z_en_weather_tag.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnWeatherTag*)thisx)
 
@@ -67,7 +67,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pathID;
 
     // flag: is targetable. Should do nothing as not set by default above
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 
     switch (WEATHER_TAG_TYPE(this)) {
         case WEATHERTAG_TYPE_UNK0:
@@ -77,7 +77,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (gSaveContext.weekEventReg[0x34] & 0x20) { // if cleared STT
+            if (gSaveContext.weekEventReg[52] & 0x20) { // if cleared STT
                 Actor_MarkForDeath(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
@@ -191,11 +191,11 @@ void func_8096689C(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     globalCtx->envCtx.windSpeed = (this->actor.world.rot.z * partialResult) + 30.0f;
     if (partialResult > 0.01f) {
-        globalCtx->envCtx.unk_EA = 8;
+        globalCtx->envCtx.sandstormState = 8;
         D_801F4E30 = 0x9B;
-    } else if (globalCtx->envCtx.unk_EA == 8) {
+    } else if (globalCtx->envCtx.sandstormState == 8) {
         D_801F4E30 = 0;
-        globalCtx->envCtx.unk_EA = 9;
+        globalCtx->envCtx.sandstormState = 9;
     }
 }
 
@@ -249,9 +249,9 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     u8 newUnk20;
     CsCmdActorAction* tmpAction;
 
-    if (func_800EE29C(globalCtx, 0x237) != 0) {
-        tmpAction = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x237)];
-        if ((globalCtx->csCtx.frames >= tmpAction->startFrame) && (tmpAction->unk0 >= 2)) {
+    if (Cutscene_CheckActorAction(globalCtx, 567)) {
+        tmpAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 567)];
+        if ((globalCtx->csCtx.frames >= tmpAction->startFrame) && (tmpAction->action >= 2)) {
             switch (gSaveContext.day) {
                 case 0:
                 case 1:
@@ -429,20 +429,20 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     range = WEATHER_TAG_RANGE100(this);
 
     if (distance < range) {
-        globalCtx->envCtx.unk_EA = 6;
+        globalCtx->envCtx.sandstormState = 6;
         strength = 1.0f - (distance / range);
         if (0.8f < strength) {
             strength = 1.0f;
         }
         D_801F4E30 = (200.0f * strength);
     } else {
-        if (globalCtx->envCtx.unk_EA == 6) {
+        if (globalCtx->envCtx.sandstormState == 6) {
             D_801F4E30 = 0;
-            globalCtx->envCtx.unk_EA = 7;
+            globalCtx->envCtx.sandstormState = 7;
         }
     }
 
-    Math_SmoothStepToS(&globalCtx->envCtx.unk_8C.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
+    Math_SmoothStepToS(&globalCtx->envCtx.lightSettings.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
 }
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene
@@ -452,7 +452,8 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.time >= 0x4AAA) && (gSaveContext.time < 0xBAAA) && (globalCtx->envCtx.unk_F2[2] == 0)) {
+            if ((gSaveContext.time >= CLOCK_TIME(7, 0)) && (gSaveContext.time < CLOCK_TIME(17, 30)) &&
+                (globalCtx->envCtx.unk_F2[2] == 0)) {
 
                 D_801BDBB0 = 1;
                 func_800FD78C(globalCtx);
@@ -484,8 +485,8 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
     u16 oldTime;
 
     this->actionFunc(this, globalCtx);
-    if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.unk11F22 != 0) && (globalCtx->msgCtx.unk11F04 == 0x5E6) &&
-        (!FrameAdvance_IsEnabled(globalCtx)) && (globalCtx->sceneLoadFlag == 0) &&
+    if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) && (globalCtx->msgCtx.unk11F04 == 0x5E6) &&
+        (!FrameAdvance_IsEnabled(&globalCtx->state)) && (globalCtx->sceneLoadFlag == 0) &&
         (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
         oldTime = gSaveContext.time;

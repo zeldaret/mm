@@ -7,7 +7,7 @@
 #include "z_obj_yado.h"
 #include "objects/object_yado_obj/object_yado_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjYado*)thisx)
 
@@ -38,7 +38,7 @@ void ObjYado_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjYado* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    D_80C16470 = (AnimatedMaterial*)Lib_SegmentedToVirtual(object_yado_obj_Matanimheader_0012E8);
+    D_80C16470 = Lib_SegmentedToVirtual(object_yado_obj_Matanimheader_0012E8);
     this->isNight = gSaveContext.isNight;
 }
 

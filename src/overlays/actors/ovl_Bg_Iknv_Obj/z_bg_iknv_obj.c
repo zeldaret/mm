@@ -7,7 +7,7 @@
 #include "z_bg_iknv_obj.h"
 #include "objects/object_iknv_obj/object_iknv_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIknvObj*)thisx)
 
@@ -64,8 +64,8 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
         case IKNV_OBJ_WATERWHEEL:
             this->displayListPtr = object_iknv_obj_DL_013058;
             this->actionFunc = BgIknvObj_UpdateWaterwheel;
-            this->dyna.actor.flags |= 0x100000;
-            this->dyna.actor.flags |= 0x10;
+            this->dyna.actor.flags |= ACTOR_FLAG_100000;
+            this->dyna.actor.flags |= ACTOR_FLAG_10;
             break;
         case IKNV_OBJ_RAISED_DOOR:
             this->displayListPtr = object_iknv_obj_DL_011880;
@@ -131,8 +131,8 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 4) &&
-        (globalCtx->csCtx.frames == 0x5D7)) {
+    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) &&
+        (globalCtx->csCtx.currentCsIndex == 4) && (globalCtx->csCtx.frames == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
 }
@@ -162,7 +162,7 @@ void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
-    if (gSaveContext.time > 0xD000) {
+    if (gSaveContext.time > CLOCK_TIME(19, 30)) {
         this->actionFunc = func_80BD7ED8;
     }
     if ((this->dyna.actor.home.rot.x == 1) && !(gSaveContext.weekEventReg[58] & 0x80)) {

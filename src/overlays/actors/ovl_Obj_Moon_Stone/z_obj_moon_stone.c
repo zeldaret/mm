@@ -7,7 +7,7 @@
 #include "z_obj_moon_stone.h"
 #include "objects/object_gi_reserve00/object_gi_reserve00.h"
 
-#define FLAGS 0x00100010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
 #define THIS ((ObjMoonStone*)thisx)
 
@@ -47,7 +47,7 @@ void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y += 10.0f;
     if (this->unk194 == 0) {
         this->actor.colChkInfo.health = 0;
-        this->actor.flags |= 9;
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80C0662C(this);
     } else {
         if ((gSaveContext.weekEventReg[74] & 0x40) == 0) {
@@ -55,7 +55,7 @@ void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, -1);
             }
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             func_80C0673C(this);
         } else {
             Actor_MarkForDeath(&this->actor);
@@ -77,7 +77,7 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     sp1A -= player->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.colChkInfo.health = 1;
-        func_801518B0(globalCtx, 0x5E3U, &this->actor);
+        Message_StartTextbox(globalCtx, 0x5E3U, &this->actor);
         func_80C066F8(this);
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);

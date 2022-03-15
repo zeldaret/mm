@@ -7,7 +7,7 @@
 #include "z_en_dg.h"
 #include "objects/object_dog/object_dog.h"
 
-#define FLAGS 0x00800019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
 
@@ -129,33 +129,41 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, 0 },   { &object_dog_Anim_0021C8, 1.0f, 0, -1, 0, -6 },
-    { &object_dog_Anim_001BD8, 1.0f, 0, -1, 0, 0 },   { &object_dog_Anim_000998, 1.0f, 0, -1, 0, -6 },
-    { &object_dog_Anim_001FB0, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001FB0, 1.0f, 0, -1, 4, -6 },
-    { &object_dog_Anim_001048, 1.0f, 0, -1, 2, -6 },  { &object_dog_Anim_001348, 1.0f, 0, -1, 0, -6 },
-    { &object_dog_Anim_001048, 1.0f, 0, 27, 2, -6 },  { &object_dog_Anim_001048, 1.0f, 28, -1, 2, -6 },
-    { &object_dog_Anim_001048, 1.0f, 54, 54, 2, -6 }, { &object_dog_Anim_0021C8, -1.5f, -1, 0, 0, -6 },
-    { &object_dog_Anim_001560, 1.0f, 0, -1, 2, 0 },   { &object_dog_Anim_001A84, 1.2f, 0, -1, 2, 0 },
-    { &object_dog_Anim_0017C0, 1.2f, 0, -1, 2, 0 },   { &object_dog_Anim_0021C8, 0.5f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dog_Anim_000998, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001348, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001048, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_001048, 1.0f, 54, 54, ANIMMODE_ONCE, -6 },
+    { &object_dog_Anim_0021C8, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
+    { &object_dog_Anim_001560, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_001A84, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0017C0, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dog_Anim_0021C8, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void func_80989140(SkelAnime* skelAnime, ActorAnimationEntryS arg1[], s32 arg2) {
+void func_80989140(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
     f32 frameCount;
 
     arg1 += arg2;
     if (arg1->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(arg1->animationSeg);
+        frameCount = Animation_GetLastFrame(arg1->animation);
     } else {
         frameCount = arg1->frameCount;
     }
 
-    Animation_Change(skelAnime, arg1->animationSeg, arg1->playbackSpeed + (BREG(88) * 0.1f), arg1->frame, frameCount,
-                     arg1->mode, arg1->transitionRate);
+    Animation_Change(skelAnime, arg1->animation, arg1->playSpeed + (BREG(88) * 0.1f), arg1->startFrame, frameCount,
+                     arg1->mode, arg1->morphFrames);
 }
 
 void func_80989204(EnDg* this, GlobalContext* globalCtx) {
@@ -198,7 +206,7 @@ void func_8098933C(EnDg* this, Vec3f* arg1) {
 }
 
 s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
-    Vec3s* sp5C = (Vec3s*)Lib_SegmentedToVirtual(arg1->points);
+    Vec3s* sp5C = Lib_SegmentedToVirtual(arg1->points);
     s32 count = arg1->count;
     s32 idx = arg2;
     s32 sp50 = false;
@@ -235,7 +243,7 @@ s16 func_809895B4(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
     f32 diffZ;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[idx];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
@@ -349,9 +357,10 @@ void func_80989BF8(EnDg* this) {
     if (this->unk_286 < 14) {
         if (this->unk_286 % 2) {
             D_8098C2A8[this->unk_286].unk_04 =
-                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF0) >> 4);
+                0x3538 + ((gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & (0x10 | 0x20 | 0x40 | 0x80)) >> 4);
         } else {
-            D_8098C2A8[this->unk_286].unk_04 = 0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & 0xF);
+            D_8098C2A8[this->unk_286].unk_04 =
+                0x3538 + (gSaveContext.weekEventReg[42 + (this->unk_286 / 2)] & (1 | 2 | 4 | 8));
         }
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -369,16 +378,16 @@ void func_80989BF8(EnDg* this) {
 void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
     if (this->unk_286 == 21) {
         if (CURRENT_DAY == 1) {
-            func_801518B0(globalCtx, 0x91C, NULL);
+            Message_StartTextbox(globalCtx, 0x91C, NULL);
         } else {
-            func_801518B0(globalCtx, 0x91E, NULL);
+            Message_StartTextbox(globalCtx, 0x91E, NULL);
         }
     } else if ((this->unk_286 >= 0) && (this->unk_286 < 14)) {
-        func_801518B0(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
+        Message_StartTextbox(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
     } else if (this->unk_286 == 20) {
-        func_801518B0(globalCtx, 0x353D, NULL);
+        Message_StartTextbox(globalCtx, 0x353D, NULL);
     } else {
-        func_801518B0(globalCtx, 0x627, NULL);
+        Message_StartTextbox(globalCtx, 0x627, NULL);
     }
 }
 
@@ -386,10 +395,10 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
     D_8098C2A8_s* temp;
 
     if ((D_8098C2A0 != 0) && !(this->unk_280 & 1)) {
-        this->actor.flags |= 0x8000000;
+        this->actor.flags |= ACTOR_FLAG_8000000;
         this->unk_280 |= 1;
     } else if ((D_8098C2A0 == 0) && (this->unk_280 & 1)) {
-        this->actor.flags &= ~0x8000000;
+        this->actor.flags &= ~ACTOR_FLAG_8000000;
         this->unk_280 &= ~1;
     }
 
@@ -398,16 +407,16 @@ void func_80989E18(EnDg* this, GlobalContext* globalCtx) {
         this->unk_290 = 1;
         D_8098C2FC = D_8098C2A8[this->unk_286];
         if (D_8098C2A0 == 0) {
-            this->actor.flags |= 0x8000000;
+            this->actor.flags |= ACTOR_FLAG_8000000;
             D_8098C2A0 = 1;
             this->unk_280 |= 1;
         }
 
         func_80989140(&this->skelAnime, sAnimations, 5);
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.speedXZ = 0.0f;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_TRUTH) {
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, globalCtx, 100.0f);
             this->actionFunc = func_8098BBEC;
         } else {
@@ -690,7 +699,7 @@ void func_8098A938(EnDg* this, GlobalContext* globalCtx) {
                 this->actionFunc = func_8098AC34;
             } else {
                 func_80989140(&this->skelAnime, sAnimations, 11);
-                sAnimations[11].playbackSpeed = -1.0f;
+                sAnimations[11].playSpeed = -1.0f;
                 this->actionFunc = func_8098B198;
             }
         }
@@ -765,7 +774,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
 
     if (sp26 < 9) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            sAnimations[14].playbackSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+            sAnimations[14].playSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
         }
         func_80989864(this, globalCtx);
     } else {
@@ -773,7 +782,7 @@ void func_8098AC34(EnDg* this, GlobalContext* globalCtx) {
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
             f32 rand = randPlusMinusPoint5Scaled(1.5f);
 
-            sAnimations[14].playbackSpeed = 1.2f;
+            sAnimations[14].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
             this->actor.speedXZ = 8.0f + rand;
         } else if (sp26 >= 0x15) {
@@ -830,7 +839,7 @@ void func_8098B004(EnDg* this, GlobalContext* globalCtx) {
 
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = -3.0f;
-    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & 2)) {
+    if ((this->actor.xzDistToPlayer < 60.0f) && (this->collider.base.ocFlags1 & OC1_HIT)) {
         this->actor.shape.rot.y += 0x71C;
     } else {
         Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 4, 0xC00);
@@ -1046,9 +1055,9 @@ void func_8098B88C(EnDg* this, GlobalContext* globalCtx) {
 void func_8098BA64(EnDg* this, GlobalContext* globalCtx) {
     if (Actor_HasNoParent(&this->actor, globalCtx)) {
         this->unk_290 = 2;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         if (D_8098C2A0 != 0) {
-            this->actor.flags &= ~0x8000000;
+            this->actor.flags &= ~ACTOR_FLAG_8000000;
             D_8098C2A0 = 0;
             this->unk_280 &= ~1;
         }
@@ -1088,7 +1097,7 @@ void func_8098BB10(EnDg* this, GlobalContext* globalCtx) {
 
 void func_8098BBEC(EnDg* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80989D38(this, globalCtx);
         this->actionFunc = func_8098BC54;
     } else {

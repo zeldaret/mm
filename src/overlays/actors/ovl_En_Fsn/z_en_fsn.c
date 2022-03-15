@@ -8,7 +8,7 @@
 #include "objects/object_fsn/object_fsn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -59,14 +59,20 @@ const ActorInit En_Fsn_InitVars = {
     (ActorFunc)EnFsn_Draw,
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_fsn_Anim_012C34, 1.0f, 0, -1, 0, 0 }, { &object_fsn_Anim_0131FC, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C58C, -1.0f, 0, -1, 2, 0 },
-    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00F00C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00D354, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_01430C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, 2, 0 }, { &object_fsn_Anim_00C26C, 1.0f, 0, -1, 0, 0 },
-    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, 2, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_fsn_Anim_012C34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_0131FC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00C58C, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00F00C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00D354, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_01430C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_fsn_Anim_00C26C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -125,7 +131,7 @@ u16 EnFsn_GetWelcome(GlobalContext* globalCtx) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
     switch (this->textId) {
         case 0:
-            if (!(gSaveContext.weekEventReg[0x50] & 0x10)) {
+            if (!(gSaveContext.weekEventReg[80] & 0x10)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -138,7 +144,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
                 this->flags |= ENFSN_GIVE_ITEM;
                 this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
-                gSaveContext.weekEventReg[0x50] |= 0x10;
+                gSaveContext.weekEventReg[80] |= 0x10;
                 this->textId = 0x29F1;
                 break;
             } else {
@@ -158,7 +164,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
-            gSaveContext.weekEventReg[0x50] |= 0x10;
+            gSaveContext.weekEventReg[80] |= 0x10;
             this->textId = 0x29F1;
             break;
         case 0x29F1:
@@ -166,7 +172,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
             this->flags |= ENFSN_END_CONVERSATION;
             break;
     }
-    func_801518B0(globalCtx, this->textId, &this->actor);
+    Message_StartTextbox(globalCtx, this->textId, &this->actor);
     if (this->flags & ENFSN_END_CONVERSATION) {
         if (this->flags & ENFSN_GAVE_LETTER_TO_MAMA) {
             this->flags &= ~ENFSN_GAVE_LETTER_TO_MAMA;
@@ -272,8 +278,8 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
 }
 
 s16 EnFsn_GetThirdDayItemId(void) {
-    if (!(gSaveContext.weekEventReg[0x21] & 4) && CURRENT_DAY == 3) {
-        if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+    if (!(gSaveContext.weekEventReg[33] & 4) && CURRENT_DAY == 3) {
+        if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
             return SI_BOMB_BAG_30_1;
         }
         return SI_MASK_ALL_NIGHT;
@@ -299,14 +305,13 @@ s16 EnFsn_GetStolenItemId(u32 stolenItem) {
 
 s32 EnFsn_HasItemsToSell(void) {
     if (CURRENT_DAY != 3) {
-        if (((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) ||
-            ((gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10)) {
+        if (((gSaveContext.stolenItems & 0xFF000000) >> 0x18) || ((gSaveContext.stolenItems & 0xFF0000) >> 0x10)) {
             return true;
         }
         return false;
     } else {
-        if (((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) ||
-            ((gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10) || !(gSaveContext.weekEventReg[0x21] & 4)) {
+        if (((gSaveContext.stolenItems & 0xFF000000) >> 0x18) || ((gSaveContext.stolenItems & 0xFF0000) >> 0x10) ||
+            !(gSaveContext.weekEventReg[33] & 4)) {
             return true;
         }
         return false;
@@ -314,8 +319,8 @@ s32 EnFsn_HasItemsToSell(void) {
 }
 
 void EnFsn_GetShopItemIds(EnFsn* this) {
-    u32 stolenItem1 = (gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18;
-    u32 stolenItem2 = (gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10;
+    u32 stolenItem1 = (gSaveContext.stolenItems & 0xFF000000) >> 0x18;
+    u32 stolenItem2 = (gSaveContext.stolenItems & 0xFF0000) >> 0x10;
     s16 itemId;
 
     this->stolenItem1 = this->stolenItem2 = 0;
@@ -362,7 +367,7 @@ void EnFsn_EndInteraction(EnFsn* this, GlobalContext* globalCtx) {
         this->cutsceneState = 0;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -377,7 +382,7 @@ void EnFsn_EndInteraction(EnFsn* this, GlobalContext* globalCtx) {
 s32 EnFsn_TestEndInteraction(EnFsn* this, GlobalContext* globalCtx, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
-        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
         func_80151BB4(globalCtx, 3);
         this->actionFunc = EnFsn_SetupEndInteraction;
         return true;
@@ -412,19 +417,19 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, GlobalContext* globalCtx) {
             func_8019F208();
             if (CURRENT_DAY != 3) {
                 this->actor.textId = 0x29FB;
-            } else if (gSaveContext.weekEventReg[0x21] & 4) {
+            } else if (gSaveContext.weekEventReg[33] & 4) {
                 this->actor.textId = 0x29FF;
-            } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+            } else if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
                 this->actor.textId = 0x29D7;
             } else {
                 this->actor.textId = 0x29D8;
             }
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
             return true;
         case 1:
             func_8019F230();
             this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
             func_80151BB4(globalCtx, 3);
             this->actionFunc = EnFsn_SetupEndInteraction;
             return true;
@@ -688,7 +693,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
     this->blinkTimer = 20;
     this->animationIdx = 4;
     this->eyeTextureIdx = 0;
-    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     this->actionFunc = EnFsn_Idle;
 }
 
@@ -697,10 +702,10 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
     if (this->animationIdx == 4) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
         if (curFrame == frameCount) {
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         }
         return;
     }
@@ -720,7 +725,7 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
             this->cutsceneState = 1;
         }
         this->actor.textId = EnFsn_GetWelcome(globalCtx);
-        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
         player->actor.world.pos.x = 1.0f;
         player->actor.world.pos.z = -34.0f;
         this->actionFunc = EnFsn_BeginInteraction;
@@ -733,12 +738,12 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animationSeg);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
         this->animationIdx = 11;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
     } else {
         if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -746,16 +751,16 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
             this->animationIdx = 5;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
             this->animationIdx = 12;
-            func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         } else {
             if (this->animationIdx == 12) {
                 if (curFrame == frameCount) {
                     this->animationIdx = 5;
-                    func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -801,16 +806,16 @@ void EnFsn_StartBuying(EnFsn* this, GlobalContext* globalCtx) {
         switch (this->actor.textId) {
             case 0x29CC:
                 this->actor.textId = 0x29CD;
-                func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                 break;
             case 0x29CD:
                 this->actor.textId = 0x29CE;
                 EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
-                func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                 break;
             case 0x29CE:
                 this->actor.textId = 0xFF;
-                func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                 this->actionFunc = EnFsn_DeterminePrice;
                 break;
             case 0x29CF:
@@ -833,24 +838,24 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
                     } else {
                         this->actor.textId = 0x29D2;
                     }
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     break;
                 case 0x29D2:
-                    if (gSaveContext.weekEventReg[0x21] & 4) {
+                    if (gSaveContext.weekEventReg[33] & 4) {
                         this->actor.textId = 0x2A01;
-                    } else if (!(gSaveContext.weekEventReg[0x21] & 8) && !(gSaveContext.weekEventReg[0x4F] & 0x40)) {
+                    } else if (!(gSaveContext.weekEventReg[33] & 8) && !(gSaveContext.weekEventReg[79] & 0x40)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;
                     }
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     break;
                 case 0x29D3:
                 case 0x29D4:
                 case 0x29FA:
                 case 0x2A01:
                     this->actor.textId = 0x29D5;
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     break;
             }
         }
@@ -865,7 +870,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = trueTmp;
                     this->actor.textId = 0x29D6;
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_FaceShopkeeperSelling;
                     break;
                 case 1:
@@ -873,7 +878,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
                     this->isSelling = false;
                     this->actor.textId = 0x29CE;
                     EnFsn_HandleLookToShopkeeperBuyingCutscene(this);
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_StartBuying;
                     break;
             }
@@ -884,7 +889,7 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_SetupDeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.textId = 0xFF;
-        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
         this->actionFunc = EnFsn_DeterminePrice;
     }
 }
@@ -919,7 +924,7 @@ void EnFsn_DeterminePrice(EnFsn* this, GlobalContext* globalCtx) {
             } else {
                 this->actor.textId = 0x29D1;
             }
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
             func_80151BB4(globalCtx, 3);
             this->actionFunc = EnFsn_SetupEndInteraction;
         }
@@ -934,7 +939,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 if (this->cutsceneState == 2) {
                     ActorCutscene_Stop(this->cutscene);
@@ -1006,7 +1011,7 @@ void EnFsn_ResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
                 this->cutscene = this->lookToShopkeeperCutscene;
                 this->actor.textId = (this->numSellingItems <= 0) ? 0x29DE : 0x29D6;
             }
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
@@ -1124,7 +1129,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
     switch (item->canBuyFunc(globalCtx, item)) {
         case CANBUY_RESULT_SUCCESS_2:
             func_8019F208();
-            gSaveContext.weekEventReg[0x21] |= 4;
+            gSaveContext.weekEventReg[33] |= 4;
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == 2) {
                 ActorCutscene_Stop(this->cutscene);
@@ -1134,7 +1139,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             item = this->items[this->cursorIdx];
             item->buyFanfareFunc(globalCtx, item);
             Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             Interface_ChangeAlpha(50);
             this->drawCursor = 0;
@@ -1142,9 +1147,9 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             item = this->items[this->cursorIdx];
             item->boughtFunc(globalCtx, item);
             if (this->stolenItem1 == this->cursorIdx) {
-                gSaveContext.roomInf[126][5] &= ~0xFF000000;
+                gSaveContext.stolenItems &= ~0xFF000000;
             } else if (this->stolenItem2 == this->cursorIdx) {
-                gSaveContext.roomInf[126][5] &= ~0xFF0000;
+                gSaveContext.stolenItems &= ~0xFF0000;
             }
             this->numSellingItems--;
             this->itemIds[this->cursorIdx] = -1;
@@ -1171,7 +1176,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, GlobalContext* globalCtx) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
             }
         } else {
@@ -1227,13 +1232,13 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
                 case 0:
                     func_8019F208();
                     this->actor.textId = 0xFF;
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_DeterminePrice;
                     break;
                 case 1:
                     func_8019F230();
                     this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     func_80151BB4(globalCtx, 3);
                     break;
             }
@@ -1243,7 +1248,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
             }
         } else {
@@ -1274,13 +1279,13 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
                     func_8019F208();
                     this->isSelling = false;
                     this->actor.textId = 0x29CE;
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_StartBuying;
                     break;
                 case 1:
                     func_8019F230();
                     this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
-                    func_801518B0(globalCtx, this->actor.textId, &this->actor);
+                    Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     func_80151BB4(globalCtx, 3);
                     break;
             }
@@ -1290,7 +1295,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx)
             if (globalCtx->msgCtx.unk120B1 == 0) {
                 EnFsn_EndInteraction(this, globalCtx);
             } else {
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
             }
         } else {
@@ -1319,7 +1324,7 @@ void EnFsn_FaceShopkeeperSelling(EnFsn* this, GlobalContext* globalCtx) {
         }
     } else if (talkState == 5 && func_80147624(globalCtx)) {
         this->actor.textId = 0x29D6;
-        func_801518B0(globalCtx, this->actor.textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
         if (globalCtx) {}
     }
 }
@@ -1344,12 +1349,12 @@ void EnFsn_ConverseBackroom(EnFsn* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
         if (this->flags & ENFSN_END_CONVERSATION) {
             this->flags &= ~ENFSN_END_CONVERSATION;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = EnFsn_IdleBackroom;
         } else if (this->flags & ENFSN_GIVE_ITEM) {
             this->flags &= ~ENFSN_GIVE_ITEM;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = EnFsn_GiveItem;
         } else {
@@ -1389,11 +1394,11 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
                        this->morphTable, 19);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, globalCtx);
     } else {
-        if ((gSaveContext.weekEventReg[0x21] & 8) || (gSaveContext.weekEventReg[0x4F] & 0x40)) {
+        if ((gSaveContext.weekEventReg[33] & 8) || (gSaveContext.weekEventReg[79] & 0x40)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
@@ -1401,10 +1406,10 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
         this->eyeTextureIdx = 0;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.targetMode = 0;
         this->animationIdx = 0;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->animationIdx);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
         this->actionFunc = EnFsn_IdleBackroom;
     }
 }
@@ -1421,7 +1426,7 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
     func_800E9250(globalCtx, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
-    func_8013D9C8(globalCtx, this->limbRotYTable, this->limbRotZTable, 19);
+    SubS_FillLimbRotTables(globalCtx, this->limbRotYTable, this->limbRotZTable, ARRAY_COUNT(this->limbRotYTable));
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {
         EnFsn_UpdateJoystickInputState(this, globalCtx);

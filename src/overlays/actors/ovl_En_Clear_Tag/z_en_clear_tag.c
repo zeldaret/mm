@@ -7,7 +7,7 @@
 #include "z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnClearTag*)thisx)
 
@@ -410,7 +410,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f vel;
     Vec3f accel;
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -521,7 +521,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Camera* camera;
+    Camera* mainCam;
     s32 pad;
 
     switch (this->cameraState) {
@@ -544,19 +544,19 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             }
             break;
         case 1:
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
-            this->camId = func_801694DC(globalCtx);
-            func_80169590(globalCtx, 0, 1);
-            func_80169590(globalCtx, this->camId, 7);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
+            this->subCamId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+            Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
             func_800B7298(globalCtx, &this->actor, 4);
-            camera = Play_GetCamera(globalCtx, MAIN_CAM);
-            this->eye.x = camera->eye.x;
-            this->eye.y = camera->eye.y;
-            this->eye.z = camera->eye.z;
-            this->at.x = camera->at.x;
-            this->at.y = camera->at.y;
-            this->at.z = camera->at.z;
-            func_801518B0(globalCtx, 0xF, NULL);
+            mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+            this->subCamEye.x = mainCam->eye.x;
+            this->subCamEye.y = mainCam->eye.y;
+            this->subCamEye.z = mainCam->eye.z;
+            this->subCamAt.x = mainCam->at.x;
+            this->subCamAt.y = mainCam->at.y;
+            this->subCamAt.z = mainCam->at.z;
+            Message_StartTextbox(globalCtx, 0xF, NULL);
             this->cameraState = 2;
             func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
@@ -568,22 +568,22 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
 
             player->actor.speedXZ = 0.0f;
             if (Message_GetState(&globalCtx->msgCtx) == 0) {
-                camera = Play_GetCamera(globalCtx, MAIN_CAM);
-                camera->eye = this->eye;
-                camera->eyeNext = this->eye;
-                camera->at = this->at;
-                func_80169AFC(globalCtx, this->camId, 0);
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
+                func_80169AFC(globalCtx, this->subCamId, 0);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->cameraState = 0;
-                this->camId = 0;
+                this->subCamId = CAM_ID_MAIN;
                 this->activeTimer = 20;
             }
             break;
     }
 
-    if (this->camId != 0) {
-        Play_CameraSetAtEye(globalCtx, this->camId, &this->at, &this->eye);
+    if (this->subCamId != CAM_ID_MAIN) {
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
