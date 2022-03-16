@@ -437,6 +437,7 @@ animdict = {
     "func_80114E90": "Interface_HasEmptyBottle",
     "func_80114F2C": "Interface_HasItemInBottle",
     "func_80123C90": "Player_SetEquipmentData",
+    "func_800BE680": "Actor_DrawDamageEffects",
     "func_8013E2D4": "SubS_StartActorCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
     "func_8013AED4": "SubS_UpdateFlags",
@@ -445,7 +446,7 @@ animdict = {
     "func_8013D5E8": "SubS_AngleDiffLessEqual",
     "func_8012F22C": "Inventory_GetSkullTokenCount",
 
-    # Structs members
+    # Struct members
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
     "skelAnime.initialFrame": "skelAnime.startFrame",
