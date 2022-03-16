@@ -1172,9 +1172,9 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
         switch (this->damageEffect) {
             case EN_RD_DMGEFF_ZORA_MAGIC:
                 if ((this->actionFunc != EnRd_Grab) && ((this->actionFunc != EnRd_Stunned) || (this->stunTimer == 0))) {
-                    this->effectTimer = 40;
-                    this->effectType = 30;
-                    this->effectAlpha = 1.0f;
+                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+                    this->drawDmgEffAlpha = 1.0f;
                     EnRd_SetupStunned(this);
                 }
                 return;
@@ -1185,20 +1185,20 @@ void EnRd_UpdateDamage(EnRd* this, GlobalContext* globalCtx) {
 
             case EN_RD_DMGEFF_FIRE_ARROW:
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
-                this->effectTimer = 180;
-                this->effectType = 0;
+                this->drawDmgEffTimer = 180;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 this->stunnedBySunsSong = false;
                 this->sunsSongStunTimer = 0;
-                this->effectAlpha = 1.0f;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case EN_RD_DMGEFF_LIGHT_ARROW:
                 Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
-                this->effectTimer = 60;
-                this->effectType = 20;
+                this->drawDmgEffTimer = 60;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->stunnedBySunsSong = false;
                 this->sunsSongStunTimer = 0;
-                this->effectAlpha = 1.0f;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case EN_RD_DMGEFF_DAMAGE:
@@ -1243,15 +1243,15 @@ void EnRd_UpdateCollision(EnRd* this, GlobalContext* globalCtx) {
 }
 
 void EnRd_UpdateEffect(EnRd* this, GlobalContext* globalCtx) {
-    if (this->effectTimer > 0) {
-        this->effectTimer--;
+    if (this->drawDmgEffTimer > 0) {
+        this->drawDmgEffTimer--;
     }
 
-    if (this->effectTimer < 20) {
-        Math_SmoothStepToF(&this->effectScale, 0.0f, 0.5f, 0.03f, 0.0f);
-        this->effectAlpha = this->effectTimer * 0.05f;
+    if (this->drawDmgEffTimer < 20) {
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
+        this->drawDmgEffAlpha = this->drawDmgEffTimer * 0.05f;
     } else {
-        Math_SmoothStepToF(&this->effectScale, 0.5f, 0.1f, 0.02f, 0.0f);
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
     }
 }
 
@@ -1308,7 +1308,7 @@ s32 EnRd_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 void EnRd_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnRd* this = THIS;
 
-    if ((this->effectTimer != 0) &&
+    if ((this->drawDmgEffTimer != 0) &&
         ((limbIndex == REDEAD_LIMB_LEFT_THIGH) || (limbIndex == REDEAD_LIMB_LEFT_SHIN) ||
          (limbIndex == REDEAD_LIMB_LEFT_FOOT) || (limbIndex == REDEAD_LIMB_RIGHT_THIGH) ||
          (limbIndex == REDEAD_LIMB_RIGHT_SHIN) || (limbIndex == REDEAD_LIMB_RIGHT_FOOT) ||
@@ -1357,8 +1357,8 @@ void EnRd_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    if (this->effectTimer > 0) {
-        func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, 0.5f,
-                      this->effectAlpha, this->effectType);
+    if (this->drawDmgEffTimer > 0) {
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }
