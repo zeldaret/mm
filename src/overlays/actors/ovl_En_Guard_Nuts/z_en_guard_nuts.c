@@ -237,7 +237,7 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
                     EnGuardNuts_Burrow(this, globalCtx);
                 } else {
                     this->guardTextIndex++;
-                    func_801518B0(globalCtx, sTextIDs[this->guardTextIndex], &this->actor);
+                    Message_StartTextbox(globalCtx, sTextIDs[this->guardTextIndex], &this->actor);
                     if (D_80ABBE38[this->guardTextIndex] == 2) {
                         D_80ABBE20 = 1;
                     }
