@@ -28,26 +28,26 @@
         <Texture Name="object_po_Tex_004B10" OutName="tex_004B10" Format="rgba16" Width="16" Height="16" Offset="0x4B10" />
         <Texture Name="object_po_Tex_004D10" OutName="tex_004D10" Format="rgba16" Width="16" Height="16" Offset="0x4D10" />
         <Texture Name="object_po_Tex_004F10" OutName="tex_004F10" Format="rgba16" Width="8" Height="8" Offset="0x4F10" />
-        <Limb Name="object_po_Standardlimb_004F90" Type="Standard" Offset="0x4F90" />
-        <Limb Name="object_po_Standardlimb_004F9C" Type="Standard" Offset="0x4F9C" />
-        <Limb Name="object_po_Standardlimb_004FA8" Type="Standard" Offset="0x4FA8" />
-        <Limb Name="object_po_Standardlimb_004FB4" Type="Standard" Offset="0x4FB4" />
-        <Limb Name="object_po_Standardlimb_004FC0" Type="Standard" Offset="0x4FC0" />
-        <Limb Name="object_po_Standardlimb_004FCC" Type="Standard" Offset="0x4FCC" />
-        <Limb Name="object_po_Standardlimb_004FD8" Type="Standard" Offset="0x4FD8" />
-        <Limb Name="object_po_Standardlimb_004FE4" Type="Standard" Offset="0x4FE4" />
-        <Limb Name="object_po_Standardlimb_004FF0" Type="Standard" Offset="0x4FF0" />
-        <Limb Name="object_po_Standardlimb_004FFC" Type="Standard" Offset="0x4FFC" />
-        <Limb Name="object_po_Standardlimb_005008" Type="Standard" Offset="0x5008" />
-        <Limb Name="object_po_Standardlimb_005014" Type="Standard" Offset="0x5014" />
-        <Limb Name="object_po_Standardlimb_005020" Type="Standard" Offset="0x5020" />
-        <Limb Name="object_po_Standardlimb_00502C" Type="Standard" Offset="0x502C" />
-        <Limb Name="object_po_Standardlimb_005038" Type="Standard" Offset="0x5038" />
-        <Limb Name="object_po_Standardlimb_005044" Type="Standard" Offset="0x5044" />
-        <Limb Name="object_po_Standardlimb_005050" Type="Standard" Offset="0x5050" />
-        <Limb Name="object_po_Standardlimb_00505C" Type="Standard" Offset="0x505C" />
-        <Limb Name="object_po_Standardlimb_005068" Type="Standard" Offset="0x5068" />
-        <Limb Name="object_po_Standardlimb_005074" Type="Standard" Offset="0x5074" />
-        <Skeleton Name="object_po_Skel_0050D0" Type="Normal" LimbType="Standard" Offset="0x50D0" />
+        <Limb Name="object_po_Standardlimb_004F90" Type="Standard" EnumName="OBJECT_PO_LIMB_01" Offset="0x4F90" />
+        <Limb Name="object_po_Standardlimb_004F9C" Type="Standard" EnumName="OBJECT_PO_LIMB_02" Offset="0x4F9C" />
+        <Limb Name="object_po_Standardlimb_004FA8" Type="Standard" EnumName="OBJECT_PO_LIMB_03" Offset="0x4FA8" />
+        <Limb Name="object_po_Standardlimb_004FB4" Type="Standard" EnumName="OBJECT_PO_LIMB_04" Offset="0x4FB4" />
+        <Limb Name="object_po_Standardlimb_004FC0" Type="Standard" EnumName="OBJECT_PO_LIMB_05" Offset="0x4FC0" />
+        <Limb Name="object_po_Standardlimb_004FCC" Type="Standard" EnumName="OBJECT_PO_LIMB_06" Offset="0x4FCC" />
+        <Limb Name="object_po_Standardlimb_004FD8" Type="Standard" EnumName="OBJECT_PO_LIMB_07" Offset="0x4FD8" />
+        <Limb Name="object_po_Standardlimb_004FE4" Type="Standard" EnumName="OBJECT_PO_LIMB_08" Offset="0x4FE4" />
+        <Limb Name="object_po_Standardlimb_004FF0" Type="Standard" EnumName="OBJECT_PO_LIMB_09" Offset="0x4FF0" />
+        <Limb Name="object_po_Standardlimb_004FFC" Type="Standard" EnumName="OBJECT_PO_LIMB_0A" Offset="0x4FFC" />
+        <Limb Name="object_po_Standardlimb_005008" Type="Standard" EnumName="OBJECT_PO_LIMB_0B" Offset="0x5008" />
+        <Limb Name="object_po_Standardlimb_005014" Type="Standard" EnumName="OBJECT_PO_LIMB_0C" Offset="0x5014" />
+        <Limb Name="object_po_Standardlimb_005020" Type="Standard" EnumName="OBJECT_PO_LIMB_0D" Offset="0x5020" />
+        <Limb Name="object_po_Standardlimb_00502C" Type="Standard" EnumName="OBJECT_PO_LIMB_0E" Offset="0x502C" />
+        <Limb Name="object_po_Standardlimb_005038" Type="Standard" EnumName="OBJECT_PO_LIMB_0F" Offset="0x5038" />
+        <Limb Name="object_po_Standardlimb_005044" Type="Standard" EnumName="OBJECT_PO_LIMB_10" Offset="0x5044" />
+        <Limb Name="object_po_Standardlimb_005050" Type="Standard" EnumName="OBJECT_PO_LIMB_11" Offset="0x5050" />
+        <Limb Name="object_po_Standardlimb_00505C" Type="Standard" EnumName="OBJECT_PO_LIMB_12" Offset="0x505C" />
+        <Limb Name="object_po_Standardlimb_005068" Type="Standard" EnumName="OBJECT_PO_LIMB_13" Offset="0x5068" />
+        <Limb Name="object_po_Standardlimb_005074" Type="Standard" EnumName="OBJECT_PO_LIMB_14" Offset="0x5074" />
+        <Skeleton Name="object_po_Skel_0050D0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_PO_LIMB_NONE" LimbMax="OBJECT_PO_LIMB_MAX" EnumName="object_po_Limbs" Offset="0x50D0" />
     </File>
 </Root>

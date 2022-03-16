@@ -42,17 +42,17 @@
         <Texture Name="object_po_composer_Tex_009280" OutName="tex_009280" Format="rgba16" Width="16" Height="16" Offset="0x9280" />
         <Texture Name="object_po_composer_Tex_009480" OutName="tex_009480" Format="rgba16" Width="16" Height="16" Offset="0x9480" />
         <Texture Name="object_po_composer_Tex_009680" OutName="tex_009680" Format="rgba16" Width="16" Height="16" Offset="0x9680" />
-        <Limb Name="object_po_composer_Standardlimb_009880" Type="Standard" Offset="0x9880" />
-        <Limb Name="object_po_composer_Standardlimb_00988C" Type="Standard" Offset="0x988C" />
-        <Limb Name="object_po_composer_Standardlimb_009898" Type="Standard" Offset="0x9898" />
-        <Limb Name="object_po_composer_Standardlimb_0098A4" Type="Standard" Offset="0x98A4" />
-        <Limb Name="object_po_composer_Standardlimb_0098B0" Type="Standard" Offset="0x98B0" />
-        <Limb Name="object_po_composer_Standardlimb_0098BC" Type="Standard" Offset="0x98BC" />
-        <Limb Name="object_po_composer_Standardlimb_0098C8" Type="Standard" Offset="0x98C8" />
-        <Limb Name="object_po_composer_Standardlimb_0098D4" Type="Standard" Offset="0x98D4" />
-        <Limb Name="object_po_composer_Standardlimb_0098E0" Type="Standard" Offset="0x98E0" />
-        <Limb Name="object_po_composer_Standardlimb_0098EC" Type="Standard" Offset="0x98EC" />
-        <Limb Name="object_po_composer_Standardlimb_0098F8" Type="Standard" Offset="0x98F8" />
-        <Skeleton Name="object_po_composer_Skel_009930" Type="Flex" LimbType="Standard" Offset="0x9930" />
+        <Limb Name="object_po_composer_Standardlimb_009880" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_01" Offset="0x9880" />
+        <Limb Name="object_po_composer_Standardlimb_00988C" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_02" Offset="0x988C" />
+        <Limb Name="object_po_composer_Standardlimb_009898" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_03" Offset="0x9898" />
+        <Limb Name="object_po_composer_Standardlimb_0098A4" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_04" Offset="0x98A4" />
+        <Limb Name="object_po_composer_Standardlimb_0098B0" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_05" Offset="0x98B0" />
+        <Limb Name="object_po_composer_Standardlimb_0098BC" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_06" Offset="0x98BC" />
+        <Limb Name="object_po_composer_Standardlimb_0098C8" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_07" Offset="0x98C8" />
+        <Limb Name="object_po_composer_Standardlimb_0098D4" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_08" Offset="0x98D4" />
+        <Limb Name="object_po_composer_Standardlimb_0098E0" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_09" Offset="0x98E0" />
+        <Limb Name="object_po_composer_Standardlimb_0098EC" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_0A" Offset="0x98EC" />
+        <Limb Name="object_po_composer_Standardlimb_0098F8" Type="Standard" EnumName="OBJECT_PO_COMPOSER_LIMB_0B" Offset="0x98F8" />
+        <Skeleton Name="object_po_composer_Skel_009930" Type="Flex" LimbType="Standard" LimbNone="OBJECT_PO_COMPOSER_LIMB_NONE" LimbMax="OBJECT_PO_COMPOSER_LIMB_MAX" EnumName="object_po_composer_Limbs" Offset="0x9930" />
     </File>
 </Root>
