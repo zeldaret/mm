@@ -138,7 +138,7 @@ void func_80A3C7E8(ObjVspinyroll* this) {
     s32 i;
     s32 j;
     f32 tempf;
-    s32 index = D_80A3D450[OBJVSPINYROLL_GET_4000(&this->dyna.actor)] * 120.0f * 0.01724138f;
+    s32 index = D_80A3D450[OBJVSPINYROLL_GET_4000(&this->dyna.actor)] * 120.0f * (1.0f / 58.0f);
 
     index += 2;
     this->unk_38C = index * 4;
@@ -193,8 +193,8 @@ s32 func_80A3C8D8(ObjVspinyroll* this, GlobalContext* globalCtx, Vec3f* arg2, s3
         spCC.x += 30.0f * this->unk_3B4.x;
         spCC.z += 30.0f * this->unk_3B4.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spD8, &spCC, &spC0, &this->unk_1A8[i].collisionPoly, 1, 0, 0,
-                                    1, &this->unk_1A8[i].bgId, &this->dyna.actor, 0.0f)) {
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spD8, &spCC, &spC0, &this->unk_1A8[i].collisionPoly, true,
+                                    false, false, true, &this->unk_1A8[i].bgId, &this->dyna.actor, 0.0f)) {
             if ((arg3 != 0) && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
                 spA8.x = ptr->unk_00.x * 0.2f;
                 spA8.y = ptr->unk_00.y;
