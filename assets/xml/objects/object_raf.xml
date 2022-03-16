@@ -26,17 +26,17 @@
         <Texture Name="object_raf_Tex_002CF8" OutName="tex_002CF8" Format="rgba16" Width="16" Height="16" Offset="0x2CF8" />
         <Texture Name="object_raf_Tex_002EF8" OutName="tex_002EF8" Format="rgba16" Width="16" Height="32" Offset="0x2EF8" />
         <Texture Name="object_raf_Tex_0032F8" OutName="tex_0032F8" Format="rgba16" Width="8" Height="8" Offset="0x32F8" />
-        <Limb Name="object_raf_Standardlimb_003378" Type="Standard" Offset="0x3378" />
-        <Limb Name="object_raf_Standardlimb_003384" Type="Standard" Offset="0x3384" />
-        <Limb Name="object_raf_Standardlimb_003390" Type="Standard" Offset="0x3390" />
-        <Limb Name="object_raf_Standardlimb_00339C" Type="Standard" Offset="0x339C" />
-        <Limb Name="object_raf_Standardlimb_0033A8" Type="Standard" Offset="0x33A8" />
-        <Limb Name="object_raf_Standardlimb_0033B4" Type="Standard" Offset="0x33B4" />
-        <Limb Name="object_raf_Standardlimb_0033C0" Type="Standard" Offset="0x33C0" />
-        <Limb Name="object_raf_Standardlimb_0033CC" Type="Standard" Offset="0x33CC" />
-        <Limb Name="object_raf_Standardlimb_0033D8" Type="Standard" Offset="0x33D8" />
-        <Limb Name="object_raf_Standardlimb_0033E4" Type="Standard" Offset="0x33E4" />
-        <Limb Name="object_raf_Standardlimb_0033F0" Type="Standard" Offset="0x33F0" />
-        <Skeleton Name="object_raf_Skel_003428" Type="Flex" LimbType="Standard" Offset="0x3428" />
+        <Limb Name="object_raf_Standardlimb_003378" Type="Standard" EnumName="OBJECT_RAF_LIMB_01" Offset="0x3378" />
+        <Limb Name="object_raf_Standardlimb_003384" Type="Standard" EnumName="OBJECT_RAF_LIMB_02" Offset="0x3384" />
+        <Limb Name="object_raf_Standardlimb_003390" Type="Standard" EnumName="OBJECT_RAF_LIMB_03" Offset="0x3390" />
+        <Limb Name="object_raf_Standardlimb_00339C" Type="Standard" EnumName="OBJECT_RAF_LIMB_04" Offset="0x339C" />
+        <Limb Name="object_raf_Standardlimb_0033A8" Type="Standard" EnumName="OBJECT_RAF_LIMB_05" Offset="0x33A8" />
+        <Limb Name="object_raf_Standardlimb_0033B4" Type="Standard" EnumName="OBJECT_RAF_LIMB_06" Offset="0x33B4" />
+        <Limb Name="object_raf_Standardlimb_0033C0" Type="Standard" EnumName="OBJECT_RAF_LIMB_07" Offset="0x33C0" />
+        <Limb Name="object_raf_Standardlimb_0033CC" Type="Standard" EnumName="OBJECT_RAF_LIMB_08" Offset="0x33CC" />
+        <Limb Name="object_raf_Standardlimb_0033D8" Type="Standard" EnumName="OBJECT_RAF_LIMB_09" Offset="0x33D8" />
+        <Limb Name="object_raf_Standardlimb_0033E4" Type="Standard" EnumName="OBJECT_RAF_LIMB_0A" Offset="0x33E4" />
+        <Limb Name="object_raf_Standardlimb_0033F0" Type="Standard" EnumName="OBJECT_RAF_LIMB_0B" Offset="0x33F0" />
+        <Skeleton Name="object_raf_Skel_003428" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RAF_LIMB_NONE" LimbMax="OBJECT_RAF_LIMB_MAX" EnumName="object_raf_Limbs" Offset="0x3428" />
     </File>
 </Root>
