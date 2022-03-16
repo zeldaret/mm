@@ -255,7 +255,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(this, globalCtx);
     this->playerStunWaitTimer = 0;
     this->timeInitialized = gSaveContext.time;
-    this->effectType = 0;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->type = EN_RAILGIBUD_TYPE_GIBDO;
     this->textId = 0;
     this->isInvincible = false;
@@ -577,7 +577,8 @@ void EnRailgibud_Damage(EnRailgibud* this, GlobalContext* globalCtx) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_405 = -1;
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        if ((this->effectTimer > 0) && (this->effectType == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
+        if ((this->drawDmgEffTimer > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
+            (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
             this->actor.hintId = 0x2A;
             SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                                GIBDO_LIMB_MAX);
@@ -592,7 +593,7 @@ void EnRailgibud_SetupStunned(EnRailgibud* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->stunTimer = 10;
 
-    if (this->effectTimer != 0) {
+    if (this->drawDmgEffTimer != 0) {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
     } else {
         Actor_SetColorFilter(&this->actor, 0, 0xC8, 0, 0x28);
@@ -649,7 +650,7 @@ void EnRailgibud_Dead(EnRailgibud* this, GlobalContext* globalCtx) {
         this->deathTimer++;
     }
 
-    if ((this->deathTimer == 20) && (this->effectTimer > 0) && (this->effectType == 0) &&
+    if ((this->deathTimer == 20) && (this->drawDmgEffTimer > 0) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) &&
         (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gRedeadSkel, NULL, this->jointTable, this->morphTable,
                            GIBDO_LIMB_MAX);
@@ -810,9 +811,9 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, GlobalContext* globalCtx) {
                 } else {
                     EnRailgibud_SetupDamage(this);
                 }
-                this->effectType = 0;
-                this->effectTimer = 180;
-                this->effectAlpha = 1.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+                this->drawDmgEffTimer = 180;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case EN_RAILGIBUD_DMGEFF_LIGHT_ARROW:
@@ -822,17 +823,17 @@ void EnRailgibud_UpdateDamage(EnRailgibud* this, GlobalContext* globalCtx) {
                 } else {
                     EnRailgibud_SetupDamage(this);
                 }
-                this->effectType = 20;
-                this->effectTimer = 60;
-                this->effectAlpha = 1.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                this->drawDmgEffTimer = 60;
+                this->drawDmgEffAlpha = 1.0f;
                 break;
 
             case EN_RAILGIBUD_DMGEFF_ZORA_MAGIC:
                 if ((this->actionFunc != EnRailgibud_Grab) &&
                     ((this->actionFunc != EnRailgibud_Stunned) || (this->stunTimer == 0))) {
-                    this->effectType = 30;
-                    this->effectTimer = 40;
-                    this->effectAlpha = 1.0f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffAlpha = 1.0f;
                     EnRailgibud_SetupStunned(this);
                 }
                 break;
@@ -911,15 +912,15 @@ void EnRailgibud_MoveGrabbedPlayerAwayFromWall(EnRailgibud* this, GlobalContext*
 }
 
 void EnRailgibud_UpdateEffect(EnRailgibud* this, GlobalContext* globalCtx) {
-    if (this->effectTimer > 0) {
-        this->effectTimer--;
+    if (this->drawDmgEffTimer > 0) {
+        this->drawDmgEffTimer--;
     }
 
-    if (this->effectTimer < 20) {
-        Math_SmoothStepToF(&this->effectScale, 0.0f, 0.5f, 0.03f, 0.0f);
-        this->effectAlpha = this->effectTimer * 0.05f;
+    if (this->drawDmgEffTimer < 20) {
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
+        this->drawDmgEffAlpha = this->drawDmgEffTimer * 0.05f;
     } else {
-        Math_SmoothStepToF(&this->effectScale, 0.5f, 0.1f, 0.02f, 0.0f);
+        Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
     }
 }
 
@@ -956,7 +957,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
     if ((this->textId == 0) && (this->type == EN_RAILGIBUD_TYPE_GIBDO)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->isInvincible = true;
-            func_801518B0(globalCtx, 0x13B2, &this->actor);
+            Message_StartTextbox(globalCtx, 0x13B2, &this->actor);
             this->textId = 0x13B2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             this->actor.speedXZ = 0.0f;
@@ -968,7 +969,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
         switch (Message_GetState(&globalCtx->msgCtx)) {
             case 5:
                 if (func_80147624(globalCtx)) {
-                    func_801518B0(globalCtx, 0x13B3, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
                 }
                 break;
@@ -1050,7 +1051,7 @@ void EnRailgibud_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
                               Gfx** gfx) {
     EnRailgibud* this = THIS;
 
-    if ((this->effectTimer != 0) &&
+    if ((this->drawDmgEffTimer != 0) &&
         ((limbIndex == GIBDO_LIMB_LEFT_THIGH) || (limbIndex == GIBDO_LIMB_LEFT_SHIN) ||
          (limbIndex == GIBDO_LIMB_LEFT_FOOT) || (limbIndex == GIBDO_LIMB_RIGHT_THIGH) ||
          (limbIndex == GIBDO_LIMB_RIGHT_SHIN) || (limbIndex == GIBDO_LIMB_RIGHT_FOOT) ||
@@ -1089,9 +1090,9 @@ void EnRailgibud_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                            EnRailgibud_PostLimbDraw, &this->actor, POLY_XLU_DISP);
     }
 
-    if (this->effectTimer > 0) {
-        func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, 0.5f,
-                      this->effectAlpha, this->effectType);
+    if (this->drawDmgEffTimer > 0) {
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1123,27 +1124,27 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx) 
 void EnRailgibud_InitActorActionCommand(EnRailgibud* this) {
     switch (ENRAILGIBUD_GET_CUTSCENE_TYPE(&this->actor)) {
         case 1:
-            this->actorActionCommand = 0x207;
+            this->actorActionCommand = 519;
             break;
 
         case 2:
-            this->actorActionCommand = 0x208;
+            this->actorActionCommand = 520;
             break;
 
         case 3:
-            this->actorActionCommand = 0x209;
+            this->actorActionCommand = 521;
             break;
 
         case 4:
-            this->actorActionCommand = 0x20A;
+            this->actorActionCommand = 522;
             break;
 
         case 5:
-            this->actorActionCommand = 0x20B;
+            this->actorActionCommand = 523;
             break;
 
         default:
-            this->actorActionCommand = 0x207;
+            this->actorActionCommand = 519;
             break;
     }
 }
@@ -1171,13 +1172,13 @@ void EnRailgibud_SinkIntoGround(EnRailgibud* this, GlobalContext* globalCtx) {
 }
 
 s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
+    s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, this->actorActionCommand)) {
-        actionIndex = func_800EE200(globalCtx, this->actorActionCommand);
-        if (this->csAction != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, this->actorActionCommand)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, this->actorActionCommand);
+        if (this->csAction != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->cutsceneAnimationIndex = EN_RAILGIBUD_ANIMATION_IDLE;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, EN_RAILGIBUD_ANIMATION_IDLE);
@@ -1236,7 +1237,7 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, GlobalContext* globalC
                 break;
         }
 
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return true;
     }
 

@@ -57,34 +57,34 @@
         <Texture Name="object_dnt_Tex_00A740" OutName="tex_00A740" Format="rgba16" Width="8" Height="8" Offset="0xA740" />
         <Texture Name="object_dnt_Tex_00A7C0" OutName="tex_00A7C0" Format="rgba16" Width="16" Height="8" Offset="0xA7C0" />
         <Texture Name="object_dnt_Tex_00A8C0" OutName="tex_00A8C0" Format="rgba16" Width="16" Height="16" Offset="0xA8C0" />
-        <Limb Name="object_dnt_Standardlimb_00AAC0" Type="Standard" Offset="0xAAC0" />
-        <Limb Name="object_dnt_Standardlimb_00AACC" Type="Standard" Offset="0xAACC" />
-        <Limb Name="object_dnt_Standardlimb_00AAD8" Type="Standard" Offset="0xAAD8" />
-        <Limb Name="object_dnt_Standardlimb_00AAE4" Type="Standard" Offset="0xAAE4" />
-        <Limb Name="object_dnt_Standardlimb_00AAF0" Type="Standard" Offset="0xAAF0" />
-        <Limb Name="object_dnt_Standardlimb_00AAFC" Type="Standard" Offset="0xAAFC" />
-        <Limb Name="object_dnt_Standardlimb_00AB08" Type="Standard" Offset="0xAB08" />
-        <Limb Name="object_dnt_Standardlimb_00AB14" Type="Standard" Offset="0xAB14" />
-        <Limb Name="object_dnt_Standardlimb_00AB20" Type="Standard" Offset="0xAB20" />
-        <Limb Name="object_dnt_Standardlimb_00AB2C" Type="Standard" Offset="0xAB2C" />
-        <Limb Name="object_dnt_Standardlimb_00AB38" Type="Standard" Offset="0xAB38" />
-        <Limb Name="object_dnt_Standardlimb_00AB44" Type="Standard" Offset="0xAB44" />
-        <Limb Name="object_dnt_Standardlimb_00AB50" Type="Standard" Offset="0xAB50" />
-        <Limb Name="object_dnt_Standardlimb_00AB5C" Type="Standard" Offset="0xAB5C" />
-        <Limb Name="object_dnt_Standardlimb_00AB68" Type="Standard" Offset="0xAB68" />
-        <Limb Name="object_dnt_Standardlimb_00AB74" Type="Standard" Offset="0xAB74" />
-        <Limb Name="object_dnt_Standardlimb_00AB80" Type="Standard" Offset="0xAB80" />
-        <Limb Name="object_dnt_Standardlimb_00AB8C" Type="Standard" Offset="0xAB8C" />
-        <Limb Name="object_dnt_Standardlimb_00AB98" Type="Standard" Offset="0xAB98" />
-        <Limb Name="object_dnt_Standardlimb_00ABA4" Type="Standard" Offset="0xABA4" />
-        <Limb Name="object_dnt_Standardlimb_00ABB0" Type="Standard" Offset="0xABB0" />
-        <Limb Name="object_dnt_Standardlimb_00ABBC" Type="Standard" Offset="0xABBC" />
-        <Limb Name="object_dnt_Standardlimb_00ABC8" Type="Standard" Offset="0xABC8" />
-        <Limb Name="object_dnt_Standardlimb_00ABD4" Type="Standard" Offset="0xABD4" />
-        <Limb Name="object_dnt_Standardlimb_00ABE0" Type="Standard" Offset="0xABE0" />
-        <Limb Name="object_dnt_Standardlimb_00ABEC" Type="Standard" Offset="0xABEC" />
-        <Limb Name="object_dnt_Standardlimb_00ABF8" Type="Standard" Offset="0xABF8" />
-        <Skeleton Name="object_dnt_Skel_00AC70" Type="Flex" LimbType="Standard" Offset="0xAC70" />
+        <Limb Name="object_dnt_Standardlimb_00AAC0" Type="Standard" EnumName="OBJECT_DNT_LIMB_01" Offset="0xAAC0" />
+        <Limb Name="object_dnt_Standardlimb_00AACC" Type="Standard" EnumName="OBJECT_DNT_LIMB_02" Offset="0xAACC" />
+        <Limb Name="object_dnt_Standardlimb_00AAD8" Type="Standard" EnumName="OBJECT_DNT_LIMB_03" Offset="0xAAD8" />
+        <Limb Name="object_dnt_Standardlimb_00AAE4" Type="Standard" EnumName="OBJECT_DNT_LIMB_04" Offset="0xAAE4" />
+        <Limb Name="object_dnt_Standardlimb_00AAF0" Type="Standard" EnumName="OBJECT_DNT_LIMB_05" Offset="0xAAF0" />
+        <Limb Name="object_dnt_Standardlimb_00AAFC" Type="Standard" EnumName="OBJECT_DNT_LIMB_06" Offset="0xAAFC" />
+        <Limb Name="object_dnt_Standardlimb_00AB08" Type="Standard" EnumName="OBJECT_DNT_LIMB_07" Offset="0xAB08" />
+        <Limb Name="object_dnt_Standardlimb_00AB14" Type="Standard" EnumName="OBJECT_DNT_LIMB_08" Offset="0xAB14" />
+        <Limb Name="object_dnt_Standardlimb_00AB20" Type="Standard" EnumName="OBJECT_DNT_LIMB_09" Offset="0xAB20" />
+        <Limb Name="object_dnt_Standardlimb_00AB2C" Type="Standard" EnumName="OBJECT_DNT_LIMB_0A" Offset="0xAB2C" />
+        <Limb Name="object_dnt_Standardlimb_00AB38" Type="Standard" EnumName="OBJECT_DNT_LIMB_0B" Offset="0xAB38" />
+        <Limb Name="object_dnt_Standardlimb_00AB44" Type="Standard" EnumName="OBJECT_DNT_LIMB_0C" Offset="0xAB44" />
+        <Limb Name="object_dnt_Standardlimb_00AB50" Type="Standard" EnumName="OBJECT_DNT_LIMB_0D" Offset="0xAB50" />
+        <Limb Name="object_dnt_Standardlimb_00AB5C" Type="Standard" EnumName="OBJECT_DNT_LIMB_0E" Offset="0xAB5C" />
+        <Limb Name="object_dnt_Standardlimb_00AB68" Type="Standard" EnumName="OBJECT_DNT_LIMB_0F" Offset="0xAB68" />
+        <Limb Name="object_dnt_Standardlimb_00AB74" Type="Standard" EnumName="OBJECT_DNT_LIMB_10" Offset="0xAB74" />
+        <Limb Name="object_dnt_Standardlimb_00AB80" Type="Standard" EnumName="OBJECT_DNT_LIMB_11" Offset="0xAB80" />
+        <Limb Name="object_dnt_Standardlimb_00AB8C" Type="Standard" EnumName="OBJECT_DNT_LIMB_12" Offset="0xAB8C" />
+        <Limb Name="object_dnt_Standardlimb_00AB98" Type="Standard" EnumName="OBJECT_DNT_LIMB_13" Offset="0xAB98" />
+        <Limb Name="object_dnt_Standardlimb_00ABA4" Type="Standard" EnumName="OBJECT_DNT_LIMB_14" Offset="0xABA4" />
+        <Limb Name="object_dnt_Standardlimb_00ABB0" Type="Standard" EnumName="OBJECT_DNT_LIMB_15" Offset="0xABB0" />
+        <Limb Name="object_dnt_Standardlimb_00ABBC" Type="Standard" EnumName="OBJECT_DNT_LIMB_16" Offset="0xABBC" />
+        <Limb Name="object_dnt_Standardlimb_00ABC8" Type="Standard" EnumName="OBJECT_DNT_LIMB_17" Offset="0xABC8" />
+        <Limb Name="object_dnt_Standardlimb_00ABD4" Type="Standard" EnumName="OBJECT_DNT_LIMB_18" Offset="0xABD4" />
+        <Limb Name="object_dnt_Standardlimb_00ABE0" Type="Standard" EnumName="OBJECT_DNT_LIMB_19" Offset="0xABE0" />
+        <Limb Name="object_dnt_Standardlimb_00ABEC" Type="Standard" EnumName="OBJECT_DNT_LIMB_1A" Offset="0xABEC" />
+        <Limb Name="object_dnt_Standardlimb_00ABF8" Type="Standard" EnumName="OBJECT_DNT_LIMB_1B" Offset="0xABF8" />
+        <Skeleton Name="object_dnt_Skel_00AC70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNT_LIMB_NONE" LimbMax="OBJECT_DNT_LIMB_MAX" EnumName="object_dnt_Limbs" Offset="0xAC70" />
         <Animation Name="object_dnt_Anim_00B0B4" Offset="0xB0B4" />
         <Texture Name="object_dnt_Tex_00B0D0" OutName="tex_00B0D0" Format="rgba16" Width="16" Height="16" Offset="0xB0D0" />
     </File>

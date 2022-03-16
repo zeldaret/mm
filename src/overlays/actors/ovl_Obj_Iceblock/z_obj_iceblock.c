@@ -460,7 +460,7 @@ s32 func_80A24118(ObjIceblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f* 
         spD0.y = spDC.y;
         spD0.z = temp_f26 + spDC.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spDC, &spD0, &spB8, &spA8, 1, 0, 0, 1, &spAC,
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spDC, &spD0, &spB8, &spA8, true, false, false, true, &spAC,
                                     &this->dyna.actor, 0.0f)) {
             temp_f20 = Math3D_Vec3fDistSq(&spDC, &spB8);
             if (temp_f20 < phi_f20) {
@@ -536,7 +536,7 @@ s32 func_80A243E0(ObjIceblock* this, GlobalContext* globalCtx, Vec3f* arg0) {
         spE0.y = spEC.y;
         spE0.z = temp_f30 + spEC.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, 1, 0, 0, 1, &spBC,
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &spBC,
                                     &this->dyna.actor, 0.0f)) {
             temp_f12 = Math3D_Vec3fDistSq(&spEC, &spC8);
             if (temp_f12 < phi_f22) {
@@ -600,7 +600,7 @@ s32 func_80A246D8(ObjIceblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
             spB4.y = spC0.y;
             spB4.z = (Math_CosS(phi_s3) * temp_f20) + spC0.z;
 
-            if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spC0, &spB4, &sp9C, &sp94, 1, 0, 0, 1, &sp98,
+            if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spC0, &spB4, &sp9C, &sp94, true, false, false, true, &sp98,
                                         &this->dyna.actor, 0.0f)) {
                 ret = true;
                 temp_v0 = (ObjIceblock*)DynaPoly_GetActor(&globalCtx->colCtx, sp98);
