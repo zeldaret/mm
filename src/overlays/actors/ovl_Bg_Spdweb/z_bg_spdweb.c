@@ -247,7 +247,7 @@ void func_809CE234(BgSpdweb* this, GlobalContext* globalCtx) {
             spA8.x = this->dyna.actor.world.pos.x + (120.0f * temp_f24);
             spA8.z = this->dyna.actor.world.pos.z + (120.0f * temp_f22);
 
-            temp_f20 = Math_Vec3f_DistXZ(&this->dyna.actor.home.pos, &spA8) * 0.008333334f;
+            temp_f20 = Math_Vec3f_DistXZ(&this->dyna.actor.home.pos, &spA8) * (1.0f / 120.0f);
             if (temp_f20 < 0.7f) {
                 temp_f20 = 1.0f - temp_f20;
                 temp_f24 = Math_SinS(BINANG_ROT180(temp_s0));
@@ -404,7 +404,7 @@ void func_809CE830(BgSpdweb* this, GlobalContext* globalCtx) {
             spD0.y = spC4.y + ((90.0f * spB0) * temp_f22);
             spD0.z = spC4.z + (90.0f * ((sp90 * temp_f22) - (spA4 * temp_f20)));
 
-            temp_f28 = Math_Vec3f_DistXYZ(&this->dyna.actor.home.pos, &spD0) * 0.011111111f;
+            temp_f28 = Math_Vec3f_DistXYZ(&this->dyna.actor.home.pos, &spD0) * (1.0f / 90.0f);
             if (temp_f28 < 0.65f) {
                 temp_f28 = 1.0f - temp_f28;
                 temp_f20 = Math_SinS(BINANG_ROT180(temp_s0));
