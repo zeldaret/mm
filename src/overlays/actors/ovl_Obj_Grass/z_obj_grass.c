@@ -100,7 +100,7 @@ void func_809A92D0(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
+#ifdef NON_EQUIVALENT
 void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
     Vec3f spBC;
     Vec3f spB0;
