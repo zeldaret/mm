@@ -5,7 +5,6 @@
  */
 
 #include "z_en_mk.h"
-#include "objects/object_mk/object_mk.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -84,7 +83,7 @@ void EnMk_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_mk_Skel_006CA0, &object_mk_Anim_001C38, this->jointTable,
-                       this->morphTable, 13);
+                       this->morphTable, OBJECT_MK_LIMB_MAX);
 
     this->unk_27C = -1;
     func_809592E0(this, 0);
