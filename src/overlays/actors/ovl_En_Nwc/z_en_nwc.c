@@ -30,7 +30,7 @@ void EnNwc_Turn(EnNwc* this, GlobalContext* globalCtx);
 void EnNwc_CheckForBreman(EnNwc* this, GlobalContext* globalCtx);
 
 void EnNwc_DrawAdultBody(Actor* thisx, GlobalContext* globalCtx);
-s32 EnNwc_OverwriteLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+s32 EnNwc_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 Actor* EnNwc_FindGrog(GlobalContext* globalCtx);
 
 enum EnNiwState {
@@ -136,14 +136,14 @@ Actor* EnNwc_FindGrog(GlobalContext* globalCtx) {
         grogSearch = grogSearch->next;
     }
 
-    return NULL; // could not find grog
+    return NULL;
 }
 
 s32 EnNwc_PlayerReleasedBremanMarch(EnNwc* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    // weird: home.rot.x holds count of chicks having transformed into adult
-    // but its incremented by 1 unlike chicks following, so it should max at 10
+    // Weird: home.rot.x holds count of chicks having transformed into adult.
+    // Weird: Its incremented by 1 unlike chicks following, so it should max at 10.
     if (this->grog->home.rot.x >= 20) {
         return false;
     }
@@ -175,7 +175,7 @@ s32 EnNwc_IsFound(EnNwc* this, GlobalContext* globalCtx) {
 }
 
 /**
- * note: Contains a possible fake match.
+ * Note: Contains a possible fake match.
  */
 void EnNwc_ChangeState(EnNwc* this, s16 newState) {
     this->actor.speedXZ = 0.0f;
@@ -265,7 +265,7 @@ void EnNwc_CrowAtTheEnd(EnNwc* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Controls the Chick when following Breman Mask
+ * Summary: Controls the Chick when following Breman Mask.
  *
  * ActionFunc for NWC Type: NWC_STATE_FOLLOWING
  */
@@ -304,6 +304,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
         (this->hasGrownUp & 1) == false) {
         this->transformTimer += 2;
         if (this->transformTimer >= (s32)(s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
+            // it is our turn to transform
             this->hasGrownUp |= 1;
             this->grog->home.rot.x += 2; // increment grog's adult tranformation counter
             EnNwc_SpawnDust(this, globalCtx);
@@ -320,7 +321,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
         if (this->actor.home.rot.z == 1) {
             newRotY = this->actor.yawTowardsPlayer;
         } else {
-            // for some reason the array is 10 * 2, incremented by 2, so this is (index - 1)
+            // for some reason the array is 10 * 2, incremented by 2, so this is "index - 1"
             newRotY = Math_Vec3f_Yaw(&this->actor.world.pos, &chickCoords[this->actor.home.rot.z - 2]);
         }
 
@@ -366,7 +367,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: Chick is Walking (Hopping) in a straight line
+ * Summary: Chick is Walking (Hopping) in a straight line.
  *
  * ActionFunc for NWC Type: NWC_STATE_HOPPING_FORWARD
  */
@@ -504,7 +505,7 @@ void EnNwc_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 EnNwc_OverwriteLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+s32 EnNwc_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                             Actor* thisx) {
     EnNwc* this = THIS;
 
@@ -524,5 +525,5 @@ void EnNwc_DrawAdultBody(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->niwSkeleton.skeleton, this->niwSkeleton.jointTable,
-                          this->niwSkeleton.dListCount, EnNwc_OverwriteLimbDraw, NULL, &this->actor);
+                          this->niwSkeleton.dListCount, EnNwc_OverrideLimbDraw, NULL, &this->actor);
 }

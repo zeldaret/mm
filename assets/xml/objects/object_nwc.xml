@@ -8,12 +8,14 @@
         <Texture Name="gNwcWingTex" OutName="wing" Format="rgba16" Width="16" Height="16" Offset="0x5D0" />
         <Texture Name="gNwcEyeOpenTex" OutName="eye_opened" Format="rgba16" Width="16" Height="16" Offset="0x7D0" />
         <Texture Name="gNwcEyeClosedTex" OutName="eye_closed" Format="rgba16" Width="16" Height="16" Offset="0x9D0" />
+        
 
         <!-- **************************************************************************************** -->
-        <!-- This object is loaded with unused textures and display lists, at least not used by EnNwc -->
+        <!-- Beyond this point is unused content, including broken display lists and textures         -->
         <!-- **************************************************************************************** -->
-        <TextureAnimation Name="object_nwc_Matanimheader_000BEC" Offset="0xBEC" />
-        <!-- unused ball texture? -->
+        <!-- this blinking animated texture seems unused, as the actor cycles through blinking with code -->
+        <TextureAnimation Name="gNwcBlinkTexAnim" Offset="0xBEC" />
+        <!-- unused multi-colored texture? -->
         <Texture Name="object_nwc_Tex_000C00" OutName="tex_000C00" Format="rgba16" Width="32" Height="32" Offset="0xC00" />
         <DList Name="object_nwc_DL_001440" Offset="0x1440" />
         <DList Name="object_nwc_DL_0014B8" Offset="0x14B8" />
@@ -26,17 +28,25 @@
         <!-- both of these display lists use the dark gold ball texture -->
         <DList Name="object_nwc_DL_001860" Offset="0x1860" />
         <DList Name="object_nwc_DL_0018D0" Offset="0x18D0" />
-        <!-- none of the following display lists appear to be used? -->
+
+        <!-- draws two untextured triangles like jack-o-lantern eyes -->
         <DList Name="object_nwc_DL_001940" Offset="0x1940" />
+
         <!-- both of these display lists use the yellow pallet texture -->
         <DList Name="object_nwc_DL_001960" Offset="0x1960" />
         <DList Name="object_nwc_DL_0019B8" Offset="0x19B8" />
+
+        <!-- in z64utils draws a un-textured tetrahedron -->
         <DList Name="object_nwc_DL_001A10" Offset="0x1A10" />
 
-        <!-- contains some kind of texture at 1A40 used in a display list-->
+        <!-- contains an unsupported texture @ 0x1A40 used in an unused display list -->
+        <!-- is type G_IM_FMT_I, G_IM_SIZ_16b -->
         <!-- <Blob Name="object_nwc_Blob_001A38" Size="0x108" Offset="0x1A38" /> -->
 
+        <!-- n64Utils throws an error for this DL because of the above texture -->
         <DList Name="object_nwc_DL_001B80" Offset="0x1B80" />
+
+        <!-- requires unassigned segment 0x01 matrix to render, no idea what its doing -->
         <DList Name="object_nwc_DL_001BE8" Offset="0x1BE8" />
         <!-- loads a dark spot from gameplay keep -->
         <DList Name="object_nwc_DL_001C10" Offset="0x1C10" />

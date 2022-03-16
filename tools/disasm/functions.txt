@@ -7530,7 +7530,7 @@
     0x8094506C:("EnNwc_CheckForBreman",),
     0x809450C0:("EnNwc_Update",),
     0x809451D8:("EnNwc_Draw",),
-    0x8094529C:("EnNwc_OverwriteLimbDraw",),
+    0x8094529C:("EnNwc_OverrideLimbDraw",),
     0x80945310:("EnNwc_DrawAdultBody",),
     0x809454F0:("ItemInbox_Init",),
     0x80945524:("ItemInbox_Destroy",),
