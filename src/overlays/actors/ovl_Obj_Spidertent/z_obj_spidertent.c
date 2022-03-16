@@ -35,7 +35,7 @@ const ActorInit Obj_Spidertent_InitVars = {
     (ActorFunc)ObjSpidertent_Draw,
 };
 
-static ColliderTrisElementInit sTrisElementsInit1[6] = {
+static ColliderTrisElementInit sTrisElementsInit1[] = {
     {
         {
             ELEMTYPE_UNK4,
@@ -129,7 +129,7 @@ static ColliderTrisInit sTrisInit1 = {
     sTrisElementsInit1,
 };
 
-static ColliderTrisElementInit sTrisElementsInit2[6] = {
+static ColliderTrisElementInit sTrisElementsInit2[] = {
     {
         {
             ELEMTYPE_UNK4,
