@@ -437,13 +437,10 @@ animdict = {
     "func_80114E90": "Interface_HasEmptyBottle",
     "func_80114F2C": "Interface_HasItemInBottle",
     "func_80123C90": "Player_SetEquipmentData",
-<<<<<<< HEAD
     "Quake2_ClearType": "Distortion_ClearType",
     "Quake2_SetType": "Distortion_SetType",
     "Quake2_SetCountdown": "Distortion_SetCountdown",
-=======
     "func_800BE680": "Actor_DrawDamageEffects",
->>>>>>> master
     "func_8013E2D4": "SubS_StartActorCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
     "func_8013AED4": "SubS_UpdateFlags",
@@ -495,6 +492,7 @@ animdict = {
     "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
     "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
     "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
+    "globalCtx->unk_1879C": "globalCtx->playerActorCsIds",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",

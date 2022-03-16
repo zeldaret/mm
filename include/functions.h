@@ -2773,7 +2773,7 @@ void func_80165438(UNK_PTR param_1);
 // void func_80165608(void);
 // void func_80165630(void);
 void func_80165658(u32 arg0);
-void func_8016566C(s32 arg0);
+void func_8016566C(u32 arg0);
 void func_80165690(void);
 // void func_801656A4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8);
 // void func_80165DCC(void);
