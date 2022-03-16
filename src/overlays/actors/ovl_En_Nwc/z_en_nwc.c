@@ -275,7 +275,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 newRotY;
 
-    this->stateTimer += 1;
+    this->stateTimer++;
     if (this->hasGrownUp & 1) {
         s16 targetUpperBodyRot = 0;
         s16 targetFootRot = 0;
