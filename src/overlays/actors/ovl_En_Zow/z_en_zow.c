@@ -403,7 +403,7 @@ void func_80BDD1E0(EnZow* this, GlobalContext* globalCtx) {
     } else {
         phi_a1 = 0x12EF;
     }
-    func_801518B0(globalCtx, phi_a1, &this->actor);
+    Message_StartTextbox(globalCtx, phi_a1, &this->actor);
 }
 
 void func_80BDD350(EnZow* this, GlobalContext* globalCtx) {

@@ -77,7 +77,7 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     sp1A -= player->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.colChkInfo.health = 1;
-        func_801518B0(globalCtx, 0x5E3U, &this->actor);
+        Message_StartTextbox(globalCtx, 0x5E3U, &this->actor);
         func_80C066F8(this);
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
