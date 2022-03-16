@@ -29,7 +29,7 @@ void Room_DrawType0Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     }
 
     mesh = &room->mesh->type0;
-    meshParams = (RoomMeshType0Params*)Lib_SegmentedToVirtual(mesh->paramsStart);
+    meshParams = Lib_SegmentedToVirtual(mesh->paramsStart);
     for (i = 0; i < mesh->count; i++) {
         if ((flags & 1) && (meshParams->opaqueDl != NULL)) {
             gSPDisplayList(gfxCtx->polyOpa.p++, meshParams->opaqueDl);
@@ -114,7 +114,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
             if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
                 (globalCtx->sceneNum != SCENE_IKNINSIDE)) {
-                globalCtx->envCtx.unk_C3 = 0xff;
+                globalCtx->envCtx.lightSettingOverride = 0xff;
                 globalCtx->envCtx.unk_E0 = 0;
             }
             func_800FEAB0();
