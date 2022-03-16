@@ -346,7 +346,7 @@ void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
             phi_v0 = 0x40;
         }
         EffectSsKakera_Spawn(globalCtx, &spC4, &spB8, &spC4, phi_s3, phi_v0, 40, 3, 0, temp_s2, 0, 0,
-                             (temp_s2 >> 3) + 40, -1, 1, D_80939024[i & 1]);
+                             (temp_s2 >> 3) + 40, -1, GAMEPLAY_KEEP, D_80939024[i & 1]);
     }
 }
 
