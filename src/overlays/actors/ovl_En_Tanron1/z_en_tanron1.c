@@ -90,7 +90,7 @@ void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
             for (i = 0; i < this->actor.params; i++) {
                 func_80BB4E50(this->unk_160, &this->actor.world.pos, Rand_ZeroFloat(0x10000));
             }
-            this->unk_144 = 0xC8;
+            this->unk_144 = 200;
             break;
 
         case 1:
@@ -119,7 +119,7 @@ void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
                     temp.y = (this->unk_14C.y - temp_a0->world.pos.y) + 70.0f;
                     temp.z = this->unk_14C.z - temp_a0->world.pos.z;
 
-                    if (sqrtf(SQ(temp.x) + SQ(temp.y) + SQ(temp.z)) < phi_f18) {
+                    if (sqrtf(SQXYZ(temp)) < phi_f18) {
                         this->unk_14C.x = temp_a0->world.pos.x;
                         this->unk_14C.y = temp_a0->world.pos.y + 70.0f;
                         this->unk_14C.z = temp_a0->world.pos.z;
@@ -250,7 +250,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                     temp.z = ptr->unk_38 + (this->unk_14C.z - ptr->unk_00.z);
 
                     ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
-                    ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQ(temp.x) + SQ(temp.z)));
+                    ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
                     if ((ptr->unk_26 & 0xF) == 0) {
                         ptr->unk_30 = randPlusMinusPoint5Scaled(temp_f30);
                         ptr->unk_34 = randPlusMinusPoint5Scaled(temp_f30 * 0.5f);
@@ -261,8 +261,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                     temp.y = (player->actor.world.pos.y + 40.0f) - ptr->unk_00.y;
                     temp.z = player->actor.world.pos.z - ptr->unk_00.z;
 
-                    if (((SQ(temp.x) + SQ(temp.y) + SQ(temp.z)) < 400.0f) &&
-                        (player->transformation != PLAYER_FORM_DEKU)) {
+                    if ((SQXYZ(temp) < 400.0f) && (player->transformation != PLAYER_FORM_DEKU)) {
                         func_800B8D10(globalCtx, &this->actor, 0.0f, 0, 0.0f, 1, 1);
                     }
                 }
@@ -278,19 +277,15 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                     temp.y = phi_s2->y - ptr->unk_00.y;
                     temp.z = phi_s2->z - ptr->unk_00.z;
 
-                    if ((SQ(temp.x) + SQ(temp.y) + SQ(temp.z)) < phi_f28) {
+                    if (SQXYZ(temp) < phi_f28) {
                         ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
-                        ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQ(temp.x) + SQ(temp.z)));
+                        ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
 
                         Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
                         Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
                         Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
 
-                        if (phi_f28 >= 100000.0f) {
-                            ptr->unk_28 = 1;
-                        } else {
-                            ptr->unk_28 = 6;
-                        }
+                        ptr->unk_28 = (phi_f28 >= 100000.0f) ? 1 : 6;
                         ptr->unk_24 = 2;
                         spB8++;
                     }
@@ -316,9 +311,9 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                     temp.y = phi_s2->y - ptr->unk_00.y;
                     temp.z = phi_s2->z - ptr->unk_00.z;
 
-                    if ((SQ(temp.x) + SQ(temp.y) + SQ(temp.z)) < phi_f28) {
+                    if (SQXYZ(temp) < phi_f28) {
                         ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
-                        ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQ(temp.x) + SQ(temp.z)));
+                        ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
 
                         Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
                         Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
