@@ -61,14 +61,14 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnElfgrp* this = THIS;
     s32 sp24;
 
-    this->unk_147 = STRAY_FAIRY_TYPE(&this->actor);
+    this->unk_147 = ENELFGRP_GET(&this->actor);
     this->unk_148 = 0;
     this->unk_14A = 0;
     this->actor.focus.pos.y += 40.0f;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
     switch (this->unk_147) {
-        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
+        case ENELFGRP_1:
         case ENELFGRP_2:
         case ENELFGRP_3:
         case ENELFGRP_4:
@@ -90,7 +90,7 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx) {
                 this->actionFunc = func_80A3A398;
 
                 switch (this->unk_147) {
-                    case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
+                    case ENELFGRP_1:
                         if (gSaveContext.weekEventReg[23] & 2) {
                             func_80A396B0(this, 1);
                         } else {
@@ -133,7 +133,7 @@ void EnElfgrp_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         default:
             sp24 = func_80A39C1C(globalCtx, 0);
-            this->unk_146 = STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN;
+            this->unk_146 = ENELFGRP_1;
             if (sp24 >= 25) {
                 this->actionFunc = func_80A3A520;
                 if ((this->actor.home.rot.z != 0) && Flags_GetSwitch(globalCtx, this->actor.home.rot.z)) {
@@ -347,7 +347,7 @@ void func_80A3A044(GlobalContext* globalCtx) {
 }
 
 void func_80A3A0AC(EnElfgrp* this, GlobalContext* globalCtx) {
-    if (!func_800EE29C(globalCtx, 0x64)) {
+    if (!Cutscene_CheckActorAction(globalCtx, 0x64)) {
         this->actionFunc = func_80A3A600;
         ActorCutscene_Stop(this->actor.cutscene);
     }
@@ -356,10 +356,10 @@ void func_80A3A0AC(EnElfgrp* this, GlobalContext* globalCtx) {
 void func_80A3A0F4(EnElfgrp* this, GlobalContext* globalCtx) {
     if (this->unk_144 == 10) {
         play_sound(NA_SE_SY_WHITE_OUT_T);
-        if (STRAY_FAIRY_TYPE(&this->actor) < ENELFGRP_4) {
+        if (ENELFGRP_GET(&this->actor) < ENELFGRP_4) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0,
-                        STRAY_FAIRY_TYPE(&this->actor) + ENELFGRP_4);
+                        ENELFGRP_GET(&this->actor) + ENELFGRP_4);
         } else {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0, 4);
@@ -388,12 +388,12 @@ void func_80A3A210(EnElfgrp* this, GlobalContext* globalCtx) {
 }
 
 void func_80A3A274(EnElfgrp* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x64)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x64)) {
         if (this->unk_14A & 1) {
             func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
         }
 
-        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x64)]->unk0) {
+        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x64)]->action) {
             case 2:
                 if (!(this->unk_14A & 1)) {
                     if (this->unk_147 == ENELFGRP_0) {
@@ -445,8 +445,8 @@ void func_80A3A484(EnElfgrp* this, GlobalContext* globalCtx) {
 }
 
 void func_80A3A4AC(EnElfgrp* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x64)) {
-        s32 temp = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x64)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 0x64)) {
+        s32 temp = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x64)]->action;
         if (temp == 3) {
             this->actionFunc = func_80A3A484;
             this->unk_144 = 90;
@@ -455,7 +455,7 @@ void func_80A3A4AC(EnElfgrp* this, GlobalContext* globalCtx) {
 }
 
 void func_80A3A520(EnElfgrp* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x67)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x67)) {
         this->actionFunc = func_80A3A600;
     } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
@@ -563,7 +563,7 @@ void func_80A3A8F8(EnElfgrp* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             player->actor.freezeTimer = 100;
             player->stateFlags1 |= 0x20000000;
-            func_801518B0(globalCtx, this->actor.textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
             this->actionFunc = func_80A3A77C;
             gSaveContext.weekEventReg[9] |= this->unk_146;
         } else {
