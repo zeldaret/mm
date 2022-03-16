@@ -13,7 +13,7 @@ typedef struct EnBombers2 {
     /* 0x0188 */ Vec3s morphTable[21];
     /* 0x0206 */ Vec3s jointTable[21];
     /* 0x0284 */ EnBombers2ActionFunc actionFunc;
-    /* 0x0288 */ s16 lastAnimFrame;
+    /* 0x0288 */ s16 unk_288;
     /* 0x028A */ s16 unk_28A;
     /* 0x028C */ char pad_28C[2];
     /* 0x028E */ s16 unk_28E;
@@ -29,7 +29,7 @@ typedef struct EnBombers2 {
     /* 0x02B2 */ s16 unk_2B2;
     /* 0x02B4 */ s16 unk_2B4;
     /* 0x02B6 */ s16 unk_2B6;
-    /* 0x02B8 */ f32 unk_2B8;
+    /* 0x02B8 */ f32 lastAnimFrame;
     /* 0x02BC */ s16 unk_2BC;
     /* 0x02BE */ s16 unk_2BE;
     /* 0x02C0 */ s16 unk_2C0;
