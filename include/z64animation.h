@@ -344,7 +344,7 @@ typedef struct AnimationSpeedInfo {
 struct SkeletonInfo;
 
 typedef s32 (*UnkKeyframeCallback)(struct GlobalContext* globalCtx, struct SkeletonInfo* skeletonInfo, s32* arg2, Gfx** dList,
-                                   u8* arg4, void*);
+                                   u8* arg4, void* arg5);
 
 // Keyframe limb?
 typedef struct {

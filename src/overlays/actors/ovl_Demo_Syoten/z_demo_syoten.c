@@ -222,14 +222,14 @@ void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx) {
     u16 temp_a0;
 
     func_80183DE0(&this->unk_144);
-    if (func_800EE29C(globalCtx, this->unk_3F0)) {
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
         if ((globalCtx->csCtx.frames >= 160) && (globalCtx->csCtx.frames < 322)) {
             func_800B9010(&this->actor, NA_SE_EV_IKANA_SOUL_LV - SFX_FLAG);
         } else if (globalCtx->csCtx.frames == 322) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_IKANA_SOUL_TRANSFORM);
         }
 
-        temp_a0 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_3F0)]->unk0;
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -273,8 +273,8 @@ void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx) {
     s32 pad;
     u16 temp_a0;
 
-    if (func_800EE29C(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_3F0)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -314,7 +314,8 @@ void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx) {
 
             case 4:
                 this->actor.speedXZ =
-                    globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_3F0)]->unkA * 0.005493164f;
+                    globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->urot.z *
+                    0.005493164f;
                 if (this->unk_3EC < this->unk_3E8->count) {
                     if (func_80C16818(this)) {
                         this->unk_3EC++;
@@ -332,8 +333,8 @@ void func_80C16DD4(DemoSyoten* this, GlobalContext* globalCtx) {
     s32 pad;
     u16 temp_a0;
 
-    if (func_800EE29C(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_3F0)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -361,8 +362,8 @@ void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx) {
     s32 pad;
     u16 temp_a0;
 
-    if (func_800EE29C(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_3F0)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
@@ -403,8 +404,8 @@ void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx) {
 void func_80C17008(DemoSyoten* this, GlobalContext* globalCtx) {
     u16 temp_a0;
 
-    if (func_800EE29C(globalCtx, this->unk_3F0)) {
-        temp_a0 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, this->unk_3F0)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
         if (this->unk_3F2 != temp_a0) {
             this->unk_3F2 = temp_a0;
             switch (temp_a0) {
