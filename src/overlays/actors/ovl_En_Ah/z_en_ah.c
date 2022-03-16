@@ -67,9 +67,11 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_ah_Anim_001860, 1.0f, 0, -1, 0, 0 }, { &object_ah_Anim_001860, 1.0f, 0, -1, 0, -4 },
-    { &object_ah_Anim_002280, 1.0f, 0, -1, 2, 0 }, { &object_ah_Anim_000968, 1.0f, 0, -1, 0, -4 },
-    { &object_ah_Anim_000DDC, 1.0f, 0, -1, 0, 0 },
+    { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_ah_Anim_002280, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_ah_Anim_000968, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_ah_Anim_000DDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 s16 D_80BD3EBC[] = { 0, 0, 1, 0 };
@@ -224,7 +226,7 @@ void func_80BD2DC8(EnAh* this) {
 
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
-    if (this->unk_1E4->id == 0) {
+    if (this->unk_1E4->id == ACTOR_PLAYER) {
         sp40.y = ((Player*)this->unk_1E4)->bodyPartsPos[7].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1E4->focus.pos);
@@ -240,7 +242,7 @@ void func_80BD2DC8(EnAh* this) {
 void func_80BD2FD0(EnAh* this, GlobalContext* globalCtx) {
     this->unk_1E4 = func_80BD2DA0(this, globalCtx);
 
-    if ((this->unk_2D8 & 8) && (this->unk_1E4 != 0)) {
+    if ((this->unk_2D8 & 8) && (this->unk_1E4 != NULL)) {
         if (DECR(this->unk_2F4) == 0) {
             func_80BD2DC8(this);
             this->unk_2F0 = 0;
