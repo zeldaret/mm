@@ -534,16 +534,16 @@ void func_80B51410(EnGk* this, GlobalContext* globalCtx) {
 
 void func_80B51510(EnGk* this, GlobalContext* globalCtx) {
     s32 pad;
-    u32 temp_v0;
+    s32 actionIndex;
 
     if (this) {}
 
-    if (func_800EE29C(globalCtx, 0x1DF)) {
-        temp_v0 = func_800EE200(globalCtx, 0x1DF);
+    if (Cutscene_CheckActorAction(globalCtx, 479)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 479);
 
-        if (globalCtx->csCtx.npcActions[temp_v0]->unk0 != this->unk_31B) {
-            this->unk_31B = globalCtx->csCtx.npcActions[temp_v0]->unk0;
-            switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+        if (globalCtx->csCtx.actorActions[actionIndex]->action != this->unk_31B) {
+            this->unk_31B = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_31A = 0;
                     this->unk_2E4 = 0;
@@ -587,7 +587,7 @@ void func_80B51510(EnGk* this, GlobalContext* globalCtx) {
             func_80B51308(this, globalCtx);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         this->actor.shape.yOffset = 0.0f;
     } else {
         this->unk_31B = 0x63;
@@ -641,7 +641,7 @@ void func_80B51760(EnGk* this, GlobalContext* globalCtx) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_1E4 |= 4;
             this->unk_31C = func_80B50410(this, globalCtx);
-            func_801518B0(globalCtx, this->unk_31C, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
             this->actionFunc = func_80B51970;
             if (this->unk_31C == 0xE81) {
                 this->unk_2E4 = 0;
@@ -682,7 +682,7 @@ void func_80B51970(EnGk* this, GlobalContext* globalCtx) {
         }
 
         this->unk_31C = func_80B50410(this, globalCtx);
-        func_801518B0(globalCtx, this->unk_31C, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
         if (this->unk_31C == 0xE80) {
             this->unk_1E4 |= 2;
         } else if (this->unk_31C == 0xE89) {
@@ -736,7 +736,7 @@ void func_80B51B40(EnGk* this, GlobalContext* globalCtx) {
             }
 
             this->unk_31C = func_80B50710(this);
-            func_801518B0(globalCtx, this->unk_31C, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
             if (this->unk_31C == 0xE8C) {
                 this->unk_1E4 |= 2;
             }
@@ -746,13 +746,13 @@ void func_80B51B40(EnGk* this, GlobalContext* globalCtx) {
             case 0:
                 func_8019F208();
                 this->unk_31C = 0xE8E;
-                func_801518B0(globalCtx, this->unk_31C, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
                 break;
 
             case 1:
                 func_8019F230();
                 this->unk_31C = 0xE8A;
-                func_801518B0(globalCtx, this->unk_31C, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
                 break;
         }
     }
@@ -790,7 +790,7 @@ void func_80B51D9C(EnGk* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_31C = 0xE99;
             }
-            func_801518B0(globalCtx, this->unk_31C, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
             this->actionFunc = func_80B51970;
         }
     } else {
@@ -918,7 +918,7 @@ void func_80B52340(EnGk* this, GlobalContext* globalCtx) {
             this->unk_31C = 0xE93;
             this->actionFunc = func_80B52430;
         }
-        func_801518B0(globalCtx, this->unk_31C, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
@@ -933,13 +933,13 @@ void func_80B52430(EnGk* this, GlobalContext* globalCtx) {
         switch (this->unk_31C) {
             case 0xE93:
                 this->unk_31C = 0xE89;
-                func_801518B0(globalCtx, this->unk_31C, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
                 this->actionFunc = func_80B51B40;
                 return;
 
             case 0xE90:
                 this->unk_31C = 0xE91;
-                func_801518B0(globalCtx, this->unk_31C, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
                 return;
 
             case 0xE91:
@@ -980,7 +980,7 @@ void func_80B5253C(EnGk* this, GlobalContext* globalCtx) {
 void func_80B525E0(EnGk* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_31C = 0xE92;
-        func_801518B0(globalCtx, this->unk_31C, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_31C, &this->actor);
         this->actionFunc = func_80B52430;
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
