@@ -882,8 +882,8 @@
         <Animation Name="gameplay_keep_Anim_0205A0" Offset="0x205A0" />
         <Animation Name="gameplay_keep_Anim_020658" Offset="0x20658" />
         <DList Name="gameplay_keep_DL_020B30" Offset="0x20B30" />
-        <DList Name="gameplay_keep_DL_020BB8" Offset="0x20BB8" />
-        <DList Name="gameplay_keep_DL_020D00" Offset="0x20D00" />
+        <DList Name="gDoorLeftDL" Offset="0x20BB8" />
+        <DList Name="gDoorRightDL" Offset="0x20D00" />
         <Texture Name="gameplay_keep_Tex_020E38" OutName="tex_020E38" Format="rgba16" Width="32" Height="64" Offset="0x20E38" />
         <DList Name="gameplay_keep_DL_0221B8" Offset="0x221B8" />
         <Texture Name="gameplay_keep_Tex_0222E8" OutName="tex_0222E8" Format="i4" Width="32" Height="64" Offset="0x222E8" />
@@ -892,23 +892,23 @@
         <Limb Name="gameplay_keep_Standardlimb_022AF4" Type="Standard" Offset="0x22AF4" />
         <Limb Name="gameplay_keep_Standardlimb_022B00" Type="Standard" Offset="0x22B00" />
         <Limb Name="gameplay_keep_Standardlimb_022B0C" Type="Standard" Offset="0x22B0C" />
-        <Skeleton Name="gameplay_keep_Skel_022B28" Type="Normal" LimbType="Standard" Offset="0x22B28" />
+        <Skeleton Name="gDoorSkel" Type="Normal" LimbType="Standard" Offset="0x22B28" />
         <Animation Name="gameplay_keep_Anim_022BE8" Offset="0x22BE8" />
         <Animation Name="gameplay_keep_Anim_022CA8" Offset="0x22CA8" />
         <Animation Name="gameplay_keep_Anim_022D90" Offset="0x22D90" />
         <Animation Name="gameplay_keep_Anim_022E68" Offset="0x22E68" />
         <Blob Name="gameplay_keep_zeroes_unk_00022E78" Size="0xA8" Offset="0x22E78" />
         <Animation Name="gameplay_keep_Anim_022FF0" Offset="0x22FF0" />
-        <Collision Name="gameplay_keep_Colheader_023100" Offset="0x23100" />
+        <Collision Name="gDoorCol" Offset="0x23100" />
         <DList Name="gameplay_keep_DL_023130" Offset="0x23130" />
         <DList Name="gOwlStatueWhiteFlashDL" Offset="0x23210" />
         <DList Name="gameplay_keep_DL_023288" Offset="0x23288" />
-        <DList Name="gameplay_keep_DL_023348" Offset="0x23348" />
-        <DList Name="gameplay_keep_DL_0233B8" Offset="0x233B8" />
-        <DList Name="gameplay_keep_DL_023428" Offset="0x23428" />
-        <DList Name="gameplay_keep_DL_023480" Offset="0x23480" />
-        <DList Name="gameplay_keep_DL_0234F0" Offset="0x234F0" />
-        <Texture Name="gameplay_keep_Tex_023508" OutName="tex_023508" Format="i8" Width="64" Height="64" Offset="0x23508" />
+        <DList Name="gLightOrb1DL" Offset="0x23348" />
+        <DList Name="gLightOrb2DL" Offset="0x233B8" />
+        <DList Name="gLightOrbVtxDL" Offset="0x23428" />
+        <DList Name="gElectricSparkDL" Offset="0x23480" />
+        <DList Name="gElectricSparkVtxDL" Offset="0x234F0" />
+        <Texture Name="gLightOrbTex" OutName="light_orb" Format="i8" Width="64" Height="64" Offset="0x23508" />
         <Texture Name="gameplay_keep_Tex_024510" OutName="tex_024510" Format="i8" Width="64" Height="32" Offset="0x24510" />
         <Texture Name="gameplay_keep_Tex_024D10" OutName="tex_024D10" Format="i8" Width="64" Height="32" Offset="0x24D10" />
         <DList Name="gameplay_keep_DL_025850" Offset="0x25850" />
@@ -1082,7 +1082,7 @@
         <Texture Name="gameplay_keep_Tex_0443B0" OutName="tex_0443B0" Format="i8" Width="32" Height="32" Offset="0x443B0" />
         <Texture Name="gameplay_keep_Tex_0447B0" OutName="tex_0447B0" Format="i8" Width="32" Height="32" Offset="0x447B0" />
         <Texture Name="gameplay_keep_Tex_044BB0" OutName="tex_044BB0" Format="i8" Width="32" Height="32" Offset="0x44BB0" />
-        <Texture Name="gameplay_keep_Tex_044FB0" OutName="tex_044FB0" Format="i8" Width="32" Height="32" Offset="0x44FB0" />
+        <Texture Name="gFrozenIceTex" OutName="frozen_ice" Format="i8" Width="32" Height="32" Offset="0x44FB0" />
         <Texture Name="gameplay_keep_Tex_0453B0" OutName="tex_0453B0" Format="i8" Width="32" Height="32" Offset="0x453B0" />
         <DList Name="gameplay_keep_DL_048DF0" Offset="0x48DF0" />
         <Texture Name="gameplay_keep_TLUT_04A460" OutName="tlut_04A460" Format="rgba16" Width="16" Height="16" Offset="0x4A460" />
@@ -1108,13 +1108,13 @@
         <DList Name="gameplay_keep_DL_04F250" Offset="0x4F250" />
         <Texture Name="gameplay_keep_Tex_04F2C0" OutName="tex_04F2C0" Format="ia16" Width="32" Height="64" Offset="0x4F2C0" />
         <DList Name="gameplay_keep_DL_050550" Offset="0x50550" />
-        <DList Name="gameplay_keep_DL_050648" Offset="0x50648" />
-        <DList Name="gameplay_keep_DL_0506E0" Offset="0x506E0" />
+        <DList Name="gFrozenIceDL" Offset="0x50648" />
+        <DList Name="gFrozenIceVtxDL" Offset="0x506E0" />
         <DList Name="gameplay_keep_DL_050D10" Offset="0x50D10" />
         <Texture Name="gameplay_keep_Tex_050E80" OutName="tex_050E80" Format="i4" Width="32" Height="32" Offset="0x50E80" />
         <DList Name="gameplay_keep_DL_0510B0" Offset="0x510B0" />
-        <DList Name="gameplay_keep_DL_051180" Offset="0x51180" />
-        <DList Name="gameplay_keep_DL_051238" Offset="0x51238" />
+        <DList Name="gFrozenSteamDL" Offset="0x51180" />
+        <DList Name="gFrozenSteamVtxDL" Offset="0x51238" />
         <Animation Name="gameplay_keep_Anim_05140C" Offset="0x5140C" />
         <DList Name="gameplay_keep_DL_051420" Offset="0x51420" />
         <DList Name="gameplay_keep_DL_0514C0" Offset="0x514C0" />
@@ -1407,23 +1407,28 @@
         <Texture Name="gameplay_keep_Tex_08CEE0" OutName="tex_08CEE0" Format="ci8" Width="32" Height="32" Offset="0x8CEE0" />
         <Texture Name="gameplay_keep_Tex_08D2E0" OutName="tex_08D2E0" Format="rgba16" Width="8" Height="16" Offset="0x8D2E0" />
         <Texture Name="gameplay_keep_Tex_08D3E0" OutName="tex_08D3E0" Format="i8" Width="64" Height="32" Offset="0x8D3E0" />
-        <Texture Name="gDust1Tex" OutName="tex_08DBE0" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
-        <Texture Name="gDust2Tex" OutName="tex_08DFE0" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
-        <Texture Name="gDust3Tex" OutName="tex_08E3E0" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
-        <Texture Name="gDust4Tex" OutName="tex_08E7E0" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
-        <Texture Name="gDust5Tex" OutName="tex_08EBE0" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
-        <Texture Name="gDust6Tex" OutName="tex_08EFE0" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
-        <Texture Name="gDust7Tex" OutName="tex_08F3E0" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
-        <Texture Name="gDust8Tex" OutName="tex_08F7E0" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        
+        <!-- Dust Textures -->
+        <Texture Name="gDust1Tex" OutName="dust_1" Format="i8" Width="32" Height="32" Offset="0x8DBE0" />
+        <Texture Name="gDust2Tex" OutName="dust_2" Format="i8" Width="32" Height="32" Offset="0x8DFE0" />
+        <Texture Name="gDust3Tex" OutName="dust_3" Format="i8" Width="32" Height="32" Offset="0x8E3E0" />
+        <Texture Name="gDust4Tex" OutName="dust_4" Format="i8" Width="32" Height="32" Offset="0x8E7E0" />
+        <Texture Name="gDust5Tex" OutName="dust_5" Format="i8" Width="32" Height="32" Offset="0x8EBE0" />
+        <Texture Name="gDust6Tex" OutName="dust_6" Format="i8" Width="32" Height="32" Offset="0x8EFE0" />
+        <Texture Name="gDust7Tex" OutName="dust_7" Format="i8" Width="32" Height="32" Offset="0x8F3E0" />
+        <Texture Name="gDust8Tex" OutName="dust_8" Format="i8" Width="32" Height="32" Offset="0x8F7E0" />
+        
         <Texture Name="gameplay_keep_Tex_08FBE0" OutName="tex_08FBE0" Format="i8" Width="32" Height="64" Offset="0x8FBE0" />
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
         <Texture Name="gameplay_keep_Tex_0913E0" OutName="tex_0913E0" Format="i8" Width="32" Height="64" Offset="0x913E0" />
         <Texture Name="gameplay_keep_Tex_091BE0" OutName="tex_091BE0" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
         <Texture Name="gameplay_keep_Tex_091CE0" OutName="tex_091CE0" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
-        <Texture Name="gameplay_keep_Tex_091DE0" OutName="tex_091DE0" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
-        <Texture Name="gameplay_keep_Tex_091FE0" OutName="tex_091FE0" Format="i4" Width="32" Height="32" Offset="0x91FE0" />
-        <Texture Name="gameplay_keep_Tex_0921E0" OutName="tex_0921E0" Format="i4" Width="32" Height="32" Offset="0x921E0" />
-        <Texture Name="gameplay_keep_Tex_0923E0" OutName="tex_0923E0" Format="i4" Width="32" Height="32" Offset="0x923E0" />
+        
+        <!-- Electric spark textures from Zora-Form attack -->
+        <Texture Name="gElectricSpark1Tex" OutName="electric_spark_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
+        <Texture Name="gElectricSpark2Tex" OutName="electric_spark_2" Format="i4" Width="32" Height="32" Offset="0x91FE0" />
+        <Texture Name="gElectricSpark3Tex" OutName="electric_spark_3" Format="i4" Width="32" Height="32" Offset="0x921E0" />
+        <Texture Name="gElectricSpark4Tex" OutName="electric_spark_4" Format="i4" Width="32" Height="32" Offset="0x923E0" />
     </File>
 </Root>

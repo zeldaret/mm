@@ -14,19 +14,19 @@ typedef struct EnTorch2 {
 } EnTorch2; // size = 0x194
 
 typedef enum {
-    TORCH2_PARAM_HUMAN,
-    TORCH2_PARAM_GORON,
-    TORCH2_PARAM_ZORA,
-    TORCH2_PARAM_DEKU,
-    TORCH2_PARAM_FIERCE_DEITY,
+    /* 0 */ TORCH2_PARAM_HUMAN,
+    /* 1 */ TORCH2_PARAM_GORON,
+    /* 2 */ TORCH2_PARAM_ZORA,
+    /* 3 */ TORCH2_PARAM_DEKU,
+    /* 4 */ TORCH2_PARAM_FIERCE_DEITY,
 } EnTorch2Param;
 
 typedef enum {
-    TORCH2_STATE_INITIALIZED,
-    TORCH2_STATE_FADING_IN,
-    TORCH2_STATE_SOLID,
-    TORCH2_STATE_IDLE,
-    TORCH2_STATE_DYING,
+    /* 0 */ TORCH2_STATE_INITIALIZED,
+    /* 1 */ TORCH2_STATE_FADING_IN,
+    /* 2 */ TORCH2_STATE_SOLID,
+    /* 3 */ TORCH2_STATE_IDLE,
+    /* 4 */ TORCH2_STATE_DYING,
 } EnTorch2State;
 
 extern const ActorInit En_Torch2_InitVars;
