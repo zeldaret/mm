@@ -40,7 +40,7 @@ const ActorInit Obj_Spinyroll_InitVars = {
     (ActorFunc)ObjSpinyroll_Draw,
 };
 
-static ColliderTrisElementInit sTrisElementsInit[6] = {
+static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
             ELEMTYPE_UNK0,

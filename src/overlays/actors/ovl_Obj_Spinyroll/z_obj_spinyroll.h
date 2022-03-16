@@ -38,7 +38,7 @@ typedef struct ObjSpinyroll {
     /* 0x015C */ ColliderTris collider;
     /* 0x017C */ ColliderTrisElement colliderElements[6];
     /* 0x03A4 */ ObjSpinyrollStruct2 unk_3A4;
-    ///* 0x0494 */ ObjSpinyrollStruct* unk_494;
+    ///* 0x0494 */ ObjSpinyrollStruct* unk_494; // alternative testing
     ///* 0x0498 */ s32 unk_498;
     /* 0x049C */ s32 unk_49C;
     /* 0x04A0 */ ObjSpinyrollActionFunc actionFunc;
