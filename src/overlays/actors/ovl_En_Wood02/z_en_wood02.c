@@ -191,12 +191,12 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    if ((this->actor.params < WOOD_BUSH_GREEN_SMALL) || (this->actor.params == WOOD_1A)) {
+    if ((this->actor.params < WOOD_BUSH_GREEN_SMALL) || (this->actor.params == WOOD_TREE_SPECIAL)) {
         Collider_InitCylinder(globalCtx, &this->collider);
         Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     }
 
-    if ((this->actor.params == WOOD_1A) && !gSaveContext.isNight && (this->unk_144 != -1) &&
+    if ((this->actor.params == WOOD_TREE_SPECIAL) && !gSaveContext.isNight && (this->unk_144 != -1) &&
         !Flags_GetCollectible(globalCtx, this->unk_144)) {
         this->actor.child =
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_ANI, this->actor.world.pos.x,
@@ -222,7 +222,7 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
         case WOOD_TREE_CONICAL_LARGE:
         case WOOD_BUSH_GREEN_LARGE:
         case WOOD_BUSH_BLACK_LARGE:
-        case WOOD_1A:
+        case WOOD_TREE_SPECIAL:
             actorScale = 1.5f;
             this->actor.uncullZoneForward = 4000.0f;
             this->actor.uncullZoneScale = 2000.0f;
@@ -280,7 +280,7 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
         THIS->drawType = WOOD_DRAW_BUSH_GREEN;
     } else if (this->actor.params < WOOD_LEAF_YELLOW) {
         THIS->drawType = WOOD_DRAW_4;
-    } else if (this->actor.params == WOOD_1A) {
+    } else if (this->actor.params == WOOD_TREE_SPECIAL) {
         THIS->drawType = WOOD_DRAW_TREE_CONICAL;
     } else {
         THIS->drawType = WOOD_DRAW_LEAF_YELLOW;
@@ -326,7 +326,7 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnWood02_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnWood02* this = THIS;
 
-    if ((this->actor.params < WOOD_BUSH_GREEN_SMALL) || (this->actor.params == WOOD_1A)) {
+    if ((this->actor.params < WOOD_BUSH_GREEN_SMALL) || (this->actor.params == WOOD_TREE_SPECIAL)) {
         Collider_DestroyCylinder(globalCtx, &this->collider);
     }
 }
@@ -383,7 +383,7 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
         EnWood02_SpawnOffspring(this, globalCtx);
     }
 
-    if ((thisx->params < WOOD_BUSH_GREEN_SMALL) || (thisx->params == WOOD_1A)) {
+    if ((thisx->params < WOOD_BUSH_GREEN_SMALL) || (thisx->params == WOOD_TREE_SPECIAL)) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
             Actor_PlaySfxAtPos(thisx, NA_SE_IT_REFLECTION_WOOD);
@@ -418,11 +418,9 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_151 = 0;
             }
 
-            if (thisx->params == WOOD_1A) {
-                if (this->unk_144 != -1) {
-                    Flags_SetCollectible(globalCtx, this->unk_144);
-                    this->unk_144 = -1;
-                }
+            if ((thisx->params == WOOD_TREE_SPECIAL) && (this->unk_144 != -1)) {
+                Flags_SetCollectible(globalCtx, this->unk_144);
+                this->unk_144 = -1;
             }
             this->unk_146 = -0x15;
             thisx->home.rot.y = 0;
@@ -433,7 +431,7 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
-    } else if ((thisx->params < WOOD_LEAF_GREEN) || (thisx->params == WOOD_1A)) { // Bush
+    } else if ((thisx->params < WOOD_LEAF_GREEN) || (thisx->params == WOOD_TREE_SPECIAL)) { // not leaves
         Player* player = GET_PLAYER(globalCtx);
 
         if ((this->unk_146 >= -1) && (((player->rideActor == NULL) && (sqrtf(thisx->xyzDistToPlayerSq) < 20.0f) &&

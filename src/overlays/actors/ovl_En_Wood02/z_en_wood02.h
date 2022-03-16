@@ -47,8 +47,7 @@ typedef enum {
     /* 0x16 */ WOOD_BUSH_BLACK_LARGE_SPAWNED,
     /* 0x17 */ WOOD_LEAF_GREEN,
     /* 0x18 */ WOOD_LEAF_YELLOW,
-    /* 0x19 */ WOOD_19,
-    /* 0x1A */ WOOD_1A
+    /* 0x1A */ WOOD_TREE_SPECIAL = 0x1A
 } WoodType;
 
 extern const ActorInit En_Wood02_InitVars;
