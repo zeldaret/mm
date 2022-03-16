@@ -88,7 +88,7 @@ void func_80A665AC(s16* arg0, s16 arg1) {
     }
 }
 
-f32 func_80A665EC(ObjDrifticeStruct* s, ObjDriftice* this) {
+f32 func_80A665EC(ObjDrifticeStruct* arg0, ObjDriftice* this) {
     f32 phi_f2 = 0.0f;
     f32 sp20;
 
@@ -103,34 +103,34 @@ f32 func_80A665EC(ObjDrifticeStruct* s, ObjDriftice* this) {
     }
 
     if (this->unk_248 > 0) {
-        if (s->unk_00.unk_00 > 0) {
-            s->unk_00.unk_00--;
+        if (arg0->unk_00.unk_00 > 0) {
+            arg0->unk_00.unk_00--;
         } else {
-            s->unk_00.unk_00 = Rand_S16Offset(30, 70);
-            s->unk_00.unk_04 = Rand_S16Offset(1000, 1000);
-            s->unk_00.unk_0C = (Rand_ZeroOne() * 1.5f) + 1.0f;
-            s->unk_00.unk_10 = fabsf(s->unk_00.unk_0C - s->unk_00.unk_08) * 0.05f;
+            arg0->unk_00.unk_00 = Rand_S16Offset(30, 70);
+            arg0->unk_00.unk_04 = Rand_S16Offset(1000, 1000);
+            arg0->unk_00.unk_0C = (Rand_ZeroOne() * 1.5f) + 1.0f;
+            arg0->unk_00.unk_10 = fabsf(arg0->unk_00.unk_0C - arg0->unk_00.unk_08) * 0.05f;
         }
     } else {
-        s->unk_00.unk_00 = 0;
-        s->unk_00.unk_0C = phi_f2;
-        s->unk_00.unk_10 = (fabsf(s->unk_00.unk_0C - s->unk_00.unk_08) * 0.05f) + 0.02f;
+        arg0->unk_00.unk_00 = 0;
+        arg0->unk_00.unk_0C = phi_f2;
+        arg0->unk_00.unk_10 = (fabsf(arg0->unk_00.unk_0C - arg0->unk_00.unk_08) * 0.05f) + 0.02f;
     }
 
-    s->unk_00.unk_02 += s->unk_00.unk_04;
-    Math_StepToF(&s->unk_00.unk_08, s->unk_00.unk_0C, s->unk_00.unk_10);
+    arg0->unk_00.unk_02 += arg0->unk_00.unk_04;
+    Math_StepToF(&arg0->unk_00.unk_08, arg0->unk_00.unk_0C, arg0->unk_00.unk_10);
 
-    sp20 += (Math_SinS(s->unk_00.unk_02) * s->unk_00.unk_08);
+    sp20 += (Math_SinS(arg0->unk_00.unk_02) * arg0->unk_00.unk_08);
     return sp20;
 }
 
-f32 func_80A667F0(ObjDrifticeStruct3* s, ObjDriftice* this) {
+f32 func_80A667F0(ObjDrifticeStruct3* arg0, ObjDriftice* this) {
     f32 temp_f20 = 0.0f;
     ObjDrifticeStruct3* temp_s0;
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        temp_s0 = &s[i];
+        temp_s0 = &arg0[i];
 
         if (temp_s0->unk_00 > 0) {
             temp_s0->unk_00--;
@@ -149,7 +149,7 @@ f32 func_80A667F0(ObjDrifticeStruct3* s, ObjDriftice* this) {
 }
 
 #ifdef NON_MATCHING
-void func_80A66930(ObjDrifticeStruct2* s, ObjDriftice* this, s16* arg2, s16* arg3) {
+void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* arg3) {
     ObjDrifticeStruct3* temp_s0;
     f32 temp_f22 = 0.0f;
     s16 phi_s0;
@@ -163,22 +163,22 @@ void func_80A66930(ObjDrifticeStruct2* s, ObjDriftice* this, s16* arg2, s16* arg
             temp_f20 = 0.01f;
         }
 
-        Math_StepToS(&s->unk_00[1], 1200.0f * temp_f20, 0x64);
+        Math_StepToS(&arg0->unk_00[1], 1200.0f * temp_f20, 0x64);
         phi_s0 = 2500.0f * temp_f20;
-        Math_StepToS(&s->unk_00[3], Math_CosS(s->unk_00[2] * 6.5536f) * (120.0f * temp_f20), 0x28);
-        Math_StepToF(&s->unk_08, 1.0f, 0.02f);
+        Math_StepToS(&arg0->unk_00[3], Math_CosS(arg0->unk_00[2] * 6.5536f) * (120.0f * temp_f20), 0x28);
+        Math_StepToF(&arg0->unk_08, 1.0f, 0.02f);
     } else {
-        Math_StepToS(&s->unk_00[1], 0, 0x96);
+        Math_StepToS(&arg0->unk_00[1], 0, 0x96);
         phi_s0 = 0;
-        Math_StepToS(&s->unk_00[3], 20, 7);
-        Math_StepToF(&s->unk_08, 0.0f, 0.02f);
+        Math_StepToS(&arg0->unk_00[3], 20, 7);
+        Math_StepToF(&arg0->unk_08, 0.0f, 0.02f);
     }
-    Math_ScaledStepToS(s->unk_00, this->dyna.actor.yawTowardsPlayer, s->unk_00[1]);
-    *arg3 = s->unk_00[0];
-    Math_ScaledStepToS(&s->unk_00[2], phi_s0, s->unk_00[3]);
+    Math_ScaledStepToS(arg0->unk_00, this->dyna.actor.yawTowardsPlayer, arg0->unk_00[1]);
+    *arg3 = arg0->unk_00[0];
+    Math_ScaledStepToS(&arg0->unk_00[2], phi_s0, arg0->unk_00[3]);
 
     for (i = 0; i < 2; i++) {
-        temp_s0 = &s->unk_0C[i];
+        temp_s0 = &arg0->unk_0C[i];
 
         if (temp_s0->unk_00 > 0) {
             temp_s0->unk_00--;
@@ -193,34 +193,34 @@ void func_80A66930(ObjDrifticeStruct2* s, ObjDriftice* this, s16* arg2, s16* arg
         temp_f22 += Math_SinS(temp_s0->unk_02) * temp_s0->unk_08;
     }
 
-    temp_f22 *= s->unk_08;
+    temp_f22 *= arg0->unk_08;
 
-    *arg2 = (s32)temp_f22 + s->unk_00[2];
+    *arg2 = (s32)temp_f22 + arg0->unk_00[2];
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Driftice/func_80A66930.s")
 #endif
 
-void func_80A66C4C(ObjDrifticeStruct4* s, ObjDriftice* this, s16* arg2, s16* arg3) {
+void func_80A66C4C(ObjDrifticeStruct4* arg0, ObjDriftice* this, s16* arg2, s16* arg3) {
     ObjDrifticeStruct3* temp_s0;
     f32 temp_f20 = 0.0f;
     s32 i;
 
-    if (s->unk_00[0] > 0) {
-        s->unk_00[0]--;
+    if (arg0->unk_00[0] > 0) {
+        arg0->unk_00[0]--;
     } else {
-        s->unk_00[0] = Rand_S16Offset(30, 70);
-        s->unk_00[2] = Rand_S16Offset(-200, 200);
-        s->unk_00[4] = Rand_S16Offset(-400, 400);
+        arg0->unk_00[0] = Rand_S16Offset(30, 70);
+        arg0->unk_00[2] = Rand_S16Offset(-200, 200);
+        arg0->unk_00[4] = Rand_S16Offset(-400, 400);
     }
 
-    Math_StepToS(&s->unk_00[1], s->unk_00[2], 0x32);
-    Math_StepToS(&s->unk_00[3], s->unk_00[4], 0x32);
+    Math_StepToS(&arg0->unk_00[1], arg0->unk_00[2], 0x32);
+    Math_StepToS(&arg0->unk_00[3], arg0->unk_00[4], 0x32);
 
-    *arg3 = s->unk_00[3] + s->unk_00[1];
+    *arg3 = arg0->unk_00[3] + arg0->unk_00[1];
 
     for (i = 0; i < 3; i++) {
-        temp_s0 = &s->unk_0C[i];
+        temp_s0 = &arg0->unk_0C[i];
 
         if (temp_s0->unk_00 > 0) {
             temp_s0->unk_00--;
@@ -238,9 +238,9 @@ void func_80A66C4C(ObjDrifticeStruct4* s, ObjDriftice* this, s16* arg2, s16* arg
     *arg2 = temp_f20;
 }
 
-void func_80A66E30(ObjDrifticeStruct* s, ObjDriftice* this) {
-    f32 pad;
-    f32* temp_s1 = D_80A67664[(this->dyna.actor.home.rot.x & 3) - 1];
+void func_80A66E30(ObjDrifticeStruct* arg0, ObjDriftice* this) {
+    f32 temp;
+    f32* temp_s1 = D_80A67664[OBJDRIFTICE_GET_ROT(&this->dyna.actor) - 1];
     s16 sp36;
     s16 sp34;
     s16 sp32;
@@ -250,14 +250,14 @@ void func_80A66E30(ObjDrifticeStruct* s, ObjDriftice* this) {
     f32 sp24;
     s16 sp22;
 
-    sp2C = func_80A665EC(s, this);
-    sp28 = func_80A667F0(s->unk_14, this);
-    func_80A66930(&s->unk_50, this, &sp32, &sp30);
-    func_80A66C4C(&s->unk_84, this, &sp36, &sp34);
+    sp2C = func_80A665EC(arg0, this);
+    sp28 = func_80A667F0(arg0->unk_14, this);
+    func_80A66930(&arg0->unk_50, this, &sp32, &sp30);
+    func_80A66C4C(&arg0->unk_84, this, &sp36, &sp34);
 
     this->dyna.actor.shape.yOffset = this->unk_240 * ((sp28 * temp_s1[1]) + (sp2C * temp_s1[0]));
 
-    sp24 = (sp32 * temp_s1[2]) + (sp36 * temp_s1[3]) * (pad = 1.0f);
+    sp24 = (sp32 * temp_s1[2]) + (sp36 * temp_s1[3]) * (temp = 1.0f);
     sp22 = (sp34 + sp30) - this->dyna.actor.shape.rot.y;
 
     this->dyna.actor.shape.rot.x = Math_CosS(sp22) * sp24;
@@ -454,7 +454,7 @@ void ObjDriftice_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if ((this->dyna.actor.home.rot.x & 3) && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
+    if (OBJDRIFTICE_GET_ROT(&this->dyna.actor) && (this->dyna.actor.flags & ACTOR_FLAG_40)) {
         func_80A66E30(&this->unk_170, this);
     }
 }
