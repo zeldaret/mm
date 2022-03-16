@@ -516,7 +516,7 @@ s32 EnNwc_OverwriteLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
         rot->z += this->footRotZ;
     }
 
-    return 0;
+    return false;
 }
 
 void EnNwc_DrawAdultBody(Actor* thisx, GlobalContext* globalCtx) {
