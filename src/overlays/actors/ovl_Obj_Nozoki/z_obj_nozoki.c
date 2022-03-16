@@ -134,7 +134,7 @@ s32 func_80BA26A8(ObjNozoki* this) {
         return true;
     }
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_15F) != 0) {
+    if (ActorCutscene_GetCanPlayNext(this->unk_15F)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_15F, &this->dyna.actor);
         return true;
     }
