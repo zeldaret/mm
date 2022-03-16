@@ -409,9 +409,6 @@ void func_80A21D1C(ObjSkateblock* this) {
 
 void func_80A21E9C(ObjSkateblock* this, GlobalContext* globalCtx) {
     DynaPolyActor* temp_v0;
-    s32 temp_s1;
-    ObjSkateblock* phi_s0;
-    s32 phi_s1;
     s32 i;
     ObjSkateblockFloor* ptr;
 
@@ -455,7 +452,7 @@ void func_80A21F74(ObjSkateblock* this, GlobalContext* globalCtx) {
     this->unk_17C++;
 
     if (this->dyna.actor.flags & ACTOR_FLAG_40) {
-        if (this->unk_17C >= 0x2E) {
+        if (this->unk_17C >= 46) {
             phi_f22 = 1.0f;
         } else {
             phi_f22 = (this->unk_17C * 0.017777778f) + 0.2f;
