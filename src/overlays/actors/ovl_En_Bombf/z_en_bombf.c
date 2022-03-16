@@ -271,28 +271,28 @@ void func_808AEFD4(EnBombf* this, GlobalContext* globalCtx) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderJntSph.base);
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[0] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[0] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[1] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[1] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.diffuseColor1[2] != 0) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.diffuseColor1[2] != 0) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[0] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[0] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[0] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[0] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[1] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[1] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[1] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[1] -= 25;
     }
 
-    if (globalCtx->envCtx.unk_8C.ambientColor[2] != 0) {
-        globalCtx->envCtx.unk_8C.ambientColor[2] -= 25;
+    if (globalCtx->envCtx.lightSettings.ambientColor[2] != 0) {
+        globalCtx->envCtx.lightSettings.ambientColor[2] -= 25;
     }
 
     if (this->timer == 0) {
@@ -408,10 +408,10 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
                             CLEAR_TAG_SMALL_EXPLOSION);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
-                globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.diffuseColor1[1] =
-                    globalCtx->envCtx.unk_8C.diffuseColor1[2] = 250;
-                globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.ambientColor[1] =
-                    globalCtx->envCtx.unk_8C.ambientColor[2] = 250;
+                globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.diffuseColor1[1] =
+                    globalCtx->envCtx.lightSettings.diffuseColor1[2] = 250;
+                globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.ambientColor[1] =
+                    globalCtx->envCtx.lightSettings.ambientColor[2] = 250;
 
                 func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
 
