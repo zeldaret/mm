@@ -66,7 +66,9 @@ AnimationHeader* D_80C0479C[] = {
 };
 
 u8 D_80C047E0[] = {
-    0, 0, 0, 2, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
+    ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
 };
 
 #include "overlays/ovl_En_Bombers/ovl_En_Bombers.c"
@@ -176,22 +178,22 @@ void func_80C039A8(EnBombers* this, GlobalContext* globalCtx) {
     this->unk_2A6 = 5;
 
     switch (player->transformation) {
-        case 4:
+        case PLAYER_FORM_HUMAN:
             this->actor.textId = 0x73D;
             if (gSaveContext.weekEventReg[84] & 0x80) {
                 this->actor.textId = 0x74B;
             }
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             this->actor.textId = 0x73E;
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             this->actor.textId = 0x73F;
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             if (gSaveContext.weekEventReg[73] & 0x20) {
                 this->actor.textId = 0x75A;
             } else if (gSaveContext.weekEventReg[73] & 0x40) {
@@ -237,7 +239,7 @@ void func_80C03AF4(EnBombers* this, GlobalContext* globalCtx) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp60)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp60, &sp6C,
-                                                               &colPoly, 1, 0, 0, 1, &sp48)) {
+                                                               &colPoly, true, false, false, true, &sp48)) {
                     func_80C03824(this, 2, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp60);
                     this->unk_2AA = Rand_S16Offset(30, 50);
@@ -257,8 +259,8 @@ void func_80C03AF4(EnBombers* this, GlobalContext* globalCtx) {
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
 
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C, &colPoly, 1, 0, 0,
-                                            1, &sp48)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp6C, &colPoly, true,
+                                            false, false, true, &sp48)) {
                     this->unk_2A8 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80C03824(this, 16, 1.0f);
@@ -322,12 +324,12 @@ void func_80C03FAC(EnBombers* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_2A4, 1, 0x1388, 0);
 
     switch (player->transformation) {
-        case 4:
+        case PLAYER_FORM_HUMAN:
             this->unk_28E = -0xFA0;
             break;
 
-        case 1:
-        case 2:
+        case PLAYER_FORM_GORON:
+        case PLAYER_FORM_ZORA:
             this->unk_28E = -0x1770;
             break;
     }
@@ -493,16 +495,16 @@ s32 EnBombers_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
                                Actor* thisx) {
     EnBombers* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_CS_LIMB_0F) {
         *dList = NULL;
     }
 
-    if (limbIndex == 17) {
+    if (limbIndex == OBJECT_CS_LIMB_11) {
         rot->x += this->unk_28A;
         rot->z += this->unk_288;
     }
 
-    if (limbIndex == 19) {
+    if (limbIndex == OBJECT_CS_LIMB_13) {
         *dList = NULL;
     }
 
