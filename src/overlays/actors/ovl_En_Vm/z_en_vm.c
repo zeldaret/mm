@@ -41,7 +41,7 @@ const ActorInit En_Vm_InitVars = {
     (ActorFunc)EnVm_Draw,
 };
 
-static ColliderJntSphElementInit sJntSphElementsInit[2] = {
+static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -79,7 +79,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-static ColliderTrisElementInit sTrisElementsInit[1] = {
+static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -202,7 +202,7 @@ void EnVm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_808CC420(EnVm* this) {
     f32 lastFrame = Animation_GetLastFrame(&object_vm_Anim_000068);
 
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 1.0f, lastFrame, lastFrame, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
     this->actionFunc = func_808CC490;
 }
 
@@ -267,7 +267,7 @@ void func_808CC610(EnVm* this, GlobalContext* globalCtx) {
 
 void func_808CC788(EnVm* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BIMOS_AIM);
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 3.0f, 3.0f, 7.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 3.0f, 3.0f, 7.0f, ANIMMODE_ONCE, 0.0f);
     this->unk_214 = 305;
     this->unk_220 = 0.06f;
     this->colliderTris.base.atFlags &= ~AT_HIT;
@@ -324,7 +324,7 @@ void func_808CC820(EnVm* this, GlobalContext* globalCtx) {
 
 void func_808CCA10(EnVm* this) {
     Animation_Change(&this->skelAnime, &object_vm_Anim_000068, -1.0f, Animation_GetLastFrame(&object_vm_Anim_000068),
-                     0.0f, 2, 0.0f);
+                     0.0f, ANIMMODE_ONCE, 0.0f);
     this->unk_214 = 100;
     this->unk_210 = 0;
     this->unk_224 = 0.0f;
@@ -367,7 +367,7 @@ void func_808CCB50(EnVm* this, GlobalContext* globalCtx) {
 
 void func_808CCBE4(EnVm* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &object_vm_Anim_000068, -1.0f, Animation_GetLastFrame(&object_vm_Anim_000068),
-                     0.0f, 2, 0.0f);
+                     0.0f, ANIMMODE_ONCE, 0.0f);
     Enemy_StartFinishingBlow(globalCtx, &this->actor);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 33);
     this->unk_214 = 33;
@@ -461,10 +461,10 @@ void EnVm_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnVm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnVm* this = THIS;
 
-    if (limbIndex == 2) {
+    if (limbIndex == OBJECT_VM_LIMB_02) {
         rot->x += this->unk_216;
         rot->y += this->unk_218;
-    } else if ((limbIndex == 10) && (this->actionFunc == func_808CCCF0)) {
+    } else if ((limbIndex == OBJECT_VM_LIMB_0A) && (this->actionFunc == func_808CCCF0)) {
         *dList = NULL;
     }
     return false;
@@ -480,7 +480,7 @@ void EnVm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
 
-    if (limbIndex == 2) {
+    if (limbIndex == OBJECT_VM_LIMB_02) {
         sp4C = NULL;
 
         Matrix_GetStateTranslation(&this->actor.focus.pos);
