@@ -59,7 +59,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, GlobalContext* globalCtx) {
 
     DynaPolyActor_Init(&this->dyna, 0);
 
-    if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) != RACE_FLAG_START) {
+    if (GET_RACE_FLAGS != RACE_FLAG_START) {
         Actor_MarkForDeath(&this->dyna.actor);
         return false;
     }
@@ -97,7 +97,7 @@ s32 func_808F8C5C(EnHorseGameCheck* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F8C70(EnHorseGameCheck* this, GlobalContext* globalCtx) {
-    if (!Matrix_NewMtx(globalCtx->state.gfxCtx)) {
+    if (Matrix_NewMtx(globalCtx->state.gfxCtx) == NULL) {
         return true;
     } else {
         Gfx_DrawDListXlu(globalCtx, object_horse_game_check_DL_003030);
@@ -116,7 +116,7 @@ s32 func_808F8CCC(EnHorseGameCheck* this, GlobalContext* globalCtx2) {
     this->unk_168 = 0;
     this->unk_174 = 0;
 
-    if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) != RACE_FLAG_START) {
+    if (GET_RACE_FLAGS != RACE_FLAG_START) {
         Actor_MarkForDeath(&this->dyna.actor);
         return false;
     }
@@ -156,13 +156,13 @@ s32 func_808F8EB0(EnHorseGameCheck* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) == RACE_FLAG_3) {
+    if (GET_RACE_FLAGS == RACE_FLAG_3) {
         globalCtx->unk_1887F = 0x40;
         gSaveContext.nextTransition = 2;
-    } else if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) == RACE_FLAG_2) {
+    } else if (GET_RACE_FLAGS == RACE_FLAG_2) {
         globalCtx->unk_1887F = 0x50;
         gSaveContext.nextTransition = 3;
-    } else if ((gSaveContext.weekEventReg[92] & (RACE_FLAG_START | RACE_FLAG_2 | RACE_FLAG_4)) == RACE_FLAG_4) {
+    } else if (GET_RACE_FLAGS == RACE_FLAG_4) {
         SET_RACE_FLAGS(RACE_FLAG_3);
         globalCtx->unk_1887F = 2;
         gSaveContext.nextTransition = 2;
@@ -228,7 +228,7 @@ s32 func_808F8FAC(EnHorseGameCheck* this, GlobalContext* globalCtx) {
 
     if ((this->unk_17C != -1) && ((this->unk_168 - this->unk_17C) > 10)) {
         this->unk_17C = -1;
-        func_800DFAC8(globalCtx->cameraPtrs[0], 4);
+        func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 4);
     }
 
     this->unk_168++;
