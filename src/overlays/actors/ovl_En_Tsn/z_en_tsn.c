@@ -171,7 +171,7 @@ void func_80ADFF84(EnTsn* this, GlobalContext* globalCtx) {
         textId = 0x1084;
     }
 
-    func_801518B0(globalCtx, textId, &this->actor);
+    Message_StartTextbox(globalCtx, textId, &this->actor);
 }
 
 void func_80AE0010(EnTsn* this, GlobalContext* globalCtx) {
@@ -289,7 +289,7 @@ void func_80AE0304(EnTsn* this, GlobalContext* globalCtx) {
 
 void func_80AE0418(EnTsn* this, GlobalContext* globalCtx) {
     if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
-        func_801518B0(globalCtx, 0x107D, NULL);
+        Message_StartTextbox(globalCtx, 0x107D, NULL);
         Actor_MarkForDeath(&this->actor);
     }
 }
