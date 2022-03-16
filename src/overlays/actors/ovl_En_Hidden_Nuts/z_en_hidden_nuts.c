@@ -69,7 +69,8 @@ static AnimationHeader* D_80BDC0FC[] = {
 };
 
 u8 D_80BDC120[] = {
-    2, 2, 2, 0, 2, 0, 0, 2, 2, 0,
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP,
 };
 
 void EnHiddenNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -114,14 +115,14 @@ void EnHiddenNuts_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80BDB1B4(EnHiddenNuts* this, s32 arg0) {
+void func_80BDB1B4(EnHiddenNuts* this, s32 arg1) {
     f32 sp34;
     f32 sp30;
 
-    this->unk_220 = arg0;
+    this->unk_220 = arg1;
     sp34 = 0.0f;
     sp30 = -4.0f;
-    this->unk_22C = Animation_GetLastFrame(D_80BDC0FC[arg0]);
+    this->unk_22C = Animation_GetLastFrame(D_80BDC0FC[arg1]);
     if (this->unk_220 == 1) {
         sp34 = this->unk_22C;
         sp30 = 0.0f;
@@ -174,8 +175,8 @@ void func_80BDB2B8(EnHiddenNuts* this, GlobalContext* globalCtx) {
             sp74.x += randPlusMinusPoint5Scaled(15.0f);
             sp74.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 0x5A),
-                                              30, 1);
+            EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30,
+                                              1);
         }
         this->unk_218 = 30;
     }
@@ -217,8 +218,8 @@ void func_80BDB59C(EnHiddenNuts* this, GlobalContext* globalCtx) {
             sp78.x += randPlusMinusPoint5Scaled(15.0f);
             sp78.z += randPlusMinusPoint5Scaled(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 0x5A),
-                                              30, 1);
+            EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30,
+                                              1);
         }
         this->unk_218 = 30;
     }
@@ -247,7 +248,7 @@ void func_80BDB7E8(EnHiddenNuts* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_226) == 0) {
+    if (!ActorCutscene_GetCanPlayNext(this->unk_226)) {
         ActorCutscene_SetIntentToPlay(this->unk_226);
         return;
     }
