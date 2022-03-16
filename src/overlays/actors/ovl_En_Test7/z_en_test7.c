@@ -434,12 +434,12 @@ void EnTest7_Init(Actor* thisx, GlobalContext* globalCtx2) {
         func_801A2E54(NA_BGM_SONG_OF_SOARING);
     }
 
-    if (globalCtx->unk_1879C[8] == -1) {
+    if (globalCtx->playerActorCsIds[8] == -1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
+    ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[8]);
     player2->stateFlags1 |= 0x20;
     Lights_PointNoGlowSetInfo(&this->lightInfo, (Math_SinS(this->unk_1E8E) * 90.0f) + player->actor.world.pos.x,
                               player->actor.world.pos.y + 10.0f,
@@ -450,15 +450,15 @@ void EnTest7_Init(Actor* thisx, GlobalContext* globalCtx2) {
 void EnTest7_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTest7* this = THIS;
 
-    ActorCutscene_Stop(globalCtx->unk_1879C[8]);
+    ActorCutscene_Stop(globalCtx->playerActorCsIds[8]);
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->lightNode);
 }
 
 void func_80AF19A8(EnTest7* this, GlobalContext* globalCtx) {
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[8])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[8])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[8]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[8], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[8], NULL);
         func_80AF082C(this, func_80AF1A2C);
         globalCtx->unk_18844 = 1;
     }
@@ -474,7 +474,7 @@ void func_80AF1A2C(EnTest7* this, GlobalContext* globalCtx) {
     func_800FD698(globalCtx, 2000, 4000, sp2C);
 
     if (this->unk_1E54 >= 10) {
-        Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+        Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
 
         this->unk_1E60 = camera->eye;
         this->unk_1E6C = camera->at;
@@ -536,7 +536,7 @@ void func_80AF1CA0(EnTest7* this, GlobalContext* globalCtx) {
         }
 
         if (Rand_ZeroOne() < 0.3f) {
-            Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+            Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
             f32 rand = Rand_ZeroOne();
 
             sp34.x = ((camera->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
@@ -559,7 +559,7 @@ void func_80AF1E44(EnTest7* this, GlobalContext* globalCtx) {
     func_80AF1B68(this, globalCtx);
 
     if (Rand_ZeroOne() < 0.3f) {
-        camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+        camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
         rand = Rand_ZeroOne();
         sp34.x = ((camera->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
         sp34.y = ((camera->eye.y - this->actor.world.pos.y) * rand) + this->actor.world.pos.y;
@@ -607,7 +607,7 @@ void func_80AF2030(EnTest7* this, GlobalContext* globalCtx) {
     this->unk_148.unk_10 -= 0x2EE0;
     this->actor.world.pos.y += 100.0f;
 
-    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
     camera->player = NULL;
 
     camera->eye.x = ((camera->eye.x - this->unk_1E60.x) * sp1C) + this->unk_1E60.x;
@@ -675,7 +675,7 @@ void func_80AF2350(EnTest7* this, GlobalContext* globalCtx) {
     if (globalCtx->sceneNum == SCENE_SECOM) {
         globalCtx->nextEntranceIndex = 0x2060;
     } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
-        func_80169F78(globalCtx);
+        func_80169F78(&globalCtx->state);
         gSaveContext.respawn[2].playerParams = (gSaveContext.respawn[2].playerParams & 0xFF) | 0x600;
         gSaveContext.respawnFlag = -6;
     } else {
@@ -697,7 +697,7 @@ void func_80AF24D8(EnTest7* this, GlobalContext* globalCtx, f32 arg2) {
     Vec3f sp3C;
     Vec3f* pos;
     Player* player = GET_PLAYER(globalCtx);
-    Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
 
     pos = &player->actor.world.pos;
     camera->player = NULL;
@@ -720,7 +720,7 @@ void func_80AF2654(EnTest7* this, GlobalContext* globalCtx, f32 arg2) {
     Camera* camera;
     Vec3f sp30;
 
-    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
     camera->player = NULL;
 
     pos = &player->actor.world.pos;
@@ -784,7 +784,7 @@ void func_80AF29C0(EnTest7* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     Vec3f* pos = &player->actor.world.pos;
-    Camera* temp_s0 = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    Camera* temp_s0 = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
 
     temp_s0->at.x = ((D_80AF3454 * Math_SinS(D_80AF3450[0]) * Math_CosS(D_80AF3450[1]))) + pos->x;
     temp_s0->at.y = (Math_SinS(D_80AF3450[1]) * D_80AF3454) + pos->y;
@@ -798,15 +798,15 @@ void func_80AF29C0(EnTest7* this, GlobalContext* globalCtx) {
 void func_80AF2AE8(EnTest7* this, GlobalContext* globalCtx) {
     Camera* camera;
 
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[8])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[8])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[8]);
         return;
     }
 
-    ActorCutscene_Start(globalCtx->unk_1879C[8], NULL);
+    ActorCutscene_Start(globalCtx->playerActorCsIds[8], NULL);
     func_80AF082C(this, func_80AF2C48);
 
-    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
     this->unk_1E60 = camera->eye;
     this->unk_1E6C = camera->at;
 
@@ -817,7 +817,7 @@ void func_80AF2BAC(EnTest7* this, GlobalContext* globalCtx, Vec3f* arg2, f32 arg
     f32 x;
     f32 y;
     f32 z;
-    Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    Camera* camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
 
     camera->player = NULL;
     x = ((camera->at.x - arg2->x) * arg3) + arg2->x;
@@ -843,7 +843,7 @@ void func_80AF2C48(EnTest7* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = ((this->actor.world.pos.y - this->actor.home.pos.y) * sp24) + this->actor.home.pos.y;
     this->actor.world.pos.z = ((this->actor.world.pos.z - this->actor.home.pos.z) * sp24) + this->actor.home.pos.z;
 
-    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
     func_80AF2BAC(this, globalCtx, &this->actor.home.pos, sp24);
 
     camera->at.x = this->actor.world.pos.x;
@@ -862,7 +862,7 @@ void func_80AF2DB4(EnTest7* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f* pos = &player->actor.world.pos;
 
-    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+    camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
 
     camera->eye.x = (Math_SinS(-player->actor.shape.rot.y) * 200.0f * -0.83907f) + pos->x;
     camera->eye.y = pos->y + 108.8042f;
@@ -876,13 +876,13 @@ void func_80AF2DB4(EnTest7* this, GlobalContext* globalCtx) {
 void func_80AF2EC8(EnTest7* this, GlobalContext* globalCtx) {
     Camera* camera;
 
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[8])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[8]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[8])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[8]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[8], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[8], NULL);
         func_80AF082C(this, func_80AF2F98);
 
-        camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->unk_1879C[8]));
+        camera = Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(globalCtx->playerActorCsIds[8]));
         this->unk_1E60 = camera->eye;
         this->unk_1E6C = camera->at;
         this->unk_1E54 = 40;
