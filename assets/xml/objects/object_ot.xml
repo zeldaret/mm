@@ -30,25 +30,25 @@
         <Texture Name="object_ot_Tex_003AE0" OutName="tex_003AE0" Format="ci8" Width="32" Height="32" Offset="0x3AE0" />
         <Texture Name="object_ot_Tex_003EE0" OutName="tex_003EE0" Format="ci8" Width="32" Height="32" Offset="0x3EE0" />
         <Texture Name="object_ot_Tex_0042E0" OutName="tex_0042E0" Format="ci8" Width="32" Height="32" Offset="0x42E0" />
-        <Limb Name="object_ot_Standardlimb_0046E0" Type="Standard" Offset="0x46E0" />
-        <Limb Name="object_ot_Standardlimb_0046EC" Type="Standard" Offset="0x46EC" />
-        <Limb Name="object_ot_Standardlimb_0046F8" Type="Standard" Offset="0x46F8" />
-        <Limb Name="object_ot_Standardlimb_004704" Type="Standard" Offset="0x4704" />
-        <Limb Name="object_ot_Standardlimb_004710" Type="Standard" Offset="0x4710" />
-        <Limb Name="object_ot_Standardlimb_00471C" Type="Standard" Offset="0x471C" />
-        <Limb Name="object_ot_Standardlimb_004728" Type="Standard" Offset="0x4728" />
-        <Limb Name="object_ot_Standardlimb_004734" Type="Standard" Offset="0x4734" />
-        <Limb Name="object_ot_Standardlimb_004740" Type="Standard" Offset="0x4740" />
-        <Limb Name="object_ot_Standardlimb_00474C" Type="Standard" Offset="0x474C" />
-        <Limb Name="object_ot_Standardlimb_004758" Type="Standard" Offset="0x4758" />
-        <Limb Name="object_ot_Standardlimb_004764" Type="Standard" Offset="0x4764" />
-        <Limb Name="object_ot_Standardlimb_004770" Type="Standard" Offset="0x4770" />
-        <Limb Name="object_ot_Standardlimb_00477C" Type="Standard" Offset="0x477C" />
-        <Limb Name="object_ot_Standardlimb_004788" Type="Standard" Offset="0x4788" />
-        <Limb Name="object_ot_Standardlimb_004794" Type="Standard" Offset="0x4794" />
-        <Limb Name="object_ot_Standardlimb_0047A0" Type="Standard" Offset="0x47A0" />
-        <Limb Name="object_ot_Standardlimb_0047AC" Type="Standard" Offset="0x47AC" />
-        <Skeleton Name="object_ot_Skel_004800" Type="Flex" LimbType="Standard" Offset="0x4800" />
+        <Limb Name="object_ot_Standardlimb_0046E0" Type="Standard" EnumName="OBJECT_OT_LIMB_01" Offset="0x46E0" />
+        <Limb Name="object_ot_Standardlimb_0046EC" Type="Standard" EnumName="OBJECT_OT_LIMB_02" Offset="0x46EC" />
+        <Limb Name="object_ot_Standardlimb_0046F8" Type="Standard" EnumName="OBJECT_OT_LIMB_03" Offset="0x46F8" />
+        <Limb Name="object_ot_Standardlimb_004704" Type="Standard" EnumName="OBJECT_OT_LIMB_04" Offset="0x4704" />
+        <Limb Name="object_ot_Standardlimb_004710" Type="Standard" EnumName="OBJECT_OT_LIMB_05" Offset="0x4710" />
+        <Limb Name="object_ot_Standardlimb_00471C" Type="Standard" EnumName="OBJECT_OT_LIMB_06" Offset="0x471C" />
+        <Limb Name="object_ot_Standardlimb_004728" Type="Standard" EnumName="OBJECT_OT_LIMB_07" Offset="0x4728" />
+        <Limb Name="object_ot_Standardlimb_004734" Type="Standard" EnumName="OBJECT_OT_LIMB_08" Offset="0x4734" />
+        <Limb Name="object_ot_Standardlimb_004740" Type="Standard" EnumName="OBJECT_OT_LIMB_09" Offset="0x4740" />
+        <Limb Name="object_ot_Standardlimb_00474C" Type="Standard" EnumName="OBJECT_OT_LIMB_0A" Offset="0x474C" />
+        <Limb Name="object_ot_Standardlimb_004758" Type="Standard" EnumName="OBJECT_OT_LIMB_0B" Offset="0x4758" />
+        <Limb Name="object_ot_Standardlimb_004764" Type="Standard" EnumName="OBJECT_OT_LIMB_0C" Offset="0x4764" />
+        <Limb Name="object_ot_Standardlimb_004770" Type="Standard" EnumName="OBJECT_OT_LIMB_0D" Offset="0x4770" />
+        <Limb Name="object_ot_Standardlimb_00477C" Type="Standard" EnumName="OBJECT_OT_LIMB_0E" Offset="0x477C" />
+        <Limb Name="object_ot_Standardlimb_004788" Type="Standard" EnumName="OBJECT_OT_LIMB_0F" Offset="0x4788" />
+        <Limb Name="object_ot_Standardlimb_004794" Type="Standard" EnumName="OBJECT_OT_LIMB_10" Offset="0x4794" />
+        <Limb Name="object_ot_Standardlimb_0047A0" Type="Standard" EnumName="OBJECT_OT_LIMB_11" Offset="0x47A0" />
+        <Limb Name="object_ot_Standardlimb_0047AC" Type="Standard" EnumName="OBJECT_OT_LIMB_12" Offset="0x47AC" />
+        <Skeleton Name="object_ot_Skel_004800" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OT_LIMB_NONE" LimbMax="OBJECT_OT_LIMB_MAX" EnumName="object_ot_Limbs" Offset="0x4800" />
         <Animation Name="object_ot_Anim_004B30" Offset="0x4B30" />
     </File>
 </Root>

@@ -40,9 +40,8 @@ typedef struct EnBigpo {
     /* 0x212 */ s16 hoverHeightCycleTimer; // sin wave up and down bobbing
     /* 0x214 */ f32 fireRadius; // distance from center during conjunction cutscene
     /* 0x218 */ f32 savedHeight; // actual height while flying moves as part of bobbing
-    // both unk21C and unk220 are passed to func_800BE680, probably need that to know what they are
-    /* 0x21C */ f32 unk21C; // tied to color alpha, decremented to zero
-    /* 0x220 */ f32 unk220; // created from unk21C
+    /* 0x21C */ f32 drawDmgEffAlpha;
+    /* 0x220 */ f32 drawDmgEffScale;
     /* 0x224 */ Vec3f limbPos[9];
     /* 0x290 */ Color_RGBA8 mainColor;
     /* 0x294 */ Color_RGBA8 lanternColor;

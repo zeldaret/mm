@@ -457,15 +457,15 @@ void func_80A33098(EnPr* this, GlobalContext* globalCtx) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->actor.colChkInfo.damageEffect == 4) {
-                this->unk_22E = 40;
-                this->unk_230 = 20;
+                this->drawDmgEffAlpha = 40;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                             this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
             }
 
             if ((player->stateFlags1 & 0x8000000) && (this->actor.colChkInfo.damageEffect == 5)) {
-                this->unk_22E = 40;
-                this->unk_230 = 31;
+                this->drawDmgEffAlpha = 40;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
             }
 
             if ((this->unk_206 != 6) && (this->unk_206 != 7)) {
@@ -580,9 +580,9 @@ void EnPr_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 0) || (limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) ||
         (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 8) || (limbIndex == 9)) {
-        Matrix_GetStateTranslation(&this->unk_23C[this->unk_228]);
+        Matrix_GetStateTranslation(&this->limbPos[this->unk_228]);
         this->unk_228++;
-        if (this->unk_228 >= ARRAY_COUNT(this->unk_23C)) {
+        if (this->unk_228 >= ARRAY_COUNT(this->limbPos)) {
             this->unk_228 = 0;
         }
     }
@@ -613,12 +613,13 @@ void EnPr_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                            this->skelAnime.dListCount, NULL, NULL, &this->actor, POLY_XLU_DISP);
     }
 
-    if (this->unk_22E != 0) {
-        f32 temp = this->unk_22E * 0.05f;
+    if (this->drawDmgEffAlpha != 0) {
+        f32 drawDmgEffAlpha = this->drawDmgEffAlpha * 0.05f;
 
         this->unk_238 = 0.8f;
         this->unk_234 = 0.8f;
-        func_800BE680(globalCtx, &this->actor, this->unk_23C, 10, 0.8f, 0.8f, temp, this->unk_230);
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0.8f, 0.8f,
+                                drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
