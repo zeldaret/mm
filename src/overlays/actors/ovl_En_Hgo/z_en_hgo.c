@@ -137,29 +137,29 @@ void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
-                func_801518B0(globalCtx, 0x15A5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A5, &this->actor);
                 this->unk_314 = 0x15A5; // That mask is a gibdo
 
             } else {
-                func_801518B0(globalCtx, 0x15A7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7; // can I research that mask
             }
         } else if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
             if (!(this->unk_310 & 1)) {
                 this->unk_310 |= 1;
-                func_801518B0(globalCtx, 0x158F, &this->actor);
+                Message_StartTextbox(globalCtx, 0x158F, &this->actor);
                 this->unk_314 = 0x158F; // Isn't this a fairy
             } else {
-                func_801518B0(globalCtx, 0x1593, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1593, &this->actor);
                 this->unk_314 = 0x1593; // Never seen a fairy this lively
             }
         } else {
             if (!(this->unk_310 & 2)) {
                 this->unk_310 |= 2;
-                func_801518B0(globalCtx, 0x1595, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1595, &this->actor);
                 this->unk_314 = 0x1595; // ghost radar is reacting
             } else {
-                func_801518B0(globalCtx, 0x1598, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1598, &this->actor);
                 this->unk_314 = 0x1598; // you seem to be similar to a ghost
             }
         }
@@ -197,44 +197,44 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         switch (this->unk_314) {
             case 0x158F:
-                func_801518B0(globalCtx, 0x1590, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1590, &this->actor);
                 this->unk_314 = 0x1590;
                 break;
             case 0x1590:
                 if (gSaveContext.weekEventReg[14] & 4) {
-                    func_801518B0(globalCtx, 0x1591, &this->actor);
+                    Message_StartTextbox(globalCtx, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
                     break;
                 }
-                func_801518B0(globalCtx, 0x1592, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
             case 0x1591:
-                func_801518B0(globalCtx, 0x1592, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
             case 0x1593:
-                func_801518B0(globalCtx, 0x1594, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1594, &this->actor);
                 this->unk_314 = 0x1594;
                 break;
             case 0x1595:
-                func_801518B0(globalCtx, 0x1596, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1596, &this->actor);
                 this->unk_314 = 0x1596;
                 break;
             case 0x1596:
-                func_801518B0(globalCtx, 0x1597, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1597, &this->actor);
                 this->unk_314 = 0x1597;
                 break;
             case 0x1598:
-                func_801518B0(globalCtx, 0x1599, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1599, &this->actor);
                 this->unk_314 = 0x1599;
                 break;
             case 0x15A5:
-                func_801518B0(globalCtx, 0x15A6, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A6, &this->actor);
                 this->unk_314 = 0x15A6;
                 break;
             case 0x15A6:
-                func_801518B0(globalCtx, 0x15A7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7;
                 break;
             case 0x15A7:
@@ -246,13 +246,13 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
+    s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E6)) {
-        actionIndex = func_800EE200(globalCtx, 0x1E6);
-        if (this->unk_316 != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->unk_316 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 486)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 486);
+        if (this->unk_316 != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk_316 = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_218 = 0;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
@@ -285,7 +285,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
                     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
                         this->unk_312 = 1;
                         if ((gSaveContext.sceneSetupIndex == 0) &&
-                            ((globalCtx->csCtx.unk_12 == 2) || (globalCtx->csCtx.unk_12 == 4))) {
+                            ((globalCtx->csCtx.currentCsIndex == 2) || (globalCtx->csCtx.currentCsIndex == 4))) {
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }
@@ -300,7 +300,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
             }
         }
 
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return true;
     }
     if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20)) &&

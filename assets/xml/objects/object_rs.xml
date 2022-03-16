@@ -33,21 +33,21 @@
         <Animation Name="object_rs_Anim_008268" Offset="0x8268" />
         <Animation Name="object_rs_Anim_0087BC" Offset="0x87BC" />
         <Animation Name="object_rs_Anim_009120" Offset="0x9120" />
-        <Limb Name="object_rs_Standardlimb_009130" Type="Standard" Offset="0x9130" />
-        <Limb Name="object_rs_Standardlimb_00913C" Type="Standard" Offset="0x913C" />
-        <Limb Name="object_rs_Standardlimb_009148" Type="Standard" Offset="0x9148" />
-        <Limb Name="object_rs_Standardlimb_009154" Type="Standard" Offset="0x9154" />
-        <Limb Name="object_rs_Standardlimb_009160" Type="Standard" Offset="0x9160" />
-        <Limb Name="object_rs_Standardlimb_00916C" Type="Standard" Offset="0x916C" />
-        <Limb Name="object_rs_Standardlimb_009178" Type="Standard" Offset="0x9178" />
-        <Limb Name="object_rs_Standardlimb_009184" Type="Standard" Offset="0x9184" />
-        <Limb Name="object_rs_Standardlimb_009190" Type="Standard" Offset="0x9190" />
-        <Limb Name="object_rs_Standardlimb_00919C" Type="Standard" Offset="0x919C" />
-        <Limb Name="object_rs_Standardlimb_0091A8" Type="Standard" Offset="0x91A8" />
-        <Limb Name="object_rs_Standardlimb_0091B4" Type="Standard" Offset="0x91B4" />
-        <Limb Name="object_rs_Standardlimb_0091C0" Type="Standard" Offset="0x91C0" />
-        <Limb Name="object_rs_Standardlimb_0091CC" Type="Standard" Offset="0x91CC" />
-        <Limb Name="object_rs_Standardlimb_0091D8" Type="Standard" Offset="0x91D8" />
-        <Skeleton Name="object_rs_Skel_009220" Type="Flex" LimbType="Standard" Offset="0x9220" />
+        <Limb Name="object_rs_Standardlimb_009130" Type="Standard" EnumName="OBJECT_RS_LIMB_01" Offset="0x9130" />
+        <Limb Name="object_rs_Standardlimb_00913C" Type="Standard" EnumName="OBJECT_RS_LIMB_02" Offset="0x913C" />
+        <Limb Name="object_rs_Standardlimb_009148" Type="Standard" EnumName="OBJECT_RS_LIMB_03" Offset="0x9148" />
+        <Limb Name="object_rs_Standardlimb_009154" Type="Standard" EnumName="OBJECT_RS_LIMB_04" Offset="0x9154" />
+        <Limb Name="object_rs_Standardlimb_009160" Type="Standard" EnumName="OBJECT_RS_LIMB_05" Offset="0x9160" />
+        <Limb Name="object_rs_Standardlimb_00916C" Type="Standard" EnumName="OBJECT_RS_LIMB_06" Offset="0x916C" />
+        <Limb Name="object_rs_Standardlimb_009178" Type="Standard" EnumName="OBJECT_RS_LIMB_07" Offset="0x9178" />
+        <Limb Name="object_rs_Standardlimb_009184" Type="Standard" EnumName="OBJECT_RS_LIMB_08" Offset="0x9184" />
+        <Limb Name="object_rs_Standardlimb_009190" Type="Standard" EnumName="OBJECT_RS_LIMB_09" Offset="0x9190" />
+        <Limb Name="object_rs_Standardlimb_00919C" Type="Standard" EnumName="OBJECT_RS_LIMB_0A" Offset="0x919C" />
+        <Limb Name="object_rs_Standardlimb_0091A8" Type="Standard" EnumName="OBJECT_RS_LIMB_0B" Offset="0x91A8" />
+        <Limb Name="object_rs_Standardlimb_0091B4" Type="Standard" EnumName="OBJECT_RS_LIMB_0C" Offset="0x91B4" />
+        <Limb Name="object_rs_Standardlimb_0091C0" Type="Standard" EnumName="OBJECT_RS_LIMB_0D" Offset="0x91C0" />
+        <Limb Name="object_rs_Standardlimb_0091CC" Type="Standard" EnumName="OBJECT_RS_LIMB_0E" Offset="0x91CC" />
+        <Limb Name="object_rs_Standardlimb_0091D8" Type="Standard" EnumName="OBJECT_RS_LIMB_0F" Offset="0x91D8" />
+        <Skeleton Name="object_rs_Skel_009220" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RS_LIMB_NONE" LimbMax="OBJECT_RS_LIMB_MAX" EnumName="object_rs_Limbs" Offset="0x9220" />
     </File>
 </Root>
