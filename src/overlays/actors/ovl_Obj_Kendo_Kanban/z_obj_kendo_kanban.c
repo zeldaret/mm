@@ -60,7 +60,7 @@ Vec3f D_80B66718 = { -300.0f, 10.0f, 40.0f };
 Vec3f D_80B66724 = { 0.0f, 10.0f, 40.0f };
 Vec3f D_80B66730 = { 300.0f, 10.0f, 40.0f };
 
-static ColliderTrisElementInit sTrisElementsInit[2] = {
+static ColliderTrisElementInit sTrisElementsInit[] = {
     {
         {
             ELEMTYPE_UNK5,
