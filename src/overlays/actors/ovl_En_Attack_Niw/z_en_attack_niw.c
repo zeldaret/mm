@@ -6,7 +6,6 @@
 
 #include "z_en_attack_niw.h"
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
-#include "objects/object_niw/object_niw.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -45,7 +44,7 @@ void EnAttackNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_niw_Skel_002530, &object_niw_Anim_0000E8, this->jointTable,
-                       this->morphTable, 16);
+                       this->morphTable, OBJECT_NIW_LIMB_MAX);
 
     if (this->actor.params < 0) {
         this->actor.params = 0;
@@ -193,7 +192,8 @@ s32 func_809585B0(EnAttackNiw* this, GlobalContext* globalCtx) {
     Actor_SetFocus(&this->actor, this->unk_2DC);
     Actor_GetScreenPos(globalCtx, &this->actor, &sp1E, &sp1C);
 
-    if ((this->actor.projectedPos.z < -20.0f) || (sp1E < 0) || (sp1E > 320) || (sp1C < 0) || (sp1C > 240)) {
+    if ((this->actor.projectedPos.z < -20.0f) || (sp1E < 0) || (sp1E > SCREEN_WIDTH) || (sp1C < 0) ||
+        (sp1C > SCREEN_HEIGHT)) {
         return false;
     }
     return true;
