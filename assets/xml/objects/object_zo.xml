@@ -42,26 +42,26 @@
         <DList Name="gZoraLeftThighDL" Offset="0xC858" />
         <DList Name="gZoraLeftShinDL" Offset="0xCB38" />
         <DList Name="gZoraLeftFootDL" Offset="0xCE10" />
-        <Limb Name="gZoraPelvisLimb" Type="Standard" Offset="0xD0D8" />
-        <Limb Name="gZoraLeftThighLimb" Type="Standard" Offset="0xD0E4" />
-        <Limb Name="gZoraLeftShinLimb" Type="Standard" Offset="0xD0F0" />
-        <Limb Name="gZoraLeftFootLimb" Type="Standard" Offset="0xD0FC" />
-        <Limb Name="gZoraRightThighLimb" Type="Standard" Offset="0xD108" />
-        <Limb Name="gZoraRightShinLimb" Type="Standard" Offset="0xD114" />
-        <Limb Name="gZoraRightFootLimb" Type="Standard" Offset="0xD120" />
-        <Limb Name="gZoraTorsoLimb" Type="Standard" Offset="0xD12C" />
-        <Limb Name="gZoraLeftUpperArmLimb" Type="Standard" Offset="0xD138" />
-        <Limb Name="gZoraLeftForearmLimb" Type="Standard" Offset="0xD144" />
-        <Limb Name="gZoraLeftHandLimb" Type="Standard" Offset="0xD150" />
-        <Limb Name="gZoraRightUpperArmLimb" Type="Standard" Offset="0xD15C" />
-        <Limb Name="gZoraRightForearmLimb" Type="Standard" Offset="0xD168" />
-        <Limb Name="gZoraRightHandLimb" Type="Standard" Offset="0xD174" />
-        <Limb Name="gZoraHeadLimb" Type="Standard" Offset="0xD180" />
-        <Limb Name="gZoraHeadTail1Limb" Type="Standard" Offset="0xD18C" />
-        <Limb Name="gZoraHeadTail2Limb" Type="Standard" Offset="0xD198" />
-        <Limb Name="gZoraHeadTail3Limb" Type="Standard" Offset="0xD1A4" />
-        <Limb Name="gZoraHeadTailFinLimb" Type="Standard" Offset="0xD1B0" />
-        <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" Offset="0xD208" />
+        <Limb Name="gZoraPelvisLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_01" Offset="0xD0D8" />
+        <Limb Name="gZoraLeftThighLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_02" Offset="0xD0E4" />
+        <Limb Name="gZoraLeftShinLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_03" Offset="0xD0F0" />
+        <Limb Name="gZoraLeftFootLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_04" Offset="0xD0FC" />
+        <Limb Name="gZoraRightThighLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_05" Offset="0xD108" />
+        <Limb Name="gZoraRightShinLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_06" Offset="0xD114" />
+        <Limb Name="gZoraRightFootLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_07" Offset="0xD120" />
+        <Limb Name="gZoraTorsoLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_08" Offset="0xD12C" />
+        <Limb Name="gZoraLeftUpperArmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_09" Offset="0xD138" />
+        <Limb Name="gZoraLeftForearmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0A" Offset="0xD144" />
+        <Limb Name="gZoraLeftHandLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0B" Offset="0xD150" />
+        <Limb Name="gZoraRightUpperArmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0C" Offset="0xD15C" />
+        <Limb Name="gZoraRightForearmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0D" Offset="0xD168" />
+        <Limb Name="gZoraRightHandLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0E" Offset="0xD174" />
+        <Limb Name="gZoraHeadLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0F" Offset="0xD180" />
+        <Limb Name="gZoraHeadTail1Limb" Type="Standard" EnumName="OBJECT_ZO_LIMB_10" Offset="0xD18C" />
+        <Limb Name="gZoraHeadTail2Limb" Type="Standard" EnumName="OBJECT_ZO_LIMB_11" Offset="0xD198" />
+        <Limb Name="gZoraHeadTail3Limb" Type="Standard" EnumName="OBJECT_ZO_LIMB_12" Offset="0xD1A4" />
+        <Limb Name="gZoraHeadTailFinLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_13" Offset="0xD1B0" />
+        <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZO_LIMB_NONE" LimbMax="OBJECT_ZO_LIMB_MAX" EnumName="object_zo_Limbs" Offset="0xD208" />
         <DList Name="object_zo_DL_00D220" Offset="0xD220" />
         <DList Name="object_zo_DL_00D288" Offset="0xD288" />
         <DList Name="object_zo_DL_00D2A0" Offset="0xD2A0" />

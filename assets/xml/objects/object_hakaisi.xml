@@ -10,6 +10,6 @@
         <DList Name="object_hakaisi_DL_002650" Offset="0x2650" />
         <DList Name="object_hakaisi_DL_0029C0" Offset="0x29C0" />
         <DList Name="object_hakaisi_DL_002CC0" Offset="0x2CC0" />
-        <!-- <Blob Name="object_hakaisi_Blob_002DD8" Size="0x218" Offset="0x2DD8" /> -->
+        <Collision Name="object_hakaisi_Colheader_002FC4" Offset="0x2FC4" />
     </File>
 </Root>
