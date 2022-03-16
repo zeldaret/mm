@@ -26,9 +26,9 @@ typedef struct EnPoh {
     /* 0x019B */ u8 unk_19B;
     /* 0x019C */ Vec3s jointTable[21];
     /* 0x021A */ Vec3s morphTable[21];
-    /* 0x0298 */ f32 unk_298;
-    /* 0x029C */ f32 unk_29C;
-    /* 0x02A0 */ Vec3f unk_2A0[10];
+    /* 0x0298 */ f32 drawDmgEffAlpha;
+    /* 0x029C */ f32 drawDmgEffScale;
+    /* 0x02A0 */ Vec3f limbPos[10];
     /* 0x0318 */ LightNode* lightNode;
     /* 0x031C */ LightInfo lightInfo;
     /* 0x032C */ ColliderCylinder colliderCylinder;
