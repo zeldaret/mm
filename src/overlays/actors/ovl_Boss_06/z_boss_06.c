@@ -197,7 +197,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
                 break;
             }
 
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
             func_800B7298(globalCtx, &this->actor, 7);
             this->unk_A00 = Play_CreateSubCamera(globalCtx);
             Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
@@ -219,11 +219,11 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
         case 1:
             if (this->unk_1CA >= 10) {
                 Math_ApproachF(&this->unk_1E4, 30.0f, 0.2f, 1.0f);
-                globalCtx->envCtx.unk_E5 = 1;
-                globalCtx->envCtx.unk_E6[2] = 0;
-                globalCtx->envCtx.unk_E6[1] = 0;
-                globalCtx->envCtx.unk_E6[0] = 0;
-                globalCtx->envCtx.unk_E6[3] = this->unk_A2C;
+                globalCtx->envCtx.fillScreen = 1;
+                globalCtx->envCtx.screenFillColor[2] = 0;
+                globalCtx->envCtx.screenFillColor[1] = 0;
+                globalCtx->envCtx.screenFillColor[0] = 0;
+                globalCtx->envCtx.screenFillColor[3] = this->unk_A2C;
                 Math_ApproachF(&this->unk_A2C, 75.0f, 1.0f, 3.0f);
             }
 
@@ -232,7 +232,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_1CA >= 60) {
-                globalCtx->envCtx.unk_E5 = 0;
+                globalCtx->envCtx.fillScreen = 0;
                 this->unk_1C8 = 0;
                 this->unk_1DC = 0.0f;
                 this->unk_1D8 = 0.0f;
@@ -331,7 +331,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
                 func_809F2ED0(this, globalCtx);
                 func_80169AFC(globalCtx, this->unk_A00, 0);
                 this->unk_A00 = 0;
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 D_809F4970->unk_151 = 0;
             }
@@ -339,7 +339,7 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_A00 != 0) {
-        ShrinkWindow_SetLetterboxTarget(0x1B);
+        ShrinkWindow_SetLetterboxTarget(27);
         Play_CameraSetAtEye(globalCtx, this->unk_A00, &this->unk_A10, &this->unk_A04);
     }
 }
@@ -499,8 +499,6 @@ void Boss06_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// v/a flips
 void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss06* this = THIS;
@@ -509,10 +507,11 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     s16 temp_s0;
     s16 temp_f10;
     Vtx* temp_v0_2;
-    u32 temp_v0;
+    u16 temp_v0;
+    u16 pad;
     u8 spD3;
     u8 spD2;
-    s32 pad;
+    s32 maxColor = 255; // Possible FAKE MATCH
     f32 sp68;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -521,8 +520,8 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     temp_v0 = gSaveContext.time;
-    if (gSaveContext.time > 0x8000) {
-        temp_v0 = (0xFFFF - gSaveContext.time) & 0xFFFF;
+    if (temp_v0 > CLOCK_TIME(12, 0)) {
+        temp_v0 = 0xFFFF - temp_v0;
     }
     sp68 = (f32)temp_v0 / 0x8000;
     spD3 = ((10.0f * sp68) + 105.0f) * this->unk_19C;
@@ -579,10 +578,12 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_InsertTranslation(0.0f, 0.0f, -1112.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, 255, (u8)((140.0f * sp68) + 115.0f), spD3);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 155, 255, maxColor, (u8)((140.0f * sp68) + 115.0f), spD3);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018CF0);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, (u8)((100.0f * sp68) + 65.0f), spD2);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 255, 255, maxColor, (u8)((100.0f * sp68) + 65.0f), spD2);
         gSPDisplayList(POLY_XLU_DISP++, object_knight_DL_018DE0);
+
+        if (1) {}
     }
 
     if (this->unk_144 & 1) {
@@ -603,7 +604,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             func_809F2120(1, 0x71A5, 0x263A);
 
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
-            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, 230);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 128, 255, 255, 0, 230);
 
             for (i = 0; i < ARRAY_COUNT(D_809F4370); i++) {
                 if ((fabsf(D_809F4370[i].x - 32.0f) < 30.0f) && (fabsf(D_809F4370[i].y - 32.0f) < 30.0f)) {
@@ -621,7 +622,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                         Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
 
-                    Matrix_Scale(-0.002f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);
+                    Matrix_Scale(-0.02f / 10.0f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -642,7 +643,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                  this->actor.world.pos.y + 84.0f + this->unk_1B4,
                                  (this->actor.world.pos.z - 2.0f) + spE0, MTXMODE_NEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, (u8)((140.0f * sp68) + 115.0f), temp_s2);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)((100.0f * sp68) + 65.0f), 128);
 
@@ -650,11 +651,8 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 64, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
+        gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_06/Boss06_Draw.s")
-#endif

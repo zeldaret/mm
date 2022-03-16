@@ -36,27 +36,27 @@
         <DList Name="object_mu_DL_00AF58" Offset="0xAF58" />
         <DList Name="object_mu_DL_00B0A0" Offset="0xB0A0" />
         <DList Name="object_mu_DL_00B0E0" Offset="0xB0E0" />
-        <Limb Name="object_mu_Standardlimb_00B170" Type="Standard" Offset="0xB170" />
-        <Limb Name="object_mu_Standardlimb_00B17C" Type="Standard" Offset="0xB17C" />
-        <Limb Name="object_mu_Standardlimb_00B188" Type="Standard" Offset="0xB188" />
-        <Limb Name="object_mu_Standardlimb_00B194" Type="Standard" Offset="0xB194" />
-        <Limb Name="object_mu_Standardlimb_00B1A0" Type="Standard" Offset="0xB1A0" />
-        <Limb Name="object_mu_Standardlimb_00B1AC" Type="Standard" Offset="0xB1AC" />
-        <Limb Name="object_mu_Standardlimb_00B1B8" Type="Standard" Offset="0xB1B8" />
-        <Limb Name="object_mu_Standardlimb_00B1C4" Type="Standard" Offset="0xB1C4" />
-        <Limb Name="object_mu_Standardlimb_00B1D0" Type="Standard" Offset="0xB1D0" />
-        <Limb Name="object_mu_Standardlimb_00B1DC" Type="Standard" Offset="0xB1DC" />
-        <Limb Name="object_mu_Standardlimb_00B1E8" Type="Standard" Offset="0xB1E8" />
-        <Limb Name="object_mu_Standardlimb_00B1F4" Type="Standard" Offset="0xB1F4" />
-        <Limb Name="object_mu_Standardlimb_00B200" Type="Standard" Offset="0xB200" />
-        <Limb Name="object_mu_Standardlimb_00B20C" Type="Standard" Offset="0xB20C" />
-        <Limb Name="object_mu_Standardlimb_00B218" Type="Standard" Offset="0xB218" />
-        <Limb Name="object_mu_Standardlimb_00B224" Type="Standard" Offset="0xB224" />
-        <Limb Name="object_mu_Standardlimb_00B230" Type="Standard" Offset="0xB230" />
-        <Limb Name="object_mu_Standardlimb_00B23C" Type="Standard" Offset="0xB23C" />
-        <Limb Name="object_mu_Standardlimb_00B248" Type="Standard" Offset="0xB248" />
-        <Limb Name="object_mu_Standardlimb_00B254" Type="Standard" Offset="0xB254" />
-        <Skeleton Name="object_mu_Skel_00B2B0" Type="Flex" LimbType="Standard" Offset="0xB2B0" />
+        <Limb Name="object_mu_Standardlimb_00B170" Type="Standard" EnumName="OBJECT_MU_LIMB_01" Offset="0xB170" />
+        <Limb Name="object_mu_Standardlimb_00B17C" Type="Standard" EnumName="OBJECT_MU_LIMB_02" Offset="0xB17C" />
+        <Limb Name="object_mu_Standardlimb_00B188" Type="Standard" EnumName="OBJECT_MU_LIMB_03" Offset="0xB188" />
+        <Limb Name="object_mu_Standardlimb_00B194" Type="Standard" EnumName="OBJECT_MU_LIMB_04" Offset="0xB194" />
+        <Limb Name="object_mu_Standardlimb_00B1A0" Type="Standard" EnumName="OBJECT_MU_LIMB_05" Offset="0xB1A0" />
+        <Limb Name="object_mu_Standardlimb_00B1AC" Type="Standard" EnumName="OBJECT_MU_LIMB_06" Offset="0xB1AC" />
+        <Limb Name="object_mu_Standardlimb_00B1B8" Type="Standard" EnumName="OBJECT_MU_LIMB_07" Offset="0xB1B8" />
+        <Limb Name="object_mu_Standardlimb_00B1C4" Type="Standard" EnumName="OBJECT_MU_LIMB_08" Offset="0xB1C4" />
+        <Limb Name="object_mu_Standardlimb_00B1D0" Type="Standard" EnumName="OBJECT_MU_LIMB_09" Offset="0xB1D0" />
+        <Limb Name="object_mu_Standardlimb_00B1DC" Type="Standard" EnumName="OBJECT_MU_LIMB_0A" Offset="0xB1DC" />
+        <Limb Name="object_mu_Standardlimb_00B1E8" Type="Standard" EnumName="OBJECT_MU_LIMB_0B" Offset="0xB1E8" />
+        <Limb Name="object_mu_Standardlimb_00B1F4" Type="Standard" EnumName="OBJECT_MU_LIMB_0C" Offset="0xB1F4" />
+        <Limb Name="object_mu_Standardlimb_00B200" Type="Standard" EnumName="OBJECT_MU_LIMB_0D" Offset="0xB200" />
+        <Limb Name="object_mu_Standardlimb_00B20C" Type="Standard" EnumName="OBJECT_MU_LIMB_0E" Offset="0xB20C" />
+        <Limb Name="object_mu_Standardlimb_00B218" Type="Standard" EnumName="OBJECT_MU_LIMB_0F" Offset="0xB218" />
+        <Limb Name="object_mu_Standardlimb_00B224" Type="Standard" EnumName="OBJECT_MU_LIMB_10" Offset="0xB224" />
+        <Limb Name="object_mu_Standardlimb_00B230" Type="Standard" EnumName="OBJECT_MU_LIMB_11" Offset="0xB230" />
+        <Limb Name="object_mu_Standardlimb_00B23C" Type="Standard" EnumName="OBJECT_MU_LIMB_12" Offset="0xB23C" />
+        <Limb Name="object_mu_Standardlimb_00B248" Type="Standard" EnumName="OBJECT_MU_LIMB_13" Offset="0xB248" />
+        <Limb Name="object_mu_Standardlimb_00B254" Type="Standard" EnumName="OBJECT_MU_LIMB_14" Offset="0xB254" />
+        <Skeleton Name="object_mu_Skel_00B2B0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MU_LIMB_NONE" LimbMax="OBJECT_MU_LIMB_MAX" EnumName="object_mu_Limbs" Offset="0xB2B0" />
         <Animation Name="object_mu_Anim_00BAC4" Offset="0xBAC4" />
     </File>
 </Root>
