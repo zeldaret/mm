@@ -720,8 +720,8 @@ s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
 void Inventory_SaveLotteryCodeGuess(GlobalContext* globalCtx) {
     u16 lotteryCodeGuess;
 
-    lotteryCodeGuess = ((globalCtx->msgCtx.unk12054 & 0xF) << 8);  // First Digit
-    lotteryCodeGuess |= ((globalCtx->msgCtx.unk12056 & 0xF) << 4); // Second Digit
-    lotteryCodeGuess |= (globalCtx->msgCtx.unk12058 & 0xF);        // Third Digit
+    lotteryCodeGuess = ((globalCtx->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
+    lotteryCodeGuess |= ((globalCtx->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
+    lotteryCodeGuess |= (globalCtx->msgCtx.unk12054[2] & 0xF);        // Third Digit
     gSaveContext.lotteryCodeGuess = (gSaveContext.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
 }
