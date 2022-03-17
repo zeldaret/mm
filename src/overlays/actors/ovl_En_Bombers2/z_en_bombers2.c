@@ -76,13 +76,13 @@ static Gfx sSetPrimColorDL[] = {
 
 static Gfx* sSetPrimColorDlPtr = sSetPrimColorDL;
 
-static void* sEyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     object_cs_Tex_00C520,
     object_cs_Tex_00CD20,
     object_cs_Tex_00D520,
 };
 
-void* D_80C05920 = object_cs_Blob_00E220;
+static TexturePtr D_80C05920 = object_cs_Tex_00E220;
 
 void EnBombers2_Init(Actor* thisx, GlobalContext* globalCtx) {
     f32 cos;
@@ -143,13 +143,13 @@ void func_80C04BA0(EnBombers2* this, GlobalContext* globalCtx) {
     player = GET_PLAYER(globalCtx);
 
     switch (player->transformation) {
-        case 1:
-        case 2:
+        case PLAYER_FORM_GORON:
+        case PLAYER_FORM_ZORA:
             this->textIdIndex = 1;
             this->unk_2CE = 5;
             break;
-        case 3:
-        case 4:
+        case PLAYER_FORM_DEKU:
+        case PLAYER_FORM_HUMAN:
             this->textIdIndex = 2;
             this->unk_2CE = 5;
             break;
@@ -163,7 +163,7 @@ void func_80C04BA0(EnBombers2* this, GlobalContext* globalCtx) {
         this->actor.textId = Text_GetFaceReaction(globalCtx, 0x15);
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2B6 = this->actor.world.rot.y;
         gSaveContext.weekEventReg[0x56] |= 2;
         func_80C04D00(this);
@@ -203,11 +203,11 @@ void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx) {
         this->unk_2A8 &= 1;
     }
     switch (player->transformation) {
-        case 4:
+        case PLAYER_FORM_HUMAN:
             this->unk_28E = -0xFA0;
             break;
-        case 1:
-        case 2:
+        case PLAYER_FORM_GORON:
+        case PLAYER_FORM_ZORA:
             this->unk_28E = -0x1770;
             break;
         default:
@@ -219,13 +219,13 @@ void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx) {
             s32 correctDigits;
 
             for (i = 0; i < ARRAY_COUNT(this->correctDigitSlots); i++) {
-                if ((this->correctDigitSlots[i] == 0) &&
+                if (!(this->correctDigitSlots[i]) &&
                     (globalCtx->msgCtx.unk12054[i] == gSaveContext.bomberCode[i])) {
-                    this->correctDigitSlots[i] = 1;
+                    this->correctDigitSlots[i] = true;
                 }
             }
             for (i = 0, correctDigits = 0; i < ARRAY_COUNT(this->correctDigitSlots); i++) {
-                if (this->correctDigitSlots[i] != 0) {
+                if (this->correctDigitSlots[i]) {
                     correctDigits++;
                 }
             }
@@ -262,8 +262,8 @@ void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx) {
                     this->unk_2CE = 0xF;
                     break;
                 case 3:
-                    for (j = 0; j < 5; j++) {
-                        this->correctDigitSlots[j] = 0;
+                    for (j = 0; j < ARRAY_COUNT(this->correctDigitSlots); j++) {
+                        this->correctDigitSlots[j] = false;
                     }
                     this->textIdIndex = 4;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
@@ -408,14 +408,14 @@ void EnBombers2_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_80C056D4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBombers2* this = THIS;
 
-    if (limbIndex == 8) {
+    if (limbIndex == OBJECT_CS_LIMB_08) {
         rot->x += this->unk_296;
     }
-    if (limbIndex == 17) {
+    if (limbIndex == OBJECT_CS_LIMB_11) {
         rot->x += this->unk_28A;
         rot->z += this->unk_288;
     }
-    if ((limbIndex == 15) || (limbIndex == 19) || (limbIndex == 20)) {
+    if ((limbIndex == OBJECT_CS_LIMB_0F) || (limbIndex == OBJECT_CS_LIMB_13) || (limbIndex == OBJECT_CS_LIMB_14)) {
         *dList = NULL;
     }
     return 0;
