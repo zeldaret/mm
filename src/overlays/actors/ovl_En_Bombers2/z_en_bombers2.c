@@ -219,8 +219,7 @@ void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx) {
             s32 correctDigits;
 
             for (i = 0; i < ARRAY_COUNT(this->correctDigitSlots); i++) {
-                if (!(this->correctDigitSlots[i]) &&
-                    (globalCtx->msgCtx.unk12054[i] == gSaveContext.bomberCode[i])) {
+                if (!(this->correctDigitSlots[i]) && (globalCtx->msgCtx.unk12054[i] == gSaveContext.bomberCode[i])) {
                     this->correctDigitSlots[i] = true;
                 }
             }
