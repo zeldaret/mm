@@ -290,7 +290,7 @@ build/asm/%.o: asm/%.s
 
 build/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-#	$(OBJCOPY) -O binary $@ $@.bin
+	$(OBJCOPY) -O binary $@ $@.bin
 	$(RM_MDEBUG)
 
 build/baserom/%.o: baserom/%
@@ -302,7 +302,7 @@ build/data/%.o: data/%.s
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-#	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 # TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
@@ -312,21 +312,21 @@ build/src/overlays/%.o: src/overlays/%.c
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-#	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-#	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-#	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 # Build C files from assets
