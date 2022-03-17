@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "objects/object_cs/object_cs.h"
+
 struct EnBombers2;
 
 typedef void (*EnBombers2ActionFunc)(struct EnBombers2*, GlobalContext*);
@@ -10,8 +12,8 @@ typedef void (*EnBombers2ActionFunc)(struct EnBombers2*, GlobalContext*);
 typedef struct EnBombers2 {
     /* 0x0000 */ Actor actor;
     /* 0x014C */ SkelAnime skelAnime;
-    /* 0x0188 */ Vec3s morphTable[21];
-    /* 0x0206 */ Vec3s jointTable[21];
+    /* 0x0188 */ Vec3s morphTable[OBJECT_CS_LIMB_MAX];
+    /* 0x0206 */ Vec3s jointTable[OBJECT_CS_LIMB_MAX];
     /* 0x0284 */ EnBombers2ActionFunc actionFunc;
     /* 0x0288 */ s16 unk_288;
     /* 0x028A */ s16 unk_28A;
@@ -30,11 +32,11 @@ typedef struct EnBombers2 {
     /* 0x02B4 */ s16 unk_2B4;
     /* 0x02B6 */ s16 unk_2B6;
     /* 0x02B8 */ f32 lastAnimFrame;
-    /* 0x02BC */ s16 unk_2BC;
+    /* 0x02BC */ s16 eyeIndex;
     /* 0x02BE */ s16 unk_2BE;
     /* 0x02C0 */ s16 unk_2C0;
-    /* 0x02C2 */ s16 unk_2C2;
-    /* 0x02C4 */ s16 unk_2C4[5];
+    /* 0x02C2 */ s16 textIdIndex;
+    /* 0x02C4 */ s16 correctDigitSlots[5];
     /* 0x02CE */ s16 unk_2CE;  
     /* 0x02D0 */ ColliderCylinder collider;
 } EnBombers2; // size = 0x31C

@@ -20,7 +20,7 @@
         <Animation Name="object_cs_Anim_0057C8" Offset="0x57C8" />
         <Animation Name="object_cs_Anim_005DC4" Offset="0x5DC4" />
         <Animation Name="object_cs_Anim_0060E8" Offset="0x60E8" />
-        <Animation Name="object_cs_Anim_0064B8" Offset="0x64B8" />
+        <Animation Name="gBomberIdleAnim" Offset="0x64B8" />
         <DList Name="object_cs_DL_009130" Offset="0x9130" />
         <DList Name="object_cs_DL_009478" Offset="0x9478" />
         <DList Name="object_cs_DL_009578" Offset="0x9578" />
