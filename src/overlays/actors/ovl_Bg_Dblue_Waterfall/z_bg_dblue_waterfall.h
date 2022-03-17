@@ -20,10 +20,10 @@ typedef struct BgDblueWaterfall {
     /* 0x019E */ u8 unk_19E;
     /* 0x019F */ u8 unk_19F;
     /* 0x01A0 */ u8 unk_1A0;
-    /* 0x01A1 */ char unk1A1[2];
+    /* 0x01A1 */ UNK_TYPE1 unk1A1[2];
     /* 0x01A3 */ s8 unk_1A3;
     /* 0x01A4 */ s16 unk_1A4;
-    /* 0x01A6 */ char unk1A6[1];
+    /* 0x01A6 */ UNK_TYPE1 unk1A6[1];
     /* 0x01A7 */ s8 unk_1A7;
     /* 0x01A8 */ f32 unk_1A8;
 } BgDblueWaterfall; // size = 0x1AC
