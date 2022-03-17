@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static AnimationHeader* sAnimations[] = {
-    &gBomberIdleAnim, &object_cs_Anim_0053F4, &object_cs_Anim_01007C, &object_cs_Anim_00349C,
+    &gBomberIdleAnim,       &object_cs_Anim_0053F4, &object_cs_Anim_01007C, &object_cs_Anim_00349C,
     &object_cs_Anim_0060E8, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0,
 };
 
