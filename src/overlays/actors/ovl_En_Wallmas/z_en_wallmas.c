@@ -384,9 +384,20 @@ void func_808758C8(EnWallmas* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875910.s")
+void func_80875910(EnWallmas* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087596C.s")
+    if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < this->unk_2C4) {
+        func_80874B88(this, globalCtx);
+    }
+}
+
+void func_8087596C(EnWallmas* this, GlobalContext* globalCtx) {
+    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+        func_80874B88(this, globalCtx);
+        this->timer = 81;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808759B8.s")
 
