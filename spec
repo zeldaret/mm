@@ -4010,8 +4010,11 @@ beginseg
     name "ovl_En_Maruta"
     compress
     include "build/src/overlays/actors/ovl_En_Maruta/z_en_maruta.o"
-    include "build/data/ovl_En_Maruta/ovl_En_Maruta.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Maruta/ovl_En_Maruta_reloc.o"
+#else
     include "build/data/ovl_En_Maruta/ovl_En_Maruta.reloc.o"
+#endif
 endseg
 
 beginseg
