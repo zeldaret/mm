@@ -30,6 +30,16 @@ pipeline {
                 sh 'bash -c "./tools/warnings_count/compare_warnings.sh setup"'
             }
         }
+        stage('Assets') {
+            steps {
+                sh 'bash -c "make -j assets 2> >(tee tools/warnings_count/warnings_assets_new.txt)"'
+            }
+        }
+        stage('Check assets warnings') {
+            steps {
+                sh 'bash -c "./tools/warnings_count/compare_warnings.sh assets"'
+            }
+        }
         stage('Disasm') {
             steps {
                 sh 'bash -c "make -j disasm 2> >(tee tools/warnings_count/warnings_disasm_new.txt)"'
