@@ -183,8 +183,10 @@ void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+void func_80874A88(EnWallmas* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874A88.s")
 
+void func_80874B04(EnWallmas* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874B04.s")
 
 void func_80874B88(EnWallmas* this, GlobalContext* globalCtx) {
@@ -358,6 +360,7 @@ void func_808752CC(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
+void func_808753F0(EnWallmas* this, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808753F0.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875484.s")
@@ -448,12 +451,69 @@ void func_8087596C(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
+void func_808759B8(EnWallmas* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808759B8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875A0C.s")
 
-void func_80875A74(EnWallmas* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875A74.s")
+void func_80875A74(EnWallmas* this, GlobalContext* globalCtx) {
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        Actor_SetDropFlag(&this->actor, &this->collider.info);
+
+        if ((this->unk_18C != 0xA) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            if (Actor_ApplyDamage(&this->actor) == 0) {
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
+                this->actor.flags &= ~ACTOR_FLAG_1;
+            } else if (this->actor.colChkInfo.damage != 0) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_DAMAGE);
+            }
+
+            func_80874B04(this, globalCtx);
+
+            if (this->actor.colChkInfo.damageEffect != 0xF) {
+                if (this->actor.colChkInfo.damageEffect == 3) {
+                    func_80874A88(this);
+                    if (this->actor.colChkInfo.health == 0) {
+                        this->timer = 3;
+                        this->collider.base.acFlags &= ~AC_ON;
+                    }
+
+                    func_808759B8(this);
+                } else if (this->actor.colChkInfo.damageEffect == 1) {
+                    this->timer = 40;
+                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    func_808759B8(this);
+                } else if (this->actor.colChkInfo.damageEffect == 5) {
+                    this->timer = 40;
+                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    this->unk_2CC = 0.55f;
+                    this->unk_2C8 = 2.0f;
+                    this->unk_18C = 0x1F;
+                    func_808759B8(this);
+                } else {
+                    if (this->actor.colChkInfo.damageEffect == 2) {
+                        this->unk_2C8 = 4.0f;
+                        this->unk_2CC = 0.55f;
+                        this->unk_18C = 0;
+                    } else if (this->actor.colChkInfo.damageEffect == 4) {
+                        this->unk_2C8 = 4.0f;
+                        this->unk_2CC = 0.55f;
+                        this->unk_18C = 0x14;
+                        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
+                                    this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
+                                    this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    }
+
+                    func_808753F0(this, 1);
+                }
+            }
+        }
+    }
+}
 
 void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
