@@ -20,7 +20,8 @@ typedef struct EnWallmas {
     /* 0x190 */ s16 switchFlag;
     /* 0x192 */ Vec3s jointTable[25];
     /* 0x228 */ Vec3s morphTable[25];
-    /* 0x2BE */ char unk_2BE[0x6];
+    /* 0x2BE */ char unk_2BE[0x2];
+    /* 0x2C0 */ f32 unk_2C0;
     /* 0x2C4 */ f32 unk_2C4;
     /* 0x2C8 */ char pad_2C8[0x90];
     /* 0x358 */ ColliderCylinder collider;

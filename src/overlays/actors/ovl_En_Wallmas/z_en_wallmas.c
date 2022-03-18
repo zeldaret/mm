@@ -111,7 +111,7 @@ extern InitChainEntry D_808763B4[];
 extern UNK_TYPE D_06000590;
 extern UNK_TYPE D_06000EA4;
 extern UNK_TYPE D_060019CC;
-extern UNK_TYPE D_0600299C;
+extern AnimationHeader D_0600299C;
 extern UNK_TYPE D_060041F4;
 extern UNK_TYPE D_06008688;
 extern UNK_TYPE D_06009244;
@@ -223,7 +223,20 @@ void func_80874BE4(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874D1C.s")
+void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    Animation_Change(&this->skelAnime, &D_0600299C, 0.0f, 20.0f, Animation_GetLastFrame(&D_0600299C), ANIMMODE_ONCE,
+                     0.0f);
+    this->unk_2C0 = player->actor.world.pos.y;
+    this->actor.world.pos.y = player->actor.world.pos.y + 300.0f;
+    this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actor.floorHeight = player->actor.floorHeight;
+    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_20;
+    this->actionFunc = func_80874DE8;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874DE8.s")
 
