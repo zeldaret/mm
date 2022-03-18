@@ -373,7 +373,16 @@ void func_808752CC(EnWallmas* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087571C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808758C8.s")
+void func_808758C8(EnWallmas* this) {
+    this->timer = 0;
+    this->actor.draw = NULL;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    if (EN_WALLMAS_GET_TYPE(&this->actor) == 1) {
+        this->actionFunc = func_80875910;
+    } else {
+        this->actionFunc = func_8087596C;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875910.s")
 
