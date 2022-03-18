@@ -225,12 +225,12 @@ endif
 
 .PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
 .DEFAULT_GOAL := uncompressed
-all: compressed
+all: compressed uncompressed
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
 
-$(ROMC): uncompressed
+$(ROMC): $(ROM)
 	python3 tools/z64compress_wrapper.py $(COMPFLAGS) $(ROM) $@ $(ELF) build/$(SPEC)
 
 $(ELF): $(TEXTURE_FILES_OUT) $(ASSET_FILES_OUT) $(O_FILES) build/ldscript.txt build/undefined_syms.txt

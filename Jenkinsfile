@@ -42,12 +42,22 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'bash -c "make -j all 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
+                sh 'bash -c "make -j uncompressed 2> >(tee tools/warnings_count/warnings_build_new.txt)"'
             }
         }
         stage('Check build warnings') {
             steps {
                 sh 'bash -c "./tools/warnings_count/compare_warnings.sh build"'
+            }
+        }
+        stage('Compress') {
+            steps {
+                sh 'bash -c "make -j compressed 2> >(tee tools/warnings_count/warnings_compress_new.txt)"'
+            }
+        }
+        stage('Check build warnings') {
+            steps {
+                sh 'bash -c "./tools/warnings_count/compare_warnings.sh compress"'
             }
         }
         stage('Report Progress') {

@@ -862,13 +862,12 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
-            u32 trueTmp = true;
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
-                    this->isSelling = trueTmp;
+                    this->isSelling = true;
                     this->stickLeftPrompt.isEnabled = false;
-                    this->stickRightPrompt.isEnabled = trueTmp;
+                    this->stickRightPrompt.isEnabled = true;
                     this->actor.textId = 0x29D6;
                     Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_FaceShopkeeperSelling;
