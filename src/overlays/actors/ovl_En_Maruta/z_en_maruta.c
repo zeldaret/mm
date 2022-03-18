@@ -558,17 +558,14 @@ void func_80B37EC0(EnMaruta* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 f32 func_80B38028(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2) {
-    f32 x = arg0->z * (arg2->x - arg1->x);
-    f32 z = arg0->x * (arg2->z - arg1->z);
+    f32 x0 = arg0->x;
+    f32 z0 = arg0->z;
+    f32 dx = arg2->x - arg1->x;
+    f32 dz = arg2->z - arg1->z;
 
-    return x - z;
+    return z0 * dx - x0 * dz;
 }
-#else
-f32 func_80B38028(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B38028.s")
-#endif
 
 void func_80B38060(EnMaruta* this, Vec3f* arg1) {
     Vec3f sp44;
