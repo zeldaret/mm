@@ -34,6 +34,8 @@ void func_80875248(EnWallmas* this);
 void func_808758C8(EnWallmas* this);
 void func_80874B88(EnWallmas* this, GlobalContext* globalCtx);
 void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874F14(EnWallmas* this, GlobalContext* globalCtx);
+void func_808756AC(EnWallmas* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Wallmas_InitVars = {
@@ -228,6 +230,7 @@ void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx) {
 
     Animation_Change(&this->skelAnime, &D_0600299C, 0.0f, 20.0f, Animation_GetLastFrame(&D_0600299C), ANIMMODE_ONCE,
                      0.0f);
+
     this->unk_2C0 = player->actor.world.pos.y;
     this->actor.world.pos.y = player->actor.world.pos.y + 300.0f;
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
@@ -238,7 +241,21 @@ void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80874DE8;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874DE8.s")
+void func_80874DE8(EnWallmas* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((player->stateFlags2 & 0x80) || (player->actor.freezeTimer > 0)) {
+        func_80875248(this);
+    } else if (!func_801690CC(globalCtx) && !(player->stateFlags2 & 0x10) && (player->invincibilityTimer >= 0) &&
+               (this->actor.xzDistToPlayer < 30.0f) && (this->actor.playerHeightRel < -5.0f) &&
+               (-(f32)(player->cylinder.dim.height + 10) < this->actor.playerHeightRel)) {
+        func_808756AC(this, globalCtx);
+    } else if (this->actor.world.pos.y <= this->unk_2C0) {
+        this->actor.world.pos.y = this->unk_2C0;
+        this->actor.velocity.y = 0.0f;
+        func_80874F14(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874F14.s")
 
