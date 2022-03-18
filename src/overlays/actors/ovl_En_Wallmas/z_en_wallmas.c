@@ -38,6 +38,7 @@ void func_80874F14(EnWallmas* this, GlobalContext* globalCtx);
 void func_808756AC(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875014(EnWallmas* this);
 void func_808750B8(EnWallmas* this);
+void func_808751C4(EnWallmas* this);
 
 #if 0
 const ActorInit En_Wallmas_InitVars = {
@@ -118,7 +119,7 @@ extern AnimationHeader D_060019CC;
 extern AnimationHeader D_0600299C;
 extern AnimationHeader D_060041F4;
 extern UNK_TYPE D_06008688;
-extern UNK_TYPE D_06009244;
+extern AnimationHeader D_06009244;
 extern UNK_TYPE D_06009520;
 extern AnimationHeader D_06009DB0;
 extern AnimationHeader D_0600A054;
@@ -294,13 +295,38 @@ void func_808750B8(EnWallmas* this) {
     this->actionFunc = func_80875108;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875108.s")
+void func_80875108(EnWallmas* this, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        func_808751C4(this);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808751C4.s")
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + 0x8000, 0xB6);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 12.0f) ||
+        Animation_OnFrame(&this->skelAnime, 24.0f) || Animation_OnFrame(&this->skelAnime, 36.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_WALK);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087520C.s")
+void func_808751C4(EnWallmas* this) {
+    Animation_PlayOnce(&this->skelAnime, &D_06009244);
+    this->actor.speedXZ = 0.0f;
+    this->actionFunc = func_8087520C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875248.s")
+void func_8087520C(EnWallmas* this, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        func_80875248(this);
+    }
+}
+
+void func_80875248(EnWallmas* this) {
+    this->timer = 0;
+    this->actor.speedXZ = 0.0f;
+    Animation_Change(&this->skelAnime, &D_060019CC, 3.0f, 0.0f, Animation_GetLastFrame(&D_060019CC), ANIMMODE_ONCE,
+                     -3.0f);
+    this->actionFunc = func_808752CC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808752CC.s")
 
