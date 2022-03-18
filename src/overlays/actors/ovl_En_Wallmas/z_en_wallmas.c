@@ -115,13 +115,14 @@ extern DamageTable D_8087638C;
 extern CollisionCheckInfoInit D_808763AC;
 extern InitChainEntry D_808763B4[];
 extern f32 D_808763C0[];
+extern s8 D_808763D4[];
 
 extern AnimationHeader D_06000590;
 extern AnimationHeader D_06000EA4;
 extern AnimationHeader D_060019CC;
 extern AnimationHeader D_0600299C;
 extern AnimationHeader D_060041F4;
-extern UNK_TYPE D_06008688;
+extern Gfx D_06008688[];
 extern AnimationHeader D_06009244;
 extern AnimationHeader D_06009520;
 extern AnimationHeader D_06009DB0;
@@ -644,11 +645,52 @@ void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
 void func_80875F04(EnWallmas*, GlobalContext*);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875F04.s")
 
-s32 func_808760A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808760A4.s")
+s32 func_808760A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnWallmas* this = THIS;
 
-void func_80876118(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80876118.s")
+    if (limbIndex == 1) {
+        if (this->actionFunc != func_8087571C) {
+            pos->z -= 1600.0f;
+        } else {
+            pos->z -= (1600.0f * (this->skelAnime.endFrame - this->skelAnime.curFrame)) / this->skelAnime.endFrame;
+        }
+    }
+
+    return false;
+}
+
+void func_80876118(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnWallmas* this = THIS;
+    Gfx* gfx;
+
+    if (D_808763D4[limbIndex] != -1) {
+        Matrix_GetStateTranslation(&this->limbPos[D_808763D4[limbIndex]]);
+    }
+
+    if (limbIndex == 19) {
+        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[9]);
+        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
+    } else if (limbIndex == 2) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gfx = POLY_OPA_DISP;
+
+        Matrix_StatePush();
+        Matrix_InsertTranslation(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
+        Matrix_RotateY(0x2AAA, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(0xAAA, MTXMODE_APPLY);
+        Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
+
+        gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&gfx[1], D_06008688);
+
+        POLY_OPA_DISP = &gfx[2];
+
+        Matrix_StatePop();
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnWallmas* this = THIS;
