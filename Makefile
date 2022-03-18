@@ -223,7 +223,7 @@ ifeq ($(COMPARE),1)
 	@md5sum -c checksum.md5
 endif
 
-.PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
+.PHONY: all uncompressed compressed clean assetclean distclean assets disasm init setup
 .DEFAULT_GOAL := uncompressed
 all: uncompressed compressed
 
@@ -257,6 +257,8 @@ setup:
 	$(MAKE) -C tools
 	python3 tools/fixbaserom.py
 	python3 tools/extract_baserom.py
+
+assets:
 	python3 extract_assets.py -j $(N_THREADS)
 
 ## Assembly generation
@@ -272,6 +274,7 @@ diff-init: uncompressed
 init:
 	$(MAKE) distclean
 	$(MAKE) setup
+	$(MAKE) assets
 	$(MAKE) disasm
 	$(MAKE) all
 	$(MAKE) diff-init
