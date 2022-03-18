@@ -36,6 +36,8 @@ void func_80874B88(EnWallmas* this, GlobalContext* globalCtx);
 void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx);
 void func_80874F14(EnWallmas* this, GlobalContext* globalCtx);
 void func_808756AC(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875014(EnWallmas* this);
+void func_808750B8(EnWallmas* this);
 
 #if 0
 const ActorInit En_Wallmas_InitVars = {
@@ -114,12 +116,12 @@ extern UNK_TYPE D_06000590;
 extern UNK_TYPE D_06000EA4;
 extern AnimationHeader D_060019CC;
 extern AnimationHeader D_0600299C;
-extern UNK_TYPE D_060041F4;
+extern AnimationHeader D_060041F4;
 extern UNK_TYPE D_06008688;
 extern UNK_TYPE D_06009244;
 extern UNK_TYPE D_06009520;
 extern AnimationHeader D_06009DB0;
-extern UNK_TYPE D_0600A054;
+extern AnimationHeader D_0600A054;
 extern FlexSkeletonHeader D_06008FB0;
 
 void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -266,13 +268,31 @@ void func_80874F14(EnWallmas* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80874FD8;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874FD8.s")
+void func_80874FD8(EnWallmas* this, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        func_80875014(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875014.s")
+void func_80875014(EnWallmas* this) {
+    Animation_PlayOnce(&this->skelAnime, &D_0600A054);
+    this->actionFunc = func_80875054;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875054.s")
+void func_80875054(EnWallmas* this, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        func_808750B8(this);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808750B8.s")
+    Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + 0x8000, 0xB6);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+}
+
+void func_808750B8(EnWallmas* this) {
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_060041F4, 3.0f);
+    this->actor.speedXZ = 3.0f;
+    this->actionFunc = func_80875108;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875108.s")
 
