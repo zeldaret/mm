@@ -872,7 +872,6 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
                     this->actor.textId = 0x29D6;
                     Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_FaceShopkeeperSelling;
-                    break;
                 case 1:
                     func_8019F208();
                     this->isSelling = false;
