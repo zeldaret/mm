@@ -4246,11 +4246,11 @@ Gfx D_801AEFA0[] = {
     gsSPEndDisplayList(),
 };
 
-void* func_800BD9A0(GraphicsContext* gfxCtx) {
+Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
     Gfx* displayListHead;
     Gfx* displayList;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, 0x10);
+    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx)*2);
 
     gDPSetRenderMode(displayListHead++,
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |

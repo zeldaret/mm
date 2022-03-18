@@ -228,6 +228,7 @@ const ActorInit Boss_03_InitVars = {
     (ActorFunc)Boss03_Draw,
 };
 
+// The limbs referenced here are not used. The position of those spheres is done manually on Boss03_PostLimbDraw
 static ColliderJntSphElementInit sJntSphElementsInit1[] = {
     {
         {
@@ -266,6 +267,7 @@ static ColliderJntSphInit sJntSphInit1 = {
     sJntSphElementsInit1,
 };
 
+// The limbs referenced here are not used. The position of those spheres is done manually on Boss03_PostLimbDraw
 static ColliderJntSphElementInit sJntSphElementsInit2[] = {
     {
         {
@@ -351,8 +353,8 @@ Vec3f D_809E8FF4[] = {
     { 0.0f, 0.0f, 0.0f },
 };
 
-Color_RGBA8 D_809E90FC = { 60, 50, 20, 255 };
-Color_RGBA8 D_809E9100 = { 40, 30, 30, 255 };
+Color_RGBA8 sGyorgDustPrimColor = { 60, 50, 20, 255 };
+Color_RGBA8 sGyorgDustEnvColor = { 40, 30, 30, 255 };
 
 /**
  * Used when chasing Player and Gyorg is near the underwater floor
@@ -377,7 +379,7 @@ void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
             pos.z = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.z;
             pos.x = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.x;
 
-            func_800B0EB0(globalCtx, &pos, &velocity, &accel, &D_809E90FC, &D_809E9100, Rand_ZeroFloat(200.0f) + 400.0f,
+            func_800B0EB0(globalCtx, &pos, &velocity, &accel, &sGyorgDustPrimColor, &sGyorgDustEnvColor, Rand_ZeroFloat(200.0f) + 400.0f,
                           10, Rand_ZeroFloat(10.0f) + 25.0f);
         }
     }
@@ -1640,8 +1642,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                     player->actor.shape.rot.y = player->actor.world.rot.y = this->actor.world.rot.y + 0x8000;
 
                     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                             0);
-                    Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, 1);
+                                             MTXMODE_NEW);
+                    Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
                     Matrix_GetStateTranslationAndScaledZ(340.0f, &this->csCamEye);
 
                     this->csCamAt.x = this->actor.world.pos.x;
@@ -1893,7 +1895,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03* this = (Boss03*)thisx;
     Actor* temp_v0_4;
     Player* player; // sp88
-    s32 phi_s0;     // i
+    s32 i;     // phi_s0
     Vec3f sp78;
     Vec3f sp6C;
     Vec3f sp60;
@@ -1917,9 +1919,9 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         Math_Vec3f_Copy(&D_809E9848, &this->actor.projectedPos);
 
-        for (phi_s0 = 0; phi_s0 != 3; phi_s0++) {
-            if (this->workTimer[phi_s0] != 0) {
-                this->workTimer[phi_s0]--;
+        for (i = 0; i < ARRAY_COUNT(this->workTimer); i++) {
+            if (this->workTimer[i] != 0) {
+                this->workTimer[i]--;
             }
         }
 
@@ -1948,6 +1950,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if ((this->actionFunc != Boss03_DeathCutscene) && (!this->unk_2D5)) {
+        // Going inside or outside the water
         if (((this->actor.world.pos.y < this->waterHeight + 50.0f) &&
              (this->waterHeight + 50.0f <= this->actor.prevPos.y)) ||
             ((this->waterHeight - 50.0f < this->actor.world.pos.y) &&
@@ -2016,10 +2019,11 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Math_ApproachS(&this->jawZRot, 0, 0xA, 0x200);
 
     if ((this->unk_240 % 2) == 0) {
-        for (phi_s0 = 0; phi_s0 < this->bubbleEffectSpawnNum; phi_s0++) {
+        for (i = 0; i < this->bubbleEffectSpawnNum; i++) {
             sp6C.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
             sp6C.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
             sp6C.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
+
             Boss03_SpawnEffectBubble(globalCtx, &sp6C);
         }
     }
@@ -2070,8 +2074,8 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if ((this->unk_280 == 1) || (this->unk_280 == 5) || (this->unk_280 == 9)) {
         sp58 = 0.0f;
 
-        for (sp5E = 0, phi_s0 = 0; (phi_s0 < 20); sp5E++) {
-            Matrix_InsertYRotation_f(sp58, 0);
+        for (sp5E = 0, i = 0; i < 20; sp5E++) {
+            Matrix_InsertYRotation_f(sp58, MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &sp60);
             sp60.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
             sp60.y = PLATFORM_HEIGHT;
@@ -2079,10 +2083,10 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
             if (sqrtf(SQ(sp60.x) + SQ(sp60.z)) < 355.0f) {
                 Boss03_SpawnEffectDroplet(globalCtx, &sp60);
-                phi_s0++;
+                i++;
             }
 
-            sp58 += 0.12566371f;
+            sp58 += ((2.0f * M_PI) / 50.0f);
             if (sp5E >= 50) {
                 break;
             }
