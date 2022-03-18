@@ -183,11 +183,26 @@ void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80874A88(EnWallmas* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874A88.s")
+void func_80874A88(EnWallmas* this) {
+    this->unk_18C = 0xA;
+    this->unk_2CC = 0.55f;
+    this->unk_2D0 = 0.82500005f;
+    this->unk_2C8 = 1.0f;
+    this->collider.base.colType = 3;
+    this->timer = 80;
+    this->actor.flags &= ~ACTOR_FLAG_400;
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+}
 
-void func_80874B04(EnWallmas* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874B04.s")
+void func_80874B04(EnWallmas* this, GlobalContext* globalCtx) {
+    if (this->unk_18C == 0xA) {
+        this->unk_18C = 0;
+        this->collider.base.colType = 0;
+        this->unk_2C8 = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 11, 2, 0.3f, 0.2f);
+        this->actor.flags |= ACTOR_FLAG_400;
+    }
+}
 
 void func_80874B88(EnWallmas* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);

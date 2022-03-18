@@ -26,7 +26,7 @@ typedef struct EnWallmas {
     /* 0x2C8 */ f32 unk_2C8;
     /* 0x2CC */ f32 unk_2CC;
     /* 0x2D0 */ f32 unk_2D0;
-    /* 0x2C8 */ char pad_2C8[0x84];
+    /* 0x2D4 */ Vec3f limbPos[11];
     /* 0x358 */ ColliderCylinder collider;
 } EnWallmas; // size = 0x3A4
 
