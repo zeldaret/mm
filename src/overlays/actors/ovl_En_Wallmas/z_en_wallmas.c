@@ -112,6 +112,7 @@ extern ColliderCylinderInit D_80876360;
 extern DamageTable D_8087638C;
 extern CollisionCheckInfoInit D_808763AC;
 extern InitChainEntry D_808763B4[];
+extern f32 D_808763C0[];
 
 extern UNK_TYPE D_06000590;
 extern UNK_TYPE D_06000EA4;
@@ -120,7 +121,7 @@ extern AnimationHeader D_0600299C;
 extern AnimationHeader D_060041F4;
 extern UNK_TYPE D_06008688;
 extern AnimationHeader D_06009244;
-extern UNK_TYPE D_06009520;
+extern AnimationHeader D_06009520;
 extern AnimationHeader D_06009DB0;
 extern AnimationHeader D_0600A054;
 extern FlexSkeletonHeader D_06008FB0;
@@ -369,9 +370,57 @@ void func_808752CC(EnWallmas* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875638.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808756AC.s")
+void func_808756AC(EnWallmas* this, GlobalContext* globalCtx) {
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_06009520, -5.0f);
+    this->timer = -30;
+    this->actionFunc = func_8087571C;
+    this->actor.speedXZ = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->unk_2C0 = this->actor.playerHeightRel;
+    func_800B724C(globalCtx, &this->actor, 18);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087571C.s")
+void func_8087571C(EnWallmas* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
+        func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_CATCH);
+    }
+
+    if (SkelAnime_Update(&this->skelAnime)) {
+        player->actor.world.pos.x = this->actor.world.pos.x;
+        player->actor.world.pos.z = this->actor.world.pos.z;
+
+        if (this->timer < 0) {
+            this->actor.world.pos.y += 2.0f;
+        } else {
+            this->actor.world.pos.y += 10.0f;
+        }
+
+        player->actor.world.pos.y = this->actor.world.pos.y - D_808763C0[(void)0, gSaveContext.playerForm];
+        if (this->timer == -30) {
+            func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_TAKEN_AWAY);
+        }
+
+        if (this->timer == 0) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_UP);
+        }
+
+        this->timer += 2;
+    } else {
+        Math_StepToF(&this->actor.world.pos.y, D_808763C0[(void)0, gSaveContext.playerForm] + player->actor.world.pos.y,
+                     5.0f);
+    }
+
+    Math_StepToF(&this->actor.world.pos.x, player->actor.world.pos.x, 3.0f);
+    Math_StepToF(&this->actor.world.pos.z, player->actor.world.pos.z, 3.0f);
+
+    if (this->timer == 30) {
+        play_sound(NA_SE_OC_ABYSS);
+        func_80169FDC(&globalCtx->state);
+    }
+}
 
 void func_808758C8(EnWallmas* this) {
     this->timer = 0;
