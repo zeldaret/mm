@@ -452,9 +452,47 @@ void func_8087596C(EnWallmas* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875A0C.s")
 
+void func_80875A74(EnWallmas* this, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875A74.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Update.s")
+void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnWallmas* this = THIS;
+
+    func_80875A74(this, globalCtx);
+    this->actionFunc(this, globalCtx);
+    if ((this->actionFunc != func_80874BE4) && (this->actionFunc != func_80875910) &&
+        (this->actionFunc != func_8087571C) && (this->actionFunc != func_8087596C)) {
+        if ((this->actionFunc != func_808752CC) && (this->actionFunc != func_8087571C)) {
+            Actor_MoveWithGravity(&this->actor);
+        }
+
+        if (this->actionFunc != func_80874DE8) {
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 25.0f, 0.0f, 0x1DU);
+        }
+
+        if ((this->actionFunc != func_80875638) && (this->actionFunc != func_80874DE8)) {
+            Collider_UpdateCylinder(&this->actor, &this->collider);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            if ((this->actionFunc != func_80875484) && (this->actor.bgCheckFlags & 1) &&
+                (this->actor.freezeTimer == 0)) {
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            }
+        }
+
+        Actor_SetFocus(&this->actor, 25.0f);
+
+        if (this->unk_2C8 > 0.0f) {
+            if (this->unk_18C != 0xA) {
+                Math_StepToF(&this->unk_2C8, 0.0f, 0.05f);
+                this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.275f;
+                this->unk_2CC = CLAMP_MAX(this->unk_2CC, 0.55f);
+            } else if (Math_StepToF(&this->unk_2D0, 0.55f, 0.01375f) == 0) {
+                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875F04.s")
 
