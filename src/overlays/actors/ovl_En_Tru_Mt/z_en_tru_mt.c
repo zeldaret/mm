@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tru_mt.h"
+#include "overlays/actors/ovl_En_Jc_Mato/z_en_jc_mato.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -87,27 +88,27 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS D_80B7755C[] = {
-    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00F9A0, 1.0f, 0, -1, 0, -4 },
-    { &object_tru_Anim_0108AC, 1.0f, 0, -1, 2, -4 }, { &object_tru_Anim_009348, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, 0 },
-    { &object_tru_Anim_015CA0, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_014728, 1.0f, 0, -1, 2, 0 },
-    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, 2, 0 },  { &object_tru_Anim_007FA0, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_016B4C, 1.0f, 0, -1, 0, -4 }, { &object_tru_Anim_011F88, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_003698, 1.0f, 0, -1, 2, -4 },
-    { &object_tru_Anim_002BD8, 1.0f, 0, -1, 0, 0 },  { &object_tru_Anim_00446C, 1.0f, 0, -1, 0, 0 },
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00F9A0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_0108AC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_009348, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_00EEDC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_015CA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_014728, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_01B5C4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_tru_Anim_007FA0, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_016B4C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_tru_Anim_011F88, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_003698, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_tru_Anim_002BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tru_Anim_00446C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 Vec3f D_80B7765C = { 3000.0f, -800.0f, 0.0f };
 
 Vec3f D_80B77668 = { 0.0f, 0.0f, -3000.0f };
-
-typedef struct {
-    Actor actor;
-    char unk144[0x15];
-    u8 unk_159;
-    char unk15A[0x48];
-    s16 unk_1A2;
-} TruMtUnkChild;
 
 s32 func_80B76030(SkelAnime* skelAnime, s16 arg1) {
     s16 endFrame;
@@ -154,7 +155,7 @@ s32 func_80B761FC(EnTruMt* this, GlobalContext* globalCtx) {
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
 
     if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
-        if (!(((TruMtUnkChild*)this->actor.child)->unk_159 & 2) &&
+        if (!(((EnJcMato*)this->actor.child)->collider.base.acFlags & AC_HIT) &&
             (this->actor.child->colChkInfo.damageEffect != 0xF)) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->unk_3A4 == 0) {
@@ -225,7 +226,7 @@ void func_80B76440(EnTruMt* this, GlobalContext* globalCtx) {
     if (func_80B76368(this, globalCtx)) {
         s16 temp_v1 = this->unk_394 - Math_Vec3f_Yaw(&this->unk_398, &this->actor.world.pos);
 
-        if ((temp_v1 < -0x1FFF) || (temp_v1 > 0x1FFF)) {
+        if ((temp_v1 <= -0x2000) || (temp_v1 >= 0x2000)) {
             Math_ApproachF(&this->actor.speedXZ, 7.0f, 0.2f, 1.0f);
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             Math_ApproachF(&this->actor.speedXZ, 7.0f, 0.2f, 1.0f);
@@ -314,7 +315,7 @@ s32 func_80B768F0(EnTruMt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B76924(EnTruMt* this) {
-    this->unk_38E.z = Math_SinS(this->unk_388) * 30.0f * 182.04445f;
+    this->unk_38E.z = Math_SinS(this->unk_388) * 30.0f * (0x10000 / 360.0f);
     this->unk_388 += 0x400;
 }
 
@@ -472,7 +473,8 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     }
 }
 
-s32 func_80B77008(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnTruMt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                             Actor* thisx) {
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
@@ -485,7 +487,7 @@ s32 func_80B77008(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80B77078(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnTruMt* this = THIS;
     MtxF* sp54;
@@ -524,28 +526,23 @@ void func_80B77078(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
         sp54 = Matrix_GetCurrentState();
         if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, 0x22F, sp54->mf[3][0], sp54->mf[3][1],
-                               sp54->mf[3][2], this->unk_38E.x,
-                               Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000,
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_JC_MATO, sp54->wx, sp54->wy,
+                               sp54->wz, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),
                                this->unk_38E.z, -1);
-            return;
-        }
-
-        if (((TruMtUnkChild*)this->actor.child)->unk_1A2 == 0) {
-            this->actor.child->world.pos.x = sp54->mf[3][0];
-            this->actor.child->world.pos.y = sp54->mf[3][1];
-            this->actor.child->world.pos.z = sp54->mf[3][2];
+        } else if (!((EnJcMato*)this->actor.child)->hitFlag) {
+            this->actor.child->world.pos.x = sp54->wx;
+            this->actor.child->world.pos.y = sp54->wy;
+            this->actor.child->world.pos.z = sp54->wz;
 
             this->actor.child->world.rot = this->unk_38E;
-            this->actor.child->world.rot.y =
-                Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) + 0x8000;
+            this->actor.child->world.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
 
             this->actor.child->shape.rot = this->actor.child->world.rot;
         }
     }
 }
 
-void func_80B77354(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnTruMt_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
@@ -573,8 +570,8 @@ void EnTruMt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sp48[this->unk_34C]));
 
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, func_80B77008, func_80B77078, func_80B77354,
-                                   &this->actor);
+                                   this->skelAnime.dListCount, EnTruMt_OverrideLimbDraw, EnTruMt_PostLimbDraw,
+                                   EnTruMt_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
