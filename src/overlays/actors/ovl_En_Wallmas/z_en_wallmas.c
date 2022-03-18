@@ -39,6 +39,8 @@ void func_808756AC(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875014(EnWallmas* this);
 void func_808750B8(EnWallmas* this);
 void func_808751C4(EnWallmas* this);
+void func_80875518(EnWallmas* this);
+void func_808755A8(EnWallmas* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Wallmas_InitVars = {
@@ -114,8 +116,8 @@ extern CollisionCheckInfoInit D_808763AC;
 extern InitChainEntry D_808763B4[];
 extern f32 D_808763C0[];
 
-extern UNK_TYPE D_06000590;
-extern UNK_TYPE D_06000EA4;
+extern AnimationHeader D_06000590;
+extern AnimationHeader D_06000EA4;
 extern AnimationHeader D_060019CC;
 extern AnimationHeader D_0600299C;
 extern AnimationHeader D_060041F4;
@@ -375,18 +377,67 @@ void func_808752CC(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808753F0(EnWallmas* this, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808753F0.s")
+void func_808753F0(EnWallmas* this, s32 arg1) {
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000590, -3.0f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875484.s")
+    if (arg1) {
+        func_800BE504(&this->actor, &this->collider);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875518.s")
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+    this->actor.speedXZ = 5.0f;
+    this->actor.velocity.y = 10.0f;
+    this->actionFunc = func_80875484;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_8087556C.s")
+void func_80875484(EnWallmas* this, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        if (this->actor.colChkInfo.health == 0) {
+            func_808755A8(this, globalCtx);
+        } else {
+            func_80875518(this);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808755A8.s")
+    if (Animation_OnFrame(&this->skelAnime, 13.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875638.s")
+    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+}
+
+void func_80875518(EnWallmas* this) {
+    Animation_PlayOnce(&this->skelAnime, &D_06000EA4);
+    this->actor.speedXZ = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actionFunc = func_8087556C;
+}
+
+void func_8087556C(EnWallmas* this, GlobalContext* globalCtx) {
+    if (SkelAnime_Update(&this->skelAnime)) {
+        func_80875248(this);
+    }
+}
+
+void func_808755A8(EnWallmas* this, GlobalContext* globalCtx) {
+    this->actor.speedXZ = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    func_800B3030(globalCtx, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 250, -10, 2);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
+    this->actionFunc = func_80875638;
+}
+
+void func_80875638(EnWallmas* this, GlobalContext* globalCtx) {
+    if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.0015f) != 0) {
+        Actor_SetScale(&this->actor, 0.01f);
+        Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x90);
+        Actor_MarkForDeath(&this->actor);
+    }
+
+    this->actor.scale.z = this->actor.scale.x;
+    this->actor.scale.y = this->actor.scale.x;
+}
 
 void func_808756AC(EnWallmas* this, GlobalContext* globalCtx) {
     Animation_MorphToPlayOnce(&this->skelAnime, &D_06009520, -5.0f);
