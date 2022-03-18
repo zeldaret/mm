@@ -15,7 +15,8 @@ typedef struct EnWallmas {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnWallmasActionFunc actionFunc;
-    /* 0x18C */ char unk_18C[0x4];
+    /* 0x18C */ char unk_18C[0x2];
+    /* 0x18E */ s16 timer;
     /* 0x190 */ s16 switchFlag;
     /* 0x192 */ Vec3s jointTable[25];
     /* 0x228 */ Vec3s morphTable[25];

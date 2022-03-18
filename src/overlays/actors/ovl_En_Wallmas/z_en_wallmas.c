@@ -180,7 +180,18 @@ void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874B04.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874B88.s")
+void func_80874B88(EnWallmas* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_20;
+    this->timer = 130;
+    this->actor.velocity.y = 0.0f;
+    this->actor.world.pos.y = player->actor.world.pos.y;
+    this->actor.floorHeight = player->actor.floorHeight;
+    this->actor.draw = EnWallmas_Draw;
+    this->actionFunc = func_80874BE4;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874BE4.s")
 
