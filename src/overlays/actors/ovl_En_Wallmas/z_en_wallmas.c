@@ -641,10 +641,29 @@ void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
+void func_80875F04(EnWallmas*, GlobalContext*);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875F04.s")
 
+s32 func_808760A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808760A4.s")
 
+void func_80876118(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80876118.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Draw.s")
+void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnWallmas* this = THIS;
+
+    if (this->actionFunc != func_80874BE4) {
+        func_8012C28C(globalCtx->state.gfxCtx);
+        SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                              this->skelAnime.dListCount, func_808760A4, func_80876118, &this->actor);
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, 11, this->unk_2CC, this->unk_2D0, this->unk_2C8,
+                                this->unk_18C);
+    }
+
+    if (this->actor.colorFilterTimer != 0) {
+        func_800AE5A0(globalCtx);
+    }
+
+    func_80875F04(this, globalCtx);
+}
