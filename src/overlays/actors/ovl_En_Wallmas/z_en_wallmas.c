@@ -112,7 +112,7 @@ extern InitChainEntry D_808763B4[];
 
 extern UNK_TYPE D_06000590;
 extern UNK_TYPE D_06000EA4;
-extern UNK_TYPE D_060019CC;
+extern AnimationHeader D_060019CC;
 extern AnimationHeader D_0600299C;
 extern UNK_TYPE D_060041F4;
 extern UNK_TYPE D_06008688;
@@ -257,7 +257,14 @@ void func_80874DE8(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874F14.s")
+void func_80874F14(EnWallmas* this, GlobalContext* globalCtx) {
+    Animation_Change(&this->skelAnime, &D_060019CC, 1.0f, 41.0f, Animation_GetLastFrame(&D_060019CC), ANIMMODE_ONCE,
+                     -3.0f);
+
+    Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, true);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_LAND);
+    this->actionFunc = func_80874FD8;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874FD8.s")
 
