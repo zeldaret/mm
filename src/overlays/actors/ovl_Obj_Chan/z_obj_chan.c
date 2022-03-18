@@ -78,10 +78,10 @@ static f32 sObjChanFlameYOffset[2] = { 1800, 1800 };
 static s32 sObjChanLoaded;
 
 void ObjChan_Init(Actor* thisx, GlobalContext* globalCtx) {
-    s16 temp_t2;
+    s32 pad;
     ObjChan* this = THIS;
 
-    if (OBJCHAN_SUBTYPE(this) == OBJCHAN_SUBTYPE_CHANDELIER) {
+    if (OBJCHAN_SUBTYPE(&this->actor) == OBJCHAN_SUBTYPE_CHANDELIER) {
         if (sObjChanLoaded) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -93,7 +93,7 @@ void ObjChan_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sObjChanCylinderInit);
     SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
-    switch (OBJCHAN_SUBTYPE(this)) {
+    switch (OBJCHAN_SUBTYPE(&this->actor)) {
         case OBJCHAN_SUBTYPE_CHANDELIER:
             this->rotation = this->actor.shape.rot.y;
             this->actor.shape.rot.y = 0;
@@ -164,8 +164,8 @@ void ObjChan_InitChandelier(ObjChan* this, GlobalContext* globalCtx) {
 
     Math_Vec3f_Copy(&sp84, &this->actor.world.pos);
     sp84.y += 1600.0f;
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp84, &this->unk1C0, &sp94, 0, 0, 1, 1,
-                                &sp90)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp84, &this->unk1C0, &sp94, false, false,
+                                true, true, &sp90)) {
         this->unk1CC = this->actor.world.pos.y - this->unk1C0.y;
     } else {
         Actor_MarkForDeath(&this->actor);
@@ -324,7 +324,7 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
 }
 
 void ObjChan_CreateSmashParticles(ObjChan* this, GlobalContext* globalCtx) {
-    short new_var = 0;
+    s16 new_var = 0;
     s32 phi_s0;
     Vec3f spDC;
     Vec3f spD0;
@@ -337,8 +337,8 @@ void ObjChan_CreateSmashParticles(ObjChan* this, GlobalContext* globalCtx) {
     f32 spA4 = new_var + (spAC = 110.0f);
 
     for (temp_s2 = 0, temp_s1 = 0; temp_s2 != 18; temp_s2++, temp_s1 += 0x4E20) {
-        float sin = Math_SinS(temp_s1);
-        float cos = Math_CosS(temp_s1);
+        f32 sin = Math_SinS(temp_s1);
+        f32 cos = Math_CosS(temp_s1);
         spDC.x = sin * 8.0f;
         spDC.y = Rand_ZeroOne() * 12.0f + 2.0f;
         spDC.z = cos * 8.0f;
@@ -422,9 +422,9 @@ void ObjChan_DrawFire(ObjChan* this, GlobalContext* globalCtx) {
 
     Matrix_RotateY(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000,
                    MTXMODE_APPLY);
-    Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].x * this->flameSize,
-                 sObjChanFlameSize[OBJCHAN_SUBTYPE(this)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(this)], 0.0f, MTXMODE_APPLY);
+    Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].x * this->flameSize,
+                 sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
+    Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
 
     dl = func_8012C2B4(POLY_XLU_DISP);
     gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);
