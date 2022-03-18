@@ -123,7 +123,7 @@ typedef struct {
     /* 0x28 */ f32 arrowTexX;
     /* 0x2C */ f32 arrowTexY;
     /* 0x30 */ f32 texZ; // Used for both stickTexZ and arrowTexZ
-    /* 0x34 */ s32 isEnabled;
+    /* 0x34 */ u32 isEnabled;
 } StickDirectionPrompt; // size = 0x38
 
 typedef struct ShopItem {
