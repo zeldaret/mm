@@ -5,6 +5,7 @@
  */
 
 #include "z_en_wallmas.h"
+#include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -29,6 +30,9 @@ void func_8087571C(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875910(EnWallmas* this, GlobalContext* globalCtx);
 void func_8087596C(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875248(EnWallmas* this);
+void func_808758C8(EnWallmas* this);
+void func_80874B88(EnWallmas* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Wallmas_InitVars = {
@@ -111,12 +115,66 @@ extern UNK_TYPE D_060041F4;
 extern UNK_TYPE D_06008688;
 extern UNK_TYPE D_06009244;
 extern UNK_TYPE D_06009520;
-extern UNK_TYPE D_06009DB0;
+extern AnimationHeader D_06009DB0;
 extern UNK_TYPE D_0600A054;
+extern FlexSkeletonHeader D_06008FB0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Init.s")
+void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnWallmas* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/EnWallmas_Destroy.s")
+    Actor_ProcessInitChain(&this->actor, D_808763B4);
+    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.5f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008FB0, &D_06009DB0, this->jointTable, this->morphTable, 25);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80876360);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_8087638C, &D_808763AC);
+
+    this->switchFlag = EN_WALLMAS_GET_SWITCH_FLAG(thisx);
+    this->actor.params &= 0xFF;
+    this->unk_2C4 = this->actor.shape.rot.x * 40.0f * 0.1f;
+    this->actor.shape.rot.x = 0;
+    this->actor.world.rot.x = 0;
+    if (this->unk_2C4 <= 0.0f) {
+        this->unk_2C4 = 200.0f;
+    }
+
+    Actor_SetFocus(&this->actor, 25.0f);
+
+    if (EN_WALLMAS_IS_FROZEN(&this->actor)) {
+        Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
+                           this->actor.world.pos.y - 15.0f, this->actor.world.pos.z, this->actor.world.rot.x,
+                           (this->actor.world.rot.y + 0x5900), this->actor.world.rot.z, 0xFF50);
+        this->actor.params &= ~0x80;
+        func_80875248(this);
+        return;
+    }
+
+    if (EN_WALLMAS_GET_TYPE(&this->actor) == 2) {
+        if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+
+        func_808758C8(this);
+    } else if (EN_WALLMAS_GET_TYPE(&this->actor) == 1) {
+        func_808758C8(this);
+    } else {
+        func_80874B88(this, globalCtx);
+    }
+}
+
+void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnWallmas* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+
+    if (this->actor.parent != NULL) {
+        EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
+
+        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
+            encount1->unk_14E--;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874A88.s")
 
