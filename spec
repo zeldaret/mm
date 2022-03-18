@@ -4210,8 +4210,7 @@ beginseg
     name "ovl_En_Tru_Mt"
     compress
     include "build/src/overlays/actors/ovl_En_Tru_Mt/z_en_tru_mt.o"
-    include "build/data/ovl_En_Tru_Mt/ovl_En_Tru_Mt.data.o"
-    include "build/data/ovl_En_Tru_Mt/ovl_En_Tru_Mt.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tru_Mt/ovl_En_Tru_Mt_reloc.o"
 endseg
 
 beginseg
