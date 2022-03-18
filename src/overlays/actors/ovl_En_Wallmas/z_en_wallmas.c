@@ -33,6 +33,7 @@ void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875248(EnWallmas* this);
 void func_808758C8(EnWallmas* this);
 void func_80874B88(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Wallmas_InitVars = {
@@ -193,7 +194,34 @@ void func_80874B88(EnWallmas* this, GlobalContext* globalCtx) {
     this->actionFunc = func_80874BE4;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874BE4.s")
+void func_80874BE4(EnWallmas* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3f* playerPos = &player->actor.world.pos;
+
+    this->actor.world.pos = *playerPos;
+    this->actor.floorHeight = player->actor.floorHeight;
+    this->actor.floorPoly = player->actor.floorPoly;
+
+    if (this->timer != 0) {
+        this->timer--;
+    }
+
+    if ((player->stateFlags1 & 0x08100000) || (player->stateFlags2 & 0x80) || (player->unk_B5E > 0) ||
+        (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & 1) ||
+        ((EN_WALLMAS_GET_TYPE(&this->actor) == 1) &&
+         (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->unk_2C4)))) {
+        func_801A75E8(NA_SE_EN_FALL_AIM);
+        this->timer = 130;
+    }
+
+    if (this->timer == 0x50) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_AIM);
+    }
+
+    if (this->timer == 0) {
+        func_80874D1C(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80874D1C.s")
 
