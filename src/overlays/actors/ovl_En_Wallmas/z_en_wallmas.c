@@ -6,6 +6,7 @@
 
 #include "z_en_wallmas.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -642,8 +643,39 @@ void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80875F04(EnWallmas*, GlobalContext*);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875F04.s")
+void func_80875F04(EnWallmas* this, GlobalContext* globalCtx) {
+    s32 pad;
+    f32 xzScale;
+    MtxF sp50;
+    Gfx* gfx;
+
+    if ((this->actor.floorPoly != NULL) && ((this->timer < 81) || (this->actionFunc == func_80875A0C))) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        gfx = POLY_OPA_DISP;
+
+        gSPDisplayList(&gfx[0], &sSetupDL[6 * 44]);
+        gDPSetPrimColor(&gfx[1], 0, 0, 0, 0, 0, 255);
+        func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+                      &sp50);
+        Matrix_InsertMatrix(&sp50, MTXMODE_NEW);
+
+        if ((this->actionFunc != func_80874BE4) && (this->actionFunc != func_808752CC) &&
+            (this->actionFunc != func_8087571C) && (this->actionFunc != func_8087596C)) {
+            xzScale = this->actor.scale.x * 50.0f;
+        } else {
+            xzScale = CLAMP_MAX(80 - this->timer, 80) * 0.00625f;
+        }
+
+        Matrix_Scale(xzScale, 1.0f, xzScale, MTXMODE_APPLY);
+        gSPMatrix(&gfx[2], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(&gfx[3], gCircleShadowDL);
+
+        POLY_OPA_DISP = &gfx[4];
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
 
 s32 func_808760A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnWallmas* this = THIS;
