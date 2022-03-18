@@ -328,7 +328,34 @@ void func_80875248(EnWallmas* this) {
     this->actionFunc = func_808752CC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808752CC.s")
+void func_808752CC(EnWallmas* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    SkelAnime_Update(&this->skelAnime);
+    if (this->skelAnime.curFrame > 20.0f) {
+        this->actor.world.pos.y += 30.0f;
+        this->timer += 9;
+        this->actor.flags &= ~ACTOR_FLAG_2000;
+    }
+
+    if (Animation_OnFrame(&this->skelAnime, 20.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_UP);
+    }
+
+    if (this->actor.playerHeightRel < -900.0f) {
+        if (EN_WALLMAS_GET_TYPE(&this->actor) == 2) {
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+
+        if ((EN_WALLMAS_GET_TYPE(&this->actor) == 0) ||
+            (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < this->unk_2C4)) {
+            func_80874B88(this, globalCtx);
+        } else {
+            func_808758C8(this);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808753F0.s")
 
