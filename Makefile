@@ -225,7 +225,7 @@ endif
 
 .PHONY: all uncompressed compressed clean assetclean distclean disasm init setup
 .DEFAULT_GOAL := uncompressed
-all: compressed uncompressed
+all: uncompressed compressed
 
 $(ROM): $(ELF)
 	$(ELF2ROM) -cic 6105 $< $@
