@@ -517,10 +517,31 @@ void func_8087596C(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808759B8(EnWallmas* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_808759B8.s")
+void func_808759B8(EnWallmas* this) {
+    this->actor.speedXZ = 0.0f;
+    if (this->actor.velocity.y > 0.0f) {
+        this->actor.velocity.y = 0.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Wallmas/func_80875A0C.s")
+    func_800BE504(&this->actor, &this->collider);
+    this->actionFunc = func_80875A0C;
+}
+
+void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx) {
+    if (this->timer != 0) {
+        this->timer--;
+    }
+
+    if (this->timer == 0) {
+        func_80874B04(this, globalCtx);
+        if (this->actor.colChkInfo.health == 0) {
+            func_808753F0(this, 0);
+        } else {
+            this->actor.world.rot.y = this->actor.shape.rot.y;
+            func_80875248(this);
+        }
+    }
+}
 
 void func_80875A74(EnWallmas* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
