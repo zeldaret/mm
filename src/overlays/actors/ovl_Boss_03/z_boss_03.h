@@ -49,7 +49,7 @@ typedef struct Boss03 {
     /* 0x0253 */ u8 hasSpwanedSmallFishes; // Tanron
     /* 0x0254 */ s16 bubbleEffectSpawnNum; // Amount of bubble effect which will be spawned by Update
     /* 0x0258 */ f32 waterHeight; // always 430.0f
-    /* 0x025C */ s16 unk_25C;
+    /* 0x025C */ s16 unk_25C; // Timer related to collision?
     /* 0x025E */ s16 unk_25E;
     /* 0x0260 */ f32 unk_260; // rotY
     /* 0x0264 */ UNK_TYPE1 unk_264[0x04];

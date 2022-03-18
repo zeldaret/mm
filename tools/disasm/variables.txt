@@ -10316,7 +10316,7 @@
     0x809E8F14:("D_809E8F14","UNK_TYPE1","",0x1),
     0x809E8F24:("D_809E8F24","UNK_TYPE1","",0x1),
     0x809E8FD8:("D_809E8FD8","UNK_TYPE1","",0x1),
-    0x809E8FE8:("D_809E8FE8","Vec3f","",0xC),
+    0x809E8FE8:("sGyorgInitialPos","Vec3f","",0xC),
     0x809E8FF4:("D_809E8FF4","f32","",0x1),
     0x809E90FC:("sGyorgDustPrimColor","UNK_TYPE1","",0x1),
     0x809E9100:("sGyorgDustEnvColor","UNK_TYPE1","",0x1),

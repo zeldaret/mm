@@ -14,18 +14,14 @@
 
 #define THIS ((Boss03*)thisx)
 
-#define WORK_TIMER_UNK0_A 0
-#define WORK_TIMER_CHEW 0
-#define WORK_TIMER_DAMAGED 0
-#define WORK_TIMER_CHASE 0
-#define WORK_TIMER_CATCH 0
-#define WORK_TIMER_PREPARE_CHARGE 0
-#define WORK_TIMER_UNK0_G 0 // used on DeathCutscene
+#define WORK_TIMER_UNK0_A 0 // used on func_809E34B8
+#define WORK_TIMER_CURRENT_ACTION 0
+#define WORK_TIMER_UNK0_C 0 // used on DeathCutscene
 
-#define WORK_TIMER_UNK1_A 1
-#define WORK_TIMER_UNK1_B 1
+#define WORK_TIMER_UNK1_A 1 // used on func_809E34B8
+#define WORK_TIMER_UNK1_B 1 // used on PrepareCharge
 
-#define WORK_TIMER_UNK2_A 2
+#define WORK_TIMER_UNK2_A 2 // used on func_809E34B8
 #define WORK_TIMER_STUNNED 2
 
 // The Y position when standing on the platform.
@@ -65,9 +61,12 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx);
 
 u8 D_809E9840;
+// Timer used to start playing the boss background music if the intro cutscene was skipped (because it was already watched)
 u8 D_809E9841;
+// Used to set the timer D_809E9841 in case the intro cutscene was skipped
 u8 D_809E9842;
 
+// Set to Gyorg's projectedPos. sGyorgProjectedPos?
 Vec3f D_809E9848;
 
 GyorgEffect sGyorgEffects[GYORG_EFFECT_COUNT];
@@ -339,7 +338,7 @@ static ColliderJntSphInit sJntSphInit2 = {
     sJntSphElementsInit2,
 };
 
-Vec3f D_809E8FE8 = { 1216.0f, 140.0f, -1161.0f };
+Vec3f sGyorgInitialPos = { 1216.0f, 140.0f, -1161.0f };
 
 // unused
 Vec3f D_809E8FF4[] = {
@@ -420,7 +419,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         return;
     }
 
-    this->actor.world.pos = D_809E8FE8;
+    this->actor.world.pos = sGyorgInitialPos;
 
     Boss03_SeedRand(1, 29093, 9786);
 
@@ -447,6 +446,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     this->actor.targetMode = 5;
+
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
     Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->colliderElements1);
@@ -458,11 +458,11 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     // gSaveContext.eventInf[5] & 0x40: intro cutscene already watched
     if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x40)) {
         this->actionFunc = func_809E344C;
-        D_809E9842 = 0;
+        D_809E9842 = false;
         Audio_QueueSeqCmd(0x100100FF);
     } else {
         Boss03_SetupIntroCutscene(this, globalCtx);
-        D_809E9842 = 1;
+        D_809E9842 = true;
     }
 
     this->numSpawnedSmallFish = -1;
@@ -476,6 +476,7 @@ void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
+    // Mid-air
     if (player->actor.world.pos.y < 540.0f) {
         this->actionFunc = func_809E34B8;
         Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
@@ -583,7 +584,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
 void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_ChasePlayer;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -10.0f);
-    this->workTimer[WORK_TIMER_CHASE] = 100;
+    this->workTimer[WORK_TIMER_CURRENT_ACTION] = 100;
     this->unk_276 = 0x1000;
     this->skelAnime.playSpeed = 1.5f;
     this->unk_278 = 10.0f;
@@ -594,7 +595,7 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 // float regalloc
 /**
  * Approaches to Player until he is near enough, then try to catch him, unless he is back on the platform or the
- * WORK_TIMER_CHASE runs out
+ * WORK_TIMER_CURRENT_ACTION runs out
  */
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -611,6 +612,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     u8 sp43;
 
     this->unk_2BD = true;
+
     SkelAnime_Update(&this->skelAnime);
 
     temp_f2 = player->actor.world.pos.x - this->actor.world.pos.x;
@@ -630,9 +632,9 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CHASE timer runs out) -> Stop chasing
+    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop chasing
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) ||
-        (this->workTimer[WORK_TIMER_CHASE] == 0)) {
+        (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -689,7 +691,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 void Boss03_SetupCatchPlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
     this->actionFunc = Boss03_CatchPlayer;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -15.0f);
-    this->workTimer[WORK_TIMER_CATCH] = 100;
+    this->workTimer[WORK_TIMER_CURRENT_ACTION] = 100;
     this->unk_2C4 = 0.0f;
     this->unk_2B8 = 0.0f;
     this->unk_242 = arg2;
@@ -727,10 +729,10 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (catch timer runs out) -> Stop trying to catch
+    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop trying to catch
     // Player
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
-        (this->workTimer[WORK_TIMER_CATCH] == 0)) {
+        (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -792,7 +794,7 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
     this->unk_276 = 0x800;
     this->unk_242 = 0;
-    this->workTimer[WORK_TIMER_CHEW] = 100;
+    this->workTimer[WORK_TIMER_CURRENT_ACTION] = 100;
     this->skelAnime.playSpeed = 1.0f;
 }
 
@@ -808,7 +810,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     this->unk_2BD = true;
     this->unk_25C = 15;
 
-    if (this->workTimer[WORK_TIMER_CHEW] == 90) {
+    if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 90) {
         func_8016566C(0x96);
     }
 
@@ -852,15 +854,15 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
     // Mashing A or B reduces the time Gyorg is chewing Player
     if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B)) {
-        if (this->workTimer[WORK_TIMER_CHEW] != 0) {
-            this->workTimer[WORK_TIMER_CHEW]--;
+        if (this->workTimer[WORK_TIMER_CURRENT_ACTION] != 0) {
+            this->workTimer[WORK_TIMER_CURRENT_ACTION]--;
         }
-        if (this->workTimer[WORK_TIMER_CHEW] != 0) {
-            this->workTimer[WORK_TIMER_CHEW]--;
+        if (this->workTimer[WORK_TIMER_CURRENT_ACTION] != 0) {
+            this->workTimer[WORK_TIMER_CURRENT_ACTION]--;
         }
     }
 
-    if (this->workTimer[WORK_TIMER_CHEW] == 0) {
+    if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
@@ -884,7 +886,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->unk_2A2.y;
 
-    if (this->workTimer[WORK_TIMER_CHEW] < 5) {
+    if (this->workTimer[WORK_TIMER_CURRENT_ACTION] < 5) {
         Math_ApproachS(&this->jawZRot, 0x3200, 2, 0x1800);
         Math_ApproachF(&this->unk_2C4, 100.0f, 1.0f, 100.0f);
     } else {
@@ -898,7 +900,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_PrepareCharge;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgBackingUpAnim, -15.0f);
-    this->workTimer[WORK_TIMER_PREPARE_CHARGE] = Rand_ZeroFloat(30.0f) + 80.0f;
+    this->workTimer[WORK_TIMER_CURRENT_ACTION] = Rand_ZeroFloat(30.0f) + 80.0f;
     this->workTimer[WORK_TIMER_UNK1_B] = 50;
     this->unk_274 = 0;
 
@@ -914,7 +916,7 @@ void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Slowly turns back while looking at Player during WORK_TIMER_PREPARE_CHARGE frames, then prepares to charge against
+ * Slowly turns back while looking at Player during WORK_TIMER_CURRENT_ACTION frames, then prepares to charge against
  * him
  */
 void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
@@ -944,7 +946,7 @@ void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
 
     // Player is above water && Player is on the floor
     if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
-        if (this->workTimer[WORK_TIMER_PREPARE_CHARGE] == 0) {
+        if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
             Boss03_SetupCharge(this, globalCtx);
         }
     } else if (player->actor.world.pos.y <= this->waterHeight) {
@@ -1095,7 +1097,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     sp5A = 0x4BC;
 
     switch (this->csState) {
-        case 0x0:
+        case 0:
             if (player->actor.world.pos.y < 1350.0f) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 7);
@@ -1122,7 +1124,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                 this->cameraFov = KREG(14) + 60.0f;
 
-                case 0x1:
+                case 1:
                     player->actor.world.pos.z = 0.0f;
                     player->actor.world.pos.x = 0.0f;
                     player->actor.speedXZ = 0.0f;
@@ -1143,7 +1145,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                         func_8016566C(0x96);
                         this->cameraFov = 80.0f;
 
-                        case 0x2:
+                        case 2:
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
 
                             temp_f2 = D_809E9104[this->unk_242].x - this->actor.world.pos.x;
@@ -1196,7 +1198,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 0x3:
+        case 3:
             Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
             sp5A = 0x1970;
             Math_ApproachF(&this->actor.speedXZ, 15.0f, 1.0f, 2.0f);
@@ -1206,19 +1208,20 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 0x4:
+        case 4:
             player->actor.world.rot.y = player->actor.shape.rot.y = 0;
 
             if (this->csTimer == 5) {
+                // Rotates Player towards Gyorg
                 func_800B7298(globalCtx, &this->actor, 8);
             }
 
             this->csCamEye.x = player->actor.world.pos.x + 30.0f;
-            this->csCamEye.y = ((player->actor.world.pos.y + Player_GetHeight(player)) - 4.0f) + BREG(17);
+            this->csCamEye.y = player->actor.world.pos.y + Player_GetHeight(player) - 4.0f + BREG(17);
             this->csCamEye.z = player->actor.world.pos.z - 30.0f;
 
             this->csCamAt.x = player->actor.world.pos.x;
-            this->csCamAt.y = (((player->actor.world.pos.y + Player_GetHeight(player)) - 18.0f) + 6.0f) + BREG(18);
+            this->csCamAt.y = player->actor.world.pos.y + Player_GetHeight(player) - 18.0f + 6.0f + BREG(18);
             this->csCamAt.z = player->actor.world.pos.z;
 
             if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -1236,16 +1239,16 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 this->actor.world.pos.y = this->waterHeight - 150.0f;
                 func_80165690();
 
-                case 0x5:
+                case 5:
                     SkelAnime_Update(&this->skelAnime);
                     this->actor.speedXZ = 20.0f;
                     Actor_MoveWithoutGravityReverse(&this->actor);
                     player->actor.shape.rot.y = -0x1470;
                     player->actor.world.rot.y = player->actor.shape.rot.y;
 
-                    this->csCamEye.x = ((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f;
-                    this->csCamEye.y = (player->actor.world.pos.y + 40.0f) + 10.0f;
-                    this->csCamEye.z = ((player->actor.world.pos.z - 30.0f) + 160.0f) + 300.0f;
+                    this->csCamEye.x = player->actor.world.pos.x + 30.0f - 90.0f + 300.0f;
+                    this->csCamEye.y = player->actor.world.pos.y + 40.0f + 10.0f;
+                    this->csCamEye.z = player->actor.world.pos.z - 30.0f + 160.0f + 300.0f;
 
                     this->csCamAt.x = this->actor.world.pos.x;
                     this->csCamAt.y = this->actor.world.pos.y - 100.0f;
@@ -1257,6 +1260,8 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                         this->csTimer = 0;
                         this->actor.gravity = -1.5f;
                         this->actor.speedXZ = 20.0f;
+
+                        // Play the boss background music
                         Audio_QueueSeqCmd(0x801B);
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
                         this->skelAnime.playSpeed = 1.0f;
@@ -1264,7 +1269,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 0x6:
+        case 6:
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
             if (this->csTimer == 30) {
@@ -1302,10 +1307,10 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->csCamTargetAt.z = this->actor.world.pos.z;
                 }
             } else {
-                Math_ApproachF(&this->csCamEye.x, (((player->actor.world.pos.x + 30.0f) - 90.0f) + 300.0f) - 90.0f,
+                Math_ApproachF(&this->csCamEye.x, player->actor.world.pos.x + 30.0f - 90.0f + 300.0f - 90.0f,
                                0.05f, 3.0f);
                 Math_ApproachF(&this->csCamEye.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
-                Math_ApproachF(&this->csCamEye.z, ((player->actor.world.pos.z - 30.0f) + 160.0f + 300.0f) - 90.0f,
+                Math_ApproachF(&this->csCamEye.z, player->actor.world.pos.z - 30.0f + 160.0f + 300.0f - 90.0f,
                                0.05f, 3.0f);
                 Math_ApproachF(&this->unk_568, 90.0f, 0.05f, 3.0f);
             }
@@ -1374,7 +1379,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
     this->floppingAnimLastFrame = Animation_GetLastFrame(&gGyorgFloppingAnim);
     Audio_QueueSeqCmd(0x100100FF);
-    this->workTimer[WORK_TIMER_UNK0_G] = 0;
+    this->workTimer[WORK_TIMER_UNK0_C] = 0;
     this->unk_242 = 0;
     this->csState = 0;
     this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1468,7 +1473,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.world.pos.y, Math_SinS(this->unk_240 * 0x1000) * 80.0f + this->waterHeight,
                            1.0f, 10.0f);
             this->actor.shape.rot.z += 0x100;
-            Matrix_RotateY(this->unk_2BE, 0);
+            Matrix_RotateY(this->unk_2BE, MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledZ(500.0f, &sp84);
             Math_ApproachF(&this->actor.world.pos.x, sp84.x, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
@@ -1480,8 +1485,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP_OLD);
             }
 
-            if ((this->workTimer[WORK_TIMER_UNK0_G] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
-                this->workTimer[WORK_TIMER_UNK0_G] = Rand_ZeroFloat(15.0f) + 15.0f;
+            if ((this->workTimer[WORK_TIMER_UNK0_C] == 0) && ((this->waterHeight - 100.0f) < this->actor.world.pos.y)) {
+                this->workTimer[WORK_TIMER_UNK0_C] = Rand_ZeroFloat(15.0f) + 15.0f;
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, this->actor.world.pos.x,
                             this->waterHeight, this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
@@ -1621,7 +1626,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
                 Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
                 this->csState = 1;
-                this->unk_2BE = 3000;
+                this->unk_2BE = 0xBB8;
 
                 case 0x1:
                     if (player->actor.world.pos.y < 437.0f) {
@@ -1746,7 +1751,7 @@ void Boss03_Stunned(Boss03* this, GlobalContext* globalCtx) {
 void Boss03_SetupDamaged(Boss03* this, GlobalContext* globalCtx) {
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
     this->actionFunc = Boss03_Damaged;
-    this->workTimer[WORK_TIMER_DAMAGED] = 30;
+    this->workTimer[WORK_TIMER_CURRENT_ACTION] = 30;
 }
 
 void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
@@ -1757,8 +1762,8 @@ void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->jawZRot, ((Math_SinS(this->unk_240 * 0x2000) * 3000.0f) + 0x3000), 2, 0x3000);
     Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 10.0f);
 
-    if (this->workTimer[WORK_TIMER_DAMAGED] == 0) {
-        if ((s8)this->actor.colChkInfo.health < 6) {
+    if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
+        if ((s8)this->actor.colChkInfo.health <= 5) {
             if (!this->hasSpwanedSmallFishes) {
                 this->hasSpwanedSmallFishes++;
                 Boss03_SetupSpawnSmallFishesCutscene(this, globalCtx);
@@ -1810,7 +1815,7 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
                     hitbox = this->collider2.elements[i].info.acHitInfo;
                     this->collider2.elements[i].info.bumperFlags &= ~BUMP_HIT;
                     this->unk_25C = 15;
-                    this->unk_25E = 0xF;
+                    this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
@@ -1859,7 +1864,7 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
                 }
 
                 if (sp4B) {
-                    this->unk_25E = 0xF;
+                    this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
@@ -1906,8 +1911,8 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actor.hintId = 0x28;
 
-    if ((D_809E9842 == 0) && (player->actor.world.pos.y < 445.0f)) {
-        D_809E9842 = 1;
+    if (!D_809E9842 && (player->actor.world.pos.y < (PLATFORM_HEIGHT + 5.0f))) {
+        D_809E9842 = true;
         D_809E9841 = 5;
     }
 
@@ -2034,6 +2039,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (D_809E9841 != 0) {
         D_809E9841--;
         if (D_809E9841 == 0) {
+            // Play the boss background music
             Audio_QueueSeqCmd(0x801B);
         }
     }
@@ -2276,24 +2282,24 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     }
 
     if (this->actionFunc == Boss03_ChewPlayer) {
-        GfxPrint_SetPos(printer, x - 7, ++y);
-        GfxPrint_Printf(printer, "work[CHEW]:%i", this->workTimer[WORK_TIMER_CHEW]);
+        GfxPrint_SetPos(printer, x - 13, ++y);
+        GfxPrint_Printf(printer, "work[CUR_ACTION]:%i", this->workTimer[WORK_TIMER_CURRENT_ACTION]);
     } else if (this->actionFunc == Boss03_Damaged) {
-        GfxPrint_SetPos(printer, x - 10, ++y);
-        GfxPrint_Printf(printer, "work[DAMAGED]:%i", this->workTimer[WORK_TIMER_DAMAGED]);
+        GfxPrint_SetPos(printer, x - 13, ++y);
+        GfxPrint_Printf(printer, "work[CUR_ACTION]:%i", this->workTimer[WORK_TIMER_CURRENT_ACTION]);
     } else if (this->actionFunc == Boss03_ChasePlayer) {
-        GfxPrint_SetPos(printer, x - 8, ++y);
-        GfxPrint_Printf(printer, "work[CHASE]:%i", this->workTimer[WORK_TIMER_CHASE]);
+        GfxPrint_SetPos(printer, x - 13, ++y);
+        GfxPrint_Printf(printer, "work[CUR_ACTION]:%i", this->workTimer[WORK_TIMER_CURRENT_ACTION]);
     } else if (this->actionFunc == Boss03_CatchPlayer) {
-        GfxPrint_SetPos(printer, x - 8, ++y);
-        GfxPrint_Printf(printer, "work[CATCH]:%i", this->workTimer[WORK_TIMER_CATCH]);
+        GfxPrint_SetPos(printer, x - 13, ++y);
+        GfxPrint_Printf(printer, "work[CUR_ACTION]:%i", this->workTimer[WORK_TIMER_CURRENT_ACTION]);
     } else if (this->actionFunc == Boss03_PrepareCharge) {
-        GfxPrint_SetPos(printer, x - 17, ++y);
-        GfxPrint_Printf(printer, "work[PREPARE_CHARGE]:%i", this->workTimer[WORK_TIMER_PREPARE_CHARGE]);
+        GfxPrint_SetPos(printer, x - 13, ++y);
+        GfxPrint_Printf(printer, "work[CUR_ACTION]:%i", this->workTimer[WORK_TIMER_CURRENT_ACTION]);
 
     } else if (this->actionFunc == Boss03_DeathCutscene) {
         GfxPrint_SetPos(printer, x - 9, ++y);
-        GfxPrint_Printf(printer, "work[UNK0_G]:%i", this->workTimer[WORK_TIMER_UNK0_G]);
+        GfxPrint_Printf(printer, "work[UNK0_C]:%i", this->workTimer[WORK_TIMER_UNK0_C]);
 
     } else if (this->actionFunc == func_809E34B8) {
         GfxPrint_SetPos(printer, x - 9, ++y);
@@ -2344,8 +2350,10 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     // GfxPrint_SetPos(printer, x, ++y);
     // GfxPrint_Printf(printer, "240:%X", this->unk_240);
 
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "242:%X", this->unk_242);
+#endif
 
 #if 0
     GfxPrint_SetPos(printer, x-16, ++y);
@@ -2367,11 +2375,15 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_Printf(printer, "waterHeight:%f", this->waterHeight);
 #endif
 
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "25C:%X", this->unk_25C);
+#endif
 
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "25E:%X", this->unk_25E);
+#endif
 
 #if 0
     GfxPrint_SetPos(printer, x-1, ++y);
@@ -2418,8 +2430,11 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_Printf(printer, "27C:%f", this->unk_27C);
 #endif
 
+#if 0
+    // related to deathcutscene?
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "280:%X", this->unk_280);
+#endif
 
 #if 0
     GfxPrint_SetPos(printer, x, ++y);
@@ -2483,19 +2498,25 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_Printf(printer, "jawPos.z:%f", this->insideJawPos.z);
 #endif
 
-#if 1
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2B8:%f", this->unk_2B8);
 #endif
 
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BC:%X", this->unk_2BC);
+#endif
 
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "2BD:%s", BOOLSTR(this->unk_2BD));
+#endif
 
+#if 0
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "2BE:%i", this->unk_2BE);
+    GfxPrint_Printf(printer, "2BE:%X", this->unk_2BE);
+#endif
 
 #if 0
     GfxPrint_SetPos(printer, x, ++y);
@@ -2530,6 +2551,27 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     GfxPrint_SetPos(printer, x, ++y);
     GfxPrint_Printf(printer, "52C:%f", this->floppingAnimLastFrame);
 #endif
+
+#if 0
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "809E9840:%i", D_809E9840);
+#endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "809E9841:%i", D_809E9841);
+    GfxPrint_SetPos(printer, x-5, ++y);
+    GfxPrint_Printf(printer, "809E9842:%s", BOOLSTR(D_809E9842));
+    #endif
+
+    #if 0
+    GfxPrint_SetPos(printer, x-5-2, ++y);
+    GfxPrint_Printf(printer, "809E9848.x:%f", D_809E9848.x);
+    GfxPrint_SetPos(printer, x-5-2, ++y);
+    GfxPrint_Printf(printer, "809E9848.y:%f", D_809E9848.y);
+    GfxPrint_SetPos(printer, x-5-2, ++y);
+    GfxPrint_Printf(printer, "809E9848.z:%f", D_809E9848.z);
+    #endif
 
     x = 1;
     y = initial_Y;
@@ -2570,6 +2612,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
     x = 1;
     y = 28;
 
+#if 0
     GfxPrint_SetPos(printer, x, --y);
     GfxPrint_Printf(printer, "pos.x:%f", this->actor.world.pos.x);
 
@@ -2599,6 +2642,7 @@ void Boss03_PrintStruct(Boss03* this, GlobalContext* globalCtx, GfxPrint* printe
         GfxPrint_Printf(printer, "player.feetPos[1].y:%f", player->actor.shape.feetPos[1].y);
 #endif
     }
+#endif
 
 #if 0
     {
