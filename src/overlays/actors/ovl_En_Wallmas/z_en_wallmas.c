@@ -44,7 +44,6 @@ void func_808751C4(EnWallmas* this);
 void func_80875518(EnWallmas* this);
 void func_808755A8(EnWallmas* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,
     ACTORCAT_ENEMY,
@@ -57,15 +56,27 @@ const ActorInit En_Wallmas_InitVars = {
     (ActorFunc)EnWallmas_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80876360 = {
-    { COLTYPE_HIT0, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HIT0,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_8087638C = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(1, 0x0),
     /* Horse trample  */ DMG_ENTRY(1, 0x0),
@@ -100,34 +111,27 @@ static DamageTable D_8087638C = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_808763AC = { 3, 30, 40, 150 };
+static CollisionCheckInfoInit sColChkInfoInit = { 3, 30, 40, 150 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_808763B4[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 48, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 5500, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
 
-#endif
+static f32 D_808763C0[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
 
-extern ColliderCylinderInit D_80876360;
-extern DamageTable D_8087638C;
-extern CollisionCheckInfoInit D_808763AC;
-extern InitChainEntry D_808763B4[];
-extern f32 D_808763C0[];
-extern s8 D_808763D4[];
+static s8 D_808763D4[] = { -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8 };
 
 void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWallmas* this = THIS;
 
-    Actor_ProcessInitChain(&this->actor, D_808763B4);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.5f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wallmaster_Skel_008FB0, &object_wallmaster_Anim_009DB0,
                        this->jointTable, this->morphTable, 25);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80876360);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_8087638C, &D_808763AC);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     this->switchFlag = EN_WALLMAS_GET_SWITCH_FLAG(thisx);
     this->actor.params &= 0xFF;

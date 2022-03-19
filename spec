@@ -809,7 +809,6 @@ beginseg
     name "ovl_En_Wallmas"
     compress
     include "build/src/overlays/actors/ovl_En_Wallmas/z_en_wallmas.o"
-    include "build/data/ovl_En_Wallmas/ovl_En_Wallmas.data.o"
     include "build/data/ovl_En_Wallmas/ovl_En_Wallmas.reloc.o"
 endseg
 
