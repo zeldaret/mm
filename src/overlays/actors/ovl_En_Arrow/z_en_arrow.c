@@ -357,10 +357,10 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
 
             if ((this->unk_262 != 0) && (this->actor.wallBgId == BG_ACTOR_MAX)) {
 
-                Math_Vec3f_Copy(&sp84.unk_00, &this->actor.world.pos);
-                sp84.unk_0C = this->actor.wallPoly;
-                sp84.unk_10 = this->bubble.unk_144;
-                EffectSs_Spawn(globalCtx, EFFECT_SS_SBN, 128, &sp84.unk_00);
+                Math_Vec3f_Copy(&sp84.pos, &this->actor.world.pos);
+                sp84.colPoly = this->actor.wallPoly;
+                sp84.scale = this->bubble.unk_144;
+                EffectSs_Spawn(globalCtx, EFFECT_SS_SBN, 128, &sp84);
             }
         }
         Actor_MarkForDeath(&this->actor);

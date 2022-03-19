@@ -4,9 +4,9 @@
 #include "global.h"
 
 typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ CollisionPoly* unk_0C;
-    /* 0x10 */ f32 unk_10;
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ CollisionPoly* colPoly;
+    /* 0x10 */ f32 scale;
 } EffectSsSbnInitParams; // size = 0x14
 
 extern const EffectSsInit Effect_Ss_Sbn_InitVars;

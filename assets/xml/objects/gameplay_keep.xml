@@ -1282,27 +1282,27 @@
         <Texture Name="gameplay_keep_Tex_0707F0" OutName="tex_0707F0" Format="i4" Width="32" Height="32" Offset="0x707F0" />
         <Texture Name="gameplay_keep_Tex_0709F0" OutName="tex_0709F0" Format="i4" Width="64" Height="64" Offset="0x709F0" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_0711F8" Offset="0x711F8" />
-        <DList Name="gameplay_keep_DL_071230" Offset="0x71230" />
+        <DList Name="gEffectSbnSlidingDL" Offset="0x71230" />
         <TextureAnimation Name="gameplay_keep_Matanimheader_0712F8" Offset="0x712F8" />
-        <Texture Name="gameplay_keep_Tex_071300" OutName="tex_071300" Format="i4" Width="32" Height="64" Offset="0x71300" />
-        <Texture Name="gameplay_keep_Tex_071700" OutName="tex_071700" Format="i4" Width="32" Height="64" Offset="0x71700" />
-        <Texture Name="gameplay_keep_Tex_071B00" OutName="tex_071B00" Format="i4" Width="32" Height="64" Offset="0x71B00" />
-        <Texture Name="gameplay_keep_Tex_071F00" OutName="tex_071F00" Format="i4" Width="32" Height="64" Offset="0x71F00" />
-        <Texture Name="gameplay_keep_Tex_072300" OutName="tex_072300" Format="i4" Width="32" Height="64" Offset="0x72300" />
-        <Texture Name="gameplay_keep_Tex_072700" OutName="tex_072700" Format="i4" Width="32" Height="64" Offset="0x72700" />
-        <Texture Name="gameplay_keep_Tex_072B00" OutName="tex_072B00" Format="i4" Width="32" Height="64" Offset="0x72B00" />
-        <Texture Name="gameplay_keep_Tex_072F00" OutName="tex_072F00" Format="i4" Width="32" Height="64" Offset="0x72F00" />
-        <Texture Name="gameplay_keep_Tex_073300" OutName="tex_073300" Format="i4" Width="32" Height="64" Offset="0x73300" />
-        <Texture Name="gameplay_keep_Tex_073700" OutName="tex_073700" Format="i4" Width="32" Height="64" Offset="0x73700" />
-        <Texture Name="gameplay_keep_Tex_073B00" OutName="tex_073B00" Format="i4" Width="32" Height="64" Offset="0x73B00" />
-        <Texture Name="gameplay_keep_Tex_073F00" OutName="tex_073F00" Format="i4" Width="32" Height="64" Offset="0x73F00" />
-        <DList Name="gameplay_keep_DL_074330" Offset="0x74330" />
+        <Texture Name="gEffectSbnSliding1Tex" OutName="effect_sbn_sliding_1" Format="i4" Width="32" Height="64" Offset="0x71300" />
+        <Texture Name="gEffectSbnSliding2Tex" OutName="effect_sbn_sliding_2" Format="i4" Width="32" Height="64" Offset="0x71700" />
+        <Texture Name="gEffectSbnSliding3Tex" OutName="effect_sbn_sliding_3" Format="i4" Width="32" Height="64" Offset="0x71B00" />
+        <Texture Name="gEffectSbnSliding4Tex" OutName="effect_sbn_sliding_4" Format="i4" Width="32" Height="64" Offset="0x71F00" />
+        <Texture Name="gEffectSbnSliding5Tex" OutName="effect_sbn_sliding_5" Format="i4" Width="32" Height="64" Offset="0x72300" />
+        <Texture Name="gEffectSbnSliding6Tex" OutName="effect_sbn_sliding_6" Format="i4" Width="32" Height="64" Offset="0x72700" />
+        <Texture Name="gEffectSbnSliding7Tex" OutName="effect_sbn_sliding_7" Format="i4" Width="32" Height="64" Offset="0x72B00" />
+        <Texture Name="gEffectSbnSliding8Tex" OutName="effect_sbn_sliding_8" Format="i4" Width="32" Height="64" Offset="0x72F00" />
+        <Texture Name="gEffectSbnSliding9Tex" OutName="effect_sbn_sliding_9" Format="i4" Width="32" Height="64" Offset="0x73300" />
+        <Texture Name="gEffectSbnSliding10Tex" OutName="effect_sbn_sliding_10" Format="i4" Width="32" Height="64" Offset="0x73700" />
+        <Texture Name="gEffectSbnSliding11Tex" OutName="effect_sbn_sliding_11" Format="i4" Width="32" Height="64" Offset="0x73B00" />
+        <Texture Name="gEffectSbnSliding12Tex" OutName="effect_sbn_sliding_12" Format="i4" Width="32" Height="64" Offset="0x73F00" />
+        <DList Name="gEffectSbnDL" Offset="0x74330" />
         <Blob Name="gameplay_keep_DL_0743F0" Size="0x10" Offset="0x743F0" />
-        <Texture Name="gameplay_keep_Tex_074400" OutName="tex_074400" Format="i4" Width="32" Height="64" Offset="0x74400" />
-        <Texture Name="gameplay_keep_Tex_074800" OutName="tex_074800" Format="i4" Width="32" Height="64" Offset="0x74800" />
-        <Texture Name="gameplay_keep_Tex_074C00" OutName="tex_074C00" Format="i4" Width="32" Height="64" Offset="0x74C00" />
-        <Texture Name="gameplay_keep_Tex_075000" OutName="tex_075000" Format="i4" Width="32" Height="64" Offset="0x75000" />
-        <Texture Name="gameplay_keep_Tex_075400" OutName="tex_075400" Format="i4" Width="32" Height="64" Offset="0x75400" />
+        <Texture Name="gEffectSbn1Tex" OutName="effect_sbn_1" Format="i4" Width="32" Height="64" Offset="0x74400" />
+        <Texture Name="gEffectSbn2Tex" OutName="effect_sbn_2" Format="i4" Width="32" Height="64" Offset="0x74800" />
+        <Texture Name="gEffectSbn3Tex" OutName="effect_sbn_3" Format="i4" Width="32" Height="64" Offset="0x74C00" />
+        <Texture Name="gEffectSbn4Tex" OutName="effect_sbn_4" Format="i4" Width="32" Height="64" Offset="0x75000" />
+        <Texture Name="gEffectSbn5Tex" OutName="effect_sbn_5" Format="i4" Width="32" Height="64" Offset="0x75400" />
         <Texture Name="gameplay_keep_Tex_075800" OutName="tex_075800" Format="i4" Width="32" Height="32" Offset="0x75800" />
         <DList Name="gSquareShadowDL" Offset="0x75A40" />
         <Texture Name="gameplay_keep_Tex_075AA8" OutName="tex_075AA8" Format="i4" Width="16" Height="16" Offset="0x75AA8" />
