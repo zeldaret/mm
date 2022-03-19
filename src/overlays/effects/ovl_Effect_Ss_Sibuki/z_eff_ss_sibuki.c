@@ -36,11 +36,13 @@ u32 EffectSsSibuki_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     this->pos = initParams->pos;
     this->velocity = initParams->velocity;
     this->accel = initParams->accel;
+
     {
         TexturePtr tex = (KREG(2) != 0) ? gameplay_keep_Tex_091CE0 : gameplay_keep_Tex_091BE0;
 
         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
     }
+
     this->life = ((s32)((Rand_ZeroOne() * (500.0f + KREG(64))) * 0.01f)) + KREG(65) + 10;
     this->rMoveDelay = initParams->moveDelay + 1;
     this->draw = EffectSsSibuki_Draw;
