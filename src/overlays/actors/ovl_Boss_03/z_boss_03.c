@@ -4,6 +4,41 @@
  * Description: Gyorg
  */
 
+/**
+ * Some notes:
+ * 
+ * Global flags:
+ * - gSaveContext.eventInf[5] & 0x40: Enabled when Gyorg's intro cutscene has been watched
+ * - gSaveContext.weekEventReg[55] & 0x80: Checked to know if Gyorg has been defeated
+ * 
+ * Seaweed:
+ * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
+ * - The default Gyorg actor will spawn 5 other Gyorg instances using the parameter GYORG_PARAM_SEAWEED to spawn them
+ * - Seaweed can "interact" only with the main Gyorg instance and Player
+ * 
+ * This actor makes some heavy assumptions about the positions of the room where it is spawned
+ * 
+ * Cutscenes:
+ * - There are 3 cutscenes:
+ *   - IntroCutscene: The cs which is played when Player falls into the main room. It also shows Gyorg's titlecard
+ *   - SpawnSmallFishesCutscene: The short cs which is played when Gyorg is spawning the small fishes (EnTanron3). This is triggered when Gyorg reaches half of his life.
+ *   - DeathCutscene: Played when Gyorg dies. Showing him splashing and becoming smaller each time until he disappears
+ * - This actor mainly handles the 3 cutscenes it has manually (instead of relying on existing systems for it)
+ *
+ * Main behaviour:
+ * - Gyorg has two branches on Gyorg's behaviour depending on Player's state:
+ *   - If Player is standing on the main platform, then Gyorg follows the PrepareCharge -> Charge -> JumpOverPlatform branch
+ *   - Otherwise, Gyorg follows the ChasePlayer -> CatchPlayer -> ChewPlayer
+ * - The main actionFunc which decides which branch should be taken is func_809E34B8
+ * - Most of the actions of those two branches are constantly checking for the WORK_TIMER_CURRENT_ACTION timer. If it runs out, then the behaviour resets back to func_809E34B8
+ * - Either branch behaviour can be interrupted at any time by a hit from Player
+ *   - Being hitted once makes Gyorg to be Stunned.
+ *   - When Gyorg is Stunned, he is vulnerable to be Damaged by Player
+ *   - If Gyorg's reaches half of his life, then he spawns the small fishes
+ *
+ * The collision logic is handled manually.
+ */
+
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -594,8 +629,7 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 #ifdef NON_MATCHING
 // float regalloc
 /**
- * Approaches to Player until he is near enough, then try to catch him, unless he is back on the platform or the
- * WORK_TIMER_CURRENT_ACTION runs out
+ * Approaches to Player until he is near enough, then try to catch him, unless he is back on the platform
  */
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -862,6 +896,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
         }
     }
 
+    // Stop chewing when the timer runs out
     if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
@@ -968,7 +1003,7 @@ void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Charge against the platform
+ * Charge against the platform, either by clashing against the platform or by preparing to jump over it
  */
 void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f14;
@@ -1754,6 +1789,9 @@ void Boss03_SetupDamaged(Boss03* this, GlobalContext* globalCtx) {
     this->workTimer[WORK_TIMER_CURRENT_ACTION] = 30;
 }
 
+/**
+ * Invulnerability period by being damaged by Player
+ */
 void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
     this->unk_25C = 15;
 

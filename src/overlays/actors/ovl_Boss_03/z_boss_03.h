@@ -83,7 +83,7 @@ typedef struct Boss03 {
     /* 0x02D6 */ s16 unk_2D6; // used as target for this->actor.shape.rot.x
     /* 0x02D8 */ s16 unk_2D8; // used as target for this->actor.shape.rot.y
     /* 0x02DA */ s16 unk_2DA; // used as target for this->actor.shape.rot.z
-    /* 0x02DC */ Vec3f unk_2DC[6]; // used by seaweed, read but not set
+    /* 0x02DC */ Vec3f unk_2DC[6]; // used by seaweed
     /* 0x0324 */ s16 unk_324; // timer? set by Tanron3
     /* 0x0328 */ Boss03ActionFunc actionFunc;
     /* 0x032C */ ColliderJntSph collider1;
