@@ -2,12 +2,12 @@
 #include "message_data_static.h"
 
 void Message_FindCreditsMessage(GlobalContext* globalCtx, u16 textId) {
-    const char* foundSegment;
-    const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
     MessageTableEntry* msgEntry = msgCtx->messageTableStaff;
     const char* segment = msgEntry->segment;
+    const char* foundSegment;
+    const char* nextSegment;
 
     while (msgEntry->textId != 0xFFFF) {
         if (msgEntry->textId == textId) {

@@ -97,9 +97,8 @@ s32 Message_ShouldAdvanceSilent(GlobalContext* globalCtx) {
 }
 
 void func_801477B4(GlobalContext* globalCtx) {
-    MessageContext* msgCtx;
+    MessageContext* msgCtx = &globalCtx->msgCtx;
 
-    msgCtx = &globalCtx->msgCtx;
     if (globalCtx->msgCtx.unk11F10 != 0) {
         msgCtx->unk12023 = 2;
         msgCtx->msgMode = 0x43;
@@ -129,9 +128,7 @@ void func_80148B98(GlobalContext* globalCtx, u8 arg1) {
             play_sound(NA_SE_SY_CURSOR);
         }
         return;
-    }
-
-    else if ((curInput->rel.stick_y < -29) && held == 0) {
+    } else if ((curInput->rel.stick_y < -29) && held == 0) {
         held = 1;
         msgCtx->choiceIndex++;
         if (msgCtx->choiceIndex > arg1) {
@@ -151,9 +148,8 @@ void func_80148B98(GlobalContext* globalCtx, u8 arg1) {
 #endif
 
 void func_80148CBC(GlobalContext* globalCtx, UNK_PTR puParm2, u8 arg2) {
-    MessageContext* msgCtx;
+    MessageContext* msgCtx = &globalCtx->msgCtx;
 
-    msgCtx = &globalCtx->msgCtx;
     msgCtx->unk11FF4 = 0x30;
     if (arg2 == 1) {
         msgCtx->unk11FF6 = msgCtx->unk11FFE[1 + msgCtx->choiceIndex];
@@ -178,12 +174,12 @@ void func_80148CBC(GlobalContext* globalCtx, UNK_PTR puParm2, u8 arg2) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
 
 void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
-    const char* foundSegment;
-    const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
     MessageTableEntry* msgEntry = msgCtx->messageEntryTable;
     const char* segment = msgEntry->segment;
+    const char* foundSegment;
+    const char* nextSegment;
 
     while (msgEntry->textId != 0xFFFF) {
         if (msgEntry->textId == textId) {
@@ -220,7 +216,7 @@ void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset,
 
     Font_LoadChar(globalCtx, codePointIndex, temp1);
     msgCtx->decodedBuffer.wchar[decodedBufPos] = codePointIndex;
-    temp1 += 128;
+    temp1 += FONT_CHAR_TEX_SIZE;
     temp2 += (16.0f * msgCtx->unk12098);
     *offset = temp1;
     *arg3 = temp2;
@@ -323,8 +319,8 @@ void func_8014D62C(GlobalContext* arg0, s32* arg1, f32* arg2, s16* arg3) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801514B0.s")
 
 void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
-    MessageContext* msgCtx;
-    msgCtx = &globalCtx->msgCtx;
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+
     msgCtx->ocarinaAction = 0xFFFF;
     func_80150D08(globalCtx, textId);
     msgCtx->unkActor = Actor;
@@ -353,6 +349,7 @@ void func_80151938(GlobalContext* globalCtx, u16 textId) {
         }
     }
     msgCtx->unk1203C = msgCtx->unk1203A;
+
     if (globalCtx->pauseCtx.unk_1F0 != 0) {
         msgCtx->unk12004 = 0x22;
         msgCtx->unk12006 = 0x15E;
@@ -370,11 +367,11 @@ void func_80151A68(GlobalContext* globalCtx, u16 textId) {
     func_8015B198(globalCtx);
     msgCtx->msgMode = 0x45;
     msgCtx->unk12024 = 0;
-    msgCtx->unk1203C = (msgCtx->unk1203A = (msgCtx->unk1201E = 0));
+    msgCtx->unk1203C = msgCtx->unk1203A = msgCtx->unk1201E = 0;
     msgCtx->unk12023 = 0x1E;
 
     // Day/Dawn/Night.. Messages
-    if (((msgCtx->currentTextId) >= 0x1BB2) && ((msgCtx->currentTextId) < 0x1BB7)) {
+    if ((msgCtx->currentTextId >= 0x1BB2) && (msgCtx->currentTextId < 0x1BB7)) {
         XREG(74) = 0x6A;
         XREG(75) = 0;
         XREG(77) = 0x58;
@@ -407,10 +404,9 @@ void func_80151BB4(GlobalContext* globalCtx, u8 arg1) {
 }
 
 u32 func_80151C9C(GlobalContext* globalCtx) {
-    MessageContext* msgCtx;
+    MessageContext* msgCtx = &globalCtx->msgCtx;
     u8 flag;
 
-    msgCtx = &globalCtx->msgCtx;
     while (true) {
         if (msgCtx->unk120B1 == 0) {
             return 0;
@@ -496,9 +492,8 @@ void func_80153E7C(GlobalContext* globalCtx, void* arg1) {
 void func_80156758(GlobalContext* globalCtx) {
     Gfx* nextDisplayList;
     Gfx* polyOpa;
-    GraphicsContext* gfxCtx;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
-    gfxCtx = globalCtx->state.gfxCtx;
     OPEN_DISPS(gfxCtx);
     polyOpa = POLY_OPA_DISP;
     nextDisplayList = Graph_GfxPlusOne(polyOpa);
@@ -507,6 +502,7 @@ void func_80156758(GlobalContext* globalCtx) {
     if ((globalCtx->msgCtx.currentTextId != 0x5E6) || (func_801690CC(globalCtx) == 0)) {
         func_801541D4(globalCtx, &nextDisplayList);
     }
+
     gSPEndDisplayList(nextDisplayList++);
     Graph_BranchDlist(polyOpa, nextDisplayList);
     POLY_OPA_DISP = nextDisplayList;

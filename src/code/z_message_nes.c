@@ -43,12 +43,12 @@ extern u8 D_801D0714[11][16];
 extern s16 D_801D07C4[11];
 
 void Message_FindMessageNES(GlobalContext* globalCtx, u16 textId) {
-    const char* foundSegment;
-    const char* nextSegment;
     MessageContext* msgCtx = &globalCtx->msgCtx;
     Font* font = &msgCtx->font;
     MessageTableEntry* msgEntry = msgCtx->messageEntryTableNes;
     const char* segment = msgEntry->segment;
+    const char* foundSegment;
+    const char* nextSegment;
 
     while (msgEntry->textId != 0xFFFF) {
         if (msgEntry->textId == textId) {
@@ -61,6 +61,7 @@ void Message_FindMessageNES(GlobalContext* globalCtx, u16 textId) {
         }
         msgEntry++;
     }
+
     msgEntry = msgCtx->messageEntryTableNes;
     foundSegment = msgEntry->segment;
     msgEntry++;
@@ -73,6 +74,7 @@ void Message_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32* offse
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s32 temp1 = *offset;
     f32 temp2 = *arg3;
+
     Font_LoadCharNES(globalCtx, codePointIndex, temp1);
     msgCtx->decodedBuffer.schar[decodedBufPos] = codePointIndex;
     temp1 += FONT_CHAR_TEX_SIZE;
@@ -128,14 +130,16 @@ void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos
 
     msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
+
     for (j = 0; j < D_801D0710[gSaveContext.language - 1]; j++) {
         Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.language - 1][j], o);
         msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.language - 1][j];
         o += FONT_CHAR_TEX_SIZE;
         p++;
     }
-    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.language - 1] + 1);
+
     p--;
+    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.language - 1] + 1);
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
@@ -168,6 +172,7 @@ void Message_LoadRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* of
     Font_LoadCharNES(globalCtx, 'e', o);
     o += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.schar[p] = 'e';
+
     if (singular != 1) {
         p++;
         Font_LoadCharNES(globalCtx, 's', o);
@@ -177,6 +182,7 @@ void Message_LoadRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos, s32* of
     } else {
         f += 16.0f * msgCtx->unk12098 * 5.0f;
     }
+
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
@@ -262,6 +268,7 @@ void Message_LoadAreaTextNES(GlobalContext* globalCtx, s32* offset, f32* arg2, s
         p++;
         f += (D_801D0470[currentChar - ' '] * msgCtx->unk12098);
     }
+
     p--;
     f += (stringLimit - 1) * (16.0f * msgCtx->unk12098);
     *decodedBufPos = p;
