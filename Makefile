@@ -291,7 +291,7 @@ build/asm/%.o: asm/%.s
 build/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(OBJCOPY) -O binary $@ $@.bin
-	@$(RM_MDEBUG)
+	$(RM_MDEBUG)
 
 build/baserom/%.o: baserom/%
 	$(OBJCOPY) -I binary -O elf32-big $< $@
@@ -307,27 +307,27 @@ build/src/overlays/%.o: src/overlays/%.c
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
 	(test -f $(@D)/$(notdir $(@D))_reloc.s && $(AS) $(ASFLAGS) $(@D)/$(notdir $(@D))_reloc.s -o $(@D)/$(notdir $(@D))_reloc.o) || true
-	@$(RM_MDEBUG)
+	$(RM_MDEBUG)
 
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
-	@$(RM_MDEBUG)
+	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
-	@$(RM_MDEBUG)
+	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
-	@$(RM_MDEBUG)
+	$(RM_MDEBUG)
 
 # Build C files from assets
 
