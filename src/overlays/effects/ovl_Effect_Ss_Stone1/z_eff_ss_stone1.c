@@ -44,7 +44,7 @@ u32 EffectSsStone1_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     this->pos = pos;
     this->vec = pos;
     this->life = 8;
-    this->rReg0 = initParams->unk_C;
+    this->rReg0 = initParams->reg0;
     this->draw = EffectSsStone1_Draw;
     this->update = EffectSsStone1_Update;
 
