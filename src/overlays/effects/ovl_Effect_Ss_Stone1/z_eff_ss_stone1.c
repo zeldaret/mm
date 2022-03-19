@@ -27,14 +27,14 @@ typedef struct {
 } EffStoneDrawInfo;
 
 static EffStoneDrawInfo sDrawInfo[] = {
-    { gameplay_keep_Tex_03BD90, { 200, 0, 0, 255 }, { 0, 0, 0, 255 } },
-    { gameplay_keep_Tex_03B990, { 255, 100, 0, 255 }, { 100, 0, 0, 255 } },
-    { gameplay_keep_Tex_03B590, { 255, 200, 0, 255 }, { 200, 0, 0, 255 } },
-    { gameplay_keep_Tex_03B190, { 255, 255, 0, 255 }, { 255, 0, 0, 255 } },
-    { gameplay_keep_Tex_03AD90, { 255, 255, 150, 255 }, { 255, 150, 0, 255 } },
-    { gameplay_keep_Tex_03A990, { 255, 255, 255, 255 }, { 255, 255, 0, 255 } },
-    { gameplay_keep_Tex_03A590, { 255, 255, 255, 255 }, { 0, 255, 0, 255 } },
-    { gameplay_keep_Tex_03A190, { 255, 255, 255, 255 }, { 0, 255, 255, 255 } },
+    { gEffStone1Tex, { 200, 0, 0, 255 }, { 0, 0, 0, 255 } },
+    { gEffStone2Tex, { 255, 100, 0, 255 }, { 100, 0, 0, 255 } },
+    { gEffStone3Tex, { 255, 200, 0, 255 }, { 200, 0, 0, 255 } },
+    { gEffStone4Tex, { 255, 255, 0, 255 }, { 255, 0, 0, 255 } },
+    { gEffStone5Tex, { 255, 255, 150, 255 }, { 255, 150, 0, 255 } },
+    { gEffStone6Tex, { 255, 255, 255, 255 }, { 255, 255, 0, 255 } },
+    { gEffStone7Tex, { 255, 255, 255, 255 }, { 0, 255, 0, 255 } },
+    { gEffStone8Tex, { 255, 255, 255, 255 }, { 0, 255, 255, 255 } },
 };
 
 u32 EffectSsStone1_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
@@ -70,7 +70,7 @@ void EffectSsStone1_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, drawParams->primColor.r, drawParams->primColor.g, drawParams->primColor.b,
                     255);
     gDPSetEnvColor(POLY_XLU_DISP++, drawParams->envColor.r, drawParams->envColor.g, drawParams->envColor.b, 255);
-    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_03C190);
+    gSPDisplayList(POLY_XLU_DISP++, gEffStoneDL);
 
     CLOSE_DISPS(gfxCtx);
 }
