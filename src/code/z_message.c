@@ -531,7 +531,59 @@ void func_80152464(GlobalContext* globalCtx, u16 arg1) {
     func_80151DA4(globalCtx, arg1);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_GetState.s")
+u8 Message_GetState(MessageContext* msgCtx) {
+    if (msgCtx->unk11F10 == 0) {
+        return 0;
+    }
+
+    if (msgCtx->msgMode == 0x42) {
+        if (msgCtx->unk11F14 != 0xFFFF) {
+            return 1;
+        }
+        if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
+            return 4;
+        }
+        if ((msgCtx->unk12020 == 0x40) || (msgCtx->unk12020 == 0x42) || (msgCtx->unk12020 == 0x30)) {
+            return 5;
+        }
+        if (msgCtx->unk12020 == 0x41) {
+            return 0x10;
+        }
+        if (((s32)msgCtx->unk12020 >= 0x50) && ((s32)msgCtx->unk12020 < 0x58)) {
+            return 3;
+        }
+        if ((msgCtx->unk12020 == 0x60) || (msgCtx->unk12020 == 0x61)) {
+            return 0xE;
+        }
+        if (msgCtx->unk12020 == 0x62) {
+            return 0xF;
+        }
+        if (msgCtx->unk12020 == 0x63) {
+            return 0x11;
+        }
+        if (msgCtx->unk12020 == 0x12) {
+            return 0x12;
+        }
+        return 6;
+    } else if (msgCtx->msgMode == 0x41) {
+        return 0xA;
+    } else if (msgCtx->msgMode == 0x1B) {
+        return 7;
+    } else if ((msgCtx->ocarinaMode == 3) || (msgCtx->msgMode == 0x37)) {
+        return 8;
+    } else if (msgCtx->msgMode == 0x20) {
+        return 9;
+    } else if ((msgCtx->msgMode == 0x21) || (msgCtx->msgMode == 0x3A)) {
+        return 0xB;
+    } else if (msgCtx->msgMode == 0x3D) {
+        return 0xC;
+    } else if (msgCtx->msgMode == 0x40) {
+        return 0xD;
+    } else if ((msgCtx->msgMode == 0x43) && (msgCtx->unk12023 == 1) && (msgCtx->unk120B1 == 0)) {
+        return 2;
+    }
+    return 3;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")
 

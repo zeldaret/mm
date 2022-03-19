@@ -803,7 +803,8 @@ typedef struct {
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F14 */ UNK_TYPE1 pad11F14[0x6];
+    /* 0x11F14 */ u16 unk11F14;
+    /* 0x11F16 */ UNK_TYPE1 pad11F16[0x4];
     /* 0x11F1A */ s16 unk11F1A[3];
     /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
