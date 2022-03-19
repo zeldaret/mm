@@ -16,16 +16,16 @@ typedef struct EnWallmas {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnWallmasActionFunc actionFunc;
-    /* 0x18C */ u8 unk_18C;
+    /* 0x18C */ u8 drawDmgEffType;
     /* 0x18E */ s16 timer;
     /* 0x190 */ s16 switchFlag;
     /* 0x192 */ Vec3s jointTable[WALLMASTER_LIMB_MAX];
     /* 0x228 */ Vec3s morphTable[WALLMASTER_LIMB_MAX];
     /* 0x2C0 */ f32 unk_2C0;
     /* 0x2C4 */ f32 unk_2C4;
-    /* 0x2C8 */ f32 unk_2C8;
-    /* 0x2CC */ f32 unk_2CC;
-    /* 0x2D0 */ f32 unk_2D0;
+    /* 0x2C8 */ f32 drawDmgEffAlpha;
+    /* 0x2CC */ f32 drawDmgEffScale;
+    /* 0x2D0 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2D4 */ Vec3f limbPos[11];
     /* 0x358 */ ColliderCylinder collider;
 } EnWallmas; // size = 0x3A4
