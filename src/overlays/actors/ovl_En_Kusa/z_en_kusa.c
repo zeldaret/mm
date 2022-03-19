@@ -112,9 +112,8 @@ static InitChainEntry sInitChain[] = {
 };
 
 /**
- * @brief Applies a "swaying" motion of the provided matrix
+ * @brief Applies a "swaying" motion to the provided matrix
  *
- * @param[in]     matrix  Matrix to update the current state
  */
 void EnAm_ApplySway(MtxF* matrix) {
     MtxF* mtxState = Matrix_GetCurrentState();
@@ -134,23 +133,23 @@ void EnAm_ApplySway(MtxF* matrix) {
 void EnKusa_Sway(void) {
     s32 i;
     s32 pad;
-    f32 spBC;
+    f32 sin_6CDA;
     f32* ptr;
-    f32 spB4;
-    f32 spB0;
+    f32 sin_6CDE;
+    f32 sin_6CE0;
     f32 tempf1;
     f32 tempf2;
     f32 tempf3;
     f32 tempf4;
     f32 tempf5;
     f32 sp7C[8];
-    f32 temp_f12;
-    f32 temp_f20;
-    f32 temp_f22;
-    f32 temp_f24;
-    f32 temp_f26;
-    f32 temp_f28;
-    f32 temp_f30;
+    f32 cos_6CE0;
+    f32 cos_6CDA;
+    f32 cos_6CDC;
+    f32 cos_6CDE;
+    f32 cos_6CD8;
+    f32 sin_6CD8;
+    f32 sin_6CDC;
 
     D_80936CD8 += 0x46;
     D_80936CDA += 0x12C;
@@ -158,31 +157,31 @@ void EnKusa_Sway(void) {
     D_80936CDE += 0x514;
     D_80936CE0 += 0x22C4;
 
-    temp_f28 = Math_SinS(D_80936CD8);
-    spBC = Math_SinS(D_80936CDA);
-    temp_f30 = Math_SinS(D_80936CDC);
-    spB4 = Math_SinS(D_80936CDE) * 1.2f;
-    spB0 = Math_SinS(D_80936CE0) * 1.5f;
+    sin_6CD8 = Math_SinS(D_80936CD8);
+    sin_6CDA = Math_SinS(D_80936CDA);
+    sin_6CDC = Math_SinS(D_80936CDC);
+    sin_6CDE = Math_SinS(D_80936CDE) * 1.2f;
+    sin_6CE0 = Math_SinS(D_80936CE0) * 1.5f;
 
-    temp_f26 = Math_CosS(D_80936CD8);
-    temp_f20 = Math_CosS(D_80936CDA);
-    temp_f22 = Math_CosS(D_80936CDC);
-    temp_f24 = Math_CosS(D_80936CDE) * 1.3f;
-    temp_f12 = Math_CosS(D_80936CE0) * 1.7f;
+    cos_6CD8 = Math_CosS(D_80936CD8);
+    cos_6CDA = Math_CosS(D_80936CDA);
+    cos_6CDC = Math_CosS(D_80936CDC);
+    cos_6CDE = Math_CosS(D_80936CDE) * 1.3f;
+    cos_6CE0 = Math_CosS(D_80936CE0) * 1.7f;
 
-    sp7C[0] = (temp_f28 - temp_f20) * temp_f30 * temp_f26 * temp_f28 * 0.0015f;
-    sp7C[1] = (spBC - temp_f22) * spB4 * temp_f20 * temp_f28 * 0.0015f;
-    sp7C[2] = (temp_f30 - temp_f24) * temp_f22 * temp_f28 * temp_f26 * 0.0015f;
-    sp7C[3] = (spB4 - temp_f20) * temp_f24 * spBC * temp_f26 * 0.0015f;
-    sp7C[4] = (temp_f28 - temp_f22) * temp_f28 * spBC * spB0 * 0.0015f;
-    sp7C[5] = (spBC - temp_f24) * temp_f30 * spB4 * spB0 * 0.0015f;
-    sp7C[6] = (temp_f30 - temp_f26) * temp_f26 * temp_f20 * temp_f12 * 0.0015f;
-    sp7C[7] = (spB4 - temp_f20) * temp_f22 * temp_f24 * temp_f12 * 0.0015f;
+    sp7C[0] = (sin_6CD8 - cos_6CDA) * sin_6CDC * cos_6CD8 * sin_6CD8 * 0.0015f;
+    sp7C[1] = (sin_6CDA - cos_6CDC) * sin_6CDE * cos_6CDA * sin_6CD8 * 0.0015f;
+    sp7C[2] = (sin_6CDC - cos_6CDE) * cos_6CDC * sin_6CD8 * cos_6CD8 * 0.0015f;
+    sp7C[3] = (sin_6CDE - cos_6CDA) * cos_6CDE * sin_6CDA * cos_6CD8 * 0.0015f;
+    sp7C[4] = (sin_6CD8 - cos_6CDC) * sin_6CD8 * sin_6CDA * sin_6CE0 * 0.0015f;
+    sp7C[5] = (sin_6CDA - cos_6CDE) * sin_6CDC * sin_6CDE * sin_6CE0 * 0.0015f;
+    sp7C[6] = (sin_6CDC - cos_6CD8) * cos_6CD8 * cos_6CDA * cos_6CE0 * 0.0015f;
+    sp7C[7] = (sin_6CDE - cos_6CDA) * cos_6CDC * cos_6CDE * cos_6CE0 * 0.0015f;
 
     for (i = 0; i < ARRAY_COUNT(D_80936AD8); i++) {
         ptr = &D_80936AD8[i].mf[0][0];
 
-        tempf1 = sp7C[(i + 0) & 7];
+        tempf1 = sp7C[i & 7];
         tempf2 = sp7C[(i + 1) & 7];
         tempf3 = sp7C[(i + 2) & 7];
         tempf4 = sp7C[(i + 3) & 7];
@@ -324,7 +323,7 @@ void EnKusa_SpawnFragments(EnKusa* this, GlobalContext* globalCtx) {
 }
 
 void EnKusa_SpawnBugs(EnKusa* this, GlobalContext* globalCtx) {
-    u32 numBugs = 0;
+    u32 numBugs;
 
     for (numBugs = 0; numBugs < 3; numBugs++) {
         Actor* bug = Actor_SpawnAsChildAndCutscene(
@@ -385,7 +384,7 @@ void EnKusa_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.home.rot.y = this->actor.shape.rot.y;
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
-    if (EnKusa_SnapToFloor(this, globalCtx, 0.0f) == 0) {
+    if (!EnKusa_SnapToFloor(this, globalCtx, 0.0f)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -547,11 +546,12 @@ void EnKusa_Fall(EnKusa* this, GlobalContext* globalCtx) {
     s16 angleOffset;
 
     wasHit = (this->collider.base.atFlags & AT_HIT) != 0;
+
     if (wasHit) {
         this->collider.base.atFlags &= ~AT_HIT;
     }
     this->timer++;
-    if ((this->actor.bgCheckFlags & 0xB) || (wasHit) || (this->timer >= 100)) {
+    if ((this->actor.bgCheckFlags & 0xB) || wasHit || (this->timer >= 100)) {
         if (!(this->actor.bgCheckFlags & 0x20)) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
