@@ -1029,11 +1029,7 @@ beginseg
     name "ovl_Bg_Breakwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Breakwall/z_bg_breakwall.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Bg_Breakwall/ovl_Bg_Breakwall_reloc.o"
-#else
-    include "build/data/ovl_Bg_Breakwall/ovl_Bg_Breakwall.reloc.o"
-#endif
 endseg
 
 beginseg

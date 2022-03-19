@@ -43,7 +43,7 @@ void func_808B7A10(BgBreakwall* this, GlobalContext* globalCtx);
 void func_808B7A90(Actor* thisx, GlobalContext* globalCtx);
 void func_808B7B54(Actor* thisx, GlobalContext* globalCtx);
 void func_808B7D34(Actor* thisx, GlobalContext* globalCtx);
-void func_808B7FE4(Actor* thisx, GlobalContext* globalCtx);
+void BgBreakwall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit Bg_Breakwall_InitVars = {
     ACTOR_BG_BREAKWALL, ACTORCAT_ITEMACTION,           FLAGS,
@@ -62,7 +62,7 @@ typedef struct {
     /* 0x1C */ ActorFunc unk_1C;
 } BgBreakwallStruct;
 
-static BgBreakwallStruct D_808B8140[] = {
+BgBreakwallStruct D_808B8140[] = {
     { OBJECT_OMOYA_OBJ, object_omoya_obj_DL_0001A0, NULL, NULL, NULL, func_808B7380, func_808B77D0, NULL },
     {
         OBJECT_YUKIMURA_OBJ,
@@ -74,12 +74,46 @@ static BgBreakwallStruct D_808B8140[] = {
         func_808B77D0,
         NULL,
     },
-    { OBJECT_KEIKOKU_OBJ, object_keikoku_obj_DL_0027D8, NULL, object_keikoku_obj_Matanimheader_004290, NULL,
-      func_808B73FC, func_808B77D0, NULL },
-    { OBJECT_KEIKOKU_OBJ, object_keikoku_obj_DL_0044A8, NULL, NULL, NULL, func_808B736C, func_808B77D0, NULL },
-    { OBJECT_POSTHOUSE_OBJ, object_posthouse_obj_DL_000A50, NULL, NULL, NULL, func_808B7410, func_808B77E0, NULL },
-    { OBJECT_POSTHOUSE_OBJ, object_posthouse_obj_DL_001870, NULL, NULL, &object_posthouse_obj_Colheader_002948,
-      func_808B7460, func_808B782C, NULL },
+    {
+        OBJECT_KEIKOKU_OBJ,
+        object_keikoku_obj_DL_0027D8,
+        NULL,
+        object_keikoku_obj_Matanimheader_004290,
+        NULL,
+        func_808B73FC,
+        func_808B77D0,
+        NULL,
+    },
+    {
+        OBJECT_KEIKOKU_OBJ,
+        object_keikoku_obj_DL_0044A8,
+        NULL,
+        NULL,
+        NULL,
+        func_808B736C,
+        func_808B77D0,
+        NULL,
+    },
+    {
+        OBJECT_POSTHOUSE_OBJ,
+        object_posthouse_obj_DL_000A50,
+        NULL,
+        NULL,
+        NULL,
+        func_808B7410,
+        func_808B77E0,
+        NULL,
+    },
+    {
+        OBJECT_POSTHOUSE_OBJ,
+        object_posthouse_obj_DL_001870,
+        NULL,
+        NULL,
+        &object_posthouse_obj_Colheader_002948,
+        func_808B7460,
+        func_808B782C,
+        NULL,
+    },
     {
         OBJECT_KUMO30,
         NULL,
@@ -90,8 +124,16 @@ static BgBreakwallStruct D_808B8140[] = {
         func_808B78A4,
         func_808B7A90,
     },
-    { OBJECT_KUMO30, NULL, NULL, object_kumo30_Matanimheader_002890, NULL, func_808B736C, func_808B78DC,
-      func_808B7B54 },
+    {
+        OBJECT_KUMO30,
+        NULL,
+        NULL,
+        object_kumo30_Matanimheader_002890,
+        NULL,
+        func_808B736C,
+        func_808B78DC,
+        func_808B7B54,
+    },
     {
         OBJECT_MNK,
         object_mnk_DL_000F58,
@@ -112,8 +154,16 @@ static BgBreakwallStruct D_808B8140[] = {
         func_808B7A10,
         func_808B7D34,
     },
-    { OBJECT_KAIZOKU_OBJ, object_kaizoku_obj_DL_00AD50, NULL, NULL, &object_kaizoku_obj_Colheader_00B868, func_808B736C,
-      func_808B77D0, NULL },
+    {
+        OBJECT_KAIZOKU_OBJ,
+        object_kaizoku_obj_DL_00AD50,
+        NULL,
+        NULL,
+        &object_kaizoku_obj_Colheader_00B868,
+        func_808B736C,
+        func_808B77D0,
+        NULL,
+    },
     {
         OBJECT_IKNINSIDE_OBJ,
         NULL,
@@ -124,8 +174,16 @@ static BgBreakwallStruct D_808B8140[] = {
         func_808B7A10,
         func_808B7D34,
     },
-    { OBJECT_SPOT11_OBJ, object_spot11_obj_DL_0013F0, NULL, NULL, &object_spot11_obj_Colheader_001EB8, func_808B736C,
-      func_808B77D0, NULL },
+    {
+        OBJECT_SPOT11_OBJ,
+        object_spot11_obj_DL_0013F0,
+        NULL,
+        NULL,
+        &object_spot11_obj_Colheader_001EB8,
+        func_808B736C,
+        func_808B77D0,
+        NULL,
+    },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -264,7 +322,7 @@ void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_15D = BGBREAKWALL_GET_FE00(&this->dyna.actor);
 }
 
-void func_808B767C(Actor* thisx, GlobalContext* globalCtx) {
+void BgBreakwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     BgBreakwall* this = THIS;
     BgBreakwallStruct* temp_s1 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
@@ -278,7 +336,7 @@ void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx) {
         BgBreakwallStruct* temp_s1 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
         this->dyna.actor.objBankIndex = this->unk_15C;
-        this->dyna.actor.draw = func_808B7FE4;
+        this->dyna.actor.draw = BgBreakwall_Draw;
 
         if (((BGBREAKWALL_GET_F(&this->dyna.actor)) != BGBREAKWALL_F_7) &&
             ((BGBREAKWALL_GET_F(&this->dyna.actor)) != BGBREAKWALL_F_9) &&
@@ -298,7 +356,7 @@ void func_808B76CC(BgBreakwall* this, GlobalContext* globalCtx) {
         }
 
         BgBreakwall_SetupAction(this, temp_s1->unk_18);
-        this->dyna.actor.destroy = func_808B767C;
+        this->dyna.actor.destroy = BgBreakwall_Destroy;
     }
 }
 
@@ -307,7 +365,7 @@ void func_808B77D0(BgBreakwall* this, GlobalContext* globalCtx) {
 
 void func_808B77E0(BgBreakwall* this, GlobalContext* globalCtx) {
     if (!Flags_GetSwitch(globalCtx, this->unk_15D)) {
-        this->dyna.actor.draw = func_808B7FE4;
+        this->dyna.actor.draw = BgBreakwall_Draw;
     } else {
         this->dyna.actor.draw = NULL;
     }
@@ -416,49 +474,40 @@ void func_808B7B54(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-#ifdef NON_MATCHING
 void func_808B7D34(Actor* thisx, GlobalContext* globalCtx) {
     BgBreakwall* this = THIS;
     s32 sp48;
-    u32 r;
-    u32 g;
-    u32 b;
-    u32 a;
+    s32 r;
+    s32 b;
+    s32 a;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     sp48 = 255 - this->unk_15E;
 
-    r = 255;
-    g = (((sp48 * 245) + (this->unk_15E * 255)) & 0xFF00) >> 8;
+    r = (((sp48 * 245) + (this->unk_15E * 255)) & 0xFF00) >> 8;
     b = (((sp48 * 145) + (this->unk_15E * 85)) & 0xFF00) >> 8;
     a = (((sp48 * 135) + (this->unk_15E * 55)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, r, g, b, a));
+    gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, r, b, a));
 
     r = (((sp48 * 255) + (this->unk_15E * 150)) & 0xFF00) >> 8;
-    g = r;
     b = (((sp48 * 255) + (this->unk_15E * 100)) & 0xFF00) >> 8;
     a = (((sp48 * 255) + (this->unk_15E * 75)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, r, g, b, a));
+    gSPSegment(POLY_XLU_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, r, r, b, a));
 
-    r = 255;
-    g = 255;
-    b = (((sp48 * 185) + (this->unk_15E * 140)) & 0xFF00) >> 8;
-    a = (((sp48 * 235) + (this->unk_15E * 45)) & 0xFF00) >> 8;
+    r = (((sp48 * 185) + (this->unk_15E * 140)) & 0xFF00) >> 8;
+    b = (((sp48 * 235) + (this->unk_15E * 45)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x0B, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, r, g, b, a));
+    gSPSegment(POLY_XLU_DISP++, 0x0B, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, 255, r, b));
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Breakwall/func_808B7D34.s")
-#endif
 
-void func_808B7FE4(Actor* thisx, GlobalContext* globalCtx) {
-    BgBreakwall* this = THIS;
+void BgBreakwall_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
+    BgBreakwall* this = THIS;
     BgBreakwallStruct* temp_s2 = &D_808B8140[BGBREAKWALL_GET_F(&this->dyna.actor)];
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
