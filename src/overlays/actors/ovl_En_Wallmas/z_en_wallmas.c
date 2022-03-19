@@ -75,39 +75,49 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
+typedef enum {
+    /* 0x0 */ EN_WALLMAS_DMGEFF_NONE,
+    /* 0x1 */ EN_WALLMAS_DMGEFF_STUN,
+    /* 0x2 */ EN_WALLMAS_DMGEFF_FIRE_ARROW,
+    /* 0x3 */ EN_WALLMAS_DMGEFF_ICE_ARROW,
+    /* 0x4 */ EN_WALLMAS_DMGEFF_LIGHT_ARROW,
+    /* 0x5 */ EN_WALLMAS_DMGEFF_ZORA_MAGIC,
+    /* 0xF */ EN_WALLMAS_DMGEFF_HOOKSHOT = 0xF
+} EnWallmasDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(1, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0xF),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(1, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(0, 0x1),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(2, EN_WALLMAS_DMGEFF_FIRE_ARROW),
+    /* Ice arrow      */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_ICE_ARROW),
+    /* Light arrow    */ DMG_ENTRY(2, EN_WALLMAS_DMGEFF_LIGHT_ARROW),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_WALLMAS_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_ZORA_MAGIC),
+    /* Normal shield  */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_WALLMAS_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_WALLMAS_DMGEFF_NONE),
 };
 
 static CollisionCheckInfoInit sColChkInfoInit = { 3, 30, 40, 150 };
@@ -181,7 +191,7 @@ void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80874A88(EnWallmas* this) {
-    this->drawDmgEffType = 0xA;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
     this->drawDmgEffFrozenSteamScale = 0.82500005f;
     this->drawDmgEffAlpha = 1.0f;
@@ -192,8 +202,8 @@ void func_80874A88(EnWallmas* this) {
 }
 
 void func_80874B04(EnWallmas* this, GlobalContext* globalCtx) {
-    if (this->drawDmgEffType == 0xA) {
-        this->drawDmgEffType = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = 0;
         this->drawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 11, 2, 0.3f, 0.2f);
@@ -530,7 +540,7 @@ void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx) {
     if (this->timer == 0) {
         func_80874B04(this, globalCtx);
         if (this->actor.colChkInfo.health == 0) {
-            func_808753F0(this, 0);
+            func_808753F0(this, false);
         } else {
             this->actor.world.rot.y = this->actor.shape.rot.y;
             func_80875248(this);
@@ -538,12 +548,13 @@ void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80875A74(EnWallmas* this, GlobalContext* globalCtx) {
+void EnWallmas_UpdateDamage(EnWallmas* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.info);
 
-        if ((this->drawDmgEffType != 0xA) || (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+            (!(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
@@ -554,8 +565,8 @@ void func_80875A74(EnWallmas* this, GlobalContext* globalCtx) {
 
             func_80874B04(this, globalCtx);
 
-            if (this->actor.colChkInfo.damageEffect != 0xF) {
-                if (this->actor.colChkInfo.damageEffect == 3) {
+            if (this->actor.colChkInfo.damageEffect != EN_WALLMAS_DMGEFF_HOOKSHOT) {
+                if (this->actor.colChkInfo.damageEffect == EN_WALLMAS_DMGEFF_ICE_ARROW) {
                     func_80874A88(this);
                     if (this->actor.colChkInfo.health == 0) {
                         this->timer = 3;
@@ -563,34 +574,34 @@ void func_80875A74(EnWallmas* this, GlobalContext* globalCtx) {
                     }
 
                     func_808759B8(this);
-                } else if (this->actor.colChkInfo.damageEffect == 1) {
+                } else if (this->actor.colChkInfo.damageEffect == EN_WALLMAS_DMGEFF_STUN) {
                     this->timer = 40;
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_808759B8(this);
-                } else if (this->actor.colChkInfo.damageEffect == 5) {
+                } else if (this->actor.colChkInfo.damageEffect == EN_WALLMAS_DMGEFF_ZORA_MAGIC) {
                     this->timer = 40;
                     Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     this->drawDmgEffScale = 0.55f;
                     this->drawDmgEffAlpha = 2.0f;
-                    this->drawDmgEffType = 0x1F;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
                     func_808759B8(this);
                 } else {
-                    if (this->actor.colChkInfo.damageEffect == 2) {
+                    if (this->actor.colChkInfo.damageEffect == EN_WALLMAS_DMGEFF_FIRE_ARROW) {
                         this->drawDmgEffAlpha = 4.0f;
                         this->drawDmgEffScale = 0.55f;
-                        this->drawDmgEffType = 0;
-                    } else if (this->actor.colChkInfo.damageEffect == 4) {
+                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+                    } else if (this->actor.colChkInfo.damageEffect == EN_WALLMAS_DMGEFF_LIGHT_ARROW) {
                         this->drawDmgEffAlpha = 4.0f;
                         this->drawDmgEffScale = 0.55f;
-                        this->drawDmgEffType = 0x14;
+                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                     this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
                                     this->collider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
                     }
 
-                    func_808753F0(this, 1);
+                    func_808753F0(this, true);
                 }
             }
         }
@@ -601,8 +612,9 @@ void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnWallmas* this = THIS;
 
-    func_80875A74(this, globalCtx);
+    EnWallmas_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
+    
     if ((this->actionFunc != func_80874BE4) && (this->actionFunc != func_80875910) &&
         (this->actionFunc != func_8087571C) && (this->actionFunc != func_8087596C)) {
         if ((this->actionFunc != func_808752CC) && (this->actionFunc != func_8087571C)) {
@@ -625,7 +637,7 @@ void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetFocus(&this->actor, 25.0f);
 
         if (this->drawDmgEffAlpha > 0.0f) {
-            if (this->drawDmgEffType != 0xA) {
+            if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
                 Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
