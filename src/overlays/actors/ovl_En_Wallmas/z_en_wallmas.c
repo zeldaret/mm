@@ -17,31 +17,31 @@ void EnWallmas_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80874B88(EnWallmas* this, GlobalContext* globalCtx);
 void func_80874BE4(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx);
 void func_80874DE8(EnWallmas* this, GlobalContext* globalCtx);
+void func_80874F14(EnWallmas* this, GlobalContext* globalCtx);
 void func_80874FD8(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875014(EnWallmas* this);
 void func_80875054(EnWallmas* this, GlobalContext* globalCtx);
+void func_808750B8(EnWallmas* this);
 void func_80875108(EnWallmas* this, GlobalContext* globalCtx);
+void func_808751C4(EnWallmas* this);
 void func_8087520C(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875248(EnWallmas* this);
 void func_808752CC(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875484(EnWallmas* this, GlobalContext* globalCtx);
+void func_80875518(EnWallmas* this);
 void func_8087556C(EnWallmas* this, GlobalContext* globalCtx);
+void func_808755A8(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875638(EnWallmas* this, GlobalContext* globalCtx);
+void func_808756AC(EnWallmas* this, GlobalContext* globalCtx);
 void func_8087571C(EnWallmas* this, GlobalContext* globalCtx);
+void func_808758C8(EnWallmas* this);
 void func_80875910(EnWallmas* this, GlobalContext* globalCtx);
 void func_8087596C(EnWallmas* this, GlobalContext* globalCtx);
 void func_80875A0C(EnWallmas* this, GlobalContext* globalCtx);
-void func_80875248(EnWallmas* this);
-void func_808758C8(EnWallmas* this);
-void func_80874B88(EnWallmas* this, GlobalContext* globalCtx);
-void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx);
-void func_80874F14(EnWallmas* this, GlobalContext* globalCtx);
-void func_808756AC(EnWallmas* this, GlobalContext* globalCtx);
-void func_80875014(EnWallmas* this);
-void func_808750B8(EnWallmas* this);
-void func_808751C4(EnWallmas* this);
-void func_80875518(EnWallmas* this);
-void func_808755A8(EnWallmas* this, GlobalContext* globalCtx);
 
 const ActorInit En_Wallmas_InitVars = {
     ACTOR_EN_WALLMAS,
