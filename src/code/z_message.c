@@ -592,7 +592,49 @@ void func_80152C64(View* view) {
     func_8013FBC8(view);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80152CAC.s")
+void func_80152CAC(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+
+    if (msgCtx->ocarinaAction == 2) {
+        func_8019C300(0xA);
+    } else {
+        if (msgCtx->ocarinaAction == 9) {
+            func_8019C300(0xD);
+        } else if (msgCtx->ocarinaAction == 7) {
+            func_8019C300(6);
+        } else if (msgCtx->ocarinaAction == 0xA) {
+            func_8019C300(2);
+        } else if (msgCtx->ocarinaAction == 0xC) {
+            func_8019C300(1);
+        } else if (msgCtx->ocarinaAction == 3) {
+            func_8019C300(0xF);
+        } else if (msgCtx->ocarinaAction == 0x10) {
+            func_8019C300(0xC);
+        } else if (msgCtx->ocarinaAction == 6) {
+            func_8019C300(6);
+        } else if (msgCtx->ocarinaAction == 5) {
+            func_8019C300(5);
+        } else {
+            func_8019C300(1);
+        }
+    }
+    if ((msgCtx->ocarinaAction == 0x3B) || (msgCtx->ocarinaAction == 0x3C)) {
+        func_8019C300(0xC);
+        func_8019C398(0xF, 0x83);
+        return;
+    }
+    if ((msgCtx->ocarinaAction == 0x3D) || (msgCtx->ocarinaAction == 0x3E)) {
+        func_8019C300(0xE);
+        func_8019C398((msgCtx->ocarinaAction - 0x29), 0x84);
+        return;
+    }
+    if ((msgCtx->ocarinaAction == 0x3F) || (msgCtx->ocarinaAction == 0x40)) {
+        func_8019C300(8);
+        func_8019C398((msgCtx->ocarinaAction - 0x2B), 0x44);
+        return;
+    }
+    func_8019C398((msgCtx->ocarinaAction - 1), 2);
+}
 
 // Spawn song effect?
 void func_80152EC0(GlobalContext* globalCtx) {
