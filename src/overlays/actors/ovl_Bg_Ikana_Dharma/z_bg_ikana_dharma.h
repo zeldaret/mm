@@ -5,15 +5,17 @@
 
 #define BGIKANADHARMA_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0x7F)
 
+#define BGIKANADHARMA_FLAG_IS_CHILD (1 << 5)
+
 struct BgIkanaDharma;
 
 typedef void (*BgIkanaDharmaActionFunc)(struct BgIkanaDharma*, GlobalContext*);
 
 typedef struct BgIkanaDharma {
     /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ ColliderCylinder unk15C;
+    /* 0x015C */ ColliderCylinder collider;
     /* 0x01A8 */ BgIkanaDharmaActionFunc actionFunc;
-    /* 0x01AC */ s8 unk_1AC;
+    /* 0x01AC */ s8 cutsceneFramesRemaining;
 } BgIkanaDharma; // size = 0x1B0
 
 extern const ActorInit Bg_Ikana_Dharma_InitVars;
