@@ -128,9 +128,14 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
 
-static f32 D_808763C0[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
+static f32 sYOffsetPerForm[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
 
-static s8 D_808763D4[] = { -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8 };
+/**
+ * This maps a given limb based on its limbIndex to its appropriate index
+ * in the limbPos array. An index of -1 indicates that the limb is not part
+ * of the limbPos array.
+ */
+static s8 sLimbIndexToLimbPosIndex[] = { -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8 };
 
 void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWallmas* this = THIS;
@@ -144,11 +149,11 @@ void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->switchFlag = EN_WALLMAS_GET_SWITCH_FLAG(thisx);
     this->actor.params &= 0xFF;
-    this->unk_2C4 = this->actor.shape.rot.x * 40.0f * 0.1f;
+    this->detectionRadius = this->actor.shape.rot.x * 40.0f * 0.1f;
     this->actor.shape.rot.x = 0;
     this->actor.world.rot.x = 0;
-    if (this->unk_2C4 <= 0.0f) {
-        this->unk_2C4 = 200.0f;
+    if (this->detectionRadius <= 0.0f) {
+        this->detectionRadius = 200.0f;
     }
 
     Actor_SetFocus(&this->actor, 25.0f);
@@ -162,14 +167,14 @@ void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if (EN_WALLMAS_GET_TYPE(&this->actor) == 2) {
+    if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_FLAG) {
         if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
 
         EnWallmas_ProximityOrSwitchInit(this);
-    } else if (EN_WALLMAS_GET_TYPE(&this->actor) == 1) {
+    } else if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_PROXIMITY) {
         EnWallmas_ProximityOrSwitchInit(this);
     } else {
         EnWallmas_TimerInit(this, globalCtx);
@@ -238,8 +243,8 @@ void EnWallmas_WaitToDrop(EnWallmas* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags1 & 0x08100000) || (player->stateFlags2 & 0x80) || (player->unk_B5E > 0) ||
         (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & 1) ||
-        ((EN_WALLMAS_GET_TYPE(&this->actor) == 1) &&
-         (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->unk_2C4)))) {
+        ((EN_WALLMAS_GET_TYPE(&this->actor) == WMT_PROXIMITY) &&
+         (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
         func_801A75E8(NA_SE_EN_FALL_AIM);
         this->timer = 130;
     }
@@ -259,7 +264,7 @@ void EnWallmas_SetupDrop(EnWallmas* this, GlobalContext* globalCtx) {
     Animation_Change(&this->skelAnime, &gWallmasterLungeAnim, 0.0f, 20.0f,
                      Animation_GetLastFrame(&gWallmasterLungeAnim), ANIMMODE_ONCE, 0.0f);
 
-    this->unk_2C0 = player->actor.world.pos.y;
+    this->yTarget = player->actor.world.pos.y;
     this->actor.world.pos.y = player->actor.world.pos.y + 300.0f;
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -278,8 +283,8 @@ void EnWallmas_Drop(EnWallmas* this, GlobalContext* globalCtx) {
                (this->actor.xzDistToPlayer < 30.0f) && (this->actor.playerHeightRel < -5.0f) &&
                (-(f32)(player->cylinder.dim.height + 10) < this->actor.playerHeightRel)) {
         EnWallmas_SetupTakePlayer(this, globalCtx);
-    } else if (this->actor.world.pos.y <= this->unk_2C0) {
-        this->actor.world.pos.y = this->unk_2C0;
+    } else if (this->actor.world.pos.y <= this->yTarget) {
+        this->actor.world.pos.y = this->yTarget;
         this->actor.velocity.y = 0.0f;
         EnWallmas_SetupLand(this, globalCtx);
     }
@@ -368,13 +373,13 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.playerHeightRel < -900.0f) {
-        if (EN_WALLMAS_GET_TYPE(&this->actor) == 2) {
+        if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_FLAG) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
 
-        if ((EN_WALLMAS_GET_TYPE(&this->actor) == 0) ||
-            (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < this->unk_2C4)) {
+        if ((EN_WALLMAS_GET_TYPE(&this->actor) == WMT_TIMER) ||
+            (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < this->detectionRadius)) {
             EnWallmas_TimerInit(this, globalCtx);
         } else {
             EnWallmas_ProximityOrSwitchInit(this);
@@ -450,7 +455,7 @@ void EnWallmas_SetupTakePlayer(EnWallmas* this, GlobalContext* globalCtx) {
     this->actionFunc = EnWallmas_TakePlayer;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
-    this->unk_2C0 = this->actor.playerHeightRel;
+    this->yTarget = this->actor.playerHeightRel;
     func_800B724C(globalCtx, &this->actor, 18);
 }
 
@@ -472,7 +477,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, GlobalContext* globalCtx) {
             this->actor.world.pos.y += 10.0f;
         }
 
-        player->actor.world.pos.y = this->actor.world.pos.y - D_808763C0[(void)0, gSaveContext.playerForm];
+        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[(void)0, gSaveContext.playerForm];
         if (this->timer == -30) {
             func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_TAKEN_AWAY);
         }
@@ -483,7 +488,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, GlobalContext* globalCtx) {
 
         this->timer += 2;
     } else {
-        Math_StepToF(&this->actor.world.pos.y, D_808763C0[(void)0, gSaveContext.playerForm] + player->actor.world.pos.y,
+        Math_StepToF(&this->actor.world.pos.y, sYOffsetPerForm[(void)0, gSaveContext.playerForm] + player->actor.world.pos.y,
                      5.0f);
     }
 
@@ -500,7 +505,7 @@ void EnWallmas_ProximityOrSwitchInit(EnWallmas* this) {
     this->timer = 0;
     this->actor.draw = NULL;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    if (EN_WALLMAS_GET_TYPE(&this->actor) == 1) {
+    if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_PROXIMITY) {
         this->actionFunc = EnWallmas_WaitForProximity;
     } else {
         this->actionFunc = EnWallmas_WaitForSwitchFlag;
@@ -510,7 +515,7 @@ void EnWallmas_ProximityOrSwitchInit(EnWallmas* this) {
 void EnWallmas_WaitForProximity(EnWallmas* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < this->unk_2C4) {
+    if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < this->detectionRadius) {
         EnWallmas_TimerInit(this, globalCtx);
     }
 }
@@ -701,8 +706,8 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     EnWallmas* this = THIS;
     Gfx* gfx;
 
-    if (D_808763D4[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_808763D4[limbIndex]]);
+    if (sLimbIndexToLimbPosIndex[limbIndex] != -1) {
+        Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
