@@ -8,7 +8,7 @@ struct GameState;
 struct GlobalContext;
 
 /**
- * Holds a compact version of a vertex used in the Skin system
+ * Holds a compact version of a vertex used in the Skin system (doesn't has the x, y, z positions or the flag member)
  * It is used to initialise the Vtx used by an animated limb
  */
 typedef struct {
@@ -33,8 +33,8 @@ typedef struct {
 } SkinTransformation; // size = 0xA
 
 typedef struct {
-    /* 0x00 */ u16 vtxCount; // number of skinVertices in this modif entry
-    /* 0x02 */ u16 transformCount; // count of limbTransformations
+    /* 0x00 */ u16 vtxCount; // number of vertices in this modif entry
+    /* 0x02 */ u16 transformCount;
     /* 0x04 */ u16 unk_04; // index of limbTransformations
     /* 0x08 */ SkinVertex* skinVertices;
     /* 0x0C */ SkinTransformation* limbTransformations;
