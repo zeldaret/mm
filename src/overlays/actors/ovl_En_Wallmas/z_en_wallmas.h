@@ -2,6 +2,7 @@
 #define Z_EN_WALLMAS_H
 
 #include "global.h"
+#include "objects/object_wallmaster/object_wallmaster.h"
 
 #define EN_WALLMAS_GET_TYPE(thisx) ((thisx)->params)
 #define EN_WALLMAS_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
@@ -18,8 +19,8 @@ typedef struct EnWallmas {
     /* 0x18C */ u8 unk_18C;
     /* 0x18E */ s16 timer;
     /* 0x190 */ s16 switchFlag;
-    /* 0x192 */ Vec3s jointTable[25];
-    /* 0x228 */ Vec3s morphTable[25];
+    /* 0x192 */ Vec3s jointTable[WALLMASTER_LIMB_MAX];
+    /* 0x228 */ Vec3s morphTable[WALLMASTER_LIMB_MAX];
     /* 0x2BE */ char unk_2BE[0x2];
     /* 0x2C0 */ f32 unk_2C0;
     /* 0x2C4 */ f32 unk_2C4;
