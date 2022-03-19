@@ -636,10 +636,10 @@ void EnWallmas_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80875F04(EnWallmas* this, GlobalContext* globalCtx) {
+void EnWallmas_DrawShadow(EnWallmas* this, GlobalContext* globalCtx) {
     s32 pad;
     f32 xzScale;
-    MtxF sp50;
+    MtxF mf;
     Gfx* gfx;
 
     if ((this->actor.floorPoly != NULL) && ((this->timer < 81) || (this->actionFunc == func_80875A0C))) {
@@ -650,8 +650,8 @@ void func_80875F04(EnWallmas* this, GlobalContext* globalCtx) {
         gSPDisplayList(&gfx[0], &sSetupDL[6 * 44]);
         gDPSetPrimColor(&gfx[1], 0, 0, 0, 0, 0, 255);
         func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                      &sp50);
-        Matrix_InsertMatrix(&sp50, MTXMODE_NEW);
+                      &mf);
+        Matrix_InsertMatrix(&mf, MTXMODE_NEW);
 
         if ((this->actionFunc != func_80874BE4) && (this->actionFunc != func_808752CC) &&
             (this->actionFunc != func_8087571C) && (this->actionFunc != func_8087596C)) {
@@ -670,7 +670,8 @@ void func_80875F04(EnWallmas* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808760A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnWallmas_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                               Actor* thisx) {
     EnWallmas* this = THIS;
 
     if (limbIndex == WALLMASTER_LIMB_ROOT) {
@@ -684,7 +685,7 @@ s32 func_808760A4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80876118(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnWallmas* this = THIS;
     Gfx* gfx;
 
@@ -723,7 +724,8 @@ void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actionFunc != func_80874BE4) {
         func_8012C28C(globalCtx->state.gfxCtx);
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                              this->skelAnime.dListCount, func_808760A4, func_80876118, &this->actor);
+                              this->skelAnime.dListCount, EnWallmas_OverrideLimbDraw, EnWallmas_PostLimbDraw,
+                              &this->actor);
         Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                                 this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                                 this->drawDmgEffType);
@@ -733,5 +735,5 @@ void EnWallmas_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_800AE5A0(globalCtx);
     }
 
-    func_80875F04(this, globalCtx);
+    EnWallmas_DrawShadow(this, globalCtx);
 }
