@@ -27,14 +27,14 @@ typedef struct {
 } EffStoneDrawInfo;
 
 static EffStoneDrawInfo sDrawInfo[] = {
-    { gEffStone1Tex, { 200, 0, 0, 255 }, { 0, 0, 0, 255 } },
-    { gEffStone2Tex, { 255, 100, 0, 255 }, { 100, 0, 0, 255 } },
-    { gEffStone3Tex, { 255, 200, 0, 255 }, { 200, 0, 0, 255 } },
-    { gEffStone4Tex, { 255, 255, 0, 255 }, { 255, 0, 0, 255 } },
-    { gEffStone5Tex, { 255, 255, 150, 255 }, { 255, 150, 0, 255 } },
-    { gEffStone6Tex, { 255, 255, 255, 255 }, { 255, 255, 0, 255 } },
-    { gEffStone7Tex, { 255, 255, 255, 255 }, { 0, 255, 0, 255 } },
-    { gEffStone8Tex, { 255, 255, 255, 255 }, { 0, 255, 255, 255 } },
+    { gEffStone8Tex, { 200, 0, 0, 255 }, { 0, 0, 0, 255 } },
+    { gEffStone7Tex, { 255, 100, 0, 255 }, { 100, 0, 0, 255 } },
+    { gEffStone6Tex, { 255, 200, 0, 255 }, { 200, 0, 0, 255 } },
+    { gEffStone5Tex, { 255, 255, 0, 255 }, { 255, 0, 0, 255 } },
+    { gEffStone4Tex, { 255, 255, 150, 255 }, { 255, 150, 0, 255 } },
+    { gEffStone3Tex, { 255, 255, 255, 255 }, { 255, 255, 0, 255 } },
+    { gEffStone2Tex, { 255, 255, 255, 255 }, { 0, 255, 0, 255 } },
+    { gEffStone1Tex, { 255, 255, 255, 255 }, { 0, 255, 255, 255 } },
 };
 
 u32 EffectSsStone1_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {

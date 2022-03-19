@@ -1050,14 +1050,14 @@
         <Texture Name="gExplosionSplashTex7" OutName="tex_0396F0" Format="i8" Width="32" Height="40" Offset="0x396F0" />
         <Texture Name="gExplosionSplashTex8" OutName="tex_039BF0" Format="i8" Width="32" Height="40" Offset="0x39BF0" />
         <DList Name="gExplosionSplashDL" Offset="0x3A0F0" />
-        <Texture Name="gEffStone8Tex" OutName="eff_stone_8" Format="ia8" Width="32" Height="32" Offset="0x3A190" />
-        <Texture Name="gEffStone7Tex" OutName="eff_stone_7" Format="ia8" Width="32" Height="32" Offset="0x3A590" />
-        <Texture Name="gEffStone6Tex" OutName="eff_stone_6" Format="ia8" Width="32" Height="32" Offset="0x3A990" />
-        <Texture Name="gEffStone5Tex" OutName="eff_stone_5" Format="ia8" Width="32" Height="32" Offset="0x3AD90" />
-        <Texture Name="gEffStone4Tex" OutName="eff_stone_4" Format="ia8" Width="32" Height="32" Offset="0x3B190" />
-        <Texture Name="gEffStone3Tex" OutName="eff_stone_3" Format="ia8" Width="32" Height="32" Offset="0x3B590" />
-        <Texture Name="gEffStone2Tex" OutName="eff_stone_2" Format="ia8" Width="32" Height="32" Offset="0x3B990" />
-        <Texture Name="gEffStone1Tex" OutName="eff_stone_1" Format="ia8" Width="32" Height="32" Offset="0x3BD90" />
+        <Texture Name="gEffStone1Tex" OutName="eff_stone_1" Format="ia8" Width="32" Height="32" Offset="0x3A190" />
+        <Texture Name="gEffStone2Tex" OutName="eff_stone_2" Format="ia8" Width="32" Height="32" Offset="0x3A590" />
+        <Texture Name="gEffStone3Tex" OutName="eff_stone_3" Format="ia8" Width="32" Height="32" Offset="0x3A990" />
+        <Texture Name="gEffStone4Tex" OutName="eff_stone_4" Format="ia8" Width="32" Height="32" Offset="0x3AD90" />
+        <Texture Name="gEffStone5Tex" OutName="eff_stone_5" Format="ia8" Width="32" Height="32" Offset="0x3B190" />
+        <Texture Name="gEffStone6Tex" OutName="eff_stone_6" Format="ia8" Width="32" Height="32" Offset="0x3B590" />
+        <Texture Name="gEffStone7Tex" OutName="eff_stone_7" Format="ia8" Width="32" Height="32" Offset="0x3B990" />
+        <Texture Name="gEffStone8Tex" OutName="eff_stone_8" Format="ia8" Width="32" Height="32" Offset="0x3BD90" />
         <DList Name="gEffStoneDL" Offset="0x3C190" />
         <Texture Name="gameplay_keep_Tex_03C230" OutName="tex_03C230" Format="i4" Width="32" Height="96" Offset="0x3C230" />
         <Texture Name="gameplay_keep_Tex_03C830" OutName="tex_03C830" Format="i4" Width="32" Height="96" Offset="0x3C830" />
