@@ -7,8 +7,7 @@
 #include "z_eff_ss_solder_srch_ball.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define rDrawFlag regs[0]
-#define rScale regs[1]
+#define rFlags regs[0]
 
 #define PARAMS ((EffectSsSolderSrchBallInitParams*)initParamsx)
 
@@ -28,20 +27,20 @@ u32 EffectSsSolderSrchBall_Init(GlobalContext* globalCtx, u32 index, EffectSs* t
     this->velocity = initParams->velocity;
     this->accel = initParams->accel;
     this->update = EffectSsSolderSrchBall_Update;
-    if (!(initParams->drawFlag & 1)) {
+    if (!(initParams->flags & SOLDERSRCHBALL_INVISIBLE)) {
         this->draw = EffectSsSolderSrchBall_Draw;
     }
     this->life = 10;
-    this->rScale = initParams->scale;
-    this->rDrawFlag = initParams->drawFlag;
-    this->actor = initParams->linkDetected; // actor field was incorrectly used as a pointer to something else
+    this->rgScale = initParams->scale;
+    this->rFlags = initParams->flags;
+    this->actor = (Actor*)initParams->playerDetected; // actor field was incorrectly used as a pointer to something else
     return 1;
 }
 
 void EffectSsSolderSrchBall_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     s32 pad;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    f32 scale = this->rScale / 100.0f;
+    f32 scale = this->rgScale / 100.0f;
 
     func_8012C28C(gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -69,28 +68,22 @@ void EffectSsSolderSrchBall_Update(GlobalContext* globalCtx, u32 index, EffectSs
     f32 playerPosDiffX;
     f32 playerPosDiffY;
     f32 playerPosDiffZ;
-    s16* linkDetected;
+    s16* playerDetected = (s16*)this->actor;
     Player* player = GET_PLAYER(globalCtx);
-
-    linkDetected = this->actor;
 
     playerPosDiffX = player->actor.world.pos.x - this->pos.x;
     playerPosDiffY = player->actor.world.pos.y - this->pos.y;
     playerPosDiffZ = player->actor.world.pos.z - this->pos.z;
 
-    if (this->regs[0] >= 2) {
-        if (sqrtf(SQ(playerPosDiffX) + SQ(playerPosDiffZ)) < 10.0f &&  sqrtf(SQ(playerPosDiffY)) < 10.0f) {
-                *linkDetected = true;
+    if (this->rFlags >= SOLDERSRCHBALL_SMALL_DETECT_RADIUS) {
+        if ((sqrtf(SQ(playerPosDiffX) + SQ(playerPosDiffZ)) < 10.0f) && (sqrtf(SQ(playerPosDiffY)) < 10.0f)) {
+            *playerDetected = true;
         }
-    } else {
-        if (!BgCheck_SphVsFirstWall(&globalCtx->colCtx, &this->pos, 30.0f)) {
-            if (sqrtf(SQ(playerPosDiffX) + SQ(playerPosDiffZ)) < 40.0f &&  sqrtf(SQ(playerPosDiffY)) < 80.0f) {
-                *linkDetected = true;
-            }
-        } else {
-            if (this->life > 1) {
-                this->life = 1;
-            }
+    } else if (!BgCheck_SphVsFirstWall(&globalCtx->colCtx, &this->pos, 30.0f)) {
+        if ((sqrtf(SQ(playerPosDiffX) + SQ(playerPosDiffZ)) < 40.0f) && (sqrtf(SQ(playerPosDiffY)) < 80.0f)) {
+            *playerDetected = true;
         }
+    } else if (this->life > 1) {
+        this->life = 1;
     }
 }

@@ -693,15 +693,15 @@ void EffectSsKFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
 // EffectSsSolderSrchBall Spawn Functions
 
 void EffectSsSolderSrchBall_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale,
-                                  s16* linkDetected, s16 drawFlag) {
+                                  s16* playerDetected, s16 flags) {
     EffectSsSolderSrchBallInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.scale = scale;
-    initParams.linkDetected = linkDetected;
-    initParams.drawFlag = drawFlag;
+    initParams.playerDetected = playerDetected;
+    initParams.flags = flags;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_SOLDER_SRCH_BALL, 128, &initParams);
 }
