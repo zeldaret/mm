@@ -1,7 +1,7 @@
 #include "global.h"
 #include "z64skin.h"
 
-void func_80138410(Skin* skin) {
+void Skin_Setup(Skin* skin) {
     skin->skeletonHeader = NULL;
     skin->limbCount = 0;
     skin->vtxTable = NULL;

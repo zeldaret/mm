@@ -96,7 +96,7 @@ void func_801382C4(Actor* actor, struct GlobalContext* globalCtx, Skin* skin, Sk
 void Skin_GetLimbPos(Skin* skin, s32 limbIndex, Vec3f* offset, Vec3f* dst);
 void Skin_GetVertexPos(Skin* skin, s32 limbIndex, s32 vtxIndex, Vec3f* dst);
 
-void func_80138410(Skin* skin);
+void Skin_Setup(Skin* skin);
 void Skin_InitAnimatedLimb(struct GameState* gameState, Skin* skin, s32 limbIndex);
 void Skin_Init(struct GameState* gameState, Skin* skin, SkeletonHeader* skeletonHeader, AnimationHeader* animationHeader);
 void Skin_Free(struct GameState* gameState, Skin* skin);

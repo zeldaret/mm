@@ -2133,7 +2133,7 @@ asm/non_matchings/code/z_skin/func_8013828C.s,func_8013828C,0x8013828C,0xE
 asm/non_matchings/code/z_skin/func_801382C4.s,func_801382C4,0x801382C4,0xF
 asm/non_matchings/code/z_skin/Skin_GetLimbPos.s,Skin_GetLimbPos,0x80138300,0x17
 asm/non_matchings/code/z_skin/Skin_GetVertexPos.s,Skin_GetVertexPos,0x8013835C,0x2D
-asm/non_matchings/code/z_skin_awb/func_80138410.s,func_80138410,0x80138410,0x5
+asm/non_matchings/code/z_skin_awb/Skin_Setup.s,Skin_Setup,0x80138410,0x5
 asm/non_matchings/code/z_skin_awb/Skin_InitAnimatedLimb.s,Skin_InitAnimatedLimb,0x80138424,0x5E
 asm/non_matchings/code/z_skin_awb/Skin_Init.s,Skin_Init,0x8013859C,0x59
 asm/non_matchings/code/z_skin_awb/Skin_Free.s,Skin_Free,0x80138700,0x35

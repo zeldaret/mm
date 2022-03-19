@@ -2619,7 +2619,7 @@
     0x801382C4:("func_801382C4",),
     0x80138300:("Skin_GetLimbPos",),
     0x8013835C:("Skin_GetVertexPos",),
-    0x80138410:("func_80138410",),
+    0x80138410:("Skin_Setup",),
     0x80138424:("Skin_InitAnimatedLimb",),
     0x8013859C:("Skin_Init",),
     0x80138700:("Skin_Free",),
