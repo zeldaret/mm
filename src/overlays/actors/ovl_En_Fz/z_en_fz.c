@@ -266,7 +266,8 @@ void func_80932784(EnFz* this, GlobalContext* globalCtx) {
     sp44.z = 440.0f;
 
     Matrix_MultiplyVector3fByState(&sp44, &this->unk_22C);
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, 1, 0, 0, 1, &sp40)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true,
+                                &sp40)) {
         Math_Vec3f_Copy(&this->unk_22C, &sp50);
     }
 
