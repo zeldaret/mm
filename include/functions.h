@@ -2482,7 +2482,7 @@ void func_80147818(GlobalContext* globalCtx, UNK_PTR puParm2, UNK_TYPE4 uParm3, 
 void func_80148B98(GlobalContext* globalCtx, u8 bParm2);
 // void func_80148CBC(void);
 // void func_80148D64(void);
-// void func_80149048(void);
+void func_80149048(GlobalContext *globalCtx);
 // void func_801491DC(void);
 // void func_80149454(void);
 // void func_801496C8(void);

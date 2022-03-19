@@ -161,7 +161,29 @@ void func_80148CBC(GlobalContext* globalCtx, UNK_PTR puParm2, u8 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148D64.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149048.s")
+void func_80149048(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+
+    if (msgCtx->unk120A4[1] < -29) {
+        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]--;
+        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] < 0x30) {
+            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = 0x39;
+        }
+        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+    } else if (msgCtx->unk120A4[1] > 29) {
+        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]++;
+        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] >= 0x3A) {
+            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = 0x30;
+        }
+        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+    }
+
+    msgCtx->bankRupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] * 10) - 0x1E0U;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801491DC.s")
 
