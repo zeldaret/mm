@@ -7,6 +7,7 @@
 #include "z_en_wallmas.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_wallmaster/object_wallmaster.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
@@ -118,24 +119,13 @@ extern InitChainEntry D_808763B4[];
 extern f32 D_808763C0[];
 extern s8 D_808763D4[];
 
-extern AnimationHeader D_06000590;
-extern AnimationHeader D_06000EA4;
-extern AnimationHeader D_060019CC;
-extern AnimationHeader D_0600299C;
-extern AnimationHeader D_060041F4;
-extern Gfx D_06008688[];
-extern AnimationHeader D_06009244;
-extern AnimationHeader D_06009520;
-extern AnimationHeader D_06009DB0;
-extern AnimationHeader D_0600A054;
-extern FlexSkeletonHeader D_06008FB0;
-
 void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWallmas* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, D_808763B4);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.5f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008FB0, &D_06009DB0, this->jointTable, this->morphTable, 25);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wallmaster_Skel_008FB0, &object_wallmaster_Anim_009DB0,
+                       this->jointTable, this->morphTable, 25);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &D_80876360);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_8087638C, &D_808763AC);
 
@@ -253,8 +243,8 @@ void func_80874BE4(EnWallmas* this, GlobalContext* globalCtx) {
 void func_80874D1C(EnWallmas* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    Animation_Change(&this->skelAnime, &D_0600299C, 0.0f, 20.0f, Animation_GetLastFrame(&D_0600299C), ANIMMODE_ONCE,
-                     0.0f);
+    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_00299C, 0.0f, 20.0f,
+                     Animation_GetLastFrame(&object_wallmaster_Anim_00299C), ANIMMODE_ONCE, 0.0f);
 
     this->unk_2C0 = player->actor.world.pos.y;
     this->actor.world.pos.y = player->actor.world.pos.y + 300.0f;
@@ -283,8 +273,8 @@ void func_80874DE8(EnWallmas* this, GlobalContext* globalCtx) {
 }
 
 void func_80874F14(EnWallmas* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &D_060019CC, 1.0f, 41.0f, Animation_GetLastFrame(&D_060019CC), ANIMMODE_ONCE,
-                     -3.0f);
+    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 1.0f, 41.0f,
+                     Animation_GetLastFrame(&object_wallmaster_Anim_0019CC), ANIMMODE_ONCE, -3.0f);
 
     Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 15.0f, 6, 20.0f, 300, 100, true);
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_LAND);
@@ -298,7 +288,7 @@ void func_80874FD8(EnWallmas* this, GlobalContext* globalCtx) {
 }
 
 void func_80875014(EnWallmas* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_0600A054);
+    Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_00A054);
     this->actionFunc = func_80875054;
 }
 
@@ -312,7 +302,7 @@ void func_80875054(EnWallmas* this, GlobalContext* globalCtx) {
 }
 
 void func_808750B8(EnWallmas* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_060041F4, 3.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_wallmaster_Anim_0041F4, 3.0f);
     this->actor.speedXZ = 3.0f;
     this->actionFunc = func_80875108;
 }
@@ -331,7 +321,7 @@ void func_80875108(EnWallmas* this, GlobalContext* globalCtx) {
 }
 
 void func_808751C4(EnWallmas* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06009244);
+    Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_009244);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_8087520C;
 }
@@ -345,8 +335,8 @@ void func_8087520C(EnWallmas* this, GlobalContext* globalCtx) {
 void func_80875248(EnWallmas* this) {
     this->timer = 0;
     this->actor.speedXZ = 0.0f;
-    Animation_Change(&this->skelAnime, &D_060019CC, 3.0f, 0.0f, Animation_GetLastFrame(&D_060019CC), ANIMMODE_ONCE,
-                     -3.0f);
+    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 3.0f, 0.0f,
+                     Animation_GetLastFrame(&object_wallmaster_Anim_0019CC), ANIMMODE_ONCE, -3.0f);
     this->actionFunc = func_808752CC;
 }
 
@@ -380,7 +370,7 @@ void func_808752CC(EnWallmas* this, GlobalContext* globalCtx) {
 }
 
 void func_808753F0(EnWallmas* this, s32 arg1) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06000590, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_wallmaster_Anim_000590, -3.0f);
 
     if (arg1) {
         func_800BE504(&this->actor, &this->collider);
@@ -409,7 +399,7 @@ void func_80875484(EnWallmas* this, GlobalContext* globalCtx) {
 }
 
 void func_80875518(EnWallmas* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06000EA4);
+    Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_000EA4);
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -442,7 +432,7 @@ void func_80875638(EnWallmas* this, GlobalContext* globalCtx) {
 }
 
 void func_808756AC(EnWallmas* this, GlobalContext* globalCtx) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06009520, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_wallmaster_Anim_009520, -5.0f);
     this->timer = -30;
     this->actionFunc = func_8087571C;
     this->actor.speedXZ = 0.0f;
@@ -714,7 +704,7 @@ void func_80876118(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&gfx[1], D_06008688);
+        gSPDisplayList(&gfx[1], object_wallmaster_DL_008688);
 
         POLY_OPA_DISP = &gfx[2];
 
