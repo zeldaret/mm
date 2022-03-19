@@ -1421,7 +1421,7 @@ extern s16 D_801CFCA4[9];
 // extern UNK_TYPE2 D_801CFD80;
 // extern UNK_TYPE2 D_801CFD84;
 // extern UNK_TYPE2 D_801CFD88;
-// extern UNK_TYPE2 D_801CFD8C;
+// extern s16 D_801CFD8C;
 // extern UNK_TYPE2 D_801CFD90;
 extern UNK_PTR D_801CFD94;
 // extern UNK_TYPE2 D_801CFD98;

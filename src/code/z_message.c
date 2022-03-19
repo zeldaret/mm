@@ -187,7 +187,58 @@ void func_80149048(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801491DC.s")
 
+#ifdef NON_MATCHING
+void func_80149454(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    static s16 D_801CFD8C;
+
+    if (msgCtx->unk120A4[1] < -29) {
+        msgCtx->unk12054[msgCtx->unk120C2]--;
+        if (msgCtx->unk12054[msgCtx->unk120C2] < 0) {
+            msgCtx->unk12054[msgCtx->unk120C2] = 9;
+        }
+        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x30;
+        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+        return;
+    }
+    if ((s32)msgCtx->unk120A4[1] > 29) {
+        msgCtx->unk12054[msgCtx->unk120C2]++;
+        if (msgCtx->unk12054[msgCtx->unk120C2] > 9) {
+            msgCtx->unk12054[msgCtx->unk120C2] = 0;
+        }
+        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x30;
+        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+        return;
+    }
+    if (((s32)msgCtx->unk120A4[0] > 29) && (D_801CFD8C == 0)) {
+        D_801CFD8C = 1;
+        msgCtx->unk120C2 += 1;
+        if ((s32)msgCtx->unk120C2 > 2) {
+            msgCtx->unk120C2 = 2;
+            return;
+        }
+        play_sound(NA_SE_SY_CURSOR);
+        return;
+    }
+    if (((s32)msgCtx->unk120A4[0] < -29) && (D_801CFD8C == 0)) {
+        D_801CFD8C = 1;
+        msgCtx->unk120C2 += -1;
+        if ((s32)msgCtx->unk120C2 < 0) {
+            msgCtx->unk120C2 = 0;
+            return;
+        }
+        play_sound(NA_SE_SY_CURSOR);
+        return;
+    }
+    D_801CFD8C = 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149454.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801496C8.s")
 
