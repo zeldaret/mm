@@ -2495,7 +2495,7 @@ void func_8014ADBC(GlobalContext* globalCtx, UNK_PTR puParm2);
 // void func_8014C70C(void);
 void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 arg4);
 // void func_8014CCB4(void);
-// void func_8014CDF0(void);
+void func_8014CDF0(OSTime time, s16 *digits);
 // void func_8014CFDC(void);
 void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos);
 // void func_8014D62C(void);

@@ -279,7 +279,37 @@ void Message_LoadAreaTextNES(GlobalContext* globalCtx, s32* offset, f32* arg2, s
     *arg2 = f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/func_80159438.s")
+void func_80159438(OSTime time, s16* digits) {
+    OSTime t = time;
+
+    digits[0] = t / 36000;
+    t -= (digits[0] * 36000);
+
+    digits[1] = t / 6000;
+    t -= (digits[1] * 6000);
+
+    digits[2] = '\'';
+
+    digits[3] = t / 1000;
+    t -= digits[3] * 1000;
+
+    digits[4] = t / 100;
+    t -= digits[4] * 100;
+
+    digits[5] = '"';
+
+    digits[6] = t / 10;
+    t -= digits[6] * 10;
+
+    digits[7] = t;
+
+    digits[0] += '0';
+    digits[1] += '0';
+    digits[3] += '0';
+    digits[4] += '0';
+    digits[6] += '0';
+    digits[7] += '0';
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/func_8015966C.s")
 

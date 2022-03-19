@@ -251,15 +251,15 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
     s32 k = *offset;
     f32 f = *arg3;
 
-    Font_LoadChar(globalCtx, 0x838B, k); // 0x838b = ル in JISX0213
+    Font_LoadChar(globalCtx, 0x838B, k); // 0x838b = ル in S-JIS
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x838B;
     t += 1;
-    Font_LoadChar(globalCtx, 0x8373, k); // 0x8373 = ピ in JISX0213
+    Font_LoadChar(globalCtx, 0x8373, k); // 0x8373 = ピ in S-JIS
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x8373;
     t += 1;
-    Font_LoadChar(globalCtx, 0x815C, k); // Ox815C = ― in JISX0213
+    Font_LoadChar(globalCtx, 0x815C, k); // Ox815C = ― in S-JIS
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x815C;
 
@@ -269,7 +269,33 @@ void func_8014CCB4(GlobalContext* globalCtx, s16* decodedBufPos, s32* offset, f3
     *arg3 = f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CDF0.s")
+void func_8014CDF0(OSTime time, s16* digits) {
+    // offsetting to actual codepoints is done outside this function
+    // every digits will be added 0x824F to get an actual S-JIS
+    // printable character.
+    OSTime temp_t2 = time;
+
+    digits[0] = temp_t2 / 36000;
+    temp_t2 -= digits[0] * 36000;
+
+    digits[1] = temp_t2 / 6000;
+    temp_t2 -= digits[1] * 6000;
+
+    digits[2] = 0x135B; // 0x135B + 0x824F = 分 (minutes) in S-JIS
+
+    digits[3] = temp_t2 / 1000;
+    temp_t2 -= digits[3] * 1000;
+
+    digits[4] = temp_t2 / 100;
+    temp_t2 -= digits[4] * 100;
+
+    digits[5] = 0x1313; // 0x1313 + 0x824F = 秒 (seconds) in S-JIS
+
+    digits[6] = temp_t2 / 10;
+    temp_t2 -= digits[6] * 10;
+
+    digits[7] = temp_t2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CFDC.s")
 
@@ -308,7 +334,7 @@ void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s
     }
 
     for (i = 0; i < 4; i++) {
-        Font_LoadChar(globalCtx, digits[i] + 0x824F, o);
+        Font_LoadChar(globalCtx, digits[i] + 0x824F, o); // 0x824F = ０ in S-JIS
         o += FONT_CHAR_TEX_SIZE;
         msgCtx->decodedBuffer.wchar[p] = digits[i] + 0x824F;
         p++;
