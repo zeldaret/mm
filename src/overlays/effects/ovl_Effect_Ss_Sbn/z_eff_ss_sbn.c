@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_sbn.c
  * Overlay: ovl_Effect_Ss_Sbn
- * Description:
+ * Description: Popped Deku Bubble
  */
 
 #include "z_eff_ss_sbn.h"
