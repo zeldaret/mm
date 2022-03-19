@@ -6,31 +6,34 @@
 
 /**
  * Some notes:
- * 
+ *
  * Global flags:
  * - gSaveContext.eventInf[5] & 0x40: Enabled when Gyorg's intro cutscene has been watched
  * - gSaveContext.weekEventReg[55] & 0x80: Checked to know if Gyorg has been defeated
- * 
+ *
  * Seaweed:
  * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
  * - The default Gyorg actor will spawn 5 other Gyorg instances using the parameter GYORG_PARAM_SEAWEED to spawn them
  * - Seaweed can "interact" only with the main Gyorg instance and Player
- * 
+ *
  * This actor makes some heavy assumptions about the positions of the room where it is spawned
- * 
+ *
  * Cutscenes:
  * - There are 3 cutscenes:
  *   - IntroCutscene: The cs which is played when Player falls into the main room. It also shows Gyorg's titlecard
- *   - SpawnSmallFishesCutscene: The short cs which is played when Gyorg is spawning the small fishes (EnTanron3). This is triggered when Gyorg reaches half of his life.
+ *   - SpawnSmallFishesCutscene: The short cs which is played when Gyorg is spawning the small fishes (EnTanron3). This
+ * is triggered when Gyorg reaches half of his life.
  *   - DeathCutscene: Played when Gyorg dies. Showing him splashing and becoming smaller each time until he disappears
  * - This actor mainly handles the 3 cutscenes it has manually (instead of relying on existing systems for it)
  *
  * Main behaviour:
  * - Gyorg has two branches on Gyorg's behaviour depending on Player's state:
- *   - If Player is standing on the main platform, then Gyorg follows the PrepareCharge -> Charge -> JumpOverPlatform branch
+ *   - If Player is standing on the main platform, then Gyorg follows the PrepareCharge -> Charge -> JumpOverPlatform
+ * branch
  *   - Otherwise, Gyorg follows the ChasePlayer -> CatchPlayer -> ChewPlayer
  * - The main actionFunc which decides which branch should be taken is func_809E34B8
- * - Most of the actions of those two branches are constantly checking for the WORK_TIMER_CURRENT_ACTION timer. If it runs out, then the behaviour resets back to func_809E34B8
+ * - Most of the actions of those two branches are constantly checking for the WORK_TIMER_CURRENT_ACTION timer. If it
+ * runs out, then the behaviour resets back to func_809E34B8
  * - Either branch behaviour can be interrupted at any time by a hit from Player
  *   - Being hitted once makes Gyorg to be Stunned.
  *   - When Gyorg is Stunned, he is vulnerable to be Damaged by Player
@@ -96,7 +99,8 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx);
 
 u8 D_809E9840;
-// Timer used to start playing the boss background music if the intro cutscene was skipped (because it was already watched)
+// Timer used to start playing the boss background music if the intro cutscene was skipped (because it was already
+// watched)
 u8 D_809E9841;
 // Used to set the timer D_809E9841 in case the intro cutscene was skipped
 u8 D_809E9842;
@@ -413,8 +417,8 @@ void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
             pos.z = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.z;
             pos.x = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.x;
 
-            func_800B0EB0(globalCtx, &pos, &velocity, &accel, &sGyorgDustPrimColor, &sGyorgDustEnvColor, Rand_ZeroFloat(200.0f) + 400.0f,
-                          10, Rand_ZeroFloat(10.0f) + 25.0f);
+            func_800B0EB0(globalCtx, &pos, &velocity, &accel, &sGyorgDustPrimColor, &sGyorgDustEnvColor,
+                          Rand_ZeroFloat(200.0f) + 400.0f, 10, Rand_ZeroFloat(10.0f) + 25.0f);
         }
     }
 }
@@ -468,8 +472,8 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_GetStateTranslationAndScaledZ((rand * 800.0f) + 400.0f, &sp70);
 
         rand = Boss03_RandZeroOne();
-        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_03, sp70.x, sp70.y, sp70.z, 0,
-                    rand * 0x10000, 0, GYORG_PARAM_SEAWEED);
+        Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_03, sp70.x, sp70.y, sp70.z, 0, rand * 0x10000, 0,
+                    GYORG_PARAM_SEAWEED);
     }
 
     sGyorgInstance = this;
@@ -660,7 +664,8 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop chasing
+    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop
+    // chasing
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
@@ -757,8 +762,8 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop trying to catch
-    // Player
+    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop
+    // trying to catch Player
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
@@ -851,12 +856,11 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     yDiff = this->unk_268.y - this->actor.world.pos.y;
     zDiff = this->unk_268.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
-                   this->unk_274);
-    Math_ApproachS(
-        &this->bodyYRot,
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f, 5,
-        0x100);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
+    Math_ApproachS(&this->bodyYRot,
+                   Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) *
+                       -0.5f,
+                   5, 0x100);
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
@@ -1336,11 +1340,11 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->csCamTargetAt.z = this->actor.world.pos.z;
                 }
             } else {
-                Math_ApproachF(&this->csCamEye.x, player->actor.world.pos.x + 30.0f - 90.0f + 300.0f - 90.0f,
-                               0.05f, 3.0f);
+                Math_ApproachF(&this->csCamEye.x, player->actor.world.pos.x + 30.0f - 90.0f + 300.0f - 90.0f, 0.05f,
+                               3.0f);
                 Math_ApproachF(&this->csCamEye.y, player->actor.world.pos.y + 40.0f + 10.0f + 90.0f, 0.05f, 3.0f);
-                Math_ApproachF(&this->csCamEye.z, player->actor.world.pos.z - 30.0f + 160.0f + 300.0f - 90.0f,
-                               0.05f, 3.0f);
+                Math_ApproachF(&this->csCamEye.z, player->actor.world.pos.z - 30.0f + 160.0f + 300.0f - 90.0f, 0.05f,
+                               3.0f);
                 Math_ApproachF(&this->unk_568, 90.0f, 0.05f, 3.0f);
             }
 
@@ -1932,7 +1936,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Boss03* this = (Boss03*)thisx;
     Actor* temp_v0_4;
     Player* player; // sp88
-    s32 i;     // phi_s0
+    s32 i;          // phi_s0
     Vec3f sp78;
     Vec3f sp6C;
     Vec3f sp60;
