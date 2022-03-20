@@ -69,7 +69,7 @@
         
         <Animation Name="gWallmasterStopWalkAnim" Offset="0x9244" /> <!-- Original name is "wm_move_wait" -->
         <Animation Name="gWallmasterHoverAnim" Offset="0x9520" /> <!-- Original name is "wm_success" -->
-        <Animation Name="gWallmasterWaitAnim" Offset="0x9DB0" /> <!-- Original name is "wm_wait" -->
+        <Animation Name="gWallmasterIdleAnim" Offset="0x9DB0" /> <!-- Original name is "wm_wait" -->
         <Animation Name="gWallmasterStandUpAnim" Offset="0xA054" /> <!-- Original name is "wm_wait_move" -->
     </File>
 </Root>

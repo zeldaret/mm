@@ -153,7 +153,7 @@ void EnFloormas_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWallmasterSkel, &gWallmasterWaitAnim, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWallmasterSkel, &gWallmasterIdleAnim, this->jointTable,
                        this->morphTable, WALLMASTER_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -258,7 +258,7 @@ void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D0B08(EnFloormas* this) {
-    Animation_PlayOnce(&this->skelAnime, &gWallmasterWaitAnim);
+    Animation_PlayOnce(&this->skelAnime, &gWallmasterIdleAnim);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808D0B50;
 }
@@ -815,7 +815,7 @@ void func_808D24F0(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D2700(EnFloormas* this) {
-    Animation_PlayOnce(&this->skelAnime, &gWallmasterWaitAnim);
+    Animation_PlayOnce(&this->skelAnime, &gWallmasterIdleAnim);
     this->unk_18E = 0;
     this->unk_194 = 1500;
     this->actor.params = ENFLOORMAS_GET_7FFF_40;
@@ -883,7 +883,7 @@ void func_808D2764(EnFloormas* this, GlobalContext* globalCtx) {
             Animation_PlayOnce(&this->skelAnime, &gFloormasterTapFingerAnim);
             this->unk_18E = 1;
         } else {
-            Animation_PlayOnce(&this->skelAnime, &gWallmasterWaitAnim);
+            Animation_PlayOnce(&this->skelAnime, &gWallmasterIdleAnim);
             this->unk_18E = 0;
         }
     }
