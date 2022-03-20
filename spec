@@ -1969,8 +1969,7 @@ beginseg
     name "ovl_Effect_Ss_K_Fire"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_K_Fire/z_eff_ss_k_fire.o"
-    include "build/data/ovl_Effect_Ss_K_Fire/ovl_Effect_Ss_K_Fire.data.o"
-    include "build/data/ovl_Effect_Ss_K_Fire/ovl_Effect_Ss_K_Fire.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_K_Fire/ovl_Effect_Ss_K_Fire_reloc.o"
 endseg
 
 beginseg
