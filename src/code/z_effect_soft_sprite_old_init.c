@@ -220,7 +220,7 @@ void EffectSsKiraKira_SpawnSmall(GlobalContext* globalCtx, Vec3f* pos, Vec3f* ve
 
 void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                                      Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life) {
-    EffectSsKiraKiraInitParams initParams;
+    EffectSsKirakiraInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
@@ -241,7 +241,7 @@ void EffectSsKiraKira_SpawnDispersed(GlobalContext* globalCtx, Vec3f* pos, Vec3f
 
 void EffectSsKiraKira_SpawnFocused(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel,
                                    Color_RGBA8* primColor, Color_RGBA8* envColor, s16 scale, s32 life) {
-    EffectSsKiraKiraInitParams initParams;
+    EffectSsKirakiraInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);

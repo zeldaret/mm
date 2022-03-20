@@ -1834,8 +1834,7 @@ beginseg
     name "ovl_Effect_Ss_Kirakira"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Kirakira/z_eff_ss_kirakira.o"
-    include "build/data/ovl_Effect_Ss_Kirakira/ovl_Effect_Ss_Kirakira.data.o"
-    include "build/data/ovl_Effect_Ss_Kirakira/ovl_Effect_Ss_Kirakira.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Kirakira/ovl_Effect_Ss_Kirakira_reloc.o"
 endseg
 
 beginseg
