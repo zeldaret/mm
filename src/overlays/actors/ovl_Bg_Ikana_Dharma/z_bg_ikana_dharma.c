@@ -147,27 +147,27 @@ void BgIkanaDharma_BeginNormalState(BgIkanaDharma* this) {
 }
 
 void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalCtx) {
-    s32 phi_v0 = (this->collider.base.acFlags & AC_HIT) != 0;
-    Actor* temp_a3 = GET_PLAYER(globalCtx);
+    s32 wasHit = (this->collider.base.acFlags & AC_HIT) != 0;
+    Player* player = GET_PLAYER(globalCtx);
     BgIkanaDharma* this2 = this;
     s32 temp_v0_3;
 
-    if (phi_v0) {
+    if (wasHit) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
-    if (phi_v0 && sFirstHitBgIkanaDharma == NULL) {
+    if (wasHit && sFirstHitBgIkanaDharma == NULL) {
         s32 temp_v0_2;
         sFirstHitBgIkanaDharma = this2;
         Flags_SetSwitch(globalCtx, BGIKANADHARMA_GET_SWITCHFLAG(&this->dyna.actor));
         temp_v0_3 = (s16)(this->dyna.actor.yawTowardsPlayer + 0x8000);
-        temp_v0_2 = ((s16)(temp_a3->shape.rot.y - temp_v0_3) >> 1);
+        temp_v0_2 = ((s16)(player->actor.shape.rot.y - temp_v0_3) >> 1);
         this->dyna.actor.world.rot.y = temp_v0_3 + temp_v0_2 + 0xF000;
         this->dyna.actor.speedXZ = 20.0f;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
         BgIkanaDharma_BeginWaitToStartCutscene(this);
     } else if ((this->dyna.actor.flags & 0x40) == 0x40 && sFirstHitBgIkanaDharma == NULL &&
                this->dyna.actor.xzDistToPlayer < 420.0f) {
-        temp_v0_3 = (s16)(this->dyna.actor.yawTowardsPlayer - temp_a3->shape.rot.y);
+        temp_v0_3 = (s16)(this->dyna.actor.yawTowardsPlayer - player->actor.shape.rot.y);
         if (temp_v0_3 < 0) {
             temp_v0_3 = -temp_v0_3; // this line is the reason temp_v0_3 isn't s16
         }
