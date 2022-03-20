@@ -142,7 +142,7 @@ void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaDharma_BeginNormalState(BgIkanaDharma* this) {
-    this->actionFunc = &BgIkanaDharma_UpdateNormalState;
+    this->actionFunc = BgIkanaDharma_UpdateNormalState;
     this->dyna.actor.speedXZ = 0.0f;
 }
 
@@ -196,7 +196,7 @@ void BgIkanaDharma_WaitToStartCutscene(BgIkanaDharma* this, GlobalContext* globa
 
 void BgIkanaDharma_BeginCutsceneState(BgIkanaDharma* this) {
     this->cutsceneFramesRemaining = 0xA;
-    this->actionFunc = &BgIkanaDharma_UpdateCutscene;
+    this->actionFunc = BgIkanaDharma_UpdateCutscene;
 }
 
 void BgIkanaDharma_UpdateCutscene(BgIkanaDharma* this, GlobalContext* globalCtx) {
