@@ -135,7 +135,8 @@ static f32 sYOffsetPerForm[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
  * in the limbPos array. An index of -1 indicates that the limb is not part
  * of the limbPos array.
  */
-static s8 sLimbIndexToLimbPosIndex[] = { -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8 };
+static s8 sLimbIndexToLimbPosIndex[] = { -1, -1, -1, -1, 0, -1, -1, 1,  -1, 2, -1, -1, 3,
+                                         -1, 4,  -1, -1, 5, -1, -1, -1, 6,  7, -1, 8 };
 
 void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWallmas* this = THIS;
@@ -167,14 +168,14 @@ void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_FLAG) {
+    if (EN_WALLMAS_GET_TYPE(&this->actor) == EN_WALLMAS_TYPE_FLAG) {
         if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
 
         EnWallmas_ProximityOrSwitchInit(this);
-    } else if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_PROXIMITY) {
+    } else if (EN_WALLMAS_GET_TYPE(&this->actor) == EN_WALLMAS_TYPE_PROXIMITY) {
         EnWallmas_ProximityOrSwitchInit(this);
     } else {
         EnWallmas_TimerInit(this, globalCtx);
@@ -206,7 +207,7 @@ void EnWallmas_Freeze(EnWallmas* this) {
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
-void EnWallmas_Thaw(EnWallmas* this, GlobalContext* globalCtx) {
+void EnWallmas_ThawIfFrozen(EnWallmas* this, GlobalContext* globalCtx) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = 0;
@@ -243,7 +244,7 @@ void EnWallmas_WaitToDrop(EnWallmas* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags1 & 0x08100000) || (player->stateFlags2 & 0x80) || (player->unk_B5E > 0) ||
         (player->actor.freezeTimer > 0) || !(player->actor.bgCheckFlags & 1) ||
-        ((EN_WALLMAS_GET_TYPE(&this->actor) == WMT_PROXIMITY) &&
+        ((EN_WALLMAS_GET_TYPE(&this->actor) == EN_WALLMAS_TYPE_PROXIMITY) &&
          (Math_Vec3f_DistXZ(&this->actor.home.pos, playerPos) > (120.f + this->detectionRadius)))) {
         func_801A75E8(NA_SE_EN_FALL_AIM);
         this->timer = 130;
@@ -373,12 +374,12 @@ void EnWallmas_ReturnToCeiling(EnWallmas* this, GlobalContext* globalCtx) {
     }
 
     if (this->actor.playerHeightRel < -900.0f) {
-        if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_FLAG) {
+        if (EN_WALLMAS_GET_TYPE(&this->actor) == EN_WALLMAS_TYPE_FLAG) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
 
-        if ((EN_WALLMAS_GET_TYPE(&this->actor) == WMT_TIMER) ||
+        if ((EN_WALLMAS_GET_TYPE(&this->actor) == EN_WALLMAS_TYPE_TIMER_ONLY) ||
             (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < this->detectionRadius)) {
             EnWallmas_TimerInit(this, globalCtx);
         } else {
@@ -488,8 +489,8 @@ void EnWallmas_TakePlayer(EnWallmas* this, GlobalContext* globalCtx) {
 
         this->timer += 2;
     } else {
-        Math_StepToF(&this->actor.world.pos.y, sYOffsetPerForm[(void)0, gSaveContext.playerForm] + player->actor.world.pos.y,
-                     5.0f);
+        Math_StepToF(&this->actor.world.pos.y,
+                     sYOffsetPerForm[(void)0, gSaveContext.playerForm] + player->actor.world.pos.y, 5.0f);
     }
 
     Math_StepToF(&this->actor.world.pos.x, player->actor.world.pos.x, 3.0f);
@@ -505,7 +506,7 @@ void EnWallmas_ProximityOrSwitchInit(EnWallmas* this) {
     this->timer = 0;
     this->actor.draw = NULL;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    if (EN_WALLMAS_GET_TYPE(&this->actor) == WMT_PROXIMITY) {
+    if (EN_WALLMAS_GET_TYPE(&this->actor) == EN_WALLMAS_TYPE_PROXIMITY) {
         this->actionFunc = EnWallmas_WaitForProximity;
     } else {
         this->actionFunc = EnWallmas_WaitForSwitchFlag;
@@ -543,7 +544,7 @@ void EnWallmas_Stun(EnWallmas* this, GlobalContext* globalCtx) {
     }
 
     if (this->timer == 0) {
-        EnWallmas_Thaw(this, globalCtx);
+        EnWallmas_ThawIfFrozen(this, globalCtx);
         if (this->actor.colChkInfo.health == 0) {
             EnWallmas_SetupDamage(this, false);
         } else {
@@ -568,7 +569,7 @@ void EnWallmas_UpdateDamage(EnWallmas* this, GlobalContext* globalCtx) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_FALL_DAMAGE);
             }
 
-            EnWallmas_Thaw(this, globalCtx);
+            EnWallmas_ThawIfFrozen(this, globalCtx);
 
             if (this->actor.colChkInfo.damageEffect != EN_WALLMAS_DMGEFF_HOOKSHOT) {
                 if (this->actor.colChkInfo.damageEffect == EN_WALLMAS_DMGEFF_ICE_ARROW) {

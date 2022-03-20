@@ -5109,7 +5109,7 @@
     0x80874810:("EnWallmas_Init",),
     0x80874A28:("EnWallmas_Destroy",),
     0x80874A88:("EnWallmas_Freeze",),
-    0x80874B04:("EnWallmas_Thaw",),
+    0x80874B04:("EnWallmas_ThawIfFrozen",),
     0x80874B88:("EnWallmas_TimerInit",),
     0x80874BE4:("EnWallmas_WaitToDrop",),
     0x80874D1C:("EnWallmas_SetupDrop",),
