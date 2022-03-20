@@ -1059,15 +1059,15 @@
         <Texture Name="gameplay_keep_Tex_03B990" OutName="tex_03B990" Format="ia8" Width="32" Height="32" Offset="0x3B990" />
         <Texture Name="gameplay_keep_Tex_03BD90" OutName="tex_03BD90" Format="ia8" Width="32" Height="32" Offset="0x3BD90" />
         <DList Name="gameplay_keep_DL_03C190" Offset="0x3C190" />
-        <Texture Name="gameplay_keep_Tex_03C230" OutName="tex_03C230" Format="i4" Width="32" Height="96" Offset="0x3C230" />
-        <Texture Name="gameplay_keep_Tex_03C830" OutName="tex_03C830" Format="i4" Width="32" Height="96" Offset="0x3C830" />
-        <Texture Name="gameplay_keep_Tex_03CE30" OutName="tex_03CE30" Format="i4" Width="32" Height="96" Offset="0x3CE30" />
-        <Texture Name="gameplay_keep_Tex_03D430" OutName="tex_03D430" Format="i4" Width="32" Height="96" Offset="0x3D430" />
-        <Texture Name="gameplay_keep_Tex_03DA30" OutName="tex_03DA30" Format="i4" Width="32" Height="96" Offset="0x3DA30" />
-        <Texture Name="gameplay_keep_Tex_03E030" OutName="tex_03E030" Format="i4" Width="32" Height="96" Offset="0x3E030" />
-        <Texture Name="gameplay_keep_Tex_03E630" OutName="tex_03E630" Format="i4" Width="32" Height="96" Offset="0x3E630" />
-        <Texture Name="gameplay_keep_Tex_03EC30" OutName="tex_03EC30" Format="i4" Width="32" Height="96" Offset="0x3EC30" />
-        <DList Name="gameplay_keep_DL_03F230" Offset="0x3F230" />
+        <Texture Name="gEffLightning1Tex" OutName="eff_lightning_1" Format="i4" Width="32" Height="96" Offset="0x3C230" />
+        <Texture Name="gEffLightning2Tex" OutName="eff_lightning_2" Format="i4" Width="32" Height="96" Offset="0x3C830" />
+        <Texture Name="gEffLightning3Tex" OutName="eff_lightning_3" Format="i4" Width="32" Height="96" Offset="0x3CE30" />
+        <Texture Name="gEffLightning4Tex" OutName="eff_lightning_4" Format="i4" Width="32" Height="96" Offset="0x3D430" />
+        <Texture Name="gEffLightning5Tex" OutName="eff_lightning_5" Format="i4" Width="32" Height="96" Offset="0x3DA30" />
+        <Texture Name="gEffLightning6Tex" OutName="eff_lightning_6" Format="i4" Width="32" Height="96" Offset="0x3E030" />
+        <Texture Name="gEffLightning7Tex" OutName="eff_lightning_7" Format="i4" Width="32" Height="96" Offset="0x3E630" />
+        <Texture Name="gEffLightning8Tex" OutName="eff_lightning_8" Format="i4" Width="32" Height="96" Offset="0x3EC30" />
+        <DList Name="gEffLightningDL" Offset="0x3F230" />
         <Texture Name="gameplay_keep_Tex_03F300" OutName="tex_03F300" Format="i8" Width="32" Height="64" Offset="0x3F300" />
         <Texture Name="gameplay_keep_Tex_03FB00" OutName="tex_03FB00" Format="i8" Width="32" Height="64" Offset="0x3FB00" />
         <Texture Name="gameplay_keep_Tex_040300" OutName="tex_040300" Format="i8" Width="32" Height="64" Offset="0x40300" />

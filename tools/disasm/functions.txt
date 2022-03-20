@@ -8165,7 +8165,7 @@
     0x8097A548:("EffectSsGFire_Draw",),
     0x8097A5F0:("EffectSsGFire_Update",),
     0x8097A680:("EffectSsLightning_Init",),
-    0x8097A794:("func_8097A794",),
+    0x8097A794:("EffectSsLightning_NewLightning",),
     0x8097A838:("EffectSsLightning_Draw",),
     0x8097AA98:("EffectSsLightning_Update",),
     0x8097AD60:("EffectSsDtBubble_Init",),

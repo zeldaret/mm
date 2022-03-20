@@ -26,9 +26,9 @@ u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, 
 void EffectSsLightning_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
 void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this);
 
-TexturePtr D_8097AC80[] = {
-    gameplay_keep_Tex_03C230, gameplay_keep_Tex_03C830, gameplay_keep_Tex_03CE30, gameplay_keep_Tex_03D430,
-    gameplay_keep_Tex_03DA30, gameplay_keep_Tex_03E030, gameplay_keep_Tex_03E630, gameplay_keep_Tex_03EC30,
+TexturePtr sLightningTextures[] = {
+    gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex, gEffLightning4Tex,
+    gEffLightning5Tex, gEffLightning6Tex, gEffLightning7Tex, gEffLightning8Tex,
 };
 
 const EffectSsInit Effect_Ss_Lightning_InitVars = {
@@ -36,14 +36,14 @@ const EffectSsInit Effect_Ss_Lightning_InitVars = {
     EffectSsLightning_Init,
 };
 
-s32 D_8097ACA8 = false;
+static s32 sIsVirtualized = false;
 
 u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsLightningInitParams* initParams = PARAMS;
     s32 i;
 
     this->pos = initParams->pos;
-    this->gfx = gameplay_keep_DL_03F230;
+    this->gfx = gEffLightningDL;
     this->life = initParams->life;
     this->draw = EffectSsLightning_Draw;
     this->update = EffectSsLightning_Update;
@@ -60,17 +60,17 @@ u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, 
     this->rYaw = initParams->yaw;
     this->rLifespan = initParams->life;
 
-    if (!D_8097ACA8) {
-        for (i = 0; i < ARRAY_COUNT(D_8097AC80); i++) {
-            D_8097AC80[i] = Lib_SegmentedToVirtual(D_8097AC80[i]);
+    if (!sIsVirtualized) {
+        for (i = 0; i < ARRAY_COUNT(sLightningTextures); i++) {
+            sLightningTextures[i] = Lib_SegmentedToVirtual(sLightningTextures[i]);
         }
-        D_8097ACA8 = true;
+        sIsVirtualized = true;
     }
 
     return 1;
 }
 
-void func_8097A794(GlobalContext* globalCtx, Vec3f* pos, s32 yaw, EffectSs* this) {
+void EffectSsLightning_NewLightning(GlobalContext* globalCtx, Vec3f* pos, s32 yaw, EffectSs* this) {
     EffectSs newLightning;
 
     EffectSS_Delete(&newLightning);
@@ -120,7 +120,7 @@ void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this)
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         func_8012C9BC(gfxCtx);
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_8097AC80[texIndex]);
+        gSPSegment(POLY_XLU_DISP++, 0x08, sLightningTextures[texIndex]);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                         this->rPrimColorA);
         gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rEnvColorA);
@@ -148,10 +148,10 @@ void EffectSsLightning_Update(GlobalContext* globalCtx, u32 index, EffectSs* thi
         pos.x = this->pos.x - (Math_CosS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx))) * scale);
         pos.z = this->pos.z + (Math_SinS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx))) * scale);
 
-        func_8097A794(globalCtx, &pos, yaw, this);
+        EffectSsLightning_NewLightning(globalCtx, &pos, yaw, this);
 
         if (Rand_ZeroOne() < 0.1f) {
-            func_8097A794(globalCtx, &pos, (this->rYaw * 2) - yaw, this);
+            EffectSsLightning_NewLightning(globalCtx, &pos, (this->rYaw * 2) - yaw, this);
         }
     }
 }
