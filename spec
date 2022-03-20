@@ -2915,8 +2915,7 @@ beginseg
     name "ovl_Obj_Fireshield"
     compress
     include "build/src/overlays/actors/ovl_Obj_Fireshield/z_obj_fireshield.o"
-    include "build/data/ovl_Obj_Fireshield/ovl_Obj_Fireshield.data.o"
-    include "build/data/ovl_Obj_Fireshield/ovl_Obj_Fireshield.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Fireshield/ovl_Obj_Fireshield_reloc.o"
 endseg
 
 beginseg
