@@ -219,7 +219,7 @@ void BgIkanaDharma_UpdateCutscene(BgIkanaDharma* this, GlobalContext* globalCtx)
 }
 
 void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
-    BgIkanaDharma* this = (BgIkanaDharma*)thisx;
+    BgIkanaDharma* this = THIS;
 
     this->actionFunc(this, globalCtx);
     if (this->actionFunc == BgIkanaDharma_UpdateNormalState) {
@@ -257,6 +257,6 @@ void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIkanaDharma_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    BgIkanaDharma* this = (BgIkanaDharma*)thisx;
+    BgIkanaDharma* this = THIS;
     Gfx_DrawDListOpa(globalCtx, object_ikana_obj_DL_0008C8);
 }
