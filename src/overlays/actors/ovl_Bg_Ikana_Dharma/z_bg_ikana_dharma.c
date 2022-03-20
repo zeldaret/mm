@@ -211,11 +211,11 @@ void BgIkanaDharma_UpdateCutscene(BgIkanaDharma* this, GlobalContext* globalCtx)
     }
     if (Math_StepToF(&this->dyna.actor.scale.y, 0.0f, 1.0f / 300.0f) != 0) {
         Actor_MarkForDeath(&this->dyna.actor);
-        return;
+    } else {
+        this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
+        this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
+        BgIkanaDharma_CreateParticles(this, globalCtx);
     }
-    this->dyna.actor.scale.x = this->dyna.actor.scale.y * 3.0f;
-    this->dyna.actor.scale.z = this->dyna.actor.scale.y * 3.0f;
-    BgIkanaDharma_CreateParticles(this, globalCtx);
 }
 
 void BgIkanaDharma_Update(Actor* thisx, GlobalContext* globalCtx) {
