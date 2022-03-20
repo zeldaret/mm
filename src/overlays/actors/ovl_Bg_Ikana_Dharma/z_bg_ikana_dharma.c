@@ -97,11 +97,8 @@ void BgIkanaDharma_CreateParticles(BgIkanaDharma* this, GlobalContext* globalCtx
 }
 
 void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx) {
-    s16 params;
     BgIkanaDharma* this = THIS;
-    f32 segmentY;
     GlobalContext* globalCtx2 = globalCtx;
-    s32 i;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->dyna.actor.scale.x = 0.3f;
@@ -110,21 +107,18 @@ void BgIkanaDharma_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 0);
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ikana_obj_Colheader_000C50);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx2, &this->collider, &this->dyna.actor, &sCylinderInit);
-    i = 0;
-    params = this->dyna.actor.params;
-    if (((params >> 5) & 1) == 0) {
-        segmentY = this->dyna.actor.world.pos.y;
-        if (i < (params & 0xF)) {
-            do {
-                segmentY += 60.0f;
-                Actor_SpawnAsChildAndCutscene(&globalCtx2->actorCtx, globalCtx2, ACTOR_BG_IKANA_DHARMA,
-                                              this->dyna.actor.world.pos.x, segmentY, this->dyna.actor.world.pos.z,
-                                              this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y,
-                                              this->dyna.actor.shape.rot.z, BGIKANADHARMA_FLAG_IS_CHILD,
-                                              this->dyna.actor.cutscene, this->dyna.actor.unk20, NULL);
-                i++;
-            } while (i != (params & 0xF));
+    Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
+    if (BGIKANADHARMA_IS_CHILD(&this->dyna.actor) == 0) {
+        f32 segmentY = this->dyna.actor.world.pos.y;
+        s32 i = 0;
+        s32 numSegments = BGIKANADHARMA_NUM_SEGMENTS(&this->dyna.actor);
+        for (; i < numSegments; i++) {
+            segmentY += 60.0f;
+            Actor_SpawnAsChildAndCutscene(&globalCtx2->actorCtx, globalCtx, ACTOR_BG_IKANA_DHARMA,
+                                          this->dyna.actor.world.pos.x, segmentY, this->dyna.actor.world.pos.z,
+                                          this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y,
+                                          this->dyna.actor.shape.rot.z, BGIKANADHARMA_FLAG_IS_CHILD,
+                                          this->dyna.actor.cutscene, this->dyna.actor.unk20, NULL);
         }
         this->dyna.actor.bgCheckFlags |= 1;
     }
