@@ -146,20 +146,18 @@ void BgIkanaDharma_BeginNormalState(BgIkanaDharma* this) {
     this->dyna.actor.speedXZ = 0.0f;
 }
 
-void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* thisx, GlobalContext* globalCtx) {
-    s32 phi_v0;
-    Actor* temp_a3;
-    BgIkanaDharma* this = thisx;
+void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* this, GlobalContext* globalCtx) {
+    s32 phi_v0 = (this->collider.base.acFlags & AC_HIT) != 0;
+    Actor* temp_a3 = GET_PLAYER(globalCtx);
+    BgIkanaDharma* this2 = this;
     s32 temp_v0_3;
 
-    temp_a3 = GET_PLAYER(globalCtx);
-    phi_v0 = (this->collider.base.acFlags & AC_HIT) != 0;
     if (phi_v0) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
     if (phi_v0 && sFirstHitBgIkanaDharma == NULL) {
         s32 temp_v0_2;
-        sFirstHitBgIkanaDharma = this;
+        sFirstHitBgIkanaDharma = this2;
         Flags_SetSwitch(globalCtx, BGIKANADHARMA_GET_SWITCHFLAG(&this->dyna.actor));
         temp_v0_3 = (s16)(this->dyna.actor.yawTowardsPlayer + 0x8000);
         temp_v0_2 = ((s16)(temp_a3->shape.rot.y - temp_v0_3) >> 1);
@@ -175,7 +173,7 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* thisx, GlobalContext* global
         }
         if (temp_v0_3 >= 0x4001) {
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &thisx->collider.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
     }
 }
