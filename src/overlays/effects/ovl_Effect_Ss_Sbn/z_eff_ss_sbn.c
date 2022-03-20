@@ -7,8 +7,8 @@
 #include "z_eff_ss_sbn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define rTwoTexY2Step regs[0]
-#define rTwoTexY2 regs[1]
+#define rScrollStep regs[0]
+#define rScroll regs[1]
 #define rTexIndex regs[2]
 #define rAlpha regs[3]
 #define rReg4 regs[4]
@@ -55,8 +55,8 @@ u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* 
     this->flags = 0;
     this->gfx = initParams->colPoly; // Uses the gfx field to store a collisionPoly
 
-    this->rTwoTexY2 = 0;
-    this->rTwoTexY2Step = 7;
+    this->rScroll = 0;
+    this->rScrollStep = 7;
     this->rTexIndex = 0;
     this->rAlpha = 200;
     this->rReg4 = 250;
@@ -139,16 +139,16 @@ void EffectSsSbn_DrawSliding(GlobalContext* globalCtx, u32 index, EffectSs* this
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(tex));
         }
         this->rTexIndex++;
-        this->rTwoTexY2 += this->rTwoTexY2Step;
+        this->rScroll += this->rScrollStep;
     } else {
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffectSbnSliding12Tex));
-        if ((this->rTwoTexY2Step >= 2) && ((globalCtx->state.frames % 2) == 0)) {
-            this->rTwoTexY2Step--;
+        if ((this->rScrollStep >= 2) && ((globalCtx->state.frames % 2) == 0)) {
+            this->rScrollStep--;
         }
-        this->rTwoTexY2 += this->rTwoTexY2Step;
+        this->rScroll += this->rScrollStep;
     }
     gSPSegment(POLY_XLU_DISP++, 0x09,
-               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, this->rTwoTexY2, 0x20, 0x20));
+               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, this->rScroll, 0x20, 0x20));
     gSPDisplayList(POLY_XLU_DISP++, gEffectSbnSlidingDL);
 
     CLOSE_DISPS(gfxCtx);
