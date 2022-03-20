@@ -152,7 +152,7 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* thisx, GlobalContext* global
     BgIkanaDharma* this = thisx;
     s32 temp_v0_3;
 
-    temp_a3 = globalCtx->actorCtx.actorLists[2].first;
+    temp_a3 = GET_PLAYER(globalCtx);
     phi_v0 = (this->collider.base.acFlags & AC_HIT) != 0;
     if (phi_v0) {
         this->collider.base.acFlags &= ~AC_HIT;
