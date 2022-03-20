@@ -30,14 +30,14 @@ static Color_RGB8 sColors[] = {
 };
 
 static TexturePtr sTextures[] = {
-    gameplay_keep_Tex_033310, gameplay_keep_Tex_033490, gameplay_keep_Tex_033610, gameplay_keep_Tex_033790,
-    gameplay_keep_Tex_033910, gameplay_keep_Tex_033A90, gameplay_keep_Tex_033C10, gameplay_keep_Tex_033D90,
-    gameplay_keep_Tex_033F10, gameplay_keep_Tex_034090, gameplay_keep_Tex_034210, gameplay_keep_Tex_034390,
-    gameplay_keep_Tex_034510, gameplay_keep_Tex_034690, gameplay_keep_Tex_034810, gameplay_keep_Tex_034990,
-    gameplay_keep_Tex_034B10, gameplay_keep_Tex_034C90, gameplay_keep_Tex_034E10, gameplay_keep_Tex_034F90,
-    gameplay_keep_Tex_035110, gameplay_keep_Tex_035290, gameplay_keep_Tex_035410, gameplay_keep_Tex_035590,
-    gameplay_keep_Tex_033310, gameplay_keep_Tex_033490, gameplay_keep_Tex_033610, gameplay_keep_Tex_033790,
-    gameplay_keep_Tex_033910, gameplay_keep_Tex_033A90, gameplay_keep_Tex_033C10, gameplay_keep_Tex_033D90,
+    gEffHitmark1Tex, gEffHitmark2Tex, gEffHitmark3Tex, gEffHitmark4Tex,
+    gEffHitmark5Tex, gEffHitmark6Tex, gEffHitmark7Tex, gEffHitmark8Tex,
+    gEffHitmark9Tex, gEffHitmark10Tex, gEffHitmark11Tex, gEffHitmark12Tex,
+    gEffHitmark13Tex, gEffHitmark14Tex, gEffHitmark15Tex, gEffHitmark16Tex,
+    gEffHitmark17Tex, gEffHitmark18Tex, gEffHitmark19Tex, gEffHitmark20Tex,
+    gEffHitmark21Tex, gEffHitmark22Tex, gEffHitmark23Tex, gEffHitmark24Tex,
+    gEffHitmark1Tex, gEffHitmark2Tex, gEffHitmark3Tex, gEffHitmark4Tex,
+    gEffHitmark5Tex, gEffHitmark6Tex, gEffHitmark7Tex, gEffHitmark8Tex,
 };
 
 const EffectSsInit Effect_Ss_Hitmark_InitVars = {
@@ -50,7 +50,7 @@ u32 EffectSsHitmark_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, vo
     s32 colorIndex;
 
     this->pos = initParams->pos;
-    this->gfx = gameplay_keep_DL_035710;
+    this->gfx = gEffHitmarkDL;
 
     if (initParams->type == EFFECT_HITMARK_DUST) {
         this->life = 16;

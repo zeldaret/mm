@@ -1011,31 +1011,31 @@
         <Texture Name="gameplay_keep_Tex_031E70" OutName="tex_031E70" Format="ia8" Width="32" Height="32" Offset="0x31E70" />
         <DList Name="gameplay_keep_DL_032270" Offset="0x32270" />
         <Texture Name="gameplay_keep_Tex_032310" OutName="tex_032310" Format="rgba32" Width="16" Height="64" Offset="0x32310" />
-        <Texture Name="gameplay_keep_Tex_033310" OutName="tex_033310" Format="i4" Width="32" Height="24" Offset="0x33310" />
-        <Texture Name="gameplay_keep_Tex_033490" OutName="tex_033490" Format="i4" Width="32" Height="24" Offset="0x33490" />
-        <Texture Name="gameplay_keep_Tex_033610" OutName="tex_033610" Format="i4" Width="32" Height="24" Offset="0x33610" />
-        <Texture Name="gameplay_keep_Tex_033790" OutName="tex_033790" Format="i4" Width="32" Height="24" Offset="0x33790" />
-        <Texture Name="gameplay_keep_Tex_033910" OutName="tex_033910" Format="i4" Width="32" Height="24" Offset="0x33910" />
-        <Texture Name="gameplay_keep_Tex_033A90" OutName="tex_033A90" Format="i4" Width="32" Height="24" Offset="0x33A90" />
-        <Texture Name="gameplay_keep_Tex_033C10" OutName="tex_033C10" Format="i4" Width="32" Height="24" Offset="0x33C10" />
-        <Texture Name="gameplay_keep_Tex_033D90" OutName="tex_033D90" Format="i4" Width="32" Height="24" Offset="0x33D90" />
-        <Texture Name="gameplay_keep_Tex_033F10" OutName="tex_033F10" Format="i4" Width="32" Height="24" Offset="0x33F10" />
-        <Texture Name="gameplay_keep_Tex_034090" OutName="tex_034090" Format="i4" Width="32" Height="24" Offset="0x34090" />
-        <Texture Name="gameplay_keep_Tex_034210" OutName="tex_034210" Format="i4" Width="32" Height="24" Offset="0x34210" />
-        <Texture Name="gameplay_keep_Tex_034390" OutName="tex_034390" Format="i4" Width="32" Height="24" Offset="0x34390" />
-        <Texture Name="gameplay_keep_Tex_034510" OutName="tex_034510" Format="i4" Width="32" Height="24" Offset="0x34510" />
-        <Texture Name="gameplay_keep_Tex_034690" OutName="tex_034690" Format="i4" Width="32" Height="24" Offset="0x34690" />
-        <Texture Name="gameplay_keep_Tex_034810" OutName="tex_034810" Format="i4" Width="32" Height="24" Offset="0x34810" />
-        <Texture Name="gameplay_keep_Tex_034990" OutName="tex_034990" Format="i4" Width="32" Height="24" Offset="0x34990" />
-        <Texture Name="gameplay_keep_Tex_034B10" OutName="tex_034B10" Format="i4" Width="32" Height="24" Offset="0x34B10" />
-        <Texture Name="gameplay_keep_Tex_034C90" OutName="tex_034C90" Format="i4" Width="32" Height="24" Offset="0x34C90" />
-        <Texture Name="gameplay_keep_Tex_034E10" OutName="tex_034E10" Format="i4" Width="32" Height="24" Offset="0x34E10" />
-        <Texture Name="gameplay_keep_Tex_034F90" OutName="tex_034F90" Format="i4" Width="32" Height="24" Offset="0x34F90" />
-        <Texture Name="gameplay_keep_Tex_035110" OutName="tex_035110" Format="i4" Width="32" Height="24" Offset="0x35110" />
-        <Texture Name="gameplay_keep_Tex_035290" OutName="tex_035290" Format="i4" Width="32" Height="24" Offset="0x35290" />
-        <Texture Name="gameplay_keep_Tex_035410" OutName="tex_035410" Format="i4" Width="32" Height="24" Offset="0x35410" />
-        <Texture Name="gameplay_keep_Tex_035590" OutName="tex_035590" Format="i4" Width="32" Height="24" Offset="0x35590" />
-        <DList Name="gameplay_keep_DL_035710" Offset="0x35710" />
+        <Texture Name="gEffHitmark1Tex" OutName="eff_hitmark_1" Format="i4" Width="32" Height="24" Offset="0x33310" />
+        <Texture Name="gEffHitmark2Tex" OutName="eff_hitmark_2" Format="i4" Width="32" Height="24" Offset="0x33490" />
+        <Texture Name="gEffHitmark3Tex" OutName="eff_hitmark_3" Format="i4" Width="32" Height="24" Offset="0x33610" />
+        <Texture Name="gEffHitmark4Tex" OutName="eff_hitmark_4" Format="i4" Width="32" Height="24" Offset="0x33790" />
+        <Texture Name="gEffHitmark5Tex" OutName="eff_hitmark_5" Format="i4" Width="32" Height="24" Offset="0x33910" />
+        <Texture Name="gEffHitmark6Tex" OutName="eff_hitmark_6" Format="i4" Width="32" Height="24" Offset="0x33A90" />
+        <Texture Name="gEffHitmark7Tex" OutName="eff_hitmark_7" Format="i4" Width="32" Height="24" Offset="0x33C10" />
+        <Texture Name="gEffHitmark8Tex" OutName="eff_hitmark_8" Format="i4" Width="32" Height="24" Offset="0x33D90" />
+        <Texture Name="gEffHitmark9Tex" OutName="eff_hitmark_9" Format="i4" Width="32" Height="24" Offset="0x33F10" />
+        <Texture Name="gEffHitmark10Tex" OutName="eff_hitmark_10" Format="i4" Width="32" Height="24" Offset="0x34090" />
+        <Texture Name="gEffHitmark11Tex" OutName="eff_hitmark_11" Format="i4" Width="32" Height="24" Offset="0x34210" />
+        <Texture Name="gEffHitmark12Tex" OutName="eff_hitmark_12" Format="i4" Width="32" Height="24" Offset="0x34390" />
+        <Texture Name="gEffHitmark13Tex" OutName="eff_hitmark_13" Format="i4" Width="32" Height="24" Offset="0x34510" />
+        <Texture Name="gEffHitmark14Tex" OutName="eff_hitmark_14" Format="i4" Width="32" Height="24" Offset="0x34690" />
+        <Texture Name="gEffHitmark15Tex" OutName="eff_hitmark_15" Format="i4" Width="32" Height="24" Offset="0x34810" />
+        <Texture Name="gEffHitmark16Tex" OutName="eff_hitmark_16" Format="i4" Width="32" Height="24" Offset="0x34990" />
+        <Texture Name="gEffHitmark17Tex" OutName="eff_hitmark_17" Format="i4" Width="32" Height="24" Offset="0x34B10" />
+        <Texture Name="gEffHitmark18Tex" OutName="eff_hitmark_18" Format="i4" Width="32" Height="24" Offset="0x34C90" />
+        <Texture Name="gEffHitmark19Tex" OutName="eff_hitmark_19" Format="i4" Width="32" Height="24" Offset="0x34E10" />
+        <Texture Name="gEffHitmark20Tex" OutName="eff_hitmark_20" Format="i4" Width="32" Height="24" Offset="0x34F90" />
+        <Texture Name="gEffHitmark21Tex" OutName="eff_hitmark_21" Format="i4" Width="32" Height="24" Offset="0x35110" />
+        <Texture Name="gEffHitmark22Tex" OutName="eff_hitmark_22" Format="i4" Width="32" Height="24" Offset="0x35290" />
+        <Texture Name="gEffHitmark23Tex" OutName="eff_hitmark_23" Format="i4" Width="32" Height="24" Offset="0x35410" />
+        <Texture Name="gEffHitmark24Tex" OutName="eff_hitmark_24" Format="i4" Width="32" Height="24" Offset="0x35590" />
+        <DList Name="gEffHitmarkDL" Offset="0x35710" />
         <Texture Name="gameplay_keep_Tex_0357B0" OutName="tex_0357B0" Format="ia8" Width="32" Height="64" Offset="0x357B0" />
         <Texture Name="gameplay_keep_Tex_035FB0" OutName="tex_035FB0" Format="ia8" Width="32" Height="64" Offset="0x35FB0" />
         <Texture Name="gameplay_keep_Tex_0367B0" OutName="tex_0367B0" Format="i8" Width="64" Height="64" Offset="0x367B0" />
