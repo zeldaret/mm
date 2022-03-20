@@ -14,7 +14,7 @@ typedef struct {
     /* 0x00 */ s32 type;
     /* 0x04 */ s16 scale;
     /* 0x08 */ Vec3f pos;
-} EffectSsHitMarkInitParams; // size = 0x14
+} EffectSsHitmarkInitParams; // size = 0x14
 
 extern const EffectSsInit Effect_Ss_Hitmark_InitVars;
 

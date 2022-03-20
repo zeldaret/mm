@@ -1953,8 +1953,7 @@ beginseg
     name "ovl_Effect_Ss_Hitmark"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.o"
-    include "build/data/ovl_Effect_Ss_Hitmark/ovl_Effect_Ss_Hitmark.data.o"
-    include "build/data/ovl_Effect_Ss_Hitmark/ovl_Effect_Ss_Hitmark.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Hitmark/ovl_Effect_Ss_Hitmark_reloc.o"
 endseg
 
 beginseg
