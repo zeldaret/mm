@@ -35,6 +35,7 @@ extern s16 D_801F6B20;
 extern s16 D_801F6B22;
 extern MessageTableEntry D_801C6B98[];
 extern MessageTableEntry D_801CFB08[];
+extern s16 D_801CFC78[15];
 
 void func_80147520(void) {
     D_801CFC98 = 0xFF;
@@ -508,7 +509,54 @@ void func_8014D62C(GlobalContext* globalCtx, s32* offset, f32* arg2, s16* decode
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D7B4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80150A84.s")
+void func_80150A84(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    u8 offset = msgCtx->unk11F0A;
+    u8 t;
+    if (D_801CFC78[offset] != 0xE) {
+        DmaMgr_SendRequest0(msgCtx->unk11EF8, &((u8*)SEGMENT_ROM_START(message_static))[D_801CFC78[offset] * 0x1000],
+                            0x1000);
+        if (globalCtx->pauseCtx.unk_1F0 == 0) {
+            if ((&D_801CFC78[offset] == &D_801CFC78[t = 0]) || (&D_801CFC78[offset] == &D_801CFC78[t = 6]) ||
+                (&D_801CFC78[offset] == &D_801CFC78[t = 10]) || (&D_801CFC78[offset] == &D_801CFC78[t = 11])) {
+                msgCtx->unk12034 = 0;
+                msgCtx->unk12036 = 0;
+                msgCtx->unk12038 = 0;
+            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 1]) {
+                msgCtx->unk12034 = 0x46;
+                msgCtx->unk12036 = 0x32;
+                msgCtx->unk12038 = 0x1E;
+            } else if ((&D_801CFC78[offset] == &D_801CFC78[t = 2]) || (&D_801CFC78[offset] == &D_801CFC78[t = 8])) {
+                msgCtx->unk12034 = 0;
+                msgCtx->unk12036 = 0xA;
+                msgCtx->unk12038 = 0x32;
+            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 13]) {
+                msgCtx->unk12034 = 0xFF;
+                msgCtx->unk12036 = 0xFF;
+                msgCtx->unk12038 = 0xC3;
+            } else {
+                msgCtx->unk12034 = 0xFF;
+                msgCtx->unk12036 = 0;
+                msgCtx->unk12038 = 0;
+            }
+            if (&D_801CFC78[offset] == &D_801CFC78[t = 1]) {
+                msgCtx->unk1203A = 0xE6;
+            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 3]) {
+                msgCtx->unk1203A = 0xB4;
+            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 13]) {
+                msgCtx->unk1203A = 0xDC;
+            } else {
+                msgCtx->unk1203A = 0xAA;
+            }
+        } else {
+            msgCtx->unk12034 = 0xFF;
+            msgCtx->unk12036 = 0xFF;
+            msgCtx->unk12038 = 0xFF;
+            msgCtx->unk1203A = 0xFF;
+        }
+        msgCtx->unk1203C = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80150D08.s")
 
