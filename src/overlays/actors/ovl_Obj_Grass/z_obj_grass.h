@@ -2,7 +2,6 @@
 #define Z_OBJ_GRASS_H
 
 #include "global.h"
-#include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 
 struct ObjGrass;
 struct ObjGrassCarry;
@@ -28,7 +27,7 @@ typedef struct {
     /* 0x4C */ ObjGrassStruct1_1* unk_4C;
 } ObjGrassStruct2; // size = 0x50
 
-typedef struct {
+typedef struct ObjGrassStruct3 {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ s8 unk_0E;

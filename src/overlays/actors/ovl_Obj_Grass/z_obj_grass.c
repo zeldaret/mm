@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_grass.h"
+#include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 

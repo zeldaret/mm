@@ -2,10 +2,10 @@
 #define Z_OBJ_GRASS_CARRY_H
 
 #include "global.h"
-#include "overlays/actors/ovl_Obj_Grass/z_obj_grass.h"
 
 struct ObjGrassCarry;
 struct ObjGrass;
+struct ObjGrassStruct3;
 
 typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry*, GlobalContext*);
 
