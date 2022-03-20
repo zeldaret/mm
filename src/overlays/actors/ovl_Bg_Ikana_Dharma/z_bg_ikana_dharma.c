@@ -61,7 +61,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1100, ICHAIN_STOP),
 };
 
-static BgIkanaDharma* g_firstHitBgIkanaDharma;
+static BgIkanaDharma* sFirstHitBgIkanaDharma;
 
 void BgIkanaDharma_CreateParticles(BgIkanaDharma* this, GlobalContext* globalCtx) {
     u32 pad;
@@ -136,8 +136,8 @@ void BgIkanaDharma_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    if (g_firstHitBgIkanaDharma == this) {
-        g_firstHitBgIkanaDharma = NULL;
+    if (sFirstHitBgIkanaDharma == this) {
+        sFirstHitBgIkanaDharma = NULL;
     }
 }
 
@@ -157,9 +157,9 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* thisx, GlobalContext* global
     if (phi_v0) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
-    if (phi_v0 && g_firstHitBgIkanaDharma == NULL) {
+    if (phi_v0 && sFirstHitBgIkanaDharma == NULL) {
         s32 temp_v0_2;
-        g_firstHitBgIkanaDharma = this;
+        sFirstHitBgIkanaDharma = this;
         Flags_SetSwitch(globalCtx, BGIKANADHARMA_GET_SWITCHFLAG(&this->dyna.actor));
         temp_v0_3 = (s16)(this->dyna.actor.yawTowardsPlayer + 0x8000);
         temp_v0_2 = ((s16)(temp_a3->shape.rot.y - temp_v0_3) >> 1);
@@ -167,7 +167,7 @@ void BgIkanaDharma_UpdateNormalState(BgIkanaDharma* thisx, GlobalContext* global
         this->dyna.actor.speedXZ = 20.0f;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
         BgIkanaDharma_BeginWaitToStartCutscene(this);
-    } else if ((this->dyna.actor.flags & 0x40) == 0x40 && g_firstHitBgIkanaDharma == NULL &&
+    } else if ((this->dyna.actor.flags & 0x40) == 0x40 && sFirstHitBgIkanaDharma == NULL &&
                this->dyna.actor.xzDistToPlayer < 420.0f) {
         temp_v0_3 = (s16)(this->dyna.actor.yawTowardsPlayer - temp_a3->shape.rot.y);
         if (temp_v0_3 < 0) {
@@ -203,8 +203,8 @@ void BgIkanaDharma_UpdateCutscene(BgIkanaDharma* this, GlobalContext* globalCtx)
     if (this->cutsceneFramesRemaining > 0) {
         this->cutsceneFramesRemaining--;
         if (this->cutsceneFramesRemaining == 0) {
-            if (g_firstHitBgIkanaDharma == this) {
-                g_firstHitBgIkanaDharma = NULL;
+            if (sFirstHitBgIkanaDharma == this) {
+                sFirstHitBgIkanaDharma = NULL;
             }
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
