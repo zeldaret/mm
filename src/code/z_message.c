@@ -369,7 +369,44 @@ void func_801496C8(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014995C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149C18.s")
+extern s16 D_801CFD98;
+extern s16 D_801CFD9C;
+extern s16 D_801CFDA0;
+extern f32 D_801CFDA4[];
+extern f32 D_801CFDC8[];
+extern s16 D_801CFD94;
+
+void func_80149C18(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+
+    if (globalCtx->pauseCtx.unk_1F0 == 0) {
+        D_801CFD94 = (s16)(s32)(D_801CFDA4[msgCtx->unk12023] * 256.0f);
+        D_801CFD9C = (s16)(s32)(1024.0f / D_801CFDA4[msgCtx->unk12023]);
+        D_801CFD98 = (s16)(s32)(D_801CFDC8[msgCtx->unk12023] * 64.0f);
+        D_801CFDA0 = (s16)(s32)(1024.0f / D_801CFDC8[msgCtx->unk12023]);
+        msgCtx->unk1206A = msgCtx->unk12006 + ((0x40 - D_801CFD98) / 2);
+        msgCtx->unk1203C += msgCtx->unk1203A / 8;
+        msgCtx->unk12023++;
+    } else {
+        msgCtx->unk12023 = 8;
+        D_801CFD94 = 0x200;
+        D_801CFD9C = 0x200;
+        D_801CFD98 = 0x59;
+        D_801CFDA0 = 0x2DB;
+        msgCtx->unk1206A = msgCtx->unk12006 + ((0x5A - D_801CFD98) / 2);
+    }
+    if (msgCtx->unk12023 == 8) {
+        msgCtx->unk12068 = msgCtx->unk12004;
+        msgCtx->unk1206A = msgCtx->unk12006;
+        msgCtx->msgMode = 3;
+        msgCtx->unk1203C = msgCtx->unk1203A;
+    }
+    if (globalCtx->pauseCtx.unk_1F0 == 0) {
+        msgCtx->unk12068 = msgCtx->unk12004 + ((0x100 - D_801CFD94) / 2);
+        return;
+    }
+    msgCtx->unk12068 = msgCtx->unk12004 + ((0x200 - D_801CFD94) / 2);
+}
 
 void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
