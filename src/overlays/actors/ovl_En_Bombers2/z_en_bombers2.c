@@ -417,7 +417,7 @@ s32 func_80C056D4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     if ((limbIndex == OBJECT_CS_LIMB_0F) || (limbIndex == OBJECT_CS_LIMB_13) || (limbIndex == OBJECT_CS_LIMB_14)) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnBombers2_Draw(Actor* thisx, GlobalContext* globalCtx) {
