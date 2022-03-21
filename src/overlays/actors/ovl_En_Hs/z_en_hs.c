@@ -127,7 +127,7 @@ void func_80952F00(EnHs* this, GlobalContext* globalCtx) {
     s32 i;
     f32 phi_f20;
 
-    if (this->actor.home.rot.z >= 0x14) {
+    if (this->actor.home.rot.z >= 20) {
         phi_f20 = 15.0f;
     } else {
         phi_f20 = 10.0f;
@@ -258,7 +258,7 @@ void func_8095345C(EnHs* this, GlobalContext* globalCtx) {
             func_80952DFC(globalCtx);
             this->unk_2A0 &= ~8;
         }
-    } else if (this->actor.home.rot.x >= 0x14) {
+    } else if (this->actor.home.rot.x >= 20) {
         this->actionFunc = func_80953354;
         this->unk_2A2 = 40;
     } else if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_10000) {
@@ -308,28 +308,28 @@ s32 EnHs_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnHs* this = THIS;
 
     switch (limbIndex) {
-        case 9:
+        case OBJECT_HS_LIMB_09:
             rot->x += this->unk_294.y;
             rot->z += this->unk_294.x;
             break;
 
-        case 10:
+        case OBJECT_HS_LIMB_0A:
             rot->x += this->unk_294.y;
             rot->z += this->unk_294.x;
             break;
 
-        case 11:
+        case OBJECT_HS_LIMB_0B:
             *dList = NULL;
             return false;
 
-        case 12:
+        case OBJECT_HS_LIMB_0C:
             if (this->actor.params == ENHS_1) {
                 *dList = NULL;
                 return false;
             }
             break;
 
-        case 13:
+        case OBJECT_HS_LIMB_0D:
             if (this->actor.params == ENHS_1) {
                 *dList = NULL;
                 return false;
