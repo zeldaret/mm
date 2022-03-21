@@ -35,7 +35,7 @@
  * - Most of the actions of those two branches are constantly checking for the WORK_TIMER_CURRENT_ACTION timer. If it
  * runs out, then the behaviour resets back to func_809E34B8
  * - Either branch behaviour can be interrupted at any time by a hit from Player
- *   - Being hitted once makes Gyorg to be Stunned.
+ *   - Being hit once makes Gyorg Stunned.
  *   - When Gyorg is Stunned, he is vulnerable to be Damaged by Player
  *   - If Gyorg's reaches half of his life, then he spawns the small fishes
  *
