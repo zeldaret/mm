@@ -1498,7 +1498,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.world.pos.x, sp84.x, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
 
-            if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame) != 0) {
+            if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame)) {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEAD_JUMP2_OLD);
             }
             if (Animation_OnFrame(&this->skelAnime, this->floppingAnimLastFrame * 0.5f) != 0) {
