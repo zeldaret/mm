@@ -2485,7 +2485,7 @@ void func_80148B98(GlobalContext* globalCtx, u8 bParm2);
 void func_80149048(GlobalContext *globalCtx);
 void func_801491DC(GlobalContext *globalCtx);
 void func_80149454(GlobalContext *globalCtx);
-// void func_801496C8(void);
+void func_801496C8(GlobalContext *globalCtx);
 // void func_8014995C(void);
 void func_80149C18(GlobalContext* globalCtx);
 // void Message_FindMessage(void);

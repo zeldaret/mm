@@ -114,6 +114,11 @@ void func_801477B4(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148558.s")
 
+// Function is actually matching
+// but the static variable create a bss shift
+// this variable seem to be part of sram_data.
+// I'll try to decomp all equivalent functions
+// before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
 void func_80148B98(GlobalContext* globalCtx, u8 arg1) {
     static s16 held = 0;
@@ -188,6 +193,11 @@ void func_80149048(GlobalContext* globalCtx) {
 
 extern s16 D_801CFD88;
 
+// Function is actually matching
+// but the static variable create a bss shift
+// this variable seem to be part of sram_data.
+// I'll try to decomp all equivalent functions
+// before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
 void func_801491DC(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -241,6 +251,11 @@ void func_801491DC(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801491DC.s")
 #endif
 
+// Function is actually matching
+// but the static variable create a bss shift
+// this variable seem to be part of sram_data.
+// I'll try to decomp all equivalent functions
+// before trying to prevent this bss reorder.
 #ifdef NON_MATCHING
 void func_80149454(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -294,7 +309,63 @@ void func_80149454(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149454.s")
 #endif
 
+// Function is actually matching
+// but the static variable create a bss shift
+// this variable seem to be part of sram_data.
+// I'll try to decomp all equivalent functions
+// before trying to prevent this bss reorder.
+#ifdef NON_MATCHING
+void func_801496C8(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    static s16 D_801CFD90; // held
+
+    if (globalCtx->msgCtx.unk120A4[1] < -0x1D) {
+        msgCtx->unk12054[msgCtx->unk120C2]--;
+        if (msgCtx->unk12054[msgCtx->unk120C2] < 0) {
+            msgCtx->unk12054[msgCtx->unk120C2] = 3;
+        }
+        msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x824F;
+        Font_LoadChar(globalCtx, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                      msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+        return;
+    }
+    if (msgCtx->unk120A4[1] >= 0x1E) {
+        msgCtx->unk12054[msgCtx->unk120C2]++;
+        if (msgCtx->unk12054[msgCtx->unk120C2] >= 4) {
+            msgCtx->unk12054[msgCtx->unk120C2] = 0;
+        }
+        msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2] = msgCtx->unk12054[msgCtx->unk120C2] + 0x824F;
+        Font_LoadChar(globalCtx, msgCtx->decodedBuffer.wchar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                      msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+        return;
+    }
+    if ((msgCtx->unk120A4[0] >= 0x1E) && (D_801CFD90 == 0)) {
+        D_801CFD90 = 1;
+        msgCtx->unk120C2++;
+        if (msgCtx->unk120C2 >= 6) {
+            msgCtx->unk120C2 = 5;
+            return;
+        }
+        play_sound(NA_SE_SY_CURSOR);
+        return;
+    }
+    if ((msgCtx->unk120A4[0] < -0x1D) && (D_801CFD90 == 0)) {
+        D_801CFD90 = 1;
+        msgCtx->unk120C2--;
+        if (msgCtx->unk120C2 < 0) {
+            msgCtx->unk120C2 = 0;
+            return;
+        }
+        play_sound(NA_SE_SY_CURSOR);
+        return;
+    }
+    D_801CFD90 = 0;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801496C8.s")
+#endif
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014995C.s")
 
