@@ -194,7 +194,7 @@ void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx) {
     f32 temp = this->skelAnime.curFrame;
 
     if ((this->unk_2AC == 0) && (this->lastAnimFrame <= temp)) {
-        if ((this->unk_2A8 & 1) == 0) {
+        if (!(this->unk_2A8 & 1)) {
             EnBombers2_ChangeAnim(this, 1, 1.0f);
         } else {
             EnBombers2_ChangeAnim(this, 5, 1.0f);
