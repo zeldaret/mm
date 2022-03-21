@@ -330,7 +330,7 @@ s32 func_80A21990(ObjSkateblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
         spE0.y = spEC.y;
         spE0.z = temp_f30 + spEC.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, 1, 0, 0, 1, &spBC,
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &spBC,
                                     &this->dyna.actor, 0.0f)) {
             temp_f0 = Math3D_Vec3fDistSq(&spEC, &spC8);
             if (temp_f0 < phi_f22) {
