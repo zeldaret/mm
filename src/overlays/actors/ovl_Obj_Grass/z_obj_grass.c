@@ -100,16 +100,18 @@ void func_809A92D0(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
 void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
     Vec3f spBC;
     Vec3f spB0;
     s32 i;
+    Vec3f* ptr2;
 
     for (i = 0; i < ARRAY_COUNT(D_809AAB4C); i++) {
-        spB0.x = ptr->unk_00.x + (D_809AAB4C[i].x * 8.0f);
-        spB0.y = (ptr->unk_00.y + (D_809AAB4C[i].y * 8.0f)) + 10.0f;
-        spB0.z = ptr->unk_00.z + (D_809AAB4C[i].z * 8.0f);
+        ptr2 = &D_809AAB4C[i];
+
+        spB0.x = ptr->unk_00.x + (ptr2->x * 8.0f);
+        spB0.y = (ptr->unk_00.y + (ptr2->y * 8.0f)) + 10.0f;
+        spB0.z = ptr->unk_00.z + (ptr2->z * 8.0f);
 
         spBC.x = (Rand_ZeroOne() - 0.5f) * 8.0f;
         spBC.y = Rand_ZeroOne() * 10.0f;
@@ -118,9 +120,9 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
                              D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0527F0);
 
-        spB0.x = ptr->unk_00.x + (D_809AAB4C[i].x * 16.0f);
-        spB0.y = (ptr->unk_00.y + (D_809AAB4C[i].y * 16.0f)) + 10.0f;
-        spB0.z = ptr->unk_00.z + (D_809AAB4C[i].z * 16.0f);
+        spB0.x = ptr->unk_00.x + (ptr2->x * 16.0f);
+        spB0.y = (ptr->unk_00.y + (ptr2->y * 16.0f)) + 10.0f;
+        spB0.z = ptr->unk_00.z + (ptr2->z * 16.0f);
 
         spBC.x = (Rand_ZeroOne() - 0.5f) * 6.0f;
         spBC.y = Rand_ZeroOne() * 10.0f;
@@ -130,10 +132,6 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
                              D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0528B0);
     }
 }
-#else
-void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass/func_809A9314.s")
-#endif
 
 void ObjGrass_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjGrass* this = THIS;
@@ -442,7 +440,7 @@ void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
     ObjGrassStruct1* ptr;
     s32 i;
     s32 j;
-    Vec3s sp70 = { 0x0000, 0x0000, 0x0000 };
+    Vec3s sp70 = { 0, 0, 0 };
     ObjGrassStruct1_1* ptr2;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -488,7 +486,7 @@ void func_809AA798(Actor* thisx, GlobalContext* globalCtx) {
     ObjGrassStruct1_1* ptr2;
     s32 i;
     s32 j;
-    Vec3s sp6C = { 0x0000, 0x0000, 0x0000 };
+    Vec3s sp6C = { 0, 0, 0 };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
