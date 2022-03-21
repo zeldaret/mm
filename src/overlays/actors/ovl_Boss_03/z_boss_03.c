@@ -524,8 +524,6 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// float regalloc
 /**
  * Swims randomly until WORK_TIMER_UNK1_A runs out
  */
@@ -533,7 +531,8 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f20;
     f32 temp_f2;
     f32 temp_f22;
-
+    f32 tmp;
+    s32 pad;
     s16 i;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -556,10 +555,8 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f20) + SQ(temp_f22)), -temp_f2), 0xA,
                    this->unk_274);
 
-    Math_ApproachS(
-        &this->bodyYRot,
-        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0xA, this->unk_274, 0) * -0.5f,
-        5, 0x100);
+    tmp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0xA, this->unk_274, 0) * -0.5f;
+    Math_ApproachS(&this->bodyYRot, tmp, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
@@ -576,13 +573,14 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     if (this->workTimer[WORK_TIMER_UNK2_A] == 0) {
         if ((sqrtf(SQ(temp_f20) + SQ(temp_f22)) < 100.0f) || (this->workTimer[WORK_TIMER_UNK0_A] == 0)) {
             for (i = 0; i < 200; i++) {
-                if ((!temp_f20) && (!temp_f20)) {}
                 this->unk_268.x = randPlusMinusPoint5Scaled(2500.0f);
                 this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
                 this->unk_268.z = randPlusMinusPoint5Scaled(2500.0f);
 
-                if (sqrtf(SQ(this->unk_268.x - this->actor.world.pos.x) +
-                          SQ(this->unk_268.z - this->actor.world.pos.z)) > 300.0f) {
+                temp_f20 = this->unk_268.x - this->actor.world.pos.x;
+                temp_f22 = this->unk_268.z - this->actor.world.pos.z;
+
+                if (sqrtf(SQ(temp_f20) + SQ(temp_f22)) > 300.0f) {
                     break;
                 }
             }
@@ -609,10 +607,6 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-void func_809E34B8(Boss03* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/func_809E34B8.s")
-#endif
 
 void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_ChasePlayer;
@@ -624,8 +618,6 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     this->unk_27C = 1.0f;
 }
 
-#ifdef NON_MATCHING
-// float regalloc
 /**
  * Approaches to Player until he is near enough, then try to catch him, unless he is back on the platform
  */
@@ -638,7 +630,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     f32 temp;
 
     Vec3f sp50;
-    f32 temp_f12;
+    s32 pad;
     f32 phi_f2;
     f32 sp44;
     u8 sp43;
@@ -648,7 +640,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     temp_f2 = player->actor.world.pos.x - this->actor.world.pos.x;
-    temp3 = ((player->actor.world.pos.y - this->actor.world.pos.y) + 50.0f);
+    temp3 = (player->actor.world.pos.y - this->actor.world.pos.y) + 50.0f;
     temp_f18 = player->actor.world.pos.z - this->actor.world.pos.z;
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp3), 0xA,
@@ -692,9 +684,10 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
 
-        temp_f12 = sqrtf(SQ(sp50.x - player->actor.world.pos.x) + SQ(sp50.z - player->actor.world.pos.z));
+        temp_f2 = sp50.x - player->actor.world.pos.x;
+        temp_f18 = sp50.z - player->actor.world.pos.z;
 
-        if (temp_f12 < (2.0f * phi_f2)) {
+        if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < (2.0f * phi_f2)) {
             Math_ApproachS(&this->jawZRot, 0x3200, 2, 0x1800);
             this->unk_278 = 25.0f;
             this->unk_27C = 5.0f;
@@ -702,7 +695,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
         }
 
         // Near enough to Player?
-        if (temp_f12 < phi_f2) {
+        if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < phi_f2) {
             Boss03_SetupCatchPlayer(this, globalCtx, sp43);
 
             if (sp43 != 0) {
@@ -717,9 +710,6 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 
     Boss03_SpawnDust(this, globalCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_ChasePlayer.s")
-#endif
 
 void Boss03_SetupCatchPlayer(Boss03* this, GlobalContext* globalCtx, u8 arg2) {
     this->actionFunc = Boss03_CatchPlayer;
@@ -1929,8 +1919,6 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// regalloc and few instructions pushed a bit below from where they should be
 void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Boss03* this = (Boss03*)thisx;
@@ -1953,8 +1941,9 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if (KREG(63) == 0) {
+        this->unk_290 = 1;
         this->unk_240++;
-        this->unk_2BC = this->unk_290 = 1;
+        this->unk_2BC = 1;
 
         this->unk_2BD = false;
 
@@ -2135,9 +2124,6 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_03/Boss03_Update.s")
-#endif
 
 void Boss03_SetObject(GlobalContext* globalCtx, s16 objectId) {
     s32 objectIndex = Object_GetIndex(&globalCtx->objectCtx, objectId);

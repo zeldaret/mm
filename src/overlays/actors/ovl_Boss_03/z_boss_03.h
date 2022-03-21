@@ -72,7 +72,7 @@ typedef struct Boss03 {
     /* 0x02A8 */ s16 jawZRot;
     /* 0x02AC */ Vec3f insideJawPos; // used to grab player
     /* 0x02B8 */ f32 unk_2B8;
-    /* 0x02BC */ s8 unk_2BC; // set but not used
+    /* 0x02BC */ u8 unk_2BC; // set but not used
     /* 0x02BD */ u8 unk_2BD; // playerUnderwater?
     /* 0x02BE */ s16 unk_2BE;
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
