@@ -1187,7 +1187,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_WATER_DEEP);
                             }
 
-                            if (this->csTimer >= 51) {
+                            if (this->csTimer > 50) {
                                 Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, 0.1f);
                             }
 
