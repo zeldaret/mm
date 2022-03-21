@@ -52,14 +52,14 @@
 
 #define THIS ((Boss03*)thisx)
 
-#define WORK_TIMER_UNK0_A 0 // used on func_809E34B8
+#define WORK_TIMER_UNK0_A 0 // used in func_809E34B8
 #define WORK_TIMER_CURRENT_ACTION 0
-#define WORK_TIMER_UNK0_C 0 // used on DeathCutscene
+#define WORK_TIMER_UNK0_C 0 // used in DeathCutscene
 
-#define WORK_TIMER_UNK1_A 1 // used on func_809E34B8
-#define WORK_TIMER_UNK1_B 1 // used on PrepareCharge
+#define WORK_TIMER_UNK1_A 1 // used in func_809E34B8
+#define WORK_TIMER_UNK1_B 1 // used in PrepareCharge
 
-#define WORK_TIMER_UNK2_A 2 // used on func_809E34B8
+#define WORK_TIMER_UNK2_A 2 // used in func_809E34B8
 #define WORK_TIMER_STUNNED 2
 
 // The Y position when standing on the platform.
