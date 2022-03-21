@@ -37,7 +37,7 @@
  * - Either branch behaviour can be interrupted at any time by a hit from Player
  *   - Being hit once makes Gyorg Stunned.
  *   - When Gyorg is Stunned, he is vulnerable to be Damaged by Player
- *   - If Gyorg's reaches half of his life, then he spawns the small fishes
+ *   - When Gyorg's health drops below half, he spawns the small fishes
  *
  * The collision logic is handled manually.
  */
