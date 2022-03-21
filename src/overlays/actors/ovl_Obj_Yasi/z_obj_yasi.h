@@ -11,4 +11,6 @@ typedef struct ObjYasi {
 
 extern const ActorInit Obj_Yasi_InitVars;
 
+#define OBJYASI_IS_WIDE(thisx) ((thisx)->params & 1)
+
 #endif // Z_OBJ_YASI_H

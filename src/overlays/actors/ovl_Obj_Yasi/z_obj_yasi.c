@@ -11,6 +11,8 @@
 
 #define THIS ((ObjYasi*)thisx)
 
+#define CAN_DROP_NUT(thisx)(thisx->params < 0)
+
 void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx);
@@ -44,7 +46,7 @@ void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->dyna.actor.home.rot.y = 0;
 
-    if ((this->dyna.actor.params & 1) != 0) {
+    if (OBJYASI_IS_WIDE(thisx)) {
         this->dyna.actor.scale.x = 0.2f;
         this->dyna.actor.scale.z = 0.2f;
     }
@@ -57,17 +59,17 @@ void ObjYasi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjYasi_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjYasi* this = (ObjYasi*)thisx;
+    ObjYasi* this = THIS;
     s16 temp;
-    Vec3f sp1C;
+    Vec3f dropPos;
 
     if (this->dyna.actor.home.rot.z != 0) {
-        if (this->dyna.actor.params < 0) {
+        if (CAN_DROP_NUT(thisx)) {
             if (Rand_ZeroOne() < 0.5f) {
-                sp1C.x = this->dyna.actor.world.pos.x;
-                sp1C.y = this->dyna.actor.world.pos.y + 280.0f;
-                sp1C.z = this->dyna.actor.world.pos.z;
-                Item_DropCollectible(globalCtx, &sp1C, ITEM00_NUTS_1);
+                dropPos.x = this->dyna.actor.world.pos.x;
+                dropPos.y = this->dyna.actor.world.pos.y + 280.0f;
+                dropPos.z = this->dyna.actor.world.pos.z;
+                Item_DropCollectible(globalCtx, &dropPos, ITEM00_NUTS_1);
             }
         }
         this->dyna.actor.home.rot.y = GET_PLAYER(globalCtx)->actor.shape.rot.y;
@@ -89,7 +91,7 @@ void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.shape.rot.x != 0) {
         Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-        Matrix_RotateY((s16)(this->dyna.actor.shape.rot.y - this->dyna.actor.home.rot.y), MTXMODE_APPLY);
+        Matrix_RotateY(BINANG_SUB(this->dyna.actor.shape.rot.y, this->dyna.actor.home.rot.y), MTXMODE_APPLY);
     } else {
         Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     }
