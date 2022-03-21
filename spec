@@ -1614,8 +1614,7 @@ beginseg
     name "ovl_En_Hs"
     compress
     include "build/src/overlays/actors/ovl_En_Hs/z_en_hs.o"
-    include "build/data/ovl_En_Hs/ovl_En_Hs.data.o"
-    include "build/data/ovl_En_Hs/ovl_En_Hs.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hs/ovl_En_Hs_reloc.o"
 endseg
 
 beginseg
