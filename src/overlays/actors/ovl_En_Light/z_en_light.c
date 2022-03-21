@@ -103,10 +103,10 @@ void EnLight_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (!ENLIGHT_GET_4000(&this->actor)) {
         EnLightStruct* sp28 = &D_808666D0[ENLIGHT_GET_F(&this->actor)];
         f32 temp_f2 = (Rand_ZeroOne() * 0.5f) + 0.5f;
-        s32 phi_v0 = (this->actor.params < 0) ? 100 : ENLIGHT_GET_2000(&this->actor) ? 730 : 300;
+        s32 radius = (this->actor.params < 0) ? 100 : ENLIGHT_GET_2000(&this->actor) ? 730 : 300;
 
         Lights_PointSetColorAndRadius(&this->lightInfo, (u8)(sp28->unk_00.r * temp_f2), (u8)(sp28->unk_00.g * temp_f2),
-                                      (u8)(sp28->unk_00.b * temp_f2), phi_v0);
+                                      (u8)(sp28->unk_00.b * temp_f2), radius);
     }
 
     func_80865BF8(this, globalCtx);
@@ -123,7 +123,7 @@ void func_80865F38(Actor* thisx, GlobalContext* globalCtx) {
     f32 sp30 = this->actor.scale.x / (sp38->unk_07 * 0.0001f);
     s32 sp2C = false;
 
-    if ENLIGHT_GET_1000 (&this->actor) {
+    if (ENLIGHT_GET_1000 (&this->actor)) {
         if (Flags_GetSwitch(globalCtx, ENLIGHT_SWITCHFLAG(&this->actor))) {
             Math_StepToF(&sp30, 1.0f, 0.05f);
             sp2C = true;
