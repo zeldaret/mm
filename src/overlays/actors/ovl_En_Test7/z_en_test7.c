@@ -46,28 +46,6 @@ const ActorInit En_Test7_InitVars = {
     (ActorFunc)EnTest7_Draw,
 };
 
-s32 D_80AF3410 = 0;
-
-Vec3f D_80AF3414 = { 0.0f, 1.0f, 0.0f };
-
-Vec3f D_80AF3420 = { 0.0f, 0.0f, 1.0f };
-
-Color_RGB8 D_80AF342C = { 64, 0, 0 };
-
-Color_RGB8 D_80AF3430 = { 220, 220, 255 };
-
-Color_RGB8 D_80AF3434 = { 64, 0, 0 };
-
-Color_RGB8 D_80AF3438 = { 220, 220, 255 };
-
-u16 D_80AF343C[] = {
-    0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30,
-};
-
-s16 D_80AF3450[] = { 0, 0x31C7 };
-
-f32 D_80AF3454 = 3500.0f;
-
 void EnTest7_SetupAction(EnTest7* this, EnTest7ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -159,12 +137,11 @@ void func_80AF0984(EnTest7Struct2* arg0, Vec3f* arg1, s32 arg2) {
     }
 }
 
-#ifdef NON_MATCHING
-// stack
 void func_80AF0C30(EnTest7Struct2* arg0, Vec3f* arg1, s32 arg2) {
+    static s32 D_80AF3410 = 0;
+    s32 i;
     s32 phi_t0 = false;
     EnTest7Struct2* ptr;
-    s32 i;
     s32 idx;
 
     for (i = 0, ptr = arg0; i < 100; i++, ptr++) {
@@ -185,9 +162,26 @@ void func_80AF0C30(EnTest7Struct2* arg0, Vec3f* arg1, s32 arg2) {
         func_80AF0984(&arg0[idx], arg1, arg2);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test7/func_80AF0C30.s")
-#endif
+
+Vec3f D_80AF3414 = { 0.0f, 1.0f, 0.0f };
+
+Vec3f D_80AF3420 = { 0.0f, 0.0f, 1.0f };
+
+Color_RGB8 D_80AF342C = { 64, 0, 0 };
+
+Color_RGB8 D_80AF3430 = { 220, 220, 255 };
+
+Color_RGB8 D_80AF3434 = { 64, 0, 0 };
+
+Color_RGB8 D_80AF3438 = { 220, 220, 255 };
+
+u16 D_80AF343C[] = {
+    0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30,
+};
+
+s16 D_80AF3450[] = { 0, 0x31C7 };
+
+f32 D_80AF3454 = 3500.0f;
 
 void func_80AF0CDC(GlobalContext* globalCtx, EnTest7Struct2* arg1) {
     static MtxF D_80AF38B0;
@@ -268,64 +262,66 @@ void func_80AF10D8(GlobalContext* globalCtx, EnTest7Struct2* arg1) {
     arg1->unk_08.z += arg1->unk_1C;
 }
 
-#ifdef NON_MATCHING
-// loop ordering
 void func_80AF118C(GlobalContext* globalCtx, EnTest7Struct2* arg1, EnTest7* this, s32 arg3, s32 arg4) {
+    s32 pad[4];
+    EnTest7Struct2* ptr;
+    s16 phi_s1;
+    s32 i;
+    f32 temp_f28;
     Vec3f sp8C;
     f32 temp_f0;
     f32 temp_f22;
     f32 temp_f24;
     f32 temp_f26;
     f32 temp_f2;
-    // EnTest7Struct2* ptr = arg1;
-    s16 phi_s1;
-    s32 i;
-    f32 temp_f28;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_15C); i++) {
-        if (arg1[i].unk_00 == 0) {
+    for (i = 0, ptr = arg1; i < (s32)(ARRAY_COUNT(this->unk_15C) * sizeof(this->unk_15C[0]));
+         i += sizeof(this->unk_15C[0]), ptr++) {
+        arg1 = ptr;
+
+        if (arg1->unk_00 == 0) {
             continue;
         }
 
-        if (arg1[i].unk_00 == 1) {
+        if (arg1->unk_00 == 1) {
             func_80AF0CDC(globalCtx, arg1);
         } else {
             func_80AF10D8(globalCtx, arg1);
         }
 
         if (arg3) {
-            temp_f22 = arg1[i].unk_08.x - this->actor.world.pos.x;
-            temp_f24 = arg1[i].unk_08.z - this->actor.world.pos.z;
+            temp_f22 = arg1->unk_08.x - this->actor.world.pos.x;
+            temp_f24 = arg1->unk_08.z - this->actor.world.pos.z;
             temp_f0 = SQ(temp_f22) + SQ(temp_f24);
 
             phi_s1 = -10000;
-            if (temp_f0 > 400.0f) {
+            if (temp_f0 > SQ(20.0f)) {
                 phi_s1 /= ((temp_f0 - SQ(20.0f)) * 0.00125f) + 1.0f;
             }
 
             temp_f26 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
             temp_f28 = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
 
-            arg1[i].unk_08.x = this->actor.world.pos.x + temp_f26;
-            arg1[i].unk_08.z = this->actor.world.pos.z + temp_f28;
+            arg1->unk_08.x = this->actor.world.pos.x + temp_f26;
+            arg1->unk_08.z = this->actor.world.pos.z + temp_f28;
 
-            temp_f22 = arg1[i].unk_14;
-            temp_f24 = arg1[i].unk_1C;
+            temp_f22 = arg1->unk_14;
+            temp_f24 = arg1->unk_1C;
 
-            arg1[i].unk_14 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
-            arg1[i].unk_1C = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
+            arg1->unk_14 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
+            arg1->unk_1C = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
 
-            temp_f22 = arg1[i].unk_20;
-            temp_f24 = arg1[i].unk_28;
+            temp_f22 = arg1->unk_20;
+            temp_f24 = arg1->unk_28;
 
-            arg1[i].unk_20 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
-            arg1[i].unk_28 = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
+            arg1->unk_20 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
+            arg1->unk_28 = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
         }
 
         if (arg4) {
-            sp8C.x = arg1[i].unk_08.x - this->actor.world.pos.x;
-            sp8C.y = arg1[i].unk_08.y - (this->actor.world.pos.y + 40.0f);
-            sp8C.z = arg1[i].unk_08.z - this->actor.world.pos.z;
+            sp8C.x = arg1->unk_08.x - this->actor.world.pos.x;
+            sp8C.y = arg1->unk_08.y - (this->actor.world.pos.y + 40.0f);
+            sp8C.z = arg1->unk_08.z - this->actor.world.pos.z;
 
             temp_f2 = 1.0f - (0.5f / ((Math3D_Vec3fMagnitude(&sp8C) / 500.0f) + 1.0f));
 
@@ -333,24 +329,20 @@ void func_80AF118C(GlobalContext* globalCtx, EnTest7Struct2* arg1, EnTest7* this
             sp8C.y *= temp_f2;
             sp8C.z *= temp_f2;
 
-            arg1[i].unk_08.x = this->actor.world.pos.x + sp8C.x;
-            arg1[i].unk_08.y = this->actor.world.pos.y + sp8C.y + 40.0f;
-            arg1[i].unk_08.z = this->actor.world.pos.z + sp8C.z;
+            arg1->unk_08.x = this->actor.world.pos.x + sp8C.x;
+            arg1->unk_08.y = this->actor.world.pos.y + sp8C.y + 40.0f;
+            arg1->unk_08.z = this->actor.world.pos.z + sp8C.z;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test7/func_80AF118C.s")
-#endif
 
-#ifdef NON_MATCHING
-// broken everywhere
 void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
+    s32 pad[3];
     GlobalContext* globalCtx = globalCtx2;
-    MtxF sp6C;
     Mtx* temp_v0;
     EnTest7Struct2* ptr;
     s32 i;
+    MtxF sp6C;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -361,42 +353,44 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
-    for (i = 0, ptr = arg1; i < 100; i++) {
-        if (ptr[i].unk_00 != 0) {
-            if ((ptr[i].unk_08.x > 30000.0f) || (ptr[i].unk_08.x < -30000.0f) || (ptr[i].unk_08.y > 30000.0f) ||
-                (ptr[i].unk_08.y < -30000.0f) || (ptr[i].unk_08.z > 30000.0f) || (ptr[i].unk_08.z < -30000.0f)) {
-                ptr[i].unk_00 = 0;
-            } else {
-                Matrix_InsertTranslation(ptr[i].unk_08.x, ptr[i].unk_08.y, ptr[i].unk_08.z, MTXMODE_NEW);
+    for (i = 0, ptr = arg1; i < 0x1770; i += 0x3C, ptr++) {
+        if (ptr->unk_00 == 0) {
+            continue;
+        }
 
-                if (ptr[i].unk_00 == 1) {
-                    Matrix_InsertRotation(ptr[i].unk_30.x, ptr[i].unk_30.y, ptr[i].unk_30.z, MTXMODE_APPLY);
-                } else {
-                    SkinMatrix_SetRotateYRP(&sp6C, ptr[i].unk_30.x, ptr[i].unk_30.y, ptr[i].unk_30.z);
-                    Matrix_InsertMatrix(&sp6C, MTXMODE_APPLY);
-                }
+        if ((ptr->unk_08.x > 30000.0f) || (ptr->unk_08.x < -30000.0f) || (ptr->unk_08.y > 30000.0f) ||
+            (ptr->unk_08.y < -30000.0f) || (ptr->unk_08.z > 30000.0f) || (ptr->unk_08.z < -30000.0f)) {
+            ptr->unk_00 = 0;
+            continue;
+        }
 
-                Matrix_Scale(ptr[i].unk_2C, ptr[i].unk_2C, ptr[i].unk_2C, MTXMODE_APPLY);
-                if (ptr[i].unk_00 == 2) {
-                    Matrix_InsertTranslation(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
-                }
+        Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
 
-                temp_v0 = Matrix_NewMtx(globalCtx->state.gfxCtx);
-                if (temp_v0 != NULL) {
-                    gSPMatrix(POLY_OPA_DISP++, temp_v0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_081628);
-                }
-            }
+        if (ptr->unk_00 == 1) {
+            Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
+        } else {
+            SkinMatrix_SetRotateYRP(&sp6C, ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z);
+            Matrix_InsertMatrix(&sp6C, MTXMODE_APPLY);
+        }
+
+        Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);
+        if (ptr->unk_00 == 2) {
+            Matrix_InsertTranslation(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
+        }
+
+        temp_v0 = Matrix_NewMtx(globalCtx->state.gfxCtx);
+        if (temp_v0 != NULL) {
+            gSPMatrix(POLY_OPA_DISP++, temp_v0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_081628);
         }
     }
+
+    if (ptr) {}
 
     Matrix_StatePop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test7/func_80AF14FC.s")
-#endif
 
 void func_80AF1730(EnTest7Struct* arg0) {
     arg0->unk_00 = 0.0f;
