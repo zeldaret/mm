@@ -10,7 +10,7 @@ typedef s32 (*BgBreakwallUnkFunc)(struct BgBreakwall*, GlobalContext*);
 typedef void (*BgBreakwallUnkFunc2)(struct BgBreakwall*, GlobalContext*);
 
 #define BGBREAKWALL_GET_F(thisx) ((thisx)-> params & 0xF)
-#define BGBREAKWALL_GET_FE00(thisx) (((thisx)-> params & 0xFE00) >> 9)
+#define BGBREAKWALL_SWITCHFLAG(thisx) (((thisx)-> params & 0xFE00) >> 9)
 
 enum {
     /*  7 */ BGBREAKWALL_F_7 = 7,
@@ -21,7 +21,7 @@ enum {
 typedef struct BgBreakwall {
     /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ s8 unk_15C;
-    /* 0x015D */ u8 unk_15D;
+    /* 0x015D */ u8 switchFlag;
     /* 0x015E */ u8 unk_15E;
     /* 0x0160 */ BgBreakwallActionFunc actionFunc;
 } BgBreakwall; // size = 0x164

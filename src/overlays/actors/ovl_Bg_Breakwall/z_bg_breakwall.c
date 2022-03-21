@@ -64,126 +64,28 @@ typedef struct {
 
 BgBreakwallStruct D_808B8140[] = {
     { OBJECT_OMOYA_OBJ, object_omoya_obj_DL_0001A0, NULL, NULL, NULL, func_808B7380, func_808B77D0, NULL },
-    {
-        OBJECT_YUKIMURA_OBJ,
-        object_yukimura_obj_DL_000F98,
-        object_yukimura_obj_DL_000EB0,
-        object_yukimura_obj_Matanimheader_002090,
-        NULL,
-        func_808B73C4,
-        func_808B77D0,
-        NULL,
-    },
-    {
-        OBJECT_KEIKOKU_OBJ,
-        object_keikoku_obj_DL_0027D8,
-        NULL,
-        object_keikoku_obj_Matanimheader_004290,
-        NULL,
-        func_808B73FC,
-        func_808B77D0,
-        NULL,
-    },
-    {
-        OBJECT_KEIKOKU_OBJ,
-        object_keikoku_obj_DL_0044A8,
-        NULL,
-        NULL,
-        NULL,
-        func_808B736C,
-        func_808B77D0,
-        NULL,
-    },
-    {
-        OBJECT_POSTHOUSE_OBJ,
-        object_posthouse_obj_DL_000A50,
-        NULL,
-        NULL,
-        NULL,
-        func_808B7410,
-        func_808B77E0,
-        NULL,
-    },
-    {
-        OBJECT_POSTHOUSE_OBJ,
-        object_posthouse_obj_DL_001870,
-        NULL,
-        NULL,
-        &object_posthouse_obj_Colheader_002948,
-        func_808B7460,
-        func_808B782C,
-        NULL,
-    },
-    {
-        OBJECT_KUMO30,
-        NULL,
-        object_kumo30_DL_002A40,
-        object_kumo30_Matanimheader_003368,
-        NULL,
-        func_808B74A8,
-        func_808B78A4,
-        func_808B7A90,
-    },
-    {
-        OBJECT_KUMO30,
-        NULL,
-        NULL,
-        object_kumo30_Matanimheader_002890,
-        NULL,
-        func_808B736C,
-        func_808B78DC,
-        func_808B7B54,
-    },
-    {
-        OBJECT_MNK,
-        object_mnk_DL_000F58,
-        NULL,
-        object_mnk_Matanimheader_002E28,
-        &object_mnk_Colheader_0033E8,
-        func_808B74D8,
-        func_808B7914,
-        NULL,
-    },
-    {
-        OBJECT_IKNINSIDE_OBJ,
-        NULL,
-        object_ikninside_obj_DL_00AB10,
-        object_ikninside_obj_Matanimheader_00BCC8,
-        NULL,
-        func_808B751C,
-        func_808B7A10,
-        func_808B7D34,
-    },
-    {
-        OBJECT_KAIZOKU_OBJ,
-        object_kaizoku_obj_DL_00AD50,
-        NULL,
-        NULL,
-        &object_kaizoku_obj_Colheader_00B868,
-        func_808B736C,
-        func_808B77D0,
-        NULL,
-    },
-    {
-        OBJECT_IKNINSIDE_OBJ,
-        NULL,
-        object_ikninside_obj_DL_00AEC0,
-        object_ikninside_obj_Matanimheader_00BCB8,
-        NULL,
-        func_808B751C,
-        func_808B7A10,
-        func_808B7D34,
-    },
-    {
-        OBJECT_SPOT11_OBJ,
-        object_spot11_obj_DL_0013F0,
-        NULL,
-        NULL,
-        &object_spot11_obj_Colheader_001EB8,
-        func_808B736C,
-        func_808B77D0,
-        NULL,
-    },
+    { OBJECT_YUKIMURA_OBJ, object_yukimura_obj_DL_000F98, object_yukimura_obj_DL_000EB0,
+      object_yukimura_obj_Matanimheader_002090, NULL, func_808B73C4, func_808B77D0, NULL },
+    { OBJECT_KEIKOKU_OBJ, object_keikoku_obj_DL_0027D8, NULL, object_keikoku_obj_Matanimheader_004290, NULL,
+      func_808B73FC, func_808B77D0, NULL },
+    { OBJECT_KEIKOKU_OBJ, object_keikoku_obj_DL_0044A8, NULL, NULL, NULL, func_808B736C, func_808B77D0, NULL },
+    { OBJECT_POSTHOUSE_OBJ, object_posthouse_obj_DL_000A50, NULL, NULL, NULL, func_808B7410, func_808B77E0, NULL },
+    { OBJECT_POSTHOUSE_OBJ, object_posthouse_obj_DL_001870, NULL, NULL, &object_posthouse_obj_Colheader_002948,
+      func_808B7460, func_808B782C, NULL },
+    { OBJECT_KUMO30, NULL, object_kumo30_DL_002A40, object_kumo30_Matanimheader_003368, NULL, func_808B74A8,
+      func_808B78A4, func_808B7A90 },
+    { OBJECT_KUMO30, NULL, NULL, object_kumo30_Matanimheader_002890, NULL, func_808B736C, func_808B78DC,
+      func_808B7B54 },
+    { OBJECT_MNK, object_mnk_DL_000F58, NULL, object_mnk_Matanimheader_002E28, &object_mnk_Colheader_0033E8,
+      func_808B74D8, func_808B7914, NULL },
+    { OBJECT_IKNINSIDE_OBJ, NULL, object_ikninside_obj_DL_00AB10, object_ikninside_obj_Matanimheader_00BCC8, NULL,
+      func_808B751C, func_808B7A10, func_808B7D34 },
+    { OBJECT_KAIZOKU_OBJ, object_kaizoku_obj_DL_00AD50, NULL, NULL, &object_kaizoku_obj_Colheader_00B868, func_808B736C,
+      func_808B77D0, NULL },
+    { OBJECT_IKNINSIDE_OBJ, NULL, object_ikninside_obj_DL_00AEC0, object_ikninside_obj_Matanimheader_00BCB8, NULL,
+      func_808B751C, func_808B7A10, func_808B7D34 },
+    { OBJECT_SPOT11_OBJ, object_spot11_obj_DL_0013F0, NULL, NULL, &object_spot11_obj_Colheader_001EB8, func_808B736C,
+      func_808B77D0, NULL },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -259,7 +161,7 @@ s32 func_808B73FC(BgBreakwall* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808B7410(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (Flags_GetSwitch(globalCtx, this->unk_15D)) {
+    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         this->dyna.actor.draw = NULL;
     }
     Actor_SetScale(&this->dyna.actor, 0.1f);
@@ -267,7 +169,7 @@ s32 func_808B7410(BgBreakwall* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808B7460(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (!Flags_GetSwitch(globalCtx, this->unk_15D)) {
+    if (!Flags_GetSwitch(globalCtx, this->switchFlag)) {
         this->dyna.actor.scale.x = 0.1f;
     }
     return true;
@@ -290,8 +192,8 @@ s32 func_808B74D8(BgBreakwall* this, GlobalContext* globalCtx) {
 s32 func_808B751C(BgBreakwall* this, GlobalContext* globalCtx) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
-    if ((BGBREAKWALL_GET_FE00(&this->dyna.actor) != 0x7F) &&
-        !Flags_GetSwitch(globalCtx, BGBREAKWALL_GET_FE00(&this->dyna.actor))) {
+    if ((BGBREAKWALL_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
+        !Flags_GetSwitch(globalCtx, BGBREAKWALL_SWITCHFLAG(&this->dyna.actor))) {
         return false;
     }
 
@@ -319,7 +221,7 @@ void BgBreakwall_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     BgBreakwall_SetupAction(this, func_808B76CC);
-    this->unk_15D = BGBREAKWALL_GET_FE00(&this->dyna.actor);
+    this->switchFlag = BGBREAKWALL_SWITCHFLAG(&this->dyna.actor);
 }
 
 void BgBreakwall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -364,7 +266,7 @@ void func_808B77D0(BgBreakwall* this, GlobalContext* globalCtx) {
 }
 
 void func_808B77E0(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (!Flags_GetSwitch(globalCtx, this->unk_15D)) {
+    if (!Flags_GetSwitch(globalCtx, this->switchFlag)) {
         this->dyna.actor.draw = BgBreakwall_Draw;
     } else {
         this->dyna.actor.draw = NULL;
@@ -374,7 +276,7 @@ void func_808B77E0(BgBreakwall* this, GlobalContext* globalCtx) {
 void func_808B782C(BgBreakwall* this, GlobalContext* globalCtx) {
     f32 phi_f0;
 
-    if (Flags_GetSwitch(globalCtx, this->unk_15D)) {
+    if (Flags_GetSwitch(globalCtx, this->switchFlag)) {
         phi_f0 = 1.0f;
     } else {
         phi_f0 = 0.1f;
@@ -477,30 +379,30 @@ void func_808B7B54(Actor* thisx, GlobalContext* globalCtx) {
 void func_808B7D34(Actor* thisx, GlobalContext* globalCtx) {
     BgBreakwall* this = THIS;
     s32 sp48;
-    s32 r;
-    s32 b;
-    s32 a;
+    s32 tempA;
+    s32 tempB;
+    s32 tempC;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     sp48 = 255 - this->unk_15E;
 
-    r = (((sp48 * 245) + (this->unk_15E * 255)) & 0xFF00) >> 8;
-    b = (((sp48 * 145) + (this->unk_15E * 85)) & 0xFF00) >> 8;
-    a = (((sp48 * 135) + (this->unk_15E * 55)) & 0xFF00) >> 8;
+    tempA = (((sp48 * 245) + (this->unk_15E * 255)) & 0xFF00) >> 8;
+    tempB = (((sp48 * 145) + (this->unk_15E * 85)) & 0xFF00) >> 8;
+    tempC = (((sp48 * 135) + (this->unk_15E * 55)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, r, b, a));
+    gSPSegment(POLY_XLU_DISP++, 0x09, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, tempA, tempB, tempC));
 
-    r = (((sp48 * 255) + (this->unk_15E * 150)) & 0xFF00) >> 8;
-    b = (((sp48 * 255) + (this->unk_15E * 100)) & 0xFF00) >> 8;
-    a = (((sp48 * 255) + (this->unk_15E * 75)) & 0xFF00) >> 8;
+    tempA = (((sp48 * 255) + (this->unk_15E * 150)) & 0xFF00) >> 8;
+    tempB = (((sp48 * 255) + (this->unk_15E * 100)) & 0xFF00) >> 8;
+    tempC = (((sp48 * 255) + (this->unk_15E * 75)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, r, r, b, a));
+    gSPSegment(POLY_XLU_DISP++, 0x0A, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, tempA, tempA, tempB, tempC));
 
-    r = (((sp48 * 185) + (this->unk_15E * 140)) & 0xFF00) >> 8;
-    b = (((sp48 * 235) + (this->unk_15E * 45)) & 0xFF00) >> 8;
+    tempA = (((sp48 * 185) + (this->unk_15E * 140)) & 0xFF00) >> 8;
+    tempB = (((sp48 * 235) + (this->unk_15E * 45)) & 0xFF00) >> 8;
 
-    gSPSegment(POLY_XLU_DISP++, 0x0B, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, 255, r, b));
+    gSPSegment(POLY_XLU_DISP++, 0x0B, Gfx_PrimColor(globalCtx->state.gfxCtx, 255, 255, 255, tempA, tempB));
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
