@@ -772,7 +772,7 @@ beginseg
     name "ovl_En_Door"
     compress
     include "build/src/overlays/actors/ovl_En_Door/z_en_door.o"
-    include "build/data/ovl_En_Door/ovl_En_Door.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Door/ovl_En_Door_reloc.o"
 endseg
 
 beginseg
