@@ -5053,8 +5053,6 @@ static Vec3s sSinkingLureLocationPos[] = {
     { 553, -48, -508 },
 };
 
-#ifdef NON_MATCHING
-// Register flip around target near the end of the function
 void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     EnFishing* this = THIS;
@@ -5066,10 +5064,9 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
     f32 target;
     f32 camAtFraction;
     f32 lureDistXZ;
-    s32 pad;
+    Camera* camera;
     Player* player = GET_PLAYER(globalCtx);
     Input* input = CONTROLLER1(globalCtx);
-    Camera* camera;
 
     playerShadowAlpha = player->actor.shape.shadowAlpha;
 
@@ -5334,7 +5331,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             player->actor.speedXZ = 0.0f;
 
             if (Message_GetState(&globalCtx->msgCtx) == 0) {
-                camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+                Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
 
                 camera->eye = sCameraEye;
                 camera->eyeNext = sCameraEye;
@@ -5533,7 +5530,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
     Math_ApproachF(&D_8090CCD0, D_8090CCD4, 1.0f, 0.05f);
 
     if (D_8090CCD0 > 0.0f) {
-        target = (D_8090CCD0 * 0.03f) + 0.8f;
+        f32 target = (D_8090CCD0 * 0.03f) + 0.8f;
+
         if (target > 1.2f) {
             target = 1.2f;
         }
@@ -5561,9 +5559,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((u8)D_8090CCD0 > 0) {
         s32 pad;
-        Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
         s16 i;
-        s32 pad1;
+        Camera* camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
         Vec3f pos;
         Vec3f rot;
         Vec3f projectedPos;
@@ -5601,9 +5598,6 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         gSaveContext.minigameScore = (SQ((f32)D_8090CCF8) * 0.0036f) + 0.5f;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/EnFishing_UpdateOwner.s")
-#endif
 
 s32 EnFishing_OwnerOverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                     Actor* thisx) {
