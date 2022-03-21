@@ -79,10 +79,6 @@ Vec3f D_80AD06C4[] = {
     { 13.7f, 9.0f, -15.5f }, { -13.7f, 9.0f, -15.5f }, { -13.7f, 9.0f, 0.0f },
 };
 
-Vec3s D_80AD070C = { 0, 0, 0 };
-
-Vec3f D_80AD0714 = { 0.0f, 0.0f, 0.0f };
-
 void EnFuKago_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFuKago* this = THIS;
@@ -184,11 +180,10 @@ void func_80ACFA78(EnFuKago* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f sp98;
     Vec3s sp90;
-    Vec3s sp88;
+    Vec3s sp88 = { 0, 0, 0 };
     EnFuKagoStruct* ptr;
     s16 y;
 
-    sp88 = D_80AD070C;
     this->dyna.actor.colChkInfo.health = 0;
     sp98 = this->dyna.actor.world.pos;
     sp90 = this->dyna.actor.shape.rot;
@@ -235,6 +230,8 @@ void func_80ACFA78(EnFuKago* this, GlobalContext* globalCtx) {
     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     this->actionFunc = func_80AD0028;
 }
+
+Vec3f D_80AD0714 = { 0.0f, 0.0f, 0.0f };
 
 void func_80ACFDAC(EnFuKago* this, GlobalContext* globalCtx, EnFuKagoStruct* arg2) {
     Vec3f sp34;
