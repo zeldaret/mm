@@ -266,7 +266,7 @@ const ActorInit Boss_03_InitVars = {
     (ActorFunc)Boss03_Draw,
 };
 
-// The limbs referenced here are not used. The position of those spheres is done manually on Boss03_PostLimbDraw
+// The limbs referenced here are not used. The position of those spheres is done manually by Boss03_PostLimbDraw.
 static ColliderJntSphElementInit sJntSphElementsInit1[] = {
     {
         {
