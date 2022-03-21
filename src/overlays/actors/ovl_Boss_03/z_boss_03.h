@@ -53,7 +53,7 @@ typedef struct Boss03 {
     /* 0x025E */ s16 unk_25E;
     /* 0x0260 */ f32 unk_260; // rotY
     /* 0x0264 */ UNK_TYPE1 unk_264[0x04];
-    /* 0x0268 */ Vec3f unk_268; //set to player.world.pos or random values
+    /* 0x0268 */ Vec3f unk_268; // set to player.world.pos or random values
     /* 0x0274 */ s16 unk_274;
     /* 0x0276 */ s16 unk_276;
     /* 0x0278 */ f32 unk_278;
