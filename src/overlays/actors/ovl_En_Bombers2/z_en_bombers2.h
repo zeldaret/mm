@@ -17,7 +17,7 @@ typedef struct EnBombers2 {
     /* 0x0284 */ EnBombers2ActionFunc actionFunc;
     /* 0x0288 */ s16 unk_288;
     /* 0x028A */ s16 unk_28A;
-    /* 0x028C */ char pad_28C[2];
+    /* 0x028C */ UNK_TYPE1 pad_28C[2];
     /* 0x028E */ s16 unk_28E;
     /* 0x0290 */ s16 unk_290;
     /* 0x0292 */ char pad_292[4];
