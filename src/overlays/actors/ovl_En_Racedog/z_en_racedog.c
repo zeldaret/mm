@@ -481,13 +481,13 @@ s32 func_80B25490(EnRacedog* this, Vec2f* arg1) {
     f32 temp;
 
     xDistToTopFront = this->actor.world.pos.x - arg1[0].x;
-    zDistToTopFront = this->actor.world.pos.z - arg1[0].y;
+    zDistToTopFront = this->actor.world.pos.z - arg1[0].z;
     xDistToBottomFront = this->actor.world.pos.x - arg1[1].x;
-    zDistToBottomFront = this->actor.world.pos.z - arg1[1].y;
+    zDistToBottomFront = this->actor.world.pos.z - arg1[1].z;
     xDistToBottomBack = this->actor.world.pos.x - arg1[2].x;
-    zDistToBottomBack = this->actor.world.pos.z - arg1[2].y;
+    zDistToBottomBack = this->actor.world.pos.z - arg1[2].z;
     xDistToTopBack = this->actor.world.pos.x - arg1[3].x;
-    zDistToTopBack = this->actor.world.pos.z - arg1[3].y;
+    zDistToTopBack = this->actor.world.pos.z - arg1[3].z;
 
     temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     temp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));

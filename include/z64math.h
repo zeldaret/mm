@@ -12,7 +12,7 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ f32 x;
-    /* 0x04 */ f32 y;
+    /* 0x04 */ f32 z;
 } Vec2f; // size = 0x08
 
 typedef struct {
