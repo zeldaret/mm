@@ -20,9 +20,9 @@ typedef struct EnBombers2 {
     /* 0x028C */ UNK_TYPE1 pad_28C[2];
     /* 0x028E */ s16 unk_28E;
     /* 0x0290 */ s16 unk_290;
-    /* 0x0292 */ char pad_292[4];
+    /* 0x0292 */ UNK_TYPE1 pad_292[4];
     /* 0x0296 */ s16 unk_296;
-    /* 0x0298 */ char pad_298[4];
+    /* 0x0298 */ UNK_TYPE1 pad_298[4];
     /* 0x029C */ Vec3f unk_29C;
     /* 0x02A8 */ s32 unk_2A8;
     /* 0x02AC */ u8 unk_2AC;
