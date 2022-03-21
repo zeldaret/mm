@@ -553,7 +553,7 @@ TexturePtr D_80B34B98[] = {
 void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnKbt* this = THIS;
     Gfx* gfx;
-    TexutrePtr tex;
+    TexturePtr tex;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
