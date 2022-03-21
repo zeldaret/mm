@@ -4,9 +4,9 @@
 #include "global.h"
 #include "objects/object_wallmaster/object_wallmaster.h"
 
-#define EN_WALLMAS_GET_TYPE(thisx) ((thisx)->params)
-#define EN_WALLMAS_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
-#define EN_WALLMAS_IS_FROZEN(thisx) ((thisx)->params & 0x80)
+#define WALLMASTER_GET_TYPE(thisx) ((thisx)->params)
+#define WALLMASTER_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
+#define WALLMASTER_IS_FROZEN(thisx) ((thisx)->params & 0x80)
 
 /**
  * This type determines under what conditions the Wallmaster will drop from the ceiling.
@@ -28,7 +28,7 @@ typedef enum {
     /* 0x00 */ WALLMASTER_TYPE_TIMER_ONLY,
     /* 0x01 */ WALLMASTER_TYPE_PROXIMITY,
     /* 0x02 */ WALLMASTER_TYPE_FLAG
-} WallmasType;
+} WallmasterType;
 
 struct EnWallmas;
 
