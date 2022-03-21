@@ -618,7 +618,7 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Approaches to Player until he is near enough, then try to catch him, unless he is back on the platform
+ * Approach Player until near enough, then try to catch Player, unless it has since got back on the platform.
  */
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
