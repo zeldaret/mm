@@ -9,13 +9,6 @@ struct MirRay3;
 
 #define MIRRAY3_F_1 1
 
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ MtxF unk_0C;
-    /* 0x4C */ CollisionPoly* unk_4C;
-    /* 0x50 */ u8 unk_50;
-} MirRay3Struct; // size = 0x54
-
 typedef struct MirRay3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderQuad colliderQuad;

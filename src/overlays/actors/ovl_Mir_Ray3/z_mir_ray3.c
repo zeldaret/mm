@@ -68,6 +68,13 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ MtxF unk_0C;
+    /* 0x4C */ CollisionPoly* unk_4C;
+    /* 0x50 */ u8 unk_50;
+} MirRay3Struct; // size = 0x54
+
 void MirRay3_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     MirRay3* this = THIS;
