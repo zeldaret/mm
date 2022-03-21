@@ -38,7 +38,7 @@ void EnTanron1_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTanron1* this = THIS;
 
     this->actor.flags &= ~ACTOR_FLAG_1;
-    if (!(this->actor.params & 0x100)) {
+    if (!ENTANRON1_GET_100(&this->actor)) {
         this->unk_144 = 0;
     } else {
         this->actor.params = 200;
@@ -188,8 +188,6 @@ void EnTanron1_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_80BB5AAC(this, globalCtx);
 }
 
-#ifdef NON_MATCHING
-// this->actor.params in v1 rather than t reg
 void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnTanron1Struct* ptr = NULL;
@@ -230,119 +228,123 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
 
     ptr = &this->unk_160[0];
     for (i = 0; i < this->actor.params; i++, ptr++) {
-        if (ptr->unk_24 == 0) {
-            continue;
-        }
-
-        ptr->unk_26++;
-        ptr->unk_00.x += ptr->unk_0C.x;
-        ptr->unk_00.y += ptr->unk_0C.y;
-        ptr->unk_00.z += ptr->unk_0C.z;
-
         if (ptr->unk_24 != 0) {
-            spB4 = &ptr->unk_00;
-            if (ptr->unk_28 == 0) {
-                spBA++;
-                ptr->unk_2C = Math_SinS(ptr->unk_26 * 0x5000) * 1.2f;
-                if ((ptr->unk_26 & 3) == 0) {
-                    temp.x = ptr->unk_30 + (this->unk_14C.x - ptr->unk_00.x);
-                    temp.y = ptr->unk_34 + (this->unk_14C.y - ptr->unk_00.y);
-                    temp.z = ptr->unk_38 + (this->unk_14C.z - ptr->unk_00.z);
+            ptr->unk_26++;
+            ptr->unk_00.x += ptr->unk_0C.x;
+            ptr->unk_00.y += ptr->unk_0C.y;
+            ptr->unk_00.z += ptr->unk_0C.z;
 
-                    ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
-                    ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
-                    if ((ptr->unk_26 & 0xF) == 0) {
-                        ptr->unk_30 = randPlusMinusPoint5Scaled(temp_f30);
-                        ptr->unk_34 = randPlusMinusPoint5Scaled(temp_f30 * 0.5f);
-                        ptr->unk_38 = randPlusMinusPoint5Scaled(temp_f30);
-                    }
-
-                    temp.x = player->actor.world.pos.x - ptr->unk_00.x;
-                    temp.y = (player->actor.world.pos.y + 40.0f) - ptr->unk_00.y;
-                    temp.z = player->actor.world.pos.z - ptr->unk_00.z;
-
-                    if ((SQXYZ(temp) < 400.0f) && (player->transformation != PLAYER_FORM_DEKU)) {
-                        func_800B8D10(globalCtx, &this->actor, 0.0f, 0, 0.0f, 1, 1);
-                    }
-                }
-
-                Math_ApproachS(&ptr->unk_1A, ptr->unk_20, 2, this->unk_158);
-                Math_ApproachS(&ptr->unk_18, ptr->unk_1E, 2, this->unk_158);
-                Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
-                Matrix_InsertXRotation_s(-ptr->unk_18, MTXMODE_APPLY);
-                Matrix_GetStateTranslationAndScaledZ(6.0f, &ptr->unk_0C);
-
-                if (phi_s2 != NULL) {
-                    temp.x = phi_s2->x - ptr->unk_00.x;
-                    temp.y = phi_s2->y - ptr->unk_00.y;
-                    temp.z = phi_s2->z - ptr->unk_00.z;
-
-                    if (SQXYZ(temp) < phi_f28) {
-                        ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
-                        ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
-
-                        Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
-                        Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
-                        Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
-
-                        ptr->unk_28 = (phi_f28 >= 100000.0f) ? 1 : 6;
-                        ptr->unk_24 = 2;
-                        spB8++;
-                    }
-                }
-            } else if (ptr->unk_28 < 9) {
-                ptr->unk_18 += 0x3000;
-                ptr->unk_1A += 0x5000;
-                ptr->unk_30 = 0.0f;
-                ptr->unk_34 = 0.0f;
-                ptr->unk_28++;
+            if (ptr->unk_24 == 0) {
             } else {
-                ptr->unk_1A += ptr->unk_2A;
-                Math_ApproachS(&ptr->unk_18, 0, 0xA, 0x1000);
-                Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(ptr->unk_30, &spA4);
+                spB4 = &ptr->unk_00;
+                if (ptr->unk_28 == 0) {
+                    spBA++;
+                    ptr->unk_2C = Math_SinS(ptr->unk_26 * 0x5000) * 1.2f;
+                    if ((ptr->unk_26 & 3) == 0) {
+                        temp.x = ptr->unk_30 + (this->unk_14C.x - ptr->unk_00.x);
+                        temp.y = ptr->unk_34 + (this->unk_14C.y - ptr->unk_00.y);
+                        temp.z = ptr->unk_38 + (this->unk_14C.z - ptr->unk_00.z);
 
-                ptr->unk_0C.x = spA4.x;
-                ptr->unk_0C.z = spA4.z;
-                ptr->unk_0C.y = -2.0f;
-
-                if (phi_s2 != NULL) {
-                    temp.x = phi_s2->x - ptr->unk_00.x;
-                    temp.y = phi_s2->y - ptr->unk_00.y;
-                    temp.z = phi_s2->z - ptr->unk_00.z;
-
-                    if (SQXYZ(temp) < phi_f28) {
                         ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
                         ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
-
-                        Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
-                        Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
-                        Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
-
-                        ptr->unk_3C = ptr->unk_00.y - 1000.0f;
-                        ptr->unk_30 = 5.0f;
-                    }
-                }
-
-                if (ptr->unk_00.y <= (ptr->unk_3C + 5.0f)) {
-                    ptr->unk_00.y = (ptr->unk_3C + 5.0f);
-                    Math_ApproachZeroF(&ptr->unk_30, 1.0f, 0.3f);
-                    Math_ApproachS(&ptr->unk_2A, 0, 1, 0x100);
-                    ptr->unk_28++;
-                    if (ptr->unk_28 > 50) {
-                        ptr->unk_24 = 0;
-                    }
-                } else {
-                    Math_ApproachF(&ptr->unk_30, ptr->unk_34, 1.0f, 0.5f);
-                    if ((ptr->unk_26 & 0xF) == 0) {
-                        if (Rand_ZeroOne() < 0.5f) {
-                            ptr->unk_34 = randPlusMinusPoint5Scaled(12.0f);
+                        if ((ptr->unk_26 & 0xF) == 0) {
+                            ptr->unk_30 = randPlusMinusPoint5Scaled(temp_f30);
+                            ptr->unk_34 = randPlusMinusPoint5Scaled(temp_f30 * 0.5f);
+                            ptr->unk_38 = randPlusMinusPoint5Scaled(temp_f30);
                         }
-                        ptr->unk_3C = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp98, &ptr->unk_00);
-                        sp9C = ptr->unk_00.y;
-                        WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, ptr->unk_00.x, ptr->unk_00.z, &sp9C, &spA0);
-                        if ((sp9C < ptr->unk_00.y) && (ptr->unk_3C < sp9C)) {
-                            ptr->unk_3C = sp9C;
+
+                        temp.x = player->actor.world.pos.x - ptr->unk_00.x;
+                        temp.y = (player->actor.world.pos.y + 40.0f) - ptr->unk_00.y;
+                        temp.z = player->actor.world.pos.z - ptr->unk_00.z;
+
+                        if ((SQXYZ(temp) < 400.0f) && (player->transformation != PLAYER_FORM_DEKU)) {
+                            func_800B8D10(globalCtx, &this->actor, 0.0f, 0, 0.0f, 1, 1);
+                        }
+                    }
+
+                    Math_ApproachS(&ptr->unk_1A, ptr->unk_20, 2, this->unk_158);
+                    Math_ApproachS(&ptr->unk_18, ptr->unk_1E, 2, this->unk_158);
+                    Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
+                    Matrix_InsertXRotation_s(-ptr->unk_18, MTXMODE_APPLY);
+                    Matrix_GetStateTranslationAndScaledZ(6.0f, &ptr->unk_0C);
+
+                    if (phi_s2 != NULL) {
+                        temp.x = phi_s2->x - ptr->unk_00.x;
+                        temp.y = phi_s2->y - ptr->unk_00.y;
+                        temp.z = phi_s2->z - ptr->unk_00.z;
+
+                        if (SQXYZ(temp) < phi_f28) {
+                            ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
+                            ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
+
+                            Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
+                            Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
+                            Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
+
+                            if (phi_f28 >= 100000.0f) {
+                                ptr->unk_28 = 1;
+                            } else {
+                                ptr->unk_28 = 6;
+                            }
+                            ptr->unk_24 = 2;
+                            spB8++;
+                        }
+                    }
+                } else if (ptr->unk_28 < 9) {
+                    ptr->unk_18 += 0x3000;
+                    ptr->unk_1A += 0x5000;
+                    ptr->unk_30 = 0.0f;
+                    ptr->unk_34 = 0.0f;
+                    ptr->unk_28++;
+                } else {
+                    ptr->unk_1A += ptr->unk_2A;
+                    Math_ApproachS(&ptr->unk_18, 0, 0xA, 0x1000);
+                    Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
+                    Matrix_GetStateTranslationAndScaledZ(ptr->unk_30, &spA4);
+
+                    ptr->unk_0C.x = spA4.x;
+                    ptr->unk_0C.z = spA4.z;
+                    ptr->unk_0C.y = -2.0f;
+
+                    if (phi_s2 != NULL) {
+                        temp.x = phi_s2->x - ptr->unk_00.x;
+                        temp.y = phi_s2->y - ptr->unk_00.y;
+                        temp.z = phi_s2->z - ptr->unk_00.z;
+
+                        if (SQXYZ(temp) < phi_f28) {
+                            ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
+                            ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
+
+                            Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
+                            Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
+                            Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
+
+                            ptr->unk_3C = ptr->unk_00.y - 1000.0f;
+                            ptr->unk_30 = 5.0f;
+                        }
+                    }
+
+                    if (ptr->unk_00.y <= (ptr->unk_3C + 5.0f)) {
+                        ptr->unk_00.y = (ptr->unk_3C + 5.0f);
+                        Math_ApproachZeroF(&ptr->unk_30, 1.0f, 0.3f);
+                        Math_ApproachS(&ptr->unk_2A, 0, 1, 0x100);
+                        ptr->unk_28++;
+                        if (ptr->unk_28 > 50) {
+                            ptr->unk_24 = 0;
+                        }
+                    } else {
+                        Math_ApproachF(&ptr->unk_30, ptr->unk_34, 1.0f, 0.5f);
+                        if ((ptr->unk_26 & 0xF) == 0) {
+                            if (Rand_ZeroOne() < 0.5f) {
+                                ptr->unk_34 = randPlusMinusPoint5Scaled(12.0f);
+                            }
+                            ptr->unk_3C = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp98, &ptr->unk_00);
+                            sp9C = ptr->unk_00.y;
+                            WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, ptr->unk_00.x, ptr->unk_00.z, &sp9C,
+                                                 &spA0);
+                            if ((sp9C < ptr->unk_00.y) && (ptr->unk_3C < sp9C)) {
+                                ptr->unk_3C = sp9C;
+                            }
                         }
                     }
                 }
@@ -359,9 +361,6 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/func_80BB5318.s")
-#endif
 
 void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
     EnTanron1Struct* ptrBase = &this->unk_160[0];
