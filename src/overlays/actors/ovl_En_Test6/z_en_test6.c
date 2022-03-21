@@ -460,11 +460,11 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
                 if (this->unk_254 != NULL) {
                     for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                         (*this->unk_254)[i].x = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + temp_s3->eye.x +
-                                                ((temp_s3->at.x - temp_s3->eye.x) * .2f);
+                                                ((temp_s3->at.x - temp_s3->eye.x) * 0.2f);
                         (*this->unk_254)[i].y = (((2.0f * Rand_ZeroOne()) - 1.0f) * 120.0f) + temp_s3->eye.y +
                                                 ((temp_s3->at.y - temp_s3->eye.y) * 0.2f) + sp4C;
                         (*this->unk_254)[i].z = (((2.0f * Rand_ZeroOne()) - 1.0f) * 40.0f) + temp_s3->eye.z +
-                                                ((temp_s3->at.z - temp_s3->eye.z) * .2f);
+                                                ((temp_s3->at.z - temp_s3->eye.z) * 0.2f);
                     }
                 }
                 func_80A90C08(0x78);
@@ -991,7 +991,7 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                                     player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
                 globalCtx->sceneLoadFlag = 0x14;
-                globalCtx->nextEntranceIndex = gSaveContext.respawn[1].entranceIndex;
+                globalCtx->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_GROTTO].entranceIndex;
                 globalCtx->unk_1887F = 2;
                 if ((gSaveContext.time > CLOCK_TIME(18, 0)) || (gSaveContext.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
@@ -1072,7 +1072,7 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     this->unk_276 = 99;
                     globalCtx->sceneLoadFlag = 0x14;
-                    globalCtx->nextEntranceIndex = gSaveContext.respawn[1].entranceIndex;
+                    globalCtx->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_GROTTO].entranceIndex;
                     globalCtx->unk_1887F = 2;
                     gSaveContext.respawnFlag = 2;
                     globalCtx->msgCtx.ocarinaMode = 4;
