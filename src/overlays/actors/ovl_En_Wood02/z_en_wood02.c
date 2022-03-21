@@ -271,19 +271,19 @@ void EnWood02_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.params < WOOD_TREE_OVAL_GREEN) {
-        THIS->drawType = WOOD_DRAW_TREE_CONICAL;
+        this->drawType = WOOD_DRAW_TREE_CONICAL;
     } else if (this->actor.params < WOOD_TREE_KAKARIKO_ADULT) {
-        THIS->drawType = WOOD_DRAW_TREE_OVAL;
+        this->drawType = WOOD_DRAW_TREE_OVAL;
     } else if (this->actor.params < WOOD_BUSH_GREEN_SMALL) {
-        THIS->drawType = WOOD_DRAW_TREE_KAKARIKO_ADULT;
+        this->drawType = WOOD_DRAW_TREE_KAKARIKO_ADULT;
     } else if (this->actor.params < WOOD_BUSH_BLACK_SMALL) {
-        THIS->drawType = WOOD_DRAW_BUSH_GREEN;
+        this->drawType = WOOD_DRAW_BUSH_GREEN;
     } else if (this->actor.params < WOOD_LEAF_YELLOW) {
-        THIS->drawType = WOOD_DRAW_4;
+        this->drawType = WOOD_DRAW_4;
     } else if (this->actor.params == WOOD_TREE_SPECIAL) {
-        THIS->drawType = WOOD_DRAW_TREE_CONICAL;
+        this->drawType = WOOD_DRAW_TREE_CONICAL;
     } else {
-        THIS->drawType = WOOD_DRAW_LEAF_YELLOW;
+        this->drawType = WOOD_DRAW_LEAF_YELLOW;
     }
 
     Actor_SetScale(&this->actor, actorScale);
@@ -444,8 +444,8 @@ void EnWood02_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     } else { // Leaves
         this->unk_146++;
-        Math_ApproachF(&thisx->velocity.x, 0.0f, 1.0f, 0.049999997f);
-        Math_ApproachF(&thisx->velocity.z, 0.0f, 1.0f, 0.049999997f);
+        Math_ApproachF(&thisx->velocity.x, 0.0f, 1.0f, 5.0f * 0.01f);
+        Math_ApproachF(&thisx->velocity.z, 0.0f, 1.0f, 5.0f * 0.01f);
         Actor_UpdatePos(thisx);
         thisx->shape.rot.z = Math_SinS(this->unk_146 * 0xBB8) * 16384.0f;
         this->unk_14A[0]--;
