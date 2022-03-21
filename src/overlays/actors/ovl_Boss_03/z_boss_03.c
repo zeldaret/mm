@@ -552,8 +552,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     yDiff = this->unk_268.y - this->actor.world.pos.y;
     zDiff = this->unk_268.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
-                   this->unk_274);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
 
     tmp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, tmp, 5, 0x100);
@@ -641,8 +640,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     yDiff = (player->actor.world.pos.y - this->actor.world.pos.y) + 50.0f;
     zDiff = player->actor.world.pos.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
-                   this->unk_274);
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
     temp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, temp, 5, 0x100);
 
