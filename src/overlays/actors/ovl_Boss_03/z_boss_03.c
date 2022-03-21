@@ -1970,7 +1970,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if ((this->actionFunc != Boss03_DeathCutscene) && (!this->unk_2D5)) {
-        // Going inside or outside the water
+        // Going into or out of the water
         if (((this->actor.world.pos.y < this->waterHeight + 50.0f) &&
              (this->waterHeight + 50.0f <= this->actor.prevPos.y)) ||
             ((this->waterHeight - 50.0f < this->actor.world.pos.y) &&
