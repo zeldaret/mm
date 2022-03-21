@@ -340,7 +340,7 @@ void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx2) {
 }
 
 void func_809A5960(ObjArmos* this, GlobalContext* globalCtx) {
-    s32 pad2;
+    s32 pad;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     Vec3f sp28;
