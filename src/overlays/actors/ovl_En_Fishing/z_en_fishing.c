@@ -3432,6 +3432,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_18C = 2000.0f;
             } else if (sp124 < 10.0f) {
                 s16 phi_v0;
+
                 if (func_809033F0(this, globalCtx, false)) {
                     func_80903C60(this, 0);
                 }
