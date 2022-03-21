@@ -83,15 +83,15 @@ s32 func_80B33E8C(GlobalContext* globalCtx) {
 }
 
 void func_80B33EF0(EnKbt* this, s16 arg1) {
-    u8 sp38[] = {
-        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
-        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
-    };
     static AnimationHeader* sAnimations[] = {
         &object_kbt_Anim_000670, &object_kbt_Anim_001674, &object_kbt_Anim_002084, &object_kbt_Anim_000FE8,
         &object_kbt_Anim_001940, &object_kbt_Anim_00E7BC, &object_kbt_Anim_00F0C8, &object_kbt_Anim_002710,
         &object_kbt_Anim_002DE0, &object_kbt_Anim_003414, &object_kbt_Anim_003D24, &object_kbt_Anim_001BF4,
         &object_kbt_Anim_002084,
+    };
+    u8 sp38[] = {
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
+        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
     };
 
     if (arg1 != this->unk_280) {
@@ -110,7 +110,7 @@ Actor* func_80B3403C(GlobalContext* globalCtx) {
     Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (npc != NULL) {
-        if (npc->id == 0x1FF) {
+        if (npc->id == ACTOR_EN_KGY) {
             return npc;
         }
         npc = npc->next;
@@ -251,9 +251,9 @@ void func_80B34314(EnKbt* this, GlobalContext* globalCtx) {
         if ((this->unk_278 != NULL) && (this->unk_278->xzDistToPlayer < 250.0f)) {
             if (this->unk_27C & 4) {
                 playerForm = gSaveContext.playerForm;
-                if (((playerForm ^ 0) != 4) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
-                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
-                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
+                if (((playerForm ^ 0) != PLAYER_FORM_HUMAN) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
+                                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
+                                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
                     this->actor.textId = 0xC38;
                 } else if (CURRENT_DAY == 3) {
                     this->actor.textId = 0xC39;
@@ -553,7 +553,7 @@ TexturePtr D_80B34B98[] = {
 void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnKbt* this = THIS;
     Gfx* gfx;
-    void* temp;
+    TexutrePtr tex;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -561,11 +561,11 @@ void EnKbt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gfx = POLY_OPA_DISP;
 
-    temp = Lib_SegmentedToVirtual(D_80B34B98[this->unk_27E]);
-    gSPSegment(&gfx[0], 0x08, temp);
+    tex = Lib_SegmentedToVirtual(D_80B34B98[this->unk_27E]);
+    gSPSegment(&gfx[0], 0x08, tex);
 
-    temp = Lib_SegmentedToVirtual(D_80B34B90[this->unk_27F]);
-    gSPSegment(&gfx[1], 0x09, temp);
+    tex = Lib_SegmentedToVirtual(D_80B34B90[this->unk_27F]);
+    gSPSegment(&gfx[1], 0x09, tex);
 
     POLY_OPA_DISP = &gfx[2];
 
