@@ -937,8 +937,7 @@ void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Slowly turns back while looking at Player during WORK_TIMER_CURRENT_ACTION frames, then prepares to charge against
- * him
+ * Slowly turns back while looking at Player during WORK_TIMER_CURRENT_ACTION frames, then prepares to charge
  */
 void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
     f32 temp_f0;
