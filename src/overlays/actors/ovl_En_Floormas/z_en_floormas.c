@@ -374,8 +374,8 @@ void func_808D108C(EnFloormas* this) {
     if (sp36 > 0) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gFloormasterTurnAnim, -3.0f);
     } else {
-        Animation_Change(&this->skelAnime, &gFloormasterTurnAnim, -1.0f,
-                         Animation_GetLastFrame(&gFloormasterTurnAnim.common), 0.0f, 2, -3.0f);
+        Animation_Change(&this->skelAnime, &gFloormasterTurnAnim, -1.0f, Animation_GetLastFrame(&gFloormasterTurnAnim),
+                         0.0f, ANIMMODE_ONCE, -3.0f);
     }
 
     if (this->actor.scale.x > 0.009f) {
@@ -417,8 +417,8 @@ void func_808D11BC(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1380(EnFloormas* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &gWallmasterHoverAnim, 3.0f, 0.0f,
-                     Animation_GetLastFrame(&gWallmasterHoverAnim.common), 2, -3.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterHoverAnim, 3.0f, 0.0f, Animation_GetLastFrame(&gWallmasterHoverAnim),
+                     ANIMMODE_ONCE, -3.0f);
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = 0.0f;
     func_808D08D0(this);
@@ -491,7 +491,7 @@ void func_808D1650(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1740(EnFloormas* this) {
-    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 41.0f, 42.0f, 2, 5.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 41.0f, 42.0f, ANIMMODE_ONCE, 5.0f);
     if ((this->actor.speedXZ < 0.0f) || (this->actionFunc != func_808D1650)) {
         this->unk_18E = 30;
     } else {
@@ -537,7 +537,7 @@ void func_808D17EC(EnFloormas* this, GlobalContext* globalCtx) {
 
         if ((this->unk_18E == 0) && (sp24 != 0)) {
             if (this->skelAnime.endFrame < 45.0f) {
-                this->skelAnime.endFrame = Animation_GetLastFrame(&gWallmasterJumpAnim.common);
+                this->skelAnime.endFrame = Animation_GetLastFrame(&gWallmasterJumpAnim);
             } else if (this->actor.params == ENFLOORMAS_GET_7FFF_40) {
                 func_808D2700(this);
             } else {
@@ -568,8 +568,8 @@ void func_808D19D4(EnFloormas* this) {
     this->actor.shape.rot.y = parent->shape.rot.y + 0x5555;
     this->actor.world.pos = parent->world.pos;
     this->actor.params = ENFLOORMAS_GET_7FFF_10;
-    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 41.0f,
-                     Animation_GetLastFrame(&gWallmasterJumpAnim.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 41.0f, Animation_GetLastFrame(&gWallmasterJumpAnim),
+                     ANIMMODE_ONCE, 0.0f);
     this->collider.dim.radius = sCylinderInit.dim.radius * 0.6f;
     this->collider.dim.height = sCylinderInit.dim.height * 0.6f;
     this->actor.flags &= ~ACTOR_FLAG_400;
@@ -685,7 +685,7 @@ void func_808D1F7C(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1FD4(EnFloormas* this) {
-    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, ANIMMODE_ONCE, 0.0f);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808D2040;
 }
@@ -715,7 +715,7 @@ void func_808D217C(EnFloormas* this, Player* player) {
     Vec3f* ptr;
     u8 playerForm;
 
-    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 36.0f, 45.0f, 2, -3.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 36.0f, 45.0f, ANIMMODE_ONCE, -3.0f);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
@@ -771,7 +771,7 @@ void func_808D22C8(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D2484(EnFloormas* this) {
-    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, ANIMMODE_ONCE, 0.0f);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808D24F0;
 }

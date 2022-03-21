@@ -135,8 +135,9 @@ static f32 sYOffsetPerForm[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
  * in the limbPos array. An index of -1 indicates that the limb is not part
  * of the limbPos array.
  */
-static s8 sLimbIndexToLimbPosIndex[] = { -1, -1, -1, -1, 0, -1, -1, 1,  -1, 2, -1, -1, 3,
-                                         -1, 4,  -1, -1, 5, -1, -1, -1, 6,  7, -1, 8 };
+static s8 sLimbIndexToLimbPosIndex[] = {
+    -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8,
+};
 
 void EnWallmas_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWallmas* this = THIS;
