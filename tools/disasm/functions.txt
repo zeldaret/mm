@@ -7251,7 +7251,7 @@
     0x809340BC:("func_809340BC",),
     0x80934178:("func_80934178",),
     0x80934464:("func_80934464",),
-    0x809349E0:("EnAm_ApplySway",),
+    0x809349E0:("EnKusa_ApplySway",),
     0x80934AB4:("EnKusa_Sway",),
     0x80934F58:("EnKusa_SnapToFloor",),
     0x80934FFC:("EnKusa_DropCollectible",),

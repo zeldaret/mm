@@ -115,7 +115,7 @@ static InitChainEntry sInitChain[] = {
  * @brief Applies a "swaying" motion to the provided matrix
  *
  */
-void EnAm_ApplySway(MtxF* matrix) {
+void EnKusa_ApplySway(MtxF* matrix) {
     MtxF* mtxState = Matrix_GetCurrentState();
     f32* tmp = &mtxState->mf[0][0];
     f32* tmp2 = &matrix->mf[0][0];
@@ -269,8 +269,8 @@ void EnKusa_UpdateVelY(EnKusa* this) {
 /**
  * @brief Scales a vector down by provided scale factor
  *
- * @param vec   vector to be scaled
- * @param scaleFactor   scale factor to be applied to vector
+ * @param vec vector to be scaled
+ * @param scaleFactor scale factor to be applied to vector
  */
 void EnKusa_RandScaleVecToZero(Vec3f* vec, f32 scaleFactor) {
     scaleFactor += ((Rand_ZeroOne() * 0.2f) - 0.1f) * scaleFactor;
@@ -696,7 +696,7 @@ void EnKusa_DrawBush(Actor* thisx, GlobalContext* globalCtx2) {
 
         if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract) &&
             (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
-            EnAm_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
+            EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
         }
 
         Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
@@ -725,7 +725,7 @@ void EnKusa_DrawGrass(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         if ((globalCtx->roomCtx.currRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
-                EnAm_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
+                EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }
         }
         Gfx_DrawDListOpa(globalCtx, gKusaSprout);
