@@ -7,6 +7,10 @@ struct EnHanabi;
 
 typedef void (*EnHanabiActionFunc)(struct EnHanabi*, GlobalContext*);
 
+#define ENHANABI_GET_1F(thisx) ((thisx)->params & 0x1F)
+
+#define ENHANABI_1F_1 1
+
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;

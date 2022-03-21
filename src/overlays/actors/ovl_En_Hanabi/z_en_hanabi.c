@@ -19,7 +19,7 @@ void func_80B23894(EnHanabi* this, GlobalContext* globalCtx);
 void func_80B238D4(EnHanabi* this, GlobalContext* globalCtx);
 void func_80B23910(EnHanabi* this, GlobalContext* globalCtx);
 void func_80B23934(EnHanabi* this, GlobalContext* globalCtx);
-void func_80B23A38(Actor* thisx, GlobalContext* globalCtx);
+void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 const ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,
@@ -34,23 +34,17 @@ const ActorInit En_Hanabi_InitVars = {
 };
 
 Vec3s D_80B23AA0[] = {
-    { 0x55, 0xE, 0x31 },    { 0x46, -0x46, 0 },     { 0x55, 0xE, -0x31 },    { 0x5A, -0x20, 0x1C },
-    { 0x5A, -0x20, -0x1C }, { 0x62, 0x10, 0 },      { 0x46, 0x46, 0 },       { 0x54, 0x2D, 0x1A },
-    { 0x54, 0x2D, -0x1A },  { 0x32, -0x32, 0x46 },  { 0x49, -0x13, 0x40 },   { 0x41, -0x41, 0x26 },
-    { 0x32, -0x32, -0x46 }, { 0x41, -0x41, -0x26 }, { 0x49, -0x13, -0x40 },  { 0, 0, -0x64 },
-    { 0xE, 0x55, -0x31 },   { 0x31, 8, -0x56 },     { 8, 0x31, -0x56 },      { 0x39, 0x39, -0x39 },
-    { 0x2D, 0x54, -0x1A },  { 0x1B, -0x1B, -0x5C }, { -0x32, 0x32, -0x46 },  { -0x1B, 0x1B, -0x5C },
-    { -0x13, 0x49, -0x40 }, { -0x46, 0x46, 0 },     { 0xE, 0x55, 0x31 },     { -0x20, 0x5A, -0x1C },
-    { -0x20, 0x5A, 0x1C },  { 0x10, 0x62, 0 },      { 0x2D, 0x54, 0x1A },    { -0x41, 0x41, -0x26 },
-    { -0x32, 0x32, 0x46 },  { -0x41, 0x41, 0x26 },  { -0x13, 0x49, 0x40 },   { 0, 0, 0x64 },
-    { 8, 0x31, 0x56 },      { 0x31, 8, 0x56 },      { 0x39, 0x39, 0x39 },    { -0x1B, 0x1B, 0x5C },
-    { 0x1B, -0x1B, 0x5C },  { -0xE, -0x55, -0x31 }, { -0xE, -0x55, 0x31 },   { 0x20, -0x5A, -0x1C },
-    { 0x20, -0x5A, 0x1C },  { -0x10, -0x62, 0 },    { -0x46, -0x46, 0 },     { -0x2D, -0x54, -0x1A },
-    { -0x2D, -0x54, 0x1A }, { 0x13, -0x49, -0x40 }, { 0x13, -0x49, 0x40 },   { -0x55, -0xE, -0x31 },
-    { -0x31, -8, -0x56 },   { -8, -0x31, -0x56 },   { -0x39, -0x39, -0x39 }, { -0x54, -0x2D, -0x1A },
-    { -0x49, 0x13, -0x40 }, { -0x55, -0xE, 0x31 },  { -0x5A, 0x20, 0x1C },   { -0x5A, 0x20, -0x1C },
-    { -0x62, -0x10, 0 },    { -0x54, -0x2D, 0x1A }, { -0x49, 0x13, 0x40 },   { -8, -0x31, 0x56 },
-    { -0x31, -8, 0x56 },    { -0x39, -0x39, 0x39 },
+    { 85, 14, 49 },    { 70, -70, 0 },    { 85, 14, -49 },  { 90, -32, 28 },   { 90, -32, -28 }, { 98, 16, 0 },
+    { 70, 70, 0 },     { 84, 45, 26 },    { 84, 45, -26 },  { 50, -50, 70 },   { 73, -19, 64 },  { 65, -65, 38 },
+    { 50, -50, -70 },  { 65, -65, -38 },  { 73, -19, -64 }, { 0, 0, -100 },    { 14, 85, -49 },  { 49, 8, -86 },
+    { 8, 49, -86 },    { 57, 57, -57 },   { 45, 84, -26 },  { 27, -27, -92 },  { -50, 50, -70 }, { -27, 27, -92 },
+    { -19, 73, -64 },  { -70, 70, 0 },    { 14, 85, 49 },   { -32, 90, -28 },  { -32, 90, 28 },  { 16, 98, 0 },
+    { 45, 84, 26 },    { -65, 65, -38 },  { -50, 50, 70 },  { -65, 65, 38 },   { -19, 73, 64 },  { 0, 0, 100 },
+    { 8, 49, 86 },     { 49, 8, 86 },     { 57, 57, 57 },   { -27, 27, 92 },   { 27, -27, 92 },  { -14, -85, -49 },
+    { -14, -85, 49 },  { 32, -90, -28 },  { 32, -90, 28 },  { -16, -98, 0 },   { -70, -70, 0 },  { -45, -84, -26 },
+    { -45, -84, 26 },  { 19, -73, -64 },  { 19, -73, 64 },  { -85, -14, -49 }, { -49, -8, -86 }, { -8, -49, -86 },
+    { -57, -57, -57 }, { -84, -45, -26 }, { -73, 19, -64 }, { -85, -14, 49 },  { -90, 32, 28 },  { -90, 32, -28 },
+    { -98, -16, 0 },   { -84, -45, 26 },  { -73, 19, 64 },  { -8, -49, 86 },   { -49, -8, 86 },  { -57, -57, 57 },
 };
 
 u8 D_80B23C2C[] = {
@@ -213,7 +207,7 @@ void EnHanabi_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_4634[i] = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->unk_4608[i]);
     }
 
-    if ((thisx->params & 0x1F) == 1) {
+    if (ENHANABI_GET_1F(thisx) == ENHANABI_1F_1) {
         this->actionFunc = func_80B23934;
         this->actor.home.rot.x = 0x384;
     }
@@ -276,7 +270,7 @@ void func_80B236C8(EnHanabi* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 sp28;
 
-    this->actor.draw = func_80B23A38;
+    this->actor.draw = EnHanabi_Draw;
     func_80B234C8(this);
     if (this->actor.home.rot.x != 0) {
         if (this->unk_144 > 0) {
@@ -351,7 +345,7 @@ void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80B22E0C(this->unk_148);
 }
 
-void func_80B23A38(Actor* thisx, GlobalContext* globalCtx) {
+void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnHanabi* this = THIS;
 
     Matrix_StatePush();
