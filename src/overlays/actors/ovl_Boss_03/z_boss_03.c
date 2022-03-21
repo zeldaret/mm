@@ -1308,9 +1308,6 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                     if (1) {}
                     if (1) {}
                     if (1) {}
-                    if (1) {}
-                    if (1) {}
-                    if (1) {}
 
                     for (i = 0; i < 3; i++) {
                         effectPos.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.x;
