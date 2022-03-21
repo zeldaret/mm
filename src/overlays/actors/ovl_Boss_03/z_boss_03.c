@@ -1158,7 +1158,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                     Math_ApproachF(&this->csCamAt.y, player->actor.world.pos.y + 30.0f, 0.5f, 100.0f);
                     this->csCamAt.z = player->actor.world.pos.z;
 
-                    if (this->csTimer >= 106) {
+                    if (this->csTimer > 105) {
                         this->csState = 2;
                         this->csTimer = 0;
                         this->unk_240 = 0;
