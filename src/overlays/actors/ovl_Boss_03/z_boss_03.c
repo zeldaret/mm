@@ -62,7 +62,7 @@
 #define WORK_TIMER_UNK2_A 2 // used in func_809E34B8
 #define WORK_TIMER_STUNNED 2
 
-// The Y position when standing on the platform.
+// The Y position of the top of the platform.
 #define PLATFORM_HEIGHT (440.0f)
 #define WATER_HEIGHT (430.0f)
 
