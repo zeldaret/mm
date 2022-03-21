@@ -2059,7 +2059,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
 static Vec3f D_8090D614 = { 0.0f, 0.0f, 0.0f };
 
 #ifdef NON_MATCHING
-// Stack memes, the pad on line ~2410 makes stack too big, but needed for ordering
+// Stack memes, the requiredScopeTemp pad on line ~2410 makes stack too big, but needed for ordering
 void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
     f32 spE4;
     f32 spE0;
@@ -2432,7 +2432,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                             sLurePos.y += D_80917278.y;
                         }
                     } else if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
-                        s32 pad;
+                        s32 requiredScopeTemp;
 
                         spDC = 0x500;
                         D_809101B0 = sReelLineRot[LINE_SEG_COUNT - 2].y + M_PI;
@@ -2851,8 +2851,6 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// D_80917266 in case 5 around the large branching
 void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
     s16 i;
     s16 sp134 = 10;
@@ -2868,7 +2866,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
     s16 spFE;
     s16 spFC;
     s16 spFA;
-    s16 phi_v0;
+    s16 spF8;
     s16 spF6;
     s16 spF4;
     s16 spF2;
@@ -2883,11 +2881,9 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
     f32 phi_f2;
     Vec3f spC4;
     Vec3f spB8;
-    u8 phi_v0_2;
     f32 temp_f0;
     f32 temp;
-    s32 pad;
-    f32 spA4;
+    f32 temp2;
 
     this->actor.uncullZoneForward = 700.0f;
     this->actor.uncullZoneScale = 50.0f;
@@ -3435,6 +3431,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_188 = 1.0f;
                 this->unk_18C = 2000.0f;
             } else if (sp124 < 10.0f) {
+                s16 phi_v0;
                 if (func_809033F0(this, globalCtx, false)) {
                     func_80903C60(this, 0);
                 }
@@ -3565,15 +3562,15 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                     D_809171F6 = 0;
 
                     if (this->unk_148 == 1) {
-                        spA4 = (this->unk_1A4 * 3.0f) + 120.0f;
+                        temp2 = (this->unk_1A4 * 3.0f) + 120.0f;
                     } else {
-                        spA4 = (2.0f * this->unk_1A4) + 120.0f;
+                        temp2 = (2.0f * this->unk_1A4) + 120.0f;
                     }
-                    if (spA4 > 255.0f) {
-                        spA4 = 255.0f;
+                    if (temp2 > 255.0f) {
+                        temp2 = 255.0f;
                     }
 
-                    func_8013EC44(0.0f, spA4, 120, 5);
+                    func_8013EC44(0.0f, temp2, 120, 5);
                     D_809171F4 = 40;
                     D_80911E28 = 10;
                     play_sound(NA_SE_IT_FISHING_HIT);
@@ -3581,6 +3578,9 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             if (this->actor.world.pos.y < WATER_SURFACE_Y(globalCtx)) {
+                u8 phi_v0_2;
+                f32 spA4;
+
                 if (this->unk_172[1] > 30) {
                     phi_v0_2 = 7;
                 } else {
@@ -4181,9 +4181,6 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/EnFishing_UpdateFish.s")
-#endif
 
 s32 EnFishing_FishOverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                                    Actor* thisx) {
