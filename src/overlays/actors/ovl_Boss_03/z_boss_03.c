@@ -853,7 +853,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->unk_260, __sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     switch (this->unk_242) {
-        case 0x0:
+        case 0:
             Math_ApproachF(&this->actor.speedXZ, 10.0f, 1.0f, 1.0f);
             if (sqrtf(SQ(xDiff) + SQ(zDiff)) < 100.0f) {
                 this->unk_242 = 1;
@@ -861,7 +861,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 0x1:
+        case 1:
             Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f);
             Math_ApproachF(&this->actor.world.pos.y, 200.0f, 0.05f, 5.0f);
             break;
@@ -1489,7 +1489,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     switch (this->unk_242) {
-        case 0x0:
+        case 0:
             Math_ApproachF(&this->actor.world.pos.y, Math_SinS(this->unk_240 * 0x1000) * 80.0f + this->waterHeight,
                            1.0f, 10.0f);
             this->actor.shape.rot.z += 0x100;
@@ -1538,7 +1538,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
             break;
 
-        case 0x1:
+        case 1:
             if (this->unk_240 == 0x96) {
                 Audio_QueueSeqCmd(0x8021);
             }
@@ -1597,7 +1597,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 0x2:
+        case 2:
             Math_ApproachZeroF(&this->unk_56C, 1.0f, 0.0005f);
             if (this->csTimer == 60) {
                 camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
@@ -1615,7 +1615,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             }
             break;
 
-        case 0x3:
+        case 3:
             this->actor.world.pos.y = 5000.0f;
             break;
     }
@@ -1638,7 +1638,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->csTimer++;
     switch (this->csState) {
-        case 0x0:
+        case 0:
             if (ActorCutscene_GetCurrentIndex() == -1) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 1);
@@ -1648,7 +1648,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                 this->csState = 1;
                 this->unk_2BE = 0xBB8;
 
-                case 0x1:
+                case 1:
                     if (player->actor.world.pos.y < 437.0f) {
                         player->actor.world.pos.z = 500.0f;
                         player->actor.world.pos.x = 500.0f;
