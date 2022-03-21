@@ -528,9 +528,9 @@ void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
  * Swims randomly until WORK_TIMER_UNK1_A runs out
  */
 void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
-    f32 temp_f20;
-    f32 temp_f2;
-    f32 temp_f22;
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
     f32 tmp;
     s32 pad;
     s16 i;
@@ -548,14 +548,14 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
 
-    temp_f20 = this->unk_268.x - this->actor.world.pos.x;
-    temp_f2 = this->unk_268.y - this->actor.world.pos.y;
-    temp_f22 = this->unk_268.z - this->actor.world.pos.z;
+    xDiff = this->unk_268.x - this->actor.world.pos.x;
+    yDiff = this->unk_268.y - this->actor.world.pos.y;
+    zDiff = this->unk_268.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f20) + SQ(temp_f22)), -temp_f2), 0xA,
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
                    this->unk_274);
 
-    tmp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f22, temp_f20), 0xA, this->unk_274, 0) * -0.5f;
+    tmp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, tmp, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
@@ -571,16 +571,16 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     }
 
     if (this->workTimer[WORK_TIMER_UNK2_A] == 0) {
-        if ((sqrtf(SQ(temp_f20) + SQ(temp_f22)) < 100.0f) || (this->workTimer[WORK_TIMER_UNK0_A] == 0)) {
+        if ((sqrtf(SQ(xDiff) + SQ(zDiff)) < 100.0f) || (this->workTimer[WORK_TIMER_UNK0_A] == 0)) {
             for (i = 0; i < 200; i++) {
                 this->unk_268.x = randPlusMinusPoint5Scaled(2500.0f);
                 this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
                 this->unk_268.z = randPlusMinusPoint5Scaled(2500.0f);
 
-                temp_f20 = this->unk_268.x - this->actor.world.pos.x;
-                temp_f22 = this->unk_268.z - this->actor.world.pos.z;
+                xDiff = this->unk_268.x - this->actor.world.pos.x;
+                zDiff = this->unk_268.z - this->actor.world.pos.z;
 
-                if (sqrtf(SQ(temp_f20) + SQ(temp_f22)) > 300.0f) {
+                if (sqrtf(SQ(xDiff) + SQ(zDiff)) > 300.0f) {
                     break;
                 }
             }
@@ -623,12 +623,10 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
  */
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    f32 temp_f2;
-    f32 temp3;
-    f32 temp_f18;
-
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
     f32 temp;
-
     Vec3f sp50;
     s32 pad;
     f32 phi_f2;
@@ -639,13 +637,13 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    temp_f2 = player->actor.world.pos.x - this->actor.world.pos.x;
-    temp3 = (player->actor.world.pos.y - this->actor.world.pos.y) + 50.0f;
-    temp_f18 = player->actor.world.pos.z - this->actor.world.pos.z;
+    xDiff = player->actor.world.pos.x - this->actor.world.pos.x;
+    yDiff = (player->actor.world.pos.y - this->actor.world.pos.y) + 50.0f;
+    zDiff = player->actor.world.pos.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp3), 0xA,
+    Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
                    this->unk_274);
-    temp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA, this->unk_274, 0) * -0.5f;
+    temp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, temp, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
@@ -684,10 +682,10 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
 
-        temp_f2 = sp50.x - player->actor.world.pos.x;
-        temp_f18 = sp50.z - player->actor.world.pos.z;
+        xDiff = sp50.x - player->actor.world.pos.x;
+        zDiff = sp50.z - player->actor.world.pos.z;
 
-        if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < (2.0f * phi_f2)) {
+        if (sqrtf(SQ(xDiff) + SQ(zDiff)) < (2.0f * phi_f2)) {
             Math_ApproachS(&this->jawZRot, 0x3200, 2, 0x1800);
             this->unk_278 = 25.0f;
             this->unk_27C = 5.0f;
@@ -695,7 +693,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
         }
 
         // Near enough to Player?
-        if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < phi_f2) {
+        if (sqrtf(SQ(xDiff) + SQ(zDiff)) < phi_f2) {
             Boss03_SetupCatchPlayer(this, globalCtx, sp43);
 
             if (sp43 != 0) {
@@ -1921,17 +1919,15 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
 
 void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
-    Boss03* this = (Boss03*)thisx;
-    Actor* temp_v0_4;
-    Player* player; // sp88
-    s32 i;          // phi_s0
-    Vec3f sp78;
-    Vec3f sp6C;
-    Vec3f sp60;
+    Boss03* this = THIS;
+    Actor* dblueActor;
+    Player* player = GET_PLAYER(globalCtx);
+    s32 i;
+    Vec3f wetSpotPos;
+    Vec3f bubblePos;
+    Vec3f dropletPos;
     s16 sp5E;
-    f32 sp58;
-
-    player = GET_PLAYER(globalCtx);
+    f32 yRot;
 
     this->actor.hintId = 0x28;
 
@@ -2028,9 +2024,9 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    temp_v0_4 = Boss03_FindActorDblueMovebg(globalCtx);
-    if (temp_v0_4 != NULL) {
-        temp_v0_4->world.pos.y = this->waterHeight;
+    dblueActor = Boss03_FindActorDblueMovebg(globalCtx);
+    if (dblueActor != NULL) {
+        dblueActor->world.pos.y = this->waterHeight;
     }
 
     Math_ApproachZeroF(&this->unk_260, 0.1f, 0.05f);
@@ -2050,11 +2046,11 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((this->unk_240 % 2) == 0) {
         for (i = 0; i < this->bubbleEffectSpawnNum; i++) {
-            sp6C.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
-            sp6C.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
-            sp6C.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
+            bubblePos.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
+            bubblePos.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
+            bubblePos.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
 
-            Boss03_SpawnEffectBubble(globalCtx, &sp6C);
+            Boss03_SpawnEffectBubble(globalCtx, &bubblePos);
         }
     }
 
@@ -2083,10 +2079,10 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         if (this->wetSpotEffectSpawnNum != 0) {
             this->wetSpotEffectSpawnNum--;
 
-            sp78.x = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.x;
-            sp78.y = PLATFORM_HEIGHT;
-            sp78.z = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.z;
-            Boss03_SpawnEffectWetSpot(globalCtx, &sp78);
+            wetSpotPos.x = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.x;
+            wetSpotPos.y = PLATFORM_HEIGHT;
+            wetSpotPos.z = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.z;
+            Boss03_SpawnEffectWetSpot(globalCtx, &wetSpotPos);
         }
     }
 
@@ -2103,21 +2099,21 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if ((this->unk_280 == 1) || (this->unk_280 == 5) || (this->unk_280 == 9)) {
-        sp58 = 0.0f;
+        yRot = 0.0f;
 
         for (sp5E = 0, i = 0; i < 20; sp5E++) {
-            Matrix_InsertYRotation_f(sp58, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &sp60);
-            sp60.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
-            sp60.y = PLATFORM_HEIGHT;
-            sp60.z += this->unk_28C + randPlusMinusPoint5Scaled(40.0f);
+            Matrix_InsertYRotation_f(yRot, MTXMODE_NEW);
+            Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
+            dropletPos.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
+            dropletPos.y = PLATFORM_HEIGHT;
+            dropletPos.z += this->unk_28C + randPlusMinusPoint5Scaled(40.0f);
 
-            if (sqrtf(SQ(sp60.x) + SQ(sp60.z)) < 355.0f) {
-                Boss03_SpawnEffectDroplet(globalCtx, &sp60);
+            if (sqrtf(SQ(dropletPos.x) + SQ(dropletPos.z)) < 355.0f) {
+                Boss03_SpawnEffectDroplet(globalCtx, &dropletPos);
                 i++;
             }
 
-            sp58 += ((2.0f * M_PI) / 50.0f);
+            yRot += ((2.0f * M_PI) / 50.0f);
             if (sp5E >= 50) {
                 break;
             }
