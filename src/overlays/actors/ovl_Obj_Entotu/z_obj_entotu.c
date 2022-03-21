@@ -40,7 +40,7 @@ u8 D_80A35410[][16] = {
 
 s32 func_80A34700(s16 minutes) {
     s32 ret = 0;
-    s16 time = gSaveContext.time * 0.021972656f;
+    s16 time = TIME_TO_MINUTES_F(gSaveContext.time);
     s32 hours = time / 60;
     s32 currMinutes = time % 60;
 
