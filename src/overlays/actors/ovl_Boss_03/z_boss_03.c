@@ -594,7 +594,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
     if (this->workTimer[WORK_TIMER_UNK1_A] == 0) {
-        // Player is above water && Player is on the floor
+        // Player is above water && Player is standing on ground
         if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
             Boss03_SetupPrepareCharge(this, globalCtx);
         } else if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_DEKU)) {
