@@ -367,7 +367,29 @@ void func_801496C8(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801496C8.s")
 #endif
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014995C.s")
+extern s32 D_801F6B00;
+extern s32 D_801F6B04;
+
+void func_8014995C(GlobalContext* globalCtx, TexturePtr arg1, Gfx** gfxp) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    Gfx* gfx = *gfxp;
+    s16 temp_t0 = msgCtx->unk11FF4;
+    s16 temp_t1 = msgCtx->unk11FF6;
+
+    gDPPipeSync(gfx++);
+    gDPLoadTextureBlock_4b(gfx++, arg1, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+
+    if ((msgCtx->unk11F0A != 5) && (msgCtx->unk11F0A != 0xD) && (globalCtx->pauseCtx.unk_1F0 == 0)) {
+        gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, msgCtx->unk1201E);
+        gSPTextureRectangle(gfx++, (temp_t0 + 1) * 4, (temp_t1 + 1) * 4, ((temp_t0 + D_801F6B00 + 1) * 4),
+                            ((temp_t1 + D_801F6B00 + 1) * 4), G_TX_RENDERTILE, 0, 0, D_801F6B04, D_801F6B04);
+        gDPPipeSync(gfx++);
+    }
+    gDPSetPrimColor(gfx++, 0, 0, msgCtx->unk12018, msgCtx->unk1201A, msgCtx->unk1201C, msgCtx->unk1201E);
+    gSPTextureRectangle(gfx++, (temp_t0 + 1) * 4, (temp_t1 + 1) * 4, ((temp_t0 + D_801F6B00 + 1) * 4),
+                        ((temp_t1 + D_801F6B00 + 1) * 4), G_TX_RENDERTILE, 0, 0, D_801F6B04, D_801F6B04);
+}
 
 extern s16 D_801CFD98;
 extern s16 D_801CFD9C;

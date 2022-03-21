@@ -820,8 +820,11 @@ typedef struct {
     /* 0x11FFE */ s16 unk11FFE[0x3];
     /* 0x12004 */ s16 unk12004;
     /* 0x12006 */ s16 unk12006;
-    /* 0x12008 */ u8 unk12008[0x16];
-    /* 0x1201E */ s16 unk1201E;
+    /* 0x12008 */ u8 unk12008[0x10];
+    /* 0x12018 */ s16 unk12018; // messageR
+    /* 0x1201A */ s16 unk1201A; // messageG
+    /* 0x1201C */ s16 unk1201C; // messageB
+    /* 0x1201E */ s16 unk1201E; // messageA
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;

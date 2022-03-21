@@ -2482,11 +2482,11 @@ void func_80147818(GlobalContext* globalCtx, UNK_PTR puParm2, UNK_TYPE4 uParm3, 
 void func_80148B98(GlobalContext* globalCtx, u8 bParm2);
 // void func_80148CBC(void);
 // void func_80148D64(void);
-void func_80149048(GlobalContext *globalCtx);
-void func_801491DC(GlobalContext *globalCtx);
-void func_80149454(GlobalContext *globalCtx);
-void func_801496C8(GlobalContext *globalCtx);
-// void func_8014995C(void);
+void func_80149048(GlobalContext* globalCtx);
+void func_801491DC(GlobalContext* globalCtx);
+void func_80149454(GlobalContext* globalCtx);
+void func_801496C8(GlobalContext* globalCtx);
+//svoid func_8014995C(GlobalContext* globalCtx, TexturePtr arg1, Gfx** gfxp);
 void func_80149C18(GlobalContext* globalCtx);
 // void Message_FindMessage(void);
 void func_80149F74(GlobalContext* globalCtx, u32** ppuParm2);
