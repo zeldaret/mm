@@ -1512,7 +1512,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                             this->waterHeight, this->actor.world.pos.z, 0, 0, 0x78, ENWATEREFFECT_777);
 
                 if (this->actionFunc == Boss03_DeathCutscene) {
-                    if (D_809E9840 % 2 != 0) {
+                    if ((D_809E9840 % 2) != 0) {
                         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_OLD);
                     } else {
                         Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_SINK_OLD);
