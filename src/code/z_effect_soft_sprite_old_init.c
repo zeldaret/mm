@@ -338,7 +338,7 @@ void EffectSsGSpk_SpawnAccel(GlobalContext* globalCtx, Actor* actor, Vec3f* pos,
     initParams.actor = actor;
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.updateMode = 0;
+    initParams.updateMode = GSPK_UPDATEMODE_NORMAL;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_G_SPK, 128, &initParams);
 }
@@ -356,7 +356,7 @@ void EffectSsGSpk_SpawnNoAccel(GlobalContext* globalCtx, Actor* actor, Vec3f* po
     initParams.actor = actor;
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.updateMode = 1;
+    initParams.updateMode = GSPK_UPDATEMODE_NO_ACCEL;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_G_SPK, 128, &initParams);
 }
