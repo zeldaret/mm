@@ -954,7 +954,36 @@ void func_80153E7C(GlobalContext* globalCtx, void* arg1) {
     func_8015966C(globalCtx, arg1, 0);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80153EF0.s")
+extern u64 D_02002AA0[];
+
+void func_80153EF0(GlobalContext* globalCtx, Gfx** gfxp) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    Gfx* gfx;
+
+    gfx = *gfxp;
+    func_8012C680(&gfx);
+
+    gDPSetCombineLERP(gfx++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, PRIMITIVE,
+                      ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetTextureFilter(gfx++, G_TF_BILERP);
+    gDPSetAlphaDither(gfx++, G_AD_NOTPATTERN);
+    gDPSetPrimColor(gfx++, 0, 0, 0x00, 0x00, 0x00, msgCtx->unk1203C);
+    gDPSetEnvColor(gfx++, 0x8C, 0x28, 0xA0, 0xFF);
+    gDPLoadTextureBlock(gfx++, &D_02002AA0, G_IM_FMT_I, G_IM_SIZ_8b, 64, 1, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                        G_TX_NOMIRROR | G_TX_WRAP, 6, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gSPTextureRectangle(gfx++, 0, (XREG(77) * 4), 0x0500, ((XREG(77) + XREG(76)) * 4), G_TX_RENDERTILE, 0, 0, 0x00CC,
+                        0x0400);
+    gDPPipeSync(gfx++);
+    gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
+    gDPSetEnvColor(gfx++, 0x00, 0x00, 0x00, 0xFF);
+
+    if ((msgCtx->currentTextId < 0x1BB2) || (msgCtx->currentTextId >= 0x1BB7)) {
+        msgCtx->unk11FF8 = XREG(75);
+    }
+    msgCtx->unk11FFA = XREG(74);
+    func_8015966C(globalCtx, &gfx, 0);
+    *gfxp = gfx++;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801541D4.s")
 
