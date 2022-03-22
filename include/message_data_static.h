@@ -1,5 +1,5 @@
-#ifndef MESSAGE_DATA_STATIC_H_
-#define MESSAGE_DATA_STATIC_H_
+#ifndef MESSAGE_DATA_STATIC_H
+#define MESSAGE_DATA_STATIC_H
 
 #include "PR/ultratypes.h"
 
