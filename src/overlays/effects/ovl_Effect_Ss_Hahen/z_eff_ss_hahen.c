@@ -50,7 +50,7 @@ u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
         this->gfx = gameplay_keep_DL_01A620;
         this->rObjId = -1;
     }
-    
+
     this->draw = EffectSsHahen_Draw;
     this->update = EffectSsHahen_Update;
     this->rDrawFlags = initParams->drawFlags;
@@ -102,10 +102,12 @@ void EffectSsHahen_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     } else {
         scale = this->rScale * 0.001f;
     }
+
     Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_InsertYRotation_f(this->rYaw * 0.01f, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(this->rPitch * 0.01f);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
+
     if (this->rDrawFlags & HAHEN_DRAWFLAGS_XLU) {
         EffectSsHahen_DrawXlu(globalCtx, this);
     } else {
