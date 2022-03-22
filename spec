@@ -1548,7 +1548,7 @@ beginseg
     name "ovl_Obj_Blockstop"
     compress
     include "build/src/overlays/actors/ovl_Obj_Blockstop/z_obj_blockstop.o"
-    include "build/data/ovl_Obj_Blockstop/ovl_Obj_Blockstop.data.o"
+    //include "build/data/ovl_Obj_Blockstop/ovl_Obj_Blockstop.data.o"
     include "build/data/ovl_Obj_Blockstop/ovl_Obj_Blockstop.reloc.o"
 endseg
 
