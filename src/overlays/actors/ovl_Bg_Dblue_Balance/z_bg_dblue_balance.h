@@ -6,7 +6,6 @@
 struct BgDblueBalance;
 
 typedef void (*BgDblueBalanceActionFunc)(struct BgDblueBalance*, GlobalContext*);
-typedef void (*BgDblueBalanceUnkFunc)(Actor*, GlobalContext*);
 
 #define BGDBLUEBALANCE_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define BGDBLUEBALANCE_GET_300(thisx) (((thisx)->params >> 8) & 3)
@@ -20,9 +19,9 @@ typedef struct {
 
 typedef struct BgDblueBalance {
     /* 0x0000 */ DynaPolyActor dyna;
-    /* 0x015C */ Actor* unk_15C;
-    /* 0x0160 */ Actor* unk_160;
-    /* 0x0164 */ Actor* unk_164;
+    /* 0x015C */ struct BgDblueBalance* unk_15C;
+    /* 0x0160 */ struct BgDblueBalance* unk_160;
+    /* 0x0164 */ struct BgDblueBalance* unk_164;
     /* 0x0168 */ BgDblueBalanceActionFunc actionFunc;
     /* 0x016C */ s32 unk_16C;
     /* 0x0170 */ s32 unk_170;
