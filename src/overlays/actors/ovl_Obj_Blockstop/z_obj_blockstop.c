@@ -13,8 +13,8 @@
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void func_809466F0(ObjBlockstop* this, GlobalContext* globalCtx);
-void func_809467E8(ObjBlockstop *arg0, GlobalContext *arg1);
+void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx);
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop *arg0, GlobalContext *arg1);
 
 
 const ActorInit Obj_Blockstop_InitVars = {
@@ -36,7 +36,7 @@ void ObjBlockstop_Init(Actor *thisx, GlobalContext *globalCtx) {
     if (Flags_GetSwitch(globalCtx, (s32) this->actor.params)) {
         Actor_MarkForDeath(&this->actor);
     }
-    this->actionFunc = func_809466F0;
+    this->actionFunc = ObjBlockstop_CheckCollision;
 }
 
 
@@ -44,7 +44,7 @@ void ObjBlockstop_Init(Actor *thisx, GlobalContext *globalCtx) {
 
 
 //checks that the position of the push block is within 20 units and activates, since the block falls and stops on the blockstop
-void func_809466F0(ObjBlockstop *this, GlobalContext *globalCtx) {
+void ObjBlockstop_CheckCollision(ObjBlockstop *this, GlobalContext *globalCtx) {
     Actor *tempActor;
     tempActor = globalCtx->actorCtx.actorLists[6].first;
         while (tempActor){
@@ -56,7 +56,7 @@ void func_809466F0(ObjBlockstop *this, GlobalContext *globalCtx) {
                 s32 params = (tempActor->params & 0xF);
                 if(params < 3){
                     ActorCutscene_SetIntentToPlay((s16) this->actor.cutscene);
-                    this->actionFunc = func_809467E8;
+                    this->actionFunc = ObjBlockstop_TryPlayCutscene;
                 }
             }
             tempActor = tempActor->next;
@@ -66,7 +66,7 @@ void func_809466F0(ObjBlockstop *this, GlobalContext *globalCtx) {
 
 
 
-void func_809467E8(ObjBlockstop *arg0, GlobalContext *arg1) {
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop *arg0, GlobalContext *arg1) {
     if (ActorCutscene_GetCanPlayNext((s16) arg0->actor.cutscene) != 0) {
         Flags_SetSwitch(arg1, (s32) arg0->actor.params);
         if (ActorCutscene_GetLength((s16) arg0->actor.cutscene) != -1) {
