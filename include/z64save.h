@@ -42,8 +42,7 @@ typedef struct ItemEquips {
 } ItemEquips; // size = 0x22
 
 typedef struct Inventory {
-    /* 0x00 */ u8 items[24];                            // "item_register" has size 0x30 according to debug rom
-    /* 0x18 */ u8 masks[24];
+    /* 0x00 */ u8 items[48];                            // "item_register", first 24 elements are normal items and the other 24 are masks
     /* 0x30 */ s8 ammo[24];                             // "item_count"
     /* 0x48 */ u32 upgrades;                            // "non_equip_register" some bits are wallet upgrades
     /* 0x4C */ u32 questItems;                          // "collect_register"

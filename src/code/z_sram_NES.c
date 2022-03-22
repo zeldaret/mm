@@ -603,14 +603,10 @@ ItemEquips sSaveDefaultItemEquips = {
 Inventory sSaveDefaultInventory = {
     // items
     {
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-    },
-    // masks
-    {
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
-        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
+        ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
         ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,
     },
     // ammo
@@ -703,44 +699,73 @@ ItemEquips sSaveDebugItemEquips = {
 };
 
 Inventory sSaveDebugInventory = {
-    { ITEM_OCARINA,
-      ITEM_BOW,
-      ITEM_ARROW_FIRE,
-      ITEM_ARROW_ICE,
-      ITEM_ARROW_LIGHT,
-      ITEM_MOON_TEAR,
-      ITEM_BOMB,
-      ITEM_BOMBCHU,
-      ITEM_STICK,
-      ITEM_NUT,
-      ITEM_MAGIC_BEANS,
-      ITEM_ROOM_KEY,
-      ITEM_POWDER_KEG,
-      ITEM_PICTO_BOX,
-      ITEM_LENS,
-      ITEM_HOOKSHOT,
-      ITEM_SWORD_GREAT_FAIRY,
-      ITEM_LETTER_TO_KAFEI,
-      ITEM_BOTTLE,
-      ITEM_POTION_RED,
-      ITEM_POTION_GREEN,
-      ITEM_POTION_BLUE,
-      ITEM_NONE,
-      ITEM_NONE }, // items
-    { ITEM_MASK_POSTMAN, ITEM_MASK_ALL_NIGHT, ITEM_MASK_BLAST,  ITEM_MASK_STONE,         ITEM_MASK_GREAT_FAIRY,
-      ITEM_MASK_DEKU,    ITEM_MASK_KEATON,    ITEM_MASK_BREMEN, ITEM_MASK_BUNNY,         ITEM_MASK_DON_GERO,
-      ITEM_MASK_SCENTS,  ITEM_MASK_GORON,     ITEM_MASK_ROMANI, ITEM_MASK_CIRCUS_LEADER, ITEM_MASK_KAFEIS_MASK,
-      ITEM_MASK_COUPLE,  ITEM_MASK_TRUTH,     ITEM_MASK_ZORA,   ITEM_MASK_KAMARO,        ITEM_MASK_GIBDO,
-      ITEM_MASK_GARO,    ITEM_MASK_CAPTAIN,   ITEM_MASK_GIANT,  ITEM_MASK_FIERCE_DEITY }, // masks
-    { 1, 30, 1, 1, 1, 1, 30, 30, 30, 30, 1, 1, 1, 1, 30, 1, 1, 1, 1, 1, 1, 1, 0, 0 },     // ammo
-    0x120009,                                                                             // upgrades
+    // items
+    {
+        ITEM_OCARINA,
+        ITEM_BOW,
+        ITEM_ARROW_FIRE,
+        ITEM_ARROW_ICE,
+        ITEM_ARROW_LIGHT,
+        ITEM_MOON_TEAR,
+        ITEM_BOMB,
+        ITEM_BOMBCHU,
+        ITEM_STICK,
+        ITEM_NUT,
+        ITEM_MAGIC_BEANS,
+        ITEM_ROOM_KEY,
+        ITEM_POWDER_KEG,
+        ITEM_PICTO_BOX,
+        ITEM_LENS,
+        ITEM_HOOKSHOT,
+        ITEM_SWORD_GREAT_FAIRY,
+        ITEM_LETTER_TO_KAFEI,
+        ITEM_BOTTLE,
+        ITEM_POTION_RED,
+        ITEM_POTION_GREEN,
+        ITEM_POTION_BLUE,
+        ITEM_NONE,
+        ITEM_NONE,
+        ITEM_MASK_POSTMAN,
+        ITEM_MASK_ALL_NIGHT,
+        ITEM_MASK_BLAST,
+        ITEM_MASK_STONE,
+        ITEM_MASK_GREAT_FAIRY,
+        ITEM_MASK_DEKU,
+        ITEM_MASK_KEATON,
+        ITEM_MASK_BREMEN,
+        ITEM_MASK_BUNNY,
+        ITEM_MASK_DON_GERO,
+        ITEM_MASK_SCENTS,
+        ITEM_MASK_GORON,
+        ITEM_MASK_ROMANI,
+        ITEM_MASK_CIRCUS_LEADER,
+        ITEM_MASK_KAFEIS_MASK,
+        ITEM_MASK_COUPLE,
+        ITEM_MASK_TRUTH,
+        ITEM_MASK_ZORA,
+        ITEM_MASK_KAMARO,
+        ITEM_MASK_GIBDO,
+        ITEM_MASK_GARO,
+        ITEM_MASK_CAPTAIN,
+        ITEM_MASK_GIANT,
+        ITEM_MASK_FIERCE_DEITY,
+    },
+    // ammo
+    { 1, 30, 1, 1, 1, 1, 30, 30, 30, 30, 1, 1, 1, 1, 30, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+    // upgrades
+    0x120009,
+    // questItems
     (1 << QUEST_SONG_SONATA) | (1 << QUEST_SONG_LULLABY) | (1 << QUEST_SONG_BOSSA_NOVA) | (1 << QUEST_SONG_ELEGY) |
         (1 << QUEST_SONG_OATH) | (1 << QUEST_SONG_TIME) | (1 << QUEST_SONG_HEALING) | (1 << QUEST_SONG_EPONA) |
         (1 << QUEST_SONG_SOARING) | (1 << QUEST_SONG_STORMS) | (1 << QUEST_BOMBERS_NOTEBOOK) |
-        (1 << QUEST_SONG_LULLABY_INTRO), // questItems
-    { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },    // dungeonItems
-    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },    // dungeonKeys
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },    // strayFairies
+        (1 << QUEST_SONG_LULLABY_INTRO),
+    // dungeonItems
+    { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
+    // dungeonKeys
+    { 8, 8, 8, 8, 8, 8, 8, 8, 8, 0 },
+    // strayFairies
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    // dekuPlaygroundPlayerName
     {
         // "LINK    "
         { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E },
@@ -748,7 +773,7 @@ Inventory sSaveDebugInventory = {
         { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E },
         // "LINK    "
         { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E },
-    }, // dekuPlaygroundPlayerName
+    },
 };
 
 u16 sSaveDebugChecksum = 0;
@@ -1040,7 +1065,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
     u16 temp_s2;
     u16 temp_v0_2;
-    u16 phi_a0;
+    u16 phi_a0; // maskCount
 
     if (gSaveContext.unk_3F3F) {
         D_801F6AF0 = gSaveContext.save.time;
@@ -1118,8 +1143,8 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                     fileChooseCtx->rupees[sp76] = gSaveContext.save.playerData.rupees;
                     fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(4);
 
-                    for (sp7A = 0, phi_a0 = 0; sp7A < ARRAY_COUNT(gSaveContext.save.inventory.masks); sp7A++) {
-                        if (gSaveContext.save.inventory.masks[(s32)sp7A] != 0xFF) {
+                    for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
+                        if (gSaveContext.save.inventory.items[sp7A + 24] != 0xFF) {
                             phi_a0++;
                         }
                     }
@@ -1213,8 +1238,8 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                         fileChooseCtx->rupees[sp76] = gSaveContext.save.playerData.rupees;
                         fileChooseCtx->unk_24474[sp76] = CUR_UPG_VALUE(4);
 
-                        for (sp7A = 0, phi_a0 = 0; sp7A < ARRAY_COUNT(gSaveContext.save.inventory.masks); sp7A++) {
-                            if (gSaveContext.save.inventory.masks[(s32)sp7A] != 0xFF) {
+                        for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
+                            if (gSaveContext.save.inventory.items[sp7A + 24] != 0xFF) {
                                 phi_a0++;
                             }
                         }
@@ -1328,8 +1353,8 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
             fileChooseCtx->unk_24476[fileChooseCtx->fileNum] =
                 (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
-            for (maskCount = i = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
-                if (gSaveContext.save.inventory.masks[(s32)i] != 0xFF) {
+            for (i = 0, maskCount = 0; i < 24; i++) {
+                if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
                     maskCount++;
                 }
             }
@@ -1371,8 +1396,8 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         fileChooseCtx->unk_24474[fileChooseCtx->fileNum] =
             (gSaveContext.save.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
 
-        for (maskCount = i = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
-            if (gSaveContext.save.inventory.masks[(s32)i] != ITEM_NONE) {
+        for (i = 0, maskCount = 0; i < 24; i++) {
+            if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
                 maskCount++;
             }
         }
@@ -1438,8 +1463,8 @@ void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         fileChooseCtx->rupees[fileChooseCtx->unk_24480] = gSaveContext.save.playerData.rupees;
         fileChooseCtx->unk_24474[fileChooseCtx->unk_24480] = CUR_UPG_VALUE(UPG_WALLET);
 
-        for (i = 0, maskCount = 0; i < ARRAY_COUNT(gSaveContext.save.inventory.masks); i++) {
-            if (gSaveContext.save.inventory.masks[(s32)i] != ITEM_NONE) {
+        for (i = 0, maskCount = 0; i < 24; i++) {
+            if (gSaveContext.save.inventory.items[i + 24] != ITEM_NONE) {
                 maskCount++;
             }
         }
