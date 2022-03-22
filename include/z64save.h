@@ -10,7 +10,7 @@ struct GlobalContext;
 struct FileChooseContext;
 
 // TODO: properly name DOWN, RETURN and TOP
-typedef enum {
+typedef enum RespawnMode {
     /* 0 */ RESTART_MODE_DOWN,                          // "RESTART_MODE_DOWN"
     /* 1 */ RESTART_MODE_RETURN,                        // "RESTART_MODE_RETURN"
     /* 2 */ RESTART_MODE_TOP,                           // "RESTART_MODE_TOP"
@@ -22,7 +22,7 @@ typedef enum {
     /* 8 */ RESPAWN_MODE_MAX
 } RespawnMode;
 
-typedef struct {
+typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
     /* 0x04 */ u8 (*saveBuf)[0x4000];
     /* 0x08 */ char unk_08[4];
@@ -35,31 +35,31 @@ typedef struct {
     /* 0x24 */ s16 unk_24;
 } SramContext; // size = 0x28
 
-typedef struct {
-    /* 0x00 */ u8 buttonItems[4][4];
-    /* 0x10 */ u8 cButtonSlots[4][4];
+typedef struct ItemEquips {
+    /* 0x00 */ u8 buttonItems[4][4];                    // "register_item"
+    /* 0x10 */ u8 cButtonSlots[4][4];                   // "register_item_pt"
     /* 0x20 */ u16 equipment;
 } ItemEquips; // size = 0x22
 
-typedef struct {
-    /* 0x00 */ u8 items[24];
+typedef struct Inventory {
+    /* 0x00 */ u8 items[24];                            // "item_register" has size 0x30 according to debug rom
     /* 0x18 */ u8 masks[24];
-    /* 0x30 */ s8 ammo[24];
-    /* 0x48 */ u32 upgrades;        // some bits are wallet upgrades
-    /* 0x4C */ u32 questItems;
-    /* 0x50 */ u8 dungeonItems[10];
-    /* 0x5A */ s8 dungeonKeys[10];
-    /* 0x64 */ s8 strayFairies[10]; // "orange_fairy"
-    /* 0x6E */ char dekuPlaygroundPlayerName[3][8]; // Stores playerName (8 char) over (3 days) when getting a new high score. "degnuts_memory_name"
+    /* 0x30 */ s8 ammo[24];                             // "item_count"
+    /* 0x48 */ u32 upgrades;                            // "non_equip_register" some bits are wallet upgrades
+    /* 0x4C */ u32 questItems;                          // "collect_register"
+    /* 0x50 */ u8 dungeonItems[10];                     // "key_compass_map"
+    /* 0x5A */ s8 dungeonKeys[10];                      // "key_register"
+    /* 0x64 */ s8 strayFairies[10];                     // "orange_fairy"
+    /* 0x6E */ char dekuPlaygroundPlayerName[3][8];     // "degnuts_memory_name" Stores playerName (8 char) over (3 days) when getting a new high score
 } Inventory; // size = 0x88
 
-typedef struct {
-    /* 0x00 */ s16 scene;
-    /* 0x02 */ Vec3s pos;
-    /* 0x08 */ s16 yaw;
+typedef struct HorseData {
+    /* 0x00 */ s16 scene;                               // "spot_no"
+    /* 0x02 */ Vec3s pos;                               // "horse_x", "horse_y" and "horse_z"
+    /* 0x08 */ s16 yaw;                                 // "horse_a"
 } HorseData; // size = 0x0A
 
-typedef struct {
+typedef struct RespawnData {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ s16 yaw;
     /* 0x0E */ s16 playerParams;
@@ -71,7 +71,7 @@ typedef struct {
     /* 0x1C */ u32 tempCollectFlags;
 } RespawnData; // size = 0x20
 
-typedef struct {
+typedef struct PermanentSceneFlags {
     /* 0x00 */ u32 chest;
     /* 0x04 */ u32 switch0;
     /* 0x08 */ u32 switch1;
@@ -81,7 +81,7 @@ typedef struct {
     /* 0x18 */ u32 unk_18;
 } PermanentSceneFlags; // size = 0x1C
 
-typedef struct {
+typedef struct CycleSceneFlags {
     /* 0x00 */ u32 chest;
     /* 0x04 */ u32 switch0;
     /* 0x08 */ u32 switch1;
@@ -89,15 +89,15 @@ typedef struct {
     /* 0x10 */ u32 collectible;
 } CycleSceneFlags; // size = 0x14
 
-typedef struct {
+typedef struct SaveOptions {
     /* 0x00 */ u16 optionId;                            // "option_id"
     /* 0x02 */ u8 language;                             // "j_n"
     /* 0x03 */ s8 audioSetting;                         // "s_sound"
     /* 0x04 */ u8 languageSetting;                      // "language"
-    /* 0x05 */ u8 zTargetSetting;                       // 0: Switch; 1: Hold
+    /* 0x05 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
 } SaveOptions; // size = 0x06
 
-typedef struct {
+typedef struct SavePlayerData {
     /* 0x0000 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
     /* 0x0006 */ u16 deaths;                            // "savect"
     /* 0x0008 */ char playerName[8];                    // "player_name"
@@ -118,7 +118,7 @@ typedef struct {
     /* 0x0026 */ s16 savedSceneNum;                     // "scene_data_ID"
 } SavePlayerData; // size = 0x28
 
-typedef struct {
+typedef struct Save {
     /* 0x0000 */ u32 entranceIndex;                     // "scene_no"
     /* 0x0004 */ u8 equippedMask;                       // "player_mask"
     /* 0x0005 */ u8 isFirstCycle;                       // "opening_flag"
@@ -163,9 +163,9 @@ typedef struct {
     /* 0x0EF8 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0x0F5C */ u32 mapsVisited;                       // "area_arrival"
     /* 0x0F60 */ u32 mapsVisible;                       // "cloud_clear"
-    /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag                   has scarecrows song
-    /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8                  scarecrows song set?
-    /* 0x0F66 */ u8 scarecrowsSong[128];                // "oca_rec_buff8"
+    /* 0x0F64 */ u8 unk_F64;                            // "oca_rec_flag"                   has scarecrows song
+    /* 0x0F65 */ u8 unk_F65;                            // "oca_rec_flag8"                  scarecrows song set?
+    /* 0x0F66 */ u8 scarecrowsSong[128];
     /* 0x0FE6 */ s8 bombersCaughtNum;                   // "aikotoba_index"
     /* 0x0FE7 */ s8 bombersCaughtOrder[5];              // "aikotoba_table"
     /* 0x0FEC */ s8 lotteryCodes[3][3];                 // "numbers_table", Preset lottery codes
@@ -175,9 +175,9 @@ typedef struct {
     /* 0x100A */ u16 checksum;                          // "check_sum"
 } Save; // size = 0x100C
 
-typedef struct {
+typedef struct SaveContext {
     /* 0x0000 */ Save save;
-    /* 0x100C */ u8 eventInf[8];
+    /* 0x100C */ u8 eventInf[8];                        // "event_inf"
     /* 0x1014 */ u8 unk_1014;                           // "stone_set_flag"
     /* 0x1015 */ u8 unk_1015;
     /* 0x1016 */ u16 jinxTimer;
@@ -257,15 +257,15 @@ typedef struct {
     /* 0x3F64 */ f32 screenScale;                       // "framescale_scale"
     /* 0x3F68 */ CycleSceneFlags cycleSceneFlags[120];  // Scene flags that are temporarily stored over the duration of a single 3-day cycle
     /* 0x48C8 */ u16 unk_48C8;                          // "scene_id_mix"
-    /* 0x48CA */ u8 maskMaskBit[27];                     // "mask_mask_bit", masks given away on the Moon
+    /* 0x48CA */ u8 maskMaskBit[27];                    // "mask_mask_bit", masks given away on the Moon
 } SaveContext; // size = 0x48C8
 
-typedef enum {
+typedef enum ButtonStatus {
     /* 0x00 */ BTN_ENABLED,
     /* 0xFF */ BTN_DISABLED = 0xFF
 } ButtonStatus;
 
-typedef enum {
+typedef enum SunsSongState {
     /* 0 */ SUNSSONG_INACTIVE,
     /* 1 */ SUNSSONG_START, // the suns ocarina effect signals that the song has finished playing
     /* 2 */ SUNSSONG_SPEED_TIME, // suns was played where time passes, speed up the advancement of time
