@@ -2058,32 +2058,23 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
 
 static Vec3f D_8090D614 = { 0.0f, 0.0f, 0.0f };
 
-#ifdef NON_MATCHING
-// Stack memes, the requiredScopeTemp pad on line ~2410 makes stack too big, but needed for ordering
 void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
     f32 spE4;
     f32 spE0;
-    s16 phi_v0;
+    s16 i;
     s16 spDC;
     f32 spD8;
     f32 spD4;
     f32 spD0;
     f32 phi_f16;
     f32 spC8;
-    s16 i;
+    f32 phi_f0;
     Player* player = GET_PLAYER(globalCtx);
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
     Vec3f spA8;
     Vec3f sp9C;
     Vec3f sp90;
     Input* input = CONTROLLER1(globalCtx);
-    // Vec3f sp80;
-
-    f32 phi_f0;
-    // f32 sp70;
-    // Vec3f sp64;
-    // Vec3f sp58;
-    // s32 pad;
 
     D_809171FE++;
 
@@ -2240,8 +2231,6 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
 
             spC8 = SQ(sLurePos.x) + SQ(sLurePos.z);
             if (spC8 > SQ(920.0f)) {
-                f32 temp;
-
                 if ((sLurePos.y > 160.0f) || (sLurePos.x < 80.0f) || (sLurePos.x > 180.0f) || (sLurePos.z > 1350.0f) ||
                     (sLurePos.z < 1100.0f) || (sLurePos.y < 45.0f)) {
                     Vec3f sp80 = this->actor.world.pos;
@@ -2266,10 +2255,9 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                     }
                 }
 
-                temp = ((sqrtf(spC8) - 920.0f) * 0.11f) + WATER_SURFACE_Y(globalCtx);
-                // spE4 = ((sqrtf(spC8) - 920.0f) * 0.11f) + WATER_SURFACE_Y(globalCtx);
-                if (sLurePos.y <= temp) {
-                    sLurePos.y = temp;
+                spE0 = ((sqrtf(spC8) - 920.0f) * 0.11f) + WATER_SURFACE_Y(globalCtx);
+                if (sLurePos.y <= spE0) {
+                    sLurePos.y = spE0;
                     D_80917238.x = D_80917238.y = D_80917238.z = 0.0f;
                     D_8090CD14 = 3;
                     D_809101D0 = 0.0;
@@ -2281,7 +2269,6 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
             } else {
                 f32 sp7C = WATER_SURFACE_Y(globalCtx);
                 f32 sp78;
-                // spE4 = WATER_SURFACE_Y(globalCtx);
 
                 if (sLurePos.y <= sp7C) {
                     D_8090CD14 = 2;
@@ -2356,7 +2343,10 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
             break;
 
         case 3: {
+            f32 pad;
             f32 sp70;
+            Vec3f sp64;
+            Vec3f sp58;
 
             D_80911F20 = 0;
 
@@ -2432,7 +2422,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                             sLurePos.y += D_80917278.y;
                         }
                     } else if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
-                        s32 requiredScopeTemp;
+                        s8 requiredScopeTemp;
 
                         spDC = 0x500;
                         D_809101B0 = sReelLineRot[LINE_SEG_COUNT - 2].y + M_PI;
@@ -2483,7 +2473,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
             Matrix_InsertYRotation_f(sLureRot.y, MTXMODE_NEW);
 
             if (D_80917206 == 2) {
-                Vec3f sp64;
+                s8 requiredScopeTemp;
 
                 Matrix_MultiplyVector3fByState(&sp90, &sp64);
                 D_80917278.x = sp64.x;
@@ -2506,7 +2496,9 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                 }
             } else if (sReelLinePos[LINE_SEG_COUNT - 1].y < (WATER_SURFACE_Y(globalCtx) + phi_f0)) {
                 if (D_80917206 == 2) {
-                    Vec3f sp58 = this->actor.world.pos;
+                    s8 requiredScopeTemp;
+
+                    sp58 = this->actor.world.pos;
                     this->actor.prevPos = this->actor.world.pos = sLurePos;
                     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 30.0f, 30.0f, 0x44);
                     this->actor.world.pos = sp58;
@@ -2579,7 +2571,8 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
 
             if ((sLurePos.y <= (WATER_SURFACE_Y(globalCtx) + 4.0f)) &&
                 (sLurePos.y >= (WATER_SURFACE_Y(globalCtx) - 4.0f))) {
-                phi_v0 = 63;
+                s8 phi_v0 = 63;
+
                 if (CHECK_BTN_ALL(input->cur.button, BTN_A) || (D_809101B4 > 1.0f)) {
                     phi_v0 = 1;
                 }
@@ -2590,8 +2583,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                     EnFishing_SpawnRipple(NULL, globalCtx->specialEffects, &spA8, 30.0f, 300.0f, 150, 90);
                 }
             }
-            break;
-        }
+        } break; // must be outside of the block
 
         case 4:
             if (this->unk_14F != 0) {
@@ -2626,10 +2618,6 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
             break;
     }
 }
-#else
-static Vec3f D_8090D620 = { 0.0f, 0.0f, 0.0f };
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Fishing/EnFishing_UpdateLure.s")
-#endif
 
 s32 func_809033F0(EnFishing* this, GlobalContext* globalCtx, u8 ignorePosCheck) {
     s16 i;
