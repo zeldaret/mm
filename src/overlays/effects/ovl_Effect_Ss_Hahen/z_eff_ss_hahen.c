@@ -47,7 +47,7 @@ u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
         this->rObjId = initParams->objId;
         EffectSsHahen_CheckForObject(this, globalCtx);
     } else {
-        this->gfx = gameplay_keep_DL_01A620;
+        this->gfx = gEffFragmentsDL;
         this->rObjId = -1;
     }
 

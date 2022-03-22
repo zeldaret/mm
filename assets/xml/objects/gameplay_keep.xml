@@ -851,8 +851,8 @@
         <DList Name="gameplay_keep_DL_01A4D0" Offset="0x1A4D0" />
         <DList Name="gameplay_keep_DL_01A538" Offset="0x1A538" />
         <DList Name="gameplay_keep_DL_01A590" Offset="0x1A590" />
-        <DList Name="gameplay_keep_DL_01A620" Offset="0x1A620" />
-        <Texture Name="gameplay_keep_Tex_01A6B0" OutName="tex_01A6B0" Format="rgba16" Width="16" Height="16" Offset="0x1A6B0" />
+        <DList Name="gEffFragmentsDL" Offset="0x1A620" />
+        <Texture Name="gWitheredLeafTex" OutName="withered_leaf" Format="rgba16" Width="16" Height="16" Offset="0x1A6B0" />
         <Texture Name="gameplay_keep_Tex_01A8B0" OutName="tex_01A8B0" Format="i8" Width="16" Height="32" Offset="0x1A8B0" />
         <Texture Name="gameplay_keep_Tex_01AAB0" OutName="tex_01AAB0" Format="i8" Width="16" Height="32" Offset="0x1AAB0" />
         <DList Name="gameplay_keep_DL_01ACF0" Offset="0x1ACF0" />
