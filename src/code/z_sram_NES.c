@@ -734,7 +734,7 @@ Inventory sSaveDebugInventory = {
       ITEM_MASK_GARO,    ITEM_MASK_CAPTAIN,   ITEM_MASK_GIANT,  ITEM_MASK_FIERCE_DEITY }, // masks
     { 1, 30, 1, 1, 1, 1, 30, 30, 30, 30, 1, 1, 1, 1, 30, 1, 1, 1, 1, 1, 1, 1, 0, 0 },     // ammo
     0x120009,                                                                             // upgrades
-    (1 << QUEST_SONG_SONATA) | (1 << QUEST_SONG_LULLABY) | (1 << QUEST_SONG_NEW_WAVE) | (1 << QUEST_SONG_ELEGY) |
+    (1 << QUEST_SONG_SONATA) | (1 << QUEST_SONG_LULLABY) | (1 << QUEST_SONG_BOSSA_NOVA) | (1 << QUEST_SONG_ELEGY) |
         (1 << QUEST_SONG_OATH) | (1 << QUEST_SONG_TIME) | (1 << QUEST_SONG_HEALING) | (1 << QUEST_SONG_EPONA) |
         (1 << QUEST_SONG_SOARING) | (1 << QUEST_SONG_STORMS) | (1 << QUEST_BOMBERS_NOTEBOOK) |
         (1 << QUEST_SONG_LULLABY_INTRO), // questItems
