@@ -2382,8 +2382,7 @@ beginseg
     name "ovl_En_Warp_tag"
     compress
     include "build/src/overlays/actors/ovl_En_Warp_tag/z_en_warp_tag.o"
-    include "build/data/ovl_En_Warp_tag/ovl_En_Warp_tag.data.o"
-    include "build/data/ovl_En_Warp_tag/ovl_En_Warp_tag.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Warp_tag/ovl_En_Warp_tag_reloc.o"
 endseg
 
 beginseg
