@@ -36,8 +36,8 @@ const ActorInit Dm_Gm_InitVars = {
 static AnimationInfoS sAnimations[] = {
     { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // -4 here is the only difference from Dm_An
-    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // -4 here is the only difference from Dm_An
+    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
@@ -160,7 +160,7 @@ Actor* func_80C24838(GlobalContext* globalCtx) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || NULL) {
+        if (tempActor == NULL || false) {
             foundActor = NULL;
             break;
         }
@@ -224,7 +224,7 @@ void func_80C24A00(DmGm* this, GlobalContext* globalCtx) {
                 case 7:
                 case 8:
                     if ((this->unk_2C8 == 12) || (this->unk_2C8 == 4) || (this->unk_2C8 == 6) || (this->unk_2C8 == 8)) {
-                        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
+                        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                             func_80C24428(this, globalCtx, this->unk_2C8 + 1);
                         }
                     }
@@ -271,7 +271,7 @@ Vec3f D_80C25218 = { 450.0f, 700.0f, -760.0f };
 Vec3s D_80C25224 = { 0x238C, 0, -0x3FFC };
 Vec3f D_80C2522C = { 1000.0f, 0.0f, 0.0f };
 
-void func_80C24CD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void DmGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad[2];
     DmGm* this = THIS;
     s8 sp2B = this->actor.objBankIndex;
@@ -299,7 +299,7 @@ void func_80C24CD0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 }
 
-void func_80C24E4C(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void DmGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     DmGm* this = THIS;
     s16 phi_v1;
     s16 phi_v0;
@@ -342,13 +342,13 @@ void func_80C24E4C(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 TexturePtr D_80C25238[] = {
     object_an1_Tex_00E6E0,
-    &object_an1_Tex_00F7A0,
-    &object_an1_Tex_0101A0,
+    object_an1_Tex_00F7A0,
+    object_an1_Tex_0101A0,
 };
 
 TexturePtr D_80C25244[] = {
-    &object_an1_Tex_00E1E0, &object_an1_Tex_00EFA0, &object_an1_Tex_00F3A0, &object_an1_Tex_00EFA0,
-    &object_an1_Tex_00FDA0, &object_an1_Tex_00F9A0, &object_an1_Tex_0103A0,
+    object_an1_Tex_00E1E0, object_an1_Tex_00EFA0, object_an1_Tex_00F3A0, object_an1_Tex_00EFA0,
+    object_an1_Tex_00FDA0, object_an1_Tex_00F9A0, object_an1_Tex_0103A0,
 };
 
 void func_80C25000(Actor* thisx, GlobalContext* globalCtx) {
@@ -362,7 +362,8 @@ void func_80C25000(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C25238[0]));
 
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, NULL, func_80C24CD0, func_80C24E4C, &this->actor);
+                                   this->skelAnime.dListCount, NULL, DmGm_PostLimbDraw, DmGm_TransformLimbDraw,
+                                   &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
