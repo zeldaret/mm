@@ -41,7 +41,7 @@ void EffectSs_DrawGEffect(GlobalContext* globalCtx, EffectSs* this, void* textur
     MtxF mfTrans11DA0;
     s32 pad1;
     Mtx* mtx;
-    void* object = globalCtx->objectCtx.status[this->rgObjBankIdx].segment;
+    void* object = globalCtx->objectCtx.status[this->rgObjBankIndex].segment;
 
     OPEN_DISPS(gfxCtx);
 
