@@ -6,6 +6,7 @@
 
 #include "z_en_geg.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_oF1d_map/object_oF1d_map.h"
 #include "objects/object_taisou/object_taisou.h"
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
@@ -692,7 +693,7 @@ void func_80BB2B1C(EnGeg* this, GlobalContext* globalCtx) {
                 this->unk_4C0[i].x *= temp_f20;
                 this->unk_4C0[i].y *= temp_f20;
                 this->unk_4C0[i].z *= temp_f20;
-                EffectSsHahen_Spawn(globalCtx, &this->unk_4B4, &this->unk_4C0[i], &sp74, 1, sp68, 1, 15,
+                EffectSsHahen_Spawn(globalCtx, &this->unk_4B4, &this->unk_4C0[i], &sp74, HAHEN_DRAWFLAGS_SMALL, sp68, GAMEPLAY_KEEP, 15,
                                     gameplay_keep_DL_06AB30);
             }
         }

@@ -121,7 +121,7 @@ void func_80BCAC40(EnScopenuts* this, GlobalContext* globalCtx) {
         sp54.x = Rand_Centered() * 10.0f;
         sp54.y = 2.0f * Rand_Centered();
         sp54.z = Rand_Centered() * 10.0f;
-        EffectSsHahen_Spawn(globalCtx, &sp60, &sp54, &D_80BCCCE4, 0, 0x96, 1, 0x10, D_80BCCCDC[i & 1]);
+        EffectSsHahen_Spawn(globalCtx, &sp60, &sp54, &D_80BCCCE4, 0, 150, GAMEPLAY_KEEP, 16, D_80BCCCDC[i & 1]);
     }
 }
 

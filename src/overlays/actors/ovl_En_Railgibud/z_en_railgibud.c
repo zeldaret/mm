@@ -5,6 +5,7 @@
  */
 
 #include "z_en_railgibud.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_rd/object_rd.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
@@ -673,7 +674,7 @@ void EnRailgibud_SpawnEffectsForSinkingIntoTheGround(EnRailgibud* this, GlobalCo
         rockFragmentAccel.z = Rand_Centered();
         rockFragmentVelocity.y += Rand_Centered() * 4.0f;
         EffectSsHahen_Spawn(globalCtx, &rockFragmentPos, &rockFragmentVelocity, &rockFragmentAccel, 0,
-                            (Rand_Next() & 7) + 10, -1, 10, NULL);
+                            (Rand_Next() & 7) + 10, HAHEN_OBJECT_DEFAULT, 10, NULL);
         EnRailgibud_SpawnDust(globalCtx, &rockFragmentPos, 10.0f, 10, 150, 0);
     }
 }

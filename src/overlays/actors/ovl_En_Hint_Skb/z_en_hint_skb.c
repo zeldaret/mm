@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hint_skb.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_skb/object_skb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -816,7 +817,7 @@ void func_80C215E4(GlobalContext* globalCtx, EnHintSkb* this, Vec3f* arg2) {
 
     sp50.y += (Rand_ZeroOne() - 0.5f) * 4.0f;
 
-    EffectSsHahen_Spawn(globalCtx, &sp5C, &sp50, &sp44, 0, ((Rand_ZeroOne() * 5.0f) + 12.0f) * 0.8f, -1, 10, NULL);
+    EffectSsHahen_Spawn(globalCtx, &sp5C, &sp50, &sp44, 0, ((Rand_ZeroOne() * 5.0f) + 12.0f) * 0.8f, HAHEN_OBJECT_DEFAULT, 10, NULL);
     func_800BBFB0(globalCtx, &sp5C, 10.0f, 1, 150, 0, 1);
 }
 

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_karebaba.h"
+#include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_dekubaba/object_dekubaba.h"
 
@@ -275,7 +276,7 @@ void func_808F1778(EnKarebaba* this, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y += 0x1999;
-    EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 3.0f, 0, 12, 5, 1, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 }
 
 void func_808F1878(EnKarebaba* this) {
@@ -407,7 +408,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
 
         if (this->unk_1EE == 0) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4800, 0x71C);
-            EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, -1, 10, NULL);
+            EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
             if ((this->actor.scale.x > 0.005f) && ((this->actor.bgCheckFlags & 2) || (this->actor.bgCheckFlags & 8))) {
                 this->actor.scale.z = 0.0f;
@@ -415,7 +416,7 @@ void func_808F1C84(EnKarebaba* this, GlobalContext* globalCtx) {
                 this->actor.scale.x = 0.0f;
                 this->actor.speedXZ = 0.0f;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-                EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, -1, 10, NULL);
+                EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
             }
 
             if (this->actor.bgCheckFlags & 2) {
@@ -463,7 +464,7 @@ void func_808F200C(EnKarebaba* this, GlobalContext* globalCtx) {
             Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_NUTS_1);
             func_808F238C(this);
         } else {
-            EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, -1, 10, NULL);
+            EffectSsHahen_SpawnBurst(globalCtx, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
             Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 1.0f);
         }
         this->actor.scale.y = this->actor.scale.x;
@@ -520,7 +521,7 @@ void func_808F228C(EnKarebaba* this, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y += 0x1999;
-    EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 3.0f, 0, 12, 5, 1, -1, 10, NULL);
+    EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 }
 
 void func_808F238C(EnKarebaba* this) {
