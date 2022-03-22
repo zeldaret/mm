@@ -836,16 +836,16 @@ void func_80144A94(SramContext* sramCtx) {
     s32 i;
     s32 cutscene = gSaveContext.save.cutscene;
 
-    bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+    bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
-    if (func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
+    if (func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
         0) {
-        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
+        func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
                       D_801C67F0[gSaveContext.fileNum * 2 + 1]);
     }
     Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
     if (CHECK_NEWF(gSaveContext.save.playerData.newf)) {
-        func_80185968(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
+        func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
                       D_801C67F0[gSaveContext.fileNum * 2 + 1]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
@@ -891,30 +891,30 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
     s32 fileNum;
 
     if (gSaveContext.unk_3F3F) {
-        bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+        bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
         if (gSaveContext.fileNum == 0xFF) {
-            func_80185968(*sramCtx->saveBuf, D_801C67C8[0], D_801C67F0[0]);
+            func_80185968(sramCtx->saveBuf, D_801C67C8[0], D_801C67F0[0]);
         } else if (fileChooseCtx->unk_2446A[gSaveContext.fileNum] != 0) {
             phi_t1 = gSaveContext.fileNum + 2;
             phi_t1 *= 2;
 
-            if (func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
-                func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            if (func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
+                func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
             }
         } else {
             phi_t1 = gSaveContext.fileNum;
             phi_t1 *= 2;
 
-            if (func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
-                func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            if (func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
+                func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
             }
         }
 
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1]);
 
         if (CHECK_NEWF(gSaveContext.save.playerData.newf)) {
-            func_80185968(*sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
             Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1]);
         }
     }
@@ -1001,7 +1001,7 @@ void func_8014546C(SramContext* sramCtx) {
         gSaveContext.save.checksum = 0;
         gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, offsetof(SaveContext, fileNum));
 
-        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, offsetof(SaveContext, fileNum));
+        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, offsetof(SaveContext, fileNum));
     } else {
         for (i = 0; i < ARRAY_COUNT(gSaveContext.cycleSceneFlags); i++) {
             gSaveContext.save.permanentSceneFlags[i].chest = gSaveContext.cycleSceneFlags[i].chest;
@@ -1015,8 +1015,8 @@ void func_8014546C(SramContext* sramCtx) {
         gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
 
         if (gSaveContext.unk_3F3F) {
-            Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, sizeof(Save));
-            Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
+            Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, sizeof(Save));
+            Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
         }
     }
 }
@@ -1038,8 +1038,8 @@ void func_80145698(SramContext* sramCtx) {
     gSaveContext.save.checksum = 0;
     gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
     if (gSaveContext.unk_3F3F) {
-        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, sizeof(Save));
-        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
+        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, sizeof(Save));
+        Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
     }
 }
 
@@ -1073,13 +1073,13 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         sp64 = 0;
 
         for (sp76 = 0; sp76 < 5; sp76++, sp64 += 2) {
-            bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+            bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
             phi_s2 = false;
             sp6E = 0;
-            if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64])) {
+            if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64])) {
                 sp6E = 1;
-                if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                     phi_s2 = true;
                 }
             }
@@ -1087,11 +1087,11 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
             if (sp76 < 2) {
                 fileChooseCtx->unk_24468[sp76] = 0;
                 if (phi_s2) {
-                    bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                    bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
+                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                 } else {
-                    // Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
-                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                    // Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
+                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                     temp_s2 = gSaveContext.save.checksum;
                     gSaveContext.save.checksum = 0;
                     temp_v0_2 = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
@@ -1102,17 +1102,17 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                         if (CHECK_NEWF2(gSaveContext.save.playerData.newf)) {}
 
                         phi_s2 = false;
-                        if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                        if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                             phi_s2 = true;
                         }
 
-                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                         temp_s2 = gSaveContext.save.checksum;
                         gSaveContext.save.checksum = 0;
                         if (phi_s2 || CHECK_NEWF(gSaveContext.save.playerData.newf) ||
                             (temp_s2 != Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]))) {
-                            bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-                            Lib_MemCpy(&gSaveContext.save, *sramCtx->saveBuf, sizeof(Save));
+                            bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
+                            Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
                             sp6E = 999;
                         }
                     }
@@ -1154,23 +1154,23 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                 }
 
                 if (sp6E == 1) {
-                    Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
+                    Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
                     func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
                 } else if (sp6E == 0) { // TODO: == 0?
                     temp_s2 = gSaveContext.save.checksum;
-                    if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                    if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                         phi_s2_3 = 1;
                     } else {
-                        Lib_MemCpy(&gSaveContext.save, *sramCtx->saveBuf, sizeof(Save));
+                        Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
                         phi_s2_3 = gSaveContext.save.checksum;
                         gSaveContext.save.checksum = 0;
                         sp7A = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
                     }
 
                     if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (phi_s2_3 != sp7A) || (phi_s2_3 != temp_s2)) {
-                        func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
-                        Lib_MemCpy(&gSaveContext.save, *sramCtx->saveBuf, sizeof(Save));
-                        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
+                        func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
+                        Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
+                        Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
                         func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
                     }
                 }
@@ -1179,11 +1179,11 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
                 if (!CHECK_NEWF(fileChooseCtx->newf2[(s32)sp76])) { // TODO: Needed?
                     if (phi_s2) {
-                        bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf,
+                        bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
+                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf,
                                    D_801C6870[sp64]); // TODO: Needed?
                     } else {
-                        Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                         temp_s2 = gSaveContext.save.checksum;
 
                         gSaveContext.save.checksum = 0;
@@ -1196,17 +1196,17 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                                 phi_s2 = false;
                             }
 
-                            if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                            if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                                 phi_s2 = true;
                             }
 
-                            Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                             temp_s2 = gSaveContext.save.checksum;
                             gSaveContext.save.checksum = 0;
                             if (phi_s2 || CHECK_NEWF(gSaveContext.save.playerData.newf) ||
                                 (temp_s2 != Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]))) {
-                                bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-                                Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                                bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
+                                Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                                 sp6E = 999;
                             }
                         }
@@ -1253,10 +1253,10 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                         func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
                     } else if (!sp6E) { // TODO: == 0?
                         temp_s2 = gSaveContext.save.checksum;
-                        if (func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                        if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
                             phi_s2_3 = 1;
                         } else {
-                            Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                             phi_s2_3 = gSaveContext.save.checksum;
                             gSaveContext.save.checksum = 0;
                             // phi_s2_3 = gSaveContext.save.checksum;
@@ -1265,15 +1265,15 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
                         if (CHECK_NEWF(gSaveContext.save.playerData.newf) || (phi_s2_3 != sp7A) ||
                             (phi_s2_3 != temp_s2)) {
-                            func_80185968(*sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
-                            Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                            func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
+                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                             func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
                             func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
                         }
                     }
                 } else {
-                    bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
-                    Lib_MemCpy(&gSaveContext, *sramCtx->saveBuf, D_801C6870[sp64]);
+                    bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
+                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
                     func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
                     func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
                 }
@@ -1285,7 +1285,7 @@ void func_801457CC(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
                 } else {
-                    Lib_MemCpy(&gSaveContext.options, *sramCtx->saveBuf, sizeof(SaveOptions));
+                    Lib_MemCpy(&gSaveContext.options, sramCtx->saveBuf, sizeof(SaveOptions));
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
                         gSaveContext.options.language = 1;
@@ -1317,7 +1317,7 @@ void func_80146580(FileChooseContext* fileChooseCtx2, SramContext* sramCtx, s32 
             func_80147314(sramCtx, fileNum);
             fileChooseCtx->unk_2446A[fileNum] = 0;
         }
-        bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+        bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
 
@@ -1365,13 +1365,13 @@ void func_80146628(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
         }
 
         // clear buffer
-        bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+        bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        func_80185968(*sramCtx->saveBuf, D_801C67C8[fileChooseCtx->unk_2448E * 2],
+        func_80185968(sramCtx->saveBuf, D_801C67C8[fileChooseCtx->unk_2448E * 2],
                       D_801C67F0[fileChooseCtx->unk_2448E * 2]);
 
         if (1) {}
-        func_80185968(&(*sramCtx->saveBuf)[0x2000], D_801C67C8[fileChooseCtx->unk_2448E * 2 + 1],
+        func_80185968(&sramCtx->saveBuf[0x2000], D_801C67C8[fileChooseCtx->unk_2448E * 2 + 1],
                       D_801C67F0[fileChooseCtx->unk_2448E * 2 + 1]);
         if (1) {}
 
@@ -1440,8 +1440,8 @@ void Sram_InitSave(FileChooseContext* fileChooseCtx2, SramContext* sramCtx) {
 
         gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
 
-        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext.save, sizeof(Save));
-        Lib_MemCpy(&(*sramCtx->saveBuf)[0x2000], &gSaveContext.save, sizeof(Save));
+        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.save, sizeof(Save));
+        Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.playerData.newf); i++) {
             fileChooseCtx->newf[fileChooseCtx->unk_24480][i] = gSaveContext.save.playerData.newf[i];
@@ -1482,7 +1482,7 @@ void func_80146DF8(SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
         // TODO: macros for languages
         gSaveContext.options.language = 1;
-        Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
+        Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
 }
 
@@ -1494,7 +1494,7 @@ void func_80146E40(GameState* gameState, SramContext* sramCtx) {
 
 void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
     if (gSaveContext.unk_3F3F) {
-        sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, sizeof(*sramCtx->saveBuf));
+        sramCtx->saveBuf = THA_AllocEndAlign16(&gamestate->heap, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
 }
@@ -1505,7 +1505,7 @@ void Sram_Alloc(GameState* gamestate, SramContext* sramCtx) {
 void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
-    func_80185F64(*sramCtx->saveBuf, curPage, numPages);
+    func_80185F64(sramCtx->saveBuf, curPage, numPages);
 }
 
 void func_80146EE8(GlobalContext* globalCtx) {
@@ -1515,7 +1515,7 @@ void func_80146EE8(GlobalContext* globalCtx) {
     gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;
     func_80145698(sramCtx);
-    func_80185F64(*sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
+    func_80185F64(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
 }
 
 /**
@@ -1549,7 +1549,7 @@ void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
 
 void func_80147020(SramContext* sramCtx) {
     // async flash write
-    func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+    func_80185DDC(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
     sramCtx->unk_18 = osGetTime();
     sramCtx->status = 2;
@@ -1578,7 +1578,7 @@ void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages) {
 }
 
 void func_80147150(SramContext* sramCtx) {
-    func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+    func_80185DDC(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
     sramCtx->unk_18 = osGetTime();
     sramCtx->status = 7;
@@ -1588,10 +1588,10 @@ void func_80147198(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
         if (func_80185EC4() != 0) {     // Is task running
             if (func_80185F04() == 0) { // Wait for task done
-                func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+                func_80185DDC(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             } else {
-                func_80185DDC(*sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+                func_80185DDC(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             }
         }
@@ -1605,11 +1605,11 @@ void func_80147198(SramContext* sramCtx) {
         }
     } else if (((osGetTime() - sramCtx->unk_18) * 0x40) / 3000 / 10000 >= 200) {
         sramCtx->status = 0;
-        bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+        bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         gSaveContext.save.isOwlSave = false;
         gSaveContext.save.checksum = 0;
         // flash read to buffer then copy to save context
-        func_80185968(*sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+        func_80185968(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, offsetof(SaveContext, fileNum));
     }
 }
@@ -1629,7 +1629,7 @@ void func_80147314(SramContext* sramCtx, s32 fileNum) {
     gSaveContext.save.checksum = 0;
     gSaveContext.save.checksum = Sram_CalcChecksum(&gSaveContext, offsetof(SaveContext, fileNum));
 
-    Lib_MemCpy(*sramCtx->saveBuf, &gSaveContext, offsetof(SaveContext, fileNum));
+    Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, offsetof(SaveContext, fileNum));
     func_80146EBC(sramCtx, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]);
     func_80146EBC(sramCtx, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2]);
 
@@ -1647,12 +1647,12 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     s32 pad;
 
     // Clear save buffer
-    bzero(*sramCtx->saveBuf, sizeof(*sramCtx->saveBuf));
+    bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
     // Read save file
-    if (func_80185968(*sramCtx->saveBuf, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]) != 0) {
+    if (func_80185968(sramCtx->saveBuf, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]) != 0) {
         // If failed, read backup save file
-        func_80185968(*sramCtx->saveBuf, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2 + 1]);
+        func_80185968(sramCtx->saveBuf, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2 + 1]);
     }
 
     // Copy buffer to save context

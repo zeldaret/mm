@@ -22,9 +22,11 @@ typedef enum RespawnMode {
     /* 8 */ RESPAWN_MODE_MAX
 } RespawnMode;
 
+#define SAVE_BUFFER_SIZE 0x4000
+
 typedef struct SramContext {
     /* 0x00 */ u8* readBuff;
-    /* 0x04 */ u8 (*saveBuf)[0x4000];
+    /* 0x04 */ u8 *saveBuf;
     /* 0x08 */ char unk_08[4];
     /* 0x0C */ s16 status;
     /* 0x10 */ u32 curPage;
