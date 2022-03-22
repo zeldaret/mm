@@ -207,10 +207,10 @@ void func_80169ECC(GlobalContext* globalCtx) {
 void func_80169EFC(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    gSaveContext.respawn[0].tempSwitchFlags = globalCtx->actorCtx.flags.switches[2];
-    gSaveContext.respawn[0].unk_18 = globalCtx->actorCtx.flags.collectible[1];
-    gSaveContext.respawn[0].tempCollectFlags = globalCtx->actorCtx.flags.collectible[2];
-    globalCtx->nextEntranceIndex = gSaveContext.respawn[0].entranceIndex;
+    gSaveContext.respawn[RESTART_MODE_DOWN].tempSwitchFlags = globalCtx->actorCtx.flags.switches[2];
+    gSaveContext.respawn[RESTART_MODE_DOWN].unk_18 = globalCtx->actorCtx.flags.collectible[1];
+    gSaveContext.respawn[RESTART_MODE_DOWN].tempCollectFlags = globalCtx->actorCtx.flags.collectible[2];
+    globalCtx->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(globalCtx);
     globalCtx->sceneLoadFlag = 0x14;
@@ -222,7 +222,7 @@ void func_80169EFC(GameState* gameState) {
 void func_80169F78(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    globalCtx->nextEntranceIndex = gSaveContext.respawn[2].entranceIndex;
+    globalCtx->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_TOP].entranceIndex;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(globalCtx);
     globalCtx->sceneLoadFlag = 0x14;

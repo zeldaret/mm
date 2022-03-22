@@ -57,8 +57,8 @@ void Opening_Init(GameState* thisx) {
     this->gameState.destroy = Opening_Destroy;
 
     gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[4].entranceIndex = 0xFF;
-    gSaveContext.respawn[5].entranceIndex = 0xFF;
-    gSaveContext.respawn[6].entranceIndex = 0xFF;
-    gSaveContext.respawn[7].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_GORON].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_ZORA].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_DEKU].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entranceIndex = 0xFF;
 }

@@ -9,6 +9,19 @@ struct GameState;
 struct GlobalContext;
 struct FileChooseContext;
 
+// TODO: properly name DOWN, RETURN and TOP
+typedef enum {
+    /* 0 */ RESTART_MODE_DOWN,                          // "RESTART_MODE_DOWN"
+    /* 1 */ RESTART_MODE_RETURN,                        // "RESTART_MODE_RETURN"
+    /* 2 */ RESTART_MODE_TOP,                           // "RESTART_MODE_TOP"
+    /* 3 */ RESPAWN_MODE_UNK_3,                         // Maybe related to grottos
+    /* 4 */ RESPAWN_MODE_GORON,                         // "RESTART_MODE_GORON"
+    /* 5 */ RESPAWN_MODE_ZORA,                          // "RESTART_MODE_ZORA"
+    /* 6 */ RESPAWN_MODE_DEKU,                          // "RESTART_MODE_NUTS"
+    /* 7 */ RESPAWN_MODE_HUMAN,                         // "RESTART_MODE_CHILD"
+    /* 8 */ RESPAWN_MODE_MAX
+} RespawnMode;
+
 typedef struct {
     /* 0x00 */ u8* readBuff;
     /* 0x04 */ u8 (*saveBuf)[0x4000];
@@ -182,7 +195,7 @@ typedef struct {
     /* 0x3CA8 */ s32 gameMode;                          // "mode"
     /* 0x3CAC */ s32 sceneSetupIndex;                   // "counter"
     /* 0x3CB0 */ s32 respawnFlag;                       // "restart_flag"
-    /* 0x3CB4 */ RespawnData respawn[8];                // "restart_data"
+    /* 0x3CB4 */ RespawnData respawn[RESPAWN_MODE_MAX]; // "restart_data"
     /* 0x3DB4 */ f32 entranceSpeed;                     // "player_wipe_speedF"
     /* 0x3DB8 */ u16 entranceSound;                     // "player_wipe_door_SE"
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
@@ -246,18 +259,6 @@ typedef struct {
     /* 0x48C8 */ u16 unk_48C8;                          // "scene_id_mix"
     /* 0x48CA */ u8 maskMaskBit[27];                     // "mask_mask_bit", masks given away on the Moon
 } SaveContext; // size = 0x48C8
-
-typedef enum {
-    /* 0x00 */ RESPAWN_MODE_VOID_OUT,
-    /* 0x01 */ RESPAWN_MODE_GROTTO,       // Exiting a grotto
-    /* 0x02 */ RESPAWN_MODE_FARORES_WIND, // Unused in MM
-    /* 0x03 */ RESPAWN_MODE_GORON,
-    /* 0x04 */ RESPAWN_MODE_ZORA,
-    /* 0x05 */ RESPAWN_MODE_DEKU,
-    /* 0x06 */ RESPAWN_MODE_CHILD_LINK,
-    /* 0x07 */ RESPAWN_MODE_UNK_7,
-    /* 0x07 */ RESPAWN_MODE_UNK_8
-} RespawnMode;
 
 typedef enum {
     /* 0x00 */ BTN_ENABLED,

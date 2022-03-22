@@ -44,15 +44,15 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
         gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     }
 
-    gSaveContext.respawn[0].entranceIndex = 0xFFFF;
+    gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex = 0xFFFF;
     gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;
-    gSaveContext.respawn[4].entranceIndex = 0xFF;
-    gSaveContext.respawn[5].entranceIndex = 0xFF;
-    gSaveContext.respawn[6].entranceIndex = 0xFF;
-    gSaveContext.respawn[7].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_GORON].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_ZORA].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_DEKU].entranceIndex = 0xFF;
+    gSaveContext.respawn[RESPAWN_MODE_HUMAN].entranceIndex = 0xFF;
     D_801BDBB0 = 0;
 
     do {

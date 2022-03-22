@@ -147,13 +147,13 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
                 // unused in vanilla, the highest params bits can directly index an address
                 entranceIndex = GET_DOORANA_DIRECT_ENTRANCE(this);
 
-                Play_SetupRespawnPoint(&globalCtx->state, 3, 0x4FF);
+                Play_SetupRespawnPoint(&globalCtx->state, RESPAWN_MODE_UNK_3, 0x4FF);
 
-                gSaveContext.respawn[3].pos.y = this->actor.world.pos.y;
-                gSaveContext.respawn[3].yaw = this->actor.home.rot.y;
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
 
                 // save the params lower byte for En_Torch to decide what item to use in the grotto chest
-                gSaveContext.respawn[3].data = GET_DOORANA_ITEMFLAGS(this);
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].data = GET_DOORANA_ITEMFLAGS(this);
 
                 // most grottos in the game use their zrotation as their entrance index, not params
                 if (DOORANA_TYPE_ROTATION_ENTRANCE(entranceIndex)) {
