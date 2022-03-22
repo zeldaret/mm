@@ -11,7 +11,7 @@
 
 #define THIS ((ObjYasi*)thisx)
 
-#define CAN_DROP_NUT(thisx)(thisx->params < 0)
+#define CAN_DROP_NUT(thisx) (thisx->params < 0)
 
 void ObjYasi_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjYasi_Destroy(Actor* thisx, GlobalContext* globalCtx);
