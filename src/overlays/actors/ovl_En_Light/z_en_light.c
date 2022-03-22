@@ -73,7 +73,7 @@ void EnLight_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (ENLIGHT_GET_1000(&this->actor) && Flags_GetSwitch(globalCtx, ENLIGHT_SWITCHFLAG(&this->actor))) {
             Actor_SetScale(&this->actor, 0.0f);
         }
-    } else if ENLIGHT_GET_2000 (&this->actor) {
+    } else if (ENLIGHT_GET_2000(&this->actor)) {
         this->actor.draw = NULL;
     }
 }
@@ -123,7 +123,7 @@ void func_80865F38(Actor* thisx, GlobalContext* globalCtx) {
     f32 sp30 = this->actor.scale.x / (sp38->unk_07 * 0.0001f);
     s32 sp2C = false;
 
-    if (ENLIGHT_GET_1000 (&this->actor)) {
+    if (ENLIGHT_GET_1000(&this->actor)) {
         if (Flags_GetSwitch(globalCtx, ENLIGHT_SWITCHFLAG(&this->actor))) {
             Math_StepToF(&sp30, 1.0f, 0.05f);
             sp2C = true;
