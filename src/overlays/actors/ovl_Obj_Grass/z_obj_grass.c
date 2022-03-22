@@ -86,8 +86,8 @@ s32 func_809A9110(GlobalContext* globalCtx, Vec3f* arg1) {
 void func_809A91FC(MtxF* matrix) {
     s32 i;
     MtxF* temp = Matrix_GetCurrentState();
-    f32* tmp = &temp->mf[0][0];
-    f32* tmp2 = &matrix->mf[0][0];
+    f32* tmp = &temp->xx;
+    f32* tmp2 = &matrix->xx;
 
     for (i = 0; i < 16; i++) {
         *tmp++ += *tmp2++;
@@ -185,22 +185,24 @@ void func_809A9790(ObjGrass* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_EQUIVALENT
 void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 i, j, x, y;
+    s32 i;
+    s32 j;
+    s32 x;
+    s32 y;
     f32 temp_f0;
-    s32 count;
     ObjGrassStruct1* ptr;
     ObjGrassStruct1_1* ptr2;
     ObjGrassStruct2* ptr3;
+    s16 yaw;
 
     for (i = 0; i < ARRAY_COUNT(D_809AADC0); i++) {
         D_809AADC0[i] = NULL;
         D_809AAE10[i] = 422500.0f;
     }
 
-    for (i = 0; i < ARRAY_COUNT(D_809AADC0); i++) {
+    for (i = 0; i < ARRAY_COUNT(D_809AADA0); i++) {
         D_809AADA0[i] = NULL;
         D_809AADB0[i] = 422500.0f;
     }
@@ -216,17 +218,15 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
     for (i = 0; i < this->unk_2944; i++) {
         ptr = &this->unk_144[i];
         temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_00, &player->actor.world.pos);
-        count = 0;
 
-        for (j = 0; count < ARRAY_COUNT(D_809AADB0); j++) {
-            if (temp_f0 > D_809AADB0[j]) {
+        for (j = 0; j < ARRAY_COUNT(D_809AADB0); j++) {
+            if (temp_f0 < D_809AADB0[j]) {
                 break;
             }
-            count++;
         }
 
-        if ((count + 1) < ARRAY_COUNT(D_809AADB0)) {
-            for (x = count + 1; x != 0; x--) {
+        if (j < ARRAY_COUNT(D_809AADB0)) {
+            for (x = 2; x >= j; x--) {
                 D_809AADB0[x + 1] = D_809AADB0[x];
                 D_809AADA0[x + 1] = D_809AADA0[x];
             }
@@ -238,40 +238,36 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
 
     this->unk_3294 = NULL;
 
-    for (i = 0; i < this->unk_2944; i++) {
+    for (i = 0; i < ARRAY_COUNT(D_809AADA0); i++) {
         ptr = D_809AADA0[i];
 
-        if (D_809AADA0[i] != NULL) {
-            for (j = 0; j < ptr->unk_FC; j++, ptr2++) {
-                if (ptr->unk_0C[i].unk_0F & 4) {
-                    continue;
-                }
+        if (ptr != NULL) {
+            for (j = 0; j < ptr->unk_FC; j++) {
+                if (!(ptr->unk_0C[j].unk_0F & 4)) {
+                    temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_0C[j].unk_00, &player->actor.world.pos);
 
-                temp_f0 = Math3D_Vec3fDistSq(&ptr->unk_0C[i].unk_00, &player->actor.world.pos);
-
-                count = 0;
-                for (x = 0; x < ARRAY_COUNT(D_809AAE10); x++) {
-                    if (temp_f0 > D_809AAE10[x]) {
-                        break;
-                    }
-                    count++;
-                }
-
-                if ((count + 1) < ARRAY_COUNT(D_809AAE10)) {
-                    for (y = count + 1; y > 0; y--) {
-                        D_809AAE10[y + 1] = D_809AAE10[y];
-                        D_809AADC0[y + 1] = D_809AADC0[y];
+                    for (x = 0; x < ARRAY_COUNT(D_809AAE10); x++) {
+                        if (temp_f0 < D_809AAE10[x]) {
+                            break;
+                        }
                     }
 
-                    D_809AAE10[x] = temp_f0;
-                    D_809AADC0[x] = &ptr->unk_0C[j];
+                    if (x < ARRAY_COUNT(D_809AAE10)) {
+                        for (y = 18; y >= x; y--) {
+                            D_809AAE10[y + 1] = D_809AAE10[y];
+                            D_809AADC0[y + 1] = D_809AADC0[y];
+                        }
 
-                    if (temp_f0 < 2500.0f) {
-                        s16 yaw = player->actor.shape.rot.y -
-                                  Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[i].unk_00);
+                        D_809AAE10[x] = temp_f0;
+                        D_809AADC0[x] = &ptr->unk_0C[j];
 
-                        if (ABS_ALT(yaw) < 0x2000) {
-                            this->unk_3294 = &ptr->unk_0C[i].unk_00;
+                        if (temp_f0 < 2500.0f) {
+                            yaw = player->actor.shape.rot.y -
+                                  Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[j].unk_00);
+
+                            if (ABS_ALT(yaw) < 0x2000) {
+                                this->unk_3294 = &ptr->unk_0C[j].unk_00;
+                            }
                         }
                     }
                 }
@@ -280,10 +276,11 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2948); i++) {
-        this->unk_2948[i].collider.base.acFlags &= (u16)~AC_HIT;
-        this->unk_2948[i].collider.base.ocFlags1 &= (u16)~OC1_HIT;
-
         ptr3 = &this->unk_2948[i];
+
+        ptr3->collider.base.acFlags &= (u16)~AC_HIT;
+        ptr3->collider.base.ocFlags1 &= (u16)~OC1_HIT;
+
         ptr2 = D_809AADC0[i];
         if (ptr2 != NULL) {
             ptr3->collider.dim.pos.x = ptr2->unk_00.x;
@@ -298,10 +295,6 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-void func_809A983C(ObjGrass* this, GlobalContext* globalCtx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Grass/func_809A983C.s")
-#endif
 
 void func_809A9DB8(ObjGrass* this) {
     s32 i;
