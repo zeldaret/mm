@@ -1041,14 +1041,14 @@
         <Texture Name="gameplay_keep_Tex_0367B0" OutName="tex_0367B0" Format="i8" Width="64" Height="64" Offset="0x367B0" />
         <DList Name="gameplay_keep_DL_0377B0" Offset="0x377B0" />
         <DList Name="gameplay_keep_DL_037850" Offset="0x37850" />
-        <Texture Name="gExplosionSplashTex1" OutName="tex_0378F0" Format="i8" Width="32" Height="40" Offset="0x378F0" />
-        <Texture Name="gExplosionSplashTex2" OutName="tex_037DF0" Format="i8" Width="32" Height="40" Offset="0x37DF0" />
-        <Texture Name="gExplosionSplashTex3" OutName="tex_0382F0" Format="i8" Width="32" Height="40" Offset="0x382F0" />
-        <Texture Name="gExplosionSplashTex4" OutName="tex_0387F0" Format="i8" Width="32" Height="40" Offset="0x387F0" />
-        <Texture Name="gExplosionSplashTex5" OutName="tex_038CF0" Format="i8" Width="32" Height="40" Offset="0x38CF0" />
-        <Texture Name="gExplosionSplashTex6" OutName="tex_0391F0" Format="i8" Width="32" Height="40" Offset="0x391F0" />
-        <Texture Name="gExplosionSplashTex7" OutName="tex_0396F0" Format="i8" Width="32" Height="40" Offset="0x396F0" />
-        <Texture Name="gExplosionSplashTex8" OutName="tex_039BF0" Format="i8" Width="32" Height="40" Offset="0x39BF0" />
+        <Texture Name="gExplosionSplash1Tex" OutName="explosion_splash_1" Format="i8" Width="32" Height="40" Offset="0x378F0" />
+        <Texture Name="gExplosionSplash2Tex" OutName="explosion_splash_2" Format="i8" Width="32" Height="40" Offset="0x37DF0" />
+        <Texture Name="gExplosionSplash3Tex" OutName="explosion_splash_3" Format="i8" Width="32" Height="40" Offset="0x382F0" />
+        <Texture Name="gExplosionSplash4Tex" OutName="explosion_splash_4" Format="i8" Width="32" Height="40" Offset="0x387F0" />
+        <Texture Name="gExplosionSplash5Tex" OutName="explosion_splash_5" Format="i8" Width="32" Height="40" Offset="0x38CF0" />
+        <Texture Name="gExplosionSplash6Tex" OutName="explosion_splash_6" Format="i8" Width="32" Height="40" Offset="0x391F0" />
+        <Texture Name="gExplosionSplash7Tex" OutName="explosion_splash_7" Format="i8" Width="32" Height="40" Offset="0x396F0" />
+        <Texture Name="gExplosionSplash8Tex" OutName="explosion_splash_8" Format="i8" Width="32" Height="40" Offset="0x39BF0" />
         <DList Name="gExplosionSplashDL" Offset="0x3A0F0" />
         <Texture Name="gameplay_keep_Tex_03A190" OutName="tex_03A190" Format="ia8" Width="32" Height="32" Offset="0x3A190" />
         <Texture Name="gameplay_keep_Tex_03A590" OutName="tex_03A590" Format="ia8" Width="32" Height="32" Offset="0x3A590" />

@@ -83,14 +83,14 @@ static f32 sLightRayMaxScale[] = {
 };
 
 static TexturePtr sSplashTex[] = {
-    gExplosionSplashTex1,
-    gExplosionSplashTex2,
-    gExplosionSplashTex3,
-    gExplosionSplashTex4,
-    gExplosionSplashTex5,
-    gExplosionSplashTex6,
-    gExplosionSplashTex7,
-    gExplosionSplashTex8,
+    gExplosionSplash1Tex,
+    gExplosionSplash2Tex,
+    gExplosionSplash3Tex,
+    gExplosionSplash4Tex,
+    gExplosionSplash5Tex,
+    gExplosionSplash6Tex,
+    gExplosionSplash7Tex,
+    gExplosionSplash8Tex,
     NULL,
     NULL,
     NULL,
