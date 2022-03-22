@@ -213,7 +213,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     s32 itemId1;
     s16 itemId2 = 0;
 
-    for (; slotId < ARRAY_COUNT(gSaveContext.save.inventory.items); slotId++) {
+    for (; slotId < 24; slotId++) {
         if ((gSaveContext.save.inventory.items[slotId] >= ITEM_BOTTLE) &&
             (gSaveContext.save.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
