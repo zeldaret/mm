@@ -42,8 +42,7 @@ typedef struct Boss03 {
     /* 0x01E6 */ Vec3s morphTable[GYORG_LIMB_MAX];
     /* 0x0240 */ s16 unk_240; // generic timer? used by Gyorg and seaweed
     /* 0x0242 */ u8 unk_242;
-    /* 0x0243 */ UNK_TYPE1 unk_243[0x01];
-    /* 0x0244 */ UNK_TYPE1 unk_244[0x08];
+    /* 0x0243 */ UNK_TYPE1 unk_243[0x09];
     /* 0x024C */ s16 workTimer[GYORG_WORK_TIMER_MAX];
     /* 0x0252 */ s8 numSpawnedSmallFish; // number of Tanron3 fish that are currently alive, -1 indexed
     /* 0x0253 */ u8 hasSpwanedSmallFishes; // Tanron

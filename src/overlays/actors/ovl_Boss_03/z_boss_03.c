@@ -22,8 +22,8 @@
  * - There are 3 cutscenes:
  *   - IntroCutscene: The cs which is played when Player falls into the main room. It also shows Gyorg's titlecard
  *   - SpawnSmallFishesCutscene: The short cs which is played when Gyorg is spawning the small fishes (EnTanron3). This
- * is triggered when Gyorg reaches half of his life.
- *   - DeathCutscene: Played when Gyorg dies. Showing him splashing and becoming smaller each time until he disappears
+ * is triggered when Gyorg reaches half of its life.
+ *   - DeathCutscene: Played when Gyorg dies. Showing it splashing and becoming smaller each time until it disappears
  * - This actor mainly handles the 3 cutscenes it has manually (instead of relying on existing systems for it)
  *
  * Main behaviour:
@@ -35,11 +35,11 @@
  * - Most of the actions of those two branches are constantly checking for the WORK_TIMER_CURRENT_ACTION timer. If it
  * runs out, then the behaviour resets back to func_809E34B8
  * - Either branch behaviour can be interrupted at any time by a hit from Player
- *   - Being hit once makes Gyorg Stunned.
- *   - When Gyorg is Stunned, he is vulnerable to be Damaged by Player
- *   - When Gyorg's health drops below half, he spawns the small fishes
+ *   - Being hit once makes Gyorg Stunned
+ *   - When Gyorg is Stunned, it is vulnerable to be Damaged by Player
+ *   - When Gyorg's health drops below half, it spawns the small fishes
  *
- * The collision logic is handled manually.
+ * The collision logic is handled manually
  */
 
 #include "z_boss_03.h"
@@ -395,7 +395,7 @@ Color_RGBA8 sGyorgDustPrimColor = { 60, 50, 20, 255 };
 Color_RGBA8 sGyorgDustEnvColor = { 40, 30, 30, 255 };
 
 /**
- * Used when chasing Player and Gyorg is near the underwater floor
+ * Used when chasing Player and Gyorg is near bottom
  */
 void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
     if (this->insideJawPos.y < 80.0f) {
@@ -447,7 +447,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->actor.scale.y = 0.02f;
         this->actor.scale.z = 0.015f;
 
-        // This bit is weird, why is it setting the first 6 elements of the joint table?
+        // Manually set the joint table of seaweed
         for (i = 0; i < 6; i++) {
             this->jointTable[i].x = Math_SinS(this->unk_240 * 0x100 + i * 15000) * 3000.0f;
             this->jointTable[i].y = Math_SinS(this->unk_240 * 0x180 + i * 20000) * 2000.0f;
@@ -485,9 +485,9 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     this->actor.targetMode = 5;
-
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
+
     Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->colliderElements1);
     Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->colliderElements2);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSkel, &gGyorgCrawlingAnim, this->jointTable,
@@ -652,8 +652,8 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is standing on ground && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out), then stop
-    // chasing
+    // If either (Player is standing on ground && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out),
+    // then stop chasing
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[0].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
@@ -798,18 +798,18 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
 }
 
 void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
-    s16 temp;
-    Vec3f sp20;
+    s16 pitchAngle;
+    Vec3f out;
 
     this->actionFunc = Boss03_ChewPlayer;
 
-    temp = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
-    Matrix_RotateY(temp, MTXMODE_NEW);
+    pitchAngle = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
+    Matrix_RotateY(pitchAngle, MTXMODE_NEW);
 
-    sp20.x = 0.0f;
-    sp20.y = 200.0f;
-    sp20.z = 700.0f;
-    Matrix_MultiplyVector3fByState(&sp20, &this->unk_268);
+    out.x = 0.0f;
+    out.y = 200.0f;
+    out.z = 700.0f;
+    Matrix_MultiplyVector3fByState(&out, &this->unk_268);
 
     this->unk_276 = 0x800;
     this->unk_242 = 0;
@@ -1360,9 +1360,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         Actor_MoveWithoutGravityReverse(&this->actor);
 
         phi_f2 = this->actor.speedXZ * 0.02f;
-        if (phi_f2 > 0.12f) {
-            phi_f2 = 0.12f;
-        }
+        phi_f2 = CLAMP_MAX(phi_f2, 0.12f);
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
