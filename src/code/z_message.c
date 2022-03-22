@@ -382,13 +382,14 @@ void func_8014995C(GlobalContext* globalCtx, TexturePtr arg1, Gfx** gfxp) {
 
     if ((msgCtx->unk11F0A != 5) && (msgCtx->unk11F0A != 0xD) && (globalCtx->pauseCtx.unk_1F0 == 0)) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, msgCtx->unk1201E);
-        gSPTextureRectangle(gfx++, (temp_t0 + 1) * 4, (temp_t1 + 1) * 4, ((temp_t0 + D_801F6B00 + 1) * 4),
-                            ((temp_t1 + D_801F6B00 + 1) * 4), G_TX_RENDERTILE, 0, 0, D_801F6B04, D_801F6B04);
+        gSPTextureRectangle(gfx++, (temp_t0 + 1) << 2, (temp_t1 + 1) << 2, ((temp_t0 + D_801F6B00 + 1)) << 2,
+                            ((temp_t1 + D_801F6B00 + 1)) << 2, G_TX_RENDERTILE, 0, 0, D_801F6B04, D_801F6B04);
         gDPPipeSync(gfx++);
     }
     gDPSetPrimColor(gfx++, 0, 0, msgCtx->unk12018, msgCtx->unk1201A, msgCtx->unk1201C, msgCtx->unk1201E);
-    gSPTextureRectangle(gfx++, (temp_t0 + 1) * 4, (temp_t1 + 1) * 4, ((temp_t0 + D_801F6B00 + 1) * 4),
-                        ((temp_t1 + D_801F6B00 + 1) * 4), G_TX_RENDERTILE, 0, 0, D_801F6B04, D_801F6B04);
+    gSPTextureRectangle(gfx++, (temp_t0) << 2, (temp_t1) << 2, ((temp_t0 + D_801F6B00)) << 2,
+                        ((temp_t1 + D_801F6B00)) << 2, G_TX_RENDERTILE, 0, 0, D_801F6B04, D_801F6B04);
+    *gfxp = gfx++;
 }
 
 extern s16 D_801CFD98;
