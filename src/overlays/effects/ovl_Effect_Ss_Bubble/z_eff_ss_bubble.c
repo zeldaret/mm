@@ -22,7 +22,7 @@ const EffectSsInit Effect_Ss_Bubble_InitVars = {
     EffectSsBubble_Init,
 };
 
-static f32 sVecAdjAmplitudes[] = { 291.0f, 582.0f, 1600.0f };
+static f32 sVecAdjMaximums[] = { 291.0f, 582.0f, 1600.0f };
 
 u32 EffectSsBubble_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsBubbleInitParams* initParams = (EffectSsBubbleInitParams*)initParamsx;
@@ -87,15 +87,15 @@ void EffectSsBubble_Update(GlobalContext* globalCtx2, u32 index, EffectSs* this)
         CollisionPoly* colPoly;
         u32 speed;
         s16 direction;
-        f32 rVecAdjAmplitude;
+        f32 rVecAdjMax;
 
         BgCheck_EntityRaycastFloor2_1(globalCtx, &globalCtx->colCtx, &colPoly, &this->pos);
         speed = SurfaceType_GetConveyorSpeed(&globalCtx->colCtx, colPoly, BGCHECK_SCENE);
         if ((speed != 0) && !SurfaceType_GetConveyorType(&globalCtx->colCtx, colPoly, BGCHECK_SCENE)) {
             direction = SurfaceType_GetConveyorDirection(&globalCtx->colCtx, colPoly, BGCHECK_SCENE) << 0xA;
-            rVecAdjAmplitude = sVecAdjAmplitudes[speed - 1];
-            this->rVecAdjX = Math_SinS(direction) * rVecAdjAmplitude;
-            this->rVecAdjZ = Math_CosS(direction) * rVecAdjAmplitude;
+            rVecAdjMax = sVecAdjMaximums[speed - 1];
+            this->rVecAdjX = Math_SinS(direction) * rVecAdjMax;
+            this->rVecAdjZ = Math_CosS(direction) * rVecAdjMax;
         }
     }
     this->vec.x += this->rVecAdjX / 100.0f;
