@@ -3704,7 +3704,7 @@ void Audio_SetCutsceneFlag(u8 flag);
 // void func_801A3FB4(void);
 // void func_801A3FFC(UNK_TYPE1 param_1);
 void audio_setBGM(u32 bgmID);
-void func_801A4058(UNK_TYPE arg1);
+void func_801A4058(UNK_TYPE arg0);
 // void func_801A41C8(void);
 // void func_801A41F8(void);
 // void func_801A429C(void);

@@ -156,7 +156,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
     s32 playerSpawnIndex;
     s32 new15E;
     s32 entranceIndex;
-    u32 playerSpawnIndexPerForm[5];
+    u32 playerSpawnIndexPerForm[PLAYER_FORM_MAX];
     u8 playerForm;
     s16 playerParams;
 
