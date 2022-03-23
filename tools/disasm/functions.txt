@@ -9925,7 +9925,7 @@
     0x80A227C0:("func_80A227C0",),
     0x80A22880:("ObjSkateblock_Update",),
     0x80A228D8:("ObjSkateblock_Draw",),
-    0x80A22D40:("func_80A22D40",),
+    0x80A22D40:("EffectEnIceBlock_CheckIceBlockObject",),
     0x80A22DB8:("EffectEnIceBlock_Init",),
     0x80A22E94:("EffectEnIceBlock_Draw",),
     0x80A22FE4:("EffectEnIceBlock_Update",),
