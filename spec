@@ -1882,8 +1882,7 @@ beginseg
     name "ovl_Effect_Ss_G_Ripple"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_G_Ripple/z_eff_ss_g_ripple.o"
-    include "build/data/ovl_Effect_Ss_G_Ripple/ovl_Effect_Ss_G_Ripple.data.o"
-    include "build/data/ovl_Effect_Ss_G_Ripple/ovl_Effect_Ss_G_Ripple.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_G_Ripple/ovl_Effect_Ss_G_Ripple_reloc.o"
 endseg
 
 beginseg

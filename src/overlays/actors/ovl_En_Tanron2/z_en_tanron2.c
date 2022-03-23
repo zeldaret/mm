@@ -674,7 +674,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0377B0);
+            gSPDisplayList(POLY_XLU_DISP++, gEffWaterRippleDL);
         }
         tanron2 = tanron2->next;
     }
