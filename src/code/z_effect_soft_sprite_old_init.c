@@ -904,7 +904,7 @@ void EffectSsEnFire_SpawnVec3s(GlobalContext* globalCtx, Actor* actor, Vec3s* po
     initParams.actor = actor;
     initParams.scale = scale;
     initParams.unk_12 = arg4;
-    initParams.flags = flags | 0x8000;
+    initParams.flags = flags | ENFIRE_BODYPART_POS_VEC3S;
     initParams.bodyPart = bodyPart;
 
     if (actor != NULL) {

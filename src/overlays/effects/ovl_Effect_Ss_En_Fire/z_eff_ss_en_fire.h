@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define ENFIRE_BODYPART_POS_VEC3S (1 << 15)
+
 typedef struct {
     /* 0x00 */ Actor* actor;
     /* 0x04 */ Vec3f pos;
