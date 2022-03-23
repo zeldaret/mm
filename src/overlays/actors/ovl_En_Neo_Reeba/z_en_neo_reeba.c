@@ -117,7 +117,7 @@ void EnNeoReeba_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNeoReeba* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_rb_Skel_001EE8, &object_rb_Anim_0001E4, this->jointTable,
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable,
                    this->morphTable, 18);
 
     if (!EN_NEO_REEBA_IS_LARGE(&this->actor)) {
