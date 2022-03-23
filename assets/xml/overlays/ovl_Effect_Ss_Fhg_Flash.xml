@@ -1,0 +1,5 @@
+<Root>
+    <File Name="ovl_Effect_Ss_Fhg_Flash" BaseAddress="0x8097C990" RangeStart="0x550" RangeEnd="0xA08">
+        <DList Name="gFghFlashDL" Offset="0x590"/>
+    </File>
+</Root>
