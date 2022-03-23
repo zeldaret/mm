@@ -2008,8 +2008,7 @@ beginseg
     name "ovl_Effect_Ss_Fire_Tail"
     compress
     include "build/src/overlays/effects/ovl_Effect_Ss_Fire_Tail/z_eff_ss_fire_tail.o"
-    include "build/data/ovl_Effect_Ss_Fire_Tail/ovl_Effect_Ss_Fire_Tail.data.o"
-    include "build/data/ovl_Effect_Ss_Fire_Tail/ovl_Effect_Ss_Fire_Tail.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_Ss_Fire_Tail/ovl_Effect_Ss_Fire_Tail_reloc.o"
 endseg
 
 beginseg

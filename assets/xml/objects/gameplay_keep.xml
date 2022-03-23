@@ -1336,8 +1336,8 @@
         <DList Name="gameplay_keep_DL_07D260" Offset="0x7D260" />
         <DList Name="gameplay_keep_DL_07D348" Offset="0x7D348" />
         <Texture Name="gameplay_keep_Tex_07D350" OutName="tex_07D350" Format="i8" Width="16" Height="32" Offset="0x7D350" />
-        <DList Name="gGameplayKeepDrawFlameDL" Offset="0x7D590" />
-        <DList Name="gameplay_keep_DL_07D650" Offset="0x7D650" />
+        <DList Name="gEffFire1DL" Offset="0x7D590" />
+        <DList Name="gEffFire2DL" Offset="0x7D650" />
         <Texture Name="gGameplayKeepFlameRippleTex" OutName="gameplay_keep_flame_ripple" Format="i4" Width="32" Height="64" Offset="0x7D710" />
         <Texture Name="gameplay_keep_Tex_07DB10" OutName="tex_07DB10" Format="i4" Width="32" Height="64" Offset="0x7DB10" />
         <Texture Name="gGameplayKeepFlameOutlineTex" OutName="gameplay_keep_flame_outline" Format="i8" Width="32" Height="64" Offset="0x7DF10" />

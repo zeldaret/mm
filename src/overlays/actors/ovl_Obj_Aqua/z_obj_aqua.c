@@ -291,6 +291,6 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
     Matrix_RotateY(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

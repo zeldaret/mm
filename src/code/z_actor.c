@@ -4614,7 +4614,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+                    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
                 }
                 break;
 

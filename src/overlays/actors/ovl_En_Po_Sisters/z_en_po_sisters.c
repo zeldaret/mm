@@ -1176,7 +1176,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(phi_f20, phi_f20, phi_f20, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+        gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
