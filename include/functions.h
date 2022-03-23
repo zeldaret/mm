@@ -586,7 +586,7 @@ void EffectSsSolderSrchBall_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* v
 void EffectSsKakera_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* arg3, s16 gravity, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s16 scale, s16 arg10, s16 arg11, s32 life, s16 colorIdx, s16 objId, Gfx* dList);
 // void EffectSsIcePiece_Spawn(UNK_TYPE4 uParm1, Vec3f* pzParm2, UNK_TYPE4 uParm3, Vec3f* pzParm4, Vec3f* param_5, UNK_TYPE4 param_6);
 // void EffectSsIcePiece_SpawnBurst(void);
-// void EffectSsEnIce_SpawnFlyingVec3f(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, Color_RGBA8* pzParm4, Color_RGBA8* param_5, UNK_TYPE4 param_6);
+// void EffectSsEnIce_SpawnFlying(UNK_TYPE4 uParm1, Actor* pzParm2, Vec3f* pzParm3, Color_RGBA8* pzParm4, Color_RGBA8* param_5, UNK_TYPE4 param_6);
 // void func_800B2B44(void);
 // void func_800B2B7C(void);
 void EffectSsEnIce_Spawn(GlobalContext* globalCtx, Vec3f* pos, f32 scale, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor, Color_RGBA8* envColor, s32 life);
