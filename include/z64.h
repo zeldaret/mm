@@ -36,8 +36,9 @@
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
-#include "z64scene.h"
 #include "z64save.h"
+#include "z64scene.h"
+#include "z64skin.h"
 #include "z64transition.h"
 #include "regs.h"
 
