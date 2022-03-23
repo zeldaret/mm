@@ -19,9 +19,9 @@ struct GlobalContext;
 
 /* G Effect Regs */
 
-#define rgTexIdx regs[0]
+#define rgTexIndex regs[0]
 #define rgScale regs[1]
-#define rgTexIdxStep regs[2]
+#define rgTexIndexStep regs[2]
 #define rgPrimColorR regs[3]
 #define rgPrimColorG regs[4]
 #define rgPrimColorB regs[5]
