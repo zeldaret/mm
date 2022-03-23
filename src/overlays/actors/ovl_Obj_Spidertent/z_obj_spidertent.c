@@ -224,7 +224,7 @@ static ColliderTrisInit sTrisInit2 = {
 };
 
 typedef struct {
-    /* 0x00 */ UNK_PTR unk_00;
+    /* 0x00 */ Gfx* unk_00;
     /* 0x04 */ CollisionHeader* unk_04;
     /* 0x08 */ ColliderTrisInit* unk_08;
     /* 0x0C */ f32 unk_0C;
@@ -238,7 +238,7 @@ typedef struct {
 
 ObjSpidertentStruct D_80B31350[] = {
     {
-        &object_spidertent_DL_000070,
+        object_spidertent_DL_000070,
         &object_spidertent_Colheader_0011AC,
         &sTrisInit1,
         0.9f,
@@ -250,7 +250,7 @@ ObjSpidertentStruct D_80B31350[] = {
         200.0f,
     },
     {
-        &object_spidertent_DL_001250,
+        object_spidertent_DL_001250,
         &object_spidertent_Colheader_00238C,
         &sTrisInit2,
         0.9f,
