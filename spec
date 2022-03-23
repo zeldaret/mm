@@ -2270,8 +2270,7 @@ beginseg
     name "ovl_Obj_Pzlblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Pzlblock/z_obj_pzlblock.o"
-    include "build/data/ovl_Obj_Pzlblock/ovl_Obj_Pzlblock.data.o"
-    include "build/data/ovl_Obj_Pzlblock/ovl_Obj_Pzlblock.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Pzlblock/ovl_Obj_Pzlblock_reloc.o"
 endseg
 
 beginseg

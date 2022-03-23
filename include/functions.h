@@ -979,7 +979,7 @@ s32 DynaPolyActor_IsInRidingMovingState(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsInRidingRotatingState(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsInSwitchPressedState(DynaPolyActor* dynaActor);
 s32 DynaPolyActor_IsInHeavySwitchPressedState(DynaPolyActor* dynaActor);
-s32 DynaPolyActor_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 arg2, s16 arg3, s16 arg4);
+s32 DynaPolyActor_ValidateMove(GlobalContext* globalCtx, DynaPolyActor* dynaActor, s16 startRadius, s16 endRadius, s16 startHeight);
 f32 Camera_fabsf(f32 f);
 f32 Camera_LengthVec3f(Vec3f* v);
 // void func_800CB270(void);
