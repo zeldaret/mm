@@ -236,7 +236,7 @@ void Daytelop_Init(GameState* thisx) {
 
     if (gSaveContext.save.day < 9) {
         if (gSaveContext.save.day == 0) {
-            func_80143AC4();
+            Sram_ClearFlagsAtDawnOfTheFirstDay();
         }
         Sram_IncrementDay();
     }

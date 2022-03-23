@@ -156,7 +156,7 @@ typedef struct Save {
     /* 0x0ED8 */ u32 unk_DD8;
     /* 0x0EDC */ u32 bankRupees;
     /* 0x0EE0 */ u32 unk_EE0;
-    /* 0x0EE4 */ u32 unk_EE4; // Fishing flags
+    /* 0x0EE4 */ u32 unk_EE4;                           // Fishing flags
     /* 0x0EE8 */ u32 unk_EE8;
     /* 0x0EEC */ u32 horseBackBalloonHighScore;
     /* 0x0EF0 */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
@@ -274,8 +274,8 @@ typedef enum SunsSongState {
 } SunsSongState;
 
 void Sram_ActivateOwl(u8 owlId);
-void func_80143AC4(void);
-void func_80143B0C(struct GlobalContext* globalCtx);
+void Sram_ClearFlagsAtDawnOfTheFirstDay(void);
+void Sram_SaveEndOfCycle(struct GlobalContext* globalCtx);
 void Sram_IncrementDay(void);
 u16 Sram_CalcChecksum(void* data, size_t count);
 void Sram_InitNewSave(void);
@@ -288,10 +288,10 @@ void func_80146580(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx
 void func_80146628(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 void Sram_InitSave(struct FileChooseContext* fileChooseCtx, SramContext* sramCtx);
 void func_80146DF8(SramContext* sramCtx);
-void func_80146E40(struct GameState* gameState, SramContext* sramCtx);
+void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gamestate, SramContext* sramCtx);
-void func_80146EE8(struct GlobalContext* globalCtx);
-void func_80146F5C(struct GlobalContext* globalCtx);
+void Sram_SaveSpecialEnterClockTown(struct GlobalContext* globalCtx);
+void Sram_SaveSpecialNewDay(struct GlobalContext* globalCtx);
 void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
 void func_80147020(SramContext* sramCtx);
 void func_80147068(SramContext* sramCtx);

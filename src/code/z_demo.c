@@ -316,7 +316,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             break;
         case 0x21:
             if (isStartFrame) {
-                func_80146EE8(globalCtx);
+                Sram_SaveSpecialEnterClockTown(globalCtx);
             }
             break;
         case 0x22:
@@ -357,7 +357,7 @@ void Cutscene_Command_Misc(GlobalContext* globalCtx2, CutsceneContext* csCtx, Cs
             }
             SET_NEXT_GAMESTATE(&globalCtx->state, Daytelop_Init, DaytelopContext);
 
-            func_80146F5C(globalCtx);
+            Sram_SaveSpecialNewDay(globalCtx);
             break;
 
         case 0x27:

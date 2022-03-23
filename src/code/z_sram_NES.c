@@ -195,7 +195,7 @@ void Sram_ActivateOwl(u8 owlId) {
     }
 }
 
-void func_80143A54(void) {
+void Sram_ClearHighscores(void) {
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF) | 0x130000;
     gSaveContext.save.unk_EE8 = (gSaveContext.save.unk_EE8 & 0xFFFF0000) | 0xA;
     gSaveContext.save.horseBackBalloonHighScore = 6000; // 60 seconds
@@ -207,7 +207,10 @@ void func_80143A54(void) {
     gSaveContext.save.dekuPlaygroundHighScores[2] = 7600; // 76 seconds
 }
 
-void func_80143AC4(void) {
+/**
+ * Clears specific weekEventReg flags. Used by the "Dawn of the First Day" message
+ */
+void Sram_ClearFlagsAtDawnOfTheFirstDay(void) {
     // Unconfirmed: "Link the Goron Claims His Reservation: 4:30 PM"
     gSaveContext.save.weekEventReg[55] &= (u8)~2;
     // Unconfirmed: "Postman fleeing town"
@@ -220,7 +223,10 @@ void func_80143AC4(void) {
     gSaveContext.save.weekEventReg[85] &= (u8)~0x80;
 }
 
-void func_80143B0C(GlobalContext* globalCtx) {
+/**
+ * Used by Song of Time (when clicking "Yes") and (indirectly) by the "Dawn of the New Day" cutscene
+ */
+void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     s16 sceneNum;
     s32 j;
     s32 i;
@@ -425,7 +431,7 @@ void func_80143B0C(GlobalContext* globalCtx) {
     gSaveContext.save.unk_E88[5] = 0;
     gSaveContext.save.unk_E88[6] = 0;
 
-    func_80143A54();
+    Sram_ClearHighscores();
 
     for (i = 0; i < 8; i++) {
         gSaveContext.save.inventory.dungeonItems[i] &= (u8)~1;
@@ -455,6 +461,7 @@ void Sram_IncrementDay(void) {
     gSaveContext.save.bombersCaughtOrder[2] = 0;
     gSaveContext.save.bombersCaughtOrder[3] = 0;
     gSaveContext.save.bombersCaughtOrder[4] = 0;
+
     // Unconfirmed: "Bombers Hide & Seek started on Day 1???"
     gSaveContext.save.weekEventReg[73] &= (u8)~0x10;
     // Unconfirmed: "Bombers Hide & Seek in Progress"
@@ -505,7 +512,7 @@ void Sram_GenerateRandomSaveFields(void) {
     s32 k;
     s16 randSpiderHouse;
 
-    func_80143A54();
+    Sram_ClearHighscores();
 
     gSaveContext.save.lotteryCodes[0][0] = Rand_S16Offset(0, 10);
     gSaveContext.save.lotteryCodes[0][1] = Rand_S16Offset(0, 10);
@@ -985,7 +992,7 @@ void Sram_OpenSave(FileChooseContext* fileChooseCtx, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_OpenSave.s")
 #endif
 
-// Similar to func_80145698, but for owl saves?
+// Similar to func_80145698, but accounts for owl saves?
 void func_8014546C(SramContext* sramCtx) {
     s32 i;
 
@@ -1486,7 +1493,7 @@ void func_80146DF8(SramContext* sramCtx) {
     }
 }
 
-void func_80146E40(GameState* gameState, SramContext* sramCtx) {
+void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
     if (&gSaveContext.save) {}
 
     func_801A3D98(gSaveContext.options.audioSetting);
@@ -1508,7 +1515,10 @@ void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
     func_80185F64(sramCtx->saveBuf, curPage, numPages);
 }
 
-void func_80146EE8(GlobalContext* globalCtx) {
+/**
+ * Saves the game on the very first time Player enters South Clock Town from the Clock Tower
+ */
+void Sram_SaveSpecialEnterClockTown(GlobalContext* globalCtx) {
     s32 pad[2];
     SramContext* sramCtx = &globalCtx->sramCtx;
 
@@ -1519,9 +1529,9 @@ void func_80146EE8(GlobalContext* globalCtx) {
 }
 
 /**
- * Save the game
+ * Saves when beating the game, after showing the "Dawn of the New Day" message
  */
-void func_80146F5C(GlobalContext* globalCtx) {
+void Sram_SaveSpecialNewDay(GlobalContext* globalCtx) {
     s32 cutscene = gSaveContext.save.cutscene;
     s32 day;
     u16 time = gSaveContext.save.time;
@@ -1531,7 +1541,7 @@ void func_80146F5C(GlobalContext* globalCtx) {
     // Unconfirmed: "Obtained Fierce Deity Mask?"
     gSaveContext.save.weekEventReg[84] &= (u8)~0x20;
 
-    func_80143B0C(globalCtx);
+    Sram_SaveEndOfCycle(globalCtx);
     func_8014546C(&globalCtx->sramCtx);
 
     gSaveContext.save.day = day;

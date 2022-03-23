@@ -145,7 +145,7 @@ void Title_Main(GameState* thisx) {
 void Title_Destroy(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_80146E40(&this->gameState, &this->sramCtx);
+    Sram_InitSram(&this->gameState, &this->sramCtx);
     ShrinkWindow_Destroy();
     CIC6105_Nop80081828();
 }
