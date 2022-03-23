@@ -20,4 +20,15 @@ typedef struct EnWarptag {
 
 extern const ActorInit En_Warp_tag_InitVars;
 
+// Only two known Variants:
+//  Goron Trial (MOON):    0x03C1
+//  Deku Playground:       0x83C0
+
+#define GET_WARPTAG_3C0_MAX(thisx) ((thisx)->params & 0x3C0)
+#define GET_WARPTAG_3C0(thisx) (((thisx)->params >> 6) & 0xF)
+#define GET_WARPTAG_EXIT_INDEX(thisx) ((thisx)->params & 0x3F)
+#define GET_WARPTAG_INVISIBLE(thisx) ((thisx)->params < 0) // 0x8000 flag
+
+#define WARPTAG_3C0_MAX 0x3C0
+
 #endif // Z_EN_WARP_TAG_H

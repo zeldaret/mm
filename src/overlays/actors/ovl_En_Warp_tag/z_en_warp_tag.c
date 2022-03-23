@@ -45,16 +45,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
-// Only two known Variants:
-//  Goron Trial (MOON):    0x03C1
-//  Deku Playground:       0x83C0
-
-#define GET_WARPTAG_3C0_MAX(this) (this->dyna.actor.params & 0x3C0)
-#define GET_WARPTAG_3C0(this) ((this->dyna.actor.params >> 6) & 0xF)
-#define GET_WARPTAG_EXIT_INDEX(this) (this->dyna.actor.params & 0x3F)
-#define GET_WARPTAG_INVISIBLE(this) (this->dyna.actor.params < 0) // 0x8000 flag
-
-#define WARPTAG_3C0_MAX 0x3C0
 
 void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWarptag* this = THIS;
@@ -62,10 +52,10 @@ void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetFocus(&this->dyna.actor, 0.0f);
 
-    if (GET_WARPTAG_3C0_MAX(this) == WARPTAG_3C0_MAX) {
+    if (GET_WARPTAG_3C0_MAX(thisx) == WARPTAG_3C0_MAX) {
         this->dyna.actor.flags &= ~ACTOR_FLAG_1;
 
-        if (GET_WARPTAG_INVISIBLE(this)) {
+        if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
             this->actionFunc = EnWarpTag_WaitForPlayer;
 
         } else {
@@ -104,7 +94,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, GlobalContext* globalCtx)
 void EnWarpTag_WaitForPlayer(EnWarptag* this, GlobalContext* globalCtx) {
     if (!Player_InCsMode(&globalCtx->state) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
-        if (GET_WARPTAG_INVISIBLE(this)) {
+        if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
             func_800B7298(globalCtx, NULL, 0x51);
             this->actionFunc = EnWarpTag_GrottoReturn;
         } else {
@@ -124,7 +114,7 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, GlobalContext* globalCtx) {
         //   and I doubt its set externally by another actor, so I believe this is unused
         // might be a bug, they might have meant to set actor flag (0x2000 0000) up above but mistyped (0x200 0000)
         // also GET_WARPTAG_3C0 should always return 2C0 -> 0xF for all known in-game uses, which is OOB
-        func_80152434(globalCtx, D_809C1000[GET_WARPTAG_3C0(this)]); // unk message function
+        func_80152434(globalCtx, D_809C1000[GET_WARPTAG_3C0(&this->dyna.actor)]); // unk message function
         this->actionFunc = EnWarpTag_Unused809C0A20;
 
     } else {
@@ -191,7 +181,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
             player->actor.gravity = -0.5f;
 
             if (this->dyna.actor.playerHeightRel < -80.0f) {
-                playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY] = GET_WARPTAG_EXIT_INDEX(this);
+                playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY] = GET_WARPTAG_EXIT_INDEX(&this->dyna.actor);
                 playerSpawnIndexPerForm[PLAYER_FORM_HUMAN] = playerSpawnIndexPerForm[PLAYER_FORM_FIERCE_DEITY];
                 playerSpawnIndexPerForm[PLAYER_FORM_GORON] = this->dyna.actor.world.rot.x;
                 playerSpawnIndexPerForm[PLAYER_FORM_ZORA] = this->dyna.actor.world.rot.y;
@@ -211,7 +201,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
                 newRespawnPos.y = playerActorEntry->pos.y;
                 newRespawnPos.z = playerActorEntry->pos.z;
 
-                if (GET_WARPTAG_3C0_MAX(this) == WARPTAG_3C0_MAX) {
+                if (GET_WARPTAG_3C0_MAX(&this->dyna.actor) == WARPTAG_3C0_MAX) {
                     playerParams = 0x9FF;
                 } else { // not used by any known variant
                     playerParams = 0x8FF;
@@ -252,7 +242,7 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, GlobalContext* globalCtx) {
     }
 
     if (this->grottoExitDelay++ == 10) {
-        globalCtx->nextEntranceIndex = globalCtx->setupExitList[GET_WARPTAG_EXIT_INDEX(this)];
+        globalCtx->nextEntranceIndex = globalCtx->setupExitList[GET_WARPTAG_EXIT_INDEX(&this->dyna.actor)];
         Scene_SetExitFade(globalCtx);
         globalCtx->sceneLoadFlag = 0x14;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
