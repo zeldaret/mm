@@ -45,7 +45,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
-
 void EnWarptag_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnWarptag* this = THIS;
 
