@@ -10390,7 +10390,7 @@
     0x809E9842:("D_809E9842","UNK_TYPE1","",0x1),
     0x809E9848:("D_809E9848","UNK_TYPE1","",0x1),
     0x809E9858:("sGyorgEffects","UNK_TYPE1","[150]",0x27D8),
-    0x809EC030:("sGyorgInstance","UNK_TYPE4","",0x4),
+    0x809EC030:("sGyorgBossInstance","UNK_TYPE4","",0x4),
     0x809EC034:("sRandSeed0","UNK_TYPE4","",0x4),
     0x809EC038:("sRandSeed1","UNK_TYPE4","",0x4),
     0x809EC03C:("sRandSeed2","UNK_TYPE4","",0x4),

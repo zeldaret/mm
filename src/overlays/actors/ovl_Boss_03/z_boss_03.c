@@ -109,7 +109,9 @@ u8 D_809E9842;
 Vec3f D_809E9848;
 
 GyorgEffect sGyorgEffects[GYORG_EFFECT_COUNT];
-Boss03* sGyorgInstance;
+
+// Used by the Seaweed variant to interact with the "real" Gyorg boss
+Boss03* sGyorgBossInstance;
 
 void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
     func_8019F420(projectedPos, sfxId);
@@ -395,7 +397,7 @@ Color_RGBA8 sGyorgDustPrimColor = { 60, 50, 20, 255 };
 Color_RGBA8 sGyorgDustEnvColor = { 40, 30, 30, 255 };
 
 /**
- * Used when chasing Player and Gyorg is near bottom
+ * Used when chasing Player and Gyorg is near the bottom
  */
 void Boss03_SpawnDust(Boss03* this, GlobalContext* globalCtx) {
     if (this->insideJawPos.y < 80.0f) {
@@ -476,7 +478,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
                     GYORG_PARAM_SEAWEED);
     }
 
-    sGyorgInstance = this;
+    sGyorgBossInstance = this;
 
     globalCtx->specialEffects = sGyorgEffects;
 
@@ -1546,15 +1548,17 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->actor.speedXZ = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->unk_2D6 = ((s16)randPlusMinusPoint5Scaled(500.0f) + this->unk_2D6) + 0x8000;
+                        this->shapeRotTargetX =
+                            ((s16)randPlusMinusPoint5Scaled(500.0f) + this->shapeRotTargetX) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->unk_2DA = ((s16)randPlusMinusPoint5Scaled(500.0f) + this->unk_2DA) + 0x8000;
+                        this->shapeRotTargetZ =
+                            ((s16)randPlusMinusPoint5Scaled(500.0f) + this->shapeRotTargetZ) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->unk_2D8 = Rand_ZeroFloat(65536.0f);
+                        this->shapeRotTargetY = Rand_ZeroFloat(65536.0f);
                     }
 
                     this->actor.world.rot.y = Math_FAtan2F(-this->actor.world.pos.z, -this->actor.world.pos.x);
@@ -1564,9 +1568,9 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 }
             }
 
-            Math_ApproachS(&this->actor.shape.rot.y, this->unk_2D8, 3, 0x500);
-            Math_ApproachS(&this->actor.shape.rot.x, this->unk_2D6, 3, 0xA00);
-            Math_ApproachS(&this->actor.shape.rot.z, this->unk_2DA, 3, 0xA00);
+            Math_ApproachS(&this->actor.shape.rot.y, this->shapeRotTargetY, 3, 0x500);
+            Math_ApproachS(&this->actor.shape.rot.x, this->shapeRotTargetX, 3, 0xA00);
+            Math_ApproachS(&this->actor.shape.rot.z, this->shapeRotTargetZ, 3, 0xA00);
 
             sp4C = 150.0f * sp64;
 
@@ -2337,7 +2341,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
             if (eff->velocity.y > 5.0f) {
                 eff->velocity.y = 5.0f;
             }
-            if (sGyorgInstance->waterHeight < eff->pos.y) {
+            if (sGyorgBossInstance->waterHeight < eff->pos.y) {
                 eff->type = GYORG_EFFECT_NONE;
             }
         }
@@ -2497,11 +2501,11 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
         Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(zDiff, xDiff), 0x14, 0x800);
     }
 
-    if (sGyorgInstance->actor.world.pos.y - 40.0f < sGyorgInstance->waterHeight) {
+    if (sGyorgBossInstance->actor.world.pos.y - 40.0f < sGyorgBossInstance->waterHeight) {
         for (i = 0; i < 6; i++) {
-            xDiff = sGyorgInstance->actor.world.pos.x - this->unk_2DC[i].x;
-            yDiff = sGyorgInstance->actor.world.pos.y - this->unk_2DC[i].y;
-            zDiff = sGyorgInstance->actor.world.pos.z - this->unk_2DC[i].z;
+            xDiff = sGyorgBossInstance->actor.world.pos.x - this->unk_2DC[i].x;
+            yDiff = sGyorgBossInstance->actor.world.pos.y - this->unk_2DC[i].y;
+            zDiff = sGyorgBossInstance->actor.world.pos.z - this->unk_2DC[i].z;
 
             temp_f0 = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
 
@@ -2509,8 +2513,8 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
                 break;
             }
 
-            phi_s0 = sGyorgInstance->actor.speedXZ * 16.0f;
-            temp_f14 = sGyorgInstance->actor.speedXZ * 5.0f + 150.0f;
+            phi_s0 = sGyorgBossInstance->actor.speedXZ * 16.0f;
+            temp_f14 = sGyorgBossInstance->actor.speedXZ * 5.0f + 150.0f;
             if (phi_s0 > 0x1000) {
                 phi_s0 = 0x1000;
             } else if (phi_s0 < 0x100) {
