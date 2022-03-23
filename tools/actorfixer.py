@@ -482,6 +482,7 @@ animdict = {
     "globalCtx->envCtx.unk_E6": "globalCtx->envCtx.screenFillColor",
     "globalCtx->envCtx.unk_C3": "globalCtx->envCtx.lightSettingOverride",
     "globalCtx->envCtx.unk_DC": "globalCtx->envCtx.lightBlend",
+    "globalCtx->interfaceCtx.unk_21E": "globalCtx->interfaceCtx.bButtonDoActionLabelIndex",
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
     "player->unk_384": "player->getItemId",

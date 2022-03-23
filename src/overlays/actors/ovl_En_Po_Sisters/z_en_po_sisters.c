@@ -212,7 +212,7 @@ void func_80B1A768(EnPoSisters* this, GlobalContext* globalCtx) {
     f32 sp20;
 
     if ((this->unk_18D == 0) || (this->actionFunc != func_80B1B444)) {
-        if (((player->meleeWeaponState == 0) || (player->meleeWeaponAnimation >= 30)) &&
+        if (((player->meleeWeaponState == 0) || (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H)) &&
             ((player->actor.world.pos.y - player->actor.floorHeight) < 1.0f)) {
             Math_StepToF(&this->unk_2EC, 110.0f, 3.0f);
         } else {

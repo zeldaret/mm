@@ -149,6 +149,44 @@ typedef enum {
     /* 0xFD */ PLAYER_AP_MAX = 0xFD
 } PlayerActionParam;
 
+typedef enum {
+    /* 00 */ PLAYER_MWA_FORWARD_SLASH_1H,      // Vertical one-handed slash
+    /* 01 */ PLAYER_MWA_FORWARD_SLASH_2H,      // Vertical two-handed slash
+    /* 02 */ PLAYER_MWA_FORWARD_COMBO_1H,      // Third vertical one-handed slash
+    /* 03 */ PLAYER_MWA_FORWARD_COMBO_2H,      // Third vertical two-handed slash
+    /* 04 */ PLAYER_MWA_RIGHT_SLASH_1H,        // Horizontal one-handed slash
+    /* 05 */ PLAYER_MWA_RIGHT_SLASH_2H,        // Horizontal two-handed slash
+    /* 06 */ PLAYER_MWA_RIGHT_COMBO_1H,        // Third horizontal one-handed slash
+    /* 07 */ PLAYER_MWA_RIGHT_COMBO_2H,        // Third horizontal two-handed slash
+    /* 08 */ PLAYER_MWA_LEFT_SLASH_1H,         // Targetted one-handed rightwalk slash
+    /* 09 */ PLAYER_MWA_LEFT_SLASH_2H,         // Targetted two-handed rightwalk slash
+    /* 10 */ PLAYER_MWA_LEFT_COMBO_1H,         // Third targetted one-handed rightwalk slash
+    /* 11 */ PLAYER_MWA_LEFT_COMBO_2H,         // Third targetted two-handed rightwalk slash
+    /* 12 */ PLAYER_MWA_STAB_1H,               // Crouch stab/targetted one-handed stab
+    /* 13 */ PLAYER_MWA_STAB_2H,               // Targetted two-handed stab
+    /* 14 */ PLAYER_MWA_STAB_COMBO_1H,         // Third targetted one-handed stab
+    /* 15 */ PLAYER_MWA_STAB_COMBO_2H,         // Third targetted two-handed stab
+    /* 16 */ PLAYER_MWA_FLIPSLASH_START,       //
+    /* 17 */ PLAYER_MWA_JUMPSLASH_START,       // Start of jumpslash
+    /* 18 */ PLAYER_MWA_ZORA_JUMPKICK_START,   // Start of Zora jump attack
+    /* 19 */ PLAYER_MWA_FLIPSLASH_FINISH,      //
+    /* 20 */ PLAYER_MWA_JUMPSLASH_FINISH,      // End of jumpslash
+    /* 21 */ PLAYER_MWA_ZORA_JUMPKICK_FINISH,  // End of Zora jump attack
+    /* 22 */ PLAYER_MWA_BACKSLASH_RIGHT,       //
+    /* 23 */ PLAYER_MWA_BACKSLASH_LEFT,        //
+    /* 24 */ PLAYER_MWA_GORON_PUNCH_LEFT,      // Goron punch
+    /* 25 */ PLAYER_MWA_GORON_PUNCH_RIGHT,     // Second Goron punch
+    /* 26 */ PLAYER_MWA_GORON_PUNCH_BUTT,      // Goron butt punch
+    /* 27 */ PLAYER_MWA_ZORA_PUNCH_LEFT,       // Zora punch
+    /* 28 */ PLAYER_MWA_ZORA_PUNCH_COMBO,      // Second Zora punch
+    /* 29 */ PLAYER_MWA_ZORA_PUNCH_KICK,       // Zora kick
+    /* 30 */ PLAYER_MWA_SPIN_ATTACK_1H,        // Half-charged one-handed spin
+    /* 31 */ PLAYER_MWA_SPIN_ATTACK_2H,        // Half-charged two-handed spin
+    /* 32 */ PLAYER_MWA_BIG_SPIN_1H,           // Fully-charged one-handed spin
+    /* 33 */ PLAYER_MWA_BIG_SPIN_2H,           // Fully-charged two-handed spin
+    /* 34 */ PLAYER_MWA_MAX
+} PlayerMeleeWeaponAnimation;
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;

@@ -181,7 +181,7 @@ void func_80122C20(GlobalContext* globalCtx, struct_80122D44_arg1* arg1) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
-        // Can't be `temp_v1->unk_01 != 0`
+        // Can't be `temp_v1->alpha != 0`
         if (temp_v1->alpha) {
             phi_a1 = temp_v1->unk_00 == 3 ? (255 / 3) : (255 / 5);
             if (phi_a1 >= temp_v1->alpha) {
@@ -492,15 +492,15 @@ s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
             return item;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.unk_21E == 0x18)) {
+        if ((player->currentMask == PLAYER_MASK_BLAST) && (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x18)) {
             return ITEM_F0;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.unk_21E == 0x1A)) {
+        if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x1A)) {
             return ITEM_F1;
         }
 
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.unk_21E == 0x19)) {
+        if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x19)) {
             return ITEM_F2;
         }
 

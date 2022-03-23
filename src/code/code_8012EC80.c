@@ -481,8 +481,8 @@ s32 Inventory_GetBtnBItem(GlobalContext* globalCtx) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (globalCtx->interfaceCtx.unk_21C != 0) {
-            if (globalCtx->interfaceCtx.unk_21E != 0) {
-                return globalCtx->interfaceCtx.unk_21E;
+            if (globalCtx->interfaceCtx.bButtonDoActionLabelIndex != 0) {
+                return globalCtx->interfaceCtx.bButtonDoActionLabelIndex;
             }
         }
         return ITEM_NONE;

@@ -412,7 +412,7 @@ s32 func_80990948(GlobalContext* globalCtx, EnWf* this, s16 arg2) {
     }
 
     if (func_800BE184(globalCtx, &this->actor, 100.0f, 10000, 12000, this->actor.shape.rot.y) &&
-        ((player->meleeWeaponAnimation == 0x11) || ((globalCtx->gameplayFrames % 2) != 0))) {
+        ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || ((globalCtx->gameplayFrames % 2) != 0))) {
         func_8099282C(this);
         return true;
     }
@@ -425,7 +425,7 @@ s32 func_80990948(GlobalContext* globalCtx, EnWf* this, s16 arg2) {
             return true;
         }
 
-        if ((player->meleeWeaponAnimation == 0x11) || ((globalCtx->gameplayFrames % 2) != 0)) {
+        if ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || ((globalCtx->gameplayFrames % 2) != 0)) {
             func_8099282C(this);
             return true;
         }
@@ -1066,7 +1066,7 @@ void func_809928CC(EnWf* this, GlobalContext* globalCtx) {
         if (this->unk_2A0 != 0) {
             this->unk_2A0--;
         } else if (func_800BE184(globalCtx, &this->actor, 100.0f, 10000, 0x4000, this->actor.shape.rot.y)) {
-            if ((player->meleeWeaponAnimation != 0x11) || ((globalCtx->gameplayFrames % 2) != 0)) {
+            if ((player->meleeWeaponAnimation != PLAYER_MWA_JUMPSLASH_START) || ((globalCtx->gameplayFrames % 2) != 0)) {
                 this->unk_2A0 = 10;
             } else {
                 func_8099223C(this);

@@ -384,7 +384,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 6))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) || (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -396,7 +396,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 4:
-            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == 0) || (player->meleeWeaponAnimation == 2))) {
+            if ((this->unk_28E == 1) && ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) || (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_COMBO_1H))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -408,7 +408,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if ((this->unk_28E == 1) && (player->meleeWeaponAnimation == 12)) {
+            if ((this->unk_28E == 1) && (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H)) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -421,7 +421,7 @@ s32 func_80B26BF8(EnKendoJs* this, GlobalContext* globalCtx) {
 
         case 6:
             if ((this->unk_28E == 1) &&
-                ((player->meleeWeaponAnimation == 17) || (player->meleeWeaponAnimation == 20))) {
+                ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH))) {
                 this->unk_28E = 0;
                 return 0;
             }
@@ -614,12 +614,12 @@ void func_80B274BC(EnKendoJs* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_28E == 1) {
-        if ((player->meleeWeaponAnimation == 17) || (player->meleeWeaponAnimation == 20)) {
+        if ((player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_START) || (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
             globalCtx->interfaceCtx.unk_25C = 3;
             if (gSaveContext.minigameScore >= 27) {
                 player->stateFlags1 |= 0x20;
             }
-        } else if (player->meleeWeaponAnimation == 12) {
+        } else if (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H) {
             globalCtx->interfaceCtx.unk_25C = 2;
         } else {
             globalCtx->interfaceCtx.unk_25C = 1;

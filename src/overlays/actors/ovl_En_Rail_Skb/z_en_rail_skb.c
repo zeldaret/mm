@@ -1036,8 +1036,8 @@ void func_80B72970(EnRailSkb* this, GlobalContext* globalCtx) {
                 this->unk_402 |= 1;
 
             case 15:
-                if ((player->meleeWeaponAnimation == 4) || (player->meleeWeaponAnimation == 11) ||
-                    (player->meleeWeaponAnimation == 22) || (player->meleeWeaponAnimation == 23)) {
+                if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) || (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
+                    (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_RIGHT) || (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
                     this->unk_402 |= 1;
                 }
 
