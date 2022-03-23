@@ -514,7 +514,76 @@ void Message_FindMessage(GlobalContext* globalCtx, u16 textId) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149F74.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014AAD0.s")
+s8* func_8019CF9C(); /* extern */
+extern s16 D_801C6A74;
+extern s16 D_801C6A78;
+
+void func_8014AAD0(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+
+    if (msgCtx->msgMode == 6) {
+        globalCtx->msgCtx.ocarinaMode = 1;
+        if (msgCtx->ocarinaAction == 0x33) {
+            msgCtx->msgMode = 0x27;
+            return;
+        } else if (msgCtx->ocarinaAction == 0x34) {
+            func_8019C300(1);
+            func_8019C300(1);
+            msgCtx->unk11F00->unk00 = func_8019CF9C();
+            msgCtx->unk11F00->unk01 = 0;
+            D_801C6A74 = D_801C6A78 = 0;
+            func_80147564(globalCtx);
+            msgCtx->unk12023 = 3;
+            msgCtx->msgMode = 0x29;
+            func_8019C398(0x19, 1);
+            return;
+        }
+        if (msgCtx->ocarinaAction == 0x35) {
+            msgCtx->msgMode = 0x2A;
+            return;
+        }
+        if (msgCtx->ocarinaAction == 0x36) {
+            func_8019C300(1);
+            func_8019C300(1);
+            msgCtx->unk11F00->unk00 = func_8019CF9C();
+            msgCtx->unk11F00->unk01 = 0;
+            D_801C6A74 = D_801C6A78 = 0;
+            func_80147564(globalCtx);
+            msgCtx->unk12023 = 3;
+            msgCtx->msgMode = 0x2E;
+            func_8019C398(0x17, 1);
+            return;
+        }
+        if (msgCtx->ocarinaAction == 0x37) {
+            msgCtx->msgMode = 0x2F;
+            return;
+        }
+        if (msgCtx->ocarinaAction == 0x3A) {
+            msgCtx->msgMode = 0x32;
+            return;
+        }
+        if ((msgCtx->ocarinaAction >= 0x47) && (msgCtx->ocarinaAction < 0x52)) {
+            msgCtx->msgMode = 0x35;
+            return;
+        }
+        if (((msgCtx->ocarinaAction >= 2) && (msgCtx->ocarinaAction < 0x11)) || (msgCtx->ocarinaAction == 0x3B) ||
+            (msgCtx->ocarinaAction == 0x3C) || (msgCtx->ocarinaAction == 0x3D) || (msgCtx->ocarinaAction == 0x3E) ||
+            (msgCtx->ocarinaAction == 0x3F) || (msgCtx->ocarinaAction == 0x40)) {
+            msgCtx->msgMode = 0xB;
+            return;
+        }
+        if ((msgCtx->ocarinaAction == 0x41) || (msgCtx->ocarinaAction == 0x42) || (msgCtx->ocarinaAction == 0x43) ||
+            (msgCtx->ocarinaAction == 0x44) || (msgCtx->ocarinaAction == 0x45) || (msgCtx->ocarinaAction == 0x46)) {
+            msgCtx->msgMode = 0xC;
+            return;
+        }
+        if ((msgCtx->ocarinaAction == 0) || (msgCtx->ocarinaAction == 1) || (msgCtx->ocarinaAction >= 0x28)) {
+            msgCtx->msgMode = 0xA;
+            return;
+        }
+        msgCtx->msgMode = 0xC;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014ADBC.s")
 
