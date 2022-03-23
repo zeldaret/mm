@@ -9,7 +9,7 @@
 
 #define rPitch regs[0]
 #define rYaw regs[1]
-#define rDrawFlags regs[2]
+#define rParams regs[2]
 #define rScale regs[3]
 #define rObjId regs[4]
 #define rObjBankIndex regs[5]
@@ -53,7 +53,7 @@ u32 EffectSsHahen_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
 
     this->draw = EffectSsHahen_Draw;
     this->update = EffectSsHahen_Update;
-    this->rDrawFlags = initParams->drawFlags;
+    this->rParams = initParams->params;
     this->rScale = initParams->scale;
     this->rPitch = Rand_ZeroOne() * 314.0f;
     this->rYaw = Rand_ZeroOne() * 314.0f;
@@ -97,7 +97,7 @@ void EffectSsHahen_DrawXlu(GlobalContext* globalCtx, EffectSs* this) {
 void EffectSsHahen_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     f32 scale;
 
-    if (this->rDrawFlags & HAHEN_DRAWFLAGS_SMALL) {
+    if (this->rParams & HAHEN_SMALL) {
         scale = this->rScale * (0.001f * 0.1f);
     } else {
         scale = this->rScale * 0.001f;
@@ -108,7 +108,7 @@ void EffectSsHahen_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     Matrix_RotateStateAroundXAxis(this->rPitch * 0.01f);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-    if (this->rDrawFlags & HAHEN_DRAWFLAGS_XLU) {
+    if (this->rParams & HAHEN_XLU) {
         EffectSsHahen_DrawXlu(globalCtx, this);
     } else {
         EffectSsHahen_DrawOpa(globalCtx, this);
