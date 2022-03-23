@@ -1208,6 +1208,7 @@ void func_80A9369C(Actor* thisx, GlobalContext* globalCtx2) {
 
         case PLAYER_FORM_FIERCE_DEITY:
             phi_f26 = player->actor.world.pos.y + 40.0f;
+            break;
     }
 
     for (i = 0; i < 51; i++) {
