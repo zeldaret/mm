@@ -637,7 +637,7 @@ void EffectSsStone1_Spawn(GlobalContext* globalCtx, Vec3f* pos, s32 arg2) {
 // EffectSsHitMark Spawn Functions
 
 void EffectSsHitMark_Spawn(GlobalContext* globalCtx, s32 type, s16 scale, Vec3f* pos) {
-    EffectSsHitMarkInitParams initParams;
+    EffectSsHitmarkInitParams initParams;
 
     initParams.type = type;
     initParams.scale = scale;

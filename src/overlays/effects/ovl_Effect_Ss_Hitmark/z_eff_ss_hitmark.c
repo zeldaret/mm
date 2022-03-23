@@ -30,14 +30,12 @@ static Color_RGB8 sColors[] = {
 };
 
 static TexturePtr sTextures[] = {
-    gEffHitmark1Tex, gEffHitmark2Tex, gEffHitmark3Tex, gEffHitmark4Tex,
-    gEffHitmark5Tex, gEffHitmark6Tex, gEffHitmark7Tex, gEffHitmark8Tex,
-    gEffHitmark9Tex, gEffHitmark10Tex, gEffHitmark11Tex, gEffHitmark12Tex,
-    gEffHitmark13Tex, gEffHitmark14Tex, gEffHitmark15Tex, gEffHitmark16Tex,
-    gEffHitmark17Tex, gEffHitmark18Tex, gEffHitmark19Tex, gEffHitmark20Tex,
-    gEffHitmark21Tex, gEffHitmark22Tex, gEffHitmark23Tex, gEffHitmark24Tex,
-    gEffHitmark1Tex, gEffHitmark2Tex, gEffHitmark3Tex, gEffHitmark4Tex,
-    gEffHitmark5Tex, gEffHitmark6Tex, gEffHitmark7Tex, gEffHitmark8Tex,
+    gEffHitmark1Tex,  gEffHitmark2Tex,  gEffHitmark3Tex,  gEffHitmark4Tex,  gEffHitmark5Tex,  gEffHitmark6Tex,
+    gEffHitmark7Tex,  gEffHitmark8Tex,  gEffHitmark9Tex,  gEffHitmark10Tex, gEffHitmark11Tex, gEffHitmark12Tex,
+    gEffHitmark13Tex, gEffHitmark14Tex, gEffHitmark15Tex, gEffHitmark16Tex, gEffHitmark17Tex, gEffHitmark18Tex,
+    gEffHitmark19Tex, gEffHitmark20Tex, gEffHitmark21Tex, gEffHitmark22Tex, gEffHitmark23Tex, gEffHitmark24Tex,
+    gEffHitmark1Tex,  gEffHitmark2Tex,  gEffHitmark3Tex,  gEffHitmark4Tex,  gEffHitmark5Tex,  gEffHitmark6Tex,
+    gEffHitmark7Tex,  gEffHitmark8Tex,
 };
 
 const EffectSsInit Effect_Ss_Hitmark_InitVars = {
