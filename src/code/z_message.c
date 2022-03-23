@@ -165,7 +165,60 @@ void func_80148CBC(GlobalContext* globalCtx, UNK_PTR puParm2, u8 arg2) {
     func_80147818(globalCtx, puParm2, msgCtx->unk11FF4, msgCtx->unk11FF6);
 }
 
+// Function is actually matching
+// but the static variable create a bss shift
+// this variable seem to be part of sram_data.
+// I'll try to decomp all equivalent functions
+// before trying to prevent this bss reorder.
+#ifdef NON_MATCHING
+void func_80148D64(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    static s16 D_801CFD84;
+
+    if (globalCtx->msgCtx.unk120A4[1] < -0x1D) {
+        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]--;
+        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] < '0') {
+            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '9';
+        }
+        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+    } else if (msgCtx->unk120A4[1] >= 0x1E) {
+        msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2]++;
+        if (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] > '9') {
+            msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2] = '0';
+        }
+        Font_LoadCharNES(globalCtx, msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + msgCtx->unk120C2],
+                         msgCtx->unk120C4 + (msgCtx->unk120C2 << 7));
+        play_sound(NA_SE_SY_RUPY_COUNT);
+    } else {
+        if ((msgCtx->unk120A4[0] >= 0x1E) && (D_801CFD84 == 0)) {
+            D_801CFD84 = 1;
+            msgCtx->unk120C2++;
+            if (msgCtx->unk120C2 >= 3) {
+                msgCtx->unk120C2 = 2;
+            } else {
+                play_sound(NA_SE_SY_CURSOR);
+            }
+        } else if ((msgCtx->unk120A4[0] < -0x1D) && (D_801CFD84 == 0)) {
+            D_801CFD84 = 1;
+            msgCtx->unk120C2--;
+            if (msgCtx->unk120C2 < 0) {
+                msgCtx->unk120C2 = 0;
+            } else {
+                play_sound(NA_SE_SY_CURSOR);
+            }
+        } else {
+            D_801CFD84 = 0;
+        }
+    }
+    msgCtx->bankRupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] * 100) - ('0' * 100);
+    msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 1] * 10) - ('0' * 10);
+    msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 2]) - '0';
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80148D64.s")
+#endif
 
 void func_80149048(GlobalContext* globalCtx) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
