@@ -962,8 +962,10 @@ void func_8099672C(EnSkb* this, GlobalContext* globalCtx) {
                     this->unk_3D8 |= 1;
 
                 case 15:
-                    if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) || (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
-                        (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_RIGHT) || (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
+                    if ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+                        (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_COMBO_2H) ||
+                        (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_RIGHT) ||
+                        (player->meleeWeaponAnimation == PLAYER_MWA_BACKSLASH_LEFT)) {
                         this->unk_3D8 |= 1;
                     }
 

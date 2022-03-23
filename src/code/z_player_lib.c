@@ -496,11 +496,13 @@ s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
             return ITEM_F0;
         }
 
-        if ((player->currentMask == PLAYER_MASK_BREMEN) && (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x1A)) {
+        if ((player->currentMask == PLAYER_MASK_BREMEN) &&
+            (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x1A)) {
             return ITEM_F1;
         }
 
-        if ((player->currentMask == PLAYER_MASK_KAMARO) && (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x19)) {
+        if ((player->currentMask == PLAYER_MASK_KAMARO) &&
+            (globalCtx->interfaceCtx.bButtonDoActionLabelIndex == 0x19)) {
             return ITEM_F2;
         }
 
