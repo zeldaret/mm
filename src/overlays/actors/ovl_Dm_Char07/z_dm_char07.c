@@ -5,8 +5,9 @@
  */
 
 #include "z_dm_char07.h"
+#include "objects/object_milkbar/object_milkbar.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmChar07*)thisx)
 
@@ -29,24 +30,6 @@ const ActorInit Dm_Char07_InitVars = {
     (ActorFunc)DmChar07_Draw,
 };
 
-extern Gfx D_06000100[];
-extern Gfx D_06000240[];
-extern Gfx D_06000650[];
-extern Gfx D_06000790[];
-extern Gfx D_06000B80[];
-extern Gfx D_06000CC0[];
-extern Gfx D_060010D0[];
-extern Gfx D_06001210[];
-extern Gfx D_060015E0[];
-extern Gfx D_060016B8[];
-extern Gfx D_06002BA0[];
-extern Gfx D_06002CD0[];
-extern CollisionHeader D_06006688;
-extern Gfx D_060076A0[];
-extern Gfx D_06007918[];
-extern AnimatedMaterial D_060105F8;
-extern Gfx D_06010D68[];
-
 void DmChar07_SetupAction(DmChar07* this, DmChar07ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
@@ -62,7 +45,7 @@ void DmChar07_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         this->isStage = 1;
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06006688);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_milkbar_Colheader_006688);
     } else {
         Actor_SetScale(&this->dyna.actor, 1.0f);
     }
@@ -96,36 +79,36 @@ void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     switch (this->dyna.actor.params) {
         case DMCHAR07_STAGE:
-            gSPDisplayList(POLY_OPA_DISP++, D_06002CD0);
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_002CD0);
             break;
         case DMCHAR07_CREDITS_STAGE:
-            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&D_060105F8));
-            gSPDisplayList(POLY_OPA_DISP++, D_06007918);
-            gSPDisplayList(POLY_OPA_DISP++, D_06000240);
-            gSPDisplayList(POLY_OPA_DISP++, D_06000790);
-            gSPDisplayList(POLY_OPA_DISP++, D_06000CC0);
-            gSPDisplayList(POLY_OPA_DISP++, D_06001210);
-            gSPDisplayList(POLY_OPA_DISP++, D_060016B8);
+            AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_milkbar_Matanimheader_0105F8));
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_007918);
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000240);
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000790);
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000CC0);
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_001210);
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_0016B8);
             break;
         case DMCHAR07_SPOTLIGHTS:
             if (this->spotlightFlags & DMCHAR07_STAGE_RIGHT_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000240);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000240);
             }
             if (this->spotlightFlags & DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000790);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000790);
             }
             if (this->spotlightFlags & DMCHAR07_STAGE_CENTER_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000CC0);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000CC0);
             }
             if (this->spotlightFlags & DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06001210);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_001210);
             }
             if (this->spotlightFlags & DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_060016B8);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_0016B8);
             }
             break;
         case DMCHAR07_DISHES:
-            gSPDisplayList(POLY_OPA_DISP++, D_06010D68);
+            gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_010D68);
             break;
     }
 
@@ -133,31 +116,31 @@ void DmChar07_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     switch (this->dyna.actor.params) {
         case DMCHAR07_STAGE:
-            gSPDisplayList(POLY_XLU_DISP++, D_06002BA0);
+            gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_002BA0);
             break;
         case DMCHAR07_CREDITS_STAGE:
-            gSPDisplayList(POLY_XLU_DISP++, D_060076A0);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000100);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000650);
-            gSPDisplayList(POLY_XLU_DISP++, D_06000B80);
-            gSPDisplayList(POLY_XLU_DISP++, D_060010D0);
-            gSPDisplayList(POLY_XLU_DISP++, D_060015E0);
+            gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_0076A0);
+            gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_000100);
+            gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_000650);
+            gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_000B80);
+            gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_0010D0);
+            gSPDisplayList(POLY_XLU_DISP++, object_milkbar_DL_0015E0);
             break;
         case DMCHAR07_SPOTLIGHTS:
             if (this->spotlightFlags & DMCHAR07_STAGE_RIGHT_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000100);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000100);
             }
             if (this->spotlightFlags & DMCHAR07_UPSTAGE_RIGHT_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000650);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000650);
             }
             if (this->spotlightFlags & DMCHAR07_STAGE_CENTER_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_06000B80);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_000B80);
             }
             if (this->spotlightFlags & DMCHAR07_UPSTAGE_LEFT_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_060010D0);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_0010D0);
             }
             if (this->spotlightFlags & DMCHAR07_DOWNSTAGE_CENTER_SPOTLIGHT) {
-                gSPDisplayList(POLY_OPA_DISP++, D_060015E0);
+                gSPDisplayList(POLY_OPA_DISP++, object_milkbar_DL_0015E0);
             }
             break;
         case DMCHAR07_DISHES:

@@ -15,6 +15,9 @@
         <Texture Name="object_dy_obj_Tex_00D240" OutName="tex_00D240" Format="i4" Width="32" Height="32" Offset="0xD240" />
         <Texture Name="object_dy_obj_Tex_00D440" OutName="tex_00D440" Format="i8" Width="16" Height="16" Offset="0xD440" />
         <Texture Name="object_dy_obj_Tex_00D540" OutName="tex_00D540" Format="i8" Width="32" Height="64" Offset="0xD540" />
+        <Array Name="object_dy_obj_Vtx_00DD40" Count="27" Offset="0xDD40">
+            <Vtx/>
+        </Array>
         <DList Name="object_dy_obj_DL_00DEF0" Offset="0xDEF0" />
         <DList Name="object_dy_obj_DL_013810" Offset="0x13810" />
         <DList Name="object_dy_obj_DL_013928" Offset="0x13928" />
@@ -61,33 +64,33 @@
         <Texture Name="object_dy_obj_Tex_01B588" OutName="tex_01B588" Format="rgba16" Width="64" Height="32" Offset="0x1B588" />
         <Texture Name="object_dy_obj_Tex_01C588" OutName="tex_01C588" Format="i8" Width="16" Height="16" Offset="0x1C588" />
         <TextureAnimation Name="object_dy_obj_Matanimheader_01C6F4" Offset="0x1C6F4" />
-        <Limb Name="object_dy_obj_Standardlimb_01C704" Type="Standard" Offset="0x1C704" />
-        <Limb Name="object_dy_obj_Standardlimb_01C710" Type="Standard" Offset="0x1C710" />
-        <Limb Name="object_dy_obj_Standardlimb_01C71C" Type="Standard" Offset="0x1C71C" />
-        <Limb Name="object_dy_obj_Standardlimb_01C728" Type="Standard" Offset="0x1C728" />
-        <Limb Name="object_dy_obj_Standardlimb_01C734" Type="Standard" Offset="0x1C734" />
-        <Limb Name="object_dy_obj_Standardlimb_01C740" Type="Standard" Offset="0x1C740" />
-        <Limb Name="object_dy_obj_Standardlimb_01C74C" Type="Standard" Offset="0x1C74C" />
-        <Limb Name="object_dy_obj_Standardlimb_01C758" Type="Standard" Offset="0x1C758" />
-        <Limb Name="object_dy_obj_Standardlimb_01C764" Type="Standard" Offset="0x1C764" />
-        <Limb Name="object_dy_obj_Standardlimb_01C770" Type="Standard" Offset="0x1C770" />
-        <Limb Name="object_dy_obj_Standardlimb_01C77C" Type="Standard" Offset="0x1C77C" />
-        <Limb Name="object_dy_obj_Standardlimb_01C788" Type="Standard" Offset="0x1C788" />
-        <Limb Name="object_dy_obj_Standardlimb_01C794" Type="Standard" Offset="0x1C794" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7A0" Type="Standard" Offset="0x1C7A0" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7AC" Type="Standard" Offset="0x1C7AC" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7B8" Type="Standard" Offset="0x1C7B8" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7C4" Type="Standard" Offset="0x1C7C4" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7D0" Type="Standard" Offset="0x1C7D0" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7DC" Type="Standard" Offset="0x1C7DC" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7E8" Type="Standard" Offset="0x1C7E8" />
-        <Limb Name="object_dy_obj_Standardlimb_01C7F4" Type="Standard" Offset="0x1C7F4" />
-        <Limb Name="object_dy_obj_Standardlimb_01C800" Type="Standard" Offset="0x1C800" />
-        <Limb Name="object_dy_obj_Standardlimb_01C80C" Type="Standard" Offset="0x1C80C" />
-        <Limb Name="object_dy_obj_Standardlimb_01C818" Type="Standard" Offset="0x1C818" />
-        <Limb Name="object_dy_obj_Standardlimb_01C824" Type="Standard" Offset="0x1C824" />
-        <Limb Name="object_dy_obj_Standardlimb_01C830" Type="Standard" Offset="0x1C830" />
-        <Limb Name="object_dy_obj_Standardlimb_01C83C" Type="Standard" Offset="0x1C83C" />
-        <Skeleton Name="object_dy_obj_Skel_01C8B4" Type="Flex" LimbType="Standard" Offset="0x1C8B4" />
+        <Limb Name="object_dy_obj_Standardlimb_01C704" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_01" Offset="0x1C704" />
+        <Limb Name="object_dy_obj_Standardlimb_01C710" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_02" Offset="0x1C710" />
+        <Limb Name="object_dy_obj_Standardlimb_01C71C" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_03" Offset="0x1C71C" />
+        <Limb Name="object_dy_obj_Standardlimb_01C728" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_04" Offset="0x1C728" />
+        <Limb Name="object_dy_obj_Standardlimb_01C734" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_05" Offset="0x1C734" />
+        <Limb Name="object_dy_obj_Standardlimb_01C740" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_06" Offset="0x1C740" />
+        <Limb Name="object_dy_obj_Standardlimb_01C74C" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_07" Offset="0x1C74C" />
+        <Limb Name="object_dy_obj_Standardlimb_01C758" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_08" Offset="0x1C758" />
+        <Limb Name="object_dy_obj_Standardlimb_01C764" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_09" Offset="0x1C764" />
+        <Limb Name="object_dy_obj_Standardlimb_01C770" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_0A" Offset="0x1C770" />
+        <Limb Name="object_dy_obj_Standardlimb_01C77C" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_0B" Offset="0x1C77C" />
+        <Limb Name="object_dy_obj_Standardlimb_01C788" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_0C" Offset="0x1C788" />
+        <Limb Name="object_dy_obj_Standardlimb_01C794" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_0D" Offset="0x1C794" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7A0" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_0E" Offset="0x1C7A0" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7AC" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_0F" Offset="0x1C7AC" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7B8" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_10" Offset="0x1C7B8" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7C4" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_11" Offset="0x1C7C4" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7D0" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_12" Offset="0x1C7D0" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7DC" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_13" Offset="0x1C7DC" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7E8" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_14" Offset="0x1C7E8" />
+        <Limb Name="object_dy_obj_Standardlimb_01C7F4" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_15" Offset="0x1C7F4" />
+        <Limb Name="object_dy_obj_Standardlimb_01C800" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_16" Offset="0x1C800" />
+        <Limb Name="object_dy_obj_Standardlimb_01C80C" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_17" Offset="0x1C80C" />
+        <Limb Name="object_dy_obj_Standardlimb_01C818" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_18" Offset="0x1C818" />
+        <Limb Name="object_dy_obj_Standardlimb_01C824" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_19" Offset="0x1C824" />
+        <Limb Name="object_dy_obj_Standardlimb_01C830" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_1A" Offset="0x1C830" />
+        <Limb Name="object_dy_obj_Standardlimb_01C83C" Type="Standard" EnumName="OBJECT_DY_OBJ_LIMB_1B" Offset="0x1C83C" />
+        <Skeleton Name="object_dy_obj_Skel_01C8B4" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DY_OBJ_LIMB_NONE" LimbMax="OBJECT_DY_OBJ_LIMB_MAX" EnumName="object_dy_obj_Limbs" Offset="0x1C8B4" />
     </File>
 </Root>

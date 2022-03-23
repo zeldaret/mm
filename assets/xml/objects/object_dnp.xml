@@ -52,33 +52,36 @@
         <Texture Name="object_dnp_Tex_00F5D0" OutName="tex_00F5D0" Format="rgba16" Width="16" Height="16" Offset="0xF5D0" />
         <Texture Name="object_dnp_Tex_00F7D0" OutName="tex_00F7D0" Format="rgba16" Width="32" Height="32" Offset="0xF7D0" />
         <Texture Name="object_dnp_Tex_00FFD0" OutName="tex_00FFD0" Format="rgba16" Width="16" Height="32" Offset="0xFFD0" />
-        <!-- <Blob Name="object_dnp_Blob_0103D0" Size="0x800" Offset="0x103D0" /> -->
-        <Limb Name="object_dnp_Standardlimb_010BD0" Type="Standard" Offset="0x10BD0" />
-        <Limb Name="object_dnp_Standardlimb_010BDC" Type="Standard" Offset="0x10BDC" />
-        <Limb Name="object_dnp_Standardlimb_010BE8" Type="Standard" Offset="0x10BE8" />
-        <Limb Name="object_dnp_Standardlimb_010BF4" Type="Standard" Offset="0x10BF4" />
-        <Limb Name="object_dnp_Standardlimb_010C00" Type="Standard" Offset="0x10C00" />
-        <Limb Name="object_dnp_Standardlimb_010C0C" Type="Standard" Offset="0x10C0C" />
-        <Limb Name="object_dnp_Standardlimb_010C18" Type="Standard" Offset="0x10C18" />
-        <Limb Name="object_dnp_Standardlimb_010C24" Type="Standard" Offset="0x10C24" />
-        <Limb Name="object_dnp_Standardlimb_010C30" Type="Standard" Offset="0x10C30" />
-        <Limb Name="object_dnp_Standardlimb_010C3C" Type="Standard" Offset="0x10C3C" />
-        <Limb Name="object_dnp_Standardlimb_010C48" Type="Standard" Offset="0x10C48" />
-        <Limb Name="object_dnp_Standardlimb_010C54" Type="Standard" Offset="0x10C54" />
-        <Limb Name="object_dnp_Standardlimb_010C60" Type="Standard" Offset="0x10C60" />
-        <Limb Name="object_dnp_Standardlimb_010C6C" Type="Standard" Offset="0x10C6C" />
-        <Limb Name="object_dnp_Standardlimb_010C78" Type="Standard" Offset="0x10C78" />
-        <Limb Name="object_dnp_Standardlimb_010C84" Type="Standard" Offset="0x10C84" />
-        <Limb Name="object_dnp_Standardlimb_010C90" Type="Standard" Offset="0x10C90" />
-        <Limb Name="object_dnp_Standardlimb_010C9C" Type="Standard" Offset="0x10C9C" />
-        <Limb Name="object_dnp_Standardlimb_010CA8" Type="Standard" Offset="0x10CA8" />
-        <Limb Name="object_dnp_Standardlimb_010CB4" Type="Standard" Offset="0x10CB4" />
-        <Limb Name="object_dnp_Standardlimb_010CC0" Type="Standard" Offset="0x10CC0" />
-        <Limb Name="object_dnp_Standardlimb_010CCC" Type="Standard" Offset="0x10CCC" />
-        <Limb Name="object_dnp_Standardlimb_010CD8" Type="Standard" Offset="0x10CD8" />
-        <Limb Name="object_dnp_Standardlimb_010CE4" Type="Standard" Offset="0x10CE4" />
-        <Limb Name="object_dnp_Standardlimb_010CF0" Type="Standard" Offset="0x10CF0" />
-        <Skeleton Name="object_dnp_Skel_010D60" Type="Flex" LimbType="Standard" Offset="0x10D60" />
+        <Texture Name="object_dnp_Tex_0103D0" OutName="tex_0103D0" Format="rgba16" Width="16" Height="16" Offset="0x103D0" />
+        <Texture Name="object_dnp_Tex_0105D0" OutName="tex_0105D0" Format="rgba16" Width="16" Height="16" Offset="0x105D0" />
+        <Texture Name="object_dnp_Tex_0107D0" OutName="tex_0107D0" Format="rgba16" Width="16" Height="16" Offset="0x107D0" />
+        <Texture Name="object_dnp_Tex_0109D0" OutName="tex_0109D0" Format="rgba16" Width="16" Height="16" Offset="0x109D0" />
+        <Limb Name="object_dnp_Standardlimb_010BD0" Type="Standard" EnumName="OBJECT_DNP_LIMB_01" Offset="0x10BD0" />
+        <Limb Name="object_dnp_Standardlimb_010BDC" Type="Standard" EnumName="OBJECT_DNP_LIMB_02" Offset="0x10BDC" />
+        <Limb Name="object_dnp_Standardlimb_010BE8" Type="Standard" EnumName="OBJECT_DNP_LIMB_03" Offset="0x10BE8" />
+        <Limb Name="object_dnp_Standardlimb_010BF4" Type="Standard" EnumName="OBJECT_DNP_LIMB_04" Offset="0x10BF4" />
+        <Limb Name="object_dnp_Standardlimb_010C00" Type="Standard" EnumName="OBJECT_DNP_LIMB_05" Offset="0x10C00" />
+        <Limb Name="object_dnp_Standardlimb_010C0C" Type="Standard" EnumName="OBJECT_DNP_LIMB_06" Offset="0x10C0C" />
+        <Limb Name="object_dnp_Standardlimb_010C18" Type="Standard" EnumName="OBJECT_DNP_LIMB_07" Offset="0x10C18" />
+        <Limb Name="object_dnp_Standardlimb_010C24" Type="Standard" EnumName="OBJECT_DNP_LIMB_08" Offset="0x10C24" />
+        <Limb Name="object_dnp_Standardlimb_010C30" Type="Standard" EnumName="OBJECT_DNP_LIMB_09" Offset="0x10C30" />
+        <Limb Name="object_dnp_Standardlimb_010C3C" Type="Standard" EnumName="OBJECT_DNP_LIMB_0A" Offset="0x10C3C" />
+        <Limb Name="object_dnp_Standardlimb_010C48" Type="Standard" EnumName="OBJECT_DNP_LIMB_0B" Offset="0x10C48" />
+        <Limb Name="object_dnp_Standardlimb_010C54" Type="Standard" EnumName="OBJECT_DNP_LIMB_0C" Offset="0x10C54" />
+        <Limb Name="object_dnp_Standardlimb_010C60" Type="Standard" EnumName="OBJECT_DNP_LIMB_0D" Offset="0x10C60" />
+        <Limb Name="object_dnp_Standardlimb_010C6C" Type="Standard" EnumName="OBJECT_DNP_LIMB_0E" Offset="0x10C6C" />
+        <Limb Name="object_dnp_Standardlimb_010C78" Type="Standard" EnumName="OBJECT_DNP_LIMB_0F" Offset="0x10C78" />
+        <Limb Name="object_dnp_Standardlimb_010C84" Type="Standard" EnumName="OBJECT_DNP_LIMB_10" Offset="0x10C84" />
+        <Limb Name="object_dnp_Standardlimb_010C90" Type="Standard" EnumName="OBJECT_DNP_LIMB_11" Offset="0x10C90" />
+        <Limb Name="object_dnp_Standardlimb_010C9C" Type="Standard" EnumName="OBJECT_DNP_LIMB_12" Offset="0x10C9C" />
+        <Limb Name="object_dnp_Standardlimb_010CA8" Type="Standard" EnumName="OBJECT_DNP_LIMB_13" Offset="0x10CA8" />
+        <Limb Name="object_dnp_Standardlimb_010CB4" Type="Standard" EnumName="OBJECT_DNP_LIMB_14" Offset="0x10CB4" />
+        <Limb Name="object_dnp_Standardlimb_010CC0" Type="Standard" EnumName="OBJECT_DNP_LIMB_15" Offset="0x10CC0" />
+        <Limb Name="object_dnp_Standardlimb_010CCC" Type="Standard" EnumName="OBJECT_DNP_LIMB_16" Offset="0x10CCC" />
+        <Limb Name="object_dnp_Standardlimb_010CD8" Type="Standard" EnumName="OBJECT_DNP_LIMB_17" Offset="0x10CD8" />
+        <Limb Name="object_dnp_Standardlimb_010CE4" Type="Standard" EnumName="OBJECT_DNP_LIMB_18" Offset="0x10CE4" />
+        <Limb Name="object_dnp_Standardlimb_010CF0" Type="Standard" EnumName="OBJECT_DNP_LIMB_19" Offset="0x10CF0" />
+        <Skeleton Name="object_dnp_Skel_010D60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNP_LIMB_NONE" LimbMax="OBJECT_DNP_LIMB_MAX" EnumName="object_dnp_Limbs" Offset="0x10D60" />
         <Animation Name="object_dnp_Anim_0115B8" Offset="0x115B8" />
         <Animation Name="object_dnp_Anim_012428" Offset="0x12428" />
     </File>

@@ -105,7 +105,8 @@ void Title_Draw(GameState* thisx) {
                             G_TX_NOLOD, G_TX_NOLOD);
 
         gDPSetTileSize(POLY_OPA_DISP++, 1, this->uls, (this->ult & 0x7F) - idx * 4, 0, 0);
-        gSPTextureRectangle(POLY_OPA_DISP++, 388, y << 2, 1156, (y + 2) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+        gSPTextureRectangle(POLY_OPA_DISP++, 97 << 2, y << 2, (97 + 192) << 2, (y + 2) << 2, G_TX_RENDERTILE, 0, 0,
+                            1 << 10, 1 << 10);
     }
 
     func_800FC444(this->gameState.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
@@ -118,7 +119,7 @@ void Title_Draw(GameState* thisx) {
 void Title_Main(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, true, true, 0, 0, 0);
 
     OPEN_DISPS(this->gameState.gfxCtx);
 

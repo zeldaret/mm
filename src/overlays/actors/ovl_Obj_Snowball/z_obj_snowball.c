@@ -228,8 +228,8 @@ void func_80B030F8(ObjSnowball* this, GlobalContext* globalCtx) {
 
         scale = ((Rand_ZeroOne() * 15.0f) + 30.0f) * this->unk_20C;
 
-        EffectSsKakera_Spawn(globalCtx, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1, 0xEF,
-                             temp_s2);
+        EffectSsKakera_Spawn(globalCtx, &spFC, &spF0, &spFC, gravity, phi_s0, 30, 0, 0, scale, phi_s4, 0, 50, -1,
+                             OBJECT_GOROIWA, temp_s2);
         if ((this->unk_210 == 0) && (temp_s7 >= 3)) {
             spFC.x += (Rand_ZeroOne() * 120.0f) - 60.0f;
             spFC.y += Rand_ZeroOne() * 80.0f;
@@ -333,7 +333,6 @@ void func_80B03688(ObjSnowball* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
     f32 temp_f30 = sqrtf(arg1);
     Vec3f spD8;
@@ -341,14 +340,16 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
     s32 i;
     Gfx* temp_s1;
     f32 temp_f20;
-    s32 phi_s5;
-    s32 pad;
     s16 phi_s2;
-    s32 pad2;
     s16 phi_s0;
     s16 phi_s3;
+    s32 phi_s5;
+    s32 tmp;
+    s32 pad;
 
     for (i = 0, phi_s5 = 0; i < 13; i++, phi_s5 += 0x1999) {
+        tmp = i & 3;
+
         temp_f20 = (Rand_ZeroOne() * (40.0f * arg1)) + 20.0f;
 
         spD8.x = Math_SinS((s32)(Rand_ZeroOne() * 6553.6f) + phi_s5) * temp_f20;
@@ -363,7 +364,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
         spD8.y += arg2->y;
         spD8.z += arg2->z;
 
-        if ((i & 3) == 0) {
+        if (tmp == 0) {
             temp_s1 = D_80B04FC8[0];
             phi_s2 = -400;
             phi_s3 = 1;
@@ -372,7 +373,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
             } else {
                 phi_s0 = 0x41;
             }
-        } else if ((i & 3) == 1) {
+        } else if (tmp == 1) {
             temp_s1 = D_80B04FC8[1];
             phi_s2 = -340;
             phi_s3 = 1;
@@ -389,7 +390,7 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &spD8, &spCC, &spD8, phi_s2, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 15.0f) + 25.0f) * arg1, phi_s3, 0, 0x36, -1, 0xEF, temp_s1);
+                             ((Rand_ZeroOne() * 15.0f) + 25.0f) * arg1, phi_s3, 0, 0x36, -1, OBJECT_GOROIWA, temp_s1);
 
         spD8.x += (Rand_ZeroOne() * 80.0f) - 40.0f;
         spD8.y += Rand_ZeroOne() * 55.0f;
@@ -401,10 +402,6 @@ void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2) {
                       (s32)(Rand_ZeroOne() * 30.0f * temp_f30) + 60);
     }
 }
-#else
-void func_80B03A80(GlobalContext* globalCtx, f32 arg1, Vec3f* arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball/func_80B03A80.s")
-#endif
 
 void func_80B03E2C(ObjSnowball* this, GlobalContext* globalCtx) {
     ObjSnowballStruct* ptr;
@@ -482,7 +479,7 @@ void ObjSnowball_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp34) {
         this->actor.textId = 0x238;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->actor.targetArrowOffset = 1400.0f / 3.0f;
         Actor_SetFocus(&this->actor, 24.0f);
         this->actor.targetMode = 3;
@@ -539,9 +536,9 @@ void func_80B04350(ObjSnowball* this, GlobalContext* globalCtx) {
     if (flag && (this->unk_211 == 0) &&
         (this->collider.elements->info.acHitInfo->toucher.dmgFlags &
          (0x80000000 | 0x4000 | 0x800 | 0x400 | 0x100 | 0x8))) {
-        this->actor.flags |= 0x10;
+        this->actor.flags |= ACTOR_FLAG_10;
         if (this->actor.home.rot.y == 1) {
-            this->actor.flags &= ~(8 | 1);
+            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         }
 
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x4000) {
@@ -761,11 +758,11 @@ void ObjSnowball_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.home.rot.y == 1) {
         if (this->unk_211 != 0) {
             if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
-                this->actor.flags &= ~0x10;
+                this->actor.flags &= ~ACTOR_FLAG_10;
                 this->unk_211 = 0;
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            this->actor.flags |= 0x10;
+            this->actor.flags |= ACTOR_FLAG_10;
             this->unk_211 = 1;
         } else if (this->actor.isTargeted) {
             sp24 = true;

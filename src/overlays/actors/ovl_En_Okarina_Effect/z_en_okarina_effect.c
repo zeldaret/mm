@@ -6,7 +6,7 @@
 
 #include "z_en_okarina_effect.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnOkarinaEffect*)thisx)
 
@@ -58,7 +58,7 @@ void func_8096B104(EnOkarinaEffect* this, GlobalContext* globalCtx) {
 void func_8096B174(EnOkarinaEffect* this, GlobalContext* globalCtx) {
     DECR(this->unk144);
     if (!globalCtx->pauseCtx.state && !globalCtx->gameOverCtx.state && !globalCtx->msgCtx.unk11F10 &&
-        !FrameAdvance_IsEnabled(globalCtx) && this->unk144 == 0) {
+        !FrameAdvance_IsEnabled(&globalCtx->state) && this->unk144 == 0) {
         EnOkarinaEffect_SetupAction(this, func_8096B1FC);
     }
 }

@@ -7,7 +7,7 @@
 #include "z_obj_hugebombiwa.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjHugebombiwa*)thisx)
 
@@ -358,8 +358,11 @@ void ObjHugebombiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80A54BF0(this);
 }
 
-void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+void ObjHugebombiwa_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    ObjHugebombiwa* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
 void func_80A54BF0(ObjHugebombiwa* this) {
@@ -437,7 +440,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
     Vec3f sp84;
 
     Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < 20; i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];
@@ -532,7 +535,7 @@ void func_80A55310(ObjHugebombiwa* this) {
     Vec3f sp84;
 
     Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < ARRAY_COUNT(this->unk_190); i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];

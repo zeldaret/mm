@@ -5,8 +5,10 @@
  */
 
 #include "z_en_goroiwa.h"
+#include "objects/object_goroiwa/object_goroiwa.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x80000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGoroiwa*)thisx)
 
@@ -29,21 +31,6 @@ void func_80941F54(EnGoroiwa* this);
 void func_80941FA4(EnGoroiwa* this, GlobalContext* globalCtx);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, GlobalContext* globalCtx);
-
-extern Gfx D_060032E0[];
-extern Gfx D_060082D0[];
-extern Gfx D_06005C20[];
-extern Gfx D_06003B40[];
-extern Gfx D_06008B90[];
-extern Gfx D_060042B0[];
-extern Gfx D_06004960[];
-extern Gfx D_06004EF0[];
-extern Gfx D_060003B0[];
-extern Gfx D_060028E0[];
-extern Gfx D_06002D70[];
-extern Gfx D_060072F0[];
-extern Gfx D_060077D0[];
-extern Gfx D_06007C60[];
 
 const ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
@@ -94,9 +81,9 @@ static f32 D_80942DFC[] = {
 };
 
 static Gfx* D_80942E0C[][3] = {
-    { D_060042B0, D_06004960, D_06004EF0 },
-    { D_060003B0, D_060028E0, D_06002D70 },
-    { D_060072F0, D_060077D0, D_06007C60 },
+    { object_goroiwa_DL_0042B0, object_goroiwa_DL_004960, object_goroiwa_DL_004EF0 },
+    { object_goroiwa_DL_0003B0, object_goroiwa_DL_0028E0, object_goroiwa_DL_002D70 },
+    { object_goroiwa_DL_0072F0, object_goroiwa_DL_0077D0, object_goroiwa_DL_007C60 },
 };
 
 static Color_RGBA8 D_80942E30[] = {
@@ -487,7 +474,7 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
                 temp_f2 = temp_f14 - this->actor.world.pos.y;
 
                 if (fabsf(temp_f2) < (fabsf(this->actor.velocity.y) + 0.01f)) {
-                    if (this->actor.flags & 0x40) {
+                    if (this->actor.flags & ACTOR_FLAG_40) {
                         sp48.x = this->actor.world.pos.x;
                         sp48.y = temp_f14 + 10.0f;
                         sp48.z = this->actor.world.pos.z;
@@ -519,7 +506,7 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
             if ((this->actor.world.pos.y + this->unk_1DC) <= sp40) {
                 this->unk_1E5 |= 0x20;
                 if (sp40 < (this->unk_1DC + sp78)) {
-                    if (this->actor.flags & 0x40) {
+                    if (this->actor.flags & ACTOR_FLAG_40) {
                         Vec3f sp34;
 
                         sp34.x = this->actor.world.pos.x;
@@ -541,10 +528,9 @@ s32 func_8093F6F8(EnGoroiwa* this, GlobalContext* globalCtx) {
     return false;
 }
 
-#ifdef NON_MATCHING
-// Stack
 void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     f32 temp;
+    f32 tmp2;
     f32 sp7C;
     Vec3f sp70;
     Vec3f sp64;
@@ -554,7 +540,8 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
         sp7C = this->unk_1C0;
     } else {
         temp = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
-        this->unk_1C0 = temp / this->unk_1DC;
+        tmp2 = temp / this->unk_1DC;
+        this->unk_1C0 = tmp2;
         sp7C = this->unk_1C0;
     }
 
@@ -580,9 +567,6 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     Matrix_CopyCurrentState(&sp24);
     func_8018219C(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/func_8093FAA4.s")
-#endif
 
 void func_8093FC00(EnGoroiwa* this) {
     s32 params = ENGOROIWA_GET_300(&this->actor);
@@ -685,7 +669,7 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
     f32 temp_f20;
     s32 pad3;
 
-    if (this->actor.flags & 0x40) {
+    if (this->actor.flags & ACTOR_FLAG_40) {
         spEC = (this->actor.scale.x + 0.1f) * 0.5f;
         sp10C.x = this->actor.world.pos.x;
         sp10C.y = this->actor.world.pos.y + this->unk_1DC;
@@ -737,8 +721,8 @@ void func_80940090(EnGoroiwa* this, GlobalContext* globalCtx) {
 
             Math_Vec3f_Sum(&sp100, &sp10C, &sp100);
             EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_s2, phi_s0, 30, 0, 0,
-                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1, 0xEF,
-                                 phi_s1);
+                                 ((Rand_ZeroOne() * 150.0f) + 300.0f) * this->actor.scale.x, phi_s3, 0, 0x32, -1,
+                                 OBJECT_GOROIWA, phi_s1);
             if (this->unk_1E6 == 0) {
                 sp100.x += ((Rand_ZeroOne() * 1200.0f) - 600.0f) * this->actor.scale.x;
                 sp100.y += ((Rand_ZeroOne() * 1400.0f) - 600.0f) * this->actor.scale.y;
@@ -820,7 +804,7 @@ void func_80940588(GlobalContext* globalCtx, Vec3f* arg1, Gfx* arg2[], Color_RGB
         }
 
         EffectSsKakera_Spawn(globalCtx, &sp100, &spF4, &sp100, phi_fp, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 100.0f) + 170.0f) * arg5, spC8, 0, 0x36, -1, 0xEF, phi_s7);
+                             ((Rand_ZeroOne() * 100.0f) + 170.0f) * arg5, spC8, 0, 0x36, -1, OBJECT_GOROIWA, phi_s7);
 
         for (j = 0; j < 2; j++) {
             spE8.x = (((Rand_ZeroOne() * 1000.0f) - 500.0f) * arg5) + sp100.x;
@@ -895,7 +879,7 @@ void func_80940A1C(GlobalContext* globalCtx, Vec3f* arg1, Gfx** arg2, Color_RGBA
         }
 
         EffectSsKakera_Spawn(globalCtx, &spE8, &spDC, &spE8, phi_s2, phi_s0, 30, 0, 0,
-                             ((Rand_ZeroOne() * 150.0f) + 250.0f) * arg5, phi_s3, 0, 0x36, -1, 0xEF, phi_s1);
+                             ((Rand_ZeroOne() * 150.0f) + 250.0f) * arg5, phi_s3, 0, 0x36, -1, OBJECT_GOROIWA, phi_s1);
 
         spE8.x += ((Rand_ZeroOne() * 800.0f) - 400.0f) * arg5;
         spE8.y += ((Rand_ZeroOne() * 800.0f) - 250.0f) * arg5;
@@ -914,7 +898,7 @@ void func_80940E38(EnGoroiwa* this, GlobalContext* globalCtx) {
     s16 sp46;
     s16 temp_a0;
 
-    if (this->actor.flags & 0x40) {
+    if (this->actor.flags & ACTOR_FLAG_40) {
         if (this->actor.xzDistToPlayer < 1000.0f) {
             sp5C = (1000.0f - this->actor.xzDistToPlayer) * 0.0012f * (this->actor.speedXZ * 0.1f);
             if (Rand_ZeroOne() < sp5C) {
@@ -1005,7 +989,7 @@ void EnGoroiwa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.shape.shadowAlpha = 200;
     func_8093EB58(this, globalCtx);
 
-    this->unk_1D0 = (Vec3s*)Lib_SegmentedToVirtual(sp2C->points);
+    this->unk_1D0 = Lib_SegmentedToVirtual(sp2C->points);
 
     func_8093EE18(this, globalCtx);
     func_8093EE64(this, this->actor.home.rot.y);
@@ -1371,7 +1355,7 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
             ptr->unk_18 = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &ptr->unk_28, &spD0, &this->actor, &spC4);
 
             if (ptr->unk_10 <= 0.0f) {
-                Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, 0);
+                Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, MTXMODE_NEW);
                 Matrix_MultiplyVector3fByState(&D_80942E6C, &spB8);
                 temp_f20 = this->unk_1DC * 0.9f;
 
@@ -1444,8 +1428,6 @@ void func_80942604(EnGoroiwa* this, GlobalContext* globalCtx) {
     }
 }
 
-#ifdef NON_MATCHING
-// stack for params and colCtx
 void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnGoroiwa* this = THIS;
@@ -1455,6 +1437,8 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp50;
     f32 sp4C;
     s32 sp48 = true;
+    u32 temp_v0_2;
+    CollisionPoly* tmp;
 
     if (!(player->stateFlags1 & (0x30000000 | 0x80 | 0x40))) {
         if (this->unk_1CC > 0) {
@@ -1471,9 +1455,10 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_8093E91C(this);
             sp5C = true;
 
-            if (this->actor.flags & 0x40) {
-                if (this->actor.floorPoly != NULL) {
-                    u32 temp_v0_2 = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+            if (this->actor.flags & ACTOR_FLAG_40) {
+                tmp = this->actor.floorPoly;
+                if (tmp != NULL) {
+                    temp_v0_2 = func_800C99D4(&globalCtx->colCtx, tmp, this->actor.floorBgId);
 
                     if ((temp_v0_2 == 14) || (temp_v0_2 == 15)) {
                         if (!(this->unk_1E5 & 0x40)) {
@@ -1530,7 +1515,7 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
 
             func_8093FAA4(this, globalCtx);
 
-            if (this->actor.flags & 0x40) {
+            if (this->actor.flags & ACTOR_FLAG_40) {
                 s32 params = ENGOROIWA_GET_C000(&this->actor);
 
                 func_8093E938(this);
@@ -1562,9 +1547,6 @@ void EnGoroiwa_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Goroiwa/EnGoroiwa_Update.s")
-#endif
 
 void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
     s32 pad;
@@ -1577,9 +1559,9 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
     Vec3s sp80;
 
     if (params == ENGOROIWA_C000_1) {
-        phi_fp = D_060032E0;
+        phi_fp = object_goroiwa_DL_0032E0;
     } else {
-        phi_fp = D_060082D0;
+        phi_fp = object_goroiwa_DL_0082D0;
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1E8); i++) {
@@ -1609,7 +1591,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_04076BC0);
+                gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
             }
@@ -1619,9 +1601,9 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
 void EnGoroiwa_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static Gfx* D_80942EB4[] = {
-        D_06005C20,
-        D_06003B40,
-        D_06008B90,
+        object_goroiwa_DL_005C20,
+        object_goroiwa_DL_003B40,
+        object_goroiwa_DL_008B90,
     };
     EnGoroiwa* this = THIS;
     s32 params = ENGOROIWA_GET_C000(&this->actor);

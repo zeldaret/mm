@@ -31,25 +31,25 @@
         <!-- <Blob Name="object_ds2n_Blob_005E18" Size="0x400" Offset="0x5E18" /> -->
         <Texture Name="object_ds2n_Tex_006218" OutName="tex_006218" Format="ci8" Width="32" Height="16" Offset="0x6218" />
         <!-- <Blob Name="object_ds2n_Blob_006418" Size="0x1B78" Offset="0x6418" /> -->
-        <Limb Name="object_ds2n_Standardlimb_008050" Type="Standard" Offset="0x8050" />
-        <Limb Name="object_ds2n_Standardlimb_00805C" Type="Standard" Offset="0x805C" />
-        <Limb Name="object_ds2n_Standardlimb_008068" Type="Standard" Offset="0x8068" />
-        <Limb Name="object_ds2n_Standardlimb_008074" Type="Standard" Offset="0x8074" />
-        <Limb Name="object_ds2n_Standardlimb_008080" Type="Standard" Offset="0x8080" />
-        <Limb Name="object_ds2n_Standardlimb_00808C" Type="Standard" Offset="0x808C" />
-        <Limb Name="object_ds2n_Standardlimb_008098" Type="Standard" Offset="0x8098" />
-        <Limb Name="object_ds2n_Standardlimb_0080A4" Type="Standard" Offset="0x80A4" />
-        <Limb Name="object_ds2n_Standardlimb_0080B0" Type="Standard" Offset="0x80B0" />
-        <Limb Name="object_ds2n_Standardlimb_0080BC" Type="Standard" Offset="0x80BC" />
-        <Limb Name="object_ds2n_Standardlimb_0080C8" Type="Standard" Offset="0x80C8" />
-        <Limb Name="object_ds2n_Standardlimb_0080D4" Type="Standard" Offset="0x80D4" />
-        <Limb Name="object_ds2n_Standardlimb_0080E0" Type="Standard" Offset="0x80E0" />
-        <Limb Name="object_ds2n_Standardlimb_0080EC" Type="Standard" Offset="0x80EC" />
-        <Limb Name="object_ds2n_Standardlimb_0080F8" Type="Standard" Offset="0x80F8" />
-        <Limb Name="object_ds2n_Standardlimb_008104" Type="Standard" Offset="0x8104" />
-        <Limb Name="object_ds2n_Standardlimb_008110" Type="Standard" Offset="0x8110" />
-        <Limb Name="object_ds2n_Standardlimb_00811C" Type="Standard" Offset="0x811C" />
-        <Skeleton Name="object_ds2n_Skel_008170" Type="Normal" LimbType="Standard" Offset="0x8170" />
+        <Limb Name="object_ds2n_Standardlimb_008050" Type="Standard" EnumName="OBJECT_DS2N_LIMB_01" Offset="0x8050" />
+        <Limb Name="object_ds2n_Standardlimb_00805C" Type="Standard" EnumName="OBJECT_DS2N_LIMB_02" Offset="0x805C" />
+        <Limb Name="object_ds2n_Standardlimb_008068" Type="Standard" EnumName="OBJECT_DS2N_LIMB_03" Offset="0x8068" />
+        <Limb Name="object_ds2n_Standardlimb_008074" Type="Standard" EnumName="OBJECT_DS2N_LIMB_04" Offset="0x8074" />
+        <Limb Name="object_ds2n_Standardlimb_008080" Type="Standard" EnumName="OBJECT_DS2N_LIMB_05" Offset="0x8080" />
+        <Limb Name="object_ds2n_Standardlimb_00808C" Type="Standard" EnumName="OBJECT_DS2N_LIMB_06" Offset="0x808C" />
+        <Limb Name="object_ds2n_Standardlimb_008098" Type="Standard" EnumName="OBJECT_DS2N_LIMB_07" Offset="0x8098" />
+        <Limb Name="object_ds2n_Standardlimb_0080A4" Type="Standard" EnumName="OBJECT_DS2N_LIMB_08" Offset="0x80A4" />
+        <Limb Name="object_ds2n_Standardlimb_0080B0" Type="Standard" EnumName="OBJECT_DS2N_LIMB_09" Offset="0x80B0" />
+        <Limb Name="object_ds2n_Standardlimb_0080BC" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0A" Offset="0x80BC" />
+        <Limb Name="object_ds2n_Standardlimb_0080C8" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0B" Offset="0x80C8" />
+        <Limb Name="object_ds2n_Standardlimb_0080D4" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0C" Offset="0x80D4" />
+        <Limb Name="object_ds2n_Standardlimb_0080E0" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0D" Offset="0x80E0" />
+        <Limb Name="object_ds2n_Standardlimb_0080EC" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0E" Offset="0x80EC" />
+        <Limb Name="object_ds2n_Standardlimb_0080F8" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0F" Offset="0x80F8" />
+        <Limb Name="object_ds2n_Standardlimb_008104" Type="Standard" EnumName="OBJECT_DS2N_LIMB_10" Offset="0x8104" />
+        <Limb Name="object_ds2n_Standardlimb_008110" Type="Standard" EnumName="OBJECT_DS2N_LIMB_11" Offset="0x8110" />
+        <Limb Name="object_ds2n_Standardlimb_00811C" Type="Standard" EnumName="OBJECT_DS2N_LIMB_12" Offset="0x811C" />
+        <Skeleton Name="object_ds2n_Skel_008170" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DS2N_LIMB_NONE" LimbMax="OBJECT_DS2N_LIMB_MAX" EnumName="object_ds2n_Limbs" Offset="0x8170" />
         <!-- <Blob Name="object_ds2n_Blob_008178" Size="0x8" Offset="0x8178" /> -->
     </File>
 </Root>

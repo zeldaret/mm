@@ -14,20 +14,20 @@
         <DList Name="gameplay_dangeon_keep_DL_007A50" Offset="0x7A50" />
         <DList Name="gameplay_dangeon_keep_DL_007B20" Offset="0x7B20" />
         <DList Name="gameplay_dangeon_keep_DL_007BF0" Offset="0x7BF0" />
-        <DList Name="gameplay_dangeon_keep_DL_007E00" Offset="0x7E00" />
-        <Collision Name="gameplay_dangeon_keep_Colheader_008018" Offset="0x8018" />
+        <DList Name="gRustyFloorSwitchDL" Offset="0x7E00" />
+        <Collision Name="gFloorSwitchCol" Offset="0x8018" />
         <DList Name="gameplay_dangeon_keep_DL_0081D0" Offset="0x81D0" />
-        <DList Name="gameplay_dangeon_keep_DL_0083F0" Offset="0x83F0" />
-        <DList Name="gameplay_dangeon_keep_DL_0085F0" Offset="0x85F0" />
+        <DList Name="gEyeSwitchGoldDL" Offset="0x83F0" />
+        <DList Name="gEyeSwitchSilverDL" Offset="0x85F0" />
         <Texture Name="gameplay_dangeon_keep_Tex_0086C0" OutName="tex_0086C0" Format="rgba16" Width="32" Height="32" Offset="0x86C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_008EC0" OutName="tex_008EC0" Format="rgba16" Width="32" Height="32" Offset="0x8EC0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_0096C0" OutName="tex_0096C0" Format="rgba16" Width="32" Height="32" Offset="0x96C0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_009EC0" OutName="tex_009EC0" Format="rgba16" Width="32" Height="32" Offset="0x9EC0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_00A6C0" OutName="tex_00A6C0" Format="rgba16" Width="32" Height="32" Offset="0xA6C0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_00AEC0" OutName="tex_00AEC0" Format="rgba16" Width="32" Height="32" Offset="0xAEC0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_00B6C0" OutName="tex_00B6C0" Format="rgba16" Width="32" Height="32" Offset="0xB6C0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_00BEC0" OutName="tex_00BEC0" Format="rgba16" Width="32" Height="32" Offset="0xBEC0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_00C6C0" OutName="tex_00C6C0" Format="rgba16" Width="32" Height="32" Offset="0xC6C0" />
+        <Texture Name="gEyeSwitchGoldClosedTex" OutName="eye_gold_closed" Format="rgba16" Width="32" Height="32" Offset="0x96C0" />
+        <Texture Name="gEyeSwitchGoldOpeningTex" OutName="eye_gold_opening" Format="rgba16" Width="32" Height="32" Offset="0x9EC0" />
+        <Texture Name="gEyeSwitchGoldClosingTex" OutName="eye_gold_closing" Format="rgba16" Width="32" Height="32" Offset="0xA6C0" />
+        <Texture Name="gEyeSwitchGoldOpenTex" OutName="eye_gold_open" Format="rgba16" Width="32" Height="32" Offset="0xAEC0" />
+        <Texture Name="gEyeSwitchSilverOpenTex" OutName="eye_silver_open" Format="rgba16" Width="32" Height="32" Offset="0xB6C0" />
+        <Texture Name="gEyeSwitchSilverHalfTex" OutName="eye_silver_half" Format="rgba16" Width="32" Height="32" Offset="0xBEC0" />
+        <Texture Name="gEyeSwitchSilverClosedTex" OutName="eye_silver_closed" Format="rgba16" Width="32" Height="32" Offset="0xC6C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00CEC0" OutName="tex_00CEC0" Format="rgba16" Width="32" Height="32" Offset="0xCEC0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00D6C0" OutName="tex_00D6C0" Format="rgba16" Width="32" Height="32" Offset="0xD6C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_00DEC0" OutName="tex_00DEC0" Format="rgba16" Width="32" Height="32" Offset="0xDEC0" />
@@ -50,8 +50,8 @@
         <Texture Name="gameplay_dangeon_keep_Tex_0162C0" OutName="tex_0162C0" Format="i8" Width="64" Height="64" Offset="0x162C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_0172C0" OutName="tex_0172C0" Format="rgba16" Width="32" Height="32" Offset="0x172C0" />
         <Texture Name="gameplay_dangeon_keep_Tex_017AC0" OutName="tex_017AC0" Format="ia16" Width="4" Height="4" Offset="0x17AC0" />
-        <DList Name="gameplay_dangeon_keep_DL_017EA0" Offset="0x17EA0" />
-        <DList Name="gameplay_dangeon_keep_DL_018090" Offset="0x18090" />
+        <DList Name="gameplay_dangeon_keep_DL_017EA0" Offset="0x17EA0" /> <!-- pot displaylist -->
+        <DList Name="gameplay_dangeon_keep_DL_018090" Offset="0x18090" /> <!-- pot break shard displaylist -->
         <DList Name="gameplay_dangeon_keep_DL_0182A0" Offset="0x182A0" />
         <DList Name="gameplay_dangeon_keep_DL_0182A8" Offset="0x182A8" />
         <Texture Name="gameplay_dangeon_keep_Tex_018350" OutName="tex_018350" Format="i8" Width="64" Height="64" Offset="0x18350" />
@@ -59,15 +59,15 @@
         <Texture Name="gameplay_dangeon_keep_Tex_01A350" OutName="tex_01A350" Format="i8" Width="64" Height="64" Offset="0x1A350" />
         <TextureAnimation Name="gameplay_dangeon_keep_Matanimheader_01B370" Offset="0x1B370" />
         <DList Name="gameplay_dangeon_keep_DL_01B500" Offset="0x1B500" />
-        <DList Name="gameplay_dangeon_keep_DL_01B508" Offset="0x1B508" />
+        <DList Name="gFloorSwitch1DL" Offset="0x1B508" />
         <DList Name="gameplay_dangeon_keep_DL_01B780" Offset="0x1B780" />
-        <DList Name="gameplay_dangeon_keep_DL_01B788" Offset="0x1B788" />
+        <DList Name="gFloorSwitch2DL" Offset="0x1B788" />
         <DList Name="gameplay_dangeon_keep_DL_01B9F0" Offset="0x1B9F0" />
-        <DList Name="gameplay_dangeon_keep_DL_01B9F8" Offset="0x1B9F8" />
-        <DList Name="gameplay_dangeon_keep_DL_01BEE0" Offset="0x1BEE0" />
-        <DList Name="gameplay_dangeon_keep_DL_01BFB8" Offset="0x1BFB8" />
-        <DList Name="gameplay_dangeon_keep_DL_01C058" Offset="0x1C058" />
-        <TextureAnimation Name="gameplay_dangeon_keep_Matanimheader_01C118" Offset="0x1C118" />
+        <DList Name="gFloorSwitch3DL" Offset="0x1B9F8" />
+        <DList Name="gCrystalSwitchCoreDL" Offset="0x1BEE0" />
+        <DList Name="gCrystalSwitchDiamondDL" Offset="0x1BFB8" />
+        <DList Name="gCrystalSwitchBaseDL" Offset="0x1C058" />
+        <TextureAnimation Name="gCrystalSwitchAnimatedMat" Offset="0x1C118" />
         <DList Name="gameplay_dangeon_keep_DL_01C220" Offset="0x1C220" />
         <DList Name="gameplay_dangeon_keep_DL_01C228" Offset="0x1C228" />
         <Texture Name="gameplay_dangeon_keep_Tex_01C2D8" OutName="tex_01C2D8" Format="rgba16" Width="32" Height="64" Offset="0x1C2D8" />

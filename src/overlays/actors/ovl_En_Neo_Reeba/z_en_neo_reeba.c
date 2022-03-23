@@ -7,7 +7,7 @@
 #include "z_en_neo_reeba.h"
 #include "objects/object_rb/object_rb.h"
 
-#define FLAGS 0x00000205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 
@@ -629,7 +629,7 @@ void EnNeoReeba_DrawEffects1(EnNeoReeba* this, GlobalContext* globalCtx) { // DD
     this->limbPos[ARRAY_COUNT(this->limbPos) - 1].y += phi_f2;
 
     this->drawEffectScale = drawEffectScale;
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), drawEffectScale, 0.5f,
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), drawEffectScale, 0.5f,
                   this->drawEffectAlpha, this->drawEffectType);
 }
 
@@ -650,7 +650,7 @@ void EnNeoReeba_DrawEffects2(EnNeoReeba* this, GlobalContext* globalCtx) { // DF
         }
 
         this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
-        func_800BE680(globalCtx, NULL, this->limbPos, 4, this->drawEffectScale, 0.5f, this->drawEffectAlpha,
+        Actor_DrawDamageEffects(globalCtx, NULL, this->limbPos, 4, this->drawEffectScale, 0.5f, this->drawEffectAlpha,
                       this->drawEffectType);
     }
 }
