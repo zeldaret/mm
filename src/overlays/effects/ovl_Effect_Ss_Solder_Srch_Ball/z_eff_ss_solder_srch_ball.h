@@ -12,7 +12,7 @@ typedef struct {
     /* 0x18 */ Vec3f accel;
     /* 0x24 */ s16 scale;
     /* 0x28 */ s16* playerDetected;
-    /* 0x2C */ s16 flags;
+    /* 0x2C */ s16 params;
 } EffectSsSolderSrchBallInitParams; // size = 0x30
 
 extern const EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars;

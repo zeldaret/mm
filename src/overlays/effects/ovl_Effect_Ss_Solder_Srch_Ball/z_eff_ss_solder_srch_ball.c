@@ -7,7 +7,7 @@
 #include "z_eff_ss_solder_srch_ball.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define rFlags regs[0]
+#define rParams regs[0]
 
 #define PARAMS ((EffectSsSolderSrchBallInitParams*)initParamsx)
 
@@ -27,12 +27,12 @@ u32 EffectSsSolderSrchBall_Init(GlobalContext* globalCtx, u32 index, EffectSs* t
     this->velocity = initParams->velocity;
     this->accel = initParams->accel;
     this->update = EffectSsSolderSrchBall_Update;
-    if (!(initParams->flags & SOLDERSRCHBALL_INVISIBLE)) {
+    if (!(initParams->params & SOLDERSRCHBALL_INVISIBLE)) {
         this->draw = EffectSsSolderSrchBall_Draw;
     }
     this->life = 10;
     this->rgScale = initParams->scale;
-    this->rFlags = initParams->flags;
+    this->rParams = initParams->params;
     this->actor = (Actor*)initParams->playerDetected; // actor field was incorrectly used as a pointer to something else
     return 1;
 }
@@ -75,7 +75,7 @@ void EffectSsSolderSrchBall_Update(GlobalContext* globalCtx, u32 index, EffectSs
     playerPosDiffY = player->actor.world.pos.y - this->pos.y;
     playerPosDiffZ = player->actor.world.pos.z - this->pos.z;
 
-    if (this->rFlags >= SOLDERSRCHBALL_SMALL_DETECT_RADIUS) {
+    if (this->rParams >= SOLDERSRCHBALL_SMALL_DETECT_RADIUS) {
         if ((sqrtf(SQ(playerPosDiffX) + SQ(playerPosDiffZ)) < 10.0f) && (sqrtf(SQ(playerPosDiffY)) < 10.0f)) {
             *playerDetected = true;
         }
