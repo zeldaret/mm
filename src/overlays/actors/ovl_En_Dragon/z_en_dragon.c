@@ -232,7 +232,29 @@ void func_80B5EF88(EnDragon* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F3A4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F418.s")
+void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3f sp28;
+    s16 temp_v0;
+
+    if (!ActorCutscene_GetCanPlayNext(this->unk_2C0)) {
+        ActorCutscene_SetIntentToPlay(this->unk_2C0);
+    } else {
+        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2C0, &this->actor);
+        Math_Vec3f_Copy(&sp28, &this->unk_260);
+        sp28.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
+        sp28.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
+        Math_Vec3f_Copy(&this->actor.world.pos, &sp28);
+        temp_v0 = Math_Vec3f_Yaw(&player->actor.world.pos, &this->unk_254);
+        player->actor.shape.rot.y = temp_v0;
+        player->actor.world.rot.y = temp_v0;
+        this->unk_2BE = 0;
+        this->unk_2CA = 0;
+        this->unk_2B8 = 0;
+        func_80B5EAA0(this, 3);
+        this->actionFunc = func_80B5F508;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F508.s")
 
