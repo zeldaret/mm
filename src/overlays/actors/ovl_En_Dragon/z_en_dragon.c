@@ -25,7 +25,6 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5EAA0(EnDragon* this, s32 arg1);
 void func_80B5EDF0(EnDragon* this);
-void func_80B60138(EnDragon* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Dragon_InitVars = {
@@ -220,7 +219,41 @@ void func_80B5EDF0(EnDragon* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5FD68.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B60138.s")
+void func_80B60138(EnDragon* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    u32 sp30;
+
+    if ((this->unk_2BA == 1) && ((this->unk_2DC.elements[2].info.bumperFlags & BUMP_HIT) ||
+                                 (this->unk_2DC.elements[3].info.bumperFlags & BUMP_HIT) ||
+                                 (this->unk_2DC.elements[4].info.bumperFlags & BUMP_HIT) ||
+                                 (this->unk_2DC.elements[5].info.bumperFlags & BUMP_HIT) ||
+                                 (this->unk_2DC.elements[6].info.bumperFlags & BUMP_HIT) ||
+                                 (this->unk_2DC.elements[7].info.bumperFlags & BUMP_HIT))) {
+        Actor_ApplyDamage(&this->actor);
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+        if (this->actor.colChkInfo.health > 0) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
+            this->unk_2BA = 3;
+        } else {
+            Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DEAD);
+            this->actor.flags |= ACTOR_FLAG_8000000;
+            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_100000;
+            this->unk_2BA = 5;
+            this->actionFunc = func_80B5FCC0;
+        }
+    }
+
+    if ((this->unk_2BA == 1) && (this->unk_2B6 == 0) && (player->invincibilityTimer == 0) &&
+        (this->unk_2DC.elements[0].info.ocElemFlags & OCELEM_HIT) &&
+        (!(func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp30) >= 0.0f) || (sp30 != 1))) {
+        this->actor.speedXZ = 0.0f;
+        this->unk_2BA = 2;
+        this->actor.flags |= ACTOR_FLAG_100000;
+        this->actionFunc = func_80B5F418;
+    }
+}
 
 void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
