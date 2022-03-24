@@ -12,7 +12,7 @@
 #include "objects/object_os_anime/object_os_anime.h"
 
 static AnimationInfoS sAnimations[] = {
-    { &object_aob_Anim_00007C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
