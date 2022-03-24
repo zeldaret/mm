@@ -1,6 +1,5 @@
 #include "global.h"
 
-void* AudioHeap_AllocZeroed(AudioAllocPool* pool, size_t size);
 void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id);
 void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize);
 SampleCacheEntry* AudioHeap_AllocTemporarySampleCacheEntry(size_t size);

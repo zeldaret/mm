@@ -3305,6 +3305,7 @@ void AudioHeap_DiscardFont(s32 fontId);
 void* AudioHeap_WritebackDCache(void* addr, size_t size);
 void* AudioHeap_AllocAttemptExternal(AudioAllocPool* pool, size_t size);
 void* AudioHeap_AllocDmaMemory(AudioAllocPool* pool, size_t size);
+void* AudioHeap_AllocZeroed(AudioAllocPool* pool, size_t size);
 void* AudioHeap_Alloc(AudioAllocPool* pool, size_t size);
 void AudioHeap_AllocPoolInit(AudioAllocPool* pool, void* addr, size_t size);
 void AudioHeap_PopCache(s32 tableType);
