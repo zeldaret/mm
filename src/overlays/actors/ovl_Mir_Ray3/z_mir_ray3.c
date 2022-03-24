@@ -249,16 +249,16 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
 
     for (i = 0; i < ARRAY_COUNT(this->unk_218); i++) {
         if (ptr[i].unk_4C != NULL) {
-            spEC[0] = ptr[i].unk_4C->normal.x * (1.0f / 32767.0f);
-            spEC[1] = ptr[i].unk_4C->normal.y * (1.0f / 32767.0f);
-            spEC[2] = ptr[i].unk_4C->normal.z * (1.0f / 32767.0f);
+            spEC[0] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.x);
+            spEC[1] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.y);
+            spEC[2] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.z);
 
-            if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp140, &sp134, &sp128, 1)) {
+            if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp140, &sp134, &sp128, true)) {
                 ptr[i].unk_00.x = sp128.x;
                 ptr[i].unk_00.y = sp128.y;
                 ptr[i].unk_00.z = sp128.z;
 
-                temp_f0 = sqrtf((SQ(sp128.x - sp140.x) + SQ(sp128.y - sp140.y)) + SQ(sp128.z - sp140.z));
+                temp_f0 = sqrtf(SQ(sp128.x - sp140.x) + SQ(sp128.y - sp140.y) + SQ(sp128.z - sp140.z));
 
                 if (temp_f0 < (temp_f26 * 0.9f)) {
                     ptr[i].unk_50 = 0xFF;
@@ -284,7 +284,8 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
                         ptr[i].unk_0C.mf[2][3] = ptr[i].unk_0C.mf[3][0] = ptr[i].unk_0C.mf[3][1] =
                             ptr[i].unk_0C.mf[3][2] = 0.0f;
 
-                if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp11C, &sp110, &sp104, 1)) {
+                if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp11C, &sp110, &sp104,
+                                          true)) {
                     ptr[i].unk_0C.mf[0][0] = sp104.x - sp128.x;
                     ptr[i].unk_0C.mf[0][1] = sp104.y - sp128.y;
                     ptr[i].unk_0C.mf[0][2] = sp104.z - sp128.z;
@@ -298,7 +299,8 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
                 sp110.y = (spF8[1] * 4.0f) + sp11C.y;
                 sp110.z = (spF8[2] * 4.0f) + sp11C.z;
 
-                if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp11C, &sp110, &sp104, 1)) {
+                if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp11C, &sp110, &sp104,
+                                          true)) {
                     ptr[i].unk_0C.mf[1][0] = sp104.x - sp128.x;
                     ptr[i].unk_0C.mf[1][1] = sp104.y - sp128.y;
                     ptr[i].unk_0C.mf[1][2] = sp104.z - sp128.z;
