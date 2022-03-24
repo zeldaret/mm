@@ -23,6 +23,7 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
+void func_80B5EDF0(EnDragon* this, s32 arg1);
 
 #if 0
 const ActorInit En_Dragon_InitVars = {
@@ -121,9 +122,46 @@ extern DamageTable D_80B605F4;
 extern ColliderJntSphElementInit D_80B60614[8];
 extern ColliderJntSphInit D_80B60734;
 
-extern UNK_TYPE D_060048B8;
+extern FlexSkeletonHeader D_06004398;
+extern AnimationHeader D_060048B8;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Init.s")
+void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnDragon* this = THIS;
+
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004398, &D_060048B8, this->jointTable, this->morphTable, 0x10);
+    this->actor.colChkInfo.health = 4;
+    this->actor.colChkInfo.damageTable = &D_80B605F4;
+    this->actor.targetMode = 0xA;
+    Collider_InitAndSetJntSph(globalCtx, &this->unk_2DC, &this->actor, &D_80B60734, this->unk_2FC);
+
+    this->unk_2DC.elements[0].dim.scale = this->unk_2DC.elements[1].dim.scale = this->unk_2DC.elements[2].dim.scale =
+        this->unk_2DC.elements[3].dim.scale = this->unk_2DC.elements[4].dim.scale =
+            this->unk_2DC.elements[5].dim.scale = this->unk_2DC.elements[6].dim.scale =
+                this->unk_2DC.elements[7].dim.scale = 1.0f;
+    this->unk_2DC.elements[0].dim.modelSphere.radius = 150;
+    this->unk_2DC.elements[0].dim.modelSphere.center.x = 420;
+    this->unk_2DC.elements[1].dim.modelSphere.radius = 160;
+    this->unk_2DC.elements[1].dim.modelSphere.center.x = 630;
+    this->unk_2DC.elements[2].dim.modelSphere.radius = 130;
+    this->unk_2DC.elements[2].dim.modelSphere.center.x = 630;
+    this->unk_2DC.elements[3].dim.modelSphere.radius = 170;
+    this->unk_2DC.elements[3].dim.modelSphere.center.x = 920;
+    this->unk_2DC.elements[4].dim.modelSphere.radius = 150;
+    this->unk_2DC.elements[4].dim.modelSphere.center.x = 530;
+    this->unk_2DC.elements[5].dim.modelSphere.radius = 140;
+    this->unk_2DC.elements[5].dim.modelSphere.center.x = 730;
+    this->unk_2DC.elements[6].dim.modelSphere.radius = 120;
+    this->unk_2DC.elements[6].dim.modelSphere.center.x = 430;
+    this->unk_2DC.elements[7].dim.modelSphere.radius = 110;
+    this->unk_2DC.elements[7].dim.modelSphere.center.x = 160;
+    this->unk_250 = (this->actor.params >> 7) & 0x1F;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->unk_2BA = 0;
+    this->actor.hintId = 0xE;
+    this->unk_2D4 = 0.5f;
+    this->actor.flags &= ~ACTOR_FLAG_8000000;
+    func_80B5EDF0(this, 0xA0);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Destroy.s")
 
