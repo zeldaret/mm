@@ -64,7 +64,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019AAF0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019AB40.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_ResetSequencePlayer.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019AC10.s")
 

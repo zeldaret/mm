@@ -6,29 +6,29 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B250.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B318.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_DiscardFont.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B3FC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B474.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B4F8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_WritebackDCache.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B520.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B578.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_AllocAttemptExternal.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_AllocDmaMemory.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B608.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B640.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_AllocZeroed.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B69C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B6E8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_Alloc.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B740.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_AllocPoolInit.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B768.s")
 
@@ -38,7 +38,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B7BC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B8FC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_InitMainPool.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018B95C.s")
 
@@ -48,9 +48,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018BB28.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018BBEC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_AllocCached.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018C380.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_SearchCaches.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018C3D8.s")
 
@@ -70,15 +70,15 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018CC3C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018CCA8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_ResetStep.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018CFAC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018D57C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_SearchPermanentCache.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018D5D4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_AllocPermanent.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018D658.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_AllocSampleCache.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018D6C8.s")
 
@@ -100,7 +100,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018DFE0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018E00C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/AudioHeap_ApplySampleBankCache.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_heap/func_8018E03C.s")
 

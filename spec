@@ -623,8 +623,6 @@ beginseg
     include "build/src/code/audio/audio_heap.o"
     include "build/data/code/audio_heap.bss.o"
     include "build/src/code/audio/audio_load.o"
-    include "build/data/code/audio_load.data.o"
-    include "build/data/code/audio_load.bss.o"
     include "build/src/code/audio/code_80192BE0.o"
     include "build/data/code/code_80192BE0.data.o"
     include "build/src/code/audio/audio_dcache.o"
