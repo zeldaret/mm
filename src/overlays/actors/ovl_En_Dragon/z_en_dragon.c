@@ -125,6 +125,8 @@ extern ColliderJntSphElementInit D_80B60614[8];
 extern ColliderJntSphInit D_80B60734;
 extern AnimationHeader* D_80B60744[];
 extern u8 D_80B60754[];
+extern Vec3f D_80B60788[];
+extern Vec3f D_80B607E8[];
 
 extern FlexSkeletonHeader D_06004398;
 extern AnimationHeader D_060048B8;
@@ -186,9 +188,15 @@ void func_80B5EAA0(EnDragon* this, s32 arg1) {
     Animation_Change(&this->skelAnime, D_80B60744[arg1], 1.0f, phi_f0, this->unk_2D0, D_80B60754[this->unk_24C], -4.0f);
 }
 
+void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EB40.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5ED90.s")
+void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
+    if (this->unk_2B4 == 0) {
+        func_800B8D50(globalCtx, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f, 8);
+        func_80B5EDF0(this);
+    }
+}
 
 void func_80B5EDF0(EnDragon* this) {
     func_80B5EAA0(this, 3);

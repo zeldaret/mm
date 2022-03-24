@@ -17,9 +17,12 @@ typedef struct EnDragon {
     /* 0x250 */ s32 unk_250;
     /* 0x254 */ Vec3f unk_254;
     /* 0x260 */ Vec3f unk_260;
-    /* 0x26C */ char unk_26C[0x30];
+    /* 0x26C */ Vec3f unk_26C;
+    /* 0x278 */ char unk_278[0x18];
+    /* 0x290 */ Vec3f unk_290;
     /* 0x29C */ Vec3f unk_29C;
-    /* 0x2A8 */ char unk_2A8[0x6];
+    /* 0x2A8 */ s16 unk_2A8;
+    /* 0x2AA */ char unk_2AA[0x4];
     /* 0x2AE */ s16 unk_2AE;
     /* 0x2B0 */ s16 unk_2B0;
     /* 0x2B2 */ s16 unk_2B2;
@@ -30,7 +33,8 @@ typedef struct EnDragon {
     /* 0x2BC */ char unk_2BC[0x2];
     /* 0x2BE */ s16 unk_2BE;
     /* 0x2C0 */ s16 unk_2C0;
-    /* 0x2C0 */ char unk_2C2[0x8];
+    /* 0x2C0 */ char unk_2C2[0x6];
+    /* 0x2C8 */ s16 unk_2C8;
     /* 0x2CA */ s16 unk_2CA;
     /* 0x2CC */ s16 unk_2CC;
     /* 0x2CE */ char unk_2CE[0x2];
