@@ -25,6 +25,7 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5EAA0(EnDragon* this, s32 arg1);
 void func_80B5EDF0(EnDragon* this);
+void func_80B60138(EnDragon* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Dragon_InitVars = {
@@ -221,7 +222,44 @@ void func_80B5EDF0(EnDragon* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B60138.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Update.s")
+void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnDragon* this = THIS;
+
+    if (this->unk_2AE != 0) {
+        this->unk_2AE--;
+    }
+
+    if (this->unk_2B4 != 0) {
+        this->unk_2B4--;
+    }
+
+    if (this->unk_2B2 != 0) {
+        this->unk_2B2--;
+    }
+
+    if (this->unk_2B6 != 0) {
+        this->unk_2B6--;
+    }
+
+    func_80B60138(this, globalCtx);
+    this->actor.shape.rot.y = this->actor.world.rot.y;
+    Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk_29C);
+    Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
+    Actor_SetScale(&this->actor, this->unk_2D4);
+
+    this->actionFunc(this, globalCtx);
+    Actor_MoveWithGravity(&this->actor);
+
+    if (this->unk_2BA != 2) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_2DC.base);
+    }
+
+    if (this->unk_2BA < 3) {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_2DC.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->unk_2DC.base);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B6043C.s")
 

@@ -15,9 +15,14 @@ typedef struct EnDragon {
     /* 0x248 */ EnDragonActionFunc actionFunc;
     /* 0x24C */ s32 unk_24C;
     /* 0x250 */ s32 unk_250;
-    /* 0x254 */ char unk_254[0x60];
+    /* 0x254 */ char unk_254[0x48];
+    /* 0x29C */ Vec3f unk_29C;
+    /* 0x2A8 */ char unk_2A8[0x6];
+    /* 0x2AE */ s16 unk_2AE;
+    /* 0x2B0 */ char unk_2B0[0x2];
+    /* 0x2B2 */ s16 unk_2B2;
     /* 0x2B4 */ s16 unk_2B4;
-    /* 0x2B6 */ char unk_2B6[0x2];
+    /* 0x2B6 */ s16 unk_2B6;
     /* 0x2B8 */ s16 unk_2B8;
     /* 0x2BA */ s16 unk_2BA;
     /* 0x2BC */ char unk_2BC[0x2];
