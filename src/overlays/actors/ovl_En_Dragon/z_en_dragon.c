@@ -220,7 +220,13 @@ void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EF88.s")
+void func_80B5EF88(EnDragon* this) {
+    this->unk_2BE = 0;
+    this->unk_2B0 = this->unk_2BE;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR_TRG);
+    this->unk_2AE = 0xFA;
+    this->actionFunc = func_80B5EFD0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EFD0.s")
 
