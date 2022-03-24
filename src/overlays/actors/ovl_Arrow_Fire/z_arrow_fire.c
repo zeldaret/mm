@@ -219,7 +219,7 @@ void FireArrow_SetQuadVerticies(ArrowFire* this) {
     static Vec3f D_809222B4 = { 0.0f, 700.0f, 100.0f };
     static Vec3f D_809222C0 = { 0.0f, 27.0f, 400.0f };
     static Vec3f D_809222CC = { 0.0f, 700.0f, -100.0f };
-    static Vec3f D_809222D8 = { 0.0f, 27.0f, -400 };
+    static Vec3f D_809222D8 = { 0.0f, 27.0f, -400.0f };
     Vec3f sp44;
     Vec3f sp38;
     Vec3f sp2C;
