@@ -88,7 +88,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A9ACD0(BgHakuginPostUnkStruct* arg0) {
-    bzero((void*)arg0, sizeof(BgHakuginPostUnkStruct));
+    bzero(arg0, sizeof(BgHakuginPostUnkStruct));
 }
 
 void func_80A9ACF0(void) {

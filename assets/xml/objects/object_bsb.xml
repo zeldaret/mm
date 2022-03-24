@@ -52,27 +52,27 @@
         <Texture Name="object_bsb_Tex_00C160" OutName="tex_00C160" Format="rgba16" Width="8" Height="8" Offset="0xC160" />
         <Texture Name="object_bsb_Tex_00C1E0" OutName="tex_00C1E0" Format="rgba16" Width="8" Height="8" Offset="0xC1E0" />
         <TextureAnimation Name="object_bsb_Matanimheader_00C298" Offset="0xC298" />
-        <Limb Name="object_bsb_Standardlimb_00C2A0" Type="Standard" Offset="0xC2A0" />
-        <Limb Name="object_bsb_Standardlimb_00C2AC" Type="Standard" Offset="0xC2AC" />
-        <Limb Name="object_bsb_Standardlimb_00C2B8" Type="Standard" Offset="0xC2B8" />
-        <Limb Name="object_bsb_Standardlimb_00C2C4" Type="Standard" Offset="0xC2C4" />
-        <Limb Name="object_bsb_Standardlimb_00C2D0" Type="Standard" Offset="0xC2D0" />
-        <Limb Name="object_bsb_Standardlimb_00C2DC" Type="Standard" Offset="0xC2DC" />
-        <Limb Name="object_bsb_Standardlimb_00C2E8" Type="Standard" Offset="0xC2E8" />
-        <Limb Name="object_bsb_Standardlimb_00C2F4" Type="Standard" Offset="0xC2F4" />
-        <Limb Name="object_bsb_Standardlimb_00C300" Type="Standard" Offset="0xC300" />
-        <Limb Name="object_bsb_Standardlimb_00C30C" Type="Standard" Offset="0xC30C" />
-        <Limb Name="object_bsb_Standardlimb_00C318" Type="Standard" Offset="0xC318" />
-        <Limb Name="object_bsb_Standardlimb_00C324" Type="Standard" Offset="0xC324" />
-        <Limb Name="object_bsb_Standardlimb_00C330" Type="Standard" Offset="0xC330" />
-        <Limb Name="object_bsb_Standardlimb_00C33C" Type="Standard" Offset="0xC33C" />
-        <Limb Name="object_bsb_Standardlimb_00C348" Type="Standard" Offset="0xC348" />
-        <Limb Name="object_bsb_Standardlimb_00C354" Type="Standard" Offset="0xC354" />
-        <Limb Name="object_bsb_Standardlimb_00C360" Type="Standard" Offset="0xC360" />
-        <Limb Name="object_bsb_Standardlimb_00C36C" Type="Standard" Offset="0xC36C" />
-        <Limb Name="object_bsb_Standardlimb_00C378" Type="Standard" Offset="0xC378" />
-        <Limb Name="object_bsb_Standardlimb_00C384" Type="Standard" Offset="0xC384" />
-        <Skeleton Name="object_bsb_Skel_00C3E0" Type="Normal" LimbType="Standard" Offset="0xC3E0" />
+        <Limb Name="object_bsb_Standardlimb_00C2A0" Type="Standard" EnumName="OBJECT_BSB_LIMB_01" Offset="0xC2A0" />
+        <Limb Name="object_bsb_Standardlimb_00C2AC" Type="Standard" EnumName="OBJECT_BSB_LIMB_02" Offset="0xC2AC" />
+        <Limb Name="object_bsb_Standardlimb_00C2B8" Type="Standard" EnumName="OBJECT_BSB_LIMB_03" Offset="0xC2B8" />
+        <Limb Name="object_bsb_Standardlimb_00C2C4" Type="Standard" EnumName="OBJECT_BSB_LIMB_04" Offset="0xC2C4" />
+        <Limb Name="object_bsb_Standardlimb_00C2D0" Type="Standard" EnumName="OBJECT_BSB_LIMB_05" Offset="0xC2D0" />
+        <Limb Name="object_bsb_Standardlimb_00C2DC" Type="Standard" EnumName="OBJECT_BSB_LIMB_06" Offset="0xC2DC" />
+        <Limb Name="object_bsb_Standardlimb_00C2E8" Type="Standard" EnumName="OBJECT_BSB_LIMB_07" Offset="0xC2E8" />
+        <Limb Name="object_bsb_Standardlimb_00C2F4" Type="Standard" EnumName="OBJECT_BSB_LIMB_08" Offset="0xC2F4" />
+        <Limb Name="object_bsb_Standardlimb_00C300" Type="Standard" EnumName="OBJECT_BSB_LIMB_09" Offset="0xC300" />
+        <Limb Name="object_bsb_Standardlimb_00C30C" Type="Standard" EnumName="OBJECT_BSB_LIMB_0A" Offset="0xC30C" />
+        <Limb Name="object_bsb_Standardlimb_00C318" Type="Standard" EnumName="OBJECT_BSB_LIMB_0B" Offset="0xC318" />
+        <Limb Name="object_bsb_Standardlimb_00C324" Type="Standard" EnumName="OBJECT_BSB_LIMB_0C" Offset="0xC324" />
+        <Limb Name="object_bsb_Standardlimb_00C330" Type="Standard" EnumName="OBJECT_BSB_LIMB_0D" Offset="0xC330" />
+        <Limb Name="object_bsb_Standardlimb_00C33C" Type="Standard" EnumName="OBJECT_BSB_LIMB_0E" Offset="0xC33C" />
+        <Limb Name="object_bsb_Standardlimb_00C348" Type="Standard" EnumName="OBJECT_BSB_LIMB_0F" Offset="0xC348" />
+        <Limb Name="object_bsb_Standardlimb_00C354" Type="Standard" EnumName="OBJECT_BSB_LIMB_10" Offset="0xC354" />
+        <Limb Name="object_bsb_Standardlimb_00C360" Type="Standard" EnumName="OBJECT_BSB_LIMB_11" Offset="0xC360" />
+        <Limb Name="object_bsb_Standardlimb_00C36C" Type="Standard" EnumName="OBJECT_BSB_LIMB_12" Offset="0xC36C" />
+        <Limb Name="object_bsb_Standardlimb_00C378" Type="Standard" EnumName="OBJECT_BSB_LIMB_13" Offset="0xC378" />
+        <Limb Name="object_bsb_Standardlimb_00C384" Type="Standard" EnumName="OBJECT_BSB_LIMB_14" Offset="0xC384" />
+        <Skeleton Name="object_bsb_Skel_00C3E0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BSB_LIMB_NONE" LimbMax="OBJECT_BSB_LIMB_MAX" EnumName="object_bsb_Limbs" Offset="0xC3E0" />
         <Animation Name="object_bsb_Anim_00C790" Offset="0xC790" />
         <Animation Name="object_bsb_Anim_00CD88" Offset="0xCD88" />
         <Animation Name="object_bsb_Anim_00D3CC" Offset="0xD3CC" />

@@ -2374,7 +2374,7 @@ s32 AudioOcarina_MemoryGameGenerateNotes(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3EC0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3F54.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SetCutsceneFlag.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3F6C.s")
 
