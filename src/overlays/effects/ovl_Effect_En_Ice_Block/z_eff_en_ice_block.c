@@ -75,7 +75,7 @@ void EffectEnIceBlock_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
 
         gSPDisplayList(POLY_XLU_DISP++, &gIceBlockShardEffectDL);
 
-        CLOSE_DISPS(globalCtx->state.gfxCtx);
+        CLOSE_DISPS(gfxCtx);
     }
 }
 

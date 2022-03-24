@@ -13,9 +13,9 @@
         <!-- this TexAnim is for the iceberg surface -->
         <TextureAnimation Name="gIceBlockIceBergSublimatingAirTexAnim" Offset="0x9D0" />
 
-        <!-- Shard of Ice thrown off of IceBlock (EffectEnIceBlock)-->
+        <!-- Shard of Ice thrown off of IceBlock (EffectEnIceBlock) -->
         <!--   IceArrow creates frozen block or platform, throws shards during growing animation -->
-        <!-- too big to be a snow flake, more like thin block of ice, better described as "Chip", or "Shard" -->
+        <!-- too big to be a snow flake, more like thin block of ice, better described as "Chip", or "Shard" or "Plate" -->
         <DList Name="gIceBlockShardEffectEndDL" Offset="0xA30" />
         <DList Name="gIceBlockShardEffectDL" Offset="0xA38" />
 
