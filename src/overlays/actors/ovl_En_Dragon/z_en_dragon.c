@@ -127,6 +127,8 @@ extern AnimationHeader* D_80B60744[];
 extern u8 D_80B60754[];
 extern Vec3f D_80B60788[];
 extern Vec3f D_80B607E8[];
+extern Color_RGBA8 D_80B60758[];
+extern Color_RGBA8 D_80B60764[];
 
 extern FlexSkeletonHeader D_06004398;
 extern AnimationHeader D_060048B8;
@@ -190,6 +192,38 @@ void func_80B5EAA0(EnDragon* this, s32 arg1) {
 
 void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EB40.s")
+/*
+void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2) {
+    static Vec3f D_80B60770 = { 0.0f, 0.0f, 0.0f };
+    static Vec3f D_80B6077C = { 0.0f, 0.1f, 0.0f };
+    s32 phi_v0;
+    s16 phi_s1;
+    s16 temp;
+    Vec3f sp9C;
+    s32 i;
+
+    phi_v0 = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
+    phi_s1 = 0;
+    if (this->unk_2BA == 6) {
+        phi_s1 = 1;
+        phi_v0 = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
+    }
+
+    for (i = 0; i < phi_v0; i++) {
+        Math_Vec3f_Copy(&sp9C, &arg2);
+        D_80B60770.x = Rand_ZeroFloat(1.0f) * 23.0f;
+        D_80B60770.y = Rand_ZeroFloat(1.0f) * 10.0f;
+        D_80B60770.z = Rand_ZeroFloat(1.0f) * 23.0f;
+        sp9C.x += randPlusMinusPoint5Scaled(i * 30.0f);
+        sp9C.y += randPlusMinusPoint5Scaled(5.0f);
+        sp9C.z += randPlusMinusPoint5Scaled(i * 30.0f);
+        D_80B6077C.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
+        temp = Rand_S16Offset(380, 240);
+        EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp9C, &D_80B60770, &D_80B6077C, &D_80B60758[phi_s1],
+                                          &D_80B60764[phi_s1], temp, 30, 0);
+    }
+}
+*/
 
 void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
     if (this->unk_2B4 == 0) {
