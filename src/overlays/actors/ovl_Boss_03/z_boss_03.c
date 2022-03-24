@@ -534,7 +534,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
-    f32 tmp;
+    f32 bodyYRotTarget;
     s32 pad;
     s16 i;
     Player* player = GET_PLAYER(globalCtx);
@@ -557,8 +557,8 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
 
-    tmp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
-    Math_ApproachS(&this->bodyYRot, tmp, 5, 0x100);
+    bodyYRotTarget = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
+    Math_ApproachS(&this->bodyYRot, bodyYRotTarget, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
@@ -628,7 +628,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
-    f32 temp;
+    f32 bodyYRotTarget;
     Vec3f sp50;
     s32 pad;
     f32 phi_f2;
@@ -644,8 +644,8 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     zDiff = player->actor.world.pos.z - this->actor.world.pos.z;
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
-    temp = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
-    Math_ApproachS(&this->bodyYRot, temp, 5, 0x100);
+    bodyYRotTarget = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
+    Math_ApproachS(&this->bodyYRot, bodyYRotTarget, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
     Math_ApproachF(&this->actor.speedXZ, this->unk_278, 1.0f, this->unk_27C);
@@ -724,7 +724,7 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
-    Actor* new_var;
+    s32 pad;
 
     this->skelAnime.playSpeed = 2.0f;
     this->unk_27C = 2.0f;
@@ -780,8 +780,7 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->unk_2B8, 100.0f, 1.0f, phi_f0);
 
         if (this->unk_2B8 > 30.0f) {
-            // fake match
-            if (((new_var = &this->actor) != player->actor.parent) && (globalCtx->grabPlayer(globalCtx, player) != 0)) {
+            if ((&this->actor != player->actor.parent) && (globalCtx->grabPlayer(globalCtx, player) != 0)) {
                 player->actor.parent = &this->actor;
                 Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
                                      &D_801DB4B8);
@@ -823,7 +822,7 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Input* input = CONTROLLER1(globalCtx);
-    f32 temp_f0;
+    f32 jawZRotTarget;
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
@@ -900,9 +899,10 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     }
 
     player->actor.world.pos = this->insideJawPos;
-    temp_f0 = Math_SinS(this->unk_240 * 0x2000);
 
-    Math_ApproachS(&this->jawZRot, temp_f0 * 2000.0f, 2, 0x3000);
+    jawZRotTarget = Math_SinS(this->unk_240 * 0x2000);
+    Math_ApproachS(&this->jawZRot, jawZRotTarget * 2000.0f, 2, 0x3000);
+
     player->actor.shape.rot.x = 0x4000;
     player->actor.world.rot.x = player->actor.shape.rot.x;
 
@@ -941,7 +941,7 @@ void Boss03_SetupPrepareCharge(Boss03* this, GlobalContext* globalCtx) {
  * Slowly turns back while looking at Player during WORK_TIMER_CURRENT_ACTION frames, then prepares to charge
  */
 void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
-    f32 temp_f0;
+    f32 posYTarget;
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->workTimer[WORK_TIMER_UNK1_B] != 0) {
@@ -958,9 +958,9 @@ void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.world.rot.x, 0, 0xA, 0x200);
     Math_ApproachS(&this->actor.shape.rot.x, 0, 0xA, 0x200);
 
-    temp_f0 = this->waterHeight - 70.0f;
-    if (temp_f0 < this->actor.world.pos.y) {
-        Math_ApproachF(&this->actor.world.pos.y, temp_f0, 0.05f, 5.0f);
+    posYTarget = this->waterHeight - 70.0f;
+    if (posYTarget < this->actor.world.pos.y) {
+        Math_ApproachF(&this->actor.world.pos.y, posYTarget, 0.05f, 5.0f);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -992,24 +992,24 @@ void Boss03_SetupCharge(Boss03* this, GlobalContext* globalCtx) {
  * Charge against the platform, either by clashing against the platform or by preparing to jump over it
  */
 void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
-    f32 temp_f14;
-    f32 sp50;
-    f32 temp_f12;
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
     Player* player = GET_PLAYER(globalCtx);
-    s16 temp_a1;
+    s16 rotXTarget;
 
     this->skelAnime.playSpeed = 2.0f;
     SkelAnime_Update(&this->skelAnime);
     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_PREATTACK_OLD - SFX_FLAG);
 
-    temp_f14 = this->unk_268.x - this->actor.world.pos.x;
-    sp50 = (this->unk_268.y - this->actor.world.pos.y) - 50.0f;
-    temp_f12 = this->unk_268.z - this->actor.world.pos.z;
+    xDiff = this->unk_268.x - this->actor.world.pos.x;
+    yDiff = (this->unk_268.y - this->actor.world.pos.y) - 50.0f;
+    zDiff = this->unk_268.z - this->actor.world.pos.z;
 
-    Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(temp_f12, temp_f14), 0xA, 0x1000);
+    Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, 0x1000);
 
-    temp_a1 = Math_FAtan2F(sqrtf(SQ(temp_f14) + SQ(temp_f12)), -sp50);
-    Math_ApproachS(&this->actor.world.rot.x, temp_a1, 0xA, 0x1000);
+    rotXTarget = Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff);
+    Math_ApproachS(&this->actor.world.rot.x, rotXTarget, 0xA, 0x1000);
 
     this->actor.shape.rot = this->actor.world.rot;
 
@@ -1100,9 +1100,9 @@ Vec3f D_809E9104[] = {
 void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     s16 i;
     Vec3f effectPos;
-    f32 temp_f2;
-    f32 temp_f16;
-    f32 temp_f18;
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
     s32 pad;
     f32 sp5C;
     s16 sp5A;
@@ -1169,14 +1169,14 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                         case 2:
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_DEMO_MOVE_OLD - SFX_FLAG);
 
-                            temp_f2 = D_809E9104[this->unk_242].x - this->actor.world.pos.x;
-                            temp_f16 = D_809E9104[this->unk_242].y - this->actor.world.pos.y;
-                            temp_f18 = D_809E9104[this->unk_242].z - this->actor.world.pos.z;
+                            xDiff = D_809E9104[this->unk_242].x - this->actor.world.pos.x;
+                            yDiff = D_809E9104[this->unk_242].y - this->actor.world.pos.y;
+                            zDiff = D_809E9104[this->unk_242].z - this->actor.world.pos.z;
 
                             Math_ApproachS(&this->actor.world.rot.x,
-                                           Math_FAtan2F(sqrtf(SQ(temp_f2) + SQ(temp_f18)), -temp_f16), 0xA,
+                                           Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
                                            this->unk_274);
-                            Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(temp_f18, temp_f2), 0xA,
+                            Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA,
                                            this->unk_274);
                             Math_ApproachS(&this->unk_274, 0x200, 1, 0x10);
 
@@ -1193,7 +1193,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                             }
 
                             if (this->unk_242 < 2) {
-                                if (sqrtf(SQ(temp_f2) + SQ(temp_f18)) < 100.0f) {
+                                if (sqrtf(SQ(xDiff) + SQ(zDiff)) < 100.0f) {
                                     this->unk_242++;
                                     this->unk_274 = 0;
                                     if (this->unk_242 >= 2) {
@@ -1923,7 +1923,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Vec3f wetSpotPos;
     Vec3f bubblePos;
     Vec3f dropletPos;
-    s16 sp5E;
+    s16 j;
     f32 yRot;
 
     this->actor.hintId = 0x28;
@@ -2098,7 +2098,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if ((this->unk_280 == 1) || (this->unk_280 == 5) || (this->unk_280 == 9)) {
         yRot = 0.0f;
 
-        for (sp5E = 0, i = 0; i < 20; sp5E++) {
+        for (j = 0, i = 0; i < 20; j++) {
             Matrix_InsertYRotation_f(yRot, MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
             dropletPos.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
@@ -2111,7 +2111,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             yRot += ((2.0f * M_PI) / 50.0f);
-            if (sp5E >= 50) {
+            if (j >= 50) {
                 break;
             }
         }
