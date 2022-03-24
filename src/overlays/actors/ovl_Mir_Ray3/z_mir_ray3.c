@@ -187,7 +187,7 @@ void func_80B9E5F4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
         sp7C.y = sp60[1] + sp88.y;
         sp7C.z = sp60[2] + sp88.z;
 
-        if (BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp88, &sp7C, &sp70, &sp6C, 1)) {
+        if (BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp88, &sp7C, &sp70, &sp6C, true)) {
             ptr[i].unk_4C = sp6C;
         } else {
             ptr[i].unk_4C = NULL;
@@ -317,7 +317,7 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
     sp134.y = (spF8[1] * (this->unk_214 * 400.0f)) + sp140.y;
     sp134.z = (spF8[2] * (this->unk_214 * 400.0f)) + sp140.z;
 
-    if (!BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp140, &sp134, &sp128, &spC4, 1)) {
+    if (!BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp140, &sp134, &sp128, &spC4, true)) {
         Math_Vec3f_Copy(&sp128, &sp134);
     }
 
@@ -340,7 +340,6 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E8D4.s")
 #endif
 
-#ifdef NON_MATCHING
 void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
     MirRay3* this = THIS;
@@ -348,7 +347,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 i;
     f32 temp;
-    u32 phi_a0;
+    u16 phi_a0;
 
     if (!(this->unk_210 & 1) && func_8012405C(globalCtx)) {
         Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
@@ -368,13 +367,14 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
         if (MIRRAY3_GET_F(&this->actor) == MIRRAY3_F_1) {
             phi_a0 = gSaveContext.time;
 
-            if (gSaveContext.time > CLOCK_TIME(12, 0)) {
-                phi_a0 = (0xFFFF - gSaveContext.time) & 0xFFFF;
+            if (phi_a0 > CLOCK_TIME(12, 0)) {
+                phi_a0 = 0xFFFF - phi_a0;
             }
 
+            temp = (phi_a0 * (1.0f / 0x8000));
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x78, 255, 255, 255, (u8)(s8)(100 * this->unk_214));
 
-            gDPSetEnvColor(POLY_XLU_DISP++, 218, 225, (u8)(((phi_a0 * (1.0f / 0x8000)) * 100.0f) + 105.0f), 255);
+            gDPSetEnvColor(POLY_XLU_DISP++, 218, 225, (u8)((100.0f * temp) + 105.0f), 255);
         } else {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x78, 255, 255, 255, (u8)(s8)(100 * this->unk_214));
             gDPSetEnvColor(POLY_XLU_DISP++, 218, 225, 205, 255);
@@ -419,6 +419,3 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Draw.s")
-#endif
