@@ -3353,7 +3353,7 @@ void AudioHeap_ApplySampleBankCache(s32 sampleBankId);
 // void func_8018E344(void);
 // void func_8018E8C8(void);
 void AudioLoad_DecreaseSampleDmaTtls(void);
-void* AudioLoad_DmaSampleData(u32 devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
+void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
 void AudioLoad_InitSampleDmaBuffers(s32 numNotes);
 s32 AudioLoad_IsFontLoadComplete(s32 fontId);
 s32 AudioLoad_IsSeqLoadComplete(s32 seqId);
