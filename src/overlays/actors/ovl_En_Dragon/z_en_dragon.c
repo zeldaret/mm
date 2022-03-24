@@ -25,6 +25,7 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5EAA0(EnDragon* this, s32 arg1);
 void func_80B5EDF0(EnDragon* this);
+void func_80B5EF88(EnDragon* this);
 
 #if 0
 const ActorInit En_Dragon_InitVars = {
@@ -199,7 +200,25 @@ void func_80B5EDF0(EnDragon* this) {
     this->actionFunc = func_80B5EE3C;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EE3C.s")
+void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    if (this->unk_2BA == 1) {
+        func_80B5EF88(this);
+    } else if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 101.0f) &&
+               (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 101.0f)) {
+        this->actor.speedXZ = -100.0f;
+    } else {
+        this->actor.speedXZ = 0.0f;
+
+        if ((fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 4.0f) &&
+            (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 4.0f)) {
+            Math_ApproachF(&this->actor.world.pos.x, this->actor.home.pos.x, 0.3f, 200.0f);
+            Math_ApproachF(&this->actor.world.pos.z, this->actor.home.pos.z, 0.3f, 200.0f);
+        } else if (this->unk_2BA != 0) {
+            this->unk_2BA = 0;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EF88.s")
 
