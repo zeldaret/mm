@@ -49,11 +49,10 @@ typedef enum {
 
 typedef enum {
     /* 0 */ MEDIUM_RAM,
-    /* 1 */ MEDIUM_UNK1,
+    /* 1 */ MEDIUM_UNK,
     /* 2 */ MEDIUM_CART,
     /* 3 */ MEDIUM_DISK_DRIVE,
-    /* 4 */ MEDIUM_UNK4,
-    /* 5 */ MEDIUM_UNK5
+    /* 5 */ MEDIUM_RAM_UNLOADED = 5
 } SampleMedium;
 
 typedef enum {
@@ -817,12 +816,12 @@ typedef struct {
     /* 0x01 */ u8 seqOrFontId;
     /* 0x02 */ u16 instId;
     /* 0x04 */ s32 unkMediumParam;
-    /* 0x08 */ s32 curDevAddr;
+    /* 0x08 */ uintptr_t curDevAddr;
     /* 0x0C */ u8* curRamAddr;
     /* 0x10 */ u8* ramAddr;
     /* 0x14 */ s32 status;
     /* 0x18 */ size_t bytesRemaining;
-    /* 0x1C */ s8* isDone;
+    /* 0x1C */ s8* isDone; // TODO: rename in OoT and sync up here. This is an external status while (s32 status) is an internal status
     /* 0x20 */ SoundFontSample sample;
     /* 0x30 */ OSMesgQueue msgqueue;
     /* 0x48 */ OSMesg msg;

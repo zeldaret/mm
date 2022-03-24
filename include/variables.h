@@ -1648,7 +1648,7 @@ extern f32 gDefaultPanVolume[];
 // extern UNK_TYPE1 D_801D5FD4;
 extern UNK_PTR D_801D5FE0;
 // extern UNK_TYPE1 D_801D5FE4;
-// extern UNK_TYPE4 D_801D5FE8;
+extern s32 gAudioContextInitalized;
 // extern UNK_TYPE4 D_801D5FEC;
 // extern UNK_TYPE4 D_801D5FF0;
 // extern UNK_TYPE4 D_801D5FF4;
@@ -3062,10 +3062,10 @@ extern const s16 gAudioTatumInit[];
 extern const AudioContextInitSizes gAudioContextInitSizes;
 // extern UNK_TYPE4 D_801E1108;
 // extern UNK_TYPE4 D_801E110C;
-// extern UNK_TYPE2 gSoundFontTable;
-// extern UNK_TYPE1 gSequenceFontTable;
-// extern UNK_TYPE2 gSequenceTable;
-// extern UNK_TYPE1 gSampleBankTable;
+extern u8 gSoundFontTable[];
+extern u8 gSequenceFontTable[];
+extern u8 gSequenceTable[];
+extern u8 gSampleBankTable[];
 extern u64 aspMainDataStart[];
 
 // bss
@@ -3585,10 +3585,10 @@ extern SoundRequest D_801FE7C0[1];
 // extern UNK_TYPE1 D_80200BCE;
 // extern UNK_TYPE1 D_80200BD0;
 extern AudioContext gAudioContext; // at 0x80200C70
-// extern UNK_TYPE4 D_80208E68;
-// extern UNK_TYPE4 D_80208E6C;
-// extern UNK_TYPE4 D_80208E70;
-// extern UNK_TYPE4 D_80208E74;
+extern void (*D_80208E68)(void);
+extern u32 (*D_80208E6C)(s8 value, SequenceChannel* channel);
+extern s32 (*D_80208E70)(SoundFontSample*, s32, s8, s32);
+extern Acmd* (*D_80208E74)(Acmd*, s32, s32);
 
 // post-code buffers
 extern u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];
