@@ -3170,7 +3170,7 @@ void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dst, MtxF* matrix);
 void Matrix_TransposeXYZ(MtxF* matrix);
 void Matrix_NormalizeXYZ(MtxF* matrix);
 void func_8018219C(MtxF* pfParm1, Vec3s* psParm2, s32 iParm3);
-// void func_801822C4(void);
+void func_801822C4(MtxF* arg0, Vec3s* arg1, s32 arg2);
 void Matrix_InsertRotationAroundUnitVector_f(f32 rotation, Vec3f* vector, s32 appendToState);
 void Matrix_InsertRotationAroundUnitVector_s(s16 rotation, Vec3f* vector, s32 appendToState);
 
