@@ -23,7 +23,8 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
-void func_80B5EDF0(EnDragon* this, s32 arg1);
+void func_80B5EAA0(EnDragon* this, s32 arg1);
+void func_80B5EDF0(EnDragon* this);
 
 #if 0
 const ActorInit En_Dragon_InitVars = {
@@ -160,7 +161,7 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.hintId = 0xE;
     this->unk_2D4 = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
-    func_80B5EDF0(this, 0xA0);
+    func_80B5EDF0(this);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Destroy.s")
@@ -171,7 +172,15 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5ED90.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EDF0.s")
+void func_80B5EDF0(EnDragon* this) {
+    func_80B5EAA0(this, 3);
+    this->unk_2BE = 0;
+    this->unk_2CC = 0;
+    this->unk_2B8 = 0;
+    this->unk_2CA = 0;
+    this->unk_2B4 = 0x1E;
+    this->actionFunc = func_80B5EE3C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EE3C.s")
 
