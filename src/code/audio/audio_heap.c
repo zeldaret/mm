@@ -118,7 +118,7 @@ void* AudioHeap_WritebackDCache(void* addr, size_t size) {
     Audio_WritebackDCache(addr, size);
     if (addr) {}
 
-    // KREG0 to KREG1 (ensures data is written straight to ram instead of the data cache)
+    // KSEG0 to KSEG1 (ensures data is written straight to ram instead of the data cache)
     return OS_PHYSICAL_TO_K1(OS_K0_TO_PHYSICAL(addr));
 }
 
