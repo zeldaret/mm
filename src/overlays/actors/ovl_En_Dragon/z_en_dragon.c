@@ -166,7 +166,11 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     func_80B5EDF0(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Destroy.s")
+void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnDragon* this = THIS;
+
+    Collider_DestroyJntSph(globalCtx, &this->unk_2DC);
+}
 
 void func_80B5EAA0(EnDragon* this, s32 arg1) {
     f32 phi_f0;
