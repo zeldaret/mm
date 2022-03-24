@@ -655,7 +655,51 @@ void func_8014CDF0(OSTime time, s16* digits) {
     digits[7] = temp_t2;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CFDC.s")
+void func_8014C70C(GlobalContext*, u16, s16); /* extern */
+extern s16 D_801CFF94[];
+void func_8014CFDC(GlobalContext* globalCtx) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    Font* font = &msgCtx->font;
+
+
+    if (msgCtx->decodedBuffer.wchar[100] == 0) {
+        if (font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100] + 2] != 0xFE) {
+            msgCtx->unk11F18 = 0;
+            if ((msgCtx->currentTextId == 0x176F) || (msgCtx->currentTextId == 0x1770) ||
+                (msgCtx->currentTextId == 0x1771)) {
+                msgCtx->decodedBuffer.wchar[100] += 2;
+                msgCtx->unk11F16 = 0;
+            } else {
+                msgCtx->decodedBuffer.wchar[100] += 2;
+                if ((font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]] < 0xC8) ||
+                    (font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]] >= 0xD8)) {
+                    msgCtx->unk11F16 = D_801CFF94[font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]]];
+                } else {
+                    msgCtx->unk11F16 = 0xFE;
+                }
+            }
+        } else {
+            msgCtx->decodedBuffer.wchar[100] += 2;
+            msgCtx->unk11F16 = font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]];
+        }
+        msgCtx->unk11F14 = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
+        msgCtx->unk11F14 |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+
+        msgCtx->unk1206C = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
+        msgCtx->unk1206C |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+
+        msgCtx->unk12070 = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
+        msgCtx->unk12070 |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+
+        msgCtx->unk12074 = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
+        msgCtx->unk12074 |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+
+        msgCtx->decodedBuffer.wchar[0x64]++;
+        if ((s32)msgCtx->unk11F16 != 0xFE) {
+            func_8014C70C(globalCtx, msgCtx->unk11F16, (s16)(msgCtx->unk1206A + 0xA));
+        }
+    }
+}
 
 // Message_LoadTimeBeforeMoonCrash
 void func_8014D304(GlobalContext* globalCtx, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {

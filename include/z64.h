@@ -804,7 +804,9 @@ typedef struct {
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ u16 unk11F14;
-    /* 0x11F16 */ UNK_TYPE1 pad11F16[0x4];
+    /* 0x11F16 */ s16 unk11F16;
+    /* 0x11F18 */ s8 unk11F18;
+    /* 0x11F19 */ UNK_TYPE1 pad11F19[0x1];
     /* 0x11F1A */ s16 unk11F1A[3];
     /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
@@ -857,7 +859,7 @@ typedef struct {
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ s32 unk12070;
-    /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
+    /* 0x12074 */ s32 unk12074;
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees;
     /* 0x12080 */ MessageTableEntry* messageEntryTable;
