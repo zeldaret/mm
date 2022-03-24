@@ -1,8 +1,7 @@
 /*
  * File: z_eff_en_ice_block.c
  * Overlay: ovl_Effect_En_Ice_Block
- * Description: Ice Shard (Pentagon shaped) thrown off of the Obj_Iceblock actor
- *   after IceArrow hits a Freezable ChuChu
+ * Description: Ice Shard (Pentagon shaped) thrown off of the Obj_Iceblock actor during growth animation
  * Object Requirement: OBJECT_ICE_BLOCK
  */
 
@@ -10,11 +9,6 @@
 #include "objects/object_ice_block/object_ice_block.h"
 
 #define PARAMS ((EffectEnIceBlockInitParams*)initParamsx)
-
-#define rObjId regs[0]
-#define rScale regs[1]
-#define rRot regs[2]
-#define rRotVel regs[3]
 
 u32 EffectEnIceBlock_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx);
 void EffectEnIceBlock_Update(GlobalContext* globalCtx, u32 index, EffectSs* this);
@@ -24,6 +18,11 @@ const EffectSsInit Effect_En_Ice_Block_InitVars = {
     EFFECT_EN_ICE_BLOCK,
     EffectEnIceBlock_Init,
 };
+
+#define rObjId regs[0]
+#define rScale regs[1]
+#define rRot regs[2]
+#define rRotVel regs[3]
 
 u32 EffectEnIceBlock_CheckIceBlockObject(EffectSs* this, GlobalContext* globalCtx) {
     if (((this->rObjId = Object_GetIndex(&globalCtx->objectCtx, OBJECT_ICE_BLOCK)) < 0) ||
@@ -74,7 +73,7 @@ void EffectEnIceBlock_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_XLU_DISP++, &object_ice_block_DL_000A38);
+        gSPDisplayList(POLY_XLU_DISP++, &gIceBlockShardEffectDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
