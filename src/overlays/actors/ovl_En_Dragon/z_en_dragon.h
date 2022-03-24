@@ -13,7 +13,7 @@ typedef struct EnDragon {
     /* 0x188 */ Vec3s jointTable[16];
     /* 0x1E8 */ Vec3s morphTable[16];
     /* 0x248 */ EnDragonActionFunc actionFunc;
-    /* 0x24C */ char unk_24C[0x4];
+    /* 0x24C */ s32 unk_24C;
     /* 0x250 */ s32 unk_250;
     /* 0x254 */ char unk_254[0x60];
     /* 0x2B4 */ s16 unk_2B4;
@@ -25,7 +25,8 @@ typedef struct EnDragon {
     /* 0x2C0 */ char unk_2C0[0xA];
     /* 0x2CA */ s16 unk_2CA;
     /* 0x2CC */ s16 unk_2CC;
-    /* 0x2CE */ char unk_2CE[0x6];
+    /* 0x2CE */ char unk_2CE[0x2];
+    /* 0x2D0 */ f32 unk_2D0;
     /* 0x2D4 */ f32 unk_2D4;
     /* 0x2D8 */ char unk_2D8[0x4];
     /* 0x2DC */ ColliderJntSph unk_2DC;

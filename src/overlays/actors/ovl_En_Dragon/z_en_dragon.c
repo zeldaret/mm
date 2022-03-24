@@ -122,6 +122,8 @@ static ColliderJntSphInit D_80B60734 = {
 extern DamageTable D_80B605F4;
 extern ColliderJntSphElementInit D_80B60614[8];
 extern ColliderJntSphInit D_80B60734;
+extern AnimationHeader* D_80B60744[];
+extern u8 D_80B60754[];
 
 extern FlexSkeletonHeader D_06004398;
 extern AnimationHeader D_060048B8;
@@ -166,7 +168,18 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EAA0.s")
+void func_80B5EAA0(EnDragon* this, s32 arg1) {
+    f32 phi_f0;
+
+    this->unk_24C = arg1;
+    this->unk_2D0 = Animation_GetLastFrame(D_80B60744[arg1]);
+    phi_f0 = 0.0f;
+    if (this->unk_24C == 3) {
+        phi_f0 = this->unk_2D0;
+    }
+
+    Animation_Change(&this->skelAnime, D_80B60744[arg1], 1.0f, phi_f0, this->unk_2D0, D_80B60754[this->unk_24C], -4.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EB40.s")
 
