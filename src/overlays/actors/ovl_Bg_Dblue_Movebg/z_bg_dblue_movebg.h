@@ -11,6 +11,8 @@ typedef void (*BgDblueMovebgActionFunc)(struct BgDblueMovebg*, GlobalContext*);
 #define BGDBLUEMOVEBG_GET_FF0(thisx) (((thisx)->params >> 4) & 0xFF)
 #define BGDBLUEMOVEBG_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
 
+#define BGDBLUEMOVEBG_F_8 8
+
 typedef struct BgDblueMovebg {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgDblueMovebgActionFunc actionFunc;

@@ -49,23 +49,23 @@
         <Texture Name="gGyorgTitleCardTex" OutName="gyorg_title_card" Format="i8" Width="128" Height="40" Offset="0x7EC8" />
 
         <!-- Gyorg Limbs -->
-        <Limb Name="gGyorgRootLimb" Type="Standard" Offset="0x92C8" />
-        <Limb Name="gGyorgHeadLimb" Type="Standard" Offset="0x92D4" />
-        <Limb Name="gGyorgBodyRootLimb" Type="Standard" Offset="0x92E0" />
-        <Limb Name="gGyorgUpperTrunkLimb" Type="Standard" Offset="0x92EC" />
-        <Limb Name="gGyorgLowerTrunkLimb" Type="Standard" Offset="0x92F8" />
-        <Limb Name="gGyorgTailLimb" Type="Standard" Offset="0x9304" />
-        <Limb Name="gGyorgRightFinRootLimb" Type="Standard" Offset="0x9310" />
-        <Limb Name="gGyorgUpperRightFinLimb" Type="Standard" Offset="0x931C" />
-        <Limb Name="gGyorgLowerRightFinLimb" Type="Standard" Offset="0x9328" />
-        <Limb Name="gGyorgLeftFinRootLimb" Type="Standard" Offset="0x9334" />
-        <Limb Name="gGyorgUpperLeftFinLimb" Type="Standard" Offset="0x9340" />
-        <Limb Name="gGyorgLowerLeftFinLimb" Type="Standard" Offset="0x934C" />
-        <Limb Name="gGyorgJawRootLimb" Type="Standard" Offset="0x9358" />
-        <Limb Name="gGyorgJawLimb" Type="Standard" Offset="0x9364" />
+        <Limb Name="gGyorgRootLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_01" Offset="0x92C8" />
+        <Limb Name="gGyorgHeadLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_02" Offset="0x92D4" />
+        <Limb Name="gGyorgBodyRootLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_03" Offset="0x92E0" />
+        <Limb Name="gGyorgUpperTrunkLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_04" Offset="0x92EC" />
+        <Limb Name="gGyorgLowerTrunkLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_05" Offset="0x92F8" />
+        <Limb Name="gGyorgTailLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_06" Offset="0x9304" />
+        <Limb Name="gGyorgRightFinRootLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_07" Offset="0x9310" />
+        <Limb Name="gGyorgUpperRightFinLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_08" Offset="0x931C" />
+        <Limb Name="gGyorgLowerRightFinLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_09" Offset="0x9328" />
+        <Limb Name="gGyorgLeftFinRootLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_0A" Offset="0x9334" />
+        <Limb Name="gGyorgUpperLeftFinLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_0B" Offset="0x9340" />
+        <Limb Name="gGyorgLowerLeftFinLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_0C" Offset="0x934C" />
+        <Limb Name="gGyorgJawRootLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_0D" Offset="0x9358" />
+        <Limb Name="gGyorgJawLimb" Type="Standard" EnumName="OBJECT_BOSS03_1_LIMB_0E" Offset="0x9364" />
 
         <!-- Gyorg Skeleton-->
-        <Skeleton Name="gGyorgSkel" Type="Flex" LimbType="Standard" Offset="0x93A8" />
+        <Skeleton Name="gGyorgSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS03_1_LIMB_NONE" LimbMax="OBJECT_BOSS03_1_LIMB_MAX" EnumName="object_boss03_1_Limbs" Offset="0x93A8" />
 
         <!-- Gyorg Animations -->
         <Animation Name="gGyorgFloppingAnim" Offset="0x9554" /> <!-- Original name is "bus_dead" -->
