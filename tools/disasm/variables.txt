@@ -2461,7 +2461,7 @@
     0x801DB8B8:("D_801DB8B8","UNK_TYPE1","",0x1),
     0x801DB900:("D_801DB900","UNK_TYPE1","",0x1),
     0x801DB930:("D_801DB930","UNK_PTR","",0x4),
-    0x801DB958:("D_801DB958","AudioSpec","[21]",0x498),
+    0x801DB958:("gAudioSpecs","AudioSpec","[21]",0x498),
     0x801DBDF0:("D_801DBDF0","f32","",0x4),
     0x801DBDF4:("jtbl_801DBDF4","UNK_PTR","",0x4),
     0x801DBE68:("D_801DBE68","f32","",0x4),
