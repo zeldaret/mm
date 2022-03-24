@@ -570,7 +570,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 
@@ -636,7 +636,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
 
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 
