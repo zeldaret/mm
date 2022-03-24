@@ -2,6 +2,7 @@
 #define Z_EN_FAMOS_H
 
 #include "global.h"
+#include "objects/object_famos/object_famos.h"
 
 struct EnFamos;
 
@@ -14,7 +15,7 @@ typedef struct EnFamosParticle {
     /* 20 */ f32   scale;
 } EnFamosParticle; // size = 0x24
 
-#define FAMOS_LIMB_COUNT 0x6
+#define GET_FAMOS_PATH(thisx) (thisx->params)
 
 // delayTimer gets reused:
 //   after spotting player, counts frames until first attack (8)
@@ -26,8 +27,8 @@ typedef struct EnFamosParticle {
 typedef struct EnFamos {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[FAMOS_LIMB_COUNT];
-    /* 0x1AC */ Vec3s morphTable[FAMOS_LIMB_COUNT];
+    /* 0x188 */ Vec3s jointTable[FAMOS_LIMB_MAX];
+    /* 0x1AC */ Vec3s morphTable[FAMOS_LIMB_MAX];
     /* 0x1D0 */ EnFamosActionFunc actionFunc;
     /* 0x1D4 */ u8 animatedMaterialIndex;
     /* 0x1D5 */ u8 stableRotation;
@@ -38,7 +39,7 @@ typedef struct EnFamos {
     /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment
     /* 0x1DC */ s16 delayTimer; // reused for different functions
     /* 0x1DE */ s16 unk1DE;
-    /* 0x1E0 */ s16 flippedTimer;
+    /* 0x1E0 */ s16 flippedTimer; // frames until it flips right side up
     /* 0x1E2 */ s16 unk1E2;
     /* 0x1E4 */ s16 unk1E4;
     /* 0x1E6 */ s16 unk1E6;
@@ -47,10 +48,11 @@ typedef struct EnFamos {
     /* 0x1F0 */ f32 unk1F0;
     /* 0x1F4 */ Vec3f targetDest;
     /* 0x200 */ Vec3f unk200; // current pos? why not use actor.pos
+    // havent figured out what the difference between the colliders are, only one cylinder is visible in KZ
     /* 0x20C */ ColliderCylinder collider1;
     /* 0x258 */ ColliderCylinder collider2;
     /* 0x2A4 */ ColliderJntSph   emblemCollider;
-    /* 0x2C4 */ ColliderJntSphElement collider3Elements;
+    /* 0x2C4 */ ColliderJntSphElement emblemColliderElements;
     /* 0x340 */ char unk340[0x40];
     /* 0x344 */ EnFamosParticle particles[0x14];
 } EnFamos; // size = 0x614

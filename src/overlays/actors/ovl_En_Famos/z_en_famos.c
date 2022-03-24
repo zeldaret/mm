@@ -6,7 +6,6 @@
 
 #include "z_en_famos.h"
 #include "../ovl_En_Bom/z_en_bom.h"
-#include "objects/object_famos/object_famos.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
@@ -159,8 +158,6 @@ static InitChainEntry sInitChain[] = {
 
 static s32 animatedMaterialsVirtualized = false;
 
-#define GET_FAMOS_PATH(thisx) (thisx->params)
-
 // in savestate KZ its 8040DAE0
 void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnFamos* this = THIS;
@@ -183,7 +180,7 @@ void EnFamos_Init(Actor* thisx, GlobalContext* globalCtx) {
                    this->morphTable, 6);
     Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(globalCtx, &this->collider2, &this->actor, &sCylinderInit2);
-    Collider_InitAndSetJntSph(globalCtx, &this->emblemCollider, &this->actor, &sJntSphInit, &this->collider3Elements);
+    Collider_InitAndSetJntSph(globalCtx, &this->emblemCollider, &this->actor, &sJntSphInit, &this->emblemColliderElements);
 
     // init animated materials
     if (!animatedMaterialsVirtualized) {
@@ -768,13 +765,12 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFamos* this = THIS;
 
-    if (limbIndex == 1) { // BODY
+    if (limbIndex == FAMOS_LIMB_BODY) {
         Matrix_InsertTranslation(0.0f, 4000.0f, 0.0f, 1);
         Matrix_InsertZRotation_s(this->unk1E6, 1);
         Matrix_InsertTranslation(0.0f, -4000.0f, 0.0f, 1);
 
-    } else if (this->flippedTimer < 0 && (limbIndex == 3 || limbIndex == 4 || limbIndex == 5)) {
-        // sword, shield, head (not body and not the emblem)
+    } else if (this->flippedTimer < 0 && (limbIndex == FAMOS_LIMB_SWORD || limbIndex == FAMOS_LIMB_SHIELD || limbIndex == FAMOS_LIMB_HEAD)) {
         *dList = NULL;
     }
 
@@ -785,7 +781,7 @@ s32 func_808AE304(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_808AE3A8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFamos* this = THIS;
 
-    if (limbIndex == 2) { // emblem
+    if (limbIndex == FAMOS_LIMB_EMBLEM) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);
         Collider_UpdateSpheres(limbIndex, &this->emblemCollider);
     }
