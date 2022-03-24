@@ -658,45 +658,44 @@ void func_8014CDF0(OSTime time, s16* digits) {
 void func_8014C70C(GlobalContext*, u16, s16); /* extern */
 extern s16 D_801CFF94[];
 void func_8014CFDC(GlobalContext* globalCtx) {
+    Font* font;
     MessageContext* msgCtx = &globalCtx->msgCtx;
-    Font* font = &msgCtx->font;
 
-
-    if (msgCtx->decodedBuffer.wchar[100] == 0) {
-        if (font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100] + 2] != 0xFE) {
+    font = &msgCtx->font;
+    if (msgCtx->msgBufPos == 0) {
+        if (font->msgBuf.schar[msgCtx->msgBufPos + 2] != 0xFE) {
             msgCtx->unk11F18 = 0;
             if ((msgCtx->currentTextId == 0x176F) || (msgCtx->currentTextId == 0x1770) ||
                 (msgCtx->currentTextId == 0x1771)) {
-                msgCtx->decodedBuffer.wchar[100] += 2;
                 msgCtx->unk11F16 = 0;
+                msgCtx->msgBufPos += 2;
             } else {
-                msgCtx->decodedBuffer.wchar[100] += 2;
-                if ((font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]] < 0xC8) ||
-                    (font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]] >= 0xD8)) {
-                    msgCtx->unk11F16 = D_801CFF94[font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]]];
+                msgCtx->msgBufPos += 2;
+                if ((font->msgBuf.schar[msgCtx->msgBufPos] < 0xC8) || (font->msgBuf.schar[msgCtx->msgBufPos] >= 0xD8)) {
+                    msgCtx->unk11F16 = D_801CFF94[font->msgBuf.schar[msgCtx->msgBufPos]];
                 } else {
                     msgCtx->unk11F16 = 0xFE;
                 }
             }
         } else {
-            msgCtx->decodedBuffer.wchar[100] += 2;
-            msgCtx->unk11F16 = font->msgBuf.schar[msgCtx->decodedBuffer.wchar[100]];
+            msgCtx->msgBufPos += 2;
+            msgCtx->unk11F16 = font->msgBuf.schar[msgCtx->msgBufPos];
         }
-        msgCtx->unk11F14 = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
-        msgCtx->unk11F14 |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+        msgCtx->unk11F14 = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
+        msgCtx->unk11F14 |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
-        msgCtx->unk1206C = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
-        msgCtx->unk1206C |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+        msgCtx->unk1206C = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
+        msgCtx->unk1206C |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
-        msgCtx->unk12070 = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
-        msgCtx->unk12070 |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+        msgCtx->unk12070 = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
+        msgCtx->unk12070 |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
-        msgCtx->unk12074 = font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]] << 8;
-        msgCtx->unk12074 |= font->msgBuf.schar[++msgCtx->decodedBuffer.wchar[0x64]];
+        msgCtx->unk12074 = font->msgBuf.schar[++msgCtx->msgBufPos] << 8;
+        msgCtx->unk12074 |= font->msgBuf.schar[++msgCtx->msgBufPos];
 
-        msgCtx->decodedBuffer.wchar[0x64]++;
-        if ((s32)msgCtx->unk11F16 != 0xFE) {
-            func_8014C70C(globalCtx, msgCtx->unk11F16, (s16)(msgCtx->unk1206A + 0xA));
+        msgCtx->msgBufPos++;
+        if (msgCtx->unk11F16 != 0xFE) {
+            func_8014C70C(globalCtx, msgCtx->unk11F16, (msgCtx->unk1206A + 0xA));
         }
     }
 }
