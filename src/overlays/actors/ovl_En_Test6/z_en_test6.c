@@ -629,9 +629,6 @@ void func_80A92118(EnTest6* this, GlobalContext* globalCtx) {
     Actor_MarkForDeath(&this->actor);
 }
 
-#ifdef NON_MATCHING
-// sp34 at 0x38, need to find one more variable
-// that can push it down without creating any more
 void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
     Input* input = CONTROLLER1(globalCtx);
     Player* player = GET_PLAYER(globalCtx);
@@ -639,7 +636,6 @@ void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
     s32 pad;
     s16 sp46;
     s16 sp44;
-    Vec3f sp34;
 
     if (this->unk_27A > 115) {
         this->unk_160 += 0.2f;
@@ -796,9 +792,7 @@ void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
 
         case 14:
             player->actor.freezeTimer = 5;
-            sp34 = this->actor.home.pos;
-            player->actor.home.pos = sp34;
-            player->actor.world.pos = sp34;
+            player->actor.world.pos = player->actor.home.pos = this->actor.home.pos;
             player->actor.shape.rot = this->actor.home.rot;
             player->actor.focus.rot.y = player->actor.shape.rot.y;
             player->currentYaw = player->actor.shape.rot.y;
@@ -826,9 +820,6 @@ void func_80A92188(EnTest6* this, GlobalContext* globalCtx) {
         func_80A92118(this, globalCtx);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Test6/func_80A92188.s")
-#endif
 
 void EnTest6_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnTest6* this = THIS;
