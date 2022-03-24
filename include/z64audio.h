@@ -162,7 +162,7 @@ typedef struct {
     /* 0x00 */ u32 medium : 2;
     /* 0x00 */ u32 unk_bit26 : 1;
     /* 0x00 */ u32 unk_bit25 : 1;
-    /* 0x01 */ size_t size : 24;
+    /* 0x01 */ u32 size : 24;
     /* 0x04 */ u8* sampleAddr;
     /* 0x08 */ AdpcmLoop* loop;
     /* 0x0C */ AdpcmBook* book;
@@ -802,7 +802,7 @@ typedef struct {
     /* 0x04 */ u8* ramAddr;
     /* 0x08 */ uintptr_t curDevAddr;
     /* 0x0C */ u8* curRamAddr;
-    /* 0x10 */ u32 bytesRemaining;
+    /* 0x10 */ size_t bytesRemaining;
     /* 0x14 */ size_t chunkSize;
     /* 0x18 */ s32 unkMediumParam;
     /* 0x1C */ u32 retMsg;
@@ -821,7 +821,7 @@ typedef struct {
     /* 0x0C */ u8* curRamAddr;
     /* 0x10 */ u8* ramAddr;
     /* 0x14 */ s32 status;
-    /* 0x18 */ u32 bytesRemaining;
+    /* 0x18 */ size_t bytesRemaining;
     /* 0x1C */ s8* isDone;
     /* 0x20 */ SoundFontSample sample;
     /* 0x30 */ OSMesgQueue msgqueue;
