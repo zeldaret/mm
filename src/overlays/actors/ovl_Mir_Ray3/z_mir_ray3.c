@@ -216,6 +216,8 @@ void func_80B9E7D0(MirRay3Struct* ptr) {
 #ifdef NON_EQUIVALENT
 void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) {
     Player* player = GET_PLAYER(globalCtx);
+    s32 i;
+    MtxF* shieldMf = &player->shieldMf;
     Vec3f sp140;
     Vec3f sp134;
     Vec3f sp128;
@@ -224,14 +226,12 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
     Vec3f sp104;
     f32 spF8[3];
     f32 spEC[3];
+    f32 temp_f0;
+    f32 temp_f26;
+    f32 temp_f2;
     Vec3f spD4;
     Vec3f spC8;
     CollisionPoly* spC4;
-    s32 i;
-    MtxF* shieldMf = &player->shieldMf;
-    // MirRay3Struct* ptr;
-    f32 temp_f0;
-    f32 temp_f26;
 
     spF8[0] = -(shieldMf->mf[2][0] * this->unk_260) * this->unk_214 * 400.0f;
     spF8[1] = -(shieldMf->mf[2][1] * this->unk_260) * this->unk_214 * 400.0f;
@@ -249,16 +249,16 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
 
     for (i = 0; i < ARRAY_COUNT(this->unk_218); i++) {
         if (ptr[i].unk_4C != NULL) {
-            spEC[0] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.x);
-            spEC[1] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.y);
-            spEC[2] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.z);
+            spEC[0] = ptr[i].unk_4C->normal.x * (1.0f / 32767.0f);
+            spEC[1] = ptr[i].unk_4C->normal.y * (1.0f / 32767.0f);
+            spEC[2] = ptr[i].unk_4C->normal.z * (1.0f / 32767.0f);
 
             if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp140, &sp134, &sp128, 1)) {
                 ptr[i].unk_00.x = sp128.x;
                 ptr[i].unk_00.y = sp128.y;
                 ptr[i].unk_00.z = sp128.z;
 
-                temp_f0 = sqrtf(SQ(sp128.x - sp140.x) + SQ(sp128.y - sp140.y) + SQ(sp128.z - sp140.z));
+                temp_f0 = sqrtf((SQ(sp128.x - sp140.x) + SQ(sp128.y - sp140.y)) + SQ(sp128.z - sp140.z));
 
                 if (temp_f0 < (temp_f26 * 0.9f)) {
                     ptr[i].unk_50 = 0xFF;
@@ -309,15 +309,17 @@ void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) 
         }
     }
 
+    temp_f2 = this->unk_214 * 400.0f;
+
     spF8[0] = -(this->unk_260 * shieldMf->mf[2][0]);
     spF8[1] = -(this->unk_260 * shieldMf->mf[2][1]);
     spF8[2] = -(this->unk_260 * shieldMf->mf[2][2]);
 
-    sp134.x = (spF8[0] * (this->unk_214 * 400.0f)) + sp140.x;
-    sp134.y = (spF8[1] * (this->unk_214 * 400.0f)) + sp140.y;
-    sp134.z = (spF8[2] * (this->unk_214 * 400.0f)) + sp140.z;
+    sp134.x = (spF8[0] * temp_f2) + sp140.x;
+    sp134.y = (spF8[1] * temp_f2) + sp140.y;
+    sp134.z = (spF8[2] * temp_f2) + sp140.z;
 
-    if (!BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp140, &sp134, &sp128, &spC4, true)) {
+    if (!BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp140, &sp134, &sp128, &spC4, 1)) {
         Math_Vec3f_Copy(&sp128, &sp134);
     }
 
