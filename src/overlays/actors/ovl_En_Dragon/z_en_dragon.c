@@ -27,6 +27,7 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5EAA0(EnDragon* this, s32 arg1);
 void func_80B5EDF0(EnDragon* this);
 void func_80B5EF88(EnDragon* this);
+void func_80B5F888(EnDragon* this);
 
 static s32 D_80B605D0 = 0;
 
@@ -463,7 +464,16 @@ void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F508.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F888.s")
+void func_80B5F888(EnDragon* this) {
+    if (this->unk_24C != 1) {
+        func_80B5EAA0(this, 1);
+    }
+
+    this->unk_2B0 = 0;
+    this->unk_2CA = 0;
+    this->unk_2BE = 0;
+    this->actionFunc = func_80B5F8D8;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F8D8.s")
 
