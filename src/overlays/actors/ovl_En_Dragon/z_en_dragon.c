@@ -487,7 +487,83 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5FD68.s")
+void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
+    Vec3f sp54;
+    s32 frames;
+
+    SkelAnime_Update(&this->skelAnime);
+    this->actor.shape.rot.z += 0x1000;
+    this->unk_2A8 = 0xFA0;
+    func_80B5EB40(this, globalCtx, this->unk_254);
+
+    if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 121.0f) &&
+        (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
+        this->actor.speedXZ = -120.0f;
+        if (((this->unk_250 & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
+            frames = globalCtx->gameplayFrames == 0;
+            if ((frames & 0x1F) != 0) {
+                Item_DropCollectibleRandom(globalCtx, NULL, &this->unk_254, 0x90);
+            }
+        }
+        this->unk_2BA = 6;
+        return;
+    }
+
+    this->actor.speedXZ = 0.0f;
+    if ((fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 20.0f) &&
+        (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 20.0f)) {
+        Math_ApproachF(&this->actor.world.pos.x, this->actor.home.pos.x, 0.3f, 300.0f);
+        Math_ApproachF(&this->actor.world.pos.z, this->actor.home.pos.z, 0.3f, 300.0f);
+        return;
+    }
+
+    D_80B605D0++;
+    if (D_80B605D0 >= (gGameInfo->data[0x987] + 8)) {
+        Math_Vec3f_Copy(&sp54, &this->actor.parent->world.pos);
+        sp54.x += (Math_SinS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
+        sp54.y += -100.0f + gGameInfo->data[0x981];
+        sp54.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
+        if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, 0x205, sp54.x, sp54.y, sp54.z, 0,
+                                          this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene, this->actor.unk20,
+                                          NULL)) {
+            gSaveContext.weekEventReg[0xD] |= 1;
+            switch (this->unk_250) {
+                case 0:
+                    gSaveContext.weekEventReg[0x53] |= 0x10;
+                    break;
+
+                case 1:
+                    gSaveContext.weekEventReg[0x53] |= 0x20;
+                    break;
+
+                case 2:
+                    gSaveContext.weekEventReg[0x53] |= 0x40;
+                    break;
+
+                case 3:
+                    gSaveContext.weekEventReg[0x53] |= 0x80;
+                    break;
+                case 4:
+                    gSaveContext.weekEventReg[0x54] |= 1;
+                    break;
+
+                case 5:
+                    gSaveContext.weekEventReg[0x54] |= 2;
+                    break;
+
+                case 6:
+                    gSaveContext.weekEventReg[0x54] |= 4;
+                    break;
+
+                case 7:
+                    gSaveContext.weekEventReg[0x54] |= 8;
+                    break;
+            }
+        }
+    }
+
+    Actor_MarkForDeath(&this->actor);
+}
 
 void func_80B60138(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
