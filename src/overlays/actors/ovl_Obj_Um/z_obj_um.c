@@ -29,7 +29,7 @@
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
  * - gSaveContext.weekEventReg[0x3B] & 0x02
  *     If true: Doesn't spawn again on Milk Road
- * 
+ *
  * weekEventReg flags set by this actor:
  * - gSaveContext.weekEventReg[0x1F] |= 0x40: Cremia offered a ride
  *     Cremia offered a ride accross the Milk Road to Player
@@ -43,7 +43,7 @@
  *     Every pot was broken by bandits. Turns off the ""Win" Milk Run minigame"
  * - gSaveContext.weekEventReg[0x3B] |= 0x02: ?
  *     Passed through Milk Road after winning the Milk Run
- * 
+ *
  * weekEventReg flags unset by this actor:
  * - gSaveContext.weekEventReg[0x1F] &= (u8)~0x80
  *     Turned off when the Milk Run finishes
@@ -81,7 +81,6 @@ const ActorInit Obj_Um_InitVars = {
     (ActorFunc)ObjUm_Draw,
 };
 
-
 extern FlexSkeletonHeader D_06011DF8;
 extern CollisionHeader D_06007E20;
 extern CollisionHeader D_06007F50;
@@ -92,8 +91,6 @@ extern Gfx D_060011E0[];
 
 extern Gfx D_04075A40[];
 
-
-
 extern TexturePtr D_060164D0;
 extern TexturePtr D_060168D0;
 extern TexturePtr D_06016CD0;
@@ -103,12 +100,7 @@ extern TexturePtr D_060178D0;
 
 // eyeTextures
 TexturePtr D_80B7C110[] = {
-    &D_060164D0,
-    &D_060168D0,
-    &D_06016CD0,
-    &D_060170D0,
-    &D_060174D0,
-    &D_060178D0,
+    &D_060164D0, &D_060168D0, &D_06016CD0, &D_060170D0, &D_060174D0, &D_060178D0,
 };
 
 extern TexturePtr D_06017CD0;
@@ -126,8 +118,22 @@ TexturePtr D_80B7C128[] = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000020, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+    {
+        COLTYPE_HIT3,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000020, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 40, 64, 0, { 0, 0, 0 } },
 };
 
@@ -140,20 +146,10 @@ typedef struct {
 } struct_80B7C254; // size = 0x14
 
 struct_80B7C254 D_80B7C164[12] = {
-    {2, 0, 0, 1.0f, 0x28},
-    {4, 1, 0, 1.0f, 0x28},
-    {3, 2, 0, 1.0f, 0x28},
-    {3, 4, 0, 1.0f, 0x28},
-    {5, 3, 1, -1.0f, 0x1E},
-    {7, 3, 1, 1.0f, 0x1E},
-    {0, 0xD, 1, -1.0f, 0x3C},
-    {1, 0xE, 1, 1.0f, 0x3C},
-    {0xD, 0xA, 0, 1.0f, 0x28},
-    {0xE, 8, 0, 1.0f, 0x28},
-    {8, 5, 0, 1.0f, 0x1E},
-    {0xA, 7, 0, 1.0f, 0x1E},
+    { 2, 0, 0, 1.0f, 0x28 },     { 4, 1, 0, 1.0f, 0x28 },   { 3, 2, 0, 1.0f, 0x28 },    { 3, 4, 0, 1.0f, 0x28 },
+    { 5, 3, 1, -1.0f, 0x1E },    { 7, 3, 1, 1.0f, 0x1E },   { 0, 0xD, 1, -1.0f, 0x3C }, { 1, 0xE, 1, 1.0f, 0x3C },
+    { 0xD, 0xA, 0, 1.0f, 0x28 }, { 0xE, 8, 0, 1.0f, 0x28 }, { 8, 5, 0, 1.0f, 0x1E },    { 0xA, 7, 0, 1.0f, 0x1E },
 };
-
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry sInitChain[] = {
@@ -172,13 +168,8 @@ extern AnimationHeader D_06019E10;
 extern AnimationHeader D_060126C4;
 
 struct_80B7C25C D_80B7C25C[] = {
-    {&D_06012CC0, true},
-    {&D_0601213C, true},
-    {&D_06019E10, false},
-    {NULL, false},
-    {&D_060126C4, false}
+    { &D_06012CC0, true }, { &D_0601213C, true }, { &D_06019E10, false }, { NULL, false }, { &D_060126C4, false }
 };
-
 
 // actionfuncs
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
@@ -289,7 +280,7 @@ void ObjUm_UpdateBanditsPositions(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
-    Path *path = &globalCtx->setupPathList[this->pathIdx];
+    Path* path = &globalCtx->setupPathList[this->pathIdx];
     s16 pad;
     Vec3s* spawnPoints;
     EnHorse* bandit1;
@@ -298,7 +289,8 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     spawnPoints = Lib_SegmentedToVirtual(path->points);
     Audio_QueueSeqCmd(0x8003);
 
-    bandit1 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y, spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
+    bandit1 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
+                                    spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
     this->bandit1 = bandit1;
 
     bandit1->unk_540 = bandit1->actor.world.pos;
@@ -319,7 +311,8 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
     bandit1->curRaceWaypoint = 1;
 
-    bandit2 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y, spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2014);
+    bandit2 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y,
+                                    spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2014);
     this->bandit2 = bandit2;
 
     bandit2->unk_540 = bandit2->actor.world.pos;
@@ -359,13 +352,15 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
         if (arg2->unk_550 == D_80B7C164[i].unk_00) {
             if (arg3->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
-                    if (D_80B7C164[i].unk_04 != 3 || ((mask = Player_GetMask(globalCtx)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
+                    if (D_80B7C164[i].unk_04 != 3 ||
+                        ((mask = Player_GetMask(globalCtx)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
                         phi_s3 = D_80B7C164[i].unk_04;
                         phi_s4 = D_80B7C164[i].unk_08;
                         phi_f20 = D_80B7C164[i].unk_0C;
                         phi_s2 = D_80B7C164[i].unk_10;
                     }
-                } else if (((arg2->unk_54C != 5) || (D_80B7C164[i].unk_04 != 2)) && ((arg2->unk_54C != 7) || (D_80B7C164[i].unk_04 != 4))) {
+                } else if (((arg2->unk_54C != 5) || (D_80B7C164[i].unk_04 != 2)) &&
+                           ((arg2->unk_54C != 7) || (D_80B7C164[i].unk_04 != 4))) {
                     phi_s3 = D_80B7C164[i].unk_04;
                     phi_s4 = D_80B7C164[i].unk_08;
                     phi_f20 = D_80B7C164[i].unk_0C;
@@ -374,8 +369,8 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
                     }
                     phi_s2 = D_80B7C164[i].unk_10;
                 }
-            // Semicolon is required to match...
-            ;
+                // Semicolon is required to match...
+                ;
             }
         }
     }
@@ -393,8 +388,8 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
     arg2->unk_568 = phi_f20;
 
     if (phi_s3 == 3) {
-        arg2->unk_558 = (s32) (Rand_ZeroOne() * 3.0f);
-    dummy_label_437827: ;
+        arg2->unk_558 = (s32)(Rand_ZeroOne() * 3.0f);
+    dummy_label_437827:;
     } else {
         arg2->unk_558 = 0;
     }
@@ -438,15 +433,15 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
     Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->unk_200]);
 
     if (arg3->unk_200 == 0) {
-        phi_f12 = (f32) (sp64[1].x - sp64[0].x);
-        phi_f14 = (f32) (sp64[1].z - sp64[0].z);
+        phi_f12 = (f32)(sp64[1].x - sp64[0].x);
+        phi_f14 = (f32)(sp64[1].z - sp64[0].z);
     } else {
         if ((arg3->unk_200 + 1) == sp6C->count) {
-            phi_f12 = (f32) (sp64[sp6C->count-1].x - sp64[sp6C->count-2].x);
-            phi_f14 = (f32) (sp64[sp6C->count-1].z - sp64[sp6C->count-2].z);
+            phi_f12 = (f32)(sp64[sp6C->count - 1].x - sp64[sp6C->count - 2].x);
+            phi_f14 = (f32)(sp64[sp6C->count - 1].z - sp64[sp6C->count - 2].z);
         } else {
-            phi_f12 = (f32) (sp64[arg3->unk_200+1].x - sp64[arg3->unk_200-1].x);
-            phi_f14 = (f32) (sp64[arg3->unk_200+1].z - sp64[arg3->unk_200-1].z);
+            phi_f12 = (f32)(sp64[arg3->unk_200 + 1].x - sp64[arg3->unk_200 - 1].x);
+            phi_f14 = (f32)(sp64[arg3->unk_200 + 1].z - sp64[arg3->unk_200 - 1].z);
         }
     }
 
@@ -531,8 +526,7 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
         func_80B781DC(this, arg2, arg3, globalCtx);
     }
 
-
-    Math3D_Lerp(&arg2->unk_540, &this->unk_360[arg2->unk_550], 1.0f - ((f32) arg2->unk_55C / arg2->unk_560), &sp30);
+    Math3D_Lerp(&arg2->unk_540, &this->unk_360[arg2->unk_550], 1.0f - ((f32)arg2->unk_55C / arg2->unk_560), &sp30);
     arg2->unk_570 = sp30;
     arg2->unk_588 = this->dyna.actor.shape.rot.y;
 
@@ -544,7 +538,7 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
         phi_v1_5 = Math_Vec3f_Yaw(&arg2->actor.prevPos, &arg2->actor.world.pos);
     }
 
-    if (1) { }
+    if (1) {}
 
     phi_v1_5 -= arg2->actor.shape.rot.y;
     if (phi_v1_5 > 0x190) {
@@ -562,7 +556,8 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
 s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3, EnHorse* arg4) {
     if (this->banditsCollisions[arg2].base.acFlags & AC_HIT) {
         if (arg3->unk_550 == 3) {
-            s16 sp36 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &arg3->actor.world.pos) - this->dyna.actor.shape.rot.y;
+            s16 sp36 =
+                Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &arg3->actor.world.pos) - this->dyna.actor.shape.rot.y;
 
             this->banditsCollisions[arg2].base.acFlags &= ~AC_HIT;
             Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
@@ -746,9 +741,9 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             // Waiting for player
 
-            if ((gSaveContext.weekEventReg[0x22] & 0x80) || gSaveContext.time >= CLOCK_TIME(19, 0)
-                 || gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 0x01)
-                 || (gSaveContext.weekEventReg[0x34] & 0x02)) {
+            if ((gSaveContext.weekEventReg[0x22] & 0x80) || gSaveContext.time >= CLOCK_TIME(19, 0) ||
+                gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 0x01) ||
+                (gSaveContext.weekEventReg[0x34] & 0x02)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -818,7 +813,9 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_800C636C(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 
-    this->donkey = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0, this->dyna.actor.shape.rot.y, 0, 0x8012);
+    this->donkey = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
+                                         this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0,
+                                         this->dyna.actor.shape.rot.y, 0, 0x8012);
 
     if (this->donkey == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
@@ -1103,11 +1100,11 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, GlobalContext* globalCtx) {
         phi_f12 = pathPoints[1].x - pathPoints[0].x;
         phi_f14 = pathPoints[1].z - pathPoints[0].z;
     } else if ((this->pointIdx + 1) == path->count) {
-        phi_f12 = pathPoints[path->count-1].x - pathPoints[path->count-2].x;
-        phi_f14 = pathPoints[path->count-1].z - pathPoints[path->count-2].z;
+        phi_f12 = pathPoints[path->count - 1].x - pathPoints[path->count - 2].x;
+        phi_f14 = pathPoints[path->count - 1].z - pathPoints[path->count - 2].z;
     } else {
-        phi_f12 = pathPoints[this->pointIdx+1].x - pathPoints[this->pointIdx-1].x;
-        phi_f14 = pathPoints[this->pointIdx+1].z - pathPoints[this->pointIdx-1].z;
+        phi_f12 = pathPoints[this->pointIdx + 1].x - pathPoints[this->pointIdx - 1].x;
+        phi_f14 = pathPoints[this->pointIdx + 1].z - pathPoints[this->pointIdx - 1].z;
     }
 
     aux = Math_Atan2S(phi_f12, phi_f14);
@@ -1396,7 +1393,7 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
 
             this->flags |= OBJ_UM_FLAG_MINIGAME_FINISHED;
 
-            dummy_label: ;
+        dummy_label:;
         }
 
         this->unk_4DC++;
@@ -1562,7 +1559,6 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
             func_80B7A860(this, globalCtx);
             break;
     }
-
 }
 
 void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
@@ -1641,7 +1637,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
 
         this->flags &= ~OBJ_UM_FLAG_0001;
 
-        if (1) { }
+        if (1) {}
 
         this->unk_2D0 = this->unk_2C4;
         this->unk_2E8 = this->unk_2DC;
@@ -1651,7 +1647,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
             this->unk_2D0.y = this->dyna.actor.floorHeight;
         }
 
-        if (1) { }
+        if (1) {}
 
         this->unk_2E8.y = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp44, &this->unk_2DC);
         if (this->unk_2E8.y == BGCHECK_Y_MIN) {
@@ -1662,8 +1658,11 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
         sp30.y = (this->unk_2D0.y + this->unk_2E8.y) * 0.5f;
         sp30.z = (this->unk_2D0.z + this->unk_2E8.z) * 0.5f;
 
-        this->dyna.actor.shape.rot.x = (s16) Math_Atan2S(sp30.y - this->dyna.actor.world.pos.y, sqrtf(SQ(sp30.x - this->dyna.actor.world.pos.x) + SQ(sp30.z - this->dyna.actor.world.pos.z)));
-        this->dyna.actor.shape.rot.z = (s16) -Math_Atan2S(sp30.y - this->unk_2D0.y, sqrtf(SQ(sp30.x - this->unk_2D0.x) + SQ(sp30.z - this->unk_2D0.z)));
+        this->dyna.actor.shape.rot.x =
+            (s16)Math_Atan2S(sp30.y - this->dyna.actor.world.pos.y, sqrtf(SQ(sp30.x - this->dyna.actor.world.pos.x) +
+                                                                          SQ(sp30.z - this->dyna.actor.world.pos.z)));
+        this->dyna.actor.shape.rot.z = (s16)-Math_Atan2S(
+            sp30.y - this->unk_2D0.y, sqrtf(SQ(sp30.x - this->unk_2D0.x) + SQ(sp30.z - this->unk_2D0.z)));
         if (this->flags & OBJ_UM_FLAG_MOVING) {
             this->dyna.actor.shape.rot.x += BINANG_SUB((Rand_ZeroOne() * 100.0f), 50.0f);
             this->dyna.actor.shape.rot.z += BINANG_SUB((Rand_ZeroOne() * 100.0f), 50.0f);
@@ -1823,8 +1822,8 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s16 temp_v0_3;
-    Vec3f sp5C = {4223.0f, -979.0f, 4098.0f};
-    Vec3f sp50 = {4223.0f, -980.0f, -4083.0f};
+    Vec3f sp5C = { 4223.0f, -979.0f, 4098.0f };
+    Vec3f sp50 = { 4223.0f, -980.0f, -4083.0f };
 
     if ((limbIndex >= UM_LIMB_CREMIA_ROOT) && (this->type == OBJ_UM_TYPE_TERMINA_FIELD)) {
         *dList = NULL;
@@ -1851,13 +1850,16 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         }
         Matrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
     } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->flags & OBJ_UM_FLAG_WAITING)) {
-        if ((SubS_AngleDiffLessEqual(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) && (this->dyna.actor.xzDistToPlayer < 500.0f)) {
+        if ((SubS_AngleDiffLessEqual(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) &&
+            (this->dyna.actor.xzDistToPlayer < 500.0f)) {
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
 
             sp30.y = player->bodyPartsPos[7].y + 3.0f;
             sp3E = Math_Vec3f_Yaw(&this->dyna.actor.focus.pos, &sp30) - this->dyna.actor.shape.rot.y;
-            temp_v0_3 = Math_Atan2S(this->dyna.actor.focus.pos.y - sp30.y, Math3D_XZLength(sp30.x - this->dyna.actor.focus.pos.x, sp30.z - this->dyna.actor.focus.pos.z));
+            temp_v0_3 = Math_Atan2S(
+                this->dyna.actor.focus.pos.y - sp30.y,
+                Math3D_XZLength(sp30.x - this->dyna.actor.focus.pos.x, sp30.z - this->dyna.actor.focus.pos.z));
             this->unk_2FE.x = rot->x + sp3E;
             this->unk_2FE.y = rot->y;
             this->unk_2FE.z = rot->z + temp_v0_3;
@@ -1884,8 +1886,8 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 }
 
 void ObjUm_SpawnFragments(GlobalContext* globalCtx, Vec3f* potPos) {
-    Vec3f sp8C = {0.0f, -1.0f, 0.0f};
-    Gfx* potFragments[] = {D_06000040, D_06000910, D_060011E0};
+    Vec3f sp8C = { 0.0f, -1.0f, 0.0f };
+    Gfx* potFragments[] = { D_06000040, D_06000910, D_060011E0 };
     s32 i;
     Vec3f sp70;
 
@@ -1895,7 +1897,8 @@ void ObjUm_SpawnFragments(GlobalContext* globalCtx, Vec3f* potPos) {
         sp70.x = (Rand_ZeroOne() * 20.0f) - 10.0f;
         sp70.y = -((Rand_ZeroOne() * 20.0f) - 10.0f);
         sp70.z = (Rand_ZeroOne() * 20.0f) - 10.0f;
-        EffectSsHahen_Spawn(globalCtx, potPos, &sp70, &sp8C, 1, 100, OBJECT_UM, 10, potFragments[(s32)(Rand_ZeroOne() * ARRAY_COUNT(potFragments))]);
+        EffectSsHahen_Spawn(globalCtx, potPos, &sp70, &sp8C, 1, 100, OBJECT_UM, 10,
+                            potFragments[(s32)(Rand_ZeroOne() * ARRAY_COUNT(potFragments))]);
     }
 }
 
@@ -1908,31 +1911,10 @@ extern Gfx D_060043E0[];
 void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
-    Mtx *mtx_s3;
-    Gfx* spFC [] = {
-        NULL,
-        D_060052B0,
-        D_06003C60,
-        D_06003C60,
-        D_06003C60,
-        D_060067C0
-    };
-    Gfx* spE4[] = {
-        NULL,
-        NULL,
-        D_06004B60,
-        D_060043E0,
-        NULL,
-        NULL
-    };
-    f32 spCC[] = {
-        0.0f,
-        1070.0f,
-        1070.0f,
-        1070.0f,
-        1070.0f,
-        2100.0f
-    };
+    Mtx* mtx_s3;
+    Gfx* spFC[] = { NULL, D_060052B0, D_06003C60, D_06003C60, D_06003C60, D_060067C0 };
+    Gfx* spE4[] = { NULL, NULL, D_06004B60, D_060043E0, NULL, NULL };
+    f32 spCC[] = { 0.0f, 1070.0f, 1070.0f, 1070.0f, 1070.0f, 2100.0f };
     Vec3f spC0 = gZeroVec3f;
     Vec3f calcPotPos;
     f32 spB0;
@@ -1940,24 +1922,24 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     spC0.y += 1700.0f;
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
-        Vec3f spA4 = {2000.0f, 1070.0f, 0.0f};
+        Vec3f spA4 = { 2000.0f, 1070.0f, 0.0f };
 
         Matrix_MultiplyVector3fByState(&spA4, &this->unk_308);
         this->flags |= OBJ_UM_FLAG_DRAWN_FLOOR;
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
-        Vec3f sp98 = {2500.0f, 200.0f, 0.0f};
+        Vec3f sp98 = { 2500.0f, 200.0f, 0.0f };
 
         Matrix_MultiplyVector3fByState(&sp98, &this->cartBedPos);
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
-        Vec3f *potPos;
+        Vec3f* potPos;
         Vec3f sp88;
         Vec3s sp80;
         s32 i;
-        f32 sp70[] = {2000.0f, 0.0f, -2000.0f};
+        f32 sp70[] = { 2000.0f, 0.0f, -2000.0f };
 
         if (!i) {}
 
@@ -2012,7 +1994,6 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         }
 
         CLOSE_DISPS(gfxCtx);
-
     }
     if (limbIndex == UM_LIMB_CREMIA_HEAD) {
         Matrix_GetStateTranslation(&this->dyna.actor.focus.pos);
@@ -2039,7 +2020,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
         SkinMatrix_SetTranslate(&spC0, cartBedPos->x, cartBedPos->y, cartBedPos->z);
     }
 
-    SkinMatrix_MulYRotation( &spC0, arg1);
+    SkinMatrix_MulYRotation(&spC0, arg1);
     SkinMatrix_SetScale(&sp80, arg2->x, 1.0f, arg2->z);
     SkinMatrix_MtxFMtxFMult(&spC0, &sp80, &sp40);
 
@@ -2057,7 +2038,6 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
     }
 }
 
-
 #ifndef NOT_DEBUG_PRINT
 #define BOOLSTR(x) ((x) ? "true" : "false")
 
@@ -2072,23 +2052,23 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetPos(printer, 28, 1);
     GfxPrint_Printf(printer, "gTime:%X", gSaveContext.time);
 
-    GfxPrint_SetPos(printer, x-7, ++y);
+    GfxPrint_SetPos(printer, x - 7, ++y);
     actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)ObjUm_UpdateBanditsPositions + SEGMENT_START(ovl_Obj_Um);
     GfxPrint_Printf(printer, "actionFunc:%X", actionFuncReloc & 0x0000FFFF);
 
     // GfxPrint_SetPos(printer, x-5, ++y);
     // GfxPrint_Printf(printer, "wheelRot:%X", this->wheelRot);
 
-    GfxPrint_SetPos(printer, x-1, ++y);
+    GfxPrint_SetPos(printer, x - 1, ++y);
     GfxPrint_Printf(printer, "type:%X", this->type);
     // GfxPrint_SetPos(printer, x-8, ++y);
     // GfxPrint_Printf(printer, "initialPath:%X", this->initialPathIdx);
-    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "! 2B4:%X", this->unk_2B4);
 
-    //GfxPrint_SetPos(printer, x-1, ++y);
-    //GfxPrint_Printf(printer, "path:%X", this->pathIdx);
-    GfxPrint_SetPos(printer, x-5, ++y);
+    // GfxPrint_SetPos(printer, x-1, ++y);
+    // GfxPrint_Printf(printer, "path:%X", this->pathIdx);
+    GfxPrint_SetPos(printer, x - 5, ++y);
     GfxPrint_Printf(printer, "pointIdx:%X", this->pointIdx);
 
     // GfxPrint_SetPos(printer, x-2, ++y);
@@ -2105,11 +2085,11 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     // GfxPrint_Printf(printer, "308.z:%f", this->unk_308.z);
 
     if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
-        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_SetPos(printer, x - 8, ++y);
         GfxPrint_Printf(printer, "potsLife[0]:%i", this->potsLife[0]);
-        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_SetPos(printer, x - 8, ++y);
         GfxPrint_Printf(printer, "potsLife[1]:%i", this->potsLife[1]);
-        GfxPrint_SetPos(printer, x-8, ++y);
+        GfxPrint_SetPos(printer, x - 8, ++y);
         GfxPrint_Printf(printer, "potsLife[2]:%i", this->potsLife[2]);
 
         // GfxPrint_SetPos(printer, x-9, ++y);
@@ -2120,7 +2100,7 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
         // GfxPrint_Printf(printer, "wasPotHit[2]:%i", this->wasPotHit[2]);
     }
 
-    GfxPrint_SetPos(printer, x-1, ++y);
+    GfxPrint_SetPos(printer, x - 1, ++y);
     GfxPrint_Printf(printer, "time:%X", this->lastTime);
 
     GfxPrint_SetPos(printer, x, ++y);
@@ -2133,10 +2113,9 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_Printf(printer, "4DC:%X", this->unk_4DC);
 
     if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
-        GfxPrint_SetPos(printer, x-10, ++y);
+        GfxPrint_SetPos(printer, x - 10, ++y);
         GfxPrint_Printf(printer, "arePotsBroken:%s", BOOLSTR(this->arePotsBroken));
     }
-
 
     y = 20;
 
@@ -2145,31 +2124,27 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetPos(printer, 1, ++y);
     GfxPrint_Printf(printer, "   8 4 2 1");
     GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "1  %i %i %i %i", (this->flags & 0x08)>>3, (this->flags & 0x04)>>2, (this->flags & 0x02)>>1, this->flags & 0x01);
+    GfxPrint_Printf(printer, "1  %i %i %i %i", (this->flags & 0x08) >> 3, (this->flags & 0x04) >> 2,
+                    (this->flags & 0x02) >> 1, this->flags & 0x01);
     GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "2  %i %i %i %i", (this->flags & 0x80)>>7, (this->flags & 0x40)>>6, (this->flags & 0x20)>>5, (this->flags & 0x10)>>4);
+    GfxPrint_Printf(printer, "2  %i %i %i %i", (this->flags & 0x80) >> 7, (this->flags & 0x40) >> 6,
+                    (this->flags & 0x20) >> 5, (this->flags & 0x10) >> 4);
     GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "3  %i %i %i %i", (this->flags & 0x800)>>11, (this->flags & 0x400)>>10, (this->flags & 0x200)>>9, (this->flags & 0x100)>>8);
+    GfxPrint_Printf(printer, "3  %i %i %i %i", (this->flags & 0x800) >> 11, (this->flags & 0x400) >> 10,
+                    (this->flags & 0x200) >> 9, (this->flags & 0x100) >> 8);
     GfxPrint_SetPos(printer, 1, ++y);
-    GfxPrint_Printf(printer, "4      %i %i", (this->flags & 0x2000)>>13, (this->flags & 0x1000)>>12);
+    GfxPrint_Printf(printer, "4      %i %i", (this->flags & 0x2000) >> 13, (this->flags & 0x1000) >> 12);
 
     y = 0;
     for (i = 0; i < 16; i++) {
         static char* flagsMap[] = {
-            "OBJ_UM_FLAG_0001",
-            "OBJ_UM_FLAG_MOVING",
-            "OBJ_UM_FLAG_0004",
-            "OBJ_UM_FLAG_WAITING",
-            "OBJ_UM_FLAG_0010",
-            "OBJ_UM_FLAG_DRAWN_FLOOR",
-            "OBJ_UM_FLAG_0040",
-            "OBJ_UM_FLAG_PLAYING_MINIGAME",
-            "OBJ_UM_FLAG_0100",
-            "OBJ_UM_FLAG_0200",
-            "OBJ_UM_FLAG_0400",
-            "OBJ_UM_FLAG_0800",
-            "OBJ_UM_FLAG_1000",
-            "OBJ_UM_FLAG_MINIGAME_FINISHED",
+            "OBJ_UM_FLAG_0001", "OBJ_UM_FLAG_MOVING",
+            "OBJ_UM_FLAG_0004", "OBJ_UM_FLAG_WAITING",
+            "OBJ_UM_FLAG_0010", "OBJ_UM_FLAG_DRAWN_FLOOR",
+            "OBJ_UM_FLAG_0040", "OBJ_UM_FLAG_PLAYING_MINIGAME",
+            "OBJ_UM_FLAG_0100", "OBJ_UM_FLAG_0200",
+            "OBJ_UM_FLAG_0400", "OBJ_UM_FLAG_0800",
+            "OBJ_UM_FLAG_1000", "OBJ_UM_FLAG_MINIGAME_FINISHED",
         };
 
         if (this->flags & (1 << i)) {
@@ -2178,12 +2153,10 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
         }
     }
 
-
-
     y = 20;
     x = 29;
 
-    GfxPrint_SetPos(printer, x-2, ++y);
+    GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "weekEvent");
     // GfxPrint_SetPos(printer, x, ++y);
     // GfxPrint_Printf(printer, "[0x16]&0x01: %i", gSaveContext.weekEventReg[0x16] & 0x01);
@@ -2239,7 +2212,8 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     this->flags |= OBJ_UM_FLAG_0001;
-    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
     sp34.x = 0.45f;
     sp34.y = 0.0f;
     sp34.z = 0.7f;
