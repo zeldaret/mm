@@ -751,7 +751,7 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is on the floor && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop
+    // If either (Player is standing on ground && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop
     // trying to catch Player
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
@@ -965,7 +965,7 @@ void Boss03_PrepareCharge(Boss03* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    // Player is above water && Player is on the floor
+    // Player is above water && Player is standing on ground
     if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
         if (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0) {
             Boss03_SetupCharge(this, globalCtx);
@@ -1033,7 +1033,7 @@ void Boss03_Charge(Boss03* this, GlobalContext* globalCtx) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0,
                         0x96, ENWATEREFFECT_780);
 
-            // Player is above water && Player is on the floor
+            // Player is above water && Player is standing on ground
             if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
                 func_800B8D50(globalCtx, NULL, 7.0f, Math_FAtan2F(player->actor.world.pos.z, player->actor.world.pos.x),
                               7.0f, 0);
@@ -1431,7 +1431,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
 
-                // Player is above water && Player is on the floor
+                // Player is above water && Player is standing on ground
                 if ((this->waterHeight < player->actor.world.pos.y) && (player->actor.bgCheckFlags & 1)) {
                     player->actor.world.pos.x = 0.0f;
                     player->actor.world.pos.z = -200.0f;
@@ -2071,7 +2071,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->wetSpotEffectSpawnNum = 20;
     }
 
-    // Player is on the floor && Player is above water
+    // Player is standing on ground && Player is above water
     if ((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) {
         if (this->wetSpotEffectSpawnNum != 0) {
             this->wetSpotEffectSpawnNum--;
@@ -2459,90 +2459,90 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
     s16 i;
     s16 pad;
-    s16 phi_s0;
-    u8 phi_s3;
+    s16 maxBendSpeed;
+    u8 flag;
     Player* player = GET_PLAYER(globalCtx);
-    f32 temp_f0;
-    f32 temp_f14;
+    f32 distanceBetweenSeaweedAndDisturbance;
+    f32 disturbanceFactor;
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
 
-    phi_s3 = 0;
+    flag = 0;
     this->unk_240++;
 
-    for (i = 0; i < 6; i++) {
-        xDiff = player->actor.world.pos.x - this->unk_2DC[i].x;
-        yDiff = player->actor.world.pos.y - this->unk_2DC[i].y;
-        zDiff = player->actor.world.pos.z - this->unk_2DC[i].z;
-        temp_f0 = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
-        temp_f14 = player->actor.speedXZ * 3.0f + 70.0f;
+    for (i = 0; i < ARRAY_COUNT(this->seaweedSegmentPositions); i++) {
+        xDiff = player->actor.world.pos.x - this->seaweedSegmentPositions[i].x;
+        yDiff = player->actor.world.pos.y - this->seaweedSegmentPositions[i].y;
+        zDiff = player->actor.world.pos.z - this->seaweedSegmentPositions[i].z;
+        distanceBetweenSeaweedAndDisturbance = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
+        disturbanceFactor = player->actor.speedXZ * 3.0f + 70.0f;
 
-        // Player is on the floor
+        // Player is standing on ground
         if (player->actor.bgCheckFlags & 1) {
-            phi_s0 = 0;
+            maxBendSpeed = 0;
         } else {
-            phi_s0 = player->actor.speedXZ * 16.0f;
-            if (phi_s0 > 0x1000) {
-                phi_s0 = 0x1000;
-            } else if (phi_s0 < 0x100) {
-                phi_s0 = 0x100;
+            maxBendSpeed = player->actor.speedXZ * 16.0f;
+            if (maxBendSpeed > 0x1000) {
+                maxBendSpeed = 0x1000;
+            } else if (maxBendSpeed < 0x100) {
+                maxBendSpeed = 0x100;
             }
         }
 
-        if (temp_f0 < temp_f14) {
-            Math_ApproachS(&this->morphTable[i].x, (temp_f14 - temp_f0) * 200.0f, 0xA, phi_s0);
-            if (phi_s0 != 0) {
-                phi_s3 |= 1;
+        if (distanceBetweenSeaweedAndDisturbance < disturbanceFactor) {
+            Math_ApproachS(&this->morphTable[i].x, (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f, 0xA, maxBendSpeed);
+            if (maxBendSpeed!= 0) {
+                flag |= 1;
             }
         }
     }
 
-    if (phi_s3 & 1) {
+    if (flag & 1) {
         Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(zDiff, xDiff), 0x14, 0x800);
     }
 
     if (sGyorgBossInstance->actor.world.pos.y - 40.0f < sGyorgBossInstance->waterHeight) {
         for (i = 0; i < 6; i++) {
-            xDiff = sGyorgBossInstance->actor.world.pos.x - this->unk_2DC[i].x;
-            yDiff = sGyorgBossInstance->actor.world.pos.y - this->unk_2DC[i].y;
-            zDiff = sGyorgBossInstance->actor.world.pos.z - this->unk_2DC[i].z;
+            xDiff = sGyorgBossInstance->actor.world.pos.x - this->seaweedSegmentPositions[i].x;
+            yDiff = sGyorgBossInstance->actor.world.pos.y - this->seaweedSegmentPositions[i].y;
+            zDiff = sGyorgBossInstance->actor.world.pos.z - this->seaweedSegmentPositions[i].z;
 
-            temp_f0 = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
+            distanceBetweenSeaweedAndDisturbance = sqrtf(SQ(xDiff) + SQ(yDiff) + SQ(zDiff));
 
-            if ((i == 0) && (temp_f0 > 400.0f)) {
+            if ((i == 0) && (distanceBetweenSeaweedAndDisturbance > 400.0f)) {
                 break;
             }
 
-            phi_s0 = sGyorgBossInstance->actor.speedXZ * 16.0f;
-            temp_f14 = sGyorgBossInstance->actor.speedXZ * 5.0f + 150.0f;
-            if (phi_s0 > 0x1000) {
-                phi_s0 = 0x1000;
+            maxBendSpeed = sGyorgBossInstance->actor.speedXZ * 16.0f;
+            disturbanceFactor = sGyorgBossInstance->actor.speedXZ * 5.0f + 150.0f;
+            if (maxBendSpeed > 0x1000) {
+                maxBendSpeed = 0x1000;
             } else if (phi_s0 < 0x100) {
-                phi_s0 = 0x0100;
+                maxBendSpeed = 0x0100;
             }
 
-            if (temp_f0 < temp_f14) {
-                Math_ApproachS(&this->morphTable[i].x, (temp_f14 - temp_f0) * 200.0f, 0xA, phi_s0);
-                if (phi_s0 != 0) {
-                    phi_s3 |= 2;
+            if (distanceBetweenSeaweedAndDisturbance < disturbanceFactor) {
+                Math_ApproachS(&this->morphTable[i].x, (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f, 0xA, maxBendSpeed);
+                if (maxBendSpeed != 0) {
+                    flag |= 2;
                 }
             }
         }
 
-        if (phi_s3 & 2) {
+        if (flag & 2) {
             Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(zDiff, xDiff), 0x14, 0x800);
         }
     }
 
-    if (phi_s3 == 0) {
+    if (flag == 0) {
         for (i = 0; i < 6; i++) {
             Math_ApproachS(&this->morphTable[i].x, 0, 0x14, 0x80);
         }
     }
 }
 
-Gfx* D_809E91C0[] = {
+Gfx* sGyorgSeaweedDLs[] = {
     gGyorgSeaweedTopDL,    gGyorgSeaweedPiece5DL, gGyorgSeaweedPiece4DL,
     gGyorgSeaweedPiece3DL, gGyorgSeaweedPiece2DL, gGyorgSeaweedPiece1DL,
 };
@@ -2568,21 +2568,18 @@ void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(this->jointTable[3].y * -5.0f * 0.1f, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(this->jointTable[2].z * 6.0f * 0.1f, MTXMODE_APPLY);
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < ARRAY_COUNT(sGyorgSeaweedDLs); i++, mtx++) {
         Matrix_RotateY(this->jointTable[i].x + this->morphTable[i].x, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->jointTable[i].y + this->morphTable[i].y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->jointTable[i].z + this->morphTable[i].z, MTXMODE_APPLY);
 
         Matrix_ToMtx(mtx);
-
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(POLY_OPA_DISP++, D_809E91C0[i]);
+        gSPDisplayList(POLY_OPA_DISP++, sGyorgSeaweedDLs[i]);
 
-        Matrix_GetStateTranslation(&this->unk_2DC[i]);
+        Matrix_GetStateTranslation(&this->seaweedSegmentPositions[i]);
         Matrix_InsertTranslation(4000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-
-        mtx++;
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
