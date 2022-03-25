@@ -3,6 +3,8 @@
 
 #include "global.h"
 #include "z64skin.h"
+#include "overlays/actors/ovl_En_In/z_en_in.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnHorse;
 
@@ -136,7 +138,7 @@ typedef struct EnHorse {
     /* 0x14C */ s32 noInputTimerMax;            
     /* 0x150 */ s32 type;
     /* 0x154 */ s8 bankIndex;             
-    /* 0x158 */ PSkinAwb skin;
+    /* 0x158 */ Skin skin;
     /* 0x1E8 */ s32 stateFlags;            
     /* 0x1EC */ s32 unk_1EC;            
     /* 0x1F0 */ Vec3f lastPos;            
@@ -148,7 +150,7 @@ typedef struct EnHorse {
     /* 0x210 */ f32 curFrame;            
     /* 0x214 */ s32 soundTimer;            
     /* 0x218 */ Vec3f unk_218;          
-    /* 0x224 */ char unk224[0xC];     
+    /* 0x224 */ UNK_TYPE1 unk224[0xC];     
     /* 0x230 */ s32 unk_230;             
     /* 0x234 */ u8 numBoosts;             
     /* 0x238 */ s32 boostRegenTime;            
@@ -156,7 +158,7 @@ typedef struct EnHorse {
     /* 0x240 */ EnHorsePostdrawFunc postDrawFunc;
     /* 0x244 */ f32 yFront;             
     /* 0x248 */ f32 yBack;             
-    /* 0x24C */ u32 unk_24C;             
+    /* 0x24C */ s32 unk_24C;             
     /* 0x250 */ s16 followTimer;             
     /* 0x254 */ s32 prevAction;       
     /* 0x258 */ Vec3f riderPos;             
@@ -168,7 +170,7 @@ typedef struct EnHorse {
     /* 0x310 */ ColliderJntSph colliderJntSph;   
     /* 0x330 */ ColliderJntSphElement colliderJntSphElements[1];   
     /* 0x370 */ s32 playerDir;      
-    /* 0x374 */ char unk374[0x2];      
+    /* 0x374 */ UNK_TYPE1 unk374[0x2];      
     /* 0x376 */ s16 angleToPlayer;      
     /* 0x378 */ s16 followPlayerTurnSpeed;      
     /* 0x37A */ u8 blinkTimer;      
@@ -177,7 +179,7 @@ typedef struct EnHorse {
     /* 0x384 */ u16 cutsceneFlags;      
     /* 0x388 */ s32 inRace;      
     /* 0x38C */ struct EnIn* rider;      
-    /* 0x390 */ char unk390[0x4];      
+    /* 0x390 */ UNK_TYPE1 unk390[0x4];      
     /* 0x394 */ u16 unk_394;             
     /* 0x398 */ f32 unk_398;             
     /* 0x39C */ s32 unk_39C;             
@@ -190,7 +192,7 @@ typedef struct EnHorse {
     /* 0x3C8 */ Vec3f backRightHoof;      
     /* 0x3D4 */ Vec3f backLeftHoof;      
     /* 0x3E0 */ s32 unk_3E0;      
-    /* 0x3E4 */ char unk3E4[0x4];      
+    /* 0x3E4 */ UNK_TYPE1 unk3E4[0x4];      
     /* 0x3E8 */ f32 unk_3E8;             
     /* 0x3EC */ s16 unk_3EC;             
     /* 0x3EE */ Vec3s jointTable[26]; 
@@ -202,13 +204,13 @@ typedef struct EnHorse {
     /* 0x538 */ s32 unk_538;      
     /* 0x53C */ s32 unk_53C;      
     /* 0x540 */ Vec3f unk_540;      
-    /* 0x54C */ char unk54C[0x4];      
+    /* 0x54C */ UNK_TYPE1 unk54C[0x4];      
     /* 0x550 */ s32 unk_550;      
-    /* 0x554 */ char unk554[0x18];      
+    /* 0x554 */ UNK_TYPE1 unk554[0x18];      
     /* 0x56C */ f32 unk_56C;             
     /* 0x570 */ Vec3f unk_570;             
     /* 0x57C */ Vec3f unk_57C;             
-    /* 0x588 */ char unk588[0x4];             
+    /* 0x588 */ UNK_TYPE1 unk588[0x4];             
     /* 0x58C */ s32 unk_58C;             
     /* 0x590 */ s32 unk_590;             
 } EnHorse; // size = 0x594
