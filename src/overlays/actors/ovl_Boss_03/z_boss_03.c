@@ -470,7 +470,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actor.world.pos = sGyorgInitialPos;
 
-    // Since Boss03_RandZeroOne is only used on this Init function, the resulting values ends up being deterministic
+    // Since Boss03_RandZeroOne is only used on this Init function, the resulting values end up being deterministic
     Boss03_SeedRand(1, 29093, 9786);
 
     for (i = 0; i < 5; i++) {
