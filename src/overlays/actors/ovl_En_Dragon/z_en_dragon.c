@@ -613,7 +613,6 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
 
 void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
     Vec3f sp54;
-    s32 frames;
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.z += 0x1000;
@@ -624,8 +623,7 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
         this->actor.speedXZ = -120.0f;
         if (((this->unk_250 & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
-            frames = globalCtx->gameplayFrames == 0;
-            if ((frames & 0x1F) != 0) {
+            if (((!globalCtx->gameplayFrames) & 0x1F)) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->unk_254, 0x90);
             }
         }
