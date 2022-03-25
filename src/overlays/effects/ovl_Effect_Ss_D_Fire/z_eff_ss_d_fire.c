@@ -28,7 +28,7 @@ const EffectSsInit Effect_Ss_D_Fire_InitVars = {
 
 static TexturePtr sFireTextures[] = { gDodongoFire0Tex, gDodongoFire1Tex, gDodongoFire2Tex, gDodongoFire3Tex };
 
-s32 func_809791B0(EffectSs* this, GlobalContext* globalCtx) {
+s32 EffectSsDFire_CheckForObject(EffectSs* this, GlobalContext* globalCtx) {
     if (((this->rObjectIndex = Object_GetIndex(&globalCtx->objectCtx, OBJECT_DODONGO)) < 0) ||
         !Object_IsLoaded(&globalCtx->objectCtx, this->rObjectIndex)) {
         this->life = -1;
@@ -41,7 +41,7 @@ s32 func_809791B0(EffectSs* this, GlobalContext* globalCtx) {
 u32 EffectSsDFire_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsDFireInitParams* initParams = PARAMS;
 
-    if (func_809791B0(this, globalCtx)) {
+    if (EffectSsDFire_CheckForObject(this, globalCtx)) {
         Math_Vec3f_Copy(&this->pos, &initParams->pos);
         Math_Vec3f_Copy(&this->velocity, &initParams->velocity);
         Math_Vec3f_Copy(&this->accel, &initParams->accel);
@@ -68,14 +68,14 @@ void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     void* object;
     f32 scale;
 
-    if (func_809791B0(this, globalCtx)) {
+    if (EffectSsDFire_CheckForObject(this, globalCtx)) {
         object = globalCtx->objectCtx.status[this->rObjectIndex].segment;
 
         OPEN_DISPS(gfxCtx);
 
         gSegments[6] = PHYSICAL_TO_VIRTUAL2(object);
         gSPSegment(POLY_XLU_DISP++, 0x06, object);
-        
+
         scale = this->rScale / 100.0f;
 
         Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, 0);
@@ -91,7 +91,7 @@ void EffectSsDFire_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
             TexturePtr* tex = sFireTextures[this->rTexIndex];
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(tex));
         }
-        
+
         gSPDisplayList(POLY_XLU_DISP++, this->gfx);
 
         CLOSE_DISPS(gfxCtx);
@@ -110,5 +110,5 @@ void EffectSsDFire_Update(GlobalContext* globalCtx, u32 index, EffectSs* this) {
         }
     }
 
-    func_809791B0(this, globalCtx);
+    EffectSsDFire_CheckForObject(this, globalCtx);
 }

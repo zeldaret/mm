@@ -8147,7 +8147,7 @@
     0x80978D70:("EffectSsGSpk_Draw",),
     0x80978F40:("func_80978F40",),
     0x80979068:("func_80979068",),
-    0x809791B0:("func_809791B0",),
+    0x809791B0:("EffectSsDFire_CheckForObject",),
     0x80979228:("EffectSsDFire_Init",),
     0x8097930C:("EffectSsDFire_Draw",),
     0x809794D4:("EffectSsDFire_Update",),
