@@ -6,6 +6,7 @@
 
 #include "z_obj_um.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -81,42 +82,22 @@ const ActorInit Obj_Um_InitVars = {
     (ActorFunc)ObjUm_Draw,
 };
 
-extern FlexSkeletonHeader D_06011DF8;
-extern CollisionHeader D_06007E20;
-extern CollisionHeader D_06007F50;
-
-extern Gfx D_06000040[];
-extern Gfx D_06000910[];
-extern Gfx D_060011E0[];
-
-extern Gfx D_04075A40[];
-
-extern TexturePtr D_060164D0;
-extern TexturePtr D_060168D0;
-extern TexturePtr D_06016CD0;
-extern TexturePtr D_060170D0;
-extern TexturePtr D_060174D0;
-extern TexturePtr D_060178D0;
-
-// eyeTextures
-TexturePtr D_80B7C110[] = {
-    &D_060164D0, &D_060168D0, &D_06016CD0, &D_060170D0, &D_060174D0, &D_060178D0,
+static TexturePtr sEyeTextures[] = {
+    gUmEyeOpenTex,
+    gUmEyeHalfTex,
+    gUmEyeClosedTex,
+    gUmEyePleasedTex,
+    gUmEyeAngryTex,
+    gUmEyeSadTex,
 };
 
-extern TexturePtr D_06017CD0;
-extern TexturePtr D_06017ED0;
-extern TexturePtr D_060182D0;
-extern TexturePtr D_060180D0;
-
-// mouthTextures
-TexturePtr D_80B7C128[] = {
-    &D_06017CD0,
-    &D_06017ED0,
-    &D_060182D0,
-    &D_060180D0,
+static TexturePtr sMouthTextures[] = {
+    gUmMouthNeutralTex,
+    gUmMouthHappyTex,
+    gUmMouthOpenTex,
+    gUmMouthSadTex,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT3,
@@ -145,13 +126,12 @@ typedef struct {
     /* 0x10 */ UNK_TYPE unk_10;
 } struct_80B7C254; // size = 0x14
 
-struct_80B7C254 D_80B7C164[12] = {
+struct_80B7C254 D_80B7C164[] = {
     { 2, 0, 0, 1.0f, 0x28 },     { 4, 1, 0, 1.0f, 0x28 },   { 3, 2, 0, 1.0f, 0x28 },    { 3, 4, 0, 1.0f, 0x28 },
     { 5, 3, 1, -1.0f, 0x1E },    { 7, 3, 1, 1.0f, 0x1E },   { 0, 0xD, 1, -1.0f, 0x3C }, { 1, 0xE, 1, 1.0f, 0x3C },
     { 0xD, 0xA, 0, 1.0f, 0x28 }, { 0xE, 8, 0, 1.0f, 0x28 }, { 8, 5, 0, 1.0f, 0x1E },    { 0xA, 7, 0, 1.0f, 0x1E },
 };
 
-// static InitChainEntry sInitChain[] = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
@@ -162,13 +142,8 @@ typedef struct {
     /* 0x04 */ s32 unk_04;
 } struct_80B7C25C; // size = 0x08
 
-extern AnimationHeader D_06012CC0;
-extern AnimationHeader D_0601213C;
-extern AnimationHeader D_06019E10;
-extern AnimationHeader D_060126C4;
-
 struct_80B7C25C D_80B7C25C[] = {
-    { &D_06012CC0, true }, { &D_0601213C, true }, { &D_06019E10, false }, { NULL, false }, { &D_060126C4, false }
+    { &object_um_Anim_012CC0, true }, { &object_um_Anim_01213C, true }, { &object_um_Anim_019E10, false }, { NULL, false }, { &object_um_Anim_0126C4, false }
 };
 
 // actionfuncs
@@ -712,8 +687,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
-    Animation_PlayLoop(&this->skelAnime, &D_06012CC0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_um_Skel_011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &object_um_Anim_012CC0);
 
     this->wheelRot = 0;
     ObjUm_StopAnim(this, globalCtx);
@@ -800,10 +775,10 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp54) {
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06007E20);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_um_Colheader_007E20);
     } else {
         DynaPolyActor_Init(&this->dyna, 3);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06007F50);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_um_Colheader_007F50);
     }
 
     if (this->dyna.bgId == 0x32) {
@@ -1002,15 +977,15 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !(this->dyna.actor.isTargeted)) {
+    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isTargeted) {
         return 0;
     }
 
     if (this->dyna.actor.xyzDistToPlayerSq <= SQ(50.0f)) {
-        if (func_800B8614(&this->dyna.actor, globalCtx, 50.0f) != 0) {
+        if (func_800B8614(&this->dyna.actor, globalCtx, 50.0f)) {
             this->dyna.actor.textId = ObjUm_RanchGetDialogue(globalCtx, this, arg2);
         }
-    } else if (func_800B863C(&this->dyna.actor, globalCtx) != 0) {
+    } else if (func_800B863C(&this->dyna.actor, globalCtx)) {
         this->dyna.actor.textId = ObjUm_RanchGetDialogue(globalCtx, this, arg2);
     }
 
@@ -1029,7 +1004,7 @@ s32 func_80B79A24(s32 arg0) {
 void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    this->dyna.actor.flags |= 1;
+    this->dyna.actor.flags |= ACTOR_FLAG_1;
     SkelAnime_Update(&this->skelAnime);
     ObjUm_UpdateAnim(this, globalCtx, 2);
     this->flags |= OBJ_UM_FLAG_WAITING;
@@ -1671,7 +1646,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx) {
-    Animation_PlayOnce(&this->skelAnime, &D_06012CC0);
+    Animation_PlayOnce(&this->skelAnime, &object_um_Anim_012CC0);
     this->unk_304 = 0;
 }
 
@@ -1833,8 +1808,8 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     if (limbIndex == UM_LIMB_CREMIA_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B7C110[this->eyeTexIndex]));
-        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B7C128[this->mouthTexIndex]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTexIndex]));
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -1887,7 +1862,7 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
 void ObjUm_SpawnFragments(GlobalContext* globalCtx, Vec3f* potPos) {
     Vec3f sp8C = { 0.0f, -1.0f, 0.0f };
-    Gfx* potFragments[] = { D_06000040, D_06000910, D_060011E0 };
+    Gfx* potFragments[] = { object_um_DL_000040, object_um_DL_000910, object_um_DL_0011E0 };
     s32 i;
     Vec3f sp70;
 
@@ -1902,18 +1877,12 @@ void ObjUm_SpawnFragments(GlobalContext* globalCtx, Vec3f* potPos) {
     }
 }
 
-extern Gfx D_060052B0[]; // gUmBrokenMinigamePotDL
-extern Gfx D_06003C60[]; // gUmMinigamePotDL
-extern Gfx D_060067C0[]; // pre-minigame pot?
-extern Gfx D_06004B60[];
-extern Gfx D_060043E0[];
-
 void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
     Mtx* mtx_s3;
-    Gfx* spFC[] = { NULL, D_060052B0, D_06003C60, D_06003C60, D_06003C60, D_060067C0 };
-    Gfx* spE4[] = { NULL, NULL, D_06004B60, D_060043E0, NULL, NULL };
+    Gfx* spFC[] = { NULL, gUmBrokenMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, gUmMinigamePotDL, object_um_DL_0067C0 };
+    Gfx* spE4[] = { NULL, NULL, object_um_DL_004B60, object_um_DL_0043E0, NULL, NULL };
     f32 spCC[] = { 0.0f, 1070.0f, 1070.0f, 1070.0f, 1070.0f, 2100.0f };
     Vec3f spC0 = gZeroVec3f;
     Vec3f calcPotPos;
@@ -2032,7 +2001,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
         POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
         gSPMatrix(POLY_OPA_DISP++, sp100, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, D_04075A40);
+        gSPDisplayList(POLY_OPA_DISP++, gSquareShadowDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

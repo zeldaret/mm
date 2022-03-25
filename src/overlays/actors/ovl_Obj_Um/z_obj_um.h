@@ -2,37 +2,12 @@
 #define Z_OBJ_UM_H
 
 #include "global.h"
+#include "objects/object_um/object_um.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
 struct ObjUm;
 
 typedef void (*ObjUmActionFunc)(struct ObjUm*, GlobalContext*);
-
-typedef enum {
-    /* 00 */ UM_LIMB_NONE,
-    /* 01 */ UM_LIMB_01, // Chair and donkey attachment
-    /* 02 */ UM_LIMB_WAGGON_ROOT,
-    /* 03 */ UM_LIMB_WAGGON_RIGHT_WHEEL,
-    /* 04 */ UM_LIMB_WAGGON_LEFT_WHEEL,
-    /* 05 */ UM_LIMB_WAGGON_CART_BED,
-    /* 06 */ UM_LIMB_WAGGON_HAND_BRAKE,
-    /* 07 */ UM_LIMB_WAGGON_CART_COVER,
-    /* 08 */ UM_LIMB_WAGGON_LEFT_LEAF_SPRING,
-    /* 09 */ UM_LIMB_WAGGON_RIGHT_LEAF_SPRING,
-    /* 10 */ UM_LIMB_WAGGON_STEERING_WHEEL,
-    /* 11 */ UM_LIMB_CREMIA_ROOT,
-    /* 12 */ UM_LIMB_CREMIA_THORAX,
-    /* 13 */ UM_LIMB_CREMIA_HEAD,
-    /* 14 */ UM_LIMB_CREMIA_HAIR,
-    /* 15 */ UM_LIMB_CREMIA_LEFT_ARM,
-    /* 16 */ UM_LIMB_CREMIA_LEFT_FOREARM,
-    /* 17 */ UM_LIMB_CREMIA_LEFT_HAND,
-    /* 18 */ UM_LIMB_CREMIA_RIGHT_ARM,
-    /* 19 */ UM_LIMB_CREMIA_RIGHT_FOREARM,
-    /* 20 */ UM_LIMB_CREMIA_RIGHT_HAND,
-    /* 21 */ UM_LIMB_CREMIA_LOWER_BODY,
-    /* 22 */ UM_LIMB_MAX
-} ObjectUmLimbs;
 
 typedef struct ObjUm {
     /* 0x000 */ DynaPolyActor dyna;
