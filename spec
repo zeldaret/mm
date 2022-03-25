@@ -2470,8 +2470,11 @@ beginseg
     name "ovl_Bg_Spdweb"
     compress
     include "build/src/overlays/actors/ovl_Bg_Spdweb/z_bg_spdweb.o"
-    include "build/data/ovl_Bg_Spdweb/ovl_Bg_Spdweb.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Bg_Spdweb/ovl_Bg_Spdweb_reloc.o"
+#else
     include "build/data/ovl_Bg_Spdweb/ovl_Bg_Spdweb.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -4617,8 +4620,7 @@ beginseg
     name "ovl_Oceff_Wipe6"
     compress
     include "build/src/overlays/actors/ovl_Oceff_Wipe6/z_oceff_wipe6.o"
-    include "build/data/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.data.o"
-    include "build/data/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6.reloc.o"
+    include "build/src/overlays/actors/ovl_Oceff_Wipe6/ovl_Oceff_Wipe6_reloc.o"
 endseg
 
 beginseg
@@ -4825,8 +4827,7 @@ beginseg
     name "ovl_En_Tanron4"
     compress
     include "build/src/overlays/actors/ovl_En_Tanron4/z_en_tanron4.o"
-    include "build/data/ovl_En_Tanron4/ovl_En_Tanron4.data.o"
-    include "build/data/ovl_En_Tanron4/ovl_En_Tanron4.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tanron4/ovl_En_Tanron4_reloc.o"
 endseg
 
 beginseg
