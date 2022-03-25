@@ -557,7 +557,8 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
 
-    bodyYRotTarget = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
+    bodyYRotTarget =
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, bodyYRotTarget, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
@@ -644,7 +645,8 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     zDiff = player->actor.world.pos.z - this->actor.world.pos.z;
 
     Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA, this->unk_274);
-    bodyYRotTarget = Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
+    bodyYRotTarget =
+        Math_SmoothStepToS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274, 0) * -0.5f;
     Math_ApproachS(&this->bodyYRot, bodyYRotTarget, 5, 0x100);
 
     Math_ApproachS(&this->unk_274, this->unk_276, 1, 0x100);
@@ -751,8 +753,8 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.x, this->actor.world.rot.x, 2, this->unk_274 * 2);
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
-    // If either (Player is standing on ground && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out) -> Stop
-    // trying to catch Player
+    // If either (Player is standing on ground && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out)
+    // -> Stop trying to catch Player
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
@@ -1173,11 +1175,9 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                             yDiff = D_809E9104[this->unk_242].y - this->actor.world.pos.y;
                             zDiff = D_809E9104[this->unk_242].z - this->actor.world.pos.z;
 
-                            Math_ApproachS(&this->actor.world.rot.x,
-                                           Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff), 0xA,
-                                           this->unk_274);
-                            Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA,
-                                           this->unk_274);
+                            Math_ApproachS(&this->actor.world.rot.x, Math_FAtan2F(sqrtf(SQ(xDiff) + SQ(zDiff)), -yDiff),
+                                           0xA, this->unk_274);
+                            Math_ApproachS(&this->actor.world.rot.y, Math_FAtan2F(zDiff, xDiff), 0xA, this->unk_274);
                             Math_ApproachS(&this->unk_274, 0x200, 1, 0x10);
 
                             if ((this->csTimer > 30) && (this->csTimer < 50)) {
@@ -2491,8 +2491,9 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (distanceBetweenSeaweedAndDisturbance < disturbanceFactor) {
-            Math_ApproachS(&this->morphTable[i].x, (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f, 0xA, maxBendSpeed);
-            if (maxBendSpeed!= 0) {
+            Math_ApproachS(&this->morphTable[i].x, (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f,
+                           0xA, maxBendSpeed);
+            if (maxBendSpeed != 0) {
                 flag |= 1;
             }
         }
@@ -2523,7 +2524,8 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             if (distanceBetweenSeaweedAndDisturbance < disturbanceFactor) {
-                Math_ApproachS(&this->morphTable[i].x, (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f, 0xA, maxBendSpeed);
+                Math_ApproachS(&this->morphTable[i].x,
+                               (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f, 0xA, maxBendSpeed);
                 if (maxBendSpeed != 0) {
                     flag |= 2;
                 }
