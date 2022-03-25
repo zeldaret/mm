@@ -18,31 +18,31 @@ typedef struct EnDragon {
     /* 0x248 */ EnDragonActionFunc actionFunc;
     /* 0x24C */ s32 animationIndex;
     /* 0x250 */ s32 pythonIndex;
-    /* 0x254 */ Vec3f unk_254;
-    /* 0x260 */ Vec3f unk_260;
-    /* 0x26C */ Vec3f unk_26C;
+    /* 0x254 */ Vec3f unk_254; // jaw pos?
+    /* 0x260 */ Vec3f burrowEntrancePos; // Vertically and horizontally centered on the burrow opening. Set by Bg_Sinkai_Kabe
+    /* 0x26C */ Vec3f unk_26C; // position of player during grab?
     /* 0x278 */ Vec3f cameraEye;
     /* 0x278 */ Vec3f cameraAt;
-    /* 0x290 */ Vec3f unk_290;
-    /* 0x29C */ Vec3f unk_29C;
+    /* 0x290 */ Vec3f unk_290; // temp for holding position of player during grab?
+    /* 0x29C */ Vec3f focusPos;
     /* 0x2A8 */ s16 jawZRotation;
     /* 0x2AA */ s16 jawYRotation; // Never initialized by the actor
     /* 0x2AC */ s16 jawXRotation; // Never initialized by the actor
-    /* 0x2AE */ s16 unk_2AE;
-    /* 0x2B0 */ s16 unk_2B0;
-    /* 0x2B2 */ s16 unk_2B2;
-    /* 0x2B4 */ s16 unk_2B4;
-    /* 0x2B6 */ s16 unk_2B6;
-    /* 0x2B8 */ s16 unk_2B8;
+    /* 0x2AE */ s16 forceRetreatTimer; // If the Deep Python is extended and this timer reaches 0, it is forced to retreat back to its burrow
+    /* 0x2B0 */ s16 unk_2B0; // some sort of extend timer
+    /* 0x2B2 */ s16 unk_2B2; // some sort of extend timer
+    /* 0x2B4 */ s16 unk_2B4; // multi-purpose timer?
+    /* 0x2B6 */ s16 grabWaitTimer; // Cannot grab the player if this is non-zero
+    /* 0x2B8 */ s16 hasGrabbedPlayer;
     /* 0x2BA */ s16 action;
     /* 0x2BC */ UNK_TYPE1 unk_2BC[0x2];
-    /* 0x2BE */ s16 unk_2BE;
-    /* 0x2C0 */ s16 unk_2C0;
-    /* 0x2C2 */ s16 unk_2C2;
+    /* 0x2BE */ s16 unk_2BE; // some sort of state variable?
+    /* 0x2C0 */ s16 grabCutsceneIndex;
+    /* 0x2C2 */ s16 deathCutsceneIndex;
     /* 0x2C4 */ UNK_TYPE1 unk_2C4[0x4];
     /* 0x2C8 */ s16 cameraId;
-    /* 0x2CA */ s16 unk_2CA;
-    /* 0x2CC */ s16 unk_2CC;
+    /* 0x2CA */ s16 grabTimer; // Counts up from the time a grab starts until the time the actor begins attacking
+    /* 0x2CC */ s16 unk_2CC; // Initialized, but never used
     /* 0x2CE */ UNK_TYPE1 unk_2CE[0x2];
     /* 0x2D0 */ f32 endFrame;
     /* 0x2D4 */ f32 scale;

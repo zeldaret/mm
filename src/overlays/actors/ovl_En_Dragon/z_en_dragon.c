@@ -15,13 +15,13 @@ void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B5EDF0(EnDragon* this);
-void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx);
-void func_80B5EF88(EnDragon* this);
-void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx);
-void func_80B5F508(EnDragon* this, GlobalContext* globalCtx);
-void func_80B5F888(EnDragon* this);
-void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx);
+void EnDragon_SetupRetreatOrIdle(EnDragon* this);
+void EnDragon_RetreatOrIdle(EnDragon* this, GlobalContext* globalCtx);
+void EnDragon_SetupExtend(EnDragon* this);
+void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx);
+void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx);
+void EnDragon_SetupAttack(EnDragon* this);
+void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx);
 void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx);
 
 typedef enum {
@@ -230,7 +230,7 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.hintId = 0xE;
     this->scale = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
-    func_80B5EDF0(this);
+    EnDragon_SetupRetreatOrIdle(this);
 }
 
 void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -308,24 +308,24 @@ void EnDragon_SpawnBubbles(EnDragon* this, GlobalContext* globalCtx, Vec3f baseP
 void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
     if (this->unk_2B4 == 0) {
         func_800B8D50(globalCtx, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f, 8);
-        func_80B5EDF0(this);
+        EnDragon_SetupRetreatOrIdle(this);
     }
 }
 
-void func_80B5EDF0(EnDragon* this) {
+void EnDragon_SetupRetreatOrIdle(EnDragon* this) {
     EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
     this->unk_2BE = 0;
     this->unk_2CC = 0;
-    this->unk_2B8 = 0;
-    this->unk_2CA = 0;
+    this->hasGrabbedPlayer = false;
+    this->grabTimer = 0;
     this->unk_2B4 = 0x1E;
-    this->actionFunc = func_80B5EE3C;
+    this->actionFunc = EnDragon_RetreatOrIdle;
 }
 
-void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx) {
+void EnDragon_RetreatOrIdle(EnDragon* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
-        func_80B5EF88(this);
+        EnDragon_SetupExtend(this);
     } else if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 101.0f) &&
                (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 101.0f)) {
         this->actor.speedXZ = -100.0f;
@@ -342,15 +342,15 @@ void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B5EF88(EnDragon* this) {
+void EnDragon_SetupExtend(EnDragon* this) {
     this->unk_2BE = 0;
     this->unk_2B0 = this->unk_2BE;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR_TRG);
-    this->unk_2AE = 0xFA;
-    this->actionFunc = func_80B5EFD0;
+    this->forceRetreatTimer = 250;
+    this->actionFunc = EnDragon_Extend;
 }
 
-void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
+void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 currentFrame = this->skelAnime.curFrame;
     s16 phi_v1;
@@ -359,15 +359,15 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
 
     if (this->action >= DEEP_PYTHON_ACTION_DAMAGE) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
-        func_80B5EDF0(this);
-    } else if (this->unk_2AE == 0) {
+        EnDragon_SetupRetreatOrIdle(this);
+    } else if (this->forceRetreatTimer == 0) {
         this->action = DEEP_PYTHON_ACTION_RETREAT;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
-        func_80B5EDF0(this);
+        EnDragon_SetupRetreatOrIdle(this);
     } else if (this->unk_2BE == 0) {
         Vec3f sp38;
 
-        Math_Vec3f_Copy(&sp38, &this->unk_260);
+        Math_Vec3f_Copy(&sp38, &this->burrowEntrancePos);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR - SFX_FLAG);
         sp38.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         sp38.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
@@ -415,10 +415,10 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
             }
 
             this->unk_2B0++;
-            if (this->unk_2B0 >= 0x3D) {
+            if (this->unk_2B0 > 60) {
                 this->action = DEEP_PYTHON_ACTION_RETREAT;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
-                func_80B5EDF0(this);
+                EnDragon_SetupRetreatOrIdle(this);
             }
         }
     }
@@ -431,16 +431,16 @@ void EnDragon_CameraSetAtEye(EnDragon* this, GlobalContext* globalCtx, Vec3f eye
     Play_CameraSetAtEye(globalCtx, this->cameraId, &this->cameraAt, &this->cameraEye);
 }
 
-void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
+void EnDragon_SetupGrab(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp28;
     s16 temp_v0;
 
-    if (!ActorCutscene_GetCanPlayNext(this->unk_2C0)) {
-        ActorCutscene_SetIntentToPlay(this->unk_2C0);
+    if (!ActorCutscene_GetCanPlayNext(this->grabCutsceneIndex)) {
+        ActorCutscene_SetIntentToPlay(this->grabCutsceneIndex);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2C0, &this->actor);
-        Math_Vec3f_Copy(&sp28, &this->unk_260);
+        ActorCutscene_StartAndSetUnkLinkFields(this->grabCutsceneIndex, &this->actor);
+        Math_Vec3f_Copy(&sp28, &this->burrowEntrancePos);
         sp28.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         sp28.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
         Math_Vec3f_Copy(&this->actor.world.pos, &sp28);
@@ -448,10 +448,10 @@ void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
         player->actor.shape.rot.y = temp_v0;
         player->actor.world.rot.y = temp_v0;
         this->unk_2BE = 0;
-        this->unk_2CA = 0;
-        this->unk_2B8 = 0;
+        this->grabTimer = 0;
+        this->hasGrabbedPlayer = false;
         EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
-        this->actionFunc = func_80B5F508;
+        this->actionFunc = EnDragon_Grab;
     }
 }
 
@@ -467,9 +467,9 @@ Vec3f D_80B607E8[] = {
 
 s16 D_80B60848[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
 
-s32 D_80B60858[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
+s32 maxGrabTimerPerPython[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
 
-void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
+void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3f sp50;
     Vec3f sp44;
@@ -477,16 +477,16 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
     this->cameraId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->unk_2CA == 0) {
-        if (this->unk_2B8 == 0) {
+    if (this->grabTimer == 0) {
+        if (!this->hasGrabbedPlayer) {
             Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_26C);
             Math_Vec3f_Copy(&this->unk_290, &this->unk_26C);
-            this->unk_2B8 = 1;
+            this->hasGrabbedPlayer = true;
         } else {
             Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_290);
         }
 
-        Math_Vec3f_Copy(&sp50, &this->unk_260);
+        Math_Vec3f_Copy(&sp50, &this->burrowEntrancePos);
         sp50.x += Math_SinS(this->actor.world.rot.y) * -930.0f;
         sp50.z += Math_CosS(this->actor.world.rot.y) * -930.0f;
         Math_Vec3f_Copy(&this->actor.world.pos, &sp50);
@@ -494,11 +494,11 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
         this->actor.speedXZ = 60.0f;
     }
 
-    this->unk_2CA++;
+    this->grabTimer++;
     Math_SmoothStepToS(&this->actor.shape.rot.z, D_80B60848[this->pythonIndex], 0xA, 0x1F4, 0x14);
     EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
 
-    Math_Vec3f_Copy(&sp50, &this->unk_260);
+    Math_Vec3f_Copy(&sp50, &this->burrowEntrancePos);
     sp50.x += Math_SinS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].x;
     sp50.y += D_80B60788[this->pythonIndex].y;
     sp50.z += Math_CosS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].z;
@@ -510,9 +510,9 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
 
     EnDragon_CameraSetAtEye(this, globalCtx, sp50, sp44);
 
-    if (D_80B60858[this->pythonIndex] < this->unk_2CA) {
+    if (this->grabTimer > maxGrabTimerPerPython[this->pythonIndex]) {
         if (this->unk_2BE == 0) {
-            func_800B7298(globalCtx, &this->actor, 6U);
+            func_800B7298(globalCtx, &this->actor, 6);
             this->unk_2BE = 1;
         }
 
@@ -521,22 +521,22 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
         player->unk_AE8 = 50;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_EAT);
-        func_80B5F888(this);
+        EnDragon_SetupAttack(this);
     }
 }
 
-void func_80B5F888(EnDragon* this) {
+void EnDragon_SetupAttack(EnDragon* this) {
     if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
         EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
     }
 
     this->unk_2B0 = 0;
-    this->unk_2CA = 0;
+    this->grabTimer = 0;
     this->unk_2BE = 0;
-    this->actionFunc = func_80B5F8D8;
+    this->actionFunc = EnDragon_Attack;
 }
 
-void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
+void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 currentFrame = this->skelAnime.curFrame;
     Vec3f sp4C;
@@ -572,7 +572,7 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_26C);
     this->jawZRotation = 0xC8;
 
-    Math_Vec3f_Copy(&sp4C, &this->unk_260);
+    Math_Vec3f_Copy(&sp4C, &this->burrowEntrancePos);
     sp4C.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
     sp4C.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
     Math_ApproachF(&this->actor.world.pos.x, sp4C.x, 0.3f, 200.0f);
@@ -593,9 +593,9 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
         (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
-        this->unk_2B6 = 0x1E;
-        ActorCutscene_Stop(this->unk_2C0);
-        if ((player->stateFlags2 & 0x80) != 0) {
+        this->grabWaitTimer = 30;
+        ActorCutscene_Stop(this->grabCutsceneIndex);
+        if (player->stateFlags2 & 0x80) {
             player->unk_AE8 = 100;
         }
 
@@ -605,16 +605,16 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
             this->unk_2B4 = 3;
             this->actionFunc = func_80B5ED90;
         } else {
-            func_80B5EDF0(this);
+            EnDragon_SetupRetreatOrIdle(this);
         }
     }
 }
 
 void EnDragon_SetupDead(EnDragon* this, GlobalContext* globalCtx) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_2C2) == 0) {
-        ActorCutscene_SetIntentToPlay(this->unk_2C2);
+    if (!ActorCutscene_GetCanPlayNext(this->deathCutsceneIndex)) {
+        ActorCutscene_SetIntentToPlay(this->deathCutsceneIndex);
     } else {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2C2, &this->actor);
+        ActorCutscene_StartAndSetUnkLinkFields(this->deathCutsceneIndex, &this->actor);
         this->endFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
         Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_2B4 = 0x14;
@@ -726,13 +726,13 @@ void EnDragon_UpdateDamage(EnDragon* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && (this->unk_2B6 == 0) && (player->invincibilityTimer == 0) &&
-        (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
+    if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && (this->grabWaitTimer == 0) &&
+        (player->invincibilityTimer == 0) && (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
         (!(func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp30) >= 0.0f) || (sp30 != 1))) {
         this->actor.speedXZ = 0.0f;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         this->actor.flags |= ACTOR_FLAG_100000;
-        this->actionFunc = func_80B5F418;
+        this->actionFunc = EnDragon_SetupGrab;
     }
 }
 
@@ -740,8 +740,8 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnDragon* this = THIS;
 
-    if (this->unk_2AE != 0) {
-        this->unk_2AE--;
+    if (this->forceRetreatTimer != 0) {
+        this->forceRetreatTimer--;
     }
 
     if (this->unk_2B4 != 0) {
@@ -752,13 +752,13 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2B2--;
     }
 
-    if (this->unk_2B6 != 0) {
-        this->unk_2B6--;
+    if (this->grabWaitTimer != 0) {
+        this->grabWaitTimer--;
     }
 
     EnDragon_UpdateDamage(this, globalCtx);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk_29C);
+    Math_Vec3f_Copy(&this->actor.focus.pos, &this->focusPos);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     Actor_SetScale(&this->actor, this->scale);
 
@@ -801,7 +801,7 @@ void EnDragon_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
 
     if (limbIndex == DEEP_PYTHON_LIMB_HEAD_AND_COLLAR_ROOT) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_29C);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->focusPos);
     }
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
