@@ -2790,8 +2790,7 @@ beginseg
     name "ovl_En_Elfgrp"
     compress
     include "build/src/overlays/actors/ovl_En_Elfgrp/z_en_elfgrp.o"
-    include "build/data/ovl_En_Elfgrp/ovl_En_Elfgrp.data.o"
-    include "build/data/ovl_En_Elfgrp/ovl_En_Elfgrp.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Elfgrp/ovl_En_Elfgrp_reloc.o"
 endseg
 
 beginseg
