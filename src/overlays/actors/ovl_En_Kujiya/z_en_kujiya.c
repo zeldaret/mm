@@ -44,9 +44,13 @@ const ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Draw,
 };
 
-#define CHECK_LOTTERY_NUMBERS (((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][0]) == ((((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
-                               ((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][1]) == ((((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) && \
-                               ((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][2]) ==  (((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF)))
+#define CHECK_LOTTERY_NUMBERS                                                \
+    (((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
+      ((((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
+     ((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
+      ((((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
+     ((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
+      (((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF)))
 
 void EnKujiya_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKujiya* this = THIS;
@@ -365,6 +369,6 @@ void EnKujiya_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_0037C0);
     gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_003C80);
     gSPDisplayList(POLY_OPA_DISP++, object_kujiya_DL_003D58);
-    
+
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
