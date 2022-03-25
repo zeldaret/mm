@@ -575,13 +575,11 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
         sp54.z = (Math_CosS(player->actor.world.rot.y) * 80.0f) + sp6C.z;
         sp4C *= 0.75f;
 
-        sp60.x = F32_LERPIMP(temp_s3->eye.x, sp54.x, sp4C);
-        sp60.y = F32_LERPIMP(temp_s3->eye.y, sp54.y, sp4C);
-        sp60.z = F32_LERPIMP(temp_s3->eye.z, sp54.z, sp4C);
+        VEC3F_LERPIMPDST(&sp60, &temp_s3->eye, &sp54, sp4C);
 
         Play_CameraSetAtEye(globalCtx, this->unk_284, &sp6C, &sp60);
     } else if ((this->unk_27A < 11) && (this->unk_27A > 0)) {
-        temp_s3->fov = temp_s3->fov + ((sp78->fov - temp_s3->fov) / this->unk_27A);
+        temp_s3->fov += (sp78->fov - temp_s3->fov) / this->unk_27A;
     }
 
     if (this->unk_286 != 0) {
