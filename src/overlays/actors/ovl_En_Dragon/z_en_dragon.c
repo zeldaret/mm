@@ -356,10 +356,9 @@ void func_80B5EF88(EnDragon* this) {
 
 void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    f32 currentFrame;
+    f32 currentFrame = this->skelAnime.curFrame;
     s16 phi_v1;
 
-    currentFrame = this->skelAnime.curFrame;
     func_80B5EB40(this, globalCtx, this->unk_254);
 
     if (this->unk_2BA >= 3) {
@@ -527,7 +526,78 @@ void func_80B5F888(EnDragon* this) {
     this->actionFunc = func_80B5F8D8;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F8D8.s")
+void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 currentFrame = this->skelAnime.curFrame;
+    Vec3f sp4C;
+    Vec3f sp40;
+
+    SkelAnime_Update(&this->skelAnime);
+    Math_SmoothStepToS(&this->actor.shape.rot.z, 0, 0xA, 0x1388, 0);
+    if (!(globalCtx->gameplayFrames & 0xF)) {
+        globalCtx->damagePlayer(globalCtx, -2);
+
+        //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+        //! player->currentMask, but in this case is garbage in the skelAnime
+        func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
+        CollisionCheck_GreenBlood(globalCtx, NULL, &player->actor.world.pos);
+    }
+
+    Math_Vec3f_Copy(&sp4C, &this->actor.world.pos);
+    sp4C.x += Math_SinS(this->actor.world.rot.y) * 3000.0f;
+    sp4C.y += 600.0f;
+    sp4C.z += Math_CosS(this->actor.world.rot.y) * 3000.0f;
+
+    Math_Vec3f_Copy(&sp40, &this->actor.world.pos);
+    sp40.x += Math_SinS(this->actor.world.rot.y) * 1200.0f;
+    sp40.y += -100.0f;
+    sp40.z += Math_CosS(this->actor.world.rot.y) * 1200.0f;
+
+    func_80B5F3A4(this, globalCtx, sp4C, sp40);
+
+    player->actor.world.rot.y = player->actor.shape.rot.y = this->actor.world.rot.y;
+    player->actor.world.rot.x = player->actor.shape.rot.x = this->actor.world.rot.x;
+    player->actor.world.rot.z = player->actor.shape.rot.z = this->actor.world.rot.z - 0x36B0;
+    Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_26C);
+    this->unk_2A8 = 0xC8;
+
+    Math_Vec3f_Copy(&sp4C, &this->unk_260);
+    sp4C.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
+    sp4C.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
+    Math_ApproachF(&this->actor.world.pos.x, sp4C.x, 0.3f, 200.0f);
+    Math_ApproachF(&this->actor.world.pos.y, sp4C.y, 0.3f, 200.0f);
+    Math_ApproachF(&this->actor.world.pos.z, sp4C.z, 0.3f, 200.0f);
+
+    if ((this->unk_2BE <= 0) && (this->unk_2D0 <= currentFrame)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
+        if (this->unk_24C != 1) {
+            func_80B5EAA0(this, 1);
+        }
+        this->unk_2BE += 1;
+    }
+
+    if (((this->unk_2BE != 0) && (this->unk_2D0 <= currentFrame)) || (!(player->stateFlags2 & 0x80)) ||
+        ((this->unk_2DC.elements[0].info.bumperFlags & BUMP_HIT)) ||
+        (this->unk_2DC.elements[1].info.bumperFlags & BUMP_HIT) ||
+        (this->unk_2DC.elements[2].info.bumperFlags & BUMP_HIT)) {
+        player->actor.parent = NULL;
+        this->unk_2B6 = 0x1E;
+        ActorCutscene_Stop(this->unk_2C0);
+        if ((player->stateFlags2 & 0x80) != 0) {
+            player->unk_AE8 = 100;
+        }
+
+        this->actor.flags &= ~ACTOR_FLAG_100000;
+
+        if ((this->unk_2BE != 0) && (this->unk_2D0 <= currentFrame)) {
+            this->unk_2B4 = 3;
+            this->actionFunc = func_80B5ED90;
+        } else {
+            func_80B5EDF0(this);
+        }
+    }
+}
 
 void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->unk_2C2) == 0) {
