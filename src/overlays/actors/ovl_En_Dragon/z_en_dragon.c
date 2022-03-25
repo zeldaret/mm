@@ -208,7 +208,8 @@ static Color_RGBA8 D_80B60764[] = {
 void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDragon* this = THIS;
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_utubo_Skel_004398, &object_utubo_Anim_0048B8, this->jointTable, this->morphTable, 0x10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_utubo_Skel_004398, &object_utubo_Anim_0048B8,
+                       this->jointTable, this->morphTable, 0x10);
     this->actor.colChkInfo.health = 4;
     this->actor.colChkInfo.damageTable = &D_80B605F4;
     this->actor.targetMode = 0xA;
@@ -354,7 +355,80 @@ void func_80B5EF88(EnDragon* this) {
     this->actionFunc = func_80B5EFD0;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EFD0.s")
+void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 currentFrame;
+    s16 phi_v1;
+
+    currentFrame = this->skelAnime.curFrame;
+    func_80B5EB40(this, globalCtx, this->unk_254);
+
+    if (this->unk_2BA >= 3) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
+        func_80B5EDF0(this);
+    } else if (this->unk_2AE == 0) {
+        this->unk_2BA = 4;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
+        func_80B5EDF0(this);
+    } else if (this->unk_2BE == 0) {
+        Vec3f sp38;
+
+        Math_Vec3f_Copy(&sp38, &this->unk_260);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR - SFX_FLAG);
+        sp38.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
+        sp38.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
+        this->actor.speedXZ = 40.0f;
+        Math_SmoothStepToS(&this->unk_2A8, 0xFA0, 5, 0xBB8, 0x14);
+
+        if ((fabsf(this->actor.world.pos.x - sp38.x) < 51.0f) && (fabsf(this->actor.world.pos.z - sp38.z) < 51.0f)) {
+            this->actor.speedXZ = 0.0f;
+            Math_ApproachF(&this->actor.world.pos.x, sp38.x, 0.3f, 50.0f);
+            Math_ApproachF(&this->actor.world.pos.z, sp38.z, 0.3f, 50.0f);
+            if ((fabsf(this->actor.world.pos.x - sp38.x) < 4.0f) && (fabsf(this->actor.world.pos.z - sp38.z) < 4.0f)) {
+                if (this->unk_24C != 1) {
+                    func_80B5EAA0(this, 1);
+                }
+
+                this->unk_2BE = 1;
+            }
+        }
+    } else {
+        Math_SmoothStepToS(&this->unk_2A8, 0, 5, 0xBB8, 0x14);
+        SkelAnime_Update(&this->skelAnime);
+        if (this->unk_2BE == 1) {
+            if (currentFrame < this->unk_2D0) {
+                return;
+            }
+            this->unk_2BE = 2;
+        }
+
+        phi_v1 = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->unk_254, &player->actor.world.pos), this->actor.shape.rot.y));
+        if (phi_v1 < 0x5000) {
+            if ((this->unk_2D0 <= currentFrame) && (this->unk_2B2 == 0)) {
+                if (this->unk_24C != 1) {
+                    func_80B5EAA0(this, 1);
+                }
+
+                this->unk_2BE = 2;
+            }
+
+            this->unk_2B0 = 0;
+        } else {
+            if (this->unk_2BE == 2) {
+                func_80B5EAA0(this, 0);
+                this->unk_2B2 = Rand_ZeroFloat(20.0f) + this->unk_2D0;
+                this->unk_2BE = 3;
+            }
+
+            this->unk_2B0++;
+            if (this->unk_2B0 >= 0x3D) {
+                this->unk_2BA = 4;
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
+                func_80B5EDF0(this);
+            }
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F3A4.s")
 
