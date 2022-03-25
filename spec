@@ -3973,8 +3973,11 @@ beginseg
     name "ovl_Obj_Spidertent"
     compress
     include "build/src/overlays/actors/ovl_Obj_Spidertent/z_obj_spidertent.o"
-    include "build/data/ovl_Obj_Spidertent/ovl_Obj_Spidertent.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Spidertent/ovl_Obj_Spidertent_reloc.o"
+#else
     include "build/data/ovl_Obj_Spidertent/ovl_Obj_Spidertent.reloc.o"
+#endif
 endseg
 
 beginseg
