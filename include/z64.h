@@ -802,7 +802,9 @@ typedef struct {
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x2];
     /* 0x11F08 */ u16 unk11F08;
     /* 0x11F0A */ u8 unk11F0A;
-    /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
+    /* 0x11F0B */ s8 unk11F0B;
+    /* 0x11F0C */ s8 unk11F0C;
+    /* 0x11F0B */ UNK_TYPE1 pad11F0D[0x3];
     /* 0x11F10 */ s32 unk11F10;
     /* 0x11F14 */ u16 unk11F14;
     /* 0x11F16 */ u16 unk11F16;

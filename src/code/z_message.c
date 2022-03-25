@@ -859,13 +859,15 @@ void func_80150A84(GlobalContext* globalCtx) {
 extern s8 D_801C6A70;
 extern s32 D_801F6B08;
 
-void func_801514B0(GlobalContext* globalCtx, s32 arg1, u8 arg2) {
-    Font* font;
-    MessageContext* msgCtx;
+void func_801514B0(GlobalContext* globalCtx, u16 arg1, u8 arg2) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    Font* font = &msgCtx->font;
+    Player* player = GET_PLAYER(globalCtx);
+    f32 temp = 1024.0f;
 
-    globalCtx->msgCtx.ocarinaAction = 0xFFFF;
-    msgCtx = &globalCtx->msgCtx;
-    if (globalCtx->msgCtx.msgMode == 0) {
+    msgCtx->ocarinaAction = 0xFFFF;
+
+    if (msgCtx->msgMode == 0) {
         gSaveContext.unk_3F26 = gSaveContext.unk_3F22;
     }
     msgCtx->unk12092 = 0;
@@ -881,22 +883,20 @@ void func_801514B0(GlobalContext* globalCtx, s32 arg1, u8 arg2) {
         msgCtx->unk11FFC = 0xC;
         msgCtx->unk11FF8 = 0x41;
     }
-    D_801F6B00 = (s32)(msgCtx->unk12098 * 16.0f);
-    D_801F6B04 = (s32)(1024.0f / msgCtx->unk12098);
-    D_801F6B08 = (s32)(1024.0f / 1.0f);
-    if ((arg1 == 0x1709) && (GET_PLAYER(globalCtx)->transformation == 3)) {
+    D_801F6B00 = (msgCtx->unk12098 * 16.0f);
+    D_801F6B04 = (temp / msgCtx->unk12098);
+    D_801F6B08 = (temp / 1);
+    if ((arg1 == 0x1709) && (player->transformation == 3)) {
         arg1 = 0x1705;
     }
     msgCtx->currentTextId = arg1;
     if (gSaveContext.language == 0) {
         Message_FindMessage(globalCtx, arg1);
-        font = &globalCtx->msgCtx.font;
         msgCtx->unk11F10 = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
                             font->messageEnd);
     } else {
         Message_FindMessageNES(globalCtx, arg1);
-        font = &globalCtx->msgCtx.font;
         msgCtx->unk11F10 = font->messageEnd;
         DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
                             font->messageEnd);
@@ -910,8 +910,8 @@ void func_801514B0(GlobalContext* globalCtx, s32 arg1, u8 arg2) {
     msgCtx->unk11F08 = (u16)font->msgBuf.wchar[msgCtx->msgBufPos];
     msgCtx->unk11F18 = (s8)((s32)(msgCtx->unk11F08 & 0xF000) >> 0xC);
     msgCtx->unk11F0A = 9;
-    msgCtx->pad11F0B[0] = (s8)arg2;
-    msgCtx->pad11F0B[1] = msgCtx->unk11F08 & 0xF;
+    msgCtx->unk11F0B = arg2;
+    msgCtx->unk11F0C = msgCtx->unk11F08 & 0xF;
     msgCtx->unk11FF2 = 1;
     DmaMgr_SendRequest0(msgCtx->unk11EF8, &SEGMENT_ROM_START(message_static)[D_801CFC78[0] << 0xC], 0x1000U);
     msgCtx->unk12034 = 0;
@@ -926,8 +926,7 @@ void func_801514B0(GlobalContext* globalCtx, s32 arg1, u8 arg2) {
     msgCtx->unk12024 = 0;
     globalCtx->msgCtx.ocarinaMode = 0;
     msgCtx->unk120D2 = 0xFF;
-    msgCtx->unk120D0 = msgCtx->unk120D2;
-    msgCtx->unk120CE = msgCtx->unk120D2;
+    msgCtx->unk120CE = msgCtx->unk120D0 = msgCtx->unk120D2;
 }
 
 void Message_StartTextbox(GlobalContext* globalCtx, u16 textId, Actor* Actor) {
