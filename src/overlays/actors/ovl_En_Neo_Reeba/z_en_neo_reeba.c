@@ -34,7 +34,7 @@ void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this);
 void EnNeoReeba_DamageAnim(EnNeoReeba* this, GlobalContext* globalCtx);
 void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this);
 void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, GlobalContext* globalCtx);
-void EnNeoReeba_SpawnIceEffects(EnNeoReeba* this, GlobalContext* globalCtx);
+void EnNeoReeba_SpawnIce(EnNeoReeba* this, GlobalContext* globalCtx);
 
 const ActorInit En_Neo_Reeba_InitVars = {
     ACTOR_EN_NEO_REEBA,
@@ -49,48 +49,50 @@ const ActorInit En_Neo_Reeba_InitVars = {
 };
 
 typedef enum {
-    /* 0x0 */ EN_NEO_REEBA_DMGEFF_NONE,           // No effect on the leever
-    /* 0x1 */ EN_NEO_REEBA_DMGEFF_BLUE_STUN,      // Turns blue, frozen in place
-    /* 0x2 */ EN_NEO_REEBA_DMGEFF_FIRE,           // Fire effects
-    /* 0x3 */ EN_NEO_REEBA_DMGEFF_FREEZE,         // Ice effects, frozen in place
-    /* 0x4 */ EN_NEO_REEBA_DMGEFF_LIGHT,          // Light effects
-    /* 0xC */ EN_NEO_REEBA_DMGEFF_HOOKSHOT = 0xC, // Pulls the leever to the player, no damage
+    /* 0x0 */ EN_NEO_REEBA_DMGEFF_IMMUNE, // No effect on the leever
+    /* 0x1 */ EN_NEO_REEBA_DMGEFF_STUN,   // Turns blue, frozen in place
+    /* 0x2 */ EN_NEO_REEBA_DMGEFF_FIRE,
+    /* 0x3 */ EN_NEO_REEBA_DMGEFF_FREEZE, // Ice effects, frozen in place
+    /* 0x4 */ EN_NEO_REEBA_DMGEFF_LIGHT,
+    /* 0xC */ EN_NEO_REEBA_DMGEFF_HOOKSHOT = 0xC, // No damage, used only for hookshot
     /* 0xD */ EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN,  // Electric effects, frozen in place
+    /* 0xE */ EN_NEO_REEBA_DMGEFF_NONE,           // Normal hit
+    /* 0xF */ EN_NEO_REEBA_DMGEFF_SHATTER,        // Normal hit that can break ice if leever is frozen
 } EnNeoReebaDamageEffect;
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* Deku Stick     */ DMG_ENTRY(1, 0xE),
-    /* Horse trample  */ DMG_ENTRY(1, 0xF),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xE),
-    /* Normal arrow   */ DMG_ENTRY(1, 0xE),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Explosives     */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
     /* Hookshot       */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_HOOKSHOT),
-    /* Goron punch    */ DMG_ENTRY(1, 0xF),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
+    /* Goron punch    */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Sword          */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Goron pound    */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
     /* Fire arrow     */ DMG_ENTRY(2, EN_NEO_REEBA_DMGEFF_FIRE),
     /* Ice arrow      */ DMG_ENTRY(2, EN_NEO_REEBA_DMGEFF_FREEZE),
     /* Light arrow    */ DMG_ENTRY(2, EN_NEO_REEBA_DMGEFF_LIGHT),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_BLUE_STUN),
-    /* Deku bubble    */ DMG_ENTRY(1, 0xE),
-    /* Deku launch    */ DMG_ENTRY(2, 0xF),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Deku spin      */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_STUN),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
     /* Zora barrier   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN),
-    /* Normal shield  */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* Light ray      */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0xF),
-    /* Sword beam     */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* Normal Roll    */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* Unblockable    */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_NONE),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Normal shield  */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* Light ray      */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Zora punch     */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Spin attack    */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
+    /* Sword beam     */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_NEO_REEBA_DMGEFF_IMMUNE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_NEO_REEBA_DMGEFF_SHATTER),
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -117,8 +119,7 @@ void EnNeoReeba_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNeoReeba* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable,
-                   this->morphTable, 18);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable, this->morphTable, 18);
 
     if (!EN_NEO_REEBA_IS_LARGE(&this->actor)) {
         Actor_SetScale(&this->actor, 0.04f);
@@ -362,7 +363,7 @@ void EnNeoReeba_Stunned(EnNeoReeba* this, GlobalContext* globalCtx) { // D398
 }
 
 void EnNeoReeba_SetupFrozen(EnNeoReeba* this) { // D3EC
-    this->drawEffectType = 0xB;
+    this->drawEffectType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
     this->drawEffectScale = 0.5f;
     this->drawEffectAlpha = 1.0f;
 
@@ -393,7 +394,7 @@ void EnNeoReeba_Frozen(EnNeoReeba* this, GlobalContext* globalCtx) { // D47C
         }
     } else if (this->stunTimer == 1) {
         this->stunTimer--;
-        EnNeoReeba_SpawnIceEffects(this, globalCtx);
+        EnNeoReeba_SpawnIce(this, globalCtx);
     } else {
         this->stunTimer--;
     }
@@ -479,7 +480,7 @@ void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, GlobalContext* globalCtx) { /
             }
         }
 
-        if (this->drawEffectType == 0) { // fire
+        if (this->drawEffectType == ACTOR_DRAW_DMGEFF_FIRE) {
             f32 target = 1.2f;
 
             if (EN_NEO_REEBA_IS_LARGE(&this->actor)) {
@@ -508,7 +509,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) { // D9B8
 
         if (this->actionFunc == EnNeoReeba_Frozen) {
             switch (this->actor.colChkInfo.damageEffect) {
-                case EN_NEO_REEBA_DMGEFF_BLUE_STUN:
+                case EN_NEO_REEBA_DMGEFF_STUN:
                 case EN_NEO_REEBA_DMGEFF_FREEZE:
                 case EN_NEO_REEBA_DMGEFF_LIGHT:
                 case EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN:
@@ -516,7 +517,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) { // D9B8
                     return;
                 default:
                     if (this->stunTimer >= 2) {
-                        EnNeoReeba_SpawnIceEffects(this, globalCtx);
+                        EnNeoReeba_SpawnIce(this, globalCtx);
                     }
                     this->stunTimer = 0;
             }
@@ -532,18 +533,19 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) { // D9B8
             case EN_NEO_REEBA_DMGEFF_FIRE:
             case EN_NEO_REEBA_DMGEFF_LIGHT:
                 if (this->actor.colChkInfo.damageEffect == EN_NEO_REEBA_DMGEFF_FIRE) {
-                    this->drawEffectType = 0;
+                    this->drawEffectType = ACTOR_DRAW_DMGEFF_FIRE;
                     this->stunTimer = 80;
                 } else {
-                    this->drawEffectType = 0x14;
+                    this->drawEffectType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     this->stunTimer = 40;
                 }
                 this->drawEffectAlpha = 1.0f;
                 this->drawEffectScale = 0.0f;
                 /* fallthrough */
-            case 14:
-            case 15:
-                if ((this->actor.colChkInfo.damageEffect == 0xF) || (this->actor.colChkInfo.damageEffect == 0xE)) {
+            case EN_NEO_REEBA_DMGEFF_NONE:
+            case EN_NEO_REEBA_DMGEFF_SHATTER:
+                if ((this->actor.colChkInfo.damageEffect == EN_NEO_REEBA_DMGEFF_SHATTER) ||
+                    (this->actor.colChkInfo.damageEffect == EN_NEO_REEBA_DMGEFF_NONE)) {
                     this->stunTimer = 0;
                 }
                 if (this->actor.colChkInfo.health > 0) {
@@ -555,7 +557,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) { // D9B8
                 break;
 
             case EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN:
-                this->drawEffectType = 0x1E;
+                this->drawEffectType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->stunTimer = 40;
                 this->drawEffectAlpha = 1.0f;
                 this->drawEffectScale = 2.0f;
@@ -563,7 +565,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) { // D9B8
                 EnNeoReeba_SetupStun(this);
                 break;
 
-            case EN_NEO_REEBA_DMGEFF_BLUE_STUN:
+            case EN_NEO_REEBA_DMGEFF_STUN:
                 Actor_SetColorFilter(&this->actor, 0, 0x78, 0, 40);
                 EnNeoReeba_SetupStun(this);
                 break;
@@ -605,7 +607,7 @@ void EnNeoReeba_UpdatePosition(EnNeoReeba* this, GlobalContext* globalCtx) { // 
     }
 }
 
-void EnNeoReeba_DrawEffects1(EnNeoReeba* this, GlobalContext* globalCtx) { // DD7C
+void EnNeoReeba_DrawFrozenEffects(EnNeoReeba* this, GlobalContext* globalCtx) { // DD7C
     s32 i;
     f32 limbPosScale = 10.0f;
     f32 phi_f2 = 20.0f;
@@ -630,10 +632,10 @@ void EnNeoReeba_DrawEffects1(EnNeoReeba* this, GlobalContext* globalCtx) { // DD
 
     this->drawEffectScale = drawEffectScale;
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), drawEffectScale, 0.5f,
-                  this->drawEffectAlpha, this->drawEffectType);
+                            this->drawEffectAlpha, this->drawEffectType);
 }
 
-void EnNeoReeba_DrawEffects2(EnNeoReeba* this, GlobalContext* globalCtx) { // DF34
+void EnNeoReeba_DrawEffects(EnNeoReeba* this, GlobalContext* globalCtx) { // DF34
     s32 i;
     f32 scale = 15.0f;
 
@@ -641,7 +643,8 @@ void EnNeoReeba_DrawEffects2(EnNeoReeba* this, GlobalContext* globalCtx) { // DF
         scale *= 1.5f;
     }
 
-    if ((this->drawEffectType == 0) || (this->drawEffectType == 0x14) || (this->drawEffectType == 0x1E)) {
+    if ((this->drawEffectType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawEffectType == ACTOR_DRAW_DMGEFF_LIGHT_ORBS) ||
+        (this->drawEffectType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL)) {
         for (i = 0; i < ARRAY_COUNT(this->limbPos) - 1; i++) {
             this->limbPos[i] = this->actor.world.pos;
             this->limbPos[i].x += scale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
@@ -651,11 +654,11 @@ void EnNeoReeba_DrawEffects2(EnNeoReeba* this, GlobalContext* globalCtx) { // DF
 
         this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
         Actor_DrawDamageEffects(globalCtx, NULL, this->limbPos, 4, this->drawEffectScale, 0.5f, this->drawEffectAlpha,
-                      this->drawEffectType);
+                                this->drawEffectType);
     }
 }
 
-void EnNeoReeba_SpawnIceEffects(EnNeoReeba* this, GlobalContext* globalCtx) { // E0BC
+void EnNeoReeba_SpawnIce(EnNeoReeba* this, GlobalContext* globalCtx) { // E0BC
     static Color_RGBA8 sIcePrimColor = { 170, 255, 255, 255 };
     static Color_RGBA8 sIceEnvColor = { 200, 200, 255, 255 };
     static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
@@ -735,10 +738,10 @@ void EnNeoReeba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (this->stunTimer > 0) {
-        if (this->drawEffectType == 0xB) {
-            EnNeoReeba_DrawEffects1(this, globalCtx);
+        if (this->drawEffectType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) {
+            EnNeoReeba_DrawFrozenEffects(this, globalCtx);
         } else {
-            EnNeoReeba_DrawEffects2(this, globalCtx);
+            EnNeoReeba_DrawEffects(this, globalCtx);
         }
     }
 }
