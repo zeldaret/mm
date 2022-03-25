@@ -309,8 +309,6 @@ static s16 D_80B60848[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x00
 
 static s32 D_80B60858[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
 
-static Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
-
 void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
     if (this->unk_2B4 == 0) {
         func_800B8D50(globalCtx, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f, 8);
@@ -566,8 +564,42 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B6043C.s")
+s32 func_80B6043C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnDragon* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B60494.s")
+    if (limbIndex == 15) {
+        rot->x += this->unk_2AC;
+        rot->y += this->unk_2AA;
+        rot->z += this->unk_2A8;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/EnDragon_Draw.s")
+    return false;
+}
+
+void func_80B60494(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnDragon* this = THIS;
+    Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
+
+    if (limbIndex == 15) {
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_254);
+        D_80B60878.x = 350.0f;
+        D_80B60878.y = -120.0f;
+        D_80B60878.z = -60.0f;
+        Matrix_MultiplyVector3fByState(&D_80B60878, &this->unk_26C);
+    }
+
+    if (limbIndex == 11) {
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_29C);
+    }
+
+    Collider_UpdateSpheres(limbIndex, &this->unk_2DC);
+}
+
+void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnDragon* this = THIS;
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_80B6043C, func_80B60494, &this->actor);
+}

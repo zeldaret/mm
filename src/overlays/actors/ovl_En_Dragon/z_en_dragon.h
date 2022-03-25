@@ -23,7 +23,8 @@ typedef struct EnDragon {
     /* 0x290 */ Vec3f unk_290;
     /* 0x29C */ Vec3f unk_29C;
     /* 0x2A8 */ s16 unk_2A8;
-    /* 0x2AA */ char unk_2AA[0x4];
+    /* 0x2AA */ s16 unk_2AA;
+    /* 0x2AC */ s16 unk_2AC;
     /* 0x2AE */ s16 unk_2AE;
     /* 0x2B0 */ s16 unk_2B0;
     /* 0x2B2 */ s16 unk_2B2;
