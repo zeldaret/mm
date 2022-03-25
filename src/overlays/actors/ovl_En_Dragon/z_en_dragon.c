@@ -5,7 +5,6 @@
  */
 
 #include "z_en_dragon.h"
-#include "objects/object_utubo/object_utubo.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -184,8 +183,8 @@ static ColliderJntSphInit D_80B60734 = {
 void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDragon* this = THIS;
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_utubo_Skel_004398, &object_utubo_Anim_0048B8,
-                       this->jointTable, this->morphTable, 0x10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDeepPythonSkel, &gDeepPythonSmallSideSwayAnim, this->jointTable,
+                       this->morphTable, DEEP_PYTHON_LIMB_MAX);
     this->actor.colChkInfo.health = 4;
     this->actor.colChkInfo.damageTable = &D_80B605F4;
     this->actor.targetMode = 0xA;
@@ -227,10 +226,10 @@ void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 AnimationHeader* D_80B60744[] = {
-    &object_utubo_Anim_0048B8,
-    &object_utubo_Anim_004ABC,
-    &object_utubo_Anim_004740,
-    &object_utubo_Anim_0048B8,
+    &gDeepPythonSmallSideSwayAnim,
+    &gDeepPythonLargeSideSwayAnim,
+    &gDeepPythonVerticalSwayAnim,
+    &gDeepPythonSmallSideSwayAnim,
 };
 
 u8 D_80B60754[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
@@ -600,8 +599,8 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
         ActorCutscene_SetIntentToPlay(this->unk_2C2);
     } else {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2C2, &this->actor);
-        this->unk_2D0 = Animation_GetLastFrame(&object_utubo_Anim_0048B8);
-        Animation_Change(&this->skelAnime, &object_utubo_Anim_0048B8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
+        this->unk_2D0 = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
+        Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_2B4 = 0x14;
         this->actionFunc = func_80B5FD68;
     }
@@ -761,7 +760,7 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 func_80B6043C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDragon* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
         rot->x += this->unk_2AC;
         rot->y += this->unk_2AA;
         rot->z += this->unk_2A8;
@@ -774,7 +773,7 @@ void func_80B60494(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnDragon* this = THIS;
     Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
 
-    if (limbIndex == 15) {
+    if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_254);
         D_80B60878.x = 350.0f;
         D_80B60878.y = -120.0f;
@@ -782,7 +781,7 @@ void func_80B60494(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultiplyVector3fByState(&D_80B60878, &this->unk_26C);
     }
 
-    if (limbIndex == 11) {
+    if (limbIndex == DEEP_PYTHON_LIMB_HEAD_AND_COLLAR_ROOT) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_29C);
     }
 

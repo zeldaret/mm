@@ -2,6 +2,7 @@
 #define Z_EN_DRAGON_H
 
 #include "global.h"
+#include "objects/object_utubo/object_utubo.h"
 
 struct EnDragon;
 
@@ -10,8 +11,8 @@ typedef void (*EnDragonActionFunc)(struct EnDragon*, GlobalContext*);
 typedef struct EnDragon {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[16];
-    /* 0x1E8 */ Vec3s morphTable[16];
+    /* 0x188 */ Vec3s jointTable[DEEP_PYTHON_LIMB_MAX];
+    /* 0x1E8 */ Vec3s morphTable[DEEP_PYTHON_LIMB_MAX];
     /* 0x248 */ EnDragonActionFunc actionFunc;
     /* 0x24C */ s32 unk_24C;
     /* 0x250 */ s32 unk_250;
