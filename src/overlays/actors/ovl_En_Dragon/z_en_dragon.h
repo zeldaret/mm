@@ -34,7 +34,7 @@ typedef struct EnDragon {
     /* 0x2B4 */ s16 unk_2B4;
     /* 0x2B6 */ s16 unk_2B6;
     /* 0x2B8 */ s16 unk_2B8;
-    /* 0x2BA */ s16 unk_2BA;
+    /* 0x2BA */ s16 action;
     /* 0x2BC */ UNK_TYPE1 unk_2BC[0x2];
     /* 0x2BE */ s16 unk_2BE;
     /* 0x2C0 */ s16 unk_2C0;

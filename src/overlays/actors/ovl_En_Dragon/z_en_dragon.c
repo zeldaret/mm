@@ -31,6 +31,16 @@ typedef enum {
     /* 3 */ DEEP_PYTHON_ANIMATION_IDLE
 } DeepPythonAnimationIndex;
 
+typedef enum {
+    /* 0 */ DEEP_PYTHON_ACTION_IDLE,
+    /* 1 */ DEEP_PYTHON_ACTION_EXTEND,
+    /* 2 */ DEEP_PYTHON_ACTION_GRAB,
+    /* 3 */ DEEP_PYTHON_ACTION_DAMAGE,
+    /* 4 */ DEEP_PYTHON_ACTION_RETREAT,
+    /* 5 */ DEEP_PYTHON_ACTION_SETUP_DEAD,
+    /* 6 */ DEEP_PYTHON_ACTION_DEAD,
+} DeepPythonAction;
+
 static s32 D_80B605D0 = 0;
 
 const ActorInit En_Dragon_InitVars = {
@@ -216,7 +226,7 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements[7].dim.modelSphere.center.x = 160;
     this->pythonIndex = EN_DRAGON_GET_PYTHON_INDEX(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->unk_2BA = 0;
+    this->action = DEEP_PYTHON_ACTION_IDLE;
     this->actor.hintId = 0xE;
     this->scale = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
@@ -275,7 +285,7 @@ void EnDragon_SpawnBubbles(EnDragon* this, GlobalContext* globalCtx, Vec3f baseP
 
     bubbleCount = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
     colorIndex = 0;
-    if (this->unk_2BA == 6) {
+    if (this->action == DEEP_PYTHON_ACTION_DEAD) {
         colorIndex = 1;
         bubbleCount = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
     }
@@ -314,7 +324,7 @@ void func_80B5EDF0(EnDragon* this) {
 
 void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    if (this->unk_2BA == 1) {
+    if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
         func_80B5EF88(this);
     } else if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 101.0f) &&
                (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 101.0f)) {
@@ -326,8 +336,8 @@ void func_80B5EE3C(EnDragon* this, GlobalContext* globalCtx) {
             (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 4.0f)) {
             Math_ApproachF(&this->actor.world.pos.x, this->actor.home.pos.x, 0.3f, 200.0f);
             Math_ApproachF(&this->actor.world.pos.z, this->actor.home.pos.z, 0.3f, 200.0f);
-        } else if (this->unk_2BA != 0) {
-            this->unk_2BA = 0;
+        } else if (this->action != DEEP_PYTHON_ACTION_IDLE) {
+            this->action = DEEP_PYTHON_ACTION_IDLE;
         }
     }
 }
@@ -347,11 +357,11 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
 
     EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
 
-    if (this->unk_2BA >= 3) {
+    if (this->action >= DEEP_PYTHON_ACTION_DAMAGE) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
         func_80B5EDF0(this);
     } else if (this->unk_2AE == 0) {
-        this->unk_2BA = 4;
+        this->action = DEEP_PYTHON_ACTION_RETREAT;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
         func_80B5EDF0(this);
     } else if (this->unk_2BE == 0) {
@@ -406,7 +416,7 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
 
             this->unk_2B0++;
             if (this->unk_2B0 >= 0x3D) {
-                this->unk_2BA = 4;
+                this->action = DEEP_PYTHON_ACTION_RETREAT;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
                 func_80B5EDF0(this);
             }
@@ -509,7 +519,7 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
         globalCtx->unk_18770(globalCtx, player);
         player->actor.parent = &this->actor;
         player->unk_AE8 = 50;
-        this->unk_2BA = 2;
+        this->action = DEEP_PYTHON_ACTION_GRAB;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_EAT);
         func_80B5F888(this);
     }
@@ -629,7 +639,8 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->unk_254, 0x90);
             }
         }
-        this->unk_2BA = 6;
+
+        this->action = DEEP_PYTHON_ACTION_DEAD;
         return;
     }
 
@@ -647,9 +658,9 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
         seahorsePos.x += (Math_SinS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
         seahorsePos.y += -100.0f + gGameInfo->data[0x981];
         seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
-        if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y, seahorsePos.z, 0,
-                                          this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene, this->actor.unk20,
-                                          NULL)) {
+        if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
+                                          seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
+                                          this->actor.unk20, NULL)) {
             gSaveContext.weekEventReg[0xD] |= 1;
             switch (this->pythonIndex) {
                 case 0:
@@ -693,33 +704,33 @@ void EnDragon_UpdateDamage(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u32 sp30;
 
-    if ((this->unk_2BA == 1) && ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
-                                 (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
-                                 (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
-                                 (this->collider.elements[5].info.bumperFlags & BUMP_HIT) ||
-                                 (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
-                                 (this->collider.elements[7].info.bumperFlags & BUMP_HIT))) {
+    if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
+                                                        (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
+                                                        (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
+                                                        (this->collider.elements[5].info.bumperFlags & BUMP_HIT) ||
+                                                        (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
+                                                        (this->collider.elements[7].info.bumperFlags & BUMP_HIT))) {
         Actor_ApplyDamage(&this->actor);
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
         if (this->actor.colChkInfo.health > 0) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
-            this->unk_2BA = 3;
+            this->action = DEEP_PYTHON_ACTION_DAMAGE;
         } else {
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DEAD);
             this->actor.flags |= ACTOR_FLAG_8000000;
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actor.flags |= ACTOR_FLAG_100000;
-            this->unk_2BA = 5;
+            this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;
             this->actionFunc = EnDragon_SetupDead;
         }
     }
 
-    if ((this->unk_2BA == 1) && (this->unk_2B6 == 0) && (player->invincibilityTimer == 0) &&
+    if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && (this->unk_2B6 == 0) && (player->invincibilityTimer == 0) &&
         (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
         (!(func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp30) >= 0.0f) || (sp30 != 1))) {
         this->actor.speedXZ = 0.0f;
-        this->unk_2BA = 2;
+        this->action = DEEP_PYTHON_ACTION_GRAB;
         this->actor.flags |= ACTOR_FLAG_100000;
         this->actionFunc = func_80B5F418;
     }
@@ -754,11 +765,11 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
 
-    if (this->unk_2BA != 2) {
+    if (this->action != 2) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
-    if (this->unk_2BA < 3) {
+    if (this->action < 3) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
