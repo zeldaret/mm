@@ -158,7 +158,7 @@ void EnNeoReeba_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void EnNeoReeba_SetupWaitUnderground(EnNeoReeba* this) { // CA34
+void EnNeoReeba_SetupWaitUnderground(EnNeoReeba* this) {
     this->actor.flags &= ~1;
     this->actor.draw = NULL;
     this->actionTimer = 10;
@@ -166,7 +166,7 @@ void EnNeoReeba_SetupWaitUnderground(EnNeoReeba* this) { // CA34
     this->actor.shape.yOffset = -2000.0f;
 }
 
-void EnNeoReeba_WaitUnderground(EnNeoReeba* this, GlobalContext* globalCtx) { // CA70
+void EnNeoReeba_WaitUnderground(EnNeoReeba* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
@@ -183,7 +183,7 @@ void EnNeoReeba_WaitUnderground(EnNeoReeba* this, GlobalContext* globalCtx) { //
     }
 }
 
-void EnNeoReeba_SetupChooseAction(EnNeoReeba* this) { // CB3C
+void EnNeoReeba_SetupChooseAction(EnNeoReeba* this) {
     this->actor.shape.yOffset = 0.0f;
 
     if (this->actionFunc == EnNeoReeba_Move) {
@@ -196,7 +196,7 @@ void EnNeoReeba_SetupChooseAction(EnNeoReeba* this) { // CB3C
     this->skelAnime.playSpeed = 1.0f;
 }
 
-void EnNeoReeba_ChooseAction(EnNeoReeba* this, GlobalContext* globalCtx) { // CB88
+void EnNeoReeba_ChooseAction(EnNeoReeba* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 distToPlayer = Actor_XZDistanceToPoint(&player->actor, &this->actor.home.pos);
 
@@ -220,14 +220,14 @@ void EnNeoReeba_ChooseAction(EnNeoReeba* this, GlobalContext* globalCtx) { // CB
     }
 }
 
-void EnNeoReeba_SetupSink(EnNeoReeba* this) { // CCE0
+void EnNeoReeba_SetupSink(EnNeoReeba* this) {
     this->sinkRiseRate = 0.0f;
     this->skelAnime.playSpeed = 2.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->actionFunc = EnNeoReeba_Sink;
 }
 
-void EnNeoReeba_Sink(EnNeoReeba* this, GlobalContext* globalCtx) { // CD28
+void EnNeoReeba_Sink(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, -2000.0f, 0.5f, this->sinkRiseRate, 10.0f) == 0.0f) {
         EnNeoReeba_SetupWaitUnderground(this);
     } else if (globalCtx->gameplayFrames % 4 == 0) {
@@ -242,7 +242,7 @@ void EnNeoReeba_Sink(EnNeoReeba* this, GlobalContext* globalCtx) { // CD28
     Math_ApproachF(&this->actor.shape.shadowScale, 0.0f, 1.0f, 1.0f);
 }
 
-void EnNeoReeba_SetupRise(EnNeoReeba* this) { // CE34
+void EnNeoReeba_SetupRise(EnNeoReeba* this) {
     this->actor.draw = EnNeoReeba_Draw;
     this->sinkRiseRate = 300.0f;
     this->skelAnime.playSpeed = 2.0f;
@@ -251,7 +251,7 @@ void EnNeoReeba_SetupRise(EnNeoReeba* this) { // CE34
     this->actionFunc = EnNeoReeba_RiseOutOfGround;
 }
 
-void EnNeoReeba_RiseOutOfGround(EnNeoReeba* this, GlobalContext* globalCtx) { // CE94
+void EnNeoReeba_RiseOutOfGround(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 0.5f, this->sinkRiseRate, 10.0f) == 0.0f) {
         EnNeoReeba_SetupChooseAction(this);
     } else if (globalCtx->gameplayFrames % 4 == 0) {
@@ -266,7 +266,7 @@ void EnNeoReeba_RiseOutOfGround(EnNeoReeba* this, GlobalContext* globalCtx) { //
     Math_ApproachF(&this->actor.shape.shadowScale, 12.0f, 1.0f, 1.0f);
 }
 
-void EnNeoReeba_SetupMove(EnNeoReeba* this) { // CFA0
+void EnNeoReeba_SetupMove(EnNeoReeba* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_MOVE);
     this->sfxTimer = 10;
     this->actionTimer = 60;
@@ -275,7 +275,7 @@ void EnNeoReeba_SetupMove(EnNeoReeba* this) { // CFA0
     this->actor.speedXZ = 14.0f;
 }
 
-void EnNeoReeba_Move(EnNeoReeba* this, GlobalContext* globalCtx) { // CFFC
+void EnNeoReeba_Move(EnNeoReeba* this, GlobalContext* globalCtx) {
     f32 remainingDist = Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->targetPos, this->actor.speedXZ);
 
     Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, this->actor.shape.shadowScale, 1, 4.0f,
@@ -301,12 +301,12 @@ void EnNeoReeba_Move(EnNeoReeba* this, GlobalContext* globalCtx) { // CFFC
     }
 }
 
-void EnNeoReeba_SetupReturnHome(EnNeoReeba* this) { // D130
+void EnNeoReeba_SetupReturnHome(EnNeoReeba* this) {
     this->actionFunc = EnNeoReeba_ReturnHome;
     this->actor.speedXZ = 6.0f;
 }
 
-void EnNeoReeba_ReturnHome(EnNeoReeba* this, GlobalContext* globalCtx) { // D150
+void EnNeoReeba_ReturnHome(EnNeoReeba* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     f32 remainingDist = Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->actor.home.pos, this->actor.speedXZ);
@@ -323,7 +323,7 @@ void EnNeoReeba_ReturnHome(EnNeoReeba* this, GlobalContext* globalCtx) { // D150
     }
 }
 
-void EnNeoReeba_SetupBounce(EnNeoReeba* this) { // D254
+void EnNeoReeba_SetupBounce(EnNeoReeba* this) {
     this->actionTimer = 60;
     this->targetPos = this->actor.world.pos;
     this->targetPos.x -= 20.0f * Math_SinS(this->actor.yawTowardsPlayer);
@@ -331,7 +331,7 @@ void EnNeoReeba_SetupBounce(EnNeoReeba* this) { // D254
     this->actionFunc = EnNeoReeba_Bounce;
 }
 
-void EnNeoReeba_Bounce(EnNeoReeba* this, GlobalContext* globalCtx) { // D2E4
+void EnNeoReeba_Bounce(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (Math_Vec3f_StepToXZ(&this->actor.world.pos, &this->targetPos, this->actor.speedXZ) < 2.0f) {
         EnNeoReeba_SetupChooseAction(this);
     }
@@ -343,12 +343,12 @@ void EnNeoReeba_Bounce(EnNeoReeba* this, GlobalContext* globalCtx) { // D2E4
     }
 }
 
-void EnNeoReeba_SetupStun(EnNeoReeba* this) { // D360
+void EnNeoReeba_SetupStun(EnNeoReeba* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnNeoReeba_Stunned;
 }
 
-void EnNeoReeba_Stunned(EnNeoReeba* this, GlobalContext* globalCtx) { // D398
+void EnNeoReeba_Stunned(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (this->stunTimer > 0) {
         this->stunTimer--;
     } else {
@@ -362,7 +362,7 @@ void EnNeoReeba_Stunned(EnNeoReeba* this, GlobalContext* globalCtx) { // D398
     }
 }
 
-void EnNeoReeba_SetupFrozen(EnNeoReeba* this) { // D3EC
+void EnNeoReeba_SetupFrozen(EnNeoReeba* this) {
     this->drawEffectType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
     this->drawEffectScale = 0.5f;
     this->drawEffectAlpha = 1.0f;
@@ -381,7 +381,7 @@ void EnNeoReeba_SetupFrozen(EnNeoReeba* this) { // D3EC
     this->actionFunc = EnNeoReeba_Frozen;
 }
 
-void EnNeoReeba_Frozen(EnNeoReeba* this, GlobalContext* globalCtx) { // D47C
+void EnNeoReeba_Frozen(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (this->stunTimer == 0) {
         this->stunTimer = 0;
         this->drawEffectScale = 0.0f;
@@ -400,7 +400,7 @@ void EnNeoReeba_Frozen(EnNeoReeba* this, GlobalContext* globalCtx) { // D47C
     }
 }
 
-void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this) { // D4FC
+void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this) {
     this->actionTimer = 10;
     this->skelAnime.playSpeed = 1.0f;
     this->velToTarget.x = Math_SinS(this->actor.yawTowardsPlayer) * -12.0f;
@@ -414,7 +414,7 @@ void EnNeoReeba_SetupDamageAnim(EnNeoReeba* this) { // D4FC
 static f32 sDamageAnimXZScales[] = { 0.04, 0.04, 0.039, 0.042, 0.045, 0.043, 0.04, 0.035, 0.03, 0.033, 0.04 };
 static f32 sDamageAnimYScales[] = { 0.04f, 0.04f, 0.041f, 0.038f, 0.035f, 0.037f, 0.04f, 0.045f, 0.05f, 0.047f, 0.04f };
 
-void EnNeoReeba_DamageAnim(EnNeoReeba* this, GlobalContext* globalCtx) { // D5A4
+void EnNeoReeba_DamageAnim(EnNeoReeba* this, GlobalContext* globalCtx) {
     if (this->actionTimer == 0) {
         this->rotationSpeed = 0.0f;
         EnNeoReeba_SetupChooseAction(this);
@@ -436,7 +436,7 @@ void EnNeoReeba_DamageAnim(EnNeoReeba* this, GlobalContext* globalCtx) { // D5A4
     }
 }
 
-void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) { // D6D0
+void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
     this->actionTimer = 10;
 
     this->velToTarget.x = Math_SinS(this->actor.yawTowardsPlayer) * -12.0f;
@@ -451,7 +451,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) { // D6D0
     this->actionFunc = EnNeoReeba_PlayDeathEffects;
 }
 
-void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, GlobalContext* globalCtx) { // D788
+void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, GlobalContext* globalCtx) {
     static Vec3f sDeadDbVel = { 0.0f, 0.0f, 0.0f };
     static Vec3f sDeadDbAccel = { 0.0f, 4.0f, 0.0f };
 
@@ -501,7 +501,7 @@ void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, GlobalContext* globalCtx) { /
     }
 }
 
-void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) { // D9B8
+void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) {
     Actor_SetFocus(&this->actor, 20.0f);
 
     if (this->collider.base.acFlags & AC_HIT) {
@@ -589,7 +589,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) { // D9B8
     }
 }
 
-void EnNeoReeba_UpdatePosition(EnNeoReeba* this, GlobalContext* globalCtx) { // DC80
+void EnNeoReeba_UpdatePosition(EnNeoReeba* this, GlobalContext* globalCtx) {
     if ((this->actionFunc != EnNeoReeba_WaitUnderground) && (this->actionFunc != EnNeoReeba_Sink) &&
         (this->actionFunc != EnNeoReeba_RiseOutOfGround)) {
         this->actor.velocity.y += this->actor.gravity;
@@ -607,7 +607,7 @@ void EnNeoReeba_UpdatePosition(EnNeoReeba* this, GlobalContext* globalCtx) { // 
     }
 }
 
-void EnNeoReeba_DrawFrozenEffects(EnNeoReeba* this, GlobalContext* globalCtx) { // DD7C
+void EnNeoReeba_DrawFrozenEffects(EnNeoReeba* this, GlobalContext* globalCtx) {
     s32 i;
     f32 limbPosScale = 10.0f;
     f32 phi_f2 = 20.0f;
@@ -635,7 +635,7 @@ void EnNeoReeba_DrawFrozenEffects(EnNeoReeba* this, GlobalContext* globalCtx) { 
                             this->drawEffectAlpha, this->drawEffectType);
 }
 
-void EnNeoReeba_DrawEffects(EnNeoReeba* this, GlobalContext* globalCtx) { // DF34
+void EnNeoReeba_DrawEffects(EnNeoReeba* this, GlobalContext* globalCtx) {
     s32 i;
     f32 scale = 15.0f;
 
@@ -658,7 +658,7 @@ void EnNeoReeba_DrawEffects(EnNeoReeba* this, GlobalContext* globalCtx) { // DF3
     }
 }
 
-void EnNeoReeba_SpawnIce(EnNeoReeba* this, GlobalContext* globalCtx) { // E0BC
+void EnNeoReeba_SpawnIce(EnNeoReeba* this, GlobalContext* globalCtx) {
     static Color_RGBA8 sIcePrimColor = { 170, 255, 255, 255 };
     static Color_RGBA8 sIceEnvColor = { 200, 200, 255, 255 };
     static Vec3f sIceAccel = { 0.0f, -1.0f, 0.0f };
@@ -686,7 +686,7 @@ void EnNeoReeba_SpawnIce(EnNeoReeba* this, GlobalContext* globalCtx) { // E0BC
     }
 }
 
-void EnNeoReeba_SinkIfStoneMask(EnNeoReeba* this, GlobalContext* globalCtx) { // E260
+void EnNeoReeba_SinkIfStoneMask(EnNeoReeba* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == EnNeoReeba_ChooseAction) || (this->actionFunc == EnNeoReeba_Move) ||
         (this->actionFunc == EnNeoReeba_ReturnHome)) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_STONE) {
@@ -716,7 +716,7 @@ void EnNeoReeba_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnNeoReeba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                Actor* thisx) { // E378
+                                Actor* thisx) {
     EnNeoReeba* this = THIS;
 
     if ((limbIndex == 3) && (this->rotationSpeed != 0.0f)) {
