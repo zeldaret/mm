@@ -8,12 +8,12 @@ struct EnFamos;
 
 typedef void (*EnFamosActionFunc)(struct EnFamos*, GlobalContext*);
 
-typedef struct EnFamosParticle {
+typedef struct EnFamosRock {
     /* 00 */ Vec3f pos;
     /* 0C */ Vec3f velocity;
     /* 18 */ Vec3s rotation;
     /* 20 */ f32   scale;
-} EnFamosParticle; // size = 0x24
+} EnFamosRock; // size = 0x24
 
 #define GET_FAMOS_PATH(thisx) (thisx->params)
 
@@ -38,9 +38,9 @@ typedef struct EnFamos {
     /* 0x1D9 */ u8 unk1D9;
     /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment
     /* 0x1DC */ s16 delayTimer; // reused for different functions
-    /* 0x1DE */ s16 unk1DE;
+    /* 0x1DE */ s16 unkTimer1DE;
     /* 0x1E0 */ s16 flippedTimer; // frames until it flips right side up
-    /* 0x1E2 */ s16 unk1E2;
+    /* 0x1E2 */ s16 unkTimer1E2;
     /* 0x1E4 */ s16 unk1E4;
     /* 0x1E6 */ s16 unk1E6;
     /* 0x1E8 */ Vec3s* pathPoints;
@@ -53,8 +53,8 @@ typedef struct EnFamos {
     /* 0x258 */ ColliderCylinder collider2;
     /* 0x2A4 */ ColliderJntSph   emblemCollider;
     /* 0x2C4 */ ColliderJntSphElement emblemColliderElements;
-    /* 0x340 */ char unk340[0x40];
-    /* 0x344 */ EnFamosParticle particles[0x14];
+    /* 0x340 */ u8 unk340[0x40];
+    /* 0x344 */ EnFamosRock rocks[20];
 } EnFamos; // size = 0x614
 
 #endif // Z_EN_FAMOS_H

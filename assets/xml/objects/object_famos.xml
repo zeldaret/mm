@@ -15,12 +15,14 @@
         <Texture Name="gFamosShieldTex" OutName="famos_shield" Format="ci4" Width="64" Height="64" Offset="0x2AE8" />
         <Texture Name="gFamosSwordHiltTex" OutName="famos_sword_hilt" Format="ci4" Width="32" Height="32" Offset="0x32E8" />
         <Texture Name="gFamosLightSwitchTex" OutName="famos_light_switch" Format="rgba16" Width="32" Height="32" Offset="0x34E8" />
-        <Limb Name="gFamosBodyLimb" Type="Standard" Offset="0x3CE8" />
-        <Limb Name="gFamosEmblemLimb" Type="Standard" Offset="0x3CF4" />
-        <Limb Name="gFamosSwordLimb" Type="Standard" Offset="0x3D00" />
-        <Limb Name="gFamosShieldLimb" Type="Standard" Offset="0x3D0C" />
-        <Limb Name="gFamosHeadLimb" Type="Standard" Offset="0x3D18" />
-        <Skeleton Name="gFamosSkeleton" Type="Normal" LimbType="Standard" Offset="0x3D38" />
+
+        <Limb Name="gFamosBodyLimb" Type="Standard" EnumName="FAMOS_LIMB_BODY" Offset="0x3CE8" />
+        <Limb Name="gFamosEmblemLimb" Type="Standard" EnumName="FAMOS_LIMB_EMBLEM" Offset="0x3CF4" />
+        <Limb Name="gFamosSwordLimb" Type="Standard" EnumName="FAMOS_LIMB_SWORD" Offset="0x3D00" />
+        <Limb Name="gFamosShieldLimb" Type="Standard" EnumName="FAMOS_LIMB_SHIELD" Offset="0x3D0C" />
+        <Limb Name="gFamosHeadLimb" Type="Standard" EnumName="FAMOS_LIMB_HEAD" Offset="0x3D18" />
+        <Skeleton Name="gFamosSkeleton" Type="Normal" LimbType="Standard" LimbNone="FAMOS_LIMB_NONE" LimbMax="FAMOS_LIMB_MAX" EnumName="ObjectFamosLimbs" Offset="0x3D38" />
+
         <Animation Name="gFamosLowerSNSAnim" Offset="0x3DC8" />
         <TextureAnimation Name="gFamosNormalGlowingEmblemAnimTex" Offset="0x3E30" />
         <TextureAnimation Name="gFamosFlippedGlowingEmblemAnimTex" Offset="0x3E38" />
