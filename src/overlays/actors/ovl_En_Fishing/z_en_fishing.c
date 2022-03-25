@@ -4,6 +4,7 @@
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
 #include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
@@ -118,86 +119,86 @@ typedef struct {
 #define LINE_SEG_COUNT 200
 #define SINKING_LURE_SEG_COUNT 20
 
-static f32 D_809101B0;
-static f32 D_809101B4;
-static s16 D_809101B8;
-static f32 D_809101BC;
-static f32 D_809101C0;
-static f32 D_809101C4;
-static f32 D_809101C8;
-static s16 D_809101CC;
-static f32 D_809101D0;
-static Vec3f sRodTipPos;
-static Vec3f sReelLinePos[LINE_SEG_COUNT];
-static Vec3f sReelLineRot[LINE_SEG_COUNT];
-static Vec3f sReelLineUnk[LINE_SEG_COUNT];
-static Vec3f sLureHookRefPos[2];
-static f32 sLureHookRotY[2];
-static u8 D_80911E28;
-static Vec3f sSinkingLurePos[SINKING_LURE_SEG_COUNT];
-static s16 D_80911F20;
-static f32 sProjectedW;
-static Vec3f sCameraEye;
-static Vec3f sCameraAt;
-static s16 sCameraId;
-static f32 D_80911F48;
-static f32 D_80911F4C;
-static f32 D_80911F50;
-static Vec3f sSinkingLureBasePos;
-static f32 D_80911F64;
-static s32 sRandSeed0;
-static s32 sRandSeed1;
-static s32 sRandSeed2;
-static FishingProp sPondProps[POND_PROP_COUNT];
-static FishingGroupFish sGroupFishes[GROUP_FISH_COUNT];
-static f32 sFishGroupAngle1;
-static f32 sFishGroupAngle2;
-static f32 sFishGroupAngle3;
-static FishingEffect sFishingEffects[EFFECT_COUNT];
-static Vec3f sStreamSoundProjectedPos;
-static EnFishing* sFishingMain;
-static u8 D_809171C8;
-static u8 sLinkAge;
-static u8 D_809171CA;
-static u8 D_809171CB;
-static f32 D_809171CC;
-static u8 D_809171D0;
-static u8 D_809171D1;
-static u8 D_809171D2;
-static s16 D_809171D4;
-static u8 D_809171D6;
-static u16 D_809171D8;
-static u16 D_809171DA;
-static s8 D_809171DC;
-static Vec3f sOwnerHeadPos;
-static Vec3s sEffOwnerHatRot;
-static u8 D_809171F2;
-static s16 D_809171F4;
-static s16 D_809171F6;
-static EnFishing* sFishingHookedFish;
-static s16 D_809171FC;
-static s16 D_809171FE;
-static s16 D_80917200;
-static s16 D_80917202;
-static s16 D_80917204;
-static u8 D_80917206;
-static Vec3f sLurePos;
-static Vec3f D_80917218;
-static Vec3f sLureRot;
-static Vec3f D_80917238;
-static Vec3f D_80917248;
-static f32 D_80917254;
-static f32 D_80917258;
-static f32 D_8091725C;
-static f32 D_80917260;
-static s8 D_80917264;
-static s16 D_80917266;
-static u8 D_80917268;
-static f32 D_8091726C;
-static u8 D_80917270;
-static s16 D_80917272;
-static u8 D_80917274;
-static Vec3f D_80917278;
+f32 D_809101B0;
+f32 D_809101B4;
+s16 D_809101B8;
+f32 D_809101BC;
+f32 D_809101C0;
+f32 D_809101C4;
+f32 D_809101C8;
+s16 D_809101CC;
+f32 D_809101D0;
+Vec3f sRodTipPos;
+Vec3f sReelLinePos[LINE_SEG_COUNT];
+Vec3f sReelLineRot[LINE_SEG_COUNT];
+Vec3f sReelLineUnk[LINE_SEG_COUNT];
+Vec3f sLureHookRefPos[2];
+f32 sLureHookRotY[2];
+u8 D_80911E28;
+Vec3f sSinkingLurePos[SINKING_LURE_SEG_COUNT];
+s16 D_80911F20;
+f32 sProjectedW;
+Vec3f sCameraEye;
+Vec3f sCameraAt;
+s16 sCameraId;
+f32 D_80911F48;
+f32 D_80911F4C;
+f32 D_80911F50;
+Vec3f sSinkingLureBasePos;
+f32 D_80911F64;
+s32 sRandSeed0;
+s32 sRandSeed1;
+s32 sRandSeed2;
+FishingProp sPondProps[POND_PROP_COUNT];
+FishingGroupFish sGroupFishes[GROUP_FISH_COUNT];
+f32 sFishGroupAngle1;
+f32 sFishGroupAngle2;
+f32 sFishGroupAngle3;
+FishingEffect sFishingEffects[EFFECT_COUNT];
+Vec3f sStreamSoundProjectedPos;
+EnFishing* sFishingMain;
+u8 D_809171C8;
+u8 sLinkAge;
+u8 D_809171CA;
+u8 D_809171CB;
+f32 D_809171CC;
+u8 D_809171D0;
+u8 D_809171D1;
+u8 D_809171D2;
+s16 D_809171D4;
+u8 D_809171D6;
+u16 D_809171D8;
+u16 D_809171DA;
+s8 D_809171DC;
+Vec3f sOwnerHeadPos;
+Vec3s sEffOwnerHatRot;
+u8 D_809171F2;
+s16 D_809171F4;
+s16 D_809171F6;
+EnFishing* sFishingHookedFish;
+s16 D_809171FC;
+s16 D_809171FE;
+s16 D_80917200;
+s16 D_80917202;
+s16 D_80917204;
+u8 D_80917206;
+Vec3f sLurePos;
+Vec3f D_80917218;
+Vec3f sLureRot;
+Vec3f D_80917238;
+Vec3f D_80917248;
+f32 D_80917254;
+f32 D_80917258;
+f32 D_8091725C;
+f32 D_80917260;
+s8 D_80917264;
+s16 D_80917266;
+u8 D_80917268;
+f32 D_8091726C;
+u8 D_80917270;
+s16 D_80917272;
+u8 D_80917274;
+Vec3f D_80917278;
 
 const ActorInit En_Fishing_InitVars = {
     ACTOR_EN_FISHING,
@@ -211,38 +212,38 @@ const ActorInit En_Fishing_InitVars = {
     (ActorFunc)EnFishing_DrawFish,
 };
 
-static f32 D_8090CCD0 = 0.0f;
-static u8 D_8090CCD4 = 0;
-static f32 D_8090CCD8 = 0.0f;
-static Vec3f D_8090CCDC = { 0.0f, 0.0f, 0.0f };
-static f32 D_8090CCE8 = 0.0f;
-static u8 sSinkingLureLocation = 0;
-static f32 D_8090CCF0 = 0.0f;
-static u8 D_8090CCF4 = true;
-static u16 D_8090CCF8 = 0;
-static u8 D_8090CCFC = 0;
-static s32 D_8090CD00 = 0;
-static s16 D_8090CD04 = 0;
-static u8 D_8090CD08 = 0;
-static u8 D_8090CD0C = 0;
-static u8 D_8090CD10 = 0;
-static s16 D_8090CD14 = 0;
-static Vec3f sFishMouthOffset = { 500.0f, 500.0f, 0.0f };
-static u8 D_8090CD24 = 0;
-static f32 D_8090CD28 = 0;
-static f32 D_8090CD2C = 0;
-static f32 D_8090CD30 = 0.0f;
-static f32 D_8090CD34 = 0.0f;
-static f32 D_8090CD38 = 0.0f;
-static f32 D_8090CD3C = 0.0f;
-static f32 D_8090CD40 = 0.0f;
-static s16 D_8090CD44 = 0;
-static s16 D_8090CD48 = 0;
-static u8 D_8090CD4C = 0;
-static u8 D_8090CD50 = 0;
-static u8 D_8090CD54 = 0;
+f32 D_8090CCD0 = 0.0f;
+u8 D_8090CCD4 = 0;
+f32 D_8090CCD8 = 0.0f;
+Vec3f D_8090CCDC = { 0.0f, 0.0f, 0.0f };
+f32 D_8090CCE8 = 0.0f;
+u8 sSinkingLureLocation = 0;
+f32 D_8090CCF0 = 0.0f;
+u8 D_8090CCF4 = true;
+u16 D_8090CCF8 = 0;
+u8 D_8090CCFC = 0;
+s32 D_8090CD00 = 0;
+s16 D_8090CD04 = 0;
+u8 D_8090CD08 = 0;
+u8 D_8090CD0C = 0;
+u8 D_8090CD10 = 0;
+s16 D_8090CD14 = 0;
+Vec3f sFishMouthOffset = { 500.0f, 500.0f, 0.0f };
+u8 D_8090CD24 = 0;
+f32 D_8090CD28 = 0;
+f32 D_8090CD2C = 0;
+f32 D_8090CD30 = 0.0f;
+f32 D_8090CD34 = 0.0f;
+f32 D_8090CD38 = 0.0f;
+f32 D_8090CD3C = 0.0f;
+f32 D_8090CD40 = 0.0f;
+s16 D_8090CD44 = 0;
+s16 D_8090CD48 = 0;
+u8 D_8090CD4C = 0;
+u8 D_8090CD50 = 0;
+u8 D_8090CD54 = 0;
 
-static ColliderJntSphElementInit sJntSphElementsInit[12] = {
+static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -386,13 +387,13 @@ static ColliderJntSphInit sJntSphInit = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    12,
+    ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit,
 };
 
-static u8 D_8090CF18 = 0;
+u8 D_8090CF18 = 0;
 static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_8090CF28 = { 0.0f, 0.0f, 2000.0f }; // Unused
+Vec3f D_8090CF28 = { 0.0f, 0.0f, 2000.0f }; // Unused
 
 void EnFishing_SetColliderElement(s32 index, ColliderJntSph* collider, Vec3f* pos, f32 scale) {
     collider->elements[index].dim.worldSphere.center.x = pos->x;
@@ -579,7 +580,7 @@ void EnFishing_SpawnRainDrop(FishingEffect* effect, Vec3f* pos, Vec3f* rot) {
     }
 }
 
-static FishingPropInit sPondPropInits[POND_PROP_COUNT + 1] = {
+FishingPropInit sPondPropInits[POND_PROP_COUNT + 1] = {
     { FS_PROP_ROCK, { 529, -53, -498 } },
     { FS_PROP_ROCK, { 461, -66, -480 } },
     { FS_PROP_ROCK, { 398, -73, -474 } },
@@ -779,7 +780,7 @@ void EnFishing_InitPondProps(EnFishing* this, GlobalContext* globalCtx) {
     }
 }
 
-static FishingFishInit sFishInits[] = {
+FishingFishInit sFishInits[] = {
     { 0, { 666, -45, 354 }, 38, 0.1f },    { 0, { 681, -45, 240 }, 36, 0.1f },   { 0, { 670, -45, 90 }, 41, 0.05f },
     { 0, { 615, -45, -450 }, 35, 0.2f },   { 0, { 500, -45, -420 }, 39, 0.1f },  { 0, { 420, -45, -550 }, 44, 0.05f },
     { 0, { -264, -45, -640 }, 40, 0.1f },  { 0, { -470, -45, -540 }, 34, 0.2f }, { 0, { -557, -45, -430 }, 54, 0.01f },
@@ -1699,7 +1700,7 @@ void EnFishing_UpdateSinkingLure(GlobalContext* globalCtx) {
     }
 }
 
-static f32 sSinkingLureSizes[] = {
+f32 sSinkingLureSizes[] = {
     1.0f, 1.5f,  1.8f, 2.0f, 1.8f, 1.6f, 1.4f, 1.2f, 1.0f, 1.0f,
     0.9f, 0.85f, 0.8f, 0.7f, 0.8f, 1.0f, 1.2f, 1.1f, 1.0f, 0.8f,
 };
@@ -1904,18 +1905,18 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-static f32 sRodScales[22] = {
+f32 sRodScales[22] = {
     1.0f,        1.0f,        1.0f,        0.9625f,     0.925f, 0.8875f,     0.85f,       0.8125f,
     0.775f,      0.73749995f, 0.7f,        0.6625f,     0.625f, 0.5875f,     0.54999995f, 0.5125f,
     0.47499996f, 0.4375f,     0.39999998f, 0.36249995f, 0.325f, 0.28749996f,
 };
 
-static f32 sRodBendRatios[22] = {
+f32 sRodBendRatios[22] = {
     0.0f,  0.0f,  0.0f,  0.0f,  0.0f,  0.06f,   0.12f,   0.18f,   0.24f,   0.30f,   0.36f,
     0.42f, 0.48f, 0.54f, 0.60f, 0.60f, 0.5142f, 0.4285f, 0.3428f, 0.2571f, 0.1714f, 0.0857f,
 };
 
-static Vec3f sRodTipOffset = { 0.0f, 0.0f, 0.0f };
+Vec3f sRodTipOffset = { 0.0f, 0.0f, 0.0f };
 
 void EnFishing_DrawRod(GlobalContext* globalCtx) {
     s16 i;
@@ -2056,7 +2057,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-static Vec3f D_8090D614 = { 0.0f, 0.0f, 0.0f };
+Vec3f D_8090D614 = { 0.0f, 0.0f, 0.0f };
 
 void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
     f32 spE4;
@@ -4684,7 +4685,7 @@ void EnFishing_DrawGroupFishes(GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-static u16 D_8090D638[] = { 0x4096, 0x408D, 0x408E, 0x408F, 0x4094, 0x4095 };
+u16 D_8090D638[] = { 0x4096, 0x408D, 0x408E, 0x408F, 0x4094, 0x4095 };
 
 void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
     switch (this->unk_154) {
@@ -5027,11 +5028,11 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
     }
 }
 
-static s16 D_8090D644[] = { 0, 1, 2, 2, 1 };
+s16 D_8090D644[] = { 0, 1, 2, 2, 1 };
 
-static Vec3f sStreamSoundPos = { 670.0f, 0.0f, -600.0f };
+Vec3f sStreamSoundPos = { 670.0f, 0.0f, -600.0f };
 
-static Vec3s sSinkingLureLocationPos[] = {
+Vec3s sSinkingLureLocationPos[] = {
     { -364, -30, -269 },
     { 1129, 3, -855 },
     { -480, 0, -1055 },
@@ -5611,10 +5612,10 @@ void EnFishing_OwnerPostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     }
 }
 
-static UNK_TYPE sFishingOwnerEyeTexs[] = {
-    &gFishingOwnerEyeOpenTex,
-    &gFishingOwnerEyeHalfTex,
-    &gFishingOwnerEyeClosedTex,
+TexturePtr sFishingOwnerEyeTexs[] = {
+    gFishingOwnerEyeOpenTex,
+    gFishingOwnerEyeHalfTex,
+    gFishingOwnerEyeClosedTex,
 };
 
 void EnFishing_DrawOwner(Actor* thisx, GlobalContext* globalCtx) {
