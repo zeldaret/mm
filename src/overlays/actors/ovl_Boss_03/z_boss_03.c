@@ -42,7 +42,6 @@
  * The collision logic is handled manually
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -828,7 +827,6 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     f32 xDiff;
     f32 yDiff;
     f32 zDiff;
-    s32 pad;
 
     this->unk_2BD = true;
     this->unk_25C = 15;
