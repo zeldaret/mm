@@ -2,6 +2,9 @@
  * File: z_eff_ss_sbn.c
  * Overlay: ovl_Effect_Ss_Sbn
  * Description: Popped Deku Bubble
+ *
+ * Note: The gfx field is used to store the colPoly, not anything gfx related
+ * This is not a problem since gfx is already void*
  */
 
 #include "z_eff_ss_sbn.h"
@@ -56,8 +59,6 @@ u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* 
     Math_Vec3f_Copy(&this->accel, &gZeroVec3f);
     this->flags = 0;
 
-    // Note: The gfx field is used to store the colPoly
-    // This is not a problem since gfx is already void*
     this->gfx = initParams->colPoly;
 
     this->rScroll = 0;
