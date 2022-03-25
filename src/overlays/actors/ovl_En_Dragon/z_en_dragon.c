@@ -22,7 +22,7 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5F508(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5F888(EnDragon* this);
 void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx);
-void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
+void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx);
 
 typedef enum {
     /* 0 */ DEEP_PYTHON_ANIMATION_SMALL_SIDE_SWAY,
@@ -600,7 +600,7 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
+void EnDragon_SetupDead(EnDragon* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->unk_2C2) == 0) {
         ActorCutscene_SetIntentToPlay(this->unk_2C2);
     } else {
@@ -608,12 +608,12 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
         this->endFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
         Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_2B4 = 0x14;
-        this->actionFunc = func_80B5FD68;
+        this->actionFunc = EnDragon_Dead;
     }
 }
 
-void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
-    Vec3f sp54;
+void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
+    Vec3f seahorsePos;
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.z += 0x1000;
@@ -624,6 +624,7 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
         this->actor.speedXZ = -120.0f;
         if (((this->pythonIndex & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
+            //! @bug: !globalCtx->gameplayFrames is 0 essentially all the time, so this code never runs.
             if (((!globalCtx->gameplayFrames) & 0x1F)) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->unk_254, 0x90);
             }
@@ -642,11 +643,11 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
 
     D_80B605D0++;
     if (D_80B605D0 >= (gGameInfo->data[0x987] + 8)) {
-        Math_Vec3f_Copy(&sp54, &this->actor.parent->world.pos);
-        sp54.x += (Math_SinS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
-        sp54.y += -100.0f + gGameInfo->data[0x981];
-        sp54.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
-        if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, 0x205, sp54.x, sp54.y, sp54.z, 0,
+        Math_Vec3f_Copy(&seahorsePos, &this->actor.parent->world.pos);
+        seahorsePos.x += (Math_SinS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
+        seahorsePos.y += -100.0f + gGameInfo->data[0x981];
+        seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
+        if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y, seahorsePos.z, 0,
                                           this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene, this->actor.unk20,
                                           NULL)) {
             gSaveContext.weekEventReg[0xD] |= 1;
@@ -710,7 +711,7 @@ void EnDragon_UpdateDamage(EnDragon* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actor.flags |= ACTOR_FLAG_100000;
             this->unk_2BA = 5;
-            this->actionFunc = func_80B5FCC0;
+            this->actionFunc = EnDragon_SetupDead;
         }
     }
 
