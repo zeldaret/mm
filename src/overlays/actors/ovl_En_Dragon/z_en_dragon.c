@@ -41,7 +41,7 @@ typedef enum {
     /* 6 */ DEEP_PYTHON_ACTION_DEAD,
 } DeepPythonAction;
 
-static s32 D_80B605D0 = 0;
+static s32 sNumPythonsDead = 0;
 
 const ActorInit En_Dragon_InitVars = {
     ACTOR_EN_DRAGON,
@@ -355,7 +355,7 @@ void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
     f32 currentFrame = this->skelAnime.curFrame;
     s16 phi_v1;
 
-    EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
+    EnDragon_SpawnBubbles(this, globalCtx, this->jawPos);
 
     if (this->action >= DEEP_PYTHON_ACTION_DAMAGE) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
@@ -396,7 +396,7 @@ void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
             this->unk_2BE = 2;
         }
 
-        phi_v1 = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->unk_254, &player->actor.world.pos), this->actor.shape.rot.y));
+        phi_v1 = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->jawPos, &player->actor.world.pos), this->actor.shape.rot.y));
         if (phi_v1 < 0x5000) {
             if ((this->endFrame <= currentFrame) && (this->unk_2B2 == 0)) {
                 if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
@@ -444,7 +444,7 @@ void EnDragon_SetupGrab(EnDragon* this, GlobalContext* globalCtx) {
         sp28.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         sp28.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
         Math_Vec3f_Copy(&this->actor.world.pos, &sp28);
-        temp_v0 = Math_Vec3f_Yaw(&player->actor.world.pos, &this->unk_254);
+        temp_v0 = Math_Vec3f_Yaw(&player->actor.world.pos, &this->jawPos);
         player->actor.shape.rot.y = temp_v0;
         player->actor.world.rot.y = temp_v0;
         this->unk_2BE = 0;
@@ -496,7 +496,7 @@ void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
 
     this->grabTimer++;
     Math_SmoothStepToS(&this->actor.shape.rot.z, D_80B60848[this->pythonIndex], 0xA, 0x1F4, 0x14);
-    EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
+    EnDragon_SpawnBubbles(this, globalCtx, this->jawPos);
 
     Math_Vec3f_Copy(&sp50, &this->burrowEntrancePos);
     sp50.x += Math_SinS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].x;
@@ -628,7 +628,7 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.z += 0x1000;
     this->jawZRotation = 0xFA0;
-    EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
+    EnDragon_SpawnBubbles(this, globalCtx, this->jawPos);
 
     if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 121.0f) &&
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
@@ -636,7 +636,7 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
         if (((this->pythonIndex & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
             //! @bug: !globalCtx->gameplayFrames is 0 essentially all the time, so this code never runs.
             if (((!globalCtx->gameplayFrames) & 0x1F)) {
-                Item_DropCollectibleRandom(globalCtx, NULL, &this->unk_254, 0x90);
+                Item_DropCollectibleRandom(globalCtx, NULL, &this->jawPos, 0x90);
             }
         }
 
@@ -652,12 +652,12 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
         return;
     }
 
-    D_80B605D0++;
-    if (D_80B605D0 >= (gGameInfo->data[0x987] + 8)) {
+    sNumPythonsDead++;
+    if (sNumPythonsDead >= (BREG(39) + 8)) {
         Math_Vec3f_Copy(&seahorsePos, &this->actor.parent->world.pos);
-        seahorsePos.x += (Math_SinS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
-        seahorsePos.y += -100.0f + gGameInfo->data[0x981];
-        seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + gGameInfo->data[0x986]));
+        seahorsePos.x += (Math_SinS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
+        seahorsePos.y += -100.0f + BREG(33);
+        seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
         if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
                                           this->actor.unk20, NULL)) {
@@ -765,11 +765,11 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
 
-    if (this->action != 2) {
+    if (this->action != DEEP_PYTHON_ACTION_GRAB) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
-    if (this->action < 3) {
+    if (this->action < DEEP_PYTHON_ACTION_DAMAGE) {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
@@ -793,7 +793,7 @@ void EnDragon_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_254);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->jawPos);
         D_80B60878.x = 350.0f;
         D_80B60878.y = -120.0f;
         D_80B60878.z = -60.0f;

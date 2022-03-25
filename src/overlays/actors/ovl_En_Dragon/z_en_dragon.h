@@ -18,7 +18,7 @@ typedef struct EnDragon {
     /* 0x248 */ EnDragonActionFunc actionFunc;
     /* 0x24C */ s32 animationIndex;
     /* 0x250 */ s32 pythonIndex;
-    /* 0x254 */ Vec3f unk_254; // jaw pos?
+    /* 0x254 */ Vec3f jawPos;
     /* 0x260 */ Vec3f burrowEntrancePos; // Vertically and horizontally centered on the burrow opening. Set by Bg_Sinkai_Kabe
     /* 0x26C */ Vec3f unk_26C; // position of player during grab?
     /* 0x278 */ Vec3f cameraEye;
