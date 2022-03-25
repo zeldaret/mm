@@ -22,7 +22,7 @@
  * - There are 3 cutscenes:
  *   - IntroCutscene: The cs which is played when Player falls into the main room. It also shows Gyorg's titlecard
  *   - SpawnSmallFishesCutscene: The short cs which is played when Gyorg is spawning the small fishes (EnTanron3). This
- * is triggered when Gyorg reaches half of its life.
+ * is triggered when Gyorg reaches half of its life
  *   - DeathCutscene: Played when Gyorg dies. Showing it splashing and becoming smaller each time until it disappears
  * - This actor mainly handles the 3 cutscenes it has manually (instead of relying on existing systems for it)
  *
@@ -62,7 +62,7 @@
 #define WORK_TIMER_UNK2_A 2 // used in func_809E34B8
 #define WORK_TIMER_STUNNED 2
 
-// The Y position of the top of the platform.
+// The Y position of the top of the platform
 #define PLATFORM_HEIGHT (440.0f)
 #define WATER_HEIGHT (430.0f)
 
@@ -116,6 +116,8 @@ Boss03* sGyorgBossInstance;
 void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
     func_8019F420(projectedPos, sfxId);
 }
+
+/* Start of SpawnEffect section */
 
 void Boss03_SpawnEffectWetSpot(GlobalContext* globalCtx, Vec3f* pos) {
     s16 i;
@@ -206,6 +208,8 @@ void Boss03_SpawnEffectBubble(GlobalContext* globalCtx, Vec3f* pos) {
     }
 }
 
+/* End of SpawnEffect section */
+
 void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphereCenter) {
     ColliderJntSphElement* sphElement;
 
@@ -216,6 +220,8 @@ void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphe
     sphElement = &collider->elements[index];
     sphElement->dim.worldSphere.radius = sphElement->dim.scale * sphElement->dim.modelSphere.radius;
 }
+
+/* Start of Random section */
 
 static s32 sRandSeed0;
 static s32 sRandSeed1;
@@ -243,6 +249,8 @@ f32 Boss03_RandZeroOne(void) {
     return fabsf(rand);
 }
 
+/* End of Random section */
+
 Actor* Boss03_FindActorDblueMovebg(GlobalContext* globalCtx) {
     Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
@@ -268,8 +276,8 @@ const ActorInit Boss_03_InitVars = {
     (ActorFunc)Boss03_Draw,
 };
 
-// The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw.
-static ColliderJntSphElementInit sJntSphElementsInit1[] = {
+// The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw
+static ColliderJntSphElementInit sHeadJntSphElementsInit[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -294,7 +302,7 @@ static ColliderJntSphElementInit sJntSphElementsInit1[] = {
     },
 };
 
-static ColliderJntSphInit sJntSphInit1 = {
+static ColliderJntSphInit sHeadJntSphInit = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -303,12 +311,12 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(sJntSphElementsInit1),
-    sJntSphElementsInit1,
+    ARRAY_COUNT(sHeadJntSphElementsInit),
+    sHeadJntSphElementsInit,
 };
 
-// The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw.
-static ColliderJntSphElementInit sJntSphElementsInit2[] = {
+// The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw
+static ColliderJntSphElementInit sBodyJntSphElementsInit[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -366,7 +374,7 @@ static ColliderJntSphElementInit sJntSphElementsInit2[] = {
     },
 };
 
-static ColliderJntSphInit sJntSphInit2 = {
+static ColliderJntSphInit sBodyJntSphInit = {
     {
         COLTYPE_METAL,
         AT_ON | AT_TYPE_ENEMY,
@@ -375,8 +383,8 @@ static ColliderJntSphInit sJntSphInit2 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(sJntSphElementsInit2),
-    sJntSphElementsInit2,
+    ARRAY_COUNT(sBodyJntSphElementsInit),
+    sBodyJntSphElementsInit,
 };
 
 Vec3f sGyorgInitialPos = { 1216.0f, 140.0f, -1161.0f };
@@ -462,6 +470,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     this->actor.world.pos = sGyorgInitialPos;
 
+    // Since Boss03_RandZeroOne is only used on this Init function, the resulting values ends up being deterministic
     Boss03_SeedRand(1, 29093, 9786);
 
     for (i = 0; i < 5; i++) {
@@ -490,8 +499,10 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
 
-    Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->colliderElements1);
-    Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->colliderElements2);
+    Collider_InitAndSetJntSph(globalCtx, &this->headCollider, &this->actor, &sHeadJntSphInit,
+                              this->headColliderElements);
+    Collider_InitAndSetJntSph(globalCtx, &this->bodyCollider, &this->actor, &sBodyJntSphInit,
+                              this->bodyColliderElements);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGyorgSkel, &gGyorgCrawlingAnim, this->jointTable,
                        this->morphTable, GYORG_LIMB_MAX);
     Actor_SetScale(&this->actor, 0.2f);
@@ -513,6 +524,8 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
 void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
 }
+
+/* Start of ActionFuncs section */
 
 void func_809E344C(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -621,7 +634,7 @@ void Boss03_SetupChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 }
 
 /**
- * Approach Player until near enough, then try to catch Player, unless it has since got back on the platform.
+ * Approach Player until near enough, then try to catch Player, unless it has since got back on the platform
  */
 void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -753,7 +766,7 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, this->unk_274 * 2);
 
     // If either (Player is standing on ground && Player is above water) or (WORK_TIMER_CURRENT_ACTION timer runs out)
-    // -> Stop trying to catch Player
+    // then stops trying to catch Player
     if (((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) ||
         (this->workTimer[WORK_TIMER_CURRENT_ACTION] == 0)) {
         if (&this->actor == player->actor.parent) {
@@ -1054,7 +1067,7 @@ void Boss03_SetupJumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
 }
 
 void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
-    this->bubbleEffectSpawnNum = 0;
+    this->bubbleEffectSpawnCount = 0;
     Boss03_PlayUnderwaterSfx(&this->actor.projectedPos, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
 
     this->skelAnime.playSpeed = 2.0f;
@@ -1065,7 +1078,7 @@ void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
 
     Actor_MoveWithGravity(&this->actor);
     if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y < this->waterHeight + 50.0f)) {
-        this->bubbleEffectSpawnNum = 2;
+        this->bubbleEffectSpawnCount = 2;
         this->actor.gravity = 0.0f;
         Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
         if (this->actor.velocity.y == 0.0f) {
@@ -1111,7 +1124,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     f32 phi_f2;
     Player* player = GET_PLAYER(globalCtx);
 
-    this->bubbleEffectSpawnNum = 0;
+    this->bubbleEffectSpawnCount = 0;
     this->csTimer++;
     this->unk_290 = 0;
 
@@ -1301,7 +1314,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Math_ApproachS(&this->actor.world.rot.x, this->actor.velocity.y * -300.0f, 3, 0x1000);
                 Actor_MoveWithGravity(&this->actor);
                 if ((this->actor.velocity.y <= 0.0f) && (this->actor.world.pos.y < (this->waterHeight + 50.0f))) {
-                    this->bubbleEffectSpawnNum = 2;
+                    this->bubbleEffectSpawnCount = 2;
                     this->actor.gravity = 0.0f;
                     Math_ApproachZeroF(&this->actor.velocity.y, 1.0f, 1.0f);
                     Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.5f);
@@ -1795,6 +1808,8 @@ void Boss03_Damaged(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+/* End of ActionFuncs section */
+
 void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
     ColliderInfo* hitbox;
     u8 sp4B = true;
@@ -1810,17 +1825,17 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
     }
 
     if (this->waterHeight < player->actor.world.pos.y) {
-        for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit1); i++) {
-            if (this->collider1.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->collider1.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+        for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
+            if (this->headCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
+                this->headCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
                 player->unk_B84 = this->actor.shape.rot.y;
                 player->unk_B80 = 20.0f;
             }
         }
 
-        for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit2); i++) {
-            if (this->collider2.elements[i].info.toucherFlags & TOUCH_HIT) {
-                this->collider2.elements[i].info.toucherFlags &= ~TOUCH_HIT;
+        for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
+            if (this->bodyCollider.elements[i].info.toucherFlags & TOUCH_HIT) {
+                this->bodyCollider.elements[i].info.toucherFlags &= ~TOUCH_HIT;
                 player->unk_B84 = this->actor.shape.rot.y;
                 player->unk_B80 = 20.0f;
             }
@@ -1829,17 +1844,17 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
 
     if (this->unk_25C == 0) {
         if ((this->actionFunc == stunnedActionFunc) && sp4B) {
-            for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit2); i++) {
-                if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
-                    hitbox = this->collider2.elements[i].info.acHitInfo;
-                    this->collider2.elements[i].info.bumperFlags &= ~BUMP_HIT;
+            for (i = 0; i < ARRAY_COUNT(sBodyJntSphElementsInit); i++) {
+                if (this->bodyCollider.elements[i].info.bumperFlags & BUMP_HIT) {
+                    hitbox = this->bodyCollider.elements[i].info.acHitInfo;
+                    this->bodyCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
                     this->unk_25C = 15;
                     this->unk_25E = 15;
 
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
                     phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? this->collider2.elements[i].info.acHitInfo->toucher.damage
+                                 ? this->bodyCollider.elements[i].info.acHitInfo->toucher.damage
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1862,10 +1877,10 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
             }
         }
 
-        for (i = 0; i < ARRAY_COUNT(sJntSphElementsInit1); i++) {
-            if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
-                hitbox = this->collider1.elements[i].info.acHitInfo;
-                this->collider1.elements[i].info.bumperFlags &= ~BUMP_HIT;
+        for (i = 0; i < ARRAY_COUNT(sHeadJntSphElementsInit); i++) {
+            if (this->headCollider.elements[i].info.bumperFlags & BUMP_HIT) {
+                hitbox = this->headCollider.elements[i].info.acHitInfo;
+                this->headCollider.elements[i].info.bumperFlags &= ~BUMP_HIT;
                 this->unk_25C = 15;
 
                 if (this->actionFunc != stunnedActionFunc) {
@@ -1888,7 +1903,7 @@ void Boss03_UpdateCollision(Boss03* this, GlobalContext* globalCtx) {
                     // (DMG_SWORD_BEAM | DMG_SPIN_ATTACK | DMG_ZORA_PUNCH | DMG_ZORA_BARRIER | DMG_DEKU_LAUNCH |
                     // DMG_DEKU_SPIN | DMG_GORON_SPIKES | DMG_SWORD | DMG_GORON_PUNCH | DMG_DEKU_STICK)
                     phi_v0 = (hitbox->toucher.dmgFlags & 0x038AC302)
-                                 ? (this->collider1.elements[i].info.acHitInfo->toucher.damage)
+                                 ? (this->headCollider.elements[i].info.acHitInfo->toucher.damage)
                                  : 0;
 
                     phi_v1 = phi_v0;
@@ -1992,30 +2007,30 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
     if (this->actionFunc != Boss03_DeathCutscene) {
         if ((this->actionFunc == Boss03_Stunned) || (this->actionFunc == Boss03_Damaged)) {
-            this->collider2.base.colType = COLTYPE_HIT3;
+            this->bodyCollider.base.colType = COLTYPE_HIT3;
         } else {
-            this->collider2.base.colType = COLTYPE_METAL;
+            this->bodyCollider.base.colType = COLTYPE_METAL;
         }
 
         Boss03_UpdateCollision(this, globalCtx);
 
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->bodyCollider.base);
 
         if (player->transformation == PLAYER_FORM_HUMAN) {
-            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->headCollider.base);
         }
 
         if (!this->unk_2BD) {
             if (player->transformation != PLAYER_FORM_HUMAN) {
-                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
+                CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->headCollider.base);
             }
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->headCollider.base);
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->bodyCollider.base);
         }
 
         if ((this->actionFunc != Boss03_Stunned) && (!this->unk_2BD)) {
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider2.base);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->headCollider.base);
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->bodyCollider.base);
         }
     }
 
@@ -2040,7 +2055,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     Math_ApproachS(&this->jawZRot, 0, 0xA, 0x200);
 
     if ((this->unk_240 % 2) == 0) {
-        for (i = 0; i < this->bubbleEffectSpawnNum; i++) {
+        for (i = 0; i < this->bubbleEffectSpawnCount; i++) {
             bubblePos.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
             bubblePos.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
             bubblePos.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
@@ -2049,7 +2064,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    this->bubbleEffectSpawnNum = 1;
+    this->bubbleEffectSpawnCount = 1;
     Boss03_UpdateEffects(globalCtx);
 
     if (D_809E9841 != 0) {
@@ -2158,7 +2173,7 @@ s32 Boss03_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
 /**
  * Used to manually index the spheres elements of the two colliders
- * Since there are two sets of ColliderJntSph, indices < 2 (ARRAY_COUNT(sJntSphElementsInit1)) refers to the first
+ * Since there are two sets of ColliderJntSph, indices < 2 (ARRAY_COUNT(sHeadJntSphElementsInit)) refers to the first
  * collider and indices >= 2 refers to the second one
  */
 s8 sGyorgSphElementIndices[] = {
@@ -2206,12 +2221,12 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         if (sphereElementIndex < 2) {
             if ((this->actionFunc == Boss03_Stunned) && (this->waterHeight < player->actor.world.pos.y)) {
-                Boss03_UpdateSphereElement(sphereElementIndex, &this->collider1, &D_809E91A8);
+                Boss03_UpdateSphereElement(sphereElementIndex, &this->headCollider, &D_809E91A8);
             } else {
-                Boss03_UpdateSphereElement(sphereElementIndex, &this->collider1, &spherePos);
+                Boss03_UpdateSphereElement(sphereElementIndex, &this->headCollider, &spherePos);
             }
         } else {
-            Boss03_UpdateSphereElement(sphereElementIndex - 2, &this->collider2, &spherePos);
+            Boss03_UpdateSphereElement(sphereElementIndex - 2, &this->bodyCollider, &spherePos);
         }
     }
 
@@ -2453,6 +2468,10 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
+#define SEAWEED_FLAG_INTERACT_NONE 0
+#define SEAWEED_FLAG_INTERACT_PLAYER 1
+#define SEAWEED_FLAG_INTERACT_GYORG 2
+
 void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
     Boss03* this = THIS;
     s16 i;
@@ -2466,7 +2485,7 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
     f32 yDiff;
     f32 zDiff;
 
-    flag = 0;
+    flag = SEAWEED_FLAG_INTERACT_NONE;
     this->unk_240++;
 
     for (i = 0; i < ARRAY_COUNT(this->seaweedSegmentPositions); i++) {
@@ -2492,12 +2511,12 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
             Math_ApproachS(&this->morphTable[i].x, (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f,
                            0xA, maxBendSpeed);
             if (maxBendSpeed != 0) {
-                flag |= 1;
+                flag |= SEAWEED_FLAG_INTERACT_PLAYER;
             }
         }
     }
 
-    if (flag & 1) {
+    if (flag & SEAWEED_FLAG_INTERACT_PLAYER) {
         Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(zDiff, xDiff), 0x14, 0x800);
     }
 
@@ -2525,17 +2544,17 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
                 Math_ApproachS(&this->morphTable[i].x,
                                (disturbanceFactor - distanceBetweenSeaweedAndDisturbance) * 200.0f, 0xA, maxBendSpeed);
                 if (maxBendSpeed != 0) {
-                    flag |= 2;
+                    flag |= SEAWEED_FLAG_INTERACT_GYORG;
                 }
             }
         }
 
-        if (flag & 2) {
+        if (flag & SEAWEED_FLAG_INTERACT_GYORG) {
             Math_ApproachS(&this->actor.shape.rot.y, Math_FAtan2F(zDiff, xDiff), 0x14, 0x800);
         }
     }
 
-    if (flag == 0) {
+    if (flag == SEAWEED_FLAG_INTERACT_NONE) {
         for (i = 0; i < 6; i++) {
             Math_ApproachS(&this->morphTable[i].x, 0, 0x14, 0x80);
         }

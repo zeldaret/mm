@@ -46,7 +46,7 @@ typedef struct Boss03 {
     /* 0x024C */ s16 workTimer[GYORG_WORK_TIMER_MAX];
     /* 0x0252 */ s8 numSpawnedSmallFish; // number of Tanron3 fish that are currently alive, -1 indexed
     /* 0x0253 */ u8 hasSpwanedSmallFishes; // Tanron
-    /* 0x0254 */ s16 bubbleEffectSpawnNum; // Amount of bubble effect which will be spawned by Update
+    /* 0x0254 */ s16 bubbleEffectSpawnCount; // Amount of bubble effect which will be spawned by Update
     /* 0x0258 */ f32 waterHeight; // always 430.0f
     /* 0x025C */ s16 unk_25C; // Timer related to collision?
     /* 0x025E */ s16 unk_25E;
@@ -66,7 +66,7 @@ typedef struct Boss03 {
     /* 0x0298 */ f32 unk_298;
     /* 0x029C */ s16 leftFinYRot;
     /* 0x029E */ s16 rightFinYRot;
-    /* 0x02A0 */ s16 bodyYRot; // body rot?
+    /* 0x02A0 */ s16 bodyYRot;
     /* 0x02A2 */ Vec3s unk_2A2;
     /* 0x02A8 */ s16 jawZRot;
     /* 0x02AC */ Vec3f insideJawPos; // used to grab player
@@ -77,18 +77,18 @@ typedef struct Boss03 {
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
     /* 0x02C0 */ f32 unk_2C4;
     /* 0x02C8 */ Vec3f prevPlayerPos;
-    /* 0x02D4 */ u8 wetSpotEffectSpawnNum; // wetspot spawn count
+    /* 0x02D4 */ u8 wetSpotEffectSpawnNum;
     /* 0x02D5 */ u8 unk_2D5; // flag
-    /* 0x02D6 */ s16 shapeRotTargetX; // used as target for this->actor.shape.rot.x
-    /* 0x02D8 */ s16 shapeRotTargetY; // used as target for this->actor.shape.rot.y
-    /* 0x02DA */ s16 shapeRotTargetZ; // used as target for this->actor.shape.rot.z
+    /* 0x02D6 */ s16 shapeRotTargetX;
+    /* 0x02D8 */ s16 shapeRotTargetY;
+    /* 0x02DA */ s16 shapeRotTargetZ;
     /* 0x02DC */ Vec3f seaweedSegmentPositions[6];
     /* 0x0324 */ s16 unk_324; // timer? set by Tanron3
     /* 0x0328 */ Boss03ActionFunc actionFunc;
-    /* 0x032C */ ColliderJntSph collider1;
-    /* 0x034C */ ColliderJntSphElement colliderElements1[2];
-    /* 0x03CC */ ColliderJntSph collider2;
-    /* 0x03EC */ ColliderJntSphElement colliderElements2[5];
+    /* 0x032C */ ColliderJntSph headCollider;
+    /* 0x034C */ ColliderJntSphElement headColliderElements[2];
+    /* 0x03CC */ ColliderJntSph bodyCollider;
+    /* 0x03EC */ ColliderJntSphElement bodyColliderElements[5];
     /* 0x052C */ f32 floppingAnimLastFrame;
     /* 0x0530 */ u32 csTimer;
     /* 0x0534 */ s16 csState;
