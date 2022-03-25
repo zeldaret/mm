@@ -181,27 +181,6 @@ static ColliderJntSphInit D_80B60734 = {
     D_80B60614, // sJntSphElementsInit,
 };
 
-static AnimationHeader* D_80B60744[] = {
-    &object_utubo_Anim_0048B8,
-    &object_utubo_Anim_004ABC,
-    &object_utubo_Anim_004740,
-    &object_utubo_Anim_0048B8,
-};
-
-static u8 D_80B60754[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
-
-static Color_RGBA8 D_80B60758[] = {
-    { 255, 255, 255, 255 },
-    { 150, 255, 255, 255 },
-    { 100, 255, 255, 255 },
-};
-
-static Color_RGBA8 D_80B60764[] = {
-    { 150, 150, 150, 0 },
-    { 0, 100, 0, 255 },
-    { 0, 0, 255, 255 },
-};
-
 void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDragon* this = THIS;
 
@@ -247,6 +226,15 @@ void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->unk_2DC);
 }
 
+AnimationHeader* D_80B60744[] = {
+    &object_utubo_Anim_0048B8,
+    &object_utubo_Anim_004ABC,
+    &object_utubo_Anim_004740,
+    &object_utubo_Anim_0048B8,
+};
+
+u8 D_80B60754[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+
 void func_80B5EAA0(EnDragon* this, s32 arg1) {
     f32 phi_f0;
 
@@ -259,6 +247,18 @@ void func_80B5EAA0(EnDragon* this, s32 arg1) {
 
     Animation_Change(&this->skelAnime, D_80B60744[arg1], 1.0f, phi_f0, this->unk_2D0, D_80B60754[this->unk_24C], -4.0f);
 }
+
+Color_RGBA8 D_80B60758[] = {
+    { 255, 255, 255, 255 },
+    { 150, 255, 255, 255 },
+    { 100, 255, 255, 255 },
+};
+
+Color_RGBA8 D_80B60764[] = {
+    { 150, 150, 150, 0 },
+    { 0, 100, 0, 255 },
+    { 0, 0, 255, 255 },
+};
 
 void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2) {
     static Vec3f D_80B60770 = { 0.0f, 0.0f, 0.0f };
@@ -441,19 +441,19 @@ void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-static Vec3f D_80B60788[] = {
+Vec3f D_80B60788[] = {
     { 1600.0f, 0.0f, 1400.0f }, { 1400.0f, 0.0f, 400.0f },  { 1800.0f, 0.0f, 1400.f },  { 1100.0f, -200.0f, 1500.0f },
     { 2000.0f, 0.0f, 1500.0f }, { 1900.0f, 0.0f, 1800.0f }, { 1700.0f, 0.0f, 1100.0f }, { 1700.0f, 0.0f, 1100.0f },
 };
 
-static Vec3f D_80B607E8[] = {
+Vec3f D_80B607E8[] = {
     { 300.0f, -100.0f, 1300.0f }, { 1500.0f, 0.0f, 2400.0f }, { 300.0f, -100.0f, 1300.0f }, { 1900.0f, 500.0f, 600.0f },
     { -1000.0f, 0.0f, 1000.0f },  { 1200.0f, 0.0f, 1500.0f }, { 1100.0f, 0.0f, 2000.0f },   { 1100.0f, 0.0f, 2000.0f },
 };
 
-static s16 D_80B60848[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
+s16 D_80B60848[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
 
-static s32 D_80B60858[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
+s32 D_80B60858[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
 
 void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
