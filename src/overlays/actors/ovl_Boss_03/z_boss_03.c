@@ -307,7 +307,7 @@ static ColliderJntSphInit sJntSphInit1 = {
     sJntSphElementsInit1,
 };
 
-// The limbs referenced here are not used. The position of those spheres is done manually on Boss03_PostLimbDraw
+// The limbs referenced here are not used. The spheres are positioned manually by Boss03_PostLimbDraw.
 static ColliderJntSphElementInit sJntSphElementsInit2[] = {
     {
         {
