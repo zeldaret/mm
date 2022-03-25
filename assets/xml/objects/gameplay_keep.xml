@@ -838,8 +838,11 @@
         <DList Name="gameplay_keep_DL_015DB0" Offset="0x15DB0" />
         <Texture Name="gameplay_keep_Tex_015E40" OutName="tex_015E40" Format="rgba16" Width="8" Height="8" Offset="0x15E40" />
         <DList Name="gameplay_keep_DL_015FA0" Offset="0x15FA0" />
-        <Texture Name="gameplay_keep_Tex_016060" OutName="tex_016060" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
-        <DList Name="gameplay_keep_DL_016360" Offset="0x16360" />
+
+        <!-- Bombchu -->
+        <Texture Name="gBombchuBodyTex" OutName="bombchu_body" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
+        <DList Name="gBombchuDL" Offset="0x16360" />
+        
         <Texture Name="gameplay_keep_Tex_0164D0" OutName="tex_0164D0" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
         <Texture Name="gameplay_keep_Tex_016CD0" OutName="tex_016CD0" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
         <Texture Name="gameplay_keep_Tex_0174D0" OutName="tex_0174D0" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
