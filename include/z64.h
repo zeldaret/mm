@@ -177,8 +177,8 @@ typedef struct {
         u8 schar[640];
         u16 wchar[640];
     } msgBuf;
-    /* 0x11D80 */ u8* messageStart;
-    /* 0x11D84 */ u8* messageEnd;
+    /* 0x11D80 */ u32 messageStart;
+    /* 0x11D84 */ u32 messageEnd;
     /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
 } Font; // size = 0x11D8C
 
@@ -799,7 +799,8 @@ typedef struct {
     /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
     /* 0x11F00 */ MsgCtx11F00* unk11F00;
     /* 0x11F04 */ u16 currentTextId;
-    /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
+    /* 0x11F06 */ UNK_TYPE1 pad11F06[0x2];
+    /* 0x11F08 */ u16 unk11F08;
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
@@ -816,7 +817,8 @@ typedef struct {
         u16 wchar[100];
     } decodedBuffer;
     /* 0x11FEC */ u16 msgBufPos;
-    /* 0x11FEE */ UNK_TYPE1 pad11FEE[0x4];
+    /* 0x11FEE */ s16 unk11FEE;
+    /* 0x11FF0 */ s16 unk11FF0;
     /* 0x11FF2 */ u16 unk11FF2;
     /* 0x11FF4 */ s16 unk11FF4;
     /* 0x11FF6 */ s16 unk11FF6;
