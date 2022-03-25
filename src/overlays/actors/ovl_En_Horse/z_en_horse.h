@@ -180,7 +180,7 @@ typedef struct EnHorse {
     /* 0x384 */ u16 cutsceneFlags;
     /* 0x388 */ s32 inRace;
     /* 0x38C */ struct EnIn* rider;
-    /* 0x390 */ UNK_TYPE1 unk390[0x4];
+    /* 0x390 */ UNK_TYPE1 unk_390[0x4];
     /* 0x394 */ u16 unk_394;
     /* 0x398 */ f32 unk_398;
     /* 0x39C */ s32 unk_39C;
@@ -193,7 +193,7 @@ typedef struct EnHorse {
     /* 0x3C8 */ Vec3f backRightHoof;
     /* 0x3D4 */ Vec3f backLeftHoof;
     /* 0x3E0 */ s32 unk_3E0;
-    /* 0x3E4 */ UNK_TYPE1 unk3E4[0x4];
+    /* 0x3E4 */ UNK_TYPE1 unk_3E4[0x4];
     /* 0x3E8 */ f32 unk_3E8;
     /* 0x3EC */ s16 unk_3EC;
     /* 0x3EE */ Vec3s jointTable[OBJECT_HA_1_LIMB_MAX];

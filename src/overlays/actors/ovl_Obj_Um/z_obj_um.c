@@ -296,7 +296,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     EnHorse* bandit2;
 
     spawnPoints = Lib_SegmentedToVirtual(path->points);
-    func_801A89A8(0x8003);
+    Audio_QueueSeqCmd(0x8003);
 
     bandit1 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y, spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
     this->bandit1 = bandit1;
@@ -313,8 +313,8 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit1->unk_55C = 0x28;
     bandit1->unk_560 = 0x28;
 
-    bandit1->unk_570 = D_801D15B0;
-    bandit1->unk_57C = D_801D15B0;
+    bandit1->unk_570 = gZeroVec3f;
+    bandit1->unk_57C = gZeroVec3f;
 
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
     bandit1->curRaceWaypoint = 1;
@@ -333,7 +333,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit2->unk_55C = 0x28;
     bandit2->unk_560 = 0x28;
 
-    bandit2->unk_57C = D_801D15B0;
+    bandit2->unk_57C = gZeroVec3f;
 
     bandit2->unk_588 = this->dyna.actor.shape.rot.y;
     bandit2->curRaceWaypoint = 2;
@@ -359,7 +359,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
         if (arg2->unk_550 == D_80B7C164[i].unk_00) {
             if (arg3->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
-                    if (D_80B7C164[i].unk_04 != 3 || ((mask = Player_GetMask(globalCtx)), PLAYER_MASK_CIRCUS_LEADERS_MASK != mask)) {
+                    if (D_80B7C164[i].unk_04 != 3 || ((mask = Player_GetMask(globalCtx)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
                         phi_s3 = D_80B7C164[i].unk_04;
                         phi_s4 = D_80B7C164[i].unk_08;
                         phi_f20 = D_80B7C164[i].unk_0C;
@@ -516,9 +516,9 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
             if (this->potsLife[potIndex] != 1) {
                 this->wasPotHit[potIndex] = true;
                 if (this->potsLife[potIndex] == 2) {
-                    func_8019F1C0(&this->potPos[potIndex], NA_SE_EV_MILK_POT_BROKEN);
+                    Audio_PlaySfxAtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_BROKEN);
                 } else {
-                    func_8019F1C0(&this->potPos[potIndex], NA_SE_EV_MILK_POT_DAMAGE);
+                    Audio_PlaySfxAtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_DAMAGE);
                 }
 
                 this->potsLife[potIndex]--;
@@ -565,7 +565,7 @@ s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
             s16 sp36 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &arg3->actor.world.pos) - this->dyna.actor.shape.rot.y;
 
             this->banditsCollisions[arg2].base.acFlags &= ~AC_HIT;
-            func_8019F1C0(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
+            Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
             arg3->unk_54C = 0xF;
 
             if (Math_SinS(sp36) > 0.0f) {
@@ -582,14 +582,16 @@ s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
             arg3->unk_564 = 1;
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                func_800BCB70(arg3->rider, 0x4000, 0xFF, 0, (s16) 0x28);
+                // TODO: remove cast?
+                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16) 0x28);
             }
         } else {
-            if (arg3->rider != 0) {
+            if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
-                func_800BCB70(arg3->rider, 0x4000, 0xFF, 0, (s16) 0x28);
+                // TODO: remove cast?
+                Actor_SetColorFilter(&arg3->rider->actor, 0x4000, 0xFF, 0, (s16) 0x28);
             }
-            func_8019F1C0(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
+            Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
     }
 
@@ -646,7 +648,7 @@ void ObjUm_SetupAction(ObjUm* this, ObjUmActionFunc actionFunc) {
 }
 
 void ObjUm_SetPlayerPosition(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     if (this->flags & OBJ_UM_FLAG_DRAWN_FLOOR) {
         player->actor.world.pos = this->unk_308;
@@ -655,13 +657,13 @@ void ObjUm_SetPlayerPosition(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_RotatePlayer(ObjUm* this, GlobalContext* globalCtx, s16 angle) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->actor.shape.rot.y = player->actor.world.rot.y = player->currentYaw = this->dyna.actor.shape.rot.y + angle;
 }
 
 void func_80B78EBC(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->actor.focus.rot.x = 0;
     player->actor.focus.rot.z = 0;
@@ -679,7 +681,7 @@ void func_80B78EBC(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_RotatePlayerView(ObjUm* this, GlobalContext* globalCtx, s16 angle) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->actor.focus.rot.y += angle;
 }
@@ -690,7 +692,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 sp54 = true;
     s32 i;
 
-    BcCheck3_BgActorInit(&this->dyna, 0);
+    DynaPolyActor_Init(&this->dyna, 0);
     this->unk_350 = 0;
 
     this->unk_2C4 = this->dyna.actor.world.pos;
@@ -700,7 +702,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     for (i = 0; i < 3; i++) {
         this->potsLife[i] = 5;
         this->wasPotHit[i] = false;
-        this->potPos[i] = D_801D15B0;
+        this->potPos[i] = gZeroVec3f;
     }
 
     this->donkey = NULL;
@@ -715,8 +717,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, NULL, 50.0f);
-    SkelAnime_InitSV(globalCtx, &this->skelAnime, &D_06011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
-    SkelAnime_ChangeAnimDefaultRepeat(&this->skelAnime, &D_06012CC0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011DF8, NULL, this->jointTable, this->morphTable, UM_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &D_06012CC0);
 
     this->wheelRot = 0;
     ObjUm_StopAnim(this, globalCtx);
@@ -799,14 +801,14 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
     }
 
-    this->unk_2F8 = this->unk_2FE = D_801D15BC;
+    this->unk_2F8 = this->unk_2FE = gZeroVec3s;
 
     if (sp54) {
-        BcCheck3_BgActorInit(&this->dyna, 0);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06007E20);
+        DynaPolyActor_Init(&this->dyna, 0);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06007E20);
     } else {
-        BcCheck3_BgActorInit(&this->dyna, 3);
-        BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06007F50);
+        DynaPolyActor_Init(&this->dyna, 3);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06007F50);
     }
 
     if (this->dyna.bgId == 0x32) {
@@ -833,10 +835,10 @@ void ObjUm_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     ObjUm* this = THIS;
     s32 i;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 
     for (i = 0; i < ARRAY_COUNT(this->potPos); i++) {
-        func_801A72CC(&this->potPos[i]);
+        Audio_StopSfxByPos(&this->potPos[i]);
     }
 
     Collider_DestroyCylinder(globalCtx, &this->banditsCollisions[0]);
@@ -871,7 +873,7 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
         case 0x33CF:
             gSaveContext.weekEventReg[0x1F] |= 0x40;
             if (globalCtx->msgCtx.choiceIndex == 0) {
-                player = PLAYER;
+                player = GET_PLAYER(globalCtx);
                 func_8019F208();
                 gSaveContext.weekEventReg[0x1F] |= 0x80;
                 globalCtx->nextEntranceIndex = 0x64B0;
@@ -928,7 +930,7 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
     s32 ret = false;
 
-    switch (func_80152498(msgCtx)) {
+    switch (Message_GetState(msgCtx)) {
         case 2:
             // TODO: test
             func_80B79560(globalCtx, this, arg2, this->dyna.actor.textId);
@@ -937,7 +939,7 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
         case 4:
         case 5:
             if (func_80147624(globalCtx) && func_80B795A0(globalCtx, this, arg2)) {
-                msgCtx->unk11F22 = 0x43;
+                msgCtx->msgMode = 0x43;
                 ret = true;
             }
             break;
@@ -974,7 +976,7 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 2) {
-        func_801518B0(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
+        Message_StartTextbox(globalCtx, this->dyna.actor.textId, &this->dyna.actor);
         *arg3 = 1;
         return 0;
     }
@@ -984,7 +986,7 @@ s32 func_80B7984C(GlobalContext* globalCtx, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if (func_800B84D0(&this->dyna.actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         *arg3 = 1;
         return 1;
     }
@@ -1028,10 +1030,10 @@ s32 func_80B79A24(s32 arg0) {
 
 // 0x80b79a30
 void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->dyna.actor.flags |= 1;
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
     ObjUm_UpdateAnim(this, globalCtx, 2);
     this->flags |= OBJ_UM_FLAG_WAITING;
     if (gSaveContext.time > CLOCK_TIME(18, 0) && gSaveContext.time <= CLOCK_TIME(19, 0)) {
@@ -1192,7 +1194,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         default:
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+            Actor_MoveWithGravity(&this->dyna.actor);
             break;
     }
 }
@@ -1235,7 +1237,7 @@ void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     ObjUm_SetPlayerPosition(this, globalCtx);
     this->flags |= OBJ_UM_FLAG_0100;
@@ -1297,7 +1299,7 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
             }
 
             this->lastTime = gSaveContext.time;
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+            Actor_MoveWithGravity(&this->dyna.actor);
             ObjUm_PreMilkRunDialogueHandler(this, globalCtx);
             break;
     }
@@ -1313,7 +1315,7 @@ void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     ObjUm_SetPlayerPosition(this, globalCtx);
     this->flags |= OBJ_UM_FLAG_0004;
@@ -1361,7 +1363,7 @@ void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         default:
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+            Actor_MoveWithGravity(&this->dyna.actor);
             func_80B78DF0(this, globalCtx);
             break;
     }
@@ -1415,12 +1417,12 @@ void func_80B7A614(ObjUm* this, GlobalContext* globalCtx) {
         }
     }
 
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+    Actor_MoveWithGravity(&this->dyna.actor);
     func_80B78DF0(this, globalCtx);
 }
 
 void func_80B7A7AC(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     this->unk_4DC = 0;
     this->arePotsBroken = false;
@@ -1459,11 +1461,11 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
         // "We'll go through here as fast as we can"
         case 0x33BB:
-            if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
+            if (IS_ZERO(this->skelAnime.curFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->skelAnime.transCurrentFrame)) {
+            } else if (IS_ZERO(this->skelAnime.morphWeight)) {
                 this->unk_4CC = 2;
                 this->mouthTexIndex = 2;
             } else {
@@ -1476,11 +1478,11 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
         // "Chase pursuers with your arrows"
         case 0x33BC:
-            if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
+            if (IS_ZERO(this->skelAnime.curFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->skelAnime.transCurrentFrame)) {
+            } else if (IS_ZERO(this->skelAnime.morphWeight)) {
                 this->unk_4CC = 2;
                 this->mouthTexIndex = 2;
             } else {
@@ -1492,11 +1494,11 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
         // "Understand?"
         case 0x33BD:
-            if (IS_ZERO(this->skelAnime.animCurrentFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
+            if (IS_ZERO(this->skelAnime.curFrame) && !(this->flags & OBJ_UM_FLAG_1000)) {
                 this->flags |= OBJ_UM_FLAG_1000;
                 this->unk_4CC = 4;
                 this->mouthTexIndex = 0;
-            } else if (IS_ZERO(this->skelAnime.transCurrentFrame)) {
+            } else if (IS_ZERO(this->skelAnime.morphWeight)) {
                 this->unk_4CC = 2;
             } else {
                 this->unk_4CC = 5;
@@ -1514,7 +1516,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
         case 0x33BF:
             this->unk_4D8++;
-            if (IS_ZERO(this->skelAnime.transCurrentFrame) && this->unk_4D8 >= 6) {
+            if (IS_ZERO(this->skelAnime.morphWeight) && this->unk_4D8 >= 6) {
                 this->unk_4CC = 0;
                 this->mouthTexIndex = 0;
             } else {
@@ -1556,7 +1558,7 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
             }
 
             this->lastTime = gSaveContext.time;
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+            Actor_MoveWithGravity(&this->dyna.actor);
             func_80B7A860(this, globalCtx);
             break;
     }
@@ -1564,7 +1566,7 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags1 |= 0x20;
     ObjUm_SetPlayerPosition(this, globalCtx);
@@ -1581,7 +1583,7 @@ void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags1 |= 0x20;
     ObjUm_SetPlayerPosition(this, globalCtx);
@@ -1592,7 +1594,7 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
 
     if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.weekEventReg[0x3B] & 0x02)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        func_801A3F54(0);
+        Audio_SetCutsceneFlag(0);
         gSaveContext.weekEventReg[0x3B] |= 0x02;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         globalCtx->nextEntranceIndex = 0x5400;
@@ -1602,11 +1604,11 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
         // A bit more than an hour
         gSaveContext.time += 0xAAC;
     }
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+    Actor_MoveWithGravity(&this->dyna.actor);
 }
 
 void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
 
     player->stateFlags1 |= 0x20;
     ObjUm_SetPlayerPosition(this, globalCtx);
@@ -1624,7 +1626,7 @@ void ObjUm_PostMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
 
 void ObjUm_TerminaFieldIdle(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    SkelAnime_FrameUpdateMatrix(&this->skelAnime);
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
@@ -1644,14 +1646,14 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
         this->unk_2D0 = this->unk_2C4;
         this->unk_2E8 = this->unk_2DC;
 
-        this->unk_2D0.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2C4);
+        this->unk_2D0.y = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp44, &this->unk_2C4);
         if (this->unk_2D0.y == BGCHECK_Y_MIN) {
             this->unk_2D0.y = this->dyna.actor.floorHeight;
         }
 
         if (1) { }
 
-        this->unk_2E8.y = func_800C3FA0(&globalCtx->colCtx, &sp44, &this->unk_2DC);
+        this->unk_2E8.y = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp44, &this->unk_2DC);
         if (this->unk_2E8.y == BGCHECK_Y_MIN) {
             this->unk_2E8.y = this->dyna.actor.floorHeight;
         }
@@ -1670,7 +1672,7 @@ void func_80B7AF30(ObjUm* this, GlobalContext* globalCtx) {
 }
 
 void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx) {
-    SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, &D_06012CC0);
+    Animation_PlayOnce(&this->skelAnime, &D_06012CC0);
     this->unk_304 = 0;
 }
 
@@ -1693,15 +1695,15 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
     } else if (index == 2) {
         animPlaybackSpeed = 1.0f;
     }
-    this->skelAnime.animPlaybackSpeed = animPlaybackSpeed;
+    this->skelAnime.playSpeed = animPlaybackSpeed;
 
     if (this->flags & OBJ_UM_FLAG_0800) {
-        this->skelAnime.animPlaybackSpeed = 1.0f;
+        this->skelAnime.playSpeed = 1.0f;
         index = -1;
     }
 
     changeAnim = index != this->unk_304;
-    if ((SkelAnime_FrameUpdateMatrix(&this->skelAnime) != 0) || changeAnim) {
+    if ((SkelAnime_Update(&this->skelAnime) != 0) || changeAnim) {
         this->unk_304 = index;
 
         if (index != -1) {
@@ -1710,9 +1712,9 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
             }
 
             if (changeAnim) {
-                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, D_80B7C25C[index].anim, -3.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, D_80B7C25C[index].anim, -3.0f);
             } else {
-                SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, D_80B7C25C[index].anim);
+                Animation_PlayOnce(&this->skelAnime, D_80B7C25C[index].anim);
             }
         } else {
             EnHorse* donkey = this->donkey;
@@ -1723,10 +1725,10 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
 
             if (changeAnim) {
                 temp = 3 - index;
-                SkelAnime_ChangeAnimTransitionStop(&this->skelAnime, D_80B7C25C[temp].anim, -10.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, D_80B7C25C[temp].anim, -10.0f);
             } else {
                 temp = 3 - index;
-                SkelAnime_ChangeAnimDefaultStop(&this->skelAnime, D_80B7C25C[temp].anim);
+                Animation_PlayOnce(&this->skelAnime, D_80B7C25C[temp].anim);
             }
         }
     }
@@ -1735,7 +1737,7 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
         this->unk_420 = this->wheelRot / 0x199A;
         // Required to match
         if (!&D_80B7C25C[0]) {}
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CART_WHEEL);
     }
 }
 
@@ -1818,7 +1820,7 @@ void ObjUm_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     ObjUm* this = THIS;
-    Player* player = PLAYER;
+    Player* player = GET_PLAYER(globalCtx);
     s32 pad;
     s16 temp_v0_3;
     Vec3f sp5C = {4223.0f, -979.0f, 4098.0f};
@@ -1842,14 +1844,14 @@ s32 ObjUm_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         if (this->flags & OBJ_UM_FLAG_MOVING) {
             rot->x = -this->wheelRot;
         }
-        SysMatrix_MultiplyVector3fByState(&sp5C, &this->unk_2C4);
+        Matrix_MultiplyVector3fByState(&sp5C, &this->unk_2C4);
     } else if (limbIndex == UM_LIMB_WAGGON_LEFT_WHEEL) {
         if (this->flags & OBJ_UM_FLAG_MOVING) {
             rot->x = this->wheelRot;
         }
-        SysMatrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
+        Matrix_MultiplyVector3fByState(&sp50, &this->unk_2DC);
     } else if ((limbIndex == UM_LIMB_CREMIA_HEAD) && (this->flags & OBJ_UM_FLAG_WAITING)) {
-        if ((func_8013D5E8(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) && (this->dyna.actor.xzDistToPlayer < 500.0f)) {
+        if ((SubS_AngleDiffLessEqual(this->dyna.actor.shape.rot.y, 0x4E20, this->dyna.actor.yawTowardsPlayer) != 0) && (this->dyna.actor.xzDistToPlayer < 500.0f)) {
             s16 sp3E;
             Vec3f sp30 = player->actor.world.pos;
 
@@ -1931,7 +1933,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         1070.0f,
         2100.0f
     };
-    Vec3f spC0 = D_801D15B0;
+    Vec3f spC0 = gZeroVec3f;
     Vec3f calcPotPos;
     f32 spB0;
 
@@ -1940,14 +1942,14 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
         Vec3f spA4 = {2000.0f, 1070.0f, 0.0f};
 
-        SysMatrix_MultiplyVector3fByState(&spA4, &this->unk_308);
+        Matrix_MultiplyVector3fByState(&spA4, &this->unk_308);
         this->flags |= OBJ_UM_FLAG_DRAWN_FLOOR;
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
         Vec3f sp98 = {2500.0f, 200.0f, 0.0f};
 
-        SysMatrix_MultiplyVector3fByState(&sp98, &this->cartBedPos);
+        Matrix_MultiplyVector3fByState(&sp98, &this->cartBedPos);
     }
 
     if (limbIndex == UM_LIMB_WAGGON_CART_BED) {
@@ -1974,12 +1976,12 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
                 sp80.y = -0x4000;
             }
 
-            SysMatrix_StatePush();
-            SysMatrix_RotateAndTranslateState(&sp88, &sp80);
+            Matrix_StatePush();
+            Matrix_JointPosition(&sp88, &sp80);
             mtx_s3 = Matrix_NewMtx(gfxCtx);
             potPos = &this->potPos[i];
-            SysMatrix_MultiplyVector3fByState(&spC0, &calcPotPos);
-            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->projectionMatrix, &calcPotPos, potPos, &spB0);
+            Matrix_MultiplyVector3fByState(&spC0, &calcPotPos);
+            SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, &calcPotPos, potPos, &spB0);
 
             if (this->wasPotHit[i]) {
                 this->wasPotHit[i] = false;
@@ -1989,7 +1991,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
                     EffectSsHitMark_SpawnFixedScale(globalCtx, 0, &calcPotPos);
                 }
             }
-            SysMatrix_StatePop();
+            Matrix_StatePop();
 
             if (mtx_s3 != NULL) {
                 if (globalCtx) {}
@@ -2013,7 +2015,7 @@ void ObjUm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
     }
     if (limbIndex == UM_LIMB_CREMIA_HEAD) {
-        SysMatrix_GetStateTranslation(&this->dyna.actor.focus.pos);
+        Matrix_GetStateTranslation(&this->dyna.actor.focus.pos);
     }
 }
 
@@ -2026,9 +2028,11 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
     MtxF sp80;
     MtxF sp40;
 
-    VEC_SET(sp108, cartBedPos->x, cartBedPos->y + 1.0f, cartBedPos->z);
+    sp108.x = cartBedPos->x;
+    sp108.y = cartBedPos->y + 1.0f;
+    sp108.z = cartBedPos->z;
 
-    temp = func_800C4000(globalCtx, &globalCtx->colCtx, &sp104, &sp108);
+    temp = BgCheck_EntityRaycastFloor2(globalCtx, &globalCtx->colCtx, &sp104, &sp108);
     if (sp104 != NULL) {
         func_800C0094(sp104, cartBedPos->x, temp, cartBedPos->z, &spC0);
     } else {
@@ -2036,14 +2040,14 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, GlobalCon
     }
 
     SkinMatrix_MulYRotation( &spC0, arg1);
-    SkinMatrix_SetScale(&sp80, arg2->x*10, 1.0f, arg2->z*10);
+    SkinMatrix_SetScale(&sp80, arg2->x, 1.0f, arg2->z);
     SkinMatrix_MtxFMtxFMult(&spC0, &sp80, &sp40);
 
     sp100 = SkinMatrix_MtxFToNewMtx(globalCtx->state.gfxCtx, &sp40);
     if (sp100 != NULL) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        gSPMatrix(POLY_OPA_DISP++, &D_801D1DE0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
         gSPMatrix(POLY_OPA_DISP++, sp100, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -2235,7 +2239,7 @@ void ObjUm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp34;
 
     this->flags |= OBJ_UM_FLAG_0001;
-    SkelAnime_DrawSV(globalCtx, this->skelAnime.skeleton, this->skelAnime.limbDrawTbl, this->skelAnime.dListCount, ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, ObjUm_OverrideLimbDraw, ObjUm_PostLimbDraw, &this->dyna.actor);
     sp34.x = 0.45f;
     sp34.y = 0.0f;
     sp34.z = 0.7f;
