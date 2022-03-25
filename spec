@@ -3325,8 +3325,7 @@ beginseg
     name "ovl_En_Guard_Nuts"
     compress
     include "build/src/overlays/actors/ovl_En_Guard_Nuts/z_en_guard_nuts.o"
-    include "build/data/ovl_En_Guard_Nuts/ovl_En_Guard_Nuts.data.o"
-    include "build/data/ovl_En_Guard_Nuts/ovl_En_Guard_Nuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Guard_Nuts/ovl_En_Guard_Nuts_reloc.o"
 endseg
 
 beginseg
