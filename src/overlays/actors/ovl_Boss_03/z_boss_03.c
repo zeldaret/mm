@@ -2519,7 +2519,7 @@ void Boss03_SeaweedUpdate(Actor* thisx, GlobalContext* globalCtx) {
             disturbanceFactor = sGyorgBossInstance->actor.speedXZ * 5.0f + 150.0f;
             if (maxBendSpeed > 0x1000) {
                 maxBendSpeed = 0x1000;
-            } else if (phi_s0 < 0x100) {
+            } else if (maxBendSpeed < 0x100) {
                 maxBendSpeed = 0x0100;
             }
 
