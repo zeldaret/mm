@@ -205,32 +205,10 @@ static Color_RGBA8 D_80B60764[] = {
     { 0, 0, 255, 255 },
 };
 
-static Vec3f D_80B60770 = { 0.0f, 0.0f, 0.0f };
-static Vec3f D_80B6077C = { 0.0f, 0.1f, 0.0f };
-
-static Vec3f D_80B60788[] = {
-    { 1600.0f, 0.0f, 1400.0f }, { 1400.0f, 0.0f, 400.0f },  { 1800.0f, 0.0f, 1400.f },  { 1100.0f, -200.0f, 1500.0f },
-    { 2000.0f, 0.0f, 1500.0f }, { 1900.0f, 0.0f, 1800.0f }, { 1700.0f, 0.0f, 1100.0f }, { 1700.0f, 0.0f, 1100.0f },
-};
-
-static Vec3f D_80B607E8[] = {
-    { 300.0f, -100.0f, 1300.0f }, { 1500.0f, 0.0f, 2400.0f }, { 300.0f, -100.0f, 1300.0f }, { 1900.0f, 500.0f, 600.0f },
-    { -1000.0f, 0.0f, 1000.0f },  { 1200.0f, 0.0f, 1500.0f }, { 1100.0f, 0.0f, 2000.0f },   { 1100.0f, 0.0f, 2000.0f },
-};
-
-static s16 D_80B60848[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
-
-static s32 D_80B60858[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
-
-static Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
-
-extern FlexSkeletonHeader D_06004398;
-extern AnimationHeader D_060048B8;
-
 void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnDragon* this = THIS;
 
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06004398, &D_060048B8, this->jointTable, this->morphTable, 0x10);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_utubo_Skel_004398, &object_utubo_Anim_0048B8, this->jointTable, this->morphTable, 0x10);
     this->actor.colChkInfo.health = 4;
     this->actor.colChkInfo.damageTable = &D_80B605F4;
     this->actor.targetMode = 0xA;
@@ -284,9 +262,6 @@ void func_80B5EAA0(EnDragon* this, s32 arg1) {
     Animation_Change(&this->skelAnime, D_80B60744[arg1], 1.0f, phi_f0, this->unk_2D0, D_80B60754[this->unk_24C], -4.0f);
 }
 
-void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5EB40.s")
-/*
 void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2) {
     static Vec3f D_80B60770 = { 0.0f, 0.0f, 0.0f };
     static Vec3f D_80B6077C = { 0.0f, 0.1f, 0.0f };
@@ -317,7 +292,22 @@ void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2) {
                                           &D_80B60764[phi_s1], temp, 30, 0);
     }
 }
-*/
+
+static Vec3f D_80B60788[] = {
+    { 1600.0f, 0.0f, 1400.0f }, { 1400.0f, 0.0f, 400.0f },  { 1800.0f, 0.0f, 1400.f },  { 1100.0f, -200.0f, 1500.0f },
+    { 2000.0f, 0.0f, 1500.0f }, { 1900.0f, 0.0f, 1800.0f }, { 1700.0f, 0.0f, 1100.0f }, { 1700.0f, 0.0f, 1100.0f },
+};
+
+static Vec3f D_80B607E8[] = {
+    { 300.0f, -100.0f, 1300.0f }, { 1500.0f, 0.0f, 2400.0f }, { 300.0f, -100.0f, 1300.0f }, { 1900.0f, 500.0f, 600.0f },
+    { -1000.0f, 0.0f, 1000.0f },  { 1200.0f, 0.0f, 1500.0f }, { 1100.0f, 0.0f, 2000.0f },   { 1100.0f, 0.0f, 2000.0f },
+};
+
+static s16 D_80B60848[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
+
+static s32 D_80B60858[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
+
+static Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
 
 void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
     if (this->unk_2B4 == 0) {
