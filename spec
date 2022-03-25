@@ -623,8 +623,6 @@ beginseg
     include "build/src/code/audio/audio_heap.o"
     include "build/data/code/audio_heap.bss.o"
     include "build/src/code/audio/audio_load.o"
-    include "build/data/code/audio_load.data.o"
-    include "build/data/code/audio_load.bss.o"
     include "build/src/code/audio/code_80192BE0.o"
     include "build/data/code/code_80192BE0.data.o"
     include "build/src/code/audio/audio_dcache.o"
@@ -771,7 +769,7 @@ beginseg
     name "ovl_En_Door"
     compress
     include "build/src/overlays/actors/ovl_En_Door/z_en_door.o"
-    include "build/data/ovl_En_Door/ovl_En_Door.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Door/ovl_En_Door_reloc.o"
 endseg
 
 beginseg
@@ -1319,11 +1317,7 @@ beginseg
     name "ovl_En_Fishing"
     compress
     include "build/src/overlays/actors/ovl_En_Fishing/z_en_fishing.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Fishing/ovl_En_Fishing_reloc.o"
-#else
-    include "build/data/ovl_En_Fishing/ovl_En_Fishing.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -2308,9 +2302,7 @@ beginseg
     name "ovl_Obj_Grass"
     compress
     include "build/src/overlays/actors/ovl_Obj_Grass/z_obj_grass.o"
-    include "build/data/ovl_Obj_Grass/ovl_Obj_Grass.data.o"
-    include "build/data/ovl_Obj_Grass/ovl_Obj_Grass.bss.o"
-    include "build/data/ovl_Obj_Grass/ovl_Obj_Grass.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Grass/ovl_Obj_Grass_reloc.o"
 endseg
 
 beginseg
@@ -2627,8 +2619,11 @@ beginseg
     name "ovl_Obj_Spinyroll"
     compress
     include "build/src/overlays/actors/ovl_Obj_Spinyroll/z_obj_spinyroll.o"
-    include "build/data/ovl_Obj_Spinyroll/ovl_Obj_Spinyroll.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Spinyroll/ovl_Obj_Spinyroll_reloc.o"
+#else
     include "build/data/ovl_Obj_Spinyroll/ovl_Obj_Spinyroll.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -2650,8 +2645,7 @@ beginseg
     name "ovl_Obj_Skateblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Skateblock/z_obj_skateblock.o"
-    include "build/data/ovl_Obj_Skateblock/ovl_Obj_Skateblock.data.o"
-    include "build/data/ovl_Obj_Skateblock/ovl_Obj_Skateblock.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Skateblock/ovl_Obj_Skateblock_reloc.o"
 endseg
 
 beginseg
@@ -2796,8 +2790,7 @@ beginseg
     name "ovl_En_Elfgrp"
     compress
     include "build/src/overlays/actors/ovl_En_Elfgrp/z_en_elfgrp.o"
-    include "build/data/ovl_En_Elfgrp/ovl_En_Elfgrp.data.o"
-    include "build/data/ovl_En_Elfgrp/ovl_En_Elfgrp.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Elfgrp/ovl_En_Elfgrp_reloc.o"
 endseg
 
 beginseg
@@ -3626,8 +3619,7 @@ beginseg
     name "ovl_En_Tsn"
     compress
     include "build/src/overlays/actors/ovl_En_Tsn/z_en_tsn.o"
-    include "build/data/ovl_En_Tsn/ovl_En_Tsn.data.o"
-    include "build/data/ovl_En_Tsn/ovl_En_Tsn.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tsn/ovl_En_Tsn_reloc.o"
 endseg
 
 beginseg
@@ -3979,8 +3971,11 @@ beginseg
     name "ovl_Obj_Spidertent"
     compress
     include "build/src/overlays/actors/ovl_Obj_Spidertent/z_obj_spidertent.o"
-    include "build/data/ovl_Obj_Spidertent/ovl_Obj_Spidertent.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Spidertent/ovl_Obj_Spidertent_reloc.o"
+#else
     include "build/data/ovl_Obj_Spidertent/ovl_Obj_Spidertent.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -4690,8 +4685,7 @@ beginseg
     name "ovl_En_Ah"
     compress
     include "build/src/overlays/actors/ovl_En_Ah/z_en_ah.o"
-    include "build/data/ovl_En_Ah/ovl_En_Ah.data.o"
-    include "build/data/ovl_En_Ah/ovl_En_Ah.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ah/ovl_En_Ah_reloc.o"
 endseg
 
 beginseg
