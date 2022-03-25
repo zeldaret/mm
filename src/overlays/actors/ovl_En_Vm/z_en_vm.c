@@ -144,8 +144,8 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 25, 100, MASS_IMMOVABLE };
 
 TexturePtr D_808CD58C[] = {
-    gameplay_keep_Tex_03F300, gameplay_keep_Tex_03FB00, gameplay_keep_Tex_040300, gameplay_keep_Tex_040B00,
-    gameplay_keep_Tex_041300, gameplay_keep_Tex_041B00, gameplay_keep_Tex_042300, gameplay_keep_Tex_042B00,
+    gEffEnemyDeathFlame1Tex, gEffEnemyDeathFlame2Tex, gEffEnemyDeathFlame3Tex, gEffEnemyDeathFlame4Tex,
+    gEffEnemyDeathFlame5Tex, gEffEnemyDeathFlame6Tex, gEffEnemyDeathFlame7Tex, gEffEnemyDeathFlame8Tex,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -533,7 +533,7 @@ void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetPrimColor(&gfx[3], 0, 0, 255, 255, 255, 168);
         gDPSetEnvColor(&gfx[4], 0, 0, 255, 0);
         gSPSegment(&gfx[5], 0x08, D_808CD58C[globalCtx->gameplayFrames & 7]);
-        gSPDisplayList(&gfx[6], gameplay_keep_DL_044300);
+        gSPDisplayList(&gfx[6], gEffEnemyDeathFlameDL);
 
         POLY_XLU_DISP = &gfx[7];
     }

@@ -1071,17 +1071,17 @@
         <Texture Name="gameplay_keep_Tex_03E630" OutName="tex_03E630" Format="i4" Width="32" Height="96" Offset="0x3E630" />
         <Texture Name="gameplay_keep_Tex_03EC30" OutName="tex_03EC30" Format="i4" Width="32" Height="96" Offset="0x3EC30" />
         <DList Name="gameplay_keep_DL_03F230" Offset="0x3F230" />
-        <Texture Name="gameplay_keep_Tex_03F300" OutName="tex_03F300" Format="i8" Width="32" Height="64" Offset="0x3F300" />
-        <Texture Name="gameplay_keep_Tex_03FB00" OutName="tex_03FB00" Format="i8" Width="32" Height="64" Offset="0x3FB00" />
-        <Texture Name="gameplay_keep_Tex_040300" OutName="tex_040300" Format="i8" Width="32" Height="64" Offset="0x40300" />
-        <Texture Name="gameplay_keep_Tex_040B00" OutName="tex_040B00" Format="i8" Width="32" Height="64" Offset="0x40B00" />
-        <Texture Name="gameplay_keep_Tex_041300" OutName="tex_041300" Format="i8" Width="32" Height="64" Offset="0x41300" />
-        <Texture Name="gameplay_keep_Tex_041B00" OutName="tex_041B00" Format="i8" Width="32" Height="64" Offset="0x41B00" />
-        <Texture Name="gameplay_keep_Tex_042300" OutName="tex_042300" Format="i8" Width="32" Height="64" Offset="0x42300" />
-        <Texture Name="gameplay_keep_Tex_042B00" OutName="tex_042B00" Format="i8" Width="32" Height="64" Offset="0x42B00" />
-        <Texture Name="gameplay_keep_Tex_043300" OutName="tex_043300" Format="i8" Width="32" Height="64" Offset="0x43300" />
-        <Texture Name="gameplay_keep_Tex_043B00" OutName="tex_043B00" Format="i8" Width="32" Height="64" Offset="0x43B00" />
-        <DList Name="gameplay_keep_DL_044300" Offset="0x44300" />
+        <Texture Name="gEffEnemyDeathFlame1Tex" OutName="eff_enemy_death_flame_1" Format="i8" Width="32" Height="64" Offset="0x3F300" />
+        <Texture Name="gEffEnemyDeathFlame2Tex" OutName="eff_enemy_death_flame_2" Format="i8" Width="32" Height="64" Offset="0x3FB00" />
+        <Texture Name="gEffEnemyDeathFlame3Tex" OutName="eff_enemy_death_flame_3" Format="i8" Width="32" Height="64" Offset="0x40300" />
+        <Texture Name="gEffEnemyDeathFlame4Tex" OutName="eff_enemy_death_flame_4" Format="i8" Width="32" Height="64" Offset="0x40B00" />
+        <Texture Name="gEffEnemyDeathFlame5Tex" OutName="eff_enemy_death_flame_5" Format="i8" Width="32" Height="64" Offset="0x41300" />
+        <Texture Name="gEffEnemyDeathFlame6Tex" OutName="eff_enemy_death_flame_6" Format="i8" Width="32" Height="64" Offset="0x41B00" />
+        <Texture Name="gEffEnemyDeathFlame7Tex" OutName="eff_enemy_death_flame_7" Format="i8" Width="32" Height="64" Offset="0x42300" />
+        <Texture Name="gEffEnemyDeathFlame8Tex" OutName="eff_enemy_death_flame_8" Format="i8" Width="32" Height="64" Offset="0x42B00" />
+        <Texture Name="gEffEnemyDeathFlame9Tex" OutName="eff_enemy_death_flame_9" Format="i8" Width="32" Height="64" Offset="0x43300" />
+        <Texture Name="gEffEnemyDeathFlame10Tex" OutName="eff_enemy_death_flame_10" Format="i8" Width="32" Height="64" Offset="0x43B00" />
+        <DList Name="gEffEnemyDeathFlameDL" Offset="0x44300" />
         <Texture Name="gameplay_keep_Tex_0443B0" OutName="tex_0443B0" Format="i8" Width="32" Height="32" Offset="0x443B0" />
         <Texture Name="gameplay_keep_Tex_0447B0" OutName="tex_0447B0" Format="i8" Width="32" Height="32" Offset="0x447B0" />
         <Texture Name="gameplay_keep_Tex_044BB0" OutName="tex_044BB0" Format="i8" Width="32" Height="32" Offset="0x44BB0" />
