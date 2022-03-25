@@ -2782,7 +2782,7 @@ void func_80168DAC(GlobalContext* globalCtx);
 void Play_Update(GlobalContext* globalCtx);
 s32 func_801690CC(GlobalContext* globalCtx);
 f32 func_80169100(GlobalContext* globalCtx, MtxF* mtx, CollisionPoly** arg2, s32* arg3, Vec3f* feetPosPtr);
-// void func_801691F0(void);
+void func_801691F0(GlobalContext* globalCtx, MtxF* mtx, Vec3f* arg2);
 void* Play_LoadScene(GlobalContext* globalCtx, RomFile* entry);
 void func_8016927C(GlobalContext* globalCtx, s16 sParm2);
 // void func_801692C4(GlobalContext* globalCtx, UNK_TYPE1 uParm2);

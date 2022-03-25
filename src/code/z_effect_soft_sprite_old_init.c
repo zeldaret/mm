@@ -288,7 +288,7 @@ void EffectSsBomb2_SpawnLayered(GlobalContext* globalCtx, Vec3f* pos, Vec3f* vel
 // EffectSsBlast Spawn Functions
 
 void EffectSsBlast_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, Color_RGBA8* primColor,
-                         Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 sclaeStepDecay, s16 life) {
+                         Color_RGBA8* envColor, s16 scale, s16 scaleStep, s16 scaleStepDecay, s16 life) {
     EffectSsBlastInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -298,7 +298,7 @@ void EffectSsBlast_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     Color_RGBA8_Copy(&initParams.envColor, envColor);
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
-    initParams.sclaeStepDecay = sclaeStepDecay;
+    initParams.scaleStepDecay = scaleStepDecay;
     initParams.life = life;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_BLAST, 128, &initParams);
