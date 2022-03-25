@@ -6,7 +6,7 @@
 
 #include "z_en_girla.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnGirlA*)thisx)
 
@@ -159,8 +159,8 @@ void EnGirlA_SetupAction(EnGirlA* this, EnGirlAActionFunc action) {
 void EnGirlA_InitObjIndex(EnGirlA* this, GlobalContext* globalCtx) {
     s16 params = this->actor.params;
 
-    //! @bug: Condition is impossible
-    if (params >= 43 && params < 0) {
+    //! @bug: Condition is impossible, && should be an ||
+    if (params >= SI_MAX && params < SI_POTION_RED_1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -185,7 +185,7 @@ void EnGirlA_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -195,7 +195,7 @@ s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -208,7 +208,7 @@ s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
     if (!(gSaveContext.weekEventReg[53] & 8)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (!(gSaveContext.weekEventReg[53] & 0x10)) {
@@ -257,7 +257,7 @@ s32 EnGirlA_CanBuyShieldHero(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this) {
-    if (CUR_CAPACITY(UPG_STICK) != 0 && AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICK)) {
+    if (CUR_CAPACITY(UPG_STICKS) != 0 && AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS)) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -366,7 +366,7 @@ s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
@@ -377,24 +377,24 @@ s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this) {
 
 void EnGirlA_BuyBottleItem(GlobalContext* globalCtx, EnGirlA* this) {
     switch (this->actor.params) {
-        case 0:
-        case 10:
-        case 18:
-        case 29:
-        case 32:
-        case 35:
+        case SI_POTION_RED_1:
+        case SI_POTION_RED_2:
+        case SI_POTION_RED_3:
+        case SI_POTION_RED_4:
+        case SI_POTION_RED_5:
+        case SI_POTION_RED_6:
             Item_Give(globalCtx, ITEM_POTION_RED);
             break;
-        case 1:
-        case 5:
-        case 14:
+        case SI_POTION_GREEN_1:
+        case SI_POTION_GREEN_2:
+        case SI_POTION_GREEN_3:
             Item_Give(globalCtx, ITEM_POTION_GREEN);
             break;
-        case 2:
+        case SI_POTION_BLUE:
             Item_Give(globalCtx, ITEM_POTION_BLUE);
             break;
-        case 3:
-        case 11:
+        case SI_FAIRY_1:
+        case SI_FAIRY_2:
             Item_Give(globalCtx, ITEM_FAIRY);
             break;
     }
@@ -538,7 +538,7 @@ void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx) {
     ShopItemEntry* shopItem = &sShopItemEntries[params];
 
     if (Object_IsLoaded(&globalCtx->objectCtx, this->objIndex)) {
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
         this->actor.objBankIndex = this->objIndex;
         this->actor.textId = shopItem->descriptionTextId;
         this->choiceTextId = shopItem->choiceTextId;
@@ -558,7 +558,7 @@ void EnGirlA_InitalUpdate(EnGirlA* this, GlobalContext* globalCtx) {
         this->itemParams = shopItem->params;
         this->drawFunc = shopItem->drawFunc;
         this->getItemDrawId = shopItem->getItemDrawId;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.25f);
         this->actor.shape.yOffset = 24.0f;
         this->actor.shape.shadowScale = 4.0f;
@@ -579,7 +579,7 @@ void EnGirlA_Update2(EnGirlA* this, GlobalContext* globalCtx) {
     this->actor.shape.shadowScale = 4.0f;
     EnGirlA_TrySetMaskItemDescription(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 5.0f);
+    Actor_SetFocus(&this->actor, 5.0f);
     this->actor.shape.rot.x = 0;
     if (this->isSelected) {
         this->rotY += 0x1F4;

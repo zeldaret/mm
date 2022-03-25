@@ -1,0 +1,61 @@
+﻿<Root>
+    <File Name="object_tl" Segment="6">
+        <Animation Name="object_tl_Anim_000440" Offset="0x440" />
+        <Animation Name="object_tl_Anim_0008B4" Offset="0x8B4" />
+        <Animation Name="object_tl_Anim_000AF4" Offset="0xAF4" />
+        <Animation Name="object_tl_Anim_000B30" Offset="0xB30" />
+        <DList Name="object_tl_DL_001550" Offset="0x1550" />
+        <DList Name="object_tl_DL_001800" Offset="0x1800" />
+        <DList Name="object_tl_DL_0018E0" Offset="0x18E0" />
+        <Limb Name="object_tl_Standardlimb_001A20" Type="Standard" EnumName="OBJECT_TL_1_LIMB_01" Offset="0x1A20" />
+        <Limb Name="object_tl_Standardlimb_001A2C" Type="Standard" EnumName="OBJECT_TL_1_LIMB_02" Offset="0x1A2C" />
+        <Limb Name="object_tl_Standardlimb_001A38" Type="Standard" EnumName="OBJECT_TL_1_LIMB_03" Offset="0x1A38" />
+        <Skeleton Name="object_tl_Skel_001A50" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TL_1_LIMB_NONE" LimbMax="OBJECT_TL_1_LIMB_MAX" EnumName="object_tl_1_Limbs" Offset="0x1A50" />
+        <Animation Name="object_tl_Anim_001C68" Offset="0x1C68" />
+        <Animation Name="object_tl_Anim_002510" Offset="0x2510" />
+        <Animation Name="object_tl_Anim_0027D8" Offset="0x27D8" />
+        <Animation Name="object_tl_Anim_002F88" Offset="0x2F88" />
+        <Animation Name="object_tl_Anim_0031DC" Offset="0x31DC" />
+        <Animation Name="object_tl_Anim_0035EC" Offset="0x35EC" />
+        <TextureAnimation Name="object_tl_Matanimheader_003624" Offset="0x3624" />
+        <Animation Name="object_tl_Anim_0039C0" Offset="0x39C0" />
+        <Animation Name="object_tl_Anim_004210" Offset="0x4210" />
+        <Texture Name="object_tl_Tex_004220" OutName="tex_004220" Format="rgba16" Width="16" Height="32" Offset="0x4220" />
+        <Texture Name="object_tl_Tex_004620" OutName="tex_004620" Format="rgba16" Width="16" Height="16" Offset="0x4620" />
+        <Texture Name="object_tl_Tex_004820" OutName="tex_004820" Format="rgba16" Width="16" Height="32" Offset="0x4820" />
+        <Texture Name="object_tl_Tex_004C20" OutName="tex_004C20" Format="rgba16" Width="32" Height="16" Offset="0x4C20" />
+        <Texture Name="object_tl_Tex_005020" OutName="tex_005020" Format="rgba16" Width="8" Height="8" Offset="0x5020" />
+        <Texture Name="object_tl_Tex_0050A0" OutName="tex_0050A0" Format="rgba16" Width="16" Height="16" Offset="0x50A0" />
+        <Texture Name="object_tl_Tex_0052A0" OutName="tex_0052A0" Format="rgba16" Width="16" Height="8" Offset="0x52A0" />
+        <Texture Name="object_tl_Tex_0053A0" OutName="tex_0053A0" Format="rgba16" Width="16" Height="16" Offset="0x53A0" />
+        <Texture Name="object_tl_Tex_0055A0" OutName="tex_0055A0" Format="rgba16" Width="16" Height="16" Offset="0x55A0" />
+        <Texture Name="object_tl_Tex_0057A0" OutName="tex_0057A0" Format="rgba16" Width="16" Height="16" Offset="0x57A0" />
+        <Texture Name="object_tl_Tex_0059A0" OutName="tex_0059A0" Format="rgba16" Width="16" Height="16" Offset="0x59A0" />
+        <DList Name="object_tl_DL_006C50" Offset="0x6C50" />
+        <DList Name="object_tl_DL_006DE8" Offset="0x6DE8" />
+        <DList Name="object_tl_DL_006F30" Offset="0x6F30" />
+        <DList Name="object_tl_DL_007040" Offset="0x7040" />
+        <DList Name="object_tl_DL_007188" Offset="0x7188" />
+        <DList Name="object_tl_DL_007298" Offset="0x7298" />
+        <DList Name="object_tl_DL_0073E0" Offset="0x73E0" />
+        <DList Name="object_tl_DL_0074F0" Offset="0x74F0" />
+        <DList Name="object_tl_DL_007638" Offset="0x7638" />
+        <DList Name="object_tl_DL_007748" Offset="0x7748" />
+        <DList Name="object_tl_DL_007938" Offset="0x7938" />
+        <DList Name="object_tl_DL_0079C8" Offset="0x79C8" />
+        <Limb Name="object_tl_Standardlimb_007BB0" Type="Standard" EnumName="OBJECT_TL_2_LIMB_01" Offset="0x7BB0" />
+        <Limb Name="object_tl_Standardlimb_007BBC" Type="Standard" EnumName="OBJECT_TL_2_LIMB_02" Offset="0x7BBC" />
+        <Limb Name="object_tl_Standardlimb_007BC8" Type="Standard" EnumName="OBJECT_TL_2_LIMB_03" Offset="0x7BC8" />
+        <Limb Name="object_tl_Standardlimb_007BD4" Type="Standard" EnumName="OBJECT_TL_2_LIMB_04" Offset="0x7BD4" />
+        <Limb Name="object_tl_Standardlimb_007BE0" Type="Standard" EnumName="OBJECT_TL_2_LIMB_05" Offset="0x7BE0" />
+        <Limb Name="object_tl_Standardlimb_007BEC" Type="Standard" EnumName="OBJECT_TL_2_LIMB_06" Offset="0x7BEC" />
+        <Limb Name="object_tl_Standardlimb_007BF8" Type="Standard" EnumName="OBJECT_TL_2_LIMB_07" Offset="0x7BF8" />
+        <Limb Name="object_tl_Standardlimb_007C04" Type="Standard" EnumName="OBJECT_TL_2_LIMB_08" Offset="0x7C04" />
+        <Limb Name="object_tl_Standardlimb_007C10" Type="Standard" EnumName="OBJECT_TL_2_LIMB_09" Offset="0x7C10" />
+        <Limb Name="object_tl_Standardlimb_007C1C" Type="Standard" EnumName="OBJECT_TL_2_LIMB_0A" Offset="0x7C1C" />
+        <Limb Name="object_tl_Standardlimb_007C28" Type="Standard" EnumName="OBJECT_TL_2_LIMB_0B" Offset="0x7C28" />
+        <Limb Name="object_tl_Standardlimb_007C34" Type="Standard" EnumName="OBJECT_TL_2_LIMB_0C" Offset="0x7C34" />
+        <Skeleton Name="object_tl_Skel_007C70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TL_2_LIMB_NONE" LimbMax="OBJECT_TL_2_LIMB_MAX" EnumName="object_tl_2_Limbs" Offset="0x7C70" />
+        <Animation Name="object_tl_Anim_00823C" Offset="0x823C" />
+    </File>
+</Root>

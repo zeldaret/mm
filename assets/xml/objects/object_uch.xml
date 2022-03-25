@@ -1,0 +1,46 @@
+﻿<Root>
+    <File Name="object_uch" Segment="6">
+        <DList Name="object_uch_DL_000080" Offset="0x80" />
+        <Texture Name="object_uch_Tex_000130" OutName="tex_000130" Format="i8" Width="32" Height="32" Offset="0x130" />
+        <TextureAnimation Name="object_uch_Matanimheader_000550" Offset="0x550" />
+        <TextureAnimation Name="object_uch_Matanimheader_000560" Offset="0x560" />
+        <Animation Name="object_uch_Anim_000608" Offset="0x608" />
+        <Animation Name="object_uch_Anim_0006C8" Offset="0x6C8" />
+        <DList Name="object_uch_DL_000720" Offset="0x720" />
+        <Texture Name="object_uch_Tex_0007B8" OutName="tex_0007B8" Format="ia16" Width="32" Height="32" Offset="0x7B8" />
+        <Animation Name="object_uch_Anim_001674" Offset="0x1674" />
+        <Animation Name="object_uch_Anim_001D80" Offset="0x1D80" />
+        <DList Name="object_uch_DL_002CD0" Offset="0x2CD0" />
+        <DList Name="object_uch_DL_002F08" Offset="0x2F08" />
+        <DList Name="object_uch_DL_002FA8" Offset="0x2FA8" />
+        <DList Name="object_uch_DL_003048" Offset="0x3048" />
+        <DList Name="object_uch_DL_003128" Offset="0x3128" />
+        <DList Name="object_uch_DL_003290" Offset="0x3290" />
+        <DList Name="object_uch_DL_003410" Offset="0x3410" />
+        <DList Name="object_uch_DL_0035E8" Offset="0x35E8" />
+        <DList Name="object_uch_DL_0037E0" Offset="0x37E0" />
+        <DList Name="object_uch_DL_0038C0" Offset="0x38C0" />
+        <DList Name="object_uch_DL_003A28" Offset="0x3A28" />
+        <DList Name="object_uch_DL_003BA8" Offset="0x3BA8" />
+        <Texture Name="object_uch_TLUT_003D80" OutName="tlut_003D80" Format="rgba16" Width="16" Height="16" Offset="0x3D80" />
+        <Texture Name="object_uch_Tex_003F80" OutName="tex_003F80" Format="ci8" Width="16" Height="16" Offset="0x3F80" />
+        <Texture Name="object_uch_Tex_004080" OutName="tex_004080" Format="ci8" Width="16" Height="16" Offset="0x4080" />
+        <Texture Name="object_uch_Tex_004180" OutName="tex_004180" Format="ci8" Width="16" Height="32" Offset="0x4180" />
+        <Texture Name="object_uch_Tex_004380" OutName="tex_004380" Format="ci8" Width="16" Height="32" Offset="0x4380" />
+        <Texture Name="object_uch_Tex_004580" OutName="tex_004580" Format="rgba16" Width="32" Height="32" Offset="0x4580" />
+        <Limb Name="object_uch_Standardlimb_004D80" Type="Standard" EnumName="OBJECT_UCH_LIMB_01" Offset="0x4D80" />
+        <Limb Name="object_uch_Standardlimb_004D8C" Type="Standard" EnumName="OBJECT_UCH_LIMB_02" Offset="0x4D8C" />
+        <Limb Name="object_uch_Standardlimb_004D98" Type="Standard" EnumName="OBJECT_UCH_LIMB_03" Offset="0x4D98" />
+        <Limb Name="object_uch_Standardlimb_004DA4" Type="Standard" EnumName="OBJECT_UCH_LIMB_04" Offset="0x4DA4" />
+        <Limb Name="object_uch_Standardlimb_004DB0" Type="Standard" EnumName="OBJECT_UCH_LIMB_05" Offset="0x4DB0" />
+        <Limb Name="object_uch_Standardlimb_004DBC" Type="Standard" EnumName="OBJECT_UCH_LIMB_06" Offset="0x4DBC" />
+        <Limb Name="object_uch_Standardlimb_004DC8" Type="Standard" EnumName="OBJECT_UCH_LIMB_07" Offset="0x4DC8" />
+        <Limb Name="object_uch_Standardlimb_004DD4" Type="Standard" EnumName="OBJECT_UCH_LIMB_08" Offset="0x4DD4" />
+        <Limb Name="object_uch_Standardlimb_004DE0" Type="Standard" EnumName="OBJECT_UCH_LIMB_09" Offset="0x4DE0" />
+        <Limb Name="object_uch_Standardlimb_004DEC" Type="Standard" EnumName="OBJECT_UCH_LIMB_0A" Offset="0x4DEC" />
+        <Limb Name="object_uch_Standardlimb_004DF8" Type="Standard" EnumName="OBJECT_UCH_LIMB_0B" Offset="0x4DF8" />
+        <Limb Name="object_uch_Standardlimb_004E04" Type="Standard" EnumName="OBJECT_UCH_LIMB_0C" Offset="0x4E04" />
+        <Limb Name="object_uch_Standardlimb_004E10" Type="Standard" EnumName="OBJECT_UCH_LIMB_0D" Offset="0x4E10" />
+        <Skeleton Name="object_uch_Skel_004E50" Type="Flex" LimbType="Standard" LimbNone="OBJECT_UCH_LIMB_NONE" LimbMax="OBJECT_UCH_LIMB_MAX" EnumName="object_uch_Limbs" Offset="0x4E50" />
+    </File>
+</Root>

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
     info->type = type;
@@ -131,7 +132,7 @@ void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* global
         posF.x = params->point.x;
         posF.y = params->point.y;
         posF.z = params->point.z;
-        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->projectionMatrix, &posF, &adjustedPos);
+        SkinMatrix_Vec3fMtxFMultXYZ(&globalCtx->viewProjectionMtxF, &posF, &adjustedPos);
         if ((adjustedPos.z > -radiusF) && (600 + radiusF > adjustedPos.z) && (400 > fabsf(adjustedPos.x) - radiusF) &&
             (400 > fabsf(adjustedPos.y) - radiusF)) {
             light = Lights_FindSlot(lights);
@@ -382,7 +383,7 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
             pos.x = params->x;
             pos.y = params->y;
             pos.z = params->z;
-            func_800B4EDC(globalCtx, &pos, &multDest, &wDest);
+            Actor_GetProjectedPos(globalCtx, &pos, &multDest, &wDest);
 
             params->drawGlow = 0;
 
@@ -412,13 +413,12 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
 
         dl = func_8012C7FC(POLY_XLU_DISP);
 
-        gSPSetOtherMode(dl++, G_SETOTHERMODE_H, 4, 4,
-                        0x00000080); //! This doesn't resolve to any of the macros in gdi.h
+        gDPSetDither(dl++, G_CD_NOISE);
 
         gDPSetCombineLERP(dl++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
 
-        gSPDisplayList(dl++, D_04029CB0);
+        gSPDisplayList(dl++, gameplay_keep_DL_029CB0);
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
@@ -434,7 +434,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
                     gSPMatrix(dl++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(dl++, D_04029CF0);
+                    gSPDisplayList(dl++, gameplay_keep_DL_029CF0);
                 }
             }
 

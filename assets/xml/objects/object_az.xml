@@ -1,0 +1,145 @@
+﻿<Root>
+    <File Name="object_az" Segment="6">
+        <DList Name="object_az_DL_001B80" Offset="0x1B80" />
+        <DList Name="object_az_DL_002098" Offset="0x2098" />
+        <DList Name="object_az_DL_002120" Offset="0x2120" />
+        <DList Name="object_az_DL_0021A8" Offset="0x21A8" />
+        <DList Name="object_az_DL_002230" Offset="0x2230" />
+        <DList Name="object_az_DL_0022C8" Offset="0x22C8" />
+        <DList Name="object_az_DL_002418" Offset="0x2418" />
+        <DList Name="object_az_DL_002568" Offset="0x2568" />
+        <DList Name="object_az_DL_0026D8" Offset="0x26D8" />
+        <DList Name="object_az_DL_0027D0" Offset="0x27D0" />
+        <DList Name="object_az_DL_0028D8" Offset="0x28D8" />
+        <DList Name="object_az_DL_002A08" Offset="0x2A08" />
+        <DList Name="object_az_DL_002B48" Offset="0x2B48" />
+        <DList Name="object_az_DL_002C88" Offset="0x2C88" />
+        <Texture Name="object_az_Tex_002DC8" OutName="tex_002DC8" Format="rgba16" Width="32" Height="32" Offset="0x2DC8" />
+        <Texture Name="object_az_Tex_0035C8" OutName="tex_0035C8" Format="rgba16" Width="32" Height="32" Offset="0x35C8" />
+        <Texture Name="object_az_Tex_003DC8" OutName="tex_003DC8" Format="rgba16" Width="16" Height="32" Offset="0x3DC8" />
+        <Texture Name="object_az_Tex_0041C8" OutName="tex_0041C8" Format="rgba16" Width="16" Height="16" Offset="0x41C8" />
+        <Texture Name="object_az_Tex_0043C8" OutName="tex_0043C8" Format="rgba16" Width="16" Height="16" Offset="0x43C8" />
+        <Texture Name="object_az_Tex_0045C8" OutName="tex_0045C8" Format="rgba16" Width="16" Height="16" Offset="0x45C8" />
+        <Texture Name="object_az_Tex_0047C8" OutName="tex_0047C8" Format="rgba16" Width="8" Height="16" Offset="0x47C8" />
+        <Texture Name="object_az_Tex_0048C8" OutName="tex_0048C8" Format="rgba16" Width="32" Height="32" Offset="0x48C8" />
+        <Texture Name="object_az_Tex_0050C8" OutName="tex_0050C8" Format="rgba16" Width="32" Height="32" Offset="0x50C8" />
+        <Texture Name="object_az_Tex_0058C8" OutName="tex_0058C8" Format="rgba16" Width="32" Height="32" Offset="0x58C8" />
+        <Texture Name="object_az_Tex_0060C8" OutName="tex_0060C8" Format="rgba16" Width="32" Height="32" Offset="0x60C8" />
+        <Texture Name="object_az_Tex_0068C8" OutName="tex_0068C8" Format="rgba16" Width="32" Height="32" Offset="0x68C8" />
+        <Texture Name="object_az_Tex_0070C8" OutName="tex_0070C8" Format="rgba16" Width="16" Height="16" Offset="0x70C8" />
+        <Limb Name="object_az_Standardlimb_0072C8" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_01" Offset="0x72C8" />
+        <Limb Name="object_az_Standardlimb_0072D4" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_02" Offset="0x72D4" />
+        <Limb Name="object_az_Standardlimb_0072E0" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_03" Offset="0x72E0" />
+        <Limb Name="object_az_Standardlimb_0072EC" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_04" Offset="0x72EC" />
+        <Limb Name="object_az_Standardlimb_0072F8" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_05" Offset="0x72F8" />
+        <Limb Name="object_az_Standardlimb_007304" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_06" Offset="0x7304" />
+        <Limb Name="object_az_Standardlimb_007310" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_07" Offset="0x7310" />
+        <Limb Name="object_az_Standardlimb_00731C" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_08" Offset="0x731C" />
+        <Limb Name="object_az_Standardlimb_007328" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_09" Offset="0x7328" />
+        <Limb Name="object_az_Standardlimb_007334" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_0A" Offset="0x7334" />
+        <Limb Name="object_az_Standardlimb_007340" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_0B" Offset="0x7340" />
+        <Limb Name="object_az_Standardlimb_00734C" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_0C" Offset="0x734C" />
+        <Limb Name="object_az_Standardlimb_007358" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_0D" Offset="0x7358" />
+        <Limb Name="object_az_Standardlimb_007364" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_0E" Offset="0x7364" />
+        <Limb Name="object_az_Standardlimb_007370" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_0F" Offset="0x7370" />
+        <Limb Name="object_az_Standardlimb_00737C" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_10" Offset="0x737C" />
+        <Limb Name="object_az_Standardlimb_007388" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_11" Offset="0x7388" />
+        <Limb Name="object_az_Standardlimb_007394" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_12" Offset="0x7394" />
+        <Limb Name="object_az_Standardlimb_0073A0" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_13" Offset="0x73A0" />
+        <Limb Name="object_az_Standardlimb_0073AC" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_14" Offset="0x73AC" />
+        <Limb Name="object_az_Standardlimb_0073B8" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_15" Offset="0x73B8" />
+        <Limb Name="object_az_Standardlimb_0073C4" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_16" Offset="0x73C4" />
+        <Limb Name="object_az_Standardlimb_0073D0" Type="Standard" EnumName="OBJECT_AZ_1_LIMB_17" Offset="0x73D0" />
+        <Skeleton Name="object_az_Skel_007438" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AZ_1_LIMB_NONE" LimbMax="OBJECT_AZ_1_LIMB_MAX" EnumName="object_az_1_Limbs" Offset="0x7438" />
+        <Animation Name="object_az_Anim_00750C" Offset="0x750C" />
+        <Animation Name="object_az_Anim_007D3C" Offset="0x7D3C" />
+        <Animation Name="object_az_Anim_0086AC" Offset="0x86AC" />
+        <Animation Name="object_az_Anim_008960" Offset="0x8960" />
+        <Animation Name="object_az_Anim_008BB4" Offset="0x8BB4" />
+        <Animation Name="object_az_Anim_008EAC" Offset="0x8EAC" />
+        <Animation Name="object_az_Anim_00925C" Offset="0x925C" />
+        <Animation Name="object_az_Anim_009B4C" Offset="0x9B4C" />
+        <Animation Name="object_az_Anim_00A25C" Offset="0xA25C" />
+        <Animation Name="object_az_Anim_00AAEC" Offset="0xAAEC" />
+        <Animation Name="object_az_Anim_00B94C" Offset="0xB94C" />
+        <Animation Name="object_az_Anim_00BCFC" Offset="0xBCFC" />
+        <Animation Name="object_az_Anim_00C0A0" Offset="0xC0A0" />
+        <Animation Name="object_az_Anim_00C47C" Offset="0xC47C" />
+        <Animation Name="object_az_Anim_00C94C" Offset="0xC94C" />
+        <DList Name="object_az_DL_00E670" Offset="0xE670" />
+        <DList Name="object_az_DL_00EB58" Offset="0xEB58" />
+        <DList Name="object_az_DL_00EBE0" Offset="0xEBE0" />
+        <DList Name="object_az_DL_00EC68" Offset="0xEC68" />
+        <DList Name="object_az_DL_00ECF0" Offset="0xECF0" />
+        <DList Name="object_az_DL_00ED88" Offset="0xED88" />
+        <DList Name="object_az_DL_00EEE0" Offset="0xEEE0" />
+        <DList Name="object_az_DL_00F030" Offset="0xF030" />
+        <DList Name="object_az_DL_00F190" Offset="0xF190" />
+        <DList Name="object_az_DL_00F2B0" Offset="0xF2B0" />
+        <DList Name="object_az_DL_00F3B8" Offset="0xF3B8" />
+        <DList Name="object_az_DL_00F4E8" Offset="0xF4E8" />
+        <DList Name="object_az_DL_00F638" Offset="0xF638" />
+        <DList Name="object_az_DL_00F788" Offset="0xF788" />
+        <Texture Name="object_az_Tex_00F918" OutName="tex_00F918" Format="rgba16" Width="32" Height="32" Offset="0xF918" />
+        <Texture Name="object_az_Tex_010118" OutName="tex_010118" Format="rgba16" Width="32" Height="32" Offset="0x10118" />
+        <Texture Name="object_az_Tex_010918" OutName="tex_010918" Format="rgba16" Width="32" Height="32" Offset="0x10918" />
+        <Texture Name="object_az_Tex_011118" OutName="tex_011118" Format="rgba16" Width="32" Height="32" Offset="0x11118" />
+        <Texture Name="object_az_Tex_011918" OutName="tex_011918" Format="rgba16" Width="32" Height="32" Offset="0x11918" />
+        <Texture Name="object_az_Tex_012118" OutName="tex_012118" Format="rgba16" Width="16" Height="32" Offset="0x12118" />
+        <Texture Name="object_az_Tex_012518" OutName="tex_012518" Format="rgba16" Width="16" Height="16" Offset="0x12518" />
+        <Texture Name="object_az_Tex_012718" OutName="tex_012718" Format="rgba16" Width="32" Height="32" Offset="0x12718" />
+        <Texture Name="object_az_Tex_012F18" OutName="tex_012F18" Format="rgba16" Width="32" Height="32" Offset="0x12F18" />
+        <Texture Name="object_az_Tex_013718" OutName="tex_013718" Format="rgba16" Width="8" Height="16" Offset="0x13718" />
+        <Texture Name="object_az_Tex_013818" OutName="tex_013818" Format="rgba16" Width="32" Height="32" Offset="0x13818" />
+        <Texture Name="object_az_Tex_014018" OutName="tex_014018" Format="rgba16" Width="32" Height="32" Offset="0x14018" />
+        <Texture Name="object_az_Tex_014818" OutName="tex_014818" Format="rgba16" Width="32" Height="32" Offset="0x14818" />
+        <Texture Name="object_az_Tex_015018" OutName="tex_015018" Format="rgba16" Width="32" Height="32" Offset="0x15018" />
+        <Texture Name="object_az_Tex_015818" OutName="tex_015818" Format="rgba16" Width="32" Height="32" Offset="0x15818" />
+        <Texture Name="object_az_Tex_016018" OutName="tex_016018" Format="rgba16" Width="32" Height="32" Offset="0x16018" />
+        <Texture Name="object_az_Tex_016818" OutName="tex_016818" Format="rgba16" Width="32" Height="32" Offset="0x16818" />
+        <Texture Name="object_az_Tex_017018" OutName="tex_017018" Format="rgba16" Width="32" Height="32" Offset="0x17018" />
+        <Limb Name="object_az_Standardlimb_017820" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_01" Offset="0x17820" />
+        <Limb Name="object_az_Standardlimb_01782C" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_02" Offset="0x1782C" />
+        <Limb Name="object_az_Standardlimb_017838" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_03" Offset="0x17838" />
+        <Limb Name="object_az_Standardlimb_017844" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_04" Offset="0x17844" />
+        <Limb Name="object_az_Standardlimb_017850" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_05" Offset="0x17850" />
+        <Limb Name="object_az_Standardlimb_01785C" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_06" Offset="0x1785C" />
+        <Limb Name="object_az_Standardlimb_017868" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_07" Offset="0x17868" />
+        <Limb Name="object_az_Standardlimb_017874" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_08" Offset="0x17874" />
+        <Limb Name="object_az_Standardlimb_017880" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_09" Offset="0x17880" />
+        <Limb Name="object_az_Standardlimb_01788C" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_0A" Offset="0x1788C" />
+        <Limb Name="object_az_Standardlimb_017898" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_0B" Offset="0x17898" />
+        <Limb Name="object_az_Standardlimb_0178A4" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_0C" Offset="0x178A4" />
+        <Limb Name="object_az_Standardlimb_0178B0" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_0D" Offset="0x178B0" />
+        <Limb Name="object_az_Standardlimb_0178BC" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_0E" Offset="0x178BC" />
+        <Limb Name="object_az_Standardlimb_0178C8" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_0F" Offset="0x178C8" />
+        <Limb Name="object_az_Standardlimb_0178D4" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_10" Offset="0x178D4" />
+        <Limb Name="object_az_Standardlimb_0178E0" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_11" Offset="0x178E0" />
+        <Limb Name="object_az_Standardlimb_0178EC" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_12" Offset="0x178EC" />
+        <Limb Name="object_az_Standardlimb_0178F8" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_13" Offset="0x178F8" />
+        <Limb Name="object_az_Standardlimb_017904" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_14" Offset="0x17904" />
+        <Limb Name="object_az_Standardlimb_017910" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_15" Offset="0x17910" />
+        <Limb Name="object_az_Standardlimb_01791C" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_16" Offset="0x1791C" />
+        <Limb Name="object_az_Standardlimb_017928" Type="Standard" EnumName="OBJECT_AZ_2_LIMB_17" Offset="0x17928" />
+        <Skeleton Name="object_az_Skel_017990" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AZ_2_LIMB_NONE" LimbMax="OBJECT_AZ_2_LIMB_MAX" EnumName="object_az_2_Limbs" Offset="0x17990" />
+        <!-- <Blob Name="object_az_Blob_0179A0" Size="0x20" Offset="0x179A0" /> -->
+        <Texture Name="object_az_Tex_0179C0" OutName="tex_0179C0" Format="i4" Width="32" Height="64" Offset="0x179C0" />
+        <Texture Name="object_az_Tex_017DC0" OutName="tex_017DC0" Format="i4" Width="64" Height="64" Offset="0x17DC0" />
+        <Texture Name="object_az_Tex_0185C0" OutName="tex_0185C0" Format="i4" Width="64" Height="64" Offset="0x185C0" />
+        <Texture Name="object_az_Tex_018DC0" OutName="tex_018DC0" Format="i4" Width="64" Height="64" Offset="0x18DC0" />
+        <Texture Name="object_az_Tex_0195C0" OutName="tex_0195C0" Format="i4" Width="64" Height="64" Offset="0x195C0" />
+        <Texture Name="object_az_Tex_019DC0" OutName="tex_019DC0" Format="i4" Width="64" Height="64" Offset="0x19DC0" />
+        <DList Name="object_az_DL_01A600" Offset="0x1A600" />
+        <TextureAnimation Name="object_az_Matanimheader_01A6E8" Offset="0x1A6E8" />
+        <DList Name="object_az_DL_01A730" Offset="0x1A730" />
+        <TextureAnimation Name="object_az_Matanimheader_01A818" Offset="0x1A818" />
+        <DList Name="object_az_DL_01A860" Offset="0x1A860" />
+        <TextureAnimation Name="object_az_Matanimheader_01A948" Offset="0x1A948" />
+        <DList Name="object_az_DL_01A990" Offset="0x1A990" />
+        <TextureAnimation Name="object_az_Matanimheader_01AA78" Offset="0x1AA78" />
+        <DList Name="object_az_DL_01AAC0" Offset="0x1AAC0" />
+        <TextureAnimation Name="object_az_Matanimheader_01ABA8" Offset="0x1ABA8" />
+        <DList Name="object_az_DL_01ABF0" Offset="0x1ABF0" />
+        <DList Name="object_az_DL_01AD00" Offset="0x1AD00" />
+    </File>
+</Root>

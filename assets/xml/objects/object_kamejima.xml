@@ -1,0 +1,78 @@
+﻿<Root>
+    <File Name="object_kamejima" Segment="6">
+        <DList Name="object_kamejima_DL_000140" Offset="0x140" />
+        <Texture Name="object_kamejima_Tex_0002D8" OutName="tex_0002D8" Format="i8" Width="32" Height="64" Offset="0x2D8" />
+        <Texture Name="object_kamejima_Tex_000AD8" OutName="tex_000AD8" Format="i8" Width="64" Height="64" Offset="0xAD8" />
+        <TextureAnimation Name="object_kamejima_Matanimheader_001AF0" Offset="0x1AF0" />
+        <Collision Name="object_kamejima_Colheader_002328" Offset="0x2328" />
+        <!-- <Blob Name="object_kamejima_Blob_002354" Size="0x1C" Offset="0x2354" /> -->
+        <Collision Name="object_kamejima_Colheader_002470" Offset="0x2470" />
+        <Collision Name="object_kamejima_Colheader_002E04" Offset="0x2E04" />
+        <Animation Name="object_kamejima_Anim_003980" Offset="0x3980" />
+        <Animation Name="object_kamejima_Anim_0047B8" Offset="0x47B8" />
+        <Animation Name="object_kamejima_Anim_0048B0" Offset="0x48B0" />
+        <DList Name="object_kamejima_DL_004E70" Offset="0x4E70" />
+        <Texture Name="object_kamejima_TLUT_005248" OutName="tlut_005248" Format="rgba16" Width="16" Height="16" Offset="0x5248" />
+        <Texture Name="object_kamejima_Tex_005448" OutName="tex_005448" Format="ci8" Width="32" Height="32" Offset="0x5448" />
+        <Texture Name="object_kamejima_Tex_005848" OutName="tex_005848" Format="ci8" Width="64" Height="32" Offset="0x5848" />
+        <!-- <Blob Name="object_kamejima_Blob_006050" Size="0x10" Offset="0x6050" /> -->
+        <Animation Name="object_kamejima_Anim_006980" Offset="0x6980" />
+        <DList Name="object_kamejima_DL_008760" Offset="0x8760" />
+        <DList Name="object_kamejima_DL_008E18" Offset="0x8E18" />
+        <DList Name="object_kamejima_DL_0090E8" Offset="0x90E8" />
+        <DList Name="object_kamejima_DL_009278" Offset="0x9278" />
+        <DList Name="object_kamejima_DL_0093E8" Offset="0x93E8" />
+        <DList Name="object_kamejima_DL_0096B8" Offset="0x96B8" />
+        <DList Name="object_kamejima_DL_009848" Offset="0x9848" />
+        <DList Name="object_kamejima_DL_0099B8" Offset="0x99B8" />
+        <DList Name="object_kamejima_DL_009C38" Offset="0x9C38" />
+        <DList Name="object_kamejima_DL_009E38" Offset="0x9E38" />
+        <DList Name="object_kamejima_DL_009F18" Offset="0x9F18" />
+        <DList Name="object_kamejima_DL_00A118" Offset="0xA118" />
+        <DList Name="object_kamejima_DL_00A4B8" Offset="0xA4B8" />
+        <DList Name="object_kamejima_DL_00A7C8" Offset="0xA7C8" />
+        <Texture Name="object_kamejima_TLUT_00AAD8" OutName="tlut_00AAD8" Format="rgba16" Width="16" Height="16" Offset="0xAAD8" />
+        <Texture Name="object_kamejima_TLUT_00ACD8" OutName="tlut_00ACD8" Format="rgba16" Width="16" Height="16" Offset="0xACD8" />
+        <Texture Name="object_kamejima_Tex_00AED8" OutName="tex_00AED8" Format="ci8" Width="32" Height="32" Offset="0xAED8" />
+        <Texture Name="object_kamejima_Tex_00B2D8" OutName="tex_00B2D8" Format="ci8" Width="16" Height="16" Offset="0xB2D8" />
+        <Texture Name="object_kamejima_Tex_00B3D8" OutName="tex_00B3D8" Format="ci8" Width="16" Height="32" Offset="0xB3D8" />
+        <Texture Name="object_kamejima_Tex_00B5D8" OutName="tex_00B5D8" Format="ci8" Width="64" Height="32" Offset="0xB5D8" />
+        <Texture Name="object_kamejima_Tex_00BDD8" OutName="tex_00BDD8" Format="ci8" Width="16" Height="16" Offset="0xBDD8" />
+        <!-- <Blob Name="object_kamejima_Blob_00BED8" Size="0x1800" Offset="0xBED8" /> -->
+        <Texture Name="object_kamejima_Tex_00D6D8" OutName="tex_00D6D8" Format="ci8" Width="16" Height="16" Offset="0xD6D8" />
+        <Texture Name="object_kamejima_Tex_00D7D8" OutName="tex_00D7D8" Format="ci8" Width="32" Height="64" Offset="0xD7D8" />
+        <Texture Name="object_kamejima_Tex_00DFD8" OutName="tex_00DFD8" Format="ci8" Width="32" Height="32" Offset="0xDFD8" />
+        <Texture Name="object_kamejima_Tex_00E3D8" OutName="tex_00E3D8" Format="ci8" Width="16" Height="32" Offset="0xE3D8" />
+        <Limb Name="object_kamejima_Standardlimb_00E5D8" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_01" Offset="0xE5D8" />
+        <Limb Name="object_kamejima_Standardlimb_00E5E4" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_02" Offset="0xE5E4" />
+        <Limb Name="object_kamejima_Standardlimb_00E5F0" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_03" Offset="0xE5F0" />
+        <Limb Name="object_kamejima_Standardlimb_00E5FC" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_04" Offset="0xE5FC" />
+        <Limb Name="object_kamejima_Standardlimb_00E608" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_05" Offset="0xE608" />
+        <Limb Name="object_kamejima_Standardlimb_00E614" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_06" Offset="0xE614" />
+        <Limb Name="object_kamejima_Standardlimb_00E620" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_07" Offset="0xE620" />
+        <Limb Name="object_kamejima_Standardlimb_00E62C" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_08" Offset="0xE62C" />
+        <Limb Name="object_kamejima_Standardlimb_00E638" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_09" Offset="0xE638" />
+        <Limb Name="object_kamejima_Standardlimb_00E644" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_0A" Offset="0xE644" />
+        <Limb Name="object_kamejima_Standardlimb_00E650" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_0B" Offset="0xE650" />
+        <Limb Name="object_kamejima_Standardlimb_00E65C" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_0C" Offset="0xE65C" />
+        <Limb Name="object_kamejima_Standardlimb_00E668" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_0D" Offset="0xE668" />
+        <Limb Name="object_kamejima_Standardlimb_00E674" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_0E" Offset="0xE674" />
+        <Limb Name="object_kamejima_Standardlimb_00E680" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_0F" Offset="0xE680" />
+        <Limb Name="object_kamejima_Standardlimb_00E68C" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_10" Offset="0xE68C" />
+        <Limb Name="object_kamejima_Standardlimb_00E698" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_11" Offset="0xE698" />
+        <Limb Name="object_kamejima_Standardlimb_00E6A4" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_12" Offset="0xE6A4" />
+        <Limb Name="object_kamejima_Standardlimb_00E6B0" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_13" Offset="0xE6B0" />
+        <Limb Name="object_kamejima_Standardlimb_00E6BC" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_14" Offset="0xE6BC" />
+        <Limb Name="object_kamejima_Standardlimb_00E6C8" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_15" Offset="0xE6C8" />
+        <Limb Name="object_kamejima_Standardlimb_00E6D4" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_16" Offset="0xE6D4" />
+        <Limb Name="object_kamejima_Standardlimb_00E6E0" Type="Standard" EnumName="OBJECT_KAMEJIMA_LIMB_17" Offset="0xE6E0" />
+        <Skeleton Name="object_kamejima_Skel_00E748" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KAMEJIMA_LIMB_NONE" LimbMax="OBJECT_KAMEJIMA_LIMB_MAX" EnumName="object_kamejima_Limbs" Offset="0xE748" />
+        <Animation Name="object_kamejima_Anim_00EF98" Offset="0xEF98" />
+        <Animation Name="object_kamejima_Anim_0100CC" Offset="0x100CC" />
+        <Animation Name="object_kamejima_Anim_010918" Offset="0x10918" />
+        <Animation Name="object_kamejima_Anim_0119D4" Offset="0x119D4" />
+        <Animation Name="object_kamejima_Anim_012260" Offset="0x12260" />
+        <Animation Name="object_kamejima_Anim_013264" Offset="0x13264" />
+        <Animation Name="object_kamejima_Anim_014E8C" Offset="0x14E8C" />
+    </File>
+</Root>

@@ -1,12 +1,12 @@
 /*
- * File z_en_death.c
+ * File: z_en_death.c
  * Overlay: ovl_En_Death
  * Description: Gomess
  */
 
 #include "z_en_death.h"
 
-#define FLAGS 0x00001035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000)
 
 #define THIS ((EnDeath*)thisx)
 

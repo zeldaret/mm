@@ -1,12 +1,12 @@
 /*
  * File: z_en_sth2.c
  * Overlay: ovl_En_Sth2
- * Description:
+ * Description: Guy waving at the telescope in Termina Field
  */
 
 #include "z_en_sth2.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnSth2*)thisx)
 

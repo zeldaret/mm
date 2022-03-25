@@ -1,12 +1,12 @@
 /*
- * File z_en_attack_niw.c
+ * File: z_en_attack_niw.c
  * Overlay: ovl_En_Attack_Niw
  * Description: Attacking cucco
  */
 
 #include "z_en_attack_niw.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnAttackNiw*)thisx)
 

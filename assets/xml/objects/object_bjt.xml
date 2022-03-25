@@ -1,0 +1,23 @@
+﻿<Root>
+    <File Name="object_bjt" Segment="6">
+        <Animation Name="object_bjt_Anim_0000FC" Offset="0xFC" />
+        <Animation Name="object_bjt_Anim_000218" Offset="0x218" />
+        <Animation Name="object_bjt_Anim_0003A8" Offset="0x3A8" />
+        <Animation Name="object_bjt_Anim_000564" Offset="0x564" />
+        <Animation Name="object_bjt_Anim_0007B8" Offset="0x7B8" />
+        <DList Name="object_bjt_DL_001570" Offset="0x1570" />
+        <DList Name="object_bjt_DL_001690" Offset="0x1690" />
+        <DList Name="object_bjt_DL_0017A0" Offset="0x17A0" />
+        <DList Name="object_bjt_DL_0018C8" Offset="0x18C8" />
+        <DList Name="object_bjt_DL_0019E8" Offset="0x19E8" />
+        <Texture Name="object_bjt_Tex_001AB0" OutName="tex_001AB0" Format="rgba16" Width="32" Height="32" Offset="0x1AB0" />
+        <Texture Name="object_bjt_Tex_0022B0" OutName="tex_0022B0" Format="rgba16" Width="8" Height="8" Offset="0x22B0" />
+        <Limb Name="object_bjt_Standardlimb_002330" Type="Standard" EnumName="OBJECT_BJT_LIMB_01" Offset="0x2330" />
+        <Limb Name="object_bjt_Standardlimb_00233C" Type="Standard" EnumName="OBJECT_BJT_LIMB_02" Offset="0x233C" />
+        <Limb Name="object_bjt_Standardlimb_002348" Type="Standard" EnumName="OBJECT_BJT_LIMB_03" Offset="0x2348" />
+        <Limb Name="object_bjt_Standardlimb_002354" Type="Standard" EnumName="OBJECT_BJT_LIMB_04" Offset="0x2354" />
+        <Limb Name="object_bjt_Standardlimb_002360" Type="Standard" EnumName="OBJECT_BJT_LIMB_05" Offset="0x2360" />
+        <Limb Name="object_bjt_Standardlimb_00236C" Type="Standard" EnumName="OBJECT_BJT_LIMB_06" Offset="0x236C" />
+        <Skeleton Name="object_bjt_Skel_002390" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BJT_LIMB_NONE" LimbMax="OBJECT_BJT_LIMB_MAX" EnumName="object_bjt_Limbs" Offset="0x2390" />
+    </File>
+</Root>

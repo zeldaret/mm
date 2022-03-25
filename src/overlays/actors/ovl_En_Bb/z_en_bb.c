@@ -1,12 +1,12 @@
 /*
- * File z_en_bb.c
+ * File: z_en_bb.c
  * Overlay: ovl_En_Bb
  * Description: Blue Bubble
  */
 
 #include "z_en_bb.h"
 
-#define FLAGS 0x00000205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
 #define THIS ((EnBb*)thisx)
 

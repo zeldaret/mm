@@ -1,0 +1,10 @@
+﻿<Root>
+    <File Name="object_efc_tw" Segment="6">
+        <!-- <Blob Name="object_efc_tw_Blob_000000" Size="0x60" Offset="0x0" /> -->
+        <DList Name="object_efc_tw_DL_0001B0" Offset="0x1B0" />
+        <Texture Name="object_efc_tw_Tex_0002C8" OutName="tex_0002C8" Format="i8" Width="64" Height="64" Offset="0x2C8" />
+        <Limb Name="object_efc_tw_Standardlimb_0012C8" Type="Standard" EnumName="OBJECT_EFC_TW_LIMB_01" Offset="0x12C8" />
+        <Limb Name="object_efc_tw_Standardlimb_0012D4" Type="Standard" EnumName="OBJECT_EFC_TW_LIMB_02" Offset="0x12D4" />
+        <Skeleton Name="object_efc_tw_Skel_0012E8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_EFC_TW_LIMB_NONE" LimbMax="OBJECT_EFC_TW_LIMB_MAX" EnumName="object_efc_tw_Limbs" Offset="0x12E8" />
+    </File>
+</Root>

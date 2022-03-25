@@ -1,0 +1,67 @@
+﻿<Root>
+    <File Name="object_fr" Segment="6">
+        <Animation Name="object_fr_Anim_0007BC" Offset="0x7BC" />
+        <Animation Name="object_fr_Anim_0011C0" Offset="0x11C0" />
+        <Animation Name="object_fr_Anim_001534" Offset="0x1534" />
+        <Texture Name="object_fr_Tex_001550" OutName="tex_001550" Format="rgba16" Width="32" Height="32" Offset="0x1550" />
+        <!-- <Blob Name="object_fr_Blob_001D50" Size="0x1D50" Offset="0x1D50" /> -->
+        <Texture Name="object_fr_Tex_003AA0" OutName="tex_003AA0" Format="i8" Width="16" Height="16" Offset="0x3AA0" />
+        <Texture Name="object_fr_Tex_003BA0" OutName="tex_003BA0" Format="rgba16" Width="32" Height="32" Offset="0x3BA0" />
+        <Texture Name="object_fr_Tex_0043A0" OutName="tex_0043A0" Format="rgba16" Width="32" Height="32" Offset="0x43A0" />
+        <Texture Name="object_fr_Tex_004BA0" OutName="tex_004BA0" Format="rgba16" Width="16" Height="16" Offset="0x4BA0" />
+        <Texture Name="object_fr_Tex_004DA0" OutName="tex_004DA0" Format="rgba16" Width="32" Height="32" Offset="0x4DA0" />
+        <Texture Name="object_fr_Tex_0055A0" OutName="tex_0055A0" Format="i8" Width="32" Height="32" Offset="0x55A0" />
+        <Texture Name="object_fr_Tex_0059A0" OutName="tex_0059A0" Format="rgba16" Width="16" Height="16" Offset="0x59A0" />
+        <Texture Name="object_fr_Tex_005BA0" OutName="tex_005BA0" Format="rgba16" Width="16" Height="16" Offset="0x5BA0" />
+        <Texture Name="object_fr_Tex_005DA0" OutName="tex_005DA0" Format="ia16" Width="32" Height="32" Offset="0x5DA0" />
+        <Texture Name="object_fr_Tex_0065A0" OutName="tex_0065A0" Format="ia16" Width="32" Height="32" Offset="0x65A0" />
+        <DList Name="object_fr_DL_008EC0" Offset="0x8EC0" />
+        <DList Name="object_fr_DL_008F60" Offset="0x8F60" />
+        <DList Name="object_fr_DL_009000" Offset="0x9000" />
+        <DList Name="object_fr_DL_009328" Offset="0x9328" />
+        <DList Name="object_fr_DL_0093C8" Offset="0x93C8" />
+        <DList Name="object_fr_DL_009468" Offset="0x9468" />
+        <DList Name="object_fr_DL_0095A0" Offset="0x95A0" />
+        <DList Name="object_fr_DL_0098B8" Offset="0x98B8" />
+        <DList Name="object_fr_DL_009AE0" Offset="0x9AE0" />
+        <DList Name="object_fr_DL_009B80" Offset="0x9B80" />
+        <DList Name="object_fr_DL_009D88" Offset="0x9D88" />
+        <DList Name="object_fr_DL_009FB0" Offset="0x9FB0" />
+        <DList Name="object_fr_DL_00A050" Offset="0xA050" />
+        <DList Name="object_fr_DL_00A258" Offset="0xA258" />
+        <DList Name="object_fr_DL_00A428" Offset="0xA428" />
+        <DList Name="object_fr_DL_00A6B8" Offset="0xA6B8" />
+        <DList Name="object_fr_DL_00A758" Offset="0xA758" />
+        <DList Name="object_fr_DL_00A978" Offset="0xA978" />
+        <DList Name="object_fr_DL_00ABA8" Offset="0xABA8" />
+        <DList Name="object_fr_DL_00AE38" Offset="0xAE38" />
+        <DList Name="object_fr_DL_00AED8" Offset="0xAED8" />
+        <DList Name="object_fr_DL_00B0F8" Offset="0xB0F8" />
+        <DList Name="object_fr_DL_00B328" Offset="0xB328" />
+        <DList Name="object_fr_DL_00B338" Offset="0xB338" />
+        <Limb Name="object_fr_Standardlimb_00B3C8" Type="Standard" EnumName="OBJECT_FR_LIMB_01" Offset="0xB3C8" />
+        <Limb Name="object_fr_Standardlimb_00B3D4" Type="Standard" EnumName="OBJECT_FR_LIMB_02" Offset="0xB3D4" />
+        <Limb Name="object_fr_Standardlimb_00B3E0" Type="Standard" EnumName="OBJECT_FR_LIMB_03" Offset="0xB3E0" />
+        <Limb Name="object_fr_Standardlimb_00B3EC" Type="Standard" EnumName="OBJECT_FR_LIMB_04" Offset="0xB3EC" />
+        <Limb Name="object_fr_Standardlimb_00B3F8" Type="Standard" EnumName="OBJECT_FR_LIMB_05" Offset="0xB3F8" />
+        <Limb Name="object_fr_Standardlimb_00B404" Type="Standard" EnumName="OBJECT_FR_LIMB_06" Offset="0xB404" />
+        <Limb Name="object_fr_Standardlimb_00B410" Type="Standard" EnumName="OBJECT_FR_LIMB_07" Offset="0xB410" />
+        <Limb Name="object_fr_Standardlimb_00B41C" Type="Standard" EnumName="OBJECT_FR_LIMB_08" Offset="0xB41C" />
+        <Limb Name="object_fr_Standardlimb_00B428" Type="Standard" EnumName="OBJECT_FR_LIMB_09" Offset="0xB428" />
+        <Limb Name="object_fr_Standardlimb_00B434" Type="Standard" EnumName="OBJECT_FR_LIMB_0A" Offset="0xB434" />
+        <Limb Name="object_fr_Standardlimb_00B440" Type="Standard" EnumName="OBJECT_FR_LIMB_0B" Offset="0xB440" />
+        <Limb Name="object_fr_Standardlimb_00B44C" Type="Standard" EnumName="OBJECT_FR_LIMB_0C" Offset="0xB44C" />
+        <Limb Name="object_fr_Standardlimb_00B458" Type="Standard" EnumName="OBJECT_FR_LIMB_0D" Offset="0xB458" />
+        <Limb Name="object_fr_Standardlimb_00B464" Type="Standard" EnumName="OBJECT_FR_LIMB_0E" Offset="0xB464" />
+        <Limb Name="object_fr_Standardlimb_00B470" Type="Standard" EnumName="OBJECT_FR_LIMB_0F" Offset="0xB470" />
+        <Limb Name="object_fr_Standardlimb_00B47C" Type="Standard" EnumName="OBJECT_FR_LIMB_10" Offset="0xB47C" />
+        <Limb Name="object_fr_Standardlimb_00B488" Type="Standard" EnumName="OBJECT_FR_LIMB_11" Offset="0xB488" />
+        <Limb Name="object_fr_Standardlimb_00B494" Type="Standard" EnumName="OBJECT_FR_LIMB_12" Offset="0xB494" />
+        <Limb Name="object_fr_Standardlimb_00B4A0" Type="Standard" EnumName="OBJECT_FR_LIMB_13" Offset="0xB4A0" />
+        <Limb Name="object_fr_Standardlimb_00B4AC" Type="Standard" EnumName="OBJECT_FR_LIMB_14" Offset="0xB4AC" />
+        <Limb Name="object_fr_Standardlimb_00B4B8" Type="Standard" EnumName="OBJECT_FR_LIMB_15" Offset="0xB4B8" />
+        <Limb Name="object_fr_Standardlimb_00B4C4" Type="Standard" EnumName="OBJECT_FR_LIMB_16" Offset="0xB4C4" />
+        <Limb Name="object_fr_Standardlimb_00B4D0" Type="Standard" EnumName="OBJECT_FR_LIMB_17" Offset="0xB4D0" />
+        <Skeleton Name="object_fr_Skel_00B538" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FR_LIMB_NONE" LimbMax="OBJECT_FR_LIMB_MAX" EnumName="object_fr_Limbs" Offset="0xB538" />
+    </File>
+</Root>

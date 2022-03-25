@@ -1,0 +1,38 @@
+﻿<Root>
+    <File Name="object_niw" Segment="6">
+        <Animation Name="object_niw_Anim_0000E8" Offset="0xE8" />
+        <DList Name="object_niw_DL_0009C0" Offset="0x9C0" />
+        <DList Name="object_niw_DL_000A98" Offset="0xA98" />
+        <DList Name="object_niw_DL_000DF0" Offset="0xDF0" />
+        <DList Name="object_niw_DL_000FD0" Offset="0xFD0" />
+        <DList Name="object_niw_DL_001088" Offset="0x1088" />
+        <DList Name="object_niw_DL_001128" Offset="0x1128" />
+        <DList Name="object_niw_DL_0011E0" Offset="0x11E0" />
+        <Texture Name="object_niw_Tex_001280" OutName="tex_001280" Format="rgba16" Width="16" Height="16" Offset="0x1280" />
+        <Texture Name="object_niw_Tex_001480" OutName="tex_001480" Format="rgba16" Width="8" Height="16" Offset="0x1480" />
+        <Texture Name="object_niw_Tex_001580" OutName="tex_001580" Format="rgba16" Width="8" Height="8" Offset="0x1580" />
+        <Texture Name="object_niw_Tex_001600" OutName="tex_001600" Format="rgba16" Width="8" Height="8" Offset="0x1600" />
+        <Texture Name="object_niw_Tex_001680" OutName="tex_001680" Format="rgba16" Width="16" Height="16" Offset="0x1680" />
+        <Texture Name="object_niw_Tex_001880" OutName="tex_001880" Format="rgba16" Width="32" Height="32" Offset="0x1880" />
+        <Texture Name="object_niw_Tex_002080" OutName="tex_002080" Format="rgba16" Width="8" Height="16" Offset="0x2080" />
+        <Texture Name="object_niw_Tex_002180" OutName="tex_002180" Format="rgba16" Width="16" Height="16" Offset="0x2180" />
+        <DList Name="gNiwFeatherMaterialDL" Offset="0x23B0" />
+        <DList Name="gNiwFeatherDL" Offset="0x2428" />
+        <Limb Name="object_niw_Standardlimb_002440" Type="Standard" EnumName="OBJECT_NIW_LIMB_01" Offset="0x2440" />
+        <Limb Name="object_niw_Standardlimb_00244C" Type="Standard" EnumName="OBJECT_NIW_LIMB_02" Offset="0x244C" />
+        <Limb Name="object_niw_Standardlimb_002458" Type="Standard" EnumName="OBJECT_NIW_LIMB_03" Offset="0x2458" />
+        <Limb Name="object_niw_Standardlimb_002464" Type="Standard" EnumName="OBJECT_NIW_LIMB_04" Offset="0x2464" />
+        <Limb Name="object_niw_Standardlimb_002470" Type="Standard" EnumName="OBJECT_NIW_LIMB_05" Offset="0x2470" />
+        <Limb Name="object_niw_Standardlimb_00247C" Type="Standard" EnumName="OBJECT_NIW_LIMB_06" Offset="0x247C" />
+        <Limb Name="object_niw_Standardlimb_002488" Type="Standard" EnumName="OBJECT_NIW_LIMB_07" Offset="0x2488" />
+        <Limb Name="object_niw_Standardlimb_002494" Type="Standard" EnumName="OBJECT_NIW_LIMB_08" Offset="0x2494" />
+        <Limb Name="object_niw_Standardlimb_0024A0" Type="Standard" EnumName="OBJECT_NIW_LIMB_09" Offset="0x24A0" />
+        <Limb Name="object_niw_Standardlimb_0024AC" Type="Standard" EnumName="OBJECT_NIW_LIMB_0A" Offset="0x24AC" />
+        <Limb Name="object_niw_Standardlimb_0024B8" Type="Standard" EnumName="OBJECT_NIW_LIMB_0B" Offset="0x24B8" />
+        <Limb Name="object_niw_Standardlimb_0024C4" Type="Standard" EnumName="OBJECT_NIW_LIMB_0C" Offset="0x24C4" />
+        <Limb Name="object_niw_Standardlimb_0024D0" Type="Standard" EnumName="OBJECT_NIW_LIMB_0D" Offset="0x24D0" />
+        <Limb Name="object_niw_Standardlimb_0024DC" Type="Standard" EnumName="OBJECT_NIW_LIMB_0E" Offset="0x24DC" />
+        <Limb Name="object_niw_Standardlimb_0024E8" Type="Standard" EnumName="OBJECT_NIW_LIMB_0F" Offset="0x24E8" />
+        <Skeleton Name="object_niw_Skel_002530" Type="Flex" LimbType="Standard" LimbNone="OBJECT_NIW_LIMB_NONE" LimbMax="OBJECT_NIW_LIMB_MAX" EnumName="object_niw_Limbs" Offset="0x2530" />
+    </File>
+</Root>

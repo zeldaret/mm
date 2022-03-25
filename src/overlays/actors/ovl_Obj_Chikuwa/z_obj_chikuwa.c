@@ -1,12 +1,12 @@
 /*
  * File: z_obj_chikuwa.c
  * Overlay: ovl_Obj_Chikuwa
- * Description: Falling Block Row
+ * Description: Falling row of blocks (unused)
  */
 
 #include "z_obj_chikuwa.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjChikuwa*)thisx)
 

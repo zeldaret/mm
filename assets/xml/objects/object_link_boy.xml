@@ -1,0 +1,81 @@
+﻿<Root>
+    <File Name="object_link_boy" Segment="6">
+        <Texture Name="object_link_boy_TLUT_000000" OutName="tlut_000000" Format="rgba16" Width="16" Height="16" Offset="0x0" />
+        <Texture Name="object_link_boy_TLUT_000200" OutName="tlut_000200" Format="rgba16" Width="16" Height="16" Offset="0x200" />
+        <Texture Name="object_link_boy_TLUT_000400" OutName="tlut_000400" Format="rgba16" Width="16" Height="16" Offset="0x400" />
+        <Texture Name="object_link_boy_Tex_000600" OutName="tex_000600" Format="ci8" Width="16" Height="32" Offset="0x600" />
+        <Texture Name="object_link_boy_Tex_000800" OutName="tex_000800" Format="ci8" Width="16" Height="32" Offset="0x800" />
+        <Texture Name="object_link_boy_Tex_000A00" OutName="tex_000A00" Format="ci8" Width="16" Height="16" Offset="0xA00" />
+        <Texture Name="object_link_boy_Tex_000B00" OutName="tex_000B00" Format="i8" Width="16" Height="16" Offset="0xB00" />
+        <DList Name="object_link_boy_DL_0049E0" Offset="0x49E0" />
+        <DList Name="object_link_boy_DL_004C50" Offset="0x4C50" />
+        <DList Name="object_link_boy_DL_004F48" Offset="0x4F48" />
+        <DList Name="object_link_boy_DL_005190" Offset="0x5190" />
+        <DList Name="object_link_boy_DL_0052A0" Offset="0x52A0" />
+        <DList Name="object_link_boy_DL_0055D0" Offset="0x55D0" />
+        <DList Name="object_link_boy_DL_005818" Offset="0x5818" />
+        <DList Name="object_link_boy_DL_005928" Offset="0x5928" />
+        <DList Name="object_link_boy_DL_005A78" Offset="0x5A78" />
+        <DList Name="object_link_boy_DL_0060E8" Offset="0x60E8" />
+        <DList Name="object_link_boy_DL_006148" Offset="0x6148" />
+        <DList Name="object_link_boy_DL_006370" Offset="0x6370" />
+        <DList Name="object_link_boy_DL_006410" Offset="0x6410" />
+        <DList Name="object_link_boy_DL_0065E0" Offset="0x65E0" />
+        <DList Name="object_link_boy_DL_0067D8" Offset="0x67D8" />
+        <DList Name="object_link_boy_DL_006A58" Offset="0x6A58" />
+        <DList Name="object_link_boy_DL_006C38" Offset="0x6C38" />
+        <DList Name="object_link_boy_DL_006EB8" Offset="0x6EB8" />
+        <DList Name="object_link_boy_DL_007820" Offset="0x7820" />
+        <DList Name="object_link_boy_DL_007A50" Offset="0x7A50" />
+        <DList Name="object_link_boy_DL_007AD0" Offset="0x7AD0" />
+        <DList Name="object_link_boy_DL_007F28" Offset="0x7F28" />
+        <DList Name="object_link_boy_DL_0080F0" Offset="0x80F0" />
+        <DList Name="object_link_boy_DL_008100" Offset="0x8100" />
+        <Texture Name="object_link_boy_TLUT_008108" OutName="tlut_008108" Format="rgba16" Width="4" Height="4" Offset="0x8108" />
+        <Texture Name="object_link_boy_TLUT_008128" OutName="tlut_008128" Format="rgba16" Width="4" Height="4" Offset="0x8128" />
+        <Texture Name="object_link_boy_TLUT_008148" OutName="tlut_008148" Format="rgba16" Width="4" Height="4" Offset="0x8148" />
+        <Texture Name="object_link_boy_TLUT_008168" OutName="tlut_008168" Format="rgba16" Width="4" Height="4" Offset="0x8168" />
+        <Texture Name="object_link_boy_TLUT_008188" OutName="tlut_008188" Format="rgba16" Width="4" Height="4" Offset="0x8188" />
+        <Texture Name="object_link_boy_TLUT_0081A8" OutName="tlut_0081A8" Format="rgba16" Width="4" Height="4" Offset="0x81A8" />
+        <Texture Name="object_link_boy_TLUT_0081C8" OutName="tlut_0081C8" Format="rgba16" Width="4" Height="4" Offset="0x81C8" />
+        <Texture Name="object_link_boy_TLUT_0081E8" OutName="tlut_0081E8" Format="rgba16" Width="4" Height="4" Offset="0x81E8" />
+        <Texture Name="object_link_boy_Tex_008208" OutName="tex_008208" Format="rgba16" Width="16" Height="16" Offset="0x8208" />
+        <Texture Name="object_link_boy_Tex_008408" OutName="tex_008408" Format="ci4" Width="16" Height="16" Offset="0x8408" />
+        <Texture Name="object_link_boy_Tex_008488" OutName="tex_008488" Format="rgba16" Width="16" Height="32" Offset="0x8488" />
+        <Texture Name="object_link_boy_Tex_008888" OutName="tex_008888" Format="rgba16" Width="32" Height="16" Offset="0x8888" />
+        <Texture Name="object_link_boy_Tex_008C88" OutName="tex_008C88" Format="ci4" Width="16" Height="16" Offset="0x8C88" />
+        <Texture Name="object_link_boy_Tex_008D08" OutName="tex_008D08" Format="ci4" Width="32" Height="32" Offset="0x8D08" />
+        <Texture Name="object_link_boy_Tex_008F08" OutName="tex_008F08" Format="ci4" Width="64" Height="64" Offset="0x8F08" />
+        <Texture Name="object_link_boy_Tex_009708" OutName="tex_009708" Format="rgba16" Width="64" Height="32" Offset="0x9708" />
+        <Texture Name="object_link_boy_Tex_00A708" OutName="tex_00A708" Format="ci4" Width="32" Height="32" Offset="0xA708" />
+        <Texture Name="object_link_boy_Tex_00A908" OutName="tex_00A908" Format="rgba16" Width="32" Height="16" Offset="0xA908" />
+        <Texture Name="object_link_boy_Tex_00AD08" OutName="tex_00AD08" Format="rgba16" Width="16" Height="16" Offset="0xAD08" />
+        <Texture Name="object_link_boy_Tex_00AF08" OutName="tex_00AF08" Format="ci4" Width="32" Height="32" Offset="0xAF08" />
+        <Texture Name="object_link_boy_Tex_00B108" OutName="tex_00B108" Format="ci4" Width="16" Height="16" Offset="0xB108" />
+        <Texture Name="object_link_boy_Tex_00B188" OutName="tex_00B188" Format="ci4" Width="64" Height="64" Offset="0xB188" />
+        <!-- TODO this texture should be 50x75 but the u64 type of textures makes this not match currently -->
+        <Texture Name="object_link_boy_Tex_00B988" OutName="tex_00B988" Format="rgba16" Width="50" Height="74" Offset="0xB988" />
+        <Limb Name="object_link_boy_Lodlimb_00D6D4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_01" Offset="0xD6D4" />
+        <Limb Name="object_link_boy_Lodlimb_00D6E4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_02" Offset="0xD6E4" />
+        <Limb Name="object_link_boy_Lodlimb_00D6F4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_03" Offset="0xD6F4" />
+        <Limb Name="object_link_boy_Lodlimb_00D704" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_04" Offset="0xD704" />
+        <Limb Name="object_link_boy_Lodlimb_00D714" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_05" Offset="0xD714" />
+        <Limb Name="object_link_boy_Lodlimb_00D724" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_06" Offset="0xD724" />
+        <Limb Name="object_link_boy_Lodlimb_00D734" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_07" Offset="0xD734" />
+        <Limb Name="object_link_boy_Lodlimb_00D744" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_08" Offset="0xD744" />
+        <Limb Name="object_link_boy_Lodlimb_00D754" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_09" Offset="0xD754" />
+        <Limb Name="object_link_boy_Lodlimb_00D764" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0A" Offset="0xD764" />
+        <Limb Name="object_link_boy_Lodlimb_00D774" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0B" Offset="0xD774" />
+        <Limb Name="object_link_boy_Lodlimb_00D784" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0C" Offset="0xD784" />
+        <Limb Name="object_link_boy_Lodlimb_00D794" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0D" Offset="0xD794" />
+        <Limb Name="object_link_boy_Lodlimb_00D7A4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0E" Offset="0xD7A4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7B4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_0F" Offset="0xD7B4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7C4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_10" Offset="0xD7C4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7D4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_11" Offset="0xD7D4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7E4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_12" Offset="0xD7E4" />
+        <Limb Name="object_link_boy_Lodlimb_00D7F4" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_13" Offset="0xD7F4" />
+        <Limb Name="object_link_boy_Lodlimb_00D804" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_14" Offset="0xD804" />
+        <Limb Name="object_link_boy_Lodlimb_00D814" Type="LOD" EnumName="OBJECT_LINK_BOY_LIMB_15" Offset="0xD814" />
+        <Skeleton Name="object_link_boy_Skel_00D878" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_BOY_LIMB_NONE" LimbMax="OBJECT_LINK_BOY_LIMB_MAX" EnumName="object_link_boy_Limbs" Offset="0xD878" />
+    </File>
+</Root>

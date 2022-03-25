@@ -1,0 +1,52 @@
+﻿<Root>
+    <File Name="object_fu" Segment="6">
+        <Animation Name="object_fu_Anim_00057C" Offset="0x57C" />
+        <Animation Name="object_fu_Anim_000B04" Offset="0xB04" />
+        <DList Name="object_fu_DL_003130" Offset="0x3130" />
+        <DList Name="object_fu_DL_003320" Offset="0x3320" />
+        <DList Name="object_fu_DL_0036A0" Offset="0x36A0" />
+        <DList Name="object_fu_DL_003BD8" Offset="0x3BD8" />
+        <DList Name="object_fu_DL_003D08" Offset="0x3D08" />
+        <DList Name="object_fu_DL_003E38" Offset="0x3E38" />
+        <DList Name="object_fu_DL_0040E0" Offset="0x40E0" />
+        <DList Name="object_fu_DL_004390" Offset="0x4390" />
+        <DList Name="object_fu_DL_004460" Offset="0x4460" />
+        <DList Name="object_fu_DL_004570" Offset="0x4570" />
+        <DList Name="object_fu_DL_004690" Offset="0x4690" />
+        <DList Name="object_fu_DL_0047E0" Offset="0x47E0" />
+        <DList Name="object_fu_DL_0048E8" Offset="0x48E8" />
+        <DList Name="object_fu_DL_004A08" Offset="0x4A08" />
+        <DList Name="object_fu_DL_004B58" Offset="0x4B58" />
+        <Texture Name="object_fu_TLUT_004C60" OutName="tlut_004C60" Format="rgba16" Width="16" Height="16" Offset="0x4C60" />
+        <Texture Name="object_fu_TLUT_004E60" OutName="tlut_004E60" Format="rgba16" Width="16" Height="16" Offset="0x4E60" />
+        <Texture Name="object_fu_Tex_005060" OutName="tex_005060" Format="ci8" Width="16" Height="16" Offset="0x5060" />
+        <Texture Name="object_fu_Tex_005160" OutName="tex_005160" Format="ci8" Width="8" Height="8" Offset="0x5160" />
+        <Texture Name="object_fu_Tex_0051A0" OutName="tex_0051A0" Format="ci8" Width="32" Height="32" Offset="0x51A0" />
+        <Texture Name="object_fu_Tex_0055A0" OutName="tex_0055A0" Format="ci8" Width="16" Height="16" Offset="0x55A0" />
+        <Texture Name="object_fu_Tex_0056A0" OutName="tex_0056A0" Format="ci8" Width="8" Height="8" Offset="0x56A0" />
+        <Texture Name="object_fu_Tex_0056E0" OutName="tex_0056E0" Format="ci8" Width="32" Height="32" Offset="0x56E0" />
+        <Texture Name="object_fu_Tex_005AE0" OutName="tex_005AE0" Format="ci8" Width="32" Height="32" Offset="0x5AE0" />
+        <Texture Name="object_fu_Tex_005EE0" OutName="tex_005EE0" Format="ci8" Width="8" Height="8" Offset="0x5EE0" />
+        <Texture Name="object_fu_Tex_005F20" OutName="tex_005F20" Format="ci8" Width="32" Height="32" Offset="0x5F20" />
+        <Texture Name="object_fu_Tex_006320" OutName="tex_006320" Format="ci8" Width="32" Height="32" Offset="0x6320" />
+        <Texture Name="object_fu_Tex_006720" OutName="tex_006720" Format="ci8" Width="32" Height="16" Offset="0x6720" />
+        <Texture Name="object_fu_Tex_006920" OutName="tex_006920" Format="ci8" Width="32" Height="16" Offset="0x6920" />
+        <Texture Name="object_fu_Tex_006B20" OutName="tex_006B20" Format="ci8" Width="8" Height="16" Offset="0x6B20" />
+        <Limb Name="object_fu_Standardlimb_006BA0" Type="Standard" EnumName="OBJECT_FU_LIMB_01" Offset="0x6BA0" />
+        <Limb Name="object_fu_Standardlimb_006BAC" Type="Standard" EnumName="OBJECT_FU_LIMB_02" Offset="0x6BAC" />
+        <Limb Name="object_fu_Standardlimb_006BB8" Type="Standard" EnumName="OBJECT_FU_LIMB_03" Offset="0x6BB8" />
+        <Limb Name="object_fu_Standardlimb_006BC4" Type="Standard" EnumName="OBJECT_FU_LIMB_04" Offset="0x6BC4" />
+        <Limb Name="object_fu_Standardlimb_006BD0" Type="Standard" EnumName="OBJECT_FU_LIMB_05" Offset="0x6BD0" />
+        <Limb Name="object_fu_Standardlimb_006BDC" Type="Standard" EnumName="OBJECT_FU_LIMB_06" Offset="0x6BDC" />
+        <Limb Name="object_fu_Standardlimb_006BE8" Type="Standard" EnumName="OBJECT_FU_LIMB_07" Offset="0x6BE8" />
+        <Limb Name="object_fu_Standardlimb_006BF4" Type="Standard" EnumName="OBJECT_FU_LIMB_08" Offset="0x6BF4" />
+        <Limb Name="object_fu_Standardlimb_006C00" Type="Standard" EnumName="OBJECT_FU_LIMB_09" Offset="0x6C00" />
+        <Limb Name="object_fu_Standardlimb_006C0C" Type="Standard" EnumName="OBJECT_FU_LIMB_0A" Offset="0x6C0C" />
+        <Limb Name="object_fu_Standardlimb_006C18" Type="Standard" EnumName="OBJECT_FU_LIMB_0B" Offset="0x6C18" />
+        <Limb Name="object_fu_Standardlimb_006C24" Type="Standard" EnumName="OBJECT_FU_LIMB_0C" Offset="0x6C24" />
+        <Limb Name="object_fu_Standardlimb_006C30" Type="Standard" EnumName="OBJECT_FU_LIMB_0D" Offset="0x6C30" />
+        <Limb Name="object_fu_Standardlimb_006C3C" Type="Standard" EnumName="OBJECT_FU_LIMB_0E" Offset="0x6C3C" />
+        <Limb Name="object_fu_Standardlimb_006C48" Type="Standard" EnumName="OBJECT_FU_LIMB_0F" Offset="0x6C48" />
+        <Skeleton Name="object_fu_Skel_006C90" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FU_LIMB_NONE" LimbMax="OBJECT_FU_LIMB_MAX" EnumName="object_fu_Limbs" Offset="0x6C90" />
+    </File>
+</Root>

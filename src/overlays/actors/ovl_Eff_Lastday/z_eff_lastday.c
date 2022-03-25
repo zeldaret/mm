@@ -1,12 +1,12 @@
 /*
- * File z_eff_lastday.c
+ * File: z_eff_lastday.c
  * Overlay: ovl_Eff_Lastday
  * Description: Moon Crash Cutscene Fire Wall
  */
 
 #include "z_eff_lastday.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EffLastday*)thisx)
 

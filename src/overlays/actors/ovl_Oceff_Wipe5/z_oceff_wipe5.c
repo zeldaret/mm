@@ -1,12 +1,12 @@
 /*
  * File: z_oceff_wipe5.c
  * Overlay: ovl_Oceff_Wipe5
- * Description:
+ * Description: Sonata/Lullaby/Bossa Nova/Elegy/Oath Ocarina Effect
  */
 
 #include "z_oceff_wipe5.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffWipe5*)thisx)
 

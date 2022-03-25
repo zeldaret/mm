@@ -1,0 +1,42 @@
+﻿<Root>
+    <File Name="object_utubo" Segment="6">
+        <Animation Name="object_utubo_Anim_00082C" Offset="0x82C" />
+        <DList Name="object_utubo_DL_0020B0" Offset="0x20B0" />
+        <DList Name="object_utubo_DL_002358" Offset="0x2358" />
+        <DList Name="object_utubo_DL_002440" Offset="0x2440" />
+        <DList Name="object_utubo_DL_002580" Offset="0x2580" />
+        <DList Name="object_utubo_DL_002738" Offset="0x2738" />
+        <DList Name="object_utubo_DL_0028A0" Offset="0x28A0" />
+        <DList Name="object_utubo_DL_002A08" Offset="0x2A08" />
+        <DList Name="object_utubo_DL_002B18" Offset="0x2B18" />
+        <DList Name="object_utubo_DL_002C28" Offset="0x2C28" />
+        <DList Name="object_utubo_DL_002D38" Offset="0x2D38" />
+        <Texture Name="object_utubo_TLUT_002E48" OutName="tlut_002E48" Format="rgba16" Width="4" Height="4" Offset="0x2E48" />
+        <Texture Name="object_utubo_TLUT_002E68" OutName="tlut_002E68" Format="rgba16" Width="4" Height="4" Offset="0x2E68" />
+        <Texture Name="object_utubo_TLUT_002E88" OutName="tlut_002E88" Format="rgba16" Width="4" Height="4" Offset="0x2E88" />
+        <Texture Name="object_utubo_Tex_002EA8" OutName="tex_002EA8" Format="ci4" Width="64" Height="64" Offset="0x2EA8" />
+        <Texture Name="object_utubo_Tex_0036A8" OutName="tex_0036A8" Format="rgba16" Width="32" Height="32" Offset="0x36A8" />
+        <Texture Name="object_utubo_Tex_003EA8" OutName="tex_003EA8" Format="ci4" Width="32" Height="32" Offset="0x3EA8" />
+        <Texture Name="object_utubo_Tex_0040A8" OutName="tex_0040A8" Format="ci4" Width="32" Height="32" Offset="0x40A8" />
+        <Limb Name="object_utubo_Standardlimb_0042A8" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_01" Offset="0x42A8" />
+        <Limb Name="object_utubo_Standardlimb_0042B4" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_02" Offset="0x42B4" />
+        <Limb Name="object_utubo_Standardlimb_0042C0" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_03" Offset="0x42C0" />
+        <Limb Name="object_utubo_Standardlimb_0042CC" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_04" Offset="0x42CC" />
+        <Limb Name="object_utubo_Standardlimb_0042D8" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_05" Offset="0x42D8" />
+        <Limb Name="object_utubo_Standardlimb_0042E4" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_06" Offset="0x42E4" />
+        <Limb Name="object_utubo_Standardlimb_0042F0" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_07" Offset="0x42F0" />
+        <Limb Name="object_utubo_Standardlimb_0042FC" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_08" Offset="0x42FC" />
+        <Limb Name="object_utubo_Standardlimb_004308" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_09" Offset="0x4308" />
+        <Limb Name="object_utubo_Standardlimb_004314" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_0A" Offset="0x4314" />
+        <Limb Name="object_utubo_Standardlimb_004320" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_0B" Offset="0x4320" />
+        <Limb Name="object_utubo_Standardlimb_00432C" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_0C" Offset="0x432C" />
+        <Limb Name="object_utubo_Standardlimb_004338" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_0D" Offset="0x4338" />
+        <Limb Name="object_utubo_Standardlimb_004344" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_0E" Offset="0x4344" />
+        <Limb Name="object_utubo_Standardlimb_004350" Type="Standard" EnumName="OBJECT_UTUBO_LIMB_0F" Offset="0x4350" />
+        <Skeleton Name="object_utubo_Skel_004398" Type="Flex" LimbType="Standard" LimbNone="OBJECT_UTUBO_LIMB_NONE" LimbMax="OBJECT_UTUBO_LIMB_MAX" EnumName="object_utubo_Limbs" Offset="0x4398" />
+        <Animation Name="object_utubo_Anim_004518" Offset="0x4518" />
+        <Animation Name="object_utubo_Anim_004740" Offset="0x4740" />
+        <Animation Name="object_utubo_Anim_0048B8" Offset="0x48B8" />
+        <Animation Name="object_utubo_Anim_004ABC" Offset="0x4ABC" />
+    </File>
+</Root>

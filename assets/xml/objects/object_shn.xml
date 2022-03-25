@@ -1,0 +1,97 @@
+﻿<Root>
+    <File Name="object_shn" Segment="6">
+        <DList Name="object_shn_DL_003510" Offset="0x3510" />
+        <DList Name="object_shn_DL_003600" Offset="0x3600" />
+        <DList Name="object_shn_DL_0039A0" Offset="0x39A0" />
+        <DList Name="object_shn_DL_003DA0" Offset="0x3DA0" />
+        <DList Name="object_shn_DL_004038" Offset="0x4038" />
+        <DList Name="object_shn_DL_0042E0" Offset="0x42E0" />
+        <DList Name="object_shn_DL_004620" Offset="0x4620" />
+        <DList Name="object_shn_DL_0048B8" Offset="0x48B8" />
+        <DList Name="object_shn_DL_004B60" Offset="0x4B60" />
+        <DList Name="object_shn_DL_004EA8" Offset="0x4EA8" />
+        <DList Name="object_shn_DL_004FC8" Offset="0x4FC8" />
+        <DList Name="object_shn_DL_0050D0" Offset="0x50D0" />
+        <DList Name="object_shn_DL_005298" Offset="0x5298" />
+        <DList Name="object_shn_DL_0053B8" Offset="0x53B8" />
+        <DList Name="object_shn_DL_0054C0" Offset="0x54C0" />
+        <Texture Name="object_shn_TLUT_005688" OutName="tlut_005688" Format="rgba16" Width="16" Height="16" Offset="0x5688" />
+        <Texture Name="object_shn_TLUT_005888" OutName="tlut_005888" Format="rgba16" Width="16" Height="16" Offset="0x5888" />
+        <Texture Name="object_shn_Tex_005A88" OutName="tex_005A88" Format="ci8" Width="8" Height="8" Offset="0x5A88" />
+        <Texture Name="object_shn_Tex_005AC8" OutName="tex_005AC8" Format="rgba16" Width="32" Height="32" Offset="0x5AC8" />
+        <Texture Name="object_shn_Tex_0062C8" OutName="tex_0062C8" Format="rgba16" Width="32" Height="32" Offset="0x62C8" />
+        <!-- <Blob Name="object_shn_Blob_006AC8" Size="0x800" Offset="0x6AC8" /> -->
+        <Texture Name="object_shn_Tex_0072C8" OutName="tex_0072C8" Format="ci8" Width="16" Height="16" Offset="0x72C8" />
+        <Texture Name="object_shn_Tex_0073C8" OutName="tex_0073C8" Format="ci8" Width="8" Height="8" Offset="0x73C8" />
+        <Texture Name="object_shn_Tex_007408" OutName="tex_007408" Format="ci8" Width="32" Height="32" Offset="0x7408" />
+        <Texture Name="object_shn_Tex_007808" OutName="tex_007808" Format="ci8" Width="16" Height="16" Offset="0x7808" />
+        <Texture Name="object_shn_Tex_007908" OutName="tex_007908" Format="ci8" Width="16" Height="16" Offset="0x7908" />
+        <Texture Name="object_shn_Tex_007A08" OutName="tex_007A08" Format="ci8" Width="32" Height="32" Offset="0x7A08" />
+        <Texture Name="object_shn_Tex_007E08" OutName="tex_007E08" Format="ci8" Width="16" Height="16" Offset="0x7E08" />
+        <Texture Name="object_shn_Tex_007F08" OutName="tex_007F08" Format="ci8" Width="8" Height="8" Offset="0x7F08" />
+        <Texture Name="object_shn_Tex_007F48" OutName="tex_007F48" Format="ci8" Width="16" Height="16" Offset="0x7F48" />
+        <!-- <Blob Name="object_shn_Blob_008050" Size="0x10" Offset="0x8050" /> -->
+        <DList Name="object_shn_DL_008BA0" Offset="0x8BA0" />
+        <DList Name="object_shn_DL_008C70" Offset="0x8C70" />
+        <DList Name="object_shn_DL_008D90" Offset="0x8D90" />
+        <DList Name="object_shn_DL_008E48" Offset="0x8E48" />
+        <DList Name="object_shn_DL_008F00" Offset="0x8F00" />
+        <DList Name="object_shn_DL_009040" Offset="0x9040" />
+        <Texture Name="object_shn_TLUT_0091D8" OutName="tlut_0091D8" Format="rgba16" Width="16" Height="16" Offset="0x91D8" />
+        <Texture Name="object_shn_TLUT_0093D8" OutName="tlut_0093D8" Format="rgba16" Width="16" Height="16" Offset="0x93D8" />
+        <Texture Name="object_shn_TLUT_0095D8" OutName="tlut_0095D8" Format="rgba16" Width="16" Height="16" Offset="0x95D8" />
+        <Texture Name="object_shn_TLUT_0097D8" OutName="tlut_0097D8" Format="rgba16" Width="16" Height="16" Offset="0x97D8" />
+        <Texture Name="object_shn_TLUT_0099D8" OutName="tlut_0099D8" Format="rgba16" Width="16" Height="16" Offset="0x99D8" />
+        <Texture Name="object_shn_TLUT_009BD8" OutName="tlut_009BD8" Format="rgba16" Width="16" Height="16" Offset="0x9BD8" />
+        <Texture Name="object_shn_Tex_009DD8" OutName="tex_009DD8" Format="ci8" Width="32" Height="32" Offset="0x9DD8" />
+        <Texture Name="object_shn_Tex_00A1D8" OutName="tex_00A1D8" Format="ci8" Width="16" Height="16" Offset="0xA1D8" />
+        <Texture Name="object_shn_Tex_00A2D8" OutName="tex_00A2D8" Format="ci8" Width="16" Height="16" Offset="0xA2D8" />
+        <Texture Name="object_shn_Tex_00A3D8" OutName="tex_00A3D8" Format="ci8" Width="8" Height="8" Offset="0xA3D8" />
+        <Texture Name="object_shn_Tex_00A418" OutName="tex_00A418" Format="ci8" Width="32" Height="32" Offset="0xA418" />
+        <Texture Name="object_shn_Tex_00A818" OutName="tex_00A818" Format="ci8" Width="8" Height="8" Offset="0xA818" />
+        <DList Name="object_shn_DL_00B730" Offset="0xB730" />
+        <DList Name="gObjectShnSwampGuideHead" Offset="0xB738" />
+        <Texture Name="object_shn_TLUT_00BCD8" OutName="tlut_00BCD8" Format="rgba16" Width="16" Height="16" Offset="0xBCD8" />
+        <Texture Name="object_shn_TLUT_00BED8" OutName="tlut_00BED8" Format="rgba16" Width="16" Height="16" Offset="0xBED8" />
+        <Texture Name="object_shn_Tex_00C0D8" OutName="tex_00C0D8" Format="ci8" Width="8" Height="8" Offset="0xC0D8" />
+        <Texture Name="object_shn_Tex_00C118" OutName="tex_00C118" Format="ci8" Width="16" Height="16" Offset="0xC118" />
+        <Texture Name="object_shn_Tex_00C218" OutName="tex_00C218" Format="ci8" Width="16" Height="16" Offset="0xC218" />
+        <Texture Name="object_shn_Tex_00C318" OutName="tex_00C318" Format="ci8" Width="32" Height="16" Offset="0xC318" />
+        <Texture Name="object_shn_Tex_00C518" OutName="tex_00C518" Format="ci8" Width="32" Height="32" Offset="0xC518" />
+        <Texture Name="object_shn_Tex_00C918" OutName="tex_00C918" Format="ci8" Width="16" Height="16" Offset="0xC918" />
+        <Texture Name="object_shn_Tex_00CA18" OutName="tex_00CA18" Format="rgba16" Width="8" Height="8" Offset="0xCA18" />
+        <Texture Name="object_shn_Tex_00CA98" OutName="tex_00CA98" Format="ci8" Width="16" Height="32" Offset="0xCA98" />
+        <Animation Name="object_shn_Anim_00D2F8" Offset="0xD2F8" />
+        <Animation Name="object_shn_Anim_00D3AC" Offset="0xD3AC" />
+        <Animation Name="object_shn_Anim_00D9D0" Offset="0xD9D0" />
+        <Animation Name="object_shn_Anim_00DFEC" Offset="0xDFEC" />
+        <Animation Name="object_shn_Anim_00E6C4" Offset="0xE6C4" />
+        <Limb Name="gObjectShnLimbWaist" Type="Standard" EnumName="OBJECT_SHN_LIMB_WAIST" Offset="0xE6E0" />
+        <Limb Name="gObjectShnLimbLegLeft" Type="Standard" EnumName="OBJECT_SHN_LIMB_LEG_LEFT" Offset="0xE6EC" />
+        <Limb Name="gObjectShnLimbShinLeft" Type="Standard" EnumName="OBJECT_SHN_LIMB_SHIN_LEFT" Offset="0xE6F8" />
+        <Limb Name="gObjectShnLimbFootLeft" Type="Standard" EnumName="OBJECT_SHN_LIMB_FOOT_LEFT" Offset="0xE704" />
+        <Limb Name="gObjectShnLimbLegRight" Type="Standard" EnumName="OBJECT_SHN_LIMB_LEG_RIGHT" Offset="0xE710" />
+        <Limb Name="gObjectShnLimbShinRight" Type="Standard" EnumName="OBJECT_SHN_LIMB_SHIN_RIGHT" Offset="0xE71C" />
+        <Limb Name="gObjectShnLimbFootRight" Type="Standard" EnumName="OBJECT_SHN_LIMB_FOOT_RIGHT" Offset="0xE728" />
+        <Limb Name="gObjectShnLimbTorso" Type="Standard" EnumName="OBJECT_SHN_LIMB_TORSO" Offset="0xE734" />
+        <Limb Name="gObjectShnLimbShoulderLeft" Type="Standard" EnumName="OBJECT_SHN_LIMB_SHOULDER_LEFT" Offset="0xE740" />
+        <Limb Name="gObjectShnLimbForearmLeft" Type="Standard" EnumName="OBJECT_SHN_LIMB_FOREARM_LEFT" Offset="0xE74C" />
+        <Limb Name="gObjectShnLimbHandLeft" Type="Standard" EnumName="OBJECT_SHN_LIMB_HAND_LEFT" Offset="0xE758" />
+        <Limb Name="gObjectShnLimbShoulderRight" Type="Standard" EnumName="OBJECT_SHN_LIMB_SHOULDER_RIGHT" Offset="0xE764" />
+        <Limb Name="gObjectShnLimbForearmRight" Type="Standard" EnumName="OBJECT_SHN_LIMB_FOREARM_RIGHT" Offset="0xE770" />
+        <Limb Name="gObjectShnLimbHandRight" Type="Standard" EnumName="OBJECT_SHN_LIMB_HAND_RIGHT" Offset="0xE77C" />
+        <Limb Name="gObjectShnLimbHead" Type="Standard" EnumName="OBJECT_SHN_LIMB_HEAD" Offset="0xE788" />
+        <Skeleton Name="gObjectShnSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SHN_LIMB_NONE" LimbMax="OBJECT_SHN_LIMB_MAX" EnumName="ObjectShnLimbs" Offset="0xE7D0" />
+        <DList Name="object_shn_DL_00F2D0" Offset="0xF2D0" />
+        <Texture Name="object_shn_TLUT_00F790" OutName="tlut_00F790" Format="rgba16" Width="16" Height="16" Offset="0xF790" />
+        <Texture Name="object_shn_TLUT_00F990" OutName="tlut_00F990" Format="rgba16" Width="16" Height="16" Offset="0xF990" />
+        <Texture Name="object_shn_Tex_00FB90" OutName="tex_00FB90" Format="rgba16" Width="32" Height="32" Offset="0xFB90" />
+        <Texture Name="object_shn_Tex_010390" OutName="tex_010390" Format="rgba16" Width="32" Height="32" Offset="0x10390" />
+        <Texture Name="object_shn_Tex_010B90" OutName="tex_010B90" Format="ci8" Width="32" Height="32" Offset="0x10B90" />
+        <Texture Name="object_shn_Tex_010F90" OutName="tex_010F90" Format="ci8" Width="8" Height="8" Offset="0x10F90" />
+        <Texture Name="object_shn_Tex_010FD0" OutName="tex_010FD0" Format="ci8" Width="16" Height="16" Offset="0x10FD0" />
+        <Texture Name="object_shn_Tex_0110D0" OutName="tex_0110D0" Format="ci8" Width="16" Height="16" Offset="0x110D0" />
+        <Texture Name="object_shn_Tex_0111D0" OutName="tex_0111D0" Format="ci8" Width="8" Height="8" Offset="0x111D0" />
+        <!-- <Blob Name="object_shn_Blob_011210" Size="0x10" Offset="0x11210" /> -->
+    </File>
+</Root>

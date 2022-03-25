@@ -1,0 +1,211 @@
+﻿<Root>
+    <File Name="object_knight" Segment="6">
+        <Animation Name="object_knight_Anim_0005A8" Offset="0x5A8" />
+        <Animation Name="object_knight_Anim_0009E0" Offset="0x9E0" />
+        <Animation Name="object_knight_Anim_000D9C" Offset="0xD9C" />
+        <Animation Name="object_knight_Anim_001CDC" Offset="0x1CDC" />
+        <Animation Name="object_knight_Anim_002174" Offset="0x2174" />
+        <Animation Name="object_knight_Anim_003008" Offset="0x3008" />
+        <Animation Name="object_knight_Anim_0031F0" Offset="0x31F0" />
+        <Animation Name="object_knight_Anim_003650" Offset="0x3650" />
+        <Animation Name="object_knight_Anim_0040E0" Offset="0x40E0" />
+        <Animation Name="object_knight_Anim_004620" Offset="0x4620" />
+        <Animation Name="object_knight_Anim_004974" Offset="0x4974" />
+        <Animation Name="object_knight_Anim_005D30" Offset="0x5D30" />
+        <Animation Name="object_knight_Anim_005E78" Offset="0x5E78" />
+        <Animation Name="object_knight_Anim_006754" Offset="0x6754" />
+        <Animation Name="object_knight_Anim_006EF8" Offset="0x6EF8" />
+        <Animation Name="object_knight_Anim_0079D4" Offset="0x79D4" />
+        <Animation Name="object_knight_Anim_008390" Offset="0x8390" />
+        <Animation Name="object_knight_Anim_008524" Offset="0x8524" />
+        <Animation Name="object_knight_Anim_0089E4" Offset="0x89E4" />
+        <Animation Name="object_knight_Anim_008D80" Offset="0x8D80" />
+        <Animation Name="object_knight_Anim_009538" Offset="0x9538" />
+        <Animation Name="object_knight_Anim_009D8C" Offset="0x9D8C" />
+        <Animation Name="object_knight_Anim_00A530" Offset="0xA530" />
+        <Animation Name="object_knight_Anim_00A88C" Offset="0xA88C" />
+        <Animation Name="object_knight_Anim_00AB68" Offset="0xAB68" />
+        <Animation Name="object_knight_Anim_00AFAC" Offset="0xAFAC" />
+        <Animation Name="object_knight_Anim_00B5D4" Offset="0xB5D4" />
+        <Animation Name="object_knight_Anim_00BCF4" Offset="0xBCF4" />
+        <Animation Name="object_knight_Anim_00C384" Offset="0xC384" />
+        <Animation Name="object_knight_Anim_00C7F0" Offset="0xC7F0" />
+        <Animation Name="object_knight_Anim_00CDE0" Offset="0xCDE0" />
+        <Animation Name="object_knight_Anim_00D870" Offset="0xD870" />
+        <Animation Name="object_knight_Anim_00DDCC" Offset="0xDDCC" />
+        <Animation Name="object_knight_Anim_00E15C" Offset="0xE15C" />
+        <Animation Name="object_knight_Anim_00E45C" Offset="0xE45C" />
+        <Animation Name="object_knight_Anim_00E7F4" Offset="0xE7F4" />
+        <Animation Name="object_knight_Anim_00EA90" Offset="0xEA90" />
+        <Animation Name="object_knight_Anim_00EF44" Offset="0xEF44" />
+        <Animation Name="object_knight_Anim_00F90C" Offset="0xF90C" />
+        <Animation Name="object_knight_Anim_00FC78" Offset="0xFC78" />
+        <Animation Name="object_knight_Anim_01024C" Offset="0x1024C" />
+        <Animation Name="object_knight_Anim_010E98" Offset="0x10E98" />
+        <Animation Name="object_knight_Anim_011298" Offset="0x11298" />
+        <Animation Name="object_knight_Anim_011AAC" Offset="0x11AAC" />
+        <DList Name="object_knight_DL_012400" Offset="0x12400" />
+        <Texture Name="object_knight_Tex_012760" OutName="tex_012760" Format="rgba16" Width="16" Height="16" Offset="0x12760" />
+        <Texture Name="object_knight_Tex_012960" OutName="tex_012960" Format="rgba16" Width="16" Height="16" Offset="0x12960" />
+        <Texture Name="object_knight_Tex_012B60" OutName="tex_012B60" Format="rgba16" Width="8" Height="8" Offset="0x12B60" />
+        <Texture Name="object_knight_Tex_012BE0" OutName="tex_012BE0" Format="ia16" Width="8" Height="8" Offset="0x12BE0" />
+        <DList Name="object_knight_DL_012DB0" Offset="0x12DB0" />
+        <Texture Name="object_knight_Tex_012EC0" OutName="tex_012EC0" Format="rgba16" Width="8" Height="16" Offset="0x12EC0" />
+        <Texture Name="object_knight_Tex_012FC0" OutName="tex_012FC0" Format="rgba16" Width="4" Height="4" Offset="0x12FC0" />
+        <DList Name="object_knight_DL_013020" Offset="0x13020" />
+        <DList Name="object_knight_DL_0153E0" Offset="0x153E0" />
+        <DList Name="object_knight_DL_0154B0" Offset="0x154B0" />
+        <DList Name="object_knight_DL_0155A0" Offset="0x155A0" />
+        <DList Name="object_knight_DL_015660" Offset="0x15660" />
+        <DList Name="object_knight_DL_015730" Offset="0x15730" />
+        <DList Name="object_knight_DL_015820" Offset="0x15820" />
+        <DList Name="object_knight_DL_0158E0" Offset="0x158E0" />
+        <DList Name="object_knight_DL_015A40" Offset="0x15A40" />
+        <DList Name="object_knight_DL_015AE0" Offset="0x15AE0" />
+        <DList Name="object_knight_DL_015B88" Offset="0x15B88" />
+        <DList Name="object_knight_DL_015D78" Offset="0x15D78" />
+        <DList Name="object_knight_DL_015E38" Offset="0x15E38" />
+        <DList Name="object_knight_DL_015ED8" Offset="0x15ED8" />
+        <DList Name="object_knight_DL_016310" Offset="0x16310" />
+        <DList Name="object_knight_DL_0163C8" Offset="0x163C8" />
+        <DList Name="object_knight_DL_016478" Offset="0x16478" />
+        <DList Name="object_knight_DL_016530" Offset="0x16530" />
+        <DList Name="object_knight_DL_0165F0" Offset="0x165F0" />
+        <DList Name="object_knight_DL_0166D8" Offset="0x166D8" />
+        <DList Name="object_knight_DL_016810" Offset="0x16810" />
+        <DList Name="object_knight_DL_0169C8" Offset="0x169C8" />
+        <DList Name="object_knight_DL_016AD0" Offset="0x16AD0" />
+        <DList Name="object_knight_DL_016B90" Offset="0x16B90" />
+        <DList Name="object_knight_DL_016C78" Offset="0x16C78" />
+        <DList Name="object_knight_DL_016DB0" Offset="0x16DB0" />
+        <DList Name="object_knight_DL_016F70" Offset="0x16F70" />
+        <Texture Name="object_knight_Tex_017078" OutName="tex_017078" Format="rgba16" Width="16" Height="16" Offset="0x17078" />
+        <Texture Name="object_knight_Tex_017278" OutName="tex_017278" Format="rgba16" Width="4" Height="4" Offset="0x17278" />
+        <Texture Name="object_knight_Tex_017298" OutName="tex_017298" Format="rgba16" Width="4" Height="8" Offset="0x17298" />
+        <Texture Name="object_knight_Tex_0172D8" OutName="tex_0172D8" Format="rgba16" Width="8" Height="8" Offset="0x172D8" />
+        <Texture Name="object_knight_Tex_017358" OutName="tex_017358" Format="rgba16" Width="16" Height="16" Offset="0x17358" />
+        <Texture Name="object_knight_Tex_017558" OutName="tex_017558" Format="rgba16" Width="8" Height="8" Offset="0x17558" />
+        <Texture Name="object_knight_Tex_0175D8" OutName="tex_0175D8" Format="rgba16" Width="8" Height="16" Offset="0x175D8" />
+        <Texture Name="object_knight_Tex_0176D8" OutName="tex_0176D8" Format="rgba16" Width="16" Height="16" Offset="0x176D8" />
+        <Texture Name="object_knight_Tex_0178D8" OutName="tex_0178D8" Format="rgba16" Width="16" Height="16" Offset="0x178D8" />
+        <Texture Name="object_knight_Tex_017AD8" OutName="tex_017AD8" Format="rgba16" Width="8" Height="16" Offset="0x17AD8" />
+        <Texture Name="object_knight_Tex_017BD8" OutName="tex_017BD8" Format="rgba16" Width="16" Height="16" Offset="0x17BD8" />
+        <Texture Name="object_knight_Tex_017DD8" OutName="tex_017DD8" Format="rgba16" Width="8" Height="32" Offset="0x17DD8" />
+        <Texture Name="object_knight_Tex_017FD8" OutName="tex_017FD8" Format="ia8" Width="8" Height="8" Offset="0x17FD8" />
+        <Texture Name="object_knight_Tex_018018" OutName="tex_018018" Format="i4" Width="16" Height="16" Offset="0x18018" />
+        <Texture Name="object_knight_Tex_018098" OutName="tex_018098" Format="i8" Width="64" Height="32" Offset="0x18098" />
+        <DList Name="object_knight_DL_0188F8" Offset="0x188F8" />
+        <DList Name="object_knight_DL_0189F0" Offset="0x189F0" />
+        <DList Name="object_knight_DL_018AF0" Offset="0x18AF0" />
+        <TextureAnimation Name="object_knight_Matanimheader_018BC4" Offset="0x18BC4" />
+        <Array Name="object_knight_Vtx_018BD0" Count="18" Offset="0x18BD0">
+            <Vtx/>
+        </Array>
+        <DList Name="object_knight_DL_018CF0" Offset="0x18CF0" />
+        <DList Name="object_knight_DL_018DE0" Offset="0x18DE0" />
+        <DList Name="object_knight_DL_018E50" Offset="0x18E50" />
+        <Texture Name="object_knight_Tex_018E58" OutName="tex_018E58" Format="ia8" Width="16" Height="16" Offset="0x18E58" />
+        <Texture Name="object_knight_Tex_018F58" OutName="tex_018F58" Format="ia16" Width="16" Height="32" Offset="0x18F58" />
+        <TextureAnimation Name="object_knight_Matanimheader_019360" Offset="0x19360" />
+        <DList Name="object_knight_DL_0193A8" Offset="0x193A8" />
+        <DList Name="object_knight_DL_0193B0" Offset="0x193B0" />
+        <Texture Name="object_knight_Tex_019470" OutName="tex_019470" Format="rgba16" Width="4" Height="4" Offset="0x19470" />
+        <Texture Name="object_knight_Tex_019490" OutName="tex_019490" Format="i8" Width="32" Height="64" Offset="0x19490" />
+        <DList Name="object_knight_DL_01D380" Offset="0x1D380" />
+        <DList Name="object_knight_DL_01D4C0" Offset="0x1D4C0" />
+        <DList Name="object_knight_DL_01D650" Offset="0x1D650" />
+        <DList Name="object_knight_DL_01D710" Offset="0x1D710" />
+        <DList Name="object_knight_DL_01D870" Offset="0x1D870" />
+        <DList Name="object_knight_DL_01DA00" Offset="0x1DA00" />
+        <DList Name="object_knight_DL_01DAC0" Offset="0x1DAC0" />
+        <DList Name="object_knight_DL_01DC00" Offset="0x1DC00" />
+        <DList Name="object_knight_DL_01DCA0" Offset="0x1DCA0" />
+        <DList Name="object_knight_DL_01DD48" Offset="0x1DD48" />
+        <DList Name="object_knight_DL_01DF88" Offset="0x1DF88" />
+        <DList Name="object_knight_DL_01E050" Offset="0x1E050" />
+        <DList Name="object_knight_DL_01E0A0" Offset="0x1E0A0" />
+        <DList Name="object_knight_DL_01E878" Offset="0x1E878" />
+        <DList Name="object_knight_DL_01EAA8" Offset="0x1EAA8" />
+        <DList Name="object_knight_DL_01EB40" Offset="0x1EB40" />
+        <DList Name="object_knight_DL_01EBD8" Offset="0x1EBD8" />
+        <DList Name="object_knight_DL_01EC98" Offset="0x1EC98" />
+        <DList Name="object_knight_DL_01EDE0" Offset="0x1EDE0" />
+        <DList Name="object_knight_DL_01EF68" Offset="0x1EF68" />
+        <DList Name="object_knight_DL_01F188" Offset="0x1F188" />
+        <DList Name="object_knight_DL_01F248" Offset="0x1F248" />
+        <DList Name="object_knight_DL_01F308" Offset="0x1F308" />
+        <DList Name="object_knight_DL_01F3C0" Offset="0x1F3C0" />
+        <DList Name="object_knight_DL_01F5C0" Offset="0x1F5C0" />
+        <DList Name="object_knight_DL_01F828" Offset="0x1F828" />
+        <Texture Name="object_knight_Tex_01F8E8" OutName="tex_01F8E8" Format="rgba16" Width="8" Height="16" Offset="0x1F8E8" />
+        <Texture Name="object_knight_Tex_01F9E8" OutName="tex_01F9E8" Format="rgba16" Width="8" Height="16" Offset="0x1F9E8" />
+        <Texture Name="object_knight_Tex_01FAE8" OutName="tex_01FAE8" Format="rgba16" Width="16" Height="8" Offset="0x1FAE8" />
+        <Texture Name="object_knight_Tex_01FBE8" OutName="tex_01FBE8" Format="ia8" Width="16" Height="16" Offset="0x1FBE8" />
+        <Texture Name="object_knight_Tex_01FCE8" OutName="tex_01FCE8" Format="rgba16" Width="8" Height="16" Offset="0x1FCE8" />
+        <Texture Name="object_knight_Tex_01FDE8" OutName="tex_01FDE8" Format="rgba16" Width="16" Height="16" Offset="0x1FDE8" />
+        <Limb Name="object_knight_Standardlimb_01FFE8" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_01" Offset="0x1FFE8" />
+        <Limb Name="object_knight_Standardlimb_01FFF4" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_02" Offset="0x1FFF4" />
+        <Limb Name="object_knight_Standardlimb_020000" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_03" Offset="0x20000" />
+        <Limb Name="object_knight_Standardlimb_02000C" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_04" Offset="0x2000C" />
+        <Limb Name="object_knight_Standardlimb_020018" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_05" Offset="0x20018" />
+        <Limb Name="object_knight_Standardlimb_020024" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_06" Offset="0x20024" />
+        <Limb Name="object_knight_Standardlimb_020030" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_07" Offset="0x20030" />
+        <Limb Name="object_knight_Standardlimb_02003C" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_08" Offset="0x2003C" />
+        <Limb Name="object_knight_Standardlimb_020048" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_09" Offset="0x20048" />
+        <Limb Name="object_knight_Standardlimb_020054" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_0A" Offset="0x20054" />
+        <Limb Name="object_knight_Standardlimb_020060" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_0B" Offset="0x20060" />
+        <Limb Name="object_knight_Standardlimb_02006C" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_0C" Offset="0x2006C" />
+        <Limb Name="object_knight_Standardlimb_020078" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_0D" Offset="0x20078" />
+        <Limb Name="object_knight_Standardlimb_020084" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_0E" Offset="0x20084" />
+        <Limb Name="object_knight_Standardlimb_020090" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_0F" Offset="0x20090" />
+        <Limb Name="object_knight_Standardlimb_02009C" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_10" Offset="0x2009C" />
+        <Limb Name="object_knight_Standardlimb_0200A8" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_11" Offset="0x200A8" />
+        <Limb Name="object_knight_Standardlimb_0200B4" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_12" Offset="0x200B4" />
+        <Limb Name="object_knight_Standardlimb_0200C0" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_13" Offset="0x200C0" />
+        <Limb Name="object_knight_Standardlimb_0200CC" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_14" Offset="0x200CC" />
+        <Limb Name="object_knight_Standardlimb_0200D8" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_15" Offset="0x200D8" />
+        <Limb Name="object_knight_Standardlimb_0200E4" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_16" Offset="0x200E4" />
+        <Limb Name="object_knight_Standardlimb_0200F0" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_17" Offset="0x200F0" />
+        <Limb Name="object_knight_Standardlimb_0200FC" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_18" Offset="0x200FC" />
+        <Limb Name="object_knight_Standardlimb_020108" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_19" Offset="0x20108" />
+        <Limb Name="object_knight_Standardlimb_020114" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_1A" Offset="0x20114" />
+        <Limb Name="object_knight_Standardlimb_020120" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_1B" Offset="0x20120" />
+        <Limb Name="object_knight_Standardlimb_02012C" Type="Standard" EnumName="OBJECT_KNIGHT_1_LIMB_1C" Offset="0x2012C" />
+        <Skeleton Name="object_knight_Skel_0201A8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KNIGHT_1_LIMB_NONE" LimbMax="OBJECT_KNIGHT_1_LIMB_MAX" EnumName="object_knight_1_Limbs" Offset="0x201A8" />
+        <Limb Name="object_knight_Standardlimb_0201B4" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_01" Offset="0x201B4" />
+        <Limb Name="object_knight_Standardlimb_0201C0" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_02" Offset="0x201C0" />
+        <Limb Name="object_knight_Standardlimb_0201CC" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_03" Offset="0x201CC" />
+        <Limb Name="object_knight_Standardlimb_0201D8" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_04" Offset="0x201D8" />
+        <Limb Name="object_knight_Standardlimb_0201E4" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_05" Offset="0x201E4" />
+        <Limb Name="object_knight_Standardlimb_0201F0" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_06" Offset="0x201F0" />
+        <Limb Name="object_knight_Standardlimb_0201FC" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_07" Offset="0x201FC" />
+        <Limb Name="object_knight_Standardlimb_020208" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_08" Offset="0x20208" />
+        <Limb Name="object_knight_Standardlimb_020214" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_09" Offset="0x20214" />
+        <Limb Name="object_knight_Standardlimb_020220" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_0A" Offset="0x20220" />
+        <Limb Name="object_knight_Standardlimb_02022C" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_0B" Offset="0x2022C" />
+        <Limb Name="object_knight_Standardlimb_020238" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_0C" Offset="0x20238" />
+        <Limb Name="object_knight_Standardlimb_020244" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_0D" Offset="0x20244" />
+        <Limb Name="object_knight_Standardlimb_020250" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_0E" Offset="0x20250" />
+        <Limb Name="object_knight_Standardlimb_02025C" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_0F" Offset="0x2025C" />
+        <Limb Name="object_knight_Standardlimb_020268" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_10" Offset="0x20268" />
+        <Limb Name="object_knight_Standardlimb_020274" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_11" Offset="0x20274" />
+        <Limb Name="object_knight_Standardlimb_020280" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_12" Offset="0x20280" />
+        <Limb Name="object_knight_Standardlimb_02028C" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_13" Offset="0x2028C" />
+        <Limb Name="object_knight_Standardlimb_020298" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_14" Offset="0x20298" />
+        <Limb Name="object_knight_Standardlimb_0202A4" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_15" Offset="0x202A4" />
+        <Limb Name="object_knight_Standardlimb_0202B0" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_16" Offset="0x202B0" />
+        <Limb Name="object_knight_Standardlimb_0202BC" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_17" Offset="0x202BC" />
+        <Limb Name="object_knight_Standardlimb_0202C8" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_18" Offset="0x202C8" />
+        <Limb Name="object_knight_Standardlimb_0202D4" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_19" Offset="0x202D4" />
+        <Limb Name="object_knight_Standardlimb_0202E0" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_1A" Offset="0x202E0" />
+        <Limb Name="object_knight_Standardlimb_0202EC" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_1B" Offset="0x202EC" />
+        <Limb Name="object_knight_Standardlimb_0202F8" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_1C" Offset="0x202F8" />
+        <Skeleton Name="object_knight_Skel_020374" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KNIGHT_2_LIMB_NONE" LimbMax="OBJECT_KNIGHT_2_LIMB_MAX" EnumName="object_knight_2_Limbs" Offset="0x20374" />
+        <Animation Name="object_knight_Anim_020950" Offset="0x20950" />
+        <Animation Name="object_knight_Anim_02105C" Offset="0x2105C" />
+        <Animation Name="object_knight_Anim_021B10" Offset="0x21B10" />
+        <Animation Name="object_knight_Anim_021E34" Offset="0x21E34" />
+        <Animation Name="object_knight_Anim_022728" Offset="0x22728" />
+        <Animation Name="object_knight_Anim_022CAC" Offset="0x22CAC" />
+    </File>
+</Root>

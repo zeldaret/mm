@@ -44,8 +44,8 @@ void GameOver_Update(GlobalContext* globalCtx) {
             }
 
             gSaveContext.unk_3DC0 = 2000;
-            gSaveContext.naviTimer = 0;
-            gSaveContext.seqIndex = 0xFF;
+            gSaveContext.tatlTimer = 0;
+            gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
             gSaveContext.nightSeqIndex = 0xFF;
             gSaveContext.eventInf[0] = 0;
             gSaveContext.eventInf[1] = 0;
@@ -66,15 +66,15 @@ void GameOver_Update(GlobalContext* globalCtx) {
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
-            if (func_801A8A50(1) != 32) {
-                func_80169F78(globalCtx);
+            if (func_801A8A50(1) != NA_BGM_GAME_OVER) {
+                func_80169F78(&globalCtx->state);
                 if (gSaveContext.respawnFlag != -7) {
                     gSaveContext.respawnFlag = -6;
                 }
                 gSaveContext.nextTransition = 2;
                 gSaveContext.health = 48;
                 gameOverCtx->state++;
-                if (gSaveContext.inventory.items[SLOT(ITEM_MASK_DEKU)] == ITEM_MASK_DEKU) {
+                if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
                     gSaveContext.playerForm = PLAYER_FORM_HUMAN;
                     gSaveContext.equippedMask = PLAYER_MASK_NONE;
                 }

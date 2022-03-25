@@ -1,0 +1,18 @@
+﻿<Root>
+    <File Name="object_bdoor" Segment="6">
+        <DList Name="object_bdoor_DL_0000C0" Offset="0xC0" />
+        <DList Name="object_bdoor_DL_000400" Offset="0x400" />
+        <DList Name="object_bdoor_DL_000530" Offset="0x530" />
+        <Texture Name="object_bdoor_Tex_0005C0" OutName="tex_0005C0" Format="rgba16" Width="32" Height="64" Offset="0x5C0" />
+        <DList Name="object_bdoor_DL_001790" Offset="0x1790" />
+        <DList Name="object_bdoor_DL_001850" Offset="0x1850" />
+        <Texture Name="object_bdoor_Tex_001910" OutName="tex_001910" Format="rgba16" Width="32" Height="64" Offset="0x1910" />
+        <DList Name="object_bdoor_DL_002A50" Offset="0x2A50" />
+        <DList Name="object_bdoor_DL_002AF8" Offset="0x2AF8" />
+        <Texture Name="object_bdoor_Tex_002BA0" OutName="tex_002BA0" Format="rgba16" Width="32" Height="64" Offset="0x2BA0" />
+        <Texture Name="object_bdoor_Tex_003BA0" OutName="tex_003BA0" Format="rgba16" Width="32" Height="64" Offset="0x3BA0" />
+        <Texture Name="object_bdoor_Tex_004BA0" OutName="tex_004BA0" Format="rgba16" Width="32" Height="64" Offset="0x4BA0" />
+        <Texture Name="object_bdoor_Tex_005BA0" OutName="tex_005BA0" Format="rgba16" Width="32" Height="64" Offset="0x5BA0" />
+        <Texture Name="object_bdoor_Tex_006BA0" OutName="tex_006BA0" Format="rgba16" Width="32" Height="64" Offset="0x6BA0" />
+    </File>
+</Root>

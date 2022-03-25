@@ -2,6 +2,7 @@
 #define Z_EN_HORSE_H
 
 #include "global.h"
+#include "z64skin.h"
 
 struct EnHorse;
 

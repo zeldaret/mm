@@ -1,12 +1,12 @@
 /*
  * File: z_obj_shutter.c
  * Overlay: ovl_Obj_Shutter
- * Description:
+ * Description: Unused West Clock Town bank closing shutter
  */
 
 #include "z_obj_shutter.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjShutter*)thisx)
 

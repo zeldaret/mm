@@ -1,12 +1,12 @@
 /*
  * File: z_obj_entotu.c
  * Overlay: ovl_Obj_Entotu
- * Description: Clock tower chimney Expelling Smoke
+ * Description: Clock Town Smoking Chimney
  */
 
 #include "z_obj_entotu.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjEntotu*)thisx)
 

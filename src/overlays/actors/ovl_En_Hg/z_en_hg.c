@@ -5,8 +5,9 @@
  */
 
 #include "z_en_hg.h"
+#include "objects/object_harfgibud/object_harfgibud.h"
 
-#define FLAGS 0x02100019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHg*)thisx)
 
@@ -27,19 +28,8 @@ void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF8A0(EnHg* this, GlobalContext* globalCtx);
 void func_80BCF93C(EnHg* this);
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx);
-s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* arg);
-void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg);
-
-extern AnimationHeader D_06000370;
-extern AnimationHeader D_06001138;
-extern AnimationHeader D_060015D4;
-extern AnimationHeader D_06001960;
-extern AnimationHeader D_0600260C;
-extern Gfx D_06005E28[];
-extern FlexSkeletonHeader D_06008580;
-extern AnimationHeader D_06009D44;
-extern AnimationHeader D_0600A164;
-extern AnimationHeader D_0600AE1C;
+s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 const ActorInit En_Hg_InitVars = {
     ACTOR_EN_HG,
@@ -112,11 +102,15 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, 0x80,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &D_0600260C, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06009D44, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &D_0600A164, 1.0f, 0.0f, 0.0f, 0, -4.0f }, { &D_06000370, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06001138, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &D_060015D4, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &D_06001960, 1.0f, 0.0f, 0.0f, 0, 0.0f },  { &D_0600AE1C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_harfgibud_Anim_00260C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_009D44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_00A164, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_000370, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_001138, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0015D4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_001960, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_00AE1C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static u32 D_80BD00C8 = false;
@@ -127,12 +121,12 @@ void EnHg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06008580, &D_0600260C, this->jointTable, this->morphTable,
-                       HG_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_harfgibud_Skel_008580, &object_harfgibud_Anim_00260C,
+                       this->jointTable, this->morphTable, HG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
-    if ((gSaveContext.weekEventReg[0x4B] & 0x20) || (gSaveContext.weekEventReg[0x34] & 0x20)) {
+    if ((gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.weekEventReg[52] & 0x20)) {
         Actor_MarkForDeath(&this->actor);
     }
     this->actor.targetMode = 1;
@@ -155,25 +149,25 @@ void EnHg_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BCF354(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BCF398;
 }
 
 void func_80BCF398(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health == 1) {
         if ((this->actor.xzDistToPlayer < 200.0f && this->actor.playerHeightRel < 40.0f) &&
-            !func_800EE29C(globalCtx, 0x1E3)) {
+            !Cutscene_CheckActorAction(globalCtx, 0x1E3)) {
             func_80BCF468(this);
         }
-        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.unk_12 == 0) &&
+        if ((gSaveContext.sceneSetupIndex == 0 && globalCtx->csCtx.currentCsIndex == 0) &&
             (globalCtx->csCtx.frames == 20 || globalCtx->csCtx.frames == 60)) {
-            Audio_PlayActorSound2(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_HALF_REDEAD_SURPRISE);
         }
     }
 }
 
 void func_80BCF468(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80BCF4AC;
 }
 
@@ -182,10 +176,10 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
     s32 pad;
 
     this->actor.speedXZ = 1.6f;
-    if (!(player->stateFlags2 & 0x08000000) && !func_80152498(&globalCtx->msgCtx)) {
+    if (!(player->stateFlags2 & 0x08000000) && Message_GetState(&globalCtx->msgCtx) == 0) {
         if (((this->skelAnime.curFrame > 9.0f) && (this->skelAnime.curFrame < 16.0f)) ||
             ((this->skelAnime.curFrame > 44.0f) && (this->skelAnime.curFrame < 51.0f))) {
-            Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+            Actor_MoveWithGravity(&this->actor);
             Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x3E8, 0x14);
             this->actor.world.rot.y = this->actor.shape.rot.y;
         }
@@ -197,7 +191,7 @@ void func_80BCF4AC(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF5F0(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BCF634;
 }
 
@@ -210,7 +204,7 @@ void func_80BCF634(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF68C(EnHg* this) {
-    func_800BDC5C(&this->skelAnime, sAnimations, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
     this->actionFunc = func_80BCF6D0;
 }
 
@@ -221,9 +215,9 @@ void func_80BCF6D0(EnHg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BCF710(EnHg* this, GlobalContext* globalCtx) {
-    if (!func_80152498(&globalCtx->msgCtx)) {
-        if (func_800B84D0(&this->actor, globalCtx)) {
-            func_801518B0(globalCtx, 0x24F, &this->actor);
+    if (Message_GetState(&globalCtx->msgCtx) == 0) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
+            Message_StartTextbox(globalCtx, 0x24F, &this->actor);
         } else {
             func_800B8614(&this->actor, globalCtx, 80.0f);
         }
@@ -234,7 +228,7 @@ void func_80BCF778(EnHg* this, GlobalContext* globalCtx) {
     if (this->actor.colChkInfo.health == 1) {
         if (this->actionFunc == func_80BCF4AC || this->actionFunc == func_80BCF6D0 ||
             this->actionFunc == func_80BCF634) {
-            func_800B9010(&this->actor, 0x32B7);
+            func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
         }
     }
 }
@@ -277,24 +271,25 @@ void func_80BCF93C(EnHg* this) {
 }
 
 void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x1E4)) {
-        u32 actionIndex = func_800EE200(globalCtx, 0x1E4);
-        if (this->cutscenes[3] != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->cutscenes[3] = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 484)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 484);
+
+        if (this->cutscenes[3] != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->cutscenes[3] = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->currentAnimation = 0;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                     break;
                 case 2:
                     this->cutscenes[2] = 0;
                     this->currentAnimation = 3;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     break;
                 case 3:
                     this->cutscenes[2] = 0;
                     this->currentAnimation = 5;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                     break;
                 case 4:
                     this->cutscenes[2] = 0;
@@ -302,14 +297,14 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                     if ((this->unk218 == 1) || (this->unk218 == 3)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    func_800BDC5C(&this->skelAnime, sAnimations, 7);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 7);
                     break;
                 case 5:
                     this->currentAnimation = 1;
-                    func_800BDC5C(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                     break;
                 case 6:
-                    gSaveContext.weekEventReg[0x4B] |= 0x20;
+                    gSaveContext.weekEventReg[75] |= 0x20;
                     Actor_MarkForDeath(&this->actor);
                     break;
             }
@@ -318,11 +313,11 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                 switch (this->currentAnimation) {
                     case 3:
                         this->currentAnimation = 4;
-                        func_800BDC5C(&this->skelAnime, sAnimations, 4);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                         break;
                     case 5:
                         this->currentAnimation = 6;
-                        func_800BDC5C(&this->skelAnime, sAnimations, 6);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
                         break;
                 }
             }
@@ -342,7 +337,7 @@ void func_80BCF95C(EnHg* this, GlobalContext* globalCtx) {
                 }
                 break;
         }
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return;
     } else if (globalCtx->csCtx.state == 0) {
         func_80BCF354(this);
@@ -362,9 +357,9 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
         } else {
             D_80BD00C8 = false;
         }
-        if (globalCtx->msgCtx.unk1202A == 3) {
+        if (globalCtx->msgCtx.ocarinaMode == 3) {
             if (globalCtx->msgCtx.unk1202E == 7 && gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
-                if (INV_CONTENT(0x41) == 0x41) {
+                if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                     this->unk218 = 3;
                 } else {
                     this->unk218 = 1;
@@ -374,8 +369,8 @@ void func_80BCFC0C(EnHg* this, GlobalContext* globalCtx) {
         } else {
             if (this->actor.xzDistToPlayer < 60.0f && fabsf(this->actor.playerHeightRel) < 40.0f) {
                 if ((this->actionFunc != func_80BCF8A0) && (this->actionFunc != func_80BCF95C)) {
-                    if (!(gSaveContext.weekEventReg[0x3D] & 2)) {
-                        gSaveContext.weekEventReg[0x3D] |= 2;
+                    if (!(gSaveContext.weekEventReg[61] & 2)) {
+                        gSaveContext.weekEventReg[61] |= 2;
                         this->unk218 = 0;
                     } else {
                         this->unk218 = 2;
@@ -401,7 +396,7 @@ void EnHg_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnHg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    return 0;
+    return false;
 }
 
 void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -422,6 +417,6 @@ void EnHg_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_SetCurrentState(&this->unk1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, D_06005E28);
+    gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_005E28);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

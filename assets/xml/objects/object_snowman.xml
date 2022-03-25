@@ -1,0 +1,49 @@
+﻿<Root>
+    <File Name="object_snowman" Segment="6">
+        <Animation Name="object_snowman_Anim_000404" Offset="0x404" />
+        <Animation Name="object_snowman_Anim_0007B4" Offset="0x7B4" />
+        <DList Name="object_snowman_DL_0010B0" Offset="0x10B0" />
+        <DList Name="object_snowman_DL_002428" Offset="0x2428" />
+        <DList Name="object_snowman_DL_002640" Offset="0x2640" />
+        <DList Name="object_snowman_DL_0028F0" Offset="0x28F0" />
+        <DList Name="object_snowman_DL_0029B0" Offset="0x29B0" />
+        <DList Name="object_snowman_DL_002A50" Offset="0x2A50" />
+        <DList Name="object_snowman_DL_002B20" Offset="0x2B20" />
+        <DList Name="object_snowman_DL_002C70" Offset="0x2C70" />
+        <DList Name="object_snowman_DL_002D10" Offset="0x2D10" />
+        <DList Name="object_snowman_DL_002DE0" Offset="0x2DE0" />
+        <DList Name="object_snowman_DL_002E70" Offset="0x2E70" />
+        <Texture Name="object_snowman_Tex_002F00" OutName="tex_002F00" Format="rgba16" Width="32" Height="64" Offset="0x2F00" />
+        <Texture Name="object_snowman_Tex_003F00" OutName="tex_003F00" Format="i4" Width="16" Height="16" Offset="0x3F00" />
+        <Texture Name="object_snowman_Tex_003F80" OutName="tex_003F80" Format="i8" Width="16" Height="16" Offset="0x3F80" />
+        <Texture Name="object_snowman_Tex_004080" OutName="tex_004080" Format="rgba16" Width="16" Height="16" Offset="0x4080" />
+        <DList Name="object_snowman_DL_004400" Offset="0x4400" />
+        <Limb Name="object_snowman_Standardlimb_0044F0" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_01" Offset="0x44F0" />
+        <Limb Name="object_snowman_Standardlimb_0044FC" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_02" Offset="0x44FC" />
+        <Limb Name="object_snowman_Standardlimb_004508" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_03" Offset="0x4508" />
+        <Limb Name="object_snowman_Standardlimb_004514" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_04" Offset="0x4514" />
+        <Limb Name="object_snowman_Standardlimb_004520" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_05" Offset="0x4520" />
+        <Limb Name="object_snowman_Standardlimb_00452C" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_06" Offset="0x452C" />
+        <Limb Name="object_snowman_Standardlimb_004538" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_07" Offset="0x4538" />
+        <Limb Name="object_snowman_Standardlimb_004544" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_08" Offset="0x4544" />
+        <Limb Name="object_snowman_Standardlimb_004550" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_09" Offset="0x4550" />
+        <Limb Name="object_snowman_Standardlimb_00455C" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_0A" Offset="0x455C" />
+        <Limb Name="object_snowman_Standardlimb_004568" Type="Standard" EnumName="OBJECT_SNOWMAN_1_LIMB_0B" Offset="0x4568" />
+        <Skeleton Name="object_snowman_Skel_0045A0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SNOWMAN_1_LIMB_NONE" LimbMax="OBJECT_SNOWMAN_1_LIMB_MAX" EnumName="object_snowman_1_Limbs" Offset="0x45A0" />
+        <Animation Name="object_snowman_Anim_004628" Offset="0x4628" />
+        <Animation Name="object_snowman_Anim_0046D8" Offset="0x46D8" />
+        <DList Name="object_snowman_DL_004960" Offset="0x4960" />
+        <DList Name="object_snowman_DL_0049E0" Offset="0x49E0" />
+        <Limb Name="object_snowman_Standardlimb_004A70" Type="Standard" EnumName="OBJECT_SNOWMAN_2_LIMB_01" Offset="0x4A70" />
+        <Limb Name="object_snowman_Standardlimb_004A7C" Type="Standard" EnumName="OBJECT_SNOWMAN_2_LIMB_02" Offset="0x4A7C" />
+        <Skeleton Name="object_snowman_Skel_004A90" Type="Flex" LimbType="Standard" LimbNone="OBJECT_SNOWMAN_2_LIMB_NONE" LimbMax="OBJECT_SNOWMAN_2_LIMB_MAX" EnumName="object_snowman_2_Limbs" Offset="0x4A90" />
+        <Animation Name="object_snowman_Anim_004F14" Offset="0x4F14" />
+        <Animation Name="object_snowman_Anim_00544C" Offset="0x544C" />
+        <Animation Name="object_snowman_Anim_00554C" Offset="0x554C" />
+        <Animation Name="object_snowman_Anim_0058CC" Offset="0x58CC" />
+        <DList Name="object_snowman_DL_005CB0" Offset="0x5CB0" />
+        <DList Name="object_snowman_DL_006190" Offset="0x6190" />
+        <DList Name="object_snowman_DL_006620" Offset="0x6620" />
+        <Texture Name="object_snowman_Tex_006730" OutName="tex_006730" Format="rgba16" Width="32" Height="64" Offset="0x6730" />
+    </File>
+</Root>

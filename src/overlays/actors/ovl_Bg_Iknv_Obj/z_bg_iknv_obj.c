@@ -5,8 +5,9 @@
  */
 
 #include "z_bg_iknv_obj.h"
+#include "objects/object_iknv_obj/object_iknv_obj.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIknvObj*)thisx)
 
@@ -19,12 +20,6 @@ void BgIknvObj_DoNothing(BgIknvObj* this, GlobalContext* globalCtx);
 void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx);
 void BgIknvObj_UpdateRaisedDoor(BgIknvObj* this, GlobalContext* globalCtx);
 void BgIknvObj_UpdateSakonDoor(BgIknvObj* this, GlobalContext* globalCtx);
-
-extern CollisionHeader D_060119D4;
-extern CollisionHeader D_06012CA4;
-extern Gfx D_06011880[];
-extern Gfx D_060129C8[];
-extern Gfx D_06013058[];
 
 const ActorInit Bg_Iknv_Obj_InitVars = {
     ACTOR_BG_IKNV_OBJ,
@@ -67,30 +62,30 @@ void BgIknvObj_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = BgIknvObj_DoNothing;
     switch (IKNV_OBJ_TYPE(this)) {
         case IKNV_OBJ_WATERWHEEL:
-            this->displayListPtr = D_06013058;
+            this->displayListPtr = object_iknv_obj_DL_013058;
             this->actionFunc = BgIknvObj_UpdateWaterwheel;
-            this->dyna.actor.flags |= 0x100000;
-            this->dyna.actor.flags |= 0x10;
+            this->dyna.actor.flags |= ACTOR_FLAG_100000;
+            this->dyna.actor.flags |= ACTOR_FLAG_10;
             break;
         case IKNV_OBJ_RAISED_DOOR:
-            this->displayListPtr = D_06011880;
-            BcCheck3_BgActorInit(&this->dyna, 0);
-            BgCheck_RelocateMeshHeader(&D_060119D4, &colHeader);
-            this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            this->displayListPtr = object_iknv_obj_DL_011880;
+            DynaPolyActor_Init(&this->dyna, 0);
+            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_0119D4, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             this->actionFunc = BgIknvObj_UpdateRaisedDoor;
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 120.0f;
             break;
         case IKNV_OBJ_SAKON_DOOR:
-            this->displayListPtr = D_060129C8;
+            this->displayListPtr = object_iknv_obj_DL_0129C8;
             this->actionFunc = BgIknvObj_UpdateSakonDoor;
-            BcCheck3_BgActorInit(&this->dyna, 0);
-            BgCheck_RelocateMeshHeader(&D_06012CA4, &colHeader);
-            this->dyna.bgId = BgCheck_AddActorMesh(globalCtx, &globalCtx->colCtx.dyna, &this->dyna, colHeader);
+            DynaPolyActor_Init(&this->dyna, 0);
+            CollisionHeader_GetVirtual(&object_iknv_obj_Colheader_012CA4, &colHeader);
+            this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
             Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
             Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
             this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
             gSaveContext.weekEventReg[51] &= (u8)~0x10;
-            Actor_SetHeight(&this->dyna.actor, IREG(88));
+            Actor_SetFocus(&this->dyna.actor, IREG(88));
             break;
         default:
             Actor_MarkForDeath(&this->dyna.actor);
@@ -108,7 +103,7 @@ void BgIknvObj_Destroy(Actor* thisx, GlobalContext* globalCtx) {
             return;
         }
     }
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 s32 func_80BD7CEC(BgIknvObj* this) {
@@ -136,8 +131,8 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, GlobalContext* globalCtx) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) && (globalCtx->csCtx.unk_12 == 4) &&
-        (globalCtx->csCtx.frames == 0x5D7)) {
+    if ((globalCtx->csCtx.state != 0) && (gSaveContext.sceneSetupIndex == 1) &&
+        (globalCtx->csCtx.currentCsIndex == 4) && (globalCtx->csCtx.frames == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
 }
@@ -154,7 +149,7 @@ s32 func_80BD7E0C(BgIknvObj* this, s16 targetRotation, GlobalContext* globalCtx)
         func_800B9010(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
         return false;
     }
-    Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
     return true;
 }
 
@@ -167,7 +162,7 @@ void func_80BD7ED8(BgIknvObj* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD7F4C(BgIknvObj* this, GlobalContext* globalCtx) {
-    if (gSaveContext.time > 0xD000) {
+    if (gSaveContext.time > CLOCK_TIME(19, 30)) {
         this->actionFunc = func_80BD7ED8;
     }
     if ((this->dyna.actor.home.rot.x == 1) && !(gSaveContext.weekEventReg[58] & 0x80)) {

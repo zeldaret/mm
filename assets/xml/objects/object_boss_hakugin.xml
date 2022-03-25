@@ -1,0 +1,82 @@
+﻿<Root>
+    <File Name="object_boss_hakugin" Segment="6">
+        <Animation Name="object_boss_hakugin_Anim_002054" Offset="0x2054" />
+        <Animation Name="object_boss_hakugin_Anim_0025B0" Offset="0x25B0" />
+        <Animation Name="object_boss_hakugin_Anim_0028D0" Offset="0x28D0" />
+        <Animation Name="object_boss_hakugin_Anim_003088" Offset="0x3088" />
+        <Animation Name="object_boss_hakugin_Anim_00319C" Offset="0x319C" />
+        <DList Name="object_boss_hakugin_DL_008030" Offset="0x8030" />
+        <DList Name="object_boss_hakugin_DL_008380" Offset="0x8380" />
+        <DList Name="object_boss_hakugin_DL_0084C0" Offset="0x84C0" />
+        <DList Name="object_boss_hakugin_DL_008590" Offset="0x8590" />
+        <DList Name="object_boss_hakugin_DL_008718" Offset="0x8718" />
+        <DList Name="object_boss_hakugin_DL_0089B8" Offset="0x89B8" />
+        <DList Name="object_boss_hakugin_DL_008AF8" Offset="0x8AF8" />
+        <DList Name="object_boss_hakugin_DL_008BC8" Offset="0x8BC8" />
+        <DList Name="object_boss_hakugin_DL_008D50" Offset="0x8D50" />
+        <DList Name="object_boss_hakugin_DL_008FF0" Offset="0x8FF0" />
+        <DList Name="object_boss_hakugin_DL_009748" Offset="0x9748" />
+        <DList Name="object_boss_hakugin_DL_009948" Offset="0x9948" />
+        <DList Name="object_boss_hakugin_DL_009E18" Offset="0x9E18" />
+        <DList Name="object_boss_hakugin_DL_009F58" Offset="0x9F58" />
+        <DList Name="object_boss_hakugin_DL_00A170" Offset="0xA170" />
+        <DList Name="object_boss_hakugin_DL_00A478" Offset="0xA478" />
+        <DList Name="object_boss_hakugin_DL_00A5B8" Offset="0xA5B8" />
+        <DList Name="object_boss_hakugin_DL_00A7D0" Offset="0xA7D0" />
+        <Texture Name="object_boss_hakugin_Tex_00AAD8" OutName="tex_00AAD8" Format="rgba16" Width="32" Height="64" Offset="0xAAD8" />
+        <Texture Name="object_boss_hakugin_Tex_00BAD8" OutName="tex_00BAD8" Format="rgba16" Width="32" Height="64" Offset="0xBAD8" />
+        <Texture Name="object_boss_hakugin_Tex_00CAD8" OutName="tex_00CAD8" Format="rgba16" Width="32" Height="64" Offset="0xCAD8" />
+        <Texture Name="object_boss_hakugin_Tex_00DAD8" OutName="tex_00DAD8" Format="rgba16" Width="32" Height="64" Offset="0xDAD8" />
+        <Texture Name="object_boss_hakugin_Tex_00EAD8" OutName="tex_00EAD8" Format="rgba16" Width="32" Height="64" Offset="0xEAD8" />
+        <Texture Name="object_boss_hakugin_Tex_00FAD8" OutName="tex_00FAD8" Format="rgba16" Width="32" Height="32" Offset="0xFAD8" />
+        <DList Name="object_boss_hakugin_DL_010488" Offset="0x10488" />
+        <DList Name="object_boss_hakugin_DL_010500" Offset="0x10500" />
+        <Texture Name="object_boss_hakugin_Tex_010560" OutName="tex_010560" Format="rgba16" Width="36" Height="36" Offset="0x10560" />
+        <DList Name="object_boss_hakugin_DL_011100" Offset="0x11100" />
+        <DList Name="object_boss_hakugin_DL_011178" Offset="0x11178" /> <!-- Stalactite -->
+        <DList Name="object_boss_hakugin_DL_011208" Offset="0x11208" />
+        <DList Name="object_boss_hakugin_DL_011278" Offset="0x11278" />
+        <Texture Name="object_boss_hakugin_Tex_011290" OutName="tex_011290" Format="i4" Width="32" Height="96" Offset="0x11290" />
+        <!-- <Blob Name="object_boss_hakugin_zeroes_unk_00011890" Size="0x600" Offset="0x11890" /> -->
+        <Texture Name="object_boss_hakugin_Tex_011E90" OutName="tex_011E90" Format="i8" Width="64" Height="64" Offset="0x11E90" />
+        <DList Name="object_boss_hakugin_DL_012ED0" Offset="0x12ED0" />
+        <DList Name="object_boss_hakugin_DL_012F40" Offset="0x12F40" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012F58" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_01" Offset="0x12F58" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012F64" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_02" Offset="0x12F64" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012F70" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_03" Offset="0x12F70" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012F7C" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_04" Offset="0x12F7C" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012F88" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_05" Offset="0x12F88" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012F94" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_06" Offset="0x12F94" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FA0" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_07" Offset="0x12FA0" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FAC" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_08" Offset="0x12FAC" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FB8" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_09" Offset="0x12FB8" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FC4" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_0A" Offset="0x12FC4" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FD0" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_0B" Offset="0x12FD0" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FDC" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_0C" Offset="0x12FDC" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FE8" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_0D" Offset="0x12FE8" />
+        <Limb Name="object_boss_hakugin_Standardlimb_012FF4" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_0E" Offset="0x12FF4" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013000" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_0F" Offset="0x13000" />
+        <Limb Name="object_boss_hakugin_Standardlimb_01300C" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_10" Offset="0x1300C" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013018" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_11" Offset="0x13018" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013024" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_12" Offset="0x13024" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013030" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_13" Offset="0x13030" />
+        <Limb Name="object_boss_hakugin_Standardlimb_01303C" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_14" Offset="0x1303C" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013048" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_15" Offset="0x13048" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013054" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_16" Offset="0x13054" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013060" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_17" Offset="0x13060" />
+        <Limb Name="object_boss_hakugin_Standardlimb_01306C" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_18" Offset="0x1306C" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013078" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_19" Offset="0x13078" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013084" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_1A" Offset="0x13084" />
+        <Limb Name="object_boss_hakugin_Standardlimb_013090" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_1B" Offset="0x13090" />
+        <Limb Name="object_boss_hakugin_Standardlimb_01309C" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_1C" Offset="0x1309C" />
+        <Limb Name="object_boss_hakugin_Standardlimb_0130A8" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_1D" Offset="0x130A8" />
+        <Limb Name="object_boss_hakugin_Standardlimb_0130B4" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_1E" Offset="0x130B4" />
+        <Limb Name="object_boss_hakugin_Standardlimb_0130C0" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_1F" Offset="0x130C0" />
+        <Limb Name="object_boss_hakugin_Standardlimb_0130CC" Type="Standard" EnumName="OBJECT_BOSS_HAKUGIN_LIMB_20" Offset="0x130CC" />
+        <Skeleton Name="object_boss_hakugin_Skel_013158" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS_HAKUGIN_LIMB_NONE" LimbMax="OBJECT_BOSS_HAKUGIN_LIMB_MAX" EnumName="object_boss_hakugin_Limbs" Offset="0x13158" />
+        <Animation Name="object_boss_hakugin_Anim_0134D0" Offset="0x134D0" />
+        <Animation Name="object_boss_hakugin_Anim_013828" Offset="0x13828" />
+        <Animation Name="object_boss_hakugin_Anim_014024" Offset="0x14024" />
+        <!-- <Blob Name="object_boss_hakugin_Blob_014034" Size="0x140C" Offset="0x14034" /> -->
+    </File>
+</Root>

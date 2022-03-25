@@ -1,0 +1,52 @@
+﻿<Root>
+    <File Name="object_box" Segment="6">
+        <Animation Name="object_box_Anim_000128" Offset="0x128" />
+        <Animation Name="object_box_Anim_00024C" Offset="0x24C" />
+        <!-- <Blob Name="object_box_zeroes_unk_0000025C" Size="0xF4" Offset="0x25C" /> -->
+        <Animation Name="object_box_Anim_00043C" Offset="0x43C" />
+        <!-- <Blob Name="object_box_zeroes_unk_0000044C" Size="0x64" Offset="0x44C" /> -->
+        <DList Name="object_box_DL_0006F0" Offset="0x6F0" />
+        <DList Name="object_box_DL_000A50" Offset="0xA50" />
+        <DList Name="object_box_DL_000DB0" Offset="0xDB0" />
+        <DList Name="object_box_DL_0012E8" Offset="0x12E8" />
+        <DList Name="object_box_DL_001850" Offset="0x1850" />
+        <DList Name="object_box_DL_001D58" Offset="0x1D58" />
+        <Texture Name="object_box_Tex_001E60" OutName="tex_001E60" Format="rgba16" Width="32" Height="64" Offset="0x1E60" />
+        <Texture Name="object_box_Tex_002E60" OutName="tex_002E60" Format="rgba16" Width="32" Height="32" Offset="0x2E60" />
+        <Texture Name="object_box_Tex_003660" OutName="tex_003660" Format="rgba16" Width="32" Height="64" Offset="0x3660" />
+        <Texture Name="object_box_Tex_004660" OutName="tex_004660" Format="rgba16" Width="32" Height="32" Offset="0x4660" />
+        <Texture Name="object_box_Tex_004E60" OutName="tex_004E60" Format="rgba16" Width="32" Height="64" Offset="0x4E60" />
+        <Texture Name="object_box_Tex_005E60" OutName="tex_005E60" Format="rgba16" Width="32" Height="32" Offset="0x5E60" />
+        <Limb Name="object_box_Standardlimb_006660" Type="Standard" EnumName="OBJECT_BOX_1_LIMB_01" Offset="0x6660" />
+        <Limb Name="object_box_Standardlimb_00666C" Type="Standard" EnumName="OBJECT_BOX_1_LIMB_02" Offset="0x666C" />
+        <Limb Name="object_box_Standardlimb_006678" Type="Standard" EnumName="OBJECT_BOX_1_LIMB_03" Offset="0x6678" />
+        <Limb Name="object_box_Standardlimb_006684" Type="Standard" EnumName="OBJECT_BOX_1_LIMB_04" Offset="0x6684" />
+        <Skeleton Name="object_box_Skel_0066A0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BOX_1_LIMB_NONE" LimbMax="OBJECT_BOX_1_LIMB_MAX" EnumName="object_box_1_Limbs" Offset="0x66A0" />
+        <!-- <Blob Name="object_box_Blob_0066A8" Size="0x798" Offset="0x66A8" /> -->
+        <Texture Name="object_box_Tex_006E40" OutName="tex_006E40" Format="i8" Width="64" Height="32" Offset="0x6E40" />
+        <DList Name="object_box_DL_007890" Offset="0x7890" />
+        <DList Name="object_box_DL_007978" Offset="0x7978" />
+        <DList Name="object_box_DL_007A40" Offset="0x7A40" />
+        <DList Name="object_box_DL_007B08" Offset="0x7B08" />
+        <DList Name="object_box_DL_007BD0" Offset="0x7BD0" />
+        <Limb Name="object_box_Standardlimb_007C98" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_01" Offset="0x7C98" />
+        <Limb Name="object_box_Standardlimb_007CA4" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_02" Offset="0x7CA4" />
+        <Limb Name="object_box_Standardlimb_007CB0" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_03" Offset="0x7CB0" />
+        <Limb Name="object_box_Standardlimb_007CBC" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_04" Offset="0x7CBC" />
+        <Limb Name="object_box_Standardlimb_007CC8" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_05" Offset="0x7CC8" />
+        <Limb Name="object_box_Standardlimb_007CD4" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_06" Offset="0x7CD4" />
+        <Limb Name="object_box_Standardlimb_007CE0" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_07" Offset="0x7CE0" />
+        <Limb Name="object_box_Standardlimb_007CEC" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_08" Offset="0x7CEC" />
+        <Limb Name="object_box_Standardlimb_007CF8" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_09" Offset="0x7CF8" />
+        <Limb Name="object_box_Standardlimb_007D04" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_0A" Offset="0x7D04" />
+        <Limb Name="object_box_Standardlimb_007D10" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_0B" Offset="0x7D10" />
+        <Limb Name="object_box_Standardlimb_007D1C" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_0C" Offset="0x7D1C" />
+        <Limb Name="object_box_Standardlimb_007D28" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_0D" Offset="0x7D28" />
+        <Limb Name="object_box_Standardlimb_007D34" Type="Standard" EnumName="OBJECT_BOX_2_LIMB_0E" Offset="0x7D34" />
+        <Skeleton Name="object_box_Skel_007D78" Type="Normal" LimbType="Standard" LimbNone="OBJECT_BOX_2_LIMB_NONE" LimbMax="OBJECT_BOX_2_LIMB_MAX" EnumName="object_box_2_Limbs" Offset="0x7D78" />
+        <Animation Name="object_box_Anim_007E54" Offset="0x7E54" />
+        <Animation Name="object_box_Anim_007F30" Offset="0x7F30" />
+        <!-- <Blob Name="object_box_zeroes_unk_00007F40" Size="0xA0" Offset="0x7F40" /> -->
+        <Collision Name="object_box_Colheader_0080E8" Offset="0x80E8" />
+    </File>
+</Root>

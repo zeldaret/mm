@@ -1,12 +1,12 @@
 /*
  * File: z_en_encount1.c
  * Overlay: ovl_En_Encount1
- * Description:
+ * Description: Spawner for Dragonflies, Skullfish, and Wallmasters
  */
 
 #include "z_en_encount1.h"
 
-#define FLAGS 0x08100010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnEncount1*)thisx)
 

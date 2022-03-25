@@ -1,12 +1,12 @@
 /*
- * File z_en_an.c
+ * File: z_en_an.c
  * Overlay: ovl_En_An
  * Description: Anju
  */
 
 #include "z_en_an.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAn*)thisx)
 

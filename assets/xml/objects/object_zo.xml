@@ -1,0 +1,78 @@
+﻿<Root>
+    <File Name="object_zo" Segment="6">
+        <Animation Name="gZoraHandsOnHipsTappingFootAnim" Offset="0x598" />
+        <Animation Name="gZoraArmsOpenAnim" Offset="0xD48" />
+        <Animation Name="gZoraThrowRupeeAnim" Offset="0x219C" />
+        <Animation Name="gZoraWalkAnim" Offset="0x2898" />
+        <Texture Name="gZoraBubbleTex" OutName="bubble" Format="ia8" Width="16" Height="16" Offset="0x28B0" />
+        <DList Name="object_zo_DL_0029F0" Offset="0x29F0" />
+        <DList Name="object_zo_DL_002A50" Offset="0x2A50" />
+        <Texture Name="gZoraSplashTex" OutName="splash" Format="i8" Width="16" Height="16" Offset="0x2A70" />
+        <DList Name="object_zo_DL_002BA0" Offset="0x2BA0" />
+        <DList Name="object_zo_DL_002C10" Offset="0x2C10" />
+        <Animation Name="gZoraSurfacingAnim" Offset="0x3610" />
+        <Animation Name="object_zo_Anim_004168" Offset="0x4168" />
+        <Animation Name="gZoraIdleAnim" Offset="0x4248" />
+        <Texture Name="gZoraTLUT" OutName="tlut" Format="rgba16" Width="16" Height="16" Offset="0x4260" />
+        <Texture Name="gZoraFinTex" OutName="fin" Format="ci8" Width="32" Height="32" Offset="0x4460" />
+        <Texture Name="gZoraBackAndHeadTailTex" OutName="back_head_tail" Format="ci8" Width="32" Height="64" Offset="0x4860" />
+        <Texture Name="object_zo_Tex_005060" OutName="tex_005060" Format="ci8" Width="8" Height="8" Offset="0x5060" />
+        <Texture Name="gZoraEyeOpenTex" OutName="eye_open" Format="rgba16" Width="32" Height="32" Offset="0x50A0" />
+        <Texture Name="gZoraEyeHalfTex" OutName="eye_half" Format="rgba16" Width="32" Height="32" Offset="0x58A0" />
+        <Texture Name="gZoraEyeClosedTex" OutName="eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x60A0" />
+        <Texture Name="gZoraMouthTex" OutName="mouth" Format="rgba16" Width="32" Height="32" Offset="0x68A0" />
+        <Texture Name="gZoraHandTex" OutName="hand" Format="ci8" Width="16" Height="16" Offset="0x70A0" />
+        <Texture Name="gZoraKneeTex" OutName="knee" Format="ci8" Width="8" Height="8" Offset="0x71A0" />
+        <DList Name="gZoraPelvisDL" Offset="0xA2A0" />
+        <DList Name="gZoraTorsoDL" Offset="0xA448" />
+        <DList Name="gZoraHeadDL" Offset="0xA7C0" />
+        <DList Name="gZoraHeadTail1DL" Offset="0xAA38" />
+        <DList Name="gZoraHeadTail2DL" Offset="0xABD8" />
+        <DList Name="gZoraHeadTail3DL" Offset="0xAD70" />
+        <DList Name="gZoraHeadTailFinDL" Offset="0xAF08" />
+        <DList Name="gZoraRightUpperArmDL" Offset="0xB148" />
+        <DList Name="gZoraRightForearmDL" Offset="0xB3A8" />
+        <DList Name="gZoraRightHandDL" Offset="0xB688" />
+        <DList Name="gZoraLeftUpperArmDL" Offset="0xB890" />
+        <DList Name="gZoraLeftForearmDL" Offset="0xBAF0" />
+        <DList Name="gZoraLeftHandDL" Offset="0xBDD0" />
+        <DList Name="gZoraRightThighDL" Offset="0xBFD8" />
+        <DList Name="gZoraRightShinDL" Offset="0xC2B8" />
+        <DList Name="gZoraRightFootDL" Offset="0xC590" />
+        <DList Name="gZoraLeftThighDL" Offset="0xC858" />
+        <DList Name="gZoraLeftShinDL" Offset="0xCB38" />
+        <DList Name="gZoraLeftFootDL" Offset="0xCE10" />
+        <Limb Name="gZoraPelvisLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_01" Offset="0xD0D8" />
+        <Limb Name="gZoraLeftThighLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_02" Offset="0xD0E4" />
+        <Limb Name="gZoraLeftShinLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_03" Offset="0xD0F0" />
+        <Limb Name="gZoraLeftFootLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_04" Offset="0xD0FC" />
+        <Limb Name="gZoraRightThighLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_05" Offset="0xD108" />
+        <Limb Name="gZoraRightShinLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_06" Offset="0xD114" />
+        <Limb Name="gZoraRightFootLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_07" Offset="0xD120" />
+        <Limb Name="gZoraTorsoLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_08" Offset="0xD12C" />
+        <Limb Name="gZoraLeftUpperArmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_09" Offset="0xD138" />
+        <Limb Name="gZoraLeftForearmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0A" Offset="0xD144" />
+        <Limb Name="gZoraLeftHandLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0B" Offset="0xD150" />
+        <Limb Name="gZoraRightUpperArmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0C" Offset="0xD15C" />
+        <Limb Name="gZoraRightForearmLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0D" Offset="0xD168" />
+        <Limb Name="gZoraRightHandLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0E" Offset="0xD174" />
+        <Limb Name="gZoraHeadLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_0F" Offset="0xD180" />
+        <Limb Name="gZoraHeadTail1Limb" Type="Standard" EnumName="OBJECT_ZO_LIMB_10" Offset="0xD18C" />
+        <Limb Name="gZoraHeadTail2Limb" Type="Standard" EnumName="OBJECT_ZO_LIMB_11" Offset="0xD198" />
+        <Limb Name="gZoraHeadTail3Limb" Type="Standard" EnumName="OBJECT_ZO_LIMB_12" Offset="0xD1A4" />
+        <Limb Name="gZoraHeadTailFinLimb" Type="Standard" EnumName="OBJECT_ZO_LIMB_13" Offset="0xD1B0" />
+        <Skeleton Name="gZoraSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZO_LIMB_NONE" LimbMax="OBJECT_ZO_LIMB_MAX" EnumName="object_zo_Limbs" Offset="0xD208" />
+        <DList Name="object_zo_DL_00D220" Offset="0xD220" />
+        <DList Name="object_zo_DL_00D288" Offset="0xD288" />
+        <DList Name="object_zo_DL_00D2A0" Offset="0xD2A0" />
+        <DList Name="object_zo_DL_00D2B8" Offset="0xD2B8" />
+        <Animation Name="object_zo_Anim_00DE20" Offset="0xDE20" />
+        <Animation Name="object_zo_Anim_00DF54" Offset="0xDF54" />
+        <Animation Name="object_zo_Anim_00E400" Offset="0xE400" />
+        <Animation Name="object_zo_Anim_00EDF0" Offset="0xEDF0" />
+        <Animation Name="object_zo_Anim_00F4E8" Offset="0xF4E8" />
+        <Animation Name="object_zo_Anim_00FDF0" Offset="0xFDF0" />
+        <Animation Name="object_zo_Anim_010B18" Offset="0x10B18" />
+        <Animation Name="object_zo_Anim_011424" Offset="0x11424" />
+    </File>
+</Root>

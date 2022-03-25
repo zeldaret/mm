@@ -1,0 +1,59 @@
+﻿<Root>
+    <File Name="object_okuta" Segment="6">
+        <Animation Name="object_okuta_Anim_00044C" Offset="0x44C" />
+        <DList Name="object_okuta_DL_000DC0" Offset="0xDC0" />
+        <DList Name="object_okuta_DL_000E70" Offset="0xE70" />
+        <DList Name="object_okuta_DL_000F28" Offset="0xF28" />
+        <DList Name="object_okuta_DL_000FD8" Offset="0xFD8" />
+        <DList Name="object_okuta_DL_001088" Offset="0x1088" />
+        <DList Name="object_okuta_DL_001140" Offset="0x1140" />
+        <DList Name="object_okuta_DL_0011F0" Offset="0x11F0" />
+        <DList Name="object_okuta_DL_0012A0" Offset="0x12A0" />
+        <DList Name="object_okuta_DL_001358" Offset="0x1358" />
+        <DList Name="object_okuta_DL_001408" Offset="0x1408" />
+        <DList Name="object_okuta_DL_0014B8" Offset="0x14B8" />
+        <DList Name="object_okuta_DL_001570" Offset="0x1570" />
+        <DList Name="object_okuta_DL_001620" Offset="0x1620" />
+        <DList Name="object_okuta_DL_001730" Offset="0x1730" />
+        <DList Name="object_okuta_DL_0017F0" Offset="0x17F0" />
+        <DList Name="object_okuta_DL_0018B0" Offset="0x18B0" />
+        <DList Name="object_okuta_DL_001970" Offset="0x1970" />
+        <DList Name="object_okuta_DL_001A38" Offset="0x1A38" />
+        <DList Name="object_okuta_DL_001B18" Offset="0x1B18" />
+        <DList Name="object_okuta_DL_001BE8" Offset="0x1BE8" />
+        <DList Name="object_okuta_DL_001C20" Offset="0x1C20" />
+        <Texture Name="object_okuta_Tex_001D20" OutName="tex_001D20" Format="rgba16" Width="16" Height="16" Offset="0x1D20" />
+        <Texture Name="object_okuta_Tex_001F20" OutName="tex_001F20" Format="rgba16" Width="8" Height="16" Offset="0x1F20" />
+        <Texture Name="object_okuta_Tex_002020" OutName="tex_002020" Format="rgba16" Width="16" Height="32" Offset="0x2020" />
+        <Texture Name="object_okuta_Tex_002420" OutName="tex_002420" Format="rgba16" Width="16" Height="16" Offset="0x2420" />
+        <Texture Name="object_okuta_Tex_002620" OutName="tex_002620" Format="rgba16" Width="16" Height="16" Offset="0x2620" />
+        <Texture Name="object_okuta_Tex_002820" OutName="tex_002820" Format="rgba16" Width="8" Height="16" Offset="0x2820" />
+        <Texture Name="object_okuta_Tex_002920" OutName="tex_002920" Format="rgba32" Width="16" Height="16" Offset="0x2920" />
+        <!-- <Blob Name="object_okuta_Blob_002D20" Size="0x200" Offset="0x2D20" /> -->
+        <Texture Name="object_okuta_Tex_002F20" OutName="tex_002F20" Format="rgba16" Width="8" Height="8" Offset="0x2F20" />
+        <Texture Name="object_okuta_Tex_002FA0" OutName="tex_002FA0" Format="rgba16" Width="8" Height="8" Offset="0x2FA0" />
+        <Texture Name="object_okuta_Tex_003020" OutName="tex_003020" Format="rgba16" Width="16" Height="16" Offset="0x3020" />
+        <DList Name="object_okuta_DL_003250" Offset="0x3250" />
+        <Limb Name="object_okuta_Standardlimb_0032E0" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_01" Offset="0x32E0" />
+        <Limb Name="object_okuta_Standardlimb_0032EC" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_02" Offset="0x32EC" />
+        <Limb Name="object_okuta_Standardlimb_0032F8" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_03" Offset="0x32F8" />
+        <Limb Name="object_okuta_Standardlimb_003304" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_04" Offset="0x3304" />
+        <Limb Name="object_okuta_Standardlimb_003310" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_05" Offset="0x3310" />
+        <Limb Name="object_okuta_Standardlimb_00331C" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_06" Offset="0x331C" />
+        <Limb Name="object_okuta_Standardlimb_003328" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_07" Offset="0x3328" />
+        <Limb Name="object_okuta_Standardlimb_003334" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_08" Offset="0x3334" />
+        <Limb Name="object_okuta_Standardlimb_003340" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_09" Offset="0x3340" />
+        <Limb Name="object_okuta_Standardlimb_00334C" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_0A" Offset="0x334C" />
+        <Limb Name="object_okuta_Standardlimb_003358" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_0B" Offset="0x3358" />
+        <Limb Name="object_okuta_Standardlimb_003364" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_0C" Offset="0x3364" />
+        <Limb Name="object_okuta_Standardlimb_003370" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_0D" Offset="0x3370" />
+        <Limb Name="object_okuta_Standardlimb_00337C" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_0E" Offset="0x337C" />
+        <Limb Name="object_okuta_Standardlimb_003388" Type="Standard" EnumName="OBJECT_OKUTA_LIMB_0F" Offset="0x3388" />
+        <Skeleton Name="object_okuta_Skel_0033D0" Type="Normal" LimbType="Standard" LimbNone="OBJECT_OKUTA_LIMB_NONE" LimbMax="OBJECT_OKUTA_LIMB_MAX" EnumName="object_okuta_Limbs" Offset="0x33D0" />
+        <Animation Name="object_okuta_Anim_003958" Offset="0x3958" />
+        <Animation Name="object_okuta_Anim_003B24" Offset="0x3B24" />
+        <Animation Name="object_okuta_Anim_003EE4" Offset="0x3EE4" />
+        <Animation Name="object_okuta_Anim_004204" Offset="0x4204" />
+        <Animation Name="object_okuta_Anim_00466C" Offset="0x466C" />
+    </File>
+</Root>

@@ -6,8 +6,9 @@
 
 #include "z_en_elfbub.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
+#include "objects/object_bubble/object_bubble.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnElfbub*)thisx)
 
@@ -51,8 +52,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 16, 32, 0, { 0, 0, 0 } },
 };
 
-extern Gfx D_06001000[];
-
 void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnElfbub* this = THIS;
     Actor* childActor;
@@ -62,7 +61,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    ActorShape_Init(&this->actor.shape, 16.0f, func_800B3FC0, 0.2f);
+    ActorShape_Init(&this->actor.shape, 16.0f, ActorShadow_DrawCircle, 0.2f);
     this->actor.hintId = 0x16;
     Actor_SetScale(&this->actor, 1.25f);
 
@@ -83,7 +82,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void EnElfbub_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -117,7 +116,7 @@ void EnElfbub_Pop(EnElfbub* this, GlobalContext* globalCtx) {
                                               Rand_S16Offset(100, 50), 25, 0);
         }
 
-        Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
+        SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 60, NA_SE_EN_AWA_BREAK);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -143,7 +142,7 @@ void EnElfbub_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnElfbub* this = THIS;
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, this->actor.shape.yOffset);
+    Actor_SetFocus(&this->actor, this->actor.shape.yOffset);
 }
 
 void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
@@ -154,15 +153,15 @@ void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, 0.0f, 1.0f, 1);
-    Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
-    Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, 1);
-    Matrix_InsertZRotation_s(this->zRot, 1);
-    Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, 1);
-    Matrix_InsertZRotation_s(this->zRot * -1, 1);
+    Matrix_InsertTranslation(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->zRot, MTXMODE_APPLY);
+    Matrix_Scale(this->xScale + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_InsertZRotation_s(this->zRot * -1, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, D_06001000);
+    gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

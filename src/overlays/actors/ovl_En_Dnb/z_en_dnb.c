@@ -1,12 +1,14 @@
 /*
  * File: z_en_dnb.c
  * Overlay: ovl_En_Dnb
- * Description:
+ * Description: Unused invisible snowy mountain that explodes?
  */
 
 #include "z_en_dnb.h"
+#include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x000000B0
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80)
 
 #define THIS ((EnDnb*)thisx)
 
@@ -18,12 +20,6 @@ void EnDnb_Draw(Actor* thisx, GlobalContext* globalCtx);
 s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg4, f32 arg5);
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
 s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx);
-
-extern Gfx D_06000000[];
-extern Gfx D_06000020[];
-extern Gfx D_06004638[];
-extern Vec3s D_06004710[];
-extern CollisionHeader D_06004D8C;
 
 const ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
@@ -47,7 +43,7 @@ void func_80A4FDD0(EnDnbParticle* particle, EnDnb* this, s16* alloc, s32 idx) {
     particle->unk_00 = sp1C;
     particle->unk_0C = sp1C;
     particle->unk_24 = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp1C);
-    particle->unk_18 = D_801D15BC;
+    particle->unk_18 = gZeroVec3s;
 }
 
 s32 func_80A4FEBC(EnDnbParticle* particle, f32 arg1) {
@@ -76,7 +72,7 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
     particle->unk_1E.x = (Rand_ZeroOne() - 0.5f) * 400.0f;
     particle->unk_1E.y = (Rand_ZeroOne() - 0.5f) * 400.0f;
     particle->unk_1E.z = (Rand_ZeroOne() - 0.5f) * 400.0f;
-    particle->unk_18 = D_801D15BC;
+    particle->unk_18 = gZeroVec3s;
     particle->unk_30 = 40.0f;
     particle->unk_2C = 0.0f;
     particle->unk_26 = arg1;
@@ -86,7 +82,7 @@ void func_80A4FFE8(EnDnbParticle* particle, s16 arg1) {
 s32 func_80A500F8(EnDnb* this) {
     static Vec3f D_80A50CB0 = { 0.0f, 0.0f, 1000.0f };
     Actor* actor = &this->dyna.actor;
-    Vec3f spA8 = D_801D15B0;
+    Vec3f spA8 = gZeroVec3f;
     Vec3f sp9C;
     s32 i;
     f32 temp_f20;
@@ -108,10 +104,10 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s16* alloc;
 
-    BcCheck3_BgActorInit(&this->dyna, 1);
-    BgCheck3_LoadMesh(globalCtx, &this->dyna, &D_06004D8C);
+    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
 
-    alloc = (s16*)Lib_SegmentedToVirtual(D_06004710);
+    alloc = Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         func_80A4FDD0(&this->particles[i], this, alloc, i);
     }
@@ -122,7 +118,7 @@ void EnDnb_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnDnb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDnb* this = THIS;
 
-    BgCheck_RemoveActorMesh(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 }
 
 void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
@@ -156,7 +152,7 @@ void EnDnb_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
     s32 i;
-    Gfx** gfx = Lib_SegmentedToVirtual(D_06004638);
+    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -181,7 +177,7 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
 
 void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
     s32 i;
-    Gfx** gfx = Lib_SegmentedToVirtual(D_06004638);
+    Gfx** gfx = Lib_SegmentedToVirtual(object_hanareyama_obj_DLArray_004638);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -259,7 +255,7 @@ s32 func_80A5086C(EnDnbUnkStruct* arg0) {
 
 s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
     static TexturePtr D_80A50CBC[] = {
-        D_0408F7E0, D_0408F3E0, D_0408EFE0, D_0408EBE0, D_0408E7E0, D_0408E3E0, D_0408DFE0, D_0408DBE0,
+        gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
     };
     GlobalContext* globalCtx = globalCtx2;
     s32 isGfxSetup = false;
@@ -275,7 +271,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
         if (arg0->isEnabled == 1) {
             if (!isGfxSetup) {
                 POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, D_06000000);
+                gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000000);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
                 isGfxSetup = true;
             }
@@ -288,13 +284,13 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
 
             Matrix_InsertTranslation(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             idx = (arg0->unk_01 / (f32)arg0->unk_02) * 8.0f;
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A50CBC[idx]));
-            gSPDisplayList(POLY_XLU_DISP++, D_06000020);
+            gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000020);
 
             Matrix_StatePop();
             sp5C += 1;

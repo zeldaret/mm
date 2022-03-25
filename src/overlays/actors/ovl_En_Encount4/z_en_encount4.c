@@ -1,12 +1,12 @@
 /*
  * File: z_en_encount4.c
  * Overlay: ovl_En_Encount4
- * Description:
+ * Description: Spawner for Stalchild and Fire Wall in Keeta chase
  */
 
 #include "z_en_encount4.h"
 
-#define FLAGS 0x08000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
 #define THIS ((EnEncount4*)thisx)
 

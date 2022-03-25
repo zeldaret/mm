@@ -1,12 +1,12 @@
 /*
  * File: z_oceff_spot.c
  * Overlay: ovl_Oceff_Spot
- * Description:
+ * Description: Sun's Song Ocarina Effect
  */
 
 #include "z_oceff_spot.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((OceffSpot*)thisx)
 

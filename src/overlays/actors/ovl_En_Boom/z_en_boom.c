@@ -1,12 +1,12 @@
 /*
- * File z_en_boom.c
+ * File: z_en_boom.c
  * Overlay: ovl_En_Boom
  * Description: Zora boomerangs
  */
 
 #include "z_en_boom.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnBoom*)thisx)
 

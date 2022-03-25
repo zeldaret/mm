@@ -1,12 +1,12 @@
 /*
  * File: z_en_part.c
  * Overlay: ovl_En_Part
- * Description:
+ * Description: Enemy body parts (spawned when dying)
  */
 
 #include "z_en_part.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnPart*)thisx)
 

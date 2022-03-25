@@ -1,12 +1,12 @@
 /*
  * File: z_mir_ray2.c
  * Overlay: ovl_Mir_Ray2
- * Description:
+ * Description: Reflectable light ray (static beam)
  */
 
 #include "z_mir_ray2.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((MirRay2*)thisx)
 

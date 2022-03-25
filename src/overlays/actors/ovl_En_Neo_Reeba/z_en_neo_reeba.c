@@ -1,12 +1,12 @@
 /*
  * File: z_en_neo_reeba.c
  * Overlay: ovl_En_Neo_Reeba
- * Description: Leevers
+ * Description: (New) Leevers
  */
 
 #include "z_en_neo_reeba.h"
 
-#define FLAGS 0x00000205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 

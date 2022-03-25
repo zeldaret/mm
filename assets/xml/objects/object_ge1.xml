@@ -1,0 +1,63 @@
+﻿<Root>
+    <File Name="object_ge1" Segment="6">
+        <Animation Name="object_ge1_Anim_000594" Offset="0x594" />
+        <Animation Name="object_ge1_Anim_000ABC" Offset="0xABC" />
+        <Animation Name="object_ge1_Anim_000CF8" Offset="0xCF8" />
+        <Animation Name="object_ge1_Anim_0013CC" Offset="0x13CC" />
+        <Animation Name="object_ge1_Anim_00202C" Offset="0x202C" />
+        <Animation Name="object_ge1_Anim_002148" Offset="0x2148" />
+        <Animation Name="object_ge1_Anim_002954" Offset="0x2954" />
+        <Animation Name="object_ge1_Anim_002AD8" Offset="0x2AD8" />
+        <Animation Name="object_ge1_Anim_002B98" Offset="0x2B98" />
+        <Limb Name="object_ge1_Standardlimb_002BB0" Type="Standard" EnumName="OBJECT_GE1_LIMB_01" Offset="0x2BB0" />
+        <Limb Name="object_ge1_Standardlimb_002BBC" Type="Standard" EnumName="OBJECT_GE1_LIMB_02" Offset="0x2BBC" />
+        <Limb Name="object_ge1_Standardlimb_002BC8" Type="Standard" EnumName="OBJECT_GE1_LIMB_03" Offset="0x2BC8" />
+        <Limb Name="object_ge1_Standardlimb_002BD4" Type="Standard" EnumName="OBJECT_GE1_LIMB_04" Offset="0x2BD4" />
+        <Limb Name="object_ge1_Standardlimb_002BE0" Type="Standard" EnumName="OBJECT_GE1_LIMB_05" Offset="0x2BE0" />
+        <Limb Name="object_ge1_Standardlimb_002BEC" Type="Standard" EnumName="OBJECT_GE1_LIMB_06" Offset="0x2BEC" />
+        <Limb Name="object_ge1_Standardlimb_002BF8" Type="Standard" EnumName="OBJECT_GE1_LIMB_07" Offset="0x2BF8" />
+        <Limb Name="object_ge1_Standardlimb_002C04" Type="Standard" EnumName="OBJECT_GE1_LIMB_08" Offset="0x2C04" />
+        <Limb Name="object_ge1_Standardlimb_002C10" Type="Standard" EnumName="OBJECT_GE1_LIMB_09" Offset="0x2C10" />
+        <Limb Name="object_ge1_Standardlimb_002C1C" Type="Standard" EnumName="OBJECT_GE1_LIMB_0A" Offset="0x2C1C" />
+        <Limb Name="object_ge1_Standardlimb_002C28" Type="Standard" EnumName="OBJECT_GE1_LIMB_0B" Offset="0x2C28" />
+        <Limb Name="object_ge1_Standardlimb_002C34" Type="Standard" EnumName="OBJECT_GE1_LIMB_0C" Offset="0x2C34" />
+        <Limb Name="object_ge1_Standardlimb_002C40" Type="Standard" EnumName="OBJECT_GE1_LIMB_0D" Offset="0x2C40" />
+        <Limb Name="object_ge1_Standardlimb_002C4C" Type="Standard" EnumName="OBJECT_GE1_LIMB_0E" Offset="0x2C4C" />
+        <Limb Name="object_ge1_Standardlimb_002C58" Type="Standard" EnumName="OBJECT_GE1_LIMB_0F" Offset="0x2C58" />
+        <Skeleton Name="object_ge1_Skel_002CA0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GE1_LIMB_NONE" LimbMax="OBJECT_GE1_LIMB_MAX" EnumName="object_ge1_Limbs" Offset="0x2CA0" />
+        <Texture Name="object_ge1_TLUT_002CB8" OutName="tlut_002CB8" Format="rgba16" Width="16" Height="16" Offset="0x2CB8" />
+        <Texture Name="object_ge1_Tex_002EB8" OutName="tex_002EB8" Format="ci8" Width="8" Height="8" Offset="0x2EB8" />
+        <Texture Name="object_ge1_Tex_002EF8" OutName="tex_002EF8" Format="ci8" Width="16" Height="16" Offset="0x2EF8" />
+        <Texture Name="object_ge1_Tex_002FF8" OutName="tex_002FF8" Format="ci8" Width="8" Height="16" Offset="0x2FF8" />
+        <!-- <Blob Name="object_ge1_Blob_003078" Size="0x1800" Offset="0x3078" /> -->
+        <Texture Name="object_ge1_Tex_004878" OutName="tex_004878" Format="ci8" Width="32" Height="32" Offset="0x4878" />
+        <Texture Name="object_ge1_Tex_004C78" OutName="tex_004C78" Format="ci8" Width="8" Height="16" Offset="0x4C78" />
+        <Texture Name="object_ge1_Tex_004CF8" OutName="tex_004CF8" Format="ci8" Width="16" Height="16" Offset="0x4CF8" />
+        <Texture Name="object_ge1_Tex_004DF8" OutName="tex_004DF8" Format="ci8" Width="16" Height="16" Offset="0x4DF8" />
+        <Texture Name="object_ge1_Tex_004EF8" OutName="tex_004EF8" Format="ci8" Width="16" Height="16" Offset="0x4EF8" />
+        <Texture Name="object_ge1_Tex_004FF8" OutName="tex_004FF8" Format="ci8" Width="8" Height="8" Offset="0x4FF8" />
+        <Texture Name="object_ge1_Tex_005038" OutName="tex_005038" Format="ci8" Width="8" Height="16" Offset="0x5038" />
+        <Texture Name="object_ge1_Tex_0050B8" OutName="tex_0050B8" Format="ci8" Width="8" Height="8" Offset="0x50B8" />
+        <Texture Name="object_ge1_Tex_0050F8" OutName="tex_0050F8" Format="rgba16" Width="8" Height="8" Offset="0x50F8" />
+        <Texture Name="object_ge1_TLUT_005178" OutName="tlut_005178" Format="rgba16" Width="16" Height="16" Offset="0x5178" />
+        <Texture Name="object_ge1_Tex_005378" OutName="tex_005378" Format="ci8" Width="16" Height="16" Offset="0x5378" />
+        <DList Name="object_ge1_DL_007F78" Offset="0x7F78" />
+        <DList Name="object_ge1_DL_0085A8" Offset="0x85A8" />
+        <DList Name="object_ge1_DL_0089B0" Offset="0x89B0" />
+        <DList Name="object_ge1_DL_008B58" Offset="0x8B58" />
+        <DList Name="object_ge1_DL_008C88" Offset="0x8C88" />
+        <DList Name="object_ge1_DL_008E80" Offset="0x8E80" />
+        <DList Name="object_ge1_DL_009028" Offset="0x9028" />
+        <DList Name="object_ge1_DL_009158" Offset="0x9158" />
+        <DList Name="object_ge1_DL_009350" Offset="0x9350" />
+        <DList Name="object_ge1_DL_009440" Offset="0x9440" />
+        <DList Name="object_ge1_DL_009570" Offset="0x9570" />
+        <DList Name="object_ge1_DL_0097C0" Offset="0x97C0" />
+        <DList Name="object_ge1_DL_009A20" Offset="0x9A20" />
+        <DList Name="object_ge1_DL_009B50" Offset="0x9B50" />
+        <DList Name="object_ge1_DL_009D18" Offset="0x9D18" />
+        <DList Name="object_ge1_DL_00BB08" Offset="0xBB08" />
+        <DList Name="object_ge1_DL_00BDA0" Offset="0xBDA0" />
+        <DList Name="object_ge1_DL_00C000" Offset="0xC000" />
+    </File>
+</Root>

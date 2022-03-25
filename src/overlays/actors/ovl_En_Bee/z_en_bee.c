@@ -1,12 +1,12 @@
 /*
- * File z_en_bee.c
+ * File: z_en_bee.c
  * Overlay: ovl_En_Bee
  * Description: Giant Bee
  */
 
 #include "z_en_bee.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnBee*)thisx)
 

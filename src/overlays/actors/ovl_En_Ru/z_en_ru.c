@@ -1,12 +1,12 @@
 /*
  * File: z_en_ru.c
  * Overlay: ovl_En_Ru
- * Description: Ruto
+ * Description: OoT's Adult Ruto (unused)
  */
 
 #include "z_en_ru.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnRu*)thisx)
 

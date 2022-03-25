@@ -1,0 +1,86 @@
+﻿<Root>
+    <File Name="object_dno" Segment="6">
+        <Animation Name="object_dno_Anim_000470" Offset="0x470" />
+        <Animation Name="object_dno_Anim_0008F0" Offset="0x8F0" />
+        <Animation Name="object_dno_Anim_000F6C" Offset="0xF6C" />
+        <Animation Name="object_dno_Anim_001A50" Offset="0x1A50" />
+        <Animation Name="object_dno_Anim_002530" Offset="0x2530" />
+        <Animation Name="object_dno_Anim_003320" Offset="0x3320" />
+        <Animation Name="object_dno_Anim_0036D0" Offset="0x36D0" />
+        <Animation Name="object_dno_Anim_0041CC" Offset="0x41CC" />
+        <Animation Name="object_dno_Anim_004DD8" Offset="0x4DD8" />
+        <Animation Name="object_dno_Anim_0051E4" Offset="0x51E4" />
+        <Animation Name="object_dno_Anim_005E20" Offset="0x5E20" />
+        <Animation Name="object_dno_Anim_005F98" Offset="0x5F98" />
+        <Animation Name="object_dno_Anim_006488" Offset="0x6488" />
+        <Animation Name="object_dno_Anim_006F84" Offset="0x6F84" />
+        <Animation Name="object_dno_Anim_0073E4" Offset="0x73E4" />
+        <Animation Name="object_dno_Anim_0077A8" Offset="0x77A8" />
+        <Animation Name="object_dno_Anim_007CA4" Offset="0x7CA4" />
+        <Animation Name="object_dno_Anim_008324" Offset="0x8324" />
+        <Animation Name="object_dno_Anim_008AE4" Offset="0x8AE4" />
+        <Animation Name="object_dno_Anim_009100" Offset="0x9100" />
+        <DList Name="object_dno_DL_00B7C0" Offset="0xB7C0" />
+        <DList Name="object_dno_DL_00B850" Offset="0xB850" />
+        <DList Name="object_dno_DL_00BC68" Offset="0xBC68" />
+        <DList Name="object_dno_DL_00BDD8" Offset="0xBDD8" />
+        <DList Name="object_dno_DL_00BEF0" Offset="0xBEF0" />
+        <DList Name="object_dno_DL_00C118" Offset="0xC118" />
+        <DList Name="object_dno_DL_00C1A0" Offset="0xC1A0" />
+        <DList Name="object_dno_DL_00C248" Offset="0xC248" />
+        <DList Name="object_dno_DL_00C370" Offset="0xC370" />
+        <DList Name="object_dno_DL_00C450" Offset="0xC450" />
+        <DList Name="object_dno_DL_00C4E0" Offset="0xC4E0" />
+        <DList Name="object_dno_DL_00C5C0" Offset="0xC5C0" />
+        <DList Name="object_dno_DL_00C650" Offset="0xC650" />
+        <DList Name="object_dno_DL_00C7C0" Offset="0xC7C0" />
+        <DList Name="object_dno_DL_00C8D8" Offset="0xC8D8" />
+        <DList Name="object_dno_DL_00C988" Offset="0xC988" />
+        <DList Name="object_dno_DL_00CA38" Offset="0xCA38" />
+        <DList Name="object_dno_DL_00CAE8" Offset="0xCAE8" />
+        <DList Name="object_dno_DL_00CBE8" Offset="0xCBE8" />
+        <DList Name="object_dno_DL_00CC90" Offset="0xCC90" />
+        <DList Name="object_dno_DL_00CD48" Offset="0xCD48" />
+        <DList Name="object_dno_DL_00CE00" Offset="0xCE00" />
+        <DList Name="object_dno_DL_00CEC8" Offset="0xCEC8" />
+        <DList Name="object_dno_DL_00CF88" Offset="0xCF88" />
+        <DList Name="object_dno_DL_00D040" Offset="0xD040" />
+        <DList Name="object_dno_DL_00D108" Offset="0xD108" />
+        <Texture Name="object_dno_Tex_00D1C8" OutName="tex_00D1C8" Format="rgba16" Width="16" Height="16" Offset="0xD1C8" />
+        <Texture Name="object_dno_Tex_00D3C8" OutName="tex_00D3C8" Format="rgba16" Width="16" Height="16" Offset="0xD3C8" />
+        <Texture Name="object_dno_Tex_00D5C8" OutName="tex_00D5C8" Format="rgba16" Width="8" Height="8" Offset="0xD5C8" />
+        <Texture Name="object_dno_Tex_00D648" OutName="tex_00D648" Format="rgba16" Width="16" Height="16" Offset="0xD648" />
+        <Texture Name="object_dno_Tex_00D848" OutName="tex_00D848" Format="rgba16" Width="16" Height="32" Offset="0xD848" />
+        <Texture Name="object_dno_Tex_00DC48" OutName="tex_00DC48" Format="rgba16" Width="16" Height="8" Offset="0xDC48" />
+        <Texture Name="object_dno_Tex_00DD48" OutName="tex_00DD48" Format="rgba16" Width="16" Height="16" Offset="0xDD48" />
+        <Texture Name="object_dno_Tex_00DF48" OutName="tex_00DF48" Format="rgba16" Width="8" Height="16" Offset="0xDF48" />
+        <Limb Name="object_dno_Standardlimb_00E048" Type="Standard" EnumName="OBJECT_DNO_LIMB_01" Offset="0xE048" />
+        <Limb Name="object_dno_Standardlimb_00E054" Type="Standard" EnumName="OBJECT_DNO_LIMB_02" Offset="0xE054" />
+        <Limb Name="object_dno_Standardlimb_00E060" Type="Standard" EnumName="OBJECT_DNO_LIMB_03" Offset="0xE060" />
+        <Limb Name="object_dno_Standardlimb_00E06C" Type="Standard" EnumName="OBJECT_DNO_LIMB_04" Offset="0xE06C" />
+        <Limb Name="object_dno_Standardlimb_00E078" Type="Standard" EnumName="OBJECT_DNO_LIMB_05" Offset="0xE078" />
+        <Limb Name="object_dno_Standardlimb_00E084" Type="Standard" EnumName="OBJECT_DNO_LIMB_06" Offset="0xE084" />
+        <Limb Name="object_dno_Standardlimb_00E090" Type="Standard" EnumName="OBJECT_DNO_LIMB_07" Offset="0xE090" />
+        <Limb Name="object_dno_Standardlimb_00E09C" Type="Standard" EnumName="OBJECT_DNO_LIMB_08" Offset="0xE09C" />
+        <Limb Name="object_dno_Standardlimb_00E0A8" Type="Standard" EnumName="OBJECT_DNO_LIMB_09" Offset="0xE0A8" />
+        <Limb Name="object_dno_Standardlimb_00E0B4" Type="Standard" EnumName="OBJECT_DNO_LIMB_0A" Offset="0xE0B4" />
+        <Limb Name="object_dno_Standardlimb_00E0C0" Type="Standard" EnumName="OBJECT_DNO_LIMB_0B" Offset="0xE0C0" />
+        <Limb Name="object_dno_Standardlimb_00E0CC" Type="Standard" EnumName="OBJECT_DNO_LIMB_0C" Offset="0xE0CC" />
+        <Limb Name="object_dno_Standardlimb_00E0D8" Type="Standard" EnumName="OBJECT_DNO_LIMB_0D" Offset="0xE0D8" />
+        <Limb Name="object_dno_Standardlimb_00E0E4" Type="Standard" EnumName="OBJECT_DNO_LIMB_0E" Offset="0xE0E4" />
+        <Limb Name="object_dno_Standardlimb_00E0F0" Type="Standard" EnumName="OBJECT_DNO_LIMB_0F" Offset="0xE0F0" />
+        <Limb Name="object_dno_Standardlimb_00E0FC" Type="Standard" EnumName="OBJECT_DNO_LIMB_10" Offset="0xE0FC" />
+        <Limb Name="object_dno_Standardlimb_00E108" Type="Standard" EnumName="OBJECT_DNO_LIMB_11" Offset="0xE108" />
+        <Limb Name="object_dno_Standardlimb_00E114" Type="Standard" EnumName="OBJECT_DNO_LIMB_12" Offset="0xE114" />
+        <Limb Name="object_dno_Standardlimb_00E120" Type="Standard" EnumName="OBJECT_DNO_LIMB_13" Offset="0xE120" />
+        <Limb Name="object_dno_Standardlimb_00E12C" Type="Standard" EnumName="OBJECT_DNO_LIMB_14" Offset="0xE12C" />
+        <Limb Name="object_dno_Standardlimb_00E138" Type="Standard" EnumName="OBJECT_DNO_LIMB_15" Offset="0xE138" />
+        <Limb Name="object_dno_Standardlimb_00E144" Type="Standard" EnumName="OBJECT_DNO_LIMB_16" Offset="0xE144" />
+        <Limb Name="object_dno_Standardlimb_00E150" Type="Standard" EnumName="OBJECT_DNO_LIMB_17" Offset="0xE150" />
+        <Limb Name="object_dno_Standardlimb_00E15C" Type="Standard" EnumName="OBJECT_DNO_LIMB_18" Offset="0xE15C" />
+        <Limb Name="object_dno_Standardlimb_00E168" Type="Standard" EnumName="OBJECT_DNO_LIMB_19" Offset="0xE168" />
+        <Limb Name="object_dno_Standardlimb_00E174" Type="Standard" EnumName="OBJECT_DNO_LIMB_1A" Offset="0xE174" />
+        <Limb Name="object_dno_Standardlimb_00E180" Type="Standard" EnumName="OBJECT_DNO_LIMB_1B" Offset="0xE180" />
+        <Skeleton Name="object_dno_Skel_00E1F8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNO_LIMB_NONE" LimbMax="OBJECT_DNO_LIMB_MAX" EnumName="object_dno_Limbs" Offset="0xE1F8" />
+    </File>
+</Root>

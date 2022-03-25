@@ -1,0 +1,54 @@
+﻿<Root>
+    <File Name="object_firefly" Segment="6">
+        <Animation Name="object_firefly_Anim_00017C" Offset="0x17C" />
+        <Texture Name="object_firefly_Tex_000190" OutName="tex_000190" Format="rgba16" Width="8" Height="8" Offset="0x190" />
+        <Texture Name="object_firefly_Tex_000210" OutName="tex_000210" Format="rgba16" Width="8" Height="8" Offset="0x210" />
+        <Texture Name="object_firefly_Tex_000290" OutName="tex_000290" Format="rgba16" Width="8" Height="8" Offset="0x290" />
+        <Texture Name="object_firefly_Tex_000310" OutName="tex_000310" Format="rgba16" Width="16" Height="8" Offset="0x310" />
+        <Texture Name="object_firefly_Tex_000410" OutName="tex_000410" Format="rgba16" Width="8" Height="16" Offset="0x410" />
+        <Texture Name="object_firefly_Tex_000510" OutName="tex_000510" Format="rgba16" Width="4" Height="16" Offset="0x510" />
+        <Texture Name="object_firefly_Tex_000590" OutName="tex_000590" Format="rgba16" Width="8" Height="8" Offset="0x590" />
+        <Texture Name="object_firefly_Tex_000610" OutName="tex_000610" Format="rgba16" Width="8" Height="16" Offset="0x610" />
+        <Texture Name="object_firefly_Tex_000710" OutName="tex_000710" Format="rgba16" Width="4" Height="16" Offset="0x710" />
+        <Texture Name="object_firefly_Tex_000790" OutName="tex_000790" Format="rgba16" Width="16" Height="8" Offset="0x790" />
+        <DList Name="object_firefly_DL_000D30" Offset="0xD30" />
+        <DList Name="object_firefly_DL_000F40" Offset="0xF40" />
+        <DList Name="object_firefly_DL_001038" Offset="0x1038" />
+        <DList Name="object_firefly_DL_001100" Offset="0x1100" />
+        <DList Name="object_firefly_DL_0011C8" Offset="0x11C8" />
+        <DList Name="object_firefly_DL_001290" Offset="0x1290" />
+        <DList Name="object_firefly_DL_001358" Offset="0x1358" />
+        <DList Name="object_firefly_DL_001420" Offset="0x1420" />
+        <DList Name="object_firefly_DL_0014E8" Offset="0x14E8" />
+        <DList Name="object_firefly_DL_0015B0" Offset="0x15B0" />
+        <DList Name="object_firefly_DL_001678" Offset="0x1678" />
+        <Limb Name="object_firefly_Standardlimb_001708" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_01" Offset="0x1708" />
+        <Limb Name="object_firefly_Standardlimb_001714" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_02" Offset="0x1714" />
+        <Limb Name="object_firefly_Standardlimb_001720" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_03" Offset="0x1720" />
+        <Limb Name="object_firefly_Standardlimb_00172C" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_04" Offset="0x172C" />
+        <Limb Name="object_firefly_Standardlimb_001738" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_05" Offset="0x1738" />
+        <Limb Name="object_firefly_Standardlimb_001744" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_06" Offset="0x1744" />
+        <Limb Name="object_firefly_Standardlimb_001750" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_07" Offset="0x1750" />
+        <Limb Name="object_firefly_Standardlimb_00175C" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_08" Offset="0x175C" />
+        <Limb Name="object_firefly_Standardlimb_001768" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_09" Offset="0x1768" />
+        <Limb Name="object_firefly_Standardlimb_001774" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_0A" Offset="0x1774" />
+        <Limb Name="object_firefly_Standardlimb_001780" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_0B" Offset="0x1780" />
+        <Limb Name="object_firefly_Standardlimb_00178C" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_0C" Offset="0x178C" />
+        <Limb Name="object_firefly_Standardlimb_001798" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_0D" Offset="0x1798" />
+        <Limb Name="object_firefly_Standardlimb_0017A4" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_0E" Offset="0x17A4" />
+        <Limb Name="object_firefly_Standardlimb_0017B0" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_0F" Offset="0x17B0" />
+        <Limb Name="object_firefly_Standardlimb_0017BC" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_10" Offset="0x17BC" />
+        <Limb Name="object_firefly_Standardlimb_0017C8" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_11" Offset="0x17C8" />
+        <Limb Name="object_firefly_Standardlimb_0017D4" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_12" Offset="0x17D4" />
+        <Limb Name="object_firefly_Standardlimb_0017E0" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_13" Offset="0x17E0" />
+        <Limb Name="object_firefly_Standardlimb_0017EC" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_14" Offset="0x17EC" />
+        <Limb Name="object_firefly_Standardlimb_0017F8" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_15" Offset="0x17F8" />
+        <Limb Name="object_firefly_Standardlimb_001804" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_16" Offset="0x1804" />
+        <Limb Name="object_firefly_Standardlimb_001810" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_17" Offset="0x1810" />
+        <Limb Name="object_firefly_Standardlimb_00181C" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_18" Offset="0x181C" />
+        <Limb Name="object_firefly_Standardlimb_001828" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_19" Offset="0x1828" />
+        <Limb Name="object_firefly_Standardlimb_001834" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_1A" Offset="0x1834" />
+        <Limb Name="object_firefly_Standardlimb_001840" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_1B" Offset="0x1840" />
+        <Skeleton Name="object_firefly_Skel_0018B8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_FIREFLY_LIMB_NONE" LimbMax="OBJECT_FIREFLY_LIMB_MAX" EnumName="object_firefly_Limbs" Offset="0x18B8" />
+    </File>
+</Root>

@@ -72,9 +72,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80114CA0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80114E90.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_HasEmptyBottle.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80114F2C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_HasItemInBottle.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80114FD0.s")
 

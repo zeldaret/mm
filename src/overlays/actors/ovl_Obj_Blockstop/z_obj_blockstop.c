@@ -1,12 +1,12 @@
 /*
  * File: z_obj_blockstop.c
  * Overlay: ovl_Obj_Blockstop
- * Description:
+ * Description: Push Block Trigger - Blockstop switch triggered by pushblock (Snowhead)
  */
 
 #include "z_obj_blockstop.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBlockstop*)thisx)
 

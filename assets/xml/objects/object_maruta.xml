@@ -1,0 +1,16 @@
+﻿<Root>
+    <File Name="object_maruta" Segment="6">
+        <Texture Name="object_maruta_Tex_000000" OutName="tex_000000" Format="rgba16" Width="32" Height="32" Offset="0x0" />
+        <Texture Name="object_maruta_Tex_000800" OutName="tex_000800" Format="rgba16" Width="32" Height="32" Offset="0x800" />
+        <Texture Name="object_maruta_Tex_001000" OutName="tex_001000" Format="rgba16" Width="32" Height="32" Offset="0x1000" />
+        <DList Name="object_maruta_DL_002220" Offset="0x2220" />
+        <DList Name="object_maruta_DL_0023D0" Offset="0x23D0" />
+        <DList Name="object_maruta_DL_002568" Offset="0x2568" />
+        <DList Name="object_maruta_DL_002660" Offset="0x2660" />
+        <DList Name="object_maruta_DL_002758" Offset="0x2758" />
+        <DList Name="object_maruta_DL_002850" Offset="0x2850" />
+        <DList Name="object_maruta_DL_002948" Offset="0x2948" />
+        <DList Name="object_maruta_DL_002AE0" Offset="0x2AE0" />
+        <DList Name="object_maruta_DL_002EC0" Offset="0x2EC0" />
+    </File>
+</Root>

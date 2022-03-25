@@ -1,0 +1,94 @@
+﻿<Root>
+    <File Name="object_trt" Segment="6">
+        <Animation Name="object_trt_Anim_000A44" Offset="0xA44" />
+        <Animation Name="object_trt_Anim_001EF4" Offset="0x1EF4" />
+        <Animation Name="object_trt_Anim_002224" Offset="0x2224" />
+        <Animation Name="object_trt_Anim_002CB0" Offset="0x2CB0" />
+        <Animation Name="object_trt_Anim_0030EC" Offset="0x30EC" />
+        <Animation Name="object_trt_Anim_003D78" Offset="0x3D78" />
+        <DList Name="object_trt_DL_006380" Offset="0x6380" />
+        <DList Name="object_trt_DL_006590" Offset="0x6590" />
+        <DList Name="object_trt_DL_0066D8" Offset="0x66D8" />
+        <DList Name="object_trt_DL_006808" Offset="0x6808" />
+        <DList Name="object_trt_DL_007298" Offset="0x7298" />
+        <DList Name="object_trt_DL_007398" Offset="0x7398" />
+        <DList Name="object_trt_DL_007478" Offset="0x7478" />
+        <DList Name="object_trt_DL_0074C8" Offset="0x74C8" />
+        <DList Name="object_trt_DL_0075C8" Offset="0x75C8" />
+        <DList Name="object_trt_DL_0076A8" Offset="0x76A8" />
+        <DList Name="object_trt_DL_0077B8" Offset="0x77B8" />
+        <DList Name="object_trt_DL_007928" Offset="0x7928" />
+        <DList Name="object_trt_DL_007C10" Offset="0x7C10" />
+        <DList Name="object_trt_DL_007D28" Offset="0x7D28" />
+        <DList Name="object_trt_DL_007E38" Offset="0x7E38" />
+        <DList Name="object_trt_DL_007F48" Offset="0x7F48" />
+        <DList Name="object_trt_DL_0080B8" Offset="0x80B8" />
+        <DList Name="object_trt_DL_0083A0" Offset="0x83A0" />
+        <DList Name="object_trt_DL_0086A0" Offset="0x86A0" />
+        <DList Name="object_trt_DL_0087B8" Offset="0x87B8" />
+        <DList Name="object_trt_DL_0088C8" Offset="0x88C8" />
+        <DList Name="object_trt_DL_008958" Offset="0x8958" />
+        <DList Name="object_trt_DL_008A08" Offset="0x8A08" />
+        <DList Name="object_trt_DL_008AA0" Offset="0x8AA0" />
+        <DList Name="object_trt_DL_008B30" Offset="0x8B30" />
+        <DList Name="object_trt_DL_008BE0" Offset="0x8BE0" />
+        <Texture Name="object_trt_TLUT_008C78" OutName="tlut_008C78" Format="rgba16" Width="16" Height="16" Offset="0x8C78" />
+        <Texture Name="object_trt_TLUT_008E78" OutName="tlut_008E78" Format="rgba16" Width="16" Height="16" Offset="0x8E78" />
+        <Texture Name="object_trt_TLUT_009078" OutName="tlut_009078" Format="rgba16" Width="16" Height="16" Offset="0x9078" />
+        <Texture Name="object_trt_TLUT_009278" OutName="tlut_009278" Format="rgba16" Width="16" Height="16" Offset="0x9278" />
+        <Texture Name="object_trt_TLUT_009478" OutName="tlut_009478" Format="rgba16" Width="16" Height="16" Offset="0x9478" />
+        <Texture Name="object_trt_TLUT_009678" OutName="tlut_009678" Format="rgba16" Width="16" Height="16" Offset="0x9678" />
+        <Texture Name="object_trt_Tex_009878" OutName="tex_009878" Format="rgba16" Width="32" Height="32" Offset="0x9878" />
+        <Texture Name="object_trt_Tex_00A078" OutName="tex_00A078" Format="rgba16" Width="16" Height="16" Offset="0xA078" />
+        <Texture Name="object_trt_Tex_00A278" OutName="tex_00A278" Format="rgba16" Width="16" Height="16" Offset="0xA278" />
+        <Texture Name="object_trt_Tex_00A478" OutName="tex_00A478" Format="rgba16" Width="16" Height="16" Offset="0xA478" />
+        <Texture Name="object_trt_Tex_00A678" OutName="tex_00A678" Format="ci8" Width="16" Height="8" Offset="0xA678" />
+        <Texture Name="object_trt_Tex_00A6F8" OutName="tex_00A6F8" Format="ci8" Width="8" Height="8" Offset="0xA6F8" />
+        <Texture Name="object_trt_Tex_00A738" OutName="tex_00A738" Format="rgba16" Width="8" Height="32" Offset="0xA738" />
+        <Texture Name="object_trt_Tex_00A938" OutName="tex_00A938" Format="rgba16" Width="8" Height="8" Offset="0xA938" />
+        <Texture Name="object_trt_Tex_00A9B8" OutName="tex_00A9B8" Format="ci8" Width="8" Height="8" Offset="0xA9B8" />
+        <Texture Name="object_trt_Tex_00A9F8" OutName="tex_00A9F8" Format="rgba16" Width="4" Height="8" Offset="0xA9F8" />
+        <Texture Name="object_trt_Tex_00AA38" OutName="tex_00AA38" Format="ci8" Width="8" Height="16" Offset="0xAA38" />
+        <Texture Name="object_trt_Tex_00AAB8" OutName="tex_00AAB8" Format="rgba16" Width="8" Height="8" Offset="0xAAB8" />
+        <Texture Name="object_trt_Tex_00AB38" OutName="tex_00AB38" Format="rgba16" Width="16" Height="32" Offset="0xAB38" />
+        <Texture Name="object_trt_Tex_00AF38" OutName="tex_00AF38" Format="rgba16" Width="16" Height="8" Offset="0xAF38" />
+        <Texture Name="object_trt_Tex_00B038" OutName="tex_00B038" Format="ci8" Width="8" Height="8" Offset="0xB038" />
+        <Texture Name="object_trt_Tex_00B078" OutName="tex_00B078" Format="ci8" Width="8" Height="8" Offset="0xB078" />
+        <Texture Name="object_trt_Tex_00B0B8" OutName="tex_00B0B8" Format="rgba16" Width="32" Height="32" Offset="0xB0B8" />
+        <Texture Name="object_trt_Tex_00B8B8" OutName="tex_00B8B8" Format="rgba16" Width="32" Height="32" Offset="0xB8B8" />
+        <Texture Name="object_trt_Tex_00C0B8" OutName="tex_00C0B8" Format="rgba16" Width="32" Height="32" Offset="0xC0B8" />
+        <Texture Name="object_trt_Tex_00C8B8" OutName="tex_00C8B8" Format="rgba16" Width="8" Height="8" Offset="0xC8B8" />
+        <TextureAnimation Name="object_trt_Matanimheader_00C988" Offset="0xC988" />
+        <Animation Name="object_trt_Anim_00D52C" Offset="0xD52C" />
+        <Animation Name="object_trt_Anim_00DE68" Offset="0xDE68" />
+        <Animation Name="object_trt_Anim_00EE98" Offset="0xEE98" />
+        <Animation Name="object_trt_Anim_00FD34" Offset="0xFD34" />
+        <Limb Name="object_trt_Standardlimb_00FD50" Type="Standard" EnumName="OBJECT_TRT_LIMB_01" Offset="0xFD50" />
+        <Limb Name="object_trt_Standardlimb_00FD5C" Type="Standard" EnumName="OBJECT_TRT_LIMB_02" Offset="0xFD5C" />
+        <Limb Name="object_trt_Standardlimb_00FD68" Type="Standard" EnumName="OBJECT_TRT_LIMB_03" Offset="0xFD68" />
+        <Limb Name="object_trt_Standardlimb_00FD74" Type="Standard" EnumName="OBJECT_TRT_LIMB_04" Offset="0xFD74" />
+        <Limb Name="object_trt_Standardlimb_00FD80" Type="Standard" EnumName="OBJECT_TRT_LIMB_05" Offset="0xFD80" />
+        <Limb Name="object_trt_Standardlimb_00FD8C" Type="Standard" EnumName="OBJECT_TRT_LIMB_06" Offset="0xFD8C" />
+        <Limb Name="object_trt_Standardlimb_00FD98" Type="Standard" EnumName="OBJECT_TRT_LIMB_07" Offset="0xFD98" />
+        <Limb Name="object_trt_Standardlimb_00FDA4" Type="Standard" EnumName="OBJECT_TRT_LIMB_08" Offset="0xFDA4" />
+        <Limb Name="object_trt_Standardlimb_00FDB0" Type="Standard" EnumName="OBJECT_TRT_LIMB_09" Offset="0xFDB0" />
+        <Limb Name="object_trt_Standardlimb_00FDBC" Type="Standard" EnumName="OBJECT_TRT_LIMB_0A" Offset="0xFDBC" />
+        <Limb Name="object_trt_Standardlimb_00FDC8" Type="Standard" EnumName="OBJECT_TRT_LIMB_0B" Offset="0xFDC8" />
+        <Limb Name="object_trt_Standardlimb_00FDD4" Type="Standard" EnumName="OBJECT_TRT_LIMB_0C" Offset="0xFDD4" />
+        <Limb Name="object_trt_Standardlimb_00FDE0" Type="Standard" EnumName="OBJECT_TRT_LIMB_0D" Offset="0xFDE0" />
+        <Limb Name="object_trt_Standardlimb_00FDEC" Type="Standard" EnumName="OBJECT_TRT_LIMB_0E" Offset="0xFDEC" />
+        <Limb Name="object_trt_Standardlimb_00FDF8" Type="Standard" EnumName="OBJECT_TRT_LIMB_0F" Offset="0xFDF8" />
+        <Limb Name="object_trt_Standardlimb_00FE04" Type="Standard" EnumName="OBJECT_TRT_LIMB_10" Offset="0xFE04" />
+        <Limb Name="object_trt_Standardlimb_00FE10" Type="Standard" EnumName="OBJECT_TRT_LIMB_11" Offset="0xFE10" />
+        <Limb Name="object_trt_Standardlimb_00FE1C" Type="Standard" EnumName="OBJECT_TRT_LIMB_12" Offset="0xFE1C" />
+        <Limb Name="object_trt_Standardlimb_00FE28" Type="Standard" EnumName="OBJECT_TRT_LIMB_13" Offset="0xFE28" />
+        <Limb Name="object_trt_Standardlimb_00FE34" Type="Standard" EnumName="OBJECT_TRT_LIMB_14" Offset="0xFE34" />
+        <Limb Name="object_trt_Standardlimb_00FE40" Type="Standard" EnumName="OBJECT_TRT_LIMB_15" Offset="0xFE40" />
+        <Limb Name="object_trt_Standardlimb_00FE4C" Type="Standard" EnumName="OBJECT_TRT_LIMB_16" Offset="0xFE4C" />
+        <Limb Name="object_trt_Standardlimb_00FE58" Type="Standard" EnumName="OBJECT_TRT_LIMB_17" Offset="0xFE58" />
+        <Limb Name="object_trt_Standardlimb_00FE64" Type="Standard" EnumName="OBJECT_TRT_LIMB_18" Offset="0xFE64" />
+        <Limb Name="object_trt_Standardlimb_00FE70" Type="Standard" EnumName="OBJECT_TRT_LIMB_19" Offset="0xFE70" />
+        <Limb Name="object_trt_Standardlimb_00FE7C" Type="Standard" EnumName="OBJECT_TRT_LIMB_1A" Offset="0xFE7C" />
+        <Skeleton Name="object_trt_Skel_00FEF0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TRT_LIMB_NONE" LimbMax="OBJECT_TRT_LIMB_MAX" EnumName="object_trt_Limbs" Offset="0xFEF0" />
+    </File>
+</Root>

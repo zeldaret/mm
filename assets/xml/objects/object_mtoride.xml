@@ -1,0 +1,49 @@
+﻿<Root>
+    <File Name="object_mtoride" Segment="6">
+        <!-- <Blob Name="object_mtoride_Blob_000000" Size="0x200" Offset="0x0" /> -->
+        <Texture Name="object_mtoride_TLUT_000200" OutName="tlut_000200" Format="rgba16" Width="4" Height="4" Offset="0x200" />
+        <Texture Name="object_mtoride_Tex_000220" OutName="tex_000220" Format="rgba16" Width="16" Height="16" Offset="0x220" />
+        <Texture Name="object_mtoride_Tex_000420" OutName="tex_000420" Format="ci4" Width="32" Height="128" Offset="0x420" />
+        <Texture Name="object_mtoride_Tex_000C20" OutName="tex_000C20" Format="ia8" Width="32" Height="8" Offset="0xC20" />
+        <Texture Name="object_mtoride_Tex_000D20" OutName="tex_000D20" Format="rgba16" Width="32" Height="32" Offset="0xD20" />
+        <Texture Name="object_mtoride_Tex_001520" OutName="tex_001520" Format="rgba16" Width="32" Height="64" Offset="0x1520" />
+        <Texture Name="object_mtoride_Tex_002520" OutName="tex_002520" Format="rgba16" Width="32" Height="64" Offset="0x2520" />
+        <Texture Name="object_mtoride_Tex_003520" OutName="tex_003520" Format="rgba16" Width="32" Height="32" Offset="0x3520" />
+        <Texture Name="object_mtoride_Tex_003D20" OutName="tex_003D20" Format="rgba16" Width="32" Height="64" Offset="0x3D20" />
+        <Texture Name="object_mtoride_Tex_004D20" OutName="tex_004D20" Format="rgba16" Width="32" Height="64" Offset="0x4D20" />
+        <Texture Name="object_mtoride_Tex_005D20" OutName="tex_005D20" Format="rgba16" Width="32" Height="32" Offset="0x5D20" />
+        <Texture Name="object_mtoride_Tex_006520" OutName="tex_006520" Format="rgba16" Width="32" Height="32" Offset="0x6520" />
+        <Texture Name="object_mtoride_Tex_006D20" OutName="tex_006D20" Format="rgba16" Width="32" Height="32" Offset="0x6D20" />
+        <Texture Name="object_mtoride_Tex_007520" OutName="tex_007520" Format="rgba16" Width="16" Height="32" Offset="0x7520" />
+        <Texture Name="object_mtoride_Tex_007920" OutName="tex_007920" Format="rgba16" Width="32" Height="32" Offset="0x7920" />
+        <Texture Name="object_mtoride_Tex_008120" OutName="tex_008120" Format="rgba16" Width="32" Height="32" Offset="0x8120" />
+        <Texture Name="object_mtoride_Tex_008920" OutName="tex_008920" Format="rgba16" Width="32" Height="32" Offset="0x8920" />
+        <Texture Name="object_mtoride_Tex_009120" OutName="tex_009120" Format="rgba16" Width="32" Height="32" Offset="0x9120" />
+        <DList Name="object_mtoride_DL_009920" Offset="0x9920" />
+        <DList Name="object_mtoride_DL_009928" Offset="0x9928" />
+        <TextureAnimation Name="object_mtoride_Matanimheader_009D70" Offset="0x9D70" />
+        <Collision Name="object_mtoride_Colheader_009E4C" Offset="0x9E4C" />
+        <DList Name="object_mtoride_DL_00A390" Offset="0xA390" />
+        <DList Name="object_mtoride_DL_00A398" Offset="0xA398" />
+        <TextureAnimation Name="object_mtoride_Matanimheader_00A5C0" Offset="0xA5C0" />
+        <DList Name="object_mtoride_DL_00A8F0" Offset="0xA8F0" />
+        <DList Name="object_mtoride_DL_00A8F8" Offset="0xA8F8" />
+        <TextureAnimation Name="object_mtoride_Matanimheader_00AA50" Offset="0xAA50" />
+        <DList Name="object_mtoride_DL_00AF90" Offset="0xAF90" />
+        <DList Name="object_mtoride_DL_00AF98" Offset="0xAF98" />
+        <TextureAnimation Name="object_mtoride_Matanimheader_00B1A0" Offset="0xB1A0" />
+        <DList Name="object_mtoride_DL_00DE50" Offset="0xDE50" />
+        <DList Name="object_mtoride_DL_00DF18" Offset="0xDF18" />
+        <DList Name="object_mtoride_DL_00F3C0" Offset="0xF3C0" />
+        <DList Name="object_mtoride_DL_00F758" Offset="0xF758" />
+        <TextureAnimation Name="object_mtoride_Matanimheader_00F768" Offset="0xF768" />
+        <DList Name="object_mtoride_DL_00FAE0" Offset="0xFAE0" />
+        <DList Name="object_mtoride_DL_00FAE8" Offset="0xFAE8" />
+        <Collision Name="object_mtoride_Colheader_00FE5C" Offset="0xFE5C" />
+        <TextureAnimation Name="object_mtoride_Matanimheader_00FE90" Offset="0xFE90" />
+        <Collision Name="object_mtoride_Colheader_010C3C" Offset="0x10C3C" />
+        <DList Name="object_mtoride_DL_010EF0" Offset="0x10EF0" />
+        <DList Name="object_mtoride_DL_010FD8" Offset="0x10FD8" />
+        <TextureAnimation Name="object_mtoride_Matanimheader_0110B8" Offset="0x110B8" />
+    </File>
+</Root>

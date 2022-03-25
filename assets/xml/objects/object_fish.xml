@@ -1,0 +1,162 @@
+﻿<Root>
+    <File Name="object_fish" Segment="6">
+        <Animation Name="gFishingFishAnim" Offset="0x7C" />
+        <DList Name="object_fish_DL_000940" Offset="0x940" />
+        <DList Name="object_fish_DL_0009E8" Offset="0x9E8" />
+        <DList Name="object_fish_DL_000B00" Offset="0xB00" />
+        <DList Name="object_fish_DL_000BA0" Offset="0xBA0" />
+        <DList Name="object_fish_DL_000C40" Offset="0xC40" />
+        <DList Name="object_fish_DL_000E30" Offset="0xE30" />
+        <DList Name="object_fish_DL_000ED0" Offset="0xED0" />
+        <DList Name="object_fish_DL_000F70" Offset="0xF70" />
+        <DList Name="object_fish_DL_0010A0" Offset="0x10A0" />
+        <DList Name="object_fish_DL_001260" Offset="0x1260" />
+        <DList Name="object_fish_DL_001300" Offset="0x1300" />
+        <DList Name="object_fish_DL_0013A0" Offset="0x13A0" />
+        <Texture Name="object_fish_Tex_0014D0" OutName="tex_0014D0" Format="rgba16" Width="16" Height="16" Offset="0x14D0" />
+        <Texture Name="object_fish_Tex_0016D0" OutName="tex_0016D0" Format="rgba16" Width="16" Height="16" Offset="0x16D0" />
+        <Texture Name="object_fish_Tex_0018D0" OutName="tex_0018D0" Format="rgba16" Width="16" Height="16" Offset="0x18D0" />
+        <Texture Name="object_fish_Tex_001AD0" OutName="tex_001AD0" Format="rgba16" Width="32" Height="32" Offset="0x1AD0" />
+        <Texture Name="object_fish_Tex_0022D0" OutName="tex_0022D0" Format="rgba16" Width="16" Height="16" Offset="0x22D0" />
+        <!-- <Blob Name="object_fish_Blob_0024D0" Size="0x200" Offset="0x24D0" /> -->
+        <Texture Name="object_fish_Tex_0026D0" OutName="tex_0026D0" Format="rgba16" Width="16" Height="16" Offset="0x26D0" />
+        <Limb Name="object_fish_Standardlimb_0028D0" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_01" Offset="0x28D0" />
+        <Limb Name="object_fish_Standardlimb_0028DC" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_02" Offset="0x28DC" />
+        <Limb Name="object_fish_Standardlimb_0028E8" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_03" Offset="0x28E8" />
+        <Limb Name="object_fish_Standardlimb_0028F4" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_04" Offset="0x28F4" />
+        <Limb Name="object_fish_Standardlimb_002900" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_05" Offset="0x2900" />
+        <Limb Name="object_fish_Standardlimb_00290C" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_06" Offset="0x290C" />
+        <Limb Name="object_fish_Standardlimb_002918" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_07" Offset="0x2918" />
+        <Limb Name="object_fish_Standardlimb_002924" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_08" Offset="0x2924" />
+        <Limb Name="object_fish_Standardlimb_002930" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_09" Offset="0x2930" />
+        <Limb Name="object_fish_Standardlimb_00293C" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0A" Offset="0x293C" />
+        <Limb Name="object_fish_Standardlimb_002948" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0B" Offset="0x2948" />
+        <Limb Name="object_fish_Standardlimb_002954" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0C" Offset="0x2954" />
+        <Limb Name="object_fish_Standardlimb_002960" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0D" Offset="0x2960" />
+        <Limb Name="object_fish_Standardlimb_00296C" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0E" Offset="0x296C" />
+        <Limb Name="object_fish_Standardlimb_002978" Type="Standard" EnumName="OBJECT_FISH_1_LIMB_0F" Offset="0x2978" />
+        <Skeleton Name="gFishingFishSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_1_LIMB_NONE" LimbMax="OBJECT_FISH_1_LIMB_MAX" EnumName="object_fish_1_Limbs" Offset="0x29C0" />
+        <Texture Name="object_fish_Tex_0029D0" OutName="tex_0029D0" Format="rgba16" Width="8" Height="16" Offset="0x29D0" />
+        <Texture Name="object_fish_Tex_002AD0" OutName="tex_002AD0" Format="rgba16" Width="8" Height="8" Offset="0x2AD0" />
+        <DList Name="object_fish_DL_002BD0" Offset="0x2BD0" />
+        <Texture Name="object_fish_Tex_002CE0" OutName="tex_002CE0" Format="i4" Width="32" Height="64" Offset="0x2CE0" />
+        <Texture Name="object_fish_Tex_0030E0" OutName="tex_0030E0" Format="i4" Width="16" Height="16" Offset="0x30E0" />
+        <DList Name="gFishingStreamSplashDL" Offset="0x3230" />
+        <Texture Name="object_fish_Tex_003320" OutName="tex_003320" Format="ia8" Width="16" Height="16" Offset="0x3320" />
+        <DList Name="gFishingBubbleSetupDL" Offset="0x3460" />
+        <DList Name="gFishingBubbleVtxDL" Offset="0x34C0" />
+        <Texture Name="object_fish_Tex_0034E0" OutName="tex_0034E0" Format="i8" Width="16" Height="16" Offset="0x34E0" />
+        <DList Name="gFishingDustSplashSetupDL" Offset="0x3610" />
+        <DList Name="gFishingDustSplashVtxDL" Offset="0x3680" />
+        <DList Name="object_fish_DL_0036E0" Offset="0x36E0" />
+        <DList Name="gFishingLineVtxDL" Offset="0x3710" />
+        <DList Name="gFishingRainDropVtxDL" Offset="0x3760" />
+        <Texture Name="object_fish_Tex_003778" OutName="tex_003778" Format="rgba16" Width="16" Height="16" Offset="0x3778" />
+        <DList Name="gFishingRainSplashSetupDL" Offset="0x39A8" />
+        <DList Name="gFishingRainSplashVtxDL" Offset="0x3A18" />
+        <Animation Name="gFishingOwnerAnim" Offset="0x453C" />
+        <DList Name="object_fish_DL_006F60" Offset="0x6F60" />
+        <DList Name="gFishingOwnerHairDL" Offset="0x7350" />
+        <DList Name="gFishingOwnerHatDL" Offset="0x74C8" />
+        <DList Name="object_fish_DL_0076B8" Offset="0x76B8" />
+        <DList Name="object_fish_DL_007CF8" Offset="0x7CF8" />
+        <DList Name="object_fish_DL_007E48" Offset="0x7E48" />
+        <DList Name="object_fish_DL_007F78" Offset="0x7F78" />
+        <DList Name="object_fish_DL_008138" Offset="0x8138" />
+        <DList Name="object_fish_DL_008288" Offset="0x8288" />
+        <DList Name="object_fish_DL_0083B8" Offset="0x83B8" />
+        <Limb Name="object_fish_Standardlimb_008578" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_01" Offset="0x8578" />
+        <Limb Name="object_fish_Standardlimb_008584" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_02" Offset="0x8584" />
+        <Limb Name="object_fish_Standardlimb_008590" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_03" Offset="0x8590" />
+        <Limb Name="object_fish_Standardlimb_00859C" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_04" Offset="0x859C" />
+        <Limb Name="object_fish_Standardlimb_0085A8" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_05" Offset="0x85A8" />
+        <Limb Name="object_fish_Standardlimb_0085B4" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_06" Offset="0x85B4" />
+        <Limb Name="object_fish_Standardlimb_0085C0" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_07" Offset="0x85C0" />
+        <Limb Name="object_fish_Standardlimb_0085CC" Type="Standard" EnumName="OBJECT_FISH_2_LIMB_08" Offset="0x85CC" />
+        <Skeleton Name="gFishingOwnerSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_2_LIMB_NONE" LimbMax="OBJECT_FISH_2_LIMB_MAX" EnumName="object_fish_2_Limbs" Offset="0x85F8" />
+        <DList Name="gFishingRippleSetupDL" Offset="0x8610" />
+        <DList Name="gFishingRippleVtxDL" Offset="0x8678" />
+        <Texture Name="object_fish_Tex_008690" OutName="tex_008690" Format="i4" Width="32" Height="32" Offset="0x8690" />
+        <DList Name="gFishingWaterDustSetupDL" Offset="0x88C0" />
+        <DList Name="gFishingWaterDustVtxDL" Offset="0x8970" />
+        <Texture Name="object_fish_TLUT_008990" OutName="tlut_008990" Format="rgba16" Width="16" Height="16" Offset="0x8990" />
+        <Texture Name="object_fish_Tex_008B90" OutName="tex_008B90" Format="ci8" Width="8" Height="8" Offset="0x8B90" />
+        <Texture Name="object_fish_Tex_008BD0" OutName="tex_008BD0" Format="ci8" Width="16" Height="16" Offset="0x8BD0" />
+        <Texture Name="object_fish_Tex_008CD0" OutName="tex_008CD0" Format="ci8" Width="16" Height="16" Offset="0x8CD0" />
+        <Texture Name="object_fish_Tex_008DD0" OutName="tex_008DD0" Format="ci8" Width="8" Height="8" Offset="0x8DD0" />
+        <Texture Name="object_fish_Tex_008E10" OutName="tex_008E10" Format="ci8" Width="32" Height="32" Offset="0x8E10" />
+        <Texture Name="object_fish_Tex_009210" OutName="tex_009210" Format="ci8" Width="8" Height="8" Offset="0x9210" />
+        <Texture Name="gFishingOwnerEyeOpenTex" OutName="tex_009250" Format="ci8" Width="32" Height="32" Offset="0x9250" />
+        <Texture Name="gFishingOwnerEyeHalfTex" OutName="tex_009650" Format="ci8" Width="32" Height="32" Offset="0x9650" />
+        <Texture Name="gFishingOwnerEyeClosedTex" OutName="tex_009A50" Format="ci8" Width="32" Height="32" Offset="0x9A50" />
+        <Texture Name="object_fish_Tex_009E50" OutName="tex_009E50" Format="ci8" Width="64" Height="32" Offset="0x9E50" />
+        <Texture Name="object_fish_Tex_00A650" OutName="tex_00A650" Format="ci8" Width="8" Height="8" Offset="0xA650" />
+        <Texture Name="object_fish_Tex_00A690" OutName="tex_00A690" Format="ci8" Width="16" Height="16" Offset="0xA690" />
+        <Texture Name="object_fish_Tex_00A790" OutName="tex_00A790" Format="ci8" Width="8" Height="16" Offset="0xA790" />
+        <Texture Name="object_fish_Tex_00A810" OutName="tex_00A810" Format="ci8" Width="16" Height="16" Offset="0xA810" />
+        <Texture Name="object_fish_Tex_00A910" OutName="tex_00A910" Format="ia8" Width="64" Height="64" Offset="0xA910" />
+        <DList Name="gFishingSinkingLureSegmentSetupDL" Offset="0xB950" />
+        <DList Name="gFishingSinkingLureSegmentVtxDL" Offset="0xB9C0" />
+        <Texture Name="object_fish_Tex_00B9E0" OutName="tex_00B9E0" Format="rgba16" Width="64" Height="16" Offset="0xB9E0" />
+        <DList Name="gFishingGroupFishSetupDL" Offset="0xC220" />
+        <DList Name="gFishingGroupFishVtxDL" Offset="0xC298" />
+        <DList Name="object_fish_DL_00C650" Offset="0xC650" />
+        <Texture Name="object_fish_Tex_00C780" OutName="tex_00C780" Format="rgba16" Width="32" Height="32" Offset="0xC780" />
+        <Animation Name="gFishingLoachAnim" Offset="0xCFE0" />
+        <DList Name="object_fish_DL_00DED0" Offset="0xDED0" />
+        <DList Name="object_fish_DL_00DFA8" Offset="0xDFA8" />
+        <DList Name="object_fish_DL_00E048" Offset="0xE048" />
+        <DList Name="object_fish_DL_00E168" Offset="0xE168" />
+        <DList Name="object_fish_DL_00E460" Offset="0xE460" />
+        <DList Name="object_fish_DL_00E500" Offset="0xE500" />
+        <DList Name="object_fish_DL_00E808" Offset="0xE808" />
+        <DList Name="object_fish_DL_00E8B0" Offset="0xE8B0" />
+        <DList Name="object_fish_DL_00EB28" Offset="0xEB28" />
+        <DList Name="object_fish_DL_00EBC8" Offset="0xEBC8" />
+        <DList Name="object_fish_DL_00EC68" Offset="0xEC68" />
+        <Texture Name="object_fish_Tex_00ED28" OutName="tex_00ED28" Format="rgba16" Width="32" Height="32" Offset="0xED28" />
+        <Texture Name="object_fish_Tex_00F528" OutName="tex_00F528" Format="rgba16" Width="32" Height="32" Offset="0xF528" />
+        <Texture Name="object_fish_Tex_00FD28" OutName="tex_00FD28" Format="rgba16" Width="32" Height="32" Offset="0xFD28" />
+        <Texture Name="object_fish_Tex_010528" OutName="tex_010528" Format="rgba16" Width="32" Height="32" Offset="0x10528" />
+        <Texture Name="object_fish_Tex_010D28" OutName="tex_010D28" Format="rgba16" Width="8" Height="8" Offset="0x10D28" />
+        <Texture Name="object_fish_Tex_010DA8" OutName="tex_010DA8" Format="rgba16" Width="16" Height="16" Offset="0x10DA8" />
+        <Limb Name="object_fish_Standardlimb_010FA8" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_01" Offset="0x10FA8" />
+        <Limb Name="object_fish_Standardlimb_010FB4" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_02" Offset="0x10FB4" />
+        <Limb Name="object_fish_Standardlimb_010FC0" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_03" Offset="0x10FC0" />
+        <Limb Name="object_fish_Standardlimb_010FCC" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_04" Offset="0x10FCC" />
+        <Limb Name="object_fish_Standardlimb_010FD8" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_05" Offset="0x10FD8" />
+        <Limb Name="object_fish_Standardlimb_010FE4" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_06" Offset="0x10FE4" />
+        <Limb Name="object_fish_Standardlimb_010FF0" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_07" Offset="0x10FF0" />
+        <Limb Name="object_fish_Standardlimb_010FFC" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_08" Offset="0x10FFC" />
+        <Limb Name="object_fish_Standardlimb_011008" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_09" Offset="0x11008" />
+        <Limb Name="object_fish_Standardlimb_011014" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_0A" Offset="0x11014" />
+        <Limb Name="object_fish_Standardlimb_011020" Type="Standard" EnumName="OBJECT_FISH_3_LIMB_0B" Offset="0x11020" />
+        <Skeleton Name="gFishingLoachSkel" Type="Flex" LimbType="Standard" LimbNone="OBJECT_FISH_3_LIMB_NONE" LimbMax="OBJECT_FISH_3_LIMB_MAX" EnumName="object_fish_3_Limbs" Offset="0x11058" />
+        <Blob Name="object_fish_Blob_011064" Size="0xC" Offset="0x11064" />
+        <Texture Name="gFishingRodSegmentStripTex" OutName="tex_011070" Format="rgba16" Width="16" Height="8" Offset="0x11070" />
+        <Texture Name="gFishingRodSegmentBlackTex" OutName="tex_011170" Format="rgba16" Width="16" Height="8" Offset="0x11170" />
+        <Texture Name="gFishingRodSegmentWhiteTex" OutName="tex_011270" Format="rgba16" Width="16" Height="8" Offset="0x11270" />
+        <DList Name="gFishingRodSetupDL" Offset="0x113D0" />
+        <DList Name="gFishingRodSegmentDL" Offset="0x11410" />
+        <Texture Name="object_fish_Tex_011440" OutName="tex_011440" Format="rgba16" Width="32" Height="32" Offset="0x11440" />
+        <Texture Name="object_fish_Tex_011C40" OutName="tex_011C40" Format="rgba16" Width="32" Height="16" Offset="0x11C40" />
+        <DList Name="gFishingLureHookDL" Offset="0x12160" />
+        <DList Name="gFishingLureFloatDL" Offset="0x121F0" />
+        <Texture Name="object_fish_Tex_0122E0" OutName="tex_0122E0" Format="rgba16" Width="32" Height="32" Offset="0x122E0" />
+        <Texture Name="object_fish_Tex_012AE0" OutName="tex_012AE0" Format="rgba16" Width="32" Height="32" Offset="0x12AE0" />
+        <DList Name="gFishingLilyPadSetupDL" Offset="0x13330" />
+        <DList Name="gFishingLilyPadVtxDL" Offset="0x133B0" />
+        <DList Name="gFishingRockSetupDL" Offset="0x13590" />
+        <DList Name="gFishingRockVtxDL" Offset="0x13610" />
+        <Texture Name="object_fish_Tex_013660" OutName="tex_013660" Format="rgba16" Width="32" Height="32" Offset="0x13660" />
+        <DList Name="gFishingWoodPostSetupDL" Offset="0x13F50" />
+        <DList Name="gFishingWoodPostVtxDL" Offset="0x13FD0" />
+        <DList Name="gFishingReedSetupDL" Offset="0x14030" />
+        <DList Name="gFishingReedVtxDL" Offset="0x140B0" />
+        <Texture Name="object_fish_Tex_0140D0" OutName="tex_0140D0" Format="rgba16" Width="16" Height="16" Offset="0x140D0" />
+        <Texture Name="object_fish_Tex_0142D0" OutName="tex_0142D0" Format="rgba16" Width="32" Height="32" Offset="0x142D0" />
+        <Texture Name="object_fish_Tex_014AD0" OutName="tex_014AD0" Format="i8" Width="32" Height="32" Offset="0x14AD0" />
+        <DList Name="gFishingAquariumBottomDL" Offset="0x153D0" />
+        <DList Name="gFishingAquariumContainerDL" Offset="0x15470" />
+    </File>
+</Root>

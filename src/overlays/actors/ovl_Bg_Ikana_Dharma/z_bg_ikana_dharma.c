@@ -1,12 +1,12 @@
 /*
  * File: z_bg_ikana_dharma.c
  * Overlay: ovl_Bg_Ikana_Dharma
- * Description: Ikana Castle - Punchable Pillar Segments
+ * Description: Stone Tower Temple - Punchable Pillar Segments
  */
 
 #include "z_bg_ikana_dharma.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((BgIkanaDharma*)thisx)
 

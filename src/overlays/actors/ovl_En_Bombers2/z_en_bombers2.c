@@ -1,12 +1,12 @@
 /*
- * File z_en_bombers2.c
+ * File: z_en_bombers2.c
  * Overlay: ovl_En_Bombers2
  * Description: Bombers - Hideout Guard
  */
 
 #include "z_en_bombers2.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBombers2*)thisx)
 

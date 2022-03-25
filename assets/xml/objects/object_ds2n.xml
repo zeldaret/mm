@@ -1,0 +1,55 @@
+﻿<Root>
+    <File Name="object_ds2n" Segment="6">
+        <DList Name="object_ds2n_DL_002420" Offset="0x2420" />
+        <DList Name="object_ds2n_DL_002740" Offset="0x2740" />
+        <DList Name="object_ds2n_DL_002C20" Offset="0x2C20" />
+        <DList Name="object_ds2n_DL_002D38" Offset="0x2D38" />
+        <DList Name="object_ds2n_DL_002F68" Offset="0x2F68" />
+        <DList Name="object_ds2n_DL_0030E0" Offset="0x30E0" />
+        <DList Name="object_ds2n_DL_0031F8" Offset="0x31F8" />
+        <DList Name="object_ds2n_DL_0033B0" Offset="0x33B0" />
+        <DList Name="object_ds2n_DL_003528" Offset="0x3528" />
+        <DList Name="object_ds2n_DL_0035F0" Offset="0x35F0" />
+        <DList Name="object_ds2n_DL_0036D0" Offset="0x36D0" />
+        <DList Name="object_ds2n_DL_0037A8" Offset="0x37A8" />
+        <DList Name="object_ds2n_DL_003988" Offset="0x3988" />
+        <DList Name="object_ds2n_DL_003A68" Offset="0x3A68" />
+        <DList Name="object_ds2n_DL_003B40" Offset="0x3B40" />
+        <Texture Name="object_ds2n_TLUT_003CD8" OutName="tlut_003CD8" Format="rgba16" Width="16" Height="16" Offset="0x3CD8" />
+        <Texture Name="object_ds2n_TLUT_003ED8" OutName="tlut_003ED8" Format="rgba16" Width="16" Height="16" Offset="0x3ED8" />
+        <Texture Name="object_ds2n_Tex_0040D8" OutName="tex_0040D8" Format="rgba16" Width="16" Height="16" Offset="0x40D8" />
+        <Texture Name="object_ds2n_Tex_0042D8" OutName="tex_0042D8" Format="rgba16" Width="16" Height="16" Offset="0x42D8" />
+        <Texture Name="object_ds2n_Tex_0044D8" OutName="tex_0044D8" Format="rgba16" Width="16" Height="32" Offset="0x44D8" />
+        <!-- <Blob Name="object_ds2n_Blob_0048D8" Size="0xC00" Offset="0x48D8" /> -->
+        <Texture Name="object_ds2n_Tex_0054D8" OutName="tex_0054D8" Format="ci8" Width="16" Height="16" Offset="0x54D8" />
+        <Texture Name="object_ds2n_Tex_0055D8" OutName="tex_0055D8" Format="ci8" Width="8" Height="8" Offset="0x55D8" />
+        <Texture Name="object_ds2n_Tex_005618" OutName="tex_005618" Format="rgba16" Width="16" Height="16" Offset="0x5618" />
+        <Texture Name="object_ds2n_Tex_005818" OutName="tex_005818" Format="ci8" Width="16" Height="16" Offset="0x5818" />
+        <Texture Name="object_ds2n_Tex_005918" OutName="tex_005918" Format="ci8" Width="16" Height="32" Offset="0x5918" />
+        <Texture Name="object_ds2n_Tex_005B18" OutName="tex_005B18" Format="rgba16" Width="16" Height="16" Offset="0x5B18" />
+        <Texture Name="object_ds2n_Tex_005D18" OutName="tex_005D18" Format="ci8" Width="16" Height="16" Offset="0x5D18" />
+        <!-- <Blob Name="object_ds2n_Blob_005E18" Size="0x400" Offset="0x5E18" /> -->
+        <Texture Name="object_ds2n_Tex_006218" OutName="tex_006218" Format="ci8" Width="32" Height="16" Offset="0x6218" />
+        <!-- <Blob Name="object_ds2n_Blob_006418" Size="0x1B78" Offset="0x6418" /> -->
+        <Limb Name="object_ds2n_Standardlimb_008050" Type="Standard" EnumName="OBJECT_DS2N_LIMB_01" Offset="0x8050" />
+        <Limb Name="object_ds2n_Standardlimb_00805C" Type="Standard" EnumName="OBJECT_DS2N_LIMB_02" Offset="0x805C" />
+        <Limb Name="object_ds2n_Standardlimb_008068" Type="Standard" EnumName="OBJECT_DS2N_LIMB_03" Offset="0x8068" />
+        <Limb Name="object_ds2n_Standardlimb_008074" Type="Standard" EnumName="OBJECT_DS2N_LIMB_04" Offset="0x8074" />
+        <Limb Name="object_ds2n_Standardlimb_008080" Type="Standard" EnumName="OBJECT_DS2N_LIMB_05" Offset="0x8080" />
+        <Limb Name="object_ds2n_Standardlimb_00808C" Type="Standard" EnumName="OBJECT_DS2N_LIMB_06" Offset="0x808C" />
+        <Limb Name="object_ds2n_Standardlimb_008098" Type="Standard" EnumName="OBJECT_DS2N_LIMB_07" Offset="0x8098" />
+        <Limb Name="object_ds2n_Standardlimb_0080A4" Type="Standard" EnumName="OBJECT_DS2N_LIMB_08" Offset="0x80A4" />
+        <Limb Name="object_ds2n_Standardlimb_0080B0" Type="Standard" EnumName="OBJECT_DS2N_LIMB_09" Offset="0x80B0" />
+        <Limb Name="object_ds2n_Standardlimb_0080BC" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0A" Offset="0x80BC" />
+        <Limb Name="object_ds2n_Standardlimb_0080C8" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0B" Offset="0x80C8" />
+        <Limb Name="object_ds2n_Standardlimb_0080D4" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0C" Offset="0x80D4" />
+        <Limb Name="object_ds2n_Standardlimb_0080E0" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0D" Offset="0x80E0" />
+        <Limb Name="object_ds2n_Standardlimb_0080EC" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0E" Offset="0x80EC" />
+        <Limb Name="object_ds2n_Standardlimb_0080F8" Type="Standard" EnumName="OBJECT_DS2N_LIMB_0F" Offset="0x80F8" />
+        <Limb Name="object_ds2n_Standardlimb_008104" Type="Standard" EnumName="OBJECT_DS2N_LIMB_10" Offset="0x8104" />
+        <Limb Name="object_ds2n_Standardlimb_008110" Type="Standard" EnumName="OBJECT_DS2N_LIMB_11" Offset="0x8110" />
+        <Limb Name="object_ds2n_Standardlimb_00811C" Type="Standard" EnumName="OBJECT_DS2N_LIMB_12" Offset="0x811C" />
+        <Skeleton Name="object_ds2n_Skel_008170" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DS2N_LIMB_NONE" LimbMax="OBJECT_DS2N_LIMB_MAX" EnumName="object_ds2n_Limbs" Offset="0x8170" />
+        <!-- <Blob Name="object_ds2n_Blob_008178" Size="0x8" Offset="0x8178" /> -->
+    </File>
+</Root>

@@ -1,0 +1,81 @@
+﻿<Root>
+    <File Name="object_zov" Segment="6">
+        <Animation Name="object_zov_Anim_0017D4" Offset="0x17D4" />
+        <Animation Name="object_zov_Anim_0023F4" Offset="0x23F4" />
+        <Animation Name="object_zov_Anim_002B5C" Offset="0x2B5C" />
+        <Animation Name="object_zov_Anim_00418C" Offset="0x418C" />
+        <Animation Name="object_zov_Anim_005A6C" Offset="0x5A6C" />
+        <Animation Name="object_zov_Anim_0066A4" Offset="0x66A4" />
+        <Animation Name="object_zov_Anim_008120" Offset="0x8120" />
+        <Animation Name="object_zov_Anim_00A888" Offset="0xA888" />
+        <Animation Name="object_zov_Anim_00B4CC" Offset="0xB4CC" />
+        <Animation Name="object_zov_Anim_00C510" Offset="0xC510" />
+        <Animation Name="object_zov_Anim_00CAA8" Offset="0xCAA8" />
+        <Animation Name="object_zov_Anim_00D3EC" Offset="0xD3EC" />
+        <DList Name="object_zov_DL_0107B0" Offset="0x107B0" />
+        <DList Name="object_zov_DL_010BC0" Offset="0x10BC0" />
+        <DList Name="object_zov_DL_010E60" Offset="0x10E60" />
+        <DList Name="object_zov_DL_010FF0" Offset="0x10FF0" />
+        <DList Name="object_zov_DL_011230" Offset="0x11230" />
+        <DList Name="object_zov_DL_011300" Offset="0x11300" />
+        <DList Name="object_zov_DL_0113F0" Offset="0x113F0" />
+        <DList Name="object_zov_DL_011690" Offset="0x11690" />
+        <DList Name="object_zov_DL_011820" Offset="0x11820" />
+        <DList Name="object_zov_DL_011A60" Offset="0x11A60" />
+        <DList Name="object_zov_DL_011B30" Offset="0x11B30" />
+        <DList Name="object_zov_DL_011C20" Offset="0x11C20" />
+        <DList Name="object_zov_DL_0122E0" Offset="0x122E0" />
+        <DList Name="object_zov_DL_0123C0" Offset="0x123C0" />
+        <DList Name="object_zov_DL_012560" Offset="0x12560" />
+        <DList Name="object_zov_DL_0127D0" Offset="0x127D0" />
+        <DList Name="object_zov_DL_012890" Offset="0x12890" />
+        <DList Name="object_zov_DL_012B20" Offset="0x12B20" />
+        <DList Name="object_zov_DL_012CB8" Offset="0x12CB8" />
+        <DList Name="object_zov_DL_012F28" Offset="0x12F28" />
+        <DList Name="object_zov_DL_012FE8" Offset="0x12FE8" />
+        <Texture Name="object_zov_TLUT_013278" OutName="tlut_013278" Format="rgba16" Width="16" Height="16" Offset="0x13278" />
+        <Texture Name="object_zov_Tex_013478" OutName="tex_013478" Format="rgba16" Width="8" Height="16" Offset="0x13478" />
+        <Texture Name="object_zov_Tex_013578" OutName="tex_013578" Format="ci8" Width="8" Height="8" Offset="0x13578" />
+        <Texture Name="object_zov_Tex_0135B8" OutName="tex_0135B8" Format="ci8" Width="8" Height="8" Offset="0x135B8" />
+        <Texture Name="object_zov_Tex_0135F8" OutName="tex_0135F8" Format="ci8" Width="32" Height="32" Offset="0x135F8" />
+        <Texture Name="object_zov_Tex_0139F8" OutName="tex_0139F8" Format="ci8" Width="16" Height="16" Offset="0x139F8" />
+        <Texture Name="object_zov_Tex_013AF8" OutName="tex_013AF8" Format="ci8" Width="8" Height="8" Offset="0x13AF8" />
+        <Texture Name="object_zov_Tex_013B38" OutName="tex_013B38" Format="ci8" Width="16" Height="16" Offset="0x13B38" />
+        <Texture Name="object_zov_Tex_013C38" OutName="tex_013C38" Format="ci8" Width="32" Height="32" Offset="0x13C38" />
+        <Texture Name="object_zov_Tex_014038" OutName="tex_014038" Format="ci8" Width="16" Height="16" Offset="0x14038" />
+        <Texture Name="object_zov_Tex_014138" OutName="tex_014138" Format="ci8" Width="32" Height="32" Offset="0x14138" />
+        <Texture Name="object_zov_Tex_014538" OutName="tex_014538" Format="ci8" Width="32" Height="32" Offset="0x14538" />
+        <Texture Name="object_zov_Tex_014938" OutName="tex_014938" Format="ci8" Width="32" Height="32" Offset="0x14938" />
+        <!-- <Blob Name="object_zov_Blob_014D38" Size="0x400" Offset="0x14D38" /> -->
+        <Texture Name="object_zov_Tex_015138" OutName="tex_015138" Format="ci8" Width="32" Height="32" Offset="0x15138" />
+        <Texture Name="object_zov_Tex_015538" OutName="tex_015538" Format="ci8" Width="8" Height="8" Offset="0x15538" />
+        <Texture Name="object_zov_Tex_015578" OutName="tex_015578" Format="ci8" Width="16" Height="16" Offset="0x15578" />
+        <Texture Name="object_zov_Tex_015678" OutName="tex_015678" Format="ci8" Width="16" Height="16" Offset="0x15678" />
+        <Texture Name="object_zov_Tex_015778" OutName="tex_015778" Format="rgba16" Width="32" Height="32" Offset="0x15778" />
+        <Texture Name="object_zov_Tex_015F78" OutName="tex_015F78" Format="ci8" Width="16" Height="16" Offset="0x15F78" />
+        <Texture Name="object_zov_Tex_016078" OutName="tex_016078" Format="ci8" Width="8" Height="16" Offset="0x16078" />
+        <Limb Name="object_zov_Standardlimb_0160F8" Type="Standard" EnumName="OBJECT_ZOV_LIMB_01" Offset="0x160F8" />
+        <Limb Name="object_zov_Standardlimb_016104" Type="Standard" EnumName="OBJECT_ZOV_LIMB_02" Offset="0x16104" />
+        <Limb Name="object_zov_Standardlimb_016110" Type="Standard" EnumName="OBJECT_ZOV_LIMB_03" Offset="0x16110" />
+        <Limb Name="object_zov_Standardlimb_01611C" Type="Standard" EnumName="OBJECT_ZOV_LIMB_04" Offset="0x1611C" />
+        <Limb Name="object_zov_Standardlimb_016128" Type="Standard" EnumName="OBJECT_ZOV_LIMB_05" Offset="0x16128" />
+        <Limb Name="object_zov_Standardlimb_016134" Type="Standard" EnumName="OBJECT_ZOV_LIMB_06" Offset="0x16134" />
+        <Limb Name="object_zov_Standardlimb_016140" Type="Standard" EnumName="OBJECT_ZOV_LIMB_07" Offset="0x16140" />
+        <Limb Name="object_zov_Standardlimb_01614C" Type="Standard" EnumName="OBJECT_ZOV_LIMB_08" Offset="0x1614C" />
+        <Limb Name="object_zov_Standardlimb_016158" Type="Standard" EnumName="OBJECT_ZOV_LIMB_09" Offset="0x16158" />
+        <Limb Name="object_zov_Standardlimb_016164" Type="Standard" EnumName="OBJECT_ZOV_LIMB_0A" Offset="0x16164" />
+        <Limb Name="object_zov_Standardlimb_016170" Type="Standard" EnumName="OBJECT_ZOV_LIMB_0B" Offset="0x16170" />
+        <Limb Name="object_zov_Standardlimb_01617C" Type="Standard" EnumName="OBJECT_ZOV_LIMB_0C" Offset="0x1617C" />
+        <Limb Name="object_zov_Standardlimb_016188" Type="Standard" EnumName="OBJECT_ZOV_LIMB_0D" Offset="0x16188" />
+        <Limb Name="object_zov_Standardlimb_016194" Type="Standard" EnumName="OBJECT_ZOV_LIMB_0E" Offset="0x16194" />
+        <Limb Name="object_zov_Standardlimb_0161A0" Type="Standard" EnumName="OBJECT_ZOV_LIMB_0F" Offset="0x161A0" />
+        <Limb Name="object_zov_Standardlimb_0161AC" Type="Standard" EnumName="OBJECT_ZOV_LIMB_10" Offset="0x161AC" />
+        <Limb Name="object_zov_Standardlimb_0161B8" Type="Standard" EnumName="OBJECT_ZOV_LIMB_11" Offset="0x161B8" />
+        <Limb Name="object_zov_Standardlimb_0161C4" Type="Standard" EnumName="OBJECT_ZOV_LIMB_12" Offset="0x161C4" />
+        <Limb Name="object_zov_Standardlimb_0161D0" Type="Standard" EnumName="OBJECT_ZOV_LIMB_13" Offset="0x161D0" />
+        <Limb Name="object_zov_Standardlimb_0161DC" Type="Standard" EnumName="OBJECT_ZOV_LIMB_14" Offset="0x161DC" />
+        <Limb Name="object_zov_Standardlimb_0161E8" Type="Standard" EnumName="OBJECT_ZOV_LIMB_15" Offset="0x161E8" />
+        <Limb Name="object_zov_Standardlimb_0161F4" Type="Standard" EnumName="OBJECT_ZOV_LIMB_16" Offset="0x161F4" />
+        <Skeleton Name="object_zov_Skel_016258" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOV_LIMB_NONE" LimbMax="OBJECT_ZOV_LIMB_MAX" EnumName="object_zov_Limbs" Offset="0x16258" />
+    </File>
+</Root>

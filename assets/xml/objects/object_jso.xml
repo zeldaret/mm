@@ -1,0 +1,122 @@
+﻿<Root>
+    <File Name="object_jso" Segment="6">
+        <!-- <Blob Name="object_jso_Blob_000000" Size="0x20" Offset="0x0" /> -->
+        <DList Name="object_jso_DL_001210" Offset="0x1210" />
+        <DList Name="object_jso_DL_001348" Offset="0x1348" />
+        <DList Name="object_jso_DL_0013F8" Offset="0x13F8" />
+        <DList Name="object_jso_DL_001508" Offset="0x1508" />
+        <DList Name="object_jso_DL_001640" Offset="0x1640" />
+        <DList Name="object_jso_DL_0016F0" Offset="0x16F0" />
+        <DList Name="object_jso_DL_001800" Offset="0x1800" />
+        <DList Name="object_jso_DL_001908" Offset="0x1908" />
+        <DList Name="object_jso_DL_001A18" Offset="0x1A18" />
+        <DList Name="object_jso_DL_001B00" Offset="0x1B00" />
+        <DList Name="object_jso_DL_001C48" Offset="0x1C48" />
+        <DList Name="object_jso_DL_001D78" Offset="0x1D78" />
+        <DList Name="object_jso_DL_001EA8" Offset="0x1EA8" />
+        <DList Name="object_jso_DL_001FA8" Offset="0x1FA8" />
+        <DList Name="object_jso_DL_001FF8" Offset="0x1FF8" />
+        <DList Name="object_jso_DL_0020B0" Offset="0x20B0" />
+        <DList Name="object_jso_DL_002100" Offset="0x2100" />
+        <!-- <Blob Name="object_jso_Blob_0021B8" Size="0x100" Offset="0x21B8" /> -->
+        <Texture Name="object_jso_Tex_0022B8" OutName="tex_0022B8" Format="rgba16" Width="16" Height="16" Offset="0x22B8" />
+        <Texture Name="object_jso_Tex_0024B8" OutName="tex_0024B8" Format="rgba16" Width="8" Height="16" Offset="0x24B8" />
+        <!-- <Blob Name="object_jso_Blob_0025B8" Size="0x80" Offset="0x25B8" /> -->
+        <Texture Name="object_jso_Tex_002638" OutName="tex_002638" Format="rgba16" Width="4" Height="4" Offset="0x2638" />
+        <Texture Name="object_jso_Tex_002658" OutName="tex_002658" Format="rgba16" Width="8" Height="32" Offset="0x2658" />
+        <Texture Name="object_jso_TLUT_002858" OutName="tlut_002858" Format="rgba16" Width="16" Height="16" Offset="0x2858" />
+        <Texture Name="object_jso_TLUT_002A58" OutName="tlut_002A58" Format="rgba16" Width="16" Height="16" Offset="0x2A58" />
+        <Texture Name="object_jso_Tex_002C58" OutName="tex_002C58" Format="ci8" Width="16" Height="16" Offset="0x2C58" />
+        <Texture Name="object_jso_Tex_002D58" OutName="tex_002D58" Format="ci8" Width="16" Height="16" Offset="0x2D58" />
+        <DList Name="object_jso_DL_002ED8" Offset="0x2ED8" />
+        <Texture Name="object_jso_Tex_002FB8" OutName="tex_002FB8" Format="rgba16" Width="8" Height="8" Offset="0x2FB8" />
+        <Limb Name="object_jso_Standardlimb_003038" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_01" Offset="0x3038" />
+        <Limb Name="object_jso_Standardlimb_003044" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_02" Offset="0x3044" />
+        <Limb Name="object_jso_Standardlimb_003050" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_03" Offset="0x3050" />
+        <Limb Name="object_jso_Standardlimb_00305C" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_04" Offset="0x305C" />
+        <Limb Name="object_jso_Standardlimb_003068" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_05" Offset="0x3068" />
+        <Limb Name="object_jso_Standardlimb_003074" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_06" Offset="0x3074" />
+        <Limb Name="object_jso_Standardlimb_003080" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_07" Offset="0x3080" />
+        <Limb Name="object_jso_Standardlimb_00308C" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_08" Offset="0x308C" />
+        <Limb Name="object_jso_Standardlimb_003098" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_09" Offset="0x3098" />
+        <Limb Name="object_jso_Standardlimb_0030A4" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_0A" Offset="0x30A4" />
+        <Limb Name="object_jso_Standardlimb_0030B0" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_0B" Offset="0x30B0" />
+        <Limb Name="object_jso_Standardlimb_0030BC" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_0C" Offset="0x30BC" />
+        <Limb Name="object_jso_Standardlimb_0030C8" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_0D" Offset="0x30C8" />
+        <Limb Name="object_jso_Standardlimb_0030D4" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_0E" Offset="0x30D4" />
+        <Limb Name="object_jso_Standardlimb_0030E0" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_0F" Offset="0x30E0" />
+        <Limb Name="object_jso_Standardlimb_0030EC" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_10" Offset="0x30EC" />
+        <Limb Name="object_jso_Standardlimb_0030F8" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_11" Offset="0x30F8" />
+        <Limb Name="object_jso_Standardlimb_003104" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_12" Offset="0x3104" />
+        <Limb Name="object_jso_Standardlimb_003110" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_13" Offset="0x3110" />
+        <Skeleton Name="object_jso_Skel_003168" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_1_LIMB_NONE" LimbMax="OBJECT_JSO_1_LIMB_MAX" EnumName="object_jso_1_Limbs" Offset="0x3168" />
+        <Animation Name="object_jso_Anim_003238" Offset="0x3238" />
+        <Animation Name="object_jso_Anim_003530" Offset="0x3530" />
+        <Animation Name="object_jso_Anim_00378C" Offset="0x378C" />
+        <Animation Name="object_jso_Anim_0038AC" Offset="0x38AC" />
+        <Animation Name="object_jso_Anim_003D5C" Offset="0x3D5C" />
+        <Animation Name="object_jso_Anim_004018" Offset="0x4018" />
+        <Animation Name="object_jso_Anim_004384" Offset="0x4384" />
+        <Animation Name="object_jso_Anim_0044F8" Offset="0x44F8" />
+        <Animation Name="object_jso_Anim_004858" Offset="0x4858" />
+        <Animation Name="object_jso_Anim_005778" Offset="0x5778" />
+        <Animation Name="object_jso_Anim_005D5C" Offset="0x5D5C" />
+        <Animation Name="object_jso_Anim_00603C" Offset="0x603C" />
+        <Animation Name="object_jso_Anim_0063A4" Offset="0x63A4" />
+        <Animation Name="object_jso_Anim_0067F0" Offset="0x67F0" />
+        <Animation Name="object_jso_Anim_0070BC" Offset="0x70BC" />
+        <Animation Name="object_jso_Anim_0071E0" Offset="0x71E0" />
+        <Animation Name="object_jso_Anim_0072AC" Offset="0x72AC" />
+        <Animation Name="object_jso_Anim_00788C" Offset="0x788C" />
+        <Animation Name="object_jso_Anim_007B04" Offset="0x7B04" />
+        <Animation Name="object_jso_Anim_0081F4" Offset="0x81F4" />
+        <DList Name="object_jso_DL_008F50" Offset="0x8F50" />
+        <DList Name="object_jso_DL_009008" Offset="0x9008" />
+        <DList Name="object_jso_DL_0090C0" Offset="0x90C0" />
+        <DList Name="object_jso_DL_009190" Offset="0x9190" />
+        <DList Name="object_jso_DL_009248" Offset="0x9248" />
+        <DList Name="object_jso_DL_009300" Offset="0x9300" />
+        <DList Name="object_jso_DL_0093D0" Offset="0x93D0" />
+        <DList Name="object_jso_DL_009428" Offset="0x9428" />
+        <DList Name="object_jso_DL_0094E0" Offset="0x94E0" />
+        <DList Name="object_jso_DL_009758" Offset="0x9758" />
+        <DList Name="object_jso_DL_0098C8" Offset="0x98C8" />
+        <DList Name="object_jso_DL_0099B8" Offset="0x99B8" />
+        <DList Name="object_jso_DL_009AA8" Offset="0x9AA8" />
+        <DList Name="object_jso_DL_009B80" Offset="0x9B80" />
+        <DList Name="object_jso_DL_009BD8" Offset="0x9BD8" />
+        <DList Name="object_jso_DL_009C98" Offset="0x9C98" />
+        <DList Name="object_jso_DL_009CF0" Offset="0x9CF0" />
+        <Texture Name="object_jso_Tex_009DB0" OutName="tex_009DB0" Format="rgba16" Width="8" Height="16" Offset="0x9DB0" />
+        <Texture Name="object_jso_Tex_009EB0" OutName="tex_009EB0" Format="rgba16" Width="8" Height="8" Offset="0x9EB0" />
+        <Texture Name="object_jso_Tex_009F30" OutName="tex_009F30" Format="rgba16" Width="16" Height="32" Offset="0x9F30" />
+        <Texture Name="object_jso_Tex_00A330" OutName="tex_00A330" Format="rgba16" Width="16" Height="16" Offset="0xA330" />
+        <Texture Name="object_jso_Tex_00A530" OutName="tex_00A530" Format="rgba16" Width="16" Height="8" Offset="0xA530" />
+        <Texture Name="object_jso_Tex_00A630" OutName="tex_00A630" Format="rgba16" Width="8" Height="8" Offset="0xA630" />
+        <Texture Name="object_jso_Tex_00A6B0" OutName="tex_00A6B0" Format="rgba16" Width="16" Height="16" Offset="0xA6B0" />
+        <Texture Name="object_jso_Tex_00A8B0" OutName="tex_00A8B0" Format="rgba16" Width="4" Height="4" Offset="0xA8B0" />
+        <Limb Name="object_jso_Standardlimb_00A8D0" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_01" Offset="0xA8D0" />
+        <Limb Name="object_jso_Standardlimb_00A8DC" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_02" Offset="0xA8DC" />
+        <Limb Name="object_jso_Standardlimb_00A8E8" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_03" Offset="0xA8E8" />
+        <Limb Name="object_jso_Standardlimb_00A8F4" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_04" Offset="0xA8F4" />
+        <Limb Name="object_jso_Standardlimb_00A900" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_05" Offset="0xA900" />
+        <Limb Name="object_jso_Standardlimb_00A90C" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_06" Offset="0xA90C" />
+        <Limb Name="object_jso_Standardlimb_00A918" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_07" Offset="0xA918" />
+        <Limb Name="object_jso_Standardlimb_00A924" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_08" Offset="0xA924" />
+        <Limb Name="object_jso_Standardlimb_00A930" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_09" Offset="0xA930" />
+        <Limb Name="object_jso_Standardlimb_00A93C" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_0A" Offset="0xA93C" />
+        <Limb Name="object_jso_Standardlimb_00A948" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_0B" Offset="0xA948" />
+        <Limb Name="object_jso_Standardlimb_00A954" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_0C" Offset="0xA954" />
+        <Limb Name="object_jso_Standardlimb_00A960" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_0D" Offset="0xA960" />
+        <Limb Name="object_jso_Standardlimb_00A96C" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_0E" Offset="0xA96C" />
+        <Limb Name="object_jso_Standardlimb_00A978" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_0F" Offset="0xA978" />
+        <Limb Name="object_jso_Standardlimb_00A984" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_10" Offset="0xA984" />
+        <Limb Name="object_jso_Standardlimb_00A990" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_11" Offset="0xA990" />
+        <Limb Name="object_jso_Standardlimb_00A99C" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_12" Offset="0xA99C" />
+        <Limb Name="object_jso_Standardlimb_00A9A8" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_13" Offset="0xA9A8" />
+        <Skeleton Name="object_jso_Skel_00AA00" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_2_LIMB_NONE" LimbMax="OBJECT_JSO_2_LIMB_MAX" EnumName="object_jso_2_Limbs" Offset="0xAA00" />
+        <Animation Name="object_jso_Anim_00AE80" Offset="0xAE80" />
+        <Animation Name="object_jso_Anim_00B1DC" Offset="0xB1DC" />
+        <Animation Name="object_jso_Anim_00B5F0" Offset="0xB5F0" />
+    </File>
+</Root>

@@ -1,12 +1,12 @@
 /*
- * File z_en_crow.c
+ * File: z_en_crow.c
  * Overlay: ovl_En_Crow
  * Description: Guay
  */
 
 #include "z_en_crow.h"
 
-#define FLAGS 0x00005005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
 
 #define THIS ((EnCrow*)thisx)
 

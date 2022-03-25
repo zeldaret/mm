@@ -1,0 +1,91 @@
+﻿<Root>
+    <File Name="object_dnt" Segment="6">
+        <Animation Name="object_dnt_Anim_000994" Offset="0x994" />
+        <Animation Name="object_dnt_Anim_0012F4" Offset="0x12F4" />
+        <DList Name="object_dnt_DL_001350" Offset="0x1350" />
+        <DList Name="object_dnt_DL_001420" Offset="0x1420" />
+        <Animation Name="object_dnt_Anim_001BC8" Offset="0x1BC8" />
+        <Animation Name="object_dnt_Anim_001E2C" Offset="0x1E2C" />
+        <Animation Name="object_dnt_Anim_002268" Offset="0x2268" />
+        <Animation Name="object_dnt_Anim_002670" Offset="0x2670" />
+        <Animation Name="object_dnt_Anim_0029E8" Offset="0x29E8" />
+        <Animation Name="object_dnt_Anim_002F08" Offset="0x2F08" />
+        <Animation Name="object_dnt_Anim_003438" Offset="0x3438" />
+        <Animation Name="object_dnt_Anim_0038CC" Offset="0x38CC" />
+        <Animation Name="object_dnt_Anim_003CC0" Offset="0x3CC0" />
+        <Blob Name="object_dnt_Blob_003CD0" Size="0x10" Offset="0x3CD0" />
+        <Animation Name="object_dnt_Anim_004700" Offset="0x4700" />
+        <Animation Name="object_dnt_Anim_004AA0" Offset="0x4AA0" />
+        <Animation Name="object_dnt_Anim_004E38" Offset="0x4E38" />
+        <Animation Name="object_dnt_Anim_005488" Offset="0x5488" />
+        <Animation Name="object_dnt_Anim_00577C" Offset="0x577C" />
+        <Animation Name="object_dnt_Anim_005CA8" Offset="0x5CA8" />
+        <DList Name="object_dnt_DL_007EA0" Offset="0x7EA0" />
+        <DList Name="object_dnt_DL_008048" Offset="0x8048" />
+        <DList Name="object_dnt_DL_008290" Offset="0x8290" />
+        <DList Name="object_dnt_DL_008320" Offset="0x8320" />
+        <DList Name="object_dnt_DL_008438" Offset="0x8438" />
+        <DList Name="object_dnt_DL_0085D8" Offset="0x85D8" />
+        <DList Name="object_dnt_DL_008688" Offset="0x8688" />
+        <DList Name="object_dnt_DL_008718" Offset="0x8718" />
+        <DList Name="object_dnt_DL_008838" Offset="0x8838" />
+        <DList Name="object_dnt_DL_008A48" Offset="0x8A48" />
+        <DList Name="object_dnt_DL_008B60" Offset="0x8B60" />
+        <DList Name="object_dnt_DL_008C10" Offset="0x8C10" />
+        <DList Name="object_dnt_DL_008DB0" Offset="0x8DB0" />
+        <DList Name="object_dnt_DL_008ED0" Offset="0x8ED0" />
+        <DList Name="object_dnt_DL_0090E8" Offset="0x90E8" />
+        <DList Name="object_dnt_DL_009200" Offset="0x9200" />
+        <DList Name="object_dnt_DL_0092B0" Offset="0x92B0" />
+        <DList Name="object_dnt_DL_009340" Offset="0x9340" />
+        <DList Name="object_dnt_DL_0093D0" Offset="0x93D0" />
+        <DList Name="object_dnt_DL_0094E8" Offset="0x94E8" />
+        <DList Name="object_dnt_DL_009630" Offset="0x9630" />
+        <DList Name="object_dnt_DL_009740" Offset="0x9740" />
+        <DList Name="object_dnt_DL_009838" Offset="0x9838" />
+        <DList Name="object_dnt_DL_0098D8" Offset="0x98D8" />
+        <DList Name="object_dnt_DL_0099E8" Offset="0x99E8" />
+        <DList Name="object_dnt_DL_009AE0" Offset="0x9AE0" />
+        <Texture Name="object_dnt_Tex_009B80" OutName="tex_009B80" Format="rgba16" Width="16" Height="16" Offset="0x9B80" />
+        <Texture Name="object_dnt_Tex_009D80" OutName="tex_009D80" Format="rgba16" Width="16" Height="16" Offset="0x9D80" />
+        <Texture Name="object_dnt_Tex_009F80" OutName="tex_009F80" Format="rgba16" Width="8" Height="16" Offset="0x9F80" />
+        <Texture Name="object_dnt_Tex_00A080" OutName="tex_00A080" Format="rgba16" Width="8" Height="16" Offset="0xA080" />
+        <Texture Name="object_dnt_Tex_00A180" OutName="tex_00A180" Format="rgba16" Width="2" Height="16" Offset="0xA180" />
+        <Texture Name="object_dnt_Tex_00A1C0" OutName="tex_00A1C0" Format="rgba16" Width="8" Height="8" Offset="0xA1C0" />
+        <Texture Name="object_dnt_Tex_00A240" OutName="tex_00A240" Format="rgba16" Width="8" Height="16" Offset="0xA240" />
+        <Texture Name="object_dnt_Tex_00A340" OutName="tex_00A340" Format="rgba16" Width="16" Height="32" Offset="0xA340" />
+        <Texture Name="object_dnt_Tex_00A740" OutName="tex_00A740" Format="rgba16" Width="8" Height="8" Offset="0xA740" />
+        <Texture Name="object_dnt_Tex_00A7C0" OutName="tex_00A7C0" Format="rgba16" Width="16" Height="8" Offset="0xA7C0" />
+        <Texture Name="object_dnt_Tex_00A8C0" OutName="tex_00A8C0" Format="rgba16" Width="16" Height="16" Offset="0xA8C0" />
+        <Limb Name="object_dnt_Standardlimb_00AAC0" Type="Standard" EnumName="OBJECT_DNT_LIMB_01" Offset="0xAAC0" />
+        <Limb Name="object_dnt_Standardlimb_00AACC" Type="Standard" EnumName="OBJECT_DNT_LIMB_02" Offset="0xAACC" />
+        <Limb Name="object_dnt_Standardlimb_00AAD8" Type="Standard" EnumName="OBJECT_DNT_LIMB_03" Offset="0xAAD8" />
+        <Limb Name="object_dnt_Standardlimb_00AAE4" Type="Standard" EnumName="OBJECT_DNT_LIMB_04" Offset="0xAAE4" />
+        <Limb Name="object_dnt_Standardlimb_00AAF0" Type="Standard" EnumName="OBJECT_DNT_LIMB_05" Offset="0xAAF0" />
+        <Limb Name="object_dnt_Standardlimb_00AAFC" Type="Standard" EnumName="OBJECT_DNT_LIMB_06" Offset="0xAAFC" />
+        <Limb Name="object_dnt_Standardlimb_00AB08" Type="Standard" EnumName="OBJECT_DNT_LIMB_07" Offset="0xAB08" />
+        <Limb Name="object_dnt_Standardlimb_00AB14" Type="Standard" EnumName="OBJECT_DNT_LIMB_08" Offset="0xAB14" />
+        <Limb Name="object_dnt_Standardlimb_00AB20" Type="Standard" EnumName="OBJECT_DNT_LIMB_09" Offset="0xAB20" />
+        <Limb Name="object_dnt_Standardlimb_00AB2C" Type="Standard" EnumName="OBJECT_DNT_LIMB_0A" Offset="0xAB2C" />
+        <Limb Name="object_dnt_Standardlimb_00AB38" Type="Standard" EnumName="OBJECT_DNT_LIMB_0B" Offset="0xAB38" />
+        <Limb Name="object_dnt_Standardlimb_00AB44" Type="Standard" EnumName="OBJECT_DNT_LIMB_0C" Offset="0xAB44" />
+        <Limb Name="object_dnt_Standardlimb_00AB50" Type="Standard" EnumName="OBJECT_DNT_LIMB_0D" Offset="0xAB50" />
+        <Limb Name="object_dnt_Standardlimb_00AB5C" Type="Standard" EnumName="OBJECT_DNT_LIMB_0E" Offset="0xAB5C" />
+        <Limb Name="object_dnt_Standardlimb_00AB68" Type="Standard" EnumName="OBJECT_DNT_LIMB_0F" Offset="0xAB68" />
+        <Limb Name="object_dnt_Standardlimb_00AB74" Type="Standard" EnumName="OBJECT_DNT_LIMB_10" Offset="0xAB74" />
+        <Limb Name="object_dnt_Standardlimb_00AB80" Type="Standard" EnumName="OBJECT_DNT_LIMB_11" Offset="0xAB80" />
+        <Limb Name="object_dnt_Standardlimb_00AB8C" Type="Standard" EnumName="OBJECT_DNT_LIMB_12" Offset="0xAB8C" />
+        <Limb Name="object_dnt_Standardlimb_00AB98" Type="Standard" EnumName="OBJECT_DNT_LIMB_13" Offset="0xAB98" />
+        <Limb Name="object_dnt_Standardlimb_00ABA4" Type="Standard" EnumName="OBJECT_DNT_LIMB_14" Offset="0xABA4" />
+        <Limb Name="object_dnt_Standardlimb_00ABB0" Type="Standard" EnumName="OBJECT_DNT_LIMB_15" Offset="0xABB0" />
+        <Limb Name="object_dnt_Standardlimb_00ABBC" Type="Standard" EnumName="OBJECT_DNT_LIMB_16" Offset="0xABBC" />
+        <Limb Name="object_dnt_Standardlimb_00ABC8" Type="Standard" EnumName="OBJECT_DNT_LIMB_17" Offset="0xABC8" />
+        <Limb Name="object_dnt_Standardlimb_00ABD4" Type="Standard" EnumName="OBJECT_DNT_LIMB_18" Offset="0xABD4" />
+        <Limb Name="object_dnt_Standardlimb_00ABE0" Type="Standard" EnumName="OBJECT_DNT_LIMB_19" Offset="0xABE0" />
+        <Limb Name="object_dnt_Standardlimb_00ABEC" Type="Standard" EnumName="OBJECT_DNT_LIMB_1A" Offset="0xABEC" />
+        <Limb Name="object_dnt_Standardlimb_00ABF8" Type="Standard" EnumName="OBJECT_DNT_LIMB_1B" Offset="0xABF8" />
+        <Skeleton Name="object_dnt_Skel_00AC70" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DNT_LIMB_NONE" LimbMax="OBJECT_DNT_LIMB_MAX" EnumName="object_dnt_Limbs" Offset="0xAC70" />
+        <Animation Name="object_dnt_Anim_00B0B4" Offset="0xB0B4" />
+        <Texture Name="object_dnt_Tex_00B0D0" OutName="tex_00B0D0" Format="rgba16" Width="16" Height="16" Offset="0xB0D0" />
+    </File>
+</Root>

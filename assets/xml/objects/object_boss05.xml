@@ -1,0 +1,81 @@
+﻿<Root>
+    <File Name="object_boss05" Segment="6">
+        <Animation Name="object_boss05_Anim_0006A4" Offset="0x6A4" />
+        <Animation Name="object_boss05_Anim_000A5C" Offset="0xA5C" />
+        <Animation Name="object_boss05_Anim_000ABC" Offset="0xABC" />
+        <DList Name="object_boss05_DL_0011C0" Offset="0x11C0" />
+        <DList Name="object_boss05_DL_001288" Offset="0x1288" />
+        <DList Name="object_boss05_DL_001320" Offset="0x1320" />
+        <DList Name="object_boss05_DL_0013D0" Offset="0x13D0" />
+        <DList Name="object_boss05_DL_0014A0" Offset="0x14A0" />
+        <DList Name="object_boss05_DL_001538" Offset="0x1538" />
+        <DList Name="object_boss05_DL_0015F0" Offset="0x15F0" />
+        <DList Name="object_boss05_DL_001688" Offset="0x1688" />
+        <DList Name="object_boss05_DL_001740" Offset="0x1740" />
+        <Texture Name="object_boss05_Tex_0017D0" OutName="tex_0017D0" Format="rgba16" Width="8" Height="8" Offset="0x17D0" />
+        <Texture Name="object_boss05_Tex_001850" OutName="tex_001850" Format="rgba16" Width="32" Height="32" Offset="0x1850" />
+        <Texture Name="object_boss05_Tex_002050" OutName="tex_002050" Format="rgba16" Width="16" Height="32" Offset="0x2050" />
+        <Limb Name="object_boss05_Standardlimb_002450" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_01" Offset="0x2450" />
+        <Limb Name="object_boss05_Standardlimb_00245C" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_02" Offset="0x245C" />
+        <Limb Name="object_boss05_Standardlimb_002468" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_03" Offset="0x2468" />
+        <Limb Name="object_boss05_Standardlimb_002474" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_04" Offset="0x2474" />
+        <Limb Name="object_boss05_Standardlimb_002480" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_05" Offset="0x2480" />
+        <Limb Name="object_boss05_Standardlimb_00248C" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_06" Offset="0x248C" />
+        <Limb Name="object_boss05_Standardlimb_002498" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_07" Offset="0x2498" />
+        <Limb Name="object_boss05_Standardlimb_0024A4" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_08" Offset="0x24A4" />
+        <Limb Name="object_boss05_Standardlimb_0024B0" Type="Standard" EnumName="OBJECT_BOSS05_1_LIMB_09" Offset="0x24B0" />
+        <Skeleton Name="object_boss05_Skel_0024E0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS05_1_LIMB_NONE" LimbMax="OBJECT_BOSS05_1_LIMB_MAX" EnumName="object_boss05_1_Limbs" Offset="0x24E0" />
+        <Animation Name="object_boss05_Anim_002F0C" Offset="0x2F0C" />
+        <Animation Name="object_boss05_Anim_003448" Offset="0x3448" />
+        <Animation Name="object_boss05_Anim_003500" Offset="0x3500" />
+        <DList Name="object_boss05_DL_004620" Offset="0x4620" />
+        <DList Name="object_boss05_DL_0046C8" Offset="0x46C8" />
+        <DList Name="object_boss05_DL_004788" Offset="0x4788" />
+        <DList Name="object_boss05_DL_004830" Offset="0x4830" />
+        <DList Name="object_boss05_DL_0048F0" Offset="0x48F0" />
+        <DList Name="object_boss05_DL_0049C0" Offset="0x49C0" />
+        <DList Name="object_boss05_DL_004A58" Offset="0x4A58" />
+        <DList Name="object_boss05_DL_004B10" Offset="0x4B10" />
+        <DList Name="object_boss05_DL_004C58" Offset="0x4C58" />
+        <DList Name="object_boss05_DL_004CF0" Offset="0x4CF0" />
+        <DList Name="object_boss05_DL_004DA8" Offset="0x4DA8" />
+        <DList Name="object_boss05_DL_004EF8" Offset="0x4EF8" />
+        <DList Name="object_boss05_DL_004FA0" Offset="0x4FA0" />
+        <DList Name="object_boss05_DL_005060" Offset="0x5060" />
+        <DList Name="object_boss05_DL_005130" Offset="0x5130" />
+        <DList Name="object_boss05_DL_0051D8" Offset="0x51D8" />
+        <DList Name="object_boss05_DL_005298" Offset="0x5298" />
+        <DList Name="object_boss05_DL_005348" Offset="0x5348" />
+        <DList Name="object_boss05_DL_005460" Offset="0x5460" />
+        <Texture Name="object_boss05_Tex_005598" OutName="tex_005598" Format="rgba16" Width="16" Height="16" Offset="0x5598" />
+        <Texture Name="object_boss05_Tex_005798" OutName="tex_005798" Format="rgba16" Width="16" Height="32" Offset="0x5798" />
+        <Texture Name="object_boss05_Tex_005B98" OutName="tex_005B98" Format="rgba16" Width="8" Height="8" Offset="0x5B98" />
+        <Texture Name="object_boss05_Tex_005C18" OutName="tex_005C18" Format="rgba16" Width="16" Height="16" Offset="0x5C18" />
+        <Texture Name="object_boss05_Tex_005E18" OutName="tex_005E18" Format="rgba32" Width="16" Height="16" Offset="0x5E18" />
+        <TextureAnimation Name="object_boss05_Matanimheader_006218" Offset="0x6240" />
+        <Limb Name="object_boss05_Standardlimb_006248" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_01" Offset="0x6248" />
+        <Limb Name="object_boss05_Standardlimb_006254" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_02" Offset="0x6254" />
+        <Limb Name="object_boss05_Standardlimb_006260" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_03" Offset="0x6260" />
+        <Limb Name="object_boss05_Standardlimb_00626C" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_04" Offset="0x626C" />
+        <Limb Name="object_boss05_Standardlimb_006278" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_05" Offset="0x6278" />
+        <Limb Name="object_boss05_Standardlimb_006284" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_06" Offset="0x6284" />
+        <Limb Name="object_boss05_Standardlimb_006290" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_07" Offset="0x6290" />
+        <Limb Name="object_boss05_Standardlimb_00629C" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_08" Offset="0x629C" />
+        <Limb Name="object_boss05_Standardlimb_0062A8" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_09" Offset="0x62A8" />
+        <Limb Name="object_boss05_Standardlimb_0062B4" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_0A" Offset="0x62B4" />
+        <Limb Name="object_boss05_Standardlimb_0062C0" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_0B" Offset="0x62C0" />
+        <Limb Name="object_boss05_Standardlimb_0062CC" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_0C" Offset="0x62CC" />
+        <Limb Name="object_boss05_Standardlimb_0062D8" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_0D" Offset="0x62D8" />
+        <Limb Name="object_boss05_Standardlimb_0062E4" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_0E" Offset="0x62E4" />
+        <Limb Name="object_boss05_Standardlimb_0062F0" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_0F" Offset="0x62F0" />
+        <Limb Name="object_boss05_Standardlimb_0062FC" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_10" Offset="0x62FC" />
+        <Limb Name="object_boss05_Standardlimb_006308" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_11" Offset="0x6308" />
+        <Limb Name="object_boss05_Standardlimb_006314" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_12" Offset="0x6314" />
+        <Limb Name="object_boss05_Standardlimb_006320" Type="Standard" EnumName="OBJECT_BOSS05_2_LIMB_13" Offset="0x6320" />
+        <Skeleton Name="object_boss05_Skel_006378" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOSS05_2_LIMB_NONE" LimbMax="OBJECT_BOSS05_2_LIMB_MAX" EnumName="object_boss05_2_Limbs" Offset="0x6378" />
+        <Animation Name="object_boss05_Anim_006484" Offset="0x6484" />
+        <Animation Name="object_boss05_Anim_006E50" Offset="0x6E50" />
+        <Animation Name="object_boss05_Anim_007488" Offset="0x7488" />
+        <Animation Name="object_boss05_Anim_007908" Offset="0x7908" />
+    </File>
+</Root>

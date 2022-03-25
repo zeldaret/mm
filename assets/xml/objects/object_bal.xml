@@ -1,0 +1,81 @@
+﻿<Root>
+    <File Name="object_bal" Segment="6">
+        <Animation Name="object_bal_Anim_0005FC" Offset="0x5FC" />
+        <Animation Name="object_bal_Anim_000840" Offset="0x840" />
+        <Animation Name="object_bal_Anim_000C78" Offset="0xC78" />
+        <Animation Name="object_bal_Anim_001804" Offset="0x1804" />
+        <DList Name="object_bal_DL_004000" Offset="0x4000" />
+        <DList Name="object_bal_DL_004108" Offset="0x4108" />
+        <DList Name="object_bal_DL_0041E8" Offset="0x41E8" />
+        <DList Name="object_bal_DL_0042A8" Offset="0x42A8" />
+        <DList Name="object_bal_DL_004368" Offset="0x4368" />
+        <DList Name="object_bal_DL_004448" Offset="0x4448" />
+        <DList Name="object_bal_DL_004508" Offset="0x4508" />
+        <DList Name="object_bal_DL_0045C8" Offset="0x45C8" />
+        <DList Name="object_bal_DL_004980" Offset="0x4980" />
+        <DList Name="object_bal_DL_004BA0" Offset="0x4BA0" />
+        <DList Name="object_bal_DL_004CA0" Offset="0x4CA0" />
+        <DList Name="object_bal_DL_004D58" Offset="0x4D58" />
+        <DList Name="object_bal_DL_004E40" Offset="0x4E40" />
+        <DList Name="object_bal_DL_004F00" Offset="0x4F00" />
+        <DList Name="object_bal_DL_005000" Offset="0x5000" />
+        <DList Name="object_bal_DL_0050F8" Offset="0x50F8" />
+        <DList Name="object_bal_DL_0051E0" Offset="0x51E0" />
+        <DList Name="object_bal_DL_0052A0" Offset="0x52A0" />
+        <Texture Name="object_bal_TLUT_0053B0" OutName="tlut_0053B0" Format="rgba16" Width="4" Height="4" Offset="0x53B0" />
+        <Texture Name="object_bal_Tex_0053D0" OutName="tex_0053D0" Format="rgba16" Width="16" Height="16" Offset="0x53D0" />
+        <Texture Name="object_bal_Tex_0055D0" OutName="tex_0055D0" Format="rgba16" Width="32" Height="32" Offset="0x55D0" />
+        <Texture Name="object_bal_Tex_005DD0" OutName="tex_005DD0" Format="rgba16" Width="16" Height="16" Offset="0x5DD0" />
+        <Texture Name="object_bal_Tex_005FD0" OutName="tex_005FD0" Format="rgba16" Width="8" Height="8" Offset="0x5FD0" />
+        <Texture Name="object_bal_Tex_006050" OutName="tex_006050" Format="rgba16" Width="32" Height="64" Offset="0x6050" />
+        <Texture Name="object_bal_Tex_007050" OutName="tex_007050" Format="rgba16" Width="8" Height="8" Offset="0x7050" />
+        <Texture Name="object_bal_Tex_0070D0" OutName="tex_0070D0" Format="rgba16" Width="16" Height="16" Offset="0x70D0" />
+        <Texture Name="object_bal_Tex_0072D0" OutName="tex_0072D0" Format="rgba16" Width="64" Height="32" Offset="0x72D0" />
+        <Texture Name="object_bal_Tex_0082D0" OutName="tex_0082D0" Format="rgba16" Width="16" Height="32" Offset="0x82D0" />
+        <Texture Name="object_bal_Tex_0086D0" OutName="tex_0086D0" Format="rgba16" Width="32" Height="16" Offset="0x86D0" />
+        <Texture Name="object_bal_Tex_008AD0" OutName="tex_008AD0" Format="rgba16" Width="16" Height="16" Offset="0x8AD0" />
+        <Texture Name="object_bal_Tex_008CD0" OutName="tex_008CD0" Format="ci4" Width="64" Height="64" Offset="0x8CD0" />
+        <Texture Name="object_bal_Tex_0094D0" OutName="tex_0094D0" Format="rgba16" Width="32" Height="64" Offset="0x94D0" />
+        <Limb Name="object_bal_Standardlimb_00A4D0" Type="Standard" EnumName="OBJECT_BAL_LIMB_01" Offset="0xA4D0" />
+        <Limb Name="object_bal_Standardlimb_00A4DC" Type="Standard" EnumName="OBJECT_BAL_LIMB_02" Offset="0xA4DC" />
+        <Limb Name="object_bal_Standardlimb_00A4E8" Type="Standard" EnumName="OBJECT_BAL_LIMB_03" Offset="0xA4E8" />
+        <Limb Name="object_bal_Standardlimb_00A4F4" Type="Standard" EnumName="OBJECT_BAL_LIMB_04" Offset="0xA4F4" />
+        <Limb Name="object_bal_Standardlimb_00A500" Type="Standard" EnumName="OBJECT_BAL_LIMB_05" Offset="0xA500" />
+        <Limb Name="object_bal_Standardlimb_00A50C" Type="Standard" EnumName="OBJECT_BAL_LIMB_06" Offset="0xA50C" />
+        <Limb Name="object_bal_Standardlimb_00A518" Type="Standard" EnumName="OBJECT_BAL_LIMB_07" Offset="0xA518" />
+        <Limb Name="object_bal_Standardlimb_00A524" Type="Standard" EnumName="OBJECT_BAL_LIMB_08" Offset="0xA524" />
+        <Limb Name="object_bal_Standardlimb_00A530" Type="Standard" EnumName="OBJECT_BAL_LIMB_09" Offset="0xA530" />
+        <Limb Name="object_bal_Standardlimb_00A53C" Type="Standard" EnumName="OBJECT_BAL_LIMB_0A" Offset="0xA53C" />
+        <Limb Name="object_bal_Standardlimb_00A548" Type="Standard" EnumName="OBJECT_BAL_LIMB_0B" Offset="0xA548" />
+        <Limb Name="object_bal_Standardlimb_00A554" Type="Standard" EnumName="OBJECT_BAL_LIMB_0C" Offset="0xA554" />
+        <Limb Name="object_bal_Standardlimb_00A560" Type="Standard" EnumName="OBJECT_BAL_LIMB_0D" Offset="0xA560" />
+        <Limb Name="object_bal_Standardlimb_00A56C" Type="Standard" EnumName="OBJECT_BAL_LIMB_0E" Offset="0xA56C" />
+        <Limb Name="object_bal_Standardlimb_00A578" Type="Standard" EnumName="OBJECT_BAL_LIMB_0F" Offset="0xA578" />
+        <Limb Name="object_bal_Standardlimb_00A584" Type="Standard" EnumName="OBJECT_BAL_LIMB_10" Offset="0xA584" />
+        <Limb Name="object_bal_Standardlimb_00A590" Type="Standard" EnumName="OBJECT_BAL_LIMB_11" Offset="0xA590" />
+        <Limb Name="object_bal_Standardlimb_00A59C" Type="Standard" EnumName="OBJECT_BAL_LIMB_12" Offset="0xA59C" />
+        <Limb Name="object_bal_Standardlimb_00A5A8" Type="Standard" EnumName="OBJECT_BAL_LIMB_13" Offset="0xA5A8" />
+        <Limb Name="object_bal_Standardlimb_00A5B4" Type="Standard" EnumName="OBJECT_BAL_LIMB_14" Offset="0xA5B4" />
+        <Limb Name="object_bal_Standardlimb_00A5C0" Type="Standard" EnumName="OBJECT_BAL_LIMB_15" Offset="0xA5C0" />
+        <Limb Name="object_bal_Standardlimb_00A5CC" Type="Standard" EnumName="OBJECT_BAL_LIMB_16" Offset="0xA5CC" />
+        <Limb Name="object_bal_Standardlimb_00A5D8" Type="Standard" EnumName="OBJECT_BAL_LIMB_17" Offset="0xA5D8" />
+        <Limb Name="object_bal_Standardlimb_00A5E4" Type="Standard" EnumName="OBJECT_BAL_LIMB_18" Offset="0xA5E4" />
+        <Limb Name="object_bal_Standardlimb_00A5F0" Type="Standard" EnumName="OBJECT_BAL_LIMB_19" Offset="0xA5F0" />
+        <Limb Name="object_bal_Standardlimb_00A5FC" Type="Standard" EnumName="OBJECT_BAL_LIMB_1A" Offset="0xA5FC" />
+        <Limb Name="object_bal_Standardlimb_00A608" Type="Standard" EnumName="OBJECT_BAL_LIMB_1B" Offset="0xA608" />
+        <Limb Name="object_bal_Standardlimb_00A614" Type="Standard" EnumName="OBJECT_BAL_LIMB_1C" Offset="0xA614" />
+        <Limb Name="object_bal_Standardlimb_00A620" Type="Standard" EnumName="OBJECT_BAL_LIMB_1D" Offset="0xA620" />
+        <Limb Name="object_bal_Standardlimb_00A62C" Type="Standard" EnumName="OBJECT_BAL_LIMB_1E" Offset="0xA62C" />
+        <Limb Name="object_bal_Standardlimb_00A638" Type="Standard" EnumName="OBJECT_BAL_LIMB_1F" Offset="0xA638" />
+        <Limb Name="object_bal_Standardlimb_00A644" Type="Standard" EnumName="OBJECT_BAL_LIMB_20" Offset="0xA644" />
+        <Skeleton Name="object_bal_Skel_00A6D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAL_LIMB_NONE" LimbMax="OBJECT_BAL_LIMB_MAX" EnumName="object_bal_Limbs" Offset="0xA6D0" />
+        <Animation Name="object_bal_Anim_00A7DC" Offset="0xA7DC" />
+        <Animation Name="object_bal_Anim_00B1E8" Offset="0xB1E8" />
+        <Animation Name="object_bal_Anim_00B604" Offset="0xB604" />
+        <Animation Name="object_bal_Anim_00C498" Offset="0xC498" />
+        <Animation Name="object_bal_Anim_00C8D8" Offset="0xC8D8" />
+        <Animation Name="object_bal_Anim_00CB78" Offset="0xCB78" />
+        <Animation Name="object_bal_Anim_00D530" Offset="0xD530" />
+        <DList Name="object_bal_DL_00D5A0" Offset="0xD5A0" />
+    </File>
+</Root>

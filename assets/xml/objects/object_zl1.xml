@@ -1,0 +1,90 @@
+﻿<Root>
+    <File Name="object_zl1" Segment="6">
+        <Animation Name="object_zl1_Anim_000438" Offset="0x438" />
+        <Texture Name="object_zl1_TLUT_000450" OutName="tlut_000450" Format="rgba16" Width="16" Height="16" Offset="0x450" />
+        <Texture Name="object_zl1_Tex_000650" OutName="tex_000650" Format="ci8" Width="8" Height="8" Offset="0x650" />
+        <Texture Name="object_zl1_Tex_000690" OutName="tex_000690" Format="ci8" Width="16" Height="16" Offset="0x690" />
+        <Texture Name="object_zl1_Tex_000790" OutName="tex_000790" Format="ci8" Width="32" Height="64" Offset="0x790" />
+        <Texture Name="object_zl1_Tex_000F90" OutName="tex_000F90" Format="ci8" Width="32" Height="8" Offset="0xF90" />
+        <Texture Name="object_zl1_Tex_001090" OutName="tex_001090" Format="ci8" Width="8" Height="8" Offset="0x1090" />
+        <Texture Name="object_zl1_Tex_0010D0" OutName="tex_0010D0" Format="ci8" Width="32" Height="32" Offset="0x10D0" />
+        <Texture Name="object_zl1_Tex_0014D0" OutName="tex_0014D0" Format="rgba16" Width="16" Height="16" Offset="0x14D0" />
+        <Texture Name="object_zl1_Tex_0016D0" OutName="tex_0016D0" Format="ci8" Width="16" Height="16" Offset="0x16D0" />
+        <Texture Name="object_zl1_Tex_0017D0" OutName="tex_0017D0" Format="rgba16" Width="8" Height="8" Offset="0x17D0" />
+        <Texture Name="object_zl1_Tex_001850" OutName="tex_001850" Format="rgba16" Width="16" Height="16" Offset="0x1850" />
+        <Texture Name="object_zl1_Tex_001A50" OutName="tex_001A50" Format="ci8" Width="8" Height="8" Offset="0x1A50" />
+        <Texture Name="object_zl1_Tex_001A90" OutName="tex_001A90" Format="ci8" Width="8" Height="8" Offset="0x1A90" />
+        <Texture Name="object_zl1_Tex_001AD0" OutName="tex_001AD0" Format="ci8" Width="16" Height="16" Offset="0x1AD0" />
+        <Texture Name="object_zl1_Tex_001BD0" OutName="tex_001BD0" Format="rgba16" Width="32" Height="32" Offset="0x1BD0" />
+        <DList Name="object_zl1_DL_004B50" Offset="0x4B50" />
+        <DList Name="object_zl1_DL_0054D0" Offset="0x54D0" />
+        <DList Name="object_zl1_DL_005738" Offset="0x5738" />
+        <DList Name="object_zl1_DL_005888" Offset="0x5888" />
+        <DList Name="object_zl1_DL_005A68" Offset="0x5A68" />
+        <DList Name="object_zl1_DL_005CD8" Offset="0x5CD8" />
+        <DList Name="object_zl1_DL_005E28" Offset="0x5E28" />
+        <DList Name="object_zl1_DL_006008" Offset="0x6008" />
+        <DList Name="object_zl1_DL_006828" Offset="0x6828" />
+        <DList Name="object_zl1_DL_0069E0" Offset="0x69E0" />
+        <DList Name="object_zl1_DL_006BA0" Offset="0x6BA0" />
+        <!-- <Texture Name="object_zl1_Tex_006CD8" OutName="tex_006CD8" Format="rgba16" Width="16" Height="16" Offset="0x6CD8" /> -->
+        <!-- <Blob Name="object_zl1_Blob_006ED8" Size="0x1F0" Offset="0x6ED8" /> -->
+        <!-- <Texture Name="object_zl1_TLUT_0070C8" OutName="tlut_0070C8" Format="rgba16" Width="16" Height="16" Offset="0x70C8" /> -->
+        <!-- <Blob Name="object_zl1_Blob_0072C8" Size="0x740" Offset="0x72C8" /> -->
+        <Texture Name="object_zl1_Tex_007A08" OutName="tex_007A08" Format="ci8" Width="8" Height="8" Offset="0x7A08" />
+        <Texture Name="object_zl1_Tex_007A48" OutName="tex_007A48" Format="rgba16" Width="8" Height="8" Offset="0x7A48" />
+        <Texture Name="object_zl1_Tex_007AC8" OutName="tex_007AC8" Format="rgba16" Width="16" Height="32" Offset="0x7AC8" />
+        <Texture Name="object_zl1_Tex_007EC8" OutName="tex_007EC8" Format="rgba16" Width="16" Height="16" Offset="0x7EC8" />
+        <Texture Name="object_zl1_Tex_0080C8" OutName="tex_0080C8" Format="rgba16" Width="16" Height="8" Offset="0x80C8" />
+        <Texture Name="object_zl1_Tex_0081C8" OutName="tex_0081C8" Format="ci8" Width="8" Height="8" Offset="0x81C8" />
+        <Texture Name="object_zl1_Tex_008208" OutName="tex_008208" Format="rgba16" Width="16" Height="16" Offset="0x8208" />
+        <Texture Name="object_zl1_Tex_008408" OutName="tex_008408" Format="ci8" Width="8" Height="8" Offset="0x8408" />
+        <Texture Name="object_zl1_Tex_008448" OutName="tex_008448" Format="ci8" Width="32" Height="8" Offset="0x8448" />
+        <Texture Name="object_zl1_Tex_008548" OutName="tex_008548" Format="ci8" Width="16" Height="16" Offset="0x8548" />
+        <Texture Name="object_zl1_Tex_008648" OutName="tex_008648" Format="rgba16" Width="8" Height="16" Offset="0x8648" />
+        <Texture Name="object_zl1_Tex_008748" OutName="tex_008748" Format="rgba16" Width="8" Height="8" Offset="0x8748" />
+        <Texture Name="object_zl1_Tex_0087C8" OutName="tex_0087C8" Format="rgba16" Width="8" Height="8" Offset="0x87C8" />
+        <!-- <Blob Name="object_zl1_Blob_008848" Size="0x2000" Offset="0x8848" /> -->
+        <Texture Name="object_zl1_Tex_00A848" OutName="tex_00A848" Format="rgba16" Width="8" Height="8" Offset="0xA848" />
+        <Texture Name="object_zl1_Tex_00A8C8" OutName="tex_00A8C8" Format="ci8" Width="8" Height="16" Offset="0xA8C8" />
+        <Texture Name="object_zl1_Tex_00A948" OutName="tex_00A948" Format="ci8" Width="16" Height="32" Offset="0xA948" />
+        <!-- <Blob Name="object_zl1_Blob_00AB48" Size="0x400" Offset="0xAB48" /> -->
+        <DList Name="object_zl1_DL_00CD98" Offset="0xCD98" />
+        <DList Name="object_zl1_DL_00DEC8" Offset="0xDEC8" />
+        <DList Name="object_zl1_DL_00E748" Offset="0xE748" />
+        <DList Name="object_zl1_DL_00EA78" Offset="0xEA78" />
+        <DList Name="object_zl1_DL_00EDA8" Offset="0xEDA8" />
+        <DList Name="object_zl1_DL_00EE00" Offset="0xEE00" />
+        <Texture Name="object_zl1_Tex_00EE58" OutName="tex_00EE58" Format="rgba16" Width="32" Height="16" Offset="0xEE58" />
+        <DList Name="object_zl1_DL_00F3A8" Offset="0xF3A8" />
+        <Limb Name="object_zl1_Standardlimb_00F4C8" Type="Standard" EnumName="OBJECT_ZL1_LIMB_01" Offset="0xF4C8" />
+        <Limb Name="object_zl1_Standardlimb_00F4D4" Type="Standard" EnumName="OBJECT_ZL1_LIMB_02" Offset="0xF4D4" />
+        <Limb Name="object_zl1_Standardlimb_00F4E0" Type="Standard" EnumName="OBJECT_ZL1_LIMB_03" Offset="0xF4E0" />
+        <Limb Name="object_zl1_Standardlimb_00F4EC" Type="Standard" EnumName="OBJECT_ZL1_LIMB_04" Offset="0xF4EC" />
+        <Limb Name="object_zl1_Standardlimb_00F4F8" Type="Standard" EnumName="OBJECT_ZL1_LIMB_05" Offset="0xF4F8" />
+        <Limb Name="object_zl1_Standardlimb_00F504" Type="Standard" EnumName="OBJECT_ZL1_LIMB_06" Offset="0xF504" />
+        <Limb Name="object_zl1_Standardlimb_00F510" Type="Standard" EnumName="OBJECT_ZL1_LIMB_07" Offset="0xF510" />
+        <Limb Name="object_zl1_Standardlimb_00F51C" Type="Standard" EnumName="OBJECT_ZL1_LIMB_08" Offset="0xF51C" />
+        <Limb Name="object_zl1_Standardlimb_00F528" Type="Standard" EnumName="OBJECT_ZL1_LIMB_09" Offset="0xF528" />
+        <Limb Name="object_zl1_Standardlimb_00F534" Type="Standard" EnumName="OBJECT_ZL1_LIMB_0A" Offset="0xF534" />
+        <Limb Name="object_zl1_Standardlimb_00F540" Type="Standard" EnumName="OBJECT_ZL1_LIMB_0B" Offset="0xF540" />
+        <Limb Name="object_zl1_Standardlimb_00F54C" Type="Standard" EnumName="OBJECT_ZL1_LIMB_0C" Offset="0xF54C" />
+        <Limb Name="object_zl1_Standardlimb_00F558" Type="Standard" EnumName="OBJECT_ZL1_LIMB_0D" Offset="0xF558" />
+        <Limb Name="object_zl1_Standardlimb_00F564" Type="Standard" EnumName="OBJECT_ZL1_LIMB_0E" Offset="0xF564" />
+        <Limb Name="object_zl1_Standardlimb_00F570" Type="Standard" EnumName="OBJECT_ZL1_LIMB_0F" Offset="0xF570" />
+        <Limb Name="object_zl1_Standardlimb_00F57C" Type="Standard" EnumName="OBJECT_ZL1_LIMB_10" Offset="0xF57C" />
+        <Limb Name="object_zl1_Standardlimb_00F588" Type="Standard" EnumName="OBJECT_ZL1_LIMB_11" Offset="0xF588" />
+        <Skeleton Name="object_zl1_Skel_00F5D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZL1_LIMB_NONE" LimbMax="OBJECT_ZL1_LIMB_MAX" EnumName="object_zl1_Limbs" Offset="0xF5D8" />
+        <Animation Name="object_zl1_Anim_010B38" Offset="0x10B38" />
+        <Animation Name="object_zl1_Anim_011348" Offset="0x11348" />
+        <Animation Name="object_zl1_Anim_0116E4" Offset="0x116E4" />
+        <Animation Name="object_zl1_Anim_011B88" Offset="0x11B88" />
+        <Animation Name="object_zl1_Anim_012118" Offset="0x12118" />
+        <Animation Name="object_zl1_Anim_012B04" Offset="0x12B04" />
+        <Animation Name="object_zl1_Anim_012F80" Offset="0x12F80" />
+        <Animation Name="object_zl1_Anim_0132D8" Offset="0x132D8" />
+        <Animation Name="object_zl1_Anim_0138E0" Offset="0x138E0" />
+        <Animation Name="object_zl1_Anim_013F10" Offset="0x13F10" />
+        <Animation Name="object_zl1_Anim_0143A8" Offset="0x143A8" />
+    </File>
+</Root>

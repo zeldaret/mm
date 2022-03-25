@@ -1,0 +1,57 @@
+﻿<Root>
+    <File Name="object_bji" Segment="6">
+        <Animation Name="object_bji_Anim_00066C" Offset="0x66C" />
+        <Animation Name="object_bji_Anim_000AB0" Offset="0xAB0" />
+        <Animation Name="object_bji_Anim_000FDC" Offset="0xFDC" />
+        <DList Name="object_bji_DL_0023A0" Offset="0x23A0" />
+        <DList Name="object_bji_DL_0028D8" Offset="0x28D8" />
+        <DList Name="object_bji_DL_002998" Offset="0x2998" />
+        <DList Name="object_bji_DL_002A98" Offset="0x2A98" />
+        <DList Name="object_bji_DL_002BA8" Offset="0x2BA8" />
+        <DList Name="object_bji_DL_002C68" Offset="0x2C68" />
+        <DList Name="object_bji_DL_002D68" Offset="0x2D68" />
+        <DList Name="object_bji_DL_002E78" Offset="0x2E78" />
+        <DList Name="object_bji_DL_0030F0" Offset="0x30F0" />
+        <DList Name="object_bji_DL_0031B0" Offset="0x31B0" />
+        <DList Name="object_bji_DL_003270" Offset="0x3270" />
+        <DList Name="object_bji_DL_003330" Offset="0x3330" />
+        <DList Name="object_bji_DL_0033F0" Offset="0x33F0" />
+        <DList Name="object_bji_DL_0034B0" Offset="0x34B0" />
+        <DList Name="object_bji_DL_003570" Offset="0x3570" />
+        <Texture Name="object_bji_TLUT_003730" OutName="tlut_003730" Format="rgba16" Width="16" Height="16" Offset="0x3730" />
+        <Texture Name="object_bji_TLUT_003930" OutName="tlut_003930" Format="rgba16" Width="16" Height="16" Offset="0x3930" />
+        <Texture Name="object_bji_TLUT_003B30" OutName="tlut_003B30" Format="rgba16" Width="16" Height="16" Offset="0x3B30" />
+        <Texture Name="object_bji_TLUT_003D30" OutName="tlut_003D30" Format="rgba16" Width="16" Height="16" Offset="0x3D30" />
+        <Texture Name="object_bji_TLUT_003F30" OutName="tlut_003F30" Format="rgba16" Width="16" Height="16" Offset="0x3F30" />
+        <Texture Name="object_bji_Tex_004130" OutName="tex_004130" Format="rgba16" Width="16" Height="16" Offset="0x4130" />
+        <Texture Name="object_bji_TLUT_004330" OutName="tlut_004330" Format="rgba16" Width="16" Height="16" Offset="0x4330" />
+        <Texture Name="object_bji_TLUT_004530" OutName="tlut_004530" Format="rgba16" Width="16" Height="16" Offset="0x4530" />
+        <Texture Name="object_bji_Tex_004730" OutName="tex_004730" Format="ci8" Width="8" Height="8" Offset="0x4730" />
+        <Texture Name="object_bji_Tex_004770" OutName="tex_004770" Format="ci8" Width="16" Height="16" Offset="0x4770" />
+        <Texture Name="object_bji_Tex_004870" OutName="tex_004870" Format="ci8" Width="8" Height="8" Offset="0x4870" />
+        <Texture Name="object_bji_Tex_0048B0" OutName="tex_0048B0" Format="ci8" Width="16" Height="16" Offset="0x48B0" />
+        <Texture Name="object_bji_Tex_0049B0" OutName="tex_0049B0" Format="ci8" Width="8" Height="8" Offset="0x49B0" />
+        <Texture Name="object_bji_Tex_0049F0" OutName="tex_0049F0" Format="ci8" Width="32" Height="32" Offset="0x49F0" />
+        <Texture Name="object_bji_Tex_004DF0" OutName="tex_004DF0" Format="ci8" Width="8" Height="8" Offset="0x4DF0" />
+        <Texture Name="object_bji_Tex_004E30" OutName="tex_004E30" Format="ci8" Width="8" Height="8" Offset="0x4E30" />
+        <Texture Name="object_bji_Tex_004E70" OutName="tex_004E70" Format="ci8" Width="32" Height="32" Offset="0x4E70" />
+        <Texture Name="object_bji_Tex_005270" OutName="tex_005270" Format="ci8" Width="32" Height="32" Offset="0x5270" />
+        <Limb Name="object_bji_Standardlimb_00569C" Type="Standard" EnumName="OBJECT_BJI_LIMB_01" Offset="0x569C" />
+        <Limb Name="object_bji_Standardlimb_0056A8" Type="Standard" EnumName="OBJECT_BJI_LIMB_02" Offset="0x56A8" />
+        <Limb Name="object_bji_Standardlimb_0056B4" Type="Standard" EnumName="OBJECT_BJI_LIMB_03" Offset="0x56B4" />
+        <Limb Name="object_bji_Standardlimb_0056C0" Type="Standard" EnumName="OBJECT_BJI_LIMB_04" Offset="0x56C0" />
+        <Limb Name="object_bji_Standardlimb_0056CC" Type="Standard" EnumName="OBJECT_BJI_LIMB_05" Offset="0x56CC" />
+        <Limb Name="object_bji_Standardlimb_0056D8" Type="Standard" EnumName="OBJECT_BJI_LIMB_06" Offset="0x56D8" />
+        <Limb Name="object_bji_Standardlimb_0056E4" Type="Standard" EnumName="OBJECT_BJI_LIMB_07" Offset="0x56E4" />
+        <Limb Name="object_bji_Standardlimb_0056F0" Type="Standard" EnumName="OBJECT_BJI_LIMB_08" Offset="0x56F0" />
+        <Limb Name="object_bji_Standardlimb_0056FC" Type="Standard" EnumName="OBJECT_BJI_LIMB_09" Offset="0x56FC" />
+        <Limb Name="object_bji_Standardlimb_005708" Type="Standard" EnumName="OBJECT_BJI_LIMB_0A" Offset="0x5708" />
+        <Limb Name="object_bji_Standardlimb_005714" Type="Standard" EnumName="OBJECT_BJI_LIMB_0B" Offset="0x5714" />
+        <Limb Name="object_bji_Standardlimb_005720" Type="Standard" EnumName="OBJECT_BJI_LIMB_0C" Offset="0x5720" />
+        <Limb Name="object_bji_Standardlimb_00572C" Type="Standard" EnumName="OBJECT_BJI_LIMB_0D" Offset="0x572C" />
+        <Limb Name="object_bji_Standardlimb_005738" Type="Standard" EnumName="OBJECT_BJI_LIMB_0E" Offset="0x5738" />
+        <Limb Name="object_bji_Standardlimb_005744" Type="Standard" EnumName="OBJECT_BJI_LIMB_0F" Offset="0x5744" />
+        <Skeleton Name="object_bji_Skel_00578C" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BJI_LIMB_NONE" LimbMax="OBJECT_BJI_LIMB_MAX" EnumName="object_bji_Limbs" Offset="0x578C" />
+        <Animation Name="object_bji_Anim_005B58" Offset="0x5B58" />
+    </File>
+</Root>

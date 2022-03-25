@@ -1,12 +1,13 @@
 /*
- * File z_en_clear_tag.c
+ * File: z_en_clear_tag.c
  * Overlay: ovl_En_Clear_Tag
  * Description: Various effects: explosions and pops, splashes, light rays
  */
 
 #include "z_en_clear_tag.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnClearTag*)thisx)
 
@@ -81,8 +82,18 @@ static f32 sLightRayMaxScale[] = {
     25.0f, 100.0f, 48.0f, 20.0f, 32.0f,
 };
 
-static Gfx* sSplashTex[] = {
-    D_040378F0, D_04037DF0, D_040382F0, D_040387F0, D_04038CF0, D_040391F0, D_040396F0, D_04039BF0, NULL, NULL, NULL,
+static TexturePtr sSplashTex[] = {
+    gExplosionSplashTex1,
+    gExplosionSplashTex2,
+    gExplosionSplashTex3,
+    gExplosionSplashTex4,
+    gExplosionSplashTex5,
+    gExplosionSplashTex6,
+    gExplosionSplashTex7,
+    gExplosionSplashTex8,
+    NULL,
+    NULL,
+    NULL,
 };
 
 #include "overlays/ovl_En_Clear_Tag/ovl_En_Clear_Tag.c"
@@ -399,7 +410,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f vel;
     Vec3f accel;
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     if (thisx->params >= 0) {
         this->activeTimer = 70;
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -416,7 +427,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                 for (i = 0; i < 54; i++) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                    Matrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), 0);
+                    Matrix_InsertYRotation_f(Rand_ZeroFloat(M_PI * 2), MTXMODE_NEW);
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(M_PI * 2));
                     Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
@@ -489,7 +500,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             pos = this->actor.world.pos;
             for (i = 0; i < 44; i++) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
-                Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), 0);
+                Matrix_InsertYRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
                 Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                 Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                 accel.x = vel.x * -0.03f;
@@ -510,7 +521,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Camera* camera;
+    Camera* mainCam;
     s32 pad;
 
     switch (this->cameraState) {
@@ -533,19 +544,19 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             }
             break;
         case 1:
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
-            this->camId = func_801694DC(globalCtx);
-            func_80169590(globalCtx, 0, 1);
-            func_80169590(globalCtx, this->camId, 7);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
+            this->subCamId = Play_CreateSubCamera(globalCtx);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
+            Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
             func_800B7298(globalCtx, &this->actor, 4);
-            camera = Play_GetCamera(globalCtx, 0);
-            this->eye.x = camera->eye.x;
-            this->eye.y = camera->eye.y;
-            this->eye.z = camera->eye.z;
-            this->at.x = camera->at.x;
-            this->at.y = camera->at.y;
-            this->at.z = camera->at.z;
-            func_801518B0(globalCtx, 0xF, NULL);
+            mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+            this->subCamEye.x = mainCam->eye.x;
+            this->subCamEye.y = mainCam->eye.y;
+            this->subCamEye.z = mainCam->eye.z;
+            this->subCamAt.x = mainCam->at.x;
+            this->subCamAt.y = mainCam->at.y;
+            this->subCamAt.z = mainCam->at.z;
+            Message_StartTextbox(globalCtx, 0xF, NULL);
             this->cameraState = 2;
             func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
@@ -556,23 +567,23 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             }
 
             player->actor.speedXZ = 0.0f;
-            if (func_80152498(&globalCtx->msgCtx) == 0) {
-                camera = Play_GetCamera(globalCtx, 0);
-                camera->eye = this->eye;
-                camera->eyeNext = this->eye;
-                camera->at = this->at;
-                func_80169AFC(globalCtx, this->camId, 0);
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+            if (Message_GetState(&globalCtx->msgCtx) == 0) {
+                mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
+                mainCam->eye = this->subCamEye;
+                mainCam->eyeNext = this->subCamEye;
+                mainCam->at = this->subCamAt;
+                func_80169AFC(globalCtx, this->subCamId, 0);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->cameraState = 0;
-                this->camId = 0;
+                this->subCamId = CAM_ID_MAIN;
                 this->activeTimer = 20;
             }
             break;
     }
 
-    if (this->camId != 0) {
-        Play_CameraSetAtEye(globalCtx, this->camId, &this->at, &this->eye);
+    if (this->subCamId != CAM_ID_MAIN) {
+        Play_CameraSetAtEye(globalCtx, this->subCamId, &this->subCamAt, &this->subCamEye);
     }
 }
 
@@ -642,7 +653,7 @@ void EnClearTag_UpdateEffects(EnClearTag* this, GlobalContext* globalCtx) {
                     sphereCenter.y += 5.0f;
 
                     // Check if the debris has hit the ground.
-                    if (func_800C5A20(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
+                    if (BgCheck_SphVsFirstPoly(&globalCtx->colCtx, &sphereCenter, 11.0f)) {
                         effect->position.y = originalYPosition;
 
                         // Bounce the debris effect.
@@ -820,7 +831,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 Matrix_SetCurrentState(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, D_04030100);
+                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_030100);
             }
         }
     }
@@ -871,7 +882,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
             Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             Matrix_InsertTranslation(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -897,7 +908,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
             Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
@@ -919,7 +930,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             // Draw the flash billboard effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColor.a);
             Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->mf_187FC);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectDL);
@@ -976,8 +987,8 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                  * `ySurface` returns the water box's surface, while `outWaterBox` returns a pointer to the WaterBox
                  */
                 ySurface = effect->position.y;
-                if (func_800CA1AC(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x, effect->position.z + vec.z,
-                                  &ySurface, &waterBox)) {
+                if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, effect->position.x + vec.x,
+                                         effect->position.z + vec.z, &ySurface, &waterBox)) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
                         Matrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
@@ -986,7 +997,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                         Matrix_RotateStateAroundXAxis(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gSPDisplayList(POLY_XLU_DISP++, D_0403A0F0);
+                        gSPDisplayList(POLY_XLU_DISP++, gExplosionSplashDL);
                     }
                 }
             }

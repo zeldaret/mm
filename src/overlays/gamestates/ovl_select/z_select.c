@@ -5,7 +5,7 @@
  */
 
 #include "z_select.h"
-#include "alloca.h"
+#include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
 void Select_LoadTitle(SelectContext* this) {
@@ -45,7 +45,7 @@ void Select_LoadGame(SelectContext* this, u32 entranceIndex, s32 opt) {
     }
 
     gSaveContext.respawn[0].entranceIndex = 0xFFFF;
-    gSaveContext.seqIndex = 0xFF;
+    gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;
@@ -868,7 +868,7 @@ void Select_DrawLoadingScreen(SelectContext* this) {
 void Select_Draw(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-    func_8012CF0C(gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
 
     SET_FULLSCREEN_VIEWPORT(&this->view);
     View_RenderView(&this->view, 0xF);

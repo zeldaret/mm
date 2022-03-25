@@ -7,7 +7,7 @@
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "z_en_horse.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnHorse*)thisx)
 

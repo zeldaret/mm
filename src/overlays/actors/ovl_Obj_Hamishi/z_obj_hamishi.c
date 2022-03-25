@@ -1,12 +1,12 @@
 /*
  * File: z_obj_hamishi.c
  * Overlay: ovl_Obj_Hamishi
- * Description: Hammer Stone
+ * Description: Bronze boulder
  */
 
 #include "z_obj_hamishi.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjHamishi*)thisx)
 

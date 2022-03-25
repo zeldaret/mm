@@ -1,0 +1,66 @@
+﻿<Root>
+    <File Name="object_thiefbird" Segment="6">
+        <Animation Name="object_thiefbird_Anim_000088" Offset="0x88" />
+        <Animation Name="object_thiefbird_Anim_000278" Offset="0x278" />
+        <Animation Name="object_thiefbird_Anim_000604" Offset="0x604" />
+        <DList Name="object_thiefbird_DL_0016D0" Offset="0x16D0" />
+        <DList Name="object_thiefbird_DL_001800" Offset="0x1800" />
+        <DList Name="object_thiefbird_DL_0018A8" Offset="0x18A8" />
+        <DList Name="object_thiefbird_DL_0019D0" Offset="0x19D0" />
+        <DList Name="object_thiefbird_DL_001A18" Offset="0x1A18" />
+        <DList Name="object_thiefbird_DL_001CF0" Offset="0x1CF0" />
+        <DList Name="object_thiefbird_DL_001DA8" Offset="0x1DA8" />
+        <DList Name="object_thiefbird_DL_001FE0" Offset="0x1FE0" />
+        <DList Name="object_thiefbird_DL_002070" Offset="0x2070" />
+        <DList Name="object_thiefbird_DL_002100" Offset="0x2100" />
+        <DList Name="object_thiefbird_DL_0021D0" Offset="0x21D0" />
+        <DList Name="object_thiefbird_DL_0022C0" Offset="0x22C0" />
+        <DList Name="object_thiefbird_DL_0023B0" Offset="0x23B0" />
+        <DList Name="object_thiefbird_DL_0024A0" Offset="0x24A0" />
+        <DList Name="object_thiefbird_DL_002590" Offset="0x2590" />
+        <DList Name="object_thiefbird_DL_002680" Offset="0x2680" />
+        <Texture Name="object_thiefbird_Tex_002770" OutName="tex_002770" Format="rgba16" Width="8" Height="16" Offset="0x2770" />
+        <Texture Name="object_thiefbird_Tex_002870" OutName="tex_002870" Format="rgba16" Width="16" Height="16" Offset="0x2870" />
+        <Texture Name="object_thiefbird_Tex_002A70" OutName="tex_002A70" Format="rgba16" Width="16" Height="16" Offset="0x2A70" />
+        <Texture Name="object_thiefbird_Tex_002C70" OutName="tex_002C70" Format="i8" Width="16" Height="16" Offset="0x2C70" />
+        <Texture Name="object_thiefbird_Tex_002D70" OutName="tex_002D70" Format="rgba16" Width="8" Height="8" Offset="0x2D70" />
+        <Texture Name="object_thiefbird_Tex_002DF0" OutName="tex_002DF0" Format="rgba16" Width="4" Height="8" Offset="0x2DF0" />
+        <Texture Name="object_thiefbird_Tex_002E30" OutName="tex_002E30" Format="rgba16" Width="16" Height="16" Offset="0x2E30" />
+        <DList Name="object_thiefbird_DL_003060" Offset="0x3060" />
+        <DList Name="object_thiefbird_DL_0030D8" Offset="0x30D8" />
+        <Texture Name="object_thiefbird_Tex_0030F0" OutName="tex_0030F0" Format="rgba16" Width="8" Height="16" Offset="0x30F0" />
+        <DList Name="object_thiefbird_DL_0033B0" Offset="0x33B0" />
+        <DList Name="object_thiefbird_DL_003D58" Offset="0x3D58" />
+        <DList Name="object_thiefbird_DL_004348" Offset="0x4348" />
+        <DList Name="object_thiefbird_DL_004B88" Offset="0x4B88" />
+        <DList Name="object_thiefbird_DL_0055E0" Offset="0x55E0" />
+        <Texture Name="object_thiefbird_Tex_0059A0" OutName="tex_0059A0" Format="rgba16" Width="32" Height="8" Offset="0x59A0" />
+        <Texture Name="object_thiefbird_Tex_005BA0" OutName="tex_005BA0" Format="rgba16" Width="8" Height="8" Offset="0x5BA0" />
+        <Texture Name="object_thiefbird_Tex_005C20" OutName="tex_005C20" Format="rgba16" Width="8" Height="8" Offset="0x5C20" />
+        <Texture Name="object_thiefbird_Tex_005CA0" OutName="tex_005CA0" Format="rgba16" Width="8" Height="8" Offset="0x5CA0" />
+        <Texture Name="object_thiefbird_Tex_005D20" OutName="tex_005D20" Format="i8" Width="8" Height="8" Offset="0x5D20" />
+        <Texture Name="object_thiefbird_Tex_005D60" OutName="tex_005D60" Format="rgba16" Width="8" Height="16" Offset="0x5D60" />
+        <Texture Name="object_thiefbird_Tex_005E60" OutName="tex_005E60" Format="rgba16" Width="8" Height="16" Offset="0x5E60" />
+        <Texture Name="object_thiefbird_Tex_005F60" OutName="tex_005F60" Format="rgba16" Width="8" Height="8" Offset="0x5F60" />
+        <Texture Name="object_thiefbird_Tex_005FE0" OutName="tex_005FE0" Format="i8" Width="8" Height="8" Offset="0x5FE0" />
+        <Texture Name="object_thiefbird_Tex_006020" OutName="tex_006020" Format="i4" Width="16" Height="16" Offset="0x6020" />
+        <Limb Name="object_thiefbird_Standardlimb_0060A0" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_01" Offset="0x60A0" />
+        <Limb Name="object_thiefbird_Standardlimb_0060AC" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_02" Offset="0x60AC" />
+        <Limb Name="object_thiefbird_Standardlimb_0060B8" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_03" Offset="0x60B8" />
+        <Limb Name="object_thiefbird_Standardlimb_0060C4" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_04" Offset="0x60C4" />
+        <Limb Name="object_thiefbird_Standardlimb_0060D0" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_05" Offset="0x60D0" />
+        <Limb Name="object_thiefbird_Standardlimb_0060DC" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_06" Offset="0x60DC" />
+        <Limb Name="object_thiefbird_Standardlimb_0060E8" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_07" Offset="0x60E8" />
+        <Limb Name="object_thiefbird_Standardlimb_0060F4" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_08" Offset="0x60F4" />
+        <Limb Name="object_thiefbird_Standardlimb_006100" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_09" Offset="0x6100" />
+        <Limb Name="object_thiefbird_Standardlimb_00610C" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0A" Offset="0x610C" />
+        <Limb Name="object_thiefbird_Standardlimb_006118" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0B" Offset="0x6118" />
+        <Limb Name="object_thiefbird_Standardlimb_006124" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0C" Offset="0x6124" />
+        <Limb Name="object_thiefbird_Standardlimb_006130" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0D" Offset="0x6130" />
+        <Limb Name="object_thiefbird_Standardlimb_00613C" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0E" Offset="0x613C" />
+        <Limb Name="object_thiefbird_Standardlimb_006148" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0F" Offset="0x6148" />
+        <Limb Name="object_thiefbird_Standardlimb_006154" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_10" Offset="0x6154" />
+        <Skeleton Name="object_thiefbird_Skel_0061A0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_THIEFBIRD_LIMB_NONE" LimbMax="OBJECT_THIEFBIRD_LIMB_MAX" EnumName="object_thiefbird_Limbs" Offset="0x61A0" />
+        <Animation Name="object_thiefbird_Anim_0063C4" Offset="0x63C4" />
+    </File>
+</Root>

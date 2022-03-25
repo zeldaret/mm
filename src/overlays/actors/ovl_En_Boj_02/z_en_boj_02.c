@@ -1,12 +1,12 @@
 /*
- * File z_en_boj_02.c
+ * File: z_en_boj_02.c
  * Overlay: ovl_En_Boj_02
  * Description: [Empty]
  */
 
 #include "z_en_boj_02.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnBoj02*)thisx)
 

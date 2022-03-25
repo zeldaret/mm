@@ -1,0 +1,110 @@
+﻿<Root>
+    <File Name="object_wf" Segment="6">
+        <Texture Name="object_wf_Tex_000000" OutName="tex_000000" Format="rgba16" Width="8" Height="16" Offset="0x0" />
+        <Texture Name="object_wf_Tex_000100" OutName="tex_000100" Format="rgba16" Width="8" Height="8" Offset="0x100" />
+        <Texture Name="object_wf_Tex_000180" OutName="tex_000180" Format="rgba16" Width="8" Height="8" Offset="0x180" />
+        <Texture Name="object_wf_Tex_000200" OutName="tex_000200" Format="rgba16" Width="8" Height="8" Offset="0x200" />
+        <Texture Name="object_wf_Tex_000280" OutName="tex_000280" Format="rgba16" Width="8" Height="8" Offset="0x280" />
+        <Texture Name="object_wf_Tex_000300" OutName="tex_000300" Format="rgba16" Width="16" Height="16" Offset="0x300" />
+        <DList Name="object_wf_DL_001A20" Offset="0x1A20" />
+        <DList Name="object_wf_DL_001AE8" Offset="0x1AE8" />
+        <DList Name="object_wf_DL_001BD8" Offset="0x1BD8" />
+        <DList Name="object_wf_DL_001CC8" Offset="0x1CC8" />
+        <DList Name="object_wf_DL_001D98" Offset="0x1D98" />
+        <DList Name="object_wf_DL_001E98" Offset="0x1E98" />
+        <DList Name="object_wf_DL_001F88" Offset="0x1F88" />
+        <DList Name="object_wf_DL_002078" Offset="0x2078" />
+        <DList Name="object_wf_DL_002148" Offset="0x2148" />
+        <DList Name="object_wf_DL_002248" Offset="0x2248" />
+        <DList Name="object_wf_DL_002368" Offset="0x2368" />
+        <DList Name="object_wf_DL_002490" Offset="0x2490" />
+        <DList Name="object_wf_DL_0025A0" Offset="0x25A0" />
+        <DList Name="object_wf_DL_0026C8" Offset="0x26C8" />
+        <Texture Name="object_wf_Tex_0027D8" OutName="tex_0027D8" Format="rgba16" Width="16" Height="16" Offset="0x27D8" />
+        <Texture Name="object_wf_Tex_0029D8" OutName="tex_0029D8" Format="rgba16" Width="16" Height="16" Offset="0x29D8" />
+        <DList Name="object_wf_DL_003488" Offset="0x3488" />
+        <DList Name="object_wf_DL_003528" Offset="0x3528" />
+        <DList Name="object_wf_DL_0035F0" Offset="0x35F0" />
+        <DList Name="object_wf_DL_0036B8" Offset="0x36B8" />
+        <DList Name="object_wf_DL_0039D8" Offset="0x39D8" />
+        <Limb Name="object_wf_Standardlimb_003A70" Type="Standard" EnumName="OBJECT_WF_1_LIMB_01" Offset="0x3A70" />
+        <Limb Name="object_wf_Standardlimb_003A7C" Type="Standard" EnumName="OBJECT_WF_1_LIMB_02" Offset="0x3A7C" />
+        <Limb Name="object_wf_Standardlimb_003A88" Type="Standard" EnumName="OBJECT_WF_1_LIMB_03" Offset="0x3A88" />
+        <Limb Name="object_wf_Standardlimb_003A94" Type="Standard" EnumName="OBJECT_WF_1_LIMB_04" Offset="0x3A94" />
+        <Limb Name="object_wf_Standardlimb_003AA0" Type="Standard" EnumName="OBJECT_WF_1_LIMB_05" Offset="0x3AA0" />
+        <Limb Name="object_wf_Standardlimb_003AAC" Type="Standard" EnumName="OBJECT_WF_1_LIMB_06" Offset="0x3AAC" />
+        <Limb Name="object_wf_Standardlimb_003AB8" Type="Standard" EnumName="OBJECT_WF_1_LIMB_07" Offset="0x3AB8" />
+        <Limb Name="object_wf_Standardlimb_003AC4" Type="Standard" EnumName="OBJECT_WF_1_LIMB_08" Offset="0x3AC4" />
+        <Limb Name="object_wf_Standardlimb_003AD0" Type="Standard" EnumName="OBJECT_WF_1_LIMB_09" Offset="0x3AD0" />
+        <Limb Name="object_wf_Standardlimb_003ADC" Type="Standard" EnumName="OBJECT_WF_1_LIMB_0A" Offset="0x3ADC" />
+        <Limb Name="object_wf_Standardlimb_003AE8" Type="Standard" EnumName="OBJECT_WF_1_LIMB_0B" Offset="0x3AE8" />
+        <Limb Name="object_wf_Standardlimb_003AF4" Type="Standard" EnumName="OBJECT_WF_1_LIMB_0C" Offset="0x3AF4" />
+        <Limb Name="object_wf_Standardlimb_003B00" Type="Standard" EnumName="OBJECT_WF_1_LIMB_0D" Offset="0x3B00" />
+        <Limb Name="object_wf_Standardlimb_003B0C" Type="Standard" EnumName="OBJECT_WF_1_LIMB_0E" Offset="0x3B0C" />
+        <Limb Name="object_wf_Standardlimb_003B18" Type="Standard" EnumName="OBJECT_WF_1_LIMB_0F" Offset="0x3B18" />
+        <Limb Name="object_wf_Standardlimb_003B24" Type="Standard" EnumName="OBJECT_WF_1_LIMB_10" Offset="0x3B24" />
+        <Limb Name="object_wf_Standardlimb_003B30" Type="Standard" EnumName="OBJECT_WF_1_LIMB_11" Offset="0x3B30" />
+        <Limb Name="object_wf_Standardlimb_003B3C" Type="Standard" EnumName="OBJECT_WF_1_LIMB_12" Offset="0x3B3C" />
+        <Limb Name="object_wf_Standardlimb_003B48" Type="Standard" EnumName="OBJECT_WF_1_LIMB_13" Offset="0x3B48" />
+        <Limb Name="object_wf_Standardlimb_003B54" Type="Standard" EnumName="OBJECT_WF_1_LIMB_14" Offset="0x3B54" />
+        <Limb Name="object_wf_Standardlimb_003B60" Type="Standard" EnumName="OBJECT_WF_1_LIMB_15" Offset="0x3B60" />
+        <Skeleton Name="object_wf_Skel_003BC0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WF_1_LIMB_NONE" LimbMax="OBJECT_WF_1_LIMB_MAX" EnumName="object_wf_1_Limbs" Offset="0x3BC0" />
+        <Animation Name="object_wf_Anim_004638" Offset="0x4638" />
+        <Animation Name="object_wf_Anim_004A90" Offset="0x4A90" />
+        <Animation Name="object_wf_Anim_004C44" Offset="0x4C44" />
+        <Animation Name="object_wf_Anim_0053D0" Offset="0x53D0" />
+        <Animation Name="object_wf_Anim_005700" Offset="0x5700" />
+        <DList Name="object_wf_DL_006D10" Offset="0x6D10" />
+        <DList Name="object_wf_DL_006DD8" Offset="0x6DD8" />
+        <DList Name="object_wf_DL_006EC8" Offset="0x6EC8" />
+        <DList Name="object_wf_DL_006FB8" Offset="0x6FB8" />
+        <DList Name="object_wf_DL_007088" Offset="0x7088" />
+        <DList Name="object_wf_DL_007188" Offset="0x7188" />
+        <DList Name="object_wf_DL_007278" Offset="0x7278" />
+        <DList Name="object_wf_DL_007368" Offset="0x7368" />
+        <DList Name="object_wf_DL_007438" Offset="0x7438" />
+        <DList Name="object_wf_DL_007538" Offset="0x7538" />
+        <DList Name="object_wf_DL_007658" Offset="0x7658" />
+        <DList Name="object_wf_DL_007770" Offset="0x7770" />
+        <DList Name="object_wf_DL_007880" Offset="0x7880" />
+        <DList Name="object_wf_DL_007998" Offset="0x7998" />
+        <Texture Name="object_wf_Tex_007AA8" OutName="tex_007AA8" Format="rgba16" Width="16" Height="16" Offset="0x7AA8" />
+        <Texture Name="object_wf_Tex_007CA8" OutName="tex_007CA8" Format="rgba16" Width="16" Height="32" Offset="0x7CA8" />
+        <Texture Name="object_wf_Tex_0080A8" OutName="tex_0080A8" Format="rgba16" Width="8" Height="8" Offset="0x80A8" />
+        <Texture Name="object_wf_Tex_008128" OutName="tex_008128" Format="rgba16" Width="8" Height="8" Offset="0x8128" />
+        <Texture Name="object_wf_Tex_0081A8" OutName="tex_0081A8" Format="rgba16" Width="8" Height="8" Offset="0x81A8" />
+        <Texture Name="object_wf_Tex_008228" OutName="tex_008228" Format="rgba16" Width="8" Height="8" Offset="0x8228" />
+        <Texture Name="object_wf_Tex_0082A8" OutName="tex_0082A8" Format="rgba16" Width="16" Height="16" Offset="0x82A8" />
+        <Texture Name="object_wf_Tex_0084A8" OutName="tex_0084A8" Format="rgba16" Width="16" Height="16" Offset="0x84A8" />
+        <DList Name="object_wf_DL_008E98" Offset="0x8E98" />
+        <DList Name="object_wf_DL_008F38" Offset="0x8F38" />
+        <DList Name="object_wf_DL_009000" Offset="0x9000" />
+        <DList Name="object_wf_DL_0090C8" Offset="0x90C8" />
+        <DList Name="object_wf_DL_0093E8" Offset="0x93E8" />
+        <Limb Name="object_wf_Standardlimb_009480" Type="Standard" EnumName="OBJECT_WF_2_LIMB_01" Offset="0x9480" />
+        <Limb Name="object_wf_Standardlimb_00948C" Type="Standard" EnumName="OBJECT_WF_2_LIMB_02" Offset="0x948C" />
+        <Limb Name="object_wf_Standardlimb_009498" Type="Standard" EnumName="OBJECT_WF_2_LIMB_03" Offset="0x9498" />
+        <Limb Name="object_wf_Standardlimb_0094A4" Type="Standard" EnumName="OBJECT_WF_2_LIMB_04" Offset="0x94A4" />
+        <Limb Name="object_wf_Standardlimb_0094B0" Type="Standard" EnumName="OBJECT_WF_2_LIMB_05" Offset="0x94B0" />
+        <Limb Name="object_wf_Standardlimb_0094BC" Type="Standard" EnumName="OBJECT_WF_2_LIMB_06" Offset="0x94BC" />
+        <Limb Name="object_wf_Standardlimb_0094C8" Type="Standard" EnumName="OBJECT_WF_2_LIMB_07" Offset="0x94C8" />
+        <Limb Name="object_wf_Standardlimb_0094D4" Type="Standard" EnumName="OBJECT_WF_2_LIMB_08" Offset="0x94D4" />
+        <Limb Name="object_wf_Standardlimb_0094E0" Type="Standard" EnumName="OBJECT_WF_2_LIMB_09" Offset="0x94E0" />
+        <Limb Name="object_wf_Standardlimb_0094EC" Type="Standard" EnumName="OBJECT_WF_2_LIMB_0A" Offset="0x94EC" />
+        <Limb Name="object_wf_Standardlimb_0094F8" Type="Standard" EnumName="OBJECT_WF_2_LIMB_0B" Offset="0x94F8" />
+        <Limb Name="object_wf_Standardlimb_009504" Type="Standard" EnumName="OBJECT_WF_2_LIMB_0C" Offset="0x9504" />
+        <Limb Name="object_wf_Standardlimb_009510" Type="Standard" EnumName="OBJECT_WF_2_LIMB_0D" Offset="0x9510" />
+        <Limb Name="object_wf_Standardlimb_00951C" Type="Standard" EnumName="OBJECT_WF_2_LIMB_0E" Offset="0x951C" />
+        <Limb Name="object_wf_Standardlimb_009528" Type="Standard" EnumName="OBJECT_WF_2_LIMB_0F" Offset="0x9528" />
+        <Limb Name="object_wf_Standardlimb_009534" Type="Standard" EnumName="OBJECT_WF_2_LIMB_10" Offset="0x9534" />
+        <Limb Name="object_wf_Standardlimb_009540" Type="Standard" EnumName="OBJECT_WF_2_LIMB_11" Offset="0x9540" />
+        <Limb Name="object_wf_Standardlimb_00954C" Type="Standard" EnumName="OBJECT_WF_2_LIMB_12" Offset="0x954C" />
+        <Limb Name="object_wf_Standardlimb_009558" Type="Standard" EnumName="OBJECT_WF_2_LIMB_13" Offset="0x9558" />
+        <Limb Name="object_wf_Standardlimb_009564" Type="Standard" EnumName="OBJECT_WF_2_LIMB_14" Offset="0x9564" />
+        <Limb Name="object_wf_Standardlimb_009570" Type="Standard" EnumName="OBJECT_WF_2_LIMB_15" Offset="0x9570" />
+        <Skeleton Name="object_wf_Skel_0095D0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_WF_2_LIMB_NONE" LimbMax="OBJECT_WF_2_LIMB_MAX" EnumName="object_wf_2_Limbs" Offset="0x95D0" />
+        <Animation Name="object_wf_Anim_009808" Offset="0x9808" />
+        <Animation Name="object_wf_Anim_009A50" Offset="0x9A50" />
+        <Animation Name="object_wf_Anim_00A3CC" Offset="0xA3CC" />
+    </File>
+</Root>

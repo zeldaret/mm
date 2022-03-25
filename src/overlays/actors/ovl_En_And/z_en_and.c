@@ -1,12 +1,12 @@
 /*
- * File z_en_and.c
+ * File: z_en_and.c
  * Overlay: ovl_En_And
  * Description: Anju in Wedding Dress
  */
 
 #include "z_en_and.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAnd*)thisx)
 
