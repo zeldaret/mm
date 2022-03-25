@@ -988,8 +988,7 @@ beginseg
     name "ovl_En_Bombf"
     compress
     include "build/src/overlays/actors/ovl_En_Bombf/z_en_bombf.o"
-    include "build/data/ovl_En_Bombf/ovl_En_Bombf.data.o"
-    include "build/data/ovl_En_Bombf/ovl_En_Bombf.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bombf/ovl_En_Bombf_reloc.o"
 endseg
 
 beginseg
