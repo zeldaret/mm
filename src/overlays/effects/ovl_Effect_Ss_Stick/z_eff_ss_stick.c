@@ -7,7 +7,7 @@
 #include "z_eff_ss_stick.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define rObjBankIdx regs[0]
+#define rObjBankIndex regs[0]
 #define rYaw regs[1]
 
 #define PARAMS ((EffectSsStickInitParams*)initParamsx)
@@ -25,7 +25,7 @@ u32 EffectSsStick_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void
     EffectSsStickInitParams* initParams = PARAMS;
     Vec3f pos;
 
-    this->rObjBankIdx = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_KEEP);
+    this->rObjBankIndex = Object_GetIndex(&globalCtx->objectCtx, GAMEPLAY_KEEP);
     pos = initParams->pos;
     this->pos = pos;
     this->vec = pos;
@@ -51,7 +51,7 @@ void EffectSsStick_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     Matrix_InsertRotation(0, this->rYaw, 0, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->rObjBankIdx].segment);
+    gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->rObjBankIndex].segment);
     gSPSegment(POLY_OPA_DISP++, 0x0C, D_801C0850);
     gSPDisplayList(POLY_OPA_DISP++, gDekuStickDL);
 
