@@ -24,6 +24,13 @@ void func_80B5F888(EnDragon* this);
 void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx);
 void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx);
 
+typedef enum {
+    /* 0 */ DEEP_PYTHON_ANIMATION_SMALL_SIDE_SWAY,
+    /* 1 */ DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY,
+    /* 2 */ DEEP_PYTHON_ANIMATION_VERTICAL_SWAY,
+    /* 3 */ DEEP_PYTHON_ANIMATION_IDLE
+} DeepPythonAnimationIndex;
+
 static s32 D_80B605D0 = 0;
 
 const ActorInit En_Dragon_InitVars = {
@@ -211,7 +218,7 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_2BA = 0;
     this->actor.hintId = 0xE;
-    this->unk_2D4 = 0.5f;
+    this->scale = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
     func_80B5EDF0(this);
 }
@@ -231,13 +238,13 @@ AnimationHeader* animations[] = {
 
 u8 animationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
-void func_80B5EAA0(EnDragon* this, s32 animationIndex) {
+void EnDragon_ChangeAnimation(EnDragon* this, s32 animationIndex) {
     f32 startFrame;
 
     this->animationIndex = animationIndex;
     this->endFrame = Animation_GetLastFrame(animations[animationIndex]);
     startFrame = 0.0f;
-    if (this->animationIndex == 3) {
+    if (this->animationIndex == DEEP_PYTHON_ANIMATION_IDLE) {
         startFrame = this->endFrame;
     }
 
@@ -257,7 +264,7 @@ Color_RGBA8 bubbleEnvColors[] = {
     { 0, 0, 255, 255 },
 };
 
-void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f basePos) {
+void EnDragon_SpawnBubbles(EnDragon* this, GlobalContext* globalCtx, Vec3f basePos) {
     static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
     static Vec3f bubbleAccel = { 0.0f, 0.1f, 0.0f };
     s32 bubbleCount;
@@ -296,7 +303,7 @@ void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5EDF0(EnDragon* this) {
-    func_80B5EAA0(this, 3);
+    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
     this->unk_2BE = 0;
     this->unk_2CC = 0;
     this->unk_2B8 = 0;
@@ -338,7 +345,7 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
     f32 currentFrame = this->skelAnime.curFrame;
     s16 phi_v1;
 
-    func_80B5EB40(this, globalCtx, this->unk_254);
+    EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
 
     if (this->unk_2BA >= 3) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
@@ -362,8 +369,8 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.world.pos.x, sp38.x, 0.3f, 50.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp38.z, 0.3f, 50.0f);
             if ((fabsf(this->actor.world.pos.x - sp38.x) < 4.0f) && (fabsf(this->actor.world.pos.z - sp38.z) < 4.0f)) {
-                if (this->animationIndex != 1) {
-                    func_80B5EAA0(this, 1);
+                if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
+                    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
                 }
 
                 this->unk_2BE = 1;
@@ -382,8 +389,8 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
         phi_v1 = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->unk_254, &player->actor.world.pos), this->actor.shape.rot.y));
         if (phi_v1 < 0x5000) {
             if ((this->endFrame <= currentFrame) && (this->unk_2B2 == 0)) {
-                if (this->animationIndex != 1) {
-                    func_80B5EAA0(this, 1);
+                if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
+                    EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
                 }
 
                 this->unk_2BE = 2;
@@ -392,7 +399,7 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
             this->unk_2B0 = 0;
         } else {
             if (this->unk_2BE == 2) {
-                func_80B5EAA0(this, 0);
+                EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_SMALL_SIDE_SWAY);
                 this->unk_2B2 = Rand_ZeroFloat(20.0f) + this->endFrame;
                 this->unk_2BE = 3;
             }
@@ -407,7 +414,7 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B5F3A4(EnDragon* this, GlobalContext* globalCtx, Vec3f eye, Vec3f at) {
+void EnDragon_CameraSetAtEye(EnDragon* this, GlobalContext* globalCtx, Vec3f eye, Vec3f at) {
     this->cameraId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
     Math_Vec3f_Copy(&this->cameraEye, &eye);
     Math_Vec3f_Copy(&this->cameraAt, &at);
@@ -433,7 +440,7 @@ void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
         this->unk_2BE = 0;
         this->unk_2CA = 0;
         this->unk_2B8 = 0;
-        func_80B5EAA0(this, 3);
+        EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
         this->actionFunc = func_80B5F508;
     }
 }
@@ -479,7 +486,7 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
 
     this->unk_2CA++;
     Math_SmoothStepToS(&this->actor.shape.rot.z, D_80B60848[this->pythonIndex], 0xA, 0x1F4, 0x14);
-    func_80B5EB40(this, globalCtx, this->unk_254);
+    EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
 
     Math_Vec3f_Copy(&sp50, &this->unk_260);
     sp50.x += Math_SinS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].x;
@@ -491,7 +498,7 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
     sp44.y += D_80B607E8[this->pythonIndex].y;
     sp44.z += Math_CosS(this->actor.world.rot.y) * D_80B607E8[this->pythonIndex].z;
 
-    func_80B5F3A4(this, globalCtx, sp50, sp44);
+    EnDragon_CameraSetAtEye(this, globalCtx, sp50, sp44);
 
     if (D_80B60858[this->pythonIndex] < this->unk_2CA) {
         if (this->unk_2BE == 0) {
@@ -509,8 +516,8 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5F888(EnDragon* this) {
-    if (this->animationIndex != 1) {
-        func_80B5EAA0(this, 1);
+    if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
+        EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
     }
 
     this->unk_2B0 = 0;
@@ -547,7 +554,7 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
     sp40.y += -100.0f;
     sp40.z += Math_CosS(this->actor.world.rot.y) * 1200.0f;
 
-    func_80B5F3A4(this, globalCtx, sp4C, sp40);
+    EnDragon_CameraSetAtEye(this, globalCtx, sp4C, sp40);
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->actor.world.rot.y;
     player->actor.world.rot.x = player->actor.shape.rot.x = this->actor.world.rot.x;
@@ -564,10 +571,11 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
 
     if ((this->unk_2BE <= 0) && (this->endFrame <= currentFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
-        if (this->animationIndex != 1) {
-            func_80B5EAA0(this, 1);
+        if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
+            EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
         }
-        this->unk_2BE += 1;
+
+        this->unk_2BE++;
     }
 
     if (((this->unk_2BE != 0) && (this->endFrame <= currentFrame)) || (!(player->stateFlags2 & 0x80)) ||
@@ -610,7 +618,7 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.z += 0x1000;
     this->jawZRotation = 0xFA0;
-    func_80B5EB40(this, globalCtx, this->unk_254);
+    EnDragon_SpawnBubbles(this, globalCtx, this->unk_254);
 
     if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 121.0f) &&
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
@@ -680,7 +688,7 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
     Actor_MarkForDeath(&this->actor);
 }
 
-void func_80B60138(EnDragon* this, GlobalContext* globalCtx) {
+void EnDragon_UpdateDamage(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u32 sp30;
 
@@ -736,11 +744,11 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2B6--;
     }
 
-    func_80B60138(this, globalCtx);
+    EnDragon_UpdateDamage(this, globalCtx);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk_29C);
     Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-    Actor_SetScale(&this->actor, this->unk_2D4);
+    Actor_SetScale(&this->actor, this->scale);
 
     this->actionFunc(this, globalCtx);
     Actor_MoveWithGravity(&this->actor);
@@ -755,7 +763,8 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B6043C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnDragon_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                              Actor* thisx) {
     EnDragon* this = THIS;
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
@@ -767,7 +776,7 @@ s32 func_80B6043C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
-void func_80B60494(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnDragon_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDragon* this = THIS;
     Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
 
@@ -792,5 +801,5 @@ void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80B6043C, func_80B60494, &this->actor);
+                          EnDragon_OverrideLimbDraw, EnDragon_PostLimbDraw, &this->actor);
 }

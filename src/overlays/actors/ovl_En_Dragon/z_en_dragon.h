@@ -45,7 +45,7 @@ typedef struct EnDragon {
     /* 0x2CC */ s16 unk_2CC;
     /* 0x2CE */ UNK_TYPE1 unk_2CE[0x2];
     /* 0x2D0 */ f32 endFrame;
-    /* 0x2D4 */ f32 unk_2D4;
+    /* 0x2D4 */ f32 scale;
     /* 0x2D8 */ UNK_TYPE1 unk_2D8[0x4];
     /* 0x2DC */ ColliderJntSph collider;
     /* 0x2FC */ ColliderJntSphElement colliderElements[8];
