@@ -10,8 +10,8 @@ typedef struct {
     /* 0x24 */ s16 scale;
     /* 0x26 */ s16 scaleStep;
     /* 0x28 */ s16 alpha;
-    /* 0x2A */ s16 fadeDelay;
-    /* 0x2C */ s16 unk_2C;
+    /* 0x2A */ s16 alphaStep;
+    /* 0x2C */ s16 fadeDelay;
     /* 0x30 */ s32 life;
 } EffectSsDFireInitParams; // size = 0x34
 

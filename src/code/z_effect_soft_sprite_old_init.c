@@ -394,7 +394,7 @@ void EffectSsGSpk_SpawnSmall(GlobalContext* globalCtx, Actor* actor, Vec3f* pos,
 
 // EffectSsDFire Spawn Functions
 void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scaleStep,
-                         s16 alpha, s16 fadeDelay, s16 arg8, s32 life) {
+                         s16 alpha, s16 alphaStep, s16 fadeDelay, s32 life) {
     EffectSsDFireInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
@@ -403,8 +403,8 @@ void EffectSsDFire_Spawn(GlobalContext* globalCtx, Vec3f* pos, Vec3f* velocity, 
     initParams.scale = scale;
     initParams.scaleStep = scaleStep;
     initParams.alpha = alpha;
+    initParams.alphaStep = alphaStep;
     initParams.fadeDelay = fadeDelay;
-    initParams.unk_2C = arg8;
     initParams.life = life;
 
     EffectSs_Spawn(globalCtx, EFFECT_SS_D_FIRE, 128, &initParams);

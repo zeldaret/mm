@@ -991,10 +991,6 @@ D_06007238 = 0x06007238;
 
 D_06000A38 = 0x06000A38;
 
-// ovl_Effect_Ss_D_Fire
-
-D_060098A0 = 0x060098A0;
-
 // ovl_Effect_Ss_Extra
 
 D_06000DC0 = 0x06000DC0;
