@@ -20,13 +20,14 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx);
-void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx);
-void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_ZoraShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_GoronShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx);
+void EnSob1_BombShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx);
-void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_ZoraShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_GoronShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx);
+void EnSob1_BombShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx);
+
 void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Idle(EnSob1* this, GlobalContext* globalCtx);
 void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx);
@@ -139,10 +140,10 @@ static InitChainEntry sInitChain[] = {
 };
 
 static EnSob1ActionFunc sInitFuncs[] = {
-    EnSob1_InitZoraShopkeeper,
-    EnSob1_InitGoronShopkeeper,
-    EnSob1_InitBombShopkeeper,
-    EnSob1_InitGoronShopkeeper,
+    EnSob1_ZoraShopkeeper_Init,
+    EnSob1_GoronShopkeeper_Init,
+    EnSob1_BombShopkeeper_Init,
+    EnSob1_GoronShopkeeper_Init,
 };
 
 static Vec3f sPosOffset[] = {
@@ -329,7 +330,7 @@ u16 EnSob1_GetGoodbye(EnSob1* this) {
     return 0x64C;
 }
 
-void EnSob1_EndInteractionBombShop(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_BombShopkeeper_EndInteraction(EnSob1* this, GlobalContext* globalCtx) {
     this->drawCursor = 0;
     this->stickLeftPrompt.isEnabled = false;
     this->stickRightPrompt.isEnabled = false;
@@ -451,7 +452,7 @@ void EnSob1_EndInteraction(GlobalContext* globalCtx, EnSob1* this) {
 s32 EnSob1_TestEndInteraction(EnSob1* this, GlobalContext* globalCtx, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         if (this->shopType == BOMB_SHOP) {
-            EnSob1_EndInteractionBombShop(this, globalCtx);
+            EnSob1_BombShopkeeper_EndInteraction(this, globalCtx);
         } else {
             EnSob1_EndInteraction(globalCtx, this);
         }
@@ -625,7 +626,7 @@ s32 EnSob1_FacingShopkeeperDialogResult(EnSob1* this, GlobalContext* globalCtx) 
         case 1:
             func_8019F230();
             if (this->shopType == BOMB_SHOP) {
-                EnSob1_EndInteractionBombShop(this, globalCtx);
+                EnSob1_BombShopkeeper_EndInteraction(this, globalCtx);
             } else {
                 EnSob1_EndInteraction(globalCtx, this);
             }
@@ -1192,10 +1193,7 @@ void EnSob1_UpdateCursorAnim(EnSob1* this) {
 void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-
-    // Possbily fake temps
-    s32 maxColor = 255;
-    f32 tmp;
+    s32 maxColor = 255; // POSSIBLY FAKE
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1222,31 +1220,33 @@ void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
         stickAnimTween = 0.0f;
         this->stickAnimState = 0;
     }
-
-    tmp = 155.0f * arrowAnimTween;
-
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.g = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+
+    this->stickRightPrompt.arrowColor.r = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.g = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
 
     this->stickRightPrompt.stickTexX = 274.0f;
     this->stickRightPrompt.stickTexX += 8.0f * stickAnimTween;
+
     this->stickLeftPrompt.stickTexX = 49.0f;
     this->stickLeftPrompt.stickTexX -= 8.0f * stickAnimTween;
 
-    this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
-    this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
 s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq) {
@@ -1319,41 +1319,37 @@ s32 EnSob1_AreObjectsLoaded(EnSob1* this, GlobalContext* globalCtx) {
     return false;
 }
 
-void EnSob1_InitZoraShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_ZoraShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gZoraSkel, NULL, this->jointTable, this->morphTable, 20);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
     Animation_Change(&this->skelAnime, &object_masterzoora_Anim_00078C, 1.0f, 0.0f,
                      Animation_GetLastFrame(&object_masterzoora_Anim_00078C), 0, 0.0f);
-    this->actor.draw = EnSob1_DrawZoraShopkeeper;
+    this->actor.draw = EnSob1_ZoraShopkeeper_Draw;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
-void EnSob1_InitGoronShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_GoronShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
                        this->morphTable, 18);
     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->objIndices[2]].segment);
     Animation_Change(&this->skelAnime, &object_mastergolon_Anim_0000FC, 1.0f, 0.0f,
                      Animation_GetLastFrame(&object_mastergolon_Anim_0000FC), 0, 0.0f);
-    this->actor.draw = EnSob1_DrawGoronShopkeeper;
+    this->actor.draw = EnSob1_GoronShopkeeper_Draw;
     this->changeObjectFunc = EnSob1_ChangeObject;
 }
 
-void EnSob1_InitBombShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
+void EnSob1_BombShopkeeper_Init(EnSob1* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_rs_Skel_009220, &object_rs_Anim_009120, this->jointTable,
                        this->morphTable, 16);
-    this->actor.draw = EnSob1_DrawBombShopkeeper;
+    this->actor.draw = EnSob1_BombShopkeeper_Draw;
     this->changeObjectFunc = NULL;
     this->skelAnime.playSpeed = 2.0f;
 }
 
 void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
     ShopItem* shopItems;
-    EnSob1XZRange* unkStruct;
+    EnSob1XZRange* xzRange;
     Vec3f* posOffset;
-
-    // Possibly fake temps
-    EnSob1* this2;
-    u32 maxColor = 255;
 
     if (EnSob1_AreObjectsLoaded(this, globalCtx)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
@@ -1387,65 +1383,63 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
             EnSob1_SetupAction(this, EnSob1_Idle);
         }
 
-        this->cursorPos.y = (this->cursorPos.x = 100.0f);
-        this->stickAccumX = (this->stickAccumY = 0);
+        this->cursorPos.y = this->cursorPos.x = 100.0f;
+        this->stickAccumY = 0;
+        this->stickAccumX = 0;
+
         this->cursorIdx = 0;
         this->cursorPos.z = 1.2f;
         this->cursorColor.r = 0;
         this->cursorColor.g = 80;
-        this->cursorColor.b = maxColor;
-        this->cursorColor.a = maxColor;
+        this->cursorColor.b = 255;
+        this->cursorColor.a = 255;
         this->cursorAnimTween = 0.0f;
         this->cursorAnimState = 0;
         this->drawCursor = 0;
 
-        this2 = this;
+        this->stickLeftPrompt.stickColor.r = 200;
+        this->stickLeftPrompt.stickColor.g = 200;
+        this->stickLeftPrompt.stickColor.b = 200;
+        this->stickLeftPrompt.stickColor.a = 180;
+        this->stickLeftPrompt.stickTexX = 49.0f;
+        this->stickLeftPrompt.stickTexY = 95.0f;
+        this->stickLeftPrompt.arrowColor.r = 255;
+        this->stickLeftPrompt.arrowColor.g = 255;
+        this->stickLeftPrompt.arrowColor.b = 0;
+        this->stickLeftPrompt.arrowColor.a = 200;
+        this->stickLeftPrompt.arrowTexX = 33.0f;
+        this->stickLeftPrompt.arrowTexY = 91.0f;
+        this->stickLeftPrompt.texZ = 1.0f;
+        this->stickLeftPrompt.isEnabled = false;
 
-        this2->stickLeftPrompt.stickColor.r = 200;
-        this2->stickLeftPrompt.stickColor.g = 200;
-        this2->stickLeftPrompt.stickColor.b = 200;
-        this2->stickLeftPrompt.stickColor.a = 180;
-        this2->stickLeftPrompt.stickTexX = 49.0f;
-        this2->stickLeftPrompt.stickTexY = 95.0f;
-        this2->stickLeftPrompt.arrowColor.r = maxColor;
-        this2->stickLeftPrompt.arrowColor.g = maxColor;
-        this2->stickLeftPrompt.arrowColor.b = 0;
-        this2->stickLeftPrompt.arrowColor.a = 200;
-        this2->stickLeftPrompt.arrowTexX = 33.0f;
-        this2->stickLeftPrompt.arrowTexY = 91.0f;
-        this2->stickLeftPrompt.texZ = 1.0f;
-        this2->stickLeftPrompt.isEnabled = 0;
+        this->stickRightPrompt.stickColor.r = 200;
+        this->stickRightPrompt.stickColor.g = 200;
+        this->stickRightPrompt.stickColor.b = 200;
+        this->stickRightPrompt.stickColor.a = 180;
+        this->stickRightPrompt.stickTexX = 274.0f;
+        this->stickRightPrompt.stickTexY = 95.0f;
+        this->stickRightPrompt.arrowColor.r = 255;
+        this->stickRightPrompt.arrowColor.g = 0;
+        this->stickRightPrompt.arrowColor.b = 0;
+        this->stickRightPrompt.arrowColor.a = 200;
+        this->stickRightPrompt.arrowTexX = 290.0f;
+        this->stickRightPrompt.arrowTexY = 91.0f;
+        this->stickRightPrompt.texZ = 1.0f;
+        this->stickRightPrompt.isEnabled = false;
 
-        if (1) {}
+        this->arrowAnimState = 0;
+        this->stickAnimState = 0;
+        this->arrowAnimTween = 0.0f;
+        this->stickAnimTween = 0.0f;
+        this->shopItemSelectedTween = 0.0f;
 
-        this2->stickRightPrompt.stickColor.r = 200;
-        this2->stickRightPrompt.stickColor.g = 200;
-        this2->stickRightPrompt.stickColor.b = 200;
-        this2->stickRightPrompt.stickColor.a = 180;
-        this2->stickRightPrompt.stickTexX = 274.0f;
-        this2->stickRightPrompt.stickTexY = 95.0f;
-        this2->stickRightPrompt.arrowColor.r = maxColor;
-        this2->stickRightPrompt.arrowColor.g = 0;
-        this2->stickRightPrompt.arrowColor.b = 0;
-        this2->stickRightPrompt.arrowColor.a = 200;
-        this2->stickRightPrompt.arrowTexX = 290.0f;
-        this2->stickRightPrompt.arrowTexY = 91.0f;
-        this2->stickRightPrompt.texZ = 1.0f;
-        this2->stickRightPrompt.isEnabled = 0;
-
-        this2->arrowAnimState = 0;
-        this2->stickAnimState = 0;
-        this2->arrowAnimTween = 0.0f;
-        this2->stickAnimTween = 0.0f;
-        this2->shopItemSelectedTween = 0.0f;
-
-        this2->actor.gravity = 0.0f;
-        this2->posXZRange = sPosXZRanges[this2->shopType];
-        Actor_SetScale(&this2->actor, sActorScales[this2->shopType]);
-        EnSob1_SpawnShopItems(this2, globalCtx, shopItems);
+        this->actor.gravity = 0.0f;
+        this->posXZRange = sPosXZRanges[this->shopType];
+        Actor_SetScale(&this->actor, sActorScales[this->shopType]);
+        EnSob1_SpawnShopItems(this, globalCtx, shopItems);
         this->headRot = this->headRotTarget = 0;
-        this2->blinkTimer = 20;
-        this2->eyeTexIndex = 0;
+        this->blinkTimer = 20;
+        this->eyeTexIndex = 0;
         this->blinkFunc = EnSob1_WaitForBlink;
         this->actor.flags &= ~ACTOR_FLAG_1;
     }
@@ -1475,7 +1469,10 @@ void EnSob1_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32 z, u8 drawCursor) {
-    s32 ulx, uly, lrx, lry;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
     f32 w;
     s32 dsdx;
     s32 pad;
@@ -1485,8 +1482,8 @@ void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
-                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gSelectionCursorTex, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w + -12.0f) * 4.0f;
@@ -1501,11 +1498,16 @@ void EnSob1_DrawCursor(GlobalContext* globalCtx, EnSob1* this, f32 x, f32 y, f32
 void EnSob1_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                         f32 dy) {
     f32 unk;
-    s32 ulx, uly, lrx, lry;
-    f32 w, h;
-    s32 dsdx, dtdy;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
+    f32 w;
+    f32 h;
+    s32 dsdx;
+    s32 dtdy;
 
-    ((void)"../z_en_soB1.c"); // Unreferenced
+    (void)"../z_en_soB1.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1531,21 +1533,15 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
     s32 drawStickRightPrompt = this->stickLeftPrompt.isEnabled;
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
-    ((void)"../z_en_soB1.c"); // Unreferenced
+    (void)"../z_en_soB1.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F8C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 191, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gArrowCursorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColor.r, this->stickLeftPrompt.arrowColor.g,
                                this->stickLeftPrompt.arrowColor.b, this->stickLeftPrompt.arrowColor.a,
@@ -1558,15 +1554,9 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
                                this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                                this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F7C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 127, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gControlStickTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnSob1_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColor.r, this->stickLeftPrompt.stickColor.g,
                                this->stickLeftPrompt.stickColor.b, this->stickLeftPrompt.stickColor.a,
@@ -1583,8 +1573,8 @@ void EnSob1_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnSob1* this) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                          Actor* thisx) {
+s32 EnSob1_ZoraShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                           Actor* thisx) {
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
@@ -1593,8 +1583,8 @@ s32 EnSob1_OverrideLimbDrawZoraShopkeeper(GlobalContext* globalCtx, s32 limbInde
     return false;
 }
 
-s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                                          Actor* thisx) {
+s32 EnSob1_BombShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                           Actor* thisx) {
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
@@ -1603,7 +1593,8 @@ s32 EnSob1_OverrideLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbInde
     return false;
 }
 
-void EnSob1_PostLimbDrawBombShopkeeper(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnSob1_BombShopkeeper_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot,
+                                        Actor* thisx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (limbIndex == 11) {
         gSPDisplayList(POLY_OPA_DISP++, object_rs_DL_000970);
@@ -1621,7 +1612,7 @@ Gfx* EnSob1_EndDList(GraphicsContext* gfxCtx) {
     return dList;
 }
 
-void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+void EnSob1_ZoraShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sZoraShopkeeperEyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
     EnSob1* this = THIS;
     s32 pad;
@@ -1633,7 +1624,7 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x0C, EnSob1_EndDList(globalCtx->state.gfxCtx));
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sZoraShopkeeperEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnSob1_OverrideLimbDrawZoraShopkeeper, NULL, &this->actor);
+                          EnSob1_ZoraShopkeeper_OverrideLimbDraw, NULL, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;
@@ -1644,7 +1635,7 @@ void EnSob1_DrawZoraShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+void EnSob1_GoronShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     static TexturePtr sGoronShopkeeperEyeTextures[] = { object_oF1d_map_Tex_010438, object_oF1d_map_Tex_010C38,
                                                         object_oF1d_map_Tex_011038 };
     EnSob1* this = THIS;
@@ -1666,7 +1657,7 @@ void EnSob1_DrawGoronShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
-void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
+void EnSob1_BombShopkeeper_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnSob1* this = THIS;
     s32 pad;
     u32 frames;
@@ -1676,7 +1667,7 @@ void EnSob1_DrawBombShopkeeper(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_rs_Tex_005458));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          EnSob1_OverrideLimbDrawBombShopkeeper, EnSob1_PostLimbDrawBombShopkeeper, &this->actor);
+                          EnSob1_BombShopkeeper_OverrideLimbDraw, EnSob1_BombShopkeeper_PostLimbDraw, &this->actor);
     for (i = 0; i < ARRAY_COUNT(this->items); i++) {
         this->items[i]->actor.scale.x = 0.2f;
         this->items[i]->actor.scale.y = 0.2f;

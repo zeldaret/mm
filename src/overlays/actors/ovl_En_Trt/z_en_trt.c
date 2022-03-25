@@ -22,11 +22,11 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx);
-s32 EnTrt_ReturnItemToShelf(EnTrt* this);
 void EnTrt_ResetItemPosition(EnTrt* this);
+void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx);
+s32 EnTrt_ReturnItemToShelf(EnTrt* this);
 s32 EnTrt_FacingShopkeeperDialogResult(EnTrt* this, GlobalContext* globalCtx);
 s32 EnTrt_TakeItemOffShelf(EnTrt* this);
-void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx);
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx);
@@ -786,7 +786,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         this->timer = 40;
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 1);
-        this->animationIdx = 1;
+        this->animationIndex = 1;
         this->actionFunc = EnTrt_IdleAwake;
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
     }
@@ -832,7 +832,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
-        this->animationIdx = 2;
+        this->animationIndex = 2;
         this->sleepSoundTimer = 10;
         this->actor.textId = 0;
         this->actionFunc = EnTrt_IdleSleeping;
@@ -852,10 +852,10 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
-        if (this->animationIdx != 5) {
+        if (this->animationIndex != 5) {
             if (curFrame == animLastFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
-                this->animationIdx = 3;
+                this->animationIndex = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
@@ -870,7 +870,7 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
         Message_StartTextbox(globalCtx, this->textId, &this->actor);
-        this->animationIdx = 5;
+        this->animationIndex = 5;
         switch (this->textId) {
             case 0x834:
                 if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
@@ -911,7 +911,7 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (DECR(this->timer) == 0) {
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
-            this->animationIdx = 4;
+            this->animationIndex = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
@@ -921,7 +921,7 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
         Message_StartTextbox(globalCtx, this->textId, &this->actor);
-        this->animationIdx = 5;
+        this->animationIndex = 5;
         this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
     }
 }
@@ -1221,10 +1221,7 @@ void EnTrt_UpdateCursorAnim(EnTrt* this) {
 void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-
-    // Possbily fake temps
-    s32 maxColor = 255;
-    f32 tmp;
+    s32 maxColor = 255; // POSSIBLY FAKE
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1251,31 +1248,33 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
         stickAnimTween = 0.0f;
         this->stickAnimState = 0;
     }
-
-    tmp = 155.0f * arrowAnimTween;
-
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.g = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+
+    this->stickRightPrompt.arrowColor.r = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.g = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
 
     this->stickRightPrompt.stickTexX = 274.0f;
     this->stickRightPrompt.stickTexX += 8.0f * stickAnimTween;
+
     this->stickLeftPrompt.stickTexX = 49.0f;
     this->stickLeftPrompt.stickTexX -= 8.0f * stickAnimTween;
 
-    this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
-    this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
 void EnTrt_OpenEyes(EnTrt* this) {
@@ -1452,9 +1451,6 @@ void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
-    u32 maxcolor = 255;
-    EnTrt* this2;
-
     EnTrt_GetCutscenes(this, globalCtx);
     this->cutscene = this->lookForwardCutscene;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
@@ -1472,58 +1468,55 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
         this->actionFunc = EnTrt_IdleSleeping;
     }
 
+    this->cursorPos.y = this->cursorPos.x = 100.0f;
     this->stickAccumY = 0;
     this->stickAccumX = 0;
+
     this->cursorIdx = 0;
-    this->cursorPos.y = this->cursorPos.x = 100.0f;
     this->cursorPos.z = 1.2f;
     this->cursorColor.r = 0;
     this->cursorColor.g = 80;
-    this->cursorColor.b = maxcolor;
-    this->cursorColor.a = maxcolor;
+    this->cursorColor.b = 255;
+    this->cursorColor.a = 255;
     this->cursorAnimTween = 0.0f;
     this->cursorAnimState = 0;
     this->drawCursor = 0;
 
-    this2 = this;
-
     this->stickLeftPrompt.stickColor.r = 200;
-    this2->stickLeftPrompt.stickColor.g = 200;
-    this2->stickLeftPrompt.stickColor.b = 200;
-    this2->stickLeftPrompt.stickColor.a = 180;
-    this2->stickLeftPrompt.stickTexX = 49.0f;
-    this2->stickLeftPrompt.stickTexY = 95.0f;
-    this2->stickLeftPrompt.arrowColor.r = maxcolor;
-    this2->stickLeftPrompt.arrowColor.g = maxcolor;
-    this2->stickLeftPrompt.arrowColor.b = 0;
-    this2->stickLeftPrompt.arrowColor.a = 200;
-    this2->stickLeftPrompt.arrowTexX = 33.0f;
-    this2->stickLeftPrompt.arrowTexY = 91.0f;
-    this2->stickLeftPrompt.texZ = 1.0f;
-    this2->stickLeftPrompt.isEnabled = false;
+    this->stickLeftPrompt.stickColor.g = 200;
+    this->stickLeftPrompt.stickColor.b = 200;
+    this->stickLeftPrompt.stickColor.a = 180;
+    this->stickLeftPrompt.stickTexX = 49.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.arrowColor.r = 255;
+    this->stickLeftPrompt.arrowColor.g = 255;
+    this->stickLeftPrompt.arrowColor.b = 0;
+    this->stickLeftPrompt.arrowColor.a = 200;
+    this->stickLeftPrompt.arrowTexX = 33.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.texZ = 1.0f;
+    this->stickLeftPrompt.isEnabled = false;
 
-    if (1) {}
+    this->stickRightPrompt.stickColor.r = 200;
+    this->stickRightPrompt.stickColor.g = 200;
+    this->stickRightPrompt.stickColor.b = 200;
+    this->stickRightPrompt.stickColor.a = 180;
+    this->stickRightPrompt.stickTexX = 274.0f;
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowColor.r = 255;
+    this->stickRightPrompt.arrowColor.g = 0;
+    this->stickRightPrompt.arrowColor.b = 0;
+    this->stickRightPrompt.arrowColor.a = 200;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickRightPrompt.texZ = 1.0f;
+    this->stickRightPrompt.isEnabled = false;
 
-    this2->stickRightPrompt.stickColor.r = 200;
-    this2->stickRightPrompt.stickColor.g = 200;
-    this2->stickRightPrompt.stickColor.b = 200;
-    this2->stickRightPrompt.stickColor.a = 180;
-    this2->stickRightPrompt.stickTexX = 274.0f;
-    this2->stickRightPrompt.stickTexY = 95.0f;
-    this2->stickRightPrompt.arrowColor.r = maxcolor;
-    this2->stickRightPrompt.arrowColor.g = 0;
-    this2->stickRightPrompt.arrowColor.b = 0;
-    this2->stickRightPrompt.arrowColor.a = 200;
-    this2->stickRightPrompt.arrowTexX = 290.0f;
-    this2->stickRightPrompt.arrowTexY = 91.0f;
-    this2->stickRightPrompt.texZ = 1.0f;
-    this2->stickRightPrompt.isEnabled = false;
-
-    this2->arrowAnimTween = 0.0f;
-    this2->stickAnimTween = 0.0f;
-    this2->arrowAnimState = 0;
-    this2->stickAnimState = 0;
-    this2->shopItemSelectedTween = 0.0f;
+    this->arrowAnimTween = 0.0f;
+    this->stickAnimTween = 0.0f;
+    this->arrowAnimState = 0;
+    this->stickAnimState = 0;
+    this->shopItemSelectedTween = 0.0f;
 
     this->actor.gravity = 0.0f;
     Actor_SetScale(&this->actor, sActorScale);
@@ -1546,7 +1539,10 @@ void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z, u8 drawCursor) {
-    s32 ulx, uly, lrx, lry;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
     f32 w;
     s32 dsdx;
     s32 pad;
@@ -1556,8 +1552,8 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
-                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gSelectionCursorTex, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w + -12.0f) * 4.0f;
@@ -1572,11 +1568,16 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
 void EnTrt_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                        f32 dy) {
     f32 unk;
-    s32 ulx, uly, lrx, lry;
-    f32 w, h;
-    s32 dsdx, dtdy;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
+    f32 w;
+    f32 h;
+    s32 dsdx;
+    s32 dtdy;
 
-    ((void)"../z_en_trt.c"); // Unreferenced
+    (void)"../z_en_trt.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1602,21 +1603,15 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
     s32 drawStickRightPrompt = this->stickLeftPrompt.isEnabled;
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
-    ((void)"../z_en_trt.c"); // Unreferenced
+    (void)"../z_en_trt.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F8C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 191, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gArrowCursorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColor.r, this->stickLeftPrompt.arrowColor.g,
                               this->stickLeftPrompt.arrowColor.b, this->stickLeftPrompt.arrowColor.a,
@@ -1629,15 +1624,9 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
                               this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F7C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 127, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gControlStickTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColor.r, this->stickLeftPrompt.stickColor.g,
                               this->stickLeftPrompt.stickColor.b, this->stickLeftPrompt.stickColor.a,
