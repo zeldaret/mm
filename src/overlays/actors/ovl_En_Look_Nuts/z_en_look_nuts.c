@@ -297,7 +297,7 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, GlobalContext* globalCtx) {
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(globalCtx);
         globalCtx->sceneLoadFlag = 0x14;
-        gSaveContext.weekEventReg[17] |= 4;
+        gSaveContext.save.weekEventReg[17] |= 4;
     }
 }
 
@@ -339,7 +339,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_StatePop();
             if (!this->isPlayerDetected) {
                 s16 drawFlag = 1;
-                if (gSaveContext.isNight) {
+                if (gSaveContext.save.isNight) {
                     drawFlag = 0;
                 }
                 if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {

@@ -338,7 +338,7 @@ s32* func_80BD3294(EnAh* this, GlobalContext* globalCtx) {
 
     switch (this->unk_1DC) {
         case 1:
-            if (gSaveContext.day == 2) {
+            if (gSaveContext.save.day == 2) {
                 return D_80BD3DF0;
             }
             return D_80BD3DE8;
