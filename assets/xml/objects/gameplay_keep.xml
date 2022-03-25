@@ -843,17 +843,17 @@
         <Texture Name="gBombchuBodyTex" OutName="bombchu_body" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
         <DList Name="gBombchuDL" Offset="0x16360" />
         
-        <Texture Name="gameplay_keep_Tex_0164D0" OutName="tex_0164D0" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
-        <Texture Name="gameplay_keep_Tex_016CD0" OutName="tex_016CD0" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
-        <Texture Name="gameplay_keep_Tex_0174D0" OutName="tex_0174D0" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
-        <Texture Name="gameplay_keep_Tex_017CD0" OutName="tex_017CD0" Format="ia16" Width="32" Height="32" Offset="0x17CD0" />
-        <Texture Name="gameplay_keep_Tex_0184D0" OutName="tex_0184D0" Format="ia16" Width="32" Height="32" Offset="0x184D0" />
-        <Texture Name="gameplay_keep_Tex_018CD0" OutName="tex_018CD0" Format="ia16" Width="32" Height="32" Offset="0x18CD0" />
-        <Texture Name="gameplay_keep_Tex_0194D0" OutName="tex_0194D0" Format="ia16" Width="32" Height="32" Offset="0x194D0" />
-        <Texture Name="gameplay_keep_Tex_019CD0" OutName="tex_019CD0" Format="ia16" Width="32" Height="32" Offset="0x19CD0" />
-        <DList Name="gameplay_keep_DL_01A4D0" Offset="0x1A4D0" />
-        <DList Name="gameplay_keep_DL_01A538" Offset="0x1A538" />
-        <DList Name="gameplay_keep_DL_01A590" Offset="0x1A590" />
+        <Texture Name="gEffBombExplosion1Tex" OutName="eff_bomb_explosion_1" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
+        <Texture Name="gEffBombExplosion2Tex" OutName="eff_bomb_explosion_2" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
+        <Texture Name="gEffBombExplosion3Tex" OutName="eff_bomb_explosion_3" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
+        <Texture Name="gEffBombExplosion4Tex" OutName="eff_bomb_explosion_4" Format="ia16" Width="32" Height="32" Offset="0x17CD0" />
+        <Texture Name="gEffBombExplosion5Tex" OutName="eff_bomb_explosion_5" Format="ia16" Width="32" Height="32" Offset="0x184D0" />
+        <Texture Name="gEffBombExplosion6Tex" OutName="eff_bomb_explosion_6" Format="ia16" Width="32" Height="32" Offset="0x18CD0" />
+        <Texture Name="gEffBombExplosion7Tex" OutName="eff_bomb_explosion_7" Format="ia16" Width="32" Height="32" Offset="0x194D0" />
+        <Texture Name="gEffBombExplosion8Tex" OutName="eff_bomb_explosion_8" Format="ia16" Width="32" Height="32" Offset="0x19CD0" />
+        <DList Name="gEffBombExplosion1DL" Offset="0x1A4D0" />
+        <DList Name="gEffBombExplosion2DL" Offset="0x1A538" />
+        <DList Name="gEffBombExplosion3DL" Offset="0x1A590" />
         <DList Name="gameplay_keep_DL_01A620" Offset="0x1A620" />
         <Texture Name="gameplay_keep_Tex_01A6B0" OutName="tex_01A6B0" Format="rgba16" Width="16" Height="16" Offset="0x1A6B0" />
         <Texture Name="gameplay_keep_Tex_01A8B0" OutName="tex_01A8B0" Format="i8" Width="16" Height="32" Offset="0x1A8B0" />
