@@ -3191,9 +3191,9 @@ void func_80183070(void);
 // void func_801832B0(void);
 // void func_8018332C(void);
 // void func_8018340C(void);
-// void func_80183430(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
-// void func_8018349C(void);
-// void func_801834A8(void);
+void func_80183430(SkeletonInfo* skeletonInfo, void* arg1, void* arg2, Vec3s* arg3, s16* arg4, UnkKeyframeCallback* callbacks);
+void func_8018349C(UNK_PTR arg0);
+void func_801834A8(SkeletonInfo* skeletonInfo, void* arg1);
 // void func_80183510(void);
 // void func_80183580(void);
 // void func_801835EC(void);
@@ -3206,9 +3206,11 @@ void func_80183070(void);
 // void func_80183A3C(void);
 // void func_80183B08(void);
 // void func_80183B68(void);
-// void func_80183DE0(void);
+s32 func_80183DE0(SkeletonInfo* skeletonInfo);
 // void func_8018410C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-// void func_8018450C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
+void func_8018450C(GlobalContext* globalCtx, SkeletonInfo* skeleton, Mtx* mtx,
+                   OverrideKeyframeDrawScaled overrideKeyframeDraw, PostKeyframeDrawScaled postKeyframeDraw,
+                   Actor* actor);
 // void func_801845A4(void);
 // void func_801845C8(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_80184638(void);
