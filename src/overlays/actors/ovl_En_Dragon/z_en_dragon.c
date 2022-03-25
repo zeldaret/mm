@@ -460,7 +460,61 @@ void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F508.s")
+void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3f sp50;
+    Vec3f sp44;
+
+    this->unk_2C8 = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+    SkelAnime_Update(&this->skelAnime);
+
+    if (this->unk_2CA == 0) {
+        if (this->unk_2B8 == 0) {
+            Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_26C);
+            Math_Vec3f_Copy(&this->unk_290, &this->unk_26C);
+            this->unk_2B8 = 1;
+        } else {
+            Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_290);
+        }
+
+        Math_Vec3f_Copy(&sp50, &this->unk_260);
+        sp50.x += Math_SinS(this->actor.world.rot.y) * -930.0f;
+        sp50.z += Math_CosS(this->actor.world.rot.y) * -930.0f;
+        Math_Vec3f_Copy(&this->actor.world.pos, &sp50);
+        this->unk_2A8 = 0x1450;
+        this->actor.speedXZ = 60.0f;
+    }
+
+    this->unk_2CA++;
+    Math_SmoothStepToS(&this->actor.shape.rot.z, D_80B60848[this->unk_250], 0xA, 0x1F4, 0x14);
+    func_80B5EB40(this, globalCtx, this->unk_254);
+
+    Math_Vec3f_Copy(&sp50, &this->unk_260);
+    sp50.x += Math_SinS(this->actor.world.rot.y) * D_80B60788[this->unk_250].x;
+    sp50.y += D_80B60788[this->unk_250].y;
+    sp50.z += Math_CosS(this->actor.world.rot.y) * D_80B60788[this->unk_250].z;
+
+    Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
+    sp44.x += Math_SinS(this->actor.world.rot.y) * D_80B607E8[this->unk_250].x;
+    sp44.y += D_80B607E8[this->unk_250].y;
+    sp44.z += Math_CosS(this->actor.world.rot.y) * D_80B607E8[this->unk_250].z;
+
+    func_80B5F3A4(this, globalCtx, sp50, sp44);
+
+    if (D_80B60858[this->unk_250] < this->unk_2CA) {
+        if (this->unk_2BE == 0) {
+            func_800B7298(globalCtx, &this->actor, 6U);
+            this->unk_2BE = 1;
+        }
+
+        globalCtx->unk_18770(globalCtx, player);
+        player->actor.parent = &this->actor;
+        player->unk_AE8 = 50;
+        this->unk_2BA = 2;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_EAT);
+        func_80B5F888(this);
+    }
+}
 
 void func_80B5F888(EnDragon* this) {
     if (this->unk_24C != 1) {
