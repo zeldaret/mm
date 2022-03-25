@@ -77,7 +77,7 @@ typedef struct Boss03 {
     /* 0x02C0 */ UNK_TYPE1 unk_2C0[0x04];
     /* 0x02C0 */ f32 unk_2C4;
     /* 0x02C8 */ Vec3f prevPlayerPos;
-    /* 0x02D4 */ u8 wetSpotEffectSpawnNum;
+    /* 0x02D4 */ u8 wetSpotEffectSpawnCount;
     /* 0x02D5 */ u8 unk_2D5; // flag
     /* 0x02D6 */ s16 shapeRotTargetX;
     /* 0x02D8 */ s16 shapeRotTargetY;

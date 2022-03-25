@@ -40,6 +40,17 @@
  *   - When Gyorg's health drops below half, it spawns the small fishes
  *
  * The collision logic is handled manually
+ *
+ * This file is (kinda) sectioned like this:
+ * - Effects stuff
+ * - RNG
+ * - Gyorg
+ *   - Init, action functions
+ *   - Cutscenes
+ *   - more actions/Update
+ *   - Draw stuff
+ * - Effect update/draw stuff
+ * - Seaweed
  */
 
 #include "z_boss_03.h"
@@ -2081,13 +2092,13 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     if ((this->waterHeight < player->actor.world.pos.y) && (this->prevPlayerPos.y <= this->waterHeight)) {
-        this->wetSpotEffectSpawnNum = 20;
+        this->wetSpotEffectSpawnCount = 20;
     }
 
     // Player is standing on ground && Player is above water
     if ((player->actor.bgCheckFlags & 1) && (player->actor.shape.feetPos[FOOT_LEFT].y >= WATER_HEIGHT + 8.0f)) {
-        if (this->wetSpotEffectSpawnNum != 0) {
-            this->wetSpotEffectSpawnNum--;
+        if (this->wetSpotEffectSpawnCount != 0) {
+            this->wetSpotEffectSpawnCount--;
 
             wetSpotPos.x = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.x;
             wetSpotPos.y = PLATFORM_HEIGHT;
