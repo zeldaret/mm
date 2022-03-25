@@ -38,8 +38,7 @@ const ActorInit En_Dragon_InitVars = {
     (ActorFunc)EnDragon_Draw,
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80B605F4 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0x0),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -74,8 +73,7 @@ static DamageTable D_80B605F4 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[8] = {
-static ColliderJntSphElementInit D_80B60614[8] = {
+static ColliderJntSphElementInit sJntSphElementsInit[8] = {
     {
         {
             ELEMTYPE_UNK1,
@@ -166,8 +164,7 @@ static ColliderJntSphElementInit D_80B60614[8] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80B60734 = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_HIT6,
         AT_NONE,
@@ -177,7 +174,7 @@ static ColliderJntSphInit D_80B60734 = {
         COLSHAPE_JNTSPH,
     },
     8,
-    D_80B60614, // sJntSphElementsInit,
+    sJntSphElementsInit,
 };
 
 void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -186,31 +183,31 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDeepPythonSkel, &gDeepPythonSmallSideSwayAnim, this->jointTable,
                        this->morphTable, DEEP_PYTHON_LIMB_MAX);
     this->actor.colChkInfo.health = 4;
-    this->actor.colChkInfo.damageTable = &D_80B605F4;
+    this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.targetMode = 0xA;
-    Collider_InitAndSetJntSph(globalCtx, &this->unk_2DC, &this->actor, &D_80B60734, this->unk_2FC);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
-    this->unk_2DC.elements[0].dim.scale = this->unk_2DC.elements[1].dim.scale = this->unk_2DC.elements[2].dim.scale =
-        this->unk_2DC.elements[3].dim.scale = this->unk_2DC.elements[4].dim.scale =
-            this->unk_2DC.elements[5].dim.scale = this->unk_2DC.elements[6].dim.scale =
-                this->unk_2DC.elements[7].dim.scale = 1.0f;
-    this->unk_2DC.elements[0].dim.modelSphere.radius = 150;
-    this->unk_2DC.elements[0].dim.modelSphere.center.x = 420;
-    this->unk_2DC.elements[1].dim.modelSphere.radius = 160;
-    this->unk_2DC.elements[1].dim.modelSphere.center.x = 630;
-    this->unk_2DC.elements[2].dim.modelSphere.radius = 130;
-    this->unk_2DC.elements[2].dim.modelSphere.center.x = 630;
-    this->unk_2DC.elements[3].dim.modelSphere.radius = 170;
-    this->unk_2DC.elements[3].dim.modelSphere.center.x = 920;
-    this->unk_2DC.elements[4].dim.modelSphere.radius = 150;
-    this->unk_2DC.elements[4].dim.modelSphere.center.x = 530;
-    this->unk_2DC.elements[5].dim.modelSphere.radius = 140;
-    this->unk_2DC.elements[5].dim.modelSphere.center.x = 730;
-    this->unk_2DC.elements[6].dim.modelSphere.radius = 120;
-    this->unk_2DC.elements[6].dim.modelSphere.center.x = 430;
-    this->unk_2DC.elements[7].dim.modelSphere.radius = 110;
-    this->unk_2DC.elements[7].dim.modelSphere.center.x = 160;
-    this->unk_250 = (this->actor.params >> 7) & 0x1F;
+    this->collider.elements[0].dim.scale = this->collider.elements[1].dim.scale = this->collider.elements[2].dim.scale =
+        this->collider.elements[3].dim.scale = this->collider.elements[4].dim.scale =
+            this->collider.elements[5].dim.scale = this->collider.elements[6].dim.scale =
+                this->collider.elements[7].dim.scale = 1.0f;
+    this->collider.elements[0].dim.modelSphere.radius = 150;
+    this->collider.elements[0].dim.modelSphere.center.x = 420;
+    this->collider.elements[1].dim.modelSphere.radius = 160;
+    this->collider.elements[1].dim.modelSphere.center.x = 630;
+    this->collider.elements[2].dim.modelSphere.radius = 130;
+    this->collider.elements[2].dim.modelSphere.center.x = 630;
+    this->collider.elements[3].dim.modelSphere.radius = 170;
+    this->collider.elements[3].dim.modelSphere.center.x = 920;
+    this->collider.elements[4].dim.modelSphere.radius = 150;
+    this->collider.elements[4].dim.modelSphere.center.x = 530;
+    this->collider.elements[5].dim.modelSphere.radius = 140;
+    this->collider.elements[5].dim.modelSphere.center.x = 730;
+    this->collider.elements[6].dim.modelSphere.radius = 120;
+    this->collider.elements[6].dim.modelSphere.center.x = 430;
+    this->collider.elements[7].dim.modelSphere.radius = 110;
+    this->collider.elements[7].dim.modelSphere.center.x = 160;
+    this->pythonIndex = EN_DRAGON_GET_PYTHON_INDEX(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_2BA = 0;
     this->actor.hintId = 0xE;
@@ -222,71 +219,72 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnDragon* this = THIS;
 
-    Collider_DestroyJntSph(globalCtx, &this->unk_2DC);
+    Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-AnimationHeader* D_80B60744[] = {
+AnimationHeader* animations[] = {
     &gDeepPythonSmallSideSwayAnim,
     &gDeepPythonLargeSideSwayAnim,
     &gDeepPythonVerticalSwayAnim,
     &gDeepPythonSmallSideSwayAnim,
 };
 
-u8 D_80B60754[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+u8 animationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
-void func_80B5EAA0(EnDragon* this, s32 arg1) {
-    f32 phi_f0;
+void func_80B5EAA0(EnDragon* this, s32 animationIndex) {
+    f32 startFrame;
 
-    this->unk_24C = arg1;
-    this->unk_2D0 = Animation_GetLastFrame(D_80B60744[arg1]);
-    phi_f0 = 0.0f;
-    if (this->unk_24C == 3) {
-        phi_f0 = this->unk_2D0;
+    this->animationIndex = animationIndex;
+    this->endFrame = Animation_GetLastFrame(animations[animationIndex]);
+    startFrame = 0.0f;
+    if (this->animationIndex == 3) {
+        startFrame = this->endFrame;
     }
 
-    Animation_Change(&this->skelAnime, D_80B60744[arg1], 1.0f, phi_f0, this->unk_2D0, D_80B60754[this->unk_24C], -4.0f);
+    Animation_Change(&this->skelAnime, animations[animationIndex], 1.0f, startFrame, this->endFrame,
+                     animationModes[this->animationIndex], -4.0f);
 }
 
-Color_RGBA8 D_80B60758[] = {
+Color_RGBA8 bubblePrimColors[] = {
     { 255, 255, 255, 255 },
     { 150, 255, 255, 255 },
     { 100, 255, 255, 255 },
 };
 
-Color_RGBA8 D_80B60764[] = {
+Color_RGBA8 bubbleEnvColors[] = {
     { 150, 150, 150, 0 },
     { 0, 100, 0, 255 },
     { 0, 0, 255, 255 },
 };
 
-void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2) {
-    static Vec3f D_80B60770 = { 0.0f, 0.0f, 0.0f };
-    static Vec3f D_80B6077C = { 0.0f, 0.1f, 0.0f };
-    s32 phi_v0;
-    s16 phi_s1;
-    s16 temp;
-    Vec3f sp9C;
+void func_80B5EB40(EnDragon* this, GlobalContext* globalCtx, Vec3f basePos) {
+    static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f bubbleAccel = { 0.0f, 0.1f, 0.0f };
+    s32 bubbleCount;
+    s16 colorIndex;
+    s16 scale;
+    Vec3f bubblePos;
     s32 i;
 
-    phi_v0 = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
-    phi_s1 = 0;
+    bubbleCount = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
+    colorIndex = 0;
     if (this->unk_2BA == 6) {
-        phi_s1 = 1;
-        phi_v0 = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
+        colorIndex = 1;
+        bubbleCount = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
     }
 
-    for (i = 0; i < phi_v0; i++) {
-        Math_Vec3f_Copy(&sp9C, &arg2);
-        D_80B60770.x = Rand_ZeroFloat(1.0f) * 23.0f;
-        D_80B60770.y = Rand_ZeroFloat(1.0f) * 10.0f;
-        D_80B60770.z = Rand_ZeroFloat(1.0f) * 23.0f;
-        sp9C.x += randPlusMinusPoint5Scaled(i * 30.0f);
-        sp9C.y += randPlusMinusPoint5Scaled(5.0f);
-        sp9C.z += randPlusMinusPoint5Scaled(i * 30.0f);
-        D_80B6077C.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
-        temp = Rand_S16Offset(380, 240);
-        EffectSsDtBubble_SpawnCustomColor(globalCtx, &sp9C, &D_80B60770, &D_80B6077C, &D_80B60758[phi_s1],
-                                          &D_80B60764[phi_s1], temp, 30, 0);
+    for (i = 0; i < bubbleCount; i++) {
+        Math_Vec3f_Copy(&bubblePos, &basePos);
+        bubbleVelocity.x = Rand_ZeroFloat(1.0f) * 23.0f;
+        bubbleVelocity.y = Rand_ZeroFloat(1.0f) * 10.0f;
+        bubbleVelocity.z = Rand_ZeroFloat(1.0f) * 23.0f;
+        bubblePos.x += randPlusMinusPoint5Scaled(i * 30.0f);
+        bubblePos.y += randPlusMinusPoint5Scaled(5.0f);
+        bubblePos.z += randPlusMinusPoint5Scaled(i * 30.0f);
+        bubbleAccel.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
+        scale = Rand_S16Offset(380, 240);
+        EffectSsDtBubble_SpawnCustomColor(globalCtx, &bubblePos, &bubbleVelocity, &bubbleAccel,
+                                          &bubblePrimColors[colorIndex], &bubbleEnvColors[colorIndex], scale, 30, 0);
     }
 }
 
@@ -357,14 +355,14 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
         sp38.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
         sp38.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
         this->actor.speedXZ = 40.0f;
-        Math_SmoothStepToS(&this->unk_2A8, 0xFA0, 5, 0xBB8, 0x14);
+        Math_SmoothStepToS(&this->jawZRotation, 0xFA0, 5, 0xBB8, 0x14);
 
         if ((fabsf(this->actor.world.pos.x - sp38.x) < 51.0f) && (fabsf(this->actor.world.pos.z - sp38.z) < 51.0f)) {
             this->actor.speedXZ = 0.0f;
             Math_ApproachF(&this->actor.world.pos.x, sp38.x, 0.3f, 50.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp38.z, 0.3f, 50.0f);
             if ((fabsf(this->actor.world.pos.x - sp38.x) < 4.0f) && (fabsf(this->actor.world.pos.z - sp38.z) < 4.0f)) {
-                if (this->unk_24C != 1) {
+                if (this->animationIndex != 1) {
                     func_80B5EAA0(this, 1);
                 }
 
@@ -372,10 +370,10 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
             }
         }
     } else {
-        Math_SmoothStepToS(&this->unk_2A8, 0, 5, 0xBB8, 0x14);
+        Math_SmoothStepToS(&this->jawZRotation, 0, 5, 0xBB8, 0x14);
         SkelAnime_Update(&this->skelAnime);
         if (this->unk_2BE == 1) {
-            if (currentFrame < this->unk_2D0) {
+            if (currentFrame < this->endFrame) {
                 return;
             }
             this->unk_2BE = 2;
@@ -383,8 +381,8 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
 
         phi_v1 = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->unk_254, &player->actor.world.pos), this->actor.shape.rot.y));
         if (phi_v1 < 0x5000) {
-            if ((this->unk_2D0 <= currentFrame) && (this->unk_2B2 == 0)) {
-                if (this->unk_24C != 1) {
+            if ((this->endFrame <= currentFrame) && (this->unk_2B2 == 0)) {
+                if (this->animationIndex != 1) {
                     func_80B5EAA0(this, 1);
                 }
 
@@ -395,7 +393,7 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
         } else {
             if (this->unk_2BE == 2) {
                 func_80B5EAA0(this, 0);
-                this->unk_2B2 = Rand_ZeroFloat(20.0f) + this->unk_2D0;
+                this->unk_2B2 = Rand_ZeroFloat(20.0f) + this->endFrame;
                 this->unk_2BE = 3;
             }
 
@@ -409,11 +407,11 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80B5F3A4(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2, Vec3f arg3) {
-    this->unk_2C8 = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
-    Math_Vec3f_Copy(&this->unk_278, &arg2);
-    Math_Vec3f_Copy(&this->unk_284, &arg3);
-    Play_CameraSetAtEye(globalCtx, this->unk_2C8, &this->unk_284, &this->unk_278);
+void func_80B5F3A4(EnDragon* this, GlobalContext* globalCtx, Vec3f eye, Vec3f at) {
+    this->cameraId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+    Math_Vec3f_Copy(&this->cameraEye, &eye);
+    Math_Vec3f_Copy(&this->cameraAt, &at);
+    Play_CameraSetAtEye(globalCtx, this->cameraId, &this->cameraAt, &this->cameraEye);
 }
 
 void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
@@ -459,7 +457,7 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
     Vec3f sp50;
     Vec3f sp44;
 
-    this->unk_2C8 = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+    this->cameraId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
     SkelAnime_Update(&this->skelAnime);
 
     if (this->unk_2CA == 0) {
@@ -475,27 +473,27 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
         sp50.x += Math_SinS(this->actor.world.rot.y) * -930.0f;
         sp50.z += Math_CosS(this->actor.world.rot.y) * -930.0f;
         Math_Vec3f_Copy(&this->actor.world.pos, &sp50);
-        this->unk_2A8 = 0x1450;
+        this->jawZRotation = 0x1450;
         this->actor.speedXZ = 60.0f;
     }
 
     this->unk_2CA++;
-    Math_SmoothStepToS(&this->actor.shape.rot.z, D_80B60848[this->unk_250], 0xA, 0x1F4, 0x14);
+    Math_SmoothStepToS(&this->actor.shape.rot.z, D_80B60848[this->pythonIndex], 0xA, 0x1F4, 0x14);
     func_80B5EB40(this, globalCtx, this->unk_254);
 
     Math_Vec3f_Copy(&sp50, &this->unk_260);
-    sp50.x += Math_SinS(this->actor.world.rot.y) * D_80B60788[this->unk_250].x;
-    sp50.y += D_80B60788[this->unk_250].y;
-    sp50.z += Math_CosS(this->actor.world.rot.y) * D_80B60788[this->unk_250].z;
+    sp50.x += Math_SinS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].x;
+    sp50.y += D_80B60788[this->pythonIndex].y;
+    sp50.z += Math_CosS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].z;
 
     Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
-    sp44.x += Math_SinS(this->actor.world.rot.y) * D_80B607E8[this->unk_250].x;
-    sp44.y += D_80B607E8[this->unk_250].y;
-    sp44.z += Math_CosS(this->actor.world.rot.y) * D_80B607E8[this->unk_250].z;
+    sp44.x += Math_SinS(this->actor.world.rot.y) * D_80B607E8[this->pythonIndex].x;
+    sp44.y += D_80B607E8[this->pythonIndex].y;
+    sp44.z += Math_CosS(this->actor.world.rot.y) * D_80B607E8[this->pythonIndex].z;
 
     func_80B5F3A4(this, globalCtx, sp50, sp44);
 
-    if (D_80B60858[this->unk_250] < this->unk_2CA) {
+    if (D_80B60858[this->pythonIndex] < this->unk_2CA) {
         if (this->unk_2BE == 0) {
             func_800B7298(globalCtx, &this->actor, 6U);
             this->unk_2BE = 1;
@@ -511,7 +509,7 @@ void func_80B5F508(EnDragon* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5F888(EnDragon* this) {
-    if (this->unk_24C != 1) {
+    if (this->animationIndex != 1) {
         func_80B5EAA0(this, 1);
     }
 
@@ -555,7 +553,7 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
     player->actor.world.rot.x = player->actor.shape.rot.x = this->actor.world.rot.x;
     player->actor.world.rot.z = player->actor.shape.rot.z = this->actor.world.rot.z - 0x36B0;
     Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_26C);
-    this->unk_2A8 = 0xC8;
+    this->jawZRotation = 0xC8;
 
     Math_Vec3f_Copy(&sp4C, &this->unk_260);
     sp4C.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
@@ -564,18 +562,18 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.world.pos.y, sp4C.y, 0.3f, 200.0f);
     Math_ApproachF(&this->actor.world.pos.z, sp4C.z, 0.3f, 200.0f);
 
-    if ((this->unk_2BE <= 0) && (this->unk_2D0 <= currentFrame)) {
+    if ((this->unk_2BE <= 0) && (this->endFrame <= currentFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
-        if (this->unk_24C != 1) {
+        if (this->animationIndex != 1) {
             func_80B5EAA0(this, 1);
         }
         this->unk_2BE += 1;
     }
 
-    if (((this->unk_2BE != 0) && (this->unk_2D0 <= currentFrame)) || (!(player->stateFlags2 & 0x80)) ||
-        ((this->unk_2DC.elements[0].info.bumperFlags & BUMP_HIT)) ||
-        (this->unk_2DC.elements[1].info.bumperFlags & BUMP_HIT) ||
-        (this->unk_2DC.elements[2].info.bumperFlags & BUMP_HIT)) {
+    if (((this->unk_2BE != 0) && (this->endFrame <= currentFrame)) || (!(player->stateFlags2 & 0x80)) ||
+        ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
+        (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
+        (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
         this->unk_2B6 = 0x1E;
         ActorCutscene_Stop(this->unk_2C0);
@@ -585,7 +583,7 @@ void func_80B5F8D8(EnDragon* this, GlobalContext* globalCtx) {
 
         this->actor.flags &= ~ACTOR_FLAG_100000;
 
-        if ((this->unk_2BE != 0) && (this->unk_2D0 <= currentFrame)) {
+        if ((this->unk_2BE != 0) && (this->endFrame <= currentFrame)) {
             this->unk_2B4 = 3;
             this->actionFunc = func_80B5ED90;
         } else {
@@ -599,7 +597,7 @@ void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
         ActorCutscene_SetIntentToPlay(this->unk_2C2);
     } else {
         ActorCutscene_StartAndSetUnkLinkFields(this->unk_2C2, &this->actor);
-        this->unk_2D0 = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
+        this->endFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
         Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
         this->unk_2B4 = 0x14;
         this->actionFunc = func_80B5FD68;
@@ -611,13 +609,13 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.rot.z += 0x1000;
-    this->unk_2A8 = 0xFA0;
+    this->jawZRotation = 0xFA0;
     func_80B5EB40(this, globalCtx, this->unk_254);
 
     if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 121.0f) &&
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
         this->actor.speedXZ = -120.0f;
-        if (((this->unk_250 & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
+        if (((this->pythonIndex & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
             if (((!globalCtx->gameplayFrames) & 0x1F)) {
                 Item_DropCollectibleRandom(globalCtx, NULL, &this->unk_254, 0x90);
             }
@@ -644,7 +642,7 @@ void func_80B5FD68(EnDragon* this, GlobalContext* globalCtx) {
                                           this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene, this->actor.unk20,
                                           NULL)) {
             gSaveContext.weekEventReg[0xD] |= 1;
-            switch (this->unk_250) {
+            switch (this->pythonIndex) {
                 case 0:
                     gSaveContext.weekEventReg[0x53] |= 0x10;
                     break;
@@ -686,12 +684,12 @@ void func_80B60138(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u32 sp30;
 
-    if ((this->unk_2BA == 1) && ((this->unk_2DC.elements[2].info.bumperFlags & BUMP_HIT) ||
-                                 (this->unk_2DC.elements[3].info.bumperFlags & BUMP_HIT) ||
-                                 (this->unk_2DC.elements[4].info.bumperFlags & BUMP_HIT) ||
-                                 (this->unk_2DC.elements[5].info.bumperFlags & BUMP_HIT) ||
-                                 (this->unk_2DC.elements[6].info.bumperFlags & BUMP_HIT) ||
-                                 (this->unk_2DC.elements[7].info.bumperFlags & BUMP_HIT))) {
+    if ((this->unk_2BA == 1) && ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
+                                 (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
+                                 (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
+                                 (this->collider.elements[5].info.bumperFlags & BUMP_HIT) ||
+                                 (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
+                                 (this->collider.elements[7].info.bumperFlags & BUMP_HIT))) {
         Actor_ApplyDamage(&this->actor);
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
         if (this->actor.colChkInfo.health > 0) {
@@ -709,7 +707,7 @@ void func_80B60138(EnDragon* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2BA == 1) && (this->unk_2B6 == 0) && (player->invincibilityTimer == 0) &&
-        (this->unk_2DC.elements[0].info.ocElemFlags & OCELEM_HIT) &&
+        (this->collider.elements[0].info.ocElemFlags & OCELEM_HIT) &&
         (!(func_800B64FC(globalCtx, 1000.0f, &this->actor.world.pos, &sp30) >= 0.0f) || (sp30 != 1))) {
         this->actor.speedXZ = 0.0f;
         this->unk_2BA = 2;
@@ -748,12 +746,12 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
 
     if (this->unk_2BA != 2) {
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->unk_2DC.base);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 
     if (this->unk_2BA < 3) {
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->unk_2DC.base);
-        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->unk_2DC.base);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
 
@@ -761,9 +759,9 @@ s32 func_80B6043C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     EnDragon* this = THIS;
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
-        rot->x += this->unk_2AC;
-        rot->y += this->unk_2AA;
-        rot->z += this->unk_2A8;
+        rot->x += this->jawXRotation;
+        rot->y += this->jawYRotation;
+        rot->z += this->jawZRotation;
     }
 
     return false;
@@ -785,7 +783,7 @@ void func_80B60494(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_29C);
     }
 
-    Collider_UpdateSpheres(limbIndex, &this->unk_2DC);
+    Collider_UpdateSpheres(limbIndex, &this->collider);
 }
 
 void EnDragon_Draw(Actor* thisx, GlobalContext* globalCtx) {
