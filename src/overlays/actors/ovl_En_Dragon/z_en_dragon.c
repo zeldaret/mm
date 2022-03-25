@@ -477,7 +477,17 @@ void func_80B5F888(EnDragon* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F8D8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5FCC0.s")
+void func_80B5FCC0(EnDragon* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->unk_2C2) == 0) {
+        ActorCutscene_SetIntentToPlay(this->unk_2C2);
+    } else {
+        ActorCutscene_StartAndSetUnkLinkFields(this->unk_2C2, &this->actor);
+        this->unk_2D0 = Animation_GetLastFrame(&object_utubo_Anim_0048B8);
+        Animation_Change(&this->skelAnime, &object_utubo_Anim_0048B8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
+        this->unk_2B4 = 0x14;
+        this->actionFunc = func_80B5FD68;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5FD68.s")
 
