@@ -9,7 +9,9 @@ typedef void (*ObjGrassCarryActionFunc)(struct ObjGrassCarry*, GlobalContext*);
 
 typedef struct ObjGrassCarry {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x58];
+    /* 0x0144 */ char unk_144[0x4C];
+    /* 0x0190 */ s32 unk_190;
+    /* 0x0194 */ char unk_194[0x8];
     /* 0x019C */ ObjGrassCarryActionFunc actionFunc;
 } ObjGrassCarry; // size = 0x1A0
 

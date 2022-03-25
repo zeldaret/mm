@@ -159,8 +159,8 @@ void EnGirlA_SetupAction(EnGirlA* this, EnGirlAActionFunc action) {
 void EnGirlA_InitObjIndex(EnGirlA* this, GlobalContext* globalCtx) {
     s16 params = this->actor.params;
 
-    //! @bug: Condition is impossible
-    if (params >= 43 && params < 0) {
+    //! @bug: Condition is impossible, && should be an ||
+    if (params >= SI_MAX && params < SI_POTION_RED_1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -377,24 +377,24 @@ s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this) {
 
 void EnGirlA_BuyBottleItem(GlobalContext* globalCtx, EnGirlA* this) {
     switch (this->actor.params) {
-        case 0:
-        case 10:
-        case 18:
-        case 29:
-        case 32:
-        case 35:
+        case SI_POTION_RED_1:
+        case SI_POTION_RED_2:
+        case SI_POTION_RED_3:
+        case SI_POTION_RED_4:
+        case SI_POTION_RED_5:
+        case SI_POTION_RED_6:
             Item_Give(globalCtx, ITEM_POTION_RED);
             break;
-        case 1:
-        case 5:
-        case 14:
+        case SI_POTION_GREEN_1:
+        case SI_POTION_GREEN_2:
+        case SI_POTION_GREEN_3:
             Item_Give(globalCtx, ITEM_POTION_GREEN);
             break;
-        case 2:
+        case SI_POTION_BLUE:
             Item_Give(globalCtx, ITEM_POTION_BLUE);
             break;
-        case 3:
-        case 11:
+        case SI_FAIRY_1:
+        case SI_FAIRY_2:
             Item_Give(globalCtx, ITEM_FAIRY);
             break;
     }
