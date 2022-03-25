@@ -27,7 +27,7 @@
  * - This actor mainly handles the 3 cutscenes it has manually (instead of relying on existing systems for it)
  *
  * Main behaviour:
- * - Gyorg has two branches on Gyorg's behaviour depending on Player's state:
+ * - Gyorg has two types of behaviour depending on Player's state:
  *   - If Player is standing on the main platform, then Gyorg follows the PrepareCharge -> Charge -> JumpOverPlatform
  * branch
  *   - Otherwise, Gyorg follows the ChasePlayer -> CatchPlayer -> ChewPlayer
