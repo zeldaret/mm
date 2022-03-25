@@ -5,6 +5,7 @@
 #include "z64skin.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_ha/object_ha.h"
 
 struct EnHorse;
 
