@@ -430,7 +430,12 @@ void func_80B5EFD0(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dragon/func_80B5F3A4.s")
+void func_80B5F3A4(EnDragon* this, GlobalContext* globalCtx, Vec3f arg2, Vec3f arg3) {
+    this->unk_2C8 = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
+    Math_Vec3f_Copy(&this->unk_278, &arg2);
+    Math_Vec3f_Copy(&this->unk_284, &arg3);
+    Play_CameraSetAtEye(globalCtx, this->unk_2C8, &this->unk_284, &this->unk_278);
+}
 
 void func_80B5F418(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
