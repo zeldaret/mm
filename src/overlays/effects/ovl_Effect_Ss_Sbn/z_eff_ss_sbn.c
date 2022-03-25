@@ -29,14 +29,16 @@ const EffectSsInit Effect_Ss_Sbn_InitVars = {
     EffectSsSbn_Init,
 };
 
-TexturePtr sEffectSbnSlidingTextures[] = {
-    gEffectSbnSliding1Tex, gEffectSbnSliding2Tex,  gEffectSbnSliding3Tex,  gEffectSbnSliding4Tex,
-    gEffectSbnSliding5Tex, gEffectSbnSliding6Tex,  gEffectSbnSliding7Tex,  gEffectSbnSliding8Tex,
-    gEffectSbnSliding9Tex, gEffectSbnSliding10Tex, gEffectSbnSliding11Tex, gEffectSbnSliding12Tex,
+static TexturePtr sSlidingTextures[] = {
+    gEffPoppedDekuBubbleSliding1Tex,  gEffPoppedDekuBubbleSliding2Tex,  gEffPoppedDekuBubbleSliding3Tex,
+    gEffPoppedDekuBubbleSliding4Tex,  gEffPoppedDekuBubbleSliding5Tex,  gEffPoppedDekuBubbleSliding6Tex,
+    gEffPoppedDekuBubbleSliding7Tex,  gEffPoppedDekuBubbleSliding8Tex,  gEffPoppedDekuBubbleSliding9Tex,
+    gEffPoppedDekuBubbleSliding10Tex, gEffPoppedDekuBubbleSliding11Tex, gEffPoppedDekuBubbleSliding12Tex,
 };
 
-TexturePtr sEffectSbnTextures[] = {
-    gEffectSbn1Tex, gEffectSbn2Tex, gEffectSbn3Tex, gEffectSbn4Tex, gEffectSbn5Tex,
+static TexturePtr sTextures[] = {
+    gEffPoppedDekuBubble1Tex, gEffPoppedDekuBubble2Tex, gEffPoppedDekuBubble3Tex,
+    gEffPoppedDekuBubble4Tex, gEffPoppedDekuBubble5Tex,
 };
 
 u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
@@ -44,8 +46,8 @@ u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* 
     CollisionPoly* colPoly;
     MtxF mtx;
     Vec3f normal;
-    Vec3f sp40;
-    Vec3f sp34;
+    Vec3f colPolyVec;
+    Vec3f bubbleVec;
     f32 angle;
     f32 opposite;
 
@@ -53,7 +55,10 @@ u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* 
     Math_Vec3f_Copy(&this->velocity, &gZeroVec3f);
     Math_Vec3f_Copy(&this->accel, &gZeroVec3f);
     this->flags = 0;
-    this->gfx = initParams->colPoly; // Uses the gfx field to store a collisionPoly
+
+    // Note: The gfx field is used to store the colPoly
+    // This is not a problem since gfx is already void*
+    this->gfx = initParams->colPoly;
 
     this->rScroll = 0;
     this->rScrollStep = 7;
@@ -86,30 +91,31 @@ u32 EffectSsSbn_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* 
             return 1;
         }
         if (normal.y > 0.05f) {
-            sp40.x = normal.x * 10.0f;
-            sp40.y = (-(SQ(normal.x) + SQ(normal.z)) * 10.0f) / normal.y;
-            sp40.z = normal.z * 10.0f;
+            colPolyVec.x = normal.x * 10.0f;
+            colPolyVec.y = (-(SQ(normal.x) + SQ(normal.z)) * 10.0f) / normal.y;
+            colPolyVec.z = normal.z * 10.0f;
         } else if (normal.y < -0.05f) {
-            sp40.x = -normal.x * 10.0f;
-            sp40.y = (-(SQ(normal.x) + SQ(normal.z)) * 10.0f) / -normal.y;
-            sp40.z = -normal.z * 10.0f;
+            colPolyVec.x = -normal.x * 10.0f;
+            colPolyVec.y = (-(SQ(normal.x) + SQ(normal.z)) * 10.0f) / -normal.y;
+            colPolyVec.z = -normal.z * 10.0f;
         } else {
-            sp40.x = 0.0f;
-            sp40.y = -10.0f;
-            sp40.z = 0.0f;
+            colPolyVec.x = 0.0f;
+            colPolyVec.y = -10.0f;
+            colPolyVec.z = 0.0f;
         }
-        sp34.x = -mtx.mf[2][0] * 10.0f;
-        sp34.y = -mtx.mf[2][1] * 10.0f;
-        sp34.z = -mtx.mf[2][2] * 10.0f;
-        Math3D_AngleBetweenVectors(&sp40, &sp34, &angle);
+        bubbleVec.x = -mtx.mf[2][0] * 10.0f;
+        bubbleVec.y = -mtx.mf[2][1] * 10.0f;
+        bubbleVec.z = -mtx.mf[2][2] * 10.0f;
+        Math3D_AngleBetweenVectors(&colPolyVec, &bubbleVec, &angle);
 
         opposite = (SQ(angle) >= 1.0f) ? 0.0f : sqrtf(1.0f - SQ(angle));
-        if (((mtx.mf[0][0] * sp40.x) + (mtx.mf[0][1] * sp40.y) + (mtx.mf[0][2] * sp40.z)) < 0.0f) {
+        if (((mtx.mf[0][0] * colPolyVec.x) + (mtx.mf[0][1] * colPolyVec.y) + (mtx.mf[0][2] * colPolyVec.z)) < 0.0f) {
             this->rRotAngle = Math_FAtan2F(angle, opposite);
         } else {
             this->rRotAngle = -Math_FAtan2F(angle, opposite);
         }
     }
+
     return 1;
 }
 
@@ -132,16 +138,16 @@ void EffectSsSbn_DrawSliding(GlobalContext* globalCtx, u32 index, EffectSs* this
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);
 
-    if (this->rTexIndex < ARRAY_COUNT(sEffectSbnSlidingTextures)) {
+    if (this->rTexIndex < ARRAY_COUNT(sSlidingTextures)) {
         {
-            TexturePtr tex = sEffectSbnSlidingTextures[this->regs[2]];
+            TexturePtr tex = sSlidingTextures[this->rTexIndex];
 
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(tex));
         }
         this->rTexIndex++;
         this->rScroll += this->rScrollStep;
     } else {
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffectSbnSliding12Tex));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffPoppedDekuBubbleSliding12Tex));
         if ((this->rScrollStep >= 2) && ((globalCtx->state.frames % 2) == 0)) {
             this->rScrollStep--;
         }
@@ -149,7 +155,7 @@ void EffectSsSbn_DrawSliding(GlobalContext* globalCtx, u32 index, EffectSs* this
     }
     gSPSegment(POLY_XLU_DISP++, 0x09,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, this->rScroll, 0x20, 0x20));
-    gSPDisplayList(POLY_XLU_DISP++, gEffectSbnSlidingDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffPoppedDekuBubbleSlidingDL);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -172,17 +178,17 @@ void EffectSsSbn_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_XLU_DECAL2);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->rAlpha);
 
-    if (this->rTexIndex < ARRAY_COUNT(sEffectSbnTextures)) {
+    if (this->rTexIndex < ARRAY_COUNT(sTextures)) {
         {
-            TexturePtr tex = sEffectSbnTextures[this->rTexIndex];
+            TexturePtr tex = sTextures[this->rTexIndex];
 
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(tex));
         }
         this->rTexIndex++;
     } else {
-        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffectSbn5Tex));
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffPoppedDekuBubble5Tex));
     }
-    gSPDisplayList(POLY_XLU_DISP++, gEffectSbnDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffPoppedDekuBubbleDL);
 
     CLOSE_DISPS(gfxCtx);
 }
