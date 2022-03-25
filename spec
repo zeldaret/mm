@@ -2642,8 +2642,7 @@ beginseg
     name "ovl_Obj_Skateblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Skateblock/z_obj_skateblock.o"
-    include "build/data/ovl_Obj_Skateblock/ovl_Obj_Skateblock.data.o"
-    include "build/data/ovl_Obj_Skateblock/ovl_Obj_Skateblock.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Skateblock/ovl_Obj_Skateblock_reloc.o"
 endseg
 
 beginseg
