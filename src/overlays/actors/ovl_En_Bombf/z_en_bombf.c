@@ -181,7 +181,7 @@ void func_808AEAE0(EnBombf* this, GlobalContext* globalCtx) {
                 }
             }
         } else {
-            if (func_80123F48(globalCtx, &this->actor.world.pos, 30.0f, 50.0f)) {
+            if (Player_IsBurningStickInRange(globalCtx, &this->actor.world.pos, 30.0f, 50.0f)) {
                 bombf = (EnBombf*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_BOMBF, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, ENBOMBF_0);
                 if (bombf != NULL) {
@@ -364,7 +364,8 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
             ((this->colliderCylinder.base.ocFlags1 & OC1_HIT) && (this->colliderCylinder.base.oc->category == 5))) {
             this->unk_1F8 = 1;
             this->timer = 0;
-        } else if ((this->timer > 100) && func_80123F48(globalCtx, &this->actor.world.pos, 30.0f, 50.0f)) {
+        } else if ((this->timer > 100) &&
+                   Player_IsBurningStickInRange(globalCtx, &this->actor.world.pos, 30.0f, 50.0f)) {
             this->timer = 100;
         }
 
