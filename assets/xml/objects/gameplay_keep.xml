@@ -1003,7 +1003,7 @@
         <Animation Name="gameplay_keep_Anim_02F0EC" Offset="0x2F0EC" />
         <Texture Name="gameplay_keep_Tex_02F100" OutName="tex_02F100" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gameplay_keep_DL_030100" Offset="0x30100" /> <!-- Floor shockwave ring -->
-        <DList Name="gameplay_keep_DL_0301B0" Offset="0x301B0" />
+        <DList Name="gEffBubbleDL" Offset="0x301B0" />
         <Texture Name="gameplay_keep_Tex_030270" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
         <Texture Name="gameplay_keep_Tex_030670" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
         <Texture Name="gameplay_keep_Tex_030A70" OutName="tex_030A70" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
@@ -1423,8 +1423,8 @@
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
         <Texture Name="gameplay_keep_Tex_0913E0" OutName="tex_0913E0" Format="i8" Width="32" Height="64" Offset="0x913E0" />
-        <Texture Name="gameplay_keep_Tex_091BE0" OutName="tex_091BE0" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
-        <Texture Name="gameplay_keep_Tex_091CE0" OutName="tex_091CE0" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
+        <Texture Name="gEffBubble1Tex" OutName="eff_bubble_1" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
+        <Texture Name="gEffBubble2Tex" OutName="eff_bubble_2" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
         
         <!-- Electric spark textures from Zora-Form attack -->
         <Texture Name="gElectricSpark1Tex" OutName="electric_spark_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />
