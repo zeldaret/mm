@@ -1565,7 +1565,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
 
         case 1:
             if (this->unk_240 == 0x96) {
-                Audio_QueueSeqCmd(0x8021);
+                Audio_QueueSeqCmd(NA_BGM_CLEAR_BOSS | 0x8000);
             }
             Math_ApproachF(&this->unk_56C, 0.01f, 1.0f, 0.0005f);
             Math_ApproachF(&this->actor.scale.x, 0.01f, 0.05f, 0.001f);
