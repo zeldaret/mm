@@ -447,6 +447,12 @@ animdict = {
     "func_8013D924": "SubS_GetObjectIndex",
     "func_8013D5E8": "SubS_AngleDiffLessEqual",
     "func_8012F22C": "Inventory_GetSkullTokenCount",
+    "func_8013DCE0": "SubS_ActorPathing_Init",
+    "func_8013DE04": "SubS_ActorPathing_Update",
+    "func_8013DF3C": "SubS_ActorPathing_ComputePointInfo",
+    "func_8013E054": "SubS_ActorPathing_MoveWithGravity",
+    "func_8013E07C": "SubS_ActorPathing_MoveWithoutGravityReverse",
+    "func_8013E0A4": "SubS_ActorPathing_SetNextPoint",
 
     # Struct members
     "skelAnime.unk03": "skelAnime.taper",
@@ -487,6 +493,7 @@ animdict = {
     "player->unk_38C": "player->mountSide",
     "player->unk_394": "player->csMode",
     "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
+    "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
     "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
     "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
