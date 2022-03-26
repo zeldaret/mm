@@ -30,7 +30,7 @@
  * - Gyorg has two types of behaviour depending on Player's state:
  *   - If Player is standing on the main platform, then Gyorg follows the PrepareCharge -> Charge -> JumpOverPlatform
  * branch
- *   - Otherwise, Gyorg follows the ChasePlayer -> CatchPlayer -> ChewPlayer
+ *   - Otherwise, Gyorg follows the ChasePlayer -> CatchPlayer -> ChewPlayer branch
  * - The main actionFunc which decides which branch should be taken is func_809E34B8
  * - Most of the actions of those two branches are constantly checking for the WORK_TIMER_CURRENT_ACTION timer. If it
  * runs out, then the behaviour resets back to func_809E34B8
