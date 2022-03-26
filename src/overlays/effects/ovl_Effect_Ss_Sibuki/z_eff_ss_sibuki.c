@@ -38,7 +38,7 @@ u32 EffectSsSibuki_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, voi
     this->accel = initParams->accel;
 
     {
-        TexturePtr tex = (KREG(2) != 0) ? gameplay_keep_Tex_091CE0 : gameplay_keep_Tex_091BE0;
+        TexturePtr tex = (KREG(2) != 0) ? gEffBubble2Tex : gEffBubble1Tex;
 
         this->gfx = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(tex));
     }
@@ -74,7 +74,7 @@ void EffectSsSibuki_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, this->rPrimColorA);
     gDPSetEnvColor(POLY_OPA_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rEnvColorA);
     gSPSegment(POLY_OPA_DISP++, 0x08, this->gfx);
-    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0301B0);
+    gSPDisplayList(POLY_OPA_DISP++, gEffBubbleDL);
 
     CLOSE_DISPS(gfxCtx);
 }
