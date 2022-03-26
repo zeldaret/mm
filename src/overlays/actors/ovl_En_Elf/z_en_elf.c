@@ -363,7 +363,7 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
         case 1:
             colorConfig = -1;
-            gSaveContext.unk_1016 = 0;
+            gSaveContext.jinxTimer = 0;
             EnElf_SetupAction(this, func_8088E0F0);
             this->unk_254 = Math_Vec3f_DistXZ(&thisx->world.pos, &player->actor.world.pos);
             this->unk_248 = player->actor.shape.rot.y;
@@ -677,7 +677,7 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
         if (this->fairyFlags & 0x200) {
             Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.doubleMagic * 0x30) + 0x30);
         }
-        gSaveContext.unk_1016 = 0;
+        gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
         this->unk_248 = refActor->actor.shape.rot.y;
         this->unk_24C = -0x1000;
