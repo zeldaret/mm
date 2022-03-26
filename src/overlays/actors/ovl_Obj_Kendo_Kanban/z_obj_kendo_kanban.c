@@ -228,7 +228,9 @@ void func_80B658A4(ObjKendoKanban* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk_30C == OBJKENDOKANBAN_F_0) {
-        if ((player->meleeWeaponAnimation == 0) || (player->meleeWeaponAnimation == 1) || (player->meleeWeaponAnimation == 0x14)) {
+        if ((player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) ||
+            (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_2H) ||
+            (player->meleeWeaponAnimation == PLAYER_MWA_JUMPSLASH_FINISH)) {
             this->unk_30C = (OBJKENDOKANBAN_F_4 | OBJKENDOKANBAN_F_1);
             this->unk_304 = 0x71C;
             this->actor.velocity = D_80B6666C;

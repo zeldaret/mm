@@ -208,7 +208,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
 
     if (player->unk_ADC != 0) {
         phi_s2 = &player->meleeWeaponInfo[0].tip;
-        if (player->meleeWeaponAnimation >= 30) {
+        if (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) {
             phi_f28 = 2500.0f;
         } else {
             phi_f28 = 400.0f;
