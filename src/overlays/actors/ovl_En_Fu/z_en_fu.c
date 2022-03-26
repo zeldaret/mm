@@ -4,11 +4,11 @@
  * Description: Honey & Darling
  */
 
+#include "z_en_fu.h"
 #include "overlays/actors/ovl_En_Fu_Mato/z_en_fu_mato.h"
 #include "overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.h"
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "z_en_fu.h"
 #include "objects/object_mu/object_mu.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
