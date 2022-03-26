@@ -213,7 +213,7 @@ void func_80B9E7D0(MirRay3Struct* ptr) {
     }
 }
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) {
     Player* player = GET_PLAYER(globalCtx);
     s32 i;
