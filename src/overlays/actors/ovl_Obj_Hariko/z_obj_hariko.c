@@ -16,10 +16,10 @@ void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B66A90(ObjHariko* this, GlobalContext* globalCtx);
-void func_80B66AC4(ObjHariko* this, GlobalContext* globalCtx);
-void func_80B66A7C(ObjHariko* this);
-void func_80B66B78(Actor *thisx);
+void ObjHariko_NoAction(ObjHariko* this, GlobalContext* globalCtx);
+void ObjHariko_BobHead(ObjHariko* this, GlobalContext* globalCtx);
+void ObjHariko_SetNoAction(ObjHariko* this);
+void ObjHariko_CheckForQuakes(Actor* thisx);
 
 const ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
@@ -33,65 +33,65 @@ const ActorInit Obj_Hariko_InitVars = {
     (ActorFunc)ObjHariko_Draw,
 };
 
-void ObjHariko_Init(Actor* thisx, GlobalContext* globalCtx){
-    ObjHariko *this = THIS;
+void ObjHariko_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjHariko* this = THIS;
     Actor_SetScale(&this->actor, 0.1f);
-    this->unk14C = 0;
-    this->unk14E = 0;
-    this->unk150 = 0;
-    this->unk152 = 0;
-    this->unk148 = 0.0f;
-    func_80B66A7C(this);
+    this->headRotation.x = 0;
+    this->headRotation.y = 0;
+    this->headRotation.z = 0;
+    this->headOffset = 0;
+    this->bobbleStep = 0.0f;
+    ObjHariko_SetNoAction(this);
 }
 
-void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx){ }
-
-void func_80B66A7C(ObjHariko* this) {
-    this->actionFunc = func_80B66A90;
+void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
-void func_80B66A90 (ObjHariko* this, GlobalContext* globalCtx) {
-
+void ObjHariko_SetNoAction(ObjHariko* this) {
+    this->actionFunc = ObjHariko_NoAction;
 }
 
-void func_80B66AA0(Actor* thisx) {
-    ObjHariko *this = THIS;
-    this->unk148 = 2730.0f;
+void ObjHariko_NoAction(ObjHariko* this, GlobalContext* globalCtx) {
+}
+
+void ObjHariko_StartBobbing(Actor* thisx) {
+    ObjHariko* this = THIS;
+    this->bobbleStep = 2730.0f;
     this->unk154 = 0;
-    this->actionFunc = func_80B66AC4;
+    this->actionFunc = ObjHariko_BobHead;
 }
 
-void func_80B66AC4(ObjHariko* this, GlobalContext* globalCtx) {
-    this->unk152 = (s16) this->unk152 + 0x1555;
-    this->unk14C = (s16) (Math_SinS(this->unk152) * this->unk148);
-    this->unk14E = (s16) (Math_CosS(this->unk152) * this->unk148);
-    Math_SmoothStepToF(&this->unk148, 0, 0.5f, 18.0f, 18.0f);
-    if (this->unk148 < 182.0f) {
-        func_80B66A7C(this);
+void ObjHariko_BobHead(ObjHariko* this, GlobalContext* globalCtx) {
+    this->headOffset = this->headOffset + 5461;
+    this->headRotation.x = Math_SinS(this->headOffset) * this->bobbleStep;
+    this->headRotation.y = Math_CosS(this->headOffset) * this->bobbleStep;
+    Math_SmoothStepToF(&this->bobbleStep, 0, 0.5f, 18.0f, 18.0f);
+    if (this->bobbleStep < 182.0f) {
+        ObjHariko_SetNoAction(this);
     }
 }
 
-void func_80B66B78(Actor *thisx) {
+void ObjHariko_CheckForQuakes(Actor* thisx) {
     if (Quake_NumActiveQuakes() != 0) {
-        func_80B66AA0(thisx);
+        ObjHariko_StartBobbing(thisx);
     }
 }
 
 void ObjHariko_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHariko *this = THIS;
+    ObjHariko* this = THIS;
     this->actionFunc(this, globalCtx);
-    func_80B66B78(thisx);
+    ObjHariko_CheckForQuakes(thisx);
 }
 
 void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    ObjHariko *this = THIS;
+    ObjHariko* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
 
     Matrix_StatePush();
-    Matrix_InsertXRotation_s(this->unk14C, 1);
-    Matrix_RotateY(this->unk14E, 1);
+    Matrix_InsertXRotation_s(this->headRotation.x, 1);
+    Matrix_RotateY(this->headRotation.y, 1);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_hariko_DL_000080);
