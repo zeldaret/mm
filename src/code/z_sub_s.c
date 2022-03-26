@@ -293,6 +293,7 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     if (pathIndex == max) {
         return NULL;
     }
+
     while (pathIndex != 0xFF) {
         path = &globalCtx->setupPathList[pathIndex];
         if (sPathDayFlags[day] & path->unk2) {
@@ -301,12 +302,14 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
         }
         pathIndex = path->unk1;
     }
+
     if (found == true) {
         *startPointIndex = time;
         *startPointIndex = CLAMP(*startPointIndex, 0, path->count - 1);
     } else {
         *startPointIndex = 0;
     }
+    
     return path;
 }
 
