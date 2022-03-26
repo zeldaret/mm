@@ -50,9 +50,9 @@ typedef struct EnNiw {
     /* 0x258 */ s16 flutterSfxTimer;
     /* 0x25A */ s16 unusedTimer25A;
     /* 0x25C */ s16 yawTimer;                   // every 70 frames rechecks yawToPlayer
-    /* 0x25E */ s16 unusedTimer25E;
+    /* 0x25E */ s16 unkAttackNiwTimer;          // every 70 frames, updates some player unk values
     /* 0x260 */ s16 iframeTimer;
-    /* 0x264 */ f32 unk264[10]; 
+    /* 0x264 */ f32 targetLimbRots[10]; 
     /* 0x28C */ s16 unusedCounter28C;
     /* 0x28E */ s16 niwState;
     /* 0x290 */ s16 attackNiwCount;
@@ -61,13 +61,13 @@ typedef struct EnNiw {
     /* 0x296 */ s16 unk296;
     /* 0x298 */ s16 unk298;
     /* 0x29C */ s16 isRunningRight;             // toggle (direction cucco is turning while running)
-    /* 0x29C */ u16 unk29C;
+    /* 0x29C */ u16 nextAnimation;
     /* 0x29E */ s16 unk29E;                     // three states 0/1/2
     /* 0x2A0 */ s16 isStormActive;              // we have a data value shared between all cucco, this shouldn't need to exist
     /* 0x2A2 */ s16 niwType;
     /* 0x2A4 */ Vec3f unk2A4;
     /* 0x2B0 */ Vec3f unk2B0;
-    /* 0x2BC */ Vec3f unk2BC; // init from data (90000 on all three)
+    /* 0x2BC */ Vec3f unk2BC;                   // init from data (90000 on all three)
     /* 0x2C8 */ f32 leftWingRotZ;
     /* 0x2CC */ f32 leftWingRotY;
     /* 0x2D0 */ f32 leftWingRotX;
@@ -77,7 +77,7 @@ typedef struct EnNiw {
     /* 0x2E0 */ f32 upperBodyRotY;
     /* 0x2E4 */ f32 headRotY;
     /* 0x2E8 */ s16 yawTowardsPlayer;
-    /* 0x2EA */ s16 unk2EA; // toggle
+    /* 0x2EA */ s16 headRotationToggle;
     /* 0x2EC */ s16 unk2EC;
     /* 0x2EE */ UNK_TYPE1  pad2EE[0x6];
     /* 0x2F4 */ f32 unusedFloat2F4;             // set in EnNiw_Update if Cucco falls off map, never read
@@ -97,7 +97,6 @@ typedef struct EnNiw {
 #define NIW_TYPE_REGULAR 0
 #define NIW_TYPE_UNK1 1
 #define NIW_TYPE_HELD 2 // spawns held by the bomber kid in east clock town during hide and seek
-// the attacking cuccos are not here, they are a different actor:
-//  ovl_En_Attack_Niw
+// the attacking cuccos are not here, they are a different actor: [ ovl_En_Attack_Niw ]
 
 #endif // Z_EN_NIW_H

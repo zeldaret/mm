@@ -29,7 +29,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_UpdateFeather(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx);
 void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx);
-void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2);
+void EnNiw_UpdateRotations(EnNiw* this, GlobalContext* globalCtx, s16 animationState);
 void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 scale);
 
 s16 sCuccoStormActive = false;
@@ -59,15 +59,11 @@ const ActorInit En_Niw_InitVars = {
     (ActorFunc)EnNiw_Draw,
 };
 
-static f32 D_80893484[] = {
-    5000.0f,
-    -5000.0f,
-};
+static f32 sHeadRotations[] = { 5000.0f, -5000.0f };
 
-static f32 sRunningAngles[] = {
-    5000.0f, 3000.0f,
-    4000.0f, // this value is never used, array is only indexed with 0/1
-};
+static f32 sRunningAngles[] = { 5000.0f, 3000.0f };
+
+static f32 sUnusedValue = 4000.0f;
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -119,7 +115,7 @@ void EnNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* this = THIS;
     Vec3f dTemp = D_808934C4;
 
-    if (this->actor.params < 0) { // all neg values become zero
+    if (this->actor.params < 0) { // all scene spawned cucco are (-1)
         this->actor.params = NIW_TYPE_REGULAR;
     }
 
@@ -180,61 +176,71 @@ void EnNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2) {
+/**
+ * Summary: instead of using SkelAnime animations, Niw modifies limbs directly to create animations
+ *
+ * AttackNiw has a copy of this function that it barely uses
+ *
+ * I want to give these animationState names but they arent as simple, moding the actor to change them has unexpected
+ * behavior
+ */
+void EnNiw_UpdateRotations(EnNiw* this, GlobalContext* globalCtx, s16 animationState) {
     f32 tempOne = 1.0f;
 
     if (this->unkTimer24C == 0) {
-        if (arg2 == 0) {
-            this->unk264[0] = 0.0f;
+        if (animationState == 0) {
+            this->targetLimbRots[0] = 0.0f;
         } else {
-            this->unk264[0] = (-10000.0f) * tempOne;
+            this->targetLimbRots[0] = (-10000.0f) * tempOne;
         }
         this->unk292 += 1;
         this->unkTimer24C = 3;
         if ((this->unk292 % 2) == 0) {
-            this->unk264[0] = 0.0f;
-            if (arg2 == 0) {
+            this->targetLimbRots[0] = 0.0f;
+            if (animationState == 0) {
                 this->unkTimer24C = Rand_ZeroFloat(30.0f);
             }
         }
     }
+
     if (this->unkTimer24E == 0) {
         this->unk296++;
         this->unk296 &= 1;
-        switch (arg2) {
+
+        switch (animationState) {
             case 0:
-                this->unk264[2] = 0.0f;
-                this->unk264[1] = 0.0f;
+                this->targetLimbRots[2] = 0.0f;
+                this->targetLimbRots[1] = 0.0f;
                 break;
             case 1:
                 this->unkTimer24E = 3;
-                this->unk264[2] = 7000.0f * tempOne;
-                this->unk264[1] = 7000.0f * tempOne;
+                this->targetLimbRots[2] = 7000.0f * tempOne;
+                this->targetLimbRots[1] = 7000.0f * tempOne;
                 if (this->unk296 == 0) {
-                    this->unk264[2] = 0.0f;
-                    this->unk264[1] = 0.0f;
+                    this->targetLimbRots[2] = 0.0f;
+                    this->targetLimbRots[1] = 0.0f;
                 }
                 break;
             case 2:
                 this->unkTimer24E = 2;
-                this->unk264[2] = -10000.0f;
-                this->unk264[1] = -10000.0f;
-                this->unk264[7] = 25000.0f;
-                this->unk264[5] = 25000.0f;
-                this->unk264[8] = 6000.0f;
-                this->unk264[6] = 6000.0f;
+                this->targetLimbRots[2] = -10000.0f;
+                this->targetLimbRots[1] = -10000.0f;
+                this->targetLimbRots[7] = 25000.0f;
+                this->targetLimbRots[5] = 25000.0f;
+                this->targetLimbRots[8] = 6000.0f;
+                this->targetLimbRots[6] = 6000.0f;
                 if (this->unk296 == 0) {
-                    this->unk264[7] = 8000.0f;
-                    this->unk264[5] = 8000.0f;
+                    this->targetLimbRots[7] = 8000.0f;
+                    this->targetLimbRots[5] = 8000.0f;
                 }
                 break;
             case 3:
                 this->unkTimer24E = 2;
-                this->unk264[5] = 10000.0f;
-                this->unk264[7] = 10000.0f;
+                this->targetLimbRots[5] = 10000.0f;
+                this->targetLimbRots[7] = 10000.0f;
                 if (this->unk296 == 0) {
-                    this->unk264[5] = 3000.0f;
-                    this->unk264[7] = 3000.0f;
+                    this->targetLimbRots[5] = 3000.0f;
+                    this->targetLimbRots[7] = 3000.0f;
                 }
                 break;
             case 4:
@@ -242,38 +248,39 @@ void func_80891320(EnNiw* this, GlobalContext* globalCtx, s16 arg2) {
                 break;
             case 5:
                 this->unkTimer24E = 5;
-                this->unk264[5] = 14000.0f;
-                this->unk264[7] = 14000.0f;
+                this->targetLimbRots[5] = 14000.0f;
+                this->targetLimbRots[7] = 14000.0f;
                 if (this->unk296 == 0) {
-                    this->unk264[5] = 10000.0f;
-                    this->unk264[7] = 10000.0f;
+                    this->targetLimbRots[5] = 10000.0f;
+                    this->targetLimbRots[7] = 10000.0f;
                 }
                 break;
         }
     }
-    if (this->unk264[9] != this->headRotY) {
-        Math_ApproachF(&this->headRotY, this->unk264[9], 0.5f, 4000.0f);
+
+    if (this->targetLimbRots[9] != this->headRotY) {
+        Math_ApproachF(&this->headRotY, this->targetLimbRots[9], 0.5f, 4000.0f);
     }
-    if (this->unk264[0] != this->upperBodyRotY) {
-        Math_ApproachF(&this->upperBodyRotY, this->unk264[0], 0.5f, 4000.0f);
+    if (this->targetLimbRots[0] != this->upperBodyRotY) {
+        Math_ApproachF(&this->upperBodyRotY, this->targetLimbRots[0], 0.5f, 4000.0f);
     }
-    if (this->unk264[2] != this->leftWingRotZ) {
-        Math_ApproachF(&this->leftWingRotZ, this->unk264[2], 0.8f, 7000.0f);
+    if (this->targetLimbRots[2] != this->leftWingRotZ) {
+        Math_ApproachF(&this->leftWingRotZ, this->targetLimbRots[2], 0.8f, 7000.0f);
     }
-    if (this->unk264[7] != this->leftWingRotY) {
-        Math_ApproachF(&this->leftWingRotY, this->unk264[7], 0.8f, 7000.0f);
+    if (this->targetLimbRots[7] != this->leftWingRotY) {
+        Math_ApproachF(&this->leftWingRotY, this->targetLimbRots[7], 0.8f, 7000.0f);
     }
-    if (this->unk264[8] != this->leftWingRotX) {
-        Math_ApproachF(&this->leftWingRotX, this->unk264[8], 0.8f, 7000.0f);
+    if (this->targetLimbRots[8] != this->leftWingRotX) {
+        Math_ApproachF(&this->leftWingRotX, this->targetLimbRots[8], 0.8f, 7000.0f);
     }
-    if (this->unk264[1] != this->rightWingRotZ) {
-        Math_ApproachF(&this->rightWingRotZ, this->unk264[1], 0.8f, 7000.0f);
+    if (this->targetLimbRots[1] != this->rightWingRotZ) {
+        Math_ApproachF(&this->rightWingRotZ, this->targetLimbRots[1], 0.8f, 7000.0f);
     }
-    if (this->unk264[5] != this->rightWingRotY) {
-        Math_ApproachF(&this->rightWingRotY, this->unk264[5], 0.8f, 7000.0f);
+    if (this->targetLimbRots[5] != this->rightWingRotY) {
+        Math_ApproachF(&this->rightWingRotY, this->targetLimbRots[5], 0.8f, 7000.0f);
     }
-    if (this->unk264[6] != this->rightWingRotX) {
-        Math_ApproachF(&this->rightWingRotX, this->unk264[6], 0.8f, 7000.0f);
+    if (this->targetLimbRots[6] != this->rightWingRotX) {
+        Math_ApproachF(&this->rightWingRotX, this->targetLimbRots[6], 0.8f, 7000.0f);
     }
 }
 
@@ -337,7 +344,7 @@ void EnNiw_UpdateRunning(EnNiw* this, GlobalContext* globalCtx, s32 isStormCucco
     targetRotY = this->yawTowardsPlayer + runningDirection;
     Math_SmoothStepToS(&this->actor.world.rot.y, targetRotY, 3, this->unk300, 0);
     Math_ApproachF(&this->unk300, 3000.0f, 1.0f, 500.0f);
-    func_80891320(this, globalCtx, 5);
+    EnNiw_UpdateRotations(this, globalCtx, 5);
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
@@ -351,7 +358,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
     f32 posZ2;
     f32 posX1 = randPlusMinusPoint5Scaled(100.0f);
     f32 posZ1 = randPlusMinusPoint5Scaled(100.0f);
-    s16 s16tmp;
+    s16 nextAnimation;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
         if (Actor_HasParent(&this->actor, globalCtx)) {               // picked up
@@ -370,13 +377,13 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
         this->unkIdleTimer2 = 10;
     }
 
-    s16tmp = 0; // probably a scoped variable here, where their scope was different
+    nextAnimation = 0; // probably a scoped variable here, where their scope was different
     if (this->unkIdleTimer2 != 0) {
         if (Rand_ZeroFloat(3.99f) < 1.0f) {
-            this->unk2EA++;
-            this->unk2EA &= 1;
+            this->headRotationToggle++;
+            this->headRotationToggle &= 1;
         }
-        Math_ApproachF(&this->unk264[9], D_80893484[this->unk2EA], 0.5f, 4000.0f);
+        Math_ApproachF(&this->targetLimbRots[9], sHeadRotations[this->headRotationToggle], 0.5f, 4000.0f);
     }
 
     if (this->unkIdleTimer2 == 0 && this->unkIdleTimer == 0) {
@@ -409,8 +416,8 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
     }
 
     if (this->unkIdleTimer != 0) {
-        Math_ApproachZeroF(&this->unk264[9], 0.5f, 4000.0f);
-        s16tmp = 1;
+        Math_ApproachZeroF(&this->targetLimbRots[9], 0.5f, 4000.0f);
+        nextAnimation = 1;
         Math_ApproachF(&this->actor.world.pos.x, this->unk2B0.x, 1.0f, this->unk300);
         Math_ApproachF(&this->actor.world.pos.z, this->unk2B0.z, 1.0f, this->unk300);
         Math_ApproachF(&this->unk300, 3.0f, 1.0f, 0.3f);
@@ -434,7 +441,7 @@ void EnNiw_Idle(EnNiw* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->unk304, 10000.0f, 1.0f, 1000.0f);
     }
 
-    func_80891320(this, globalCtx, s16tmp);
+    EnNiw_UpdateRotations(this, globalCtx, nextAnimation);
 }
 
 void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
@@ -476,7 +483,7 @@ void EnNiw_Held(EnNiw* this, GlobalContext* globalCtx) {
         this->actionFunc = EnNiw_Thrown;
     }
 
-    func_80891320(this, globalCtx, 2);
+    EnNiw_UpdateRotations(this, globalCtx, 2);
 }
 
 void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
@@ -518,7 +525,7 @@ void EnNiw_Thrown(EnNiw* this, GlobalContext* globalCtx) {
         if (this->hoppingTimer > 5) {
             Actor_LiftActor(&this->actor, globalCtx);
         }
-        func_80891320(this, globalCtx, 2);
+        EnNiw_UpdateRotations(this, globalCtx, 2);
     }
 }
 
@@ -571,9 +578,13 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
             }
         }
     }
-    func_80891320(this, globalCtx, 2);
+
+    EnNiw_UpdateRotations(this, globalCtx, 2);
 }
 
+/**
+ *  Possible Fake Match: the weird way this state is set
+ */
 void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx) {
     s32 state;
     if (1) {
@@ -581,7 +592,7 @@ void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx) {
     }
 
     this->cuccoStormTimer = 10;
-    this->niwState = this->unk29C = state;
+    this->niwState = this->nextAnimation = state;
     this->actionFunc = EnNiw_Upset;
 }
 
@@ -591,12 +602,12 @@ void EnNiw_Upset(EnNiw* this, GlobalContext* globalCtx) {
     if (this->cuccoStormTimer == 0) {
         this->cuccoStormTimer = 60;
         this->unkTimer24C = 10;
-        this->unk29C = 4;
+        this->nextAnimation = 4;
         this->niwState = NIW_STATE_ANGRY2;
         this->actionFunc = EnNiw_SetupCuccoStorm;
     }
 
-    func_80891320(this, globalCtx, this->unk29C);
+    EnNiw_UpdateRotations(this, globalCtx, this->nextAnimation);
 }
 
 // the long crow with head back before they descend
@@ -606,15 +617,16 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
     this->sfxTimer1 = 100;
     if (this->cuccoStormTimer == 40) {
         viewY = 14000.0f;
-        this->unk264[0] = 10000.0f;
-        this->unk264[7] = this->unk264[5] = viewY;
-        this->unk264[6] = 0.0f;
-        this->unk264[8] = 0.0f;
-        this->unk264[1] = 0.0f;
-        this->unk264[2] = 0.0f;
+        this->targetLimbRots[0] = 10000.0f;
+        this->targetLimbRots[7] = this->targetLimbRots[5] = viewY;
+        this->targetLimbRots[6] = 0.0f;
+        this->targetLimbRots[8] = 0.0f;
+        this->targetLimbRots[1] = 0.0f;
+        this->targetLimbRots[2] = 0.0f;
         this->unkTimer24C = 10;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
     }
+
     if (this->cuccoStormTimer == 0) {
         this->cuccoStormTimer = 10;
         this->yawTowardsPlayer = this->actor.yawTowardsPlayer;
@@ -622,7 +634,8 @@ void EnNiw_SetupCuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
         this->niwState = NIW_STATE_ANGRY3;
         this->actionFunc = EnNiw_CuccoStorm;
     }
-    func_80891320(this, globalCtx, this->unk29C);
+
+    EnNiw_UpdateRotations(this, globalCtx, this->nextAnimation);
 }
 
 void EnNiw_CuccoStorm(EnNiw* this, GlobalContext* globalCtx) {
@@ -660,10 +673,10 @@ void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx) {
         this->generalTimer2 = this->generalTimer1 = this->unk298 = 0;
         this->unk300 = this->unk304 = 0;
         this->actor.speedXZ = 0;
-        this->unk264[8] = 0;
-        this->unk264[6] = 0;
-        this->unk264[5] = 0;
-        this->unk264[7] = 0;
+        this->targetLimbRots[8] = 0;
+        this->targetLimbRots[6] = 0;
+        this->targetLimbRots[5] = 0;
+        this->targetLimbRots[7] = 0;
         Math_Vec3f_Copy(&this->unk2BC, &tempVec3f);
 
         EnNiw_SetupIdle(this);
@@ -678,7 +691,7 @@ void EnNiw_RunAway(EnNiw* this, GlobalContext* globalCtx) {
         }
         this->yawTowardsPlayer = Math_Atan2S(dX, dZ);
         EnNiw_UpdateRunning(this, globalCtx, false);
-        func_80891320(this, globalCtx, 2);
+        EnNiw_UpdateRotations(this, globalCtx, 2);
     }
 }
 
@@ -719,10 +732,10 @@ void EnNiw_CheckRage(EnNiw* this, GlobalContext* globalCtx) {
                 this->unk2A4.z = this->unk2B0.z = this->actor.world.pos.z;
                 this->generalTimer2 = this->generalTimer1 = this->unk298;
 
-                this->unk264[8] = 0.0f;
-                this->unk264[6] = 0.0f;
-                this->unk264[5] = 0.0f;
-                this->unk264[7] = 0.0f;
+                this->targetLimbRots[8] = 0.0f;
+                this->targetLimbRots[6] = 0.0f;
+                this->targetLimbRots[5] = 0.0f;
+                this->targetLimbRots[7] = 0.0f;
                 this->isStormActive = true;
                 this->actionFunc = EnNiw_Trigger;
                 this->unk304 = 0.0f;
@@ -766,7 +779,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->niwState != NIW_STATE_IDLE) {
-        this->unk264[9] = 0.0f;
+        this->targetLimbRots[9] = 0.0f;
     }
 
     if (this->unk29E != 0) {
@@ -809,7 +822,7 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
     DECR(this->flutterSfxTimer);
     DECR(this->unusedTimer25A);
     DECR(this->yawTimer);
-    DECR(this->unusedTimer25E);
+    DECR(this->unkAttackNiwTimer);
     DECR(this->iframeTimer);
 
     this->actor.shape.rot = this->actor.world.rot;
@@ -858,11 +871,11 @@ void EnNiw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->headRotY = 0.0f;
 
         // clang-format off
-        this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->isRunningRight = this->unk29C = 0;
+        this->isStormActive = this->unusedCounter28C = this->unk292 = this->unk29E = this->unk298 = this->isRunningRight = this->nextAnimation = 0;
         // clang-format on
 
         for (i = 0; i < 10; i++) {
-            this->unk264[i] = 0.0f;
+            this->targetLimbRots[i] = 0.0f;
         }
 
         this->niwState = NIW_STATE_HOPPING;
