@@ -36,8 +36,9 @@
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
-#include "z64scene.h"
 #include "z64save.h"
+#include "z64scene.h"
+#include "z64skin.h"
 #include "z64transition.h"
 #include "regs.h"
 
@@ -139,15 +140,21 @@ typedef struct {
     /* 0x4 */ f32 dynamicSizeStep;
     /* 0x8 */ u8 state;
     /* 0x9 */ u8 sizeGrowsCos2;
-    /* 0xA */ u8 unkA;
+    /* 0xA */ u8 colorsIndex;
     /* 0xB */ u8 flags;
-    /* 0xC */ u8 unkC;
+    /* 0xC */ u8 lightParamsIndex;
 } FireObjInitParams; // size = 0xD
 
-typedef struct {
+typedef struct FireObjColors {
     /* 0x0 */ Color_RGBA8 primColor;
-    /* 0x4 */ u8 unk4;
+    /* 0x4 */ u8 lod;
     /* 0x5 */ Color_RGB8 envColor;
+} FireObjColors; // size = 0x8
+
+typedef struct FireObjLightParams {
+    /* 0x0 */ s16 radius;
+    /* 0x2 */ Color_RGB8 color;
+    /* 0x5 */ Color_RGB8 maxColorAdj;
 } FireObjLightParams; // size = 0x8
 
 #define FONT_CHAR_TEX_WIDTH  16
@@ -865,7 +872,8 @@ typedef struct {
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x30];
+    /* 0x120B0 */ u8 unk120B0;
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
     /* 0x120D4 */ UNK_TYPE2 unk120D4;
@@ -1158,8 +1166,8 @@ typedef enum {
 
 struct FireObjLight {
     /* 0x00 */ LightNode* light;
-    /* 0x04 */ LightInfoPositional lightInfo;
-    /* 0x12 */ u8 unk12;
+    /* 0x04 */ LightInfo lightInfo;
+    /* 0x12 */ u8 lightParamsIndex;
 }; // size = 0x13
 
 #define OS_SC_RETRACE_MSG       1
@@ -1210,7 +1218,7 @@ struct FireObj {
     /* 0x24 */ u8 state; // 0 - growing, 1 - shrinking, 2 - fully lit, 3 - not lit
     /* 0x25 */ u8 sizeGrowsCos2;
     /* 0x26 */ u8 unk26;
-    /* 0x27 */ u8 unk27;
+    /* 0x27 */ u8 colorsIndex;
     /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
     /* 0x29 */ UNK_TYPE1 pad29[0x1];
     /* 0x2A */ s16 ignitionDelay;
