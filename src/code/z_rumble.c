@@ -82,5 +82,5 @@ void func_8013EE38(void) {
 }
 
 void func_8013EE48(s32 arg0) {
-    D_801F69D0.unk_105 = arg0 != false;
+    D_801F69D0.unk_105 = !!arg0;
 }
