@@ -1423,7 +1423,7 @@ void Boss03_SetupDeathCutscene(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_DeathCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFloppingAnim, -10.0f);
     this->floppingAnimLastFrame = Animation_GetLastFrame(&gGyorgFloppingAnim);
-    Audio_QueueSeqCmd(0x100100FF);
+    Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
     this->workTimer[WORK_TIMER_UNK0_C] = 0;
     this->unk_242 = 0;
     this->csState = 0;
