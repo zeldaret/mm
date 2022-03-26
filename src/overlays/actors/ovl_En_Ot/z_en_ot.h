@@ -36,7 +36,7 @@ typedef struct EnOt {
     /* 0x01D8 */ Vec3s jointTable[19];
     /* 0x024A */ Vec3s morphTable[19];
     /* 0x02BC */ s32 animIdx;
-    /* 0x02C0 */ struct_8013DF3C_arg1 unk_2C0;
+    /* 0x02C0 */ ActorPathing actorPath;
     /* 0x032C */ u16 unk_32C;
     /* 0x0330 */ Vec3f unk_330;
     /* 0x033C */ s32 unk_33C;

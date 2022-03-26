@@ -134,7 +134,7 @@ typedef struct {
     /* 0x100C */ u8 eventInf[8];
     /* 0x1014 */ u8 unk_1014; // "stone_set_flag"
     /* 0x1015 */ u8 unk_1015;
-    /* 0x1016 */ u16 unk_1016;
+    /* 0x1016 */ u16 jinxTimer;
     /* 0x1018 */ s16 rupeeAccumulator; // "lupy_udct"
     /* 0x101A */ u8 unk_101A[6];       // "bottle_status", one entry for each bottle
     /* 0x1020 */ OSTime unk_1020[6];   // "bottle_ostime", one entry for each bottle
