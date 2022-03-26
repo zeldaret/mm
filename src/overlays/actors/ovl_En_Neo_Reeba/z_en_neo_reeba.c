@@ -119,15 +119,15 @@ void EnNeoReeba_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNeoReeba* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable, this->morphTable, 18);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable, this->morphTable, LEEVER_LIMB_MAX);
 
     if (!EN_NEO_REEBA_IS_LARGE(&this->actor)) {
         Actor_SetScale(&this->actor, 0.04f);
-        this->actor.colChkInfo.mass = 0x5A;
+        this->actor.colChkInfo.mass = 90;
         this->actor.colChkInfo.health = 1;
     } else {
         Actor_SetScale(&this->actor, 0.05f);
-        this->actor.colChkInfo.mass = 0xB4;
+        this->actor.colChkInfo.mass = 180;
         this->actor.colChkInfo.health = 3;
     }
 
@@ -159,7 +159,7 @@ void EnNeoReeba_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnNeoReeba_SetupWaitUnderground(EnNeoReeba* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.draw = NULL;
     this->actionTimer = 10;
     this->actionFunc = EnNeoReeba_WaitUnderground;
@@ -247,7 +247,7 @@ void EnNeoReeba_SetupRise(EnNeoReeba* this) {
     this->sinkRiseRate = 300.0f;
     this->skelAnime.playSpeed = 2.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actionFunc = EnNeoReeba_RiseOutOfGround;
 }
 
@@ -444,8 +444,8 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
 
     this->rotationSpeed = 3640.0f;
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 25);
-    this->actor.flags |= 0x08000000;
-    this->actor.flags &= ~1;
+    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_RIVA_DEAD);
     this->actionFunc = EnNeoReeba_PlayDeathEffects;
@@ -468,7 +468,7 @@ void EnNeoReeba_PlayDeathEffects(EnNeoReeba* this, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
-        if (this->actionTimer < 11) {
+        if (this->actionTimer <= 10) {
             this->rotationAngle -= 0x1388;
             this->actor.scale.x = this->actor.scale.z = sDamageAnimXZScales[this->actionTimer];
             this->actor.scale.y = sDamageAnimYScales[this->actionTimer];
@@ -513,7 +513,7 @@ void EnNeoReeba_HandleHit(EnNeoReeba* this, GlobalContext* globalCtx) {
                 case EN_NEO_REEBA_DMGEFF_FREEZE:
                 case EN_NEO_REEBA_DMGEFF_LIGHT:
                 case EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN:
-                case 14:
+                case EN_NEO_REEBA_DMGEFF_NONE:
                     return;
                 default:
                     if (this->stunTimer >= 2) {
@@ -653,7 +653,7 @@ void EnNeoReeba_DrawEffects(EnNeoReeba* this, GlobalContext* globalCtx) {
         }
 
         this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
-        Actor_DrawDamageEffects(globalCtx, NULL, this->limbPos, 4, this->drawEffectScale, 0.5f, this->drawEffectAlpha,
+        Actor_DrawDamageEffects(globalCtx, NULL, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawEffectScale, 0.5f, this->drawEffectAlpha,
                                 this->drawEffectType);
     }
 }
@@ -719,7 +719,7 @@ s32 EnNeoReeba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
                                 Actor* thisx) {
     EnNeoReeba* this = THIS;
 
-    if ((limbIndex == 3) && (this->rotationSpeed != 0.0f)) {
+    if ((limbIndex == OBJECT_RB_LIMB_03) && (this->rotationSpeed != 0.0f)) {
         rot->y += (s16)(this->rotationSpeed * Math_SinS(this->rotationAngle));
         rot->z += (s16)(this->rotationSpeed * Math_CosS(this->rotationAngle));
     }
