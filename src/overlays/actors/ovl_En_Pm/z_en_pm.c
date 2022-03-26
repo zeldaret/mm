@@ -914,7 +914,7 @@ s32 func_80AF8ED4(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_234 = NULL;
     sp2C = func_80AF7CB0(this, globalCtx, actorCat, actorId);
     if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
     }
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
@@ -945,7 +945,7 @@ s32 func_80AF9008(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_234 = NULL;
     door = func_80AF7D60(globalCtx, arg2->unk0);
     if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp55, D_80AFB430[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp55, D_80AFB430[arg2->unk0]);
     }
 
     if ((door != NULL) && (door->dyna.actor.update != NULL)) {
@@ -990,7 +990,7 @@ s32 func_80AF91E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_234 = NULL;
 
     if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp2B, D_80AFB430[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp2B, D_80AFB430[arg2->unk0]);
     }
 
     if ((this->unk_234 != NULL) && (this->unk_234->count < 3)) {
@@ -1070,7 +1070,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->unk_234 = NULL;
     if (D_80AFB430[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80AFB430[arg2->unk0]);
     }
 
     if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {
@@ -1123,7 +1123,7 @@ s32 func_80AF95E8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_234 = NULL;
     phi_a3 = D_80AFB430[arg2->unk0];
     if (phi_a3 >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, phi_a3);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, phi_a3);
     }
 
     if ((this->unk_234 != 0) && (this->unk_234->count >= 2)) {

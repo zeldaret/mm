@@ -203,7 +203,7 @@ void func_80AD36EC(EnTrt2* this, GlobalContext* globalCtx) {
                 this->unk_1E4 = 0;
                 this->unk_3D9 = 1;
                 this->actor.velocity.y = 0.0f;
-                this->path = func_8013D648(globalCtx, this->path->unk1, -1);
+                this->path = SubS_GetPathByIndex(globalCtx, this->path->unk1, -1);
                 ActorCutscene_Stop(this->unk_3DA);
                 this->unk_3DA = ActorCutscene_GetAdditionalCutscene(this->unk_3DA);
                 ActorCutscene_SetIntentToPlay(this->unk_3DA);
@@ -437,7 +437,7 @@ void func_80AD417C(EnTrt2* this, GlobalContext* globalCtx) {
             globalCtx->msgCtx.unk12023 = 4;
             if (this->unk_3A8 == 0x84C) {
                 func_80AD3380(&this->skelAnime, sAnimations, 6);
-                this->path = func_8013D648(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
+                this->path = SubS_GetPathByIndex(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
@@ -708,7 +708,7 @@ void func_80AD4DB4(EnTrt2* this, GlobalContext* globalCtx) {
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(globalCtx, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
-    this->path = func_8013D648(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENTRT2_GET_FC00(&this->actor), 0x3F);
     this->unk_3AE = Rand_S16Offset(100, 50);
     this->unk_3B0 = 10;
     this->unk_3A8 = 0;

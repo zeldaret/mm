@@ -1332,7 +1332,7 @@ void func_80A1428C(EnGo* this, GlobalContext* globalCtx) {
     Math_Vec3f_Copy(&sp30, &this->actor.world.pos);
     if (this->unk_284 != NULL) {
         this->actor.flags &= ~ACTOR_FLAG_2000000;
-        func_8013C8B8(this->unk_284, 0, &sp24);
+        SubS_CopyPointFromPathCheckBounds(this->unk_284, 0, &sp24);
         temp = Math_Vec3f_Yaw(&sp30, &sp24);
         this->actor.shape.rot.y = temp;
         this->actor.world.rot.y = temp;
@@ -1393,7 +1393,7 @@ void func_80A1449C(EnGo* this, GlobalContext* globalCtx) {
 
 void func_80A144F4(EnGo* this, GlobalContext* globalCtx) {
     if (gSaveContext.day >= 2) {
-        this->unk_284 = func_8013BEDC(globalCtx, ENGO_GET_7F80(&this->actor), 0xFF, &this->unk_3E4);
+        this->unk_284 = SubS_GetDayDependentPath(globalCtx, ENGO_GET_7F80(&this->actor), 0xFF, &this->unk_3E4);
         if (this->unk_284 != NULL) {
             this->unk_3E4 = 1;
         }
@@ -1785,7 +1785,7 @@ void func_80A153FC(EnGo* this, GlobalContext* globalCtx) {
         }
 
         sp5C = Lib_SegmentedToVirtual(this->unk_284->points);
-        if (func_8013BD40(&this->actor, this->unk_284, this->unk_3E4)) {
+        if (SubS_HasReachedPoint(&this->actor, this->unk_284, this->unk_3E4)) {
             if (this->unk_3E4 >= (this->unk_284->count - 1)) {
                 this->unk_3E4 = 0;
             } else {

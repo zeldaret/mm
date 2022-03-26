@@ -507,7 +507,7 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     u16 phi_a1;
     s32 idx = arg2->unk0 - 1;
 
-    this->unk_3C8 = func_8013BB34(globalCtx, params, D_80AEF8E8[idx + 1]);
+    this->unk_3C8 = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
     if (this->unk_3C8 == 0) {
         return false;
     }

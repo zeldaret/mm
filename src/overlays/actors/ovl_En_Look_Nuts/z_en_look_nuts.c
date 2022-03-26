@@ -164,9 +164,9 @@ void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
         return;
     }
 
-    this->path = func_8013D648(globalCtx, this->pathLocation, 0x1F);
+    this->path = SubS_GetPathByIndex(globalCtx, this->pathLocation, 0x1F);
     if (this->path != NULL) {
-        sp34 = func_8013D83C(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
+        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
     }
 
     if (sp30 < 10.0f) {

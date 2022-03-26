@@ -53,7 +53,7 @@ void EnSob1_Blink(EnSob1* this);
 
 s32 EnSob1_TakeItemOffShelf(EnSob1* this);
 s32 EnSob1_ReturnItemToShelf(EnSob1* this);
-s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
+s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 
 static AnimationInfoS sAnimationsBombShopkeeper[] = {
     { &object_rs_Anim_009120, 2.0f, 0, -1, ANIMMODE_LOOP, 20 },
@@ -711,10 +711,9 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
     s16 animLastFrame = Animation_GetLastFrame(&object_rs_Anim_009120) / (s16)this->skelAnime.playSpeed;
 
-    Math_SmoothStepToS(
-        &this->actor.world.rot.y,
-        EnSob1_GetXZAngleAndDistanceSqToPoint(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &distSq), 4,
-        1000, 1);
+    Math_SmoothStepToS(&this->actor.world.rot.y,
+                       EnSob1_GetDistSqAndOrient(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &distSq),
+                       4, 1000, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
@@ -750,10 +749,9 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
         }
     }
     if (this->path != NULL) {
-        Math_SmoothStepToS(
-            &this->actor.world.rot.y,
-            EnSob1_GetXZAngleAndDistanceSqToPoint(this->path, this->pathPointsIdx, &this->actor.world.pos, &distSq), 4,
-            1000, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y,
+                           EnSob1_GetDistSqAndOrient(this->path, this->pathPointsIdx, &this->actor.world.pos, &distSq),
+                           4, 1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.speedXZ = 2.0f;
         if (distSq < SQ(5.0f)) {
@@ -1249,7 +1247,7 @@ void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
-s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq) {
+s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
@@ -1375,7 +1373,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->pathPointsIdx = 0;
 
         if (this->shopType == BOMB_SHOP) {
-            this->path = func_8013D648(globalCtx, ENSOB1_GET_PATH(&this->actor), 0x1F);
+            this->path = SubS_GetPathByIndex(globalCtx, ENSOB1_GET_PATH(&this->actor), 0x1F);
         }
         if (this->shopType == BOMB_SHOP) {
             EnSob1_SetupAction(this, EnSob1_SetupWalk);

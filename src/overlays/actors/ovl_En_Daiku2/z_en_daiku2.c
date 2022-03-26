@@ -70,7 +70,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void func_80BE61D0(EnDaiku2* this) {
     if ((this->unk_27A != -1) && (this->unk_258 != 0)) {
-        if (func_8013D68C(this->unk_258, this->unk_25C, &this->unk_268) == 0) {
+        if (SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_268) == 0) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -88,7 +88,7 @@ void EnDaiku2_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
     this->unk_27A = ENDAIKU2_GET_1F80(&this->actor);
-    this->unk_258 = func_8013D648(globalCtx, this->unk_27A, 0x3F);
+    this->unk_258 = SubS_GetPathByIndex(globalCtx, this->unk_27A, 0x3F);
     this->unk_280 = ENDAIKU2_GET_8000(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);
     if (!this->unk_280) {

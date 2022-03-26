@@ -639,7 +639,7 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags |= ACTOR_FLAG_2000000;
 
-    this->path = func_8013D648(globalCtx, ENRUPPECROW_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENRUPPECROW_GET_PATH(&this->actor), 0x3F);
     if (this->path != NULL) {
         this->actionFunc = EnRuppecrow_HandleSong;
     } else {

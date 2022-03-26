@@ -707,7 +707,7 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         if (gSaveContext.weekEventReg[52] & 0x40) {
             Actor_MarkForDeath(&this->actor);
         } else if (globalCtx->actorCtx.unk5 & 2) {
-            this->path = func_8013D648(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
+            this->path = SubS_GetPathByIndex(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
@@ -716,7 +716,7 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
         if (gSaveContext.weekEventReg[52] & 0x40) {
-            this->path = func_8013D648(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
+            this->path = SubS_GetPathByIndex(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
                 Actor_MarkForDeath(&this->actor);
             } else {
