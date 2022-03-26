@@ -3659,9 +3659,9 @@ void EnHorse_MountDismount(EnHorse* this, GlobalContext* globalCtx) {
 }
 
 void EnHorse_StickDirection(Vec2f* curStick, f32* stickMag, s16* angle) {
-    *stickMag = sqrtf(SQ(curStick->x) + SQ(curStick->y));
+    *stickMag = sqrtf(SQ(curStick->x) + SQ(curStick->z));
     *stickMag = CLAMP_MAX(*stickMag, 60.0f);
-    *angle = Math_Atan2S(-curStick->x, curStick->y);
+    *angle = Math_Atan2S(-curStick->x, curStick->z);
 }
 
 void EnHorse_UpdateStick(EnHorse* this, GlobalContext* globalCtx) {
@@ -3669,7 +3669,7 @@ void EnHorse_UpdateStick(EnHorse* this, GlobalContext* globalCtx) {
 
     this->lastStick = this->curStick;
     this->curStick.x = input->rel.stick_x;
-    this->curStick.y = input->rel.stick_y;
+    this->curStick.z = input->rel.stick_y;
 }
 
 void EnHorse_ResolveCollision(EnHorse* this, GlobalContext* globalCtx, CollisionPoly* colPoly) {
