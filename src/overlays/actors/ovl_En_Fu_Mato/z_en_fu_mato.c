@@ -212,7 +212,7 @@ void func_80ACE850(EnFuMato* this, GlobalContext* globalCtx) {
         ptr->unk_00 = this->dyna.actor.world.pos;
 
         ptr->unk_0C.x = Math_CosS(temp_s4) * D_80ACF654[phi_s2].x;
-        ptr->unk_0C.y = D_80ACF654[phi_s2].y;
+        ptr->unk_0C.y = D_80ACF654[phi_s2].z;
         ptr->unk_0C.z = -Math_SinS(temp_s4) * D_80ACF654[phi_s2].x;
 
         ptr->unk_0C.x += Rand_Centered();
