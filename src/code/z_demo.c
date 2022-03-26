@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "z64rumble.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 
 void Cutscene_DoNothing(GlobalContext* globalCtx, CutsceneContext* csCtx);

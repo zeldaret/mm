@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 
 void GameOver_Init(GlobalContext* globalCtx) {
     globalCtx->gameOverCtx.state = GAMEOVER_INACTIVE;

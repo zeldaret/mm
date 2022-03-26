@@ -5,6 +5,7 @@
  */
 
 #include "z_door_shutter.h"
+#include "z64rumble.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_bdoor/object_bdoor.h"
 #include "objects/object_numa_obj/object_numa_obj.h"

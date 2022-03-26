@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_switch.h"
+#include "z64rumble.h"
 #include "objects/gameplay_dangeon_keep/gameplay_dangeon_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)

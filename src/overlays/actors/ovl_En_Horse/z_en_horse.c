@@ -5,6 +5,7 @@
  */
 
 #include "z_en_horse.h"
+#include "z64rumble.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 

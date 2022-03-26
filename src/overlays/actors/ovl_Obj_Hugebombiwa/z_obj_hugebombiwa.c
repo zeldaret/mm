@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hugebombiwa.h"
+#include "z64rumble.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
 #define FLAGS (ACTOR_FLAG_10)

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_rr.h"
+#include "z64rumble.h"
 #include "objects/object_rr/object_rr.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)

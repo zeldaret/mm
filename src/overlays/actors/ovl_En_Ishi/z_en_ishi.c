@@ -5,6 +5,7 @@
  */
 
 #include "z_en_ishi.h"
+#include "z64rumble.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ishi/object_ishi.h"

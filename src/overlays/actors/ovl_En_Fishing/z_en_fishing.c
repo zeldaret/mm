@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
+#include "z64rumble.h"
 #include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
@@ -4730,7 +4731,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
                     case 0:
                         if (gSaveContext.rupees >= 20) {
                             func_801159EC(-20);
-                            if (func_8013EE04() == 0) {
+                            if (!Rumble_ControllerOneHasRumblePak()) {
                                 this->actor.textId = 0x407C;
                             } else {
                                 this->actor.textId = 0x407D;

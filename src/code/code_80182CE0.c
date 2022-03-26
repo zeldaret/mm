@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80182CE0/func_80182CE0.s")
 

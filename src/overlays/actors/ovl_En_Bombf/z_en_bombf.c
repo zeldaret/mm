@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bombf.h"
+#include "z64rumble.h"
 #include "objects/object_bombf/object_bombf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)

@@ -1,12 +1,14 @@
 #include "global.h"
+#include "z64rumble.h"
 
 UnkRumbleStruct D_801F69D0;
 
 void func_8013EC10(UNK_TYPE arg0) {
     func_80182CE0(&D_801F69D0);
-    func_80175474(D_801F69D0.rumbleEnable);
+    func_80175474(D_801F69D0.rumbleEnabled);
 }
 
+// Used by some bosses (and fishing)
 void func_8013EC44(f32 arg0, u8 arg1, u8 arg2, u8 arg3) {
     s32 temp1;
     s32 temp2;
@@ -27,6 +29,7 @@ void func_8013EC44(f32 arg0, u8 arg1, u8 arg2, u8 arg3) {
     }
 }
 
+// Normal rumble?
 void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
     s32 temp_a0;
     s32 phi_v0;
@@ -54,17 +57,17 @@ void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
     }
 }
 
-void func_8013ED9C(void) {
+void Rumble_Init(void) {
     func_80183020(&D_801F69D0);
     func_80174F24(func_8013EC10, 0);
 }
 
-void func_8013EDD0(void) {
+void Rumble_Destroy(void) {
     func_80174F44(func_8013EC10, 0);
     func_80183058(&D_801F69D0);
 }
 
-s32 func_8013EE04(void) {
+s32 Rumble_ControllerOneHasRumblePak(void) {
     return PadMgr_ControllerHasRumblePak(0);
 }
 
@@ -77,5 +80,5 @@ void func_8013EE38(void) {
 }
 
 void func_8013EE48(s32 arg0) {
-    D_801F69D0.unk_105 = arg0 != 0;
+    D_801F69D0.unk_105 = arg0 != false;
 }

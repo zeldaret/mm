@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_f40_switch.h"
+#include "z64rumble.h"
 #include "objects/object_f40_switch/object_f40_switch.h"
 
 #define FLAGS (ACTOR_FLAG_10)

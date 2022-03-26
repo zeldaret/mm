@@ -2497,15 +2497,7 @@ s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s3
 s32 func_8013E7C0(GlobalContext* globalCtx, Actor* actor, Vec3s* arg2);
 void func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s32 arg4, s16 arg5, s16 arg6);
 s32 func_8013E950(Vec3f* arg0, Vec3f* arg1, s16 arg2, Vec3f* arg3, Vec3f* arg4, s16* arg5, s16* arg6, s16* arg7, s16* arg8, u16 arg9, u16 arg10, u16 arg11, u16 arg12);
-// void func_8013EC10(void);
-void func_8013EC44(f32 a, u8 b, u8 c, u8 d);
-void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3);
-void func_8013ED9C(void);
-void func_8013EDD0(void);
-s32 func_8013EE04(void);
-void func_8013EE24(void);
-// void func_8013EE38(void);
-// void func_8013EE48(void);
+
 void View_ViewportToVp(Vp* dest, Viewport* src);
 void View_Init(View* view, GraphicsContext* gfxCtx);
 void View_SetViewOrientation(View* view, Vec3f* eye, Vec3f* at, Vec3f* up);
@@ -2957,7 +2949,7 @@ void Padmgr_SetEventCallback(OSMesg pvParm1);
 // void func_80175364(void);
 // void func_80175434(void);
 // void func_8017544C(void);
-void func_80175474(u8 arg0[MAXCONTROLLERS]);
+void func_80175474(u8 rumbleEnabled[MAXCONTROLLERS]);
 s32 PadMgr_ControllerHasRumblePak(s32 port);
 void Padmgr_CalcStickEdges(Input* input);
 // void Padmgr_ParseState(void);
@@ -3178,10 +3170,6 @@ u64* SysUcode_GetUCodeBoot(void);
 size_t SysUcode_GetUCodeBootSize(void);
 u64* SysUcode_GetUCode(void);
 u64* SysUcode_GetUCodeData(void);
-
-void func_80182CE0(UnkRumbleStruct* arg0);
-void func_80183020(UnkRumbleStruct* arg0);
-void func_80183058(UnkRumbleStruct* arg0);
 
 void func_80183070(void);
 // void func_801830A0(void);

@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_hakugin_switch.h"
+#include "z64rumble.h"
 #include "objects/object_goronswitch/object_goronswitch.h"
 
 #define FLAGS (ACTOR_FLAG_10)
