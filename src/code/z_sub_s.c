@@ -373,6 +373,9 @@ s16 SubS_GetDistSqAndOrientPoints(Vec3f* vecA, Vec3f* vecB, f32* distSq) {
     return Math_Atan2S(diffX, diffZ);
 }
 
+/**
+ * Returns true when the actor has reached the inputed point
+ */
 s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep) {
     Vec3f offsetBefore;
     Vec3f offsetAfter;
