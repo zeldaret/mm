@@ -20,10 +20,10 @@ typedef struct EnDragon {
     /* 0x250 */ s32 pythonIndex;
     /* 0x254 */ Vec3f jawPos;
     /* 0x260 */ Vec3f burrowEntrancePos; // Vertically and horizontally centered on the burrow opening. Set by Bg_Sinkai_Kabe
-    /* 0x26C */ Vec3f unk_26C; // position of player during grab?
+    /* 0x26C */ Vec3f playerGrabPosition;
     /* 0x278 */ Vec3f cameraEye;
     /* 0x278 */ Vec3f cameraAt;
-    /* 0x290 */ Vec3f unk_290; // temp for holding position of player during grab?
+    /* 0x290 */ Vec3f playerGrabPositionTemp;
     /* 0x29C */ Vec3f focusPos;
     /* 0x2A8 */ s16 jawZRotation;
     /* 0x2AA */ s16 jawYRotation; // Never initialized by the actor

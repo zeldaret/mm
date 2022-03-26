@@ -479,11 +479,11 @@ void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
 
     if (this->grabTimer == 0) {
         if (!this->hasGrabbedPlayer) {
-            Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_26C);
-            Math_Vec3f_Copy(&this->unk_290, &this->unk_26C);
+            Math_Vec3f_Copy(&player->actor.world.pos, &this->playerGrabPosition);
+            Math_Vec3f_Copy(&this->playerGrabPositionTemp, &this->playerGrabPosition);
             this->hasGrabbedPlayer = true;
         } else {
-            Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_290);
+            Math_Vec3f_Copy(&player->actor.world.pos, &this->playerGrabPositionTemp);
         }
 
         Math_Vec3f_Copy(&sp50, &this->burrowEntrancePos);
@@ -569,7 +569,7 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
     player->actor.world.rot.y = player->actor.shape.rot.y = this->actor.world.rot.y;
     player->actor.world.rot.x = player->actor.shape.rot.x = this->actor.world.rot.x;
     player->actor.world.rot.z = player->actor.shape.rot.z = this->actor.world.rot.z - 0x36B0;
-    Math_Vec3f_Copy(&player->actor.world.pos, &this->unk_26C);
+    Math_Vec3f_Copy(&player->actor.world.pos, &this->playerGrabPosition);
     this->jawZRotation = 0xC8;
 
     Math_Vec3f_Copy(&sp4C, &this->burrowEntrancePos);
@@ -797,7 +797,7 @@ void EnDragon_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         D_80B60878.x = 350.0f;
         D_80B60878.y = -120.0f;
         D_80B60878.z = -60.0f;
-        Matrix_MultiplyVector3fByState(&D_80B60878, &this->unk_26C);
+        Matrix_MultiplyVector3fByState(&D_80B60878, &this->playerGrabPosition);
     }
 
     if (limbIndex == DEEP_PYTHON_LIMB_HEAD_AND_COLLAR_ROOT) {
