@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_hariko.h"
+#include "assets/objects/object_hariko/object_hariko.h"
 
 #define FLAGS (ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -17,8 +18,9 @@ void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void func_80B66A90(ObjHariko* this, GlobalContext* globalCtx);
 void func_80B66AC4(ObjHariko* this, GlobalContext* globalCtx);
+void func_80B66A7C(ObjHariko* this);
+void func_80B66B78(Actor *thisx);
 
-#if 0
 const ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
     ACTORCAT_PROP,
@@ -31,24 +33,70 @@ const ActorInit Obj_Hariko_InitVars = {
     (ActorFunc)ObjHariko_Draw,
 };
 
-#endif
+void ObjHariko_Init(Actor* thisx, GlobalContext* globalCtx){
+    ObjHariko *this = THIS;
+    Actor_SetScale(&this->actor, 0.1f);
+    this->unk14C = 0;
+    this->unk14E = 0;
+    this->unk150 = 0;
+    this->unk152 = 0;
+    this->unk148 = 0.0f;
+    func_80B66A7C(this);
+}
 
-extern UNK_TYPE D_06000080;
+void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx){ }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Init.s")
+void func_80B66A7C(ObjHariko* this) {
+    this->actionFunc = func_80B66A90;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Destroy.s")
+void func_80B66A90 (ObjHariko* this, GlobalContext* globalCtx) {
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66A7C.s")
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66A90.s")
+void func_80B66AA0(Actor* thisx) {
+    ObjHariko *this = THIS;
+    this->unk148 = 2730.0f;
+    this->unk154 = 0;
+    this->actionFunc = func_80B66AC4;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66AA0.s")
+void func_80B66AC4(ObjHariko* this, GlobalContext* globalCtx) {
+    this->unk152 = (s16) this->unk152 + 0x1555;
+    this->unk14C = (s16) (Math_SinS(this->unk152) * this->unk148);
+    this->unk14E = (s16) (Math_CosS(this->unk152) * this->unk148);
+    Math_SmoothStepToF(&this->unk148, 0, 0.5f, 18.0f, 18.0f);
+    if (this->unk148 < 182.0f) {
+        func_80B66A7C(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66AC4.s")
+void func_80B66B78(Actor *thisx) {
+    if (Quake_NumActiveQuakes() != 0) {
+        func_80B66AA0(thisx);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/func_80B66B78.s")
+void ObjHariko_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjHariko *this = THIS;
+    this->actionFunc(this, globalCtx);
+    func_80B66B78(thisx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Update.s")
+void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjHariko *this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hariko/ObjHariko_Draw.s")
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    Matrix_StatePush();
+    Matrix_InsertXRotation_s(this->unk14C, 1);
+    Matrix_RotateY(this->unk14E, 1);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, object_hariko_DL_000080);
+    gSPDisplayList(POLY_OPA_DISP++, object_hariko_DL_000110);
+
+    Matrix_StatePop();
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
