@@ -525,7 +525,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     if ((KREG(64) != 0) || (gSaveContext.eventInf[5] & 0x40)) {
         this->actionFunc = func_809E344C;
         D_809E9842 = false;
-        Audio_QueueSeqCmd(0x100100FF);
+        Audio_QueueSeqCmd(NA_BGM_STOP | 0x10000);
     } else {
         Boss03_SetupIntroCutscene(this, globalCtx);
         D_809E9842 = true;
