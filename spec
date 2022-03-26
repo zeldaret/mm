@@ -2216,8 +2216,7 @@ beginseg
     name "ovl_Obj_Hamishi"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hamishi/z_obj_hamishi.o"
-    include "build/data/ovl_Obj_Hamishi/ovl_Obj_Hamishi.data.o"
-    include "build/data/ovl_Obj_Hamishi/ovl_Obj_Hamishi.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hamishi/ovl_Obj_Hamishi_reloc.o"
 endseg
 
 beginseg
