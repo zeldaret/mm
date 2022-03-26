@@ -12,8 +12,8 @@ void func_8013EC10(UNK_TYPE arg0) {
 
 // Used by some bosses (and fishing)
 void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
+    s32 temp;
     s32 distance;
-    s32 temp2;
 
     if (SQ(1000.0f) < distSq) {
         distance = 1000;
@@ -22,9 +22,10 @@ void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
     }
 
     if ((distance < 1000) && (arg1 != 0) && (arg3 != 0)) {
-        temp2 = arg1 - (distance * 255) / 1000;
-        if (temp2 > 0) {
-            D_801F69D0.unk_10A = temp2;
+        temp = arg1 - (distance * 255) / 1000;
+
+        if (temp > 0) {
+            D_801F69D0.unk_10A = temp;
             D_801F69D0.unk_10B = arg2;
             D_801F69D0.unk_10C = arg3;
         }
@@ -33,7 +34,7 @@ void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
 
 // Normal rumble?
 void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
-    s32 temp_a0;
+    s32 temp;
     s32 distance;
     s32 i;
 
@@ -44,12 +45,12 @@ void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
     }
 
     if ((distance < 1000) && (arg1 != 0) && (arg3 != 0)) {
-        temp_a0 = arg1 - (distance * 255) / 1000;
+        temp = arg1 - (distance * 255) / 1000;
 
         for (i = 0; i < ARRAY_COUNT(D_801F69D0.unk_04); i++) {
             if (D_801F69D0.unk_04[i] == 0) {
-                if (temp_a0 > 0) {
-                    D_801F69D0.unk_04[i] = temp_a0;
+                if (temp > 0) {
+                    D_801F69D0.unk_04[i] = temp;
                     D_801F69D0.unk_44[i] = arg2;
                     D_801F69D0.unk_84[i] = arg3;
                 }

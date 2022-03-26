@@ -7,7 +7,7 @@
 typedef struct UnkRumbleStruct {
     /* 0x000 */ u8 rumbleEnabled[MAXCONTROLLERS];
     /* 0x004 */ u8 unk_04[0x40];
-    /* 0x044 */ u8 unk_44[0x40];
+    /* 0x044 */ u8 unk_44[0x40]; // delay timer?
     /* 0x084 */ u8 unk_84[0x40];
     /* 0x0C4 */ u8 unk_C4[0x40];
     /* 0x104 */ u8 unk_104; // state?
