@@ -119,7 +119,8 @@ void EnNeoReeba_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnNeoReeba* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable, this->morphTable, LEEVER_LIMB_MAX);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gLeeverSkel, &gLeeverSpinAnim, this->jointTable, this->morphTable,
+                   LEEVER_LIMB_MAX);
 
     if (!EN_NEO_REEBA_IS_LARGE(&this->actor)) {
         Actor_SetScale(&this->actor, 0.04f);
@@ -653,8 +654,8 @@ void EnNeoReeba_DrawEffects(EnNeoReeba* this, GlobalContext* globalCtx) {
         }
 
         this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
-        Actor_DrawDamageEffects(globalCtx, NULL, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawEffectScale, 0.5f, this->drawEffectAlpha,
-                                this->drawEffectType);
+        Actor_DrawDamageEffects(globalCtx, NULL, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawEffectScale, 0.5f,
+                                this->drawEffectAlpha, this->drawEffectType);
     }
 }
 
