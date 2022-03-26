@@ -44,7 +44,7 @@ void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
     }
 
     if ((phi_v0 < 1000) && (arg1 != 0) && (arg3 != 0)) {
-        temp_a0 = arg1 - ((s32)(phi_v0 * 0xFF) / 1000);
+        temp_a0 = arg1 - (phi_v0 * 255) / 1000;
 
         for (i = 0; i < ARRAY_COUNT(D_801F69D0.unk_04); i++) {
             if (D_801F69D0.unk_04[i] == 0) {
