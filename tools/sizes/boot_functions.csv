@@ -9,8 +9,8 @@ asm/non_matchings/boot/idle/Idle_InitVideo.s,Idle_InitVideo,0x8008038C,0x62
 asm/non_matchings/boot/idle/Idle_ThreadEntry.s,Idle_ThreadEntry,0x80080514,0x33
 asm/non_matchings/boot/viconfig/ViConfig_UpdateVi.s,ViConfig_UpdateVi,0x800805E0,0x5A
 asm/non_matchings/boot/viconfig/ViConfig_UpdateBlack.s,ViConfig_UpdateBlack,0x80080748,0x12
-asm/non_matchings/boot/z_std_dma/DmaMgr_DMARomToRam.s,DmaMgr_DMARomToRam,0x80080790,0x51
-asm/non_matchings/boot/z_std_dma/DmaMgr_DmaCallback0.s,DmaMgr_DmaCallback0,0x800808D4,0x8
+asm/non_matchings/boot/z_std_dma/DmaMgr_DmaRomToRam.s,DmaMgr_DmaRomToRam,0x80080790,0x51
+asm/non_matchings/boot/z_std_dma/DmaMgr_DmaHandler.s,DmaMgr_DmaHandler,0x800808D4,0x8
 asm/non_matchings/boot/z_std_dma/DmaMgr_FindDmaEntry.s,DmaMgr_FindDmaEntry,0x800808F4,0x17
 asm/non_matchings/boot/z_std_dma/DmaMgr_TranslateVromToRom.s,DmaMgr_TranslateVromToRom,0x80080950,0x1B
 asm/non_matchings/boot/z_std_dma/DmaMgr_FindDmaIndex.s,DmaMgr_FindDmaIndex,0x800809BC,0xE
