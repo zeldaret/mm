@@ -50,7 +50,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/func_8018410C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/func_8018450C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/EnTest_OverrideKeyframeDraw.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/c_keyframe/func_801845A4.s")
 

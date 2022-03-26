@@ -268,7 +268,7 @@ void EnTest_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp28 != NULL) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        func_8018450C(globalCtx, &this->skeletonInfo, sp28, func_808634B8, NULL, thisx);
+        EnTest_OverrideKeyframeDraw(globalCtx, &this->skeletonInfo, sp28, func_808634B8, NULL, thisx);
         func_80863048(globalCtx, this->unk_20C);
     }
 }

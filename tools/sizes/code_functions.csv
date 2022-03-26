@@ -2940,7 +2940,7 @@ asm/non_matchings/code/c_keyframe/func_80183B08.s,func_80183B08,0x80183B08,0x18
 asm/non_matchings/code/c_keyframe/func_80183B68.s,func_80183B68,0x80183B68,0x9E
 asm/non_matchings/code/c_keyframe/func_80183DE0.s,func_80183DE0,0x80183DE0,0xCB
 asm/non_matchings/code/c_keyframe/func_8018410C.s,func_8018410C,0x8018410C,0x100
-asm/non_matchings/code/c_keyframe/func_8018450C.s,func_8018450C,0x8018450C,0x26
+asm/non_matchings/code/c_keyframe/EnTest_OverrideKeyframeDraw.s,EnTest_OverrideKeyframeDraw,0x8018450C,0x26
 asm/non_matchings/code/c_keyframe/func_801845A4.s,func_801845A4,0x801845A4,0x9
 asm/non_matchings/code/c_keyframe/func_801845C8.s,func_801845C8,0x801845C8,0x19
 asm/non_matchings/code/c_keyframe/func_8018462C.s,func_8018462C,0x8018462C,0x3

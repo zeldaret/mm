@@ -3208,7 +3208,7 @@ void func_801835EC(UNK_PTR arg0, UNK_PTR arg1);
 // void func_80183B68(void);
 s32 func_80183DE0(SkeletonInfo* skeletonInfo);
 // void func_8018410C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
-void func_8018450C(GlobalContext* globalCtx, SkeletonInfo* skeleton, Mtx* mtx,
+void EnTest_OverrideKeyframeDraw(GlobalContext* globalCtx, SkeletonInfo* skeleton, Mtx* mtx,
                    OverrideKeyframeDrawScaled overrideKeyframeDraw, PostKeyframeDrawScaled postKeyframeDraw,
                    Actor* actor);
 // void func_801845A4(void);
