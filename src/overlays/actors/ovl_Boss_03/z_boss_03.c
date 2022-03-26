@@ -41,7 +41,7 @@
  *
  * The collision logic is handled manually
  *
- * This file is (kinda) sectioned like this:
+ * This file is more or less sectioned like this:
  * - SpawnEffect
  * - RNG
  * - Gyorg
@@ -262,7 +262,7 @@ f32 Boss03_RandZeroOne(void) {
 
 /* End of RNG section */
 
-// ACTOR_BG_DBLUE_MOVEBG is never spawned naturally on Gyorg's fight, so this function is kinda useless
+// ACTOR_BG_DBLUE_MOVEBG is never spawned naturally on Gyorg's fight
 Actor* Boss03_FindActorDblueMovebg(GlobalContext* globalCtx) {
     Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
