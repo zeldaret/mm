@@ -1745,7 +1745,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
 
 /* End of Gyorg's Cutscenes section */
 
-/* Start of Gyorg's Cutscenes section */
+/* Start of Gyorg's Other actionFuncs and Update section */
 
 void Boss03_SetupStunned(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
