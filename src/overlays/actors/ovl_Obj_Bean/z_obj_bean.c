@@ -234,7 +234,7 @@ void func_809372D0(ObjBean* this) {
 
     sp34 = Math3D_Vec3fMagnitude(&actor->velocity);
     temp_f2 = D_80938FF8[this->unk_1DE].x;
-    temp_f12 = D_80938FF8[this->unk_1DE].y;
+    temp_f12 = D_80938FF8[this->unk_1DE].z;
     if (sp34 < (actor->speedXZ * 8.0f)) {
         temp_f2 = ((temp_f2 - 2.0f) * 0.1f) + 2.0f;
         temp_f12 *= 0.4f;
