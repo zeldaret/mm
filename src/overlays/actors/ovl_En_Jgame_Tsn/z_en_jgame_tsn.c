@@ -49,9 +49,9 @@ const ActorInit En_Jgame_Tsn_InitVars = {
 };
 
 static AnimationInfo sAnimations[] = {
-    { &object_tsn_Anim_0092FC, 1.0f, 0.0f, 0.0f, 0, -6.0f },
-    { &object_tsn_Anim_000964, 1.0f, 0.0f, 0.0f, 0, -6.0f },
-    { &object_tsn_Anim_001198, 1.0f, 0.0f, 0.0f, 0, -6.0f },
+    { &object_tsn_Anim_0092FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
+    { &object_tsn_Anim_000964, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
+    { &object_tsn_Anim_001198, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -496,7 +496,7 @@ void func_80C147B4(EnJgameTsn* this, GlobalContext* globalCtx) {
 s32 func_80C14960(Vec2f arg0, Vec2f arg1) {
     s32 phi_v1;
 
-    if ((arg1.x * arg0.y) < (arg0.x * arg1.y)) {
+    if ((arg1.x * arg0.z) < (arg0.x * arg1.z)) {
         phi_v1 = 1;
     } else {
         phi_v1 = -1;
@@ -517,9 +517,9 @@ s32 func_80C149B0(GlobalContext* globalCtx, EnJgameTsnStruct* arg1) {
     f32 temp_f22 = player->actor.world.pos.x;
 
     sp64.x = arg1->points[0].z - temp_f20;
-    sp64.y = arg1->points[0].x - temp_f22;
+    sp64.z = arg1->points[0].x - temp_f22;
     sp5C.x = arg1->points[1].z - temp_f20;
-    sp5C.y = arg1->points[1].x - temp_f22;
+    sp5C.z = arg1->points[1].x - temp_f22;
     temp_s3 = func_80C14960(sp64, sp5C);
 
     while (i != 0) {
@@ -531,9 +531,9 @@ s32 func_80C149B0(GlobalContext* globalCtx, EnJgameTsnStruct* arg1) {
         }
 
         sp64.x = arg1->points[sp50].z - temp_f20;
-        sp64.y = arg1->points[sp50].x - temp_f22;
+        sp64.z = arg1->points[sp50].x - temp_f22;
         sp5C.x = arg1->points[i].z - temp_f20;
-        sp5C.y = arg1->points[i].x - temp_f22;
+        sp5C.z = arg1->points[i].x - temp_f22;
 
         if (func_80C14960(sp64, sp5C) != temp_s3) {
             sp58 = false;
