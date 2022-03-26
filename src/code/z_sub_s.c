@@ -309,7 +309,7 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     } else {
         *startPointIndex = 0;
     }
-    
+
     return path;
 }
 
