@@ -50,12 +50,26 @@ We recommend using Debian or Ubuntu 20.04 Linux distributions.
 
 ### MacOS
 
-Preparation is covered in a [separate document](docsBUILDING_MACOS.md).
+Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
 
 
 ### Linux (Native or under WSL / VM)
 
-#### 1. Install build dependencies
+#### 1. Fork the repository
+
+Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then clone your fork where you wish to have the project, with the command:
+
+```bash
+git clone https://github.com/<YOUR_USERNAME>/mm.git
+```
+
+This will copy the GitHub repository contents into a new folder in the current directory called `mm`. Change into this directory before doing anything else:
+
+```bash
+cd mm
+```
+
+#### 2. Install build dependencies
 
 The build process has the following package requirements:
 
@@ -78,14 +92,6 @@ To install the Python dependencies simply run in a terminal:
 
 ```bash
 python3 -m pip install -r requirements.txt
-```
-
-#### 2. Fork the repository
-
-Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then clone your fork where you wish to have the project, with the command:
-
-```bash
-git clone https://github.com/<YOUR_USERNAME>/mm.git
 ```
 
 #### 3. Prepare a base ROM
