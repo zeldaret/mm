@@ -14,7 +14,7 @@
  * Seaweed:
  * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
  * - The default Gyorg actor will spawn 5 other Gyorg instances using the parameter GYORG_PARAM_SEAWEED to spawn them
- * - Seaweed can bend when then main Gyorg instance (the actual boss) or Player are near
+ * - Seaweed can bend when the main Gyorg instance (the actual boss) or Player are near
  *
  * This actor makes some heavy assumptions about the positions of the room where it is spawned
  *
