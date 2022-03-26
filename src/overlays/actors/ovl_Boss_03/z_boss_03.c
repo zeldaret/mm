@@ -2093,7 +2093,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         D_809E9841--;
         if (D_809E9841 == 0) {
             // Play the boss background music
-            Audio_QueueSeqCmd(0x801B);
+            Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
         }
     }
 
