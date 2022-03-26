@@ -3043,8 +3043,11 @@ beginseg
     name "ovl_Obj_Driftice"
     compress
     include "build/src/overlays/actors/ovl_Obj_Driftice/z_obj_driftice.o"
-    include "build/data/ovl_Obj_Driftice/ovl_Obj_Driftice.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Driftice/ovl_Obj_Driftice_reloc.o"
+#else
     include "build/data/ovl_Obj_Driftice/ovl_Obj_Driftice.reloc.o"
+#endif
 endseg
 
 beginseg
