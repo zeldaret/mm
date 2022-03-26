@@ -4504,8 +4504,7 @@ beginseg
     name "ovl_Obj_Yasi"
     compress
     include "build/src/overlays/actors/ovl_Obj_Yasi/z_obj_yasi.o"
-    include "build/data/ovl_Obj_Yasi/ovl_Obj_Yasi.data.o"
-    include "build/data/ovl_Obj_Yasi/ovl_Obj_Yasi.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Yasi/ovl_Obj_Yasi_reloc.o"
 endseg
 
 beginseg
