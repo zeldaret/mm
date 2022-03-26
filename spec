@@ -2819,8 +2819,7 @@ beginseg
     name "ovl_Obj_Smork"
     compress
     include "build/src/overlays/actors/ovl_Obj_Smork/z_obj_smork.o"
-    include "build/data/ovl_Obj_Smork/ovl_Obj_Smork.data.o"
-    include "build/data/ovl_Obj_Smork/ovl_Obj_Smork.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Smork/ovl_Obj_Smork_reloc.o"
 endseg
 
 beginseg
