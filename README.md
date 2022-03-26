@@ -55,7 +55,7 @@ Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
 
 ### Linux (Native or under WSL / VM)
 
-#### 1. Fork the repository
+#### 1. Clone the repository
 
 Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then clone your fork where you wish to have the project, with the command:
 
