@@ -4179,8 +4179,7 @@ beginseg
     name "ovl_Bg_Kin2_Shelf"
     compress
     include "build/src/overlays/actors/ovl_Bg_Kin2_Shelf/z_bg_kin2_shelf.o"
-    include "build/data/ovl_Bg_Kin2_Shelf/ovl_Bg_Kin2_Shelf.data.o"
-    include "build/data/ovl_Bg_Kin2_Shelf/ovl_Bg_Kin2_Shelf.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Kin2_Shelf/ovl_Bg_Kin2_Shelf_reloc.o"
 endseg
 
 beginseg
