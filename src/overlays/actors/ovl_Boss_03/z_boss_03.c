@@ -47,7 +47,7 @@
  * - Gyorg
  *   - Init and actionFuncs
  *   - Cutscenes
- *   - Other actionFuncs and Update
+ *   - Cutscenes actionFuncs and Update
  *   - Draw
  * - Effect Update/Draw
  * - Seaweed
@@ -1114,7 +1114,7 @@ void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
 
 /* End of Gyorg's Init and actionFuncs section */
 
-/* Start of Gyorg's Other actionFuncs and Update section */
+/* Start of Gyorg's Cutscenes section */
 
 void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_IntroCutscene;
@@ -1746,7 +1746,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
 
 /* End of Gyorg's Cutscenes section */
 
-/* Start of Gyorg's Other actionFuncs and Update section */
+/* Start of Gyorg's More actionFuncs and Update section */
 
 void Boss03_SetupStunned(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -2153,7 +2153,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
-/* End of Gyorg's Other actionFuncs and Update section */
+/* End of Gyorg's More actionFuncs and Update section */
 
 /* Start of Gyorg's Draw section */
 
