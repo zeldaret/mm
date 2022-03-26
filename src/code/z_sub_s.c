@@ -15,9 +15,9 @@ Vec3f D_801C5DB0 = { 1.0f, 1.0f, 1.0f };
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with unk_1A4 == 5 and the specified unk_1A5.
+ * Finds the first EnDoor instance with unk_1A4 == 5 and the specified switchFlag.
  */
-EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
+EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 switchFlag) {
     Actor* actor = NULL;
     EnDoor* door;
 
@@ -29,7 +29,7 @@ EnDoor* SubS_FindDoor(GlobalContext* globalCtx, s32 unk_1A5) {
             break;
         }
 
-        if ((door->unk_1A4 == 5) && (door->switchFlag == (u8)unk_1A5)) {
+        if ((door->unk_1A4 == 5) && (door->switchFlag == (u8)switchFlag)) {
             break;
         }
 
@@ -279,7 +279,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }
-    
+
     return reached;
 }
 
