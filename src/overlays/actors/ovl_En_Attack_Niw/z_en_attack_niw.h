@@ -11,8 +11,8 @@ typedef void (*EnAttackNiwActionFunc)(struct EnAttackNiw*, GlobalContext*);
 typedef struct EnAttackNiw {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[OBJECT_NIW_LIMB_MAX];
-    /* 0x1E8 */ Vec3s morphTable[OBJECT_NIW_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[NIW_LIMB_MAX];
+    /* 0x1E8 */ Vec3s morphTable[NIW_LIMB_MAX];
     /* 0x248 */ EnAttackNiwActionFunc actionFunc;
     /* 0x24C */ s16 unk_24C;
     /* 0x24E */ s16 unk_24E;

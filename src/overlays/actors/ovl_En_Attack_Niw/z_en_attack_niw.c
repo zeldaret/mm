@@ -43,8 +43,8 @@ void EnAttackNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_niw_Skel_002530, &object_niw_Anim_0000E8, this->jointTable,
-                       this->morphTable, OBJECT_NIW_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable,
+                       this->morphTable, NIW_LIMB_MAX);
 
     if (this->actor.params < 0) {
         this->actor.params = 0;
@@ -68,8 +68,8 @@ void EnAttackNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnNiw* parent = (EnNiw*)this->actor.parent;
 
     if ((thisx->parent != NULL) && (thisx->parent->update != NULL)) {
-        if (parent->unk290 > 0) {
-            parent->unk290--;
+        if (parent->attackNiwCount > 0) {
+            parent->attackNiwCount--;
         }
     }
 }
@@ -421,21 +421,21 @@ s32 EnAttackNiw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx) {
     EnAttackNiw* this = THIS;
 
-    if (limbIndex == OBJECT_NIW_LIMB_0D) {
+    if (limbIndex == NIW_LIMB_UPPER_BODY) {
         rot->y += (s16)this->unk_2B4;
     }
 
-    if (limbIndex == OBJECT_NIW_LIMB_0F) {
+    if (limbIndex == NIW_LIMB_HEAD) {
         rot->z += (s16)this->unk_2B8;
     }
 
-    if (limbIndex == OBJECT_NIW_LIMB_0B) {
+    if (limbIndex == NIW_LIMB_RIGHT_WING_ROOT) {
         rot->x += (s16)this->unk_2B0;
         rot->y += (s16)this->unk_2AC;
         rot->z += (s16)this->unk_2A8;
     }
 
-    if (limbIndex == OBJECT_NIW_LIMB_07) {
+    if (limbIndex == NIW_LIMB_LEFT_WING_ROOT) {
         rot->x += (s16)this->unk_2A4;
         rot->y += (s16)this->unk_2A0;
         rot->z += (s16)this->unk_29C;
