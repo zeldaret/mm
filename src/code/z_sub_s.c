@@ -307,17 +307,136 @@ s32 SubS_FillLimbRotTables(GlobalContext* globalCtx, s16* limbRotTableY, s16* li
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013DCCC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013DCE0.s")
+void SubS_ActorPathing_Init(GlobalContext* globalCtx, Vec3f* worldPos, Actor* actor, ActorPathing* actorPath,
+                            Path* paths, s32 pathIndex, s32 begPointIndex, s32 endPointIndex, s32 curPointIndex,
+                            u8 flags) {
+    Path* path;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013DE04.s")
+    actorPath->setupPathList = globalCtx->setupPathList;
+    actorPath->pathIndex = pathIndex;
+    path = &paths[pathIndex];
+    actorPath->points = Lib_SegmentedToVirtual(path->points);
+    actorPath->count = path->count;
+    actorPath->begPointIndex = begPointIndex;
+    if (endPointIndex == 0) {
+        actorPath->endPointIndex = actorPath->count - 1;
+    } else if (endPointIndex > 0) {
+        actorPath->endPointIndex = endPointIndex;
+    } else {
+        //! @bug: endPointIndex is negative, subtraction causes result to be past the end
+        actorPath->endPointIndex = (actorPath->count - endPointIndex) - 1;
+    }
+    actorPath->curPointIndex = curPointIndex;
+    actorPath->curPoint.x = actorPath->points[0].x;
+    actorPath->curPoint.y = actorPath->points[0].y;
+    actorPath->curPoint.z = actorPath->points[0].z;
+    Math_Vec3f_Copy(&actorPath->prevPoint, &actorPath->curPoint);
+    actorPath->worldPos = worldPos;
+    actorPath->actor = actor;
+    actorPath->flags = flags;
+    actorPath->prevFlags = flags;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013DF3C.s")
+s32 SubS_ActorPathing_Update(GlobalContext* globalCtx, ActorPathing* actorPath,
+                             ActorPathingComputeFunc computePointInfoFunc, ActorPathingUpdateFunc updateActorInfoFunc,
+                             ActorPathingUpdateFunc moveFunc, ActorPathingUpdateFunc setNextPointFunc) {
+    s32 shouldSetNextPoint;
+    s32 reupdate;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E054.s")
+    actorPath->computePointInfoFunc = computePointInfoFunc;
+    actorPath->updateActorInfoFunc = updateActorInfoFunc;
+    actorPath->moveFunc = moveFunc;
+    actorPath->setNextPointFunc = setNextPointFunc;
+    actorPath->flags &= ~ACTOR_PATHING_REACHED_TEMPORARY;
+    reupdate = false;
+    if (actorPath->flags & ACTOR_PATHING_MOVE_BACKWARDS) {
+        if (!(actorPath->prevFlags & ACTOR_PATHING_MOVE_BACKWARDS)) {
+            actorPath->curPointIndex--;
+        }
+    } else if (actorPath->prevFlags & ACTOR_PATHING_MOVE_BACKWARDS) {
+        actorPath->curPointIndex++;
+    }
+    do {
+        shouldSetNextPoint = false;
+        if (actorPath->computePointInfoFunc != NULL) {
+            actorPath->computePointInfoFunc(globalCtx, actorPath);
+        }
+        if (actorPath->updateActorInfoFunc != NULL) {
+            shouldSetNextPoint = actorPath->updateActorInfoFunc(globalCtx, actorPath);
+        }
+        if (shouldSetNextPoint) {
+            if (actorPath->setNextPointFunc != NULL) {
+                reupdate = actorPath->setNextPointFunc(globalCtx, actorPath);
+            }
+        } else if (actorPath->moveFunc != NULL) {
+            reupdate = actorPath->moveFunc(globalCtx, actorPath);
+        }
+    } while (reupdate);
+    actorPath->prevFlags = actorPath->flags;
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E07C.s")
+void SubS_ActorPathing_ComputePointInfo(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Vec3f diff;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E0A4.s")
+    actorPath->curPoint.x = actorPath->points[actorPath->curPointIndex].x + actorPath->pointOffset.x;
+    actorPath->curPoint.y = actorPath->points[actorPath->curPointIndex].y + actorPath->pointOffset.y;
+    actorPath->curPoint.z = actorPath->points[actorPath->curPointIndex].z + actorPath->pointOffset.z;
+    diff.x = actorPath->curPoint.x - actorPath->worldPos->x;
+    diff.y = actorPath->curPoint.y - actorPath->worldPos->y;
+    diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
+    actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
+    actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
+    actorPath->rotToCurPoint.y = Math_FAtan2F(diff.z, diff.x);
+    actorPath->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
+    actorPath->rotToCurPoint.z = 0;
+}
+
+s32 SubS_ActorPathing_MoveWithGravity(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor_MoveWithGravity(actorPath->actor);
+    return false;
+}
+
+s32 SubS_ActorPathing_MoveWithoutGravityReverse(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor_MoveWithoutGravityReverse(actorPath->actor);
+    return false;
+}
+
+s32 SubS_ActorPathing_SetNextPoint(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    s32 reupdate = true;
+
+    Math_Vec3f_Copy(&actorPath->prevPoint, &actorPath->curPoint);
+    if (!(actorPath->flags & ACTOR_PATHING_MOVE_BACKWARDS)) {
+        if (actorPath->curPointIndex >= actorPath->endPointIndex) {
+            if (actorPath->flags & ACTOR_PATHING_RETURN_TO_START) {
+                actorPath->curPointIndex = actorPath->begPointIndex;
+            } else if (actorPath->flags & ACTOR_PATHING_SWITCH_DIRECTION) {
+                actorPath->flags |= ACTOR_PATHING_MOVE_BACKWARDS;
+            } else {
+                reupdate = false;
+            }
+            actorPath->flags |= ACTOR_PATHING_REACHED_END;
+        } else {
+            actorPath->curPointIndex++;
+        }
+        actorPath->flags |= ACTOR_PATHING_REACHED_POINT;
+    } else {
+        if (actorPath->begPointIndex >= actorPath->curPointIndex) {
+            if (actorPath->flags & ACTOR_PATHING_RETURN_TO_START) {
+                actorPath->curPointIndex = actorPath->endPointIndex;
+            } else if (actorPath->flags & ACTOR_PATHING_SWITCH_DIRECTION) {
+                actorPath->flags &= ~ACTOR_PATHING_MOVE_BACKWARDS;
+            } else {
+                reupdate = false;
+            }
+            actorPath->flags |= ACTOR_PATHING_REACHED_END;
+        } else {
+            actorPath->curPointIndex--;
+        }
+    }
+    actorPath->flags |= ACTOR_PATHING_REACHED_POINT;
+    return reupdate;
+}
 
 void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex,
                                      s32* curIndex) {

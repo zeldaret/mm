@@ -94,16 +94,16 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnk_Anim_000B70, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnk_Anim_002A08, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnk_Anim_00031C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnk_Anim_000430, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnk_Anim_000430, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnk_Anim_000894, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnk_Anim_002B6C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnk_Anim_0006CC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWaitAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardAttackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
+    { &gDekuPalaceGuardDigAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDekuPalaceGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gDekuPalaceGuardHappyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_hintnuts_Anim_000168, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &object_hintnuts_Anim_0024CC, 1.0f, -1, -1, ANIMMODE_ONCE, 0 },
     { &object_hintnuts_Anim_0024CC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
@@ -178,7 +178,7 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
 
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &object_dnk_Skel_002848, NULL, this->jointTable,
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable,
                                this->morphTable, 11);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
@@ -326,9 +326,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
 void func_80A51CB8(EnDnk* this, GlobalContext* globalCtx) {
     static TexturePtr D_80A5245C[] = {
-        object_dnk_Tex_001680,
-        object_dnk_Tex_001700,
-        object_dnk_Tex_001780,
+        gDekuPalaceGuardEyeOpenTex,
+        gDekuPalaceGuardEyeHalfTex,
+        gDekuPalaceGuardEyeClosedTex,
     };
     s32 pad;
 
