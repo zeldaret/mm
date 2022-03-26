@@ -149,7 +149,7 @@ s32 func_80B6FE08(BgKin2Shelf* this, GlobalContext* globalCtx) {
 
 s32 func_80B6FE48(BgKin2Shelf* this, GlobalContext* globalCtx) {
     s32 params = BGKIN2SHELF_GET_1(&this->dyna.actor);
-    s32 temp_v1 = (D_80B70778[params] & this->unk_164) & 0xFF;
+    u8 temp_v1 = D_80B70778[params] & this->unk_164;
 
     if ((this->unk_166 != 0) && (this->unk_167 != 0)) {
         return false;
@@ -176,11 +176,11 @@ s32 func_80B6FEBC(BgKin2Shelf* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_164 & 4) {
-        return (this->unk_167 < 0) ^ 1;
+        return this->unk_167 >= 0;
     }
 
     if (this->unk_164 & 8) {
-        return (this->unk_166 < 0) ^ 1;
+        return this->unk_166 >= 0;
     }
     return false;
 }
