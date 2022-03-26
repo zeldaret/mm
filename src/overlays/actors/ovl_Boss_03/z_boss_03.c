@@ -42,14 +42,14 @@
  * The collision logic is handled manually
  *
  * This file is (kinda) sectioned like this:
- * - Effects stuff
+ * - SpawnEffect
  * - RNG
  * - Gyorg
- *   - Init, action functions
+ *   - Init and actionFuncs
  *   - Cutscenes
- *   - more actions/Update
- *   - Draw stuff
- * - Effect update/draw stuff
+ *   - Other actionFuncs and Update
+ *   - Draw
+ * - Effect Update/Draw
  * - Seaweed
  */
 
@@ -232,7 +232,7 @@ void Boss03_UpdateSphereElement(s32 index, ColliderJntSph* collider, Vec3f* sphe
     sphElement->dim.worldSphere.radius = sphElement->dim.scale * sphElement->dim.modelSphere.radius;
 }
 
-/* Start of Random section */
+/* Start of RNG section */
 
 static s32 sRandSeed0;
 static s32 sRandSeed1;
@@ -260,7 +260,7 @@ f32 Boss03_RandZeroOne(void) {
     return fabsf(rand);
 }
 
-/* End of Random section */
+/* End of RNG section */
 
 Actor* Boss03_FindActorDblueMovebg(GlobalContext* globalCtx) {
     Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
@@ -274,6 +274,8 @@ Actor* Boss03_FindActorDblueMovebg(GlobalContext* globalCtx) {
 
     return NULL;
 }
+
+/* Start of Gyorg's Init and actionFuncs section */
 
 const ActorInit Boss_03_InitVars = {
     ACTOR_BOSS_03,
@@ -1109,6 +1111,10 @@ void Boss03_JumpOverPlatform(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+/* End of Gyorg's Init and actionFuncs section */
+
+/* Start of Gyorg's Other actionFuncs and Update section */
+
 void Boss03_SetupIntroCutscene(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_IntroCutscene;
     Animation_MorphToLoop(&this->skelAnime, &gGyorgFastSwimmingAnim, -10.0f);
@@ -1737,6 +1743,10 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
     }
 }
 
+/* End of Gyorg's Cutscenes section */
+
+/* Start of Gyorg's Cutscenes section */
+
 void Boss03_SetupStunned(Boss03* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
@@ -2142,6 +2152,10 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 }
 
+/* End of Gyorg's Other actionFuncs and Update section */
+
+/* Start of Gyorg's Draw section */
+
 void Boss03_SetObject(GlobalContext* globalCtx, s16 objectId) {
     s32 objectIndex = Object_GetIndex(&globalCtx->objectCtx, objectId);
 
@@ -2276,6 +2290,10 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
+
+/* End of Gyorg's Draw section */
+
+/* Start of Effect Update/Draw section */
 
 void Boss03_UpdateEffects(GlobalContext* globalCtx) {
     GyorgEffect* eff = globalCtx->specialEffects;
@@ -2479,6 +2497,10 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
+/* End of Effect Update/Draw section */
+
+/* Start of Seaweed section */
+
 #define SEAWEED_FLAG_INTERACT_NONE 0
 #define SEAWEED_FLAG_INTERACT_PLAYER 1
 #define SEAWEED_FLAG_INTERACT_GYORG 2
@@ -2614,3 +2636,5 @@ void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
+
+/* End of Seaweed section */
