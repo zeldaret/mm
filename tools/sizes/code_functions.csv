@@ -2694,7 +2694,7 @@ asm/non_matchings/code/padmgr/func_80175364.s,func_80175364,0x80175364,0x34
 asm/non_matchings/code/padmgr/func_80175434.s,func_80175434,0x80175434,0x6
 asm/non_matchings/code/padmgr/func_8017544C.s,func_8017544C,0x8017544C,0xA
 asm/non_matchings/code/padmgr/func_80175474.s,func_80175474,0x80175474,0x13
-asm/non_matchings/code/padmgr/func_801754C0.s,func_801754C0,0x801754C0,0x8
+asm/non_matchings/code/padmgr/PadMgr_ControllerHasRumblePak.s,PadMgr_ControllerHasRumblePak,0x801754C0,0x8
 asm/non_matchings/code/padmgr/Padmgr_CalcStickEdges.s,Padmgr_CalcStickEdges,0x801754E0,0xB1
 asm/non_matchings/code/padmgr/Padmgr_ParseState.s,Padmgr_ParseState,0x801757A4,0x86
 asm/non_matchings/code/padmgr/func_801759BC.s,func_801759BC,0x801759BC,0x49
