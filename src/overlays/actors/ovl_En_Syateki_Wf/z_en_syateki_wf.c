@@ -145,16 +145,14 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnSyatekiWf* this = THIS;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
-    s32 temp;
+    s32 i;
 
     path = syatekiMan->path;
     while (path->unk2 != 2) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
-    temp = 0;
-    while (temp < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor)) {
-        temp++;
+    for (i = 0; i < EN_SYATEKI_WF_GET_PARAM_FF00(&this->actor); i++) {
         path = &globalCtx->setupPathList[path->unk1];
     }
 
@@ -463,7 +461,7 @@ void EnSyatekiWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     Vec3f sp18;
 
     Collider_UpdateSpheres(limbIndex, &this->unk_34C);
-    if (limbIndex == 6) {
+    if (limbIndex == OBJECT_WF_2_LIMB_06) {
         Matrix_MultiplyVector3fByState(&D_80A20FD0, &sp18);
         this->unk_300.dim.pos.x = sp18.x;
         this->unk_300.dim.pos.y = sp18.y;
