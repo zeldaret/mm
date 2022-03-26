@@ -131,7 +131,7 @@ void func_80A3D9C4(ObjSmork* this, GlobalContext* globalCtx) {
 void ObjSmork_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjSmork* this = THIS;
 
-    Lib_MemCpy(this->unk_148, ovl_Obj_Smork_Vtx_000C10, sizeof(ovl_Obj_Smork_Vtx_000C10));
+    Lib_MemCpy(this->unk_148, ovl_Obj_Smork_Vtx_000C10, sizeof(Vtx) * ARRAY_COUNT(ovl_Obj_Smork_Vtx_000C10));
     this->unk_1C6 = Rand_S16Offset(0, 59);
     this->unk_1C4 = 0;
 }
