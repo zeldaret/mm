@@ -356,7 +356,7 @@ void func_8087B7C0(EnHorse* this, GlobalContext* globalCtx, Path* path) {
         sp68 = 0;
     }
 
-    sp64 = 9.99999968029e+37;
+    sp64 = 1.0e+38;
     sp60 = sp68 + 5;
     if (path->count < sp60) {
         sp60 = path->count;
@@ -569,7 +569,7 @@ s32 EnHorse_Spawn(EnHorse* this, GlobalContext* globalCtx) {
     f32 dist;
     Path* path;
     s32 spawn = false;
-    f32 minDist = 9.99999968029e+37;
+    f32 minDist = 1.0e+38;
     Player* player = GET_PLAYER(globalCtx);
     Vec3f spawnPos;
     s32 pathIdx = func_800F3940(globalCtx);
@@ -4492,7 +4492,7 @@ void EnHorse_RandomOffset(Vec3f* src, f32 dist, Vec3f* dst) {
     dst->z = ((Rand_ZeroOne() * (2.0f * dist)) + src->z) - dist;
 }
 
-void EnHorse_SkinCallback1(Actor* thisx, GlobalContext* globalCtx, Skin* skin) {
+void EnHorse_PostDraw(Actor* thisx, GlobalContext* globalCtx, Skin* skin) {
     s32 pad;
     EnHorse* this = THIS;
     Vec3f sp7C = { 0.0f, 0.0f, 0.0f };
@@ -4688,7 +4688,7 @@ void EnHorse_SkinCallback1(Actor* thisx, GlobalContext* globalCtx, Skin* skin) {
     }
 }
 
-s32 EnHorse_SkinCallback2(Actor* thisx, GlobalContext* globalCtx, s32 limbIndex, Skin* skin) {
+s32 EnHorse_OverrideLimbDraw(Actor* thisx, GlobalContext* globalCtx, s32 limbIndex, Skin* skin) {
     static TexturePtr D_80889204[] = {
         object_horse_link_child_Tex_001D28,
         object_horse_link_child_Tex_001928,
@@ -4733,9 +4733,9 @@ void EnHorse_Draw(Actor* thisx, GlobalContext* globalCtx) {
         this->stateFlags |= ENHORSE_DRAW;
         if (!(this->unk_1EC & 1)) {
             if (this->stateFlags & ENHORSE_JUMPING) {
-                func_80138258(&this->actor, globalCtx, &this->skin, EnHorse_SkinCallback1, EnHorse_SkinCallback2, 0);
+                func_80138258(&this->actor, globalCtx, &this->skin, EnHorse_PostDraw, EnHorse_OverrideLimbDraw, false);
             } else {
-                func_80138258(&this->actor, globalCtx, &this->skin, EnHorse_SkinCallback1, EnHorse_SkinCallback2, 1);
+                func_80138258(&this->actor, globalCtx, &this->skin, EnHorse_PostDraw, EnHorse_OverrideLimbDraw, true);
             }
         } else {
             if (this->stateFlags & ENHORSE_JUMPING) {
