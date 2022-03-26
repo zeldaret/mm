@@ -104,7 +104,7 @@ void ObjBigicicle_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    sp28 = (this->actor.params >> 8) & 0xFF;
+    sp28 = OBJBIGICLE_GET_FF00(&this->actor);
     if ((sp28 == 0) || (sp28 == 0xFF)) {
         sp28 = 0x3C;
     }
@@ -112,7 +112,7 @@ void ObjBigicicle_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actor.params &= 0xFF;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    sp30 = sp28 * 0.016666668f;
+    sp30 = sp28 * (1.0f / 60.0f);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider1, &this->actor, &sCylinderInit1);
     this->collider1.dim.radius = this->collider1.dim.radius * sp30;
@@ -124,7 +124,7 @@ void ObjBigicicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider2.dim.height = this->collider2.dim.height * sp30;
     this->collider2.dim.yShift = this->collider2.dim.yShift * sp30;
 
-    if (Flags_GetSwitch(globalCtx, this->actor.params) != 0) {
+    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -155,7 +155,7 @@ void func_80AE8DE4(ObjBigicicle* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f sp98;
     Vec3f sp8C;
-    f32 temp_f20 = this->actor.scale.x * 16.666666f;
+    f32 temp_f20 = this->actor.scale.x * (50.0f / 3.0f);
 
     for (i = 0; i < 10; i++) {
         sp98.x = (randPlusMinusPoint5Scaled(4.0f) * temp_f20) + this->actor.world.pos.x;
@@ -194,7 +194,7 @@ void func_80AE8FD4(ObjBigicicle* this, GlobalContext* globalCtx) {
 }
 
 void func_80AE9090(ObjBigicicle* this, GlobalContext* globalCtx) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene) != 0) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         this->unk_149++;
         func_80AE8DE4(this, globalCtx);
@@ -267,7 +267,7 @@ void func_80AE939C(ObjBigicicle* this, GlobalContext* globalCtx) {
     s32 i;
     Vec3f sp98;
     Vec3f sp8C;
-    f32 temp_f20 = this->actor.scale.x * 16.666666f;
+    f32 temp_f20 = this->actor.scale.x * (50.0f / 3.0f);
 
     for (i = 0; i < 20; i++) {
         sp8C.x = randPlusMinusPoint5Scaled(15.0f);
