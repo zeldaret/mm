@@ -14,7 +14,7 @@
  * Seaweed:
  * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
  * - The default Gyorg actor will spawn 5 other Gyorg instances using the parameter GYORG_PARAM_SEAWEED to spawn them
- * - Seaweed can "interact" only with the main Gyorg instance and Player
+ * - Seaweed can bend when then main Gyorg instance (the actual boss) or Player are near
  *
  * This actor makes some heavy assumptions about the positions of the room where it is spawned
  *
@@ -74,8 +74,8 @@
 #define WORK_TIMER_STUNNED 2
 
 // The Y position of the top of the platform
-#define PLATFORM_HEIGHT (440.0f)
-#define WATER_HEIGHT (430.0f)
+#define PLATFORM_HEIGHT 440.0f
+#define WATER_HEIGHT 430.0f
 
 void Boss03_Init(Actor* thisx, GlobalContext* globalCtx);
 void Boss03_Destroy(Actor* thisx, GlobalContext* globalCtx);
@@ -262,6 +262,7 @@ f32 Boss03_RandZeroOne(void) {
 
 /* End of RNG section */
 
+// ACTOR_BG_DBLUE_MOVEBG is never spawned naturally on Gyorg's fight, so this function is kinda useless
 Actor* Boss03_FindActorDblueMovebg(GlobalContext* globalCtx) {
     Actor* actor = globalCtx->actorCtx.actorLists[ACTORCAT_BG].first;
 
