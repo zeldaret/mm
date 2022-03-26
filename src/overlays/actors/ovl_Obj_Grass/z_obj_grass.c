@@ -118,7 +118,7 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0527F0);
+                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gKakeraLeafMiddle);
 
         spB0.x = ptr->unk_00.x + (ptr2->x * 16.0f);
         spB0.y = (ptr->unk_00.y + (ptr2->y * 16.0f)) + 10.0f;
@@ -129,7 +129,7 @@ void func_809A9314(ObjGrassStruct1_1* ptr, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0528B0);
+                             D_809AAB7C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gKakeraLeafTip);
     }
 }
 

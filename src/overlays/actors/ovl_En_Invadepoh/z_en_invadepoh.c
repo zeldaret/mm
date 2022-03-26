@@ -3534,7 +3534,7 @@ void func_80B4B3DC(EnInvadepoh* this) {
 }
 
 void func_80B4B430(EnInvadepoh* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_dog_Anim_0021C8, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gDogWalkAnim, -6.0f);
     this->actionTimer = Rand_S16Offset(50, 80);
     this->actionFunc = func_80B4B484;
 }
@@ -3557,7 +3557,7 @@ void func_80B4B484(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4B510(EnInvadepoh* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_dog_Anim_001BD8, -6.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gDogRunAnim, -6.0f);
     this->actionTimer = Rand_S16Offset(50, 200);
     this->actionFunc = func_80B4B564;
 }
@@ -3601,7 +3601,7 @@ void func_80B4B564(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4B724(EnInvadepoh* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dog_Anim_000998, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDogBarkAnim, -6.0f);
     this->actionFunc = func_80B4B768;
 }
 
@@ -3621,7 +3621,7 @@ void func_80B4B768(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void func_80B4B820(EnInvadepoh* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dog_Anim_001560, -6.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDogJumpAnim, -6.0f);
     this->actionFunc = func_80B4B864;
 }
 
@@ -3640,8 +3640,8 @@ void func_80B4B8BC(Actor* thisx, GlobalContext* globalCtx) {
     if (Object_IsLoaded(&globalCtx->objectCtx, this->bankIndex)) {
         this->actor.objBankIndex = this->bankIndex;
         Actor_SetObjectDependency(globalCtx, &this->actor);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, &object_dog_Anim_0021C8,
-                           this->jointTable, this->morphTable, 13);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDogSkel, &gDogWalkAnim, this->jointTable, this->morphTable,
+                           DOG_LIMB_MAX);
         func_80B45C04(&this->behaviorInfo, 0, 0, 0, 0, &gZeroVec3s, 3000, 0.1f, 0.0f, 0.0f);
         func_80B44664(this, globalCtx);
         EnInvadepoh_SetPathPointToWorldPos(this, 0);
@@ -4553,7 +4553,8 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80B4E5B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if ((limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7)) {
+    if ((limbIndex == DOG_LIMB_HEAD) || (limbIndex == DOG_LIMB_RIGHT_FACE_HAIR) ||
+        (limbIndex == DOG_LIMB_LEFT_FACE_HAIR)) {
         EnInvadepoh* this = THIS;
 
         rot->x += this->behaviorInfo.unk20.x;
@@ -4567,7 +4568,7 @@ s32 func_80B4E5B0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
 void func_80B4E61C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnInvadepoh* this = THIS;
 
-    if (limbIndex == 5) {
+    if (limbIndex == DOG_LIMB_HEAD) {
         Matrix_GetStateTranslationAndScaledY(20.0f, &this->actor.focus.pos);
     }
 }
