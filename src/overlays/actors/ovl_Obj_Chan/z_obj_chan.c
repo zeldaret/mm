@@ -71,8 +71,8 @@ void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx);
 void ObjChan_DrawFire(ObjChan* this, GlobalContext* globalCtx);
 
 static Vec3f sObjChanFlameSize[2] = {
-    { 0.159999996424f, 0.109999999404f, 1.0f },
-    { 0.129999995232f, 0.0900000035763f, 1.0f },
+    { 0.16f, 0.11f, 1.0f },
+    { 0.13f, 0.09f, 1.0f },
 };
 static f32 sObjChanFlameYOffset[2] = { 1800, 1800 };
 static s32 sObjChanLoaded;
