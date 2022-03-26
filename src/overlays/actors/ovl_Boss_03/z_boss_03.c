@@ -47,7 +47,7 @@
  * - Gyorg
  *   - Init and actionFuncs
  *   - Cutscenes
- *   - Cutscenes actionFuncs and Update
+ *   - More actionFuncs and Update
  *   - Draw
  * - Effect Update/Draw
  * - Seaweed
