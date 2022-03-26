@@ -493,6 +493,7 @@ animdict = {
     "player->unk_38C": "player->mountSide",
     "player->unk_394": "player->csMode",
     "globalCtx->actorCtx.actorList[": "globalCtx->actorCtx.actorLists[",
+    "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
     "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
     "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
