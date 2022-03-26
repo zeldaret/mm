@@ -4769,8 +4769,7 @@ beginseg
     name "ovl_En_Hidden_Nuts"
     compress
     include "build/src/overlays/actors/ovl_En_Hidden_Nuts/z_en_hidden_nuts.o"
-    include "build/data/ovl_En_Hidden_Nuts/ovl_En_Hidden_Nuts.data.o"
-    include "build/data/ovl_En_Hidden_Nuts/ovl_En_Hidden_Nuts.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hidden_Nuts/ovl_En_Hidden_Nuts_reloc.o"
 endseg
 
 beginseg
