@@ -1311,7 +1311,6 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                         this->actor.gravity = -1.5f;
                         this->actor.speedXZ = 20.0f;
 
-                        // Play the boss background music
                         Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KONB_JUMP_OLD);
                         this->skelAnime.playSpeed = 1.0f;
@@ -2092,7 +2091,6 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
     if (D_809E9841 != 0) {
         D_809E9841--;
         if (D_809E9841 == 0) {
-            // Play the boss background music
             Audio_QueueSeqCmd(NA_BGM_BOSS | 0x8000);
         }
     }
