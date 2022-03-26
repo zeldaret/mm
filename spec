@@ -4223,8 +4223,7 @@ beginseg
     name "ovl_Bg_Ikana_Block"
     compress
     include "build/src/overlays/actors/ovl_Bg_Ikana_Block/z_bg_ikana_block.o"
-    include "build/data/ovl_Bg_Ikana_Block/ovl_Bg_Ikana_Block.data.o"
-    include "build/data/ovl_Bg_Ikana_Block/ovl_Bg_Ikana_Block.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Ikana_Block/ovl_Bg_Ikana_Block_reloc.o"
 endseg
 
 beginseg
