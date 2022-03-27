@@ -2,6 +2,7 @@
 #define Z_EN_HORSE_LINK_CHILD_H
 
 #include "global.h"
+#include "z64skin.h"
 
 struct EnHorseLinkChild;
 
