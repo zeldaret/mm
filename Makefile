@@ -73,8 +73,9 @@ AS         := $(MIPS_BINUTILS_PREFIX)as
 LD         := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
-# ASM_PROC   := python3 tools/asm-processor/build.py --input-enc=utf-8 --output-enc=euc-jp
 ASM_PROC   := python3 tools/asm-processor/build.py
+
+ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp
 
 IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
 
@@ -183,6 +184,7 @@ build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 build/src/code/audio/%.o: OPTFLAGS := -O2
 
 build/assets/%.o: OPTFLAGS := -O1
+build/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
@@ -199,19 +201,19 @@ build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
 build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
-build/src/boot_O2/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot_O2_g3/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/%.o: CC := $(CC_OLD)
 # Needed at least until voice is decompiled
-build/src/libultra/voice/%.o: CC := $(ASM_PROC) $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-build/src/code/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/code/audio/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/src/overlays/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/assets/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
+build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 
