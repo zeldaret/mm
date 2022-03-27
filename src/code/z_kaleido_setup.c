@@ -28,19 +28,19 @@ void func_800F4A10(GlobalContext* globalCtx) {
 
     if (pauseCtx->state == 1) {
         for (i = 0; i < 11; i++) {
-            if (((gSaveContext.mapsVisited >> i) & 1) != 0) {
+            if (((gSaveContext.save.mapsVisited >> i) & 1) != 0) {
                 pauseCtx->worldMapPoints[i] = 1;
             }
         }
     } else {
         for (i = 9; i >= 0; i--) {
-            if (((gSaveContext.owlActivationFlags >> i) & 1) != 0) {
+            if (((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) != 0) {
                 pauseCtx->worldMapPoints[i] = (u8) 1U;
                 pauseCtx->unk_238[4] = i;
             }
         }
 
-        if (((gSaveContext.owlActivationFlags >> 4) & 1) != 0) {
+        if (((gSaveContext.save.playerData.owlActivationFlags >> 4) & 1) != 0) {
             pauseCtx->unk_238[4] = 4;
         }
     }
@@ -86,9 +86,9 @@ void func_800F4C0C(GlobalContext* globalCtx) {
 
     if (pauseCtx->state == 0) {
         if (pauseCtx->debugState == 0) {
-            if ((globalCtx->gameOverCtx.state == 0) && (globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0) && (gSaveContext.cutscene < 0xFFF0)) {
+            if ((globalCtx->gameOverCtx.state == 0) && (globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
                 if (gSaveContext.nextCutsceneIndex < 0xFFF0) {
-                    if ((func_801690CC(globalCtx) == 0) || (( (msgCtx->msgMode != 0)) && (msgCtx->unk11F04 == 0xFF))) {
+                    if ((func_801690CC(globalCtx) == 0) || (( (msgCtx->msgMode != 0)) && (msgCtx->currentTextId == 0xFF))) {
                         if ((globalCtx->unk_1887C < 2)) {
                             if ((gSaveContext.unk_3F28 != 8) && (gSaveContext.unk_3F28 != 9)) {
                                 if (((gSaveContext.eventInf[1] & 0x80) == 0) && ((player->stateFlags1 & 0x20) == 0)) {
