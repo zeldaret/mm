@@ -36,8 +36,10 @@
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
-#include "z64scene.h"
 #include "z64save.h"
+#include "z64scene.h"
+#include "z64skin.h"
+#include "z64subs.h"
 #include "z64transition.h"
 #include "regs.h"
 
@@ -139,15 +141,21 @@ typedef struct {
     /* 0x4 */ f32 dynamicSizeStep;
     /* 0x8 */ u8 state;
     /* 0x9 */ u8 sizeGrowsCos2;
-    /* 0xA */ u8 unkA;
+    /* 0xA */ u8 colorsIndex;
     /* 0xB */ u8 flags;
-    /* 0xC */ u8 unkC;
+    /* 0xC */ u8 lightParamsIndex;
 } FireObjInitParams; // size = 0xD
 
-typedef struct {
+typedef struct FireObjColors {
     /* 0x0 */ Color_RGBA8 primColor;
-    /* 0x4 */ u8 unk4;
+    /* 0x4 */ u8 lod;
     /* 0x5 */ Color_RGB8 envColor;
+} FireObjColors; // size = 0x8
+
+typedef struct FireObjLightParams {
+    /* 0x0 */ s16 radius;
+    /* 0x2 */ Color_RGB8 color;
+    /* 0x5 */ Color_RGB8 maxColorAdj;
 } FireObjLightParams; // size = 0x8
 
 #define FONT_CHAR_TEX_WIDTH  16
@@ -865,7 +873,8 @@ typedef struct {
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x31];
+    /* 0x12080 */ UNK_TYPE1 pad12080[0x30];
+    /* 0x120B0 */ u8 unk120B0;
     /* 0x120B1 */ u8 unk120B1;
     /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
     /* 0x120D4 */ UNK_TYPE2 unk120D4;
@@ -1158,8 +1167,8 @@ typedef enum {
 
 struct FireObjLight {
     /* 0x00 */ LightNode* light;
-    /* 0x04 */ LightInfoPositional lightInfo;
-    /* 0x12 */ u8 unk12;
+    /* 0x04 */ LightInfo lightInfo;
+    /* 0x12 */ u8 lightParamsIndex;
 }; // size = 0x13
 
 #define OS_SC_RETRACE_MSG       1
@@ -1210,7 +1219,7 @@ struct FireObj {
     /* 0x24 */ u8 state; // 0 - growing, 1 - shrinking, 2 - fully lit, 3 - not lit
     /* 0x25 */ u8 sizeGrowsCos2;
     /* 0x26 */ u8 unk26;
-    /* 0x27 */ u8 unk27;
+    /* 0x27 */ u8 colorsIndex;
     /* 0x28 */ u8 flags; // bit 0 - ?, bit 1 - ?
     /* 0x29 */ UNK_TYPE1 pad29[0x1];
     /* 0x2A */ s16 ignitionDelay;
@@ -1360,45 +1369,6 @@ typedef struct {
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
-
-
-typedef enum {
-    /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
-    /* 1 */ SUBS_CUTSCENE_NORMAL,
-    /* 2 */ SUBS_CUTSCENE_SET_FLAG
-} SubSCutsceneType;
-
-typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
-
-typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
-
-struct struct_8013DF3C_arg1;
-typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
-typedef s32 (*struct_8013DF3C_arg1_unk_func2)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
-
-typedef struct struct_8013DF3C_arg1 {
-    /* 0x00 */ Path* setupPathList;
-    /* 0x04 */ s32 pathIndex;
-    /* 0x08 */ Vec3s* points;
-    /* 0x0C */ s32 count;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ u8 unk_1C;
-    /* 0x1D */ u8 unk_1D;
-    /* 0x20 */ Vec3f unk_20;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
-    /* 0x44 */ Vec3f* unk_44;
-    /* 0x48 */ Actor* actor;
-    /* 0x4C */ f32 unk_4C;
-    /* 0x50 */ f32 unk_50;
-    /* 0x54 */ Vec3s unk_54;
-    /* 0x5C */ struct_8013DF3C_arg1_unk_func1 unk_5C;
-    /* 0x60 */ struct_8013DF3C_arg1_unk_func2 unk_60;
-    /* 0x64 */ struct_8013DF3C_arg1_unk_func2 unk_64;
-    /* 0x68 */ struct_8013DF3C_arg1_unk_func2 unk_68;
-} struct_8013DF3C_arg1; // size = 0x6C
 
 typedef struct {
     /* 0x00 */ u32 type;
