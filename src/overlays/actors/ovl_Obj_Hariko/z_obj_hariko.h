@@ -13,7 +13,7 @@ typedef struct ObjHariko {
     /* 0x0148 */ f32 bobbleStep;
     /* 0x014C */ Vec3s headRotation;
     /* 0x0152 */ s16 headOffset;
-    /* 0x0154 */ s16 unk154;
+    /* 0x0154 */ s16 unk154; // Set but not used
 } ObjHariko; // size = 0x158
 
 extern const ActorInit Obj_Hariko_InitVars;
