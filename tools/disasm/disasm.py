@@ -2,9 +2,15 @@
 
 import argparse, ast, math, os, re, struct
 import bisect
-from mips_isa import *
-from multiprocessing import *
+import multiprocessing
 from pathlib import Path
+# global mips_fpr_names
+from mips_isa import *
+
+fpr_name_options = {
+    "numeric": numeric_fpr_names,
+    "o32": o32_fpr_names,
+}
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -26,9 +32,14 @@ parser.add_argument(
     required=False,
     help="Optional list of files to diassemble separated by a space. This is a whitelist, all files will be skipped besides the ones listed here if used.",
 )
+parser.add_argument("-Mreg-names", choices=fpr_name_options.keys(), help="How to name registers in the output")
 
 args = parser.parse_args()
 jobs = args.jobs
+
+# mips_gpr_names = gpr_name_options.get(args.Mreg_names, mips_gpr_names)
+# mips_fpr_names = fpr_name_options.get(args.Mreg_names)
+
 
 ASM_OUT = "asm/"
 DATA_OUT = "data/"
@@ -2357,7 +2368,7 @@ for segment in files_spec:
 
 del files_spec[:]
 
-pool = get_context("fork").Pool(jobs)
+pool = multiprocessing.get_context("fork").Pool(jobs)
 # Find symbols for each segment
 for section in all_sections:
     if section[-1]["name"] == "makerom":
@@ -2393,7 +2404,7 @@ for section in all_sections:
 pool.close()
 pool.join()
 
-pool = get_context("fork").Pool(jobs)
+pool = multiprocessing.get_context("fork").Pool(jobs)
 for section in all_sections:
     if section[-1]["type"] == "makerom":
         continue
@@ -2418,7 +2429,7 @@ for section in all_sections:
 vrom_addrs = {addr for _, addr in vrom_variables}
 
 # Textual disassembly for each segment
-with get_context("fork").Pool(jobs) as p:
+with multiprocessing.get_context("fork").Pool(jobs) as p:
     p.map(
         disassemble_segment,
         [
