@@ -131,15 +131,15 @@ void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos
     msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
 
-    for (j = 0; j < D_801D0710[gSaveContext.language - 1]; j++) {
-        Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.language - 1][j], o);
-        msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.language - 1][j];
+    for (j = 0; j < D_801D0710[gSaveContext.options.language - 1]; j++) {
+        Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.options.language - 1][j], o);
+        msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.options.language - 1][j];
         o += FONT_CHAR_TEX_SIZE;
         p++;
     }
 
     p--;
-    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.language - 1] + 1);
+    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.options.language - 1] + 1);
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
