@@ -44,7 +44,7 @@ static InitChainEntry D_80B3C96C[] = {
 };
 
 void func_80B3C260(ObjGhaka* this) {
-    if (gSaveContext.weekEventReg[20] & 0x20) {
+    if (gSaveContext.save.weekEventReg[20] & 0x20) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;
     }
     this->actionFunc = func_80B3C39C;
@@ -59,7 +59,7 @@ void func_80B3C2B0(ObjGhaka* this) {
 }
 
 void func_80B3C2C4(ObjGhaka* this, GlobalContext* globalCtx) {
-    if (!(gSaveContext.weekEventReg[20] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[20] & 0x20)) {
         Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0,
                                       0, this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
     } else {
@@ -84,7 +84,8 @@ void func_80B3C39C(ObjGhaka* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if (this->dyna.pushForce < 0.0f && !(gSaveContext.weekEventReg[20] & 0x20) &&
+
+    if (this->dyna.pushForce < 0.0f && !(gSaveContext.save.weekEventReg[20] & 0x20) &&
         player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
@@ -97,13 +98,13 @@ void func_80B3C4E0(ObjGhaka* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             func_80B3C260(this);
         }
     } else if (talkState == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
@@ -135,7 +136,7 @@ void func_80B3C624(ObjGhaka* this, GlobalContext* globalCtx) {
         player->stateFlags2 &= ~0x10;
         this->dyna.pushForce = 0.0f;
         func_80B3C2C4(this, globalCtx);
-        gSaveContext.weekEventReg[20] |= 0x20;
+        gSaveContext.save.weekEventReg[20] |= 0x20;
         func_80B3C260(this);
         Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
     } else {
@@ -157,7 +158,7 @@ void ObjGhaka_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (this->dyna.actor.floorPoly == 0) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
-    if (gSaveContext.weekEventReg[20] & 0x20) {
+    if (gSaveContext.save.weekEventReg[20] & 0x20) {
         func_80B3C2C4(this, globalCtx);
     }
     func_80B3C260(this);
