@@ -95,7 +95,8 @@ void EnSyatekiCrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable, 9);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
+                       OBJECT_CROW_LIMB_MAX);
     Collider_InitJntSph(globalCtx, &this->unk_23C);
     Collider_SetJntSph(globalCtx, &this->unk_23C, &this->actor, &sJntSphInit, &this->unk_25C);
     this->unk_23C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
