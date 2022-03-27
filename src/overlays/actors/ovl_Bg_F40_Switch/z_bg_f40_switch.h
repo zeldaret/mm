@@ -5,12 +5,12 @@
 
 struct BgF40Switch;
 
-#define BGF40SWITCH_GET_SWITCHFLAG(this) (((this)->actor.actor.params & 0xFE00) >> 9)
+#define BGF40SWITCH_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef void (*BgF40SwitchActionFunc)(struct BgF40Switch*, GlobalContext*);
 
 typedef struct BgF40Switch {
-    /* 0x0000 */ DynaPolyActor actor;
+    /* 0x0000 */ DynaPolyActor dyna;
     /* 0x015C */ s16 switchReleaseDelay; // frames until a pressed switch becomes released if nothing is still pressing it
     /* 0x015E */ s8 isPressed; // Logical state of the switch (pressed or unpressed). Animation state may lag behind this slightly.
     /* 0x015F */ s8 wasPressed; // used as temporary during update function
