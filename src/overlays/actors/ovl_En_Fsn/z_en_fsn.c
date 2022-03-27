@@ -5,7 +5,6 @@
  */
 
 #include "z_en_fsn.h"
-#include "objects/object_fsn/object_fsn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -47,6 +46,29 @@ void EnFsn_SelectItem(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx);
 void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx);
 
+typedef enum {
+    /* 0 */ ENFSN_CUTSCENESTATE_STOPPED,
+    /* 1 */ ENFSN_CUTSCENESTATE_WAITING,
+    /* 2 */ ENFSN_CUTSCENESTATE_PLAYING
+} EnFsnCutsceneState;
+
+typedef enum {
+    /* 00 */ FSN_ANIMATION_IDLE,
+    /* 01 */ FSN_ANIMATION_SCRATCH_BACK,
+    /* 02 */ FSN_ANIMATION_TURN_AROUND_FORWARD,
+    /* 03 */ FSN_ANIMATION_TURN_AROUND_REVERSE,
+    /* 04 */ FSN_ANIMATION_HANDS_ON_COUNTER_START,
+    /* 05 */ FSN_ANIMATION_HANDS_ON_COUNTER_LOOP,
+    /* 06 */ FSN_ANIMATION_HAND_ON_FACE_START,
+    /* 07 */ FSN_ANIMATION_HAND_ON_FACE_LOOP,
+    /* 08 */ FSN_ANIMATION_LEAN_FORWARD_START,
+    /* 09 */ FSN_ANIMATION_LEAN_FORWARD_LOOP,
+    /* 10 */ FSN_ANIMATION_SLAM_COUNTER_START,
+    /* 11 */ FSN_ANIMATION_SLAM_COUNTER_LOOP,
+    /* 12 */ FSN_ANIMATION_MAKE_OFFER,
+    /* 13 */ FSN_ANIMATION_MAX
+} FsnAnimation;
+
 const ActorInit En_Fsn_InitVars = {
     ACTOR_EN_FSN,
     ACTORCAT_NPC,
@@ -60,19 +82,19 @@ const ActorInit En_Fsn_InitVars = {
 };
 
 static AnimationInfoS sAnimations[] = {
-    { &object_fsn_Anim_012C34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_fsn_Anim_0131FC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_fsn_Anim_00C58C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_fsn_Anim_00C58C, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_fsn_Anim_00E3EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_fsn_Anim_00F00C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_fsn_Anim_00CB3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_fsn_Anim_00D354, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_fsn_Anim_0138B0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_fsn_Anim_01430C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_fsn_Anim_00B9D8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_fsn_Anim_00C26C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_fsn_Anim_00DE34, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gFsnIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gFsnScratchBackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gFsnTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gFsnTurnAroundAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gFsnHandsOnCounterStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gFsnHandsOnCounterLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gFsnHandOnFaceStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gFsnHandOnFaceLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gFsnLeanForwardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gFsnLeanForwardLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gFsnSlamCounterStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gFsnSlamCounterLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gFsnMakeOfferAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -187,7 +209,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleSetupResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx) && this->cutsceneState == 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx) && this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
         if (ENFSN_IS_SHOP(&this->actor)) {
@@ -205,19 +227,19 @@ void EnFsn_UpdateCollider(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_HandleLookToShopkeeperBuyingCutscene(EnFsn* this) {
-    if (this->cutsceneState == 2 && this->lookToShopkeeperBuyingCutscene != this->cutscene &&
-        this->actor.textId == 0x29CE) {
+    if ((this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) &&
+        (this->lookToShopkeeperBuyingCutscene != this->cutscene) && (this->actor.textId == 0x29CE)) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShopkeeperBuyingCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_Start(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
@@ -362,9 +384,9 @@ void EnFsn_SpawnShopItems(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_EndInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
-        this->cutsceneState = 0;
+        this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
     globalCtx->msgCtx.msgMode = 0x43;
@@ -400,14 +422,14 @@ s32 EnFsn_TestCancelOption(EnFsn* this, GlobalContext* globalCtx, Input* input) 
 }
 
 void EnFsn_UpdateCursorPos(EnFsn* this, GlobalContext* globalCtx) {
-    s16 sp2E;
-    s16 sp2C;
+    s16 x;
+    s16 y;
     f32 xOffset = 0.0f;
     f32 yOffset = 17.0f;
 
-    Actor_GetScreenPos(globalCtx, &this->items[this->cursorIdx]->actor, &sp2E, &sp2C);
-    this->cursorPos.x = sp2E + xOffset;
-    this->cursorPos.y = sp2C + yOffset;
+    Actor_GetScreenPos(globalCtx, &this->items[this->cursorIdx]->actor, &x, &y);
+    this->cursorPos.x = x + xOffset;
+    this->cursorPos.y = y + yOffset;
     this->cursorPos.z = 1.2f;
 }
 
@@ -579,8 +601,7 @@ void EnFsn_UpdateCursorAnim(EnFsn* this) {
 void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-    s32 maxColor = 255;
-    f32 tmp;
+    s32 maxColor = 255; // POSSIBLY FAKE
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -607,54 +628,51 @@ void EnFsn_UpdateStickDirectionPromptAnim(EnFsn* this) {
         stickAnimTween = 0.0f;
         this->stickAnimState = 0;
     }
-
-    tmp = 155.0f * arrowAnimTween;
-
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.g = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+
+    this->stickRightPrompt.arrowColor.r = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.g = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
 
     this->stickRightPrompt.stickTexX = 274.0f;
     this->stickRightPrompt.stickTexX += 8.0f * stickAnimTween;
+
     this->stickLeftPrompt.stickTexX = 49.0f;
     this->stickLeftPrompt.stickTexX -= 8.0f * stickAnimTween;
 
-    this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
-    this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
 void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
-    EnFsn* this2;
-    s32 maxColor = 255;
-
     if (EnFsn_HasItemsToSell()) {
         EnFsn_SpawnShopItems(this, globalCtx);
 
-        this2 = this;
-        this2->cursorPos.x = 100.0f;
-        this2->cursorPos.y = 100.0f;
-        this2->stickAccumY = 0;
-        this2->stickAccumX = 0;
+        this->cursorPos.y = this->cursorPos.x = 100.0f;
+        this->stickAccumY = 0;
+        this->stickAccumX = 0;
 
         this->cursorPos.z = 1.2f;
         this->cursorColor.r = 0;
         this->cursorColor.g = 80;
-        this->cursorColor.b = maxColor;
-        this->cursorColor.a = maxColor;
+        this->cursorColor.b = 255;
+        this->cursorColor.a = 255;
+        this->cursorAnimTween = 0.0f;
         this->cursorAnimState = 0;
         this->drawCursor = 0;
-        this->cursorAnimTween = 0.0f;
 
         this->stickLeftPrompt.stickColor.r = 200;
         this->stickLeftPrompt.stickColor.g = 200;
@@ -662,8 +680,8 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
         this->stickLeftPrompt.stickColor.a = 180;
         this->stickLeftPrompt.stickTexX = 49.0f;
         this->stickLeftPrompt.stickTexY = 95.0f;
-        this->stickLeftPrompt.arrowColor.r = maxColor;
-        this->stickLeftPrompt.arrowColor.g = maxColor;
+        this->stickLeftPrompt.arrowColor.r = 255;
+        this->stickLeftPrompt.arrowColor.g = 255;
         this->stickLeftPrompt.arrowColor.b = 0;
         this->stickLeftPrompt.arrowColor.a = 200;
         this->stickLeftPrompt.arrowTexX = 33.0f;
@@ -677,7 +695,7 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
         this->stickRightPrompt.stickColor.a = 180;
         this->stickRightPrompt.stickTexX = 274.0f;
         this->stickRightPrompt.stickTexY = 95.0f;
-        this->stickRightPrompt.arrowColor.r = maxColor;
+        this->stickRightPrompt.arrowColor.r = 255;
         this->stickRightPrompt.arrowColor.g = 0;
         this->stickRightPrompt.arrowColor.b = 0;
         this->stickRightPrompt.arrowColor.a = 200;
@@ -691,21 +709,21 @@ void EnFsn_InitShop(EnFsn* this, GlobalContext* globalCtx) {
         this->stickAnimTween = this->arrowAnimTween = 0.0f;
     }
     this->blinkTimer = 20;
-    this->animationIdx = 4;
+    this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_START;
     this->eyeTextureIdx = 0;
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     this->actionFunc = EnFsn_Idle;
 }
 
 void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (this->animationIdx == 4) {
+    if (this->animationIndex == FSN_ANIMATION_HANDS_ON_COUNTER_START) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+        s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
         if (curFrame == frameCount) {
-            this->animationIdx = 5;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         }
         return;
     }
@@ -716,13 +734,13 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if (this->cutsceneState == 0) {
+        if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
             }
             this->cutscene = this->lookToShopkeeperCutscene;
             ActorCutscene_SetIntentToPlay(this->cutscene);
-            this->cutsceneState = 1;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
         }
         this->actor.textId = EnFsn_GetWelcome(globalCtx);
         Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
@@ -738,29 +756,29 @@ void EnFsn_Idle(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIdx].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimations[this->animationIndex].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
-        this->animationIdx = 11;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+        this->animationIndex = FSN_ANIMATION_SLAM_COUNTER_LOOP;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     } else {
-        if (this->animationIdx == 11 && Animation_OnFrame(&this->skelAnime, 18.0f)) {
+        if (this->animationIndex == FSN_ANIMATION_SLAM_COUNTER_LOOP && Animation_OnFrame(&this->skelAnime, 18.0f)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
         }
         if (this->flags & ENFSN_CALM_DOWN) {
             this->flags &= ~ENFSN_CALM_DOWN;
-            this->animationIdx = 5;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else if (this->flags & ENFSN_OFFER_FINAL_PRICE) {
             this->flags &= ~ENFSN_OFFER_FINAL_PRICE;
-            this->animationIdx = 12;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+            this->animationIndex = FSN_ANIMATION_MAKE_OFFER;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         } else {
-            if (this->animationIdx == 12) {
+            if (this->animationIndex == FSN_ANIMATION_MAKE_OFFER) {
                 if (curFrame == frameCount) {
-                    this->animationIdx = 5;
-                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+                    this->animationIndex = FSN_ANIMATION_HANDS_ON_COUNTER_LOOP;
+                    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
                 } else {
                     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HANKO);
@@ -776,10 +794,10 @@ void EnFsn_Haggle(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_BeginInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 1) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             if (Player_GetMask(globalCtx) == PLAYER_MASK_NONE) {
                 func_8011552C(globalCtx, 16);
                 if (EnFsn_HasItemsToSell()) {
@@ -862,13 +880,12 @@ void EnFsn_AskBuyOrSell(EnFsn* this, GlobalContext* globalCtx) {
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!EnFsn_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
-            u32 trueTmp = true;
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
-                    this->isSelling = trueTmp;
+                    this->isSelling = true;
                     this->stickLeftPrompt.isEnabled = false;
-                    this->stickRightPrompt.isEnabled = trueTmp;
+                    this->stickRightPrompt.isEnabled = true;
                     this->actor.textId = 0x29D6;
                     Message_StartTextbox(globalCtx, this->actor.textId, &this->actor);
                     this->actionFunc = EnFsn_FaceShopkeeperSelling;
@@ -941,9 +958,9 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
                 func_8019F208();
                 globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
-                if (this->cutsceneState == 2) {
+                if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
-                    this->cutsceneState = 0;
+                    this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
                 }
                 switch (this->price) {
                     case 5:
@@ -975,7 +992,7 @@ void EnFsn_MakeOffer(EnFsn* this, GlobalContext* globalCtx) {
 
 void EnFsn_GiveItem(EnFsn* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        if (this->isSelling == true && this->items[this->cursorIdx]->getItemId == GI_MASK_ALL_NIGHT) {
+        if ((this->isSelling == true) && (this->items[this->cursorIdx]->getItemId == GI_MASK_ALL_NIGHT)) {
             func_80151BB4(globalCtx, 45);
             func_80151BB4(globalCtx, 3);
         }
@@ -1027,10 +1044,10 @@ void EnFsn_ResumeInteraction(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_ResumeShoppingInteraction(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             if (!this->isSelling) {
                 this->actionFunc = EnFsn_AskCanBuyMore;
             } else if (this->actor.textId != 0x29D6) {
@@ -1052,18 +1069,18 @@ void EnFsn_ResumeShoppingInteraction(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_LookToShelf(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene) != 0) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             EnFsn_UpdateCursorPos(this, globalCtx);
             this->actionFunc = EnFsn_BrowseShelf;
             func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
@@ -1100,18 +1117,18 @@ void EnFsn_BrowseShelf(EnFsn* this, GlobalContext* globalCtx) {
 }
 
 void EnFsn_LookToShopkeeperFromShelf(EnFsn* this, GlobalContext* globalCtx) {
-    if (this->cutsceneState == 2) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
         ActorCutscene_Stop(this->cutscene);
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
             ActorCutscene_Stop(0x7C);
         }
         this->cutscene = this->lookToShopkeeperFromShelfCutscene;
         ActorCutscene_SetIntentToPlay(this->cutscene);
-        this->cutsceneState = 1;
-    } else if (this->cutsceneState == 1) {
+        this->cutsceneState = ENFSN_CUTSCENESTATE_WAITING;
+    } else if (this->cutsceneState == ENFSN_CUTSCENESTATE_WAITING) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
             this->stickLeftPrompt.isEnabled = false;
             this->stickRightPrompt.isEnabled = true;
             this->actor.textId = 0x29D6;
@@ -1131,9 +1148,9 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, GlobalContext* globalCtx) {
             func_8019F208();
             gSaveContext.weekEventReg[33] |= 4;
         case CANBUY_RESULT_SUCCESS_1:
-            if (this->cutsceneState == 2) {
+            if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
-                this->cutsceneState = 0;
+                this->cutsceneState = ENFSN_CUTSCENESTATE_STOPPED;
             }
             func_8019F208();
             item = this->items[this->cursorIdx];
@@ -1214,10 +1231,10 @@ void EnFsn_PlayerCannotBuy(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -1260,10 +1277,10 @@ void EnFsn_AskCanBuyMore(EnFsn* this, GlobalContext* globalCtx) {
 void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (this->cutsceneState == 0) {
+    if (this->cutsceneState == ENFSN_CUTSCENESTATE_STOPPED) {
         if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
             ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
-            this->cutsceneState = 2;
+            this->cutsceneState = ENFSN_CUTSCENESTATE_PLAYING;
         } else {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
                 ActorCutscene_Stop(0x7C);
@@ -1386,12 +1403,12 @@ void EnFsn_Blink(EnFsn* this) {
 }
 
 void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
-    EnFsn* this = THIS;
     s32 pad;
+    EnFsn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fsn_Skel_013320, &object_fsn_Anim_012C34, this->jointTable,
-                       this->morphTable, 19);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable, this->morphTable,
+                       FSN_LIMB_MAX + 1);
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1408,8 +1425,8 @@ void EnFsn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->eyeTextureIdx = 0;
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.targetMode = 0;
-        this->animationIdx = 0;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIdx);
+        this->animationIndex = FSN_ANIMATION_IDLE;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         this->actionFunc = EnFsn_IdleBackroom;
     }
 }
@@ -1441,7 +1458,10 @@ void EnFsn_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnFsn_DrawCursor(EnFsn* this, GlobalContext* globalCtx, f32 x, f32 y, f32 z, u8 drawCursor) {
-    s32 ulx, uly, lrx, lry;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
     f32 w;
     s32 dsdx;
     s32 pad;
@@ -1451,8 +1471,8 @@ void EnFsn_DrawCursor(EnFsn* this, GlobalContext* globalCtx, f32 x, f32 y, f32 z
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
-                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gSelectionCursorTex, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w + -12.0f) * 4.0f;
@@ -1467,9 +1487,14 @@ void EnFsn_DrawCursor(EnFsn* this, GlobalContext* globalCtx, f32 x, f32 y, f32 z
 void EnFsn_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                        f32 dy) {
     f32 unk;
-    s32 ulx, uly, lrx, lry;
-    f32 w, h;
-    s32 dsdx, dtdy;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
+    f32 w;
+    f32 h;
+    s32 dsdx;
+    s32 dtdy;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1499,15 +1524,9 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, GlobalContext* globalCtx) {
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F8C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 191, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gArrowCursorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnFsn_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColor.r, this->stickLeftPrompt.arrowColor.g,
                               this->stickLeftPrompt.arrowColor.b, this->stickLeftPrompt.arrowColor.a,
@@ -1520,15 +1539,9 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, GlobalContext* globalCtx) {
                               this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F7C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 127, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gControlStickTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnFsn_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColor.r, this->stickLeftPrompt.stickColor.g,
                               this->stickLeftPrompt.stickColor.b, this->stickLeftPrompt.stickColor.a,
@@ -1547,21 +1560,20 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, GlobalContext* globalCtx) {
 
 s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFsn* this = THIS;
-    s16 tmp;
     s32 limbRotTableIdx;
 
-    if (limbIndex == 16) {
+    if (limbIndex == FSN_LIMB_HEAD) {
         Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
     }
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         switch (limbIndex) {
-            case 8:
+            case FSN_LIMB_TORSO:
                 limbRotTableIdx = 0;
                 break;
-            case 11:
+            case FSN_LIMB_LEFT_HAND:
                 limbRotTableIdx = 1;
                 break;
-            case 16:
+            case FSN_LIMB_HEAD:
                 limbRotTableIdx = 2;
                 break;
             default:
@@ -1569,13 +1581,11 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
                 break;
         }
         if (limbRotTableIdx < 9) {
-            tmp = (s32)(Math_SinS(this->limbRotYTable[limbRotTableIdx]) * 200.0f);
-            rot->y += tmp;
-            tmp = (s32)(Math_CosS(this->limbRotZTable[limbRotTableIdx]) * 200.0f);
-            rot->z += tmp;
+            rot->y += (s16)(Math_SinS(this->limbRotYTable[limbRotTableIdx]) * 200.0f);
+            rot->z += (s16)(Math_CosS(this->limbRotZTable[limbRotTableIdx]) * 200.0f);
         }
     }
-    if (limbIndex == 17) {
+    if (limbIndex == FSN_LIMB_TOUPEE) {
         *dList = NULL;
     }
     return false;
@@ -1584,22 +1594,22 @@ s32 EnFsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 void EnFsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFsn* this = THIS;
 
-    if (limbIndex == 16) {
+    if (limbIndex == FSN_LIMB_HEAD) {
         this->actor.focus.pos.x = this->actor.world.pos.x;
         this->actor.focus.pos.y = this->actor.world.pos.y + 60.0f;
         this->actor.focus.pos.z = this->actor.world.pos.z;
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        gSPDisplayList(POLY_OPA_DISP++, object_fsn_DL_00F180);
-        gSPDisplayList(POLY_OPA_DISP++, object_fsn_DL_00F218);
+        gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesFrameDL);
+        gSPDisplayList(POLY_OPA_DISP++, gFsnGlassesLensesDL);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 }
 
 void EnFsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr sEyeTextures[] = { object_fsn_Tex_005BC0, object_fsn_Tex_006D40, object_fsn_Tex_007140 };
-    EnFsn* this = THIS;
+    static TexturePtr sEyeTextures[] = { gFsnEyeOpenTex, gFsnEyeHalfTex, gFsnEyeClosedTex };
     s32 pad;
+    EnFsn* this = THIS;
     s16 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

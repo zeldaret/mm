@@ -838,8 +838,11 @@
         <DList Name="gameplay_keep_DL_015DB0" Offset="0x15DB0" />
         <Texture Name="gameplay_keep_Tex_015E40" OutName="tex_015E40" Format="rgba16" Width="8" Height="8" Offset="0x15E40" />
         <DList Name="gameplay_keep_DL_015FA0" Offset="0x15FA0" />
-        <Texture Name="gameplay_keep_Tex_016060" OutName="tex_016060" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
-        <DList Name="gameplay_keep_DL_016360" Offset="0x16360" />
+
+        <!-- Bombchu -->
+        <Texture Name="gBombchuBodyTex" OutName="bombchu_body" Format="rgba16" Width="8" Height="8" Offset="0x16060" />
+        <DList Name="gBombchuDL" Offset="0x16360" />
+        
         <Texture Name="gameplay_keep_Tex_0164D0" OutName="tex_0164D0" Format="ia16" Width="32" Height="32" Offset="0x164D0" />
         <Texture Name="gameplay_keep_Tex_016CD0" OutName="tex_016CD0" Format="ia16" Width="32" Height="32" Offset="0x16CD0" />
         <Texture Name="gameplay_keep_Tex_0174D0" OutName="tex_0174D0" Format="ia16" Width="32" Height="32" Offset="0x174D0" />
@@ -870,9 +873,9 @@
         <Texture Name="gameplay_keep_Tex_01F200" OutName="tex_01F200" Format="i8" Width="8" Height="8" Offset="0x1F200" />
         <DList Name="gameplay_keep_DL_01F300" Offset="0x1F300" />
         <Texture Name="gameplay_keep_Tex_01F340" OutName="tex_01F340" Format="ia8" Width="32" Height="32" Offset="0x1F340" />
-        <Texture Name="gameplay_keep_Tex_01F740" OutName="tex_01F740" Format="ia4" Width="16" Height="16" Offset="0x1F740" />
-        <Texture Name="gameplay_keep_Tex_01F7C0" OutName="tex_01F7C0" Format="ia8" Width="16" Height="16" Offset="0x1F7C0" />
-        <Texture Name="gameplay_keep_Tex_01F8C0" OutName="tex_01F8C0" Format="ia8" Width="16" Height="24" Offset="0x1F8C0" />
+        <Texture Name="gSelectionCursorTex" OutName="selection_cursor" Format="ia4" Width="16" Height="16" Offset="0x1F740" />
+        <Texture Name="gControlStickTex" OutName="control_stick" Format="ia8" Width="16" Height="16" Offset="0x1F7C0" />
+        <Texture Name="gArrowCursorTex" OutName="arrow_cursor" Format="ia8" Width="16" Height="24" Offset="0x1F8C0" />
 
         <!-- Boulder Fragments -->
         <DList Name="gBoulderFragmentsDL" Offset="0x1FA40" />
@@ -1000,7 +1003,7 @@
         <Animation Name="gameplay_keep_Anim_02F0EC" Offset="0x2F0EC" />
         <Texture Name="gameplay_keep_Tex_02F100" OutName="tex_02F100" Format="i8" Width="64" Height="64" Offset="0x2F100" />
         <DList Name="gameplay_keep_DL_030100" Offset="0x30100" /> <!-- Floor shockwave ring -->
-        <DList Name="gameplay_keep_DL_0301B0" Offset="0x301B0" />
+        <DList Name="gEffBubbleDL" Offset="0x301B0" />
         <Texture Name="gameplay_keep_Tex_030270" OutName="tex_030270" Format="ia8" Width="32" Height="32" Offset="0x30270" />
         <Texture Name="gameplay_keep_Tex_030670" OutName="tex_030670" Format="ia8" Width="32" Height="32" Offset="0x30670" />
         <Texture Name="gameplay_keep_Tex_030A70" OutName="tex_030A70" Format="ia8" Width="32" Height="32" Offset="0x30A70" />
@@ -1169,8 +1172,8 @@
         <Limb Name="gameplay_keep_Standardlimb_05272C" Type="Standard" Offset="0x5272C" />
         <Limb Name="gameplay_keep_Standardlimb_052738" Type="Standard" Offset="0x52738" />
         <Skeleton Name="gameplay_keep_Skel_0527A0" Type="Normal" LimbType="Standard" Offset="0x527A0" />
-        <DList Name="gameplay_keep_DL_0527F0" Offset="0x527F0" />
-        <DList Name="gameplay_keep_DL_0528B0" Offset="0x528B0" />
+        <DList Name="gKakeraLeafMiddle" Offset="0x527F0" />
+        <DList Name="gKakeraLeafTip" Offset="0x528B0" />
         <Texture Name="gameplay_keep_Tex_052940" OutName="tex_052940" Format="rgba16" Width="32" Height="32" Offset="0x52940" />
         <Texture Name="gameplay_keep_Tex_053140" OutName="tex_053140" Format="rgba16" Width="32" Height="32" Offset="0x53140" />
         <Texture Name="gameplay_keep_Tex_053940" OutName="tex_053940" Format="i4" Width="64" Height="64" Offset="0x53940" />
@@ -1420,8 +1423,8 @@
         <Texture Name="gameplay_keep_Tex_0903E0" OutName="tex_0903E0" Format="i8" Width="32" Height="64" Offset="0x903E0" />
         <Texture Name="gameplay_keep_Tex_090BE0" OutName="tex_090BE0" Format="i8" Width="32" Height="64" Offset="0x90BE0" />
         <Texture Name="gameplay_keep_Tex_0913E0" OutName="tex_0913E0" Format="i8" Width="32" Height="64" Offset="0x913E0" />
-        <Texture Name="gameplay_keep_Tex_091BE0" OutName="tex_091BE0" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
-        <Texture Name="gameplay_keep_Tex_091CE0" OutName="tex_091CE0" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
+        <Texture Name="gEffBubble1Tex" OutName="eff_bubble_1" Format="ia8" Width="16" Height="16" Offset="0x91BE0" />
+        <Texture Name="gEffBubble2Tex" OutName="eff_bubble_2" Format="ia8" Width="16" Height="16" Offset="0x91CE0" />
         
         <!-- Electric spark textures from Zora-Form attack -->
         <Texture Name="gElectricSpark1Tex" OutName="electric_spark_1" Format="i4" Width="32" Height="32" Offset="0x91DE0" />

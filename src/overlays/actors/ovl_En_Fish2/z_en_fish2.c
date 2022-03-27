@@ -1094,9 +1094,9 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
             TexturePtr phi_v0;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = gameplay_keep_Tex_091CE0;
+                phi_v0 = gEffBubble2Tex;
             } else {
-                phi_v0 = gameplay_keep_Tex_091BE0;
+                phi_v0 = gEffBubble1Tex;
             }
 
             ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
@@ -1168,7 +1168,7 @@ void func_80B2B180(EnFish2* this, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_OPA_DISP++, 150, 150, 150, 0);
             gSPSegment(POLY_OPA_DISP++, 0x08, ptr->unk_20);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0301B0);
+            gSPDisplayList(POLY_OPA_DISP++, gEffBubbleDL);
         }
     }
 

@@ -905,12 +905,15 @@ void func_80C00284(EnBomjima* this, GlobalContext* globalCtx) {
         this->unk_2BC &= 1;
     }
 
-    if ((player->transformation != PLAYER_FORM_GORON) && (player->transformation != PLAYER_FORM_ZORA)) {
-        if (player->transformation == PLAYER_FORM_HUMAN) {
-            this->unk_28E = -4000;
-        }
-    } else {
-        this->unk_28E = -6000;
+    switch (player->transformation) {
+        case PLAYER_FORM_HUMAN:
+            this->unk_28E = -0xFA0;
+            break;
+
+        case PLAYER_FORM_GORON:
+        case PLAYER_FORM_ZORA:
+            this->unk_28E = -0x1770;
+            break;
     }
 
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
