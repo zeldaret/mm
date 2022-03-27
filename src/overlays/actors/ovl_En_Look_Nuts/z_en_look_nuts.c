@@ -291,13 +291,13 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         globalCtx->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(globalCtx);
         globalCtx->sceneLoadFlag = 0x14;
-        gSaveContext.weekEventReg[17] |= 4;
+        gSaveContext.save.weekEventReg[17] |= 4;
     }
 }
 
@@ -339,7 +339,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_StatePop();
             if (!this->isPlayerDetected) {
                 s16 drawFlag = 1;
-                if (gSaveContext.isNight) {
+                if (gSaveContext.save.isNight) {
                     drawFlag = 0;
                 }
                 if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
