@@ -311,9 +311,9 @@ void ObjChan_PotAction(ObjChan* this, GlobalContext* globalCtx) {
         SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 20, NA_SE_EV_CHANDELIER_BROKEN);
         func_80BB9A1C((ObjChan*)this->actor.parent, 40.0f);
         if (this->myPotIndex == 4) {
-            temp_v0_2 = gSaveContext.weekEventReg[0x25];
+            temp_v0_2 = gSaveContext.save.weekEventReg[0x25];
             if (!(temp_v0_2 & 0x10)) {
-                gSaveContext.weekEventReg[0x25] = temp_v0_2 | 0x10;
+                gSaveContext.save.weekEventReg[0x25] = temp_v0_2 | 0x10;
                 Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0x8000,
                                               this->actor.cutscene, this->actor.unk20, NULL);
