@@ -2998,7 +2998,7 @@
     0x80168090:("Play_Draw",),
     0x80168DAC:("func_80168DAC",),
     0x80168F64:("Play_Update",),
-    0x801690CC:("func_801690CC",),
+    0x801690CC:("Play_InCsMode",),
     0x80169100:("func_80169100",),
     0x801691F0:("func_801691F0",),
     0x80169220:("Play_LoadScene",),

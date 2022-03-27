@@ -61,18 +61,10 @@ void func_800F4A10(GlobalContext* globalCtx) {
 }
 
 void func_800F4C0C(GlobalContext* globalCtx) {
-    Input* input;
-    MessageContext* msgCtx;
-    Player* player;
-    PauseContext* pauseCtx;
-
-
-    player = GET_PLAYER(globalCtx);
-
-
-    input = CONTROLLER1(globalCtx);
-    msgCtx = &globalCtx->msgCtx;
-    pauseCtx = &globalCtx->pauseCtx;
+    Input* input = CONTROLLER1(globalCtx);
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    Player* player = GET_PLAYER(globalCtx);
+    PauseContext* pauseCtx = &globalCtx->pauseCtx;
 
     if (~(input->cur.button | ~0x10) == 0) {
         if (msgCtx && msgCtx) {}
@@ -82,7 +74,7 @@ void func_800F4C0C(GlobalContext* globalCtx) {
         if (pauseCtx->debugState == 0) {
             if ((globalCtx->gameOverCtx.state == 0) && (globalCtx->sceneLoadFlag == 0) && (globalCtx->unk_18B4A == 0) && (gSaveContext.save.cutscene < 0xFFF0)) {
                 if (gSaveContext.nextCutsceneIndex < 0xFFF0) {
-                    if ((func_801690CC(globalCtx) == 0) || (( (msgCtx->msgMode != 0)) && (msgCtx->currentTextId == 0xFF))) {
+                    if (!Play_InCsMode(globalCtx) || (( (msgCtx->msgMode != 0)) && (msgCtx->currentTextId == 0xFF))) {
                         if ((globalCtx->unk_1887C < 2)) {
                             if ((gSaveContext.unk_3F28 != 8) && (gSaveContext.unk_3F28 != 9)) {
                                 if (((gSaveContext.eventInf[1] & 0x80) == 0) && ((player->stateFlags1 & 0x20) == 0)) {
@@ -120,7 +112,7 @@ void KaleidoSetup_Init(GlobalContext* globalCtx) {
 
     bzero(pauseCtx, sizeof(PauseContext));
 
-    pauseCtx->pageIndex = 0;
+    pauseCtx->pageIndex = PAUSE_0;
 
     pauseCtx->unk_21C = 160.0f;
     pauseCtx->unk_218 = 160.0f;
@@ -131,18 +123,18 @@ void KaleidoSetup_Init(GlobalContext* globalCtx) {
     pauseCtx->unk_20C = 936.0f;
     pauseCtx->unk_220 = -314.0f;
 
-    pauseCtx->unk_238[1] = XREG(94) + 3;
+    pauseCtx->unk_238[PAUSE_1] = XREG(94) + 3;
 
     pauseCtx->unk_258 = 11;
     pauseCtx->unk_25A = 0;
 
-    pauseCtx->unk_25E[0] = 999;
-    pauseCtx->unk_25E[1] = XREG(94) + 3;
-    pauseCtx->unk_25E[2] = 999;
-    pauseCtx->unk_25E[3] = 999;
+    pauseCtx->unk_25E[PAUSE_0] = 999;
+    pauseCtx->unk_25E[PAUSE_1] = XREG(94) + 3;
+    pauseCtx->unk_25E[PAUSE_2] = 999;
+    pauseCtx->unk_25E[PAUSE_3] = 999;
 
-    pauseCtx->unk_268[0] = 0;
-    pauseCtx->unk_268[1] = XREG(94) + 3;
+    pauseCtx->unk_268[PAUSE_0] = 0;
+    pauseCtx->unk_268[PAUSE_1] = XREG(94) + 3;
 
     pauseCtx->unk_284 = 2;
     pauseCtx->unk_2A0 = -1;
@@ -154,5 +146,4 @@ void KaleidoSetup_Init(GlobalContext* globalCtx) {
 }
 
 void KaleidoSetup_Destroy(GlobalContext* globalCtx) {
-
 }

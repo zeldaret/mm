@@ -58,7 +58,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801690CC.s")
+s32 Play_InCsMode(GlobalContext* globalCtx) {
+    return globalCtx->csCtx.state != 0 || Player_InCsMode(&globalCtx->state);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169100.s")
 

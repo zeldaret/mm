@@ -683,7 +683,7 @@ void func_80BF4EBC(EnRg* this, GlobalContext* globalCtx) {
 void func_80BF4FC4(EnRg* this, GlobalContext* globalCtx) {
     this->unk_344 = func_80BF4560(this, globalCtx);
 
-    if (!func_801690CC(globalCtx)) {
+    if (!Play_InCsMode(globalCtx)) {
         if (this->actor.bgCheckFlags & 2) {
             if (this->unk_310 & 0x400) {
                 this->unk_310 &= ~0x400;
@@ -802,7 +802,7 @@ void EnRg_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80BF3ED4(this, globalCtx);
 
-    if (!func_801690CC(globalCtx)) {
+    if (!Play_InCsMode(globalCtx)) {
         func_80BF3C64(this);
     }
 }
