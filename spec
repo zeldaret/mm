@@ -3320,8 +3320,11 @@ beginseg
     name "ovl_Bg_Hakugin_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/z_bg_hakugin_bombwall.o"
-    include "build/data/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall_reloc.o"
+#else
     include "build/data/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall.reloc.o"
+#endif
 endseg
 
 beginseg
