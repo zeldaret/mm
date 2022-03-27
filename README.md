@@ -90,7 +90,7 @@ cd mm
 
 #### 3. Install python dependencies
 
-The build process has a few python packages requrired that are located in `requirements.txt`.
+The build process has a few python packages required that are located in `requirements.txt`.
 
 To install them simply run in a terminal:
 
