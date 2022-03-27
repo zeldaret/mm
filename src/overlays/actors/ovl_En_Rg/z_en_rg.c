@@ -477,11 +477,11 @@ s32 func_80BF47AC(EnRg* this, GlobalContext* globalCtx) {
 
     if ((this->unk_310 & 0x400) || (this->unk_310 & 0x1000)) {
         phi_f0 = 0.0f;
-    } else if (this->unk_348 >= 2) {
+    } else if (this->numCheckpointsAheadOfPlayer >= 2) {
         phi_f0 = phi_f2 * 0.5f;
-    } else if (this->unk_348 == 1) {
+    } else if (this->numCheckpointsAheadOfPlayer == 1) {
         phi_f0 = phi_f2 * 0.75f;
-    } else if (this->unk_348 == 0) {
+    } else if (this->numCheckpointsAheadOfPlayer == 0) {
         s16 temp_v0_3 = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
 
         if ((ABS_ALT(temp_v0_3) > 0x4000) || (this->unk_326 > 0)) {
@@ -489,7 +489,7 @@ s32 func_80BF47AC(EnRg* this, GlobalContext* globalCtx) {
         } else {
             phi_f0 = phi_f2 * 0.94f;
         }
-    } else if (this->unk_348 == -1) {
+    } else if (this->numCheckpointsAheadOfPlayer == -1) {
         phi_f0 = phi_f2 * 1.6f;
     } else {
         phi_f0 = 2.0f * phi_f2;
@@ -667,7 +667,7 @@ void func_80BF4EBC(EnRg* this, GlobalContext* globalCtx) {
             this->actor.shape.yOffset = 14.0f;
             this->actionFunc = func_80BF4FC4;
         }
-    } else if (gSaveContext.weekEventReg[12] & 2) {
+    } else if (gSaveContext.save.weekEventReg[12] & 2) {
         if (DECR(this->unk_318) == 0) {
             func_80BF409C(this, 1);
             this->unk_310 &= ~8;
@@ -733,7 +733,7 @@ void func_80BF4FC4(EnRg* this, GlobalContext* globalCtx) {
 void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRg* this = THIS;
 
-    if (gSaveContext.entranceIndex == 0xD010) {
+    if (gSaveContext.save.entranceIndex == 0xD010) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_oF1d_map_Skel_011AC8, NULL, this->jointTable,
                            this->morphTable, 18);
@@ -759,7 +759,7 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.gravity = -1.0f;
         SubS_UpdateFlags(&this->unk_310, 3, 7);
 
-        if (!(gSaveContext.weekEventReg[12] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[12] & 2)) {
             this->unk_318 = Rand_S16Offset(30, 30);
         }
 
