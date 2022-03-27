@@ -566,7 +566,7 @@ void EnCrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCrow_OverrideLimbDraw, EnCrow_PostLimbDraw, &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                  this->actor.scale.x * 100.0f * this->steamScale, this->effectScale, this->effectAlpha,
-                  this->deathMode);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->actor.scale.x * 100.0f * this->steamScale, this->effectScale, this->effectAlpha,
+                            this->deathMode);
 }
