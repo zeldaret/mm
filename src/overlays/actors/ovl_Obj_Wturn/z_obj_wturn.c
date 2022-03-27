@@ -39,8 +39,8 @@ void func_808A7954(ObjWturn* this) {
 }
 
 void func_808A7968(ObjWturn* this, GlobalContext* globalCtx) {
-    if (globalCtx->msgCtx.unk1202A >= 28 && globalCtx->msgCtx.unk1202A < 39) {
-        Actor_UnsetSwitchFlag(globalCtx, this->actor.params);
+    if (globalCtx->msgCtx.ocarinaMode >= 28 && globalCtx->msgCtx.ocarinaMode < 39) {
+        Flags_UnsetSwitch(globalCtx, this->actor.params);
         Actor_MarkForDeath(&this->actor);
     } else if ((Flags_GetSwitch(globalCtx, this->actor.params) && (globalCtx->sceneNum == SCENE_F40)) ||
                (!Flags_GetSwitch(globalCtx, this->actor.params) && (globalCtx->sceneNum == SCENE_F41))) {
@@ -85,7 +85,7 @@ void func_808A7BA0(ObjWturn* this, GlobalContext* globalCtx) {
         func_808A7C04(this, globalCtx);
     }
     func_800B8FE8(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
-    func_80169988(globalCtx, this->camId, this->actor.shape.rot.z);
+    Play_CameraSetRoll(globalCtx, this->camId, this->actor.shape.rot.z);
 }
 
 void func_808A7C04(ObjWturn* this, GlobalContext* globalCtx) {
@@ -107,7 +107,7 @@ void func_808A7C78(ObjWturn* this, GlobalContext* globalCtx) {
 
     this->unk_14A++;
     player->actor.world.pos.y = this->actor.world.pos.y + this->unk_14A * 4.0f;
-    func_8016981C(globalCtx, this->camId, &player->actor.focus.pos, &camera->eye, &D_808A7DC0);
+    Play_CameraSetAtEyeUp(globalCtx, this->camId, &player->actor.focus.pos, &camera->eye, &D_808A7DC0);
     if (this->unk_14A == 1) {
         globalCtx->unk_1887F = 0x40;
         gSaveContext.nextTransition = 3;
