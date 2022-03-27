@@ -167,22 +167,6 @@ Vec3f D_80AF3414 = { 0.0f, 1.0f, 0.0f };
 
 Vec3f D_80AF3420 = { 0.0f, 0.0f, 1.0f };
 
-Color_RGB8 D_80AF342C = { 64, 0, 0 };
-
-Color_RGB8 D_80AF3430 = { 220, 220, 255 };
-
-Color_RGB8 D_80AF3434 = { 64, 0, 0 };
-
-Color_RGB8 D_80AF3438 = { 220, 220, 255 };
-
-u16 D_80AF343C[] = {
-    0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30,
-};
-
-s16 D_80AF3450[] = { 0, 0x31C7 };
-
-f32 D_80AF3454 = 3500.0f;
-
 void func_80AF0CDC(GlobalContext* globalCtx, EnTest7Struct2* arg1) {
     static MtxF D_80AF38B0;
     static Vec3f D_80AF38F0;
@@ -459,8 +443,8 @@ void func_80AF19A8(EnTest7* this, GlobalContext* globalCtx) {
 }
 
 void func_80AF1A2C(EnTest7* this, GlobalContext* globalCtx) {
-    Color_RGB8 sp34 = D_80AF342C;
-    Color_RGB8 sp30 = D_80AF3430;
+    Color_RGB8 sp34 = { 64, 0, 0 };
+    Color_RGB8 sp30 = { 220, 220, 255 };
     f32 sp2C = this->unk_1E54 / 10.0f;
 
     func_800FD59C(globalCtx, &sp30, sp2C);
@@ -625,8 +609,8 @@ void func_80AF2030(EnTest7* this, GlobalContext* globalCtx) {
 void func_80AF21E8(EnTest7* this, GlobalContext* globalCtx) {
     s32 sp2C = this->unk_1E54 - 100;
     f32 sp1C;
-    Color_RGB8 sp24 = D_80AF3434;
-    Color_RGB8 sp20 = D_80AF3438;
+    Color_RGB8 sp24 = { 64, 0, 0 };
+    Color_RGB8 sp20 = { 220, 220, 255 };
 
     if (MREG(64) != 0) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
@@ -653,6 +637,10 @@ void func_80AF2318(EnTest7* this, GlobalContext* globalCtx) {
     }
 }
 
+u16 D_80AF343C[] = {
+    0x68B0, 0x6A60, 0xB230, 0x9A80, 0xD890, 0x3E40, 0x8640, 0x84A0, 0x2040, 0xAA30,
+};
+
 void func_80AF2350(EnTest7* this, GlobalContext* globalCtx) {
     Vec3f sp2C;
 
@@ -674,9 +662,9 @@ void func_80AF2350(EnTest7* this, GlobalContext* globalCtx) {
         gSaveContext.respawnFlag = -6;
     } else {
         globalCtx->nextEntranceIndex = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
-        if ((globalCtx->nextEntranceIndex == 0x84A0) && (gSaveContext.weekEventReg[20] & 2)) {
+        if ((globalCtx->nextEntranceIndex == 0x84A0) && (gSaveContext.save.weekEventReg[20] & 2)) {
             globalCtx->nextEntranceIndex = 0xCA0;
-        } else if ((globalCtx->nextEntranceIndex == 0x9A80) && (gSaveContext.weekEventReg[33] & 0x80)) {
+        } else if ((globalCtx->nextEntranceIndex == 0x9A80) && (gSaveContext.save.weekEventReg[33] & 0x80)) {
             globalCtx->nextEntranceIndex = 0xAE80;
         }
     }
@@ -773,6 +761,10 @@ void func_80AF2938(EnTest7* this, GlobalContext* globalCtx) {
         func_80AF082C(this, func_80AF2EC8);
     }
 }
+
+s16 D_80AF3450[] = { 0, 0x31C7 };
+
+f32 D_80AF3454 = 3500.0f;
 
 void func_80AF29C0(EnTest7* this, GlobalContext* globalCtx) {
     s32 pad;
