@@ -266,7 +266,7 @@ void func_80C14044(EnJgameTsn* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
                     ActorCutscene_Stop(this->actor.cutscene);
                 }
@@ -405,7 +405,7 @@ void func_80C14610(EnJgameTsn* this, GlobalContext* globalCtx) {
 }
 
 void func_80C14684(EnJgameTsn* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             if (gSaveContext.rupees >= 20) {
                 Message_StartTextbox(globalCtx, 0x109E, &this->actor);
@@ -436,7 +436,7 @@ void func_80C1476C(EnJgameTsn* this, GlobalContext* globalCtx) {
 }
 
 void func_80C147B4(EnJgameTsn* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_300) {
             case 0x1095:
                 Message_StartTextbox(globalCtx, 0x1096, &this->actor);
