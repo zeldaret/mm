@@ -909,6 +909,7 @@ void func_800C63C4(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgI
 void func_800C641C(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId);
 void func_800C6474(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId);
 void DynaPoly_DeleteBgActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId);
+void func_800C6554(GlobalContext* globalCtx, DynaCollisionContext* dyna);
 void BgCheck_CalcWaterboxDimensions(Vec3f* minPos, Vec3f* maxXPos, Vec3f* maxZPos, Vec3s* minPosOut, s16* xLength, s16* zLength);
 void DynaPoly_ExpandSRT(GlobalContext* globalCtx, DynaCollisionContext* dyna, s32 bgId, s32* vtxStartIndex, s32* polyStartIndex, s32* waterBoxStartIndex);
 void BgCheck_ResetFlagsIfLoadedActor(GlobalContext* globalCtx, DynaCollisionContext* dyna, Actor* actor);
