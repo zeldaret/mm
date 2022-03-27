@@ -96,8 +96,8 @@ void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_RotateY(this->headRotation.y, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, gHarikoBody);
-    gSPDisplayList(POLY_OPA_DISP++, gHarikoFace);
+    gSPDisplayList(POLY_OPA_DISP++, gHarikoBodyDL);
+    gSPDisplayList(POLY_OPA_DISP++, gHarikoFaceDL);
 
     Matrix_StatePop();
     CLOSE_DISPS(globalCtx->state.gfxCtx);
