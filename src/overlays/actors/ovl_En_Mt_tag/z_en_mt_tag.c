@@ -234,7 +234,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, GlobalContext* globalCtx) {
 s32 EnMttag_ExitRace(GlobalContext* globalCtx, s32 arg1, s32 nextTransition) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     globalCtx->nextEntranceIndex = 0xD020;
-    if ((gSaveContext.weekEventReg[33] & 0x80)) {
+    if ((gSaveContext.save.weekEventReg[33] & 0x80)) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {
@@ -288,7 +288,7 @@ void EnMttag_ShowIntroCutscene(EnMttag* this, GlobalContext* globalCtx) {
  */
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        gSaveContext.weekEventReg[12] |= 2;
+        gSaveContext.save.weekEventReg[12] |= 2;
         this->actionFunc = EnMttag_RaceStart;
     }
 }
@@ -416,11 +416,11 @@ void EnMttag_RaceFinish(EnMttag* this, GlobalContext* globalCtx) {
 void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (((talkState == 5 && func_80147624(globalCtx)) || talkState == 2)) {
+    if (((talkState == 5 && Message_ShouldAdvance(globalCtx)) || talkState == 2)) {
         if (this->shouldRestartRace) {
             globalCtx->nextEntranceIndex = 0xD010;
 
-            if (gSaveContext.weekEventReg[33] & 0x80) {
+            if (gSaveContext.save.weekEventReg[33] & 0x80) {
                 // Spring
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -433,7 +433,8 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
             gSaveContext.nextTransition = 2;
             func_801477B4(globalCtx);
             func_800B7298(globalCtx, &this->actor, 7);
-            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.doubleMagic * 48) + 48);
+            Parameter_AddMagic(globalCtx,
+                               ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
 
             gSaveContext.eventInf[1] &= (u8)~1;
             gSaveContext.eventInf[1] &= (u8)~2;
@@ -452,7 +453,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
  * responded to the Goron Elder's son's question.
  */
 void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && (Message_ShouldAdvance(globalCtx))) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             // Exit the race
             func_8019F230();
@@ -477,7 +478,7 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
     Player* player;
     EnMttag* this = THIS;
 
-    if (gSaveContext.entranceIndex == 0xD010) {
+    if (gSaveContext.save.entranceIndex == 0xD010) {
         player = GET_PLAYER(globalCtx);
         player->stateFlags1 |= 0x20;
         this->raceInitialized = false;
@@ -488,7 +489,7 @@ void EnMttag_Init(Actor* thisx, GlobalContext* globalCtx) {
         gSaveContext.eventInf[1] &= (u8)~4;
         gSaveContext.eventInf[1] &= (u8)~8;
 
-        if (!(gSaveContext.weekEventReg[12] & 2)) {
+        if (!(gSaveContext.save.weekEventReg[12] & 2)) {
             this->actionFunc = EnMttag_ShowIntroCutscene;
         } else {
             s32 requiredScopeTemp;
