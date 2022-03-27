@@ -38,7 +38,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123358.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_801233E4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_InCsMode.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123420.s")
 
@@ -68,7 +68,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123C58.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123C90.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_SetEquipmentData.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80123D50.s")
 
@@ -114,7 +114,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_8012422C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124258.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/Player_GetExplosiveHeld.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124278.s")
 

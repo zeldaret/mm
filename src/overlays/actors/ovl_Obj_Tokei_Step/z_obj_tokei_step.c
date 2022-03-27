@@ -7,7 +7,7 @@
 #include "z_obj_tokei_step.h"
 #include "objects/object_tokei_step/object_tokei_step.h"
 
-#define FLAGS 0x00400010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_400000)
 
 #define THIS ((ObjTokeiStep*)thisx)
 
@@ -153,7 +153,7 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, GlobalContext* globalCtx) {
         if (hasPrevBounced && (panel->numBounces < 3) && (panel->startFallingTimer <= 0)) {
             finalPosY = sPanelXOffsets[i] + this->dyna.actor.world.pos.y;
             if (!panel->hasSoundPlayed) {
-                Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_CLOCK_TOWER_STAIR_MOVE);
                 panel->hasSoundPlayed = true;
             }
             panel->posChangeY += -2.5f;
@@ -193,7 +193,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     if ((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 2) &&
-        (globalCtx->csCtx.unk_12 == 0)) {
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
@@ -221,9 +221,10 @@ void ObjTokeiStep_SetupBeginOpen(ObjTokeiStep* this) {
 void ObjTokeiStep_BeginOpen(ObjTokeiStep* this, GlobalContext* globalCtx) {
     CsCmdActorAction* action;
 
-    if (func_800EE29C(globalCtx, 0x86)) {
-        action = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x86)];
-        if ((action->startFrame == globalCtx->csCtx.frames) && (action->unk0 != 0)) {
+    if (Cutscene_CheckActorAction(globalCtx, 134)) {
+        action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 134)];
+
+        if ((action->startFrame == globalCtx->csCtx.frames) && (action->action != 0)) {
             this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
             ObjTokeiStep_SetupOpen(this);
         }
@@ -250,7 +251,7 @@ void ObjTokeiStep_Open(ObjTokeiStep* this, GlobalContext* globalCtx) {
 }
 
 void ObjTokeiStep_SetupDoNothingOpen(ObjTokeiStep* this) {
-    this->dyna.actor.flags &= ~0x10;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_10;
     this->actionFunc = ObjTokeiStep_DoNothingOpen;
 }
 
@@ -266,7 +267,7 @@ void ObjTokeiStep_Update(Actor* thisx, GlobalContext* globalCtx) {
 void ObjTokeiStep_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeiStep* this = THIS;
 
-    func_800BDFC0(globalCtx, gClocktowerPanelDL);
+    Gfx_DrawDListOpa(globalCtx, gClocktowerPanelDL);
 }
 
 void ObjTokeiStep_DrawOpen(Actor* thisx, GlobalContext* globalCtx) {

@@ -3,7 +3,7 @@
         <DList Name="object_uch_DL_000080" Offset="0x80" />
         <Texture Name="object_uch_Tex_000130" OutName="tex_000130" Format="i8" Width="32" Height="32" Offset="0x130" />
         <TextureAnimation Name="object_uch_Matanimheader_000550" Offset="0x550" />
-        <!-- <Blob Name="object_uch_Blob_000560" Size="0x10" Offset="0x560" /> -->
+        <TextureAnimation Name="object_uch_Matanimheader_000560" Offset="0x560" />
         <Animation Name="object_uch_Anim_000608" Offset="0x608" />
         <Animation Name="object_uch_Anim_0006C8" Offset="0x6C8" />
         <DList Name="object_uch_DL_000720" Offset="0x720" />
@@ -28,19 +28,19 @@
         <Texture Name="object_uch_Tex_004180" OutName="tex_004180" Format="ci8" Width="16" Height="32" Offset="0x4180" />
         <Texture Name="object_uch_Tex_004380" OutName="tex_004380" Format="ci8" Width="16" Height="32" Offset="0x4380" />
         <Texture Name="object_uch_Tex_004580" OutName="tex_004580" Format="rgba16" Width="32" Height="32" Offset="0x4580" />
-        <Limb Name="object_uch_Standardlimb_004D80" Type="Standard" Offset="0x4D80" />
-        <Limb Name="object_uch_Standardlimb_004D8C" Type="Standard" Offset="0x4D8C" />
-        <Limb Name="object_uch_Standardlimb_004D98" Type="Standard" Offset="0x4D98" />
-        <Limb Name="object_uch_Standardlimb_004DA4" Type="Standard" Offset="0x4DA4" />
-        <Limb Name="object_uch_Standardlimb_004DB0" Type="Standard" Offset="0x4DB0" />
-        <Limb Name="object_uch_Standardlimb_004DBC" Type="Standard" Offset="0x4DBC" />
-        <Limb Name="object_uch_Standardlimb_004DC8" Type="Standard" Offset="0x4DC8" />
-        <Limb Name="object_uch_Standardlimb_004DD4" Type="Standard" Offset="0x4DD4" />
-        <Limb Name="object_uch_Standardlimb_004DE0" Type="Standard" Offset="0x4DE0" />
-        <Limb Name="object_uch_Standardlimb_004DEC" Type="Standard" Offset="0x4DEC" />
-        <Limb Name="object_uch_Standardlimb_004DF8" Type="Standard" Offset="0x4DF8" />
-        <Limb Name="object_uch_Standardlimb_004E04" Type="Standard" Offset="0x4E04" />
-        <Limb Name="object_uch_Standardlimb_004E10" Type="Standard" Offset="0x4E10" />
-        <Skeleton Name="object_uch_Skel_004E50" Type="Flex" LimbType="Standard" Offset="0x4E50" />
+        <Limb Name="object_uch_Standardlimb_004D80" Type="Standard" EnumName="OBJECT_UCH_LIMB_01" Offset="0x4D80" />
+        <Limb Name="object_uch_Standardlimb_004D8C" Type="Standard" EnumName="OBJECT_UCH_LIMB_02" Offset="0x4D8C" />
+        <Limb Name="object_uch_Standardlimb_004D98" Type="Standard" EnumName="OBJECT_UCH_LIMB_03" Offset="0x4D98" />
+        <Limb Name="object_uch_Standardlimb_004DA4" Type="Standard" EnumName="OBJECT_UCH_LIMB_04" Offset="0x4DA4" />
+        <Limb Name="object_uch_Standardlimb_004DB0" Type="Standard" EnumName="OBJECT_UCH_LIMB_05" Offset="0x4DB0" />
+        <Limb Name="object_uch_Standardlimb_004DBC" Type="Standard" EnumName="OBJECT_UCH_LIMB_06" Offset="0x4DBC" />
+        <Limb Name="object_uch_Standardlimb_004DC8" Type="Standard" EnumName="OBJECT_UCH_LIMB_07" Offset="0x4DC8" />
+        <Limb Name="object_uch_Standardlimb_004DD4" Type="Standard" EnumName="OBJECT_UCH_LIMB_08" Offset="0x4DD4" />
+        <Limb Name="object_uch_Standardlimb_004DE0" Type="Standard" EnumName="OBJECT_UCH_LIMB_09" Offset="0x4DE0" />
+        <Limb Name="object_uch_Standardlimb_004DEC" Type="Standard" EnumName="OBJECT_UCH_LIMB_0A" Offset="0x4DEC" />
+        <Limb Name="object_uch_Standardlimb_004DF8" Type="Standard" EnumName="OBJECT_UCH_LIMB_0B" Offset="0x4DF8" />
+        <Limb Name="object_uch_Standardlimb_004E04" Type="Standard" EnumName="OBJECT_UCH_LIMB_0C" Offset="0x4E04" />
+        <Limb Name="object_uch_Standardlimb_004E10" Type="Standard" EnumName="OBJECT_UCH_LIMB_0D" Offset="0x4E10" />
+        <Skeleton Name="object_uch_Skel_004E50" Type="Flex" LimbType="Standard" LimbNone="OBJECT_UCH_LIMB_NONE" LimbMax="OBJECT_UCH_LIMB_MAX" EnumName="object_uch_Limbs" Offset="0x4E50" />
     </File>
 </Root>

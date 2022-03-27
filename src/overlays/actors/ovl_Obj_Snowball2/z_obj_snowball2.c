@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_snowball2.h"
+#include "objects/object_goroiwa/object_goroiwa.h"
 
-#define FLAGS 0x00800000
+#define FLAGS (ACTOR_FLAG_800000)
 
 #define THIS ((ObjSnowball2*)thisx)
 
@@ -15,7 +16,16 @@ void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+void func_80B38E20(ObjSnowball2* this);
+void func_80B39C78(ObjSnowball2* this);
+void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B39F60(ObjSnowball2* this);
+void func_80B39FA8(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B3A0D8(ObjSnowball2* this);
+void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx);
+void func_80B3A498(ObjSnowball2* this);
+void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx);
+
 const ActorInit Obj_Snowball2_InitVars = {
     ACTOR_OBJ_SNOWBALL2,
     ACTORCAT_PROP,
@@ -28,82 +38,587 @@ const ActorInit Obj_Snowball2_InitVars = {
     (ActorFunc)ObjSnowball2_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-static ColliderJntSphElementInit D_80B3A8E0[1] = {
+static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
-        { ELEMTYPE_UNK0, { 0x00400000, 0x00, 0x02 }, { 0x0583FFBE, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NONE, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0x00400000, 0x00, 0x02 },
+            { 0x0583FFBE, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_NONE,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 15 }, 100 },
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_80B3A904 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_JNTSPH, },
-    1, D_80B3A8E0, // sJntSphElementsInit,
+static ColliderJntSphInit sJntSphInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_JNTSPH,
+    },
+    1,
+    sJntSphElementsInit,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B3A93C[] = {
-    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
+Color_RGBA8 D_80B3A914 = { 250, 250, 250, 255 };
+
+Color_RGBA8 D_80B3A918 = { 180, 180, 180, 255 };
+
+Gfx* D_80B3A91C[] = {
+    object_goroiwa_DL_0072F0,
+    object_goroiwa_DL_0077D0,
+    object_goroiwa_DL_007C60,
+    object_goroiwa_DL_007C60,
 };
 
-#endif
+Vec3f D_80B3A92C = { 0.0f, 0.3f, 0.0f };
 
-extern ColliderJntSphElementInit D_80B3A8E0[1];
-extern ColliderJntSphInit D_80B3A904;
-extern InitChainEntry D_80B3A93C[];
+void func_80B38E20(ObjSnowball2* this) {
+    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x,
+                                          this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
+                                          this->actor.world.pos.z, &this->actor.shape.rot);
+    Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+    Collider_UpdateSpheres(0, &this->collider);
+}
 
-extern UNK_TYPE D_06008B90;
+void func_80B38E88(ObjSnowball2* this, GlobalContext* globalCtx) {
+    s32 temp_v0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38E20.s")
+    if (this->unk_1AE == 0) {
+        temp_v0 = func_800A8150(ENOBJSNOWBALL2_GET_3F(&this->actor));
+        if (temp_v0 >= 0) {
+            Item_DropCollectible(globalCtx, &this->actor.world.pos,
+                                 (ENOBJSNOWBALL2_GET_7F00(&this->actor) << 8) | temp_v0);
+            this->unk_1AE = 1;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38E88.s")
+void func_80B38EFC(ObjSnowball2* this, GlobalContext* globalCtx) {
+    s32 pad;
+    s32 i;
+    Vec3f spA4;
+    Vec3f sp98;
+    Vec3f sp8C;
+    f32 sp88 = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B38EFC.s")
+    for (i = 0; i < 2; i++) {
+        sp8C.x = ((Rand_ZeroOne() * 30.0f) - 15.0f) + this->actor.world.pos.x;
+        sp8C.y = ((Rand_ZeroOne() * 20.0f) - 10.0f) + sp88;
+        sp8C.z = ((Rand_ZeroOne() * 30.0f) - 15.0f) + this->actor.world.pos.z;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39108.s")
+        sp98.x = (Rand_ZeroOne() - 0.5f) * 1.6f;
+        sp98.y = -1.5f;
+        sp98.z = (Rand_ZeroOne() - 0.5f) * 1.6f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39470.s")
+        spA4.x = sp98.x * -0.06f;
+        spA4.y = sp98.y * -0.06f;
+        spA4.z = sp98.z * -0.06f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B395C4.s")
+        func_800B0E48(globalCtx, &sp8C, &sp98, &spA4, &D_80B3A914, &D_80B3A918, (s32)(Rand_ZeroOne() * 40.0f) + 10,
+                      (s32)(Rand_ZeroOne() * 30.0f) + 10);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B395EC.s")
+void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
+    s32 phi_s5;
+    s16 phi_s1;
+    s32 phi_v0;
+    s32 i;
+    u32 temp;
+    s32 temp_s3;
+    Vec3f spDC;
+    Vec3f spD0;
+    f32 temp_f2;
+    f32 spC8 = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
+    f32 temp_f0;
+    f32 temp_f12;
+    f32 temp_f20;
+    f32 temp_f22;
+    f32 temp_f24;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39638.s")
+    for (i = 0, phi_s5 = 0; i < 11; i++, phi_s5 += (0x10000 / 11)) {
+        temp_s3 = (s32)(Rand_ZeroOne() * 5957.0f) + phi_s5;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39834.s")
+        if (((u32)Rand_Next() >> 0x1E) == 0) {
+            phi_s1 = 0x20;
+        } else {
+            phi_s1 = 0x40;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39908.s")
+        if ((i & 3) == 0) {
+            phi_s1 |= 1;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39B28.s")
+        temp_f0 = Rand_ZeroOne();
+        temp_f20 = (1.0f - SQ(temp_f0)) * 12.0f;
+        temp_f22 = Math_SinS(temp_s3);
+        temp_f24 = Math_CosS(temp_s3);
+        temp_f12 = (Rand_ZeroOne() * 1.6f) - 0.8f;
+        temp_f2 = fabsf(temp_f12) * temp_f12;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39B5C.s")
+        spDC.x = temp_f22 * 4.0f;
+        spDC.y = (temp_f2 * 6.0f) + 9.0f;
+        spDC.z = temp_f24 * 4.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Init.s")
+        spD0.x = (temp_f22 * temp_f20) + this->actor.world.pos.x;
+        spD0.y = (temp_f2 * temp_f20) + spC8;
+        spD0.z = (temp_f24 * temp_f20) + this->actor.world.pos.z;
+        temp = Rand_Next();
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Destroy.s")
+        if ((i & 3) == 0) {
+            phi_v0 = 1;
+        } else {
+            phi_v0 = 0;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39C78.s")
+        EffectSsKakera_Spawn(globalCtx, &spD0, &spDC, &spD0, -300, phi_s1, 30, 0, 0, (temp >> 0x1D) + 8, phi_v0, 0, 50,
+                             -1, OBJECT_GOROIWA, D_80B3A91C[i & 3]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39C9C.s")
+        spD0.x += (Rand_ZeroOne() - 0.5f) * 40.0f;
+        spD0.y += (Rand_ZeroOne() - 0.3f) * 45.0f;
+        spD0.z += (Rand_ZeroOne() - 0.5f) * 40.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39F60.s")
+        func_800B0E48(globalCtx, &spD0, &gZeroVec3f, &D_80B3A92C, &D_80B3A914, &D_80B3A918,
+                      (s32)(Rand_ZeroOne() * 70.0f) + 10, (s32)(Rand_ZeroOne() * 100.0f) + 10);
+    }
+    spD0.y = (temp_f2 * temp_f20) + spC8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B39FA8.s")
+void func_80B39470(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSnowball2* this = THIS;
+    Vec3f sp58;
+    s32 phi_s0;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A0D8.s")
+    sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A13C.s")
+    for (phi_s0 = 0, i = 0; i < 5; i++, phi_s0 += (0x10000 / 5)) {
+        sp58.x = (Math_SinS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.x;
+        sp58.z = (Math_CosS((s32)(Rand_ZeroOne() * 7200.0f) + phi_s0) * 15.0f) + this->actor.world.pos.z;
+        EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 200);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A498.s")
+    sp58.x = this->actor.world.pos.x;
+    sp58.z = this->actor.world.pos.z;
+    EffectSsGSplash_Spawn(globalCtx, &sp58, NULL, NULL, 0, 300);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/func_80B3A500.s")
+void func_80B395C4(GlobalContext* this, Vec3f* arg1) {
+    EffectSsGRipple_Spawn(this, arg1, 200, 700, 0);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Update.s")
+void func_80B395EC(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSnowball2* this = THIS;
+    Vec3f sp18;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Snowball2/ObjSnowball2_Draw.s")
+    sp18.x = this->actor.world.pos.x;
+    sp18.y = this->actor.world.pos.y + this->actor.depthInWater;
+    sp18.z = this->actor.world.pos.z;
+    func_80B395C4(globalCtx, &sp18);
+}
+
+void func_80B39638(GlobalContext* globalCtx, Vec3f* arg1) {
+    static s16 D_80B3A938 = 0;
+    f32 temp_f20;
+    f32 temp_f22;
+    f32 temp_f24;
+    Vec3f sp98;
+    Vec3f sp8C;
+    Vec3f sp80;
+    f32 temp_f2;
+    s32 i;
+
+    D_80B3A938 += (s16)((u32)Rand_Next() >> 0x11);
+
+    for (i = 0; i < 2; i++) {
+        D_80B3A938 += 0x8000;
+        temp_f20 = Rand_ZeroOne();
+        temp_f22 = Math_SinS(D_80B3A938) * temp_f20;
+        temp_f24 = Rand_ZeroOne();
+        temp_f2 = Math_CosS(D_80B3A938) * temp_f20;
+
+        sp98.x = arg1->x + (temp_f22 * 5.0f);
+        sp98.y = arg1->y + (temp_f24 * 25.0f);
+        sp98.z = arg1->z + (temp_f2 * 5.0f);
+
+        sp8C.x = temp_f22 * 1.55f;
+        sp8C.y = temp_f24 * -0.7f;
+        sp8C.z = temp_f2 * 1.55f;
+
+        sp80.x = sp8C.x * -0.02f;
+        sp80.y = sp8C.y * -0.025f;
+        sp80.z = sp8C.z * -0.02f;
+
+        EffectSsIceSmoke_Spawn(globalCtx, &sp98, &sp8C, &sp80, (s32)(Rand_ZeroOne() * 30.0f) + 68);
+    }
+}
+
+void func_80B39834(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSnowball2* this = THIS;
+    s32 i;
+
+    for (i = 0; i < 3; i++) {
+        EffectSsBubble_Spawn(globalCtx, &this->actor.world.pos, 0.0f, 20.0f, 30.0f, (Rand_ZeroOne() * 0.11f) + 0.03f);
+    }
+}
+
+void func_80B39908(ObjSnowball2* this, GlobalContext* globalCtx) {
+    Vec3f spAC;
+    Vec3f spA0;
+    Vec3f sp94;
+    s32 i;
+
+    if (this->collider.elements[0].info.bumperFlags & BUMP_HIT) {
+        Vec3s* hitPos = &this->collider.elements[0].info.bumper.hitPos;
+
+        for (i = 0; i < 4; i++) {
+            sp94.x = ((Rand_ZeroOne() * 14.0f) - 7.0f) + hitPos->x;
+            sp94.y = ((Rand_ZeroOne() * 14.0f) - 7.0f) + hitPos->y;
+            sp94.z = ((Rand_ZeroOne() * 14.0f) - 7.0f) + hitPos->z;
+
+            spA0.x = (Rand_ZeroOne() - 0.5f) * 1.6f;
+            spA0.y = -0.8f;
+            spA0.z = (Rand_ZeroOne() - 0.5f) * 1.6f;
+
+            spAC.x = spA0.x * -0.06f;
+            spAC.y = spA0.y * -0.06f;
+            spAC.z = spA0.z * -0.06f;
+
+            func_800B0E48(globalCtx, &sp94, &spA0, &spAC, &D_80B3A914, &D_80B3A918, (s32)(Rand_ZeroOne() * 40.0f) + 10,
+                          (s32)(Rand_ZeroOne() * 30.0f) + 10);
+        }
+    }
+}
+
+void func_80B39B28(ObjSnowball2* this, GlobalContext* globalCtx) {
+    if ((this->unk_1AE == 0) && (globalCtx->roomCtx.currRoom.num != this->unk_1AF)) {
+        this->unk_1AE = 1;
+    }
+}
+
+void func_80B39B5C(ObjSnowball2* this, GlobalContext* globalCtx) {
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_SMALL_SNOWBALL_BROKEN);
+}
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),  ICHAIN_F32_DIV1000(terminalVelocity, -20000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 25, ICHAIN_STOP),
+};
+
+void ObjSnowball2_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSnowball2* this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+    Collider_InitJntSph(globalCtx, &this->collider);
+    this->actor.shape.rot.x = 0;
+    this->actor.shape.rot.z = 0;
+    this->actor.shape.rot.y = (u32)Rand_Next() >> 0x10;
+    ActorShape_Init(&this->actor.shape, 200.0f, NULL, 12.5f);
+    this->actor.shape.shadowAlpha = 130;
+    Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
+    func_80B38E20(this);
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
+    this->unk_1AF = this->actor.room;
+    func_80B39C78(this);
+}
+
+void ObjSnowball2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSnowball2* this = THIS;
+
+    Collider_DestroyJntSph(globalCtx, &this->collider);
+}
+
+void func_80B39C78(ObjSnowball2* this) {
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->unk_1AD = 0;
+    this->actionFunc = func_80B39C9C;
+}
+
+void func_80B39C9C(ObjSnowball2* this, GlobalContext* globalCtx) {
+    s32 pad;
+    s32 sp38 = (this->collider.base.acFlags & AC_HIT) != 0;
+    s32 pad2;
+
+    if (sp38) {
+        this->collider.base.acFlags &= ~AC_HIT;
+    }
+
+    if (Actor_HasParent(&this->actor, globalCtx)) {
+        this->actor.room = -1;
+        this->actor.flags |= ACTOR_FLAG_10;
+        if (func_800A817C(ENOBJSNOWBALL2_GET_3F(&this->actor))) {
+            func_80B38E88(this, globalCtx);
+        }
+        func_80B38EFC(this, globalCtx);
+        func_800B8E58(GET_PLAYER(globalCtx), NA_SE_PL_PULL_UP_SNOWBALL);
+        func_80B39F60(this);
+    } else if ((this->actor.bgCheckFlags & 0x20) &&
+               ((this->actor.shape.yOffset * this->actor.scale.y) < this->actor.depthInWater)) {
+        func_80B3A498(this);
+    } else if (sp38 && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x0583FFBC)) {
+        func_80B38E88(this, globalCtx);
+        func_80B39108(this, globalCtx);
+        func_80B39B5C(this, globalCtx);
+        Actor_MarkForDeath(&this->actor);
+        return;
+    } else {
+        if (sp38 && (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 2)) {
+            func_80B39908(this, globalCtx);
+        }
+
+        if (this->unk_1AD == 0) {
+            Actor_MoveWithGravity(&this->actor);
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x44);
+            if ((this->actor.bgCheckFlags & 1) &&
+                (DynaPoly_GetActor(&globalCtx->colCtx, this->actor.floorBgId) == NULL)) {
+                this->unk_1AD = 1;
+                this->actor.flags &= ~ACTOR_FLAG_10;
+            }
+        }
+
+        if (this->actor.xzDistToPlayer < 800.0f) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+            if (this->actor.xzDistToPlayer < 150.0f) {
+                CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+                if (this->actor.xzDistToPlayer < 100.0f) {
+                    if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, GET_PLAYER(globalCtx)->actor.world.rot.y)) >=
+                        0x5556) {
+                        Actor_PickUp(&this->actor, globalCtx, GI_NONE, 36.0f, 30.0f);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void func_80B39F60(ObjSnowball2* this) {
+    this->actor.world.pos.y += (600.0f - this->actor.shape.yOffset) * this->actor.scale.y;
+    this->unk_1AC = 4;
+    this->actor.shape.yOffset = 600.0f;
+    this->actionFunc = func_80B39FA8;
+}
+
+void func_80B39FA8(ObjSnowball2* this, GlobalContext* globalCtx) {
+    s32 pad;
+    Vec3f sp30;
+    s32 sp2C;
+
+    func_80B39B28(this, globalCtx);
+
+    if (this->unk_1AC > 0) {
+        this->unk_1AC--;
+        func_80B38EFC(this, globalCtx);
+    }
+
+    if (Actor_HasNoParent(&this->actor, globalCtx)) {
+        this->actor.room = globalCtx->roomCtx.currRoom.num;
+        this->actor.speedXZ *= 3.8f;
+        this->actor.velocity.y *= 0.4f;
+        this->actor.gravity = -2.8f;
+        Actor_MoveWithGravity(&this->actor);
+        Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
+        func_80B3A0D8(this);
+    } else {
+        sp30.x = this->actor.world.pos.x;
+        sp30.y = this->actor.world.pos.y + 20.0f;
+        sp30.z = this->actor.world.pos.z;
+        this->actor.floorHeight =
+            BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp2C, &this->actor, &sp30);
+    }
+}
+
+void func_80B3A0D8(ObjSnowball2* this) {
+    this->unk_1AC = 60;
+    this->actor.colChkInfo.mass = 180;
+    this->unk_1A8 = Rand_S16Offset(-5000, 4000);
+    this->unk_1AA = Rand_S16Offset(-800, 1600);
+    this->actionFunc = func_80B3A13C;
+}
+
+void func_80B3A13C(ObjSnowball2* this, GlobalContext* globalCtx) {
+    s32 pad;
+    s32 sp38 = (this->collider.base.atFlags & AT_HIT) != 0;
+    s32 sp34 = (this->collider.base.ocFlags1 & OC1_HIT) != 0;
+    s32 sp30;
+
+    if (sp38) {
+        this->collider.base.atFlags &= ~AT_HIT;
+    }
+
+    if (sp34) {
+        this->collider.base.ocFlags1 &= ~OC1_HIT;
+    }
+
+    if (this->unk_1AC > 0) {
+        this->unk_1AC--;
+    }
+
+    func_80B39B28(this, globalCtx);
+
+    if ((((this->actor.bgCheckFlags & 9) || sp38) && !(this->actor.bgCheckFlags & 0x20)) || (this->unk_1AC <= 0)) {
+        func_80B38E88(this, globalCtx);
+        func_80B39108(this, globalCtx);
+        func_80B39B5C(this, globalCtx);
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    sp30 = false;
+    if (this->actor.bgCheckFlags & 0x60) {
+        if ((this->actor.bgCheckFlags & 0x40) || (this->actor.speedXZ > 3.0f)) {
+            if (this->actor.depthInWater < (1200.0f * this->actor.scale.y)) {
+                func_80B39470(&this->actor, globalCtx);
+                func_80B395EC(&this->actor, globalCtx);
+            }
+            if (this->actor.bgCheckFlags & 0x40) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BOMB_DROP_WATER);
+            }
+        } else if ((((globalCtx->gameplayFrames % 16) == 0) || (((u32)Rand_Next() >> 0x10) == 0)) &&
+                   (this->actor.depthInWater < (1200.0f * this->actor.scale.y))) {
+            func_80B395EC(&this->actor, globalCtx);
+        }
+
+        func_80B39834(&this->actor, globalCtx);
+        this->unk_1A8 >>= 1;
+        this->unk_1AA >>= 1;
+
+        if (sp34) {
+            this->actor.speedXZ *= 0.8f;
+        } else {
+            this->actor.speedXZ *= 0.65f;
+        }
+        this->actor.velocity.y *= 0.27f;
+        this->actor.gravity *= 0.27f;
+        if (this->actor.speedXZ < 0.4f) {
+            sp30 = true;
+        }
+    } else {
+        if (sp34) {
+            this->actor.speedXZ *= 0.8f;
+        } else {
+            this->actor.speedXZ *= 0.96f;
+        }
+        this->actor.velocity.y *= 0.96f;
+    }
+
+    Actor_MoveWithGravity(&this->actor);
+    Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 15.0f, 15.0f, 0.0f, 0x45);
+    this->actor.shape.rot.x += this->unk_1A8;
+    this->actor.shape.rot.y += this->unk_1AA;
+    func_80B38E20(this);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    if (sp30) {
+        func_80B3A498(this);
+    } else {
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
+
+void func_80B3A498(ObjSnowball2* this) {
+    this->actor.home.pos.x = this->actor.world.pos.x;
+    this->unk_1AC = 46;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.home.pos.y = this->actor.world.pos.y + this->actor.depthInWater;
+    this->actor.home.pos.z = this->actor.world.pos.z;
+    this->actor.world.pos.y = this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
+    this->actor.shape.yOffset = 0.0f;
+    this->actor.speedXZ = 0.0f;
+    this->actionFunc = func_80B3A500;
+}
+
+void func_80B3A500(ObjSnowball2* this, GlobalContext* globalCtx) {
+    f32 phi_f0;
+    s32 pad;
+    f32 temp_f14 = this->actor.home.pos.y - this->actor.world.pos.y;
+    f32 temp_f12 = this->actor.scale.y * 600.0f;
+
+    this->unk_1AC--;
+
+    this->actor.speedXZ *= 0.7f;
+
+    this->unk_1A8 >>= 1;
+    this->unk_1AA >>= 1;
+
+    this->actor.shape.rot.x += this->unk_1A8;
+    this->actor.shape.rot.y += this->unk_1AA;
+
+    if (temp_f14 < -temp_f12) {
+        this->actor.gravity = this->actor.scale.y * -40.0f;
+        phi_f0 = 0.94f;
+    } else if (temp_f12 < temp_f14) {
+        this->actor.gravity = this->actor.scale.y * 24.0f;
+        phi_f0 = 0.8f;
+    } else if (temp_f12 > 0.001f) {
+        this->actor.gravity = (((1.6f * temp_f14) / temp_f12) + -1.0f + 0.6f) * 0.5f * 40.0f * this->actor.scale.y;
+        phi_f0 = (((-0.13999999f * temp_f14) / temp_f12) + 0.94f + 0.8f) * 0.5f;
+    } else {
+        this->actor.gravity = 0.0f;
+        phi_f0 = 1.0f;
+    }
+
+    this->actor.velocity.y *= phi_f0;
+    this->actor.velocity.y += this->actor.gravity;
+    this->actor.world.pos.y += this->actor.velocity.y;
+
+    if (((globalCtx->gameplayFrames % 16) == 0) || (((u32)Rand_Next() >> 0x10) == 0)) {
+        func_80B395C4(globalCtx, &this->actor.home.pos);
+    }
+
+    if (this->unk_1AC <= 0) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    if (this->unk_1AC < 20) {
+        this->actor.scale.x -= 0.00125f;
+        if (this) {}
+        this->actor.scale.y = this->actor.scale.x;
+        this->actor.scale.z = this->actor.scale.x;
+
+        if ((this->unk_1AC >= 6) && (temp_f14 < temp_f12)) {
+            func_80B39638(globalCtx, &this->actor.home.pos);
+        }
+
+        if (this->unk_1AC == 10) {
+            func_80B38E88(this, globalCtx);
+        }
+
+        func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    } else {
+        func_80B38E20(this);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
+
+void ObjSnowball2_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSnowball2* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+
+    if (this->actor.projectedPos.z < 460.0f) {
+        if (this->actor.projectedPos.z > 200.0f) {
+            this->actor.shape.shadowAlpha = (460 - (s32)this->actor.projectedPos.z) >> 1;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        } else if (this->actor.projectedPos.z > -10.0f) {
+            this->actor.shape.shadowAlpha = 130;
+            this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        } else {
+            this->actor.shape.shadowDraw = NULL;
+        }
+    } else {
+        this->actor.shape.shadowDraw = NULL;
+    }
+}
+
+void ObjSnowball2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSnowball2* this = THIS;
+
+    Gfx_DrawDListOpa(globalCtx, object_goroiwa_DL_008B90);
+}

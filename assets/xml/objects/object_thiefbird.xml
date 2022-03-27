@@ -44,23 +44,23 @@
         <Texture Name="object_thiefbird_Tex_005F60" OutName="tex_005F60" Format="rgba16" Width="8" Height="8" Offset="0x5F60" />
         <Texture Name="object_thiefbird_Tex_005FE0" OutName="tex_005FE0" Format="i8" Width="8" Height="8" Offset="0x5FE0" />
         <Texture Name="object_thiefbird_Tex_006020" OutName="tex_006020" Format="i4" Width="16" Height="16" Offset="0x6020" />
-        <Limb Name="object_thiefbird_Standardlimb_0060A0" Type="Standard" Offset="0x60A0" />
-        <Limb Name="object_thiefbird_Standardlimb_0060AC" Type="Standard" Offset="0x60AC" />
-        <Limb Name="object_thiefbird_Standardlimb_0060B8" Type="Standard" Offset="0x60B8" />
-        <Limb Name="object_thiefbird_Standardlimb_0060C4" Type="Standard" Offset="0x60C4" />
-        <Limb Name="object_thiefbird_Standardlimb_0060D0" Type="Standard" Offset="0x60D0" />
-        <Limb Name="object_thiefbird_Standardlimb_0060DC" Type="Standard" Offset="0x60DC" />
-        <Limb Name="object_thiefbird_Standardlimb_0060E8" Type="Standard" Offset="0x60E8" />
-        <Limb Name="object_thiefbird_Standardlimb_0060F4" Type="Standard" Offset="0x60F4" />
-        <Limb Name="object_thiefbird_Standardlimb_006100" Type="Standard" Offset="0x6100" />
-        <Limb Name="object_thiefbird_Standardlimb_00610C" Type="Standard" Offset="0x610C" />
-        <Limb Name="object_thiefbird_Standardlimb_006118" Type="Standard" Offset="0x6118" />
-        <Limb Name="object_thiefbird_Standardlimb_006124" Type="Standard" Offset="0x6124" />
-        <Limb Name="object_thiefbird_Standardlimb_006130" Type="Standard" Offset="0x6130" />
-        <Limb Name="object_thiefbird_Standardlimb_00613C" Type="Standard" Offset="0x613C" />
-        <Limb Name="object_thiefbird_Standardlimb_006148" Type="Standard" Offset="0x6148" />
-        <Limb Name="object_thiefbird_Standardlimb_006154" Type="Standard" Offset="0x6154" />
-        <Skeleton Name="object_thiefbird_Skel_0061A0" Type="Flex" LimbType="Standard" Offset="0x61A0" />
+        <Limb Name="object_thiefbird_Standardlimb_0060A0" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_01" Offset="0x60A0" />
+        <Limb Name="object_thiefbird_Standardlimb_0060AC" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_02" Offset="0x60AC" />
+        <Limb Name="object_thiefbird_Standardlimb_0060B8" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_03" Offset="0x60B8" />
+        <Limb Name="object_thiefbird_Standardlimb_0060C4" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_04" Offset="0x60C4" />
+        <Limb Name="object_thiefbird_Standardlimb_0060D0" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_05" Offset="0x60D0" />
+        <Limb Name="object_thiefbird_Standardlimb_0060DC" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_06" Offset="0x60DC" />
+        <Limb Name="object_thiefbird_Standardlimb_0060E8" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_07" Offset="0x60E8" />
+        <Limb Name="object_thiefbird_Standardlimb_0060F4" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_08" Offset="0x60F4" />
+        <Limb Name="object_thiefbird_Standardlimb_006100" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_09" Offset="0x6100" />
+        <Limb Name="object_thiefbird_Standardlimb_00610C" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0A" Offset="0x610C" />
+        <Limb Name="object_thiefbird_Standardlimb_006118" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0B" Offset="0x6118" />
+        <Limb Name="object_thiefbird_Standardlimb_006124" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0C" Offset="0x6124" />
+        <Limb Name="object_thiefbird_Standardlimb_006130" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0D" Offset="0x6130" />
+        <Limb Name="object_thiefbird_Standardlimb_00613C" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0E" Offset="0x613C" />
+        <Limb Name="object_thiefbird_Standardlimb_006148" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_0F" Offset="0x6148" />
+        <Limb Name="object_thiefbird_Standardlimb_006154" Type="Standard" EnumName="OBJECT_THIEFBIRD_LIMB_10" Offset="0x6154" />
+        <Skeleton Name="object_thiefbird_Skel_0061A0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_THIEFBIRD_LIMB_NONE" LimbMax="OBJECT_THIEFBIRD_LIMB_MAX" EnumName="object_thiefbird_Limbs" Offset="0x61A0" />
         <Animation Name="object_thiefbird_Anim_0063C4" Offset="0x63C4" />
     </File>
 </Root>

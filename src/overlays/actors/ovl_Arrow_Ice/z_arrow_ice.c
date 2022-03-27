@@ -7,7 +7,7 @@
 #include "z_arrow_ice.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 
-#define FLAGS 0x02000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((ArrowIce*)thisx)
 
@@ -162,7 +162,7 @@ void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
     ArrowIce_LerpFiredPosition(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;
@@ -178,7 +178,7 @@ void ArrowIce_Fly(ArrowIce* this, GlobalContext* globalCtx) {
 void ArrowIce_Update(Actor* thisx, GlobalContext* globalCtx) {
     ArrowIce* this = THIS;
 
-    if ((globalCtx->msgCtx.unk11F22 == 0xE) || (globalCtx->msgCtx.unk11F22 == 0x12)) {
+    if ((globalCtx->msgCtx.msgMode == 0xE) || (globalCtx->msgCtx.msgMode == 0x12)) {
         Actor_MarkForDeath(&this->actor);
         return;
     } else {
@@ -228,11 +228,11 @@ void ArrowIce_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(this->radius * 0.2f, this->height * 3.0f, this->radius * 0.2f, MTXMODE_APPLY);
         Matrix_InsertTranslation(0.0f, -700.0f, 0.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, sIceArrowDL);
+        gSPDisplayList(POLY_XLU_DISP++, gIceArrowMaterialDL);
         gSPDisplayList(POLY_XLU_DISP++,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 511 - (stateFrames * 5) % 512, 0, 128, 32, 1,
                                         511 - (stateFrames * 10) % 512, 511 - (stateFrames * 10) % 512, 4, 16));
-        gSPDisplayList(POLY_XLU_DISP++, sIceArrowVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gIceArrowModelDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

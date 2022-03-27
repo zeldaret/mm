@@ -39,7 +39,7 @@
 
 #include "z_en_holl.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnHoll*)thisx)
 
@@ -108,7 +108,7 @@ void EnHoll_SetupAction(EnHoll* this) {
 void EnHoll_SetPlayerSide(GlobalContext* globalCtx, EnHoll* this, Vec3f* transformedPlayerPos) {
     Player* player = GET_PLAYER(globalCtx);
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, transformedPlayerPos, &player->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->actor, transformedPlayerPos, &player->actor.world.pos);
     this->playerSide = (transformedPlayerPos->z < 0.0f) ? EN_HOLL_BEHIND : EN_HOLL_BEFORE;
 }
 
@@ -223,8 +223,8 @@ void EnHoll_TransparentIdle(EnHoll* this, GlobalContext* globalCtx) {
     f32 enHollTop;
     f32 playerDistFromCentralPlane;
 
-    Actor_CalcOffsetOrientedToDrawRotation(&this->actor, &transformedPlayerPos,
-                                           useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
+    Actor_OffsetOfPointInActorCoords(&this->actor, &transformedPlayerPos,
+                                     useViewEye ? &globalCtx->view.eye : &player->actor.world.pos);
     enHollTop = (globalCtx->sceneNum == SCENE_PIRATE) ? EN_HOLL_TOP_PIRATE : EN_HOLL_TOP_DEFAULT;
 
     if ((transformedPlayerPos.y > EN_HOLL_BOTTOM_DEFAULT) && (transformedPlayerPos.y < enHollTop) &&

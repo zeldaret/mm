@@ -371,7 +371,7 @@ void Math_Vec3f_DistXYZAndStoreNormDiff(Vec3f* a, Vec3f* b, f32 scale, Vec3f* de
 f32 Math_Vec3f_DistXYZ(Vec3f* a, Vec3f* b) {
     Vec3f diff;
     Math_Vec3f_Diff(b, a, &diff);
-    return sqrtf(SQ(diff.x) + SQ(diff.y) + SQ(diff.z));
+    return sqrtf(SQXYZ(diff));
 }
 
 f32 Math_Vec3f_DistXYZAndStoreDiff(Vec3f* a, Vec3f* b, Vec3f* dest) {
@@ -578,7 +578,7 @@ void Math_ApproachZeroF(f32* pValue, f32 scale, f32 maxStep) {
     *pValue = *pValue - f0;
 }
 
-s32 Math_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep) {
+s16 Math_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep) {
     s16 stepSize = 0;
     s16 diff = target - *pValue;
 
@@ -647,8 +647,8 @@ void func_801000CC(u16 sfxId) {
     func_8019F128(sfxId);
 }
 
-void func_801000F4(s32 a0, u16 sfxId) {
-    func_8019F1C0(a0, sfxId);
+void Lib_PlaySfxAtPos(Vec3f* pos, u16 sfxId) {
+    Audio_PlaySfxAtPos(pos, sfxId);
 }
 
 void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 a, Vec3f* src, Vec3f* dst) {

@@ -15,18 +15,17 @@ typedef struct DoorAna {
 
 extern const ActorInit Door_Ana_InitVars;
 
-#define DOORANA_TYPE_REGULAR      0x000
-#define DOORANA_TYPE_UNK          0x100
-#define DOORANA_TYPE_HIDDEN       0x200
-#define DOORANA_TYPE_ADJACENT     0x300
-#define DOORANA_TYPE_BITRANGE     0x300
+#define DOORANA_TYPE_BITMASK            0x300
+#define DOORANA_TYPE_VISIBLE            0x000
+#define DOORANA_TYPE_HIDDEN_STORMS      0x100 // Incomplete, leftover from OoT 
+#define DOORANA_TYPE_HIDDEN_BOMB        0x200
+#define DOORANA_TYPE_VISIBLE_SCENE_EXIT 0x300 // Destination dependent on scene exit list
 
-#define GET_DOORANA_TYPE(this)(this->actor.params & 0x300)
-
-#define DOORANA_TYPE_ROTATION_ENTRANCE(directEntrance)(directEntrance < 0)
-#define GET_DOORANA_DIRECT_ENTRANCE(this) ((((this)->actor.params >> 0xC) & 0x7) - 1) 
-#define GET_DOORANA_ADJACENT_ENTRANCE(this) ((this)->actor.params & 0x1F) 
-#define GET_DOORANA_ROTATION_ENTRANCE(this) (this->actor.home.rot.z + 1) 
-#define GET_DOORANA_ITEMFLAGS(this) ((this)->actor.params & 0xFF) 
+#define DOORANA_GET_TYPE(thisx) ((thisx)->params & DOORANA_TYPE_BITMASK)
+#define DOORANA_GET_ENTRANCE(thisx) ((((thisx)->params >> 12) & 0x7) - 1) 
+#define DOORANA_GET_EX_ENTRANCE(thisx) ((thisx)->home.rot.z + 1)
+#define DOORANA_GET_EXIT_INDEX(thisx) ((thisx)->params & 0x1F)
+#define DOORANA_GET_ITEMFLAGS(thisx) ((thisx)->params & 0xFF)
+#define DOORANA_SET_TYPE(thisx, t) ((thisx)->params = ((thisx)->params & ~DOORANA_TYPE_BITMASK) + (t))
 
 #endif // Z_DOOR_ANA_H

@@ -7,8 +7,9 @@
 #include "z_en_dodongo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
+#include "objects/object_dodongo/object_dodongo.h"
 
-#define FLAGS 0x00000405
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
 #define THIS ((EnDodongo*)thisx)
 
@@ -33,16 +34,6 @@ void func_8087864C(EnDodongo* this);
 void func_808786C8(EnDodongo* this, GlobalContext* globalCtx);
 void func_80878724(EnDodongo* this);
 void func_808787B0(EnDodongo* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060013C4;
-extern AnimationHeader D_06001A44;
-extern AnimationHeader D_060028F0;
-extern AnimationHeader D_06003088;
-extern AnimationHeader D_06003B14;
-extern AnimationHeader D_060042C4;
-extern AnimationHeader D_06004C20;
-extern SkeletonHeader D_06008318;
-extern AnimationHeader D_06008B1C;
 
 const ActorInit En_Dodongo_InitVars = {
     ACTOR_EN_DODONGO,
@@ -303,8 +294,9 @@ void EnDodongo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_330.g = 10;
     this->unk_330.a = 200;
     Math_Vec3f_Copy(&this->unk_314, &D_801C5DB0);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 48.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06008318, &D_06004C20, this->jointTable, this->morphTable, 31);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20,
+                   this->jointTable, this->morphTable, 31);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetJntSph(globalCtx, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
     Collider_InitAndSetJntSph(globalCtx, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
@@ -407,13 +399,13 @@ void func_80876B08(EnDodongo* this, GlobalContext* globalCtx) {
 
 void func_80876BD0(EnDodongo* this, GlobalContext* globalCtx, s32 arg2) {
     if (this->actor.colChkInfo.damageEffect == 2) {
-        this->unk_300 = 0;
-        this->unk_340 = 0.75f;
-        this->unk_33C = 4.0f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffAlpha = 4.0f;
     } else if (this->actor.colChkInfo.damageEffect == 4) {
-        this->unk_300 = 20;
-        this->unk_340 = 0.75f;
-        this->unk_33C = 4.0f;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffAlpha = 4.0f;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                     this->collider1.elements[arg2].info.bumper.hitPos.x,
                     this->collider1.elements[arg2].info.bumper.hitPos.y,
@@ -422,25 +414,26 @@ void func_80876BD0(EnDodongo* this, GlobalContext* globalCtx, s32 arg2) {
 }
 
 void func_80876CAC(EnDodongo* this) {
-    this->unk_300 = 10;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider1.base.colType = COLTYPE_HIT3;
-    this->unk_340 = 0.75f;
-    this->unk_344 = 1.125f;
-    this->unk_33C = 1.0f;
+    this->drawDmgEffScale = 0.75f;
+    this->drawDmgEffFrozenSteamScale = 1.125f;
+    this->drawDmgEffAlpha = 1.0f;
     this->timer = 80;
-    this->actor.flags &= ~0x400;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 80);
+    this->actor.flags &= ~ACTOR_FLAG_400;
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 80);
 }
 
 void func_80876D28(EnDodongo* this, GlobalContext* globalCtx) {
-    if (this->unk_300 == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->timer = 0;
         this->actor.colorFilterTimer = 0;
-        this->unk_300 = 0;
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider1.base.colType = COLTYPE_HIT0;
-        this->unk_33C = 0.0f;
-        func_800BF7CC(globalCtx, &this->actor, &this->unk_348[0], 9, 2, this->unk_334 * 0.3f, this->unk_334 * 0.2f);
-        this->actor.flags |= 0x400;
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, &this->limbPos[0], 9, 2, this->unk_334 * 0.3f,
+                              this->unk_334 * 0.2f);
+        this->actor.flags |= ACTOR_FLAG_400;
     }
 }
 
@@ -455,7 +448,7 @@ void func_80876DC4(EnDodongo* this, GlobalContext* globalCtx) {
     f32 temp_f22;
     f32 temp_f20;
 
-    Math_Vec3f_Copy(&sp68, &this->unk_348[0]);
+    Math_Vec3f_Copy(&sp68, &this->limbPos[0]);
     sp66 = (Rand_Next() >> 0x12) + this->actor.shape.rot.y;
     temp_f20 = Math_CosS(sp66);
     temp_f22 = Math_SinS(sp66);
@@ -503,8 +496,8 @@ void func_80876DC4(EnDodongo* this, GlobalContext* globalCtx) {
     sp74.z = (Rand_ZeroFloat(0.1f) + 0.15f) * -temp_f22 * this->unk_334;
     func_800B0EB0(globalCtx, &sp68, &sp80, &sp74, &this->unk_32C, &this->unk_330, sp64, sp62, 0x14);
 
-    sp68.x = this->unk_348[0].x + (temp_f20 * 6.0f * this->unk_334);
-    sp68.z = this->unk_348[0].z - (temp_f22 * 6.0f * this->unk_334);
+    sp68.x = this->limbPos[0].x + (temp_f20 * 6.0f * this->unk_334);
+    sp68.z = this->limbPos[0].z - (temp_f22 * 6.0f * this->unk_334);
     sp80.x *= -1.0f;
     sp80.z = sp80.z * -1.0f;
     sp74.x = (Rand_ZeroFloat(0.1f) + 0.15f) * -temp_f20 * this->unk_334;
@@ -522,13 +515,13 @@ s32 func_8087721C(EnDodongo* this) {
 
 s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
     Vec3f sp44;
 
     // Bugfix from OoT
     while (explosive != NULL) {
         if (!explosive->params && (explosive->parent == NULL) && (explosive->update != NULL) &&
-            (explosive != player->unk_388) &&
+            (explosive != player->interactRangeActor) &&
             (((explosive->id == ACTOR_EN_BOM) && (((EnBom*)explosive)->timer > 0)) ||
              ((explosive->id == ACTOR_EN_BOMBF) && (((EnBombf*)explosive)->timer > 0)))) {
             Math_Vec3f_Diff(&explosive->world.pos, &this->unk_308, &sp44);
@@ -544,7 +537,7 @@ s32 func_80877278(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_808773C4(EnDodongo* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06004C20, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dodongo_Anim_004C20, -4.0f);
     this->actor.speedXZ = 0.0f;
     this->timer = Rand_S16Offset(30, 50);
     this->actionFunc = func_80877424;
@@ -564,7 +557,7 @@ void func_80877424(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80877494(EnDodongo* this) {
-    Animation_MorphToLoop(&this->skelAnime, &D_06008B1C, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &object_dodongo_Anim_008B1C, -4.0f);
     this->actor.speedXZ = this->unk_334 * 1.5f;
     this->timer = Rand_S16Offset(50, 70);
     this->actionFunc = func_80877500;
@@ -577,13 +570,13 @@ void func_80877500(EnDodongo* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 19.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_WALK);
         sp30.x = this->collider1Elements[2].dim.worldSphere.center.x;
         sp30.y = this->collider1Elements[2].dim.worldSphere.center.y;
         sp30.z = this->collider1Elements[2].dim.worldSphere.center.z;
         func_80876930(this, globalCtx, &sp30);
     } else if (Animation_OnFrame(&this->skelAnime, 39.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_WALK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_WALK);
         sp30.x = this->collider1Elements[1].dim.worldSphere.center.x;
         sp30.y = this->collider1Elements[1].dim.worldSphere.center.y;
         sp30.z = this->collider1Elements[1].dim.worldSphere.center.z;
@@ -623,15 +616,15 @@ void func_808777A8(EnDodongo* this) {
     s32 i;
     Sphere16* sph;
 
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_060028F0, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_0028F0, -4.0f);
     this->actor.speedXZ = 0.0f;
 
     for (i = 0; i < ARRAY_COUNT(this->collider3Elements); i++) {
         sph = &this->collider3.elements[i].dim.worldSphere;
 
-        sph->center.x = this->unk_348[0].x;
-        sph->center.y = this->unk_348[0].y;
-        sph->center.z = this->unk_348[0].z;
+        sph->center.x = this->limbPos[0].x;
+        sph->center.y = this->limbPos[0].y;
+        sph->center.z = this->limbPos[0].z;
         sph->radius = 0;
     }
 
@@ -649,7 +642,7 @@ void func_8087784C(EnDodongo* this, GlobalContext* globalCtx) {
     f32 temp_f12;
 
     if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_CRY);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_CRY);
     }
 
     if (func_8087721C(this)) {
@@ -665,10 +658,10 @@ void func_8087784C(EnDodongo* this, GlobalContext* globalCtx) {
         temp_f12 = Math_CosS(this->actor.shape.rot.y) * this->unk_334;
 
         for (i = 0; i < end; i++, element++) {
-            element->dim.worldSphere.center.x = this->unk_348[0].x + (element->dim.modelSphere.center.z * temp_f2);
+            element->dim.worldSphere.center.x = this->limbPos[0].x + (element->dim.modelSphere.center.z * temp_f2);
             element->dim.worldSphere.center.y =
-                this->unk_348[0].y + (element->dim.modelSphere.center.y * this->unk_334);
-            element->dim.worldSphere.center.z = this->unk_348[0].z + (element->dim.modelSphere.center.z * temp_f12);
+                this->limbPos[0].y + (element->dim.modelSphere.center.y * this->unk_334);
+            element->dim.worldSphere.center.z = this->limbPos[0].z + (element->dim.modelSphere.center.z * temp_f12);
             element->dim.worldSphere.radius = element->dim.modelSphere.radius;
         }
 
@@ -676,7 +669,7 @@ void func_8087784C(EnDodongo* this, GlobalContext* globalCtx) {
         D_80879348.x = 2.5f * temp_f2;
         D_80879348.y = this->unk_334 * 1.4f;
         D_80879348.z = 2.5f * temp_f12;
-        EffectSsDFire_Spawn(globalCtx, &this->unk_348[0], &D_80879354, &D_80879348, this->unk_334 * 100.0f,
+        EffectSsDFire_Spawn(globalCtx, &this->limbPos[0], &D_80879354, &D_80879348, this->unk_334 * 100.0f,
                             this->unk_334 * 35.0f, 0xFF - (frame * 10), 5, 0, 8);
     } else if ((this->skelAnime.curFrame >= 2.0f) && (this->skelAnime.curFrame <= 20.0f)) {
         func_800B9010(&this->actor, NA_SE_EN_DODO_J_BREATH - SFX_FLAG);
@@ -688,7 +681,7 @@ void func_8087784C(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80877D50(EnDodongo* this) {
-    Animation_PlayOnce(&this->skelAnime, &D_06003088);
+    Animation_PlayOnce(&this->skelAnime, &object_dodongo_Anim_003088);
     this->actionFunc = func_80877D90;
 }
 
@@ -700,8 +693,8 @@ void func_80877D90(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80877DE0(EnDodongo* this) {
-    Animation_Change(&this->skelAnime, &D_060028F0, -1.0f, 35.0f, 0.0f, 2, -4.0f);
-    this->actor.flags |= 0x10;
+    Animation_Change(&this->skelAnime, &object_dodongo_Anim_0028F0, -1.0f, 35.0f, 0.0f, 2, -4.0f);
+    this->actor.flags |= ACTOR_FLAG_10;
     this->timer = 25;
     this->actionFunc = func_80877E60;
     this->actor.speedXZ = 0.0f;
@@ -713,7 +706,7 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
     Vec3f sp84;
     Vec3f sp78;
     s16 i;
-    Actor* explosive = globalCtx->actorCtx.actorList[ACTORCAT_EXPLOSIVES].first;
+    Actor* explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
     Vec3f sp64;
     s32 pad;
     s16 sp5E;
@@ -736,12 +729,12 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, 28.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_EAT);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_EAT);
         if (this->actor.child != NULL) {
             Actor_MarkForDeath(this->actor.child);
             this->actor.child = NULL;
         }
-        this->actor.flags &= ~0x10;
+        this->actor.flags &= ~ACTOR_FLAG_10;
     } else if (this->skelAnime.playSpeed > -0.5f) {
         this->timer--;
         if (this->timer == 10) {
@@ -759,14 +752,14 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
                               this->unk_334 * 10.0f, 10);
             }
 
-            Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             if (this->actor.colChkInfo.health <= 4) {
                 this->actor.colChkInfo.health = 0;
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
             } else {
                 this->actor.colChkInfo.health -= 4;
             }
-            func_800BCB70(&this->actor, 0x4000, 0x78, 0, 8);
+            Actor_SetColorFilter(&this->actor, 0x4000, 0x78, 0, 8);
         }
     } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
         this->timer--;
@@ -779,13 +772,13 @@ void func_80877E60(EnDodongo* this, GlobalContext* globalCtx) {
         } else {
             sp5E = this->unk_334 * 50.0f;
             sp5C = this->unk_334 * 5.0f;
-            Math_Vec3f_Copy(&sp64, &this->unk_348[0]);
+            Math_Vec3f_Copy(&sp64, &this->limbPos[0]);
             func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
             sp64.x -= Math_CosS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
             sp64.z += Math_SinS(this->actor.shape.rot.y) * 6.0f * this->unk_334;
             func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
-            sp64.x = (2.0f * this->unk_348[0].x) - sp64.x;
-            sp64.z = (2.0f * this->unk_348[0].z) - sp64.z;
+            sp64.x = (2.0f * this->limbPos[0].x) - sp64.x;
+            sp64.z = (2.0f * this->limbPos[0].z) - sp64.z;
             func_800B0DE0(globalCtx, &sp64, &gZeroVec3f, &D_80879360, &D_8087936C, &D_8087936C, sp5E, sp5C);
         }
     }
@@ -812,13 +805,13 @@ void func_80878354(EnDodongo* this) {
     this->unk_306 = (0xFFFF - ABS_ALT(yDiff)) / 15;
 
     if (yDiff >= 0) {
-        sp18 = &D_060042C4;
+        sp18 = &object_dodongo_Anim_0042C4;
         this->unk_306 = -this->unk_306;
     } else {
-        sp18 = &D_06003B14;
+        sp18 = &object_dodongo_Anim_003B14;
     }
 
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_TAIL);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_TAIL);
     Animation_PlayOnceSetSpeed(&this->skelAnime, sp18, 2.0f);
     this->timer = 0;
     this->collider1.base.atFlags |= AT_ON;
@@ -852,7 +845,7 @@ void func_80878424(EnDodongo* this, GlobalContext* globalCtx) {
     sp20.z = this->collider1Elements[2].dim.worldSphere.center.z;
     func_80876930(this, globalCtx, &sp20);
     CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
-    this->actor.flags |= 0x1000000;
+    this->actor.flags |= ACTOR_FLAG_1000000;
 }
 
 void func_80878594(EnDodongo* this) {
@@ -878,12 +871,12 @@ void func_808785B0(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_8087864C(EnDodongo* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_06001A44, -4.0f);
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_DAMAGE);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_001A44, -4.0f);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DAMAGE);
     this->timer = 0;
     this->unk_304 = 0;
     this->actor.speedXZ = 0.0f;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
     this->actionFunc = func_808786C8;
 }
 
@@ -898,13 +891,13 @@ void func_808786C8(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void func_80878724(EnDodongo* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_060013C4, -8.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_dodongo_Anim_0013C4, -8.0f);
     this->timer = 0;
     this->unk_304 = 0;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_J_DEAD);
-    this->actor.flags &= ~1;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_J_DEAD);
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
-    func_800BCB70(&this->actor, 0x4000, 0xFF, 0, 8);
+    Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
     this->actionFunc = func_808787B0;
 }
 
@@ -916,7 +909,7 @@ void func_808787B0(EnDodongo* this, GlobalContext* globalCtx) {
             func_80876DC4(this, globalCtx);
         }
     } else if (this->actor.colorFilterTimer == 0) {
-        func_800BCB70(&this->actor, 0x4000, 0x78, 0, 4);
+        Actor_SetColorFilter(&this->actor, 0x4000, 0x78, 0, 4);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -929,7 +922,7 @@ void func_808787B0(EnDodongo* this, GlobalContext* globalCtx) {
             this->timer = 8;
         }
     } else if (Animation_OnFrame(&this->skelAnime, 52.0f)) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 
     if (this->timer != 0) {
@@ -960,7 +953,8 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
         }
 
         if ((i != ARRAY_COUNT(this->collider2Elements)) &&
-            ((this->unk_300 != 10) || !(this->collider2.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+             !(this->collider2.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, globalCtx);
             Math_Vec3s_ToVec3f(&sp3C, &this->collider2.elements[i].info.bumper.hitPos);
             if (this->actor.colChkInfo.damageEffect == 0xF) {
@@ -974,7 +968,7 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
     } else if (this->collider1.base.acFlags & AC_HIT) {
         this->collider2.base.acFlags &= ~AC_HIT;
         this->collider1.base.acFlags &= ~AC_HIT;
-        func_800BE2B8(&this->actor, &this->collider1);
+        Actor_SetDropFlagJntSph(&this->actor, &this->collider1);
 
         for (i = 0; i < ARRAY_COUNT(this->collider1Elements); i++) {
             if (this->collider1.elements[i].info.bumperFlags & BUMP_HIT) {
@@ -983,7 +977,8 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
         }
 
         if ((i != ARRAY_COUNT(this->collider1Elements)) &&
-            ((this->unk_300 != 10) || !(this->collider1.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+             !(this->collider1.elements[i].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             func_80876D28(this, globalCtx);
             if (this->actor.colChkInfo.damageEffect != 0xF) {
                 if (!Actor_ApplyDamage(&this->actor)) {
@@ -1000,16 +995,16 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
                     }
                 } else if (this->actor.colChkInfo.damageEffect == 1) {
                     this->timer = 40;
-                    func_800BCB70(&this->actor, 0, 0xFF, 0, 40);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_80878594(this);
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->timer = 40;
-                    func_800BCB70(&this->actor, 0, 0xFF, 0, 40);
-                    Audio_PlayActorSound2(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    this->unk_300 = 30;
-                    this->unk_340 = 0.75f;
-                    this->unk_33C = 2.0f;
+                    Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+                    this->drawDmgEffScale = 0.75f;
+                    this->drawDmgEffAlpha = 2.0f;
                     func_80878594(this);
                 } else if (this->actor.colChkInfo.damageEffect == 3) {
                     func_80876CAC(this);
@@ -1024,15 +1019,15 @@ void EnDodongo_UpdateDamage(EnDodongo* this, GlobalContext* globalCtx) {
 }
 
 void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
-    EnDodongo* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnDodongo* this = THIS;
 
     EnDodongo_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+    Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 75.0f, 60.0f, 70.0f, 0x1D);
     if (this->actor.bgCheckFlags & 2) {
-        Audio_PlayActorSound2(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
     }
 
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider1.base);
@@ -1050,12 +1045,12 @@ void EnDodongo_Update(Actor* thisx, GlobalContext* globalCtx2) {
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider3.base);
     }
 
-    if (this->unk_33C > 0.0f) {
-        if (this->unk_300 != 10) {
-            Math_StepToF(&this->unk_33C, 0.0f, 0.05f);
-            this->unk_340 = (this->unk_33C + 1.0f) * 0.375f;
-            this->unk_340 = (this->unk_340 > 0.75f) ? 0.75f : this->unk_340;
-        } else if (!Math_StepToF(&this->unk_344, 0.75f, 0.01875f)) {
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
+            this->drawDmgEffScale = (this->drawDmgEffScale > 0.75f) ? 0.75f : this->drawDmgEffScale;
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1086,20 +1081,20 @@ void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Collider_UpdateSpheres(limbIndex, &this->collider1);
     Collider_UpdateSpheres(limbIndex, &this->collider2);
     if (D_80879388[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->unk_348[D_80879388[limbIndex]]);
+        Matrix_GetStateTranslation(&this->limbPos[D_80879388[limbIndex]]);
     }
 
     if (limbIndex == 7) {
         Matrix_MultiplyVector3fByState(&D_80879370, &this->unk_308);
-        Matrix_MultiplyVector3fByState(&D_8087937C, &this->unk_348[0]);
+        Matrix_MultiplyVector3fByState(&D_8087937C, &this->limbPos[0]);
         Matrix_GetStateTranslation(&this->actor.focus.pos);
-        Matrix_GetStateTranslationAndScaledY(-200.0f, &this->unk_348[1]);
+        Matrix_GetStateTranslationAndScaledY(-200.0f, &this->limbPos[1]);
     } else if (limbIndex == 13) {
         Matrix_GetStateTranslationAndScaledX(1600.0f, &this->unk_320);
     }
 
     if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->timer != this->unk_304)) {
-        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_338), &this->unk_320, &this->unk_348[4]);
+        EffectBlure_AddVertex(Effect_GetByIndex(this->unk_338), &this->unk_320, &this->limbPos[4]);
         this->unk_304 = this->timer;
     }
 }
@@ -1110,6 +1105,7 @@ void EnDodongo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,
                       EnDodongo_PostLimbDraw, &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->unk_348, ARRAY_COUNT(this->unk_348), this->unk_340 * this->unk_334,
-                  this->unk_344 * this->unk_334, this->unk_33C, this->unk_300);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->drawDmgEffScale * this->unk_334, this->drawDmgEffFrozenSteamScale * this->unk_334,
+                            this->drawDmgEffAlpha, this->drawDmgEffType);
 }

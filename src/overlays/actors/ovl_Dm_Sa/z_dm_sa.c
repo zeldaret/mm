@@ -5,8 +5,9 @@
  */
 
 #include "z_dm_sa.h"
+#include "objects/object_stk/object_stk.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DmSa*)thisx)
 
@@ -29,15 +30,12 @@ const ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Draw,
 };
 
-extern FlexSkeletonHeader D_06013328;
-extern AnimationHeader D_0600CC94;
+static AnimationInfo D_80A2ED00[] = { { &object_stk_Anim_00CC94, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 } };
 
-static ActorAnimationEntry D_80A2ED00[] = { { &D_0600CC94, 1.0f, 0, -1.0f, 0, 0 } };
-
-void func_80A2E960(SkelAnime* arg0, ActorAnimationEntry* animations, u16 index) {
+void func_80A2E960(SkelAnime* arg0, AnimationInfo* animations, u16 index) {
     f32 frameCount;
-    animations += index;
 
+    animations += index;
     if (animations->frameCount < 0.0f) {
         frameCount = Animation_GetLastFrame(animations->animation);
     } else {
@@ -53,8 +51,8 @@ void DmSa_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk2E0 = 0;
     this->alpha = 0xFF;
     this->actor.targetArrowOffset = 3000.0f;
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06013328, NULL, 0, 0, 0);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_stk_Skel_013328, NULL, NULL, NULL, 0);
     func_80A2E960(&this->skelAnime, D_80A2ED00, 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmSa_DoNothing;
@@ -74,14 +72,14 @@ void DmSa_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 }
 
-s32 func_80A2EB10(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* actor) {
-    return 0;
+s32 DmSa_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    return false;
 }
 
-void func_80A2EB2C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* actor) {
+void DmSa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void func_80A2EB44(GlobalContext* globalCtx, s32 limbIndex, Actor* actor) {
+void DmSa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 Gfx* func_80A2EB58(GraphicsContext* gfxCtx, u32 alpha) {
@@ -120,8 +118,9 @@ void DmSa_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, func_80A2EBB0(globalCtx->state.gfxCtx, this->alpha));
     }
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                  func_80A2EB10, func_80A2EB2C, func_80A2EB44, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, DmSa_OverrideLimbDraw, DmSa_PostLimbDraw,
+                                   DmSa_TransformLimbDraw, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

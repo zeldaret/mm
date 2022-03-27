@@ -7,8 +7,10 @@
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
 #include "z_en_fish2.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_fb/object_fb.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnFish2*)thisx)
 
@@ -39,13 +41,6 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx);
 void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2);
 void func_80B2AF80(EnFish2* this, GlobalContext* globalCtx);
 void func_80B2B180(EnFish2* this, GlobalContext* globalCtx);
-
-extern AnimationHeader D_060006D8;
-extern AnimationHeader D_060007D4;
-extern AnimationHeader D_06000ACC;
-extern AnimationHeader D_06001174;
-extern AnimationHeader D_060013AC;
-extern FlexSkeletonHeader D_06006190;
 
 static s32 D_80B2B2E0 = 0;
 static s32 D_80B2B2E4 = 0;
@@ -109,7 +104,8 @@ static f32 D_80B2B380[] = { 0.019f, 0.033f };
 
 void func_80B28370(EnFish2* this, s32 arg0) {
     static AnimationHeader* D_80B2B388[] = {
-        &D_060013AC, &D_060007D4, &D_060006D8, &D_060006D8, &D_06001174, &D_06000ACC,
+        &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
+        &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
     };
     static u8 D_80B2B3A0[] = { 0, 0, 2, 2, 2, 2 };
     f32 sp34;
@@ -160,9 +156,9 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
     D_80B2B2F0++;
 
     if (this->actor.params == 0) {
-        ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 20.0f);
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06006190, &D_060013AC, this->jointTable, this->morphTable,
-                           24);
+        ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC,
+                           this->jointTable, this->morphTable, 24);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
             if (gSaveContext.weekEventReg[81] & 0x10) {
@@ -213,7 +209,7 @@ void EnFish2_Init(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->actor.params != 0) {
         this->unk_2B4 = 10;
         this->actor.draw = NULL;
-        this->actor.flags |= 0x8000000;
+        this->actor.flags |= ACTOR_FLAG_8000000;
         this->actionFunc = func_80B2A01C;
     }
 }
@@ -328,10 +324,10 @@ void func_80B28B5C(EnFish2* this) {
 }
 
 void func_80B28C14(EnFish2* this, GlobalContext* globalCtx) {
-    Actor* itemAction = globalCtx->actorCtx.actorList[ACTORCAT_ITEMACTION].first;
+    Actor* itemAction = globalCtx->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
     WaterBox* waterbox;
 
-    if (func_800B84D0(&this->actor, globalCtx)) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         func_80B29128(this);
         return;
     }
@@ -438,7 +434,7 @@ void func_80B29128(EnFish2* this) {
 }
 
 void func_80B2913C(EnFish2* this, GlobalContext* globalCtx) {
-    if ((func_80152498(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
         func_801477B4(globalCtx);
         func_80B28B5C(this);
     }
@@ -533,7 +529,7 @@ void func_80B2951C(EnFish2* this) {
     Actor_MarkForDeath(this->unk_350);
     this->unk_350 = NULL;
     D_80B2B2F4 = &this->actor;
-    Audio_PlayActorSound2(&this->actor, NA_SE_EN_DODO_M_EAT);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DODO_M_EAT);
     this->actionFunc = func_80B295A4;
 }
 
@@ -642,7 +638,7 @@ void func_80B297FC(EnFish2* this, GlobalContext* globalCtx) {
                 }
 
                 this->unk_2B6 = 4;
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_FISH_GROW_UP);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_GROW_UP);
                 this->unk_2C4++;
             }
             break;
@@ -747,7 +743,7 @@ void func_80B297FC(EnFish2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B29E5C(EnFish2* this, GlobalContext* globalCtx) {
-    Actor* prop = globalCtx->actorCtx.actorList[ACTORCAT_PROP].first;
+    Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (prop != NULL) {
         if (prop->id != ACTOR_EN_FISH2) {
@@ -893,13 +889,13 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
         if (temp_v0 != NULL) {
             temp_v0->speedXZ = 4.0f;
             temp_v0->velocity.y = 15.0f;
-            Audio_PlayActorSound2(&this->actor, NA_SE_SY_PIECE_OF_HEART);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
             gSaveContext.weekEventReg[81] &= (u8)~0x10;
             gSaveContext.weekEventReg[81] &= (u8)~0x20;
             gSaveContext.weekEventReg[81] &= (u8)~0x40;
             gSaveContext.weekEventReg[81] &= (u8)~0x80;
-            gSaveContext.weekEventReg[82] &= (u8)~0x1;
-            gSaveContext.weekEventReg[82] &= (u8)~0x2;
+            gSaveContext.weekEventReg[82] &= (u8)~1;
+            gSaveContext.weekEventReg[82] &= (u8)~2;
         }
     }
 
@@ -912,7 +908,7 @@ void func_80B2A498(EnFish2* this, GlobalContext* globalCtx) {
             Vec3f sp6C;
             s32 i;
 
-            Audio_PlaySoundAtPosition(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
 
             for (i = 0; i < 10; i++) {
                 Math_Vec3f_Copy(&sp6C, &this->actor.world.pos);
@@ -937,8 +933,8 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     static f32 D_80B2B3A8[] = {
         0.0f, 40.0f, -40.0f, 0.0f, 0.0f, 0.0f,
     };
-    EnFish2* this = THIS;
     GlobalContext* globalCtx = globalCtx2;
+    EnFish2* this = THIS;
 
     if ((this->actionFunc != func_80B295A4) && (this->actor.params != 1)) {
         SkelAnime_Update(&this->skelAnime);
@@ -958,7 +954,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     this->actionFunc(this, globalCtx);
-    Actor_SetHeight(&this->actor, 0);
+    Actor_SetFocus(&this->actor, 0);
 
     if (this->actor.params != 1) {
         WaterBox* sp6C;
@@ -990,7 +986,7 @@ void EnFish2_Update(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_2F4.z += (Math_CosS(this->actor.world.rot.y) * 25.0f) - this->unk_330;
         this->unk_33C = 25.0f - ((this->unk_330 - 0.01f) * 1000.0f);
         Actor_SetScale(&this->actor, this->unk_330);
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0, 15.0f, 10.0f, 7);
 
         if (this->actor.params != 2) {
@@ -1095,12 +1091,12 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (!ptr->unk_00) {
-            u32 phi_v0;
+            TexturePtr phi_v0;
 
             if (Rand_ZeroOne() < 0.5f) {
-                phi_v0 = &D_04091CE0;
+                phi_v0 = gameplay_keep_Tex_091CE0;
             } else {
-                phi_v0 = &D_04091BE0;
+                phi_v0 = gameplay_keep_Tex_091BE0;
             }
 
             ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
@@ -1172,7 +1168,7 @@ void func_80B2B180(EnFish2* this, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(POLY_OPA_DISP++, 150, 150, 150, 0);
             gSPSegment(POLY_OPA_DISP++, 0x08, ptr->unk_20);
-            gSPDisplayList(POLY_OPA_DISP++, D_040301B0);
+            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0301B0);
         }
     }
 
