@@ -182,12 +182,12 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         func_80C10148(this);
         return;
     }
-    
-    if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
+
+    if ((temp_v0_2 == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
             Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
-            if ((gSaveContext.weekEventReg[63] & 0x80)) {
+            if ((gSaveContext.save.weekEventReg[63] & 0x80)) {
                 this->actor.textId = 0x2ADF;
             } else {
                 this->actor.textId = 0x2ADA;
@@ -500,11 +500,11 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC; // hear directions again?
         func_80C10148(this);
-    } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
+    } else if ((temp_v0_2 == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
-            if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
+            if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
                 this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)

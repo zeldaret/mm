@@ -180,7 +180,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                     this->actor.world.pos.y = BgCheck_EntityRaycastFloor3(&globalCtx->colCtx, &this->actor.floorPoly,
                                                                           &bgId, &this->actor.world.pos) +
                                               50.0f;
-                    if (gSaveContext.weekEventReg[84] & 0x10) {
+                    if (gSaveContext.save.weekEventReg[84] & 0x10) {
                         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
                         Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp64, &sp64);
@@ -195,7 +195,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                             this->unk_394.y = this->actor.world.pos.y;
                             this->unk_394.z = (this->actor.world.pos.z + this->unk_360->actor.world.pos.z) * 0.5f;
                             Math_Vec3f_Copy(&this->unk_360->unk_394, &this->unk_394);
-                            if (gSaveContext.weekEventReg[32] & 1) {
+                            if (gSaveContext.save.weekEventReg[32] & 1) {
                                 func_80B5C244(this, globalCtx);
                             } else {
                                 func_80B5C684(this, globalCtx);
@@ -230,7 +230,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
             switch (this->unk_344) {
                 case 0:
                     Actor_SetScale(&this->actor, 0.0f);
-                    if (!(gSaveContext.weekEventReg[13] & 1)) {
+                    if (!(gSaveContext.save.weekEventReg[13] & 1)) {
                         Actor_SetScale(&this->actor, 0.0f);
                         func_80B5C910(this, globalCtx);
                     } else {
@@ -250,8 +250,8 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                 case 1:
                     Actor_SetScale(&this->actor, 0.012999999f);
-                    if (gSaveContext.weekEventReg[84] & 0x10) {
-                        if (gSaveContext.weekEventReg[32] & 1) {
+                    if (gSaveContext.save.weekEventReg[84] & 0x10) {
+                        if (gSaveContext.save.weekEventReg[32] & 1) {
                             func_80B5C244(this, globalCtx);
                         } else {
                             func_80B5C684(this, globalCtx);
@@ -264,7 +264,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if (!(gSaveContext.weekEventReg[26] & 8)) {
+            if (!(gSaveContext.save.weekEventReg[26] & 8)) {
                 this->actor.flags |= ACTOR_FLAG_8000000;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 Actor_SetScale(&this->actor, 0.0064999997f);
@@ -376,11 +376,11 @@ void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5C154(EnOt* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[32] & 1) {
+    if (gSaveContext.save.weekEventReg[32] & 1) {
         this->unk_38C = GI_RUPEE_RED;
     } else {
         this->unk_38C = GI_HEART_PIECE;
-        gSaveContext.weekEventReg[32] |= 1;
+        gSaveContext.save.weekEventReg[32] |= 1;
     }
     Actor_PickUp(&this->actor, globalCtx, this->unk_38C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_80B5C1CC;
@@ -482,7 +482,7 @@ void func_80B5C634(EnOt* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5C64C(EnOt* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[26] & 8) {
+    if (gSaveContext.save.weekEventReg[26] & 8) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -505,7 +505,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
         Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp30);
     } else {
         if (this->unk_73C == 0) {
-            gSaveContext.weekEventReg[84] |= 0x10;
+            gSaveContext.save.weekEventReg[84] |= 0x10;
             switch (this->unk_388) {
                 case 0:
                     ActorCutscene_Stop(this->cutscenes[2]);
@@ -527,7 +527,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_348.x, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_348.z, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
-    if ((gSaveContext.weekEventReg[84] & 0x10) && (this->unk_33C == 1)) {
+    if ((gSaveContext.save.weekEventReg[84] & 0x10) && (this->unk_33C == 1)) {
         this->actor.textId = 0;
         this->unk_384 = 1;
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
@@ -556,7 +556,7 @@ void func_80B5C910(EnOt* this, GlobalContext* globalCtx) {
 void func_80B5C950(EnOt* this, GlobalContext* globalCtx) {
     if (this->unk_32C & 8) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SEAHORSE_OUT_BOTTLE);
-        gSaveContext.weekEventReg[25] |= 4;
+        gSaveContext.save.weekEventReg[25] |= 4;
         func_80B5CAD0(this, globalCtx);
     }
 }
@@ -650,7 +650,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
             this->actor.world.rot.y = this->actor.shape.rot.y;
             if (1) {}
             if (!temp) {
-                gSaveContext.weekEventReg[23] |= 0x10;
+                gSaveContext.save.weekEventReg[23] |= 0x10;
                 Message_StartTextbox(globalCtx, 0x1069, NULL);
             }
             break;
@@ -663,7 +663,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk11F04 == 0x1069)) {
+            if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.currentTextId == 0x1069)) {
                 this->unk_32C |= 4;
                 ActorCutscene_Stop(this->cutscenes[0]);
                 player->stateFlags2 &= ~0x20000000;
@@ -701,7 +701,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (!(gSaveContext.weekEventReg[84] & 0x10) && (ENOT_GET_C000(&this->actor) == 1)) {
+    if (!(gSaveContext.save.weekEventReg[84] & 0x10) && (ENOT_GET_C000(&this->actor) == 1)) {
         if ((fabsf(this->actor.xzDistToPlayer) <= 130.0f) && (fabsf(this->actor.playerHeightRel) <= 130.0f)) {
             player->unk_B2B = 29;
         }
@@ -754,7 +754,7 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
                                     phi_a1 = 0x1069;
                                 }
                             } else if (Flags_GetSwitch(globalCtx, ENOT_GET_3F80(&this->actor))) {
-                                if (gSaveContext.weekEventReg[23] & 0x10) {
+                                if (gSaveContext.save.weekEventReg[23] & 0x10) {
                                     phi_a1 = 0x106C;
                                 } else {
                                     phi_a1 = 0x106B;
@@ -786,8 +786,8 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     default:
                     case 0x1068:
                     case 0x106B:
@@ -817,31 +817,27 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_80B5D37C(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
-    s32 pad;
-    EnOt* temp_s0 = (EnOt*)arg1->actor;
-    f32 sp24;
-    f32 sp20;
+s32 EnOt_ActorPathing_Move(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor* thisx = actorPath->actor;
+    EnOt* this = (EnOt*)thisx;
+    f32 sp24 = Math_CosS(-thisx->world.rot.x) * thisx->speedXZ;
+    f32 sp20 = gFramerateDivisorHalf;
 
-    sp24 = Math_CosS(temp_s0->actor.world.rot.x * -1) * temp_s0->actor.speedXZ;
-    sp20 = gFramerateDivisorHalf;
+    thisx->velocity.x = Math_SinS(thisx->world.rot.y) * sp24;
+    thisx->velocity.y = Math_SinS(-thisx->world.rot.x) * thisx->speedXZ;
+    thisx->velocity.z = Math_CosS(thisx->world.rot.y) * sp24;
 
-    temp_s0->actor.velocity.x = Math_SinS(temp_s0->actor.world.rot.y) * sp24;
-    temp_s0->actor.velocity.y = Math_SinS(temp_s0->actor.world.rot.x * -1) * temp_s0->actor.speedXZ;
-    do {
-        temp_s0->actor.velocity.z = Math_CosS(temp_s0->actor.world.rot.y) * sp24;
-        temp_s0->unk_330.x += (temp_s0->actor.velocity.x * sp20) + temp_s0->actor.colChkInfo.displacement.x;
-        temp_s0->unk_330.y += (temp_s0->actor.velocity.y * sp20) + temp_s0->actor.colChkInfo.displacement.y;
-    } while (0);
-    temp_s0->unk_330.z += (temp_s0->actor.velocity.z * sp20) + temp_s0->actor.colChkInfo.displacement.z;
+    this->unk_330.x += (thisx->velocity.x * sp20) + thisx->colChkInfo.displacement.x;
+    this->unk_330.y += (thisx->velocity.y * sp20) + thisx->colChkInfo.displacement.y;
+    this->unk_330.z += (thisx->velocity.z * sp20) + thisx->colChkInfo.displacement.z;
 
     return false;
 }
 
-s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
+s32 EnOt_ActorPathing_UpdateActorInfo(GlobalContext* globalCtx, ActorPathing* actorPath) {
+    Actor* thisx = actorPath->actor;
+    s32 ret = false;
     s32 pad;
-    s32 ret;
-    Actor* temp_s1 = arg1->actor;
     Vec3f sp50;
     Vec3f sp44;
     f32 temp;
@@ -849,32 +845,31 @@ s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
     s32 sp30;
     s32 sp34;
 
-    ret = false;
-    temp_s1->gravity = 0.0f;
-    Math_SmoothStepToF(&temp_s1->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
+    thisx->gravity = 0.0f;
+    Math_SmoothStepToF(&thisx->speedXZ, 10.0f, 0.8f, 2.0f, 0.0f);
 
-    sp50.x = arg1->unk_20.x - temp_s1->world.pos.x;
-    sp50.y = arg1->unk_20.y - temp_s1->world.pos.y;
-    sp50.z = arg1->unk_20.z - temp_s1->world.pos.z;
+    sp50.x = actorPath->curPoint.x - thisx->world.pos.x;
+    sp50.y = actorPath->curPoint.y - thisx->world.pos.y;
+    sp50.z = actorPath->curPoint.z - thisx->world.pos.z;
 
-    sp44.x = arg1->unk_20.x - arg1->unk_38.x;
-    sp44.y = arg1->unk_20.y - arg1->unk_38.y;
-    sp44.z = arg1->unk_20.z - arg1->unk_38.z;
+    sp44.x = actorPath->curPoint.x - actorPath->prevPoint.x;
+    sp44.y = actorPath->curPoint.y - actorPath->prevPoint.y;
+    sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
     temp = Math3D_Parallel(&sp50, &sp44);
-    if ((arg1->unk_4C < SQ(temp_s1->speedXZ)) || (temp <= 0.0f)) {
+    if ((actorPath->distSqToCurPointXZ < SQ(thisx->speedXZ)) || (temp <= 0.0f)) {
         ret = true;
     } else {
-        temp = SQ(temp_s1->speedXZ) / arg1->unk_50;
-        sp34 = ABS(arg1->unk_54.x - temp_s1->world.rot.x);
+        temp = SQ(thisx->speedXZ) / actorPath->distSqToCurPoint;
+        sp34 = ABS(actorPath->rotToCurPoint.x - thisx->world.rot.x);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
 
-        sp34 = ABS(arg1->unk_54.y - temp_s1->world.rot.y);
+        sp34 = ABS(actorPath->rotToCurPoint.y - thisx->world.rot.y);
 
-        Math_SmoothStepToS(&temp_s1->world.rot.x, arg1->unk_54.x, 1, sp2C, 0);
+        Math_SmoothStepToS(&thisx->world.rot.x, actorPath->rotToCurPoint.x, 1, sp2C, 0);
         sp2C = (s32)(sp34 * temp) + 0xAAA;
-        Math_SmoothStepToS(&temp_s1->world.rot.y, arg1->unk_54.y, 1, sp2C, 0);
-        Math_SmoothStepToS(&temp_s1->shape.rot.y, temp_s1->world.rot.y, 2, sp2C, 0);
+        Math_SmoothStepToS(&thisx->world.rot.y, actorPath->rotToCurPoint.y, 1, sp2C, 0);
+        Math_SmoothStepToS(&thisx->shape.rot.y, thisx->world.rot.y, 2, sp2C, 0);
     }
 
     return ret;
@@ -883,12 +878,12 @@ s32 func_80B5D470(GlobalContext* globalCtx, struct_8013DF3C_arg1* arg1) {
 void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
     func_80B5B2E0(globalCtx, &this->actor.world.pos, this->unk_346, &this->unk_348, &this->unk_340);
     Math_Vec3f_Copy(&this->unk_330, &this->actor.world.pos);
-    func_8013DCE0(globalCtx, &this->unk_330, &this->actor, &this->unk_2C0, globalCtx->setupPathList, this->unk_346, 0,
-                  0, this->unk_340, 0);
+    SubS_ActorPathing_Init(globalCtx, &this->unk_330, &this->actor, &this->actorPath, globalCtx->setupPathList,
+                           this->unk_346, 0, 0, this->unk_340, 0);
     this->unk_32C = 0;
-    this->unk_2C0.unk_2C.x = 0.0f;
-    this->unk_2C0.unk_2C.y = 0.0f;
-    this->unk_2C0.unk_2C.z = 0.0f;
+    this->actorPath.pointOffset.x = 0.0f;
+    this->actorPath.pointOffset.y = 0.0f;
+    this->actorPath.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speedXZ = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIdx);
@@ -900,16 +895,18 @@ void func_80B5D648(EnOt* this, GlobalContext* globalCtx) {
 
 void func_80B5D750(EnOt* this, GlobalContext* globalCtx) {
     if (!(this->unk_32C & 1) && !(this->unk_32C & 2)) {
-        func_8013DE04(globalCtx, &this->unk_2C0, func_8013DF3C, func_80B5D470, func_80B5D37C, func_8013E0A4);
+        SubS_ActorPathing_Update(globalCtx, &this->actorPath, SubS_ActorPathing_ComputePointInfo,
+                                 EnOt_ActorPathing_UpdateActorInfo, EnOt_ActorPathing_Move,
+                                 SubS_ActorPathing_SetNextPoint);
     }
 
     Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_330);
 
-    if (this->unk_2C0.unk_1C & 0x40) {
+    if (this->actorPath.flags & ACTOR_PATHING_REACHED_POINT_TEMPORARY) {
         this->unk_32C |= 2;
     }
 
-    if (this->unk_2C0.unk_1C & 0x80) {
+    if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_TEMPORARY) {
         this->unk_32C |= 1;
     }
 
@@ -988,8 +985,8 @@ void func_80B5DB6C(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!(gSaveContext.weekEventReg[84] & 0x10) && !(this->unk_32C & 8)) {
-        if (gSaveContext.weekEventReg[25] & 4) {
+    if (!(gSaveContext.save.weekEventReg[84] & 0x10) && !(this->unk_32C & 8)) {
+        if (gSaveContext.save.weekEventReg[25] & 4) {
             Vec3f sp50;
 
             func_80B5B2E0(globalCtx, &this->actor.world.pos, ENOT_GET_7F(&this->actor), &sp50, &this->unk_340);
@@ -1001,7 +998,7 @@ void func_80B5DB6C(Actor* thisx, GlobalContext* globalCtx) {
         } else if (D_80B5E888 != NULL) {
             s32 sp4C = false;
 
-            if (gSaveContext.weekEventReg[13] & 1) {
+            if (gSaveContext.save.weekEventReg[13] & 1) {
                 if (!SurfaceType_IsHorseBlocked(&globalCtx->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
                     sp4C = true;
                 }
