@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Object for the Clock Town cow statues -->
     <File Name="object_hariko" Segment="6">
         <DList Name="gHarikoBody" Offset="0x80" />
         <DList Name="gHarikoFace" Offset="0x110" />

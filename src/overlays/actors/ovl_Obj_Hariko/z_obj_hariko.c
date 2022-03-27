@@ -16,11 +16,11 @@ void ObjHariko_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHariko_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjHariko_Wait(ObjHariko* this, GlobalContext* globalCtx);
-void ObjHariko_BobHead(ObjHariko* this, GlobalContext* globalCtx);
 void ObjHariko_SetupWait(ObjHariko* this);
-void ObjHariko_CheckForQuakes(ObjHariko* this);
+void ObjHariko_Wait(ObjHariko* this, GlobalContext* globalCtx);
 void ObjHariko_SetupBobHead(ObjHariko* this);
+void ObjHariko_BobHead(ObjHariko* this, GlobalContext* globalCtx);
+void ObjHariko_CheckForQuakes(ObjHariko* this);
 
 const ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
