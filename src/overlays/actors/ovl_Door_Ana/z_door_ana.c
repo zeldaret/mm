@@ -139,13 +139,13 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                Play_SetupRespawnPoint(&globalCtx->state, 3, 0x4FF);
+                Play_SetupRespawnPoint(&globalCtx->state, RESPAWN_MODE_UNK_3, 0x4FF);
 
-                gSaveContext.respawn[3].pos.y = this->actor.world.pos.y;
-                gSaveContext.respawn[3].yaw = this->actor.home.rot.y;
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
 
                 // Stores item and chest flag that ACTOR_EN_TORCH uses for spawning the grotto chest
-                gSaveContext.respawn[3].data = DOORANA_GET_ITEMFLAGS(&this->actor);
+                gSaveContext.respawn[RESPAWN_MODE_UNK_3].data = DOORANA_GET_ITEMFLAGS(&this->actor);
 
                 if (destinationIdx < 0) {
                     destinationIdx = DOORANA_GET_EX_ENTRANCE(&this->actor);

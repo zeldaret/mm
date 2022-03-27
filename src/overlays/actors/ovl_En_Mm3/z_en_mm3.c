@@ -102,7 +102,7 @@ void EnMm3_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnMm3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnMm3* this = THIS;
 
-    gSaveContext.weekEventReg[63] &= (u8)~1;
+    gSaveContext.save.weekEventReg[63] &= (u8)~1;
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -139,12 +139,12 @@ void func_80A6F2C8(EnMm3* this, GlobalContext* globalCtx) {
 }
 
 void func_80A6F3B4(EnMm3* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_2B4) {
             case 0x278E:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     if (this->unk_2B2 & 0x20) {
-                        if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
+                        if (gSaveContext.save.playerData.rupees >= globalCtx->msgCtx.unk1206C) {
                             func_8019F208();
                             Message_StartTextbox(globalCtx, 0x2790, &this->actor);
                             this->unk_2B4 = 0x2790;
@@ -170,7 +170,7 @@ void func_80A6F3B4(EnMm3* this, GlobalContext* globalCtx) {
 
             case 0x279A:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
-                    if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
+                    if (gSaveContext.save.playerData.rupees >= globalCtx->msgCtx.unk1206C) {
                         func_8019F208();
                         Message_StartTextbox(globalCtx, 0x2790, &this->actor);
                         this->unk_2B4 = 0x2790;
@@ -193,7 +193,7 @@ void func_80A6F3B4(EnMm3* this, GlobalContext* globalCtx) {
 }
 
 void func_80A6F5E4(EnMm3* this, GlobalContext* globalCtx) {
-    if (((this->unk_2B4 != 0x2791) || (this->unk_2AC == 0)) && func_80147624(globalCtx)) {
+    if (((this->unk_2B4 != 0x2791) || (this->unk_2AC == 0)) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_2B4) {
             case 0x278A:
                 if (func_80A6FFAC(this, globalCtx)) {
@@ -274,7 +274,7 @@ void func_80A6F5E4(EnMm3* this, GlobalContext* globalCtx) {
             case 0x2795:
             case 0x2796:
             case 0x2797:
-                if (gSaveContext.weekEventReg[63] & 2) {
+                if (gSaveContext.save.weekEventReg[63] & 2) {
                     Message_StartTextbox(globalCtx, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
                     func_80151BB4(globalCtx, 0xB);
@@ -332,7 +332,7 @@ void func_80A6F9DC(EnMm3* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(globalCtx);
 
@@ -346,8 +346,8 @@ void func_80A6F9DC(EnMm3* this, GlobalContext* globalCtx) {
                     play_sound(NA_SE_SY_START_SHOT);
                     func_80A6FBA0(this);
                 } else {
-                    gSaveContext.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.weekEventReg[63] &= (u8)~2;
+                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
                     func_80A6F270(this);
                 }
             }
@@ -368,8 +368,8 @@ void func_80A6F9DC(EnMm3* this, GlobalContext* globalCtx) {
 void func_80A6FBA0(EnMm3* this) {
     func_801A5BD0(0x6F);
     func_801A0238(0, 5);
-    gSaveContext.weekEventReg[63] |= 1;
-    gSaveContext.weekEventReg[63] &= (u8)~2;
+    gSaveContext.save.weekEventReg[63] |= 1;
+    gSaveContext.save.weekEventReg[63] &= (u8)~2;
     this->actionFunc = func_80A6FBFC;
 }
 
@@ -424,12 +424,12 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        if (!(gSaveContext.weekEventReg[77] & 1)) {
-            gSaveContext.weekEventReg[77] |= 1;
+        if (!(gSaveContext.save.weekEventReg[77] & 1)) {
+            gSaveContext.save.weekEventReg[77] |= 1;
         }
         this->actor.parent = NULL;
         func_80A6FED8(this);
-    } else if (gSaveContext.weekEventReg[77] & 1) {
+    } else if (gSaveContext.save.weekEventReg[77] & 1) {
         Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -457,7 +457,7 @@ void func_80A6FEEC(EnMm3* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80A6FFAC(EnMm3* this, GlobalContext* globalCtx) {
-    switch (gSaveContext.playerForm) {
+    switch (gSaveContext.save.playerForm) {
         case 4:
             if (Player_GetMask(globalCtx) == PLAYER_MASK_BUNNY) {
                 if (this->unk_2B2 & 0x10) {
@@ -491,7 +491,7 @@ s32 func_80A6FFAC(EnMm3* this, GlobalContext* globalCtx) {
 }
 
 void func_80A70084(EnMm3* this, GlobalContext* globalCtx) {
-    switch (gSaveContext.playerForm) {
+    switch (gSaveContext.save.playerForm) {
         case 4:
             if (Player_GetMask(globalCtx) == PLAYER_MASK_BUNNY) {
                 this->unk_2B2 |= 0x10;

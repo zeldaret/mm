@@ -21,6 +21,7 @@
 #include "ichain.h"
 #include "sequence.h"
 #include "sfx.h"
+#include "message_data_static.h"
 
 #include "z64actor.h"
 #include "z64animation.h"
@@ -39,6 +40,7 @@
 #include "z64save.h"
 #include "z64scene.h"
 #include "z64skin.h"
+#include "z64subs.h"
 #include "z64transition.h"
 #include "regs.h"
 
@@ -173,7 +175,7 @@ typedef struct {
     } msgBuf;
     /* 0x11D80 */ u8* messageStart;
     /* 0x11D84 */ u8* messageEnd;
-    /* 0x11D88 */ u8 unk_11D88;
+    /* 0x11D88 */ u8 unk_11D88; // current Char Buffer ?
 } Font; // size = 0x11D8C
 
 // Game Info aka. Static Context
@@ -312,19 +314,6 @@ typedef struct {
     /* 0x2 */ s8 pillarboxTarget;
     /* 0x3 */ s8 pillarboxMagnitude;
 } ShrinkWindowContext; // size = 0x4
-
-typedef struct {
-    /* 0x00 */ u8* readBuff;
-    /* 0x04 */ u32* flashReadBuff;
-    /* 0x08 */ char unk_08[4];
-    /* 0x0C */ s16 status;
-    /* 0x10 */ u32 curPage;
-    /* 0x14 */ u32 numPages;
-    /* 0x18 */ OSTime unk_18;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ s16 unk_24;
-} SramContext; // size = 0x28
 
 typedef struct {
     /* 0x0 */ s32 topY;
@@ -838,46 +827,91 @@ typedef struct {
 typedef struct {
     /* 0x00000 */ View view;
     /* 0x00168 */ Font font;
-    /* 0x11EF4 */ char unk_11EF4[0x10];
-    /* 0x11F04 */ u16 unk11F04;
+    /* 0x11EF4 */ char unk_11EF4[0x4];
+    /* 0x11EF8 */ UNK_PTR unk11EF8;
+    /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x8];
+    /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ UNK_TYPE1 pad11F06[0x4];
     /* 0x11F0A */ u8 unk11F0A;
     /* 0x11F0B */ UNK_TYPE1 pad11F0B[0x5];
     /* 0x11F10 */ s32 unk11F10;
-    /* 0x11F14 */ UNK_TYPE1 pad11F14[0xE];
+    /* 0x11F14 */ UNK_TYPE1 pad11F14[0x6];
+    /* 0x11F1A */ s16 unk11F1A[3];
+    /* 0x11F20 */ UNK_TYPE1 pad11F20[0x2];
     /* 0x11F22 */ u8 msgMode;
-    /* 0x11F23 */ UNK_TYPE1 pad11F23[0xFD];
+    /* 0x11F23 */ UNK_TYPE1 pad11F23;
+    /* 0x11F24 */ union {
+        u8  schar[206];
+        u16 wchar[103];
+    } decodedBuffer;
+    /* 0x11FF2 */ u16 unk11FF2;
+    /* 0x11FF4 */ s16 unk11FF4;
+    /* 0x11FF6 */ s16 unk11FF6;
+    /* 0x11FF8 */ UNK_TYPE1 unk11FF8[0x6];
+    /* 0x11FFE */ s16 unk11FFE[0x3];
+    /* 0x12004 */ s16 unk12004;
+    /* 0x12006 */ s16 unk12006;
+    /* 0x12008 */ u8 unk12008[0x16];
+    /* 0x1201E */ s16 unk1201E;
     /* 0x12020 */ u8 unk12020;
     /* 0x12021 */ u8 choiceIndex;
     /* 0x12022 */ u8 unk12022;
     /* 0x12023 */ u8 unk12023;
-    /* 0x12024 */ UNK_TYPE1 unk12024[0x6];
+    /* 0x12024 */ s16 unk12024;
+    /* 0x12026 */ u16 unk12026;
+    /* 0x12028 */ u16 songPlayed;
     /* 0x1202A */ u16 ocarinaMode;
     /* 0x1202C */ u16 ocarinaAction;
     /* 0x1202E */ u16 unk1202E;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
-    /* 0x12034 */ UNK_TYPE1 pad12034[0x10];
+    /* 0x12034 */ UNK_TYPE1 pad12034[0x6];
+    /* 0x1203A */ s16 unk1203A;
+    /* 0x1203C */ s16 unk1203C;
+    /* 0x1203E */ s16 pad1203E;
+    /* 0x12040 */ Actor* unkActor;
     /* 0x12044 */ s16 unk12044;
-    /* 0x12046 */ UNK_TYPE1 pad12046[0x2];
+    /* 0x12046 */ s16 unk12046;
     /* 0x12048 */ u8 unk12048; // EnKakasi
-    /* 0x12049 */ UNK_TYPE1 pad12049[0xB];
-    /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
-    /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
-    /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
-    /* 0x1205A */ UNK_TYPE1 pad1205A[0x10];
+    /* 0x12049 */ UNK_TYPE1 pad12049[0x1];
+    /* 0x1204A */ s16 unk1204A[0x5];
+    /* 0x12054 */ s16 unk12054[3]; // First, second and third digits in lottery code guess
+    /* 0x1205A */ UNK_TYPE1 pad1205A[0xE];
+    /* 0x12068 */ s16 unk12068;
     /* 0x1206A */ s16 unk1206A;
     /* 0x1206C */ s32 unk1206C;
     /* 0x12070 */ s32 unk12070;
     /* 0x12074 */ UNK_TYPE1 pad12074[0x4];
     /* 0x12078 */ s32 bankRupeesSelected;
     /* 0x1207C */ s32 bankRupees; 
-    /* 0x12080 */ UNK_TYPE1 pad12080[0x30];
+    /* 0x12080 */ MessageTableEntry* messageEntryTable;
+    /* 0x12084 */ MessageTableEntry* messageEntryTableNes;
+    /* 0x12088 */ UNK_TYPE4 unk12088;
+    /* 0x1208C */ MessageTableEntry* messageTableStaff;
+    /* 0x12090 */ s16 unk12090;
+    /* 0x12092 */ s16 unk12092;
+    /* 0x12094 */ s8 unk12094;
+    /* 0x12095 */ UNK_TYPE1 unk12095[0x3];
+    /* 0x12098 */ f32 unk12098; // Text_Scale?
+    /* 0x1209C */ s16 unk1209C;
+    /* 0x1209E */ UNK_TYPE1 unk1209E[0x2];
+    /* 0x120A0 */ s32 unk120A0;
+    /* 0x120A4 */ UNK_TYPE1 unk120A4[0xC];
     /* 0x120B0 */ u8 unk120B0;
     /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ UNK_TYPE1 pad120B2[0x22];
-    /* 0x120D4 */ UNK_TYPE2 unk120D4;
-    /* 0x120D6 */ UNK_TYPE2 unk120D6;
+    /* 0x120B2 */ u8 unk120B2[0xC];
+    /* 0x120BE */ s16 unk120BE;
+    /* 0x120C0 */ s16 unk120C0;
+    /* 0x120C2 */ s16 unk120C2;
+    /* 0x120C4 */ s32 unk120C4;
+    /* 0x120C8 */ s16 unk120C8;
+    /* 0x120CA */ s16 unk120CA;
+    /* 0x120CC */ s16 unk120CC;
+    /* 0x120CE */ s16 unk120CE;
+    /* 0x120D0 */ s16 unk120D0;
+    /* 0x120D2 */ s16 unk120D2;
+    /* 0x120D4 */ s16 unk120D4;
+    /* 0x120D6 */ s16 unk120D6;
     /* 0x120D8 */ UNK_TYPE1 pad120D8[0x8];
 } MessageContext; // size = 0x120E0
 
@@ -1368,45 +1402,6 @@ typedef struct {
     /* 0x4 */ s32 unk4;
     /* 0x8 */ s32 unk8; // game script pointer?
 } struct_80133038_arg2; // size = 0xC
-
-
-typedef enum {
-    /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
-    /* 1 */ SUBS_CUTSCENE_NORMAL,
-    /* 2 */ SUBS_CUTSCENE_SET_FLAG
-} SubSCutsceneType;
-
-typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
-
-typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
-
-struct struct_8013DF3C_arg1;
-typedef void (*struct_8013DF3C_arg1_unk_func1)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
-typedef s32 (*struct_8013DF3C_arg1_unk_func2)(struct GlobalContext*, struct struct_8013DF3C_arg1*);
-
-typedef struct struct_8013DF3C_arg1 {
-    /* 0x00 */ Path* setupPathList;
-    /* 0x04 */ s32 pathIndex;
-    /* 0x08 */ Vec3s* points;
-    /* 0x0C */ s32 count;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ u8 unk_1C;
-    /* 0x1D */ u8 unk_1D;
-    /* 0x20 */ Vec3f unk_20;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
-    /* 0x44 */ Vec3f* unk_44;
-    /* 0x48 */ Actor* actor;
-    /* 0x4C */ f32 unk_4C;
-    /* 0x50 */ f32 unk_50;
-    /* 0x54 */ Vec3s unk_54;
-    /* 0x5C */ struct_8013DF3C_arg1_unk_func1 unk_5C;
-    /* 0x60 */ struct_8013DF3C_arg1_unk_func2 unk_60;
-    /* 0x64 */ struct_8013DF3C_arg1_unk_func2 unk_64;
-    /* 0x68 */ struct_8013DF3C_arg1_unk_func2 unk_68;
-} struct_8013DF3C_arg1; // size = 0x6C
 
 typedef struct {
     /* 0x00 */ u32 type;
