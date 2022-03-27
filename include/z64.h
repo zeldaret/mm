@@ -888,9 +888,7 @@ typedef struct {
     /* 0x12048 */ u8 unk12048; // EnKakasi
     /* 0x12049 */ UNK_TYPE1 pad12049[0x1];
     /* 0x1204A */ s16 unk1204A[0x5];
-    /* 0x12054 */ s16 unk12054; // First digit in lottery code guess
-    /* 0x12056 */ s16 unk12056; // Second digit lottery code guess
-    /* 0x12058 */ s16 unk12058; // Third digit lottery code guess
+    /* 0x12054 */ s16 unk12054[3]; // First, second and third digits in lottery code guess
     /* 0x1205A */ UNK_TYPE1 pad1205A[0xE];
     /* 0x12068 */ s16 unk12068;
     /* 0x1206A */ s16 unk1206A;

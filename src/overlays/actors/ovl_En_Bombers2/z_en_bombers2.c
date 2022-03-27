@@ -213,7 +213,7 @@ void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx) {
         default:
             break;
     }
-    if ((this->unk_2CE == Message_GetState(&globalCtx->msgCtx)) && (func_80147624(globalCtx) != 0)) {
+    if ((this->unk_2CE == Message_GetState(&globalCtx->msgCtx)) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_2CE == 0xF) {
             s32 i;
             s32 correctDigits;
