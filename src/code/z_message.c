@@ -474,7 +474,7 @@ void func_80152EC0(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80153750.s")
 
 void func_80153E7C(GlobalContext* globalCtx, void* arg1) {
-    if ((gSaveContext.language == 0) && (globalCtx->msgCtx.unk12090 == 0)) {
+    if ((gSaveContext.options.language == 0) && (globalCtx->msgCtx.unk12090 == 0)) {
         func_8014ADBC(globalCtx, arg1);
         return;
     }
