@@ -330,10 +330,10 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
 void func_80B24E14(EnRacedog* this) {
     if (this->unk_290 % 2) {
         D_80B25D88[this->unk_290].unk_0E =
-            (((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
+            (((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
     } else {
         D_80B25D88[this->unk_290].unk_0E =
-            ((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
+            ((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
     }
 
     if ((D_80B25D88[this->unk_290].unk_0E >= 0x3547) || (D_80B25D88[this->unk_290].unk_0E < 0x3539)) {

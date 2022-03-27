@@ -683,8 +683,8 @@ void EnSsh_Wait(EnSsh* this, GlobalContext* globalCtx) {
 void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
     EnSsh_Bob(this, globalCtx);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x904:
             case 0x905:
             case 0x906:
@@ -693,7 +693,7 @@ void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
             case 0x911:
             case 0x912:
             case 0x914:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             default:
@@ -707,11 +707,11 @@ void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
 void func_809756D0(EnSsh* this, GlobalContext* globalCtx) {
     u16 phi_a1;
 
-    if (gSaveContext.weekEventReg[34] & 8) {
+    if (gSaveContext.save.weekEventReg[34] & 8) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;
-        gSaveContext.weekEventReg[34] |= 8;
+        gSaveContext.save.weekEventReg[34] |= 8;
     }
     Message_StartTextbox(globalCtx, phi_a1, &this->actor);
 }
