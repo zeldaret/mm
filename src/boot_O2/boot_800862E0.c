@@ -1,9 +1,9 @@
 #include "global.h"
 #include "system_malloc.h"
 
-typedef void (*BlockFunc)(void*); // BlockFunc
-typedef void (*BlockFunc1)(void*, u32); // BlockFunc1
-typedef void (*BlockFunc8)(void*, u32, u32, u32, u32, u32, u32, u32, u32); // BlockFunc8
+typedef void (*BlockFunc)(void*);
+typedef void (*BlockFunc1)(void*, u32);
+typedef void (*BlockFunc8)(void*, u32, u32, u32, u32, u32, u32, u32, u32);
 
 typedef struct InitFunc {
     uintptr_t nextOffset;
