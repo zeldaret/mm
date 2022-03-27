@@ -4528,9 +4528,7 @@ beginseg
     name "ovl_Obj_Chan"
     compress
     include "build/src/overlays/actors/ovl_Obj_Chan/z_obj_chan.o"
-    include "build/data/ovl_Obj_Chan/ovl_Obj_Chan.data.o"
-    include "build/data/ovl_Obj_Chan/ovl_Obj_Chan.bss.o"
-    include "build/data/ovl_Obj_Chan/ovl_Obj_Chan.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Chan/ovl_Obj_Chan_reloc.o"
 endseg
 
 beginseg
