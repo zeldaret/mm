@@ -55,21 +55,7 @@ Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
 
 ### Linux (Native or under WSL / VM)
 
-#### 1. Clone the repository
-
-Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then clone your fork where you wish to have the project, with the command:
-
-```bash
-git clone https://github.com/<YOUR_USERNAME>/mm.git
-```
-
-This will copy the GitHub repository contents into a new folder in the current directory called `mm`. Change into this directory before doing anything else:
-
-```bash
-cd mm
-```
-
-#### 2. Install build dependencies
+#### 1. Install build dependencies
 
 The build process has the following package requirements:
 
@@ -88,17 +74,35 @@ sudo apt update
 sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev
 ```
 
-To install the Python dependencies simply run in a terminal:
+#### 2. Clone the repository
+
+Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then clone your fork where you wish to have the project, with the command:
+
+```bash
+git clone https://github.com/<YOUR_USERNAME>/mm.git
+```
+
+This will copy the GitHub repository contents into a new folder in the current directory called `mm`. Change into this directory before doing anything else:
+
+```bash
+cd mm
+```
+
+#### 3. Install python dependencies
+
+The build process has a few python packages requrired that are located in `requirements.txt`.
+
+To install them simply run in a terminal:
 
 ```bash
 python3 -m pip install -r requirements.txt
 ```
 
-#### 3. Prepare a base ROM
+#### 4. Prepare a base ROM
 
 Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to reflect the version of ROM you are using. ex: `baserom.mm.us.rev1.z64`
 
-#### 4. Make and Build the ROM
+#### 5. Make and Build the ROM
 
 To start the extraction/build process, run the following command:
 
