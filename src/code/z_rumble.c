@@ -7,7 +7,7 @@ UnkRumbleStruct D_801F69D0;
 // RumbleImpl?
 void func_8013EC10(UNK_TYPE arg0) {
     func_80182CE0(&D_801F69D0);
-    func_80175474(D_801F69D0.rumbleEnabled);
+    PadMgr_RumbleSet(D_801F69D0.rumbleEnabled);
 }
 
 // Used by some bosses (and fishing)

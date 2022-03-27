@@ -2917,7 +2917,7 @@ void Padmgr_SetEventCallback(OSMesg pvParm1);
 // void func_80175364(void);
 void func_80175434(void);
 void func_8017544C(s32 port, s32 rumbleOn);
-void func_80175474(u8 rumbleEnabled[MAXCONTROLLERS]);
+void PadMgr_RumbleSet(u8 rumbleEnabled[MAXCONTROLLERS]);
 s32 PadMgr_ControllerHasRumblePak(s32 port);
 void Padmgr_CalcStickEdges(Input* input);
 // void Padmgr_ParseState(void);

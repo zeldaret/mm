@@ -3179,7 +3179,7 @@
     0x80175364:("func_80175364",),
     0x80175434:("func_80175434",),
     0x8017544C:("func_8017544C",),
-    0x80175474:("func_80175474",),
+    0x80175474:("PadMgr_RumbleSet",),
     0x801754C0:("PadMgr_ControllerHasRumblePak",),
     0x801754E0:("Padmgr_CalcStickEdges",),
     0x801757A4:("Padmgr_ParseState",),
