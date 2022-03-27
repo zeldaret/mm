@@ -259,16 +259,16 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, GlobalContext* globalCtx) {
 
     EnMinifrog_TurnToPlayer(this);
     EnMinifrog_Jump(this);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         EnMinifrog_SetJumpState(this);
 
-        switch (globalCtx->msgCtx.unk11F04) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0xD81: // "Ah! Don Gero! It has been so long."
             case 0xD83: // "Could it be... Has spring finally come to the mountains?"
             case 0xD84: // "That look...It is true! Winter was so long that I began to lose all hope."
             case 0xD86: // "Could it be... You came all this way looking for me?"
             case 0xD87: // "Ah! You need not say a thing. Upon seeing that face, I understand!" ...
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
             case 0xD82:                                     // "What has brought you all this way?"
                 if (gSaveContext.weekEventReg[33] & 0x80) { // Mountain village is unfrozen
@@ -496,7 +496,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
     EnMinifrog_Jump(this);
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0: // Yes
                         func_8019F208();
@@ -511,12 +511,12 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
             }
             break;
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 EnMinifrog_SetJumpState(this);
-                switch (globalCtx->msgCtx.unk11F04) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0xD76: // "I have been waiting for you, Don Gero. Forgive me if I'm mistaken, but it looks like
                                 // you've lost a little weight..."
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         gSaveContext.weekEventReg[34] |= 1; // Spoken to MINIFROG_YELLOW
                         break;
@@ -525,7 +525,7 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, GlobalContext* globalCtx) {
                                 // has come to the mountains..."
                     case 0xD7A: // "And when the great Don Gero has come for us, too...What a pity."
                     case 0xD7F: // "Well, if it isn't the great Don Gero."
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
                     case 0xD77: // "Let us begin our chorus"
                         this->actionFunc = EnMinifrog_BeginChoirCutscene;

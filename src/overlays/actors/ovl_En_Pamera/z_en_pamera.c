@@ -639,7 +639,7 @@ void EnPamera_HandleDialogue(EnPamera* this, GlobalContext* globalCtx) {
             func_80BD9B4C(this, globalCtx);
             break;
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80BD9938(this);
             }
             break;
@@ -651,7 +651,7 @@ void EnPamera_HandleDialogue(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD9B4C(EnPamera* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_324) {
             case 0x1587:
                 Message_StartTextbox(globalCtx, 0x1588, &this->actor);

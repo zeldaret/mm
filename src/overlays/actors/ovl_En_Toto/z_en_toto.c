@@ -207,7 +207,7 @@ void EnToto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80BA383C(EnToto* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime) && this->actionFuncIndex == 1 &&
         this->skelAnime.animation != &object_zm_Anim_000C80) {
-        if (globalCtx->msgCtx.unk11F04 != 0x2A98 && globalCtx->msgCtx.unk11F04 != 0x2A99) {
+        if (globalCtx->msgCtx.currentTextId != 0x2A98 && globalCtx->msgCtx.currentTextId != 0x2A99) {
             if (this->unk2B4 & 1 || Rand_ZeroOne() > 0.5f) {
                 this->unk2B4 = (this->unk2B4 + 1) & 3;
             }
@@ -408,7 +408,7 @@ s32 func_80BA407C(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA40D4(EnToto* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         return 1;
     }
     return 0;
@@ -422,7 +422,7 @@ s32 func_80BA4128(EnToto* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BA415C(EnToto* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 4 && Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             func_8019F230();
         } else {

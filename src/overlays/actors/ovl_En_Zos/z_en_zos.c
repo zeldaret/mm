@@ -301,8 +301,8 @@ void func_80BBB574(EnZos* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x124B:
                 if (this->unk_2B8 == 9) {
                     globalCtx->msgCtx.unk11F10 = 0;
@@ -386,8 +386,8 @@ void func_80BBB8AC(EnZos* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x1237:
                 player->exchangeItemId = 0;
 
@@ -397,13 +397,13 @@ void func_80BBB8AC(EnZos* this, GlobalContext* globalCtx) {
             case 0x123C:
             case 0x123E:
             case 0x123F:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1244:
                 this->unk_2B6 &= ~0x10;
                 func_80BBAE84(this, 6, 0);
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1232:
@@ -413,18 +413,18 @@ void func_80BBB8AC(EnZos* this, GlobalContext* globalCtx) {
             case 0x1239:
             case 0x1246:
                 func_80BBAE84(this, 6, 0);
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1233:
                 func_80BBAE84(this, 5, 0);
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1245:
             case 0x1248:
                 func_80BBAE84(this, 3, 0);
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1231:
@@ -582,7 +582,7 @@ void func_80BBC070(EnZos* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80BBAE84(this, 2, 0);
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80BBC14C;

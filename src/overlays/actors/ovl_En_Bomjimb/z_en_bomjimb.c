@@ -758,7 +758,7 @@ void func_80C02A14(EnBomjimb* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 3;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         if ((this->unk_2CA == 8) && (gSaveContext.unk_FE6 >= 5)) {
             func_80C02CA4(this, globalCtx);
@@ -777,7 +777,7 @@ void func_80C02BCC(EnBomjimb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 5000, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
-        if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
             func_801477B4(globalCtx);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~0x10000000;

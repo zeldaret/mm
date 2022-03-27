@@ -195,7 +195,7 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
 void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+        if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
             func_801477B4(globalCtx);
 
             if (this->actor.textId == 0x62C) {
@@ -226,13 +226,13 @@ void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (globalCtx->msgCtx.unk11F04 == 0x2AC6 || globalCtx->msgCtx.unk11F04 == 0x2AC7 ||
-        globalCtx->msgCtx.unk11F04 == 0x2AC8) {
+    if (globalCtx->msgCtx.currentTextId == 0x2AC6 || globalCtx->msgCtx.currentTextId == 0x2AC7 ||
+        globalCtx->msgCtx.currentTextId == 0x2AC8) {
         this->skelAnime.playSpeed = 0.0f;
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         this->skelAnime.curFrame = 30.0f;
     }
-    if (globalCtx->msgCtx.unk11F04 == 0x2ACF) {
+    if (globalCtx->msgCtx.currentTextId == 0x2ACF) {
         this->skelAnime.playSpeed = 0.0f;
     }
 

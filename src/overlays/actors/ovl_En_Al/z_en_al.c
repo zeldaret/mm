@@ -559,7 +559,7 @@ void func_80BDEFE4(EnAl* this, GlobalContext* globalCtx) {
 
 s32 func_80BDF064(EnAl* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 sp22 = globalCtx->msgCtx.unk11F04;
+    u16 sp22 = globalCtx->msgCtx.currentTextId;
     Actor* sp1C = func_80BDE1A0(this, globalCtx, 4, 0xA4);
     Actor* temp_v0 = func_80BDE1A0(this, globalCtx, 4, 0x234);
 

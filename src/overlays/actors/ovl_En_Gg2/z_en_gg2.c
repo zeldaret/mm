@@ -172,7 +172,7 @@ void func_80B3B05C(EnGg2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3B0A0(EnGg2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_2F0 = 0;

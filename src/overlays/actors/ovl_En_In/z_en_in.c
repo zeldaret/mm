@@ -1183,7 +1183,7 @@ s32 func_808F5674(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             break;
         case 4:
         case 5:
-            if (func_80147624(globalCtx) && func_808F4414(globalCtx, this, arg2)) {
+            if (Message_ShouldAdvance(globalCtx) && func_808F4414(globalCtx, this, arg2)) {
                 func_801477B4(globalCtx);
                 ret = true;
             }
@@ -1478,7 +1478,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
 
     Matrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if (&this->actor == player->targetActor &&
-        !(globalCtx->msgCtx.unk11F04 >= 0xFF && globalCtx->msgCtx.unk11F04 <= 0x200) && newUnk4C8 == 3 &&
+        !(globalCtx->msgCtx.currentTextId >= 0xFF && globalCtx->msgCtx.currentTextId <= 0x200) && newUnk4C8 == 3 &&
         this->unk4C8 == 3) {
         if (!(globalCtx->state.frames & 1)) {
             this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;

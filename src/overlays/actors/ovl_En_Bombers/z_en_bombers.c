@@ -334,7 +334,7 @@ void func_80C03FAC(EnBombers* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->unk_2A6 == Message_GetState(&globalCtx->msgCtx)) && func_80147624(globalCtx)) {
+    if ((this->unk_2A6 == Message_GetState(&globalCtx->msgCtx)) && Message_ShouldAdvance(globalCtx)) {
         sp2A = 0;
         func_801477B4(globalCtx);
         this->unk_2A6 = 5;
@@ -446,7 +446,7 @@ void func_80C04354(EnBombers* this, GlobalContext* globalCtx) {
 
 void func_80C043C8(EnBombers* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80C042F8(this);
     }

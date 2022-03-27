@@ -162,15 +162,15 @@ void func_80959624(EnMk* this, GlobalContext* globalCtx) {
 void func_809596A0(EnMk* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if ((globalCtx->msgCtx.unk11F04 == 0xFB9) || (globalCtx->msgCtx.unk11F04 == 0xFBB) ||
-        (globalCtx->msgCtx.unk11F04 == 0xFBC)) {
+    if ((globalCtx->msgCtx.currentTextId == 0xFB9) || (globalCtx->msgCtx.currentTextId == 0xFBB) ||
+        (globalCtx->msgCtx.currentTextId == 0xFBC)) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x400, 0x80);
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80959774;
             }
@@ -273,14 +273,14 @@ void func_80959A24(EnMk* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0xFA1:
                     case 0xFA3:
                     case 0xFA4:
                     case 0xFAA:
                     case 0xFAE:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     case 0xFA2:
@@ -289,7 +289,7 @@ void func_80959A24(EnMk* this, GlobalContext* globalCtx) {
                             this->actionFunc = func_80959E18;
                             break;
                         }
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     case 0xFA5:

@@ -228,7 +228,7 @@ void func_80ABB590(EnGuardNuts* this, GlobalContext* globalCtx) {
         if ((this->guardTextIndex == 3) && (this->animIndex == WAIT_HEAD_TILT_ANIM)) {
             EnGuardNuts_ChangeAnim(this, WAIT_HEAD_TILT_ANIM);
         }
-        if (func_80147624(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx) != 0) {
             if (D_80ABBE38[this->guardTextIndex] != 1) {
                 if (D_80ABBE38[this->guardTextIndex] == 2) {
                     func_801477B4(globalCtx);

@@ -254,7 +254,7 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
 
 s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
 
     if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
         switch (temp) {

@@ -207,7 +207,7 @@ void func_80BC7068(EnGuruguru* this, GlobalContext* globalCtx) {
             }
         }
     }
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
         func_801477B4(globalCtx);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {

@@ -138,7 +138,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->isTalking) {
         if (Actor_TextboxIsClosing(&this->dyna.actor, globalCtx)) {
             this->isTalking = false;
-        } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+        } else if ((Message_GetState(&globalCtx->msgCtx) == 4) && (Message_ShouldAdvance(globalCtx))) {
             if (globalCtx->msgCtx.choiceIndex != 0) {
                 func_8019F208();
                 globalCtx->msgCtx.msgMode = 0x4D;

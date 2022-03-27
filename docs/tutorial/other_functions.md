@@ -288,7 +288,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         func_80C10148(this);
         return;
     }
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         temp_v0_3 = this->actor.textId;
         if (temp_v0_3 == 0x2AD9) {
             Flags_SetSwitch(globalCtx, (s32) this->actor.params);
@@ -347,7 +347,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
             Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
@@ -397,7 +397,7 @@ somehow we skipped over `t0`. Where is this in the code? The `153` in the middle
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
 ```
 
 If you look at the conditionals and the declaration of `temp_v0_2`, you may notice something odd: `temp_v0_2` is a `u8`. Therefore the `& 0xFF` does nothing! It's surprisingly common for this to happen, be it leaving out a `& 0xFF` or adding an extraneous one. If we remove it, we get a match:
