@@ -3894,8 +3894,7 @@ beginseg
     name "ovl_En_Hanabi"
     compress
     include "build/src/overlays/actors/ovl_En_Hanabi/z_en_hanabi.o"
-    include "build/data/ovl_En_Hanabi/ovl_En_Hanabi.data.o"
-    include "build/data/ovl_En_Hanabi/ovl_En_Hanabi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hanabi/ovl_En_Hanabi_reloc.o"
 endseg
 
 beginseg

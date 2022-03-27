@@ -13267,7 +13267,7 @@
     0x80B23910:("func_80B23910",),
     0x80B23934:("func_80B23934",),
     0x80B239FC:("EnHanabi_Update",),
-    0x80B23A38:("func_80B23A38",),
+    0x80B23A38:("EnHanabi_Draw",),
     0x80B23D50:("func_80B23D50",),
     0x80B23DD0:("func_80B23DD0",),
     0x80B23E10:("ObjDowsing_Init",),
