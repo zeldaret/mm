@@ -1087,7 +1087,7 @@ void EnIk_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_800AE5A0(globalCtx);
     }
     func_800BC620(&this->actor.focus.pos, &D_8092C200, 255, globalCtx);
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, this->unk_30C,
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->effectScale, this->unk_30C,
                   this->effectAlpha, this->drawEffect);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
