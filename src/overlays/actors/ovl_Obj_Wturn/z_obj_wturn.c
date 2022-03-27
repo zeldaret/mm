@@ -94,7 +94,7 @@ void func_808A7C04(ObjWturn* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y += this->actor.playerHeightRel;
     player->actor.shape.shadowAlpha = 0;
     func_800B7298(globalCtx, &this->actor, 0x54);
-    func_800B8E58(&player->actor, NA_SE_VO_NAVY_ENEMY);
+    func_800B8E58(player, NA_SE_VO_NAVY_ENEMY);
     this->unk_14A = 0;
     func_80165690();
     this->actionFunc = func_808A7C78;
