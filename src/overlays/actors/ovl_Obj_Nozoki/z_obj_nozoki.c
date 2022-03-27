@@ -6,7 +6,6 @@
 
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
-#include "objects/object_mask_truth/object_mask_truth.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -408,17 +407,17 @@ void func_80BA311C(ObjNozoki* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA3230(ObjNozoki* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[64] & 0x20) {
+    if (gSaveContext.save.weekEventReg[64] & 0x20) {
         Actor* npc = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
         Actor* test3 = SubS_FindActor(globalCtx, npc, ACTORCAT_NPC, ACTOR_EN_TEST3);
 
         if ((test3 != NULL) && (test3->draw != NULL)) {
-            if ((globalCtx->curSpawn == 3) && !(gSaveContext.weekEventReg[64] & 0x40)) {
+            if ((globalCtx->curSpawn == 3) && !(gSaveContext.save.weekEventReg[64] & 0x40)) {
                 this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
                 this->dyna.actor.textId = 0x297A;
             } else {
                 this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
-                if (gSaveContext.weekEventReg[64] & 0x40) {
+                if (gSaveContext.save.weekEventReg[64] & 0x40) {
                     this->dyna.actor.textId = 0;
                 } else {
                     this->dyna.actor.textId = 0x2979;
@@ -435,9 +434,9 @@ void func_80BA3230(ObjNozoki* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA3344(ObjNozoki* this, GlobalContext* globalCtx) {
-    if ((globalCtx->curSpawn == 3) && !(gSaveContext.weekEventReg[64] & 0x40)) {
+    if ((globalCtx->curSpawn == 3) && !(gSaveContext.save.weekEventReg[64] & 0x40)) {
         if (Actor_TextboxIsClosing(&this->dyna.actor, globalCtx)) {
-            gSaveContext.weekEventReg[64] |= 0x40;
+            gSaveContext.save.weekEventReg[64] |= 0x40;
             this->dyna.actor.flags &= ~ACTOR_FLAG_10000;
             ObjNozoki_SetupAction(this, func_80BA3230);
         }
@@ -455,7 +454,7 @@ void ObjNozoki_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 Gfx* D_80BA34FC[] = {
     object_secom_obj_DL_000080,
-    object_mask_truth_DL_0001A0,
+    (Gfx*)0x0A0001A0,
     object_secom_obj_DL_001230,
     object_secom_obj_DL_001300,
 };
