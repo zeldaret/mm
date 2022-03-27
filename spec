@@ -2795,8 +2795,11 @@ beginseg
     name "ovl_Obj_Vspinyroll"
     compress
     include "build/src/overlays/actors/ovl_Obj_Vspinyroll/z_obj_vspinyroll.o"
-    include "build/data/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll_reloc.o"
+#else
     include "build/data/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll.reloc.o"
+#endif
 endseg
 
 beginseg
