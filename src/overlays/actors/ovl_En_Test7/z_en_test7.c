@@ -575,13 +575,14 @@ void func_80AF1F48(EnTest7* this, GlobalContext* globalCtx) {
 void func_80AF2030(EnTest7* this, GlobalContext* globalCtx) {
     s32 pad;
     s32 temp = this->unk_1E54 - 96;
-    f32 sp1C = 1.0f - (temp / 4.00000000000000001f);
+    f32 four = 4.0f;
+    f32 sp1C = 1.0f - (temp / four);
     Camera* camera;
     f32 temp_f2;
     f32 temp_f4;
 
-    this->unk_148.unk_08 = ((temp * -0.1f) / 4.00000000000000001f) + 0.1f;
-    this->unk_148.unk_0C = ((temp * 5.9f) / 4.00000000000000001f) + 0.1f;
+    this->unk_148.unk_08 = ((temp * -0.1f) / four) + 0.1f;
+    this->unk_148.unk_0C = ((temp * 5.9f) / four) + 0.1f;
     this->unk_148.unk_10 -= 0x2EE0;
     this->actor.world.pos.y += 100.0f;
 
@@ -732,12 +733,13 @@ void func_80AF2808(EnTest7* this, GlobalContext* globalCtx, f32 arg2) {
 
 void func_80AF2854(EnTest7* this, GlobalContext* globalCtx) {
     f32 temp;
+    f32 sixteen = 16.0f;
 
     if ((this->unk_1E54 >= 12) && (this->unk_1E54 < 31)) {
         temp = (this->unk_1E54 - 12) / 18.0f;
         func_80AF24D8(this, globalCtx, temp);
     } else if ((this->unk_1E54 >= 79) && (this->unk_1E54 < 96)) {
-        temp = (this->unk_1E54 - 79) / 16.000000001f;
+        temp = (this->unk_1E54 - 79) / sixteen;
         func_80AF2654(this, globalCtx, temp);
     }
 
