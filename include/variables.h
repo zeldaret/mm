@@ -909,9 +909,7 @@ extern UNK_TYPE4 D_801BDAA4;
 // extern UNK_TYPE4 D_801BDACC;
 // extern UNK_TYPE4 D_801BDAF0;
 // extern UNK_TYPE4 D_801BDAF8;
-// extern UNK_TYPE1 sKaleidoSetupKscpPos;
-// extern UNK_TYPE1 sKaleidoSetupEyeX;
-// extern UNK_TYPE1 sKaleidoSetupEyeZ;
+
 extern u8 kanfontOrdering[92];
 // extern UNK_TYPE4 D_801BDB90;
 // extern UNK_TYPE4 D_801BDB94;

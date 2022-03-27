@@ -1507,6 +1507,7 @@ void func_800F4A10(GlobalContext* globalCtx);
 void KaleidoSetup_Update(GlobalContext* globalCtx);
 void KaleidoSetup_Init(GlobalContext* globalCtx);
 void KaleidoSetup_Destroy(GlobalContext* globalCtx);
+
 void Font_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32 offset);
 void Font_LoadCharNES(GlobalContext* globalCtx, u8 codePointIndex, s32 offset);
 void Font_LoadMessageBoxEndIcon(Font* font, u16 icon);
