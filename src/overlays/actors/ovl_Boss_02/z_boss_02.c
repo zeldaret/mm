@@ -550,7 +550,7 @@ void Boss02_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 i;
     s32 pad[2];
 
-    if ((gSaveContext.weekEventReg[52] & 0x20) && (this->actor.params == 0)) {
+    if ((gSaveContext.save.weekEventReg[52] & 0x20) && (this->actor.params == 0)) {
         D_809E0434 = (DoorWarp1*)Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1,
                                                     0.0f, 60.0f, 0.0f, 0, 0, 0, 1);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
@@ -2058,7 +2058,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if ((gSaveContext.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
+            if ((gSaveContext.save.weekEventReg[52] & 0x20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
             Cutscene_Start(globalCtx, &globalCtx->csCtx);

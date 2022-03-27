@@ -45,7 +45,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
             }
 
             gSaveContext.unk_3DC0 = 2000;
-            gSaveContext.tatlTimer = 0;
+            gSaveContext.save.playerData.tatlTimer = 0;
             gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
             gSaveContext.nightSeqIndex = 0xFF;
             gSaveContext.eventInf[0] = 0;
@@ -73,11 +73,11 @@ void GameOver_Update(GlobalContext* globalCtx) {
                     gSaveContext.respawnFlag = -6;
                 }
                 gSaveContext.nextTransition = 2;
-                gSaveContext.health = 48;
+                gSaveContext.save.playerData.health = 48;
                 gameOverCtx->state++;
                 if (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU) {
-                    gSaveContext.playerForm = PLAYER_FORM_HUMAN;
-                    gSaveContext.equippedMask = PLAYER_MASK_NONE;
+                    gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
+                    gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
                 }
                 func_8013EE24();
             }

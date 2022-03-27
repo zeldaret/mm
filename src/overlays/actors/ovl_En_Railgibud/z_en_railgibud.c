@@ -255,7 +255,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(this, globalCtx);
     this->playerStunWaitTimer = 0;
-    this->timeInitialized = gSaveContext.time;
+    this->timeInitialized = gSaveContext.save.time;
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     this->type = EN_RAILGIBUD_TYPE_GIBDO;
     this->textId = 0;
@@ -271,7 +271,7 @@ void EnRailgibud_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    if (gSaveContext.weekEventReg[14] & 4) {
+    if (gSaveContext.save.weekEventReg[14] & 4) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -382,7 +382,8 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
     if (EnRailgibud_PlayerInRangeWithCorrectState(this, globalCtx) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
-            if ((gSaveContext.playerForm == PLAYER_FORM_GORON) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
+            if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) ||
+                (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
                 // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
                 // do so. It will appear to take damage and shake its head side-to-side.
                 EnRailgibud_SetupGrabFail(this);
@@ -553,7 +554,7 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, GlobalContext* globalCtx) {
         this->actor.world.rot = this->actor.shape.rot;
     }
     if (EnRailgibud_PlayerInRangeWithCorrectState(this, globalCtx)) {
-        if ((gSaveContext.playerForm != PLAYER_FORM_GORON) && (gSaveContext.playerForm != PLAYER_FORM_DEKU) &&
+        if ((gSaveContext.save.playerForm != PLAYER_FORM_GORON) && (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) &&
             Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
             EnRailgibud_SetupWalkToPlayer(this);
         }
@@ -866,7 +867,7 @@ s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, GlobalCont
     distanceFromTargetPos = Math_Vec3f_StepTo(&this->actor.world.pos, &targetPos, 10.0f);
     distanceFromTargetAngle = Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 0x1770, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
         distanceFromTargetYOffset = Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
     }
 
@@ -969,14 +970,14 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
     } else {
         switch (Message_GetState(&globalCtx->msgCtx)) {
             case 5:
-                if (func_80147624(globalCtx)) {
+                if (Message_ShouldAdvance(globalCtx)) {
                     Message_StartTextbox(globalCtx, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
                 }
                 break;
 
             case 6:
-                if (func_80147624(globalCtx)) {
+                if (Message_ShouldAdvance(globalCtx)) {
                     this->textId = 0;
                     this->isInvincible = false;
                     this->actor.speedXZ = 0.6f;
@@ -1113,8 +1114,7 @@ void EnRailgibud_InitCutsceneGibdo(EnRailgibud* this, GlobalContext* globalCtx) 
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-
-    if (gSaveContext.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
+    if (gSaveContext.save.entranceIndex != 0x2090) { // NOT Cutscene: Music Box House Opens
         Actor_MarkForDeath(&this->actor);
     }
 
