@@ -522,6 +522,7 @@ animdict = {
     "gSaveContext.skullTokenCount": "gSaveContext.save.skullTokenCount",
     "gSaveContext.unk_1016": "gSaveContext.jinxTimer",
     "gSaveContext.unk_3F58": "gSaveContext.sunsSongState",
+    "gSaveContext.equips": "gSaveContext.save.equips",
     "player->unk_A87": "player->exchangeItemId",
     "player->leftHandActor": "player->heldActor",
     "player->unk_384": "player->getItemId",

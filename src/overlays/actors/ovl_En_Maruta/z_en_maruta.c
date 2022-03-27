@@ -57,7 +57,7 @@ u8 D_80B386C0[] = {
     0xFF, 0x2B, 0xD4, 0x17, 0xE8, 0x55, 0xAA, 0x0F, 0xF0,
 };
 
-s32 D_80B386CC[] = {
+s32 D_80B386CC[PLAYER_MWA_MAX] = {
     5, 5, 3, 3, 7, 7, 7, 7, 3, 3, 3, 3, 7, 7, 3, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7,
 };
 
@@ -328,7 +328,7 @@ void func_80B37590(EnMaruta* this, GlobalContext* globalCtx) {
             break;
 
         case 4:
-            if (player->swordAnimation == 8) {
+            if (player->meleeWeaponAnimation == PLAYER_MWA_LEFT_SLASH_1H) {
                 sp48 = D_80B3876C;
             } else {
                 sp48 = D_80B38778;
@@ -337,7 +337,7 @@ void func_80B37590(EnMaruta* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (player->swordAnimation == 0) {
+            if (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) {
                 sp48 = D_80B38784;
             } else {
                 sp48 = D_80B38790;
@@ -346,7 +346,7 @@ void func_80B37590(EnMaruta* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (player->swordAnimation == 0) {
+            if (player->meleeWeaponAnimation == PLAYER_MWA_FORWARD_SLASH_1H) {
                 sp48 = D_80B3879C;
             } else {
                 sp48 = D_80B387A8;
@@ -355,7 +355,7 @@ void func_80B37590(EnMaruta* this, GlobalContext* globalCtx) {
             break;
 
         case 8:
-            if (player->swordAnimation == 4) {
+            if (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) {
                 sp48 = D_80B387B4;
             } else {
                 sp48 = D_80B387C0;
@@ -459,8 +459,10 @@ s32 func_80B37B78(EnMaruta* this, GlobalContext* globalCtx) {
 
     temp_v1 = BINANG_SUB(temp_v1, player->actor.shape.rot.y);
     if ((ABS_ALT(temp_v1) < 0x1555) ||
-        ((player->swordState != 0) && ((player->swordAnimation == 4) || (player->swordAnimation == 6) ||
-                                       (player->swordAnimation == 0x1E) || (player->swordAnimation == 0x20)))) {
+        ((player->meleeWeaponState != 0) && ((player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_SLASH_1H) ||
+                                             (player->meleeWeaponAnimation == PLAYER_MWA_RIGHT_COMBO_1H) ||
+                                             (player->meleeWeaponAnimation == PLAYER_MWA_SPIN_ATTACK_1H) ||
+                                             (player->meleeWeaponAnimation == PLAYER_MWA_BIG_SPIN_1H)))) {
         return true;
     }
     return false;
@@ -492,16 +494,17 @@ void func_80B37CA0(EnMaruta* this, GlobalContext* globalCtx) {
             this->collider.base.acFlags &= ~AC_HIT;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SWORD_STRIKE);
 
-            if (D_80B386CC[player->swordAnimation] != 0) {
-                s32 temp = D_80B386CC[player->swordAnimation] + 1;
+            if (D_80B386CC[player->meleeWeaponAnimation] != 0) {
+                s32 temp = D_80B386CC[player->meleeWeaponAnimation] + 1;
 
                 temp = (temp << 8) & 0xFF00;
-                this->unk_210 = D_80B386CC[player->swordAnimation];
+                this->unk_210 = D_80B386CC[player->meleeWeaponAnimation];
                 Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_MARUTA,
                                    this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0,
                                    this->actor.shape.rot.y, 0, temp);
                 this->actor.world.rot.y = this->actor.shape.rot.y;
-                if ((this->unk_210 == 5) || ((this->unk_210 == 7) && (player->swordAnimation == 0xC))) {
+                if ((this->unk_210 == 5) ||
+                    ((this->unk_210 == 7) && (player->meleeWeaponAnimation == PLAYER_MWA_STAB_1H))) {
                     func_80B37590(this, globalCtx);
                 } else {
                     func_80B374B8(this);

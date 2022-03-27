@@ -399,7 +399,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     func_80A41FA4(this, globalCtx);
                 } else {
                     gSaveContext.screenScale = 0.0f;
-                    Play_SetRespawnData(&globalCtx->state, RESTART_MODE_DOWN, Entrance_CreateIndexFromSpawn(0),
+                    Play_SetRespawnData(&globalCtx->state, RESPAWN_MODE_DOWN, Entrance_CreateIndexFromSpawn(0),
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     func_80169EFC(&globalCtx->state);
                     if (player->stateFlags1 & 0x800000) {
@@ -448,7 +448,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     } else {
                         playerParams = 0xBFF;
                     }
-                    Play_SetRespawnData(&globalCtx->state, RESTART_MODE_RETURN, entranceIndex, player->unk_3CE,
+                    Play_SetRespawnData(&globalCtx->state, RESPAWN_MODE_RETURN, entranceIndex, player->unk_3CE,
                                         playerParams, &player->unk_3C0, player->unk_3CC);
 
                     if ((globalCtx->sceneNum == SCENE_TENMON_DAI) || (globalCtx->sceneNum == SCENE_00KEIKOKU)) {

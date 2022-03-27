@@ -29,13 +29,13 @@ void func_80127B64(struct_801F58B0 arg0[], UNK_TYPE arg1, Vec3f* arg2);
 
 s32 func_801226E0(GlobalContext* globalCtx, s32 arg1) {
     if (arg1 == 0) {
-        Play_SetupRespawnPoint(&globalCtx->state, RESPAWN_MODE_VOID_OUT, 0xBFF);
+        Play_SetupRespawnPoint(&globalCtx->state, RESPAWN_MODE_DOWN, 0xBFF);
         if (globalCtx->sceneNum == SCENE_KAKUSIANA) {
             return 1;
         }
     }
 
-    gSaveContext.respawn[RESPAWN_MODE_VOID_OUT].data = 0;
+    gSaveContext.respawn[RESPAWN_MODE_DOWN].data = 0;
     return arg1;
 }
 
@@ -324,7 +324,7 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
     player->unk_AE7++;
 
     if (player->unk_AE7 == 2) {
-        s16 objectId = gPlayerFormObjectIndexes[((void)0, gSaveContext.playerForm)];
+        s16 objectId = gPlayerFormObjectIndexes[((void)0, gSaveContext.save.playerForm)];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&globalCtx->objectCtx, player->actor.objBankIndex, objectId);
@@ -334,11 +334,11 @@ void func_8012301C(Player* player, GlobalContext* globalCtx2) {
 
         if (Object_IsLoaded(&globalCtx->objectCtx, objBankIndex)) {
             player->actor.objBankIndex = objBankIndex;
-            player->actor.shape.rot.z = gSaveContext.playerForm + 1;
+            player->actor.shape.rot.z = gSaveContext.save.playerForm + 1;
             player->actor.init = PlayerCall_Init;
             player->actor.update = PlayerCall_Update;
             player->actor.draw = PlayerCall_Draw;
-            gSaveContext.equippedMask = PLAYER_MASK_NONE;
+            gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
         }
     }
 }
@@ -510,19 +510,21 @@ s32 func_8012364C(GlobalContext* globalCtx, Player* player, s32 arg2) {
     }
 
     if (arg2 == 1) {
-        return (gSaveContext.buttonStatus[1] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
-                                                              : ITEM_NONE;
+        return (gSaveContext.buttonStatus[1] != BTN_DISABLED)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
+               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_LEFT]
+                                                 : ITEM_NONE;
     }
 
     if (arg2 == 2) {
-        return (gSaveContext.buttonStatus[2] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-               : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
-                                                              : ITEM_NONE;
+        return (gSaveContext.buttonStatus[2] != BTN_DISABLED)
+                   ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
+               : (gSaveContext.unk_3F22 == 0x10) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_DOWN]
+                                                 : ITEM_NONE;
     }
 
-    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
-           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
+    return (gSaveContext.buttonStatus[3] != BTN_DISABLED) ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
+           : (gSaveContext.unk_3F22 == 0x10)              ? gSaveContext.save.equips.buttonItems[0][EQUIP_SLOT_C_RIGHT]
                                                           : ITEM_NONE;
 }
 
@@ -611,7 +613,7 @@ void Player_SetModels(Player* player, s32 modelGroup) {
     player->sheathType = gPlayerModelTypes[modelGroup][3];
 
     if (player->sheathType == 14) {
-        if (gSaveContext.equips.buttonItems[CUR_FORM][EQUIP_SLOT_B] == ITEM_NONE) {
+        if (gSaveContext.save.equips.buttonItems[CUR_FORM][EQUIP_SLOT_B] == ITEM_NONE) {
             player->sheathType = 15;
         }
     }
@@ -653,7 +655,7 @@ void func_80123C58(Player* player) {
 
 void Player_SetEquipmentData(GlobalContext* globalCtx, Player* player) {
     if (player->csMode != 0x86) {
-        player->currentShield = CUR_EQUIP_VALUE_VOID(EQUIP_SHIELD);
+        player->currentShield = GET_CUR_EQUIP_VALUE(EQUIP_SHIELD);
         if ((player->transformation != PLAYER_FORM_ZORA) || (((player->currentBoots != PLAYER_BOOTS_ZORA_LAND)) &&
                                                              (player->currentBoots != PLAYER_BOOTS_ZORA_UNDERWATER))) {
             player->currentBoots = D_801BFF90[player->transformation];
@@ -736,7 +738,7 @@ s32 Player_IsBurningStickInRange(GlobalContext* globalCtx, Vec3f* pos, f32 xzRan
 }
 
 u8 Player_GetStrength(void) {
-    return sPlayerStrengths[(void)0, gSaveContext.playerForm];
+    return sPlayerStrengths[(void)0, gSaveContext.save.playerForm];
 }
 
 u8 Player_GetMask(GlobalContext* globalCtx) {
