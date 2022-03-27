@@ -1625,8 +1625,7 @@ beginseg
     name "ovl_En_Mk"
     compress
     include "build/src/overlays/actors/ovl_En_Mk/z_en_mk.o"
-    include "build/data/ovl_En_Mk/ovl_En_Mk.data.o"
-    include "build/data/ovl_En_Mk/ovl_En_Mk.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mk/ovl_En_Mk_reloc.o"
 endseg
 
 beginseg
@@ -2796,8 +2795,11 @@ beginseg
     name "ovl_Obj_Vspinyroll"
     compress
     include "build/src/overlays/actors/ovl_Obj_Vspinyroll/z_obj_vspinyroll.o"
-    include "build/data/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll_reloc.o"
+#else
     include "build/data/ovl_Obj_Vspinyroll/ovl_Obj_Vspinyroll.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -3320,8 +3322,11 @@ beginseg
     name "ovl_Bg_Hakugin_Bombwall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/z_bg_hakugin_bombwall.o"
-    include "build/data/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall_reloc.o"
+#else
     include "build/data/ovl_Bg_Hakugin_Bombwall/ovl_Bg_Hakugin_Bombwall.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -3889,8 +3894,7 @@ beginseg
     name "ovl_En_Hanabi"
     compress
     include "build/src/overlays/actors/ovl_En_Hanabi/z_en_hanabi.o"
-    include "build/data/ovl_En_Hanabi/ovl_En_Hanabi.data.o"
-    include "build/data/ovl_En_Hanabi/ovl_En_Hanabi.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Hanabi/ovl_En_Hanabi_reloc.o"
 endseg
 
 beginseg
@@ -3974,8 +3978,7 @@ beginseg
     name "ovl_En_Kbt"
     compress
     include "build/src/overlays/actors/ovl_En_Kbt/z_en_kbt.o"
-    include "build/data/ovl_En_Kbt/ovl_En_Kbt.data.o"
-    include "build/data/ovl_En_Kbt/ovl_En_Kbt.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kbt/ovl_En_Kbt_reloc.o"
 endseg
 
 beginseg
@@ -3989,8 +3992,7 @@ beginseg
     name "ovl_En_Maruta"
     compress
     include "build/src/overlays/actors/ovl_En_Maruta/z_en_maruta.o"
-    include "build/data/ovl_En_Maruta/ovl_En_Maruta.data.o"
-    include "build/data/ovl_En_Maruta/ovl_En_Maruta.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Maruta/ovl_En_Maruta_reloc.o"
 endseg
 
 beginseg
@@ -4246,17 +4248,14 @@ beginseg
     name "ovl_Bg_Dblue_Balance"
     compress
     include "build/src/overlays/actors/ovl_Bg_Dblue_Balance/z_bg_dblue_balance.o"
-    include "build/data/ovl_Bg_Dblue_Balance/ovl_Bg_Dblue_Balance.data.o"
-    include "build/data/ovl_Bg_Dblue_Balance/ovl_Bg_Dblue_Balance.bss.o"
-    include "build/data/ovl_Bg_Dblue_Balance/ovl_Bg_Dblue_Balance.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Dblue_Balance/ovl_Bg_Dblue_Balance_reloc.o"
 endseg
 
 beginseg
     name "ovl_Bg_Dblue_Waterfall"
     compress
     include "build/src/overlays/actors/ovl_Bg_Dblue_Waterfall/z_bg_dblue_waterfall.o"
-    include "build/data/ovl_Bg_Dblue_Waterfall/ovl_Bg_Dblue_Waterfall.data.o"
-    include "build/data/ovl_Bg_Dblue_Waterfall/ovl_Bg_Dblue_Waterfall.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Dblue_Waterfall/ovl_Bg_Dblue_Waterfall_reloc.o"
 endseg
 
 beginseg
@@ -4523,9 +4522,7 @@ beginseg
     name "ovl_Obj_Chan"
     compress
     include "build/src/overlays/actors/ovl_Obj_Chan/z_obj_chan.o"
-    include "build/data/ovl_Obj_Chan/ovl_Obj_Chan.data.o"
-    include "build/data/ovl_Obj_Chan/ovl_Obj_Chan.bss.o"
-    include "build/data/ovl_Obj_Chan/ovl_Obj_Chan.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Chan/ovl_Obj_Chan_reloc.o"
 endseg
 
 beginseg
@@ -5135,8 +5132,7 @@ beginseg
     name "ovl_En_Jgame_Tsn"
     compress
     include "build/src/overlays/actors/ovl_En_Jgame_Tsn/z_en_jgame_tsn.o"
-    include "build/data/ovl_En_Jgame_Tsn/ovl_En_Jgame_Tsn.data.o"
-    include "build/data/ovl_En_Jgame_Tsn/ovl_En_Jgame_Tsn.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Jgame_Tsn/ovl_En_Jgame_Tsn_reloc.o"
 endseg
 
 beginseg
