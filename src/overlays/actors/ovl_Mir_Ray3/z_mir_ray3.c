@@ -369,7 +369,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (MIRRAY3_GET_F(&this->actor) == MIRRAY3_F_1) {
-            phi_a0 = gSaveContext.time;
+            phi_a0 = gSaveContext.save.time;
 
             if (phi_a0 > CLOCK_TIME(12, 0)) {
                 phi_a0 = 0xFFFF - phi_a0;
