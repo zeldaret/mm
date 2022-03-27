@@ -1,6 +1,70 @@
 #include "global.h"
 
+extern s16 D_801BDB00[4]/* = { 1, 2, 3, 0 }*/;
+extern f32 D_801BDB08[4]/* = { -64.0f, 0.0f, 64.0f, 0.0f }*/;
+extern f32 D_801BDB18[6]/* = { 0.0f, -64.0f, 0.0f, 64.0f, 0.0f, 0.0f }*/;
+
+
+
+#ifdef NON_EQUIVALENT
+void func_800F4A10(GlobalContext* globalCtx) {
+    PauseContext* pauseCtx;
+    s16 i;
+
+    func_8013EE24();
+
+    pauseCtx = &globalCtx->pauseCtx;
+
+    pauseCtx->unk_206 = 0;
+    pauseCtx->unk_200 = 1;
+    pauseCtx->eye.x = D_801BDB08[pauseCtx->pageIndex];
+    pauseCtx->eye.z = D_801BDB18[pauseCtx->pageIndex];
+    pauseCtx->unk_27E = -0x0028;
+    pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
+
+    for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
+        pauseCtx->worldMapPoints[i] = 0;
+    }
+
+    if (pauseCtx->state == 1) {
+        for (i = 0; i < 11; i++) {
+            if (((gSaveContext.mapsVisited >> i) & 1) != 0) {
+                pauseCtx->worldMapPoints[i] = 1;
+            }
+        }
+    } else {
+        for (i = 9; i >= 0; i--) {
+            if (((gSaveContext.owlActivationFlags >> i) & 1) != 0) {
+                pauseCtx->worldMapPoints[i] = (u8) 1U;
+                pauseCtx->unk_238[4] = i;
+            }
+        }
+
+        if (((gSaveContext.owlActivationFlags >> 4) & 1) != 0) {
+            pauseCtx->unk_238[4] = 4;
+        }
+    }
+
+    gGameInfo->data[0x24B] = -0x00C8;
+    gGameInfo->data[0x24C] = -0x3840;
+    gGameInfo->data[0x24D] = 0x2710;
+    gGameInfo->data[0x24E] = 0x2710;
+    gGameInfo->data[0x24F] = 0x2710;
+    gGameInfo->data[0x250] = -0x00BE;
+    gGameInfo->data[0x251] = -0x06D6;
+    gGameInfo->data[0x252] = -0x0B90;
+    gGameInfo->data[0x253] = 0x06E0;
+    gGameInfo->data[0x254] = 0;
+    gGameInfo->data[0x255] = -0x0622;
+    gGameInfo->data[0x256] = -0x0C44;
+    gGameInfo->data[0x257] = 0x0622;
+    gGameInfo->data[0x258] = -0x0622;
+    gGameInfo->data[0x259] = -0x005A;
+    gGameInfo->data[0x25A] = -0x3840;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_setup/func_800F4A10.s")
+#endif
 
 void func_800F4C0C(GlobalContext* globalCtx) {
     Input* input;
