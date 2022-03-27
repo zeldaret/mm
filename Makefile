@@ -266,7 +266,7 @@ setup:
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
+	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS) -Mreg-names=o32
 
 diff-init: uncompressed
 	$(RM) -rf expected/

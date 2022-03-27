@@ -304,7 +304,7 @@ o32_fpr_names = [
     "$31", # Floating-point control/status register
 ]
 
-mips_fpr_names = o32_fpr_names
+mips_fpr_names = numeric_fpr_names
 
 # Instruction field fetching
 
