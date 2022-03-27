@@ -207,7 +207,7 @@ void EnGakufu_GiveReward(EnGakufu* this, GlobalContext* globalCtx) {
 
     play_sound(NA_SE_SY_CORRECT_CHIME);
 
-    hour = gSaveContext.time * (24.0f / 0x10000);
+    hour = gSaveContext.save.time * (24.0f / 0x10000);
     for (i = 0; i < 3; i++) {
         Item_DropCollectible(globalCtx, &sRewardDropsSpawnTerminaFieldPos, sRewardDrops[i + sRewardDropsIndex[hour]]);
     }
