@@ -102,7 +102,7 @@ MIPS_VERSION := -mips2
 CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712
 
 # Use relocations and abi fpr names in the dump
-OBJDUMP_FLAGS := -dr -Mreg-names=32
+OBJDUMP_FLAGS := -d -r -Mreg-names=32
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -211,7 +211,7 @@ build/src/code/audio/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/overlays/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/assets/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/assets/%.o: CC := $(ASM_PROC) $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 
@@ -323,7 +323,7 @@ build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-	@$(OBJDUMP) -$(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
