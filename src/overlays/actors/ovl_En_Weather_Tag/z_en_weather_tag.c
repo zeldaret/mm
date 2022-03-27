@@ -422,8 +422,8 @@ void func_809672DC(EnWeatherTag* this, GlobalContext* globalCtx) {
     f32 range;
     f32 strength = 0.0f;
 
-    func_800BCCDC(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos, &this->actor.world.pos,
-                  0);
+    Actor_GetClosestPosOnPath(this->pathPoints, this->pathCount, &GET_PLAYER(globalCtx)->actor.world.pos,
+                              &this->actor.world.pos, false);
 
     distance = Actor_XZDistanceBetweenActors(&player->actor, &this->actor);
     range = WEATHER_TAG_RANGE100(this);

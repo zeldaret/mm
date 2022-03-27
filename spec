@@ -965,8 +965,7 @@ beginseg
     name "ovl_En_River_Sound"
     compress
     include "build/src/overlays/actors/ovl_En_River_Sound/z_en_river_sound.o"
-    include "build/data/ovl_En_River_Sound/ovl_En_River_Sound.data.o"
-    include "build/data/ovl_En_River_Sound/ovl_En_River_Sound.reloc.o"
+    include "build/src/overlays/actors/ovl_En_River_Sound/ovl_En_River_Sound_reloc.o"
 endseg
 
 beginseg
@@ -3512,8 +3511,7 @@ beginseg
     name "ovl_En_Fu_Kago"
     compress
     include "build/src/overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.o"
-    include "build/data/ovl_En_Fu_Kago/ovl_En_Fu_Kago.data.o"
-    include "build/data/ovl_En_Fu_Kago/ovl_En_Fu_Kago.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fu_Kago/ovl_En_Fu_Kago_reloc.o"
 endseg
 
 beginseg
@@ -3977,8 +3975,7 @@ beginseg
     name "ovl_En_Kbt"
     compress
     include "build/src/overlays/actors/ovl_En_Kbt/z_en_kbt.o"
-    include "build/data/ovl_En_Kbt/ovl_En_Kbt.data.o"
-    include "build/data/ovl_En_Kbt/ovl_En_Kbt.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kbt/ovl_En_Kbt_reloc.o"
 endseg
 
 beginseg
@@ -4194,8 +4191,7 @@ beginseg
     name "ovl_En_Tru_Mt"
     compress
     include "build/src/overlays/actors/ovl_En_Tru_Mt/z_en_tru_mt.o"
-    include "build/data/ovl_En_Tru_Mt/ovl_En_Tru_Mt.data.o"
-    include "build/data/ovl_En_Tru_Mt/ovl_En_Tru_Mt.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Tru_Mt/ovl_En_Tru_Mt_reloc.o"
 endseg
 
 beginseg
