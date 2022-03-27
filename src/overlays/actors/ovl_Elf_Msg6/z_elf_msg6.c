@@ -41,19 +41,19 @@ static InitChainEntry sInitChain[] = {
 };
 
 s32 func_80BA15A0(void) {
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && !(gSaveContext.weekEventReg[87] & 0x10)) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA) && !(gSaveContext.save.weekEventReg[87] & 0x10)) {
         return true;
     }
 
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) && !(gSaveContext.weekEventReg[87] & 0x20)) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT) && !(gSaveContext.save.weekEventReg[87] & 0x20)) {
         return true;
     }
 
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && !(gSaveContext.weekEventReg[87] & 0x40)) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG) && !(gSaveContext.save.weekEventReg[87] & 0x40)) {
         return true;
     }
 
-    if (CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD) && !(gSaveContext.weekEventReg[87] & 0x80)) {
+    if (CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD) && !(gSaveContext.save.weekEventReg[87] & 0x80)) {
         return true;
     }
 
@@ -62,24 +62,24 @@ s32 func_80BA15A0(void) {
 
 void func_80BA165C(void) {
     if (CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
-        gSaveContext.weekEventReg[87] |= 0x10;
+        gSaveContext.save.weekEventReg[87] |= 0x10;
     }
 
     if (CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
-        gSaveContext.weekEventReg[87] |= 0x20;
+        gSaveContext.save.weekEventReg[87] |= 0x20;
     }
 
     if (CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
-        gSaveContext.weekEventReg[87] |= 0x40;
+        gSaveContext.save.weekEventReg[87] |= 0x40;
     }
 
     if (CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-        gSaveContext.weekEventReg[87] |= 0x80;
+        gSaveContext.save.weekEventReg[87] |= 0x80;
     }
 }
 
 s32 func_80BA16F4(ElfMsg6* this, GlobalContext* globalCtx) {
-    if (!(gSaveContext.weekEventReg[31] & 4) && (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
+    if (!(gSaveContext.save.weekEventReg[31] & 4) && (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
         this->actor.textId = 0x216;
         return false;
     }
@@ -94,7 +94,7 @@ s32 func_80BA16F4(ElfMsg6* this, GlobalContext* globalCtx) {
     }
 
     if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GOHT)) {
-        if (gSaveContext.weekEventReg[31] & 1) {
+        if (gSaveContext.save.weekEventReg[31] & 1) {
             this->actor.textId = 0x257;
         } else {
             this->actor.textId = 0x231;
@@ -103,7 +103,7 @@ s32 func_80BA16F4(ElfMsg6* this, GlobalContext* globalCtx) {
     }
 
     if (!CHECK_QUEST_ITEM(QUEST_REMAINS_GYORG)) {
-        if (gSaveContext.weekEventReg[31] & 2) {
+        if (gSaveContext.save.weekEventReg[31] & 2) {
             this->actor.textId = 0x258;
         } else {
             this->actor.textId = 0x232;
@@ -112,7 +112,7 @@ s32 func_80BA16F4(ElfMsg6* this, GlobalContext* globalCtx) {
     }
 
     if (!CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
-        if (gSaveContext.weekEventReg[80] & 4) {
+        if (gSaveContext.save.weekEventReg[80] & 4) {
             this->actor.textId = 0x259;
         } else {
             this->actor.textId = 0x233;
@@ -162,14 +162,14 @@ void ElfMsg6_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             switch (ELFMSG6_GET_F0(&this->actor)) {
                 case 0:
-                    if (gSaveContext.inventory.items[ITEM_HOOKSHOT] != ITEM_HOOKSHOT) {
+                    if (gSaveContext.save.inventory.items[ITEM_HOOKSHOT] != ITEM_HOOKSHOT) {
                         Actor_MarkForDeath(&this->actor);
                         return;
                     }
                     break;
 
                 case 1:
-                    if (gSaveContext.weekEventReg[83] & 2) {
+                    if (gSaveContext.save.weekEventReg[83] & 2) {
                         Actor_MarkForDeath(&this->actor);
                         return;
                     }
@@ -183,14 +183,14 @@ void ElfMsg6_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
 
-            if (gSaveContext.weekEventReg[8] & 0x40) {
-                if (gSaveContext.weekEventReg[88] & 0x20) {
+            if (gSaveContext.save.weekEventReg[8] & 0x40) {
+                if (gSaveContext.save.weekEventReg[88] & 0x20) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 this->actor.textId = 0x25B;
             } else {
-                if (!(gSaveContext.weekEventReg[74] & 0x20) || (gSaveContext.weekEventReg[79] & 0x10)) {
+                if (!(gSaveContext.save.weekEventReg[74] & 0x20) || (gSaveContext.save.weekEventReg[79] & 0x10)) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
@@ -202,7 +202,7 @@ void ElfMsg6_Init(Actor* thisx, GlobalContext* globalCtx) {
         case 3:
             if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) &&
                  Flags_GetSwitch(globalCtx, ELFMSG6_SWITCHFLAG(&this->actor))) ||
-                (gSaveContext.weekEventReg[88] & 0x10) || (gSaveContext.weekEventReg[91] & 1) ||
+                (gSaveContext.save.weekEventReg[88] & 0x10) || (gSaveContext.save.weekEventReg[91] & 1) ||
                 (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -265,18 +265,18 @@ void func_80BA1CF8(ElfMsg6* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         switch (this->actor.textId) {
             case 0x224:
-                gSaveContext.weekEventReg[79] |= 0x10;
+                gSaveContext.save.weekEventReg[79] |= 0x10;
                 break;
 
             case 0x25B:
-                gSaveContext.weekEventReg[88] |= 0x20;
+                gSaveContext.save.weekEventReg[88] |= 0x20;
                 break;
         }
         Actor_MarkForDeath(&this->actor);
         return;
     }
 
-    if ((this->actor.textId == 0x224) && (gSaveContext.weekEventReg[8] & 0x40)) {
+    if ((this->actor.textId == 0x224) && (gSaveContext.save.weekEventReg[8] & 0x40)) {
         this->actor.textId = 0x25B;
     } else if (func_80BA1C00(this) && (player->actor.speedXZ > 1.0f)) {
         player->tatlTextId = -this->actor.textId;
@@ -299,19 +299,19 @@ void func_80BA1E30(ElfMsg6* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         switch (this->actor.textId) {
             case 0x216:
-                gSaveContext.weekEventReg[31] |= 4;
+                gSaveContext.save.weekEventReg[31] |= 4;
                 break;
 
             case 0x231:
-                gSaveContext.weekEventReg[31] |= 1;
+                gSaveContext.save.weekEventReg[31] |= 1;
                 break;
 
             case 0x232:
-                gSaveContext.weekEventReg[31] |= 2;
+                gSaveContext.save.weekEventReg[31] |= 2;
                 break;
 
             case 0x233:
-                gSaveContext.weekEventReg[80] |= 4;
+                gSaveContext.save.weekEventReg[80] |= 4;
                 break;
         }
         func_80BA165C();
@@ -330,7 +330,7 @@ void func_80BA1E30(ElfMsg6* this, GlobalContext* globalCtx) {
 }
 
 void func_80BA1F80(ElfMsg6* this, GlobalContext* globalCtx) {
-    if (((ELFMSG6_GET_F0(&this->actor)) == 1) && (gSaveContext.weekEventReg[83] & 2)) {
+    if (((ELFMSG6_GET_F0(&this->actor)) == 1) && (gSaveContext.save.weekEventReg[83] & 2)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -362,7 +362,7 @@ void func_80BA2048(ElfMsg6* this, GlobalContext* globalCtx) {
     }
 
     if (((ELFMSG6_SWITCHFLAG(&this->actor) != 0x7F) && Flags_GetSwitch(globalCtx, ELFMSG6_SWITCHFLAG(&this->actor))) ||
-        (gSaveContext.weekEventReg[88] & 0x10) || (gSaveContext.weekEventReg[91] & 1) ||
+        (gSaveContext.save.weekEventReg[88] & 0x10) || (gSaveContext.save.weekEventReg[91] & 1) ||
         (INV_CONTENT(ITEM_MASK_ZORA) == ITEM_MASK_ZORA)) {
         Actor_MarkForDeath(&this->actor);
         return;
