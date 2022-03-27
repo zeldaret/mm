@@ -44,13 +44,13 @@ const ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Draw,
 };
 
-#define CHECK_LOTTERY_NUMBERS                                                \
-    (((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
-      ((((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
-     ((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
-      ((((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
-     ((u32)((void)0, gSaveContext.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
-      (((void)0, gSaveContext.lotteryCodeGuess & 0xFFFF) & 0xF)))
+#define CHECK_LOTTERY_NUMBERS                                                     \
+    (((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
+      ((((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
+     ((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
+      ((((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
+     ((u32)((void)0, gSaveContext.save.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
+      (((void)0, gSaveContext.save.lotteryCodeGuess & 0xFFFF) & 0xF)))
 
 void EnKujiya_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnKujiya* this = THIS;
@@ -63,7 +63,8 @@ void EnKujiya_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
 
-    if (func_80BB0FF8() && !(gSaveContext.time < CLOCK_TIME(6, 0)) && (gSaveContext.time < CLOCK_TIME(18, 0))) {
+    if (func_80BB0FF8() && (gSaveContext.save.time >= CLOCK_TIME(6, 0)) &&
+        (gSaveContext.save.time < CLOCK_TIME(18, 0))) {
         this->actor.shape.rot.y = 0;
     } else {
         this->actor.shape.rot.y = 0x7555;
@@ -80,7 +81,7 @@ void func_80BB09A8(EnKujiya* this) {
 
 void func_80BB09BC(EnKujiya* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if ((gSaveContext.time >= CLOCK_TIME(6, 0)) && (gSaveContext.time < CLOCK_TIME(18, 0))) {
+        if ((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < CLOCK_TIME(18, 0))) {
             if (func_80BB0FF8()) {
                 Message_StartTextbox(globalCtx, 0x2B61, &this->actor);
                 this->unk_14A = 0x2B61;
@@ -96,7 +97,7 @@ void func_80BB09BC(EnKujiya* this, GlobalContext* globalCtx) {
             this->unk_14A = 0x2B63;
         }
         func_80BB0E44(this);
-    } else if ((gSaveContext.time >= CLOCK_TIME(18, 0)) && func_80BB0FF8() && (this->actor.shape.rot.y == 0)) {
+    } else if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && func_80BB0FF8() && (this->actor.shape.rot.y == 0)) {
         func_80BB1168(this);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
@@ -104,9 +105,9 @@ void func_80BB09BC(EnKujiya* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB0B28(EnKujiya* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.rupees < 10) {
+            if (gSaveContext.save.playerData.rupees < 10) {
                 play_sound(NA_SE_SY_ERROR);
                 Message_StartTextbox(globalCtx, 0x2B62, &this->actor);
                 this->unk_14A = 0x2B62;
@@ -138,7 +139,7 @@ void func_80BB0BF8(EnKujiya* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_14A) {
             case 0x2B5C:
                 Message_StartTextbox(globalCtx, 0x2B5D, &this->actor);
@@ -195,13 +196,13 @@ void func_80BB0E58(EnKujiya* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80BB09A8(this);
             }
             break;
 
         case 17:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 Inventory_SaveLotteryCodeGuess(globalCtx);
                 Message_StartTextbox(globalCtx, 0x2B60, &this->actor);
                 this->unk_14A = 0x2B60;
@@ -227,7 +228,7 @@ void func_80BB0F94(EnKujiya* this) {
 }
 
 void func_80BB0FA8(EnKujiya* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         func_80BB09A8(this);
     }
 }
@@ -235,19 +236,19 @@ void func_80BB0FA8(EnKujiya* this, GlobalContext* globalCtx) {
 s32 func_80BB0FF8(void) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.weekEventReg[33] & 0x10) {
+            if (gSaveContext.save.weekEventReg[33] & 0x10) {
                 return true;
             }
             break;
 
         case 2:
-            if (gSaveContext.weekEventReg[33] & 0x20) {
+            if (gSaveContext.save.weekEventReg[33] & 0x20) {
                 return true;
             }
             break;
 
         case 3:
-            if (gSaveContext.weekEventReg[33] & 0x40) {
+            if (gSaveContext.save.weekEventReg[33] & 0x40) {
                 return true;
             }
             break;
@@ -258,15 +259,15 @@ s32 func_80BB0FF8(void) {
 void func_80BB1088(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.weekEventReg[33] |= 0x10;
+            gSaveContext.save.weekEventReg[33] |= 0x10;
             break;
 
         case 2:
-            gSaveContext.weekEventReg[33] |= 0x20;
+            gSaveContext.save.weekEventReg[33] |= 0x20;
             break;
 
         case 3:
-            gSaveContext.weekEventReg[33] |= 0x40;
+            gSaveContext.save.weekEventReg[33] |= 0x40;
             break;
     }
 }
@@ -274,15 +275,15 @@ void func_80BB1088(void) {
 void func_80BB10F8(void) {
     switch (CURRENT_DAY) {
         case 1:
-            gSaveContext.weekEventReg[33] &= (u8)~0x10;
+            gSaveContext.save.weekEventReg[33] &= (u8)~0x10;
             break;
 
         case 2:
-            gSaveContext.weekEventReg[33] &= (u8)~0x20;
+            gSaveContext.save.weekEventReg[33] &= (u8)~0x20;
             break;
 
         case 3:
-            gSaveContext.weekEventReg[33] &= (u8)~0x40;
+            gSaveContext.save.weekEventReg[33] &= (u8)~0x40;
             break;
     }
 }
