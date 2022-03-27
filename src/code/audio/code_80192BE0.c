@@ -78,4 +78,4 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_NextRandom.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_801946E4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_InitMesgQueues.s")
