@@ -372,7 +372,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 Message_StartTextbox(globalCtx, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
@@ -381,7 +381,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->actionFunc = func_80995244;
             }
             break;
@@ -807,7 +807,7 @@ void func_809964A0(EnSkb* this, GlobalContext* globalCtx) {
 void func_809964DC(EnSkb* this, GlobalContext* globalCtx) {
     if (this->unk_3D6 == 0) {
         if ((this->actionFunc != func_80994E94) && (this->actionFunc != func_80996284) &&
-            (this->actionFunc != func_809964A0) && (gSaveContext.weekEventReg[85] & 0x40)) {
+            (this->actionFunc != func_809964A0) && (gSaveContext.save.weekEventReg[85] & 0x40)) {
             this->actor.colChkInfo.health = 0;
             func_809961E4(this, globalCtx);
         }

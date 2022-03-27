@@ -290,7 +290,7 @@ void func_80BD3118(EnAh* this, GlobalContext* globalCtx) {
 
 s32 func_80BD3198(EnAh* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x40) {
         if (this->unk_2DA != temp) {
@@ -338,7 +338,7 @@ s32* func_80BD3294(EnAh* this, GlobalContext* globalCtx) {
 
     switch (this->unk_1DC) {
         case 1:
-            if (gSaveContext.day == 2) {
+            if (gSaveContext.save.day == 2) {
                 return D_80BD3DF0;
             }
             return D_80BD3DE8;
