@@ -58,7 +58,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 AnimationHeader* D_80C0479C[] = {
-    &gBomberIdleAnim, &object_cs_Anim_0053F4, &object_cs_Anim_01007C, &object_cs_Anim_00349C,
+    &gBomberIdleAnim,       &object_cs_Anim_0053F4, &object_cs_Anim_01007C, &object_cs_Anim_00349C,
     &object_cs_Anim_004960, &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_001A1C,
     &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
     &object_cs_Anim_001708, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0,
