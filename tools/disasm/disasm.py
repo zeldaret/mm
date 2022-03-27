@@ -37,7 +37,7 @@ parser.add_argument("--reg-names", choices=fpr_name_options.keys(), help="How to
 args = parser.parse_args()
 jobs = args.jobs
 
-mips_isa.mips_fpr_names = fpr_name_options.get(args.Mreg_names, mips_isa.mips_fpr_names)
+mips_isa.mips_fpr_names = fpr_name_options.get(args.reg_names, mips_isa.mips_fpr_names)
 
 
 ASM_OUT = "asm/"
