@@ -4,6 +4,7 @@
  * Description: Twinmold
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
@@ -32,15 +33,15 @@ void func_809DD2F8(GlobalContext* globalCtx);
 void func_809DD934(Boss02* this, GlobalContext* globalCtx);
 void func_809DEAC4(Boss02* this, GlobalContext* globalCtx);
 
-static u8 D_809E0420;
-static u8 D_809E0421;
-static u8 D_809E0422;
-static Boss02* D_809E0424;
-static Boss02* D_809E0428;
-static Boss02* D_809E042C;
-static u8 D_809E0430;
-static DoorWarp1* D_809E0434;
-static Boss02Effects D_809E0438[150];
+u8 D_809E0420;
+u8 D_809E0421;
+u8 D_809E0422;
+Boss02* D_809E0424;
+Boss02* D_809E0428;
+Boss02* D_809E042C;
+u8 D_809E0430;
+DoorWarp1* D_809E0434;
+Boss02Effects D_809E0438[150];
 
 static DamageTable sDamageTable1 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
@@ -124,17 +125,17 @@ const ActorInit Boss_02_InitVars = {
     (ActorFunc)Boss02_Draw,
 };
 
-static f32 D_809DF5B0 = 1.0f;
+f32 D_809DF5B0 = 1.0f;
 
-static s16 D_809DF5B4[] = {
+s16 D_809DF5B4[] = {
     0, 195, 190, 185, 180, 175, 170, 165, 160, 155, 150, 145, 140, 135, 130, 125, 120, 115, 110, 105, 100, 95, 90, 0,
 };
 
-static s16 D_809DF5E4[] = {
+s16 D_809DF5E4[] = {
     0, 196, 192, 188, 184, 180, 176, 172, 168, 164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120, 116, 112,
 };
 
-static ColliderJntSphElementInit sJntSphElementsInit1[22] = {
+static ColliderJntSphElementInit sJntSphElementsInit1[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -388,11 +389,11 @@ static ColliderJntSphInit sJntSphInit1 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    22,
+    ARRAY_COUNT(sJntSphElementsInit1),
     sJntSphElementsInit1,
 };
 
-static ColliderJntSphElementInit sJntSphElementsInit2[2] = {
+static ColliderJntSphElementInit sJntSphElementsInit2[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -426,7 +427,7 @@ static ColliderJntSphInit sJntSphInit2 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    2,
+    ARRAY_COUNT(sJntSphElementsInit2),
     sJntSphElementsInit2,
 };
 
@@ -450,13 +451,13 @@ static ColliderCylinderInit sCylinderInit = {
     { 150, 200, 0, { 0, 0, 0 } },
 };
 
-static Vec3f D_809DF9C0[] = {
+Vec3f D_809DF9C0[] = {
     { 0.0f, -200.0f, 1000.0f },    { 0.0f, 500.0f, 1000.0f },        { 0.0f, 1000.0f, 1000.0f },
     { 1000.0f, 500.0f, 1000.0f },  { 1000.0f, 1000.0f, -1000.0f },   { -1000.0f, 500.0f, -1000.0f },
     { -1000.0f, 500.0f, 1000.0f }, { -1000.0f, -1000.0f, -1000.0f }, { -1000.0f, -1000.0f, -1000.0f },
 };
 
-static Vec3f D_809DFA2C[] = {
+Vec3f D_809DFA2C[] = {
     { 0.0f, -200.0f, -800.0f },  { 0.0f, 800.0f, -800.0f },   { 800.0f, 300.0f, -800.0f },
     { -800.0f, 800.0f, 0.0f },   { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f },
     { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f },
@@ -654,8 +655,9 @@ void func_809DAAA8(Boss02* this, GlobalContext* globalCtx) {
     this->actor.world.pos.y = -500.0f;
 }
 
+Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
+
 void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
-    static Color_RGBA8 D_809DFA98 = { 185, 140, 70, 255 };
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
     CollisionPoly* spDC;
@@ -1321,16 +1323,18 @@ void func_809DC78C(Actor* thisx, GlobalContext* globalCtx) {
     func_809DD934(this, globalCtx);
 }
 
+Gfx* D_809DFA9C[] = {
+    object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
+    object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
+    object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
+    object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
+    object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
+    object_boss02_DL_013210, object_boss02_DL_013590,
+};
+
+Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
+
 void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
-    static Gfx* D_809DFA9C[] = {
-        object_boss02_DL_00ECF0, object_boss02_DL_00EF90, object_boss02_DL_00F310, object_boss02_DL_00F690,
-        object_boss02_DL_00FA10, object_boss02_DL_00FD90, object_boss02_DL_010110, object_boss02_DL_010490,
-        object_boss02_DL_010810, object_boss02_DL_010B90, object_boss02_DL_010F10, object_boss02_DL_011290,
-        object_boss02_DL_011610, object_boss02_DL_011990, object_boss02_DL_011D10, object_boss02_DL_012090,
-        object_boss02_DL_012410, object_boss02_DL_012790, object_boss02_DL_012B10, object_boss02_DL_012E90,
-        object_boss02_DL_013210, object_boss02_DL_013590,
-    };
-    static Vec3f D_809DFAF4 = { -10000.0f, -100000.0f, -100000.0f };
     GlobalContext* globalCtx = globalCtx2;
     Boss02* this = THIS;
     s32 i;
