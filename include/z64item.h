@@ -31,7 +31,7 @@ typedef enum {
     /* 0x05 */ QUEST_SWORD,
     /* 0x06 */ QUEST_SONG_SONATA,
     /* 0x07 */ QUEST_SONG_LULLABY,
-    /* 0x08 */ QUEST_SONG_NOVA,
+    /* 0x08 */ QUEST_SONG_BOSSA_NOVA,
     /* 0x09 */ QUEST_SONG_ELEGY,
     /* 0x0A */ QUEST_SONG_OATH,
     /* 0x0B */ QUEST_SONG_SARIA,
@@ -261,6 +261,7 @@ typedef enum {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEA_HORSE_CAUGHT,
+    /* 0xFD */ ITEM_UNK_FD = 0xFD,
     /* 0xFF */ ITEM_NONE = 0xFF
 } ItemID;
 

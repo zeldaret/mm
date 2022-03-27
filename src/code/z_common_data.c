@@ -3,8 +3,9 @@
 SaveContext gSaveContext;
 
 void SaveContext_Init(void) {
-    bzero(&gSaveContext, sizeof(gSaveContext));
-    gSaveContext.playerForm = 0;
+    bzero(&gSaveContext, sizeof(SaveContext));
+
+    gSaveContext.save.playerForm = 0;
     gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
     gSaveContext.nightSeqIndex = 0xFF;
     gSaveContext.unk_3F46 = NA_BGM_GENERAL_SFX;
@@ -16,7 +17,8 @@ void SaveContext_Init(void) {
     gSaveContext.dogIsLost = true;
     gSaveContext.nextTransition = 0xFF;
     gSaveContext.unk_3F26 = 50;
-    gSaveContext.language = 1;
-    gSaveContext.audioSetting = 0;
-    gSaveContext.zTargetSetting = 0;
+
+    gSaveContext.options.language = 1;
+    gSaveContext.options.audioSetting = 0;
+    gSaveContext.options.zTargetSetting = 0;
 }
