@@ -964,8 +964,7 @@ beginseg
     name "ovl_En_River_Sound"
     compress
     include "build/src/overlays/actors/ovl_En_River_Sound/z_en_river_sound.o"
-    include "build/data/ovl_En_River_Sound/ovl_En_River_Sound.data.o"
-    include "build/data/ovl_En_River_Sound/ovl_En_River_Sound.reloc.o"
+    include "build/src/overlays/actors/ovl_En_River_Sound/ovl_En_River_Sound_reloc.o"
 endseg
 
 beginseg
@@ -3511,8 +3510,7 @@ beginseg
     name "ovl_En_Fu_Kago"
     compress
     include "build/src/overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.o"
-    include "build/data/ovl_En_Fu_Kago/ovl_En_Fu_Kago.data.o"
-    include "build/data/ovl_En_Fu_Kago/ovl_En_Fu_Kago.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fu_Kago/ovl_En_Fu_Kago_reloc.o"
 endseg
 
 beginseg
@@ -3746,8 +3744,7 @@ beginseg
     name "ovl_En_Gakufu"
     compress
     include "build/src/overlays/actors/ovl_En_Gakufu/z_en_gakufu.o"
-    include "build/data/ovl_En_Gakufu/ovl_En_Gakufu.data.o"
-    include "build/data/ovl_En_Gakufu/ovl_En_Gakufu.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Gakufu/ovl_En_Gakufu_reloc.o"
 endseg
 
 beginseg
@@ -5004,8 +5001,7 @@ beginseg
     name "ovl_En_Bombers2"
     compress
     include "build/src/overlays/actors/ovl_En_Bombers2/z_en_bombers2.o"
-    include "build/data/ovl_En_Bombers2/ovl_En_Bombers2.data.o"
-    include "build/data/ovl_En_Bombers2/ovl_En_Bombers2.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bombers2/ovl_En_Bombers2_reloc.o"
 endseg
 
 beginseg
