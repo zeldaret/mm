@@ -90,7 +90,7 @@ static AnimationInfoS sAnimations[] = {
     { &object_dnt_Anim_002670, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
-Gfx* D_80BCCCDC[] = { gameplay_keep_DL_0527F0, gameplay_keep_DL_0528B0 };
+Gfx* D_80BCCCDC[] = { gKakeraLeafMiddle, gKakeraLeafTip };
 
 Vec3f D_80BCCCE4 = { 0.0f, -0.5f, 0.0f };
 
@@ -170,7 +170,7 @@ void func_80BCAE78(EnScopenuts* this, GlobalContext* globalCtx) {
 s16 func_80BCAF0C(EnScopenuts* this) {
     switch (this->unk_33C) {
         case 0x0:
-            if (gSaveContext.weekEventReg[53] & 2) {
+            if (gSaveContext.save.weekEventReg[53] & 2) {
                 this->unk_328 |= 1;
                 return 0x1638;
             }
@@ -239,7 +239,7 @@ void func_80BCB1C8(EnScopenuts* this, GlobalContext* globalCtx) {
     this->unk_350 *= 0.92f;
     Actor_SetScale(&this->actor, this->unk_350);
     if (this->actor.bgCheckFlags & 1) {
-        gSaveContext.weekEventReg[52] |= 0x40;
+        gSaveContext.save.weekEventReg[52] |= 0x40;
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -315,7 +315,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
                 globalCtx->msgCtx.msgMode = 0x43;
@@ -331,10 +331,10 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 4) {
-        if (func_80147624(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx) != 0) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.rupees < this->unk_358) {
+                    if (gSaveContext.save.playerData.rupees < this->unk_358) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1636;
                         this->unk_328 |= 1;
@@ -368,7 +368,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
 void func_80BCB90C(EnScopenuts* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        gSaveContext.weekEventReg[53] |= 2;
+        gSaveContext.save.weekEventReg[53] |= 2;
         this->actionFunc = func_80BCB6D0;
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -594,7 +594,7 @@ void func_80BCBFFC(EnScopenuts* this, GlobalContext* globalCtx) {
         if (sp32 == 3) {
             if (this->unk_334 >= (this->path->count - 1)) {
                 ActorCutscene_Stop(this->unk_338);
-                gSaveContext.weekEventReg[52] &= (u8)~0x40;
+                gSaveContext.save.weekEventReg[52] &= (u8)~0x40;
                 this->actionFunc = func_80BCC288;
             } else {
                 this->unk_334++;
@@ -684,7 +684,8 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnScopenuts* this = THIS;
 
-    if (!(gSaveContext.weekEventReg[74] & 0x40) && (gSaveContext.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+    if (!(gSaveContext.save.weekEventReg[74] & 0x40) &&
+        (gSaveContext.save.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -704,7 +705,7 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.speedXZ = 0.0f;
 
     if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_0) {
-        if (gSaveContext.weekEventReg[52] & 0x40) {
+        if (gSaveContext.save.weekEventReg[52] & 0x40) {
             Actor_MarkForDeath(&this->actor);
         } else if (globalCtx->actorCtx.unk5 & 2) {
             this->path = func_8013D648(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
@@ -715,7 +716,7 @@ void EnScopenuts_Init(Actor* thisx, GlobalContext* globalCtx) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
-        if (gSaveContext.weekEventReg[52] & 0x40) {
+        if (gSaveContext.save.weekEventReg[52] & 0x40) {
             this->path = func_8013D648(globalCtx, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
             if (this->path == NULL) {
                 Actor_MarkForDeath(&this->actor);
