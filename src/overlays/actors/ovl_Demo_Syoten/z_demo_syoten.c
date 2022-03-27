@@ -490,7 +490,7 @@ void func_80C173B4(Actor* thisx, GlobalContext* globalCtx) {
     if (matrix != NULL) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-        EnTest_OverrideKeyframeDraw(globalCtx, &this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
+        func_8018450C(globalCtx, &this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
     }
 }
 

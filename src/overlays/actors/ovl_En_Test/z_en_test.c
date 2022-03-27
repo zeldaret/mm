@@ -225,8 +225,8 @@ void EnTest_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80862EDC(this->unk_20C);
 }
 
-s32 func_808634B8(GlobalContext* globalCtx, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList, u8* flags,
-                  Actor* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
+s32 EnTest_OverrideKeyframeDraw(GlobalContext* globalCtx, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
+                                u8* flags, Actor* thisx, Vec3f* scale, Vec3s* rot, Vec3f* pos) {
     EnTest* this = THIS;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -268,7 +268,7 @@ void EnTest_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (sp28 != NULL) {
         func_8012C2DC(globalCtx->state.gfxCtx);
-        EnTest_OverrideKeyframeDraw(globalCtx, &this->skeletonInfo, sp28, func_808634B8, NULL, thisx);
+        func_8018450C(globalCtx, &this->skeletonInfo, sp28, EnTest_OverrideKeyframeDraw, NULL, thisx);
         func_80863048(globalCtx, this->unk_20C);
     }
 }
