@@ -4,23 +4,19 @@ extern s16 D_801BDB00[4]/* = { 1, 2, 3, 0 }*/;
 extern f32 D_801BDB08[4]/* = { -64.0f, 0.0f, 64.0f, 0.0f }*/;
 extern f32 D_801BDB18[6]/* = { 0.0f, -64.0f, 0.0f, 64.0f, 0.0f, 0.0f }*/;
 
-
-
-#ifdef NON_EQUIVALENT
 void func_800F4A10(GlobalContext* globalCtx) {
     PauseContext* pauseCtx;
     s16 i;
+    pauseCtx = &globalCtx->pauseCtx;
 
     func_8013EE24();
-
-    pauseCtx = &globalCtx->pauseCtx;
 
     pauseCtx->unk_206 = 0;
     pauseCtx->unk_200 = 1;
     pauseCtx->eye.x = D_801BDB08[pauseCtx->pageIndex];
     pauseCtx->eye.z = D_801BDB18[pauseCtx->pageIndex];
-    pauseCtx->unk_27E = -0x0028;
     pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
+    pauseCtx->unk_27E = -0x0028;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
         pauseCtx->worldMapPoints[i] = 0;
@@ -35,7 +31,7 @@ void func_800F4A10(GlobalContext* globalCtx) {
     } else {
         for (i = 9; i >= 0; i--) {
             if (((gSaveContext.save.playerData.owlActivationFlags >> i) & 1) != 0) {
-                pauseCtx->worldMapPoints[i] = (u8) 1U;
+                pauseCtx->worldMapPoints[i] = (u8) 1;
                 pauseCtx->unk_238[4] = i;
             }
         }
@@ -62,9 +58,6 @@ void func_800F4A10(GlobalContext* globalCtx) {
     gGameInfo->data[0x259] = -0x005A;
     gGameInfo->data[0x25A] = -0x3840;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kaleido_setup/func_800F4A10.s")
-#endif
 
 void func_800F4C0C(GlobalContext* globalCtx) {
     Input* input;
