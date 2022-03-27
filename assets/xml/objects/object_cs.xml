@@ -62,7 +62,6 @@
         <Texture Name="object_cs_Tex_00D520" OutName="tex_00D520" Format="rgba16" Width="32" Height="32" Offset="0xD520" />
         <Texture Name="object_cs_Tex_00DD20" OutName="tex_00DD20" Format="i8" Width="32" Height="32" Offset="0xDD20" />
         <Texture Name="object_cs_Tex_00E120" OutName="tex_00E120" Format="i8" Width="16" Height="16" Offset="0xE120" />
-        <!--<Blob Name="object_cs_Blob_00E220" Size="0x400" Offset="0xE220" />-->
         <Texture Name="object_cs_Tex_00E220" OutName="tex_00E220" Format="i8" Width="32" Height="32" Offset="0xE220"/>
         <Texture Name="object_cs_Tex_00E620" OutName="tex_00E620" Format="i8" Width="32" Height="32" Offset="0xE620" />
         <Texture Name="object_cs_Tex_00EA20" OutName="tex_00EA20" Format="i8" Width="32" Height="32" Offset="0xEA20" />

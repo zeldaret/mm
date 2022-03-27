@@ -115,7 +115,7 @@ void EnBomjima_Init(Actor* thisx, GlobalContext* globalCtx) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
-                       this->morphTable, 21);
+                       this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     gSaveContext.weekEventReg[83] &= (u8)~4;
     this->actor.targetMode = 0;
