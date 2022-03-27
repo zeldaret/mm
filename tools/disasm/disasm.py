@@ -4,7 +4,6 @@ import argparse, ast, math, os, re, struct
 import bisect
 import multiprocessing
 from pathlib import Path
-# global mips_isa.mips_fpr_names
 import mips_isa
 
 # Consider implementing gpr naming too, but already uses abi names by default
@@ -18,22 +17,22 @@ parser.add_argument(
     "-j", dest="jobs", type=int, default=1, help="number of processes to run at once"
 )
 parser.add_argument(
-    "--full",
-    "-f",
-    dest="full",
+    "-a",
+    "--all",
+    dest="all",
     action="store_true",
     default=False,
     help="Decompile all files regardless of whether they are used or not",
 )
 parser.add_argument(
-    "-files",
+    "-f",
     "--files",
     dest="files",
     nargs="+",
     required=False,
     help="Optional list of files to diassemble separated by a space. This is a whitelist, all files will be skipped besides the ones listed here if used.",
 )
-parser.add_argument("-Mreg-names", choices=fpr_name_options.keys(), help="How to name registers in the output")
+parser.add_argument("--reg-names", choices=fpr_name_options.keys(), help="How to name registers in the output")
 
 args = parser.parse_args()
 jobs = args.jobs
@@ -2216,7 +2215,7 @@ for segment in files_spec:
         new[offset] = name
     full_file_list[segment[0]] = new
 
-if args.full:
+if args.all:
     new_spec = []
     for segment in files_spec:
         if args.files and not any(

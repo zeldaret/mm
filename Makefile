@@ -21,9 +21,9 @@ ifeq ($(NON_MATCHING),1)
   COMPARE := 0
 endif
 
-DISASM_FLAGS ?= 
+DISASM_FLAGS := --reg-names=o32
 ifneq ($(FULL_DISASM), 0)
-  DISASM_FLAGS += --full
+  DISASM_FLAGS += --all
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -103,7 +103,7 @@ MIPS_VERSION := -mips2
 CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712
 
 # Use relocations and abi fpr names in the dump
-OBJDUMP_FLAGS := -d -r -Mreg-names=32
+OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -268,7 +268,7 @@ setup:
 ## Assembly generation
 disasm:
 	$(RM) -rf asm data
-	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS) -Mreg-names=o32
+	python3 tools/disasm/disasm.py -j $(N_THREADS) $(DISASM_FLAGS)
 
 diff-init: uncompressed
 	$(RM) -rf expected/
