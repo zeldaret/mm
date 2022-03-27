@@ -2224,7 +2224,7 @@ asm/non_matchings/code/z_sub_s/func_8013E748.s,func_8013E748,0x8013E748,0x1E
 asm/non_matchings/code/z_sub_s/func_8013E7C0.s,func_8013E7C0,0x8013E7C0,0x4E
 asm/non_matchings/code/z_sub_s/func_8013E8F8.s,func_8013E8F8,0x8013E8F8,0x16
 asm/non_matchings/code/z_sub_s/func_8013E950.s,func_8013E950,0x8013E950,0xB0
-asm/non_matchings/code/code_8013EC10/func_8013EC10.s,func_8013EC10,0x8013EC10,0xD
+asm/non_matchings/code/code_8013EC10/Rumble_Update.s,Rumble_Update,0x8013EC10,0xD
 asm/non_matchings/code/code_8013EC10/func_8013EC44.s,func_8013EC44,0x8013EC44,0x27
 asm/non_matchings/code/code_8013EC10/func_8013ECE0.s,func_8013ECE0,0x8013ECE0,0x2F
 asm/non_matchings/code/code_8013EC10/Rumble_Init.s,Rumble_Init,0x8013ED9C,0xD
@@ -2911,9 +2911,9 @@ asm/non_matchings/code/sys_ucode/SysUcode_GetUCodeBoot.s,SysUcode_GetUCodeBoot,0
 asm/non_matchings/code/sys_ucode/SysUcode_GetUCodeBootSize.s,SysUcode_GetUCodeBootSize,0x80182CA0,0x7
 asm/non_matchings/code/sys_ucode/SysUcode_GetUCode.s,SysUcode_GetUCode,0x80182CBC,0x4
 asm/non_matchings/code/sys_ucode/SysUcode_GetUCodeData.s,SysUcode_GetUCodeData,0x80182CCC,0x5
-asm/non_matchings/code/sys_ucode/func_80182CE0.s,func_80182CE0,0x80182CE0,0xD0
-asm/non_matchings/code/sys_ucode/func_80183020.s,func_80183020,0x80183020,0xE
-asm/non_matchings/code/sys_ucode/func_80183058.s,func_80183058,0x80183058,0x6
+asm/non_matchings/code/sys_ucode/RumbleManager_Update.s,RumbleManager_Update,0x80182CE0,0xD0
+asm/non_matchings/code/sys_ucode/RumbleManager_Init.s,RumbleManager_Init,0x80183020,0xE
+asm/non_matchings/code/sys_ucode/RumbleManager_Destroy.s,RumbleManager_Destroy,0x80183058,0x6
 asm/non_matchings/code/code_80183070/func_80183070.s,func_80183070,0x80183070,0xC
 asm/non_matchings/code/c_keyframe/func_801830A0.s,func_801830A0,0x801830A0,0xA
 asm/non_matchings/code/c_keyframe/func_801830C8.s,func_801830C8,0x801830C8,0x8

@@ -3,9 +3,8 @@
 
 RumbleManager sRumbleMgr;
 
-// RumbleImpl?
-void func_8013EC10(UNK_TYPE arg0) {
-    func_80182CE0(&sRumbleMgr);
+void Rumble_Update(void* arg0) {
+    RumbleManager_Update(&sRumbleMgr);
     PadMgr_RumbleSet(sRumbleMgr.rumbleEnabled);
 }
 
@@ -60,13 +59,13 @@ void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
 }
 
 void Rumble_Init(void) {
-    func_80183020(&sRumbleMgr);
-    func_80174F24(func_8013EC10, 0);
+    RumbleManager_Init(&sRumbleMgr);
+    func_80174F24(Rumble_Update, NULL);
 }
 
 void Rumble_Destroy(void) {
-    func_80174F44(func_8013EC10, 0);
-    func_80183058(&sRumbleMgr);
+    func_80174F44(Rumble_Update, NULL);
+    RumbleManager_Destroy(&sRumbleMgr);
 }
 
 s32 Rumble_ControllerOneHasRumblePak(void) {
