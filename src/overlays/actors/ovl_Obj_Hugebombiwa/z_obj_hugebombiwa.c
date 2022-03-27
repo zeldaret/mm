@@ -409,7 +409,7 @@ void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         Flags_SetSwitch(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
             ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_17SETUGEN2))) {
-            gSaveContext.weekEventReg[19] |= 2;
+            gSaveContext.save.weekEventReg[19] |= 2;
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {

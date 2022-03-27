@@ -18,7 +18,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A8B2C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A8BD0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/Audio_SetVolumeScale.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A7B10/func_801A8D5C.s")
 
