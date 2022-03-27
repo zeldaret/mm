@@ -455,7 +455,7 @@ void EnBom_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         thisx->gravity = -1.2f;
         if (this->timer != 0) {
-            if (!this->isPowderKeg || (func_808715B8 == this->actionFunc) || !Play_InCsMode(globalCtx)) {
+            if (!this->isPowderKeg || (this->actionFunc == func_808715B8) || !Play_InCsMode(globalCtx)) {
                 this->timer--;
             }
         }
