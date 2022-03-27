@@ -1213,7 +1213,7 @@ asm/non_matchings/code/z_jpeg/Jpeg_GetUnalignedU16.s,Jpeg_GetUnalignedU16,0x800F
 asm/non_matchings/code/z_jpeg/Jpeg_ParseMarkers.s,Jpeg_ParseMarkers,0x800F4540,0x73
 asm/non_matchings/code/z_jpeg/Jpeg_Decode.s,Jpeg_Decode,0x800F470C,0xC1
 asm/non_matchings/code/z_kaleido_setup/func_800F4A10.s,func_800F4A10,0x800F4A10,0x7F
-asm/non_matchings/code/z_kaleido_setup/func_800F4C0C.s,func_800F4C0C,0x800F4C0C,0x85
+asm/non_matchings/code/z_kaleido_setup/KaleidoSetup_Update.s,KaleidoSetup_Update,0x800F4C0C,0x85
 asm/non_matchings/code/z_kaleido_setup/func_800F4E20.s,func_800F4E20,0x800F4E20,0x42
 asm/non_matchings/code/z_kaleido_setup/func_800F4F28.s,func_800F4F28,0x800F4F28,0x6
 asm/non_matchings/code/z_kanfont/Font_LoadChar.s,Font_LoadChar,0x800F4F40,0x5

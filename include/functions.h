@@ -1504,7 +1504,7 @@ void func_800F40A0(GameState* gameState, Player* player);
 UNK_TYPE func_800F41E4(GlobalContext* globalCtx, ActorContext* actorCtx);
 
 void func_800F4A10(GlobalContext* globalCtx);
-void func_800F4C0C(GlobalContext* globalCtx);
+void KaleidoSetup_Update(GlobalContext* globalCtx);
 void KaleidoSetup_Init(GlobalContext* globalCtx);
 void KaleidoSetup_Destroy(GlobalContext* globalCtx);
 void Font_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32 offset);
