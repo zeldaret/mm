@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_haka_tomb.h"
+#include "objects/object_haka_obj/object_haka_obj.h"
 
 #define FLAGS 0x00000000
 
@@ -21,9 +22,6 @@ void func_80BD6754(BgHakaTomb* this);
 void func_80BD6768(BgHakaTomb* this, GlobalContext* globalCtx);
 void BgHakaTomb_SetupDoNothing(BgHakaTomb* this);
 void BgHakaTomb_DoNothing(BgHakaTomb* this, GlobalContext* globalCtx);
-
-extern CollisionHeader D_06000EE8[];
-extern Gfx D_060007B0[];
 
 const ActorInit Bg_Haka_Tomb_InitVars = {
     ACTOR_BG_HAKA_TOMB,
@@ -48,8 +46,8 @@ void BgHakaTomb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, D_06000EE8);
-    func_8013E3B8(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_haka_obj_Colheader_000EE8);
+    SubS_FillCutscenesList(&this->dyna.actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
     func_80BD6624(this);
 }
 
@@ -84,17 +82,16 @@ s32 func_80BD6638(s16* arg0, s16* arg1, s32 arg2) {
 void func_80BD66AC(BgHakaTomb* this, GlobalContext* globalCtx) {
     s16 temp;
 
-    if (Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= 9;
+    if (Flags_GetClear(globalCtx, this->dyna.actor.room)) {
+        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     }
-    if (!func_80BD6638(&temp, this->cutscenes, 1) && (temp < 0) &&
-        Actor_GetRoomCleared(globalCtx, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= 1;
+    if (!func_80BD6638(&temp, this->cutscenes, 1) && (temp < 0) && Flags_GetClear(globalCtx, this->dyna.actor.room)) {
+        this->dyna.actor.flags |= ACTOR_FLAG_1;
         if (this->dyna.actor.isTargeted) {
             func_80BD6754(this);
         }
     } else {
-        this->dyna.actor.flags &= ~1;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_1;
     }
 }
 
@@ -103,7 +100,7 @@ void func_80BD6754(BgHakaTomb* this) {
 }
 
 void func_80BD6768(BgHakaTomb* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->dyna.actor, this->cutscenes[0], -1, 0)) {
+    if (SubS_StartActorCutscene(&this->dyna.actor, this->cutscenes[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         BgHakaTomb_SetupDoNothing(this);
     }
 }
@@ -129,5 +126,5 @@ void BgHakaTomb_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgHakaTomb_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060007B0);
+    Gfx_DrawDListOpa(globalCtx, object_haka_obj_DL_0007B0);
 }

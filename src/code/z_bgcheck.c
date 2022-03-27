@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "vt.h"
 
@@ -3991,7 +3992,7 @@ void BgCheck_InitCollisionHeaders(CollisionContext* colCtx, GlobalContext* globa
     for (i = 0; i < BG_ACTOR_MAX; i++) {
         flag = dyna->bgActorFlags[i];
         if ((flag & 1) && !(flag & 2)) {
-            Actor_SetObjectSegment(globalCtx, dyna->bgActors[i].actor);
+            Actor_SetObjectDependency(globalCtx, dyna->bgActors[i].actor);
             CollisionHeader_SegmentedToVirtual(dyna->bgActors[i].colHeader);
         }
     }
@@ -4047,7 +4048,7 @@ u16 func_800C9728(CollisionContext* colCtx, u32 camId, s32 bgId) {
         return 0;
     }
     camData = colHeader->cameraDataList;
-    result = camData[camId].cameraSType;
+    result = camData[camId].setting;
     return result;
 }
 
@@ -4088,7 +4089,7 @@ u16 func_800C97F8(CollisionContext* colCtx, u32 camId, s32 bgId) {
     if (camData == NULL) {
         return 0;
     }
-    return camData[camId].unk_02;
+    return camData[camId].numData;
 }
 
 /**
@@ -4114,7 +4115,7 @@ u16 func_800C9844(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
 }
 
 /**
- * CamData get camPosData
+ * CamData get data
  */
 Vec3s* func_800C98CC(CollisionContext* colCtx, s32 camId, s32 bgId) {
     CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
@@ -4127,11 +4128,11 @@ Vec3s* func_800C98CC(CollisionContext* colCtx, s32 camId, s32 bgId) {
     if (cameraDataList == NULL) {
         return NULL;
     }
-    return Lib_SegmentedToVirtual(cameraDataList[camId].camPosData);
+    return Lib_SegmentedToVirtual(cameraDataList[camId].data);
 }
 
 /**
- * SurfaceType Get camPosData
+ * SurfaceType Get data
  */
 Vec3s* SurfaceType_GetCamPosData(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     CollisionHeader* colHeader = BgCheck_GetCollisionHeader(colCtx, bgId);
@@ -4321,17 +4322,18 @@ s32 SurfaceType_IsIgnoredByProjectiles(CollisionContext* colCtx, CollisionPoly* 
 }
 
 /**
- * CollisionPoly is conveyor enabled
- * Returns true if `poly` is a conveyor surface, else false
+ * SurfaceType Get Conveyor Surface Type
+ * Return type 0 (CONVEYOR_WATER) if 'poly' is a surface that will only move player underwater
+ * Return type 1 (CONVEYOR_FLOOR) if `poly` is a surface that must be stood on to move player
  */
-s32 SurfaceType_IsConveyor(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
+s32 SurfaceType_GetConveyorType(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     u32 flags;
 
     if (BgCheck_GetCollisionHeader(colCtx, bgId) == NULL) {
-        return true;
+        return CONVEYOR_FLOOR;
     }
     if (poly == NULL) {
-        return false;
+        return CONVEYOR_WATER;
     }
     flags = poly->flags_vIB & 0x2000;
     return !!flags;
@@ -4572,7 +4574,7 @@ u16 WaterBox_GetCameraSetting(CollisionContext* colCtx, WaterBox* waterBox, s32 
         return result;
     }
 
-    result = camData[camId].cameraSType;
+    result = camData[camId].setting;
     return result;
 }
 

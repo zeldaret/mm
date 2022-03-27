@@ -5,6 +5,7 @@
  */
 
 #include "z_bg_icicle.h"
+#include "objects/object_icicle/object_icicle.h"
 
 #define FLAGS 0x00000000
 
@@ -56,12 +57,9 @@ const ActorInit Bg_Icicle_InitVars = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1500, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, -3, ICHAIN_CONTINUE),
-    ICHAIN_F32(minVelocityY, -30, ICHAIN_CONTINUE),
+    ICHAIN_F32(terminalVelocity, -30, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
-
-extern Gfx D_060000D0[];
-extern CollisionHeader D_06000294;
 
 void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -71,7 +69,7 @@ void BgIcicle_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(thisx, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06000294);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_icicle_Colheader_000294);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, thisx, &sCylinderInit);
     Collider_UpdateCylinder(thisx, &this->collider);
@@ -107,7 +105,7 @@ void BgIcicle_Break(BgIcicle* this, GlobalContext* globalCtx, f32 arg2) {
     s32 j;
     s32 i;
 
-    Audio_PlaySoundAtPosition(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 10; j++) {
@@ -144,7 +142,7 @@ void BgIcicle_Shiver(BgIcicle* this, GlobalContext* globalCtx) {
     }
 
     if (!(this->shiverTimer % 4)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_ICE_SWING);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_SWING);
     }
 
     if (this->shiverTimer == 0) {
@@ -184,7 +182,7 @@ void BgIcicle_Fall(BgIcicle* this, GlobalContext* globalCtx) {
             return;
         }
     } else {
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->dyna.actor);
+        Actor_MoveWithGravity(&this->dyna.actor);
         this->dyna.actor.world.pos.y += 40.0f;
         Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
         this->dyna.actor.world.pos.y -= 40.0f;
@@ -245,5 +243,5 @@ void BgIcicle_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgIcicle_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    func_800BDFC0(globalCtx, D_060000D0);
+    Gfx_DrawDListOpa(globalCtx, object_icicle_DL_0000D0);
 }

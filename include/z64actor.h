@@ -1,5 +1,5 @@
-#ifndef _Z64ACTOR_H_
-#define _Z64ACTOR_H_
+#ifndef Z64ACTOR_H
+#define Z64ACTOR_H
 
 #include "PR/ultratypes.h"
 #include "z64math.h"
@@ -7,6 +7,8 @@
 #include "z64collision_check.h"
 #include "unk.h"
 
+// This value is hardcoded to be the size of ovl_Arrow_Fire which currently is the biggest actor that uses the AM_FIELD.
+#define AM_FIELD_SIZE SEGMENT_SIZE(ovl_Arrow_Fire)
 #define MASS_IMMOVABLE 0xFF // Cannot be pushed by OC collisions
 #define MASS_HEAVY 0xFE     // Can only be pushed by OC collisions with IMMOVABLE and HEAVY objects.
 
@@ -14,6 +16,8 @@ struct Actor;
 struct GlobalContext;
 struct Lights;
 struct CollisionPoly;
+
+struct EnBox;
 
 typedef void(*ActorFunc)(struct Actor* this, struct GlobalContext* globalCtx);
 
@@ -116,6 +120,8 @@ typedef struct {
     /* 0x10 */ f32 shadowScale; // Changes the size of the shadow
     /* 0x14 */ u8 shadowAlpha; // Default is 255
     /* 0x15 */ u8 feetFloorFlags; // Set if the actor's foot is clipped under the floor. & 1 is right foot, & 2 is left
+    /* 0x16 */ u8 unk_16;
+    /* 0x17 */ u8 unk_17;
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
@@ -131,15 +137,15 @@ typedef struct Actor {
     /* 0x020 */ s16 unk20;
     /* 0x024 */ PosRot world; // Position/rotation in the world
     /* 0x038 */ s8 cutscene;
-    /* 0x039 */ s8 unk39;
+    /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
-    /* 0x050 */ u16 sfx; // SFX ID to play. Sound plays when value is set, then is cleared the following update cycle
+    /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
     /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
     /* 0x070 */ f32 speedXZ; // How fast the actor is traveling along the XZ plane
     /* 0x074 */ f32 gravity; // Acceleration due to gravity. Value is added to Y velocity every frame
-    /* 0x078 */ f32 minVelocityY; // Sets the lower bounds cap on velocity along the Y axis
+    /* 0x078 */ f32 terminalVelocity; // Sets the lower bounds cap on velocity along the Y axis
     /* 0x07C */ struct CollisionPoly* wallPoly; // Wall polygon the actor is touching
     /* 0x080 */ struct CollisionPoly* floorPoly; // Floor polygon directly below the actor
     /* 0x084 */ u8 wallBgId; // Bg ID of the wall polygon the actor is touching
@@ -168,12 +174,12 @@ typedef struct Actor {
     /* 0x11C */ u8 colorFilterTimer; // A non-zero value enables the color filter. Decrements automatically
     /* 0x11D */ u8 isDrawn; // Set to true if the actor is currently being drawn. Always stays false for lens actors
     /* 0x11E */ u8 dropFlag; // Configures what item is dropped by the actor from `Item_DropCollectibleRandom`
-    /* 0x11F */ u8 hintId; // Sets what 0600 dialog to display when talking to navi. Default 0xFF
+    /* 0x11F */ u8 hintId; // Sets what 0600 dialog to display when talking to Tatl. Default 0xFF
     /* 0x120 */ struct Actor* parent; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x124 */ struct Actor* child; // Usage is actor specific. Set if actor is spawned via `Actor_SpawnAsChild`
     /* 0x128 */ struct Actor* prev; // Previous actor of this category
     /* 0x12C */ struct Actor* next; // Next actor of this category
-    /* 0x130 */ ActorFunc init; // Initialization Routine. Called by `Actor_Init` or `Actor_UpdateAll`
+    /* 0x130 */ ActorFunc init; // Initialization Routine. Called by `Actor_InitContext` or `Actor_UpdateAll`
     /* 0x134 */ ActorFunc destroy; // Destruction Routine. Called by `Actor_Destroy`
     /* 0x138 */ ActorFunc update; // Update Routine. Called by `Actor_UpdateAll`
     /* 0x13C */ ActorFunc draw; // Draw Routine. Called by `Actor_Draw`
@@ -287,26 +293,111 @@ typedef enum {
     /* 0x08 */ ACTORCAT_MISC,
     /* 0x09 */ ACTORCAT_BOSS,
     /* 0x0A */ ACTORCAT_DOOR,
-    /* 0x0B */ ACTORCAT_CHEST
+    /* 0x0B */ ACTORCAT_CHEST,
+    /* 0x0C */ ACTORCAT_MAX
 } ActorType;
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* animation;
-    /* 0x04 */ f32 playSpeed;
-    /* 0x08 */ f32 startFrame;
-    /* 0x0C */ f32 frameCount;
-    /* 0x10 */ u8 mode;
-    /* 0x14 */ f32 morphFrames;
-} ActorAnimationEntry; // size = 0x18
+    /* 0x00 */ Vec3f pos;
+    /* 0x0C */ f32 unkC;
+    /* 0x10 */ Color_RGBA8 color;
+} TargetContextEntry; // size = 0x14
+
+typedef struct TargetContext {
+    /* 0x00 */ Vec3f unk0;
+    /* 0x0C */ Vec3f targetCenterPos;
+    /* 0x18 */ Color_RGBAf fairyInner;
+    /* 0x28 */ Color_RGBAf fairyOuter;
+    /* 0x38 */ Actor* arrowPointedActor;
+    /* 0x3C */ Actor* targetedActor;
+    /* 0x40 */ f32 unk40;
+    /* 0x44 */ f32 unk44;
+    /* 0x48 */ s16 unk48; // alpha
+    /* 0x4A */ u8 unk4A;
+    /* 0x4B */ u8 unk4B;
+    /* 0x4C */ s8 unk4C;
+    /* 0x4D */ UNK_TYPE1 pad4D[0x3];
+    /* 0x50 */ TargetContextEntry unk50[3];
+    /* 0x8C */ Actor* unk8C;
+    /* 0x90 */ Actor* bgmEnemy;
+    /* 0x94 */ Actor* unk_94;
+} TargetContext; // size = 0x98
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* animationSeg;
-    /* 0x04 */ f32 playbackSpeed;
-    /* 0x08 */ s16 frame;
-    /* 0x0A */ s16 frameCount;
-    /* 0x0C */ u8 mode;
-    /* 0x0E */ s16 transitionRate;
-} ActorAnimationEntryS; // size = 0x10
+    /* 0x0 */ TexturePtr texture;
+    /* 0x4 */ s16 x;
+    /* 0x6 */ s16 y;
+    /* 0x8 */ u8 width;
+    /* 0x9 */ u8 height;
+    /* 0xA */ u8 durationTimer; // how long the title card appears for before fading
+    /* 0xB */ u8 delayTimer; // how long the title card waits to appear
+    /* 0xC */ s16 alpha;
+    /* 0xE */ s16 intensity;
+} TitleCardContext; // size = 0x10
+
+typedef struct ActorContext_unk_20C {
+    /* 0x0 */ s16 id;
+    /* 0x2 */ s8 isDynamicallyInitialised;
+    /* 0x4 */ void* ptr;
+} ActorContext_unk_20C; // size = 0x8
+
+typedef struct ActorContextFlags {
+    /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
+    /* 0x10 */ u32 chest;
+    /* 0x14 */ u32 clearedRoom;
+    /* 0x18 */ u32 clearedRoomTemp;
+    /* 0x1C */ u32 collectible[4]; // bitfield of 128 bits
+} ActorContextFlags; // size = 0x2C
+
+typedef struct ActorListEntry {
+    /* 0x0 */ s32 length; // number of actors loaded of this type
+    /* 0x4 */ Actor* first; // pointer to first actor of this type
+    /* 0x8 */ s32 unk_08;
+} ActorListEntry; // size = 0xC
+
+typedef struct ActorContext {
+    /* 0x000 */ u8 freezeFlashTimer;
+    /* 0x001 */ UNK_TYPE1 pad1;
+    /* 0x002 */ u8 unk2;
+    /* 0x003 */ u8 unk3;
+    /* 0x004 */ s8 unk4;
+    /* 0x005 */ u8 unk5;
+    /* 0x006 */ UNK_TYPE1 pad6[0x5];
+    /* 0x00B */ s8 unkB;
+    /* 0x00C */ s16 unkC;
+    /* 0x00E */ u8 totalLoadedActors;
+    /* 0x00F */ u8 undrawnActorCount;
+    /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
+    /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
+    /* 0x120 */ TargetContext targetContext;
+    /* 0x1B8 */ ActorContextFlags flags;
+    /* 0x1E4 */ TitleCardContext titleCtxt;
+    /* 0x1F4 */ u8 unk1F4;
+    /* 0x1F5 */ u8 unk1F5;
+    /* 0x1F6 */ UNK_TYPE1 pad1F6[0x2];
+    /* 0x1F8 */ f32 unk1F8;
+    /* 0x1FC */ Vec3f unk1FC;
+    /* 0x208 */ UNK_TYPE1 unk_208[0x4];
+    /* 0x20C */ ActorContext_unk_20C unk_20C[8];
+    /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
+    /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
+    /* 0x254 */ u32 unk254[5];
+    /* 0x268 */ u8 unk268;
+    /* 0x269 */ UNK_TYPE1 pad269[0x3];
+    /* 0x26C */ Input unk_26C;
+} ActorContext; // size = 0x284
+
+typedef enum {
+    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
+    /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
+    /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
+    /* 21 */ ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS,
+    /* 30 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL = 30,
+    /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM,
+    /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
+} ActorDrawDamageEffectType;
 
 typedef enum {
     /* 0x000 */ ACTOR_PLAYER,
@@ -1003,13 +1094,85 @@ typedef enum {
 } ActorID;
 
 typedef enum {
+    /* 0 */ DOORLOCK_NORMAL,
+    /* 1 */ DOORLOCK_BOSS,
+    /* 2 */ DOORLOCK_2, // DOORLOCK_NORMAL_SPIRIT on OoT
+    /* 3 */ DOORLOCK_MAX
+} DoorLockType;
+
+// Targetability / ACTOR_FLAG_TARGETABLE?
+#define ACTOR_FLAG_1             (1 << 0)
+// 
+#define ACTOR_FLAG_2             (1 << 1)
+// 
+#define ACTOR_FLAG_4             (1 << 2)
+// 
+#define ACTOR_FLAG_8             (1 << 3)
+// 
+#define ACTOR_FLAG_10            (1 << 4)
+// 
+#define ACTOR_FLAG_20            (1 << 5)
+// 
+#define ACTOR_FLAG_40            (1 << 6)
+// Invisible
+#define ACTOR_FLAG_80            (1 << 7)
+// Related to talk
+#define ACTOR_FLAG_100           (1 << 8)
+// 
+#define ACTOR_FLAG_200           (1 << 9)
+// 
+#define ACTOR_FLAG_400           (1 << 10)
+// 
+#define ACTOR_FLAG_800           (1 << 11)
+// 
+#define ACTOR_FLAG_1000          (1 << 12)
+// 
+#define ACTOR_FLAG_2000          (1 << 13)
+// 
+#define ACTOR_FLAG_4000          (1 << 14)
+// 
+#define ACTOR_FLAG_8000          (1 << 15)
+// 
+#define ACTOR_FLAG_10000         (1 << 16)
+// 
+#define ACTOR_FLAG_20000         (1 << 17)
+// 
+#define ACTOR_FLAG_40000         (1 << 18)
+// 
+#define ACTOR_FLAG_80000         (1 << 19)
+// 
+#define ACTOR_FLAG_100000        (1 << 20)
+// 
+#define ACTOR_FLAG_200000        (1 << 21)
+// 
+#define ACTOR_FLAG_400000        (1 << 22)
+// 
+#define ACTOR_FLAG_800000        (1 << 23)
+// 
+#define ACTOR_FLAG_1000000       (1 << 24)
+// 
+#define ACTOR_FLAG_2000000       (1 << 25)
+// 
+#define ACTOR_FLAG_4000000       (1 << 26)
+// 
+#define ACTOR_FLAG_8000000       (1 << 27)
+// 
+#define ACTOR_FLAG_10000000      (1 << 28)
+// 
+#define ACTOR_FLAG_20000000      (1 << 29)
+// 
+#define ACTOR_FLAG_40000000      (1 << 30)
+// 
+#define ACTOR_FLAG_80000000      (1 << 31)
+
+typedef enum {
     /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
     /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
     /* 0x02 */ CLEAR_TAG_POP,
     /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
     /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
     /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
 
 #endif

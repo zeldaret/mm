@@ -24,7 +24,7 @@ void* KaleidoManager_FaultAddrConvFunc(void* address, void* param) {
     uintptr_t offset;
 
     if (ovl != NULL) {
-        size = (u8*)ovl->vramEnd - (u8*)ovl->vramStart;
+        size = VRAM_PTR_SIZE(ovl);
         ramStart = ovl->loadedRamAddr;
         ramEnd = ramStart + size;
         offset = (u8*)ovl->vramStart - ramStart;
@@ -47,7 +47,7 @@ void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl) {
     if (ovl->loadedRamAddr != NULL) {
         ovl->offset = 0;
-        bzero(ovl->loadedRamAddr, (uintptr_t)ovl->vramEnd - (uintptr_t)ovl->vramStart);
+        bzero(ovl->loadedRamAddr, VRAM_PTR_SIZE(ovl));
         ovl->loadedRamAddr = NULL;
         gKaleidoMgrCurOvl = NULL;
     }
@@ -59,7 +59,7 @@ void KaleidoManager_Init(GlobalContext* globalCtx) {
     u32 i;
 
     for (i = 0; i < ARRAY_COUNT(gKaleidoMgrOverlayTable); i++) {
-        size = (uintptr_t)gKaleidoMgrOverlayTable[i].vramEnd - (uintptr_t)gKaleidoMgrOverlayTable[i].vramStart;
+        size = VRAM_PTR_SIZE(&gKaleidoMgrOverlayTable[i]);
         if (size > largestSize) {
             largestSize = size;
         }

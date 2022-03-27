@@ -1,7 +1,7 @@
 # Documenting
 
-Up: [Contents](contents.md)
-Previous: [Data](data.md)
+- Up: [Contents](contents.md)
+- Previous: [Data](data.md)
 
 Decompilation is only the first step: since the point of this project is to understand the game better than ever before, the code needs documentation. In this document, we will go through the basic stuff that it's good to do for any actor: we will not try to understand every single thing the actor does in full detail, but try to name the functions and variables usefully for a full documentation pass later to take advantage of.
 
@@ -62,11 +62,7 @@ const ActorInit En_Recepgirl_InitVars = {
     (ActorFunc)EnRecepgirl_Draw,
 };
 
-extern void* D_0600F8F0;
-extern void* D_0600FCF0;
-extern void* D_060100F0;
-
-static void* D_80C106B0[4] = { &D_0600F8F0, &D_0600FCF0, &D_060100F0, &D_0600FCF0 };
+static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80C106C0[] = {
@@ -76,14 +72,6 @@ static InitChainEntry D_80C106C0[] = {
 
 static s32 D_80C106C8 = 0;
 
-extern AnimationHeader D_06000968;
-extern AnimationHeader D_06001384;
-extern AnimationHeader D_06009890;
-extern AnimationHeader D_0600A280;
-extern AnimationHeader D_0600AD98;
-extern FlexSkeletonHeader D_06011B60;
-
-
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_Init.s")
 void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRecepgirl* this = THIS;
@@ -91,7 +79,7 @@ void EnRecepgirl_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, D_80C106C0);
     ActorShape_Init(&this->actor.shape, -60.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06011B60, &D_06009890, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_bg_Skel_011B60, &object_bg_Anim_009890, this->jointTable, this->morphTable, 24);
 
     if (D_80C106C8 == 0) {
     for (i = 0; i < 4; i++) {
@@ -132,8 +120,8 @@ void func_80C100DC(EnRecepgirl *this) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10148.s")
 void func_80C10148(EnRecepgirl *this) {
-    if (this->skelAnime.animation == &D_06001384) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (this->skelAnime.animation == &object_bg_Anim_001384) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
     }
     this->actionFunc = func_80C1019C;
 }
@@ -141,16 +129,16 @@ void func_80C10148(EnRecepgirl *this) {
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C1019C.s")
 void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
-        if (this->skelAnime.animation == &D_0600A280) {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+        if (this->skelAnime.animation == &object_bg_Anim_00A280) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         } else {
-            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &object_bg_Anim_009890, -4.0f);
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         func_80C10290(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == 2) {
             this->actor.textId = 0x2367;
@@ -164,7 +152,7 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10290.s")
 void func_80C10290(EnRecepgirl *this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
     this->actionFunc = func_80C102D4;
 }
 
@@ -173,22 +161,22 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     u8 temp_v0_2;
 
     if (SkelAnime_Update(&this->skelAnime) != 0) {
-        if (this->skelAnime.animation == &D_0600A280) {
-            Animation_ChangeDefaultRepeat(&this->skelAnime, &D_06001384);
-        } else if (this->skelAnime.animation == &D_0600AD98) {
+        if (this->skelAnime.animation == &object_bg_Anim_00A280) {
+            Animation_ChangeDefaultRepeat(&this->skelAnime, &object_bg_Anim_001384);
+        } else if (this->skelAnime.animation == &object_bg_Anim_00AD98) {
             if (this->actor.textId == 0x2ADA) {
-                Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 10.0f);
             } else {
-                Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+                Animation_ChangeTransitionRepeat(&this->skelAnime, &object_bg_Anim_009890, 10.0f);
             }
         } else if (this->actor.textId == 0x2ADA) {
-            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &object_bg_Anim_009890, 10.0f);
         } else {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
         }
     }
 
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC;
         func_80C10148(this);
@@ -197,18 +185,18 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
     
     if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
-            Actor_SetSwitchFlag(globalCtx, this->actor.params);
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
+            Flags_SetSwitch(globalCtx, this->actor.params);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
             if ((gSaveContext.weekEventReg[63] & 0x80)) {
                 this->actor.textId = 0x2ADF;
             } else {
                 this->actor.textId = 0x2ADA;
             }
         } else if (this->actor.textId == 0x2ADC) {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
             this->actor.textId = 0x2ADD;
         } else {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 10.0f);
             if (this->actor.textId == 0x2ADD) {
                 this->actor.textId = 0x2ADE;
             } else if (this->actor.textId == 0x2ADA) {
@@ -262,7 +250,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
-    func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80C10558, NULL, func_80C10590, &this->actor);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -273,7 +261,7 @@ void EnRecepgirl_Draw(Actor *thisx, GlobalContext *globalCtx) {
 
 (We can delete the `GLOBAL_ASM` lines now.)
 
-The worst part of documentation is finding somewhere to start. We have a decent place to start here, though, in that we already know the function (or rather, the use) of a couple of the functions, namely the LimbDraws. So we can rename `func_80C10558` to `EnRecepgirl_OverrideLimbDraw` and `func_80C10590` to `EnRecepgirl_UnkLimbDraw`. Remember to do a global rename so that the functions in the assembly are renamed, use `rename_global_asm`,
+The worst part of documentation is finding somewhere to start. We have a decent place to start here, though, in that we already know the function (or rather, the use) of a couple of the functions, namely the LimbDraws. So we can rename `func_80C10558` to `EnRecepgirl_OverrideLimbDraw` and `func_80C10590` to `EnRecepgirl_TransformLimbDraw`. Remember to do a global rename so that the functions in the assembly are renamed, use `rename_global_asm`,
 ```
 $ ./tools/rename_global_asm.py
 asm/non_matchings/overlays/ovl_En_Recepgirl/func_80C10558.s --> asm/non_matchings/overlays/ovl_En_Recepgirl/EnRecepgirl_OverrideLimbDraw.s
@@ -349,11 +337,9 @@ Go to "Analysis -> Find Dlists" and press OK (the defaults are usually fine). Th
 
 We will talk about what all these types of data are next time, but for now, all we want to know is what
 ```C
-extern void* D_0600F8F0;
-extern void* D_0600FCF0;
-extern void* D_060100F0;
+static void* D_80C106B0[4] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
 ```
-actually are. We know they are set on segment 8, so we need to find where the skeleton uses them. We know from `extern FlexSkeletonHeader D_06011B60;` that this is at `0x06011B60`, so scroll down to it, right-click on it, and choose "Open in Skeleton Viewer". Pick an animation that we know it uses (sometimes Z64Utils misidentifies other things for animations), such as `extern AnimationHeader D_06000968;`, and you will get this error:
+actually are. We know they are set on segment 8, so we need to find where the skeleton uses them. We know from `object_bg_Skel_011B60` that this is at `0x06011B60`, so scroll down to it, right-click on it, and choose "Open in Skeleton Viewer". Pick an animation that we know it uses (sometimes Z64Utils misidentifies other things for animations), such as `object_bg_Anim_000968`, and you will get this error:
 
 ![Z64Utils, error when viewing skeleton](images/z64utils_skeleton_error.png)
 
@@ -389,11 +375,7 @@ But what sort of textures? This is an NPC, so what textures on the model would i
 
 **N.B.** static data should not be renamed in the assembly or `variables.txt`, since assembly has no notion of file locality and there can be symbol clashes. Therefore it should only be renamed in its respective file, not globally.
 ```C
-extern void* D_0600F8F0;
-extern void* D_0600FCF0;
-extern void* D_060100F0;
-
-static TexturePtr sEyeTextures[] = { &D_0600F8F0, &D_0600FCF0, &D_060100F0, &D_0600FCF0 };
+static TexturePtr sEyeTextures[] = { object_bg_Tex_00F8F0, object_bg_Tex_00FCF0, object_bg_Tex_0100F0, object_bg_Tex_00FCF0 };
 ```
 
 And now it's rather more obvious what
@@ -461,24 +443,24 @@ Finally, we have to name the rest of the functions. Setup functions are usually 
 
 ```C
 void func_80C10148(EnRecepgirl* this) {
-    if (this->skelAnime.animation == &D_06001384) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+    if (this->skelAnime.animation == &object_bg_Anim_001384) {
+        Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
     }
     this->actionFunc = func_80C1019C;
 }
 
 void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
     if (SkelAnime_Update(&this->skelAnime) != 0) {
-        if (this->skelAnime.animation == &D_0600A280) {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 5.0f);
+        if (this->skelAnime.animation == &object_bg_Anim_00A280) {
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 5.0f);
         } else {
-            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, -4.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &object_bg_Anim_009890, -4.0f);
         }
     }
 
-    if (func_800B84D0(&this->actor, globalCtx) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0) {
         func_80C10290(this);
-    } else if (Actor_IsActorFacingLink(&this->actor, 0x2000)) {
+    } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
         func_800B8614(&this->actor, globalCtx, 60.0f);
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
@@ -491,7 +473,7 @@ void func_80C1019C(EnRecepgirl* this, GlobalContext* globalCtx) {
 }
 
 void func_80C10290(EnRecepgirl* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
     this->actionFunc = func_80C102D4;
 }
 
@@ -499,39 +481,39 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
     u8 temp_v0_2;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->skelAnime.animation == &D_0600A280) {
-            Animation_ChangeDefaultRepeat(&this->skelAnime, &D_06001384);
-        } else if (this->skelAnime.animation == &D_0600AD98) {
+        if (this->skelAnime.animation == &object_bg_Anim_00A280) {
+            Animation_ChangeDefaultRepeat(&this->skelAnime, &object_bg_Anim_001384);
+        } else if (this->skelAnime.animation == &object_bg_Anim_00AD98) {
             if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
-                Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
+                Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 10.0f);
             } else {
-                Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+                Animation_ChangeTransitionRepeat(&this->skelAnime, &object_bg_Anim_009890, 10.0f);
             }
         } else if (this->actor.textId == 0x2ADA) { // Mayor's office is on the left (meeting ongoing)
-            Animation_ChangeTransitionRepeat(&this->skelAnime, &D_06009890, 10.0f);
+            Animation_ChangeTransitionRepeat(&this->skelAnime, &object_bg_Anim_009890, 10.0f);
         } else {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600A280, -4.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00A280, -4.0f);
         }
     }
 
-    temp_v0_2 = func_80152498(&globalCtx->msgCtx);
+    temp_v0_2 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0_2 == 2) {
         this->actor.textId = 0x2ADC; // hear directions again?
         func_80C10148(this);
     } else if ((temp_v0_2 == 5) && (func_80147624(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
-            Actor_SetSwitchFlag(globalCtx, this->actor.params);
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
+            Flags_SetSwitch(globalCtx, this->actor.params);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
             if (gSaveContext.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
                 this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)
             }
         } else if (this->actor.textId == 0x2ADC) { // hear directions again?
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
             this->actor.textId = 0x2ADD; // "So..."
         } else {
-            Animation_MorphToPlayOnce(&this->skelAnime, &D_06000968, 10.0f);
+            Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_000968, 10.0f);
 
             if (this->actor.textId == 0x2ADD) { // "So..."
                 this->actor.textId = 0x2ADE;    // Mayor's office is on the left, drawing room on the right
@@ -546,7 +528,7 @@ void func_80C102D4(EnRecepgirl* this, GlobalContext* globalCtx) {
     }
 }
 ```
-All this branching is to make the conversation look more diverse and interesting. Notably, though, `func_80C1019C` is set to start with, and is only changed when `func_800B84D0(&this->actor, globalCtx) != 0`. This is something to do with talking. The other function handles the rest of the conversation, and hands back to the first if `func_80152498(&globalCtx->msgCtx) == 2`. This function is *something* to do with the text state, which will require `z_message` to be decomped. However, observation in-game will reveal this is something to do with ending dialogue. So we can conclude that the action functions are `EnRecepgirl_Wait` and `EnRecepgirl_Talk`. The setup functions are thus `EnRecepgirl_SetupWait` and `EnRecepgirl_SetupTalk`.
+All this branching is to make the conversation look more diverse and interesting. Notably, though, `func_80C1019C` is set to start with, and is only changed when `Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) != 0`. This is something to do with talking. The other function handles the rest of the conversation, and hands back to the first if `Message_GetState(&globalCtx->msgCtx) == 2`. This function is *something* to do with the text state, which will require `z_message` to be decomped. However, observation in-game will reveal this is something to do with ending dialogue. So we can conclude that the action functions are `EnRecepgirl_Wait` and `EnRecepgirl_Talk`. The setup functions are thus `EnRecepgirl_SetupWait` and `EnRecepgirl_SetupTalk`.
 
 For more complex actors, we have a tool called `graphovl.py` that can produce function flow graphs for actors: running 
 ```
@@ -568,7 +550,7 @@ We like to make macros for reading an actor's `params` (indeed, this is required
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
-        CollisionHeader_GetVirtual(&D_06001B2C, &colHeader);
+        CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 ```
@@ -588,7 +570,7 @@ Notice that we use `thisx`: this makes the form of every one of these macros the
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, 1);
-        CollisionHeader_GetVirtual(&D_06001B2C, &colHeader);
+        CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 ```

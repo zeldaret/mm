@@ -1,37 +1,37 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
+#include "interface/parameter_static/parameter_static.h"
+#include "prevent_bss_reordering.h"
 
-static s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
-static s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
-static s16 sHeartsPrimFactors[3][3] = { { 0, 0, 0 }, { 0, 120, -50 }, { -155, 30, 205 } };
-static s16 sHeartsEnvFactors[3][3] = { { 0, 0, 0 }, { 205, -40, -60 }, { -50, -40, 195 } };
-static s16 sHeartsDDPrimColors[3][3] = { { 255, 255, 255 }, { 255, 190, 0 }, { 100, 100, 255 } };
-static s16 sHeartsDDEnvColors[3][3] = { { 200, 0, 0 }, { 255, 0, 0 }, { 0, 0, 255 } };
-static s16 sHeartsDDPrimFactors[3][3] = { { 0, 0, 0 }, { 0, -65, -255 }, { -155, -155, 0 } };
-static s16 sHeartsDDEnvFactors[3][3] = { { 0, 0, 0 }, { 55, 0, 0 }, { -200, 0, 255 } };
+s16 sHeartsPrimColors[3][3] = { { 255, 70, 50 }, { 255, 190, 0 }, { 100, 100, 255 } };
+s16 sHeartsEnvColors[3][3] = { { 50, 40, 60 }, { 255, 0, 0 }, { 0, 0, 255 } };
+s16 sHeartsPrimFactors[3][3] = { { 0, 0, 0 }, { 0, 120, -50 }, { -155, 30, 205 } };
+s16 sHeartsEnvFactors[3][3] = { { 0, 0, 0 }, { 205, -40, -60 }, { -50, -40, 195 } };
+s16 sHeartsDDPrimColors[3][3] = { { 255, 255, 255 }, { 255, 190, 0 }, { 100, 100, 255 } };
+s16 sHeartsDDEnvColors[3][3] = { { 200, 0, 0 }, { 255, 0, 0 }, { 0, 0, 255 } };
+s16 sHeartsDDPrimFactors[3][3] = { { 0, 0, 0 }, { 0, -65, -255 }, { -155, -155, 0 } };
+s16 sHeartsDDEnvFactors[3][3] = { { 0, 0, 0 }, { 55, 0, 0 }, { -200, 0, 255 } };
 
 s16 sBeatingHeartsDDPrim[3];
 s16 sBeatingHeartsDDEnv[3];
 s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
-extern TexturePtr D_02000000; // Empty heart texture
-extern TexturePtr D_02000100; // Quarter Heart Texture
-extern TexturePtr D_02000200; // Half Heart Texture
-extern TexturePtr D_02000300; // Three Quarter Heart Texture
-extern TexturePtr D_02000400; // Full heart texture
-extern TexturePtr D_02000500; // Empty Double Defense Heart texture
-extern TexturePtr D_02000600; // Quarter Double Defense Heart Texture
-extern TexturePtr D_02000700; // Half Double Defense Heart Texture
-extern TexturePtr D_02000800; // Three Quarter Double Defense Heart Texture
-extern TexturePtr D_02000900; // Full Double Defense Heart texture
+TexturePtr HeartTextures[] = {
+    gHeartFullTex,         gHeartQuarterTex,      gHeartQuarterTex,      gHeartQuarterTex,
+    gHeartQuarterTex,      gHeartQuarterTex,      gHeartHalfTex,         gHeartHalfTex,
+    gHeartHalfTex,         gHeartHalfTex,         gHeartHalfTex,         gHeartThreeQuarterTex,
+    gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex,
+};
 
-TexturePtr HeartTextures[] = { &D_02000400, &D_02000100, &D_02000100, &D_02000100, &D_02000100, &D_02000100,
-                               &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000200, &D_02000300,
-                               &D_02000300, &D_02000300, &D_02000300, &D_02000300 };
-
-TexturePtr HeartDDTextures[] = { &D_02000900, &D_02000600, &D_02000600, &D_02000600, &D_02000600, &D_02000600,
-                                 &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000700, &D_02000800,
-                                 &D_02000800, &D_02000800, &D_02000800, &D_02000800 };
+TexturePtr HeartDDTextures[] = {
+    gDefenseHeartFullTex,         gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
+    gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
+    gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartHalfTex,
+    gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartThreeQuarterTex,
+    gDefenseHeartThreeQuarterTex, gDefenseHeartThreeQuarterTex, gDefenseHeartThreeQuarterTex,
+    gDefenseHeartThreeQuarterTex,
+};
 
 void LifeMeter_Init(GlobalContext* globalCtx) {
     InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
@@ -276,11 +276,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
             }
 
             if (i < fullHeartCount) {
-                heartTex = &D_02000400;
+                heartTex = gHeartFullTex;
             } else if (i == fullHeartCount) {
                 heartTex = HeartTextures[fractionHeartCount];
             } else {
-                heartTex = &D_02000000;
+                heartTex = gHeartEmptyTex;
             }
         } else {
             if (i < fullHeartCount) {
@@ -316,11 +316,11 @@ void LifeMeter_Draw(GlobalContext* globalCtx) {
                 gDPSetEnvColor(OVERLAY_DISP++, sHeartsDDEnv[1][0], sHeartsDDEnv[1][1], sHeartsDDEnv[1][2], 255);
             }
             if (i < fullHeartCount) {
-                heartTex = &D_02000900;
+                heartTex = gDefenseHeartFullTex;
             } else if (i == fullHeartCount) {
                 heartTex = HeartDDTextures[fractionHeartCount];
             } else {
-                heartTex = &D_02000500;
+                heartTex = gDefenseHeartEmptyTex;
             }
         }
 
@@ -399,9 +399,9 @@ void LifeMeter_UpdateSizeAndBeep(GlobalContext* globalCtx) {
         if (interfaceCtx->lifeSizeChange <= 0) {
             interfaceCtx->lifeSizeChange = 0;
             interfaceCtx->lifeSizeChangeDirection = 0;
-            if (func_801233E4(globalCtx) == 0 && (globalCtx->pauseCtx.state == 0) &&
+            if (Player_InCsMode(&globalCtx->state) == 0 && (globalCtx->pauseCtx.state == 0) &&
                 (globalCtx->pauseCtx.debugState == 0) && LifeMeter_IsCritical() && func_801690CC(globalCtx) == 0) {
-                // func_801233E4 and func_801690CC : Check if in Cutscene
+                // Player_InCsMode and func_801690CC : Check if in Cutscene
                 play_sound(NA_SE_SY_HITPOINT_ALARM);
             }
         }

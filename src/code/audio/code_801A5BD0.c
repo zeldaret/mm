@@ -6,7 +6,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A5C8C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A5CFC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/Audio_PlaySfxGeneral.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A5DDC.s")
 
@@ -24,7 +24,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A7284.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A72CC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/Audio_StopSfxByPos.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A7328.s")
 
@@ -40,6 +40,6 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A787C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A78E4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/Audio_IsSfxPlaying.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_801A5BD0/func_801A794C.s")

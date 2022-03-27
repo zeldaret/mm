@@ -7,7 +7,7 @@
 #include "z_obj_iceblock.h"
 #include "objects/object_ice_block/object_ice_block.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjIceblock*)thisx)
 
@@ -193,8 +193,8 @@ void func_80A2339C(GlobalContext* globalCtx, Vec3f* arg1, f32 arg2, f32 arg3, s3
 
 void func_80A23690(ObjIceblock* this) {
     this->dyna.actor.velocity.y += this->dyna.actor.gravity;
-    if (this->dyna.actor.velocity.y < this->dyna.actor.minVelocityY) {
-        this->dyna.actor.velocity.y = this->dyna.actor.minVelocityY;
+    if (this->dyna.actor.velocity.y < this->dyna.actor.terminalVelocity) {
+        this->dyna.actor.velocity.y = this->dyna.actor.terminalVelocity;
     }
     this->dyna.actor.world.pos.y += this->dyna.actor.velocity.y;
 }
@@ -460,7 +460,7 @@ s32 func_80A24118(ObjIceblock* this, GlobalContext* globalCtx, f32 arg2, Vec3f* 
         spD0.y = spDC.y;
         spD0.z = temp_f26 + spDC.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spDC, &spD0, &spB8, &spA8, 1, 0, 0, 1, &spAC,
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spDC, &spD0, &spB8, &spA8, true, false, false, true, &spAC,
                                     &this->dyna.actor, 0.0f)) {
             temp_f20 = Math3D_Vec3fDistSq(&spDC, &spB8);
             if (temp_f20 < phi_f20) {
@@ -536,7 +536,7 @@ s32 func_80A243E0(ObjIceblock* this, GlobalContext* globalCtx, Vec3f* arg0) {
         spE0.y = spEC.y;
         spE0.z = temp_f30 + spEC.z;
 
-        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, 1, 0, 0, 1, &spBC,
+        if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spEC, &spE0, &spC8, &spB8, true, false, false, true, &spBC,
                                     &this->dyna.actor, 0.0f)) {
             temp_f12 = Math3D_Vec3fDistSq(&spEC, &spC8);
             if (temp_f12 < phi_f22) {
@@ -600,7 +600,7 @@ s32 func_80A246D8(ObjIceblock* this, GlobalContext* globalCtx, Vec3f* arg2) {
             spB4.y = spC0.y;
             spB4.z = (Math_CosS(phi_s3) * temp_f20) + spC0.z;
 
-            if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spC0, &spB4, &sp9C, &sp94, 1, 0, 0, 1, &sp98,
+            if (BgCheck_EntityLineTest3(&globalCtx->colCtx, &spC0, &spB4, &sp9C, &sp94, true, false, false, true, &sp98,
                                         &this->dyna.actor, 0.0f)) {
                 ret = true;
                 temp_v0 = (ObjIceblock*)DynaPoly_GetActor(&globalCtx->colCtx, sp98);
@@ -670,7 +670,7 @@ void func_80A24B74(ObjIceblock* this, GlobalContext* globalCtx) {
     s32 pad;
     Vec3f sp20;
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         if (1) {}
         sp20.x = this->dyna.actor.world.pos.x;
         sp20.y = this->unk_244;
@@ -687,7 +687,7 @@ void func_80A24BDC(ObjIceblock* this, GlobalContext* globalCtx, f32 arg2, f32 ar
     s16 phi_s0;
     s32 phi_s1 = 0;
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         sp88.y = this->unk_244;
         temp_f22 = 0x10000 / arg4;
 
@@ -723,7 +723,7 @@ void func_80A24DD0(ObjIceblock* this, GlobalContext* globalCtx) {
     }
 
     this->unk_2A2++;
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         if (this->unk_2A2 >= 0x2E) {
             phi_f22 = 1.0f;
         } else {
@@ -764,7 +764,7 @@ void func_80A2508C(ObjIceblock* this, GlobalContext* globalCtx) {
     f32 temp_f0;
     s32 temp_v0;
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         temp_v0 = (s32)(this->dyna.actor.scale.y * 130.0f) - 3;
         if (temp_v0 > 0) {
             this->unk_2AC += temp_v0;
@@ -893,9 +893,12 @@ void func_80A25440(ObjIceblock* this) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_F32_DIV1000(speedXZ, 16000, ICHAIN_CONTINUE),       ICHAIN_F32_DIV1000(gravity, -1800, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(minVelocityY, -26000, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),      ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(speedXZ, 16000, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(gravity, -1800, ICHAIN_CONTINUE),
+    ICHAIN_F32_DIV1000(terminalVelocity, -26000, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 150, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_STOP),
 };
 
@@ -931,7 +934,7 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (D_80A26E7C == NULL) {
-        D_80A26E7C = Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_000328);
+        D_80A26E7C = Lib_SegmentedToVirtual(object_ice_block_Matanimheader_000328);
     }
 
     if (!(this->unk_1B0 & 8)) {
@@ -1005,7 +1008,7 @@ void func_80A2586C(ObjIceblock* this, GlobalContext* globalCtx) {
 
     func_80A2319C(this, this->dyna.actor.scale.x);
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         func_80A2339C(globalCtx, &this->dyna.actor.world.pos, (this->dyna.actor.scale.x + 0.05f) * 0.6666666f, 1.0f, 3);
     }
 }
@@ -1025,7 +1028,7 @@ void func_80A25994(ObjIceblock* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (this->dyna.actor.flags & 0x40) {
+    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         func_80A2339C(globalCtx, &this->dyna.actor.world.pos, this->dyna.actor.scale.x, 1.2f, 15);
         if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
             sp30.x = this->dyna.actor.world.pos.x;
@@ -1093,13 +1096,13 @@ void func_80A25BBC(ObjIceblock* this, GlobalContext* globalCtx) {
     func_80A23690(this);
 
     if (func_80A23F90(this, globalCtx)) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
     }
 
     if (func_80A24954(this, globalCtx)) {
         func_80A2491C(this);
         if (this->unk_2B0 == 3) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_DIVE_INTO_WATER_L);
         }
     }
 }
@@ -1172,12 +1175,12 @@ void func_80A25E50(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A25BA0(this);
     } else if (sp38) {
         if (func_80A24118(this, globalCtx, 59.9f, &sp28)) {
-            Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         }
         func_80A2541C(this, globalCtx);
         func_80A25CF4(this);
     } else {
-        func_800B9010(&this->dyna.actor, 0xDF);
+        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 }
 
@@ -1201,7 +1204,7 @@ void func_80A25FD4(ObjIceblock* this, GlobalContext* globalCtx) {
     if (sp2C == -1) {
         sp30 = false;
     } else if (!(this->unk_1B0 & 2) && (this->unk_26E[sp2C] >= 11) && !func_80A24118(this, globalCtx, 2.0f, &sp20) &&
-               !func_801233E4(globalCtx)) {
+               !Player_InCsMode(&globalCtx->state)) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
@@ -1259,11 +1262,11 @@ void func_80A26144(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A23B88(this);
         func_80A25BA0(this);
     } else if (sp28) {
-        Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
         func_80A23B88(this);
         func_80A25FA0(this);
     } else {
-        func_800B9010(&this->dyna.actor, 0xDF);
+        func_800B9010(&this->dyna.actor, NA_SE_PL_SLIP_ICE_LEVEL - SFX_FLAG);
     }
 
     func_80A24DD0(this, globalCtx);
@@ -1495,7 +1498,7 @@ void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     func_80A25440(this);
-    Actor_SetHeight(&this->dyna.actor, this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y);
+    Actor_SetFocus(&this->dyna.actor, this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y);
     this->unk_1B0 &= ~0x2;
 
     if (parent) {}
@@ -1505,10 +1508,10 @@ void func_80A26B64(ObjIceblock* this, GlobalContext* globalCtx) {
 }
 
 void func_80A26B74(ObjIceblock* this, GlobalContext* globalCtx) {
-    func_800BE03C(globalCtx, object_ice_block_DL_0001A0);
+    Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0001A0);
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
-        func_800BE03C(globalCtx, object_ice_block_DL_0007F0);
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
+        Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0007F0);
     }
 }
 
@@ -1536,7 +1539,7 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
     }
 
     if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_ice_block_Matanimheader_0009D0));
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 20.0f,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);

@@ -12,7 +12,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197A54.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197AA4.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_SequenceChannelDisable.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197B14.s")
 
@@ -20,13 +20,13 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197C8C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197D24.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_SequencePlayerDisableAsFinished.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197D4C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_SequencePlayerDisable.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197E08.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_AudioListPushBack.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197E48.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_AudioListPopBack.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_80197E88.s")
 
@@ -64,10 +64,10 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019AAF0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019AB40.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_ResetSequencePlayer.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019AC10.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_InitSequencePlayerChannels.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019ACEC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/func_8019ADBC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/audio_seqplayer/AudioSeq_InitSequencePlayers.s")

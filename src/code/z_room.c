@@ -29,7 +29,7 @@ void Room_DrawType0Mesh(GlobalContext* globalCtx, Room* room, u32 flags) {
     }
 
     mesh = &room->mesh->type0;
-    meshParams = (RoomMeshType0Params*)Lib_SegmentedToVirtual(mesh->paramsStart);
+    meshParams = Lib_SegmentedToVirtual(mesh->paramsStart);
     for (i = 0; i < mesh->count; i++) {
         if ((flags & 1) && (meshParams->opaqueDl != NULL)) {
             gSPDisplayList(gfxCtx->polyOpa.p++, meshParams->opaqueDl);
@@ -75,12 +75,10 @@ void Room_Init(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_AllocateAndLoad.s")
 
-#ifdef NON_MATCHING
 s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32 index) {
-    size_t size;
-
-    // XXX: this should use a branch-likely
     if (roomCtx->unk31 == 0) {
+        s32 size;
+
         roomCtx->prevRoom = roomCtx->currRoom;
         roomCtx->currRoom.num = index;
         roomCtx->currRoom.segment = NULL;
@@ -101,9 +99,6 @@ s32 Room_StartRoomTransition(GlobalContext* globalCtx, RoomContext* roomCtx, s32
 
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_room/Room_StartRoomTransition.s")
-#endif
 
 s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
     if (roomCtx->unk31 == 1) {
@@ -119,7 +114,7 @@ s32 Room_HandleLoadCallbacks(GlobalContext* globalCtx, RoomContext* roomCtx) {
 
             if (((globalCtx->sceneNum != SCENE_IKANA) || (roomCtx->currRoom.num != 1)) &&
                 (globalCtx->sceneNum != SCENE_IKNINSIDE)) {
-                globalCtx->envCtx.unk_C3 = 0xff;
+                globalCtx->envCtx.lightSettingOverride = 0xff;
                 globalCtx->envCtx.unk_E0 = 0;
             }
             func_800FEAB0();

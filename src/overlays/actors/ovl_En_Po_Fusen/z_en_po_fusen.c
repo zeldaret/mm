@@ -6,8 +6,9 @@
 
 #include "z_en_po_fusen.h"
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
+#include "objects/object_po_fusen/object_po_fusen.h"
 
-#define FLAGS 0x80100030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnPoFusen*)thisx)
 
@@ -26,10 +27,7 @@ void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_Idle(EnPoFusen* this, GlobalContext* globalCtx);
 void EnPoFusen_IdleFuse(EnPoFusen* this, GlobalContext* globalCtx);
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* arg);
-
-extern AnimationHeader D_06000040;
-extern FlexSkeletonHeader D_060024F0;
+                               Actor* thisx);
 
 const ActorInit En_Po_Fusen_InitVars = {
     ACTOR_EN_PO_FUSEN,
@@ -111,8 +109,9 @@ void EnPoFusen_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (0) {}
     this->collider.dim.worldSphere.radius = 40;
-    SkelAnime_InitFlex(globalCtx, &this->anime, &D_060024F0, &D_06000040, this->jointTable, this->morphTable, 10);
-    ActorShape_Init(&this->actor.shape, 0.0f, func_800B3FC0, 25.0f);
+    SkelAnime_InitFlex(globalCtx, &this->anime, &object_po_fusen_Skel_0024F0, &object_po_fusen_Anim_000040,
+                       this->jointTable, this->morphTable, 10);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
 
     if (EnPoFusen_CheckParent(this, globalCtx) == 0) {
@@ -148,9 +147,9 @@ void EnPoFusen_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 u16 EnPoFusen_CheckParent(EnPoFusen* this, GlobalContext* globalCtx) {
-    struct Actor* actorPtr;
+    Actor* actorPtr;
 
-    actorPtr = globalCtx->actorCtx.actorList[ACTORCAT_NPC].first;
+    actorPtr = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
     if (GET_IS_FUSE_TYPE_PARAM(this)) {
         return 1;
     }
@@ -243,7 +242,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 void EnPoFusen_Pop(EnPoFusen* this, GlobalContext* globalCtx) {
     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x,
                 this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
-    Audio_PlayActorSound2(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_MarkForDeath(&this->actor);
 }
 
@@ -271,8 +270,8 @@ void EnPoFusen_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
-                               Actor* arg) {
-    EnPoFusen* this = (EnPoFusen*)arg;
+                               Actor* thisx) {
+    EnPoFusen* this = THIS;
     f32 zScale;
     f32 yScale;
     f32 xScale;
@@ -307,18 +306,19 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         rot->y += (s16)(this->limb9Rot * Math_SinS(this->randBaseRotChange));
         rot->z += (s16)(this->limb9Rot * Math_CosS(this->randBaseRotChange));
     }
-    return 0;
+    return false;
 }
 
-void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* arg) {
+void EnPoFusen_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-void EnPoFusen_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnPoFusen_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 }
 
 void EnPoFusen_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPoFusen* this = THIS;
     func_8012C28C(globalCtx->state.gfxCtx);
-    func_801343C0(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
-                  EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_UnkActorDraw, &this->actor);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
+                                   EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_TransformLimbDraw,
+                                   &this->actor);
 }

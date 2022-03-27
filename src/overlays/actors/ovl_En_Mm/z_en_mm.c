@@ -5,8 +5,9 @@
  */
 
 #include "z_en_mm.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnMm*)thisx)
 
@@ -79,7 +80,7 @@ void EnMm_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    ActorShape_Init(&this->actor.shape, 50.0f, func_800B3FC0, 1.2f);
+    ActorShape_Init(&this->actor.shape, 50.0f, ActorShadow_DrawCircle, 1.2f);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     if (this->actor.parent != NULL) {
@@ -123,7 +124,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         func_80965BBC(this);
-        Audio_PlayActorSound2(&this->actor, NA_SE_PL_PULL_UP_ROCK);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_PULL_UP_ROCK);
     } else {
         if ((this->actor.velocity.y > 0.0f) && (this->actor.bgCheckFlags & 0x10)) {
             this->actor.velocity.y = 0.0f;
@@ -134,7 +135,7 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
             this->actor.world.rot.y += BINANG_SUB(0x8000, (s16)(angle * 2));
             this->actor.speedXZ *= 0.5f;
             CollisionCheck_SpawnShieldParticles(globalCtx, &this->actor.world.pos);
-            Audio_PlayActorSound2(&this->actor, NA_SE_EV_HUMAN_BOUND);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
 
         if (!(this->actor.bgCheckFlags & 1)) {
@@ -168,13 +169,13 @@ void func_80965DB4(EnMm* this, GlobalContext* globalCtx) {
                     this->actor.bgCheckFlags &= ~1;
                 }
 
-                Audio_PlayActorSound2(&this->actor, NA_SE_EV_HUMAN_BOUND);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HUMAN_BOUND);
             } else {
-                func_800B8A1C(&this->actor, globalCtx, GI_NONE, 50.0f, 30.0f);
+                Actor_PickUp(&this->actor, globalCtx, GI_NONE, 50.0f, 30.0f);
             }
         }
 
-        Actor_SetVelocityAndMoveYRotationAndGravity(&this->actor);
+        Actor_MoveWithGravity(&this->actor);
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -200,7 +201,7 @@ void EnMm_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_ResetCylinderAC(globalCtx, &this->collider.base);
     this->actionFunc(this, globalCtx);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 20.0f, 10.0f, 20.0f, 31);
-    Actor_SetHeight(&this->actor, 20.0f);
+    Actor_SetFocus(&this->actor, 20.0f);
 }
 
 void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
@@ -216,6 +217,6 @@ void EnMm_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateY(-rotY, MTXMODE_APPLY);
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, &D_04055628);
+    gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
