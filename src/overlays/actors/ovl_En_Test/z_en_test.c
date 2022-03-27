@@ -28,106 +28,106 @@ const ActorInit En_Test_InitVars = {
     (ActorFunc)EnTest_Draw,
 };
 
-void func_80862B70(EnTestStruct* arg0_) {
+void func_80862B70(EnTestStruct* arg0) {
     s32 i;
 
     for (i = 0; i < 20; i++) {
-        EnTestStruct* arg0 = &arg0_[i];
+        EnTestStruct* ptr = &arg0[i];
 
-        arg0->unk_00 = false;
-        arg0->unk_04 = 0;
-        arg0->unk_08.x = 0.0f;
-        arg0->unk_08.y = 0.0f;
-        arg0->unk_08.z = 0.0f;
-        arg0->unk_14.x = 0.0f;
-        arg0->unk_14.y = 0.0f;
-        arg0->unk_14.z = 0.0f;
-        arg0->unk_20.x = 0.0f;
-        arg0->unk_20.y = 0.0f;
-        arg0->unk_20.z = 0.0f;
-        arg0->unk_2C = 0.001f;
-        arg0->unk_30.x = 0;
-        arg0->unk_30.y = 0;
-        arg0->unk_30.z = 0;
-        arg0->unk_36.x = 0;
-        arg0->unk_36.y = 0;
-        arg0->unk_36.z = 0;
+        ptr->unk_00 = false;
+        ptr->unk_04 = 0;
+        ptr->unk_08.x = 0.0f;
+        ptr->unk_08.y = 0.0f;
+        ptr->unk_08.z = 0.0f;
+        ptr->unk_14.x = 0.0f;
+        ptr->unk_14.y = 0.0f;
+        ptr->unk_14.z = 0.0f;
+        ptr->unk_20.x = 0.0f;
+        ptr->unk_20.y = 0.0f;
+        ptr->unk_20.z = 0.0f;
+        ptr->unk_2C = 0.001f;
+        ptr->unk_30.x = 0;
+        ptr->unk_30.y = 0;
+        ptr->unk_30.z = 0;
+        ptr->unk_36.x = 0;
+        ptr->unk_36.y = 0;
+        ptr->unk_36.z = 0;
     }
 }
 
-void func_80862CBC(EnTestStruct* arg0_, Vec3f* arg1) {
-    EnTestStruct* arg0;
+void func_80862CBC(EnTestStruct* arg0, Vec3f* arg1) {
+    EnTestStruct* ptr;
     s32 i;
 
     for (i = 0; i < 20; i++) {
-        arg0 = &arg0_[i];
+        ptr = &arg0[i];
 
-        if (!arg0->unk_00) {
+        if (!ptr->unk_00) {
             s16 sp26 = Rand_ZeroOne() * 0xFFFF;
             f32 sp20;
 
-            arg0->unk_00 = true;
+            ptr->unk_00 = true;
 
-            arg0->unk_08.x = (Math_CosS(sp26) * 20.0f) + arg1->x;
-            arg0->unk_08.y = arg1->y;
-            arg0->unk_08.z = (Math_SinS(sp26) * 20.0f) + arg1->z;
+            ptr->unk_08.x = (Math_CosS(sp26) * 20.0f) + arg1->x;
+            ptr->unk_08.y = arg1->y;
+            ptr->unk_08.z = (Math_SinS(sp26) * 20.0f) + arg1->z;
 
             sp20 = Rand_ZeroOne();
 
-            arg0->unk_14.x = Math_CosS(sp26) * 13.0f * sp20;
-            arg0->unk_14.y = (Rand_ZeroOne() * 5.0f) + 8.0f;
-            arg0->unk_14.z = (Math_SinS(sp26) * 13.0f) * sp20;
+            ptr->unk_14.x = Math_CosS(sp26) * 13.0f * sp20;
+            ptr->unk_14.y = (Rand_ZeroOne() * 5.0f) + 8.0f;
+            ptr->unk_14.z = (Math_SinS(sp26) * 13.0f) * sp20;
 
-            arg0->unk_20.x = 0.0f;
-            arg0->unk_20.z = 0.0f;
-            arg0->unk_20.y = -2.0f;
+            ptr->unk_20.x = 0.0f;
+            ptr->unk_20.z = 0.0f;
+            ptr->unk_20.y = -2.0f;
 
-            arg0->unk_2C = (Rand_ZeroOne() * 0.0004f) + 0.0004f;
+            ptr->unk_2C = (Rand_ZeroOne() * 0.0004f) + 0.0004f;
 
-            arg0->unk_30.x = Rand_ZeroOne() * 0x7FFE;
-            arg0->unk_30.y = Rand_ZeroOne() * 0x7FFE;
-            arg0->unk_30.z = Rand_ZeroOne() * 0x7FFE;
+            ptr->unk_30.x = Rand_ZeroOne() * 0x7FFE;
+            ptr->unk_30.y = Rand_ZeroOne() * 0x7FFE;
+            ptr->unk_30.z = Rand_ZeroOne() * 0x7FFE;
 
-            arg0->unk_36.x = Rand_ZeroOne() * 0x2000;
-            arg0->unk_36.y = Rand_ZeroOne() * 0x2000;
-            arg0->unk_36.z = Rand_ZeroOne() * 0x2000;
+            ptr->unk_36.x = Rand_ZeroOne() * 0x2000;
+            ptr->unk_36.y = Rand_ZeroOne() * 0x2000;
+            ptr->unk_36.z = Rand_ZeroOne() * 0x2000;
 
-            arg0->unk_04 = 10;
+            ptr->unk_04 = 10;
             break;
         }
     }
 }
 
-void func_80862EDC(EnTestStruct* arg0_) {
+void func_80862EDC(EnTestStruct* arg0) {
     s32 i;
-    EnTestStruct* arg0;
+    EnTestStruct* ptr;
 
     for (i = 0; i < 20; i++) {
-        arg0 = &arg0_[i];
+        ptr = &arg0[i];
 
-        if (arg0->unk_00) {
-            arg0->unk_04--;
-            if (arg0->unk_04 < 0) {
-                arg0->unk_00 = false;
+        if (ptr->unk_00) {
+            ptr->unk_04--;
+            if (ptr->unk_04 < 0) {
+                ptr->unk_00 = false;
             }
 
-            arg0->unk_08.x += arg0->unk_14.x;
-            arg0->unk_08.y += arg0->unk_14.y;
-            arg0->unk_08.z += arg0->unk_14.z;
+            ptr->unk_08.x += arg0->unk_14.x;
+            ptr->unk_08.y += arg0->unk_14.y;
+            ptr->unk_08.z += arg0->unk_14.z;
 
-            arg0->unk_14.x += arg0->unk_20.x;
-            arg0->unk_14.y += arg0->unk_20.y;
-            arg0->unk_14.z += arg0->unk_20.z;
+            ptr->unk_14.x += arg0->unk_20.x;
+            ptr->unk_14.y += arg0->unk_20.y;
+            ptr->unk_14.z += arg0->unk_20.z;
 
-            arg0->unk_30.x += arg0->unk_36.x;
-            arg0->unk_30.y += arg0->unk_36.y;
-            arg0->unk_30.z += arg0->unk_36.z;
+            ptr->unk_30.x += arg0->unk_36.x;
+            ptr->unk_30.y += arg0->unk_36.y;
+            ptr->unk_30.z += arg0->unk_36.z;
         }
     }
 }
 
-void func_80863048(GlobalContext* globalCtx, EnTestStruct* arg1_) {
-    EnTestStruct* arg1;
+void func_80863048(GlobalContext* globalCtx, EnTestStruct* arg1) {
+    EnTestStruct* ptr;
     s32 i;
     Mtx* mtx;
 
@@ -139,15 +139,15 @@ void func_80863048(GlobalContext* globalCtx, EnTestStruct* arg1_) {
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
     for (i = 0; i < 20; i++) {
-        arg1 = &arg1_[i];
+        ptr = &arg1[i];
 
-        if (!arg1->unk_00) {
+        if (!ptr->unk_00) {
             continue;
         }
 
-        Matrix_InsertTranslation(arg1->unk_08.x, arg1->unk_08.y, arg1->unk_08.z, MTXMODE_NEW);
-        Matrix_InsertRotation(arg1->unk_30.x, arg1->unk_30.y, arg1->unk_30.z, MTXMODE_APPLY);
-        Matrix_Scale(arg1->unk_2C, arg1->unk_2C, arg1->unk_2C, MTXMODE_APPLY);
+        Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+        Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
+        Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);
 
         mtx = Matrix_NewMtx(globalCtx->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
