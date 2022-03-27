@@ -112,7 +112,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.cutscene = this->cutscenes[0];
 
     // between midnight and morning start spawned
-    if (gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         this->alpha = 255;
     } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
@@ -121,7 +121,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // check if already healed
-    if (gSaveContext.weekEventReg[82] & 4) {
+    if (gSaveContext.save.weekEventReg[82] & 4) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -292,7 +292,7 @@ void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
             case 0x147D: // I am counting on you
                 func_801477B4(globalCtx);
                 this->actionFunc = EnYb_Disappear;
-                gSaveContext.weekEventReg[82] |= 0x4;
+                gSaveContext.save.weekEventReg[82] |= 0x4;
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
@@ -353,7 +353,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
     if (this->actor.xzDistToPlayer < 180.0f && fabsf(this->actor.playerHeightRel) < 50.0f &&
         globalCtx->msgCtx.ocarinaMode == 3 && globalCtx->msgCtx.unk1202E == 7 &&
-        gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
@@ -385,7 +385,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
 }
 
 void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx) {
-    if (gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         EnYb_UpdateAnimation(this, globalCtx);
         this->alpha += 5;
         if (this->alpha > 250) {

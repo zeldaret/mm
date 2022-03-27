@@ -341,7 +341,7 @@ s32 func_80BF17BC(EnIg* this, GlobalContext* globalCtx) {
 
         case 1:
         case 3:
-            if (!(gSaveContext.weekEventReg[75] & 0x10) && (this->unk_3F6 == 3)) {
+            if (!(gSaveContext.save.weekEventReg[75] & 0x10) && (this->unk_3F6 == 3)) {
                 ActorCutscene_Stop(sp2A);
                 this->unk_3F6 = 5;
             } else {
@@ -509,7 +509,7 @@ s32 func_80BF1D78(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80BF1DF4(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp56 = gSaveContext.time - 0x3FFC;
+    u16 sp56 = gSaveContext.save.time - 0x3FFC;
     u8 sp55 = ENIG_GET_FF(&this->actor);
     EnDoor* door;
     Vec3s* sp4C;
@@ -554,7 +554,7 @@ s32 func_80BF1DF4(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80BF1FA8(EnIg* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp2E = gSaveContext.time - 0x3FFC;
+    u16 sp2E = gSaveContext.save.time - 0x3FFC;
     u16 phi_v1;
     u8 sp2B = ENIG_GET_FF(&this->actor);
     s32 temp_t8;
@@ -840,7 +840,7 @@ void func_80BF2A50(EnIg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BF2AF8(EnIg* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
+    u32* unk_14 = &gSaveContext.save.daySpeed;
     struct_80133038_arg2 sp20;
 
     this->unk_3EC = REG(15) + *unk_14;

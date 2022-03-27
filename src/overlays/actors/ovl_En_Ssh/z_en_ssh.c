@@ -707,11 +707,11 @@ void EnSsh_Talk(EnSsh* this, GlobalContext* globalCtx) {
 void func_809756D0(EnSsh* this, GlobalContext* globalCtx) {
     u16 phi_a1;
 
-    if (gSaveContext.weekEventReg[34] & 8) {
+    if (gSaveContext.save.weekEventReg[34] & 8) {
         phi_a1 = 0x914;
     } else {
         phi_a1 = 0x910;
-        gSaveContext.weekEventReg[34] |= 8;
+        gSaveContext.save.weekEventReg[34] |= 8;
     }
     Message_StartTextbox(globalCtx, phi_a1, &this->actor);
 }

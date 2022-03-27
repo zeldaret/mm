@@ -332,8 +332,9 @@ void func_80B76980(EnTruMt* this, GlobalContext* globalCtx) {
     } else if (gSaveContext.eventInf[4] & 1) {
         u32 score = gSaveContext.minigameScore;
 
-        if (((gSaveContext.unk_EE8 & 0xFFFF0000) >> 0x10) < score) {
-            gSaveContext.unk_EE8 = ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.unk_EE8 & 0xFFFF);
+        if (((gSaveContext.save.unk_EE8 & 0xFFFF0000) >> 0x10) < score) {
+            gSaveContext.save.unk_EE8 =
+                ((gSaveContext.minigameScore & 0xFFFF) << 0x10) | (gSaveContext.save.unk_EE8 & 0xFFFF);
             gSaveContext.eventInf[3] |= 0x80;
         }
     }

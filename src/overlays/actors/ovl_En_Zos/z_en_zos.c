@@ -84,11 +84,11 @@ void EnZos_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (ENZOS_GET_F(&this->actor)) {
         case ENZOS_F_1:
-            if (!(gSaveContext.weekEventReg[55] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
             }
 
-            if (gSaveContext.weekEventReg[78] & 1) {
+            if (gSaveContext.save.weekEventReg[78] & 1) {
                 this->actionFunc = func_80BBC24C;
             } else {
                 this->actionFunc = func_80BBC14C;
@@ -104,7 +104,7 @@ void EnZos_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         default:
-            if (gSaveContext.weekEventReg[55] & 0x80) {
+            if (gSaveContext.save.weekEventReg[55] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -115,7 +115,7 @@ void EnZos_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnZos_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnZos* this = THIS;
 
-    gSaveContext.weekEventReg[52] &= (u8)~0x10;
+    gSaveContext.save.weekEventReg[52] &= (u8)~0x10;
 }
 
 void func_80BBAE84(EnZos* this, s16 arg1, u8 arg2) {
@@ -187,7 +187,7 @@ void func_80BBB0D4(EnZos* this, GlobalContext* globalCtx) {
 void func_80BBB15C(EnZos* this, GlobalContext* globalCtx) {
     s32 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (this->unk_2B6 & 8) {
             textId = 0x1235;
             func_80BBAE84(this, 6, 0);
@@ -196,7 +196,7 @@ void func_80BBB15C(EnZos* this, GlobalContext* globalCtx) {
             textId = 0x123E;
             func_80BBAE84(this, 6, 0);
             this->unk_2B6 |= 2;
-        } else if (gSaveContext.weekEventReg[40] & 0x20) {
+        } else if (gSaveContext.save.weekEventReg[40] & 0x20) {
             textId = 0x1236;
             func_80BBAE84(this, 6, 0);
             this->unk_2B6 |= 0x80;
@@ -207,13 +207,13 @@ void func_80BBB15C(EnZos* this, GlobalContext* globalCtx) {
         }
     } else {
         this->unk_2B6 &= ~2;
-        if (gSaveContext.weekEventReg[39] & 0x10) {
+        if (gSaveContext.save.weekEventReg[39] & 0x10) {
             textId = 0x1243;
             func_80BBAE84(this, 6, 0);
             this->unk_2B6 |= 0x80;
         } else {
             textId = 0x1244;
-            gSaveContext.weekEventReg[39] |= 0x10;
+            gSaveContext.save.weekEventReg[39] |= 0x10;
             func_80BBAE84(this, 4, 0);
             this->unk_2B6 |= 0x10;
         }
@@ -237,11 +237,11 @@ void func_80BBB354(EnZos* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BBB2C4;
-        gSaveContext.weekEventReg[39] |= 0x20;
+        gSaveContext.save.weekEventReg[39] |= 0x20;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
-        if (gSaveContext.weekEventReg[39] & 0x20) {
+        if (gSaveContext.save.weekEventReg[39] & 0x20) {
             item = GI_RUPEE_PURPLE;
         } else {
             item = GI_HEART_PIECE;
@@ -348,22 +348,22 @@ void func_80BBB718(EnZos* this, GlobalContext* globalCtx) {
                 player->actor.textId = 0x1232;
                 func_80BBAE84(this, 5, 0);
                 this->unk_2B6 |= 8;
-                gSaveContext.weekEventReg[40] |= 0x20;
-            } else if (gSaveContext.weekEventReg[39] & 8) {
+                gSaveContext.save.weekEventReg[40] |= 0x20;
+            } else if (gSaveContext.save.weekEventReg[39] & 8) {
                 player->actor.textId = 0x1241;
             } else {
                 player->actor.textId = 0x1237;
-                gSaveContext.weekEventReg[39] |= 8;
+                gSaveContext.save.weekEventReg[39] |= 8;
                 func_80BBAE84(this, 4, 0);
                 this->unk_2B6 |= 4;
             }
             this->actionFunc = func_80BBB8AC;
         } else if (sp24 < 0) {
-            if (gSaveContext.weekEventReg[39] & 8) {
+            if (gSaveContext.save.weekEventReg[39] & 8) {
                 func_80151938(globalCtx, 0x1241);
             } else {
                 func_80151938(globalCtx, 0x1237);
-                gSaveContext.weekEventReg[39] |= 8;
+                gSaveContext.save.weekEventReg[39] |= 8;
                 func_80BBAE84(this, 4, 0);
                 this->unk_2B6 |= 4;
             }
@@ -470,17 +470,17 @@ void func_80BBB8AC(EnZos* this, GlobalContext* globalCtx) {
 void func_80BBBB84(EnZos* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             Message_StartTextbox(globalCtx, 0x1248, &this->actor);
             this->actionFunc = func_80BBB8AC;
             func_80BBAE84(this, 6, 0);
             this->unk_2B6 |= 2;
-        } else if (gSaveContext.weekEventReg[41] & 0x10) {
+        } else if (gSaveContext.save.weekEventReg[41] & 0x10) {
             Message_StartTextbox(globalCtx, 0x124A, &this->actor);
             this->actionFunc = func_80BBB8AC;
             func_80BBAE84(this, 6, 0);
         } else {
-            gSaveContext.weekEventReg[41] |= 0x10;
+            gSaveContext.save.weekEventReg[41] |= 0x10;
             Message_StartTextbox(globalCtx, 0x124B, &this->actor);
             this->actionFunc = func_80BBB574;
             func_80BBAE84(this, 9, 2);
@@ -544,9 +544,9 @@ void func_80BBBDE0(EnZos* this, GlobalContext* globalCtx) {
     }
 
     if (!Actor_IsFacingPlayer(&this->actor, 0x4000) && (this->actor.xzDistToPlayer < 100.0f)) {
-        gSaveContext.weekEventReg[52] |= 0x10;
+        gSaveContext.save.weekEventReg[52] |= 0x10;
     } else {
-        gSaveContext.weekEventReg[52] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[52] &= (u8)~0x10;
     }
 
     sp28.x = this->actor.projectedPos.x;
@@ -558,14 +558,14 @@ void func_80BBBDE0(EnZos* this, GlobalContext* globalCtx) {
 void func_80BBBFBC(EnZos* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[79] & 1) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.weekEventReg[79] & 1) {
             textId = 0x125B;
-        } else if (gSaveContext.weekEventReg[78] & 0x80) {
+        } else if (gSaveContext.save.weekEventReg[78] & 0x80) {
             textId = 0x125A;
         } else {
             textId = 0x1259;
-            gSaveContext.weekEventReg[78] |= 0x80;
+            gSaveContext.save.weekEventReg[78] |= 0x80;
         }
         func_80BBAE84(this, 5, 0);
     } else {
@@ -626,7 +626,7 @@ void func_80BBC22C(EnZos* this, GlobalContext* globalCtx) {
 
 void func_80BBC24C(EnZos* this, GlobalContext* globalCtx) {
     func_80BBB0D4(this, globalCtx);
-    if (gSaveContext.weekEventReg[79] & 1) {
+    if (gSaveContext.save.weekEventReg[79] & 1) {
         this->actionFunc = func_80BBC22C;
         func_80BBAE84(this, 7, 2);
     }

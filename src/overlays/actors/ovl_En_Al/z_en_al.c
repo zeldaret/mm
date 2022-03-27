@@ -187,7 +187,7 @@ Actor* func_80BDE384(EnAl* this, GlobalContext* globalCtx) {
 
     switch (this->unk_35C) {
         case 2:
-            if (!(gSaveContext.weekEventReg[89] & 8) && (gSaveContext.weekEventReg[85] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
                 actor = func_80BDE1A0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_PM);
             } else {
                 actor = &GET_PLAYER(globalCtx)->actor;
@@ -398,7 +398,7 @@ s32 func_80BDEA14(EnAl* this, GlobalContext* globalCtx) {
     switch (this->unk_4E6) {
         case 0:
         case 1:
-            if ((gSaveContext.weekEventReg[75] & 2)) {
+            if ((gSaveContext.save.weekEventReg[75] & 2)) {
                 sp18 = true;
             } else if (func_80BDE4E0(this, &this->unk_4E6, 0)) {
                 sp18 = true;
@@ -439,7 +439,7 @@ s32* func_80BDEABC(EnAl* this, GlobalContext* globalCtx) {
             return D_80BDFE84;
 
         case 2:
-            if (!(gSaveContext.weekEventReg[89] & 8) && (gSaveContext.weekEventReg[85] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[89] & 8) && (gSaveContext.save.weekEventReg[85] & 0x80)) {
                 this->unk_4EC = func_80BDE7FC;
                 return D_80BDFCBC;
             }
@@ -687,15 +687,15 @@ void func_80BDF414(EnAl* this, GlobalContext* globalCtx) {
     switch (this->unk_4EA) {
         case 0:
         case 1:
-            if (!(gSaveContext.weekEventReg[89] & 8)) {
-                if (gSaveContext.weekEventReg[85] & 0x80) {
+            if (!(gSaveContext.save.weekEventReg[89] & 8)) {
+                if (gSaveContext.save.weekEventReg[85] & 0x80) {
                     func_80BDE4E0(this, &this->unk_4EA, 0);
                 }
             }
             break;
 
         case 2:
-            if (gSaveContext.weekEventReg[89] & 8) {
+            if (gSaveContext.save.weekEventReg[89] & 8) {
                 this->unk_4EA++;
             }
             break;
@@ -734,7 +734,7 @@ void func_80BDF578(EnAl* this, GlobalContext* globalCtx) {
 }
 
 void func_80BDF5E8(EnAl* this, GlobalContext* globalCtx) {
-    u32* unk14 = &gSaveContext.unk_14;
+    u32* unk14 = &gSaveContext.save.daySpeed;
     struct_80133038_arg2 sp20;
 
     this->unk_4E0 = REG(15) + *unk14;

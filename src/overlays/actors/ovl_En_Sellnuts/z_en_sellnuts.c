@@ -348,21 +348,21 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
         } else {
             switch (this->unk_340) {
                 case 0x60E:
-                    gSaveContext.weekEventReg[17] |= 0x20;
-                    gSaveContext.weekEventReg[86] |= 4;
+                    gSaveContext.save.weekEventReg[17] |= 0x20;
+                    gSaveContext.save.weekEventReg[86] |= 4;
                     Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x628:
-                    gSaveContext.weekEventReg[77] |= 0x40;
-                    gSaveContext.weekEventReg[86] |= 4;
+                    gSaveContext.save.weekEventReg[77] |= 0x40;
+                    gSaveContext.save.weekEventReg[86] |= 4;
                     Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x614:
-                    gSaveContext.weekEventReg[17] |= 0x40;
+                    gSaveContext.save.weekEventReg[17] |= 0x40;
                     Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
@@ -384,22 +384,22 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
                this->actor.isTargeted) {
         func_800B85E0(&this->actor, globalCtx, 80.0f, EXCH_ITEM_2A);
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (gSaveContext.day == 3) {
+            if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
-                if (gSaveContext.weekEventReg[77] & 0x40) {
+                if (gSaveContext.save.weekEventReg[77] & 0x40) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             } else {
                 this->unk_33A = 1;
-                if (gSaveContext.weekEventReg[17] & 0x20) {
+                if (gSaveContext.save.weekEventReg[17] & 0x20) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             }
-        } else if (gSaveContext.weekEventReg[17] & 0x40) {
+        } else if (gSaveContext.save.weekEventReg[17] & 0x40) {
             this->unk_340 = D_80ADD918[this->unk_33A];
         } else {
             this->unk_340 = D_80ADD910[this->unk_33A];
@@ -479,7 +479,7 @@ void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        gSaveContext.weekEventReg[17] |= 0x80;
+        gSaveContext.save.weekEventReg[17] |= 0x80;
         this->actionFunc = func_80ADBCE4;
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_DEED_LAND, 300.0f, 300.0f);
@@ -723,7 +723,7 @@ void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (gSaveContext.day == 3) {
+            if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
             } else {
                 this->unk_33A = 1;
@@ -835,7 +835,7 @@ void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 17);
         } else if (this->unk_34C == 17) {
             ActorCutscene_Stop(this->cutscene);
-            gSaveContext.weekEventReg[73] |= 4;
+            gSaveContext.save.weekEventReg[73] |= 4;
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -871,7 +871,7 @@ void func_80ADCC04(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADCD3C(EnSellnuts* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if (gSaveContext.weekEventReg[73] & 4) {
+    if (gSaveContext.save.weekEventReg[73] & 4) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
@@ -947,7 +947,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad2;
 
-    if ((gSaveContext.weekEventReg[17] & 0x80) || (gSaveContext.weekEventReg[61] & 0x10)) {
+    if ((gSaveContext.save.weekEventReg[17] & 0x80) || (gSaveContext.save.weekEventReg[61] & 0x10)) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -969,7 +969,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_36C = 0.01f;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
-    if (gSaveContext.weekEventReg[73] & 4) {
+    if (gSaveContext.save.weekEventReg[73] & 4) {
         if (ENSELLNUTS_GET_1(&this->actor)) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -977,7 +977,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (gSaveContext.day == 3) {
+            if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
             } else {
                 this->unk_33A = 1;
@@ -1035,7 +1035,7 @@ void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_328++;
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (gSaveContext.day == 3) {
+        if (gSaveContext.save.day == 3) {
             this->unk_33A = 2;
         } else {
             this->unk_33A = 1;

@@ -218,12 +218,11 @@ s32 func_808F3334(EnIn* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808F33B8(void) {
-    s32 ret;
+    s32 ret = (((gSaveContext.save.day == 1) &&
+                ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
+               (gSaveContext.save.day >= 2)) &&
+              !(gSaveContext.save.weekEventReg[22] & 1);
 
-    if (((ret = gSaveContext.day == 1) && (ret = gSaveContext.time >= 0x3AAA) && (ret = gSaveContext.time <= 0x4000)) ||
-        (ret = gSaveContext.day >= 2)) {
-        ret = (gSaveContext.weekEventReg[22] & 1) == 0;
-    }
     return ret;
 }
 
@@ -347,7 +346,7 @@ void func_808F395C(EnIn* this, GlobalContext* globalCtx) {
 void func_808F39DC(EnIn* this, GlobalContext* globalCtx) {
     u16 textId = 0;
 
-    if (gSaveContext.day != 3) {
+    if (gSaveContext.save.day != 3) {
         switch (GET_RACE_FLAGS) {
             case RACE_FLAG_2:
                 textId = 0x347A;
@@ -395,7 +394,7 @@ void func_808F3B40(EnIn* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->actionFunc = func_808F3AD4;
-        textId = gSaveContext.day != 3 ? 0x3481 : 0x34A4;
+        textId = gSaveContext.save.day != 3 ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
@@ -419,7 +418,7 @@ void func_808F3C40(EnIn* this, GlobalContext* globalCtx) {
         this->actor.parent = NULL;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->actionFunc = func_808F3BD4;
-        textId = gSaveContext.day != 3 ? 0x346A : 0x3492;
+        textId = gSaveContext.save.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
@@ -442,7 +441,7 @@ void func_808F3D40(EnIn* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actionFunc = func_808F3CD4;
-        textId = gSaveContext.day != 3 ? 0x347D : 0x34A0;
+        textId = gSaveContext.save.day != 3 ? 0x347D : 0x34A0;
         this->actor.textId = textId;
         this->actor.flags |= ACTOR_FLAG_10000;
     } else {
@@ -456,7 +455,7 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
     if (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER) {
         s32 requiredScopeTemp;
 
-        if (!(gSaveContext.weekEventReg[63] & 0x40)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 0x40)) {
             return 0x34A9;
         } else if (this->unk4AC & 8) {
             return 0x34B1;
@@ -466,41 +465,43 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
     } else {
         switch (arg2) {
             case 0:
-                if ((gSaveContext.playerForm == PLAYER_FORM_ZORA) || (gSaveContext.playerForm == PLAYER_FORM_GORON)) {
+                if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
+                    (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
                     textId = 0x345C;
-                } else if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+                } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     textId = 0x3460;
-                } else if (!(gSaveContext.weekEventReg[15] & 8)) {
+                } else if (!(gSaveContext.save.weekEventReg[15] & 8)) {
                     textId = 0x3458;
                 } else {
                     textId = 0x345B;
                 }
                 break;
             case 1:
-                if (!(gSaveContext.weekEventReg[15] & 0x10)) {
+                if (!(gSaveContext.save.weekEventReg[15] & 0x10)) {
                     textId = 0x3463;
                 } else {
                     textId = 0x346B;
                 }
                 break;
             case 3:
-                if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     textId = 0x3485;
-                } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA ||
-                           gSaveContext.playerForm == PLAYER_FORM_GORON) {
+                } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
+                           gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
                     textId = 0x3484;
-                } else if (!(gSaveContext.weekEventReg[56] & 4)) {
+                } else if (!(gSaveContext.save.weekEventReg[56] & 4)) {
                     textId = 0x346D;
                 } else {
                     textId = 0x3482;
                 }
                 break;
             case 4:
-                if (gSaveContext.playerForm == PLAYER_FORM_ZORA || gSaveContext.playerForm == PLAYER_FORM_GORON) {
+                if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
+                    gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
                     textId = 0x348A;
-                } else if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+                } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     textId = 0x348B;
-                } else if (!(gSaveContext.weekEventReg[16] & 1)) {
+                } else if (!(gSaveContext.save.weekEventReg[16] & 1)) {
                     textId = 0x3486;
                 } else {
                     textId = 0x3489;
@@ -509,19 +510,19 @@ u16 func_808F3DD4(GlobalContext* globalCtx, EnIn* this, u32 arg2) {
             case 5:
                 if (func_808F33B8()) {
                     textId = 0x34B3;
-                } else if (!(gSaveContext.weekEventReg[16] & 2)) {
+                } else if (!(gSaveContext.save.weekEventReg[16] & 2)) {
                     textId = 0x348E;
                 } else {
                     textId = 0x3493;
                 }
                 break;
             case 7:
-                if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     textId = 0x34A8;
-                } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA ||
-                           gSaveContext.playerForm == PLAYER_FORM_GORON) {
+                } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
+                           gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
                     textId = 0x34A7;
-                } else if (!(gSaveContext.weekEventReg[16] & 4)) {
+                } else if (!(gSaveContext.save.weekEventReg[16] & 4)) {
                     textId = 0x3495;
                 } else {
                     textId = 0x34A5;
@@ -572,9 +573,9 @@ s32 func_808F4150(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
-        if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
+        if (gSaveContext.save.playerData.rupees >= globalCtx->msgCtx.unk1206C) {
             func_801159EC(-globalCtx->msgCtx.unk1206C);
-            if (!(gSaveContext.weekEventReg[57] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[57] & 1)) {
                 func_808F4108(this, globalCtx, 0x3474);
             } else if (this->unk4AC & 8) {
                 func_808F4108(this, globalCtx, 0x3475);
@@ -598,9 +599,9 @@ s32 func_808F4270(GlobalContext* globalCtx, EnIn* this, s32 arg2, MessageContext
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
-        if (gSaveContext.rupees >= fee) {
+        if (gSaveContext.save.playerData.rupees >= fee) {
             func_801159EC(-fee);
-            if (!(gSaveContext.weekEventReg[57] & 1)) {
+            if (!(gSaveContext.save.weekEventReg[57] & 1)) {
                 if (arg4 != 0) {
                     func_800E8EA0(globalCtx, &this->actor, 0x3474);
                 } else {
@@ -648,7 +649,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             break;
         case 0x34A9:
             func_808F4108(this, globalCtx, 0x34AA);
-            gSaveContext.weekEventReg[63] |= 0x40;
+            gSaveContext.save.weekEventReg[63] |= 0x40;
             ret = false;
             break;
         case 0x34AA:
@@ -679,7 +680,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
         case 0:
             switch (textId) {
                 case 0x3458:
-                    gSaveContext.weekEventReg[15] |= 8;
+                    gSaveContext.save.weekEventReg[15] |= 8;
                     func_800E8EA0(globalCtx, &this->actor, 0x3459);
                     ret = false;
                     break;
@@ -728,7 +729,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
         case 1:
             switch (textId) {
                 case 0x3463:
-                    gSaveContext.weekEventReg[15] |= 0x10;
+                    gSaveContext.save.weekEventReg[15] |= 0x10;
                     func_800E8EA0(globalCtx, &this->actor, 0x3464);
                     ret = false;
                     break;
@@ -743,7 +744,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x3466:
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
-                        if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
+                        if (gSaveContext.save.playerData.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
@@ -804,12 +805,12 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3472:
                     func_808F43E0(this);
-                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
                     ret = true;
                     break;
                 case 0x3473:
-                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3475:
@@ -818,7 +819,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk_1887F = 5;
                     globalCtx->sceneLoadFlag = 0x14;
-                    gSaveContext.weekEventReg[57] |= 1;
+                    gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x3478:
                     if (msgCtx->choiceIndex == 0) {
@@ -826,14 +827,14 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         ret = false;
                     } else {
                         func_8019F230();
-                        gSaveContext.weekEventReg[56] &= (u8)~8;
+                        gSaveContext.save.weekEventReg[56] &= (u8)~8;
                         func_808F4108(this, globalCtx, 0x3479);
                         ret = false;
                     }
                     break;
                 case 0x347B:
                     func_808F4108(this, globalCtx, 0x347C);
-                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
                     ret = false;
                     break;
             }
@@ -842,8 +843,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             switch (textId) {
                 case 0x346D:
                     func_808F4108(this, globalCtx, 0x346E);
-                    gSaveContext.weekEventReg[56] |= 4;
-                    gSaveContext.weekEventReg[56] |= 8;
+                    gSaveContext.save.weekEventReg[56] |= 4;
+                    gSaveContext.save.weekEventReg[56] |= 8;
                     ret = false;
                     break;
                 case 0x346F:
@@ -852,7 +853,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3482:
                     func_808F4108(this, globalCtx, 0x3483);
-                    gSaveContext.weekEventReg[56] |= 8;
+                    gSaveContext.save.weekEventReg[56] |= 8;
                     ret = false;
                     break;
                 case 0x3484:
@@ -872,7 +873,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     ret = false;
                     break;
                 case 0x3477:
-                    gSaveContext.weekEventReg[56] |= 8;
+                    gSaveContext.save.weekEventReg[56] |= 8;
                     func_808F4108(this, globalCtx, 0x3478);
                     ret = false;
                     break;
@@ -883,7 +884,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         func_800E8EA0(globalCtx, &this->actor, 0x347E);
                         ret = false;
                     } else {
-                        gSaveContext.weekEventReg[56] |= 8;
+                        gSaveContext.save.weekEventReg[56] |= 8;
                         func_808F4108(this, globalCtx, 0x347B);
                         ret = false;
                     }
@@ -939,7 +940,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
             switch (textId) {
                 case 0x3486:
                     func_800E8EA0(globalCtx, &this->actor, 0x3487);
-                    gSaveContext.weekEventReg[16] |= 1;
+                    gSaveContext.save.weekEventReg[16] |= 1;
                     ret = false;
                     break;
                 case 0x3487:
@@ -980,7 +981,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x348E:
                 case 0x34B3:
                     func_800E8EA0(globalCtx, &this->actor, 0x348F);
-                    gSaveContext.weekEventReg[16] |= 2;
+                    gSaveContext.save.weekEventReg[16] |= 2;
                     ret = false;
                     break;
                 case 0x3493:
@@ -995,7 +996,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                 case 0x3490:
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
-                        if (gSaveContext.rupees >= globalCtx->msgCtx.unk1206C) {
+                        if (gSaveContext.save.playerData.rupees >= globalCtx->msgCtx.unk1206C) {
                             if (Interface_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
                                 Actor_PickUp(&this->actor, globalCtx, GI_MILK, 500.0f, 100.0f);
@@ -1032,8 +1033,8 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3495:
                     func_808F4108(this, globalCtx, 0x3496);
-                    gSaveContext.weekEventReg[16] |= 4;
-                    gSaveContext.weekEventReg[56] |= 8;
+                    gSaveContext.save.weekEventReg[16] |= 4;
+                    gSaveContext.save.weekEventReg[56] |= 8;
                     ret = false;
                     break;
                 case 0x3497:
@@ -1048,11 +1049,11 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x34A5:
                     func_808F4108(this, globalCtx, 0x34A6);
-                    gSaveContext.weekEventReg[56] |= 8;
+                    gSaveContext.save.weekEventReg[56] |= 8;
                     ret = false;
                     break;
                 case 0x3473:
-                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
                     break;
                 case 0x3474:
@@ -1065,7 +1066,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     globalCtx->nextEntranceIndex = 0xCE50;
                     globalCtx->unk_1887F = 5;
                     globalCtx->sceneLoadFlag = 0x14;
-                    gSaveContext.weekEventReg[57] |= 1;
+                    gSaveContext.save.weekEventReg[57] |= 1;
                     break;
                 case 0x349D:
                     func_808F30B0(&this->skelAnime, 1);
@@ -1074,7 +1075,7 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                         func_800E8EA0(globalCtx, &this->actor, 0x34A1);
                         ret = false;
                     } else {
-                        gSaveContext.weekEventReg[56] |= 8;
+                        gSaveContext.save.weekEventReg[56] |= 8;
                         func_808F4108(this, globalCtx, 0x349E);
                         ret = false;
                     }
@@ -1157,13 +1158,13 @@ s32 func_808F4414(GlobalContext* globalCtx, EnIn* this, s32 arg2) {
                     break;
                 case 0x3472:
                     func_808F43E0(this);
-                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
                     func_80151BB4(globalCtx, 0x11);
                     ret = true;
                     break;
                 case 0x349E:
                     func_808F4108(this, globalCtx, 0x349F);
-                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
                     ret = false;
                     break;
             }
@@ -1274,7 +1275,7 @@ s32 func_808F5994(EnIn* this, GlobalContext* globalCtx, Vec3f* arg2, s16 arg3) {
 }
 
 void func_808F5A34(EnIn* this, GlobalContext* globalCtx) {
-    if (gSaveContext.day != 3) {
+    if (gSaveContext.save.day != 3) {
         func_808F5728(globalCtx, this, 3, &this->unk48C);
     } else {
         func_808F5728(globalCtx, this, 7, &this->unk48C);
@@ -1283,13 +1284,13 @@ void func_808F5A34(EnIn* this, GlobalContext* globalCtx) {
 
 void func_808F5A94(EnIn* this, GlobalContext* globalCtx) {
     if (func_800F41E4(globalCtx, &globalCtx->actorCtx)) {
-        if (gSaveContext.day == 3) {
+        if (gSaveContext.save.day == 3) {
             func_808F5728(globalCtx, this, 7, &this->unk48C);
         } else {
             func_808F5728(globalCtx, this, 3, &this->unk48C);
         }
     } else {
-        if (gSaveContext.day == 3) {
+        if (gSaveContext.save.day == 3) {
             func_808F5728(globalCtx, this, 5, &this->unk48C);
         } else {
             func_808F5728(globalCtx, this, 1, &this->unk48C);
@@ -1299,17 +1300,17 @@ void func_808F5A94(EnIn* this, GlobalContext* globalCtx) {
 
 void func_808F5B58(EnIn* this, GlobalContext* globalCtx) {
     if (func_800F41E4(globalCtx, &globalCtx->actorCtx)) {
-        if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.weekEventReg[63] & 0x40) ||
-            gSaveContext.weekEventReg[56] & 8) {
-            if (gSaveContext.day == 3) {
+        if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.save.weekEventReg[63] & 0x40) ||
+            gSaveContext.save.weekEventReg[56] & 8) {
+            if (gSaveContext.save.day == 3) {
                 func_808F5728(globalCtx, this, 6, &this->unk48C);
             } else {
                 func_808F5728(globalCtx, this, 2, &this->unk48C);
             }
         }
     } else if (Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADER ||
-               (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.weekEventReg[63] & 0x40)) {
-        if (gSaveContext.day == 3) {
+               (Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.save.weekEventReg[63] & 0x40)) {
+        if (gSaveContext.save.day == 3) {
             func_808F5728(globalCtx, this, 4, &this->unk48C);
         } else {
             func_808F5728(globalCtx, this, 0, &this->unk48C);
@@ -1321,9 +1322,9 @@ void func_808F5C98(EnIn* this, GlobalContext* globalCtx) {
     if (this->unk4B0 == RACE_FLAG_END) {
         this->actionFunc = func_808F5B58;
     }
-    if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.weekEventReg[63] & 0x40) ||
-        gSaveContext.weekEventReg[56] & 8) {
-        if (gSaveContext.day != 3) {
+    if ((Player_GetMask(globalCtx) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.save.weekEventReg[63] & 0x40) ||
+        gSaveContext.save.weekEventReg[56] & 8) {
+        if (gSaveContext.save.day != 3) {
             func_808F5728(globalCtx, this, 2, &this->unk48C);
         } else {
             func_808F5728(globalCtx, this, 6, &this->unk48C);
@@ -1385,7 +1386,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
             if (GET_RACE_FLAGS == RACE_FLAG_2 || (GET_RACE_FLAGS) == RACE_FLAG_3) {
-                gSaveContext.weekEventReg[56] &= (u8)~8;
+                gSaveContext.save.weekEventReg[56] &= (u8)~8;
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
                 func_808F35AC(this, globalCtx);
@@ -1406,7 +1407,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                 }
             } else {
                 if (GET_RACE_FLAGS != RACE_FLAG_START) {
-                    gSaveContext.weekEventReg[56] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
                     this->unk23C = 0;
                     this->unk4AC |= 2;
                     if (type == ENIN_BLUE_SHIRT) {
@@ -1414,7 +1415,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                             func_808F30B0(&this->skelAnime, 0);
                             this->actionFunc = func_808F5A94;
                         } else {
-                            if (gSaveContext.weekEventReg[52] & 1) {
+                            if (gSaveContext.save.weekEventReg[52] & 1) {
                                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
@@ -1425,7 +1426,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
                             }
                         }
                     } else {
-                        if (gSaveContext.weekEventReg[52] & 1) {
+                        if (gSaveContext.save.weekEventReg[52] & 1) {
                             Actor_MarkForDeath(&this->actor);
                         } else {
                             func_808F30B0(&this->skelAnime, 7);

@@ -77,7 +77,7 @@ void EnWeatherTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
         case WEATHERTAG_TYPE_UNK1:
-            if (gSaveContext.weekEventReg[52] & 0x20) { // if cleared STT
+            if (gSaveContext.save.weekEventReg[52] & 0x20) { // if cleared STT
                 Actor_MarkForDeath(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
@@ -252,7 +252,7 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
     if (Cutscene_CheckActorAction(globalCtx, 567)) {
         tmpAction = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 567)];
         if ((globalCtx->csCtx.frames >= tmpAction->startFrame) && (tmpAction->action >= 2)) {
-            switch (gSaveContext.day) {
+            switch (gSaveContext.save.day) {
                 case 0:
                 case 1:
                 default:
@@ -282,7 +282,7 @@ void func_80966BF4(EnWeatherTag* this, GlobalContext* globalCtx) {
 void func_80966D20(EnWeatherTag* this, GlobalContext* globalCtx) {
     u8 newUnk20;
 
-    switch (gSaveContext.day) {
+    switch (gSaveContext.save.day) {
         case 0:
         case 1:
         default:
@@ -452,7 +452,7 @@ void func_809674C8(EnWeatherTag* this, GlobalContext* globalCtx) {
 
     if (Actor_XZDistanceBetweenActors(&player->actor, &this->actor) < WEATHER_TAG_RANGE100(this)) {
         if (CURRENT_DAY == 2) {
-            if ((gSaveContext.time >= CLOCK_TIME(7, 0)) && (gSaveContext.time < CLOCK_TIME(17, 30)) &&
+            if ((gSaveContext.save.time >= CLOCK_TIME(7, 0)) && (gSaveContext.save.time < CLOCK_TIME(17, 30)) &&
                 (globalCtx->envCtx.unk_F2[2] == 0)) {
 
                 D_801BDBB0 = 1;
@@ -489,11 +489,11 @@ void EnWeatherTag_Update(Actor* thisx, GlobalContext* globalCtx) {
         (globalCtx->msgCtx.currentTextId == 0x5E6) && (!FrameAdvance_IsEnabled(&globalCtx->state)) &&
         (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) && (globalCtx->csCtx.state == 0)) {
 
-        oldTime = gSaveContext.time;
-        gSaveContext.time = (u16)REG(0xF) + oldTime; // cast req
+        oldTime = gSaveContext.save.time;
+        gSaveContext.save.time = (u16)REG(0xF) + oldTime; // cast req
         if (REG(0xF) != 0) {
-            oldTime = gSaveContext.time;
-            gSaveContext.time = (u16)gSaveContext.unk_14 + oldTime;
+            oldTime = gSaveContext.save.time;
+            gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + oldTime;
         }
     }
 }

@@ -391,12 +391,12 @@ void func_80151BB4(GlobalContext* globalCtx, u8 arg1) {
     u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if ((gSaveContext.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
     } else if (arg1 >= 20) {
-        if ((gSaveContext.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
+        if ((gSaveContext.save.weekEventReg[D_801C6B28[arg1] >> 8] & (u8)D_801C6B28[arg1]) == 0) {
             msgCtx->unk120B2[msgCtx->unk120B1] = temp;
             msgCtx->unk120B1++;
         }
@@ -413,10 +413,10 @@ u32 func_80151C9C(GlobalContext* globalCtx) {
         }
         msgCtx->unk120B1--;
 
-        if ((gSaveContext.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] &
+        if ((gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] &
              (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]) == 0) {
-            flag = gSaveContext.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8];
-            gSaveContext.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] =
+            flag = gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8];
+            gSaveContext.save.weekEventReg[D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]] >> 8] =
                 flag | (u8)D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]];
             if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                 func_80151938(globalCtx, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
@@ -474,7 +474,7 @@ void func_80152EC0(GlobalContext* globalCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80153750.s")
 
 void func_80153E7C(GlobalContext* globalCtx, void* arg1) {
-    if ((gSaveContext.language == 0) && (globalCtx->msgCtx.unk12090 == 0)) {
+    if ((gSaveContext.options.language == 0) && (globalCtx->msgCtx.unk12090 == 0)) {
         func_8014ADBC(globalCtx, arg1);
         return;
     }

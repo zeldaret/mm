@@ -131,15 +131,15 @@ void Message_LoadLocalizedRupeesNES(GlobalContext* globalCtx, s16* decodedBufPos
     msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
 
-    for (j = 0; j < D_801D0710[gSaveContext.language - 1]; j++) {
-        Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.language - 1][j], o);
-        msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.language - 1][j];
+    for (j = 0; j < D_801D0710[gSaveContext.options.language - 1]; j++) {
+        Font_LoadCharNES(globalCtx, D_801D06F0[gSaveContext.options.language - 1][j], o);
+        msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.options.language - 1][j];
         o += FONT_CHAR_TEX_SIZE;
         p++;
     }
 
     p--;
-    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.language - 1] + 1);
+    f += 16.0f * msgCtx->unk12098 * (D_801D0710[gSaveContext.options.language - 1] + 1);
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
@@ -200,10 +200,10 @@ void Message_LoadTimeNES(GlobalContext* globalCtx, u8 arg1, s32* offset, f32* ar
     s16 i;
 
     if (arg1 == 0xCF) {
-        day = gSaveContext.day;
-        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.time);
+        day = gSaveContext.save.day;
+        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.save.time);
     } else {
-        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.time);
+        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.save.time);
     }
     timeInMinutes = TIME_TO_MINUTES_F(dayTime);
 

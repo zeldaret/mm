@@ -120,7 +120,7 @@ void EnMk_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80959524(GlobalContext* globalCtx) {
-    return gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 7;
+    return gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 7;
 }
 
 void func_8095954C(EnMk* this, GlobalContext* globalCtx) {
@@ -145,10 +145,10 @@ void func_8095954C(EnMk* this, GlobalContext* globalCtx) {
 void func_80959624(EnMk* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         if (this->unk_27A & 4) {
             textId = 0xFB9;
-        } else if (gSaveContext.weekEventReg[55] & 0x80) {
+        } else if (gSaveContext.save.weekEventReg[55] & 0x80) {
             textId = 0xFBC;
         } else {
             textId = 0xFBB;
@@ -203,17 +203,17 @@ void func_80959844(EnMk* this, GlobalContext* globalCtx) {
 
     if ((this->unk_27A & 2) && (func_80959524(globalCtx) >= 7)) {
         textId = 0xFB3;
-    } else if (gSaveContext.weekEventReg[20] & 0x40) {
+    } else if (gSaveContext.save.weekEventReg[20] & 0x40) {
         textId = 0xFB9;
-    } else if (gSaveContext.weekEventReg[19] & 0x40) {
+    } else if (gSaveContext.save.weekEventReg[19] & 0x40) {
         textId = 0xFB5;
     } else if (func_80959524(globalCtx) >= 7) {
         textId = 0xFB3;
     } else {
-        switch (gSaveContext.playerForm) {
+        switch (gSaveContext.save.playerForm) {
             case PLAYER_FORM_DEKU:
-                if (gSaveContext.weekEventReg[19] & 0x10) {
-                    if (gSaveContext.weekEventReg[55] & 0x80) {
+                if (gSaveContext.save.weekEventReg[19] & 0x10) {
+                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
                         textId = 0xFAF;
                     } else {
                         textId = 0xFAE;
@@ -224,8 +224,8 @@ void func_80959844(EnMk* this, GlobalContext* globalCtx) {
                 break;
 
             case PLAYER_FORM_GORON:
-                if (gSaveContext.weekEventReg[19] & 8) {
-                    if (gSaveContext.weekEventReg[55] & 0x80) {
+                if (gSaveContext.save.weekEventReg[19] & 8) {
+                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
                         textId = 0xFAB;
                     } else {
                         textId = 0xFAA;
@@ -239,8 +239,8 @@ void func_80959844(EnMk* this, GlobalContext* globalCtx) {
             case PLAYER_FORM_HUMAN:
                 if (func_80959524(globalCtx) > 0) {
                     textId = 0xFA7;
-                } else if (gSaveContext.weekEventReg[19] & 4) {
-                    if (gSaveContext.weekEventReg[55] & 0x80) {
+                } else if (gSaveContext.save.weekEventReg[19] & 4) {
+                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
                         textId = 0xFBF;
                     } else {
                         textId = 0xFA6;
@@ -253,7 +253,7 @@ void func_80959844(EnMk* this, GlobalContext* globalCtx) {
             default:
                 if (func_80959524(globalCtx) > 0) {
                     textId = 0xFB0;
-                } else if (gSaveContext.weekEventReg[19] & 0x20) {
+                } else if (gSaveContext.save.weekEventReg[19] & 0x20) {
                     textId = 0xFB2;
                 } else {
                     textId = 0xFB1;
@@ -284,7 +284,7 @@ void func_80959A24(EnMk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0xFA2:
-                        if (gSaveContext.weekEventReg[55] & 0x80) {
+                        if (gSaveContext.save.weekEventReg[55] & 0x80) {
                             func_801477B4(globalCtx);
                             this->actionFunc = func_80959E18;
                             break;
@@ -309,13 +309,13 @@ void func_80959A24(EnMk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0xFA0:
-                        gSaveContext.weekEventReg[19] |= 4;
+                        gSaveContext.save.weekEventReg[19] |= 4;
                         func_80151938(globalCtx, 0xFA1);
                         break;
 
                     case 0xFA8:
-                        gSaveContext.weekEventReg[19] |= 8;
-                        if (gSaveContext.weekEventReg[55] & 0x80) {
+                        gSaveContext.save.weekEventReg[19] |= 8;
+                        if (gSaveContext.save.weekEventReg[55] & 0x80) {
                             func_80151938(globalCtx, 0xFBD);
                             break;
                         }
@@ -323,8 +323,8 @@ void func_80959A24(EnMk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0xFAC:
-                        gSaveContext.weekEventReg[19] |= 0x10;
-                        if (gSaveContext.weekEventReg[55] & 0x80) {
+                        gSaveContext.save.weekEventReg[19] |= 0x10;
+                        if (gSaveContext.save.weekEventReg[55] & 0x80) {
                             func_80151938(globalCtx, 0xFBE);
                             break;
                         }
@@ -332,7 +332,7 @@ void func_80959A24(EnMk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0xFB1:
-                        gSaveContext.weekEventReg[19] |= 0x20;
+                        gSaveContext.save.weekEventReg[19] |= 0x20;
                         func_801477B4(globalCtx);
                         this->actionFunc = func_80959E18;
                         break;
@@ -374,7 +374,7 @@ void func_80959D28(EnMk* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((globalCtx->csCtx.state == 0) && (this->actor.cutscene == -1)) {
-        if (gSaveContext.weekEventReg[20] & 0x40) {
+        if (gSaveContext.save.weekEventReg[20] & 0x40) {
             this->unk_27A &= ~1;
             this->actionFunc = func_80959774;
             this->actor.home.rot.y += 0x4E20;
@@ -402,7 +402,7 @@ void func_80959E18(EnMk* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    if (gSaveContext.weekEventReg[20] & 0x40) {
+    if (gSaveContext.save.weekEventReg[20] & 0x40) {
         this->unk_27A &= ~1;
         this->actionFunc = func_80959774;
         this->actor.home.rot.y += 0x4E20;
@@ -412,9 +412,9 @@ void func_80959E18(EnMk* this, GlobalContext* globalCtx) {
     if (func_800B8718(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.ocarinaMode = 4;
         this->actionFunc = func_80959D28;
-        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             this->actor.cutscene = this->unk_276[0];
-            gSaveContext.weekEventReg[20] |= 0x40;
+            gSaveContext.save.weekEventReg[20] |= 0x40;
             Item_Give(globalCtx, ITEM_SONG_NOVA);
         } else {
             this->actor.cutscene = this->unk_276[1];
@@ -429,7 +429,7 @@ void func_80959E18(EnMk* this, GlobalContext* globalCtx) {
     } else if ((this->actor.xzDistToPlayer < 120.0f) && (ABS_ALT(sp22) <= 0x4300)) {
         this->unk_27A |= 1;
         func_800B8614(&this->actor, globalCtx, 200.0f);
-        if (!(gSaveContext.weekEventReg[20] & 0x40) && (gSaveContext.weekEventReg[19] & 0x40)) {
+        if (!(gSaveContext.save.weekEventReg[20] & 0x40) && (gSaveContext.save.weekEventReg[19] & 0x40)) {
             func_800B874C(&this->actor, globalCtx, 200.0f, 100.0f);
         }
     } else {

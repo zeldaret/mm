@@ -120,8 +120,8 @@ s32 func_80B0F660(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B0F6DC(EnGb2* this) {
-    if (!(gSaveContext.weekEventReg[54] & 0x20)) {
-        gSaveContext.weekEventReg[54] |= 0x20;
+    if (!(gSaveContext.save.weekEventReg[54] & 0x20)) {
+        gSaveContext.save.weekEventReg[54] |= 0x20;
         this->unk_26E = 0x14D0;
     } else {
         this->unk_26E = 0x14D1;
@@ -163,7 +163,7 @@ u16 func_80B0F7FC(EnGb2* this) {
                 return 0x14E4;
             }
 
-            if (gSaveContext.health > 48) {
+            if (gSaveContext.save.playerData.health > 48) {
                 return 0x14D2;
             }
 
@@ -171,7 +171,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D3;
 
         case 0x14E4:
-            if (gSaveContext.health > 48) {
+            if (gSaveContext.save.playerData.health > 48) {
                 return 0x14D2;
             }
 
@@ -208,7 +208,7 @@ u16 func_80B0F8F8(EnGb2* this) {
 
         case 0x14DE:
             this->unk_26C |= 2;
-            gSaveContext.weekEventReg[54] |= 0x80;
+            gSaveContext.save.weekEventReg[54] |= 0x80;
             return 0x14DF;
 
         case 0x14E1:
@@ -226,7 +226,7 @@ u16 func_80B0F97C(EnGb2* this) {
             return 0x14F7;
 
         case 0x14F7:
-            gSaveContext.weekEventReg[76] |= 0x80;
+            gSaveContext.save.weekEventReg[76] |= 0x80;
             this->unk_26C |= 2;
             return 0x14F8;
 
@@ -259,7 +259,7 @@ s32 func_80B0FA48(EnGb2* this, GlobalContext* globalCtx) {
             return false;
 
         case PLAYER_MASK_CAPTAIN:
-            if (!(gSaveContext.weekEventReg[80] & 0x40)) {
+            if (!(gSaveContext.save.weekEventReg[80] & 0x40)) {
                 this->unk_26E = 0x14EB;
                 return false;
             }
@@ -267,7 +267,7 @@ s32 func_80B0FA48(EnGb2* this, GlobalContext* globalCtx) {
             return true;
     }
 
-    if (!(gSaveContext.weekEventReg[80] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[80] & 0x20)) {
         this->unk_26E = 0x14EF;
         return false;
     } else {
@@ -407,7 +407,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
         if (this->unk_26E == 0x14D5) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.rupees < this->unk_288) {
+                    if (gSaveContext.save.playerData.rupees < this->unk_288) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_26E = 0x14D7;
                         this->unk_26C |= 2;
@@ -505,7 +505,7 @@ void func_80B10344(EnGb2* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (gSaveContext.health < 49) {
+    if (gSaveContext.save.playerData.health < 49) {
         gSaveContext.unk_3DD0[1] = 5;
         gSaveContext.eventInf[4] |= 0x40;
         gSaveContext.eventInf[4] |= 0x20;
@@ -575,7 +575,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
     } else if ((temp_v0 == 4) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
-                if (gSaveContext.rupees < this->unk_288) {
+                if (gSaveContext.save.playerData.rupees < this->unk_288) {
                     play_sound(NA_SE_SY_ERROR);
                     this->unk_26E = 0x14D7;
                     this->unk_26C |= 2;
@@ -617,7 +617,7 @@ void func_80B10868(EnGb2* this, GlobalContext* globalCtx) {
 void func_80B10924(EnGb2* this, GlobalContext* globalCtx) {
     s32 sp24;
 
-    if (gSaveContext.weekEventReg[54] & 0x40) {
+    if (gSaveContext.save.weekEventReg[54] & 0x40) {
         sp24 = 5;
     } else {
         sp24 = 12;
@@ -626,7 +626,7 @@ void func_80B10924(EnGb2* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         if (sp24 == 12) {
-            gSaveContext.weekEventReg[54] |= 0x40;
+            gSaveContext.save.weekEventReg[54] |= 0x40;
         } else {
             func_801159EC(50);
         }
@@ -706,9 +706,9 @@ void func_80B10B5C(EnGb2* this, GlobalContext* globalCtx) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             if (this->unk_26E == 0x14EB) {
-                gSaveContext.weekEventReg[80] |= 0x40;
+                gSaveContext.save.weekEventReg[80] |= 0x40;
             } else if (this->unk_26E == 0x14EF) {
-                gSaveContext.weekEventReg[80] |= 0x20;
+                gSaveContext.save.weekEventReg[80] |= 0x20;
             }
             this->unk_26C &= ~0x20;
             this->unk_290 = 0;
@@ -885,13 +885,13 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (ENGB2_GET_7(&this->actor)) {
         case ENGB2_7_0:
-            if (gSaveContext.weekEventReg[54] & 0x80) {
+            if (gSaveContext.save.weekEventReg[54] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
-            } else if (gSaveContext.weekEventReg[52] & 0x20) {
+            } else if (gSaveContext.save.weekEventReg[52] & 0x20) {
                 Actor_MarkForDeath(&this->actor);
             }
 
-            if (gSaveContext.entranceIndex == 0x9C10) {
+            if (gSaveContext.save.entranceIndex == 0x9C10) {
                 func_800FE484();
                 this->actionFunc = func_80B10240;
                 break;
@@ -910,7 +910,7 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENGB2_7_1:
-            if ((globalCtx->curSpawn == 1) || (gSaveContext.weekEventReg[80] & 0x80)) {
+            if ((globalCtx->curSpawn == 1) || (gSaveContext.save.weekEventReg[80] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -940,7 +940,7 @@ void EnGb2_Init(Actor* thisx, GlobalContext* globalCtx) {
                 return;
             }
 
-            if (gSaveContext.weekEventReg[76] & 0x80) {
+            if (gSaveContext.save.weekEventReg[76] & 0x80) {
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
                 this->actor.flags &= ~ACTOR_FLAG_1;

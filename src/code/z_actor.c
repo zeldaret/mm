@@ -2224,7 +2224,7 @@ void func_800B90F4(GlobalContext* globalCtx) {
 void func_800B9120(ActorContext* actorCtx) {
     s32 phi_v0 = CURRENT_DAY * 2;
 
-    if (gSaveContext.time < CLOCK_TIME(6, 0) || gSaveContext.time > CLOCK_TIME(18, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0) || gSaveContext.save.time > CLOCK_TIME(18, 0)) {
         phi_v0++;
     }
 
@@ -2236,7 +2236,7 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     CycleSceneFlags* cycleFlags;
     s32 i;
 
-    gSaveContext.weekEventReg[92] |= 0x80;
+    gSaveContext.save.weekEventReg[92] |= 0x80;
     cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
@@ -2252,8 +2252,8 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     }
 
     actorCtx->flags.chest = cycleFlags->chest;
-    actorCtx->flags.switches[0] = cycleFlags->swch0;
-    actorCtx->flags.switches[1] = cycleFlags->swch1;
+    actorCtx->flags.switches[0] = cycleFlags->switch0;
+    actorCtx->flags.switches[1] = cycleFlags->switch1;
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
         cycleFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }

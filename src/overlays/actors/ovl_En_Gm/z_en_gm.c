@@ -382,7 +382,7 @@ s32 func_8094E52C(EnGm* this, GlobalContext* globalCtx) {
             }
 
         case 2:
-            if (!(gSaveContext.weekEventReg[86] & 0x40) && (this->unk_3E0 == 2)) {
+            if (!(gSaveContext.save.weekEventReg[86] & 0x40) && (this->unk_3E0 == 2)) {
                 ActorCutscene_Stop(sp2A);
             } else {
                 Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
@@ -552,8 +552,8 @@ s32 func_8094EB1C(EnGm* this, GlobalContext* globalCtx) {
 
     switch (this->unk_3E0) {
         case 0:
-            if ((gSaveContext.weekEventReg[50] & 1) || (gSaveContext.weekEventReg[51] & 0x80) ||
-                (gSaveContext.weekEventReg[75] & 2)) {
+            if ((gSaveContext.save.weekEventReg[50] & 1) || (gSaveContext.save.weekEventReg[51] & 0x80) ||
+                (gSaveContext.save.weekEventReg[75] & 2)) {
                 ret = true;
                 break;
             }
@@ -659,14 +659,14 @@ s32 func_8094EE84(EnGm* this, GlobalContext* globalCtx) {
             this->actor.child = this->unk_268;
             this->unk_264 = func_8094EDBC(this, globalCtx);
 
-            if ((this->unk_258 == 5) && !(gSaveContext.weekEventReg[50] & 1) &&
-                !(gSaveContext.weekEventReg[51] & 0x80) && !(gSaveContext.weekEventReg[75] & 2)) {
+            if ((this->unk_258 == 5) && !(gSaveContext.save.weekEventReg[50] & 1) &&
+                !(gSaveContext.save.weekEventReg[51] & 0x80) && !(gSaveContext.save.weekEventReg[75] & 2)) {
                 this->unk_3A4 |= 0x20;
             } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
                 this->unk_3A4 |= 0x20;
             }
 
-            if ((this->unk_258 == 3) && (gSaveContext.weekEventReg[75] & 1)) {
+            if ((this->unk_258 == 3) && (gSaveContext.save.weekEventReg[75] & 1)) {
                 this->unk_3A4 &= ~0x20;
             }
 
@@ -920,7 +920,7 @@ s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp56 = gSaveContext.time - 0x3FFC;
+    u16 sp56 = gSaveContext.save.time - 0x3FFC;
     u8 sp55 = ENGM_GET_FF(&this->actor);
     EnDoor* door;
     Vec3s* sp4C;
@@ -966,7 +966,7 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp2E = gSaveContext.time - 0x3FFC;
+    u16 sp2E = gSaveContext.save.time - 0x3FFC;
     u16 phi_v1;
     u8 sp2B = ENGM_GET_FF(&this->actor);
     s32 pad;
@@ -1052,7 +1052,7 @@ s32 func_8094FE10(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         func_8094E054(this, globalCtx, 11);
         SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_268 = al;
-        if (!(gSaveContext.weekEventReg[86] & 0x20)) {
+        if (!(gSaveContext.save.weekEventReg[86] & 0x20)) {
             this->unk_3C8 = 2;
             this->unk_3CA = 2;
             this->unk_3CC = 8;
@@ -1267,7 +1267,7 @@ s32 func_80950490(EnGm* this, GlobalContext* globalCtx) {
     };
     s32 pad;
 
-    if ((gSaveContext.weekEventReg[50] & 1) || (gSaveContext.weekEventReg[51] & 0x80)) {
+    if ((gSaveContext.save.weekEventReg[50] & 1) || (gSaveContext.save.weekEventReg[51] & 0x80)) {
         if (this->unk_400 == 0) {
             this->unk_3C8 = 1;
             this->unk_3CA = 1;
@@ -1493,7 +1493,7 @@ void func_80950C24(EnGm* this, GlobalContext* globalCtx) {
 }
 
 void func_80950CDC(EnGm* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
+    u32* unk_14 = &gSaveContext.save.daySpeed;
     struct_80133038_arg2 sp20;
 
     this->unk_3C4 = REG(15) + *unk_14;

@@ -71,12 +71,12 @@ void EnKbt_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80B33E64(GlobalContext* globalCtx) {
-    return gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 1;
+    return gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 1;
 }
 
 s32 func_80B33E8C(GlobalContext* globalCtx) {
     if ((CURRENT_DAY == 3) ||
-        ((CURRENT_DAY == 2) && (gSaveContext.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 2))) {
+        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[globalCtx->sceneNum].unk_14 & 2))) {
         return true;
     }
     return false;
@@ -250,7 +250,7 @@ void func_80B34314(EnKbt* this, GlobalContext* globalCtx) {
     } else if (this->actor.xzDistToPlayer < 250.0f) {
         if ((this->unk_278 != NULL) && (this->unk_278->xzDistToPlayer < 250.0f)) {
             if (this->unk_27C & 4) {
-                playerForm = gSaveContext.playerForm;
+                playerForm = gSaveContext.save.playerForm;
                 if (((playerForm ^ 0) != PLAYER_FORM_HUMAN) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
                                                                 (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
                                                                 (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
@@ -266,10 +266,10 @@ void func_80B34314(EnKbt* this, GlobalContext* globalCtx) {
 
             if (this->actor.textId != 0xC37) {
                 if (((this->actor.textId == 0xC4E) || (this->actor.textId == 0xC4F) || (this->actor.textId == 0xC50)) &&
-                    (gSaveContext.playerForm != PLAYER_FORM_HUMAN)) {
+                    (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN)) {
                     this->actor.textId = 0xC37;
                 }
-            } else if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+            } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 if (func_80B33E8C(globalCtx)) {
                     this->actor.textId = 0xC50;
                 } else {

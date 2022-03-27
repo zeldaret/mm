@@ -324,7 +324,8 @@ s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
             break;
     }
     this->unk_1EA |= 0x20;
-    if (gSaveContext.day == 3 && gSaveContext.time >= CLOCK_TIME(5, 0) && gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (gSaveContext.save.day == 3 && gSaveContext.save.time >= CLOCK_TIME(5, 0) &&
+        gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         return 0x2006;
     }
     return 0x1FCD;
@@ -333,13 +334,13 @@ s32 func_80AD0B38(EnOsn* this, GlobalContext* globalCtx) {
 s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE) && CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) && CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (this->unk_1EA & 1) {
             this->unk_1EA |= 0x20;
-            if ((gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
+            if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) &&
                 (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
-                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) &&
-                    (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+                    (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
@@ -350,8 +351,8 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (this->unk_1EA & 4) {
                 this->unk_1EA |= 0x20;
-                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) &&
-                    (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+                    (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
@@ -363,43 +364,43 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (this->unk_1EA & 8) {
                 this->unk_1EA |= 0x20;
-                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) &&
-                    (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+                    (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
             }
             this->unk_1EA |= 8;
-            if (gSaveContext.weekEventReg[76] & 0x20) {
+            if (gSaveContext.save.weekEventReg[76] & 0x20) {
                 return 0x1FC8;
             }
 
-            gSaveContext.weekEventReg[76] |= 0x20;
+            gSaveContext.save.weekEventReg[76] |= 0x20;
             return 0x1FCE;
         }
 
         if (player->transformation == PLAYER_FORM_ZORA) {
             if (this->unk_1EA & 0x10) {
                 this->unk_1EA |= 0x20;
-                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) &&
-                    (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+                    (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
             }
             this->unk_1EA |= 0x10;
-            if (gSaveContext.weekEventReg[76] & 0x40) {
+            if (gSaveContext.save.weekEventReg[76] & 0x40) {
                 return 0x1FC8;
             }
-            gSaveContext.weekEventReg[76] |= 0x40;
+            gSaveContext.save.weekEventReg[76] |= 0x40;
             return 0x1FD0;
         }
 
         if (Player_GetMask(globalCtx) == PLAYER_MASK_NONE) {
             if (this->unk_1EA & 2) {
                 this->unk_1EA |= 0x20;
-                if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) &&
-                    (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+                    (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     return 0x2006;
                 }
                 return 0x1FCD;
@@ -412,7 +413,8 @@ s32 func_80AD0E10(EnOsn* this, GlobalContext* globalCtx) {
     }
 
     this->unk_1EA |= 0x20;
-    if ((gSaveContext.day == 3) && (gSaveContext.time >= CLOCK_TIME(5, 0)) && (gSaveContext.time < CLOCK_TIME(6, 0))) {
+    if ((gSaveContext.save.day == 3) && (gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+        (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
         return 0x2004;
     }
 
@@ -430,8 +432,8 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1FCA:
-            if ((gSaveContext.day == 3 && gSaveContext.time >= CLOCK_TIME(5, 0)) &&
-                gSaveContext.time < CLOCK_TIME(6, 0)) {
+            if ((gSaveContext.save.day == 3 && gSaveContext.save.time >= CLOCK_TIME(5, 0)) &&
+                gSaveContext.save.time < CLOCK_TIME(6, 0)) {
                 this->unk_1F4 = 0x2007;
             } else {
                 this->unk_1F4 = 0x1FCB;
@@ -579,10 +581,11 @@ void func_80AD10FC(EnOsn* this, GlobalContext* globalCtx) {
 
 void func_80AD1398(EnOsn* this) {
     this->cutscene = this->actor.cutscene;
-    if ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) || (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) ||
+        (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
         this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
 
-        if ((gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE) ||
+        if ((gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE) ||
             (INV_CONTENT(ITEM_MASK_DEKU) == ITEM_MASK_DEKU)) {
             this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
         }
@@ -604,7 +607,7 @@ void func_80AD144C(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD14C8(EnOsn* this, GlobalContext* globalCtx) {
     s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.inventory.items[SLOT_OCARINA] != ITEM_NONE && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
+    if (gSaveContext.save.inventory.items[SLOT_OCARINA] != ITEM_NONE && !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->actionFunc = func_80AD1634;
         } else if ((((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (temp_v1 < 0x4000)) &&
@@ -774,17 +777,17 @@ void EnOsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1FA = 255;
     switch (ENOSN_GET_3(&this->actor)) {
         case 0:
-            if (((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC030)) ||
-                (gSaveContext.entranceIndex == 0xC060)) {
+            if (((gSaveContext.save.entranceIndex == 0xC020) || (gSaveContext.save.entranceIndex == 0xC030)) ||
+                (gSaveContext.save.entranceIndex == 0xC060)) {
                 this->unk_1EA |= 1;
             }
             this->unk_1F0 = 1;
             if (globalCtx->sceneNum == SCENE_INSIDETOWER) {
-                if ((gSaveContext.entranceIndex == 0xC020) || (gSaveContext.entranceIndex == 0xC060)) {
+                if ((gSaveContext.save.entranceIndex == 0xC020) || (gSaveContext.save.entranceIndex == 0xC060)) {
                     this->actionFunc = func_80AD16A8;
                     return;
                 }
-                if (gSaveContext.entranceIndex == 0xC030) {
+                if (gSaveContext.save.entranceIndex == 0xC030) {
                     func_80AD1398(this);
                     this->actionFunc = func_80AD1634;
                     return;

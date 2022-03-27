@@ -333,7 +333,7 @@ s32* func_80BE0E04(EnTab* this, GlobalContext* globalCtx) {
                 return D_80BE1998;
             }
 
-            if (gSaveContext.day == 3) {
+            if (gSaveContext.save.day == 3) {
                 return D_80BE1A0C;
             }
             return D_80BE19A0;
@@ -422,7 +422,8 @@ s32 func_80BE10BC(EnTab* this, GlobalContext* globalCtx) {
             } else {
                 dist = Math_Vec3f_DistXYZ(&this->actor.world.pos, &this->unk_1E4->actor.world.pos);
 
-                if ((gSaveContext.weekEventReg[75] & 1) || (this->unk_1E4->actor.draw == NULL) || !(dist < 160.0f)) {
+                if ((gSaveContext.save.weekEventReg[75] & 1) || (this->unk_1E4->actor.draw == NULL) ||
+                    !(dist < 160.0f)) {
                     tempActor = &GET_PLAYER(globalCtx)->actor;
                     this->actor.child = tempActor;
                 } else {
@@ -458,7 +459,7 @@ void func_80BE1224(EnTab* this, GlobalContext* globalCtx) {
 }
 
 void func_80BE127C(EnTab* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
+    u32* unk_14 = &gSaveContext.save.daySpeed;
     struct_80133038_arg2 sp18;
 
     this->unk_31A = REG(15) + *unk_14;

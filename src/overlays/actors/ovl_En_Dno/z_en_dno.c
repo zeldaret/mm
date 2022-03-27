@@ -211,7 +211,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
             switch (ENDNO_GET_C000(thisx)) {
                 case ENDNO_GET_C000_0:
                     func_80A71788(this, globalCtx);
-                    if (!(gSaveContext.weekEventReg[23] & 0x20) || (gSaveContext.weekEventReg[93] & 2)) {
+                    if (!(gSaveContext.save.weekEventReg[23] & 0x20) || (gSaveContext.save.weekEventReg[93] & 2)) {
                         Actor_MarkForDeath(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 14, &this->unk_32C);
@@ -225,7 +225,7 @@ void EnDno_Init(Actor* thisx, GlobalContext* globalCtx) {
                     break;
 
                 case ENDNO_GET_C000_1:
-                    if (gSaveContext.weekEventReg[23] & 0x20) {
+                    if (gSaveContext.save.weekEventReg[23] & 0x20) {
                         Actor_MarkForDeath(thisx);
                     } else {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 13, &this->unk_32C);
@@ -267,7 +267,7 @@ void func_80A71B68(EnDno* this, GlobalContext* globalCtx) {
     this->unk_452 = 0;
     this->actor.textId = 0;
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
-        if (gSaveContext.weekEventReg[27] & 1) {
+        if (gSaveContext.save.weekEventReg[27] & 1) {
             if (!(this->unk_3B0 & 0x20)) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 6, &this->unk_32C);
                 this->actor.shape.rot.y = Actor_YawBetweenActors(&this->actor, this->unk_460);
@@ -331,17 +331,17 @@ void func_80A71C3C(EnDno* this, GlobalContext* globalCtx) {
 
 void func_80A71E54(EnDno* this, GlobalContext* globalCtx) {
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
-        if (gSaveContext.weekEventReg[27] & 1) {
+        if (gSaveContext.save.weekEventReg[27] & 1) {
             this->textId = 0x811;
         } else {
             this->textId = 0x80F;
-            gSaveContext.weekEventReg[27] |= 1;
+            gSaveContext.save.weekEventReg[27] |= 1;
         }
-    } else if (gSaveContext.weekEventReg[26] & 0x80) {
+    } else if (gSaveContext.save.weekEventReg[26] & 0x80) {
         this->textId = 0x80B;
     } else {
         this->textId = 0x80C;
-        gSaveContext.weekEventReg[26] |= 0x80;
+        gSaveContext.save.weekEventReg[26] |= 0x80;
     }
 
     if (this->textId != 0x811) {
@@ -558,7 +558,7 @@ void func_80A725F8(EnDno* this, GlobalContext* globalCtx) {
 
                 case 2:
                     if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2D8)) {
-                        gSaveContext.weekEventReg[93] |= 2;
+                        gSaveContext.save.weekEventReg[93] |= 2;
                         Message_StartTextbox(globalCtx, 0x802, &this->actor);
                     }
                     break;

@@ -360,45 +360,45 @@ void func_80BDD1E0(EnZow* this, GlobalContext* globalCtx) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (gSaveContext.weekEventReg[55] & 0x80) {
-            if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-                if (gSaveContext.weekEventReg[78] & 4) {
+        if (gSaveContext.save.weekEventReg[55] & 0x80) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+                if (gSaveContext.save.weekEventReg[78] & 4) {
                     phi_a1 = 0x12FD;
                 } else {
                     phi_a1 = 0x12FA;
-                    gSaveContext.weekEventReg[78] |= 4;
+                    gSaveContext.save.weekEventReg[78] |= 4;
                 }
-            } else if (gSaveContext.weekEventReg[78] & 0x10) {
+            } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
                 phi_a1 = 0x1301;
             } else {
-                gSaveContext.weekEventReg[78] |= 0x10;
+                gSaveContext.save.weekEventReg[78] |= 0x10;
                 phi_a1 = 0x12FF;
             }
-        } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-            if (gSaveContext.weekEventReg[78] & 8) {
+        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (gSaveContext.save.weekEventReg[78] & 8) {
                 phi_a1 = 0x12F8;
             } else {
                 phi_a1 = 0x12F3;
-                gSaveContext.weekEventReg[78] |= 8;
+                gSaveContext.save.weekEventReg[78] |= 8;
             }
-        } else if (gSaveContext.weekEventReg[78] & 0x10) {
+        } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
             phi_a1 = 0x1301;
         } else {
-            gSaveContext.weekEventReg[78] |= 0x10;
+            gSaveContext.save.weekEventReg[78] |= 0x10;
             phi_a1 = 0x12FF;
         }
-    } else if (gSaveContext.weekEventReg[55] & 0x80) {
-        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    } else if (gSaveContext.save.weekEventReg[55] & 0x80) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
             phi_a1 = 0x12F1;
         }
-    } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[78] & 2) {
+    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.weekEventReg[78] & 2) {
             phi_a1 = 0x12EB;
         } else {
             phi_a1 = 0x12E8;
-            gSaveContext.weekEventReg[78] |= 2;
+            gSaveContext.save.weekEventReg[78] |= 2;
         }
     } else {
         phi_a1 = 0x12EF;

@@ -265,7 +265,7 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (gSaveContext.weekEventReg[88] & 0x10)) {
+    if ((ENZOG_GET_F(&this->actor) != ENZOG_F_2) && (gSaveContext.save.weekEventReg[88] & 0x10)) {
         this->unk_302 = this->unk_300 = 0;
         this->unk_2FC = this->unk_2FE = 3;
         this->actor.flags |= ACTOR_FLAG_2000000;
@@ -275,7 +275,7 @@ void EnZog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         Animation_PlayLoop(&this->skelAnime, D_80B958DC[0]);
         this->actor.textId = 0x1009;
-        if (gSaveContext.weekEventReg[91] & 2) {
+        if (gSaveContext.save.weekEventReg[91] & 2) {
             this->actor.textId = 0x103C;
             this->actionFunc = func_80B9451C;
         } else {
@@ -629,7 +629,7 @@ void func_80B9451C(EnZog* this, GlobalContext* globalCtx) {
         this->unk_300 = 2;
         this->actionFunc = func_80B94470;
     } else if ((globalCtx->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
@@ -645,7 +645,7 @@ void func_80B9461C(EnZog* this, GlobalContext* globalCtx) {
         this->actor.textId = 0x103C;
         this->actionFunc = func_80B9451C;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        gSaveContext.weekEventReg[91] |= 2;
+        gSaveContext.save.weekEventReg[91] |= 2;
     }
 
     if ((this->unk_304 == 11) && ((s32)this->skelAnime.curFrame >= 55)) {
@@ -717,7 +717,7 @@ void func_80B948A8(EnZog* this, GlobalContext* globalCtx) {
         this->unk_300 = 2;
         this->actionFunc = func_80B946FC;
     } else if ((globalCtx->msgCtx.ocarinaMode == 3) && (this->actor.xzDistToPlayer < 120.0f)) {
-        if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((globalCtx->msgCtx.unk1202E == 7) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             func_80B93BA8(this, 2);
             this->actionFunc = func_80B943C0;
             this->actor.shape.shadowDraw = NULL;
@@ -747,11 +747,11 @@ void func_80B94A00(EnZog* this, GlobalContext* globalCtx) {
     if (func_80B93BE0(this, globalCtx)) {
         this->actionFunc = func_80B948A8;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        if (gSaveContext.weekEventReg[29] & 0x20) {
+        if (gSaveContext.save.weekEventReg[29] & 0x20) {
             this->actor.textId = 0x1009;
         } else {
             this->actor.textId = 0x1008;
-            gSaveContext.weekEventReg[29] |= 0x20;
+            gSaveContext.save.weekEventReg[29] |= 0x20;
         }
         this->unk_300 = 2;
         this->unk_31C = 2;
@@ -904,7 +904,7 @@ void func_80B94E34(EnZog* this, GlobalContext* globalCtx) {
         this->unk_31C = 1;
         this->unk_31E = 0;
         func_80B93BA8(this, 0);
-        gSaveContext.weekEventReg[88] |= 0x10;
+        gSaveContext.save.weekEventReg[88] |= 0x10;
     } else if ((this->actor.yawTowardsPlayer > 16000) && (this->actor.yawTowardsPlayer < 32000) &&
                (this->unk_302 == 0)) {
         func_800B8614(&this->actor, globalCtx, 150.0f);
@@ -938,7 +938,7 @@ void func_80B95128(EnZog* this, GlobalContext* globalCtx) {
         }
 
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        gSaveContext.weekEventReg[91] |= 1;
+        gSaveContext.save.weekEventReg[91] |= 1;
     } else {
         func_800B8614(&this->actor, globalCtx, 150.0f);
     }

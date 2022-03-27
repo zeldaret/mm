@@ -94,7 +94,7 @@ void EnBombers2_Init(Actor* thisx, GlobalContext* globalCtx) {
                        this->jointTable, OBJECT_CS_LIMB_MAX);
     this->actor.targetMode = 6;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
-    if ((gSaveContext.weekEventReg[0x49] & 0x80) || (gSaveContext.entranceIndex == 0xD220)) {
+    if ((gSaveContext.save.weekEventReg[73] & 0x80) || (gSaveContext.save.entranceIndex == 0xD220)) {
         this->actor.world.pos.x += Math_SinS(this->actor.home.rot.y + 0xC100) * 50.0f;
         cos = Math_CosS(this->actor.home.rot.y + 0xC100) * 50.0f;
         this->unk_2AC = 1;
@@ -165,7 +165,7 @@ void func_80C04BA0(EnBombers2* this, GlobalContext* globalCtx) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->unk_2B6 = this->actor.world.rot.y;
-        gSaveContext.weekEventReg[0x56] |= 2;
+        gSaveContext.save.weekEventReg[86] |= 2;
         func_80C04D00(this);
         return;
     }
@@ -219,7 +219,8 @@ void func_80C04D8C(EnBombers2* this, GlobalContext* globalCtx) {
             s32 correctDigits;
 
             for (i = 0; i < ARRAY_COUNT(this->correctDigitSlots); i++) {
-                if (!(this->correctDigitSlots[i]) && (globalCtx->msgCtx.unk12054[i] == gSaveContext.bomberCode[i])) {
+                if (!(this->correctDigitSlots[i]) &&
+                    (globalCtx->msgCtx.unk12054[i] == gSaveContext.save.bomberCode[i])) {
                     this->correctDigitSlots[i] = true;
                 }
             }
@@ -329,7 +330,7 @@ void func_80C0520C(EnBombers2* this, GlobalContext* globalCtx) {
                 EnBombers2_ChangeAnim(this, 6, 1.0f);
                 this->unk_2A8 = 0;
                 this->unk_2C0 = 1;
-                gSaveContext.weekEventReg[0x49] |= 0x80;
+                gSaveContext.save.weekEventReg[73] |= 0x80;
                 ActorCutscene_Stop(this->cutscene);
                 this->unk_2AC = 1;
                 this->actor.textId = sTextIds[this->textIdIndex];

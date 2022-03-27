@@ -110,7 +110,7 @@ s32 ObjWarpstone_BeginOpeningCutscene(ObjWarpstone* this, GlobalContext* globalC
 s32 ObjWarpstone_PlayOpeningCutscene(ObjWarpstone* this, GlobalContext* globalCtx) {
     if (this->openingCSTimer++ >= OBJ_WARPSTONE_TIMER_ACTIVATE_THRESHOLD) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
-        func_80143A10(OBJ_WARPSTONE_GET_ID(this));
+        Sram_ActivateOwl(OBJ_WARPSTONE_GET_ID(this));
         ObjWarpstone_SetupAction(this, ObjWarpstone_OpenedIdle);
     } else if (this->openingCSTimer < OBJ_WARPSTONE_TIMER_OPEN_THRESHOLD) {
         Math_StepToF(&this->dyna.actor.velocity.x, 0.01f, 0.001f);
@@ -144,7 +144,7 @@ void ObjWarpstone_Update(Actor* thisx, GlobalContext* globalCtx) {
                 globalCtx->msgCtx.msgMode = 0x4D;
                 globalCtx->msgCtx.unk120D6 = 0;
                 globalCtx->msgCtx.unk120D4 = 0;
-                gSaveContext.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
+                gSaveContext.save.owlSaveLocation = OBJ_WARPSTONE_GET_ID(this);
             } else {
                 func_801477B4(globalCtx);
             }

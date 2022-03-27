@@ -94,7 +94,7 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_314 = 0;
     this->unk_310 = 0;
     this->unk_312 = 0;
-    if ((gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.weekEventReg[52] & 0x20)) {
+    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
         func_80BD049C(this);
     } else {
         thisx->draw = NULL;
@@ -144,7 +144,7 @@ void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
                 Message_StartTextbox(globalCtx, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7; // can I research that mask
             }
-        } else if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
             if (!(this->unk_310 & 1)) {
                 this->unk_310 |= 1;
                 Message_StartTextbox(globalCtx, 0x158F, &this->actor);
@@ -201,7 +201,7 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
                 this->unk_314 = 0x1590;
                 break;
             case 0x1590:
-                if (gSaveContext.weekEventReg[14] & 4) {
+                if (gSaveContext.save.weekEventReg[14] & 4) {
                     Message_StartTextbox(globalCtx, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
                     break;
@@ -303,7 +303,7 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
         Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return true;
     }
-    if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20)) &&
+    if ((globalCtx->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
         (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,

@@ -99,38 +99,38 @@ void EnBomjimb_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2C6 = ENBOMJIMB_F0_0;
     }
 
-    if ((gSaveContext.weekEventReg[73] & 0x10) || (gSaveContext.weekEventReg[85] & 2)) {
+    if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
         switch (this->unk_2C8) {
             case ENBOMJIMB_F_0:
-                if (gSaveContext.weekEventReg[11] & 1) {
+                if (gSaveContext.save.weekEventReg[11] & 1) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_1:
-                if (gSaveContext.weekEventReg[11] & 2) {
+                if (gSaveContext.save.weekEventReg[11] & 2) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_2:
-                if (gSaveContext.weekEventReg[11] & 4) {
+                if (gSaveContext.save.weekEventReg[11] & 4) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_3:
-                if (gSaveContext.weekEventReg[11] & 8) {
+                if (gSaveContext.save.weekEventReg[11] & 8) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_4:
-                if (gSaveContext.weekEventReg[11] & 0x10) {
+                if (gSaveContext.save.weekEventReg[11] & 0x10) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
@@ -138,8 +138,8 @@ void EnBomjimb_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if ((!(gSaveContext.weekEventReg[73] & 0x10) && !(gSaveContext.weekEventReg[85] & 2)) ||
-        (gSaveContext.weekEventReg[75] & 0x40)) {
+    if ((!(gSaveContext.save.weekEventReg[73] & 0x10) && !(gSaveContext.save.weekEventReg[85] & 2)) ||
+        (gSaveContext.save.weekEventReg[75] & 0x40)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -671,8 +671,8 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[73] & 0x10)) ||
-        ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.weekEventReg[85] & 2))) {
+    if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.save.weekEventReg[73] & 0x10)) ||
+        ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.save.weekEventReg[85] & 2))) {
         func_80C0113C(this, 17, 1.0f);
         Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
@@ -683,13 +683,13 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
         return;
     }
 
-    idx = gSaveContext.unk_FE6;
+    idx = gSaveContext.save.bombersCaughtNum;
     Message_StartTextbox(globalCtx, D_80C03230[idx], &this->actor);
-    idx = gSaveContext.unk_FE6;
-    gSaveContext.unk_FE7[idx] = this->unk_2C8 + 1;
-    gSaveContext.unk_FE6++;
+    idx = gSaveContext.save.bombersCaughtNum;
+    gSaveContext.save.bombersCaughtOrder[idx] = this->unk_2C8 + 1;
+    gSaveContext.save.bombersCaughtNum++;
 
-    if (gSaveContext.unk_FE6 > 4) {
+    if (gSaveContext.save.bombersCaughtNum > 4) {
         func_801A3098(0x922);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
@@ -697,28 +697,28 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
 
     switch (this->unk_2C8) {
         case ENBOMJIMB_F_0:
-            gSaveContext.weekEventReg[76] |= 1;
-            gSaveContext.weekEventReg[11] |= 1;
+            gSaveContext.save.weekEventReg[76] |= 1;
+            gSaveContext.save.weekEventReg[11] |= 1;
             break;
 
         case ENBOMJIMB_F_1:
-            gSaveContext.weekEventReg[76] |= 2;
-            gSaveContext.weekEventReg[11] |= 2;
+            gSaveContext.save.weekEventReg[76] |= 2;
+            gSaveContext.save.weekEventReg[11] |= 2;
             break;
 
         case ENBOMJIMB_F_2:
-            gSaveContext.weekEventReg[76] |= 4;
-            gSaveContext.weekEventReg[11] |= 4;
+            gSaveContext.save.weekEventReg[76] |= 4;
+            gSaveContext.save.weekEventReg[11] |= 4;
             break;
 
         case ENBOMJIMB_F_3:
-            gSaveContext.weekEventReg[76] |= 8;
-            gSaveContext.weekEventReg[11] |= 8;
+            gSaveContext.save.weekEventReg[76] |= 8;
+            gSaveContext.save.weekEventReg[11] |= 8;
             break;
 
         case ENBOMJIMB_F_4:
-            gSaveContext.weekEventReg[76] |= 0x10;
-            gSaveContext.weekEventReg[11] |= 0x10;
+            gSaveContext.save.weekEventReg[76] |= 0x10;
+            gSaveContext.save.weekEventReg[11] |= 0x10;
             break;
     }
 
@@ -760,7 +760,7 @@ void func_80C02A14(EnBomjimb* this, GlobalContext* globalCtx) {
 
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
-        if ((this->unk_2CA == 8) && (gSaveContext.unk_FE6 >= 5)) {
+        if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, globalCtx);
         } else {
             if (this->unk_2CA == 8) {
@@ -800,8 +800,8 @@ void func_80C02CA4(EnBomjimb* this, GlobalContext* globalCtx) {
         globalCtx->unk_1887F = 0x56;
         gSaveContext.nextTransition = 3;
     }
-    gSaveContext.weekEventReg[75] |= 0x40;
-    gSaveContext.weekEventReg[83] |= 4;
+    gSaveContext.save.weekEventReg[75] |= 0x40;
+    gSaveContext.save.weekEventReg[83] |= 4;
     this->actionFunc = func_80C02DAC;
 }
 

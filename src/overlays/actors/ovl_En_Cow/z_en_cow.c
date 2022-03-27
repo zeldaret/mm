@@ -116,7 +116,7 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             this->actionFunc = EnCow_Idle;
 
-            if (!(gSaveContext.weekEventReg[22] & 1) && (CURRENT_DAY != 1) &&
+            if (!(gSaveContext.save.weekEventReg[22] & 1) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
@@ -153,7 +153,7 @@ void EnCow_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
 
-    gSaveContext.weekEventReg[87] &= (u8)~1;
+    gSaveContext.save.weekEventReg[87] &= (u8)~1;
 }
 
 void EnCow_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -289,8 +289,8 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
         if (func_801A5100() == 4) {
-            if (!(gSaveContext.weekEventReg[87] & 1)) {
-                gSaveContext.weekEventReg[87] |= 1;
+            if (!(gSaveContext.save.weekEventReg[87] & 1)) {
+                gSaveContext.save.weekEventReg[87] |= 1;
                 if (Interface_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
@@ -301,7 +301,7 @@ void EnCow_Idle(EnCow* this, GlobalContext* globalCtx) {
                 this->actionFunc = EnCow_Talk;
             }
         } else {
-            gSaveContext.weekEventReg[87] &= (u8)~1;
+            gSaveContext.save.weekEventReg[87] &= (u8)~1;
         }
     }
 

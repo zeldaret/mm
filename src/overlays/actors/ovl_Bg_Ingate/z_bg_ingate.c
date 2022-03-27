@@ -194,7 +194,7 @@ void func_80953F9C(BgIngate* this, GlobalContext* globalCtx) {
                 this->dyna.actor.textId = 0x9E4;
                 Message_StartTextbox(globalCtx, this->dyna.actor.textId, NULL);
                 this->unk16C += 1;
-                gSaveContext.weekEventReg[90] |= 0x40;
+                gSaveContext.save.weekEventReg[90] |= 0x40;
                 this->actionFunc = func_809543D4;
             } else {
 
@@ -253,7 +253,7 @@ void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
     globalCtx->unk_1887F = 3;
     gSaveContext.nextTransition = 3;
     this->actionFunc = func_80953F8C;
-    gSaveContext.weekEventReg[90] &= (u8)~0x40;
+    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
     func_800FE498();
 }
 
@@ -289,7 +289,7 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
                         this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
                     }
                     func_80953F14(this, globalCtx);
-                    gSaveContext.weekEventReg[90] &= (u8)~0x40;
+                    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
                     func_8019F230();
                 }
                 func_801477B4(globalCtx);
@@ -297,7 +297,7 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
             case 0x9E6:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
                     func_80953EA4(this, globalCtx);
-                    gSaveContext.weekEventReg[90] &= (u8)~0x40;
+                    gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
                     func_8019F208();
                 } else {
                     this = this;
@@ -330,10 +330,10 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Actor_SetScale(&this->dyna.actor, 1.0f);
         this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
-        if (gSaveContext.weekEventReg[20] & 2) {
-            gSaveContext.weekEventReg[90] &= (u8)~0x40;
+        if (gSaveContext.save.weekEventReg[20] & 2) {
+            gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
         }
-        if (!(gSaveContext.eventInf[3] & 0x20) && (gSaveContext.weekEventReg[90] & 0x40)) {
+        if (!(gSaveContext.eventInf[3] & 0x20) && (gSaveContext.save.weekEventReg[90] & 0x40)) {
             phi_a2 = 1;
             this->unk16C = 1;
             this->actionFunc = func_809541B8;

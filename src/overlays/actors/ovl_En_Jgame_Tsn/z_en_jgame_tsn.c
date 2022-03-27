@@ -94,7 +94,7 @@ void EnJgameTsn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.velocity.y = 0.0f;
 
-    if (gSaveContext.entranceIndex == 0x68D0) {
+    if (gSaveContext.save.entranceIndex == 0x68D0) {
         this->actor.flags |= ACTOR_FLAG_10000;
     }
 
@@ -141,7 +141,7 @@ void EnJgameTsn_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnJgameTsn* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    gSaveContext.weekEventReg[90] &= (u8)~0x20;
+    gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
 }
 
 void func_80C13B74(EnJgameTsn* this) {
@@ -168,8 +168,8 @@ void func_80C13BB8(EnJgameTsn* this, GlobalContext* globalCtx) {
                 Message_StartTextbox(globalCtx, 0x10A3, &this->actor);
                 this->unk_300 = 0x10A3;
             }
-        } else if (((gSaveContext.time > CLOCK_TIME(4, 0)) && (gSaveContext.time < CLOCK_TIME(7, 0))) ||
-                   ((gSaveContext.time > CLOCK_TIME(16, 0)) && (gSaveContext.time < CLOCK_TIME(19, 0)))) {
+        } else if (((gSaveContext.save.time > CLOCK_TIME(4, 0)) && (gSaveContext.save.time < CLOCK_TIME(7, 0))) ||
+                   ((gSaveContext.save.time > CLOCK_TIME(16, 0)) && (gSaveContext.save.time < CLOCK_TIME(19, 0)))) {
             Message_StartTextbox(globalCtx, 0x1094, &this->actor);
             this->unk_300 = 0x1094;
         } else if (this->unk_2F8 == 0) {
@@ -190,7 +190,7 @@ void func_80C13BB8(EnJgameTsn* this, GlobalContext* globalCtx) {
     }
 
     if ((player->actor.bgCheckFlags & 1) && !(player->stateFlags1 & 0x2000) && (this->unk_2FE == 0) &&
-        (gSaveContext.playerForm == PLAYER_FORM_HUMAN) && func_80C149B0(globalCtx, &this->unk_1F8)) {
+        (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) && func_80C149B0(globalCtx, &this->unk_1F8)) {
         this->unk_2FE = 1;
         func_80C13E6C(this);
     } else if (!(player->actor.bgCheckFlags & 1)) {
@@ -209,8 +209,8 @@ void func_80C13E6C(EnJgameTsn* this) {
 void func_80C13E90(EnJgameTsn* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if (((gSaveContext.time > CLOCK_TIME(4, 0)) && (gSaveContext.time < CLOCK_TIME(7, 0))) ||
-            ((gSaveContext.time > CLOCK_TIME(16, 0)) && (gSaveContext.time < CLOCK_TIME(19, 0)))) {
+        if (((gSaveContext.save.time > CLOCK_TIME(4, 0)) && (gSaveContext.save.time < CLOCK_TIME(7, 0))) ||
+            ((gSaveContext.save.time > CLOCK_TIME(16, 0)) && (gSaveContext.save.time < CLOCK_TIME(19, 0)))) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
             Message_StartTextbox(globalCtx, 0x1094, &this->actor);
             this->unk_300 = 0x1094;
@@ -286,7 +286,7 @@ void func_80C1410C(EnJgameTsn* this, GlobalContext* globalCtx) {
     func_801A2BB8(0x25);
     globalCtx->interfaceCtx.unk_280 = 1;
     func_80112AFC(globalCtx);
-    gSaveContext.weekEventReg[90] |= 0x20;
+    gSaveContext.save.weekEventReg[90] |= 0x20;
     func_8010E9F0(4, 0x78);
     this->actionFunc = func_80C1418C;
 }
@@ -379,11 +379,11 @@ void func_80C14540(EnJgameTsn* this) {
 
 void func_80C14554(EnJgameTsn* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
-        if (!(gSaveContext.weekEventReg[82] & 0x10)) {
-            gSaveContext.weekEventReg[82] |= 0x10;
+        if (!(gSaveContext.save.weekEventReg[82] & 0x10)) {
+            gSaveContext.save.weekEventReg[82] |= 0x10;
         }
         func_80C145FC(this);
-    } else if (gSaveContext.weekEventReg[82] & 0x10) {
+    } else if (gSaveContext.save.weekEventReg[82] & 0x10) {
         Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -407,7 +407,7 @@ void func_80C14610(EnJgameTsn* this, GlobalContext* globalCtx) {
 void func_80C14684(EnJgameTsn* this, GlobalContext* globalCtx) {
     if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.rupees >= 20) {
+            if (gSaveContext.save.playerData.rupees >= 20) {
                 Message_StartTextbox(globalCtx, 0x109E, &this->actor);
                 this->unk_300 = 0x109E;
                 func_801159EC(-20);
@@ -480,7 +480,7 @@ void func_80C147B4(EnJgameTsn* this, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
                 gSaveContext.minigameState = 3;
                 gSaveContext.unk_3DD0[4] = 5;
-                gSaveContext.weekEventReg[90] &= (u8)~0x20;
+                gSaveContext.save.weekEventReg[90] &= (u8)~0x20;
                 func_80C144E4(this);
                 break;
 
