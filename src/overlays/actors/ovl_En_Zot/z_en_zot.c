@@ -1104,14 +1104,14 @@ void func_80B98AD0(EnZot* this, GlobalContext* globalCtx) {
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.weekEventReg[41] &= (u8)~0x20;
-                func_8019C300(0);
+                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
                 break;
 
             case 0x12BA:
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80B98CA8;
                 gSaveContext.weekEventReg[41] |= 0x20;
-                func_8019C300(0);
+                AudioOcarina_SetInstrumentId(OCARINA_INSTRUMENT_OFF);
                 break;
 
             default:
@@ -1140,7 +1140,7 @@ void func_80B98BF4(EnZot* this, GlobalContext* globalCtx) {
 void func_80B98CA8(EnZot* this, GlobalContext* globalCtx) {
     if (func_800B8718(&this->actor, &globalCtx->state)) {
         globalCtx->msgCtx.ocarinaMode = 4;
-        func_8019B544(0xFFFF);
+        AudioOcarina_StartDefault(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 120.0f);

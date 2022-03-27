@@ -76,6 +76,6 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80194568.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_80194668.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_NextRandom.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_InitMesgQueues.s")
