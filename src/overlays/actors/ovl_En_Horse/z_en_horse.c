@@ -2916,7 +2916,7 @@ void EnHorse_UpdateHorsebackArchery(EnHorse* this, GlobalContext* globalCtx) {
     EnHorse_UpdateHbaRaceInfo(this, globalCtx, &sHbaInfo);
 
     if (((this->hbaFlags & 1) || (this->hbaTimer > 45)) && (sp28 != 1) && (gSaveContext.minigameState != 3)) {
-        gSaveContext.cutscene = 0;
+        gSaveContext.save.cutscene = 0;
         globalCtx->sceneLoadFlag = 0x14;
         globalCtx->unk_1887F = 0x40;
     }
