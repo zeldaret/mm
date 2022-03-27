@@ -415,7 +415,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, GlobalContext* globalCtx) {
         this->unkState1A8 = 0;
     }
 
-    if (this->unkMsgState1AC == Message_GetState(&globalCtx->msgCtx) && func_80147624(globalCtx) != 0) {
+    if (this->unkMsgState1AC == Message_GetState(&globalCtx->msgCtx) && Message_ShouldAdvance(globalCtx) != 0) {
         func_801477B4(globalCtx);
         if (this->unkMsgState1AC == 5) {
             // bad song input
@@ -560,7 +560,7 @@ void EnKakasi_SetupSongTeach(EnKakasi* this, GlobalContext* globalCtx) {
  * before actually teaching
  */
 void EnKakasi_OcarinaRemark(EnKakasi* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
         func_80152434(globalCtx, 0x35);
         this->unkState1A8 = 0;
         if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -735,7 +735,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     func_8096FAAC(this, globalCtx);
 
     if (this->unkState1A8 != 0 && Message_GetState(&globalCtx->msgCtx) == this->unkMsgState1AC &&
-        func_80147624(globalCtx) != 0) {
+        Message_ShouldAdvance(globalCtx) != 0) {
 
         func_801477B4(globalCtx);
 
@@ -1101,7 +1101,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, GlobalContext* globalCtx) {
 void EnKakasi_RisenDialogue(EnKakasi* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 1000, 0);
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
         func_801477B4(globalCtx);
         EnKakasi_SetupIdleRisen(this);
     }

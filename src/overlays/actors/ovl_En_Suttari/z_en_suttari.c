@@ -1111,7 +1111,7 @@ void func_80BAD004(EnSuttari* this, GlobalContext* globalCtx) {
 void func_80BAD130(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if ((talkState == 5 || talkState == 6) && func_80147624(globalCtx)) {
+    if ((talkState == 5 || talkState == 6) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->flags1 & 8) {
@@ -1142,7 +1142,7 @@ void func_80BAD230(EnSuttari* this, GlobalContext* globalCtx) {
 }
 
 void func_80BAD2B4(EnSuttari* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x2A30) {
             ActorCutscene_Stop(this->cutscenes[0]);
             ActorCutscene_SetIntentToPlay(this->cutscenes[1]);
@@ -1162,13 +1162,13 @@ void func_80BAD380(EnSuttari* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->stateFlags1 & 0x40) && (globalCtx->msgCtx.unk11F04 != 0x2A31)) {
+    if ((player->stateFlags1 & 0x40) && (globalCtx->msgCtx.currentTextId != 0x2A31)) {
         this->flags1 |= 0x8000;
         this->actor.speedXZ = 0.0f;
     } else {
         this->flags1 &= ~0x8000;
         func_80BABA90(this, 1, 1);
-        if ((this->flags1 & 0x4000) && (talkState == 5) && func_80147624(globalCtx)) {
+        if ((this->flags1 & 0x4000) && (talkState == 5) && Message_ShouldAdvance(globalCtx)) {
             this->flags2 &= ~0x10;
             player->stateFlags1 &= ~0x10000000;
             this->flags1 &= ~0x4000;
@@ -1306,7 +1306,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, this->animationIndex);
     }
     if (talkstate == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->flags1 & 0x400) {
                 if (this->textId == 0x29EE) {
                     ActorCutscene_Stop(this->cutscenes[this->cutsceneIdx]);
@@ -1328,7 +1328,7 @@ void func_80BADA9C(EnSuttari* this, GlobalContext* globalCtx) {
             }
             func_80BAAB78(this, globalCtx);
         }
-    } else if ((talkstate == 4) && func_80147624(globalCtx)) {
+    } else if ((talkstate == 4) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();

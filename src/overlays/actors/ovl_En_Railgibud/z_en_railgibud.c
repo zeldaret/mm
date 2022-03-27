@@ -969,14 +969,14 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, GlobalContext* global
     } else {
         switch (Message_GetState(&globalCtx->msgCtx)) {
             case 5:
-                if (func_80147624(globalCtx)) {
+                if (Message_ShouldAdvance(globalCtx)) {
                     Message_StartTextbox(globalCtx, 0x13B3, &this->actor);
                     this->textId = 0x13B3;
                 }
                 break;
 
             case 6:
-                if (func_80147624(globalCtx)) {
+                if (Message_ShouldAdvance(globalCtx)) {
                     this->textId = 0;
                     this->isInvincible = false;
                     this->actor.speedXZ = 0.6f;

@@ -1243,7 +1243,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
                 globalCtx->msgCtx.msgMode = 0x43;
@@ -1265,7 +1265,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     this->unk_32C |= 0x8;
@@ -1285,7 +1285,7 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_33C = 0;
@@ -1310,7 +1310,7 @@ void func_80BEF20C(EnAkindonuts* this, GlobalContext* globalCtx) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 6);
     }
 
-    if ((sp27 == 5) && func_80147624(globalCtx)) {
+    if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
             globalCtx->msgCtx.msgMode = 0x43;
@@ -1341,7 +1341,7 @@ void func_80BEF360(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEF450(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
         this->actionFunc = func_80BEF4B8;
     }

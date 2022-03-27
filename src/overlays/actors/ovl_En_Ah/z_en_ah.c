@@ -290,7 +290,7 @@ void func_80BD3118(EnAh* this, GlobalContext* globalCtx) {
 
 s32 func_80BD3198(EnAh* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x40) {
         if (this->unk_2DA != temp) {

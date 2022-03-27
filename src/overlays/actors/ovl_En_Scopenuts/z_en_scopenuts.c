@@ -315,7 +315,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_328 & 1) {
                 this->unk_328 &= ~1;
                 globalCtx->msgCtx.msgMode = 0x43;
@@ -331,7 +331,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 4) {
-        if (func_80147624(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx) != 0) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.playerData.rupees < this->unk_358) {

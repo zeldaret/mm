@@ -256,7 +256,7 @@ void func_80BE0A98(EnTab* this, GlobalContext* globalCtx) {
     Matrix_InsertTranslation(this->unk_308, 0.0f, 0.0f, MTXMODE_APPLY);
 
     if ((&this->actor == player->targetActor) &&
-        ((globalCtx->msgCtx.unk11F04 < 0xFF) || (globalCtx->msgCtx.unk11F04 > 0x200)) && (sp20 == 3) &&
+        ((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
         (this->unk_334 == 3)) {
         if ((globalCtx->state.frames % 2) == 0) {
             if (this->unk_304 != 0.0f) {
@@ -415,8 +415,8 @@ s32 func_80BE10BC(EnTab* this, GlobalContext* globalCtx) {
 
     switch (this->unk_1D8) {
         case 1:
-            if ((player->stateFlags1 & 0x40) && !(globalCtx->msgCtx.unk11F04 <= 0x2B00) &&
-                (globalCtx->msgCtx.unk11F04 < 0x2B08)) {
+            if ((player->stateFlags1 & 0x40) && !(globalCtx->msgCtx.currentTextId <= 0x2B00) &&
+                (globalCtx->msgCtx.currentTextId < 0x2B08)) {
                 this->actor.child = &this->unk_1E4->actor;
                 this->unk_2FC |= 8;
             } else {

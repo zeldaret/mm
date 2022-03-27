@@ -821,7 +821,7 @@ s32 func_80A8777C(Actor* thisx, GlobalContext* globalCtx) {
 
                 case 4:
                 case 5:
-                    if (!func_80147624(globalCtx)) {
+                    if (!Message_ShouldAdvance(globalCtx)) {
                         break;
                     }
             }

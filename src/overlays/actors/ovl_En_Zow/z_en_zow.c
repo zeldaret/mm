@@ -463,8 +463,8 @@ void func_80BDD570(EnZow* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x12E8:
                     case 0x12E9:
                     case 0x12EC:
@@ -480,7 +480,7 @@ void func_80BDD570(EnZow* this, GlobalContext* globalCtx) {
                     case 0x12FB:
                     case 0x12FD:
                     case 0x12FF:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     default:

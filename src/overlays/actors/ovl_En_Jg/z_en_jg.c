@@ -358,7 +358,7 @@ void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
         if ((this->textId == 0xDCC) || (this->textId == 0xDDD) || (this->textId == 0xDE0)) {
             // There is nothing more to say after these lines, so end the current conversation.
             globalCtx->msgCtx.msgMode = 0x43;
@@ -425,7 +425,7 @@ void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, GlobalContext* globalCtx) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
         }
     } else if (this->animationIndex == EN_JG_ANIMATION_SURPRISE_LOOP) {
-        if ((messageState == 5) && (func_80147624(globalCtx))) {
+        if ((messageState == 5) && (Message_ShouldAdvance(globalCtx))) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->flags &= ~FLAG_LOOKING_AT_PLAYER;
@@ -480,7 +480,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->animationIndex);
     }
 
-    if ((messageState == 5) && (func_80147624(globalCtx))) {
+    if ((messageState == 5) && (Message_ShouldAdvance(globalCtx))) {
         temp = this->textId;
         if ((temp == 0xDB4) || (temp == 0xDB5) || (temp == 0xDC4) || (temp == 0xDC6)) {
             // There is nothing more to say after these lines, so end the current conversation.
@@ -600,7 +600,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
 }
 
 void EnJg_EndFrozenInteraction(EnJg* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx) != 0) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx) != 0) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = EnJg_FrozenIdle;

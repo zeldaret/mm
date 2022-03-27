@@ -271,7 +271,7 @@ void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
 void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (((talkState == 4) || (talkState == 5)) && func_80147624(globalCtx)) {
+    if (((talkState == 4) || (talkState == 5)) && Message_ShouldAdvance(globalCtx)) {
         switch (this->dyna.actor.textId) {
             case 0x9E4:
                 this->dyna.actor.textId = 0x9E5;

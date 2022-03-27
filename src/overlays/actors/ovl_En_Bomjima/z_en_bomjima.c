@@ -581,7 +581,7 @@ void func_80BFF4F4(EnBomjima* this) {
 }
 
 void func_80BFF52C(EnBomjima* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         if (globalCtx->msgCtx.choiceIndex == 0) {
             Player* player = GET_PLAYER(globalCtx);
@@ -624,7 +624,7 @@ void func_80BFF6CC(EnBomjima* this, GlobalContext* globalCtx) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (this->unk_2CC <= curFrame) {
-        if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
             func_801477B4(globalCtx);
             func_80BFE494(this, 1, 1.0f);
             this->actionFunc = func_80BFF754;
@@ -729,7 +729,7 @@ void func_80BFF9B0(EnBomjima* this, GlobalContext* globalCtx) {
 }
 
 void func_80BFFB40(EnBomjima* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80BFE494(this, 15, 1.0f);
         D_80C009F0 = 100;
@@ -916,7 +916,7 @@ void func_80C00284(EnBomjima* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         this->collider.dim.radius = 10;
         this->collider.dim.height = 30;
         if ((this->unk_2A0 == 4) || (this->unk_2CA == 1) || ((this->unk_2CA == 3) && (this->unk_2C8 >= 2))) {

@@ -418,7 +418,6 @@ animdict = {
     "func_8016A0AC": "Play_IsUnderwater",
     "func_800F5A8C": "Environment_LerpWeight",
     "func_801A3F54": "Audio_SetCutsceneFlag",
-    "func_801518B0": "Message_StartTextbox",
     "func_800EA0D4": "Cutscene_Start",
     "func_800EA0EC": "Cutscene_End",
     "func_800EDE34": "Cutscene_ActorTranslate",
@@ -454,7 +453,22 @@ animdict = {
     "func_8013E07C": "SubS_ActorPathing_MoveWithoutGravityReverse",
     "func_8013E0A4": "SubS_ActorPathing_SetNextPoint",
 
-    # Struct members
+    "func_80147624": "Message_ShouldAdvance",
+    "func_80147734": "Message_ShouldAdvanceSilent",
+    "func_80149EBC": "Message_FindMessage",
+    "func_8014CC14": "Message_LoadChar",
+    "func_801518B0": "Message_StartTextbox",
+    "func_801588D0": "Message_FindMessageNES",
+    "func_80158988": "Message_LoadCharNES",
+    "func_80158A24": "Message_LoadPluralRupeesNES",
+    "func_80158C04": "Message_LoadLocalizedRupeesNES",
+    "func_80158D98": "Message_LoadRupeesNES",
+    "func_80158FB0": "Message_LoadTimeNES",
+    "func_8015926C": "Message_LoadAreaTextNES",
+    "func_8015E750": "Message_FindCreditsMessage",
+    
+
+    # Structs members
     "skelAnime.unk03": "skelAnime.taper",
     "skelAnime.animCurrentSeg": "skelAnime.animation",
     "skelAnime.initialFrame": "skelAnime.startFrame",
@@ -524,6 +538,7 @@ animdict = {
     "globalCtx->msgCtx.unk1202A": "globalCtx->msgCtx.ocarinaMode",
     "globalCtx->msgCtx.unk1202C": "globalCtx->msgCtx.ocarinaAction",
     "globalCtx->msgCtx.unk11F22": "globalCtx->msgCtx.msgMode",
+    "globalCtx->msgCtx.unk11F04": "globalCtx->msgCtx.currentTextId",
 
     "D_801D15B0" : "gZeroVec3f",
     "D_801D15BC" : "gZeroVec3s",

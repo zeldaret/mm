@@ -159,14 +159,14 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
-            if ((temp_v0 == 6) && (func_80147624(globalCtx) != 0)) {
+            if ((temp_v0 == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
                 this->actionFunc = func_80952734;
                 return;
             }
             // Duplicate return node #17. Try simplifying control flow for better match
             return;
         }
-        if (func_80147624(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx) != 0) {
             func_801477B4(globalCtx);
             Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
@@ -175,7 +175,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
         // Duplicate return node #17. Try simplifying control flow for better match
         return;
     }
-    if (func_80147624(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx) != 0) {
         temp_v0_2 = globalCtx->msgCtx.choiceIndex;
         if (temp_v0_2 != 0) {
             if (temp_v0_2 != 1) {
@@ -211,7 +211,7 @@ which is long, messy, and contains some rather nasty-looking control flow, inclu
     temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
-            if ((temp_v0 == 6) && (func_80147624(globalCtx) != 0)) {
+            if ((temp_v0 == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
                 this->actionFunc = func_80952734;
                 return;
             }
@@ -248,13 +248,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         goto block_17;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     func_801477B4(globalCtx);
@@ -262,7 +262,7 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     temp_v0_2 = globalCtx->msgCtx.choiceIndex;
@@ -350,13 +350,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         goto block_17;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     func_801477B4(globalCtx);
@@ -364,7 +364,7 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     temp_v0_2 = globalCtx->msgCtx.choiceIndex;
@@ -420,13 +420,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         return;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     func_801477B4(globalCtx);
@@ -434,7 +434,7 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     temp_v0_2 = globalCtx->msgCtx.choiceIndex;
@@ -557,7 +557,7 @@ There's a couple of other obvious things here:
 Well, at least the bottom half looks respectable now. Again, there is no code after the switch, so the next thing up, namely
 
 ```C
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
 ```
@@ -578,13 +578,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         return;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     func_801477B4(globalCtx);
@@ -592,7 +592,7 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx) != 0) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_801477B4(globalCtx);
@@ -647,7 +647,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx) == 0) {
+            if (Message_ShouldAdvance(globalCtx) == 0) {
                 return;
             }
             func_801477B4(globalCtx);
@@ -656,7 +656,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 4:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_801477B4(globalCtx);
@@ -700,7 +700,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 func_801477B4(globalCtx);
                 Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
@@ -708,7 +708,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 4:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_801477B4(globalCtx);

@@ -416,7 +416,7 @@ void EnMttag_RaceFinish(EnMttag* this, GlobalContext* globalCtx) {
 void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
-    if (((talkState == 5 && func_80147624(globalCtx)) || talkState == 2)) {
+    if (((talkState == 5 && Message_ShouldAdvance(globalCtx)) || talkState == 2)) {
         if (this->shouldRestartRace) {
             globalCtx->nextEntranceIndex = 0xD010;
 
@@ -453,7 +453,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
  * responded to the Goron Elder's son's question.
  */
 void EnMttag_HandleCantWinChoice(EnMttag* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 4) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && (Message_ShouldAdvance(globalCtx))) {
         if (globalCtx->msgCtx.choiceIndex != 0) {
             // Exit the race
             func_8019F230();

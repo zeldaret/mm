@@ -357,7 +357,7 @@ void EnMa4_Wait(EnMa4* this, GlobalContext* globalCtx) {
 
 // Chooses the next dialogue based on player's selection
 void EnMa4_HandlePlayerChoice(EnMa4* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx) != 0) {
         switch (this->textId) {
             case 0x3339:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -491,7 +491,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 aux;
 
-    if (func_80147624(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx) != 0) {
         switch (this->textId) {
             case 0x2390:
                 func_801477B4(globalCtx);
@@ -643,7 +643,7 @@ void EnMa4_DialogueHandler(EnMa4* this, GlobalContext* globalCtx) {
             break;
 
         case 6: // End conversation
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 if ((globalCtx->msgCtx.unk120B1 == 0) || !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     EnMa4_SetupWait(this);
                 }

@@ -841,7 +841,7 @@ void func_80AF8BA8(s32 arg0) {
 void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 sp28 = Message_GetState(&globalCtx->msgCtx);
-    u16 temp_a0 = globalCtx->msgCtx.unk11F04;
+    u16 temp_a0 = globalCtx->msgCtx.currentTextId;
 
     if ((player->targetActor == &this->actor) && ((temp_a0 < 255) || (temp_a0 > 512)) && (sp28 == 3) &&
         (this->unk_388 == 3)) {
@@ -875,7 +875,7 @@ s32 func_80AF8D84(EnPm* this, GlobalContext* globalCtx) {
 
 s32 func_80AF8DD4(EnPm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
     s32 pad;
 
     if (player->stateFlags1 & (0x400 | 0x40)) {

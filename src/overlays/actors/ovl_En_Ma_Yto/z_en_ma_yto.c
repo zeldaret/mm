@@ -422,7 +422,7 @@ void EnMaYto_DefaultDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->unk31E = 0;
                 EnMaYto_SetupDefaultWait(this);
             }
@@ -443,7 +443,7 @@ void EnMaYto_DefaultDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 void EnMaYto_DefaultHandlePlayerChoice(EnMaYto* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) { // Yes
             func_8019F208();
             EnMaYto_SetFaceExpression(this, 0, 3);
@@ -460,7 +460,7 @@ void EnMaYto_DefaultHandlePlayerChoice(EnMaYto* this, GlobalContext* globalCtx) 
 }
 
 void EnMaYto_DefaultChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x3391:
                 EnMaYto_SetFaceExpression(this, 0, 3);
@@ -554,7 +554,7 @@ void EnMaYto_DinnerDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 EnMaYto_SetupDinnerWait(this);
             }
             break;
@@ -568,7 +568,7 @@ void EnMaYto_DinnerDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 void EnMaYto_DinnerHandlePlayerChoice(EnMaYto* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) { // Yes
             func_8019F208();
             EnMaYto_SetFaceExpression(this, 0, 3);
@@ -585,7 +585,7 @@ void EnMaYto_DinnerHandlePlayerChoice(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 void EnMaYto_DinnerChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x3398:
                 EnMaYto_SetFaceExpression(this, 0, 3);
@@ -740,7 +740,7 @@ void EnMaYto_BarnDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->unk31E = 0;
                 EnMaYto_SetupBarnWait(this);
             }
@@ -756,7 +756,7 @@ void EnMaYto_BarnDialogueHandler(EnMaYto* this, GlobalContext* globalCtx) {
 }
 
 void EnMaYto_BarnChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x33A9:
                 func_80B90E50(this, 0);
@@ -932,7 +932,7 @@ void EnMaYto_AfterMilkRunDialogueHandler(EnMaYto* this, GlobalContext* globalCtx
 }
 
 void EnMaYto_AfterMilkRunChooseNextDialogue(EnMaYto* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x33C1:
                 EnMaYto_SetFaceExpression(this, 3, 1);
@@ -1068,7 +1068,7 @@ void EnMaYto_SetupPostMilkRunWaitDialogueEnd(EnMaYto* this) {
 
 void EnMaYto_PostMilkRunWaitDialogueEnd(EnMaYto* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 6 || Message_GetState(&globalCtx->msgCtx) == 5) {
-        if (func_80147624(globalCtx) && Message_GetState(&globalCtx->msgCtx) == 5) {
+        if (Message_ShouldAdvance(globalCtx) && Message_GetState(&globalCtx->msgCtx) == 5) {
             func_800B7298(globalCtx, &this->actor, 7);
             func_801477B4(globalCtx);
         }

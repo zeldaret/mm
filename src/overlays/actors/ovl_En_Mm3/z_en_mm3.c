@@ -139,7 +139,7 @@ void func_80A6F2C8(EnMm3* this, GlobalContext* globalCtx) {
 }
 
 void func_80A6F3B4(EnMm3* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_2B4) {
             case 0x278E:
                 if (globalCtx->msgCtx.choiceIndex == 0) {
@@ -193,7 +193,7 @@ void func_80A6F3B4(EnMm3* this, GlobalContext* globalCtx) {
 }
 
 void func_80A6F5E4(EnMm3* this, GlobalContext* globalCtx) {
-    if (((this->unk_2B4 != 0x2791) || (this->unk_2AC == 0)) && func_80147624(globalCtx)) {
+    if (((this->unk_2B4 != 0x2791) || (this->unk_2AC == 0)) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_2B4) {
             case 0x278A:
                 if (func_80A6FFAC(this, globalCtx)) {
@@ -332,7 +332,7 @@ void func_80A6F9DC(EnMm3* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(globalCtx);
 

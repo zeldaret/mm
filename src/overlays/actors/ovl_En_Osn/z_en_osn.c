@@ -749,7 +749,7 @@ void func_80AD16A8(EnOsn* this, GlobalContext* globalCtx) {
 void func_80AD19A0(EnOsn* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
-    if ((temp_v0 == 6 || temp_v0 == 5) && func_80147624(globalCtx)) {
+    if ((temp_v0 == 6 || temp_v0 == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_1EA & 0x20) {
             this->unk_1EA &= ~0x20;
             globalCtx->msgCtx.msgMode = 0x43;
@@ -897,7 +897,7 @@ void EnOsn_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_1FA == 0xFF) {
         func_8012C28C(globalCtx->state.gfxCtx);
         if ((this->unk_1EC == 0xB) || (this->unk_1EC == 0xC) || (this->unk_1EC == 0x17) ||
-            (globalCtx->msgCtx.unk11F04 == 0x1FCA)) {
+            (globalCtx->msgCtx.currentTextId == 0x1FCA)) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD258C));
             gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD2594));
         } else if ((this->unk_1EC == 7) || (this->unk_1EC == 3) || (this->unk_1EC == 0xD)) {

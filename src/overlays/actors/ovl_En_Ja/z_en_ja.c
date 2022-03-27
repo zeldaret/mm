@@ -211,7 +211,7 @@ void func_80BC1E40(EnJa* this, GlobalContext* globalCtx) {
     s32 sp20 = Message_GetState(&globalCtx->msgCtx);
     f32 phi_f0;
 
-    if (((globalCtx->msgCtx.unk11F04 < 0xFF) || (globalCtx->msgCtx.unk11F04 > 0x200)) && (sp20 == 3) &&
+    if (((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
         (this->unk_374 == 3) && (&this->actor == player->targetActor)) {
         if ((globalCtx->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {

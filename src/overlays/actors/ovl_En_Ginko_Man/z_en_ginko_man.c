@@ -103,7 +103,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, GlobalContext* globalCtx) {
 
 // action func: non-input dialogue
 void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
-    if (!func_80147624(globalCtx)) {
+    if (!Message_ShouldAdvance(globalCtx)) {
         return;
     }
 
@@ -261,7 +261,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             this->curTextId = 0x46B; // So...
             break;
         case 0x470: // "Is that so?  Come back and deposit some after saving up a bunch!"
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_801477B4(globalCtx);
                 this->isStampChecked = false;
                 EnGinkoMan_SetupIdle(this); // change to waiting for approach
@@ -304,7 +304,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
 
 // actionfunc: wait for player dialogue input
 void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx) {
-    if (!func_80147624(globalCtx)) {
+    if (!Message_ShouldAdvance(globalCtx)) {
         return;
     }
 
@@ -437,7 +437,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
 }
 
 void EnGinkoMan_WaitForRupeeCount(EnGinkoMan* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->curTextId) {
             case 0x450: // "How much? How much?" [rupee prompt] Set the amount with [Control Stick] and
                 if (globalCtx->msgCtx.bankRupeesSelected == 0) {
@@ -482,7 +482,7 @@ void EnGinkoMan_Dialogue(EnGinkoMan* this, GlobalContext* globalCtx) {
             EnGinkoMan_DepositDialogue(this, globalCtx);
             break;
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->isStampChecked = false;
                 EnGinkoMan_SetupIdle(this);
             }
@@ -547,7 +547,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, GlobalContext* globalCtx) {
 
         EnGinkoMan_SetupDialogue(this);
     } else if (this->curTextId == 0x45D) { // saved up 5000 rupees for HP
-        if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
             if (!(gSaveContext.save.weekEventReg[59] & 8)) {
                 gSaveContext.save.weekEventReg[59] |= 8;
             }

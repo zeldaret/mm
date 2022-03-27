@@ -435,7 +435,7 @@ s32 func_80BF1AE0(EnIg* this, GlobalContext* globalCtx) {
 
 s32 func_80BF1B40(EnIg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
     s32 pad;
 
     if (player->stateFlags1 & 0xC40) {

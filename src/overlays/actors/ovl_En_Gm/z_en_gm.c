@@ -778,7 +778,7 @@ void func_8094F2E8(EnGm* this) {
 void func_8094F3D0(EnGm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 sp28 = Message_GetState(&globalCtx->msgCtx);
-    s32 var = globalCtx->msgCtx.unk11F04;
+    s32 var = globalCtx->msgCtx.currentTextId;
 
     if ((&this->actor == player->targetActor) && ((var < 0xFF) || (var > 0x200)) && (sp28 == 3) &&
         (this->unk_3F0 == 3)) {
@@ -807,7 +807,7 @@ s32 func_8094F4EC(EnGm* this, GlobalContext* globalCtx) {
 
 s32 func_8094F53C(EnGm* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 sp32 = globalCtx->msgCtx.unk11F04;
+    u16 sp32 = globalCtx->msgCtx.currentTextId;
     Actor* al = func_8094DEE0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AL);
     Actor* toto = func_8094DEE0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_TOTO);
 

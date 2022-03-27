@@ -514,7 +514,7 @@ void func_80BA9758(EnBaba* this, GlobalContext* globalCtx) {
 void func_80BA9848(EnBaba* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
-    if (((temp_v0 == 5) || (temp_v0 == 6)) && func_80147624(globalCtx)) {
+    if (((temp_v0 == 5) || (temp_v0 == 6)) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80BA9B80;
@@ -526,7 +526,7 @@ void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_40A & 1) {
                 this->unk_40A &= ~1;
                 globalCtx->msgCtx.msgMode = 0x43;
@@ -556,7 +556,7 @@ void func_80BA98EC(EnBaba* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 6) {
-        if (func_80147624(globalCtx) && (globalCtx->msgCtx.unk120B1 == 0)) {
+        if (Message_ShouldAdvance(globalCtx) && (globalCtx->msgCtx.unk120B1 == 0)) {
             gSaveContext.save.weekEventReg[81] |= 2;
             func_80BA8C4C(globalCtx, 0xD670);
         }

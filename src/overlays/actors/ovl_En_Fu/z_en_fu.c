@@ -426,7 +426,7 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_80962588(EnFu* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx) && (this->unk_552 == 0x2871)) {
+    if (Message_ShouldAdvance(globalCtx) && (this->unk_552 == 0x2871)) {
         if (1) {}
         if (globalCtx->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.playerData.rupees >= 10) {
@@ -449,7 +449,7 @@ void func_80962588(EnFu* this, GlobalContext* globalCtx) {
 void func_80962660(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_552) {
             case 0x283C:
                 func_80963F44(this, globalCtx);
@@ -596,7 +596,7 @@ void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->unk_54A = 1;
                 switch (this->unk_552) {
                     case 0x287F:
@@ -842,7 +842,7 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
     static s32 D_80964C24 = 0;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((this->unk_54A == 0) && (((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
+    if ((this->unk_54A == 0) && (((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) ||
                                  ((Message_GetState(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
         func_801477B4(globalCtx);
         this->unk_54A = 2;
@@ -1210,7 +1210,7 @@ void func_8096413C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_80964190(EnFu* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_552) {
             case 0x2842:
             case 0x2844:
@@ -1262,7 +1262,7 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_8096426C(EnFu* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_552) {
             case 0x2840:
             case 0x2841:

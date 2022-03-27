@@ -312,7 +312,7 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == 5 && func_80147624(globalCtx)) {
+    if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         play_sound(NA_SE_SY_MESSAGE_PASS);
         if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
             EnTrt_StartShopping(globalCtx, this);
@@ -330,7 +330,7 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
             player->stateFlags2 &= ~0x20000000;
         }
-    } else if (talkState == 5 && func_80147624(globalCtx)) {
+    } else if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x883:
                 this->textId = 0x884;
@@ -370,7 +370,7 @@ void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x886:
                 this->textId = 0x887;
@@ -385,7 +385,7 @@ void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x88F) {
             if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
@@ -450,7 +450,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
     //! @bug: player is set to NULL not PLAYER
     Player* player = NULL;
 
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
                 ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
@@ -475,11 +475,11 @@ void EnTrt_EndConversation(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_EndInteraction(globalCtx, this);
         }
     } else if (talkState == 6) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_EndInteraction(globalCtx, this);
         }
     }
@@ -521,7 +521,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
-            if ((!func_80147624(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) &&
+            if ((!Message_ShouldAdvance(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) &&
                 (this->stickAccumX > 0)) {
                 cursorIdx = EnTrt_SetCursorIndexFromNeutral(this, 2);
                 if (cursorIdx != CURSOR_INVALID) {
@@ -707,7 +707,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
     if (EnTrt_TakeItemOffShelf(this)) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
+            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         EnTrt_HandleCanBuyItem(globalCtx, this);
@@ -719,7 +719,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
                         break;
                 }
             }
-        } else if (talkState == 5 && func_80147624(globalCtx)) {
+        } else if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
             if (!Interface_HasEmptyBottle()) {
                 play_sound(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(globalCtx, this, 0x846);
@@ -930,7 +930,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     this->blinkFunc = EnTrt_Blink;
-    if (talkState == 6 && func_80147624(globalCtx)) {
+    if (talkState == 6 && Message_ShouldAdvance(globalCtx)) {
         if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
@@ -948,7 +948,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 }
 
 void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x83C) {
             if (Interface_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
@@ -1015,7 +1015,7 @@ void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupEndInteraction(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         EnTrt_EndInteraction(globalCtx, this);
     }
 }
@@ -1032,7 +1032,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
             func_800B8614(&this->actor, globalCtx, 200.0f);
         }
     }
-    if (talkState == 6 && func_80147624(globalCtx)) {
+    if (talkState == 6 && Message_ShouldAdvance(globalCtx)) {
         if (gSaveContext.save.weekEventReg[20] & 2) {
             globalCtx->nextEntranceIndex = 0xC50;
         } else {
@@ -1045,7 +1045,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_CannotBuy(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, EnTrt_GetItemTextId(this));
     }
@@ -1054,7 +1054,7 @@ void EnTrt_CannotBuy(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_CanBuy(EnTrt* this, GlobalContext* globalCtx) {
     EnGirlA* item;
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnTrt_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1074,7 +1074,7 @@ void EnTrt_BuyItemWithFanfare(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = EnTrt_ItemGiven;
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -1094,7 +1094,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
 
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
@@ -1117,7 +1117,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
             }
         }
     } else if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
@@ -1362,7 +1362,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     s32 itemGiven;
 
     if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->talkOptionTextId == 0x845 || this->talkOptionTextId == 0x882) {
                 func_80151938(globalCtx, 0xFF);
             } else {

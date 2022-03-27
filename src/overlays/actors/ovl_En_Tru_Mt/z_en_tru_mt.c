@@ -372,7 +372,7 @@ void func_80B76A64(EnTruMt* this, GlobalContext* globalCtx) {
 
 void func_80B76BB8(EnTruMt* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             globalCtx->nextEntranceIndex = 0xA810;
             globalCtx->unk_1887F = 3;
             gSaveContext.nextTransition = 3;

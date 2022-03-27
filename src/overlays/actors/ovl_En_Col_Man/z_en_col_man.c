@@ -138,7 +138,7 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
 }
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         gSaveContext.save.weekEventReg[56] |= 2;
         Actor_MarkForDeath(&this->actor);
     }

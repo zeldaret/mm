@@ -542,7 +542,7 @@ void func_80BB2520(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_496) {
             case 0xD5E:
                 this->unk_49A = this->unk_49C[1];
@@ -564,7 +564,7 @@ void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_496) {
             case 0xD63:
                 globalCtx->msgCtx.msgMode = 0x43;
@@ -615,7 +615,7 @@ void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
             this->unk_4AC = 6;
             func_80BB2020(this, globalCtx);
         }
-    } else if ((sp27 == 5) && func_80147624(globalCtx)) {
+    } else if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_496 == 0xD67) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -629,7 +629,7 @@ void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB2A54(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_496 == 0xD65) {
             ActorCutscene_Stop(this->unk_498);
             this->unk_230 &= ~0x10;

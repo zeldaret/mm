@@ -662,7 +662,7 @@ void func_80B51760(EnGk* this, GlobalContext* globalCtx) {
 void func_80B51970(EnGk* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
-    if (((temp_v0 == 6) || (temp_v0 == 5)) && func_80147624(globalCtx)) {
+    if (((temp_v0 == 6) || (temp_v0 == 5)) && Message_ShouldAdvance(globalCtx)) {
         if ((this->unk_31C == 0xE84) || (this->unk_31C == 0xE99)) {
             ActorCutscene_Stop(this->unk_318);
             this->unk_318 = ActorCutscene_GetAdditionalCutscene(this->unk_318);
@@ -713,7 +713,7 @@ void func_80B51B40(EnGk* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 6) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_1E4 & 1) {
                 this->unk_1E4 &= ~1;
                 this->unk_1E4 &= ~4;
@@ -741,7 +741,7 @@ void func_80B51B40(EnGk* this, GlobalContext* globalCtx) {
                 this->unk_1E4 |= 2;
             }
         }
-    } else if ((temp_v0 == 4) && (func_80147624(globalCtx) != 0)) {
+    } else if ((temp_v0 == 4) && (Message_ShouldAdvance(globalCtx) != 0)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_8019F208();
@@ -874,7 +874,7 @@ void func_80B5202C(EnGk* this, GlobalContext* globalCtx) {
 }
 
 void func_80B5216C(EnGk* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80B51698;
@@ -929,7 +929,7 @@ void func_80B52340(EnGk* this, GlobalContext* globalCtx) {
 }
 
 void func_80B52430(EnGk* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_31C) {
             case 0xE93:
                 this->unk_31C = 0xE89;

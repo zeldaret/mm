@@ -389,7 +389,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_26C & 2) {
                 globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
@@ -403,7 +403,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
                 Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && func_80147624(globalCtx)) {
+    } else if ((temp_v0 == 4) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_26E == 0x14D5) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
@@ -551,7 +551,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_26C & 2) {
                 globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
@@ -572,7 +572,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
                 Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
             }
         }
-    } else if ((temp_v0 == 4) && func_80147624(globalCtx)) {
+    } else if ((temp_v0 == 4) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 if (gSaveContext.save.playerData.rupees < this->unk_288) {
@@ -746,7 +746,7 @@ void func_80B10DAC(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B10E98(EnGb2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_26C & 2) {
             this->unk_26C &= ~2;
             globalCtx->msgCtx.msgMode = 0x43;
@@ -790,7 +790,7 @@ void func_80B11048(EnGb2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B110F8(EnGb2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_26C & 2) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;

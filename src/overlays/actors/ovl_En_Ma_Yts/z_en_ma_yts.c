@@ -359,7 +359,7 @@ void EnMaYts_DialogueHandler(EnMaYts* this, GlobalContext* globalCtx) {
             break;
 
         case 6: // End conversation
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 EnMaYts_SetupStartDialogue(this);
             }
             break;
@@ -426,7 +426,7 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, GlobalContext* globalCtx) {
 
 // Select the following dialogue based on the current one, and an appropiate face expression
 void EnMaYts_ChooseNextDialogue(EnMaYts* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx) != 0) {
         switch (this->textId) {
             case 0x335F:
                 EnMaYts_SetFaceExpression(this, 0, 2);

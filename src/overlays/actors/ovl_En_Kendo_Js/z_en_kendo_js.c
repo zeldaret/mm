@@ -213,7 +213,7 @@ void func_80B2654C(EnKendoJs* this, GlobalContext* globalCtx) {
 }
 
 void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx) && (this->unk_288 == 0x2716)) {
+    if (Message_ShouldAdvance(globalCtx) && (this->unk_288 == 0x2716)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == EQUIP_SWORD) {
@@ -262,7 +262,7 @@ void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
 void func_80B269A4(EnKendoJs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!func_80147624(globalCtx)) {
+    if (!Message_ShouldAdvance(globalCtx)) {
         return;
     }
 
@@ -326,7 +326,7 @@ void func_80B26AFC(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 if (this->unk_288 == 0x272C) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                 }
@@ -504,7 +504,7 @@ void func_80B2714C(EnKendoJs* this) {
 void func_80B27188(EnKendoJs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_288 == 0x2729) {
             func_80B26F14(this, globalCtx);
         } else if (!func_80B26F6C(this, globalCtx)) {

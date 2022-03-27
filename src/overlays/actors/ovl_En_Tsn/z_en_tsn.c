@@ -175,7 +175,7 @@ void func_80ADFF84(EnTsn* this, GlobalContext* globalCtx) {
 }
 
 void func_80AE0010(EnTsn* this, GlobalContext* globalCtx) {
-    switch (globalCtx->msgCtx.unk11F04) {
+    switch (globalCtx->msgCtx.currentTextId) {
         case 0x107F:
         case 0x1080:
         case 0x1081:
@@ -193,15 +193,15 @@ void func_80AE0010(EnTsn* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x107F:
             case 0x1081:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1080:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_001198, -10.0f);
                 break;
 
@@ -221,13 +221,13 @@ void func_80AE0010(EnTsn* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x1084:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_000964, -10.0f);
                 break;
 
             case 0x1085:
             case 0x1086:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1089:
@@ -241,7 +241,7 @@ void func_80AE0010(EnTsn* this, GlobalContext* globalCtx) {
 
             case 0x1087:
                 Animation_MorphToLoop(&this->skelAnime, &object_tsn_Anim_001198, -10.0f);
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1088:
@@ -375,7 +375,7 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad[2];
 
-    if ((this->unk_220 & 8) && (globalCtx->msgCtx.unk11F04 == 0x1078)) {
+    if ((this->unk_220 & 8) && (globalCtx->msgCtx.currentTextId == 0x1078)) {
         this->unk_220 &= ~8;
         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
     }
@@ -385,8 +385,8 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x106E:
                         if (gSaveContext.save.weekEventReg[25] & 0x40) {
                             func_80151938(globalCtx, 0x1074);
@@ -403,13 +403,13 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
                     case 0x1070:
                     case 0x1071:
                     case 0x1072:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1076:
                     case 0x1079:
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_000964, -10.0f);
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x107A:
@@ -419,7 +419,7 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
                     case 0x1075:
                     case 0x1078:
                         player->exchangeItemId = 0;
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
 
@@ -447,7 +447,7 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
 
                     case 0x107B:
                         player->exchangeItemId = 0;
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
 
@@ -463,7 +463,7 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
                     case 0x108A:
                     case 0x1091:
                         gSaveContext.save.weekEventReg[26] |= 4;
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         this->unk_220 |= 2;
                         this->actor.textId = 0x1091;
                         break;
@@ -473,7 +473,7 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
                     case 0x108D:
                     case 0x108E:
                     case 0x108F:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x1092:
@@ -539,7 +539,7 @@ void func_80AE0C88(EnTsn* this, GlobalContext* globalCtx) {
 }
 
 void func_80AE0D10(EnTsn* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         this->actionFunc = func_80AE0D78;
         ActorCutscene_Stop(this->actor.cutscene);

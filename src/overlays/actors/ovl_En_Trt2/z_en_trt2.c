@@ -332,7 +332,7 @@ void func_80AD3CEC(EnTrt2* this, GlobalContext* globalCtx) {
     if (this->unk_3D8) {
         Message_StartTextbox(globalCtx, this->unk_3A8, &this->actor);
         this->unk_3D8 = false;
-    } else if ((sp27 == 5) && func_80147624(globalCtx)) {
+    } else if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         func_80AD3380(&this->skelAnime, sAnimations, 6);
@@ -359,7 +359,7 @@ void func_80AD3DA4(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD3E34(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (Interface_HasEmptyBottle()) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -377,7 +377,7 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 6) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if ((Interface_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
                 !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 this->unk_3B2 = 12;
@@ -388,7 +388,7 @@ void func_80AD3EF0(EnTrt2* this, GlobalContext* globalCtx) {
                 this->unk_3B2 = 10;
             }
         }
-    } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
+    } else if ((temp_v0 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_3B2 = 12;
@@ -411,7 +411,7 @@ void func_80AD3FF4(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD40AC(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
         this->unk_3B2 = 13;
     }
@@ -428,7 +428,7 @@ void func_80AD4110(EnTrt2* this, GlobalContext* globalCtx) {
 }
 
 void func_80AD417C(EnTrt2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_3A8 == 0x84B) {
             func_80AD349C(this);
             func_80AD3DA4(this, globalCtx);
@@ -514,7 +514,7 @@ void func_80AD4550(EnTrt2* this, GlobalContext* globalCtx) {
         this->unk_3B2 = 17;
     }
 
-    if ((sp23 == 5) && func_80147624(globalCtx)) {
+    if ((sp23 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
     }
