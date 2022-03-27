@@ -1,9 +1,9 @@
 #include "global.h"
 #include "system_malloc.h"
 
-typedef void (*arg3_8008633C)(void*); // BlockFunc
-typedef void (*arg3_800863AC)(void*, u32); // BlockFunc1
-typedef void (*arg3_8008641C)(void*, u32, u32, u32, u32, u32, u32, u32, u32); // BlockFunc8
+typedef void (*BlockFunc)(void*); // BlockFunc
+typedef void (*BlockFunc1)(void*, u32); // BlockFunc1
+typedef void (*BlockFunc8)(void*, u32, u32, u32, u32, u32, u32, u32, u32); // BlockFunc8
 
 typedef struct InitFunc {
     uintptr_t nextOffset;
@@ -33,39 +33,39 @@ void SystemArena_FreeNullCheck(void* ptr) {
     }
 }
 
-void func_8008633C(void* blk, size_t nBlk, size_t blkSize, arg3_8008633C arg3) {
+void SystemArena_RunBlockFunc(void* blk, size_t nBlk, size_t blkSize, BlockFunc blockFunc) {
     uintptr_t pos = blk;
 
     for (; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
-        arg3(pos);
+        blockFunc(pos);
     }
 }
 
-void func_800863AC(void* blk, size_t nBlk, size_t blkSize, arg3_800863AC arg3) {
+void SystemArena_RunBlockFunc1(void* blk, size_t nBlk, size_t blkSize, BlockFunc1 blockFunc) {
     uintptr_t pos = blk;
 
     for (; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
-        arg3(pos, 2);
+        blockFunc(pos, 2);
     }
 }
 
-void* func_8008641C(void* blk, size_t nBlk, size_t blkSize, arg3_8008641C arg3) {
+void* SystemArena_RunBlockFunc8(void* blk, size_t nBlk, size_t blkSize, BlockFunc8 blockFunc) {
     if (blk == NULL) {
         blk = SystemArena_MallocMin1(nBlk * blkSize);
     }
 
-    if (blk != NULL && arg3 != NULL) {
+    if (blk != NULL && blockFunc != NULL) {
         uintptr_t pos = blk;
 
         for (; pos < (uintptr_t)blk + (nBlk * blkSize); pos += (blkSize & ~0)) {
-            arg3(pos, 0, 0, 0, 0, 0, 0, 0, 0);
+            blockFunc(pos, 0, 0, 0, 0, 0, 0, 0, 0);
         }
     }
 
     return blk;
 }
 
-void func_800864EC(void* blk, size_t nBlk, size_t blkSize, arg3_800863AC arg3, s32 shouldFree) {
+void SystemArena_RunBlockFunc1Reverse(void* blk, size_t nBlk, size_t blkSize, BlockFunc1 blockFunc, s32 shouldFree) {
     uintptr_t pos;
     uintptr_t start;
     size_t maskedBlkSize;
@@ -74,14 +74,14 @@ void func_800864EC(void* blk, size_t nBlk, size_t blkSize, arg3_800863AC arg3, s
         return;
     }
 
-    if (arg3 != NULL) {
+    if (blockFunc != NULL) {
         start = blk;
         maskedBlkSize = (blkSize & ~0);
         pos = (uintptr_t)start + (nBlk * blkSize);
 
         while (pos > start) {
             pos -= maskedBlkSize;
-            arg3(pos, 2);
+            blockFunc(pos, 2);
         }
     }
 
@@ -90,7 +90,7 @@ void func_800864EC(void* blk, size_t nBlk, size_t blkSize, arg3_800863AC arg3, s
     }
 }
 
-void func_80086588(void) {
+void SystemArena_RunInits(void) {
     InitFunc* initFunc = (InitFunc*)&sInitFuncs;
     u32 nextOffset = initFunc->nextOffset;
     InitFunc* prev = NULL;
@@ -112,5 +112,5 @@ void func_80086588(void) {
 
 void SystemArena_Init(void* start, size_t size) {
     SystemArena_InitArena(start, size);
-    func_80086588();
+    SystemArena_RunInits();
 }
