@@ -66,6 +66,9 @@ typedef struct {
     /* 0xC */ s32 remainingFrames;
 } FreqLerp; // size = 0x10
 
+s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume);
+void func_801A3238(s8 playerIndex, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
+
 // Sfx bss
 SfxSettings sSfxSettings[8];
 u8 sSfxSettingsFlags;
@@ -2071,11 +2074,50 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019FF38.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019FF9C.s")
+/**
+ * Used for EnRiverSound
+ */
+void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale) {
+    if (!Audio_IsSfxPlaying(NA_SE_EV_RIVER_STREAM - SFX_FLAG)) {
+        sRiverFreqScaleLerp.value = freqScale;
+    } else if (freqScale != sRiverFreqScaleLerp.value) {
+        sRiverFreqScaleLerp.target = freqScale;
+        sRiverFreqScaleLerp.remainingFrames = 40;
+        sRiverFreqScaleLerp.step = (sRiverFreqScaleLerp.target - sRiverFreqScaleLerp.value) / 40;
+    }
+    Audio_PlaySfxGeneral(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value, &D_801DB4B0,
+                         &D_801DB4B8);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0048.s")
+/**
+ * Unused remnant of OoT's EnRiverSound
+ * Used for Zora's River Waterfall
+ */
+void Audio_PlaySfxForWaterfall(Vec3f* pos, f32 freqScale) {
+    if (!Audio_IsSfxPlaying(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG)) {
+        sWaterfallFreqScaleLerp.value = freqScale;
+    } else if (freqScale != sWaterfallFreqScaleLerp.value) {
+        sWaterfallFreqScaleLerp.target = freqScale;
+        sWaterfallFreqScaleLerp.remainingFrames = 40;
+        sWaterfallFreqScaleLerp.step = (sWaterfallFreqScaleLerp.target - sWaterfallFreqScaleLerp.value) / 40;
+    }
+    Audio_PlaySfxGeneral(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, pos, 4, &sWaterfallFreqScaleLerp.value,
+                         &sWaterfallFreqScaleLerp.value, &D_801DB4B8);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A00EC.s")
+/**
+ * Used for EnRiverSound variables
+ */
+void Audio_StepFreqLerp(FreqLerp* lerp) {
+    if (lerp->remainingFrames != 0) {
+        lerp->remainingFrames--;
+        if (lerp->remainingFrames != 0) {
+            lerp->value += lerp->step;
+        } else {
+            lerp->value = lerp->target;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0124.s")
 
@@ -2087,13 +2129,131 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0238.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A026C.s")
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * Was designed to incrementally increase volume of NA_BGM_GANON_TOWER for each new room during the climb of Ganon's
+ * Tower
+ */
+void Audio_SetGanonsTowerBgmVolumeLevel(u8 ganonsTowerLevel) {
+    u8 channelIndex;
+    s8 pan = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0318.s")
+    // Ganondorfs's Lair
+    if (ganonsTowerLevel == 0) {
+        pan = 0x7F;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0450.s")
+    for (channelIndex = 0; channelIndex < 16; channelIndex++) {
+        // CHAN_UPD_PAN_UNSIGNED
+        Audio_QueueCmdS8(((u8)(u32)channelIndex << 8) | 0x7000000, pan);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A046C.s")
+    // Lowest room in Ganon's Tower (Entrance Room)
+    if (ganonsTowerLevel == 7) {
+        // Adds a delay to setting the volume in the first room
+        sEnterGanonsTowerTimer = 2;
+    } else {
+        Audio_SetGanonsTowerBgmVolume(sGanonsTowerLevelsVol[ganonsTowerLevel % ARRAY_COUNTU(sGanonsTowerLevelsVol)]);
+    }
+}
+
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * If a new volume is requested for ganon's tower, update the volume and
+ * calculate a new low-pass filter cutoff and reverb based on the new volume
+ */
+s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
+    u8 lowPassFilterCutoff;
+    u8 channelIndex;
+    u16 reverb;
+
+    if (sGanonsTowerVol != targetVolume) {
+        // Sets the volume
+        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 0, targetVolume, 2);
+
+        // Sets the filter cutoff of the form (lowPassFilterCutoff << 4) | (highPassFilter & 0xF). highPassFilter is
+        // always set to 0
+        if (targetVolume < 0x40) {
+            // Only the first room
+            lowPassFilterCutoff = 0x10;
+        } else {
+            // Higher volume leads to a higher cut-off frequency in the low-pass filtering
+            lowPassFilterCutoff = (((targetVolume - 0x40) >> 2) + 1) << 4;
+        }
+
+        Audio_QueueSeqCmd((8 << 28) | ((u8)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u8)(4) << 16) | ((u8)(15) << 8) |
+                          (u8)(lowPassFilterCutoff));
+
+        // Sets the reverb
+        for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
+             channelIndex++) {
+            if (&gAudioContext.sequenceChannelNone !=
+                gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
+                // soundScriptIO[5] was set to 0x40 in channels 0, 1, and 4 (BGM no longer in OoT)
+                if ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
+                    0xFF) {
+                    // Higher volume leads to lower reverb
+                    reverb =
+                        (((u16)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
+                          targetVolume) +
+                         0x7F);
+
+                    if (reverb > 0x7F) {
+                        reverb = 0x7F;
+                    }
+
+                    // CHAN_UPD_REVERB
+                    Audio_QueueCmdS8(_SHIFTL(5, 24, 8) | _SHIFTL(SEQ_PLAYER_BGM_MAIN, 16, 8) |
+                                         _SHIFTL(channelIndex, 8, 8),
+                                     (u8)reverb);
+                }
+            }
+        }
+
+        sGanonsTowerVol = targetVolume;
+    }
+    return -1;
+}
+
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * Responsible for lowering market bgm in Child Market Entrance and Child Market Back Alley
+ * Only lowers volume for 1 frame, so must be called every frame to maintain lower volume
+ */
+void Audio_LowerMainBgmVolume(u8 volume) {
+    sRiverSoundMainBgmVol = volume;
+    sRiverSoundMainBgmLower = true;
+}
+
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * Still called by Audio_Update every frame, but none of these processes get initialized
+ */
+void Audio_UpdateRiverSoundVolumes(void) {
+    // Updates Main Bgm Volume (RiverSound of type RS_LOWER_MAIN_BGM_VOLUME)
+    if (sRiverSoundMainBgmLower == true) {
+        if (sRiverSoundMainBgmCurrentVol != sRiverSoundMainBgmVol) {
+            // lowers the volume for 1 frame
+            Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 0, sRiverSoundMainBgmVol, 10);
+            sRiverSoundMainBgmCurrentVol = sRiverSoundMainBgmVol;
+            sRiverSoundMainBgmRestore = true;
+        }
+        sRiverSoundMainBgmLower = false;
+    } else if ((sRiverSoundMainBgmRestore == true) && !sAudioIsWindowOpen) {
+        // restores the volume every frame
+        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 0, 0x7F, 10);
+        sRiverSoundMainBgmCurrentVol = 0x7F;
+        sRiverSoundMainBgmRestore = false;
+    }
+
+    // Update Ganon's Tower Volume (RiverSound of type RS_GANON_TOWER_7)
+    if (sEnterGanonsTowerTimer != 0) {
+        sEnterGanonsTowerTimer--;
+        if (sEnterGanonsTowerTimer == 0) {
+            Audio_SetGanonsTowerBgmVolume(sGanonsTowerLevelsVol[7]);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0554.s")
 
@@ -2107,13 +2267,71 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0868.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A09D4.s")
+/**
+ * Unused remnant of OoT's EnRiverSound (func_800F4E30)
+ */
+void func_801A09D4(Vec3f* pos, f32 xzDistToPlayer) {
+    f32 volumeRel;
+    s8 pan;
+    u8 channelIndex;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0C70.s")
+    if (sRiverSoundBgmPos == NULL) {
+        sRiverSoundBgmPos = pos;
+        sRiverSoundXZDistToPlayer = xzDistToPlayer;
+    } else if (sRiverSoundBgmPos != pos) {
+        if (sRiverSoundXZDistToPlayer > xzDistToPlayer) {
+            sRiverSoundBgmPos = pos;
+            sRiverSoundXZDistToPlayer = xzDistToPlayer;
+        }
+    } else {
+        sRiverSoundXZDistToPlayer = xzDistToPlayer;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0C90.s")
+    if (sRiverSoundBgmPos->x > 100.0f) {
+        pan = 0x7F;
+    } else if (sRiverSoundBgmPos->x < -100.0f) {
+        pan = 0;
+    } else {
+        pan = ((sRiverSoundBgmPos->x / 100.0f) * 64.0f) + 64.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0CB0.s")
+    if (sRiverSoundXZDistToPlayer > 400.0f) {
+        volumeRel = 0.1f;
+    } else if (sRiverSoundXZDistToPlayer < 120.0f) {
+        volumeRel = 1.0f;
+    } else {
+        volumeRel = ((1.0f - ((sRiverSoundXZDistToPlayer - 120.0f) / 280.0f)) * 0.9f) + 0.1f;
+    }
+
+    for (channelIndex = 0; channelIndex < 16; channelIndex++) {
+        if (channelIndex != 9) {
+            Audio_QueueSeqCmd(((u32)(6) << 28) | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(2) << 16) |
+                              ((u32)(channelIndex) << 8) | ((u8)(127.0f * volumeRel)));
+            Audio_QueueCmdS8(0x03000000 | ((u8)((u32)channelIndex) << 8), pan);
+        }
+    }
+}
+
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_ClearSariaBgm(void) {
+    if (sRiverSoundBgmPos != NULL) {
+        sRiverSoundBgmPos = NULL;
+    }
+}
+
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_ClearSariaBgmAtPos(Vec3f* pos) {
+    if (sRiverSoundBgmPos == pos) {
+        sRiverSoundBgmPos = NULL;
+    }
+}
+
+void Audio_SplitBgmChannels(s8 volumeSplit);
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SplitBgmChannels.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0E44.s")
 
@@ -2147,9 +2365,58 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2090.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A21FC.s")
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_PlaySariaBgm(Vec3f* pos, u16 seqId, u16 distMax) {
+    f32 absY;
+    f32 dist;
+    u8 targetVolume;
+    f32 prevDist;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2460.s")
+    if (sRiverSoundBgmTimer != 0) {
+        sRiverSoundBgmTimer--;
+        return;
+    }
+
+    dist = sqrtf(SQ(pos->z) + (SQ(pos->x) + SQ(pos->y)));
+
+    if (sRiverSoundBgmPos == NULL) {
+        sRiverSoundBgmPos = pos;
+        func_801A3238(SEQ_PLAYER_BGM_SUB, seqId, 0, 7, 2);
+    } else {
+        prevDist = sqrtf(SQ(sRiverSoundBgmPos->z) + SQ(sRiverSoundBgmPos->x));
+        if (dist < prevDist) {
+            sRiverSoundBgmPos = pos;
+        } else {
+            dist = prevDist;
+        }
+    }
+
+    absY = ABS_ALT(pos->y);
+
+    if ((distMax / 15.0f) < absY) {
+        targetVolume = 0;
+    } else if (dist < distMax) {
+        targetVolume = (1.0f - (dist / distMax)) * 127.0f;
+    } else {
+        targetVolume = 0;
+    }
+
+    if (seqId != NA_BGM_FAIRY_FOUNTAIN) {
+        Audio_SplitBgmChannels(targetVolume);
+    }
+
+    Audio_SetVolumeScale(SEQ_PLAYER_BGM_SUB, 3, targetVolume, 0);
+    Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, 0x7F - targetVolume, 0);
+}
+
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_ClearSariaBgm2(void) {
+    sRiverSoundBgmPos = NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A246C.s")
 

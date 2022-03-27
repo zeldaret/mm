@@ -3008,7 +3008,7 @@ extern f32 D_801E05B4;
 extern f32 D_801E05B8;
 extern f32 D_801E05D0;
 extern f32 D_801E05D4;
-// extern UNK_TYPE1 D_801E0BD0;
+extern const u16 gAudioEnvironmentalSfx[];
 // extern UNK_TYPE1 D_801E0BFC;
 extern f32 D_801E0CEC;
 extern f32 D_801E0CF0;

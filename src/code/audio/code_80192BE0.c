@@ -18,7 +18,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_8019387C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_801938A0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/Audio_QueueCmdS8.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_80192BE0/func_801938D0.s")
 
