@@ -155,7 +155,7 @@ asm/non_matchings/boot/mtxuty-cvt/MtxConv_L2F.s,MtxConv_L2F,0x80086258,0xA
 asm/non_matchings/boot/assert/__assert.s,__assert,0x80086280,0xD
 asm/non_matchings/boot/assert/func_800862B4.s,func_800862B4,0x800862B4,0xB
 asm/non_matchings/boot/boot_800862E0/SystemArena_MallocMin1.s,SystemArena_MallocMin1,0x800862E0,0xC
-asm/non_matchings/boot/boot_800862E0/SystemArena_FreeNull.s,SystemArena_FreeNull,0x80086310,0xB
+asm/non_matchings/boot/boot_800862E0/SystemArena_FreeNullCheck.s,SystemArena_FreeNullCheck,0x80086310,0xB
 asm/non_matchings/boot/boot_800862E0/func_8008633C.s,func_8008633C,0x8008633C,0x1C
 asm/non_matchings/boot/boot_800862E0/func_800863AC.s,func_800863AC,0x800863AC,0x1C
 asm/non_matchings/boot/boot_800862E0/func_8008641C.s,func_8008641C,0x8008641C,0x34

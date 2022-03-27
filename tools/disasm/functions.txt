@@ -158,7 +158,7 @@
     0x80086280:("__assert",),
     0x800862B4:("func_800862B4",),
     0x800862E0:("SystemArena_MallocMin1",),
-    0x80086310:("SystemArena_FreeNull",),
+    0x80086310:("SystemArena_FreeNullCheck",),
     0x8008633C:("func_8008633C",),
     0x800863AC:("func_800863AC",),
     0x8008641C:("func_8008641C",),

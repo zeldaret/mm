@@ -153,7 +153,7 @@ void MtxConv_L2F(MtxF* m1, MatrixInternal* m2);
 void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 void* SystemArena_MallocMin1(u32 size);
-void SystemArena_FreeNull(void* ptr);
+void SystemArena_FreeNullCheck(void* ptr);
 void func_80086588(void);
 void SystemArena_Init(void* start, size_t size);
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);

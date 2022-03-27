@@ -1,9 +1,9 @@
 #include "global.h"
 #include "system_malloc.h"
 
-typedef void (*arg3_8008633C)(void*);
-typedef void (*arg3_800863AC)(void*, u32);
-typedef void (*arg3_8008641C)(void*, u32, u32, u32, u32, u32, u32, u32, u32);
+typedef void (*arg3_8008633C)(void*); // BlockFunc
+typedef void (*arg3_800863AC)(void*, u32); // BlockFunc1
+typedef void (*arg3_8008641C)(void*, u32, u32, u32, u32, u32, u32, u32, u32); // BlockFunc8
 
 typedef struct InitFunc {
     uintptr_t nextOffset;
@@ -27,7 +27,7 @@ void* SystemArena_MallocMin1(size_t size) {
     return __osMalloc(&gSystemArena, size);
 }
 
-void SystemArena_FreeNull(void* ptr) {
+void SystemArena_FreeNullCheck(void* ptr) {
     if (ptr != NULL) {
         __osFree(&gSystemArena, ptr);
     }
@@ -68,7 +68,7 @@ void* func_8008641C(void* blk, size_t nBlk, size_t blkSize, arg3_8008641C arg3) 
 void func_800864EC(void* blk, size_t nBlk, size_t blkSize, arg3_800863AC arg3, s32 shouldFree) {
     uintptr_t pos;
     uintptr_t start;
-    size_t step;
+    size_t maskedBlkSize;
 
     if (blk == NULL) {
         return;
@@ -76,17 +76,17 @@ void func_800864EC(void* blk, size_t nBlk, size_t blkSize, arg3_800863AC arg3, s
 
     if (arg3 != NULL) {
         start = blk;
-        step = (blkSize & ~0);
+        maskedBlkSize = (blkSize & ~0);
         pos = (uintptr_t)start + (nBlk * blkSize);
 
         while (pos > start) {
-            pos -= step;
+            pos -= maskedBlkSize;
             arg3(pos, 2);
         }
     }
 
     if (shouldFree) {
-        SystemArena_FreeNull(blk);
+        SystemArena_FreeNullCheck(blk);
     }
 }
 
