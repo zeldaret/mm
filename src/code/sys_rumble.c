@@ -4,7 +4,7 @@
 u8 D_801D1E70 = true;
 
 // RumbleImpl?
-void func_80182CE0(UnkRumbleStruct* arg0) {
+void func_80182CE0(RumbleManager* arg0) {
     s32 index = -1;
     s32 i;
     s32 temp;
@@ -132,11 +132,11 @@ void func_80182CE0(UnkRumbleStruct* arg0) {
     }
 }
 
-void func_80183020(UnkRumbleStruct* arg0) {
-    bzero(arg0, sizeof(UnkRumbleStruct));
+void func_80183020(RumbleManager* arg0) {
+    bzero(arg0, sizeof(RumbleManager));
     arg0->unk_104 = 2;
     arg0->unk_105 = true;
 }
 
-void func_80183058(UnkRumbleStruct* arg0) {
+void func_80183058(RumbleManager* arg0) {
 }

@@ -4,7 +4,7 @@
 #include "PR/ultratypes.h"
 #include "io/controller.h"
 
-typedef struct UnkRumbleStruct {
+typedef struct RumbleManager {
     /* 0x000 */ u8 rumbleEnabled[MAXCONTROLLERS];
     /* 0x004 */ u8 unk_04[0x40];
     /* 0x044 */ u8 unk_44[0x40]; // delay timer?
@@ -18,7 +18,7 @@ typedef struct UnkRumbleStruct {
     /* 0x10B */ u8 unk_10B;
     /* 0x10C */ u8 unk_10C;
     /* 0x10D */ u8 unk_10D;
-} UnkRumbleStruct; // size = 0x10E
+} RumbleManager; // size = 0x10E
 
 void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3);
 void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3);
@@ -29,8 +29,8 @@ void func_8013EE24(void);
 void func_8013EE38(void);
 void func_8013EE48(s32 arg0);
 
-void func_80182CE0(UnkRumbleStruct* arg0);
-void func_80183020(UnkRumbleStruct* arg0);
-void func_80183058(UnkRumbleStruct* arg0);
+void func_80182CE0(RumbleManager* arg0);
+void func_80183020(RumbleManager* arg0);
+void func_80183058(RumbleManager* arg0);
 
 #endif

@@ -603,7 +603,7 @@ beginseg
     include "build/data/code/sys_matrix.data.o"
     include "build/data/code/sys_matrix.bss.o"
     include "build/src/code/sys_ucode.o"
-    include "build/src/code/code_80182CE0.o"
+    include "build/src/code/sys_rumble.o"
     include "build/data/code/code_801D1E80.data.o"
     include "build/src/code/code_80183070.o"
     include "build/src/code/c_keyframe.o"
