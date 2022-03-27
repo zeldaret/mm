@@ -9,7 +9,7 @@
  *
  * Global flags:
  * - gSaveContext.eventInf[5] & 0x40: Enabled when Gyorg's intro cutscene has been watched
- * - gSaveContext.weekEventReg[55] & 0x80: Checked to know if Gyorg has been defeated
+ * - gSaveContext.save.weekEventReg[55] & 0x80: Checked to know if Gyorg has been defeated
  *
  * Seaweed:
  * - Refers to the seaweed at the bottom of the stage where Player fights Gyorg
@@ -453,7 +453,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
     Vec3f sp70;
 
-    if (gSaveContext.weekEventReg[55] & 0x80) {
+    if (gSaveContext.save.weekEventReg[55] & 0x80) {
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_DOOR_WARP1, 0.0f, PLATFORM_HEIGHT,
                            200.0f, 0, 0, 0, ENDOORWARP1_FF_1);
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ITEM_B_HEART, 0.0f, PLATFORM_HEIGHT, 0.0f, 0, 0, 0, 0);
