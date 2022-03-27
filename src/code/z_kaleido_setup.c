@@ -1,8 +1,9 @@
 #include "global.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
-extern s16 D_801BDB00[4]/* = { 1, 2, 3, 0 }*/;
-extern f32 D_801BDB08[4]/* = { -64.0f, 0.0f, 64.0f, 0.0f }*/;
-extern f32 D_801BDB18[6]/* = { 0.0f, -64.0f, 0.0f, 64.0f, 0.0f, 0.0f }*/;
+s16 sKaleidoSetupKscpPos[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
+f32 sKaleidoSetupEyeX[] = { -64.0f, 0.0f, 64.0f, 0.0f };
+f32 sKaleidoSetupEyeZ[] = { 0.0f, -64.0f, 0.0f, 64.0f };
 
 void func_800F4A10(GlobalContext* globalCtx) {
     PauseContext* pauseCtx;
@@ -13,9 +14,9 @@ void func_800F4A10(GlobalContext* globalCtx) {
 
     pauseCtx->unk_206 = 0;
     pauseCtx->unk_200 = 1;
-    pauseCtx->eye.x = D_801BDB08[pauseCtx->pageIndex];
-    pauseCtx->eye.z = D_801BDB18[pauseCtx->pageIndex];
-    pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
+    pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
+    pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
+    pauseCtx->pageIndex = sKaleidoSetupKscpPos[pauseCtx->pageIndex];
     pauseCtx->unk_27E = -0x0028;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
@@ -61,9 +62,9 @@ void func_800F4A10(GlobalContext* globalCtx) {
 
 void func_800F4C0C(GlobalContext* globalCtx) {
     Input* input;
-    MessageContext* msgCtx; // sp24
+    MessageContext* msgCtx;
     Player* player;
-    PauseContext* pauseCtx; // sp1C
+    PauseContext* pauseCtx;
 
 
     player = GET_PLAYER(globalCtx);
