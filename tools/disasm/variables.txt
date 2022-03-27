@@ -957,7 +957,7 @@
     0x801BDACC:("D_801BDACC","UNK_TYPE4","",0x4),
     0x801BDAF0:("D_801BDAF0","UNK_TYPE4","",0x4),
     0x801BDAF8:("D_801BDAF8","UNK_TYPE4","",0x4),
-    0x801BDB00:("sKaleidoSetupKscpPos","UNK_TYPE1","",0x1),
+    0x801BDB00:("D_801BDB00","UNK_TYPE1","",0x1),
     0x801BDB08:("sKaleidoSetupEyeX","UNK_TYPE1","",0x1),
     0x801BDB18:("sKaleidoSetupEyeZ","UNK_TYPE1","",0x1),
     0x801BDB30:("kanfontOrdering","u8","[92]",0x5c),

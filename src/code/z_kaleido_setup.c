@@ -1,7 +1,7 @@
 #include "global.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
-s16 sKaleidoSetupKscpPos[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
+s16 D_801BDB00[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
 f32 sKaleidoSetupEyeX[] = { -64.0f, 0.0f, 64.0f, 0.0f };
 f32 sKaleidoSetupEyeZ[] = { 0.0f, -64.0f, 0.0f, 64.0f };
 
@@ -15,7 +15,7 @@ void func_800F4A10(GlobalContext* globalCtx) {
     pauseCtx->unk_200 = 1;
     pauseCtx->eye.x = sKaleidoSetupEyeX[pauseCtx->pageIndex];
     pauseCtx->eye.z = sKaleidoSetupEyeZ[pauseCtx->pageIndex];
-    pauseCtx->pageIndex = sKaleidoSetupKscpPos[pauseCtx->pageIndex];
+    pauseCtx->pageIndex = D_801BDB00[pauseCtx->pageIndex];
     pauseCtx->unk_27E = -40;
 
     for (i = 0; i < ARRAY_COUNT(pauseCtx->worldMapPoints); i++) {
