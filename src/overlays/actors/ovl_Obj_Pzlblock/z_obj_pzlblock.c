@@ -64,8 +64,8 @@ Color_RGB8 D_809A4088[] = {
 };
 
 s32 func_809A33E0(ObjPzlblock* this, GlobalContext* globalCtx, s16 arg2) {
-    return DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 1) == 0 ||
-           DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 28) == 0;
+    return !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 1) ||
+           !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 28);
 }
 
 s32 func_809A3448(ObjPzlblock* this) {
