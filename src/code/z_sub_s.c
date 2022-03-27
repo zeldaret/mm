@@ -287,7 +287,7 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
     Path* path = NULL;
     s32 found = false;
     s32 time =
-        (((s16)TIME_TO_MINUTES_F(gSaveContext.time) % 60) + ((s16)TIME_TO_MINUTES_F(gSaveContext.time) / 60) * 60) / 30;
+        (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) + ((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) / 60) * 60) / 30;
     s32 day = CURRENT_DAY;
 
     if (pathIndex == max) {

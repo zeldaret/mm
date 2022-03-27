@@ -224,7 +224,7 @@ void func_80BDB59C(EnHiddenNuts* this, GlobalContext* globalCtx) {
         this->unk_218 = 30;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80BDB268(this);
     }

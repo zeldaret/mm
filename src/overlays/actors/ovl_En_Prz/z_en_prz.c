@@ -354,7 +354,7 @@ void func_80A767A8(EnPrz* this, GlobalContext* globalCtx) {
         this->unk_1C8 = 1;
     }
 
-    playerForm = gSaveContext.playerForm;
+    playerForm = gSaveContext.save.playerForm;
     this->unk_1D8.y =
         (player->actor.world.pos.y + D_80A771E0[playerForm]) + randPlusMinusPoint5Scaled((2.0f * this->unk_1E6) + 1.0f);
     func_80A76070(this, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_1D8), globalCtx);

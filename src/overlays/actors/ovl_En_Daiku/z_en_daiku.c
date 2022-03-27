@@ -77,10 +77,11 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
         this->actor.flags |= ACTOR_FLAG_8000000;
-        if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
-    } else if ((gSaveContext.day == 3) && gSaveContext.isNight) {
+    } else if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -140,7 +141,7 @@ void func_809437C8(EnDaiku* this) {
 }
 
 void func_80943820(EnDaiku* this) {
-    s32 day = gSaveContext.day - 1;
+    s32 day = gSaveContext.save.day - 1;
 
     switch (this->unk_278) {
         case 0:
@@ -167,7 +168,7 @@ void func_80943820(EnDaiku* this) {
 void func_809438F8(EnDaiku* this, GlobalContext* globalCtx) {
     f32 currentFrame = this->skelAnime.curFrame;
     s32 pad;
-    s32 day = gSaveContext.day - 1;
+    s32 day = gSaveContext.save.day - 1;
     s32 pad2;
 
     if (Player_GetMask(globalCtx) == PLAYER_MASK_KAFEIS_MASK) {
@@ -241,7 +242,7 @@ void func_80943BDC(EnDaiku* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80943820(this);
     }
@@ -255,7 +256,7 @@ void EnDaiku_Update(Actor* thisx, GlobalContext* globalCtx) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.day == 3) && (gSaveContext.isNight)) {
+    if ((this->unk_278 == ENDAIKU_PARAMS_FF_0) && (gSaveContext.save.day == 3) && (gSaveContext.save.isNight)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
