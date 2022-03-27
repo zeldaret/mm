@@ -4,6 +4,7 @@
  * Description: Snowhead Temple Central Pillar
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_post.h"
 #include "objects/object_hakugin_obj/object_hakugin_obj.h"
 
@@ -87,7 +88,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void func_80A9ACD0(BgHakuginPostUnkStruct* arg0) {
-    bzero((void*)arg0, sizeof(BgHakuginPostUnkStruct));
+    bzero(arg0, sizeof(BgHakuginPostUnkStruct));
 }
 
 void func_80A9ACF0(void) {

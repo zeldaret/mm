@@ -458,11 +458,11 @@ void func_80AA5EBC(DmChar00* this, GlobalContext* globalCtx) {
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneSetupIndex == 0) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA5720(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA575C(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 2) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA5890(this, globalCtx);
                     }
                 }
@@ -470,17 +470,17 @@ void func_80AA5EBC(DmChar00* this, GlobalContext* globalCtx) {
 
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneSetupIndex == 0) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA58CC(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA5950(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 2) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA5960(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA59E4(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA5A6C(this, globalCtx);
                     }
                 }
@@ -488,34 +488,34 @@ void func_80AA5EBC(DmChar00* this, GlobalContext* globalCtx) {
 
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneSetupIndex == 3) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA5AF4(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 2) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA5E2C(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 7) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA5BF8(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA5CD4(this, globalCtx);
                     }
                 }
                 break;
 
             case SCENE_MITURIN:
-                if ((gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.unk_12 == 1)) {
+                if ((gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.currentCsIndex == 1)) {
                     func_80AA5DC8(this, globalCtx);
                 }
                 break;
 
             case SCENE_INSIDETOWER:
-                if ((gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.unk_12 == 0)) {
+                if ((gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.currentCsIndex == 0)) {
                     func_80AA5D10(this, globalCtx);
                 }
                 break;
 
             case SCENE_PIRATE:
-                if ((gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.unk_12 == 0)) {
+                if ((gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.currentCsIndex == 0)) {
                     func_80AA5D6C(this, globalCtx);
                 }
                 break;
@@ -527,7 +527,7 @@ void DmChar00_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     DmChar00* this = THIS;
 
-    if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !func_800EE2F4(globalCtx)) {
+    if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
         Actor_MarkForDeath(thisx);
     }
 
@@ -551,18 +551,18 @@ void DmChar00_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80AA62FC(DmChar00* this, GlobalContext* globalCtx) {
-    u16 sp26 = DMCHAR00_GET(&this->actor) + 0x71;
-    u32 temp_v0;
+    u16 sp26 = DMCHAR00_GET(&this->actor) + 113;
+    s32 temp_v0;
     s32 pad;
 
-    if (func_800EE29C(globalCtx, sp26)) {
-        temp_v0 = func_800EE200(globalCtx, sp26);
+    if (Cutscene_CheckActorAction(globalCtx, sp26)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, sp26);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[temp_v0]->startFrame) {
-            if (this->unk_260 != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
-                this->unk_260 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
+            if (this->unk_260 != globalCtx->csCtx.actorActions[temp_v0]->action) {
+                this->unk_260 = globalCtx->csCtx.actorActions[temp_v0]->action;
 
-                switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+                switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
                     case 0x1:
                         this->unk_261 = 0;
                         break;
@@ -786,7 +786,7 @@ void func_80AA62FC(DmChar00* this, GlobalContext* globalCtx) {
                 func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
             }
         }
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     } else {
         this->unk_260 = 99;
     }
@@ -853,7 +853,8 @@ void func_80AA62FC(DmChar00* this, GlobalContext* globalCtx) {
 void func_80AA67F8(DmChar00* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((globalCtx->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.unk_12 == 1)) {
+    if ((globalCtx->csCtx.state == 0) && (gSaveContext.sceneSetupIndex == 0) &&
+        (globalCtx->csCtx.currentCsIndex == 1)) {
         if (this->unk_261 != 42) {
             this->unk_261 = 42;
             func_80AA5580(&this->skelAnime, &sAnimations[this->unk_261], 0);
@@ -916,7 +917,7 @@ void DmChar00_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((globalCtx->csCtx.state == 0) &&
         ((globalCtx->sceneNum != SCENE_OPENINGDAN) || (gSaveContext.sceneSetupIndex != 0) ||
-         (globalCtx->roomCtx.currRoom.num != 0) || (globalCtx->csCtx.unk_12 != 1) ||
+         (globalCtx->roomCtx.currRoom.num != 0) || (globalCtx->csCtx.currentCsIndex != 1) ||
          (DMCHAR00_GET(&this->actor) != DMCHAR00_0))) {
         return;
     }

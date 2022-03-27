@@ -163,8 +163,8 @@ void BgCtowerGear_Update(Actor* thisx, GlobalContext* globalCtx) {
 void BgCtowerGear_UpdateOrgan(Actor* thisx, GlobalContext* globalCtx) {
     BgCtowerGear* this = THIS;
 
-    if (func_800EE29C(globalCtx, 0x68)) {
-        switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x68)]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 104)) {
+        switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 104)]->action) {
             case 1:
                 this->dyna.actor.draw = NULL;
                 func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
