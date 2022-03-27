@@ -769,8 +769,8 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->stateFlags = 0;
     }
 
-    if (((globalCtx->sceneNum == SCENE_KOEPONARACE) && ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 1)) ||
-        ((gSaveContext.entranceIndex == 0x6400) && Cutscene_GetSceneSetupIndex(globalCtx))) {
+    if (((globalCtx->sceneNum == SCENE_KOEPONARACE) && ((gSaveContext.save.weekEventReg[92] & (1 | 2 | 4)) == 1)) ||
+        ((gSaveContext.save.entranceIndex == 0x6400) && Cutscene_GetSceneSetupIndex(globalCtx))) {
         this->stateFlags |= ENHORSE_FLAG_25;
     }
 
@@ -1553,7 +1553,7 @@ void EnHorse_Stopping(EnHorse* this, GlobalContext* globalCtx) {
     if ((this->stateFlags & ENHORSE_STOPPING_NEIGH_SOUND) && (this->skin.skelAnime.curFrame > 29.0f)) {
         this->actor.speedXZ = 0.0f;
         if ((Rand_ZeroOne() > 0.5f) &&
-            ((gSaveContext.entranceIndex != 0x6400) || !Cutscene_GetSceneSetupIndex(globalCtx))) {
+            ((gSaveContext.save.entranceIndex != 0x6400) || !Cutscene_GetSceneSetupIndex(globalCtx))) {
             if (this->stateFlags & ENHORSE_DRAW) {
                 if (this->type == HORSE_2) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_KID_HORSE_NEIGH);
@@ -2461,7 +2461,7 @@ void func_808819D8(EnHorse* this, GlobalContext* globalCtx) {
         func_8088168C(this);
     }
 
-    if ((gSaveContext.weekEventReg[92] & (1 | 2 | 4)) == 3) {
+    if ((gSaveContext.save.weekEventReg[92] & (1 | 2 | 4)) == 3) {
         this->rider->unk488 = 7;
     } else {
         EnHorse_SetIngoAnimation(this->animationIdx, this->skin.skelAnime.curFrame, this->unk_394 & 1,
