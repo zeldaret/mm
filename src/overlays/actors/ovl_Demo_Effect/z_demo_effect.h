@@ -15,7 +15,7 @@ typedef struct DemoEffect {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnimeCurve skelCurve;
     /* 0x0164 */ u8 unk_164;
-    /* 0x0165 */ UNK_TYPE1 unk165[3];
+    /* 0x0165 */ UNK_TYPE1 unk_165[3];
     /* 0x0168 */ u8 unk_168[3];
     /* 0x016C */ s16 unk_16C;
     /* 0x0170 */ DemoEffectUnkFunc unk_170;
