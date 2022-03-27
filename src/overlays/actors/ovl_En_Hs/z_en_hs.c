@@ -172,8 +172,8 @@ void func_80953098(EnHs* this, GlobalContext* globalCtx) {
 }
 
 void func_80953180(EnHs* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x33F4:
             case 0x33F6:
                 func_801477B4(globalCtx);
@@ -216,7 +216,7 @@ void func_809532D0(EnHs* this, GlobalContext* globalCtx) {
     if (DECR(this->unk_2A2) == 0) {
         globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENHS_GET_F(&this->actor)];
         globalCtx->sceneLoadFlag = 0x14;
-        gSaveContext.weekEventReg[25] |= 8;
+        gSaveContext.save.weekEventReg[25] |= 8;
         this->actionFunc = func_809532C0;
     }
 }
@@ -237,7 +237,7 @@ void func_809533A0(EnHs* this, GlobalContext* globalCtx) {
     } else if (this->unk_2A0 & 0x10) {
         sp1E = 0x33F9;
         this->unk_2A0 &= ~0x10;
-    } else if (gSaveContext.weekEventReg[25] & 8) {
+    } else if (gSaveContext.save.weekEventReg[25] & 8) {
         sp1E = 0x33F4;
     } else {
         sp1E = 0x33F5;
