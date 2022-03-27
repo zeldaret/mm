@@ -3512,8 +3512,7 @@ beginseg
     name "ovl_En_Fu_Kago"
     compress
     include "build/src/overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.o"
-    include "build/data/ovl_En_Fu_Kago/ovl_En_Fu_Kago.data.o"
-    include "build/data/ovl_En_Fu_Kago/ovl_En_Fu_Kago.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Fu_Kago/ovl_En_Fu_Kago_reloc.o"
 endseg
 
 beginseg
