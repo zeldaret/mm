@@ -156,9 +156,9 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
 
-        } else if (!Play_InCsMode(globalCtx) && (player->stateFlags1 & 0x08800000) == 0 &&
-                   this->actor.xzDistToPlayer <= 20.0f && this->actor.playerHeightRel >= -50.0f &&
-                   this->actor.playerHeightRel <= 15.0f) {
+        } else if (!Play_InCsMode(globalCtx) && ((player->stateFlags1 & 0x08800000) == 0) &&
+                   (this->actor.xzDistToPlayer <= 20.0f) && (this->actor.playerHeightRel >= -50.0f) &&
+                   (this->actor.playerHeightRel <= 15.0f)) {
             player->stateFlags1 |= 0x80000000;
             this->actor.targetMode = 1;
 
