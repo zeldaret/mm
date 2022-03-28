@@ -1208,7 +1208,7 @@
     0x801BFF3C:("sActionModelGroups","UNK_TYPE1","",0x1),
     0x801BFF90:("D_801BFF90","UNK_TYPE1","",0x1),
     0x801BFF98:("sPlayerStrengths","UNK_TYPE1","",0x1),
-    0x801BFFA0:("D_801BFFA0","UNK_TYPE1","",0x1),
+    0x801BFFA0:("sEnvironmentTextTriggers","UNK_TYPE1","",0x1),
     0x801BFFB0:("gPlayerModelTypes","UNK_TYPE1","",0x1),
     0x801BFFFC:("D_801BFFFC","UNK_TYPE1","",0x1),
     0x801C0024:("D_801C0024","UNK_TYPE1","",0x1),

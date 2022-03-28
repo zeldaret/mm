@@ -568,9 +568,10 @@ typedef struct {
     /* 0x02 */ u16 textId;
 } TextTriggerEntry; // size = 0x04
 
-extern TextTriggerEntry D_801BFFA0[];
+extern TextTriggerEntry sEnvironmentTextTriggers[];
+// Those textIds are OoT remanents and are not present anymore in this game anymore
 #if 0
-TextTriggerEntry D_801BFFA0[] = {
+TextTriggerEntry sEnvironmentTextTriggers[] = {
     { 1, 0x26FC },
     { 2, 0x26FD },
     { 0, 0 },
@@ -862,32 +863,33 @@ s32 func_801242B4(Player* player) {
 s32 func_801242DC(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     TextTriggerEntry* triggerEntry;
-    s32 sp1C;
+    s32 index;
 
-    if (globalCtx->roomCtx.currRoom.unk2 == 3) {
-        sp1C = 0;
+    if (globalCtx->roomCtx.currRoom.unk2 == 3) { // Room is hot
+        index = 0;
     } else if ((player->transformation != PLAYER_FORM_ZORA) && (player->unk_AD8 > 80)) {
-        sp1C = 3;
+        index = 3;
     } else if (player->stateFlags1 & PLAYER_STATE1_8000000) {
         if ((player->transformation == PLAYER_FORM_ZORA) && (player->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER) &&
             (player->actor.bgCheckFlags & 1)) {
-            sp1C = 1;
+            index = 1;
         } else {
-            sp1C = 2;
+            index = 2;
         }
     } else {
         return 0;
     }
 
-    triggerEntry = &D_801BFFA0[sp1C];
+    // Trigger general textboxes under certain conditions, like "It's so hot in here!". Unused on MM
+    triggerEntry = &sEnvironmentTextTriggers[index];
     if (!Player_InCsMode(globalCtx)) {
-        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (sp1C == 0)) {
+        if ((triggerEntry->flag) && !(gSaveContext.textTriggerFlags & triggerEntry->flag) && (index == 0)) {
             Message_StartTextbox(globalCtx, triggerEntry->textId, NULL);
             gSaveContext.textTriggerFlags |= triggerEntry->flag;
         }
     }
 
-    return sp1C + 1;
+    return index + 1;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_player_lib/func_80124420.s")
