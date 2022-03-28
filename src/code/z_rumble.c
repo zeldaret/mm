@@ -31,15 +31,15 @@ void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
 }
 
 // Normal rumble?
-void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3) {
+void func_8013ECE0(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
     s32 temp;
     s32 distance;
     s32 i;
 
-    if (SQ(1000.0f) < xyzDistToPlayerSq) {
+    if (SQ(1000.0f) < distSq) {
         distance = 1000;
     } else {
-        distance = sqrtf(xyzDistToPlayerSq);
+        distance = sqrtf(distSq);
     }
 
     if ((distance < 1000) && (arg1 != 0) && (arg3 != 0)) {

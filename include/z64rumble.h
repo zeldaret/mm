@@ -21,7 +21,7 @@ typedef struct RumbleManager {
 } RumbleManager; // size = 0x10E
 
 void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3);
-void func_8013ECE0(f32 xyzDistToPlayerSq, u8 arg1, u8 arg2, u8 arg3);
+void func_8013ECE0(f32 distSq, u8 arg1, u8 arg2, u8 arg3);
 void Rumble_Init(void);
 void Rumble_Destroy(void);
 s32 Rumble_ControllerOneHasRumblePak(void);
