@@ -224,7 +224,7 @@ void func_80C1CAB0(DmAn* this, GlobalContext* globalCtx) {
                 case 7:
                 case 8:
                     if ((this->unk_2C8 == 12) || (this->unk_2C8 == 4) || (this->unk_2C8 == 6) || (this->unk_2C8 == 8)) {
-                        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
+                        if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                             func_80C1C4D8(this, globalCtx, this->unk_2C8 + 1);
                         }
                     }
