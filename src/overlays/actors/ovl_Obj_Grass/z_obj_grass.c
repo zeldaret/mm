@@ -267,7 +267,7 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
                                   Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[j].unk_00);
 
                             if (ABS_ALT(yaw) < 0x2000) {
-                                this->unk_3294 = &ptr->unk_0C[j].unk_00;
+                                this->unk_3294 = &ptr->unk_0C[j];
                             }
                         }
                     }

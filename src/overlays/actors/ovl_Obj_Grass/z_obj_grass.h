@@ -40,7 +40,7 @@ typedef struct ObjGrass {
     /* 0x328E */ s16 unk_328E;
     /* 0x3290 */ s16 unk_3290;
     /* 0x3292 */ s16 unk_3292;
-    /* 0x3294 */ Vec3f* unk_3294;
+    /* 0x3294 */ ObjGrassStruct1_1* unk_3294;
     /* 0x3298 */ struct ObjGrassCarry* unk_3298[2];
 } ObjGrass; // size = 0x32A0
 
