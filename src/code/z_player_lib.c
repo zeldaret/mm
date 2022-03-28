@@ -773,7 +773,7 @@ s32 Player_HoldsHookshot(Player* player) {
 }
 
 s32 func_801240DC(Player* player) {
-    return Player_HoldsHookshot(player) && player->heldActor == NULL;
+    return Player_HoldsHookshot(player) && (player->heldActor == NULL);
 }
 
 s32 func_80124110(Player* player, s32 actionParam) {
