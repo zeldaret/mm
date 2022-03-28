@@ -288,7 +288,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         func_80C10148(this);
         return;
     }
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         temp_v0_3 = this->actor.textId;
         if (temp_v0_3 == 0x2AD9) {
             Flags_SetSwitch(globalCtx, (s32) this->actor.params);
@@ -347,7 +347,7 @@ void func_80C102D4(EnRecepgirl *this, GlobalContext *globalCtx) {
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
         if (this->actor.textId == 0x2AD9) {
             Flags_SetSwitch(globalCtx, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &D_0600AD98, 10.0f);
@@ -378,7 +378,7 @@ There remains one thing we need to fix before trying to compile it, namely `*(&g
     /* 0x0EF8 */ u8 weekEventReg[100];       // "week_event_reg"
     /* 0x0F5C */ u32 mapsVisited;            // "area_arrival"
 ```
-so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.weekEventReg[63] & 0x80)` will do.
+so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.save.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.save.weekEventReg[63] & 0x80)` will do.
 
 Running `./diff.py -mwo3 func_80C102D4` and scrolling down, we discover that this doesn't match!
 
@@ -397,7 +397,7 @@ somehow we skipped over `t0`. Where is this in the code? The `153` in the middle
         return;
     }
 
-    if (((temp_v0_2 & 0xFF) == 5) && (func_80147624(globalCtx) != 0)) {
+    if (((temp_v0_2 & 0xFF) == 5) && (Message_ShouldAdvance(globalCtx) != 0)) {
 ```
 
 If you look at the conditionals and the declaration of `temp_v0_2`, you may notice something odd: `temp_v0_2` is a `u8`. Therefore the `& 0xFF` does nothing! It's surprisingly common for this to happen, be it leaving out a `& 0xFF` or adding an extraneous one. If we remove it, we get a match:

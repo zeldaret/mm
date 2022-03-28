@@ -355,8 +355,8 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.tatlTimer >= 25800) || (gSaveContext.tatlTimer < 3000)) {
-                gSaveContext.tatlTimer = 0;
+            if ((gSaveContext.save.playerData.tatlTimer >= 25800) || (gSaveContext.save.playerData.tatlTimer < 3000)) {
+                gSaveContext.save.playerData.tatlTimer = 0;
             }
             this->unk_266 = ElfMessage_GetFirstCycleHint(globalCtx);
             break;
@@ -675,7 +675,8 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
         !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
         func_80115908(globalCtx, 0x80);
         if (this->fairyFlags & 0x200) {
-            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.doubleMagic * 0x30) + 0x30);
+            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) +
+                                              (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
@@ -1360,8 +1361,8 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx)) {
-                if (globalCtx->msgCtx.unk11F04 == 0x202) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                if (globalCtx->msgCtx.currentTextId == 0x202) {
                     switch (globalCtx->msgCtx.choiceIndex) {
                         case 0:
                             func_8019F230();
@@ -1375,19 +1376,19 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
 
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 - 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId - 1);
                         break;
 
                     case 1:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
                 }
             }
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 576:
                         func_80151938(globalCtx, 0x245);
                         break;
@@ -1414,10 +1415,10 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
                                 break;
 
                             case 3:
-                                if (!gSaveContext.isNight) {
+                                if (!gSaveContext.save.isNight) {
                                     func_80151938(globalCtx, 0x248);
-                                } else if ((gSaveContext.time < CLOCK_TIME(6, 0)) &&
-                                           (gSaveContext.weekEventReg[74] & 0x20)) {
+                                } else if ((gSaveContext.save.time < CLOCK_TIME(6, 0)) &&
+                                           (gSaveContext.save.weekEventReg[74] & 0x20)) {
                                     func_80151938(globalCtx, 0x225);
                                 } else {
                                     func_80151938(globalCtx, 0x249);
@@ -1454,11 +1455,11 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
-        gSaveContext.tatlTimer = 0;
+        gSaveContext.save.playerData.tatlTimer = 0;
     }
 
     if ((player->tatlTextId == 0) && (player->unk_730 == NULL)) {
-        if ((gSaveContext.tatlTimer >= 600) && (gSaveContext.tatlTimer <= 3000)) {
+        if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = ElfMessage_GetFirstCycleHint(globalCtx);
         }
     }
@@ -1473,7 +1474,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
 
         if (thisx->textId == ElfMessage_GetFirstCycleHint(globalCtx)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.tatlTimer = 3001;
+            gSaveContext.save.playerData.tatlTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1504,10 +1505,10 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
 
         if (!func_801690CC(globalCtx)) {
-            if (gSaveContext.tatlTimer < 25800) {
-                gSaveContext.tatlTimer++;
+            if (gSaveContext.save.playerData.tatlTimer < 25800) {
+                gSaveContext.save.playerData.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {
-                gSaveContext.tatlTimer = 0;
+                gSaveContext.save.playerData.tatlTimer = 0;
             }
         }
     }

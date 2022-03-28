@@ -370,7 +370,7 @@ s32 func_80ACF04C(EnFuMato* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
 
         fu->unk_548++;
-        if ((fu->unk_542 == 2) || (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
+        if ((fu->unk_542 == 2) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
             fu->unk_546 = 1;
             func_80ACE680(this);
         } else {
