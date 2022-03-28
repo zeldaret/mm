@@ -119,7 +119,7 @@ void func_801229FC(Player* player) {
     /**
      * Notes:
      *
-     * player->maskObjectLoadState seem to be able to take 3 possible values
+     * player->maskObjectLoadState seems to be able to take 3 possible values
      * - 0: The mask object is loaded.
      * - 1: The mask object must be changed (and the DMA request has not been sent yet)
      * - 2: Waiting for the DMA request to complete.
