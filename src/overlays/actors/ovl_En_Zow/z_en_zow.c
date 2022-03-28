@@ -360,45 +360,45 @@ void func_80BDD1E0(EnZow* this, GlobalContext* globalCtx) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (gSaveContext.weekEventReg[55] & 0x80) {
-            if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-                if (gSaveContext.weekEventReg[78] & 4) {
+        if (gSaveContext.save.weekEventReg[55] & 0x80) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+                if (gSaveContext.save.weekEventReg[78] & 4) {
                     phi_a1 = 0x12FD;
                 } else {
                     phi_a1 = 0x12FA;
-                    gSaveContext.weekEventReg[78] |= 4;
+                    gSaveContext.save.weekEventReg[78] |= 4;
                 }
-            } else if (gSaveContext.weekEventReg[78] & 0x10) {
+            } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
                 phi_a1 = 0x1301;
             } else {
-                gSaveContext.weekEventReg[78] |= 0x10;
+                gSaveContext.save.weekEventReg[78] |= 0x10;
                 phi_a1 = 0x12FF;
             }
-        } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-            if (gSaveContext.weekEventReg[78] & 8) {
+        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (gSaveContext.save.weekEventReg[78] & 8) {
                 phi_a1 = 0x12F8;
             } else {
                 phi_a1 = 0x12F3;
-                gSaveContext.weekEventReg[78] |= 8;
+                gSaveContext.save.weekEventReg[78] |= 8;
             }
-        } else if (gSaveContext.weekEventReg[78] & 0x10) {
+        } else if (gSaveContext.save.weekEventReg[78] & 0x10) {
             phi_a1 = 0x1301;
         } else {
-            gSaveContext.weekEventReg[78] |= 0x10;
+            gSaveContext.save.weekEventReg[78] |= 0x10;
             phi_a1 = 0x12FF;
         }
-    } else if (gSaveContext.weekEventReg[55] & 0x80) {
-        if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    } else if (gSaveContext.save.weekEventReg[55] & 0x80) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
             phi_a1 = 0x12F1;
         }
-    } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[78] & 2) {
+    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.weekEventReg[78] & 2) {
             phi_a1 = 0x12EB;
         } else {
             phi_a1 = 0x12E8;
-            gSaveContext.weekEventReg[78] |= 2;
+            gSaveContext.save.weekEventReg[78] |= 2;
         }
     } else {
         phi_a1 = 0x12EF;
@@ -463,8 +463,8 @@ void func_80BDD570(EnZow* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x12E8:
                     case 0x12E9:
                     case 0x12EC:
@@ -480,7 +480,7 @@ void func_80BDD570(EnZow* this, GlobalContext* globalCtx) {
                     case 0x12FB:
                     case 0x12FD:
                     case 0x12FF:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
 
                     default:
