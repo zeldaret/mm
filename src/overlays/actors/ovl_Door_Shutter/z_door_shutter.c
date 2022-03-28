@@ -344,7 +344,7 @@ void func_808A1090(DoorShutter* this, GlobalContext* globalCtx) {
         if (this->unk_166 != 0) {
             Flags_SetSwitch(globalCtx, DOORSHUTTER_GET_7F(&this->actor));
             if (this->doorType != 5) {
-                gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex]--;
+                gSaveContext.save.inventory.dungeonKeys[gSaveContext.mapIndex]--;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
@@ -367,7 +367,7 @@ void func_808A1090(DoorShutter* this, GlobalContext* globalCtx) {
             }
 
             if (this->doorType == 6) {
-                if (gSaveContext.healthCapacity < (DOORSHUTTER_GET_1F(&this->actor) * 0x10)) {
+                if (gSaveContext.save.playerData.healthCapacity < (DOORSHUTTER_GET_1F(&this->actor) * 0x10)) {
                     player->doorType = -1;
                     this->actor.textId = 0x14FC;
                 }
@@ -570,7 +570,7 @@ void func_808A1884(DoorShutter* this, GlobalContext* globalCtx) {
     if (DoorShutter_SetupDoor(this, globalCtx) && !(player->stateFlags1 & 0x800)) {
         DoorShutter_SetupAction(this, func_808A1C50);
         if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-            s8 data = gSaveContext.respawn[0].data;
+            s8 data = gSaveContext.respawn[RESTART_MODE_DOWN].data;
 
             func_801226E0(globalCtx, data);
             player->unk_A86 = -1;
