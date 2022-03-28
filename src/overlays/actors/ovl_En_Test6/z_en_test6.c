@@ -375,9 +375,9 @@ void func_80A9156C(EnTest6* this, GlobalContext* globalCtx) {
             break;
 
         default:
-            gSaveContext.daysElapsed = 0;
-            gSaveContext.day = false;
-            gSaveContext.time = CLOCK_TIME(6, 0) - 1;
+            gSaveContext.save.daysElapsed = 0;
+            gSaveContext.save.day = false;
+            gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
             EnTest6_SetupAction(this, func_80A92950);
             break;
     }
@@ -976,13 +976,13 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 return;
 
             case 9:
-                Play_SetRespawnData(&globalCtx->state, 1, ((void)0, gSaveContext.entranceIndex & 0xFFFF),
+                Play_SetRespawnData(&globalCtx->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
                                     player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
                 globalCtx->sceneLoadFlag = 0x14;
                 globalCtx->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_GROTTO].entranceIndex;
                 globalCtx->unk_1887F = 2;
-                if ((gSaveContext.time > CLOCK_TIME(18, 0)) || (gSaveContext.time < CLOCK_TIME(6, 0))) {
+                if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
                     gSaveContext.eventInf[2] |= 0x80;
                 } else {
@@ -1056,8 +1056,8 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                 return;
 
             case 9:
-                if (gSaveContext.time > CLOCK_TIME(12, 0)) {
-                    Play_SetRespawnData(&globalCtx->state, 1, ((void)0, gSaveContext.entranceIndex & 0xFFFF),
+                if (gSaveContext.save.time > CLOCK_TIME(12, 0)) {
+                    Play_SetRespawnData(&globalCtx->state, 1, ((void)0, gSaveContext.save.entranceIndex & 0xFFFF),
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     this->unk_276 = 99;
                     globalCtx->sceneLoadFlag = 0x14;

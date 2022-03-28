@@ -372,7 +372,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 Message_StartTextbox(globalCtx, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
@@ -381,7 +381,7 @@ void func_80995190(EnSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->actionFunc = func_80995244;
             }
             break;
@@ -807,7 +807,7 @@ void func_809964A0(EnSkb* this, GlobalContext* globalCtx) {
 void func_809964DC(EnSkb* this, GlobalContext* globalCtx) {
     if (this->unk_3D6 == 0) {
         if ((this->actionFunc != func_80994E94) && (this->actionFunc != func_80996284) &&
-            (this->actionFunc != func_809964A0) && (gSaveContext.weekEventReg[85] & 0x40)) {
+            (this->actionFunc != func_809964A0) && (gSaveContext.save.weekEventReg[85] & 0x40)) {
             this->actor.colChkInfo.health = 0;
             func_809961E4(this, globalCtx);
         }
@@ -817,7 +817,7 @@ void func_809964DC(EnSkb* this, GlobalContext* globalCtx) {
 s32 func_80996544(Vec2f arg0, Vec2f arg1) {
     s32 ret;
 
-    if ((arg1.x * arg0.y) < (arg0.x * arg1.y)) {
+    if ((arg1.x * arg0.z) < (arg0.x * arg1.z)) {
         ret = 1;
     } else {
         ret = -1;
@@ -840,9 +840,9 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
     worldX = this->actor.world.pos.x;
 
     sp60.x = D_80997468[0].z - worldZ;
-    sp60.y = D_80997468[0].x - worldX;
+    sp60.z = D_80997468[0].x - worldX;
     sp58.x = D_80997468[1].z - worldZ;
-    sp58.y = D_80997468[1].x - worldX;
+    sp58.z = D_80997468[1].x - worldX;
     j = 1;
     temp_s2 = func_80996544(sp60, sp58);
 
@@ -856,9 +856,9 @@ s32 func_80996594(EnSkb* this, GlobalContext* globalCtx) {
             j = 0;
         }
         sp60.x = D_80997468[i].z - worldZ;
-        sp60.y = D_80997468[i].x - worldX;
+        sp60.z = D_80997468[i].x - worldX;
         sp58.x = D_80997468[j].z - worldZ;
-        sp58.y = D_80997468[j].x - worldX;
+        sp58.z = D_80997468[j].x - worldX;
         if (func_80996544(sp60, sp58) != temp_s2) {
             sp54 = false;
             break;
