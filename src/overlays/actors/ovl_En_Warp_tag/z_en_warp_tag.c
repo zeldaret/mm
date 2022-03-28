@@ -192,7 +192,7 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, GlobalContext* globalCtx) {
                     playerForm = player->transformation;
                 }
 
-                entranceIndex = gSaveContext.entranceIndex;
+                entranceIndex = gSaveContext.save.entranceIndex;
 
                 playerSpawnIndex = playerSpawnIndexPerForm[playerForm];
                 playerActorEntry = &globalCtx->linkActorEntry[playerSpawnIndex];
