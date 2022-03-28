@@ -42,8 +42,6 @@ void SkelCurve_SetAnim(SkelAnimeCurve* skelCurve, TransformUpdateIndex* transUpd
     skelCurve->transUpdIdx = transUpdIdx;
 }
 
-#ifdef NON_MATCHING
-/* Should be functionally equivalent, also migrating rodata makes it a lot cleaner */
 s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
     s16* transforms;
     u8* transformRefIdx;
@@ -53,7 +51,6 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
     s32 ret = 0;
     s32 k;
     TransformData* transData;
-    f32 transformValue;
     s32 j;
 
     transformIndex = Lib_SegmentedToVirtual(skelCurve->transUpdIdx);
@@ -62,7 +59,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
     transformCopyValues = Lib_SegmentedToVirtual(transformIndex->copyValues);
     transforms = (s16*)skelCurve->transforms;
 
-    skelCurve->animCurFrame += skelCurve->animSpeed * (globalCtx->state.framerateDivisor * 0.5f);
+    skelCurve->animCurFrame += skelCurve->animSpeed * ((s32)globalCtx->state.framerateDivisor * 0.5f);
 
     if ((skelCurve->animSpeed >= 0.0f && skelCurve->animCurFrame > skelCurve->animFinalFrame) ||
         (skelCurve->animSpeed < 0.0f && skelCurve->animCurFrame < skelCurve->animFinalFrame)) {
@@ -72,7 +69,8 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
 
     for (i = 0; i < skelCurve->limbCount; i++) {
         for (j = 0; j < 3; j++) {
-            for (k = 0; k < 3; k++, transformRefIdx++, transforms++) {
+            for (k = 0; k < 3; k++) {
+                f32 transformValue;
                 if (*transformRefIdx == 0) {
                     transformValue = *transformCopyValues;
                     *transforms = transformValue;
@@ -88,15 +86,14 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
                         *transforms = transformValue * 100.0f;
                     }
                 }
+                transformRefIdx++;
+                transforms++;
             }
         }
     }
 
     return ret;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_fcurve_data_skelanime/SkelCurve_Update.s")
-#endif
 
 void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve* skelCurve,
                         OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
