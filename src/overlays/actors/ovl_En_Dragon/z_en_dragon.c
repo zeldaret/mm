@@ -661,37 +661,37 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
         if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
                                           this->actor.unk20, NULL)) {
-            gSaveContext.weekEventReg[0xD] |= 1;
+            gSaveContext.save.weekEventReg[0xD] |= 1;
             switch (this->pythonIndex) {
                 case 0:
-                    gSaveContext.weekEventReg[0x53] |= 0x10;
+                    gSaveContext.save.weekEventReg[0x53] |= 0x10;
                     break;
 
                 case 1:
-                    gSaveContext.weekEventReg[0x53] |= 0x20;
+                    gSaveContext.save.weekEventReg[0x53] |= 0x20;
                     break;
 
                 case 2:
-                    gSaveContext.weekEventReg[0x53] |= 0x40;
+                    gSaveContext.save.weekEventReg[0x53] |= 0x40;
                     break;
 
                 case 3:
-                    gSaveContext.weekEventReg[0x53] |= 0x80;
+                    gSaveContext.save.weekEventReg[0x53] |= 0x80;
                     break;
                 case 4:
-                    gSaveContext.weekEventReg[0x54] |= 1;
+                    gSaveContext.save.weekEventReg[0x54] |= 1;
                     break;
 
                 case 5:
-                    gSaveContext.weekEventReg[0x54] |= 2;
+                    gSaveContext.save.weekEventReg[0x54] |= 2;
                     break;
 
                 case 6:
-                    gSaveContext.weekEventReg[0x54] |= 4;
+                    gSaveContext.save.weekEventReg[0x54] |= 4;
                     break;
 
                 case 7:
-                    gSaveContext.weekEventReg[0x54] |= 8;
+                    gSaveContext.save.weekEventReg[0x54] |= 8;
                     break;
             }
         }
