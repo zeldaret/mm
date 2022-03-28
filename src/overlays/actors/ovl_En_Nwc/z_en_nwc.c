@@ -69,7 +69,7 @@ void EnNwc_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((gSaveContext.weekEventReg[0x19] & 8)) {
+    if ((gSaveContext.save.weekEventReg[0x19] & 8)) {
         // if breman mask was already used, replace with adult EnNiw
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);
