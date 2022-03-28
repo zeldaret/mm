@@ -2,6 +2,7 @@
 #define Z_EN_NB_H
 
 #include "global.h"
+#include "objects/object_nb/object_nb.h"
 
 struct EnNb;
 
@@ -22,8 +23,8 @@ typedef struct EnNb {
     /* 0x1EC */ char unk_1EC[0x04];
     /* 0x1F0 */ Vec3f unk_1F0;
     /* 0x1FC */ Vec3s unk_1FC;
-    /* 0x202 */ Vec3s jointTable[8];
-    /* 0x232 */ Vec3s morphTable[8];
+    /* 0x202 */ Vec3s jointTable[OBJECT_NB_LIMB_MAX];
+    /* 0x232 */ Vec3s morphTable[OBJECT_NB_LIMB_MAX];
     /* 0x262 */ u16 unk_262; // bitpack
     /* 0x264 */ u16 textId;
     /* 0x266 */ char unk_266[0x02];

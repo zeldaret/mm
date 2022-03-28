@@ -126,7 +126,7 @@ void func_80BBFE60(EnNb* this) {
 }
 
 // EnNb_ChangeAnim
-s32 func_80BBFE8C(EnNb* this, s32 arg1) {
+s32 EnNb_ChangeAnim(EnNb* this, s32 arg1) {
     s32 phi_v1 = false;
     s32 phi_t0 = 0;
 
@@ -419,12 +419,11 @@ void func_80BC0800(EnNb* this) {
 // Related to both stories?
 void func_80BC08E0(EnNb* this, GlobalContext* globalCtx) {
     if (this->unk_284 == 0) {
-        func_80BBFE8C(this, 2);
+        EnNb_ChangeAnim(this, 2);
         this->unk_262 |= 0x400;
         this->unk_284++;
-        return;
     } else if ((this->unk_284 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80BBFE8C(this, 1);
+        EnNb_ChangeAnim(this, 1);
         this->unk_262 &= 0xFBFF;
         this->unk_284++;
     }
@@ -432,12 +431,12 @@ void func_80BC08E0(EnNb* this, GlobalContext* globalCtx) {
 
 void func_80BC0978(EnNb* this, GlobalContext* globalCtx) {
     if (this->unk_284 == 0) {
-        func_80BBFE8C(this, 5);
+        EnNb_ChangeAnim(this, 5);
         this->unk_262 &= ~0x20;
         this->unk_262 |= 0x400;
         this->unk_284 += 1;
     } else if ((this->unk_284 == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80BBFE8C(this, 3);
+        EnNb_ChangeAnim(this, 3);
         this->unk_262 &= ~0x400;
         this->unk_284 += 1;
     }
@@ -454,7 +453,7 @@ s32 func_80BC0A18(EnNb* this, GlobalContext* globalCtx) {
             switch (currentTextId) {
                 case 0x28CF:
                     this->unk_262 |= 0x20;
-                    func_80BBFE8C(this, 3);
+                    EnNb_ChangeAnim(this, 3);
                     break;
 
                 case 0x2904: // "You want to hear the carnival of time story? ..."
@@ -469,7 +468,7 @@ s32 func_80BC0A18(EnNb* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0x28CB:
-                    func_80BBFE8C(this, 4);
+                    EnNb_ChangeAnim(this, 4);
                     break;
 
                 case 0x28C7:
@@ -478,7 +477,7 @@ s32 func_80BC0A18(EnNb* this, GlobalContext* globalCtx) {
                 case 0x2906:
                 case 0x290D:
                 case 0x2912:
-                    func_80BBFE8C(this, 3);
+                    EnNb_ChangeAnim(this, 3);
                     break;
             }
         }
@@ -488,7 +487,7 @@ s32 func_80BC0A18(EnNb* this, GlobalContext* globalCtx) {
         this->unk_18C = NULL;
         this->textId = 0;
         this->unk_262 &= ~0x80;
-        func_80BBFE8C(this, 1);
+        EnNb_ChangeAnim(this, 1);
     }
 
     if (this->unk_18C != NULL) {
@@ -504,7 +503,7 @@ s32 func_80BC0B98(EnNb* this, GlobalContext* globalCtx, UNK_TYPE arg2) {
     if (func_80BBFDB0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
         SubS_UpdateFlags(&this->unk_262, 3, 7);
         this->unk_262 |= 0x20;
-        func_80BBFE8C(this, 0);
+        EnNb_ChangeAnim(this, 0);
         sp24 = 1;
     }
 
@@ -517,7 +516,7 @@ s32 func_80BC0C0C(EnNb* this, GlobalContext* globalCtx, UNK_TYPE arg2) {
     } else {
         SubS_UpdateFlags(&this->unk_262, 4, 7);
     }
-    func_80BBFE8C(this, 0);
+    EnNb_ChangeAnim(this, 0);
 
     return 1;
 }
@@ -608,10 +607,10 @@ void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_nb_Skel_008C40, NULL, this->jointTable, this->morphTable,
-                       8);
+                       OBJECT_NB_LIMB_MAX);
 
     this->unk_290 = -1;
-    func_80BBFE8C(this, 0);
+    EnNb_ChangeAnim(this, 0);
 
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
@@ -656,7 +655,7 @@ void EnNb_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnNb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnNb* this = THIS;
 
-    if (limbIndex == 5) {
+    if (limbIndex == OBJECT_NB_LIMB_05) {
         func_80BC05A8(this, globalCtx);
     }
 
@@ -667,7 +666,7 @@ void EnNb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnNb* this = THIS;
     Vec3f sp18;
 
-    if ((ActorCutscene_GetCurrentIndex() == -1) && (limbIndex == 5)) {
+    if ((ActorCutscene_GetCurrentIndex() == -1) && (limbIndex == OBJECT_NB_LIMB_05)) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp18);
         Math_ApproachF(&thisx->focus.pos.x, sp18.x, 0.6f, 10000.0f);
         Math_ApproachF(&thisx->focus.pos.y, sp18.y, 0.6f, 10000.0f);
@@ -676,7 +675,7 @@ void EnNb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnNb_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnNb* this = THIS;
     s32 phi_v0;
     s32 phi_v1;
@@ -694,7 +693,7 @@ void EnNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         phi_v0 = false;
     }
 
-    if (limbIndex == 5) {
+    if (limbIndex == OBJECT_NB_LIMB_05) {
         func_8013AD9C(this->headRot + 0x4000, this->unk_27E + this->actor.shape.rot.y + 0x4000, &this->unk_1F0,
                       &this->unk_1FC, phi_v0, phi_v1);
         Matrix_StatePop();
@@ -837,7 +836,7 @@ void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_8012C5B0(globalCtx->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnNb_OverrideLimbDraw, EnNb_PostLimbDraw,
-                                       EnNb_UnkActorDraw, &this->actor);
+                                       EnNb_TransformLimbDraw, &this->actor);
     }
 
 #ifdef PRINT_TO_SCREEN
