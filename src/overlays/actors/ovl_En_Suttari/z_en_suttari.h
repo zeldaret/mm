@@ -55,7 +55,7 @@ typedef struct EnSuttari {
     /* 0x436 */ s16 unk436;
     /* 0x438 */ Vec3f unk438;
     /* 0x444 */ Vec3f unk444;
-    /* 0x450 */ s32 animationIdx;
+    /* 0x450 */ s32 animationIndex;
     /* 0x454 */ UNK_TYPE1 unk_454[0x2];
     /* 0x456 */ s16 cutscenes[2];
     /* 0x45A */ s16 cutsceneIdx;
