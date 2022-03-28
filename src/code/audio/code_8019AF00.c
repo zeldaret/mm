@@ -45,7 +45,7 @@ typedef enum {
     /* 0xD */ SFX_CHANNEL_OCARINA, // SfxOcarinaBank
     /* 0xE */ SFX_CHANNEL_VOICE0,  // SfxVoiceBank
     /* 0xF */ SFX_CHANNEL_VOICE1
-} SfxChannelIdx; // playerIdx = 2
+} SfxChannelIndex; // playerIndex = 2
 
 // Global IO ports for sequences, 8 global ports per seqPlayer
 typedef enum {
@@ -65,6 +65,10 @@ typedef struct {
     /* 0x8 */ f32 step;
     /* 0xC */ s32 remainingFrames;
 } FreqLerp; // size = 0x10
+
+s32 AudioOcarina_MemoryGameGenerateNotes(void);
+s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume);
+void func_801A3238(s8 playerIndex, u16 seqId, u8 fadeTimer, s8 arg3, u8 arg4);
 
 // Sfx bss
 SfxSettings sSfxSettings[8];
@@ -104,7 +108,7 @@ u8 sIsFinalHoursOrSoaring;
 u8 sObjSoundFanfareSeqId;
 u8 sObjSoundFanfareRequested;
 Vec3f sObjSoundFanfarePos;
-u8 sObjSoundPlayerIdx;
+u8 sObjSoundPlayerIndex;
 Vec3f sObjSoundPos;
 s16 sObjSoundFlags;
 f32 sObjSoundMinDist;
@@ -119,7 +123,7 @@ u8 sSpatialSeqFlags;
 u8 D_801FD432;
 u8 sSpatialSubBgmFadeTimer;
 u8 D_801FD434;
-u8 sSpatialSeqPlayerIdx;
+u8 sSpatialSeqPlayerIndex;
 u8 sSpatialSeqFadeTimer;
 u16 D_801FD438;
 
@@ -136,8 +140,8 @@ s32 sOcaInputBtnPress;
 u8 sOcarinaResetDelay;
 u8 sOcarinaResetUnused;
 u8 sOcarinaHasStartedSong;
-u8 sFirstOcarinaSongIdx;
-u8 sLastOcarinaSongIdx;
+u8 sFirstOcarinaSongIndex;
+u8 sLastOcarinaSongIndex;
 u32 sOcarinaAvailSongs;
 u8 sOcarinaStaffPlayingPos;
 u16 sMusicStaffPos[OCARINA_SONG_MAX];
@@ -984,11 +988,11 @@ u8 sIsOcarinaInputEnabled = false;
 s8 sOcarinaInstrumentId = OCARINA_INSTRUMENT_OFF;
 u8 sCurOcarinaPitch = OCARINA_PITCH_NONE;
 u8 sPrevOcarinaPitch = 0;
-u8 sCurOcarinaButtonIdx = 0;
+u8 sCurOcarinaButtonIndex = 0;
 u8 sMusicStaffPrevPitch = 0;
 f32 sCurOcarinaBendFreq = 1.0f;
 f32 sDefaultOcarinaVolume = 0.68503935f;
-s8 sCurOcarinaBendIdx = 0;
+s8 sCurOcarinaBendIndex = 0;
 s8 sCurOcarinaVolume = 0x57;
 s8 sCurOcarinaVibrato = 0;
 u8 sPlaybackState = 0;
@@ -1014,7 +1018,7 @@ u8 sCurOcarinaSong[8] = {
 u8 sOcarinaSongAppendPos = 0;
 u8 sOcarinaSongStartingPos = 0;
 
-u8 sButtonToNoteMap[5] = {
+u8 sButtonToPitchMap[5] = {
     OCARINA_PITCH_D4, // OCARINA_BTN_A
     OCARINA_PITCH_F4, // OCARINA_BTN_C_DOWN
     OCARINA_PITCH_A4, // OCARINA_BTN_C_RIGHT
@@ -1022,7 +1026,7 @@ u8 sButtonToNoteMap[5] = {
     OCARINA_PITCH_D5, // OCARINA_BTN_C_UP
 };
 
-u8 sOcaMemoryGameAppendPos = 0;
+u8 sOcarinaMemoryGameAppendPos = 0;
 u8 sOcaMemoryGameEndPos = 0;
 u8 sOcaMemoryGameNumNotes[] = { 5, 6, 8 };
 OcarinaNote sOcarinaSongNotes[OCARINA_SONG_MAX][20] = {
@@ -1443,9 +1447,9 @@ u32 sOcarinaRecordTaskStart = 0;
 u8 sRecordOcarinaPitch = 0;
 u8 sRecordOcarinaVolume = 0;
 u8 sRecordOcarinaVibrato = 0;
-s8 sRecordOcarinaBendIdx = 0;
-u8 sRecordOcarinaButtonIdx = 0;
-u8 sPlayedOcarinaSongIdxPlusOne = 0;
+s8 sRecordOcarinaBendIndex = 0;
+u8 sRecordOcarinaButtonIndex = 0;
+u8 sPlayedOcarinaSongIndexPlusOne = 0;
 u8 sMusicStaffNumNotesPerTest = 0;
 u8 D_801D8530 = false;
 u32 D_801D8534 = 0;
@@ -1460,7 +1464,7 @@ OcarinaNote* gScarecrowLongSongPtr = sScarecrowsLongSongNotes;
 u8* gScarecrowSpawnSongPtr = (u8*)&sOcarinaSongNotes[OCARINA_SONG_SCARECROW];
 OcarinaNote* sTerminaWallSongPtr = sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL];
 
-u8 sNoteToButtonMap[16] = {
+u8 sPitchToButtonMap[16] = {
     OCARINA_BTN_A,                            // OCARINA_PITCH_C4
     OCARINA_BTN_A,                            // OCARINA_PITCH_DFLAT4
     OCARINA_BTN_A,                            // OCARINA_PITCH_D4
@@ -1849,6 +1853,7 @@ const u16 gAudioEnvironmentalSfx[] = {
     NA_SE_EV_WAVE_S - SFX_FLAG,         NA_SE_EV_WAVE_S - SFX_FLAG,
 };
 
+extern const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX];
 /**
 const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
     true,  // OCARINA_SONG_SONATA
@@ -1886,7 +1891,8 @@ const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B02C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B074.s")
+void AudioOcarina_MapSongFromNotesToButtons(u8 noteSongIndex, u8 buttonSongIndex, u8 numButtons);
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_MapSongFromNotesToButtons.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B144.s")
 
@@ -1898,7 +1904,7 @@ const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B4B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B544.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_StartDefault.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019B568.s")
 
@@ -1924,7 +1930,7 @@ const u8 sIsOcarinaSongReserved[OCARINA_SONG_MAX] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C2E4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C300.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_SetInstrumentId.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019C398.s")
 
@@ -1953,17 +1959,154 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CF78.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CF9C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/AudioOcarina_GetPlaybackStaff.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019CFA8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D134.s")
+/**
+ * Tests to see if the notes from songIndex contain identical notes
+ * within its song to any of the reserved songIndex from 0 up to maxSongIndex
+ */
+s32 AudioOcarina_TerminaWallValidateNotes(u8 songIndex, u8 maxSongIndex) {
+    u8 curSongIndex;
+    u8 j;
+    u8 k;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D26C.s")
+    // loop through all possible songs up to maxSongIndex
+    for (curSongIndex = 0; curSongIndex < maxSongIndex; curSongIndex++) {
+        // check to see if the song is reserved or not
+        if (sIsOcarinaSongReserved[curSongIndex]) {
+            // starting index to test the song
+            for (j = 0; j < (9 - gOcarinaSongButtons[curSongIndex].numButtons); j++) {
+                // loop through each note in the song
+                for (k = 0; (k < gOcarinaSongButtons[curSongIndex].numButtons) && ((k + j) < 8) &&
+                            (gOcarinaSongButtons[curSongIndex].buttonIndex[k] ==
+                             gOcarinaSongButtons[songIndex].buttonIndex[(k + j)]);
+                     k++) {
+                    continue;
+                }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D488.s")
+                if (k == gOcarinaSongButtons[curSongIndex].numButtons) {
+                    // failure: songIndex is identical to curSongIndex.
+                    return -1;
+                }
+            }
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D4F8.s")
+    // success: notes are accepted and used
+    return 0;
+}
+
+/**
+ * Generates the notes displayed on the Termina Field wall of musical notes
+ * Song generation loop alternates between 8 random notes and a random song from Ocarina of Time (OoT).
+ * Will check to see that the notes are valid by ensuring no playable song is within the selected notes
+ * All OoT songs are valid, so the outer loop will run a maxiumum of two times.
+ * i.e. if random notes fails, then the next set of notes will be from a valid OoT song
+ */
+void AudioOcarina_TerminaWallGenerateNotes(void) {
+    OcarinaNote* ocarinaNote;
+    u8 randButtonIndex;
+    u8 i;
+    u8 j;
+
+    do {
+        i = 0;
+        if (sOcarinaWallCounter++ % 2) {
+            j = 0;
+
+            for (; i < 8; i++) {
+                randButtonIndex = Audio_NextRandom() % ARRAY_COUNT(sButtonToPitchMap);
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].pitch = sButtonToPitchMap[randButtonIndex];
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].length = 19;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].volume = 80;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].vibrato = 0;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].bend = 0;
+                j++;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].pitch = OCARINA_PITCH_NONE;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].length = 3;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].volume = 0;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].vibrato = 0;
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j].bend = 0;
+                j++;
+            }
+
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j - 2].length = 90;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j - 1].length = 22;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j + 1].pitch = OCARINA_PITCH_NONE;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][j + 1].length = 0;
+            AudioOcarina_MapSongFromNotesToButtons(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL, 8);
+        } else {
+            j = Audio_NextRandom() % ARRAY_COUNT(sOoTOcarinaSongNotes);
+            ocarinaNote = sOoTOcarinaSongNotes[j];
+
+            for (; ocarinaNote[i].length != 0; i++) {
+                sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i] = ocarinaNote[i];
+            }
+
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i].pitch = OCARINA_PITCH_NONE;
+            sOcarinaSongNotes[OCARINA_SONG_TERMINA_WALL][i].length = 0;
+            AudioOcarina_MapSongFromNotesToButtons(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL,
+                                                   sOoTOcarinaSongsNumNotes[j]);
+        }
+    } while (AudioOcarina_TerminaWallValidateNotes(OCARINA_SONG_TERMINA_WALL, OCARINA_SONG_TERMINA_WALL) != 0);
+}
+
+/**
+ * Unused remnant of OoT
+ */
+void AudioOcarina_MemoryGameSetNumNotes(u8 minigameRound) {
+    u8 i;
+
+    if (minigameRound > 2) {
+        minigameRound = 2;
+    }
+
+    sOcarinaMemoryGameAppendPos = 0;
+    sOcaMemoryGameEndPos = sOcaMemoryGameNumNotes[minigameRound];
+
+    for (i = 0; i < 3; i++) {
+        AudioOcarina_MemoryGameGenerateNotes();
+    }
+}
+
+/**
+ * Unused remnant of OoT, Id 14 now represent Goron Lullaby Intro instead of the OoT ocarina memory game
+ * //! @bug calling this function in MM will overwrite Goron Lullaby Intro
+ */
+#define OCARINA_SONG_MEMORYGAME 14
+s32 AudioOcarina_MemoryGameGenerateNotes(void) {
+    u32 randButtonIndex;
+    u8 randPitch;
+
+    if (sOcarinaMemoryGameAppendPos == sOcaMemoryGameEndPos) {
+        return true;
+    }
+
+    randButtonIndex = Audio_NextRandom();
+    randPitch = sButtonToPitchMap[randButtonIndex % ARRAY_COUNT(sButtonToPitchMap)];
+
+    if (sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos - 1].pitch == randPitch) {
+        randPitch = sButtonToPitchMap[(randButtonIndex + 1) % ARRAY_COUNT(sButtonToPitchMap)];
+    }
+
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].pitch = randPitch;
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].length = 45;
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].volume = 0x50;
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].vibrato = 0;
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].bend = 0;
+
+    sOcarinaMemoryGameAppendPos++;
+
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].pitch = OCARINA_PITCH_NONE;
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos].length = 0;
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos + 1].pitch = OCARINA_PITCH_NONE;
+    sOcarinaSongNotes[OCARINA_SONG_MEMORYGAME][sOcarinaMemoryGameAppendPos + 1].length = 0;
+    if (1) {}
+    return false;
+}
+#undef OCARINA_SONG_MEMORYGAME
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019D600.s")
 
@@ -2071,11 +2214,50 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019FF38.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019FF9C.s")
+/**
+ * Used for EnRiverSound
+ */
+void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale) {
+    if (!Audio_IsSfxPlaying(NA_SE_EV_RIVER_STREAM - SFX_FLAG)) {
+        sRiverFreqScaleLerp.value = freqScale;
+    } else if (freqScale != sRiverFreqScaleLerp.value) {
+        sRiverFreqScaleLerp.target = freqScale;
+        sRiverFreqScaleLerp.remainingFrames = 40;
+        sRiverFreqScaleLerp.step = (sRiverFreqScaleLerp.target - sRiverFreqScaleLerp.value) / 40;
+    }
+    Audio_PlaySfxGeneral(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value, &D_801DB4B0,
+                         &D_801DB4B8);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0048.s")
+/**
+ * Unused remnant of OoT's EnRiverSound
+ * Used for Zora's River Waterfall
+ */
+void Audio_PlaySfxForWaterfall(Vec3f* pos, f32 freqScale) {
+    if (!Audio_IsSfxPlaying(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG)) {
+        sWaterfallFreqScaleLerp.value = freqScale;
+    } else if (freqScale != sWaterfallFreqScaleLerp.value) {
+        sWaterfallFreqScaleLerp.target = freqScale;
+        sWaterfallFreqScaleLerp.remainingFrames = 40;
+        sWaterfallFreqScaleLerp.step = (sWaterfallFreqScaleLerp.target - sWaterfallFreqScaleLerp.value) / 40;
+    }
+    Audio_PlaySfxGeneral(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, pos, 4, &sWaterfallFreqScaleLerp.value,
+                         &sWaterfallFreqScaleLerp.value, &D_801DB4B8);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A00EC.s")
+/**
+ * Used for EnRiverSound variables
+ */
+void Audio_StepFreqLerp(FreqLerp* lerp) {
+    if (lerp->remainingFrames != 0) {
+        lerp->remainingFrames--;
+        if (lerp->remainingFrames != 0) {
+            lerp->value += lerp->step;
+        } else {
+            lerp->value = lerp->target;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0124.s")
 
@@ -2087,13 +2269,131 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0238.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A026C.s")
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * Was designed to incrementally increase volume of NA_BGM_GANON_TOWER for each new room during the climb of Ganon's
+ * Tower
+ */
+void Audio_SetGanonsTowerBgmVolumeLevel(u8 ganonsTowerLevel) {
+    u8 channelIndex;
+    s8 pan = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0318.s")
+    // Ganondorfs's Lair
+    if (ganonsTowerLevel == 0) {
+        pan = 0x7F;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0450.s")
+    for (channelIndex = 0; channelIndex < 16; channelIndex++) {
+        // CHAN_UPD_PAN_UNSIGNED
+        Audio_QueueCmdS8(((u8)(u32)channelIndex << 8) | 0x7000000, pan);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A046C.s")
+    // Lowest room in Ganon's Tower (Entrance Room)
+    if (ganonsTowerLevel == 7) {
+        // Adds a delay to setting the volume in the first room
+        sEnterGanonsTowerTimer = 2;
+    } else {
+        Audio_SetGanonsTowerBgmVolume(sGanonsTowerLevelsVol[ganonsTowerLevel % ARRAY_COUNTU(sGanonsTowerLevelsVol)]);
+    }
+}
+
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * If a new volume is requested for ganon's tower, update the volume and
+ * calculate a new low-pass filter cutoff and reverb based on the new volume
+ */
+s32 Audio_SetGanonsTowerBgmVolume(u8 targetVolume) {
+    u8 lowPassFilterCutoff;
+    u8 channelIndex;
+    u16 reverb;
+
+    if (sGanonsTowerVol != targetVolume) {
+        // Sets the volume
+        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 0, targetVolume, 2);
+
+        // Sets the filter cutoff of the form (lowPassFilterCutoff << 4) | (highPassFilter & 0xF). highPassFilter is
+        // always set to 0
+        if (targetVolume < 0x40) {
+            // Only the first room
+            lowPassFilterCutoff = 0x10;
+        } else {
+            // Higher volume leads to a higher cut-off frequency in the low-pass filtering
+            lowPassFilterCutoff = (((targetVolume - 0x40) >> 2) + 1) << 4;
+        }
+
+        Audio_QueueSeqCmd((8 << 28) | ((u8)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u8)(4) << 16) | ((u8)(15) << 8) |
+                          (u8)(lowPassFilterCutoff));
+
+        // Sets the reverb
+        for (channelIndex = 0; channelIndex < ARRAY_COUNT(gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels);
+             channelIndex++) {
+            if (&gAudioContext.sequenceChannelNone !=
+                gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]) {
+                // soundScriptIO[5] was set to 0x40 in channels 0, 1, and 4 (BGM no longer in OoT)
+                if ((u8)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] !=
+                    0xFF) {
+                    // Higher volume leads to lower reverb
+                    reverb =
+                        (((u16)gAudioContext.seqPlayers[SEQ_PLAYER_BGM_MAIN].channels[channelIndex]->soundScriptIO[5] -
+                          targetVolume) +
+                         0x7F);
+
+                    if (reverb > 0x7F) {
+                        reverb = 0x7F;
+                    }
+
+                    // CHAN_UPD_REVERB
+                    Audio_QueueCmdS8(_SHIFTL(5, 24, 8) | _SHIFTL(SEQ_PLAYER_BGM_MAIN, 16, 8) |
+                                         _SHIFTL(channelIndex, 8, 8),
+                                     (u8)reverb);
+                }
+            }
+        }
+
+        sGanonsTowerVol = targetVolume;
+    }
+    return -1;
+}
+
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * Responsible for lowering market bgm in Child Market Entrance and Child Market Back Alley
+ * Only lowers volume for 1 frame, so must be called every frame to maintain lower volume
+ */
+void Audio_LowerMainBgmVolume(u8 volume) {
+    sRiverSoundMainBgmVol = volume;
+    sRiverSoundMainBgmLower = true;
+}
+
+/**
+ * Unused remnant from OoT's EnRiverSound
+ * Still called by Audio_Update every frame, but none of these processes get initialized
+ */
+void Audio_UpdateRiverSoundVolumes(void) {
+    // Updates Main Bgm Volume (RiverSound of type RS_LOWER_MAIN_BGM_VOLUME)
+    if (sRiverSoundMainBgmLower == true) {
+        if (sRiverSoundMainBgmCurrentVol != sRiverSoundMainBgmVol) {
+            // lowers the volume for 1 frame
+            Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 0, sRiverSoundMainBgmVol, 10);
+            sRiverSoundMainBgmCurrentVol = sRiverSoundMainBgmVol;
+            sRiverSoundMainBgmRestore = true;
+        }
+        sRiverSoundMainBgmLower = false;
+    } else if ((sRiverSoundMainBgmRestore == true) && !sAudioIsWindowOpen) {
+        // restores the volume every frame
+        Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 0, 0x7F, 10);
+        sRiverSoundMainBgmCurrentVol = 0x7F;
+        sRiverSoundMainBgmRestore = false;
+    }
+
+    // Update Ganon's Tower Volume (RiverSound of type RS_GANON_TOWER_7)
+    if (sEnterGanonsTowerTimer != 0) {
+        sEnterGanonsTowerTimer--;
+        if (sEnterGanonsTowerTimer == 0) {
+            Audio_SetGanonsTowerBgmVolume(sGanonsTowerLevelsVol[7]);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0554.s")
 
@@ -2107,13 +2407,71 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0868.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A09D4.s")
+/**
+ * Unused remnant of OoT's EnRiverSound (func_800F4E30)
+ */
+void func_801A09D4(Vec3f* pos, f32 xzDistToPlayer) {
+    f32 volumeRel;
+    s8 pan;
+    u8 channelIndex;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0C70.s")
+    if (sRiverSoundBgmPos == NULL) {
+        sRiverSoundBgmPos = pos;
+        sRiverSoundXZDistToPlayer = xzDistToPlayer;
+    } else if (sRiverSoundBgmPos != pos) {
+        if (sRiverSoundXZDistToPlayer > xzDistToPlayer) {
+            sRiverSoundBgmPos = pos;
+            sRiverSoundXZDistToPlayer = xzDistToPlayer;
+        }
+    } else {
+        sRiverSoundXZDistToPlayer = xzDistToPlayer;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0C90.s")
+    if (sRiverSoundBgmPos->x > 100.0f) {
+        pan = 0x7F;
+    } else if (sRiverSoundBgmPos->x < -100.0f) {
+        pan = 0;
+    } else {
+        pan = ((sRiverSoundBgmPos->x / 100.0f) * 64.0f) + 64.0f;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0CB0.s")
+    if (sRiverSoundXZDistToPlayer > 400.0f) {
+        volumeRel = 0.1f;
+    } else if (sRiverSoundXZDistToPlayer < 120.0f) {
+        volumeRel = 1.0f;
+    } else {
+        volumeRel = ((1.0f - ((sRiverSoundXZDistToPlayer - 120.0f) / 280.0f)) * 0.9f) + 0.1f;
+    }
+
+    for (channelIndex = 0; channelIndex < 16; channelIndex++) {
+        if (channelIndex != 9) {
+            Audio_QueueSeqCmd(((u32)(6) << 28) | ((u32)(SEQ_PLAYER_BGM_MAIN) << 24) | ((u32)(2) << 16) |
+                              ((u32)(channelIndex) << 8) | ((u8)(127.0f * volumeRel)));
+            Audio_QueueCmdS8(0x03000000 | ((u8)((u32)channelIndex) << 8), pan);
+        }
+    }
+}
+
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_ClearSariaBgm(void) {
+    if (sRiverSoundBgmPos != NULL) {
+        sRiverSoundBgmPos = NULL;
+    }
+}
+
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_ClearSariaBgmAtPos(Vec3f* pos) {
+    if (sRiverSoundBgmPos == pos) {
+        sRiverSoundBgmPos = NULL;
+    }
+}
+
+void Audio_SplitBgmChannels(s8 volumeSplit);
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SplitBgmChannels.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A0E44.s")
 
@@ -2147,9 +2505,58 @@ const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2090.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A21FC.s")
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_PlaySariaBgm(Vec3f* pos, u16 seqId, u16 distMax) {
+    f32 absY;
+    f32 dist;
+    u8 targetVolume;
+    f32 prevDist;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A2460.s")
+    if (sRiverSoundBgmTimer != 0) {
+        sRiverSoundBgmTimer--;
+        return;
+    }
+
+    dist = sqrtf(SQ(pos->z) + (SQ(pos->x) + SQ(pos->y)));
+
+    if (sRiverSoundBgmPos == NULL) {
+        sRiverSoundBgmPos = pos;
+        func_801A3238(SEQ_PLAYER_BGM_SUB, seqId, 0, 7, 2);
+    } else {
+        prevDist = sqrtf(SQ(sRiverSoundBgmPos->z) + SQ(sRiverSoundBgmPos->x));
+        if (dist < prevDist) {
+            sRiverSoundBgmPos = pos;
+        } else {
+            dist = prevDist;
+        }
+    }
+
+    absY = ABS_ALT(pos->y);
+
+    if ((distMax / 15.0f) < absY) {
+        targetVolume = 0;
+    } else if (dist < distMax) {
+        targetVolume = (1.0f - (dist / distMax)) * 127.0f;
+    } else {
+        targetVolume = 0;
+    }
+
+    if (seqId != NA_BGM_FAIRY_FOUNTAIN) {
+        Audio_SplitBgmChannels(targetVolume);
+    }
+
+    Audio_SetVolumeScale(SEQ_PLAYER_BGM_SUB, 3, targetVolume, 0);
+    Audio_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, 3, 0x7F - targetVolume, 0);
+}
+
+/**
+ * Unused remnant of OoT's EnRiverSound
+ */
+void Audio_ClearSariaBgm2(void) {
+    sRiverSoundBgmPos = NULL;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A246C.s")
 
