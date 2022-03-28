@@ -587,7 +587,69 @@ void func_8014AAD0(GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014ADBC.s")
 
+void func_8014C70C(GlobalContext*, u16, s16);
+#ifdef NON_MATCHING
+void func_80178E3C(u8*, u32, UNK_PTR, u32); /* extern */
+extern s16 D_801CFF70[];
+extern s16 D_801CFF7C[];
+extern s16 D_801CFF88[];
+
+void func_8014C70C(GlobalContext* globalCtx, u16 arg1, s16 arg2) {
+    MessageContext* msgCtx = &globalCtx->msgCtx;
+    if (arg1 == 0x83) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 0xA);
+        msgCtx->unk12014 = 0x10;
+    } else if ((arg1 >= 0x84) && (arg1 < 0x8B)) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 0xA);
+        msgCtx->unk12014 = 0x10;
+    } else if (arg1 == 0x77) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 0xA);
+        msgCtx->unk12014 = 0x20;
+    } else if ((arg1 >= 0x61) && (arg1 < 0x6D)) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 0xA);
+        msgCtx->unk12014 = 0x10;
+        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), 0x61, (u8*)msgCtx->unk11EF8 + 0x1000, 0x180U);
+    } else if (arg1 == 0x6D) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 6);
+        msgCtx->unk12014 = 0x20;
+        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), 0x61, (u8*)msgCtx->unk11EF8 + 0x1000, 0x1000U);
+    } else if (arg1 < 0x61) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 6);
+        msgCtx->unk12014 = 0x20;
+        func_80178E3C(SEGMENT_ROM_START(icon_item_static_test), arg1, (u8*)msgCtx->unk11EF8 + 0x1000, 0x1000U);
+    } else if (arg1 == 0xCC) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 8);
+        msgCtx->unk12014 = 0x20;
+        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), 0x15, (u8*)msgCtx->unk11EF8 + 0x1000, 0x400U);
+    } else if (arg1 >= 0xB8) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 8);
+        msgCtx->unk12014 = 0x20;
+        func_80178E3C(SEGMENT_ROM_START(schedule_dma_static_test), (arg1 - 0xB8), (u8*)msgCtx->unk11EF8 + 0x1000,
+                      0x800U);
+    } else if (arg1 >= 0x6E) {
+        msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF7C[gSaveContext.language]);
+        msgCtx->unk12012 = (arg2 + 0xA);
+        msgCtx->unk12014 = 0x18;
+        func_80178E3C(SEGMENT_ROM_START(icon_item_24_static_test), (arg1 - 0x6E), (u8*)msgCtx->unk11EF8 + 0x1000,
+                      0x900U);
+    }
+    if (globalCtx->pauseCtx.unk_1F0 != 0) {
+        msgCtx->unk12010 = ((msgCtx->unk12010 * 1.4f) + 2.0f);
+        msgCtx->unk12014 = (msgCtx->unk12014 * 1.4f);
+    }
+    msgCtx->unk12022 = 1;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014C70C.s")
+#endif
 
 void Message_LoadChar(GlobalContext* globalCtx, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos) {
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -655,8 +717,8 @@ void func_8014CDF0(OSTime time, s16* digits) {
     digits[7] = temp_t2;
 }
 
-void func_8014C70C(GlobalContext*, u16, s16); /* extern */
 extern s16 D_801CFF94[];
+
 void func_8014CFDC(GlobalContext* globalCtx) {
     Font* font;
     MessageContext* msgCtx = &globalCtx->msgCtx;
@@ -1103,6 +1165,8 @@ u8 Message_GetState(MessageContext* msgCtx) {
     }
     return 3;
 }
+
+void func_8015268C(GlobalContext* globalCtx, Gfx** gfxp);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8015268C.s")
 

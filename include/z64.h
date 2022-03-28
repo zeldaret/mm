@@ -830,7 +830,11 @@ typedef struct {
     /* 0x11FFE */ s16 unk11FFE[0x3];
     /* 0x12004 */ s16 unk12004;
     /* 0x12006 */ s16 unk12006;
-    /* 0x12008 */ u8 unk12008[0x10];
+    /* 0x12008 */ u8 unk12008[0x8];
+    /* 0x12010 */ s16 unk12010;
+    /* 0x12012 */ s16 unk12012;
+    /* 0x12014 */ s16 unk12014;
+    /* 0x12014 */ s16 unk12016;
     /* 0x12018 */ s16 unk12018; // messageR
     /* 0x1201A */ s16 unk1201A; // messageG
     /* 0x1201C */ s16 unk1201C; // messageB
