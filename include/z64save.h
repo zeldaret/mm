@@ -14,7 +14,7 @@ typedef enum RespawnMode {
     /* 0 */ RESPAWN_MODE_DOWN,                          // "RESTART_MODE_DOWN"
     /* 1 */ RESPAWN_MODE_RETURN,                        // "RESTART_MODE_RETURN"
     /* 2 */ RESPAWN_MODE_TOP,                           // "RESTART_MODE_TOP"
-    /* 3 */ RESPAWN_MODE_UNK_3,                         // Maybe related to grottos
+    /* 3 */ RESPAWN_MODE_UNK_3,                         // Related to grottos
     /* 4 */ RESPAWN_MODE_GORON,                         // "RESTART_MODE_GORON"
     /* 5 */ RESPAWN_MODE_ZORA,                          // "RESTART_MODE_ZORA"
     /* 6 */ RESPAWN_MODE_DEKU,                          // "RESTART_MODE_NUTS"
