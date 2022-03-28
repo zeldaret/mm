@@ -573,9 +573,8 @@ void func_80AF1F48(EnTest7* this, GlobalContext* globalCtx) {
 }
 
 void func_80AF2030(EnTest7* this, GlobalContext* globalCtx) {
-    s32 pad;
     s32 temp = this->unk_1E54 - 96;
-    f32 four = 4.0f;
+    f32 four = 4;
     f32 sp1C = 1.0f - (temp / four);
     Camera* camera;
     f32 temp_f2;
