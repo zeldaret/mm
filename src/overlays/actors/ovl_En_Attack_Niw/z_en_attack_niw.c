@@ -265,9 +265,9 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, GlobalContext* global
         this->targetRightWingRotX = 0.0f;
         this->targetLeftWingRotX = 0.0f;
 
-        this->targetRotY = this->actor.yawTowardsPlayer; // start turn to face player
+        this->targetRotY = this->actor.yawTowardsPlayer;      // start turn to face player
         this->targetRotX = this->actor.world.rot.x - 2000.0f; // bank into the turn
-        this->actor.gravity = -0.2f; // start gentle decent (no longer flying without gravity)
+        this->actor.gravity = -0.2f;                          // start gentle decent (no longer flying without gravity)
         this->targetHeadRotZ = 0.0f;
         this->actionFunc = EnAttackNiw_AimAtPlayer;
         this->targetXZSpeed = 5.0f;
