@@ -111,17 +111,17 @@ void func_80862EDC(EnTestStruct* arg0) {
                 ptr->unk_00 = false;
             }
 
-            ptr->unk_08.x += arg0->unk_14.x;
-            ptr->unk_08.y += arg0->unk_14.y;
-            ptr->unk_08.z += arg0->unk_14.z;
+            ptr->unk_08.x += ptr->unk_14.x;
+            ptr->unk_08.y += ptr->unk_14.y;
+            ptr->unk_08.z += ptr->unk_14.z;
 
-            ptr->unk_14.x += arg0->unk_20.x;
-            ptr->unk_14.y += arg0->unk_20.y;
-            ptr->unk_14.z += arg0->unk_20.z;
+            ptr->unk_14.x += ptr->unk_20.x;
+            ptr->unk_14.y += ptr->unk_20.y;
+            ptr->unk_14.z += ptr->unk_20.z;
 
-            ptr->unk_30.x += arg0->unk_36.x;
-            ptr->unk_30.y += arg0->unk_36.y;
-            ptr->unk_30.z += arg0->unk_36.z;
+            ptr->unk_30.x += ptr->unk_36.x;
+            ptr->unk_30.y += ptr->unk_36.y;
+            ptr->unk_30.z += ptr->unk_36.z;
         }
     }
 }
