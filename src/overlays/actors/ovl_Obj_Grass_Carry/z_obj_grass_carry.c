@@ -130,7 +130,7 @@ void func_809AAFE8(Vec3f* arg0, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 8.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0527F0);
+                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) & 7], 0, 0, 80, -1, 1, gKakeraLeafMiddle);
 
         spB0.x = arg0->x + (ptr->x * 16.0f);
         spB0.y = arg0->y + (ptr->y * 16.0f) + 10.0f;
@@ -141,7 +141,7 @@ void func_809AAFE8(Vec3f* arg0, GlobalContext* globalCtx) {
         spBC.z = (Rand_ZeroOne() - 0.5f) * 6.0f;
 
         EffectSsKakera_Spawn(globalCtx, &spB0, &spBC, &spB0, -100, 64, 40, 3, 0,
-                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gameplay_keep_DL_0528B0);
+                             D_809ABC3C[(s32)(Rand_ZeroOne() * 111.1f) % 7], 0, 0, 80, -1, 1, gKakeraLeafTip);
     }
 }
 
@@ -356,5 +356,5 @@ void ObjGrassCarry_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_809ABB7C(Actor* this, GlobalContext* globalCtx) {
-    Gfx_DrawDListOpa(globalCtx, gameplay_field_keep_DL_0078A0);
+    Gfx_DrawDListOpa(globalCtx, gKusaBushType1);
 }

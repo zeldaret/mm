@@ -35,27 +35,6 @@ typedef struct ObjGrassStruct3 {
     /* 0x0F */ u8 unk_0F;
 } ObjGrassStruct3; // size >= 0x10
 
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s8 unk_0E;
-    /* 0x0F */ u8 unk_0F;
-    /* 0x10 */ u8 unk_10;
-    /* 0x11 */ UNK_TYPE1 unk_11[0x3];
-} ObjGrassStruct1_1; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ ObjGrassStruct1_1 unk_0C[12];
-    /* 0xFC */ s16 unk_FC;
-    /* 0xFE */ u8 unk_FE;
-} ObjGrassStruct1; // size = 0x100
-
-typedef struct {
-    /* 0x00 */ ColliderCylinder collider;
-    /* 0x4C */ ObjGrassStruct1_1* unk_4C;
-} ObjGrassStruct2; // size = 0x50
-
 typedef struct ObjGrass {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ ObjGrassStruct1 unk_144[40];
