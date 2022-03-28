@@ -88,7 +88,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-ActorAnimationEntryS D_80BC1628[] = {
+AnimationInfoS D_80BC1628[] = {
     { &object_nb_Anim_000990, 1.0f, 0, -1, 0, 0 },  { &object_nb_Anim_000990, 1.0f, 0, -1, 0, -4 },
     { &object_nb_Anim_000290, 1.0f, 0, -1, 2, 0 },  { &object_nb_Anim_000290, 1.0f, 0, -1, 0, -4 },
     { &object_nb_Anim_00052C, 1.0f, 0, -1, 0, -4 }, { &object_nb_Anim_0006D4, 1.0f, 0, -1, 2, -4 },
@@ -99,7 +99,7 @@ Actor* func_80BBFDB0(EnNb* this, GlobalContext* globalCtx, u8 actorCategory, s16
     Actor* actor = NULL;
 
     while (true) {
-        actor = func_ActorCategoryIterateById(globalCtx, actor, actorCategory, actorId);
+        actor = SubS_FindActor(globalCtx, actor, actorCategory, actorId);
         if (actor == NULL) {
             break;
         }
@@ -140,7 +140,7 @@ s32 func_80BBFE8C(EnNb* this, s32 arg1) {
 
     if (phi_v1) {
         this->unk_290 = arg1;
-        phi_t0 = func_8013BC6C(&this->skelAnime, D_80BC1628, arg1);
+        phi_t0 = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BC1628, arg1);
         this->unk_268 = this->skelAnime.playSpeed;
     }
 
@@ -208,7 +208,8 @@ s32 func_80BC00AC(EnNb* this, GlobalContext* globalCtx) {
                 case 0x4:
                 case 0x6:
                 case 0x8:
-                    func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), &this->actor);
+                    Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
+                                          &this->actor);
                     this->unk_288++;
                     phi_v1 = 1;
             }
@@ -219,7 +220,8 @@ s32 func_80BC00AC(EnNb* this, GlobalContext* globalCtx) {
         case 0x5:
         case 0x7:
             if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
-                func_800E0308(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)), this->actor.child);
+                Camera_SetTargetActor(Play_GetCamera(globalCtx, ActorCutscene_GetCurrentCamera(sp2A)),
+                                      this->actor.child);
             }
             this->unk_288++;
             phi_v1 = 1;
@@ -249,7 +251,7 @@ s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1:
-            func_8016A268(globalCtx, 1, 0, 0, 0, 0);
+            func_8016A268(&globalCtx->state, 1, 0, 0, 0, 0);
             this->unk_286 = 40;
             this->unk_288 = (u16)((s16)this->unk_288 + 1);
             break;
@@ -285,7 +287,7 @@ s32 func_80BC01DC(EnNb* this, GlobalContext* globalCtx) {
 
         case 0x5:
             if (!(gSaveContext.eventInf[4] & 4)) {
-                gSaveContext.time = CLOCK_TIME(8, 0);
+                gSaveContext.save.time = CLOCK_TIME(8, 0);
                 Sram_IncrementDay();
             } else {
                 func_800FE658(120.0f);
@@ -327,9 +329,9 @@ s32 func_80BC04FC(EnNb* this, GlobalContext* globalCtx) {
     s32 phi_v1 = 0;
 
     if (this->unk_262 & 7) {
-        if (func_800B84D0(&this->actor, globalCtx) != 0) {
+        if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
             this->unk_262 |= 0x20;
-            func_8013AED4(&this->unk_262, 0, 7);
+            SubS_UpdateFlags(&this->unk_262, 0, 7);
             this->unk_288 = 0;
             this->unk_28C = NULL;
             this->actor.child = this->unk_1E8;
@@ -344,8 +346,8 @@ s32 func_80BC04FC(EnNb* this, GlobalContext* globalCtx) {
 
 void func_80BC05A8(EnNb* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    s32 sp28 = func_80152498(&globalCtx->msgCtx);
-    u16 temp_a0 = globalCtx->msgCtx.unk11F04;
+    s32 sp28 = Message_GetState(&globalCtx->msgCtx);
+    u16 temp_a0 = globalCtx->msgCtx.currentTextId;
 
     if ((&this->actor == player->targetActor) && ((temp_a0 < 0xFF) || (temp_a0 > 0x200)) && (sp28 == 3) &&
         (this->unk_298 == 3)) {
@@ -443,7 +445,7 @@ void func_80BC0978(EnNb* this, GlobalContext* globalCtx) {
 
 s32 func_80BC0A18(EnNb* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 currentTextId = globalCtx->msgCtx.unk11F04;
+    u16 currentTextId = globalCtx->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x40) {
         this->unk_262 |= 0x80;
@@ -500,7 +502,7 @@ s32 func_80BC0B98(EnNb* this, GlobalContext* globalCtx, UNK_TYPE arg2) {
     s32 sp24 = 0;
 
     if (func_80BBFDB0(this, globalCtx, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
-        func_8013AED4(&this->unk_262, 3, 7);
+        SubS_UpdateFlags(&this->unk_262, 3, 7);
         this->unk_262 |= 0x20;
         func_80BBFE8C(this, 0);
         sp24 = 1;
@@ -511,9 +513,9 @@ s32 func_80BC0B98(EnNb* this, GlobalContext* globalCtx, UNK_TYPE arg2) {
 
 s32 func_80BC0C0C(EnNb* this, GlobalContext* globalCtx, UNK_TYPE arg2) {
     if (!(gSaveContext.eventInf[4] & 8)) {
-        func_8013AED4(&this->unk_262, 3, 7);
+        SubS_UpdateFlags(&this->unk_262, 3, 7);
     } else {
-        func_8013AED4(&this->unk_262, 4, 7);
+        SubS_UpdateFlags(&this->unk_262, 4, 7);
     }
     func_80BBFE8C(this, 0);
 
@@ -561,12 +563,12 @@ void EnNb_Wait(EnNb* this, GlobalContext* globalCtx) {
     s32 pad;
     struct_80133038_arg2 sp20;
 
-    this->unk_280 = REG(15) + ((void)0, gSaveContext.unk_14);
+    this->unk_280 = REG(15) + ((void)0, gSaveContext.save.daySpeed);
 
     if (gSaveContext.eventInf[4] & 8) {
         sp20.unk0 = 1;
         func_80BC0C80(this, globalCtx, &sp20.unk0);
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     } else if ((func_80133038(globalCtx, D_80BC13F0, &sp20) == 0) ||
                ((this->unk_1DC != sp20.unk0) && (func_80BC0C80(this, globalCtx, &sp20.unk0) == 0))) {
@@ -574,7 +576,7 @@ void EnNb_Wait(EnNb* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~1;
         sp20.unk0 = 0;
     } else {
-        this->actor.shape.shadowDraw = func_800B3FC0;
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.flags |= 1;
     }
 
@@ -589,7 +591,7 @@ void func_80BC0EAC(EnNb* this, GlobalContext* globalCtx) {
             gSaveContext.eventInf[4] &= (u8)~0x04;
             gSaveContext.eventInf[4] &= (u8)~0x08;
         }
-        func_8013AED4(&this->unk_262, 3, 7);
+        SubS_UpdateFlags(&this->unk_262, 3, 7);
         if (this->unk_1DC != 2) {
             this->unk_262 &= ~0x20;
         }
@@ -617,7 +619,7 @@ void EnNb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_262 = 0;
 
     if (gSaveContext.eventInf[4] & 8) {
-        func_8013AED4(&this->unk_262, 4, 1 | 2 | 4);
+        SubS_UpdateFlags(&this->unk_262, 4, 1 | 2 | 4);
     } else {
         gSaveContext.eventInf[4] &= (u8)~0x04;
         gSaveContext.eventInf[4] &= (u8)~0x08;
@@ -644,7 +646,7 @@ void EnNb_Update(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_1DC != 0) {
         func_80BBFE60(this);
         func_80BC0800(this);
-        if (Actor_IsActorFacingLink(&this->actor, 0x38E0)) {
+        if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
             func_8013C964(&this->actor, globalCtx, this->unk_274, 30.0f, 0, this->unk_262 & 7);
         }
         func_80BBFF24(this, globalCtx);
@@ -666,7 +668,7 @@ void EnNb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp18;
 
     if ((ActorCutscene_GetCurrentIndex() == -1) && (limbIndex == 5)) {
-        Matrix_MultiplyVector3fByState(&D_801D15B0, &sp18);
+        Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp18);
         Math_ApproachF(&thisx->focus.pos.x, sp18.x, 0.6f, 10000.0f);
         Math_ApproachF(&thisx->focus.pos.y, sp18.y, 0.6f, 10000.0f);
         Math_ApproachF(&thisx->focus.pos.z, sp18.z, 0.6f, 10000.0f);
@@ -709,7 +711,10 @@ void EnNb_UnkActorDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
 #ifdef PRINT_TO_SCREEN
 
-#define RELOCATE(symbol) ((uintptr_t)(symbol) == 0 ? 0 : ((uintptr_t)(symbol) - (uintptr_t)func_80BBFDB0 + (uintptr_t)SEGMENT_START(ovl_En_Nb)))
+#define RELOCATE(symbol)      \
+    ((uintptr_t)(symbol) == 0 \
+         ? 0                  \
+         : ((uintptr_t)(symbol) - (uintptr_t)func_80BBFDB0 + (uintptr_t)SEGMENT_START(ovl_En_Nb)))
 
 void EnNb_PrintSymbol(EnNb* this, GlobalContext* globalCtx, GfxPrint* printer, uintptr_t symbol) {
     if (symbol == (uintptr_t)EnNb_Wait) {
@@ -736,9 +741,9 @@ void EnNb_PrintRelocatedStuff(EnNb* this, GlobalContext* globalCtx, GfxPrint* pr
 
     y++;
 
-    //GfxPrint_SetPos(printer, x, y++);
-    //GfxPrint_Printf(printer, "unk_1E0:    ");
-    //EnNb_PrintSymbol(this, globalCtx, printer, this->unk_1E0);
+    // GfxPrint_SetPos(printer, x, y++);
+    // GfxPrint_Printf(printer, "unk_1E0:    ");
+    // EnNb_PrintSymbol(this, globalCtx, printer, this->unk_1E0);
 }
 
 void EnNb_PrintStructMembers(EnNb* this, GlobalContext* globalCtx, GfxPrint* printer) {
@@ -746,15 +751,14 @@ void EnNb_PrintStructMembers(EnNb* this, GlobalContext* globalCtx, GfxPrint* pri
     s32 y = 5;
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
-
     GfxPrint_SetPos(printer, x, y++);
     GfxPrint_Printf(printer, "unk_1DC:    %X", this->unk_1DC);
     GfxPrint_SetPos(printer, x, y++);
     GfxPrint_Printf(printer, "unk_1E4:    %X", this->unk_1E4);
 
     if (this->unk_1E8 != NULL) {
-        //GfxPrint_SetPos(printer, x, y++);
-        //GfxPrint_Printf(printer, "unk_1E8.id: %X", this->unk_1E8->id);
+        // GfxPrint_SetPos(printer, x, y++);
+        // GfxPrint_Printf(printer, "unk_1E8.id: %X", this->unk_1E8->id);
     }
 
     GfxPrint_SetPos(printer, x, y++);
@@ -762,19 +766,19 @@ void EnNb_PrintStructMembers(EnNb* this, GlobalContext* globalCtx, GfxPrint* pri
     GfxPrint_SetPos(printer, x, y++);
     GfxPrint_Printf(printer, "textId:     %X", this->textId);
 
-    //GfxPrint_SetPos(printer, x, y++);
-    //GfxPrint_Printf(printer, "unk_268:    %f", this->unk_268);
-    //GfxPrint_SetPos(printer, x, y++);
-    //GfxPrint_Printf(printer, "unk_26C:    %f", this->unk_26C);
-    //GfxPrint_SetPos(printer, x, y++);
-    //GfxPrint_Printf(printer, "unk_270:    %f", this->unk_270);
-    //GfxPrint_SetPos(printer, x, y++);
-    //GfxPrint_Printf(printer, "unk_274:    %f", this->unk_274);
+    // GfxPrint_SetPos(printer, x, y++);
+    // GfxPrint_Printf(printer, "unk_268:    %f", this->unk_268);
+    // GfxPrint_SetPos(printer, x, y++);
+    // GfxPrint_Printf(printer, "unk_26C:    %f", this->unk_26C);
+    // GfxPrint_SetPos(printer, x, y++);
+    // GfxPrint_Printf(printer, "unk_270:    %f", this->unk_270);
+    // GfxPrint_SetPos(printer, x, y++);
+    // GfxPrint_Printf(printer, "unk_274:    %f", this->unk_274);
 
-    //GfxPrint_SetPos(printer, x, y++);
-    //GfxPrint_Printf(printer, "headRot:    %X", this->headRot);
-    //GfxPrint_SetPos(printer, x, y++);
-    //GfxPrint_Printf(printer, "unk_27E:    %X", this->unk_27E);
+    // GfxPrint_SetPos(printer, x, y++);
+    // GfxPrint_Printf(printer, "headRot:    %X", this->headRot);
+    // GfxPrint_SetPos(printer, x, y++);
+    // GfxPrint_Printf(printer, "unk_27E:    %X", this->unk_27E);
     GfxPrint_SetPos(printer, x, y++);
     GfxPrint_Printf(printer, "unk_280:    %X", this->unk_280);
     GfxPrint_SetPos(printer, x, y++);
@@ -816,7 +820,7 @@ void EnNb_DrawToScreen(EnNb* this, GlobalContext* globalCtx) {
 
     EnNb_PrintRelocatedStuff(this, globalCtx, &printer);
     EnNb_PrintStructMembers(this, globalCtx, &printer);
-    //EnNb_PrintEventInf(this, globalCtx, &printer);
+    // EnNb_PrintEventInf(this, globalCtx, &printer);
 
     POLY_OPA_DISP = GfxPrint_Close(&printer);
     GfxPrint_Destroy(&printer);
@@ -831,11 +835,12 @@ void EnNb_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_1DC != 0) {
         func_8012C5B0(globalCtx->state.gfxCtx);
-        func_801343C0(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                      EnNb_OverrideLimbDraw, EnNb_PostLimbDraw, EnNb_UnkActorDraw, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, EnNb_OverrideLimbDraw, EnNb_PostLimbDraw,
+                                       EnNb_UnkActorDraw, &this->actor);
     }
 
-    #ifdef PRINT_TO_SCREEN
+#ifdef PRINT_TO_SCREEN
     EnNb_DrawToScreen(this, globalCtx);
-    #endif
+#endif
 }
