@@ -980,7 +980,7 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                                     player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                 this->unk_276 = 99;
                 globalCtx->sceneLoadFlag = 0x14;
-                globalCtx->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_GROTTO].entranceIndex;
+                globalCtx->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
                 globalCtx->unk_1887F = 2;
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.respawnFlag = -0x63;
@@ -1061,7 +1061,7 @@ void func_80A92950(EnTest6* this, GlobalContext* globalCtx) {
                                         player->unk_3CE, 0xBFF, &player->unk_3C0, player->unk_3CC);
                     this->unk_276 = 99;
                     globalCtx->sceneLoadFlag = 0x14;
-                    globalCtx->nextEntranceIndex = gSaveContext.respawn[RESPAWN_MODE_GROTTO].entranceIndex;
+                    globalCtx->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_RETURN].entranceIndex;
                     globalCtx->unk_1887F = 2;
                     gSaveContext.respawnFlag = 2;
                     globalCtx->msgCtx.ocarinaMode = 4;
