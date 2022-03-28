@@ -146,14 +146,14 @@ s32 func_808B736C(BgBreakwall* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808B7380(BgBreakwall* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.day >= 2) && !(gSaveContext.weekEventReg[22] & 1)) {
+    if ((gSaveContext.save.day >= 2) && !(gSaveContext.save.weekEventReg[22] & 1)) {
         return false;
     }
     return true;
 }
 
 s32 func_808B73C4(BgBreakwall* this, GlobalContext* globalCtx) {
-    return (gSaveContext.weekEventReg[33] & 0x80) || (gSaveContext.weekEventReg[21] & 1);
+    return (gSaveContext.save.weekEventReg[33] & 0x80) || (gSaveContext.save.weekEventReg[21] & 1);
 }
 
 s32 func_808B73FC(BgBreakwall* this, GlobalContext* globalCtx) {
@@ -176,14 +176,14 @@ s32 func_808B7460(BgBreakwall* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808B74A8(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[55] & 0x80) {
+    if (gSaveContext.save.weekEventReg[55] & 0x80) {
         return false;
     }
     return true;
 }
 
 s32 func_808B74D8(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (!(gSaveContext.weekEventReg[9] & 0x80) || (gSaveContext.weekEventReg[23] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[9] & 0x80) || (gSaveContext.save.weekEventReg[23] & 0x20)) {
         return false;
     }
     return true;
@@ -199,7 +199,7 @@ s32 func_808B751C(BgBreakwall* this, GlobalContext* globalCtx) {
 
     func_800FEA50(globalCtx);
 
-    if (gSaveContext.isNight) {
+    if (gSaveContext.save.isNight) {
         this->unk_15E = 0;
     } else {
         this->unk_15E = 255;
@@ -285,7 +285,7 @@ void func_808B782C(BgBreakwall* this, GlobalContext* globalCtx) {
 }
 
 void func_808B78A4(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[55] & 0x80) {
+    if (gSaveContext.save.weekEventReg[55] & 0x80) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }
@@ -314,7 +314,7 @@ void func_808B7914(BgBreakwall* this, GlobalContext* globalCtx) {
 }
 
 void func_808B7A10(BgBreakwall* this, GlobalContext* globalCtx) {
-    if (gSaveContext.isNight) {
+    if (gSaveContext.save.isNight) {
         if (this->unk_15E < 245) {
             this->unk_15E += 10;
         } else {
