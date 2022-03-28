@@ -42,13 +42,14 @@ void SkelCurve_SetAnim(SkelAnimeCurve* skelCurve, TransformUpdateIndex* transUpd
     skelCurve->transUpdIdx = transUpdIdx;
 }
 
+// boolean
 s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
     s16* transforms;
     u8* transformRefIdx;
     TransformUpdateIndex* transformIndex;
     u16* transformCopyValues;
     s32 i;
-    s32 ret = 0;
+    s32 ret = false;
     s32 k;
     TransformData* transData;
     s32 j;
@@ -64,7 +65,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
     if ((skelCurve->animSpeed >= 0.0f && skelCurve->animCurFrame > skelCurve->animFinalFrame) ||
         (skelCurve->animSpeed < 0.0f && skelCurve->animCurFrame < skelCurve->animFinalFrame)) {
         skelCurve->animCurFrame = skelCurve->animFinalFrame;
-        ret = 1;
+        ret = true;
     }
 
     for (i = 0; i < skelCurve->limbCount; i++) {

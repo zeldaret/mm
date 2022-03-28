@@ -223,11 +223,11 @@ extern u32 link_animetion_segment;
 
 // fcurve_skelanime structs
 typedef struct {
-    /* 0x0000 */ u16 unk00; // appears to be flags
-    /* 0x0002 */ s16 unk02;
-    /* 0x0004 */ s16 unk04;
-    /* 0x0006 */ s16 unk06;
-    /* 0x0008 */ f32 unk08;
+    /* 0x0000 */ u16 flags;
+    /* 0x0002 */ s16 abscissa;
+    /* 0x0004 */ s16 leftGradient;
+    /* 0x0006 */ s16 rightGradient;
+    /* 0x0008 */ f32 ordinate;
 } TransformData; // size = 0xC
 
 typedef struct {
