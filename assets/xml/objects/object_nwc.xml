@@ -39,9 +39,9 @@
         <!-- in z64utils draws a un-textured tetrahedron -->
         <DList Name="object_nwc_DL_001A10" Offset="0x1A10" />
 
-        <!-- contains an unsupported texture @ 0x1A40 used in an unused display list -->
-        <!-- is type G_IM_FMT_I, G_IM_SIZ_16b -->
-        <!-- <Blob Name="object_nwc_Blob_001A38" Size="0x108" Offset="0x1A38" /> -->
+        <!-- contains an unsupported texture (i16) used in an unused display list ( @ 0x1B80 ) -->
+        <!-- is type G_IM_FMT_I, G_IM_SIZ_16b, dimensions are best guesses from Texture64 renders -->
+        <Texture Name="object_nwc_Tex_001A40" OutName="broken_tex_gimfmti_001A40" Format="ia16" Width="8" Height="16" Offset="0x1A40" />
 
         <!-- Z64Utils throws an error for this DL because of the above texture -->
         <DList Name="object_nwc_DL_001B80" Offset="0x1B80" />
