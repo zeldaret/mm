@@ -24,6 +24,7 @@ void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A36260(EnSyatekiOkuta* this);
 void func_80A362F8(EnSyatekiOkuta* this);
+void func_80A36CB0(EnSyatekiOkuta* this);
 
 #if 0
 const ActorInit En_Syateki_Okuta_InitVars = {
@@ -58,6 +59,9 @@ extern InitChainEntry D_80A37B88[];
 
 extern SkeletonHeader D_060033D0;
 extern AnimationHeader D_0600466C;
+extern AnimationInfo D_80A3759C;
+extern Color_RGBA8 D_80A37B90;
+extern Color_RGBA8 D_80A37B94;
 
 void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -93,9 +97,13 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36148.s")
+void func_80A36148(Vec3f* pos, Vec3f* velocity, s16 scaleStep, GlobalContext* globalCtx) {
+    func_800B0DE0(globalCtx, pos, velocity, &gZeroVec3f, &D_80A37B90, &D_80A37B94, 400, scaleStep);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A361B0.s")
+void func_80A361B0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    EffectSsGSplash_Spawn(globalCtx, &this->actor.home.pos, NULL, NULL, 0, 800);
+}
 
 s32 func_80A361F4(EnSyatekiOkuta* this) {
     s32 temp_a0;
@@ -150,7 +158,12 @@ void func_80A362F8(EnSyatekiOkuta* this) {
 void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36360.s")
+void func_80A36360(EnSyatekiOkuta* this) {
+    this->actor.draw = EnSyatekiOkuta_Draw;
+    this->unk_2AA = 0;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 4);
+    this->actionFunc = func_80A363B4;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A363B4.s")
 
@@ -162,18 +175,109 @@ void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36504.s")
 
-void func_80A3657C(EnSyatekiOkuta* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A3657C.s")
+void func_80A3657C(EnSyatekiOkuta* this) {
+    this->unk_2A4 = 0;
+    this->unk_2AA = 0x12C;
+    if (this->unk_2A6 == 1) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
+    }
+
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 1);
+    this->actionFunc = func_80A365EC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A365EC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A368E0.s")
+void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    Actor* new_var = &this->actor;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36A90.s")
+    this->collider.dim.height =
+        (D_80A37570.dim.height - this->collider.dim.yShift) * this->unk_1DC * this->actor.scale.y * 100.0f;
+    this->collider.dim.radius = D_80A37570.dim.radius * this->actor.scale.x * 100.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36AF8.s")
+    if (this->actionFunc == func_80A363B4) {
+        if ((this->unk_2A6 == 2) && func_80A361F4(this)) {
+            return;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Update.s")
+        if (this->skelAnime.curFrame < (this->skelAnime.endFrame - 5.0f)) {
+            this->collider.dim.height *= 1.35f;
+        }
+    }
+
+    if (this->unk_2A6 == 1) {
+        this->collider.dim.radius += 10;
+        this->collider.dim.height += 15;
+    }
+
+    this->collider.dim.pos.x = this->actor.world.pos.x;
+    // Dumb but required to match
+    this->collider.dim.pos.y = this->actor.world.pos.y + ((this->skelAnime.jointTable + 0)->y * this->actor.scale.y);
+    this->collider.dim.pos.z = this->actor.world.pos.z;
+    CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+}
+
+s32 func_80A36A90(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    if ((this->actionFunc == func_80A365EC) || (this->actionFunc == func_80A36350)) {
+        return 0;
+    }
+
+    if ((this->collider.base.acFlags & AC_HIT) != 0) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        return 1;
+    }
+
+    func_80A368E0(this, globalCtx);
+    return 0;
+}
+
+void func_80A36AF8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+    s16 temp_v1_2;
+
+    if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) && (syatekiMan->unk_26A == 1) &&
+        (syatekiMan->unk_26C == 0)) {
+        temp_v1_2 = (syatekiMan->unk_190 >> ((this->actor.params & 0xF) * 2)) & 3;
+        if (temp_v1_2 > 0) {
+            Actor_SetScale(&this->actor, 0.01f);
+            this->unk_2A6 = temp_v1_2;
+            func_80A36360(this);
+        }
+    }
+}
+
+void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnSyatekiOkuta* this = THIS;
+    EnSyatekiMan* syatekiMan;
+
+    this->actionFunc(this, globalCtx);
+
+    if (this->actionFunc != func_80A36350) {
+        SkelAnime_Update(&this->skelAnime);
+    }
+
+    func_80A36AF8(this, globalCtx);
+
+    if (func_80A36A90(this, globalCtx) != 0) {
+        syatekiMan = (EnSyatekiMan*)this->actor.parent;
+        if (this->unk_2A6 == 1) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
+            globalCtx->interfaceCtx.unk_25C++;
+            syatekiMan->unk_280++;
+            syatekiMan->unk_26E = 1;
+        } else {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_ERROR);
+            syatekiMan->unk_26E = 2;
+        }
+
+        func_80A3657C(this);
+    } else {
+        this->collider.base.acFlags &= ~AC_HIT;
+    }
+
+    func_80A36CB0(this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36CB0.s")
 
