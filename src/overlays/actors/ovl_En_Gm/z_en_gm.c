@@ -1626,7 +1626,7 @@ void EnGm_Update(Actor* thisx, GlobalContext* globalCtx) {
             func_8094DFF8(this, globalCtx);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, globalCtx, this->unk_3B4, 30.0f, 0, this->unk_3A4 & 7);
+            func_8013C964(&this->actor, globalCtx, this->unk_3B4, 30.0f, EXCH_ITEM_NONE, this->unk_3A4 & 7);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);

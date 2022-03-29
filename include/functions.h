@@ -2459,10 +2459,10 @@ Path* SubS_GetDayDependentPath(GlobalContext* globalCtx, u8 pathIndex, u8 max, s
 s32 func_8013C068(Path* path, s32 arg1, Vec3f* arg2, f32 arg3, s32 arg4);
 s32 func_8013C624(Actor* actor, Path* path, s32* arg2, f32* arg3, s32 arg4, s32 arg5);
 s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
-s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s32 arg4, s32 arg5);
-void SubS_FillShadowTex(s32 arg0, s32 arg1, u8* arg2, s32 arg3);
-void SubS_GenShadowTex(Vec3f* arg0, Vec3f* arg1, u8* arg2, f32 arg3, u8 arg4, u8* arg5, s8* arg6);
-void SubS_DrawShadowTex(Actor* actor, GraphicsContext** gfxCtxPtr, u8* arg2);
+s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type);
+void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
+void SubS_DrawShadowTex(Actor* actor, GraphicsContext** gfxCtxPtr, u8* tex);
 s16 func_8013D0E0(s16* arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5);
 s32 func_8013D2E0(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, Vec3s* arg3, Vec3s* arg4, Vec3s* arg5, u16* arg6);
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
@@ -2490,9 +2490,10 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes);
 void func_8013E4B0(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, Plane* plane);
 s32 func_8013E5CC(Vec3f* arg0, Vec3s* arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg4, Vec3f* arg5);
 Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyActor verifyActor);
-s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s32 arg4, Vec3s* arg5, func_8013E748_arg6 arg6);
-s32 func_8013E7C0(GlobalContext* globalCtx, Actor* actor, Vec3s* arg2);
-void func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 arg2, f32 arg3, s32 arg4, s16 arg5, s16 arg6);
+s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, func_8013E748_VerifyFunc verifyFunc);
+s32 SubS_ActorAndPlayerAreFacing(GlobalContext* globalCtx, Actor* actor, void* data);
+void func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
+                   s16 actorYawTol);
 s32 func_8013E950(Vec3f* arg0, Vec3f* arg1, s16 arg2, Vec3f* arg3, Vec3f* arg4, s16* arg5, s16* arg6, s16* arg7, s16* arg8, u16 arg9, u16 arg10, u16 arg11, u16 arg12);
 // void func_8013EC10(void);
 void func_8013EC44(f32 a, u8 b, u8 c, u8 d);

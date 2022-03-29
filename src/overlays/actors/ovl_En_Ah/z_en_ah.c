@@ -541,7 +541,7 @@ void EnAh_Update(Actor* thisx, GlobalContext* globalCtx) {
         radius = this->collider.dim.radius + 60;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, globalCtx, radius, height, 0, this->unk_2D8 & 7);
+        func_8013C964(&this->actor, globalCtx, radius, height, EXCH_ITEM_NONE, this->unk_2D8 & 7);
         if (!(this->unk_2D8 & 0x10)) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);

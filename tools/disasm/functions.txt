@@ -2707,7 +2707,7 @@
     0x8013E5CC:("func_8013E5CC",),
     0x8013E640:("SubS_FindActorCustom",),
     0x8013E748:("func_8013E748",),
-    0x8013E7C0:("func_8013E7C0",),
+    0x8013E7C0:("SubS_ActorAndPlayerAreFacing",),
     0x8013E8F8:("func_8013E8F8",),
     0x8013E950:("func_8013E950",),
     0x8013EC10:("func_8013EC10",),

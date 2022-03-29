@@ -918,7 +918,7 @@ void EnIg_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80BF1258(this);
         func_80BF13E4(this);
         func_80BF15EC(this);
-        func_8013C964(&this->actor, globalCtx, 60.0f, 30.0f, 0, this->unk_3D0 & 7);
+        func_8013C964(&this->actor, globalCtx, 60.0f, 30.0f, EXCH_ITEM_NONE, this->unk_3D0 & 7);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         func_80BF1354(this, globalCtx);

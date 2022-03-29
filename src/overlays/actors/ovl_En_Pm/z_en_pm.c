@@ -1086,7 +1086,7 @@ s32 func_80AF94AC(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
         if (arg2->unk0 == 24) {
             Flags_UnsetSwitch(globalCtx, 0);
             Flags_UnsetSwitch(globalCtx, 1);
-            this->unk_394 = 0;
+            this->unk_394 = EXCH_ITEM_NONE;
             this->unk_368 = 60.0f;
             func_80AF7E98(this, 9);
         }
@@ -1274,7 +1274,7 @@ s32 func_80AF9BF8(EnPm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.targetMode = 0;
-    this->unk_394 = 0;
+    this->unk_394 = EXCH_ITEM_NONE;
     this->unk_356 = 0;
     this->unk_368 = 40.0f;
 

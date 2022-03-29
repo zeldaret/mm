@@ -564,7 +564,7 @@ void EnDai_Update(Actor* thisx, GlobalContext* globalCtx) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
-                func_8013C964(&this->actor, globalCtx, 0.0f, 0.0f, 0, this->unk_1CE & 7);
+                func_8013C964(&this->actor, globalCtx, 0.0f, 0.0f, EXCH_ITEM_NONE, this->unk_1CE & 7);
             }
             func_80B3E460(this);
         }

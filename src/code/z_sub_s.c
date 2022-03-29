@@ -341,7 +341,60 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C964.s")
+//! @TODO: Needs docs with func_800B8500
+s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
+    s32 ret = false;
+    s16 x;
+    s16 y;
+    f32 xzDistToPlayerTemp;
+
+    Actor_GetScreenPos(globalCtx, actor, &x, &y);
+
+    switch (type) {
+        case 1:
+            yRange = fabsf(actor->playerHeightRel) + 1.0f;
+            xzRange = actor->xzDistToPlayer + 1.0f;
+            ret = Actor_PickUp(actor, globalCtx, itemId, xzRange, yRange);
+            break;
+        case 2:
+            if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+        case 3:
+            //! @bug: Both x and y conditionals are always true, || should be an &&
+            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+        case 4:
+            yRange = fabsf(actor->playerHeightRel) + 1.0f;
+            xzRange = actor->xzDistToPlayer + 1.0f;
+            xzDistToPlayerTemp = actor->xzDistToPlayer;
+            actor->xzDistToPlayer = 0.0f;
+            actor->flags |= 0x10000;
+            ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            actor->xzDistToPlayer = xzDistToPlayerTemp;
+            break;
+        case 5:
+            //! @bug: Both x and y conditionals are always true, || should be an &&
+            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
+                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
+                actor->flags |= 0x10000;
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+        case 6:
+            //! @bug: Both x and y conditionals are always true, || should be an &&
+            if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
+                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
+                actor->flags |= 0x10000;
+                ret = func_800B8500(actor, globalCtx, xzRange, yRange, itemId);
+            }
+            break;
+    }
+    return ret;
+}
 
 const u8 sShadowMaps[4][12][12] = {
     {
@@ -845,10 +898,44 @@ Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actor
     return actorIter;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E748.s")
+//! @TODO: Needs docs with func_800B8500
+s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
+                  func_8013E748_VerifyFunc verifyFunc) {
+    s32 ret = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E7C0.s")
+    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(globalCtx, actor, data))) {
+        ret = func_800B8500(actor, globalCtx, xzRange, yRange, exchangeItemId);
+    }
+    return ret;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E8F8.s")
+s32 SubS_ActorAndPlayerAreFacing(GlobalContext* globalCtx, Actor* actor, void* data) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3s* yawTols = (Vec3s*)data;
+    s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
+    s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
+    s32 areFacing = false;
+    s32 actorYawTol = ABS(yawTols->y);
+    s32 playerYawTol;
+
+    if (actorYaw < (s16)actorYawTol) {
+        playerYawTol = ABS(yawTols->x);
+        if (playerYaw < (s16)playerYawTol) {
+            areFacing = true;
+        }
+    }
+
+    return areFacing;
+}
+
+//! @TODO: Needs docs with func_800B8500
+void func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
+                   s16 actorYawTol) {
+    Vec3s yawTols;
+
+    yawTols.x = playerYawTol;
+    yawTols.y = actorYawTol;
+    func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerAreFacing);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E950.s")

@@ -2221,7 +2221,7 @@ asm/non_matchings/code/z_sub_s/func_8013E4B0.s,func_8013E4B0,0x8013E4B0,0x47
 asm/non_matchings/code/z_sub_s/func_8013E5CC.s,func_8013E5CC,0x8013E5CC,0x1D
 asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x8013E640,0x42
 asm/non_matchings/code/z_sub_s/func_8013E748.s,func_8013E748,0x8013E748,0x1E
-asm/non_matchings/code/z_sub_s/func_8013E7C0.s,func_8013E7C0,0x8013E7C0,0x4E
+asm/non_matchings/code/z_sub_s/SubS_ActorAndPlayerAreFacing.s,SubS_ActorAndPlayerAreFacing,0x8013E7C0,0x4E
 asm/non_matchings/code/z_sub_s/func_8013E8F8.s,func_8013E8F8,0x8013E8F8,0x16
 asm/non_matchings/code/z_sub_s/func_8013E950.s,func_8013E950,0x8013E950,0xB0
 asm/non_matchings/code/code_8013EC10/func_8013EC10.s,func_8013EC10,0x8013EC10,0xD

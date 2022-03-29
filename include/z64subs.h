@@ -14,7 +14,8 @@ typedef enum {
     /* 2 */ SUBS_CUTSCENE_SET_FLAG
 } SubSCutsceneType;
 
-typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, void*);
+//! @TODO: rename based on func_8013E748 and func_800B8500
+typedef s32 (*func_8013E748_VerifyFunc)(struct GlobalContext*, Actor*, void*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 

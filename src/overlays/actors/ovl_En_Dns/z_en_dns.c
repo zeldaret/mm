@@ -554,7 +554,7 @@ void EnDns_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_8092C934(this);
         func_8092C86C(this, globalCtx);
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
-        func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, 0, this->unk_2C6 & 7);
+        func_8013C964(&this->actor, globalCtx, 80.0f, 40.0f, EXCH_ITEM_NONE, this->unk_2C6 & 7);
         Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, globalCtx);
         func_8092C5C0(this);

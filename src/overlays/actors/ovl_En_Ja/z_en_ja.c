@@ -379,7 +379,7 @@ void EnJa_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         radius = this->collider.dim.radius + 30;
         height = this->collider.dim.height + 10;
-        func_8013C964(&this->actor, globalCtx, radius, height, 0, this->unk_340 & 7);
+        func_8013C964(&this->actor, globalCtx, radius, height, EXCH_ITEM_NONE, this->unk_340 & 7);
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);
