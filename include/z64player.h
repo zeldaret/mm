@@ -445,7 +445,7 @@ typedef struct struct_80122744_arg1 {
 #define PLAYER_STATE3_8000000    (1 << 27)
 // 
 #define PLAYER_STATE3_10000000   (1 << 28)
-// 
+// breman mask march?
 #define PLAYER_STATE3_20000000   (1 << 29)
 // 
 #define PLAYER_STATE3_40000000   (1 << 30)
