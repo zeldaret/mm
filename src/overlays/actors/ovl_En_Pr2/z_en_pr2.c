@@ -186,10 +186,10 @@ void EnPr2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->actor.parent != NULL) {
-        Actor* parent = this->actor.parent;
+        EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((parent->update != NULL) && (((EnEncount1*)parent)->unk_14E > 0)) {
-            ((EnEncount1*)parent)->unk_14E--;
+        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
+            encount1->unk_14E--;
         }
     }
 }
