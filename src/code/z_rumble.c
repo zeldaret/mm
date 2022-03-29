@@ -25,7 +25,7 @@ void Rumble_Override(f32 distSq, u8 arg1, u8 arg2, u8 decreaseStep) {
         if (temp > 0) {
             gRumbleMgr.unk_10A = temp;
             gRumbleMgr.unk_10B = arg2;
-            gRumbleMgr.decreaseStepForced = decreaseStep;
+            gRumbleMgr.overrideDecreaseStep = decreaseStep;
         }
     }
 }
@@ -71,15 +71,25 @@ s32 Rumble_ControllerOneHasRumblePak(void) {
     return PadMgr_ControllerHasRumblePak(0);
 }
 
-void func_8013EE24(void) {
+/**
+ * Wipes every old request for a fresh start, then proceeds to process them as normal
+ */
+void Rumble_StateReset(void) {
     gRumbleMgr.state = RUMBLEMANAGER_STATE_INITIAL;
 }
 
-void func_8013EE38(void) {
-    gRumbleMgr.state = RUMBLEMANAGER_STATE_0;
+/**
+ * Changes the state of the manager to WIPE
+ * 
+ * On this state, every request is deleted
+ */
+void Rumble_StateWipeRequests(void) {
+    gRumbleMgr.state = RUMBLEMANAGER_STATE_WIPE;
 }
 
-// Rumble_SetEnableUpdate? unk_105 seems to control if RumbleManager should update or not
-void func_8013EE48(s32 arg0) {
-    gRumbleMgr.unk_105 = !!arg0;
+/**
+ * Request processing is paused if updateEnabled is set to false
+ */
+void Rumble_SetUpdateEnabled(s32 updateEnabled) {
+    gRumbleMgr.updateEnabled = !!updateEnabled;
 }

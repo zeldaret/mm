@@ -2230,9 +2230,9 @@ asm/non_matchings/code/code_8013EC10/Rumble_Request.s,Rumble_Request,0x8013ECE0,
 asm/non_matchings/code/code_8013EC10/Rumble_Init.s,Rumble_Init,0x8013ED9C,0xD
 asm/non_matchings/code/code_8013EC10/Rumble_Destroy.s,Rumble_Destroy,0x8013EDD0,0xD
 asm/non_matchings/code/code_8013EC10/Rumble_ControllerOneHasRumblePak.s,Rumble_ControllerOneHasRumblePak,0x8013EE04,0x8
-asm/non_matchings/code/code_8013EC10/func_8013EE24.s,func_8013EE24,0x8013EE24,0x5
-asm/non_matchings/code/code_8013EC10/func_8013EE38.s,func_8013EE38,0x8013EE38,0x4
-asm/non_matchings/code/code_8013EC10/func_8013EE48.s,func_8013EE48,0x8013EE48,0x6
+asm/non_matchings/code/code_8013EC10/Rumble_StateReset.s,Rumble_StateReset,0x8013EE24,0x5
+asm/non_matchings/code/code_8013EC10/Rumble_StateWipeRequests.s,Rumble_StateWipeRequests,0x8013EE38,0x4
+asm/non_matchings/code/code_8013EC10/Rumble_SetUpdateEnabled.s,Rumble_SetUpdateEnabled,0x8013EE48,0x6
 asm/non_matchings/code/z_view/View_ViewportToVp.s,View_ViewportToVp,0x8013EE60,0x25
 asm/non_matchings/code/z_view/View_Init.s,View_Init,0x8013EEF4,0x2A
 asm/non_matchings/code/z_view/View_SetViewOrientation.s,View_SetViewOrientation,0x8013EF9C,0x2D

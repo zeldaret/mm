@@ -79,7 +79,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
                     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
                     gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
                 }
-                func_8013EE24();
+                Rumble_StateReset();
             }
             break;
         case GAMEOVER_REVIVE_START:
