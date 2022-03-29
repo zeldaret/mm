@@ -702,7 +702,7 @@ s32 func_80BF2470(EnIg* this, GlobalContext* globalCtx) {
     f32 temp;
     s32 pad;
 
-    if (!func_8013AD6C(globalCtx) && (this->unk_3EC != 0)) {
+    if (!SubS_InCsMode(globalCtx) && (this->unk_3EC != 0)) {
         if ((door != NULL) && (door->dyna.actor.update != NULL)) {
             if (((f32)this->unk_3E2 / this->unk_3E0) <= 0.9f) {
                 door->unk_1A7 = this->unk_2A4;
@@ -748,7 +748,7 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = sp58.x;
     this->actor.world.pos.z = sp58.z;
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         sp54 = this->unk_294;
         sp50 = this->unk_290;
         sp58 = this->actor.world.pos;
@@ -765,7 +765,7 @@ s32 func_80BF25E8(EnIg* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         this->unk_294 = sp54;
         this->unk_290 = sp50;
         this->unk_278 = sp58;

@@ -2172,7 +2172,7 @@ asm/non_matchings/code/z_snap/func_8013A530.s,func_8013A530,0x8013A530,0xA4
 asm/non_matchings/code/z_sub_s/SubS_FindDoor.s,SubS_FindDoor,0x8013A7C0,0x28
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFlexLimb,0x8013A860,0xA8
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
-asm/non_matchings/code/z_sub_s/func_8013AD6C.s,func_8013AD6C,0x8013AD6C,0xC
+asm/non_matchings/code/z_sub_s/SubS_InCsMode.s,SubS_InCsMode,0x8013AD6C,0xC
 asm/non_matchings/code/z_sub_s/func_8013AD9C.s,func_8013AD9C,0x8013AD9C,0x4E
 asm/non_matchings/code/z_sub_s/SubS_UpdateFlags.s,SubS_UpdateFlags,0x8013AED4,0xB
 asm/non_matchings/code/z_sub_s/func_8013AF00.s,func_8013AF00,0x8013AF00,0x44
@@ -2190,9 +2190,9 @@ asm/non_matchings/code/z_sub_s/func_8013C068.s,func_8013C068,0x8013C068,0x16F
 asm/non_matchings/code/z_sub_s/func_8013C624.s,func_8013C624,0x8013C624,0xA5
 asm/non_matchings/code/z_sub_s/SubS_CopyPointFromPathCheckBounds.s,SubS_CopyPointFromPathCheckBounds,0x8013C8B8,0x2B
 asm/non_matchings/code/z_sub_s/func_8013C964.s,func_8013C964,0x8013C964,0xB2
-asm/non_matchings/code/z_sub_s/func_8013CC2C.s,func_8013CC2C,0x8013CC2C,0x4E
-asm/non_matchings/code/z_sub_s/func_8013CD64.s,func_8013CD64,0x8013CD64,0x68
-asm/non_matchings/code/z_sub_s/func_8013CF04.s,func_8013CF04,0x8013CF04,0x77
+asm/non_matchings/code/z_sub_s/SubS_FillShadowTex.s,SubS_FillShadowTex,0x8013CC2C,0x4E
+asm/non_matchings/code/z_sub_s/SubS_GenShadowTex.s,SubS_GenShadowTex,0x8013CD64,0x68
+asm/non_matchings/code/z_sub_s/SubS_DrawShadowTex.s,SubS_DrawShadowTex,0x8013CF04,0x77
 asm/non_matchings/code/z_sub_s/func_8013D0E0.s,func_8013D0E0,0x8013D0E0,0x80
 asm/non_matchings/code/z_sub_s/func_8013D2E0.s,func_8013D2E0,0x8013D2E0,0xC2
 asm/non_matchings/code/z_sub_s/SubS_AngleDiffLessEqual.s,SubS_AngleDiffLessEqual,0x8013D5E8,0x18

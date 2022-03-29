@@ -1409,7 +1409,7 @@ s32 func_80AF9D04(EnPm* this, GlobalContext* globalCtx) {
     Vec3f* sp28;
     f32 temp;
 
-    if (!func_8013AD6C(globalCtx) && (this->unk_374 != 0)) {
+    if (!SubS_InCsMode(globalCtx) && (this->unk_374 != 0)) {
         if ((door != NULL) && (door->dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
                 door->unk_1A7 = this->unk_260;
@@ -1457,7 +1457,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = sp58.x;
     this->actor.world.pos.z = sp58.z;
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         sp54 = this->unk_254;
         sp50 = this->unk_250;
         sp58 = this->actor.world.pos;
@@ -1474,7 +1474,7 @@ s32 func_80AF9E7C(EnPm* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         this->unk_254 = sp54;
         this->unk_250 = sp50;
         this->unk_238 = sp58;

@@ -384,7 +384,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = sp58.x;
     this->actor.world.pos.z = sp58.z;
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         sp54 = this->unk_430;
         sp50 = this->unk_42C;
         sp58 = this->actor.world.pos;
@@ -401,7 +401,7 @@ s32 func_80BA9160(EnBaba* this, GlobalContext* globalCtx) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
     }
 
-    if (func_8013AD6C(globalCtx)) {
+    if (SubS_InCsMode(globalCtx)) {
         this->unk_430 = sp54;
         this->unk_42C = sp50;
         this->unk_414 = sp58;

@@ -154,8 +154,8 @@ void EnGs_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80997AFC(this->unk_194, &this->unk_1FA);
     this->unk_1F4 = this->unk_1FA;
-    Math_Vec3f_Copy(&this->unk_1B0[0], &D_801C5DB0);
-    Math_Vec3f_Copy(&this->unk_1B0[1], &D_801C5DB0);
+    Math_Vec3f_Copy(&this->unk_1B0[0], &gOneVec3f);
+    Math_Vec3f_Copy(&this->unk_1B0[1], &gOneVec3f);
     SubS_FillCutscenesList(&this->actor, this->unk_212, ARRAY_COUNT(this->unk_212));
     func_801A5080(0);
     if (this->actor.params == ENGS_1) {

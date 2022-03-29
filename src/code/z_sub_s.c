@@ -10,7 +10,7 @@ s16 sPathDayFlags[] = { 0x40, 0x20, 0x10, 8, 4, 2, 1, 0 };
 
 #include "code/sub_s/sub_s.c"
 
-Vec3f D_801C5DB0 = { 1.0f, 1.0f, 1.0f };
+Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
@@ -158,7 +158,15 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     return gfx;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD6C.s")
+s32 SubS_InCsMode(GlobalContext* globalCtx) {
+    s32 inCsMode = false;
+
+    if (Play_InCsMode(globalCtx)) {
+        inCsMode = true;
+    }
+
+    return inCsMode;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013AD9C.s")
 
@@ -335,11 +343,134 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C964.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013CC2C.s")
+const u8 shadowMaps[4][12][12] = {
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    },
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    },
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    },
+    {
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 },
+        { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 },
+    },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013CD64.s")
+void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
+    s32 i;
+    s32 j;
+    s32 start;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013CF04.s")
+    for (i = 0; i < 12; i++) {
+        start = ((startRow + i) * 64) + startCol - 390;
+        for (j = 0; j < 12; j++) {
+            if (shadowMaps[size][i][j] != 0) {
+                if ((start + j >= 0) && (start + j < (s32)sizeof(u8[64][64]))) {
+                    tex[start + j] = 255;
+                }
+            }
+        }
+    }
+}
+
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[],
+                       s8 parentBodyParts[]) {
+    Vec3f pos;
+    Vec3f startVec;
+    s32 i;
+    s32 parentBodyPart;
+    Vec3f* bodyPartPos;
+    s32 startCol;
+    s32 startRow;
+
+    for (i = 0; i < bodyPartsNum; i++) {
+        if (parentBodyParts[i] >= 0) {
+            parentBodyPart = parentBodyParts[i];
+            bodyPartPos = &bodyPartsPos[i];
+
+            pos.x = (bodyPartsPos[parentBodyPart].x - bodyPartPos->x) * tween + (bodyPartPos->x - worldPos->x);
+            pos.y = (bodyPartsPos[parentBodyPart].y - bodyPartPos->y) * tween + (bodyPartPos->y - worldPos->y);
+            pos.z = (bodyPartsPos[parentBodyPart].z - bodyPartPos->z) * tween + (bodyPartPos->z - worldPos->z);
+        } else {
+            bodyPartPos = &bodyPartsPos[i];
+
+            pos.x = bodyPartPos->x - worldPos->x;
+            pos.y = bodyPartPos->y - worldPos->y;
+            pos.z = bodyPartPos->z - worldPos->z;
+        }
+
+        Matrix_MultiplyVector3fByState(&pos, &startVec);
+        startCol = 64.0f + startVec.x;
+        startRow = 64.0f - startVec.z;
+        SubS_FillShadowTex(startCol >> 1, startRow >> 1, tex, sizes[i]);
+    }
+}
+
+void SubS_DrawShadowTex(Actor* actor, GraphicsContext** gfxCtxPtr, u8* tex) {
+    s32 pad;
+    GraphicsContext* gfxCtx = *gfxCtxPtr;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C28C(gfxCtx);
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 100);
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+    Matrix_InsertTranslation(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
+    Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowDL);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                        G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowVtxDL);
+
+    CLOSE_DISPS(gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013D0E0.s")
 

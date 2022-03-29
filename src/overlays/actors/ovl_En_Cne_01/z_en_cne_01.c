@@ -318,10 +318,10 @@ void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx) {
         *shadowTexIter++ = 0;
     }
     for (i = 0; i < 5; i++) {
-        func_8013CD64(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
-                      ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSize, gEnHyBodyPartsIndex);
+        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
+                          ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSizes, gEnHyParentBodyParts);
     }
-    func_8013CF04(&this->enHy.actor, &globalCtx->state.gfxCtx, shadowTex);
+    SubS_DrawShadowTex(&this->enHy.actor, &globalCtx->state.gfxCtx, shadowTex);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
