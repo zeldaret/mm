@@ -298,8 +298,6 @@ void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
-    Actor* new_var = &this->actor;
-
     this->collider.dim.height =
         (sCylinderInit.dim.height - this->collider.dim.yShift) * this->unk_1D8.y * this->actor.scale.y * 100.0f;
     this->collider.dim.radius = sCylinderInit.dim.radius * this->actor.scale.x * 100.0f;
