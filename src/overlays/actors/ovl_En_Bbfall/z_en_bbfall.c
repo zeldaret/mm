@@ -23,6 +23,7 @@ void func_808BFB4C(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BFE58(EnBbfall* this, GlobalContext* globalCtx);
 void func_808C00A0(EnBbfall* this, GlobalContext* globalCtx);
 void func_808C0178(EnBbfall* this, GlobalContext* globalCtx);
+void func_808BF5E0(EnBbfall* this);
 
 #if 0
 const ActorInit En_Bbfall_InitVars = {
@@ -112,10 +113,26 @@ extern DamageTable D_808C0DAC;
 extern CollisionCheckInfoInit D_808C0DCC;
 extern InitChainEntry D_808C0DD4[];
 
+extern SkeletonHeader D_06001A30;
 extern UNK_TYPE D_06000184;
-extern UNK_TYPE D_06000444;
+extern AnimationHeader D_06000444;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Init.s")
+void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnBbfall* this = THIS;
+    s32 i;
+
+    Actor_ProcessInitChain(&this->actor, D_808C0DD4);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06001A30, &D_06000444, this->jointTable, this->morphTable, 16);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_808C0DAC, &D_808C0DCC);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_808C0D9C, this->colliderElements);
+    ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
+    this->unk_250 = 0;
+    func_808BF5E0(this);
+    Actor_SetFocus(&this->actor, 0.0f);
+    for (i = 0; i < 3; i++) {
+        this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Destroy.s")
 
