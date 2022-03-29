@@ -479,7 +479,6 @@ animdict = {
     "func_80158FB0": "Message_LoadTimeNES",
     "func_8015926C": "Message_LoadAreaTextNES",
     "func_8015E750": "Message_FindCreditsMessage",
-    "func_8013AD6C": "SubS_InCsMode",
     
 
     # Structs members
