@@ -122,7 +122,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 13, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_HEAD, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -133,7 +133,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 12, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_COLLAR, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -144,7 +144,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 12, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_COLLAR, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -155,7 +155,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 10, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_BODY_SEGMENT_1, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -166,7 +166,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 10, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_BODY_SEGMENT_1, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -177,7 +177,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 9, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_BODY_SEGMENT_2, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -188,7 +188,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 9, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_BODY_SEGMENT_2, { { 0, 0, 0 }, 0 }, 1 },
     },
     {
         {
@@ -199,7 +199,7 @@ static ColliderJntSphElementInit sJntSphElementsInit[8] = {
             BUMP_ON,
             OCELEM_ON,
         },
-        { 9, { { 0, 0, 0 }, 0 }, 1 },
+        { DEEP_PYTHON_LIMB_BODY_SEGMENT_2, { { 0, 0, 0 }, 0 }, 1 },
     },
 };
 
@@ -265,44 +265,44 @@ void EnDragon_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-AnimationHeader* animations[] = {
+static AnimationHeader* sAnimations[] = {
     &gDeepPythonSmallSideSwayAnim,
     &gDeepPythonLargeSideSwayAnim,
     &gDeepPythonVerticalSwayAnim,
     &gDeepPythonSmallSideSwayAnim,
 };
 
-u8 animationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
 
 void EnDragon_ChangeAnimation(EnDragon* this, s32 animationIndex) {
     f32 startFrame;
 
     this->animationIndex = animationIndex;
-    this->endFrame = Animation_GetLastFrame(animations[animationIndex]);
+    this->endFrame = Animation_GetLastFrame(sAnimations[animationIndex]);
     startFrame = 0.0f;
     if (this->animationIndex == DEEP_PYTHON_ANIMATION_IDLE) {
         startFrame = this->endFrame;
     }
 
-    Animation_Change(&this->skelAnime, animations[animationIndex], 1.0f, startFrame, this->endFrame,
-                     animationModes[this->animationIndex], -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[animationIndex], 1.0f, startFrame, this->endFrame,
+                     sAnimationModes[this->animationIndex], -4.0f);
 }
 
-Color_RGBA8 bubblePrimColors[] = {
+static Color_RGBA8 sBubblePrimColors[] = {
     { 255, 255, 255, 255 },
     { 150, 255, 255, 255 },
     { 100, 255, 255, 255 },
 };
 
-Color_RGBA8 bubbleEnvColors[] = {
+static Color_RGBA8 sBubbleEnvColors[] = {
     { 150, 150, 150, 0 },
     { 0, 100, 0, 255 },
     { 0, 0, 255, 255 },
 };
 
 void EnDragon_SpawnBubbles(EnDragon* this, GlobalContext* globalCtx, Vec3f basePos) {
-    static Vec3f bubbleVelocity = { 0.0f, 0.0f, 0.0f };
-    static Vec3f bubbleAccel = { 0.0f, 0.1f, 0.0f };
+    static Vec3f sBubbleVelocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBubbleAccel = { 0.0f, 0.1f, 0.0f };
     s32 bubbleCount;
     s16 colorIndex;
     s16 scale;
@@ -318,16 +318,16 @@ void EnDragon_SpawnBubbles(EnDragon* this, GlobalContext* globalCtx, Vec3f baseP
 
     for (i = 0; i < bubbleCount; i++) {
         Math_Vec3f_Copy(&bubblePos, &basePos);
-        bubbleVelocity.x = Rand_ZeroFloat(1.0f) * 23.0f;
-        bubbleVelocity.y = Rand_ZeroFloat(1.0f) * 10.0f;
-        bubbleVelocity.z = Rand_ZeroFloat(1.0f) * 23.0f;
+        sBubbleVelocity.x = Rand_ZeroFloat(1.0f) * 23.0f;
+        sBubbleVelocity.y = Rand_ZeroFloat(1.0f) * 10.0f;
+        sBubbleVelocity.z = Rand_ZeroFloat(1.0f) * 23.0f;
         bubblePos.x += randPlusMinusPoint5Scaled(i * 30.0f);
         bubblePos.y += randPlusMinusPoint5Scaled(5.0f);
         bubblePos.z += randPlusMinusPoint5Scaled(i * 30.0f);
-        bubbleAccel.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
+        sBubbleAccel.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
         scale = Rand_S16Offset(380, 240);
-        EffectSsDtBubble_SpawnCustomColor(globalCtx, &bubblePos, &bubbleVelocity, &bubbleAccel,
-                                          &bubblePrimColors[colorIndex], &bubbleEnvColors[colorIndex], scale, 30, 0);
+        EffectSsDtBubble_SpawnCustomColor(globalCtx, &bubblePos, &sBubbleVelocity, &sBubbleAccel,
+                                          &sBubblePrimColors[colorIndex], &sBubbleEnvColors[colorIndex], scale, 30, 0);
     }
 }
 
@@ -486,19 +486,19 @@ void EnDragon_SetupGrab(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-Vec3f cameraEyePerPython[] = {
+static Vec3f sCameraEyePerPython[] = {
     { 1600.0f, 0.0f, 1400.0f }, { 1400.0f, 0.0f, 400.0f },  { 1800.0f, 0.0f, 1400.f },  { 1100.0f, -200.0f, 1500.0f },
     { 2000.0f, 0.0f, 1500.0f }, { 1900.0f, 0.0f, 1800.0f }, { 1700.0f, 0.0f, 1100.0f }, { 1700.0f, 0.0f, 1100.0f },
 };
 
-Vec3f cameraAtPerPython[] = {
+static Vec3f sCameraAtPerPython[] = {
     { 300.0f, -100.0f, 1300.0f }, { 1500.0f, 0.0f, 2400.0f }, { 300.0f, -100.0f, 1300.0f }, { 1900.0f, 500.0f, 600.0f },
     { -1000.0f, 0.0f, 1000.0f },  { 1200.0f, 0.0f, 1500.0f }, { 1100.0f, 0.0f, 2000.0f },   { 1100.0f, 0.0f, 2000.0f },
 };
 
-s16 zRotPerPython[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
+static s16 sZRotPerPython[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
 
-s32 maxGrabTimerPerPython[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
+static s32 sMaxGrabTimerPerPython[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
 
 void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -526,22 +526,22 @@ void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
     }
 
     this->grabTimer++;
-    Math_SmoothStepToS(&this->actor.shape.rot.z, zRotPerPython[this->pythonIndex], 0xA, 0x1F4, 0x14);
+    Math_SmoothStepToS(&this->actor.shape.rot.z, sZRotPerPython[this->pythonIndex], 0xA, 0x1F4, 0x14);
     EnDragon_SpawnBubbles(this, globalCtx, this->jawPos);
 
     Math_Vec3f_Copy(&sp50, &this->burrowEntrancePos);
-    sp50.x += Math_SinS(this->actor.world.rot.y) * cameraEyePerPython[this->pythonIndex].x;
-    sp50.y += cameraEyePerPython[this->pythonIndex].y;
-    sp50.z += Math_CosS(this->actor.world.rot.y) * cameraEyePerPython[this->pythonIndex].z;
+    sp50.x += Math_SinS(this->actor.world.rot.y) * sCameraEyePerPython[this->pythonIndex].x;
+    sp50.y += sCameraEyePerPython[this->pythonIndex].y;
+    sp50.z += Math_CosS(this->actor.world.rot.y) * sCameraEyePerPython[this->pythonIndex].z;
 
     Math_Vec3f_Copy(&at, &this->actor.world.pos);
-    at.x += Math_SinS(this->actor.world.rot.y) * cameraAtPerPython[this->pythonIndex].x;
-    at.y += cameraAtPerPython[this->pythonIndex].y;
-    at.z += Math_CosS(this->actor.world.rot.y) * cameraAtPerPython[this->pythonIndex].z;
+    at.x += Math_SinS(this->actor.world.rot.y) * sCameraAtPerPython[this->pythonIndex].x;
+    at.y += sCameraAtPerPython[this->pythonIndex].y;
+    at.z += Math_CosS(this->actor.world.rot.y) * sCameraAtPerPython[this->pythonIndex].z;
 
     EnDragon_CameraSetAtEye(this, globalCtx, sp50, at);
 
-    if (this->grabTimer > maxGrabTimerPerPython[this->pythonIndex]) {
+    if (this->grabTimer > sMaxGrabTimerPerPython[this->pythonIndex]) {
         if (this->state == DEEP_PYTHON_GRAB_STATE_START) {
             func_800B7298(globalCtx, &this->actor, 6);
             this->state = DEEP_PYTHON_GRAB_STATE_GRABBED;
@@ -575,7 +575,7 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.shape.rot.z, 0, 0xA, 0x1388, 0);
-    if (!(globalCtx->gameplayFrames & 0xF)) {
+    if ((globalCtx->gameplayFrames % 16) == 0) {
         globalCtx->damagePlayer(globalCtx, -2);
 
         //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
@@ -692,37 +692,37 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
         if (Actor_SpawnAsChildAndCutscene(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
                                           seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.cutscene,
                                           this->actor.unk20, NULL)) {
-            gSaveContext.save.weekEventReg[0xD] |= 1;
+            gSaveContext.save.weekEventReg[13] |= 1;
             switch (this->pythonIndex) {
                 case 0:
-                    gSaveContext.save.weekEventReg[0x53] |= 0x10;
+                    gSaveContext.save.weekEventReg[83] |= 0x10;
                     break;
 
                 case 1:
-                    gSaveContext.save.weekEventReg[0x53] |= 0x20;
+                    gSaveContext.save.weekEventReg[83] |= 0x20;
                     break;
 
                 case 2:
-                    gSaveContext.save.weekEventReg[0x53] |= 0x40;
+                    gSaveContext.save.weekEventReg[83] |= 0x40;
                     break;
 
                 case 3:
-                    gSaveContext.save.weekEventReg[0x53] |= 0x80;
+                    gSaveContext.save.weekEventReg[83] |= 0x80;
                     break;
                 case 4:
-                    gSaveContext.save.weekEventReg[0x54] |= 1;
+                    gSaveContext.save.weekEventReg[84] |= 1;
                     break;
 
                 case 5:
-                    gSaveContext.save.weekEventReg[0x54] |= 2;
+                    gSaveContext.save.weekEventReg[84] |= 2;
                     break;
 
                 case 6:
-                    gSaveContext.save.weekEventReg[0x54] |= 4;
+                    gSaveContext.save.weekEventReg[84] |= 4;
                     break;
 
                 case 7:
-                    gSaveContext.save.weekEventReg[0x54] |= 8;
+                    gSaveContext.save.weekEventReg[84] |= 8;
                     break;
             }
         }
