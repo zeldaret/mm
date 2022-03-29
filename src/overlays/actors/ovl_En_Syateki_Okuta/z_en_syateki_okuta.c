@@ -25,6 +25,8 @@ void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A36260(EnSyatekiOkuta* this);
 void func_80A362F8(EnSyatekiOkuta* this);
 void func_80A36CB0(EnSyatekiOkuta* this);
+void func_80A36444(EnSyatekiOkuta* this);
+void func_80A364C0(EnSyatekiOkuta* this);
 
 #if 0
 const ActorInit En_Syateki_Okuta_InitVars = {
@@ -58,6 +60,9 @@ extern ColliderCylinderInit D_80A37570;
 extern InitChainEntry D_80A37B88[];
 extern Color_RGBA8 D_80A37B90;
 extern Color_RGBA8 D_80A37B94;
+extern Vec3f D_80A37B98;
+extern Color_RGBA8 D_80A37BA4;
+extern Color_RGBA8 D_80A37BA8;
 
 extern SkeletonHeader D_060033D0;
 extern AnimationHeader D_0600466C;
@@ -169,15 +174,47 @@ void func_80A36360(EnSyatekiOkuta* this) {
     this->actionFunc = func_80A363B4;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A363B4.s")
+void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
+        if (func_80A361F4(this)) {
+            return;
+        } else {
+            func_80A361B0(this, globalCtx);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36444.s")
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        func_80A36444(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36488.s")
+void func_80A36444(EnSyatekiOkuta* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 3);
+    this->actionFunc = func_80A36488;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A364C0.s")
+void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36504.s")
+    if (syatekiMan->unk_26C >= 0x46) {
+        func_80A364C0(this);
+    }
+}
+
+void func_80A364C0(EnSyatekiOkuta* this) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 2);
+    this->actionFunc = func_80A36504;
+}
+
+void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
+        func_80A361B0(this, globalCtx);
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DAIOCTA_LAND);
+    } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        func_80A362F8(this);
+    }
+}
 
 void func_80A3657C(EnSyatekiOkuta* this) {
     this->unk_2A4 = 0;
@@ -190,7 +227,59 @@ void func_80A3657C(EnSyatekiOkuta* this) {
     this->actionFunc = func_80A365EC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A365EC.s")
+void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    Vec3f sp84;
+    Vec3f sp78;
+    s32 pad;
+    s32 i;
+
+    if (this->unk_2AA > 0) {
+        this->unk_2AA -= 15;
+    }
+
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        if (this->unk_2A4 == 0) {
+            sp78.x = this->actor.world.pos.x;
+            sp78.y = this->actor.world.pos.y + 40.0f;
+            sp78.z = this->actor.world.pos.z;
+            sp84.x = 0.0f;
+            sp84.y = -0.5f;
+            sp84.z = 0.0f;
+            func_80A36148(&sp78, &sp84, -20, globalCtx);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD2);
+        }
+
+        this->unk_2A4++;
+    }
+
+    if (Animation_OnFrame(&this->skelAnime, 15.0f)) {
+        func_80A361B0(this, globalCtx);
+    }
+
+    if (this->unk_2A4 < 3) {
+        Actor_SetScale(&this->actor, ((this->unk_2A4 * 0.25f) + 1.0f) * 0.01f);
+    } else if (this->unk_2A4 < 6) {
+        Actor_SetScale(&this->actor, (1.5f - ((this->unk_2A4 - 2) * 0.2333f)) * 0.01f);
+    } else if (this->unk_2A4 < 11) {
+        Actor_SetScale(&this->actor, (((this->unk_2A4 - 5) * 0.04f) + 0.8f) * 0.01f);
+    } else {
+        if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.002f)) {
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 30, NA_SE_EN_COMMON_WATER_MID);
+            for (i = 0; i < 10; i++) {
+                sp84.x = (Rand_ZeroOne() - 0.5f) * 7.0f;
+                sp84.y = Rand_ZeroOne() * 7.0f;
+                sp84.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
+                EffectSsDtBubble_SpawnCustomColor(globalCtx, &this->actor.world.pos, &sp84, &D_80A37B98, &D_80A37BA4,
+                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, 0);
+            }
+
+            func_80A362F8(this);
+        }
+
+        this->actor.scale.y = this->actor.scale.x;
+        this->actor.scale.z = this->actor.scale.x;
+    }
+}
 
 void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     Actor* new_var = &this->actor;
