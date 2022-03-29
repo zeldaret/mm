@@ -56,12 +56,16 @@ static InitChainEntry D_80A37B88[] = {
 
 extern ColliderCylinderInit D_80A37570;
 extern InitChainEntry D_80A37B88[];
+extern Color_RGBA8 D_80A37B90;
+extern Color_RGBA8 D_80A37B94;
 
 extern SkeletonHeader D_060033D0;
 extern AnimationHeader D_0600466C;
 extern AnimationInfo D_80A3759C;
-extern Color_RGBA8 D_80A37B90;
-extern Color_RGBA8 D_80A37B94;
+extern Gfx D_801AEFA0[];
+extern Gfx D_80A37630[];
+extern Gfx D_80A37A88[];
+extern Gfx D_80A37B08[];
 
 void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -329,8 +333,87 @@ void func_80A36CB0(EnSyatekiOkuta* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A370EC.s")
+s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
+    if (this->actionFunc == func_80A363B4) {
+        arg2->y = 1.0f;
+        arg2->z = 1.0f;
+        arg2->x = (sin_rad((M_PI / 16) * arg1) * 0.4f) + 1.0f;
+    } else if (this->actionFunc == func_80A365EC) {
+        if ((arg1 >= 35.0f) || (arg1 < 25.0f)) {
+            return 0;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A37294.s")
+        if (arg1 < 27.0f) {
+            arg2->z = 1.0f;
+            arg2->x = arg2->y = ((arg1 - 24.0f) * 0.5f) + 1.0f;
+        } else if (arg1 < 30.0f) {
+            arg2->z = (arg1 - 26.0f) * 0.333f + 1.0f;
+            arg2->x = arg2->y = 2.0f - (arg1 - 26.0f) * 0.333f;
+        } else {
+            arg2->z = 2.0f - ((arg1 - 29.0f) * 0.2f);
+            arg2->x = arg2->y = 1.0f;
+        }
+    } else {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Draw.s")
+    return 1;
+}
+
+s32 func_80A37294(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    s32 pad;
+    Vec3f sp20;
+    f32 curFrame;
+    EnSyatekiOkuta* this = THIS;
+
+    curFrame = this->skelAnime.curFrame;
+    if (this->actionFunc == func_80A365EC) {
+        curFrame += this->unk_2A4;
+    }
+
+    if (limbIndex == 0xE) {
+        sp20 = this->unk_1D8;
+        Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
+    } else if ((limbIndex == 0xF) && (func_80A370EC(this, curFrame, &sp20))) {
+        Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
+    }
+
+    return false;
+}
+
+void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiOkuta* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    if (this->unk_2A6 == 1) {
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
+    } else {
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_80A37630);
+    }
+
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A37294, NULL,
+                      &this->actor);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    if (this->actionFunc == func_80A365EC) {
+        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f,
+                                 this->actor.world.pos.z + 20.0f, 0);
+
+        if (this->unk_2AA >= 256) {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, 255);
+        } else {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->unk_2AA);
+        }
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        if (this->unk_2A6 == 2) {
+            gSPDisplayList(POLY_XLU_DISP++, D_80A37A88);
+        } else {
+            gSPDisplayList(POLY_XLU_DISP++, D_80A37B08);
+        }
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
