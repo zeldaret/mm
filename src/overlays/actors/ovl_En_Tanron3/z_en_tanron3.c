@@ -86,12 +86,12 @@ static ColliderCylinderInit sUnusedCylinderInit = {
 };
 
 void EnTanron3_CreateEffect(GlobalContext* globalCtx, Vec3f* effectPos) {
-    UnkTanron3Effect* effectPtr = (UnkTanron3Effect*)globalCtx->specialEffects;
+    GyorgEffect* effectPtr = globalCtx->specialEffects;
     s16 i;
 
-    for (i = 0; i < 150; i++, effectPtr++) {
-        if ((effectPtr->type == 0) || (effectPtr->type == 1)) {
-            effectPtr->type = 2;
+    for (i = 0; i < GYORG_EFFECT_COUNT; i++, effectPtr++) {
+        if ((effectPtr->type == GYORG_EFFECT_NONE) || (effectPtr->type == GYORG_EFFECT_BUBBLE)) {
+            effectPtr->type = GYORG_EFFECT_DROPLET;
             effectPtr->pos = *effectPos;
             effectPtr->velocity = *sZeroVec;
             effectPtr->accel = *sZeroVec;
@@ -124,7 +124,7 @@ void EnTanron3_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnTanron3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
-    sGyorg->unk_252--;
+    sGyorg->numSpawnedSmallFish--;
 }
 
 void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {

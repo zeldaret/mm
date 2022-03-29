@@ -1175,7 +1175,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->collider.info.toucher.damage = 16;
         }
 
-        this->unk_1E4 = func_8013BEDC(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
+        this->unk_1E4 = SubS_GetDayDependentPath(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
         if (this->unk_1E4 != NULL) {
             this->unk_4A0 = 1;
         }

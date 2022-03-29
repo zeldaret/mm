@@ -12,7 +12,7 @@
 #include "objects/object_os_anime/object_os_anime.h"
 
 static AnimationInfoS sAnimations[] = {
-    { &object_aob_Anim_00007C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
     { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
@@ -152,7 +152,7 @@ s32 func_800F0CE4(EnHy* enHy, GlobalContext* globalCtx, ActorFunc draw, s16 arg3
     EnDoor* door;
     s32 pad;
 
-    if (func_8013D68C(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
         door = EnHy_FindNearestDoor(&enHy->actor, globalCtx);
         if (door != NULL) {
             ret = true;
@@ -174,7 +174,7 @@ s32 func_800F0DD4(EnHy* enHy, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     EnDoor* door;
 
     enHy->curPoint = 0;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &enHy->actor.world.pos)) {
         door = EnHy_FindNearestDoor(&enHy->actor, globalCtx);
         if (door != NULL) {
             ret = true;
@@ -209,7 +209,8 @@ s32 EnHy_MoveForwards(EnHy* enHy, f32 speedTarget) {
 
     Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = enHy->actor.speedXZ * 400.0f;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) && func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
+        SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint++;
         if (enHy->curPoint >= enHy->path->count) {
             reachedEnd = true;
@@ -226,7 +227,8 @@ s32 EnHy_MoveBackwards(EnHy* enHy, f32 speedTarget) {
 
     Math_SmoothStepToF(&enHy->actor.speedXZ, speedTarget, 0.4f, 1000.0f, 0.0f);
     rotStep = enHy->actor.speedXZ * 400.0f;
-    if (func_8013D68C(enHy->path, enHy->curPoint, &curPointPos) && func_8013D768(&enHy->actor, &curPointPos, rotStep)) {
+    if (SubS_CopyPointFromPath(enHy->path, enHy->curPoint, &curPointPos) &&
+        SubS_MoveActorToPoint(&enHy->actor, &curPointPos, rotStep)) {
         enHy->curPoint--;
         if (enHy->curPoint < 0) {
             reachedEnd = true;
@@ -263,12 +265,12 @@ s32 EnHy_PlayWalkingSound(EnHy* enHy, GlobalContext* globalCtx, f32 distAboveThr
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, enHy->actor.floorPoly, enHy->actor.floorBgId) + SFX_FLAG;
     }
 
-    enHy->isLeftFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->leftFootPos, distAboveThreshold);
+    enHy->isLeftFootOnGround = isFootOnGround = SubS_IsFloorAbove(globalCtx, &enHy->leftFootPos, distAboveThreshold);
     if (enHy->isLeftFootOnGround && !wasLeftFootOnGround && isFootOnGround) {
         Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }
 
-    enHy->isRightFootOnGround = isFootOnGround = func_8013DB90(globalCtx, &enHy->rightFootPos, distAboveThreshold);
+    enHy->isRightFootOnGround = isFootOnGround = SubS_IsFloorAbove(globalCtx, &enHy->rightFootPos, distAboveThreshold);
     if (enHy->isRightFootOnGround && !wasRightFootOnGround && isFootOnGround) {
         Actor_PlaySfxAtPos(&enHy->actor, sfxId);
     }

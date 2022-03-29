@@ -149,7 +149,7 @@ void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
     f32 sp30;
 
     SkelAnime_Update(&this->skelAnime);
-    if (func_801690CC(globalCtx) != 0) {
+    if (Play_InCsMode(globalCtx)) {
         this->actor.speedXZ = 0.0f;
         return;
     }
@@ -164,9 +164,9 @@ void EnLookNuts_Patrol(EnLookNuts* this, GlobalContext* globalCtx) {
         return;
     }
 
-    this->path = func_8013D648(globalCtx, this->pathLocation, 0x1F);
+    this->path = SubS_GetPathByIndex(globalCtx, this->pathLocation, 0x1F);
     if (this->path != NULL) {
-        sp34 = func_8013D83C(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
+        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
     }
 
     if (sp30 < 10.0f) {
@@ -205,7 +205,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
-    if ((func_801690CC(globalCtx) == 0) && (D_80A6862C == 0) && (this->eventTimer == 0)) {
+    if (!Play_InCsMode(globalCtx) && (D_80A6862C == 0) && (this->eventTimer == 0)) {
         this->eventTimer = 10;
         switch (this->waitTimer) {
             case 0:
@@ -291,13 +291,13 @@ void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this) {
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         globalCtx->nextEntranceIndex = Entrance_CreateIndexFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(globalCtx);
         globalCtx->sceneLoadFlag = 0x14;
-        gSaveContext.weekEventReg[17] |= 4;
+        gSaveContext.save.weekEventReg[17] |= 4;
     }
 }
 
@@ -339,7 +339,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_StatePop();
             if (!this->isPlayerDetected) {
                 s16 drawFlag = 1;
-                if (gSaveContext.isNight) {
+                if (gSaveContext.save.isNight) {
                     drawFlag = 0;
                 }
                 if (Player_GetMask(globalCtx) != PLAYER_MASK_STONE) {
@@ -351,7 +351,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
                 Player* player = GET_PLAYER(globalCtx);
 
-                if (!(player->stateFlags3 & 0x100) && !func_801690CC(globalCtx)) {
+                if (!(player->stateFlags3 & 0x100) && !Play_InCsMode(globalCtx)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
                     play_sound(NA_SE_SY_FOUND);

@@ -2224,7 +2224,7 @@ void func_800B90F4(GlobalContext* globalCtx) {
 void func_800B9120(ActorContext* actorCtx) {
     s32 phi_v0 = CURRENT_DAY * 2;
 
-    if (gSaveContext.time < CLOCK_TIME(6, 0) || gSaveContext.time > CLOCK_TIME(18, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0) || gSaveContext.save.time > CLOCK_TIME(18, 0)) {
         phi_v0++;
     }
 
@@ -2236,7 +2236,7 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     CycleSceneFlags* cycleFlags;
     s32 i;
 
-    gSaveContext.weekEventReg[92] |= 0x80;
+    gSaveContext.save.weekEventReg[92] |= 0x80;
     cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
@@ -2252,8 +2252,8 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     }
 
     actorCtx->flags.chest = cycleFlags->chest;
-    actorCtx->flags.switches[0] = cycleFlags->swch0;
-    actorCtx->flags.switches[1] = cycleFlags->swch1;
+    actorCtx->flags.switches[0] = cycleFlags->switch0;
+    actorCtx->flags.switches[1] = cycleFlags->switch1;
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
         cycleFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
@@ -3799,13 +3799,13 @@ void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
-void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
-    if (arg2 >= 5) {
+void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 y, s16 countdown) {
+    if (y >= 5) {
         func_8013ECE0(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
         func_8013ECE0(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    func_800BC770(globalCtx, arg2, arg3);
+    func_800BC770(globalCtx, y, countdown);
 }
 
 typedef struct {
@@ -3908,104 +3908,148 @@ Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
     return Hilite_DrawXlu(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-void func_800BCCDC(Vec3s* points, s32 pathCount, Vec3f* pos1, Vec3f* pos2, s32 arg4) {
-    s32 spB4;
-    s32 spB0;
-    s32 spA8[2] = { 0, 0 };
-    s32 spA0[2] = { 0, 0 };
-    Vec3f sp94;
-    Vec3f sp7C[2];
-    Vec3f sp70;
-    Vec3f sp64;
-    f32 sp60;
-    f32 sp5C;
-    f32 sp54[2];
+/**
+ * Calculates the closest position `dstPos` to the input position `srcPos` along the path given by `points`/`numPoints`
+ * Whether the points provided forms a closed-loop path is indicated by `isPathLoop`
+ */
+void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop) {
+    s32 pointIndex;
+    s32 closestPointIndex;
+    s32 useAdjacentLines[2] = {
+        false, // determines whether to use line connecting to previous point in calculations
+        false, // determines whether to use line connecting to next point in calculations
+    };
+    s32 isRightSideOfAdjacentLines[2] = {
+        false, // determines whether srcPos is on the right side of the line from prev to curr point
+        false, // determines whether srcPos is on the right side of the line from curr to next point
+    };
+    Vec3f closestPoint;
+    Vec3f closestPos[2];
+    Vec3f closestPointNext;
+    Vec3f closestPointPrev;
+    f32 distSq; // First used as distSq to closest point, then used as distSq to closest position
+    f32 closestPointDistSq;
+    f32 loopDistSq[2];
+    s32 i;
 
-    spB0 = 0;
-    sp5C = SQ(40000.0f);
+    closestPointIndex = 0;
+    closestPointDistSq = SQ(40000.0f);
 
-    for (spB4 = 0; spB4 < pathCount; spB4++) {
-        sp60 = Math3D_XZDistanceSquared(pos1->x, pos1->z, points[spB4].x, points[spB4].z);
-        if (sp60 < sp5C) {
-            sp5C = sp60;
-            spB0 = spB4;
+    // Find the point closest to srcPos
+    for (pointIndex = 0; pointIndex < numPoints; pointIndex++) {
+        distSq = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, points[pointIndex].x, points[pointIndex].z);
+        if (distSq < closestPointDistSq) {
+            closestPointDistSq = distSq;
+            closestPointIndex = pointIndex;
         }
     }
 
-    sp94.x = (points + spB0)->x;
-    sp94.z = (points + spB0)->z;
-    pos2->y = (points + spB0)->y;
-    if (spB0 != 0) {
-        sp64.x = (points + spB0 - 1)->x;
-        sp64.z = (points + spB0 - 1)->z;
-    } else if (arg4) {
-        sp64.x = (points + pathCount - 1)->x;
-        sp64.z = (points + pathCount - 1)->z;
+    closestPoint.x = (points + closestPointIndex)->x;
+    closestPoint.z = (points + closestPointIndex)->z;
+    dstPos->y = (points + closestPointIndex)->y;
+
+    // Analyze point on path immediately previous to the closest point
+    if (closestPointIndex != 0) {
+        // The point previous to the closest point
+        closestPointPrev.x = (points + closestPointIndex - 1)->x;
+        closestPointPrev.z = (points + closestPointIndex - 1)->z;
+    } else if (isPathLoop) {
+        // Closest point is the first point in the path list
+        // Set the previous point to loop around to the the final point on the path
+        closestPointPrev.x = (points + numPoints - 1)->x;
+        closestPointPrev.z = (points + numPoints - 1)->z;
+    }
+    if ((closestPointIndex != 0) || isPathLoop) {
+        // Use the adjacent line
+        useAdjacentLines[0] =
+            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPointPrev.x, closestPointPrev.z, closestPoint.x,
+                                     closestPoint.z, &closestPos[0].x, &closestPos[0].z, &distSq);
     }
 
-    if ((spB0 != 0) || arg4) {
-        spA8[0] =
-            Math3D_PointDistToLine2D(pos1->x, pos1->z, sp64.x, sp64.z, sp94.x, sp94.z, &sp7C[0].x, &sp7C[0].z, &sp60);
+    // Analyze point on path immediately next to the closest point
+    if (closestPointIndex + 1 != numPoints) {
+        // The point next to the closest point
+        closestPointNext.x = (points + closestPointIndex + 1)->x;
+        closestPointNext.z = (points + closestPointIndex + 1)->z;
+    } else if (isPathLoop) {
+        // Closest point is the final point in the path list
+        // Set the next point to loop around to the the first point on the path
+        closestPointNext.x = (points + 0)->x;
+        closestPointNext.z = (points + 0)->z;
+    }
+    if ((closestPointIndex + 1 != numPoints) || isPathLoop) {
+        useAdjacentLines[1] =
+            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPoint.x, closestPoint.z, closestPointNext.x,
+                                     closestPointNext.z, &closestPos[1].x, &closestPos[1].z, &distSq);
     }
 
-    if (spB0 + 1 != pathCount) {
-        sp70.x = (points + spB0 + 1)->x;
-        sp70.z = (points + spB0 + 1)->z;
-    } else if (arg4) {
-        sp70.x = points->x;
-        sp70.z = points->z;
-    }
+    /**
+     * For close-looped paths, they must be defined in a clockwise orientation looking from the top down.
+     * Therefore, `srcPos` being interior of the loop will lead to both lines of `isRightSideOfAdjacentLines`
+     * returning true.
+     */
+    if (isPathLoop) {
+        isRightSideOfAdjacentLines[0] = ((closestPointPrev.x - srcPos->x) * (closestPoint.z - srcPos->z)) <
+                                        ((closestPointPrev.z - srcPos->z) * (closestPoint.x - srcPos->x));
 
-    if ((spB0 + 1 != pathCount) || arg4) {
-        spA8[1] =
-            Math3D_PointDistToLine2D(pos1->x, pos1->z, sp94.x, sp94.z, sp70.x, sp70.z, &sp7C[1].x, &sp7C[1].z, &sp60);
-    }
+        isRightSideOfAdjacentLines[1] = ((closestPointNext.z - srcPos->z) * (closestPoint.x - srcPos->x)) <
+                                        ((closestPoint.z - srcPos->z) * (closestPointNext.x - srcPos->x));
 
-    if (arg4) {
-        s32 phi_s0_2;
-
-        spA0[0] = ((sp64.x - pos1->x) * (sp94.z - pos1->z)) < ((sp64.z - pos1->z) * (sp94.x - pos1->x));
-        spA0[1] = ((sp70.z - pos1->z) * (sp94.x - pos1->x)) < ((sp94.z - pos1->z) * (sp70.x - pos1->x));
-
-        for (phi_s0_2 = 0; phi_s0_2 < ARRAY_COUNT(sp54); phi_s0_2++) {
-            if (spA8[phi_s0_2] != 0) {
-                sp54[phi_s0_2] = Math3D_XZDistanceSquared(pos1->x, pos1->z, sp7C[phi_s0_2].x, sp7C[phi_s0_2].z);
+        for (i = 0; i < ARRAY_COUNT(loopDistSq); i++) {
+            if (useAdjacentLines[i]) {
+                // Get distSq from srcPos to closestPos
+                loopDistSq[i] = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, closestPos[i].x, closestPos[i].z);
             } else {
-                sp54[phi_s0_2] = SQ(40000.0f);
+                // The closest Pos is not contained within the line-segment
+                loopDistSq[i] = SQ(40000.0f);
             }
         }
     }
 
-    if (arg4 && (((spA0[0] != 0) && (spA0[1] != 0)) || ((spA0[0] != 0) && (spA8[0] != 0) && (sp54[0] < sp54[1])) ||
-                 ((spA0[1] != 0) && (spA8[1] != 0) && (sp54[1] < sp54[0])))) {
-        pos2->x = pos1->x;
-        pos2->z = pos1->z;
-    } else if ((spA8[0] != 0) && (spA8[1] != 0)) {
-        if ((spA0[0] == 0) && (spA0[1] == 0)) {
-            if (Math3D_PointDistToLine2D(pos1->x, pos1->z, sp7C[0].x, sp7C[0].z, sp7C[1].x, sp7C[1].z, &pos2->x,
-                                         &pos2->z, &sp60) == 0) {
-                pos2->x = (sp7C[1].x + sp7C[0].x) * 0.5f;
-                pos2->z = (sp7C[1].z + sp7C[0].z) * 0.5f;
+    // Calculate closest position along path
+    if (isPathLoop && ((isRightSideOfAdjacentLines[0] && isRightSideOfAdjacentLines[1]) ||
+                       (isRightSideOfAdjacentLines[0] && useAdjacentLines[0] && (loopDistSq[0] < loopDistSq[1])) ||
+                       (isRightSideOfAdjacentLines[1] && useAdjacentLines[1] && (loopDistSq[1] < loopDistSq[0])))) {
+        // srcPos is contained within the closed loop
+        dstPos->x = srcPos->x;
+        dstPos->z = srcPos->z;
+    } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
+        // srcPos is somewhere withing the bend of the path
+        if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
+            // srcPos is not inside a loop
+            if (!Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
+                                          closestPos[1].z, &dstPos->x, &dstPos->z, &distSq)) {
+                // The dstPos calculated in Math3D_PointDistToLine2D was not valid.
+                // Take the midpoint of the two closest ponits instead
+                dstPos->x = (closestPos[1].x + closestPos[0].x) * 0.5f;
+                dstPos->z = (closestPos[1].z + closestPos[0].z) * 0.5f;
             }
-        } else if (sp54[1] < sp54[0]) {
-            pos2->x = sp7C[1].x;
-            pos2->z = sp7C[1].z;
+        } else if (loopDistSq[1] < loopDistSq[0]) {
+            // Use closest position along the line in the loop connecting the closest point and the next point
+            dstPos->x = closestPos[1].x;
+            dstPos->z = closestPos[1].z;
         } else {
-            pos2->x = sp7C[0].x;
-            pos2->z = sp7C[0].z;
+            // Use closest position along the ling in the loop connecting the closest point and the prev point
+            dstPos->x = closestPos[0].x;
+            dstPos->z = closestPos[0].z;
         }
-    } else if (spA8[0] != 0) {
-        pos2->x = sp7C[0].x;
-        pos2->z = sp7C[0].z;
-    } else if (spA8[1] != 0) {
-        pos2->x = sp7C[1].x;
-        pos2->z = sp7C[1].z;
-    } else if (arg4 && ((((sp64.x - pos1->x) * (sp70.z - pos1->z)) < ((sp64.z - pos1->z) * (sp70.x - pos1->x))))) {
-        pos2->x = pos1->x;
-        pos2->z = pos1->z;
+    } else if (useAdjacentLines[0]) {
+        // Use closest position along line segment connecting the closest point and the prev point
+        dstPos->x = closestPos[0].x;
+        dstPos->z = closestPos[0].z;
+    } else if (useAdjacentLines[1]) {
+        // Use closest position along line segment connecting the closest point and the next point
+        dstPos->x = closestPos[1].x;
+        dstPos->z = closestPos[1].z;
+    } else if (isPathLoop && ((((closestPointPrev.x - srcPos->x) * (closestPointNext.z - srcPos->z)) <
+                               ((closestPointPrev.z - srcPos->z) * (closestPointNext.x - srcPos->x))))) {
+        // Inside the line that directly connects the previous point to the next point (inside the bend of a corner)
+        dstPos->x = srcPos->x;
+        dstPos->z = srcPos->z;
     } else {
-        pos2->x = sp94.x;
-        pos2->z = sp94.z;
+        // The closest point and the closest position are the same (srcPos is near the outer region of a corner)
+        dstPos->x = closestPoint.x;
+        dstPos->z = closestPoint.z;
     }
 }
 
@@ -4188,11 +4232,11 @@ Gfx D_801AEFA0[] = {
     gsSPEndDisplayList(),
 };
 
-void* func_800BD9A0(GraphicsContext* gfxCtx) {
+Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
     Gfx* displayListHead;
     Gfx* displayList;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, 0x10);
+    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
 
     gDPSetRenderMode(displayListHead++,
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |

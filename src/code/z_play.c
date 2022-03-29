@@ -58,7 +58,9 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/Play_Update.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_801690CC.s")
+s32 Play_InCsMode(GlobalContext* globalCtx) {
+    return (globalCtx->csCtx.state != 0) || Player_InCsMode(&globalCtx->state);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_play/func_80169100.s")
 
@@ -158,8 +160,8 @@ void Play_SaveCycleSceneFlags(GameState* gameState) {
 
     cycleSceneFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
     cycleSceneFlags->chest = globalCtx->actorCtx.flags.chest;
-    cycleSceneFlags->swch0 = globalCtx->actorCtx.flags.switches[0];
-    cycleSceneFlags->swch1 = globalCtx->actorCtx.flags.switches[1];
+    cycleSceneFlags->switch0 = globalCtx->actorCtx.flags.switches[0];
+    cycleSceneFlags->switch1 = globalCtx->actorCtx.flags.switches[1];
 
     if (globalCtx->sceneNum == SCENE_INISIE_R) { // Inverted Stone Tower Temple
         cycleSceneFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
@@ -178,7 +180,7 @@ void Play_SetRespawnData(GameState* gameState, s32 respawnMode, u16 entranceInde
     gSaveContext.respawn[respawnMode].pos = *pos;
     gSaveContext.respawn[respawnMode].yaw = yaw;
     gSaveContext.respawn[respawnMode].playerParams = playerParams;
-    gSaveContext.respawn[respawnMode].tempSwchFlags = globalCtx->actorCtx.flags.switches[2];
+    gSaveContext.respawn[respawnMode].tempSwitchFlags = globalCtx->actorCtx.flags.switches[2];
     gSaveContext.respawn[respawnMode].unk_18 = globalCtx->actorCtx.flags.collectible[1];
     gSaveContext.respawn[respawnMode].tempCollectFlags = globalCtx->actorCtx.flags.collectible[2];
 }
@@ -188,7 +190,7 @@ void Play_SetupRespawnPoint(GameState* gameState, s32 respawnMode, s32 playerPar
     Player* player = GET_PLAYER(globalCtx);
 
     if (globalCtx->sceneNum != SCENE_KAKUSIANA) { // Grottos
-        Play_SetRespawnData(&globalCtx->state, respawnMode, (u16)((void)0, gSaveContext.entranceIndex),
+        Play_SetRespawnData(&globalCtx->state, respawnMode, (u16)((void)0, gSaveContext.save.entranceIndex),
                             globalCtx->roomCtx.currRoom.num, playerParams, &player->actor.world.pos,
                             player->actor.shape.rot.y);
     }
@@ -207,10 +209,10 @@ void func_80169ECC(GlobalContext* globalCtx) {
 void func_80169EFC(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    gSaveContext.respawn[0].tempSwchFlags = globalCtx->actorCtx.flags.switches[2];
-    gSaveContext.respawn[0].unk_18 = globalCtx->actorCtx.flags.collectible[1];
-    gSaveContext.respawn[0].tempCollectFlags = globalCtx->actorCtx.flags.collectible[2];
-    globalCtx->nextEntranceIndex = gSaveContext.respawn[0].entranceIndex;
+    gSaveContext.respawn[RESTART_MODE_DOWN].tempSwitchFlags = globalCtx->actorCtx.flags.switches[2];
+    gSaveContext.respawn[RESTART_MODE_DOWN].unk_18 = globalCtx->actorCtx.flags.collectible[1];
+    gSaveContext.respawn[RESTART_MODE_DOWN].tempCollectFlags = globalCtx->actorCtx.flags.collectible[2];
+    globalCtx->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_DOWN].entranceIndex;
     gSaveContext.respawnFlag = 1;
     func_80169ECC(globalCtx);
     globalCtx->sceneLoadFlag = 0x14;
@@ -222,7 +224,7 @@ void func_80169EFC(GameState* gameState) {
 void func_80169F78(GameState* gameState) {
     GlobalContext* globalCtx = (GlobalContext*)gameState;
 
-    globalCtx->nextEntranceIndex = gSaveContext.respawn[2].entranceIndex;
+    globalCtx->nextEntranceIndex = gSaveContext.respawn[RESTART_MODE_TOP].entranceIndex;
     gSaveContext.respawnFlag = -1;
     func_80169ECC(globalCtx);
     globalCtx->sceneLoadFlag = 0x14;

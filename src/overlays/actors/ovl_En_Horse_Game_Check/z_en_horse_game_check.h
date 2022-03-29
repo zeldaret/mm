@@ -32,13 +32,14 @@ enum {
 #define RACE_FLAG_4 4
 #define RACE_FLAGS 7
 
-#define GET_RACE_FLAGS (gSaveContext.weekEventReg[92] & RACE_FLAGS)
+#define GET_RACE_FLAGS (gSaveContext.save.weekEventReg[92] & RACE_FLAGS)
 
-#define SET_RACE_FLAGS(flag) {                                                                                                           \
-    gSaveContext.weekEventReg[92] &= (u8) ~RACE_FLAGS;                                                \
-    gSaveContext.weekEventReg[92] =                                                                                                      \
-        gSaveContext.weekEventReg[92] | (u8)((gSaveContext.weekEventReg[92] & ~RACE_FLAGS) | (flag)); \
-}
+#define SET_RACE_FLAGS(flag)                                                                                        \
+    {                                                                                                               \
+        gSaveContext.save.weekEventReg[92] &= (u8)~RACE_FLAGS;                                                      \
+        gSaveContext.save.weekEventReg[92] =                                                                        \
+            gSaveContext.save.weekEventReg[92] | (u8)((gSaveContext.save.weekEventReg[92] & ~RACE_FLAGS) | (flag)); \
+    }
 
 typedef struct EnHorseGameCheck {
     /* 0x000 */ DynaPolyActor dyna;

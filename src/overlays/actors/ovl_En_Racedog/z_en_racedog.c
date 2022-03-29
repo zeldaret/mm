@@ -225,7 +225,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1E0 = func_8013D648(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->unk_1E0 = SubS_GetPathByIndex(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
     if (ENRACEDOG_GET_3E0(&this->actor) < 14) {
@@ -330,10 +330,10 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
 void func_80B24E14(EnRacedog* this) {
     if (this->unk_290 % 2) {
         D_80B25D88[this->unk_290].unk_0E =
-            (((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
+            (((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
     } else {
         D_80B25D88[this->unk_290].unk_0E =
-            ((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
+            ((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
     }
 
     if ((D_80B25D88[this->unk_290].unk_0E >= 0x3547) || (D_80B25D88[this->unk_290].unk_0E < 0x3539)) {
