@@ -533,8 +533,8 @@ s32 func_80998A48(EnGs* this, GlobalContext* globalCtx) {
     } else if (this->unk_19D == 1) {
         if (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7,
                           0) == 0.0f) {
-            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) &&
-                Message_GetState(&globalCtx->msgCtx) == 0) {
+            if ((this->actor.params != ENGS_0) && !Play_InCsMode(globalCtx) &&
+                (Message_GetState(&globalCtx->msgCtx) == 0)) {
                 this->unk_216 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
                 Message_StartTextbox(globalCtx, 0x20D2, NULL);

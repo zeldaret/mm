@@ -165,11 +165,11 @@ s32 func_808F3178(EnIn* this, GlobalContext* globalCtx) {
     u8 prevUnk261 = this->unk261;
     u8 tmp;
 
-    this->unk260 = tmp = func_8013DB90(globalCtx, &this->unk248, -6.0f);
+    this->unk260 = tmp = SubS_IsFloorAbove(globalCtx, &this->unk248, -6.0f);
     if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
-    this->unk261 = tmp = func_8013DB90(globalCtx, &this->unk254, -6.0f);
+    this->unk261 = tmp = SubS_IsFloorAbove(globalCtx, &this->unk254, -6.0f);
     if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
     }
@@ -286,7 +286,7 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     sp36 = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->path, this->unk244, &sp28) && func_8013D768(&this->actor, &sp28, sp36)) {
+    if (SubS_CopyPointFromPath(this->path, this->unk244, &sp28) && SubS_MoveActorToPoint(&this->actor, &sp28, sp36)) {
         this->unk244++;
         if (this->unk244 >= this->path->count) {
             this->unk244 = 0;
@@ -1382,7 +1382,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->path = func_8013D648(globalCtx, ENIN_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(globalCtx, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
             if (GET_RACE_FLAGS == RACE_FLAG_2 || (GET_RACE_FLAGS) == RACE_FLAG_3) {

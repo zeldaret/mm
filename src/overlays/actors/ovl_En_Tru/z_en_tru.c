@@ -723,7 +723,7 @@ s32 func_80A87400(EnTru* this, GlobalContext* globalCtx) {
 
     if (this->path != NULL) {
         sp4C = Lib_SegmentedToVirtual(this->path->points);
-        if (func_8013BD40(&this->actor, this->path, this->unk_384)) {
+        if (SubS_HasReachedPoint(&this->actor, this->path, this->unk_384)) {
             if (this->unk_384 > this->unk_384 + 1) {
                 this->unk_384 = this->path->count - 2;
                 ret = true;
@@ -1127,7 +1127,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->unk_37C = -1;
     func_80A86924(this, 0);
-    this->path = func_8013BEDC(globalCtx, this->actor.params & 0xFF, 255, &this->unk_384);
+    this->path = SubS_GetDayDependentPath(globalCtx, this->actor.params & 0xFF, 255, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
     }

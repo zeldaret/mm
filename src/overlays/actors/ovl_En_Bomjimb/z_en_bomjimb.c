@@ -209,7 +209,7 @@ void func_80C012E0(EnBomjimb* this) {
 s32 func_80C012FC(EnBomjimb* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!func_801690CC(globalCtx) && (this->actor.xzDistToPlayer < 40.0f) &&
+    if (!Play_InCsMode(globalCtx) && (this->actor.xzDistToPlayer < 40.0f) &&
         (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (globalCtx->msgCtx.unk11F10 == 0)) {
         this->actor.speedXZ = 0.0f;
         func_80C02740(this, globalCtx);
@@ -722,7 +722,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if (!func_801690CC(globalCtx)) {
+    if (!Play_InCsMode(globalCtx)) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x10000000;
