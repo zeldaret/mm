@@ -12,9 +12,7 @@ typedef struct EnSyatekiOkuta {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnSyatekiOkutaActionFunc actionFunc;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ char unk_1D8[0x4];
-    /* 0x1DC */ f32 unk_1DC;
-    /* 0x1E0 */ char unk_1E0[0x4];
+    /* 0x1DC */ Vec3f unk_1D8;
     /* 0x1E4 */ Vec3s jointTable[16];
     /* 0x244 */ Vec3s morphTable[16];
     /* 0x2A4 */ s16 unk_2A4;

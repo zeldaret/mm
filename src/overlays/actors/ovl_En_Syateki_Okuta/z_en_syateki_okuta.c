@@ -192,7 +192,7 @@ void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     Actor* new_var = &this->actor;
 
     this->collider.dim.height =
-        (D_80A37570.dim.height - this->collider.dim.yShift) * this->unk_1DC * this->actor.scale.y * 100.0f;
+        (D_80A37570.dim.height - this->collider.dim.yShift) * this->unk_1D8.y * this->actor.scale.y * 100.0f;
     this->collider.dim.radius = D_80A37570.dim.radius * this->actor.scale.x * 100.0f;
 
     if (this->actionFunc == func_80A363B4) {
@@ -279,7 +279,55 @@ void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80A36CB0(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36CB0.s")
+void func_80A36CB0(EnSyatekiOkuta* this) {
+    f32 curFrame = this->skelAnime.curFrame;
+
+    if (this->actionFunc == func_80A363B4) {
+        if (curFrame < 8.0f) {
+            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.0f;
+        } else if (curFrame < 10.0f) {
+            this->unk_1D8.x = this->unk_1D8.z = 1.0f;
+            this->unk_1D8.y = ((curFrame - 7.0f) * 0.4f) + 1.0f;
+        } else if (curFrame < 14.0f) {
+            this->unk_1D8.x = this->unk_1D8.z = ((curFrame - 9.0f) * 0.075f) + 1.0f;
+            this->unk_1D8.y = 1.8f - ((curFrame - 9.0f) * 0.25f);
+        } else {
+            this->unk_1D8.x = this->unk_1D8.z = 1.3f - ((curFrame - 13.0f) * 0.05f);
+            this->unk_1D8.y = ((curFrame - 13.0f) * 0.0333f) + 0.8f;
+        }
+    } else if (this->actionFunc == func_80A36488) {
+        this->unk_1D8.x = this->unk_1D8.z = 1.0f;
+        this->unk_1D8.y = (sin_rad((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
+    } else if (this->actionFunc == func_80A36504) {
+        if (curFrame < 3.0f) {
+            this->unk_1D8.y = 1.0f;
+        } else if (curFrame < 4.0f) {
+            this->unk_1D8.y = (curFrame - 2.0f) + 1.0f;
+        } else {
+            this->unk_1D8.y = 2.0f - ((curFrame - 3.0f) * 0.333f);
+        }
+        this->unk_1D8.x = this->unk_1D8.z = 1.0f;
+    } else if (this->actionFunc == func_80A365EC) {
+        curFrame += this->unk_2A4;
+        if (curFrame >= 35.0f) {
+            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.0f;
+        } else if (curFrame < 4.0f) {
+            this->unk_1D8.x = this->unk_1D8.z = 1.0f - (curFrame * 0.0666f);
+            this->unk_1D8.y = (curFrame * 0.1666f) + 1.0f;
+        } else if (curFrame < 25.0f) {
+            this->unk_1D8.x = this->unk_1D8.z = ((curFrame - 4.0f) * 0.01f) + 0.8f;
+            this->unk_1D8.y = 1.5f - ((curFrame - 4.0f) * 0.025f);
+        } else if (curFrame < 27.0f) {
+            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = ((curFrame - 24.0f) * 0.25f) + 1.0f;
+        } else if (curFrame < 30.0f) {
+            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.5f - ((curFrame - 26.0f) * 0.233f);
+        } else {
+            this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = ((curFrame - 29.0f) * 0.04f) + 0.8f;
+        }
+    } else {
+        this->unk_1D8.x = this->unk_1D8.y = this->unk_1D8.z = 1.0f;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A370EC.s")
 
