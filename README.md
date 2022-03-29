@@ -50,7 +50,7 @@ We recommend using Debian or Ubuntu 20.04 Linux distributions.
 
 ### MacOS
 
-Preparation is covered in a [separate document](docsBUILDING_MACOS.md).
+Preparation is covered in a [separate document](docs/BUILDING_MACOS.md).
 
 
 ### Linux (Native or under WSL / VM)
@@ -74,13 +74,7 @@ sudo apt update
 sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev
 ```
 
-To install the Python dependencies simply run in a terminal:
-
-```bash
-python3 -m pip install -r requirements.txt
-```
-
-#### 2. Fork the repository
+#### 2. Clone the repository
 
 Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then clone your fork where you wish to have the project, with the command:
 
@@ -88,11 +82,27 @@ Create your own fork of the repository at `https://github.com/zeldaret/mm`. Then
 git clone https://github.com/<YOUR_USERNAME>/mm.git
 ```
 
-#### 3. Prepare a base ROM
+This will copy the GitHub repository contents into a new folder in the current directory called `mm`. Change into this directory before doing anything else:
+
+```bash
+cd mm
+```
+
+#### 3. Install python dependencies
+
+The build process has a few python packages required that are located in `requirements.txt`.
+
+To install them simply run in a terminal:
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+#### 4. Prepare a base ROM
 
 Copy your ROM to inside the root of this new project directory, and rename the file of the baserom to reflect the version of ROM you are using. ex: `baserom.mm.us.rev1.z64`
 
-#### 4. Make and Build the ROM
+#### 5. Make and Build the ROM
 
 To start the extraction/build process, run the following command:
 

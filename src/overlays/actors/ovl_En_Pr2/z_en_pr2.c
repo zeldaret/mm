@@ -152,7 +152,7 @@ void EnPr2_Init(Actor* thisx, GlobalContext* globalCtx) {
 
                 if (parent->update != NULL) {
                     this->unk_1C8 = ((EnEncount1*)parent)->unk_15A;
-                    this->path = func_8013D648(globalCtx, this->unk_1C8, 0x3F);
+                    this->path = SubS_GetPathByIndex(globalCtx, this->unk_1C8, 0x3F);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
                         this->unk_208 = 20.0f;
@@ -276,7 +276,7 @@ void func_80A745FC(EnPr2* this, GlobalContext* globalCtx) {
         Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.3f, 1.0f);
     }
 
-    if ((this->path != NULL) && !func_8013D68C(this->path, this->unk_1D0, &this->unk_21C)) {
+    if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_1D0, &this->unk_21C)) {
         Actor_MarkForDeath(&this->actor);
     }
 

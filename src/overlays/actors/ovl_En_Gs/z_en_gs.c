@@ -112,7 +112,7 @@ s8 func_80997A90(s16 arg0, s16 arg1) {
     if ((arg0 == 0) || ((arg0 != 1) && (arg0 != 2) && (arg0 == 3))) {
         phi_v1 = 0;
     } else {
-        phi_v1 = (gSaveContext.unk_EC4 >> (arg1 * 3)) & 7;
+        phi_v1 = (gSaveContext.save.unk_EC4 >> (arg1 * 3)) & 7;
     }
     return phi_v1;
 }
@@ -217,8 +217,8 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x20D0:
                         func_80997D14(this, globalCtx);
                         break;
@@ -296,7 +296,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
+                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
                         this->unk_194 = 1;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -306,7 +306,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.playerForm == PLAYER_FORM_ZORA)) {
+                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
                         this->unk_194 = 3;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -316,7 +316,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     break;
 
                 case 1:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.playerForm == PLAYER_FORM_GORON)) {
+                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
                         this->unk_194 = 2;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -388,8 +388,8 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
-        gSaveContext.unk_EC4 =
-            ((u32)gSaveContext.unk_EC4 & ~(7 << (this->unk_198 * 3))) | ((this->unk_194 & 7) << (this->unk_198 * 3));
+        gSaveContext.save.unk_EC4 = ((u32)gSaveContext.save.unk_EC4 & ~(7 << (this->unk_198 * 3))) |
+                                    ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {
@@ -450,7 +450,7 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
-                if (((gSaveContext.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
+                if (((gSaveContext.save.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
                     phi_v0 = 0;
                 }
             }
@@ -459,29 +459,29 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
                 this->unk_20C = -1;
                 switch (this->unk_194) {
                     case 1:
-                        if (!(gSaveContext.weekEventReg[77] & 8)) {
+                        if (!(gSaveContext.save.weekEventReg[77] & 8)) {
                             this->unk_20C = 6;
-                            gSaveContext.weekEventReg[77] |= 8;
+                            gSaveContext.save.weekEventReg[77] |= 8;
                         }
                         break;
 
                     case 3:
-                        if (!(gSaveContext.weekEventReg[77] & 0x10)) {
+                        if (!(gSaveContext.save.weekEventReg[77] & 0x10)) {
                             this->unk_20C = 6;
-                            gSaveContext.weekEventReg[77] |= 0x10;
+                            gSaveContext.save.weekEventReg[77] |= 0x10;
                         }
                         break;
 
                     case 2:
-                        if (!(gSaveContext.weekEventReg[77] & 0x20)) {
+                        if (!(gSaveContext.save.weekEventReg[77] & 0x20)) {
                             this->unk_20C = 6;
-                            gSaveContext.weekEventReg[77] |= 0x20;
+                            gSaveContext.save.weekEventReg[77] |= 0x20;
                         }
                         break;
                 }
 
-                if (!(gSaveContext.weekEventReg[90] & 0x10)) {
-                    gSaveContext.weekEventReg[90] |= 0x10;
+                if (!(gSaveContext.save.weekEventReg[90] & 0x10)) {
+                    gSaveContext.save.weekEventReg[90] |= 0x10;
                     this->unk_20C = 12;
                 }
 
@@ -533,8 +533,8 @@ s32 func_80998A48(EnGs* this, GlobalContext* globalCtx) {
     } else if (this->unk_19D == 1) {
         if (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7,
                           0) == 0.0f) {
-            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) &&
-                Message_GetState(&globalCtx->msgCtx) == 0) {
+            if ((this->actor.params != ENGS_0) && !Play_InCsMode(globalCtx) &&
+                (Message_GetState(&globalCtx->msgCtx) == 0)) {
                 this->unk_216 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
                 Message_StartTextbox(globalCtx, 0x20D2, NULL);
