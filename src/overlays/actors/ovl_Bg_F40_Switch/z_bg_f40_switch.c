@@ -145,7 +145,7 @@ void BgF40Switch_Press(BgF40Switch* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y -= 0.0495f;
     if (this->dyna.actor.scale.y <= 0.0165f) {
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_SWITCH);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Add(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         if (this->isInitiator) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
             this->isInitiator = false;

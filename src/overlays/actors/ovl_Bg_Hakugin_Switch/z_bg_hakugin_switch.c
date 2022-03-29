@@ -307,7 +307,7 @@ void func_80B15E78(BgHakuginSwitch* this, GlobalContext* globalCtx) {
 
     if (Math_StepToF(&this->dyna.actor.world.pos.y, sp20->unk_4 + this->dyna.actor.home.pos.y, sp20->unk_C)) {
         if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-            func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+            Rumble_Add(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         }
         func_80B15F3C(this, globalCtx);
     } else if (!(sp20->unk_14 & 0x80)) {
@@ -447,7 +447,7 @@ void func_80B16400(BgHakuginSwitch* this, GlobalContext* globalCtx) {
     if (Math_StepToF(&this->dyna.actor.world.pos.y,
                      (this->dyna.actor.home.pos.y + 2.0f) - (1800.0f * this->dyna.actor.scale.y), 10.0f)) {
         if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-            func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+            Rumble_Add(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         }
         func_80B16494(this, globalCtx);
     }

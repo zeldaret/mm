@@ -339,7 +339,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
 
     if (this->collider2.elements->dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Add(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
     this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];

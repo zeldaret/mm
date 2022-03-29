@@ -262,7 +262,7 @@ void func_808AEF68(EnBombf* this, GlobalContext* globalCtx) {
 void func_808AEFD4(EnBombf* this, GlobalContext* globalCtx) {
     if (this->colliderJntSph.elements->dim.modelSphere.radius == 0) {
         this->actor.flags |= ACTOR_FLAG_20;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Add(this->actor.xzDistToPlayer, 255, 20, 150);
     }
 
     this->colliderJntSph.elements->dim.modelSphere.radius = 100;

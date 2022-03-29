@@ -9,7 +9,7 @@ void Rumble_Update(void* arg0) {
 }
 
 // Used by some bosses (and fishing)
-void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
+void Rumble_AddForced(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
     s32 temp;
     s32 distance;
 
@@ -30,8 +30,7 @@ void func_8013EC44(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
     }
 }
 
-// Normal rumble?
-void func_8013ECE0(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
+void Rumble_Add(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
     s32 temp;
     s32 distance;
     s32 i;

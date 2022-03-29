@@ -67,7 +67,7 @@ void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {
     Quake_SetSpeed(quake, 20000);
     Quake_SetQuakeValues(quake, 1, 0, 0, 0);
     Quake_SetCountdown(quake, 7);
-    func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+    Rumble_Add(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
 }
 
 void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, GlobalContext* globalCtx) {

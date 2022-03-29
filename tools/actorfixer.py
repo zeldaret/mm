@@ -403,6 +403,8 @@ animdict = {
     "func_80169BC4": "Play_CameraGetUID",
     "func_80169C64": "Play_GetCsCamDataSetting",
     "func_80169C84": "Play_GetCsCamDataVec3s",
+    "func_8013EC44": "Rumble_AddForced",
+    "func_8013ECE0": "Rumble_Add",
     "func_8017D2FC": "Math3D_LineSegVsPlane",
     "func_8013A7C0": "SubS_FindDoor",
     "func_8013E640": "SubS_FindActorCustom",
@@ -452,7 +454,6 @@ animdict = {
     "func_8013E054": "SubS_ActorPathing_MoveWithGravity",
     "func_8013E07C": "SubS_ActorPathing_MoveWithoutGravityReverse",
     "func_8013E0A4": "SubS_ActorPathing_SetNextPoint",
-
     "func_80147624": "Message_ShouldAdvance",
     "func_80147734": "Message_ShouldAdvanceSilent",
     "func_80149EBC": "Message_FindMessage",
@@ -466,7 +467,6 @@ animdict = {
     "func_80158FB0": "Message_LoadTimeNES",
     "func_8015926C": "Message_LoadAreaTextNES",
     "func_8015E750": "Message_FindCreditsMessage",
-    
 
     # Structs members
     "skelAnime.unk03": "skelAnime.taper",

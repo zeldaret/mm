@@ -2225,8 +2225,8 @@ asm/non_matchings/code/z_sub_s/func_8013E7C0.s,func_8013E7C0,0x8013E7C0,0x4E
 asm/non_matchings/code/z_sub_s/func_8013E8F8.s,func_8013E8F8,0x8013E8F8,0x16
 asm/non_matchings/code/z_sub_s/func_8013E950.s,func_8013E950,0x8013E950,0xB0
 asm/non_matchings/code/code_8013EC10/Rumble_Update.s,Rumble_Update,0x8013EC10,0xD
-asm/non_matchings/code/code_8013EC10/func_8013EC44.s,func_8013EC44,0x8013EC44,0x27
-asm/non_matchings/code/code_8013EC10/func_8013ECE0.s,func_8013ECE0,0x8013ECE0,0x2F
+asm/non_matchings/code/code_8013EC10/Rumble_AddForced.s,Rumble_AddForced,0x8013EC44,0x27
+asm/non_matchings/code/code_8013EC10/Rumble_Add.s,Rumble_Add,0x8013ECE0,0x2F
 asm/non_matchings/code/code_8013EC10/Rumble_Init.s,Rumble_Init,0x8013ED9C,0xD
 asm/non_matchings/code/code_8013EC10/Rumble_Destroy.s,Rumble_Destroy,0x8013EDD0,0xD
 asm/non_matchings/code/code_8013EC10/Rumble_ControllerOneHasRumblePak.s,Rumble_ControllerOneHasRumblePak,0x8013EE04,0x8

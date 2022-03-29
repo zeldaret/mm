@@ -749,7 +749,7 @@ void EnBigslime_BreakIntoMinislime(EnBigslime* this, GlobalContext* globalCtx) {
     Quake_SetSpeed(quake, 20000);
     Quake_SetQuakeValues(quake, 15, 0, 0, 0);
     Quake_SetCountdown(quake, 15);
-    func_8013ECE0(this->actor.xyzDistToPlayerSq, 180, 20, 100);
+    Rumble_Add(this->actor.xyzDistToPlayerSq, 180, 20, 100);
     this->bigslimeCollider[0].base.atFlags &= ~AT_ON;
     this->gekkoCollider.base.acFlags &= ~(AC_ON | AC_HIT);
 

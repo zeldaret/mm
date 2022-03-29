@@ -564,7 +564,7 @@ void ObjSwitch_FloorSwitchPushDown(ObjSwitch* this, GlobalContext* globalCtx) {
     this->dyna.actor.scale.y -= 0.0495f;
     if (this->dyna.actor.scale.y <= this->floorSwitchDownScale) {
         ObjSwitch_PlayFootSwitchSfx(this);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Add(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);
         ObjSwitch_FloorSwitchDownInit(this);
     }
@@ -865,7 +865,7 @@ void ObjSwitch_LargeFloorSwitchPushDown(ObjSwitch* this, GlobalContext* globalCt
     this->dyna.actor.scale.y -= 0.074250005f;
     if (this->dyna.actor.scale.y <= 33.0f / 2000.0f) {
         ObjSwitch_PlayFootSwitchSfx(this);
-        func_8013ECE0(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Add(this->dyna.actor.xyzDistToPlayerSq, 120, 20, 10);
         ObjSwitch_StopCutscene(this);
         ObjSwitch_LargeFloorSwitchDownInit(this);
     }

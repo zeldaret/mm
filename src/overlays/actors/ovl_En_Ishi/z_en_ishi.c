@@ -599,7 +599,7 @@ void func_8095EBDC(EnIshi* this, GlobalContext* globalCtx) {
             Quake_SetSpeed(quake, 0x4350);
             Quake_SetQuakeValues(quake, 3, 0, 0, 0);
             Quake_SetCountdown(quake, 7);
-            func_8013ECE0(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+            Rumble_Add(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
 
         Actor_MarkForDeath(&this->actor);

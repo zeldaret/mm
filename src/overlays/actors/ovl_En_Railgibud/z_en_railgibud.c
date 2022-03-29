@@ -348,7 +348,7 @@ void EnRailgibud_AttemptPlayerFreeze(EnRailgibud* this, GlobalContext* globalCtx
 
     if (ABS_ALT(yaw) < 0x2008) {
         player->actor.freezeTimer = 60;
-        func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+        Rumble_Add(this->actor.xzDistToPlayer, 255, 20, 150);
         func_80123E90(globalCtx, &this->actor);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
         EnRailgibud_SetupWalkToPlayer(this);
@@ -394,7 +394,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, GlobalContext* globalCtx) {
             if (this->playerStunWaitTimer == 0) {
                 player->actor.freezeTimer = 40;
                 this->playerStunWaitTimer = 60;
-                func_8013ECE0(this->actor.xzDistToPlayer, 255, 20, 150);
+                Rumble_Add(this->actor.xzDistToPlayer, 255, 20, 150);
                 func_80123E90(globalCtx, &this->actor);
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_REDEAD_AIM);
             } else {
@@ -453,7 +453,7 @@ void EnRailgibud_Grab(EnRailgibud* this, GlobalContext* globalCtx) {
                 damageSfxId = player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S;
                 globalCtx->damagePlayer(globalCtx, -8);
                 func_800B8E58(player, damageSfxId);
-                func_8013ECE0(this->actor.xzDistToPlayer, 240, 1, 12);
+                Rumble_Add(this->actor.xzDistToPlayer, 240, 1, 12);
                 this->grabDamageTimer = 0;
             } else {
                 this->grabDamageTimer++;
