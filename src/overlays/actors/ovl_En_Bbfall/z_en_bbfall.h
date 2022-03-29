@@ -13,9 +13,18 @@ typedef struct EnBbfall {
     /* 0x188 */ Vec3s jointTable[16];
     /* 0x1E8 */ Vec3s morphTable[16];
     /* 0x248 */ EnBbfallActionFunc actionFunc;
-    /* 0x24C */ char unk_24C[0x4];
+    /* 0x24C */ u8 unk_24C;
+    /* 0x24D */ s8 unk_24D;
+    /* 0x24E */ char unk_24E[0x2];
     /* 0x250 */ s16 unk_250;
-    /* 0x252 */ char unk_252[0x132];
+    /* 0x252 */ char unk_252[0x2];
+    /* 0x254 */ f32 unk_254;
+    /* 0x258 */ f32 unk_258;
+    /* 0x25C */ char unk_25C[0x4];
+    /* 0x260 */ f32 unk_260;
+    /* 0x264 */ char unk_264[0x4];
+    /* 0x268 */ Vec3f unk_268[6];
+    /* 0x2B0 */ char unk_2B0[0xD4];
     /* 0x384 */ ColliderJntSph collider;
     /* 0x3A4 */ ColliderJntSphElement colliderElements[3];
 } EnBbfall; // size = 0x464

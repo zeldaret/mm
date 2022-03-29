@@ -24,6 +24,7 @@ void func_808BFE58(EnBbfall* this, GlobalContext* globalCtx);
 void func_808C00A0(EnBbfall* this, GlobalContext* globalCtx);
 void func_808C0178(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BF5E0(EnBbfall* this);
+void func_808BF7A0(EnBbfall* this);
 
 #if 0
 const ActorInit En_Bbfall_InitVars = {
@@ -114,7 +115,7 @@ extern CollisionCheckInfoInit D_808C0DCC;
 extern InitChainEntry D_808C0DD4[];
 
 extern SkeletonHeader D_06001A30;
-extern UNK_TYPE D_06000184;
+extern AnimationHeader D_06000184;
 extern AnimationHeader D_06000444;
 
 void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
@@ -134,7 +135,11 @@ void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Destroy.s")
+void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnBbfall* this = THIS;
+
+    Collider_DestroyJntSph(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF344.s")
 
@@ -150,9 +155,41 @@ void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF5AC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF5E0.s")
+void func_808BF5E0(EnBbfall* this) {
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF734.s")
+    Animation_PlayLoop(&this->skelAnime, &D_06000184);
+    this->collider.base.atFlags &= ~AT_ON;
+    this->collider.base.acFlags &= ~AC_ON;
+    this->collider.base.ocFlags1 &= ~OC1_ON;
+    this->unk_254 = 0.8f;
+    this->unk_258 = 1.0f;
+    this->unk_24C = -1;
+    this->actor.colChkInfo.health = D_808C0DCC.health;
+    this->actor.colorFilterTimer = 0;
+    this->unk_24D = 0;
+    this->actor.speedXZ = 0.0f;
+    this->actor.gravity = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
+    this->actor.world.pos.y -= 90.0f;
+    for (i = 0; i < 6; i++) {
+        Math_Vec3f_Copy(&this->unk_268[i], &this->actor.world.pos);
+        this->unk_268[i].y -= 47.0f;
+    }
+
+    this->actor.bgCheckFlags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actionFunc = func_808BF734;
+}
+
+void func_808BF734(EnBbfall* this, GlobalContext* globalCtx) {
+    if (this->unk_250 != 0) {
+        this->unk_250--;
+    } else if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE) && (this->actor.xyzDistToPlayerSq <= SQ(250.0f))) {
+        func_808BF7A0(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF7A0.s")
 
