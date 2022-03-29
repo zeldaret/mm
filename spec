@@ -760,8 +760,7 @@ beginseg
     name "ovl_En_Light"
     compress
     include "build/src/overlays/actors/ovl_En_Light/z_en_light.o"
-    include "build/data/ovl_En_Light/ovl_En_Light.data.o"
-    include "build/data/ovl_En_Light/ovl_En_Light.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Light/ovl_En_Light_reloc.o"
 endseg
 
 beginseg
