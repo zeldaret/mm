@@ -2492,8 +2492,7 @@ s32 func_8013E5CC(Vec3f* arg0, Vec3s* arg1, Vec3f* arg2, Vec3f* arg3, Vec3f* arg
 Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyActor verifyActor);
 s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, func_8013E748_VerifyFunc verifyFunc);
 s32 SubS_ActorAndPlayerAreFacing(GlobalContext* globalCtx, Actor* actor, void* data);
-void func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
-                   s16 actorYawTol);
+void func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol, s16 actorYawTol);
 s32 func_8013E950(Vec3f* arg0, Vec3f* arg1, s16 arg2, Vec3f* arg3, Vec3f* arg4, s16* arg5, s16* arg6, s16* arg7, s16* arg8, u16 arg9, u16 arg10, u16 arg11, u16 arg12);
 // void func_8013EC10(void);
 void func_8013EC44(f32 a, u8 b, u8 c, u8 d);
