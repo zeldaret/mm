@@ -28,7 +28,15 @@ void func_80A36CB0(EnSyatekiOkuta* this);
 void func_80A36444(EnSyatekiOkuta* this);
 void func_80A364C0(EnSyatekiOkuta* this);
 
-#if 0
+extern SkeletonHeader D_060033D0;
+extern AnimationHeader D_0600466C;
+extern AnimationHeader D_0600044C;
+extern AnimationHeader D_06003958;
+extern AnimationHeader D_06003B24;
+extern AnimationHeader D_06003EE4;
+extern AnimationHeader D_06004204;
+extern Gfx D_801AEFA0[];
+
 const ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
     ACTORCAT_ENEMY,
@@ -43,10 +51,32 @@ const ActorInit En_Syateki_Okuta_InitVars = {
 
 // static ColliderCylinderInit sCylinderInit = {
 static ColliderCylinderInit D_80A37570 = {
-    { COLTYPE_HIT3, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+    {
+        COLTYPE_HIT3,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 20, 40, -30, { 0, 0, 0 } },
 };
+
+static AnimationInfo D_80A3759C[] = {
+    { &D_0600044C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &D_06003958, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &D_06003B24, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &D_06003EE4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &D_0600466C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &D_06004204, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+};
+
+#include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80A37B88[] = {
@@ -54,23 +84,15 @@ static InitChainEntry D_80A37B88[] = {
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
-#endif
+static Color_RGBA8 D_80A37B90 = { 255, 255, 255, 255 };
 
-extern ColliderCylinderInit D_80A37570;
-extern InitChainEntry D_80A37B88[];
-extern Color_RGBA8 D_80A37B90;
-extern Color_RGBA8 D_80A37B94;
-extern Vec3f D_80A37B98;
-extern Color_RGBA8 D_80A37BA4;
-extern Color_RGBA8 D_80A37BA8;
+static Color_RGBA8 D_80A37B94 = { 150, 150, 150, 255 };
 
-extern SkeletonHeader D_060033D0;
-extern AnimationHeader D_0600466C;
-extern AnimationInfo D_80A3759C;
-extern Gfx D_801AEFA0[];
-extern Gfx D_80A37630[];
-extern Gfx D_80A37A88[];
-extern Gfx D_80A37B08[];
+static Vec3f D_80A37B98 = { 0.0f, -0.5, 0.0f };
+
+static Color_RGBA8 D_80A37BA4 = { 255, 255, 255, 255 };
+
+static Color_RGBA8 D_80A37BA8 = { 150, 150, 150, 0 };
 
 void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
@@ -170,7 +192,7 @@ void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 void func_80A36360(EnSyatekiOkuta* this) {
     this->actor.draw = EnSyatekiOkuta_Draw;
     this->unk_2AA = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 4);
     this->actionFunc = func_80A363B4;
 }
 
@@ -190,7 +212,7 @@ void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A36444(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 3);
     this->actionFunc = func_80A36488;
 }
 
@@ -203,7 +225,7 @@ void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A364C0(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 2);
     this->actionFunc = func_80A36504;
 }
 
@@ -223,7 +245,7 @@ void func_80A3657C(EnSyatekiOkuta* this) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, &D_80A3759C, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 1);
     this->actionFunc = func_80A365EC;
 }
 
@@ -479,7 +501,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_2A6 == 1) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_80A37630);
+        gSPSegment(POLY_OPA_DISP++, 0x08, ovl_En_Syateki_Okuta_DL_001640);
     }
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A37294, NULL,
@@ -498,9 +520,9 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->unk_2A6 == 2) {
-            gSPDisplayList(POLY_XLU_DISP++, D_80A37A88);
+            gSPDisplayList(POLY_XLU_DISP++, ovl_En_Syateki_Okuta_DL_001A98);
         } else {
-            gSPDisplayList(POLY_XLU_DISP++, D_80A37B08);
+            gSPDisplayList(POLY_XLU_DISP++, ovl_En_Syateki_Okuta_DL_001B18);
         }
     }
 
