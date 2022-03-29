@@ -1,6 +1,7 @@
 #include "global.h"
 #include "z64rumble.h"
 
+// sRumbleWasEnabledonLastFrame? Probably name it after unk_105
 u8 D_801D1E70 = true;
 
 void RumbleManager_Update(RumbleManager* rumbleMgr) {
@@ -8,10 +9,12 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
     s32 i;
     s32 temp;
 
+    // Turn of rumbling for all controllers
     for (i = 0; i < ARRAY_COUNT(rumbleMgr->rumbleEnabled); i++) {
-        rumbleMgr->rumbleEnabled[i] = 0;
+        rumbleMgr->rumbleEnabled[i] = false;
     }
 
+    // Rumbling update is disabled (?)
     if (!rumbleMgr->unk_105) {
         if (D_801D1E70) {
             for (i = 0; i < MAXCONTROLLERS; i++) {
@@ -20,13 +23,15 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         }
 
         D_801D1E70 = rumbleMgr->unk_105;
+
         func_80175434();
+
         return;
     }
 
     D_801D1E70 = rumbleMgr->unk_105;
 
-    if (rumbleMgr->unk_104 == 2) {
+    if (rumbleMgr->state == RUMBLEMANAGER_STATE_INITIAL) {
         for (i = 0; i < MAXCONTROLLERS; ++i) {
             func_8017544C(i, false);
         }
@@ -38,18 +43,20 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
             rumbleMgr->unk_C4[i] = 0;
         }
 
-        rumbleMgr->unk_106 = 0;
+        rumbleMgr->rumblingTimer = 0;
         rumbleMgr->unk_108 = 0;
+
         rumbleMgr->unk_10A = 0;
         rumbleMgr->unk_10B = 0;
         rumbleMgr->unk_10C = 0;
         rumbleMgr->unk_10D = 0;
-        rumbleMgr->unk_104 = 1;
+
+        rumbleMgr->state = RUMBLEMANAGER_STATE_1;
 
         func_80175434();
     }
 
-    if (rumbleMgr->unk_104 != 0) {
+    if (rumbleMgr->state != RUMBLEMANAGER_STATE_0) {
         for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
             if (rumbleMgr->unk_04[i] != 0) {
                 if (rumbleMgr->unk_44[i] > 0) {
@@ -64,7 +71,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
                 }
 
                 temp = rumbleMgr->unk_C4[i] + rumbleMgr->unk_04[i];
-                rumbleMgr->unk_C4[i] = temp;
+                rumbleMgr->unk_C4[i] = temp; // overflows
                 if (index == -1) {
                     index = i;
                     rumbleMgr->rumbleEnabled[0] = (temp >= 0x100);
@@ -88,7 +95,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
             }
 
             temp = rumbleMgr->unk_10D + rumbleMgr->unk_10A;
-            rumbleMgr->unk_10D = temp;
+            rumbleMgr->unk_10D = temp; // overflows
             rumbleMgr->rumbleEnabled[0] = (temp >= 0x100);
         }
 
@@ -103,39 +110,39 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         if (temp == 0) {
             rumbleMgr->unk_108++;
             if (rumbleMgr->unk_108 > 5) {
-                rumbleMgr->unk_106 = 0;
+                rumbleMgr->rumblingTimer = 0;
                 rumbleMgr->unk_108 = 5;
             }
         } else {
             rumbleMgr->unk_108 = 0;
-            rumbleMgr->unk_106++;
-            if (rumbleMgr->unk_106 > 0x1C20) {
-                rumbleMgr->unk_104 = 0;
+            rumbleMgr->rumblingTimer++;
+            if (rumbleMgr->rumblingTimer > 2 * 60 * 60) { // 2 minutes
+                rumbleMgr->state = RUMBLEMANAGER_STATE_0;
             }
         }
+    } else { // RUMBLEMANAGER_STATE_0
+        for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
+            rumbleMgr->unk_04[i] = 0;
+            rumbleMgr->unk_44[i] = 0;
+            rumbleMgr->unk_84[i] = 0;
+            rumbleMgr->unk_C4[i] = 0;
+        }
 
-        return;
+        rumbleMgr->rumblingTimer = 0;
+        rumbleMgr->unk_108 = 0;
+
+        rumbleMgr->unk_10A = 0;
+        rumbleMgr->unk_10B = 0;
+        rumbleMgr->unk_10C = 0;
+        rumbleMgr->unk_10D = 0;
+
+        func_80175434();
     }
-
-    for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
-        rumbleMgr->unk_04[i] = 0;
-        rumbleMgr->unk_44[i] = 0;
-        rumbleMgr->unk_84[i] = 0;
-        rumbleMgr->unk_C4[i] = 0;
-    }
-
-    rumbleMgr->unk_106 = 0;
-    rumbleMgr->unk_108 = 0;
-    rumbleMgr->unk_10A = 0;
-    rumbleMgr->unk_10B = 0;
-    rumbleMgr->unk_10C = 0;
-    rumbleMgr->unk_10D = 0;
-    func_80175434();
 }
 
 void RumbleManager_Init(RumbleManager* rumbleMgr) {
     bzero(rumbleMgr, sizeof(RumbleManager));
-    rumbleMgr->unk_104 = 2;
+    rumbleMgr->state = RUMBLEMANAGER_STATE_INITIAL;
     rumbleMgr->unk_105 = true;
 }
 

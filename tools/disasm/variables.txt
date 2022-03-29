@@ -4069,7 +4069,7 @@
     0x801F5AB4:("sDisableAnimQueueFlags","UNK_TYPE1","",0x1),
     0x801F5AC0:("gSkinLimbMatrices","MtxF","[60]",0xF00),
     0x801F69C0:("D_801F69C0","UNK_TYPE1","",0x10),
-    0x801F69D0:("sRumbleMgr","RumbleManager","",0x10E),
+    0x801F69D0:("gRumbleMgr","RumbleManager","",0x10E),
     0x801F6AE0:("sSkyboxDrawMatrix","Mtx*","",0x4),
     0x801F6AF0:("D_801F6AF0","UNK_TYPE1","",0x1),
     0x801F6AF2:("D_801F6AF2","UNK_TYPE1","",0x1),
