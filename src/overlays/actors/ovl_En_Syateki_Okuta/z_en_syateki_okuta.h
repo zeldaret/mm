@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define EN_SYATEKI_OKUTA_GET_F(thisx) ((thisx)->params & 0xF)
+
 struct EnSyatekiOkuta;
 
 typedef void (*EnSyatekiOkutaActionFunc)(struct EnSyatekiOkuta*, GlobalContext*);

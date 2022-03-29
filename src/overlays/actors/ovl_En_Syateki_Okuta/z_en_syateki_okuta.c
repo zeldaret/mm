@@ -17,17 +17,17 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A36260(EnSyatekiOkuta* this);
 void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A362F8(EnSyatekiOkuta* this);
 void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36444(EnSyatekiOkuta* this);
 void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A364C0(EnSyatekiOkuta* this);
 void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
-void func_80A36260(EnSyatekiOkuta* this);
-void func_80A362F8(EnSyatekiOkuta* this);
 void func_80A36CB0(EnSyatekiOkuta* this);
-void func_80A36444(EnSyatekiOkuta* this);
-void func_80A364C0(EnSyatekiOkuta* this);
 
 const ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
@@ -41,8 +41,7 @@ const ActorInit En_Syateki_Okuta_InitVars = {
     (ActorFunc)EnSyatekiOkuta_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A37570 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_HIT3,
         AT_NONE,
@@ -62,7 +61,7 @@ static ColliderCylinderInit D_80A37570 = {
     { 20, 40, -30, { 0, 0, 0 } },
 };
 
-static AnimationInfo D_80A3759C[] = {
+static AnimationInfo sAnimations[] = {
     { &object_okuta_Anim_00044C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &object_okuta_Anim_003958, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &object_okuta_Anim_003B24, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
@@ -73,8 +72,7 @@ static AnimationInfo D_80A3759C[] = {
 
 #include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80A37B88[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 66, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
@@ -96,11 +94,11 @@ void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     f32 ySurface;
     s32 bgId;
 
-    Actor_ProcessInitChain(&this->actor, D_80A37B88);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_okuta_Skel_0033D0, &object_okuta_Anim_00466C, this->jointTable,
                    this->morphTable, 16);
     Collider_InitCylinder(globalCtx, &this->collider);
-    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80A37570);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId,
                                                           &this->actor, &this->actor.world.pos);
@@ -138,21 +136,21 @@ s32 func_80A361F4(EnSyatekiOkuta* this) {
     s32 temp_v1;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    temp_v1 = this->actor.params & 0xF;
+    temp_v1 = EN_SYATEKI_OKUTA_GET_F(&this->actor);
     if ((temp_v1 == 1) || (temp_v1 == 4)) {
         temp_a0 = syatekiMan->unk_190;
         temp_a1 = (temp_v1 * 2) + 6;
 
         if ((temp_a0 >> temp_a1) & 3) {
-            return 1;
+            return true;
         }
 
         if ((temp_a1 == 8) && ((temp_a0 >> 0xE) & 3)) {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 void func_80A36260(EnSyatekiOkuta* this) {
@@ -188,7 +186,7 @@ void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 void func_80A36360(EnSyatekiOkuta* this) {
     this->actor.draw = EnSyatekiOkuta_Draw;
     this->unk_2AA = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 4);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
     this->actionFunc = func_80A363B4;
 }
 
@@ -208,7 +206,7 @@ void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A36444(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 3);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
     this->actionFunc = func_80A36488;
 }
 
@@ -221,7 +219,7 @@ void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A364C0(EnSyatekiOkuta* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 2);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
     this->actionFunc = func_80A36504;
 }
 
@@ -241,7 +239,7 @@ void func_80A3657C(EnSyatekiOkuta* this) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, D_80A3759C, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
     this->actionFunc = func_80A365EC;
 }
 
@@ -303,8 +301,8 @@ void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     Actor* new_var = &this->actor;
 
     this->collider.dim.height =
-        (D_80A37570.dim.height - this->collider.dim.yShift) * this->unk_1D8.y * this->actor.scale.y * 100.0f;
-    this->collider.dim.radius = D_80A37570.dim.radius * this->actor.scale.x * 100.0f;
+        (sCylinderInit.dim.height - this->collider.dim.yShift) * this->unk_1D8.y * this->actor.scale.y * 100.0f;
+    this->collider.dim.radius = sCylinderInit.dim.radius * this->actor.scale.x * 100.0f;
 
     if (this->actionFunc == func_80A363B4) {
         if ((this->unk_2A6 == 2) && func_80A361F4(this)) {
@@ -330,16 +328,16 @@ void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 
 s32 func_80A36A90(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     if ((this->actionFunc == func_80A365EC) || (this->actionFunc == func_80A36350)) {
-        return 0;
+        return false;
     }
 
     if ((this->collider.base.acFlags & AC_HIT) != 0) {
         this->collider.base.acFlags &= ~AC_HIT;
-        return 1;
+        return true;
     }
 
     func_80A368E0(this, globalCtx);
-    return 0;
+    return false;
 }
 
 void func_80A36AF8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
@@ -348,7 +346,7 @@ void func_80A36AF8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 
     if ((this->actionFunc != func_80A36488) && (this->actionFunc != func_80A363B4) && (syatekiMan->unk_26A == 1) &&
         (syatekiMan->unk_26C == 0)) {
-        temp_v1_2 = (syatekiMan->unk_190 >> ((this->actor.params & 0xF) * 2)) & 3;
+        temp_v1_2 = (syatekiMan->unk_190 >> (EN_SYATEKI_OKUTA_GET_F(&this->actor) * 2)) & 3;
         if (temp_v1_2 > 0) {
             Actor_SetScale(&this->actor, 0.01f);
             this->unk_2A6 = temp_v1_2;
@@ -447,7 +445,7 @@ s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
         arg2->x = (sin_rad((M_PI / 16) * arg1) * 0.4f) + 1.0f;
     } else if (this->actionFunc == func_80A365EC) {
         if ((arg1 >= 35.0f) || (arg1 < 25.0f)) {
-            return 0;
+            return false;
         }
 
         if (arg1 < 27.0f) {
@@ -461,10 +459,10 @@ s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
             arg2->x = arg2->y = 1.0f;
         }
     } else {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }
 
 s32 func_80A37294(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -478,10 +476,10 @@ s32 func_80A37294(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
         curFrame += this->unk_2A4;
     }
 
-    if (limbIndex == 0xE) {
+    if (limbIndex == OBJECT_OKUTA_LIMB_0E) {
         sp20 = this->unk_1D8;
         Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
-    } else if ((limbIndex == 0xF) && (func_80A370EC(this, curFrame, &sp20))) {
+    } else if ((limbIndex == OBJECT_OKUTA_LIMB_0F) && (func_80A370EC(this, curFrame, &sp20))) {
         Matrix_Scale(sp20.x, sp20.y, sp20.z, MTXMODE_APPLY);
     }
 
