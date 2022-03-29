@@ -99,7 +99,7 @@ static AnimationInfoS sAnimations[] = {
     { &gZoraWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-s8 D_8099F578[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
+s8 sBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
 s8 sParentBodyParts[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
 u8 sShadowSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -310,8 +310,8 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (D_8099F578[limbIndex] >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->bodyPartsPos[D_8099F578[limbIndex]]);
+    if (sBodyParts[limbIndex] >= 0) {
+        Matrix_MultiplyVector3fByState(&zeroVec, &this->bodyPartsPos[sBodyParts[limbIndex]]);
     }
     if (limbIndex == 15) {
         Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
