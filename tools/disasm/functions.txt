@@ -8201,7 +8201,7 @@
     0x8097DCA0:("EffectSsKakera_Init",),
     0x8097DE30:("func_8097DE30",),
     0x8097DE6C:("EffectSsKakera_Draw",),
-    0x8097E130:("func_8097E130",),
+    0x8097E130:("EffectSsKakera_CheckForObject",),
     0x8097E19C:("func_8097E19C",),
     0x8097E34C:("func_8097E34C",),
     0x8097E368:("func_8097E368",),

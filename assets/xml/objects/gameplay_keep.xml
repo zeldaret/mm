@@ -38,7 +38,7 @@
         <Texture Name="gameplay_keep_Tex_002E08" OutName="tex_002E08" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
         <Texture Name="gameplay_keep_Tex_003008" OutName="tex_003008" Format="i8" Width="8" Height="8" Offset="0x3008" />
         <Blob Name="gameplay_keep_Blob_003050" Size="0x20" Offset="0x3050" />
-        <DList Name="gameplay_keep_DL_0032B0" Offset="0x32B0" />
+        <DList Name="gDekuStickDL" Offset="0x32B0" />
         <Blob Name="gameplay_keep_Blob_003400" Size="0x9D0" Offset="0x3400" />
         <DList Name="gameplay_keep_DL_005360" Offset="0x5360" />
         <DList Name="gameplay_keep_DL_0056C0" Offset="0x56C0" />
@@ -68,7 +68,7 @@
         <Texture Name="gameplay_keep_Tex_00C7B0" OutName="tex_00C7B0" Format="rgba16" Width="8" Height="8" Offset="0xC7B0" />
         <Texture Name="gameplay_keep_Tex_00C830" OutName="tex_00C830" Format="rgba16" Width="16" Height="16" Offset="0xC830" />
         <Texture Name="gameplay_keep_Tex_00CA30" OutName="tex_00CA30" Format="rgba16" Width="16" Height="16" Offset="0xCA30" />
-        <Texture Name="gameplay_keep_Tex_00CC30" OutName="tex_00CC30" Format="i8" Width="16" Height="16" Offset="0xCC30" />
+        <Texture Name="gDekuStickTex" OutName="tex_00CC30" Format="i8" Width="16" Height="16" Offset="0xCC30" />
         <Blob Name="gameplay_keep_Blob_00CD30" Size="0x210" Offset="0xCD30" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CF40" Offset="0xCF40" />
         <PlayerAnimation Name="gameplay_keep_Linkanim_00CF48" Offset="0xCF48" />
