@@ -183,8 +183,8 @@ void func_80997D38(EnGs* this, GlobalContext* globalCtx) {
 
     if (Message_GetState(&globalCtx->msgCtx) == 0) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
-            func_8013E8F8(&this->actor, globalCtx, D_8099A408[this->actor.params], D_8099A408[this->actor.params], EXCH_ITEM_NONE,
-                          0x2000, 0x2000);
+            func_8013E8F8(&this->actor, globalCtx, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
+                          EXCH_ITEM_NONE, 0x2000, 0x2000);
         }
     }
 
