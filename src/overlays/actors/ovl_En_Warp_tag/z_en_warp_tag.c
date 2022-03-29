@@ -91,7 +91,7 @@ void EnWarpTag_CheckDungeonKeepObject(EnWarptag* this, GlobalContext* globalCtx)
 }
 
 void EnWarpTag_WaitForPlayer(EnWarptag* this, GlobalContext* globalCtx) {
-    if (!Player_InCsMode(&globalCtx->state) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
+    if (!Player_InCsMode(globalCtx) && (this->dyna.actor.xzDistToPlayer <= 30.0f) &&
         (this->dyna.actor.playerHeightRel <= 10.0f)) {
         if (GET_WARPTAG_INVISIBLE(&this->dyna.actor)) {
             func_800B7298(globalCtx, NULL, 0x51);
