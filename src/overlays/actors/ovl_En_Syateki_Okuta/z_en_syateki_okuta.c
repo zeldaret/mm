@@ -5,6 +5,7 @@
  */
 
 #include "z_en_syateki_okuta.h"
+#include "objects/object_okuta/object_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
@@ -27,15 +28,6 @@ void func_80A362F8(EnSyatekiOkuta* this);
 void func_80A36CB0(EnSyatekiOkuta* this);
 void func_80A36444(EnSyatekiOkuta* this);
 void func_80A364C0(EnSyatekiOkuta* this);
-
-extern SkeletonHeader D_060033D0;
-extern AnimationHeader D_0600466C;
-extern AnimationHeader D_0600044C;
-extern AnimationHeader D_06003958;
-extern AnimationHeader D_06003B24;
-extern AnimationHeader D_06003EE4;
-extern AnimationHeader D_06004204;
-extern Gfx D_801AEFA0[];
 
 const ActorInit En_Syateki_Okuta_InitVars = {
     ACTOR_EN_SYATEKI_OKUTA,
@@ -71,9 +63,12 @@ static ColliderCylinderInit D_80A37570 = {
 };
 
 static AnimationInfo D_80A3759C[] = {
-    { &D_0600044C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &D_06003958, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &D_06003B24, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &D_06003EE4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &D_0600466C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, { &D_06004204, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_okuta_Anim_00044C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_okuta_Anim_003958, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_okuta_Anim_003B24, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_okuta_Anim_003EE4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
+    { &object_okuta_Anim_00466C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &object_okuta_Anim_004204, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
 };
 
 #include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
@@ -102,7 +97,8 @@ void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 bgId;
 
     Actor_ProcessInitChain(&this->actor, D_80A37B88);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060033D0, &D_0600466C, this->jointTable, this->morphTable, 16);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_okuta_Skel_0033D0, &object_okuta_Anim_00466C, this->jointTable,
+                   this->morphTable, 16);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80A37570);
 
@@ -160,7 +156,7 @@ s32 func_80A361F4(EnSyatekiOkuta* this) {
 }
 
 void func_80A36260(EnSyatekiOkuta* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_0600466C, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_okuta_Anim_00466C, 0.0f);
     this->actor.draw = NULL;
     this->actionFunc = func_80A362A8;
 }
@@ -180,7 +176,7 @@ void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 }
 
 void func_80A362F8(EnSyatekiOkuta* this) {
-    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_0600466C, 0.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &object_okuta_Anim_00466C, 0.0f);
     this->actor.draw = NULL;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80A36350;
@@ -240,7 +236,7 @@ void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 
 void func_80A3657C(EnSyatekiOkuta* this) {
     this->unk_2A4 = 0;
-    this->unk_2AA = 0x12C;
+    this->unk_2AA = 300;
     if (this->unk_2A6 == 1) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
