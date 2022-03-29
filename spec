@@ -4534,8 +4534,7 @@ beginseg
     name "ovl_Bg_F40_Block"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Block/z_bg_f40_block.o"
-    include "build/data/ovl_Bg_F40_Block/ovl_Bg_F40_Block.data.o"
-    include "build/data/ovl_Bg_F40_Block/ovl_Bg_F40_Block.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Block/ovl_Bg_F40_Block_reloc.o"
 endseg
 
 beginseg
