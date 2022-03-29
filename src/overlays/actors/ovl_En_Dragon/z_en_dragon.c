@@ -42,10 +42,10 @@ typedef enum {
 } DeepPythonAction;
 
 typedef enum {
-    /* 0 */ DEEP_PYTHON_EXTEND_STATE_0,
-    /* 1 */ DEEP_PYTHON_EXTEND_STATE_1,
-    /* 2 */ DEEP_PYTHON_EXTEND_STATE_2,
-    /* 3 */ DEEP_PYTHON_EXTEND_STATE_3,
+    /* 0 */ DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED,
+    /* 1 */ DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED,
+    /* 2 */ DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY,
+    /* 3 */ DEEP_PYTHON_EXTEND_STATE_REPEAT_SMALL_SWAY,
 } DeepPythonExtendState;
 
 typedef enum {
@@ -361,78 +361,82 @@ void EnDragon_RetreatOrIdle(EnDragon* this, GlobalContext* globalCtx) {
 
 void EnDragon_SetupExtend(EnDragon* this) {
     this->state = 0;
-    this->unk_2B0 = this->state;
+    this->behindJawRetreatTimer = this->state;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR_TRG);
-    this->forceRetreatTimer = 250;
+    this->retreatTimer = 250;
     this->actionFunc = EnDragon_Extend;
 }
 
 void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 currentFrame = this->skelAnime.curFrame;
-    s16 phi_v1;
+    s16 yaw;
 
     EnDragon_SpawnBubbles(this, globalCtx, this->jawPos);
 
     if (this->action >= DEEP_PYTHON_ACTION_DAMAGE) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
         EnDragon_SetupRetreatOrIdle(this);
-    } else if (this->forceRetreatTimer == 0) {
+    } else if (this->retreatTimer == 0) {
         this->action = DEEP_PYTHON_ACTION_RETREAT;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
         EnDragon_SetupRetreatOrIdle(this);
-    } else if (this->state == DEEP_PYTHON_EXTEND_STATE_0) {
-        Vec3f sp38;
+    } else if (this->state == DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED) {
+        Vec3f extendedPos;
 
-        Math_Vec3f_Copy(&sp38, &this->burrowEntrancePos);
+        Math_Vec3f_Copy(&extendedPos, &this->burrowEntrancePos);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR - SFX_FLAG);
-        sp38.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
-        sp38.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
+        extendedPos.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
+        extendedPos.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
         this->actor.speedXZ = 40.0f;
         Math_SmoothStepToS(&this->jawZRotation, 0xFA0, 5, 0xBB8, 0x14);
 
-        if ((fabsf(this->actor.world.pos.x - sp38.x) < 51.0f) && (fabsf(this->actor.world.pos.z - sp38.z) < 51.0f)) {
+        if ((fabsf(this->actor.world.pos.x - extendedPos.x) < 51.0f) &&
+            (fabsf(this->actor.world.pos.z - extendedPos.z) < 51.0f)) {
             this->actor.speedXZ = 0.0f;
-            Math_ApproachF(&this->actor.world.pos.x, sp38.x, 0.3f, 50.0f);
-            Math_ApproachF(&this->actor.world.pos.z, sp38.z, 0.3f, 50.0f);
-            if ((fabsf(this->actor.world.pos.x - sp38.x) < 4.0f) && (fabsf(this->actor.world.pos.z - sp38.z) < 4.0f)) {
+            Math_ApproachF(&this->actor.world.pos.x, extendedPos.x, 0.3f, 50.0f);
+            Math_ApproachF(&this->actor.world.pos.z, extendedPos.z, 0.3f, 50.0f);
+            if ((fabsf(this->actor.world.pos.x - extendedPos.x) < 4.0f) &&
+                (fabsf(this->actor.world.pos.z - extendedPos.z) < 4.0f)) {
                 if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
                     EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
                 }
 
-                this->state = DEEP_PYTHON_EXTEND_STATE_1;
+                this->state = DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED;
             }
         }
     } else {
         Math_SmoothStepToS(&this->jawZRotation, 0, 5, 0xBB8, 0x14);
         SkelAnime_Update(&this->skelAnime);
-        if (this->state == DEEP_PYTHON_EXTEND_STATE_1) {
+        if (this->state == DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED) {
             if (currentFrame < this->endFrame) {
                 return;
             }
-            this->state = DEEP_PYTHON_EXTEND_STATE_2;
+            this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY;
         }
 
-        phi_v1 = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->jawPos, &player->actor.world.pos), this->actor.shape.rot.y));
-        if (phi_v1 < 0x5000) {
-            if ((this->endFrame <= currentFrame) && (this->unk_2B2 == 0)) {
+        yaw = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->jawPos, &player->actor.world.pos), this->actor.shape.rot.y));
+        if (yaw < 0x5000) {
+            // Player is in front of the jaw
+            if ((this->endFrame <= currentFrame) && (this->largeSwayWaitTimer == 0)) {
                 if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
                     EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
                 }
 
-                this->state = DEEP_PYTHON_EXTEND_STATE_2;
+                this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY;
             }
 
-            this->unk_2B0 = 0;
+            this->behindJawRetreatTimer = 0;
         } else {
-            if (this->state == DEEP_PYTHON_EXTEND_STATE_2) {
+            // Player is in behind the jaw
+            if (this->state == DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY) {
                 EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_SMALL_SIDE_SWAY);
-                this->unk_2B2 = Rand_ZeroFloat(20.0f) + this->endFrame;
-                this->state = DEEP_PYTHON_EXTEND_STATE_3;
+                this->largeSwayWaitTimer = Rand_ZeroFloat(20.0f) + this->endFrame;
+                this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_SMALL_SWAY;
             }
 
-            this->unk_2B0++;
-            if (this->unk_2B0 > 60) {
+            this->behindJawRetreatTimer++;
+            if (this->behindJawRetreatTimer > 60) {
                 this->action = DEEP_PYTHON_ACTION_RETREAT;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
                 EnDragon_SetupRetreatOrIdle(this);
@@ -450,20 +454,20 @@ void EnDragon_CameraSetAtEye(EnDragon* this, GlobalContext* globalCtx, Vec3f eye
 
 void EnDragon_SetupGrab(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp28;
-    s16 temp_v0;
+    Vec3f extendedPos;
+    s16 yaw;
 
     if (!ActorCutscene_GetCanPlayNext(this->grabCutsceneIndex)) {
         ActorCutscene_SetIntentToPlay(this->grabCutsceneIndex);
     } else {
         ActorCutscene_StartAndSetUnkLinkFields(this->grabCutsceneIndex, &this->actor);
-        Math_Vec3f_Copy(&sp28, &this->burrowEntrancePos);
-        sp28.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
-        sp28.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
-        Math_Vec3f_Copy(&this->actor.world.pos, &sp28);
-        temp_v0 = Math_Vec3f_Yaw(&player->actor.world.pos, &this->jawPos);
-        player->actor.shape.rot.y = temp_v0;
-        player->actor.world.rot.y = temp_v0;
+        Math_Vec3f_Copy(&extendedPos, &this->burrowEntrancePos);
+        extendedPos.x += Math_SinS(this->actor.world.rot.y) * -530.0f;
+        extendedPos.z += Math_CosS(this->actor.world.rot.y) * -530.0f;
+        Math_Vec3f_Copy(&this->actor.world.pos, &extendedPos);
+        yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &this->jawPos);
+        player->actor.shape.rot.y = yaw;
+        player->actor.world.rot.y = yaw;
         this->state = DEEP_PYTHON_GRAB_STATE_0;
         this->grabTimer = 0;
         this->hasGrabbedPlayer = false;
@@ -547,7 +551,7 @@ void EnDragon_SetupAttack(EnDragon* this) {
         EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
     }
 
-    this->unk_2B0 = 0;
+    this->behindJawRetreatTimer = 0;
     this->grabTimer = 0;
     this->state = DEEP_PYTHON_ATTACK_STATE_0;
     this->actionFunc = EnDragon_Attack;
@@ -757,16 +761,16 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnDragon* this = THIS;
 
-    if (this->forceRetreatTimer != 0) {
-        this->forceRetreatTimer--;
+    if (this->retreatTimer != 0) {
+        this->retreatTimer--;
     }
 
     if (this->timer != 0) {
         this->timer--;
     }
 
-    if (this->unk_2B2 != 0) {
-        this->unk_2B2--;
+    if (this->largeSwayWaitTimer != 0) {
+        this->largeSwayWaitTimer--;
     }
 
     if (this->grabWaitTimer != 0) {
@@ -807,14 +811,14 @@ s32 EnDragon_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
 void EnDragon_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDragon* this = THIS;
-    Vec3f D_80B60878 = { 350.0f, -120.0f, -60.0f };
+    Vec3f playerGrabOffsetFromJawPos = { 350.0f, -120.0f, -60.0f };
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
         Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->jawPos);
-        D_80B60878.x = 350.0f;
-        D_80B60878.y = -120.0f;
-        D_80B60878.z = -60.0f;
-        Matrix_MultiplyVector3fByState(&D_80B60878, &this->playerGrabPosition);
+        playerGrabOffsetFromJawPos.x = 350.0f;
+        playerGrabOffsetFromJawPos.y = -120.0f;
+        playerGrabOffsetFromJawPos.z = -60.0f;
+        Matrix_MultiplyVector3fByState(&playerGrabOffsetFromJawPos, &this->playerGrabPosition);
     }
 
     if (limbIndex == DEEP_PYTHON_LIMB_HEAD_AND_COLLAR_ROOT) {

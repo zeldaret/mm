@@ -28,9 +28,9 @@ typedef struct EnDragon {
     /* 0x2A8 */ s16 jawZRotation;
     /* 0x2AA */ s16 jawYRotation; // Never initialized by the actor
     /* 0x2AC */ s16 jawXRotation; // Never initialized by the actor
-    /* 0x2AE */ s16 forceRetreatTimer; // If the Deep Python is extended and this timer reaches 0, it is forced to retreat back to its burrow
-    /* 0x2B0 */ s16 unk_2B0; // some sort of extend timer
-    /* 0x2B2 */ s16 unk_2B2; // some sort of extend timer
+    /* 0x2AE */ s16 retreatTimer; // If the Deep Python is extended and this timer reaches 0, it is forced to retreat back to its burrow
+    /* 0x2B0 */ s16 behindJawRetreatTimer; // If the player is behind the jaw, then this will count up. When it reaches 60, the Deep Python will retreat
+    /* 0x2B2 */ s16 largeSwayWaitTimer; // If the player is in front of the jaw, it won't play or replay the large sway animation unless this is zero.
     /* 0x2B4 */ s16 timer;
     /* 0x2B6 */ s16 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x2B8 */ s16 hasGrabbedPlayer;
