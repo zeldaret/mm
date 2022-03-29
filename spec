@@ -2712,8 +2712,7 @@ beginseg
     name "ovl_Obj_Entotu"
     compress
     include "build/src/overlays/actors/ovl_Obj_Entotu/z_obj_entotu.o"
-    include "build/data/ovl_Obj_Entotu/ovl_Obj_Entotu.data.o"
-    include "build/data/ovl_Obj_Entotu/ovl_Obj_Entotu.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Entotu/ovl_Obj_Entotu_reloc.o"
 endseg
 
 beginseg
