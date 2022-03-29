@@ -2624,8 +2624,7 @@ beginseg
     name "ovl_Effect_En_Ice_Block"
     compress
     include "build/src/overlays/effects/ovl_Effect_En_Ice_Block/z_eff_en_ice_block.o"
-    include "build/data/ovl_Effect_En_Ice_Block/ovl_Effect_En_Ice_Block.data.o"
-    include "build/data/ovl_Effect_En_Ice_Block/ovl_Effect_En_Ice_Block.reloc.o"
+    include "build/src/overlays/effects/ovl_Effect_En_Ice_Block/ovl_Effect_En_Ice_Block_reloc.o"
 endseg
 
 beginseg
