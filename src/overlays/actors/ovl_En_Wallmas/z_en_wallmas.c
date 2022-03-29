@@ -281,7 +281,7 @@ void EnWallmas_Drop(EnWallmas* this, GlobalContext* globalCtx) {
 
     if ((player->stateFlags2 & 0x80) || (player->actor.freezeTimer > 0)) {
         EnWallmas_SetupReturnToCeiling(this);
-    } else if (!func_801690CC(globalCtx) && !(player->stateFlags2 & 0x10) && (player->invincibilityTimer >= 0) &&
+    } else if (!Play_InCsMode(globalCtx) && !(player->stateFlags2 & 0x10) && (player->invincibilityTimer >= 0) &&
                (this->actor.xzDistToPlayer < 30.0f) && (this->actor.playerHeightRel < -5.0f) &&
                (-(f32)(player->cylinder.dim.height + 10) < this->actor.playerHeightRel)) {
         EnWallmas_SetupTakePlayer(this, globalCtx);
@@ -479,7 +479,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, GlobalContext* globalCtx) {
             this->actor.world.pos.y += 10.0f;
         }
 
-        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[((void)0, gSaveContext.playerForm)];
+        player->actor.world.pos.y = this->actor.world.pos.y - sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)];
         if (this->timer == -30) {
             func_800B8E58(player, player->ageProperties->unk_92 + NA_SE_VO_LI_TAKEN_AWAY);
         }
@@ -491,7 +491,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, GlobalContext* globalCtx) {
         this->timer += 2;
     } else {
         Math_StepToF(&this->actor.world.pos.y,
-                     sYOffsetPerForm[((void)0, gSaveContext.playerForm)] + player->actor.world.pos.y, 5.0f);
+                     sYOffsetPerForm[((void)0, gSaveContext.save.playerForm)] + player->actor.world.pos.y, 5.0f);
     }
 
     Math_StepToF(&this->actor.world.pos.x, player->actor.world.pos.x, 3.0f);
