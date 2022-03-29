@@ -4188,8 +4188,7 @@ beginseg
     name "ovl_En_Neo_Reeba"
     compress
     include "build/src/overlays/actors/ovl_En_Neo_Reeba/z_en_neo_reeba.o"
-    include "build/data/ovl_En_Neo_Reeba/ovl_En_Neo_Reeba.data.o"
-    include "build/data/ovl_En_Neo_Reeba/ovl_En_Neo_Reeba.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Neo_Reeba/ovl_En_Neo_Reeba_reloc.o"
 endseg
 
 beginseg
