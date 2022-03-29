@@ -15,11 +15,11 @@ typedef struct {
 } CurveInterpKnot; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ u8* maxIndex;
-    /* 0x4 */ CurveInterpKnot* CurveInterpKnot;
-    /* 0x8 */ s16* copyValues;
+    /* 0x0 */ u8* knotCount;
+    /* 0x4 */ CurveInterpKnot* interpolationData;
+    /* 0x8 */ s16* constantData;
     /* 0xC */ s16 unk_0C; // Set but not used
-    /* 0xE */ s16 unk10;
+    /* 0xE */ s16 maxFrameCount; // Not used, inferred from use in objects
 } CurveAnimationHeader; // size 0x10
 
 typedef struct {

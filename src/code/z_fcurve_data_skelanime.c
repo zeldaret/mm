@@ -12,10 +12,10 @@
  * - a header (really a footer, for it is always last in the object file)
  * - a list of counts for the 9 properties of each limb (u8)
  * - a list of interpolation data (CurveInterpKnot). The length is the sum of the counts.
- * - a list of fixed data (). The length is the number of 0 in counts.
+ * - a list of constant data (). The length is the number of 0 in counts.
  *
  * If the interpolation count for a property is 0, the value of the property is copied from the next number in the
- * fixed data; there are no gaps for nonzero interpolation count.
+ * constant data; there are no gaps for nonzero interpolation count.
  * If the interpolation count N for a property is larger than 0, the next N elements of the interpolation data array
  * are used to interpolate the value of the property, using Curve_Interpolate.
  *
@@ -43,13 +43,13 @@ void SkelCurve_Clear(SkelCurve* skelCurve) {
  *
  * @return bool always true
  */
-s32 SkelCurve_Init(GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeletonHeader* limbListSeg,
+s32 SkelCurve_Init(GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeletonHeader* skeletonHeaderSeg,
                    CurveAnimationHeader* animation) {
     SkelCurveLimb** limbs;
-    CurveSkeletonHeader* skeleton = Lib_SegmentedToVirtual(limbListSeg);
+    CurveSkeletonHeader* skeletonHeader = Lib_SegmentedToVirtual(skeletonHeaderSeg);
 
-    skelCurve->limbCount = skeleton->limbCount;
-    skelCurve->skeleton = Lib_SegmentedToVirtual(skeleton->limbs);
+    skelCurve->limbCount = skeletonHeader->limbCount;
+    skelCurve->skeleton = Lib_SegmentedToVirtual(skeletonHeader->limbs);
 
     skelCurve->transforms = ZeldaArena_Malloc(sizeof(*skelCurve->transforms) * skelCurve->limbCount);
 
@@ -93,19 +93,19 @@ typedef enum {
  */
 s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
     s16* transforms;
-    u8* transformMaxIndex;
-    CurveAnimationHeader* transformIndex;
-    u16* transformCopyValues;
-    s32 i;
+    u8* knotCount;
+    CurveAnimationHeader* animation;
+    u16* constantData;
+    s32 curLimb;
     s32 ret = false;
     s32 coord;
-    CurveInterpKnot* transData;
+    CurveInterpKnot* startKnot;
     s32 vecType;
 
-    transformIndex = Lib_SegmentedToVirtual(skelCurve->animation);
-    transformMaxIndex = Lib_SegmentedToVirtual(transformIndex->maxIndex);
-    transData = Lib_SegmentedToVirtual(transformIndex->CurveInterpKnot);
-    transformCopyValues = Lib_SegmentedToVirtual(transformIndex->copyValues);
+    animation = Lib_SegmentedToVirtual(skelCurve->animation);
+    knotCount = Lib_SegmentedToVirtual(animation->knotCount);
+    startKnot = Lib_SegmentedToVirtual(animation->interpolationData);
+    constantData = Lib_SegmentedToVirtual(animation->constantData);
     transforms = (s16*)skelCurve->transforms;
 
     skelCurve->curFrame += skelCurve->playSpeed * ((s32)globalCtx->state.framerateDivisor * 0.5f);
@@ -116,19 +116,19 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
         ret = true;
     }
 
-    for (i = 0; i < skelCurve->limbCount; i++) {
+    for (curLimb = 0; curLimb < skelCurve->limbCount; curLimb++) {
         for (vecType = SKELCURVE_VEC_TYPE_SCALE; vecType < SKELCURVE_VEC_TYPE_MAX;
              vecType++) {                         // scale/rotation/position
             for (coord = 0; coord < 3; coord++) { // x/y/z
                 f32 transformValue;
 
-                if (*transformMaxIndex == 0) {
-                    transformValue = *transformCopyValues;
+                if (*knotCount == 0) {
+                    transformValue = *constantData;
                     *transforms = transformValue;
-                    transformCopyValues++;
+                    constantData++;
                 } else {
-                    transformValue = Curve_Interpolate(skelCurve->curFrame, transData, *transformMaxIndex);
-                    transData += *transformMaxIndex;
+                    transformValue = Curve_Interpolate(skelCurve->curFrame, startKnot, *knotCount);
+                    startKnot += *knotCount;
                     if (vecType == SKELCURVE_VEC_TYPE_SCALE) {
                         // Rescaling allows for more refined scaling using an s16
                         *transforms = transformValue * SKELCURVE_SCALE_SCALE;
@@ -140,7 +140,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
                         *transforms = transformValue * SKELCURVE_SCALE_POSITION;
                     }
                 }
-                transformMaxIndex++;
+                knotCount++;
                 transforms++;
             }
         }
@@ -176,7 +176,6 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
         rot.y = transform->y;
         rot.z = transform->z;
         transform++;
-        // Position.
         pos.x = transform->x;
         pos.y = transform->y;
         pos.z = transform->z;
@@ -228,6 +227,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 
+// The first and last arguments are used inconsistently in different actors.
 void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelCurve* skelCurve,
                     OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
     if (skelCurve->transforms != NULL) {
