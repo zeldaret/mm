@@ -872,9 +872,41 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
     return i;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E4B0.s")
+void SubS_ComputePlane(Vec3f* pos, Vec3f* arg1, Vec3s* rot, Plane* plane) {
+    f32 sin;
+    f32 cos;
+    f32 sp2C;
+    f32 tmp2;
+    f32 normY;
+    f32 tmp;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E5CC.s")
+    sin = Math_SinS(-rot->x);
+    cos = Math_CosS(-rot->x);
+    tmp2 = arg1->z;
+    tmp = arg1->y;
+    sp2C = (tmp2 * cos) - (tmp * sin);
+    normY = (tmp2 * sin) + (tmp * cos);
+
+    sin = Math_SinS(rot->y);
+    cos = Math_CosS(rot->y);
+    tmp = arg1->x;
+    plane->normal.y = normY;
+    plane->normal.z = (sp2C * cos) - (tmp * sin);
+    plane->normal.x = (sp2C * sin) + (tmp * cos);
+    plane->originDist = -((pos->x * plane->normal.x) + (plane->normal.y * pos->y) + (plane->normal.z * pos->z));
+}
+
+s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* arg2, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect) {
+    s32 pad;
+    Plane plane;
+
+    SubS_ComputePlane(pos, arg2, rot, &plane);
+
+    return Math3D_LineSegVsPlane(plane.normal.x, plane.normal.y, plane.normal.z, plane.originDist, linePointA,
+                                 linePointB, intersect, false)
+               ? true
+               : false;
+}
 
 /**
  * Finds the first actor instance of a specified Id and category verified with a custom callback.

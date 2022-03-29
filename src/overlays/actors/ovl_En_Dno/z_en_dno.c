@@ -149,8 +149,8 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
         crace = (BgCraceMovebg*)SubS_FindActor(globalCtx, &crace->actor, ACTORCAT_BG, ACTOR_BG_CRACE_MOVEBG);
         if (crace != NULL) {
             if (ENDNO_GET_F(&crace->actor) == ENDNO_GET_F_0 && !(crace->unk_170 & 1)) {
-                if (func_8013E5CC(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C, &this->actor.prevPos,
-                                  &this->actor.world.pos, &sp88)) {
+                if (SubS_LineSegVsPlane(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C,
+                                        &this->actor.prevPos, &this->actor.world.pos, &sp88)) {
                     Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
                     Matrix_RotateY(-crace->actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultiplyVector3fByState(&sp7C, &sp70);

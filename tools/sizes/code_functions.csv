@@ -2217,8 +2217,8 @@ asm/non_matchings/code/z_sub_s/SubS_ActorPathing_SetNextPoint.s,SubS_ActorPathin
 asm/non_matchings/code/z_sub_s/SubS_ChangeAnimationBySpeedInfo.s,SubS_ChangeAnimationBySpeedInfo,0x8013E1C8,0x43
 asm/non_matchings/code/z_sub_s/SubS_StartActorCutscene.s,SubS_StartActorCutscene,0x8013E2D4,0x39
 asm/non_matchings/code/z_sub_s/SubS_FillCutscenesList.s,SubS_FillCutscenesList,0x8013E3B8,0x3E
-asm/non_matchings/code/z_sub_s/func_8013E4B0.s,func_8013E4B0,0x8013E4B0,0x47
-asm/non_matchings/code/z_sub_s/func_8013E5CC.s,func_8013E5CC,0x8013E5CC,0x1D
+asm/non_matchings/code/z_sub_s/SubS_ComputePlane.s,SubS_ComputePlane,0x8013E4B0,0x47
+asm/non_matchings/code/z_sub_s/SubS_LineSegVsPlane.s,SubS_LineSegVsPlane,0x8013E5CC,0x1D
 asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x8013E640,0x42
 asm/non_matchings/code/z_sub_s/func_8013E748.s,func_8013E748,0x8013E748,0x1E
 asm/non_matchings/code/z_sub_s/SubS_ActorAndPlayerAreFacing.s,SubS_ActorAndPlayerAreFacing,0x8013E7C0,0x4E
