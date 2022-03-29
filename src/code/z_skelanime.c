@@ -627,8 +627,7 @@ void SkelAnime_GetFrameData(AnimationHeader* animation, s32 frame, s32 limbCount
 
     for (i = 0; i < limbCount; i++) {
         // Debug prints here, this is needed to prevent loop unrolling
-        if (0) {
-            if (0) {};
+        if ((frameTable == NULL) || (jointIndices == NULL) || (dynamicData == NULL)) {
         }
         frameTable->x = jointIndices->x >= staticIndexMax ? dynamicData[jointIndices->x] : frameData[jointIndices->x];
         frameTable->y = jointIndices->y >= staticIndexMax ? dynamicData[jointIndices->y] : frameData[jointIndices->y];

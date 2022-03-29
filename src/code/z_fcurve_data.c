@@ -1,6 +1,13 @@
+/**
+ * File: z_fcurve_data.c
+ * Description: Interpolation functions for use with Curve SkelAnime
+ */
 #include "global.h"
 
-// FCurve_CubicHermiteSpline
+#define FCURVE_INTERP_CUBIC 0  // Interpolate using a Hermite cubic spline
+#define FCURVE_INTERP_NONE 1   // Return the value at the left endpoint instead of interpolating
+#define FCURVE_INTERP_LINEAR 2 // Interpolate linearly
+
 /**
  * Hermite cubic spline interpolation between two endpoints, a,b. More information available at
  * https://en.wikipedia.org/wiki/Cubic_Hermite_spline
@@ -13,17 +20,17 @@
  * @param m1 p'(b)
  * @return f32 p(t), value of the cubic interpolating polynomial
  */
-f32 func_800F23E0(f32 t, f32 interval, f32 y0, f32 y1, f32 m0, f32 m1) {
-    f32 sq = t * t;
-    f32 cube = sq * t;
-    f32 temp_f18 = 2.0f * cube;
-    f32 sp4 = sq * 3.0f;
+f32 Curve_CubicHermiteSpline(f32 t, f32 interval, f32 y0, f32 y1, f32 m0, f32 m1) {
+    f32 t2 = t * t;
+    f32 t3 = t2 * t;
+    f32 t3x2 = t3 * 2.0f;
+    f32 t2x3 = t2 * 3.0f;
 
     // Hermite basis cubics h_{ij} satisfy h_{ij}^{(j)}(i) = 1, the other three values being 0
-    f32 h00 = temp_f18 - sp4 + 1.0f; // h_{00}(0) = 1
-    f32 h01 = sp4 - temp_f18;        // h_{01}'(0) = 1
-    f32 h10 = cube - 2.0f * sq + t;  // h_{10}(1) = 1
-    f32 h11 = cube - sq;             // h_{11}'(1) = 1
+    f32 h00 = t3x2 - t2x3 + 1.0f; // h_{00}(0) = 1
+    f32 h01 = t2x3 - t3x2;        // h_{01}'(0) = 1
+    f32 h10 = t3 - t2 * 2.0f + t; // h_{10}(1) = 1
+    f32 h11 = t3 - t2;            // h_{11}'(1) = 1
 
     f32 ret = h00 * y0;
 
@@ -34,46 +41,42 @@ f32 func_800F23E0(f32 t, f32 interval, f32 y0, f32 y1, f32 m0, f32 m1) {
     return ret;
 }
 
-#define FCURVE_INTERP_CUBIC  0 // Interpolate using a Hermite cubic spline
-#define FCURVE_INTERP_NONE   1 // Return the value at the left endpoint instead of interpolating
-#define FCURVE_INTERP_LINEAR 2 // Interpolate linearly
-
-// FCurve_Interpolate
 /**
- * Interpolates based on an array of TransformData.
+ * Interpolates based on an array of CurveInterpKnot.
  *
  * @param x point at which to interpolate.
- * @param transData TransformData to use. Must have at least maxIndex elements
- * @param maxIndex 
+ * @param knots Beginning of CurveInterpKnot array to use.
+ * @param knotCount number of knots to read from the array.
  * @return f32 interpolated value
  */
-f32 func_800F2478(f32 x, TransformData* transData, s32 maxIndex) {
+f32 Curve_Interpolate(f32 x, CurveInterpKnot* knots, s32 knotCount) {
     // If outside the entire interpolation interval, return the value at the near endpoint.
-    if (x <= transData[0].abscissa) {
-        return transData[0].ordinate;
-    } else if (x >= transData[maxIndex - 1].abscissa) {
-        return transData[maxIndex - 1].ordinate;
+    if (x <= knots[0].abscissa) {
+        return knots[0].ordinate;
+    } else if (x >= knots[knotCount - 1].abscissa) {
+        return knots[knotCount - 1].ordinate;
     } else {
         s32 cur;
 
         for (cur = 0;; cur++) {
             s32 next = cur + 1;
             // Find the subinterval in which x lies
-            if (x < transData[next].abscissa) {
-                if (transData[cur].flags & FCURVE_INTERP_NONE) {
+            if (x < knots[next].abscissa) {
+                if (knots[cur].flags & FCURVE_INTERP_NONE) {
                     // No interpolation
-                    return transData[cur].ordinate;
-                } else if (transData[cur].flags & FCURVE_INTERP_LINEAR) {
+                    return knots[cur].ordinate;
+                } else if (knots[cur].flags & FCURVE_INTERP_LINEAR) {
                     // Linear interpolation
-                    return transData[cur].ordinate +
-                        ((x - (f32)transData[cur].abscissa) / ((f32)transData[next].abscissa - (f32)transData[cur].abscissa)) *
-                            (transData[next].ordinate - transData[cur].ordinate);
+                    return knots[cur].ordinate +
+                           ((x - (f32)knots[cur].abscissa) / ((f32)knots[next].abscissa - (f32)knots[cur].abscissa)) *
+                               (knots[next].ordinate - knots[cur].ordinate);
                 } else {
                     // Cubic interpolation
-                    f32 diff = (f32)transData[next].abscissa - (f32)transData[cur].abscissa;
-                    return func_800F23E0((x - (f32)transData[cur].abscissa) / ((f32)transData[next].abscissa - (f32)transData[cur].abscissa),
-                                        diff * (1.0f / 30.0f), transData[cur].ordinate, transData[next].ordinate,
-                                        transData[cur].rightGradient, transData[next].leftGradient);
+                    f32 diff = (f32)knots[next].abscissa - (f32)knots[cur].abscissa;
+                    f32 t = (x - (f32)knots[cur].abscissa) / ((f32)knots[next].abscissa - (f32)knots[cur].abscissa);
+
+                    return Curve_CubicHermiteSpline(t, diff * (1.0f / 30.0f), knots[cur].ordinate, knots[next].ordinate,
+                                         knots[cur].rightGradient, knots[next].leftGradient);
                 }
             }
         }

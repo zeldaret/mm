@@ -28,6 +28,7 @@
 #include "z64audio.h"
 #include "z64bgcheck.h"
 #include "z64collision_check.h"
+#include "z64curve.h"
 #include "z64cutscene.h"
 #include "z64dma.h"
 #include "z64effect.h"

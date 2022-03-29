@@ -7,6 +7,7 @@ struct DemoEffect;
 
 typedef void (*DemoEffectActionFunc)(struct DemoEffect*, GlobalContext*);
 
+// 0x144 is curve
 typedef struct DemoEffect {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ char unk_144[0x34];

@@ -9,6 +9,7 @@
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
 #include "objects/object_boss02/object_boss02.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "prevent_bss_reordering.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -31,15 +32,15 @@ void func_809DD2F8(GlobalContext* globalCtx);
 void func_809DD934(Boss02* this, GlobalContext* globalCtx);
 void func_809DEAC4(Boss02* this, GlobalContext* globalCtx);
 
-static u8 D_809E0420;
-static u8 D_809E0421;
-static u8 D_809E0422;
-static Boss02* D_809E0424;
-static Boss02* D_809E0428;
-static Boss02* D_809E042C;
-static u8 D_809E0430;
-static DoorWarp1* D_809E0434;
-static Boss02Effects D_809E0438[150];
+u8 D_809E0420;
+u8 D_809E0421;
+u8 D_809E0422;
+Boss02* D_809E0424;
+Boss02* D_809E0428;
+Boss02* D_809E042C;
+u8 D_809E0430;
+DoorWarp1* D_809E0434;
+Boss02Effects D_809E0438[150];
 
 static DamageTable sDamageTable1 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),

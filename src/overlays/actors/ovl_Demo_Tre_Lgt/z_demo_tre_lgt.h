@@ -5,6 +5,7 @@
 
 struct DemoTreLgt;
 
+// 0x144 is curve
 typedef struct DemoTreLgt {
     /* 0x000 */ Actor actor;
     /* 0x144 */ char unk_144[0x34];
