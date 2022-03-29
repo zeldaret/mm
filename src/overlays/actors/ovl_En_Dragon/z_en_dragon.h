@@ -36,7 +36,7 @@ typedef struct EnDragon {
     /* 0x2B8 */ s16 hasGrabbedPlayer;
     /* 0x2BA */ s16 action;
     /* 0x2BC */ UNK_TYPE1 unk_2BC[0x2];
-    /* 0x2BE */ s16 unk_2BE; // some sort of state variable?
+    /* 0x2BE */ s16 state;
     /* 0x2C0 */ s16 grabCutsceneIndex;
     /* 0x2C2 */ s16 deathCutsceneIndex;
     /* 0x2C4 */ UNK_TYPE1 unk_2C4[0x4];

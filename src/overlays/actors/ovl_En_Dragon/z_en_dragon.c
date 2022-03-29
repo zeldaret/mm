@@ -41,6 +41,23 @@ typedef enum {
     /* 6 */ DEEP_PYTHON_ACTION_DEAD,
 } DeepPythonAction;
 
+typedef enum {
+    /* 0 */ DEEP_PYTHON_EXTEND_STATE_0,
+    /* 1 */ DEEP_PYTHON_EXTEND_STATE_1,
+    /* 2 */ DEEP_PYTHON_EXTEND_STATE_2,
+    /* 3 */ DEEP_PYTHON_EXTEND_STATE_3,
+} DeepPythonExtendState;
+
+typedef enum {
+    /* 0 */ DEEP_PYTHON_GRAB_STATE_0,
+    /* 1 */ DEEP_PYTHON_GRAB_STATE_1,
+} DeepPythonGrabState;
+
+typedef enum {
+    /* 0 */ DEEP_PYTHON_ATTACK_STATE_0,
+    /* 1 */ DEEP_PYTHON_ATTACK_STATE_1,
+} DeepPythonAttackState;
+
 static s32 sNumPythonsDead = 0;
 
 const ActorInit En_Dragon_InitVars = {
@@ -314,7 +331,7 @@ void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
 
 void EnDragon_SetupRetreatOrIdle(EnDragon* this) {
     EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
-    this->unk_2BE = 0;
+    this->state = 0;
     this->unk_2CC = 0;
     this->hasGrabbedPlayer = false;
     this->grabTimer = 0;
@@ -343,8 +360,8 @@ void EnDragon_RetreatOrIdle(EnDragon* this, GlobalContext* globalCtx) {
 }
 
 void EnDragon_SetupExtend(EnDragon* this) {
-    this->unk_2BE = 0;
-    this->unk_2B0 = this->unk_2BE;
+    this->state = 0;
+    this->unk_2B0 = this->state;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_APPEAR_TRG);
     this->forceRetreatTimer = 250;
     this->actionFunc = EnDragon_Extend;
@@ -364,7 +381,7 @@ void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
         this->action = DEEP_PYTHON_ACTION_RETREAT;
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BACK);
         EnDragon_SetupRetreatOrIdle(this);
-    } else if (this->unk_2BE == 0) {
+    } else if (this->state == DEEP_PYTHON_EXTEND_STATE_0) {
         Vec3f sp38;
 
         Math_Vec3f_Copy(&sp38, &this->burrowEntrancePos);
@@ -383,17 +400,17 @@ void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
                     EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
                 }
 
-                this->unk_2BE = 1;
+                this->state = DEEP_PYTHON_EXTEND_STATE_1;
             }
         }
     } else {
         Math_SmoothStepToS(&this->jawZRotation, 0, 5, 0xBB8, 0x14);
         SkelAnime_Update(&this->skelAnime);
-        if (this->unk_2BE == 1) {
+        if (this->state == DEEP_PYTHON_EXTEND_STATE_1) {
             if (currentFrame < this->endFrame) {
                 return;
             }
-            this->unk_2BE = 2;
+            this->state = DEEP_PYTHON_EXTEND_STATE_2;
         }
 
         phi_v1 = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->jawPos, &player->actor.world.pos), this->actor.shape.rot.y));
@@ -403,15 +420,15 @@ void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
                     EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
                 }
 
-                this->unk_2BE = 2;
+                this->state = DEEP_PYTHON_EXTEND_STATE_2;
             }
 
             this->unk_2B0 = 0;
         } else {
-            if (this->unk_2BE == 2) {
+            if (this->state == DEEP_PYTHON_EXTEND_STATE_2) {
                 EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_SMALL_SIDE_SWAY);
                 this->unk_2B2 = Rand_ZeroFloat(20.0f) + this->endFrame;
-                this->unk_2BE = 3;
+                this->state = DEEP_PYTHON_EXTEND_STATE_3;
             }
 
             this->unk_2B0++;
@@ -447,7 +464,7 @@ void EnDragon_SetupGrab(EnDragon* this, GlobalContext* globalCtx) {
         temp_v0 = Math_Vec3f_Yaw(&player->actor.world.pos, &this->jawPos);
         player->actor.shape.rot.y = temp_v0;
         player->actor.world.rot.y = temp_v0;
-        this->unk_2BE = 0;
+        this->state = DEEP_PYTHON_GRAB_STATE_0;
         this->grabTimer = 0;
         this->hasGrabbedPlayer = false;
         EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
@@ -511,9 +528,9 @@ void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
     EnDragon_CameraSetAtEye(this, globalCtx, sp50, sp44);
 
     if (this->grabTimer > maxGrabTimerPerPython[this->pythonIndex]) {
-        if (this->unk_2BE == 0) {
+        if (this->state == DEEP_PYTHON_GRAB_STATE_0) {
             func_800B7298(globalCtx, &this->actor, 6);
-            this->unk_2BE = 1;
+            this->state = DEEP_PYTHON_GRAB_STATE_1;
         }
 
         globalCtx->unk_18770(globalCtx, player);
@@ -532,7 +549,7 @@ void EnDragon_SetupAttack(EnDragon* this) {
 
     this->unk_2B0 = 0;
     this->grabTimer = 0;
-    this->unk_2BE = 0;
+    this->state = DEEP_PYTHON_ATTACK_STATE_0;
     this->actionFunc = EnDragon_Attack;
 }
 
@@ -579,17 +596,17 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.world.pos.y, sp4C.y, 0.3f, 200.0f);
     Math_ApproachF(&this->actor.world.pos.z, sp4C.z, 0.3f, 200.0f);
 
-    if ((this->unk_2BE <= 0) && (this->endFrame <= currentFrame)) {
+    if ((this->state <= DEEP_PYTHON_ATTACK_STATE_0) && (this->endFrame <= currentFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
         if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
             EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
         }
 
-        this->unk_2BE++;
+        this->state++;
     }
 
-    if (((this->unk_2BE != 0) && (this->endFrame <= currentFrame)) || (!(player->stateFlags2 & 0x80)) ||
-        ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
+    if (((this->state != DEEP_PYTHON_ATTACK_STATE_0) && (this->endFrame <= currentFrame)) ||
+        (!(player->stateFlags2 & 0x80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
         (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
         player->actor.parent = NULL;
@@ -601,7 +618,7 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
 
         this->actor.flags &= ~ACTOR_FLAG_100000;
 
-        if ((this->unk_2BE != 0) && (this->endFrame <= currentFrame)) {
+        if ((this->state != DEEP_PYTHON_ATTACK_STATE_0) && (this->endFrame <= currentFrame)) {
             this->unk_2B4 = 3;
             this->actionFunc = func_80B5ED90;
         } else {
