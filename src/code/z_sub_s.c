@@ -343,7 +343,7 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013C964.s")
 
-const u8 shadowMaps[4][12][12] = {
+const u8 sShadowMaps[4][12][12] = {
     {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -410,7 +410,7 @@ void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
     for (i = 0; i < 12; i++) {
         start = ((startRow + i) * 64) + startCol - 390;
         for (j = 0; j < 12; j++) {
-            if (shadowMaps[size][i][j] != 0) {
+            if (sShadowMaps[size][i][j] != 0) {
                 if ((start + j >= 0) && (start + j < (s32)sizeof(u8[64][64]))) {
                     tex[start + j] = 255;
                 }

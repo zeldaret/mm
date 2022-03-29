@@ -4,6 +4,10 @@
 #include "z64actor.h"
 #include "z64scene.h"
 
+#include "code/sub_s/sub_s.h"
+
+extern Vec3f gOneVec3f;
+
 typedef enum {
     /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
