@@ -772,7 +772,7 @@ s32 Actor_OtherIsTargeted(GlobalContext* globalCtx, Actor* actor);
 void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, GlobalContext* globalCtx);
 void func_800BC770(GlobalContext* globalCtx, s16 y, s16 countdown);
 void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed);
-void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3);
+void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 y, s16 countdown);
 void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type);
 void Actor_SetColorFilter(Actor* actor, u16 colorFlag, u16 colorIntensityMax, u16 xluFlag, u16 duration);
 Hilite* func_800BCBF4(Vec3f* arg0, GlobalContext* globalCtx);
@@ -3485,7 +3485,7 @@ void func_8019F230(void); // cancel sfx
 // void func_8019F300(void);
 void func_8019F420(Vec3f* pos, u16 sfxId);
 void func_8019F4AC(Vec3f* pos, u16 sfxId);
-void func_8019F540(u8 arg0);
+void func_8019F540(s8 arg0);
 void func_8019F570(Vec3f* pos, s8 arg1);
 // void func_8019F5AC(void);
 // void func_8019F638(void);

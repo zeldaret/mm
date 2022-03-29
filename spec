@@ -2481,9 +2481,7 @@ beginseg
     name "ovl_Boss_03"
     compress
     include "build/src/overlays/actors/ovl_Boss_03/z_boss_03.o"
-    include "build/data/ovl_Boss_03/ovl_Boss_03.data.o"
-    include "build/data/ovl_Boss_03/ovl_Boss_03.bss.o"
-    include "build/data/ovl_Boss_03/ovl_Boss_03.reloc.o"
+    include "build/src/overlays/actors/ovl_Boss_03/ovl_Boss_03_reloc.o"
 endseg
 
 beginseg
