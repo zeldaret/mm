@@ -383,8 +383,8 @@ s32 func_80BF43FC(EnRg* this) {
     s32 phi_s0 = D_80BF57E4[this->unk_344][temp_s7];
 
     while (true) {
-        func_8013C8B8(this->path, phi_s0 - 1, &sp9C);
-        func_8013C8B8(this->path, phi_s0 + 1, &sp90);
+        SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 - 1, &sp9C);
+        SubS_CopyPointFromPathCheckBounds(this->path, phi_s0 + 1, &sp90);
         if (Math3D_PointDistToLine2D(this->actor.world.pos.x, this->actor.world.pos.z, sp9C.x, sp9C.z, sp90.x, sp90.z,
                                      &sp8C, &sp88, &sp84) &&
             (!phi_s6 || ((phi_s4 + 1) == phi_s0) || (sp84 < phi_f20))) {
@@ -521,7 +521,7 @@ void func_80BF4964(EnRg* this) {
     if (this->path != NULL) {
         sp3C = Lib_SegmentedToVirtual(this->path->points);
 
-        if (func_8013BD40(&this->actor, this->path, this->unk_33C)) {
+        if (SubS_HasReachedPoint(&this->actor, this->path, this->unk_33C)) {
             if ((this->path->count - 1) < (this->unk_33C + 1)) {
                 this->unk_33C = this->path->count - 1;
             } else {
@@ -749,7 +749,7 @@ void EnRg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         Effect_Add(globalCtx, &this->unk_340, EFFECT_TIRE_MARK, 0, 0, &D_80BF59F0);
 
-        this->path = func_8013BEDC(globalCtx, ENRG_GET_7F80(&this->actor), 255, &this->unk_33C);
+        this->path = SubS_GetDayDependentPath(globalCtx, ENRG_GET_7F80(&this->actor), 255, &this->unk_33C);
         if (this->path != NULL) {
             this->unk_33C = 1;
         }

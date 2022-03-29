@@ -113,7 +113,7 @@ void func_809C1158(EnAob01* this, GlobalContext* globalCtx) {
 
     if (temp_s0 != 0x3F) {
         do {
-            this->unk_1D8[i] = func_8013D648(globalCtx, temp_s0, 0x3F);
+            this->unk_1D8[i] = SubS_GetPathByIndex(globalCtx, temp_s0, 0x3F);
             temp_s0 = this->unk_1D8[i]->unk1;
             i++;
         } while (temp_s0 != 0xFF);
