@@ -39,7 +39,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
             rumbleMgr->unk_04[i] = 0;
             rumbleMgr->unk_44[i] = 0;
-            rumbleMgr->unk_84[i] = 0;
+            rumbleMgr->decreaseStep[i] = 0;
             rumbleMgr->unk_C4[i] = 0;
         }
 
@@ -48,7 +48,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
         rumbleMgr->unk_10A = 0;
         rumbleMgr->unk_10B = 0;
-        rumbleMgr->unk_10C = 0;
+        rumbleMgr->decreaseStepForced = 0;
         rumbleMgr->unk_10D = 0;
 
         rumbleMgr->state = RUMBLEMANAGER_STATE_1;
@@ -57,12 +57,13 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
     }
 
     if (rumbleMgr->state != RUMBLEMANAGER_STATE_0) {
+        // Process arrays of rumble requests
         for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
-            if (rumbleMgr->unk_04[i] != 0) {
+            if (rumbleMgr->unk_04[i] != 0) { // This entry has a non-empty rumble request
                 if (rumbleMgr->unk_44[i] > 0) {
                     rumbleMgr->unk_44[i]--;
                 } else {
-                    temp = rumbleMgr->unk_04[i] - rumbleMgr->unk_84[i];
+                    temp = rumbleMgr->unk_04[i] - rumbleMgr->decreaseStep[i];
                     if (temp > 0) {
                         rumbleMgr->unk_04[i] = temp;
                     } else {
@@ -82,11 +83,12 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
             }
         }
 
+        // Process Forced request. Note it takes priority over the values set by the request arrays
         if (rumbleMgr->unk_10A != 0) {
             if (rumbleMgr->unk_10B > 0) {
                 rumbleMgr->unk_10B--;
             } else {
-                temp = rumbleMgr->unk_10A - rumbleMgr->unk_10C;
+                temp = rumbleMgr->unk_10A - rumbleMgr->decreaseStepForced;
                 if (temp > 0) {
                     rumbleMgr->unk_10A = temp;
                 } else {
@@ -124,7 +126,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
             rumbleMgr->unk_04[i] = 0;
             rumbleMgr->unk_44[i] = 0;
-            rumbleMgr->unk_84[i] = 0;
+            rumbleMgr->decreaseStep[i] = 0;
             rumbleMgr->unk_C4[i] = 0;
         }
 
@@ -133,7 +135,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
         rumbleMgr->unk_10A = 0;
         rumbleMgr->unk_10B = 0;
-        rumbleMgr->unk_10C = 0;
+        rumbleMgr->decreaseStepForced = 0;
         rumbleMgr->unk_10D = 0;
 
         func_80175434();

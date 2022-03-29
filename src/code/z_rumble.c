@@ -9,7 +9,7 @@ void Rumble_Update(void* arg0) {
 }
 
 // Used by some bosses (and fishing)
-void Rumble_AddForced(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
+void Rumble_AddForced(f32 distSq, u8 arg1, u8 arg2, u8 decreaseStep) {
     s32 temp;
     s32 distance;
 
@@ -19,18 +19,18 @@ void Rumble_AddForced(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
         distance = sqrtf(distSq);
     }
 
-    if ((distance < 1000) && (arg1 != 0) && (arg3 != 0)) {
+    if ((distance < 1000) && (arg1 != 0) && (decreaseStep != 0)) {
         temp = arg1 - (distance * 255) / 1000;
 
         if (temp > 0) {
             gRumbleMgr.unk_10A = temp;
             gRumbleMgr.unk_10B = arg2;
-            gRumbleMgr.unk_10C = arg3;
+            gRumbleMgr.decreaseStepForced = decreaseStep;
         }
     }
 }
 
-void Rumble_Add(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
+void Rumble_Add(f32 distSq, u8 arg1, u8 arg2, u8 decreaseStep) {
     s32 temp;
     s32 distance;
     s32 i;
@@ -41,7 +41,7 @@ void Rumble_Add(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
         distance = sqrtf(distSq);
     }
 
-    if ((distance < 1000) && (arg1 != 0) && (arg3 != 0)) {
+    if ((distance < 1000) && (arg1 != 0) && (decreaseStep != 0)) {
         temp = arg1 - (distance * 255) / 1000;
 
         for (i = 0; i < ARRAY_COUNT(gRumbleMgr.unk_04); i++) {
@@ -49,7 +49,7 @@ void Rumble_Add(f32 distSq, u8 arg1, u8 arg2, u8 arg3) {
                 if (temp > 0) {
                     gRumbleMgr.unk_04[i] = temp;
                     gRumbleMgr.unk_44[i] = arg2;
-                    gRumbleMgr.unk_84[i] = arg3;
+                    gRumbleMgr.decreaseStep[i] = decreaseStep;
                 }
                 break;
             }

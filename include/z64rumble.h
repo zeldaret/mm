@@ -14,7 +14,7 @@ typedef struct RumbleManager {
     /* 0x000 */ u8 rumbleEnabled[MAXCONTROLLERS];
     /* 0x004 */ u8 unk_04[0x40];
     /* 0x044 */ u8 unk_44[0x40]; // delay timer?
-    /* 0x084 */ u8 unk_84[0x40]; // decreaseStep for unk_04
+    /* 0x084 */ u8 decreaseStep[0x40]; // decreaseStep for unk_04
     /* 0x0C4 */ u8 unk_C4[0x40];
     /* 0x104 */ u8 state;
     /* 0x105 */ u8 unk_105; // seems to be a boolean value which controls updating the instance. Maybe updateEnabled?
@@ -22,7 +22,7 @@ typedef struct RumbleManager {
     /* 0x108 */ u16 unk_108; // small counter/timer to restart rumblingTimer?
     /* 0x10A */ u8 unk_10A;
     /* 0x10B */ u8 unk_10B; // delay timer?
-    /* 0x10C */ u8 unk_10C; // decreaseStep for unk_10A
+    /* 0x10C */ u8 decreaseStepForced; // decreaseStep for unk_10A
     /* 0x10D */ u8 unk_10D;
 } RumbleManager; // size = 0x10E
 
