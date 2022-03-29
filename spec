@@ -3623,8 +3623,7 @@ beginseg
     name "ovl_Obj_Bigicicle"
     compress
     include "build/src/overlays/actors/ovl_Obj_Bigicicle/z_obj_bigicicle.o"
-    include "build/data/ovl_Obj_Bigicicle/ovl_Obj_Bigicicle.data.o"
-    include "build/data/ovl_Obj_Bigicicle/ovl_Obj_Bigicicle.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Bigicicle/ovl_Obj_Bigicicle_reloc.o"
 endseg
 
 beginseg
