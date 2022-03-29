@@ -22,6 +22,7 @@ void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A36260(EnSyatekiOkuta* this);
+void func_80A362F8(EnSyatekiOkuta* this);
 
 #if 0
 const ActorInit En_Syateki_Okuta_InitVars = {
@@ -97,13 +98,35 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A361F4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36260.s")
+void func_80A36260(EnSyatekiOkuta* this) {
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_0600466C, 0.0f);
+    this->actor.draw = NULL;
+    this->actionFunc = func_80A362A8;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A362A8.s")
+void func_80A362A8(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+    Actor* actorIt = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A362F8.s")
+    while (actorIt != NULL) {
+        if (actorIt->id == ACTOR_EN_SYATEKI_MAN) {
+            this->actor.parent = actorIt;
+            func_80A362F8(this);
+            break;
+        } else {
+            actorIt = actorIt->next;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36350.s")
+void func_80A362F8(EnSyatekiOkuta* this) {
+    Animation_PlayOnceSetSpeed(&this->skelAnime, &D_0600466C, 0.0f);
+    this->actor.draw = NULL;
+    Actor_SetScale(&this->actor, 0.01f);
+    this->actionFunc = func_80A36350;
+}
+
+void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36360.s")
 
