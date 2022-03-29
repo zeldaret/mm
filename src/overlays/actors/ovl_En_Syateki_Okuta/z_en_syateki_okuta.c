@@ -5,6 +5,7 @@
  */
 
 #include "z_en_syateki_okuta.h"
+#include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
@@ -96,7 +97,28 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A361B0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A361F4.s")
+s32 func_80A361F4(EnSyatekiOkuta* this) {
+    s32 temp_a0;
+    s32 temp_a1;
+    s32 temp_v1;
+    EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
+
+    temp_v1 = this->actor.params & 0xF;
+    if ((temp_v1 == 1) || (temp_v1 == 4)) {
+        temp_a0 = syatekiMan->unk_190;
+        temp_a1 = (temp_v1 * 2) + 6;
+
+        if ((temp_a0 >> temp_a1) & 3) {
+            return 1;
+        }
+
+        if ((temp_a1 == 8) && ((temp_a0 >> 0xE) & 3)) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void func_80A36260(EnSyatekiOkuta* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &D_0600466C, 0.0f);
@@ -140,6 +162,7 @@ void func_80A36350(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36504.s")
 
+void func_80A3657C(EnSyatekiOkuta* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A3657C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A365EC.s")
