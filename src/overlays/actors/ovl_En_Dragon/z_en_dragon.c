@@ -49,13 +49,13 @@ typedef enum {
 } DeepPythonExtendState;
 
 typedef enum {
-    /* 0 */ DEEP_PYTHON_GRAB_STATE_0,
-    /* 1 */ DEEP_PYTHON_GRAB_STATE_1,
+    /* 0 */ DEEP_PYTHON_GRAB_STATE_START,
+    /* 1 */ DEEP_PYTHON_GRAB_STATE_GRABBED,
 } DeepPythonGrabState;
 
 typedef enum {
-    /* 0 */ DEEP_PYTHON_ATTACK_STATE_0,
-    /* 1 */ DEEP_PYTHON_ATTACK_STATE_1,
+    /* 0 */ DEEP_PYTHON_ATTACK_STATE_START,
+    /* 1 */ DEEP_PYTHON_ATTACK_STATE_RELEASED,
 } DeepPythonAttackState;
 
 static s32 sNumPythonsDead = 0;
@@ -72,39 +72,44 @@ const ActorInit En_Dragon_InitVars = {
     (ActorFunc)EnDragon_Draw,
 };
 
+typedef enum {
+    /* 0x0 */ DEEP_PYTHON_DMGEFF_NONE,
+    /* 0xF */ DEEP_PYTHON_DMGEFF_DAMAGE = 0xF
+} DeepPythonDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(0, 0x0),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0xF),
-    /* Zora boomerang */ DMG_ENTRY(1, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0x0),
-    /* Goron punch    */ DMG_ENTRY(0, 0x0),
-    /* Sword          */ DMG_ENTRY(0, 0x0),
-    /* Goron pound    */ DMG_ENTRY(0, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(0, 0x0),
-    /* Ice arrow      */ DMG_ENTRY(0, 0x0),
-    /* Light arrow    */ DMG_ENTRY(0, 0x0),
-    /* Goron spikes   */ DMG_ENTRY(0, 0x0),
-    /* Deku spin      */ DMG_ENTRY(0, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
-    /* Deku launch    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(1, 0xF),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(0, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0xF),
-    /* Spin attack    */ DMG_ENTRY(0, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0xF),
+    /* Deku Nut       */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, DEEP_PYTHON_DMGEFF_DAMAGE),
+    /* Zora boomerang */ DMG_ENTRY(1, DEEP_PYTHON_DMGEFF_DAMAGE),
+    /* Normal arrow   */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Ice arrow      */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Light arrow    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Goron spikes   */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(1, DEEP_PYTHON_DMGEFF_DAMAGE),
+    /* Normal shield  */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, DEEP_PYTHON_DMGEFF_DAMAGE),
+    /* Spin attack    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, DEEP_PYTHON_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, DEEP_PYTHON_DMGEFF_DAMAGE),
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[8] = {
@@ -216,6 +221,7 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDeepPythonSkel, &gDeepPythonSmallSideSwayAnim, this->jointTable,
                        this->morphTable, DEEP_PYTHON_LIMB_MAX);
+
     this->actor.colChkInfo.health = 4;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.targetMode = 0xA;
@@ -225,6 +231,7 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.elements[3].dim.scale = this->collider.elements[4].dim.scale =
             this->collider.elements[5].dim.scale = this->collider.elements[6].dim.scale =
                 this->collider.elements[7].dim.scale = 1.0f;
+
     this->collider.elements[0].dim.modelSphere.radius = 150;
     this->collider.elements[0].dim.modelSphere.center.x = 420;
     this->collider.elements[1].dim.modelSphere.radius = 160;
@@ -241,12 +248,14 @@ void EnDragon_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->collider.elements[6].dim.modelSphere.center.x = 430;
     this->collider.elements[7].dim.modelSphere.radius = 110;
     this->collider.elements[7].dim.modelSphere.center.x = 160;
+
     this->pythonIndex = EN_DRAGON_GET_PYTHON_INDEX(&this->actor);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->action = DEEP_PYTHON_ACTION_IDLE;
     this->actor.hintId = 0xE;
     this->scale = 0.5f;
     this->actor.flags &= ~ACTOR_FLAG_8000000;
+
     EnDragon_SetupRetreatOrIdle(this);
 }
 
@@ -412,6 +421,7 @@ void EnDragon_Extend(EnDragon* this, GlobalContext* globalCtx) {
             if (currentFrame < this->endFrame) {
                 return;
             }
+
             this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY;
         }
 
@@ -468,7 +478,7 @@ void EnDragon_SetupGrab(EnDragon* this, GlobalContext* globalCtx) {
         yaw = Math_Vec3f_Yaw(&player->actor.world.pos, &this->jawPos);
         player->actor.shape.rot.y = yaw;
         player->actor.world.rot.y = yaw;
-        this->state = DEEP_PYTHON_GRAB_STATE_0;
+        this->state = DEEP_PYTHON_GRAB_STATE_START;
         this->grabTimer = 0;
         this->hasGrabbedPlayer = false;
         EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_IDLE);
@@ -476,24 +486,24 @@ void EnDragon_SetupGrab(EnDragon* this, GlobalContext* globalCtx) {
     }
 }
 
-Vec3f D_80B60788[] = {
+Vec3f cameraEyePerPython[] = {
     { 1600.0f, 0.0f, 1400.0f }, { 1400.0f, 0.0f, 400.0f },  { 1800.0f, 0.0f, 1400.f },  { 1100.0f, -200.0f, 1500.0f },
     { 2000.0f, 0.0f, 1500.0f }, { 1900.0f, 0.0f, 1800.0f }, { 1700.0f, 0.0f, 1100.0f }, { 1700.0f, 0.0f, 1100.0f },
 };
 
-Vec3f D_80B607E8[] = {
+Vec3f cameraAtPerPython[] = {
     { 300.0f, -100.0f, 1300.0f }, { 1500.0f, 0.0f, 2400.0f }, { 300.0f, -100.0f, 1300.0f }, { 1900.0f, 500.0f, 600.0f },
     { -1000.0f, 0.0f, 1000.0f },  { 1200.0f, 0.0f, 1500.0f }, { 1100.0f, 0.0f, 2000.0f },   { 1100.0f, 0.0f, 2000.0f },
 };
 
-s16 D_80B60848[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
+s16 zRotPerPython[] = { 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x07D0, 0x0BB8, 0x0000, 0x0000 };
 
 s32 maxGrabTimerPerPython[] = { 5, 5, 5, 4, 5, 8, 5, 5 };
 
 void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    Vec3f sp50;
-    Vec3f sp44;
+    Vec3f sp50; // used as both the extended position and the camera eye
+    Vec3f at;
 
     this->cameraId = ActorCutscene_GetCurrentCamera(this->actor.cutscene);
     SkelAnime_Update(&this->skelAnime);
@@ -516,25 +526,25 @@ void EnDragon_Grab(EnDragon* this, GlobalContext* globalCtx) {
     }
 
     this->grabTimer++;
-    Math_SmoothStepToS(&this->actor.shape.rot.z, D_80B60848[this->pythonIndex], 0xA, 0x1F4, 0x14);
+    Math_SmoothStepToS(&this->actor.shape.rot.z, zRotPerPython[this->pythonIndex], 0xA, 0x1F4, 0x14);
     EnDragon_SpawnBubbles(this, globalCtx, this->jawPos);
 
     Math_Vec3f_Copy(&sp50, &this->burrowEntrancePos);
-    sp50.x += Math_SinS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].x;
-    sp50.y += D_80B60788[this->pythonIndex].y;
-    sp50.z += Math_CosS(this->actor.world.rot.y) * D_80B60788[this->pythonIndex].z;
+    sp50.x += Math_SinS(this->actor.world.rot.y) * cameraEyePerPython[this->pythonIndex].x;
+    sp50.y += cameraEyePerPython[this->pythonIndex].y;
+    sp50.z += Math_CosS(this->actor.world.rot.y) * cameraEyePerPython[this->pythonIndex].z;
 
-    Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
-    sp44.x += Math_SinS(this->actor.world.rot.y) * D_80B607E8[this->pythonIndex].x;
-    sp44.y += D_80B607E8[this->pythonIndex].y;
-    sp44.z += Math_CosS(this->actor.world.rot.y) * D_80B607E8[this->pythonIndex].z;
+    Math_Vec3f_Copy(&at, &this->actor.world.pos);
+    at.x += Math_SinS(this->actor.world.rot.y) * cameraAtPerPython[this->pythonIndex].x;
+    at.y += cameraAtPerPython[this->pythonIndex].y;
+    at.z += Math_CosS(this->actor.world.rot.y) * cameraAtPerPython[this->pythonIndex].z;
 
-    EnDragon_CameraSetAtEye(this, globalCtx, sp50, sp44);
+    EnDragon_CameraSetAtEye(this, globalCtx, sp50, at);
 
     if (this->grabTimer > maxGrabTimerPerPython[this->pythonIndex]) {
-        if (this->state == DEEP_PYTHON_GRAB_STATE_0) {
+        if (this->state == DEEP_PYTHON_GRAB_STATE_START) {
             func_800B7298(globalCtx, &this->actor, 6);
-            this->state = DEEP_PYTHON_GRAB_STATE_1;
+            this->state = DEEP_PYTHON_GRAB_STATE_GRABBED;
         }
 
         globalCtx->unk_18770(globalCtx, player);
@@ -553,15 +563,15 @@ void EnDragon_SetupAttack(EnDragon* this) {
 
     this->behindJawRetreatTimer = 0;
     this->grabTimer = 0;
-    this->state = DEEP_PYTHON_ATTACK_STATE_0;
+    this->state = DEEP_PYTHON_ATTACK_STATE_START;
     this->actionFunc = EnDragon_Attack;
 }
 
 void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 currentFrame = this->skelAnime.curFrame;
-    Vec3f sp4C;
-    Vec3f sp40;
+    Vec3f sp4C; // used as both the extended position and the camera eye
+    Vec3f at;
 
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.shape.rot.z, 0, 0xA, 0x1388, 0);
@@ -580,12 +590,12 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
     sp4C.y += 600.0f;
     sp4C.z += Math_CosS(this->actor.world.rot.y) * 3000.0f;
 
-    Math_Vec3f_Copy(&sp40, &this->actor.world.pos);
-    sp40.x += Math_SinS(this->actor.world.rot.y) * 1200.0f;
-    sp40.y += -100.0f;
-    sp40.z += Math_CosS(this->actor.world.rot.y) * 1200.0f;
+    Math_Vec3f_Copy(&at, &this->actor.world.pos);
+    at.x += Math_SinS(this->actor.world.rot.y) * 1200.0f;
+    at.y += -100.0f;
+    at.z += Math_CosS(this->actor.world.rot.y) * 1200.0f;
 
-    EnDragon_CameraSetAtEye(this, globalCtx, sp4C, sp40);
+    EnDragon_CameraSetAtEye(this, globalCtx, sp4C, at);
 
     player->actor.world.rot.y = player->actor.shape.rot.y = this->actor.world.rot.y;
     player->actor.world.rot.x = player->actor.shape.rot.x = this->actor.world.rot.x;
@@ -600,7 +610,7 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->actor.world.pos.y, sp4C.y, 0.3f, 200.0f);
     Math_ApproachF(&this->actor.world.pos.z, sp4C.z, 0.3f, 200.0f);
 
-    if ((this->state <= DEEP_PYTHON_ATTACK_STATE_0) && (this->endFrame <= currentFrame)) {
+    if ((this->state <= DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_BITE);
         if (this->animationIndex != DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY) {
             EnDragon_ChangeAnimation(this, DEEP_PYTHON_ANIMATION_LARGE_SIDE_SWAY);
@@ -609,7 +619,7 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
         this->state++;
     }
 
-    if (((this->state != DEEP_PYTHON_ATTACK_STATE_0) && (this->endFrame <= currentFrame)) ||
+    if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) ||
         (!(player->stateFlags2 & 0x80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
         (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
@@ -622,7 +632,7 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
 
         this->actor.flags &= ~ACTOR_FLAG_100000;
 
-        if ((this->state != DEEP_PYTHON_ATTACK_STATE_0) && (this->endFrame <= currentFrame)) {
+        if ((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) {
             this->timer = 3;
             this->actionFunc = EnDragon_RetreatOnceTimerEnds;
         } else {
