@@ -1,6 +1,7 @@
 #include "CutsceneMM_Commands.h"
 
 #include <cassert>
+#include <unordered_map>
 
 #include "Utils/BitConverter.h"
 #include "Utils/StringHelper.h"

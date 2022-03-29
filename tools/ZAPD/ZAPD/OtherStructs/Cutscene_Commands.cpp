@@ -1,6 +1,7 @@
 #include "Cutscene_Commands.h"
 
 #include <cassert>
+#include <unordered_map>
 
 #include "CutsceneMM_Commands.h"
 #include "Globals.h"
