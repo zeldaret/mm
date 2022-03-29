@@ -19,7 +19,7 @@ typedef struct EnSyatekiOkuta {
     /* 0x244 */ Vec3s morphTable[16];
     /* 0x2A4 */ s16 unk_2A4;
     /* 0x2A6 */ s16 unk_2A6;
-    /* 0x2A8 */ char unk_2A8[0x2];
+    /* 0x2A8 */ UNK_TYPE1 unk_2A8[0x2];
     /* 0x2AA */ s16 unk_2AA;
 } EnSyatekiOkuta; // size = 0x2AC
 
