@@ -4445,8 +4445,7 @@ beginseg
     name "ovl_En_Kujiya"
     compress
     include "build/src/overlays/actors/ovl_En_Kujiya/z_en_kujiya.o"
-    include "build/data/ovl_En_Kujiya/ovl_En_Kujiya.data.o"
-    include "build/data/ovl_En_Kujiya/ovl_En_Kujiya.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kujiya/ovl_En_Kujiya_reloc.o"
 endseg
 
 beginseg
