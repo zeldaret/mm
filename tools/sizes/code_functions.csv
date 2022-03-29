@@ -1213,7 +1213,7 @@ asm/non_matchings/code/z_jpeg/Jpeg_GetUnalignedU16.s,Jpeg_GetUnalignedU16,0x800F
 asm/non_matchings/code/z_jpeg/Jpeg_ParseMarkers.s,Jpeg_ParseMarkers,0x800F4540,0x73
 asm/non_matchings/code/z_jpeg/Jpeg_Decode.s,Jpeg_Decode,0x800F470C,0xC1
 asm/non_matchings/code/z_kaleido_setup/func_800F4A10.s,func_800F4A10,0x800F4A10,0x7F
-asm/non_matchings/code/z_kaleido_setup/func_800F4C0C.s,func_800F4C0C,0x800F4C0C,0x85
+asm/non_matchings/code/z_kaleido_setup/KaleidoSetup_Update.s,KaleidoSetup_Update,0x800F4C0C,0x85
 asm/non_matchings/code/z_kaleido_setup/func_800F4E20.s,func_800F4E20,0x800F4E20,0x42
 asm/non_matchings/code/z_kaleido_setup/func_800F4F28.s,func_800F4F28,0x800F4F28,0x6
 asm/non_matchings/code/z_kanfont/Font_LoadChar.s,Font_LoadChar,0x800F4F40,0x5
@@ -2512,7 +2512,7 @@ asm/non_matchings/code/z_play/func_80167F0C.s,func_80167F0C,0x80167F0C,0x61
 asm/non_matchings/code/z_play/Play_Draw.s,Play_Draw,0x80168090,0x347
 asm/non_matchings/code/z_play/func_80168DAC.s,func_80168DAC,0x80168DAC,0x6E
 asm/non_matchings/code/z_play/Play_Update.s,Play_Update,0x80168F64,0x5A
-asm/non_matchings/code/z_play/func_801690CC.s,func_801690CC,0x801690CC,0xD
+asm/non_matchings/code/z_play/Play_InCsMode.s,Play_InCsMode,0x801690CC,0xD
 asm/non_matchings/code/z_play/func_80169100.s,func_80169100,0x80169100,0x3C
 asm/non_matchings/code/z_play/func_801691F0.s,func_801691F0,0x801691F0,0xC
 asm/non_matchings/code/z_play/Play_LoadScene.s,Play_LoadScene,0x80169220,0x17

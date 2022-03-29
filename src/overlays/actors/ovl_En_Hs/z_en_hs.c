@@ -222,7 +222,7 @@ void func_809532D0(EnHs* this, GlobalContext* globalCtx) {
 }
 
 void func_80953354(EnHs* this, GlobalContext* globalCtx) {
-    if (!func_801690CC(globalCtx)) {
+    if (!Play_InCsMode(globalCtx)) {
         func_800B7298(globalCtx, &this->actor, 7);
         this->actionFunc = func_809532D0;
     }

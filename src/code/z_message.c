@@ -499,7 +499,7 @@ void func_80156758(GlobalContext* globalCtx) {
     nextDisplayList = Graph_GfxPlusOne(polyOpa);
     gSPDisplayList(OVERLAY_DISP++, nextDisplayList);
 
-    if ((globalCtx->msgCtx.currentTextId != 0x5E6) || (func_801690CC(globalCtx) == 0)) {
+    if ((globalCtx->msgCtx.currentTextId != 0x5E6) || !Play_InCsMode(globalCtx)) {
         func_801541D4(globalCtx, &nextDisplayList);
     }
 

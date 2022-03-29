@@ -1043,7 +1043,7 @@ s32 func_80AEE86C(EnTk* this, GlobalContext* globalCtx) {
         (this->actor.xyzDistToPlayerSq <= SQ(115.0f)) &&
         func_80AEE7E0(&this->actor.world.pos, 100.0f, this->unk_324, this->unk_36C) &&
         (((this->unk_2CA & 2) && (Math_Vec3f_DistXZ(&this->unk_300, &sp28) >= 100.0f)) || !(this->unk_2CA & 2)) &&
-        !func_801690CC(globalCtx)) {
+        !Play_InCsMode(globalCtx)) {
         Math_Vec3f_Copy(&this->unk_300, &sp28);
         ret = true;
     }
@@ -1189,7 +1189,7 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (Message_GetState(&globalCtx->msgCtx) == 0 && !func_801690CC(globalCtx) && (this->unk_2C6-- <= 0)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 0 && !Play_InCsMode(globalCtx) && (this->unk_2C6-- <= 0)) {
         Message_StartTextbox(globalCtx, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;
