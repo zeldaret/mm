@@ -322,8 +322,8 @@ void EnDragon_SpawnBubbles(EnDragon* this, GlobalContext* globalCtx, Vec3f baseP
     }
 }
 
-void func_80B5ED90(EnDragon* this, GlobalContext* globalCtx) {
-    if (this->unk_2B4 == 0) {
+void EnDragon_RetreatOnceTimerEnds(EnDragon* this, GlobalContext* globalCtx) {
+    if (this->timer == 0) {
         func_800B8D50(globalCtx, &this->actor, 10.0f, this->actor.world.rot.y, 10.0f, 8);
         EnDragon_SetupRetreatOrIdle(this);
     }
@@ -335,7 +335,7 @@ void EnDragon_SetupRetreatOrIdle(EnDragon* this) {
     this->unk_2CC = 0;
     this->hasGrabbedPlayer = false;
     this->grabTimer = 0;
-    this->unk_2B4 = 0x1E;
+    this->timer = 30;
     this->actionFunc = EnDragon_RetreatOrIdle;
 }
 
@@ -343,7 +343,7 @@ void EnDragon_RetreatOrIdle(EnDragon* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
         EnDragon_SetupExtend(this);
-    } else if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 101.0f) &&
+    } else if ((this->timer != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 101.0f) &&
                (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 101.0f)) {
         this->actor.speedXZ = -100.0f;
     } else {
@@ -619,8 +619,8 @@ void EnDragon_Attack(EnDragon* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_100000;
 
         if ((this->state != DEEP_PYTHON_ATTACK_STATE_0) && (this->endFrame <= currentFrame)) {
-            this->unk_2B4 = 3;
-            this->actionFunc = func_80B5ED90;
+            this->timer = 3;
+            this->actionFunc = EnDragon_RetreatOnceTimerEnds;
         } else {
             EnDragon_SetupRetreatOrIdle(this);
         }
@@ -634,7 +634,7 @@ void EnDragon_SetupDead(EnDragon* this, GlobalContext* globalCtx) {
         ActorCutscene_StartAndSetUnkLinkFields(this->deathCutsceneIndex, &this->actor);
         this->endFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
         Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
-        this->unk_2B4 = 0x14;
+        this->timer = 20;
         this->actionFunc = EnDragon_Dead;
     }
 }
@@ -647,7 +647,7 @@ void EnDragon_Dead(EnDragon* this, GlobalContext* globalCtx) {
     this->jawZRotation = 0xFA0;
     EnDragon_SpawnBubbles(this, globalCtx, this->jawPos);
 
-    if ((this->unk_2B4 != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 121.0f) &&
+    if ((this->timer != 0) && (fabsf(this->actor.world.pos.x - this->actor.home.pos.x) > 121.0f) &&
         (fabsf(this->actor.world.pos.z - this->actor.home.pos.z) > 121.0f)) {
         this->actor.speedXZ = -120.0f;
         if (((this->pythonIndex & 1) == 0) && (Rand_ZeroOne() < 0.5f)) {
@@ -761,8 +761,8 @@ void EnDragon_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->forceRetreatTimer--;
     }
 
-    if (this->unk_2B4 != 0) {
-        this->unk_2B4--;
+    if (this->timer != 0) {
+        this->timer--;
     }
 
     if (this->unk_2B2 != 0) {

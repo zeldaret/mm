@@ -14132,7 +14132,7 @@
     0x80B5EA74:("EnDragon_Destroy",),
     0x80B5EAA0:("EnDragon_ChangeAnimation",),
     0x80B5EB40:("EnDragon_SpawnBubbles",),
-    0x80B5ED90:("func_80B5ED90",),
+    0x80B5ED90:("EnDragon_RetreatOnceTimerEnds",),
     0x80B5EDF0:("EnDragon_SetupRetreatOrIdle",),
     0x80B5EE3C:("EnDragon_RetreatOrIdle",),
     0x80B5EF88:("EnDragon_SetupExtend",),

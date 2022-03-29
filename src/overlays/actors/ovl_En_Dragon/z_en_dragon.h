@@ -31,7 +31,7 @@ typedef struct EnDragon {
     /* 0x2AE */ s16 forceRetreatTimer; // If the Deep Python is extended and this timer reaches 0, it is forced to retreat back to its burrow
     /* 0x2B0 */ s16 unk_2B0; // some sort of extend timer
     /* 0x2B2 */ s16 unk_2B2; // some sort of extend timer
-    /* 0x2B4 */ s16 unk_2B4; // multi-purpose timer?
+    /* 0x2B4 */ s16 timer;
     /* 0x2B6 */ s16 grabWaitTimer; // Cannot grab the player if this is non-zero
     /* 0x2B8 */ s16 hasGrabbedPlayer;
     /* 0x2BA */ s16 action;
