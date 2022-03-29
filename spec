@@ -2255,8 +2255,7 @@ beginseg
     name "ovl_Obj_Armos"
     compress
     include "build/src/overlays/actors/ovl_Obj_Armos/z_obj_armos.o"
-    include "build/data/ovl_Obj_Armos/ovl_Obj_Armos.data.o"
-    include "build/data/ovl_Obj_Armos/ovl_Obj_Armos.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Armos/ovl_Obj_Armos_reloc.o"
 endseg
 
 beginseg
