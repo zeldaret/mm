@@ -4893,7 +4893,7 @@
     0x80863188:("EnTest_Init",),
     0x80863310:("EnTest_Destroy",),
     0x8086333C:("EnTest_Update",),
-    0x808634B8:("func_808634B8",),
+    0x808634B8:("EnTest_OverrideKeyframeDraw",),
     0x808636A8:("EnTest_Draw",),
     0x80863870:("EnGirlA_SetupAction",),
     0x8086387C:("EnGirlA_InitObjIndex",),
