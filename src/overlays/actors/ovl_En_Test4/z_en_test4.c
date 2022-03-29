@@ -405,7 +405,7 @@ void func_80A42AB8(EnTest4* this, GlobalContext* globalCtx) {
                     if (player->stateFlags1 & 0x800000) {
                         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
-                        if ((rideActor->unk_150 == 0) || (rideActor->unk_150 == 2)) {
+                        if ((rideActor->type == HORSE_EPONA) || (rideActor->type == HORSE_2)) {
                             if (CURRENT_DAY < 3) {
                                 D_801BDA9C = 1;
                             } else {

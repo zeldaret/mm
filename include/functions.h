@@ -1488,7 +1488,7 @@ void FireObj_Init(GlobalContext* globalCtx, FireObj* fire, FireObjInitParams* in
 void FireObj_Destroy(GlobalContext* globalCtx, FireObj* fire);
 void FireObj_SetState2(FireObj* fire, f32 dynamicSizeStep, u8 newState);
 void FireObj_Update(GlobalContext* globalCtx, FireObj* fire, Actor* actor);
-// void func_800F3940(void);
+s32 func_800F3940(GlobalContext* globalCtx);
 // void func_800F39B4(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_800F3A64(void);
 void func_800F3B2C(GlobalContext* globalCtx);
@@ -1496,7 +1496,7 @@ void func_800F3B2C(GlobalContext* globalCtx);
 // void func_800F3C44(void);
 // void func_800F3ED4(void);
 void func_800F40A0(GameState* gameState, Player* player);
-// void func_800F415C(void);
+void func_800F415C(Actor* actor, Vec3f* arg1, s16 arg2);
 UNK_TYPE func_800F41E4(GlobalContext* globalCtx, ActorContext* actorCtx);
 
 void func_800F4A10(GlobalContext* globalCtx);
@@ -2408,7 +2408,6 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* pos, s16 angle);
 s32 Animation_OnFrame(SkelAnime* skelAnime, f32 frame);
 void SkelAnime_Free(SkelAnime* skelAnime, GlobalContext* globalCtx);
 void SkelAnime_CopyFrameTable(SkelAnime* skelAnime, Vec3s* dst, Vec3s* src);
-
 void SkinMatrix_Vec3fMtxFMultXYZW(MtxF* mf, Vec3f* src, Vec3f* xyzDest, f32* wDest);
 void SkinMatrix_Vec3fMtxFMultXYZ(MtxF* mf, Vec3f* src, Vec3f* dest);
 void SkinMatrix_MtxFMtxFMult(MtxF* mfB, MtxF* mfA, MtxF* dest);
@@ -3068,7 +3067,7 @@ s32 Math3D_LineSegVsPlane(f32 nx, f32 ny, f32 nz, f32 originDist, Vec3f* linePoi
 void Math3D_TriSetCoords(TriNorm* tri, Vec3f* pointA, Vec3f* pointB, Vec3f* pointC);
 u32 Math3D_IsPointInSphere(Sphere16* sphere, Vec3f* point);
 s32 Math3D_PointDistToLine2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32* arg6, f32* arg7, f32* arg8); // returns boolean
-// void func_8017D7C0(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7);
+s32 func_8017D7C0(f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32* lineLenSq);
 // void func_8017D814(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017D91C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 // void func_8017DA24(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
