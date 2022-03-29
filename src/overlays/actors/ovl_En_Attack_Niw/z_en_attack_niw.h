@@ -56,4 +56,7 @@ typedef struct EnAttackNiw {
 
 extern const ActorInit En_Attack_Niw_InitVars;
 
+
+#define ATTACK_NIW_REGULAR  0    // spawned by EnNiw
+
 #endif // Z_EN_ATTACK_NIW_H

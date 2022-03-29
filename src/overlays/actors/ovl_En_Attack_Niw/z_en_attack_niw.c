@@ -48,7 +48,7 @@ void EnAttackNiw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     // probably copy pasted from EnNiw, which has this same code, but AttackNiw has no params
     if (this->actor.params < 0) {
-        this->actor.params = 0;
+        this->actor.params = ATTACK_NIW_REGULAR;
     }
 
     Actor_SetScale(&this->actor, 0.01f);
@@ -76,11 +76,11 @@ void EnAttackNiw_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 /**
- * Summary: instead of using SkelAnime animations AttackNiw modifies limbs directly to create animations
+ * Summary: instead of using SkelAnime animations AttackNiw modifies head+wings directly to create animations
  *
- * EnNiw has its own version of this function, probably copy paste since AttackNiw only uses two animationState
+ * EnNiw has its own version of this function, probably copy paste since AttackNiw only uses two animationState (2/5)
  */
-void EnAttackNiw_UpdateRotations(EnAttackNiw* this, GlobalContext* globalCtx, s16 animationState) {
+void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, GlobalContext* globalCtx, s16 animationState) {
     if (this->unkTimer24C == 0) {
         if (animationState == 0) {
             this->targetBodyRotY = 0.0f;
@@ -103,12 +103,12 @@ void EnAttackNiw_UpdateRotations(EnAttackNiw* this, GlobalContext* globalCtx, s1
         this->unkToggle28A &= 1;
 
         switch (animationState) { // only case 2 and 5 are ever called in AttackNiw
-            case 0:
+            case NIW_ANIMATION_STILL:
                 this->targetLeftWingRotZ = 0.0f;
                 this->targetRightWingRotZ = 0.0f;
                 break;
 
-            case 1:
+            case NIW_ANIMATION_HEAD_PECKING:
                 this->unkTimer250 = 3;
                 this->targetLeftWingRotZ = 7000.0f;
                 this->targetRightWingRotZ = 7000.0f;
@@ -118,7 +118,7 @@ void EnAttackNiw_UpdateRotations(EnAttackNiw* this, GlobalContext* globalCtx, s1
                 }
                 break;
 
-            case 2:
+            case NIW_ANIMATION_PECKING_AND_WAVING:
                 this->unkTimer250 = 2;
                 this->targetLeftWingRotZ = -10000.0f;
                 this->targetRightWingRotZ = -10000.0f;
@@ -132,7 +132,7 @@ void EnAttackNiw_UpdateRotations(EnAttackNiw* this, GlobalContext* globalCtx, s1
                 }
                 break;
 
-            case 3:
+            case NIW_ANIMATION_PECKING_AND_FORFLAPPING:
                 this->unkTimer250 = 2;
                 this->targetRightWingRotY = 10000.0f;
                 this->targetLeftWingRotY = 10000.0f;
@@ -142,12 +142,12 @@ void EnAttackNiw_UpdateRotations(EnAttackNiw* this, GlobalContext* globalCtx, s1
                 }
                 break;
 
-            case 4:
+            case NIW_ANIMATION_FREEZE:
                 this->unusedTimer24E = 5;
                 this->unkTimer24C = this->unusedTimer24E;
                 break;
 
-            case 5:
+            case NIW_ANIMATION_PECKING_SLOW_FORFLAPPING:
                 this->unkTimer250 = 5;
                 this->targetRightWingRotY = 14000.0f;
                 this->targetLeftWingRotY = 14000.0f;
@@ -276,7 +276,7 @@ void EnAttackNiw_EnterViewFromOffscreen(EnAttackNiw* this, GlobalContext* global
         this->unkTimer24C = 10;
         this->targetBodyRotY = -10000.0f;
         this->targetHeadRotZ = -3000.0f;
-        EnAttackNiw_UpdateRotations(this, globalCtx, 2);
+        EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
     }
 }
 
@@ -325,10 +325,10 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, GlobalContext* globalCtx) {
         this->actionFunc = EnAttackNiw_FlyAway;
 
     } else if (this->actor.bgCheckFlags & 1) { // touching floor
-        EnAttackNiw_UpdateRotations(this, globalCtx, 5);
+        EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_SLOW_FORFLAPPING);
 
     } else {
-        EnAttackNiw_UpdateRotations(this, globalCtx, 2);
+        EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
     }
 }
 
@@ -341,7 +341,7 @@ void EnAttackNiw_FlyAway(EnAttackNiw* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.x, this->targetRotX, 5, this->rotStep, 0);
     Math_ApproachF(&this->rotStep, 5000.0f, 1.0f, 100.0f);
     Math_ApproachF(&this->actor.velocity.y, 5.0f, 0.3f, 1.0f);
-    EnAttackNiw_UpdateRotations(this, globalCtx, 2);
+    EnAttackNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
 }
 
 void EnAttackNiw_Update(Actor* thisx, GlobalContext* globalCtx) {

@@ -58,7 +58,7 @@ typedef struct EnNiw {
     /* 0x290 */ s16 attackNiwCount;
     /* 0x292 */ s16 unk292;
     /* 0x294 */ s16 pad294;
-    /* 0x296 */ s16 unk296;
+    /* 0x296 */ s16 unkToggle296;
     /* 0x298 */ s16 unk298;
     /* 0x29C */ s16 isRunningRight;             // toggle (direction cucco is turning while running)
     /* 0x29C */ u16 nextAnimation;
@@ -98,5 +98,16 @@ typedef struct EnNiw {
 #define NIW_TYPE_UNK1 1
 #define NIW_TYPE_HELD 2 // spawns held by the bomber kid in east clock town during hide and seek
 // the attacking cuccos are not here, they are a different actor: [ ovl_En_Attack_Niw ]
+
+typedef enum {
+    /* 0 */ NIW_ANIMATION_STILL,
+    /* 1 */ NIW_ANIMATION_HEAD_PECKING, // forward and backward, feeding
+    /* 2 */ NIW_ANIMATION_PECKING_AND_WAVING, // wings move along their axis, like human hand waving
+    /* 3 */ NIW_ANIMATION_PECKING_AND_FORFLAPPING, // (unused) low (yaw based) flapping, forward and back
+    /* 4 */ NIW_ANIMATION_FREEZE, // used during Cucco Storm
+    /* 5 */ NIW_ANIMATION_PECKING_SLOW_FORFLAPPING, // wing speed half that of 3
+
+} EnNiwHeadAndWingAnimationState;
+
 
 #endif // Z_EN_NIW_H
