@@ -520,7 +520,7 @@ void func_80A9C058(BgHakuginPost* this, GlobalContext* globalCtx, BgHakuginPostU
                 sp44.x = this->dyna.actor.home.pos.x + unkStruct1->unk_14.x;
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
-                Rumble_Add(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
+                Rumble_Request(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(globalCtx)->actor.world.pos), 255, 20, 150);
                 quake = Quake_Add(GET_ACTIVE_CAM(globalCtx), 3);
                 Quake_SetSpeed(quake, 20000);
                 Quake_SetQuakeValues(quake, 7, 0, 0, 0);
@@ -541,7 +541,7 @@ void func_80A9C18C(BgHakuginPost* this, GlobalContext* globalCtx) {
     Camera* activeCam = GET_ACTIVE_CAM(globalCtx);
     s16 quake;
 
-    Rumble_Add(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
+    Rumble_Request(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
                                            this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
                   255, 20, 150);
     quake = Quake_Add(activeCam, 3);

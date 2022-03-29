@@ -14,7 +14,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         rumbleMgr->rumbleEnabled[i] = false;
     }
 
-    // Rumbling update is disabled (?)
+    // Rumbling update is disabled
     if (!rumbleMgr->unk_105) {
         if (D_801D1E70) {
             for (i = 0; i < MAXCONTROLLERS; i++) {
@@ -36,7 +36,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
             func_8017544C(i, false);
         }
 
-        for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
+        for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             rumbleMgr->unk_04[i] = 0;
             rumbleMgr->unk_44[i] = 0;
             rumbleMgr->decreaseStep[i] = 0;
@@ -58,7 +58,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
     if (rumbleMgr->state != RUMBLEMANAGER_STATE_0) {
         // Process arrays of rumble requests
-        for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
+        for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             if (rumbleMgr->unk_04[i] != 0) { // This entry has a non-empty rumble request
                 if (rumbleMgr->unk_44[i] > 0) {
                     rumbleMgr->unk_44[i]--;
@@ -123,7 +123,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
             }
         }
     } else { // RUMBLEMANAGER_STATE_0
-        for (i = 0; i < ARRAY_COUNT(rumbleMgr->unk_04); i++) {
+        for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             rumbleMgr->unk_04[i] = 0;
             rumbleMgr->unk_44[i] = 0;
             rumbleMgr->decreaseStep[i] = 0;

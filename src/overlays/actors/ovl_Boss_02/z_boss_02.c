@@ -2084,7 +2084,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             this->unk_1D30.z = player->actor.world.pos.z;
             if (this->unk_1D1C >= 30) {
                 if (this->unk_1D1C == 30) {
-                    Rumble_AddForced(0.0f, 50, 200, 1);
+                    Rumble_Override(0.0f, 50, 200, 1);
                 }
                 this->unk_0150 += 0x4000;
                 sp58 = (Math_SinS(this->unk_0150) * (BREG(19) + 5)) * 0.1f;
@@ -2109,7 +2109,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
             }
 
             if (this->unk_1D1C == 92) {
-                Rumble_AddForced(0.0f, 255, 30, 100);
+                Rumble_Override(0.0f, 255, 30, 100);
             }
 
             if (this->unk_1D1C == 100) {

@@ -629,7 +629,7 @@ void func_808FB088(EnRr* this, GlobalContext* globalCtx) {
 void func_808FB1C0(EnRr* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    Rumble_Add(this->actor.xyzDistToPlayerSq, 120, 2, 120);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 2, 120);
     if (!(this->unk_1E4 & 7)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_DEMO_EYE);
     }

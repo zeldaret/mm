@@ -1229,7 +1229,7 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) 
     Quake_SetSpeed(this->quake, 18000);
     Quake_SetQuakeValues(this->quake, 2, 0, 0, 0);
     Quake_SetCountdown(this->quake, 15);
-    Rumble_Add(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
     this->timer = 40;
     this->actionFunc = EnPametfrog_SnapperSpawn;
 }
@@ -1239,7 +1239,7 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_ShakeCamera(this, globalCtx, (f32)(this->timer * 7.5f) + 200.0f,
                             ((f32)(this->timer * 2) * (15.0f / 16.0f)) + -20.0f);
     if (this->timer != 0) {
-        Rumble_Add(this->actor.xyzDistToPlayerSq, 120, 20, 10);
+        Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
     } else {
         EnPametfrog_SetupTransitionGekkoSnapper(this, globalCtx);
     }
@@ -1252,7 +1252,7 @@ void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, GlobalContext* g
     Quake_SetSpeed(this->quake, 20000);
     Quake_SetQuakeValues(this->quake, 17, 0, 0, 0);
     Quake_SetCountdown(this->quake, 12);
-    Rumble_Add(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
     this->actionFunc = EnPametfrog_TransitionGekkoSnapper;
 }
 

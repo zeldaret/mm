@@ -63,7 +63,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
             gSaveContext.unk_3F24 = 0;
             Kankyo_InitGameOverLights(globalCtx);
             sGameOverTimer = 20;
-            Rumble_Add(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             gameOverCtx->state = GAMEOVER_DEATH_WAIT_GROUND;
             break;
         case GAMEOVER_DEATH_FADE_OUT:
@@ -91,7 +91,7 @@ void GameOver_Update(GlobalContext* globalCtx) {
         case GAMEOVER_REVIVE_RUMBLE:
             sGameOverTimer = 50;
             gameOverCtx->state++;
-            Rumble_Add(0.0f, 126, 124, 63);
+            Rumble_Request(0.0f, 126, 124, 63);
             break;
         case GAMEOVER_REVIVE_WAIT_GROUND:
             sGameOverTimer--;

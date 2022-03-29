@@ -3451,7 +3451,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                     }
                     D_80917272 = phi_v0;
                     D_809171F4 = phi_v0;
-                    Rumble_AddForced(0.0f, 60, phi_v0 * 3, 10);
+                    Rumble_Override(0.0f, 60, phi_v0 * 3, 10);
                 } else {
                     if (this->unk_1A4 > 70.0f) {
                         phi_v0 = Rand_ZeroFloat(5.0f) + 10.0f;
@@ -3464,7 +3464,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                     }
                     D_80917272 = phi_v0;
                     D_809171F4 = phi_v0;
-                    Rumble_AddForced(0.0f, 180, phi_v0 * 3, 10);
+                    Rumble_Override(0.0f, 180, phi_v0 * 3, 10);
                 }
 
                 D_80917274 = 0;
@@ -3506,11 +3506,11 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 if (D_80917206 == 2) {
                     D_80917272 = 30;
                     D_809171F4 = 100;
-                    Rumble_AddForced(0.0f, 60, 90, 10);
+                    Rumble_Override(0.0f, 60, 90, 10);
                 } else {
                     D_80917272 = 30;
                     D_809171F4 = 40;
-                    Rumble_AddForced(0.0f, 180, 90, 10);
+                    Rumble_Override(0.0f, 180, 90, 10);
                 }
 
                 D_80917274 = 0;
@@ -3561,7 +3561,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                         temp2 = 255.0f;
                     }
 
-                    Rumble_AddForced(0.0f, temp2, 120, 5);
+                    Rumble_Override(0.0f, temp2, 120, 5);
                     D_809171F4 = 40;
                     D_80911E28 = 10;
                     play_sound(NA_SE_IT_FISHING_HIT);
@@ -3595,7 +3595,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                         spA4 *= 3.0f / 4.0f;
                     }
 
-                    Rumble_AddForced(0.0f, spA4, Rand_ZeroFloat(5.0f) + 10.0f, 5);
+                    Rumble_Override(0.0f, spA4, Rand_ZeroFloat(5.0f) + 10.0f, 5);
                 }
 
                 if (this->unk_172[1] > 30) {
@@ -3631,7 +3631,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                             } else {
                                 phi_a1 = 180;
                             }
-                            Rumble_AddForced(0.0f, phi_a1, 90, 2);
+                            Rumble_Override(0.0f, phi_a1, 90, 2);
                             this->unk_172[0] = 20;
                             this->unk_172[1] = 100;
                             this->unk_172[2] = 20;
@@ -3759,7 +3759,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                     }
                 } else {
                     // Assignment of OoT's D_80B7E086 here removed in MM
-                    Rumble_AddForced(0.0f, 1, 3, 1);
+                    Rumble_Override(0.0f, 1, 3, 1);
                     Audio_QueueSeqCmd(0x100A00FF);
                 }
 
@@ -3782,7 +3782,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_150 = 6;
                 this->unk_172[0] = 100;
                 player->unk_B28 = 3;
-                Rumble_AddForced(0.0f, 1, 3, 1);
+                Rumble_Override(0.0f, 1, 3, 1);
                 D_809171D8++;
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 D_8090CD4C = 100;
@@ -5155,7 +5155,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         (fabsf(player->actor.world.pos.z - sSinkingLureLocationPos[sSinkingLureLocation - 1].z) < 25.0f)) {
         sSinkingLureLocation = 0;
         D_8090CD4C = 20;
-        Rumble_AddForced(0.0f, 150, 10, 10);
+        Rumble_Override(0.0f, 150, 10, 10);
         play_sound(NA_SE_SY_TRE_BOX_APPEAR);
         Audio_QueueSeqCmd(0x101400FF);
     }
@@ -5310,7 +5310,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             sCameraAt.z = camera->at.z;
             Message_StartTextbox(globalCtx, 0x409E, NULL);
             D_8090CD4C = 11;
-            Rumble_AddForced(0.0f, 150, 10, 10);
+            Rumble_Override(0.0f, 150, 10, 10);
             // fallthrough
 
         case 11:

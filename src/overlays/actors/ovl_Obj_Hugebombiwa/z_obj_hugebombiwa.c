@@ -299,7 +299,7 @@ void func_80A54980(ObjHugebombiwa* this, GlobalContext* globalCtx, s32 arg2) {
     Quake_SetSpeed(quake, 0x4E20);
     Quake_SetQuakeValues(quake, arg2, 0, 0, 0);
     Quake_SetCountdown(quake, 7);
-    Rumble_Add(this->actor.xyzDistToPlayerSq, 255, 20, 150);
+    Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 }
 
 s32 func_80A54A0C(ObjHugebombiwa* this) {

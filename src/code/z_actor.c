@@ -3802,9 +3802,9 @@ void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed) {
 
 void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
     if (arg2 >= 5) {
-        Rumble_Add(actor->xyzDistToPlayerSq, 255, 20, 150);
+        Rumble_Request(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
-        Rumble_Add(actor->xyzDistToPlayerSq, 180, 20, 100);
+        Rumble_Request(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
     func_800BC770(globalCtx, arg2, arg3);
 }
