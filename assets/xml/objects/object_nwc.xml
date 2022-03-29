@@ -43,7 +43,7 @@
         <!-- is type G_IM_FMT_I, G_IM_SIZ_16b -->
         <!-- <Blob Name="object_nwc_Blob_001A38" Size="0x108" Offset="0x1A38" /> -->
 
-        <!-- n64Utils throws an error for this DL because of the above texture -->
+        <!-- Z64Utils throws an error for this DL because of the above texture -->
         <DList Name="object_nwc_DL_001B80" Offset="0x1B80" />
 
         <!-- requires unassigned segment 0x01 matrix to render, no idea what its doing -->

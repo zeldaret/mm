@@ -174,9 +174,6 @@ s32 EnNwc_IsFound(EnNwc* this, GlobalContext* globalCtx) {
     return false;
 }
 
-/**
- * Note: Contains a possible fake match.
- */
 void EnNwc_ChangeState(EnNwc* this, s16 newState) {
     this->actor.speedXZ = 0.0f;
     switch (newState) {
@@ -199,7 +196,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
             this->randomRot = (s16)(s32)randPlusMinusPoint5Scaled(10000.0f);
             break;
         case NWC_STATE_RUNNING:
-            this->actor.world.rot.y = this->actor.home.rot.z * 0x3000 & 0xFFFF; // (&0xFFFF) prob fake match
+            this->actor.world.rot.y = this->actor.home.rot.z * 0x3000 & 0xFFFF; // Fake Match?: & 0xFFFF
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->stateTimer = Rand_ZeroFloat(40.0f) + 120.0f;
             this->actionFunc = EnNwc_RunAway;

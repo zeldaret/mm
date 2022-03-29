@@ -209,48 +209,39 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
 
         switch (animationState) {
             case NIW_ANIMATION_STILL:
-                // both wingRotZ
-                this->targetLimbRots[2] = 0.0f;
+                this->targetLimbRots[2] = 0.0f; // both wingRotZ
                 this->targetLimbRots[1] = 0.0f;
                 break;
             case NIW_ANIMATION_HEAD_PECKING:
                 this->unkTimer24E = 3;
-                // both wingRotZ
-                this->targetLimbRots[2] = 7000.0f * tempOne;
+                this->targetLimbRots[2] = 7000.0f * tempOne; // both wingRotZ
                 this->targetLimbRots[1] = 7000.0f * tempOne;
                 if (this->unkToggle296 == 0) {
-                    // both wingRotZ
-                    this->targetLimbRots[2] = 0.0f;
+                    this->targetLimbRots[2] = 0.0f; // both wingRotZ
                     this->targetLimbRots[1] = 0.0f;
                 }
                 break;
 
             case NIW_ANIMATION_PECKING_AND_WAVING:
                 this->unkTimer24E = 2;
-                // both wingRotZ
-                this->targetLimbRots[2] = -10000.0f;
+                this->targetLimbRots[2] = -10000.0f; // both wingRotZ
                 this->targetLimbRots[1] = -10000.0f;
-                // both wingRotY
-                this->targetLimbRots[7] = 25000.0f;
+                this->targetLimbRots[7] = 25000.0f; // both wingRotY
                 this->targetLimbRots[5] = 25000.0f;
-                // both wingRotX
-                this->targetLimbRots[8] = 6000.0f;
+                this->targetLimbRots[8] = 6000.0f; // both wingRotX
                 this->targetLimbRots[6] = 6000.0f;
                 if (this->unkToggle296 == 0) {
-                    // both wingRotY
-                    this->targetLimbRots[7] = 8000.0f;
+                    this->targetLimbRots[7] = 8000.0f; // both wingRotY
                     this->targetLimbRots[5] = 8000.0f;
                 }
                 break;
 
             case NIW_ANIMATION_PECKING_AND_FORFLAPPING:
                 this->unkTimer24E = 2;
-                // both wingRotY
-                this->targetLimbRots[5] = 10000.0f;
+                this->targetLimbRots[5] = 10000.0f; // both wingRotY
                 this->targetLimbRots[7] = 10000.0f;
                 if (this->unkToggle296 == 0) {
-                    // both wingRotY
-                    this->targetLimbRots[5] = 3000.0f;
+                    this->targetLimbRots[5] = 3000.0f; // both wingRotY
                     this->targetLimbRots[7] = 3000.0f;
                 }
                 break;
@@ -261,12 +252,10 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
 
             case NIW_ANIMATION_PECKING_SLOW_FORFLAPPING:
                 this->unkTimer24E = 5;
-                // both wingRotY
-                this->targetLimbRots[5] = 14000.0f;
+                this->targetLimbRots[5] = 14000.0f; // both wingRotY
                 this->targetLimbRots[7] = 14000.0f;
                 if (this->unkToggle296 == 0) {
-                    // both wingRotY
-                    this->targetLimbRots[5] = 10000.0f;
+                    this->targetLimbRots[5] = 10000.0f; // both wingRotY
                     this->targetLimbRots[7] = 10000.0f;
                 }
                 break;
@@ -347,8 +336,8 @@ void EnNiw_UpdateRunning(EnNiw* this, GlobalContext* globalCtx, s32 isStormCucco
         runningDirection = -runningAngles[isStormCucco];
     }
 
-    if (isStormCucco == true && (this->runAwayTimer == 0 || (this->actor.bgCheckFlags & 8))) {
-        // bgCheckFlags 8: hit a wall
+    if (isStormCucco == true &&
+        (this->runAwayTimer == 0 || (this->actor.bgCheckFlags & 8))) { // bgCheckFlags 8: hit a wall
         this->runAwayTimer = 150;
         if (this->yawTimer == 0) {
             this->yawTimer = 70;
@@ -598,11 +587,10 @@ void EnNiw_Swimming(EnNiw* this, GlobalContext* globalCtx) {
     EnNiw_AnimateWingHead(this, globalCtx, NIW_ANIMATION_PECKING_AND_WAVING);
 }
 
-/**
- *  Possible Fake Match: the weird way this state is set
- */
 void EnNiw_Trigger(EnNiw* this, GlobalContext* globalCtx) {
     s32 state;
+
+    // Possible Fake Match: the weird way this state is set
     if (1) {
         state = NIW_STATE_ANGRY1;
     }
