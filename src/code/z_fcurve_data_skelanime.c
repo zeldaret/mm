@@ -93,7 +93,7 @@ typedef enum {
  */
 s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
     s16* transforms;
-    u8* knotCount;
+    u8* knotCounts;
     CurveAnimationHeader* animation;
     u16* constantData;
     s32 curLimb;
@@ -103,7 +103,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
     s32 vecType;
 
     animation = Lib_SegmentedToVirtual(skelCurve->animation);
-    knotCount = Lib_SegmentedToVirtual(animation->knotCount);
+    knotCounts = Lib_SegmentedToVirtual(animation->knotCounts);
     startKnot = Lib_SegmentedToVirtual(animation->interpolationData);
     constantData = Lib_SegmentedToVirtual(animation->constantData);
     transforms = (s16*)skelCurve->transforms;
@@ -122,13 +122,13 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
             for (coord = 0; coord < 3; coord++) { // x/y/z
                 f32 transformValue;
 
-                if (*knotCount == 0) {
+                if (*knotCounts == 0) {
                     transformValue = *constantData;
                     *transforms = transformValue;
                     constantData++;
                 } else {
-                    transformValue = Curve_Interpolate(skelCurve->curFrame, startKnot, *knotCount);
-                    startKnot += *knotCount;
+                    transformValue = Curve_Interpolate(skelCurve->curFrame, startKnot, *knotCounts);
+                    startKnot += *knotCounts;
                     if (vecType == SKELCURVE_VEC_TYPE_SCALE) {
                         // Rescaling allows for more refined scaling using an s16
                         *transforms = transformValue * SKELCURVE_SCALE_SCALE;
@@ -136,11 +136,11 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
                         // Convert value from degrees to a binary angle
                         *transforms = transformValue * SKELCURVE_SCALE_ROTATION;
                     } else { // SKELCURVE_VEC_TYPE_POSIITON
-                        // Model scale to world scale
+                        // Model to world scale conversion
                         *transforms = transformValue * SKELCURVE_SCALE_POSITION;
                     }
                 }
-                knotCount++;
+                knotCounts++;
                 transforms++;
             }
         }

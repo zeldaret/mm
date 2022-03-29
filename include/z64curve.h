@@ -15,7 +15,7 @@ typedef struct {
 } CurveInterpKnot; // size = 0xC
 
 typedef struct {
-    /* 0x0 */ u8* knotCount;
+    /* 0x0 */ u8* knotCounts;
     /* 0x4 */ CurveInterpKnot* interpolationData;
     /* 0x8 */ s16* constantData;
     /* 0xC */ s16 unk_0C;        // Set but not used, always 1 in objects
