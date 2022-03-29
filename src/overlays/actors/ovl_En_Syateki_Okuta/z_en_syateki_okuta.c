@@ -211,8 +211,8 @@ void func_80A368E0(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
     }
 
     this->collider.dim.pos.x = this->actor.world.pos.x;
-    // Dumb but required to match
-    this->collider.dim.pos.y = this->actor.world.pos.y + ((this->skelAnime.jointTable + 0)->y * this->actor.scale.y);
+    // jointTable->y is the y-translation of the skeleton root
+    this->collider.dim.pos.y = this->actor.world.pos.y + (this->skelAnime.jointTable->y * this->actor.scale.y);
     this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
 }
