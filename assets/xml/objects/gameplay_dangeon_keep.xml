@@ -75,15 +75,19 @@
         <DList Name="gameplay_dangeon_keep_DL_01D980" Offset="0x1D980" />
         <Texture Name="gameplay_dangeon_keep_Tex_01DC70" OutName="tex_01DC70" Format="rgba16" Width="32" Height="32" Offset="0x1DC70" />
         <Texture Name="gameplay_dangeon_keep_Tex_01E470" OutName="tex_01E470" Format="rgba16" Width="32" Height="32" Offset="0x1E470" />
+        <!-- snowhead(?) floor changing stone staircase stone textures -->
         <Texture Name="gameplay_dangeon_keep_Tex_01EC70" OutName="tex_01EC70" Format="rgba16" Width="32" Height="32" Offset="0x1EC70" />
         <Texture Name="gameplay_dangeon_keep_Tex_01F470" OutName="tex_01F470" Format="i4" Width="64" Height="64" Offset="0x1F470" />
         <Texture Name="gameplay_dangeon_keep_Tex_01FC70" OutName="tex_01FC70" Format="i4" Width="64" Height="64" Offset="0x1FC70" />
         <Texture Name="gameplay_dangeon_keep_Tex_020470" OutName="tex_020470" Format="i4" Width="64" Height="64" Offset="0x20470" />
         <Texture Name="gameplay_dangeon_keep_Tex_020C70" OutName="tex_020C70" Format="i4" Width="64" Height="64" Offset="0x20C70" />
+        <!-- snowhead(?) floor changing stone staircase -->
         <DList Name="gameplay_dangeon_keep_DL_0219E0" Offset="0x219E0" />
-        <DList Name="gameplay_dangeon_keep_DL_021EF0" Offset="0x21EF0" />
-        <Texture Name="gameplay_dangeon_keep_Tex_021FF8" OutName="tex_021FF8" Format="rgba32" Width="32" Height="32" Offset="0x21FF8" />
-        <TextureAnimation Name="gameplay_dangeon_keep_Matanimheader_023008" Offset="0x23008" />
-        <Collision Name="gameplay_dangeon_keep_Colheader_02324C" Offset="0x2324C" />
+
+        <!-- En_Warp_tag assets -->
+        <DList Name="gWarpTagGoronTrialBaseDL" Offset="0x21EF0" />
+        <Texture Name="gWarpTagRainbowTex" OutName="warptag_rainbow" Format="rgba32" Width="32" Height="32" Offset="0x21FF8" />
+        <TextureAnimation Name="gWarpTagRainbowAnimMat" Offset="0x23008" />
+        <Collision Name="gWarpTagGoronTrialBaseCollider" Offset="0x2324C" />
     </File>
 </Root>

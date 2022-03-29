@@ -7,7 +7,6 @@
 #include "z_en_aob_01.h"
 #include "overlays/actors/ovl_En_Racedog/z_en_racedog.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
-#include "objects/object_aob/object_aob.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -46,12 +45,12 @@ const ActorInit En_Aob_01_InitVars = {
 };
 
 static AnimationInfo D_809C3790[6] = {
-    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_aob_Anim_0068B4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_aob_Anim_00700C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_aob_Anim_0058EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_aob_Anim_006040, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gMamamuYanSurpriseStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gMamamuYanSurpriseLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -91,11 +90,11 @@ static EnAobStruct D_809C384C[] = {
 };
 
 void func_809C10B0(EnAob01* this, s32 arg1) {
-    if (DECR(this->unk_3F0) == 0) {
-        this->unk_3EE++;
-        if (this->unk_3EE >= arg1) {
-            this->unk_3EE = 0;
-            this->unk_3F0 = Rand_S16Offset(30, 30);
+    if (DECR(this->blinkTimer) == 0) {
+        this->eyeIndex++;
+        if (this->eyeIndex >= arg1) {
+            this->eyeIndex = 0;
+            this->blinkTimer = Rand_S16Offset(30, 30);
         }
     }
 }
@@ -925,8 +924,8 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAob01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_aob_Skel_000180, NULL, this->jointTable, this->morphTable,
-                       16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gMamamuYanSkel, NULL, this->jointTable, this->morphTable,
+                       MAMAMU_YAN_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_43C = 0;
@@ -982,35 +981,36 @@ void EnAob01_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                              Actor* thisx) {
     EnAob01* this = THIS;
-    TexturePtr sp38[] = {
-        object_aob_Tex_000658,
-        object_aob_Tex_000E58,
-        object_aob_Tex_001658,
+    TexturePtr eyeTextures[] = {
+        gMamamuYanEyeOpenTex,
+        gMamamuYanEyeHalfTex,
+        gMamamuYanEyeClosedTex,
     };
 
-    if (limbIndex == 15) {
+    if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        *dList = object_aob_DL_003D18;
+        *dList = gMamamuYanHeadDL;
 
-        gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sp38[this->unk_3EE]));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(eyeTextures[this->eyeIndex]));
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_2DA.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_2DA.x * -1, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 8) {
+    if (limbIndex == MAMAMU_YAN_LIMB_TORSO) {
         Matrix_InsertXRotation_s(this->unk_2E0.y * -1, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_2E0.x * -1, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
+    if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == MAMAMU_YAN_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += (s16)Math_SinS(this->unk_2F8[limbIndex]) * 200;
         rot->z += (s16)Math_CosS(this->unk_318[limbIndex]) * 200;
     }
@@ -1021,7 +1021,7 @@ void EnAob01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     static Vec3f D_809C3968 = { 0.0f, 0.0f, 0.0f };
     EnAob01* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_809C3968, &this->actor.focus.pos);
     }
 }
