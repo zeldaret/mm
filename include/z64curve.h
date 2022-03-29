@@ -7,7 +7,7 @@
 struct GlobalContext;
 
 typedef struct {
-    /* 0x0 */ u16 flags;         // Only the bottom two bytes are used, although others are set in objects
+    /* 0x0 */ u16 flags;         // Only the bottom two bits are used, although others are set in objects
     /* 0x2 */ s16 abscissa;      // knot input value
     /* 0x4 */ s16 leftGradient;  // left derivative at the point
     /* 0x6 */ s16 rightGradient; // right derivative at the point
@@ -18,7 +18,7 @@ typedef struct {
     /* 0x0 */ u8* knotCount;
     /* 0x4 */ CurveInterpKnot* interpolationData;
     /* 0x8 */ s16* constantData;
-    /* 0xC */ s16 unk_0C; // Set but not used
+    /* 0xC */ s16 unk_0C;        // Set but not used, always 1 in objects
     /* 0xE */ s16 maxFrameCount; // Not used, inferred from use in objects
 } CurveAnimationHeader; // size 0x10
 
@@ -50,10 +50,8 @@ typedef struct {
     /* 0x1C */ LimbTransform* transforms;
 } SkelCurve; // size = 0x20
 
-typedef s32 (*OverrideCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex,
-                                     struct Actor* actor);
-typedef void (*PostCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex,
-                                  struct Actor* actor);
+typedef s32 (*OverrideCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex, struct Actor* actor);
+typedef void (*PostCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex, struct Actor* actor);
 
 
 
