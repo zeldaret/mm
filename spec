@@ -2283,8 +2283,7 @@ beginseg
     name "ovl_Obj_Grass_Carry"
     compress
     include "build/src/overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.o"
-    include "build/data/ovl_Obj_Grass_Carry/ovl_Obj_Grass_Carry.data.o"
-    include "build/data/ovl_Obj_Grass_Carry/ovl_Obj_Grass_Carry.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Grass_Carry/ovl_Obj_Grass_Carry_reloc.o"
 endseg
 
 beginseg
