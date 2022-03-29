@@ -20,8 +20,8 @@
         <DList Name="gNiwFeatherDL" Offset="0x2428" />
 
         <Limb Name="gNiwRootLimb" LimbType="Standard" EnumName="NIW_LIMB_ROOT" Offset="0x2440"/>
-        <Limb Name="gNiwLimb_244C" LimbType="Standard" EnumName="NIW_LIMB_244C" Offset="0x244C"/>
-        <Limb Name="gNiwLimb_2458" LimbType="Standard" EnumName="NIW_LIMB_2458" Offset="0x2458"/>
+        <Limb Name="gNiwLimb_244C" LimbType="Standard" EnumName="NIW_LIMB_2" Offset="0x244C"/>
+        <Limb Name="gNiwLimb_2458" LimbType="Standard" EnumName="NIW_LIMB_3" Offset="0x2458"/>
         <Limb Name="gNiwTailAndUndersideLimb" LimbType="Standard" EnumName="NIW_LIMB_UNDER_SIDE" Offset="0x2464"/>
         <Limb Name="gNiwLeftFootRootLimb" LimbType="Standard" EnumName="NIW_LIMB_LEFT_FOOT_ROOT" Offset="0x2470"/>
         <Limb Name="gNiwLeftFootLimb" LimbType="Standard" EnumName="NIW_LIMB_LEFT_FOOT" Offset="0x247C"/>

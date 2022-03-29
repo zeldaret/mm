@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_nwc" Segment="6">
-        <DList Name="gNwcEndDl" Offset="0x2E0" />
+        <DList Name="gNwcEndDL" Offset="0x2E0" />
         <DList Name="gNwcBodyDL" Offset="0x2E8" />
         <Texture Name="gNwcBodyTex" OutName="body" Format="rgba16" Width="8" Height="8" Offset="0x4D0" />
         <Texture Name="gNwcBeakTex" OutName="beak" Format="rgba16" Width="8" Height="8" Offset="0x550" />

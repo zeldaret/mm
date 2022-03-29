@@ -8,8 +8,8 @@
  */
 
 #include "z_en_nwc.h"
-#include "../ovl_En_Niw/z_en_niw.h"
-#include "../ovl_En_Hs/z_en_hs.h" // grog
+#include "overlays/actors/ovl_En_Niw/z_en_niw.h"
+#include "overlays/actors/ovl_En_Hs/z_en_hs.h" // grog
 #include "objects/object_nwc/object_nwc.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -69,7 +69,7 @@ void EnNwc_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((gSaveContext.save.weekEventReg[0x19] & 8)) {
+    if ((gSaveContext.save.weekEventReg[25] & 8)) {
         // if breman mask was already used, replace with adult EnNiw
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);
@@ -314,7 +314,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
     }
 
     Math_Vec3f_Diff(&chickCoords[this->actor.home.rot.z], &this->actor.world.pos, &targetVector);
-    if (SQXZ(targetVector) < 25.0f) { // too close to keep moving, stop
+    if (SQXZ(targetVector) < SQ(5.0f)) { // too close to keep moving, stop
         this->actor.speedXZ = 0.0f;
 
         // first nwc in the line follows player, the rest follow the previous one
