@@ -21,6 +21,7 @@ void func_80A363B4(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A36488(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A36504(EnSyatekiOkuta* this, GlobalContext* globalCtx);
 void func_80A365EC(EnSyatekiOkuta* this, GlobalContext* globalCtx);
+void func_80A36260(EnSyatekiOkuta* this);
 
 #if 0
 const ActorInit En_Syateki_Okuta_InitVars = {
@@ -53,11 +54,42 @@ static InitChainEntry D_80A37B88[] = {
 extern ColliderCylinderInit D_80A37570;
 extern InitChainEntry D_80A37B88[];
 
-extern UNK_TYPE D_0600466C;
+extern SkeletonHeader D_060033D0;
+extern AnimationHeader D_0600466C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Init.s")
+void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnSyatekiOkuta* this = THIS;
+    WaterBox* waterbox;
+    f32 ySurface;
+    s32 bgId;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/EnSyatekiOkuta_Destroy.s")
+    Actor_ProcessInitChain(&this->actor, D_80A37B88);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &D_060033D0, &D_0600466C, this->jointTable, this->morphTable, 16);
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &D_80A37570);
+
+    this->actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &bgId,
+                                                          &this->actor, &this->actor.world.pos);
+
+    if (!(WaterBox_GetSurface1_2(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
+                                 &ySurface, &waterbox)) ||
+        (ySurface <= this->actor.floorHeight)) {
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        this->actor.world.pos.y = this->actor.home.pos.y = ySurface;
+    }
+
+    this->unk_2A4 = 0;
+    this->unk_2AA = 0;
+    func_80A36260(this);
+}
+
+void EnSyatekiOkuta_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnSyatekiOkuta* this = THIS;
+
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Syateki_Okuta/func_80A36148.s")
 
