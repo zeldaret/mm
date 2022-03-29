@@ -35,7 +35,7 @@ void SkelCurve_Clear(SkelCurve* skelCurve) {
     skelCurve->playSpeed = 0.0f;
     skelCurve->endFrame = 0.0f;
     skelCurve->unk_0C = 0.0f;
-    skelCurve->transforms = NULL;
+    skelCurve->jointTable = NULL;
 }
 
 /**
@@ -51,7 +51,7 @@ s32 SkelCurve_Init(GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeleton
     skelCurve->limbCount = skeletonHeader->limbCount;
     skelCurve->skeleton = Lib_SegmentedToVirtual(skeletonHeader->limbs);
 
-    skelCurve->transforms = ZeldaArena_Malloc(sizeof(*skelCurve->transforms) * skelCurve->limbCount);
+    skelCurve->jointTable = ZeldaArena_Malloc(sizeof(*skelCurve->jointTable) * skelCurve->limbCount);
 
     skelCurve->curFrame = 0.0f;
     return true;
@@ -61,8 +61,8 @@ s32 SkelCurve_Init(GlobalContext* globalCtx, SkelCurve* skelCurve, CurveSkeleton
  * Frees the joint data.
  */
 void SkelCurve_Destroy(GlobalContext* globalCtx, SkelCurve* skelCurve) {
-    if (skelCurve->transforms != NULL) {
-        ZeldaArena_Free(skelCurve->transforms);
+    if (skelCurve->jointTable != NULL) {
+        ZeldaArena_Free(skelCurve->jointTable);
     }
 }
 
@@ -92,7 +92,7 @@ typedef enum {
  * @return bool true when the animation has finished.
  */
 s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
-    s16* transforms;
+    s16* jointData;
     u8* knotCounts;
     CurveAnimationHeader* animation;
     u16* constantData;
@@ -106,7 +106,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
     knotCounts = Lib_SegmentedToVirtual(animation->knotCounts);
     startKnot = Lib_SegmentedToVirtual(animation->interpolationData);
     constantData = Lib_SegmentedToVirtual(animation->constantData);
-    transforms = (s16*)skelCurve->transforms;
+    jointData = *skelCurve->jointTable;
 
     skelCurve->curFrame += skelCurve->playSpeed * ((s32)globalCtx->state.framerateDivisor * 0.5f);
 
@@ -124,24 +124,24 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelCurve* skelCurve) {
 
                 if (*knotCounts == 0) {
                     transformValue = *constantData;
-                    *transforms = transformValue;
+                    *jointData = transformValue;
                     constantData++;
                 } else {
                     transformValue = Curve_Interpolate(skelCurve->curFrame, startKnot, *knotCounts);
                     startKnot += *knotCounts;
                     if (vecType == SKELCURVE_VEC_TYPE_SCALE) {
                         // Rescaling allows for more refined scaling using an s16
-                        *transforms = transformValue * SKELCURVE_SCALE_SCALE;
+                        *jointData = transformValue * SKELCURVE_SCALE_SCALE;
                     } else if (vecType == SKELCURVE_VEC_TYPE_ROTATION) {
                         // Convert value from degrees to a binary angle
-                        *transforms = transformValue * SKELCURVE_SCALE_ROTATION;
+                        *jointData = transformValue * SKELCURVE_SCALE_ROTATION;
                     } else { // SKELCURVE_VEC_TYPE_POSIITON
                         // Model to world scale conversion
-                        *transforms = transformValue * SKELCURVE_SCALE_POSITION;
+                        *jointData = transformValue * SKELCURVE_SCALE_POSITION;
                     }
                 }
                 knotCounts++;
-                transforms++;
+                jointData++;
             }
         }
     }
@@ -166,19 +166,19 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
         Vec3s rot;
         Vec3f pos;
         Gfx* dList;
-        Vec3s* transform = (Vec3s*)&skelCurve->transforms[limbIndex];
+        s16* jointData = skelCurve->jointTable[limbIndex];
 
-        scale.x = transform->x / SKELCURVE_SCALE_SCALE;
-        scale.y = transform->y / SKELCURVE_SCALE_SCALE;
-        scale.z = transform->z / SKELCURVE_SCALE_SCALE;
-        transform++;
-        rot.x = transform->x;
-        rot.y = transform->y;
-        rot.z = transform->z;
-        transform++;
-        pos.x = transform->x;
-        pos.y = transform->y;
-        pos.z = transform->z;
+        scale.x = jointData[0] / SKELCURVE_SCALE_SCALE;
+        scale.y = jointData[1] / SKELCURVE_SCALE_SCALE;
+        scale.z = jointData[2] / SKELCURVE_SCALE_SCALE;
+        jointData += 3;
+        rot.x = jointData[0];
+        rot.y = jointData[1];
+        rot.z = jointData[2];
+        jointData += 3;
+        pos.x = jointData[0];
+        pos.y = jointData[1];
+        pos.z = jointData[2];
 
         Matrix_JointPosition(&pos, &rot);
         Matrix_Scale(scale.x, scale.y, scale.z, MTXMODE_APPLY);
@@ -230,7 +230,7 @@ void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelCurve* skel
 // The first and last arguments are used inconsistently in different actors.
 void SkelCurve_Draw(Actor* actor, GlobalContext* globalCtx, SkelCurve* skelCurve,
                     OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
-    if (skelCurve->transforms != NULL) {
+    if (skelCurve->jointTable != NULL) {
         SkelCurve_DrawLimb(globalCtx, 0, skelCurve, overrideLimbDraw, postLimbDraw, lod, thisx);
     }
 }

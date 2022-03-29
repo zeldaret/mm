@@ -34,12 +34,6 @@ typedef struct {
 } CurveSkeletonHeader; // size = 0x8
 
 typedef struct {
-    /* 0x0 */ Vec3s scale;
-    /* 0x6 */ Vec3s rot;
-    /* 0xC */ Vec3s pos;
-} LimbTransform; // size = 0x12
-
-typedef struct {
     /* 0x00 */ u8 limbCount;
     /* 0x04 */ SkelCurveLimb** skeleton;
     /* 0x08 */ CurveAnimationHeader* animation;
@@ -47,7 +41,7 @@ typedef struct {
     /* 0x10 */ f32 endFrame;
     /* 0x14 */ f32 playSpeed;
     /* 0x18 */ f32 curFrame;
-    /* 0x1C */ LimbTransform* transforms;
+    /* 0x1C */ s16 (*jointTable)[9];
 } SkelCurve; // size = 0x20
 
 typedef s32 (*OverrideCurveLimbDraw)(struct GlobalContext* globalCtx, SkelCurve* skelCuve, s32 limbIndex, struct Actor* actor);
