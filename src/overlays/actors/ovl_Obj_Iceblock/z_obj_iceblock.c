@@ -16,8 +16,8 @@ void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjIceblock_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80A257A0(ObjIceblock* this);
-void func_80A257B4(ObjIceblock* this, GlobalContext* globalCtx);
+void ObjIceBlock_SetupAttemptSpawnCutscene(ObjIceblock* this);
+void ObjIceBlock_AttemptSpawnCutscene(ObjIceblock* this, GlobalContext* globalCtx);
 void func_80A25824(ObjIceblock* this);
 void func_80A2586C(ObjIceblock* this, GlobalContext* globalCtx);
 void func_80A25978(ObjIceblock* this);
@@ -77,7 +77,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 44, 62, -31, { 0, 0, 0 } },
 };
 
-static AnimatedMaterial* D_80A26E7C = NULL;
+static AnimatedMaterial* sCubeSublimatingAirTexMat = NULL;
 
 s16 func_80A23090(s16 arg0, s16 arg1, s16 arg2) {
     if (arg0 >= 0) {
@@ -915,28 +915,29 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.world.rot.z = 0;
     this->dyna.actor.home.rot.x = 0;
     this->dyna.actor.home.rot.z = 0;
-    if (!OBJICEBLOCK_GET_2(&this->dyna.actor)) {
+    if (!GET_ICEBLOCK_SNAP_ROT(&this->dyna.actor)) {
         this->dyna.actor.shape.rot.y = (this->dyna.actor.shape.rot.y + 0x2000) & 0xC000;
         this->dyna.actor.home.rot.y = this->dyna.actor.shape.rot.y;
         this->dyna.actor.world.rot.y = this->dyna.actor.shape.rot.y;
     }
 
     DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_ice_block_Colheader_000438);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gIceBlockDynaColHeader);
     func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
 
-    if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
+    if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor)) {
         this->collider.dim.yShift = -100;
         this->collider.dim.height = 126;
         this->collider.dim.radius = 29;
     }
 
-    if (D_80A26E7C == NULL) {
-        D_80A26E7C = Lib_SegmentedToVirtual(object_ice_block_Matanimheader_000328);
+    if (sCubeSublimatingAirTexMat == NULL) {
+        sCubeSublimatingAirTexMat = Lib_SegmentedToVirtual(gIceBlockCubeSublimatingAirTexAnim);
     }
 
+    // ... this is init, why would this value be set?
     if (!(this->unk_1B0 & 8)) {
         parent = this->dyna.actor.parent;
         if (parent != NULL) {
@@ -948,14 +949,14 @@ void ObjIceblock_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
+    if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor)) {
         this->unk_2B4 = -1.0f;
     }
 
     this->unk_2B0 = 0;
-    this->unkFunc = func_80A26B64;
-    func_80A257A0(this);
-    this->unk_2AE = 450;
+    this->extendedDrawFunc = func_80A26B64;
+    ObjIceBlock_SetupAttemptSpawnCutscene(this);
+    this->meltTimer = 450; // (450/20) = 22 seconds
 }
 
 void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -965,15 +966,15 @@ void ObjIceblock_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80A257A0(ObjIceblock* this) {
-    this->actionFunc = func_80A257B4;
+void ObjIceBlock_SetupAttemptSpawnCutscene(ObjIceblock* this) {
+    this->actionFunc = ObjIceBlock_AttemptSpawnCutscene;
 }
 
-void func_80A257B4(ObjIceblock* this, GlobalContext* globalCtx) {
+void ObjIceBlock_AttemptSpawnCutscene(ObjIceblock* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->unkFunc = func_80A26BF8;
-        this->unk_2B1 = 80;
+        this->extendedDrawFunc = func_80A26BF8;
+        this->spawnCutsceneTimer = 80;
         func_80A25824(this);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -982,7 +983,7 @@ void func_80A257B4(ObjIceblock* this, GlobalContext* globalCtx) {
 
 void func_80A25824(ObjIceblock* this) {
     this->actionFunc = func_80A2586C;
-    this->unk_2A0 = 2;
+    this->stateTimer = 2;
     Actor_SetScale(&this->dyna.actor, 0.01f);
     func_80A2319C(this, this->dyna.actor.scale.x);
 }
@@ -990,20 +991,20 @@ void func_80A25824(ObjIceblock* this) {
 void func_80A2586C(ObjIceblock* this, GlobalContext* globalCtx) {
     func_80A236D4(this, &this->dyna.actor.home.pos);
 
-    if (this->unk_2A0 > 0) {
-        this->unk_2A0--;
+    if (this->stateTimer > 0) {
+        this->stateTimer--;
         return;
     }
 
     if (Math_StepToF(&this->dyna.actor.scale.x, 0.1f, 0.02f)) {
         Actor_SetScale(&this->dyna.actor, 0.1f);
-        if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
+        if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor)) {
             this->unk_2B4 = 0.05f;
         }
         func_80A25978(this);
     } else {
         Actor_SetScale(&this->dyna.actor, this->dyna.actor.scale.x);
-        this->unk_2A0 = 2;
+        this->stateTimer = 2;
     }
 
     func_80A2319C(this, this->dyna.actor.scale.x);
@@ -1015,7 +1016,7 @@ void func_80A2586C(ObjIceblock* this, GlobalContext* globalCtx) {
 
 void func_80A25978(ObjIceblock* this) {
     this->actionFunc = func_80A25994;
-    this->unk_2A0 = 4;
+    this->stateTimer = 4;
 }
 
 void func_80A25994(ObjIceblock* this, GlobalContext* globalCtx) {
@@ -1023,14 +1024,14 @@ void func_80A25994(ObjIceblock* this, GlobalContext* globalCtx) {
     Vec3f sp30;
 
     func_80A236D4(this, &this->dyna.actor.home.pos);
-    if (this->unk_2A0 > 0) {
-        this->unk_2A0--;
+    if (this->stateTimer > 0) {
+        this->stateTimer--;
         return;
     }
 
     if (this->dyna.actor.flags & ACTOR_FLAG_40) {
         func_80A2339C(globalCtx, &this->dyna.actor.world.pos, this->dyna.actor.scale.x, 1.2f, 15);
-        if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
+        if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor)) {
             sp30.x = this->dyna.actor.world.pos.x;
             sp30.y = this->dyna.actor.world.pos.y - 30.0f;
             sp30.z = this->dyna.actor.world.pos.z;
@@ -1038,17 +1039,17 @@ void func_80A25994(ObjIceblock* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
+    if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor)) {
         this->unk_2B4 = 0.1f;
     }
 
     func_80A25A8C(this);
-    this->unkFunc = func_80A26B74;
+    this->extendedDrawFunc = func_80A26B74;
 }
 
 void func_80A25A8C(ObjIceblock* this) {
     this->actionFunc = func_80A25AA8;
-    this->unk_2A0 = 2;
+    this->stateTimer = 2;
 }
 
 void func_80A25AA8(ObjIceblock* this, GlobalContext* globalCtx) {
@@ -1056,8 +1057,8 @@ void func_80A25AA8(ObjIceblock* this, GlobalContext* globalCtx) {
     f32 sp24;
     s32 temp = func_80A236D4(this, &this->dyna.actor.home.pos);
 
-    if (this->unk_2A0 > 0) {
-        this->unk_2A0--;
+    if (this->stateTimer > 0) {
+        this->stateTimer--;
         return;
     }
 
@@ -1074,7 +1075,7 @@ void func_80A25AA8(ObjIceblock* this, GlobalContext* globalCtx) {
         this->dyna.actor.shape.yOffset = 300.0f;
         this->unk_248.y += sp24;
 
-        if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
+        if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor)) {
             this->collider.dim.yShift = -69;
         } else {
             this->collider.dim.yShift = 0;
@@ -1226,7 +1227,7 @@ void func_80A260E8(ObjIceblock* this) {
     this->unk_260 = D_80A26FC0[this->unk_26C];
     this->unk_25C = 0.0f;
     this->dyna.actor.velocity.y = 0.0f;
-    this->unk_2A0 = 15;
+    this->stateTimer = 15;
     func_80A24DC4(this);
     this->actionFunc = func_80A26144;
 }
@@ -1237,8 +1238,8 @@ void func_80A26144(ObjIceblock* this, GlobalContext* globalCtx) {
     s32 isBool;
     s32 sp24;
 
-    if (this->unk_2A0 > 0) {
-        this->unk_2A0--;
+    if (this->stateTimer > 0) {
+        this->stateTimer--;
     }
 
     Math_StepToF(&this->unk_25C, this->unk_260, 0.75f);
@@ -1248,7 +1249,7 @@ void func_80A26144(ObjIceblock* this, GlobalContext* globalCtx) {
     sp24 = func_80A23F90(this, globalCtx);
     isBool = sp24 == 0;
 
-    if (isBool || sp28 || (this->unk_2A0 == 1)) {
+    if (isBool || sp28 || (this->stateTimer == 1)) {
         func_80A2541C(this, globalCtx);
     }
 
@@ -1275,7 +1276,7 @@ void func_80A26144(ObjIceblock* this, GlobalContext* globalCtx) {
 void func_80A262BC(ObjIceblock* this) {
     this->actionFunc = func_80A262EC;
     this->dyna.actor.velocity.y *= 0.7f;
-    this->unk_2A0 = -1;
+    this->stateTimer = -1;
 }
 
 void func_80A262EC(ObjIceblock* this, GlobalContext* globalCtx) {
@@ -1289,20 +1290,20 @@ void func_80A262EC(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A2541C(this, globalCtx);
     }
 
-    if (this->unk_2A0 > 0) {
-        this->unk_2A0--;
+    if (this->stateTimer > 0) {
+        this->stateTimer--;
     }
 
-    if (this->unk_2A0 == -1) {
+    if (this->stateTimer == -1) {
         if ((this->dyna.actor.velocity.y < 0.0f) && (this->dyna.actor.world.pos.y < this->unk_244) &&
             ((this->unk_244 - (600.0f * this->dyna.actor.scale.y)) <= this->dyna.actor.world.pos.y)) {
             func_80A24BDC(this, globalCtx, 1.0f, 0.9f, 11);
             func_80A24B74(this, globalCtx);
-            this->unk_2A0 = 3;
+            this->stateTimer = 3;
         } else {
-            this->unk_2A0 = 0;
+            this->stateTimer = 0;
         }
-    } else if (this->unk_2A0 == 1) {
+    } else if (this->stateTimer == 1) {
         func_80A24BDC(this, globalCtx, 0.7f, 1.3f, 6);
         func_80A24B74(this, globalCtx);
     }
@@ -1344,7 +1345,7 @@ void func_80A26574(ObjIceblock* this) {
     this->unk_27C.unk_18 = 500;
     this->unk_27C.unk_22 = 500;
     this->unk_27C.unk_08 = 7.0f;
-    this->unk_2A0 = 40;
+    this->stateTimer = 40;
 }
 
 void func_80A265C0(ObjIceblock* this, GlobalContext* globalCtx) {
@@ -1355,11 +1356,11 @@ void func_80A265C0(ObjIceblock* this, GlobalContext* globalCtx) {
         func_80A2541C(this, globalCtx);
     }
 
-    if (this->unk_2A0 > 0) {
-        this->unk_2A0--;
+    if (this->stateTimer > 0) {
+        this->stateTimer--;
     } else {
         ptr = &this->unk_27C;
-        this->unk_2A0 = Rand_S16Offset(30, 60);
+        this->stateTimer = Rand_S16Offset(30, 60);
         ptr->unk_0C = Rand_S16Offset(300, 300);
         ptr->unk_0E = Rand_S16Offset(900, 600);
         ptr->unk_04 = (2.0f * Rand_ZeroOne()) + 1.0f;
@@ -1400,7 +1401,7 @@ void func_80A266E0(ObjIceblock* this, GlobalContext* globalCtx) {
         actor->scale.z = actor->scale.x;
     }
 
-    if (OBJICEBLOCK_GET_1(&this->dyna.actor)) {
+    if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor)) {
         this->unk_2B4 = actor->scale.y;
         this->collider.dim.height = (s32)(actor->scale.y * 1230.0f) + 1;
         this->collider.dim.yShift = actor->scale.y * -1000.0f;
@@ -1441,14 +1442,14 @@ void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_2B0 == 1) || (this->unk_2B0 == 2) || (this->unk_2B0 == 3)) {
-        if (this->unk_2AE > 0) {
-            this->unk_2AE--;
+        if (this->meltTimer > 0) {
+            this->meltTimer--;
         }
     }
 
     if (((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) ||
-        (this->unk_2AE == 0)) {
-        this->unk_2AE = -1;
+        (this->meltTimer == 0)) {
+        this->meltTimer = -1;
         this->unk_2B0 = 4;
         this->unk_1B0 &= ~0x100;
         if (this->unk_1B0 & 1) {
@@ -1458,9 +1459,10 @@ void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx) {
         func_80A266C4(this);
     }
 
-    if (this->unk_2B1 > 0) {
-        this->unk_2B1--;
-        if (this->unk_2B1 == 0) {
+    // this could have been in the actionFunc?
+    if (this->spawnCutsceneTimer > 0) {
+        this->spawnCutsceneTimer--;
+        if (this->spawnCutsceneTimer == 0) {
             ActorCutscene_Stop(this->dyna.actor.cutscene);
         }
     }
@@ -1482,7 +1484,7 @@ void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx) {
     Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
 
     if (this->unk_1B0 & 0x10) {
-        if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
+        if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
             this->collider.base.ocFlags1 &= ~OC1_NO_PUSH;
             this->collider.base.ocFlags1 |= (OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER);
             this->collider.info.bumper.dmgFlags |=
@@ -1507,14 +1509,16 @@ void ObjIceblock_Update(Actor* thisx, GlobalContext* globalCtx) {
 void func_80A26B64(ObjIceblock* this, GlobalContext* globalCtx) {
 }
 
+// draw func
 void func_80A26B74(ObjIceblock* this, GlobalContext* globalCtx) {
-    Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0001A0);
-    if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
-        Gfx_DrawDListXlu(globalCtx, object_ice_block_DL_0007F0);
+    Gfx_DrawDListXlu(globalCtx, gIceBlockCubeDL);
+    if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gIceBlockIceBergSublimatingAirTexAnim));
+        Gfx_DrawDListXlu(globalCtx, gIceBlockIceBergDL);
     }
 }
 
+// draw func
 void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
     s32 pad[2];
     ObjIceBlockUnkStruct* ptr;
@@ -1535,17 +1539,17 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
         Matrix_Scale(ptr->unk_04, ptr->unk_08, ptr->unk_0C, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_ice_block_DL_0001A0);
+        gSPDisplayList(POLY_XLU_DISP++, gIceBlockCubeDL);
     }
 
-    if (OBJICEBLOCK_GET_1(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
-        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ice_block_Matanimheader_0009D0));
+    if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gIceBlockIceBergSublimatingAirTexAnim));
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 20.0f,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_ice_block_DL_0007F0);
+        gSPDisplayList(POLY_XLU_DISP++, gIceBlockIceBergDL);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1554,7 +1558,7 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
 void ObjIceblock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjIceblock* this = THIS;
 
-    AnimatedMat_Draw(globalCtx, D_80A26E7C);
-    this->unkFunc(this, globalCtx);
+    AnimatedMat_Draw(globalCtx, sCubeSublimatingAirTexMat);
+    this->extendedDrawFunc(this, globalCtx);
     func_80A24AA8(this, globalCtx);
 }
