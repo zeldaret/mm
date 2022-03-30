@@ -899,15 +899,14 @@ void SubS_ComputePlane(Vec3f* origin, Vec3f* point, Vec3s* rot, Plane* plane) {
 
 s32 SubS_LineSegVsPlane(Vec3f* origin, Vec3s* rot, Vec3f* point, Vec3f* linePointA, Vec3f* linePointB,
                         Vec3f* intersect) {
-    s32 pad;
+    s32 lineSegVsPlane;
     Plane plane;
 
     SubS_ComputePlane(origin, point, rot, &plane);
+    lineSegVsPlane = Math3D_LineSegVsPlane(plane.normal.x, plane.normal.y, plane.normal.z, plane.originDist, linePointA,
+                                           linePointB, intersect, false);
 
-    return Math3D_LineSegVsPlane(plane.normal.x, plane.normal.y, plane.normal.z, plane.originDist, linePointA,
-                                 linePointB, intersect, false)
-               ? true
-               : false;
+    return lineSegVsPlane ? true : false;
 }
 
 /**
