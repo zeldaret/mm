@@ -343,7 +343,7 @@ void func_808B921C(DoorWarp1* this, GlobalContext* globalCtx) {
         func_808BB8D4(this, globalCtx, 1);
     }
 
-    if (func_808B866C(this, globalCtx) && !func_801690CC(globalCtx)) {
+    if (func_808B866C(this, globalCtx) && !Play_InCsMode(globalCtx)) {
         func_800B7298(globalCtx, &this->dyna.actor, 7);
         Message_StartTextbox(globalCtx, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
@@ -443,7 +443,7 @@ void func_808B96B0(DoorWarp1* this, GlobalContext* globalCtx) {
 
 void func_808B977C(DoorWarp1* this, GlobalContext* globalCtx) {
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
-    if (func_808B866C(this, globalCtx) && !func_801690CC(globalCtx)) {
+    if (func_808B866C(this, globalCtx) && !Play_InCsMode(globalCtx)) {
         Player* player = GET_PLAYER(globalCtx);
 
         Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
@@ -595,7 +595,7 @@ void func_808B9ED8(DoorWarp1* this, GlobalContext* globalCtx) {
 
 void func_808B9F10(DoorWarp1* this, GlobalContext* globalCtx) {
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
-    if ((this->unk_203 == 0) && func_808B866C(this, globalCtx) && !func_801690CC(globalCtx) && (this->unk_203 == 0)) {
+    if ((this->unk_203 == 0) && func_808B866C(this, globalCtx) && !Play_InCsMode(globalCtx) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(globalCtx);
 
         Interface_ChangeAlpha(1);

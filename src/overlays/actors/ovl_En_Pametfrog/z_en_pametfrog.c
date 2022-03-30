@@ -1036,7 +1036,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_IdleWaterEffects(this, globalCtx);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x400, 0x80);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (SkelAnime_Update(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
+    if (SkelAnime_Update(&this->skelAnime) && !Play_InCsMode(globalCtx)) {
         if (!this->unk_2AE) {
             func_801A2E54(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;
