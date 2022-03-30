@@ -4092,8 +4092,7 @@ beginseg
     name "ovl_Obj_Hariko"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hariko/z_obj_hariko.o"
-    include "build/data/ovl_Obj_Hariko/ovl_Obj_Hariko.data.o"
-    include "build/data/ovl_Obj_Hariko/ovl_Obj_Hariko.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hariko/ovl_Obj_Hariko_reloc.o"
 endseg
 
 beginseg
