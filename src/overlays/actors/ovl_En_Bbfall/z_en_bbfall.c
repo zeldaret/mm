@@ -151,7 +151,11 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF514.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF578.s")
+void func_808BF578(EnBbfall* this) {
+    this->collider.elements->info.toucher.effect = 1;
+    this->collider.elements[1].info.toucherFlags |= 1;
+    this->collider.elements[2].info.toucherFlags |= 1;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF5AC.s")
 
@@ -191,7 +195,19 @@ void func_808BF734(EnBbfall* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF7A0.s")
+void func_808BF7A0(EnBbfall* this) {
+    this->actor.gravity = -1.0f;
+    this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+    this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
+    this->collider.base.atFlags |= AT_ON;
+    this->collider.base.acFlags |= AC_ON;
+    this->collider.base.ocFlags1 |= OC1_ON;
+    this->actor.velocity.y = 17.0f;
+    func_808BF578(this);
+    this->actor.flags |= ACTOR_FLAG_1;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEFALL_APPEAR);
+    this->actionFunc = func_808BF830;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF830.s")
 
