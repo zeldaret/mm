@@ -80,7 +80,7 @@ void Rumble_StateReset(void) {
 
 /**
  * Changes the state of the manager to WIPE
- * 
+ *
  * On this state, every request is deleted
  */
 void Rumble_StateWipeRequests(void) {

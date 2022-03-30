@@ -542,8 +542,8 @@ void func_80A9C18C(BgHakuginPost* this, GlobalContext* globalCtx) {
     s16 quake;
 
     Rumble_Request(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
-                                           this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
-                  255, 20, 150);
+                                            this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
+                   255, 20, 150);
     quake = Quake_Add(activeCam, 3);
     Quake_SetSpeed(quake, 17232);
     Quake_SetQuakeValues(quake, 6, 0, 0, 0);
