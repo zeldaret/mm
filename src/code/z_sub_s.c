@@ -962,13 +962,13 @@ s32 SubS_ActorAndPlayerAreFacing(GlobalContext* globalCtx, Actor* actor, void* d
 }
 
 //! @TODO: Needs docs with func_800B8500
-void func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
-                   s16 actorYawTol) {
+s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
+                  s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerAreFacing);
+    return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerAreFacing);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E950.s")
