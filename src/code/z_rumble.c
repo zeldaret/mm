@@ -9,7 +9,7 @@ void Rumble_Update(void* arg0) {
 }
 
 // Used by some bosses (and fishing)
-void Rumble_Override(f32 distSq, u8 arg1, u8 arg2, u8 decreaseStep) {
+void Rumble_Override(f32 distSq, u8 arg1, u8 ticksTimer, u8 decreaseStep) {
     s32 temp;
     s32 distance;
 
@@ -24,13 +24,13 @@ void Rumble_Override(f32 distSq, u8 arg1, u8 arg2, u8 decreaseStep) {
 
         if (temp > 0) {
             gRumbleMgr.unk_10A = temp;
-            gRumbleMgr.unk_10B = arg2;
+            gRumbleMgr.overrideTimer = ticksTimer;
             gRumbleMgr.overrideDecreaseStep = decreaseStep;
         }
     }
 }
 
-void Rumble_Request(f32 distSq, u8 arg1, u8 arg2, u8 decreaseStep) {
+void Rumble_Request(f32 distSq, u8 arg1, u8 ticksTimer, u8 decreaseStep) {
     s32 temp;
     s32 distance;
     s32 i;
@@ -48,7 +48,7 @@ void Rumble_Request(f32 distSq, u8 arg1, u8 arg2, u8 decreaseStep) {
             if (gRumbleMgr.unk_04[i] == 0) {
                 if (temp > 0) {
                     gRumbleMgr.unk_04[i] = temp;
-                    gRumbleMgr.unk_44[i] = arg2;
+                    gRumbleMgr.timer[i] = ticksTimer;
                     gRumbleMgr.decreaseStep[i] = decreaseStep;
                 }
                 break;

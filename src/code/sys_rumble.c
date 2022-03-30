@@ -40,7 +40,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             rumbleMgr->unk_04[i] = 0;
-            rumbleMgr->unk_44[i] = 0;
+            rumbleMgr->timer[i] = 0;
             rumbleMgr->decreaseStep[i] = 0;
             rumbleMgr->unk_C4[i] = 0;
         }
@@ -49,7 +49,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         rumbleMgr->unk_108 = 0;
 
         rumbleMgr->unk_10A = 0;
-        rumbleMgr->unk_10B = 0;
+        rumbleMgr->overrideTimer = 0;
         rumbleMgr->overrideDecreaseStep = 0;
         rumbleMgr->unk_10D = 0;
 
@@ -62,8 +62,8 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         // Process arrays of rumble requests
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             if (rumbleMgr->unk_04[i] != 0) { // This entry has a non-empty rumble request
-                if (rumbleMgr->unk_44[i] > 0) {
-                    rumbleMgr->unk_44[i]--;
+                if (rumbleMgr->timer[i] > 0) {
+                    rumbleMgr->timer[i]--;
                 } else {
                     temp = rumbleMgr->unk_04[i] - rumbleMgr->decreaseStep[i];
                     if (temp > 0) {
@@ -87,8 +87,8 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
 
         // Process Override request. Note it takes priority over the values set by the request arrays
         if (rumbleMgr->unk_10A != 0) {
-            if (rumbleMgr->unk_10B > 0) {
-                rumbleMgr->unk_10B--;
+            if (rumbleMgr->overrideTimer > 0) {
+                rumbleMgr->overrideTimer--;
             } else {
                 temp = rumbleMgr->unk_10A - rumbleMgr->overrideDecreaseStep;
                 if (temp > 0) {
@@ -129,7 +129,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
     } else { // RUMBLEMANAGER_STATE_WIPE
         for (i = 0; i < RUMBLE_REQUEST_BUFFER_SIZE; i++) {
             rumbleMgr->unk_04[i] = 0;
-            rumbleMgr->unk_44[i] = 0;
+            rumbleMgr->timer[i] = 0;
             rumbleMgr->decreaseStep[i] = 0;
             rumbleMgr->unk_C4[i] = 0;
         }
@@ -138,7 +138,7 @@ void RumbleManager_Update(RumbleManager* rumbleMgr) {
         rumbleMgr->unk_108 = 0;
 
         rumbleMgr->unk_10A = 0;
-        rumbleMgr->unk_10B = 0;
+        rumbleMgr->overrideTimer = 0;
         rumbleMgr->overrideDecreaseStep = 0;
         rumbleMgr->unk_10D = 0;
 
