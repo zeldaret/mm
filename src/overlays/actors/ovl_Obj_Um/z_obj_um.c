@@ -16,41 +16,41 @@
 
 /**
  * weekEventReg flags checked by this actor:
- * - gSaveContext.weekEventReg[0x16] & 0x01: Aliens defeated
+ * - gSaveContext.save.weekEventReg[22] & 0x01: Aliens defeated
  *     If false: The actor doesn't spawn
- * - gSaveContext.weekEventReg[0x1F] & 0x40
+ * - gSaveContext.save.weekEventReg[31] & 0x40
  *     If true: Cremia doesn't explain again she'll deliever milk to town
- * - gSaveContext.weekEventReg[0x1F] & 0x80
+ * - gSaveContext.save.weekEventReg[31] & 0x80
  *     If true: Triggers cutscene on Romani's Ranch
- * - gSaveContext.weekEventReg[0x22] & 0x80
+ * - gSaveContext.save.weekEventReg[34] & 0x80
  *     If true: Doesn't spawn on Romani's Ranch
- * - gSaveContext.weekEventReg[0x34] & 0x01
+ * - gSaveContext.save.weekEventReg[52] & 0x01
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - gSaveContext.weekEventReg[0x34] & 0x02
+ * - gSaveContext.save.weekEventReg[52] & 0x02
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - gSaveContext.weekEventReg[0x3B] & 0x02
+ * - gSaveContext.save.weekEventReg[59] & 0x02
  *     If true: Doesn't spawn again on Milk Road
  *
  * weekEventReg flags set by this actor:
- * - gSaveContext.weekEventReg[0x1F] |= 0x40: Cremia offered a ride
+ * - gSaveContext.save.weekEventReg[31] |= 0x40: Cremia offered a ride
  *     Cremia offered a ride accross the Milk Road to Player
- * - gSaveContext.weekEventReg[0x1F] |= 0x80: Player is in Milk Run
+ * - gSaveContext.save.weekEventReg[31] |= 0x80: Player is in Milk Run
  *     Player accepts the ride and is with Cremia during the Milk Run.
- * - gSaveContext.weekEventReg[0x22] |= 0x80: Cremia does Milk Run alone
+ * - gSaveContext.save.weekEventReg[34] |= 0x80: Cremia does Milk Run alone
  *     Player didn't interact or didn't accept the ride
- * - gSaveContext.weekEventReg[0x34] |= 0x01: Won Milk Run minigame
+ * - gSaveContext.save.weekEventReg[52] |= 0x01: Won Milk Run minigame
  *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
- * - gSaveContext.weekEventReg[0x34] |= 0x02: Lose Milk Run minigame
+ * - gSaveContext.save.weekEventReg[52] |= 0x02: Lose Milk Run minigame
  *     Every pot was broken by bandits. Turns off the ""Win" Milk Run minigame"
- * - gSaveContext.weekEventReg[0x3B] |= 0x02: ?
+ * - gSaveContext.save.weekEventReg[59] |= 0x02: ?
  *     Passed through Milk Road after winning the Milk Run
  *
  * weekEventReg flags unset by this actor:
- * - gSaveContext.weekEventReg[0x1F] &= (u8)~0x80
+ * - gSaveContext.save.weekEventReg[31] &= (u8)~0x80
  *     Turned off when the Milk Run finishes
- * - gSaveContext.weekEventReg[0x34] &= (u8)~0x01
+ * - gSaveContext.save.weekEventReg[52] &= (u8)~0x01
  *     Turned off if Player lose the Milk Run
- * - gSaveContext.weekEventReg[0x34] &= (u8)~0x02
+ * - gSaveContext.save.weekEventReg[52] &= (u8)~0x02
  *     Turned off if Player wins the Milk Run
  */
 
@@ -405,18 +405,18 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
         arg3->unk_564 = 1;
     }
 
-    Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->unk_200]);
+    Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->curRaceWaypoint]);
 
-    if (arg3->unk_200 == 0) {
+    if (arg3->curRaceWaypoint == 0) {
         phi_f12 = (f32)(sp64[1].x - sp64[0].x);
         phi_f14 = (f32)(sp64[1].z - sp64[0].z);
     } else {
-        if ((arg3->unk_200 + 1) == sp6C->count) {
+        if ((arg3->curRaceWaypoint + 1) == sp6C->count) {
             phi_f12 = (f32)(sp64[sp6C->count - 1].x - sp64[sp6C->count - 2].x);
             phi_f14 = (f32)(sp64[sp6C->count - 1].z - sp64[sp6C->count - 2].z);
         } else {
-            phi_f12 = (f32)(sp64[arg3->unk_200 + 1].x - sp64[arg3->unk_200 - 1].x);
-            phi_f14 = (f32)(sp64[arg3->unk_200 + 1].z - sp64[arg3->unk_200 - 1].z);
+            phi_f12 = (f32)(sp64[arg3->curRaceWaypoint + 1].x - sp64[arg3->curRaceWaypoint - 1].x);
+            phi_f14 = (f32)(sp64[arg3->curRaceWaypoint + 1].z - sp64[arg3->curRaceWaypoint - 1].z);
         }
     }
 
@@ -424,11 +424,11 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
 
     func_8017B7F8(&sp50, (s16)temp_a1, &sp4C, &sp48, &sp44);
     if (((arg3->actor.world.pos.x * sp4C) + (sp48 * arg3->actor.world.pos.z) + sp44) > 0.0f) {
-        arg3->unk_200++;
-        if (arg3->unk_200 >= sp68) {
-            arg3->unk_200 = 0;
+        arg3->curRaceWaypoint++;
+        if (arg3->curRaceWaypoint >= sp68) {
+            arg3->curRaceWaypoint = 0;
         }
-        Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->unk_200]);
+        Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->curRaceWaypoint]);
     }
 
     arg3->actor.world.rot.y = Math_Vec3f_Yaw(&arg3->actor.world.pos, &sp50);
@@ -697,7 +697,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->initialPathIdx = OBJ_UM_PARSE_PATH_IDX(thisx->params);
 
     // if (!AliensDefeated)
-    if (!(gSaveContext.weekEventReg[0x16] & 0x01)) {
+    if (!(gSaveContext.save.weekEventReg[22] & 0x01)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -706,7 +706,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         ObjUm_SetupAction(this, ObjUm_TerminaFieldIdle);
     } else if (this->type == OBJ_UM_TYPE_RANCH) {
         this->pathIdx = this->initialPathIdx;
-        if (gSaveContext.weekEventReg[0x1F] & 0x80) {
+        if (gSaveContext.save.weekEventReg[31] & 0x80) {
             // In cutscene
 
             sp54 = false;
@@ -716,9 +716,9 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         } else {
             // Waiting for player
 
-            if ((gSaveContext.weekEventReg[0x22] & 0x80) || gSaveContext.time >= CLOCK_TIME(19, 0) ||
-                gSaveContext.time <= CLOCK_TIME(6, 0) || (gSaveContext.weekEventReg[0x34] & 0x01) ||
-                (gSaveContext.weekEventReg[0x34] & 0x02)) {
+            if ((gSaveContext.save.weekEventReg[34] & 0x80) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
+                gSaveContext.save.time <= CLOCK_TIME(6, 0) || (gSaveContext.save.weekEventReg[52] & 0x01) ||
+                (gSaveContext.save.weekEventReg[52] & 0x02)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -728,12 +728,12 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!(gSaveContext.weekEventReg[0x1F] & 0x80) || (gSaveContext.weekEventReg[0x34] & 0x01)) {
+        if (!(gSaveContext.save.weekEventReg[31] & 0x80) || (gSaveContext.save.weekEventReg[52] & 0x01)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
 
-        if (!(gSaveContext.weekEventReg[0x34] & 0x02)) {
+        if (!(gSaveContext.save.weekEventReg[52] & 0x02)) {
             this->pathIdx = this->initialPathIdx;
             sp54 = false;
             func_800FE484();
@@ -742,7 +742,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             ObjUm_RotatePlayer(this, globalCtx, 0);
         }
     } else if (this->type == OBJ_UM_TYPE_MILK_RUN_MINIGAME) {
-        if (!(gSaveContext.weekEventReg[0x1F] & 0x80)) {
+        if (!(gSaveContext.save.weekEventReg[31] & 0x80)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -754,7 +754,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, globalCtx, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!(gSaveContext.weekEventReg[0x34] & 0x01) || (gSaveContext.weekEventReg[0x3B] & 0x02)) {
+        if (!(gSaveContext.save.weekEventReg[52] & 0x01) || (gSaveContext.save.weekEventReg[59] & 0x02)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -843,11 +843,11 @@ s32 func_80B795A0(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
         case 0x33B4:
         // "Want a ride?"
         case 0x33CF:
-            gSaveContext.weekEventReg[0x1F] |= 0x40;
+            gSaveContext.save.weekEventReg[31] |= 0x40;
             if (globalCtx->msgCtx.choiceIndex == 0) {
                 player = GET_PLAYER(globalCtx);
                 func_8019F208();
-                gSaveContext.weekEventReg[0x1F] |= 0x80;
+                gSaveContext.save.weekEventReg[31] |= 0x80;
                 globalCtx->nextEntranceIndex = 0x64B0;
                 if (player->stateFlags1 & 0x800000) {
                     D_801BDAA0 = 1;
@@ -910,7 +910,7 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
 
         case 4:
         case 5:
-            if (func_80147624(globalCtx) && func_80B795A0(globalCtx, this, arg2)) {
+            if (Message_ShouldAdvance(globalCtx) && func_80B795A0(globalCtx, this, arg2)) {
                 msgCtx->msgMode = 0x43;
                 ret = true;
             }
@@ -922,8 +922,8 @@ s32 func_80B79734(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
 u16 ObjUm_RanchGetDialogue(GlobalContext* globalCtx, ObjUm* this, s32 arg2) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
-        if (gSaveContext.weekEventReg[0x1F] & 0x40) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        if (gSaveContext.save.weekEventReg[31] & 0x40) {
             // "Want a ride?"
             textId = 0x33CF;
         } else {
@@ -1008,16 +1008,16 @@ void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     ObjUm_UpdateAnim(this, globalCtx, 2);
     this->flags |= OBJ_UM_FLAG_WAITING;
-    if (gSaveContext.time > CLOCK_TIME(18, 0) && gSaveContext.time <= CLOCK_TIME(19, 0)) {
+    if (gSaveContext.save.time > CLOCK_TIME(18, 0) && gSaveContext.save.time <= CLOCK_TIME(19, 0)) {
         if (!(player->stateFlags1 & 0x800000)) {
             func_80B7984C(globalCtx, this, 0, &this->unk_2B4);
         }
-    } else if (!func_80B79A24(this->unk_2B4) && gSaveContext.time > CLOCK_TIME(19, 0)) {
-        gSaveContext.weekEventReg[0x22] |= 0x80;
+    } else if (!func_80B79A24(this->unk_2B4) && gSaveContext.save.time > CLOCK_TIME(19, 0)) {
+        gSaveContext.save.weekEventReg[34] |= 0x80;
         ObjUm_SetupAction(this, ObjUm_RanchWaitPathFinished);
     }
 
-    switch (globalCtx->msgCtx.unk11F04) {
+    switch (globalCtx->msgCtx.currentTextId) {
         default:
             this->unk_4CC = 0;
             this->mouthTexIndex = 0;
@@ -1154,7 +1154,7 @@ void ObjUm_RanchWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
     switch (ObjUm_UpdatePath(this, globalCtx)) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
-            if (gSaveContext.weekEventReg[0x1F] & 0x80) {
+            if (gSaveContext.save.weekEventReg[31] & 0x80) {
                 ActorCutscene_Stop(this->dyna.actor.cutscene);
                 globalCtx->nextEntranceIndex = 0x3E50;
                 globalCtx->unk_1887F = 0x40;
@@ -1176,7 +1176,7 @@ void ObjUm_RanchStartCs(ObjUm* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->lastTime = gSaveContext.time;
+        this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7A0E0);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -1187,7 +1187,7 @@ void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_RanchWaitPathFinished(this, globalCtx);
     ObjUm_RotatePlayer(this, globalCtx, 0);
 
-    switch (globalCtx->msgCtx.unk11F04) {
+    switch (globalCtx->msgCtx.currentTextId) {
         case 0x33B6:
             this->unk_4CC = 1;
             this->mouthTexIndex = 1;
@@ -1202,7 +1202,7 @@ void func_80B7A070(ObjUm* this, GlobalContext* globalCtx) {
 
 void func_80B7A0E0(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    if (gSaveContext.time != this->lastTime) {
+    if (gSaveContext.save.time != this->lastTime) {
         ObjUm_UpdateAnim(this, globalCtx, 0);
         ObjUm_SetupAction(this, func_80B7A070);
     }
@@ -1223,7 +1223,7 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_SetPlayerPosition(this, globalCtx);
     this->flags |= OBJ_UM_FLAG_0004;
 
-    switch (globalCtx->msgCtx.unk11F04) {
+    switch (globalCtx->msgCtx.currentTextId) {
         case 0x33B8:
             this->unk_4CC = 0;
             this->mouthTexIndex = 3;
@@ -1244,11 +1244,11 @@ void ObjUm_PreMilkRunDialogueHandler(ObjUm* this, GlobalContext* globalCtx) {
 
 void func_80B7A240(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    if (gSaveContext.time != this->lastTime) {
+    if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
 
-    this->lastTime = gSaveContext.time;
+    this->lastTime = gSaveContext.save.time;
     ObjUm_PreMilkRunDialogueHandler(this, globalCtx);
 }
 
@@ -1266,11 +1266,11 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         default:
-            if (gSaveContext.time == this->lastTime) {
+            if (gSaveContext.save.time == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7A240);
             }
 
-            this->lastTime = gSaveContext.time;
+            this->lastTime = gSaveContext.save.time;
             Actor_MoveWithGravity(&this->dyna.actor);
             ObjUm_PreMilkRunDialogueHandler(this, globalCtx);
             break;
@@ -1280,7 +1280,7 @@ void func_80B7A2AC(ObjUm* this, GlobalContext* globalCtx) {
 void func_80B7A394(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_SetPlayerPosition(this, globalCtx);
     this->flags |= OBJ_UM_FLAG_0004;
-    if (gSaveContext.time != this->lastTime) {
+    if (gSaveContext.save.time != this->lastTime) {
         ObjUm_UpdateAnim(this, globalCtx, 0);
         ObjUm_SetupAction(this, func_80B7A2AC);
     }
@@ -1294,7 +1294,7 @@ void ObjUm_PreMilkRunStartCs(ObjUm* this, GlobalContext* globalCtx) {
     player->stateFlags1 |= 0x20;
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->lastTime = gSaveContext.time;
+        this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7A394);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -1312,24 +1312,24 @@ void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx) {
         case OBJUM_PATH_STATE_1:
         case OBJUM_PATH_STATE_FINISH:
             gSaveContext.seqIndex = 0xFF;
-            gSaveContext.weekEventReg[0x1F] &= (u8)~0x80;
+            gSaveContext.save.weekEventReg[31] &= (u8)~0x80;
             gSaveContext.nightSeqIndex = 0xFF;
 
-            if (!(gSaveContext.weekEventReg[0x34] & 0x01) && !(gSaveContext.weekEventReg[0x34] & 0x02)) {
+            if (!(gSaveContext.save.weekEventReg[52] & 0x01) && !(gSaveContext.save.weekEventReg[52] & 0x02)) {
                 if (this->arePotsBroken == false) {
                     globalCtx->nextEntranceIndex = 0x3E60;
                     globalCtx->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
                     globalCtx->sceneLoadFlag = 0x14;
-                    gSaveContext.weekEventReg[0x34] |= 0x01;
-                    gSaveContext.weekEventReg[0x34] &= (u8)~0x2;
+                    gSaveContext.save.weekEventReg[52] |= 0x01;
+                    gSaveContext.save.weekEventReg[52] &= (u8)~0x2;
                 } else {
                     globalCtx->nextEntranceIndex = 0x6480;
                     globalCtx->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
                     globalCtx->sceneLoadFlag = 0x14;
-                    gSaveContext.weekEventReg[0x34] |= 0x02;
-                    gSaveContext.weekEventReg[0x34] &= (u8)~0x1;
+                    gSaveContext.save.weekEventReg[52] |= 0x02;
+                    gSaveContext.save.weekEventReg[52] &= (u8)~0x1;
                 }
             }
             break;
@@ -1425,7 +1425,7 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
         ObjUm_SetupAction(this, func_80B7A7AC);
     }
 
-    switch (globalCtx->msgCtx.unk11F04) {
+    switch (globalCtx->msgCtx.currentTextId) {
         case 0x33BA:
             this->unk_4CC = 2;
             this->mouthTexIndex = 3;
@@ -1507,11 +1507,11 @@ void func_80B7A860(ObjUm* this, GlobalContext* globalCtx) {
 
 void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx) {
     ObjUm_UpdateAnim(this, globalCtx, 2);
-    if (gSaveContext.time != this->lastTime) {
+    if (gSaveContext.save.time != this->lastTime) {
         ObjUm_SetupAction(this, func_80B7ABE4);
     }
 
-    this->lastTime = gSaveContext.time;
+    this->lastTime = gSaveContext.save.time;
     func_80B7A860(this, globalCtx);
 }
 
@@ -1525,11 +1525,11 @@ void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx) {
             break;
 
         default:
-            if (gSaveContext.time == this->lastTime) {
+            if (gSaveContext.save.time == this->lastTime) {
                 ObjUm_SetupAction(this, func_80B7AB78);
             }
 
-            this->lastTime = gSaveContext.time;
+            this->lastTime = gSaveContext.save.time;
             Actor_MoveWithGravity(&this->dyna.actor);
             func_80B7A860(this, globalCtx);
             break;
@@ -1546,7 +1546,7 @@ void ObjUm_StartCs(ObjUm* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        this->lastTime = gSaveContext.time;
+        this->lastTime = gSaveContext.save.time;
         ObjUm_SetupAction(this, func_80B7ABE4);
     } else {
         ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
@@ -1563,17 +1563,17 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
     this->wheelRot += 1000;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
-    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.weekEventReg[0x3B] & 0x02)) {
+    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 0x02)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Audio_SetCutsceneFlag(0);
-        gSaveContext.weekEventReg[0x3B] |= 0x02;
+        gSaveContext.save.weekEventReg[59] |= 0x02;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         globalCtx->nextEntranceIndex = 0x5400;
         globalCtx->unk_1887F = 0x40;
         gSaveContext.nextTransition = 3;
         globalCtx->sceneLoadFlag = 0x14;
         // A bit more than an hour
-        gSaveContext.time += 0xAAC;
+        gSaveContext.save.time += 0xAAC;
     }
     Actor_MoveWithGravity(&this->dyna.actor);
 }
@@ -2019,7 +2019,7 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetColor(printer, 255, 255, 255, 255);
 
     GfxPrint_SetPos(printer, 28, 1);
-    GfxPrint_Printf(printer, "gTime:%X", gSaveContext.time);
+    GfxPrint_Printf(printer, "gTime:%X", gSaveContext.save.time);
 
     GfxPrint_SetPos(printer, x - 7, ++y);
     actionFuncReloc = (uintptr_t)this->actionFunc - (uintptr_t)ObjUm_UpdateBanditsPositions + SEGMENT_START(ovl_Obj_Um);
@@ -2128,19 +2128,19 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "weekEvent");
     // GfxPrint_SetPos(printer, x, ++y);
-    // GfxPrint_Printf(printer, "[0x16]&0x01: %i", gSaveContext.weekEventReg[0x16] & 0x01);
+    // GfxPrint_Printf(printer, "[0x16]&0x01: %i", gSaveContext.save.weekEventReg[22] & 0x01);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[1F]&40:%i", gSaveContext.weekEventReg[0x1F] & 0x40 ? 1 : 0);
+    GfxPrint_Printf(printer, "[1F]&40:%i", gSaveContext.save.weekEventReg[31] & 0x40 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[1F]&80:%i", gSaveContext.weekEventReg[0x1F] & 0x80 ? 1 : 0);
+    GfxPrint_Printf(printer, "[1F]&80:%i", gSaveContext.save.weekEventReg[31] & 0x80 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[22]&80:%i", gSaveContext.weekEventReg[0x22] & 0x80 ? 1 : 0);
+    GfxPrint_Printf(printer, "[22]&80:%i", gSaveContext.save.weekEventReg[34] & 0x80 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[34]&01:%i", gSaveContext.weekEventReg[0x34] & 0x01 ? 1 : 0);
+    GfxPrint_Printf(printer, "[34]&01:%i", gSaveContext.save.weekEventReg[52] & 0x01 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[34]&02:%i", gSaveContext.weekEventReg[0x34] & 0x02 ? 1 : 0);
+    GfxPrint_Printf(printer, "[34]&02:%i", gSaveContext.save.weekEventReg[52] & 0x02 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[3B]&02:%i", gSaveContext.weekEventReg[0x3B] & 0x02 ? 1 : 0);
+    GfxPrint_Printf(printer, "[3B]&02:%i", gSaveContext.save.weekEventReg[59] & 0x02 ? 1 : 0);
 }
 
 void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {
