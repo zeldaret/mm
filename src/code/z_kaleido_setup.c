@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64rumble.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
 
 s16 D_801BDB00[] = { PAUSE_1, PAUSE_2, PAUSE_3, PAUSE_0 };
@@ -9,7 +10,7 @@ void func_800F4A10(GlobalContext* globalCtx) {
     PauseContext* pauseCtx = &globalCtx->pauseCtx;
     s16 i;
 
-    func_8013EE24();
+    Rumble_StateReset();
 
     pauseCtx->unk_206 = 0;
     pauseCtx->unk_200 = 1;

@@ -1355,7 +1355,7 @@ void EnHorse_MountedTrot(EnHorse* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         func_8087C178(this);
-        func_8013ECE0(0.0f, 60, 8, 255);
+        Rumble_Request(0.0f, 60, 8, 255);
         if (this->actor.speedXZ >= 6.0f) {
             EnHorse_StartGallopingInterruptable(this);
         } else if (this->actor.speedXZ < 3.0f) {
@@ -1423,7 +1423,7 @@ void EnHorse_MountedGallop(EnHorse* this, GlobalContext* globalCtx) {
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         func_8087C1C0(this);
-        func_8013ECE0(0.0f, 120, 8, 255);
+        Rumble_Request(0.0f, 120, 8, 255);
         if (EnHorse_PlayerCanMove(this, globalCtx) == true) {
             if ((stickMag >= 10.0f) && (Math_CosS(stickAngle) <= -0.5f)) {
                 EnHorse_StartBraking(this, globalCtx);
@@ -1451,7 +1451,7 @@ void EnHorse_StartRearing(EnHorse* this) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_HORSE_NEIGH);
                 }
             }
-            func_8013ECE0(0.0f, 180, 20, 100);
+            Rumble_Request(0.0f, 180, 20, 100);
             this->stateFlags &= ~ENHORSE_STOPPING_NEIGH_SOUND;
         }
         EnHorse_StartMountedIdleResetAnim(this);
@@ -1466,7 +1466,7 @@ void EnHorse_StartRearing(EnHorse* this) {
         }
     }
 
-    func_8013ECE0(0.0f, 180, 20, 100);
+    Rumble_Request(0.0f, 180, 20, 100);
     Animation_Change(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx], 1.0f, 0.0f,
                      Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, -3.0f);
 }
@@ -1484,7 +1484,7 @@ void EnHorse_MountedRearing(EnHorse* this, GlobalContext* globalCtx) {
             } else {
                 Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_LAND2);
             }
-            func_8013ECE0(0.0f, 180, 20, 100);
+            Rumble_Request(0.0f, 180, 20, 100);
         }
     }
 
@@ -1525,7 +1525,7 @@ void EnHorse_StartBraking(EnHorse* this, GlobalContext* globalCtx) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_HORSE_NEIGH);
                 }
             }
-            func_8013ECE0(0.0f, 180, 20, 100);
+            Rumble_Request(0.0f, 180, 20, 100);
             this->stateFlags &= ~ENHORSE_STOPPING_NEIGH_SOUND;
         }
         EnHorse_StartMountedIdleResetAnim(this);
@@ -1562,7 +1562,7 @@ void EnHorse_Stopping(EnHorse* this, GlobalContext* globalCtx) {
                     Audio_PlaySfxAtPos(&this->unk_218, NA_SE_EV_HORSE_NEIGH);
                 }
             }
-            func_8013ECE0(0.0f, 180, 20, 100);
+            Rumble_Request(0.0f, 180, 20, 100);
             this->stateFlags &= ~ENHORSE_STOPPING_NEIGH_SOUND;
         } else {
             EnHorse_StartMountedIdleResetAnim(this);
@@ -1694,7 +1694,7 @@ void EnHorse_StartLowJump(EnHorse* this, GlobalContext* globalCtx) {
     } else {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_JUMP);
     }
-    func_8013ECE0(0.0f, 170, 10, 10);
+    Rumble_Request(0.0f, 170, 10, 10);
 }
 
 void EnHorse_Stub1(EnHorse* this) {
@@ -1754,7 +1754,7 @@ void EnHorse_LowJump(EnHorse* this, GlobalContext* globalCtx) {
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_LAND);
         }
-        func_8013ECE0(0.0f, 255, 10, 80);
+        Rumble_Request(0.0f, 255, 10, 80);
         this->stateFlags &= ~ENHORSE_JUMPING;
         this->actor.gravity = -3.5f;
         this->actor.world.pos.y = this->actor.floorHeight;
@@ -1793,7 +1793,7 @@ void EnHorse_StartHighJump(EnHorse* this, GlobalContext* globalCtx) {
     } else {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_JUMP);
     }
-    func_8013ECE0(0.0f, 170, 10, 10);
+    Rumble_Request(0.0f, 170, 10, 10);
 }
 
 void EnHorse_Stub2(EnHorse* this) {
@@ -1852,7 +1852,7 @@ void EnHorse_HighJump(EnHorse* this, GlobalContext* globalCtx) {
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_LAND);
         }
-        func_8013ECE0(0.0f, 255, 10, 80);
+        Rumble_Request(0.0f, 255, 10, 80);
         this->stateFlags &= ~ENHORSE_JUMPING;
         this->actor.gravity = -3.5f;
         this->actor.world.pos.y = this->actor.floorHeight;
@@ -2274,7 +2274,7 @@ void func_80881290(EnHorse* this, GlobalContext* globalCtx) {
     } else {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_JUMP);
     }
-    func_8013ECE0(0.0f, 170, 10, 10);
+    Rumble_Request(0.0f, 170, 10, 10);
 }
 
 void func_80881398(EnHorse* this, GlobalContext* globalCtx) {
@@ -2314,7 +2314,7 @@ void func_80881398(EnHorse* this, GlobalContext* globalCtx) {
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_LAND);
         }
-        func_8013ECE0(0.0f, 255, 10, 80);
+        Rumble_Request(0.0f, 255, 10, 80);
         this->stateFlags &= ~ENHORSE_JUMPING;
         this->stateFlags &= ~ENHORSE_FLAG_30;
         this->actor.gravity = -3.5f;
@@ -2496,7 +2496,7 @@ void EnHorse_CsMoveToPoint(EnHorse* this, GlobalContext* globalCtx, CsCmdActorAc
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         func_8087C1C0(this);
-        func_8013ECE0(0.0f, 120, 8, 255);
+        Rumble_Request(0.0f, 120, 8, 255);
         Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
                                    this->actor.speedXZ * 0.3f);
     }
@@ -2531,7 +2531,7 @@ void EnHorse_CsPlayHighJumpAnim(EnHorse* this, GlobalContext* globalCtx) {
     } else {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_JUMP);
     }
-    func_8013ECE0(0.0f, 170, 10, 10);
+    Rumble_Request(0.0f, 170, 10, 10);
 }
 
 void EnHorse_CsJumpInit(EnHorse* this, GlobalContext* globalCtx, CsCmdActorAction* action) {
@@ -2581,7 +2581,7 @@ void EnHorse_CsJump(EnHorse* this, GlobalContext* globalCtx, CsCmdActorAction* a
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_LAND);
         }
-        func_8013ECE0(0.0f, 255, 10, 80);
+        Rumble_Request(0.0f, 255, 10, 80);
         this->stateFlags &= ~ENHORSE_JUMPING;
         this->actor.gravity = -3.5f;
         this->actor.velocity.y = 0.0f;
@@ -2677,7 +2677,7 @@ void EnHorse_CsWarpMoveToPoint(EnHorse* this, GlobalContext* globalCtx, CsCmdAct
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         func_8087C1C0(this);
-        func_8013ECE0(0.0f, 120, 8, 255);
+        Rumble_Request(0.0f, 120, 8, 255);
         Animation_PlayOnceSetSpeed(&this->skin.skelAnime, sAnimationHeaders[this->type][this->animationIdx],
                                    this->actor.speedXZ * 0.3f);
     }
@@ -2875,7 +2875,7 @@ void EnHorse_UpdateHbaAnim(EnHorse* this) {
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_RUN);
         }
-        func_8013ECE0(0.0f, 60, 8, 255);
+        Rumble_Request(0.0f, 60, 8, 255);
     } else if (this->animationIdx == ENHORSE_ANIM_GALLOP) {
         animSpeed = this->actor.speedXZ * 0.2f;
         if (this->type == HORSE_2) {
@@ -2883,7 +2883,7 @@ void EnHorse_UpdateHbaAnim(EnHorse* this) {
         } else {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_RUN);
         }
-        func_8013ECE0(0.0f, 120, 8, 255);
+        Rumble_Request(0.0f, 120, 8, 255);
     } else {
         animSpeed = 1.0f;
     }
@@ -3999,7 +3999,7 @@ void func_80886C00(EnHorse* this, GlobalContext* globalCtx) {
         (globalCtx->interfaceCtx.unk_212 == 8) && !(this->stateFlags & ENHORSE_BOOST) &&
         !(this->stateFlags & ENHORSE_FLAG_8) && !(this->stateFlags & ENHORSE_FLAG_9)) {
         if (this->numBoosts > 0) {
-            func_8013ECE0(0.0f, 180, 20, 100);
+            Rumble_Request(0.0f, 180, 20, 100);
             this->stateFlags |= ENHORSE_BOOST;
             this->stateFlags |= ENHORSE_FIRST_BOOST_REGEN;
             this->stateFlags |= ENHORSE_FLAG_8;
