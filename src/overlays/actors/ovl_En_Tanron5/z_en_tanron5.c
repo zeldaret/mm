@@ -271,7 +271,7 @@ void EnTanron5_Update(Actor* thisx, GlobalContext* globalCtx2) {
             this->collider.base.acFlags &= ~AC_HIT;
             spC4 = 10;
 
-            if (func_801690CC(globalCtx)) {
+            if (Play_InCsMode(globalCtx)) {
                 this->unk_144 = 1;
             } else {
                 this->unk_144 = 5;

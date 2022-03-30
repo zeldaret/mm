@@ -94,7 +94,7 @@ void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->unk_29A = ENBOMBOWLMAN_GET_FF00(&this->actor);
-    this->path = func_8013D648(globalCtx, this->unk_29A, 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, this->unk_29A, 0x3F);
     this->unk_2C8 = 80.0f;
 
     if ((gSaveContext.save.entranceIndex == 0xD220) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
@@ -157,7 +157,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 
 void func_809C4B6C(EnBomBowlMan* this) {
     if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
-        if (!func_8013D68C(this->path, this->unk_298, &this->unk_2A0)) {
+        if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
             Actor_MarkForDeath(&this->actor);
         }
     }

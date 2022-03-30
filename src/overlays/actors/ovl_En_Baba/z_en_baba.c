@@ -266,7 +266,7 @@ s32 func_80BA8D2C(EnBaba* this, f32 arg1) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, arg1, 0.4f, 1000.0f, 0.0f);
     sp3E = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->path, this->unk_1E8, &sp2C) && func_8013D768(&this->actor, &sp2C, sp3E)) {
+    if (SubS_CopyPointFromPath(this->path, this->unk_1E8, &sp2C) && SubS_MoveActorToPoint(&this->actor, &sp2C, sp3E)) {
         this->unk_1E8++;
         if (this->unk_1E8 >= this->path->count) {
             ret = true;
@@ -311,7 +311,7 @@ s32 func_80BA8F88(EnBaba* this, GlobalContext* globalCtx, struct_80133038_arg2* 
     u8 sp23 = ENBABA_GET_3F00(&this->actor);
 
     if (D_80BAA4A8[arg2->unk0] >= 0) {
-        this->unk_410 = func_8013BB34(globalCtx, sp23, D_80BAA4A8[arg2->unk0]);
+        this->unk_410 = SubS_GetAdditionalPath(globalCtx, sp23, D_80BAA4A8[arg2->unk0]);
     }
 
     if (this->unk_410 == NULL) {
@@ -659,7 +659,7 @@ void EnBaba_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = func_8013D648(globalCtx, ENBABA_GET_3F00(&this->actor), ENBABA_3F00_3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENBABA_GET_3F00(&this->actor), ENBABA_3F00_3F);
 
     Actor_SetScale(&this->actor, 0.01f);
 
