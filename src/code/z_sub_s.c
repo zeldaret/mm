@@ -904,7 +904,8 @@ void SubS_ComputePlane(Vec3f* point, Vec3f* rotPoint, Vec3s* rot, Plane* plane) 
     plane->originDist = -((point->x * plane->normal.x) + (plane->normal.y * point->y) + (plane->normal.z * point->z));
 }
 
-s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* rotPoint, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect) {
+s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* rotPoint, Vec3f* linePointA, Vec3f* linePointB,
+                        Vec3f* intersect) {
     s32 lineSegVsPlane;
     Plane plane;
 
