@@ -783,6 +783,13 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
         else:
             min_instr_count = 2
             skip_instr_count = 1
+    elif opt == 'O0':
+        if framepointer:
+            min_instr_count = 8
+            skip_instr_count = 8
+        else:
+            min_instr_count = 4
+            skip_instr_count = 4
     elif opt == 'g':
         if framepointer:
             min_instr_count = 7
@@ -792,7 +799,7 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
             skip_instr_count = 4
     else:
         if opt != 'g3':
-            raise Failure("must pass one of -g, -O1, -O2, -O2 -g3")
+            raise Failure("must pass one of -g, -O0, -O1, -O2, -O2 -g3")
         if framepointer:
             min_instr_count = 4
             skip_instr_count = 4
@@ -813,6 +820,7 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
     ]
 
     is_cutscene_data = False
+    is_early_include = False
 
     for line_no, raw_line in enumerate(f, 1):
         raw_line = raw_line.rstrip()
@@ -832,44 +840,51 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
                 global_asm = None
             else:
                 global_asm.process_line(raw_line, output_enc)
+        elif line in ['GLOBAL_ASM(', '#pragma GLOBAL_ASM(']:
+            global_asm = GlobalAsmBlock("GLOBAL_ASM block at line " + str(line_no))
+            start_index = len(output_lines)
+        elif ((line.startswith('GLOBAL_ASM("') or line.startswith('#pragma GLOBAL_ASM("'))
+                and line.endswith('")')):
+            fname = line[line.index('(') + 2 : -2]
+            out_dependencies.append(fname)
+            global_asm = GlobalAsmBlock(fname)
+            with open(fname, encoding=input_enc) as f:
+                for line2 in f:
+                    global_asm.process_line(line2.rstrip(), output_enc)
+            src, fn = global_asm.finish(state)
+            output_lines[-1] = ''.join(src)
+            asm_functions.append(fn)
+            global_asm = None
+        elif line == '#pragma asmproc recurse':
+            # C includes qualified as
+            # #pragma asmproc recurse
+            # #include "file.c"
+            # will be processed recursively when encountered
+            is_early_include = True
+        elif is_early_include:
+            # Previous line was a #pragma asmproc recurse
+            is_early_include = False
+            if not line.startswith("#include "):
+                raise Failure("#pragma asmproc recurse must be followed by an #include ")
+            fpath = os.path.dirname(f.name)
+            fname = os.path.join(fpath, line[line.index(' ') + 2 : -1])
+            out_dependencies.append(fname)
+            include_src = StringIO()
+            with open(fname, encoding=input_enc) as include_file:
+                parse_source(include_file, opt, framepointer, mips1, input_enc, output_enc, out_dependencies, include_src)
+            include_src.write('#line ' + str(line_no + 1) + ' "' + f.name + '"')
+            output_lines[-1] = include_src.getvalue()
+            include_src.close()
         else:
-            if line in ['GLOBAL_ASM(', '#pragma GLOBAL_ASM(']:
-                global_asm = GlobalAsmBlock("GLOBAL_ASM block at line " + str(line_no))
-                start_index = len(output_lines)
-            elif ((line.startswith('GLOBAL_ASM("') or line.startswith('#pragma GLOBAL_ASM("'))
-                    and line.endswith('")')):
-                fname = line[line.index('(') + 2 : -2]
-                out_dependencies.append(fname)
-                global_asm = GlobalAsmBlock(fname)
-                with open(fname, encoding=input_enc) as f:
-                    for line2 in f:
-                        global_asm.process_line(line2.rstrip(), output_enc)
-                src, fn = global_asm.finish(state)
-                output_lines[-1] = ''.join(src)
-                asm_functions.append(fn)
-                global_asm = None
-            elif line.startswith('#include "') and line.endswith('" EARLY'):
-                # C includes qualified with EARLY (i.e. #include "file.c" EARLY) will be
-                # processed recursively when encountered
-                fpath = os.path.dirname(f.name)
-                fname = os.path.join(fpath, line[line.index(' ') + 2 : -7])
-                out_dependencies.append(fname)
-                include_src = StringIO()
-                with open(fname, encoding=input_enc) as include_file:
-                    parse_source(include_file, opt, framepointer, mips1, input_enc, output_enc, out_dependencies, include_src)
-                include_src.write('#line ' + str(line_no + 1) + ' "' + f.name + '"')
-                output_lines[-1] = include_src.getvalue()
-                include_src.close()
-            else:
-                # This is a hack to replace all floating-point numbers in an array of a particular type
-                # (in this case CutsceneData) with their corresponding IEEE-754 hexadecimal representation
-                if cutscene_data_regexpr.search(line) is not None:
-                    is_cutscene_data = True
-                elif line.endswith("};"):
-                    is_cutscene_data = False
-                if is_cutscene_data:
-                    raw_line = re.sub(float_regexpr, repl_float_hex, raw_line)
-                output_lines[-1] = raw_line
+            # This is a hack to replace all floating-point numbers in an array of a particular type
+            # (in this case CutsceneData) with their corresponding IEEE-754 hexadecimal representation
+            if cutscene_data_regexpr.search(line) is not None:
+                is_cutscene_data = True
+            elif line.endswith("};"):
+                is_cutscene_data = False
+            if is_cutscene_data:
+                raw_line = re.sub(float_regexpr, repl_float_hex, raw_line)
+            output_lines[-1] = raw_line
 
     if print_source:
         if isinstance(print_source, StringIO):
@@ -877,7 +892,14 @@ def parse_source(f, opt, framepointer, mips1, input_enc, output_enc, out_depende
                 print_source.write(line + '\n')
         else:
             for line in output_lines:
-                print_source.write(line.encode(output_enc) + b'\n')
+                try:
+                    line_encoded = line.encode(output_enc)
+                except UnicodeEncodeError:
+                    print("Failed to encode a line to", output_enc)
+                    print("The line:", line)
+                    print("The line, utf-8-encoded:", line.encode("utf-8"))
+                    raise
+                print_source.write(line_encoded + b'\n')
             print_source.flush()
             if print_source != sys.stdout.buffer:
                 print_source.close()
@@ -1239,6 +1261,7 @@ def run_wrapped(argv, outfile, functions):
     parser.add_argument('-mips1', dest='mips1', action='store_true')
     parser.add_argument('-g3', dest='g3', action='store_true')
     group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-O0', dest='opt', action='store_const', const='O0')
     group.add_argument('-O1', dest='opt', action='store_const', const='O1')
     group.add_argument('-O2', dest='opt', action='store_const', const='O2')
     group.add_argument('-g', dest='opt', action='store_const', const='g')
