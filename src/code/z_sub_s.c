@@ -872,35 +872,43 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
     return i;
 }
 
-void SubS_ComputePlane(Vec3f* pos, Vec3f* point, Vec3s* rot, Plane* plane) {
+/**
+ * Computes a plane based on a point on the plane, a rotationPoint and two angles
+ *
+ * @param[in] point a point on the plane
+ * @param[in] rotPoint the point to rotate about
+ * @param[in] rot the angles to rotate with
+ * @param[out] plane the computed plane
+ */
+void SubS_ComputePlane(Vec3f* point, Vec3f* rotPoint, Vec3s* rot, Plane* plane) {
     f32 sin;
     f32 cos;
     f32 sp2C;
-    f32 pointZ;
+    f32 rotPointZ;
     f32 normY;
-    f32 pointYX;
+    f32 rotPointYX;
 
     sin = Math_SinS(-rot->x);
     cos = Math_CosS(-rot->x);
-    pointZ = point->z;
-    pointYX = point->y;
-    sp2C = (pointZ * cos) - (pointYX * sin);
-    normY = (pointZ * sin) + (pointYX * cos);
+    rotPointZ = rotPoint->z;
+    rotPointYX = rotPoint->y;
+    sp2C = (rotPointZ * cos) - (rotPointYX * sin);
+    normY = (rotPointZ * sin) + (rotPointYX * cos);
 
     sin = Math_SinS(rot->y);
     cos = Math_CosS(rot->y);
-    pointYX = point->x;
+    rotPointYX = rotPoint->x;
     plane->normal.y = normY;
-    plane->normal.z = (sp2C * cos) - (pointYX * sin);
-    plane->normal.x = (sp2C * sin) + (pointYX * cos);
-    plane->originDist = -((pos->x * plane->normal.x) + (plane->normal.y * pos->y) + (plane->normal.z * pos->z));
+    plane->normal.z = (sp2C * cos) - (rotPointYX * sin);
+    plane->normal.x = (sp2C * sin) + (rotPointYX * cos);
+    plane->originDist = -((point->x * plane->normal.x) + (plane->normal.y * point->y) + (plane->normal.z * point->z));
 }
 
-s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* point, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect) {
+s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* rotPoint, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect) {
     s32 lineSegVsPlane;
     Plane plane;
 
-    SubS_ComputePlane(pos, point, rot, &plane);
+    SubS_ComputePlane(pos, rotPoint, rot, &plane);
     lineSegVsPlane = Math3D_LineSegVsPlane(plane.normal.x, plane.normal.y, plane.normal.z, plane.originDist, linePointA,
                                            linePointB, intersect, false);
 

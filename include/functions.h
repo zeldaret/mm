@@ -2487,8 +2487,8 @@ s32 SubS_ActorPathing_SetNextPoint(GlobalContext* globalCtx, ActorPathing* actor
 void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animations, s32 nextIndex, s32* curIndex);
 s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type);
 s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes);
-void SubS_ComputePlane(Vec3f* pos, Vec3f* point, Vec3s* rot, Plane* plane);
-s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* point, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect);
+void SubS_ComputePlane(Vec3f* point, Vec3f* rotPoint, Vec3s* rot, Plane* plane);
+s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* rotPoint, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect);
 Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyActor verifyActor);
 s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, func_8013E748_VerifyFunc verifyFunc);
 s32 SubS_ActorAndPlayerAreFacing(GlobalContext* globalCtx, Actor* actor, void* data);
