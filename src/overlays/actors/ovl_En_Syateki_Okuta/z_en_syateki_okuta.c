@@ -76,15 +76,15 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
-static Color_RGBA8 D_80A37B90 = { 255, 255, 255, 255 };
+Color_RGBA8 D_80A37B90 = { 255, 255, 255, 255 };
 
-static Color_RGBA8 D_80A37B94 = { 150, 150, 150, 255 };
+Color_RGBA8 D_80A37B94 = { 150, 150, 150, 255 };
 
-static Vec3f D_80A37B98 = { 0.0f, -0.5, 0.0f };
+Vec3f D_80A37B98 = { 0.0f, -0.5, 0.0f };
 
-static Color_RGBA8 D_80A37BA4 = { 255, 255, 255, 255 };
+Color_RGBA8 D_80A37BA4 = { 255, 255, 255, 255 };
 
-static Color_RGBA8 D_80A37BA8 = { 150, 150, 150, 0 };
+Color_RGBA8 D_80A37BA8 = { 150, 150, 150, 0 };
 
 void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
