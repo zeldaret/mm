@@ -5,7 +5,6 @@
  */
 
 #include "z_en_syateki_okuta.h"
-#include "objects/object_okuta/object_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
@@ -96,7 +95,7 @@ void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(globalCtx, &this->skelAnime, &object_okuta_Skel_0033D0, &object_okuta_Anim_00466C, this->jointTable,
-                   this->morphTable, 16);
+                   this->morphTable, OBJECT_OKUTA_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -329,7 +328,7 @@ s32 func_80A36A90(EnSyatekiOkuta* this, GlobalContext* globalCtx) {
         return false;
     }
 
-    if ((this->collider.base.acFlags & AC_HIT) != 0) {
+    if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         return true;
     }
@@ -366,7 +365,7 @@ void EnSyatekiOkuta_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80A36AF8(this, globalCtx);
 
-    if (func_80A36A90(this, globalCtx) != 0) {
+    if (func_80A36A90(this, globalCtx)) {
         syatekiMan = (EnSyatekiMan*)this->actor.parent;
         if (this->unk_2A6 == 1) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
@@ -463,7 +462,8 @@ s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
     return true;
 }
 
-s32 func_80A37294(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnSyatekiOkuta_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                    Actor* thisx) {
     s32 pad;
     Vec3f sp20;
     f32 curFrame;
@@ -496,8 +496,8 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPSegment(POLY_OPA_DISP++, 0x08, ovl_En_Syateki_Okuta_DL_001640);
     }
 
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A37294, NULL,
-                      &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw,
+                      NULL, &this->actor);
     func_8012C2DC(globalCtx->state.gfxCtx);
     if (this->actionFunc == func_80A365EC) {
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f,
