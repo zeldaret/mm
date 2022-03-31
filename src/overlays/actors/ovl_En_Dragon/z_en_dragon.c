@@ -735,25 +735,27 @@ void EnDragon_UpdateDamage(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u32 sp30;
 
-    if ((this->action == DEEP_PYTHON_ACTION_EXTEND) && ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
-                                                        (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
-                                                        (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
-                                                        (this->collider.elements[5].info.bumperFlags & BUMP_HIT) ||
-                                                        (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
-                                                        (this->collider.elements[7].info.bumperFlags & BUMP_HIT))) {
-        Actor_ApplyDamage(&this->actor);
-        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
-        if (this->actor.colChkInfo.health > 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
-            this->action = DEEP_PYTHON_ACTION_DAMAGE;
-        } else {
-            Enemy_StartFinishingBlow(globalCtx, &this->actor);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DEAD);
-            this->actor.flags |= ACTOR_FLAG_8000000;
-            this->actor.flags &= ~ACTOR_FLAG_1;
-            this->actor.flags |= ACTOR_FLAG_100000;
-            this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;
-            this->actionFunc = EnDragon_SetupDead;
+    if ((this->action == DEEP_PYTHON_ACTION_EXTEND)) {
+        if ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[5].info.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[6].info.bumperFlags & BUMP_HIT) ||
+            (this->collider.elements[7].info.bumperFlags & BUMP_HIT)) {
+            Actor_ApplyDamage(&this->actor);
+            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 25);
+            if (this->actor.colChkInfo.health > 0) {
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DAMAGE);
+                this->action = DEEP_PYTHON_ACTION_DAMAGE;
+            } else {
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
+                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_UTSUBO_DEAD);
+                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_100000;
+                this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;
+                this->actionFunc = EnDragon_SetupDead;
+            }
         }
     }
 
