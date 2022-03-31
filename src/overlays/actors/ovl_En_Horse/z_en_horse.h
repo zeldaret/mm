@@ -220,7 +220,7 @@ typedef struct EnHorse {
     /* 0x564 */ s32 unk_564; // set but not used
     /* 0x568 */ f32 unk_568; // set but not used
     /* 0x56C */ f32 unk_56C;
-    /* 0x570 */ Vec3f unk_570;
+    /* 0x570 */ Vec3f banditPosition; // Milk run minigame bandit
     /* 0x57C */ Vec3f unk_57C;
     /* 0x588 */ s16 unk_588;
     /* 0x58A */ UNK_TYPE1 unk_58A[0x2]; // struct padding?

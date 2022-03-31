@@ -3408,6 +3408,7 @@ void func_80884D04(EnHorse* this, GlobalContext* globalCtx) {
                      Animation_GetLastFrame(sAnimationHeaders[this->type][this->animationIdx]), ANIMMODE_ONCE, 0.0f);
 }
 
+// Action func: EnHorse_UpdateBandit?
 void func_80884E0C(EnHorse* this, GlobalContext* globalCtx) {
     f32 playSpeed = (this->unk_56C * 0.2f * 0.5f) + 1.0f;
     Vec3f pos;
@@ -3424,8 +3425,8 @@ void func_80884E0C(EnHorse* this, GlobalContext* globalCtx) {
     }
 
     this->unk_57C = this->actor.world.pos;
-    this->actor.world.pos.x = this->unk_570.x;
-    this->actor.world.pos.z = this->unk_570.z;
+    this->actor.world.pos.x = this->banditPosition.x;
+    this->actor.world.pos.z = this->banditPosition.z;
 
     this->unk_56C = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
     if (((this->unk_550 == 5) || (this->unk_550 == 7)) && (Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADER)) {
@@ -3445,7 +3446,7 @@ void func_80884E0C(EnHorse* this, GlobalContext* globalCtx) {
         }
         this->actor.world.pos.y += this->actor.velocity.y * 0.5f;
     } else {
-        this->actor.world.pos.y = this->unk_570.y;
+        this->actor.world.pos.y = this->banditPosition.y;
     }
 }
 

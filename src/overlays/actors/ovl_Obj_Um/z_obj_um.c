@@ -253,7 +253,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit1->unk_55C = 40;
     bandit1->unk_560 = 40;
 
-    bandit1->unk_570 = gZeroVec3f;
+    bandit1->banditPosition = gZeroVec3f;
     bandit1->unk_57C = gZeroVec3f;
 
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
@@ -427,9 +427,9 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 banditIndex, EnHors
     bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
     bandit->actor.velocity.z = Math_CosS(bandit->actor.world.rot.y) * sp3C;
 
-    bandit->unk_570.x = bandit->actor.world.pos.x + (bandit->actor.velocity.x * 0.5f) + bandit->actor.colChkInfo.displacement.x;
-    bandit->unk_570.y = bandit->actor.world.pos.y + (bandit->actor.velocity.y * 0.5f) + bandit->actor.colChkInfo.displacement.y;
-    bandit->unk_570.z = bandit->actor.world.pos.z + (bandit->actor.velocity.z * 0.5f) + bandit->actor.colChkInfo.displacement.z;
+    bandit->banditPosition.x = bandit->actor.world.pos.x + (bandit->actor.velocity.x * 0.5f) + bandit->actor.colChkInfo.displacement.x;
+    bandit->banditPosition.y = bandit->actor.world.pos.y + (bandit->actor.velocity.y * 0.5f) + bandit->actor.colChkInfo.displacement.y;
+    bandit->banditPosition.z = bandit->actor.world.pos.z + (bandit->actor.velocity.z * 0.5f) + bandit->actor.colChkInfo.displacement.z;
 
     phi_v1_2 = BINANG_SUB(bandit->actor.world.rot.y, bandit->actor.shape.rot.y);
 
@@ -491,7 +491,7 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* bandit1, EnHor
     }
 
     Math3D_Lerp(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560), &sp30);
-    bandit1->unk_570 = sp30;
+    bandit1->banditPosition = sp30;
     bandit1->unk_588 = this->dyna.actor.shape.rot.y;
 
     if ((bandit1->unk_550 == 10) || ((bandit1->unk_550 == 8))) {
