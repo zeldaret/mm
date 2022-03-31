@@ -100,13 +100,19 @@ typedef enum {
     /* 0 */ HORSE_EPONA,
     /* 1 */ HORSE_HNI,
     /* 2 */ HORSE_2,
-    /* 3 */ HORSE_3,
-    /* 4 */ HORSE_4
+    /* 3 */ HORSE_3, // bandits?
+    /* 4 */ HORSE_4 // Cremia's donkey
 } HorseType;
 
 #define ENHORSE_GET_2000(thisx) ((thisx)->params & 0x2000)
 #define ENHORSE_GET_4000(thisx) ((thisx)->params & 0x4000)
 #define ENHORSE_GET_8000(thisx) ((thisx)->params & 0x8000)
+
+#define ENHORSE_PARAM(upper, low) ((upper) | (low))
+
+#define ENHORSE_8000 0x8000
+#define ENHORSE_4000 0x4000
+#define ENHORSE_2000 0x2000
 
 enum {
     /*  0 */ ENHORSE_0,
@@ -209,10 +215,10 @@ typedef struct EnHorse {
     /* 0x550 */ s32 unk_550;
     /* 0x554 */ UNK_TYPE unk_554;
     /* 0x558 */ UNK_TYPE unk_558;
-    /* 0x55C */ UNK_TYPE unk_55C;
-    /* 0x560 */ UNK_TYPE unk_560;
-    /* 0x564 */ UNK_TYPE unk_564;
-    /* 0x568 */ f32 unk_568;
+    /* 0x55C */ s32 unk_55C; // maybe currentDistanceToCart... it isn't really a distance tho
+    /* 0x560 */ s32 unk_560; // maybe initialDistanceToCart
+    /* 0x564 */ s32 unk_564; // set but not used
+    /* 0x568 */ f32 unk_568; // set but not used
     /* 0x56C */ f32 unk_56C;
     /* 0x570 */ Vec3f unk_570;
     /* 0x57C */ Vec3f unk_57C;

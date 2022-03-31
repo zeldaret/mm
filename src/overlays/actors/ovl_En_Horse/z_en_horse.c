@@ -121,7 +121,7 @@ static AnimationHeader** sAnimationHeaders[] = {
     NULL, NULL, sEponaAnimHeaders, sHniAnimHeaders, sHniAnimHeaders,
 };
 
-static f32 sPlaybackSpeeds[] = { 2.0f / 3.0f, 2.0f / 3.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 2.0f / 3.0f, 2.0f / 3.0f };
+static f32 sPlaybackSpeeds[] = { 2.0f / 3.0f, 2.0f / 3.0f, 3.0f / 3.0f, 3.0f / 3.0f, 3.0f / 3.0f, 3.0f / 3.0f, 3.0f / 3.0f, 2.0f / 3.0f, 2.0f / 3.0f, };
 
 static SkeletonHeader* sSkeletonHeaders[] = {
     NULL, NULL, &object_horse_link_child_Skel_00A480, NULL, NULL,
@@ -732,7 +732,7 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Actor_MarkForDeath(&this->actor);
     }
 
-    this->actor.params &= ~0xE000;
+    this->actor.params &= ~(0x8000 | 0x4000 | 0x2000);
     if (this->actor.params == 0x1FFF) {
         this->actor.params = ENHORSE_1;
     }
@@ -741,7 +741,7 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->stateFlags = ENHORSE_FLAG_19 | ENHORSE_CANT_JUMP | ENHORSE_UNRIDEABLE;
     } else if (this->actor.params == ENHORSE_8) {
         this->stateFlags = ENHORSE_FLAG_19 | ENHORSE_CANT_JUMP;
-        if (CHECK_QUEST_ITEM(14)) {
+        if (CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
             this->stateFlags &= ~ENHORSE_CANT_JUMP;
             this->stateFlags |= ENHORSE_FLAG_26;
         }
@@ -911,6 +911,7 @@ void EnHorse_Init(Actor* thisx, GlobalContext* globalCtx2) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Horse/EnHorse_Init.s")
 #endif
 
+// EnHorse_WaitForObject
 void func_8087D540(Actor* thisx, GlobalContext* globalCtx) {
     EnHorse* this = THIS;
 
@@ -3346,12 +3347,12 @@ void func_80884994(EnHorse* this) {
 }
 
 void func_80884A40(EnHorse* this, GlobalContext* globalCtx) {
-    s32 sp44[] = { 5, 6, 0 };
+    s32 sp44[] = { ENHORSE_ANIM_TROT, ENHORSE_ANIM_GALLOP, ENHORSE_ANIM_IDLE };
     s32 sp40;
     s32 temp_v0;
 
     if (this->animationIdx == ENHORSE_ANIM_WHINNEY) {
-        temp_v0 = 0;
+        temp_v0 = ENHORSE_ANIM_IDLE;
     } else {
         temp_v0 = this->animationIdx;
     }

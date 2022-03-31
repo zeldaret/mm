@@ -16,7 +16,7 @@
 
 /**
  * weekEventReg flags checked by this actor:
- * - gSaveContext.save.weekEventReg[22] & 0x01: Aliens defeated
+ * - gSaveContext.save.weekEventReg[22] & 1: Aliens defeated
  *     If false: The actor doesn't spawn
  * - gSaveContext.save.weekEventReg[31] & 0x40
  *     If true: Cremia doesn't explain again she'll deliever milk to town
@@ -24,11 +24,11 @@
  *     If true: Triggers cutscene on Romani's Ranch
  * - gSaveContext.save.weekEventReg[34] & 0x80
  *     If true: Doesn't spawn on Romani's Ranch
- * - gSaveContext.save.weekEventReg[52] & 0x01
+ * - gSaveContext.save.weekEventReg[52] & 1
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - gSaveContext.save.weekEventReg[52] & 0x02
+ * - gSaveContext.save.weekEventReg[52] & 2
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
- * - gSaveContext.save.weekEventReg[59] & 0x02
+ * - gSaveContext.save.weekEventReg[59] & 2
  *     If true: Doesn't spawn again on Milk Road
  *
  * weekEventReg flags set by this actor:
@@ -38,19 +38,19 @@
  *     Player accepts the ride and is with Cremia during the Milk Run.
  * - gSaveContext.save.weekEventReg[34] |= 0x80: Cremia does Milk Run alone
  *     Player didn't interact or didn't accept the ride
- * - gSaveContext.save.weekEventReg[52] |= 0x01: Won Milk Run minigame
+ * - gSaveContext.save.weekEventReg[52] |= 1: Won Milk Run minigame
  *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
- * - gSaveContext.save.weekEventReg[52] |= 0x02: Lose Milk Run minigame
+ * - gSaveContext.save.weekEventReg[52] |= 2: Lose Milk Run minigame
  *     Every pot was broken by bandits. Turns off the ""Win" Milk Run minigame"
- * - gSaveContext.save.weekEventReg[59] |= 0x02: ?
+ * - gSaveContext.save.weekEventReg[59] |= 2: ?
  *     Passed through Milk Road after winning the Milk Run
  *
  * weekEventReg flags unset by this actor:
  * - gSaveContext.save.weekEventReg[31] &= (u8)~0x80
  *     Turned off when the Milk Run finishes
- * - gSaveContext.save.weekEventReg[52] &= (u8)~0x01
+ * - gSaveContext.save.weekEventReg[52] &= (u8)~1
  *     Turned off if Player lose the Milk Run
- * - gSaveContext.save.weekEventReg[52] &= (u8)~0x02
+ * - gSaveContext.save.weekEventReg[52] &= (u8)~2
  *     Turned off if Player wins the Milk Run
  */
 
@@ -118,34 +118,6 @@ static ColliderCylinderInit sCylinderInit = {
     { 40, 64, 0, { 0, 0, 0 } },
 };
 
-typedef struct {
-    /* 0x00 */ UNK_TYPE unk_00;
-    /* 0x04 */ UNK_TYPE unk_04;
-    /* 0x08 */ UNK_TYPE unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ UNK_TYPE unk_10;
-} struct_80B7C254; // size = 0x14
-
-struct_80B7C254 D_80B7C164[] = {
-    { 2, 0, 0, 1.0f, 0x28 },     { 4, 1, 0, 1.0f, 0x28 },   { 3, 2, 0, 1.0f, 0x28 },    { 3, 4, 0, 1.0f, 0x28 },
-    { 5, 3, 1, -1.0f, 0x1E },    { 7, 3, 1, 1.0f, 0x1E },   { 0, 0xD, 1, -1.0f, 0x3C }, { 1, 0xE, 1, 1.0f, 0x3C },
-    { 0xD, 0xA, 0, 1.0f, 0x28 }, { 0xE, 8, 0, 1.0f, 0x28 }, { 8, 5, 0, 1.0f, 0x1E },    { 0xA, 7, 0, 1.0f, 0x1E },
-};
-
-static InitChainEntry sInitChain[] = {
-    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
-};
-
-typedef struct {
-    /* 0x00 */ AnimationHeader* anim;
-    /* 0x04 */ s32 unk_04;
-} struct_80B7C25C; // size = 0x08
-
-struct_80B7C25C D_80B7C25C[] = {
-    { &object_um_Anim_012CC0, true }, { &object_um_Anim_01213C, true }, { &object_um_Anim_019E10, false }, { NULL, false }, { &object_um_Anim_0126C4, false }
-};
-
 // actionfuncs
 void func_80B7A144(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_RanchWait(ObjUm* this, GlobalContext* globalCtx);
@@ -166,6 +138,7 @@ void func_80B7AB78(ObjUm* this, GlobalContext* globalCtx);
 void func_80B7ABE4(ObjUm* this, GlobalContext* globalCtx);
 void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx);
 
+// This function may be wrongly named...
 void ObjUm_UpdateBanditsPositions(ObjUm* this, GlobalContext* globalCtx) {
     s16 rotY = this->dyna.actor.shape.rot.y;
     Vec3f sp108;
@@ -265,20 +238,20 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     Audio_QueueSeqCmd(0x8003);
 
     bandit1 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[0].x, spawnPoints[0].y,
-                                    spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2013);
+                                    spawnPoints[0].z, 0, this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_2000, ENHORSE_19));
     this->bandit1 = bandit1;
 
     bandit1->unk_540 = bandit1->actor.world.pos;
 
     bandit1->unk_54C = 0xF;
-    bandit1->unk_550 = 0xA;
+    bandit1->unk_550 = 10;
 
     bandit1->unk_554 = this->pathIdx;
     bandit1->unk_568 = 0.0f;
     bandit1->unk_56C = 0.0f;
     bandit1->unk_558 = 0;
-    bandit1->unk_55C = 0x28;
-    bandit1->unk_560 = 0x28;
+    bandit1->unk_55C = 40;
+    bandit1->unk_560 = 40;
 
     bandit1->unk_570 = gZeroVec3f;
     bandit1->unk_57C = gZeroVec3f;
@@ -287,7 +260,7 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit1->curRaceWaypoint = 1;
 
     bandit2 = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, spawnPoints[1].x, spawnPoints[1].y,
-                                    spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0, 0x2014);
+                                    spawnPoints[1].z, 0, this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_2000, ENHORSE_20));
     this->bandit2 = bandit2;
 
     bandit2->unk_540 = bandit2->actor.world.pos;
@@ -298,8 +271,8 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
     bandit2->unk_554 = this->pathIdx;
     bandit2->unk_568 = 0.0f;
     bandit2->unk_56C = 0.0f;
-    bandit2->unk_55C = 0x28;
-    bandit2->unk_560 = 0x28;
+    bandit2->unk_55C = 40;
+    bandit2->unk_560 = 40;
 
     bandit2->unk_57C = gZeroVec3f;
 
@@ -312,6 +285,20 @@ s32 ObjUm_InitBandits(ObjUm* this, GlobalContext* globalCtx) {
 
     return 0;
 }
+
+typedef struct {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ s32 unk_10;
+} struct_80B7C254; // size = 0x14
+
+struct_80B7C254 D_80B7C164[] = {
+    { 2, 0, 0, 1.0f, 40 },     { 4, 1, 0, 1.0f, 40 },   { 3, 2, 0, 1.0f, 40 },    { 3, 4, 0, 1.0f, 40 },
+    { 5, 3, 1, -1.0f, 30 },    { 7, 3, 1, 1.0f, 30 },   { 0, 13, 1, -1.0f, 60 }, { 1, 14, 1, 1.0f, 60 },
+    { 13, 10, 0, 1.0f, 40 }, { 14, 8, 0, 1.0f, 40 }, { 8, 5, 0, 1.0f, 30 },    { 10, 7, 0, 1.0f, 30 },
+};
 
 // BanditAttack?
 s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* globalCtx) {
@@ -372,7 +359,8 @@ s32 func_80B781DC(ObjUm* this, EnHorse* arg2, EnHorse* arg3, GlobalContext* glob
     return 0;
 }
 
-s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3) {
+// ObjUm_Bandit_UpdatePosition?
+s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 banditIndex, EnHorse* bandit) {
     Path* sp6C = &globalCtx->setupPathList[this->pathIdx];
     s32 sp68;
     Vec3s* sp64;
@@ -393,57 +381,57 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
         return 0;
     }
 
-    if (Math3D_Distance(&arg3->actor.world.pos, &this->dyna.actor.world.pos) < 800.0f) {
-        if (arg2 == 0) {
+    if (Math3D_Distance(&bandit->actor.world.pos, &this->dyna.actor.world.pos) < 800.0f) {
+        if (banditIndex == 0) {
             this->flags |= OBJ_UM_FLAG_0200;
         } else {
             this->flags |= OBJ_UM_FLAG_0400;
         }
-        arg3->unk_540 = arg3->actor.world.pos;
-        arg3->unk_55C = 0x32;
-        arg3->unk_560 = 0x32;
-        arg3->unk_564 = 1;
+        bandit->unk_540 = bandit->actor.world.pos;
+        bandit->unk_55C = 50;
+        bandit->unk_560 = 50;
+        bandit->unk_564 = 1;
     }
 
-    Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->curRaceWaypoint]);
+    Math_Vec3s_ToVec3f(&sp50, &sp64[bandit->curRaceWaypoint]);
 
-    if (arg3->curRaceWaypoint == 0) {
+    if (bandit->curRaceWaypoint == 0) {
         phi_f12 = (f32)(sp64[1].x - sp64[0].x);
         phi_f14 = (f32)(sp64[1].z - sp64[0].z);
     } else {
-        if ((arg3->curRaceWaypoint + 1) == sp6C->count) {
+        if ((bandit->curRaceWaypoint + 1) == sp6C->count) {
             phi_f12 = (f32)(sp64[sp6C->count - 1].x - sp64[sp6C->count - 2].x);
             phi_f14 = (f32)(sp64[sp6C->count - 1].z - sp64[sp6C->count - 2].z);
         } else {
-            phi_f12 = (f32)(sp64[arg3->curRaceWaypoint + 1].x - sp64[arg3->curRaceWaypoint - 1].x);
-            phi_f14 = (f32)(sp64[arg3->curRaceWaypoint + 1].z - sp64[arg3->curRaceWaypoint - 1].z);
+            phi_f12 = (f32)(sp64[bandit->curRaceWaypoint + 1].x - sp64[bandit->curRaceWaypoint - 1].x);
+            phi_f14 = (f32)(sp64[bandit->curRaceWaypoint + 1].z - sp64[bandit->curRaceWaypoint - 1].z);
         }
     }
 
     temp_a1 = Math_Atan2S(phi_f12, phi_f14);
 
     func_8017B7F8(&sp50, (s16)temp_a1, &sp4C, &sp48, &sp44);
-    if (((arg3->actor.world.pos.x * sp4C) + (sp48 * arg3->actor.world.pos.z) + sp44) > 0.0f) {
-        arg3->curRaceWaypoint++;
-        if (arg3->curRaceWaypoint >= sp68) {
-            arg3->curRaceWaypoint = 0;
+    if (((bandit->actor.world.pos.x * sp4C) + (sp48 * bandit->actor.world.pos.z) + sp44) > 0.0f) {
+        bandit->curRaceWaypoint++;
+        if (bandit->curRaceWaypoint >= sp68) {
+            bandit->curRaceWaypoint = 0;
         }
-        Math_Vec3s_ToVec3f(&sp50, &sp64[arg3->curRaceWaypoint]);
+        Math_Vec3s_ToVec3f(&sp50, &sp64[bandit->curRaceWaypoint]);
     }
 
-    arg3->actor.world.rot.y = Math_Vec3f_Yaw(&arg3->actor.world.pos, &sp50);
-    arg3->actor.speedXZ = 45.0f;
+    bandit->actor.world.rot.y = Math_Vec3f_Yaw(&bandit->actor.world.pos, &sp50);
+    bandit->actor.speedXZ = 45.0f;
 
-    sp3C = Math_CosS(arg3->actor.world.rot.x) * arg3->actor.speedXZ;
-    arg3->actor.velocity.x = Math_SinS(arg3->actor.world.rot.y) * sp3C;
-    arg3->actor.velocity.y = Math_SinS(arg3->actor.world.rot.x) * arg3->actor.speedXZ;
-    arg3->actor.velocity.z = Math_CosS(arg3->actor.world.rot.y) * sp3C;
+    sp3C = Math_CosS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    bandit->actor.velocity.x = Math_SinS(bandit->actor.world.rot.y) * sp3C;
+    bandit->actor.velocity.y = Math_SinS(bandit->actor.world.rot.x) * bandit->actor.speedXZ;
+    bandit->actor.velocity.z = Math_CosS(bandit->actor.world.rot.y) * sp3C;
 
-    arg3->unk_570.x = arg3->actor.world.pos.x + (arg3->actor.velocity.x * 0.5f) + arg3->actor.colChkInfo.displacement.x;
-    arg3->unk_570.y = arg3->actor.world.pos.y + (arg3->actor.velocity.y * 0.5f) + arg3->actor.colChkInfo.displacement.y;
-    arg3->unk_570.z = arg3->actor.world.pos.z + (arg3->actor.velocity.z * 0.5f) + arg3->actor.colChkInfo.displacement.z;
+    bandit->unk_570.x = bandit->actor.world.pos.x + (bandit->actor.velocity.x * 0.5f) + bandit->actor.colChkInfo.displacement.x;
+    bandit->unk_570.y = bandit->actor.world.pos.y + (bandit->actor.velocity.y * 0.5f) + bandit->actor.colChkInfo.displacement.y;
+    bandit->unk_570.z = bandit->actor.world.pos.z + (bandit->actor.velocity.z * 0.5f) + bandit->actor.colChkInfo.displacement.z;
 
-    phi_v1_2 = BINANG_SUB(arg3->actor.world.rot.y, arg3->actor.shape.rot.y);
+    phi_v1_2 = BINANG_SUB(bandit->actor.world.rot.y, bandit->actor.shape.rot.y);
 
     if (phi_v1_2 > 0x190) {
         phi_v1_2 = 0x190;
@@ -451,20 +439,21 @@ s32 func_80B783E0(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
         phi_v1_2 = -0x190;
     }
 
-    arg3->actor.shape.rot.y = arg3->actor.shape.rot.y + phi_v1_2;
+    bandit->actor.shape.rot.y = bandit->actor.shape.rot.y + phi_v1_2;
     return 0;
 }
 
-s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse* arg3) {
+// ObjUm_Bandit_GetCloserAndAttack
+s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* bandit1, EnHorse* bandit2) {
     s32 pad;
     Vec3f sp30;
     s16 phi_v1_5;
 
-    arg2->unk_55C--;
-    if (arg2->unk_55C <= 0) {
-        arg2->unk_55C = 0;
+    bandit1->unk_55C--;
+    if (bandit1->unk_55C <= 0) {
+        bandit1->unk_55C = 0;
 
-        if ((arg2->unk_550 == 3) && !(this->flags & OBJ_UM_FLAG_MINIGAME_FINISHED)) {
+        if ((bandit1->unk_550 == 3) && !(this->flags & OBJ_UM_FLAG_MINIGAME_FINISHED)) {
             s32 potIndex = -1;
 
             if (this->potsLife[0] != 1) {
@@ -492,36 +481,36 @@ s32 func_80B78764(ObjUm* this, GlobalContext* globalCtx, EnHorse* arg2, EnHorse*
                 }
 
                 this->potsLife[potIndex]--;
-                if (this->potsLife[potIndex] <= 0) {
+                if (this->potsLife[potIndex] < 1) {
                     this->potsLife[potIndex] = 1;
                 }
             }
         }
 
-        func_80B781DC(this, arg2, arg3, globalCtx);
+        func_80B781DC(this, bandit1, bandit2, globalCtx);
     }
 
-    Math3D_Lerp(&arg2->unk_540, &this->unk_360[arg2->unk_550], 1.0f - ((f32)arg2->unk_55C / arg2->unk_560), &sp30);
-    arg2->unk_570 = sp30;
-    arg2->unk_588 = this->dyna.actor.shape.rot.y;
+    Math3D_Lerp(&bandit1->unk_540, &this->unk_360[bandit1->unk_550], 1.0f - ((f32)bandit1->unk_55C / bandit1->unk_560), &sp30);
+    bandit1->unk_570 = sp30;
+    bandit1->unk_588 = this->dyna.actor.shape.rot.y;
 
-    if ((arg2->unk_550 == 0xA) || ((arg2->unk_550 == 8))) {
-        phi_v1_5 = arg2->unk_588;
-    } else if (Math3D_Distance(&arg2->actor.prevPos, &arg2->actor.world.pos) < 10.0f) {
-        phi_v1_5 = arg2->unk_588;
+    if ((bandit1->unk_550 == 10) || ((bandit1->unk_550 == 8))) {
+        phi_v1_5 = bandit1->unk_588;
+    } else if (Math3D_Distance(&bandit1->actor.prevPos, &bandit1->actor.world.pos) < 10.0f) {
+        phi_v1_5 = bandit1->unk_588;
     } else {
-        phi_v1_5 = Math_Vec3f_Yaw(&arg2->actor.prevPos, &arg2->actor.world.pos);
+        phi_v1_5 = Math_Vec3f_Yaw(&bandit1->actor.prevPos, &bandit1->actor.world.pos);
     }
 
     if (1) {}
 
-    phi_v1_5 -= arg2->actor.shape.rot.y;
+    phi_v1_5 -= bandit1->actor.shape.rot.y;
     if (phi_v1_5 > 0x190) {
-        arg2->actor.shape.rot.y += 0x190;
+        bandit1->actor.shape.rot.y += 0x190;
     } else if (phi_v1_5 < -0x190) {
-        arg2->actor.shape.rot.y += -0x190;
+        bandit1->actor.shape.rot.y += -0x190;
     } else {
-        arg2->actor.shape.rot.y += phi_v1_5;
+        bandit1->actor.shape.rot.y += phi_v1_5;
     }
 
     return 0;
@@ -539,16 +528,16 @@ s32 func_80B78A54(ObjUm* this, GlobalContext* globalCtx, s32 arg2, EnHorse* arg3
             arg3->unk_54C = 0xF;
 
             if (Math_SinS(sp36) > 0.0f) {
-                arg3->unk_550 = arg4->unk_550 != 0xA ? 0xA : 8;
+                arg3->unk_550 = arg4->unk_550 != 10 ? 10 : 8;
                 arg3->unk_568 = -1.0f;
             } else {
-                arg3->unk_550 = arg4->unk_550 != 8 ? 8 : 0xA;
+                arg3->unk_550 = arg4->unk_550 != 8 ? 8 : 10;
                 arg3->unk_568 = 1.0f;
             }
 
             arg3->unk_540 = arg3->actor.world.pos;
-            arg3->unk_55C = 0x28;
-            arg3->unk_560 = 0x28;
+            arg3->unk_55C = 40;
+            arg3->unk_560 = 40;
             arg3->unk_564 = 1;
             if (arg3->rider != NULL) {
                 arg3->rider->actor.colorFilterTimer = 20;
@@ -656,6 +645,11 @@ void ObjUm_RotatePlayerView(ObjUm* this, GlobalContext* globalCtx, s16 angle) {
     player->actor.focus.rot.y += angle;
 }
 
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_STOP),
+};
+
 void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     ObjUm* this = THIS;
@@ -697,7 +691,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->initialPathIdx = OBJ_UM_PARSE_PATH_IDX(thisx->params);
 
     // if (!AliensDefeated)
-    if (!(gSaveContext.save.weekEventReg[22] & 0x01)) {
+    if (!(gSaveContext.save.weekEventReg[22] & 1)) {
         Actor_MarkForDeath(&this->dyna.actor);
         return;
     }
@@ -717,8 +711,8 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             // Waiting for player
 
             if ((gSaveContext.save.weekEventReg[34] & 0x80) || gSaveContext.save.time >= CLOCK_TIME(19, 0) ||
-                gSaveContext.save.time <= CLOCK_TIME(6, 0) || (gSaveContext.save.weekEventReg[52] & 0x01) ||
-                (gSaveContext.save.weekEventReg[52] & 0x02)) {
+                gSaveContext.save.time <= CLOCK_TIME(6, 0) || (gSaveContext.save.weekEventReg[52] & 1) ||
+                (gSaveContext.save.weekEventReg[52] & 2)) {
                 Actor_MarkForDeath(&this->dyna.actor);
                 return;
             }
@@ -728,12 +722,12 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!(gSaveContext.save.weekEventReg[31] & 0x80) || (gSaveContext.save.weekEventReg[52] & 0x01)) {
+        if (!(gSaveContext.save.weekEventReg[31] & 0x80) || (gSaveContext.save.weekEventReg[52] & 1)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
 
-        if (!(gSaveContext.save.weekEventReg[52] & 0x02)) {
+        if (!(gSaveContext.save.weekEventReg[52] & 2)) {
             this->pathIdx = this->initialPathIdx;
             sp54 = false;
             func_800FE484();
@@ -754,7 +748,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, globalCtx, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!(gSaveContext.save.weekEventReg[52] & 0x01) || (gSaveContext.save.weekEventReg[59] & 0x02)) {
+        if (!(gSaveContext.save.weekEventReg[52] & 1) || (gSaveContext.save.weekEventReg[59] & 2)) {
             Actor_MarkForDeath(&this->dyna.actor);
             return;
         }
@@ -790,7 +784,7 @@ void ObjUm_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->donkey = (EnHorse*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_HORSE, this->dyna.actor.world.pos.x,
                                          this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, 0,
-                                         this->dyna.actor.shape.rot.y, 0, 0x8012);
+                                         this->dyna.actor.shape.rot.y, 0, ENHORSE_PARAM(ENHORSE_8000, ENHORSE_18));
 
     if (this->donkey == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
@@ -1315,21 +1309,21 @@ void ObjUm_RunMinigame(ObjUm* this, GlobalContext* globalCtx) {
             gSaveContext.save.weekEventReg[31] &= (u8)~0x80;
             gSaveContext.nightSeqIndex = 0xFF;
 
-            if (!(gSaveContext.save.weekEventReg[52] & 0x01) && !(gSaveContext.save.weekEventReg[52] & 0x02)) {
+            if (!(gSaveContext.save.weekEventReg[52] & 1) && !(gSaveContext.save.weekEventReg[52] & 2)) {
                 if (this->arePotsBroken == false) {
                     globalCtx->nextEntranceIndex = 0x3E60;
                     globalCtx->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
                     globalCtx->sceneLoadFlag = 0x14;
-                    gSaveContext.save.weekEventReg[52] |= 0x01;
-                    gSaveContext.save.weekEventReg[52] &= (u8)~0x2;
+                    gSaveContext.save.weekEventReg[52] |= 1;
+                    gSaveContext.save.weekEventReg[52] &= (u8)~2;
                 } else {
                     globalCtx->nextEntranceIndex = 0x6480;
                     globalCtx->unk_1887F = 0x40;
                     gSaveContext.nextTransition = 3;
                     globalCtx->sceneLoadFlag = 0x14;
-                    gSaveContext.save.weekEventReg[52] |= 0x02;
-                    gSaveContext.save.weekEventReg[52] &= (u8)~0x1;
+                    gSaveContext.save.weekEventReg[52] |= 2;
+                    gSaveContext.save.weekEventReg[52] &= (u8)~1;
                 }
             }
             break;
@@ -1563,10 +1557,10 @@ void ObjUm_PostMilkRunWaitPathFinished(ObjUm* this, GlobalContext* globalCtx) {
     this->wheelRot += 1000;
     ObjUm_UpdateAnim(this, globalCtx, 0);
 
-    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 0x02)) {
+    if ((ObjUm_UpdatePath(this, globalCtx) == OBJUM_PATH_STATE_4) && !(gSaveContext.save.weekEventReg[59] & 2)) {
         ActorCutscene_Stop(this->dyna.actor.cutscene);
         Audio_SetCutsceneFlag(0);
-        gSaveContext.save.weekEventReg[59] |= 0x02;
+        gSaveContext.save.weekEventReg[59] |= 2;
         gSaveContext.nextCutsceneIndex = 0xFFF3;
         globalCtx->nextEntranceIndex = 0x5400;
         globalCtx->unk_1887F = 0x40;
@@ -1650,13 +1644,22 @@ void ObjUm_StopAnim(ObjUm* this, GlobalContext* globalCtx) {
     this->unk_304 = 0;
 }
 
+typedef struct {
+    /* 0x00 */ AnimationHeader* anim;
+    /* 0x04 */ s32 animMoves;
+} struct_80B7C25C; // size = 0x08
+
+struct_80B7C25C D_80B7C25C[] = {
+    { &object_um_Anim_012CC0, true }, { &object_um_Anim_01213C, true }, { &object_um_Anim_019E10, false }, { NULL, false }, { &object_um_Anim_0126C4, false }
+};
+
 void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
     s32 changeAnim;
     s32 temp;
     s32 indexTemp = index;
     f32 animPlaybackSpeed = 0.0f;
 
-    if (D_80B7C25C[index].unk_04) {
+    if (D_80B7C25C[index].animMoves) {
         this->flags |= OBJ_UM_FLAG_MOVING;
     } else {
         this->flags &= ~OBJ_UM_FLAG_MOVING;
@@ -1677,7 +1680,7 @@ void ObjUm_UpdateAnim(ObjUm* this, GlobalContext* globalCtx, s32 index) {
     }
 
     changeAnim = index != this->unk_304;
-    if ((SkelAnime_Update(&this->skelAnime) != 0) || changeAnim) {
+    if (SkelAnime_Update(&this->skelAnime) || changeAnim) {
         this->unk_304 = index;
 
         if (index != -1) {
@@ -2128,19 +2131,19 @@ void ObjUm_PrintStruct(ObjUm* this, GlobalContext* globalCtx, GfxPrint* printer)
     GfxPrint_SetPos(printer, x - 2, ++y);
     GfxPrint_Printf(printer, "weekEvent");
     // GfxPrint_SetPos(printer, x, ++y);
-    // GfxPrint_Printf(printer, "[0x16]&0x01: %i", gSaveContext.save.weekEventReg[22] & 0x01);
+    // GfxPrint_Printf(printer, "[22]&1: %i", gSaveContext.save.weekEventReg[22] & 1);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[1F]&40:%i", gSaveContext.save.weekEventReg[31] & 0x40 ? 1 : 0);
+    GfxPrint_Printf(printer, "[31]&40:%i", gSaveContext.save.weekEventReg[31] & 0x40 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[1F]&80:%i", gSaveContext.save.weekEventReg[31] & 0x80 ? 1 : 0);
+    GfxPrint_Printf(printer, "[31]&80:%i", gSaveContext.save.weekEventReg[31] & 0x80 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[22]&80:%i", gSaveContext.save.weekEventReg[34] & 0x80 ? 1 : 0);
+    GfxPrint_Printf(printer, "[34]&80:%i", gSaveContext.save.weekEventReg[34] & 0x80 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[34]&01:%i", gSaveContext.save.weekEventReg[52] & 0x01 ? 1 : 0);
+    GfxPrint_Printf(printer, "[52]&01:%i", gSaveContext.save.weekEventReg[52] & 1 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[34]&02:%i", gSaveContext.save.weekEventReg[52] & 0x02 ? 1 : 0);
+    GfxPrint_Printf(printer, "[52]&02:%i", gSaveContext.save.weekEventReg[52] & 2 ? 1 : 0);
     GfxPrint_SetPos(printer, x, ++y);
-    GfxPrint_Printf(printer, "[3B]&02:%i", gSaveContext.save.weekEventReg[59] & 0x02 ? 1 : 0);
+    GfxPrint_Printf(printer, "[59]&02:%i", gSaveContext.save.weekEventReg[59] & 2 ? 1 : 0);
 }
 
 void ObjUm_DrawStruct(ObjUm* this, GlobalContext* globalCtx) {
