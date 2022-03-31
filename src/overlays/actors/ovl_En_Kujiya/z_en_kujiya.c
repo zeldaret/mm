@@ -2,7 +2,7 @@
  * File: z_en_kujiya.c
  * Overlay: ovl_En_Kujiya
  * Description: Clock Town - Lottery Shop
- * 
+ *
  * (kuji = lottery, ya = shop)
  */
 
@@ -100,7 +100,8 @@ void EnKujiya_Wait(EnKujiya* this, GlobalContext* globalCtx) {
         }
 
         EnKujiya_SetupTalk(this);
-    } else if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && EnKujiya_CheckBoughtTicket() && (this->actor.shape.rot.y == 0)) {
+    } else if ((gSaveContext.save.time >= CLOCK_TIME(18, 0)) && EnKujiya_CheckBoughtTicket() &&
+               (this->actor.shape.rot.y == 0)) {
         EnKujiya_SetupTurnToOpen(this);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
