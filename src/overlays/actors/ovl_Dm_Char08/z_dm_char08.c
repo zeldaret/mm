@@ -162,7 +162,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk1E4 = this->dyna.actor.world.pos.y;
     this->unk1F0 = 0.0f;
     if (globalCtx->sceneNum == SCENE_31MISAKI) {
-        if ((gSaveContext.weekEventReg[0x35] & 0x20) != 0) {
+        if ((gSaveContext.save.weekEventReg[0x35] & 0x20) != 0) {
             DynaPolyActor_Init(&this->dyna, 3);
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06002470);
         } else {
@@ -184,7 +184,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
                     this->dyna.actor.world.pos.y + 368.0f, this->dyna.actor.world.pos.z - 174.0f, 0, 0x7530, 0, 1);
     switch (globalCtx->sceneNum) {
         case SCENE_31MISAKI:
-            if ((gSaveContext.weekEventReg[0x35] & 0x20)) {
+            if ((gSaveContext.save.weekEventReg[0x35] & 0x20)) {
                 this->dyna.actor.world.pos.x = -6480.0f;
                 this->unk1E4 = -120.0f;
                 this->dyna.actor.world.pos.z = 1750.0f;
@@ -202,7 +202,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk207 = 0;
                 this->unk208 = 0;
                 this->dyna.actor.flags |= 1;
-                if (gSaveContext.entranceIndex == 0x6A80) {
+                if (gSaveContext.save.entranceIndex == 0x6A80) {
                     this->unk200 = 0;
                     this->actionFunc = func_80AAFAC4;
                 } else {
@@ -273,16 +273,16 @@ void func_80AAF610(DmChar08* this, GlobalContext* globalCtx) {
 //
 //    // temp_s0 = this->dyna.actor.cutscene;
 //     //phi_s0 = this->dyna.actor.cutscene;
-//     //if (((void)0, gSaveContext.weekEventReg[0x5D] & 0x8)) {
+//     //if (((void)0, gSaveContext.save.weekEventReg[0x5D] & 0x8)) {
 //     //    phi_s0 =
 //     ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(phi_s0)));
 //     //}
-//     phi_s0 = (((void)0, gSaveContext.weekEventReg[0x5D] & 0x8)) ?
+//     phi_s0 = (((void)0, gSaveContext.save.weekEventReg[0x5D] & 0x8)) ?
 //     ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(phi_s0)))
 //     : this->dyna.actor.cutscene; if (ActorCutscene_GetCanPlayNext(phi_s0) != 0) {
 //         ActorCutscene_Start(phi_s0, &this->dyna.actor);
-//         gSaveContext.weekEventReg[0x35] |= 0x20;
-//         gSaveContext.weekEventReg[0x5D] |= 8;
+//         gSaveContext.save.weekEventReg[0x35] |= 0x20;
+//         gSaveContext.save.weekEventReg[0x5D] |= 8;
 //         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
 //         this->actionFunc = func_80AAF884;
 //         return;
@@ -326,10 +326,10 @@ void func_80AAFA18(DmChar08* this, GlobalContext* globalCtx) {
     nextCs2 = nextCs1;
     nextCs1 = ActorCutscene_GetAdditionalCutscene(nextCs1);
 
-    nextCs = ((void)0, gSaveContext.weekEventReg[53] & 0x40) ? nextCs1 : nextCs2;
+    nextCs = ((void)0, gSaveContext.save.weekEventReg[53] & 0x40) ? nextCs1 : nextCs2;
 
     if (ActorCutscene_GetCanPlayNext(nextCs) != 0) {
-        gSaveContext.weekEventReg[53] |= 0x40;
+        gSaveContext.save.weekEventReg[53] |= 0x40;
         ActorCutscene_Start(nextCs, &this->dyna.actor);
         this->actionFunc = func_80AAFE78;
     } else {
@@ -385,14 +385,15 @@ void func_80AAFBA4(DmChar08* this, GlobalContext* globalCtx) {
 void func_80AAFCCC(DmChar08* this, GlobalContext* globalCtx) {
     switch (globalCtx->sceneNum) {
         case SCENE_31MISAKI:
-            if (!(gSaveContext.weekEventReg[0x37] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[0x37] & 0x80)) {
                 switch (this->pad206) {
                     case 0:
                         return; // Must be a return
                     case 1:
                         Message_StartTextbox(globalCtx, 0x102A, &this->dyna.actor);
                         this->pad206++;
-                        break;;
+                        break;
+                        ;
                     case 2:
                         if (Message_GetState(&globalCtx->msgCtx) == 2) {
                             Message_StartTextbox(globalCtx, 0x102B, &this->dyna.actor);
@@ -424,7 +425,8 @@ void func_80AAFCCC(DmChar08* this, GlobalContext* globalCtx) {
                 case 1:
                     Message_StartTextbox(globalCtx, 0x102E, &this->dyna.actor);
                     this->pad206++;
-                    break;;
+                    break;
+                    ;
                 case 2:
                     if (Message_GetState(&globalCtx->msgCtx) == 2) {
                         Message_StartTextbox(globalCtx, 0x102F, &this->dyna.actor);
@@ -535,10 +537,10 @@ void func_80AB01E8(DmChar08* this, GlobalContext* globalCtx) {
 }
 
 void func_80AB023C(DmChar08* this, GlobalContext* globalCtx) {
-    if ((globalCtx->msgCtx.unk11F04 != this->unk1FC) && (globalCtx->msgCtx.unk11F04 != 0)) {
-        this->unk1FC = globalCtx->msgCtx.unk11F04;
+    if ((globalCtx->msgCtx.currentTextId != this->unk1FC) && (globalCtx->msgCtx.currentTextId != 0)) {
+        this->unk1FC = globalCtx->msgCtx.currentTextId;
         this->unk208 = 0;
-        switch (globalCtx->msgCtx.unk11F04) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x1025:
                 this->unk207 = 1;
                 return;
@@ -766,7 +768,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) != 0) {
                         this->unk208 = this->unk208 + 1;
                     }
-                    if ((Message_GetState(&globalCtx->msgCtx) == 6) && (func_80147624(globalCtx) != 0)) {
+                    if ((Message_GetState(&globalCtx->msgCtx) == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
                         this->unk208 = 3;
                     }
                     break;
@@ -776,7 +778,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                         this->unk200 = 0;
                         this->unk208 = this->unk208 + 1;
                     }
-                    if ((Message_GetState(&globalCtx->msgCtx) == 6) && (func_80147624(globalCtx) != 0)) {
+                    if ((Message_GetState(&globalCtx->msgCtx) == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
                         this->unk208 = 3;
                     }
                     break;
@@ -831,8 +833,9 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80AB096C(DmChar08 *this, GlobalContext *globalCtx) {
-    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_31MISAKI) && (gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.currentCsIndex == 0)) {
+void func_80AB096C(DmChar08* this, GlobalContext* globalCtx) {
+    if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_31MISAKI) &&
+        (gSaveContext.sceneSetupIndex == 0) && (globalCtx->csCtx.currentCsIndex == 0)) {
         if ((globalCtx->csCtx.frames >= 890) && (globalCtx->csCtx.frames < 922)) {
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
@@ -842,8 +845,73 @@ void func_80AB096C(DmChar08 *this, GlobalContext *globalCtx) {
     }
 }
 
+extern Vec3s D_80AB13A0[12];
+extern Vec3s D_80AB14D0[12];
+extern Vec3s D_80AB1600[12];
+extern Vec3s D_80AB1648[12];
+extern void* D_80AB16A8[3];
+
 // not today
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AB0A10.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AB0A10.s")
+void func_80AB0A10(DmChar08* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 temp_f0;
+    f32 phi_f2;
+    f32 phi_f0;
+    f32 phi_f12;
+    s32 i;
+
+    if (player->actor.world.pos.x > 0.0f) {
+        temp_f0 = this->skelAnime.curFrame;
+        if (temp_f0 <= 19.0f) {
+            phi_f12 = 19.0f;
+            phi_f2 = temp_f0 / 19.0f;
+        } else {
+            phi_f2 = (29.0f - temp_f0) / 9.0f;
+            phi_f12 = 29.0f;
+        }
+
+        D_80AB16A8[0] = &D_80AB13A0;
+
+        for (i = 0; i < ARRAY_COUNT(D_80AB1600); i++) {
+            D_80AB1600[i].x = D_80AB1648[i].x;
+        }
+
+        D_80AB1600[0].y = (100.0f * phi_f2) + 900.0f;
+        D_80AB1600[1].y = (100.0f * phi_f2) + 900.0f;
+        D_80AB1600[2].y = (500.0f * phi_f2) + -200.0f;
+        D_80AB1600[3].y = (900.0f * phi_f2) + -800.0f;
+        D_80AB1600[5].y = 0x4B0;
+        D_80AB1600[9].y = 0x6A4;
+    } else {
+        phi_f0 = this->skelAnime.curFrame + 26.0f;
+        if (phi_f0 > 29.0f) {
+            phi_f12 = 29.0f;
+            phi_f0 -= 29.0f;
+        }
+
+        if (phi_f0 <= 18.0f) {
+            phi_f2 = phi_f0 / 18.0f;
+        } else {
+            phi_f2 = (29.0f - phi_f0) / 10.0f;
+        }
+
+        D_80AB16A8[0] = &D_80AB14D0;
+
+        for (i = 0; i < ARRAY_COUNT(D_80AB1600); i++) {
+            D_80AB1600[i].x = -D_80AB1648[i].x;
+        }
+
+        D_80AB1600[0].y = (500.0f * phi_f2) + 720.0f;
+        D_80AB1600[1].y = (660.0f * phi_f2) + 420.0f;
+        D_80AB1600[2].y = (1130.0f * phi_f2) + -430.0f;
+        D_80AB1600[3].y = (1430.0f * phi_f2) + -1060.0f;
+        D_80AB1600[5].y = 0x4B0;
+        D_80AB1600[9].y = 0x6A4;
+    }
+    func_800C6554(globalCtx, &globalCtx->colCtx.dyna);
+}
+
 
 void DmChar08_Update(Actor* thisx, GlobalContext* globalCtx) {
     DmChar08* this = (DmChar08*)thisx;
@@ -880,15 +948,16 @@ void DmChar08_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80AB0A10(this, globalCtx);
 }
 
-s32 func_80AB0E3C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3f *pos, Vec3s *rot, Actor *thisx) {
-    if ((globalCtx->csCtx.state == 0) && (globalCtx->sceneNum == SCENE_31MISAKI) && (limbIndex == OBJECT_KAMEJIMA_LIMB_15)) {
+s32 func_80AB0E3C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    if ((globalCtx->csCtx.state == 0) && (globalCtx->sceneNum == SCENE_31MISAKI) &&
+        (limbIndex == OBJECT_KAMEJIMA_LIMB_15)) {
         rot->z = -0x5E24;
     }
     return 0;
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AB0E7C.s")
-void func_80AB0E7C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *rot, Actor *thisx) {
+void func_80AB0E7C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     DmChar08* this = THIS;
     Vec3f src;
 
@@ -901,14 +970,12 @@ void func_80AB0E7C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
         src.y = 2500.0f;
         src.z = 700.0f;
         Matrix_MultiplyVector3fByState(&src, &this->unk1B8);
-    }
-    else if (limbIndex == 8) {
+    } else if (limbIndex == 8) {
         src.x = 1600.0f;
         src.y = -200.0f;
         src.z = 0.0f;
         Matrix_MultiplyVector3fByState(&src, &this->unk1C4);
-    }
-    else if (limbIndex == 6) {
+    } else if (limbIndex == 6) {
         src.x = 600.0f;
         src.y = 700.0f;
         src.z = 0.0f;
@@ -916,8 +983,8 @@ void func_80AB0E7C(GlobalContext *globalCtx, s32 limbIndex, Gfx **dList, Vec3s *
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AB0F90.s")
-void func_80AB0F90(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
+#ifdef NON_MATCHING
+void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     f32 temp_f0;
     f32 temp_f12;
     f32 temp_f12_2;
@@ -927,57 +994,60 @@ void func_80AB0F90(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
     DmChar08* this = THIS;
 
     switch (limbIndex) {
-    case 4:
-        Matrix_StatePop();
-        temp_f12 = ((1.0f - 0.7f) * this->unk1F0) + 0.7f;
-        Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
-        Matrix_StatePush();
-        return;
-    case 17:
-    case 18:
-    case 21:
-    case 22:
-        Matrix_StatePop();
-        temp_f12_2 = (this->unk1F0 * 0.4f) + 0.6f;
-        Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
-        Matrix_StatePush();
-        return;
-    case 19:
-    case 23:
-        temp_f12_3 = (this->unk1F0 * 0.4f) + 0.6f;
-        Matrix_Scale(temp_f12_3, temp_f12_3, temp_f12_3, 1);
-        return;
-    case 14:
-        Matrix_StatePop();
-        temp_f12_4 = (this->unk1F0 * 0.52f) + 0.48f;
-        Matrix_Scale(temp_f12_4, temp_f12_4, temp_f12_4, 1);
-        Matrix_StatePush();
-        return;
-    case 10:
-    case 12:
-        temp_f12_5 = (this->unk1F0 * 0.55f) + 0.45f;
-        Matrix_Scale(temp_f12_5, (this->unk1F0 * 0.2f) + 0.8f, temp_f12_5, 1);
-        /* fallthrough */
-    default:
-        return;
+        case 4:
+            Matrix_StatePop();
+            temp_f12 = ((1.0f - 0.7f) * this->unk1F0) + 0.7f;
+            Matrix_Scale(temp_f12, temp_f12, 1.0f, 1);
+            Matrix_StatePush();
+            return;
+        case 17:
+        case 18:
+        case 21:
+        case 22:
+            Matrix_StatePop();
+            temp_f12_2 = (this->unk1F0 * 0.4f) + 0.6f;
+            Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
+            Matrix_StatePush();
+            return;
+        case 19:
+        case 23:
+            temp_f12_3 = (this->unk1F0 * 0.4f) + 0.6f;
+            Matrix_Scale(temp_f12_3, temp_f12_3, temp_f12_3, 1);
+            return;
+        case 14:
+            Matrix_StatePop();
+            temp_f12_4 = (this->unk1F0 * 0.52f) + 0.48f;
+            Matrix_Scale(temp_f12_4, temp_f12_4, temp_f12_4, 1);
+            Matrix_StatePush();
+            return;
+        case 10:
+        case 12:
+            temp_f12_5 = (this->unk1F0 * 0.55f) + 0.45f;
+            Matrix_Scale(temp_f12_5, (this->unk1F0 * 0.2f) + 0.8f, temp_f12_5, 1);
+            /* fallthrough */
+        default:
+            return;
     }
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AB0F90.s")
+#endif
 
+void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx); /* extern */
+extern TexturePtr D_80AB1788[9];                                           // Eye textures
 
-
-void func_80AB0F90(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx); /* extern */
-extern TexturePtr D_80AB1788[9];//Eye textures
-
-void DmChar08_Draw(Actor *thisx, GlobalContext *globalCtx) {
-    DmChar08 *this = (DmChar08 *) thisx;
-s32 pad;
+void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    DmChar08* this = (DmChar08*)thisx;
+    s32 pad;
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AB1788[this->unk201]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AB1788[this->unk201]));
     if ((this->unk1FF > 0) || (globalCtx->csCtx.state != 0)) {
-        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, func_80AB0E3C, func_80AB0E7C, func_80AB0F90, &this->dyna.actor);
+        SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                       this->skelAnime.dListCount, func_80AB0E3C, func_80AB0E7C, func_80AB0F90,
+                                       &this->dyna.actor);
         this->unk1A4->world.pos.x = this->unk1AC.x;
         this->unk1A4->world.pos.y = this->unk1AC.y;
         this->unk1A4->world.pos.z = this->unk1AC.z;
@@ -995,7 +1065,7 @@ s32 pad;
         func_8012C2DC(globalCtx->state.gfxCtx);
         Scene_SetRenderModeXlu(globalCtx, 2, 2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->unk205);
-        gSPMatrix(POLY_XLU_DISP++,  Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_kamejima_DL_004E70);
     }
     CLOSE_DISPS(globalCtx->state.gfxCtx);
