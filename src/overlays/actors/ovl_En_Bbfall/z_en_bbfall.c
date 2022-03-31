@@ -25,6 +25,7 @@ void func_808C00A0(EnBbfall* this, GlobalContext* globalCtx);
 void func_808C0178(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BF5E0(EnBbfall* this);
 void func_808BF7A0(EnBbfall* this);
+void func_808BF894(EnBbfall* this);
 
 #if 0
 const ActorInit En_Bbfall_InitVars = {
@@ -147,7 +148,13 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF438.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF4B4.s")
+void func_808BF4B4(EnBbfall* this) {
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_MOUTH);
+    }
+
+    func_800B9010(&this->actor, NA_SE_EN_BUBLEFALL_FIRE - SFX_FLAG);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF514.s")
 
@@ -209,9 +216,23 @@ void func_808BF7A0(EnBbfall* this) {
     this->actionFunc = func_808BF830;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF830.s")
+void func_808BF830(EnBbfall* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    if (this->actor.home.pos.y < this->actor.world.pos.y) {
+        func_808BF894(this);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF894.s")
+    func_808BF4B4(this);
+}
+
+void func_808BF894(EnBbfall* this) {
+    this->unk_24C = 0xFF;
+    this->unk_24D = 1;
+    this->actor.bgCheckFlags &= ~1;
+    this->actor.speedXZ = 5.0f;
+    this->actor.gravity = -1.0f;
+    this->actionFunc = func_808BF8DC;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF8DC.s")
 
