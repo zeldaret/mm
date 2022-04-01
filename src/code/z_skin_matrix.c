@@ -1,13 +1,11 @@
 #include "global.h"
 
-// clang-format off
-MtxF sMtxFClear = {
-    1.0f, 0.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f, 1.0f,
-};
-// clang-format on
+MtxF sMtxFClear = { {
+    { 1.0f, 0.0f, 0.0f, 0.0f },
+    { 0.0f, 1.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 1.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f, 1.0f },
+} };
 
 /**
  * Multiplies a 4 component row vector [ src , 1 ] by the matrix mf and writes the resulting 4 components to xyzDest
