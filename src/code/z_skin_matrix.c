@@ -30,6 +30,7 @@ void SkinMatrix_Vec3fMtxFMultXYZ(MtxF* mf, Vec3f* src, Vec3f* dest) {
     f32 my = mf->yx;
     f32 mz = mf->zx;
     f32 mw = mf->wx;
+
     dest->x = mw + ((src->x * mx) + (src->y * my) + (src->z * mz));
 
     mx = mf->xy;

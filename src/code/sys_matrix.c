@@ -5,22 +5,20 @@
 #include "global.h"
 
 // clang-format off
-// Mtx gMtxClear = gdSPDefMtx(
 Mtx gIdentityMtx = gdSPDefMtx(
     1.0f, 0.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 0.0f, 1.0f
 );
-
-// MtxF gMtxFClear = {
-MtxF gIdentityMtxF = {
-    1.0f, 0.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f, 0.0f,
-    0.0f, 0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f, 1.0f,
-};
 // clang-format on
+
+MtxF gIdentityMtxF = { {
+    { 1.0f, 0.0f, 0.0f, 0.0f },
+    { 0.0f, 1.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 1.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f, 1.0f },
+} };
 
 MtxF* sMatrixStack;   // "Matrix_stack"
 MtxF* sCurrentMatrix; // "Matrix_now"
@@ -53,19 +51,19 @@ void Matrix_StatePop(void) {
 
 // Matrix_Get
 /* Read and copy the top matrix from the stack */
-void Matrix_CopyCurrentState(MtxF *matrix) {
+void Matrix_CopyCurrentState(MtxF* matrix) {
     Matrix_MtxFCopy(matrix, sCurrentMatrix);
 }
 
 // Matrix_Put
 /* Write a matrix to the top of the stack */
-void Matrix_SetCurrentState(MtxF *matrix) {
+void Matrix_SetCurrentState(MtxF* matrix) {
     Matrix_MtxFCopy(sCurrentMatrix, matrix);
 }
 
 // Matrix_GetCurrent
 /* Return pointer to top of the matrix stack */
-MtxF *Matrix_GetCurrentState(void) {
+MtxF* Matrix_GetCurrentState(void) {
     return sCurrentMatrix;
 }
 
@@ -904,11 +902,11 @@ Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest) {
     return dest;
 }
 
-Mtx *Matrix_ToMtx(Mtx *dest) {
+Mtx* Matrix_ToMtx(Mtx* dest) {
     return Matrix_ToRSPMatrix(sCurrentMatrix, dest);
 }
 
-Mtx *Matrix_NewMtx(GraphicsContext *gfxCtx) {
+Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx) {
     return Matrix_ToMtx(GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 
@@ -1020,10 +1018,10 @@ void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
 
 // Matrix_MtxToMtxF
 /**
- * @brief Converts fixed-point 
- * 
- * @param src 
- * @param dest 
+ * @brief Converts fixed-point
+ *
+ * @param src
+ * @param dest
  */
 void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
     u16* mInt = (u16*)&src->m[0][0];
