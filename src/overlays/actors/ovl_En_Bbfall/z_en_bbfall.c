@@ -276,9 +276,21 @@ void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx) {
     func_808BF4B4(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFA18.s")
+void func_808BFA18(EnBbfall* this) {
+    this->unk_24D = 0;
+    this->collider.base.acFlags &= ~AC_ON;
+    this->actionFunc = func_808BFA3C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFA3C.s")
+void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    if (this->actor.world.pos.y < (this->actor.floorHeight - 90.0f)) {
+        this->unk_250 = 0xA;
+        func_808BF5E0(this);
+    } else {
+        func_808BF4B4(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFAB4.s")
 
