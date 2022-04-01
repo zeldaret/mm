@@ -26,6 +26,7 @@ void func_808C0178(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BF5E0(EnBbfall* this);
 void func_808BF7A0(EnBbfall* this);
 void func_808BF894(EnBbfall* this);
+void func_808BFA18(EnBbfall* this);
 
 #if 0
 const ActorInit En_Bbfall_InitVars = {
@@ -146,7 +147,17 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF3B8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF438.s")
+s32 func_808BF438(EnBbfall* this, GlobalContext* globalCtx) {
+    if (!SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
+        u32 temp_v0 = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+
+        if ((temp_v0 == 2) || (temp_v0 == 3) || (temp_v0 == 9)) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void func_808BF4B4(EnBbfall* this) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
@@ -156,7 +167,17 @@ void func_808BF4B4(EnBbfall* this) {
     func_800B9010(&this->actor, NA_SE_EN_BUBLEFALL_FIRE - SFX_FLAG);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF514.s")
+void func_808BF514(EnBbfall* this) {
+    if (this->actor.bgCheckFlags & 8) {
+        s16 temp_v1 = this->actor.shape.rot.y - this->actor.wallYaw;
+
+        if (ABS_ALT(temp_v1) > 0x4000) {
+            this->actor.shape.rot.y = (this->actor.wallYaw * 2) - this->actor.shape.rot.y - 0x8000;
+        }
+
+        this->actor.bgCheckFlags &= ~8;
+    }
+}
 
 void func_808BF578(EnBbfall* this) {
     this->collider.elements->info.toucher.effect = 1;
@@ -234,7 +255,26 @@ void func_808BF894(EnBbfall* this) {
     this->actionFunc = func_808BF8DC;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF8DC.s")
+void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    Math_StepToF(&this->unk_254, 0.8f, 0.1f);
+    Math_StepToF(&this->unk_258, 1.0f, 0.1f);
+    func_808BF514(this);
+    if (this->actor.bgCheckFlags & 1) {
+        if (func_808BF438(this, globalCtx)) {
+            func_808BFA18(this);
+        } else {
+            this->actor.velocity.y *= -1.2f;
+            this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
+            this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(73728.0f);
+        }
+
+        this->actor.bgCheckFlags &= ~1;
+    }
+
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    func_808BF4B4(this);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFA18.s")
 
