@@ -69,7 +69,7 @@ void EnNwc_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    if ((gSaveContext.save.weekEventReg[25] & 8)) {
+    if (gSaveContext.save.weekEventReg[25] & 8) {
         // if breman mask was already used, replace with adult EnNiw
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, NIW_TYPE_REGULAR);
@@ -223,12 +223,13 @@ void EnNwc_ToggleState(EnNwc* this) {
 void EnNwc_CheckFound(EnNwc* this, GlobalContext* globalCtx) {
     if (EnNwc_IsFound(this, globalCtx)) {
         u8 currentChickCount = (this->grog->home.rot.z / 2);
+        
         if (currentChickCount > 9) {
             currentChickCount = 9;
         }
 
         // save our current chick order
-        this->actor.home.rot.z = this->grog->home.rot.z + 1;
+        this->actor.home.rot.z++;
 
         // if < 10 chicks, increment grog's chick counter
         if (this->grog->home.rot.z < 20) {
@@ -276,6 +277,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
     if (this->hasGrownUp & 1) {
         s16 targetUpperBodyRot = 0;
         s16 targetFootRot = 0;
+        
         if (this->actor.speedXZ > 0.0f) {
             if (this->stateTimer & 4) {
                 targetFootRot = 0x1B58;
@@ -292,7 +294,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
         if ((this->stateTimer & 3) == 3 && this->stateTimer & 20) {
             this->actor.velocity.y = 2.0f; // hop up and down
         }
-        if ((this->stateTimer & 0x1B) == 0x18) {
+        if ((this->stateTimer & 0x1B) == 24) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_SONG);
         }
     }
@@ -459,7 +461,7 @@ void EnNwc_Update(Actor* thisx, GlobalContext* globalCtx) {
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 10.0f, 10.0f, 10.0f, 5);
     this->actionFunc(this, globalCtx);
-    if (this->hasGrownUp & true) {
+    if (this->hasGrownUp & 1) {
         this->actor.objBankIndex = this->niwObjectIndex;
         this->actor.draw = EnNwc_DrawAdultBody;
         this->actor.shape.shadowScale = 15.0f;
@@ -481,7 +483,7 @@ void EnNwc_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnNwc_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    TexturePtr eyeTextures[] = { &gNwcEyeOpenTex, &gNwcEyeClosedTex };
+    TexturePtr eyeTextures[] = { gNwcEyeOpenTex, gNwcEyeClosedTex };
     EnNwc* this = THIS;
     Gfx* dispHead;
 

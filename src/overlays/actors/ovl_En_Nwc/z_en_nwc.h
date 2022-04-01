@@ -17,7 +17,7 @@ typedef struct EnNwc {
     /* 0x249 */ s8 nwcObjectIndex;
     /* 0x24A */ s16 blinkState;
     /* 0x24C */ s16 blinkTimer;
-    /* 0x250 */ Actor *grog;
+    /* 0x250 */ Actor* grog;
     /* 0x254 */ s16 stateTimer; // count frames to next state change
     /* 0x256 */ union {
                   s16 mixedValue256;  // default name for reset

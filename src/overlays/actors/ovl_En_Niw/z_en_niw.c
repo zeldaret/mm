@@ -190,7 +190,7 @@ void EnNiw_AnimateWingHead(EnNiw* this, GlobalContext* globalCtx, s16 animationS
         if (animationState == NIW_ANIMATION_STILL) {
             this->targetLimbRots[0] = 0.0f;
         } else {
-            this->targetLimbRots[0] = (-10000.0f) * tempOne;
+            this->targetLimbRots[0] = -10000.0f * tempOne;
         }
 
         this->unk292 += 1;
