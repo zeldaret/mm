@@ -36,10 +36,10 @@ Actor* EnNwc_FindGrog(GlobalContext* globalCtx);
 enum EnNiwState {
     /* -1 */ NWC_STATE_NIW_LOADED = -1,     // set after loading object_niw
     /*  0 */ NWC_STATE_CHECK_BREMAN = 0,    // checking for breman mask
-    /*  1 */ NWC_STATE_TURNING = 1,         // turning to face a new direction to explore
-    /*  2 */ NWC_STATE_HOPPING_FORWARD = 2, // hopping to go explore
-    /*  3 */ NWC_STATE_FOLLOWING = 3,       // following the player
-    /*  4 */ NWC_STATE_RUNNING = 4,         // running from the player after failed breman march
+    /*  1 */ NWC_STATE_TURNING,             // turning to face a new direction to explore
+    /*  2 */ NWC_STATE_HOPPING_FORWARD,     // hopping to go explore
+    /*  3 */ NWC_STATE_FOLLOWING,           // following the player
+    /*  4 */ NWC_STATE_RUNNING,             // running from the player after failed breman march
 };
 
 const ActorInit En_Nwc_InitVars = {
@@ -216,7 +216,7 @@ void EnNwc_ToggleState(EnNwc* this) {
     if (this->state != NWC_STATE_CHECK_BREMAN) {
         EnNwc_ChangeState(this, NWC_STATE_CHECK_BREMAN);
     } else {
-        EnNwc_ChangeState(this, (s16)(s32)(Rand_ZeroFloat(2.0f) + 1.0f));
+        EnNwc_ChangeState(this, Rand_ZeroFloat(2.0f) + 1.0f);
     }
 }
 
@@ -229,7 +229,7 @@ void EnNwc_CheckFound(EnNwc* this, GlobalContext* globalCtx) {
         }
 
         // save our current chick order
-        this->actor.home.rot.z++;
+        this->actor.home.rot.z = this->grog->home.rot.z + 1;
 
         // if < 10 chicks, increment grog's chick counter
         if (this->grog->home.rot.z < 20) {
