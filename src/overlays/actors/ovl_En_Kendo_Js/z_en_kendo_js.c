@@ -109,7 +109,8 @@ void EnKendoJs_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_js_Skel_006990, &object_js_Anim_000F4C, this->jointTable,
                        this->morphTable, 13);
 
-    if ((CURRENT_DAY == 3) && !((gSaveContext.time <= CLOCK_TIME(23, 0)) && (gSaveContext.time >= CLOCK_TIME(6, 0)))) {
+    if ((CURRENT_DAY == 3) &&
+        !((gSaveContext.save.time <= CLOCK_TIME(23, 0)) && (gSaveContext.save.time >= CLOCK_TIME(6, 0)))) {
         if (ENKENDOJS_GET_FF(&this->actor) != ENKENDOJS_FF_1) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_KANBAN, this->actor.home.pos.x,
                         this->actor.home.pos.y, this->actor.home.pos.z - 10.0f, this->actor.home.rot.x,
@@ -145,7 +146,7 @@ void EnKendoJs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnKendoJs* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    gSaveContext.weekEventReg[82] &= (u8)~8;
+    gSaveContext.save.weekEventReg[82] &= (u8)~8;
 }
 
 void func_80B26538(EnKendoJs* this) {
@@ -166,8 +167,8 @@ void func_80B2654C(EnKendoJs* this, GlobalContext* globalCtx) {
         if (ENKENDOJS_GET_FF(&this->actor) == ENKENDOJS_FF_1) {
             Message_StartTextbox(globalCtx, 0x273C, &this->actor);
             this->unk_288 = 0x273C;
-        } else if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
-            switch (gSaveContext.playerForm) {
+        } else if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            switch (gSaveContext.save.playerForm) {
                 case PLAYER_FORM_DEKU:
                     phi_v0 = 0;
                     break;
@@ -212,15 +213,15 @@ void func_80B2654C(EnKendoJs* this, GlobalContext* globalCtx) {
 }
 
 void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx) && (this->unk_288 == 0x2716)) {
+    if (Message_ShouldAdvance(globalCtx) && (this->unk_288 == 0x2716)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
-                if (CUR_EQUIP_VALUE_VOID(EQUIP_SWORD) == EQUIP_SWORD) {
+                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == EQUIP_SWORD) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(globalCtx, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
-                } else if (gSaveContext.rupees < globalCtx->msgCtx.unk1206C) {
+                } else if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(globalCtx, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
@@ -233,12 +234,12 @@ void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                if (CUR_EQUIP_VALUE_VOID(EQUIP_SWORD) == EQUIP_SWORD) {
+                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == EQUIP_SWORD) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(globalCtx, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
-                } else if (gSaveContext.rupees < globalCtx->msgCtx.unk12070) {
+                } else if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk12070) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(globalCtx, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
@@ -261,7 +262,7 @@ void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
 void func_80B269A4(EnKendoJs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!func_80147624(globalCtx)) {
+    if (!Message_ShouldAdvance(globalCtx)) {
         return;
     }
 
@@ -325,7 +326,7 @@ void func_80B26AFC(EnKendoJs* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 if (this->unk_288 == 0x272C) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                 }
@@ -492,7 +493,7 @@ void func_80B27030(EnKendoJs* this, GlobalContext* globalCtx) {
 }
 
 void func_80B2714C(EnKendoJs* this) {
-    gSaveContext.weekEventReg[82] |= 8;
+    gSaveContext.save.weekEventReg[82] |= 8;
     this->unk_28C = 1;
     this->unk_290 = 0;
     this->unk_284 = 0;
@@ -503,7 +504,7 @@ void func_80B2714C(EnKendoJs* this) {
 void func_80B27188(EnKendoJs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_288 == 0x2729) {
             func_80B26F14(this, globalCtx);
         } else if (!func_80B26F6C(this, globalCtx)) {
@@ -553,14 +554,14 @@ void func_80B27188(EnKendoJs* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_284 == 7) {
-            gSaveContext.weekEventReg[82] &= (u8)~8;
+            gSaveContext.save.weekEventReg[82] &= (u8)~8;
             func_80B26AE8(this);
         }
     }
 }
 
 void func_80B273D0(EnKendoJs* this) {
-    gSaveContext.weekEventReg[82] |= 8;
+    gSaveContext.save.weekEventReg[82] |= 8;
     this->unk_290 = 120;
     this->unk_284 = 0;
     this->unk_286 = 1;
@@ -593,7 +594,7 @@ void func_80B274BC(EnKendoJs* this, GlobalContext* globalCtx) {
                 this->unk_288 = 0x272E;
             }
             player->stateFlags1 |= 0x20;
-            gSaveContext.weekEventReg[82] &= (u8)~8;
+            gSaveContext.save.weekEventReg[82] &= (u8)~8;
             func_80B26AE8(this);
             return;
         }
@@ -635,7 +636,7 @@ void func_80B276D8(EnKendoJs* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         func_80B27760(this);
-    } else if (!(gSaveContext.weekEventReg[63] & 0x20)) {
+    } else if (!(gSaveContext.save.weekEventReg[63] & 0x20)) {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 800.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_RED, 800.0f, 100.0f);
@@ -650,8 +651,8 @@ void func_80B27774(EnKendoJs* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if (!(gSaveContext.weekEventReg[63] & 0x20)) {
-            gSaveContext.weekEventReg[63] |= 0x20;
+        if (!(gSaveContext.save.weekEventReg[63] & 0x20)) {
+            gSaveContext.save.weekEventReg[63] |= 0x20;
             Message_StartTextbox(globalCtx, 0x272F, &this->actor);
             this->unk_288 = 0x272F;
         } else {

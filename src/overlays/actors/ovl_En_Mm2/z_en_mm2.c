@@ -49,7 +49,7 @@ void EnMm2_Reading(EnMm2* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState != 2) {
-        if (talkState == 5 && func_80147624(globalCtx)) {
+        if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
             func_801477B4(globalCtx);
             this->actionFunc = EnMm2_WaitForRead;
         }

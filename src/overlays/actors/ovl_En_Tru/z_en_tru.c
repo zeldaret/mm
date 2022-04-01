@@ -654,11 +654,11 @@ UNK_TYPE* func_80A871E0(EnTru* this, GlobalContext* globalCtx) {
         return D_80A88924;
     }
 
-    if (!(this->unk_34E & 0x40) && !(gSaveContext.weekEventReg[16] & 0x10)) {
+    if (!(this->unk_34E & 0x40) && !(gSaveContext.save.weekEventReg[16] & 0x10)) {
         return D_80A88918;
     }
 
-    if ((this->unk_34E & 0x1000) && !(gSaveContext.weekEventReg[16] & 0x10)) {
+    if ((this->unk_34E & 0x1000) && !(gSaveContext.save.weekEventReg[16] & 0x10)) {
         return D_80A88910;
     }
 
@@ -723,7 +723,7 @@ s32 func_80A87400(EnTru* this, GlobalContext* globalCtx) {
 
     if (this->path != NULL) {
         sp4C = Lib_SegmentedToVirtual(this->path->points);
-        if (func_8013BD40(&this->actor, this->path, this->unk_384)) {
+        if (SubS_HasReachedPoint(&this->actor, this->path, this->unk_384)) {
             if (this->unk_384 > this->unk_384 + 1) {
                 this->unk_384 = this->path->count - 2;
                 ret = true;
@@ -753,7 +753,7 @@ s32 func_80A875AC(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (this->unk_364) {
         case 0:
-            if ((this->unk_34E & 0x40) || (gSaveContext.weekEventReg[16] & 0x10)) {
+            if ((this->unk_34E & 0x40) || (gSaveContext.save.weekEventReg[16] & 0x10)) {
                 this->unk_374 = this->actor.cutscene;
                 this->unk_364++;
             } else {
@@ -821,7 +821,7 @@ s32 func_80A8777C(Actor* thisx, GlobalContext* globalCtx) {
 
                 case 4:
                 case 5:
-                    if (!func_80147624(globalCtx)) {
+                    if (!Message_ShouldAdvance(globalCtx)) {
                         break;
                     }
             }
@@ -1029,7 +1029,7 @@ s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx) {
         case 4:
             if (func_80A87400(this, globalCtx) || (DECR(this->unk_362) == 0)) {
                 ret = true;
-                gSaveContext.weekEventReg[12] |= 8;
+                gSaveContext.save.weekEventReg[12] |= 8;
             }
             break;
     }
@@ -1046,7 +1046,7 @@ s32 func_80A87DC0(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80A87FD0(EnTru* this, GlobalContext* globalCtx) {
     if (this->actor.draw != NULL) {
-        if ((this->unk_34E & 0x80) || (gSaveContext.weekEventReg[16] & 0x10)) {
+        if ((this->unk_34E & 0x80) || (gSaveContext.save.weekEventReg[16] & 0x10)) {
             if (func_80A873B8(this)) {
                 SubS_UpdateFlags(&this->unk_34E, 3, 7);
             } else {
@@ -1068,7 +1068,7 @@ void func_80A87FD0(EnTru* this, GlobalContext* globalCtx) {
                     func_80A86924(this, 2);
                 }
             }
-        } else if (!(gSaveContext.weekEventReg[16] & 0x10) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
+        } else if (!(gSaveContext.save.weekEventReg[16] & 0x10) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
                    (this->actor.xzDistToPlayer < 140.0f)) {
             SubS_UpdateFlags(&this->unk_34E, 4, 7);
             this->unk_34E |= 0x1040;
@@ -1093,12 +1093,12 @@ void func_80A881E0(EnTru* this, GlobalContext* globalCtx) {
             ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
         }
 
-        if (!(this->unk_34E & 0x40) && !(gSaveContext.weekEventReg[16] & 0x10)) {
+        if (!(this->unk_34E & 0x40) && !(gSaveContext.save.weekEventReg[16] & 0x10)) {
             func_80A86924(this, 0);
         } else if (this->unk_34E & 0x80) {
             func_80A86924(this, 0);
             func_80A86460(this);
-        } else if (gSaveContext.weekEventReg[16] & 0x10) {
+        } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
             func_80A86924(this, 6);
         }
 
@@ -1115,7 +1115,7 @@ void func_80A881E0(EnTru* this, GlobalContext* globalCtx) {
 void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnTru* this = THIS;
 
-    if ((gSaveContext.entranceIndex != 0xC200) || (gSaveContext.weekEventReg[12] & 8)) {
+    if ((gSaveContext.save.entranceIndex != 0xC200) || (gSaveContext.save.weekEventReg[12] & 8)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -1127,7 +1127,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->unk_37C = -1;
     func_80A86924(this, 0);
-    this->path = func_8013BEDC(globalCtx, this->actor.params & 0xFF, 255, &this->unk_384);
+    this->path = SubS_GetDayDependentPath(globalCtx, this->actor.params & 0xFF, 255, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
     }
@@ -1136,7 +1136,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 
-    if (gSaveContext.weekEventReg[16] & 0x10) {
+    if (gSaveContext.save.weekEventReg[16] & 0x10) {
         func_80A86924(this, 5);
     } else {
         this->unk_388 = 0;
