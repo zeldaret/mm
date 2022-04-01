@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bbfall.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
@@ -312,8 +313,65 @@ void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Update.s")
 
+s32 func_808C07D4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C07D4.s")
 
+void func_808C080C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C080C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Draw.s")
+void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnBbfall* this = THIS;
+    MtxF* currentMatrixState;
+    Gfx* gfx;
+    s32 phi_s3;
+    Vec3f* ptr;
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    gfx = POLY_OPA_DISP;
+    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    POLY_OPA_DISP = &gfx[1];
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808C07D4, func_808C080C,
+                      &this->actor);
+
+    if (this->unk_24C > 0) {
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        Matrix_RotateY(
+            ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
+            MTXMODE_APPLY);
+        Matrix_Scale(this->unk_258, this->unk_254, 1.0f, MTXMODE_APPLY);
+        gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
+        currentMatrixState = Matrix_GetCurrentState();
+
+        phi_s3 = this->unk_24C;
+        ptr = &this->unk_268[0];
+
+        for (i = 0; i < ARRAY_COUNT(this->unk_268); i++, ptr++) {
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
+                                        ((globalCtx->gameplayFrames + (i * 10)) * (-20 + i * 2)) & 0x1FF, 32, 128));
+            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, phi_s3);
+            currentMatrixState->mf[3][0] = ptr->x;
+            currentMatrixState->mf[3][1] = ptr->y;
+            currentMatrixState->mf[3][2] = ptr->z;
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+
+            phi_s3 -= 35;
+            if (phi_s3 < 0) {
+                break;
+            }
+
+            Matrix_Scale(0.87f, 0.87f, 1.0f, MTXMODE_APPLY);
+        }
+    }
+
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
