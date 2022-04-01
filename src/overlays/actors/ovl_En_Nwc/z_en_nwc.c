@@ -31,15 +31,15 @@ void EnNwc_CheckForBreman(EnNwc* this, GlobalContext* globalCtx);
 
 void EnNwc_DrawAdultBody(Actor* thisx, GlobalContext* globalCtx);
 s32 EnNwc_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-Actor* EnNwc_FindGrog(GlobalContext* globalCtx);
+EnHs* EnNwc_FindGrog(GlobalContext* globalCtx);
 
 enum EnNiwState {
-    /* -1 */ NWC_STATE_NIW_LOADED = -1,     // set after loading object_niw
-    /*  0 */ NWC_STATE_CHECK_BREMAN = 0,    // checking for breman mask
-    /*  1 */ NWC_STATE_TURNING,             // turning to face a new direction to explore
-    /*  2 */ NWC_STATE_HOPPING_FORWARD,     // hopping to go explore
-    /*  3 */ NWC_STATE_FOLLOWING,           // following the player
-    /*  4 */ NWC_STATE_RUNNING,             // running from the player after failed breman march
+    /* -1 */ NWC_STATE_NIW_LOADED = -1,  // set after loading object_niw
+    /*  0 */ NWC_STATE_CHECK_BREMAN = 0, // checking for breman mask
+    /*  1 */ NWC_STATE_TURNING,          // turning to face a new direction to explore
+    /*  2 */ NWC_STATE_HOPPING_FORWARD,  // hopping to go explore
+    /*  3 */ NWC_STATE_FOLLOWING,        // following the player
+    /*  4 */ NWC_STATE_RUNNING,          // running from the player after failed breman march
 };
 
 const ActorInit En_Nwc_InitVars = {
@@ -126,12 +126,12 @@ void EnNwc_SpawnDust(EnNwc* this, GlobalContext* globalCtx) {
     }
 }
 
-Actor* EnNwc_FindGrog(GlobalContext* globalCtx) {
+EnHs* EnNwc_FindGrog(GlobalContext* globalCtx) {
     Actor* grogSearch = globalCtx->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (grogSearch != NULL) {
         if (grogSearch->id == ACTOR_EN_HS) {
-            return grogSearch;
+            return (EnHs*)grogSearch;
         }
         grogSearch = grogSearch->next;
     }
@@ -144,7 +144,7 @@ s32 EnNwc_PlayerReleasedBremanMarch(EnNwc* this, GlobalContext* globalCtx) {
 
     // Weird: home.rot.x holds count of chicks having transformed into adult.
     // Weird: Its incremented by 1 unlike chicks following, so it should max at 10.
-    if (this->grog->home.rot.x >= 20) {
+    if (this->grog->actor.home.rot.x >= 20) {
         return false;
     }
 
@@ -222,18 +222,18 @@ void EnNwc_ToggleState(EnNwc* this) {
 
 void EnNwc_CheckFound(EnNwc* this, GlobalContext* globalCtx) {
     if (EnNwc_IsFound(this, globalCtx)) {
-        u8 currentChickCount = (this->grog->home.rot.z / 2);
-        
+        u8 currentChickCount = (this->grog->actor.home.rot.z / 2);
+
         if (currentChickCount > 9) {
             currentChickCount = 9;
         }
 
         // save our current chick order
-        this->actor.home.rot.z = this->grog->home.rot.z + 1;
+        this->actor.home.rot.z = this->grog->actor.home.rot.z + 1;
 
         // if < 10 chicks, increment grog's chick counter
-        if (this->grog->home.rot.z < 20) {
-            this->grog->home.rot.z += 2;
+        if (this->grog->actor.home.rot.z < 20) {
+            this->grog->actor.home.rot.z += 2;
         }
 
         EnNwc_ChangeState(this, NWC_STATE_FOLLOWING);
@@ -277,7 +277,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
     if (this->hasGrownUp & 1) {
         s16 targetUpperBodyRot = 0;
         s16 targetFootRot = 0;
-        
+
         if (this->actor.speedXZ > 0.0f) {
             if (this->stateTimer & 4) {
                 targetFootRot = 0x1B58;
@@ -299,13 +299,13 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (this->grog->home.rot.z >= 20 && // all 10 chicks have been found
+    if (this->grog->actor.home.rot.z >= 20 && // all 10 chicks have been found
         (this->hasGrownUp & 1) == false) {
         this->transformTimer += 2;
         if (this->transformTimer >= (s32)(s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
             // it is our turn to transform
             this->hasGrownUp |= 1;
-            this->grog->home.rot.x += 2; // increment grog's adult tranformation counter
+            this->grog->actor.home.rot.x += 2; // increment grog's adult tranformation counter
             EnNwc_SpawnDust(this, globalCtx);
             Actor_SetScale(&this->actor, 0.002f);
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICK_TO_CHICKEN);
@@ -339,8 +339,8 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 0xBB8, 0xC8);
 
     if (EnNwc_PlayerReleasedBremanMarch(this, globalCtx)) {
-        this->grog->home.rot.x = 0; // reset adult count
-        this->grog->home.rot.z = 0; // reset chick follow count
+        this->grog->actor.home.rot.x = 0; // reset adult count
+        this->grog->actor.home.rot.z = 0; // reset chick follow count
 
         EnNwc_ChangeState(this, NWC_STATE_RUNNING);
 
@@ -357,7 +357,7 @@ void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
         Actor_SetScale(&this->actor, this->actor.scale.x);
     }
 
-    if (this->grog->home.rot.x >= 20) { // all chicks have turned into adult cucco, stop and crow
+    if (this->grog->actor.home.rot.x >= 20) { // all chicks have turned into adult cucco, stop and crow
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHICKEN_CRY_M);
         this->actionFunc = EnNwc_CrowAtTheEnd;
         this->actor.speedXZ = 0.0f;
