@@ -896,14 +896,14 @@ void EnFishing_Init(Actor* thisx, GlobalContext* globalCtx2) {
             fish->type = FS_GROUP_FISH_NORMAL;
 
             if (i <= 20) {
-                fish->unk_10.x = fish->pos.x = __sinf(sFishGroupAngle1) * 720.0f;
-                fish->unk_10.z = fish->pos.z = __cosf(sFishGroupAngle1) * 720.0f;
+                fish->unk_10.x = fish->pos.x = sinf(sFishGroupAngle1) * 720.0f;
+                fish->unk_10.z = fish->pos.z = cosf(sFishGroupAngle1) * 720.0f;
             } else if (i <= 40) {
-                fish->unk_10.x = fish->pos.x = __sinf(sFishGroupAngle2) * 720.0f;
-                fish->unk_10.z = fish->pos.z = __cosf(sFishGroupAngle2) * 720.0f;
+                fish->unk_10.x = fish->pos.x = sinf(sFishGroupAngle2) * 720.0f;
+                fish->unk_10.z = fish->pos.z = cosf(sFishGroupAngle2) * 720.0f;
             } else {
-                fish->unk_10.x = fish->pos.x = __sinf(sFishGroupAngle3) * 720.0f;
-                fish->unk_10.z = fish->pos.z = __cosf(sFishGroupAngle3) * 720.0f;
+                fish->unk_10.x = fish->pos.x = sinf(sFishGroupAngle3) * 720.0f;
+                fish->unk_10.z = fish->pos.z = cosf(sFishGroupAngle3) * 720.0f;
             }
 
             fish->unk_10.y = fish->pos.y = -35.0f;
@@ -2292,8 +2292,8 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                             sp7C = Rand_ZeroFloat(1.5f) + 0.5f;
                             sp78 = Rand_ZeroFloat(6.28f);
 
-                            sp9C.x = __sinf(sp78) * sp7C;
-                            sp9C.z = __cosf(sp78) * sp7C;
+                            sp9C.x = sinf(sp78) * sp7C;
+                            sp9C.z = cosf(sp78) * sp7C;
                             sp9C.y = Rand_ZeroFloat(3.0f) + 3.0f;
 
                             spA8 = sLurePos;
@@ -2648,8 +2648,8 @@ s32 func_809033F0(EnFishing* this, GlobalContext* globalCtx, u8 ignorePosCheck) 
         speedXZ = (Rand_ZeroFloat(1.5f) + 0.5f) * scale;
         angle = Rand_ZeroFloat(6.28f);
 
-        vel.x = __sinf(angle) * speedXZ;
-        vel.z = __cosf(angle) * speedXZ;
+        vel.x = sinf(angle) * speedXZ;
+        vel.z = cosf(angle) * speedXZ;
         vel.y = (Rand_ZeroFloat(3.0f) + 3.0f) * scale;
 
         pos = this->actor.world.pos;
@@ -2695,8 +2695,8 @@ void func_809036BC(EnFishing* this, GlobalContext* globalCtx) {
         speedXZ = (Rand_ZeroFloat(1.5f) + 0.5f) * scale;
         angle = Rand_ZeroFloat(6.28f);
 
-        vel.x = __sinf(angle) * speedXZ;
-        vel.z = __cosf(angle) * speedXZ;
+        vel.x = sinf(angle) * speedXZ;
+        vel.z = cosf(angle) * speedXZ;
         vel.y = Rand_ZeroFloat(2.0f) + 2.0f;
 
         pos = this->actor.world.pos;
@@ -2945,10 +2945,10 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
 
         this->unk_184 += this->unk_190;
 
-        temp = __cosf(this->unk_184);
+        temp = cosf(this->unk_184);
         this->unk_164 = this->unk_166 + (temp * this->unk_194);
 
-        temp = __cosf(this->unk_184 + -1.2f);
+        temp = cosf(this->unk_184 + -1.2f);
         this->unk_16E = this->unk_166 + (temp * this->unk_194 * 1.6f);
     } else {
         Actor_SetScale(&this->actor, this->unk_1A4 * 65.0f * 0.000001f);
@@ -2959,11 +2959,11 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk_184 += this->unk_190 * 0.8f;
 
         for (i = 0; i < 3; i++) {
-            temp = __cosf(this->unk_184 + (i * 2.1f));
+            temp = cosf(this->unk_184 + (i * 2.1f));
             this->unk_1C4[i] = this->unk_166 + (temp * this->unk_194 * 2.0f);
         }
 
-        temp = __cosf(this->unk_184 + 0.4f);
+        temp = cosf(this->unk_184 + 0.4f);
         this->unk_164 = (this->unk_194 * temp * 2.0f) * 0.6f;
     }
 
@@ -4487,9 +4487,9 @@ void EnFishing_UpdateGroupFishes(GlobalContext* globalCtx) {
         refPos = &player->actor.world.pos;
     }
 
-    basePos[0].x = __sinf(sFishGroupAngle1) * 720.0f;
+    basePos[0].x = sinf(sFishGroupAngle1) * 720.0f;
     basePos[0].y = -35.0f;
-    basePos[0].z = __cosf(sFishGroupAngle1) * 720.0f;
+    basePos[0].z = cosf(sFishGroupAngle1) * 720.0f;
 
     temp1 = refPos->x - basePos[0].x;
     temp2 = refPos->z - basePos[0].z;
@@ -4504,9 +4504,9 @@ void EnFishing_UpdateGroupFishes(GlobalContext* globalCtx) {
         Math_ApproachF(&sFishGroupAngle1, 0.7f, 1.0f, 0.001f);
     }
 
-    basePos[1].x = __sinf(sFishGroupAngle2) * 720.0f;
+    basePos[1].x = sinf(sFishGroupAngle2) * 720.0f;
     basePos[1].y = -35.0f;
-    basePos[1].z = __cosf(sFishGroupAngle2) * 720.0f;
+    basePos[1].z = cosf(sFishGroupAngle2) * 720.0f;
 
     temp1 = refPos->x - basePos[1].x;
     temp2 = refPos->z - basePos[1].z;
@@ -4521,9 +4521,9 @@ void EnFishing_UpdateGroupFishes(GlobalContext* globalCtx) {
         Math_ApproachF(&sFishGroupAngle2, 2.3f, 1.0f, 0.001f);
     }
 
-    basePos[2].x = __sinf(sFishGroupAngle3) * 720.0f;
+    basePos[2].x = sinf(sFishGroupAngle3) * 720.0f;
     basePos[2].y = -35.0f;
-    basePos[2].z = __cosf(sFishGroupAngle3) * 720.0f;
+    basePos[2].z = cosf(sFishGroupAngle3) * 720.0f;
 
     temp1 = refPos->x - basePos[2].x;
     temp2 = refPos->z - basePos[2].z;
@@ -4635,7 +4635,7 @@ void EnFishing_UpdateGroupFishes(GlobalContext* globalCtx) {
                 Math_ApproachF(&fish->unk_34, 1.0f, 1.0f, 0.1f);
                 Math_ApproachF(&fish->unk_38, 0.4f, 1.0f, 0.04f);
                 fish->unk_30 += fish->unk_34;
-                fish->unk_2C = (__cosf(fish->unk_30) * fish->unk_38) + offset;
+                fish->unk_2C = (cosf(fish->unk_30) * fish->unk_38) + offset;
             }
         }
 
@@ -5484,8 +5484,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             speedXZ = Rand_ZeroFloat(1.5f) + 1.5f;
             angle = Rand_ZeroFloat(6.28f);
 
-            vel.x = __sinf(angle) * speedXZ;
-            vel.z = __cosf(angle) * speedXZ;
+            vel.x = sinf(angle) * speedXZ;
+            vel.z = cosf(angle) * speedXZ;
             vel.y = Rand_ZeroFloat(3.0f) + 2.0f;
 
             pos = player->actor.world.pos;

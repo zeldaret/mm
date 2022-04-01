@@ -294,8 +294,8 @@ void func_80BDCDA8(EnZow* this, EnZowStruct* ptr) {
         temp_f22 = Rand_ZeroOne() * 6.28f;
 
         sp78.y = (Rand_ZeroOne() * 3.0f) + 3.0f;
-        sp78.x = __sinf(temp_f22) * temp_f20;
-        sp78.z = __cosf(temp_f22) * temp_f20;
+        sp78.x = sinf(temp_f22) * temp_f20;
+        sp78.z = cosf(temp_f22) * temp_f20;
 
         sp84 = this->actor.world.pos;
         sp84.x += sp78.x * 6.0f;

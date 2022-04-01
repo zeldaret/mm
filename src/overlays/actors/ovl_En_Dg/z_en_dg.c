@@ -189,8 +189,8 @@ void func_8098933C(EnDg* this, Vec3f* arg1) {
         sp20 = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         sp1C = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        __sinf(0.0f);
-        __cosf(0.0f);
+        sinf(0.0f);
+        cosf(0.0f);
         arg1->x = -Math_Acot2F(1.0f, -sp1C * sp20);
         arg1->z = Math_Acot2F(1.0f, -sp24 * sp20);
     }

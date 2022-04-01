@@ -154,11 +154,11 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                     Math_SmoothStepToF(&this->particles[i].scale, 0.1, 0.1f, 0.001f, 0.00001f);
                     Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
                     this->particles[i].posOffset.x +=
-                        __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                        sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
                     this->particles[i].posOffset.y +=
-                        __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                        sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
                     this->particles[i].posOffset.z +=
-                        __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
+                        sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                     switch ((i >> 1) & 3) {
                         case 0:
@@ -205,7 +205,7 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
                                                this->particles[i].LostWoodsSkyFishPosOffsetMax,
                                            0.5f, 2.0f, 0.2f);
                         this->particles[i].LostWoodsSkyFishSpeedXZClock += this->particles[i].LostWoodsSkyFishSpeedXZ;
-                        this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y);
+                        this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y);
                         this->particles[i].speedClock.x += 0.2f * Rand_ZeroOne(); // unused calculation
                         this->particles[i].speedClock.y += this->particles[i].LostWoodsSkyFishSpeedY;
                         this->particles[i].speedClock.z += 0.1f * Rand_ZeroOne(); // unused calculation
@@ -377,9 +377,9 @@ void DemoKakyo_MoonSparklesActionFunc(DemoKankyo* this, GlobalContext* globalCtx
                 Math_SmoothStepToF(&this->particles[i].scale, 0.2f, 0.1f, 0.001f, 0.00001f);
                 Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
 
-                this->particles[i].posOffset.x += __sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
-                this->particles[i].posOffset.y += __sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
-                this->particles[i].posOffset.z += __sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
+                this->particles[i].posOffset.x += sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                this->particles[i].posOffset.z += sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                 switch ((i >> 1) & 3) {
                     case 0:

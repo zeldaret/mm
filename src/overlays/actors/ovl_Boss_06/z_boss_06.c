@@ -467,7 +467,7 @@ void Boss06_Update(Actor* thisx, GlobalContext* globalCtx) {
 
         for (i = 0; i < 1024; i++) {
             temp_f22 =
-                (((__sinf(phi_f24) * this->unk_1D4) + 1.0f) * ((__sinf(phi_f26) * this->unk_1D0) + this->unk_1D0)) +
+                (((sinf(phi_f24) * this->unk_1D4) + 1.0f) * ((sinf(phi_f26) * this->unk_1D0) + this->unk_1D0)) +
                 this->unk_1CC;
 
             phi_f26 += (M_PI / 64);

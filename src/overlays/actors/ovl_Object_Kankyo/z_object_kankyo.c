@@ -268,8 +268,8 @@ void func_808DC454(ObjectKankyo* this, GlobalContext* globalCtx) {
                 phi_f20 = globalCtx->envCtx.windSpeed / 120.0f;
                 phi_f20 = CLAMP(phi_f20, 0.0f, 1.0f);
 
-                this->unk_14C[i].unk_0C += __sinf((this->unk_144 + (i * 100.0f)) * 0.01f) + (spC4 * 10.0f * phi_f20);
-                this->unk_14C[i].unk_14 += __cosf((this->unk_148 + (i * 100.0f)) * 0.01f) + (spBC * 10.0f * phi_f20);
+                this->unk_14C[i].unk_0C += sinf((this->unk_144 + (i * 100.0f)) * 0.01f) + (spC4 * 10.0f * phi_f20);
+                this->unk_14C[i].unk_14 += cosf((this->unk_148 + (i * 100.0f)) * 0.01f) + (spBC * 10.0f * phi_f20);
                 this->unk_14C[i].unk_10 -=
                     this->unk_14C[i].unk_18 - (spC0 * 3.0f * (globalCtx->envCtx.windSpeed / 100.0f));
 
@@ -431,8 +431,8 @@ void func_808DCDB4(ObjectKankyo* this, GlobalContext* globalCtx) {
                 temp_f20 = globalCtx->envCtx.windSpeed / 120.0f;
                 temp_f20 = CLAMP(temp_f20, 0.0f, 1.0f);
 
-                this->unk_14C[i].unk_0C += __sinf((this->unk_144 + i) * 0.01f) + (spA0 * 10.0f * temp_f20);
-                this->unk_14C[i].unk_14 += __cosf((this->unk_148 + i) * 0.01f) + (sp9C * 10.0f * temp_f20);
+                this->unk_14C[i].unk_0C += sinf((this->unk_144 + i) * 0.01f) + (spA0 * 10.0f * temp_f20);
+                this->unk_14C[i].unk_14 += cosf((this->unk_148 + i) * 0.01f) + (sp9C * 10.0f * temp_f20);
 
                 if ((i % 2) == 0) {
                     this->unk_14C[i].unk_10 += this->unk_14C[i].unk_18;

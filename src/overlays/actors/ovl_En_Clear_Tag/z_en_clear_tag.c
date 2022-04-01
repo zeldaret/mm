@@ -478,8 +478,8 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                 if (thisx->params != CLEAR_TAG_POP) {
                     pos.y = this->actor.world.pos.y;
                     for (i = 0; i < 18; i++) {
-                        vel.x = __sinf(i * (33.0f / 40.0f)) * i * .5f;
-                        vel.z = __cosf(i * (33.0f / 40.0f)) * i * .5f;
+                        vel.x = sinf(i * (33.0f / 40.0f)) * i * .5f;
+                        vel.z = cosf(i * (33.0f / 40.0f)) * i * .5f;
                         vel.y = Rand_ZeroFloat(8.0f) + 7.0f;
 
                         vel.x += randPlusMinusPoint5Scaled(0.5f);

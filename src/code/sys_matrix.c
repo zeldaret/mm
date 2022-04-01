@@ -206,8 +206,8 @@ void Matrix_InsertXRotation_f(f32 x, s32 mode) {
         if (x != 0) {
             cmf = sCurrentMatrix;
 
-            sin = __sinf(x);
-            cos = __cosf(x);
+            sin = sinf(x);
+            cos = cosf(x);
 
             temp1 = cmf->yx;
             temp2 = cmf->zx;
@@ -233,8 +233,8 @@ void Matrix_InsertXRotation_f(f32 x, s32 mode) {
         cmf = sCurrentMatrix;
 
         if (x != 0) {
-            sin = __sinf(x);
-            cos = __cosf(x);
+            sin = sinf(x);
+            cos = cosf(x);
         } else {
             sin = zero;
             cos = one;
@@ -318,8 +318,8 @@ void Matrix_SetStateXRotation(f32 x) {
     cmf->ww = 1.0f;
 
     if (x != 0.0f) {
-        sin = __sinf(x);
-        cos = __cosf(x);
+        sin = sinf(x);
+        cos = cosf(x);
 
         cmf->yy = cos;
         cmf->zz = cos;
@@ -412,8 +412,8 @@ void Matrix_InsertYRotation_f(f32 y, s32 mode) {
         if (y != 0.0f) {
             cmf = sCurrentMatrix;
 
-            sin = __sinf(y);
-            cos = __cosf(y);
+            sin = sinf(y);
+            cos = cosf(y);
 
             temp1 = cmf->xx;
             temp2 = cmf->zx;
@@ -439,8 +439,8 @@ void Matrix_InsertYRotation_f(f32 y, s32 mode) {
         cmf = sCurrentMatrix;
 
         if (y != 0.0f) {
-            sin = __sinf(y);
-            cos = __cosf(y);
+            sin = sinf(y);
+            cos = cosf(y);
         } else {
             cos = one;
             sin = zero;
@@ -545,8 +545,8 @@ void Matrix_InsertZRotation_f(f32 z, s32 mode) {
         if (z != 0) {
             cmf = sCurrentMatrix;
 
-            sin = __sinf(z);
-            cos = __cosf(z);
+            sin = sinf(z);
+            cos = cosf(z);
 
             temp1 = cmf->xx;
             temp2 = cmf->yx;
@@ -572,8 +572,8 @@ void Matrix_InsertZRotation_f(f32 z, s32 mode) {
         cmf = sCurrentMatrix;
 
         if (z != 0) {
-            sin = __sinf(z);
-            cos = __cosf(z);
+            sin = sinf(z);
+            cos = cosf(z);
         } else {
             sin = 0.0f;
             cos = 1.0f;
@@ -1224,8 +1224,8 @@ void Matrix_InsertRotationAroundUnitVector_f(f32 angle, Vec3f* axis, s32 mode) {
         if (angle != 0) {
             cmf = sCurrentMatrix;
 
-            sin = __sinf(angle);
-            cos = __cosf(angle);
+            sin = sinf(angle);
+            cos = cosf(angle);
 
             temp2 = cmf->yx;
             temp3 = cmf->zx;
@@ -1255,8 +1255,8 @@ void Matrix_InsertRotationAroundUnitVector_f(f32 angle, Vec3f* axis, s32 mode) {
         cmf = sCurrentMatrix;
 
         if (angle != 0) {
-            sin = __sinf(angle);
-            cos = __cosf(angle);
+            sin = sinf(angle);
+            cos = cosf(angle);
             rCos = 1.0f - cos;
 
             cmf->xx = axis->x * axis->x * rCos + cos;

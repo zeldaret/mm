@@ -16,8 +16,8 @@ void guRotateF(float m[4][4], float a, float x, float y, float z) {
 
     a = a * D_80097F90;
 
-    sine = __sinf(a);
-    cosine = __cosf(a);
+    sine = sinf(a);
+    cosine = cosf(a);
 
     ab = x * y * (1 - cosine);
     bc = y * z * (1 - cosine);
