@@ -678,7 +678,7 @@ void func_80B68310(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
             if (this->unk_29C & 1) {
                 if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_29F)) {
-                    Matrix_StatePush();
+                    Matrix_Push();
                     Matrix_InsertZRotation_s(0x3A98, MTXMODE_APPLY);
                     Matrix_InsertTranslation(0.0f, 190.0f, 0.0f, MTXMODE_APPLY);
 
@@ -687,7 +687,7 @@ void func_80B68310(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
                     gSPSegment(POLY_OPA_DISP++, 0x0A, globalCtx->objectCtx.status[this->unk_29F].segment);
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_truth_DL_0001A0);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
             }
 

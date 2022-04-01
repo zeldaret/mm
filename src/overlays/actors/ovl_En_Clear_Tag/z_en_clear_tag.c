@@ -828,7 +828,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, (s8)effect->primColor.a);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)effect->primColor.a);
                 func_800C0094(this->actor.floorPoly, effect->position.x, effect->position.y, effect->position.z, &mtxF);
-                Matrix_SetCurrentState(&mtxF);
+                Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale, 1.0f, effect->scale, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_030100);
@@ -853,7 +853,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)(effect->primColor.a * 0.7f));
                 func_800C0094(this->actor.floorPoly, effect->position.x, this->actor.floorHeight, effect->position.z,
                               &mtxF);
-                Matrix_SetCurrentState(&mtxF);
+                Matrix_Put(&mtxF);
                 Matrix_Scale(effect->scale * 3.0f, 1.0f, effect->scale * 3.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectGroundDL);

@@ -366,7 +366,7 @@ void func_80AD0340(EnFuKago* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(D_80AD061C); i++, ptr++) {
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &this->dyna.actor.shape.rot);
         Matrix_InsertTranslation(ptr->unk_24.x, ptr->unk_24.y, ptr->unk_24.z, MTXMODE_APPLY);
         Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
@@ -376,7 +376,7 @@ void func_80AD0340(EnFuKago* this, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, D_80AD061C[i]);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

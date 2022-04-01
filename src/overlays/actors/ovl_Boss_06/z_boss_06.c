@@ -608,7 +608,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
             for (i = 0; i < ARRAY_COUNT(D_809F4370); i++) {
                 if ((fabsf(D_809F4370[i].x - 32.0f) < 30.0f) && (fabsf(D_809F4370[i].y - 32.0f) < 30.0f)) {
-                    Matrix_StatePush();
+                    Matrix_Push();
 
                     gSPSegment(POLY_XLU_DISP++, 0x08,
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
@@ -628,7 +628,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                     gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
             }
         } else {

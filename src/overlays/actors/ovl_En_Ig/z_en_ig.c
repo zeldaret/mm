@@ -961,7 +961,7 @@ void EnIg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == 10) {
-        Matrix_CopyCurrentState(&this->unk_190);
+        Matrix_Get(&this->unk_190);
     }
 }
 
@@ -985,13 +985,13 @@ void EnIg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
     if (limbIndex == 9) {
         func_8013AD9C(this->unk_3E8 + 0x4000, this->unk_3EA + this->actor.shape.rot.y + 0x4000, &this->unk_2D4,
                       &this->unk_2E6, phi_v0, phi_v1);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_2D4.x, this->unk_2D4.y, this->unk_2D4.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_2E6.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_2E6.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_2E6.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 
@@ -1015,7 +1015,7 @@ void EnIg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         POLY_OPA_DISP = SubS_DrawTransformFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                                this->skelAnime.dListCount, EnIg_OverrideLimbDraw, EnIg_PostLimbDraw,
                                                EnIg_TransformLimbDraw, &this->actor, POLY_OPA_DISP);
-        Matrix_SetCurrentState(&this->unk_190);
+        Matrix_Put(&this->unk_190);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dai_DL_00C538);

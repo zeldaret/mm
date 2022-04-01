@@ -134,7 +134,7 @@ void func_80A4984C(EnWizFire* this, GlobalContext* globalCtx) {
     }
 
     this->unk_16E = 0;
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_RotateY(this->actor.world.rot.y, MTXMODE_NEW);
     Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
 
@@ -145,7 +145,7 @@ void func_80A4984C(EnWizFire* this, GlobalContext* globalCtx) {
     }
 
     Matrix_MultiplyVector3fByState(&sp44, &this->actor.velocity);
-    Matrix_StatePop();
+    Matrix_Pop();
     this->actor.world.rot.x = this->actor.world.rot.y = this->actor.world.rot.z = 0;
     this->unk_168 = 50;
     if (this->unk_162 != 0) {
@@ -202,11 +202,11 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
         if (this->unk_162 == 1) {
             this->unk_16A = 10;
 
-            Matrix_StatePush();
+            Matrix_Push();
             Matrix_RotateY((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
             sp54.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
             Matrix_MultiplyVector3fByState(&sp54, &this->actor.velocity);
-            Matrix_StatePop();
+            Matrix_Pop();
 
             this->actor.velocity.y = 6.0f;
             this->actor.gravity = -0.7f;
@@ -664,7 +664,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
     if ((this->unk_162 == 0) && (this->unk_160 == 2)) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
@@ -678,8 +678,8 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 245, 255, 128);
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003120);
 
-        Matrix_StatePop();
-        Matrix_StatePush();
+        Matrix_Pop();
+        Matrix_Push();
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -698,7 +698,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
 
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -728,7 +728,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = 9; i >= this->unk_16E; i--) {
         f32 temp_f20 = this->actor.scale.x - (i * -0.0019f);
@@ -754,7 +754,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 

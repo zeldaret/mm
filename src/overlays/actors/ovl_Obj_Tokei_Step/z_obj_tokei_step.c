@@ -52,7 +52,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
-    MtxF* mtx = Matrix_GetCurrentState();
+    MtxF* mtx = Matrix_GetCurrent();
 
     mtx->wx = panel->pos.x;
     mtx->wy = panel->pos.y;

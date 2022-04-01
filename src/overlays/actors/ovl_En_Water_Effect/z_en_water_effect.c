@@ -617,9 +617,9 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
     gDPSetEnvColor(POLY_XLU_DISP++, 165, 235, 255, 128);
 
-    Matrix_StatePush();
-    Matrix_StatePush();
-    Matrix_StatePush();
+    Matrix_Push();
+    Matrix_Push();
+    Matrix_Push();
 
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_778)) {
         if (this->unk_E2C > 1.0f) {
@@ -633,7 +633,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000420);
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         if (this->unk_E30 > 1.0f) {
             func_8012C2DC(globalCtx->state.gfxCtx);
@@ -645,10 +645,10 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)this->unk_E30);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000730);
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     } else {
-        Matrix_StatePop();
-        Matrix_StatePop();
+        Matrix_Pop();
+        Matrix_Pop();
     }
 
     if ((this->unk_E34 > 1.0f) && (this->actor.params != ENWATEREFFECT_780)) {
@@ -661,7 +661,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_000A48);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if ((this->actor.params == ENWATEREFFECT_777) || (this->actor.params == ENWATEREFFECT_780)) {
         func_8012C2DC(globalCtx->state.gfxCtx);

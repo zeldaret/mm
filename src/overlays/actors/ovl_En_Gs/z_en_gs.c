@@ -1070,7 +1070,7 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     frames = globalCtx->gameplayFrames;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_StatePush();
+    Matrix_Push();
 
     if (this->unk_19A & 1) {
         Matrix_RotateY(this->unk_19E[0].y, MTXMODE_APPLY);
@@ -1088,7 +1088,7 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_0009D0);
     gSPDisplayList(POLY_OPA_DISP++, object_gs_DL_000A60);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_19A & 2) {
         func_8012C2DC(globalCtx->state.gfxCtx);

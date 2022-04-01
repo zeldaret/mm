@@ -361,10 +361,10 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
         sp34 = D_80964B24;
     }
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&sp34, &this->actor.focus.pos);
-    Matrix_StatePop();
+    Matrix_Pop();
     this->actor.focus.pos.x += this->actor.world.pos.x;
     this->actor.focus.pos.y += this->actor.world.pos.y;
     this->actor.focus.pos.z += this->actor.world.pos.z;
@@ -1379,9 +1379,9 @@ void EnFu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFu* this = THIS;
 
-    Matrix_StatePush();
+    Matrix_Push();
     func_80964950(globalCtx, this->unk_2D8, ARRAY_COUNT(this->unk_2D8));
-    Matrix_StatePop();
+    Matrix_Pop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1432,11 +1432,11 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             ptr->unk_08.y += ptr->unk_20.y;
             ptr->unk_08.x += 2.0f * Math_SinS(ptr->unk_2C);
             ptr->unk_08.z += 2.0f * Math_CosS(ptr->unk_2C);
-            Matrix_StatePush();
+            Matrix_Push();
             Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
             Matrix_RotateY(yaw, MTXMODE_APPLY);
             Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
-            Matrix_StatePop();
+            Matrix_Pop();
             ptr->unk_2C += 6000;
         }
     }

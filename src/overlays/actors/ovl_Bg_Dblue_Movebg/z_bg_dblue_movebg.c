@@ -770,7 +770,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Gfx* gfx;
     Gfx* gfx2;
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -808,7 +808,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         }
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
@@ -834,7 +834,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                              (s32)(((globalCtx->gameplayFrames % 128) * -9.0f) / this->unk_1F8[j][i]),
                                              0x20, 0x20, 1, 0, 0, 0x20, 0x20));
                     }
-                    Matrix_StatePush();
+                    Matrix_Push();
                     Matrix_InsertXRotation_s(i * 0x2000, MTXMODE_APPLY);
                     Matrix_InsertTranslation(1785.0f, 0.0f, 270.0f, MTXMODE_APPLY);
                     if (j != 0) {
@@ -849,7 +849,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                     gDPSetEnvColor(gfx++, 255, 255, 255, this->unk_1D8[j][i]);
                     gSPDisplayList(gfx++, object_dblue_object_DL_00CD10);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
             }
         }

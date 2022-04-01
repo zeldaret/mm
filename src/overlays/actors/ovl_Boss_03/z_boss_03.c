@@ -2259,7 +2259,7 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
         D_809E91B4.x = this->unk_2C4 + 300.0f;
         Matrix_MultiplyVector3fByState(&D_809E91B4, &this->insideJawPos);
-        Matrix_CopyCurrentState(&mf);
+        Matrix_Get(&mf);
         func_8018219C(&mf, &this->unk_2A2, 0);
     }
 }

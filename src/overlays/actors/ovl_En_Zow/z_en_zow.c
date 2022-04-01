@@ -619,13 +619,13 @@ void EnZow_Draw(Actor* thisx, GlobalContext* globalCtx) {
     };
     EnZow* this = THIS;
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     func_80BDC830(this->unk_2D0, globalCtx);
     func_80BDC9DC(this->unk_2D0, globalCtx);
     func_80BDCB84(this->unk_2D0, globalCtx);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_2CE != 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);

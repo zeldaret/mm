@@ -230,7 +230,7 @@ BgHakuginPostUnkStruct1* func_80A9B32C(BgHakuginPostUnkStruct* unkStruct, BgHaku
 }
 
 void func_80A9B384(Vec3f* arg0) {
-    MtxF* matrix = Matrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrent();
 
     matrix->mf[3][0] = arg0->x;
     matrix->mf[3][1] = arg0->y;

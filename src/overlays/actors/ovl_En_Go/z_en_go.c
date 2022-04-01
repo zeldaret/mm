@@ -253,7 +253,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
                 flag = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
             temp = ((f32)ptr->unk_02 / ptr->unk_01);
             temp *= 255;
@@ -271,7 +271,7 @@ void func_80A11144(EnGoStruct ptr[], GlobalContext* globalCtx) {
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_003258);
 
-            Matrix_StatePop();
+            Matrix_Pop();
             if (globalCtx->state.gfxCtx) {}
         }
     }
@@ -328,7 +328,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
                 gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014CF0);
                 flag = true;
             }
-            Matrix_StatePush();
+            Matrix_Push();
 
             temp = (f32)ptr->unk_02 / ptr->unk_01;
 
@@ -346,7 +346,7 @@ void func_80A115B4(EnGoStruct ptr[], GlobalContext* globalCtx) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A16644[(s32)(temp * 7.0f)]));
             gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
         if (globalCtx->state.gfxCtx) {}
     }
@@ -464,7 +464,7 @@ void func_80A11EC0(EnGoStruct ptr[], GlobalContext* globalCtx, Gfx arg2[], Gfx a
                 flag = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
             Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_Scale(0.08f, 0.08f, 0.08f, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(ptr->unk_0A.z, MTXMODE_APPLY);
@@ -477,7 +477,7 @@ void func_80A11EC0(EnGoStruct ptr[], GlobalContext* globalCtx, Gfx arg2[], Gfx a
                 gSPDisplayList(POLY_OPA_DISP++, arg3);
             }
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
@@ -1065,7 +1065,7 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
     u32 frames2;
 
     if (this->unk_390 & 0x400) {
-        Matrix_StatePush();
+        Matrix_Push();
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
@@ -1086,7 +1086,7 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 
@@ -2034,25 +2034,25 @@ void EnGo_TransfromLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
             func_8013AD9C(this->unk_3B0 + this->unk_3B4 + 0x4000,
                           this->unk_3B2 + this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_290,
                           &this->unk_2A8, phi_v1, phi_v0);
-            Matrix_StatePop();
+            Matrix_Pop();
             Matrix_InsertTranslation(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_2A8.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_2A8.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(this->unk_2A8.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_Push();
             break;
 
         case 10:
             func_8013AD9C(this->unk_3B4 + 0x4000, this->unk_3B6 + this->actor.shape.rot.y + 0x4000, &this->unk_29C,
                           &this->unk_2AE, phi_v1, phi_v0);
-            Matrix_StatePop();
+            Matrix_Pop();
             Matrix_InsertTranslation(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_2AE.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_2AE.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(this->unk_2AE.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_Push();
             break;
     }
 }

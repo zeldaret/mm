@@ -1698,7 +1698,7 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
     MtxF currentState;
 
     Matrix_MultiplyVector3fByState(&zeroVec, &newPos);
-    Matrix_CopyCurrentState(&currentState);
+    Matrix_Get(&currentState);
     func_8018219C(&currentState, &newRot, MTXMODE_NEW);
     *pos = newPos;
     if (isFullyAwake) {

@@ -564,7 +564,7 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_CopyCurrentState(&sp24);
+    Matrix_Get(&sp24);
     func_8018219C(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
 }
 
@@ -1586,7 +1586,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, ptr->unk_2C);
 
                 func_800C0094(ptr->unk_28, ptr->unk_00.x, ptr->unk_18, ptr->unk_00.z, &sp88);
-                Matrix_SetCurrentState(&sp88);
+                Matrix_Put(&sp88);
                 Matrix_Scale(this->actor.scale.x * 7.5f, 1.0f, this->actor.scale.z * 7.5f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

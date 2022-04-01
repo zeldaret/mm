@@ -421,13 +421,13 @@ void EnShn_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
     if (limbIndex == OBJECT_SHN_LIMB_HEAD) {
         func_8013AD9C((this->unk_2BA + 0x4000), (this->unk_2BC + this->actor.shape.rot.y + 0x4000), &this->unk_1E8,
                       &this->unk_1F4, phi_v0, phi_v1);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_1E8.x, this->unk_1E8.y, this->unk_1E8.z, 0);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
         Matrix_RotateY(this->unk_1F4.y, 1);
         Matrix_InsertXRotation_s(this->unk_1F4.x, 1);
         Matrix_InsertZRotation_s(this->unk_1F4.z, 1);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 

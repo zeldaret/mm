@@ -682,7 +682,7 @@ void func_80B32F04(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp4C;
     s32 pad2;
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     sp4C = GET_ACTIVE_CAM(globalCtx)->eye;
 
@@ -716,7 +716,7 @@ void func_80B32F04(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_XLU_DISP = gfx;
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -726,7 +726,7 @@ void func_80B331C8(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     Matrix_Scale(this->unk_1E0, this->unk_1E0, this->unk_1E0, MTXMODE_APPLY);
 
@@ -745,7 +745,7 @@ void func_80B331C8(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, object_zoraegg_DL_005250);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     func_80B32F04(thisx, globalCtx);
 
@@ -773,7 +773,7 @@ s32 EnZoraegg_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 }
 
 void func_80B333DC(GlobalContext* globalCtx, Gfx** dList, f32 arg2) {
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_Scale(arg2, arg2, arg2, MTXMODE_APPLY);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -781,7 +781,7 @@ void func_80B333DC(GlobalContext* globalCtx, Gfx** dList, f32 arg2) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, *dList);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -796,7 +796,7 @@ void EnZoraegg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
             switch (limbIndex) {
                 case 2:
                     temp_f20 = this->unk_1EE * 0.01f;
-                    Matrix_StatePush();
+                    Matrix_Push();
                     Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
                     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -809,7 +809,7 @@ void EnZoraegg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
                     break;
 
                 case 4:
-                    Matrix_StatePop();
+                    Matrix_Pop();
                     break;
 
                 case 5:
@@ -824,7 +824,7 @@ void EnZoraegg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
             switch (limbIndex) {
                 case 2:
                     temp_f20 = (this->unk_1EE * 0.005f) + 0.5f;
-                    Matrix_StatePush();
+                    Matrix_Push();
                     Matrix_Scale(1.0f, temp_f20, temp_f20, MTXMODE_APPLY);
 
                     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -849,7 +849,7 @@ void EnZoraegg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
                     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                     break;
 
                 case 5:

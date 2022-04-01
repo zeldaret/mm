@@ -1454,7 +1454,7 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if ((limbIndex == 16) && (this->actionFunc == func_8089B580)) {
         if ((this->skelAnime.curFrame > 38.0f) && (this->skelAnime.curFrame <= 55.0f) &&
             (this->unk_292 != this->unk_290)) {
-            sp48 = Matrix_GetCurrentState();
+            sp48 = Matrix_GetCurrent();
             sp58 = 48 - (s32)this->skelAnime.curFrame;
             sp58 = CLAMP_MIN(sp58, 0);
             Matrix_MultiplyVector3fByState(&D_8089E3A4, &sp4C);

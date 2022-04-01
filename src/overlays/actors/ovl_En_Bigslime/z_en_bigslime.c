@@ -2874,7 +2874,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* shadowDL
                              s16 rotation, f32 alpha) {
     f32 yDistMinY;
     f32 xz;
-    MtxF* sysMatrix = Matrix_GetCurrentState();
+    MtxF* sysMatrix = Matrix_GetCurrent();
 
     yDistMinY = pos->y - scaleY - GBT_ROOM_5_MIN_Y;
     yDistMinY = CLAMP((yDistMinY), 0.0f, (GBT_ROOM_5_CENTER_Y - GBT_ROOM_5_MIN_Y) / 2);
@@ -2999,9 +2999,9 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
 
     // Draw bubbles inside Bigslime
     if (this->actor.scale.x > 0.0f) {
-        Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+        Matrix_Put(&globalCtx->billboardMtxF);
         Matrix_Scale(0.0050000003f, 0.0050000003f, 0.0050000003f, MTXMODE_APPLY);
-        billboardMtxF = Matrix_GetCurrentState();
+        billboardMtxF = Matrix_GetCurrent();
 
         for (i = 0; i < 28; i++) {
             bubblesInfoPtr = &bubblesInfo[i];

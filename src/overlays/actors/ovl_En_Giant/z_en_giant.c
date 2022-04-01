@@ -485,7 +485,7 @@ void EnGiant_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnGiant* this = THIS;
 
     if (limbIndex == GIANT_LIMB_HEAD) {
-        Matrix_CopyCurrentState(&this->headDrawMtxF);
+        Matrix_Get(&this->headDrawMtxF);
     }
 }
 

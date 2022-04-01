@@ -598,15 +598,15 @@ void func_809ED50C(Boss04* this) {
     Matrix_Scale(this->actor.scale.x * 13.0f, this->actor.scale.y * 13.0f, this->actor.scale.z * 16.0f, MTXMODE_APPLY);
     Matrix_RotateY(this->unk_2DC, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(this->unk_2DE, MTXMODE_APPLY);
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2E4); i++) {
         Matrix_RotateStateAroundXAxis(0.3926991f);
         Matrix_GetStateTranslationAndScaledZ(100.0f, &this->unk_2E4[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
+    Matrix_Pop();
+    Matrix_Push();
     Matrix_InsertTranslation(38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3A4); i++) {
@@ -614,8 +614,8 @@ void func_809ED50C(Boss04* this) {
         Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_3A4[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
+    Matrix_Pop();
+    Matrix_Push();
     Matrix_InsertTranslation(-38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_458); i++) {
@@ -623,8 +623,8 @@ void func_809ED50C(Boss04* this) {
         Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_458[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
+    Matrix_Pop();
+    Matrix_Push();
     Matrix_InsertTranslation(71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_50C); i++) {
@@ -632,8 +632,8 @@ void func_809ED50C(Boss04* this) {
         Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_50C[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
+    Matrix_Pop();
+    Matrix_Push();
     Matrix_InsertTranslation(-71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_590); i++) {
@@ -641,8 +641,8 @@ void func_809ED50C(Boss04* this) {
         Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_590[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
+    Matrix_Pop();
+    Matrix_Push();
     Matrix_InsertTranslation(92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_614); i++) {
@@ -650,8 +650,8 @@ void func_809ED50C(Boss04* this) {
         Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_614[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
+    Matrix_Pop();
+    Matrix_Push();
     Matrix_InsertTranslation(-92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_65C); i++) {
@@ -659,12 +659,12 @@ void func_809ED50C(Boss04* this) {
         Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_65C[i]);
     }
 
-    Matrix_StatePop();
-    Matrix_StatePush();
+    Matrix_Pop();
+    Matrix_Push();
     Matrix_InsertTranslation(100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     Matrix_GetStateTranslation(&this->unk_6A4);
-    Matrix_StatePop();
+    Matrix_Pop();
     Matrix_InsertTranslation(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     Matrix_GetStateTranslation(&this->unk_6B0);
 }

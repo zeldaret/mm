@@ -159,7 +159,7 @@ void Title_Init(GameState* thisx) {
     DmaMgr_SendRequest0(this->staticSegment, (uintptr_t)_nintendo_rogo_staticSegmentRomStart, segmentSize);
 
     Game_SetFramerateDivisor(thisx, 1);
-    Matrix_StateAlloc(thisx);
+    Matrix_Init(thisx);
     ShrinkWindow_Init();
     View_Init(&this->view, thisx->gfxCtx);
 

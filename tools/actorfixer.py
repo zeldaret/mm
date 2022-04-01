@@ -10,6 +10,7 @@ animdict = {
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
     "atan_flip": "Math_Acot2F",
     "atans": "Math_Atan2S",
+    
     "SysMatrix_StateAlloc": "Matrix_StateAlloc",
     "SysMatrix_StatePush": "Matrix_StatePush",
     "SysMatrix_CopyCurrentState": "Matrix_CopyCurrentState",
@@ -46,6 +47,14 @@ animdict = {
     "SysMatrix_InsertRotationAroundUnitVector_f": "Matrix_InsertRotationAroundUnitVector_f",
     "SysMatrix_InsertRotationAroundUnitVector_s": "Matrix_InsertRotationAroundUnitVector_s",
     "SysMatrix_GetStateAsRSPMatrix": "Matrix_GetStateAsRSPMatrix",
+
+    "Matrix_StateAlloc":       "Matrix_Init",
+    "Matrix_StatePush":        "Matrix_Push",
+    "Matrix_StatePop":         "Matrix_Pop",
+    "Matrix_CopyCurrentState": "Matrix_Get",
+    "Matrix_SetCurrentState":  "Matrix_Put",
+    "Matrix_GetCurrentState":  "Matrix_GetCurrent",
+
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",

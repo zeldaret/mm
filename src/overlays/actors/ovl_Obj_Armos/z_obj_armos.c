@@ -374,7 +374,7 @@ void func_809A5A3C(ObjArmos* this, GlobalContext* globalCtx) {
 
         func_800C0094(this->dyna.actor.floorPoly, this->unk_250.x, this->dyna.actor.floorHeight, this->unk_250.z,
                       &sp48);
-        Matrix_SetCurrentState(&sp48);
+        Matrix_Put(&sp48);
         Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

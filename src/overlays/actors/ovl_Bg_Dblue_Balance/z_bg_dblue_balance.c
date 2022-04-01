@@ -220,11 +220,11 @@ void func_80B8264C(BgDblueBalance* this) {
          i++, phi_s2 += 0x2000, phi_s0++) {
         phi_s0->unk_0C = this->dyna.actor.shape.rot.x + phi_s2;
 
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_InsertXRotation_s(phi_s0->unk_0C, MTXMODE_NEW);
         Matrix_InsertTranslation(-545.0f, 0.0f, 270.0f, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&sp78);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_MultiplyVector3fByState(&sp78, &phi_s0->unk_00);
 
         temp_f0 = (sp78.z - 135.0f);
@@ -486,10 +486,10 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
             if (this->unk_182) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp5C = this->unk_15C;
-                Matrix_StatePush();
+                Matrix_Push();
                 Matrix_RotateY(BINANG_SUB(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
                 Matrix_GetStateTranslationAndScaledZ(45.0f, &sp60);
-                Matrix_StatePop();
+                Matrix_Pop();
 
                 sp50.x = sp5C->dyna.actor.world.pos.x + sp60.x;
                 sp50.y = this->unk_228;
@@ -511,10 +511,10 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
             if (this->unk_182) {
                 Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp3C = this->unk_160;
-                Matrix_StatePush();
+                Matrix_Push();
                 Matrix_RotateY(BINANG_ADD(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
                 Matrix_GetStateTranslationAndScaledZ(30.0f, &sp40);
-                Matrix_StatePop();
+                Matrix_Pop();
 
                 sp30.x = sp3C->dyna.actor.world.pos.x + sp40.x;
                 sp30.y = this->unk_228;

@@ -399,11 +399,11 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
         Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
-        Matrix_StatePop();
+        Matrix_Pop();
         if (this->unk3F0 == 0) {
             EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
@@ -431,11 +431,11 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.x += Math_SinS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
         Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
-        Matrix_StatePop();
+        Matrix_Pop();
         if (this->unk3F0 == 0) {
             EffectSsSolderSrchBall_Spawn(globalCtx, &effectPos, &effectVel, &gZeroVec3f, 50, &this->unk3F0, 1);
         }
@@ -1494,7 +1494,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     if (((this->flags1 & 8) && (this->flags1 & 0x10)) || ((this->flags1 & 2) && !(this->flags1 & 0x20)) ||
         ((this->flags1 & 4) && !(this->flags1 & 0x20))) {
         if (limbIndex == 8) {
-            curState = Matrix_GetCurrentState();
+            curState = Matrix_GetCurrent();
             Matrix_MultiplyVector3fByState(&D_80BAE95C, &this->unk3F8);
             if (this->actor.child == NULL) {
                 if (this->flags1 & 0x100) {

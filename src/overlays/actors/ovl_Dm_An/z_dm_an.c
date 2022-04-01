@@ -280,7 +280,7 @@ void func_80C1CD80(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if ((limbIndex == OBJECT_AN1_LIMB_05) && (this->unk_2D4 != 0)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_JointPosition(&D_80C1D2C8, &D_80C1D2D4);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -288,7 +288,7 @@ void func_80C1CD80(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         gSPDisplayList(POLY_OPA_DISP++, gMoonMaskDL);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[sp2B].segment);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -320,23 +320,23 @@ void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         func_8013AD9C(this->unk_2BE + this->unk_2C2 + 0x4000,
                       this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C, &this->unk_1A4,
                       phi_v1, phi_v0);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_1A4.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_1A4.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_1A4.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     } else if (limbIndex == OBJECT_AN1_LIMB_02) {
         func_8013AD9C(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
                       &this->unk_1AA, phi_v1, phi_v0);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_1AA.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_1AA.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_1AA.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 

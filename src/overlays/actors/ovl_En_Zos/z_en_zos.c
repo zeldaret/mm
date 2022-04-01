@@ -718,7 +718,7 @@ void EnZos_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(&gfx[0], 0x08, Lib_SegmentedToVirtual(D_80BBC75C[this->unk_2AC]));
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_RotateY(this->actor.home.rot.y - this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_InsertTranslation(0.0f, 0.0f, -974.4f, MTXMODE_APPLY);
 
@@ -728,7 +728,7 @@ void EnZos_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     POLY_OPA_DISP = &gfx[4];
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           func_80BBC4E4, func_80BBC500, &this->actor);

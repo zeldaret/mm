@@ -439,7 +439,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
     s32 pad;
     Vec3f sp84;
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < 20; i++, phi_s2 += 0x4000) {
@@ -471,7 +471,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
 
     this->unk_4B0 = 0;
     this->unk_4B2 = 100;
-    Matrix_StatePop();
+    Matrix_Pop();
     this->actionFunc = func_80A55064;
 }
 
@@ -534,7 +534,7 @@ void func_80A55310(ObjHugebombiwa* this) {
     s16 phi_s2;
     Vec3f sp84;
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < ARRAY_COUNT(this->unk_190); i++, phi_s2 += 0x4000) {
@@ -567,7 +567,7 @@ void func_80A55310(ObjHugebombiwa* this) {
 
     this->unk_4B0 = 0;
     this->unk_4B2 = 100;
-    Matrix_StatePop();
+    Matrix_Pop();
     this->actionFunc = func_80A55564;
 }
 

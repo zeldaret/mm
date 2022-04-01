@@ -27,49 +27,61 @@ MtxF* sCurrentMatrix; // "Matrix_now"
 
 /* Stack operations */
 
-// Matrix_Init
-/* Create the matrix stack and set the pointer to the top of it */
-void Matrix_StateAlloc(GameState* gameState) {
+/**
+ * @brief Create the matrix stack and set the pointer to the top of it.
+ */
+void Matrix_Init(GameState* gameState) {
     sMatrixStack = THA_AllocEndAlign16(&gameState->heap, MATRIX_STACK_SIZE * sizeof(MtxF));
     sCurrentMatrix = sMatrixStack;
 }
 
-// Matrix_Push
-/* Place a new matrix on the top of the stack */
-void Matrix_StatePush(void) {
+/**
+ * @brief Place a new matrix on the top of the stack and move the stack pointer up.
+ */
+void Matrix_Push(void) {
     MtxF* prev = sCurrentMatrix;
 
     sCurrentMatrix++;
     Matrix_MtxFCopy(sCurrentMatrix, prev);
 }
 
-// Matrix_Pop
-/* Discard the top matrix on the stack */
-void Matrix_StatePop(void) {
+/**
+ * @brief Discard the top matrix on the stack and move stack pointer to the next one down.
+ */
+void Matrix_Pop(void) {
     sCurrentMatrix--;
 }
 
-// Matrix_Get
-/* Read and copy the top matrix from the stack */
-void Matrix_CopyCurrentState(MtxF* matrix) {
-    Matrix_MtxFCopy(matrix, sCurrentMatrix);
+/**
+ * @brief Copy the top matrix from the stack.
+ * 
+ * @param[out] dest Matrix into which to copy.
+ */
+void Matrix_Get(MtxF* dest) {
+    Matrix_MtxFCopy(dest, sCurrentMatrix);
 }
 
-// Matrix_Put
-/* Write a matrix to the top of the stack */
-void Matrix_SetCurrentState(MtxF* matrix) {
-    Matrix_MtxFCopy(sCurrentMatrix, matrix);
+/**
+ * @brief Overwrite the top matrix on the stack.
+ * 
+ * @param[in] src Matrix from which to copy.
+ */
+void Matrix_Put(MtxF* src) {
+    Matrix_MtxFCopy(sCurrentMatrix, src);
 }
 
-// Matrix_GetCurrent
-/* Return pointer to top of the matrix stack */
-MtxF* Matrix_GetCurrentState(void) {
+/**
+ * @brief Return pointer to the top of the matrix stack.
+ * 
+ * @return MtxF* pointer to top matrix on the stack.
+ */
+MtxF* Matrix_GetCurrent(void) {
     return sCurrentMatrix;
 }
 
 // Matrix_Mult
 void Matrix_InsertMatrix(MtxF* mf, s32 mode) {
-    MtxF* cmf = Matrix_GetCurrentState();
+    MtxF* cmf = Matrix_GetCurrent();
 
     if (mode == MTXMODE_APPLY) {
         SkinMatrix_MtxFMtxFMult(cmf, mf, cmf);
@@ -124,7 +136,6 @@ void Matrix_Scale(f32 x, f32 y, f32 z, s32 mode) {
 }
 
 // Matrix_RotateXS
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertXRotation_s.s")
 void Matrix_InsertXRotation_s(s16 x, s32 mode) {
     MtxF* cmf;
     f32 sin;
@@ -189,8 +200,8 @@ void Matrix_InsertXRotation_s(s16 x, s32 mode) {
     }
 }
 
+// Unused
 // Matrix_RotateX
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertXRotation_f.s")
 void Matrix_InsertXRotation_f(f32 x, s32 mode) {
     MtxF* cmf;
     f32 sin;
@@ -464,7 +475,6 @@ void Matrix_InsertYRotation_f(f32 y, s32 mode) {
 }
 
 // Matrix_RotateZS
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertZRotation_s.s")
 void Matrix_InsertZRotation_s(s16 z, s32 mode) {
     MtxF* cmf;
     f32 sin;
@@ -597,7 +607,6 @@ void Matrix_InsertZRotation_f(f32 z, s32 mode) {
 }
 
 // Matrix_RotateZYX
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_InsertRotation.s")
 void Matrix_InsertRotation(s16 x, s16 y, s16 z, s32 mode) {
     MtxF* cmf = sCurrentMatrix;
     f32 temp1;
@@ -686,7 +695,6 @@ void Matrix_InsertRotation(s16 x, s16 y, s16 z, s32 mode) {
 }
 
 // Matrix_TranslateRotateZYX
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_JointPosition.s")
 void Matrix_JointPosition(Vec3f* translation, Vec3s* rotation) {
     MtxF* cmf = sCurrentMatrix;
     f32 sin = Math_SinS(rotation->z);
@@ -829,7 +837,6 @@ void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* vec) {
 }
 
 // Matrix_MtxFToMtx
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_ToRSPMatrix.s")
 Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest) {
     s32 temp;
     u16* mInt = (u16*)&dest->m[0][0];
@@ -910,13 +917,13 @@ Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx) {
     return Matrix_ToMtx(GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 
+// Unused
 // Matrix_MtxFToNewMtx
 Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
     return Matrix_ToRSPMatrix(src, GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 
 // Matrix_MultVec3f
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_matrix/Matrix_MultiplyVector3fByState.s")
 void Matrix_MultiplyVector3fByState(Vec3f* src, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
@@ -1018,10 +1025,10 @@ void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
 
 // Matrix_MtxToMtxF
 /**
- * @brief Converts fixed-point
+ * @brief Converts fixed-point RSP-compatible matrix to an MtxF.
  *
- * @param src
- * @param dest
+ * @param[in] src mtx to convert
+ * @param[out] dest MtxF to output to
  */
 void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
     u16* mInt = (u16*)&src->m[0][0];
@@ -1045,6 +1052,7 @@ void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
     dest->ww = ((mInt[15] << 0x10) | mFrac[15]) * (1 / (f32)0x10000);
 }
 
+// Unused
 // Matrix_MultVec3fExt
 void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dest, MtxF* mf) {
     dest->x = mf->wx + (mf->xx * src->x + mf->yx * src->y + mf->zx * src->z);

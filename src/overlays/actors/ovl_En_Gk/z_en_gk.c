@@ -404,7 +404,7 @@ s32 func_80B50ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     MtxF sp28;
 
     Matrix_MultiplyVector3fByState(&sp70, &sp7C);
-    Matrix_CopyCurrentState(&sp28);
+    Matrix_Get(&sp28);
     func_8018219C(&sp28, &sp68, 0);
 
     *arg2 = sp7C;
@@ -1150,13 +1150,13 @@ void EnGk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         Matrix_MultiplyVector3fByState(&sp34, &this->unk_2E8);
         Matrix_MultiplyVector3fByState(&sp28, &this->unk_2F4);
 
-        Matrix_StatePush();
+        Matrix_Push();
 
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&sp4C, &this->unk_30C);
         Matrix_MultiplyVector3fByState(&sp40, &this->unk_300);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 
@@ -1182,7 +1182,7 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
                           this->unk_320 + this->unk_324 + this->actor.shape.rot.y + 0x4000, &this->unk_328,
                           &this->unk_334, phi_v0, phi_v1);
 
-            Matrix_StatePop();
+            Matrix_Pop();
 
             Matrix_InsertTranslation(this->unk_328.x, this->unk_328.y, this->unk_328.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -1190,7 +1190,7 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
             Matrix_InsertXRotation_s(this->unk_334.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(this->unk_334.z, MTXMODE_APPLY);
 
-            Matrix_StatePush();
+            Matrix_Push();
             break;
 
         case 9:
@@ -1208,7 +1208,7 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
             func_80B50ED4(this->unk_322 + 0x4000, this->unk_324 + this->actor.shape.rot.y + 0x4000, &this->unk_33C,
                           &this->unk_348, phi_v0, phi_v1);
 
-            Matrix_StatePop();
+            Matrix_Pop();
 
             Matrix_InsertTranslation(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -1216,7 +1216,7 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
             Matrix_InsertXRotation_s(this->unk_348.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(this->unk_348.z, MTXMODE_APPLY);
 
-            Matrix_StatePush();
+            Matrix_Push();
             break;
     }
 }

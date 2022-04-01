@@ -1137,7 +1137,7 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
     func_800B8050(&this->actor, globalCtx, MTXMODE_NEW);
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_InsertTranslation(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
 
@@ -1161,7 +1161,7 @@ void func_80B43074(EnKgy* this, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void EnKgy_Draw(Actor* thisx, GlobalContext* globalCtx) {

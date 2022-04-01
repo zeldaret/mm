@@ -1053,13 +1053,13 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     if ((limbIndex == 20) || (limbIndex == 21)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

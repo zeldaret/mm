@@ -339,14 +339,14 @@ void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
         this->unk_2FC = index;
         this->unk_2E4 = this->unk_29C[index];
 
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                               &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_MultiplyVector3fByState(&this->unk_2E4, &this->actor.world.pos);
         this->actor.world.pos = sp5C;
         this->actor.prevPos = this->actor.world.pos;
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 0.0f, 0.0f, 0.0f, 4);

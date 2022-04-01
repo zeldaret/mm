@@ -240,7 +240,7 @@ void func_80A5B508(void) {
 
 void func_80A5B954(MtxF* matrix, f32 arg1) {
     s32 i;
-    MtxF* temp = Matrix_GetCurrentState();
+    MtxF* temp = Matrix_GetCurrent();
     f32* tmp = (f32*)&temp->mf[0];
     f32* tmp2 = (f32*)&matrix->mf[0];
 

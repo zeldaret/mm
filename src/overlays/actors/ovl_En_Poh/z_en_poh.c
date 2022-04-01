@@ -888,7 +888,7 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
             Matrix_Scale(0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x, 0.01f / this->actor.scale.x,
                          MTXMODE_APPLY);
         }
-        Matrix_CopyCurrentState(&this->unk_3D8);
+        Matrix_Get(&this->unk_3D8);
         func_80B2C910(&sp60, globalCtx);
         Lights_PointGlowSetInfo(&this->lightInfo, this->colliderSph.elements[0].dim.worldSphere.center.x + (s32)sp60.x,
                                 this->colliderSph.elements[0].dim.worldSphere.center.y + (s32)sp60.y,
@@ -952,7 +952,7 @@ void EnPoh_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPPipeSync(&gfx[0]);
     gDPSetEnvColor(&gfx[1], this->unk_198, this->unk_199, this->unk_19A, 255);
 
-    Matrix_SetCurrentState(&this->unk_3D8);
+    Matrix_Put(&this->unk_3D8);
 
     gSPMatrix(&gfx[2], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&gfx[3], object_po_DL_002D28);

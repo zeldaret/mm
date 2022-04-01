@@ -265,7 +265,7 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_XLU_DISP++, 0x02, globalCtx->interfaceCtx.parameterSegment);
 
     for (i = 0; (i < ARRAY_COUNT(this->buttonIndex)) && (this->buttonIndex[i] != OCARINA_BTN_INVALID); i++) {
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_InsertTranslation(30 * i - 105, sOcarinaBtnWallYOffsets[this->buttonIndex[i]] * 7.5f, 1.0f,
                                  MTXMODE_APPLY);
         Matrix_Scale(0.6f, 0.6f, 0.6f, MTXMODE_APPLY);
@@ -284,7 +284,7 @@ void EnGakufu_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPDisplayList(POLY_XLU_DISP++, gGakufuButtonIndexDL);
 
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     gSPSegment(POLY_XLU_DISP++, 0x02, globalCtx->sceneSegment);

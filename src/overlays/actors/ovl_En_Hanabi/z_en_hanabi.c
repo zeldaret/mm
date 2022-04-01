@@ -348,7 +348,7 @@ void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx) {
 void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnHanabi* this = THIS;
 
-    Matrix_StatePush();
+    Matrix_Push();
     func_80B22FA8(this->unk_148, globalCtx);
-    Matrix_StatePop();
+    Matrix_Pop();
 }

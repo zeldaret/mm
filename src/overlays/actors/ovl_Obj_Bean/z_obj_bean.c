@@ -154,9 +154,9 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
         this->dyna.actor.world.pos.z = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.z) * 1.9f) + sp88.z;
         func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                       this->dyna.actor.world.pos.z, &sp48);
-        Matrix_SetCurrentState(&sp48);
+        Matrix_Put(&sp48);
         Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&sp48);
+        Matrix_Get(&sp48);
         func_8018219C(&sp48, &this->dyna.actor.shape.rot, 0);
         return true;
     }

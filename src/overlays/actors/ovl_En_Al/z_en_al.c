@@ -828,27 +828,27 @@ void EnAl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     switch (limbIndex) {
         case 3:
-            Matrix_CopyCurrentState(&this->unk_190[0]);
+            Matrix_Get(&this->unk_190[0]);
             break;
 
         case 11:
-            Matrix_CopyCurrentState(&this->unk_190[1]);
+            Matrix_Get(&this->unk_190[1]);
             break;
 
         case 12:
-            Matrix_CopyCurrentState(&this->unk_190[2]);
+            Matrix_Get(&this->unk_190[2]);
             break;
 
         case 13:
-            Matrix_CopyCurrentState(&this->unk_190[3]);
+            Matrix_Get(&this->unk_190[3]);
             break;
 
         case 14:
-            Matrix_CopyCurrentState(&this->unk_190[4]);
+            Matrix_Get(&this->unk_190[4]);
             break;
 
         case 15:
-            Matrix_CopyCurrentState(&this->unk_190[5]);
+            Matrix_Get(&this->unk_190[5]);
             break;
 
         case 16:
@@ -878,13 +878,13 @@ void EnAl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
     if (limbIndex == 16) {
         func_8013AD9C(this->unk_4DC + 0x4000, this->unk_4DE + this->actor.shape.rot.y + 0x4000, &this->unk_36C,
                       &this->unk_378, phi_v0, phi_v1);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_36C.x, this->unk_36C.y, this->unk_36C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_378.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_378.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_378.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 
@@ -902,7 +902,7 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                        EnAl_TransformLimbDraw, &this->actor);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
-            Matrix_SetCurrentState(&this->unk_190[i]);
+            Matrix_Put(&this->unk_190[i]);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

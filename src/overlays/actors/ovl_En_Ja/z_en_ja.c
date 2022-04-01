@@ -418,13 +418,13 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     } else if ((this->unk_340 & 0x40) && (limbIndex == 11)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_JointPosition(&D_80BC3774, &D_80BC37A4);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BA30);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -434,7 +434,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                                   ((this->skelAnime.curFrame >= 35.0f) && (this->skelAnime.curFrame <= 47.0f)))) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
-            Matrix_StatePush();
+            Matrix_Push();
             Matrix_InsertTranslation(D_80BC378C.x, D_80BC378C.y, D_80BC378C.z, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
@@ -466,14 +466,14 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
-            Matrix_StatePop();
+            Matrix_Pop();
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         } else if (limbIndex == 14) {
             if ((this->skelAnime.curFrame >= 0.0f) && (this->skelAnime.curFrame <= 18.0f)) {
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 
-                Matrix_StatePush();
+                Matrix_Push();
 
                 Matrix_InsertTranslation(D_80BC3798.x, D_80BC3798.y, D_80BC3798.z, MTXMODE_APPLY);
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -506,7 +506,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BCC8);
 
-                Matrix_StatePop();
+                Matrix_Pop();
 
                 CLOSE_DISPS(globalCtx->state.gfxCtx);
             }
@@ -540,24 +540,24 @@ void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
             func_8013AD9C(this->unk_354 + this->unk_358 + 0x4000,
                           this->unk_356 + this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1EC,
                           &this->unk_274, phi_v1, phi_v0);
-            Matrix_StatePop();
+            Matrix_Pop();
             Matrix_InsertTranslation(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_274.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_274.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(this->unk_274.z, MTXMODE_APPLY);
-            Matrix_StatePush();
+            Matrix_Push();
         }
     } else {
         func_8013AD9C(this->unk_358 + 0x4000, this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1F8,
                       &this->unk_27A, phi_v1, phi_v0);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_27A.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_27A.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_27A.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 

@@ -106,7 +106,7 @@ static InitChainEntry sInitChain[] = {
 static f32 D_80A6BA14[] = { 0.06f, 0.1f, 0.13f };
 
 void func_80A687A0(EnMushi2* this) {
-    MtxF* matrix = Matrix_GetCurrentState();
+    MtxF* matrix = Matrix_GetCurrent();
 
     matrix->mf[3][0] += this->unk_348 * this->unk_31C.x;
     matrix->mf[3][1] += this->unk_348 * this->unk_31C.y;
@@ -298,7 +298,7 @@ s32 func_80A68F9C(EnMushi2* this, s16 arg1) {
         return false;
     }
 
-    matrix = Matrix_GetCurrentState();
+    matrix = Matrix_GetCurrent();
 
     matrix->mf[0][0] = this->unk_310.x;
     matrix->mf[0][1] = this->unk_310.y;
@@ -345,7 +345,7 @@ s32 func_80A690C4(EnMushi2* this, s16 arg1) {
         return false;
     }
 
-    matrix = Matrix_GetCurrentState();
+    matrix = Matrix_GetCurrent();
 
     matrix->mf[0][0] = this->unk_310.x;
     matrix->mf[0][1] = this->unk_310.y;

@@ -824,11 +824,11 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
     Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_InsertZRotation_s(-this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerMinuteRingDL);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     Matrix_InsertTranslation(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

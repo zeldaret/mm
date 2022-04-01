@@ -116,7 +116,7 @@ static InitChainEntry sInitChain[] = {
  *
  */
 void EnKusa_ApplySway(MtxF* matrix) {
-    MtxF* mtxState = Matrix_GetCurrentState();
+    MtxF* mtxState = Matrix_GetCurrent();
     f32* tmp = &mtxState->mf[0][0];
     f32* tmp2 = &matrix->mf[0][0];
     s32 i;

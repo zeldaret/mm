@@ -1661,7 +1661,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 if (Cutscene_CheckActorAction(globalCtx, 513) &&
                     (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
                     (this->unk_337 >= 0)) {
-                    Matrix_StatePush();
+                    Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);
 
@@ -1673,7 +1673,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_336].segment);
 
-                    Matrix_StatePop();
+                    Matrix_Pop();
                 }
                 break;
         }

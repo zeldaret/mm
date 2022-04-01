@@ -377,11 +377,11 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
-        Matrix_StatePop();
+        Matrix_Pop();
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
@@ -398,9 +398,9 @@ void EnFg_Draw(Actor* thisx, GlobalContext* globalCtx) {
         { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
     };
 
-    Matrix_StatePush();
+    Matrix_Push();
     EnFg_DrawDust(globalCtx, &this->dustEffect[0]);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);

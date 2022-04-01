@@ -509,7 +509,7 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = sp74; i < phi_s7; i += temp) {
         temp_f20 = i * 0.14f;
@@ -533,9 +533,9 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = sp74; i < phi_s7; i += temp) {
         temp_f20 = i * 0.14f;
@@ -557,7 +557,7 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -583,7 +583,7 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
     if (phi_s4 > 0) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
 
         for (i = 0; i < phi_s4; i++) {
             if (ptr->unk_48 != 0) {
@@ -611,7 +611,7 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -765,11 +765,11 @@ void EnGg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if (limbIndex == 4) {
         Matrix_MultiplyVector3fByState(&D_80B36DF0, &this->unk_320);
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&sp30, &this->unk_32C);
         Matrix_MultiplyVector3fByState(&sp24, &this->unk_338);
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 

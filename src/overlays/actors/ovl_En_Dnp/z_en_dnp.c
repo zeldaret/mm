@@ -426,7 +426,7 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     MtxF sp2C;
 
     Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp74);
-    Matrix_CopyCurrentState(&sp2C);
+    Matrix_Get(&sp2C);
     func_8018219C(&sp2C, &sp6C, 0);
     *arg2 = sp74;
     if (arg4 == 0) {
@@ -468,13 +468,13 @@ void EnDnp_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
     if (limbIndex == 12) {
         func_80B3D974(this->unk_330 + 0x4000, this->unk_332 + this->actor.shape.rot.y + 0x4000, &this->unk_1D8,
                       &this->unk_1E4, phi_v1, phi_v0);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_1E4.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_1E4.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_1E4.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 

@@ -389,11 +389,11 @@ void ObjChan_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
     if (this->stateFlags & OBJCHAN_STATE_ON_FIRE) {
         ObjChan_DrawFire(this, globalCtx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx) {

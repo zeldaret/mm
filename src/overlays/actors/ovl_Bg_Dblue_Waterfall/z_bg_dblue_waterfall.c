@@ -314,10 +314,10 @@ void func_80B84610(BgDblueWaterfall* this, GlobalContext* globalCtx) {
         }
     }
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_RotateY(BINANG_ADD(this->actor.yawTowardsPlayer, 0x4000), MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(this->unk_1A8, &sp34);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     player->actor.world.pos.x += sp34.x;
     player->actor.world.pos.z += sp34.z;

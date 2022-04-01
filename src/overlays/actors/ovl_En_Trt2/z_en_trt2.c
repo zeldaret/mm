@@ -855,7 +855,7 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     MtxF sp28;
 
     Matrix_MultiplyVector3fByState(&sp70, &sp7C);
-    Matrix_CopyCurrentState(&sp28);
+    Matrix_Get(&sp28);
     func_8018219C(&sp28, &sp68, 0);
 
     *arg2 = sp7C;

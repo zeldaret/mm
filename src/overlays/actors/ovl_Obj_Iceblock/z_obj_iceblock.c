@@ -884,7 +884,7 @@ void func_80A25440(ObjIceblock* this) {
             Matrix_RotateY(this->unk_254.y + this->dyna.actor.home.rot.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_254.x + this->dyna.actor.home.rot.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(this->unk_254.z + this->dyna.actor.home.rot.z, MTXMODE_APPLY);
-            Matrix_CopyCurrentState(&sp40);
+            Matrix_Get(&sp40);
             func_8018219C(&sp40, &temp_s1->shape.rot, MTXMODE_APPLY);
         } else {
             Math_Vec3f_Sum(&this->dyna.actor.world.pos, &this->unk_248, &temp_s1->world.pos);

@@ -986,7 +986,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_StatePush();
+        Matrix_Push();
         frames = globalCtx->gameplayFrames;
         Matrix_MultiplyVector3fByState(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
@@ -1004,7 +1004,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         POLY_XLU_DISP = gfxXlu + 5;
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

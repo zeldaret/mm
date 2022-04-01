@@ -175,7 +175,7 @@ void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
                 phi_fp = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
             if (globalCtx) {}
             temp_f20 = (f32)ptr->unk_02 / ptr->unk_01;
@@ -195,7 +195,7 @@ void func_80BF3920(EnRgStruct* ptr, GlobalContext* globalCtx) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80BF5934[idx]));
             gSPDisplayList(POLY_XLU_DISP++, object_oF1d_map_DL_014D00);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 

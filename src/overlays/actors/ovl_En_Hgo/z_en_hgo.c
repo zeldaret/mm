@@ -361,7 +361,7 @@ void EnHgo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnHgo* this = THIS;
 
     if (limbIndex == HGO_LIMB_PELVIS) {
-        Matrix_CopyCurrentState(&this->unk_1D8);
+        Matrix_Get(&this->unk_1D8);
         Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }
@@ -374,7 +374,7 @@ void EnHgo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_30C]));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
-    Matrix_SetCurrentState(&this->unk_1D8);
+    Matrix_Put(&this->unk_1D8);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_harfgibud_DL_00F248);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

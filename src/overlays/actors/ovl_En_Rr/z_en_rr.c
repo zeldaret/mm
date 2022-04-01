@@ -887,7 +887,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (this->unk_1E8 * 0) & 0x7F, (this->unk_1E8 * 0) & 0x3F,
                                 0x20, 0x10, 1, (this->unk_1E8 * 0) & 0x3F, (this->unk_1E8 * -6) & 0x7F, 0x20, 0x10));
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_Scale((1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, 1.0f,
                  (1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, MTXMODE_APPLY);
 
@@ -899,7 +899,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     Matrix_GetStateTranslationAndScaledZ(-1842.1053f, vecPtr++);
     Matrix_GetStateTranslationAndScaledX(1842.1053f, vecPtr++);
     Matrix_GetStateTranslationAndScaledX(-1842.1053f, vecPtr++);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     for (i = 1; i < ARRAY_COUNT(this->unk_324); i++) {
         temp_f20 = this->unk_324[i].unk_08 * (this->unk_324[i].unk_10 + 1.0f);
@@ -907,7 +907,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
         Matrix_InsertTranslation(0.0f, ptr->unk_00 + 1000.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertRotation(ptr->unk_1A.x, ptr->unk_1A.y, ptr->unk_1A.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_Scale(temp_f20, 1.0f, temp_f20, MTXMODE_APPLY);
         Matrix_ToMtx(matrix);
 
@@ -919,7 +919,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_GetStateTranslationAndScaledZ(-1842.1053f, vecPtr++);
         Matrix_GetStateTranslationAndScaledX(1842.1053f, vecPtr++);
         Matrix_GetStateTranslationAndScaledX(-1842.1053f, vecPtr++);
-        Matrix_StatePop();
+        Matrix_Pop();
         matrix++;
         if (i == 3) {
             Matrix_GetStateTranslation(&spA4);

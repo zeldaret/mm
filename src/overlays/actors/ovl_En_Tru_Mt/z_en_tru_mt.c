@@ -456,7 +456,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     MtxF sp28;
 
     Matrix_MultiplyVector3fByState(&sp70, &sp7C);
-    Matrix_CopyCurrentState(&sp28);
+    Matrix_Get(&sp28);
     func_8018219C(&sp28, &sp68, 0);
 
     *arg2 = sp7C;
@@ -525,7 +525,7 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-        sp54 = Matrix_GetCurrentState();
+        sp54 = Matrix_GetCurrent();
         if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_JC_MATO, sp54->wx, sp54->wy,
                                sp54->wz, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),

@@ -981,7 +981,7 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     Matrix_Scale(phi_f12, phi_f12, phi_f12, MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x0A, Matrix_NewMtx(globalCtx->state.gfxCtx));
-    Matrix_StatePush();
+    Matrix_Push();
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100,
                                 0x100, 1, sp94 & 0xFF, -((s16)(2.0f * this->unk_1AC) & 0x1FF), 0x100, 0x100));
@@ -993,7 +993,7 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     gSPSegment(POLY_XLU_DISP++, 0x09, Matrix_NewMtx(globalCtx->state.gfxCtx));
     gSPDisplayList(POLY_XLU_DISP++, object_warp1_DL_0001A0);
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     if (this->unk_1B0 > 0.0f) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B0);

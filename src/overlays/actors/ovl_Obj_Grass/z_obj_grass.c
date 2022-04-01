@@ -86,7 +86,7 @@ s32 func_809A9110(GlobalContext* globalCtx, Vec3f* arg1) {
 
 void func_809A91FC(MtxF* matrix) {
     s32 i;
-    MtxF* temp = Matrix_GetCurrentState();
+    MtxF* temp = Matrix_GetCurrent();
     f32* tmp = &temp->xx;
     f32* tmp2 = &matrix->xx;
 

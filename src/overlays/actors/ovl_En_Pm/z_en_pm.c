@@ -742,7 +742,7 @@ s32 func_80AF87C4(EnPm* this, GlobalContext* globalCtx) {
 }
 
 void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
-    Matrix_StatePush();
+    Matrix_Push();
 
     switch (arg2) {
         case 0:
@@ -764,7 +764,7 @@ void func_80AF8890(EnPm* this, Gfx** gfx, s32 arg2) {
             break;
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 }
 
 void func_80AF898C(EnPm* this) {
@@ -1870,13 +1870,13 @@ void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gf
     if (arg1 == 15) {
         func_8013AD9C(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
                       &this->unk_290, phi_v0, phi_v1);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_290.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_290.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_290.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 

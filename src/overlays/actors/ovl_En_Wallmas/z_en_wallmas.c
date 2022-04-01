@@ -720,7 +720,7 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
         gfx = POLY_OPA_DISP;
 
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_InsertTranslation(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
         Matrix_RotateY(0x2AAA, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(0xAAA, MTXMODE_APPLY);
@@ -731,7 +731,7 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
         POLY_OPA_DISP = &gfx[2];
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

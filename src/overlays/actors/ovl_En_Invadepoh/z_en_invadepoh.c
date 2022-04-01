@@ -1324,7 +1324,7 @@ void func_80B454BC(EnInvadepoh* this, GlobalContext* globalCtx) {
 }
 
 void EnInvadepoh_SetSysMatrix(Vec3f* vec) {
-    MtxF* sysMatrix = Matrix_GetCurrentState();
+    MtxF* sysMatrix = Matrix_GetCurrent();
 
     sysMatrix->wx = vec->x;
     sysMatrix->wy = vec->y;
@@ -2387,16 +2387,16 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[temp], 0x32);
     if (this->actor.child != NULL) {
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                               &this->actor.shape.rot);
         Matrix_InsertTranslation(0, 57.0f, -36.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&this->actor.child->world.pos);
-        Matrix_CopyCurrentState(&unkMtx);
+        Matrix_Get(&unkMtx);
         func_8018219C(&unkMtx, &this->actor.child->shape.rot, 0);
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 }
 
@@ -4349,19 +4349,19 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnInvadepoh* this = THIS;
 
     if ((limbIndex == 12) && (this->alienBeamAlpha != 0)) {
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateY(-0x3830, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&D_80B502A0);
-        Matrix_StatePop();
+        Matrix_Get(&D_80B502A0);
+        Matrix_Pop();
     } else if ((limbIndex == 13) && (this->alienBeamAlpha != 0)) {
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
         Matrix_RotateY(-0x47D0, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
-        Matrix_CopyCurrentState(&D_80B502E0);
-        Matrix_StatePop();
+        Matrix_Get(&D_80B502E0);
+        Matrix_Pop();
     }
     if (limbIndex == 11) {
         Matrix_MultiplyVector3fByState(&D_80B4EE24, &this->actor.focus.pos);
@@ -4375,7 +4375,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(spCC);
     func_8012C2DC(spCC);
-    Matrix_StatePush();
+    Matrix_Push();
     if (this->drawAlien) {
         Gfx* new_var6;
         Gfx* spBC;
@@ -4456,7 +4456,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
     CLOSE_DISPS(spCC);
 }
 
@@ -4528,10 +4528,10 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad[2];
     Vec3f sp5C;
 
-    Matrix_StatePush();
+    Matrix_Push();
     Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(200.0f, &sp5C);
-    Matrix_StatePop();
+    Matrix_Pop();
     sp5C.x += thisx->world.pos.x;
     sp5C.y += thisx->world.pos.y;
     sp5C.z += thisx->world.pos.z;

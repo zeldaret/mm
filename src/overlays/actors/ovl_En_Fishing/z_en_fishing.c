@@ -1150,7 +1150,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     gDPPipeSync(POLY_XLU_DISP++);
 
@@ -1342,7 +1342,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, gFishingOwnerHatDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1551,7 +1551,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     if ((D_8090CD14 == 3) && ((pos->y > WATER_SURFACE_Y(globalCtx)) || ((D_8090CD0C != 0) && hookIndex))) {
         offsetY = 0.0f;
@@ -1601,14 +1601,14 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
     if ((hookIndex == 1) && (D_8090CD0C != 0)) {
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
         Matrix_InsertTranslation(250.0f, 0.0f, -1400.0f, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
 
         if (D_8090CD10 != 0) {
             FishingEffect* effect = globalCtx->specialEffects;
             MtxF mf;
 
             Matrix_MultiplyVector3fByState(&sZeroVec, &effect->pos);
-            Matrix_CopyCurrentState(&mf);
+            Matrix_Get(&mf);
             func_8018219C(&mf, &sEffOwnerHatRot, 0);
 
             D_8090CD10 = 0;
@@ -1620,7 +1620,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
             effect->accel = sZeroVec;
         }
 
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(M_PI / 2);
 
@@ -1628,7 +1628,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
         gSPDisplayList(POLY_OPA_DISP++, gFishingOwnerHatDL);
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
@@ -1764,7 +1764,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_StatePush();
+    Matrix_Push();
 
     if (D_8090CD54 != 0) {
         Vec3f posTemp = sLurePos;
@@ -1899,7 +1899,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
         }
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -2028,7 +2028,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
         Matrix_InsertYRotation_f(sRodBendRatios[i] * D_8090CD28 * 0.5f, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(sRodBendRatios[i] * spC0 * 0.5f);
 
-        Matrix_StatePush();
+        Matrix_Push();
         Matrix_Scale(sRodScales[i], sRodScales[i], 0.52f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -2046,7 +2046,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
 
         gSPDisplayList(POLY_OPA_DISP++, gFishingRodSegmentDL);
 
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(0.0f, 0.0f, 500.0f, MTXMODE_APPLY);
 
         if (i == 21) {
@@ -4359,7 +4359,7 @@ void EnFishing_DrawPondProps(GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_StatePush();
+    Matrix_Push();
 
     for (i = 0; i < POND_PROP_COUNT; i++) {
         if (prop->type == FS_PROP_REED) {
@@ -4454,7 +4454,7 @@ void EnFishing_DrawPondProps(GlobalContext* globalCtx) {
         prop++;
     }
 
-    Matrix_StatePop();
+    Matrix_Pop();
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

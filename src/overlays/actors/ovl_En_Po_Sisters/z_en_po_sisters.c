@@ -1100,7 +1100,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         }
 
         if (!(this->unk_191 & 0x80)) {
-            Matrix_CopyCurrentState(&this->unk_358);
+            Matrix_Get(&this->unk_358);
         }
     }
 }
@@ -1136,7 +1136,7 @@ void EnPoSisters_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (!(this->unk_191 & 0x80)) {
-        Matrix_SetCurrentState(&this->unk_358);
+        Matrix_Put(&this->unk_358);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_po_sisters_DL_0027B0);

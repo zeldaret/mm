@@ -1024,9 +1024,9 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnOt* this = THIS;
     Gfx* gfx;
 
-    Matrix_StatePush();
+    Matrix_Push();
     func_80B5E1D8(globalCtx, this->unk_3A4, 10);
-    Matrix_StatePop();
+    Matrix_Pop();
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 

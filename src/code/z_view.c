@@ -263,7 +263,7 @@ s32 View_StepDistortion(View* view, Mtx* projectionMtx) {
     }
 
     Matrix_FromRSPMatrix(projectionMtx, &projectionMtxF);
-    Matrix_SetCurrentState(&projectionMtxF);
+    Matrix_Put(&projectionMtxF);
     Matrix_RotateStateAroundXAxis(view->curDistortionDirRot.x);
     Matrix_InsertYRotation_f(view->curDistortionDirRot.y, MTXMODE_APPLY);
     Matrix_InsertZRotation_f(view->curDistortionDirRot.z, MTXMODE_APPLY);

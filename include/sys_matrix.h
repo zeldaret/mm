@@ -3,12 +3,14 @@
 
 #include "z64.h"
 
-void Matrix_StateAlloc(GameState* gameState);
-void Matrix_StatePush(void);
-void Matrix_StatePop(void);
-void Matrix_CopyCurrentState(MtxF* matrix);
-void Matrix_SetCurrentState(MtxF* matrix);
-MtxF* Matrix_GetCurrentState(void);
+/* Stack operations */
+void Matrix_Init(GameState* gameState);
+void Matrix_Push(void);
+void Matrix_Pop(void);
+void Matrix_Get(MtxF* dest);
+void Matrix_Put(MtxF* src);
+MtxF* Matrix_GetCurrent(void);
+
 void Matrix_InsertMatrix(MtxF* matrix, s32 appendToState);
 void Matrix_InsertTranslation(f32 x, f32 y, f32 z, s32 appendToState);
 void Matrix_Scale(f32 xScale, f32 yScale, f32 zScale, s32 appendToState);

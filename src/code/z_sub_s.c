@@ -53,7 +53,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
     Vec3f pos;
     Vec3s rot;
 
-    Matrix_StatePush();
+    Matrix_Push();
     limb = Lib_SegmentedToVirtual(skeleton[limbIndex]);
     limbIndex++;
     rot = jointTable[limbIndex];
@@ -64,7 +64,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
 
     if ((overrideLimbDraw == NULL) || !overrideLimbDraw(globalCtx, limbIndex, &newDList, &pos, &rot, actor, &gfx)) {
         Matrix_JointPosition(&pos, &rot);
-        Matrix_StatePush();
+        Matrix_Push();
 
         transformLimbDraw(globalCtx, limbIndex, actor, &gfx);
 
@@ -77,7 +77,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
             Matrix_ToMtx(*mtx);
             (*mtx)++;
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     }
     if (postLimbDraw != NULL) {
         postLimbDraw(globalCtx, limbIndex, &limbDList, &rot, actor, &gfx);
@@ -86,7 +86,7 @@ Gfx* SubS_DrawTransformFlexLimb(GlobalContext* globalCtx, s32 limbIndex, void** 
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->child, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
     if (limb->sibling != LIMB_DONE) {
         gfx = SubS_DrawTransformFlexLimb(globalCtx, limb->sibling, skeleton, jointTable, overrideLimbDraw, postLimbDraw,
                                          transformLimbDraw, actor, mtx, gfx);
@@ -119,7 +119,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
     }
 
     gSPSegment(gfx++, 0x0D, mtx);
-    Matrix_StatePush();
+    Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
     pos.x = jointTable->x;
     pos.y = jointTable->y;
@@ -130,7 +130,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
 
     if (overrideLimbDraw == NULL || !overrideLimbDraw(globalCtx, 1, &newDlist, &pos, &rot, actor, &gfx)) {
         Matrix_JointPosition(&pos, &rot);
-        Matrix_StatePush();
+        Matrix_Push();
 
         transformLimbDraw(globalCtx, 1, actor, &gfx);
 
@@ -143,7 +143,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
             Matrix_ToMtx(mtx);
             mtx++;
         }
-        Matrix_StatePop();
+        Matrix_Pop();
     }
 
     if (postLimbDraw != NULL) {
@@ -154,7 +154,7 @@ Gfx* SubS_DrawTransformFlex(GlobalContext* globalCtx, void** skeleton, Vec3s* jo
         gfx = SubS_DrawTransformFlexLimb(globalCtx, rootLimb->child, skeleton, jointTable, overrideLimbDraw,
                                          postLimbDraw, transformLimbDraw, actor, &mtx, gfx);
     }
-    Matrix_StatePop();
+    Matrix_Pop();
     return gfx;
 }
 

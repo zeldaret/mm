@@ -477,7 +477,7 @@ void func_808D9894(EnSw* this, Vec3f* vec) {
     sp1C.zw = 0.0f;
     sp1C.ww = 0.0f;
 
-    Matrix_SetCurrentState(&sp1C);
+    Matrix_Put(&sp1C);
     sp5C.x = vec->x - this->actor.world.pos.x;
     sp5C.y = vec->y - this->actor.world.pos.y;
     sp5C.z = vec->z - this->actor.world.pos.z;

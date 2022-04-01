@@ -309,7 +309,7 @@ void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
     if (temp >= 0) {
         sp3C = Item_DropCollectible(globalCtx, &this->actor.world.pos, temp | (ENISHI_GET_FE00(&this->actor) << 8));
         if (sp3C != NULL) {
-            Matrix_StatePush();
+            Matrix_Push();
             Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
             Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
@@ -326,7 +326,7 @@ void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
                 }
                 sp3C->velocity.y *= temp_f2;
             }
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 }

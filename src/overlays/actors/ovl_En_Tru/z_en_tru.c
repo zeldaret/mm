@@ -286,7 +286,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
                 flag = true;
             }
 
-            Matrix_StatePush();
+            Matrix_Push();
 
             do {
                 alpha = (f32)arg0->unk_02 / arg0->unk_01;
@@ -313,7 +313,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A8B280[idx]));
             gSPDisplayList(POLY_XLU_DISP++, object_tru_DL_01A830);
 
-            Matrix_StatePop();
+            Matrix_Pop();
         }
     }
 
@@ -477,7 +477,7 @@ s32 func_80A86B0C(EnTru* this, GlobalContext* globalCtx) {
 
 s32 func_80A86BAC(EnTru* this, GlobalContext* globalCtx) {
     if (this->unk_34E & 0x400) {
-        Matrix_StatePush();
+        Matrix_Push();
         func_8012C28C(globalCtx->state.gfxCtx);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -501,13 +501,13 @@ s32 func_80A86BAC(EnTru* this, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_tru_DL_0020C8);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
     if (this->unk_34E & 0x800) {
-        Matrix_StatePush();
+        Matrix_Push();
         func_8012C2DC(globalCtx->state.gfxCtx);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -519,7 +519,7 @@ s32 func_80A86BAC(EnTru* this, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_tru_DL_001F90);
 
-        Matrix_StatePop();
+        Matrix_Pop();
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -1217,7 +1217,7 @@ void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
     if (limbIndex == 21) {
         func_8013AD9C(this->unk_366, this->unk_368 + this->actor.shape.rot.y, &this->unk_1EC, &this->unk_204, phi_v1,
                       sp2C);
-        Matrix_StatePop();
+        Matrix_Pop();
         Matrix_InsertTranslation(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (sp2C) {
@@ -1229,7 +1229,7 @@ void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
         Matrix_RotateY(this->unk_204.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_204.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_204.z, MTXMODE_APPLY);
-        Matrix_StatePush();
+        Matrix_Push();
     }
 }
 

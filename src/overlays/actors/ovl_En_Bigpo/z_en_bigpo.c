@@ -1257,7 +1257,7 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
                              1);
             }
         }
-        Matrix_CopyCurrentState(&this->drawMtxF);
+        Matrix_Get(&this->drawMtxF);
     }
 
     limbByte = D_80B65078[limbIndex];
@@ -1316,7 +1316,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, GlobalContext* globalCtx) {
                             this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 
-    Matrix_SetCurrentState(&this->drawMtxF);
+    Matrix_Put(&this->drawMtxF);
     EnBigpo_DrawLantern(&this->actor, globalCtx);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         EnBigpo_DrawCircleFlames(&this->actor, globalCtx);
@@ -1416,7 +1416,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
     MtxF* mtfxPtr;
     s32 i;
 
-    mtfxPtr = Matrix_GetCurrentState();
+    mtfxPtr = Matrix_GetCurrent();
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
