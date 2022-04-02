@@ -313,7 +313,7 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk488 %= 8;
+        this->unk488 %= ARRAY_COUNT(sAnimations);
         this->unk486 = this->unk488;
         Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
                          Animation_GetLastFrame(sAnimations[this->unk488]), 2, -10.0f);
