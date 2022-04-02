@@ -237,7 +237,7 @@ typedef struct {
 } ColliderSphereInit; // size = 0x2C
 
 typedef struct {
-    /* 0x00 */ LineSegment line;
+    /* 0x00 */ Linef line;
     /* 0x18 */ u16         ocFlags;
 } OcLine; // size = 0x1C
 

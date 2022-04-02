@@ -4194,7 +4194,7 @@
     0x801FBBD4:("D_801FBBD4","UNK_TYPE1","",0x1),
     0x801FBBE0:("D_801FBBE0","UNK_TYPE1","",0x1),
     0x801FBBF0:("D_801FBBF0","Vec3f","",0xc),
-    0x801FBC00:("Math3D_ColSphereTri_line","LineSegment","",0x18),
+    0x801FBC00:("Math3D_ColSphereTri_line","Linef","",0x18),
     0x801FBC18:("Math3D_ColSphereTri_point","Vec3f","",0xc),
     0x801FBC28:("D_801FBC28","UNK_TYPE1","",0x1),
     0x801FBC2C:("D_801FBC2C","UNK_TYPE1","",0x1),

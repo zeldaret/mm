@@ -3823,7 +3823,7 @@ s32 BgCheck_CheckLineAgainstDyna(CollisionContext* colCtx, u16 xpFlags, Vec3f* p
     s32 pad;
     s32 i;
     s32 result = false;
-    LineSegment line;
+    Linef line;
     f32 ay;
     f32 by;
 

@@ -81,7 +81,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ Vec3f a;
     /* 0x0C */ Vec3f b;
-} LineSegment; // size = 0x18
+} Linef; // size = 0x18
 
 // Defines a point in the spherical coordinate system
 typedef struct {
