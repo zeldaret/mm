@@ -295,9 +295,10 @@ void func_808F3690(EnIn* this, GlobalContext* globalCtx) {
 }
 
 void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
-    AnimationHeader* animations[] = { &object_in_Anim_015E38, &object_in_Anim_016A60, &object_in_Anim_0177AC,
-                                      &object_in_Anim_016484, &object_in_Anim_0170DC, &object_in_Anim_018240,
-                                      &object_in_Anim_0187C8, &object_in_Anim_0198A8 };
+    AnimationHeader* sAnimations[] = {
+        &object_in_Anim_015E38, &object_in_Anim_016A60, &object_in_Anim_0177AC, &object_in_Anim_016484,
+        &object_in_Anim_0170DC, &object_in_Anim_018240, &object_in_Anim_0187C8, &object_in_Anim_0198A8,
+    };
 
     if (this->skelAnime.animation == &object_in_Anim_016484 || this->skelAnime.animation == &object_in_Anim_0170DC) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
@@ -312,9 +313,10 @@ void func_808F374C(EnIn* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
-        this->unk486 = this->unk488 %= 8;
-        Animation_Change(&this->skelAnime, animations[this->unk488], 1.0f, 0.0f,
-                         Animation_GetLastFrame(animations[this->unk488]), 2, -10.0f);
+        this->unk488 %= 8;
+        this->unk486 = this->unk488;
+        Animation_Change(&this->skelAnime, sAnimations[this->unk488], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[this->unk488]), 2, -10.0f);
     }
 }
 
@@ -1365,7 +1367,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk4AC = 0;
     type = ENIN_GET_TYPE(thisx);
     this->unk4B0 = GET_RACE_FLAGS;
-    if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == 4) {
+    if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == ENIN_BLUE_SHIRT) {
         this->unk4AC |= 8;
     }
     if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
@@ -1385,7 +1387,7 @@ void EnIn_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->path = SubS_GetPathByIndex(globalCtx, ENIN_GET_PATH(&this->actor), 0x3F);
         this->unk23D = 0;
         if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if (GET_RACE_FLAGS == RACE_FLAG_2 || (GET_RACE_FLAGS) == RACE_FLAG_3) {
+            if (GET_RACE_FLAGS == RACE_FLAG_2 || GET_RACE_FLAGS == RACE_FLAG_3) {
                 gSaveContext.save.weekEventReg[56] &= (u8)~8;
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;

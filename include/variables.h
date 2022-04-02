@@ -1736,7 +1736,7 @@ extern UNK_PTR D_801D84F0;
 // extern UNK_TYPE2 D_801D853E;
 // extern UNK_TYPE1 D_801D8544;
 extern UNK_PTR D_801D889C;
-extern UNK_PTR gScarecrowSpawnSongPtr;
+extern u8* gScarecrowSpawnSongPtr;
 extern UNK_PTR D_801D88A4;
 // extern UNK_TYPE1 D_801D88A8;
 // extern UNK_TYPE1 D_801D88B8;

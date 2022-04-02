@@ -1127,7 +1127,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->unk_37C = -1;
     func_80A86924(this, 0);
-    this->path = SubS_GetDayDependentPath(globalCtx, this->actor.params & 0xFF, 255, &this->unk_384);
+    this->path = SubS_GetDayDependentPath(globalCtx, ENTRU_GET_PATH(&this->actor), 255, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
     }
