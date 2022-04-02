@@ -1,4 +1,6 @@
-#include "global.h"
+#include "z64math.h"
+#include "libc/stdbool.h"
+#include "libc/math.h"
 
 #define Math3D_PlaneVsPlaneNewLine func_80179B94
 #define Math3D_LineSegMakePerpLineSeg func_80179798
@@ -2220,7 +2222,6 @@ s32 Math3D_TriVsTriIntersect(TriNorm* ta, TriNorm* tb, Vec3f* intersect) {
     }
     return false;
 }
-
 
 s32 Math3D_XZInSphere(Sphere16* sphere, f32 x, f32 z) {
     f32 xDiff = sphere->center.x - x;
