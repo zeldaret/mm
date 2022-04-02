@@ -150,8 +150,8 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
     childRotOut->y += childAngle;
 }
 
-void ObjChan_InitChandelier(ObjChan* this, GlobalContext* globalCtx) {
-    s32 j;
+void ObjChan_InitChandelier(ObjChan* thisx, GlobalContext* globalCtx) {
+    ObjChan* this = thisx;
     s32 i;
     ObjChan* temp_v0;
     Vec3f childPos;
@@ -173,13 +173,11 @@ void ObjChan_InitChandelier(ObjChan* this, GlobalContext* globalCtx) {
     }
 
     for (i = 0; i < 5; i++) {
-        temp_v0 = (ObjChan*)&globalCtx->actorCtx; // strange cast needed for matching
         ObjChan_CalculatePotPosition(&childPos, &childRot, &this->actor.world.pos, &this->actor.shape.rot,
                                      (s32)(i * 360.0f / 5.0f * (65536.0f / 360.0f)) + this->rotation);
-        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene((ActorContext*)temp_v0, globalCtx, ACTOR_OBJ_CHAN, childPos.x,
-                                                          childPos.y, childPos.z, childRot.x, childRot.y, childRot.z,
-                                                          (this->actor.params & 0xFFF) | 0x1000, this->actor.cutscene,
-                                                          this->actor.unk20, &this->actor);
+        temp_v0 = (ObjChan*)Actor_SpawnAsChildAndCutscene(
+            &globalCtx->actorCtx, globalCtx, ACTOR_OBJ_CHAN, childPos.x, childPos.y, childPos.z, childRot.x, childRot.y,
+            childRot.z, (this->actor.params & 0xFFF) | 0x1000, this->actor.cutscene, this->actor.unk20, &this->actor);
         if (temp_v0 != NULL) {
             this->pots[i] = temp_v0;
             temp_v0->myPotIndex = i;

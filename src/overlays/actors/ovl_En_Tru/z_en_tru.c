@@ -807,42 +807,33 @@ s32 func_80A875AC(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80A8777C(Actor* thisx, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    EnTru* this = THIS;
     s32 ret = 0;
-
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    s32 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     switch (temp_v0) {
-        default:
-            if (temp_v0 != 0x10) {
-                break;
-            }
-            if (0) {
-
-                case 4:
-                case 5:
-                    if (!Message_ShouldAdvance(globalCtx)) {
-                        break;
+        case 4:
+        case 5:
+            if (Message_ShouldAdvance(globalCtx)) {
+                case 16:
+                    temp_v0 = func_80123810(globalCtx);
+                    if ((temp_v0 == 35) || (temp_v0 == 36)) {
+                        this->unk_34E |= 8;
+                        if (temp_v0 == 35) {
+                            this->unk_390 = 1;
+                        } else {
+                            this->unk_390 = 2;
+                        }
+                        this->unk_378 = func_80A87880;
+                        this->unk_364 = 0;
+                        ret = 1;
+                    } else if (temp_v0 < 0) {
+                        ret = 3;
+                    } else if (temp_v0 != 0) {
+                        ret = 2;
                     }
+                    break;
             }
-
-            temp_v0 = func_80123810(globalCtx);
-            if ((temp_v0 == 35) || (temp_v0 == 36)) {
-                ((EnTru*)thisx)->unk_34E |= 8;
-                if (temp_v0 == 35) {
-                    ((EnTru*)thisx)->unk_390 = 1;
-                } else {
-                    ((EnTru*)thisx)->unk_390 = 2;
-                }
-                ((EnTru*)thisx)->unk_378 = func_80A87880;
-                ((EnTru*)thisx)->unk_364 = 0;
-                ret = 1;
-            } else if (temp_v0 < 0) {
-                ret = 3;
-            } else if (temp_v0 != 0) {
-                ret = 2;
-            }
-            break;
     }
 
     return ret;
