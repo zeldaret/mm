@@ -209,7 +209,7 @@ void ObjChan_InitChandelier(ObjChan* this2, GlobalContext* globalCtx) {
 }
 
 void ObjChan_ChandelierAction(ObjChan* this2, GlobalContext* globalCtx) {
-    ObjChan* this2 = this;
+    ObjChan* this = this2;
     ObjChan* temp;
     s32 i;
     Vec3f sp60;
