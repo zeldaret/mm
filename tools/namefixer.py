@@ -104,11 +104,11 @@ wordReplace = {
     "SkelAnime_LodDraw": "SkelAnime_DrawLod",
     "SkelAnime_LodDrawLimbSV": "SkelAnime_DrawFlexLimbLod",
     "SkelAnime_LodDrawSV": "SkelAnime_DrawFlexLod",
-    "SkelAnime_DrawLimb": "SkelAnime_DrawLimbOpa",
-    "SkelAnime_Draw": "SkelAnime_DrawOpa",
+    # "SkelAnime_DrawLimb": "SkelAnime_DrawLimbOpa", # A different function is called this now
+    # "SkelAnime_Draw": "SkelAnime_DrawOpa", # A different function is called this now
     "SkelAnime_DrawLimbSV": "SkelAnime_DrawFlexLimbOpa",
     "SkelAnime_DrawSV": "SkelAnime_DrawFlexOpa",
-    "SkelAnime_AnimateFrame": "SkelAnime_GetFrameData",
+    # "SkelAnime_AnimateFrame": "SkelAnime_GetFrameData", # A different function is called this now
     "SkelAnime_GetTotalFrames": "Animation_GetLength",
     "SkelAnime_GetFrameCount": "Animation_GetLastFrame",
     "SkelAnime_Draw2Limb": "SkelAnime_DrawLimb",
