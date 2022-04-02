@@ -29,7 +29,6 @@
 #define Math3D_Dist2DSq Math3D_XZDistanceSquared
 #define Math3D_Dist2D Math3D_XZDistance
 #define Math3D_Vec3fMagnitudeSq Math3D_LengthSquared
-#define Math3D_Vec3fMagnitude Math3D_Vec3fMagnitude
 #define Math3D_Vec3fDistSq Math3D_Vec3fDistSq
 #define Math3D_Vec3f_DistXYZ Math3D_Distance
 #define Math3D_DistXYZ16toF Math3D_DistanceS
@@ -51,15 +50,15 @@
 #define Math3D_TriChkLineSegParaXDist func_8017CB08
 #define Math3D_TriChkPointParaZImpl Math3D_TriChkLineSegParaZDist
 #define Math3D_TriChkPointParaZDeterminate func_8017CEA8
-#define func_801B8B38 Math3D_TriChkPointParaZIntersect
 #define Math3D_TriChkPointParaZ func_8017CFA4
 #define Math3D_TriChkLineSegParaZDist_ func_8017D1AC
 #define Math3D_LineSegFindPlaneIntersect func_8017D220
 #define Math3D_TriLineIntersect func_8017D404
 #define Math3D_TriNorm Math3D_TriSetCoords
 #define Math3D_PointInSph Math3D_IsPointInSphere
-#define func_801B93AC Math3D_PointDistToLine2D
 #define Math3D_PointDistToLine2D_ func_8017D814
+#define Math3D_Vec3fMagnitudeSq Math3D_LengthSquared
+#define Math3D_LineClosestToPoint func_80179A44
 
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);
@@ -174,9 +173,6 @@ s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f*
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_80179798.s")
 #endif
 
-#define Math3D_Vec3fMagnitudeSq Math3D_LengthSquared
-
-#define Math3D_LineClosestToPoint func_80179A44
 f32 Math3D_LineClosestToPoint(Linef* line, Vec3f* pos, Vec3f* closestPoint) {
     f32 dirVectorSize = Math3D_Vec3fMagnitudeSq(&line->b);
     f32 t;
@@ -272,6 +268,9 @@ void Math3D_LineSplitRatio(Vec3f* v0, Vec3f* v1, f32 ratio, Vec3f* ret) {
     Math3D_PointOnInfiniteLine(v0, &diff, ratio, ret);
 }
 
+/**
+ * Calculates the cosine between vectors `a` and `b`
+ */
 f32 Math3D_Cos(Vec3f* a, Vec3f* b) {
     f32 ret;
 
@@ -279,6 +278,10 @@ f32 Math3D_Cos(Vec3f* a, Vec3f* b) {
     return ret;
 }
 
+/**
+ * Calculates the cosine between vectors `a` and `b` and places the result in `ret`
+ * returns true if the cosine cannot be calculated because the product of the magnitudes is zero
+ */
 s32 Math3D_CosOut(Vec3f* a, Vec3f* b, f32* dst) {
     f32 magProduct = Math3D_Vec3fMagnitude(a) * Math3D_Vec3fMagnitude(b);
 
@@ -551,11 +554,26 @@ f32 Math3D_DistXYZ16toF(Vec3s* a, Vec3f* b) {
     return Math3D_Vec3fMagnitude(&diff);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017A7B8.s")
+/**
+ * Gets the Z portion of the cross product of vectors `a - (`dx`,`dy`,z) and `b` - (`dx`,`dy`,z)
+ */
+f32 Math3D_Vec3fDiff_CrossZ(Vec3f* a, Vec3f* b, f32 dx, f32 dy) {
+    return ((a->x - dx) * (b->y - dy)) - ((a->y - dy) * (b->x - dx));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017A7F8.s")
+/**
+ * Gets the X portion of the cross product of vectors `a - (x,`dy`,`dz`) and `b` - (x,`dy`,`dz`)
+ */
+f32 Math3D_Vec3fDiff_CrossX(Vec3f* a, Vec3f* b, f32 dy, f32 dz) {
+    return ((a->y - dy) * (b->z - dz)) - ((a->z - dz) * (b->y - dy));
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017A838.s")
+/**
+ * Gets the Y portion of the cross product of vectors `a - (`dx`,y,`dz`) and `b` - (`dx`,y,`dz`)
+ */
+f32 Math3D_Vec3fDiff_CrossY(Vec3f* a, Vec3f* b, f32 dz, f32 dx) {
+    return ((a->z - dz) * (b->x - dx)) - ((a->x - dx) * (b->z - dz));
+}
 
 void Math3D_Vec3f_Cross(Vec3f* a, Vec3f* b, Vec3f* ret) {
     ret->x = (a->y * b->z) - (a->z * b->y);
@@ -692,7 +710,7 @@ s32 Math3D_PointRelativeToCubeVertices(Vec3f* point, Vec3f* min, Vec3f* max) {
     return ret;
 }
 
-#ifdef BSS_MATCHING
+#ifdef NON_MATCHING
 // in-function static bss
 s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     static Vec3f triVtx0;
@@ -869,7 +887,35 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_LineVsCube.s")
 #endif
 
+#ifdef NON_MATCHING
+/**
+ * Checks if a line segment with endpoints `a` and `b` intersect a cube
+ */
+// in-static bss
+s32 Math3D_LineVsCubeShort(Vec3s* min, Vec3s* max, Vec3s* a, Vec3s* b) {
+    static Vec3f D_801FBD20; // minF
+    static Vec3f D_801FBD30; // maxF
+    static Vec3f D_801FBD40; // aF
+    static Vec3f D_801FBD50; // bF
+
+    D_801FBD20.x = min->x;
+    D_801FBD20.y = min->y;
+    D_801FBD20.z = min->z;
+    D_801FBD30.x = max->x;
+    D_801FBD30.y = max->y;
+    D_801FBD30.z = max->z;
+    D_801FBD40.x = a->x;
+    D_801FBD40.y = a->y;
+    D_801FBD40.z = a->z;
+    D_801FBD50.x = b->x;
+    D_801FBD50.y = b->y;
+    D_801FBD50.z = b->z;
+
+    return Math3D_LineVsCube(&D_801FBD20, &D_801FBD30, &D_801FBD40, &D_801FBD50);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017B68C.s")
+#endif
 
 void Math3D_RotateXZPlane(Vec3f* pointOnPlane, s16 angle, f32* a, f32* c, f32* d) {
     *a = Math_SinS(angle) * 32767.0f;
@@ -1282,8 +1328,7 @@ s32 Math3D_TriChkPointParaZDeterminate(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f
     return Math3D_TriChkPointParaZImpl(v0, v1, v2, y, z, detMax, 1.0f, nx);
 }
 
-// Math3D_TriChkPointParaZIntersect
-s32 func_801B8B38(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x, f32 y,
+s32 Math3D_TriChkPointParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x, f32 y,
                   f32* zIntersect) {
     if (IS_ZERO(nz)) {
         return 0;
@@ -1423,7 +1468,7 @@ s32 Math3D_PointInSph(Sphere16* sphere, Vec3f* point) {
     return false;
 }
 
-s32 func_801B93AC(f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32* perpXOut, f32* perpYOut, f32* lineLenSq) {
+s32 Math3D_PointDistToLine2D(f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32* perpXOut, f32* perpYOut, f32* lineLenSq) {
     f32 perpendicularRatio;
     f32 xDiff = x2 - x1;
     f32 yDiff = y2 - y1;
@@ -1451,7 +1496,7 @@ s32 func_8017D7C0(f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32* lineLenSq
     f32 perpX;
     f32 perpY;
 
-    return func_801B93AC(x0, y0, x1, y1, x2, y2, &perpX, &perpY, lineLenSq);
+    return Math3D_PointDistToLine2D(x0, y0, x1, y1, x2, y2, &perpX, &perpY, lineLenSq);
 }
 
 s32 Math3D_PointDistToLine2D_(f32 x0, f32 y0, Vec3f* p1, Vec3f* p2, f32* lineLenSq) {
@@ -2129,7 +2174,6 @@ s32 Math3D_CylOutsideCylDist(Cylinder16* ca, Cylinder16* cb, f32* deadSpace, f32
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColCylinderCylinderAmountAndDistance.s")
 #endif
 
-// #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3d_ColTriTri.s")
 #define Math3D_TriVsTriIntersect Math3d_ColTriTri
 s32 Math3D_TriVsTriIntersect(TriNorm* ta, TriNorm* tb, Vec3f* intersect) {
     f32 dist0 = Math3D_Plane(&ta->plane, &tb->vtx[0]);
@@ -2208,7 +2252,6 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z) {
     return false;
 }
 
-
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017FB1C.s")
 
 void func_8017FD44(Vec3f* arg0, Vec3f* arg1, Vec3f* dst, f32 arg3) {
@@ -2226,4 +2269,3 @@ void func_8017FD44(Vec3f* arg0, Vec3f* arg1, Vec3f* dst, f32 arg3) {
         dst->z = Math_CosS((s16)(32767.0f * arg3) + sp2A) * sp24 + sp2C.z;
     }
 }
-
