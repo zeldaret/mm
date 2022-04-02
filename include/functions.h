@@ -2462,7 +2462,7 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
 s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type);
 void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
 void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
-void SubS_DrawShadowTex(Actor* actor, GraphicsContext** gfxCtxPtr, u8* tex);
+void SubS_DrawShadowTex(Actor* actor, GlobalContext* globalCtx, u8* tex);
 s16 func_8013D0E0(s16* arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5);
 s32 func_8013D2E0(Vec3f* arg0, Vec3f* arg1, Vec3s* arg2, Vec3s* arg3, Vec3s* arg4, Vec3s* arg5, u16* arg6);
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);

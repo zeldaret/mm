@@ -505,9 +505,9 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
     }
 }
 
-void SubS_DrawShadowTex(Actor* actor, GraphicsContext** gfxCtxPtr, u8* tex) {
+void SubS_DrawShadowTex(Actor* actor, GlobalContext* globalCtx, u8* tex) {
     s32 pad;
-    GraphicsContext* gfxCtx = *gfxCtxPtr;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 

@@ -321,7 +321,7 @@ void EnCne01_Draw(Actor* thisx, GlobalContext* globalCtx) {
         SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
                           ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSizes, gEnHyParentBodyParts);
     }
-    SubS_DrawShadowTex(&this->enHy.actor, &globalCtx->state.gfxCtx, shadowTex);
+    SubS_DrawShadowTex(&this->enHy.actor, globalCtx, shadowTex);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

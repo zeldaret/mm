@@ -363,6 +363,6 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           ARRAY_COUNT(this->bodyPartsPos), sShadowSizes, sParentBodyParts);
     }
 
-    SubS_DrawShadowTex(&this->actor, &globalCtx->state.gfxCtx, shadowTex);
+    SubS_DrawShadowTex(&this->actor, globalCtx, shadowTex);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
