@@ -20,7 +20,7 @@
         <Texture Name="gLotteryShopGradientTex" OutName="lottery_shop_gradient" Format="i8" Width="4" Height="4" Offset="0x4668" /><!-- Used for box and target -->
         <Texture Name="gLotteryShopCylinderTopBottomTex" OutName="lottery_shop_cylinder_top_bottom" Format="rgba16" Width="16" Height="32" Offset="0x4678" />
         <Texture Name="gLotteryShopCylinderMiddleStripesTex" OutName="lottery_shop_cylinder_middle_stripes" Format="rgba16" Width="16" Height="32" Offset="0x4A78" />
-        <Texture Name="gLotteryShopSignBorderTex" OutName="Lottery_shop_sign_border" Format="rgba16" Width="16" Height="64" Offset="0x4E78" />
+        <Texture Name="gLotteryShopSignBorderTex" OutName="lottery_shop_sign_border" Format="rgba16" Width="16" Height="64" Offset="0x4E78" />
         <Texture Name="gLotteryShopBoxBaseTex" OutName="lottery_shop_box_base" Format="rgba16" Width="16" Height="16" Offset="0x5678" />
         <Texture Name="gLotteryShopRainbowTex" OutName="lottery_shop_rainbow" Format="rgba16" Width="4" Height="32" Offset="0x5878" />
         <Texture Name="gLotteryShopRupeesTex" OutName="lottery_shop_rupees" Format="rgba16" Width="32" Height="32" Offset="0x5978" />
