@@ -384,6 +384,20 @@ animdict = {
     "func_8017FA34": "Math3D_XYInSphere",
     "func_8017FAA8": "Math3D_YZInSphere",
     "func_8017D2FC": "Math3D_LineSegVsPlane",
+
+    "Math3D_CrossProduct": "Math3D_Vec3f_Cross",
+    "Math3D_Parallel": "Math3D_Cos",
+    "Math3D_AngleBetweenVectors": "Math3D_CosOut",
+    "func_80179A44": "Math3D_LineClosestToPoint",
+
+    "Math3D_XZLengthSquared": "Math3D_Dist1DSq",
+    "Math3D_XZLength": "Math3D_Dist1D",
+    "Math3D_XZDistanceSquared": "Math3D_Dist2DSq",
+    "Math3D_XZDistance": "Math3D_Dist2D",
+    "Math3D_LengthSquared": "Math3D_Vec3fMagnitudeSq",
+    "Math3D_Distance": "Math3D_Vec3f_DistXYZ",
+    "Math3D_DistanceS": "Math3D_DistXYZ16toF",
+
     "func_800DFB14": "Camera_ChangeDataIdx",
     "func_800DFC68": "Camera_GetInputDirYaw",
     "func_800DFCB4": "Camera_GetCamDirPitch",

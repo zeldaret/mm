@@ -3672,7 +3672,7 @@
     0x801E0138:("D_801E0138","f32","",0x4),
     0x801E013C:("D_801E013C","f32","",0x4),
     0x801E0140:("D_801E0140","f32","",0x4),
-    0x801E0144:("Math3D_AngleBetweenVectors_min_length","f32","",0x4),
+    0x801E0144:("Math3D_CosOut_min_length","f32","",0x4),
     0x801E0148:("D_801E0148","f32","",0x4),
     0x801E014C:("D_801E014C","f32","",0x4),
     0x801E0150:("Math3D_UnitNormalVector_min_length","f32","",0x4),

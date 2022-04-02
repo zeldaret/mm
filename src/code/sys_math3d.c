@@ -2,9 +2,9 @@
 #include "libc/stdbool.h"
 #include "libc/math.h"
 
+#define Math3D_FindPointOnPlaneIntersect func_80179B34
 #define Math3D_PlaneVsPlaneNewLine func_80179B94
 #define Math3D_LineSegMakePerpLineSeg func_80179798
-#define Math3D_Vec3f_Cross Math3D_CrossProduct
 #define Math3D_Plane func_8017B9D8
 #define Math3D_TriLineIntersect func_8017D404
 #define Math3D_CylOutsideCylDist Math3D_ColCylinderCylinderAmountAndDistance
@@ -22,18 +22,8 @@
 #define Math3D_LineSplitRatio Math3D_Lerp
 #define Math3D_PlaneVsPlaneVsLineClosestPoint func_80179D74
 #define Math3D_PointInCyl func_8017E294
-#define Math3D_Cos Math3D_Parallel
-#define Math3D_CosOut Math3D_AngleBetweenVectors
 #define Math3D_Vec3fReflect func_80179F64
 #define Math3D_PointInSquare2D Math3D_XZBoundCheck
-#define Math3D_Dist1DSq Math3D_XZLengthSquared
-#define Math3D_Dist1D Math3D_XZLength
-#define Math3D_Dist2DSq Math3D_XZDistanceSquared
-#define Math3D_Dist2D Math3D_XZDistance
-#define Math3D_Vec3fMagnitudeSq Math3D_LengthSquared
-#define Math3D_Vec3fDistSq Math3D_Vec3fDistSq
-#define Math3D_Vec3f_DistXYZ Math3D_Distance
-#define Math3D_DistXYZ16toF Math3D_DistanceS
 #define Math3D_RotateXZPlane func_8017B7F8
 #define Math3D_DefPlane Math3D_UnitNormalVector
 #define Math3D_PlaneF Math3D_SignedDistanceFromPlane
@@ -59,8 +49,8 @@
 #define Math3D_TriNorm Math3D_TriSetCoords
 #define Math3D_PointInSph Math3D_IsPointInSphere
 #define Math3D_PointDistToLine2D_ func_8017D814
-#define Math3D_Vec3fMagnitudeSq Math3D_LengthSquared
-#define Math3D_LineClosestToPoint func_80179A44
+#define Math3D_TriVsTriIntersect Math3d_ColTriTri
+#define Math3D_GetSphVsTriIntersectPoint func_8017DD34
 
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);
@@ -82,7 +72,6 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
                                       Vec3f* closestPoint) {
     static InfiniteLine planeIntersectLine;
     static Linef planeIntersectSeg;
-
     Vec3f sp34; // unused
 
     if (!Math3D_PlaneVsPlaneNewLine(planeAA, planeAB, planeAC, planeADist, planeBA, planeBB, planeBC, planeBDist,
@@ -175,12 +164,17 @@ s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f*
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_80179798.s")
 #endif
 
+/**
+ * Determines the closest point on the line `line` to `pos`, by forming a line perpendicular from
+ * `point` to `line` closest point is placed in `closestPoint`
+ */
 f32 Math3D_LineClosestToPoint(Linef* line, Vec3f* pos, Vec3f* closestPoint) {
     f32 dirVectorSize = Math3D_Vec3fMagnitudeSq(&line->b);
     f32 t;
 
     if (IS_ZERO(dirVectorSize)) {
         Math_Vec3f_Copy(closestPoint, pos);
+        //! @bug Missing early return
     }
 
     t = (((pos->x - line->a.x) * line->b.x) + ((pos->y - line->a.y) * line->b.y) + ((pos->z - line->a.z) * line->b.z)) /
@@ -192,7 +186,6 @@ f32 Math3D_LineClosestToPoint(Linef* line, Vec3f* pos, Vec3f* closestPoint) {
     return t;
 }
 
-#define Math3D_FindPointOnPlaneIntersect func_80179B34
 void Math3D_FindPointOnPlaneIntersect(f32 planeAAxis1Norm, f32 planeAAxis2Norm, f32 planeBAxis1Norm,
                                       f32 planeBAxis2Norm, f32 axis3Direction, f32 planeADist, f32 planeBDist,
                                       f32* axis1Point, f32* axis2Point) {
@@ -200,7 +193,6 @@ void Math3D_FindPointOnPlaneIntersect(f32 planeAAxis1Norm, f32 planeAAxis2Norm, 
     *axis2Point = ((planeBAxis1Norm * planeADist) - (planeAAxis1Norm * planeBDist)) / axis3Direction;
 }
 
-#define Math3D_PlaneVsPlaneNewLine func_80179B94
 s32 Math3D_PlaneVsPlaneNewLine(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB,
                                f32 planeBC, f32 planeBDist, InfiniteLine* intersect) {
     char pad[4];
@@ -510,30 +502,51 @@ s32 func_8017A438(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4) 
     return 1;
 }
 
+/**
+ * Returns the distance squared between `a` and `b` on a single axis
+ */
 f32 Math3D_Dist1DSq(f32 a, f32 b) {
     return SQ(a) + SQ(b);
 }
 
+/**
+ * Returns the distance between `a` and `b` on a single axis
+ */
 f32 Math3D_Dist1D(f32 a, f32 b) {
     return sqrtf(Math3D_Dist1DSq(a, b));
 }
 
+/**
+ * Returns the distance squared between (`x0`,`y0`) and (`x1`,`x2`)
+ */
 f32 Math3D_Dist2DSq(f32 x0, f32 y0, f32 x1, f32 y1) {
     return Math3D_Dist1DSq(x0 - x1, y0 - y1);
 }
 
+/**
+ * Returns the distance between points (`x0`,`y0`) and (`x1`,`y1`)
+ */
 f32 Math3D_Dist2D(f32 x0, f32 y0, f32 x1, f32 y1) {
     return sqrtf(Math3D_Dist2DSq(x0, y0, x1, y1));
 }
 
+/**
+ * Returns the magntiude (length) squared of `vec`
+ */
 f32 Math3D_Vec3fMagnitudeSq(Vec3f* vec) {
     return SQ(vec->x) + SQ(vec->y) + SQ(vec->z);
 }
 
+/**
+ * Returns the magnitude(length) of `vec`
+ */
 f32 Math3D_Vec3fMagnitude(Vec3f* vec) {
     return sqrtf(Math3D_Vec3fMagnitudeSq(vec));
 }
 
+/**
+ * Returns the distance between `a` and `b` squared.
+ */
 f32 Math3D_Vec3fDistSq(Vec3f* a, Vec3f* b) {
     Vec3f diff;
 
@@ -542,10 +555,16 @@ f32 Math3D_Vec3fDistSq(Vec3f* a, Vec3f* b) {
     return Math3D_Vec3fMagnitudeSq(&diff);
 }
 
+/*
+ * Calculates the distance between points `a` and `b`
+ */
 f32 Math3D_Vec3f_DistXYZ(Vec3f* a, Vec3f* b) {
     return Math_Vec3f_DistXYZ(a, b);
 }
 
+/*
+ * Calculates the distance between `a` and `b`.
+ */
 f32 Math3D_DistXYZ16toF(Vec3s* a, Vec3f* b) {
     Vec3f diff;
 
@@ -577,6 +596,9 @@ f32 Math3D_Vec3fDiff_CrossY(Vec3f* a, Vec3f* b, f32 dz, f32 dx) {
     return ((a->z - dz) * (b->x - dx)) - ((a->x - dx) * (b->z - dz));
 }
 
+/**
+ * Gets the Cross Product of vectors `a` and `b` and places the result in `ret`
+ */
 void Math3D_Vec3f_Cross(Vec3f* a, Vec3f* b, Vec3f* ret) {
     ret->x = (a->y * b->z) - (a->z * b->y);
     ret->y = (a->z * b->x) - (a->x * b->z);
@@ -1576,9 +1598,6 @@ s32 func_8017DA24(f32 z0, f32 x0, Vec3f* p1, Vec3f* p2, f32* lineLenSq) {
     return ret;
 }
 
-#define Math3D_TriVsSphIntersect Math3D_ColSphereTri
-#define Math3D_GetSphVsTriIntersectPoint func_8017DD34
-
 #ifdef NON_MATCHING
 // in-function static bss
 s32 Math3D_LineVsSph(Sphere16* sphere, Linef* line) {
@@ -2176,7 +2195,6 @@ s32 Math3D_CylOutsideCylDist(Cylinder16* ca, Cylinder16* cb, f32* deadSpace, f32
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_ColCylinderCylinderAmountAndDistance.s")
 #endif
 
-#define Math3D_TriVsTriIntersect Math3d_ColTriTri
 s32 Math3D_TriVsTriIntersect(TriNorm* ta, TriNorm* tb, Vec3f* intersect) {
     f32 dist0 = Math3D_Plane(&ta->plane, &tb->vtx[0]);
     f32 dist1 = Math3D_Plane(&ta->plane, &tb->vtx[1]);

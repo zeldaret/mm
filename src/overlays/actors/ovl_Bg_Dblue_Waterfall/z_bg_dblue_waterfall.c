@@ -61,7 +61,7 @@ Color_RGBA8 D_80B8539C = { 200, 255, 255, 255 };
 Color_RGBA8 D_80B853A0 = { 200, 200, 200, 0 };
 
 s32 func_80B83C80(Vec3f* arg0, Vec3f* arg1) {
-    f32 temp_f0 = Math3D_LengthSquared(arg0);
+    f32 temp_f0 = Math3D_Vec3fMagnitudeSq(arg0);
     f32 temp_f2;
 
     if (temp_f0 < 0.0000010000001f) {

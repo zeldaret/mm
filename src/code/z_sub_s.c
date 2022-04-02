@@ -557,8 +557,8 @@ void SubS_ActorPathing_ComputePointInfo(GlobalContext* globalCtx, ActorPathing* 
     diff.x = actorPath->curPoint.x - actorPath->worldPos->x;
     diff.y = actorPath->curPoint.y - actorPath->worldPos->y;
     diff.z = actorPath->curPoint.z - actorPath->worldPos->z;
-    actorPath->distSqToCurPointXZ = Math3D_XZLengthSquared(diff.x, diff.z);
-    actorPath->distSqToCurPoint = Math3D_LengthSquared(&diff);
+    actorPath->distSqToCurPointXZ = Math3D_Dist1DSq(diff.x, diff.z);
+    actorPath->distSqToCurPoint = Math3D_Vec3fMagnitudeSq(&diff);
     actorPath->rotToCurPoint.y = Math_FAtan2F(diff.z, diff.x);
     actorPath->rotToCurPoint.x = Math_FAtan2F(sqrtf(actorPath->distSqToCurPointXZ), -diff.y);
     actorPath->rotToCurPoint.z = 0;

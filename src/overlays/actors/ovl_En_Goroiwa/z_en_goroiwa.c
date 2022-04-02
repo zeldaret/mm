@@ -199,7 +199,7 @@ f32 func_8093EB74(EnGoroiwa* this, GlobalContext* globalCtx) {
     for (i = 1; i < temp_s4; i++) {
         Math_Vec3f_Copy(&sp54, &sp48);
         Math_Vec3s_ToVec3f(&sp48, &this->unk_1D0[i]);
-        temp_f20 += Math3D_Distance(&sp54, &sp48);
+        temp_f20 += Math3D_Vec3f_DistXYZ(&sp54, &sp48);
     }
 
     return temp_f20;
@@ -539,7 +539,7 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     if (this->unk_1E5 & 0x10) {
         sp7C = this->unk_1C0;
     } else {
-        temp = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
+        temp = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.prevPos);
         tmp2 = temp / this->unk_1DC;
         this->unk_1C0 = tmp2;
         sp7C = this->unk_1C0;
@@ -547,12 +547,12 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
 
     sp7C *= this->unk_1C4;
     if (!(this->unk_1E5 & 0x10)) {
-        if (Math3D_LengthSquared(&this->actor.velocity) > 0.1f) {
+        if (Math3D_Vec3fMagnitudeSq(&this->actor.velocity) > 0.1f) {
             Math_Vec3f_Copy(&this->unk_1A8, &this->actor.velocity);
         }
     }
 
-    Math3D_CrossProduct(&D_80942E60, &this->unk_1A8, &sp70);
+    Math3D_Vec3f_Cross(&D_80942E60, &this->unk_1A8, &sp70);
 
     if (func_8093EAD4(&sp64, &sp70)) {
         this->unk_1B4 = sp64;
@@ -1360,7 +1360,7 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
                 temp_f20 = this->unk_1DC * 0.9f;
 
                 if (spB8.y > 0.0f) {
-                    if (Math3D_AngleBetweenVectors(&D_80942E60, &spB8, &spAC)) {
+                    if (Math3D_CosOut(&D_80942E60, &spB8, &spAC)) {
                         phi_f12 = 1.0f;
                     } else {
                         phi_f12 = 1.0f - SQ(spAC);

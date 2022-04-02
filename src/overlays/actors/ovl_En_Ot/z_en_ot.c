@@ -856,7 +856,7 @@ s32 EnOt_ActorPathing_UpdateActorInfo(GlobalContext* globalCtx, ActorPathing* ac
     sp44.y = actorPath->curPoint.y - actorPath->prevPoint.y;
     sp44.z = actorPath->curPoint.z - actorPath->prevPoint.z;
 
-    temp = Math3D_Parallel(&sp50, &sp44);
+    temp = Math3D_Cos(&sp50, &sp44);
     if ((actorPath->distSqToCurPointXZ < SQ(thisx->speedXZ)) || (temp <= 0.0f)) {
         ret = true;
     } else {

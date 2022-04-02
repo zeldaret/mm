@@ -126,7 +126,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
         return false;
     }
 
-    Math3D_CrossProduct(&this->axisUp, &normal, &vec);
+    Math3D_Vec3f_Cross(&this->axisUp, &normal, &vec);
 
     magnitude = Math3D_Vec3fMagnitude(&vec);
 
@@ -139,7 +139,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
     Matrix_InsertRotationAroundUnitVector_f(angle, &vec, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->axisLeft, &vec);
     Math_Vec3f_Copy(&this->axisLeft, &vec);
-    Math3D_CrossProduct(&this->axisLeft, &normal, &this->axisForwards);
+    Math3D_Vec3f_Cross(&this->axisLeft, &normal, &this->axisForwards);
 
     magnitude = Math3D_Vec3fMagnitude(&this->axisForwards);
     if (magnitude < 0.001f) {

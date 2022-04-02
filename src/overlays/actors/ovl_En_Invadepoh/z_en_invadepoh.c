@@ -790,7 +790,7 @@ f32 EnInvadepoh_GetTotalPathLength(EnInvadepoh* this) {
     for (i = 1; i < temp_s4; i++) {
         Math_Vec3f_Copy(&sp54, &pathPointF);
         Math_Vec3s_ToVec3f(&pathPointF, pathPoint);
-        distance = Math3D_Distance(&sp54, &pathPointF);
+        distance = Math3D_Vec3f_DistXYZ(&sp54, &pathPointF);
         pathPoint++;
         totalDistance += distance;
     }
@@ -841,7 +841,7 @@ s32 func_80B440B8(EnInvadepoh* this, f32 arg1, f32 arg2) {
     }
 
     temp_f12_2 = (sp2C * sp38) + (sp30 * sp34);
-    new_var = Math3D_XZLength(sp40, sp3C);
+    new_var = Math3D_Dist1D(sp40, sp3C);
 
     if ((temp_f12_2 < 0.0f) || (new_var < temp_f12_2)) {
         return false;
@@ -913,7 +913,7 @@ void func_80B443A0(EnInvadepoh* this) {
     for (i = 1; i < temp_s5; i++, phi_s1++, phi_s0++) {
         Math_Vec3f_Copy(&sp70, &sp64);
         Math_Vec3s_ToVec3f(&sp64, phi_s1);
-        phi_f20 += Math3D_Distance(&sp70, &sp64);
+        phi_f20 += Math3D_Vec3f_DistXYZ(&sp70, &sp64);
         *phi_s0 = phi_f20 * pathTotalDistInv;
         if (*phi_s0 < 0.0f) {
             *phi_s0 = 0.0f;
@@ -1153,7 +1153,7 @@ s32 func_80B44C80(EnInvadepoh* this, GlobalContext* globalCtx) {
     temp_f0_2 = temp_f2 - this->actor.world.pos.z;
 
     if (this->actor.speedXZ > 0.0f) {
-        if (Math3D_AngleBetweenVectors(&sp6C, &sp60, &sp44) != 0) {
+        if (Math3D_CosOut(&sp6C, &sp60, &sp44) != 0) {
             sp40 = 1;
         } else if (sp44 <= 0.0f) {
             sp40 = 1;
@@ -1231,7 +1231,7 @@ void func_80B45080(void) {
 s32 func_80B450C0(f32* x1, f32* z1, f32 x2, f32 z2, f32 speed) {
     f32 deltaX = x2 - *x1;
     f32 deltaZ = z2 - *z1;
-    f32 temp_f0 = Math3D_XZLength(deltaX, deltaZ);
+    f32 temp_f0 = Math3D_Dist1D(deltaX, deltaZ);
 
     if (speed < temp_f0) {
         f32 temp_f2 = speed / temp_f0;

@@ -364,7 +364,7 @@ void func_8087B7C0(EnHorse* this, GlobalContext* globalCtx, Path* path) {
 
     for (i = sp68; i < sp60; i++) {
         Math_Vec3s_ToVec3f(&sp50, &spA0[i]);
-        temp_f0 = Math3D_Distance(&this->actor.world.pos, &sp50);
+        temp_f0 = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &sp50);
         if (temp_f0 < sp64) {
             sp64 = temp_f0;
             sp68 = i;
@@ -537,7 +537,7 @@ s32 func_8087C38C(GlobalContext* globalCtx, EnHorse* this, Vec3f* arg2) {
         return false;
     }
 
-    eyeDist = Math3D_Distance(arg2, &globalCtx->view.eye);
+    eyeDist = Math3D_Vec3f_DistXYZ(arg2, &globalCtx->view.eye);
 
     return func_8087C2B8(globalCtx, this, &sp24, sp20) || (eyeDist < 100.0f);
 }
@@ -588,7 +588,7 @@ s32 EnHorse_Spawn(EnHorse* this, GlobalContext* globalCtx) {
         spawnPos.x = pathPoints[i].x;
         spawnPos.y = pathPoints[i].y;
         spawnPos.z = pathPoints[i].z;
-        dist = Math3D_Distance(&player->actor.world.pos, &spawnPos);
+        dist = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &spawnPos);
 
         if ((minDist < dist) || func_8087C38C(globalCtx, this, &spawnPos)) {
             continue;
@@ -614,7 +614,7 @@ s32 EnHorse_Spawn(EnHorse* this, GlobalContext* globalCtx) {
         spawnPos.x = pathPoints[i].x;
         spawnPos.y = pathPoints[i].y;
         spawnPos.z = pathPoints[i].z;
-        dist = Math3D_Distance(&player->actor.world.pos, &spawnPos);
+        dist = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &spawnPos);
 
         if (minDist < dist) {
             continue;
@@ -2484,7 +2484,7 @@ void EnHorse_CsMoveToPoint(EnHorse* this, GlobalContext* globalCtx, CsCmdActorAc
     endPos.y = action->endPos.y;
     endPos.z = action->endPos.z;
 
-    if (Math3D_Distance(&endPos, &this->actor.world.pos) > 8.0f) {
+    if (Math3D_Vec3f_DistXYZ(&endPos, &this->actor.world.pos) > 8.0f) {
         EnHorse_RotateToPoint(this, globalCtx, &endPos, 0x320);
         this->actor.speedXZ = 8.0f;
         this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.3f;
@@ -2665,7 +2665,7 @@ void EnHorse_CsWarpMoveToPoint(EnHorse* this, GlobalContext* globalCtx, CsCmdAct
     endPos.y = action->endPos.y;
     endPos.z = action->endPos.z;
 
-    if (Math3D_Distance(&endPos, &this->actor.world.pos) > 8.0f) {
+    if (Math3D_Vec3f_DistXYZ(&endPos, &this->actor.world.pos) > 8.0f) {
         EnHorse_RotateToPoint(this, globalCtx, &endPos, 0x320);
         this->actor.speedXZ = 8.0f;
         this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.3f;
@@ -2801,7 +2801,7 @@ s32 EnHorse_UpdateHbaRaceInfo(EnHorse* this, GlobalContext* globalCtx, RaceInfo*
     func_8017B7F8(&pos, raceInfo->waypoints[this->curRaceWaypoint].angle, &px, &pz, &d);
 
     if ((this->curRaceWaypoint >= (raceInfo->numWaypoints - 1)) &&
-        (Math3D_Distance(&pos, &this->actor.world.pos) < DREG(8))) {
+        (Math3D_Vec3f_DistXYZ(&pos, &this->actor.world.pos) < DREG(8))) {
         this->hbaFlags |= 2;
     }
 
@@ -2971,9 +2971,9 @@ void EnHorse_FleePlayer(EnHorse* this, GlobalContext* globalCtx) {
         }
     }
 
-    distToHome = Math3D_Distance(&this->actor.home.pos, &this->actor.world.pos);
-    playerDistToHome = Math3D_Distance(&player->actor.world.pos, &this->actor.home.pos);
-    distToPlayer = Math3D_Distance(&player->actor.world.pos, &this->actor.world.pos);
+    distToHome = Math3D_Vec3f_DistXYZ(&this->actor.home.pos, &this->actor.world.pos);
+    playerDistToHome = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.home.pos);
+    distToPlayer = Math3D_Vec3f_DistXYZ(&player->actor.world.pos, &this->actor.world.pos);
 
     if (playerDistToHome > 300.0f) {
         if (distToHome > 150.0f) {
@@ -3330,7 +3330,7 @@ void func_808848C8(EnHorse* this, GlobalContext* globalCtx) {
     func_800F415C(&this->actor, &sp24, 2000);
     this->skin.skelAnime.playSpeed = this->actor.speedXZ * 0.75f;
     SkelAnime_Update(&this->skin.skelAnime);
-    if (Math3D_Distance(&sp24, &this->actor.world.pos) < 30.0f) {
+    if (Math3D_Vec3f_DistXYZ(&sp24, &this->actor.world.pos) < 30.0f) {
         this->stateFlags &= ~ENHORSE_UNRIDEABLE;
         EnHorse_StartIdleRidable(this);
     }
@@ -3425,7 +3425,7 @@ void func_80884E0C(EnHorse* this, GlobalContext* globalCtx) {
     this->actor.world.pos.x = this->unk_570.x;
     this->actor.world.pos.z = this->unk_570.z;
 
-    this->unk_56C = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
+    this->unk_56C = Math3D_Vec3f_DistXYZ(&this->actor.world.pos, &this->actor.prevPos);
     if (((this->unk_550 == 5) || (this->unk_550 == 7)) && (Player_GetMask(globalCtx) != PLAYER_MASK_CIRCUS_LEADER)) {
         this->rider->unk488 = 7;
     } else {
