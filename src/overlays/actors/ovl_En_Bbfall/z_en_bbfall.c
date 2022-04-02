@@ -146,9 +146,25 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF344.s")
+void func_808BF344(EnBbfall* this) {
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+    this->drawDmgEffScale = 0.4f;
+    this->drawDmgEffFrozenSteamScale = 0.6f;
+    this->unk_250 = 80;
+    this->drawDmgEffAlpha = 1.0f;
+    this->actor.flags &= ~ACTOR_FLAG_200;
+    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF3B8.s")
+void func_808BF3B8(EnBbfall* this, GlobalContext* globalCtx) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f,
+                              0.15f);
+        this->actor.flags |= ACTOR_FLAG_200;
+    }
+}
 
 s32 func_808BF438(EnBbfall* this, GlobalContext* globalCtx) {
     if (!SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
@@ -188,7 +204,11 @@ void func_808BF578(EnBbfall* this) {
     this->collider.elements[2].info.toucherFlags |= 1;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BF5AC.s")
+void func_808BF5AC(EnBbfall* this) {
+    this->collider.elements[0].info.toucher.effect = 0;
+    this->collider.elements[1].info.toucherFlags &= ~1;
+    this->collider.elements[2].info.toucherFlags &= ~1;
+}
 
 void func_808BF5E0(EnBbfall* this) {
     s32 i;
@@ -295,25 +315,292 @@ void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFAB4.s")
+void func_808BFAB4(EnBbfall* this) {
+    Animation_PlayLoop(&this->skelAnime, &D_06000444);
+    this->collider.base.atFlags |= AT_ON;
+    this->unk_250 = 200;
+    this->unk_24C = 0;
+    this->collider.base.acFlags |= AC_ON;
+    this->actor.speedXZ = 2.0f;
+    this->unk_254 = 0.0f;
+    this->unk_258 = 0.0f;
+    this->actor.gravity = -2.0f;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DOWN);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    this->actionFunc = func_808BFB4C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFB4C.s")
+void func_808BFB4C(EnBbfall* this, GlobalContext* globalCtx) {
+    SkelAnime_Update(&this->skelAnime);
+    func_808BF514(this);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFCCC.s")
+    if (this->actor.bgCheckFlags & 1) {
+        if (func_808BF438(this, globalCtx)) {
+            func_808BFA18(this);
+            return;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFE58.s")
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+        if (this->unk_250 == 0) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_UP);
+            func_808BF578(this);
+            this->actor.velocity.y = 8.0f;
+            func_808BF894(this);
+            return;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808BFF8C.s")
+        if (this->actor.velocity.y < -14.0f) {
+            this->actor.velocity.y *= -0.7f;
+        } else {
+            this->actor.velocity.y = 10.0f;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C00A0.s")
+        this->actor.bgCheckFlags &= ~1;
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &this->actor.world.pos, 7.0f, 2, 2.0f, 0, 0, 0);
+        Math_ScaledStepToS(&this->actor.shape.rot.y, BINANG_ADD(this->actor.yawTowardsPlayer, 0x8000), 0xBB8);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C013C.s")
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C0178.s")
+    if (this->unk_250 > 0) {
+        this->unk_250--;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C01E0.s")
+void func_808BFCCC(EnBbfall* this, GlobalContext* globalCtx) {
+    Vec3f* bodyPartVelocity;
+    Vec3f posDiff;
+    f32 magnitude;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Update.s")
+    func_800BE5CC(&this->actor, &this->collider, 0);
+    this->unk_250 = 15;
+    this->actor.shape.rot.x += 0x4E20;
+    this->actor.speedXZ = 0.0f;
+    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
+    Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x70);
+    this->actor.velocity.y = 0.0f;
+    this->actor.speedXZ = 0.0f;
+    this->unk_24E = 1;
+    this->actor.gravity = -1.5f;
+
+    bodyPartVelocity = &this->bodyPartsVelocity[0];
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++, bodyPartVelocity++) {
+        Math_Vec3f_Diff(&this->bodyPartsPos[i], &this->actor.world.pos, &posDiff);
+        magnitude = Math3D_Vec3fMagnitude(&posDiff);
+        if (magnitude > 1.0f) {
+            magnitude = 2.5f / magnitude;
+        }
+
+        bodyPartVelocity->x = posDiff.x * magnitude;
+        bodyPartVelocity->z = posDiff.z * magnitude;
+        bodyPartVelocity->y = Rand_ZeroFloat(3.5f) + 10.0f;
+    }
+
+    this->actionFunc = func_808BFE58;
+}
+
+void func_808BFE58(EnBbfall* this, GlobalContext* globalCtx) {
+    s32 i;
+
+    this->unk_250--;
+    Math_SmoothStepToS(&this->actor.world.rot.z, 0x4000, 4, 0x1000, 0x400);
+
+    if (this->unk_250 == 0) {
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            func_800B3030(globalCtx, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
+        }
+
+        Actor_MarkForDeath(&this->actor);
+    } else {
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);
+            this->bodyPartsVelocity[i].y += this->actor.gravity;
+        }
+    }
+}
+
+void func_808BFF8C(EnBbfall* this) {
+    this->collider.base.acFlags &= ~AC_ON;
+    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
+    func_800BE5CC(&this->actor, &this->collider, 0);
+
+    if (this->actor.colChkInfo.damageEffect == 5) {
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
+        this->drawDmgEffAlpha = 2.0f;
+        this->drawDmgEffScale = 0.4f;
+    } else if (this->actor.colChkInfo.damageEffect == 1) {
+        Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
+        this->actor.speedXZ = 0.0f;
+    } else if (this->actor.colChkInfo.damageEffect == 14) {
+        this->actor.speedXZ = 0.0f;
+    } else {
+        Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
+        this->actor.speedXZ = 7.0f;
+    }
+
+    this->actionFunc = func_808C00A0;
+}
+
+void func_808C00A0(EnBbfall* this, GlobalContext* globalCtx) {
+    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
+        if (func_808BF438(this, globalCtx)) {
+            func_808BFA18(this);
+        } else {
+            func_808BFAB4(this);
+        }
+    }
+}
+
+void func_808C013C(EnBbfall* this) {
+    this->actor.speedXZ = 0.0f;
+    if (this->actor.velocity.y > 0.0f) {
+        this->actor.velocity.y = 0.0f;
+    }
+
+    this->actor.gravity = -2.0f;
+    this->actionFunc = func_808C0178;
+}
+
+void func_808C0178(EnBbfall* this, GlobalContext* globalCtx) {
+    DECR(this->unk_250);
+
+    if (this->unk_250 == 0) {
+        func_808BF3B8(this, globalCtx);
+        if (this->actor.colChkInfo.health == 0) {
+            func_808BFCCC(this, globalCtx);
+        } else {
+            func_808BFAB4(this);
+        }
+    }
+}
+
+void func_808C01E0(EnBbfall* this, GlobalContext* globalCtx) {
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
+        this->collider.base.atFlags &= ~AT_ON;
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+            (!(this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            Actor_SetDropFlagJntSph(&this->actor, &this->collider);
+            this->unk_24C = 0;
+            this->unk_254 = 0.0f;
+            this->unk_258 = 0.0f;
+            func_808BF5AC(this);
+            func_808BF3B8(this, globalCtx);
+
+            if (Actor_ApplyDamage(&this->actor) == 0) {
+                Enemy_StartFinishingBlow(globalCtx, &this->actor);
+            }
+
+            if (this->actor.colChkInfo.damageEffect == 3) {
+                func_808BF344(this);
+                if (this->actor.colChkInfo.health == 0) {
+                    this->unk_250 = 3;
+                    this->collider.base.acFlags &= ~AC_ON;
+                }
+
+                func_808C013C(this);
+            } else if (this->actor.colChkInfo.health == 0) {
+                func_808BFCCC(this, globalCtx);
+            } else {
+                func_808BFF8C(this);
+            }
+
+            if (this->actor.colChkInfo.damageEffect == 4) {
+                this->drawDmgEffAlpha = 4.0f;
+                this->drawDmgEffScale = 0.4f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
+                            this->collider.elements[0].info.bumper.hitPos.x,
+                            this->collider.elements[0].info.bumper.hitPos.y,
+                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
+            }
+        }
+    } else {
+        if (this->collider.base.atFlags & AT_BOUNCED) {
+            this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
+            func_808BF5AC(this);
+            if (this->actionFunc != func_808BFB4C) {
+                this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
+                this->actor.shape.rot.y = this->actor.world.rot.y;
+                func_808BFAB4(this);
+            }
+        }
+    }
+}
+
+void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnBbfall* this = THIS;
+    Sphere16* sphere;
+    Vec3f sp5C;
+    s32 i;
+    f32 temp_f0_2;
+    s32 pad[2];
+
+    func_808C01E0(this, globalCtx);
+    this->actionFunc(this, globalCtx);
+    if (this->actionFunc != func_808BFE58) {
+        Actor_MoveWithGravity(&this->actor);
+        if (this->unk_24D != 0) {
+            Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 20.0f, 7);
+        }
+
+        for (i = 5; i >= 2; i--) {
+            Math_Vec3f_Diff(&this->unk_268[i - 2], &this->unk_268[i - 1], &sp5C);
+            Math_Vec3f_Scale(&sp5C, (i - 1) * 0.1f);
+            Math_Vec3f_Copy(&this->unk_268[i], &this->unk_268[i - 1]);
+            Math_Vec3f_Sum(&this->unk_268[i], &sp5C, &this->unk_268[i]);
+        }
+
+        Math_Vec3f_Copy(&this->unk_268[1], &this->unk_268[0]);
+        Math_Vec3f_Copy(&this->unk_268[0], &this->actor.world.pos);
+        this->unk_268[0].y += 15.0f;
+        this->unk_268[0].y -= 47.0f * this->unk_254;
+
+        for (i = 0, temp_f0_2 = this->unk_258; i < 3; i++, temp_f0_2 *= 0.7569f) {
+            sphere = &this->collider.elements[i].dim.worldSphere;
+            sphere->radius = 30.0f * temp_f0_2;
+            sphere->center.x = this->unk_268[2 * i].x;
+            sphere->center.y = this->unk_268[2 * i].y + (47.0f * temp_f0_2);
+            sphere->center.z = this->unk_268[2 * i].z;
+        }
+
+        this->collider.elements[0].dim.worldSphere.radius =
+            CLAMP_MIN(this->collider.elements[0].dim.worldSphere.radius, 20);
+
+        Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements->dim.worldSphere.center);
+
+        if (this->collider.base.atFlags & AT_ON) {
+            this->actor.flags |= ACTOR_FLAG_1000000;
+            CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->collider.base.acFlags & AC_ON) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->collider.base.ocFlags1 & OC1_ON) {
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->drawDmgEffAlpha > 0.0f) {
+            if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+                Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+                this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
+                this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
+            } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.4f, 0.01f)) {
+                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            }
+        }
+    }
+}
 
 s32 EnBbfall_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                               Actor* thisx) {

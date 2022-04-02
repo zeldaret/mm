@@ -14,7 +14,7 @@ typedef struct EnBbfall {
     /* 0x1E8 */ Vec3s morphTable[16];
     /* 0x248 */ EnBbfallActionFunc actionFunc;
     /* 0x24C */ u8 unk_24C;
-    /* 0x24D */ s8 unk_24D;
+    /* 0x24D */ u8 unk_24D;
     /* 0x24E */ s8 unk_24E;
     /* 0x24F */ u8 drawDmgEffType;
     /* 0x250 */ s16 unk_250;
@@ -26,7 +26,7 @@ typedef struct EnBbfall {
     /* 0x264 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x268 */ Vec3f unk_268[6];
     /* 0x2B0 */ Vec3f bodyPartsPos[5];
-    /* 0x2EC */ char unk_2EC[0x3C];
+    /* 0x2EC */ Vec3f bodyPartsVelocity[5];
     /* 0x328 */ Gfx* unk_328;
     /* 0x32C */ char unk_32C[0x58];
     /* 0x384 */ ColliderJntSph collider;
