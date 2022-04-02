@@ -116,6 +116,8 @@ extern ColliderJntSphInit D_808C0D9C;
 extern DamageTable D_808C0DAC;
 extern CollisionCheckInfoInit D_808C0DCC;
 extern InitChainEntry D_808C0DD4[];
+extern s8 D_808C0DDC[];
+extern Vec3f D_808C0DEC;
 
 extern SkeletonHeader D_06001A30;
 extern AnimationHeader D_06000184;
@@ -313,11 +315,59 @@ void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/EnBbfall_Update.s")
 
-s32 func_808C07D4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C07D4.s")
+s32 EnBbfall_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                              Actor* thisx) {
+    EnBbfall* this = THIS;
 
-void func_808C080C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bbfall/func_808C080C.s")
+    if (this->unk_24E == -1) {
+        this->unk_328 = *dList;
+        *dList = NULL;
+    }
+
+    return false;
+}
+
+void EnBbfall_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    s32 pad;
+    EnBbfall* this = THIS;
+    MtxF* currentMatrixState;
+
+    if (this->unk_24E == 0) {
+        if (D_808C0DDC[limbIndex] != -1) {
+            if (D_808C0DDC[limbIndex] == 0) {
+                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->bodyPartsPos[0]);
+            } else if (D_808C0DDC[limbIndex] == 3) {
+                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->bodyPartsPos[3]);
+                Matrix_MultiplyVector3fByState(&D_808C0DEC, &this->bodyPartsPos[4]);
+            } else {
+                Matrix_GetStateTranslation(&this->bodyPartsPos[D_808C0DDC[limbIndex]]);
+            }
+        }
+    } else if (this->unk_24E > 0) {
+        if (D_808C0DDC[limbIndex] != -1) {
+            Matrix_GetStateTranslation(&this->bodyPartsPos[D_808C0DDC[limbIndex]]);
+        }
+
+        if (limbIndex == 15) {
+            this->unk_24E = -1;
+        }
+    } else {
+        if (D_808C0DDC[limbIndex] != -1) {
+            OPEN_DISPS(globalCtx->state.gfxCtx);
+
+            currentMatrixState = Matrix_GetCurrentState();
+            currentMatrixState->mf[3][0] = this->bodyPartsPos[D_808C0DDC[limbIndex]].x;
+            currentMatrixState->mf[3][1] = this->bodyPartsPos[D_808C0DDC[limbIndex]].y;
+            currentMatrixState->mf[3][2] = this->bodyPartsPos[D_808C0DDC[limbIndex]].z;
+            Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, this->unk_328);
+
+            CLOSE_DISPS(globalCtx->state.gfxCtx);
+        }
+    }
+}
 
 void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
@@ -333,8 +383,8 @@ void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     gfx = POLY_OPA_DISP;
     gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
     POLY_OPA_DISP = &gfx[1];
-    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, func_808C07D4, func_808C080C,
-                      &this->actor);
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBbfall_OverrideLimbDraw,
+                      EnBbfall_PostLimbDraw, &this->actor);
 
     if (this->unk_24C > 0) {
         func_8012C2DC(globalCtx->state.gfxCtx);
