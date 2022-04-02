@@ -178,7 +178,7 @@ f32 Math_Acot2F(f32 adjacent, f32 opposite);
 
 f32 Math3D_Normalize(Vec3f* vec);
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
-s32 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
+s32 Math3D_LineVsLineClosestTwoPoints(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f* lineBPointA, Vec3f* lineBPointB, Vec3f* lineAClosestToB, Vec3f* lineBClosestToA);
 f32 Math3D_LineClosestToPoint(Linef* line, Vec3f* pos, Vec3f* closestPoint);
 void func_80179B34(float fParm1, f32 fParm2, f32 fParm5, f32 fParm6, f32 param_5, f32 param_6, f32 param_7, float* param_8, float* param_9);
 s32 func_80179B94(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, InfiniteLine* intersect);

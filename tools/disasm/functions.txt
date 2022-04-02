@@ -3257,7 +3257,7 @@
     0x801795C0:("randPlusMinusPoint5Scaled",),
     0x801795F0:("Math3D_Normalize",),
     0x80179678:("Math3D_PlaneVsLineSegClosestPoint",),
-    0x80179798:("func_80179798",),
+    0x80179798:("Math3D_LineVsLineClosestTwoPoints",),
     0x80179A44:("Math3D_LineClosestToPoint",),
     0x80179B34:("func_80179B34",),
     0x80179B94:("func_80179B94",),

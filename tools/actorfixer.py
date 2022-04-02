@@ -397,6 +397,7 @@ animdict = {
     "Math3D_LengthSquared": "Math3D_Vec3fMagnitudeSq",
     "Math3D_Distance": "Math3D_Vec3f_DistXYZ",
     "Math3D_DistanceS": "Math3D_DistXYZ16toF",
+    "func_80179798": "Math3D_LineVsLineClosestTwoPoints",
 
     "func_800DFB14": "Camera_ChangeDataIdx",
     "func_800DFC68": "Camera_GetInputDirYaw",

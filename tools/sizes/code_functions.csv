@@ -2771,7 +2771,7 @@ asm/non_matchings/code/sys_math/Rand_ZeroFloat.s,Rand_ZeroFloat,0x80179594,0xB
 asm/non_matchings/code/sys_math/randPlusMinusPoint5Scaled.s,randPlusMinusPoint5Scaled,0x801795C0,0xC
 asm/non_matchings/code/sys_math3d/Math3D_Normalize.s,Math3D_Normalize,0x801795F0,0x22
 asm/non_matchings/code/sys_math3d/Math3D_PlaneVsLineSegClosestPoint.s,Math3D_PlaneVsLineSegClosestPoint,0x80179678,0x48
-asm/non_matchings/code/sys_math3d/func_80179798.s,func_80179798,0x80179798,0xAB
+asm/non_matchings/code/sys_math3d/Math3D_LineVsLineClosestTwoPoints.s,Math3D_LineVsLineClosestTwoPoints,0x80179798,0xAB
 asm/non_matchings/code/sys_math3d/Math3D_LineClosestToPoint.s,Math3D_LineClosestToPoint,0x80179A44,0x3C
 asm/non_matchings/code/sys_math3d/func_80179B34.s,func_80179B34,0x80179B34,0x18
 asm/non_matchings/code/sys_math3d/func_80179B94.s,func_80179B94,0x80179B94,0x78
