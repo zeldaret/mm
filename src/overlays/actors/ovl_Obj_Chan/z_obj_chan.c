@@ -64,7 +64,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-void ObjChan_InitChandelier(ObjChan* this, GlobalContext* globalCtx);
+void ObjChan_InitChandelier(ObjChan* this2, GlobalContext* globalCtx);
 void ObjChan_InitPot(ObjChan* this, GlobalContext* globalCtx);
 void ObjChan_CreateSmashParticles(ObjChan* this, GlobalContext* globalCtx);
 void ObjChan_DrawPot(Actor* thisx, GlobalContext* globalCtx);
@@ -150,8 +150,8 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
     childRotOut->y += childAngle;
 }
 
-void ObjChan_InitChandelier(ObjChan* thisx, GlobalContext* globalCtx) {
-    ObjChan* this = thisx;
+void ObjChan_InitChandelier(ObjChan* this2, GlobalContext* globalCtx) {
+    ObjChan* this = this2;
     s32 i;
     ObjChan* temp_v0;
     Vec3f childPos;
@@ -208,8 +208,8 @@ void ObjChan_InitChandelier(ObjChan* thisx, GlobalContext* globalCtx) {
     this->actionFunc = ObjChan_ChandelierAction;
 }
 
-void ObjChan_ChandelierAction(ObjChan* thisx, GlobalContext* globalCtx) {
-    ObjChan* this = thisx;
+void ObjChan_ChandelierAction(ObjChan* this2, GlobalContext* globalCtx) {
+    ObjChan* this2 = this;
     ObjChan* temp;
     s32 i;
     Vec3f sp60;
