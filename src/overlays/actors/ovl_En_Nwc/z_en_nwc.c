@@ -9,7 +9,6 @@
 
 #include "z_en_nwc.h"
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
-#include "overlays/actors/ovl_En_Hs/z_en_hs.h" // grog
 #include "objects/object_nwc/object_nwc.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -268,7 +267,7 @@ void EnNwc_CrowAtTheEnd(EnNwc* this, GlobalContext* globalCtx) {
  * ActionFunc for NWC Type: NWC_STATE_FOLLOWING
  */
 void EnNwc_Follow(EnNwc* this, GlobalContext* globalCtx) {
-    Vec3f* chickCoords = ((EnHs*)this->grog)->nwcPos;
+    Vec3f* chickCoords = this->grog->nwcPos;
     Vec3f targetVector;
     s32 pad;
     s16 newRotY;
