@@ -14,15 +14,15 @@ typedef enum RumbleManagerState {
 
 typedef struct RumbleManager {
     /* 0x000 */ u8 rumbleEnabled[MAXCONTROLLERS];
-    /* 0x004 */ u8 unk_04[RUMBLE_REQUEST_BUFFER_SIZE];
+    /* 0x004 */ u8 unk_04[RUMBLE_REQUEST_BUFFER_SIZE]; // seems to have two purposes: act as a priority value over the other rumble requests and to contribute to unk_C4 on each tick
     /* 0x044 */ u8 timer[RUMBLE_REQUEST_BUFFER_SIZE]; // amount of ticks this request will run before unk_04 starts decreasing
     /* 0x084 */ u8 decreaseStep[RUMBLE_REQUEST_BUFFER_SIZE]; // used to decrease unk_04 by this amount each tick after timer runs out
-    /* 0x0C4 */ u8 unk_C4[RUMBLE_REQUEST_BUFFER_SIZE];
+    /* 0x0C4 */ u8 unk_C4[RUMBLE_REQUEST_BUFFER_SIZE]; // the value contained here plus unk_04 must meet a certain threshold to start rumbling this tick
     /* 0x104 */ u8 state;
     /* 0x105 */ u8 updateEnabled; // boolean value which controls if the Update function should be run. Contrary to RUMBLEMANAGER_STATE_WIPE, disabling this does not wipe the state of the requests
     /* 0x106 */ u16 rumblingTimer; // amount of "ticks" updates the Rumble Pak has been rumbling without pause. It is restarted after 5 ticks of not rumbling
     /* 0x108 */ u16 unk_108; // small counter/timer used to restart rumblingTimer?
-    /* 0x10A */ u8 unk_10A;
+    /* 0x10A */ u8 unk_10A; // "override" counterpart for unk_04
     /* 0x10B */ u8 overrideTimer;
     /* 0x10C */ u8 overrideDecreaseStep;
     /* 0x10D */ u8 unk_10D;
