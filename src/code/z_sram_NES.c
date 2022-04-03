@@ -1494,7 +1494,7 @@ void func_80146DF8(SramContext* sramCtx) {
 }
 
 void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
-    if (&gSaveContext.save) {}
+    if (gSaveContext.save.entranceIndex) {} // Required to match
 
     func_801A3D98(gSaveContext.options.audioSetting);
 }

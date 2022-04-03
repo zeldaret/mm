@@ -87,7 +87,7 @@ static InitChainEntry sInitChain[] = {
  * angle can differ from the target angle if the panel is in
  * the middle of rotating.
  */
-s32 ObjTokeidai_GetTargetSunMoonPanelRotation() {
+s32 ObjTokeidai_GetTargetSunMoonPanelRotation(void) {
     if (gSaveContext.save.isNight) {
         return 0x8000;
     }

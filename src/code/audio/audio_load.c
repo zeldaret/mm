@@ -459,6 +459,7 @@ s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId) {
         if (instrument->normalRangeHi != 0x7F) {
             return AudioLoad_SyncLoadSample(instrument->highNotesSound.sample, fontId);
         }
+        // TODO: is this missing return UB?
     } else if (instId == 0x7F) {
         Drum* drum = AudioPlayback_GetDrum(fontId, drumId);
 
@@ -468,6 +469,7 @@ s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId) {
         AudioLoad_SyncLoadSample(drum->sound.sample, fontId);
         return 0;
     }
+    // TODO: is this missing return UB?
 }
 
 void AudioLoad_AsyncLoad(s32 tableType, s32 id, s32 nChunks, s32 retData, OSMesgQueue* retQueue) {

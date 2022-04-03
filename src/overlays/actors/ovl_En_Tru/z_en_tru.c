@@ -320,6 +320,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
 #else
+void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tru/func_80A85F84.s")
 #endif
 
@@ -580,7 +581,6 @@ s32 func_80A86DB8(EnTru* this) {
 
             if (this->skelAnime.curFrame < 57.0f) {
                 if (DECR(this->unk_36C) == 0) {
-                    this = this;
                     this->unk_36C = Rand_S16Offset(8, 8);
                     this->unk_36E = 2;
                 } else {

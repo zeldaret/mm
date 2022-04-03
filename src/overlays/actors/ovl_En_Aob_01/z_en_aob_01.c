@@ -669,7 +669,6 @@ void func_809C2730(EnAob01* this, GlobalContext* globalCtx) {
 void func_809C2788(EnAob01* this, GlobalContext* globalCtx) {
     this->unk_2D2 |= 0x20;
     if (func_809C25E4(this, globalCtx)) {
-        globalCtx = globalCtx;
         if (func_801A8A50(0) != 0x41) {
             globalCtx->nextEntranceIndex = 0x7C10;
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & (u8)~7) | 3;

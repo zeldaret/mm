@@ -241,10 +241,10 @@ void ObjSwitch_InitTrisCollider(ObjSwitch* this, GlobalContext* globalCtx, Colli
 }
 
 Actor* ObjSwitch_SpawnIce(ObjSwitch* this, GlobalContext* globalCtx) {
-    Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ICE_POLY,
-                       this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 25.0f, this->dyna.actor.world.pos.z,
-                       this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y, this->dyna.actor.world.rot.z,
-                       0xFF32);
+    return Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_OBJ_ICE_POLY,
+                              this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 25.0f,
+                              this->dyna.actor.world.pos.z, this->dyna.actor.world.rot.x, this->dyna.actor.world.rot.y,
+                              this->dyna.actor.world.rot.z, 0xFF32);
 }
 
 void ObjSwitch_SetSwitchFlagState(ObjSwitch* this, GlobalContext* globalCtx, s32 setFlag) {

@@ -401,6 +401,7 @@ s32 func_80BF43FC(EnRg* this) {
     return phi_s4;
 }
 #else
+s32 func_80BF43FC(EnRg* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Rg/func_80BF43FC.s")
 #endif
 

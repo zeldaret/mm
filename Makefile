@@ -13,7 +13,7 @@ WERROR ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
 # Disassembles all asm from the ROM instead of skipping files which are entirely in C
-FULL_DISASM ?= 0
+FULL_DISASM ?= 1
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
@@ -100,7 +100,7 @@ ASFLAGS := -march=vr4300 -32 -Iinclude
 MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
-CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712
+CFLAGS += -G 0 -non_shared -fullwarn -verbose -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712,516
 
 # Use relocations and abi fpr names in the dump
 OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
