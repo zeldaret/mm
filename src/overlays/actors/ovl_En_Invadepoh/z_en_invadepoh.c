@@ -3963,8 +3963,8 @@ void func_80B4C730(EnInvadepoh* this, GlobalContext* globalCtx) {
     func_80B44700(this);
     func_80B44EFC(this, globalCtx);
     func_80B43E6C(this, 6, 2000, 100);
-    phi_a2 = ((this->pathIndex < this->endPoint) ? this->pathIndex : this->endPoint - 1 );
-    
+    phi_a2 = ((this->pathIndex < this->endPoint) ? this->pathIndex : this->endPoint - 1);
+
     Math_Vec3s_ToVec3f(&sp4C, &this->pathPoints[phi_a2]);
     Math_Vec3s_ToVec3f(&sp40, &this->pathPoints[phi_a2 + 1]);
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&sp4C, &sp40), 5, 0x7D0, 0x64);
