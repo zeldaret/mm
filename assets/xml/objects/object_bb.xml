@@ -3,7 +3,7 @@
     <File Name="object_bb" Segment="6">
         <!-- Bubble Animations -->
         <Animation Name="gBubbleAttackAnim" Offset="0x184" /> <!-- Original name is "bb_atack" -->
-        <Animation Name="object_bb_Anim_0002AC" Offset="0x2AC" /> <!-- Original name might be "bb_damage". Maybe unused? -->
+        <Animation Name="gBubbleUnusedPainAnim" Offset="0x2AC" /> <!-- Original name might be "bb_damage". Unused. -->
         <Animation Name="gBubbleFlyingAnim" Offset="0x444" /> <!-- Original name is "bb_fly" -->
 
         <!-- Bubble Limb DisplayLimbs -->
