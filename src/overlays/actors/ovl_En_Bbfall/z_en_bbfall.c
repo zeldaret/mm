@@ -6,6 +6,7 @@
 
 #include "z_en_bbfall.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/object_bb/object_bb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
@@ -153,16 +154,13 @@ static s8 D_808C0DDC[] = {
  */
 static Vec3f D_808C0DEC = { 1000.0f, -700.0f, 0.0f };
 
-extern SkeletonHeader D_06001A30;
-extern AnimationHeader D_06000184;
-extern AnimationHeader D_06000444;
-
 void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBbfall* this = THIS;
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, D_808C0DD4);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &D_06001A30, &D_06000444, this->jointTable, this->morphTable, 16);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable, this->morphTable,
+                   16);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_808C0DAC, &D_808C0DCC);
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_808C0D9C, this->colliderElements);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
@@ -247,7 +245,7 @@ void func_808BF5AC(EnBbfall* this) {
 void func_808BF5E0(EnBbfall* this) {
     s32 i;
 
-    Animation_PlayLoop(&this->skelAnime, &D_06000184);
+    Animation_PlayLoop(&this->skelAnime, &gBubbleAttackAnim);
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
@@ -350,7 +348,7 @@ void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx) {
 }
 
 void func_808BFAB4(EnBbfall* this) {
-    Animation_PlayLoop(&this->skelAnime, &D_06000444);
+    Animation_PlayLoop(&this->skelAnime, &gBubbleFlyingAnim);
     this->collider.base.atFlags |= AT_ON;
     this->unk_250 = 200;
     this->unk_24C = 0;
