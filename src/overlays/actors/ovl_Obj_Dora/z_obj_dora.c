@@ -23,6 +23,18 @@ void ObjDora_MoveGong(ObjDora* this, GlobalContext* globalCtx);
 s32 ObjDora_IsHalfHourly(u16 time);
 void ObjDora_UpdateCollision(ObjDora* this, GlobalContext* globalCtx);
 
+typedef enum {
+    /* 0x0 */ DORA_HIT_NONE,
+    /* 0x1 */ DORA_HIT_LIGHT,
+    /* 0x2 */ DORA_HIT_STRONG
+} ObjDoraHitStrength;
+
+typedef enum {
+    /* 0x0 */ DORA_DMGEFF_NONE,
+    /* 0xE */ DORA_DMGEFF_STRONG = 0xE,
+    /* 0xF */ DORA_DMGEFF_LIGHT
+} ObjDoraDamageEffect;
+
 const ActorInit Obj_Dora_InitVars = {
     ACTOR_OBJ_DORA,
     ACTORCAT_NPC,
@@ -239,10 +251,10 @@ void ObjDora_MoveGong(ObjDora* this, GlobalContext* globalCtx) {
 }
 
 s32 ObjDora_IsHalfHourly(u16 time) {
-    f32 temp = time;
+    f32 timeHalfHour = time;
 
-    temp -= (CLOCK_TIME_F(0, 30) * (s32)(time / CLOCK_TIME_F(0, 30)));
-    if ((temp < CLOCK_TIME_F(0, 1)) || (CLOCK_TIME_F(0, 29) < temp)) {
+    timeHalfHour -= (CLOCK_TIME_F(0, 30) * (s32)(time / CLOCK_TIME_F(0, 30)));
+    if ((timeHalfHour < CLOCK_TIME_F(0, 1)) || (CLOCK_TIME_F(0, 29) < timeHalfHour)) {
         return true;
     }
 
