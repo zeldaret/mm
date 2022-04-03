@@ -247,13 +247,13 @@ void EnBbfall_CheckForWall(EnBbfall* this) {
 }
 
 void EnBbfall_EnableColliders(EnBbfall* this) {
-    this->collider.elements[0].info.toucher.effect = 1; // Fire
+    this->collider.elements[0].info.toucher.effect = ELEMTYPE_UNK1; // Fire
     this->collider.elements[1].info.toucherFlags |= TOUCH_ON;
     this->collider.elements[2].info.toucherFlags |= TOUCH_ON;
 }
 
 void EnBbfall_DisableColliders(EnBbfall* this) {
-    this->collider.elements[0].info.toucher.effect = 0; // Nothing
+    this->collider.elements[0].info.toucher.effect = ELEMTYPE_UNK0; // Nothing
     this->collider.elements[1].info.toucherFlags &= ~TOUCH_ON;
     this->collider.elements[2].info.toucherFlags &= ~TOUCH_ON;
 }
