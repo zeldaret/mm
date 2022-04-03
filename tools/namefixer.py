@@ -659,17 +659,30 @@ def replace_single(file):
             outfile.write(srcdata)
 
 def replace_all(repo):
-    for subdir, dirs, files in os.walk(repo + os.sep + 'src'):
+    for subdir, dirs, files in os.walk(os.path.join(repo,'src')):
         for filename in files:
             if filename.endswith('.c') or filename.endswith('.h'):
-                file = subdir + os.sep + filename
+                file = os.path.join(subdir,filename)
                 replace_single(file)
 
-    for subdir, dirs, files in os.walk(repo + os.sep + 'asm'):
+    for subdir, dirs, files in os.walk(os.path.join(repo,'asm')):
         for filename in files:
             if filename.endswith('.s'):
-                file = subdir + os.sep + filename
+                file = os.path.join(subdir,filename)
                 replace_single(file)
+
+    for subdir, dirs, files in os.walk(os.path.join(repo,'data')):
+        for filename in files:
+            if filename.endswith('.s'):
+                file = os.path.join(subdir,filename)
+                replace_single(file)
+
+    for subdir, dirs, files in os.walk(os.path.join(repo,'docs')):
+        for filename in files:
+            if filename.endswith('.md'):
+                file = os.path.join(subdir,filename)
+                replace_single(file)
+
 
 def dictSanityCheck():
     keys = wordReplace.keys()
@@ -680,6 +693,7 @@ def dictSanityCheck():
             print(f"This would produce unintended renames")
             print(f"Fix this by removing said key from the dictionary")
             exit(-1)
+
     keys = simpleReplace.keys()
     values = {*wordReplace.values(), *simpleReplace.values()}
     for k in keys:
