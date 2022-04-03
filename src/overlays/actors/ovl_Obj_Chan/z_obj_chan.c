@@ -150,6 +150,7 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
     childRotOut->y += childAngle;
 }
 
+//! @TODO: Possibly takes actor and recasts
 void ObjChan_InitChandelier(ObjChan* this2, GlobalContext* globalCtx) {
     ObjChan* this = this2;
     s32 i;
@@ -208,6 +209,7 @@ void ObjChan_InitChandelier(ObjChan* this2, GlobalContext* globalCtx) {
     this->actionFunc = ObjChan_ChandelierAction;
 }
 
+//! @TODO: More descriptive name than Action?
 void ObjChan_ChandelierAction(ObjChan* this2, GlobalContext* globalCtx) {
     ObjChan* this = this2;
     ObjChan* temp;
