@@ -176,7 +176,7 @@ void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->timer = 0;
     func_808BF5E0(this);
     Actor_SetFocus(&this->actor, 0.0f);
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
         this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
     }
 }
@@ -276,7 +276,7 @@ void func_808BF5E0(EnBbfall* this) {
     this->actor.velocity.y = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.world.pos.y -= 90.0f;
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_268); i++) {
         Math_Vec3f_Copy(&this->unk_268[i], &this->actor.world.pos);
         this->unk_268[i].y -= 47.0f;
     }
@@ -600,7 +600,7 @@ void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 20.0f, 7);
         }
 
-        for (i = 5; i >= 2; i--) {
+        for (i = ARRAY_COUNT(this->unk_268) - 1; i >= 2; i--) {
             Math_Vec3f_Diff(&this->unk_268[i - 2], &this->unk_268[i - 1], &sp5C);
             Math_Vec3f_Scale(&sp5C, (i - 1) * 0.1f);
             Math_Vec3f_Copy(&this->unk_268[i], &this->unk_268[i - 1]);
@@ -612,7 +612,7 @@ void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_268[0].y += 15.0f;
         this->unk_268[0].y -= 47.0f * this->flameScaleY;
 
-        for (i = 0, temp_f0_2 = this->flameScaleX; i < 3; i++, temp_f0_2 *= 0.7569f) {
+        for (i = 0, temp_f0_2 = this->flameScaleX; i < ARRAY_COUNT(this->colliderElements); i++, temp_f0_2 *= 0.7569f) {
             sphere = &this->collider.elements[i].dim.worldSphere;
             sphere->radius = 30.0f * temp_f0_2;
             sphere->center.x = this->unk_268[2 * i].x;
