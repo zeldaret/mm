@@ -4066,8 +4066,7 @@ beginseg
     name "ovl_Obj_Dora"
     compress
     include "build/src/overlays/actors/ovl_Obj_Dora/z_obj_dora.o"
-    //include "build/data/ovl_Obj_Dora/ovl_Obj_Dora.data.o"
-    include "build/data/ovl_Obj_Dora/ovl_Obj_Dora.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Dora/ovl_Obj_Dora_reloc.o"
 endseg
 
 beginseg
