@@ -16,14 +16,14 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808BF5E0(EnBbfall* this);
-void func_808BF734(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BF7A0(EnBbfall* this);
-void func_808BF830(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BF894(EnBbfall* this);
-void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BFA18(EnBbfall* this);
-void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_SetupWaitForPlayer(EnBbfall* this);
+void EnBbfall_WaitForPlayer(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_SetupEmerge(EnBbfall* this);
+void EnBbfall_Emerge(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_SetupFly(EnBbfall* this);
+void EnBbfall_Fly(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_SetupSinkIntoLava(EnBbfall* this);
+void EnBbfall_SinkIntoLava(EnBbfall* this, GlobalContext* globalCtx);
 void EnBbfall_Down(EnBbfall* this, GlobalContext* globalCtx);
 void EnBbfall_Dead(EnBbfall* this, GlobalContext* globalCtx);
 void EnBbfall_Damage(EnBbfall* this, GlobalContext* globalCtx);
@@ -174,7 +174,7 @@ void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
     this->timer = 0;
-    func_808BF5E0(this);
+    EnBbfall_SetupWaitForPlayer(this);
     Actor_SetFocus(&this->actor, 0.0f);
     for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
         this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
@@ -207,19 +207,19 @@ void EnBbfall_Thaw(EnBbfall* this, GlobalContext* globalCtx) {
     }
 }
 
-s32 func_808BF438(EnBbfall* this, GlobalContext* globalCtx) {
+s32 EnBbfall_IsTouchingLava(EnBbfall* this, GlobalContext* globalCtx) {
     if (!SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
         u32 temp_v0 = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
         if ((temp_v0 == 2) || (temp_v0 == 3) || (temp_v0 == 9)) {
-            return 1;
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
-void func_808BF4B4(EnBbfall* this) {
+void EnBbfall_PlaySfx(EnBbfall* this) {
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_MOUTH);
     }
@@ -246,19 +246,19 @@ void EnBbfall_CheckForWall(EnBbfall* this) {
     }
 }
 
-void func_808BF578(EnBbfall* this) {
-    this->collider.elements->info.toucher.effect = 1;
-    this->collider.elements[1].info.toucherFlags |= 1;
-    this->collider.elements[2].info.toucherFlags |= 1;
+void EnBbfall_EnableColliders(EnBbfall* this) {
+    this->collider.elements[0].info.toucher.effect = 1; // Fire
+    this->collider.elements[1].info.toucherFlags |= TOUCH_ON;
+    this->collider.elements[2].info.toucherFlags |= TOUCH_ON;
 }
 
-void func_808BF5AC(EnBbfall* this) {
-    this->collider.elements[0].info.toucher.effect = 0;
-    this->collider.elements[1].info.toucherFlags &= ~1;
-    this->collider.elements[2].info.toucherFlags &= ~1;
+void EnBbfall_DisableColliders(EnBbfall* this) {
+    this->collider.elements[0].info.toucher.effect = 0; // Nothing
+    this->collider.elements[1].info.toucherFlags &= ~TOUCH_ON;
+    this->collider.elements[2].info.toucherFlags &= ~TOUCH_ON;
 }
 
-void func_808BF5E0(EnBbfall* this) {
+void EnBbfall_SetupWaitForPlayer(EnBbfall* this) {
     s32 i;
 
     Animation_PlayLoop(&this->skelAnime, &gBubbleAttackAnim);
@@ -267,34 +267,34 @@ void func_808BF5E0(EnBbfall* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->flameScaleY = 0.8f;
     this->flameScaleX = 1.0f;
-    this->unk_24C = -1;
+    this->flameOpacity = 255;
     this->actor.colChkInfo.health = sColChkInfoInit.health;
     this->actor.colorFilterTimer = 0;
-    this->unk_24D = 0;
+    this->isBgCheckCollisionEnabled = false;
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
     this->actor.world.pos.y -= 90.0f;
-    for (i = 0; i < ARRAY_COUNT(this->unk_268); i++) {
-        Math_Vec3f_Copy(&this->unk_268[i], &this->actor.world.pos);
-        this->unk_268[i].y -= 47.0f;
+    for (i = 0; i < ARRAY_COUNT(this->flamePos); i++) {
+        Math_Vec3f_Copy(&this->flamePos[i], &this->actor.world.pos);
+        this->flamePos[i].y -= 47.0f;
     }
 
     this->actor.bgCheckFlags &= ~1;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actionFunc = func_808BF734;
+    this->actionFunc = EnBbfall_WaitForPlayer;
 }
 
-void func_808BF734(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_WaitForPlayer(EnBbfall* this, GlobalContext* globalCtx) {
     if (this->timer != 0) {
         this->timer--;
     } else if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE) && (this->actor.xyzDistToPlayerSq <= SQ(250.0f))) {
-        func_808BF7A0(this);
+        EnBbfall_SetupEmerge(this);
     }
 }
 
-void func_808BF7A0(EnBbfall* this) {
+void EnBbfall_SetupEmerge(EnBbfall* this) {
     this->actor.gravity = -1.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -302,39 +302,40 @@ void func_808BF7A0(EnBbfall* this) {
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
     this->actor.velocity.y = 17.0f;
-    func_808BF578(this);
+    EnBbfall_EnableColliders(this);
     this->actor.flags |= ACTOR_FLAG_1;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEFALL_APPEAR);
-    this->actionFunc = func_808BF830;
+    this->actionFunc = EnBbfall_Emerge;
 }
 
-void func_808BF830(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_Emerge(EnBbfall* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.home.pos.y < this->actor.world.pos.y) {
-        func_808BF894(this);
+        EnBbfall_SetupFly(this);
     }
 
-    func_808BF4B4(this);
+    EnBbfall_PlaySfx(this);
 }
 
-void func_808BF894(EnBbfall* this) {
-    this->unk_24C = 0xFF;
-    this->unk_24D = 1;
+void EnBbfall_SetupFly(EnBbfall* this) {
+    this->flameOpacity = 255;
+    this->isBgCheckCollisionEnabled = true;
     this->actor.bgCheckFlags &= ~1;
     this->actor.speedXZ = 5.0f;
     this->actor.gravity = -1.0f;
-    this->actionFunc = func_808BF8DC;
+    this->actionFunc = EnBbfall_Fly;
 }
 
-void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_Fly(EnBbfall* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     Math_StepToF(&this->flameScaleY, 0.8f, 0.1f);
     Math_StepToF(&this->flameScaleX, 1.0f, 0.1f);
     EnBbfall_CheckForWall(this);
     if (this->actor.bgCheckFlags & 1) {
-        if (func_808BF438(this, globalCtx)) {
-            func_808BFA18(this);
+        if (EnBbfall_IsTouchingLava(this, globalCtx)) {
+            EnBbfall_SetupSinkIntoLava(this);
         } else {
+            // Bounce upwards off the ground
             this->actor.velocity.y *= -1.2f;
             this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
             this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(73728.0f);
@@ -344,22 +345,22 @@ void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx) {
     }
 
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    func_808BF4B4(this);
+    EnBbfall_PlaySfx(this);
 }
 
-void func_808BFA18(EnBbfall* this) {
-    this->unk_24D = 0;
+void EnBbfall_SetupSinkIntoLava(EnBbfall* this) {
+    this->isBgCheckCollisionEnabled = false;
     this->collider.base.acFlags &= ~AC_ON;
-    this->actionFunc = func_808BFA3C;
+    this->actionFunc = EnBbfall_SinkIntoLava;
 }
 
-void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_SinkIntoLava(EnBbfall* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.world.pos.y < (this->actor.floorHeight - 90.0f)) {
         this->timer = 10;
-        func_808BF5E0(this);
+        EnBbfall_SetupWaitForPlayer(this);
     } else {
-        func_808BF4B4(this);
+        EnBbfall_PlaySfx(this);
     }
 }
 
@@ -367,7 +368,7 @@ void EnBbfall_SetupDown(EnBbfall* this) {
     Animation_PlayLoop(&this->skelAnime, &gBubbleFlyingAnim);
     this->collider.base.atFlags |= AT_ON;
     this->timer = 200;
-    this->unk_24C = 0;
+    this->flameOpacity = 0;
     this->collider.base.acFlags |= AC_ON;
     this->actor.speedXZ = 2.0f;
     this->flameScaleY = 0.0f;
@@ -383,17 +384,17 @@ void EnBbfall_Down(EnBbfall* this, GlobalContext* globalCtx) {
     EnBbfall_CheckForWall(this);
 
     if (this->actor.bgCheckFlags & 1) {
-        if (func_808BF438(this, globalCtx)) {
-            func_808BFA18(this);
+        if (EnBbfall_IsTouchingLava(this, globalCtx)) {
+            EnBbfall_SetupSinkIntoLava(this);
             return;
         }
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         if (this->timer == 0) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_UP);
-            func_808BF578(this);
+            EnBbfall_EnableColliders(this);
             this->actor.velocity.y = 8.0f;
-            func_808BF894(this);
+            EnBbfall_SetupFly(this);
             return;
         }
 
@@ -498,8 +499,8 @@ void EnBbfall_SetupDamage(EnBbfall* this) {
 void EnBbfall_Damage(EnBbfall* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
-        if (func_808BF438(this, globalCtx)) {
-            func_808BFA18(this);
+        if (EnBbfall_IsTouchingLava(this, globalCtx)) {
+            EnBbfall_SetupSinkIntoLava(this);
         } else {
             EnBbfall_SetupDown(this);
         }
@@ -537,10 +538,10 @@ void EnBbfall_UpdateDamage(EnBbfall* this, GlobalContext* globalCtx) {
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
             (!(this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetDropFlagJntSph(&this->actor, &this->collider);
-            this->unk_24C = 0;
+            this->flameOpacity = 0;
             this->flameScaleY = 0.0f;
             this->flameScaleX = 0.0f;
-            func_808BF5AC(this);
+            EnBbfall_DisableColliders(this);
             EnBbfall_Thaw(this, globalCtx);
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
@@ -574,7 +575,7 @@ void EnBbfall_UpdateDamage(EnBbfall* this, GlobalContext* globalCtx) {
     } else {
         if (this->collider.base.atFlags & AT_BOUNCED) {
             this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
-            func_808BF5AC(this);
+            EnBbfall_DisableColliders(this);
             if (this->actionFunc != EnBbfall_Down) {
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -589,35 +590,35 @@ void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
     Sphere16* sphere;
     Vec3f sp5C;
     s32 i;
-    f32 temp_f0_2;
+    f32 scale;
     s32 pad[2];
 
     EnBbfall_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
     if (this->actionFunc != EnBbfall_Dead) {
         Actor_MoveWithGravity(&this->actor);
-        if (this->unk_24D != 0) {
+        if (this->isBgCheckCollisionEnabled) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 20.0f, 7);
         }
 
-        for (i = ARRAY_COUNT(this->unk_268) - 1; i >= 2; i--) {
-            Math_Vec3f_Diff(&this->unk_268[i - 2], &this->unk_268[i - 1], &sp5C);
+        for (i = ARRAY_COUNT(this->flamePos) - 1; i >= 2; i--) {
+            Math_Vec3f_Diff(&this->flamePos[i - 2], &this->flamePos[i - 1], &sp5C);
             Math_Vec3f_Scale(&sp5C, (i - 1) * 0.1f);
-            Math_Vec3f_Copy(&this->unk_268[i], &this->unk_268[i - 1]);
-            Math_Vec3f_Sum(&this->unk_268[i], &sp5C, &this->unk_268[i]);
+            Math_Vec3f_Copy(&this->flamePos[i], &this->flamePos[i - 1]);
+            Math_Vec3f_Sum(&this->flamePos[i], &sp5C, &this->flamePos[i]);
         }
 
-        Math_Vec3f_Copy(&this->unk_268[1], &this->unk_268[0]);
-        Math_Vec3f_Copy(&this->unk_268[0], &this->actor.world.pos);
-        this->unk_268[0].y += 15.0f;
-        this->unk_268[0].y -= 47.0f * this->flameScaleY;
+        Math_Vec3f_Copy(&this->flamePos[1], &this->flamePos[0]);
+        Math_Vec3f_Copy(&this->flamePos[0], &this->actor.world.pos);
+        this->flamePos[0].y += 15.0f;
+        this->flamePos[0].y -= 47.0f * this->flameScaleY;
 
-        for (i = 0, temp_f0_2 = this->flameScaleX; i < ARRAY_COUNT(this->colliderElements); i++, temp_f0_2 *= 0.7569f) {
+        for (i = 0, scale = this->flameScaleX; i < ARRAY_COUNT(this->colliderElements); i++, scale *= 0.7569f) {
             sphere = &this->collider.elements[i].dim.worldSphere;
-            sphere->radius = 30.0f * temp_f0_2;
-            sphere->center.x = this->unk_268[2 * i].x;
-            sphere->center.y = this->unk_268[2 * i].y + (47.0f * temp_f0_2);
-            sphere->center.z = this->unk_268[2 * i].z;
+            sphere->radius = 30.0f * scale;
+            sphere->center.x = this->flamePos[2 * i].x;
+            sphere->center.y = this->flamePos[2 * i].y + (47.0f * scale);
+            sphere->center.z = this->flamePos[2 * i].z;
         }
 
         this->collider.elements[0].dim.worldSphere.radius =
@@ -709,8 +710,8 @@ void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     EnBbfall* this = THIS;
     MtxF* currentMatrixState;
     Gfx* gfx;
-    s32 phi_s3;
-    Vec3f* ptr;
+    s32 opacity;
+    Vec3f* pos;
     s32 i;
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -721,7 +722,7 @@ void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBbfall_OverrideLimbDraw,
                       EnBbfall_PostLimbDraw, &this->actor);
 
-    if (this->unk_24C > 0) {
+    if (this->flameOpacity > 0) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_RotateY(
             ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
@@ -730,23 +731,23 @@ void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         currentMatrixState = Matrix_GetCurrentState();
 
-        phi_s3 = this->unk_24C;
-        ptr = &this->unk_268[0];
+        opacity = this->flameOpacity;
+        pos = &this->flamePos[0];
 
-        for (i = 0; i < ARRAY_COUNT(this->unk_268); i++, ptr++) {
+        for (i = 0; i < ARRAY_COUNT(this->flamePos); i++, pos++) {
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
                                         ((globalCtx->gameplayFrames + (i * 10)) * (-20 + i * 2)) & 0x1FF, 32, 128));
-            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, phi_s3);
-            currentMatrixState->mf[3][0] = ptr->x;
-            currentMatrixState->mf[3][1] = ptr->y;
-            currentMatrixState->mf[3][2] = ptr->z;
+            gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 0, opacity);
+            currentMatrixState->mf[3][0] = pos->x;
+            currentMatrixState->mf[3][1] = pos->y;
+            currentMatrixState->mf[3][2] = pos->z;
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
 
-            phi_s3 -= 35;
-            if (phi_s3 < 0) {
+            opacity -= 35;
+            if (opacity < 0) {
                 break;
             }
 

@@ -14,8 +14,8 @@ typedef struct EnBbfall {
     /* 0x188 */ Vec3s jointTable[BUBBLE_LIMB_MAX];
     /* 0x1E8 */ Vec3s morphTable[BUBBLE_LIMB_MAX];
     /* 0x248 */ EnBbfallActionFunc actionFunc;
-    /* 0x24C */ u8 unk_24C;
-    /* 0x24D */ u8 unk_24D;
+    /* 0x24C */ u8 flameOpacity;
+    /* 0x24D */ u8 isBgCheckCollisionEnabled;
     /* 0x24E */ s8 bodyPartDrawStatus;
     /* 0x24F */ u8 drawDmgEffType;
     /* 0x250 */ s16 timer;
@@ -24,7 +24,7 @@ typedef struct EnBbfall {
     /* 0x25C */ f32 drawDmgEffAlpha;
     /* 0x260 */ f32 drawDmgEffScale;
     /* 0x264 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x268 */ Vec3f unk_268[6];
+    /* 0x268 */ Vec3f flamePos[6];
     /* 0x2B0 */ Vec3f bodyPartsPos[5];
     /* 0x2EC */ Vec3f bodyPartsVelocity[5];
     /* 0x328 */ Gfx* limbDList;
