@@ -20,8 +20,8 @@ void ObjDora_SetupWait(ObjDora* this);
 void ObjDora_Wait(ObjDora* this, GlobalContext* globalCtx);
 void ObjDora_SetupMoveGong(ObjDora* this);
 void ObjDora_MoveGong(ObjDora* this, GlobalContext* globalCtx);
-bool ObjDora_IsHalfHourly(u16 time);
-void ObjDora_CheckCollision(ObjDora* this, GlobalContext* globalCtx);
+s32 ObjDora_IsHalfHourly(u16 time);
+void ObjDora_UpdateCollision(ObjDora* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Dora_InitVars = {
     ACTOR_OBJ_DORA,
@@ -118,47 +118,49 @@ static ColliderTrisInit sTrisInit = {
 };
 
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x0),
-    /* Deku Stick     */ DMG_ENTRY(2, 0xF),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(0, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(0, 0xF),
-    /* Normal arrow   */ DMG_ENTRY(0, 0xF),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(2, 0xF),
-    /* Hookshot       */ DMG_ENTRY(0, 0xF),
-    /* Goron punch    */ DMG_ENTRY(2, 0xE),
-    /* Sword          */ DMG_ENTRY(1, 0xF),
-    /* Goron pound    */ DMG_ENTRY(1, 0xF),
-    /* Fire arrow     */ DMG_ENTRY(0, 0xF),
-    /* Ice arrow      */ DMG_ENTRY(0, 0xF),
-    /* Light arrow    */ DMG_ENTRY(0, 0xF),
-    /* Goron spikes   */ DMG_ENTRY(1, 0xF),
-    /* Deku spin      */ DMG_ENTRY(0, 0xF),
-    /* Deku bubble    */ DMG_ENTRY(0, 0x0),
-    /* Deku launch    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x0),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x0),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0xF),
-    /* Zora punch     */ DMG_ENTRY(0, 0xF),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(0, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Deku Stick     */ DMG_ENTRY(2, DORA_DMGEFF_LIGHT),
+    /* Horse trample  */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* Normal arrow   */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(2, DORA_DMGEFF_LIGHT),
+    /* Hookshot       */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* Goron punch    */ DMG_ENTRY(2, DORA_DMGEFF_STRONG),
+    /* Sword          */ DMG_ENTRY(1, DORA_DMGEFF_LIGHT),
+    /* Goron pound    */ DMG_ENTRY(1, DORA_DMGEFF_LIGHT),
+    /* Fire arrow     */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* Ice arrow      */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* Light arrow    */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* Goron spikes   */ DMG_ENTRY(1, DORA_DMGEFF_LIGHT),
+    /* Deku spin      */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* Deku bubble    */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Zora barrier   */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Normal shield  */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, DORA_DMGEFF_LIGHT),
+    /* Zora punch     */ DMG_ENTRY(0, DORA_DMGEFF_LIGHT),
+    /* Spin attack    */ DMG_ENTRY(1, DORA_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(0, DORA_DMGEFF_NONE),
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 void ObjDora_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjDora* this = THIS;
-    s32 i, j;
+    s32 i;
+    s32 j;
     Vec3f vtx[3];
-    s32 buf = 0, buff2 = 0;
+    s32 buf = 0;
+    s32 buff2 = 0;
 
     Actor_SetScale(&this->actor, 0.1f);
     ActorShape_Init(&this->actor.shape, 0.0f, &ActorShadow_DrawCircle, 36.0f);
@@ -236,18 +238,18 @@ void ObjDora_MoveGong(ObjDora* this, GlobalContext* globalCtx) {
     this->gongRotation.z = Math_SinS(this->gongAngle.z) * this->gongForce.z;
 }
 
-bool ObjDora_IsHalfHourly(u16 time) {
+s32 ObjDora_IsHalfHourly(u16 time) {
     f32 temp = time;
-    temp -= (1365.3334f * (s32)(time / 1365.3334f));
 
-    if ((temp < 45.511112f) || (1319.8223f < temp)) {
+    temp -= (CLOCK_TIME_F(0, 30) * (s32)(time / CLOCK_TIME_F(0, 30)));
+    if ((temp < CLOCK_TIME_F(0, 1)) || (CLOCK_TIME_F(0, 29) < temp)) {
         return true;
     }
 
     return false;
 }
 
-void ObjDora_CheckCollision(ObjDora* this, GlobalContext* globalCtx) {
+void ObjDora_UpdateCollision(ObjDora* this, GlobalContext* globalCtx) {
     Actor* itemDrop;
     u16 time;
 
@@ -257,9 +259,9 @@ void ObjDora_CheckCollision(ObjDora* this, GlobalContext* globalCtx) {
         this->collisionCooldownTimer = 5;
 
         switch (this->actor.colChkInfo.damageEffect) {
-            case 14:
-            case 15:
-                if (this->actor.colChkInfo.damageEffect == 15) {
+            case DORA_DMGEFF_STRONG:
+            case DORA_DMGEFF_LIGHT:
+                if (this->actor.colChkInfo.damageEffect == DORA_DMGEFF_LIGHT) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DORA_S);
                     this->lastGongHitType = DORA_HIT_LIGHT;
                 } else {
@@ -270,7 +272,7 @@ void ObjDora_CheckCollision(ObjDora* this, GlobalContext* globalCtx) {
                 func_800BC848(&this->actor, globalCtx, 5, 10);
                 ObjDora_SetupMoveGong(this);
 
-                if ((ObjDora_IsHalfHourly(time) == 1) && (this->rupeeDropTimer == 0)) {
+                if ((ObjDora_IsHalfHourly(time) == true) && (this->rupeeDropTimer == 0)) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
                     itemDrop = Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_BLUE);
                     itemDrop->world.rot.y = this->actor.world.rot.y;
@@ -284,11 +286,11 @@ void ObjDora_CheckCollision(ObjDora* this, GlobalContext* globalCtx) {
     }
 
     if (this->rupeeDropTimer > 0) {
-        this->rupeeDropTimer -= 1;
+        this->rupeeDropTimer--;
     }
 
     if (this->collisionCooldownTimer > 0) {
-        this->collisionCooldownTimer -= 1;
+        this->collisionCooldownTimer--;
     } else {
         CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderTris.base);
     }
@@ -298,12 +300,12 @@ void ObjDora_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjDora* this = THIS;
 
     this->actionFunc(this, globalCtx);
-    ObjDora_CheckCollision(this, globalCtx);
+    ObjDora_UpdateCollision(this, globalCtx);
 }
 
 void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjDora* this = THIS;
-    f32 gongXForce;
+    f32 gongForceX;
 
     static Vec3f position = { 0.0f, -61.5f, 0.0f };
 
@@ -311,9 +313,9 @@ void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     if (this->actionFunc == ObjDora_MoveGong) {
-        gongXForce = this->gongForce.x;
+        gongForceX = this->gongForce.x;
         if ((globalCtx->state.frames % 2) != 0) {
-            gongXForce *= -1.0f;
+            gongForceX *= -1.0f;
         }
 
         Matrix_StatePush();
@@ -321,7 +323,7 @@ void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, &gDoraGongDL);
 
-        Matrix_InsertTranslation(position.x, position.y + gongXForce, position.z + gongXForce, MTXMODE_APPLY);
+        Matrix_InsertTranslation(position.x, position.y + gongForceX, position.z + gongForceX, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->gongRotation.z - this->gongRotation.x, MTXMODE_APPLY);
         Matrix_InsertTranslation(-position.x, -position.y, -position.z, MTXMODE_APPLY);
 
