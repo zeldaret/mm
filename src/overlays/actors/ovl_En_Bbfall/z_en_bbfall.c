@@ -209,9 +209,9 @@ void EnBbfall_Thaw(EnBbfall* this, GlobalContext* globalCtx) {
 
 s32 EnBbfall_IsTouchingLava(EnBbfall* this, GlobalContext* globalCtx) {
     if (!SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
-        u32 temp_v0 = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        u32 floorType = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((temp_v0 == 2) || (temp_v0 == 3) || (temp_v0 == 9)) {
+        if ((floorType == 2) || (floorType == 3) || (floorType == 9)) {
             return true;
         }
     }
