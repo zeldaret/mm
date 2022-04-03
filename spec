@@ -1058,7 +1058,6 @@ beginseg
     name "ovl_En_Bbfall"
     compress
     include "build/src/overlays/actors/ovl_En_Bbfall/z_en_bbfall.o"
-    include "build/data/ovl_En_Bbfall/ovl_En_Bbfall.data.o"
     include "build/data/ovl_En_Bbfall/ovl_En_Bbfall.reloc.o"
 endseg
 

@@ -29,7 +29,6 @@ void func_808BF7A0(EnBbfall* this);
 void func_808BF894(EnBbfall* this);
 void func_808BFA18(EnBbfall* this);
 
-#if 0
 const ActorInit En_Bbfall_InitVars = {
     ACTOR_EN_BBFALL,
     ACTORCAT_ENEMY,
@@ -45,23 +44,52 @@ const ActorInit En_Bbfall_InitVars = {
 // static ColliderJntSphElementInit sJntSphElementsInit[3] = {
 static ColliderJntSphElementInit D_808C0D30[3] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x01, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x01, 0x08 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_ON | BUMP_HOOKABLE,
+            OCELEM_ON,
+        },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x01, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x01, 0x08 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
     },
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x01, 0x08 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_HARD, BUMP_NONE, OCELEM_NONE, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x01, 0x08 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_ON | TOUCH_SFX_HARD,
+            BUMP_NONE,
+            OCELEM_NONE,
+        },
         { 0, { { 0, 0, 0 }, 20 }, 100 },
     },
 };
 
 // static ColliderJntSphInit sJntSphInit = {
 static ColliderJntSphInit D_808C0D9C = {
-    { COLTYPE_HIT3, AT_NONE | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
-    3, D_808C0D30, // sJntSphElementsInit,
+    {
+        COLTYPE_HIT3,
+        AT_NONE | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
+    3,
+    D_808C0D30, // sJntSphElementsInit,
 };
 
 // static DamageTable sDamageTable = {
@@ -109,15 +137,21 @@ static InitChainEntry D_808C0DD4[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
-#endif
+/**
+ * This maps a given limb based on its limbIndex to its appropriate index
+ * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
+ * limb is not part of the bodyParts arrays.
+ */
+static s8 D_808C0DDC[] = {
+    -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
+};
 
-extern ColliderJntSphElementInit D_808C0D30[3];
-extern ColliderJntSphInit D_808C0D9C;
-extern DamageTable D_808C0DAC;
-extern CollisionCheckInfoInit D_808C0DCC;
-extern InitChainEntry D_808C0DD4[];
-extern s8 D_808C0DDC[];
-extern Vec3f D_808C0DEC;
+/**
+ * The last element of the bodyParts arrays is a duplicate of the cranium
+ * limb, which is then offset by a certain amount. There is no display list
+ * associated with this, so it is only used for effects.
+ */
+static Vec3f D_808C0DEC = { 1000.0f, -700.0f, 0.0f };
 
 extern SkeletonHeader D_06001A30;
 extern AnimationHeader D_06000184;
