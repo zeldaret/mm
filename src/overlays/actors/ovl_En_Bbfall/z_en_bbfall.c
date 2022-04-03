@@ -6,7 +6,6 @@
 
 #include "z_en_bbfall.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_bb/object_bb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
@@ -17,18 +16,24 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_808BF734(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BF830(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BFB4C(EnBbfall* this, GlobalContext* globalCtx);
-void func_808BFE58(EnBbfall* this, GlobalContext* globalCtx);
-void func_808C00A0(EnBbfall* this, GlobalContext* globalCtx);
-void func_808C0178(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BF5E0(EnBbfall* this);
+void func_808BF734(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BF7A0(EnBbfall* this);
+void func_808BF830(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BF894(EnBbfall* this);
+void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx);
 void func_808BFA18(EnBbfall* this);
+void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_Down(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_Dead(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_Damage(EnBbfall* this, GlobalContext* globalCtx);
+void EnBbfall_Frozen(EnBbfall* this, GlobalContext* globalCtx);
+
+typedef enum {
+    /* -1 */ BBFALL_BODY_PART_DRAW_STATUS_BROKEN = -1,
+    /*  0 */ BBFALL_BODY_PART_DRAW_STATUS_ALIVE,
+    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD,
+} EnBbfallBodyPartDrawStatus;
 
 const ActorInit En_Bbfall_InitVars = {
     ACTOR_EN_BBFALL,
@@ -42,8 +47,7 @@ const ActorInit En_Bbfall_InitVars = {
     (ActorFunc)EnBbfall_Draw,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[3] = {
-static ColliderJntSphElementInit D_808C0D30[3] = {
+static ColliderJntSphElementInit sJntSphElementsInit[3] = {
     {
         {
             ELEMTYPE_UNK0,
@@ -79,8 +83,7 @@ static ColliderJntSphElementInit D_808C0D30[3] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-static ColliderJntSphInit D_808C0D9C = {
+static ColliderJntSphInit sJntSphInit = {
     {
         COLTYPE_HIT3,
         AT_NONE | AT_TYPE_ENEMY,
@@ -89,51 +92,57 @@ static ColliderJntSphInit D_808C0D9C = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    3,
-    D_808C0D30, // sJntSphElementsInit,
+    ARRAY_COUNT(sJntSphElementsInit),
+    sJntSphElementsInit,
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_808C0DAC = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(0, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(0, 0xE),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(1, 0x0),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+typedef enum {
+    /* 0x0 */ EN_BBFALL_DMGEFF_NONE,
+    /* 0x1 */ EN_BBFALL_DMGEFF_STUN,
+    /* 0x3 */ EN_BBFALL_DMGEFF_ICE_ARROW = 0x3,
+    /* 0x4 */ EN_BBFALL_DMGEFF_LIGHT_ARROW,
+    /* 0x5 */ EN_BBFALL_DMGEFF_ZORA_MAGIC,
+    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE,
+} EnBbfallDamageEffect;
+
+static DamageTable sDamageTable = {
+    /* Deku Nut       */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_HOOKSHOT),
+    /* Goron punch    */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Ice arrow      */ DMG_ENTRY(2, EN_BBFALL_DMGEFF_ICE_ARROW),
+    /* Light arrow    */ DMG_ENTRY(2, EN_BBFALL_DMGEFF_LIGHT_ARROW),
+    /* Goron spikes   */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, EN_BBFALL_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_ZORA_MAGIC),
+    /* Normal shield  */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, EN_BBFALL_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, EN_BBFALL_DMGEFF_NONE),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_808C0DCC = { 2, 20, 40, 50 };
+static CollisionCheckInfoInit sColChkInfoInit = { 2, 20, 40, 50 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_808C0DD4[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 36, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
@@ -143,7 +152,7 @@ static InitChainEntry D_808C0DD4[] = {
  * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
  * limb is not part of the bodyParts arrays.
  */
-static s8 D_808C0DDC[] = {
+static s8 sLimbIndexToBodyPartsIndex[] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 
@@ -152,19 +161,19 @@ static s8 D_808C0DDC[] = {
  * limb, which is then offset by a certain amount. There is no display list
  * associated with this, so it is only used for effects.
  */
-static Vec3f D_808C0DEC = { 1000.0f, -700.0f, 0.0f };
+static Vec3f sDuplicateCraniumBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
 void EnBbfall_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnBbfall* this = THIS;
     s32 i;
 
-    Actor_ProcessInitChain(&this->actor, D_808C0DD4);
+    Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_Init(globalCtx, &this->skelAnime, &gBubbleSkel, &gBubbleFlyingAnim, this->jointTable, this->morphTable,
-                   16);
-    CollisionCheck_SetInfo(&this->actor.colChkInfo, &D_808C0DAC, &D_808C0DCC);
-    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &D_808C0D9C, this->colliderElements);
+                   BUBBLE_LIMB_MAX);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+    Collider_InitAndSetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     ActorShape_Init(&this->actor.shape, 1500.0f, ActorShadow_DrawCircle, 35.0f);
-    this->unk_250 = 0;
+    this->timer = 0;
     func_808BF5E0(this);
     Actor_SetFocus(&this->actor, 0.0f);
     for (i = 0; i < 3; i++) {
@@ -178,17 +187,17 @@ void EnBbfall_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyJntSph(globalCtx, &this->collider);
 }
 
-void func_808BF344(EnBbfall* this) {
+void EnBbfall_Freeze(EnBbfall* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.4f;
     this->drawDmgEffFrozenSteamScale = 0.6f;
-    this->unk_250 = 80;
+    this->timer = 80;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
-void func_808BF3B8(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_Thaw(EnBbfall* this, GlobalContext* globalCtx) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
@@ -218,12 +227,19 @@ void func_808BF4B4(EnBbfall* this) {
     func_800B9010(&this->actor, NA_SE_EN_BUBLEFALL_FIRE - SFX_FLAG);
 }
 
-void func_808BF514(EnBbfall* this) {
-    if (this->actor.bgCheckFlags & 8) {
-        s16 temp_v1 = this->actor.shape.rot.y - this->actor.wallYaw;
+/**
+ * Checks to see if the Bubble is touching a wall. If it is, and if the
+ * Bubble is facing directly "into" the wall, then rotate it away from
+ * the wall.
+ */
+void EnBbfall_CheckForWall(EnBbfall* this) {
+    s16 yawDiff;
 
-        if (ABS_ALT(temp_v1) > 0x4000) {
-            this->actor.shape.rot.y = (this->actor.wallYaw * 2) - this->actor.shape.rot.y - 0x8000;
+    if (this->actor.bgCheckFlags & 8) {
+        yawDiff = this->actor.shape.rot.y - this->actor.wallYaw;
+
+        if (ABS_ALT(yawDiff) > 0x4000) {
+            this->actor.shape.rot.y = ((this->actor.wallYaw * 2) - this->actor.shape.rot.y) - 0x8000;
         }
 
         this->actor.bgCheckFlags &= ~8;
@@ -249,10 +265,10 @@ void func_808BF5E0(EnBbfall* this) {
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    this->unk_254 = 0.8f;
-    this->unk_258 = 1.0f;
+    this->flameScaleY = 0.8f;
+    this->flameScaleX = 1.0f;
     this->unk_24C = -1;
-    this->actor.colChkInfo.health = D_808C0DCC.health;
+    this->actor.colChkInfo.health = sColChkInfoInit.health;
     this->actor.colorFilterTimer = 0;
     this->unk_24D = 0;
     this->actor.speedXZ = 0.0f;
@@ -271,8 +287,8 @@ void func_808BF5E0(EnBbfall* this) {
 }
 
 void func_808BF734(EnBbfall* this, GlobalContext* globalCtx) {
-    if (this->unk_250 != 0) {
-        this->unk_250--;
+    if (this->timer != 0) {
+        this->timer--;
     } else if ((Player_GetMask(globalCtx) != PLAYER_MASK_STONE) && (this->actor.xyzDistToPlayerSq <= SQ(250.0f))) {
         func_808BF7A0(this);
     }
@@ -312,9 +328,9 @@ void func_808BF894(EnBbfall* this) {
 
 void func_808BF8DC(EnBbfall* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    Math_StepToF(&this->unk_254, 0.8f, 0.1f);
-    Math_StepToF(&this->unk_258, 1.0f, 0.1f);
-    func_808BF514(this);
+    Math_StepToF(&this->flameScaleY, 0.8f, 0.1f);
+    Math_StepToF(&this->flameScaleX, 1.0f, 0.1f);
+    EnBbfall_CheckForWall(this);
     if (this->actor.bgCheckFlags & 1) {
         if (func_808BF438(this, globalCtx)) {
             func_808BFA18(this);
@@ -340,31 +356,31 @@ void func_808BFA18(EnBbfall* this) {
 void func_808BFA3C(EnBbfall* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
     if (this->actor.world.pos.y < (this->actor.floorHeight - 90.0f)) {
-        this->unk_250 = 0xA;
+        this->timer = 10;
         func_808BF5E0(this);
     } else {
         func_808BF4B4(this);
     }
 }
 
-void func_808BFAB4(EnBbfall* this) {
+void EnBbfall_SetupDown(EnBbfall* this) {
     Animation_PlayLoop(&this->skelAnime, &gBubbleFlyingAnim);
     this->collider.base.atFlags |= AT_ON;
-    this->unk_250 = 200;
+    this->timer = 200;
     this->unk_24C = 0;
     this->collider.base.acFlags |= AC_ON;
     this->actor.speedXZ = 2.0f;
-    this->unk_254 = 0.0f;
-    this->unk_258 = 0.0f;
+    this->flameScaleY = 0.0f;
+    this->flameScaleX = 0.0f;
     this->actor.gravity = -2.0f;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DOWN);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    this->actionFunc = func_808BFB4C;
+    this->actionFunc = EnBbfall_Down;
 }
 
-void func_808BFB4C(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_Down(EnBbfall* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
-    func_808BF514(this);
+    EnBbfall_CheckForWall(this);
 
     if (this->actor.bgCheckFlags & 1) {
         if (func_808BF438(this, globalCtx)) {
@@ -373,7 +389,7 @@ void func_808BFB4C(EnBbfall* this, GlobalContext* globalCtx) {
         }
 
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
-        if (this->unk_250 == 0) {
+        if (this->timer == 0) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_UP);
             func_808BF578(this);
             this->actor.velocity.y = 8.0f;
@@ -397,26 +413,26 @@ void func_808BFB4C(EnBbfall* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_WING);
     }
 
-    if (this->unk_250 > 0) {
-        this->unk_250--;
+    if (this->timer > 0) {
+        this->timer--;
     }
 }
 
-void func_808BFCCC(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_SetupDead(EnBbfall* this, GlobalContext* globalCtx) {
     Vec3f* bodyPartVelocity;
     Vec3f posDiff;
     f32 magnitude;
     s32 i;
 
     func_800BE5CC(&this->actor, &this->collider, 0);
-    this->unk_250 = 15;
+    this->timer = 15;
     this->actor.shape.rot.x += 0x4E20;
     this->actor.speedXZ = 0.0f;
     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_BUBLE_DEAD);
     Item_DropCollectibleRandom(globalCtx, &this->actor, &this->actor.world.pos, 0x70);
     this->actor.velocity.y = 0.0f;
     this->actor.speedXZ = 0.0f;
-    this->unk_24E = 1;
+    this->bodyPartDrawStatus = BBFALL_BODY_PART_DRAW_STATUS_DEAD;
     this->actor.gravity = -1.5f;
 
     bodyPartVelocity = &this->bodyPartsVelocity[0];
@@ -432,16 +448,16 @@ void func_808BFCCC(EnBbfall* this, GlobalContext* globalCtx) {
         bodyPartVelocity->y = Rand_ZeroFloat(3.5f) + 10.0f;
     }
 
-    this->actionFunc = func_808BFE58;
+    this->actionFunc = EnBbfall_Dead;
 }
 
-void func_808BFE58(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_Dead(EnBbfall* this, GlobalContext* globalCtx) {
     s32 i;
 
-    this->unk_250--;
+    this->timer--;
     Math_SmoothStepToS(&this->actor.world.rot.z, 0x4000, 4, 0x1000, 0x400);
 
-    if (this->unk_250 == 0) {
+    if (this->timer == 0) {
         for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
             func_800B3030(globalCtx, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
@@ -456,64 +472,64 @@ void func_808BFE58(EnBbfall* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_808BFF8C(EnBbfall* this) {
+void EnBbfall_SetupDamage(EnBbfall* this) {
     this->collider.base.acFlags &= ~AC_ON;
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLE_DAMAGE);
     func_800BE5CC(&this->actor, &this->collider, 0);
 
-    if (this->actor.colChkInfo.damageEffect == 5) {
+    if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_ZORA_MAGIC) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
         this->drawDmgEffAlpha = 2.0f;
         this->drawDmgEffScale = 0.4f;
-    } else if (this->actor.colChkInfo.damageEffect == 1) {
+    } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_STUN) {
         Actor_SetColorFilter(&this->actor, 0, 255, 0, 20);
         this->actor.speedXZ = 0.0f;
-    } else if (this->actor.colChkInfo.damageEffect == 14) {
+    } else if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_HOOKSHOT) {
         this->actor.speedXZ = 0.0f;
     } else {
         Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
         this->actor.speedXZ = 7.0f;
     }
 
-    this->actionFunc = func_808C00A0;
+    this->actionFunc = EnBbfall_Damage;
 }
 
-void func_808C00A0(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_Damage(EnBbfall* this, GlobalContext* globalCtx) {
     Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
     if ((this->actor.bgCheckFlags & 1) && (this->actor.speedXZ < 0.1f)) {
         if (func_808BF438(this, globalCtx)) {
             func_808BFA18(this);
         } else {
-            func_808BFAB4(this);
+            EnBbfall_SetupDown(this);
         }
     }
 }
 
-void func_808C013C(EnBbfall* this) {
+void EnBbfall_SetupFrozen(EnBbfall* this) {
     this->actor.speedXZ = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
 
     this->actor.gravity = -2.0f;
-    this->actionFunc = func_808C0178;
+    this->actionFunc = EnBbfall_Frozen;
 }
 
-void func_808C0178(EnBbfall* this, GlobalContext* globalCtx) {
-    DECR(this->unk_250);
+void EnBbfall_Frozen(EnBbfall* this, GlobalContext* globalCtx) {
+    DECR(this->timer);
 
-    if (this->unk_250 == 0) {
-        func_808BF3B8(this, globalCtx);
+    if (this->timer == 0) {
+        EnBbfall_Thaw(this, globalCtx);
         if (this->actor.colChkInfo.health == 0) {
-            func_808BFCCC(this, globalCtx);
+            EnBbfall_SetupDead(this, globalCtx);
         } else {
-            func_808BFAB4(this);
+            EnBbfall_SetupDown(this);
         }
     }
 }
 
-void func_808C01E0(EnBbfall* this, GlobalContext* globalCtx) {
+void EnBbfall_UpdateDamage(EnBbfall* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
@@ -522,30 +538,30 @@ void func_808C01E0(EnBbfall* this, GlobalContext* globalCtx) {
             (!(this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
             Actor_SetDropFlagJntSph(&this->actor, &this->collider);
             this->unk_24C = 0;
-            this->unk_254 = 0.0f;
-            this->unk_258 = 0.0f;
+            this->flameScaleY = 0.0f;
+            this->flameScaleX = 0.0f;
             func_808BF5AC(this);
-            func_808BF3B8(this, globalCtx);
+            EnBbfall_Thaw(this, globalCtx);
 
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(globalCtx, &this->actor);
             }
 
-            if (this->actor.colChkInfo.damageEffect == 3) {
-                func_808BF344(this);
+            if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_ICE_ARROW) {
+                EnBbfall_Freeze(this);
                 if (this->actor.colChkInfo.health == 0) {
-                    this->unk_250 = 3;
+                    this->timer = 3;
                     this->collider.base.acFlags &= ~AC_ON;
                 }
 
-                func_808C013C(this);
+                EnBbfall_SetupFrozen(this);
             } else if (this->actor.colChkInfo.health == 0) {
-                func_808BFCCC(this, globalCtx);
+                EnBbfall_SetupDead(this, globalCtx);
             } else {
-                func_808BFF8C(this);
+                EnBbfall_SetupDamage(this);
             }
 
-            if (this->actor.colChkInfo.damageEffect == 4) {
+            if (this->actor.colChkInfo.damageEffect == EN_BBFALL_DMGEFF_LIGHT_ARROW) {
                 this->drawDmgEffAlpha = 4.0f;
                 this->drawDmgEffScale = 0.4f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
@@ -559,10 +575,10 @@ void func_808C01E0(EnBbfall* this, GlobalContext* globalCtx) {
         if (this->collider.base.atFlags & AT_BOUNCED) {
             this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
             func_808BF5AC(this);
-            if (this->actionFunc != func_808BFB4C) {
+            if (this->actionFunc != EnBbfall_Down) {
                 this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                func_808BFAB4(this);
+                EnBbfall_SetupDown(this);
             }
         }
     }
@@ -576,9 +592,9 @@ void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
     f32 temp_f0_2;
     s32 pad[2];
 
-    func_808C01E0(this, globalCtx);
+    EnBbfall_UpdateDamage(this, globalCtx);
     this->actionFunc(this, globalCtx);
-    if (this->actionFunc != func_808BFE58) {
+    if (this->actionFunc != EnBbfall_Dead) {
         Actor_MoveWithGravity(&this->actor);
         if (this->unk_24D != 0) {
             Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 25.0f, 20.0f, 7);
@@ -594,9 +610,9 @@ void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->unk_268[1], &this->unk_268[0]);
         Math_Vec3f_Copy(&this->unk_268[0], &this->actor.world.pos);
         this->unk_268[0].y += 15.0f;
-        this->unk_268[0].y -= 47.0f * this->unk_254;
+        this->unk_268[0].y -= 47.0f * this->flameScaleY;
 
-        for (i = 0, temp_f0_2 = this->unk_258; i < 3; i++, temp_f0_2 *= 0.7569f) {
+        for (i = 0, temp_f0_2 = this->flameScaleX; i < 3; i++, temp_f0_2 *= 0.7569f) {
             sphere = &this->collider.elements[i].dim.worldSphere;
             sphere->radius = 30.0f * temp_f0_2;
             sphere->center.x = this->unk_268[2 * i].x;
@@ -638,8 +654,8 @@ s32 EnBbfall_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
                               Actor* thisx) {
     EnBbfall* this = THIS;
 
-    if (this->unk_24E == -1) {
-        this->unk_328 = *dList;
+    if (this->bodyPartDrawStatus == BBFALL_BODY_PART_DRAW_STATUS_BROKEN) {
+        this->limbDList = *dList;
         *dList = NULL;
     }
 
@@ -651,37 +667,37 @@ void EnBbfall_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnBbfall* this = THIS;
     MtxF* currentMatrixState;
 
-    if (this->unk_24E == 0) {
-        if (D_808C0DDC[limbIndex] != -1) {
-            if (D_808C0DDC[limbIndex] == 0) {
+    if (this->bodyPartDrawStatus == BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
+        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
+            if (sLimbIndexToBodyPartsIndex[limbIndex] == 0) {
                 Matrix_GetStateTranslationAndScaledX(1000.0f, &this->bodyPartsPos[0]);
-            } else if (D_808C0DDC[limbIndex] == 3) {
+            } else if (sLimbIndexToBodyPartsIndex[limbIndex] == 3) {
                 Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->bodyPartsPos[3]);
-                Matrix_MultiplyVector3fByState(&D_808C0DEC, &this->bodyPartsPos[4]);
+                Matrix_MultiplyVector3fByState(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
             } else {
-                Matrix_GetStateTranslation(&this->bodyPartsPos[D_808C0DDC[limbIndex]]);
+                Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
             }
         }
-    } else if (this->unk_24E > 0) {
-        if (D_808C0DDC[limbIndex] != -1) {
-            Matrix_GetStateTranslation(&this->bodyPartsPos[D_808C0DDC[limbIndex]]);
+    } else if (this->bodyPartDrawStatus > BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
+        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
+            Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
         }
 
-        if (limbIndex == 15) {
-            this->unk_24E = -1;
+        if (limbIndex == BUBBLE_LIMB_CRANIUM) {
+            this->bodyPartDrawStatus = BBFALL_BODY_PART_DRAW_STATUS_BROKEN;
         }
     } else {
-        if (D_808C0DDC[limbIndex] != -1) {
+        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             currentMatrixState = Matrix_GetCurrentState();
-            currentMatrixState->mf[3][0] = this->bodyPartsPos[D_808C0DDC[limbIndex]].x;
-            currentMatrixState->mf[3][1] = this->bodyPartsPos[D_808C0DDC[limbIndex]].y;
-            currentMatrixState->mf[3][2] = this->bodyPartsPos[D_808C0DDC[limbIndex]].z;
+            currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
+            currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
+            currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
             Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, this->unk_328);
+            gSPDisplayList(POLY_OPA_DISP++, this->limbDList);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
@@ -710,7 +726,7 @@ void EnBbfall_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_RotateY(
             ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
             MTXMODE_APPLY);
-        Matrix_Scale(this->unk_258, this->unk_254, 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
         currentMatrixState = Matrix_GetCurrentState();
 
