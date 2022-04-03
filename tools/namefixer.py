@@ -671,12 +671,36 @@ def replace_all(repo):
                 file = subdir + os.sep + filename
                 replace_single(file)
 
-parser = argparse.ArgumentParser(description='Apply function renames to a file')
-parser.add_argument('file', help="source file to be processed. use . to process the whole repo")
+def dictSanityCheck():
+    keys = wordReplace.keys()
+    values = wordReplace.values()
+    for k in keys:
+        if k in values:
+            print(f"Key '{k}' found in values")
+            print(f"This would produce unintended renames")
+            print(f"Fix this by removing said key from the dictionary")
+            exit(-1)
+    keys = simpleReplace.keys()
+    values = {*wordReplace.values(), *simpleReplace.values()}
+    for k in keys:
+        for value in values:
+            if k in value:
+                print(f"Key '{k}' found in values")
+                print(f"This would produce unintended renames")
+                print(f"Fix this by removing said key from the dictionary")
+                exit(-1)
 
-if __name__ == "__main__":
+def main():
+    parser = argparse.ArgumentParser(description='Apply function renames to a file')
+    parser.add_argument('file', help="source file to be processed. use . to process the whole repo")
     args = parser.parse_args()
+
+    dictSanityCheck()
+
     if args.file == '.':
         replace_all(os.curdir)
     else:
         replace_single(args.file)
+
+if __name__ == "__main__":
+    main()
