@@ -536,7 +536,7 @@ void EnBbfall_UpdateDamage(EnBbfall* this, GlobalContext* globalCtx) {
         this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
         this->collider.base.atFlags &= ~AT_ON;
         if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
-            (!(this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0xDB0B3))) {
+            !(this->collider.elements[0].info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             Actor_SetDropFlagJntSph(&this->actor, &this->collider);
             this->flameOpacity = 0;
             this->flameScaleY = 0.0f;
@@ -588,7 +588,7 @@ void EnBbfall_UpdateDamage(EnBbfall* this, GlobalContext* globalCtx) {
 void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnBbfall* this = THIS;
     Sphere16* sphere;
-    Vec3f sp5C;
+    Vec3f diff;
     s32 i;
     f32 scale;
     s32 pad[2];
@@ -602,10 +602,10 @@ void EnBbfall_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         for (i = ARRAY_COUNT(this->flamePos) - 1; i >= 2; i--) {
-            Math_Vec3f_Diff(&this->flamePos[i - 2], &this->flamePos[i - 1], &sp5C);
-            Math_Vec3f_Scale(&sp5C, (i - 1) * 0.1f);
+            Math_Vec3f_Diff(&this->flamePos[i - 2], &this->flamePos[i - 1], &diff);
+            Math_Vec3f_Scale(&diff, (i - 1) * 0.1f);
             Math_Vec3f_Copy(&this->flamePos[i], &this->flamePos[i - 1]);
-            Math_Vec3f_Sum(&this->flamePos[i], &sp5C, &this->flamePos[i]);
+            Math_Vec3f_Sum(&this->flamePos[i], &diff, &this->flamePos[i]);
         }
 
         Math_Vec3f_Copy(&this->flamePos[1], &this->flamePos[0]);
