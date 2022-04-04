@@ -201,7 +201,7 @@ void EnRacedog_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animationIn
                      animationInfo->startFrame, frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
-void func_80B246F4(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_UpdateCollision(EnRacedog* this, GlobalContext* globalCtx) {
     this->collider.dim.pos.x = this->actor.world.pos.x;
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
@@ -257,11 +257,11 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1E0 = SubS_GetPathByIndex(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
-    if (ENRACEDOG_GET_3E0(&this->actor) < 14) {
-        this->index = ENRACEDOG_GET_3E0(&this->actor);
+    if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
+        this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -325,8 +325,8 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
     f32 sp30;
 
     this->collider.dim.radius = 15;
-    if (this->unk_1E0 != 0) {
-        phi_a1 = func_80B2478C(this->unk_1E0, this->unk_1E8, &this->actor.world.pos, &sp30);
+    if (this->path != NULL) {
+        phi_a1 = func_80B2478C(this->path, this->unk_1E8, &this->actor.world.pos, &sp30);
         if (this->actor.bgCheckFlags & 8) {
             phi_a1 = this->actor.wallYaw;
         }
@@ -336,13 +336,13 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
 
         if (sp30 <= 2500.0f) {
             this->unk_1E8++;
-            if (this->unk_1E8 >= (this->unk_1E0->count - 1)) {
+            if (this->unk_1E8 >= (this->path->count - 1)) {
                 this->unk_1E8 = 0;
             }
         }
 
         func_80B24F08(this);
-        if ((this->unk_1E8 >= ((this->unk_1E0->count / 4) * 3)) && (this->index == D_80B25D4C)) {
+        if ((this->unk_1E8 >= ((this->path->count / 4) * 3)) && (this->index == D_80B25D4C)) {
             D_80B25D48++;
         }
 
@@ -384,7 +384,7 @@ void EnRacedog_UpdateTextId(EnRacedog* this) {
 
 void func_80B24F08(EnRacedog* this) {
     s32 temp_a0;
-    s32 temp_v1 = this->unk_1E0->count;
+    s32 temp_v1 = this->path->count;
 
     if (this->unk_2B8 < this->unk_1E8) {
         this->unk_2B8 = this->unk_1E8;
@@ -568,7 +568,7 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    func_80B246F4(this, globalCtx);
+    EnRacedog_UpdateCollision(this, globalCtx);
     func_80B248B8(this, &sp2C);
     Math_ApproachF(&this->unk_2AC.x, sp2C.x, 0.2f, 0.1f);
 

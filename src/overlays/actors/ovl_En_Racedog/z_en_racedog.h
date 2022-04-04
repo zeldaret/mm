@@ -4,7 +4,7 @@
 #include "global.h"
 #include "objects/object_dog/object_dog.h"
 
-#define ENRACEDOG_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
+#define ENRACEDOG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENRACEDOG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
 
 struct EnRacedog;
@@ -18,7 +18,7 @@ typedef struct EnRacedog {
     /* 0x14C */ SkelAnime skelAnime;
     /* 0x190 */ ColliderCylinder collider;
     /* 0x1DC */ UNK_TYPE1 unk_1DC[0x4];
-    /* 0x1E0 */ Path* unk_1E0;
+    /* 0x1E0 */ Path* path;
     /* 0x1E4 */ UNK_TYPE1 unk_1E4[0x4];
     /* 0x1E8 */ s32 unk_1E8;
     /* 0x1EC */ Vec3s jointTable[DOG_LIMB_MAX];
