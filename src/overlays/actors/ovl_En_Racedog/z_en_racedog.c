@@ -32,6 +32,17 @@ s32 func_80B25490(EnRacedog* this, Vec2f* arg1);
 void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B256BC(EnRacedog* this);
 
+// Dogs can be in three conditions, which is indicated by the message they say when you pick them up.
+// If it starts with "Ruff!", they're in good condition.
+// If it starts with "Rrr-Ruff!", they're in normal condition.
+// If it starts with "Hoo-whine", they're in bad condition.
+// These text boxes are grouped up like so:
+// - 0x3538 - 0x353D: Good condition
+// - 0x353E - 0x3541: Normal condition
+// - 0x3542 - 0x3546: Bad condition
+#define DOG_IS_IN_GOOD_CONDITION(this) (D_80B25D88[this->unk_290].textId < 0x353E)
+#define DOG_IS_IN_BAD_CONDITION(this) (D_80B25D88[this->unk_290].textId >= 0x3542)
+
 typedef struct {
     f32 unk_00;
     f32 goodConditionSpeedMultiplier;
@@ -363,7 +374,7 @@ void func_80B24F08(EnRacedog* this) {
                     this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 }
 
-                if ((D_80B25D88[this->unk_290].textId < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+                if (DOG_IS_IN_GOOD_CONDITION(this) && (this->unk_290 != D_80B25D4C)) {
                     this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
                 }
             } else if (this->unk_1E8 < (temp_a0 * 3)) {
@@ -373,7 +384,7 @@ void func_80B24F08(EnRacedog* this) {
                     this->targetSpeed =
                         sBaseSpeeds[D_80B25D88[this->unk_290].color][1] + randPlusMinusPoint5Scaled(1.0f);
 
-                    if ((D_80B25D88[this->unk_290].textId < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+                    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->unk_290 != D_80B25D4C)) {
                         this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
                     }
                 }
@@ -413,12 +424,12 @@ void func_80B251EC(EnRacedog* this) {
         }
     }
 
-    if (D_80B25D88[this->unk_290].textId < 0x3542) {
+    if (!DOG_IS_IN_BAD_CONDITION(this)) {
         temp = D_80B25D88[this->unk_290].unk_00;
         this->targetSpeed = temp * sBaseSpeeds[D_80B25D88[this->unk_290].color][1];
     }
 
-    if ((D_80B25D88[this->unk_290].textId < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->unk_290 != D_80B25D4C)) {
         this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
     }
 }
