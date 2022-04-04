@@ -27,8 +27,8 @@ typedef struct EnRacedog {
     /* 0x28A */ s16 unk_28A;
     /* 0x28C */ s16 unk_28C;
     /* 0x28A */ UNK_TYPE1 unk_28E[0x2];
-    /* 0x290 */ s16 unk_290;
-    /* 0x292 */ s16 unk_292;
+    /* 0x290 */ s16 index;
+    /* 0x292 */ s16 selectedDogIndex;
     /* 0x294 */ UNK_TYPE1 unk_294[0x4];
     /* 0x298 */ f32 targetSpeed;
     /* 0x29C */ s16 unk_29C;

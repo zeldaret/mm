@@ -40,17 +40,17 @@ void func_80B256BC(EnRacedog* this);
 // - 0x3538 - 0x353D: Good condition
 // - 0x353E - 0x3541: Normal condition
 // - 0x3542 - 0x3546: Bad condition
-#define DOG_IS_IN_GOOD_CONDITION(this) (D_80B25D88[this->unk_290].textId < 0x353E)
-#define DOG_IS_IN_BAD_CONDITION(this) (D_80B25D88[this->unk_290].textId >= 0x3542)
+#define DOG_IS_IN_GOOD_CONDITION(this) (sDogInfo[this->index].textId < 0x353E)
+#define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
 
 typedef struct {
     f32 unk_00;
     f32 goodConditionSpeedMultiplier;
     s16 color;
-    s16 unk_0A;
+    s16 index;
     s16 unk_0C;
     s16 textId;
-} UnkRacedogStruct;
+} RaceDogInfo;
 
 const ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
@@ -76,7 +76,7 @@ static f32 sBaseSpeeds[][2] = {
     { 0.0f, 0.0f }, { 5.0f, 5.5f }, { 5.0f, 5.0f }, { 5.5f, 5.0f }, { 4.5f, 5.5f }, { 6.0f, 4.0f }, { 4.0f, 6.0f },
 };
 
-static UnkRacedogStruct D_80B25D88[] = {
+static RaceDogInfo sDogInfo[] = {
     { -1.0f, 1.2f, DOG_COLOR_BEIGE, 0, 9, 0x3539 },  { -1.0f, 1.2f, DOG_COLOR_WHITE, 1, 9, 0x353A },
     { -1.0f, 1.2f, DOG_COLOR_BLUE, 2, 10, 0x353B },  { -1.0f, 1.2f, DOG_COLOR_GRAY, 3, 9, 0x353C },
     { -1.0f, 1.2f, DOG_COLOR_BROWN, 4, 8, 0x353D },  { -1.0f, 1.2f, DOG_COLOR_GRAY, 5, 9, 0x353E },
@@ -86,7 +86,7 @@ static UnkRacedogStruct D_80B25D88[] = {
     { -1.0f, 1.2f, DOG_COLOR_WHITE, 12, 9, 0x3545 }, { -1.0f, 1.2f, DOG_COLOR_BROWN, 13, 8, 0x3546 },
 };
 
-static UnkRacedogStruct D_80B25E68 = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
+static RaceDogInfo sSelectedDogInfo = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
 
 static Vec2f D_80B25E78[] = {
     { -3914.0f, 1283.0f },
@@ -241,7 +241,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
     if (ENRACEDOG_GET_3E0(&this->actor) < 14) {
-        this->unk_290 = ENRACEDOG_GET_3E0(&this->actor);
+        this->index = ENRACEDOG_GET_3E0(&this->actor);
     } else {
         Actor_MarkForDeath(&this->actor);
     }
@@ -254,7 +254,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2A0.z = 0.0f;
     this->unk_2C4 = 1.0f;
 
-    if ((D_80B25D88[this->unk_290].textId >= 0x353F) && (this->unk_290 == (s16)Rand_ZeroFloat(20.0f))) {
+    if ((sDogInfo[this->index].textId >= 0x353F) && (this->index == (s16)Rand_ZeroFloat(20.0f))) {
         this->unk_28C = 5;
     } else {
         this->unk_28C = 0;
@@ -262,15 +262,15 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_28A = 60;
     this->unk_28A += this->unk_28C;
-    this->targetSpeed = sBaseSpeeds[D_80B25D88[this->unk_290].color][0];
+    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0];
     this->unk_29C = 0;
     this->unk_2B8 = -1;
 
     func_80B24E14(this);
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_20;
-    D_80B25E68 = D_80B25D88[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
-    this->unk_292 = D_80B25E68.unk_0A;
+    sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
+    this->selectedDogIndex = sSelectedDogInfo.index;
     func_80B24630(&this->skelAnime, D_80B25EF0, 0);
     D_80B25EF0->playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = func_80B24C14;
@@ -325,7 +325,7 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
         }
 
         func_80B24F08(this);
-        if ((this->unk_1E8 >= ((this->unk_1E0->count / 4) * 3)) && (this->unk_290 == D_80B25D4C)) {
+        if ((this->unk_1E8 >= ((this->unk_1E0->count / 4) * 3)) && (this->index == D_80B25D4C)) {
             D_80B25D48++;
         }
 
@@ -340,19 +340,19 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
 }
 
 void func_80B24E14(EnRacedog* this) {
-    if (this->unk_290 % 2) {
-        D_80B25D88[this->unk_290].textId =
-            (((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
+    if (this->index % 2) {
+        sDogInfo[this->index].textId =
+            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
     } else {
-        D_80B25D88[this->unk_290].textId =
-            ((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
+        sDogInfo[this->index].textId =
+            ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
     }
 
-    if ((D_80B25D88[this->unk_290].textId >= 0x3547) || (D_80B25D88[this->unk_290].textId < 0x3539)) {
-        D_80B25D88[this->unk_290].textId = 0x353E;
+    if ((sDogInfo[this->index].textId >= 0x3547) || (sDogInfo[this->index].textId < 0x3539)) {
+        sDogInfo[this->index].textId = 0x353E;
     }
-    if (D_80B25D88[this->unk_290].textId == 0x3547) {
-        D_80B25D88[this->unk_290].textId = 0x3538;
+    if (sDogInfo[this->index].textId == 0x3547) {
+        sDogInfo[this->index].textId = 0x3538;
     }
 }
 
@@ -363,29 +363,27 @@ void func_80B24F08(EnRacedog* this) {
     if (this->unk_2B8 < this->unk_1E8) {
         this->unk_2B8 = this->unk_1E8;
         if (this->unk_1E8 == 0) {
-            this->targetSpeed = sBaseSpeeds[D_80B25D88[this->unk_290].color][0];
+            this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0];
         } else {
             temp_a0 = temp_v1 / 4;
             if (this->unk_1E8 < temp_a0) {
-                if (D_80B25D88[this->unk_290].color == DOG_COLOR_BLUE) {
-                    this->targetSpeed =
-                        sBaseSpeeds[D_80B25D88[this->unk_290].color][0] + randPlusMinusPoint5Scaled(1.0f);
+                if (sDogInfo[this->index].color == DOG_COLOR_BLUE) {
+                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + randPlusMinusPoint5Scaled(1.0f);
                 } else {
                     this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 }
 
-                if (DOG_IS_IN_GOOD_CONDITION(this) && (this->unk_290 != D_80B25D4C)) {
-                    this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
+                if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
+                    this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                 }
             } else if (this->unk_1E8 < (temp_a0 * 3)) {
-                if (this->unk_1E8 < D_80B25D88[this->unk_290].unk_0C) {
+                if (this->unk_1E8 < sDogInfo[this->index].unk_0C) {
                     this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 } else {
-                    this->targetSpeed =
-                        sBaseSpeeds[D_80B25D88[this->unk_290].color][1] + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + randPlusMinusPoint5Scaled(1.0f);
 
-                    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->unk_290 != D_80B25D4C)) {
-                        this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
+                    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
+                        this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                     }
                 }
             } else if (this->unk_1E8 < temp_v1) {
@@ -402,7 +400,7 @@ void func_80B24F08(EnRacedog* this) {
 
     Math_ApproachF(&this->actor.speedXZ, this->targetSpeed, 0.5f, 3.0f);
 
-    if (this->unk_290 == this->unk_292) {
+    if (this->index == this->selectedDogIndex) {
         if (this->actor.speedXZ > 7.5f) {
             this->actor.speedXZ = 7.5f;
         }
@@ -416,21 +414,21 @@ void func_80B24F08(EnRacedog* this) {
 void func_80B251EC(EnRacedog* this) {
     f32 temp;
 
-    if (D_80B25D88[this->unk_290].unk_00 == -1.0f) {
+    if (sDogInfo[this->index].unk_00 == -1.0f) {
         if (D_80B25D48 < 100.0f) {
-            D_80B25D88[this->unk_290].unk_00 = 200.0f / (200.0f - D_80B25D48);
+            sDogInfo[this->index].unk_00 = 200.0f / (200.0f - D_80B25D48);
         } else {
-            D_80B25D88[this->unk_290].unk_00 = 2.0f;
+            sDogInfo[this->index].unk_00 = 2.0f;
         }
     }
 
     if (!DOG_IS_IN_BAD_CONDITION(this)) {
-        temp = D_80B25D88[this->unk_290].unk_00;
-        this->targetSpeed = temp * sBaseSpeeds[D_80B25D88[this->unk_290].color][1];
+        temp = sDogInfo[this->index].unk_00;
+        this->targetSpeed = temp * sBaseSpeeds[sDogInfo[this->index].color][1];
     }
 
-    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->unk_290 != D_80B25D4C)) {
-        this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
+    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
+        this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
     }
 }
 
@@ -445,7 +443,7 @@ void func_80B252F8(EnRacedog* this) {
 
     if (((this->unk_1E8 >= D_80B25D44) || (this->unk_29C <= 0)) && (this->unk_1E8 > D_80B25D44)) {
         D_80B25D44 = this->unk_1E8;
-        D_80B25D4C = this->unk_290;
+        D_80B25D4C = this->index;
     }
 }
 
@@ -458,7 +456,7 @@ void func_80B2538C(EnRacedog* this) {
         }
 
         this->unk_29C = 3;
-        if (this->unk_290 == this->unk_292) {
+        if (this->index == this->selectedDogIndex) {
             gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (D_80B25D40 * 8);
         }
     }
@@ -519,7 +517,7 @@ void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx) {
     s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
     Vec3f sp38;
 
-    if (((this->unk_290 + curFrame) % mod) == 0) {
+    if (((this->index + curFrame) % mod) == 0) {
         sp38.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
         sp38.y = this->actor.world.pos.y;
         sp38.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
@@ -540,7 +538,7 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnRacedog* this = THIS;
     Vec3f sp2C = { 0.0f, 0.0f, 0.0f };
 
-    this->unk_292 = D_80B25E68.unk_0A;
+    this->selectedDogIndex = sSelectedDogInfo.index;
 
     this->actionFunc(this, globalCtx);
 
@@ -590,9 +588,9 @@ void func_80B2583C(EnRacedog* this) {
 
 void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
     Vec3s sp48 = gZeroVec3s;
-    s32 phi_v0 = (this->unk_290 == this->unk_292) ? true : false;
+    s32 shouldDrawSelectionArrow = (this->index == this->selectedDogIndex) ? true : false;
 
-    if (phi_v0) {
+    if (shouldDrawSelectionArrow) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
@@ -640,7 +638,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    switch (D_80B25D88[this->unk_290].color) {
+    switch (sDogInfo[this->index].color) {
         case DOG_COLOR_BEIGE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
