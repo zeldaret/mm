@@ -17,6 +17,12 @@ WERROR ?= 0
 KEEP_MDEBUG ?= 0
 # Disassembles all asm from the ROM instead of skipping files which are entirely in C
 FULL_DISASM ?= 0
+# Check code syntax with host compiler
+RUN_CC_CHECK ?= 1
+# Dump build object files
+OBJDUMP_BUILD ?= 1
+# Number of threads to disassmble, extract, and compress with
+N_THREADS ?= $(shell nproc)
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
@@ -48,9 +54,8 @@ else
   endif
 endif
 
-N_THREADS ?= $(shell nproc)
-
 #### Tools ####
+
 ifeq ($(shell type mips-linux-gnu-ld >/dev/null 2>/dev/null; echo $$?), 0)
   MIPS_BINUTILS_PREFIX := mips-linux-gnu-
 else
@@ -89,8 +94,12 @@ else
 endif
 
 # Check code syntax with host compiler
-CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
-CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
+ifneq ($(RUN_CC_CHECK),0)
+	CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
+	CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
+else
+	CC_CHECK := @:
+endif
 
 CPP        := cpp
 ELF2ROM    := tools/buildtools/elf2rom
@@ -107,6 +116,12 @@ CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_
 
 # Use relocations and abi fpr names in the dump
 OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
+
+ifneq ($(OBJDUMP_BUILD), 0)
+	OBJDUMP_CMD = @$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+else
+	OBJDUMP_CMD = @:
+endif
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -314,7 +329,7 @@ build/data/%.o: data/%.s
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 # TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
@@ -324,21 +339,21 @@ build/src/overlays/%.o: src/overlays/%.c
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 # Build C files from assets
