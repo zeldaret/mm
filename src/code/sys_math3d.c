@@ -94,8 +94,6 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
     return true;
 }
 #else
-// static InfiniteLine planeIntersectLine;
-// static Linef planeIntersectSeg;
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/Math3D_PlaneVsLineSegClosestPoint.s")
 #endif
 
@@ -832,7 +830,7 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
     }
     triVtx0.x = max->x;
     triVtx0.y = max->y;
-    triVtx0.z = max->z;
+    triVtx0.z = min->z;
     triVtx1.x = min->x;
     triVtx1.y = max->y;
     triVtx1.z = min->z;
@@ -916,7 +914,7 @@ s32 Math3D_LineVsCube(Vec3f* min, Vec3f* max, Vec3f* a, Vec3f* b) {
 /**
  * Checks if a line segment with endpoints `a` and `b` intersect a cube
  */
-// in-static bss
+// in-function static bss
 s32 Math3D_LineVsCubeShort(Vec3s* min, Vec3s* max, Vec3s* a, Vec3s* b) {
     static Vec3f D_801FBD20; // minF
     static Vec3f D_801FBD30; // maxF
@@ -1401,7 +1399,7 @@ s32 Math3D_TriChkLineSegParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, 
         return false;
     }
 
-    if (Math3D_TriChkPointParaXImpl(v0, v1, v2, x, y, 300.0f, 1.0f, nz)) {
+    if (Math3D_TriChkPointParaZImpl(v0, v1, v2, x, y, 300.0f, 1.0f, nz)) {
         *zIntersect = (((-nx * x) - (ny * y)) - originDist) / nz;
         return true;
     }
