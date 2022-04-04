@@ -58,18 +58,20 @@ typedef struct {
 static D_8098C2A4_s D_8098C2A4 = { 0x0063, 0x0000 };
 
 typedef struct {
-    s16 unk_00;
+    s16 color;
     s16 unk_02;
     s16 unk_04;
 } D_8098C2A8_s;
 
 static D_8098C2A8_s D_8098C2A8[] = {
-    { 3, 0, 0x3539 },  { 1, 1, 0x353A },  { 5, 2, 0x353B },  { 2, 3, 0x353C },  { 4, 4, 0x3538 },
-    { 2, 5, 0x353E },  { 3, 6, 0x353F },  { 1, 7, 0x3540 },  { 1, 8, 0x3541 },  { 6, 9, 0x3542 },
-    { 2, 10, 0x3543 }, { 3, 11, 0x3544 }, { 1, 12, 0x3545 }, { 4, 13, 0x3546 },
+    { DOG_COLOR_BEIGE, 0, 0x3539 },  { DOG_COLOR_WHITE, 1, 0x353A },  { DOG_COLOR_BLUE, 2, 0x353B },
+    { DOG_COLOR_GRAY, 3, 0x353C },   { DOG_COLOR_BROWN, 4, 0x3538 },  { DOG_COLOR_GRAY, 5, 0x353E },
+    { DOG_COLOR_BEIGE, 6, 0x353F },  { DOG_COLOR_WHITE, 7, 0x3540 },  { DOG_COLOR_WHITE, 8, 0x3541 },
+    { DOG_COLOR_GOLD, 9, 0x3542 },   { DOG_COLOR_GRAY, 10, 0x3543 },  { DOG_COLOR_BEIGE, 11, 0x3544 },
+    { DOG_COLOR_WHITE, 12, 0x3545 }, { DOG_COLOR_BROWN, 13, 0x3546 },
 };
 
-static D_8098C2A8_s D_8098C2FC = { 0, -1, 0x353E };
+static D_8098C2A8_s D_8098C2FC = { DOG_COLOR_DEFAULT, -1, 0x353E };
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -1194,25 +1196,31 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    switch (D_8098C2A8[this->unk_286].unk_00) {
-        case 3:
+    switch (D_8098C2A8[this->unk_286].color) {
+        case DOG_COLOR_BEIGE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
-        case 1:
+
+        case DOG_COLOR_WHITE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 0);
             break;
-        case 5:
+
+        case DOG_COLOR_BLUE:
             gDPSetEnvColor(POLY_OPA_DISP++, 79, 79, 143, 0);
             break;
-        case 6:
+
+        case DOG_COLOR_GOLD:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 207, 47, 0);
             break;
-        case 4:
+
+        case DOG_COLOR_BROWN:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 79, 47, 0);
             break;
-        case 2:
+
+        case DOG_COLOR_GRAY:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 143, 143, 0);
             break;
+
         default:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;

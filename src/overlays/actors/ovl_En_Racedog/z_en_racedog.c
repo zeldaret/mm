@@ -9,6 +9,7 @@
  */
 
 #include "z_en_racedog.h"
+#include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
@@ -34,7 +35,7 @@ void func_80B256BC(EnRacedog* this);
 typedef struct {
     f32 unk_00;
     f32 unk_04;
-    s16 unk_08;
+    s16 color;
     s16 unk_0A;
     s16 unk_0C;
     s16 unk_0E;
@@ -65,16 +66,23 @@ static f32 D_80B25D50[][2] = {
 };
 
 static UnkRacedogStruct D_80B25D88[] = {
-    { -1.0f, 1.20000004768f, 3, 0, 9, 0x3539 },  { -1.0f, 1.20000004768f, 1, 1, 9, 0x353A },
-    { -1.0f, 1.20000004768f, 5, 2, 10, 0x353B }, { -1.0f, 1.20000004768f, 2, 3, 9, 0x353C },
-    { -1.0f, 1.20000004768f, 4, 4, 8, 0x353D },  { -1.0f, 1.20000004768f, 2, 5, 9, 0x353E },
-    { -1.0f, 1.20000004768f, 3, 6, 9, 0x353F },  { -1.0f, 1.20000004768f, 1, 7, 9, 0x3540 },
-    { -1.0f, 1.20000004768f, 1, 8, 9, 0x3541 },  { -1.0f, 1.20000004768f, 6, 9, 8, 0x3542 },
-    { -1.0f, 1.20000004768f, 2, 10, 9, 0x3543 }, { -1.0f, 1.20000004768f, 3, 11, 9, 0x3544 },
-    { -1.0f, 1.20000004768f, 1, 12, 9, 0x3545 }, { -1.0f, 1.20000004768f, 4, 13, 8, 0x3546 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_BEIGE, 0, 9, 0x3539 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_WHITE, 1, 9, 0x353A },
+    { -1.0f, 1.20000004768f, DOG_COLOR_BLUE, 2, 10, 0x353B },
+    { -1.0f, 1.20000004768f, DOG_COLOR_GRAY, 3, 9, 0x353C },
+    { -1.0f, 1.20000004768f, DOG_COLOR_BROWN, 4, 8, 0x353D },
+    { -1.0f, 1.20000004768f, DOG_COLOR_GRAY, 5, 9, 0x353E },
+    { -1.0f, 1.20000004768f, DOG_COLOR_BEIGE, 6, 9, 0x353F },
+    { -1.0f, 1.20000004768f, DOG_COLOR_WHITE, 7, 9, 0x3540 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_WHITE, 8, 9, 0x3541 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_GOLD, 9, 8, 0x3542 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_GRAY, 10, 9, 0x3543 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_BEIGE, 11, 9, 0x3544 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_WHITE, 12, 9, 0x3545 },
+    { -1.0f, 1.20000004768f, DOG_COLOR_BROWN, 13, 8, 0x3546 },
 };
 
-static UnkRacedogStruct D_80B25E68 = { -1.0f, 1.0, 0, -1, 0, 0x353E };
+static UnkRacedogStruct D_80B25E68 = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
 
 static Vec2f D_80B25E78[] = {
     { -3914.0f, 1283.0f },
@@ -250,7 +258,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_28A = 60;
     this->unk_28A += this->unk_28C;
-    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][0];
+    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].color][0];
     this->unk_29C = 0;
     this->unk_2B8 = -1;
 
@@ -351,12 +359,12 @@ void func_80B24F08(EnRacedog* this) {
     if (this->unk_2B8 < this->unk_1E8) {
         this->unk_2B8 = this->unk_1E8;
         if (this->unk_1E8 == 0) {
-            this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][0];
+            this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].color][0];
         } else {
             temp_a0 = temp_v1 / 4;
             if (this->unk_1E8 < temp_a0) {
-                if (D_80B25D88[this->unk_290].unk_08 == 5) {
-                    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][0] + randPlusMinusPoint5Scaled(1.0f);
+                if (D_80B25D88[this->unk_290].color == DOG_COLOR_BLUE) {
+                    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].color][0] + randPlusMinusPoint5Scaled(1.0f);
                 } else {
                     this->unk_298 = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 }
@@ -368,7 +376,7 @@ void func_80B24F08(EnRacedog* this) {
                 if (this->unk_1E8 < D_80B25D88[this->unk_290].unk_0C) {
                     this->unk_298 = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 } else {
-                    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].unk_08][1] + randPlusMinusPoint5Scaled(1.0f);
+                    this->unk_298 = D_80B25D50[D_80B25D88[this->unk_290].color][1] + randPlusMinusPoint5Scaled(1.0f);
 
                     if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
                         this->unk_298 *= D_80B25D88[this->unk_290].unk_04;
@@ -412,7 +420,7 @@ void func_80B251EC(EnRacedog* this) {
 
     if (D_80B25D88[this->unk_290].unk_0E < 0x3542) {
         temp = D_80B25D88[this->unk_290].unk_00;
-        this->unk_298 = temp * D_80B25D50[D_80B25D88[this->unk_290].unk_08][1];
+        this->unk_298 = temp * D_80B25D50[D_80B25D88[this->unk_290].color][1];
     }
 
     if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
@@ -626,25 +634,31 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     gDPPipeSync(POLY_OPA_DISP++);
 
-    switch (D_80B25D88[this->unk_290].unk_08) {
-        case 3:
+    switch (D_80B25D88[this->unk_290].color) {
+        case DOG_COLOR_BEIGE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;
-        case 1:
+
+        case DOG_COLOR_WHITE:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 0);
             break;
-        case 5:
+
+        case DOG_COLOR_BLUE:
             gDPSetEnvColor(POLY_OPA_DISP++, 79, 79, 143, 0);
             break;
-        case 6:
+
+        case DOG_COLOR_GOLD:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 207, 47, 0);
             break;
-        case 4:
+
+        case DOG_COLOR_BROWN:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 79, 47, 0);
             break;
-        case 2:
+
+        case DOG_COLOR_GRAY:
             gDPSetEnvColor(POLY_OPA_DISP++, 143, 143, 143, 0);
             break;
+
         default:
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
             break;

@@ -4,6 +4,16 @@
 #include "global.h"
 #include "objects/object_dog/object_dog.h"
 
+typedef enum {
+    /* 0 */ DOG_COLOR_DEFAULT, // ends up just being treated as beige
+    /* 1 */ DOG_COLOR_WHITE,
+    /* 2 */ DOG_COLOR_GRAY,
+    /* 3 */ DOG_COLOR_BEIGE,
+    /* 4 */ DOG_COLOR_BROWN,
+    /* 5 */ DOG_COLOR_BLUE,
+    /* 6 */ DOG_COLOR_GOLD,
+} DogColors;
+
 struct EnDg;
 
 typedef void (*EnDgActionFunc)(struct EnDg*, GlobalContext*);
