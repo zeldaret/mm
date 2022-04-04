@@ -7,6 +7,17 @@
 #define ENRACEDOG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENRACEDOG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
 
+/**
+ * The main point of this seems to be some very light anti-cheat detection. The dog
+ * must progress through these statuses in a linear order to finish the race.
+ */
+typedef enum {
+    /* 0 */ RACEDOG_RACE_STATUS_BEFORE_POINT_9,
+    /* 1 */ RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11,
+    /* 2 */ RACEDOG_RACE_STATUS_AFTER_POINT_11,
+    /* 3 */ RACEDOG_RACE_STATUS_FINISHED
+} RacedogRaceStatus;
+
 struct EnRacedog;
 
 typedef void (*EnRacedogActionFunc)(struct EnRacedog*, GlobalContext*);
