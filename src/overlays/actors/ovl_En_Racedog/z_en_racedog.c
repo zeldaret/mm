@@ -675,7 +675,7 @@ void EnRacedog_UpdateSelectionArrow(EnRacedog* this) {
 }
 
 void EnRacedog_DrawSelectionArrow(EnRacedog* this, GlobalContext* globalCtx) {
-    Vec3s sp48 = gZeroVec3s;
+    Vec3s rotation = gZeroVec3s;
     s32 shouldDrawSelectionArrow = (this->index == this->selectedDogIndex) ? true : false;
 
     if (shouldDrawSelectionArrow) {
@@ -684,7 +684,7 @@ void EnRacedog_DrawSelectionArrow(EnRacedog* this, GlobalContext* globalCtx) {
         func_8012C28C(globalCtx->state.gfxCtx);
         EnRacedog_UpdateSelectionArrow(this);
         Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
-                                              this->actor.world.pos.z, &sp48);
+                                              this->actor.world.pos.z, &rotation);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->selectionArrowGreenPrimColor, 0, 255);
@@ -707,10 +707,10 @@ s32 EnRacedog_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 void EnRacedog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnRacedog* this = THIS;
-    Vec3f sp1C = { 0.0f, 20.0f, 0.0f };
+    Vec3f focusOffset = { 0.0f, 20.0f, 0.0f };
 
     if (limbIndex == DOG_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sp1C, &this->actor.focus.pos);
+        Matrix_MultiplyVector3fByState(&focusOffset, &this->actor.focus.pos);
     }
 
     if (limbIndex == DOG_LIMB_TAIL) {
