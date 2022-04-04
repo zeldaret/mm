@@ -23,7 +23,7 @@ typedef struct EnRacedog {
     /* 0x1E8 */ s32 unk_1E8;
     /* 0x1EC */ Vec3s jointTable[DOG_LIMB_MAX];
     /* 0x23A */ Vec3s morphTable[DOG_LIMB_MAX];
-    /* 0x288 */ s16 unk_288;
+    /* 0x288 */ s16 selectionArrowTimer;
     /* 0x28A */ s16 raceStartTimer;
     /* 0x28C */ s16 extraTimeBeforeRaceStart;
     /* 0x28A */ UNK_TYPE1 unk_28E[0x2];
@@ -35,8 +35,8 @@ typedef struct EnRacedog {
     /* 0x2A0 */ Vec3f unk_2A0;
     /* 0x2AC */ Vec3f unk_2AC;
     /* 0x2B8 */ s32 unk_2B8;
-    /* 0x2BC */ s32 unk_2BC;
-    /* 0x2C0 */ s32 unk_2C0;
+    /* 0x2BC */ s32 selectionArrowGreenPrimColor;
+    /* 0x2C0 */ s32 selectionArrowGreenEnvColor;
     /* 0x2C4 */ f32 selectionArrowScale;
 } EnRacedog; // size = 0x2C8
 

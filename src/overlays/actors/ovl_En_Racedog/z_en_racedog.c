@@ -266,9 +266,9 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->actor);
     }
 
-    this->unk_2BC = 0xFF;
-    this->unk_2C0 = 0x32;
-    this->unk_288 = 0xC;
+    this->selectionArrowGreenPrimColor = 255;
+    this->selectionArrowGreenEnvColor = 50;
+    this->selectionArrowTimer = 12;
     this->unk_2A0.x = 0.0f;
     this->unk_2A0.y = 0.0f;
     this->unk_2A0.z = 0.0f;
@@ -587,32 +587,23 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 }
 
-void func_80B2583C(EnRacedog* this) {
-    s16 phi_v1;
-
-    if (this->unk_288 >= 7) {
-        this->unk_2BC -= 0x10;
-        this->unk_2C0 += 8;
+void EnRacedog_UpdateSelectionArrow(EnRacedog* this) {
+    if (this->selectionArrowTimer > 6) {
+        this->selectionArrowGreenPrimColor -= 16;
+        this->selectionArrowGreenEnvColor += 8;
         this->selectionArrowScale += 0.05f;
     } else {
-        this->unk_2BC += 0x10;
-        this->unk_2C0 -= 8;
+        this->selectionArrowGreenPrimColor += 16;
+        this->selectionArrowGreenEnvColor -= 8;
         this->selectionArrowScale -= 0.05f;
     }
 
-    if (this->unk_288 == 0) {
-        phi_v1 = 0;
-    } else {
-        this->unk_288--;
-        phi_v1 = this->unk_288;
-    }
-
-    if (phi_v1 == 0) {
-        this->unk_288 = 0xC;
+    if (DECR(this->selectionArrowTimer) == 0) {
+        this->selectionArrowTimer = 12;
     }
 }
 
-void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_DrawSelectionArrow(EnRacedog* this, GlobalContext* globalCtx) {
     Vec3s sp48 = gZeroVec3s;
     s32 shouldDrawSelectionArrow = (this->index == this->selectedDogIndex) ? true : false;
 
@@ -620,13 +611,13 @@ void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
-        func_80B2583C(this);
+        EnRacedog_UpdateSelectionArrow(this);
         Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
                                               this->actor.world.pos.z, &sp48);
 
         gDPPipeSync(POLY_OPA_DISP++);
-        gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->unk_2BC, 0, 255);
-        gDPSetEnvColor(POLY_OPA_DISP++, 255, this->unk_2C0, 0, 255);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->selectionArrowGreenPrimColor, 0, 255);
+        gDPSetEnvColor(POLY_OPA_DISP++, 255, this->selectionArrowGreenEnvColor, 0, 255);
         Matrix_Scale(this->selectionArrowScale * 2.0f, this->selectionArrowScale * 2.0f,
                      this->selectionArrowScale * 2.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -652,7 +643,7 @@ void EnRacedog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 
     if (limbIndex == DOG_LIMB_TAIL) {
-        func_80B258D8(this, globalCtx);
+        EnRacedog_DrawSelectionArrow(this, globalCtx);
     }
 }
 
