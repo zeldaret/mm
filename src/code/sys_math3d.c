@@ -100,7 +100,8 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
 /**
  * Finds the two points on lines A and B where the lines are closest together.
  */
-s32 Math3D_LineVsLineClosestTwoPoints(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f* lineBPointA, Vec3f* lineBPointB, Vec3f* lineAClosestToB, Vec3f* lineBClosestToA) {
+s32 Math3D_LineVsLineClosestTwoPoints(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f* lineBPointA, Vec3f* lineBPointB,
+                                      Vec3f* lineAClosestToB, Vec3f* lineBClosestToA) {
     f32 sqMag;
     f32 scaleB;
     f32 lineAx;
@@ -307,7 +308,6 @@ void Math3D_Vec3fReflect(Vec3f* vec, Vec3f* normal, Vec3f* reflVec) {
     reflVec->y = ((normScaleY + vec->y) + (normScaleY + vec->y)) + negVec.y;
     reflVec->z = ((normScaleZ + vec->z) + (normScaleZ + vec->z)) + negVec.z;
 }
-
 
 s32 Math3D_PointInSquare2D(f32 upperLeftX, f32 lowerRightX, f32 upperLeftY, f32 lowerRightY, f32 x, f32 y) {
     if (x >= upperLeftX && x <= lowerRightX && y >= upperLeftY && y <= lowerRightY) {
@@ -1063,7 +1063,6 @@ s32 Math3D_TriChkPointParaYIntersectDist(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx
     return false;
 }
 
-
 s32 Math3D_TriChkPointParaYIntersectInsideTri(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist,
                                               f32 z, f32 x, f32* yIntersect, f32 chkDist) {
     if (IS_ZERO(ny)) {
@@ -1351,8 +1350,8 @@ s32 Math3D_TriChkPointParaZDeterminate(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 y, f
     return Math3D_TriChkPointParaZImpl(v0, v1, v2, y, z, detMax, 1.0f, nx);
 }
 
-s32 Math3D_TriChkPointParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x, f32 y,
-                  f32* zIntersect) {
+s32 Math3D_TriChkPointParaZIntersect(Vec3f* v0, Vec3f* v1, Vec3f* v2, f32 nx, f32 ny, f32 nz, f32 originDist, f32 x,
+                                     f32 y, f32* zIntersect) {
     if (IS_ZERO(nz)) {
         return 0;
     }
@@ -1491,7 +1490,8 @@ s32 Math3D_PointInSph(Sphere16* sphere, Vec3f* point) {
     return false;
 }
 
-s32 Math3D_PointDistToLine2D(f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32* perpXOut, f32* perpYOut, f32* lineLenSq) {
+s32 Math3D_PointDistToLine2D(f32 x0, f32 y0, f32 x1, f32 y1, f32 x2, f32 y2, f32* perpXOut, f32* perpYOut,
+                             f32* lineLenSq) {
     f32 perpendicularRatio;
     f32 xDiff = x2 - x1;
     f32 yDiff = y2 - y1;
@@ -2270,7 +2270,8 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z) {
     return false;
 }
 
-s32 func_8017FB1C(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32* arg7, f32* arg8, f32* arg9, f32* argA) {
+s32 func_8017FB1C(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32* arg7, f32* arg8, f32* arg9,
+                  f32* argA) {
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_fs0;
