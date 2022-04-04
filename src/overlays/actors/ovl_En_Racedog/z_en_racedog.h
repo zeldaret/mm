@@ -24,8 +24,8 @@ typedef struct EnRacedog {
     /* 0x1EC */ Vec3s jointTable[DOG_LIMB_MAX];
     /* 0x23A */ Vec3s morphTable[DOG_LIMB_MAX];
     /* 0x288 */ s16 unk_288;
-    /* 0x28A */ s16 unk_28A;
-    /* 0x28C */ s16 unk_28C;
+    /* 0x28A */ s16 raceStartTimer;
+    /* 0x28C */ s16 extraTimeBeforeRaceStart;
     /* 0x28A */ UNK_TYPE1 unk_28E[0x2];
     /* 0x290 */ s16 index;
     /* 0x292 */ s16 selectedDogIndex;
@@ -37,7 +37,7 @@ typedef struct EnRacedog {
     /* 0x2B8 */ s32 unk_2B8;
     /* 0x2BC */ s32 unk_2BC;
     /* 0x2C0 */ s32 unk_2C0;
-    /* 0x2C4 */ f32 unk_2C4;
+    /* 0x2C4 */ f32 selectionArrowScale;
 } EnRacedog; // size = 0x2C8
 
 extern const ActorInit En_Racedog_InitVars;

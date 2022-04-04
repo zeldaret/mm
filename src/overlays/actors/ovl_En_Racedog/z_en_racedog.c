@@ -20,9 +20,9 @@ void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx);
+void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx);
 void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
-void func_80B24E14(EnRacedog* this);
+void EnRacedog_UpdateTextId(EnRacedog* this);
 void func_80B24F08(EnRacedog* this);
 void func_80B251EC(EnRacedog* this);
 void func_80B252F8(EnRacedog* this);
@@ -272,28 +272,34 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2A0.x = 0.0f;
     this->unk_2A0.y = 0.0f;
     this->unk_2A0.z = 0.0f;
-    this->unk_2C4 = 1.0f;
+    this->selectionArrowScale = 1.0f;
 
-    if ((sDogInfo[this->index].textId >= 0x353F) && (this->index == (s16)Rand_ZeroFloat(20.0f))) {
-        this->unk_28C = 5;
+    // The first part of this check is a bit strange. If they intended to check for dogs that were
+    // in good condition, they should've stopped at 0x353D instead of 0x353E. Additionally, this
+    // runs before EnRacedog_UpdateTextId is called to set the text IDs to their "correct" values,
+    // meaning that the IDs are just whatever their default values in sDogInfo are. As a result,
+    // the blue dog, one beige dog, one white dog, one brown dog, and two gray dogs never bother
+    // to do the random 1/20 check here, regardless of anything else.
+    if ((sDogInfo[this->index].textId > 0x353E) && (this->index == (s16)Rand_ZeroFloat(20.0f))) {
+        this->extraTimeBeforeRaceStart = 5;
     } else {
-        this->unk_28C = 0;
+        this->extraTimeBeforeRaceStart = 0;
     }
 
-    this->unk_28A = 60;
-    this->unk_28A += this->unk_28C;
+    this->raceStartTimer = 60;
+    this->raceStartTimer += this->extraTimeBeforeRaceStart;
     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0];
     this->unk_29C = 0;
     this->unk_2B8 = -1;
 
-    func_80B24E14(this);
+    EnRacedog_UpdateTextId(this);
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_20;
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
     EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_IDLE);
     sAnimations[RACEDOG_ANIMATION_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
-    this->actionFunc = func_80B24C14;
+    this->actionFunc = EnRacedog_RaceStart;
 }
 
 void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -302,19 +308,10 @@ void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx) {
-    s16 phi_v1;
-
-    if (this->unk_28A == 0) {
-        phi_v1 = 0;
-    } else {
-        this->unk_28A--;
-        phi_v1 = this->unk_28A;
-    }
-
-    if (phi_v1 == 0) {
-        this->unk_28A = Rand_S16Offset(50, 50);
-        if (this->unk_28C == 0) {
+void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx) {
+    if (DECR(this->raceStartTimer) == 0) {
+        this->raceStartTimer = Rand_S16Offset(50, 50);
+        if (this->extraTimeBeforeRaceStart == 0) {
             play_sound(NA_SE_SY_START_SHOT);
         }
 
@@ -359,7 +356,12 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
     func_80B255AC(this, globalCtx);
 }
 
-void func_80B24E14(EnRacedog* this) {
+/**
+ * Updates the text ID in sDogInfo based on what was set in the weekEventRegs by
+ * En_Aob_01. This makes it so sDogInfo can be used in other functions to determine
+ * the condition of the dog.
+ */
+void EnRacedog_UpdateTextId(EnRacedog* this) {
     if (this->index % 2) {
         sDogInfo[this->index].textId =
             (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
@@ -368,9 +370,13 @@ void func_80B24E14(EnRacedog* this) {
             ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
     }
 
+    // This makes sure the text ID is something in the range of 0x3539 to 0x3547.
     if ((sDogInfo[this->index].textId >= 0x3547) || (sDogInfo[this->index].textId < 0x3539)) {
         sDogInfo[this->index].textId = 0x353E;
     }
+
+    // Actual valid text IDs for the race dogs range between 0x3538 and 0x3546, so this
+    // code makes the two ranges match up. Perhaps the text got shifted?
     if (sDogInfo[this->index].textId == 0x3547) {
         sDogInfo[this->index].textId = 0x3538;
     }
@@ -587,11 +593,11 @@ void func_80B2583C(EnRacedog* this) {
     if (this->unk_288 >= 7) {
         this->unk_2BC -= 0x10;
         this->unk_2C0 += 8;
-        this->unk_2C4 += 0.05f;
+        this->selectionArrowScale += 0.05f;
     } else {
         this->unk_2BC += 0x10;
         this->unk_2C0 -= 8;
-        this->unk_2C4 -= 0.05f;
+        this->selectionArrowScale -= 0.05f;
     }
 
     if (this->unk_288 == 0) {
@@ -621,7 +627,8 @@ void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->unk_2BC, 0, 255);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, this->unk_2C0, 0, 255);
-        Matrix_Scale(this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, MTXMODE_APPLY);
+        Matrix_Scale(this->selectionArrowScale * 2.0f, this->selectionArrowScale * 2.0f,
+                     this->selectionArrowScale * 2.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowEmptyDL);
         gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowDL);
