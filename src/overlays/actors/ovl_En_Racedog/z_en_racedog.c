@@ -25,10 +25,10 @@ void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx);
 void EnRacedog_UpdateTextId(EnRacedog* this);
 void EnRacedog_UpdateSpeed(EnRacedog* this);
 void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this);
-void func_80B252F8(EnRacedog* this);
-void func_80B2538C(EnRacedog* this);
+void EnRacedog_UpdateRaceVariables(EnRacedog* this);
+void EnRacedog_CheckForFinish(EnRacedog* this);
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this);
-s32 func_80B25490(EnRacedog* this, Vec2f* arg1);
+s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* arg1);
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx);
 void EnRacedog_PlayWalkSfx(EnRacedog* this);
 
@@ -63,6 +63,13 @@ typedef enum {
     /* 16 */ RACEDOG_ANIMATION_MAX
 } RacedogAnimationIndex;
 
+typedef enum {
+    /* 0 */ RACEDOG_RACE_STATUS_BEFORE_POINT_9,
+    /* 1 */ RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11,
+    /* 2 */ RACEDOG_RACE_STATUS_AFTER_POINT_11,
+    /* 3 */ RACEDOG_RACE_STATUS_FINISHED
+} RacedogRaceStatus;
+
 typedef struct {
     f32 sprintSpeedMultiplier;
     f32 goodConditionSpeedMultiplier;
@@ -84,13 +91,13 @@ const ActorInit En_Racedog_InitVars = {
     (ActorFunc)EnRacedog_Draw,
 };
 
-s16 D_80B25D40 = 0;
+static s16 sNumberOfDogsFinished = 0;
 
-s16 D_80B25D44 = -1;
+static s16 sFurthestPoint = -1;
 
-s16 D_80B25D48 = 0;
+static s16 sSprintTimer = 0;
 
-s16 D_80B25D4C = -1;
+static s16 sFirstPlaceIndex = -1;
 
 static f32 sBaseSpeeds[][2] = {
     { 0.0f, 0.0f }, { 5.0f, 5.5f }, { 5.0f, 5.0f }, { 5.5f, 5.0f }, { 4.5f, 5.5f }, { 6.0f, 4.0f }, { 4.0f, 6.0f },
@@ -108,7 +115,7 @@ static RaceDogInfo sDogInfo[] = {
 
 static RaceDogInfo sSelectedDogInfo = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
 
-static Vec2f D_80B25E78[] = {
+static Vec2f sFinishLineCoordinates[] = {
     { -3914.0f, 1283.0f },
     { -3747.0f, 1104.0f },
     { -3717.0f, 1169.0f },
@@ -289,7 +296,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->raceStartTimer = 60;
     this->raceStartTimer += this->extraTimeBeforeRaceStart;
     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0];
-    this->unk_29C = 0;
+    this->raceStatus = RACEDOG_RACE_STATUS_BEFORE_POINT_9;
     this->pointForCurrentTargetSpeed = -1;
 
     EnRacedog_UpdateTextId(this);
@@ -342,12 +349,12 @@ void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx) {
         }
 
         EnRacedog_UpdateSpeed(this);
-        if ((this->currentPoint >= ((this->path->count / 4) * 3)) && (this->index == D_80B25D4C)) {
-            D_80B25D48++;
+        if ((this->currentPoint >= ((this->path->count / 4) * 3)) && (this->index == sFirstPlaceIndex)) {
+            sSprintTimer++;
         }
 
-        func_80B252F8(this);
-        func_80B2538C(this);
+        EnRacedog_UpdateRaceVariables(this);
+        EnRacedog_CheckForFinish(this);
         Actor_MoveWithGravity(&this->actor);
     }
 
@@ -403,7 +410,7 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
                     this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 }
 
-                if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
+                if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != sFirstPlaceIndex)) {
                     this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                 }
             } else if (this->currentPoint < (quarterPathCount * 3)) {
@@ -413,7 +420,7 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
                 } else {
                     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + randPlusMinusPoint5Scaled(1.0f);
 
-                    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
+                    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != sFirstPlaceIndex)) {
                         this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                     }
                 }
@@ -426,7 +433,7 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
         }
     }
 
-    if ((this->currentPoint != 0) || (this->unk_29C != 0)) {
+    if ((this->currentPoint != 0) || (this->raceStatus != RACEDOG_RACE_STATUS_BEFORE_POINT_9)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
@@ -452,8 +459,8 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this) {
     f32 sprintSpeedMultiplier;
 
     if (sDogInfo[this->index].sprintSpeedMultiplier == -1.0f) {
-        if (D_80B25D48 < 100.0f) {
-            sDogInfo[this->index].sprintSpeedMultiplier = 200.0f / (200.0f - D_80B25D48);
+        if (sSprintTimer < 100.0f) {
+            sDogInfo[this->index].sprintSpeedMultiplier = 200.0f / (200.0f - sSprintTimer);
         } else {
             sDogInfo[this->index].sprintSpeedMultiplier = 2.0f;
         }
@@ -464,37 +471,39 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this) {
         this->targetSpeed = sprintSpeedMultiplier * sBaseSpeeds[sDogInfo[this->index].color][1];
     }
 
-    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
+    if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != sFirstPlaceIndex)) {
         this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
     }
 }
 
-void func_80B252F8(EnRacedog* this) {
-    if ((this->currentPoint >= 9) && (this->unk_29C == 0)) {
-        this->unk_29C = 1;
+void EnRacedog_UpdateRaceVariables(EnRacedog* this) {
+    if ((this->currentPoint >= 9) && (this->raceStatus == RACEDOG_RACE_STATUS_BEFORE_POINT_9)) {
+        this->raceStatus = RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11;
     }
 
-    if ((this->currentPoint >= 0xB) && (this->unk_29C == 1)) {
-        this->unk_29C = 2;
+    if ((this->currentPoint >= 11) && (this->raceStatus == RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11)) {
+        this->raceStatus = RACEDOG_RACE_STATUS_AFTER_POINT_11;
     }
 
-    if (((this->currentPoint >= D_80B25D44) || (this->unk_29C <= 0)) && (this->currentPoint > D_80B25D44)) {
-        D_80B25D44 = this->currentPoint;
-        D_80B25D4C = this->index;
+    if (((this->currentPoint >= sFurthestPoint) || (this->raceStatus <= RACEDOG_RACE_STATUS_BEFORE_POINT_9)) &&
+        (this->currentPoint > sFurthestPoint)) {
+        sFurthestPoint = this->currentPoint;
+        sFirstPlaceIndex = this->index;
     }
 }
 
-void func_80B2538C(EnRacedog* this) {
-    if (func_80B25490(this, D_80B25E78) && this->unk_29C == 2) {
-        D_80B25D40++;
-        if (D_80B25D40 == 1) {
+void EnRacedog_CheckForFinish(EnRacedog* this) {
+    if (EnRacedog_IsOverFinishLine(this, sFinishLineCoordinates) &&
+        this->raceStatus == RACEDOG_RACE_STATUS_AFTER_POINT_11) {
+        sNumberOfDogsFinished++;
+        if (sNumberOfDogsFinished == 1) {
             Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
             play_sound(NA_SE_SY_START_SHOT);
         }
 
-        this->unk_29C = 3;
+        this->raceStatus = RACEDOG_RACE_STATUS_FINISHED;
         if (this->index == this->selectedDogIndex) {
-            gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (D_80B25D40 * 8);
+            gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (sNumberOfDogsFinished * 8);
         }
     }
 }
@@ -507,7 +516,7 @@ void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     }
 }
 
-s32 func_80B25490(EnRacedog* this, Vec2f* arg1) {
+s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     f32 xDistToTopFront;
     f32 zDistToTopFront;
     f32 xDistToBottomFront;
@@ -519,14 +528,14 @@ s32 func_80B25490(EnRacedog* this, Vec2f* arg1) {
     f32 temp_f0;
     f32 temp;
 
-    xDistToTopFront = this->actor.world.pos.x - arg1[0].x;
-    zDistToTopFront = this->actor.world.pos.z - arg1[0].z;
-    xDistToBottomFront = this->actor.world.pos.x - arg1[1].x;
-    zDistToBottomFront = this->actor.world.pos.z - arg1[1].z;
-    xDistToBottomBack = this->actor.world.pos.x - arg1[2].x;
-    zDistToBottomBack = this->actor.world.pos.z - arg1[2].z;
-    xDistToTopBack = this->actor.world.pos.x - arg1[3].x;
-    zDistToTopBack = this->actor.world.pos.z - arg1[3].z;
+    xDistToTopFront = this->actor.world.pos.x - finishLineCoordinates[0].x;
+    zDistToTopFront = this->actor.world.pos.z - finishLineCoordinates[0].z;
+    xDistToBottomFront = this->actor.world.pos.x - finishLineCoordinates[1].x;
+    zDistToBottomFront = this->actor.world.pos.z - finishLineCoordinates[1].z;
+    xDistToBottomBack = this->actor.world.pos.x - finishLineCoordinates[2].x;
+    zDistToBottomBack = this->actor.world.pos.z - finishLineCoordinates[2].z;
+    xDistToTopBack = this->actor.world.pos.x - finishLineCoordinates[3].x;
+    zDistToTopBack = this->actor.world.pos.z - finishLineCoordinates[3].z;
 
     temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     temp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));

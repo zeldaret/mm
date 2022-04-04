@@ -31,7 +31,7 @@ typedef struct EnRacedog {
     /* 0x292 */ s16 selectedDogIndex;
     /* 0x294 */ UNK_TYPE1 unk_294[0x4];
     /* 0x298 */ f32 targetSpeed;
-    /* 0x29C */ s16 unk_29C;
+    /* 0x29C */ s16 raceStatus;
     /* 0x2A0 */ Vec3f unk_2A0;
     /* 0x2AC */ Vec3f unk_2AC;
     /* 0x2B8 */ s32 pointForCurrentTargetSpeed;
