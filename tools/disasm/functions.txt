@@ -13280,7 +13280,7 @@
     0x80B24630:("EnRacedog_ChangeAnimation",),
     0x80B246F4:("EnRacedog_UpdateCollision",),
     0x80B2478C:("EnRacedog_GetYRotation",),
-    0x80B248B8:("func_80B248B8",),
+    0x80B248B8:("EnRacedog_CalculateFloorTangent",),
     0x80B24930:("EnRacedog_Init",),
     0x80B24BE8:("EnRacedog_Destroy",),
     0x80B24C14:("EnRacedog_RaceStart",),

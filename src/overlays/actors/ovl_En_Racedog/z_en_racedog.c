@@ -103,6 +103,9 @@ const ActorInit En_Racedog_InitVars = {
     (ActorFunc)EnRacedog_Draw,
 };
 
+/**
+ * Mainly used to determine what place the player's selected dog finishes in.
+ */
 static s16 sNumberOfDogsFinished = 0;
 
 /**
@@ -286,15 +289,15 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     return RADF_TO_BINANG(Math_Acot2F(zDiffWithRandomVariation, xDiffWithRandomDeviation));
 }
 
-void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
-    f32 sp20;
-    f32 sp1C;
+void EnRacedog_CalculateFloorTangent(EnRacedog* this, Vec3f* floorTangent) {
+    f32 ny;
+    f32 nz;
 
     if (this->actor.floorPoly != NULL) {
-        sp20 = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
-        sp1C = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
+        ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
+        nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        arg1->x = -Math_Acot2F(1.0f, -sp1C * sp20);
+        floorTangent->x = -Math_Acot2F(1.0f, -nz * ny);
     }
 }
 
@@ -321,9 +324,9 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->selectionArrowGreenPrimColor = 255;
     this->selectionArrowGreenEnvColor = 50;
     this->selectionArrowTimer = 12;
-    this->unk_2A0.x = 0.0f;
-    this->unk_2A0.y = 0.0f;
-    this->unk_2A0.z = 0.0f;
+    this->previousRotation.x = 0.0f;
+    this->previousRotation.y = 0.0f;
+    this->previousRotation.z = 0.0f;
     this->selectionArrowScale = 1.0f;
 
     // The first part of this check is a bit strange. If they intended to check for dogs that were
@@ -628,18 +631,20 @@ void EnRacedog_PlayWalkSfx(EnRacedog* this) {
 void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnRacedog* this = THIS;
-    Vec3f sp2C = { 0.0f, 0.0f, 0.0f };
+    Vec3f floorTangent = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedDogInfo.index;
 
     this->actionFunc(this, globalCtx);
 
     EnRacedog_UpdateCollision(this, globalCtx);
-    func_80B248B8(this, &sp2C);
-    Math_ApproachF(&this->unk_2AC.x, sp2C.x, 0.2f, 0.1f);
+    EnRacedog_CalculateFloorTangent(this, &floorTangent);
+    Math_ApproachF(&this->currentRotation.x, floorTangent.x, 0.2f, 0.1f);
 
-    if (this->unk_2A0.x > 0.0f) {
-        if ((this->unk_2AC.x < 0.0f) && (this->unk_2AC.x > -0.1f)) {
+    if (this->previousRotation.x > 0.0f) {
+        if ((this->currentRotation.x < 0.0f) && (this->currentRotation.x > -0.1f)) {
+            // Moves to the part of the running animation where the dog has four feet
+            // on the ground and is about to lift its feet off the ground.
             this->skelAnime.curFrame = 4.0f;
             this->actor.velocity.y = 5.5f;
         }
@@ -649,7 +654,7 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->skelAnime.curFrame = 0.0f;
     }
 
-    this->unk_2A0 = this->unk_2AC;
+    this->previousRotation = this->currentRotation;
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -753,7 +758,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(this->unk_2AC.x);
+    Matrix_RotateStateAroundXAxis(this->currentRotation.x);
     Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
