@@ -13277,7 +13277,7 @@
     0x80B23F50:("ObjWind_Destroy",),
     0x80B23F60:("ObjWind_Update",),
     0x80B243C0:("ObjWind_Draw",),
-    0x80B24630:("func_80B24630",),
+    0x80B24630:("EnRacedog_ChangeAnimation",),
     0x80B246F4:("func_80B246F4",),
     0x80B2478C:("func_80B2478C",),
     0x80B248B8:("func_80B248B8",),

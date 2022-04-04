@@ -43,6 +43,26 @@ void func_80B256BC(EnRacedog* this);
 #define DOG_IS_IN_GOOD_CONDITION(this) (sDogInfo[this->index].textId < 0x353E)
 #define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
 
+typedef enum {
+    /*  0 */ RACEDOG_ANIMATION_IDLE,
+    /*  1 */ RACEDOG_ANIMATION_WALK_1,
+    /*  2 */ RACEDOG_ANIMATION_RUN,
+    /*  3 */ RACEDOG_ANIMATION_BARK,
+    /*  4 */ RACEDOG_ANIMATION_SIT_DOWN_1,
+    /*  5 */ RACEDOG_ANIMATION_SIT_DOWN_2,
+    /*  6 */ RACEDOG_ANIMATION_LYING_DOWN_START_1,
+    /*  7 */ RACEDOG_ANIMATION_LYING_DOWN_LOOP,
+    /*  8 */ RACEDOG_ANIMATION_LYING_DOWN_START_2,
+    /*  9 */ RACEDOG_ANIMATION_LYING_DOWN_START_3,
+    /* 10 */ RACEDOG_ANIMATION_LYING_DOWN_START_4,
+    /* 11 */ RACEDOG_ANIMATION_WALK_2,
+    /* 12 */ RACEDOG_ANIMATION_JUMP,
+    /* 13 */ RACEDOG_ANIMATION_LONG_JUMP,
+    /* 14 */ RACEDOG_ANIMATION_JUMP_2,
+    /* 15 */ RACEDOG_ANIMATION_WALK_3,
+    /* 16 */ RACEDOG_ANIMATION_MAX
+} RacedogAnimationIndex;
+
 typedef struct {
     f32 sprintSpeedMultiplier;
     f32 goodConditionSpeedMultiplier;
@@ -152,7 +172,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS D_80B25EF0[] = {
+static AnimationInfoS sAnimations[] = {
     { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
     { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
@@ -167,18 +187,18 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void func_80B24630(SkelAnime* skelAnime, AnimationInfoS arg1[], s32 arg2) {
+void EnRacedog_ChangeAnimation(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 index) {
     f32 frameCount;
 
-    arg1 += arg2;
-    if (arg1->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(arg1->animation);
+    animationInfo += index;
+    if (animationInfo->frameCount < 0) {
+        frameCount = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = arg1->frameCount;
+        frameCount = animationInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, arg1->animation, arg1->playSpeed + (BREG(88) * 0.1f), arg1->startFrame, frameCount,
-                     arg1->mode, arg1->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed + (BREG(88) * 0.1f),
+                     animationInfo->startFrame, frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
 void func_80B246F4(EnRacedog* this, GlobalContext* globalCtx) {
@@ -271,8 +291,8 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.flags |= ACTOR_FLAG_20;
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
-    func_80B24630(&this->skelAnime, D_80B25EF0, 0);
-    D_80B25EF0->playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
+    EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_IDLE);
+    sAnimations[RACEDOG_ANIMATION_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = func_80B24C14;
 }
 
@@ -298,7 +318,7 @@ void func_80B24C14(EnRacedog* this, GlobalContext* globalCtx) {
             play_sound(NA_SE_SY_START_SHOT);
         }
 
-        func_80B24630(&this->skelAnime, D_80B25EF0, 2);
+        EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_RUN);
         this->actionFunc = func_80B24CB4;
     }
 }
@@ -464,9 +484,9 @@ void func_80B2538C(EnRacedog* this) {
 
 void func_80B25448(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
-        D_80B25EF0[2].playSpeed = 0.9f;
+        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 0.9f;
     } else {
-        D_80B25EF0[2].playSpeed = 1.0f;
+        sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 1.0f;
     }
 }
 
