@@ -32,17 +32,22 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* arg1);
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx);
 void EnRacedog_PlayWalkSfx(EnRacedog* this);
 
-// Dogs can be in three conditions, which is indicated by the message they say when you pick them up.
-// If it starts with "Ruff!", they're in good condition.
-// If it starts with "Rrr-Ruff!", they're in normal condition.
-// If it starts with "Hoo-whine", they're in bad condition.
-// These text boxes are grouped up like so:
-// - 0x3538 - 0x353D: Good condition
-// - 0x353E - 0x3541: Normal condition
-// - 0x3542 - 0x3546: Bad condition
+/**
+ * Dogs can be in three conditions, which is indicated by the message they say when you pick them up.
+ * If it starts with "Ruff!", they're in good condition.
+ * If it starts with "Rrr-Ruff!", they're in normal condition.
+ * If it starts with "Hoo-whine", they're in bad condition.
+ * These text boxes are grouped up like so:
+ * - 0x3538 - 0x353D: Good condition
+ * - 0x353E - 0x3541: Normal condition
+ * - 0x3542 - 0x3546: Bad condition
+ */
 #define DOG_IS_IN_GOOD_CONDITION(this) (sDogInfo[this->index].textId < 0x353E)
 #define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
 
+/**
+ * The vast majority of these indices are never used by the actor.
+ */
 typedef enum {
     /*  0 */ RACEDOG_ANIMATION_IDLE,
     /*  1 */ RACEDOG_ANIMATION_WALK_1,
@@ -63,6 +68,10 @@ typedef enum {
     /* 16 */ RACEDOG_ANIMATION_MAX
 } RacedogAnimationIndex;
 
+/**
+ * The only point of this seems to be some very light anti-cheat detection. The dog
+ * must progress through these statuses in a linear order to finish the race.
+ */
 typedef enum {
     /* 0 */ RACEDOG_RACE_STATUS_BEFORE_POINT_9,
     /* 1 */ RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11,
@@ -70,13 +79,16 @@ typedef enum {
     /* 3 */ RACEDOG_RACE_STATUS_FINISHED
 } RacedogRaceStatus;
 
+/**
+ * Stores various information for each dog in the race, mostly related to speed.
+ */
 typedef struct {
-    f32 sprintSpeedMultiplier;
-    f32 goodConditionSpeedMultiplier;
-    s16 color;
-    s16 index;
-    s16 unk_0C;
-    s16 textId;
+    f32 sprintSpeedMultiplier;        // Target speed is multiplied by this when the dog is in the last 1/4 of the race
+    f32 goodConditionSpeedMultiplier; // Target speed is multiplied by this if the dog is in good condition
+    s16 color;                        // The dog's color, which is used as an index into sBaseSpeeds
+    s16 index;                        // The dog's index within sDogInfo
+    s16 pointToUseSecondBaseSpeed;    // When the dog is at or after this point, the second value in sBaseSpeeds is used
+    s16 textId;                       // Used to determine the dog's condition
 } RaceDogInfo;
 
 const ActorInit En_Racedog_InitVars = {
@@ -93,16 +105,41 @@ const ActorInit En_Racedog_InitVars = {
 
 static s16 sNumberOfDogsFinished = 0;
 
+/**
+ * The furthest point along the race track path that any dog has reached.
+ */
 static s16 sFurthestPoint = -1;
 
+/**
+ * Starts counting up as soon as the first-place dog gets 3/4ths of the way through the race track,
+ * and stops counting up as soon as the first-place dog finishes. Used to scale up the sprint
+ * multiplier in EnRacedog_CalculateFinalStretchTargetSpeed.
+ */
 static s16 sSprintTimer = 0;
 
+/**
+ * The index of the dog currently in first place. Only updated whenever furthestPoint is also updated.
+ */
 static s16 sFirstPlaceIndex = -1;
 
+/**
+ * The base speeds for each dog indexed by their color. The two values are used during different parts of the race.
+ * - At the very start of the race, all dogs will use the first value for their color, but only for a single point
+ *   along the race track's path. After that, they will have base speed of 5.0, regardless of what's in the table
+ *   for their color. The sole exception to this is the blue dog, who will use its first value for the entire
+ *   first 1/4th of the race.
+ * - For the last 3/4ths of the race, the dog will check to see if it's current point along the race track path is
+ *   greater than or equal to the pointToUseSecondBaseSpeed for its RaceDogInfo. If it is, then it will use the
+ *   second value for its color as its base speed, otherwise it will use 5.0.
+ */
 static f32 sBaseSpeeds[][2] = {
     { 0.0f, 0.0f }, { 5.0f, 5.5f }, { 5.0f, 5.0f }, { 5.5f, 5.0f }, { 4.5f, 5.5f }, { 6.0f, 4.0f }, { 4.0f, 6.0f },
 };
 
+/**
+ * A table of RaceDogInfo for every dog in the race. Note that the sprintSpeedMultiplier and
+ * textId values in this table are updated by functions within this actor.
+ */
 static RaceDogInfo sDogInfo[] = {
     { -1.0f, 1.2f, DOG_COLOR_BEIGE, 0, 9, 0x3539 },  { -1.0f, 1.2f, DOG_COLOR_WHITE, 1, 9, 0x353A },
     { -1.0f, 1.2f, DOG_COLOR_BLUE, 2, 10, 0x353B },  { -1.0f, 1.2f, DOG_COLOR_GRAY, 3, 9, 0x353C },
@@ -113,8 +150,16 @@ static RaceDogInfo sDogInfo[] = {
     { -1.0f, 1.2f, DOG_COLOR_WHITE, 12, 9, 0x3545 }, { -1.0f, 1.2f, DOG_COLOR_BROWN, 13, 8, 0x3546 },
 };
 
+/**
+ * Stores the RacedogInfo for the dog that is selected by the player. These values are just
+ * placeholders, and the actual value gets grabbed from sDogInfo in EnRacedog_Init.
+ */
 static RaceDogInfo sSelectedDogInfo = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
 
+/**
+ * The XZ-coordinates used to determine if the dog is inside the finish line.
+ * It's a decent bit bigger than the in-game visual.
+ */
 static Vec2f sFinishLineCoordinates[] = {
     { -3914.0f, 1283.0f },
     { -3747.0f, 1104.0f },
@@ -404,6 +449,7 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
             quarterPathCount = pathCount / 4;
             if (this->currentPoint < quarterPathCount) {
                 // The dog is past the very start, but is still less than 1/4th of the way through the race track.
+                // This code will give the blue dog a higher base speed than any other dog (6.0 instead of 5.0).
                 if (sDogInfo[this->index].color == DOG_COLOR_BLUE) {
                     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + randPlusMinusPoint5Scaled(1.0f);
                 } else {
@@ -415,7 +461,7 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
                 }
             } else if (this->currentPoint < (quarterPathCount * 3)) {
                 // The dog is between 1/4th and 3/4ths of the way through the race track.
-                if (this->currentPoint < sDogInfo[this->index].unk_0C) {
+                if (this->currentPoint < sDogInfo[this->index].pointToUseSecondBaseSpeed) {
                     this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 } else {
                     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + randPlusMinusPoint5Scaled(1.0f);
