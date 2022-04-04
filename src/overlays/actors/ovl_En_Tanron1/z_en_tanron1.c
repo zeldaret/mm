@@ -6,7 +6,7 @@
 
 #include "z_en_tanron1.h"
 
-#define FLAGS 0x00000035
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTanron1*)thisx)
 
@@ -15,7 +15,9 @@ void EnTanron1_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTanron1_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx);
+void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx);
+
 const ActorInit En_Tanron1_InitVars = {
     ACTOR_EN_TANRON1,
     ACTORCAT_ENEMY,
@@ -28,18 +30,387 @@ const ActorInit En_Tanron1_InitVars = {
     (ActorFunc)EnTanron1_Draw,
 };
 
-#endif
+static u64 sPad = { 0 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Init.s")
+#include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Destroy.s")
+void EnTanron1_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnTanron1* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/func_80BB4E50.s")
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    if (!ENTANRON1_GET_100(&this->actor)) {
+        this->unk_144 = 0;
+    } else {
+        this->actor.params = 200;
+        this->unk_144 = 1;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Update.s")
+void EnTanron1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/EnTanron1_Draw.s")
+void func_80BB4E50(EnTanron1Struct* arg0, Vec3f* arg1, s16 arg2) {
+    s16 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/func_80BB5318.s")
+    for (i = 0; i < 200; i++, arg0++) {
+        if (arg0->unk_24 == 0) {
+            arg0->unk_24 = 1;
+            arg0->unk_2C = 0.0f;
+            arg0->unk_00 = *arg1;
+            arg0->unk_18 = arg0->unk_1C = 0;
+            arg0->unk_1A = arg2;
+            arg0->unk_26 = Rand_ZeroFloat(100.0f);
+            arg0->unk_28 = 0;
+            if (Rand_ZeroOne() < 0.5f) {
+                arg0->unk_2A = 0xC00;
+            } else {
+                arg0->unk_2A = -0xC00;
+            }
+            break;
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Tanron1/func_80BB5AAC.s")
+void EnTanron1_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnTanron1* this = THIS;
+    Actor* temp_a0;
+    Player* player = GET_PLAYER(globalCtx);
+    s16 i;
+    EnTanron1Struct* ptr = &this->unk_160[0];
+    Vec3f temp;
+    f32 phi_f18;
+    s32 pad;
+
+    if (this->unk_148 != 0) {
+        this->unk_148--;
+    }
+
+    switch (this->unk_144) {
+        case 0:
+            for (i = 0; i < this->actor.params; i++) {
+                func_80BB4E50(this->unk_160, &this->actor.world.pos, Rand_ZeroFloat(0x10000));
+            }
+            this->unk_144 = 200;
+            break;
+
+        case 1:
+            this->unk_14C.x = player->actor.world.pos.x;
+            this->unk_14C.y = player->actor.world.pos.y + 60.0f;
+            this->unk_14C.z = player->actor.world.pos.z;
+            if (this->unk_148 != 0) {
+                func_80BB4E50(this->unk_160, &this->actor.world.pos, this->actor.world.rot.y);
+            }
+            this->unk_158 = 0x1000;
+            this->unk_15C = 150.0f;
+            break;
+
+        case 100:
+            phi_f18 = 10.0f;
+
+            while (phi_f18 < 1000.0f) {
+                temp_a0 = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
+                while (temp_a0 != NULL) {
+                    if (temp_a0->id != ACTOR_OBJ_SYOKUDAI) {
+                        temp_a0 = temp_a0->next;
+                        continue;
+                    }
+
+                    temp.x = this->unk_14C.x - temp_a0->world.pos.x;
+                    temp.y = (this->unk_14C.y - temp_a0->world.pos.y) + 70.0f;
+                    temp.z = this->unk_14C.z - temp_a0->world.pos.z;
+
+                    if (sqrtf(SQXYZ(temp)) < phi_f18) {
+                        this->unk_14C.x = temp_a0->world.pos.x;
+                        this->unk_14C.y = temp_a0->world.pos.y + 70.0f;
+                        this->unk_14C.z = temp_a0->world.pos.z;
+                        goto end;
+                    }
+                    temp_a0 = temp_a0->next;
+                }
+                phi_f18 += 20.0f;
+            }
+        end:
+            break;
+
+        case 200:
+            this->unk_14C = this->actor.world.pos;
+            this->unk_158 = 0x5000;
+            this->unk_15C = 50.0f;
+            break;
+
+        case 250:
+            for (i = 0; i < ARRAY_COUNT(this->unk_160); i++, ptr++) {
+                if ((ptr->unk_24 != 0) && (ptr->unk_28 < 8)) {
+                    ptr->unk_28 = 8;
+                    ptr->unk_24 = 2;
+                }
+            }
+            this->unk_144 = 1;
+            break;
+    }
+
+    if ((player->itemActionParam == 7) && (player->unk_B28 != 0)) {
+        this->unk_14C.x = player->swordInfo[0].tip.x;
+        this->unk_14C.y = player->swordInfo[0].tip.y;
+        this->unk_14C.z = player->swordInfo[0].tip.z;
+
+        this->unk_158 = 0x5000;
+        this->unk_15C = 50.0f;
+        if (this->unk_144 != 1) {
+            this->unk_144 = 100;
+        }
+    } else {
+        temp_a0 = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+        while (temp_a0 != NULL) {
+            if (temp_a0->params == 1) {
+                temp_a0 = temp_a0->next;
+                continue;
+            }
+
+            this->unk_14C.x = temp_a0->world.pos.x;
+            this->unk_14C.y = temp_a0->world.pos.y + 50.0f;
+            this->unk_14C.z = temp_a0->world.pos.z;
+
+            this->unk_15C = 150.0f;
+            this->unk_158 = 0x1000;
+            if (this->unk_144 != 1) {
+                this->unk_144 = 100;
+            }
+            break;
+        }
+    }
+    func_80BB5318(this, globalCtx);
+}
+
+void EnTanron1_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnTanron1* this = THIS;
+
+    func_80BB5AAC(this, globalCtx);
+}
+
+void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    EnTanron1Struct* ptr = NULL;
+    f32 phi_f28 = 0.0f;
+    Vec3f* phi_s2 = NULL;
+    Vec3f temp;
+    s16 spBA = 0;
+    s16 spB8 = 0;
+    Vec3f* spB4 = NULL;
+    f32 spB0;
+    Vec3f spA4;
+    WaterBox* spA0;
+    f32 sp9C;
+    CollisionPoly* sp98;
+    Actor* temp_v0;
+    s16 i;
+    f32 temp_f30 = this->unk_15C;
+
+    if (player->unk_ADC != 0) {
+        phi_s2 = &player->swordInfo[0].tip;
+        if (player->swordAnimation >= 30) {
+            phi_f28 = 2500.0f;
+        } else {
+            phi_f28 = 400.0f;
+        }
+    }
+
+    temp_v0 = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+    while (temp_v0 != NULL) {
+        if (temp_v0->params != 1) {
+            temp_v0 = temp_v0->next;
+            continue;
+        }
+        phi_s2 = &temp_v0->world.pos;
+        phi_f28 = 40000.0f;
+        break;
+    }
+
+    ptr = &this->unk_160[0];
+    for (i = 0; i < this->actor.params; i++, ptr++) {
+        if (ptr->unk_24 != 0) {
+            ptr->unk_26++;
+            ptr->unk_00.x += ptr->unk_0C.x;
+            ptr->unk_00.y += ptr->unk_0C.y;
+            ptr->unk_00.z += ptr->unk_0C.z;
+
+            if (ptr->unk_24 == 0) {
+            } else {
+                spB4 = &ptr->unk_00;
+                if (ptr->unk_28 == 0) {
+                    spBA++;
+                    ptr->unk_2C = Math_SinS(ptr->unk_26 * 0x5000) * 1.2f;
+                    if ((ptr->unk_26 & 3) == 0) {
+                        temp.x = ptr->unk_30 + (this->unk_14C.x - ptr->unk_00.x);
+                        temp.y = ptr->unk_34 + (this->unk_14C.y - ptr->unk_00.y);
+                        temp.z = ptr->unk_38 + (this->unk_14C.z - ptr->unk_00.z);
+
+                        ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
+                        ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
+                        if ((ptr->unk_26 & 0xF) == 0) {
+                            ptr->unk_30 = randPlusMinusPoint5Scaled(temp_f30);
+                            ptr->unk_34 = randPlusMinusPoint5Scaled(temp_f30 * 0.5f);
+                            ptr->unk_38 = randPlusMinusPoint5Scaled(temp_f30);
+                        }
+
+                        temp.x = player->actor.world.pos.x - ptr->unk_00.x;
+                        temp.y = (player->actor.world.pos.y + 40.0f) - ptr->unk_00.y;
+                        temp.z = player->actor.world.pos.z - ptr->unk_00.z;
+
+                        if ((SQXYZ(temp) < 400.0f) && (player->transformation != PLAYER_FORM_DEKU)) {
+                            func_800B8D10(globalCtx, &this->actor, 0.0f, 0, 0.0f, 1, 1);
+                        }
+                    }
+
+                    Math_ApproachS(&ptr->unk_1A, ptr->unk_20, 2, this->unk_158);
+                    Math_ApproachS(&ptr->unk_18, ptr->unk_1E, 2, this->unk_158);
+                    Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
+                    Matrix_InsertXRotation_s(-ptr->unk_18, MTXMODE_APPLY);
+                    Matrix_GetStateTranslationAndScaledZ(6.0f, &ptr->unk_0C);
+
+                    if (phi_s2 != NULL) {
+                        temp.x = phi_s2->x - ptr->unk_00.x;
+                        temp.y = phi_s2->y - ptr->unk_00.y;
+                        temp.z = phi_s2->z - ptr->unk_00.z;
+
+                        if (SQXYZ(temp) < phi_f28) {
+                            ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
+                            ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
+
+                            Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
+                            Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
+                            Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
+
+                            if (phi_f28 >= 100000.0f) {
+                                ptr->unk_28 = 1;
+                            } else {
+                                ptr->unk_28 = 6;
+                            }
+                            ptr->unk_24 = 2;
+                            spB8++;
+                        }
+                    }
+                } else if (ptr->unk_28 < 9) {
+                    ptr->unk_18 += 0x3000;
+                    ptr->unk_1A += 0x5000;
+                    ptr->unk_30 = 0.0f;
+                    ptr->unk_34 = 0.0f;
+                    ptr->unk_28++;
+                } else {
+                    ptr->unk_1A += ptr->unk_2A;
+                    Math_ApproachS(&ptr->unk_18, 0, 0xA, 0x1000);
+                    Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
+                    Matrix_GetStateTranslationAndScaledZ(ptr->unk_30, &spA4);
+
+                    ptr->unk_0C.x = spA4.x;
+                    ptr->unk_0C.z = spA4.z;
+                    ptr->unk_0C.y = -2.0f;
+
+                    if (phi_s2 != NULL) {
+                        temp.x = phi_s2->x - ptr->unk_00.x;
+                        temp.y = phi_s2->y - ptr->unk_00.y;
+                        temp.z = phi_s2->z - ptr->unk_00.z;
+
+                        if (SQXYZ(temp) < phi_f28) {
+                            ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
+                            ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
+
+                            Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
+                            Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
+                            Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
+
+                            ptr->unk_3C = ptr->unk_00.y - 1000.0f;
+                            ptr->unk_30 = 5.0f;
+                        }
+                    }
+
+                    if (ptr->unk_00.y <= (ptr->unk_3C + 5.0f)) {
+                        ptr->unk_00.y = (ptr->unk_3C + 5.0f);
+                        Math_ApproachZeroF(&ptr->unk_30, 1.0f, 0.3f);
+                        Math_ApproachS(&ptr->unk_2A, 0, 1, 0x100);
+                        ptr->unk_28++;
+                        if (ptr->unk_28 > 50) {
+                            ptr->unk_24 = 0;
+                        }
+                    } else {
+                        Math_ApproachF(&ptr->unk_30, ptr->unk_34, 1.0f, 0.5f);
+                        if ((ptr->unk_26 & 0xF) == 0) {
+                            if (Rand_ZeroOne() < 0.5f) {
+                                ptr->unk_34 = randPlusMinusPoint5Scaled(12.0f);
+                            }
+                            ptr->unk_3C = BgCheck_EntityRaycastFloor1(&globalCtx->colCtx, &sp98, &ptr->unk_00);
+                            sp9C = ptr->unk_00.y;
+                            WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, ptr->unk_00.x, ptr->unk_00.z, &sp9C,
+                                                 &spA0);
+                            if ((sp9C < ptr->unk_00.y) && (ptr->unk_3C < sp9C)) {
+                                ptr->unk_3C = sp9C;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (spB4 != NULL) {
+        SkinMatrix_Vec3fMtxFMultXYZW(&globalCtx->viewProjectionMtxF, spB4, &this->unk_3360, &spB0);
+        if (spB8 >= (s16)(KREG(39) + 20)) {
+            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
+        } else if (spBA >= 20) {
+            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_FLY - SFX_FLAG);
+        }
+    }
+}
+
+void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
+    EnTanron1Struct* ptrBase = &this->unk_160[0];
+    s16 i;
+    u8 flag = 0;
+    EnTanron1Struct* ptr = ptrBase;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    for (i = 0; i < this->actor.params; i++, ptr++) {
+        if (ptr->unk_24 == 1) {
+            if (!flag) {
+                gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001888);
+                flag++;
+            }
+            Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+            Matrix_RotateY(ptr->unk_1A, MTXMODE_APPLY);
+            Matrix_InsertXRotation_s(ptr->unk_18 * -1, MTXMODE_APPLY);
+            Matrix_Scale(1.2f, ptr->unk_2C, 1.2f, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
+        }
+    }
+
+    flag = 0;
+    ptr = ptrBase;
+    for (i = 0; i < this->actor.params; i++, ptr++) {
+        if (ptr->unk_24 != 2) {
+            continue;
+        }
+
+        if (!flag) {
+            gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001888);
+            gDPLoadTextureBlock(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001428, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 32, 0,
+                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 4, 5, G_TX_NOLOD, G_TX_NOLOD);
+            flag++;
+        }
+
+        Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+        Matrix_RotateY(ptr->unk_1A, MTXMODE_APPLY);
+        Matrix_InsertXRotation_s(ptr->unk_18 * -1, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001900);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}

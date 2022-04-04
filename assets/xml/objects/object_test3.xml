@@ -42,27 +42,27 @@
         <Texture Name="object_test3_Tex_00F3C0" OutName="tex_00F3C0" Format="i4" Width="16" Height="16" Offset="0xF3C0" />
         <Texture Name="object_test3_Tex_00F440" OutName="tex_00F440" Format="i4" Width="32" Height="32" Offset="0xF440" />
         <DList Name="object_test3_DL_00F640" Offset="0xF640" />
-        <Limb Name="object_test3_Lodlimb_00F648" Type="LOD" Offset="0xF648" />
-        <Limb Name="object_test3_Lodlimb_00F658" Type="LOD" Offset="0xF658" />
-        <Limb Name="object_test3_Lodlimb_00F668" Type="LOD" Offset="0xF668" />
-        <Limb Name="object_test3_Lodlimb_00F678" Type="LOD" Offset="0xF678" />
-        <Limb Name="object_test3_Lodlimb_00F688" Type="LOD" Offset="0xF688" />
-        <Limb Name="object_test3_Lodlimb_00F698" Type="LOD" Offset="0xF698" />
-        <Limb Name="object_test3_Lodlimb_00F6A8" Type="LOD" Offset="0xF6A8" />
-        <Limb Name="object_test3_Lodlimb_00F6B8" Type="LOD" Offset="0xF6B8" />
-        <Limb Name="object_test3_Lodlimb_00F6C8" Type="LOD" Offset="0xF6C8" />
-        <Limb Name="object_test3_Lodlimb_00F6D8" Type="LOD" Offset="0xF6D8" />
-        <Limb Name="object_test3_Lodlimb_00F6E8" Type="LOD" Offset="0xF6E8" />
-        <Limb Name="object_test3_Lodlimb_00F6F8" Type="LOD" Offset="0xF6F8" />
-        <Limb Name="object_test3_Lodlimb_00F708" Type="LOD" Offset="0xF708" />
-        <Limb Name="object_test3_Lodlimb_00F718" Type="LOD" Offset="0xF718" />
-        <Limb Name="object_test3_Lodlimb_00F728" Type="LOD" Offset="0xF728" />
-        <Limb Name="object_test3_Lodlimb_00F738" Type="LOD" Offset="0xF738" />
-        <Limb Name="object_test3_Lodlimb_00F748" Type="LOD" Offset="0xF748" />
-        <Limb Name="object_test3_Lodlimb_00F758" Type="LOD" Offset="0xF758" />
-        <Limb Name="object_test3_Lodlimb_00F768" Type="LOD" Offset="0xF768" />
-        <Limb Name="object_test3_Lodlimb_00F778" Type="LOD" Offset="0xF778" />
-        <Limb Name="object_test3_Lodlimb_00F788" Type="LOD" Offset="0xF788" />
-        <Skeleton Name="object_test3_Skel_00F7EC" Type="Flex" LimbType="Standard" Offset="0xF7EC" />
+        <Limb Name="object_test3_Lodlimb_00F648" Type="LOD" EnumName="OBJECT_TEST3_LIMB_01" Offset="0xF648" />
+        <Limb Name="object_test3_Lodlimb_00F658" Type="LOD" EnumName="OBJECT_TEST3_LIMB_02" Offset="0xF658" />
+        <Limb Name="object_test3_Lodlimb_00F668" Type="LOD" EnumName="OBJECT_TEST3_LIMB_03" Offset="0xF668" />
+        <Limb Name="object_test3_Lodlimb_00F678" Type="LOD" EnumName="OBJECT_TEST3_LIMB_04" Offset="0xF678" />
+        <Limb Name="object_test3_Lodlimb_00F688" Type="LOD" EnumName="OBJECT_TEST3_LIMB_05" Offset="0xF688" />
+        <Limb Name="object_test3_Lodlimb_00F698" Type="LOD" EnumName="OBJECT_TEST3_LIMB_06" Offset="0xF698" />
+        <Limb Name="object_test3_Lodlimb_00F6A8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_07" Offset="0xF6A8" />
+        <Limb Name="object_test3_Lodlimb_00F6B8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_08" Offset="0xF6B8" />
+        <Limb Name="object_test3_Lodlimb_00F6C8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_09" Offset="0xF6C8" />
+        <Limb Name="object_test3_Lodlimb_00F6D8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0A" Offset="0xF6D8" />
+        <Limb Name="object_test3_Lodlimb_00F6E8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0B" Offset="0xF6E8" />
+        <Limb Name="object_test3_Lodlimb_00F6F8" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0C" Offset="0xF6F8" />
+        <Limb Name="object_test3_Lodlimb_00F708" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0D" Offset="0xF708" />
+        <Limb Name="object_test3_Lodlimb_00F718" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0E" Offset="0xF718" />
+        <Limb Name="object_test3_Lodlimb_00F728" Type="LOD" EnumName="OBJECT_TEST3_LIMB_0F" Offset="0xF728" />
+        <Limb Name="object_test3_Lodlimb_00F738" Type="LOD" EnumName="OBJECT_TEST3_LIMB_10" Offset="0xF738" />
+        <Limb Name="object_test3_Lodlimb_00F748" Type="LOD" EnumName="OBJECT_TEST3_LIMB_11" Offset="0xF748" />
+        <Limb Name="object_test3_Lodlimb_00F758" Type="LOD" EnumName="OBJECT_TEST3_LIMB_12" Offset="0xF758" />
+        <Limb Name="object_test3_Lodlimb_00F768" Type="LOD" EnumName="OBJECT_TEST3_LIMB_13" Offset="0xF768" />
+        <Limb Name="object_test3_Lodlimb_00F778" Type="LOD" EnumName="OBJECT_TEST3_LIMB_14" Offset="0xF778" />
+        <Limb Name="object_test3_Lodlimb_00F788" Type="LOD" EnumName="OBJECT_TEST3_LIMB_15" Offset="0xF788" />
+        <Skeleton Name="object_test3_Skel_00F7EC" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TEST3_LIMB_NONE" LimbMax="OBJECT_TEST3_LIMB_MAX" EnumName="object_test3_Limbs" Offset="0xF7EC" />
     </File>
 </Root>

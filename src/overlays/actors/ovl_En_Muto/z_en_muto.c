@@ -7,7 +7,7 @@
 #include "z_en_muto.h"
 #include "objects/object_toryo/object_toryo.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnMuto*)thisx)
 
@@ -70,11 +70,11 @@ void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (!this->isInMayorsRoom) {
         this->shouldSetHeadRotation = true;
         this->textIdIndex = 2;
-        if (gSaveContext.weekEventReg[60] & 0x80) {
+        if (gSaveContext.save.weekEventReg[60] & 0x80) {
             this->textIdIndex = 3;
         }
 
-        if (gSaveContext.day != 3 || !gSaveContext.isNight) {
+        if (gSaveContext.save.day != 3 || !gSaveContext.save.isNight) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
@@ -82,7 +82,7 @@ void EnMuto_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->collider.dim.height = 60;
         this->collider.dim.yShift = 0;
 
-        if (gSaveContext.weekEventReg[63] & 0x80 || (gSaveContext.day == 3 && gSaveContext.isNight)) {
+        if (gSaveContext.save.weekEventReg[63] & 0x80 || (gSaveContext.save.day == 3 && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -101,7 +101,7 @@ void EnMuto_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void EnMuto_ChangeAnim(EnMuto* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = { &object_toryo_Anim_000E50, &object_toryo_Anim_000E50 };
-    static u8 sAnimationModes[] = { 0, 2 };
+    static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_ONCE };
 
     this->animIndex = animIndex;
     this->frameIndex = Animation_GetLastFrame(&sAnimations[animIndex]->common);
@@ -134,7 +134,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
     this->actor.textId = sTextIds[this->textIdIndex];
 
     if (!this->isInMayorsRoom && (player = GET_PLAYER(globalCtx))->transformation == PLAYER_FORM_DEKU) {
-        if (!(gSaveContext.weekEventReg[0x58] & 8)) {
+        if (!(gSaveContext.save.weekEventReg[88] & 8)) {
             this->actor.textId = 0x62C;
         } else {
             this->actor.textId = 0x62B;
@@ -161,7 +161,7 @@ void EnMuto_Idle(EnMuto* this, GlobalContext* globalCtx) {
         }
     } else {
         this->textIdIndex = 0;
-        if (gSaveContext.weekEventReg[0x3C] & 8) {
+        if (gSaveContext.save.weekEventReg[60] & 8) {
             this->textIdIndex = 1;
         }
         if (Player_GetMask(globalCtx) == PLAYER_MASK_COUPLE) {
@@ -195,14 +195,14 @@ void EnMuto_SetupDialogue(EnMuto* this, GlobalContext* globalCtx) {
 void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
     if (!this->isInMayorsRoom) {
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
-        if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+        if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
             func_801477B4(globalCtx);
 
             if (this->actor.textId == 0x62C) {
-                gSaveContext.weekEventReg[88] |= 8;
+                gSaveContext.save.weekEventReg[88] |= 8;
             }
             if (this->actor.textId == 0x624) {
-                gSaveContext.weekEventReg[60] |= 0x80;
+                gSaveContext.save.weekEventReg[60] |= 0x80;
             }
 
             this->textIdIndex = 3;
@@ -226,13 +226,13 @@ void EnMuto_InDialogue(EnMuto* this, GlobalContext* globalCtx) {
         }
     }
 
-    if (globalCtx->msgCtx.unk11F04 == 0x2AC6 || globalCtx->msgCtx.unk11F04 == 0x2AC7 ||
-        globalCtx->msgCtx.unk11F04 == 0x2AC8) {
+    if (globalCtx->msgCtx.currentTextId == 0x2AC6 || globalCtx->msgCtx.currentTextId == 0x2AC7 ||
+        globalCtx->msgCtx.currentTextId == 0x2AC8) {
         this->skelAnime.playSpeed = 0.0f;
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         this->skelAnime.curFrame = 30.0f;
     }
-    if (globalCtx->msgCtx.unk11F04 == 0x2ACF) {
+    if (globalCtx->msgCtx.currentTextId == 0x2ACF) {
         this->skelAnime.playSpeed = 0.0f;
     }
 
@@ -251,7 +251,7 @@ void EnMuto_Update(Actor* thisx, GlobalContext* globalCtx2) {
         EnMuto_SetHeadRotation(this);
     }
 
-    if (this->isInMayorsRoom && gSaveContext.day == 3 && gSaveContext.isNight) {
+    if (this->isInMayorsRoom && gSaveContext.save.day == 3 && gSaveContext.save.isNight) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

@@ -9,7 +9,7 @@
 #include "objects/object_stk2/object_stk2.h"
 #include "objects/object_stk3/object_stk3.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((DmStk*)thisx)
 
@@ -102,43 +102,79 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, 0, 0.0f },  { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0070DC, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_00D830, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_00055C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00130C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_00C270, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00CBB8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_01AA80, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01D07C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_016910, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_018ED0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_01DDE0, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01EF50, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0035C8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0049C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0259F4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0266C8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_026CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01C114, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_004580, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_01F9E4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_029A04, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_02AD54, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0110B4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_011FB0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_012A58, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_0141E4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_00E6EC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_00EEC0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_027CF4, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_028F28, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_03323C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_031210, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_0322FC, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_032AE0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_03021C, 1.0f, 0.0f, -1.0f, 0, 0.0f }, { &object_stk2_Anim_036964, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, 2, 0.0f },  { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_037B94, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk2_Anim_03A8F8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk2_Anim_034FD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_005F44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk3_Anim_002CD8, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_0039F0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk3_Anim_004554, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_0051C0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_stk3_Anim_001374, 1.0f, 0.0f, -1.0f, 2, 0.0f }, { &object_stk3_Anim_001EDC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_stk_Anim_01C21C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_01D3D0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_001030, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_01D008, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_015C14, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0070DC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00D830, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00055C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00130C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00C270, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00CBB8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_01AA80, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01D07C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_016910, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_018ED0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_01DDE0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01EF50, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02DC64, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02E9A0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0035C8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_0049C8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0259F4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_0266C8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_026CF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01C114, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_004580, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_020CAC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02200C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02336C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_002774, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_003068, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0101A4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_010B60, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02A2D8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_01F9E4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_029A04, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_02AD54, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_00BB2C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_00C964, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0110B4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_011FB0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_012A58, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_0141E4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_00E6EC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_00EEC0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_027CF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_028F28, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_03323C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_031210, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_0322FC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_032AE0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_03021C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_036964, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_016508, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk_Anim_015028, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk_Anim_014920, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_02FA70, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_037B94, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_03967C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk2_Anim_03A8F8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk2_Anim_034FD8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_005F44, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk3_Anim_002CD8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_0039F0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk3_Anim_004554, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_0051C0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_stk3_Anim_001374, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_stk3_Anim_001EDC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
@@ -158,8 +194,7 @@ void func_80A9FDB0(DmStk* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, ActorAnimationEntry* animation,
-                   u16 index) {
+void func_80A9FE3C(DmStk* this, GlobalContext* globalCtx, SkelAnime* skelAnime, AnimationInfo* animation, u16 index) {
     func_80A9FDB0(this, globalCtx);
 
     animation += index;
@@ -314,7 +349,7 @@ void func_80AA01C0(DmStk* this, GlobalContext* globalCtx) {
 
         case 785:
             func_8019F128(NA_SE_SY_STALKIDS_PSYCHO);
-            func_8019FE74(&D_801D6654, 0.0f, 150);
+            func_8019FE74(&gSfxVolume, 0.0f, 150);
             break;
 
         case 560:
@@ -344,7 +379,7 @@ void func_80AA0264(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 650:
-            func_8019FE74(&D_801D6654, 0.0f, 80);
+            func_8019FE74(&gSfxVolume, 0.0f, 80);
             break;
 
         case 265:
@@ -686,7 +721,7 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
                     func_80A9FED8(this, globalCtx);
                 } else if (gSaveContext.sceneSetupIndex == 0) {
                     func_80AA0100(this, globalCtx);
-                } else if ((gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.unk_12 == 0)) {
+                } else if ((gSaveContext.sceneSetupIndex == 2) && (globalCtx->csCtx.currentCsIndex == 0)) {
                     func_80AA0158(this, globalCtx);
                 }
                 break;
@@ -699,9 +734,9 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_OPENINGDAN:
                 if (gSaveContext.sceneSetupIndex == 0) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA01C0(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA0264(this, globalCtx);
                     }
                 }
@@ -709,19 +744,19 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_OKUJOU:
                 if (gSaveContext.sceneSetupIndex == 0) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA0420(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA05F0(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 2) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA09DC(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 3) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 3) {
                         func_80AA0B08(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 2) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA0DA8(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA0E1C(this, globalCtx);
                     }
                 }
@@ -729,15 +764,15 @@ void func_80AA0E90(DmStk* this, GlobalContext* globalCtx) {
 
             case SCENE_00KEIKOKU:
                 if (gSaveContext.sceneSetupIndex == 3) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA0634(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 2) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 2) {
                         func_80AA066C(this, globalCtx);
                     }
                 } else if (gSaveContext.sceneSetupIndex == 7) {
-                    if (globalCtx->csCtx.unk_12 == 0) {
+                    if (globalCtx->csCtx.currentCsIndex == 0) {
                         func_80AA071C(this, globalCtx);
-                    } else if (globalCtx->csCtx.unk_12 == 1) {
+                    } else if (globalCtx->csCtx.currentCsIndex == 1) {
                         func_80AA076C(this, globalCtx);
                     }
                 }
@@ -806,7 +841,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             Collider_InitCylinder(globalCtx, &this->collider);
 
-            if (gSaveContext.entranceIndex == 0x2C00) {
+            if (gSaveContext.save.entranceIndex == 0x2C00) {
                 if (gSaveContext.sceneSetupIndex == 0) {
                     if (gSaveContext.unk_3DD0[3] == 0) {
                         func_8010E9F0(3, 300);
@@ -814,7 +849,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
                         XREG(81) = 115;
                     }
 
-                    if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                         sCylinderInit.base.colType = COLTYPE_WOOD;
                         this->actionFunc = func_80AA18D8;
                     } else {
@@ -859,7 +894,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_2E0 = 5;
             this->actionFunc = func_80AA1714;
         } else {
-            if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !func_800EE2F4(globalCtx)) {
+            if ((globalCtx->sceneNum == SCENE_LOST_WOODS) && !Cutscene_IsPlaying(globalCtx)) {
                 Actor_MarkForDeath(&this->actor);
             }
             this->unk_32C = 2;
@@ -885,7 +920,7 @@ void DmStk_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
-        (globalCtx->csCtx.unk_12 > 0)) {
+        (globalCtx->csCtx.currentCsIndex > 0)) {
         globalCtx->envCtx.unk_17 = 15;
         globalCtx->envCtx.unk_18 = 15;
     }
@@ -903,7 +938,7 @@ void func_80AA1704(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA1714(DmStk* this, GlobalContext* globalCtx) {
     Vec3f sp1C;
 
-    if (!(gSaveContext.weekEventReg[74] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[74] & 0x20)) {
         func_80169474(globalCtx, &this->actor.world.pos, &sp1C);
         if (globalCtx->view.fovy < 25.0f) {
             if ((sp1C.x >= 70.0f) && (sp1C.x < 250.0f) && (sp1C.y >= 30.0f) && (sp1C.y < 210.0f)) {
@@ -920,10 +955,10 @@ void func_80AA17F8(DmStk* this, GlobalContext* globalCtx) {
     s16 sp18 = ActorCutscene_GetAdditionalCutscene(sp1C);
     s16 cutscene;
 
-    if (gSaveContext.day < 3) {
+    if (gSaveContext.save.day < 3) {
         cutscene = sp1E;
-    } else if ((gSaveContext.weekEventReg[8] & 0x40) ||
-               ((CURRENT_DAY == 3) && (gSaveContext.time < CLOCK_TIME(6, 0)))) {
+    } else if ((gSaveContext.save.weekEventReg[8] & 0x40) ||
+               ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
         cutscene = sp18;
     } else {
         cutscene = sp1C;
@@ -1016,7 +1051,7 @@ void func_80AA1B9C(DmStk* this, GlobalContext* globalCtx) {
     if (this->unk_339 >= 3) {
         this->unk_339 = 0;
         if (!(player->stateFlags2 & 0x8000000)) {
-            func_801518B0(globalCtx, 0x2013, &this->actor);
+            Message_StartTextbox(globalCtx, 0x2013, &this->actor);
         }
     }
 
@@ -1041,21 +1076,21 @@ void func_80AA1C64(DmStk* this, GlobalContext* globalCtx) {
 
 void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
     s32 pad;
-    u32 temp_v0;
+    s32 temp_v0;
 
-    if (func_800EE29C(globalCtx, 0x6B)) {
-        temp_v0 = func_800EE200(globalCtx, 0x6B);
+    if (Cutscene_CheckActorAction(globalCtx, 107)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 107);
 
-        if (globalCtx->csCtx.frames == globalCtx->csCtx.npcActions[temp_v0]->startFrame) {
-            if (this->unk_334 != globalCtx->csCtx.npcActions[temp_v0]->unk0) {
-                this->unk_334 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+        if (globalCtx->csCtx.frames == globalCtx->csCtx.actorActions[temp_v0]->startFrame) {
+            if (this->unk_334 != globalCtx->csCtx.actorActions[temp_v0]->action) {
+                this->unk_334 = globalCtx->csCtx.actorActions[temp_v0]->action;
                 if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
                     this->unk_32D = 6;
                 } else {
                     this->unk_32D = 9;
                 }
 
-                switch (globalCtx->csCtx.npcActions[temp_v0]->unk0) {
+                switch (globalCtx->csCtx.actorActions[temp_v0]->action) {
                     case 0:
                     case 1:
                         this->unk_2E0 = 3;
@@ -1136,7 +1171,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 22:
                         this->unk_2E0 = 29;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
@@ -1148,7 +1183,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 24:
                         this->unk_2E0 = 32;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
@@ -1159,14 +1194,14 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
 
                     case 26:
                         this->unk_2E0 = 34;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
 
                     case 27:
                         this->unk_2E0 = 36;
-                        if (gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+                        if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
                             this->unk_32D = 3;
                         }
                         break;
@@ -1315,7 +1350,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             }
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     } else {
         this->unk_334 = 99;
     }
@@ -1364,7 +1399,7 @@ void func_80AA1D1C(DmStk* this, GlobalContext* globalCtx) {
             if (this->unk_2E4 < 0) {
                 this->unk_2E4 = 0;
                 this->unk_32F = 0;
-                gSaveContext.weekEventReg[12] |= 4;
+                gSaveContext.save.weekEventReg[12] |= 4;
                 if (!(globalCtx->actorCtx.unk5 & 2)) {
                     Actor_MarkForDeath(&this->actor);
                 } else {
@@ -1442,12 +1477,12 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state == 0) {
         func_80AA1AF8(this, globalCtx);
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
         this->unk_328++;
         if (this->unk_328 > 800) {
             this->unk_328 = 0;
             if (!(player->stateFlags2 & 0x8000000)) {
-                func_801518B0(globalCtx, 0x2014, &this->actor);
+                Message_StartTextbox(globalCtx, 0x2014, &this->actor);
             }
         }
         if ((this->collider.base.acFlags & AC_HIT) && (this->actor.colChkInfo.damageEffect == 0xF)) {
@@ -1460,7 +1495,7 @@ void func_80AA2720(DmStk* this, GlobalContext* globalCtx) {
 void func_80AA27EC(DmStk* this, GlobalContext* globalCtx) {
     if (globalCtx->csCtx.state == 0) {
         func_80AA1AF8(this, globalCtx);
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_1;
 
         if (this->unk_2E0 == 33) {
             this->actor.targetArrowOffset = 3100.0f;
@@ -1530,21 +1565,21 @@ void DmStk_Update(Actor* thisx, GlobalContext* globalCtx) {
                 break;
         }
 
-        if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.unk11F22 != 0) &&
-            (globalCtx->msgCtx.unk11F04 == 0x5E6) && !FrameAdvance_IsEnabled(globalCtx) &&
+        if ((globalCtx->actorCtx.unk5 & 2) && (globalCtx->msgCtx.msgMode != 0) &&
+            (globalCtx->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&globalCtx->state) &&
             (globalCtx->sceneLoadFlag == 0) && (ActorCutscene_GetCurrentIndex() == -1) &&
             (globalCtx->csCtx.state == 0)) {
-            time = gSaveContext.time;
-            gSaveContext.time = (u16)REG(15) + time;
+            time = gSaveContext.save.time;
+            gSaveContext.save.time = (u16)REG(15) + time;
             if (REG(15) != 0) {
-                time = gSaveContext.time;
-                gSaveContext.time = (u16)gSaveContext.unk_14 + time;
+                time = gSaveContext.save.time;
+                gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
             }
         }
     }
 
     if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 3) &&
-        (globalCtx->csCtx.unk_12 > 0)) {
+        (globalCtx->csCtx.currentCsIndex > 0)) {
         globalCtx->envCtx.unk_17 = 15;
         globalCtx->envCtx.unk_18 = 15;
     }
@@ -1623,8 +1658,9 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_006BB0);
                 gSPDisplayList(POLY_OPA_DISP++, object_stk_DL_005870);
 
-                if (func_800EE29C(globalCtx, 0x201) &&
-                    (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x201)]->unk0 == 2) && (this->unk_337 >= 0)) {
+                if (Cutscene_CheckActorAction(globalCtx, 513) &&
+                    (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 513)]->action == 2) &&
+                    (this->unk_337 >= 0)) {
                     Matrix_StatePush();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
                     gSegments[6] = PHYSICAL_TO_VIRTUAL(globalCtx->objectCtx.status[this->unk_337].segment);

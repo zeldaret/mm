@@ -7,7 +7,7 @@
 #include "z_en_akindonuts.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS 0x00000039
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAkindonuts*)thisx)
 
@@ -62,19 +62,30 @@ static ColliderCylinderInitType1 sCylinderInit = {
     { 27, 32, 0, { 0, 0, 0 } },
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_dnt_Anim_005488, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, 0, 0 },
-    { &object_dnt_Anim_004AA0, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_004E38, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_005CA8, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_0038CC, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003CC0, 1.0f, 0, -1, 0, 0 },
-    { &object_dnt_Anim_0012F4, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_004700, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_003438, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_001E2C, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_000994, 1.0f, 0, -1, 0, 0 },
-    { &object_dnt_Anim_002268, 1.0f, 0, -1, 2, 0 },  { &object_dnt_Anim_002F08, 1.0f, 0, -1, 0, 0 },
-    { &object_dnt_Anim_00577C, 1.0f, 0, -1, 0, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 8, -1, 2, 0 },
-    { &object_dnt_Anim_0029E8, 1.0f, 4, -1, 2, -4 }, { &object_dnt_Anim_0029E8, 1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, 0, 0 },  { &object_dnt_Anim_0012F4, -1.0f, 0, -1, 2, 0 },
-    { &object_dnt_Anim_002670, 1.0f, 0, -1, 2, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_dnt_Anim_005488, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_004AA0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_004E38, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_005CA8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_0038CC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_003CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_0012F4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_004700, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_003438, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_001E2C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_000994, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_002268, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_002F08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_00577C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_dnt_Anim_0029E8, 1.0f, 8, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_0029E8, 1.0f, 4, -1, ANIMMODE_ONCE, -4 },
+    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_dnt_Anim_0012F4, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_dnt_Anim_002670, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
 
 static u16 D_80BF048C[] = {
@@ -246,17 +257,17 @@ void func_80BED090(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        gSaveContext.weekEventReg[63] |= 0x8;
-        gSaveContext.weekEventReg[63] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[63] |= 8;
+        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        gSaveContext.weekEventReg[63] &= (u8)~0x8;
-        gSaveContext.weekEventReg[63] |= 0x10;
+        gSaveContext.save.weekEventReg[63] &= (u8)~8;
+        gSaveContext.save.weekEventReg[63] |= 0x10;
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        gSaveContext.weekEventReg[63] |= 0x8;
-        gSaveContext.weekEventReg[63] |= 0x10;
+        gSaveContext.save.weekEventReg[63] |= 8;
+        gSaveContext.save.weekEventReg[63] |= 0x10;
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        gSaveContext.weekEventReg[63] &= (u8)~0x8;
-        gSaveContext.weekEventReg[63] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[63] &= (u8)~8;
+        gSaveContext.save.weekEventReg[63] &= (u8)~0x10;
     }
 }
 
@@ -264,19 +275,19 @@ s32 func_80BED140(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if ((gSaveContext.weekEventReg[63] & 0x8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
+        if ((gSaveContext.save.weekEventReg[63] & 8) && !(gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_ZORA) {
-        if (!(gSaveContext.weekEventReg[63] & 0x8) && (gSaveContext.weekEventReg[63] & 0x10)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 8) && (gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_GORON) {
-        if ((gSaveContext.weekEventReg[63] & 0x8) && (gSaveContext.weekEventReg[63] & 0x10)) {
+        if ((gSaveContext.save.weekEventReg[63] & 8) && (gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     } else if (player->transformation == PLAYER_FORM_HUMAN) {
-        if (!(gSaveContext.weekEventReg[63] & 0x8) && !(gSaveContext.weekEventReg[63] & 0x10)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 8) && !(gSaveContext.save.weekEventReg[63] & 0x10)) {
             return true;
         }
     }
@@ -289,7 +300,7 @@ s32 func_80BED208(EnAkindonuts* this) {
         return 0;
     }
 
-    if (gSaveContext.rupees < 10) {
+    if (gSaveContext.save.playerData.rupees < 10) {
         return 1;
     }
 
@@ -303,15 +314,15 @@ s32 func_80BED208(EnAkindonuts* this) {
 }
 
 s32 func_80BED27C(EnAkindonuts* this) {
-    if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) == 3) {
+    if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) == 3) {
         return 2;
     }
 
-    if (CUR_UPG_VALUE_VOID(UPG_BOMB_BAG) < 2) {
+    if (GET_CUR_UPG_VALUE(UPG_BOMB_BAG) < 2) {
         return 0;
     }
 
-    if (gSaveContext.rupees < 200) {
+    if (gSaveContext.save.playerData.rupees < 200) {
         return 1;
     }
 
@@ -321,11 +332,11 @@ s32 func_80BED27C(EnAkindonuts* this) {
 }
 
 s32 func_80BED2FC(EnAkindonuts* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return 2;
     }
 
-    if (gSaveContext.rupees < 40) {
+    if (gSaveContext.save.playerData.rupees < 40) {
         return 1;
     }
 
@@ -335,11 +346,11 @@ s32 func_80BED2FC(EnAkindonuts* this) {
 }
 
 s32 func_80BED35C(EnAkindonuts* this) {
-    if (!func_80114E90()) {
+    if (!Interface_HasEmptyBottle()) {
         return 2;
     }
 
-    if (gSaveContext.rupees < 100) {
+    if (gSaveContext.save.playerData.rupees < 100) {
         return 1;
     }
 
@@ -373,8 +384,8 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x15E7:
-            if (!(gSaveContext.weekEventReg[61] & 0x20)) {
-                gSaveContext.weekEventReg[61] |= 0x20;
+            if (!(gSaveContext.save.weekEventReg[61] & 0x20)) {
+                gSaveContext.save.weekEventReg[61] |= 0x20;
                 this->unk_33C = 0x15E8;
                 break;
             }
@@ -414,7 +425,7 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C &= ~0x1;
                         this->unk_32C |= 0x40;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -435,7 +446,7 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
         case 0x15E5:
             this->unk_33C = 0x15E6;
             func_80BED090(globalCtx);
-            gSaveContext.weekEventReg[61] |= 0x10;
+            gSaveContext.save.weekEventReg[61] |= 0x10;
             this->unk_32C |= 0x20;
             break;
 
@@ -444,14 +455,14 @@ void func_80BED3BC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
     switch (this->unk_33C) {
         case 0:
-            if (func_80BED140(globalCtx) && !(gSaveContext.weekEventReg[61] & 0x40)) {
-                gSaveContext.weekEventReg[61] |= 0x40;
+            if (func_80BED140(globalCtx) && !(gSaveContext.save.weekEventReg[61] & 0x40)) {
+                gSaveContext.save.weekEventReg[61] |= 0x40;
                 this->unk_33C = 0x15F0;
                 break;
             }
@@ -497,7 +508,7 @@ void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -515,7 +526,7 @@ void func_80BED680(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -551,8 +562,8 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x15FE:
-            if (!(gSaveContext.weekEventReg[62] & 1)) {
-                gSaveContext.weekEventReg[62] |= 1;
+            if (!(gSaveContext.save.weekEventReg[62] & 1)) {
+                gSaveContext.save.weekEventReg[62] |= 1;
                 this->unk_33C = 0x15FF;
                 break;
             }
@@ -592,7 +603,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -612,7 +623,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x15FA:
             this->unk_33C = 0x15FB;
-            gSaveContext.weekEventReg[61] |= 0x80;
+            gSaveContext.save.weekEventReg[61] |= 0x80;
             this->unk_32C |= 0x20;
             break;
 
@@ -621,7 +632,7 @@ void func_80BED8A4(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -629,8 +640,8 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[62] & 2)) {
-                gSaveContext.weekEventReg[62] |= 0x2;
+            if ((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.save.weekEventReg[62] & 2)) {
+                gSaveContext.save.weekEventReg[62] |= 2;
                 this->unk_33C = 0x15F0;
                 break;
             }
@@ -675,7 +686,7 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -693,7 +704,7 @@ void func_80BEDB88(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -729,8 +740,8 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1610:
-            if (!(gSaveContext.weekEventReg[62] & 8)) {
-                gSaveContext.weekEventReg[62] |= 8;
+            if (!(gSaveContext.save.weekEventReg[62] & 8)) {
+                gSaveContext.save.weekEventReg[62] |= 8;
                 this->unk_33C = 0x1611;
                 break;
             }
@@ -765,7 +776,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -785,7 +796,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x15FA:
             this->unk_33C = 0x160D;
-            gSaveContext.weekEventReg[62] |= 0x4;
+            gSaveContext.save.weekEventReg[62] |= 4;
             this->unk_32C |= 0x20;
             break;
 
@@ -794,7 +805,7 @@ void func_80BEDDAC(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -802,8 +813,8 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_GORON) && !(gSaveContext.weekEventReg[62] & 0x10)) {
-                gSaveContext.weekEventReg[62] |= 0x10;
+            if ((player->transformation == PLAYER_FORM_GORON) && !(gSaveContext.save.weekEventReg[62] & 0x10)) {
+                gSaveContext.save.weekEventReg[62] |= 0x10;
                 this->unk_33C = 0x1614;
                 break;
             }
@@ -843,7 +854,7 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x161A;
                         this->actionFunc = func_80BEF360;
@@ -861,7 +872,7 @@ void func_80BEE070(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -889,8 +900,8 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 0x1624:
-            if (!(gSaveContext.weekEventReg[62] & 0x40)) {
-                gSaveContext.weekEventReg[62] |= 0x40;
+            if (!(gSaveContext.save.weekEventReg[62] & 0x40)) {
+                gSaveContext.save.weekEventReg[62] |= 0x40;
                 this->unk_33C = 0x1625;
                 break;
             }
@@ -926,7 +937,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x1629;
                         this->actionFunc = func_80BEF360;
@@ -946,7 +957,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
 
         case 0x1622:
             this->unk_33C = 0x1623;
-            gSaveContext.weekEventReg[62] |= 0x20;
+            gSaveContext.save.weekEventReg[62] |= 0x20;
             this->unk_32C |= 0x20;
             break;
 
@@ -955,7 +966,7 @@ void func_80BEE274(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -963,8 +974,8 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
 
     switch (this->unk_33C) {
         case 0:
-            if ((player->transformation == PLAYER_FORM_ZORA) && !(gSaveContext.weekEventReg[62] & 0x80)) {
-                gSaveContext.weekEventReg[62] |= 0x80;
+            if ((player->transformation == PLAYER_FORM_ZORA) && !(gSaveContext.save.weekEventReg[62] & 0x80)) {
+                gSaveContext.save.weekEventReg[62] |= 0x80;
                 this->unk_33C = 0x162A;
                 break;
             }
@@ -1004,7 +1015,7 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
-                        globalCtx->msgCtx.unk11F22 = 0x43;
+                        globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
@@ -1022,7 +1033,7 @@ void func_80BEE530(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_33C, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_33C, &this->actor);
 }
 
 void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
@@ -1084,7 +1095,7 @@ void func_80BEE73C(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            if (gSaveContext.weekEventReg[61] & 0x10) {
+            if (gSaveContext.save.weekEventReg[61] & 0x10) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BED680;
                 } else {
@@ -1098,7 +1109,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 1:
-            if (gSaveContext.weekEventReg[61] & 0x80) {
+            if (gSaveContext.save.weekEventReg[61] & 0x80) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEDB88;
                 } else {
@@ -1112,7 +1123,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 2:
-            if (gSaveContext.weekEventReg[62] & 4) {
+            if (gSaveContext.save.weekEventReg[62] & 4) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE070;
                 } else {
@@ -1126,7 +1137,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if (gSaveContext.weekEventReg[62] & 0x20) {
+            if (gSaveContext.save.weekEventReg[62] & 0x20) {
                 if (ENAKINDONUTS_GET_4(&this->actor)) {
                     this->unk_2DC = func_80BEE530;
                 } else {
@@ -1143,7 +1154,7 @@ void func_80BEE938(EnAkindonuts* this, GlobalContext* globalCtx) {
 
 void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
     s16 phi_v0;
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
@@ -1166,7 +1177,7 @@ void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BEEDC0;
             this->unk_338 = 3;
             this->collider.dim.height = 64;
-            func_8013BC6C(&this->skelAnime, sAnimations, 3);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
             return;
         }
     }
@@ -1176,19 +1187,19 @@ void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
             this->unk_338 = 17;
             this->collider.dim.height = 0;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
-            func_8013BC6C(&this->skelAnime, sAnimations, 17);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 17);
         } else if (this->unk_338 == 2) {
             this->unk_338 = 16;
             this->collider.dim.height = 32;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
-            func_8013BC6C(&this->skelAnime, sAnimations, 16);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 16);
         } else if (this->unk_338 == 17) {
             phi_v0 = DECR(this->unk_33A);
             if (phi_v0 == 0) {
                 this->unk_33A = Rand_ZeroOne() * 10.0f;
                 this->unk_338 = 2;
                 this->collider.dim.height = 32;
-                func_8013BC6C(&this->skelAnime, sAnimations, 2);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 2);
             }
         } else if (this->unk_338 == 16) {
             phi_v0 = DECR(this->unk_33A);
@@ -1196,7 +1207,7 @@ void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
                 this->unk_33A = Rand_S16Offset(40, 40);
                 this->unk_338 = 18;
                 this->collider.dim.height = 32;
-                func_8013BC6C(&this->skelAnime, sAnimations, 18);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 18);
             }
         }
     }
@@ -1205,7 +1216,7 @@ void func_80BEEB20(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BEEDC0(EnAkindonuts* this, GlobalContext* globalCtx) {
     if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
         this->actionFunc = func_80BEEE10;
-        func_8013BC6C(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
     }
 }
 
@@ -1223,7 +1234,7 @@ void func_80BEEE10(EnAkindonuts* this, GlobalContext* globalCtx) {
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         this->unk_338 = 4;
-        func_8013BC6C(&this->skelAnime, sAnimations, 4);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 4);
         this->actionFunc = func_80BEEB20;
     }
 }
@@ -1232,29 +1243,29 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->unk_32C & 1) {
                 this->unk_32C &= ~0x1;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_33C = 0;
                 this->actionFunc = func_80BEEE10;
             } else if (this->unk_32C & 0x20) {
                 this->unk_32C &= ~0x20;
-                this->actor.flags &= ~1;
+                this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_32C &= ~0x4;
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_338 = 8;
                 this->unk_33C = 0;
-                func_8013BC6C(&this->skelAnime, sAnimations, this->unk_338);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_338);
                 this->actionFunc = func_80BEF518;
             } else {
                 this->unk_2DC(this, globalCtx);
             }
         }
     } else if (temp_v0 == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     this->unk_32C |= 0x8;
@@ -1274,8 +1285,8 @@ void func_80BEEFA8(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        globalCtx->msgCtx.unk11F22 = 0x43;
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_33C = 0;
         this->actionFunc = func_80BEEE10;
@@ -1285,24 +1296,24 @@ void func_80BEF18C(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BEF20C(EnAkindonuts* this, GlobalContext* globalCtx) {
     u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 sp24 = this->skelAnime.curFrame;
-    s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp22 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
     if (this->unk_356 == 40) {
         this->unk_338 = 5;
-        func_8013BC6C(&this->skelAnime, sAnimations, 5);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 5);
     }
 
     this->unk_356++;
 
     if ((sp24 == sp22) && (this->unk_338 == 5)) {
         this->unk_338 = 6;
-        func_8013BC6C(&this->skelAnime, sAnimations, 6);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 6);
     }
 
-    if ((sp27 == 5) && func_80147624(globalCtx)) {
+    if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_32C & 1) {
             this->unk_32C &= ~0x1;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = func_80BEF360;
         } else {
@@ -1330,7 +1341,7 @@ void func_80BEF360(EnAkindonuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80BEF450(EnAkindonuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
         this->actionFunc = func_80BEF4B8;
     }
@@ -1347,7 +1358,7 @@ void func_80BEF4B8(EnAkindonuts* this, GlobalContext* globalCtx) {
 
 void func_80BEF518(EnAkindonuts* this, GlobalContext* globalCtx) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp24 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
     switch (sp26) {
         case 10:
@@ -1421,7 +1432,7 @@ void func_80BEF518(EnAkindonuts* this, GlobalContext* globalCtx) {
     if (sp26 == sp24) {
         this->unk_33E = 3;
         this->unk_338 = 19;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->unk_338);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_338);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_32C &= ~2;
         this->unk_32C |= 0x80;
@@ -1454,7 +1465,7 @@ void func_80BEF770(EnAkindonuts* this, GlobalContext* globalCtx) {
 void func_80BEF83C(EnAkindonuts* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     s16 sp32 = this->skelAnime.curFrame;
-    s16 sp30 = Animation_GetLastFrame(&sAnimations[this->unk_338].animationSeg->common);
+    s16 sp30 = Animation_GetLastFrame(&sAnimations[this->unk_338].animation->common);
 
     if (sp32 == sp30) {
         Math_SmoothStepToS(&this->unk_362, 0x1C71, 3, 0x100, 0);
@@ -1480,7 +1491,7 @@ void func_80BEF83C(EnAkindonuts* this, GlobalContext* globalCtx) {
     if ((this->actor.home.pos.y + 22.5f) < this->actor.world.pos.y) {
         this->unk_34C = 0.3f;
         this->unk_338 = 9;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->unk_338);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_338);
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BEF9F0;
     }
@@ -1499,7 +1510,7 @@ void func_80BEF9F0(EnAkindonuts* this, GlobalContext* globalCtx) {
     if ((this->actor.home.pos.y + 200.0f) < this->actor.world.pos.y) {
         Math_ApproachF(&this->actor.velocity.y, 0.0f, 0.2f, 1.0f);
         this->unk_338 = 10;
-        func_8013BC6C(&this->skelAnime, sAnimations, this->unk_338);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_338);
         if (ENAKINDONUTS_GET_3(&this->actor) == ENAKINDONUTS_3_2) {
             this->unk_32C |= 0x2;
         }
@@ -1595,14 +1606,14 @@ void EnAkindonuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
 
     if (!ENAKINDONUTS_GET_4(&this->actor)) {
-        this->path = func_8013D648(globalCtx, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(globalCtx, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
         if (this->path == NULL) {
             Actor_MarkForDeath(&this->actor);
             return;
         }
     }
 
-    func_8013BC6C(&this->skelAnime, sAnimations, 4);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 4);
     this->unk_32C |= 0x2;
     this->unk_32C |= 0x4;
     this->unk_338 = 4;

@@ -7,7 +7,7 @@
 #include "z_en_ms.h"
 #include "objects/object_ms/object_ms.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnMs*)thisx)
 
@@ -83,7 +83,7 @@ void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
     s16 yawDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
+    if (gSaveContext.save.inventory.items[SLOT_MAGIC_BEANS] == ITEM_NONE) {
         this->actor.textId = 0x92E; // "[...] You're the first customer [...]"
     } else {
         this->actor.textId = 0x932; // "[...] So you liked my Magic Beans [...]"
@@ -99,13 +99,13 @@ void EnMs_Wait(EnMs* this, GlobalContext* globalCtx) {
 void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 6:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 this->actionFunc = EnMs_Wait;
             }
             break;
 
         case 5:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 func_801477B4(globalCtx);
                 Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, this->actor.xzDistToPlayer,
                              this->actor.playerHeightRel);
@@ -114,11 +114,11 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
             break;
 
         case 4:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0: // yes
                         func_801477B4(globalCtx);
-                        if (gSaveContext.rupees < 10) {
+                        if (gSaveContext.save.playerData.rupees < 10) {
                             play_sound(NA_SE_SY_ERROR);
                             func_80151938(globalCtx, 0x935); // "[...] You don't have enough Rupees."
                         } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {

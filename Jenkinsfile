@@ -3,11 +3,21 @@ pipeline {
         label 'mm'
     }
 
+    options {
+        ansiColor('xterm')
+    }
+
     stages {
         stage('Check formatting') {
             steps {
                 echo 'Checking formatting...'
                 sh 'bash -c "tools/check_format.sh 2>&1 >(tee tools/check_format.txt)"'
+            }
+        }
+        stage('Check relocs') {
+            steps {
+                echo 'Checking relocs on spec...'
+                sh 'bash -c "tools/reloc_spec_check.sh"'
             }
         }
         stage('Copy ROM') {

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnBomjimb*)thisx)
 
@@ -78,8 +78,8 @@ void EnBomjimb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -2.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
-                       this->morphTable, 21);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
+                       this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.targetMode = 6;
     Actor_SetScale(&this->actor, 0.01f);
@@ -99,38 +99,38 @@ void EnBomjimb_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_2C6 = ENBOMJIMB_F0_0;
     }
 
-    if ((gSaveContext.weekEventReg[73] & 0x10) || (gSaveContext.weekEventReg[85] & 2)) {
+    if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
         switch (this->unk_2C8) {
             case ENBOMJIMB_F_0:
-                if (gSaveContext.weekEventReg[11] & 1) {
+                if (gSaveContext.save.weekEventReg[11] & 1) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_1:
-                if (gSaveContext.weekEventReg[11] & 2) {
+                if (gSaveContext.save.weekEventReg[11] & 2) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_2:
-                if (gSaveContext.weekEventReg[11] & 4) {
+                if (gSaveContext.save.weekEventReg[11] & 4) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_3:
-                if (gSaveContext.weekEventReg[11] & 8) {
+                if (gSaveContext.save.weekEventReg[11] & 8) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
                 break;
 
             case ENBOMJIMB_F_4:
-                if (gSaveContext.weekEventReg[11] & 0x10) {
+                if (gSaveContext.save.weekEventReg[11] & 0x10) {
                     Actor_MarkForDeath(&this->actor);
                     return;
                 }
@@ -138,8 +138,8 @@ void EnBomjimb_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    if ((!(gSaveContext.weekEventReg[73] & 0x10) && !(gSaveContext.weekEventReg[85] & 2)) ||
-        (gSaveContext.weekEventReg[75] & 0x40)) {
+    if ((!(gSaveContext.save.weekEventReg[73] & 0x10) && !(gSaveContext.save.weekEventReg[85] & 2)) ||
+        (gSaveContext.save.weekEventReg[75] & 0x40)) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -160,7 +160,7 @@ void EnBomjimb_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
     static AnimationHeader* sAnimations[] = {
-        &object_cs_Anim_0064B8, &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
+        &gBomberIdleAnim,       &object_cs_Anim_00FAF4, &object_cs_Anim_0057C8, &object_cs_Anim_0053F4,
         &object_cs_Anim_002044, &object_cs_Anim_01007C, &object_cs_Anim_00349C, &object_cs_Anim_004960,
         &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_002930, &object_cs_Anim_001A1C,
         &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
@@ -209,7 +209,7 @@ void func_80C012E0(EnBomjimb* this) {
 s32 func_80C012FC(EnBomjimb* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!func_801690CC(globalCtx) && (this->actor.xzDistToPlayer < 40.0f) &&
+    if (!Play_InCsMode(globalCtx) && (this->actor.xzDistToPlayer < 40.0f) &&
         (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 50.0f) && (globalCtx->msgCtx.unk11F10 == 0)) {
         this->actor.speedXZ = 0.0f;
         func_80C02740(this, globalCtx);
@@ -276,7 +276,7 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp48, &sp60,
-                                                               &colPoly, 1, 0, 0, 1, &sp44)) {
+                                                               &colPoly, true, false, false, true, &sp44)) {
                     func_80C0113C(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp48);
                     this->unk_2B0 = Rand_S16Offset(30, 50);
@@ -295,8 +295,8 @@ void func_80C014E4(EnBomjimb* this, GlobalContext* globalCtx) {
                 Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
                 sp54.x += Math_SinS(this->actor.world.rot.y) * 60.0f;
                 sp54.z += Math_CosS(this->actor.world.rot.y) * 60.0f;
-                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, 1, 0, 0,
-                                            1, &sp44)) {
+                if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp54, &sp60, &colPoly, true,
+                                            false, false, true, &sp44)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
                         func_80C0113C(this, 20, 1.0f);
@@ -556,7 +556,8 @@ void func_80C0217C(EnBomjimb* this, GlobalContext* globalCtx) {
     sp74.y += 20.0f;
     sp74.z += Math_CosS(this->actor.world.rot.y) * 50.0f;
 
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, 1, 0, 0, 1, &sp60)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.world.pos, &sp74, &sp64, &sp70, true, false, false,
+                                true, &sp60)) {
         s16 temp = BINANG_SUB((this->actor.world.rot.y - this->actor.yawTowardsPlayer), 0x8000);
         this->unk_2D6 = temp;
 
@@ -661,7 +662,7 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
     func_80C0113C(this, 21, 1.0f);
     if ((player->transformation != PLAYER_FORM_DEKU) && (player->transformation != PLAYER_FORM_HUMAN)) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -670,10 +671,10 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.weekEventReg[73] & 0x10)) ||
-        ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.weekEventReg[85] & 2))) {
+    if (((player->transformation == PLAYER_FORM_DEKU) && !(gSaveContext.save.weekEventReg[73] & 0x10)) ||
+        ((player->transformation == PLAYER_FORM_HUMAN) && !(gSaveContext.save.weekEventReg[85] & 2))) {
         func_80C0113C(this, 17, 1.0f);
-        func_801518B0(globalCtx, 0x72E, &this->actor);
+        Message_StartTextbox(globalCtx, 0x72E, &this->actor);
         player->stateFlags1 |= 0x10000000;
         player->actor.freezeTimer = 3;
         func_80C012E0(this);
@@ -682,13 +683,13 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
         return;
     }
 
-    idx = gSaveContext.unk_FE6;
-    func_801518B0(globalCtx, D_80C03230[idx], &this->actor);
-    idx = gSaveContext.unk_FE6;
-    gSaveContext.unk_FE7[idx] = this->unk_2C8 + 1;
-    gSaveContext.unk_FE6++;
+    idx = gSaveContext.save.bombersCaughtNum;
+    Message_StartTextbox(globalCtx, D_80C03230[idx], &this->actor);
+    idx = gSaveContext.save.bombersCaughtNum;
+    gSaveContext.save.bombersCaughtOrder[idx] = this->unk_2C8 + 1;
+    gSaveContext.save.bombersCaughtNum++;
 
-    if (gSaveContext.unk_FE6 > 4) {
+    if (gSaveContext.save.bombersCaughtNum > 4) {
         func_801A3098(0x922);
     } else {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_PIECE_OF_HEART);
@@ -696,32 +697,32 @@ void func_80C02740(EnBomjimb* this, GlobalContext* globalCtx) {
 
     switch (this->unk_2C8) {
         case ENBOMJIMB_F_0:
-            gSaveContext.weekEventReg[76] |= 1;
-            gSaveContext.weekEventReg[11] |= 1;
+            gSaveContext.save.weekEventReg[76] |= 1;
+            gSaveContext.save.weekEventReg[11] |= 1;
             break;
 
         case ENBOMJIMB_F_1:
-            gSaveContext.weekEventReg[76] |= 2;
-            gSaveContext.weekEventReg[11] |= 2;
+            gSaveContext.save.weekEventReg[76] |= 2;
+            gSaveContext.save.weekEventReg[11] |= 2;
             break;
 
         case ENBOMJIMB_F_2:
-            gSaveContext.weekEventReg[76] |= 4;
-            gSaveContext.weekEventReg[11] |= 4;
+            gSaveContext.save.weekEventReg[76] |= 4;
+            gSaveContext.save.weekEventReg[11] |= 4;
             break;
 
         case ENBOMJIMB_F_3:
-            gSaveContext.weekEventReg[76] |= 8;
-            gSaveContext.weekEventReg[11] |= 8;
+            gSaveContext.save.weekEventReg[76] |= 8;
+            gSaveContext.save.weekEventReg[11] |= 8;
             break;
 
         case ENBOMJIMB_F_4:
-            gSaveContext.weekEventReg[76] |= 0x10;
-            gSaveContext.weekEventReg[11] |= 0x10;
+            gSaveContext.save.weekEventReg[76] |= 0x10;
+            gSaveContext.save.weekEventReg[11] |= 0x10;
             break;
     }
 
-    if (!func_801690CC(globalCtx)) {
+    if (!Play_InCsMode(globalCtx)) {
         Player* player = GET_PLAYER(globalCtx);
 
         player->stateFlags1 |= 0x10000000;
@@ -757,9 +758,9 @@ void func_80C02A14(EnBomjimb* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 3;
     }
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
-        if ((this->unk_2CA == 8) && (gSaveContext.unk_FE6 >= 5)) {
+        if ((this->unk_2CA == 8) && (gSaveContext.save.bombersCaughtNum >= 5)) {
             func_80C02CA4(this, globalCtx);
         } else {
             if (this->unk_2CA == 8) {
@@ -776,7 +777,7 @@ void func_80C02BCC(EnBomjimb* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 5000, 0);
     if (this->unk_2C0 == 0) {
         player->actor.freezeTimer = 3;
-        if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+        if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
             func_801477B4(globalCtx);
             this->unk_2C0 = 1;
             player->stateFlags1 &= ~0x10000000;
@@ -799,8 +800,8 @@ void func_80C02CA4(EnBomjimb* this, GlobalContext* globalCtx) {
         globalCtx->unk_1887F = 0x56;
         gSaveContext.nextTransition = 3;
     }
-    gSaveContext.weekEventReg[75] |= 0x40;
-    gSaveContext.weekEventReg[83] |= 4;
+    gSaveContext.save.weekEventReg[75] |= 0x40;
+    gSaveContext.save.weekEventReg[83] |= 4;
     this->actionFunc = func_80C02DAC;
 }
 

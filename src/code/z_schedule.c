@@ -10,7 +10,7 @@ s32 Schedule_CheckFlagS(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     ScheduleCmdCheckFlagS* cmd = (ScheduleCmdCheckFlagS*)*script;
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
-    if (gSaveContext.weekEventReg[flag >> 8] & (flag & 0xFF)) {
+    if (gSaveContext.save.weekEventReg[flag >> 8] & (flag & 0xFF)) {
         *script = *script + cmd->offset;
     }
 
@@ -21,7 +21,7 @@ s32 Schedule_CheckFlagL(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     ScheduleCmdCheckFlagL* cmd = (ScheduleCmdCheckFlagL*)*script;
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
-    if (gSaveContext.weekEventReg[flag >> 8] & (flag & 0xFF)) {
+    if (gSaveContext.save.weekEventReg[flag >> 8] & (flag & 0xFF)) {
         *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
@@ -153,7 +153,7 @@ s32 Schedule_CheckDayS(GlobalContext* globalCtx, u8** script, ScheduleResult* re
     ScheduleCmdCheckDayS* cmd = (ScheduleCmdCheckDayS*)*script;
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
-    if (day != (s16)gSaveContext.day) {
+    if (day != (s16)gSaveContext.save.day) {
         *script = *script + cmd->offset;
     }
 
@@ -164,7 +164,7 @@ s32 Schedule_CheckDayL(GlobalContext* globalCtx, u8** script, ScheduleResult* re
     ScheduleCmdCheckDayL* cmd = (ScheduleCmdCheckDayL*)*script;
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
-    if (day != (s16)gSaveContext.day) {
+    if (day != (s16)gSaveContext.save.day) {
         *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 

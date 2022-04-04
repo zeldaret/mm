@@ -2,34 +2,19 @@
 #define Z_EN_TANRON3_H
 
 #include "global.h"
+#include "objects/object_boss03/object_boss03.h"
 
 struct EnTanron3;
 
 typedef void (*EnTanron3ActionFunc)(struct EnTanron3*, GlobalContext*);
 
-#define TANRON3_WORK_TIMER_PICK_NEW_DEVIATION 0
-#define TANRON3_WORK_TIMER_DIE 0
-#define TANRON3_WORK_TIMER_OUT_OF_WATER 1
-#define TANRON3_WORK_TIMER_ATTACK 2
-#define TANRON3_WORK_TIMER_WAIT 2
 #define TANRON3_WORK_TIMER_MAX 3
-
-typedef struct {
-    /* 0x00 */ u8 type;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ Vec3f pos;
-    /* 0x10 */ Vec3f velocity;
-    /* 0x1C */ Vec3f accel;
-    /* 0x28 */ char unk_28[0xC];
-    /* 0x34 */ Vec3f unk_34;
-    /* 0x40 */ char unk_40[0x4];
-} UnkTanron3Effect;
 
 typedef struct EnTanron3 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[10];
-    /* 0x1C4 */ Vec3s morphTable[10];
+    /* 0x188 */ Vec3s jointTable[GYORG_SMALL_FISH_LIMB_MAX];
+    /* 0x1C4 */ Vec3s morphTable[GYORG_SMALL_FISH_LIMB_MAX];
     /* 0x200 */ s16 timer;
     /* 0x202 */ u8 isNonHostile; // If true, the fish will not move towards the player to attack them
     /* 0x203 */ u8 isBeached; // If true, the fish is on the central platform flopping around
@@ -48,8 +33,8 @@ typedef struct EnTanron3 {
     /* 0x248 */ Vec3s targetShapeRotation;
     /* 0x250 */ s32 currentRotationAngle;
     /* 0x254 */ s32 nextRotationAngle;
-    /* 0x258 */ s16 tailRotation;
-    /* 0x25A */ s16 trunkRotation;
+    /* 0x258 */ s16 trunkRotation;
+    /* 0x25A */ s16 tailRotation;
     /* 0x25C */ s16 bodyRotation;
     /* 0x260 */ ColliderCylinder atCollider;
     /* 0x2AC */ ColliderCylinder acCollider;

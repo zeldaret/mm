@@ -21,7 +21,7 @@
 
 // Macro to convert the time format used in the save struct into the format used in Schedule
 #define SCHEDULE_CONVERT_TIME(time) ((time) - 0x10000 / 360 * 90)
-#define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.time)
+#define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
 
 typedef enum {
     /* 00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,        // Checks if a weekEventReg flag is set and branches if so, short range branch

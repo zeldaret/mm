@@ -7,7 +7,7 @@
 #include "z_object_kankyo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((ObjectKankyo*)thisx)
 
@@ -222,7 +222,7 @@ void func_808DC454(ObjectKankyo* this, GlobalContext* globalCtx) {
                 this->unk_14C[i].unk_08 = globalCtx->view.eye.z + (spC8 * 120.0f);
                 this->unk_14C[i].unk_0C = (Rand_ZeroOne() - 0.5f) * (2.0f * temp_120);
 
-                temp_f22 = (func_800DFCB4(GET_ACTIVE_CAM(globalCtx)) * 0.004f) + 60.0f;
+                temp_f22 = (Camera_GetCamDirPitch(GET_ACTIVE_CAM(globalCtx)) * 0.004f) + 60.0f;
                 if (temp_f22 < 20.0f) {
                     temp_f22 = 20.0f;
                 }
@@ -273,7 +273,7 @@ void func_808DC454(ObjectKankyo* this, GlobalContext* globalCtx) {
                 this->unk_14C[i].unk_10 -=
                     this->unk_14C[i].unk_18 - (spC0 * 3.0f * (globalCtx->envCtx.windSpeed / 100.0f));
 
-                temp_f22 = (-func_800DFCB4(GET_ACTIVE_CAM(globalCtx)) * 0.012f) + 40.0f;
+                temp_f22 = (-Camera_GetCamDirPitch(GET_ACTIVE_CAM(globalCtx)) * 0.012f) + 40.0f;
                 if (temp_f22 < -40.0f) {
                     temp_f22 = -40.0f;
                 }
@@ -349,10 +349,10 @@ void func_808DCBF8(ObjectKankyo* this, GlobalContext* globalCtx) {
 
     if (temp_f0 > 0.01f) {
         D_801F4E30 = 155.0f * temp_f0;
-        globalCtx->envCtx.unk_EA = 10;
+        globalCtx->envCtx.sandstormState = 10;
     } else {
         D_801F4E30 = 0;
-        globalCtx->envCtx.unk_EA = 10;
+        globalCtx->envCtx.sandstormState = 10;
     }
     func_808DC454(this, globalCtx);
 }
@@ -514,7 +514,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
     f32 temp_f2;
     f32 tempf;
 
-    if ((globalCtx->cameraPtrs[MAIN_CAM]->flags2 & 0x100) || ((u8)globalCtx->envCtx.unk_E2 == 0)) {
+    if ((globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || ((u8)globalCtx->envCtx.unk_E2 == 0)) {
         return;
     }
 
@@ -592,7 +592,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
     if (globalCtx->sceneNum == SCENE_KYOJINNOMA) {
         phi_f26 = 1.0f;
     } else {
-        tempA = func_800E031C(GET_ACTIVE_CAM(globalCtx));
+        tempA = Camera_GetWaterYPos(GET_ACTIVE_CAM(globalCtx));
         if (tempA != BGCHECK_Y_MIN) {
             tempA -= globalCtx->view.eye.y;
             phi_f26 = tempA / 4000.0f;
@@ -602,7 +602,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
 
         phi_f26 = CLAMP_MAX(phi_f26, 1.0f);
 
-        if (!(globalCtx->cameraPtrs[MAIN_CAM]->flags2 & 0x100) || (phi_f26 == 0.0f)) {
+        if (!(globalCtx->cameraPtrs[CAM_ID_MAIN]->flags2 & 0x100) || (phi_f26 == 0.0f)) {
             return;
         }
     }

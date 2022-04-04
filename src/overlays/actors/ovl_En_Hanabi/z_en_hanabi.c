@@ -5,8 +5,9 @@
  */
 
 #include "z_en_hanabi.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnHanabi*)thisx)
 
@@ -18,8 +19,8 @@ void func_80B23894(EnHanabi* this, GlobalContext* globalCtx);
 void func_80B238D4(EnHanabi* this, GlobalContext* globalCtx);
 void func_80B23910(EnHanabi* this, GlobalContext* globalCtx);
 void func_80B23934(EnHanabi* this, GlobalContext* globalCtx);
+void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Hanabi_InitVars = {
     ACTOR_EN_HANABI,
     ACTORCAT_ITEMACTION,
@@ -32,38 +33,322 @@ const ActorInit En_Hanabi_InitVars = {
     (ActorFunc)NULL,
 };
 
-#endif
+Vec3s D_80B23AA0[] = {
+    { 85, 14, 49 },    { 70, -70, 0 },    { 85, 14, -49 },  { 90, -32, 28 },   { 90, -32, -28 }, { 98, 16, 0 },
+    { 70, 70, 0 },     { 84, 45, 26 },    { 84, 45, -26 },  { 50, -50, 70 },   { 73, -19, 64 },  { 65, -65, 38 },
+    { 50, -50, -70 },  { 65, -65, -38 },  { 73, -19, -64 }, { 0, 0, -100 },    { 14, 85, -49 },  { 49, 8, -86 },
+    { 8, 49, -86 },    { 57, 57, -57 },   { 45, 84, -26 },  { 27, -27, -92 },  { -50, 50, -70 }, { -27, 27, -92 },
+    { -19, 73, -64 },  { -70, 70, 0 },    { 14, 85, 49 },   { -32, 90, -28 },  { -32, 90, 28 },  { 16, 98, 0 },
+    { 45, 84, 26 },    { -65, 65, -38 },  { -50, 50, 70 },  { -65, 65, 38 },   { -19, 73, 64 },  { 0, 0, 100 },
+    { 8, 49, 86 },     { 49, 8, 86 },     { 57, 57, 57 },   { -27, 27, 92 },   { 27, -27, 92 },  { -14, -85, -49 },
+    { -14, -85, 49 },  { 32, -90, -28 },  { 32, -90, 28 },  { -16, -98, 0 },   { -70, -70, 0 },  { -45, -84, -26 },
+    { -45, -84, 26 },  { 19, -73, -64 },  { 19, -73, 64 },  { -85, -14, -49 }, { -49, -8, -86 }, { -8, -49, -86 },
+    { -57, -57, -57 }, { -84, -45, -26 }, { -73, 19, -64 }, { -85, -14, 49 },  { -90, 32, 28 },  { -90, 32, -28 },
+    { -98, -16, 0 },   { -84, -45, 26 },  { -73, 19, 64 },  { -8, -49, 86 },   { -49, -8, 86 },  { -57, -57, 57 },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B22C00.s")
+u8 D_80B23C2C[] = {
+    255, 255, 200, 255, 200, 255, 200, 255, 255, 255, 200, 200, 200, 255, 200, 200, 200, 255,
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B22C2C.s")
+u8 D_80B23C40[] = {
+    200, 200, 0, 200, 0, 200, 0, 200, 200, 200, 0, 0, 0, 200, 0, 0, 200, 200,
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B22C80.s")
+void func_80B22C00(EnHanabiStruct* arg0) {
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B22E0C.s")
+    for (i = 0; i < 400; i++, arg0++) {
+        arg0->unk_00 = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B22F34.s")
+void func_80B22C2C(EnHanabiStruct* arg0, s32 arg1) {
+    arg0->unk_01 = (s32)Rand_ZeroFloat(20.0f) + 60;
+    arg0->unk_02 = arg1;
+    arg0->unk_14.x = 0.7f;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B22FA8.s")
+s32 func_80B22C80(Vec3f* arg0, EnHanabiStruct* arg1, f32 arg2) {
+    Vec3s* phi_s1 = &D_80B23AA0[0];
+    f32 temp_f22 = (Rand_ZeroFloat(0.2f) + 0.6f) * arg2;
+    s32 temp_s6 = (s32)Rand_ZeroFloat(6.0f) * 3;
+    s32 i;
+    s32 j;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/EnHanabi_Init.s")
+    for (i = 0, j = 0; j < ARRAY_COUNT(D_80B23AA0) && i < 400; i++, arg1++) {
+        if (arg1->unk_00 <= 0) {
+            arg1->unk_00 = 1;
+            Math_Vec3f_Copy(&arg1->unk_08, arg0);
+            arg1->unk_20.x = phi_s1->x * temp_f22;
+            arg1->unk_20.y = (phi_s1->y * temp_f22) + 50.0f;
+            arg1->unk_20.z = phi_s1->z * temp_f22;
+            arg1->unk_04 = 1.5f * arg2;
+            func_80B22C2C(arg1, temp_s6);
+            phi_s1++;
+            j++;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/EnHanabi_Destroy.s")
+    return temp_s6;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B234C8.s")
+void func_80B22E0C(EnHanabiStruct* arg0) {
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B235CC.s")
+    for (i = 0; i < 400; i++, arg0++) {
+        if (arg0->unk_00 == 1) {
+            arg0->unk_08.x += arg0->unk_20.x;
+            arg0->unk_08.y += arg0->unk_20.y;
+            arg0->unk_08.z += arg0->unk_20.z;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B236C8.s")
+            arg0->unk_20.x *= arg0->unk_14.x;
+            arg0->unk_20.z *= arg0->unk_14.x;
+            arg0->unk_20.y *= arg0->unk_14.x;
+            arg0->unk_20.y -= 1.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B23894.s")
+            arg0->unk_20.x += randPlusMinusPoint5Scaled(0.8f);
+            arg0->unk_20.y += randPlusMinusPoint5Scaled(0.8f);
+            arg0->unk_20.z += randPlusMinusPoint5Scaled(0.8f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B238D4.s")
+            if (arg0->unk_01 > 0) {
+                arg0->unk_01--;
+            } else {
+                arg0->unk_00 = 0;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B23910.s")
+s32 func_80B22F34(EnHanabiStruct* arg0) {
+    s32 count = 0;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B23934.s")
+    for (i = 0; i < 400; i++, arg0++) {
+        if (arg0->unk_00 == 1) {
+            count++;
+        }
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/EnHanabi_Update.s")
+    return count;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Hanabi/func_80B23A38.s")
+void func_80B22FA8(EnHanabiStruct* arg0, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    s32 i;
+    u8 sp53;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C2DC(globalCtx->state.gfxCtx);
+
+    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+
+    gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
+    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB10);
+
+    sp53 = 0xFF;
+    if (sp53) {}
+
+    for (i = 0; i < 400; i++, arg0++) {
+        if (arg0->unk_00 == 1) {
+            Matrix_InsertTranslation(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
+            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            if (arg0->unk_01 < 40) {
+                Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,
+                             MTXMODE_APPLY);
+            } else {
+                Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
+            }
+            Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 4864, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            if (sp53 != arg0->unk_02) {
+                gDPPipeSync(POLY_XLU_DISP++);
+                gDPSetEnvColor(POLY_XLU_DISP++, D_80B23C40[arg0->unk_02], D_80B23C40[arg0->unk_02 + 1],
+                               D_80B23C40[arg0->unk_02 + 2], 255);
+
+                sp53 = arg0->unk_02;
+            }
+
+            if (arg0->unk_01 < 6) {
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
+                                D_80B23C2C[arg0->unk_02 + 2], arg0->unk_01 * 50);
+            } else {
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
+                                D_80B23C2C[arg0->unk_02 + 2], 255);
+            }
+
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_07AB58);
+        }
+    }
+
+    CLOSE_DISPS(gfxCtx);
+}
+
+void EnHanabi_Init(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnHanabi* this = THIS;
+    s32 i;
+
+    if (1) {}
+
+    Actor_SetScale(thisx, 1.0f);
+    this->actionFunc = func_80B23910;
+    this->unk_144 = 0;
+    func_80B22C00(this->unk_148);
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_4608); i++) {
+        Lights_PointNoGlowSetInfo(&this->unk_4608[i], thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, 255,
+                                  255, 255, -1);
+        this->unk_4634[i] = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &this->unk_4608[i]);
+    }
+
+    if (ENHANABI_GET_1F(thisx) == ENHANABI_1F_1) {
+        this->actionFunc = func_80B23934;
+        this->actor.home.rot.x = 0x384;
+    }
+}
+
+void EnHanabi_Destroy(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnHanabi* this = THIS;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_4634); i++) {
+        LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_4634[i]);
+    }
+}
+
+void func_80B234C8(EnHanabi* this) {
+    s16 phi_v1;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_4640); i++) {
+        if (this->unk_4640[i] > 0) {
+            this->unk_4640[i]--;
+            if (this->unk_4640[i] == 0) {
+                phi_v1 = -1;
+            } else {
+                if (this->unk_4640[i] >= 0xA) {
+                    phi_v1 = 0x3E8;
+                } else {
+                    phi_v1 = this->unk_4640[i] * 0x64;
+                }
+
+                if (this->actor.home.rot.x >= 0x259) {
+                    phi_v1 *= 2;
+                }
+            }
+
+            Lights_PointSetColorAndRadius(&this->unk_4608[i], D_80B23C2C[this->unk_4648[i]],
+                                          D_80B23C2C[this->unk_4648[i] + 1], D_80B23C2C[this->unk_4648[i] + 2], phi_v1);
+        }
+    }
+}
+
+void func_80B235CC(EnHanabi* this, Vec3f* arg1, s32 arg2) {
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_4640); i++) {
+        if (this->unk_4640[i] == 0) {
+            this->unk_4648[i] = arg2;
+            Lights_PointNoGlowSetInfo(&this->unk_4608[i], arg1->x, arg1->y, arg1->z, D_80B23C2C[arg2],
+                                      D_80B23C2C[arg2 + 1], D_80B23C2C[arg2 + 2], 0x3E8);
+            this->unk_4640[i] = 20;
+            break;
+        }
+    }
+}
+
+void func_80B236C8(EnHanabi* this, GlobalContext* globalCtx) {
+    Vec3f sp34;
+    f32 sp30;
+    s32 pad;
+    s32 sp28;
+
+    this->actor.draw = EnHanabi_Draw;
+    func_80B234C8(this);
+    if (this->actor.home.rot.x != 0) {
+        if (this->unk_144 > 0) {
+            this->unk_144--;
+            return;
+        }
+
+        Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
+
+        if (this->actor.home.rot.x != 0) {
+            sp30 = Rand_ZeroFloat(200.0f) + this->actor.home.rot.x;
+        } else {
+            sp30 = Rand_ZeroFloat(200.0f) + 300.0f;
+        }
+
+        sp34.x += sp30 * Math_SinS(this->actor.home.rot.y);
+        sp34.y += randPlusMinusPoint5Scaled(300.0f);
+        sp34.z += sp30 * Math_CosS(this->actor.home.rot.y);
+
+        if (this->actor.home.rot.x >= 0x259) {
+            sp28 = func_80B22C80(&sp34, this->unk_148, 2.0f);
+        } else {
+            sp28 = func_80B22C80(&sp34, this->unk_148, 1.0f);
+        }
+
+        this->actor.home.rot.y += (s16)((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
+        this->unk_144 = (s32)Rand_ZeroFloat(5.0f) + 20;
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_FIREWORKS);
+        func_80B235CC(this, &sp34, sp28);
+    }
+}
+
+void func_80B23894(EnHanabi* this, GlobalContext* globalCtx) {
+    func_80B236C8(this, globalCtx);
+    if (func_80B22F34(this->unk_148) == 0) {
+        Actor_MarkForDeath(&this->actor);
+    }
+}
+
+void func_80B238D4(EnHanabi* this, GlobalContext* globalCtx) {
+    func_80B236C8(this, globalCtx);
+    if (this->actor.home.rot.x == 0) {
+        this->actionFunc = func_80B23894;
+    }
+}
+
+void func_80B23910(EnHanabi* this, GlobalContext* globalCtx) {
+    if (this->actor.home.rot.x != 0) {
+        this->actionFunc = func_80B238D4;
+    }
+}
+
+void func_80B23934(EnHanabi* this, GlobalContext* globalCtx) {
+    if ((gSaveContext.save.entranceIndex == 0x5410) && (gSaveContext.sceneSetupIndex == 7)) {
+        if (globalCtx->csCtx.frames > 1650) {
+            func_80B236C8(this, globalCtx);
+            func_800B8FE8(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
+        }
+    }
+
+    if ((globalCtx->sceneNum == SCENE_00KEIKOKU) && (gSaveContext.sceneSetupIndex == 7) &&
+        (globalCtx->csCtx.currentCsIndex == 0) && (globalCtx->csCtx.frames == 610)) {
+        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_GROAN);
+    }
+}
+
+void EnHanabi_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnHanabi* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+
+    func_80B22E0C(this->unk_148);
+}
+
+void EnHanabi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnHanabi* this = THIS;
+
+    Matrix_StatePush();
+    func_80B22FA8(this->unk_148, globalCtx);
+    Matrix_StatePop();
+}

@@ -7,7 +7,7 @@
 #include "z_en_sw.h"
 #include "objects/object_st/object_st.h"
 
-#define FLAGS 0x00000005
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
 #define THIS ((EnSw*)thisx)
 
@@ -134,11 +134,11 @@ static DamageTable sDamageTable2 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_st_Anim_000304, 1.0f, 0, -1, 3, 0 },
-    { &object_st_Anim_000304, 1.0f, 0, -1, 3, -4 },
-    { &object_st_Anim_0055A8, 1.0f, 0, -1, 1, -4 },
-    { &object_st_Anim_005B98, 1.0f, 0, -1, 1, -4 },
+static AnimationInfoS sAnimations[] = {
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, 0 },
+    { &object_st_Anim_000304, 1.0f, 0, -1, ANIMMODE_ONCE_INTERP, -4 },
+    { &object_st_Anim_0055A8, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
+    { &object_st_Anim_005B98, 1.0f, 0, -1, ANIMMODE_LOOP_INTERP, -4 },
 };
 
 void func_808D8940(EnSw* this, GlobalContext* globalCtx) {
@@ -176,14 +176,15 @@ s32 func_808D8B58(EnSw* this) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_464); i++, phi_s2 += 0x1555) {
-        if (this->unk_412 != 10) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->unk_464[i] = (Rand_ZeroOne() * 16.0f) + 8.0f;
         } else {
             this->unk_464[i] = 80;
         }
         this->unk_47C[i] = this->unk_464[i];
-        this->unk_418[i] = 0.45000002f;
-        if ((this->unk_412 == 0) || (this->unk_412 == 1) || (this->unk_412 == 10)) {
+        this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
+        if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
+            (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
             this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
             this->unk_380[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
@@ -197,26 +198,27 @@ s32 func_808D8B58(EnSw* this) {
 
 s32 func_808D8D60(EnSw* this, GlobalContext* globalCtx, s32 arg2) {
     s32 ret = false;
-    u8 sp53;
-    Vec3f sp44;
-    f32 sp40;
+    u8 drawDmgEffType;
+    Vec3f limbPos[1];
+    f32 drawDmgEffAlpha;
 
     if (arg2 < this->unk_462) {
         if (this->unk_464[arg2] != 0) {
-            sp40 = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
-            sp53 = this->unk_412;
-            Math_ApproachF(&this->unk_418[arg2], 0.3f, 0.3f, 0.5f);
-            Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
-            sp44.x += this->unk_380[arg2].x;
-            sp44.y += this->unk_380[arg2].y;
-            sp44.z += this->unk_380[arg2].z;
-            if (sp53 == 10) {
+            drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
+            drawDmgEffType = this->drawDmgEffType;
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
+            Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
+            limbPos[0].x += this->unk_380[arg2].x;
+            limbPos[0].y += this->unk_380[arg2].y;
+            limbPos[0].z += this->unk_380[arg2].z;
+            if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
                 if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
-                    sp53 = 11;
+                    drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 }
-                sp40 = 1.0f;
+                drawDmgEffAlpha = 1.0f;
             }
-            func_800BE680(globalCtx, &this->actor, &sp44, 1, 0.3f, this->unk_418[arg2], sp40, sp53);
+            Actor_DrawDamageEffects(globalCtx, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
+                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
             ret = true;
         }
     }
@@ -275,7 +277,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, 0);
+    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
@@ -665,7 +667,7 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
         }
 
-        if (this->unk_412 == 10) {
+        if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             // clang-format off
             for (i = 0; i < ARRAY_COUNT(this->unk_464); i++) { this->unk_464[i] = 0; }
             // clang-format on
@@ -674,43 +676,43 @@ s32 func_808DA08C(EnSw* this, GlobalContext* globalCtx) {
         } else if (!func_808D90C4(this)) {
             SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
-            this->actor.flags &= ~1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             if (!ENSW_GET_3(&this->actor)) {
-                func_8013BC6C(&this->skelAnime, sAnimations, 3);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 3);
             }
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:
-                    this->unk_412 = 20;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 case 3:
-                    this->unk_412 = 10;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                     this->unk_45C = 0;
                     func_808D8B58(this);
                     break;
 
                 case 2:
-                    this->unk_412 = 0;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 case 5:
-                    this->unk_412 = 30;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                     this->unk_45C = 20;
                     func_808D8B58(this);
                     break;
 
                 default:
-                    this->unk_412 = 1;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
                     this->unk_45C = 0;
                     break;
             }
 
-            if (!ENSW_GET_3(&this->actor) && (this->unk_412 != 10)) {
+            if (!ENSW_GET_3(&this->actor) && (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
                 func_808D9E44(this);
             }
             this->unk_458 = 20;
@@ -856,7 +858,7 @@ void func_808DA6FC(EnSw* this, GlobalContext* globalCtx) {
 #endif
 
 void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
-    if (this->unk_412 == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         s32 i;
         s32 count;
         s16 phi_a0;
@@ -877,7 +879,7 @@ void func_808DA89C(EnSw* this, GlobalContext* globalCtx) {
             if (!ENSW_GET_3(&this->actor)) {
                 func_808D9E44(this);
             }
-            this->unk_412 = 1;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
             func_808D8ED0(this, globalCtx);
         }
         return;
@@ -921,7 +923,7 @@ void func_808DAA60(EnSw* this, GlobalContext* globalCtx) {
     Vec3f sp34;
     f32 temp_f16;
 
-    sp44 = (Vec3s*)Lib_SegmentedToVirtual(this->unk_1E4->points);
+    sp44 = Lib_SegmentedToVirtual(this->unk_1E4->points);
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
@@ -1065,7 +1067,7 @@ void func_808DAEB4(EnSw* this, GlobalContext* globalCtx) {
         phi_a0 = DECR(this->unk_45C);
         if (phi_a0 == 0) {
             this->unk_410 |= 2;
-            if (!ENSW_GET_3(&this->actor) && (this->unk_412 == 1)) {
+            if (!ENSW_GET_3(&this->actor) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE)) {
                 func_808D8B58(this);
                 this->unk_45C = 10;
             } else {
@@ -1159,7 +1161,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         SkelAnime_Init(globalCtx, &this->skelAnime, &object_st_Skel_005298, NULL, this->jointTable, this->morphTable,
                        30);
-        func_8013BC6C(&this->skelAnime, sAnimations, 0);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, 0);
         this->skelAnime.playSpeed = 4.0f;
 
         Collider_InitAndSetSphere(globalCtx, &this->collider, &this->actor, &sSphereInit);
@@ -1173,7 +1175,7 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->collider.info.toucher.damage = 16;
         }
 
-        this->unk_1E4 = func_8013BEDC(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
+        this->unk_1E4 = SubS_GetDayDependentPath(globalCtx, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
         if (this->unk_1E4 != NULL) {
             this->unk_4A0 = 1;
         }
@@ -1185,8 +1187,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;
@@ -1206,8 +1208,8 @@ void EnSw_Init(Actor* thisx, GlobalContext* globalCtx) {
 
             case 2:
             case 3:
-                this->actor.flags &= ~1;
-                this->actor.flags |= 0x10;
+                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_10;
 
                 if (this->actor.world.rot.z < 0) {
                     this->unk_460 = -thisx->world.rot.z;
@@ -1249,7 +1251,7 @@ void EnSw_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
     }
 
-    if ((this->unk_412 != 10) || (this->unk_45A != 0)) {
+    if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) || (this->unk_45A != 0)) {
         SkelAnime_Update(&this->skelAnime);
     }
 

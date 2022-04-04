@@ -7,7 +7,7 @@
 #include "z_obj_hugebombiwa.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjHugebombiwa*)thisx)
 
@@ -409,7 +409,7 @@ void func_80A54CEC(ObjHugebombiwa* this, GlobalContext* globalCtx) {
         Flags_SetSwitch(globalCtx, ENHUGEBOMBIWA_GET_7F(&this->actor));
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor)) &&
             ((globalCtx->sceneNum == SCENE_17SETUGEN) || (globalCtx->sceneNum == SCENE_17SETUGEN2))) {
-            gSaveContext.weekEventReg[19] |= 2;
+            gSaveContext.save.weekEventReg[19] |= 2;
         }
 
         if (!(ENHUGEBOMBIWA_GET_100(&this->actor))) {
@@ -440,7 +440,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
     Vec3f sp84;
 
     Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < 20; i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];
@@ -535,7 +535,7 @@ void func_80A55310(ObjHugebombiwa* this) {
     Vec3f sp84;
 
     Matrix_StatePush();
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s2 = 0x1000; i < ARRAY_COUNT(this->unk_190); i++, phi_s2 += 0x4000) {
         ptr = &this->unk_190[i];

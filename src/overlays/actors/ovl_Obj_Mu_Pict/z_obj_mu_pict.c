@@ -6,7 +6,7 @@
 
 #include "z_obj_mu_pict.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((ObjMuPict*)thisx)
 
@@ -40,7 +40,7 @@ const ActorInit Obj_Mu_Pict_InitVars = {
 void ObjMuPict_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjMuPict* this = THIS;
 
-    if (!(gSaveContext.weekEventReg[75] & 0x20) && !(gSaveContext.weekEventReg[52] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[75] & 0x20) && !(gSaveContext.save.weekEventReg[52] & 0x20)) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -109,7 +109,7 @@ void func_80C06CD8(ObjMuPict* this, GlobalContext* globalCtx) {
             func_80C06E88(this, globalCtx);
             break;
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80C06B5C(this);
                 if (this->actor.cutscene >= 0) {
                     ActorCutscene_Stop(this->actor.cutscene);
@@ -137,51 +137,51 @@ void func_80C06DC8(ObjMuPict* this, GlobalContext* globalCtx) {
     if (this->unk14A == 0) {
         if (this->unk148 == 0) {
             this->unk148 = 1;
-            func_801518B0(globalCtx, 0x159A, &this->actor);
+            Message_StartTextbox(globalCtx, 0x159A, &this->actor);
             this->textId = 0x159A;
         } else {
-            func_801518B0(globalCtx, 0x159D, &this->actor);
+            Message_StartTextbox(globalCtx, 0x159D, &this->actor);
             this->textId = 0x159D;
         }
     } else if (this->unk148 == 0) {
         this->unk148 = 1;
-        func_801518B0(globalCtx, 0x15A0, &this->actor);
+        Message_StartTextbox(globalCtx, 0x15A0, &this->actor);
         this->textId = 0x15A0;
     } else {
-        func_801518B0(globalCtx, 0x15A3, &this->actor);
+        Message_StartTextbox(globalCtx, 0x15A3, &this->actor);
         this->textId = 0x15A3;
     }
 }
 
 void func_80C06E88(ObjMuPict* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x159A:
-                func_801518B0(globalCtx, 0x159B, &this->actor);
+                Message_StartTextbox(globalCtx, 0x159B, &this->actor);
                 this->textId = 0x159B;
                 break;
             case 0x159B:
-                func_801518B0(globalCtx, 0x159C, &this->actor);
+                Message_StartTextbox(globalCtx, 0x159C, &this->actor);
                 this->textId = 0x159C;
                 break;
             case 0x159D:
-                func_801518B0(globalCtx, 0x159E, &this->actor);
+                Message_StartTextbox(globalCtx, 0x159E, &this->actor);
                 this->textId = 0x159E;
                 break;
             case 0x159E:
-                func_801518B0(globalCtx, 0x159F, &this->actor);
+                Message_StartTextbox(globalCtx, 0x159F, &this->actor);
                 this->textId = 0x159F;
                 break;
             case 0x15A0:
-                func_801518B0(globalCtx, 0x15A1, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A1, &this->actor);
                 this->textId = 0x15A1;
                 break;
             case 0x15A1:
-                func_801518B0(globalCtx, 0x15A2, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A2, &this->actor);
                 this->textId = 0x15A2;
                 break;
             case 0x15A3:
-                func_801518B0(globalCtx, 0x15A4, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A4, &this->actor);
                 this->textId = 0x15A4;
                 break;
         }

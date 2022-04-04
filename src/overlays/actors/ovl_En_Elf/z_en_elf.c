@@ -7,7 +7,7 @@
 #include "z_en_elf.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnElf*)thisx)
 
@@ -355,15 +355,15 @@ void EnElf_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.tatlTimer >= 25800) || (gSaveContext.tatlTimer < 3000)) {
-                gSaveContext.tatlTimer = 0;
+            if ((gSaveContext.save.playerData.tatlTimer >= 25800) || (gSaveContext.save.playerData.tatlTimer < 3000)) {
+                gSaveContext.save.playerData.tatlTimer = 0;
             }
             this->unk_266 = ElfMessage_GetFirstCycleHint(globalCtx);
             break;
 
         case 1:
             colorConfig = -1;
-            gSaveContext.unk_1016 = 0;
+            gSaveContext.jinxTimer = 0;
             EnElf_SetupAction(this, func_8088E0F0);
             this->unk_254 = Math_Vec3f_DistXZ(&thisx->world.pos, &player->actor.world.pos);
             this->unk_248 = player->actor.shape.rot.y;
@@ -675,9 +675,10 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
         !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
         func_80115908(globalCtx, 0x80);
         if (this->fairyFlags & 0x200) {
-            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) + (gSaveContext.doubleMagic * 0x30) + 0x30);
+            Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) +
+                                              (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
         }
-        gSaveContext.unk_1016 = 0;
+        gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
         this->unk_248 = refActor->actor.shape.rot.y;
         this->unk_24C = -0x1000;
@@ -700,7 +701,7 @@ void func_8088DD34(EnElf* this, GlobalContext* globalCtx) {
     }
 
     if (this->fairyFlags & 0x2000) {
-        Actor_PickUp(&this->actor, globalCtx, 0xBA, 80.0f, 60.0f);
+        Actor_PickUp(&this->actor, globalCtx, GI_MAX, 80.0f, 60.0f);
     }
 }
 
@@ -854,8 +855,8 @@ void func_8088E60C(EnElf* this, GlobalContext* globalCtx) {
         glowLightRadius = 0;
     }
 
-    if (func_800EE29C(globalCtx, 0xC9)) {
-        if (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0xC9)]->unk0 == 6) {
+    if (Cutscene_CheckActorAction(globalCtx, 201)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 201)]->action == 6) {
             glowLightRadius = 0;
         }
     }
@@ -888,12 +889,12 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
     func_8088E5A8(this, globalCtx);
     xScale = 0.0f;
 
-    if (func_800EE29C(globalCtx, 0xC9)) {
-        sp38 = func_800EE200(globalCtx, 0xC9);
+    if (Cutscene_CheckActorAction(globalCtx, 201)) {
+        sp38 = Cutscene_GetActorActionIndex(globalCtx, 201);
         func_808908D0(&nextPos, globalCtx, sp38);
-        this->actor.shape.rot.y = globalCtx->csCtx.npcActions[sp38]->unk8;
-        this->actor.shape.rot.x = globalCtx->csCtx.npcActions[sp38]->unk6;
-        if (globalCtx->csCtx.npcActions[sp38]->unk0 == 5) {
+        this->actor.shape.rot.y = globalCtx->csCtx.actorActions[sp38]->urot.y;
+        this->actor.shape.rot.x = globalCtx->csCtx.actorActions[sp38]->urot.x;
+        if (globalCtx->csCtx.actorActions[sp38]->action == 5) {
             func_8088F5F4(this, globalCtx, 16);
         }
 
@@ -904,14 +905,14 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
         }
 
         if ((globalCtx->sceneNum == SCENE_CLOCKTOWER) && (gSaveContext.sceneSetupIndex == 0) &&
-            (globalCtx->csCtx.unk_12 == 0) &&
-            ((globalCtx->csCtx.frames == 0x95) || (globalCtx->csCtx.frames == 0x17D) ||
-             (globalCtx->csCtx.frames == 0x24F))) {
+            (globalCtx->csCtx.currentCsIndex == 0) &&
+            ((globalCtx->csCtx.frames == 149) || (globalCtx->csCtx.frames == 381) ||
+             (globalCtx->csCtx.frames == 591))) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
         if ((globalCtx->sceneNum == SCENE_SECOM) && (gSaveContext.sceneSetupIndex == 0) &&
-            (globalCtx->csCtx.unk_12 == 4) && (globalCtx->csCtx.frames == 0x5F)) {
+            (globalCtx->csCtx.currentCsIndex == 4) && (globalCtx->csCtx.frames == 95)) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
     } else {
@@ -1016,7 +1017,7 @@ void func_8088E850(EnElf* this, GlobalContext* globalCtx) {
 
     func_8088E60C(this, globalCtx);
 
-    if (!func_800EE29C(globalCtx, 0xC9)) {
+    if (!Cutscene_CheckActorAction(globalCtx, 0xC9)) {
         this->actor.shape.rot.y = this->unk_258;
     }
 }
@@ -1107,8 +1108,8 @@ void func_8088F214(EnElf* this, GlobalContext* globalCtx) {
     s32 pad;
 
     if (globalCtx->csCtx.state != 0) {
-        if (func_800EE29C(globalCtx, 0xC9)) {
-            switch (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0xC9)]->unk0) {
+        if (Cutscene_CheckActorAction(globalCtx, 201)) {
+            switch (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 201)]->action) {
                 case 4:
                     sp34 = 7;
                     break;
@@ -1360,8 +1361,8 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx)) {
-                if (globalCtx->msgCtx.unk11F04 == 0x202) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                if (globalCtx->msgCtx.currentTextId == 0x202) {
                     switch (globalCtx->msgCtx.choiceIndex) {
                         case 0:
                             func_8019F230();
@@ -1375,19 +1376,19 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
 
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 - 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId - 1);
                         break;
 
                     case 1:
-                        func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                        func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                         break;
                 }
             }
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 576:
                         func_80151938(globalCtx, 0x245);
                         break;
@@ -1414,10 +1415,10 @@ void func_8088FE64(Actor* thisx, GlobalContext* globalCtx2) {
                                 break;
 
                             case 3:
-                                if (!gSaveContext.isNight) {
+                                if (!gSaveContext.save.isNight) {
                                     func_80151938(globalCtx, 0x248);
-                                } else if ((gSaveContext.time < CLOCK_TIME(6, 0)) &&
-                                           (gSaveContext.weekEventReg[74] & 0x20)) {
+                                } else if ((gSaveContext.save.time < CLOCK_TIME(6, 0)) &&
+                                           (gSaveContext.save.weekEventReg[74] & 0x20)) {
                                     func_80151938(globalCtx, 0x225);
                                 } else {
                                     func_80151938(globalCtx, 0x249);
@@ -1454,11 +1455,11 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
-        gSaveContext.tatlTimer = 0;
+        gSaveContext.save.playerData.tatlTimer = 0;
     }
 
     if ((player->tatlTextId == 0) && (player->unk_730 == NULL)) {
-        if ((gSaveContext.tatlTimer >= 600) && (gSaveContext.tatlTimer <= 3000)) {
+        if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = ElfMessage_GetFirstCycleHint(globalCtx);
         }
     }
@@ -1473,7 +1474,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
 
         if (thisx->textId == ElfMessage_GetFirstCycleHint(globalCtx)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.tatlTimer = 3001;
+            gSaveContext.save.playerData.tatlTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1503,11 +1504,11 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actionFunc(this, globalCtx);
 
-        if (!func_801690CC(globalCtx)) {
-            if (gSaveContext.tatlTimer < 25800) {
-                gSaveContext.tatlTimer++;
+        if (!Play_InCsMode(globalCtx)) {
+            if (gSaveContext.save.playerData.tatlTimer < 25800) {
+                gSaveContext.save.playerData.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {
-                gSaveContext.tatlTimer = 0;
+                gSaveContext.save.playerData.tatlTimer = 0;
             }
         }
     }
@@ -1577,8 +1578,8 @@ void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (player->currentMask != PLAYER_MASK_GIANT) {
         if (!(this->fairyFlags & 8) &&
-            (!func_800EE29C(globalCtx, 0xC9) ||
-             (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0xC9)]->unk0 != 6)) &&
+            (!Cutscene_CheckActorAction(globalCtx, 201) ||
+             (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 201)]->action != 6)) &&
             (!(player->stateFlags1 & 0x100000) || (kREG(90) < this->actor.projectedPos.z))) {
             Gfx* dListHead = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(Gfx) * 4);
             f32 alphaScale;
@@ -1621,17 +1622,17 @@ void EnElf_Draw(Actor* thisx, GlobalContext* globalCtx) {
 void func_808908D0(Vec3f* vec, GlobalContext* globalCtx, u32 action) {
     Vec3f startPos;
     Vec3f endPos;
-    CsCmdActorAction* npcAction = globalCtx->csCtx.npcActions[action];
+    CsCmdActorAction* npcAction = globalCtx->csCtx.actorActions[action];
     f32 lerp;
 
-    startPos.x = npcAction->unk0C.x;
-    startPos.y = npcAction->unk0C.y;
-    startPos.z = npcAction->unk0C.z;
+    startPos.x = npcAction->startPos.x;
+    startPos.y = npcAction->startPos.y;
+    startPos.z = npcAction->startPos.z;
 
-    endPos.x = npcAction->unk18.x;
-    endPos.y = npcAction->unk18.y;
-    endPos.z = npcAction->unk18.z;
+    endPos.x = npcAction->endPos.x;
+    endPos.y = npcAction->endPos.y;
+    endPos.z = npcAction->endPos.z;
 
-    lerp = func_800F5A8C(npcAction->endFrame, npcAction->startFrame, globalCtx->csCtx.frames, globalCtx);
+    lerp = Environment_LerpWeight(npcAction->endFrame, npcAction->startFrame, globalCtx->csCtx.frames);
     VEC3F_LERPIMPDST(vec, &startPos, &endPos, lerp);
 }

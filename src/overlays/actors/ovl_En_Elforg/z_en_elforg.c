@@ -7,7 +7,7 @@
 #include "z_en_elforg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnElforg*)thisx)
 
@@ -81,7 +81,7 @@ void EnElforg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     switch (STRAY_FAIRY_TYPE(&this->actor)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
-            if (gSaveContext.weekEventReg[8] & 0x80) {
+            if (gSaveContext.save.weekEventReg[8] & 0x80) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -364,7 +364,7 @@ void EnElforg_CirclePlayer(EnElforg* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 distanceFromPlayer;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_GORON) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
         distanceFromPlayer = 40.0f;
     } else {
         distanceFromPlayer = 20.0f;
@@ -407,7 +407,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, GlobalContext* globalCtx) 
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~0x20000000;
         Actor_MarkForDeath(&this->actor);
-        gSaveContext.weekEventReg[8] |= 0x80;
+        gSaveContext.save.weekEventReg[8] |= 0x80;
         ActorCutscene_Stop(0x7C);
     } else {
         func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
@@ -456,16 +456,16 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 100;
                 player->stateFlags1 |= 0x20000000;
-                func_801518B0(globalCtx, 0x579, NULL);
+                Message_StartTextbox(globalCtx, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
                 ActorCutscene_SetIntentToPlay(0x7C);
                 return;
             }
 
             if (func_8010A074(globalCtx)) {
-                gSaveContext.inventory.strayFairies[gSaveContext.unk_48C8]++;
-                func_801518B0(globalCtx, 0x11, NULL);
-                if (gSaveContext.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
+                gSaveContext.save.inventory.strayFairies[gSaveContext.unk_48C8]++;
+                Message_StartTextbox(globalCtx, 0x11, NULL);
+                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.unk_48C8] >= 15) {
                     func_801A3098(NA_BGM_GET_ITEM | 0x900);
                 }
             }

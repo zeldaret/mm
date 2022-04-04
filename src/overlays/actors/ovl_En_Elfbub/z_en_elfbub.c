@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 #include "objects/object_bubble/object_bubble.h"
 
-#define FLAGS 0x00000001
+#define FLAGS (ACTOR_FLAG_1)
 
 #define THIS ((EnElfbub*)thisx)
 
@@ -82,7 +82,7 @@ void EnElfbub_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->oscillationAngle = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void EnElfbub_Destroy(Actor* thisx, GlobalContext* globalCtx) {

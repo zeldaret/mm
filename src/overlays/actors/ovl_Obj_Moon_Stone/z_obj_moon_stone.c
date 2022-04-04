@@ -7,7 +7,7 @@
 #include "z_obj_moon_stone.h"
 #include "objects/object_gi_reserve00/object_gi_reserve00.h"
 
-#define FLAGS 0x00100010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
 #define THIS ((ObjMoonStone*)thisx)
 
@@ -47,19 +47,17 @@ void ObjMoonStone_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.focus.pos.y += 10.0f;
     if (this->unk194 == 0) {
         this->actor.colChkInfo.health = 0;
-        this->actor.flags |= 9;
+        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         func_80C0662C(this);
-    } else {
-        if ((gSaveContext.weekEventReg[74] & 0x40) == 0) {
-            if ((gSaveContext.weekEventReg[74] & 0x80)) {
-                Actor_Spawn(&globalCtx->actorCtx, globalCtx, 1, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, 0, -1);
-            }
-            this->actor.flags &= ~1;
-            func_80C0673C(this);
-        } else {
-            Actor_MarkForDeath(&this->actor);
+    } else if (!(gSaveContext.save.weekEventReg[74] & 0x40)) {
+        if ((gSaveContext.save.weekEventReg[74] & 0x80)) {
+            Actor_Spawn(&globalCtx->actorCtx, globalCtx, 1, this->actor.world.pos.x, this->actor.world.pos.y,
+                        this->actor.world.pos.z, 0, 0, 0, -1);
         }
+        this->actor.flags &= ~ACTOR_FLAG_1;
+        func_80C0673C(this);
+    } else {
+        Actor_MarkForDeath(&this->actor);
     }
 }
 
@@ -77,7 +75,7 @@ void func_80C06640(ObjMoonStone* this, GlobalContext* globalCtx) {
     sp1A -= player->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.colChkInfo.health = 1;
-        func_801518B0(globalCtx, 0x5E3U, &this->actor);
+        Message_StartTextbox(globalCtx, 0x5E3U, &this->actor);
         func_80C066F8(this);
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
@@ -99,15 +97,15 @@ void func_80C0670C(ObjMoonStone* this, GlobalContext* globalCtx) {
 }
 
 void func_80C0673C(ObjMoonStone* this) {
-    if ((gSaveContext.weekEventReg[74] & 0x80) == 0) {
+    if (!(gSaveContext.save.weekEventReg[74] & 0x80)) {
         this->actor.draw = NULL;
     }
     this->actionFunc = func_80C06768;
 }
 
 void func_80C06768(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if ((gSaveContext.weekEventReg[74] & 0x80)) {
-        if (this->actor.draw == 0) {
+    if ((gSaveContext.save.weekEventReg[74] & 0x80)) {
+        if (this->actor.draw == NULL) {
             this->actor.draw = ObjMoonStone_Draw;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, -1);
@@ -129,8 +127,8 @@ void func_80C0685C(ObjMoonStone* this) {
 }
 
 void func_80C06870(ObjMoonStone* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        gSaveContext.weekEventReg[74] |= 0x40;
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
+        gSaveContext.save.weekEventReg[74] |= 0x40;
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -139,7 +137,7 @@ void ObjMoonStone_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjMoonStone* this = THIS;
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((player->stateFlags1 & 0x10000282) == 0) {
+    if (!(player->stateFlags1 & 0x10000282)) {
         this->actionFunc(this, globalCtx);
     }
 }

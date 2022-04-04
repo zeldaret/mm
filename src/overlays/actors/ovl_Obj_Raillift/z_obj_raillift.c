@@ -7,7 +7,7 @@
 #include "z_obj_raillift.h"
 #include "objects/object_raillift/object_raillift.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjRaillift*)thisx)
 
@@ -89,7 +89,7 @@ void ObjRaillift_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
-        this->points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        this->points = Lib_SegmentedToVirtual(path->points);
         ObjRaillift_UpdatePosition(this, this->curPoint);
         if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(globalCtx, OBJRAILLIFT_GET_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;

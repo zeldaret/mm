@@ -7,7 +7,7 @@
 #include "z_obj_ending.h"
 #include "objects/object_ending_obj/object_ending_obj.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjEnding*)thisx)
 
@@ -44,7 +44,7 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->modelInfo = &sModelInfo[thisx->params];
     animMat = this->modelInfo->animMat;
     if (animMat != NULL) {
-        this->animMat = (AnimatedMaterial*)Lib_SegmentedToVirtual(animMat);
+        this->animMat = Lib_SegmentedToVirtual(animMat);
     }
 }
 

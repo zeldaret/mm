@@ -7,7 +7,7 @@
 #include "z_en_thiefbird.h"
 #include "objects/object_thiefbird/object_thiefbird.h"
 
-#define FLAGS 0x80001205
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnThiefbird*)thisx)
 
@@ -168,7 +168,7 @@ void EnThiefbird_Init(Actor* thisx, GlobalContext* globalCtx) {
         D_80C1392C = 1;
         Math_Vec3f_Copy(&D_80C13920, &this->actor.world.pos);
         Actor_MarkForDeath(&this->actor);
-    } else if ((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) {
+    } else if (STOLEN_ITEM_1 != STOLEN_ITEM_NONE) {
         Actor_MarkForDeath(&this->actor);
     } else {
         func_80C11538(this);
@@ -213,17 +213,17 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     s32 itemId1;
     s16 itemId2 = 0;
 
-    for (; slotId < ARRAY_COUNT(gSaveContext.inventory.items); slotId++) {
-        if ((gSaveContext.inventory.items[slotId] >= ITEM_BOTTLE) &&
-            (gSaveContext.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
+    for (; slotId < 24; slotId++) {
+        if ((gSaveContext.save.inventory.items[slotId] >= ITEM_BOTTLE) &&
+            (gSaveContext.save.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
-            itemId2 = gSaveContext.inventory.items[slotId];
+            itemId2 = gSaveContext.save.inventory.items[slotId];
             break;
         }
     }
 
-    if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
-        phi_a3 = CUR_EQUIP_VALUE_VOID(EQUIP_SWORD);
+    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_SWORD);
         if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
         }
@@ -240,8 +240,8 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     if (isItemFound) {
         func_801149A0(itemId2, slotId);
         this->unk_3E8 = object_thiefbird_DL_0033B0;
-        if (!Message_GetState(&globalCtx->msgCtx)) {
-            func_801518B0(globalCtx, 0xF4, NULL);
+        if (Message_GetState(&globalCtx->msgCtx) == 0) {
+            Message_StartTextbox(globalCtx, 0xF4, NULL);
         }
         itemId1 = ITEM_BOTTLE;
     } else if (phi_a3 != 0) {
@@ -260,21 +260,21 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
-            TAKE_EQUIPPED_ITEM(EQUIP_SWORD);
+            SET_EQUIP_VALUE(EQUIP_SWORD, 0);
             this->unk_3E8 = D_80C13680[phi_a3 - 1];
         }
 
-        if (!Message_GetState(&globalCtx->msgCtx)) {
-            func_801518B0(globalCtx, 0xF5, NULL);
+        if (Message_GetState(&globalCtx->msgCtx) == 0) {
+            Message_StartTextbox(globalCtx, 0xF5, NULL);
         }
     } else {
         return false;
     }
 
-    if (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18)) {
-        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFFFFFF) | ((itemId1 & 0xFF) << 0x18);
+    if (STOLEN_ITEM_1 == STOLEN_ITEM_NONE) {
+        SET_STOLEN_ITEM_1(itemId1);
     } else {
-        gSaveContext.roomInf[126][5] = (gSaveContext.roomInf[126][5] & 0xFF00FFFF) | ((itemId1 & 0xFF) << 0x10);
+        SET_STOLEN_ITEM_2(itemId1);
     }
 
     return true;
@@ -334,7 +334,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
         spAC = 0;
     }
 
-    sp98 = (gSaveContext.rupees / 4) * 3;
+    sp98 = (gSaveContext.save.playerData.rupees / 4) * 3;
     phi_s0_2 = sp98 / 50;
     sp5C = (-spB0 - spAC);
     sp5C += 8;
@@ -443,20 +443,20 @@ void func_80C11338(EnThiefbird* this, GlobalContext* globalCtx) {
 }
 
 void func_80C11454(EnThiefbird* this) {
-    this->unk_18C = 10;
-    this->unk_3D8 = 0.5f;
-    this->unk_3DC = 0.75f;
-    this->unk_3D4 = 1.0f;
-    this->actor.flags &= ~0x200;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+    this->drawDmgEffScale = 0.5f;
+    this->drawDmgEffFrozenSteamScale = 0.75f;
+    this->drawDmgEffAlpha = 1.0f;
+    this->actor.flags &= ~ACTOR_FLAG_200;
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
 }
 
 void func_80C114C0(EnThiefbird* this, GlobalContext* globalCtx) {
-    if (this->unk_18C == 10) {
-        this->unk_18C = 0;
-        this->unk_3D4 = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_350, 11, 2, 0.2f, 0.2f);
-        this->actor.flags |= 0x200;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 11, 2, 0.2f, 0.2f);
+        this->actor.flags |= ACTOR_FLAG_200;
     }
 }
 
@@ -570,8 +570,7 @@ void func_80C1193C(EnThiefbird* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_VOICE);
             if (!(this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((D_80C1392C != 0) && CUR_UPG_VALUE(UPG_QUIVER) &&
-                    (!((gSaveContext.roomInf[126][5] & 0xFF000000) >> 0x18) ||
-                     !((gSaveContext.roomInf[126][5] & 0xFF0000) >> 0x10)) &&
+                    ((STOLEN_ITEM_1 == STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 == STOLEN_ITEM_NONE)) &&
                     (Rand_ZeroOne() < 0.5f) && func_80C10B0C(this, globalCtx)) {
                     func_80C1242C(this);
                 } else if (func_80C10E98(globalCtx)) {
@@ -600,7 +599,7 @@ void func_80C11C60(EnThiefbird* this) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_THIEFBIRD_DEAD);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->unk_192 = 0x1C00;
     this->actionFunc = func_80C11D14;
 }
@@ -611,7 +610,7 @@ void func_80C11D14(EnThiefbird* this, GlobalContext* globalCtx) {
         this->unk_18E--;
     }
 
-    if (this->unk_18C == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         if (this->unk_18E < 38) {
             func_80C114C0(this, globalCtx);
             this->actor.speedXZ = 4.0f;
@@ -631,7 +630,7 @@ void func_80C11D14(EnThiefbird* this, GlobalContext* globalCtx) {
 }
 
 void func_80C11DC0(EnThiefbird* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80C11DF0;
     this->actor.gravity = -0.5f;
 }
@@ -646,8 +645,8 @@ void func_80C11DF0(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
-        for (i = 0; i < ARRAY_COUNT(this->unk_350); i++) {
-            func_800B3030(globalCtx, &this->unk_350[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
+        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
+            func_800B3030(globalCtx, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -713,7 +712,7 @@ void func_80C1215C(EnThiefbird* this, GlobalContext* globalCtx) {
         this->unk_18E--;
     }
 
-    if (this->unk_18C == 10) {
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         if (this->unk_18E < 38) {
             func_80C114C0(this, globalCtx);
             this->actor.speedXZ = 4.0f;
@@ -778,7 +777,7 @@ void func_80C12378(EnThiefbird* this, GlobalContext* globalCtx) {
 
 void func_80C1242C(EnThiefbird* this) {
     Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000278, 2.0f, 0.0f, 0.0f, 0, -4.0f);
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->collider.base.acFlags |= AC_ON;
     this->actionFunc = func_80C124B0;
     this->actor.speedXZ = 12.0f;
@@ -823,7 +822,7 @@ void func_80C124B0(EnThiefbird* this, GlobalContext* globalCtx) {
 }
 
 void func_80C126A8(EnThiefbird* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_80C126D8;
 }
@@ -841,7 +840,7 @@ void func_80C12744(EnThiefbird* this) {
     Animation_Change(&this->skelAnime, &object_thiefbird_Anim_000604, 1.0f, 0.0f, 0.0f, 1, -4.0f);
     this->unk_190 = 0;
     this->collider.base.acFlags |= AC_ON;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_80C127F4;
     this->actor.speedXZ = 4.0f;
     this->skelAnime.playSpeed = 3.0f;
@@ -877,10 +876,10 @@ void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, &this->unk_3EC->actor), 3,
                                0x2000, 0x100);
         }
-        temp_v0 = Math_Vec3f_Pitch(&this->unk_350[9], &this->unk_3EC->actor.world.pos);
+        temp_v0 = Math_Vec3f_Pitch(&this->limbPos[9], &this->unk_3EC->actor.world.pos);
         temp_v0 = CLAMP(temp_v0, -0x3000, 0x3000);
         Math_SmoothStepToS(&this->actor.shape.rot.x, temp_v0, 4, 0x800, 0x80);
-        temp_f0 = Actor_DistanceToPoint(&this->unk_3EC->actor, &this->unk_350[9]);
+        temp_f0 = Actor_DistanceToPoint(&this->unk_3EC->actor, &this->limbPos[9]);
         this->actor.speedXZ = (0.02f * temp_f0) + 2.0f;
         this->actor.speedXZ = CLAMP_MAX(this->actor.speedXZ, 4.0f);
         if ((this->unk_3EC->actor.speedXZ <= 0.0f) && (temp_f0 < 40.0f)) {
@@ -907,7 +906,7 @@ void func_80C127F4(EnThiefbird* this, GlobalContext* globalCtx) {
 
         Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 4, 0x800, 0x80);
         if (this->unk_194 == 0) {
-            this->actor.flags &= ~0x10;
+            this->actor.flags &= ~ACTOR_FLAG_10;
             func_80C11538(this);
         }
     }
@@ -925,7 +924,7 @@ void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
         this->unk_194 = 0;
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            if (this->collider.elements[i].info.bumperFlags & 2) {
+            if (this->collider.elements[i].info.bumperFlags & BUMP_HIT) {
                 break;
             }
         }
@@ -933,22 +932,22 @@ void func_80C12B1C(EnThiefbird* this, GlobalContext* globalCtx) {
         if (this->actor.colChkInfo.damageEffect == 3) {
             func_80C11454(this);
         } else if (this->actor.colChkInfo.damageEffect == 4) {
-            this->unk_18C = 20;
-            this->unk_3D8 = 0.5f;
-            this->unk_3D4 = 4.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+            this->drawDmgEffScale = 0.5f;
+            this->drawDmgEffAlpha = 4.0f;
             if (i != ARRAY_COUNT(this->colliderElements)) {
                 sph = &this->collider.elements[i];
                 Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
                             sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
             }
         } else if (this->actor.colChkInfo.damageEffect == 2) {
-            this->unk_18C = 0;
-            this->unk_3D8 = 0.5f;
-            this->unk_3D4 = 4.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+            this->drawDmgEffScale = 0.5f;
+            this->drawDmgEffAlpha = 4.0f;
         } else if (this->actor.colChkInfo.damageEffect == 5) {
-            this->unk_18C = 0x1E;
-            this->unk_3D8 = 0.5f;
-            this->unk_3D4 = 2.0f;
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+            this->drawDmgEffScale = 0.5f;
+            this->drawDmgEffAlpha = 2.0f;
         }
 
         if (this->unk_3E8 != 0) {
@@ -1020,12 +1019,12 @@ void EnThiefbird_Update(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
-    if (this->unk_3D4 > 0.0f) {
-        if (this->unk_18C != 10) {
-            Math_StepToF(&this->unk_3D4, 0.0f, 0.05f);
-            this->unk_3D8 = (this->unk_3D4 + 1.0f) * 0.25f;
-            this->unk_3D8 = CLAMP_MAX(this->unk_3D8, 0.5f);
-        } else if (!Math_StepToF(&this->unk_3DC, 0.5f, 0.0125f)) {
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
+            this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.5f, 0.0125f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1099,11 +1098,11 @@ void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     idx = D_80C13698[limbIndex];
     if (idx != -1) {
         if (idx == 9) {
-            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->unk_350[idx]);
+            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[idx]);
         } else {
-            Matrix_GetStateTranslation(&this->unk_350[idx]);
+            Matrix_GetStateTranslation(&this->limbPos[idx]);
             if ((idx == 3) || (idx == 5)) {
-                Matrix_GetStateTranslationAndScaledX(2000.0f, &this->unk_350[idx + 1]);
+                Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[idx + 1]);
             }
         }
     }
@@ -1151,7 +1150,7 @@ void EnThiefbird_Draw(Actor* thisx, GlobalContext* globalCtx) {
         func_800AE5A0(globalCtx);
     }
     func_80C13354(this, globalCtx);
-    func_800BE680(globalCtx, &this->actor, this->unk_350, 11, this->unk_3D8, this->unk_3DC, this->unk_3D4,
-                  this->unk_18C);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements[1].dim.worldSphere.center);
 }

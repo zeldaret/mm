@@ -7,7 +7,7 @@
 #include "z_en_mm.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnMm*)thisx)
 
@@ -74,8 +74,8 @@ void EnMm_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnMm* this = THIS;
     EnMmActionFunc action;
 
-    if ((this->actor.params >= 0) && ((!(gSaveContext.weekEventReg[37] & 0x10)) ||
-                                      (gSaveContext.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
+    if ((this->actor.params >= 0) && ((!(gSaveContext.save.weekEventReg[37] & 0x10)) ||
+                                      (gSaveContext.save.weekEventReg[37] & 8) || (gSaveContext.unk_1014 != 0))) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

@@ -7,7 +7,7 @@
 #include "z_en_owl.h"
 #include "objects/object_owl/object_owl.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnOwl*)thisx)
 
@@ -41,7 +41,7 @@ void func_8095C484(EnOwl* this);
 void func_8095CCF4(Actor* thisx, GlobalContext* globalCtx);
 void func_8095D074(Actor* thisx, GlobalContext* globalCtx);
 void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
-                      AnimationHeader* animationSeg, f32 transitionRate);
+                      AnimationHeader* animation, f32 morphFrames);
 
 typedef enum {
     /* 0x00 */ OWL_REPEAT,
@@ -120,7 +120,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
         Actor_SetScale(&this->actor, 0.1f);
         this->actor.update = func_8095CCF4;
         this->actor.draw = func_8095D074;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_3D8 = 0;
         this->unk_3DA = 0x320;
         this->unk_3DC = 0x12C;
@@ -157,7 +157,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
 
         case ENOWL_GET_TYPE_2:
-            if (gSaveContext.inventory.items[SLOT_LENS] == ITEM_LENS) {
+            if (gSaveContext.save.inventory.items[ITEM_LENS] == ITEM_LENS) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -183,7 +183,7 @@ void EnOwl_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         case ENOWL_GET_TYPE_2:
             this->actionFunc = func_8095BE0C;
-            if (gSaveContext.weekEventReg[9] & 0x20) {
+            if (gSaveContext.save.weekEventReg[9] & 0x20) {
                 this->actor.textId = 0xBF0;
             } else {
                 this->actor.textId = 0xBEA;
@@ -228,7 +228,7 @@ s32 func_8095A978(EnOwl* this, GlobalContext* globalCtx, u16 textId, f32 targetD
 
     this->actor.textId = textId;
     if (this->actor.xzDistToPlayer < targetDist) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, targetDist, arg4, EXCH_ITEM_NONE);
     }
 
@@ -294,7 +294,7 @@ void func_8095ABF0(EnOwl* this, GlobalContext* globalCtx) {
     if (Actor_TextboxIsClosing(&this->actor, globalCtx)) {
         Audio_QueueSeqCmd(0x110000FF);
         func_8095AAD0(this, globalCtx);
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     }
 }
 
@@ -309,7 +309,7 @@ void func_8095AC50(EnOwl* this, GlobalContext* globalCtx) {
             func_8095ABA8(this);
             this->actionFunc = func_8095AB1C;
         }
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     }
 }
 
@@ -324,7 +324,7 @@ void func_8095ACEC(EnOwl* this) {
 }
 
 void func_8095AD54(EnOwl* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 4) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 4) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case OWL_REPEAT:
                 func_80151938(globalCtx, 0x7D1);
@@ -340,14 +340,14 @@ void func_8095AD54(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void func_8095AE00(EnOwl* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_80151938(globalCtx, 0x7D2);
         this->actionFunc = func_8095AD54;
     }
 }
 
 void func_8095AE60(EnOwl* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_80151938(globalCtx, 0x7D1);
         this->actionFunc = func_8095AE00;
     }
@@ -364,13 +364,13 @@ void func_8095AEC0(EnOwl* this, GlobalContext* globalCtx) {
 void func_8095AF2C(EnOwl* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
-                if (globalCtx->msgCtx.unk11F04 == 0xBFE) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                if (globalCtx->msgCtx.currentTextId == 0xBFE) {
                     func_8095ACEC(this);
                     func_801477B4(globalCtx);
                     this->actionFunc = func_8095ABF0;
                 } else {
-                    func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                    func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 }
             }
             break;
@@ -408,7 +408,7 @@ s32 func_8095B06C(EnOwl* this) {
 
 void func_8095B0C8(EnOwl* this) {
     s32 pad;
-    Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(this->path->points);
 
     points += this->unk_3F8;
     this->unk_3EC = Math_FAtan2F(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
@@ -441,7 +441,7 @@ void func_8095B254(EnOwl* this, GlobalContext* globalCtx) {
     if (this->actionFlags & 1) {
         EnOwl_ChangeMode(this, func_8095B1E4, func_8095C328, &this->skelAnime1, &object_owl_Anim_001ADC, 0.0f);
         this->unk_3EA = 6;
-        this->actor.flags |= 0x20;
+        this->actor.flags |= ACTOR_FLAG_20;
     }
 
     func_8095B158(this);
@@ -504,10 +504,10 @@ void func_8095B574(EnOwl* this, GlobalContext* globalCtx) {
         this->actionFlags |= 0x40;
         this->unk_406 = 2;
     } else if (this->actor.xzDistToPlayer < 200.0f) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 200.0f, 400.0f, EXCH_ITEM_NONE);
     } else {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     }
     func_8095B480(this, globalCtx);
 }
@@ -542,7 +542,7 @@ void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (sp44 < SQ(this->actor.speedXZ)) {
         this->actor.speedXZ = 0.0f;
-        points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+        points = Lib_SegmentedToVirtual(this->path->points);
         points += this->unk_3F8;
 
         do {
@@ -607,16 +607,16 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 4:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0xBEC:
                         switch (globalCtx->msgCtx.choiceIndex) {
                             case 0:
                                 func_8019F208();
-                                if (gSaveContext.weekEventReg[9] & 0x40) {
+                                if (gSaveContext.save.weekEventReg[9] & 0x40) {
                                     func_80151938(globalCtx, 0xBF4);
                                 } else {
-                                    gSaveContext.weekEventReg[9] |= 0x40;
+                                    gSaveContext.save.weekEventReg[9] |= 0x40;
                                     func_80151938(globalCtx, 0xBED);
                                 }
                                 break;
@@ -646,10 +646,10 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0xBEA:
-                        gSaveContext.weekEventReg[9] |= 0x20;
+                        gSaveContext.save.weekEventReg[9] |= 0x20;
                         func_80151938(globalCtx, 0xBEB);
                         break;
 
@@ -671,7 +671,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
                         this->eyeTexIndex = 0;
                         this->blinkTimer = Rand_S16Offset(60, 60);
                         this->actionFlags |= 8;
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.home.rot.x = 0;
                         func_8095ACEC(this);
                         this->unk_406 = 0;
@@ -683,7 +683,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
                         func_801477B4(globalCtx);
                         Audio_QueueSeqCmd(0x110000FF);
                         func_8095ACEC(this);
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         this->actor.textId = 0xBF0;
                         this->actionFunc = func_8095BE0C;
                         break;
@@ -695,7 +695,7 @@ void func_8095BA84(EnOwl* this, GlobalContext* globalCtx) {
                     case 0xBF5:
                         func_801477B4(globalCtx);
                         Audio_QueueSeqCmd(0x110000FF);
-                        this->actor.flags &= ~0x10000;
+                        this->actor.flags &= ~ACTOR_FLAG_10000;
                         EnOwl_ChangeMode(this, func_8095B3DC, func_8095C484, &this->skelAnime1, &object_owl_Anim_00CB94,
                                          0.0f);
                         this->eyeTexIndex = 0;
@@ -721,10 +721,10 @@ void func_8095BE0C(EnOwl* this, GlobalContext* globalCtx) {
             func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, EXCH_ITEM_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 200.0f, 200.0f, EXCH_ITEM_NONE);
     } else {
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     }
 }
 
@@ -738,7 +738,7 @@ void func_8095BF58(EnOwl* this, GlobalContext* globalCtx) {
 }
 
 void func_8095BF78(EnOwl* this, GlobalContext* globalCtx) {
-    this->actor.flags |= 0x20;
+    this->actor.flags |= ACTOR_FLAG_20;
     if (this->actor.xzDistToPlayer > 6000.0f) {
         Actor_MarkForDeath(&this->actor);
     }
@@ -1191,10 +1191,9 @@ void func_8095D074(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc, SkelAnime* skelAnime,
-                      AnimationHeader* animationSeg, f32 transitionRate) {
+                      AnimationHeader* animation, f32 morphFrames) {
     this->skelAnime3 = skelAnime;
-    Animation_Change(this->skelAnime3, animationSeg, 1.0f, 0.0f, Animation_GetLastFrame(animationSeg), 2,
-                     transitionRate);
+    Animation_Change(this->skelAnime3, animation, 1.0f, 0.0f, Animation_GetLastFrame(animation), 2, morphFrames);
     this->actionFunc = actionFunc;
     this->unk_414 = unkFunc;
 }

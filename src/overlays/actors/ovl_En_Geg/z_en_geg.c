@@ -11,7 +11,7 @@
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
 #define THIS ((EnGeg*)thisx)
 
@@ -125,18 +125,28 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, 0 },      { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, 0, -4 },
-    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, 0 },      { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, 2, -4 },
-    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, 2, -4 },    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, 0 },
-    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, 0, -4 },     { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, 2, -4 },
-    { &object_taisou_Anim_0016C8, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_004DD4, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_00283C, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_007764, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_002C48, 1.0f, 0, -1, 0, 0 },
-    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, 0, 0 },        { &object_taisou_Anim_005790, 1.0f, 0, -1, 0, 0 },
-    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, 0, 0 },      { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, 2, 0 },
-    { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, 0, -4 }, { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, 2, 0 },
-    { &object_oF1d_map_Anim_014CE0, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_011D98, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_oF1d_map_Anim_012DE0, 2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_oF1d_map_Anim_012DE0, -2.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_003E28, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_oF1d_map_Anim_0039D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &object_taisou_Anim_0016C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_00283C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_007764, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_005EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_002C48, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_0031D8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_taisou_Anim_005790, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_oF1d_map_Anim_003650, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_hakugin_demo_Anim_002704, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_hakugin_demo_Anim_003378, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &object_oF1d_map_Anim_0135E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_oF1d_map_Anim_014CE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 u16 func_80BB16D0(EnGeg* this) {
@@ -368,7 +378,7 @@ void func_80BB1FCC(EnGeg* this, GlobalContext* globalCtx) {
 
 void func_80BB2020(EnGeg* this, GlobalContext* globalCtx) {
     gSegments[6] = PHYSICAL_TO_VIRTUAL2(globalCtx->objectCtx.status[this->unk_248].segment);
-    func_8013BC6C(&this->skelAnime, sAnimations, this->unk_4AC);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, this->unk_4AC);
 }
 
 s32 func_80BB2088(EnGeg* this, GlobalContext* globalCtx) {
@@ -432,20 +442,20 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
                 this->unk_49A = this->unk_49C[2];
                 this->unk_230 &= ~4;
             }
-            func_801518B0(globalCtx, this->unk_496, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             this->unk_230 |= 4;
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, globalCtx, 300.0f);
         }
     } else {
         this->unk_230 &= ~4;
-        if (gSaveContext.weekEventReg[35] & 0x40) {
+        if (gSaveContext.save.weekEventReg[35] & 0x40) {
             if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_230 & 8)) {
                 this->unk_496 = 0xD62;
-                func_801518B0(globalCtx, this->unk_496, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
                 this->unk_230 &= ~8;
                 this->actionFunc = func_80BB27D4;
             } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
@@ -453,15 +463,15 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
                 this->unk_230 |= 8;
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_230 & 8)) {
-            gSaveContext.weekEventReg[35] |= 0x40;
+            gSaveContext.save.weekEventReg[35] |= 0x40;
             this->unk_496 = 0xD5E;
             this->unk_49A = this->unk_49C[0];
-            func_801518B0(globalCtx, this->unk_496, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
             this->unk_230 &= ~8;
-            this->actor.flags &= ~0x10000;
+            this->actor.flags &= ~ACTOR_FLAG_10000;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
-            this->actor.flags |= 0x10000;
+            this->actor.flags |= ACTOR_FLAG_10000;
             func_800B8614(&this->actor, globalCtx, 300.0f);
             this->unk_230 |= 8;
         }
@@ -532,7 +542,7 @@ void func_80BB2520(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_496) {
             case 0xD5E:
                 this->unk_49A = this->unk_49C[1];
@@ -541,7 +551,7 @@ void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
 
             case 0xD61:
                 ActorCutscene_Stop(this->unk_498);
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_230 &= ~0x10;
                 this->actionFunc = func_80BB221C;
@@ -549,22 +559,22 @@ void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
         }
 
         this->unk_496 = func_80BB16D0(this);
-        func_801518B0(globalCtx, this->unk_496, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
     }
 }
 
 void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_496) {
             case 0xD63:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB221C;
                 break;
 
             case 0xD69:
                 this->unk_49A = this->unk_49C[6];
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB2520;
                 break;
@@ -572,7 +582,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
             case 0xD6D:
             case 0xD6F:
             case 0xD8A:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = func_80BB31B8;
                 break;
@@ -580,7 +590,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
             case 0xD72:
             case 0xD75:
             case 0xD8B:
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->unk_230 &= ~0x10;
                 this->unk_49A = this->unk_49C[7];
@@ -589,7 +599,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
 
             default:
                 this->unk_496 = func_80BB16D0(this);
-                func_801518B0(globalCtx, this->unk_496, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
                 break;
         }
     }
@@ -598,16 +608,16 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
 void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
     u8 sp27 = Message_GetState(&globalCtx->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_4AC].animationSeg);
+    s16 lastFrame = Animation_GetLastFrame(sAnimations[this->unk_4AC].animation);
 
     if (this->unk_4AC == 19) {
         if (curFrame == lastFrame) {
             this->unk_4AC = 6;
             func_80BB2020(this, globalCtx);
         }
-    } else if ((sp27 == 5) && func_80147624(globalCtx)) {
+    } else if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_496 == 0xD67) {
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->unk_49A = this->unk_49C[4];
             this->actionFunc = func_80BB2520;
@@ -619,17 +629,17 @@ void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB2A54(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_496 == 0xD65) {
             ActorCutscene_Stop(this->unk_498);
             this->unk_230 &= ~0x10;
             this->unk_244 = 65;
-            globalCtx->msgCtx.unk11F22 = 0x43;
+            globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
             this->actionFunc = func_80BB347C;
         } else {
             this->unk_496 = func_80BB16D0(this);
-            func_801518B0(globalCtx, this->unk_496, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
         }
     }
 }
@@ -645,7 +655,7 @@ void func_80BB2B1C(EnGeg* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCurrentIndex() != this->unk_49C[4]) {
         if (ActorCutscene_GetCanPlayNext(this->unk_498)) {
-            gSaveContext.weekEventReg[37] |= 8;
+            gSaveContext.save.weekEventReg[37] |= 8;
             if (this->actor.child != NULL) {
                 Actor_MarkForDeath(this->actor.child);
             }
@@ -694,7 +704,7 @@ void func_80BB2B1C(EnGeg* this, GlobalContext* globalCtx) {
 
 void func_80BB2E00(EnGeg* this, GlobalContext* globalCtx) {
     s16 sp2E = this->skelAnime.curFrame;
-    s16 sp2C = Animation_GetLastFrame(sAnimations[this->unk_4AC].animationSeg);
+    s16 sp2C = Animation_GetLastFrame(sAnimations[this->unk_4AC].animation);
 
     if (this->unk_4AC == 2) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
@@ -761,11 +771,11 @@ void func_80BB30B4(EnGeg* this, GlobalContext* globalCtx) {
         } else {
             this->unk_496 = 0xD6E;
         }
-        func_801518B0(globalCtx, this->unk_496, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
-        this->actor.flags &= ~0x10000;
+        this->actor.flags &= ~ACTOR_FLAG_10000;
     } else if (this->actor.xzDistToPlayer < 150.0f) {
-        this->actor.flags |= 0x10000;
+        this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8614(&this->actor, globalCtx, 150.0f);
     }
 }
@@ -787,7 +797,7 @@ void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        gSaveContext.weekEventReg[61] |= 1;
+        gSaveContext.save.weekEventReg[61] |= 1;
         if (getItemId == GI_MASK_DON_GERO) {
             this->unk_230 |= 0x40;
         }
@@ -799,7 +809,7 @@ void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx) {
 
 void func_80BB32AC(EnGeg* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, this->unk_496, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
@@ -850,7 +860,7 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad2;
     s32 sp34[] = { 0x3E, 0xF64 };
 
-    if (gSaveContext.weekEventReg[61] & 1) {
+    if (gSaveContext.save.weekEventReg[61] & 1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -894,7 +904,7 @@ void EnGeg_Update(Actor* thisx, GlobalContext* globalCtx) {
     func_80BB1FCC(this, globalCtx);
     func_80BB2088(this, globalCtx);
     func_80BB1C8C(this);
-    func_8013D9C8(globalCtx, &this->unk_238, &this->unk_232, 3);
+    SubS_FillLimbRotTables(globalCtx, this->unk_238, this->unk_232, ARRAY_COUNT(this->unk_238));
     func_80BB1D04(this);
     func_80BB178C(this, globalCtx);
 }

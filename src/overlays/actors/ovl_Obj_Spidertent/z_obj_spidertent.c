@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_spidertent.h"
+#include "objects/object_spidertent/object_spidertent.h"
 
-#define FLAGS 0x10000000
+#define FLAGS (ACTOR_FLAG_10000000)
 
 #define THIS ((ObjSpidertent*)thisx)
 
@@ -15,7 +16,13 @@ void ObjSpidertent_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+void func_80B307E0(ObjSpidertent* this);
+void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx);
+void func_80B30A2C(ObjSpidertent* this);
+void func_80B30A4C(ObjSpidertent* this, GlobalContext* globalCtx);
+void func_80B30AD4(ObjSpidertent* this);
+void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx);
+
 const ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
     ACTORCAT_BG,
@@ -28,118 +35,789 @@ const ActorInit Obj_Spidertent_InitVars = {
     (ActorFunc)ObjSpidertent_Draw,
 };
 
-// static ColliderTrisElementInit sTrisElementsInit[6] = {
-static ColliderTrisElementInit D_80B31060[6] = {
+static ColliderTrisElementInit sTrisElementsInit1[] = {
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 68.80000305175781f, 0.0f, 18.799999237060547f }, { 76.30000305175781f, 0.0f, -63.79999923706055f }, { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 68.80000305175781f, 0.0f, 18.799999237060547f },
+            { 76.30000305175781f, 0.0f, -63.79999923706055f },
+            { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 76.30000305175781f, 0.0f, -63.79999923706055f }, { 23.799999237060547f, 0.0f, -116.30000305175781f }, { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 76.30000305175781f, 0.0f, -63.79999923706055f },
+            { 23.799999237060547f, 0.0f, -116.30000305175781f },
+            { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 23.799999237060547f, 0.0f, -116.30000305175781f }, { -111.30000305175781f, 0.0f, -26.299999237060547f }, { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 23.799999237060547f, 0.0f, -116.30000305175781f },
+            { -111.30000305175781f, 0.0f, -26.299999237060547f },
+            { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { -111.30000305175781f, 0.0f, -26.299999237060547f }, { -81.30000305175781f, 0.0f, 78.80000305175781f }, { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { -111.30000305175781f, 0.0f, -26.299999237060547f },
+            { -81.30000305175781f, 0.0f, 78.80000305175781f },
+            { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { -81.30000305175781f, 0.0f, 78.80000305175781f }, { 23.799999237060547f, 0.0f, 108.80000305175781f }, { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { -81.30000305175781f, 0.0f, 78.80000305175781f },
+            { 23.799999237060547f, 0.0f, 108.80000305175781f },
+            { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 23.799999237060547f, 0.0f, 108.80000305175781f }, { 68.80000305175781f, 0.0f, 18.799999237060547f }, { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 23.799999237060547f, 0.0f, 108.80000305175781f },
+            { 68.80000305175781f, 0.0f, 18.799999237060547f },
+            { 1.2999999523162842f, 40.0f, -3.799999952316284f } } },
     },
 };
 
-// static ColliderTrisInit sTrisInit = {
-static ColliderTrisInit D_80B311C8 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    6, D_80B31060, // sTrisElementsInit,
+static ColliderTrisInit sTrisInit1 = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_TRIS,
+    },
+    6,
+    sTrisElementsInit1,
 };
 
-// static ColliderTrisElementInit sTrisElementsInit[6] = {
-static ColliderTrisElementInit D_80B311D8[6] = {
+static ColliderTrisElementInit sTrisElementsInit2[] = {
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 17.799999237060547f, 0.0f, 81.5999984741211f }, { 51.599998474121094f, 0.0f, 14.100000381469727f }, { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 17.799999237060547f, 0.0f, 81.5999984741211f },
+            { 51.599998474121094f, 0.0f, 14.100000381469727f },
+            { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { -60.900001525878906f, 0.0f, 59.099998474121094f }, { 17.799999237060547f, 0.0f, 81.5999984741211f }, { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { -60.900001525878906f, 0.0f, 59.099998474121094f },
+            { 17.799999237060547f, 0.0f, 81.5999984741211f },
+            { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { -83.4000015258789f, 0.0f, -19.700000762939453f }, { -60.900001525878906f, 0.0f, 59.099998474121094f }, { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { -83.4000015258789f, 0.0f, -19.700000762939453f },
+            { -60.900001525878906f, 0.0f, 59.099998474121094f },
+            { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 17.799999237060547f, 0.0f, -87.19999694824219f }, { -83.4000015258789f, 0.0f, -19.700000762939453f }, { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 17.799999237060547f, 0.0f, -87.19999694824219f },
+            { -83.4000015258789f, 0.0f, -19.700000762939453f },
+            { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 57.20000076293945f, 0.0f, -47.79999923706055f }, { 17.799999237060547f, 0.0f, -87.19999694824219f }, { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 57.20000076293945f, 0.0f, -47.79999923706055f },
+            { 17.799999237060547f, 0.0f, -87.19999694824219f },
+            { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
     },
     {
-        { ELEMTYPE_UNK4, { 0x00000000, 0x00, 0x00 }, { 0x00000800, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
-        { { { 51.599998474121094f, 0.0f, 14.100000381469727f }, { 57.20000076293945f, 0.0f, -47.79999923706055f }, { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
+        {
+            ELEMTYPE_UNK4,
+            { 0x00000000, 0x00, 0x00 },
+            { 0x00000800, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_NONE,
+        },
+        { { { 51.599998474121094f, 0.0f, 14.100000381469727f },
+            { 57.20000076293945f, 0.0f, -47.79999923706055f },
+            { 0.8999999761581421f, 30.0f, -2.799999952316284f } } },
     },
 };
 
-// static ColliderTrisInit sTrisInit = {
-static ColliderTrisInit D_80B31340 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_NONE, OC2_NONE, COLSHAPE_TRIS, },
-    6, D_80B311D8, // sTrisElementsInit,
+static ColliderTrisInit sTrisInit2 = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_TRIS,
+    },
+    6,
+    sTrisElementsInit2,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80B31418[] = {
+typedef struct {
+    /* 0x00 */ Gfx* unk_00;
+    /* 0x04 */ CollisionHeader* unk_04;
+    /* 0x08 */ ColliderTrisInit* unk_08;
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+} ObjSpidertentStruct;
+
+ObjSpidertentStruct D_80B31350[] = {
+    {
+        object_spidertent_DL_000070,
+        &object_spidertent_Colheader_0011AC,
+        &sTrisInit1,
+        0.9f,
+        1.3f,
+        40.0f,
+        -3.8f,
+        SQ(120.0f),
+        240.0f,
+        200.0f,
+    },
+    {
+        object_spidertent_DL_001250,
+        &object_spidertent_Colheader_00238C,
+        &sTrisInit2,
+        0.9f,
+        0.9f,
+        30.0f,
+        -2.8f,
+        SQ(88.0f),
+        176.0f,
+        168.0f,
+    },
+};
+
+typedef struct {
+    /* 0x00 */ f32 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ f32 unk_08;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ s8 unk_0E;
+    /* 0x0F */ s8 unk_0F;
+    /* 0x10 */ Color_RGBA8 unk_10;
+    /* 0x14 */ Color_RGBA8 unk_14;
+} ObjSpidertentStruct2;
+
+ObjSpidertentStruct2 D_80B313A0[] = {
+    {
+        -20.0f,
+        6.0f,
+        0.0f,
+        100,
+        14,
+        5,
+        { 255, 255, 160, 160 },
+        { 255, 0, 0, 0 },
+    },
+    {
+        0.0f,
+        4.0f,
+        1.2f,
+        80,
+        9,
+        3,
+        { 255, 255, 160, 120 },
+        { 255, 0, 0, 0 },
+    },
+    {
+        0.0f,
+        4.2f,
+        0.3f,
+        70,
+        12,
+        2,
+        { 255, 255, 160, 100 },
+        { 55, 0, 0, 0 },
+    },
+    {
+        0.0f,
+        3.0f,
+        0.0f,
+        20,
+        6,
+        2,
+        { 255, 100, 20, 80 },
+        { 255, 0, 0, 0 },
+    },
+};
+
+Vec3f D_80B31400 = { 1.0f, 0.0f, 0.0f };
+Vec3f D_80B3140C = { 0.0f, 1.0f, 0.0f };
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 200, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 1000, ICHAIN_STOP),
 };
 
+s32 func_80B2FB10(Vec3f* arg0, Vec3f* arg1) {
+    f32 temp_f0 = Math3D_LengthSquared(arg0);
+    f32 temp_f2;
+
+    if (temp_f0 < 9.999999e-9f) {
+        return false;
+    }
+    temp_f2 = 1.0f / sqrtf(temp_f0);
+    arg1->x = arg0->x * temp_f2;
+    arg1->y = arg0->y * temp_f2;
+    arg1->z = arg0->z * temp_f2;
+    return true;
+}
+
+s32 func_80B2FB94(Vec3f* arg0, f32 arg1, TriNorm* triNorm, Vec3f* arg3, f32* arg4) {
+    f32 temp_f0;
+    f32 temp_f0_2;
+    f32 temp_f16;
+    Vec3f sp48;
+    Vec3f sp3C;
+    f32 temp_f2;
+    f32 temp_f2_2;
+
+    temp_f0 = triNorm->plane.normal.x * arg1;
+    temp_f2 = triNorm->plane.normal.y * arg1;
+    temp_f16 = triNorm->plane.normal.z * arg1;
+
+    sp48.x = arg0->x + temp_f0;
+    sp48.y = arg0->y + temp_f2;
+    sp48.z = arg0->z + temp_f16;
+
+    sp3C.x = arg0->x - temp_f0;
+    sp3C.y = arg0->y - temp_f2;
+    sp3C.z = arg0->z - temp_f16;
+
+    if (Math3D_LineSegVsPlane(triNorm->plane.normal.x, triNorm->plane.normal.y, triNorm->plane.normal.z,
+                              triNorm->plane.originDist, &sp48, &sp3C, arg3, 0)) {
+        temp_f0_2 = Math3D_Vec3fDistSq(arg0, arg3);
+        temp_f2_2 = SQ(arg1) - temp_f0_2;
+        if (SQ(arg1) < temp_f0_2) {
+            return false;
+        }
+        *arg4 = sqrtf(temp_f2_2);
+        return true;
+    }
+    return false;
+}
+
+s32 func_80B2FC98(TriNorm* triNorm, Vec3f* arg1) {
+    Vec3f sp84;
+    Vec3f sp78;
+    Vec3f* vtx;
+    Vec3f* vtx2;
+    Vec3f sp4C[3];
+    s32 i;
+
+    if (triNorm->plane.normal.x > 0.5f) {
+        vtx = &triNorm->vtx[0];
+        vtx2 = &triNorm->vtx[2];
+
+        for (i = 0; i < ARRAY_COUNT(sp4C); i++, vtx = &triNorm->vtx[i]) {
+            sp84.x = 0.0f;
+            sp84.y = vtx->y - arg1->y;
+            sp84.z = vtx->z - arg1->z;
+
+            sp78.x = 0.0f;
+            sp78.y = vtx2->y - arg1->y;
+            sp78.z = vtx2->z - arg1->z;
+
+            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
+
+            vtx2 = vtx;
+        }
+
+        return ((sp4C[0].x >= 0.0f) && (sp4C[1].x >= 0.0f) && (sp4C[2].x >= 0.0f)) ||
+               ((sp4C[0].x < 0.0f) && (sp4C[1].x < 0.0f) && (sp4C[2].x < 0.0f));
+    } else if (triNorm->plane.normal.y > 0.5f) {
+        vtx = &triNorm->vtx[0];
+        vtx2 = &triNorm->vtx[2];
+
+        for (i = 0; i < ARRAY_COUNT(sp4C); i++, vtx = &triNorm->vtx[i]) {
+            sp84.x = vtx->x - arg1->x;
+            sp84.y = 0.0f;
+            sp84.z = vtx->z - arg1->z;
+
+            sp78.x = vtx2->x - arg1->x;
+            sp78.y = 0.0f;
+            sp78.z = vtx2->z - arg1->z;
+
+            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
+
+            vtx2 = vtx;
+        }
+
+        return ((sp4C[0].y >= 0.0f) && (sp4C[1].y >= 0.0f) && (sp4C[2].y >= 0.0f)) ||
+               ((sp4C[0].y < 0.0f) && (sp4C[1].y < 0.0f) && (sp4C[2].y < 0.0f));
+    } else {
+        vtx = &triNorm->vtx[0];
+        vtx2 = &triNorm->vtx[2];
+
+        for (i = 0; i < ARRAY_COUNT(sp4C); i++, vtx = &triNorm->vtx[i]) {
+            sp84.x = vtx->x - arg1->x;
+            sp84.y = vtx->y - arg1->y;
+            sp84.z = 0.0f;
+
+            sp78.x = vtx2->x - arg1->x;
+            sp78.y = vtx2->y - arg1->y;
+            sp78.z = 0.0f;
+
+            Math3D_CrossProduct(&sp84, &sp78, &sp4C[i]);
+
+            vtx2 = vtx;
+        }
+
+        return ((sp4C[0].z >= 0.0f) && (sp4C[1].z >= 0.0f) && (sp4C[2].z >= 0.0f)) ||
+               ((sp4C[0].z < 0.0f) && (sp4C[1].z < 0.0f) && (sp4C[2].z < 0.0f));
+    }
+}
+
+void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triNorm, Vec3f* arg3, f32 arg4, s32 arg5) {
+    ObjSpidertent* this = THIS;
+    ObjSpidertentStruct* spE0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
+    f32 temp_f24;
+    f32 phi_f22;
+    s32 i;
+    f32 temp_f0;
+    Vec3f spC4;
+    Vec3f spB8;
+    Vec3f spAC;
+    Vec3f spA0;
+    Vec3f sp94;
+    Vec3f sp88;
+    f32 temp_f2;
+    ObjSpidertentStruct2* sp80 = &D_80B313A0[arg5];
+
+    spAC.x = triNorm->plane.normal.x;
+    spAC.y = triNorm->plane.normal.y;
+    spAC.z = triNorm->plane.normal.z;
+
+    if (triNorm->plane.normal.y < 0.5f) {
+        Math3D_CrossProduct(&spAC, &D_80B3140C, &sp88);
+    } else {
+        Math3D_CrossProduct(&spAC, &D_80B31400, &sp88);
+    }
+
+    if (func_80B2FB10(&sp88, &spA0)) {
+        phi_f22 = 0.0f;
+        temp_f24 = (2 * M_PI) / sp80->unk_0F;
+
+        for (i = 0; i < sp80->unk_0F; i++) {
+            temp_f2 = (Rand_ZeroOne() * temp_f24) + phi_f22;
+            Matrix_InsertRotationAroundUnitVector_f(temp_f2, &spAC, MTXMODE_NEW);
+            Matrix_MultiplyVector3fByState(&spA0, &sp94);
+
+            if (arg5 == 0) {
+                spC4.x = (sp94.x * arg4) + arg3->x;
+                spC4.y = (sp94.y * arg4) + arg3->y;
+                spC4.z = (sp94.z * arg4) + arg3->z;
+            } else {
+                temp_f0 = Rand_ZeroOne();
+                temp_f0 = (1.0f - SQ(temp_f0)) * arg4;
+                spC4.x = (sp94.x * temp_f0) + arg3->x;
+                spC4.y = (sp94.y * temp_f0) + arg3->y;
+                spC4.z = (sp94.z * temp_f0) + arg3->z;
+            }
+
+            if ((Math3D_Vec3fDistSq(&spC4, &this->dyna.actor.world.pos) < spE0->unk_1C) &&
+                func_80B2FC98(triNorm, &spC4)) {
+                spB8.x = sp80->unk_08 * sp94.x;
+                spB8.y = sp80->unk_08 * sp94.y;
+                spB8.z = sp80->unk_08 * sp94.z;
+
+                EffectSsDeadDb_Spawn(globalCtx, &spC4, &spB8, &gZeroVec3f, &sp80->unk_10, &sp80->unk_14, sp80->unk_0C,
+                                     0, sp80->unk_0E);
+            }
+
+            phi_f22 += temp_f24;
+        }
+    }
+}
+
+void func_80B30410(ObjSpidertent* this, Vec3f* arg1) {
+    s32 i;
+
+    Math_Vec3f_Copy(&this->unk_3A4, arg1);
+    this->unk_3C2 = 255;
+    this->unk_3C3 = 255;
+    this->unk_3C4 = 255;
+    this->unk_3C5 = 255;
+    for (i = 0; i < ARRAY_COUNT(D_80B313A0); i++) {
+        this->unk_3B0[i] = D_80B313A0[i].unk_00;
+    }
+    this->unk_3C0 = 0;
+}
+
+s32 func_80B30480(ObjSpidertent* this, GlobalContext* globalCtx, Vec3f* arg2) {
+    Player* player = GET_PLAYER(globalCtx);
+    TriNorm* triNorm;
+    s32 i;
+    Vec3f sp58;
+    f32 sp54;
+
+    if (player->itemActionParam == 7) {
+        if (player->unk_B28 > 0) {
+            for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+                triNorm = &this->collider.elements[i].dim;
+
+                if (func_80B2FB94(&player->swordInfo[0].tip, 6.0f, triNorm, &sp58, &sp54) &&
+                    func_80B2FC98(triNorm, &sp58)) {
+                    break;
+                }
+            }
+
+            if (i < ARRAY_COUNT(this->colliderElements)) {
+                Math_Vec3f_Copy(arg2, &player->swordInfo[0].tip);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    ObjSpidertent* this = THIS;
+    s32 temp_s1 = OBJSPIDERTENT_GET_1(&this->dyna.actor);
+    ObjSpidertentStruct* ptr = &D_80B31350[temp_s1];
+    ColliderTrisElementInit* element;
+    Vec3f sp70[3];
+    Vec3f sp64;
+    s32 i, j;
+
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+    DynaPolyActor_Init(&this->dyna, 0);
+    Collider_InitTris(globalCtx, &this->collider);
+
+    if (Flags_GetSwitch(globalCtx, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
+        Actor_MarkForDeath(&this->dyna.actor);
+        return;
+    }
+
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, ptr->unk_04);
+    Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, D_80B31350[temp_s1].unk_08, this->colliderElements);
+    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+
+    sp64.x = ptr->unk_10 * 1.2f;
+    sp64.y = ptr->unk_10 * 1.2f;
+    sp64.z = ptr->unk_10 * 1.2f;
+
+    Matrix_MultiplyVector3fByState(&sp64, &this->dyna.actor.focus.pos);
+    Matrix_InsertTranslation(ptr->unk_10, ptr->unk_14 + 5.0f, ptr->unk_18, MTXMODE_APPLY);
+    Matrix_Scale(ptr->unk_0C, ptr->unk_0C, ptr->unk_0C, MTXMODE_APPLY);
+    Matrix_InsertTranslation(-ptr->unk_10, -ptr->unk_14, -ptr->unk_18, MTXMODE_APPLY);
+
+    for (i = 0; i < 6; i++) {
+        element = &ptr->unk_08->elements[i];
+
+        for (j = 0; j < ARRAY_COUNT(sp70); j++) {
+            Matrix_MultiplyVector3fByState(&element->dim.vtx[j], &sp70[j]);
+        }
+
+        Collider_SetTrisVertices(&this->collider, i, &sp70[0], &sp70[1], &sp70[2]);
+    }
+
+    func_80B307E0(this);
+}
+
+void ObjSpidertent_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSpidertent* this = THIS;
+
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyTris(globalCtx, &this->collider);
+}
+
+void func_80B307E0(ObjSpidertent* this) {
+    this->unk_3C2 = 255;
+    this->unk_3C3 = 255;
+    this->unk_3C4 = 255;
+    this->unk_3C5 = 255;
+    this->actionFunc = func_80B30808;
+}
+
+void func_80B30808(ObjSpidertent* this, GlobalContext* globalCtx) {
+    s32 phi_s4;
+    s32 i;
+    ObjSpidertentStruct* ptr2 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
+    Vec3f sp70;
+    Vec3s* hitPos;
+    ColliderTrisElement* ptr;
+    f32 temp_f0;
+    s32 phi_s1;
+    Vec3f sp54;
+    f32 phi_f20;
+    s32 phi_s0 = false;
+
+    if (this->collider.base.acFlags & AC_HIT) {
+        Player* player = GET_PLAYER(globalCtx);
+
+        this->collider.base.acFlags &= ~AC_HIT;
+        phi_s1 = 0;
+        phi_s4 = -1;
+        phi_f20 = FLT_MAX;
+
+        for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+            ptr = &this->collider.elements[i];
+
+            if (ptr->info.bumperFlags & BUMP_HIT) {
+                sp54.x = ptr->info.bumper.hitPos.x;
+                sp54.y = ptr->info.bumper.hitPos.y;
+                sp54.z = ptr->info.bumper.hitPos.z;
+
+                temp_f0 = Math3D_Vec3fDistSq(&sp54, &player->actor.world.pos);
+                if (temp_f0 < phi_f20) {
+                    phi_f20 = temp_f0;
+                    phi_s4 = i;
+                }
+            }
+        }
+
+        if (phi_s4 >= 0) {
+            hitPos = &this->collider.elements[phi_s4].info.bumper.hitPos;
+
+            sp70.x = hitPos->x;
+            sp70.y = hitPos->y;
+            sp70.z = hitPos->z;
+        } else {
+            Math_Vec3f_Copy(&sp70, &this->dyna.actor.world.pos);
+        }
+        phi_s0 = true;
+    } else if ((this->dyna.actor.xzDistToPlayer < ptr2->unk_24) && func_80B30480(this, globalCtx, &sp70)) {
+        phi_s0 = true;
+    }
+
+    if (phi_s0) {
+        func_80B30410(this, &sp70);
+        func_80B30A2C(this);
+    } else {
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
+
+void func_80B30A2C(ObjSpidertent* this) {
+    this->dyna.actor.flags |= ACTOR_FLAG_10;
+    this->actionFunc = func_80B30A4C;
+}
+
+void func_80B30A4C(ObjSpidertent* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
+        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        if (this->dyna.actor.cutscene >= 0) {
+            func_800B7298(globalCtx, &this->dyna.actor, 1);
+        }
+        Flags_SetSwitch(globalCtx, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
+        func_80B30AD4(this);
+    } else {
+        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    }
+}
+
+void func_80B30AD4(ObjSpidertent* this) {
+    this->unk_3C1 = 80;
+    this->unk_3C6 = 0;
+    this->unk_3C7 = 0;
+    this->actionFunc = func_80B30AF8;
+}
+
+#ifdef NON_MATCHING
+void func_80B30AF8(ObjSpidertent* this, GlobalContext* globalCtx) {
+    ObjSpidertentStruct* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
+    TriNorm* triNorm;
+    s32 i, j;
+    ObjSpidertentStruct2* ptr;
+    Vec3f sp60;
+    f32 sp5C;
+
+    this->unk_3C6++;
+
+    if (this->unk_3C6 < 40) {
+        if (this->unk_3C2 > 2) {
+            this->unk_3C2 -= 2;
+        } else {
+            this->unk_3C2 = 0;
+        }
+
+        if (this->unk_3C3 > 5) {
+            this->unk_3C3 -= 5;
+        } else {
+            this->unk_3C3 = 0;
+        }
+
+        if (this->unk_3C4 > 5) {
+            this->unk_3C4 -= 5;
+        } else {
+            this->unk_3C4 = 0;
+        }
+
+        if (this->unk_3C5 > 1) {
+            this->unk_3C5--;
+        } else {
+            this->unk_3C5 = 0;
+        }
+    } else {
+        if (this->unk_3C2 > 4) {
+            this->unk_3C2 -= 4;
+        } else {
+            this->unk_3C2 = 0;
+        }
+
+        if (this->unk_3C3 < 255) {
+            this->unk_3C3++;
+        } else {
+            this->unk_3C3 = 255;
+        }
+
+        if (this->unk_3C4 < 255) {
+            this->unk_3C4++;
+        } else {
+            this->unk_3C4 = 255;
+        }
+
+        if (this->unk_3C5 > 10) {
+            this->unk_3C5 -= 10;
+        } else {
+            this->unk_3C5 = 0;
+        }
+    }
+
+    this->unk_3C1--;
+    if (this->unk_3C1 == 40) {
+        func_800C62BC(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    }
+
+    if (this->unk_3C1 >= 0x20) {
+        if (this->unk_3C7 > 0) {
+            this->unk_3C7--;
+        } else if (this->unk_3C1 >= 0x33) {
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_EXTINCT);
+            this->unk_3C7 = Rand_S16Offset(2, 2);
+        } else {
+            SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->dyna.actor.world.pos, 11, NA_SE_EN_EXTINCT);
+            this->unk_3C7 = Rand_S16Offset(2, 4);
+        }
+
+        for (j = 0; j < ARRAY_COUNT(this->unk_3B0); j++) {
+            this->unk_3B0[j] += D_80B313A0[j].unk_04;
+            if (temp_s0->unk_20 < this->unk_3B0[j]) {
+                this->unk_3C0 |= (1 << j);
+            }
+        }
+
+        for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
+            triNorm = &this->collider.elements[i].dim;
+
+            for (j = 0; j < ARRAY_COUNT(this->unk_3B0); j++) {
+                if (!(this->unk_3B0[j] < 5.0f) && !(this->unk_3C0 & (1 << j)) &&
+                    func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
+                    func_80B300F4(this, globalCtx, triNorm, &sp60, sp5C, j);
+                }
+            }
+        }
+    } else if (this->unk_3C1 <= 0) {
+        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        Actor_MarkForDeath(&this->dyna.actor);
+    }
+}
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AF8.s")
 #endif
 
-extern ColliderTrisElementInit D_80B31060[6];
-extern ColliderTrisInit D_80B311C8;
-extern ColliderTrisElementInit D_80B311D8[6];
-extern ColliderTrisInit D_80B31340;
-extern InitChainEntry D_80B31418[];
+void ObjSpidertent_Update(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSpidertent* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B2FB10.s")
+    this->actionFunc(this, globalCtx);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B2FB94.s")
+void ObjSpidertent_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjSpidertent* this = THIS;
+    s32 params = OBJSPIDERTENT_GET_1(&this->dyna.actor);
+    s32 temp_f18 = this->unk_3C5 * (29.0f / 51);
+    Gfx* gfx;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B2FC98.s")
+    OPEN_DISPS(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B300F4.s")
+    gfx = POLY_XLU_DISP;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30410.s")
+    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+    gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gDPSetPrimColor(gfx++, 0, 0xFF, this->unk_3C2, this->unk_3C3, this->unk_3C4, temp_f18);
+    gSPDisplayList(gfx++, D_80B31350[params].unk_00);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30480.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Init.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Destroy.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B307E0.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30808.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30A2C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30A4C.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AD4.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AF8.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Update.s")
-
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/ObjSpidertent_Draw.s")
+    POLY_XLU_DISP = gfx;
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}

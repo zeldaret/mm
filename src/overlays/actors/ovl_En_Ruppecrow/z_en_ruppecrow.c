@@ -7,7 +7,7 @@
 #include "z_en_ruppecrow.h"
 #include "objects/object_crow/object_crow.h"
 
-#define FLAGS 0x00004030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000)
 
 #define THIS ((EnRuppecrow*)thisx)
 
@@ -225,7 +225,7 @@ void EnRuppecrow_ShatterIce(EnRuppecrow* this, GlobalContext* globalCtx) {
     if (this->currentEffect == ENRUPPECROW_EFFECT_ICE) {
         this->currentEffect = ENRUPPECROW_EFFECT_NONE;
         this->unk_2C8 = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ENRUPPECROW_LIMB_POS_COUNT, 0x2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0x2, 0.2f, 0.2f);
     }
 }
 
@@ -285,7 +285,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
-            this->rupees[rupeeIndex]->actor.flags |= 0x10;
+            this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
         } else {
             rupee = (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00,
                                            this->actor.world.pos.x + xOffset, this->actor.world.pos.y,
@@ -296,7 +296,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, GlobalContext* globalCtx) {
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
             rupee = this->rupees[rupeeIndex];
             rupee->unk152 = 60;
-            this->rupees[rupeeIndex]->actor.flags |= 0x10;
+            this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
         }
     } else if (this->rupeeIndex == 19) {
         rupee =
@@ -308,7 +308,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
-        this->rupees[rupeeIndex]->actor.flags |= 0x10;
+        this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
     } else {
         rupee =
             (EnItem00*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_ITEM00, this->actor.world.pos.x + xOffset,
@@ -319,7 +319,7 @@ void EnRuppecrow_SpawnRupee(EnRuppecrow* this, GlobalContext* globalCtx) {
         Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_RUPY_FALL);
         rupee = this->rupees[rupeeIndex];
         rupee->unk152 = 60;
-        this->rupees[rupeeIndex]->actor.flags |= 0x10;
+        this->rupees[rupeeIndex]->actor.flags |= ACTOR_FLAG_10;
     }
 
     this->rupeeIndex++;
@@ -367,7 +367,7 @@ void EnRuppecrow_UpdatePosition(EnRuppecrow* this, GlobalContext* globalCtx) {
 s32 EnRuppecrow_CheckPlayedMatchingSong(GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (globalCtx->msgCtx.unk1202A == 0x3) {
+    if (globalCtx->msgCtx.ocarinaMode == 0x3) {
         switch (player->transformation) {
             case PLAYER_FORM_DEKU:
                 if (globalCtx->msgCtx.unk1202E == OCARINA_SONG_SONATA) {
@@ -440,7 +440,7 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
 
     this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &object_crow_Anim_0000F0, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
+    Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, 0x1, -3.0f);
 
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
@@ -465,12 +465,12 @@ void EnRuppecrow_HandleDeath(EnRuppecrow* this) {
     }
 
     Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x0, 0x28);
-    if (this->actor.flags & 0x8000) {
+    if (this->actor.flags & ACTOR_FLAG_8000) {
         this->actor.speedXZ = 0.0f;
     }
 
     this->collider.base.acFlags &= ~AC_ON;
-    this->actor.flags |= 0x10;
+    this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = EnRuppecrow_FallToDespawn;
 }
 
@@ -481,7 +481,7 @@ void EnRuppecrow_UpdateDamage(EnRuppecrow* this, GlobalContext* globalCtx) {
 
         if (this->actor.colChkInfo.damageEffect != 0x1) {
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~0x1;
+            this->actor.flags &= ~ACTOR_FLAG_1;
             Enemy_StartFinishingBlow(globalCtx, &this->actor);
             EnRuppecrow_HandleDeath(this);
         }
@@ -602,7 +602,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, GlobalContext* globalCtx) {
     }
 
     this->actor.colorFilterTimer = 40;
-    if (!(this->actor.flags & 0x8000)) {
+    if (!(this->actor.flags & ACTOR_FLAG_8000)) {
         if (this->currentEffect != ENRUPPECROW_EFFECT_ICE) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
             this->actor.shape.rot.z += 0x1780;
@@ -627,8 +627,8 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     EnRuppecrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_crow_Skel_0010C0, &object_crow_Anim_0000F0, this->joinTable,
-                       this->morphTable, ENRUPPECROW_LIMB_COUNT);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->joinTable, this->morphTable,
+                       OBJECT_CROW_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     Collider_InitJntSph(globalCtx, &this->collider);
@@ -637,9 +637,9 @@ void EnRuppecrow_Init(Actor* thisx, GlobalContext* globalCtx2) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.flags |= 0x2000000;
+    this->actor.flags |= ACTOR_FLAG_2000000;
 
-    this->path = func_8013D648(globalCtx, ENRUPPECROW_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENRUPPECROW_GET_PATH(&this->actor), 0x3F);
     if (this->path != NULL) {
         this->actionFunc = EnRuppecrow_HandleSong;
     } else {

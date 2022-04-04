@@ -5,8 +5,9 @@
  */
 
 #include "z_mir_ray3.h"
+#include "objects/object_mir_ray/object_mir_ray.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((MirRay3*)thisx)
 
@@ -15,7 +16,6 @@ void MirRay3_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void MirRay3_Update(Actor* thisx, GlobalContext* globalCtx);
 void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Mir_Ray3_InitVars = {
     ACTOR_MIR_RAY3,
     ACTORCAT_ITEMACTION,
@@ -28,39 +28,398 @@ const ActorInit Mir_Ray3_InitVars = {
     (ActorFunc)MirRay3_Draw,
 };
 
-// static ColliderQuadInit sQuadInit = {
-static ColliderQuadInit D_80B9F420 = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_PLAYER, AC_NONE, OC1_NONE, OC2_NONE, COLSHAPE_QUAD, },
-    { ELEMTYPE_UNK0, { 0x00200000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_ON | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_NONE, },
+static ColliderQuadInit sQuadInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_NONE,
+        COLSHAPE_QUAD,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00200000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_NONE,
+    },
     { { { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f } } },
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B9F470 = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER, OC1_NONE, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x00200000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_NONE, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER | AC_TYPE_OTHER,
+        OC1_NONE,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00200000, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_NONE,
+    },
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
+typedef struct {
+    /* 0x00 */ Vec3f unk_00;
+    /* 0x0C */ MtxF unk_0C;
+    /* 0x4C */ CollisionPoly* unk_4C;
+    /* 0x50 */ u8 unk_50;
+} MirRay3Struct; // size = 0x54
+
+void MirRay3_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    MirRay3* this = THIS;
+
+    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
+    Actor_SetScale(&this->actor, 1.0f);
+
+    this->unk_218[0].x = -536.0f;
+    this->unk_218[0].y = -939.0f;
+
+    this->unk_218[1].x = -1690.0f;
+    this->unk_218[1].y = 0.0f;
+
+    this->unk_218[2].x = -536.0f;
+    this->unk_218[2].y = 938.0f;
+
+    this->unk_218[3].x = 921.0f;
+    this->unk_218[3].y = 0.0f;
+
+    this->unk_218[4].x = 758.0f;
+    this->unk_218[4].y = 800.0f;
+
+    this->unk_218[5].x = 758.0f;
+    this->unk_218[5].y = -800.0f;
+
+    Collider_InitQuad(globalCtx, &this->colliderQuad);
+    Collider_SetQuad(globalCtx, &this->colliderQuad, &this->actor, &sQuadInit);
+    Collider_InitCylinder(globalCtx, &this->colliderCylinder);
+    Collider_SetCylinder(globalCtx, &this->colliderCylinder, &this->actor, &sCylinderInit);
+    this->actor.world.rot.x = this->actor.shape.rot.x = 0;
+}
+
+void MirRay3_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    MirRay3* this = THIS;
+
+    Collider_DestroyQuad(globalCtx, &this->colliderQuad);
+    Collider_DestroyCylinder(globalCtx, &this->colliderCylinder);
+}
+
+void MirRay3_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad[2];
+    MirRay3* this = THIS;
+    Player* player = GET_PLAYER(globalCtx);
+
+    this->unk_210 &= ~1;
+
+    if (this->unk_214 > 0.5f) {
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->colliderQuad.base);
+    }
+
+    this->unk_210 &= ~2;
+
+    if (func_8012405C(globalCtx)) {
+        if (this->colliderCylinder.base.acFlags & AC_HIT) {
+            this->unk_210 |= 2;
+        }
+        this->actor.world.pos.x = player->shieldMf.mf[3][0];
+        this->actor.world.pos.y = player->shieldMf.mf[3][1];
+        this->actor.world.pos.z = player->shieldMf.mf[3][2];
+        Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
+        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->colliderCylinder.base);
+    }
+
+    if (this->unk_214 > 0.1f) {
+        func_800B8F98(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
+    }
+
+    Math_ApproachZeroF(&this->unk_214, 1.0f, 0.1f);
+}
+
+void func_80B9E544(MirRay3* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    MtxF* shieldMtx = &player->shieldMf;
+    f32 temp_f0;
+
+    if (this->unk_210 & 2) {
+        temp_f0 = sqrtf(SQ(shieldMtx->mf[2][0]) + SQ(shieldMtx->mf[2][1]) + SQ(shieldMtx->mf[2][2]));
+        if (temp_f0 == 0.0f) {
+            this->unk_260 = 1.0f;
+        } else {
+            this->unk_260 = 1.0f / temp_f0;
+        }
+        Math_ApproachF(&this->unk_214, 1.0f, 0.5f, 0.25f);
+    }
+}
+
+void func_80B9E5F4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) {
+    Player* player = GET_PLAYER(globalCtx);
+    MtxF* shieldMtx = &player->shieldMf;
+    s32 i;
+    Vec3f sp88;
+    Vec3f sp7C;
+    Vec3f sp70;
+    CollisionPoly* sp6C;
+    f32 sp60[3];
+
+    sp60[0] = -(shieldMtx->mf[2][0] * this->unk_260) * this->unk_214 * 400.0f;
+    sp60[1] = -(shieldMtx->mf[2][1] * this->unk_260) * this->unk_214 * 400.0f;
+    sp60[2] = -(shieldMtx->mf[2][2] * this->unk_260) * this->unk_214 * 400.0f;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_218); i++) {
+        sp88.x = (shieldMtx->mf[3][0] + (this->unk_218[i].x * shieldMtx->mf[0][0])) +
+                 (this->unk_218[i].y * shieldMtx->mf[1][0]);
+        sp88.y = (shieldMtx->mf[3][1] + (this->unk_218[i].x * shieldMtx->mf[0][1])) +
+                 (this->unk_218[i].y * shieldMtx->mf[1][1]);
+        sp88.z = (shieldMtx->mf[3][2] + (this->unk_218[i].x * shieldMtx->mf[0][2])) +
+                 (this->unk_218[i].y * shieldMtx->mf[1][2]);
+
+        sp7C.x = sp60[0] + sp88.x;
+        sp7C.y = sp60[1] + sp88.y;
+        sp7C.z = sp60[2] + sp88.z;
+
+        if (BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp88, &sp7C, &sp70, &sp6C, true)) {
+            ptr[i].unk_4C = sp6C;
+        } else {
+            ptr[i].unk_4C = NULL;
+        }
+    }
+}
+
+void func_80B9E7D0(MirRay3Struct* ptr) {
+    s32 i;
+    s32 j;
+
+    for (i = 0; i < 6; i++) {
+        for (j = i + 1; j < 6; j++) {
+            if ((ptr[i].unk_4C != NULL) && (ptr[j].unk_4C != NULL)) {
+                if ((ABS(ptr[i].unk_4C->normal.x - ptr[j].unk_4C->normal.x) < 100) &&
+                    (ABS(ptr[i].unk_4C->normal.y - ptr[j].unk_4C->normal.y) < 100) &&
+                    (ABS(ptr[i].unk_4C->normal.z - ptr[j].unk_4C->normal.z) < 100) &&
+                    (ptr[i].unk_4C->dist == ptr[j].unk_4C->dist)) {
+                    ptr[j].unk_4C = NULL;
+                }
+            }
+        }
+    }
+}
+
+#ifdef NON_MATCHING
+void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr) {
+    Player* player = GET_PLAYER(globalCtx);
+    s32 i;
+    MtxF* shieldMf = &player->shieldMf;
+    Vec3f sp140;
+    Vec3f sp134;
+    Vec3f sp128;
+    Vec3f sp11C;
+    Vec3f sp110;
+    Vec3f sp104;
+    f32 spF8[3];
+    f32 spEC[3];
+    f32 temp_f0;
+    f32 temp_f26;
+    f32 temp_f2;
+    Vec3f spD4;
+    Vec3f spC8;
+    CollisionPoly* spC4;
+
+    spF8[0] = -(shieldMf->mf[2][0] * this->unk_260) * this->unk_214 * 400.0f;
+    spF8[1] = -(shieldMf->mf[2][1] * this->unk_260) * this->unk_214 * 400.0f;
+    spF8[2] = -(shieldMf->mf[2][2] * this->unk_260) * this->unk_214 * 400.0f;
+
+    sp140.x = shieldMf->mf[3][0];
+    sp140.y = shieldMf->mf[3][1];
+    sp140.z = shieldMf->mf[3][2];
+
+    sp134.x = spF8[0] + sp140.x;
+    sp134.y = spF8[1] + sp140.y;
+    sp134.z = spF8[2] + sp140.z;
+
+    temp_f26 = this->unk_214 * 400.0f;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_218); i++) {
+        if (ptr[i].unk_4C != NULL) {
+            spEC[0] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.x);
+            spEC[1] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.y);
+            spEC[2] = COLPOLY_GET_NORMAL(ptr[i].unk_4C->normal.z);
+
+            if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp140, &sp134, &sp128, true)) {
+                ptr[i].unk_00.x = sp128.x;
+                ptr[i].unk_00.y = sp128.y;
+                ptr[i].unk_00.z = sp128.z;
+
+                temp_f0 = sqrtf(SQ(sp128.x - sp140.x) + SQ(sp128.y - sp140.y) + SQ(sp128.z - sp140.z));
+
+                if (temp_f0 < (temp_f26 * 0.9f)) {
+                    ptr[i].unk_50 = 0xFF;
+                } else if (temp_f26 < temp_f0) {
+                    ptr[i].unk_50 = 0;
+                } else {
+                    ptr[i].unk_50 = (s32)((10.0f - ((10.0f / temp_f26) * temp_f0)) * 255.0f);
+                }
+
+                sp11C.x = (shieldMf->mf[0][0] * 100.0f) + sp140.x;
+                sp11C.y = (shieldMf->mf[0][1] * 100.0f) + sp140.y;
+                sp11C.z = (shieldMf->mf[0][2] * 100.0f) + sp140.z;
+
+                sp110.x = (spF8[0] * 4.0f) + sp11C.x;
+                sp110.y = (spF8[1] * 4.0f) + sp11C.y;
+                sp110.z = (spF8[2] * 4.0f) + sp11C.z;
+
+                ptr[i].unk_0C.mf[0][0] = ptr[i].unk_0C.mf[1][1] = ptr[i].unk_0C.mf[2][2] = ptr[i].unk_0C.mf[3][3] =
+                    1.0f;
+
+                ptr[i].unk_0C.mf[0][1] = ptr[i].unk_0C.mf[0][2] = ptr[i].unk_0C.mf[0][3] = ptr[i].unk_0C.mf[1][0] =
+                    ptr[i].unk_0C.mf[1][2] = ptr[i].unk_0C.mf[1][3] = ptr[i].unk_0C.mf[2][0] = ptr[i].unk_0C.mf[2][1] =
+                        ptr[i].unk_0C.mf[2][3] = ptr[i].unk_0C.mf[3][0] = ptr[i].unk_0C.mf[3][1] =
+                            ptr[i].unk_0C.mf[3][2] = 0.0f;
+
+                if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp11C, &sp110, &sp104,
+                                          true)) {
+                    ptr[i].unk_0C.mf[0][0] = sp104.x - sp128.x;
+                    ptr[i].unk_0C.mf[0][1] = sp104.y - sp128.y;
+                    ptr[i].unk_0C.mf[0][2] = sp104.z - sp128.z;
+                }
+
+                sp11C.x = (shieldMf->mf[1][0] * 100.0f) + sp140.x;
+                sp11C.y = (shieldMf->mf[1][1] * 100.0f) + sp140.y;
+                sp11C.z = (shieldMf->mf[1][2] * 100.0f) + sp140.z;
+
+                sp110.x = (spF8[0] * 4.0f) + sp11C.x;
+                sp110.y = (spF8[1] * 4.0f) + sp11C.y;
+                sp110.z = (spF8[2] * 4.0f) + sp11C.z;
+
+                if (Math3D_LineSegVsPlane(spEC[0], spEC[1], spEC[2], ptr[i].unk_4C->dist, &sp11C, &sp110, &sp104,
+                                          true)) {
+                    ptr[i].unk_0C.mf[1][0] = sp104.x - sp128.x;
+                    ptr[i].unk_0C.mf[1][1] = sp104.y - sp128.y;
+                    ptr[i].unk_0C.mf[1][2] = sp104.z - sp128.z;
+                }
+            } else {
+                ptr[i].unk_4C = NULL;
+            }
+        }
+    }
+
+    temp_f2 = this->unk_214 * 400.0f;
+
+    spF8[0] = -(this->unk_260 * shieldMf->mf[2][0]);
+    spF8[1] = -(this->unk_260 * shieldMf->mf[2][1]);
+    spF8[2] = -(this->unk_260 * shieldMf->mf[2][2]);
+
+    sp134.x = (spF8[0] * temp_f2) + sp140.x;
+    sp134.y = (spF8[1] * temp_f2) + sp140.y;
+    sp134.z = (spF8[2] * temp_f2) + sp140.z;
+
+    if (!BgCheck_AnyLineTest1(&globalCtx->colCtx, &sp140, &sp134, &sp128, &spC4, 1)) {
+        Math_Vec3f_Copy(&sp128, &sp134);
+    }
+
+    sp128.x += spF8[0] * 5.0f;
+    sp128.y += spF8[1] * 5.0f;
+    sp128.z += spF8[2] * 5.0f;
+
+    spD4.x = (shieldMf->mf[0][0] * 300.0f) + sp140.x;
+    spD4.y = (shieldMf->mf[0][1] * 300.0f) + sp140.y;
+    spD4.z = (shieldMf->mf[0][2] * 300.0f) + sp140.z;
+
+    spC8.x = (shieldMf->mf[0][0] * 300.0f) + sp128.x;
+    spC8.y = (shieldMf->mf[0][1] * 300.0f) + sp128.y;
+    spC8.z = (shieldMf->mf[0][2] * 300.0f) + sp128.z;
+
+    Collider_SetQuadVertices(&this->colliderQuad, &spD4, &sp140, &spC8, &sp128);
+}
+#else
+void func_80B9E8D4(MirRay3* this, GlobalContext* globalCtx, MirRay3Struct* ptr);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E8D4.s")
 #endif
 
-extern ColliderQuadInit D_80B9F420;
-extern ColliderCylinderInit D_80B9F470;
+void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad[2];
+    MirRay3* this = THIS;
+    MirRay3Struct sp8C[6];
+    Player* player = GET_PLAYER(globalCtx);
+    s32 i;
+    f32 temp;
+    u16 phi_a0;
 
-extern UNK_TYPE D_060003F8;
+    if (!(this->unk_210 & 1) && func_8012405C(globalCtx)) {
+        Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
+        func_80B9E544(this, globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Init.s")
+        if (this->unk_214 <= 0.1f) {
+            return;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Destroy.s")
+        OPEN_DISPS(globalCtx->state.gfxCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Update.s")
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        Matrix_Scale(1.0f, 1.0f, this->unk_214, MTXMODE_APPLY);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E544.s")
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E5F4.s")
+        if (MIRRAY3_GET_F(&this->actor) == MIRRAY3_F_1) {
+            phi_a0 = gSaveContext.save.time;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E7D0.s")
+            if (phi_a0 > CLOCK_TIME(12, 0)) {
+                phi_a0 = 0xFFFF - phi_a0;
+            }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E8D4.s")
+            temp = (phi_a0 * (1.0f / 0x8000));
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x78, 255, 255, 255, (u8)(s8)(100 * this->unk_214));
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/MirRay3_Draw.s")
+            gDPSetEnvColor(POLY_XLU_DISP++, 218, 225, (u8)((100.0f * temp) + 105.0f), 255);
+        } else {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x78, 255, 255, 255, (u8)(s8)(100 * this->unk_214));
+            gDPSetEnvColor(POLY_XLU_DISP++, 218, 225, 205, 255);
+        }
+
+        AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_mir_ray_Matanimheader_0003F8));
+
+        gSPDisplayList(POLY_XLU_DISP++, object_mir_ray_DL_000168);
+
+        func_80B9E5F4(this, globalCtx, sp8C);
+        func_80B9E7D0(sp8C);
+        func_80B9E8D4(this, globalCtx, sp8C);
+
+        if (sp8C[0].unk_4C == NULL) {
+            sp8C[0].unk_50 = 0;
+        }
+
+        for (i = 1; i < ARRAY_COUNT(sp8C); i++) {
+            if ((sp8C[i].unk_4C != NULL) && (sp8C[0].unk_50 < sp8C[i].unk_50)) {
+                sp8C[0].unk_50 = sp8C[i].unk_50;
+            }
+        }
+
+        gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_DECAL2);
+
+        for (i = 0; i < ARRAY_COUNT(sp8C); i++) {
+            if (sp8C[i].unk_4C != NULL) {
+                Matrix_InsertTranslation(sp8C[i].unk_00.x, sp8C[i].unk_00.y, sp8C[i].unk_00.z, MTXMODE_NEW);
+                Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+                Matrix_InsertMatrix(&sp8C[i].unk_0C, MTXMODE_APPLY);
+
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gDPPipeSync(POLY_XLU_DISP++);
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, sp8C[0].unk_50);
+                gSPDisplayList(POLY_XLU_DISP++, object_mir_ray_DL_0004B0);
+            }
+        }
+
+        this->unk_210 |= 1;
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}

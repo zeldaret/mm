@@ -177,10 +177,10 @@ void DoorWarp1_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_1DC);
     LightContext_RemoveLight(globalCtx, &globalCtx->lightCtx, this->unk_1F0);
 
-    for (i = 0; i < ARRAY_COUNT(globalCtx->envCtx.unk_8C.diffuseColor1); i++) {
-        globalCtx->envCtx.unk_8C.diffuseColor1[i] = 0;
-        globalCtx->envCtx.unk_8C.fogColor[i] = globalCtx->envCtx.unk_8C.diffuseColor1[i];
-        globalCtx->envCtx.unk_8C.ambientColor[i] = globalCtx->envCtx.unk_8C.diffuseColor1[i];
+    for (i = 0; i < ARRAY_COUNT(globalCtx->envCtx.lightSettings.diffuseColor1); i++) {
+        globalCtx->envCtx.lightSettings.diffuseColor1[i] = 0;
+        globalCtx->envCtx.lightSettings.fogColor[i] = globalCtx->envCtx.lightSettings.diffuseColor1[i];
+        globalCtx->envCtx.lightSettings.ambientColor[i] = globalCtx->envCtx.lightSettings.diffuseColor1[i];
     }
 
     if (this->unk_1D3 != 0) {
@@ -270,7 +270,7 @@ void func_808B8E78(DoorWarp1* this, GlobalContext* globalCtx) {
     this->unk_1A4 = 700.0f;
     if (globalCtx->sceneNum == SCENE_INISIE_N) {
         DoorWarp1_SetupAction(this, func_808B96A0);
-    } else if (gSaveContext.weekEventReg[86] & 0x80) {
+    } else if (gSaveContext.save.weekEventReg[86] & 0x80) {
         this->unk_1D4 = 0;
         DoorWarp1_SetupAction(this, func_808B921C);
     } else {
@@ -279,14 +279,15 @@ void func_808B8E78(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 s32 func_808B900C(DoorWarp1* this, GlobalContext* globalCtx) {
-    u32 index;
+    s32 index;
     u8 ret = false;
 
-    if (func_800EE29C(globalCtx, 0x239)) {
-        index = func_800EE200(globalCtx, 0x239);
-        if (this->unk_208 != globalCtx->csCtx.npcActions[index]->unk0) {
-            this->unk_208 = globalCtx->csCtx.npcActions[index]->unk0;
-            if (globalCtx->csCtx.npcActions[index]->unk0 == 2) {
+    if (Cutscene_CheckActorAction(globalCtx, 569)) {
+        index = Cutscene_GetActorActionIndex(globalCtx, 569);
+
+        if (this->unk_208 != globalCtx->csCtx.actorActions[index]->action) {
+            this->unk_208 = globalCtx->csCtx.actorActions[index]->action;
+            if (globalCtx->csCtx.actorActions[index]->action == 2) {
                 ret = true;
             }
         }
@@ -342,9 +343,9 @@ void func_808B921C(DoorWarp1* this, GlobalContext* globalCtx) {
         func_808BB8D4(this, globalCtx, 1);
     }
 
-    if (func_808B866C(this, globalCtx) && !func_801690CC(globalCtx)) {
+    if (func_808B866C(this, globalCtx) && !Play_InCsMode(globalCtx)) {
         func_800B7298(globalCtx, &this->dyna.actor, 7);
-        func_801518B0(globalCtx, 0xF2, &this->dyna.actor);
+        Message_StartTextbox(globalCtx, 0xF2, &this->dyna.actor);
         DoorWarp1_SetupAction(this, func_808B93A0);
     }
 
@@ -355,7 +356,7 @@ void func_808B93A0(DoorWarp1* this, GlobalContext* globalCtx) {
     s32 pad;
     Player* player = GET_PLAYER(globalCtx);
 
-    if (Message_GetState(&globalCtx->msgCtx) == 4 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 4 && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
@@ -375,7 +376,7 @@ void func_808B93A0(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B94A4(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (!func_808B866C(this, globalCtx) && (ActorCutscene_GetCurrentIndex() != globalCtx->unk_1879C[8])) {
+    if (!func_808B866C(this, globalCtx) && (ActorCutscene_GetCurrentIndex() != globalCtx->playerActorCsIds[8])) {
         DoorWarp1_SetupAction(this, func_808B921C);
     }
     func_808BB8D4(this, globalCtx, 1);
@@ -383,10 +384,10 @@ void func_808B94A4(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9524(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[9])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[9]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[9]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[9], NULL);
         DoorWarp1_SetupAction(this, func_808B958C);
     }
 }
@@ -442,7 +443,7 @@ void func_808B96B0(DoorWarp1* this, GlobalContext* globalCtx) {
 
 void func_808B977C(DoorWarp1* this, GlobalContext* globalCtx) {
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
-    if (func_808B866C(this, globalCtx) && !func_801690CC(globalCtx)) {
+    if (func_808B866C(this, globalCtx) && !Play_InCsMode(globalCtx)) {
         Player* player = GET_PLAYER(globalCtx);
 
         Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
@@ -455,10 +456,10 @@ void func_808B977C(DoorWarp1* this, GlobalContext* globalCtx) {
 }
 
 void func_808B9840(DoorWarp1* this, GlobalContext* globalCtx) {
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[9])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[9]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[9]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[9], NULL);
         DoorWarp1_SetupAction(this, func_808B98A8);
     }
 }
@@ -487,7 +488,7 @@ void func_808B98A8(DoorWarp1* this, GlobalContext* globalCtx) {
                 Scene_SetExitFade(globalCtx);
                 globalCtx->sceneLoadFlag = 0x14;
             } else {
-                func_80169FDC(globalCtx);
+                func_80169FDC(&globalCtx->state);
             }
         }
     }
@@ -552,28 +553,28 @@ void func_808B9CE8(DoorWarp1* this, GlobalContext* globalCtx) {
 
     switch (globalCtx->sceneNum) {
         case SCENE_MITURIN_BS:
-            gSaveContext.roomInf[126][3] =
-                (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFFFF00) | (((u8)gSaveContext.roomInf[126][4]) & 0xFF);
+            gSaveContext.save.unk_ECC[0] =
+                (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFFFFFF00) | (((u8)gSaveContext.save.unk_ECC[1]) & 0xFF);
             break;
 
         case SCENE_HAKUGIN_BS:
-            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFFFF00FF) |
-                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 8);
+            gSaveContext.save.unk_ECC[0] = (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFFFF00FF) |
+                                           ((((u8)gSaveContext.save.unk_ECC[1]) & 0xFF) << 8);
             break;
 
         case SCENE_INISIE_BS:
-            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0xFF00FFFF) |
-                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x10);
+            gSaveContext.save.unk_ECC[0] = (((void)0, gSaveContext.save.unk_ECC[0]) & 0xFF00FFFF) |
+                                           ((((u8)gSaveContext.save.unk_ECC[1]) & 0xFF) << 0x10);
             break;
 
         case SCENE_SEA_BS:
-            gSaveContext.roomInf[126][3] = (((void)0, gSaveContext.roomInf[126][3]) & 0x00FFFFFF) |
-                                           ((((u8)gSaveContext.roomInf[126][4]) & 0xFF) << 0x18);
+            gSaveContext.save.unk_ECC[0] = (((void)0, gSaveContext.save.unk_ECC[0]) & 0x00FFFFFF) |
+                                           ((((u8)gSaveContext.save.unk_ECC[1]) & 0xFF) << 0x18);
             break;
     }
 
-    gSaveContext.roomInf[126][4] =
-        (gSaveContext.roomInf[126][4] & 0xFFFFFF00) | ((((u8)gSaveContext.roomInf[126][4]) + 1) & 0xFF);
+    gSaveContext.save.unk_ECC[1] =
+        (gSaveContext.save.unk_ECC[1] & 0xFFFFFF00) | ((((u8)gSaveContext.save.unk_ECC[1]) + 1) & 0xFF);
     Item_Give(globalCtx, func_808B849C(this, globalCtx) + (ITEM_REMAINS_ODOLWA - 1));
     DoorWarp1_SetupAction(this, func_808B9E94);
 }
@@ -594,7 +595,7 @@ void func_808B9ED8(DoorWarp1* this, GlobalContext* globalCtx) {
 
 void func_808B9F10(DoorWarp1* this, GlobalContext* globalCtx) {
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WARP_HOLE - SFX_FLAG);
-    if ((this->unk_203 == 0) && func_808B866C(this, globalCtx) && !func_801690CC(globalCtx) && (this->unk_203 == 0)) {
+    if ((this->unk_203 == 0) && func_808B866C(this, globalCtx) && !Play_InCsMode(globalCtx) && (this->unk_203 == 0)) {
         Player* player = GET_PLAYER(globalCtx);
 
         Interface_ChangeAlpha(1);
@@ -615,10 +616,10 @@ void func_808B9FD0(DoorWarp1* this, GlobalContext* globalCtx) {
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(globalCtx->unk_1879C[9])) {
-        ActorCutscene_SetIntentToPlay(globalCtx->unk_1879C[9]);
+    if (!ActorCutscene_GetCanPlayNext(globalCtx->playerActorCsIds[9])) {
+        ActorCutscene_SetIntentToPlay(globalCtx->playerActorCsIds[9]);
     } else {
-        ActorCutscene_Start(globalCtx->unk_1879C[9], NULL);
+        ActorCutscene_Start(globalCtx->playerActorCsIds[9], NULL);
         Audio_PlaySfxGeneral(NA_SE_EV_LINK_WARP, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
         Animation_ChangeImpl(&this->skelAnime, &object_warp1_Anim_001374, 1.0f,
                              Animation_GetLastFrame(&object_warp1_Anim_001374.common),
@@ -651,24 +652,24 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
 
         if (this->unk_202 != 0) {
             if (phi_v0_2 > 0) {
-                gSaveContext.weekEventReg[7] |= 0x80;
+                gSaveContext.save.weekEventReg[7] |= 0x80;
             }
 
             switch (phi_v0_2) {
                 case 0:
-                    phi_a0 = gSaveContext.roomInf[126][3] & 0xFF;
+                    phi_a0 = gSaveContext.save.unk_ECC[0] & 0xFF;
                     break;
 
                 case 1:
-                    phi_a0 = (gSaveContext.roomInf[126][3] & 0xFF00) >> 8;
+                    phi_a0 = (gSaveContext.save.unk_ECC[0] & 0xFF00) >> 8;
                     break;
 
                 case 2:
-                    phi_a0 = (gSaveContext.roomInf[126][3] & 0xFF0000) >> 0x10;
+                    phi_a0 = (gSaveContext.save.unk_ECC[0] & 0xFF0000) >> 0x10;
                     break;
 
                 case 3:
-                    phi_a0 = (gSaveContext.roomInf[126][3] & 0xFF000000) >> 0x18;
+                    phi_a0 = (gSaveContext.save.unk_ECC[0] & 0xFF000000) >> 0x18;
                     break;
 
                 default:
@@ -709,8 +710,8 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
         } else {
             switch (phi_v0_2) {
                 case 0:
-                    if (gSaveContext.weekEventReg[20] & 2) {
-                        gSaveContext.weekEventReg[7] |= 0x80;
+                    if (gSaveContext.save.weekEventReg[20] & 2) {
+                        gSaveContext.save.weekEventReg[7] |= 0x80;
                         globalCtx->nextEntranceIndex = 0x3010;
                         globalCtx->sceneLoadFlag = 0x14;
                         globalCtx->unk_1887F = 3;
@@ -725,7 +726,7 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
                     break;
 
                 case 1:
-                    gSaveContext.weekEventReg[33] |= 0x80;
+                    gSaveContext.save.weekEventReg[33] |= 0x80;
                     globalCtx->nextEntranceIndex = 0xAE70;
                     globalCtx->sceneLoadFlag = 0x14;
                     globalCtx->unk_1887F = 3;
@@ -733,14 +734,14 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
                     break;
 
                 case 3:
-                    if (gSaveContext.weekEventReg[55] & 0x80) {
+                    if (gSaveContext.save.weekEventReg[55] & 0x80) {
                         globalCtx->nextEntranceIndex = 0x6A90;
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         globalCtx->sceneLoadFlag = 0x14;
                         globalCtx->unk_1887F = 3;
                         gSaveContext.nextTransition = 3;
                     } else {
-                        gSaveContext.weekEventReg[55] |= 0x80;
+                        gSaveContext.save.weekEventReg[55] |= 0x80;
                         globalCtx->nextEntranceIndex = 0x6A80;
                         gSaveContext.nextCutsceneIndex = 0xFFF0;
                         globalCtx->sceneLoadFlag = 0x14;
@@ -750,7 +751,7 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    gSaveContext.weekEventReg[52] |= 0x20;
+                    gSaveContext.save.weekEventReg[52] |= 0x20;
                     globalCtx->nextEntranceIndex = 0x20F0;
                     gSaveContext.nextCutsceneIndex = 0xFFF2;
                     globalCtx->sceneLoadFlag = 0x14;
@@ -767,7 +768,7 @@ void func_808BA10C(DoorWarp1* this, GlobalContext* globalCtx) {
         Scene_SetExitFade(globalCtx);
         globalCtx->sceneLoadFlag = 0x14;
     } else {
-        func_80169FDC(globalCtx);
+        func_80169FDC(&globalCtx->state);
     }
 }
 
@@ -832,15 +833,15 @@ void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1D0 > 140) {
-        globalCtx->envCtx.unk_E5 = 1;
+        globalCtx->envCtx.fillScreen = 1;
         temp_f0 = (this->unk_1D0 - 140) / 20.0f;
         if (temp_f0 > 1.0f) {
             temp_f0 = 1.0f;
         }
-        globalCtx->envCtx.unk_E6[0] = 160;
-        globalCtx->envCtx.unk_E6[1] = 160;
-        globalCtx->envCtx.unk_E6[2] = 160;
-        globalCtx->envCtx.unk_E6[3] = 255.0f * temp_f0;
+        globalCtx->envCtx.screenFillColor[0] = 160;
+        globalCtx->envCtx.screenFillColor[1] = 160;
+        globalCtx->envCtx.screenFillColor[2] = 160;
+        globalCtx->envCtx.screenFillColor[3] = 255.0f * temp_f0;
     }
 
     Lights_PointNoGlowSetInfo(&this->unk_1E0, player->actor.world.pos.x + 10.0f, player->actor.world.pos.y + 10.0f,
@@ -863,13 +864,13 @@ void func_808BA550(DoorWarp1* this, GlobalContext* globalCtx) {
         temp_f16 = -255.0f * temp_f0;
 
         for (i = 0; i < 3; i++) {
-            globalCtx->envCtx.unk_8C.diffuseColor1[i] = temp_f16;
-            globalCtx->envCtx.unk_8C.fogColor[i] = temp_f16;
-            globalCtx->envCtx.unk_8C.ambientColor[i] = temp_f16;
+            globalCtx->envCtx.lightSettings.diffuseColor1[i] = temp_f16;
+            globalCtx->envCtx.lightSettings.fogColor[i] = temp_f16;
+            globalCtx->envCtx.lightSettings.ambientColor[i] = temp_f16;
         }
 
-        globalCtx->envCtx.unk_8C.fogNear = -500.0f * temp_f0;
-        if (globalCtx->envCtx.unk_8C.fogNear < -300) {
+        globalCtx->envCtx.lightSettings.fogNear = -500.0f * temp_f0;
+        if (globalCtx->envCtx.lightSettings.fogNear < -300) {
             globalCtx->roomCtx.currRoom.segment = NULL;
         }
     }
@@ -885,14 +886,14 @@ void func_808BAAF4(DoorWarp1* this, GlobalContext* globalCtx) {
         phi_f2 = 85.0f;
     }
 
-    if (!(gSaveContext.weekEventReg[86] & 0x80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
+    if (!(gSaveContext.save.weekEventReg[86] & 0x80) && (fabsf(this->dyna.actor.xzDistToPlayer) < phi_f2) &&
         ((player->actor.world.pos.y - 20.0f) < this->dyna.actor.world.pos.y) &&
         (this->dyna.actor.world.pos.y < (player->actor.world.pos.y + 20.0f))) {
         cutscene = this->dyna.actor.cutscene;
 
         if (ActorCutscene_GetCanPlayNext(cutscene)) {
             ActorCutscene_Start(cutscene, &this->dyna.actor);
-            gSaveContext.weekEventReg[86] |= 0x80;
+            gSaveContext.save.weekEventReg[86] |= 0x80;
             DoorWarp1_SetupAction(this, func_808BABF4);
         } else {
             ActorCutscene_SetIntentToPlay(cutscene);

@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_hamishi.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjHamishi*)thisx)
 
@@ -15,7 +16,6 @@ void ObjHamishi_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjHamishi_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Hamishi_InitVars = {
     ACTOR_OBJ_HAMISHI,
     ACTORCAT_PROP,
@@ -28,44 +28,261 @@ const ActorInit Obj_Hamishi_InitVars = {
     (ActorFunc)ObjHamishi_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_809A1AA0 = {
-    { COLTYPE_HARD, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_2, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK0, { 0x00000000, 0x00, 0x00 }, { 0x81C37FB6, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HARD,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x81C37FB6, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 50, 70, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit D_809A1ACC = { 0, 12, 60, MASS_IMMOVABLE };
+static CollisionCheckInfoInit sColChkInfoInit = { 0, 12, 60, MASS_IMMOVABLE };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_809A1AE8[] = {
+s16 D_809A1AD4[] = {
+    145, 135, 115, 85, 75, 53, 45, 40, 35,
+};
+
+static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 250, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 500, ICHAIN_STOP),
 };
 
-#endif
+void func_809A0F20(Actor* thisx, GlobalContext* globalCtx) {
+    ObjHamishi* this = THIS;
 
-extern ColliderCylinderInit D_809A1AA0;
-extern CollisionCheckInfoInit D_809A1ACC;
-extern InitChainEntry D_809A1AE8[];
+    Collider_InitCylinder(globalCtx, &this->collider);
+    Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/func_809A0F20.s")
+void func_809A0F78(ObjHamishi* this) {
+    if (this->unk_198 > 0) {
+        this->unk_198--;
+        this->unk_19A += 0x1388;
+        this->unk_19C += 0xE10;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/func_809A0F78.s")
+        Math_StepToF(&this->unk_190, 0.0f, 0.15f);
+        Math_StepToF(&this->unk_194, 0.0f, 40.0f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/func_809A10F4.s")
+        this->actor.world.pos.x = (Math_SinS(this->unk_19A * 4) * this->unk_190) + this->actor.home.pos.x;
+        this->actor.world.pos.z = (Math_CosS(this->unk_19A * 7) * this->unk_190) + this->actor.home.pos.z;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/func_809A13A0.s")
+        this->actor.shape.rot.x = (s32)(Math_SinS(this->unk_19C * 4) * this->unk_194) + this->actor.home.rot.x;
+        this->actor.shape.rot.z = (s32)(Math_CosS(this->unk_19C * 7) * this->unk_194) + this->actor.home.rot.z;
+    } else {
+        Math_StepToF(&this->actor.world.pos.x, this->actor.home.pos.x, 1.0f);
+        Math_StepToF(&this->actor.world.pos.z, this->actor.home.pos.z, 1.0f);
+        Math_ScaledStepToS(&this->actor.shape.rot.x, this->actor.home.rot.x, 0xBB8);
+        Math_ScaledStepToS(&this->actor.shape.rot.z, this->actor.home.rot.z, 0xBB8);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/func_809A1408.s")
+void func_809A10F4(ObjHamishi* this, GlobalContext* globalCtx) {
+    s32 i;
+    Vec3f spC8;
+    Vec3f spBC;
+    f32 temp_f20;
+    s16 temp_s0 = 1000;
+    s32 gravity;
+    s32 phi_v0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/ObjHamishi_Init.s")
+    for (i = 0; i < ARRAY_COUNT(D_809A1AD4); i++) {
+        temp_s0 += 0x4E20;
+        temp_f20 = Rand_ZeroOne() * 10.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/ObjHamishi_Destroy.s")
+        spBC.x = (Math_SinS(temp_s0) * temp_f20) + this->actor.world.pos.x;
+        spBC.y = (Rand_ZeroOne() * 40.0f) + this->actor.world.pos.y + 5.0f;
+        spBC.z = (Math_CosS(temp_s0) * temp_f20) + this->actor.world.pos.z;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/ObjHamishi_Update.s")
+        temp_f20 = (Rand_ZeroOne() * 10.0f) + 2.0f;
+        spC8.x = Math_SinS(temp_s0) * temp_f20;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Hamishi/ObjHamishi_Draw.s")
+        spC8.y = (Rand_ZeroOne() * 15.0f) + (Rand_ZeroOne() * i * 2.5f);
+        spC8.z = Math_CosS(temp_s0) * temp_f20;
+
+        if (i == 0) {
+            phi_v0 = 41;
+            gravity = -450;
+        } else if (i < 4) {
+            phi_v0 = 37;
+            gravity = -380;
+        } else {
+            phi_v0 = 69;
+            gravity = -320;
+        }
+
+        EffectSsKakera_Spawn(globalCtx, &spBC, &spC8, &this->actor.world.pos, gravity, phi_v0, 30, 5, 0, D_809A1AD4[i],
+                             3, 0, 70, 1, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
+    }
+
+    func_800BBFB0(globalCtx, &this->actor.world.pos, 140.0f, 6, 180, 90, 1);
+    func_800BBFB0(globalCtx, &this->actor.world.pos, 140.0f, 12, 80, 90, 1);
+}
+
+void func_809A13A0(ObjHamishi* this, GlobalContext* globalCtx) {
+    s32 pad;
+    Vec3f sp28;
+    s32 sp24;
+
+    sp28.x = this->actor.world.pos.x;
+    sp28.y = this->actor.world.pos.y + 30.0f;
+    sp28.z = this->actor.world.pos.z;
+
+    this->actor.floorHeight =
+        BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->actor.floorPoly, &sp24, &this->actor, &sp28);
+}
+
+s32 func_809A1408(ObjHamishi* this, GlobalContext* globalCtx) {
+    s32 pad;
+    WaterBox* sp30;
+    f32 sp2C;
+    s32 sp28;
+
+    if (WaterBox_GetSurfaceImpl(globalCtx, &globalCtx->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp2C,
+                                &sp30, &sp28) &&
+        (this->actor.world.pos.y < sp2C)) {
+        return true;
+    }
+    return false;
+}
+
+void ObjHamishi_Init(Actor* thisx, GlobalContext* globalCtx) {
+    ObjHamishi* this = THIS;
+
+    Actor_ProcessInitChain(&this->actor, sInitChain);
+
+    if (globalCtx->csCtx.state != 0) {
+        this->actor.uncullZoneForward += 1000.0f;
+    }
+
+    if (this->actor.shape.rot.y == 0) {
+        this->actor.shape.rot.y = (u32)Rand_Next() >> 0x10;
+        this->actor.world.rot.y = this->actor.shape.rot.y;
+        this->actor.home.rot.y = this->actor.shape.rot.y;
+    }
+
+    func_809A0F20(&this->actor, globalCtx);
+    CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+    func_809A13A0(this, globalCtx);
+    ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 2.3f);
+
+    if (Flags_GetSwitch(globalCtx, OBJHAMISHI_GET_SWITCHFLAG(&this->actor))) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
+
+    this->actor.shape.yOffset = 80.0f;
+
+    if (func_809A1408(this, globalCtx)) {
+        this->unk_1A2 |= 1;
+    }
+}
+
+void ObjHamishi_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    Collider_DestroyCylinder(globalCtx, &THIS->collider);
+}
+
+void ObjHamishi_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    ObjHamishi* this = THIS;
+    s32 sp24 = (this->collider.base.acFlags & AC_HIT) != 0;
+
+    func_809A0F78(this);
+
+    if (sp24) {
+        this->unk_1A1 = 5;
+        this->collider.base.acFlags &= ~AC_HIT;
+    }
+
+    if (sp24) {
+        if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000500) {
+            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x400) {
+                this->unk_1A0 = 26;
+            } else {
+                this->unk_1A0 = 11;
+            }
+
+            if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x80000000) {
+                this->unk_19E = 2;
+            } else {
+                this->unk_19E++;
+            }
+
+            if (this->unk_19E < 2) {
+                this->unk_198 = 15;
+                this->unk_190 = 2.0f;
+                this->unk_194 = 400.0f;
+            } else {
+                func_809A10F4(this, globalCtx);
+                SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &this->actor.world.pos, 40, NA_SE_EV_WALL_BROKEN);
+                Flags_SetSwitch(globalCtx, OBJHAMISHI_GET_SWITCHFLAG(&this->actor));
+                Actor_MarkForDeath(&this->actor);
+            }
+        }
+    }
+
+    if (this->actor.update != NULL) {
+        if (this->unk_1A1 > 0) {
+            this->unk_1A1--;
+            if (this->unk_1A1 == 0) {
+                this->collider.base.colType = COLTYPE_HARD;
+            } else {
+                this->collider.base.colType = COLTYPE_NONE;
+            }
+        }
+
+        if (this->unk_1A0 > 0) {
+            this->unk_1A0--;
+        } else if ((this->actor.flags & ACTOR_FLAG_40) && (this->actor.xzDistToPlayer < 1000.0f)) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+
+        if (this->actor.xzDistToPlayer < 600.0f) {
+            CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+    }
+}
+
+void ObjHamishi_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjHamishi* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    if ((thisx->projectedPos.z <= 2150.0f) || ((this->unk_1A2 & 1) && (thisx->projectedPos.z < 2250.0f))) {
+        thisx->shape.shadowAlpha = 160;
+        func_8012C28C(globalCtx->state.gfxCtx);
+
+        gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 170, 130, 255);
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_field_keep_DL_0061E8);
+    } else if (thisx->projectedPos.z < 2250.0f) {
+        f32 sp20 = (2250.0f - thisx->projectedPos.z) * 2.55f;
+
+        thisx->shape.shadowAlpha = sp20 * 0.627451f;
+        func_8012C2DC(globalCtx->state.gfxCtx);
+
+        gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 170, 130, (s32)sp20);
+        gSPDisplayList(POLY_XLU_DISP++, gameplay_field_keep_DL_0061E8);
+    } else {
+        thisx->shape.shadowAlpha = 0;
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}

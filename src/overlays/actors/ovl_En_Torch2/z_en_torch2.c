@@ -7,7 +7,7 @@
 #include "z_en_torch2.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000010
+#define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((EnTorch2*)thisx)
 
@@ -32,9 +32,22 @@ const ActorInit En_Torch2_InitVars = {
 };
 
 static ColliderCylinderInit sCylinderInit = {
-    { COLTYPE_METAL, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1 | OC1_TYPE_2,
-      OC2_TYPE_2, COLSHAPE_CYLINDER },
-    { ELEMTYPE_UNK2, { 0x00100000, 0, 0 }, { 0xF7CFFFFF, 0, 0 }, TOUCH_NONE, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON },
+    {
+        COLTYPE_METAL,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_PLAYER | OC1_TYPE_1 | OC1_TYPE_2,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00100000, 0, 0 },
+        { 0xF7CFFFFF, 0, 0 },
+        TOUCH_NONE,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 20, 60, 0, { 0, 0, 0 } },
 };
 
@@ -62,9 +75,9 @@ void EnTorch2_Init(Actor* thisx, GlobalContext* globalCtx) {
     // params: which form Link is in (e.g. human, deku, etc.)
     params = this->actor.params;
     if (params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= 0x4000000; // Can press switch
+        this->actor.flags |= ACTOR_FLAG_4000000; // Can press switch
         if (params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= 0x20000; // Can press heavy switches
+            this->actor.flags |= ACTOR_FLAG_20000; // Can press heavy switches
         }
     }
     this->framesUntilNextState = 20;
@@ -74,7 +87,8 @@ void EnTorch2_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(globalCtx, &this->collider);
-    func_80169DCC(globalCtx, this->actor.params + 3, 0xFF, 0, 0xBFF, &this->actor.world.pos, this->actor.shape.rot.y);
+    Play_SetRespawnData(&globalCtx->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0, 0xBFF,
+                        &this->actor.world.pos, this->actor.shape.rot.y);
     globalCtx->actorCtx.unk254[this->actor.params] = 0;
 }
 
@@ -146,10 +160,9 @@ void EnTorch2_UpdateDeath(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx) {
+void EnTorch2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
     EnTorch2* this = THIS;
-
-    GlobalContext* unused = globalCtx;
     Gfx* gfx = sShellDLists[thisx->params];
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

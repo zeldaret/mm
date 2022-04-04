@@ -5,8 +5,9 @@
  */
 
 #include "z_demo_syoten.h"
+#include "objects/object_syoten/object_syoten.h"
 
-#define FLAGS 0x00000030
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((DemoSyoten*)thisx)
 
@@ -15,7 +16,15 @@ void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Update(Actor* thisx, GlobalContext* globalCtx);
 void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-#if 0
+void func_80C16A64(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16DD4(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C17008(DemoSyoten* this, GlobalContext* globalCtx);
+void func_80C173B4(Actor* thisx, GlobalContext* globalCtx);
+void func_80C17690(Actor* thisx, GlobalContext* globalCtx);
+
 const ActorInit Demo_Syoten_InitVars = {
     ACTOR_DEMO_SYOTEN,
     ACTORCAT_ITEMACTION,
@@ -28,45 +37,539 @@ const ActorInit Demo_Syoten_InitVars = {
     (ActorFunc)DemoSyoten_Draw,
 };
 
-#endif
+u8 D_80C177D0[] = {
+    0, 1, 1, 0, 2, 2, 2, 2, 0, 0, 1, 0, 2, 2, 0, 1, 0, 2, 2, 0, 1, 0, 2, 2, 0, 1, 0,
+    2, 2, 0, 1, 0, 1, 2, 2, 1, 2, 2, 0, 0, 0, 1, 1, 0, 2, 2, 2, 2, 0, 0, 1, 0, 2, 2,
+    0, 1, 0, 2, 2, 0, 1, 0, 2, 2, 2, 0, 0, 2, 0, 1, 1, 0, 2, 2, 2, 0, 1, 0, 2, 2, 0,
+};
 
-extern UNK_TYPE D_0600023C;
-extern UNK_TYPE D_06001298;
-extern UNK_TYPE D_060018C0;
-extern UNK_TYPE D_06002880;
+Color_RGBA8 D_80C17824[] = {
+    { 160, 100, 130, 255 },
+    { 150, 120, 160, 255 },
+    { 130, 90, 150, 255 },
+    { 90, 70, 120, 255 },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Init.s")
+Color_RGBA8 D_80C17834[] = {
+    { 110, 50, 80, 255 },
+    { 120, 100, 130, 255 },
+    { 90, 40, 100, 255 },
+    { 60, 50, 100, 255 },
+};
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Destroy.s")
+void DemoSyoten_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    DemoSyoten* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16760.s")
+    Actor_SetScale(&this->actor, 0.3f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16818.s")
+    this->actionFunc = func_80C16A64;
+    this->unk_3E4 = 0;
+    this->unk_3E6 = 0;
+    this->unk_3DC = NULL;
+    this->unk_3E0 = NULL;
+    this->unk_3F2 = 0;
+    this->unk_3D8 = 1.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C168D0.s")
+    switch (DEMOSYOTEN_GET_F(&this->actor)) {
+        case DEMOSYOTEN_F_0:
+            func_80183430(&this->unk_144, &object_syoten_Blob_001328, &object_syoten_Blob_00023C, this->unk_174,
+                          this->unk_2A6, 0);
+            func_801835EC(&this->unk_144, &object_syoten_Blob_00023C);
+            this->actor.draw = NULL;
+            this->actionFunc = func_80C16A74;
+            this->actor.child = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EFF_DUST,
+                                                   this->actor.world.pos.x, this->actor.world.pos.y,
+                                                   this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
+            this->unk_3F0 = 0x215;
+            Actor_SetScale(&this->actor, 0.05f);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16974.s")
+        case DEMOSYOTEN_F_1:
+            Actor_SetScale(&this->actor, 0.1f);
+            this->unk_3DC = object_syoten_DL_001370;
+            this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001448);
+            this->unk_3E4 |= 1;
+            this->actionFunc = func_80C16BD4;
+            this->unk_3F0 = 0x215;
+            Actor_SetScale(&this->actor, 0.05f);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16A64.s")
+        case DEMOSYOTEN_F_2:
+            this->unk_3DC = object_syoten_DL_001730;
+            this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_0018B8);
+            this->unk_3F0 = 0x216;
+            this->actionFunc = func_80C16DD4;
+            this->unk_3E4 |= 2;
+            Actor_SetScale(&this->actor, 4.0f);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16A74.s")
+        case DEMOSYOTEN_F_3:
+            this->unk_3DC = object_syoten_DL_001DD0;
+            this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_002B98);
+            this->unk_3F0 = 0x218;
+            this->unk_3E4 |= 8;
+            this->actionFunc = func_80C16EAC;
+            Actor_SetScale(&this->actor, 0.5f);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16BD4.s")
+        case DEMOSYOTEN_F_4:
+            this->unk_3DC = object_syoten_DL_002880;
+            this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_002B88);
+            this->unk_3E4 |= 2;
+            this->actionFunc = func_80C17008;
+            this->unk_3F0 = 0x217;
+            this->unk_3E4 |= 1;
+            this->unk_3E4 |= 8;
+            this->actor.draw = func_80C17690;
+            Actor_SetScale(&this->actor, 5.0f);
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16DD4.s")
+void DemoSyoten_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    DemoSyoten* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C16EAC.s")
+    if (DEMOSYOTEN_GET_F(&this->actor) == DEMOSYOTEN_F_0) {
+        func_8018349C(&this->unk_144);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C17008.s")
+void func_80C16760(DemoSyoten* this, GlobalContext* globalCtx) {
+    s32 pad;
+    Vec3s* points;
+    Vec3f sp2C;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Update.s")
+    this->unk_3EC = 0;
+    if (DEMOSYOTEN_GET_7E00(&this->actor) != DEMOSYOTEN_7E00_3F) {
+        this->unk_3E8 = &globalCtx->setupPathList[DEMOSYOTEN_GET_7E00(&this->actor)];
+        if (this->unk_3E8 != NULL) {
+            points = Lib_SegmentedToVirtual(this->unk_3E8->points);
+            Math_Vec3s_ToVec3f(&this->actor.world.pos, &points[0]);
+            this->unk_3EC++;
+            points++;
+            Math_Vec3s_ToVec3f(&sp2C, points);
+            this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp2C);
+            this->actor.world.rot.x = Math_Vec3f_Pitch(&this->actor.world.pos, &sp2C);
+        }
+    } else {
+        this->unk_3E8 = NULL;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C170F8.s")
+s32 func_80C16818(DemoSyoten* this) {
+    s32 pad;
+    Path* path = this->unk_3E8;
+    Vec3s* points;
+    Vec3f sp28;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C173B4.s")
+    if (path == NULL) {
+        return true;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C17468.s")
+    points = Lib_SegmentedToVirtual(this->unk_3E8->points);
+    points += this->unk_3EC;
+    Math_Vec3s_ToVec3f(&sp28, points);
+    this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &sp28);
+    this->actor.world.rot.x = Math_Vec3f_Pitch(&this->actor.world.pos, &sp28);
+    Actor_MoveWithoutGravityReverse(&this->actor);
+    if (Math_Vec3f_DistXYZ(&this->actor.world.pos, &sp28) < 2.0f) {
+        return true;
+    }
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/DemoSyoten_Draw.s")
+void func_80C168D0(DemoSyoten* this, GlobalContext* globalCtx) {
+    s32 pad;
+    Path* path = this->unk_3E8;
+    Vec3s* points;
+    Vec3f sp30;
+    Vec3f sp24;
+    f32 sp20;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Demo_Syoten/func_80C17690.s")
+    if (path != NULL) {
+        points = Lib_SegmentedToVirtual(this->unk_3E8->points);
+        points += this->unk_3EC;
+        Math_Vec3s_ToVec3f(&sp30, points);
+        Actor_GetProjectedPos(globalCtx, &sp30, &sp24, &sp20);
+        Math_Vec3f_Copy(&sp30, &this->actor.projectedPos);
+        sp30.z = sp30.y;
+        sp24.z = sp24.y;
+        this->actor.shape.rot.z = -Math_Vec3f_Yaw(&sp24, &sp30);
+    }
+}
+
+void func_80C16974(f32 arg0) {
+    Vtx* vtx = Lib_SegmentedToVirtual(&object_syotenVtx_0018C0);
+    u8 sp20[3];
+    s32 i;
+
+    arg0 = CLAMP_MAX(arg0, 1.0f);
+
+    sp20[0] = (s8)0.0f;
+    sp20[1] = (s8)(152.0f * arg0);
+    sp20[2] = (s8)(255.0f * arg0);
+
+    for (i = 0; i < ARRAY_COUNT(D_80C177D0); i++, vtx++) {
+        vtx->v.cn[3] = sp20[D_80C177D0[i]];
+    }
+}
+
+void func_80C16A64(DemoSyoten* this, GlobalContext* globalCtx) {
+}
+
+void func_80C16A74(DemoSyoten* this, GlobalContext* globalCtx) {
+    u16 temp_a0;
+
+    func_80183DE0(&this->unk_144);
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        if ((globalCtx->csCtx.frames >= 160) && (globalCtx->csCtx.frames < 322)) {
+            func_800B9010(&this->actor, NA_SE_EV_IKANA_SOUL_LV - SFX_FLAG);
+        } else if (globalCtx->csCtx.frames == 322) {
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_IKANA_SOUL_TRANSFORM);
+        }
+
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+        if (this->unk_3F2 != temp_a0) {
+            this->unk_3F2 = temp_a0;
+            switch (temp_a0) {
+                case 1:
+                    this->actor.draw = NULL;
+                    break;
+
+                case 2:
+                    this->actor.draw = func_80C173B4;
+                    this->unk_3D8 = 1.0f;
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    this->actor.draw = NULL;
+                    break;
+            }
+        }
+
+        if (temp_a0 == 3) {
+            if (this->unk_3D8 > 0.0125f) {
+                this->unk_3D8 -= 0.0125f;
+                if (this->actor.child != NULL) {
+                    this->actor.child->home.rot.z = 0x14;
+                }
+            } else {
+                this->actor.draw = NULL;
+                if (this->actor.child != NULL) {
+                    this->actor.child->home.rot.z = 0;
+                }
+            }
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+}
+
+void func_80C16BD4(DemoSyoten* this, GlobalContext* globalCtx) {
+    s32 pad;
+    u16 temp_a0;
+
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+        if (this->unk_3F2 != temp_a0) {
+            this->unk_3F2 = temp_a0;
+            switch (temp_a0) {
+                default:
+                    this->actor.draw = NULL;
+                    break;
+
+                case 1:
+                case 2:
+                    this->actor.draw = NULL;
+                    Actor_SetScale(&this->actor, 0.0f);
+                    break;
+
+                case 3:
+                    this->actor.draw = DemoSyoten_Draw;
+                    this->unk_3E4 &= ~4;
+                    this->unk_3E4 |= 1;
+                    this->actor.shape.rot.z = 0;
+                    break;
+
+                case 4:
+                    this->actor.draw = DemoSyoten_Draw;
+                    func_80C16760(this, globalCtx);
+                    this->unk_3E4 |= 4;
+                    this->unk_3E4 &= ~1;
+                    break;
+            }
+        }
+
+        switch (temp_a0) {
+            case 3:
+                if (this->actor.scale.x < 0.05f) {
+                    this->actor.scale.x += 0.000625f;
+                }
+                Actor_SetScale(&this->actor, this->actor.scale.x);
+                break;
+
+            case 4:
+                this->actor.speedXZ =
+                    globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->urot.z *
+                    0.005493164f;
+                if (this->unk_3EC < this->unk_3E8->count) {
+                    if (func_80C16818(this)) {
+                        this->unk_3EC++;
+                    }
+                    func_80C168D0(this, globalCtx);
+                }
+                break;
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+}
+
+void func_80C16DD4(DemoSyoten* this, GlobalContext* globalCtx) {
+    s32 pad;
+    u16 temp_a0;
+
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+        if (this->unk_3F2 != temp_a0) {
+            this->unk_3F2 = temp_a0;
+            switch (temp_a0) {
+                case 1:
+                    this->actor.draw = NULL;
+                    break;
+
+                case 2:
+                    this->actor.draw = DemoSyoten_Draw;
+                    this->unk_3E6 = -6;
+                    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_DM_FLYING_GOD_DASH);
+                    break;
+            }
+        }
+
+        if ((temp_a0 == 2) && (this->unk_3E6 < 40)) {
+            this->unk_3E6++;
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+}
+
+void func_80C16EAC(DemoSyoten* this, GlobalContext* globalCtx) {
+    s32 pad;
+    u16 temp_a0;
+
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+        if (this->unk_3F2 != temp_a0) {
+            this->unk_3F2 = temp_a0;
+            switch (temp_a0) {
+                case 1:
+                    this->actor.draw = NULL;
+                    this->unk_3D8 = 0.0f;
+                    Actor_SetScale(&this->actor, 0.5f);
+                    break;
+
+                case 2:
+                    this->actor.draw = DemoSyoten_Draw;
+                    break;
+            }
+        }
+
+        if (temp_a0 == 2) {
+            if (this->actor.scale.x < 8.0f) {
+                this->actor.scale.x += 0.1875f;
+            }
+
+            Actor_SetScale(&this->actor, this->actor.scale.x);
+
+            if (this->unk_3D8 < 1.0f) {
+                this->unk_3D8 += 0.025f;
+            }
+
+            if (this->unk_3D8 > 1.0f) {
+                this->unk_3D8 = 1.0f;
+            }
+            func_800B9010(&this->actor, NA_SE_EV_IKANA_PURIFICATION - SFX_FLAG);
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+    func_80C16974(this->unk_3D8);
+}
+
+void func_80C17008(DemoSyoten* this, GlobalContext* globalCtx) {
+    u16 temp_a0;
+
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_3F0)) {
+        temp_a0 = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, this->unk_3F0)]->action;
+        if (this->unk_3F2 != temp_a0) {
+            this->unk_3F2 = temp_a0;
+            switch (temp_a0) {
+                case 1:
+                    this->actor.draw = NULL;
+                    break;
+
+                case 2:
+                    this->actor.draw = func_80C17690;
+                    this->unk_3E6 = -10;
+                    break;
+            }
+        }
+
+        if ((temp_a0 == 2) && (this->unk_3E6 < 15)) {
+            this->unk_3E6++;
+        }
+    } else {
+        this->actor.draw = NULL;
+    }
+}
+
+void DemoSyoten_Update(Actor* thisx, GlobalContext* globalCtx) {
+    DemoSyoten* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+}
+
+s32 func_80C170F8(GlobalContext* globalCtx, UNK_TYPE arg1, s32 arg2, UNK_TYPE arg3, UNK_TYPE arg4, Actor* thisx) {
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    DemoSyoten* this = THIS;
+
+    OPEN_DISPS(gfxCtx);
+
+    switch (arg2) {
+        case 2:
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 240, 140, (s32)(this->unk_3D8 * 150.0f));
+            break;
+
+        case 4:
+        case 12:
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 240, 190, (s32)(this->unk_3D8 * 200.0f));
+            break;
+
+        case 6:
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 240, 150, (s32)(this->unk_3D8 * 150.0f));
+            break;
+
+        case 8:
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 240, 180, (s32)(this->unk_3D8 * 200.0f));
+            break;
+
+        case 10:
+        case 14:
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 240, 170, (s32)(this->unk_3D8 * 150.0f));
+            break;
+
+        case 16:
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 240, 160, (s32)(this->unk_3D8 * 200.0f));
+            break;
+    }
+
+    CLOSE_DISPS(gfxCtx);
+    return true;
+}
+
+void func_80C173B4(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    DemoSyoten* this = THIS;
+    Mtx* matrix;
+
+    AnimatedMat_DrawXlu(globalCtx, Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001298));
+
+    matrix = GRAPH_ALLOC(globalCtx->state.gfxCtx, ALIGN16(sizeof(Mtx) * this->unk_144.unk_18->unk_1));
+
+    if (matrix != NULL) {
+        func_8012C2DC(globalCtx->state.gfxCtx);
+        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        func_8018450C(globalCtx, &this->unk_144, matrix, (void*)func_80C170F8, 0, &this->actor);
+    }
+}
+
+void func_80C17468(GlobalContext* globalCtx) {
+    Color_RGBA8 sp2C;
+    Color_RGBA8 sp28;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_800FE7A8(D_80C17824, &sp2C);
+    func_800FE7A8(D_80C17834, &sp28);
+
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp2C.r, sp2C.g, sp2C.b, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, sp28.r, sp28.g, sp28.b, 255);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    DemoSyoten* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C2DC(globalCtx->state.gfxCtx);
+
+    if (this->unk_3E4 & 4) {
+        Matrix_InsertZRotation_s(-this->actor.shape.rot.z, MTXMODE_APPLY);
+        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, 5.0f, 1.0f, MTXMODE_APPLY);
+    }
+
+    if (this->unk_3E4 & 1) {
+        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    }
+
+    if (this->unk_3E4 & 8) {
+        func_80C17468(globalCtx);
+    }
+
+    if (this->unk_3E0 != NULL) {
+        if (this->unk_3E4 & 2) {
+            AnimatedMat_DrawStepXlu(globalCtx, this->unk_3E0, this->unk_3E6);
+        } else {
+            AnimatedMat_DrawXlu(globalCtx, this->unk_3E0);
+        }
+    }
+
+    if (this->unk_3DC != NULL) {
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, this->unk_3DC);
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_80C17690(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    DemoSyoten* this = THIS;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+
+    if (this->unk_3E4 & 8) {
+        func_80C17468(globalCtx);
+    }
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+    AnimatedMat_DrawStepXlu(globalCtx, this->unk_3E0, this->unk_3E6);
+
+    gSPDisplayList(POLY_XLU_DISP++, object_syoten_DL_002880);
+
+    AnimatedMat_DrawStepXlu(globalCtx, this->unk_3E0, this->unk_3E6 + 5);
+
+    gSPDisplayList(POLY_XLU_DISP++, object_syoten_DL_002A20);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}

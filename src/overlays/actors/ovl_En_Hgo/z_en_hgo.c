@@ -7,7 +7,7 @@
 #include "z_en_hgo.h"
 #include "objects/object_harfgibud/object_harfgibud.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHgo*)thisx)
 
@@ -40,14 +40,14 @@ const ActorInit En_Hgo_InitVars = {
     (ActorFunc)EnHgo_Draw,
 };
 
-static ActorAnimationEntry sAnimations[] = {
-    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, 0, -4.0f },
-    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, 0, 0.0f },
-    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, 2, 0.0f },
-    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, 0, 0.0f },
+static AnimationInfo sAnimations[] = {
+    { &object_harfgibud_Anim_00B644, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &object_harfgibud_Anim_013684, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0152EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_015C70, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_0165F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_harfgibud_Anim_014220, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_harfgibud_Anim_014A9C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -94,7 +94,7 @@ void EnHgo_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_314 = 0;
     this->unk_310 = 0;
     this->unk_312 = 0;
-    if ((gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.weekEventReg[52] & 0x20)) {
+    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
         func_80BD049C(this);
     } else {
         thisx->draw = NULL;
@@ -109,7 +109,7 @@ void EnHgo_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80BD03EC(EnHgo* this) {
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80BD0410;
 }
 
@@ -128,7 +128,7 @@ void func_80BD0434(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD049C(EnHgo* this) {
-    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
     this->actionFunc = func_80BD04E0;
 }
 
@@ -137,29 +137,29 @@ void func_80BD04E0(EnHgo* this, GlobalContext* globalCtx) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
             if (!(this->unk_310 & 4)) {
                 this->unk_310 |= 4;
-                func_801518B0(globalCtx, 0x15A5, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A5, &this->actor);
                 this->unk_314 = 0x15A5; // That mask is a gibdo
 
             } else {
-                func_801518B0(globalCtx, 0x15A7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7; // can I research that mask
             }
-        } else if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
             if (!(this->unk_310 & 1)) {
                 this->unk_310 |= 1;
-                func_801518B0(globalCtx, 0x158F, &this->actor);
+                Message_StartTextbox(globalCtx, 0x158F, &this->actor);
                 this->unk_314 = 0x158F; // Isn't this a fairy
             } else {
-                func_801518B0(globalCtx, 0x1593, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1593, &this->actor);
                 this->unk_314 = 0x1593; // Never seen a fairy this lively
             }
         } else {
             if (!(this->unk_310 & 2)) {
                 this->unk_310 |= 2;
-                func_801518B0(globalCtx, 0x1595, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1595, &this->actor);
                 this->unk_314 = 0x1595; // ghost radar is reacting
             } else {
-                func_801518B0(globalCtx, 0x1598, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1598, &this->actor);
                 this->unk_314 = 0x1598; // you seem to be similar to a ghost
             }
         }
@@ -185,7 +185,7 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
             func_80BD06FC(this, globalCtx);
             break;
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80BD049C(this);
             }
     }
@@ -194,47 +194,47 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_314) {
             case 0x158F:
-                func_801518B0(globalCtx, 0x1590, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1590, &this->actor);
                 this->unk_314 = 0x1590;
                 break;
             case 0x1590:
-                if (gSaveContext.weekEventReg[14] & 4) {
-                    func_801518B0(globalCtx, 0x1591, &this->actor);
+                if (gSaveContext.save.weekEventReg[14] & 4) {
+                    Message_StartTextbox(globalCtx, 0x1591, &this->actor);
                     this->unk_314 = 0x1591;
                     break;
                 }
-                func_801518B0(globalCtx, 0x1592, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
             case 0x1591:
-                func_801518B0(globalCtx, 0x1592, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1592, &this->actor);
                 this->unk_314 = 0x1592;
                 break;
             case 0x1593:
-                func_801518B0(globalCtx, 0x1594, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1594, &this->actor);
                 this->unk_314 = 0x1594;
                 break;
             case 0x1595:
-                func_801518B0(globalCtx, 0x1596, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1596, &this->actor);
                 this->unk_314 = 0x1596;
                 break;
             case 0x1596:
-                func_801518B0(globalCtx, 0x1597, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1597, &this->actor);
                 this->unk_314 = 0x1597;
                 break;
             case 0x1598:
-                func_801518B0(globalCtx, 0x1599, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1599, &this->actor);
                 this->unk_314 = 0x1599;
                 break;
             case 0x15A5:
-                func_801518B0(globalCtx, 0x15A6, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A6, &this->actor);
                 this->unk_314 = 0x15A6;
                 break;
             case 0x15A6:
-                func_801518B0(globalCtx, 0x15A7, &this->actor);
+                Message_StartTextbox(globalCtx, 0x15A7, &this->actor);
                 this->unk_314 = 0x15A7;
                 break;
             case 0x15A7:
@@ -246,37 +246,37 @@ void func_80BD06FC(EnHgo* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
+    s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E6)) {
-        actionIndex = func_800EE200(globalCtx, 0x1E6);
-        if (this->unk_316 != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->unk_316 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+    if (Cutscene_CheckActorAction(globalCtx, 486)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 486);
+        if (this->unk_316 != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk_316 = globalCtx->csCtx.actorActions[actionIndex]->action;
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->unk_218 = 0;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
                     break;
                 case 2:
                     this->actor.draw = EnHgo_Draw;
                     this->unk_218 = 1;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                     break;
                 case 3:
                     this->unk_218 = 2;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 2);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
                     break;
                 case 4:
                     this->unk_218 = 3;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     break;
                 case 5:
                     this->unk_218 = 4;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 4);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 4);
                     break;
                 case 6:
                     this->unk_218 = 5;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 5);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -285,25 +285,25 @@ s32 func_80BD0898(EnHgo* this, GlobalContext* globalCtx) {
                     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) && (this->unk_312 == 0)) {
                         this->unk_312 = 1;
                         if ((gSaveContext.sceneSetupIndex == 0) &&
-                            ((globalCtx->csCtx.unk_12 == 2) || (globalCtx->csCtx.unk_12 == 4))) {
+                            ((globalCtx->csCtx.currentCsIndex == 2) || (globalCtx->csCtx.currentCsIndex == 4))) {
                             Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }
                     break;
                 case 2:
                     this->unk_218 = 3;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
                     break;
                 case 5:
                     this->unk_218 = 6;
-                    Actor_ChangeAnimation(&this->skelAnime, sAnimations, 6);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 6);
             }
         }
 
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         return true;
     }
-    if ((globalCtx->csCtx.state == 0) && (((gSaveContext.weekEventReg[75]) & 0x20)) &&
+    if ((globalCtx->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
         (this->actionFunc == func_80BD0410)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,

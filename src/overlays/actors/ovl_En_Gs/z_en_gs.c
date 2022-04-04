@@ -8,7 +8,7 @@
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x02000019
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGs*)thisx)
 
@@ -112,7 +112,7 @@ s8 func_80997A90(s16 arg0, s16 arg1) {
     if ((arg0 == 0) || ((arg0 != 1) && (arg0 != 2) && (arg0 == 3))) {
         phi_v1 = 0;
     } else {
-        phi_v1 = (gSaveContext.roomInf[126][1] >> (arg1 * 3)) & 7;
+        phi_v1 = (gSaveContext.save.unk_EC4 >> (arg1 * 3)) & 7;
     }
     return phi_v1;
 }
@@ -156,7 +156,7 @@ void EnGs_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_1F4 = this->unk_1FA;
     Math_Vec3f_Copy(&this->unk_1B0[0], &D_801C5DB0);
     Math_Vec3f_Copy(&this->unk_1B0[1], &D_801C5DB0);
-    func_8013E3B8(&this->actor, &this->unk_212, 2);
+    SubS_FillCutscenesList(&this->actor, this->unk_212, ARRAY_COUNT(this->unk_212));
     func_801A5080(0);
     if (this->actor.params == ENGS_1) {
         Actor_SetScale(&this->actor, 0.15f);
@@ -206,7 +206,7 @@ void func_80997DEC(EnGs* this, GlobalContext* globalCtx) {
 void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
-            func_801518B0(globalCtx, this->unk_210, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
             break;
 
         case 1:
@@ -217,8 +217,8 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x20D0:
                         func_80997D14(this, globalCtx);
                         break;
@@ -262,7 +262,7 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997FF0(EnGs* this, GlobalContext* globalCtx) {
-    if (func_8013E2D4(&this->actor, globalCtx->unk_1879C[0], -1, 1)) {
+    if (SubS_StartActorCutscene(&this->actor, globalCtx->playerActorCsIds[0], -1, SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, globalCtx);
     }
 }
@@ -273,7 +273,7 @@ void func_80998040(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
-    switch (globalCtx->msgCtx.unk1202A) {
+    switch (globalCtx->msgCtx.ocarinaMode) {
         case 3:
             switch (globalCtx->msgCtx.unk1202E) {
                 case 7:
@@ -296,7 +296,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     break;
 
                 case 0:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.playerForm == PLAYER_FORM_DEKU)) {
+                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
                         this->unk_194 = 1;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -306,7 +306,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.playerForm == PLAYER_FORM_ZORA)) {
+                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
                         this->unk_194 = 3;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -316,7 +316,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
                     break;
 
                 case 1:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.playerForm == PLAYER_FORM_GORON)) {
+                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
                         this->unk_194 = 2;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -339,7 +339,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
 
 void func_80998300(EnGs* this, GlobalContext* globalCtx) {
     if (this->actor.cutscene != -1) {
-        ActorCutscene_Stop(globalCtx->unk_1879C[0]);
+        ActorCutscene_Stop(globalCtx->playerActorCsIds[0]);
     }
 }
 
@@ -380,7 +380,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
     EnGs* gossipStone;
     Vec3f sp38;
 
-    if (func_8013E2D4(&this->actor, this->unk_212, -1, 0)) {
+    if (SubS_StartActorCutscene(&this->actor, this->unk_212[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         Player* player = GET_PLAYER(globalCtx);
 
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -388,8 +388,8 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;
-        gSaveContext.roomInf[126][1] =
-            (gSaveContext.roomInf[126][1] & ~(7 << (this->unk_198 * 3))) | ((this->unk_194 & 7) << (this->unk_198 * 3));
+        gSaveContext.save.unk_EC4 = ((u32)gSaveContext.save.unk_EC4 & ~(7 << (this->unk_198 * 3))) |
+                                    ((this->unk_194 & 7) << (this->unk_198 * 3));
         gossipStone = NULL;
 
         do {
@@ -446,11 +446,11 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
         if ((this->unk_19C == 5) && (this->unk_194 != 0)) {
             s32 i;
 
-            ActorCutscene_Stop(this->unk_212);
+            ActorCutscene_Stop(this->unk_212[0]);
             phi_v0 = 1;
 
             for (i = 0; i < 4; i++) {
-                if (((gSaveContext.roomInf[126][1] >> (i * 3)) & 7) != (u32)this->unk_194) {
+                if (((gSaveContext.save.unk_EC4 >> (i * 3)) & 7) != (u32)this->unk_194) {
                     phi_v0 = 0;
                 }
             }
@@ -459,29 +459,29 @@ void func_8099874C(EnGs* this, GlobalContext* globalCtx) {
                 this->unk_20C = -1;
                 switch (this->unk_194) {
                     case 1:
-                        if (!(gSaveContext.weekEventReg[77] & 8)) {
+                        if (!(gSaveContext.save.weekEventReg[77] & 8)) {
                             this->unk_20C = 6;
-                            gSaveContext.weekEventReg[77] |= 8;
+                            gSaveContext.save.weekEventReg[77] |= 8;
                         }
                         break;
 
                     case 3:
-                        if (!(gSaveContext.weekEventReg[77] & 0x10)) {
+                        if (!(gSaveContext.save.weekEventReg[77] & 0x10)) {
                             this->unk_20C = 6;
-                            gSaveContext.weekEventReg[77] |= 0x10;
+                            gSaveContext.save.weekEventReg[77] |= 0x10;
                         }
                         break;
 
                     case 2:
-                        if (!(gSaveContext.weekEventReg[77] & 0x20)) {
+                        if (!(gSaveContext.save.weekEventReg[77] & 0x20)) {
                             this->unk_20C = 6;
-                            gSaveContext.weekEventReg[77] |= 0x20;
+                            gSaveContext.save.weekEventReg[77] |= 0x20;
                         }
                         break;
                 }
 
-                if (!(gSaveContext.weekEventReg[90] & 0x10)) {
-                    gSaveContext.weekEventReg[90] |= 0x10;
+                if (!(gSaveContext.save.weekEventReg[90] & 0x10)) {
+                    gSaveContext.save.weekEventReg[90] |= 0x10;
                     this->unk_20C = 12;
                 }
 
@@ -533,10 +533,11 @@ s32 func_80998A48(EnGs* this, GlobalContext* globalCtx) {
     } else if (this->unk_19D == 1) {
         if (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7,
                           0) == 0.0f) {
-            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) && !Message_GetState(&globalCtx->msgCtx)) {
+            if ((this->actor.params != ENGS_0) && !Play_InCsMode(globalCtx) &&
+                (Message_GetState(&globalCtx->msgCtx) == 0)) {
                 this->unk_216 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
-                func_801518B0(globalCtx, 0x20D2, NULL);
+                Message_StartTextbox(globalCtx, 0x20D2, NULL);
             }
             this->unk_19A &= ~1;
             sp3C = 0;
@@ -1005,7 +1006,7 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
     EnGs* this = THIS;
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        globalCtx->msgCtx.unk11F22 = 0;
+        globalCtx->msgCtx.msgMode = 0;
         globalCtx->msgCtx.unk11F10 = 0;
         this->collider.base.acFlags &= ~AC_HIT;
         func_80997DEC(this, globalCtx);
@@ -1021,11 +1022,11 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
         s16 sp2E;
         s16 sp2C;
 
-        if ((this->actor.flags & 0x40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
+        if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, globalCtx);
             Actor_GetScreenPos(globalCtx, &this->actor, &sp2E, &sp2C);
-            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > 320) || (sp2C < 0) ||
-                (sp2C > 240)) {
+            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
+                (sp2C > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
             } else if (this->unk_21C > 0) {
                 func_800BC848(&this->actor, globalCtx, this->unk_21C, this->unk_21E);

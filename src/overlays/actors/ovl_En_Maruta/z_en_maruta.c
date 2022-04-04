@@ -5,8 +5,10 @@
  */
 
 #include "z_en_maruta.h"
+#include "overlays/actors/ovl_En_Kendo_Js/z_en_kendo_js.h"
+#include "objects/object_maruta/object_maruta.h"
 
-#define FLAGS 0x00000011
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
 
 #define THIS ((EnMaruta*)thisx)
 
@@ -15,16 +17,25 @@ void EnMaruta_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnMaruta_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80B372B8(EnMaruta* this);
 void func_80B372CC(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37364(EnMaruta* this);
 void func_80B3738C(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B373F4(EnMaruta* this);
 void func_80B37428(EnMaruta* this, GlobalContext* globalCtx);
 void func_80B374FC(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37590(EnMaruta* this, GlobalContext* globalCtx);
 void func_80B37950(EnMaruta* this, GlobalContext* globalCtx);
 void func_80B379C0(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37A14(EnMaruta* this);
 void func_80B37A64(EnMaruta* this, GlobalContext* globalCtx);
 void func_80B37AA0(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B37C04(s16* arg0);
+void func_80B37EC0(EnMaruta* this, GlobalContext* globalCtx);
+void func_80B38060(EnMaruta* this, Vec3f* arg1);
+void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4);
+void func_80B382E4(GlobalContext* globalCtx, Vec3f arg1);
 
-#if 0
 const ActorInit En_Maruta_InitVars = {
     ACTOR_EN_MARUTA,
     ACTORCAT_PROP,
@@ -37,15 +48,94 @@ const ActorInit En_Maruta_InitVars = {
     (ActorFunc)EnMaruta_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80B38AFC = {
-    { COLTYPE_NONE, AT_NONE, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON | BUMP_HOOKABLE, OCELEM_ON, },
+Gfx* D_80B386A0[] = {
+    object_maruta_DL_002220, object_maruta_DL_0023D0, object_maruta_DL_002568, object_maruta_DL_002660,
+    object_maruta_DL_002758, object_maruta_DL_002850, object_maruta_DL_002948, object_maruta_DL_002AE0,
+};
+
+u8 D_80B386C0[] = {
+    0xFF, 0x2B, 0xD4, 0x17, 0xE8, 0x55, 0xAA, 0x0F, 0xF0,
+};
+
+s32 D_80B386CC[] = {
+    5, 5, 3, 3, 7, 7, 7, 7, 3, 3, 3, 3, 7, 7, 3, 3, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7,
+};
+
+Vec3f D_80B38754 = { -2.0f, 3.0f, 0.0f };
+Vec3f D_80B38760 = { -2.0f, 3.0f, 0.0f };
+Vec3f D_80B3876C = { 2.0f, 3.0f, 0.0f };
+Vec3f D_80B38778 = { -2.0f, 10.0f, 0.0f };
+Vec3f D_80B38784 = { -2.5f, 5.0f, 0.0f };
+Vec3f D_80B38790 = { -3.0f, 10.0f, 0.0f };
+Vec3f D_80B3879C = { 2.5f, 5.0f, 0.0f };
+Vec3f D_80B387A8 = { 3.0f, 10.0f, 0.0f };
+Vec3f D_80B387B4 = { -1.0f, 7.0f, -1.0f };
+Vec3f D_80B387C0 = { 1.0f, 7.0f, -1.0f };
+Vec3f D_80B387CC = { 0.0f, 8.0f, -1.5f };
+Vec3f D_80B387D8 = { 0.0f, 8.0f, -1.5f };
+
+Vec3f D_80B387E4[] = {
+    { 0.0f, 0.0f, 0.0f },    { 0.0f, 0.0f, 0.0f },    { -10.0f, 460.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f },    { 10.0f, 460.0f, 0.0f }, { -40.0f, 315.0f, 0.0f },
+    { 40.0f, 315.0f, 0.0f }, { 0.0f, 140.0f, 0.0f },  { 0.0f, 445.0f, 0.0f },
+};
+
+Vec3f D_80B38850[] = {
+    { 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, 1.0f },
+    { 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, -1.0f }, { -1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f },
+};
+
+Vec3f D_80B388BC[] = {
+    { 90.0f, 630.0f, -78.0f }, { -90.0f, 630.0f, -78.0f }, { -90.0f, 630.0f, 78.0f }, { 90.0f, 630.0f, 78.0f },
+    { 90.0f, 350.0f, -78.0f }, { -90.0f, 170.0f, -78.0f }, { -90.0f, 170.0f, 78.0f }, { 90.0f, 350.0f, 78.0f },
+};
+
+Vec3f D_80B3891C[] = {
+    { 90.0f, 630.0f, -78.0f }, { -90.0f, 630.0f, -78.0f }, { -90.0f, 630.0f, 78.0f }, { 90.0f, 630.0f, 78.0f },
+    { 90.0f, 170.0f, -78.0f }, { -90.0f, 350.0f, -78.0f }, { -90.0f, 350.0f, 78.0f }, { 90.0f, 170.0f, 78.0f },
+};
+
+Vec3f D_80B3897C[] = {
+    { 0.0f, 630.0f, -104.0f }, { -90.0f, 630.0f, -52.0f }, { -90.0f, 630.0f, 52.0f }, { 0.0f, 630.0f, 104.0f },
+    { 0.0f, 0.0f, -104.0f },   { -90.0f, 0.0f, -52.0f },   { -90.0f, 0.0f, 52.0f },   { 0.0f, 0.0f, 104.0f },
+};
+
+Vec3f D_80B389DC[] = {
+    { 0.0f, 630.0f, -104.0f }, { 90.0f, 630.0f, -52.0f }, { 90.0f, 630.0f, 52.0f }, { 0.0f, 630.0f, 104.0f },
+    { 0.0f, 0.0f, -104.0f },   { 90.0f, 0.0f, -52.0f },   { 90.0f, 0.0f, 52.0f },   { 0.0f, 0.0f, 104.0f },
+};
+
+Vec3f D_80B38A3C[] = {
+    { 90.0f, 630.0f, -78.0f }, { -90.0f, 630.0f, -78.0f }, { -90.0f, 630.0f, 78.0f }, { 90.0f, 630.0f, 78.0f },
+    { 90.0f, 260.0f, -78.0f }, { -90.0f, 260.0f, -78.0f }, { -90.0f, 260.0f, 78.0f }, { 90.0f, 260.0f, 78.0f },
+};
+
+Vec3f D_80B38A9C[] = {
+    { 90.0f, 260.0f, -78.0f }, { -90.0f, 260.0f, -78.0f }, { -90.0f, 260.0f, 78.0f }, { 90.0f, 260.0f, 78.0f },
+    { 90.0f, 20.0f, -78.0f },  { -90.0f, 20.0f, -78.0f },  { -90.0f, 20.0f, 78.0f },  { 90.0f, 20.0f, 78.0f },
+};
+
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0xF7CFFFFF, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON | BUMP_HOOKABLE,
+        OCELEM_ON,
+    },
     { 12, 65, 0, { 0, 0, 0 } },
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80B38B28 = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(0, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -80,71 +170,530 @@ static DamageTable D_80B38B28 = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80B38B48 = { 8, 0, 0, 0, MASS_HEAVY };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
-#endif
+Vec3f D_80B38B54 = { 0.0f, 0.0f, 0.0f };
 
-extern ColliderCylinderInit D_80B38AFC;
-extern DamageTable D_80B38B28;
-extern CollisionCheckInfoInit2 D_80B38B48;
+void EnMaruta_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnMaruta* this = THIS;
+    s32 i;
 
-extern UNK_TYPE D_06002EC0;
+    Actor_SetScale(&this->actor, 0.1f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/EnMaruta_Init.s")
+    this->actor.targetMode = 6;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/EnMaruta_Destroy.s")
+    this->actor.focus.pos = this->actor.world.pos;
+    this->actor.focus.pos.y += 50.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B372B8.s")
+    this->actor.colChkInfo.health = 1;
+    this->actor.world.pos.y -= 4.0f;
+    this->actor.home.pos.y -= 4.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B372CC.s")
+    this->unk_210 = ENMARUTA_GET_FF00(&this->actor);
+    this->unk_218 = 0;
+    this->unk_21A = 0;
+    this->unk_1A0 = NULL;
+    this->unk_21C = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37364.s")
+    this->unk_194.x = 0.0f;
+    this->unk_194.y = 0.0f;
+    this->unk_194.z = 1.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B3738C.s")
+    for (i = 0; i < ARRAY_COUNT(this->unk_1A4); i++) {
+        this->unk_1A4[i] = D_80B38B54;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B373F4.s")
+    this->unk_214 = -1;
+    this->unk_220 = 0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37428.s")
+    if (this->unk_210 == 0) {
+        Collider_InitCylinder(globalCtx, &this->collider);
+        Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B374B8.s")
+    if (this->unk_210 == 0) {
+        if (ENMARUTA_GET_FF(&this->actor) == 0xFF) {
+            func_80B372B8(this);
+        } else {
+            func_80B37364(this);
+        }
+    } else {
+        func_80B37590(this, globalCtx);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B374FC.s")
+void EnMaruta_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnMaruta* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37590.s")
+    if (this->unk_210 == 0) {
+        Collider_DestroyCylinder(globalCtx, &this->collider);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37950.s")
+void func_80B372B8(EnMaruta* this) {
+    this->actionFunc = func_80B372CC;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37998.s")
+void func_80B372CC(EnMaruta* this, GlobalContext* globalCtx) {
+    s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B379C0.s")
+    if (temp_v1 > 0x1555) {
+        this->actor.shape.rot.y += 0x2AAA;
+    } else if (temp_v1 < -0x1555) {
+        this->actor.shape.rot.y -= 0x2AAA;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37A14.s")
+    if (this->unk_220 == 1) {
+        func_80B373F4(this);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37A64.s")
+    if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
+        EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37A8C.s")
+        kendoJs->unk_292 = this->actor.isTargeted;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37AA0.s")
+void func_80B37364(EnMaruta* this) {
+    this->actor.world.pos.y = this->actor.home.pos.y - 630.0f;
+    this->actionFunc = func_80B3738C;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37B78.s")
+void func_80B3738C(EnMaruta* this, GlobalContext* globalCtx) {
+    if (Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 0.4f, 100.0f, 10.0f) == 0.0f) {
+        func_80B372B8(this);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37C04.s")
+void func_80B373F4(EnMaruta* this) {
+    this->collider.base.acFlags |= AC_HIT;
+    this->actor.velocity.y = 0.0f;
+    this->actor.gravity = -2.0f;
+    this->actionFunc = func_80B37428;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37C60.s")
+void func_80B37428(EnMaruta* this, GlobalContext* globalCtx) {
+    if ((this->actor.floorHeight - 630.0f) < this->actor.world.pos.y) {
+        this->actor.velocity.y += this->actor.gravity;
+        this->actor.world.pos.y += this->actor.velocity.y;
+    } else {
+        if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
+            EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37CA0.s")
+            kendoJs->unk_28C--;
+        }
+        Actor_MarkForDeath(&this->actor);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B37EC0.s")
+void func_80B374B8(EnMaruta* this) {
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    if (this->actionFunc != func_80B37428) {
+        this->unk_21E = 0;
+        this->actor.gravity = -2.0f;
+        this->actionFunc = func_80B374FC;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B38028.s")
+void func_80B374FC(EnMaruta* this, GlobalContext* globalCtx) {
+    if (this->unk_21E == 40) {
+        Actor_MarkForDeath(&this->actor);
+        return;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B38060.s")
+    if (((this->actor.floorHeight - 630.0f) < this->actor.world.pos.y) && (this->unk_21E > 30)) {
+        this->actor.velocity.y += this->actor.gravity;
+        this->actor.world.pos.y += this->actor.velocity.y;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B3828C.s")
+    this->unk_21E++;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/func_80B382E4.s")
+void func_80B37590(EnMaruta* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Vec3f sp48;
+    s16 sp46;
+    Vec3f sp38;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/EnMaruta_Update.s")
+    this->unk_21E = 0;
+    this->unk_21C = 0;
+    this->actor.gravity = -2.0f;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Maruta/EnMaruta_Draw.s")
+    switch (this->unk_210) {
+        case 2:
+            sp48 = D_80B38754;
+            this->unk_1A0 = D_80B388BC;
+            break;
+
+        case 4:
+            if (player->swordAnimation == 8) {
+                sp48 = D_80B3876C;
+            } else {
+                sp48 = D_80B38778;
+            }
+            this->unk_1A0 = D_80B3891C;
+            break;
+
+        case 5:
+            if (player->swordAnimation == 0) {
+                sp48 = D_80B38784;
+            } else {
+                sp48 = D_80B38790;
+            }
+            this->unk_1A0 = D_80B3897C;
+            break;
+
+        case 6:
+            if (player->swordAnimation == 0) {
+                sp48 = D_80B3879C;
+            } else {
+                sp48 = D_80B387A8;
+            }
+            this->unk_1A0 = D_80B389DC;
+            break;
+
+        case 8:
+            if (player->swordAnimation == 4) {
+                sp48 = D_80B387B4;
+            } else {
+                sp48 = D_80B387C0;
+            }
+            this->unk_1A0 = D_80B38A3C;
+            break;
+
+        case 7:
+            sp48 = D_80B387CC;
+            this->unk_1A0 = D_80B38A9C;
+            break;
+
+        default:
+            sp48 = D_80B38B54;
+            break;
+    }
+
+    sp46 = this->actor.shape.rot.y;
+    this->actor.velocity.x = (sp48.x * Math_CosS(sp46) + (Math_SinS(sp46) * sp48.z));
+    this->actor.velocity.y = sp48.y;
+    this->actor.velocity.z = (-sp48.x * Math_SinS(sp46) + (Math_CosS(sp46) * sp48.z));
+
+    sp38 = D_80B38850[this->unk_210];
+
+    func_80B3828C(&sp38, &this->unk_194, Rand_Next() & 0xFFF, Rand_Next() & 0xFFF, 0);
+    this->unk_21A = Rand_Next() & 0x7FF;
+
+    if (this->unk_210 == 7) {
+        this->unk_21A |= 0x3F;
+    } else {
+        this->unk_21A |= 0xFF;
+    }
+
+    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actionFunc = func_80B37950;
+}
+
+void func_80B37950(EnMaruta* this, GlobalContext* globalCtx) {
+    this->unk_218 += this->unk_21A;
+    this->actor.velocity.y += this->actor.gravity;
+    func_80B37EC0(this, globalCtx);
+    Actor_UpdatePos(&this->actor);
+}
+
+void func_80B37998(EnMaruta* this) {
+    this->unk_21E = 0;
+    this->actor.gravity = 0.0f;
+    this->actor.velocity.y = 0.0f;
+    this->unk_21A = 0;
+    this->actionFunc = func_80B379C0;
+}
+
+void func_80B379C0(EnMaruta* this, GlobalContext* globalCtx) {
+    if (this->unk_21E == 40) {
+        func_80B37A14(this);
+    } else {
+        this->unk_21E++;
+    }
+    func_80B37C04(&this->unk_218);
+}
+
+void func_80B37A14(EnMaruta* this) {
+    s16 temp = this->unk_218 & 0x7FFF;
+
+    if (((this->unk_210 == 5) || (this->unk_210 == 6)) && !temp) {
+        this->unk_21E = 100;
+    } else {
+        this->unk_21E = 0;
+    }
+    this->actionFunc = func_80B37A64;
+}
+
+void func_80B37A64(EnMaruta* this, GlobalContext* globalCtx) {
+    if (this->unk_21E > 100) {
+        this->actor.colChkInfo.health = 0;
+    } else {
+        this->unk_21E++;
+    }
+}
+
+void func_80B37A8C(EnMaruta* this) {
+    this->actionFunc = func_80B37AA0;
+}
+
+void func_80B37AA0(EnMaruta* this, GlobalContext* globalCtx) {
+    if (this->actor.scale.y == 0.0f) {
+        if (this->actor.scale.x == 0.0f) {
+            Actor_MarkForDeath(&this->actor);
+            return;
+        }
+        Math_SmoothStepToF(&this->actor.scale.x, 0.0f, 0.2f, 0.01f, 0.001f);
+        Math_SmoothStepToF(&this->actor.scale.z, 0.0f, 0.2f, 0.01f, 0.001f);
+    } else {
+        Math_SmoothStepToF(&this->actor.scale.y, 0.0f, 0.2f, 0.003f, 0.001f);
+    }
+}
+
+s32 func_80B37B78(EnMaruta* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    s16 temp_v1 = BINANG_SUB(this->actor.yawTowardsPlayer, 0x8000);
+
+    temp_v1 = BINANG_SUB(temp_v1, player->actor.shape.rot.y);
+    if ((ABS_ALT(temp_v1) < 0x1555) ||
+        ((player->swordState != 0) && ((player->swordAnimation == 4) || (player->swordAnimation == 6) ||
+                                       (player->swordAnimation == 0x1E) || (player->swordAnimation == 0x20)))) {
+        return true;
+    }
+    return false;
+}
+
+void func_80B37C04(s16* arg0) {
+    s16 temp_a1 = *arg0 & 0xC000;
+    s16 temp = *arg0 & 0x3FFF;
+
+    if (temp > 0x2000) {
+        temp_a1 += 0x4000;
+    }
+    Math_SmoothStepToS(arg0, temp_a1, 1, 0xAAA, 0xB6);
+}
+
+void func_80B37C60(EnMaruta* this) {
+    if ((this->actionFunc != func_80B37AA0) && (this->actor.colChkInfo.health == 0)) {
+        func_80B37A8C(this);
+    }
+}
+
+void func_80B37CA0(EnMaruta* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    if ((this->actionFunc == func_80B372CC) || (this->actionFunc == func_80B3738C) ||
+        (this->actionFunc == func_80B374FC) || (this->actionFunc == func_80B37AA0) ||
+        ((this->actionFunc == func_80B37428) && !(this->actor.world.pos.y < (this->actor.floorHeight - 20.0f)))) {
+        if ((this->collider.base.acFlags & AC_HIT) && (this->actionFunc == func_80B372CC)) {
+            this->collider.base.acFlags &= ~AC_HIT;
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SWORD_STRIKE);
+
+            if (D_80B386CC[player->swordAnimation] != 0) {
+                s32 temp = D_80B386CC[player->swordAnimation] + 1;
+
+                temp = (temp << 8) & 0xFF00;
+                this->unk_210 = D_80B386CC[player->swordAnimation];
+                Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_MARUTA,
+                                   this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, 0,
+                                   this->actor.shape.rot.y, 0, temp);
+                this->actor.world.rot.y = this->actor.shape.rot.y;
+                if ((this->unk_210 == 5) || ((this->unk_210 == 7) && (player->swordAnimation == 0xC))) {
+                    func_80B37590(this, globalCtx);
+                } else {
+                    func_80B374B8(this);
+                }
+
+                if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
+                    EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
+
+                    kendoJs->unk_28E = 1;
+                    kendoJs->unk_28C--;
+                }
+                return;
+            }
+        }
+
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+
+        if (func_80B37B78(this, globalCtx) && (this->actionFunc == func_80B372CC)) {
+            CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+        }
+    }
+}
+
+void func_80B37EC0(EnMaruta* this, GlobalContext* globalCtx) {
+    Vec3f sp34 = this->unk_204;
+    s32 phi_a2 = -1;
+    s32 i;
+    f32 temp;
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_1A4); i++) {
+        if (this->unk_1A4[i].y < sp34.y) {
+            sp34 = this->unk_1A4[i];
+            phi_a2 = i;
+        }
+        this->unk_214 = phi_a2;
+    }
+
+    if (sp34.y < this->actor.floorHeight) {
+        this->unk_218 -= this->unk_21A;
+
+        temp = this->actor.floorHeight - sp34.y;
+        this->actor.velocity.y -= this->actor.gravity;
+        this->actor.velocity.x *= 0.6f;
+        this->actor.velocity.z *= 0.6f;
+        this->actor.world.pos.y += temp;
+
+        if (this->actor.velocity.y < -this->actor.gravity) {
+            func_80B382E4(globalCtx, sp34);
+            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_LOG_BOUND);
+            this->actor.velocity.y *= -0.6f;
+            func_80B38060(this, &sp34);
+        }
+    }
+}
+
+f32 func_80B38028(Vec3f* arg0, Vec3f* arg1, Vec3f* arg2) {
+    f32 x0 = arg0->x;
+    f32 z0 = arg0->z;
+    f32 dx = arg2->x - arg1->x;
+    f32 dz = arg2->z - arg1->z;
+
+    return z0 * dx - x0 * dz;
+}
+
+void func_80B38060(EnMaruta* this, Vec3f* arg1) {
+    Vec3f sp44;
+    s32 pad;
+    f32 temp_f0;
+    f32 phi_f2;
+
+    func_80B3828C(&this->unk_194, &sp44, 0, this->actor.shape.rot.y, 0);
+    temp_f0 = func_80B38028(&sp44, &this->unk_204, arg1);
+
+    if ((this->unk_210 == 5) || (this->unk_210 == 6)) {
+        phi_f2 = 8.0f;
+    } else if (this->unk_210 == 4) {
+        phi_f2 = 5.0f;
+    } else {
+        phi_f2 = 2.0f;
+    }
+
+    if ((temp_f0 < phi_f2) && (-phi_f2 < temp_f0)) {
+        phi_f2 = 3.0f;
+    } else {
+        phi_f2 = 1.2f;
+    }
+
+    if (temp_f0 > 0.0f) {
+        if (this->unk_21A > 0) {
+            this->unk_21A *= phi_f2;
+        } else {
+            this->unk_21A *= -0.8f;
+        }
+    } else {
+        if (this->unk_21A > 0) {
+            this->unk_21A *= -0.8f;
+        } else {
+            this->unk_21A *= phi_f2;
+        }
+    }
+
+    if ((ABS_ALT(this->unk_21A) < 0x38E) &&
+        (((this->unk_218 & 0x3FFF) < 0x71C) || ((this->unk_218 & 0x3FFF) >= 0x38E4))) {
+        this->actor.gravity *= 0.8f;
+        this->unk_21C++;
+        if (this->unk_21C == 2) {
+            func_80B37998(this);
+        }
+    } else if (ABS_ALT(this->unk_21A) > 0x38E) {
+        if (this->unk_21A < 0) {
+            this->unk_21A = -0x38E;
+        } else {
+            this->unk_21A = 0x38E;
+        }
+    }
+}
+
+void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4) {
+    Matrix_StatePush();
+    Matrix_InsertRotation(arg2, arg3, arg4, MTXMODE_NEW);
+    Matrix_MultiplyVector3fByState(arg0, arg1);
+    Matrix_StatePop();
+}
+
+void func_80B382E4(GlobalContext* globalCtx, Vec3f arg1) {
+    Vec3f sp84 = arg1;
+    Vec3f sp78;
+    Vec3f sp6C;
+    Color_RGBA8 sp68 = { 170, 130, 90, 255 };
+    Color_RGBA8 sp64 = { 100, 60, 20, 255 };
+    s32 i;
+
+    sp6C.y = 0.0f;
+    sp84.y += 15.0f;
+
+    for (i = 0; i < 10; i++) {
+        sp78.x = Rand_Centered() * 10.0f;
+        sp78.y = 2.0f * Rand_ZeroOne();
+        sp78.z = Rand_Centered() * 10.0f;
+        sp6C.x = -0.2f * sp78.x;
+        sp6C.z = -0.2f * sp78.z;
+        func_800B0EB0(globalCtx, &sp84, &sp78, &sp6C, &sp68, &sp64, 60, 20, 10);
+    }
+}
+
+void EnMaruta_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnMaruta* this = THIS;
+
+    this->actionFunc(this, globalCtx);
+
+    func_80B37CA0(this, globalCtx);
+    func_80B37C60(this);
+}
+
+void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnMaruta* this = THIS;
+    Vec3f sp50;
+    s32 i;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    if (this->unk_210 == 0) {
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, object_maruta_DL_002EC0);
+    } else {
+        sp50 = D_80B387E4[this->unk_210];
+
+        Matrix_StatePush();
+        Matrix_InsertTranslation(sp50.x, sp50.y, sp50.z, MTXMODE_APPLY);
+        Matrix_InsertRotationAroundUnitVector_s(this->unk_218, &this->unk_194, MTXMODE_APPLY);
+        Matrix_InsertTranslation(-sp50.x, -sp50.y, -sp50.z, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        for (i = 0; i < 8; i++) {
+            if (D_80B386C0[this->unk_210] & (1 << i)) {
+                gSPDisplayList(POLY_OPA_DISP++, D_80B386A0[i]);
+            }
+        }
+
+        if (this->unk_1A0 != NULL) {
+            for (i = 0; i < ARRAY_COUNT(this->unk_1A4); i++) {
+                Matrix_MultiplyVector3fByState(&this->unk_1A0[i], &this->unk_1A4[i]);
+            }
+            Matrix_MultiplyVector3fByState(&sp50, &this->unk_204);
+        }
+
+        Matrix_StatePop();
+    }
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}

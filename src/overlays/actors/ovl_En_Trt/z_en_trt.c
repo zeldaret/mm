@@ -8,7 +8,7 @@
 #include "objects/object_trt/object_trt.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000009
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
 #define THIS ((EnTrt*)thisx)
 
@@ -22,11 +22,11 @@ void EnTrt_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnTrt_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx);
-s32 EnTrt_ReturnItemToShelf(EnTrt* this);
 void EnTrt_ResetItemPosition(EnTrt* this);
+void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx);
+s32 EnTrt_ReturnItemToShelf(EnTrt* this);
 s32 EnTrt_FacingShopkeeperDialogResult(EnTrt* this, GlobalContext* globalCtx);
 s32 EnTrt_TakeItemOffShelf(EnTrt* this);
-void EnTrt_UpdateHeadYawAndPitch(EnTrt* this, GlobalContext* globalCtx);
 
 void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx);
 void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx);
@@ -64,12 +64,17 @@ void EnTrt_Blink(EnTrt* this);
 void EnTrt_OpenEyes2(EnTrt* this);
 void EnTrt_NodOff(EnTrt* this);
 
-static ActorAnimationEntryS sAnimations[] = {
-    { &object_trt_Anim_00DE68, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00EE98, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_00FD34, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_0030EC, 1.0f, 0, -1, 2, 0 },
-    { &object_trt_Anim_003D78, 1.0f, 0, -1, 2, 0 }, { &object_trt_Anim_00D52C, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_000A44, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_001EF4, 1.0f, 0, -1, 0, 0 },
-    { &object_trt_Anim_002224, 1.0f, 0, -1, 0, 0 }, { &object_trt_Anim_002CB0, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimations[] = {
+    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 const ActorInit En_Trt_InitVars = {
@@ -92,17 +97,17 @@ static ShopItem sShop[] = {
     { SI_POTION_BLUE, { -12, 32, -36 } },
 };
 
-void EnTrt_ChangeAnim(SkelAnime* skelAnime, ActorAnimationEntryS* animations, s32 idx) {
+void EnTrt_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animations, s32 idx) {
     f32 frameCount;
 
     animations += idx;
     if (animations->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animations->animationSeg);
+        frameCount = Animation_GetLastFrame(animations->animation);
     } else {
         frameCount = animations->frameCount;
     }
-    Animation_Change(skelAnime, animations->animationSeg, animations->playbackSpeed, animations->frame, frameCount,
-                     animations->mode, animations->transitionRate);
+    Animation_Change(skelAnime, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
+                     animations->mode, animations->morphFrames);
 }
 
 s32 EnTrt_TestItemSelected(GlobalContext* globalCtx) {
@@ -184,7 +189,7 @@ u16 EnTrt_GetItemTextId(EnTrt* this) {
 u16 EnTrt_GetItemChoiceTextId(EnTrt* this) {
     EnGirlA* item = this->items[this->cursorIdx];
 
-    if (item->actor.params == SI_POTION_BLUE && !(gSaveContext.weekEventReg[0x35] & 0x10)) {
+    if (item->actor.params == SI_POTION_BLUE && !(gSaveContext.save.weekEventReg[53] & 0x10)) {
         this->textId = 0x881;
         return 0x881;
     }
@@ -199,7 +204,7 @@ void EnTrt_EndInteraction(GlobalContext* globalCtx, EnTrt* this) {
         this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
     }
     Actor_ProcessTalkRequest(&this->actor, &globalCtx->state);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     Interface_ChangeAlpha(50);
     this->drawCursor = 0;
@@ -307,7 +312,7 @@ void EnTrt_Hello(EnTrt* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if (talkState == 5 && func_80147624(globalCtx)) {
+    if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         play_sound(NA_SE_SY_MESSAGE_PASS);
         if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
             EnTrt_StartShopping(globalCtx, this);
@@ -325,24 +330,24 @@ void EnTrt_GetMushroom(EnTrt* this, GlobalContext* globalCtx) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
             player->stateFlags2 &= ~0x20000000;
         }
-    } else if (talkState == 5 && func_80147624(globalCtx)) {
+    } else if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x883:
                 this->textId = 0x884;
-                func_801518B0(globalCtx, this->textId, &this->actor);
-                gSaveContext.weekEventReg[0x35] |= 8;
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
+                gSaveContext.save.weekEventReg[53] |= 8;
                 func_80123D50(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                 break;
             case 0x888:
                 this->textId = 0x889;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 break;
             case 0x889:
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_PayForMushroom;
                 break;
@@ -365,7 +370,7 @@ void EnTrt_PayForMushroom(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         switch (this->textId) {
             case 0x886:
                 this->textId = 0x887;
@@ -380,45 +385,45 @@ void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x88F) {
-            if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
+            if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->tmpTextId = this->textId;
                 this->textId = 0x88E;
-                gSaveContext.weekEventReg[0x55] |= 8;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                gSaveContext.save.weekEventReg[85] |= 8;
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
         } else {
-            if (gSaveContext.weekEventReg[0xC] & 8) {
+            if (gSaveContext.save.weekEventReg[12] & 8) {
                 this->textId = 0x83D;
                 EnTrt_SetupStartShopping(globalCtx, this, 0);
-            } else if (gSaveContext.weekEventReg[0x54] & 0x40) {
+            } else if (gSaveContext.save.weekEventReg[84] & 0x40) {
                 this->textId = 0x83B;
-                if (func_80114F2C(ITEM_POTION_RED)) {
+                if (Interface_HasItemInBottle(ITEM_POTION_RED)) {
                     EnTrt_SetupStartShopping(globalCtx, this, false);
                 } else {
                     this->actionFunc = EnTrt_TryToGiveRedPotion;
                 }
-            } else if (gSaveContext.weekEventReg[0x10] & 0x10) {
+            } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
                 this->timer = 30;
                 this->textId = 0x838;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
                 this->actionFunc = EnTrt_Surprised;
                 return;
-            } else if (gSaveContext.weekEventReg[0x11] & 1) {
+            } else if (gSaveContext.save.weekEventReg[17] & 1) {
                 this->textId = 0x835;
                 EnTrt_SetupStartShopping(globalCtx, this, false);
             }
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
         }
     }
 }
@@ -428,13 +433,13 @@ void EnTrt_GiveRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        if (!(gSaveContext.weekEventReg[0xC] & 0x10)) {
-            gSaveContext.weekEventReg[0xC] |= 0x10;
+        if (!(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            gSaveContext.save.weekEventReg[12] |= 0x10;
         }
-        gSaveContext.weekEventReg[0x54] |= 0x40;
+        gSaveContext.save.weekEventReg[84] |= 0x40;
         player->stateFlags2 &= ~0x20000000;
         this->actionFunc = EnTrt_GivenRedPotionForKoume;
-    } else if (gSaveContext.weekEventReg[0xC] & 0x10) {
+    } else if (gSaveContext.save.weekEventReg[12] & 0x10) {
         Actor_PickUp(&this->actor, globalCtx, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_BOTTLE_POTION_RED, 300.0f, 300.0f);
@@ -445,7 +450,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, GlobalContext* globalCtx) {
     //! @bug: player is set to NULL not PLAYER
     Player* player = NULL;
 
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
                 ActorCutscene_StartAndSetFlag(this->cutscene, &this->actor);
@@ -470,11 +475,11 @@ void EnTrt_EndConversation(EnTrt* this, GlobalContext* globalCtx) {
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_EndInteraction(globalCtx, this);
         }
     } else if (talkState == 6) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_EndInteraction(globalCtx, this);
         }
     }
@@ -516,7 +521,7 @@ void EnTrt_FaceShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     } else if (talkState == 4) {
         func_8011552C(globalCtx, 6);
         if (!EnTrt_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
-            if ((!func_80147624(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) &&
+            if ((!Message_ShouldAdvance(globalCtx) || !EnTrt_FacingShopkeeperDialogResult(this, globalCtx)) &&
                 (this->stickAccumX > 0)) {
                 cursorIdx = EnTrt_SetCursorIndexFromNeutral(this, 2);
                 if (cursorIdx != CURSOR_INVALID) {
@@ -632,7 +637,7 @@ void EnTrt_SetupBuyItemWithFanfare(GlobalContext* globalCtx, EnTrt* this) {
     Player* player = GET_PLAYER(globalCtx);
 
     Actor_PickUp(&this->actor, globalCtx, this->items[this->cursorIdx]->getItemId, 300.0f, 300.0f);
-    globalCtx->msgCtx.unk11F22 = 0x43;
+    globalCtx->msgCtx.msgMode = 0x43;
     globalCtx->msgCtx.unk12023 = 4;
     player->stateFlags2 &= ~0x20000000;
     Interface_ChangeAlpha(50);
@@ -702,7 +707,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
     if (EnTrt_TakeItemOffShelf(this)) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
-            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
+            if (!EnTrt_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         EnTrt_HandleCanBuyItem(globalCtx, this);
@@ -714,8 +719,8 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
                         break;
                 }
             }
-        } else if (talkState == 5 && func_80147624(globalCtx)) {
-            if (!func_80114E90()) {
+        } else if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
+            if (!Interface_HasEmptyBottle()) {
                 play_sound(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(globalCtx, this, 0x846);
             } else {
@@ -727,7 +732,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
                 this->drawCursor = 0;
                 this->shopItemSelectedTween = 0.0f;
                 item->boughtFunc(globalCtx, item);
-                gSaveContext.weekEventReg[0x35] |= 0x10;
+                gSaveContext.save.weekEventReg[53] |= 0x10;
             }
         }
     }
@@ -736,14 +741,14 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((gSaveContext.weekEventReg[0x55] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40)) {
+    if ((gSaveContext.save.weekEventReg[85] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40)) {
         this->textId = 0x88F;
     } else if (!(this->flags & ENTRT_MET)) {
         this->textId = 0x834;
     } else {
         this->textId = 0x83E;
     }
-    if (!(gSaveContext.weekEventReg[0x35] & 8)) {
+    if (!(gSaveContext.save.weekEventReg[53] & 8)) {
         this->talkOptionTextId = 0x845;
     } else if (this->flags & ENTRT_GIVEN_MUSHROOM) {
         this->talkOptionTextId = 0x882;
@@ -781,7 +786,7 @@ void EnTrt_IdleSleeping(EnTrt* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         this->timer = 40;
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 1);
-        this->animationIdx = 1;
+        this->animationIndex = 1;
         this->actionFunc = EnTrt_IdleAwake;
         this->blinkFunc = EnTrt_OpenThenCloseEyes;
     }
@@ -827,7 +832,7 @@ void EnTrt_IdleAwake(EnTrt* this, GlobalContext* globalCtx) {
     if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(150, 100);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 2);
-        this->animationIdx = 2;
+        this->animationIndex = 2;
         this->sleepSoundTimer = 10;
         this->actor.textId = 0;
         this->actionFunc = EnTrt_IdleSleeping;
@@ -847,10 +852,10 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
-        if (this->animationIdx != 5) {
+        if (this->animationIndex != 5) {
             if (curFrame == animLastFrame) {
                 EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 3);
-                this->animationIdx = 3;
+                this->animationIndex = 3;
                 this->blinkFunc = EnTrt_OpenEyesThenSetToBlink;
                 this->timer = 10;
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING;
@@ -864,12 +869,12 @@ void EnTrt_BeginInteraction(EnTrt* this, GlobalContext* globalCtx) {
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
-        func_801518B0(globalCtx, this->textId, &this->actor);
-        this->animationIdx = 5;
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
+        this->animationIndex = 5;
         switch (this->textId) {
             case 0x834:
-                if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) &&
-                    !(gSaveContext.weekEventReg[0x10] & 0x10) && !(gSaveContext.weekEventReg[0x11] & 1)) {
+                if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
+                    !(gSaveContext.save.weekEventReg[16] & 0x10) && !(gSaveContext.save.weekEventReg[17] & 1)) {
                     func_8011552C(globalCtx, 6);
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = true;
@@ -906,7 +911,7 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
     } else if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING_SPECIAL) {
         if (DECR(this->timer) == 0) {
             EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 4);
-            this->animationIdx = 4;
+            this->animationIndex = 4;
             this->blinkFunc = EnTrt_OpenEyes2;
             Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_SURPRISED);
             this->timer = 30;
@@ -915,8 +920,8 @@ void EnTrt_Surprised(EnTrt* this, GlobalContext* globalCtx) {
     } else if (DECR(this->timer) == 0) {
         this->timer = Rand_S16Offset(40, 20);
         EnTrt_ChangeAnim(&this->skelAnime, sAnimations, 5);
-        func_801518B0(globalCtx, this->textId, &this->actor);
-        this->animationIdx = 5;
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
+        this->animationIndex = 5;
         this->actionFunc = EnTrt_TryToGiveRedPotionAfterSurprised;
     }
 }
@@ -925,8 +930,8 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
     u8 talkState = Message_GetState(&globalCtx->msgCtx);
 
     this->blinkFunc = EnTrt_Blink;
-    if (talkState == 6 && func_80147624(globalCtx)) {
-        if (func_80114E90() || !(gSaveContext.weekEventReg[0xC] & 0x10)) {
+    if (talkState == 6 && Message_ShouldAdvance(globalCtx)) {
+        if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -935,34 +940,34 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
         } else {
             this->tmpTextId = this->textId;
             this->textId = 0x88E;
-            gSaveContext.weekEventReg[0x55] |= 8;
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            gSaveContext.save.weekEventReg[85] |= 8;
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
             this->actionFunc = EnTrt_EndConversation;
         }
     }
 }
 
 void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x83C) {
-            if (func_80114E90()) {
+            if (Interface_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
                 }
-                globalCtx->msgCtx.unk11F22 = 0x43;
+                globalCtx->msgCtx.msgMode = 0x43;
                 globalCtx->msgCtx.unk12023 = 4;
                 this->actionFunc = EnTrt_GiveRedPotionForKoume;
             } else {
                 this->tmpTextId = this->textId;
                 this->textId = 0x88E;
-                gSaveContext.weekEventReg[0x55] |= 8;
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                gSaveContext.save.weekEventReg[85] |= 8;
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
         } else {
             this->textId = 0x83C;
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
         }
     }
 }
@@ -1010,7 +1015,7 @@ void EnTrt_ItemGiven(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupEndInteraction(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         EnTrt_EndInteraction(globalCtx, this);
     }
 }
@@ -1020,15 +1025,15 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
     } else {
         if ((player->actor.world.pos.x >= -50.0f && player->actor.world.pos.x <= 50.0f) &&
             (player->actor.world.pos.z >= -19.0f && player->actor.world.pos.z <= 30.0f)) {
             func_800B8614(&this->actor, globalCtx, 200.0f);
         }
     }
-    if (talkState == 6 && func_80147624(globalCtx)) {
-        if (gSaveContext.weekEventReg[0x14] & 2) {
+    if (talkState == 6 && Message_ShouldAdvance(globalCtx)) {
+        if (gSaveContext.save.weekEventReg[20] & 2) {
             globalCtx->nextEntranceIndex = 0xC50;
         } else {
             globalCtx->nextEntranceIndex = 0x8450;
@@ -1040,7 +1045,7 @@ void EnTrt_ShopkeeperGone(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_CannotBuy(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = this->tmpActionFunc;
         func_80151938(globalCtx, EnTrt_GetItemTextId(this));
     }
@@ -1049,7 +1054,7 @@ void EnTrt_CannotBuy(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_CanBuy(EnTrt* this, GlobalContext* globalCtx) {
     EnGirlA* item;
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnTrt_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1069,7 +1074,7 @@ void EnTrt_BuyItemWithFanfare(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_SetupItemGiven(EnTrt* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         this->actionFunc = EnTrt_ItemGiven;
         if (this->cutsceneState == ENTRT_CUTSCENESTATE_STOPPED) {
             if (ActorCutscene_GetCurrentIndex() == 0x7C) {
@@ -1089,7 +1094,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
 
     if (talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
@@ -1099,7 +1104,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         player->actor.shape.rot.y = BINANG_ROT180(player->actor.shape.rot.y);
                         player->stateFlags2 |= 0x20000000;
-                        func_801518B0(globalCtx, this->textId, &this->actor);
+                        Message_StartTextbox(globalCtx, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(globalCtx, this, true);
                         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
                         break;
@@ -1112,7 +1117,7 @@ void EnTrt_ContinueShopping(EnTrt* this, GlobalContext* globalCtx) {
             }
         }
     } else if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             EnTrt_ResetItemPosition(this);
             item = this->items[this->cursorIdx];
             item->restockFunc(globalCtx, item);
@@ -1216,10 +1221,7 @@ void EnTrt_UpdateCursorAnim(EnTrt* this) {
 void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
     f32 arrowAnimTween = this->arrowAnimTween;
     f32 stickAnimTween = this->stickAnimTween;
-
-    // Possbily fake temps
-    s32 maxColor = 255;
-    f32 tmp;
+    s32 maxColor = 255; // POSSIBLY FAKE
 
     if (this->arrowAnimState == 0) {
         arrowAnimTween += 0.05f;
@@ -1246,31 +1248,33 @@ void EnTrt_UpdateStickDirectionPromptAnim(EnTrt* this) {
         stickAnimTween = 0.0f;
         this->stickAnimState = 0;
     }
-
-    tmp = 155.0f * arrowAnimTween;
-
     this->stickAnimTween = stickAnimTween;
 
     this->stickLeftPrompt.arrowColor.r = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.g = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
-    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100, arrowAnimTween);
+    this->stickLeftPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickLeftPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowColor.r = (maxColor - ((s32)tmp)) & 0xFF;
-    this->stickRightPrompt.arrowColor.g = (255 - ((s32)tmp)) & 0xFF;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+
+    this->stickRightPrompt.arrowColor.r = COL_CHAN_MIX(maxColor, 155.0f, arrowAnimTween);
+    this->stickRightPrompt.arrowColor.g = COL_CHAN_MIX(255, 155.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.b = COL_CHAN_MIX(0, -100.0f, arrowAnimTween);
     this->stickRightPrompt.arrowColor.a = COL_CHAN_MIX(200, 50.0f, arrowAnimTween);
 
-    this->stickRightPrompt.arrowTexX = 290.0f;
     this->stickLeftPrompt.arrowTexX = 33.0f;
 
     this->stickRightPrompt.stickTexX = 274.0f;
     this->stickRightPrompt.stickTexX += 8.0f * stickAnimTween;
+
     this->stickLeftPrompt.stickTexX = 49.0f;
     this->stickLeftPrompt.stickTexX -= 8.0f * stickAnimTween;
 
-    this->stickLeftPrompt.arrowTexY = this->stickRightPrompt.arrowTexY = 91.0f;
-    this->stickLeftPrompt.stickTexY = this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
 void EnTrt_OpenEyes(EnTrt* this) {
@@ -1358,7 +1362,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     s32 itemGiven;
 
     if (talkState == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             if (this->talkOptionTextId == 0x845 || this->talkOptionTextId == 0x882) {
                 func_80151938(globalCtx, 0xFF);
             } else {
@@ -1369,7 +1373,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
         itemGiven = func_80123810(globalCtx);
         if (itemGiven > EXCH_ITEM_NONE) {
             if (itemGiven == EXCH_ITEM_1E) {
-                if (gSaveContext.weekEventReg[0x35] & 8) {
+                if (gSaveContext.save.weekEventReg[53] & 8) {
                     player->actor.textId = 0x888;
                 } else {
                     player->actor.textId = 0x883;
@@ -1393,7 +1397,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
             } else {
                 this->textId = 0x886;
             }
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
             this->actionFunc = EnTrt_Goodbye;
         }
     }
@@ -1438,7 +1442,8 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, GlobalContext* globalCtx) {
 
 void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_trt_Skel_00FEF0, &object_trt_Anim_00FD34, NULL, NULL, 0);
-    if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
+    if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
+        gSaveContext.save.day >= 2) {
         this->actor.draw = NULL;
     } else {
         this->actor.draw = EnTrt_Draw;
@@ -1446,9 +1451,6 @@ void EnTrt_InitShopkeeper(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
-    u32 maxcolor = 255;
-    EnTrt* this2;
-
     EnTrt_GetCutscenes(this, globalCtx);
     this->cutscene = this->lookForwardCutscene;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
@@ -1456,7 +1458,8 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.colChkInfo.cylRadius = 50;
     this->timer = Rand_S16Offset(40, 20);
-    if (!(gSaveContext.weekEventReg[0xC] & 8) && !(gSaveContext.weekEventReg[0x54] & 0x40) && gSaveContext.day >= 2) {
+    if (!(gSaveContext.save.weekEventReg[12] & 8) && !(gSaveContext.save.weekEventReg[84] & 0x40) &&
+        gSaveContext.save.day >= 2) {
         this->textId = 0x84A;
         this->actionFunc = EnTrt_ShopkeeperGone;
     } else {
@@ -1465,58 +1468,55 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
         this->actionFunc = EnTrt_IdleSleeping;
     }
 
+    this->cursorPos.y = this->cursorPos.x = 100.0f;
     this->stickAccumY = 0;
     this->stickAccumX = 0;
+
     this->cursorIdx = 0;
-    this->cursorPos.y = this->cursorPos.x = 100.0f;
     this->cursorPos.z = 1.2f;
     this->cursorColor.r = 0;
     this->cursorColor.g = 80;
-    this->cursorColor.b = maxcolor;
-    this->cursorColor.a = maxcolor;
+    this->cursorColor.b = 255;
+    this->cursorColor.a = 255;
     this->cursorAnimTween = 0.0f;
     this->cursorAnimState = 0;
     this->drawCursor = 0;
 
-    this2 = this;
-
     this->stickLeftPrompt.stickColor.r = 200;
-    this2->stickLeftPrompt.stickColor.g = 200;
-    this2->stickLeftPrompt.stickColor.b = 200;
-    this2->stickLeftPrompt.stickColor.a = 180;
-    this2->stickLeftPrompt.stickTexX = 49.0f;
-    this2->stickLeftPrompt.stickTexY = 95.0f;
-    this2->stickLeftPrompt.arrowColor.r = maxcolor;
-    this2->stickLeftPrompt.arrowColor.g = maxcolor;
-    this2->stickLeftPrompt.arrowColor.b = 0;
-    this2->stickLeftPrompt.arrowColor.a = 200;
-    this2->stickLeftPrompt.arrowTexX = 33.0f;
-    this2->stickLeftPrompt.arrowTexY = 91.0f;
-    this2->stickLeftPrompt.texZ = 1.0f;
-    this2->stickLeftPrompt.isEnabled = false;
+    this->stickLeftPrompt.stickColor.g = 200;
+    this->stickLeftPrompt.stickColor.b = 200;
+    this->stickLeftPrompt.stickColor.a = 180;
+    this->stickLeftPrompt.stickTexX = 49.0f;
+    this->stickLeftPrompt.stickTexY = 95.0f;
+    this->stickLeftPrompt.arrowColor.r = 255;
+    this->stickLeftPrompt.arrowColor.g = 255;
+    this->stickLeftPrompt.arrowColor.b = 0;
+    this->stickLeftPrompt.arrowColor.a = 200;
+    this->stickLeftPrompt.arrowTexX = 33.0f;
+    this->stickLeftPrompt.arrowTexY = 91.0f;
+    this->stickLeftPrompt.texZ = 1.0f;
+    this->stickLeftPrompt.isEnabled = false;
 
-    if (1) {}
+    this->stickRightPrompt.stickColor.r = 200;
+    this->stickRightPrompt.stickColor.g = 200;
+    this->stickRightPrompt.stickColor.b = 200;
+    this->stickRightPrompt.stickColor.a = 180;
+    this->stickRightPrompt.stickTexX = 274.0f;
+    this->stickRightPrompt.stickTexY = 95.0f;
+    this->stickRightPrompt.arrowColor.r = 255;
+    this->stickRightPrompt.arrowColor.g = 0;
+    this->stickRightPrompt.arrowColor.b = 0;
+    this->stickRightPrompt.arrowColor.a = 200;
+    this->stickRightPrompt.arrowTexX = 290.0f;
+    this->stickRightPrompt.arrowTexY = 91.0f;
+    this->stickRightPrompt.texZ = 1.0f;
+    this->stickRightPrompt.isEnabled = false;
 
-    this2->stickRightPrompt.stickColor.r = 200;
-    this2->stickRightPrompt.stickColor.g = 200;
-    this2->stickRightPrompt.stickColor.b = 200;
-    this2->stickRightPrompt.stickColor.a = 180;
-    this2->stickRightPrompt.stickTexX = 274.0f;
-    this2->stickRightPrompt.stickTexY = 95.0f;
-    this2->stickRightPrompt.arrowColor.r = maxcolor;
-    this2->stickRightPrompt.arrowColor.g = 0;
-    this2->stickRightPrompt.arrowColor.b = 0;
-    this2->stickRightPrompt.arrowColor.a = 200;
-    this2->stickRightPrompt.arrowTexX = 290.0f;
-    this2->stickRightPrompt.arrowTexY = 91.0f;
-    this2->stickRightPrompt.texZ = 1.0f;
-    this2->stickRightPrompt.isEnabled = false;
-
-    this2->arrowAnimTween = 0.0f;
-    this2->stickAnimTween = 0.0f;
-    this2->arrowAnimState = 0;
-    this2->stickAnimState = 0;
-    this2->shopItemSelectedTween = 0.0f;
+    this->arrowAnimTween = 0.0f;
+    this->stickAnimTween = 0.0f;
+    this->arrowAnimState = 0;
+    this->stickAnimState = 0;
+    this->shopItemSelectedTween = 0.0f;
 
     this->actor.gravity = 0.0f;
     Actor_SetScale(&this->actor, sActorScale);
@@ -1524,11 +1524,11 @@ void EnTrt_InitShop(EnTrt* this, GlobalContext* globalCtx) {
     this->blinkTimer = 20;
     this->eyeTextureIdx = 0;
     this->blinkFunc = EnTrt_EyesClosed;
-    if (gSaveContext.weekEventReg[0x35] & 8) {
+    if (gSaveContext.save.weekEventReg[53] & 8) {
         this->flags |= ENTRT_GIVEN_MUSHROOM;
     }
 
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
 }
 
 void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx) {
@@ -1539,7 +1539,10 @@ void EnTrt_GetCutscenes(EnTrt* this, GlobalContext* globalCtx) {
 }
 
 void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z, u8 drawCursor) {
-    s32 ulx, uly, lrx, lry;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
     f32 w;
     s32 dsdx;
     s32 pad;
@@ -1549,8 +1552,8 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, this->cursorColor.r, this->cursorColor.g, this->cursorColor.b,
                         this->cursorColor.a);
-        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gameplay_keep_Tex_01F740, G_IM_FMT_IA, 16, 16, 0,
-                               G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gSelectionCursorTex, G_IM_FMT_IA, 16, 16, 0, G_TX_MIRROR | G_TX_WRAP,
+                               G_TX_MIRROR | G_TX_WRAP, 4, 4, G_TX_NOLOD, G_TX_NOLOD);
         w = 16.0f * z;
         ulx = (x - w) * 4.0f;
         uly = (y - w + -12.0f) * 4.0f;
@@ -1565,11 +1568,16 @@ void EnTrt_DrawCursor(GlobalContext* globalCtx, EnTrt* this, f32 x, f32 y, f32 z
 void EnTrt_DrawTextRec(GlobalContext* globalCtx, s32 r, s32 g, s32 b, s32 a, f32 x, f32 y, f32 z, s32 s, s32 t, f32 dx,
                        f32 dy) {
     f32 unk;
-    s32 ulx, uly, lrx, lry;
-    f32 w, h;
-    s32 dsdx, dtdy;
+    s32 ulx;
+    s32 uly;
+    s32 lrx;
+    s32 lry;
+    f32 w;
+    f32 h;
+    s32 dsdx;
+    s32 dtdy;
 
-    ((void)"../z_en_trt.c"); // Unreferenced
+    (void)"../z_en_trt.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gDPPipeSync(OVERLAY_DISP++);
@@ -1595,21 +1603,15 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
     s32 drawStickRightPrompt = this->stickLeftPrompt.isEnabled;
     s32 drawStickLeftPrompt = this->stickRightPrompt.isEnabled;
 
-    ((void)"../z_en_trt.c"); // Unreferenced
+    (void)"../z_en_trt.c";
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     if (drawStickRightPrompt || drawStickLeftPrompt) {
         func_8012C654(globalCtx->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F8C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 191, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 23 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gArrowCursorTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.arrowColor.r, this->stickLeftPrompt.arrowColor.g,
                               this->stickLeftPrompt.arrowColor.b, this->stickLeftPrompt.arrowColor.a,
@@ -1622,15 +1624,9 @@ void EnTrt_DrawStickDirectionPrompt(GlobalContext* globalCtx, EnTrt* this) {
                               this->stickRightPrompt.arrowTexX, this->stickRightPrompt.arrowTexY,
                               this->stickRightPrompt.texZ, 0, 0, 1.0f, 1.0f);
         }
-        gDPSetTextureImage(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, gameplay_keep_Tex_01F7C0);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPLoadSync(OVERLAY_DISP++);
-        gDPLoadBlock(OVERLAY_DISP++, G_TX_LOADTILE, 0, 0, 127, 1024);
-        gDPPipeSync(OVERLAY_DISP++);
-        gDPSetTile(OVERLAY_DISP++, G_IM_FMT_IA, G_IM_SIZ_8b, 2, 0x0000, G_TX_RENDERTILE, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                   G_TX_NOMASK, G_TX_NOLOD, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOLOD);
-        gDPSetTileSize(OVERLAY_DISP++, G_TX_RENDERTILE, 0, 0, 15 * 4, 15 * 4);
+        gDPLoadTextureBlock(OVERLAY_DISP++, gControlStickTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 4, G_TX_NOMASK, G_TX_NOLOD,
+                            G_TX_NOLOD);
         if (drawStickRightPrompt) {
             EnTrt_DrawTextRec(globalCtx, this->stickLeftPrompt.stickColor.r, this->stickLeftPrompt.stickColor.g,
                               this->stickLeftPrompt.stickColor.b, this->stickLeftPrompt.stickColor.a,

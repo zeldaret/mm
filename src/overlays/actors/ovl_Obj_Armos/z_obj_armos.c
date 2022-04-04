@@ -5,8 +5,9 @@
  */
 
 #include "z_obj_armos.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x04000010
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
 
 #define THIS ((ObjArmos*)thisx)
 
@@ -15,11 +16,13 @@ void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_809A54B4(ObjArmos* this);
 void func_809A54E0(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A5610(ObjArmos* this);
 void func_809A562C(ObjArmos* this, GlobalContext* globalCtx);
+void func_809A57D8(ObjArmos* this);
 void func_809A57F4(ObjArmos* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit Obj_Armos_InitVars = {
     ACTOR_OBJ_ARMOS,
     ACTORCAT_PROP,
@@ -32,51 +35,358 @@ const ActorInit Obj_Armos_InitVars = {
     (ActorFunc)ObjArmos_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
-static InitChainEntry D_809A5BC0[] = {
-    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 120, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 250, ICHAIN_CONTINUE),
-    ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
+s16 D_809A5BB0[] = { 1, -1, 0, 0 };
+s16 D_809A5BB8[] = { 0, 0, 1, -1 };
+
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 120, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 250, ICHAIN_CONTINUE), ICHAIN_F32_DIV1000(gravity, -4000, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
-#endif
+s32 func_809A4E00(ObjArmos* this, GlobalContext* globalCtx, s16 arg2) {
+    return !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 1) ||
+           !DynaPolyActor_ValidateMove(globalCtx, &this->dyna, 30, arg2, 28);
+}
 
-extern InitChainEntry D_809A5BC0[];
+s32 func_809A4E68(ObjArmos* this) {
+    s16 temp_v0;
 
-extern UNK_TYPE D_0600033C;
+    if (fabsf(this->dyna.pushForce) > 0.1f) {
+        temp_v0 = BINANG_ADD(this->dyna.yRotation, 0x2000);
+        if (this->dyna.pushForce < 0.0f) {
+            temp_v0 = BINANG_ROT180(temp_v0);
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A4E00.s")
+        if (temp_v0 < -0x4000) {
+            return 3;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A4E68.s")
+        if (temp_v0 < 0) {
+            return 1;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A4F00.s")
+        if (temp_v0 < 0x4000) {
+            return 2;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A500C.s")
+        return 0;
+    }
+    return -1;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A518C.s")
+s32 func_809A4F00(ObjArmos* this, s32 arg1) {
+    s32 temp_v0 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Init.s")
+    if (temp_v0 == OBJARMOS_ROT_7_0) {
+        return arg1 == 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Destroy.s")
+    if (temp_v0 == OBJARMOS_ROT_7_1) {
+        return arg1 == 1;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A54B4.s")
+    if (temp_v0 == OBJARMOS_ROT_7_2) {
+        return arg1 == 2;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A54E0.s")
+    if (temp_v0 == OBJARMOS_ROT_7_3) {
+        return arg1 == 3;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A5610.s")
+    if (temp_v0 == OBJARMOS_ROT_7_4) {
+        return arg1 == 0 || arg1 == 1;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A562C.s")
+    if (temp_v0 == OBJARMOS_ROT_7_5) {
+        return arg1 == 2 || arg1 == 3;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A57D8.s")
+    if (temp_v0 == OBJARMOS_ROT_7_6) {
+        if (this->unk_26E != 0) {
+            return arg1 == 0 || arg1 == 1;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A57F4.s")
+        if (this->unk_270 != 0) {
+            return arg1 == 2 || arg1 == 3;
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Update.s")
+        return true;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A5960.s")
+    return false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/func_809A5A3C.s")
+s32 func_809A500C(ObjArmos* this, s32 arg1) {
+    s32 temp_v0 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
+    s32 temp_v1 = OBJARMOS_GET_ROTX_F(&this->dyna.actor);
+    s32 temp;
+    s32 temp2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Armos/ObjArmos_Draw.s")
+    if (temp_v0 == OBJARMOS_ROT_7_0) {
+        return this->unk_26E < temp_v1;
+    }
+
+    if (temp_v0 == OBJARMOS_ROT_7_1) {
+        return -temp_v1 < this->unk_26E;
+    }
+
+    if (temp_v0 == OBJARMOS_ROT_7_2) {
+        return this->unk_270 < temp_v1;
+    }
+
+    if (temp_v0 == OBJARMOS_ROT_7_3) {
+        return -temp_v1 < this->unk_270;
+    }
+
+    if (temp_v0 == OBJARMOS_ROT_7_4) {
+        temp = D_809A5BB0[arg1] + this->unk_26E;
+        return temp <= temp_v1 && -temp_v1 <= temp;
+    }
+
+    if (temp_v0 == OBJARMOS_ROT_7_5) {
+        temp2 = D_809A5BB8[arg1] + this->unk_270;
+        return temp2 <= temp_v1 && -temp_v1 <= temp2;
+    }
+
+    if (temp_v0 == OBJARMOS_ROT_7_6) {
+        if ((arg1 == 0) || (arg1 == 1)) {
+            temp = D_809A5BB0[arg1] + this->unk_26E;
+            return temp <= temp_v1 && -temp_v1 <= temp;
+        }
+
+        temp2 = D_809A5BB8[arg1] + this->unk_270;
+        return temp2 <= temp_v1 && -temp_v1 <= temp2;
+    }
+
+    return false;
+}
+
+void func_809A518C(ObjArmos* this, s32 arg1) {
+    this->unk_26E += D_809A5BB0[arg1];
+    this->unk_270 += D_809A5BB8[arg1];
+
+    if ((arg1 == 0) || (arg1 == 1)) {
+        this->unk_25C = &this->dyna.actor.world.pos.x;
+        this->unk_260 = this->dyna.actor.home.pos.x + (this->unk_26E * 60);
+    } else {
+        this->unk_25C = &this->dyna.actor.world.pos.z;
+        this->unk_260 = this->dyna.actor.home.pos.z + (this->unk_270 * 60);
+    }
+    this->unk_264 = arg1;
+}
+
+void ObjArmos_Init(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    ObjArmos* this = THIS;
+    s32 sp44 = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
+    s32 sp40 = OBJARMOS_GET_ROTX_F(&this->dyna.actor);
+    f32 sp3C = Animation_GetLastFrame(&gArmosPushedBackAnim);
+
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
+
+    this->dyna.actor.home.rot.y = this->dyna.actor.world.rot.x = this->dyna.actor.world.rot.y =
+        this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.x = this->dyna.actor.shape.rot.z = 0;
+
+    DynaPolyActor_Init(&this->dyna, 0);
+    DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_am_Colheader_005CF8);
+
+    SkelAnime_Init(globalCtx, &this->skelAnime, &object_am_Skel_005948, &gArmosPushedBackAnim, this->jointTable,
+                   this->morphTable, OBJECT_AM_LIMB_MAX);
+
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, sp3C, sp3C, ANIMMODE_ONCE, 0.0f);
+
+    if (sp40 == 0) {
+        func_809A57D8(this);
+    } else if (Flags_GetSwitch(globalCtx, OBJARMOS_GET_7F(&this->dyna.actor))) {
+        if (sp44 == OBJARMOS_ROT_7_0) {
+            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + (sp40 * 60);
+            func_809A57D8(this);
+        } else if (sp44 == OBJARMOS_ROT_7_1) {
+            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x - (sp40 * 60);
+            func_809A57D8(this);
+        } else if (sp44 == OBJARMOS_ROT_7_2) {
+            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + (sp40 * 60);
+            func_809A57D8(this);
+        } else if (sp44 == OBJARMOS_ROT_7_3) {
+            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z - (sp40 * 60);
+            func_809A57D8(this);
+        } else {
+            func_809A54B4(this);
+        }
+    } else {
+        func_809A54B4(this);
+    }
+}
+
+void ObjArmos_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    ObjArmos* this = THIS;
+
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+}
+
+void func_809A54B4(ObjArmos* this) {
+    this->actionFunc = func_809A54E0;
+    this->unk_24C = 4;
+    this->unk_266[1] = 0;
+    this->unk_266[2] = 0;
+    this->unk_266[3] = 0;
+    this->unk_266[0] = 0;
+}
+
+void func_809A54E0(ObjArmos* this, GlobalContext* globalCtx) {
+    s32 i;
+    s32 sp20 = func_809A4E68(this);
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_266); i++) {
+        if (sp20 == i) {
+            this->unk_266[i]++;
+        } else if (this->unk_266[i] > 0) {
+            this->unk_266[i]--;
+        }
+    }
+
+    if (sp20 != -1) {
+        if ((this->unk_266[sp20] >= 9) && func_809A4F00(this, sp20) && func_809A500C(this, sp20) &&
+            !func_809A4E00(this, globalCtx, (this->dyna.pushForce > 0.0f) ? 90 : 120)) {
+            func_809A518C(this, sp20);
+            func_809A5610(this);
+        } else {
+            GET_PLAYER(globalCtx)->stateFlags2 &= ~0x10;
+            this->dyna.pushForce = 0.0f;
+        }
+    }
+}
+
+void func_809A5610(ObjArmos* this) {
+    this->actionFunc = func_809A562C;
+    this->unk_24C = 5;
+}
+
+void func_809A562C(ObjArmos* this, GlobalContext* globalCtx) {
+    s32 pad[2];
+    Player* player;
+    f32 temp2 = this->unk_260 - *this->unk_25C;
+    s32 temp;
+    s32 sp20;
+
+    if (Math_StepToF(this->unk_25C, this->unk_260, (Math_SinS(fabsf(temp2) * 546.13336f) * 1.6f) + 1.0f)) {
+        player = GET_PLAYER(globalCtx);
+        temp = OBJARMOS_GET_ROTZ_7(&this->dyna.actor);
+        sp20 = false;
+
+        if ((temp == OBJARMOS_ROT_7_4) || (temp == OBJARMOS_ROT_7_5) || (temp == OBJARMOS_ROT_7_6)) {
+            if (!func_809A500C(this, this->unk_264) || func_809A4E00(this, globalCtx, 0x5A)) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            }
+        } else if (func_809A500C(this, this->unk_264)) {
+            if (func_809A4E00(this, globalCtx, 0x5A)) {
+                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            }
+        } else {
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Flags_SetSwitch(globalCtx, OBJARMOS_GET_7F(&this->dyna.actor));
+            sp20 = true;
+        }
+
+        player->stateFlags2 &= ~0x10;
+        this->dyna.pushForce = 0.0f;
+
+        if (!sp20) {
+            func_809A54B4(this);
+        } else {
+            func_809A57D8(this);
+        }
+    } else {
+        func_800B9010(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+    }
+}
+
+void func_809A57D8(ObjArmos* this) {
+    this->actionFunc = func_809A57F4;
+    this->unk_24C = 4;
+}
+
+void func_809A57F4(ObjArmos* this, GlobalContext* globalCtx) {
+    if (fabsf(this->dyna.pushForce) > 0.1f) {
+        GET_PLAYER(globalCtx)->stateFlags2 &= ~0x10;
+        this->dyna.pushForce = 0.0f;
+    }
+}
+
+void ObjArmos_Update(Actor* thisx, GlobalContext* globalCtx2) {
+    GlobalContext* globalCtx = globalCtx2;
+    ObjArmos* this = THIS;
+    s32 sp2C;
+
+    this->actionFunc(this, globalCtx);
+    this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
+
+    if (this->unk_24C != 0) {
+        Actor_UpdateBgCheckInfo(globalCtx, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->unk_24C);
+
+        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & 1) &&
+            (DynaPoly_GetActor(&globalCtx->colCtx, this->dyna.actor.floorBgId) == NULL)) {
+            this->unk_24C = 0;
+        }
+
+        this->unk_250.x = (Math_SinS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.x;
+        this->unk_250.y = this->dyna.actor.world.pos.y + 20.0f;
+        this->unk_250.z = (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z;
+
+        this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&globalCtx->colCtx, &this->dyna.actor.floorPoly,
+                                                                   &sp2C, &this->dyna.actor, &this->unk_250);
+    }
+}
+
+void func_809A5960(ObjArmos* this, GlobalContext* globalCtx) {
+    s32 pad;
+
+    OPEN_DISPS(globalCtx->state.gfxCtx);
+    Vec3f sp28;
+
+    sp28.x = Math_SinS(this->dyna.actor.shape.rot.y);
+    Matrix_SetStateRotationAndTranslation(
+        (sp28.x * -9.0f) + this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+        (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+    Matrix_Scale(0.014f, 0.014f, 0.014f, MTXMODE_APPLY);
+    func_8012C28C(globalCtx->state.gfxCtx);
+
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+    SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
+
+    CLOSE_DISPS(globalCtx->state.gfxCtx);
+}
+
+void func_809A5A3C(ObjArmos* this, GlobalContext* globalCtx) {
+    s32 pad[2];
+    MtxF sp48;
+
+    if (this->dyna.actor.floorPoly != NULL) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+
+        func_8012C448(globalCtx->state.gfxCtx);
+
+        gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
+                          COMBINED);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
+
+        func_800C0094(this->dyna.actor.floorPoly, this->unk_250.x, this->dyna.actor.floorHeight, this->unk_250.z,
+                      &sp48);
+        Matrix_SetCurrentState(&sp48);
+        Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gCircleShadowDL);
+
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
+
+void ObjArmos_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    ObjArmos* this = THIS;
+
+    func_809A5960(this, globalCtx);
+    func_809A5A3C(this, globalCtx);
+}

@@ -13,8 +13,7 @@ s32 Object_Spawn(ObjectContext* objectCtx, s16 id) {
     }
 
     if (objectCtx->num < OBJECT_EXCHANGE_BANK_MAX - 1) {
-        objectCtx->status[objectCtx->num + 1].segment =
-            (void*)ALIGN16((u32)objectCtx->status[objectCtx->num].segment + size);
+        objectCtx->status[objectCtx->num + 1].segment = ALIGN16((u32)objectCtx->status[objectCtx->num].segment + size);
     }
 
     objectCtx->num++;
@@ -152,7 +151,7 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->linkActorEntry = (ActorEntry*)Lib_SegmentedToVirtual(cmd->spawnList.segment) +
                                 globalCtx->setupEntranceList[globalCtx->curSpawn].spawn;
     if ((globalCtx->linkActorEntry->params & 0x0F00) >> 8 == 0x0C ||
-        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[1].playerParams == 0x0CFF)) {
+        (gSaveContext.respawnFlag == 0x02 && gSaveContext.respawn[RESTART_MODE_RETURN].playerParams == 0x0CFF)) {
         // Skull Kid Object
         Object_Spawn(&globalCtx->objectCtx, OBJECT_STK);
         return;
@@ -162,7 +161,7 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
     nextObject = globalCtx2->objectCtx.status[globalCtx2->objectCtx.num].segment;
     globalCtx->objectCtx.num = loadedCount;
     globalCtx->objectCtx.spawnedObjectCount = loadedCount;
-    playerForm = gSaveContext.playerForm;
+    playerForm = gSaveContext.save.playerForm;
     playerObjectId = gLinkFormObjectIndexes[playerForm];
     gActorOverlayTable[0].initInfo->objectId = playerObjectId;
     Object_Spawn(&globalCtx->objectCtx, playerObjectId);
@@ -172,14 +171,14 @@ void Scene_HeaderCmdSpawnList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x01: Actor List
 void Scene_HeaderCmdActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->numSetupActors = (u16)cmd->actorList.num;
-    globalCtx->setupActorList = (ActorEntry*)Lib_SegmentedToVirtual(cmd->actorList.segment);
-    globalCtx->actorCtx.unkC = (u16)0;
+    globalCtx->numSetupActors = cmd->actorList.num;
+    globalCtx->setupActorList = Lib_SegmentedToVirtual(cmd->actorList.segment);
+    globalCtx->actorCtx.unkC = 0;
 }
 
 // SceneTableEntry Header Command 0x02: List of cameras for actor cutscenes
 void Scene_HeaderCmdActorCutsceneCamList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->unk_18858 = (UNK_PTR)Lib_SegmentedToVirtual(cmd->csCameraList.segment);
+    globalCtx->csCamData = Lib_SegmentedToVirtual(cmd->csCameraList.segment);
 }
 
 // SceneTableEntry Header Command 0x03: Collision Header
@@ -187,21 +186,21 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
     CollisionHeader* colHeaderTemp;
     CollisionHeader* colHeader;
 
-    colHeaderTemp = (CollisionHeader*)Lib_SegmentedToVirtual(cmd->colHeader.segment);
+    colHeaderTemp = Lib_SegmentedToVirtual(cmd->colHeader.segment);
     colHeader = colHeaderTemp;
-    colHeader->vtxList = (Vec3s*)Lib_SegmentedToVirtual(colHeaderTemp->vtxList);
-    colHeader->polyList = (CollisionPoly*)Lib_SegmentedToVirtual(colHeader->polyList);
+    colHeader->vtxList = Lib_SegmentedToVirtual(colHeaderTemp->vtxList);
+    colHeader->polyList = Lib_SegmentedToVirtual(colHeader->polyList);
 
     if (colHeader->surfaceTypeList != NULL) {
-        colHeader->surfaceTypeList = (SurfaceType*)Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
+        colHeader->surfaceTypeList = Lib_SegmentedToVirtual(colHeader->surfaceTypeList);
     }
 
     if (colHeader->cameraDataList != NULL) {
-        colHeader->cameraDataList = (void*)Lib_SegmentedToVirtual(colHeader->cameraDataList);
+        colHeader->cameraDataList = Lib_SegmentedToVirtual(colHeader->cameraDataList);
     }
 
     if (colHeader->waterBoxes != NULL) {
-        colHeader->waterBoxes = (WaterBox*)Lib_SegmentedToVirtual(colHeader->waterBoxes);
+        colHeader->waterBoxes = Lib_SegmentedToVirtual(colHeader->waterBoxes);
     }
 
     BgCheck_Allocate(&globalCtx->colCtx, globalCtx, colHeader);
@@ -210,12 +209,12 @@ void Scene_HeaderCmdColHeader(GlobalContext* globalCtx, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x04: Room List
 void Scene_HeaderCmdRoomList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->numRooms = cmd->roomList.num;
-    globalCtx->roomList = (RomFile*)Lib_SegmentedToVirtual(cmd->roomList.segment);
+    globalCtx->roomList = Lib_SegmentedToVirtual(cmd->roomList.segment);
 }
 
 // SceneTableEntry Header Command 0x06: Entrance List
 void Scene_HeaderCmdEntranceList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->setupEntranceList = (EntranceEntry*)Lib_SegmentedToVirtual(cmd->entranceList.segment);
+    globalCtx->setupEntranceList = Lib_SegmentedToVirtual(cmd->entranceList.segment);
 }
 
 // SceneTableEntry Header Command 0x07: Special Files
@@ -248,19 +247,21 @@ void Scene_HeaderCmdRoomBehavior(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
 void Scene_HeaderCmdMesh(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->roomCtx.currRoom.mesh = (RoomMesh*)Lib_SegmentedToVirtual(cmd->mesh.segment);
+    globalCtx->roomCtx.currRoom.mesh = Lib_SegmentedToVirtual(cmd->mesh.segment);
 }
 
 // SceneTableEntry Header Command 0x0B:  Object List
 void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    s32 i, j, k;
+    s32 i;
+    s32 j;
+    s32 k;
     ObjectStatus* firstObject;
     ObjectStatus* status;
     ObjectStatus* status2;
     s16* objectEntry;
     void* nextPtr;
 
-    objectEntry = (s16*)Lib_SegmentedToVirtual(cmd->objectList.segment);
+    objectEntry = Lib_SegmentedToVirtual(cmd->objectList.segment);
     k = 0;
     i = globalCtx->objectCtx.spawnedObjectCount;
     status = &globalCtx->objectCtx.status[i];
@@ -305,7 +306,7 @@ void Scene_HeaderCmdObjectList(GlobalContext* globalCtx, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x0C: Light List
 void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
     s32 i;
-    LightInfo* lightInfo = (LightInfo*)Lib_SegmentedToVirtual(cmd->lightList.segment);
+    LightInfo* lightInfo = Lib_SegmentedToVirtual(cmd->lightList.segment);
 
     for (i = 0; i < cmd->lightList.num; i++) {
         LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, lightInfo);
@@ -315,14 +316,13 @@ void Scene_HeaderCmdLightList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x0D: Path List
 void Scene_HeaderCmdPathList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->setupPathList = (Path*)Lib_SegmentedToVirtual(cmd->pathList.segment);
+    globalCtx->setupPathList = Lib_SegmentedToVirtual(cmd->pathList.segment);
 }
 
 // SceneTableEntry Header Command 0x0E: Transition Actor List
 void Scene_HeaderCmdTransiActorList(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->doorCtx.numTransitionActors = cmd->transiActorList.num;
-    globalCtx->doorCtx.transitionActorList =
-        (TransitionActorEntry*)Lib_SegmentedToVirtual((void*)cmd->transiActorList.segment);
+    globalCtx->doorCtx.transitionActorList = Lib_SegmentedToVirtual(cmd->transiActorList.segment);
     func_80105818(globalCtx, globalCtx->doorCtx.numTransitionActors, globalCtx->doorCtx.transitionActorList);
 }
 
@@ -334,7 +334,7 @@ void Door_InitContext(GameState* state, DoorContext* doorCtx) {
 // SceneTableEntry Header Command 0x0F: Environment Light Settings List
 void Scene_HeaderCmdEnvLightSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     globalCtx->envCtx.numLightSettings = cmd->lightSettingList.num;
-    globalCtx->envCtx.lightSettingsList = (void*)Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
+    globalCtx->envCtx.lightSettingsList = Lib_SegmentedToVirtual(cmd->lightSettingList.segment);
 }
 
 /**
@@ -374,8 +374,8 @@ void Scene_HeaderCmdSkyboxSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x12: Skybox Disables
 void Scene_HeaderCmdSkyboxDisables(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->envCtx.unk_15 = cmd->skyboxDisables.unk4;
-    globalCtx->envCtx.unk_16 = cmd->skyboxDisables.unk5;
+    globalCtx->envCtx.skyboxDisabled = cmd->skyboxDisables.unk4;
+    globalCtx->envCtx.sunMoonDisabled = cmd->skyboxDisables.unk5;
 }
 
 // SceneTableEntry Header Command 0x10: Time Settings
@@ -383,42 +383,45 @@ void Scene_HeaderCmdTimeSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
     u32 dayTime;
 
     if (cmd->timeSettings.hour != 0xFF && cmd->timeSettings.min != 0xFF) {
-        gSaveContext.environmentTime = gSaveContext.time =
+        gSaveContext.environmentTime = gSaveContext.save.time =
             (u16)(((cmd->timeSettings.hour + (cmd->timeSettings.min / 60.0f)) * 60.0f) / 0.021972656f);
     }
 
     if (cmd->timeSettings.unk6 != 0xFF) {
-        globalCtx->envCtx.unk_2 = cmd->timeSettings.unk6;
+        globalCtx->envCtx.timeIncrement = cmd->timeSettings.unk6;
     } else {
-        globalCtx->envCtx.unk_2 = 0;
+        globalCtx->envCtx.timeIncrement = 0;
     }
 
-    if ((gSaveContext.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.unk_2 != 0)) {
-        globalCtx->envCtx.unk_2 = 5;
+    if ((gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) && (globalCtx->envCtx.timeIncrement != 0)) {
+        globalCtx->envCtx.timeIncrement = 5;
     }
 
-    if (gSaveContext.unk_3F58 == 0) {
-        REG(15) = globalCtx->envCtx.unk_2;
+    if (gSaveContext.sunsSongState == SUNSSONG_INACTIVE) {
+        REG(15) = globalCtx->envCtx.timeIncrement;
     }
 
-    dayTime = gSaveContext.time;
+    dayTime = gSaveContext.save.time;
     globalCtx->envCtx.unk_4 = -(Math_SinS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.time;
+    dayTime = gSaveContext.save.time;
     globalCtx->envCtx.unk_8 = (Math_CosS(dayTime - 0x8000) * 120.0f) * 25.0f;
-    dayTime = gSaveContext.time;
+    dayTime = gSaveContext.save.time;
     globalCtx->envCtx.unk_C = (Math_CosS(dayTime - 0x8000) * 20.0f) * 25.0f;
 
-    if (globalCtx->envCtx.unk_2 == 0 && gSaveContext.cutscene < 0xFFF0) {
-        gSaveContext.environmentTime = gSaveContext.time;
+    if (globalCtx->envCtx.timeIncrement == 0 && gSaveContext.save.cutscene < 0xFFF0) {
+        gSaveContext.environmentTime = gSaveContext.save.time;
 
-        if (gSaveContext.environmentTime >= 0x2AAA && gSaveContext.environmentTime < 0x4555) {
-            gSaveContext.environmentTime = 0x3555;
-        } else if (gSaveContext.environmentTime >= 0x4555 && gSaveContext.environmentTime < 0x5555) {
-            gSaveContext.environmentTime = 0x5555;
-        } else if (gSaveContext.environmentTime >= 0xAAAA && gSaveContext.environmentTime < 0xB555) {
-            gSaveContext.environmentTime = 0xB555;
-        } else if (gSaveContext.environmentTime >= 0xC000 && gSaveContext.environmentTime < 0xCAAA) {
-            gSaveContext.environmentTime = 0xCAAA;
+        if (gSaveContext.environmentTime >= CLOCK_TIME(4, 0) && gSaveContext.environmentTime < CLOCK_TIME(6, 30)) {
+            gSaveContext.environmentTime = CLOCK_TIME(5, 0);
+        } else if (gSaveContext.environmentTime >= CLOCK_TIME(6, 30) &&
+                   gSaveContext.environmentTime < CLOCK_TIME(8, 0)) {
+            gSaveContext.environmentTime = CLOCK_TIME(8, 0);
+        } else if (gSaveContext.environmentTime >= CLOCK_TIME(16, 0) &&
+                   gSaveContext.environmentTime < CLOCK_TIME(17, 0)) {
+            gSaveContext.environmentTime = CLOCK_TIME(17, 0);
+        } else if (gSaveContext.environmentTime >= CLOCK_TIME(18, 0) &&
+                   gSaveContext.environmentTime < CLOCK_TIME(19, 0)) {
+            gSaveContext.environmentTime = CLOCK_TIME(19, 0);
         }
     }
 }
@@ -437,7 +440,7 @@ void Scene_HeaderCmdWindSettings(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x13: Exit List
 void Scene_HeaderCmdExitList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->setupExitList = (u16*)Lib_SegmentedToVirtual(cmd->exitList.segment);
+    globalCtx->setupExitList = Lib_SegmentedToVirtual(cmd->exitList.segment);
 }
 
 // SceneTableEntry Header Command 0x09: Undefined
@@ -465,11 +468,11 @@ void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
     SceneCmd* altHeader;
 
     if (gSaveContext.sceneSetupIndex) {
-        altHeaderList = (SceneCmd**)Lib_SegmentedToVirtual(cmd->altHeaders.segment);
+        altHeaderList = Lib_SegmentedToVirtual(cmd->altHeaders.segment);
         altHeader = altHeaderList[gSaveContext.sceneSetupIndex - 1];
 
         if (altHeader != NULL) {
-            Scene_ProcessHeader(globalCtx, (SceneCmd*)Lib_SegmentedToVirtual(altHeader));
+            Scene_ProcessHeader(globalCtx, Lib_SegmentedToVirtual(altHeader));
             (cmd + 1)->base.code = 0x14;
         }
     }
@@ -477,14 +480,13 @@ void Scene_HeaderCmdAltHeaderList(GlobalContext* globalCtx, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x17: Cutscene List
 void Scene_HeaderCmdCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    globalCtx->csCtx.sceneCsCount = (u8)cmd->base.data1;
-    globalCtx->csCtx.sceneCsList = (CutsceneEntry*)Lib_SegmentedToVirtual((void*)cmd->base.data2);
+    globalCtx->csCtx.sceneCsCount = cmd->base.data1;
+    globalCtx->csCtx.sceneCsList = Lib_SegmentedToVirtual(cmd->base.data2);
 }
 
 // SceneTableEntry Header Command 0x1B: Actor Cutscene List
 void Scene_HeaderCmdActorCutsceneList(GlobalContext* globalCtx, SceneCmd* cmd) {
-    ActorCutscene_Init(globalCtx, (ActorCutscene*)Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment),
-                       cmd->cutsceneActorList.num);
+    ActorCutscene_Init(globalCtx, Lib_SegmentedToVirtual(cmd->cutsceneActorList.segment), cmd->cutsceneActorList.num);
 }
 
 // SceneTableEntry Header Command 0x1C: Mini Maps
@@ -525,7 +527,7 @@ void Scene_HeaderCmdSetAreaVisitedFlag(GlobalContext* globalCtx, SceneCmd* cmd) 
     }
 
     if (i < ARRAY_COUNT(gScenesPerRegion)) {
-        gSaveContext.mapsVisited = (gBitFlags[i] | gSaveContext.mapsVisited) | gSaveContext.mapsVisited;
+        gSaveContext.save.mapsVisited = (gBitFlags[i] | gSaveContext.save.mapsVisited) | gSaveContext.save.mapsVisited;
     }
 }
 
@@ -608,5 +610,5 @@ u16 Entrance_CreateIndex(s32 sceneIndex, s32 spawnIndex, s32 sceneSetup) {
  * Creates an entrance index from the current entrance index with the given spawn index.
  */
 u16 Entrance_CreateIndexFromSpawn(s32 spawnIndex) {
-    return Entrance_CreateIndex(gSaveContext.entranceIndex >> 9, spawnIndex, 0);
+    return Entrance_CreateIndex(gSaveContext.save.entranceIndex >> 9, spawnIndex, 0);
 }

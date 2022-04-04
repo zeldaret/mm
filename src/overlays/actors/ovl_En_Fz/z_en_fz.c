@@ -9,7 +9,7 @@
 #include "objects/object_fz/object_fz.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00000015
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
 
 #define THIS ((EnFz*)thisx)
 
@@ -180,7 +180,7 @@ void EnFz_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_BC8 = 0;
     this->unk_BCF = 0;
     this->unk_BCC = 1;
@@ -227,9 +227,9 @@ void EnFz_Init(Actor* thisx, GlobalContext* globalCtx) {
         }
     }
 
-    this->unk_BA4 = 0;
-    this->unk_BA0 = 0.0f;
-    this->unk_B9C = 0.0f;
+    this->drawDmgEffTimer = 0;
+    this->drawDmgEffScale = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     func_80932784(this, globalCtx);
 }
 
@@ -266,7 +266,8 @@ void func_80932784(EnFz* this, GlobalContext* globalCtx) {
     sp44.z = 440.0f;
 
     Matrix_MultiplyVector3fByState(&sp44, &this->unk_22C);
-    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, 1, 0, 0, 1, &sp40)) {
+    if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true,
+                                &sp40)) {
         Math_Vec3f_Copy(&this->unk_22C, &sp50);
     }
 
@@ -415,8 +416,8 @@ void func_80932C98(EnFz* this, GlobalContext* globalCtx) {
             this->collider1.base.acFlags &= ~AC_HIT;
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:
-                    this->unk_BA4 = 0x28;
-                    this->unk_B9C = 1.0f;
+                    this->drawDmgEffTimer = 40;
+                    this->drawDmgEffAlpha = 1.0f;
 
                 case 15:
                     Actor_ApplyDamage(&this->actor);
@@ -472,7 +473,7 @@ void func_80933014(EnFz* this) {
 void func_809330D4(EnFz* this) {
     this->unk_BD6 = 2;
     this->unk_BCE = 0;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actionFunc = func_80933104;
 }
 
@@ -543,7 +544,7 @@ void func_80933324(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933368;
 }
@@ -619,7 +620,7 @@ void func_809334B8(EnFz* this, GlobalContext* globalCtx) {
         sp58.y = this->actor.world.pos.y + 20.0f;
         sp58.z = this->actor.world.pos.z;
 
-        Matrix_RotateY(this->actor.shape.rot.y, 0);
+        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
         sp64.x = 0.0f;
         sp64.y = -2.0f;
@@ -653,7 +654,7 @@ void func_809336C0(EnFz* this, GlobalContext* globalCtx) {
     this->unk_BCC = 1;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk_BD7 = 0;
     this->unk_BCA = 60;
     func_800BC154(globalCtx, &globalCtx->actorCtx, &this->actor, ACTORCAT_PROP);
@@ -671,7 +672,7 @@ void func_80933790(EnFz* this) {
     this->unk_BD6 = 3;
     this->unk_BCE = 0;
     this->unk_BD8 = 1;
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     this->unk_BBC = 0.0f;
     this->actionFunc = func_809337D4;
@@ -702,7 +703,7 @@ void func_8093389C(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_809338E0;
 }
@@ -736,7 +737,7 @@ void func_809338E0(EnFz* this, GlobalContext* globalCtx) {
     sp58.y = this->actor.world.pos.y + 20.0f;
     sp58.z = this->actor.world.pos.z;
 
-    Matrix_RotateY(this->actor.shape.rot.y, 0);
+    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
 
     sp64.x = 0.0f;
     sp64.y = -2.0f;
@@ -763,7 +764,7 @@ void func_80933AF4(EnFz* this) {
     this->unk_BCA = 40;
     this->unk_BCC = 1;
     this->unk_BCE = 1;
-    this->actor.flags |= 1;
+    this->actor.flags |= ACTOR_FLAG_1;
     this->actor.gravity = -1.0f;
     this->actionFunc = func_80933B38;
 }
@@ -772,16 +773,16 @@ void func_80933B38(EnFz* this, GlobalContext* globalCtx) {
 }
 
 void func_80933B48(EnFz* this, GlobalContext* globalCtx) {
-    if (this->unk_BA4 != 0) {
-        if (this->unk_BA4 > 0) {
-            this->unk_BA4--;
+    if (this->drawDmgEffTimer != 0) {
+        if (this->drawDmgEffTimer > 0) {
+            this->drawDmgEffTimer--;
         }
 
-        if (this->unk_BA4 < 20) {
-            Math_SmoothStepToF(&this->unk_BA0, 0.0f, 0.5f, 0.03f, 0.0f);
-            this->unk_B9C = this->unk_BA4 * 0.05f;
+        if (this->drawDmgEffTimer < 20) {
+            Math_SmoothStepToF(&this->drawDmgEffScale, 0.0f, 0.5f, 0.03f, 0.0f);
+            this->drawDmgEffAlpha = this->drawDmgEffTimer * 0.05f;
         } else {
-            Math_SmoothStepToF(&this->unk_BA0, 0.5f, 0.1f, 0.02f, 0.0f);
+            Math_SmoothStepToF(&this->drawDmgEffScale, 0.5f, 0.1f, 0.02f, 0.0f);
         }
     }
 }
@@ -861,17 +862,17 @@ void EnFz_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     func_80934464(this, globalCtx);
 
-    if (this->unk_BA4 > 0) {
+    if (this->drawDmgEffTimer > 0) {
         s32 pad2[6];
-        Vec3f sp58;
-        Vec3f sp4C;
+        Vec3f limbPos[2];
         s32 pad3;
 
-        sp4C = this->actor.world.pos;
-        sp58 = this->actor.world.pos;
-        sp4C.y += 20.0f;
-        sp58.y += 40.0f;
-        func_800BE680(globalCtx, NULL, &sp4C, 2, this->unk_BA0 * 4.0f, 0.5f, this->unk_B9C, 20);
+        limbPos[0] = this->actor.world.pos;
+        limbPos[1] = this->actor.world.pos;
+        limbPos[0].y += 20.0f;
+        limbPos[1].y += 40.0f;
+        Actor_DrawDamageEffects(globalCtx, NULL, limbPos, ARRAY_COUNT(limbPos), this->drawDmgEffScale * 4.0f, 0.5f,
+                                this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -1003,7 +1004,7 @@ void func_80934464(EnFz* this, GlobalContext* globalCtx) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_051180);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
                 flag++;
             }
 
@@ -1017,7 +1018,7 @@ void func_80934464(EnFz* this, GlobalContext* globalCtx) {
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_051238);
+            gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamVtxDL);
         }
     }
 

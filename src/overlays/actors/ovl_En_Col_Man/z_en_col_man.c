@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS 0x00100000
+#define FLAGS (ACTOR_FLAG_100000)
 
 #define THIS ((EnColMan*)thisx)
 
@@ -94,7 +94,7 @@ void EnColMan_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80AFDD60(EnColMan* this) {
-    if (!(gSaveContext.weekEventReg[56] & 2)) {
+    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
         this->actor.draw = func_80AFE414;
         this->actor.shape.yOffset = 700.0f;
         if (this->actor.params == EN_COL_MAN_HEART_PIECE) {
@@ -123,14 +123,14 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
             this->actor.speedXZ = 0.0f;
         }
     }
-    if (!(gSaveContext.weekEventReg[56] & 2)) {
+    if (!(gSaveContext.save.weekEventReg[56] & 2)) {
         this->actor.shape.rot.y += 0x3E8;
     }
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         this->actor.draw = NULL;
         this->actionFunc = EnColMan_SetHeartPieceCollectedAndKill;
-    } else if (!(gSaveContext.weekEventReg[56] & 2)) {
+    } else if (!(gSaveContext.save.weekEventReg[56] & 2)) {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 40.0f, 40.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_RECOVERY_HEART, 40.0f, 40.0f);
@@ -138,16 +138,16 @@ void func_80AFDE00(EnColMan* this, GlobalContext* globalCtx) {
 }
 
 void EnColMan_SetHeartPieceCollectedAndKill(EnColMan* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
-        gSaveContext.weekEventReg[56] |= 2;
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
+        gSaveContext.save.weekEventReg[56] |= 2;
         Actor_MarkForDeath(&this->actor);
     }
 }
 
 void func_80AFDF60(EnColMan* this) {
     this->actor.draw = func_80AFE584;
-    this->actor.flags |= 0x10;
-    this->actor.flags |= 0x20;
+    this->actor.flags |= ACTOR_FLAG_10;
+    this->actor.flags |= ACTOR_FLAG_20;
     this->type = EN_COL_MAN_FALLING_ROCK;
     this->actionFunc = func_80AFDFB4;
     this->actor.shape.shadowScale = 5.0f;
