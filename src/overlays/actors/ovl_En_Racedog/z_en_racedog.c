@@ -21,16 +21,16 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx);
-void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx);
+void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx);
 void EnRacedog_UpdateTextId(EnRacedog* this);
-void func_80B24F08(EnRacedog* this);
-void func_80B251EC(EnRacedog* this);
+void EnRacedog_UpdateSpeed(EnRacedog* this);
+void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this);
 void func_80B252F8(EnRacedog* this);
 void func_80B2538C(EnRacedog* this);
-void func_80B25448(EnRacedog* this);
+void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this);
 s32 func_80B25490(EnRacedog* this, Vec2f* arg1);
-void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx);
-void func_80B256BC(EnRacedog* this);
+void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx);
+void EnRacedog_PlayWalkSfx(EnRacedog* this);
 
 // Dogs can be in three conditions, which is indicated by the message they say when you pick them up.
 // If it starts with "Ruff!", they're in good condition.
@@ -84,13 +84,13 @@ const ActorInit En_Racedog_InitVars = {
     (ActorFunc)EnRacedog_Draw,
 };
 
-static s16 D_80B25D40 = 0;
+s16 D_80B25D40 = 0;
 
-static s16 D_80B25D44 = -1;
+s16 D_80B25D44 = -1;
 
-static s16 D_80B25D48 = 0;
+s16 D_80B25D48 = 0;
 
-static s16 D_80B25D4C = -1;
+s16 D_80B25D4C = -1;
 
 static f32 sBaseSpeeds[][2] = {
     { 0.0f, 0.0f }, { 5.0f, 5.5f }, { 5.0f, 5.0f }, { 5.5f, 5.0f }, { 4.5f, 5.5f }, { 6.0f, 4.0f }, { 4.0f, 6.0f },
@@ -290,7 +290,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->raceStartTimer += this->extraTimeBeforeRaceStart;
     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0];
     this->unk_29C = 0;
-    this->unk_2B8 = -1;
+    this->pointForCurrentTargetSpeed = -1;
 
     EnRacedog_UpdateTextId(this);
     this->actor.flags |= ACTOR_FLAG_10;
@@ -316,11 +316,11 @@ void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx) {
         }
 
         EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_RUN);
-        this->actionFunc = func_80B24CB4;
+        this->actionFunc = EnRacedog_Race;
     }
 }
 
-void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx) {
     s16 yRotation;
     f32 distSq;
 
@@ -341,7 +341,7 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
             }
         }
 
-        func_80B24F08(this);
+        EnRacedog_UpdateSpeed(this);
         if ((this->currentPoint >= ((this->path->count / 4) * 3)) && (this->index == D_80B25D4C)) {
             D_80B25D48++;
         }
@@ -351,9 +351,9 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    func_80B25448(this);
-    func_80B256BC(this);
-    func_80B255AC(this, globalCtx);
+    EnRacedog_UpdateRunAnimationPlaySpeed(this);
+    EnRacedog_PlayWalkSfx(this);
+    EnRacedog_SpawnFloorDustRing(this, globalCtx);
 }
 
 /**
@@ -382,17 +382,21 @@ void EnRacedog_UpdateTextId(EnRacedog* this) {
     }
 }
 
-void func_80B24F08(EnRacedog* this) {
-    s32 temp_a0;
-    s32 temp_v1 = this->path->count;
+void EnRacedog_UpdateSpeed(EnRacedog* this) {
+    s32 quarterPathCount;
+    s32 pathCount = this->path->count;
 
-    if (this->unk_2B8 < this->currentPoint) {
-        this->unk_2B8 = this->currentPoint;
+    // Only update the target speed if the dog is at a further point along the path
+    // than it was when the target speed was last updated.
+    if (this->pointForCurrentTargetSpeed < this->currentPoint) {
+        this->pointForCurrentTargetSpeed = this->currentPoint;
         if (this->currentPoint == 0) {
+            // The dog is at the very start of the race track.
             this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0];
         } else {
-            temp_a0 = temp_v1 / 4;
-            if (this->currentPoint < temp_a0) {
+            quarterPathCount = pathCount / 4;
+            if (this->currentPoint < quarterPathCount) {
+                // The dog is past the very start, but is still less than 1/4th of the way through the race track.
                 if (sDogInfo[this->index].color == DOG_COLOR_BLUE) {
                     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + randPlusMinusPoint5Scaled(1.0f);
                 } else {
@@ -402,7 +406,8 @@ void func_80B24F08(EnRacedog* this) {
                 if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
                     this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                 }
-            } else if (this->currentPoint < (temp_a0 * 3)) {
+            } else if (this->currentPoint < (quarterPathCount * 3)) {
+                // The dog is between 1/4th and 3/4ths of the way through the race track.
                 if (this->currentPoint < sDogInfo[this->index].unk_0C) {
                     this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 } else {
@@ -412,8 +417,9 @@ void func_80B24F08(EnRacedog* this) {
                         this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                     }
                 }
-            } else if (this->currentPoint < temp_v1) {
-                func_80B251EC(this);
+            } else if (this->currentPoint < pathCount) {
+                // The dog is more than 3/4ths of the way through the race track.
+                EnRacedog_CalculateFinalStretchTargetSpeed(this);
             } else {
                 this->targetSpeed = randPlusMinusPoint5Scaled(1.0f) + 5.0f;
             }
@@ -426,6 +432,7 @@ void func_80B24F08(EnRacedog* this) {
 
     Math_ApproachF(&this->actor.speedXZ, this->targetSpeed, 0.5f, 3.0f);
 
+    // The dog that the player has selected has a slightly higher max speed than the other dogs.
     if (this->index == this->selectedDogIndex) {
         if (this->actor.speedXZ > 7.5f) {
             this->actor.speedXZ = 7.5f;
@@ -437,7 +444,11 @@ void func_80B24F08(EnRacedog* this) {
     }
 }
 
-void func_80B251EC(EnRacedog* this) {
+/**
+ * This function handles updating targetSpeed for the final stretch of the race,
+ * where dogs start sprinting towards the finish line.
+ */
+void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this) {
     f32 sprintSpeedMultiplier;
 
     if (sDogInfo[this->index].sprintSpeedMultiplier == -1.0f) {
@@ -488,7 +499,7 @@ void func_80B2538C(EnRacedog* this) {
     }
 }
 
-void func_80B25448(EnRacedog* this) {
+void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
         sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 0.9f;
     } else {
@@ -538,20 +549,20 @@ s32 func_80B25490(EnRacedog* this, Vec2f* arg1) {
     return true;
 }
 
-void func_80B255AC(EnRacedog* this, GlobalContext* globalCtx) {
+void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
-    Vec3f sp38;
+    Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
-        sp38.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
-        sp38.y = this->actor.world.pos.y;
-        sp38.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
-        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &sp38, 10.0f, 0, 2.0f, 300, 0, true);
+        pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
+        pos.y = this->actor.world.pos.y;
+        pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
+        Actor_SpawnFloorDustRing(globalCtx, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
 
-void func_80B256BC(EnRacedog* this) {
+void EnRacedog_PlayWalkSfx(EnRacedog* this) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if ((curFrame == 1) || (curFrame == 7)) {
