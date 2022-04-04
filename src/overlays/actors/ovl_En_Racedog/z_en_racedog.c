@@ -33,10 +33,11 @@ void EnRacedog_SpawnFloorDustRing(EnRacedog* this, GlobalContext* globalCtx);
 void EnRacedog_PlayWalkSfx(EnRacedog* this);
 
 /**
- * Dogs can be in three conditions, which is indicated by the message they say when you pick them up.
- * If it starts with "Ruff!", they're in good condition.
- * If it starts with "Rrr-Ruff!", they're in normal condition.
- * If it starts with "Hoo-whine", they're in bad condition.
+ * Dogs can be in three conditions, which is indicated by the message it says when
+ * you pick it up prior to entering the race.
+ * If it starts with "Ruff!", it's in good condition.
+ * If it starts with "Rrr-Ruff!", it's in normal condition.
+ * If it starts with "Hoo-whine", it's in bad condition.
  * These text boxes are grouped up like so:
  * - 0x3538 - 0x353D: Good condition
  * - 0x353E - 0x3541: Normal condition
@@ -45,9 +46,6 @@ void EnRacedog_PlayWalkSfx(EnRacedog* this);
 #define DOG_IS_IN_GOOD_CONDITION(this) (sDogInfo[this->index].textId < 0x353E)
 #define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
 
-/**
- * The vast majority of these indices are never used by the actor.
- */
 typedef enum {
     /*  0 */ RACEDOG_ANIMATION_IDLE,
     /*  1 */ RACEDOG_ANIMATION_WALK_1,
@@ -69,7 +67,7 @@ typedef enum {
 } RacedogAnimationIndex;
 
 /**
- * The only point of this seems to be some very light anti-cheat detection. The dog
+ * The main point of this seems to be some very light anti-cheat detection. The dog
  * must progress through these statuses in a linear order to finish the race.
  */
 typedef enum {
@@ -103,9 +101,6 @@ const ActorInit En_Racedog_InitVars = {
     (ActorFunc)EnRacedog_Draw,
 };
 
-/**
- * Mainly used to determine what place the player's selected dog finishes in.
- */
 static s16 sNumberOfDogsFinished = 0;
 
 /**
@@ -121,19 +116,20 @@ static s16 sFurthestPoint = -1;
 static s16 sSprintTimer = 0;
 
 /**
- * The index of the dog currently in first place. Only updated whenever furthestPoint is also updated.
+ * The index of the dog currently in first place. It's determined by checking, for each dog on the track,
+ * if its current point along the race track path is greater than or equal to sFurthestPoint.
  */
 static s16 sFirstPlaceIndex = -1;
 
 /**
- * The base speeds for each dog indexed by their color. The two values are used during different parts of the race.
+ * The base speeds for each dog indexed by its color. The two values are used during different parts of the race.
  * - At the very start of the race, all dogs will use the first value for their color, but only for a single point
- *   along the race track's path. After that, they will have base speed of 5.0, regardless of what's in the table
+ *   along the race track's path. After that, they will have a base speed of 5.0, regardless of what's in the table
  *   for their color. The sole exception to this is the blue dog, who will use its first value for the entire
  *   first 1/4th of the race.
- * - For the last 3/4ths of the race, the dog will check to see if it's current point along the race track path is
- *   greater than or equal to the pointToUseSecondBaseSpeed for its RaceDogInfo. If it is, then it will use the
- *   second value for its color as its base speed, otherwise it will use 5.0.
+ * - For the last 3/4ths of the race, all dogs will check to see if their current point along the race track path is
+ *   greater than or equal to the pointToUseSecondBaseSpeed for their RaceDogInfo. If it is, then they will use the
+ *   second value for their color as their base speed; otherwise, they will use 5.0.
  */
 static f32 sBaseSpeeds[][2] = {
     { 0.0f, 0.0f }, { 5.0f, 5.5f }, { 5.0f, 5.0f }, { 5.5f, 5.0f }, { 4.5f, 5.5f }, { 6.0f, 4.0f }, { 4.0f, 6.0f },
@@ -264,6 +260,10 @@ void EnRacedog_UpdateCollision(EnRacedog* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
 }
 
+/**
+ * Returns the Y-rotation the dog should have to move to the next point along the race track path.
+ * There is a small degree of randomness incorporated into this angle.
+ */
 s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
     Vec3s* point;
     f32 xDiffWithRandomDeviation;
@@ -350,8 +350,10 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRacedog_UpdateTextId(this);
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_20;
+
     sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
     this->selectedDogIndex = sSelectedDogInfo.index;
+
     EnRacedog_ChangeAnimation(&this->skelAnime, sAnimations, RACEDOG_ANIMATION_IDLE);
     sAnimations[RACEDOG_ANIMATION_IDLE].playSpeed = Rand_ZeroFloat(0.5f) + 1.0f;
     this->actionFunc = EnRacedog_RaceStart;
@@ -363,6 +365,10 @@ void EnRacedog_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
+/**
+ * This function makes the dog wait at the starting line until the race actually begins.
+ * It's also responsible for playing the starting shot sound once the race begins.
+ */
 void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx) {
     if (DECR(this->raceStartTimer) == 0) {
         this->raceStartTimer = Rand_S16Offset(50, 50);
@@ -375,6 +381,9 @@ void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * This function handles the dog's behavior and state for the entire time the race is going.
+ */
 void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx) {
     s16 yRotation;
     f32 distSq;
@@ -397,6 +406,10 @@ void EnRacedog_Race(EnRacedog* this, GlobalContext* globalCtx) {
         }
 
         EnRacedog_UpdateSpeed(this);
+
+        // Putting this after EnRacedog_UpdateSpeed will ensure that when EnRacedog_CalculateFinalStretchTargetSpeed
+        // is called for the first-place dog, the sprint timer will be 0, so the first-place dog will be guaranteed
+        // to have a sprint speed multiplier of 1.
         if ((this->currentPoint >= ((this->path->count / 4) * 3)) && (this->index == sFirstPlaceIndex)) {
             sSprintTimer++;
         }
@@ -437,6 +450,10 @@ void EnRacedog_UpdateTextId(EnRacedog* this) {
     }
 }
 
+/**
+ * Responsible for calculating the dog's target speed and for making its actual speed
+ * approach the target speed.
+ */
 void EnRacedog_UpdateSpeed(EnRacedog* this) {
     s32 quarterPathCount;
     s32 pathCount = this->path->count;
@@ -482,6 +499,8 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
         }
     }
 
+    // Seemingly the only point of this raceStatus check is to ensure this code still runs when
+    // the dog has finished the race and is at point 0 along their second lap.
     if ((this->currentPoint != 0) || (this->raceStatus != RACEDOG_RACE_STATUS_BEFORE_POINT_9)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
@@ -502,11 +521,13 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
 
 /**
  * This function handles updating targetSpeed for the final stretch of the race,
- * where dogs start sprinting towards the finish line.
+ * where the dog starts sprinting towards the finish line.
  */
 void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this) {
     f32 sprintSpeedMultiplier;
 
+    // Dogs are only allowed to update their sprintSpeedMultiplier once, so its value will
+    // depend on the value of sSprintTimer when they first hit the 3/4th mark on the track.
     if (sDogInfo[this->index].sprintSpeedMultiplier == -1.0f) {
         if (sSprintTimer < 100.0f) {
             sDogInfo[this->index].sprintSpeedMultiplier = 200.0f / (200.0f - sSprintTimer);
@@ -525,6 +546,10 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this) {
     }
 }
 
+/**
+ * Responsible for updating the raceStatus variable for this dog, as well as updating the
+ * sFurthestPoint and sFirstPlaceIndex variables.
+ */
 void EnRacedog_UpdateRaceVariables(EnRacedog* this) {
     if ((this->currentPoint >= 9) && (this->raceStatus == RACEDOG_RACE_STATUS_BEFORE_POINT_9)) {
         this->raceStatus = RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11;
@@ -541,6 +566,11 @@ void EnRacedog_UpdateRaceVariables(EnRacedog* this) {
     }
 }
 
+/**
+ * Checks to see if this dog has finished the race. This function is responsible for changing the
+ * music when the first dog finishes the race, and it is also responsible for updating the event
+ * flags with what position the player's selected dog finished in.
+ */
 void EnRacedog_CheckForFinish(EnRacedog* this) {
     if (EnRacedog_IsOverFinishLine(this, sFinishLineCoordinates) &&
         this->raceStatus == RACEDOG_RACE_STATUS_AFTER_POINT_11) {
@@ -557,6 +587,10 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
     }
 }
 
+/**
+ * Slows the dog's running speed animation if its speed is less than 3.0, and sets it
+ * to normal speed otherwise.
+ */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     if (this->actor.speedXZ < 3.0f) {
         sAnimations[RACEDOG_ANIMATION_RUN].playSpeed = 0.9f;
