@@ -1,6 +1,10 @@
+# Build options can either be changed by modifying the makefile, by building with 'make SETTING=value', 
+# or setting them in a file called .make_options as `SETTING ?= value
+
+-include .make_options
+
 MAKEFLAGS += --no-builtin-rules
 
-# Build options can either be changed by modifying the makefile, or by building with 'make SETTING=value'
 
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1

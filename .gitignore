@@ -50,3 +50,4 @@ tools/mips_to_c/
 
 # Per-user configuration
 .python-version
+.make_options
