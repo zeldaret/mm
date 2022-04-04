@@ -44,7 +44,7 @@ void func_80B256BC(EnRacedog* this);
 #define DOG_IS_IN_BAD_CONDITION(this) (sDogInfo[this->index].textId >= 0x3542)
 
 typedef struct {
-    f32 unk_00;
+    f32 sprintSpeedMultiplier;
     f32 goodConditionSpeedMultiplier;
     s16 color;
     s16 index;
@@ -412,19 +412,19 @@ void func_80B24F08(EnRacedog* this) {
 }
 
 void func_80B251EC(EnRacedog* this) {
-    f32 temp;
+    f32 sprintSpeedMultiplier;
 
-    if (sDogInfo[this->index].unk_00 == -1.0f) {
+    if (sDogInfo[this->index].sprintSpeedMultiplier == -1.0f) {
         if (D_80B25D48 < 100.0f) {
-            sDogInfo[this->index].unk_00 = 200.0f / (200.0f - D_80B25D48);
+            sDogInfo[this->index].sprintSpeedMultiplier = 200.0f / (200.0f - D_80B25D48);
         } else {
-            sDogInfo[this->index].unk_00 = 2.0f;
+            sDogInfo[this->index].sprintSpeedMultiplier = 2.0f;
         }
     }
 
     if (!DOG_IS_IN_BAD_CONDITION(this)) {
-        temp = sDogInfo[this->index].unk_00;
-        this->targetSpeed = temp * sBaseSpeeds[sDogInfo[this->index].color][1];
+        sprintSpeedMultiplier = sDogInfo[this->index].sprintSpeedMultiplier;
+        this->targetSpeed = sprintSpeedMultiplier * sBaseSpeeds[sDogInfo[this->index].color][1];
     }
 
     if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
