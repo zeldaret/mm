@@ -20,7 +20,7 @@ typedef struct EnRacedog {
     /* 0x1DC */ UNK_TYPE1 unk_1DC[0x4];
     /* 0x1E0 */ Path* path;
     /* 0x1E4 */ UNK_TYPE1 unk_1E4[0x4];
-    /* 0x1E8 */ s32 unk_1E8;
+    /* 0x1E8 */ s32 currentPoint;
     /* 0x1EC */ Vec3s jointTable[DOG_LIMB_MAX];
     /* 0x23A */ Vec3s morphTable[DOG_LIMB_MAX];
     /* 0x288 */ s16 selectionArrowTimer;

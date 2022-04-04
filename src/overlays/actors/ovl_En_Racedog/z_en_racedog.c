@@ -209,29 +209,29 @@ void EnRacedog_UpdateCollision(EnRacedog* this, GlobalContext* globalCtx) {
     Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 26.0f, 10.0f, 0.0f, 5);
 }
 
-s16 func_80B2478C(Path* path, s32 arg1, Vec3f* pos, f32* arg3) {
+s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
     Vec3s* point;
-    f32 phi_f14;
-    f32 sp1C;
+    f32 xDiffWithRandomDeviation;
+    f32 zDiffWithRandomVariation;
     f32 xDiff;
     f32 zDiff;
 
     if (path != NULL) {
         point = Lib_SegmentedToVirtual(path->points);
-        point = &point[arg1];
-        phi_f14 = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
-        sp1C = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
+        point = &point[pointIndex];
+        xDiffWithRandomDeviation = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
+        zDiffWithRandomVariation = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
         xDiff = point->x - pos->x;
         zDiff = point->z - pos->z;
     } else {
-        phi_f14 = 0.0f;
-        sp1C = 0.0f;
+        xDiffWithRandomDeviation = 0.0f;
+        zDiffWithRandomVariation = 0.0f;
         xDiff = 0.0f;
         zDiff = 0.0f;
     }
 
-    *arg3 = SQ(xDiff) + SQ(zDiff);
-    return RADF_TO_BINANG(Math_Acot2F(sp1C, phi_f14));
+    *distSQ = SQ(xDiff) + SQ(zDiff);
+    return RADF_TO_BINANG(Math_Acot2F(zDiffWithRandomVariation, xDiffWithRandomDeviation));
 }
 
 void func_80B248B8(EnRacedog* this, Vec3f* arg1) {
@@ -321,28 +321,28 @@ void EnRacedog_RaceStart(EnRacedog* this, GlobalContext* globalCtx) {
 }
 
 void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
-    s16 phi_a1;
-    f32 sp30;
+    s16 yRotation;
+    f32 distSq;
 
     this->collider.dim.radius = 15;
     if (this->path != NULL) {
-        phi_a1 = func_80B2478C(this->path, this->unk_1E8, &this->actor.world.pos, &sp30);
+        yRotation = EnRacedog_GetYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSq);
         if (this->actor.bgCheckFlags & 8) {
-            phi_a1 = this->actor.wallYaw;
+            yRotation = this->actor.wallYaw;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 0x3E8, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y, yRotation, 4, 0x3E8, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
 
-        if (sp30 <= 2500.0f) {
-            this->unk_1E8++;
-            if (this->unk_1E8 >= (this->path->count - 1)) {
-                this->unk_1E8 = 0;
+        if (distSq <= SQ(50.0f)) {
+            this->currentPoint++;
+            if (this->currentPoint >= (this->path->count - 1)) {
+                this->currentPoint = 0;
             }
         }
 
         func_80B24F08(this);
-        if ((this->unk_1E8 >= ((this->path->count / 4) * 3)) && (this->index == D_80B25D4C)) {
+        if ((this->currentPoint >= ((this->path->count / 4) * 3)) && (this->index == D_80B25D4C)) {
             D_80B25D48++;
         }
 
@@ -386,13 +386,13 @@ void func_80B24F08(EnRacedog* this) {
     s32 temp_a0;
     s32 temp_v1 = this->path->count;
 
-    if (this->unk_2B8 < this->unk_1E8) {
-        this->unk_2B8 = this->unk_1E8;
-        if (this->unk_1E8 == 0) {
+    if (this->unk_2B8 < this->currentPoint) {
+        this->unk_2B8 = this->currentPoint;
+        if (this->currentPoint == 0) {
             this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0];
         } else {
             temp_a0 = temp_v1 / 4;
-            if (this->unk_1E8 < temp_a0) {
+            if (this->currentPoint < temp_a0) {
                 if (sDogInfo[this->index].color == DOG_COLOR_BLUE) {
                     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + randPlusMinusPoint5Scaled(1.0f);
                 } else {
@@ -402,8 +402,8 @@ void func_80B24F08(EnRacedog* this) {
                 if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != D_80B25D4C)) {
                     this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                 }
-            } else if (this->unk_1E8 < (temp_a0 * 3)) {
-                if (this->unk_1E8 < sDogInfo[this->index].unk_0C) {
+            } else if (this->currentPoint < (temp_a0 * 3)) {
+                if (this->currentPoint < sDogInfo[this->index].unk_0C) {
                     this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 } else {
                     this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + randPlusMinusPoint5Scaled(1.0f);
@@ -412,7 +412,7 @@ void func_80B24F08(EnRacedog* this) {
                         this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
                     }
                 }
-            } else if (this->unk_1E8 < temp_v1) {
+            } else if (this->currentPoint < temp_v1) {
                 func_80B251EC(this);
             } else {
                 this->targetSpeed = randPlusMinusPoint5Scaled(1.0f) + 5.0f;
@@ -420,7 +420,7 @@ void func_80B24F08(EnRacedog* this) {
         }
     }
 
-    if ((this->unk_1E8 != 0) || (this->unk_29C != 0)) {
+    if ((this->currentPoint != 0) || (this->unk_29C != 0)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
@@ -459,16 +459,16 @@ void func_80B251EC(EnRacedog* this) {
 }
 
 void func_80B252F8(EnRacedog* this) {
-    if ((this->unk_1E8 >= 9) && (this->unk_29C == 0)) {
+    if ((this->currentPoint >= 9) && (this->unk_29C == 0)) {
         this->unk_29C = 1;
     }
 
-    if ((this->unk_1E8 >= 0xB) && (this->unk_29C == 1)) {
+    if ((this->currentPoint >= 0xB) && (this->unk_29C == 1)) {
         this->unk_29C = 2;
     }
 
-    if (((this->unk_1E8 >= D_80B25D44) || (this->unk_29C <= 0)) && (this->unk_1E8 > D_80B25D44)) {
-        D_80B25D44 = this->unk_1E8;
+    if (((this->currentPoint >= D_80B25D44) || (this->unk_29C <= 0)) && (this->currentPoint > D_80B25D44)) {
+        D_80B25D44 = this->currentPoint;
         D_80B25D4C = this->index;
     }
 }
