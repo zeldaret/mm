@@ -161,7 +161,7 @@ static RaceDogInfo sSelectedDogInfo = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x
 
 /**
  * The XZ-coordinates used to determine if the dog is inside the finish line.
- * It's a decent bit bigger than the in-game visual.
+ * They're a little bit bigger than the in-game visual.
  */
 static Vec2f sFinishLineCoordinates[] = {
     { -3914.0f, 1283.0f },
@@ -565,6 +565,9 @@ void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
     }
 }
 
+/**
+ * Returns true if the dog's current position is in the finish line.
+ */
 s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     f32 xDistToTopFront;
     f32 zDistToTopFront;
@@ -574,8 +577,8 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     f32 zDistToBottomFront;
     f32 zDistToTopBack;
     f32 xDistToTopBack;
-    f32 temp_f0;
-    f32 temp;
+    f32 frontPointsCrossProduct;
+    f32 crossProductTemp;
 
     xDistToTopFront = this->actor.world.pos.x - finishLineCoordinates[0].x;
     zDistToTopFront = this->actor.world.pos.z - finishLineCoordinates[0].z;
@@ -586,21 +589,25 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     xDistToTopBack = this->actor.world.pos.x - finishLineCoordinates[3].x;
     zDistToTopBack = this->actor.world.pos.z - finishLineCoordinates[3].z;
 
-    temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
-    temp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
-    if (temp_f0 * temp < 0.0f) {
+    // frontPointsCrossProduct is positive if the dog is to the left of the line formed by the front points
+    // crossProductTemp is positive if the dog is above the line formed by the bottom points
+    frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
+    crossProductTemp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
+    if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
         return false;
     }
 
-    temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
-    temp = ((xDistToBottomBack * zDistToTopBack) - (xDistToTopBack * zDistToBottomBack));
-    if (temp_f0 * temp < 0.0f) {
+    // crossProductTemp is positive if the dog is to the right of the line formed by the back points
+    frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
+    crossProductTemp = ((xDistToBottomBack * zDistToTopBack) - (xDistToTopBack * zDistToBottomBack));
+    if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
         return false;
     }
 
-    temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
-    temp = ((xDistToTopBack * zDistToTopFront) - (xDistToTopFront * zDistToTopBack));
-    if (temp_f0 * temp < 0.0f) {
+    // crossProductTemp is positive if the dog is below the line formed by the top points
+    frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
+    crossProductTemp = ((xDistToTopBack * zDistToTopFront) - (xDistToTopFront * zDistToTopBack));
+    if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
         return false;
     }
 
