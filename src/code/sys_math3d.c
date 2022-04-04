@@ -2307,7 +2307,7 @@ s32 func_8017FB1C(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f3
 
     if (temp_ft5 > 0.0f) {
         temp_fv0 = ((-temp_fs0 - sqrtf(temp_ft5)) / (2.0f * temp_fa1));
-        temp_ft2 = ((sqrtf(temp_ft5) + -temp_fs0) / (2.0f * temp_fa1));
+        temp_ft2 = ((-temp_fs0 + sqrtf(temp_ft5)) / (2.0f * temp_fa1));
         *arg7 = (arg5 * temp_fv0) + arg3;
         *arg8 = (arg6 * temp_fv0) + arg4;
         *arg9 = (arg5 * temp_ft2) + arg3;
