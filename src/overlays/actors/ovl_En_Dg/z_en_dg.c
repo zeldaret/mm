@@ -60,7 +60,7 @@ static D_8098C2A4_s D_8098C2A4 = { 0x0063, 0x0000 };
 typedef struct {
     s16 color;
     s16 unk_02;
-    s16 unk_04;
+    s16 textId;
 } D_8098C2A8_s;
 
 static D_8098C2A8_s D_8098C2A8[] = {
@@ -276,7 +276,7 @@ void func_80989674(EnDg* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
         } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
-        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
+        } else if (D_8098C2A8[this->unk_286].textId & 0x11) {
             Math_ApproachF(&this->actor.speedXZ, 1.0f, 0.2f, 1.0f);
         } else {
             Math_ApproachF(&this->actor.speedXZ, 3.5f, 0.2f, 1.0f);
@@ -337,7 +337,7 @@ void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
             func_80989140(&this->skelAnime, sAnimations, 2);
         } else if (globalCtx->sceneNum == SCENE_CLOCKTOWER) {
             func_80989140(&this->skelAnime, sAnimations, 2);
-        } else if (D_8098C2A8[this->unk_286].unk_04 & 0x11) {
+        } else if (D_8098C2A8[this->unk_286].textId & 0x11) {
             func_80989140(&this->skelAnime, sAnimations, 1);
         } else {
             func_80989140(&this->skelAnime, sAnimations, 2);
@@ -349,23 +349,23 @@ void func_80989ADC(EnDg* this, GlobalContext* globalCtx) {
 void func_80989BF8(EnDg* this) {
     if (this->unk_286 < 14) {
         if (this->unk_286 % 2) {
-            D_8098C2A8[this->unk_286].unk_04 =
+            D_8098C2A8[this->unk_286].textId =
                 0x3538 +
                 ((gSaveContext.save.weekEventReg[42 + (this->unk_286 / 2)] & (0x10 | 0x20 | 0x40 | 0x80)) >> 4);
         } else {
-            D_8098C2A8[this->unk_286].unk_04 =
+            D_8098C2A8[this->unk_286].textId =
                 0x3538 + (gSaveContext.save.weekEventReg[42 + (this->unk_286 / 2)] & (1 | 2 | 4 | 8));
         }
     } else {
         Actor_MarkForDeath(&this->actor);
     }
 
-    if ((D_8098C2A8[this->unk_286].unk_04 >= 0x3547) || (D_8098C2A8[this->unk_286].unk_04 < 0x3538)) {
-        D_8098C2A8[this->unk_286].unk_04 = 0x353E;
+    if ((D_8098C2A8[this->unk_286].textId >= 0x3547) || (D_8098C2A8[this->unk_286].textId < 0x3538)) {
+        D_8098C2A8[this->unk_286].textId = 0x353E;
     }
 
-    if (D_8098C2A8[this->unk_286].unk_04 == 0x353D) {
-        D_8098C2A8[this->unk_286].unk_04 = 0x3538;
+    if (D_8098C2A8[this->unk_286].textId == 0x353D) {
+        D_8098C2A8[this->unk_286].textId = 0x3538;
     }
 }
 
@@ -377,7 +377,7 @@ void func_80989D38(EnDg* this, GlobalContext* globalCtx) {
             Message_StartTextbox(globalCtx, 0x91E, NULL);
         }
     } else if ((this->unk_286 >= 0) && (this->unk_286 < 14)) {
-        Message_StartTextbox(globalCtx, D_8098C2A8[this->unk_286].unk_04, NULL);
+        Message_StartTextbox(globalCtx, D_8098C2A8[this->unk_286].textId, NULL);
     } else if (this->unk_286 == 20) {
         Message_StartTextbox(globalCtx, 0x353D, NULL);
     } else {

@@ -34,11 +34,11 @@ void func_80B256BC(EnRacedog* this);
 
 typedef struct {
     f32 unk_00;
-    f32 unk_04;
+    f32 goodConditionSpeedMultiplier;
     s16 color;
     s16 unk_0A;
     s16 unk_0C;
-    s16 unk_0E;
+    s16 textId;
 } UnkRacedogStruct;
 
 const ActorInit En_Racedog_InitVars = {
@@ -66,20 +66,13 @@ static f32 sBaseSpeeds[][2] = {
 };
 
 static UnkRacedogStruct D_80B25D88[] = {
-    { -1.0f, 1.2f, DOG_COLOR_BEIGE, 0, 9, 0x3539 },
-    { -1.0f, 1.2f, DOG_COLOR_WHITE, 1, 9, 0x353A },
-    { -1.0f, 1.2f, DOG_COLOR_BLUE, 2, 10, 0x353B },
-    { -1.0f, 1.2f, DOG_COLOR_GRAY, 3, 9, 0x353C },
-    { -1.0f, 1.2f, DOG_COLOR_BROWN, 4, 8, 0x353D },
-    { -1.0f, 1.2f, DOG_COLOR_GRAY, 5, 9, 0x353E },
-    { -1.0f, 1.2f, DOG_COLOR_BEIGE, 6, 9, 0x353F },
-    { -1.0f, 1.2f, DOG_COLOR_WHITE, 7, 9, 0x3540 },
-    { -1.0f, 1.2f, DOG_COLOR_WHITE, 8, 9, 0x3541 },
-    { -1.0f, 1.2f, DOG_COLOR_GOLD, 9, 8, 0x3542 },
-    { -1.0f, 1.2f, DOG_COLOR_GRAY, 10, 9, 0x3543 },
-    { -1.0f, 1.2f, DOG_COLOR_BEIGE, 11, 9, 0x3544 },
-    { -1.0f, 1.2f, DOG_COLOR_WHITE, 12, 9, 0x3545 },
-    { -1.0f, 1.2f, DOG_COLOR_BROWN, 13, 8, 0x3546 },
+    { -1.0f, 1.2f, DOG_COLOR_BEIGE, 0, 9, 0x3539 },  { -1.0f, 1.2f, DOG_COLOR_WHITE, 1, 9, 0x353A },
+    { -1.0f, 1.2f, DOG_COLOR_BLUE, 2, 10, 0x353B },  { -1.0f, 1.2f, DOG_COLOR_GRAY, 3, 9, 0x353C },
+    { -1.0f, 1.2f, DOG_COLOR_BROWN, 4, 8, 0x353D },  { -1.0f, 1.2f, DOG_COLOR_GRAY, 5, 9, 0x353E },
+    { -1.0f, 1.2f, DOG_COLOR_BEIGE, 6, 9, 0x353F },  { -1.0f, 1.2f, DOG_COLOR_WHITE, 7, 9, 0x3540 },
+    { -1.0f, 1.2f, DOG_COLOR_WHITE, 8, 9, 0x3541 },  { -1.0f, 1.2f, DOG_COLOR_GOLD, 9, 8, 0x3542 },
+    { -1.0f, 1.2f, DOG_COLOR_GRAY, 10, 9, 0x3543 },  { -1.0f, 1.2f, DOG_COLOR_BEIGE, 11, 9, 0x3544 },
+    { -1.0f, 1.2f, DOG_COLOR_WHITE, 12, 9, 0x3545 }, { -1.0f, 1.2f, DOG_COLOR_BROWN, 13, 8, 0x3546 },
 };
 
 static UnkRacedogStruct D_80B25E68 = { -1.0f, 1.0, DOG_COLOR_DEFAULT, -1, 0, 0x353E };
@@ -250,7 +243,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2A0.z = 0.0f;
     this->unk_2C4 = 1.0f;
 
-    if ((D_80B25D88[this->unk_290].unk_0E >= 0x353F) && (this->unk_290 == (s16)Rand_ZeroFloat(20.0f))) {
+    if ((D_80B25D88[this->unk_290].textId >= 0x353F) && (this->unk_290 == (s16)Rand_ZeroFloat(20.0f))) {
         this->unk_28C = 5;
     } else {
         this->unk_28C = 0;
@@ -258,7 +251,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_28A = 60;
     this->unk_28A += this->unk_28C;
-    this->unk_298 = sBaseSpeeds[D_80B25D88[this->unk_290].color][0];
+    this->targetSpeed = sBaseSpeeds[D_80B25D88[this->unk_290].color][0];
     this->unk_29C = 0;
     this->unk_2B8 = -1;
 
@@ -337,18 +330,18 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
 
 void func_80B24E14(EnRacedog* this) {
     if (this->unk_290 % 2) {
-        D_80B25D88[this->unk_290].unk_0E =
+        D_80B25D88[this->unk_290].textId =
             (((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
     } else {
-        D_80B25D88[this->unk_290].unk_0E =
+        D_80B25D88[this->unk_290].textId =
             ((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
     }
 
-    if ((D_80B25D88[this->unk_290].unk_0E >= 0x3547) || (D_80B25D88[this->unk_290].unk_0E < 0x3539)) {
-        D_80B25D88[this->unk_290].unk_0E = 0x353E;
+    if ((D_80B25D88[this->unk_290].textId >= 0x3547) || (D_80B25D88[this->unk_290].textId < 0x3539)) {
+        D_80B25D88[this->unk_290].textId = 0x353E;
     }
-    if (D_80B25D88[this->unk_290].unk_0E == 0x3547) {
-        D_80B25D88[this->unk_290].unk_0E = 0x3538;
+    if (D_80B25D88[this->unk_290].textId == 0x3547) {
+        D_80B25D88[this->unk_290].textId = 0x3538;
     }
 }
 
@@ -359,33 +352,35 @@ void func_80B24F08(EnRacedog* this) {
     if (this->unk_2B8 < this->unk_1E8) {
         this->unk_2B8 = this->unk_1E8;
         if (this->unk_1E8 == 0) {
-            this->unk_298 = sBaseSpeeds[D_80B25D88[this->unk_290].color][0];
+            this->targetSpeed = sBaseSpeeds[D_80B25D88[this->unk_290].color][0];
         } else {
             temp_a0 = temp_v1 / 4;
             if (this->unk_1E8 < temp_a0) {
                 if (D_80B25D88[this->unk_290].color == DOG_COLOR_BLUE) {
-                    this->unk_298 = sBaseSpeeds[D_80B25D88[this->unk_290].color][0] + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed =
+                        sBaseSpeeds[D_80B25D88[this->unk_290].color][0] + randPlusMinusPoint5Scaled(1.0f);
                 } else {
-                    this->unk_298 = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 }
 
-                if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
-                    this->unk_298 *= D_80B25D88[this->unk_290].unk_04;
+                if ((D_80B25D88[this->unk_290].textId < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+                    this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
                 }
             } else if (this->unk_1E8 < (temp_a0 * 3)) {
                 if (this->unk_1E8 < D_80B25D88[this->unk_290].unk_0C) {
-                    this->unk_298 = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
                 } else {
-                    this->unk_298 = sBaseSpeeds[D_80B25D88[this->unk_290].color][1] + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed =
+                        sBaseSpeeds[D_80B25D88[this->unk_290].color][1] + randPlusMinusPoint5Scaled(1.0f);
 
-                    if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
-                        this->unk_298 *= D_80B25D88[this->unk_290].unk_04;
+                    if ((D_80B25D88[this->unk_290].textId < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+                        this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
                     }
                 }
             } else if (this->unk_1E8 < temp_v1) {
                 func_80B251EC(this);
             } else {
-                this->unk_298 = randPlusMinusPoint5Scaled(1.0f) + 5.0f;
+                this->targetSpeed = randPlusMinusPoint5Scaled(1.0f) + 5.0f;
             }
         }
     }
@@ -394,7 +389,7 @@ void func_80B24F08(EnRacedog* this) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, this->unk_298, 0.5f, 3.0f);
+    Math_ApproachF(&this->actor.speedXZ, this->targetSpeed, 0.5f, 3.0f);
 
     if (this->unk_290 == this->unk_292) {
         if (this->actor.speedXZ > 7.5f) {
@@ -418,13 +413,13 @@ void func_80B251EC(EnRacedog* this) {
         }
     }
 
-    if (D_80B25D88[this->unk_290].unk_0E < 0x3542) {
+    if (D_80B25D88[this->unk_290].textId < 0x3542) {
         temp = D_80B25D88[this->unk_290].unk_00;
-        this->unk_298 = temp * sBaseSpeeds[D_80B25D88[this->unk_290].color][1];
+        this->targetSpeed = temp * sBaseSpeeds[D_80B25D88[this->unk_290].color][1];
     }
 
-    if ((D_80B25D88[this->unk_290].unk_0E < 0x353E) && (this->unk_290 != D_80B25D4C)) {
-        this->unk_298 *= D_80B25D88[this->unk_290].unk_04;
+    if ((D_80B25D88[this->unk_290].textId < 0x353E) && (this->unk_290 != D_80B25D4C)) {
+        this->targetSpeed *= D_80B25D88[this->unk_290].goodConditionSpeedMultiplier;
     }
 }
 
