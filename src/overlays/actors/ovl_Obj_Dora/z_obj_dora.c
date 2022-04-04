@@ -20,7 +20,7 @@ void ObjDora_SetupWait(ObjDora* this);
 void ObjDora_Wait(ObjDora* this, GlobalContext* globalCtx);
 void ObjDora_SetupMoveGong(ObjDora* this);
 void ObjDora_MoveGong(ObjDora* this, GlobalContext* globalCtx);
-s32 ObjDora_IsHalfHourly(u16 time);
+s32 ObjDora_IsHalfHour(u16 time);
 void ObjDora_UpdateCollision(ObjDora* this, GlobalContext* globalCtx);
 
 typedef enum {
@@ -241,16 +241,16 @@ void ObjDora_MoveGong(ObjDora* this, GlobalContext* globalCtx) {
         ObjDora_SetupWait(this);
     }
 
-    Math_SmoothStepToF(&(this->gongForce.x), 0, 0.2f, 0.2f, 0.1f);
-    Math_SmoothStepToF(&(this->gongForce.y), 0, 0.5f, 54.0f, 18.0f);
-    Math_SmoothStepToF(&(this->gongForce.z), 0, 0.5f, 54.0f, 18.0f);
+    Math_SmoothStepToF(&this->gongForce.x, 0, 0.2f, 0.2f, 0.1f);
+    Math_SmoothStepToF(&this->gongForce.y, 0, 0.5f, 54.0f, 18.0f);
+    Math_SmoothStepToF(&this->gongForce.z, 0, 0.5f, 54.0f, 18.0f);
     this->gongAngle.x += 0x1555;
     this->gongAngle.z += 0x238E;
     this->gongRotation.x = Math_SinS(this->gongAngle.x) * this->gongForce.y;
     this->gongRotation.z = Math_SinS(this->gongAngle.z) * this->gongForce.z;
 }
 
-s32 ObjDora_IsHalfHourly(u16 time) {
+s32 ObjDora_IsHalfHour(u16 time) {
     f32 timeHalfHour = time;
 
     timeHalfHour -= (CLOCK_TIME_F(0, 30) * (s32)(time / CLOCK_TIME_F(0, 30)));
@@ -284,11 +284,11 @@ void ObjDora_UpdateCollision(ObjDora* this, GlobalContext* globalCtx) {
                 func_800BC848(&this->actor, globalCtx, 5, 10);
                 ObjDora_SetupMoveGong(this);
 
-                if ((ObjDora_IsHalfHourly(time) == true) && (this->rupeeDropTimer == 0)) {
+                if ((ObjDora_IsHalfHour(time) == true) && (this->rupeeDropTimer == 0)) {
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
                     itemDrop = Item_DropCollectible(globalCtx, &this->actor.world.pos, ITEM00_RUPEE_BLUE);
                     itemDrop->world.rot.y = this->actor.world.rot.y;
-                    itemDrop->world.rot.y += (s32)(Rand_Centered() * 90.0f * 182.04445f);
+                    itemDrop->world.rot.y += (s32)(Rand_Centered() * 90.0f * (0x10000 / 360.0f));
                     itemDrop->velocity.y = 5.0f;
                     itemDrop->gravity = -1.0f;
                     this->rupeeDropTimer = 40;
@@ -316,10 +316,9 @@ void ObjDora_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjDora_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    static Vec3f position = { 0.0f, -61.5f, 0.0f };
     ObjDora* this = THIS;
     f32 gongForceX;
-
-    static Vec3f position = { 0.0f, -61.5f, 0.0f };
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
