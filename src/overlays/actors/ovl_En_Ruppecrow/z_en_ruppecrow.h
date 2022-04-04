@@ -2,11 +2,11 @@
 #define Z_EN_RUPPECROW_H
 
 #include "global.h"
+#include "objects/object_crow/object_crow.h"
 
 #define ENRUPPECROW_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
 #define ENRUPPECROW_RUPEE_COUNT 20
-#define ENRUPPECROW_LIMB_COUNT 9
 #define ENRUPPECROW_LIMB_POS_COUNT 4
 
 struct EnRuppecrow;
@@ -19,8 +19,8 @@ typedef struct EnRuppecrow {
     /* 0x194 */ SkelAnime skelAnime;
     /* 0x1D8 */ EnRuppecrowActionFunc actionFunc;
     /* 0x1DC */ UNK_TYPE4 unk_1DC; // unused
-    /* 0x1E0 */ Vec3s joinTable[ENRUPPECROW_LIMB_COUNT];
-    /* 0x216 */ Vec3s morphTable[ENRUPPECROW_LIMB_COUNT];
+    /* 0x1E0 */ Vec3s joinTable[OBJECT_CROW_LIMB_MAX];
+    /* 0x216 */ Vec3s morphTable[OBJECT_CROW_LIMB_MAX];
     /* 0x24C */ Path* path;
     /* 0x250 */ s32 currentPoint;
     /* 0x254 */ ColliderJntSph collider;
