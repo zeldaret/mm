@@ -13,7 +13,7 @@ WERROR ?= 0
 # Keep .mdebug section in build
 KEEP_MDEBUG ?= 0
 # Disassembles all asm from the ROM instead of skipping files which are entirely in C
-FULL_DISASM ?= 1
+FULL_DISASM ?= 0
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
