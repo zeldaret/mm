@@ -474,7 +474,7 @@ Actor* Item_DropCollectible2(GlobalContext* globalCtx, Vec3f* spawnPos, s32 para
 void Item_DropCollectibleRandom(GlobalContext* globalCtx, Actor* fromActor, Vec3f* spawnPos, s16 params);
 s32 func_800A8150(s32 index);
 s32 func_800A817C(s32 index);
-s32 func_800A81A4(GlobalContext* globalCtx, s32 a1, s32 a2);
+s32 EnItem00_CanDropBigFairy(GlobalContext* globalCtx, s32 index, s32 collectibleFlag);
 void EffectBlure_AddVertex(EffectBlure* this, Vec3f* p1, Vec3f* p2);
 void EffectBlure_AddSpace(EffectBlure* this);
 void EffectBlure_Init1(void* thisx, void* initParamsx);
@@ -732,7 +732,7 @@ void func_800B8D50(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 yaw, f3
 void func_800B8D98(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
 void func_800B8DD4(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4, u32 arg5);
 void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f32 arg4);
-void func_800B8E58(Player* player, u16 sfxId);
+void func_800B8E58(Actor* actor, u16 sfxId);
 void Actor_PlaySfxAtPos(Actor* actor, u16 sfxId);
 void func_800B8EF4(GlobalContext* globalCtx, Actor* actor);
 void func_800B8F98(Actor* actor, u16 sfxId);

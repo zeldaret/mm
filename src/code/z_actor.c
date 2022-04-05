@@ -2126,11 +2126,12 @@ void func_800B8E1C(GlobalContext* globalCtx, Actor* actor, f32 arg2, s16 arg3, f
     func_800B8DD4(globalCtx, actor, arg2, arg3, arg4, 0);
 }
 
-void func_800B8E58(Player* player, u16 sfxId) {
-    if (player->currentMask == PLAYER_MASK_GIANT) {
-        func_8019F170(&player->actor.projectedPos, sfxId);
+void func_800B8E58(Actor* actor, u16 sfxId) {
+    //! @bug: missing type check before casting to player
+    if (((Player*)actor)->currentMask == PLAYER_MASK_GIANT) {
+        func_8019F170(&actor->projectedPos, sfxId);
     } else {
-        Audio_PlaySfxGeneral(sfxId, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
+        Audio_PlaySfxGeneral(sfxId, &actor->projectedPos, 4, &D_801DB4B0, &D_801DB4B0, &D_801DB4B8);
     }
 }
 
