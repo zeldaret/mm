@@ -234,7 +234,7 @@ void func_809372D0(ObjBean* this) {
 
     sp34 = Math3D_Vec3fMagnitude(&actor->velocity);
     temp_f2 = D_80938FF8[this->unk_1DE].x;
-    temp_f12 = D_80938FF8[this->unk_1DE].y;
+    temp_f12 = D_80938FF8[this->unk_1DE].z;
     if (sp34 < (actor->speedXZ * 8.0f)) {
         temp_f2 = ((temp_f2 - 2.0f) * 0.1f) + 2.0f;
         temp_f12 *= 0.4f;
@@ -303,8 +303,8 @@ void func_809375C8(ObjBean* this, GlobalContext* globalCtx) {
 
 void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
     static Gfx* D_80939024[] = {
-        gameplay_keep_DL_0527F0,
-        gameplay_keep_DL_0528B0,
+        gKakeraLeafMiddle,
+        gKakeraLeafTip,
     };
     Vec3f spC4;
     Vec3f spB8;
@@ -346,7 +346,7 @@ void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
             phi_v0 = 0x40;
         }
         EffectSsKakera_Spawn(globalCtx, &spC4, &spB8, &spC4, phi_s3, phi_v0, 40, 3, 0, temp_s2, 0, 0,
-                             (temp_s2 >> 3) + 40, -1, 1, D_80939024[i & 1]);
+                             (temp_s2 >> 3) + 40, -1, GAMEPLAY_KEEP, D_80939024[i & 1]);
     }
 }
 

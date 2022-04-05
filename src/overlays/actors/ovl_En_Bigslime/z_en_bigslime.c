@@ -309,7 +309,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx2) {
-    // gSaveContext.weekEventReg[KEY] = VALUE
+    // gSaveContext.save.weekEventReg[KEY] = VALUE
     // KEY | VALUE
     static s32 isFrogReturnedFlags[] = {
         (32 << 8) | 0x40, // Woodfall Temple Frog Returned
@@ -340,7 +340,7 @@ void EnBigslime_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     if (Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0,
@@ -906,22 +906,22 @@ void EnBigslime_GekkoSfxInsideBigslime(EnBigslime* this, u16 sfxId) {
 }
 
 void EnBigslime_GekkoFreeze(EnBigslime* this) {
-    this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_FROZEN;
+    this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->gekkoCollider.base.colType = COLTYPE_HIT3;
     this->gekkoCollider.info.elemType = ELEMTYPE_UNK0;
     this->stunTimer = 2;
-    this->unk_38C = 0.75f;
-    this->unk_390 = 1.125f;
-    this->unk_388 = 1.0f;
+    this->gekkoDrawDmgEffScale = 0.75f;
+    this->gekkoDrawDmgEffFrozenSteamScale = 1.125f;
+    this->gekkoDrawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_200;
 }
 
 void EnBigslime_GekkoThaw(EnBigslime* this, GlobalContext* globalCtx) {
-    if (this->gekkoDrawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
-        this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_THAW;
+    if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->gekkoCollider.base.colType = COLTYPE_HIT6;
         this->gekkoCollider.info.elemType = ELEMTYPE_UNK1;
-        this->unk_388 = 0.0f;
+        this->gekkoDrawDmgEffAlpha = 0.0f;
         Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
@@ -1614,7 +1614,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, GlobalContext* globalCt
         if (this->numGekkoMeleeAttacks == 0) {
             this->numGekkoPosGrabPlayer--;
 
-            if ((gSaveContext.health < 5) || (this->numGekkoPosGrabPlayer == 0)) {
+            if ((gSaveContext.save.playerData.health < 5) || (this->numGekkoPosGrabPlayer == 0)) {
                 this->numGekkoPosGrabPlayer = 0;
                 this->gekkoRot.y = this->actor.world.rot.y;
                 this->gekkoPosOffset.x = Math_SinS(this->gekkoRot.y) * -50.0f;
@@ -2211,7 +2211,7 @@ void EnBigslime_SetupStunGekko(EnBigslime* this) {
 void EnBigslime_StunGekko(EnBigslime* this, GlobalContext* globalCtx) {
     this->stunTimer--;
     if (this->stunTimer == 0) {
-        if (this->gekkoDrawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
+        if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             EnBigslime_GekkoThaw(this, globalCtx);
             EnBigslime_SetupDamageGekko(this, false);
         } else {
@@ -2615,7 +2615,7 @@ void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, GlobalContext* globa
 void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCtx) {
     if (this->gekkoCollider.base.acFlags & AC_HIT) {
         this->gekkoCollider.base.acFlags &= ~AC_HIT;
-        if ((this->gekkoDrawEffect != GEKKO_DRAW_EFFECT_FROZEN) ||
+        if ((this->gekkoDrawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
             !(this->gekkoCollider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             EnBigslime_EndThrowMinislime(this);
             if (this->actor.colChkInfo.damageEffect != BIGSLIME_DMGEFF_HOOKSHOT) {
@@ -2627,12 +2627,12 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                     EnBigslime_GekkoThaw(this, globalCtx);
                     if ((this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) ||
                         (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_LIGHT)) {
-                        this->unk_388 = 4.0f;
-                        this->unk_38C = 0.75f;
+                        this->gekkoDrawDmgEffAlpha = 4.0f;
+                        this->gekkoDrawDmgEffScale = 0.75f;
                         if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
-                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_THAW;
+                            this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else {
-                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
+                            this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                         this->gekkoCollider.info.bumper.hitPos.x,
                                         this->gekkoCollider.info.bumper.hitPos.y,
@@ -2645,9 +2645,9 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                 } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ELECTRIC_STUN) {
                     this->stunTimer = 40;
                     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                    this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_ELECTRIC_STUN;
-                    this->unk_38C = 0.75f;
-                    this->unk_388 = 2.0f;
+                    this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+                    this->gekkoDrawDmgEffScale = 0.75f;
+                    this->gekkoDrawDmgEffAlpha = 2.0f;
                     EnBigslime_SetupStunGekko(this);
                 } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_STUN ||
                            this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_DEKU_STUN) {
@@ -2662,12 +2662,12 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, GlobalContext* globalCt
                     EnBigslime_GekkoThaw(this, globalCtx);
                     if ((this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) ||
                         (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_LIGHT)) {
-                        this->unk_388 = 3.0f;
-                        this->unk_38C = 0.75f;
+                        this->gekkoDrawDmgEffAlpha = 3.0f;
+                        this->gekkoDrawDmgEffScale = 0.75f;
                         if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_FIRE) {
-                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_THAW;
+                            this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else {
-                            this->gekkoDrawEffect = GEKKO_DRAW_EFFECT_LIGHT_ORBS;
+                            this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                         this->gekkoCollider.info.bumper.hitPos.x,
                                         this->gekkoCollider.info.bumper.hitPos.y,
@@ -2755,12 +2755,13 @@ void EnBigslime_UpdateEffects(EnBigslime* this) {
     }
 
     // update actor damage draw effects
-    if (this->unk_388 > 0.0f) {
-        if ((this->gekkoDrawEffect != GEKKO_DRAW_EFFECT_FROZEN) && (this->actionFunc != EnBigslime_PlayCutscene)) {
-            Math_StepToF(&this->unk_388, 0.0f, 0.05f);
-            this->unk_38C = 0.375f * (this->unk_388 + 1.0f);
-            this->unk_38C = CLAMP_MAX(this->unk_38C, 0.75f);
-        } else if (!Math_StepToF(&this->unk_390, 0.75f, 0.01875f)) {
+    if (this->gekkoDrawDmgEffAlpha > 0.0f) {
+        if ((this->gekkoDrawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
+            (this->actionFunc != EnBigslime_PlayCutscene)) {
+            Math_StepToF(&this->gekkoDrawDmgEffAlpha, 0.0f, 0.05f);
+            this->gekkoDrawDmgEffScale = 0.375f * (this->gekkoDrawDmgEffAlpha + 1.0f);
+            this->gekkoDrawDmgEffScale = CLAMP_MAX(this->gekkoDrawDmgEffScale, 0.75f);
+        } else if (!Math_StepToF(&this->gekkoDrawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -3074,9 +3075,9 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
     } else if ((this->actionFunc == EnBigslime_CutsceneDefeat) || (this->actionFunc == EnBigslime_GekkoDespawn)) {
         func_800AE434(globalCtx, &gekkoDamageColor, 20, 20);
     } else if (this->actionFunc == EnBigslime_StunGekko) {
-        if (this->gekkoDrawEffect == GEKKO_DRAW_EFFECT_FROZEN) {
+        if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             func_800AE434(globalCtx, &gekkoDamageColor, this->stunTimer, 80);
-        } else if (this->gekkoDrawEffect == GEKKO_DRAW_EFFECT_ELECTRIC_STUN) {
+        } else if (this->gekkoDrawDmgEffType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL) {
             func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);
         } else {
             func_800AE434(globalCtx, &gekkoStunColor, this->stunTimer, 40);
@@ -3109,10 +3110,10 @@ void EnBigslime_DrawGekko(Actor* thisx, GlobalContext* globalCtx) {
 
     EnBigslime_DrawShatteringEffects(this, globalCtx);
 
-    // Draw actor damage effects
-    func_800BE680(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
-                  this->gekkoScale * (999.99991f / 7.0f) * this->unk_38C, this->unk_390, this->unk_388,
-                  this->gekkoDrawEffect);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->gekkoScale * (999.99991f / 7.0f) * this->gekkoDrawDmgEffScale,
+                            this->gekkoDrawDmgEffFrozenSteamScale, this->gekkoDrawDmgEffAlpha,
+                            this->gekkoDrawDmgEffType);
 }
 
 void EnBigslime_DrawShatteringEffects(EnBigslime* this, GlobalContext* globalCtx) {

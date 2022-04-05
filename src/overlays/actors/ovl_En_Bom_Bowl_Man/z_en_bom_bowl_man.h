@@ -43,7 +43,7 @@ typedef struct EnBomBowlMan {
     /* 0x02C2 */ s16 unk_2C2;
     /* 0x02C4 */ f32 unk_2C4;
     /* 0x02C8 */ f32 unk_2C8;
-    /* 0x02CC */ UNK_TYPE1 unk2CC[4];
+    /* 0x02CC */ s16 unk_2CC[2];
     /* 0x02D0 */ s16 unk_2D0;
     /* 0x02D2 */ s16 unk_2D2;
     /* 0x02D4 */ s16 unk_2D4;

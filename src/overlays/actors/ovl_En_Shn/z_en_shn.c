@@ -186,8 +186,8 @@ void func_80AE6488(EnShn* this, GlobalContext* globalCtx) {
     this->unk_2D4 = CLAMP(this->unk_2D4, 0.0f, 80.0f);
     Matrix_InsertTranslation(this->unk_2D4, 0.0f, 0.0f, 1);
     if ((&this->actor == player->targetActor) &&
-        ((globalCtx->msgCtx.unk11F04 < 0xFF) || (globalCtx->msgCtx.unk11F04 >= 0x201)) && (tempMsgState == 3) &&
-        (this->msgState == 3)) {
+        ((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId >= 0x201)) &&
+        (tempMsgState == 3) && (this->msgState == 3)) {
         if (globalCtx->state.frames % 2 == 0) {
             if (this->unk_2D0 != 0.0f) {
                 this->unk_2D0 = 0.0f;
@@ -203,7 +203,7 @@ void func_80AE6488(EnShn* this, GlobalContext* globalCtx) {
 
 s32 func_80AE65F4(EnShn* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
 
     if (player->stateFlags1 & 0x40) {
         if (this->unk_1DA != temp) {
@@ -220,7 +220,7 @@ s32 func_80AE65F4(EnShn* this, GlobalContext* globalCtx) {
         this->unk_1DA = temp;
         this->unk_1D8 |= 0x40;
     } else if (this->unk_1D8 & 0x40) {
-        if (!(gSaveContext.weekEventReg[23] & 8)) {
+        if (!(gSaveContext.save.weekEventReg[23] & 8)) {
             func_80AE615C(this, 3);
         }
         this->unk_1DA = 0;
@@ -256,7 +256,7 @@ s32 func_80AE6704(EnShn* thisx, GlobalContext* globalCtx) {
             }
             break;
         case 6:
-            gSaveContext.weekEventReg[90] &= (u8)~0x40;
+            gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
             func_800B7298(globalCtx, &this->actor, 7);
             globalCtx->nextEntranceIndex = 0x8460;
             gSaveContext.nextCutsceneIndex = 0;
@@ -301,7 +301,7 @@ s32 func_80AE68F0(EnShn* this, GlobalContext* globalCtx) {
             SubS_UpdateFlags(&this->unk_1D8, 0, 7);
             this->unk_1DC = func_80AE6880(this, globalCtx);
             this->unk_2C6 = 0;
-            if (gSaveContext.weekEventReg[23] & 8) {
+            if (gSaveContext.save.weekEventReg[23] & 8) {
                 this->unk_1D8 |= 8;
             }
             this->actionFunc = func_80AE6A64;
@@ -313,7 +313,7 @@ s32 func_80AE68F0(EnShn* this, GlobalContext* globalCtx) {
 
 void func_80AE69E8(EnShn* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
-    if ((gSaveContext.weekEventReg[23] & 8) && EnShn_IsFacingPlayer(this)) {
+    if ((gSaveContext.save.weekEventReg[23] & 8) && EnShn_IsFacingPlayer(this)) {
         this->unk_1D8 |= 8;
     } else {
         this->unk_1D8 &= ~0x8;
@@ -348,7 +348,7 @@ void EnShn_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, NULL, this->jointTable, this->morphTable,
                        OBJECT_SHN_LIMB_MAX);
     this->unk_2E8 = -1;
-    if (gSaveContext.weekEventReg[23] & 8) {
+    if (gSaveContext.save.weekEventReg[23] & 8) {
         func_80AE615C(this, 0);
     } else {
         func_80AE615C(this, 2);
@@ -358,7 +358,7 @@ void EnShn_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2E0 = 0;
     this->unk_2D8 = 0;
     this->unk_1D8 = 0;
-    if (gSaveContext.entranceIndex != 0xA820) {
+    if (gSaveContext.save.entranceIndex != 0xA820) {
         SubS_UpdateFlags(&this->unk_1D8, 3, 7);
         this->unk_2BE = 0;
     } else {

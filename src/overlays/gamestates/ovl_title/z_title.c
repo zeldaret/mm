@@ -119,7 +119,7 @@ void Title_Draw(GameState* thisx) {
 void Title_Main(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, true, true, 0, 0, 0);
 
     OPEN_DISPS(this->gameState.gfxCtx);
 
@@ -145,7 +145,7 @@ void Title_Main(GameState* thisx) {
 void Title_Destroy(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_80146E40(&this->gameState, &this->sramCtx);
+    Sram_InitSram(&this->gameState, &this->sramCtx);
     ShrinkWindow_Destroy();
     CIC6105_Nop80081828();
 }
@@ -173,7 +173,7 @@ void Title_Init(GameState* thisx) {
         gSaveContext.fileNum = 0xFF;
     }
 
-    gSaveContext.unk_3F3F = 1;
+    gSaveContext.unk_3F3F = true;
     Sram_Alloc(thisx, &this->sramCtx);
     this->ult = 0;
     this->timer = 20;

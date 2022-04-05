@@ -516,7 +516,7 @@ void func_809289E4(ObjTsubo* this, GlobalContext* globalCtx) {
                 this->actor.flags &= ~0x10;
             }
         }
-        if (this->actor.xzDistToPlayer < 800.0f || gSaveContext.entranceIndex == 0xD010) {
+        if (this->actor.xzDistToPlayer < 800.0f || gSaveContext.save.entranceIndex == 0xD010) {
             Collider_UpdateCylinder(&this->actor, &this->cylinderCollider);
             CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &this->cylinderCollider.base);
             if (this->actor.xzDistToPlayer < 150.0f) {

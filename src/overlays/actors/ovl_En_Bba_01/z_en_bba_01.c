@@ -220,7 +220,7 @@ void EnBba01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = func_8013D648(globalCtx, ENBBA01_GET_PATH(&this->enHy.actor), ENBBA01_NO_PATH);
+    this->enHy.path = SubS_GetPathByIndex(globalCtx, ENBBA01_GET_PATH(&this->enHy.actor), ENBBA01_NO_PATH);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnBba01_FinishInit;

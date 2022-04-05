@@ -5,7 +5,6 @@
  */
 
 #include "z_en_floormas.h"
-#include "objects/object_wallmaster/object_wallmaster.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
@@ -154,8 +153,8 @@ void EnFloormas_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 50.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_wallmaster_Skel_008FB0, &object_wallmaster_Anim_009DB0,
-                       this->jointTable, this->morphTable, 25);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWallmasterSkel, &gWallmasterIdleAnim, this->jointTable,
+                       this->morphTable, WALLMASTER_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -233,10 +232,10 @@ void func_808D0930(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D09CC(EnFloormas* this) {
-    this->unk_18C = 10;
-    this->unk_2C8 = 0.55f;
-    this->unk_2CC = 0.82500005f;
-    this->unk_2C4 = 1.0f;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+    this->drawDmgEffScale = 0.55f;
+    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_18E = 80;
     this->actor.flags &= ~(ACTOR_FLAG_200 | ACTOR_FLAG_400);
@@ -244,11 +243,11 @@ void func_808D09CC(EnFloormas* this) {
 }
 
 void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
-    if (this->unk_18C == 10) {
-        this->unk_18C = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT0;
-        this->unk_2C4 = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0), 2,
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2,
                               this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= ACTOR_FLAG_400;
@@ -259,7 +258,7 @@ void func_808D0A48(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D0B08(EnFloormas* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_009DB0);
+    Animation_PlayOnce(&this->skelAnime, &gWallmasterIdleAnim);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808D0B50;
 }
@@ -278,7 +277,7 @@ void func_808D0B50(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D0C14(EnFloormas* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_wallmaster_Anim_00A054, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gWallmasterStandUpAnim, -3.0f);
     this->actionFunc = func_808D0C58;
 }
 
@@ -296,7 +295,7 @@ void func_808D0C58(EnFloormas* this, GlobalContext* globalCtx) {
 
 void func_808D0CE4(EnFloormas* this) {
     if (this->actionFunc != func_808D0F80) {
-        Animation_PlayLoopSetSpeed(&this->skelAnime, &object_wallmaster_Anim_0041F4, 1.5f);
+        Animation_PlayLoopSetSpeed(&this->skelAnime, &gWallmasterWalkAnim, 1.5f);
     } else {
         this->skelAnime.playSpeed = 1.5f;
     }
@@ -334,7 +333,7 @@ void func_808D0D70(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D0ECC(EnFloormas* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_009244);
+    Animation_PlayOnce(&this->skelAnime, &gWallmasterStopWalkAnim);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808D0F14;
 }
@@ -373,10 +372,10 @@ void func_808D108C(EnFloormas* this) {
 
     this->actor.speedXZ = 0.0f;
     if (sp36 > 0) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &object_wallmaster_Anim_002158, -3.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &gFloormasterTurnAnim, -3.0f);
     } else {
-        Animation_Change(&this->skelAnime, &object_wallmaster_Anim_002158, -1.0f,
-                         Animation_GetLastFrame(&object_wallmaster_Anim_002158.common), 0.0f, 2, -3.0f);
+        Animation_Change(&this->skelAnime, &gFloormasterTurnAnim, -1.0f, Animation_GetLastFrame(&gFloormasterTurnAnim),
+                         0.0f, ANIMMODE_ONCE, -3.0f);
     }
 
     if (this->actor.scale.x > 0.009f) {
@@ -418,8 +417,8 @@ void func_808D11BC(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1380(EnFloormas* this, GlobalContext* globalCtx) {
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_009520, 3.0f, 0.0f,
-                     Animation_GetLastFrame(&object_wallmaster_Anim_009520.common), 2, -3.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterHoverAnim, 3.0f, 0.0f, Animation_GetLastFrame(&gWallmasterHoverAnim),
+                     ANIMMODE_ONCE, -3.0f);
     this->actor.speedXZ = 0.0f;
     this->actor.gravity = 0.0f;
     func_808D08D0(this);
@@ -492,7 +491,7 @@ void func_808D1650(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1740(EnFloormas* this) {
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 1.0f, 41.0f, 42.0f, 2, 5.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 41.0f, 42.0f, ANIMMODE_ONCE, 5.0f);
     if ((this->actor.speedXZ < 0.0f) || (this->actionFunc != func_808D1650)) {
         this->unk_18E = 30;
     } else {
@@ -538,7 +537,7 @@ void func_808D17EC(EnFloormas* this, GlobalContext* globalCtx) {
 
         if ((this->unk_18E == 0) && (sp24 != 0)) {
             if (this->skelAnime.endFrame < 45.0f) {
-                this->skelAnime.endFrame = Animation_GetLastFrame(&object_wallmaster_Anim_0019CC.common);
+                this->skelAnime.endFrame = Animation_GetLastFrame(&gWallmasterJumpAnim);
             } else if (this->actor.params == ENFLOORMAS_GET_7FFF_40) {
                 func_808D2700(this);
             } else {
@@ -556,7 +555,7 @@ void func_808D19D4(EnFloormas* this) {
     Actor* parent;
 
     this->actor.colorFilterTimer = 0;
-    this->unk_2C4 = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     Actor_SetScale(&this->actor, 0.004f);
     this->actor.flags |= ACTOR_FLAG_10;
     if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
@@ -569,8 +568,8 @@ void func_808D19D4(EnFloormas* this) {
     this->actor.shape.rot.y = parent->shape.rot.y + 0x5555;
     this->actor.world.pos = parent->world.pos;
     this->actor.params = ENFLOORMAS_GET_7FFF_10;
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 1.0f, 41.0f,
-                     Animation_GetLastFrame(&object_wallmaster_Anim_0019CC.common), 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 41.0f, Animation_GetLastFrame(&gWallmasterJumpAnim),
+                     ANIMMODE_ONCE, 0.0f);
     this->collider.dim.radius = sCylinderInit.dim.radius * 0.6f;
     this->collider.dim.height = sCylinderInit.dim.height * 0.6f;
     this->actor.flags &= ~ACTOR_FLAG_400;
@@ -596,7 +595,7 @@ void func_808D1B44(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1BCC(EnFloormas* this) {
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &object_wallmaster_Anim_0041F4, 4.5f);
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &gWallmasterWalkAnim, 4.5f);
     this->actor.speedXZ = 5.0f;
     this->actionFunc = func_808D1C1C;
 }
@@ -623,7 +622,7 @@ void func_808D1C1C(EnFloormas* this, GlobalContext* globalCtx) {
 
 void func_808D1D0C(EnFloormas* this) {
     if (this->actionFunc != func_808D1C1C) {
-        Animation_PlayLoopSetSpeed(&this->skelAnime, &object_wallmaster_Anim_0041F4, 4.5f);
+        Animation_PlayLoopSetSpeed(&this->skelAnime, &gWallmasterWalkAnim, 4.5f);
     }
     this->actor.speedXZ = 5.0f;
     this->actionFunc = func_808D1D6C;
@@ -686,7 +685,7 @@ void func_808D1F7C(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D1FD4(EnFloormas* this) {
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 2.0f, 0.0f, 41.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, ANIMMODE_ONCE, 0.0f);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808D2040;
 }
@@ -716,12 +715,12 @@ void func_808D217C(EnFloormas* this, Player* player) {
     Vec3f* ptr;
     u8 playerForm;
 
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 1.0f, 36.0f, 45.0f, 2, -3.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 36.0f, 45.0f, ANIMMODE_ONCE, -3.0f);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
-    playerForm = gSaveContext.playerForm;
+    playerForm = gSaveContext.save.playerForm;
     ptr = &D_808D3900[playerForm];
     this->actor.home.pos.x = ptr->z * Math_SinS(this->actor.shape.rot.y);
     this->actor.home.pos.y = CLAMP(-this->actor.playerHeightRel, ptr->x, ptr->y);
@@ -772,7 +771,7 @@ void func_808D22C8(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D2484(EnFloormas* this) {
-    Animation_Change(&this->skelAnime, &object_wallmaster_Anim_0019CC, 2.0f, 0.0f, 41.0f, 2, 0.0f);
+    Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 2.0f, 0.0f, 41.0f, ANIMMODE_ONCE, 0.0f);
     this->actor.speedXZ = 0.0f;
     this->actionFunc = func_808D24F0;
 }
@@ -816,7 +815,7 @@ void func_808D24F0(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D2700(EnFloormas* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_009DB0);
+    Animation_PlayOnce(&this->skelAnime, &gWallmasterIdleAnim);
     this->unk_18E = 0;
     this->unk_194 = 1500;
     this->actor.params = ENFLOORMAS_GET_7FFF_40;
@@ -881,10 +880,10 @@ void func_808D2764(EnFloormas* this, GlobalContext* globalCtx) {
             this->actor.colChkInfo.health = sColChkInfoInit.health;
             func_808D0C14(this);
         } else if (this->unk_18E == 0) {
-            Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_0039B0);
+            Animation_PlayOnce(&this->skelAnime, &gFloormasterTapFingerAnim);
             this->unk_18E = 1;
         } else {
-            Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_009DB0);
+            Animation_PlayOnce(&this->skelAnime, &gWallmasterIdleAnim);
             this->unk_18E = 0;
         }
     }
@@ -896,7 +895,7 @@ void func_808D2A20(EnFloormas* this) {
     EnFloormas* parent = (EnFloormas*)this->actor.parent;
     EnFloormas* child = (EnFloormas*)this->actor.child;
 
-    this->unk_2C4 = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
 
     if ((parent->actionFunc == func_808D2AA8) && (child->actionFunc == func_808D2AA8)) {
         func_808D2AB8(parent);
@@ -924,7 +923,7 @@ void func_808D2AF4(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D2B18(EnFloormas* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_wallmaster_Anim_000590, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gWallmasterDamageAnim, -3.0f);
     func_800BE504(&this->actor, &this->collider);
     Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 20);
     this->actor.speedXZ = 5.0f;
@@ -967,7 +966,7 @@ void func_808D2C08(EnFloormas* this, GlobalContext* globalCtx) {
 }
 
 void func_808D2CDC(EnFloormas* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_wallmaster_Anim_000EA4);
+    Animation_PlayOnce(&this->skelAnime, &gWallmasterRecoverFromDamageAnim);
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1009,16 +1008,17 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
     if (this->collider.base.acFlags & AC_HIT) {
         this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.info);
-        if ((this->unk_18C != 10) || !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
+        if ((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
+            !(this->collider.info.acHitInfo->toucher.dmgFlags & 0xDB0B3)) {
             if (this->actor.colChkInfo.damageEffect == 0xE) {
                 func_808D0908(this);
                 this->actor.colorFilterTimer = 0;
                 this->actor.colChkInfo.damage = 4;
                 this->unk_192 = -1600;
                 this->actor.gravity = -1.0f;
-                this->unk_2C4 = 4.0f;
-                this->unk_2C8 = 0.55f;
-                this->unk_18C = 20;
+                this->drawDmgEffAlpha = 4.0f;
+                this->drawDmgEffScale = 0.55f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
             }
 
             if (this->collider.base.colType != COLTYPE_HARD) {
@@ -1053,19 +1053,19 @@ void func_808D2E34(EnFloormas* this, GlobalContext* globalCtx) {
                         this->unk_18E = 40;
                         Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
                         Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
-                        this->unk_2C8 = 0.55f;
-                        this->unk_2C4 = 2.0f;
-                        this->unk_18C = 31;
+                        this->drawDmgEffScale = 0.55f;
+                        this->drawDmgEffAlpha = 2.0f;
+                        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
                         func_808D2D6C(this);
                     } else {
                         if (this->actor.colChkInfo.damageEffect == 2) {
-                            this->unk_2C4 = 4.0f;
-                            this->unk_2C8 = 0.55f;
-                            this->unk_18C = 0;
+                            this->drawDmgEffAlpha = 4.0f;
+                            this->drawDmgEffScale = 0.55f;
+                            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else if (this->actor.colChkInfo.damageEffect == 4) {
-                            this->unk_2C4 = 4.0f;
-                            this->unk_2C8 = 0.55f;
-                            this->unk_18C = 20;
+                            this->drawDmgEffAlpha = 4.0f;
+                            this->drawDmgEffScale = 0.55f;
+                            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG,
                                         this->collider.info.bumper.hitPos.x, this->collider.info.bumper.hitPos.y,
                                         this->collider.info.bumper.hitPos.z, 0, 0, 0,
@@ -1133,12 +1133,12 @@ void EnFloormas_Update(Actor* thisx, GlobalContext* globalCtx) {
                 }
             }
 
-            if (this->unk_2C4 > 0.0f) {
-                if (this->unk_18C != 10) {
-                    Math_StepToF(&this->unk_2C4, 0.0f, 0.05f);
-                    this->unk_2C8 = (this->unk_2C4 + 1.0f) * 0.275f;
-                    this->unk_2C8 = CLAMP_MAX(this->unk_2C8, 0.55f);
-                } else if (!Math_StepToF(&this->unk_2CC, 0.55f, 0.01375f)) {
+            if (this->drawDmgEffAlpha > 0.0f) {
+                if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+                    Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+                    this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
+                    this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
+                } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
                     func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
             }
@@ -1150,9 +1150,10 @@ s32 EnFloormas_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
                                 Actor* thisx, Gfx** gfx) {
     EnFloormas* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == WALLMASTER_LIMB_ROOT) {
         pos->z += this->unk_192;
     }
+
     return false;
 }
 
@@ -1161,16 +1162,13 @@ void EnFloormas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnFloormas* this = THIS;
 
     if (D_808D393C[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->unk_2D0[D_808D393C[limbIndex]]);
+        Matrix_GetStateTranslation(&this->limbPos[D_808D393C[limbIndex]]);
     }
 
-    if (limbIndex == 19) {
-        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->unk_2D0[9]);
-        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->unk_2D0[10]);
-        return;
-    }
-
-    if (limbIndex == 2) {
+    if (limbIndex == WALLMASTER_LIMB_WRIST) {
+        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[9]);
+        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
+    } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         Matrix_StatePush();
         Matrix_InsertTranslation(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(M_PI / 3, MTXMODE_APPLY);
@@ -1178,7 +1176,7 @@ void EnFloormas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
         gSPMatrix((*gfx)++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList((*gfx)++, object_wallmaster_DL_008688);
+        gSPDisplayList((*gfx)++, gWallmasterLittleFingerDL);
 
         Matrix_StatePop();
     }
@@ -1203,9 +1201,10 @@ void EnFloormas_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    func_800BE680(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0),
-                  100.0f * (this->unk_2C8 * this->actor.scale.x), 100.0f * (this->unk_2CC * this->actor.scale.x),
-                  this->unk_2C4, this->unk_18C);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            100.0f * (this->drawDmgEffScale * this->actor.scale.x),
+                            100.0f * (this->drawDmgEffFrozenSteamScale * this->actor.scale.x), this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 }
 
 void func_808D3754(Actor* thisx, GlobalContext* globalCtx) {
@@ -1227,7 +1226,8 @@ void func_808D3754(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    func_800BE680(globalCtx, &this->actor, this->unk_2D0, ARRAY_COUNT(this->unk_2D0),
-                  this->unk_2C8 * this->actor.scale.x * 100.0f, this->unk_2CC * this->actor.scale.x * 100.0f,
-                  this->unk_2C4, this->unk_18C);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                            this->drawDmgEffScale * this->actor.scale.x * 100.0f,
+                            this->drawDmgEffFrozenSteamScale * this->actor.scale.x * 100.0f, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 }

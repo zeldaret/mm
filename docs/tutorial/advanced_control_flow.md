@@ -81,7 +81,7 @@ void EnMs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 void func_80952734(EnMs* this, GlobalContext* globalCtx) {
     s16 temp_v1 = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
-    if (gSaveContext.inventory.items[10] == ITEM_NONE) {
+    if (gSaveContext.save.inventory.items[10] == ITEM_NONE) {
         this->actor.textId = 0x92E;
     } else {
         this->actor.textId = 0x932;
@@ -159,14 +159,14 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
-            if ((temp_v0 == 6) && (func_80147624(globalCtx) != 0)) {
+            if ((temp_v0 == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
                 this->actionFunc = func_80952734;
                 return;
             }
             // Duplicate return node #17. Try simplifying control flow for better match
             return;
         }
-        if (func_80147624(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx) != 0) {
             func_801477B4(globalCtx);
             Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
             this->actionFunc = func_809529AC;
@@ -175,7 +175,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
         // Duplicate return node #17. Try simplifying control flow for better match
         return;
     }
-    if (func_80147624(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx) != 0) {
         temp_v0_2 = globalCtx->msgCtx.choiceIndex;
         if (temp_v0_2 != 0) {
             if (temp_v0_2 != 1) {
@@ -187,12 +187,12 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             return;
         }
         func_801477B4(globalCtx);
-        if ((s32) gSaveContext.rupees < 0xA) {
+        if ((s32) gSaveContext.save.playerData.rupees < 0xA) {
             play_sound(0x4806U);
             func_80151938(globalCtx, 0x935U);
             return;
         }
-        if ((s32) gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+        if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
             play_sound(0x4806U);
             func_80151938(globalCtx, 0x937U);
             return;
@@ -211,7 +211,7 @@ which is long, messy, and contains some rather nasty-looking control flow, inclu
     temp_v0 = Message_GetState(&globalCtx->msgCtx);
     if (temp_v0 != 4) {
         if (temp_v0 != 5) {
-            if ((temp_v0 == 6) && (func_80147624(globalCtx) != 0)) {
+            if ((temp_v0 == 6) && (Message_ShouldAdvance(globalCtx) != 0)) {
                 this->actionFunc = func_80952734;
                 return;
             }
@@ -248,13 +248,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         goto block_17;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     func_801477B4(globalCtx);
@@ -262,7 +262,7 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     temp_v0_2 = globalCtx->msgCtx.choiceIndex;
@@ -275,14 +275,14 @@ block_7:
     goto block_16;
 block_11:
     func_801477B4(globalCtx);
-    if ((s32) gSaveContext.rupees >= 0xA) {
+    if ((s32) gSaveContext.save.playerData.rupees >= 0xA) {
         goto block_13;
     }
     play_sound(0x4806U);
     func_80151938(globalCtx, 0x935U);
     return;
 block_13:
-    if ((s32) gSaveContext.inventory.ammo[gItemSlots[0xA]] < 0x14) {
+    if ((s32) gSaveContext.save.inventory.ammo[gItemSlots[0xA]] < 0x14) {
         goto block_15;
     }
     play_sound(0x4806U);
@@ -312,7 +312,7 @@ which in many ways looks worse: you can see why the use of gotos in code is stro
 The simplest sort of block label to eliminate is one that is only used once, and where the corresponding goto jumps over a simple block of code with no extra internal control flow structure. There are two obvious examples of this here, the first being
 
 ```C
-    if ((s32) gSaveContext.rupees >= 0xA) {
+    if ((s32) gSaveContext.save.playerData.rupees >= 0xA) {
         goto block_13;
     }
     play_sound(0x4806U);
@@ -324,7 +324,7 @@ block_13:
 Currently, this says to jump over the code block `play_sound...` if the condition in the if is satisfied. In non-goto terms, this means that the block should be run if the condition is *not* satisfied. This also illustrates a general property of goto-only mode: you have to reverse the senses of all of the ifs. Therefore the appropriate approach is to swap the if round, put the code block inside, and remove the goto and the label:
 
 ```C
-    if (gSaveContext.rupees < 0xA) {
+    if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
         func_80151938(globalCtx, 0x935U);
         return;
@@ -350,13 +350,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         goto block_17;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     func_801477B4(globalCtx);
@@ -364,7 +364,7 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         goto block_17;
     }
     temp_v0_2 = globalCtx->msgCtx.choiceIndex;
@@ -378,12 +378,12 @@ block_7:
 block_11:
     func_801477B4(globalCtx);
     
-    if (gSaveContext.rupees < 0xA) {
+    if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
         func_80151938(globalCtx, 0x935U);
         return;
     }
-    if (gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+    if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
         func_80151938(globalCtx, 0x937U);
         return;
@@ -420,13 +420,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         return;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     func_801477B4(globalCtx);
@@ -434,7 +434,7 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     temp_v0_2 = globalCtx->msgCtx.choiceIndex;
@@ -448,12 +448,12 @@ block_7:
 block_11:
     func_801477B4(globalCtx);
     
-    if (gSaveContext.rupees < 0xA) {
+    if (gSaveContext.save.playerData.rupees < 0xA) {
         play_sound(0x4806U);
         func_80151938(globalCtx, 0x935U);
         return;
     }
-    if (gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+    if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
         play_sound(0x4806U);
         func_80151938(globalCtx, 0x937U);
         return;
@@ -497,12 +497,12 @@ So let us rewrite the entire second half as a switch:
         case 0:
             func_801477B4(globalCtx);
             
-            if (gSaveContext.rupees < 0xA) {
+            if (gSaveContext.save.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
                 func_80151938(globalCtx, 0x935U);
                 return;
             }
-            if (gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+            if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
                 func_80151938(globalCtx, 0x937U);
                 return;
@@ -532,10 +532,10 @@ There's a couple of other obvious things here:
         case 0:
             func_801477B4(globalCtx);
             
-            if (gSaveContext.rupees < 0xA) {
+            if (gSaveContext.save.playerData.rupees < 0xA) {
                 play_sound(0x4806U);
                 func_80151938(globalCtx, 0x935U);
-            } else if (gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+            } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                 play_sound(0x4806U);
                 func_80151938(globalCtx, 0x937U);
             } else {
@@ -557,7 +557,7 @@ There's a couple of other obvious things here:
 Well, at least the bottom half looks respectable now. Again, there is no code after the switch, so the next thing up, namely
 
 ```C
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
 ```
@@ -578,13 +578,13 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
     if (temp_v0 != 6) {
         return;
     }
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     this->actionFunc = func_80952734;
     return;
 block_5:
-    if (func_80147624(globalCtx) == 0) {
+    if (Message_ShouldAdvance(globalCtx) == 0) {
         return;
     }
     func_801477B4(globalCtx);
@@ -592,15 +592,15 @@ block_5:
     this->actionFunc = func_809529AC;
     return;
 block_7:
-    if (func_80147624(globalCtx) != 0) {
+    if (Message_ShouldAdvance(globalCtx) != 0) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
                 func_801477B4(globalCtx);
                 
-                if (gSaveContext.rupees < 0xA) {
+                if (gSaveContext.save.playerData.rupees < 0xA) {
                     play_sound(0x4806U);
                     func_80151938(globalCtx, 0x935U);
-                } else if (gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+                } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                     play_sound(0x4806U);
                     func_80151938(globalCtx, 0x937U);
                 } else {
@@ -647,7 +647,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx) == 0) {
+            if (Message_ShouldAdvance(globalCtx) == 0) {
                 return;
             }
             func_801477B4(globalCtx);
@@ -656,15 +656,15 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 4:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_801477B4(globalCtx);
 
-                        if (gSaveContext.rupees < 0xA) {
+                        if (gSaveContext.save.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
                             func_80151938(globalCtx, 0x935U);
-                        } else if (gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+                        } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
                             func_80151938(globalCtx, 0x937U);
                         } else {
@@ -700,7 +700,7 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 5:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 func_801477B4(globalCtx);
                 Actor_PickUp((Actor *) this, globalCtx, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
                 this->actionFunc = func_809529AC;
@@ -708,15 +708,15 @@ void func_809527F8(EnMs *this, GlobalContext *globalCtx) {
             break;
 
         case 4:
-            if (func_80147624(globalCtx) != 0) {
+            if (Message_ShouldAdvance(globalCtx) != 0) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         func_801477B4(globalCtx);
 
-                        if (gSaveContext.rupees < 0xA) {
+                        if (gSaveContext.save.playerData.rupees < 0xA) {
                             play_sound(0x4806U);
                             func_80151938(globalCtx, 0x935U);
-                        } else if (gSaveContext.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
+                        } else if (gSaveContext.save.inventory.ammo[gItemSlots[0xA]] >= 0x14) {
                             play_sound(0x4806U);
                             func_80151938(globalCtx, 0x937U);
                         } else {

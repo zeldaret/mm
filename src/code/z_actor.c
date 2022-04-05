@@ -2225,7 +2225,7 @@ void func_800B90F4(GlobalContext* globalCtx) {
 void func_800B9120(ActorContext* actorCtx) {
     s32 phi_v0 = CURRENT_DAY * 2;
 
-    if (gSaveContext.time < CLOCK_TIME(6, 0) || gSaveContext.time > CLOCK_TIME(18, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0) || gSaveContext.save.time > CLOCK_TIME(18, 0)) {
         phi_v0++;
     }
 
@@ -2237,7 +2237,7 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     CycleSceneFlags* cycleFlags;
     s32 i;
 
-    gSaveContext.weekEventReg[92] |= 0x80;
+    gSaveContext.save.weekEventReg[92] |= 0x80;
     cycleFlags = &gSaveContext.cycleSceneFlags[Play_GetOriginalSceneNumber(globalCtx->sceneNum)];
 
     bzero(actorCtx, sizeof(ActorContext));
@@ -2253,8 +2253,8 @@ void Actor_InitContext(GlobalContext* globalCtx, ActorContext* actorCtx, ActorEn
     }
 
     actorCtx->flags.chest = cycleFlags->chest;
-    actorCtx->flags.switches[0] = cycleFlags->swch0;
-    actorCtx->flags.switches[1] = cycleFlags->swch1;
+    actorCtx->flags.switches[0] = cycleFlags->switch0;
+    actorCtx->flags.switches[1] = cycleFlags->switch1;
     if (globalCtx->sceneNum == SCENE_INISIE_R) {
         cycleFlags = &gSaveContext.cycleSceneFlags[globalCtx->sceneNum];
     }
@@ -3800,13 +3800,13 @@ void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
-void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
-    if (arg2 >= 5) {
+void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 y, s16 countdown) {
+    if (y >= 5) {
         func_8013ECE0(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
         func_8013ECE0(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    func_800BC770(globalCtx, arg2, arg3);
+    func_800BC770(globalCtx, y, countdown);
 }
 
 typedef struct {
@@ -3909,104 +3909,148 @@ Hilite* func_800BCC68(Vec3f* arg0, GlobalContext* globalCtx) {
     return Hilite_DrawXlu(arg0, &globalCtx->view.eye, &lightDir, globalCtx->state.gfxCtx);
 }
 
-void func_800BCCDC(Vec3s* points, s32 pathCount, Vec3f* pos1, Vec3f* pos2, s32 arg4) {
-    s32 spB4;
-    s32 spB0;
-    s32 spA8[2] = { 0, 0 };
-    s32 spA0[2] = { 0, 0 };
-    Vec3f sp94;
-    Vec3f sp7C[2];
-    Vec3f sp70;
-    Vec3f sp64;
-    f32 sp60;
-    f32 sp5C;
-    f32 sp54[2];
+/**
+ * Calculates the closest position `dstPos` to the input position `srcPos` along the path given by `points`/`numPoints`
+ * Whether the points provided forms a closed-loop path is indicated by `isPathLoop`
+ */
+void Actor_GetClosestPosOnPath(Vec3s* points, s32 numPoints, Vec3f* srcPos, Vec3f* dstPos, s32 isPathLoop) {
+    s32 pointIndex;
+    s32 closestPointIndex;
+    s32 useAdjacentLines[2] = {
+        false, // determines whether to use line connecting to previous point in calculations
+        false, // determines whether to use line connecting to next point in calculations
+    };
+    s32 isRightSideOfAdjacentLines[2] = {
+        false, // determines whether srcPos is on the right side of the line from prev to curr point
+        false, // determines whether srcPos is on the right side of the line from curr to next point
+    };
+    Vec3f closestPoint;
+    Vec3f closestPos[2];
+    Vec3f closestPointNext;
+    Vec3f closestPointPrev;
+    f32 distSq; // First used as distSq to closest point, then used as distSq to closest position
+    f32 closestPointDistSq;
+    f32 loopDistSq[2];
+    s32 i;
 
-    spB0 = 0;
-    sp5C = SQ(40000.0f);
+    closestPointIndex = 0;
+    closestPointDistSq = SQ(40000.0f);
 
-    for (spB4 = 0; spB4 < pathCount; spB4++) {
-        sp60 = Math3D_XZDistanceSquared(pos1->x, pos1->z, points[spB4].x, points[spB4].z);
-        if (sp60 < sp5C) {
-            sp5C = sp60;
-            spB0 = spB4;
+    // Find the point closest to srcPos
+    for (pointIndex = 0; pointIndex < numPoints; pointIndex++) {
+        distSq = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, points[pointIndex].x, points[pointIndex].z);
+        if (distSq < closestPointDistSq) {
+            closestPointDistSq = distSq;
+            closestPointIndex = pointIndex;
         }
     }
 
-    sp94.x = (points + spB0)->x;
-    sp94.z = (points + spB0)->z;
-    pos2->y = (points + spB0)->y;
-    if (spB0 != 0) {
-        sp64.x = (points + spB0 - 1)->x;
-        sp64.z = (points + spB0 - 1)->z;
-    } else if (arg4) {
-        sp64.x = (points + pathCount - 1)->x;
-        sp64.z = (points + pathCount - 1)->z;
+    closestPoint.x = (points + closestPointIndex)->x;
+    closestPoint.z = (points + closestPointIndex)->z;
+    dstPos->y = (points + closestPointIndex)->y;
+
+    // Analyze point on path immediately previous to the closest point
+    if (closestPointIndex != 0) {
+        // The point previous to the closest point
+        closestPointPrev.x = (points + closestPointIndex - 1)->x;
+        closestPointPrev.z = (points + closestPointIndex - 1)->z;
+    } else if (isPathLoop) {
+        // Closest point is the first point in the path list
+        // Set the previous point to loop around to the the final point on the path
+        closestPointPrev.x = (points + numPoints - 1)->x;
+        closestPointPrev.z = (points + numPoints - 1)->z;
+    }
+    if ((closestPointIndex != 0) || isPathLoop) {
+        // Use the adjacent line
+        useAdjacentLines[0] =
+            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPointPrev.x, closestPointPrev.z, closestPoint.x,
+                                     closestPoint.z, &closestPos[0].x, &closestPos[0].z, &distSq);
     }
 
-    if ((spB0 != 0) || arg4) {
-        spA8[0] =
-            Math3D_PointDistToLine2D(pos1->x, pos1->z, sp64.x, sp64.z, sp94.x, sp94.z, &sp7C[0].x, &sp7C[0].z, &sp60);
+    // Analyze point on path immediately next to the closest point
+    if (closestPointIndex + 1 != numPoints) {
+        // The point next to the closest point
+        closestPointNext.x = (points + closestPointIndex + 1)->x;
+        closestPointNext.z = (points + closestPointIndex + 1)->z;
+    } else if (isPathLoop) {
+        // Closest point is the final point in the path list
+        // Set the next point to loop around to the the first point on the path
+        closestPointNext.x = (points + 0)->x;
+        closestPointNext.z = (points + 0)->z;
+    }
+    if ((closestPointIndex + 1 != numPoints) || isPathLoop) {
+        useAdjacentLines[1] =
+            Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPoint.x, closestPoint.z, closestPointNext.x,
+                                     closestPointNext.z, &closestPos[1].x, &closestPos[1].z, &distSq);
     }
 
-    if (spB0 + 1 != pathCount) {
-        sp70.x = (points + spB0 + 1)->x;
-        sp70.z = (points + spB0 + 1)->z;
-    } else if (arg4) {
-        sp70.x = points->x;
-        sp70.z = points->z;
-    }
+    /**
+     * For close-looped paths, they must be defined in a clockwise orientation looking from the top down.
+     * Therefore, `srcPos` being interior of the loop will lead to both lines of `isRightSideOfAdjacentLines`
+     * returning true.
+     */
+    if (isPathLoop) {
+        isRightSideOfAdjacentLines[0] = ((closestPointPrev.x - srcPos->x) * (closestPoint.z - srcPos->z)) <
+                                        ((closestPointPrev.z - srcPos->z) * (closestPoint.x - srcPos->x));
 
-    if ((spB0 + 1 != pathCount) || arg4) {
-        spA8[1] =
-            Math3D_PointDistToLine2D(pos1->x, pos1->z, sp94.x, sp94.z, sp70.x, sp70.z, &sp7C[1].x, &sp7C[1].z, &sp60);
-    }
+        isRightSideOfAdjacentLines[1] = ((closestPointNext.z - srcPos->z) * (closestPoint.x - srcPos->x)) <
+                                        ((closestPoint.z - srcPos->z) * (closestPointNext.x - srcPos->x));
 
-    if (arg4) {
-        s32 phi_s0_2;
-
-        spA0[0] = ((sp64.x - pos1->x) * (sp94.z - pos1->z)) < ((sp64.z - pos1->z) * (sp94.x - pos1->x));
-        spA0[1] = ((sp70.z - pos1->z) * (sp94.x - pos1->x)) < ((sp94.z - pos1->z) * (sp70.x - pos1->x));
-
-        for (phi_s0_2 = 0; phi_s0_2 < ARRAY_COUNT(sp54); phi_s0_2++) {
-            if (spA8[phi_s0_2] != 0) {
-                sp54[phi_s0_2] = Math3D_XZDistanceSquared(pos1->x, pos1->z, sp7C[phi_s0_2].x, sp7C[phi_s0_2].z);
+        for (i = 0; i < ARRAY_COUNT(loopDistSq); i++) {
+            if (useAdjacentLines[i]) {
+                // Get distSq from srcPos to closestPos
+                loopDistSq[i] = Math3D_XZDistanceSquared(srcPos->x, srcPos->z, closestPos[i].x, closestPos[i].z);
             } else {
-                sp54[phi_s0_2] = SQ(40000.0f);
+                // The closest Pos is not contained within the line-segment
+                loopDistSq[i] = SQ(40000.0f);
             }
         }
     }
 
-    if (arg4 && (((spA0[0] != 0) && (spA0[1] != 0)) || ((spA0[0] != 0) && (spA8[0] != 0) && (sp54[0] < sp54[1])) ||
-                 ((spA0[1] != 0) && (spA8[1] != 0) && (sp54[1] < sp54[0])))) {
-        pos2->x = pos1->x;
-        pos2->z = pos1->z;
-    } else if ((spA8[0] != 0) && (spA8[1] != 0)) {
-        if ((spA0[0] == 0) && (spA0[1] == 0)) {
-            if (Math3D_PointDistToLine2D(pos1->x, pos1->z, sp7C[0].x, sp7C[0].z, sp7C[1].x, sp7C[1].z, &pos2->x,
-                                         &pos2->z, &sp60) == 0) {
-                pos2->x = (sp7C[1].x + sp7C[0].x) * 0.5f;
-                pos2->z = (sp7C[1].z + sp7C[0].z) * 0.5f;
+    // Calculate closest position along path
+    if (isPathLoop && ((isRightSideOfAdjacentLines[0] && isRightSideOfAdjacentLines[1]) ||
+                       (isRightSideOfAdjacentLines[0] && useAdjacentLines[0] && (loopDistSq[0] < loopDistSq[1])) ||
+                       (isRightSideOfAdjacentLines[1] && useAdjacentLines[1] && (loopDistSq[1] < loopDistSq[0])))) {
+        // srcPos is contained within the closed loop
+        dstPos->x = srcPos->x;
+        dstPos->z = srcPos->z;
+    } else if (useAdjacentLines[0] && useAdjacentLines[1]) {
+        // srcPos is somewhere withing the bend of the path
+        if (!isRightSideOfAdjacentLines[0] && !isRightSideOfAdjacentLines[1]) {
+            // srcPos is not inside a loop
+            if (!Math3D_PointDistToLine2D(srcPos->x, srcPos->z, closestPos[0].x, closestPos[0].z, closestPos[1].x,
+                                          closestPos[1].z, &dstPos->x, &dstPos->z, &distSq)) {
+                // The dstPos calculated in Math3D_PointDistToLine2D was not valid.
+                // Take the midpoint of the two closest ponits instead
+                dstPos->x = (closestPos[1].x + closestPos[0].x) * 0.5f;
+                dstPos->z = (closestPos[1].z + closestPos[0].z) * 0.5f;
             }
-        } else if (sp54[1] < sp54[0]) {
-            pos2->x = sp7C[1].x;
-            pos2->z = sp7C[1].z;
+        } else if (loopDistSq[1] < loopDistSq[0]) {
+            // Use closest position along the line in the loop connecting the closest point and the next point
+            dstPos->x = closestPos[1].x;
+            dstPos->z = closestPos[1].z;
         } else {
-            pos2->x = sp7C[0].x;
-            pos2->z = sp7C[0].z;
+            // Use closest position along the ling in the loop connecting the closest point and the prev point
+            dstPos->x = closestPos[0].x;
+            dstPos->z = closestPos[0].z;
         }
-    } else if (spA8[0] != 0) {
-        pos2->x = sp7C[0].x;
-        pos2->z = sp7C[0].z;
-    } else if (spA8[1] != 0) {
-        pos2->x = sp7C[1].x;
-        pos2->z = sp7C[1].z;
-    } else if (arg4 && ((((sp64.x - pos1->x) * (sp70.z - pos1->z)) < ((sp64.z - pos1->z) * (sp70.x - pos1->x))))) {
-        pos2->x = pos1->x;
-        pos2->z = pos1->z;
+    } else if (useAdjacentLines[0]) {
+        // Use closest position along line segment connecting the closest point and the prev point
+        dstPos->x = closestPos[0].x;
+        dstPos->z = closestPos[0].z;
+    } else if (useAdjacentLines[1]) {
+        // Use closest position along line segment connecting the closest point and the next point
+        dstPos->x = closestPos[1].x;
+        dstPos->z = closestPos[1].z;
+    } else if (isPathLoop && ((((closestPointPrev.x - srcPos->x) * (closestPointNext.z - srcPos->z)) <
+                               ((closestPointPrev.z - srcPos->z) * (closestPointNext.x - srcPos->x))))) {
+        // Inside the line that directly connects the previous point to the next point (inside the bend of a corner)
+        dstPos->x = srcPos->x;
+        dstPos->z = srcPos->z;
     } else {
-        pos2->x = sp94.x;
-        pos2->z = sp94.z;
+        // The closest point and the closest position are the same (srcPos is near the outer region of a corner)
+        dstPos->x = closestPoint.x;
+        dstPos->z = closestPoint.z;
     }
 }
 
@@ -4189,11 +4233,11 @@ Gfx D_801AEFA0[] = {
     gsSPEndDisplayList(),
 };
 
-void* func_800BD9A0(GraphicsContext* gfxCtx) {
+Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
     Gfx* displayListHead;
     Gfx* displayList;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, 0x10);
+    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
 
     gDPSetRenderMode(displayListHead++,
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |
@@ -4447,39 +4491,42 @@ s32 func_800BE63C(struct EnBox* chest) {
     return false;
 }
 
-TexturePtr D_801AEFA8[] = {
-    gameplay_keep_Tex_091DE0,
-    gameplay_keep_Tex_091FE0,
-    gameplay_keep_Tex_0921E0,
-    gameplay_keep_Tex_0923E0,
+TexturePtr sElectricSparkTextures[] = {
+    gElectricSpark1Tex,
+    gElectricSpark2Tex,
+    gElectricSpark3Tex,
+    gElectricSpark4Tex,
 };
 
-// Draw common damageEffects
-void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 arg3, f32 effectScale, f32 steamScale,
-                   f32 effectAlpha, u8 mode) {
+/**
+ * Draw common damage effects applied to each limb provided in limbPos
+ */
+void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 limbPosCount, f32 effectScale,
+                             f32 frozenSteamScale, f32 effectAlpha, u8 type) {
     if (effectAlpha > 0.001f) {
-        s32 temp_v1_3;
-        s16 i;
-        MtxF* temp_s3;
+        s32 twoTexScrollParam;
+        s16 limbIndex;
+        MtxF* currentMatrix;
         f32 alpha;
-        f32 sp124;
-        f32 sp120;
-        f32 sp11C;
-        f32 sp118;
-        Vec3f* limbAux = limbPos;
-        u32 sp110 = globalCtx->gameplayFrames;
-        f32 sp74;
+        f32 frozenScale;
+        f32 lightOrbsScale;
+        f32 electricSparksScale;
+        f32 steamScale;
+        Vec3f* limbPosStart = limbPos;
+        u32 gameplayFrames = globalCtx->gameplayFrames;
+        f32 effectAlphaScaled;
 
-        temp_s3 = Matrix_GetCurrentState();
+        currentMatrix = Matrix_GetCurrentState();
 
+        // Apply sfx along with damage effect
         if ((actor != NULL) && (effectAlpha > 0.05f) && (globalCtx->gameOverCtx.state == 0)) {
-            if (mode == 0) {
+            if (type == ACTOR_DRAW_DMGEFF_FIRE) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
-            } else if (mode == 1) {
+            } else if (type == ACTOR_DRAW_DMGEFF_BLUE_FIRE) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
-            } else if (mode == 0xB) {
+            } else if (type == ACTOR_DRAW_DMGEFF_FROZEN_SFX) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
-            } else if ((mode == 0x14) || (mode == 0x15)) {
+            } else if ((type == ACTOR_DRAW_DMGEFF_LIGHT_ORBS) || (type == ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS)) {
                 Actor_PlaySfxAtPos(actor, NA_SE_EN_COMMON_DEADLIGHT - SFX_FLAG);
             }
         }
@@ -4488,58 +4535,60 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        switch (mode) {
-            case 0xA:
-            case 0xB:
-                sp124 = ((KREG(19) * 0.01f) + 2.3f) * effectScale;
-                sp118 = ((KREG(28) * 0.0001f) + 0.035f) * steamScale;
+        switch (type) {
+            case ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX:
+            case ACTOR_DRAW_DMGEFF_FROZEN_SFX:
+                frozenScale = ((KREG(19) * 0.01f) + 2.3f) * effectScale;
+                steamScale = ((KREG(28) * 0.0001f) + 0.035f) * frozenSteamScale;
                 func_800BCC68(limbPos, globalCtx);
 
+                // Setup to draw ice over frozen actor
+
                 gSPSegment(POLY_XLU_DISP++, 0x08,
-                           Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, sp110 & 0xFF, 0x20, 0x10, 1, 0,
-                                            (sp110 * 2) & 0xFF, 0x40, 0x20));
-
+                           Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, gameplayFrames & 0xFF, 32, 16, 1, 0,
+                                            (gameplayFrames * 2) & 0xFF, 64, 32));
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 170, 255, 255, 255);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenIceDL);
 
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_050648);
+                effectAlphaScaled = effectAlpha * 255.0f;
 
-                sp74 = effectAlpha * 255.0f;
-                for (i = 0; i < arg3; i++) {
-                    alpha = i & 3;
-                    alpha = sp74 - (30.0f * alpha);
-                    if (sp74 < (30.0f * (i & 3))) {
+                // Apply and draw ice over each limb of frozen actor
+                for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
+                    alpha = limbIndex & 3;
+                    alpha = effectAlphaScaled - (30.0f * alpha);
+                    if (effectAlphaScaled < (30.0f * (limbIndex & 3))) {
                         alpha = 0.0f;
                     }
                     if (alpha > 255.0f) {
                         alpha = 255.0f;
                     }
 
-                    gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 0xC8, KREG(21) + 0xC8, KREG(22) + 0xFF, (u8)alpha);
+                    gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 200, KREG(21) + 200, KREG(22) + 255, (u8)alpha);
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
-                    Matrix_Scale(sp124, sp124, sp124, MTXMODE_APPLY);
-                    if (i & 1) {
+                    Matrix_Scale(frozenScale, frozenScale, frozenScale, MTXMODE_APPLY);
+
+                    if (limbIndex & 1) {
                         Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
                     }
-                    if (i & 2) {
+
+                    if (limbIndex & 2) {
                         Matrix_InsertZRotation_f(M_PI, MTXMODE_APPLY);
                     }
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0506E0);
-
-                    limbPos++;
+                    gSPDisplayList(POLY_XLU_DISP++, gFrozenIceVtxDL);
                 }
 
-                limbPos = limbAux;
+                limbPos = limbPosStart; // reset limbPos
+
+                // Setup to draw steam over frozen actor
 
                 gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
-
                 gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);
-
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_051180);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamDL);
 
                 alpha = effectAlpha * 100.0f;
                 if (alpha > 100.0f) {
@@ -4548,158 +4597,165 @@ void func_800BE680(GlobalContext* globalCtx, Actor* actor, Vec3f limbPos[], s16 
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
 
-                for (i = 0; i < arg3; i++) {
-                    temp_v1_3 = ((i * 3) + sp110);
+                // Apply and draw steam over each limb of frozen actor
+                for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
+                    twoTexScrollParam = ((limbIndex * 3) + gameplayFrames);
                     gSPSegment(POLY_XLU_DISP++, 0x08,
-                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, temp_v1_3 * 3, temp_v1_3 * -0xC, 0x20, 0x40,
-                                                1, 0, 0, 0x20, 0x20));
+                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, twoTexScrollParam * 3,
+                                                twoTexScrollParam * -12, 32, 64, 1, 0, 0, 32, 32));
 
                     Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-                    Matrix_Scale(sp118, sp118, 1.0f, MTXMODE_APPLY);
+                    Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_051238);
-
-                    limbPos++;
+                    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamVtxDL);
                 }
                 break;
 
-            case 0x0:
-            case 0x1:
-                if (mode == 0) {
+            case ACTOR_DRAW_DMGEFF_FIRE:
+            case ACTOR_DRAW_DMGEFF_BLUE_FIRE:
+                if (type == ACTOR_DRAW_DMGEFF_FIRE) {
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
                 } else {
                     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 0);
-                    mode = 0xFF;
+                    // Reuse type for blue primitive color
+                    type = 255;
                 }
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
                 Matrix_Scale((effectScale * 0.005f) * 1.35f, (effectScale * 0.005f), (effectScale * 0.005f) * 1.35f,
                              MTXMODE_APPLY);
 
-                sp74 = effectAlpha * 255.0f;
+                effectAlphaScaled = effectAlpha * 255.0f;
 
-                for (i = 0; i < arg3; i++) {
-                    alpha = i & 3;
-                    alpha = sp74 - 30.0f * alpha;
-                    if (sp74 < 30.0f * (i & 3)) {
+                // Apply and draw fire on every limb
+                for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
+                    alpha = limbIndex & 3;
+                    alpha = effectAlphaScaled - 30.0f * alpha;
+                    if (effectAlphaScaled < 30.0f * (limbIndex & 3)) {
                         alpha = 0.0f;
                     }
                     if (alpha > 255.0f) {
                         alpha = 255.0f;
                     }
 
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, mode, (u8)alpha);
+                    // Use type for blue primitive color
+                    // = 0 for ACTOR_DRAW_DMGEFF_FIRE
+                    // = 255 for ACTOR_DRAW_DMGEFF_BLUE_FIRE
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, type, (u8)alpha);
 
                     gSPSegment(POLY_XLU_DISP++, 0x08,
-                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
-                                                ((i * 10 + sp110) * -0x14) & 0x1FF, 0x20, 0x80));
+                               Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0,
+                                                ((limbIndex * 10 + gameplayFrames) * -20) & 0x1FF, 32, 128));
 
                     Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
-                    temp_s3->mf[3][0] = limbPos->x;
-                    temp_s3->mf[3][1] = limbPos->y;
-                    temp_s3->mf[3][2] = limbPos->z;
+                    currentMatrix->mf[3][0] = limbPos->x;
+                    currentMatrix->mf[3][1] = limbPos->y;
+                    currentMatrix->mf[3][2] = limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
                     gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
-
-                    limbPos++;
                 }
                 break;
 
-            case 0x14:
-            case 0x15:
-                sp120 = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
+            case ACTOR_DRAW_DMGEFF_LIGHT_ORBS:
+            case ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS:
 
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023348);
+                // Setup to draw light orbs on actor
+
+                lightOrbsScale = ((KREG(19) * 0.01f) + 4.0f) * effectScale;
+
+                gSPDisplayList(POLY_XLU_DISP++, gLightOrb1DL);
 
                 alpha = effectAlpha * 255.0f;
                 if (alpha > 255.0f) {
                     alpha = 255.0f;
                 }
 
-                if (mode == 0x15) {
-                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF), (u8)(sREG(17) + 0xFF),
-                                    (u8)(sREG(18) + 0xFF), (u8)alpha);
+                if (type == ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS) {
+                    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 255), (u8)(sREG(17) + 255),
+                                    (u8)(sREG(18) + 255), (u8)alpha);
 
-                    gDPSetEnvColor(POLY_XLU_DISP++, (u8)sREG(19), (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF), 0x80);
+                    gDPSetEnvColor(POLY_XLU_DISP++, (u8)sREG(19), (u8)(sREG(20) + 255), (u8)(sREG(21) + 255), 128);
                 } else {
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)alpha);
 
                     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 100, 128);
                 }
-                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale(sp120, sp120, 1.0f, MTXMODE_APPLY);
 
-                for (i = 0; i < arg3; i++) {
+                Matrix_SetCurrentState(&globalCtx->billboardMtxF);
+                Matrix_Scale(lightOrbsScale, lightOrbsScale, 1.0f, MTXMODE_APPLY);
+
+                // Apply and draw a light orb over each limb of frozen actor
+                for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
                     Matrix_InsertZRotation_f(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
-                    temp_s3->mf[3][0] = limbPos->x;
-                    temp_s3->mf[3][1] = limbPos->y;
-                    temp_s3->mf[3][2] = limbPos->z;
+                    currentMatrix->mf[3][0] = limbPos->x;
+                    currentMatrix->mf[3][1] = limbPos->y;
+                    currentMatrix->mf[3][2] = limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
-
-                    limbPos++;
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
                 }
                 break;
 
-            case 0x1E:
-            case 0x1F:
-            case 0x20:
-                if (mode == 0x1E) {
-                    sp11C = (KREG(19) * 0.01f + 1.0f) * effectScale;
-                } else if (mode == 0x1F) {
-                    sp11C = (KREG(19) * 0.01f + 1.5f) * effectScale;
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL:
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM:
+            case ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE:
+                if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL) {
+                    electricSparksScale = (KREG(19) * 0.01f + 1.0f) * effectScale;
+                } else if (type == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM) {
+                    electricSparksScale = (KREG(19) * 0.01f + 1.5f) * effectScale;
                 } else {
-                    sp11C = (KREG(19) * 0.01f + 2.0f) * effectScale;
+                    electricSparksScale = (KREG(19) * 0.01f + 2.0f) * effectScale;
                 }
 
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801AEFA8[globalCtx->gameplayFrames & 3]));
+                gSPSegment(POLY_XLU_DISP++, 0x08,
+                           Lib_SegmentedToVirtual(sElectricSparkTextures[globalCtx->gameplayFrames % 4]));
 
-                gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023480);
+                gSPDisplayList(POLY_XLU_DISP++, gElectricSparkDL);
 
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 0xFF), (u8)(sREG(17) + 0xFF),
-                                (u8)(sREG(18) + 0x96), (u8)(sREG(19) + 0xFF));
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)(sREG(16) + 255), (u8)(sREG(17) + 255), (u8)(sREG(18) + 150),
+                                (u8)(sREG(19) + 255));
 
-                gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 0xFF), (u8)(sREG(21) + 0xFF), (u8)sREG(22),
-                               (u8)sREG(23));
+                gDPSetEnvColor(POLY_XLU_DISP++, (u8)(sREG(20) + 255), (u8)(sREG(21) + 255), (u8)sREG(22), (u8)sREG(23));
 
                 Matrix_SetCurrentState(&globalCtx->billboardMtxF);
-                Matrix_Scale(sp11C, sp11C, sp11C, MTXMODE_APPLY);
+                Matrix_Scale(electricSparksScale, electricSparksScale, electricSparksScale, MTXMODE_APPLY);
 
-                for (i = 0; i < arg3; i++) {
+                // Every limb draws two electric sparks at random orientations
+                for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
+                    // first electric spark
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
-                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0234F0);
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
 
+                    // second electric spark
                     Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
                     Matrix_InsertZRotation_f(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
-                    temp_s3->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    temp_s3->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    temp_s3->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0234F0);
-
-                    limbPos++;
+                    gSPDisplayList(POLY_XLU_DISP++, gElectricSparkVtxDL);
                 }
+
                 break;
         }
 
