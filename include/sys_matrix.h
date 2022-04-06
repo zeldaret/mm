@@ -32,7 +32,7 @@ Mtx* Matrix_ToMtx(Mtx* dest);
 Mtx* Matrix_GetStateAsRSPMatrix(Mtx* mtx);
 Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx);
 Mtx* Matrix_AppendStateToPolyOpaDisp(GraphicsContext* gfxCtx);
-Mtx* Matrix_AppendToPolyOpaDisp(MtxF* mtx, GraphicsContext* gfxCtx);
+Mtx* Matrix_MtxFToNewMtx(MtxF* mtx, GraphicsContext* gfxCtx);
 
 void Matrix_MultVec3f(Vec3f* src, Vec3f* dest);
 void Matrix_MultZero(Vec3f* dest);

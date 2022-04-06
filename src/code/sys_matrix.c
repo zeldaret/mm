@@ -1081,15 +1081,14 @@ void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rot) {
     }
 }
 
-// Matrix_MtxFToMtx
 /**
  * @brief Converts a floating-point MtxF to a fixed-point RSP-compatible matrix.
  *
- * @param[in] src MtxF to convert
- * @param[out] dest mtx to output to
+ * @param[in] src MtxF to convert.
+ * @param[out] dest mtx to output to.
  *
- * @return dest
- * 
+ * @return dest.
+ *
  * @remark original name: "_MtxF_to_Mtx"
  */
 Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest) {
@@ -1165,17 +1164,46 @@ Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest) {
     return dest;
 }
 
+/**
+ * @brief Converts current fixed-point RSP-compatible matrix.
+ *
+ * Debug uses Matrix_CheckFloats to test current first.
+ *
+ * @param[out] dest mtx to output to.
+ *
+ * @return dest
+ *
+ * @remark original name: "_Matrix_to_Mtx"
+ */
 Mtx* Matrix_ToMtx(Mtx* dest) {
     return Matrix_MtxFToMtx(sCurrentMatrix, dest);
 }
 
+/**
+ * @brief Converts current to a RSP-compatible matrix and saves it to allocated space in the OPA buffer.
+ *
+ * @param gfxCtx Graphics context.
+ *
+ * @return allocated mtx.
+ *
+ * @remark original name: "_Matrix_to_Mtx_new"
+ */
 Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx) {
     return Matrix_ToMtx(GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 
 // Unused
-// Matrix_MtxFToNewMtx
-Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
+/**
+ * @brief Converts src to a RSP-compatible matrix and saves it to allocated space in the OPA buffer.
+ *
+ * @param src MtxF to convert.
+ * @param gfxCtx Graphics context.
+ *
+ * @return allocated mtx.
+ *
+ * @remark original name unknown, likely close to "_Matrix_MtxF_to_Mtx_new"
+ */
+Mtx* Matrix_MtxFToNewMtx(MtxF* src, GraphicsContext* gfxCtx) {
     return Matrix_MtxFToMtx(src, GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 
