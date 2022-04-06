@@ -71,6 +71,7 @@ animdict = {
     "Matrix_GetStateTranslationAndScaledY":    "Matrix_MultVecY",
     "Matrix_GetStateTranslationAndScaledZ":    "Matrix_MultVecZ",
     "Matrix_MultiplyVector3fXZByCurrentState": "Matrix_MultVec3fXZ",
+    "Matrix_FromRSPMatrix":                    "Matrix_MtxToMtxF",
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_8012403C": "Player_GetMask",

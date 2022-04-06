@@ -1369,7 +1369,6 @@ void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
     }
 }
 
-// Matrix_MtxToMtxF
 /**
  * @brief Converts fixed-point RSP-compatible matrix to an MtxF.
  *
@@ -1405,13 +1404,14 @@ void Matrix_MtxToMtxF(Mtx* src, MtxF* dest) {
 /**
  * @brief Calculates mf * (src,1) and writes its components to dest.
  *
- * This is the same as @sa Matrix_MultVec3f but using a specified matrix rather than the current one;
+ * This is the same as @sa Matrix_MultVec3f but using a specified matrix rather than the current one; the same
+ * assumptions apply.
  *
  * @param src input vector
  * @param dest output vector
  * @param mf matrix to multiply by
  */
-void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dest, MtxF* mf) {
+void Matrix_MultVec3fExt(Vec3f* src, Vec3f* dest, MtxF* mf) {
     dest->x = mf->xw + (mf->xx * src->x + mf->xy * src->y + mf->xz * src->z);
     dest->y = mf->yw + (mf->yx * src->x + mf->yy * src->y + mf->yz * src->z);
     dest->z = mf->zw + (mf->zx * src->x + mf->zy * src->y + mf->zz * src->z);
@@ -1419,7 +1419,21 @@ void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dest, MtxF* mf) {
 
 // Matrix_Transpose or Matrix_Reverse
 /**
- * @brief Transposes the linear part of mf.
+ * @brief Transposes the linear part of mf (ignores the translational part).
+ *
+ * Viz.,
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      A & b \\
+ *      0 & 1
+ *  \end{pmatrix}
+ *  \longrightarrow
+ *  \begin{pmatrix}
+ *      A^T & b \\
+ *      0 & 1
+ *  \end{pmatrix}
+ * \f]
  *
  * @param mf matrix to transpose
  *
