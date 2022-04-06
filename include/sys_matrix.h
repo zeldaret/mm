@@ -43,7 +43,7 @@ void Matrix_MultVec3fXZ(Vec3f* src, Vec3f* dest);
 void Matrix_MtxFCopy(MtxF* dest, MtxF* src);
 void Matrix_MtxToMtxF(Mtx* src, MtxF* dest);
 void Matrix_MultVec3fExt(Vec3f* src, Vec3f* dest, MtxF* matrix);
-void Matrix_TransposeXYZ(MtxF* mtx);
+void Matrix_Transpose(MtxF* mtx);
 void Matrix_NormalizeXYZ(MtxF* mtx);
 void func_8018219C(MtxF* mtx, Vec3s* rotDest, s32 flag);
 void func_801822C4(MtxF* mtx, Vec3s* rotDest, s32 flag);

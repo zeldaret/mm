@@ -1400,7 +1400,6 @@ void Matrix_MtxToMtxF(Mtx* src, MtxF* dest) {
 }
 
 // Unused
-// Matrix_MultVec3fExt
 /**
  * @brief Calculates mf * (src,1) and writes its components to dest.
  *
@@ -1439,7 +1438,7 @@ void Matrix_MultVec3fExt(Vec3f* src, Vec3f* dest, MtxF* mf) {
  *
  * @remark original name: "Matrix_reverse"
  */
-void Matrix_TransposeXYZ(MtxF* mf) {
+void Matrix_Transpose(MtxF* mf) {
     f32 temp;
 
     temp = mf->yx;
