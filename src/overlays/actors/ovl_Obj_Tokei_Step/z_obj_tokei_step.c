@@ -54,9 +54,9 @@ static InitChainEntry sInitChain[] = {
 void ObjTokeiStep_SetSysMatrix(ObjTokeiStepPanel* panel) {
     MtxF* mtx = Matrix_GetCurrent();
 
-    mtx->wx = panel->pos.x;
-    mtx->wy = panel->pos.y;
-    mtx->wz = panel->pos.z;
+    mtx->xw = panel->pos.x;
+    mtx->yw = panel->pos.y;
+    mtx->zw = panel->pos.z;
 }
 
 void ObjTokeiStep_AddQuake(ObjTokeiStep* this, GlobalContext* globalCtx) {

@@ -34,10 +34,10 @@ typedef float MtxF_t[4][4];
 typedef union {
     MtxF_t mf;
     struct {
-        float xx, xy, xz, xw,
-              yx, yy, yz, yw,
-              zx, zy, zz, zw,
-              wx, wy, wz, ww;
+        float xx, yx, zx, wx,
+              xy, yy, zy, wy,
+              xz, yz, zz, wz,
+              xw, yw, zw, ww;
     };
 } MtxF; // size = 0x40
 

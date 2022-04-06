@@ -256,7 +256,7 @@ s32 func_80A3CC30(ObjVspinyroll* this, GlobalContext* globalCtx) {
 void func_80A3CC84(f32 arg0) {
     MtxF* matrix = Matrix_GetCurrent();
 
-    matrix->wy += arg0;
+    matrix->yw += arg0;
 }
 
 void ObjVspinyroll_Init(Actor* thisx, GlobalContext* globalCtx) {

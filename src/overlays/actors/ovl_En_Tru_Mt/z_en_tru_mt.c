@@ -527,13 +527,13 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
         sp54 = Matrix_GetCurrent();
         if ((this->actor.child == NULL) || (this->actor.child->update == NULL)) {
-            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_JC_MATO, sp54->wx, sp54->wy,
-                               sp54->wz, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_JC_MATO, sp54->xw, sp54->yw,
+                               sp54->zw, this->unk_38E.x, BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))),
                                this->unk_38E.z, -1);
         } else if (!((EnJcMato*)this->actor.child)->hitFlag) {
-            this->actor.child->world.pos.x = sp54->wx;
-            this->actor.child->world.pos.y = sp54->wy;
-            this->actor.child->world.pos.z = sp54->wz;
+            this->actor.child->world.pos.x = sp54->xw;
+            this->actor.child->world.pos.y = sp54->yw;
+            this->actor.child->world.pos.z = sp54->zw;
 
             this->actor.child->world.rot = this->unk_38E;
             this->actor.child->world.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));

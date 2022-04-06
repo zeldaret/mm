@@ -567,9 +567,9 @@ void func_80B2DC50(EnPoh* this, GlobalContext* globalCtx) {
     this->actor.update = func_80B2F328;
     this->actor.draw = func_80B2F37C;
     this->actor.shape.shadowDraw = NULL;
-    this->actor.world.pos.x = this->unk_3D8.wx;
-    this->actor.world.pos.y = this->unk_3D8.wy;
-    this->actor.world.pos.z = this->unk_3D8.wz;
+    this->actor.world.pos.x = this->unk_3D8.xw;
+    this->actor.world.pos.y = this->unk_3D8.yw;
+    this->actor.world.pos.z = this->unk_3D8.zw;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.gravity = -1.0f;

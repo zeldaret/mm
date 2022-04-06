@@ -336,13 +336,13 @@ void func_808D93BC(EnSw* this) {
     MtxF sp18;
 
     sp18.xx = this->unk_35C.x;
-    sp18.xy = this->unk_35C.y;
-    sp18.xz = this->unk_35C.z;
-    sp18.yx = this->unk_368.x;
+    sp18.yx = this->unk_35C.y;
+    sp18.zx = this->unk_35C.z;
+    sp18.xy = this->unk_368.x;
     sp18.yy = this->unk_368.y;
-    sp18.yz = this->unk_368.z;
-    sp18.zx = this->unk_350.x;
-    sp18.zy = this->unk_350.y;
+    sp18.zy = this->unk_368.z;
+    sp18.xz = this->unk_350.x;
+    sp18.yz = this->unk_350.y;
     sp18.zz = this->unk_350.z;
     func_8018219C(&sp18, &this->actor.world.rot, 0);
     this->actor.world.rot.x = -this->actor.world.rot.x;
@@ -458,23 +458,23 @@ void func_808D9894(EnSw* this, Vec3f* vec) {
     MtxF sp1C;
 
     sp1C.xx = this->unk_35C.x;
-    sp1C.yx = this->unk_35C.y;
-    sp1C.zx = this->unk_35C.z;
-    sp1C.wx = 0.0f;
-
-    sp1C.xy = this->unk_368.x;
-    sp1C.yy = this->unk_368.y;
-    sp1C.zy = this->unk_368.z;
-    sp1C.wy = 0.0f;
-
-    sp1C.xz = this->unk_350.x;
-    sp1C.yz = this->unk_350.y;
-    sp1C.zz = this->unk_350.z;
-    sp1C.wz = 0.0f;
-
+    sp1C.xy = this->unk_35C.y;
+    sp1C.xz = this->unk_35C.z;
     sp1C.xw = 0.0f;
+
+    sp1C.yx = this->unk_368.x;
+    sp1C.yy = this->unk_368.y;
+    sp1C.yz = this->unk_368.z;
     sp1C.yw = 0.0f;
+
+    sp1C.zx = this->unk_350.x;
+    sp1C.zy = this->unk_350.y;
+    sp1C.zz = this->unk_350.z;
     sp1C.zw = 0.0f;
+
+    sp1C.wx = 0.0f;
+    sp1C.wy = 0.0f;
+    sp1C.wz = 0.0f;
     sp1C.ww = 0.0f;
 
     Matrix_Put(&sp1C);

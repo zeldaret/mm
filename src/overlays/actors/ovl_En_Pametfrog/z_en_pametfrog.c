@@ -278,13 +278,13 @@ void func_8086A238(EnPametfrog* this) {
     MtxF unkMtx;
 
     unkMtx.xx = this->unk_2E8.x;
-    unkMtx.xy = this->unk_2E8.y;
-    unkMtx.xz = this->unk_2E8.z;
-    unkMtx.yx = this->unk_2DC.x;
+    unkMtx.yx = this->unk_2E8.y;
+    unkMtx.zx = this->unk_2E8.z;
+    unkMtx.xy = this->unk_2DC.x;
     unkMtx.yy = this->unk_2DC.y;
-    unkMtx.yz = this->unk_2DC.z;
-    unkMtx.zx = this->unk_2D0.x;
-    unkMtx.zy = this->unk_2D0.y;
+    unkMtx.zy = this->unk_2DC.z;
+    unkMtx.xz = this->unk_2D0.x;
+    unkMtx.yz = this->unk_2D0.y;
     unkMtx.zz = this->unk_2D0.z;
 
     func_8018219C(&unkMtx, &this->actor.shape.rot, 0);

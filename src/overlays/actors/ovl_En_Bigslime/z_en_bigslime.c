@@ -2873,25 +2873,25 @@ void EnBigslime_UpdateGekko(Actor* thisx, GlobalContext* globalCtx) {
 void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* shadowDList, f32 scaleX, f32 scalez, f32 scaleY,
                              s16 rotation, f32 alpha) {
     f32 yDistMinY;
-    f32 xz;
+    f32 zx;
     MtxF* sysMatrix = Matrix_GetCurrent();
 
     yDistMinY = pos->y - scaleY - GBT_ROOM_5_MIN_Y;
     yDistMinY = CLAMP((yDistMinY), 0.0f, (GBT_ROOM_5_CENTER_Y - GBT_ROOM_5_MIN_Y) / 2);
-    xz = 1.0f - (yDistMinY * (1.0f / 1550.0f));
+    zx = 1.0f - (yDistMinY * (1.0f / 1550.0f));
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
-    sysMatrix->xx = xz;
+    sysMatrix->xx = zx;
     sysMatrix->yy = 1.0f;
-    sysMatrix->zz = xz;
-    sysMatrix->xz = sysMatrix->xy = 0.0f;
-    sysMatrix->yz = sysMatrix->yx = 0.0f;
-    sysMatrix->zy = sysMatrix->zx = 0.0f;
-    sysMatrix->wx = pos->x;
-    sysMatrix->wy = GBT_ROOM_5_MIN_Y;
-    sysMatrix->wz = pos->z;
-    sysMatrix->xw = sysMatrix->yw = sysMatrix->zw = 0.0f;
+    sysMatrix->zz = zx;
+    sysMatrix->zx = sysMatrix->yx = 0.0f;
+    sysMatrix->zy = sysMatrix->xy = 0.0f;
+    sysMatrix->yz = sysMatrix->xz = 0.0f;
+    sysMatrix->xw = pos->x;
+    sysMatrix->yw = GBT_ROOM_5_MIN_Y;
+    sysMatrix->zw = pos->z;
+    sysMatrix->wx = sysMatrix->wy = sysMatrix->wz = 0.0f;
     sysMatrix->ww = 1.0f;
 
     Matrix_RotateY(rotation, MTXMODE_APPLY);
@@ -2901,7 +2901,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, GlobalContext* globalCtx, Gfx* shadowDL
                           COMBINED);
     }
 
-    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(alpha * xz));
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(alpha * zx));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, shadowDList);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
@@ -3006,11 +3006,11 @@ void EnBigslime_DrawBigslime(Actor* thisx, GlobalContext* globalCtx) {
         for (i = 0; i < 28; i++) {
             bubblesInfoPtr = &bubblesInfo[i];
             dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][bubblesInfoPtr->v];
-            billboardMtxF->wx =
+            billboardMtxF->xw =
                 dynamicVtx->n.ob[0] * this->actor.scale.x * bubblesInfoPtr->scaleVtx + this->actor.world.pos.x;
-            billboardMtxF->wy =
+            billboardMtxF->yw =
                 dynamicVtx->n.ob[1] * this->actor.scale.y * bubblesInfoPtr->scaleVtx + this->actor.world.pos.y;
-            billboardMtxF->wz =
+            billboardMtxF->zw =
                 dynamicVtx->n.ob[2] * this->actor.scale.z * bubblesInfoPtr->scaleVtx + this->actor.world.pos.z;
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

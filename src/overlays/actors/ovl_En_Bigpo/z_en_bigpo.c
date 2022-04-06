@@ -734,9 +734,9 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, GlobalContext* globalCtx) {
 void EnBigpo_SetupLanternDrop(EnBigpo* this, GlobalContext* globalCtx) {
     this->actor.draw = EnBigpo_DrawLantern;
     this->actor.shape.shadowDraw = NULL;
-    this->actor.world.pos.x = this->drawMtxF.wx;
-    this->actor.world.pos.y = this->drawMtxF.wy;
-    this->actor.world.pos.z = this->drawMtxF.wz;
+    this->actor.world.pos.x = this->drawMtxF.xw;
+    this->actor.world.pos.y = this->drawMtxF.yw;
+    this->actor.world.pos.z = this->drawMtxF.zw;
 
     Actor_SetScale(&this->actor, 0.014f);
     this->actor.gravity = -1.0f;
@@ -1440,9 +1440,9 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, GlobalContext* globalCtx) {
 
         Lights_PointNoGlowSetInfo(&this->fires[i].info, this->fires[i].pos.x, this->fires[i].pos.y,
                                   this->fires[i].pos.z, 170, 255, 255, fireRadius);
-        mtfxPtr->wx = firePtr->pos.x;
-        mtfxPtr->wy = firePtr->pos.y;
-        mtfxPtr->wz = firePtr->pos.z;
+        mtfxPtr->xw = firePtr->pos.x;
+        mtfxPtr->yw = firePtr->pos.y;
+        mtfxPtr->zw = firePtr->pos.z;
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

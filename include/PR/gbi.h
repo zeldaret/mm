@@ -1647,10 +1647,10 @@ typedef union {
 #define FPART(x) (qs1616(x) & 0xFFFF)
 
 #define gdSPDefMtx(     \
-        xx, xy, xz, xw, \
-        yx, yy, yz, yw, \
-        zx, zy, zz, zw, \
-        wx, wy, wz, ww) \
+        xx, yx, zx, wx, \
+        xy, yy, zy, wy, \
+        xz, yz, zz, wz, \
+        xw, yw, zw, ww) \
     {{                                  \
         (IPART(xx) << 16) | IPART(xy),  \
         (IPART(xz) << 16) | IPART(xw),  \

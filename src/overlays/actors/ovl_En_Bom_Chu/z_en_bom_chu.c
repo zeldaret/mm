@@ -156,15 +156,15 @@ void EnBomChu_UpdateRotation(EnBomChu* this) {
     MtxF mf;
 
     mf.xx = this->axisLeft.x;
-    mf.xy = this->axisLeft.y;
-    mf.xz = this->axisLeft.z;
+    mf.yx = this->axisLeft.y;
+    mf.zx = this->axisLeft.z;
 
-    mf.yx = this->axisUp.x;
+    mf.xy = this->axisUp.x;
     mf.yy = this->axisUp.y;
-    mf.yz = this->axisUp.z;
+    mf.zy = this->axisUp.z;
 
-    mf.zx = this->axisForwards.x;
-    mf.zy = this->axisForwards.y;
+    mf.xz = this->axisForwards.x;
+    mf.yz = this->axisForwards.y;
     mf.zz = this->axisForwards.z;
 
     func_8018219C(&mf, &this->actor.world.rot, 0);

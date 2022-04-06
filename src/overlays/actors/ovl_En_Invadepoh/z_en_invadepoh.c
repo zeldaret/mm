@@ -1326,9 +1326,9 @@ void func_80B454BC(EnInvadepoh* this, GlobalContext* globalCtx) {
 void EnInvadepoh_SetSysMatrix(Vec3f* vec) {
     MtxF* sysMatrix = Matrix_GetCurrent();
 
-    sysMatrix->wx = vec->x;
-    sysMatrix->wy = vec->y;
-    sysMatrix->wz = vec->z;
+    sysMatrix->xw = vec->x;
+    sysMatrix->yw = vec->y;
+    sysMatrix->zw = vec->z;
 }
 
 s32 func_80B45550(EnInvadepoh* this, GlobalContext* globalCtx, f32 range, s32 arg3) {
