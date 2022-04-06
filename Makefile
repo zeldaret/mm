@@ -101,7 +101,7 @@ ifneq ($(RUN_CC_CHECK),0)
     CC_CHECK += -Werror
   endif
 else
-	CC_CHECK := @:
+  CC_CHECK := @:
 endif
 
 CPP        := cpp
