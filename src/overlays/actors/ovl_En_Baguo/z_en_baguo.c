@@ -498,7 +498,7 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
         if (particle->isVisible) {
-            Matrix_InsertTranslation(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
+            Matrix_Translate(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
             Matrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
             Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);

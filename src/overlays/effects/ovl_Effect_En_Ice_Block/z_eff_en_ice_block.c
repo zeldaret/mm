@@ -66,7 +66,7 @@ void EffectEnIceBlock_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
                    globalCtx->objectCtx.status[this->rObjId].segment); // object: OBJECT_ICE_BLOCK
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
+        Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->rRot, MTXMODE_APPLY);

@@ -328,7 +328,7 @@ void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 0, 0, 0, (BREG(52) + 50));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
 
-    Matrix_InsertTranslation(player->actor.world.pos.x, player->actor.floorHeight, player->actor.world.pos.z,
+    Matrix_Translate(player->actor.world.pos.x, player->actor.floorHeight, player->actor.world.pos.z,
                              MTXMODE_NEW);
     Matrix_InsertYRotation_f(BREG(51) / 100.0f, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 1.0f, (BREG(63) / 10.0f) + 1.0f, MTXMODE_APPLY);
@@ -337,7 +337,7 @@ void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) 
     tempz = ((player->actor.world.pos.y - player->actor.floorHeight + BREG(54)) * (BREG(55) - 5) / 10.0f) + BREG(58) -
             20.0f;
 
-    Matrix_InsertTranslation(tempx, 0.0f, tempz, MTXMODE_APPLY);
+    Matrix_Translate(tempx, 0.0f, tempz, MTXMODE_APPLY);
     Matrix_Scale(((BREG(56) - 250) / 1000.0f) + 0.6f, 1.0f, ((BREG(59) - 250) / 1000.0f) + 0.6f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

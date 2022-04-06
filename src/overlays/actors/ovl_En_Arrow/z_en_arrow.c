@@ -665,7 +665,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         Matrix_Scale(this->bubble.unk_144 * sp9C, this->bubble.unk_144 * sp9C, this->bubble.unk_144 * spA0,
                      MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
 
         if (this->actor.speedXZ == 0.0f) {
             func_800B8118(&this->actor, globalCtx, MTXMODE_NEW);

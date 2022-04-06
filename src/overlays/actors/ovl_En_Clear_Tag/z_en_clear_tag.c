@@ -809,7 +809,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             // Draw the debris effect.
-            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             Matrix_InsertYRotation_f(effect->rotationY, MTXMODE_APPLY);
             Matrix_RotateStateAroundXAxis(effect->rotationX);
@@ -881,10 +881,10 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
-            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertTranslation(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
         }
@@ -907,7 +907,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             gSPSegment(
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
-            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -929,7 +929,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
 
             // Draw the flash billboard effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColor.a);
-            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -954,7 +954,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             // Draw the light ray effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)effect->primColor.r, (u8)effect->primColor.g,
                             (u8)effect->primColor.b, (u8)effect->primColor.a);
-            Matrix_InsertTranslation(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
+            Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_InsertYRotation_f(effect->rotationY, MTXMODE_APPLY);
             Matrix_RotateStateAroundXAxis(effect->rotationX);
             Matrix_InsertZRotation_f(effect->rotationZ, MTXMODE_APPLY);
@@ -991,7 +991,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                                          effect->position.z + vec.z, &ySurface, &waterBox)) {
                     if ((effect->position.y - ySurface) < 200.0f) {
                         // Draw the splash effect.
-                        Matrix_InsertTranslation(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
+                        Matrix_Translate(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
                                                  MTXMODE_NEW);
                         Matrix_InsertYRotation_f(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
                         Matrix_RotateStateAroundXAxis(effect->rotationX);

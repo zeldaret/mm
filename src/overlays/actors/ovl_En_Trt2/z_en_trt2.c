@@ -895,7 +895,7 @@ void EnTrt2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
     if (limbIndex == 21) {
         func_80AD5394(this->unk_3D4, this->unk_3D6, &this->unk_3C8, &this->unk_3C2, phi_v0);
-        Matrix_InsertTranslation(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_3C2.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_3C2.x, MTXMODE_APPLY);
@@ -908,7 +908,7 @@ void EnTrt2_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* th
     EnTrt2* this = THIS;
 
     if (limbIndex == 21) {
-        Matrix_InsertTranslation(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_3C2.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_3C2.x, MTXMODE_APPLY);

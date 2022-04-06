@@ -720,7 +720,7 @@ void EnZos_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     Matrix_Push();
     Matrix_RotateY(this->actor.home.rot.y - this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, -974.4f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -974.4f, MTXMODE_APPLY);
 
     gSPMatrix(&gfx[1], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&gfx[2], object_zos_DL_0136E0);

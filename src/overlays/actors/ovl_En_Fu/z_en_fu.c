@@ -1348,17 +1348,17 @@ s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnFu* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_InsertTranslation(1600.0f, 300.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1600.0f, 300.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_524[1], MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_524[0], MTXMODE_APPLY);
         Matrix_RotateY(this->unk_524[2], MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1600.0f, -300.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1600.0f, -300.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 20) {
-        Matrix_InsertTranslation(1800.0f, 200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1800.0f, 200.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_52A[1], MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_52A[0], MTXMODE_APPLY);
         Matrix_RotateY(this->unk_52A[2], MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1800.0f, -200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1800.0f, -200.0f, 0.0f, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1433,7 +1433,7 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             ptr->unk_08.x += 2.0f * Math_SinS(ptr->unk_2C);
             ptr->unk_08.z += 2.0f * Math_CosS(ptr->unk_2C);
             Matrix_Push();
-            Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
             Matrix_RotateY(yaw, MTXMODE_APPLY);
             Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
             Matrix_Pop();
@@ -1457,7 +1457,7 @@ void func_80964950(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
                 gSPDisplayList(POLY_OPA_DISP++, object_mu_DL_00B0A0);
                 flag = true;
             }
-            Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_00, ptr->unk_00, ptr->unk_00, MTXMODE_APPLY);
 

@@ -153,7 +153,7 @@ void EnElfbub_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     func_8012C2DC(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
     Matrix_Scale(this->xyScale + 1.0f, this->xyScale + 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(this->zRot, MTXMODE_APPLY);

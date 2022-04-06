@@ -112,9 +112,9 @@ MtxF* Matrix_GetCurrent(void) {
     return sCurrentMatrix;
 }
 
-// Matrix_Mult
 /**
- * @brief APPLY replaces current by current * mf. NEW replaces current by mf.
+ * @brief General multiplication of current by a matrix. APPLY replaces current by current * mf. NEW replaces current by
+ * mf.
  *
  * @param mf Matrix to multiply by.
  * @param mode NEW or APPLY
@@ -131,9 +131,31 @@ void Matrix_Mult(MtxF* mf, s32 mode) {
     }
 }
 
-// Matrix_Translate
-void Matrix_InsertTranslation(f32 x, f32 y, f32 z, s32 mode) {
-    MtxF* cmf = sCurrentMatrix;
+/**
+ * @brief Right-multiply current by a translation matrix T. 
+ * APPLY: current * T -> current
+ * NEW: T -> current
+ * 
+ * T is given by
+ * 
+ * \f[
+ *  \begin{pmatrix}
+ *      1 & 0 & 0 & x \\
+ *      0 & 1 & 0 & y \\
+ *      0 & 0 & 1 & z \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ * 
+ * @param x translation distance in the x direction
+ * @param y translation distance in the y direction
+ * @param z translation distance in the z direction
+ * @param mode NEW or APPLY
+ *
+ * @remark original name: "Matrix_translate"
+ */
+void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode) {
+    MtxF* cmf;
     f32 tx;
     f32 ty;
 

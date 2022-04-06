@@ -68,7 +68,7 @@ void DebugDisplay_DrawSpriteI8(DebugDispObject* dispObj, void* texture, GlobalCo
     func_8012C6FC(globalCtx->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, dispObj->color.r, dispObj->color.g, dispObj->color.b, dispObj->color.a);
-    Matrix_InsertTranslation(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, MTXMODE_NEW);
+    Matrix_Translate(dispObj->pos.x, dispObj->pos.y, dispObj->pos.z, MTXMODE_NEW);
     Matrix_Scale(dispObj->scale.x, dispObj->scale.y, dispObj->scale.z, MTXMODE_APPLY);
     Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
     Matrix_InsertRotation(dispObj->rot.x, dispObj->rot.y, dispObj->rot.z, MTXMODE_APPLY);

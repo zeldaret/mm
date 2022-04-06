@@ -1466,10 +1466,10 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     if (limbIndex == 15) {
         *dList = object_boj_DL_00AF90;
         if (!(this->flags1 & 4)) {
-            Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk3F2, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(-this->unk2DC.x, MTXMODE_APPLY);
-            Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }
     }
     if (limbIndex == 8) {

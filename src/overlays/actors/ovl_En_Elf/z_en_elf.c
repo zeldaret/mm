@@ -1559,7 +1559,7 @@ s32 EnElf_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         scale *= this->actor.scale.x * 124.99999f;
 
         Matrix_MultiplyVector3fByState(&zeroVec, &sp34);
-        Matrix_InsertTranslation(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
+        Matrix_Translate(sp34.x, sp34.y, sp34.z, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     }
 

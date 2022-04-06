@@ -108,7 +108,7 @@ void func_80A3D9C4(ObjSmork* this, GlobalContext* globalCtx) {
     }
 
     if (this->unk_1B8 > 0.0f) {
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);

@@ -1375,11 +1375,11 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     }
 
     idx = (this->unk_014E + 196) % ARRAY_COUNT(this->unk_01BC);
-    Matrix_InsertTranslation(this->unk_01BC[idx].x, this->unk_01BC[idx].y, this->unk_01BC[idx].z, MTXMODE_NEW);
+    Matrix_Translate(this->unk_01BC[idx].x, this->unk_01BC[idx].y, this->unk_01BC[idx].z, MTXMODE_NEW);
     Matrix_InsertYRotation_f(this->unk_0B1C[idx].y + spA8, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(spAC - this->unk_0B1C[idx].x);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 250.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 250.0f, MTXMODE_APPLY);
     Matrix_GetStateTranslationAndScaledZ(150.0f, &this->unk_147C[0]);
     this->unk_0188 = this->unk_017C;
     Matrix_GetStateTranslationAndScaledZ(300.0f, &this->unk_017C);
@@ -1406,7 +1406,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             spA0 = spA8;
         }
 
-        Matrix_InsertTranslation(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z,
+        Matrix_Translate(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z,
                                  MTXMODE_NEW);
         Matrix_InsertYRotation_f(this->unk_0B1C[phi_v0].y + spA0, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(spA4 - this->unk_0B1C[phi_v0].x);
@@ -1542,7 +1542,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, effect->unk_26 + (i * 3),
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
@@ -1561,7 +1561,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x01, 100, 100, 120, 255);
                 flag++;
             }
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
             Matrix_RotateY(effect->unk_30, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(effect->unk_2E, MTXMODE_APPLY);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0,
@@ -1583,7 +1583,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)effect->unk_2C);
 
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
@@ -1607,7 +1607,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, effect->unk_26 + (i * 3),
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
-            Matrix_InsertTranslation(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
+            Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 

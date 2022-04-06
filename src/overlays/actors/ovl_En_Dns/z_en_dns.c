@@ -617,7 +617,7 @@ void EnDns_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     if (limbIndex == KINGS_CHAMBER_DEKU_GUARD_LIMB_HEAD) {
         func_8092D954(this->unk_2CC, this->unk_2CE + this->actor.shape.rot.y, &this->unk_218, &this->unk_224, phi_v1,
                       phi_v0);
-        Matrix_InsertTranslation(this->unk_218.x, this->unk_218.y, this->unk_218.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_218.x, this->unk_218.y, this->unk_218.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_224.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_224.z, MTXMODE_APPLY);

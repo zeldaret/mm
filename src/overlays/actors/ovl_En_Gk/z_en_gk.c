@@ -1184,7 +1184,7 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
             Matrix_Pop();
 
-            Matrix_InsertTranslation(this->unk_328.x, this->unk_328.y, this->unk_328.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_328.x, this->unk_328.y, this->unk_328.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_334.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_334.x, MTXMODE_APPLY);
@@ -1210,7 +1210,7 @@ void EnGk_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 
             Matrix_Pop();
 
-            Matrix_InsertTranslation(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_348.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_348.x, MTXMODE_APPLY);

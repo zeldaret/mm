@@ -578,9 +578,9 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
     sp64.z = ptr->unk_10 * 1.2f;
 
     Matrix_MultiplyVector3fByState(&sp64, &this->dyna.actor.focus.pos);
-    Matrix_InsertTranslation(ptr->unk_10, ptr->unk_14 + 5.0f, ptr->unk_18, MTXMODE_APPLY);
+    Matrix_Translate(ptr->unk_10, ptr->unk_14 + 5.0f, ptr->unk_18, MTXMODE_APPLY);
     Matrix_Scale(ptr->unk_0C, ptr->unk_0C, ptr->unk_0C, MTXMODE_APPLY);
-    Matrix_InsertTranslation(-ptr->unk_10, -ptr->unk_14, -ptr->unk_18, MTXMODE_APPLY);
+    Matrix_Translate(-ptr->unk_10, -ptr->unk_14, -ptr->unk_18, MTXMODE_APPLY);
 
     for (i = 0; i < 6; i++) {
         element = &ptr->unk_08->elements[i];

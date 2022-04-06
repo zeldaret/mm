@@ -261,10 +261,10 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->enHy.headRot.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->enHy.headRot.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == BBA_LIMB_BAG) {
@@ -274,7 +274,7 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 &&
         ((globalCtx->state.frames % 2) == 0)) {
-        Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == BBA_LIMB_BAG) || (limbIndex == BBA_LIMB_TORSO) || (limbIndex == BBA_LIMB_LEFT_FOREARM)) {

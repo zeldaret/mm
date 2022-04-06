@@ -550,7 +550,7 @@ void func_80BE7718(EnDaiku2* this, GlobalContext* globalCtx) {
         for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
             if (particle->isEnabled) {
                 Matrix_Push();
-                Matrix_InsertTranslation(particle->unk_04.x, particle->unk_04.y, particle->unk_04.z, MTXMODE_NEW);
+                Matrix_Translate(particle->unk_04.x, particle->unk_04.y, particle->unk_04.z, MTXMODE_NEW);
                 Matrix_InsertXRotation_s(particle->unk_28.x, MTXMODE_APPLY);
                 Matrix_RotateY(particle->unk_28.y, MTXMODE_APPLY);
                 Matrix_InsertZRotation_s(particle->unk_28.z, MTXMODE_APPLY);

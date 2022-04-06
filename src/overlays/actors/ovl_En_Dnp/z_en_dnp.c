@@ -469,7 +469,7 @@ void EnDnp_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
         func_80B3D974(this->unk_330 + 0x4000, this->unk_332 + this->actor.shape.rot.y + 0x4000, &this->unk_1D8,
                       &this->unk_1E4, phi_v1, phi_v0);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_1D8.x, this->unk_1D8.y, this->unk_1D8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_1E4.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_1E4.x, MTXMODE_APPLY);

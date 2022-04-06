@@ -532,7 +532,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                             var2 = ((entry->unkC - 120.0f) * 0.001f) + 0.15f;
                         }
 
-                        Matrix_InsertTranslation(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
+                        Matrix_Translate(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
                         Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
 
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b,
@@ -543,7 +543,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                         for (i = 0; i < 4; i++) {
                             Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
                             Matrix_Push();
-                            Matrix_InsertTranslation(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
+                            Matrix_Translate(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                                       G_MTX_MODELVIEW | G_MTX_LOAD);
                             gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
@@ -565,7 +565,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
 
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
 
-            Matrix_InsertTranslation(actor->focus.pos.x,
+            Matrix_Translate(actor->focus.pos.x,
                                      actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
                                      actor->focus.pos.z, MTXMODE_NEW);
             Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
@@ -3773,7 +3773,7 @@ void func_800BC620(Vec3f* arg0, Vec3f* arg1, u8 alpha, GlobalContext* globalCtx)
         func_800C0094(sp44, arg0->x, sp54, arg0->z, &sp58);
         Matrix_Put(&sp58);
     } else {
-        Matrix_InsertTranslation(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
+        Matrix_Translate(arg0->x, arg0->y, arg0->z, MTXMODE_NEW);
     }
     Matrix_Scale(arg1->x, 1.0f, arg1->z, MTXMODE_APPLY);
 
@@ -3840,7 +3840,7 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, entry->yShift, 500.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, entry->yShift, 500.0f, MTXMODE_APPLY);
     Matrix_Get(&baseMtxF);
 
     chainsTranslateX = sinf(entry->chainAngle - chainRotZ) * -(10 - frame) * 0.1f * entry->chainLength;
@@ -3849,7 +3849,7 @@ void Actor_DrawDoorLock(GlobalContext* globalCtx, s32 frame, s32 type) {
     for (i = 0; i < 4; i++) {
         Matrix_Put(&baseMtxF);
         Matrix_InsertZRotation_f(chainRotZ, MTXMODE_APPLY);
-        Matrix_InsertTranslation(chainsTranslateX, chainsTranslateY, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(chainsTranslateX, chainsTranslateY, 0.0f, MTXMODE_APPLY);
         if (entry->chainsScale != 1.0f) {
             Matrix_Scale(entry->chainsScale, entry->chainsScale, entry->chainsScale, MTXMODE_APPLY);
         }
@@ -4564,7 +4564,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
 
                     gDPSetEnvColor(POLY_XLU_DISP++, KREG(20) + 200, KREG(21) + 200, KREG(22) + 255, (u8)alpha);
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
+                    Matrix_Translate(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_Scale(frozenScale, frozenScale, frozenScale, MTXMODE_APPLY);
 
                     if (limbIndex & 1) {
@@ -4603,7 +4603,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                                Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, twoTexScrollParam * 3,
                                                 twoTexScrollParam * -12, 32, 64, 1, 0, 0, 32, 32));
 
-                    Matrix_InsertTranslation(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
+                    Matrix_Translate(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
                     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
                     Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 

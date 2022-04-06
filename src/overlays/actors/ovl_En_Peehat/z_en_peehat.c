@@ -903,9 +903,9 @@ void EnPeehat_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList
         OPEN_DISPS(globalCtx->state.gfxCtx);
         gfx = POLY_OPA_DISP;
 
-        Matrix_InsertTranslation(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Collider_UpdateSphere(0, &this->colliderSphere);
-        Matrix_InsertTranslation(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(3.2f, MTXMODE_APPLY);
         Matrix_Scale(0.3f, 0.2f, 0.2f, MTXMODE_APPLY);
 

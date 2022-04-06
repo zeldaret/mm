@@ -473,7 +473,7 @@ void EnBombf_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000340);
             gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000530);
 
-            Matrix_InsertTranslation(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(this->unk_204, this->unk_204, this->unk_204, MTXMODE_APPLY);
         }
 

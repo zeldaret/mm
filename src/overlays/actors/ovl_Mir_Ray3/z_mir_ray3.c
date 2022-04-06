@@ -406,7 +406,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         for (i = 0; i < ARRAY_COUNT(sp8C); i++) {
             if (sp8C[i].unk_4C != NULL) {
-                Matrix_InsertTranslation(sp8C[i].unk_00.x, sp8C[i].unk_00.y, sp8C[i].unk_00.z, MTXMODE_NEW);
+                Matrix_Translate(sp8C[i].unk_00.x, sp8C[i].unk_00.y, sp8C[i].unk_00.z, MTXMODE_NEW);
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
                 Matrix_Mult(&sp8C[i].unk_0C, MTXMODE_APPLY);
 

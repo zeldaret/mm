@@ -998,10 +998,10 @@ s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_2DA.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_2DA.x * -1, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == MAMAMU_YAN_LIMB_TORSO) {

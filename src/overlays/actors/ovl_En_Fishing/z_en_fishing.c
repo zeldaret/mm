@@ -1164,7 +1164,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, effect->alpha);
 
-            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->unk_30, 1.0f, effect->unk_30, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1187,7 +1187,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, effect->alpha);
 
-            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
@@ -1215,7 +1215,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, effect->timer + (i * 3),
                                         (effect->timer + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
-            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
@@ -1238,7 +1238,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 flag++;
             }
 
-            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
 
@@ -1261,7 +1261,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 flag++;
             }
 
-            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_InsertYRotation_f(effect->unk_38, MTXMODE_APPLY);
             Matrix_RotateStateAroundXAxis(effect->unk_34);
             Matrix_InsertZRotation_f(effect->unk_3C, MTXMODE_APPLY);
@@ -1288,7 +1288,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 flag++;
             }
 
-            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->unk_30, 1.0f, effect->unk_30, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1315,7 +1315,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 rotY = M_PI;
             }
 
-            Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_InsertYRotation_f(rotY, MTXMODE_APPLY);
             Matrix_Scale(effect->unk_30, effect->unk_30, 1.0f, MTXMODE_APPLY);
@@ -1330,12 +1330,12 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
 
     effect = firstEffect;
     if (effect->type == FS_EFF_OWNER_HAT) {
-        Matrix_InsertTranslation(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+        Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
         Matrix_InsertYRotation_f((sEffOwnerHatRot.y * M_PI) / 32768, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis((sEffOwnerHatRot.x * M_PI) / 32768);
         Matrix_InsertZRotation_f((sEffOwnerHatRot.z * M_PI) / 32768, MTXMODE_APPLY);
         Matrix_Scale(effect->unk_30, effect->unk_30, effect->unk_30, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(M_PI / 2);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -1358,7 +1358,7 @@ void EnFishing_DrawStreamSplash(GlobalContext* globalCtx) {
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, 50);
 
-    Matrix_InsertTranslation(670.0f, -24.0f, -600.0f, MTXMODE_NEW);
+    Matrix_Translate(670.0f, -24.0f, -600.0f, MTXMODE_NEW);
     Matrix_Scale(0.02f, 1.0f, 0.02f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1577,7 +1577,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
     refPos->y = pos->y + posStep.y;
     refPos->z = pos->z + posStep.z;
 
-    Matrix_InsertTranslation(pos->x, pos->y, pos->z, MTXMODE_NEW);
+    Matrix_Translate(pos->x, pos->y, pos->z, MTXMODE_NEW);
 
     if ((player->actor.speedXZ == 0.0f) && (D_809101B4 == 0.0f)) {
         Math_ApproachF(&sLureHookRotY[hookIndex], ry, 0.1f, 0.3f);
@@ -1600,7 +1600,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
 
     if ((hookIndex == 1) && (D_8090CD0C != 0)) {
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(250.0f, 0.0f, -1400.0f, MTXMODE_APPLY);
+        Matrix_Translate(250.0f, 0.0f, -1400.0f, MTXMODE_APPLY);
         Matrix_Push();
 
         if (D_8090CD10 != 0) {
@@ -1621,7 +1621,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
         }
 
         Matrix_Pop();
-        Matrix_InsertTranslation(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(M_PI / 2);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1720,7 +1720,7 @@ void EnFishing_DrawSinkingLure(GlobalContext* globalCtx) {
 
         for (i = SINKING_LURE_SEG_COUNT - 1; i >= 0; i--) {
             if ((i + D_80911F20) < SINKING_LURE_SEG_COUNT) {
-                Matrix_InsertTranslation(sSinkingLurePos[i].x, sSinkingLurePos[i].y, sSinkingLurePos[i].z, MTXMODE_NEW);
+                Matrix_Translate(sSinkingLurePos[i].x, sSinkingLurePos[i].y, sSinkingLurePos[i].z, MTXMODE_NEW);
                 scale = sSinkingLureSizes[i + D_80911F20] * 0.04f;
                 Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -1737,7 +1737,7 @@ void EnFishing_DrawSinkingLure(GlobalContext* globalCtx) {
 
         for (i = SINKING_LURE_SEG_COUNT - 1; i >= 0; i--) {
             if ((i + D_80911F20) < SINKING_LURE_SEG_COUNT) {
-                Matrix_InsertTranslation(sSinkingLurePos[i].x, sSinkingLurePos[i].y, sSinkingLurePos[i].z, MTXMODE_NEW);
+                Matrix_Translate(sSinkingLurePos[i].x, sSinkingLurePos[i].y, sSinkingLurePos[i].z, MTXMODE_NEW);
                 scale = sSinkingLureSizes[i + D_80911F20] * 0.04f;
                 Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -1798,11 +1798,11 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
     }
 
     if (D_80917206 != 2) {
-        Matrix_InsertTranslation(sLurePos.x, sLurePos.y, sLurePos.z, MTXMODE_NEW);
+        Matrix_Translate(sLurePos.x, sLurePos.y, sLurePos.z, MTXMODE_NEW);
         Matrix_InsertYRotation_f(sLureRot.y + D_80917254, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(sLureRot.x);
         Matrix_Scale(0.0039999997f, 0.0039999997f, 0.0039999997f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, D_80917258, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, D_80917258, MTXMODE_APPLY);
         Matrix_InsertZRotation_f(M_PI / 2, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(M_PI / 2, MTXMODE_APPLY);
 
@@ -1850,7 +1850,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
 
         dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
-        Matrix_InsertTranslation(sRodTipPos.x, sRodTipPos.y, sRodTipPos.z, MTXMODE_NEW);
+        Matrix_Translate(sRodTipPos.x, sRodTipPos.y, sRodTipPos.z, MTXMODE_NEW);
         Matrix_InsertYRotation_f(ry, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(rx);
         Matrix_Scale(D_809101C8, 1.0f, dist, MTXMODE_APPLY);
@@ -1877,7 +1877,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
 
                 dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
-                Matrix_InsertTranslation((linePos + i)->x, (linePos + i)->y, (linePos + i)->z, MTXMODE_NEW);
+                Matrix_Translate((linePos + i)->x, (linePos + i)->y, (linePos + i)->z, MTXMODE_NEW);
                 Matrix_InsertYRotation_f(ry, MTXMODE_APPLY);
                 Matrix_RotateStateAroundXAxis(rx);
                 Matrix_Scale(D_809101C8, 1.0f, dist, MTXMODE_APPLY);
@@ -1888,7 +1888,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
                 break;
             }
 
-            Matrix_InsertTranslation((linePos + i)->x, (linePos + i)->y, (linePos + i)->z, MTXMODE_NEW);
+            Matrix_Translate((linePos + i)->x, (linePos + i)->y, (linePos + i)->z, MTXMODE_NEW);
             Matrix_InsertYRotation_f((lineRot + i)->y, MTXMODE_APPLY);
             Matrix_RotateStateAroundXAxis((lineRot + i)->x);
             Matrix_Scale(D_809101C8, 1.0f, 0.005f, MTXMODE_APPLY);
@@ -2004,9 +2004,9 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
     Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
 
     if (sLinkAge != 1) {
-        Matrix_InsertTranslation(0.0f, 400.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 400.0f, 0.0f, MTXMODE_APPLY);
     } else {
-        Matrix_InsertTranslation(0.0f, 230.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 230.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (D_8090CD14 == 5) {
@@ -2022,7 +2022,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
 
     spC0 = (D_8090CD3C * (((player->unk_B08[1] - 1.0f) * -0.25f) + 0.5f)) + (D_8090CD2C + D_8090CD38);
 
-    Matrix_InsertTranslation(0.0f, 0.0f, -1300.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -1300.0f, MTXMODE_APPLY);
 
     for (i = 0; i < 22; i++) {
         Matrix_InsertYRotation_f(sRodBendRatios[i] * D_8090CD28 * 0.5f, MTXMODE_APPLY);
@@ -2047,7 +2047,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, gFishingRodSegmentDL);
 
         Matrix_Pop();
-        Matrix_InsertTranslation(0.0f, 0.0f, 500.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 500.0f, MTXMODE_APPLY);
 
         if (i == 21) {
             Matrix_MultiplyVector3fByState(&sRodTipOffset, &sRodTipPos);
@@ -4232,7 +4232,7 @@ void EnFishing_DrawFish(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_InsertYRotation_f(((this->unk_15A + this->actor.shape.rot.y) / 32768.0f) * M_PI, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(((this->unk_158 + this->actor.shape.rot.x) / 32768.0f) * M_PI);
     Matrix_InsertZRotation_f(((this->unk_15C + this->actor.shape.rot.z) / 32768.0f) * M_PI, MTXMODE_APPLY);
@@ -4240,15 +4240,15 @@ void EnFishing_DrawFish(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_148 == 0) {
         Matrix_InsertYRotation_f((this->unk_164 * (M_PI / 32768)) - (M_PI / 2), MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, this->unk_164 * 10.0f * 0.01f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, this->unk_164 * 10.0f * 0.01f, MTXMODE_APPLY);
 
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, EnFishing_FishOverrideLimbDraw, EnFishing_FishPostLimbDraw,
                               &this->actor);
     } else {
-        Matrix_InsertTranslation(0.0f, 0.0f, 3000.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 3000.0f, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(this->unk_164 * (M_PI / 32768), MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, 0.0f, -3000.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, -3000.0f, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(-(M_PI / 2), MTXMODE_APPLY);
 
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
@@ -4369,7 +4369,7 @@ void EnFishing_DrawPondProps(GlobalContext* globalCtx) {
             }
 
             if (prop->shouldDraw) {
-                Matrix_InsertTranslation(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
+                Matrix_Translate(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
                 Matrix_Scale(prop->scale, prop->scale, prop->scale, MTXMODE_APPLY);
                 Matrix_InsertYRotation_f(prop->rotY, MTXMODE_APPLY);
                 Matrix_RotateStateAroundXAxis(prop->rotX);
@@ -4394,7 +4394,7 @@ void EnFishing_DrawPondProps(GlobalContext* globalCtx) {
             }
 
             if (prop->shouldDraw) {
-                Matrix_InsertTranslation(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
+                Matrix_Translate(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
                 Matrix_Scale(prop->scale, prop->scale, prop->scale, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4416,10 +4416,10 @@ void EnFishing_DrawPondProps(GlobalContext* globalCtx) {
             }
 
             if (prop->shouldDraw) {
-                Matrix_InsertTranslation(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
+                Matrix_Translate(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
                 Matrix_Scale(prop->scale, 1.0f, prop->scale, MTXMODE_APPLY);
                 Matrix_InsertYRotation_f(prop->lilyPadAngle * (M_PI / 32768), MTXMODE_APPLY);
-                Matrix_InsertTranslation(0.0f, 0.0f, 20.0f, MTXMODE_APPLY);
+                Matrix_Translate(0.0f, 0.0f, 20.0f, MTXMODE_APPLY);
                 Matrix_InsertYRotation_f(prop->rotY, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4441,7 +4441,7 @@ void EnFishing_DrawPondProps(GlobalContext* globalCtx) {
             }
 
             if (prop->shouldDraw) {
-                Matrix_InsertTranslation(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
+                Matrix_Translate(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
                 Matrix_Scale(prop->scale, prop->scale, prop->scale, MTXMODE_APPLY);
                 Matrix_InsertYRotation_f(prop->rotY, MTXMODE_APPLY);
 
@@ -4669,7 +4669,7 @@ void EnFishing_DrawGroupFishes(GlobalContext* globalCtx) {
             }
 
             if (fish->shouldDraw) {
-                Matrix_InsertTranslation(fish->pos.x, fish->pos.y, fish->pos.z, MTXMODE_NEW);
+                Matrix_Translate(fish->pos.x, fish->pos.y, fish->pos.z, MTXMODE_NEW);
                 Matrix_InsertYRotation_f(((f32)fish->unk_3E * M_PI) / 32768.0f, MTXMODE_APPLY);
                 Matrix_RotateStateAroundXAxis((-(f32)fish->unk_3C * M_PI) / 32768.0f);
                 Matrix_Scale(fish->unk_2C * scale, scale, scale, MTXMODE_APPLY);
@@ -5672,7 +5672,7 @@ void EnFishing_DrawOwner(Actor* thisx, GlobalContext* globalCtx) {
 
     D_8090CCF4 = true;
 
-    Matrix_InsertTranslation(130.0f, 40.0f, 1300.0f, MTXMODE_NEW);
+    Matrix_Translate(130.0f, 40.0f, 1300.0f, MTXMODE_NEW);
     Matrix_Scale(0.08f, 0.12f, 0.14f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

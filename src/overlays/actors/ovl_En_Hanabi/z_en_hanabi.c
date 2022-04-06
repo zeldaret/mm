@@ -153,7 +153,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, GlobalContext* globalCtx2) {
 
     for (i = 0; i < 400; i++, arg0++) {
         if (arg0->unk_00 == 1) {
-            Matrix_InsertTranslation(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
+            Matrix_Translate(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             if (arg0->unk_01 < 40) {
                 Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,

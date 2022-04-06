@@ -710,7 +710,7 @@ void func_80A75950(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     if (this->unk_1E0 < 10) {
         if (limbIndex == 2) {
-            Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Matrix_GetStateTranslation(&this->unk_270);
         }
         Matrix_GetStateTranslation(&this->unk_234[limbIndex]);

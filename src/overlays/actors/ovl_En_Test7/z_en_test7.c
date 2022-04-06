@@ -348,7 +348,7 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
             continue;
         }
 
-        Matrix_InsertTranslation(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+        Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
 
         if (ptr->unk_00 == 1) {
             Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
@@ -359,7 +359,7 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
 
         Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);
         if (ptr->unk_00 == 2) {
-            Matrix_InsertTranslation(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
         }
 
         temp_v0 = Matrix_NewMtx(globalCtx->state.gfxCtx);
@@ -962,7 +962,7 @@ void EnTest7_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_144 & 2) {
         Matrix_Push();
-        Matrix_InsertTranslation(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertRotation(0, this->unk_148.unk_10, 0, MTXMODE_APPLY);
         Matrix_Scale(this->unk_148.unk_08 * 100.0f, this->unk_148.unk_0C * 100.0f, this->unk_148.unk_08 * 100.0f,
                      MTXMODE_APPLY);

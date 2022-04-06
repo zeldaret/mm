@@ -807,7 +807,7 @@ void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx) {
         translation.x = (-(globalCtx->view.eye.x - thisx->world.pos.x) * scale) + globalCtx->view.eye.x;
         translation.y = (-(globalCtx->view.eye.y - thisx->world.pos.y) * scale) + globalCtx->view.eye.y;
         translation.z = (-(globalCtx->view.eye.z - thisx->world.pos.z) * scale) + globalCtx->view.eye.z;
-        Matrix_InsertTranslation(translation.x, translation.y, translation.z, MTXMODE_NEW);
+        Matrix_Translate(translation.x, translation.y, translation.z, MTXMODE_NEW);
         Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
         Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(thisx->shape.rot.x, MTXMODE_APPLY);
@@ -870,7 +870,7 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
         if (debrisParticles[i].modelIndex < 3) {
-            Matrix_InsertTranslation(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z,
+            Matrix_Translate(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z,
                                      MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
             Matrix_InsertRotation(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,

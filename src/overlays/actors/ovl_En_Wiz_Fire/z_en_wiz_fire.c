@@ -629,7 +629,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
     if ((this->unk_162 == 0) && (this->unk_160 == 2)) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
 
@@ -665,7 +665,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_Push();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
 
@@ -680,7 +680,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
 
         Matrix_Pop();
         Matrix_Push();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
@@ -699,7 +699,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
 
         Matrix_Pop();
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
@@ -742,7 +742,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 220, 255, 235, 0);
             }
 
-            Matrix_InsertTranslation(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset,
+            Matrix_Translate(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset,
                                      this->unk_178[i].z, MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -771,7 +771,7 @@ void func_80A4BAB4(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight + 20.0f, this->actor.world.pos.z,
+    Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight + 20.0f, this->actor.world.pos.z,
                              MTXMODE_NEW);
     Matrix_Scale(this->unk_14C + this->unk_154, this->unk_14C + this->unk_158, this->unk_14C + this->unk_15C,
                  MTXMODE_APPLY);
@@ -865,7 +865,7 @@ void func_80A4BF78(EnWizFire* this, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (ptr->unk_01 * 3) & 0x7F,
                                         (ptr->unk_01 * 0xF) & 0xFF, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_0C, ptr->unk_0C, 1.0f, MTXMODE_APPLY);
 

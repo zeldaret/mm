@@ -274,7 +274,7 @@ void EnEncount2_DrawParticles(EnEncount2* this, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, sPtr++) {
         if (sPtr->enabled) {
-            Matrix_InsertTranslation(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
+            Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));

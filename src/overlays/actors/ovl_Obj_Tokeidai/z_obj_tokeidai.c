@@ -819,10 +819,10 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_InsertTranslation(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
 
     Matrix_Push();
     Matrix_InsertZRotation_s(-this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
@@ -830,7 +830,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerMinuteRingDL);
     Matrix_Pop();
 
-    Matrix_InsertTranslation(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, this->clockFaceZTranslation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockCenterAndHandDL);
 
@@ -843,7 +843,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, gClockTowerClockFace);
     }
 
-    Matrix_InsertTranslation(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
     Matrix_RotateY((s16)this->sunMoonPanelRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerSunAndMoonPanelDL);
@@ -857,10 +857,10 @@ void ObjTokeidai_Counterweight_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjTokeidai* this = THIS;
 
     Matrix_RotateY(-this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -5480.0f, 80.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -5480.0f, 80.0f, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 5480.0f, -80.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 5480.0f, -80.0f, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -888,12 +888,12 @@ void ObjTokeidai_ExteriorGear_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->yTranslation, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -1791.0f, MTXMODE_APPLY);
     Matrix_RotateY(-this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(-this->xRotation, MTXMODE_APPLY);
     Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, 1791.0f, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(this->minuteRingOrExteriorGearRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     func_8012C28C(globalCtx->state.gfxCtx);

@@ -817,7 +817,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+        Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
@@ -836,7 +836,7 @@ void BgDblueMovebg_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                     }
                     Matrix_Push();
                     Matrix_InsertXRotation_s(i * 0x2000, MTXMODE_APPLY);
-                    Matrix_InsertTranslation(1785.0f, 0.0f, 270.0f, MTXMODE_APPLY);
+                    Matrix_Translate(1785.0f, 0.0f, 270.0f, MTXMODE_APPLY);
                     if (j != 0) {
                         Matrix_InsertZRotation_s(-0x8000, MTXMODE_APPLY);
                     }

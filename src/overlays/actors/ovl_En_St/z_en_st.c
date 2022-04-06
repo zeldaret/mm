@@ -247,7 +247,7 @@ void func_808A54B0(EnSt* this, GlobalContext* globalCtx) {
         gSPSegment(POLY_XLU_DISP++, 0x06, globalCtx->objectCtx.status[this->unk_2C0].segment);
 
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.06f, 0.12f, 0.06f, MTXMODE_APPLY);

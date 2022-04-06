@@ -283,9 +283,9 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < ARRAY_COUNT(this->distanceTraveled); i++) {
         if (*distanceTraveled < 1.0f) {
             aux = 1.0f - SQ(*distanceTraveled);
-            Matrix_InsertTranslation(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
+            Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
             Matrix_RotateY(sp92, MTXMODE_APPLY);
-            Matrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
+            Matrix_Translate(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
                                      initialPositions->y * ((this->dy * aux) + (1.0f - this->dy)),
                                      initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);
             Matrix_Scale(this->scalingFactor, this->scalingFactor, this->scalingFactor, MTXMODE_APPLY);
@@ -340,7 +340,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
 
             aux = 1.0f - SQ(*distanceTraveled);
             Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
-            Matrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
+            Matrix_Translate(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
                                      (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f,
                                      (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, MTXMODE_APPLY);
 

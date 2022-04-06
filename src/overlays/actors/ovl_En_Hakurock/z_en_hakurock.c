@@ -350,7 +350,7 @@ void func_80B228F4(Actor* thisx, GlobalContext* globalCtx) {
 void EnHakurock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_InsertTranslation(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011100);
     gSPDisplayList(POLY_OPA_DISP++, object_boss_hakugin_DL_011178);

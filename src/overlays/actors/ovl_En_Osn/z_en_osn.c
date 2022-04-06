@@ -872,7 +872,7 @@ void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     }
     if (((this->unk_1EC == 17) || (this->unk_1EC == 21) || (this->unk_1EC == 22)) && (limbIndex == 6)) {
         Matrix_Push();
-        Matrix_InsertTranslation(-400.0f, 1100.0f, -200.0f, MTXMODE_APPLY);
+        Matrix_Translate(-400.0f, 1100.0f, -200.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(sp28.x, MTXMODE_APPLY);
         Matrix_RotateY(sp28.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(sp28.z, MTXMODE_APPLY);

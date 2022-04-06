@@ -1246,10 +1246,10 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     }
 
     if (limbIndex == 15) {
-        Matrix_InsertTranslation(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_258.x, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_258.y, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-3000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 8) {
         Matrix_InsertXRotation_s(-this->unk_25E.y, MTXMODE_APPLY);
     }

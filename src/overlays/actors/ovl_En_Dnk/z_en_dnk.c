@@ -288,7 +288,7 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultiplyVector3fByState(&sp50, &sp44);
         Matrix_Get(&sp5C);
         func_8018219C(&sp5C, &sp3C, 0);
-        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (this->unk_28C & 0x10) {
             if (this->unk_28C & 0x20) {
@@ -364,7 +364,7 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultiplyVector3fByState(&sp50, &sp44);
         Matrix_Get(&sp5C);
         func_8018219C(&sp5C, &sp3C, 0);
-        Matrix_InsertTranslation(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
+        Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->unk_28C & 0x10) {

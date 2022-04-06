@@ -536,7 +536,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
                 screenPos.y < SCREEN_HEIGHT) {
-                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
+                Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 scaleAlpha = this->particles[i].alpha / 50.0f;
                 if (scaleAlpha > 1.0f) {
                     scaleAlpha = 1.0f;
@@ -625,7 +625,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
             // checking if particle is on screen
             if (screenPos.x >= 0.0f && screenPos.x < SCREEN_WIDTH && screenPos.y >= 0.0f &&
                 screenPos.y < SCREEN_HEIGHT) {
-                Matrix_InsertTranslation(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
+                Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
                 alphaScale = this->particles[i].alpha / 50.0f;
                 if (alphaScale > 1.0f) {
                     alphaScale = 1.0f;

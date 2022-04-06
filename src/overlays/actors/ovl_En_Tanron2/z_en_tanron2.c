@@ -624,7 +624,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     for (i = 0; i < ARRAY_COUNT(D_80BB8458); i++) {
         if (D_80BB8458[i] != NULL) {
-            Matrix_InsertTranslation(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
+            Matrix_Translate(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
                                      D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(D_80BB8458[i]->actor.scale.x, D_80BB8458[i]->actor.scale.y, 0.0f, MTXMODE_APPLY);
@@ -646,7 +646,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z,
+            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z,
                                      MTXMODE_NEW);
             Matrix_Scale(0.6f, 0.0f, 0.6f, MTXMODE_APPLY);
 
@@ -668,7 +668,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0) &&
             (tanron2->world.pos.y <= tanron2->floorHeight)) {
-            Matrix_InsertTranslation(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
+            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
                                      MTXMODE_NEW);
             Matrix_Scale(D_80BB8454, 0.0f, D_80BB8454, MTXMODE_APPLY);
 

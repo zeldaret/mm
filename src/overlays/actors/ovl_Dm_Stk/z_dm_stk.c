@@ -1709,7 +1709,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
                 break;
 
             case 5:
-                Matrix_InsertTranslation(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
+                Matrix_Translate(-20.0f, -660.0f, 860.0f, MTXMODE_APPLY);
                 Matrix_RotateY(0x6142, MTXMODE_APPLY);
                 Matrix_InsertXRotation_s(-0x1988, MTXMODE_APPLY);
 

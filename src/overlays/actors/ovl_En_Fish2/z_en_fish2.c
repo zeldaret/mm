@@ -1161,7 +1161,7 @@ void func_80B2B180(EnFish2* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (ptr->unk_00) {
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_14, ptr->unk_14, ptr->unk_14, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

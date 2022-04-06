@@ -426,7 +426,7 @@ void EnSsh_Sway(EnSsh* this) {
         swayVecBase.z = 0.0f;
 
         Matrix_Push();
-        Matrix_InsertTranslation(this->ceilingPos.x, this->ceilingPos.y, this->ceilingPos.z, MTXMODE_NEW);
+        Matrix_Translate(this->ceilingPos.x, this->ceilingPos.y, this->ceilingPos.z, MTXMODE_NEW);
         Matrix_InsertYRotation_f(this->actor.world.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
         Matrix_MultiplyVector3fByState(&swayVecBase, &swayVec);
         Matrix_Pop();
@@ -593,7 +593,7 @@ s32 EnSsh_SetCylinderOC(EnSsh* this, GlobalContext* globalCtx) {
         colliderOffsets[i].z *= this->colliderScale;
 
         Matrix_Push();
-        Matrix_InsertTranslation(colliderPos.x, colliderPos.y, colliderPos.z, MTXMODE_NEW);
+        Matrix_Translate(colliderPos.x, colliderPos.y, colliderPos.z, MTXMODE_NEW);
         Matrix_InsertYRotation_f(BINANG_TO_RAD(this->initialYaw), MTXMODE_APPLY);
         Matrix_MultiplyVector3fByState(&colliderOffsets[i], &colliderPos);
         Matrix_Pop();

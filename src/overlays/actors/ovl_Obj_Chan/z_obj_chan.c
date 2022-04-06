@@ -424,7 +424,7 @@ void ObjChan_DrawFire(ObjChan* this, GlobalContext* globalCtx) {
                    MTXMODE_APPLY);
     Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].x * this->flameSize,
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);
 
     dl = func_8012C2B4(POLY_XLU_DISP);
     gSPMatrix(&dl[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_LOAD);

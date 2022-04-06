@@ -999,7 +999,7 @@ void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
                           this->unk_46A + this->unk_46E + this->actor.shape.rot.y + 0x4000, &this->unk_470,
                           &this->unk_47C, phi_v0, phi_v1);
             Matrix_Pop();
-            Matrix_InsertTranslation(this->unk_470.x, this->unk_470.y, this->unk_470.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_470.x, this->unk_470.y, this->unk_470.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_47C.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_47C.x, MTXMODE_APPLY);
@@ -1023,7 +1023,7 @@ void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
             func_80BB3728(this->unk_46C + 0x4000, this->unk_46E + this->actor.shape.rot.y + 0x4000, &this->unk_484,
                           &this->unk_490, phi_v0, phi_v1);
             Matrix_Pop();
-            Matrix_InsertTranslation(this->unk_484.x, this->unk_484.y, this->unk_484.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_484.x, this->unk_484.y, this->unk_484.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_490.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_490.x, MTXMODE_APPLY);
@@ -1062,12 +1062,12 @@ void func_80BB3CB4(EnGeg* this, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
                              this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(sp24, MTXMODE_APPLY);
 

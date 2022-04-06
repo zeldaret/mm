@@ -520,7 +520,7 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
 
         if (1) {}
 
-        Matrix_InsertTranslation(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
+        Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
@@ -544,7 +544,7 @@ void func_80B35C84(EnGgStruct* ptr, GlobalContext* globalCtx) {
         temp_f26 = ptr->unk_0C.z + (ptr->unk_18.z * temp_f20) + (0.5f * ptr->unk_24.z * temp_f20 * temp_f20);
         temp_f20 = Rand_ZeroOne() * 0.003f;
 
-        Matrix_InsertTranslation(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
+        Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);
         Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
@@ -596,7 +596,7 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
             temp_f28 = ptr->unk_0C.z + (ptr->unk_18.z * i) + (0.5f * ptr->unk_24.z * i * i);
             temp_f20 = Rand_ZeroOne() * 0.003f;
 
-            Matrix_InsertTranslation((Rand_Centered() * (100.0f * phi_f22)) + temp_f24, temp_f26,
+            Matrix_Translate((Rand_Centered() * (100.0f * phi_f22)) + temp_f24, temp_f26,
                                      ((30.0f * phi_f22) * Rand_Centered()) + temp_f28, MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 

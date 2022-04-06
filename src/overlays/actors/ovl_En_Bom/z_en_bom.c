@@ -630,7 +630,7 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 f32 sp44 = (1000.0f / Math_CosS(ABS_ALT((s16)(this->unk_1FA % 10922)) - 0x1555)) + -1000.0f;
 
                 Matrix_RotateY(sp4A, MTXMODE_APPLY);
-                Matrix_InsertTranslation(0.0f, sp44, 0.0f, MTXMODE_APPLY);
+                Matrix_Translate(0.0f, sp44, 0.0f, MTXMODE_APPLY);
                 Matrix_InsertXRotation_s(this->unk_1FA, MTXMODE_APPLY);
                 Matrix_RotateY(-sp4A, MTXMODE_APPLY);
             }
@@ -776,7 +776,7 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+    Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
     Matrix_InsertRotation(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
     Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
@@ -787,7 +787,7 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
     ptr2 = &D_80874650[1];
 
     for (i = 1; i < temp_s5; i++, ptr2++) {
-        Matrix_InsertTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
+        Matrix_Translate(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
         Matrix_InsertRotation(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 

@@ -160,7 +160,7 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         Matrix_Push();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+        Matrix_Translate(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
                                  MTXMODE_NEW);
         Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
@@ -185,7 +185,7 @@ void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         Matrix_Push();
-        Matrix_InsertTranslation(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
+        Matrix_Translate(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
                                  MTXMODE_NEW);
         Matrix_InsertXRotation_s(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateY(this->particles[i].unk_18.y, MTXMODE_APPLY);
@@ -282,7 +282,7 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, GlobalContext* globalCtx2) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);
 
-            Matrix_InsertTranslation(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
+            Matrix_Translate(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 

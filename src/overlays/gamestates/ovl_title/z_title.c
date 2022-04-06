@@ -80,7 +80,7 @@ void Title_Draw(GameState* thisx) {
 
     Title_RenderView(this, 0.0f, 150.0f, 300.0f);
     func_8012C28C(this->gameState.gfxCtx);
-    Matrix_InsertTranslation(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
+    Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_InsertRotation(0, titleRotation, 0, MTXMODE_APPLY);
 

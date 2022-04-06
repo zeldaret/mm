@@ -1166,9 +1166,9 @@ void func_8095D074(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(0.0f, 500.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 500.0f, 0.0f, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(this->unk_3D8 - 0x4000, MTXMODE_APPLY);
-    Matrix_InsertTranslation(0.0f, 0.0f, -500.0f, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -500.0f, MTXMODE_APPLY);
     if (this->unk_3DC >= 0x20) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

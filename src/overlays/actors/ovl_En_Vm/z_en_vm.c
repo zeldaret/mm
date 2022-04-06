@@ -526,7 +526,7 @@ void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(&gfx[0], &sSetupDL[6 * 60]);
         gDPSetColorDither(&gfx[1], G_CD_DISABLE);
 
-        Matrix_InsertTranslation(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, MTXMODE_NEW);
         Matrix_Scale(0.8f, 0.8f, 0.8f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[2], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -543,7 +543,7 @@ void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(&gfx[0], 0x08, func_8012CB28(globalCtx->state.gfxCtx, 0, this->unk_212));
 
-        Matrix_InsertTranslation(this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z,
+        Matrix_Translate(this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z,
                                  MTXMODE_NEW);
         Matrix_InsertRotation(this->unk_216, this->unk_218 + this->actor.shape.rot.y, 0, MTXMODE_APPLY);
         Matrix_Scale(this->unk_220, this->unk_220, this->unk_224 * 0.0015f, MTXMODE_APPLY);

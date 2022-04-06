@@ -1218,7 +1218,7 @@ void EnDg_Draw(Actor* thisx, GlobalContext* globalCtx) {
             break;
     }
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateStateAroundXAxis(this->unk_294.x);
     Matrix_InsertZRotation_f(this->unk_294.z, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);

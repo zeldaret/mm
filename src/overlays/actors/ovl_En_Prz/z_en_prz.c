@@ -496,7 +496,7 @@ void func_80A76FCC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnPrz* this = THIS;
 
     if (limbIndex == 2) {
-        Matrix_InsertTranslation(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_MultiplyVector3fByState(&sp1C, &this->unk_1CC);
     }
 }

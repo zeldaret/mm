@@ -252,10 +252,10 @@ s32 EnCne01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
     if (limbIndex == CNE_LIMB_HEAD) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->enHy.headRot.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->enHy.headRot.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == CNE_LIMB_TORSO) {
@@ -264,7 +264,7 @@ s32 EnCne01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if ((limbIndex == CNE_LIMB_HEAD) && this->enHy.inMsgState3 && ((globalCtx->state.frames % 2) == 0)) {
-        Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == CNE_LIMB_TORSO) || (limbIndex == CNE_LIMB_LEFT_UPPER_ARM) ||

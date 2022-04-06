@@ -671,7 +671,7 @@ void func_80AADC00(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         if (globalCtx->csCtx.actorActions[actionIndex]->action == 4) {
-            Matrix_InsertTranslation(-600.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(-600.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Gfx_DrawDListOpa(globalCtx, object_dmask_DL_001E70);
         }
     }
@@ -716,7 +716,7 @@ void DmChar05_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
 void func_80AADD9C(GlobalContext* globalCtx, DmChar05* this) {
     if (this->actor.objBankIndex == this->unk_18F) {
-        Matrix_InsertTranslation(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_InsertRotation(0, globalCtx->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(globalCtx, GID_44);
@@ -729,7 +729,7 @@ void func_80AADD9C(GlobalContext* globalCtx, DmChar05* this) {
 
 void func_80AADE78(GlobalContext* globalCtx, DmChar05* this) {
     if (this->actor.objBankIndex == this->unk_18F) {
-        Matrix_InsertTranslation(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_InsertRotation(0, globalCtx->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(globalCtx, GID_45);
@@ -742,7 +742,7 @@ void func_80AADE78(GlobalContext* globalCtx, DmChar05* this) {
 
 void func_80AADF54(GlobalContext* globalCtx, DmChar05* this) {
     if (this->actor.objBankIndex == this->unk_18F) {
-        Matrix_InsertTranslation(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
         Matrix_InsertRotation(0, globalCtx->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
         GetItem_Draw(globalCtx, GID_6B);
@@ -756,7 +756,7 @@ void func_80AADF54(GlobalContext* globalCtx, DmChar05* this) {
 void func_80AAE030(GlobalContext* globalCtx, DmChar05* this) {
     if (this->unk_18E != 0) {
         if (this->actor.objBankIndex == this->unk_18F) {
-            Matrix_InsertTranslation(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_190.x, this->unk_190.y, this->unk_190.z, MTXMODE_NEW);
             Matrix_InsertRotation(0, globalCtx->gameplayFrames * 1000, 0, MTXMODE_APPLY);
             Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);
             GetItem_Draw(globalCtx, GID_03);
@@ -776,7 +776,7 @@ void func_80AAE114(GlobalContext* globalCtx, DmChar05* this) {
 
     sp34 = DMCHAR05_GET(&this->actor) - DMCHAR05_5;
     if (this->actor.objBankIndex == this->unk_18F) {
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_InsertRotation(0, globalCtx->gameplayFrames * 1000, 0, MTXMODE_APPLY);
         Matrix_Scale(0.2f, 0.2f, 0.2f, MTXMODE_APPLY);

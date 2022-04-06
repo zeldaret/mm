@@ -53,7 +53,7 @@ void EnBu_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);

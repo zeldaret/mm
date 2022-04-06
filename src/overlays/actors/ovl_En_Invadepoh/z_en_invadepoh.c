@@ -2390,7 +2390,7 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Push();
         Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                               &this->actor.shape.rot);
-        Matrix_InsertTranslation(0, 57.0f, -36.0f, MTXMODE_APPLY);
+        Matrix_Translate(0, 57.0f, -36.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&this->actor.child->world.pos);
@@ -4320,7 +4320,7 @@ void func_80B4D7B8(GlobalContext* globalCtx) {
             temp_v0 = globalCtx->gameplayFrames;
             temp_s5 = (temp_v0 + ((0x10 * i) & 0xFFU)) & 0x7F;
             temp_s6 = (u8)(temp_v0 * -0xF);
-            Matrix_InsertTranslation(phi_s2->unk4.x, phi_s2->unk4.y, phi_s2->unk4.z, MTXMODE_NEW);
+            Matrix_Translate(phi_s2->unk4.x, phi_s2->unk4.y, phi_s2->unk4.z, MTXMODE_NEW);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 170, phi_s2->unk2);
@@ -4442,7 +4442,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         sp74.x = thisx->world.pos.x + sp80.x;
         sp74.y = thisx->world.pos.y + sp80.y + 68.0f;
         sp74.z = thisx->world.pos.z + sp80.z;
-        Matrix_InsertTranslation(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
+        Matrix_Translate(sp74.x, sp74.y, sp74.z, MTXMODE_NEW);
         Matrix_Scale(0.25f, 0.25f, 0.25f, MTXMODE_APPLY);
         alpha2 = this->alienAlpha * (100.0f / 255.0f);
         gSPDisplayList(gfx++, gameplay_keep_DL_029CB0);

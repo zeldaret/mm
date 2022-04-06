@@ -227,7 +227,7 @@ void func_80BC1E40(EnJa* this, GlobalContext* globalCtx) {
     this->unk_34C += (this->unk_348 != 0.0f) ? 60.0f : -60.0f;
     this->unk_34C = CLAMP(this->unk_34C, 0.0f, 120.0f);
 
-    Matrix_InsertTranslation(this->unk_34C, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_34C, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_374 = sp20;
 }
 
@@ -435,7 +435,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
             OPEN_DISPS(globalCtx->state.gfxCtx);
 
             Matrix_Push();
-            Matrix_InsertTranslation(D_80BC378C.x, D_80BC378C.y, D_80BC378C.z, MTXMODE_APPLY);
+            Matrix_Translate(D_80BC378C.x, D_80BC378C.y, D_80BC378C.z, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
             gDPPipeSync(POLY_OPA_DISP++);
@@ -475,7 +475,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
                 Matrix_Push();
 
-                Matrix_InsertTranslation(D_80BC3798.x, D_80BC3798.y, D_80BC3798.z, MTXMODE_APPLY);
+                Matrix_Translate(D_80BC3798.x, D_80BC3798.y, D_80BC3798.z, MTXMODE_APPLY);
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
                 gDPPipeSync(POLY_OPA_DISP++);
@@ -541,7 +541,7 @@ void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
                           this->unk_356 + this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1EC,
                           &this->unk_274, phi_v1, phi_v0);
             Matrix_Pop();
-            Matrix_InsertTranslation(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Matrix_RotateY(this->unk_274.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(this->unk_274.x, MTXMODE_APPLY);
@@ -552,7 +552,7 @@ void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         func_8013AD9C(this->unk_358 + 0x4000, this->unk_35A + this->actor.shape.rot.y + 0x4000, &this->unk_1F8,
                       &this->unk_27A, phi_v1, phi_v0);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_27A.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_27A.x, MTXMODE_APPLY);
@@ -718,7 +718,7 @@ void func_80BC33C0(EnJaStruct* ptr, GlobalContext* globalCtx) {
     if (((ptr->unk_0E < 0) || (ptr->unk_0E >= 19)) && ((ptr->unk_0E < 83) || (ptr->unk_0E >= 103))) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+        Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
         Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 

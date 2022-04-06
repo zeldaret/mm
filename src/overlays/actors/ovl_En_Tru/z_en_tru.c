@@ -176,10 +176,10 @@ void func_80A85788(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
             gSPSegment(POLY_XLU_DISP++, 0x08,
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -arg0->unk_02 * 5, 32, 64, 1, 0, 0, 32, 32));
 
-            Matrix_InsertTranslation(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertTranslation(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -234,7 +234,7 @@ void func_80A85BCC(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)alpha);
 
-            Matrix_InsertTranslation(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
 
@@ -303,7 +303,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
             gDPSetEnvColor(POLY_XLU_DISP++, D_80A8B25C[arg0->unk_00 - 3].r, D_80A8B25C[arg0->unk_00 - 3].g,
                            D_80A8B25C[arg0->unk_00 - 3].b, 0);
 
-            Matrix_InsertTranslation(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
@@ -1218,7 +1218,7 @@ void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
         func_8013AD9C(this->unk_366, this->unk_368 + this->actor.shape.rot.y, &this->unk_1EC, &this->unk_204, phi_v1,
                       sp2C);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         if (sp2C) {
             s16 oldZ = this->unk_204.z;

@@ -574,7 +574,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
 
     xDiff = this->unk_268.x - this->actor.world.pos.x;
@@ -706,7 +706,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
             sp44 = 100.0f;
         }
 
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
@@ -864,7 +864,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
 
     xDiff = this->unk_268.x - this->actor.world.pos.x;
@@ -1394,7 +1394,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         phi_f2 = CLAMP_MAX(phi_f2, 0.12f);
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(sp5C, MTXMODE_APPLY);
@@ -1692,7 +1692,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                     player->actor.shape.rot.y = player->actor.world.rot.y = this->actor.world.rot.y + 0x8000;
 
-                    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+                    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                              MTXMODE_NEW);
                     Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
                     Matrix_GetStateTranslationAndScaledZ(340.0f, &this->csCamEye);
@@ -2277,7 +2277,7 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         Matrix_InsertYRotation_f(this->unk_260, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, Boss03_OverrideLimbDraw, Boss03_PostLimbDraw, &this->actor);
         POLY_OPA_DISP = func_801660B8(globalCtx, POLY_OPA_DISP);
@@ -2413,7 +2413,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
                 flag = true;
             }
 
-            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
+            Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
             Matrix_Scale(eff->unk_34.x, eff->unk_34.x, 1.0f, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
 
@@ -2444,7 +2444,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)eff->unk_40, (u8)((((void)0, eff->unk_40) + 55.0f)), 225, 150);
 
-            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
+            Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
                 Matrix_InsertYRotation_f(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) *
@@ -2481,7 +2481,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s16)eff->unk_40, ((void)0, ((s16)eff->unk_40) + 55), 225,
                             eff->alpha);
 
-            Matrix_InsertTranslation(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
+            Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             Matrix_Scale(eff->unk_34.x, 1.0f, eff->unk_34.x, MTXMODE_APPLY);
             Matrix_InsertYRotation_f(eff->unk_34.z, MTXMODE_APPLY);
@@ -2610,7 +2610,7 @@ void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(POLY_OPA_DISP++, 0x0D, mtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
@@ -2630,7 +2630,7 @@ void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_OPA_DISP++, sGyorgSeaweedDLs[i]);
 
         Matrix_GetStateTranslation(&this->seaweedSegmentPositions[i]);
-        Matrix_InsertTranslation(4000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(4000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

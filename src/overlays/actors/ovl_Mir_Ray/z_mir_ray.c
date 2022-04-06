@@ -640,7 +640,7 @@ void MirRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         for (i = 0; i < ARRAY_COUNT(reflection); i++) {
             if (reflection[i].reflectionPoly != NULL) {
-                Matrix_InsertTranslation(reflection[i].pos.x, reflection[i].pos.y, reflection[i].pos.z, MTXMODE_NEW);
+                Matrix_Translate(reflection[i].pos.x, reflection[i].pos.y, reflection[i].pos.z, MTXMODE_NEW);
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
                 Matrix_Mult(&reflection[i].mtx, MTXMODE_APPLY);
 

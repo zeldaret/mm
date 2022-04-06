@@ -378,7 +378,7 @@ void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
                 gSPDisplayList(POLY_OPA_DISP++, ovl_En_Tanron1_DL_001888);
                 flag++;
             }
-            Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
             Matrix_RotateY(ptr->unk_1A, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(ptr->unk_18 * -1, MTXMODE_APPLY);
             Matrix_Scale(1.2f, ptr->unk_2C, 1.2f, MTXMODE_APPLY);
@@ -403,7 +403,7 @@ void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
             flag++;
         }
 
-        Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
+        Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
         Matrix_RotateY(ptr->unk_1A, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(ptr->unk_18 * -1, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);

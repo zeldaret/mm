@@ -927,12 +927,12 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(POLY_OPA_DISP++, object_kanban_DL_000C30);
 
     if (this->actionState != ENKANBAN_SIGN) {
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(this->floorRot.x);
         Matrix_InsertZRotation_f(this->floorRot.z, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
         Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
 
@@ -941,10 +941,10 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         zShift = CLAMP_MIN(zShift, zShift2);
         zShift *= -(f32)this->direction;
 
-        Matrix_InsertTranslation(0.0f, 0.0f, zShift, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, zShift, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->spinRot.x, MTXMODE_APPLY);
         Matrix_RotateY(this->spinRot.z, MTXMODE_APPLY);
-        Matrix_InsertTranslation(this->offset.x, this->offset.y, this->offset.z - 100.0f, MTXMODE_APPLY);
+        Matrix_Translate(this->offset.x, this->offset.y, this->offset.z - 100.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -960,7 +960,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
             phi_f0 = -15.0f;
         }
         this->actor.world.pos.y = this->actor.home.pos.y + phi_f0;
-        Matrix_InsertTranslation(0.0f, 0.0f, -100.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, -100.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->partFlags == 0xFFFF) {
@@ -976,7 +976,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         if (this->cutMarkAlpha != 0) {
             f32 cutOffset = (this->cutType == CUT_POST) ? -1200.0f : 0.0f;
 
-            Matrix_InsertTranslation(0.0f, 4400.0f + cutOffset, 200.0f, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 4400.0f + cutOffset, 200.0f, MTXMODE_APPLY);
             Matrix_InsertZRotation_f(sCutAngles[this->cutType], MTXMODE_APPLY);
             Matrix_Scale(0.0f, 10.0f, 2.0f, MTXMODE_APPLY);
 
@@ -1011,7 +1011,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
             zShift = ((this->actor.world.pos.y - this->actor.floorHeight) * -50.0f) / 100.0f;
         }
 
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z + zShift,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z + zShift,
                                  MTXMODE_NEW);
         Matrix_RotateStateAroundXAxis(this->floorRot.x);
         Matrix_InsertZRotation_f(this->floorRot.z, MTXMODE_APPLY);
@@ -1025,7 +1025,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->spinRot.x, MTXMODE_APPLY);
         Matrix_RotateY(this->spinRot.z, MTXMODE_APPLY);
-        Matrix_InsertTranslation(this->offset.x, this->offset.y, this->offset.z, MTXMODE_APPLY);
+        Matrix_Translate(this->offset.x, this->offset.y, this->offset.z, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         for (i = 0; i < ARRAY_COUNT(sShadowTexFlags); i++) {

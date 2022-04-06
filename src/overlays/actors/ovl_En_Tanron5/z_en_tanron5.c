@@ -516,7 +516,7 @@ void func_80BE5C10(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(texture));
 
-        Matrix_InsertTranslation(0.0f, 200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 200.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_198, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

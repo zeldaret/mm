@@ -1479,7 +1479,7 @@ void func_808F6334(EnIn* this, GlobalContext* globalCtx) {
     this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
-    Matrix_InsertTranslation(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if (&this->actor == player->targetActor &&
         !(globalCtx->msgCtx.currentTextId >= 0xFF && globalCtx->msgCtx.currentTextId <= 0x200) && newUnk4C8 == 3 &&
         this->unk4C8 == 3) {
@@ -1540,10 +1540,10 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (limbIndex == 16) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk358.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->unk358.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         func_808F6334(this, globalCtx);
     }
     if (limbIndex == 9) {

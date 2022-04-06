@@ -1038,7 +1038,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnOt_PostLimbDraw, &this->actor);
-    Matrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
+    Matrix_Translate(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);
     Matrix_Scale(0.0882f, 0.0882f, 0.0882f, MTXMODE_APPLY);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -1148,7 +1148,7 @@ void func_80B5E1D8(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
                 if (globalCtx) {}
             }
 
-            Matrix_InsertTranslation(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
+            Matrix_Translate(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
             Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
             Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
 

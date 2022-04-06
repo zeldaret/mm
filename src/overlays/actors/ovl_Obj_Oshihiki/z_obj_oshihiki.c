@@ -588,7 +588,7 @@ void ObjOshihiki_Draw(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     if (ObjOshihiki_MoveWithBlockUnder(this, globalCtx)) {
-        Matrix_InsertTranslation(this->underDistX * 10.0f, 0.0f, this->underDistZ * 10.0f, MTXMODE_APPLY);
+        Matrix_Translate(this->underDistX * 10.0f, 0.0f, this->underDistZ * 10.0f, MTXMODE_APPLY);
     }
 
     this->stateFlags &= ~PUSHBLOCK_MOVE_UNDER;

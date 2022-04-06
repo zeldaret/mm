@@ -856,7 +856,7 @@ void func_80AF8C68(EnPm* this, GlobalContext* globalCtx) {
         this->unk_360 = 0.0f;
     }
     Math_SmoothStepToF(&this->unk_364, this->unk_360, 0.8f, 40.0f, 10.0f);
-    Matrix_InsertTranslation(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
+    Matrix_Translate(this->unk_364, 0.0f, 0.0f, MTXMODE_APPLY);
     this->unk_388 = sp28;
 }
 
@@ -1871,7 +1871,7 @@ void EnPm_TransformLimbDraw(GlobalContext* globalCtx, s32 arg1, Actor* thisx, Gf
         func_8013AD9C(this->unk_370 + 0x4000, this->unk_372 + this->actor.shape.rot.y + 0x4000, &this->unk_284,
                       &this->unk_290, phi_v0, phi_v1);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_284.x, this->unk_284.y, this->unk_284.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_290.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_290.x, MTXMODE_APPLY);

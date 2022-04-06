@@ -1170,7 +1170,7 @@ void EnFloormas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         Matrix_Push();
-        Matrix_InsertTranslation(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
+        Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(M_PI / 3, MTXMODE_APPLY);
         Matrix_InsertZRotation_f(M_PI / 12, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);

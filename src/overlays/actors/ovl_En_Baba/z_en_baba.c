@@ -688,10 +688,10 @@ s32 EnBaba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     EnBaba* this = THIS;
 
     if (limbIndex == 6) {
-        Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_2E4.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(-this->unk_2E4.x, MTXMODE_APPLY);
-        Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 5) {
@@ -700,7 +700,7 @@ s32 EnBaba_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 
     if ((limbIndex == 6) && (this->unk_1E2 != 0) && ((globalCtx->state.frames % 2) == 0)) {
-        Matrix_InsertTranslation(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(40.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if ((limbIndex == 5) || (limbIndex == 10) || (limbIndex == 14)) {

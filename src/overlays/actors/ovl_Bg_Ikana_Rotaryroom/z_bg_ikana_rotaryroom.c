@@ -168,9 +168,9 @@ void func_80B80440(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     if (Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
-        Matrix_InsertTranslation(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
+        Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
     } else {
-        Matrix_InsertTranslation(D_80B8216C.x, D_80B8216C.y, D_80B8216C.z, MTXMODE_APPLY);
+        Matrix_Translate(D_80B8216C.x, D_80B8216C.y, D_80B8216C.z, MTXMODE_APPLY);
     }
     Matrix_GetStateTranslation(&sp50);
     func_80B80358(&sp50);
@@ -217,7 +217,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                 if ((Math3D_Vec3fDistSq(&spB4, &D_80B82184[spC8][i].unk_04) < SQ(250.0f)) &&
                     ((ptr->unk_00 ^ spC4) && (ptr->unk_01 == 0U))) {
                     Matrix_Push();
-                    Matrix_InsertTranslation(spB4.x, spB4.y, spB4.z, MTXMODE_APPLY);
+                    Matrix_Translate(spB4.x, spB4.y, spB4.z, MTXMODE_APPLY);
                     Matrix_RotateY(actor->shape.rot.y - this->dyna.actor.home.rot.y, MTXMODE_APPLY);
                     Matrix_InsertXRotation_s(actor->shape.rot.x - this->dyna.actor.home.rot.x, MTXMODE_APPLY);
                     Matrix_InsertZRotation_s(actor->shape.rot.z - this->dyna.actor.home.rot.z, MTXMODE_APPLY);
@@ -275,13 +275,13 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     Matrix_InsertZRotation_s(-this->dyna.actor.shape.rot.z, MTXMODE_NEW);
     Matrix_InsertXRotation_s(-this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateY(-this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertTranslation(-this->dyna.actor.world.pos.x, -this->dyna.actor.world.pos.y,
+    Matrix_Translate(-this->dyna.actor.world.pos.x, -this->dyna.actor.world.pos.y,
                              -this->dyna.actor.world.pos.z, MTXMODE_APPLY);
 
     if (actor != NULL) {
         Matrix_Push();
 
-        Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+        Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
         Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
@@ -302,7 +302,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
             Matrix_Push();
 
-            Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+            Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
             Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
@@ -326,7 +326,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
             Matrix_Push();
 
-            Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+            Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
             Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
@@ -352,7 +352,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
             Matrix_Push();
 
-            Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+            Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
             Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
             Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
             Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
@@ -370,7 +370,7 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
         Matrix_Push();
 
-        Matrix_InsertTranslation(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
+        Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
         Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
@@ -483,7 +483,7 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
-        Matrix_InsertTranslation(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
+        Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&sp34);
         Matrix_SetStateRotationAndTranslation(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
                                               sp40->actor.world.pos.z, &sp40->actor.shape.rot);

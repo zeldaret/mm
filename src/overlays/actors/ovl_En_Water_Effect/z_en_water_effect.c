@@ -293,7 +293,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225, 150);
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_00 == 1) {
                 Matrix_RotateY(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
@@ -326,7 +326,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225,
                             ptr->unk_3C);
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
             Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
 
@@ -530,7 +530,7 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (ptr->unk_01 * -20) & 0x1FF,
                                         0x20, 0x80));
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_2A >= 2) {
                 Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
@@ -549,7 +549,7 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0043E8);
 
             if ((ptr->unk_2A & 1) == 0) {
-                Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y + 5.0f, ptr->unk_04.z, MTXMODE_NEW);
+                Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y + 5.0f, ptr->unk_04.z, MTXMODE_NEW);
                 Matrix_InsertXRotation_s(ptr->unk_28, MTXMODE_APPLY);
                 Matrix_Scale(ptr->unk_2C.z, ptr->unk_2C.z, ptr->unk_2C.z, MTXMODE_APPLY);
 
@@ -610,7 +610,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     func_8012C2DC(globalCtx->state.gfxCtx);
@@ -690,7 +690,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (u8)ptr->unk_38, (u8)(((void)0, ptr->unk_38) + 55.0f), 225,
                                 ptr->unk_3C);
 
-                Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+                Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
                 Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
                 Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
 

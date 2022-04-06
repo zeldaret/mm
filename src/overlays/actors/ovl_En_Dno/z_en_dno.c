@@ -992,7 +992,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         func_80A711D0(this, globalCtx, &sp84);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
         gfxXlu = func_8012C2B4(POLY_XLU_DISP);
 
         gSPMatrix(gfxXlu, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

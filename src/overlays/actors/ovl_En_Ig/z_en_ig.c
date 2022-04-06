@@ -986,7 +986,7 @@ void EnIg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         func_8013AD9C(this->unk_3E8 + 0x4000, this->unk_3EA + this->actor.shape.rot.y + 0x4000, &this->unk_2D4,
                       &this->unk_2E6, phi_v0, phi_v1);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_2D4.x, this->unk_2D4.y, this->unk_2D4.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_2D4.x, this->unk_2D4.y, this->unk_2D4.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_2E6.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_2E6.x, MTXMODE_APPLY);

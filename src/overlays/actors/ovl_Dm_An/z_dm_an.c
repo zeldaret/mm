@@ -321,7 +321,7 @@ void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
                       this->unk_2C0 + this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_18C, &this->unk_1A4,
                       phi_v1, phi_v0);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_1A4.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_1A4.x, MTXMODE_APPLY);
@@ -331,7 +331,7 @@ void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         func_8013AD9C(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
                       &this->unk_1AA, phi_v1, phi_v0);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_1AA.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_1AA.x, MTXMODE_APPLY);

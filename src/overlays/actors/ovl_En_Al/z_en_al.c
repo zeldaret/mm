@@ -879,7 +879,7 @@ void EnAl_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         func_8013AD9C(this->unk_4DC + 0x4000, this->unk_4DE + this->actor.shape.rot.y + 0x4000, &this->unk_36C,
                       &this->unk_378, phi_v0, phi_v1);
         Matrix_Pop();
-        Matrix_InsertTranslation(this->unk_36C.x, this->unk_36C.y, this->unk_36C.z, MTXMODE_NEW);
+        Matrix_Translate(this->unk_36C.x, this->unk_36C.y, this->unk_36C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateY(this->unk_378.y, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_378.x, MTXMODE_APPLY);
@@ -896,7 +896,7 @@ void EnAl_Draw(Actor* thisx, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
-        Matrix_InsertTranslation(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnAl_OverrideLimbDraw, EnAl_PostLimbDraw,
                                        EnAl_TransformLimbDraw, &this->actor);

@@ -3,7 +3,7 @@
 Mtx* sSkyboxDrawMatrix;
 
 Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z) {
-    Matrix_InsertTranslation(x, y, z, MTXMODE_NEW);
+    Matrix_Translate(x, y, z, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(skyboxCtx->rotX);
     Matrix_InsertYRotation_f(skyboxCtx->rotY, MTXMODE_APPLY);
@@ -30,7 +30,7 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
 
     sSkyboxDrawMatrix = GRAPH_ALLOC(gfxCtx, sizeof(Mtx));
 
-    Matrix_InsertTranslation(x, y, z, MTXMODE_NEW);
+    Matrix_Translate(x, y, z, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(skyboxCtx->rotX);
     Matrix_InsertYRotation_f(skyboxCtx->rotY, MTXMODE_APPLY);

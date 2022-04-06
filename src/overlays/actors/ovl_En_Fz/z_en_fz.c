@@ -259,7 +259,7 @@ void func_80932784(EnFz* this, GlobalContext* globalCtx) {
     sp5C.y = this->actor.world.pos.y + 20.0f;
     sp5C.z = this->actor.world.pos.z;
 
-    Matrix_InsertTranslation(sp5C.x, sp5C.y, sp5C.z, MTXMODE_NEW);
+    Matrix_Translate(sp5C.x, sp5C.y, sp5C.z, MTXMODE_NEW);
     Matrix_InsertRotation(this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, MTXMODE_APPLY);
 
     sp44.x = sp44.y = 0.0f;
@@ -1013,7 +1013,7 @@ void func_80934464(EnFz* this, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (ptr->unk_01 + (i * 3)) * 3,
                                         (ptr->unk_01 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
-            Matrix_InsertTranslation(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
+            Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 

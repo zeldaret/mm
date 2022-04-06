@@ -557,7 +557,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
                 gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
             }
 
-            Matrix_InsertTranslation(spC4.x, spC4.y, spC4.z, MTXMODE_NEW);
+            Matrix_Translate(spC4.x, spC4.y, spC4.z, MTXMODE_NEW);
             tempf = (i & 7) * 0.008f;
             Matrix_Scale(0.05f + tempf, 0.05f + tempf, 0.05f + tempf, MTXMODE_APPLY);
             temp_f2 = Math_Vec3f_DistXYZ(&spC4, &globalCtx->view.eye) / 300.0f;
@@ -616,7 +616,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
         func_80169474(globalCtx, &spBC, &spB0);
 
         if ((spB0.x >= 0.0f) && (spB0.x < 320.0f) && (spB0.y >= 0.0f) && (spB0.y < 240.0f)) {
-            Matrix_InsertTranslation(spBC.x, spBC.y, spBC.z, MTXMODE_NEW);
+            Matrix_Translate(spBC.x, spBC.y, spBC.z, MTXMODE_NEW);
             Matrix_Scale(0.03f, 0.03f, 0.03f, MTXMODE_APPLY);
             temp_f0 = Math_Vec3f_DistXYZ(&spBC, &globalCtx->view.eye);
             temp_f0 = (u8)(255.0f * phi_f26) * (1.0f - (temp_f0 / 300.0f));
@@ -679,7 +679,7 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
             continue;
         }
 
-        Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+        Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
 
         gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
@@ -715,7 +715,7 @@ void func_808DDE9C(Actor* thisx, GlobalContext* globalCtx2) {
                 continue;
             }
 
-            Matrix_InsertTranslation(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+            Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
             temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
             Matrix_Scale(temp_f12, temp_f12, temp_f12, MTXMODE_APPLY);
 

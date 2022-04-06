@@ -12,7 +12,7 @@ void Matrix_Put(MtxF* src);
 MtxF* Matrix_GetCurrent(void);
 
 void Matrix_Mult(MtxF* matrix, s32 appendToState);
-void Matrix_InsertTranslation(f32 x, f32 y, f32 z, s32 appendToState);
+void Matrix_Translate(f32 x, f32 y, f32 z, s32 appendToState);
 void Matrix_Scale(f32 xScale, f32 yScale, f32 zScale, s32 appendToState);
 void Matrix_InsertXRotation_s(s16 rotation, s32 appendToState);
 void Matrix_InsertXRotation_f(f32 rotation, s32 appendToState);

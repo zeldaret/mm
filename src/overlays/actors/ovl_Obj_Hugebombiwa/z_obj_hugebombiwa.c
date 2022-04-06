@@ -711,7 +711,7 @@ void func_80A55B34(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_SetStateRotationAndTranslation(ptr->unk_0C.x, ptr->unk_0C.y + (325.0f * ptr->unk_00.y), ptr->unk_0C.z,
                                               &ptr->unk_1C);
         Matrix_Scale(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_APPLY);
-        Matrix_InsertTranslation(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
+        Matrix_Translate(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
 
         gSPMatrix(gfx++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(gfx++, object_bombiwa_DL_0009E0);
