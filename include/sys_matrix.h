@@ -41,7 +41,7 @@ void Matrix_MultVecY(f32 y, Vec3f* dest);
 void Matrix_MultVecZ(f32 z, Vec3f* dest);
 void Matrix_MultVec3fXZ(Vec3f* src, Vec3f* dest);
 void Matrix_MtxFCopy(MtxF* dest, MtxF* src);
-void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest);
+void Matrix_MtxToMtxF(Mtx* src, MtxF* dest);
 void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dest, MtxF* matrix);
 void Matrix_TransposeXYZ(MtxF* mtx);
 void Matrix_NormalizeXYZ(MtxF* mtx);

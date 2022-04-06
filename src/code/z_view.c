@@ -262,7 +262,7 @@ s32 View_StepDistortion(View* view, Mtx* projectionMtx) {
             F32_LERPIMP(view->curDistortionScale.z, view->distortionScale.z, view->distortionSpeed);
     }
 
-    Matrix_FromRSPMatrix(projectionMtx, &projectionMtxF);
+    Matrix_MtxToMtxF(projectionMtx, &projectionMtxF);
     Matrix_Put(&projectionMtxF);
     Matrix_RotateXFApply(view->curDistortionDirRot.x);
     Matrix_RotateYF(view->curDistortionDirRot.y, MTXMODE_APPLY);

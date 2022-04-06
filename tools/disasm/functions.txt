@@ -3385,7 +3385,7 @@
     0x80181C10:("Matrix_MultVecZ",),
     0x80181C5C:("Matrix_MultVec3fXZ",),
     0x80181CDC:("Matrix_MtxFCopy",),
-    0x80181D64:("Matrix_FromRSPMatrix",),
+    0x80181D64:("Matrix_MtxToMtxF",),
     0x80181FB8:("Matrix_MultiplyVector3fByMatrix",),
     0x80182068:("Matrix_TransposeXYZ",),
     0x801820A0:("Matrix_NormalizeXYZ",),

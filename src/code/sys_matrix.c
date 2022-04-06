@@ -1223,7 +1223,7 @@ void Matrix_MultVec3f(Vec3f* src, Vec3f* dest) {
  * Can also see it as obtaining the translation vector part of current, but the former interpretation is consistent with
  * the other functions nearby.
  *
- * @note Special case of Matrix_MultVec3f with `src = { 0, 0, 0 }`; the same assumptions apply.
+ * @note Special case of @sa Matrix_MultVec3f with `src = { 0, 0, 0 }`; the same assumptions apply.
  *
  * @param dest output.
  *
@@ -1242,7 +1242,7 @@ void Matrix_MultZero(Vec3f* dest) {
  *
  * I.e. calculate \f[ A(x, 0, 0) + b \f].
  *
- * @note Special case of Matrix_MultVec3f with `src = { x, 0, 0 }`; the same assumptions apply.
+ * @note Special case of @sa Matrix_MultVec3f with `src = { x, 0, 0 }`; the same assumptions apply.
  *
  * @param x multiplier of unit vector in x direction.
  * @param dest output.
@@ -1262,7 +1262,7 @@ void Matrix_MultVecX(f32 x, Vec3f* dest) {
  *
  * I.e. calculate \f[ A(0, y, 0) + b \f].
  *
- * @note Special case of Matrix_MultVec3f with `src = { 0, y, 0 }`; the same assumptions apply.
+ * @note Special case of @sa Matrix_MultVec3f with `src = { 0, y, 0 }`; the same assumptions apply.
  *
  * @param y multiplier of unit vector in y direction.
  * @param dest output.
@@ -1282,7 +1282,7 @@ void Matrix_MultVecY(f32 y, Vec3f* dest) {
  *
  * I.e. calculate \f[ A(0, 0, z) + b \f]`.
  *
- * @note Special case of Matrix_MultVec3f with `src = { 0, 0, z }`; the same assumptions apply.
+ * @note Special case of @sa Matrix_MultVec3f with `src = { 0, 0, z }`; the same assumptions apply.
  *
  * @param z multiplier of unit vector in z direction.
  * @param dest output.
@@ -1300,7 +1300,7 @@ void Matrix_MultVecZ(f32 z, Vec3f* dest) {
 /**
  * @brief Calculates current * (src,1) and writes its x and z components to dest.
  *
- * The same as @sa Matrix_MultVec3f, but only applies to the x and z components.
+ * The same as @sa Matrix_MultVec3f, but only applies to the x and z components; the same assumptions apply.
  *
  * @note Unlike the previous functions, does *not* just multiply (x, 0, z, 1) and save the x,y,z components.
  *
@@ -1378,7 +1378,7 @@ void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
  *
  * @remark original name: "Matrix_MtxtoMtxF"
  */
-void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
+void Matrix_MtxToMtxF(Mtx* src, MtxF* dest) {
     u16* intPart = (u16*)&src->m[0][0];
     u16* fracPart = (u16*)&src->m[2][0];
 
@@ -1405,7 +1405,7 @@ void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
 /**
  * @brief Calculates mf * (src,1) and writes its components to dest.
  *
- * This is the same as @sa Matrix_MultVec3f but using a specified matrix rather than the current one.
+ * This is the same as @sa Matrix_MultVec3f but using a specified matrix rather than the current one;
  *
  * @param src input vector
  * @param dest output vector
