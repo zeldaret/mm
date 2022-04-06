@@ -473,7 +473,7 @@ void Boss06_Update(Actor* thisx, GlobalContext* globalCtx) {
             phi_f26 += (M_PI / 64);
             phi_f24 += 0.030679617f;
 
-            Matrix_InsertZRotation_f(i * (M_PI / 512), MTXMODE_NEW);
+            Matrix_RotateZF(i * (M_PI / 512), MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledY(temp_f22, &sp7C);
 
             sp7C.x += 32.0f + this->unk_1BC;
@@ -616,10 +616,10 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
                     Matrix_Translate((D_809F4370[i].x - 32.0f) * -2.4f, (D_809F4370[i].y - 32.0f) * -2.4f, 0.0f,
                                              MTXMODE_APPLY);
-                    Matrix_InsertZRotation_f(i * (M_PI / 64), MTXMODE_APPLY);
+                    Matrix_RotateZF(i * (M_PI / 64), MTXMODE_APPLY);
 
                     if (func_809F2140() < 0.5f) {
-                        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
                     }
 
                     Matrix_Scale(-0.02f / 10.0f, -this->unk_1D8, 1.0f, MTXMODE_APPLY);

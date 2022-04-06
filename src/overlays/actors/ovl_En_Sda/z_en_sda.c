@@ -330,7 +330,7 @@ void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) 
 
     Matrix_Translate(player->actor.world.pos.x, player->actor.floorHeight, player->actor.world.pos.z,
                              MTXMODE_NEW);
-    Matrix_InsertYRotation_f(BREG(51) / 100.0f, MTXMODE_APPLY);
+    Matrix_RotateYF(BREG(51) / 100.0f, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 1.0f, (BREG(63) / 10.0f) + 1.0f, MTXMODE_APPLY);
 
     tempx = (BREG(62) / 10.0f) + 2.0f;

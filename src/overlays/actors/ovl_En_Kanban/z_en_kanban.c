@@ -550,7 +550,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
                             Vec3f spC8;
 
                             Matrix_SetStateXRotation(this->floorRot.x);
-                            Matrix_InsertZRotation_f(this->floorRot.z, MTXMODE_APPLY);
+                            Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
                             Matrix_GetStateTranslationAndScaledY(KREG(20) + 10.0f, &spC8);
                             Math_ApproachF(&this->actor.velocity.x, spC8.x, 0.5f, (KREG(21) * 0.01f) + 0.1f);
                             Math_ApproachF(&this->actor.velocity.z, spC8.z, 0.5f, (KREG(21) * 0.01f) + 0.3f);
@@ -931,7 +931,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
                                  MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(this->floorRot.x);
-        Matrix_InsertZRotation_f(this->floorRot.z, MTXMODE_APPLY);
+        Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
@@ -977,7 +977,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
             f32 cutOffset = (this->cutType == CUT_POST) ? -1200.0f : 0.0f;
 
             Matrix_Translate(0.0f, 4400.0f + cutOffset, 200.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_f(sCutAngles[this->cutType], MTXMODE_APPLY);
+            Matrix_RotateZF(sCutAngles[this->cutType], MTXMODE_APPLY);
             Matrix_Scale(0.0f, 10.0f, 2.0f, MTXMODE_APPLY);
 
             gDPPipeSync(POLY_XLU_DISP++);
@@ -1014,7 +1014,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z + zShift,
                                  MTXMODE_NEW);
         Matrix_RotateStateAroundXAxis(this->floorRot.x);
-        Matrix_InsertZRotation_f(this->floorRot.z, MTXMODE_APPLY);
+        Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, 0.0f, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->actionState == ENKANBAN_SIGN) {

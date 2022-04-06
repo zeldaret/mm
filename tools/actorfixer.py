@@ -57,8 +57,11 @@ animdict = {
     "Matrix_InsertMatrix":      "Matrix_Mult",
     "Matrix_InsertTranslation": "Matrix_Translate",
     "Matrix_InsertXRotation_s": "Matrix_RotateXS",
+    "Matrix_InsertXRotation_f": "Matrix_RotateXF",
     "Matrix_RotateY":           "Matrix_RotateYS",
+    "Matrix_InsertYRotation_f": "Matrix_RotateYF",
     "Matrix_InsertZRotation_s": "Matrix_RotateZS",
+    "Matrix_InsertZRotation_f": "Matrix_RotateZF",
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_8012403C": "Player_GetMask",

@@ -338,12 +338,12 @@ void Matrix_RotateXS(s16 x, s32 mode) {
  *
  * @remark original name may have been "Matrix_RotateX", but clashed with the previous function
  */
-void Matrix_InsertXRotation_f(f32 x, s32 mode) {
+void Matrix_RotateXF(f32 x, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 temp1;
-    f32 temp2;
+    f32 tempY;
+    f32 tempZ;
     f32 zero = 0.0;
     f32 one = 1.0;
 
@@ -354,25 +354,25 @@ void Matrix_InsertXRotation_f(f32 x, s32 mode) {
             sin = sinf(x);
             cos = cosf(x);
 
-            temp1 = cmf->xy;
-            temp2 = cmf->xz;
-            cmf->xy = temp1 * cos + temp2 * sin;
-            cmf->xz = temp2 * cos - temp1 * sin;
+            tempY = cmf->xy;
+            tempZ = cmf->xz;
+            cmf->xy = tempY * cos + tempZ * sin;
+            cmf->xz = tempZ * cos - tempY * sin;
 
-            temp1 = cmf->yy;
-            temp2 = cmf->yz;
-            cmf->yy = temp1 * cos + temp2 * sin;
-            cmf->yz = temp2 * cos - temp1 * sin;
+            tempY = cmf->yy;
+            tempZ = cmf->yz;
+            cmf->yy = tempY * cos + tempZ * sin;
+            cmf->yz = tempZ * cos - tempY * sin;
 
-            temp1 = cmf->zy;
-            temp2 = cmf->zz;
-            cmf->zy = temp1 * cos + temp2 * sin;
-            cmf->zz = temp2 * cos - temp1 * sin;
+            tempY = cmf->zy;
+            tempZ = cmf->zz;
+            cmf->zy = tempY * cos + tempZ * sin;
+            cmf->zz = tempZ * cos - tempY * sin;
 
-            temp1 = cmf->wy;
-            temp2 = cmf->wz;
-            cmf->wy = temp1 * cos + temp2 * sin;
-            cmf->wz = temp2 * cos - temp1 * sin;
+            tempY = cmf->wy;
+            tempZ = cmf->wz;
+            cmf->wy = tempY * cos + tempZ * sin;
+            cmf->wz = tempZ * cos - tempY * sin;
         }
     } else {
         cmf = sCurrentMatrix;
@@ -409,8 +409,8 @@ void Matrix_RotateStateAroundXAxis(f32 x) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 temp_1;
-    f32 temp_2;
+    f32 tempY;
+    f32 tempZ;
     s32 pad;
 
     if (x != 0.0f) {
@@ -419,25 +419,25 @@ void Matrix_RotateStateAroundXAxis(f32 x) {
         sin = sins(RADF_TO_BINANG(x)) * SHT_MINV;
         cos = coss(RADF_TO_BINANG(x)) * SHT_MINV;
 
-        temp_1 = cmf->xy;
-        temp_2 = cmf->xz;
-        cmf->xy = (temp_1 * cos) + (temp_2 * sin);
-        cmf->xz = (temp_2 * cos) - (temp_1 * sin);
+        tempY = cmf->xy;
+        tempZ = cmf->xz;
+        cmf->xy = (tempY * cos) + (tempZ * sin);
+        cmf->xz = (tempZ * cos) - (tempY * sin);
 
-        temp_1 = cmf->yy;
-        temp_2 = cmf->yz;
-        cmf->yy = (temp_1 * cos) + (temp_2 * sin);
-        cmf->yz = (temp_2 * cos) - (temp_1 * sin);
+        tempY = cmf->yy;
+        tempZ = cmf->yz;
+        cmf->yy = (tempY * cos) + (tempZ * sin);
+        cmf->yz = (tempZ * cos) - (tempY * sin);
 
-        temp_1 = cmf->zy;
-        temp_2 = cmf->zz;
-        cmf->zy = (temp_1 * cos) + (temp_2 * sin);
-        cmf->zz = (temp_2 * cos) - (temp_1 * sin);
+        tempY = cmf->zy;
+        tempZ = cmf->zz;
+        cmf->zy = (tempY * cos) + (tempZ * sin);
+        cmf->zz = (tempZ * cos) - (tempY * sin);
 
-        temp_1 = cmf->wy;
-        temp_2 = cmf->wz;
-        cmf->wy = (temp_1 * cos) + (temp_2 * sin);
-        cmf->wz = (temp_2 * cos) - (temp_1 * sin);
+        tempY = cmf->wy;
+        tempZ = cmf->wz;
+        cmf->wy = (tempY * cos) + (tempZ * sin);
+        cmf->wz = (tempZ * cos) - (tempY * sin);
     }
 }
 
@@ -543,7 +543,7 @@ void Matrix_RotateYS(s16 y, s32 mode) {
 }
 
 // Matrix_RotateYS
-void Matrix_InsertYRotation_f(f32 y, s32 mode) {
+void Matrix_RotateYF(f32 y, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -677,7 +677,7 @@ void Matrix_RotateZS(s16 z, s32 mode) {
 }
 
 // Matrix_RotateZ
-void Matrix_InsertZRotation_f(f32 z, s32 mode) {
+void Matrix_RotateZF(f32 z, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;

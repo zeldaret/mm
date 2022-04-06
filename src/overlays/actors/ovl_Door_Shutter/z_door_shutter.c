@@ -689,10 +689,10 @@ void DoorShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 s16 yaw = this->actor.shape.rot.y - Math_Vec3f_Yaw(&globalCtx->view.eye, &this->actor.world.pos);
 
                 if (ABS_ALT(yaw) < 0x4000) {
-                    Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                    Matrix_RotateYF(M_PI, MTXMODE_APPLY);
                 }
             } else if (this->actor.room == transitionEntry->sides[0].room) {
-                Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
             }
         } else if (this->doorType == 5) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_808A22DC[this->unk_15E]));

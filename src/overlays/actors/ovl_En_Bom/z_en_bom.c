@@ -383,7 +383,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
         spCC = Rand_ZeroFloat(M_PI);
 
         for (i = 0; i < 15; i++) {
-            Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
+            Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;

@@ -491,7 +491,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         f32 rand;
 
         rand = Boss03_RandZeroOne();
-        Matrix_InsertYRotation_f((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
+        Matrix_RotateYF((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
 
         rand = Boss03_RandZeroOne();
         Matrix_GetStateTranslationAndScaledZ((rand * 800.0f) + 400.0f, &sp70);
@@ -1397,7 +1397,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(sp5C, MTXMODE_APPLY);
+        Matrix_RotateYF(sp5C, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(100.0f, &this->csCamAt);
 
@@ -1491,7 +1491,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                     this->csCamTargetAt.z = this->actor.world.pos.z;
 
                     this->unk_568 += this->unk_56C;
-                    Matrix_InsertYRotation_f(this->unk_568, MTXMODE_NEW);
+                    Matrix_RotateYF(this->unk_568, MTXMODE_NEW);
                     Matrix_MultiplyVector3fByState(&sp90, &this->csCamTargetEye);
 
                     this->csCamTargetEye.x += this->actor.world.pos.x;
@@ -2132,7 +2132,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
         yRot = 0.0f;
 
         for (j = 0, i = 0; i < 20; j++) {
-            Matrix_InsertYRotation_f(yRot, MTXMODE_NEW);
+            Matrix_RotateYF(yRot, MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
             dropletPos.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
             dropletPos.y = PLATFORM_HEIGHT;
@@ -2276,7 +2276,7 @@ void Boss03_Draw(Actor* thisx, GlobalContext* globalCtx) {
             POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
         }
 
-        Matrix_InsertYRotation_f(this->unk_260, MTXMODE_APPLY);
+        Matrix_RotateYF(this->unk_260, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -600.0f, 0.0f, MTXMODE_APPLY);
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, Boss03_OverrideLimbDraw, Boss03_PostLimbDraw, &this->actor);
@@ -2346,7 +2346,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                 eff->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
-                    Matrix_InsertYRotation_f((2.0f * (j * M_PI)) / 6.0f, 0);
+                    Matrix_RotateYF((2.0f * (j * M_PI)) / 6.0f, 0);
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
@@ -2447,7 +2447,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_InsertYRotation_f(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) *
+                Matrix_RotateYF(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) *
                                              (M_PI / 0x8000),
                                          MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
@@ -2455,7 +2455,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             }
 
             Matrix_Scale(eff->unk_34.x, eff->unk_34.y, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_f(eff->unk_34.z, MTXMODE_APPLY);
+            Matrix_RotateZF(eff->unk_34.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
@@ -2484,7 +2484,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             Matrix_Scale(eff->unk_34.x, 1.0f, eff->unk_34.x, MTXMODE_APPLY);
-            Matrix_InsertYRotation_f(eff->unk_34.z, MTXMODE_APPLY);
+            Matrix_RotateYF(eff->unk_34.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);

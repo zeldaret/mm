@@ -1022,7 +1022,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
                 sp9C = Rand_ZeroFloat(M_PI);
 
                 for (i = 0; i < 15; i++) {
-                    Matrix_InsertYRotation_f(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
+                    Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
                     Matrix_GetStateTranslationAndScaledZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f,
                                                          &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
@@ -1376,7 +1376,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     idx = (this->unk_014E + 196) % ARRAY_COUNT(this->unk_01BC);
     Matrix_Translate(this->unk_01BC[idx].x, this->unk_01BC[idx].y, this->unk_01BC[idx].z, MTXMODE_NEW);
-    Matrix_InsertYRotation_f(this->unk_0B1C[idx].y + spA8, MTXMODE_APPLY);
+    Matrix_RotateYF(this->unk_0B1C[idx].y + spA8, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(spAC - this->unk_0B1C[idx].x);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, 250.0f, MTXMODE_APPLY);
@@ -1408,11 +1408,11 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
         Matrix_Translate(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z,
                                  MTXMODE_NEW);
-        Matrix_InsertYRotation_f(this->unk_0B1C[phi_v0].y + spA0, MTXMODE_APPLY);
+        Matrix_RotateYF(this->unk_0B1C[phi_v0].y + spA0, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(spA4 - this->unk_0B1C[phi_v0].x);
-        Matrix_InsertZRotation_f(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
+        Matrix_RotateZF(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(M_PI / 2, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(-(M_PI / 2));
         Matrix_ToMtx(mtxIter);
 
@@ -2032,7 +2032,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
         this->unk_1D30.z = player->actor.world.pos.z;
 
         this->unk_1D54 = Math_SinS(this->unk_1D14 * 1512) * this->unk_1D58;
-        Matrix_InsertZRotation_f(this->unk_1D54, MTXMODE_APPLY);
+        Matrix_RotateZF(this->unk_1D54, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_1D3C);
         Play_CameraSetAtEyeUp(globalCtx, this->unk_1D22, &this->unk_1D30, &this->unk_1D24, &this->unk_1D3C);
         ShrinkWindow_SetLetterboxTarget(27);
@@ -2083,7 +2083,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
                 }
                 this->unk_0150 += 0x4000;
                 sp58 = (Math_SinS(this->unk_0150) * (BREG(19) + 5)) * 0.1f;
-                Matrix_InsertZRotation_f(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f),
+                Matrix_RotateZF(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f),
                                          MTXMODE_NEW);
                 Matrix_GetStateTranslationAndScaledY(1.0f, &this->unk_1D3C);
                 func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);

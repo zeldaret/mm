@@ -190,7 +190,7 @@ void EnLight_Draw(Actor* thisx, GlobalContext* globalCtx) {
                    MTXMODE_APPLY);
 
     if (ENLIGHT_GET_1(&this->actor)) {
-        Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+        Matrix_RotateYF(M_PI, MTXMODE_APPLY);
     }
 
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);

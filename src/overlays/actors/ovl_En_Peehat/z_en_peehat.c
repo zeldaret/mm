@@ -845,11 +845,11 @@ s32 EnPeehat_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
         Matrix_Push();
         Matrix_RotateStateAroundXAxis(this->unk_2BC * 0.115f);
-        Matrix_InsertYRotation_f(this->unk_2BC * 0.13f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_f(this->unk_2BC * 0.1f, MTXMODE_APPLY);
+        Matrix_RotateYF(this->unk_2BC * 0.13f, MTXMODE_APPLY);
+        Matrix_RotateZF(this->unk_2BC * 0.1f, MTXMODE_APPLY);
         Matrix_Scale(1.0f - this->unk_2C4, this->unk_2C4 + 1.0f, 1.0f - this->unk_2C4, MTXMODE_APPLY);
-        Matrix_InsertZRotation_f(-(this->unk_2BC * 0.1f), MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
+        Matrix_RotateZF(-(this->unk_2BC * 0.1f), MTXMODE_APPLY);
+        Matrix_RotateYF(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
         Matrix_RotateStateAroundXAxis(-(this->unk_2BC * 0.115f));
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -906,7 +906,7 @@ void EnPeehat_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList
         Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Collider_UpdateSphere(0, &this->colliderSphere);
         Matrix_Translate(500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertYRotation_f(3.2f, MTXMODE_APPLY);
+        Matrix_RotateYF(3.2f, MTXMODE_APPLY);
         Matrix_Scale(0.3f, 0.2f, 0.2f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

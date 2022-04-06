@@ -6,8 +6,8 @@ Mtx* SkyboxDraw_UpdateMatrix(SkyboxContext* skyboxCtx, f32 x, f32 y, f32 z) {
     Matrix_Translate(x, y, z, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(skyboxCtx->rotX);
-    Matrix_InsertYRotation_f(skyboxCtx->rotY, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(skyboxCtx->rotZ, MTXMODE_APPLY);
+    Matrix_RotateYF(skyboxCtx->rotY, MTXMODE_APPLY);
+    Matrix_RotateZF(skyboxCtx->rotZ, MTXMODE_APPLY);
     return Matrix_ToMtx(sSkyboxDrawMatrix);
 }
 
@@ -33,8 +33,8 @@ void SkyboxDraw_Draw(SkyboxContext* skyboxCtx, GraphicsContext* gfxCtx, s16 skyb
     Matrix_Translate(x, y, z, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateStateAroundXAxis(skyboxCtx->rotX);
-    Matrix_InsertYRotation_f(skyboxCtx->rotY, MTXMODE_APPLY);
-    Matrix_InsertZRotation_f(skyboxCtx->rotZ, MTXMODE_APPLY);
+    Matrix_RotateYF(skyboxCtx->rotY, MTXMODE_APPLY);
+    Matrix_RotateZF(skyboxCtx->rotZ, MTXMODE_APPLY);
     Matrix_ToMtx(sSkyboxDrawMatrix);
 
     gSPMatrix(POLY_OPA_DISP++, sSkyboxDrawMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

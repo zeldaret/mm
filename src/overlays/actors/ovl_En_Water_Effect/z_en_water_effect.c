@@ -225,7 +225,7 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
                     }
 
                     for (j = 0; j < 12; j++) {
-                        Matrix_InsertYRotation_f((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
+                        Matrix_RotateYF((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
                         Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
                         spA4.y = Rand_ZeroFloat(4.0f) + 2.0f;
                         func_80A58908(this, &ptr->unk_04, &spA4, ptr->unk_2A);
@@ -302,7 +302,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             }
 
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+            Matrix_RotateZF(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042B0);
@@ -328,7 +328,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
             Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
-            Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+            Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_water_effect_DL_0042F8);
@@ -541,7 +541,7 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
 
             if ((i & 1) != 0) {
-                Matrix_InsertYRotation_f(M_PI, MTXMODE_APPLY);
+                Matrix_RotateYF(M_PI, MTXMODE_APPLY);
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -692,7 +692,7 @@ void func_80A5A6B8(Actor* thisx, GlobalContext* globalCtx2) {
 
                 Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
                 Matrix_Scale(ptr->unk_2C.x, 1.0f, ptr->unk_2C.x, MTXMODE_APPLY);
-                Matrix_InsertYRotation_f(ptr->unk_2C.z, MTXMODE_APPLY);
+                Matrix_RotateYF(ptr->unk_2C.z, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

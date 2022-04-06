@@ -235,7 +235,7 @@ void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateY(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
+        Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
     }
 }
@@ -426,7 +426,7 @@ void EnRecepgirl_UnkLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateY(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
+        Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
     }
 }

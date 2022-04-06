@@ -163,21 +163,21 @@ As for the TransformLimbDraw, it has a much simpler prototype. mips2c gives
 ```C
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {
-        Matrix_RotateY((s16) (0x400 - actor->unk2AE), 1);
+        Matrix_RotateYS((s16) (0x400 - actor->unk2AE), 1);
         Matrix_GetStateTranslationAndScaledX(500.0f, (Vec3f *) &actor->focus);
     }
 }
 ```
 There is only minor cleanup needed here: 
 - recasting the last argument, 
-- replacing the last argument of `Matrix_RotateY` by the enum `MTXMODE_APPLY` (which means "use the current matrix instead of starting from a new identity matrix"), and the first argument by `0x400 - this->unk_2AE.x`.
+- replacing the last argument of `Matrix_RotateYS` by the enum `MTXMODE_APPLY` (which means "use the current matrix instead of starting from a new identity matrix"), and the first argument by `0x400 - this->unk_2AE.x`.
 - `(Vec3f *) &actor->focus` to `&actor->focus.pos` (this is the same issue as `(Actor*)this`, where mips2c doesn't climb deep enough into the struct).
 ```C
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
     EnRecepgirl* this = THIS;
 
     if (limbIndex == 5) {
-        Matrix_RotateY(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
+        Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
     }
 }
