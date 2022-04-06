@@ -240,7 +240,7 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
         }
     }
 
-    Matrix_SetStateXRotation((BREG(50) + 70) / 100.0f);
+    Matrix_RotateXFNew((BREG(50) + 70) / 100.0f);
 
     for (i = 0; i < 18; i++) {
         if (D_80947AFC[i] >= 0) {
@@ -275,7 +275,7 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
             sp64[i].z = (((KREG(82) / 100.0f) + 4.0f) * sp188.z) + sp16C.z;
         }
 
-        Matrix_SetStateXRotation((BREG(50) + 70) / 100.0f);
+        Matrix_RotateXFNew((BREG(50) + 70) / 100.0f);
 
         for (i = 0; i < 22; i++) {
             sp194.x = sp64[i].x - player->actor.world.pos.x;

@@ -1377,7 +1377,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     idx = (this->unk_014E + 196) % ARRAY_COUNT(this->unk_01BC);
     Matrix_Translate(this->unk_01BC[idx].x, this->unk_01BC[idx].y, this->unk_01BC[idx].z, MTXMODE_NEW);
     Matrix_RotateYF(this->unk_0B1C[idx].y + spA8, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(spAC - this->unk_0B1C[idx].x);
+    Matrix_RotateXFApply(spAC - this->unk_0B1C[idx].x);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, 250.0f, MTXMODE_APPLY);
     Matrix_GetStateTranslationAndScaledZ(150.0f, &this->unk_147C[0]);
@@ -1409,11 +1409,11 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_Translate(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z,
                                  MTXMODE_NEW);
         Matrix_RotateYF(this->unk_0B1C[phi_v0].y + spA0, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(spA4 - this->unk_0B1C[phi_v0].x);
+        Matrix_RotateXFApply(spA4 - this->unk_0B1C[phi_v0].x);
         Matrix_RotateZF(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(-(M_PI / 2));
+        Matrix_RotateXFApply(-(M_PI / 2));
         Matrix_ToMtx(mtxIter);
 
         gSPMatrix(POLY_OPA_DISP++, mtxIter, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

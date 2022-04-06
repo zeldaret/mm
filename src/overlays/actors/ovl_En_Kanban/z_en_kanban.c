@@ -549,7 +549,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
                         } else {
                             Vec3f spC8;
 
-                            Matrix_SetStateXRotation(this->floorRot.x);
+                            Matrix_RotateXFNew(this->floorRot.x);
                             Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
                             Matrix_GetStateTranslationAndScaledY(KREG(20) + 10.0f, &spC8);
                             Math_ApproachF(&this->actor.velocity.x, spC8.x, 0.5f, (KREG(21) * 0.01f) + 0.1f);
@@ -930,7 +930,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(this->floorRot.x);
+        Matrix_RotateXFApply(this->floorRot.x);
         Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -1013,12 +1013,12 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z + zShift,
                                  MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(this->floorRot.x);
+        Matrix_RotateXFApply(this->floorRot.x);
         Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, 0.0f, this->actor.scale.z, MTXMODE_APPLY);
 
         if (this->actionState == ENKANBAN_SIGN) {
-            Matrix_RotateStateAroundXAxis(-M_PI / 5);
+            Matrix_RotateXFApply(-M_PI / 5);
         }
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);

@@ -571,7 +571,7 @@ void EnFishing_SpawnRainDrop(FishingEffect* effect, Vec3f* pos, Vec3f* rot) {
             effect->unk_38 = rot->y;
             effect->unk_3C = rot->z;
             Matrix_RotateYF(rot->y, MTXMODE_NEW);
-            Matrix_RotateStateAroundXAxis(rot->x);
+            Matrix_RotateXFApply(rot->x);
             Matrix_MultiplyVector3fByState(&velSrc, &effect->vel);
             break;
         }
@@ -1263,7 +1263,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
 
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_RotateYF(effect->unk_38, MTXMODE_APPLY);
-            Matrix_RotateStateAroundXAxis(effect->unk_34);
+            Matrix_RotateXFApply(effect->unk_34);
             Matrix_RotateZF(effect->unk_3C, MTXMODE_APPLY);
             Matrix_Scale(0.002f, 1.0f, 0.1f, MTXMODE_APPLY);
 
@@ -1332,11 +1332,11 @@ void EnFishing_DrawEffects(FishingEffect* effect, GlobalContext* globalCtx) {
     if (effect->type == FS_EFF_OWNER_HAT) {
         Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
         Matrix_RotateYF((sEffOwnerHatRot.y * M_PI) / 32768, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis((sEffOwnerHatRot.x * M_PI) / 32768);
+        Matrix_RotateXFApply((sEffOwnerHatRot.x * M_PI) / 32768);
         Matrix_RotateZF((sEffOwnerHatRot.z * M_PI) / 32768, MTXMODE_APPLY);
         Matrix_Scale(effect->unk_30, effect->unk_30, effect->unk_30, MTXMODE_APPLY);
         Matrix_Translate(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(M_PI / 2);
+        Matrix_RotateXFApply(M_PI / 2);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gSPDisplayList(POLY_OPA_DISP++, gFishingOwnerHatDL);
@@ -1495,7 +1495,7 @@ void EnFishing_UpdateLine(GlobalContext* globalCtx, Vec3f* basePos, Vec3f* pos, 
         (rot + i - 1)->x = rx;
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(rx);
+        Matrix_RotateXFApply(rx);
         Matrix_MultiplyVector3fByState(&posSrc, &posStep);
 
         (pos + i)->x = (pos + i - 1)->x + posStep.x;
@@ -1528,7 +1528,7 @@ void EnFishing_UpdateLinePos(Vec3f* pos) {
         rx = -Math_Acot2F(dist, dy);
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(rx);
+        Matrix_RotateXFApply(rx);
         Matrix_MultiplyVector3fByState(&posSrc, &posStep);
 
         (pos + i)->x = (pos + i + 1)->x + posStep.x;
@@ -1570,7 +1570,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
     rx = -Math_Acot2F(dist, dy);
 
     Matrix_RotateYF(ry, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(rx);
+    Matrix_RotateXFApply(rx);
     Matrix_MultiplyVector3fByState(&posSrc, &posStep);
 
     refPos->x = pos->x + posStep.x;
@@ -1586,7 +1586,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
     }
 
     Matrix_RotateYF(sLureHookRotY[hookIndex], MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(rx);
+    Matrix_RotateXFApply(rx);
     Matrix_Scale(0.0039999997f, 0.0039999997f, 0.005f, MTXMODE_APPLY);
     Matrix_RotateYF(M_PI, MTXMODE_APPLY);
 
@@ -1622,7 +1622,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
 
         Matrix_Pop();
         Matrix_Translate(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(M_PI / 2);
+        Matrix_RotateXFApply(M_PI / 2);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gFishingOwnerHatDL);
@@ -1691,7 +1691,7 @@ void EnFishing_UpdateSinkingLure(GlobalContext* globalCtx) {
         rx = -Math_Acot2F(dist, dy);
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(rx);
+        Matrix_RotateXFApply(rx);
         Matrix_MultiplyVector3fByState(&posSrc, &posStep);
 
         (pos + i)->x = (pos + i - 1)->x + posStep.x;
@@ -1800,7 +1800,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
     if (D_80917206 != 2) {
         Matrix_Translate(sLurePos.x, sLurePos.y, sLurePos.z, MTXMODE_NEW);
         Matrix_RotateYF(sLureRot.y + D_80917254, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(sLureRot.x);
+        Matrix_RotateXFApply(sLureRot.x);
         Matrix_Scale(0.0039999997f, 0.0039999997f, 0.0039999997f, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, D_80917258, MTXMODE_APPLY);
         Matrix_RotateZF(M_PI / 2, MTXMODE_APPLY);
@@ -1852,7 +1852,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
 
         Matrix_Translate(sRodTipPos.x, sRodTipPos.y, sRodTipPos.z, MTXMODE_NEW);
         Matrix_RotateYF(ry, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(rx);
+        Matrix_RotateXFApply(rx);
         Matrix_Scale(D_809101C8, 1.0f, dist, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1879,7 +1879,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
 
                 Matrix_Translate((linePos + i)->x, (linePos + i)->y, (linePos + i)->z, MTXMODE_NEW);
                 Matrix_RotateYF(ry, MTXMODE_APPLY);
-                Matrix_RotateStateAroundXAxis(rx);
+                Matrix_RotateXFApply(rx);
                 Matrix_Scale(D_809101C8, 1.0f, dist, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1890,7 +1890,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
 
             Matrix_Translate((linePos + i)->x, (linePos + i)->y, (linePos + i)->z, MTXMODE_NEW);
             Matrix_RotateYF((lineRot + i)->y, MTXMODE_APPLY);
-            Matrix_RotateStateAroundXAxis((lineRot + i)->x);
+            Matrix_RotateXFApply((lineRot + i)->x);
             Matrix_Scale(D_809101C8, 1.0f, 0.005f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -2015,9 +2015,9 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
         Matrix_RotateYF(1.288053f, MTXMODE_APPLY);
     }
 
-    Matrix_RotateStateAroundXAxis(-0.6283185f);
+    Matrix_RotateXFApply(-0.6283185f);
     Matrix_RotateZF((player->unk_B08[0] * 0.5f) + 0.4712389f, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis((D_8090CD40 + 20.0f) * 0.01f * M_PI);
+    Matrix_RotateXFApply((D_8090CD40 + 20.0f) * 0.01f * M_PI);
     Matrix_Scale(0.70000005f, 0.70000005f, 0.70000005f, MTXMODE_APPLY);
 
     spC0 = (D_8090CD3C * (((player->unk_B08[1] - 1.0f) * -0.25f) + 0.5f)) + (D_8090CD2C + D_8090CD38);
@@ -2026,7 +2026,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
 
     for (i = 0; i < 22; i++) {
         Matrix_RotateYF(sRodBendRatios[i] * D_8090CD28 * 0.5f, MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(sRodBendRatios[i] * spC0 * 0.5f);
+        Matrix_RotateXFApply(sRodBendRatios[i] * spC0 * 0.5f);
 
         Matrix_Push();
         Matrix_Scale(sRodScales[i], sRodScales[i], 0.52f, MTXMODE_APPLY);
@@ -4234,7 +4234,7 @@ void EnFishing_DrawFish(Actor* thisx, GlobalContext* globalCtx) {
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYF(((this->unk_15A + this->actor.shape.rot.y) / 32768.0f) * M_PI, MTXMODE_APPLY);
-    Matrix_RotateStateAroundXAxis(((this->unk_158 + this->actor.shape.rot.x) / 32768.0f) * M_PI);
+    Matrix_RotateXFApply(((this->unk_158 + this->actor.shape.rot.x) / 32768.0f) * M_PI);
     Matrix_RotateZF(((this->unk_15C + this->actor.shape.rot.z) / 32768.0f) * M_PI, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
@@ -4372,7 +4372,7 @@ void EnFishing_DrawPondProps(GlobalContext* globalCtx) {
                 Matrix_Translate(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
                 Matrix_Scale(prop->scale, prop->scale, prop->scale, MTXMODE_APPLY);
                 Matrix_RotateYF(prop->rotY, MTXMODE_APPLY);
-                Matrix_RotateStateAroundXAxis(prop->rotX);
+                Matrix_RotateXFApply(prop->rotX);
                 Matrix_RotateYF(prop->reedAngle, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -4671,7 +4671,7 @@ void EnFishing_DrawGroupFishes(GlobalContext* globalCtx) {
             if (fish->shouldDraw) {
                 Matrix_Translate(fish->pos.x, fish->pos.y, fish->pos.z, MTXMODE_NEW);
                 Matrix_RotateYF(((f32)fish->unk_3E * M_PI) / 32768.0f, MTXMODE_APPLY);
-                Matrix_RotateStateAroundXAxis((-(f32)fish->unk_3C * M_PI) / 32768.0f);
+                Matrix_RotateXFApply((-(f32)fish->unk_3C * M_PI) / 32768.0f);
                 Matrix_Scale(fish->unk_2C * scale, scale, scale, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

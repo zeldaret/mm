@@ -136,7 +136,7 @@ void EnTanron3_SpawnBubbles(EnTanron3* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < 20; i++) {
         Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
+        Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
         Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(3.0f) + 2.0f, &velocity);
         acceleration.x = velocity.x * -0.05f;
         acceleration.y = velocity.y * -0.05f;

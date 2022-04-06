@@ -360,7 +360,7 @@ void func_80BB71C8(EnTanron2* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < 15; i++) {
         Matrix_RotateYF(Rand_ZeroFloat(6.2831855f), MTXMODE_NEW);
-        Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(6.2831855f));
+        Matrix_RotateXFApply(Rand_ZeroFloat(6.2831855f));
         Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
         sp90.x = this->actor.world.pos.x + spA8.x;
         sp90.y = this->actor.world.pos.y + spA8.y;

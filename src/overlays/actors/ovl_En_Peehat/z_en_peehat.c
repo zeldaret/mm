@@ -844,13 +844,13 @@ s32 EnPeehat_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         Gfx* gfx = POLY_OPA_DISP;
 
         Matrix_Push();
-        Matrix_RotateStateAroundXAxis(this->unk_2BC * 0.115f);
+        Matrix_RotateXFApply(this->unk_2BC * 0.115f);
         Matrix_RotateYF(this->unk_2BC * 0.13f, MTXMODE_APPLY);
         Matrix_RotateZF(this->unk_2BC * 0.1f, MTXMODE_APPLY);
         Matrix_Scale(1.0f - this->unk_2C4, this->unk_2C4 + 1.0f, 1.0f - this->unk_2C4, MTXMODE_APPLY);
         Matrix_RotateZF(-(this->unk_2BC * 0.1f), MTXMODE_APPLY);
         Matrix_RotateYF(-(this->unk_2BC * 0.13f), MTXMODE_APPLY);
-        Matrix_RotateStateAroundXAxis(-(this->unk_2BC * 0.115f));
+        Matrix_RotateXFApply(-(this->unk_2BC * 0.115f));
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[1], *dList);

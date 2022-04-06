@@ -118,7 +118,7 @@ MtxF* Matrix_GetCurrent(void) {
  *      NEW: mf -> current
  *
  * @param mf Matrix to multiply by.
- * @param mode APPLY or NEW
+ * @param mode APPLY or NEW.
  *
  * @remark original name: "Matrix_mult"
  */
@@ -145,13 +145,13 @@ void Matrix_Mult(MtxF* mf, s32 mode) {
  *      0 & 1 & 0 & y \\
  *      0 & 0 & 1 & z \\
  *      0 & 0 & 0 & 1
- *  \end{pmatrix}
+ *  \end{pmatrix} .
  * \f]
  *
- * @param x translation distance in the x direction
- * @param y translation distance in the y direction
- * @param z translation distance in the z direction
- * @param mode APPLY or NEW
+ * @param x translation distance in the x direction.
+ * @param y translation distance in the y direction.
+ * @param z translation distance in the z direction.
+ * @param mode APPLY or NEW.
  *
  * @remark original name: "Matrix_translate"
  */
@@ -179,7 +179,7 @@ void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode) {
 }
 
 /**
- * @brief Right-multiply by the diagonal scale matrix S = diag(x,y,z,1)
+ * @brief Right-multiply by the diagonal scale matrix S = diag(x,y,z,1).
  *      APPLY: current * S -> current
  *      NEW: S -> current
  *
@@ -191,13 +191,13 @@ void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode) {
  *      0 & y & 0 & 0 \\
  *      0 & 0 & z & 0 \\
  *      0 & 0 & 0 & 1
- *  \end{pmatrix}
+ *  \end{pmatrix} .
  * \f]
  *
- * @param x scale in x direction
- * @param y scale in y direction
- * @param z scale in z direction
- * @param mode APPLY or NEW
+ * @param x scale in x direction.
+ * @param y scale in y direction.
+ * @param z scale in z direction.
+ * @param mode APPLY or NEW.
  *
  * @remark original name: "Matrix_scale"
  */
@@ -242,8 +242,8 @@ void Matrix_Scale(f32 x, f32 y, f32 z, s32 mode) {
  *
  * @note The same as Matrix_RotateXF, but uses a binary angle.
  * 
- * @param x rotation angle (binary)
- * @param mode APPLY or NEW
+ * @param x rotation angle (binary).
+ * @param mode APPLY or NEW.
  *
  * @remark original name: "Matrix_RotateX"
  */
@@ -312,9 +312,8 @@ void Matrix_RotateXS(s16 x, s32 mode) {
 }
 
 // Unused
-// Matrix_RotateX
 /**
- * @brief Right-multiply by a rotation about the x axis
+ * @brief Right-multiply by a rotation about the x axis.
  *      APPLY: current * R -> current
  *      NEW: R -> current
  *
@@ -333,10 +332,10 @@ void Matrix_RotateXS(s16 x, s32 mode) {
  *
  * @note The same as Matrix_RotateXS, but uses a float angle in degrees.
  * 
- * @param x rotation angle in degrees
- * @param mode APPLY or NEW
+ * @param x rotation angle in degrees.
+ * @param mode APPLY or NEW.
  *
- * @remark original name may have been "Matrix_RotateX", but clashed with the previous function
+ * @remark original name may have been "Matrix_RotateX", but clashed with the previous function.
  */
 void Matrix_RotateXF(f32 x, s32 mode) {
     MtxF* cmf;
@@ -404,8 +403,15 @@ void Matrix_RotateXF(f32 x, s32 mode) {
     }
 }
 
-// Matrix_RotateXApply
-void Matrix_RotateStateAroundXAxis(f32 x) {
+/**
+ * @brief Right-multiply by a rotation about the x axis.
+ *      current * R -> current
+ * 
+ * @note Matrix_RotateXF with mode APPLY.
+ * 
+ * @param x rotation angle in degrees.
+ */
+void Matrix_RotateXFApply(f32 x) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -441,8 +447,15 @@ void Matrix_RotateStateAroundXAxis(f32 x) {
     }
 }
 
-// Matrix_RotateXNew
-void Matrix_SetStateXRotation(f32 x) {
+/**
+ * @brief Replace current by a rotation about the x axis.
+ *      R -> current
+ * 
+ * @note Matrix_RotateXF with mode NEW.
+ * 
+ * @param x rotation angle in degrees.
+ */
+void Matrix_RotateXFNew(f32 x) {
     MtxF* cmf = sCurrentMatrix;
     s32 pad;
     s32 pad1;

@@ -601,7 +601,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Push();
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2E4); i++) {
-        Matrix_RotateStateAroundXAxis(0.3926991f);
+        Matrix_RotateXFApply(0.3926991f);
         Matrix_GetStateTranslationAndScaledZ(100.0f, &this->unk_2E4[i]);
     }
 
@@ -610,7 +610,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Translate(38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3A4); i++) {
-        Matrix_RotateStateAroundXAxis(0.41887903f);
+        Matrix_RotateXFApply(0.41887903f);
         Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_3A4[i]);
     }
 
@@ -619,7 +619,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Translate(-38.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_458); i++) {
-        Matrix_RotateStateAroundXAxis(0.41887903f);
+        Matrix_RotateXFApply(0.41887903f);
         Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_458[i]);
     }
 
@@ -628,7 +628,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Translate(71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_50C); i++) {
-        Matrix_RotateStateAroundXAxis(0.5711987f);
+        Matrix_RotateXFApply(0.5711987f);
         Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_50C[i]);
     }
 
@@ -637,7 +637,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Translate(-71.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_590); i++) {
-        Matrix_RotateStateAroundXAxis(0.5711987f);
+        Matrix_RotateXFApply(0.5711987f);
         Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_590[i]);
     }
 
@@ -646,7 +646,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Translate(92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_614); i++) {
-        Matrix_RotateStateAroundXAxis(1.0471976f);
+        Matrix_RotateXFApply(1.0471976f);
         Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_614[i]);
     }
 
@@ -655,7 +655,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Translate(-92.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_65C); i++) {
-        Matrix_RotateStateAroundXAxis(1.0471976f);
+        Matrix_RotateXFApply(1.0471976f);
         Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_65C[i]);
     }
 

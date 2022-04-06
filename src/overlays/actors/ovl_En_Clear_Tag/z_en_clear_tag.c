@@ -428,7 +428,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                     Matrix_RotateYF(Rand_ZeroFloat(M_PI * 2), MTXMODE_NEW);
-                    Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(M_PI * 2));
+                    Matrix_RotateXFApply(Rand_ZeroFloat(M_PI * 2));
                     Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
                     accel.y = vel.y * -0.03f;
@@ -501,7 +501,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
             for (i = 0; i < 44; i++) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                 Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
-                Matrix_RotateStateAroundXAxis(Rand_ZeroFloat(2 * M_PI));
+                Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
                 Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
                 accel.x = vel.x * -0.03f;
                 accel.y = vel.y * -0.03f;
@@ -812,7 +812,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
             Matrix_RotateYF(effect->rotationY, MTXMODE_APPLY);
-            Matrix_RotateStateAroundXAxis(effect->rotationX);
+            Matrix_RotateXFApply(effect->rotationX);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gClearTagDebrisEffectDL);
         }
@@ -956,10 +956,10 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                             (u8)effect->primColor.b, (u8)effect->primColor.a);
             Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
             Matrix_RotateYF(effect->rotationY, MTXMODE_APPLY);
-            Matrix_RotateStateAroundXAxis(effect->rotationX);
+            Matrix_RotateXFApply(effect->rotationX);
             Matrix_RotateZF(effect->rotationZ, MTXMODE_APPLY);
             Matrix_Scale(effect->scale * 0.5f, effect->scale * 0.5f, effect->maxScale * effect->scale, MTXMODE_APPLY);
-            Matrix_RotateStateAroundXAxis(M_PI / 2);
+            Matrix_RotateXFApply(M_PI / 2);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagLightRayEffectDL);
         }
@@ -994,7 +994,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                         Matrix_Translate(effect->position.x + vec.x, ySurface, effect->position.z + vec.z,
                                                  MTXMODE_NEW);
                         Matrix_RotateYF(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_APPLY);
-                        Matrix_RotateStateAroundXAxis(effect->rotationX);
+                        Matrix_RotateXFApply(effect->rotationX);
                         Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
                         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gSPDisplayList(POLY_XLU_DISP++, gExplosionSplashDL);
