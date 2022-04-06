@@ -501,25 +501,25 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
     Vec3f vecA;
     Vec3f vecC;
 
-    spE8[0] = -(shieldMtx->zx * this->reflectRange) * this->reflectIntensity * 400.0f;
-    spE8[1] = -(shieldMtx->zy * this->reflectRange) * this->reflectIntensity * 400.0f;
+    spE8[0] = -(shieldMtx->xz * this->reflectRange) * this->reflectIntensity * 400.0f;
+    spE8[1] = -(shieldMtx->yz * this->reflectRange) * this->reflectIntensity * 400.0f;
     spE8[2] = -(shieldMtx->zz * this->reflectRange) * this->reflectIntensity * 400.0f;
 
-    vecB.x = shieldMtx->wx;
-    vecB.y = shieldMtx->wy;
-    vecB.z = shieldMtx->wz;
+    vecB.x = shieldMtx->xw;
+    vecB.y = shieldMtx->yw;
+    vecB.z = shieldMtx->zw;
 
     vecD.x = spE8[0] + vecB.x;
     vecD.y = spE8[1] + vecB.y;
     vecD.z = spE8[2] + vecB.z;
 
     vecA.x = vecB.x + (shieldMtx->xx * 300.0f);
-    vecA.y = vecB.y + (shieldMtx->xy * 300.0f);
-    vecA.z = vecB.z + (shieldMtx->xz * 300.0f);
+    vecA.y = vecB.y + (shieldMtx->yx * 300.0f);
+    vecA.z = vecB.z + (shieldMtx->zx * 300.0f);
 
     vecC.x = vecD.x + (shieldMtx->xx * 300.0f);
-    vecC.y = vecD.y + (shieldMtx->xy * 300.0f);
-    vecC.z = vecD.z + (shieldMtx->xz * 300.0f);
+    vecC.y = vecD.y + (shieldMtx->yx * 300.0f);
+    vecC.z = vecD.z + (shieldMtx->zx * 300.0f);
 
     Collider_SetQuadVertices(&this->collider2, &vecA, &vecB, &vecC, &vecD);
 
@@ -547,8 +547,8 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
                 reflection[i].opacity = (s32)(reflection[i].opacity * 1.275f);
 
                 sp10C.x = (shieldMtx->xx * 100.0f) + vecB.x;
-                sp10C.y = (shieldMtx->xy * 100.0f) + vecB.y;
-                sp10C.z = (shieldMtx->xz * 100.0f) + vecB.z;
+                sp10C.y = (shieldMtx->yx * 100.0f) + vecB.y;
+                sp10C.z = (shieldMtx->zx * 100.0f) + vecB.z;
 
                 sp100.x = (spE8[0] * 4.0f) + sp10C.x;
                 sp100.y = (spE8[1] * 4.0f) + sp10C.y;
@@ -556,21 +556,21 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
 
                 reflection[i].mtx.xx = reflection[i].mtx.yy = reflection[i].mtx.zz = reflection[i].mtx.ww = 1.0f;
 
-                reflection[i].mtx.xy = reflection[i].mtx.xz = reflection[i].mtx.wx = reflection[i].mtx.yx =
-                    reflection[i].mtx.yz = reflection[i].mtx.wy = reflection[i].mtx.zx = reflection[i].mtx.zy =
-                        reflection[i].mtx.wz = reflection[i].mtx.wx = reflection[i].mtx.wy = reflection[i].mtx.wz =
+                reflection[i].mtx.yx = reflection[i].mtx.zx = reflection[i].mtx.wx = reflection[i].mtx.xy =
+                    reflection[i].mtx.zy = reflection[i].mtx.wy = reflection[i].mtx.xz = reflection[i].mtx.yz =
+                        reflection[i].mtx.wz = reflection[i].mtx.xw = reflection[i].mtx.yw = reflection[i].mtx.zw =
                             0.0f;
 
                 if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
                                           &sp10C, &sp100, &intersection, 1)) {
                     reflection[i].mtx.xx = intersection.x - sp118.x;
-                    reflection[i].mtx.xy = intersection.y - sp118.y;
-                    reflection[i].mtx.xz = intersection.z - sp118.z;
+                    reflection[i].mtx.yx = intersection.y - sp118.y;
+                    reflection[i].mtx.zx = intersection.z - sp118.z;
                 }
 
-                sp10C.x = (shieldMtx->yx * 100.0f) + vecB.x;
+                sp10C.x = (shieldMtx->xy * 100.0f) + vecB.x;
                 sp10C.y = (shieldMtx->yy * 100.0f) + vecB.y;
-                sp10C.z = (shieldMtx->yz * 100.0f) + vecB.z;
+                sp10C.z = (shieldMtx->zy * 100.0f) + vecB.z;
 
                 sp100.x = (spE8[0] * 4.0f) + sp10C.x;
                 sp100.y = (spE8[1] * 4.0f) + sp10C.y;
@@ -578,9 +578,9 @@ void MirRay_ReflectedBeam(MirRay* this, GlobalContext* globalCtx, MirRayShieldRe
 
                 if (Math3D_LineSegVsPlane(normalVec[0], normalVec[1], normalVec[2], reflection[i].reflectionPoly->dist,
                                           &sp10C, &sp100, &intersection, 1)) {
-                    reflection[i].mtx.yx = intersection.x - sp118.x;
+                    reflection[i].mtx.xy = intersection.x - sp118.x;
                     reflection[i].mtx.yy = intersection.y - sp118.y;
-                    reflection[i].mtx.yz = intersection.z - sp118.z;
+                    reflection[i].mtx.zy = intersection.z - sp118.z;
                 }
             } else {
                 reflection[i].reflectionPoly = NULL;
