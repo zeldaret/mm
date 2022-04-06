@@ -153,7 +153,7 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
                                   &this->actor.world.pos, &sp88)) {
                     Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
                     Matrix_RotateYS(-crace->actor.home.rot.y, MTXMODE_NEW);
-                    Matrix_MultiplyVector3fByState(&sp7C, &sp70);
+                    Matrix_MultVec3f(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
                         crace->unk_170 |= 1;
                     }
@@ -988,7 +988,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         Matrix_Push();
         frames = globalCtx->gameplayFrames;
-        Matrix_MultiplyVector3fByState(&D_80A73B40, &sp84);
+        Matrix_MultVec3f(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
         Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);

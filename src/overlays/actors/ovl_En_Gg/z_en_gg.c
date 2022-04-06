@@ -764,11 +764,11 @@ void EnGg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&D_80B36DF0, &this->unk_320);
+        Matrix_MultVec3f(&D_80B36DF0, &this->unk_320);
         Matrix_Push();
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp30, &this->unk_32C);
-        Matrix_MultiplyVector3fByState(&sp24, &this->unk_338);
+        Matrix_MultVec3f(&sp30, &this->unk_32C);
+        Matrix_MultVec3f(&sp24, &this->unk_338);
         Matrix_Pop();
     }
 }

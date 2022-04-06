@@ -191,7 +191,7 @@ void func_809CE068(BgSpdweb* this) {
 
     for (i = 0; i < this->collider.count; i++) {
         for (j = 0; j < ARRAY_COUNT(sp64); j++) {
-            Matrix_MultiplyVector3fByState(this->collider.elements[i].dim.vtx + j, &sp64[j]);
+            Matrix_MultVec3f(this->collider.elements[i].dim.vtx + j, &sp64[j]);
         }
         Collider_SetTrisVertices(&this->collider, i, &sp64[0], &sp64[1], &sp64[2]);
     }

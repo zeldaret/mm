@@ -173,8 +173,8 @@ void EnSsh_AddBlureVertex(EnSsh* this) {
     p2Base.z *= this->colliderScale;
 
     Matrix_Push();
-    Matrix_MultiplyVector3fByState(&p1Base, &p1);
-    Matrix_MultiplyVector3fByState(&p2Base, &p2);
+    Matrix_MultVec3f(&p1Base, &p1);
+    Matrix_MultVec3f(&p2Base, &p2);
     Matrix_Pop();
     EffectBlure_AddVertex(Effect_GetByIndex(this->blureIdx), &p1, &p2);
 }
@@ -428,7 +428,7 @@ void EnSsh_Sway(EnSsh* this) {
         Matrix_Push();
         Matrix_Translate(this->ceilingPos.x, this->ceilingPos.y, this->ceilingPos.z, MTXMODE_NEW);
         Matrix_RotateYF(this->actor.world.rot.y * (M_PI / 0x8000), MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&swayVecBase, &swayVec);
+        Matrix_MultVec3f(&swayVecBase, &swayVec);
         Matrix_Pop();
 
         this->actor.shape.rot.z = -(swayAngle * 2);
@@ -595,7 +595,7 @@ s32 EnSsh_SetCylinderOC(EnSsh* this, GlobalContext* globalCtx) {
         Matrix_Push();
         Matrix_Translate(colliderPos.x, colliderPos.y, colliderPos.z, MTXMODE_NEW);
         Matrix_RotateYF(BINANG_TO_RAD(this->initialYaw), MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&colliderOffsets[i], &colliderPos);
+        Matrix_MultVec3f(&colliderOffsets[i], &colliderPos);
         Matrix_Pop();
 
         this->collider1[3 + i].dim.pos.x = colliderPos.x;

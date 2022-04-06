@@ -311,16 +311,16 @@ void EnZo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if (D_8099F578[limbIndex] >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->unk_364[D_8099F578[limbIndex]]);
+        Matrix_MultVec3f(&zeroVec, &this->unk_364[D_8099F578[limbIndex]]);
     }
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->leftFootPos);
+        Matrix_MultVec3f(&zeroVec, &this->leftFootPos);
     }
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->rightFootPos);
+        Matrix_MultVec3f(&zeroVec, &this->rightFootPos);
     }
 }
 

@@ -688,7 +688,7 @@ void func_80B047C0(ObjSnowball* this, GlobalContext* globalCtx) {
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_InsertRotation(ptr->unk_1C.x, ptr->unk_1C.y, ptr->unk_1C.z, MTXMODE_NEW);
-                Matrix_MultiplyVector3fByState(&D_80B04FE4, &sp88);
+                Matrix_MultVec3f(&D_80B04FE4, &sp88);
 
                 sp84 = this->unk_20C * 60.0f * 0.9f;
                 if (sp88.y > 0.0f) {

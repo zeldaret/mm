@@ -554,7 +554,7 @@ void func_80BD3AA8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnAh* this = THIS;
 
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&D_80BD3F00, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BD3F00, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 }

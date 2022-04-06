@@ -3057,7 +3057,7 @@ void EnBigslime_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == GEKKO_LIMB_R_ANKLE) {
-        Matrix_MultiplyVector3fByState(&rightFootOffsetRef, &rightFootOffset);
+        Matrix_MultVec3f(&rightFootOffsetRef, &rightFootOffset);
         this->gekkoCollider.dim.pos.y = rightFootOffset.y;
     }
 }

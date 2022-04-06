@@ -240,7 +240,7 @@ s32 EnCne01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     bodyPart = gEnHyBodyParts[limbIndex];
     if (bodyPart >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
     }
 
     if (limbIndex == CNE_LIMB_HEAD) {
@@ -289,7 +289,7 @@ void EnCne01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == CNE_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.actor.focus.pos);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.actor.focus.pos);
     }
 }
 

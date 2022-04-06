@@ -81,7 +81,7 @@ void ObjTokeiStep_SpawnDust(ObjTokeiStep* this, ObjTokeiStepPanel* panel, Global
     dustSpawnOffset.z = -10.0f;
     for (i = 0; i < 7; i++) {
         dustSpawnOffset.x = sDustSpawnXOffsets[i];
-        Matrix_MultiplyVector3fByState(&dustSpawnOffset, &dustSpawnPos);
+        Matrix_MultVec3f(&dustSpawnOffset, &dustSpawnPos);
         dustSpawnPos.x += panel->pos.x;
         dustSpawnPos.y += panel->pos.y;
         dustSpawnPos.z += panel->pos.z;
@@ -104,7 +104,7 @@ void ObjTokeiStep_InitSteps(ObjTokeiStep* this) {
     for (i = 0; i < ARRAY_COUNT(this->panels); i++) {
         panel = &this->panels[i];
         panelOffset.z = i * -20.0f;
-        Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
+        Matrix_MultVec3f(&panelOffset, &panel->pos);
         panel->posChangeY = 0.0f;
         panel->numBounces = 0;
     }
@@ -123,7 +123,7 @@ void ObjTokeiStep_InitStepsOpen(ObjTokeiStep* this) {
         panel = &this->panels[i];
         panelOffset.y = sPanelXOffsets[i];
         panelOffset.z = i * -20.0f;
-        Matrix_MultiplyVector3fByState(&panelOffset, &panel->pos);
+        Matrix_MultVec3f(&panelOffset, &panel->pos);
     }
 }
 

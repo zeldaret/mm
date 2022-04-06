@@ -643,7 +643,7 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                 Matrix_GetStateTranslationAndScaledX(1000.0f, &this->bodyPartsPos[0]);
             } else if (sLimbIndexToBodyPartsIndex[limbIndex] == 3) {
                 Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->bodyPartsPos[3]);
-                Matrix_MultiplyVector3fByState(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
+                Matrix_MultVec3f(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
             } else {
                 Matrix_GetStateTranslation(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
             }

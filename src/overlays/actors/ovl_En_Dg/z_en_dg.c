@@ -1178,9 +1178,9 @@ void EnDg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (limbIndex == DOG_LIMB_HEAD) {
         if (this->actionFunc == func_8098BBEC) {
             sp20.x = 5000.0f;
-            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
         } else if (this->actionFunc != func_8098BC54) {
-            Matrix_MultiplyVector3fByState(&sp20, &this->actor.focus.pos);
+            Matrix_MultVec3f(&sp20, &this->actor.focus.pos);
         }
     }
 }

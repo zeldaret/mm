@@ -225,15 +225,15 @@ void FireArrow_SetQuadVerticies(ArrowFire* this) {
     Vec3f sp2C;
     Vec3f sp20;
 
-    Matrix_MultiplyVector3fByState(&D_80922284, &sp44);
-    Matrix_MultiplyVector3fByState(&D_80922290, &sp38);
-    Matrix_MultiplyVector3fByState(&D_8092229C, &sp2C);
-    Matrix_MultiplyVector3fByState(&D_809222A8, &sp20);
+    Matrix_MultVec3f(&D_80922284, &sp44);
+    Matrix_MultVec3f(&D_80922290, &sp38);
+    Matrix_MultVec3f(&D_8092229C, &sp2C);
+    Matrix_MultVec3f(&D_809222A8, &sp20);
     Collider_SetQuadVertices(&this->collider1, &sp44, &sp38, &sp2C, &sp20);
-    Matrix_MultiplyVector3fByState(&D_809222B4, &sp44);
-    Matrix_MultiplyVector3fByState(&D_809222C0, &sp38);
-    Matrix_MultiplyVector3fByState(&D_809222CC, &sp2C);
-    Matrix_MultiplyVector3fByState(&D_809222D8, &sp20);
+    Matrix_MultVec3f(&D_809222B4, &sp44);
+    Matrix_MultVec3f(&D_809222C0, &sp38);
+    Matrix_MultVec3f(&D_809222CC, &sp2C);
+    Matrix_MultVec3f(&D_809222D8, &sp20);
     Collider_SetQuadVertices(&this->collider2, &sp44, &sp38, &sp2C, &sp20);
 }
 

@@ -693,7 +693,7 @@ void func_80BBC500(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     static Vec3f D_80BBC750 = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_80BBC750, &thisx->focus.pos);
+        Matrix_MultVec3f(&D_80BBC750, &thisx->focus.pos);
     }
 }
 

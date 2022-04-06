@@ -886,7 +886,7 @@ void EnHintSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
                 Matrix_GetStateTranslation(&this->limbPos[this->limbCount]);
                 this->limbCount++;
             } else if ((limbIndex == 11) && !(this->unk_3E8 & 2)) {
-                Matrix_MultiplyVector3fByState(&D_80C21E70, &this->limbPos[this->limbCount]);
+                Matrix_MultVec3f(&D_80C21E70, &this->limbPos[this->limbCount]);
                 this->limbCount++;
             }
         }

@@ -462,7 +462,7 @@ void EnSyatekiWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     Collider_UpdateSpheres(limbIndex, &this->unk_34C);
     if (limbIndex == OBJECT_WF_2_LIMB_06) {
-        Matrix_MultiplyVector3fByState(&D_80A20FD0, &sp18);
+        Matrix_MultVec3f(&D_80A20FD0, &sp18);
         this->unk_300.dim.pos.x = sp18.x;
         this->unk_300.dim.pos.y = sp18.y;
         this->unk_300.dim.pos.z = sp18.z;

@@ -665,7 +665,7 @@ void func_80B68310(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     if (limbIndex == 15) {
         s32 pad;
 
-        Matrix_MultiplyVector3fByState(&D_80B6D200, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B6D200, &this->actor.focus.pos);
 
         if (!ENSTH_GET_100(&this->actor)) {
             OPEN_DISPS(globalCtx->state.gfxCtx);

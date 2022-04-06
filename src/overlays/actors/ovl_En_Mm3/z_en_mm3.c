@@ -551,7 +551,7 @@ void EnMm3_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnMm3* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80A704F0, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80A704F0, &this->actor.focus.pos);
     }
 }
 

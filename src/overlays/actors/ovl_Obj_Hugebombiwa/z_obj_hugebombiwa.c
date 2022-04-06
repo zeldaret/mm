@@ -455,7 +455,7 @@ void func_80A54E10(ObjHugebombiwa* this) {
         sp84.y = (i + 1) * 10.0f;
         sp84.z = fabsf(Math_CosS(phi_s2)) * temp_f20_2;
 
-        Matrix_MultiplyVector3fByState(&sp84, &ptr->unk_0C);
+        Matrix_MultVec3f(&sp84, &ptr->unk_0C);
 
         ptr->unk_0C.x += this->actor.world.pos.x;
         ptr->unk_0C.y += this->actor.world.pos.y;
@@ -549,7 +549,7 @@ void func_80A55310(ObjHugebombiwa* this) {
         sp84.x = Math_SinS(phi_s2) * temp_f20_2;
         sp84.y = (i + 1) * 14.0f;
         sp84.z = fabsf(Math_CosS(phi_s2)) * temp_f20_2;
-        Matrix_MultiplyVector3fByState(&sp84, &ptr->unk_0C);
+        Matrix_MultVec3f(&sp84, &ptr->unk_0C);
 
         ptr->unk_0C.x += this->actor.world.pos.x;
         ptr->unk_0C.y += this->actor.world.pos.y;

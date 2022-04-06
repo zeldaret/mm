@@ -572,7 +572,7 @@ void EnFishing_SpawnRainDrop(FishingEffect* effect, Vec3f* pos, Vec3f* rot) {
             effect->unk_3C = rot->z;
             Matrix_RotateYF(rot->y, MTXMODE_NEW);
             Matrix_RotateXFApply(rot->x);
-            Matrix_MultiplyVector3fByState(&velSrc, &effect->vel);
+            Matrix_MultVec3f(&velSrc, &effect->vel);
             break;
         }
 
@@ -1496,7 +1496,7 @@ void EnFishing_UpdateLine(GlobalContext* globalCtx, Vec3f* basePos, Vec3f* pos, 
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
         Matrix_RotateXFApply(rx);
-        Matrix_MultiplyVector3fByState(&posSrc, &posStep);
+        Matrix_MultVec3f(&posSrc, &posStep);
 
         (pos + i)->x = (pos + i - 1)->x + posStep.x;
         (pos + i)->y = (pos + i - 1)->y + posStep.y;
@@ -1529,7 +1529,7 @@ void EnFishing_UpdateLinePos(Vec3f* pos) {
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
         Matrix_RotateXFApply(rx);
-        Matrix_MultiplyVector3fByState(&posSrc, &posStep);
+        Matrix_MultVec3f(&posSrc, &posStep);
 
         (pos + i)->x = (pos + i + 1)->x + posStep.x;
         (pos + i)->y = (pos + i + 1)->y + posStep.y;
@@ -1571,7 +1571,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
 
     Matrix_RotateYF(ry, MTXMODE_NEW);
     Matrix_RotateXFApply(rx);
-    Matrix_MultiplyVector3fByState(&posSrc, &posStep);
+    Matrix_MultVec3f(&posSrc, &posStep);
 
     refPos->x = pos->x + posStep.x;
     refPos->y = pos->y + posStep.y;
@@ -1607,7 +1607,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
             FishingEffect* effect = globalCtx->specialEffects;
             MtxF mf;
 
-            Matrix_MultiplyVector3fByState(&sZeroVec, &effect->pos);
+            Matrix_MultVec3f(&sZeroVec, &effect->pos);
             Matrix_Get(&mf);
             func_8018219C(&mf, &sEffOwnerHatRot, 0);
 
@@ -1669,7 +1669,7 @@ void EnFishing_UpdateSinkingLure(GlobalContext* globalCtx) {
         sp94.x = 5.0f;
         sp94.y = 0.0f;
         sp94.z = 3.0f;
-        Matrix_MultiplyVector3fByState(&sp94, &sp88);
+        Matrix_MultVec3f(&sp94, &sp88);
     }
 
     for (i = 1; i < SINKING_LURE_SEG_COUNT; i++) {
@@ -1692,7 +1692,7 @@ void EnFishing_UpdateSinkingLure(GlobalContext* globalCtx) {
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
         Matrix_RotateXFApply(rx);
-        Matrix_MultiplyVector3fByState(&posSrc, &posStep);
+        Matrix_MultVec3f(&posSrc, &posStep);
 
         (pos + i)->x = (pos + i - 1)->x + posStep.x;
         (pos + i)->y = (pos + i - 1)->y + posStep.y;
@@ -1782,7 +1782,7 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
             posSrc.x = 2.0f;
             posSrc.y = 0.0f;
             posSrc.z = 0.0f;
-            Matrix_MultiplyVector3fByState(&posSrc, &posStep);
+            Matrix_MultVec3f(&posSrc, &posStep);
             sLurePos.x += posStep.x;
             sLurePos.z += posStep.z;
         }
@@ -1814,16 +1814,16 @@ void EnFishing_DrawLureAndLine(GlobalContext* globalCtx, Vec3f* linePos, Vec3f* 
         posSrc.x = -850.0f;
         posSrc.y = 0.0f;
         posSrc.z = 0.0f;
-        Matrix_MultiplyVector3fByState(&posSrc, &D_80917218);
+        Matrix_MultVec3f(&posSrc, &D_80917218);
 
         posSrc.x = 500.0f;
         posSrc.z = -300.0f;
-        Matrix_MultiplyVector3fByState(&posSrc, &hookPos[0]);
+        Matrix_MultVec3f(&posSrc, &hookPos[0]);
         EnFishing_DrawLureHook(globalCtx, &hookPos[0], &sLureHookRefPos[0], 0);
 
         posSrc.x = 2100.0f;
         posSrc.z = -50.0f;
-        Matrix_MultiplyVector3fByState(&posSrc, &hookPos[1]);
+        Matrix_MultVec3f(&posSrc, &hookPos[1]);
         EnFishing_DrawLureHook(globalCtx, &hookPos[1], &sLureHookRefPos[1], 1);
     }
 
@@ -2050,7 +2050,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
         Matrix_Translate(0.0f, 0.0f, 500.0f, MTXMODE_APPLY);
 
         if (i == 21) {
-            Matrix_MultiplyVector3fByState(&sRodTipOffset, &sRodTipPos);
+            Matrix_MultVec3f(&sRodTipOffset, &sRodTipPos);
         }
     }
 
@@ -2179,7 +2179,7 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
                     sp90.x = 0.0f;
                     sp90.y = 0.0f;
                     sp90.z = 25.0f;
-                    Matrix_MultiplyVector3fByState(&sp90, &D_80917238);
+                    Matrix_MultVec3f(&sp90, &D_80917238);
                     D_80917238.y = 15.0f;
                     D_80917248.x = D_80917248.z = 0.0f;
                     D_80917248.y = -1.0f;
@@ -2476,12 +2476,12 @@ void EnFishing_UpdateLure(EnFishing* this, GlobalContext* globalCtx) {
             if (D_80917206 == 2) {
                 s8 requiredScopeTemp;
 
-                Matrix_MultiplyVector3fByState(&sp90, &sp64);
+                Matrix_MultVec3f(&sp90, &sp64);
                 D_80917278.x = sp64.x;
                 D_80917278.z = sp64.z;
                 phi_f0 = 10.0f;
             } else {
-                Matrix_MultiplyVector3fByState(&sp90, &D_80917278);
+                Matrix_MultVec3f(&sp90, &D_80917278);
                 phi_f0 = 0.0f;
             }
 
@@ -2722,7 +2722,7 @@ void func_809038A4(EnFishing* this, Input* input) {
 
     if ((D_8090CD14 == 3) && (this->unk_19A == 0) && (D_8090CD0C == 0)) {
         Matrix_RotateYF((-this->actor.shape.rot.y / 32768.0f) * M_PI, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp34, &sp28);
+        Matrix_MultVec3f(&sp34, &sp28);
 
         if ((sp28.z > 0.0f) || (this->unk_1A4 < 40.0f)) {
             if ((this->unk_150 == 7) && (sp24 < SQ(200.0f))) {
@@ -3247,7 +3247,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
             sp10C.y = 0.0f;
             sp10C.z = 0.0f;
             Matrix_RotateYF(sLureRot.y, MTXMODE_NEW);
-            Matrix_MultiplyVector3fByState(&sp10C, &sp100);
+            Matrix_MultVec3f(&sp10C, &sp100);
 
             this->unk_1AC.x = sLurePos.x + sp100.x;
             this->unk_1AC.z = sLurePos.z + sp100.z;
@@ -3379,7 +3379,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
             sp10C.z = 30.0f;
 
             Matrix_RotateYF(sLureRot.y, MTXMODE_NEW);
-            Matrix_MultiplyVector3fByState(&sp10C, &sp100);
+            Matrix_MultVec3f(&sp10C, &sp100);
 
             this->unk_1AC.x = sLurePos.x + sp100.x;
             this->unk_1AC.z = sLurePos.z + sp100.z;
@@ -3610,7 +3610,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                             Matrix_RotateYF(randPlusMinusPoint5Scaled(2.3561945f) +
                                                          (((this->actor.yawTowardsPlayer + 0x8000) / 32768.0f) * M_PI),
                                                      MTXMODE_NEW);
-                            Matrix_MultiplyVector3fByState(&sp10C, &sp100);
+                            Matrix_MultVec3f(&sp10C, &sp100);
 
                             this->unk_1AC.x = this->actor.world.pos.x + sp100.x;
                             this->unk_1AC.z = this->actor.world.pos.z + sp100.z;
@@ -3813,7 +3813,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                 sp10C.z = 50.0f;
             }
             Matrix_RotateYF((player->actor.shape.rot.y / 32768.0f) * M_PI, MTXMODE_NEW);
-            Matrix_MultiplyVector3fByState(&sp10C, &sCameraEye);
+            Matrix_MultVec3f(&sp10C, &sCameraEye);
 
             sCameraEye.x += player->actor.world.pos.x;
             sCameraEye.y += player->actor.world.pos.y;
@@ -3855,7 +3855,7 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
             sp10C.x = 4.0f;
             sp10C.y = -10.0f;
             sp10C.z = 5.0f;
-            Matrix_MultiplyVector3fByState(&sp10C, &sp100);
+            Matrix_MultVec3f(&sp10C, &sp100);
             Math_ApproachF(&this->actor.world.pos.x, player->bodyPartsPos[15].x + sp100.x, 1.0f, 6.0f);
             Math_ApproachF(&this->actor.world.pos.y, player->bodyPartsPos[15].y + sp100.y, 1.0f, 6.0f);
             Math_ApproachF(&this->actor.world.pos.z, player->bodyPartsPos[15].z + sp100.z, 1.0f, 6.0f);
@@ -4199,7 +4199,7 @@ void EnFishing_FishPostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     EnFishing* this = THIS;
 
     if (limbIndex == 13) {
-        Matrix_MultiplyVector3fByState(&sFishMouthOffset, &this->fishMouthPos);
+        Matrix_MultVec3f(&sFishMouthOffset, &this->fishMouthPos);
     }
 }
 
@@ -4223,7 +4223,7 @@ void EnFishing_LoachPostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     EnFishing* this = THIS;
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&sLoachMouthOffset, &this->fishMouthPos);
+        Matrix_MultVec3f(&sLoachMouthOffset, &this->fishMouthPos);
     }
 }
 
@@ -5194,7 +5194,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             sp114.x = 0.0f;
             sp114.y = 0.0f;
             sp114.z = 100.0f;
-            Matrix_MultiplyVector3fByState(&sp114, &spFC);
+            Matrix_MultVec3f(&sp114, &spFC);
 
             if (D_8090CD14 == 1) {
                 camAtFraction = 0.2f;
@@ -5214,7 +5214,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             }
             sp114.z = -80.0f;
 
-            Matrix_MultiplyVector3fByState(&sp114, &sp108);
+            Matrix_MultVec3f(&sp114, &sp108);
             sp108.x += player->actor.world.pos.x;
             sp108.y += player->actor.world.pos.y;
             sp108.z += player->actor.world.pos.z;
@@ -5270,7 +5270,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
             sp114.x = 0.0f;
             sp114.y = 0.0f;
             sp114.z = 100.0f;
-            Matrix_MultiplyVector3fByState(&sp114, &spFC);
+            Matrix_MultVec3f(&sp114, &spFC);
 
             Math_ApproachF(&sCameraEye.x, sp108.x, 0.3f, fabsf(spFC.x) * D_80911F4C);
             Math_ApproachF(&sCameraEye.y, sp108.y, 0.3f, 20.0f * D_80911F4C);
@@ -5378,7 +5378,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                 sp114.y -= 20.0f;
             }
 
-            Matrix_MultiplyVector3fByState(&sp114, &sp108);
+            Matrix_MultVec3f(&sp114, &sp108);
 
             sSinkingLureBasePos.x = player->actor.world.pos.x + sp108.x;
             sSinkingLureBasePos.y = player->actor.world.pos.y + sp108.y;
@@ -5396,7 +5396,7 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
                 sp114.z = -35.0f;
             }
 
-            Matrix_MultiplyVector3fByState(&sp114, &sCameraEye);
+            Matrix_MultVec3f(&sp114, &sCameraEye);
             sCameraEye.x += player->actor.world.pos.x;
             sCameraEye.y += player->actor.world.pos.y;
             sCameraEye.z += player->actor.world.pos.z;
@@ -5600,7 +5600,7 @@ void EnFishing_OwnerPostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
     if (limbIndex == 8) { // Head
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_MultiplyVector3fByState(&sZeroVec, &sOwnerHeadPos);
+        Matrix_MultVec3f(&sZeroVec, &sOwnerHeadPos);
 
         if (D_8090CD08 == 1) {
             gSPDisplayList(POLY_OPA_DISP++, gFishingOwnerHatDL);

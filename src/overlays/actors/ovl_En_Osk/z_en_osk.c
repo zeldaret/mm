@@ -505,7 +505,7 @@ void func_80BF6C54(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnOsk* this = THIS;
 
     if (limbIndex == 1) {
-        Matrix_MultiplyVector3fByState(&D_80BF7024, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BF7024, &this->actor.focus.pos);
     }
 }
 

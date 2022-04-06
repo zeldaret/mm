@@ -911,7 +911,7 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
             Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[temp_s3 + 1]);
 
             for (i = temp_s3 + 2; i < ARRAY_COUNT(this->limbPos); i++, vec++, vec2++) {
-                Matrix_MultiplyVector3fByState(vec2, vec);
+                Matrix_MultVec3f(vec2, vec);
             }
         }
     }

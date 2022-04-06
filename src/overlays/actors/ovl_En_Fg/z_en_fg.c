@@ -386,7 +386,7 @@ void EnFg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&vec1, &this->actor.focus.pos);
+        Matrix_MultVec3f(&vec1, &this->actor.focus.pos);
     }
 }
 

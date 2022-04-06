@@ -285,7 +285,7 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        Matrix_MultiplyVector3fByState(&sp50, &sp44);
+        Matrix_MultVec3f(&sp50, &sp44);
         Matrix_Get(&sp5C);
         func_8018219C(&sp5C, &sp3C, 0);
         Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);
@@ -361,7 +361,7 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     Vec3s sp3C;
 
     if (limbIndex == 2) {
-        Matrix_MultiplyVector3fByState(&sp50, &sp44);
+        Matrix_MultVec3f(&sp50, &sp44);
         Matrix_Get(&sp5C);
         func_8018219C(&sp5C, &sp3C, 0);
         Matrix_Translate(sp44.x, sp44.y, sp44.z, MTXMODE_NEW);

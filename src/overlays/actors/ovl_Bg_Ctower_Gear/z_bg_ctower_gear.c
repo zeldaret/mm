@@ -82,7 +82,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                 splashOffset.x = sExitSplashOffsets[i].x - (Rand_ZeroOne() * 30.0f);
                 splashOffset.y = sExitSplashOffsets[i].y;
                 splashOffset.z = sExitSplashOffsets[i].z;
-                Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                Matrix_MultVec3f(&splashOffset, &splashSpawnPos);
                 splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                 splashSpawnPos.y += this->dyna.actor.world.pos.y;
                 splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);
@@ -100,7 +100,7 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
                     splashOffset.x = sEnterSplashOffsets[i].x + (Rand_ZeroOne() * 10.0f);
                     splashOffset.y = sEnterSplashOffsets[i].y;
                     splashOffset.z = sEnterSplashOffsets[i].z;
-                    Matrix_MultiplyVector3fByState(&splashOffset, &splashSpawnPos);
+                    Matrix_MultVec3f(&splashOffset, &splashSpawnPos);
                     splashSpawnPos.x += this->dyna.actor.world.pos.x + ((Rand_ZeroOne() * 20.0f) - 10.0f);
                     splashSpawnPos.y += this->dyna.actor.world.pos.y;
                     splashSpawnPos.z += this->dyna.actor.world.pos.z + ((Rand_ZeroOne() * 20.0f) - 10.0f);

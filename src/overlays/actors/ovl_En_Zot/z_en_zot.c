@@ -1380,7 +1380,7 @@ void EnZot_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnZot* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80B99934, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B99934, &this->actor.focus.pos);
     }
 }
 

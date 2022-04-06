@@ -594,7 +594,7 @@ void func_80A2ABD0(BgDblueMovebg* this, GlobalContext* globalCtx) {
             Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
             Matrix_RotateXS(this->dyna.actor.shape.rot.x + (j * 0x2000), MTXMODE_APPLY);
             Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-            Matrix_MultiplyVector3fByState(&D_80A2B988, &spAC);
+            Matrix_MultVec3f(&D_80A2B988, &spAC);
             Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spAC);
             Math_Vec3f_Copy(&this->unk_238[i][j], &spAC);
             temp_f20 = spAC.y - this->unk_2F8[i]->world.pos.y;

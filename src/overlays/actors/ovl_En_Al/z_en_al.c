@@ -852,7 +852,7 @@ void EnAl_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
             break;
 
         case 16:
-            Matrix_MultiplyVector3fByState(&D_80BE0070, &this->actor.focus.pos);
+            Matrix_MultVec3f(&D_80BE0070, &this->actor.focus.pos);
             Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
             break;
     }

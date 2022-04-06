@@ -839,7 +839,7 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     out.x = 0.0f;
     out.y = 200.0f;
     out.z = 700.0f;
-    Matrix_MultiplyVector3fByState(&out, &this->unk_268);
+    Matrix_MultVec3f(&out, &this->unk_268);
 
     this->unk_276 = 0x800;
     this->unk_242 = 0;
@@ -1492,7 +1492,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                     this->unk_568 += this->unk_56C;
                     Matrix_RotateYF(this->unk_568, MTXMODE_NEW);
-                    Matrix_MultiplyVector3fByState(&sp90, &this->csCamTargetEye);
+                    Matrix_MultVec3f(&sp90, &this->csCamTargetEye);
 
                     this->csCamTargetEye.x += this->actor.world.pos.x;
                     this->csCamTargetEye.y += this->waterHeight;
@@ -2236,12 +2236,12 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     Player* player = GET_PLAYER(globalCtx);
 
     if (limbIndex == GYORG_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_809E9148, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_809E9148, &this->actor.focus.pos);
     }
 
     sphereElementIndex = sGyorgSphElementIndices[limbIndex];
     if (sphereElementIndex >= 0) {
-        Matrix_MultiplyVector3fByState(&D_809E9154[sphereElementIndex], &spherePos);
+        Matrix_MultVec3f(&D_809E9154[sphereElementIndex], &spherePos);
 
         if (sphereElementIndex < 2) {
             if ((this->actionFunc == Boss03_Stunned) && (this->waterHeight < player->actor.world.pos.y)) {
@@ -2258,7 +2258,7 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         MtxF mf;
 
         D_809E91B4.x = this->unk_2C4 + 300.0f;
-        Matrix_MultiplyVector3fByState(&D_809E91B4, &this->insideJawPos);
+        Matrix_MultVec3f(&D_809E91B4, &this->insideJawPos);
         Matrix_Get(&mf);
         func_8018219C(&mf, &this->unk_2A2, 0);
     }
@@ -2350,7 +2350,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
-                    Matrix_MultiplyVector3fByState(&sp94, &velocity);
+                    Matrix_MultVec3f(&sp94, &velocity);
                     Boss03_SpawnEffectSplash(globalCtx, &eff->pos, &velocity);
                 }
             }

@@ -939,7 +939,7 @@ s32 func_80AF31D0(GlobalContext* globalCtx, SkeletonInfo* skeletonInfo, s32 limb
     Vec3f sp18;
 
     if ((*dList != NULL) && (Rand_ZeroOne() < 0.03f)) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp18);
+        Matrix_MultVec3f(&gZeroVec3f, &sp18);
         func_80AF0C30(this->unk_15C, &sp18, 0);
     }
     return true;

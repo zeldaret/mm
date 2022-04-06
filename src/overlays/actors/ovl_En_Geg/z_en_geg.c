@@ -915,7 +915,7 @@ s32 func_80BB3728(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
+    Matrix_MultVec3f(&sp70, &sp7C);
     Matrix_Get(&sp28);
     func_8018219C(&sp28, &sp68, 0);
     *arg2 = sp7C;
@@ -967,11 +967,11 @@ void EnGeg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         sp2C.y += 2.0f * Rand_Centered();
         sp2C.z += Rand_Centered();
 
-        Matrix_MultiplyVector3fByState(&D_80BB407C, &this->unk_4B4);
+        Matrix_MultVec3f(&D_80BB407C, &this->unk_4B4);
         Matrix_Push();
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp38, &this->unk_4C0[0]);
-        Matrix_MultiplyVector3fByState(&sp2C, &this->unk_4C0[1]);
+        Matrix_MultVec3f(&sp38, &this->unk_4C0[0]);
+        Matrix_MultVec3f(&sp2C, &this->unk_4C0[1]);
         Matrix_Pop();
     }
 }

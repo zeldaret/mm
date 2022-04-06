@@ -4364,7 +4364,7 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_Pop();
     }
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_80B4EE24, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B4EE24, &this->actor.focus.pos);
     }
 }
 
@@ -4508,7 +4508,7 @@ void func_80B4E2AC(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         gSPDisplayList(POLY_OPA_DISP++, object_ma1_DL_0003B0);
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 14) {
-        Matrix_MultiplyVector3fByState(&D_80B4EE30, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B4EE30, &this->actor.focus.pos);
     }
 }
 

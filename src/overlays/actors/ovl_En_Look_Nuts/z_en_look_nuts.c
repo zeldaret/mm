@@ -335,7 +335,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             effectVelOffset.z = 20.0f;
-            Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
+            Matrix_MultVec3f(&effectVelOffset, &effectVel);
             Matrix_Pop();
             if (!this->isPlayerDetected) {
                 s16 drawFlag = 1;

@@ -253,7 +253,7 @@ BgIkanaRotaryroomStruct4* func_80B80778(BgIkanaRotaryroom* this, GlobalContext* 
             if ((ptr->unk_01 == 0) &&
                 (Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                                        this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot),
-                 Matrix_MultiplyVector3fByState(&ptr->unk_04, &sp68),
+                 Matrix_MultVec3f(&ptr->unk_04, &sp68),
                  (Math3D_Vec3fDistSq(&arg2->world.pos, &sp68) < SQ(250.0f)))) {
                 sp58 = ptr;
                 break;
@@ -673,7 +673,7 @@ void func_80B81570(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         sp64.y = D_80B821C4[i].y;
         sp64.z = D_80B821C4[i].z;
 
-        Matrix_MultiplyVector3fByState(&sp64, &sp70);
+        Matrix_MultVec3f(&sp64, &sp70);
 
         sp70.x += this->dyna.actor.world.pos.x;
         sp70.y += this->dyna.actor.world.pos.y;

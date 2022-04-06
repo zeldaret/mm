@@ -609,7 +609,7 @@ void EnRacedog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Vec3f sp1C = { 0.0f, 20.0f, 0.0f };
 
     if (limbIndex == DOG_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sp1C, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp1C, &this->actor.focus.pos);
     }
 
     if (limbIndex == DOG_LIMB_TAIL) {

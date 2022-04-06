@@ -1121,11 +1121,11 @@ void EnKgy_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnKgy* this = THIS;
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_80B432D8, &this->unk_2A8);
+        Matrix_MultVec3f(&D_80B432D8, &this->unk_2A8);
     }
 
     if (limbIndex == 16) {
-        Matrix_MultiplyVector3fByState(&D_80B432E4, &this->unk_2C0);
+        Matrix_MultVec3f(&D_80B432E4, &this->unk_2C0);
     }
 }
 

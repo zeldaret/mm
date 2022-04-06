@@ -1705,7 +1705,7 @@ void EnOssan_PartTimeWorker_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sPartTimeWorkerFocusOffset, &this->actor.focus.pos);
     }
 }
 

@@ -1078,7 +1078,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
                 this->unk_22C[end] = this->unk_22C[end - 1];
             }
 
-            Matrix_MultiplyVector3fByState(&D_80B1DAFC, this->unk_22C);
+            Matrix_MultVec3f(&D_80B1DAFC, this->unk_22C);
         }
 
         if (this->unk_190 > 0) {

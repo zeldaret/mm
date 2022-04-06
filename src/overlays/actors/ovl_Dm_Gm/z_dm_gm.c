@@ -294,7 +294,7 @@ void DmGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == OBJECT_AN1_LIMB_09) {
-        Matrix_MultiplyVector3fByState(&D_80C2522C, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80C2522C, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 }

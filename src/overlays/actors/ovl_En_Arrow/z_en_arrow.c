@@ -579,15 +579,15 @@ void func_8088B88C(GlobalContext* globalCtx, EnArrow* this, EnArrowUnkStruct* ar
     Vec3f sp34;
     s32 sp30;
 
-    Matrix_MultiplyVector3fByState(&arg2->unk_48, &this->unk_234);
+    Matrix_MultVec3f(&arg2->unk_48, &this->unk_234);
     if (func_8088ACE0 == this->actionFunc) {
         if (this->unk_244 == 0) {
             sp4C = arg2->unk_00;
         } else {
             sp4C = arg2->unk_18[globalCtx->gameplayFrames % 2];
         }
-        Matrix_MultiplyVector3fByState(&sp4C[0], &sp40);
-        Matrix_MultiplyVector3fByState(&sp4C[1], &sp34);
+        Matrix_MultVec3f(&sp4C[0], &sp40);
+        Matrix_MultVec3f(&sp4C[1], &sp34);
         if (this->actor.params < ENARROW_8) {
             sp30 = this->actor.params < ENARROW_6;
             if (this->unk_264 == 0) {

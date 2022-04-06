@@ -1052,7 +1052,7 @@ void EnMa4_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3f sp28 = { 800.0f, 0.0f, 0.0f };
 
     if (limbIndex == MA1_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sp28, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp28, &this->actor.focus.pos);
     } else if (limbIndex == MA1_LIMB_HAND_LEFT) {
         if (this->hasBow == true) {
             OPEN_DISPS(globalCtx->state.gfxCtx);

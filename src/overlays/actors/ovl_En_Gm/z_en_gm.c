@@ -1679,7 +1679,7 @@ void EnGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     s32 pad2;
 
     if ((ActorCutscene_GetCurrentIndex() == -1) && (limbIndex == 16)) {
-        Matrix_MultiplyVector3fByState(&D_80951E24, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80951E24, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
 
@@ -1692,7 +1692,7 @@ void EnGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp30);
+        Matrix_MultVec3f(&gZeroVec3f, &sp30);
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
     }
 }

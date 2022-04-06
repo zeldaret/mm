@@ -403,7 +403,7 @@ s32 func_80B50ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
+    Matrix_MultVec3f(&sp70, &sp7C);
     Matrix_Get(&sp28);
     func_8018219C(&sp28, &sp68, 0);
 
@@ -1146,15 +1146,15 @@ void EnGk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         this->actor.focus.pos.y = this->actor.world.pos.y + phi_f0;
         this->actor.focus.pos.z = this->actor.world.pos.z;
 
-        Matrix_MultiplyVector3fByState(&sp58, &this->actor.focus.pos);
-        Matrix_MultiplyVector3fByState(&sp34, &this->unk_2E8);
-        Matrix_MultiplyVector3fByState(&sp28, &this->unk_2F4);
+        Matrix_MultVec3f(&sp58, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp34, &this->unk_2E8);
+        Matrix_MultVec3f(&sp28, &this->unk_2F4);
 
         Matrix_Push();
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sp4C, &this->unk_30C);
-        Matrix_MultiplyVector3fByState(&sp40, &this->unk_300);
+        Matrix_MultVec3f(&sp4C, &this->unk_30C);
+        Matrix_MultVec3f(&sp40, &this->unk_300);
 
         Matrix_Pop();
     }

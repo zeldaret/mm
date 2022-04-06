@@ -210,7 +210,7 @@ void func_80A1B9CC(ObjFlowerpot* this, GlobalContext* globalCtx) {
 void func_80A1BA04(ObjFlowerpot* this, Vec3f* arg1) {
     Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                           &this->actor.shape.rot);
-    Matrix_MultiplyVector3fByState(&D_80A1D408, arg1);
+    Matrix_MultVec3f(&D_80A1D408, arg1);
 }
 
 void func_80A1BA44(ObjFlowerpot* this, GlobalContext* globalCtx) {

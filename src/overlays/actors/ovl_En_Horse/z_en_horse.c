@@ -4720,7 +4720,7 @@ s32 func_80888D18(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* p
     EnHorse* this = THIS;
 
     if (limbIndex == 3) {
-        Matrix_MultiplyVector3fByState(&sp1C, &this->riderPos);
+        Matrix_MultVec3f(&sp1C, &this->riderPos);
     }
     return false;
 }

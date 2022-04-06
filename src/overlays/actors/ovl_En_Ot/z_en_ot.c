@@ -465,13 +465,13 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
         sp38.x = 1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
-        Matrix_MultiplyVector3fByState(&sp38, &sp44);
+        Matrix_MultVec3f(&sp38, &sp44);
         Math_Vec3f_Sum(&this->unk_74C, &sp44, &sp44);
         func_80B5DF58(this->unk_3A4, 1, &sp44, &this->actor.shape.rot, 10);
         sp38.x = -1.0f;
         sp38.y = 8.1f;
         sp38.z = 0.0f;
-        Matrix_MultiplyVector3fByState(&sp38, &sp44);
+        Matrix_MultVec3f(&sp38, &sp44);
         Math_Vec3f_Sum(&this->unk_74C, &sp44, &sp44);
         func_80B5DF58(this->unk_3A4, 2, &sp44, &this->actor.shape.rot, 10);
     }
@@ -1068,7 +1068,7 @@ void EnOt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
         gSPDisplayList(&gfx[0], object_ot_DL_0004A0);
         POLY_OPA_DISP = &gfx[1];
-        Matrix_MultiplyVector3fByState(&D_80B5E410, &this->unk_74C);
+        Matrix_MultVec3f(&D_80B5E410, &this->unk_74C);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 1) {
@@ -1124,7 +1124,7 @@ void func_80B5E078(GlobalContext* globalCtx, EnOtUnkStruct* arg1, s32 arg2) {
             sp54.y = arg1->unk_34;
             sp54.z = 0.0f;
             Matrix_RotateYS(temp, MTXMODE_NEW);
-            Matrix_MultiplyVector3fByState(&sp54, &arg1->unk_0C);
+            Matrix_MultVec3f(&sp54, &arg1->unk_0C);
             Math_Vec3f_Sum(&arg1->unk_0C, &arg1->unk_50, &arg1->unk_0C);
             arg1->unk_4C--;
         }

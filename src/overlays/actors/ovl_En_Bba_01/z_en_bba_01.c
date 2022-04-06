@@ -250,7 +250,7 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     bodyPart = gEnHyBodyParts[limbIndex];
     if (bodyPart >= 0) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
     }
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
@@ -298,7 +298,7 @@ void EnBba01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
-        Matrix_MultiplyVector3fByState(&zeroVec, &this->enHy.actor.focus.pos);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.actor.focus.pos);
     }
 }
 

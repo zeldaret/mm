@@ -143,7 +143,7 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_MultiplyVector3fByState(&D_80939018, &spAC);
+    Matrix_MultVec3f(&D_80939018, &spAC);
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spA0);
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 

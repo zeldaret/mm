@@ -901,7 +901,7 @@ s32 DmChar00_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     if (limbIndex == 6) {
         sp28 = ((Math_SinS(this->unk_262 * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * 124.99999f);
-        Matrix_MultiplyVector3fByState(&D_80AA7808, &sp1C);
+        Matrix_MultVec3f(&D_80AA7808, &sp1C);
         Matrix_Translate(sp1C.x, sp1C.y, sp1C.z, MTXMODE_NEW);
         Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
     }

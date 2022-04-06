@@ -943,7 +943,7 @@ void EnIg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp2C;
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&D_80BF3528, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BF3528, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
 
         gSPDisplayList((*gfx)++, object_dai_DL_008710);
@@ -956,7 +956,7 @@ void EnIg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if (limbIndex == 9) {
         gSPDisplayList((*gfx)++, object_dai_DL_008B00);
-        Matrix_MultiplyVector3fByState(&D_80BF351C, &sp2C);
+        Matrix_MultVec3f(&D_80BF351C, &sp2C);
         Math_Vec3f_ToVec3s(&this->collider2.dim.worldSphere.center, &sp2C);
     }
 

@@ -144,7 +144,7 @@ void func_80A4984C(EnWizFire* this, GlobalContext* globalCtx) {
         sp44.z = 12.0f;
     }
 
-    Matrix_MultiplyVector3fByState(&sp44, &this->actor.velocity);
+    Matrix_MultVec3f(&sp44, &this->actor.velocity);
     Matrix_Pop();
     this->actor.world.rot.x = this->actor.world.rot.y = this->actor.world.rot.z = 0;
     this->unk_168 = 50;
@@ -205,7 +205,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
             Matrix_Push();
             Matrix_RotateYS((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
             sp54.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
-            Matrix_MultiplyVector3fByState(&sp54, &this->actor.velocity);
+            Matrix_MultVec3f(&sp54, &this->actor.velocity);
             Matrix_Pop();
 
             this->actor.velocity.y = 6.0f;

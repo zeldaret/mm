@@ -606,7 +606,7 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         if (!this->isPowderKeg) {
             func_800B8050(&this->actor, globalCtx, 0);
-            Matrix_MultiplyVector3fByState(&D_80872EE0, &this->actor.home.pos);
+            Matrix_MultVec3f(&D_80872EE0, &this->actor.home.pos);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -635,9 +635,9 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 Matrix_RotateYS(-sp4A, MTXMODE_APPLY);
             }
 
-            Matrix_MultiplyVector3fByState(&D_80872EEC, &this->actor.home.pos);
-            Matrix_MultiplyVector3fByState(&D_80872EF8, &sp58);
-            Matrix_MultiplyVector3fByState(&D_80872F04, &sp4C);
+            Matrix_MultVec3f(&D_80872EEC, &this->actor.home.pos);
+            Matrix_MultVec3f(&D_80872EF8, &sp58);
+            Matrix_MultVec3f(&D_80872F04, &sp4C);
 
             gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

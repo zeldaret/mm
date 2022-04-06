@@ -363,7 +363,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
 
     Matrix_Push();
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&sp34, &this->actor.focus.pos);
+    Matrix_MultVec3f(&sp34, &this->actor.focus.pos);
     Matrix_Pop();
     this->actor.focus.pos.x += this->actor.world.pos.x;
     this->actor.focus.pos.y += this->actor.world.pos.y;
@@ -1369,9 +1369,9 @@ void EnFu_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnFu* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_MultiplyVector3fByState(&D_80964C28, &this->unk_508);
+        Matrix_MultVec3f(&D_80964C28, &this->unk_508);
     } else if (limbIndex == 20) {
-        Matrix_MultiplyVector3fByState(&D_80964C34, &this->unk_514);
+        Matrix_MultVec3f(&D_80964C34, &this->unk_514);
     }
 }
 
@@ -1435,7 +1435,7 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             Matrix_Push();
             Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
             Matrix_RotateYS(yaw, MTXMODE_APPLY);
-            Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
+            Matrix_MultVec3f(&sp44, &ptr->unk_08);
             Matrix_Pop();
             ptr->unk_2C += 6000;
         }

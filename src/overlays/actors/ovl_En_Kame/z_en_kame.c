@@ -785,7 +785,7 @@ void func_80AD8AF8(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
         ptr2 = D_80AD8E68;
         ptr = &this->limbPos[5];
         for (i = 0; i < ARRAY_COUNT(D_80AD8E68); i++) {
-            Matrix_MultiplyVector3fByState(ptr2, ptr);
+            Matrix_MultVec3f(ptr2, ptr);
             ptr2++;
             ptr++;
         }

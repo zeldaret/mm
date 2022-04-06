@@ -1174,7 +1174,7 @@ s32 EnTru_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
         this->actor.focus.pos.y = ((this->actor.focus.pos.y + 10.0f) / 10.0f) * 10.0f;
         this->actor.focus.pos.z = (this->actor.focus.pos.z / 10.0f) * 10.0f;
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
-        Matrix_MultiplyVector3fByState(&D_80A8B3FC, &this->unk_1F8);
+        Matrix_MultVec3f(&D_80A8B3FC, &this->unk_1F8);
     }
 
     if (!(this->unk_34E & 0x200) && (limbIndex == 14)) {

@@ -566,7 +566,7 @@ s32 func_8092D954(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
     Vec3s sp6C;
     MtxF sp2C;
 
-    Matrix_MultiplyVector3fByState(&gZeroVec3f, &sp74);
+    Matrix_MultVec3f(&gZeroVec3f, &sp74);
     Matrix_Get(&sp2C);
     func_8018219C(&sp2C, &sp6C, 0);
     *arg2 = sp74;

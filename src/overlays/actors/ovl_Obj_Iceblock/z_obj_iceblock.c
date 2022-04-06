@@ -874,7 +874,7 @@ void func_80A25440(ObjIceblock* this) {
             sp34.y = this->unk_248.y - sp24;
             sp34.z = this->unk_248.z;
 
-            Matrix_MultiplyVector3fByState(&sp34, &sp28);
+            Matrix_MultVec3f(&sp34, &sp28);
 
             sp34.x = this->dyna.actor.world.pos.x;
             sp34.y = this->dyna.actor.world.pos.y + sp24;

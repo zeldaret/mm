@@ -1356,7 +1356,7 @@ void func_8094220C(EnGoroiwa* this, GlobalContext* globalCtx) {
 
             if (ptr->unk_10 <= 0.0f) {
                 Matrix_InsertRotation(ptr->unk_1C, ptr->unk_1E, ptr->unk_20, MTXMODE_NEW);
-                Matrix_MultiplyVector3fByState(&D_80942E6C, &spB8);
+                Matrix_MultVec3f(&D_80942E6C, &spB8);
                 temp_f20 = this->unk_1DC * 0.9f;
 
                 if (spB8.y > 0.0f) {

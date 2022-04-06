@@ -1022,7 +1022,7 @@ void EnAob01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnAob01* this = THIS;
 
     if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_809C3968, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_809C3968, &this->actor.focus.pos);
     }
 }
 

@@ -309,14 +309,14 @@ void ArmsHook_Draw(Actor* thisx, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         if ((ArmsHook_Shoot != this->actionFunc) || (this->timer <= 0)) {
-            Matrix_MultiplyVector3fByState(&D_808C1C10, &this->unk1E0);
-            Matrix_MultiplyVector3fByState(&D_808C1C28, &sp5C);
-            Matrix_MultiplyVector3fByState(&D_808C1C34, &sp50);
+            Matrix_MultVec3f(&D_808C1C10, &this->unk1E0);
+            Matrix_MultVec3f(&D_808C1C28, &sp5C);
+            Matrix_MultVec3f(&D_808C1C34, &sp50);
             this->unk1C4 = 0;
         } else {
-            Matrix_MultiplyVector3fByState(&D_808C1C1C, &this->unk1E0);
-            Matrix_MultiplyVector3fByState(&D_808C1C40, &sp5C);
-            Matrix_MultiplyVector3fByState(&D_808C1C4C, &sp50);
+            Matrix_MultVec3f(&D_808C1C1C, &this->unk1E0);
+            Matrix_MultVec3f(&D_808C1C40, &sp5C);
+            Matrix_MultVec3f(&D_808C1C4C, &sp50);
         }
         func_80126440(globalCtx, &this->collider.base, &this->unk1C4, &sp5C, &sp50);
         func_8012C28C(globalCtx->state.gfxCtx);

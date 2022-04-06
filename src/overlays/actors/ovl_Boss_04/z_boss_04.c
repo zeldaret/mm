@@ -806,9 +806,9 @@ void Boss04_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
 
     if (limbIndex == 1) {
         Matrix_GetStateTranslationAndScaledY(-500.0f, &this->actor.focus.pos);
-        Matrix_MultiplyVector3fByState(&D_809EE228, &sp18);
+        Matrix_MultVec3f(&D_809EE228, &sp18);
         func_809EC040(0, &this->collider1, &sp18);
-        Matrix_MultiplyVector3fByState(&D_809EE234, &sp18);
+        Matrix_MultVec3f(&D_809EE234, &sp18);
         func_809EC040(0, &this->collider2, &sp18);
     }
 }

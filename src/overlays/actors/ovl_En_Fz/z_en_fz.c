@@ -265,7 +265,7 @@ void func_80932784(EnFz* this, GlobalContext* globalCtx) {
     sp44.x = sp44.y = 0.0f;
     sp44.z = 440.0f;
 
-    Matrix_MultiplyVector3fByState(&sp44, &this->unk_22C);
+    Matrix_MultVec3f(&sp44, &this->unk_22C);
     if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &sp5C, &this->unk_22C, &sp50, &sp3C, true, false, false, true,
                                 &sp40)) {
         Math_Vec3f_Copy(&this->unk_22C, &sp50);
@@ -629,7 +629,7 @@ void func_809334B8(EnFz* this, GlobalContext* globalCtx) {
                                                            : 0.0f) +
                  20;
 
-        Matrix_MultiplyVector3fByState(&sp64, &sp4C);
+        Matrix_MultVec3f(&sp64, &sp4C);
 
         if ((this->unk_BCA & 7) == 0) {
             sp3F = 1;
@@ -746,7 +746,7 @@ void func_809338E0(EnFz* this, GlobalContext* globalCtx) {
                                                        : 0.0f) +
              20;
 
-    Matrix_MultiplyVector3fByState(&sp64, &sp4C);
+    Matrix_MultVec3f(&sp64, &sp4C);
 
     if (!(this->unk_BC6 & 7)) {
         sp3F = 1;

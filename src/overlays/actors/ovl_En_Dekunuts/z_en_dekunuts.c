@@ -717,7 +717,7 @@ void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
             ptr1 = &D_808BEFA4[0];
             ptr2 = &this->limbPos[value + 1];
             for (i = value + 1; i < ARRAY_COUNT(this->limbPos); i++) {
-                Matrix_MultiplyVector3fByState(ptr1, ptr2);
+                Matrix_MultVec3f(ptr1, ptr2);
                 ptr1++, ptr2++;
             }
         }

@@ -1357,7 +1357,7 @@ void EnTk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                 break;
 
             case 14:
-                Matrix_MultiplyVector3fByState(&D_80AEFA84, &this->unk_2B4);
+                Matrix_MultVec3f(&D_80AEFA84, &this->unk_2B4);
 
                 OPEN_DISPS(globalCtx->state.gfxCtx);
 

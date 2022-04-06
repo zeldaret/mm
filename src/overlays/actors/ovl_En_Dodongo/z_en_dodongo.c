@@ -1085,8 +1085,8 @@ void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 
     if (limbIndex == 7) {
-        Matrix_MultiplyVector3fByState(&D_80879370, &this->unk_308);
-        Matrix_MultiplyVector3fByState(&D_8087937C, &this->limbPos[0]);
+        Matrix_MultVec3f(&D_80879370, &this->unk_308);
+        Matrix_MultVec3f(&D_8087937C, &this->limbPos[0]);
         Matrix_GetStateTranslation(&this->actor.focus.pos);
         Matrix_GetStateTranslationAndScaledY(-200.0f, &this->limbPos[1]);
     } else if (limbIndex == 13) {

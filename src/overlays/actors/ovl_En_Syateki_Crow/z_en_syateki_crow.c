@@ -304,12 +304,12 @@ void EnSyatekiCrow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     Vec3f* sp1C;
 
     if (limbIndex == OBJECT_CROW_LIMB_BODY) {
-        Matrix_MultiplyVector3fByState(&D_809CB0D8, &this->unk_144[0]);
+        Matrix_MultVec3f(&D_809CB0D8, &this->unk_144[0]);
         this->unk_144[0].y -= 20.0f;
     } else if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||
                (limbIndex == OBJECT_CROW_LIMB_TAIL)) {
         sp1C = &this->unk_144[(limbIndex >> 1) - 1];
-        Matrix_MultiplyVector3fByState(&D_809CB050, sp1C);
+        Matrix_MultVec3f(&D_809CB050, sp1C);
         sp1C->y -= 20.0f;
     }
 }

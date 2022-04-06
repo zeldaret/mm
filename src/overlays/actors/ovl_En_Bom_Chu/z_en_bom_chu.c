@@ -137,7 +137,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, GlobalCon
 
     Math_Vec3f_Scale(&vec, 1.0f / magnitude);
     Matrix_InsertRotationAroundUnitVector_f(angle, &vec, MTXMODE_NEW);
-    Matrix_MultiplyVector3fByState(&this->axisLeft, &vec);
+    Matrix_MultVec3f(&this->axisLeft, &vec);
     Math_Vec3f_Copy(&this->axisLeft, &vec);
     Math3D_CrossProduct(&this->axisLeft, &normal, &this->axisForwards);
 

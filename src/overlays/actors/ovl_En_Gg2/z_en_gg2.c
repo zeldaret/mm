@@ -471,7 +471,7 @@ void func_80B3BDC0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnGg2* this = THIS;
 
     if (limbIndex == 4) {
-        Matrix_MultiplyVector3fByState(&D_80B3C0A0, &this->unk_304);
+        Matrix_MultVec3f(&D_80B3C0A0, &this->unk_304);
     }
 }
 

@@ -120,12 +120,12 @@ void func_80B823B0(BgDblueBalance* this) {
     sp28.z = 0.0f;
 
     if (this->unk_15C != NULL) {
-        Matrix_MultiplyVector3fByState(&sp28, &this->unk_15C->dyna.actor.world.pos);
+        Matrix_MultVec3f(&sp28, &this->unk_15C->dyna.actor.world.pos);
     }
 
     sp28.x = 138.28f;
     if (this->unk_160 != NULL) {
-        Matrix_MultiplyVector3fByState(&sp28, &this->unk_160->dyna.actor.world.pos);
+        Matrix_MultVec3f(&sp28, &this->unk_160->dyna.actor.world.pos);
     }
 }
 
@@ -145,7 +145,7 @@ s32 func_80B82454(BgDblueBalance* this, GlobalContext* globalCtx) {
     sp48.y = 0.0f;
     sp48.z = 0.0f;
 
-    Matrix_MultiplyVector3fByState(&sp48, &sp3C);
+    Matrix_MultVec3f(&sp48, &sp3C);
 
     this->unk_15C = (BgDblueBalance*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_DBLUE_BALANCE, sp3C.x,
                                                  sp3C.y, sp3C.z, 0, this->dyna.actor.shape.rot.y, 0, 0x100);
@@ -157,7 +157,7 @@ s32 func_80B82454(BgDblueBalance* this, GlobalContext* globalCtx) {
     }
 
     sp48.x = 138.28f;
-    Matrix_MultiplyVector3fByState(&sp48, &sp3C);
+    Matrix_MultVec3f(&sp48, &sp3C);
 
     this->unk_160 = (BgDblueBalance*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BG_DBLUE_BALANCE, sp3C.x,
                                                  sp3C.y, sp3C.z, 0, this->dyna.actor.shape.rot.y, 0, 0x200);
@@ -225,7 +225,7 @@ void func_80B8264C(BgDblueBalance* this) {
         Matrix_Translate(-545.0f, 0.0f, 270.0f, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&sp78);
         Matrix_Pop();
-        Matrix_MultiplyVector3fByState(&sp78, &phi_s0->unk_00);
+        Matrix_MultVec3f(&sp78, &phi_s0->unk_00);
 
         temp_f0 = (sp78.z - 135.0f);
         if (sp78.z > 135.0f) {

@@ -868,7 +868,7 @@ void EnOsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     Vec3s sp28 = { 0x9920, -0x384, -0x320 };
 
     if (limbIndex == 11) {
-        Matrix_MultiplyVector3fByState(&sp30, &thisx->focus.pos);
+        Matrix_MultVec3f(&sp30, &thisx->focus.pos);
     }
     if (((this->unk_1EC == 17) || (this->unk_1EC == 21) || (this->unk_1EC == 22)) && (limbIndex == 6)) {
         Matrix_Push();

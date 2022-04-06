@@ -894,7 +894,7 @@ void EnPeehat_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList
         Vec3f* vec2 = &this->limbPos[12];
 
         for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, vec2++) {
-            Matrix_MultiplyVector3fByState(vec, vec2);
+            Matrix_MultVec3f(vec, vec2);
         }
 
         Matrix_GetStateTranslationAndScaledX(3000.0f, vec2++);

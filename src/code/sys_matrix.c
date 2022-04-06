@@ -241,7 +241,7 @@ void Matrix_Scale(f32 x, f32 y, f32 z, s32 mode) {
  * where \f[ c = \cos x, s = \sin x \f].
  *
  * @note The same as Matrix_RotateXF, but uses a binary angle.
- * 
+ *
  * @param x rotation angle (binary).
  * @param mode APPLY or NEW.
  *
@@ -331,7 +331,7 @@ void Matrix_RotateXS(s16 x, s32 mode) {
  * where \f[ c = \cos x, s = \sin x \f].
  *
  * @note The same as Matrix_RotateXS, but uses a float angle in degrees.
- * 
+ *
  * @param x rotation angle in degrees.
  * @param mode APPLY or NEW.
  *
@@ -406,9 +406,9 @@ void Matrix_RotateXF(f32 x, s32 mode) {
 /**
  * @brief Right-multiply by a rotation about the x axis.
  *      current * R -> current
- * 
+ *
  * @note Matrix_RotateXF with mode APPLY.
- * 
+ *
  * @param x rotation angle in degrees.
  */
 void Matrix_RotateXFApply(f32 x) {
@@ -450,9 +450,9 @@ void Matrix_RotateXFApply(f32 x) {
 /**
  * @brief Replace current by a rotation about the x axis.
  *      R -> current
- * 
+ *
  * @note Matrix_RotateXF with mode NEW.
- * 
+ *
  * @param x rotation angle in degrees.
  */
 void Matrix_RotateXFNew(f32 x) {
@@ -491,12 +491,37 @@ void Matrix_RotateXFNew(f32 x) {
     }
 }
 
+/**
+ * @brief Right-multiply by a rotation about the y axis
+ *      APPLY: current * R -> current
+ *      NEW: R -> current
+ *
+ * R is given by
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      c & 0 & s & 0 \\
+ *      0 & 1 & 0 & 0 \\
+ *      -s & 0 & c & 0 \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * where \f[ c = \cos y, s = \sin y \f].
+ *
+ * @note The same as Matrix_RotateYF, but uses a binary angle.
+ *
+ * @param y rotation angle (binary).
+ * @param mode APPLY or NEW.
+ *
+ * @remark original name: "Matrix_RotateY"
+ */
 void Matrix_RotateYS(s16 y, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 temp1;
-    f32 temp2;
+    f32 tempX;
+    f32 tempZ;
 
     if (mode == MTXMODE_APPLY) {
         if (y != 0) {
@@ -505,25 +530,25 @@ void Matrix_RotateYS(s16 y, s32 mode) {
             sin = Math_SinS(y);
             cos = Math_CosS(y);
 
-            temp1 = cmf->xx;
-            temp2 = cmf->xz;
-            cmf->xx = temp1 * cos - temp2 * sin;
-            cmf->xz = temp1 * sin + temp2 * cos;
+            tempX = cmf->xx;
+            tempZ = cmf->xz;
+            cmf->xx = tempX * cos - tempZ * sin;
+            cmf->xz = tempX * sin + tempZ * cos;
 
-            temp1 = cmf->yx;
-            temp2 = cmf->yz;
-            cmf->yx = temp1 * cos - temp2 * sin;
-            cmf->yz = temp1 * sin + temp2 * cos;
+            tempX = cmf->yx;
+            tempZ = cmf->yz;
+            cmf->yx = tempX * cos - tempZ * sin;
+            cmf->yz = tempX * sin + tempZ * cos;
 
-            temp1 = cmf->zx;
-            temp2 = cmf->zz;
-            cmf->zx = temp1 * cos - temp2 * sin;
-            cmf->zz = temp1 * sin + temp2 * cos;
+            tempX = cmf->zx;
+            tempZ = cmf->zz;
+            cmf->zx = tempX * cos - tempZ * sin;
+            cmf->zz = tempX * sin + tempZ * cos;
 
-            temp1 = cmf->wx;
-            temp2 = cmf->wz;
-            cmf->wx = temp1 * cos - temp2 * sin;
-            cmf->wz = temp1 * sin + temp2 * cos;
+            tempX = cmf->wx;
+            tempZ = cmf->wz;
+            cmf->wx = tempX * cos - tempZ * sin;
+            cmf->wz = tempX * sin + tempZ * cos;
         }
     } else {
         cmf = sCurrentMatrix;
@@ -555,13 +580,37 @@ void Matrix_RotateYS(s16 y, s32 mode) {
     }
 }
 
-// Matrix_RotateYS
+/**
+ * @brief Right-multiply by a rotation about the y axis.
+ *      APPLY: current * R -> current
+ *      NEW: R -> current
+ *
+ * R is given by
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      c & 0 & s & 0 \\
+ *      0 & 1 & 0 & 0 \\
+ *      -s & 0 & c & 0 \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * where \f[ c = \cos y, s = \sin y \f].
+ *
+ * @note The same as Matrix_RotateYS, but uses a float angle in degrees.
+ *
+ * @param y rotation angle in degrees.
+ * @param mode APPLY or NEW.
+ *
+ * @remark original name may have been "Matrix_RotateY", but clashed with the previous function.
+ */
 void Matrix_RotateYF(f32 y, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 temp1;
-    f32 temp2;
+    f32 tempX;
+    f32 tempZ;
     f32 zero = 0.0;
     f32 one = 1.0;
 
@@ -572,25 +621,25 @@ void Matrix_RotateYF(f32 y, s32 mode) {
             sin = sinf(y);
             cos = cosf(y);
 
-            temp1 = cmf->xx;
-            temp2 = cmf->xz;
-            cmf->xx = temp1 * cos - temp2 * sin;
-            cmf->xz = temp1 * sin + temp2 * cos;
+            tempX = cmf->xx;
+            tempZ = cmf->xz;
+            cmf->xx = tempX * cos - tempZ * sin;
+            cmf->xz = tempX * sin + tempZ * cos;
 
-            temp1 = cmf->yx;
-            temp2 = cmf->yz;
-            cmf->yx = temp1 * cos - temp2 * sin;
-            cmf->yz = temp1 * sin + temp2 * cos;
+            tempX = cmf->yx;
+            tempZ = cmf->yz;
+            cmf->yx = tempX * cos - tempZ * sin;
+            cmf->yz = tempX * sin + tempZ * cos;
 
-            temp1 = cmf->zx;
-            temp2 = cmf->zz;
-            cmf->zx = temp1 * cos - temp2 * sin;
-            cmf->zz = temp1 * sin + temp2 * cos;
+            tempX = cmf->zx;
+            tempZ = cmf->zz;
+            cmf->zx = tempX * cos - tempZ * sin;
+            cmf->zz = tempX * sin + tempZ * cos;
 
-            temp1 = cmf->wx;
-            temp2 = cmf->wz;
-            cmf->wx = temp1 * cos - temp2 * sin;
-            cmf->wz = temp1 * sin + temp2 * cos;
+            tempX = cmf->wx;
+            tempZ = cmf->wz;
+            cmf->wx = tempX * cos - tempZ * sin;
+            cmf->wz = tempX * sin + tempZ * cos;
         }
     } else {
         cmf = sCurrentMatrix;
@@ -622,13 +671,37 @@ void Matrix_RotateYF(f32 y, s32 mode) {
     }
 }
 
-// Matrix_RotateZS
+/**
+ * @brief Right-multiply by a rotation about the z axis
+ *      APPLY: current * R -> current
+ *      NEW: R -> current
+ *
+ * R is given by
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      c & -s & 0 & 0 \\
+ *      s & c & 0 & 0 \\
+ *      0 & 0 & 1 & 0 \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * where \f[ c = \cos z, s = \sin z \f].
+ *
+ * @note The same as Matrix_RotateZF, but uses a binary angle.
+ *
+ * @param z rotation angle (binary).
+ * @param mode APPLY or NEW.
+ *
+ * @remark original name: "Matrix_RotateZ"
+ */
 void Matrix_RotateZS(s16 z, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 temp1;
-    f32 temp2;
+    f32 tempX;
+    f32 tempY;
     f32 zero = 0.0;
     f32 one = 1.0;
 
@@ -639,25 +712,25 @@ void Matrix_RotateZS(s16 z, s32 mode) {
             sin = Math_SinS(z);
             cos = Math_CosS(z);
 
-            temp1 = cmf->xx;
-            temp2 = cmf->xy;
-            cmf->xx = temp1 * cos + temp2 * sin;
-            cmf->xy = temp2 * cos - temp1 * sin;
+            tempX = cmf->xx;
+            tempY = cmf->xy;
+            cmf->xx = tempX * cos + tempY * sin;
+            cmf->xy = tempY * cos - tempX * sin;
 
-            temp1 = cmf->yx;
-            temp2 = cmf->yy;
-            cmf->yx = temp1 * cos + temp2 * sin;
-            cmf->yy = temp2 * cos - temp1 * sin;
+            tempX = cmf->yx;
+            tempY = cmf->yy;
+            cmf->yx = tempX * cos + tempY * sin;
+            cmf->yy = tempY * cos - tempX * sin;
 
-            temp1 = cmf->zx;
-            temp2 = cmf->zy;
-            cmf->zx = temp1 * cos + temp2 * sin;
-            cmf->zy = temp2 * cos - temp1 * sin;
+            tempX = cmf->zx;
+            tempY = cmf->zy;
+            cmf->zx = tempX * cos + tempY * sin;
+            cmf->zy = tempY * cos - tempX * sin;
 
-            temp1 = cmf->wx;
-            temp2 = cmf->wy;
-            cmf->wx = temp1 * cos + temp2 * sin;
-            cmf->wy = temp2 * cos - temp1 * sin;
+            tempX = cmf->wx;
+            tempY = cmf->wy;
+            cmf->wx = tempX * cos + tempY * sin;
+            cmf->wy = tempY * cos - tempX * sin;
         }
     } else {
         cmf = sCurrentMatrix;
@@ -689,13 +762,37 @@ void Matrix_RotateZS(s16 z, s32 mode) {
     }
 }
 
-// Matrix_RotateZ
+/**
+ * @brief Right-multiply by a rotation about the z axis.
+ *      APPLY: current * R -> current
+ *      NEW: R -> current
+ *
+ * R is given by
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      c & -s & 0 & 0 \\
+ *      s & c & 0 & 0 \\
+ *      0 & 0 & 1 & 0 \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * where \f[ c = \cos z, s = \sin z \f].
+ *
+ * @note The same as Matrix_RotateYS, but uses a float angle in degrees.
+ *
+ * @param z rotation angle in degrees.
+ * @param mode APPLY or NEW.
+ *
+ * @remark original name may have been "Matrix_RotateZ", but clashed with the previous function.
+ */
 void Matrix_RotateZF(f32 z, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 temp1;
-    f32 temp2;
+    f32 tempX;
+    f32 tempY;
 
     if (mode == MTXMODE_APPLY) {
         if (z != 0) {
@@ -704,25 +801,25 @@ void Matrix_RotateZF(f32 z, s32 mode) {
             sin = sinf(z);
             cos = cosf(z);
 
-            temp1 = cmf->xx;
-            temp2 = cmf->xy;
-            cmf->xx = temp1 * cos + temp2 * sin;
-            cmf->xy = temp2 * cos - temp1 * sin;
+            tempX = cmf->xx;
+            tempY = cmf->xy;
+            cmf->xx = tempX * cos + tempY * sin;
+            cmf->xy = tempY * cos - tempX * sin;
 
-            temp1 = cmf->yx;
-            temp2 = cmf->yy;
-            cmf->yx = temp1 * cos + temp2 * sin;
-            cmf->yy = temp2 * cos - temp1 * sin;
+            tempX = cmf->yx;
+            tempY = cmf->yy;
+            cmf->yx = tempX * cos + tempY * sin;
+            cmf->yy = tempY * cos - tempX * sin;
 
-            temp1 = cmf->zx;
-            temp2 = cmf->zy;
-            cmf->zx = temp1 * cos + temp2 * sin;
-            cmf->zy = temp2 * cos - temp1 * sin;
+            tempX = cmf->zx;
+            tempY = cmf->zy;
+            cmf->zx = tempX * cos + tempY * sin;
+            cmf->zy = tempY * cos - tempX * sin;
 
-            temp1 = cmf->wx;
-            temp2 = cmf->wy;
-            cmf->wx = temp1 * cos + temp2 * sin;
-            cmf->wy = temp2 * cos - temp1 * sin;
+            tempX = cmf->wx;
+            tempY = cmf->wy;
+            cmf->wx = tempX * cos + tempY * sin;
+            cmf->wy = tempY * cos - tempX * sin;
         }
     } else {
         cmf = sCurrentMatrix;
@@ -990,7 +1087,7 @@ Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest) {
     u16* intPart = (u16*)&dest->m[0][0];
     u16* fracPart = (u16*)&dest->m[2][0];
 
-    // For some reason the first 9 elements use the intPart temp
+    // For some reason the first 9 elements use the intPart temp for the fractional part.
     temp = src->xx * 0x10000;
     intPart[0] = (temp >> 0x10);
     intPart[16 + 0] = temp;
@@ -1086,7 +1183,7 @@ Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
  *  \end{pmatrix}
  * \f]
  *
- * and so calculates
+ * where A is \f[ 3 \times 3 \f] and b \f[ 3 \times 1 \f], and so calculates
  *
  * \f[
  *  MX =
@@ -1110,7 +1207,7 @@ Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
  * @param src input vector
  * @param dest output vector
  */
-void Matrix_MultiplyVector3fByState(Vec3f* src, Vec3f* dest) {
+void Matrix_MultVec3f(Vec3f* src, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
     dest->x = cmf->xw + (cmf->xx * src->x + cmf->xy * src->y + cmf->xz * src->z);

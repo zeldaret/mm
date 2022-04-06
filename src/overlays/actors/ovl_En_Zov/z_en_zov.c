@@ -535,17 +535,17 @@ void EnZov_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnZov* this = THIS;
 
     if (limbIndex == 12) {
-        Matrix_MultiplyVector3fByState(&D_80BD2744, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BD2744, &this->actor.focus.pos);
         Math_Vec3f_Copy(&this->unk_2FC, &this->actor.focus.pos);
         this->unk_2FC.y += 10.0f;
     }
 
     if (limbIndex == 18) {
-        Matrix_MultiplyVector3fByState(&D_80BD2750, &this->unk_308);
+        Matrix_MultVec3f(&D_80BD2750, &this->unk_308);
     }
 
     if (limbIndex == 13) {
-        Matrix_MultiplyVector3fByState(&D_80BD2750, &this->unk_314);
+        Matrix_MultVec3f(&D_80BD2750, &this->unk_314);
     }
 }
 

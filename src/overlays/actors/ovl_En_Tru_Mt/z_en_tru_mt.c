@@ -455,7 +455,7 @@ void func_80B76ED4(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
+    Matrix_MultVec3f(&sp70, &sp7C);
     Matrix_Get(&sp28);
     func_8018219C(&sp28, &sp68, 0);
 
@@ -479,11 +479,11 @@ s32 EnTruMt_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnTruMt* this = THIS;
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_35C);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk_35C);
     }
 
     if (limbIndex == OBJECT_TRU_LIMB_15) {
-        Matrix_MultiplyVector3fByState(&D_80B7765C, &this->unk_350);
+        Matrix_MultVec3f(&D_80B7765C, &this->unk_350);
     }
     return false;
 }
@@ -513,7 +513,7 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        Matrix_MultiplyVector3fByState(&D_80B77668, &this->unk_370);
+        Matrix_MultVec3f(&D_80B77668, &this->unk_370);
         Matrix_Translate(this->unk_370.x, this->unk_370.y, this->unk_370.z, MTXMODE_NEW);
         Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_38E.z, MTXMODE_APPLY);

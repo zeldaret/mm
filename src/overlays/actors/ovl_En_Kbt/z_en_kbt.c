@@ -537,7 +537,7 @@ void EnKbt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnKbt* this = THIS;
 
     if (limbIndex == OBJECT_KBT_LIMB_09) {
-        Matrix_MultiplyVector3fByState(&D_80B34B84, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80B34B84, &this->actor.focus.pos);
     }
 }
 

@@ -1578,16 +1578,16 @@ void EnIn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
 
     if (limbIndex == 16) {
-        Matrix_MultiplyVector3fByState(&sp50, &this->unk4B4);
+        Matrix_MultVec3f(&sp50, &this->unk4B4);
         Math_Vec3f_Copy(&this->actor.focus.pos, &this->unk4B4);
     }
     if (this->unk23D == 0) {
         Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
         if (limbIndex == 4) {
-            Matrix_MultiplyVector3fByState(&sp44, &this->unk248);
+            Matrix_MultVec3f(&sp44, &this->unk248);
         }
         if (limbIndex == 7) {
-            Matrix_MultiplyVector3fByState(&sp44, &this->unk254);
+            Matrix_MultVec3f(&sp44, &this->unk254);
         }
         if (this->unk23C == 0) {
             if (!(this->unk4AC & 8)) {

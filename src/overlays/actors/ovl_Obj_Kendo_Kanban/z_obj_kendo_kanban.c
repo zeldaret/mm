@@ -179,7 +179,7 @@ void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         for (j = 0; j < ARRAY_COUNT(sp70); j++) {
-            Matrix_MultiplyVector3fByState(&sTrisElementsInit[i].dim.vtx[j], &sp70[j]);
+            Matrix_MultVec3f(&sTrisElementsInit[i].dim.vtx[j], &sp70[j]);
         }
         Collider_SetTrisVertices(&this->colliderTris, i, &sp70[0], &sp70[1], &sp70[2]);
     }
@@ -343,7 +343,7 @@ void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
         Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                               &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&this->unk_2E4, &this->actor.world.pos);
+        Matrix_MultVec3f(&this->unk_2E4, &this->actor.world.pos);
         this->actor.world.pos = sp5C;
         this->actor.prevPos = this->actor.world.pos;
         Matrix_Pop();
@@ -499,10 +499,10 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_26C); i++) {
-        Matrix_MultiplyVector3fByState(&this->unk_29C[i], &this->unk_26C[i]);
+        Matrix_MultVec3f(&this->unk_29C[i], &this->unk_26C[i]);
     }
 
-    Matrix_MultiplyVector3fByState(&this->unk_2CC, &this->unk_2D8);
+    Matrix_MultVec3f(&this->unk_2CC, &this->unk_2D8);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Kendo_Kanban/ObjKendoKanban_Draw.s")

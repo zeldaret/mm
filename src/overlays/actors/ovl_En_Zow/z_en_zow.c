@@ -603,7 +603,7 @@ Vec3f D_80BDDD4C = { 400.0f, 0.0f, 0.0f };
 
 void func_80BDDAA0(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80BDDD4C, &thisx->focus.pos);
+        Matrix_MultVec3f(&D_80BDDD4C, &thisx->focus.pos);
     }
 }
 

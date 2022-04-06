@@ -414,7 +414,7 @@ void EnCow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     EnCow* this = THIS;
 
     if (limbIndex == COW_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_8099D63C, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_8099D63C, &this->actor.focus.pos);
     }
 }
 

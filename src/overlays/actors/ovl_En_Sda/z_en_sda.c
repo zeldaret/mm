@@ -138,7 +138,7 @@ void func_809469C0(Player* player, u8* shadowTexture, f32 arg2) {
                 sp88.z = D_80947EA0[i].z - player->actor.world.pos.z;
             }
 
-            Matrix_MultiplyVector3fByState(&sp88, &sp7C);
+            Matrix_MultVec3f(&sp88, &sp7C);
             sp7C.x *= (1.0f + (BREG(49) / 100.0f));
             sp7C.y *= (1.0f + (BREG(49) / 100.0f));
             temp_t0 = sp7C.x + 32.0f;
@@ -264,12 +264,12 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
         sp178.x *= (KREG(88) - 1);
 
         Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&D_80947A60, &sp16C);
+        Matrix_MultVec3f(&D_80947A60, &sp16C);
         Matrix_RotateYS(sp178.y, MTXMODE_NEW);
         Matrix_RotateXS(sp178.x, MTXMODE_APPLY);
 
         for (i = 0; i < 22; i++) {
-            Matrix_MultiplyVector3fByState(&D_80947B10[i], &sp188);
+            Matrix_MultVec3f(&D_80947B10[i], &sp188);
             sp64[i].x = (((KREG(82) / 100.0f) + 4.0f) * sp188.x) + sp16C.x;
             sp64[i].y = (((KREG(82) / 100.0f) + 4.0f) * sp188.y) + sp16C.y;
             sp64[i].z = (((KREG(82) / 100.0f) + 4.0f) * sp188.z) + sp16C.z;
@@ -282,7 +282,7 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
             sp194.y = sp64[i].y - player->actor.world.pos.y + KREG(80) + 16.0f;
             sp194.z = sp64[i].z - player->actor.world.pos.z;
 
-            Matrix_MultiplyVector3fByState(&sp194, &sp188);
+            Matrix_MultVec3f(&sp194, &sp188);
 
             sp188.x *= (1.0f + (KREG(90) / 100.0f));
             sp188.y *= (1.0f + (KREG(90) / 100.0f));

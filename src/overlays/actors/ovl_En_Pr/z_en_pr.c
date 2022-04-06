@@ -575,7 +575,7 @@ void EnPr_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if (limbIndex == 2) {
         Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&sp24, &this->unk_2D4);
+        Matrix_MultVec3f(&sp24, &this->unk_2D4);
     }
 
     if ((limbIndex == 0) || (limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) ||

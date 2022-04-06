@@ -1065,11 +1065,11 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     }
 
     if (limbIndex == 14) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_318);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk_318);
     }
 
     if (limbIndex == 17) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->unk_300);
+        Matrix_MultVec3f(&gZeroVec3f, &this->unk_300);
     }
 
     Collider_UpdateSpheres(limbIndex, &this->collider);

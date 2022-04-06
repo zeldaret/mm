@@ -340,7 +340,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
                         }
 
                         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-                        Matrix_MultiplyVector3fByState(&sPieceOffsets[piece->pieceType], &offset);
+                        Matrix_MultVec3f(&sPieceOffsets[piece->pieceType], &offset);
                         piece->actor.world.pos.x += offset.x;
                         piece->actor.world.pos.y += offset.y;
                         piece->actor.world.pos.z += offset.z;
@@ -856,7 +856,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
 
             Matrix_RotateYS(signpost->actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_MultiplyVector3fByState(&sPieceOffsets[this->pieceType], &offset);
+            Matrix_MultVec3f(&sPieceOffsets[this->pieceType], &offset);
             distX =
                 Math_SmoothStepToF(&this->actor.world.pos.x, signpost->actor.world.pos.x + offset.x, 1.0f, 3.0f, 0.0f);
             distY =

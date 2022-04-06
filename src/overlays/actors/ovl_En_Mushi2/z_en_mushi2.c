@@ -286,9 +286,9 @@ void func_80A68F24(EnMushi2* this) {
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
-    Matrix_MultiplyVector3fByState(&D_80A6B9A0, &this->unk_310);
-    Matrix_MultiplyVector3fByState(&D_80A6B9AC, &this->unk_31C);
-    Matrix_MultiplyVector3fByState(&D_80A6B9B8, &this->unk_328);
+    Matrix_MultVec3f(&D_80A6B9A0, &this->unk_310);
+    Matrix_MultVec3f(&D_80A6B9AC, &this->unk_31C);
+    Matrix_MultVec3f(&D_80A6B9B8, &this->unk_328);
 }
 
 s32 func_80A68F9C(EnMushi2* this, s16 arg1) {

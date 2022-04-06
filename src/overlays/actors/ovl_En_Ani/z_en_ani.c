@@ -331,7 +331,7 @@ void EnAni_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     static Vec3f D_809686A4 = { 800.0f, 500.0f, 0.0f };
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_809686A4, &thisx->focus.pos);
+        Matrix_MultVec3f(&D_809686A4, &thisx->focus.pos);
     }
 }
 

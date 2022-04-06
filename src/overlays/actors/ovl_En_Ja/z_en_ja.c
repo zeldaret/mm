@@ -413,7 +413,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     s32 pad2;
 
     if (limbIndex == 15) {
-        Matrix_MultiplyVector3fByState(&D_80BC3780, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BC3780, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     } else if ((this->unk_340 & 0x40) && (limbIndex == 11)) {
         OPEN_DISPS(globalCtx->state.gfxCtx);

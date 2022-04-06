@@ -1018,14 +1018,14 @@ void EnJg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     EnJg* this = THIS;
 
     if (limbIndex == GORON_ELDER_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&sFocusOffset, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
     }
 
     if (limbIndex == GORON_ELDER_LIMB_LOWER_LIP) {
-        Matrix_MultiplyVector3fByState(&sBreathPosOffset, &this->breathPos);
+        Matrix_MultVec3f(&sBreathPosOffset, &this->breathPos);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultiplyVector3fByState(&sBreathVelOffset, &this->breathVelocity);
-        Matrix_MultiplyVector3fByState(&sBreathAccelOffset, &this->breathAccel);
+        Matrix_MultVec3f(&sBreathVelOffset, &this->breathVelocity);
+        Matrix_MultVec3f(&sBreathAccelOffset, &this->breathAccel);
     }
 }
 

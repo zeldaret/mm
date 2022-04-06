@@ -854,7 +854,7 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
     Vec3s sp68;
     MtxF sp28;
 
-    Matrix_MultiplyVector3fByState(&sp70, &sp7C);
+    Matrix_MultVec3f(&sp70, &sp7C);
     Matrix_Get(&sp28);
     func_8018219C(&sp28, &sp68, 0);
 
@@ -900,7 +900,7 @@ void EnTrt2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         Matrix_RotateYS(this->unk_3C2.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_3C2.x, MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_3C2.z, MTXMODE_APPLY);
-        Matrix_MultiplyVector3fByState(&sp30, &this->actor.focus.pos);
+        Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
 }
 

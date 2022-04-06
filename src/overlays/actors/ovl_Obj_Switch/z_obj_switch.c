@@ -233,7 +233,7 @@ void ObjSwitch_InitTrisCollider(ObjSwitch* this, GlobalContext* globalCtx, Colli
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         if (this) {}
         for (j = 0; j < ARRAY_COUNT(vtx); j++) {
-            Matrix_MultiplyVector3fByState(&init->elements[i].dim.vtx[j], &vtx[j]);
+            Matrix_MultVec3f(&init->elements[i].dim.vtx[j], &vtx[j]);
         }
         Collider_SetTrisVertices(&this->colliderTris, i, &vtx[0], &vtx[1], &vtx[2]);
     }

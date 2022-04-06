@@ -430,10 +430,10 @@ void EnYb_PostLimbDrawOpa(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnYb* this = THIS;
 
     if (limbIndex == YB_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_80BFB2F4, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BFB2F4, &this->actor.focus.pos);
     }
     if (limbIndex == YB_LIMB_LEGS_ROOT) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->shadowPos);
     }
 }
 
@@ -441,10 +441,10 @@ void EnYb_PostLimbDrawXlu(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     EnYb* this = THIS;
 
     if (limbIndex == YB_LIMB_HEAD) {
-        Matrix_MultiplyVector3fByState(&D_80BFB300, &this->actor.focus.pos);
+        Matrix_MultVec3f(&D_80BFB300, &this->actor.focus.pos);
     }
     if (limbIndex == YB_LIMB_LEGS_ROOT) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->shadowPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->shadowPos);
     }
 }
 

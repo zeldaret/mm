@@ -1274,7 +1274,7 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             Matrix_GetStateTranslationAndScaledX(-4000.0f, &this->limbPos[limbByte]);
 
             for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
-                Matrix_MultiplyVector3fByState(v1ptr, v2ptr);
+                Matrix_MultVec3f(v1ptr, v2ptr);
                 v2ptr++;
                 v1ptr++;
             }
