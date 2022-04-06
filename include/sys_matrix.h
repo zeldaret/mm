@@ -39,7 +39,7 @@ void Matrix_GetStateTranslation(Vec3f* dst);
 void Matrix_GetStateTranslationAndScaledX(f32 scale, Vec3f* dst);
 void Matrix_GetStateTranslationAndScaledY(f32 scale, Vec3f* dst);
 void Matrix_GetStateTranslationAndScaledZ(f32 scale, Vec3f* dst);
-void Matrix_MultiplyVector3fXZByCurrentState(Vec3f* src, Vec3f* dst);
+void Matrix_MultVec3fXZ(Vec3f* src, Vec3f* dst);
 void Matrix_MtxFCopy(MtxF* dst, MtxF* src);
 void Matrix_FromRSPMatrix(Mtx* src, MtxF* dst);
 void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dst, MtxF* matrix);

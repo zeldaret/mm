@@ -3383,7 +3383,7 @@
     0x80181B78:("Matrix_GetStateTranslationAndScaledX",),
     0x80181BC4:("Matrix_GetStateTranslationAndScaledY",),
     0x80181C10:("Matrix_GetStateTranslationAndScaledZ",),
-    0x80181C5C:("Matrix_MultiplyVector3fXZByCurrentState",),
+    0x80181C5C:("Matrix_MultVec3fXZ",),
     0x80181CDC:("Matrix_MtxFCopy",),
     0x80181D64:("Matrix_FromRSPMatrix",),
     0x80181FB8:("Matrix_MultiplyVector3fByMatrix",),

@@ -1226,42 +1226,41 @@ void Matrix_GetStateTranslation(Vec3f* translateOut) {
 }
 
 // Matrix_MultX
-void Matrix_GetStateTranslationAndScaledX(f32 arg0, Vec3f* dst) {
+void Matrix_GetStateTranslationAndScaledX(f32 x, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
-    dst->x = cmf->xw + cmf->xx * arg0;
-    dst->y = cmf->yw + cmf->yx * arg0;
-    dst->z = cmf->zw + cmf->zx * arg0;
+    dest->x = cmf->xw + cmf->xx * x;
+    dest->y = cmf->yw + cmf->yx * x;
+    dest->z = cmf->zw + cmf->zx * x;
 }
 
 // Matrix_MultY
-void Matrix_GetStateTranslationAndScaledY(f32 arg0, Vec3f* dst) {
+void Matrix_GetStateTranslationAndScaledY(f32 y, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
-    dst->x = cmf->xw + cmf->xy * arg0;
-    dst->y = cmf->yw + cmf->yy * arg0;
-    dst->z = cmf->zw + cmf->zy * arg0;
+    dest->x = cmf->xw + cmf->xy * y;
+    dest->y = cmf->yw + cmf->yy * y;
+    dest->z = cmf->zw + cmf->zy * y;
 }
 
 // Matrix_MultZ
-void Matrix_GetStateTranslationAndScaledZ(f32 arg0, Vec3f* dst) {
+void Matrix_GetStateTranslationAndScaledZ(f32 z, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
-    dst->x = cmf->xw + cmf->xz * arg0;
-    dst->y = cmf->yw + cmf->yz * arg0;
-    dst->z = cmf->zw + cmf->zz * arg0;
+    dest->x = cmf->xw + cmf->xz * z;
+    dest->y = cmf->yw + cmf->yz * z;
+    dest->z = cmf->zw + cmf->zz * z;
 }
 
-// Matrix_MultVec3fXZ
 /**
  * @brief Calculates current * (src,1) and writes its x and z components to dest.
  *
- * The same as @sa Matrix_MultVec3f, but only writes the x and z components.
+ * The same as @sa Matrix_MultVec3f, but only applies to the x and z components.
  *
  * @param src input vector
  * @param dest output vector
  */
-void Matrix_MultiplyVector3fXZByCurrentState(Vec3f* src, Vec3f* dest) {
+void Matrix_MultVec3fXZ(Vec3f* src, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
     dest->x = cmf->xw + (cmf->xx * src->x + cmf->xy * src->y + cmf->xz * src->z);
