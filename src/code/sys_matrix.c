@@ -940,10 +940,10 @@ void Matrix_InsertRotation(s16 x, s16 y, s16 z, s32 mode) {
 }
 
 // Matrix_TranslateRotateZYX
-void Matrix_JointPosition(Vec3f* translation, Vec3s* rotation) {
+void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
-    f32 sin = Math_SinS(rotation->z);
-    f32 cos = Math_CosS(rotation->z);
+    f32 sin = Math_SinS(rot->z);
+    f32 cos = Math_CosS(rot->z);
     f32 temp1;
     f32 temp2;
 
@@ -971,9 +971,9 @@ void Matrix_JointPosition(Vec3f* translation, Vec3s* rotation) {
     cmf->wx = temp1 * cos + temp2 * sin;
     cmf->wy = temp2 * cos - temp1 * sin;
 
-    if (rotation->y != 0) {
-        sin = Math_SinS(rotation->y);
-        cos = Math_CosS(rotation->y);
+    if (rot->y != 0) {
+        sin = Math_SinS(rot->y);
+        cos = Math_CosS(rot->y);
 
         temp1 = cmf->xx;
         temp2 = cmf->xz;
@@ -996,9 +996,9 @@ void Matrix_JointPosition(Vec3f* translation, Vec3s* rotation) {
         cmf->wz = temp1 * sin + temp2 * cos;
     }
 
-    if (rotation->x != 0) {
-        sin = Math_SinS(rotation->x);
-        cos = Math_CosS(rotation->x);
+    if (rot->x != 0) {
+        sin = Math_SinS(rot->x);
+        cos = Math_CosS(rot->x);
 
         temp1 = cmf->xy;
         temp2 = cmf->xz;
@@ -1023,10 +1023,10 @@ void Matrix_JointPosition(Vec3f* translation, Vec3s* rotation) {
 }
 
 // Matrix_SetTranslateRotateYXZ
-void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* vec) {
+void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
-    f32 sp30 = Math_SinS(vec->y);
-    f32 sp2C = Math_CosS(vec->y);
+    f32 sp30 = Math_SinS(rot->y);
+    f32 sp2C = Math_CosS(rot->y);
     f32 sp28;
     f32 sp24;
 
@@ -1040,9 +1040,9 @@ void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* vec) {
     cmf->wz = 0.0f;
     cmf->ww = 1.0f;
 
-    if (vec->x != 0) {
-        sp24 = Math_SinS(vec->x);
-        sp28 = Math_CosS(vec->x);
+    if (rot->x != 0) {
+        sp24 = Math_SinS(rot->x);
+        sp28 = Math_CosS(rot->x);
 
         cmf->zz = sp2C * sp28;
         cmf->zy = sp2C * sp24;
@@ -1059,9 +1059,9 @@ void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* vec) {
         cmf->yy = 1.0f;
     }
 
-    if (vec->z != 0) {
-        sp24 = Math_SinS(vec->z);
-        sp28 = Math_CosS(vec->z);
+    if (rot->z != 0) {
+        sp24 = Math_SinS(rot->z);
+        sp28 = Math_CosS(rot->z);
 
         sp30 = cmf->xx;
         sp2C = cmf->xy;
@@ -1082,7 +1082,17 @@ void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* vec) {
 }
 
 // Matrix_MtxFToMtx
-Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest) {
+/**
+ * @brief Converts a floating-point MtxF to a fixed-point RSP-compatible matrix.
+ *
+ * @param[in] src MtxF to convert
+ * @param[out] dest mtx to output to
+ *
+ * @return dest
+ * 
+ * @remark original name: "_MtxF_to_Mtx"
+ */
+Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest) {
     s32 temp;
     u16* intPart = (u16*)&dest->m[0][0];
     u16* fracPart = (u16*)&dest->m[2][0];
@@ -1156,7 +1166,7 @@ Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest) {
 }
 
 Mtx* Matrix_ToMtx(Mtx* dest) {
-    return Matrix_ToRSPMatrix(sCurrentMatrix, dest);
+    return Matrix_MtxFToMtx(sCurrentMatrix, dest);
 }
 
 Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx) {
@@ -1166,7 +1176,7 @@ Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx) {
 // Unused
 // Matrix_MtxFToNewMtx
 Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
-    return Matrix_ToRSPMatrix(src, GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
+    return Matrix_MtxFToMtx(src, GRAPH_ALLOC(gfxCtx, sizeof(Mtx)));
 }
 
 // Matrix_MultVec3f

@@ -3374,7 +3374,7 @@
     0x8018103C:("Matrix_InsertRotation",),
     0x801812FC:("Matrix_JointPosition",),
     0x80181650:("Matrix_SetStateRotationAndTranslation",),
-    0x801817FC:("Matrix_ToRSPMatrix",),
+    0x801817FC:("Matrix_MtxFToMtx",),
     0x80181A18:("Matrix_ToMtx",),
     0x80181A40:("Matrix_NewMtx",),
     0x80181A6C:("Matrix_AppendToPolyOpaDisp",),

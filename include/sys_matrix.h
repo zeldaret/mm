@@ -27,7 +27,7 @@ void Matrix_JointPosition(Vec3f* pos, Vec3s* rot);
 void Matrix_RotateAndTranslateState(Vec3f* translation, Vec3s* rot);
 void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rotation);
 
-Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest);
+Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest);
 Mtx* Matrix_ToMtx(Mtx* dest);
 Mtx* Matrix_GetStateAsRSPMatrix(Mtx* mtx);
 Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx);
