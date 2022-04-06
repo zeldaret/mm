@@ -586,7 +586,7 @@ void DemoKakyo_DrawLostWoodsSparkle(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
                 Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -657,7 +657,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
 
                 gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
 
-                Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+                Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
                 Matrix_InsertZRotation_f(DEGF_TO_RADF(globalCtx->state.frames * 20.0f), MTXMODE_APPLY);
 

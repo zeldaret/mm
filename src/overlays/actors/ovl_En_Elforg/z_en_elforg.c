@@ -611,7 +611,7 @@ void EnElforg_Draw(Actor* thisx, GlobalContext* globalCtx) {
             AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gStrayFairyClockTownTexAnim));
             break;
     }
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
     POLY_XLU_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

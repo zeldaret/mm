@@ -354,7 +354,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
     u16 phi_a0;
 
     if (!(this->unk_210 & 1) && func_8012405C(globalCtx)) {
-        Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
+        Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         func_80B9E544(this, globalCtx);
 
         if (this->unk_214 <= 0.1f) {
@@ -408,7 +408,7 @@ void MirRay3_Draw(Actor* thisx, GlobalContext* globalCtx) {
             if (sp8C[i].unk_4C != NULL) {
                 Matrix_InsertTranslation(sp8C[i].unk_00.x, sp8C[i].unk_00.y, sp8C[i].unk_00.z, MTXMODE_NEW);
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
-                Matrix_InsertMatrix(&sp8C[i].unk_0C, MTXMODE_APPLY);
+                Matrix_Mult(&sp8C[i].unk_0C, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -171,7 +171,7 @@ void ObjWarpstone_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_InsertTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 34.0f,
                                  this->dyna.actor.world.pos.z, MTXMODE_NEW);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
         Matrix_InsertTranslation(0.0f, 0.0f, 30.0f, MTXMODE_APPLY);
         Matrix_Scale(this->dyna.actor.velocity.x, this->dyna.actor.velocity.x, this->dyna.actor.velocity.x,
                      MTXMODE_APPLY);

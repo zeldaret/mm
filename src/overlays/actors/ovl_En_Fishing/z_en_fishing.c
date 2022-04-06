@@ -2001,7 +2001,7 @@ void EnFishing_DrawRod(GlobalContext* globalCtx) {
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 155, 0, 255);
 
-    Matrix_InsertMatrix(&player->mf_CC4, MTXMODE_NEW);
+    Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
 
     if (sLinkAge != 1) {
         Matrix_InsertTranslation(0.0f, 400.0f, 0.0f, MTXMODE_APPLY);

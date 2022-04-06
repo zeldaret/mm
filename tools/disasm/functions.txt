@@ -3360,7 +3360,7 @@
     0x801801E8:("Matrix_Get",),
     0x8018020C:("Matrix_Put",),
     0x80180234:("Matrix_GetCurrent",),
-    0x80180244:("Matrix_InsertMatrix",),
+    0x80180244:("Matrix_Mult",),
     0x8018029C:("Matrix_InsertTranslation",),
     0x8018039C:("Matrix_Scale",),
     0x80180478:("Matrix_InsertXRotation_s",),

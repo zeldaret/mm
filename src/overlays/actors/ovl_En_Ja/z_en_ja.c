@@ -719,7 +719,7 @@ void func_80BC33C0(EnJaStruct* ptr, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         Matrix_InsertTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         switch (ptr->unk_0C) {

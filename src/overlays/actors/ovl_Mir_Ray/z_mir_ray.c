@@ -603,7 +603,7 @@ void MirRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
     this->reflectIntensity = 0.0f;
 
     if (!D_808E3BF0 && !this->unLit && func_80124088(globalCtx)) {
-        Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
+        Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         MirRay_SetIntensity(this, globalCtx);
 
         if (this->reflectIntensity <= 0.0f) {
@@ -642,7 +642,7 @@ void MirRay_Draw(Actor* thisx, GlobalContext* globalCtx) {
             if (reflection[i].reflectionPoly != NULL) {
                 Matrix_InsertTranslation(reflection[i].pos.x, reflection[i].pos.y, reflection[i].pos.z, MTXMODE_NEW);
                 Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
-                Matrix_InsertMatrix(&reflection[i].mtx, MTXMODE_APPLY);
+                Matrix_Mult(&reflection[i].mtx, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

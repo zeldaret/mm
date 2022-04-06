@@ -354,7 +354,7 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
             Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
         } else {
             SkinMatrix_SetRotateYRP(&sp6C, ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z);
-            Matrix_InsertMatrix(&sp6C, MTXMODE_APPLY);
+            Matrix_Mult(&sp6C, MTXMODE_APPLY);
         }
 
         Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);

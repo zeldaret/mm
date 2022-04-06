@@ -782,7 +782,7 @@ void func_80A4BAB4(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 100, 50, 0, (s8)this->unk_1FC);
     gDPSetEnvColor(POLY_XLU_DISP++, 200, 235, 245, 255);
 
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_002630);

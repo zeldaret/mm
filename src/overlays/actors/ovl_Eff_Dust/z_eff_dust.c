@@ -339,7 +339,7 @@ void func_809199FC(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (*distanceTraveled * 255.0f));
 
             aux = 1.0f - SQ(*distanceTraveled);
-            Matrix_InsertMatrix(&player->mf_CC4, MTXMODE_NEW);
+            Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
             Matrix_InsertTranslation(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
                                      (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f,
                                      (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, MTXMODE_APPLY);

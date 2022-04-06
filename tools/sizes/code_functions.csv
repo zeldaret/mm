@@ -2874,7 +2874,7 @@ asm/non_matchings/code/sys_matrix/Matrix_Pop.s,Matrix_Pop,0x801801CC,0x7
 asm/non_matchings/code/sys_matrix/Matrix_Get.s,Matrix_Get,0x801801E8,0x9
 asm/non_matchings/code/sys_matrix/Matrix_Put.s,Matrix_Put,0x8018020C,0xA
 asm/non_matchings/code/sys_matrix/Matrix_GetCurrent.s,Matrix_GetCurrent,0x80180234,0x4
-asm/non_matchings/code/sys_matrix/Matrix_InsertMatrix.s,Matrix_InsertMatrix,0x80180244,0x16
+asm/non_matchings/code/sys_matrix/Matrix_Mult.s,Matrix_Mult,0x80180244,0x16
 asm/non_matchings/code/sys_matrix/Matrix_InsertTranslation.s,Matrix_InsertTranslation,0x8018029C,0x40
 asm/non_matchings/code/sys_matrix/Matrix_Scale.s,Matrix_Scale,0x8018039C,0x37
 asm/non_matchings/code/sys_matrix/Matrix_InsertXRotation_s.s,Matrix_InsertXRotation_s,0x80180478,0x66

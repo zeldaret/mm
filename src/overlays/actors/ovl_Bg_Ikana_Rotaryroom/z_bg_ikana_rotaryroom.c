@@ -399,7 +399,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     if (ikanaBlock != NULL) {
         Matrix_Push();
 
-        Matrix_InsertMatrix(&this->unk_204.unk_04, MTXMODE_APPLY);
+        Matrix_Mult(&this->unk_204.unk_04, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&ikanaBlock->actor.world.pos);
         func_80B80358(&ikanaBlock->actor.world.pos);
         Matrix_Get(&sp3C);
@@ -413,7 +413,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         if (ptr != NULL) {
             Matrix_Push();
 
-            Matrix_InsertMatrix(&this->unk_248[i].unk_04, MTXMODE_APPLY);
+            Matrix_Mult(&this->unk_248[i].unk_04, MTXMODE_APPLY);
             Matrix_GetStateTranslation(&ptr->world.pos);
             func_80B80358(&ptr->world.pos);
             Matrix_Get(&sp3C);
@@ -428,7 +428,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         if (ptr2 != NULL) {
             Matrix_Push();
 
-            Matrix_InsertMatrix(&this->unk_2D0[i].unk_04, MTXMODE_APPLY);
+            Matrix_Mult(&this->unk_2D0[i].unk_04, MTXMODE_APPLY);
             Matrix_GetStateTranslation(&ptr2->world.pos);
             func_80B80358(&ptr2->world.pos);
             Matrix_Get(&sp3C);
@@ -443,7 +443,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         if (ptr3 != NULL) {
             Matrix_Push();
 
-            Matrix_InsertMatrix(&this->unk_3E0[i].unk_04, MTXMODE_APPLY);
+            Matrix_Mult(&this->unk_3E0[i].unk_04, MTXMODE_APPLY);
             Matrix_GetStateTranslation(&ptr3->world.pos);
             func_80B80358(&ptr3->world.pos);
             Matrix_Get(&sp3C);
@@ -457,7 +457,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     if (player != NULL) {
         Matrix_Push();
 
-        Matrix_InsertMatrix(&this->unk_520.unk_00, MTXMODE_APPLY);
+        Matrix_Mult(&this->unk_520.unk_00, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
         func_80B80358(&player->actor.world.pos);

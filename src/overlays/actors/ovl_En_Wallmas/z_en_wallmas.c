@@ -670,7 +670,7 @@ void EnWallmas_DrawShadow(EnWallmas* this, GlobalContext* globalCtx) {
         gDPSetPrimColor(&gfx[1], 0, 0, 0, 0, 0, 255);
         func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                       &mf);
-        Matrix_InsertMatrix(&mf, MTXMODE_NEW);
+        Matrix_Mult(&mf, MTXMODE_NEW);
 
         if ((this->actionFunc != EnWallmas_WaitToDrop) && (this->actionFunc != EnWallmas_ReturnToCeiling) &&
             (this->actionFunc != EnWallmas_TakePlayer) && (this->actionFunc != EnWallmas_WaitForSwitchFlag)) {

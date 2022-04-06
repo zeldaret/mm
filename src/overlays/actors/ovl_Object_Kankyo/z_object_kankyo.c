@@ -566,7 +566,7 @@ void func_808DD3C8(Actor* thisx, GlobalContext* globalCtx2) {
             gDPPipeSync(POLY_XLU_DISP++);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)(160.0f * temp_f2));
 
-            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -625,7 +625,7 @@ void func_808DD970(Actor* thisx, GlobalContext* globalCtx2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 55, temp_f0);
             gDPSetEnvColor(POLY_XLU_DISP++, 55, 50, 255, temp_f0);
 
-            Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+            Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

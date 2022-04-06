@@ -1,6 +1,27 @@
 /**
  * File: sys_matrix.c
  * Description: Matrix system that mostly uses a matrix stack.
+ *
+ * @note The RSP matrix format (and hence the `MtxF` format) is column-major: vectors are presumed to be row vectors,
+ * and matrices as a column of row vectors. This means that, for example, a translation matrix
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      1 & 0 & 0 & x \\
+ *      0 & 1 & 0 & y \\
+ *      0 & 0 & 1 & z \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * will be stored as
+ * { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { x, y, z, 1 }, }
+ *
+ * As such, we label the elements in column-major order so we can follow the same conventions for multiplying matrices
+ * as the rest of the world, i.e. that \f[ [AB]_{ij} = \sum_k A_{ik} B_{kj} \f].
+ * 
+ * Throughout this file, `mode` indicates whether to multiply the matrix on top of the stack by the new construction
+ * (APPLY), or to just overwrite it (NEW).
  */
 #include "global.h"
 
@@ -20,8 +41,8 @@ MtxF gIdentityMtxF = { {
     { 0.0f, 0.0f, 0.0f, 1.0f },
 } };
 
-MtxF* sMatrixStack;   // "Matrix_stack"
-MtxF* sCurrentMatrix; // "Matrix_now"
+MtxF* sMatrixStack;   // original name: "Matrix_stack"
+MtxF* sCurrentMatrix; // original name: "Matrix_now"
 
 #define MATRIX_STACK_SIZE 20
 
@@ -29,6 +50,8 @@ MtxF* sCurrentMatrix; // "Matrix_now"
 
 /**
  * @brief Create the matrix stack and set the pointer to the top of it.
+ *
+ * @remark original name: "new_Matrix"
  */
 void Matrix_Init(GameState* gameState) {
     sMatrixStack = THA_AllocEndAlign16(&gameState->heap, MATRIX_STACK_SIZE * sizeof(MtxF));
@@ -37,6 +60,8 @@ void Matrix_Init(GameState* gameState) {
 
 /**
  * @brief Place a new matrix on the top of the stack and move the stack pointer up.
+ *
+ * @remark original name: "Matrix_push"
  */
 void Matrix_Push(void) {
     MtxF* prev = sCurrentMatrix;
@@ -47,6 +72,8 @@ void Matrix_Push(void) {
 
 /**
  * @brief Discard the top matrix on the stack and move stack pointer to the next one down.
+ *
+ * @remark original name: "Matrix_pull"
  */
 void Matrix_Pop(void) {
     sCurrentMatrix--;
@@ -54,8 +81,10 @@ void Matrix_Pop(void) {
 
 /**
  * @brief Copy the top matrix from the stack.
- * 
+ *
  * @param[out] dest Matrix into which to copy.
+ *
+ * @remark original name: "Matrix_get"
  */
 void Matrix_Get(MtxF* dest) {
     Matrix_MtxFCopy(dest, sCurrentMatrix);
@@ -63,8 +92,10 @@ void Matrix_Get(MtxF* dest) {
 
 /**
  * @brief Overwrite the top matrix on the stack.
- * 
+ *
  * @param[in] src Matrix from which to copy.
+ *
+ * @remark original name: "Matrix_put"
  */
 void Matrix_Put(MtxF* src) {
     Matrix_MtxFCopy(sCurrentMatrix, src);
@@ -72,15 +103,25 @@ void Matrix_Put(MtxF* src) {
 
 /**
  * @brief Return pointer to the top of the matrix stack.
- * 
- * @return MtxF* pointer to top matrix on the stack.
+ *
+ * @return pointer to top matrix on the stack.
+ *
+ * @remark original name: get_Matrix_now
  */
 MtxF* Matrix_GetCurrent(void) {
     return sCurrentMatrix;
 }
 
 // Matrix_Mult
-void Matrix_InsertMatrix(MtxF* mf, s32 mode) {
+/**
+ * @brief APPLY replaces current by current * mf. NEW replaces current by mf.
+ *
+ * @param mf Matrix to multiply by.
+ * @param mode NEW or APPLY
+ *
+ * @remark original name: "Matrix_mult"
+ */
+void Matrix_Mult(MtxF* mf, s32 mode) {
     MtxF* cmf = Matrix_GetCurrent();
 
     if (mode == MTXMODE_APPLY) {
@@ -268,7 +309,7 @@ void Matrix_InsertXRotation_f(f32 x, s32 mode) {
     }
 }
 
-// ?
+// Matrix_RotateXApply
 void Matrix_RotateStateAroundXAxis(f32 x) {
     MtxF* cmf;
     f32 sin;
@@ -305,7 +346,7 @@ void Matrix_RotateStateAroundXAxis(f32 x) {
     }
 }
 
-// Matrix_NewRotateX?
+// Matrix_RotateXNew
 void Matrix_SetStateXRotation(f32 x) {
     MtxF* cmf = sCurrentMatrix;
     s32 pad;
@@ -839,72 +880,72 @@ void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* vec) {
 // Matrix_MtxFToMtx
 Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest) {
     s32 temp;
-    u16* mInt = (u16*)&dest->m[0][0];
-    u16* mFrac = (u16*)&dest->m[2][0];
+    u16* intPart = (u16*)&dest->m[0][0];
+    u16* fracPart = (u16*)&dest->m[2][0];
 
     temp = src->xx * 0x10000;
-    mInt[0] = (temp >> 0x10);
-    mInt[16 + 0] = temp;
+    intPart[0] = (temp >> 0x10);
+    intPart[16 + 0] = temp;
 
     temp = src->xy * 0x10000;
-    mInt[1] = (temp >> 0x10);
-    mInt[16 + 1] = temp;
+    intPart[1] = (temp >> 0x10);
+    intPart[16 + 1] = temp;
 
     temp = src->xz * 0x10000;
-    mInt[2] = (temp >> 0x10);
-    mInt[16 + 2] = temp;
+    intPart[2] = (temp >> 0x10);
+    intPart[16 + 2] = temp;
 
     temp = src->xw * 0x10000;
-    mInt[3] = (temp >> 0x10);
-    mInt[16 + 3] = temp;
+    intPart[3] = (temp >> 0x10);
+    intPart[16 + 3] = temp;
 
     temp = src->yx * 0x10000;
-    mInt[4] = (temp >> 0x10);
-    mInt[16 + 4] = temp;
+    intPart[4] = (temp >> 0x10);
+    intPart[16 + 4] = temp;
 
     temp = src->yy * 0x10000;
-    mInt[5] = (temp >> 0x10);
-    mInt[16 + 5] = temp;
+    intPart[5] = (temp >> 0x10);
+    intPart[16 + 5] = temp;
 
     temp = src->yz * 0x10000;
-    mInt[6] = (temp >> 0x10);
-    mInt[16 + 6] = temp;
+    intPart[6] = (temp >> 0x10);
+    intPart[16 + 6] = temp;
 
     temp = src->yw * 0x10000;
-    mInt[7] = (temp >> 0x10);
-    mInt[16 + 7] = temp;
+    intPart[7] = (temp >> 0x10);
+    intPart[16 + 7] = temp;
 
     temp = src->zx * 0x10000;
-    mInt[8] = (temp >> 0x10);
-    mInt[16 + 8] = temp;
+    intPart[8] = (temp >> 0x10);
+    intPart[16 + 8] = temp;
 
     temp = src->zy * 0x10000;
-    mInt[9] = (temp >> 0x10);
-    mFrac[9] = temp;
+    intPart[9] = (temp >> 0x10);
+    fracPart[9] = temp;
 
     temp = src->zz * 0x10000;
-    mInt[10] = (temp >> 0x10);
-    mFrac[10] = temp;
+    intPart[10] = (temp >> 0x10);
+    fracPart[10] = temp;
 
     temp = src->zw * 0x10000;
-    mInt[11] = (temp >> 0x10);
-    mFrac[11] = temp;
+    intPart[11] = (temp >> 0x10);
+    fracPart[11] = temp;
 
     temp = src->wx * 0x10000;
-    mInt[12] = (temp >> 0x10);
-    mFrac[12] = temp;
+    intPart[12] = (temp >> 0x10);
+    fracPart[12] = temp;
 
     temp = src->wy * 0x10000;
-    mInt[13] = (temp >> 0x10);
-    mFrac[13] = temp;
+    intPart[13] = (temp >> 0x10);
+    fracPart[13] = temp;
 
     temp = src->wz * 0x10000;
-    mInt[14] = (temp >> 0x10);
-    mFrac[14] = temp;
+    intPart[14] = (temp >> 0x10);
+    fracPart[14] = temp;
 
     temp = src->ww * 0x10000;
-    mInt[15] = (temp >> 0x10);
-    mFrac[15] = temp;
+    intPart[15] = (temp >> 0x10);
+    fracPart[15] = temp;
 
     return dest;
 }
@@ -1031,25 +1072,25 @@ void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
  * @param[out] dest MtxF to output to
  */
 void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
-    u16* mInt = (u16*)&src->m[0][0];
-    u16* mFrac = (u16*)&src->m[2][0];
+    u16* intPart = (u16*)&src->m[0][0];
+    u16* fracPart = (u16*)&src->m[2][0];
 
-    dest->xx = ((mInt[0] << 0x10) | mFrac[0]) * (1 / (f32)0x10000);
-    dest->xy = ((mInt[1] << 0x10) | mFrac[1]) * (1 / (f32)0x10000);
-    dest->xz = ((mInt[2] << 0x10) | mFrac[2]) * (1 / (f32)0x10000);
-    dest->xw = ((mInt[3] << 0x10) | mFrac[3]) * (1 / (f32)0x10000);
-    dest->yx = ((mInt[4] << 0x10) | mFrac[4]) * (1 / (f32)0x10000);
-    dest->yy = ((mInt[5] << 0x10) | mFrac[5]) * (1 / (f32)0x10000);
-    dest->yz = ((mInt[6] << 0x10) | mFrac[6]) * (1 / (f32)0x10000);
-    dest->yw = ((mInt[7] << 0x10) | mFrac[7]) * (1 / (f32)0x10000);
-    dest->zx = ((mInt[8] << 0x10) | mFrac[8]) * (1 / (f32)0x10000);
-    dest->zy = ((mInt[9] << 0x10) | mFrac[9]) * (1 / (f32)0x10000);
-    dest->zz = ((mInt[10] << 0x10) | mFrac[10]) * (1 / (f32)0x10000);
-    dest->zw = ((mInt[11] << 0x10) | mFrac[11]) * (1 / (f32)0x10000);
-    dest->wx = ((mInt[12] << 0x10) | mFrac[12]) * (1 / (f32)0x10000);
-    dest->wy = ((mInt[13] << 0x10) | mFrac[13]) * (1 / (f32)0x10000);
-    dest->wz = ((mInt[14] << 0x10) | mFrac[14]) * (1 / (f32)0x10000);
-    dest->ww = ((mInt[15] << 0x10) | mFrac[15]) * (1 / (f32)0x10000);
+    dest->xx = ((intPart[0] << 0x10) | fracPart[0]) * (1 / (f32)0x10000);
+    dest->xy = ((intPart[1] << 0x10) | fracPart[1]) * (1 / (f32)0x10000);
+    dest->xz = ((intPart[2] << 0x10) | fracPart[2]) * (1 / (f32)0x10000);
+    dest->xw = ((intPart[3] << 0x10) | fracPart[3]) * (1 / (f32)0x10000);
+    dest->yx = ((intPart[4] << 0x10) | fracPart[4]) * (1 / (f32)0x10000);
+    dest->yy = ((intPart[5] << 0x10) | fracPart[5]) * (1 / (f32)0x10000);
+    dest->yz = ((intPart[6] << 0x10) | fracPart[6]) * (1 / (f32)0x10000);
+    dest->yw = ((intPart[7] << 0x10) | fracPart[7]) * (1 / (f32)0x10000);
+    dest->zx = ((intPart[8] << 0x10) | fracPart[8]) * (1 / (f32)0x10000);
+    dest->zy = ((intPart[9] << 0x10) | fracPart[9]) * (1 / (f32)0x10000);
+    dest->zz = ((intPart[10] << 0x10) | fracPart[10]) * (1 / (f32)0x10000);
+    dest->zw = ((intPart[11] << 0x10) | fracPart[11]) * (1 / (f32)0x10000);
+    dest->wx = ((intPart[12] << 0x10) | fracPart[12]) * (1 / (f32)0x10000);
+    dest->wy = ((intPart[13] << 0x10) | fracPart[13]) * (1 / (f32)0x10000);
+    dest->wz = ((intPart[14] << 0x10) | fracPart[14]) * (1 / (f32)0x10000);
+    dest->ww = ((intPart[15] << 0x10) | fracPart[15]) * (1 / (f32)0x10000);
 }
 
 // Unused

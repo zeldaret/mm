@@ -263,7 +263,7 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
         sp178.y += (KREG(87) * 0x8000) + 0x8000;
         sp178.x *= (KREG(88) - 1);
 
-        Matrix_InsertMatrix(&player->shieldMf, MTXMODE_NEW);
+        Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&D_80947A60, &sp16C);
         Matrix_RotateY(sp178.y, MTXMODE_NEW);
         Matrix_InsertXRotation_s(sp178.x, MTXMODE_APPLY);

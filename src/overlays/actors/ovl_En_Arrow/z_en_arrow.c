@@ -718,7 +718,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         Matrix_Push();
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         if (this->actor.speedXZ == 0.0f) {
             phi_v0 = 0;
@@ -740,7 +740,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         func_8012C28C(globalCtx->state.gfxCtx);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_058BA0);

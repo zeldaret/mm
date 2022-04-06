@@ -4405,10 +4405,10 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
             gDPPipeSync(spBC++);
             gDPSetPrimColor(spBC++, 0, 255, 240, 180, 100, 60);
             gDPSetEnvColor(spBC++, 255, 255, 255, this->alienBeamAlpha * (150.0f / 255.0f));
-            Matrix_InsertMatrix(&D_80B502A0, MTXMODE_NEW);
+            Matrix_Mult(&D_80B502A0, MTXMODE_NEW);
             gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(spBC++, object_uch_DL_000080);
-            Matrix_InsertMatrix(&D_80B502E0, MTXMODE_NEW);
+            Matrix_Mult(&D_80B502E0, MTXMODE_NEW);
             gSPMatrix(spBC++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(spBC++, object_uch_DL_000080);
             spB8->polyXlu.p = spBC;
@@ -4437,7 +4437,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetDither(gfx++, G_CD_NOISE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
-        Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
+        Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
         sp74.x = thisx->world.pos.x + sp80.x;
         sp74.y = thisx->world.pos.y + sp80.y + 68.0f;
@@ -4529,7 +4529,7 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     Vec3f sp5C;
 
     Matrix_Push();
-    Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_NEW);
+    Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_NEW);
     Matrix_GetStateTranslationAndScaledZ(200.0f, &sp5C);
     Matrix_Pop();
     sp5C.x += thisx->world.pos.x;

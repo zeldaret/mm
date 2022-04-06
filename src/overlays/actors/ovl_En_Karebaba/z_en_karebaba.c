@@ -633,7 +633,7 @@ void func_808F280C(EnKarebaba* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
     func_800C0094(this->unk_22C, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z, &sp40);
-    Matrix_InsertMatrix(&sp40, MTXMODE_NEW);
+    Matrix_Mult(&sp40, MTXMODE_NEW);
     Matrix_Scale(0.15f, 1.0f, 0.15f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
