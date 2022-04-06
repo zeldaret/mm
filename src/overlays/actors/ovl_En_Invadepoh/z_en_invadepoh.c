@@ -4438,7 +4438,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
         Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(60.0f, &sp80);
+        Matrix_MultVecZ(60.0f, &sp80);
         sp74.x = thisx->world.pos.x + sp80.x;
         sp74.y = thisx->world.pos.y + sp80.y + 68.0f;
         sp74.z = thisx->world.pos.z + sp80.z;
@@ -4530,7 +4530,7 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
 
     Matrix_Push();
     Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_NEW);
-    Matrix_GetStateTranslationAndScaledZ(200.0f, &sp5C);
+    Matrix_MultVecZ(200.0f, &sp5C);
     Matrix_Pop();
     sp5C.x += thisx->world.pos.x;
     sp5C.y += thisx->world.pos.y;
@@ -4569,7 +4569,7 @@ void func_80B4E61C(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnInvadepoh* this = THIS;
 
     if (limbIndex == DOG_LIMB_HEAD) {
-        Matrix_GetStateTranslationAndScaledY(20.0f, &this->actor.focus.pos);
+        Matrix_MultVecY(20.0f, &this->actor.focus.pos);
     }
 }
 

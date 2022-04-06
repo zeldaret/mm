@@ -429,7 +429,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                     Matrix_RotateYF(Rand_ZeroFloat(M_PI * 2), MTXMODE_NEW);
                     Matrix_RotateXFApply(Rand_ZeroFloat(M_PI * 2));
-                    Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
+                    Matrix_MultVecZ(lightRayMaxScale, &vel);
                     accel.x = vel.x * -0.03f;
                     accel.y = vel.y * -0.03f;
                     accel.z = vel.z * -0.03f;
@@ -502,7 +502,7 @@ void EnClearTag_Init(Actor* thisx, GlobalContext* globalCtx) {
                 lightRayMaxScale = sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);
                 Matrix_RotateYF(Rand_ZeroFloat(2 * M_PI), MTXMODE_NEW);
                 Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
-                Matrix_GetStateTranslationAndScaledZ(lightRayMaxScale, &vel);
+                Matrix_MultVecZ(lightRayMaxScale, &vel);
                 accel.x = vel.x * -0.03f;
                 accel.y = vel.y * -0.03f;
                 accel.z = vel.z * -0.03f;
@@ -980,7 +980,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             // Apply material 16 times along a circle to give the appearance of a splash
             for (j = 0; j < 16; j++) {
                 Matrix_RotateYF(2.0f * (j * M_PI) * (1.0f / 16.0f), MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(effect->maxScale, &vec);
+                Matrix_MultVecZ(effect->maxScale, &vec);
                 /**
                  * Get the water surface at point (`x`, `ySurface`, `z`). `ySurface` doubles as position y input
                  * returns true if point is within the xz boundaries of an active water box, else false

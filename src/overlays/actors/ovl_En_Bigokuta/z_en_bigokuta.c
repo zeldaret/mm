@@ -636,7 +636,7 @@ void EnBigokuta_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if (limbPosIndex != -1) {
         if (limbPosIndex < 6) {
-            Matrix_GetStateTranslationAndScaledX(800.0f, &this->limbPos[limbPosIndex]);
+            Matrix_MultVecX(800.0f, &this->limbPos[limbPosIndex]);
         } else if (limbPosIndex < 8) {
             Matrix_MultZero(&this->limbPos[limbPosIndex]);
         } else {

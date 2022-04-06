@@ -141,7 +141,7 @@ void ObjChan_CalculatePotPosition(Vec3f* childPosOut, Vec3s* childRotOut, Vec3f*
     Matrix_RotateXS(parentRot->x, MTXMODE_APPLY);
     Matrix_RotateZS(parentRot->z, MTXMODE_APPLY);
     Matrix_RotateYS(childAngle, MTXMODE_APPLY);
-    Matrix_GetStateTranslationAndScaledX(-280.0f, &offset);
+    Matrix_MultVecX(-280.0f, &offset);
 
     childPosOut->x = parentPos->x + offset.x;
     childPosOut->y = parentPos->y + offset.y;
@@ -243,7 +243,7 @@ void ObjChan_ChandelierAction(ObjChan* this2, GlobalContext* globalCtx) {
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_RotateYS(this->rotation, MTXMODE_APPLY);
-    Matrix_GetStateTranslationAndScaledY(this->unk1CC, &this->actor.world.pos);
+    Matrix_MultVecY(this->unk1CC, &this->actor.world.pos);
     Math_Vec3f_Sum(&this->actor.world.pos, &this->unk1C0, &this->actor.world.pos);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     for (i = 0; i < 5; i++) {

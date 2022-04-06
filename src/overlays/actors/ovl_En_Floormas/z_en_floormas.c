@@ -1166,8 +1166,8 @@ void EnFloormas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[9]);
-        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
+        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         Matrix_Push();
         Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);

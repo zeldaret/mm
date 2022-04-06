@@ -1446,9 +1446,9 @@ void func_8089DC84(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     }
 
     if (limbIndex == 4) {
-        Matrix_GetStateTranslationAndScaledX(300.0f, &this->actor.shape.feetPos[0]);
+        Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[0]);
     } else if (limbIndex == 7) {
-        Matrix_GetStateTranslationAndScaledX(300.0f, &this->actor.shape.feetPos[1]);
+        Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[1]);
     }
 
     if ((limbIndex == 16) && (this->actionFunc == func_8089B580)) {

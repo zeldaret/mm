@@ -608,7 +608,7 @@ void func_80B81234(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_RotateYS(player->actor.shape.rot.y, MTXMODE_NEW);
             Matrix_RotateXS(player->actor.shape.rot.x, MTXMODE_APPLY);
             Matrix_RotateZS(player->actor.shape.rot.z, MTXMODE_APPLY);
-            Matrix_GetStateTranslationAndScaledY(sp44, &sp4C);
+            Matrix_MultVecY(sp44, &sp4C);
 
             Matrix_Pop();
 

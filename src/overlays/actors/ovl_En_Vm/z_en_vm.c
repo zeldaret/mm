@@ -484,8 +484,8 @@ void EnVm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         sp4C = NULL;
 
         Matrix_MultZero(&this->actor.focus.pos);
-        Matrix_GetStateTranslationAndScaledZ(1600.0f, &this->unk_228);
-        Matrix_GetStateTranslationAndScaledZ(this->unk_224 * 71.428566f, &this->unk_234);
+        Matrix_MultVecZ(1600.0f, &this->unk_228);
+        Matrix_MultVecZ(this->unk_224 * 71.428566f, &this->unk_234);
 
         if (BgCheck_EntityLineTest1(&globalCtx->colCtx, &this->actor.focus.pos, &this->unk_234, &sp5C, &sp4C, true,
                                     true, false, true, &sp48)) {

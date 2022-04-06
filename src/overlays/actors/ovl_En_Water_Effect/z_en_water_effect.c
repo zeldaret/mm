@@ -226,7 +226,7 @@ void EnWaterEffect_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
                     for (j = 0; j < 12; j++) {
                         Matrix_RotateYF((2.0f * (j * M_PI)) / 5.5f, MTXMODE_NEW);
-                        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
+                        Matrix_MultVecZ(Rand_ZeroFloat(1.5f) + 1.5f, &spA4);
                         spA4.y = Rand_ZeroFloat(4.0f) + 2.0f;
                         func_80A58908(this, &ptr->unk_04, &spA4, ptr->unk_2A);
                     }

@@ -642,11 +642,11 @@ s32 ObjSwitch_IsEyeSwitchHit(ObjSwitch* this) {
             Matrix_Push();
             Matrix_RotateYS(acActor->world.rot.y, MTXMODE_NEW);
             Matrix_RotateXS(acActor->world.rot.x, MTXMODE_APPLY);
-            Matrix_GetStateTranslationAndScaledZ(1.0f, &sp2C);
+            Matrix_MultVecZ(1.0f, &sp2C);
             Matrix_RotateYS(actor->shape.rot.y, MTXMODE_NEW);
             Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
             Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
-            Matrix_GetStateTranslationAndScaledZ(1.0f, &sp20);
+            Matrix_MultVecZ(1.0f, &sp20);
             Matrix_Pop();
             if ((Math3D_Parallel(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {
                 return true;

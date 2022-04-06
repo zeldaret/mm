@@ -551,7 +551,7 @@ void EnKanban_Update(Actor* thisx, GlobalContext* globalCtx) {
 
                             Matrix_RotateXFNew(this->floorRot.x);
                             Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
-                            Matrix_GetStateTranslationAndScaledY(KREG(20) + 10.0f, &spC8);
+                            Matrix_MultVecY(KREG(20) + 10.0f, &spC8);
                             Math_ApproachF(&this->actor.velocity.x, spC8.x, 0.5f, (KREG(21) * 0.01f) + 0.1f);
                             Math_ApproachF(&this->actor.velocity.z, spC8.z, 0.5f, (KREG(21) * 0.01f) + 0.3f);
                             this->actor.world.rot.y = Math_Atan2S(spC8.x, spC8.z);

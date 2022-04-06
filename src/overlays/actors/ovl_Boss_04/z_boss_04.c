@@ -215,7 +215,7 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     phi_s0_2 = 0;
     for (i = 0; i < 82; i++) {
         Matrix_RotateYS(phi_s0_2, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(phi_f20, &sp90);
+        Matrix_MultVecZ(phi_f20, &sp90);
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON2, this->unk_6E8 + sp90.x,
                            phi_f24, this->unk_6F0 + sp90.z, 0, 0, 0, i);
         phi_f20 += 2.5f;
@@ -339,7 +339,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
         case 1:
             player->actor.shape.rot.y = 0x7FFF;
             player->actor.world.rot.y = player->actor.shape.rot.y;
-            Matrix_GetStateTranslationAndScaledZ(-100.0f, &this->unk_70C);
+            Matrix_MultVecZ(-100.0f, &this->unk_70C);
 
             this->unk_70C.x += player->actor.world.pos.x;
             this->unk_70C.y = Player_GetHeight(player) + player->actor.world.pos.y + 36.0f;
@@ -358,7 +358,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
 
         case 2:
         case 3:
-            Matrix_GetStateTranslationAndScaledZ(500.0f, &this->unk_70C);
+            Matrix_MultVecZ(500.0f, &this->unk_70C);
             this->unk_70C.x += this->actor.world.pos.x;
             this->unk_70C.y += this->actor.world.pos.y - 50.0f;
             this->unk_70C.z += this->actor.world.pos.z;
@@ -602,7 +602,7 @@ void func_809ED50C(Boss04* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2E4); i++) {
         Matrix_RotateXFApply(0.3926991f);
-        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->unk_2E4[i]);
+        Matrix_MultVecZ(100.0f, &this->unk_2E4[i]);
     }
 
     Matrix_Pop();
@@ -611,7 +611,7 @@ void func_809ED50C(Boss04* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3A4); i++) {
         Matrix_RotateXFApply(0.41887903f);
-        Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_3A4[i]);
+        Matrix_MultVecZ(92.0f, &this->unk_3A4[i]);
     }
 
     Matrix_Pop();
@@ -620,7 +620,7 @@ void func_809ED50C(Boss04* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_458); i++) {
         Matrix_RotateXFApply(0.41887903f);
-        Matrix_GetStateTranslationAndScaledZ(92.0f, &this->unk_458[i]);
+        Matrix_MultVecZ(92.0f, &this->unk_458[i]);
     }
 
     Matrix_Pop();
@@ -629,7 +629,7 @@ void func_809ED50C(Boss04* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_50C); i++) {
         Matrix_RotateXFApply(0.5711987f);
-        Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_50C[i]);
+        Matrix_MultVecZ(71.0f, &this->unk_50C[i]);
     }
 
     Matrix_Pop();
@@ -638,7 +638,7 @@ void func_809ED50C(Boss04* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_590); i++) {
         Matrix_RotateXFApply(0.5711987f);
-        Matrix_GetStateTranslationAndScaledZ(71.0f, &this->unk_590[i]);
+        Matrix_MultVecZ(71.0f, &this->unk_590[i]);
     }
 
     Matrix_Pop();
@@ -647,7 +647,7 @@ void func_809ED50C(Boss04* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_614); i++) {
         Matrix_RotateXFApply(1.0471976f);
-        Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_614[i]);
+        Matrix_MultVecZ(38.0f, &this->unk_614[i]);
     }
 
     Matrix_Pop();
@@ -656,7 +656,7 @@ void func_809ED50C(Boss04* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->unk_65C); i++) {
         Matrix_RotateXFApply(1.0471976f);
-        Matrix_GetStateTranslationAndScaledZ(38.0f, &this->unk_65C[i]);
+        Matrix_MultVecZ(38.0f, &this->unk_65C[i]);
     }
 
     Matrix_Pop();
@@ -805,7 +805,7 @@ void Boss04_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     Vec3f sp18;
 
     if (limbIndex == 1) {
-        Matrix_GetStateTranslationAndScaledY(-500.0f, &this->actor.focus.pos);
+        Matrix_MultVecY(-500.0f, &this->actor.focus.pos);
         Matrix_MultVec3f(&D_809EE228, &sp18);
         func_809EC040(0, &this->collider1, &sp18);
         Matrix_MultVec3f(&D_809EE234, &sp18);

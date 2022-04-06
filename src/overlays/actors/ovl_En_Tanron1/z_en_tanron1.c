@@ -266,7 +266,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                     Math_ApproachS(&ptr->unk_18, ptr->unk_1E, 2, this->unk_158);
                     Matrix_RotateYS(ptr->unk_1A, MTXMODE_NEW);
                     Matrix_RotateXS(-ptr->unk_18, MTXMODE_APPLY);
-                    Matrix_GetStateTranslationAndScaledZ(6.0f, &ptr->unk_0C);
+                    Matrix_MultVecZ(6.0f, &ptr->unk_0C);
 
                     if (phi_s2 != NULL) {
                         temp.x = phi_s2->x - ptr->unk_00.x;
@@ -279,7 +279,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
 
                             Matrix_RotateYS(ptr->unk_20, MTXMODE_NEW);
                             Matrix_RotateXS(-ptr->unk_1E, MTXMODE_APPLY);
-                            Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
+                            Matrix_MultVecZ(-20.0f, &ptr->unk_0C);
 
                             if (phi_f28 >= 100000.0f) {
                                 ptr->unk_28 = 1;
@@ -300,7 +300,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                     ptr->unk_1A += ptr->unk_2A;
                     Math_ApproachS(&ptr->unk_18, 0, 0xA, 0x1000);
                     Matrix_RotateYS(ptr->unk_1A, MTXMODE_NEW);
-                    Matrix_GetStateTranslationAndScaledZ(ptr->unk_30, &spA4);
+                    Matrix_MultVecZ(ptr->unk_30, &spA4);
 
                     ptr->unk_0C.x = spA4.x;
                     ptr->unk_0C.z = spA4.z;
@@ -317,7 +317,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
 
                             Matrix_RotateYS(ptr->unk_20, MTXMODE_NEW);
                             Matrix_RotateXS(-ptr->unk_1E, MTXMODE_APPLY);
-                            Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
+                            Matrix_MultVecZ(-20.0f, &ptr->unk_0C);
 
                             ptr->unk_3C = ptr->unk_00.y - 1000.0f;
                             ptr->unk_30 = 5.0f;

@@ -711,7 +711,7 @@ void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
 
     if (value != -1) {
         if (value < 3) {
-            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[value]);
+            Matrix_MultVecX(1000.0f, &this->limbPos[value]);
         } else {
             Matrix_MultZero(&this->limbPos[value]);
             ptr1 = &D_808BEFA4[0];

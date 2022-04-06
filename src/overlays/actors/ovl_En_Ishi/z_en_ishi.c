@@ -313,7 +313,7 @@ void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
             Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
-            Matrix_GetStateTranslationAndScaledY(1.0f, &sp30);
+            Matrix_MultVecY(1.0f, &sp30);
             sp2C = Math3D_Parallel(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
                 temp_v1_2 = Math_FAtan2F(sp30.z, sp30.x) - sp3C->world.rot.y;

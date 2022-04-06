@@ -1397,7 +1397,7 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     if (limbIndex == GEKKO_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
         this->actor.focus.rot.y = this->actor.shape.rot.y;
-        Matrix_GetStateTranslationAndScaledY(2500.0f, &vec);
+        Matrix_MultVecY(2500.0f, &vec);
         center = &this->collider.elements[0].dim.worldSphere.center;
         center->x = vec.x;
         center->y = vec.y;

@@ -262,7 +262,7 @@ void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
                     break;
             }
             Matrix_RotateYS(sp32, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(this->actor.speedXZ, &this->actor.velocity);
+            Matrix_MultVecZ(this->actor.speedXZ, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
             this->unk_14E = 5;
         }
@@ -361,7 +361,7 @@ void func_80BB71C8(EnTanron2* this, GlobalContext* globalCtx) {
     for (i = 0; i < 15; i++) {
         Matrix_RotateYF(Rand_ZeroFloat(6.2831855f), MTXMODE_NEW);
         Matrix_RotateXFApply(Rand_ZeroFloat(6.2831855f));
-        Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
+        Matrix_MultVecZ(Rand_ZeroFloat(10.0f) + 5.0f, &spA8);
         sp90.x = this->actor.world.pos.x + spA8.x;
         sp90.y = this->actor.world.pos.y + spA8.y;
         sp90.z = this->actor.world.pos.z + spA8.z;
@@ -439,10 +439,10 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
                     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
                     if ((acHitInfo->toucher.dmgFlags & 0x300000) != 0) {
                         this->unk_154 = 10;
-                        Matrix_GetStateTranslationAndScaledZ(-10.0f, &this->actor.velocity);
+                        Matrix_MultVecZ(-10.0f, &this->actor.velocity);
                     } else {
                         this->unk_156 = 15;
-                        Matrix_GetStateTranslationAndScaledZ(-20.0f, &this->actor.velocity);
+                        Matrix_MultVecZ(-20.0f, &this->actor.velocity);
                         damage = this->actor.colChkInfo.damage;
                         this->actor.colChkInfo.health -= damage;
                         func_80BB7398(this, globalCtx);
@@ -467,7 +467,7 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
         Matrix_RotateYS(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
                                    this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
                        MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(10.0f, &this->actor.velocity);
+        Matrix_MultVecZ(10.0f, &this->actor.velocity);
         this->unk_152 = Rand_ZeroFloat(100.0f) + 200.0f;
     } else if (D_80BB8450->unk_1F6 == 10) {
         Actor_MarkForDeath(&this->actor);

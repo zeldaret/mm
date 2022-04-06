@@ -1206,6 +1206,8 @@ Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
  *
  * @param src input vector
  * @param dest output vector
+ *
+ * @remark original name: "Matrix_Position"
  */
 void Matrix_MultVec3f(Vec3f* src, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
@@ -1215,14 +1217,13 @@ void Matrix_MultVec3f(Vec3f* src, Vec3f* dest) {
     dest->z = cmf->zw + (cmf->zx * src->x + cmf->zy * src->y + cmf->zz * src->z);
 }
 
-// Matrix_GetTranslation
 /**
  * @brief Multiply the vector `(0, 0, 0, 1)` by current.
  *
  * Can also see it as obtaining the translation vector part of current, but the former interpretation is consistent with
  * the other functions nearby.
  *
- * @note Special case of Matrix_MultVec3f with `src = { 0, 0, 0 }`.
+ * @note Special case of Matrix_MultVec3f with `src = { 0, 0, 0 }`; the same assumptions apply.
  *
  * @param dest output.
  *
@@ -1236,18 +1237,19 @@ void Matrix_MultZero(Vec3f* dest) {
     dest->z = cmf->zw;
 }
 
-// Matrix_MultVecX
 /**
  * @brief Multiply the vector `(x, 0, 0, 1)` by current.
  *
  * I.e. calculate \f[ A(x, 0, 0) + b \f].
  *
- * @note Special case of Matrix_MultVec3f with `src = { x, 0, 0 }`.
+ * @note Special case of Matrix_MultVec3f with `src = { x, 0, 0 }`; the same assumptions apply.
  *
  * @param x multiplier of unit vector in x direction.
  * @param dest output.
+ *
+ * @remark original name: "Matrix_Position_VecX"
  */
-void Matrix_GetStateTranslationAndScaledX(f32 x, Vec3f* dest) {
+void Matrix_MultVecX(f32 x, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
     dest->x = cmf->xw + cmf->xx * x;
@@ -1255,18 +1257,19 @@ void Matrix_GetStateTranslationAndScaledX(f32 x, Vec3f* dest) {
     dest->z = cmf->zw + cmf->zx * x;
 }
 
-// Matrix_MultVecY
 /**
- * @brief Multiply the vector `(0,y,0,1)` by current.
+ * @brief Multiply the vector `(0, y, 0, 1)` by current.
  *
- * I.e. calculate \f[ A(0,y,0) + b \f].
+ * I.e. calculate \f[ A(0, y, 0) + b \f].
  *
- * @note Special case of Matrix_MultVec3f with `src = { 0, y, 0 }`.
+ * @note Special case of Matrix_MultVec3f with `src = { 0, y, 0 }`; the same assumptions apply.
  *
  * @param y multiplier of unit vector in y direction.
  * @param dest output.
+ *
+ * @remark original name is most likely "Matrix_Position_VecY" by analogy with the other two.
  */
-void Matrix_GetStateTranslationAndScaledY(f32 y, Vec3f* dest) {
+void Matrix_MultVecY(f32 y, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
     dest->x = cmf->xw + cmf->xy * y;
@@ -1274,18 +1277,19 @@ void Matrix_GetStateTranslationAndScaledY(f32 y, Vec3f* dest) {
     dest->z = cmf->zw + cmf->zy * y;
 }
 
-// Matrix_MultVecZ
 /**
- * @brief Multiply the vector `(0,0,z,1)` by current.
+ * @brief Multiply the vector `(0, 0, z, 1)` by current.
  *
- * I.e. calculate \f[ A(0,0,z) + b \f]`.
+ * I.e. calculate \f[ A(0, 0, z) + b \f]`.
  *
- * @note Special case of Matrix_MultVec3f with `src = { 0, 0, z }`.
+ * @note Special case of Matrix_MultVec3f with `src = { 0, 0, z }`; the same assumptions apply.
  *
  * @param z multiplier of unit vector in z direction.
  * @param dest output.
+ *
+ * @remark original name: "Matrix_Position_VecZ"
  */
-void Matrix_GetStateTranslationAndScaledZ(f32 z, Vec3f* dest) {
+void Matrix_MultVecZ(f32 z, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
     dest->x = cmf->xw + cmf->xz * z;
@@ -1297,6 +1301,8 @@ void Matrix_GetStateTranslationAndScaledZ(f32 z, Vec3f* dest) {
  * @brief Calculates current * (src,1) and writes its x and z components to dest.
  *
  * The same as @sa Matrix_MultVec3f, but only applies to the x and z components.
+ *
+ * @note Unlike the previous functions, does *not* just multiply (x, 0, z, 1) and save the x,y,z components.
  *
  * @param src input vector.
  * @param dest output vector.

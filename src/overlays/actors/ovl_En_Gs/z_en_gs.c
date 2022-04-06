@@ -384,7 +384,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
         Player* player = GET_PLAYER(globalCtx);
 
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(160.0f, &sp38);
+        Matrix_MultVecZ(160.0f, &sp38);
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
         this->unk_200 = 0.0f;

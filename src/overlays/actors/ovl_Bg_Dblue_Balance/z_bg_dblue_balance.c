@@ -488,7 +488,7 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
                 sp5C = this->unk_15C;
                 Matrix_Push();
                 Matrix_RotateYS(BINANG_SUB(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(45.0f, &sp60);
+                Matrix_MultVecZ(45.0f, &sp60);
                 Matrix_Pop();
 
                 sp50.x = sp5C->dyna.actor.world.pos.x + sp60.x;
@@ -513,7 +513,7 @@ void func_80B82DE0(BgDblueBalance* this, GlobalContext* globalCtx) {
                 sp3C = this->unk_160;
                 Matrix_Push();
                 Matrix_RotateYS(BINANG_ADD(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
-                Matrix_GetStateTranslationAndScaledZ(30.0f, &sp40);
+                Matrix_MultVecZ(30.0f, &sp40);
                 Matrix_Pop();
 
                 sp30.x = sp3C->dyna.actor.world.pos.x + sp40.x;

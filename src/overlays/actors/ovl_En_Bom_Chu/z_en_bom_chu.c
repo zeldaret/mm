@@ -209,9 +209,9 @@ void EnBomChu_SetupMove(EnBomChu* this) {
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
 
-    Matrix_GetStateTranslationAndScaledY(1.0f, &this->axisUp);
-    Matrix_GetStateTranslationAndScaledZ(1.0f, &this->axisForwards);
-    Matrix_GetStateTranslationAndScaledX(1.0f, &this->axisLeft);
+    Matrix_MultVecY(1.0f, &this->axisUp);
+    Matrix_MultVecZ(1.0f, &this->axisForwards);
+    Matrix_MultVecX(1.0f, &this->axisLeft);
 
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.world.rot.y = this->actor.shape.rot.y;

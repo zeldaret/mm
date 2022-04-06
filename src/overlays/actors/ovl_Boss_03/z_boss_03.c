@@ -494,7 +494,7 @@ void Boss03_Init(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_RotateYF((rand * M_PI * 0.2f) + ((2.0f * M_PI / 5.0f) * i), MTXMODE_NEW);
 
         rand = Boss03_RandZeroOne();
-        Matrix_GetStateTranslationAndScaledZ((rand * 800.0f) + 400.0f, &sp70);
+        Matrix_MultVecZ((rand * 800.0f) + 400.0f, &sp70);
 
         rand = Boss03_RandZeroOne();
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_BOSS_03, sp70.x, sp70.y, sp70.z, 0, rand * 0x10000, 0,
@@ -592,7 +592,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     Math_ApproachF(&this->unk_260, sinf(this->skelAnime.curFrame * (M_PI / 5.0f)) * 10.0f * 0.01f, 0.5f, 1.0f);
 
     if ((this->workTimer[WORK_TIMER_UNK2_A] == 0) && (this->actor.bgCheckFlags & 8)) {
-        Matrix_GetStateTranslationAndScaledZ(-500.0f, &this->unk_268);
+        Matrix_MultVecZ(-500.0f, &this->unk_268);
         this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
         this->workTimer[WORK_TIMER_UNK2_A] = 60;
         this->workTimer[WORK_TIMER_UNK0_A] = Rand_ZeroFloat(60.0f) + 60.0f;
@@ -709,7 +709,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
+        Matrix_MultVecZ(sp44, &sp50);
 
         xDiff = sp50.x - player->actor.world.pos.x;
         zDiff = sp50.z - player->actor.world.pos.z;
@@ -1399,7 +1399,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_RotateYF(sp5C, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledZ(100.0f, &this->csCamAt);
+        Matrix_MultVecZ(100.0f, &this->csCamAt);
 
         this->csCamEye = this->actor.world.pos;
 
@@ -1518,7 +1518,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                            1.0f, 10.0f);
             this->actor.shape.rot.z += 0x100;
             Matrix_RotateYS(this->unk_2BE, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(500.0f, &sp84);
+            Matrix_MultVecZ(500.0f, &sp84);
             Math_ApproachF(&this->actor.world.pos.x, sp84.x, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
 
@@ -1695,7 +1695,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                              MTXMODE_NEW);
                     Matrix_RotateYS(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
-                    Matrix_GetStateTranslationAndScaledZ(340.0f, &this->csCamEye);
+                    Matrix_MultVecZ(340.0f, &this->csCamEye);
 
                     this->csCamAt.x = this->actor.world.pos.x;
                     this->csCamAt.y = this->actor.world.pos.y;
@@ -2133,7 +2133,7 @@ void Boss03_Update(Actor* thisx, GlobalContext* globalCtx2) {
 
         for (j = 0, i = 0; i < 20; j++) {
             Matrix_RotateYF(yRot, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
+            Matrix_MultVecZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
             dropletPos.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
             dropletPos.y = PLATFORM_HEIGHT;
             dropletPos.z += this->unk_28C + randPlusMinusPoint5Scaled(40.0f);

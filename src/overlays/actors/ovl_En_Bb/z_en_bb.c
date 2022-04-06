@@ -640,9 +640,9 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_ALIVE) {
         if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
             if (sLimbIndexToBodyPartsIndex[limbIndex] == 0) {
-                Matrix_GetStateTranslationAndScaledX(1000.0f, &this->bodyPartsPos[0]);
+                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[0]);
             } else if (sLimbIndexToBodyPartsIndex[limbIndex] == 3) {
-                Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->bodyPartsPos[3]);
+                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[3]);
                 Matrix_MultVec3f(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
             } else {
                 Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);

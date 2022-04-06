@@ -895,10 +895,10 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    Matrix_GetStateTranslationAndScaledZ(1842.1053f, vecPtr++);
-    Matrix_GetStateTranslationAndScaledZ(-1842.1053f, vecPtr++);
-    Matrix_GetStateTranslationAndScaledX(1842.1053f, vecPtr++);
-    Matrix_GetStateTranslationAndScaledX(-1842.1053f, vecPtr++);
+    Matrix_MultVecZ(1842.1053f, vecPtr++);
+    Matrix_MultVecZ(-1842.1053f, vecPtr++);
+    Matrix_MultVecX(1842.1053f, vecPtr++);
+    Matrix_MultVecX(-1842.1053f, vecPtr++);
     Matrix_Pop();
 
     for (i = 1; i < ARRAY_COUNT(this->unk_324); i++) {
@@ -915,10 +915,10 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_RotateYS(0x2000, MTXMODE_APPLY);
         }
 
-        Matrix_GetStateTranslationAndScaledZ(1842.1053f, vecPtr++);
-        Matrix_GetStateTranslationAndScaledZ(-1842.1053f, vecPtr++);
-        Matrix_GetStateTranslationAndScaledX(1842.1053f, vecPtr++);
-        Matrix_GetStateTranslationAndScaledX(-1842.1053f, vecPtr++);
+        Matrix_MultVecZ(1842.1053f, vecPtr++);
+        Matrix_MultVecZ(-1842.1053f, vecPtr++);
+        Matrix_MultVecX(1842.1053f, vecPtr++);
+        Matrix_MultVecX(-1842.1053f, vecPtr++);
         Matrix_Pop();
         matrix++;
         if (i == 3) {

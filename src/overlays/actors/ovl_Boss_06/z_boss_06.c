@@ -474,7 +474,7 @@ void Boss06_Update(Actor* thisx, GlobalContext* globalCtx) {
             phi_f24 += 0.030679617f;
 
             Matrix_RotateZF(i * (M_PI / 512), MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledY(temp_f22, &sp7C);
+            Matrix_MultVecY(temp_f22, &sp7C);
 
             sp7C.x += 32.0f + this->unk_1BC;
             sp7C.y += 32.0f + this->unk_1C0;

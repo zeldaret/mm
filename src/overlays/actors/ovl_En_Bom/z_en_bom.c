@@ -384,7 +384,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
 
         for (i = 0; i < 15; i++) {
             Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + spCC, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
+            Matrix_MultVecZ((10 - this->timer) * 300.0f * 0.1f, &spC0);
             spB4.x = this->actor.world.pos.x + spC0.x;
             spB4.y = this->actor.world.pos.y + 500.0f;
             spB4.z = this->actor.world.pos.z + spC0.z;
@@ -400,7 +400,7 @@ void func_808715B8(EnBom* this, GlobalContext* globalCtx) {
                         sp84 = D_80872E94;
                         sp80 = D_80872E94;
                     }
-                    Matrix_GetStateTranslationAndScaledZ(5.0f, &sp94);
+                    Matrix_MultVecZ(5.0f, &sp94);
                     sp88.x = sp88.z = 0.0f;
                     sp94.y = 2.0f;
                     sp88.y = 0.2f;

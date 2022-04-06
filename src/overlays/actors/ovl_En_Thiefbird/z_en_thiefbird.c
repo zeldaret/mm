@@ -1098,11 +1098,11 @@ void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     idx = D_80C13698[limbIndex];
     if (idx != -1) {
         if (idx == 9) {
-            Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[idx]);
+            Matrix_MultVecX(1000.0f, &this->limbPos[idx]);
         } else {
             Matrix_MultZero(&this->limbPos[idx]);
             if ((idx == 3) || (idx == 5)) {
-                Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[idx + 1]);
+                Matrix_MultVecX(2000.0f, &this->limbPos[idx + 1]);
             }
         }
     }

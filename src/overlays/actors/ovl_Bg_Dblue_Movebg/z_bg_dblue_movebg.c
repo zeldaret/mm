@@ -260,8 +260,8 @@ void BgDblueMovebg_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->unk_1CC = D_80A2B96C[this->unk_178];
             this->unk_1CE = this->unk_1CC;
             Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledX(2240.0f, &this->unk_190);
-            Matrix_GetStateTranslationAndScaledX(-10.0f, &this->unk_19C);
+            Matrix_MultVecX(2240.0f, &this->unk_190);
+            Matrix_MultVecX(-10.0f, &this->unk_19C);
             Math_Vec3f_Sum(&this->unk_190, &this->dyna.actor.world.pos, &this->unk_190);
             Math_Vec3f_Sum(&this->unk_19C, &this->dyna.actor.world.pos, &this->unk_19C);
             D_80A2BBF0 = this;

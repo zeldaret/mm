@@ -901,14 +901,14 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         if (temp_s3 < 4) {
             Matrix_MultZero(&this->limbPos[temp_s3]);
         } else if (temp_s3 == 4) {
-            Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[temp_s3]);
+            Matrix_MultVecX(2000.0f, &this->limbPos[temp_s3]);
         } else {
             s32 i;
             Vec3f* vec = &this->limbPos[temp_s3 + 2];
             Vec3f* vec2 = &D_80B2F734[0];
 
-            Matrix_GetStateTranslationAndScaledX(-2000.0f, &this->limbPos[temp_s3]);
-            Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[temp_s3 + 1]);
+            Matrix_MultVecX(-2000.0f, &this->limbPos[temp_s3]);
+            Matrix_MultVecY(-2000.0f, &this->limbPos[temp_s3 + 1]);
 
             for (i = temp_s3 + 2; i < ARRAY_COUNT(this->limbPos); i++, vec++, vec2++) {
                 Matrix_MultVec3f(vec2, vec);

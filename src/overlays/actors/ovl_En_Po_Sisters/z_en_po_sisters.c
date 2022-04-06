@@ -1059,12 +1059,12 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     if (D_80B1DB08[limbIndex] != -1) {
         Matrix_MultZero(&this->limbPos[D_80B1DB08[limbIndex]]);
     } else if (limbIndex == 9) {
-        Matrix_GetStateTranslationAndScaledY(-2500.0f, &this->limbPos[4]);
-        Matrix_GetStateTranslationAndScaledY(3000.0f, &this->limbPos[5]);
+        Matrix_MultVecY(-2500.0f, &this->limbPos[4]);
+        Matrix_MultVecY(3000.0f, &this->limbPos[5]);
     } else if (limbIndex == 10) {
-        Matrix_GetStateTranslationAndScaledY(-4000.0f, &this->limbPos[6]);
+        Matrix_MultVecY(-4000.0f, &this->limbPos[6]);
     } else if (limbIndex == 11) {
-        Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[7]);
+        Matrix_MultVecX(3000.0f, &this->limbPos[7]);
     }
 
     if ((this->actionFunc == func_80B1BA90) && (this->unk_192 >= 8) && (limbIndex == 9)) {

@@ -67,6 +67,9 @@ animdict = {
     
     "Matrix_MultiplyVector3fByState":          "Matrix_MultVec3f",
     "Matrix_GetStateTranslation":              "Matrix_MultZero",
+    "Matrix_GetStateTranslationAndScaledX":    "Matrix_MultVecX",
+    "Matrix_GetStateTranslationAndScaledY":    "Matrix_MultVecY",
+    "Matrix_GetStateTranslationAndScaledZ":    "Matrix_MultVecZ",
     "Matrix_MultiplyVector3fXZByCurrentState": "Matrix_MultVec3fXZ",
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",

@@ -164,7 +164,7 @@ As for the TransformLimbDraw, it has a much simpler prototype. mips2c gives
 void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *actor) {
     if (limbIndex == 5) {
         Matrix_RotateYS((s16) (0x400 - actor->unk2AE), 1);
-        Matrix_GetStateTranslationAndScaledX(500.0f, (Vec3f *) &actor->focus);
+        Matrix_MultVecX(500.0f, (Vec3f *) &actor->focus);
     }
 }
 ```
@@ -178,7 +178,7 @@ void func_80C10590(GlobalContext *globalCtx, s32 limbIndex, Actor *thisx) {
 
     if (limbIndex == 5) {
         Matrix_RotateYS(0x400 - this->unk_2AE.x, MTXMODE_APPLY);
-        Matrix_GetStateTranslationAndScaledX(500.0f, &this->actor.focus.pos);
+        Matrix_MultVecX(500.0f, &this->actor.focus.pos);
     }
 }
 ```

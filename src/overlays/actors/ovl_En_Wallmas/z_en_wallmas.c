@@ -713,8 +713,8 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[9]);
-        Matrix_GetStateTranslationAndScaledX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
+        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 

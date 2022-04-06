@@ -1123,7 +1123,7 @@ void EnTite_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         if (idx != -1) {
             Matrix_MultZero(&this->limbPos[idx]);
             if (idx >= 1) {
-                Matrix_GetStateTranslationAndScaledX(2500.0f, &this->limbPos[idx + 4]);
+                Matrix_MultVecX(2500.0f, &this->limbPos[idx + 4]);
             }
         }
     } else if (this->unk_2BA > 0) {

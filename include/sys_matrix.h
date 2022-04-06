@@ -36,9 +36,9 @@ Mtx* Matrix_AppendToPolyOpaDisp(MtxF* mtx, GraphicsContext* gfxCtx);
 
 void Matrix_MultVec3f(Vec3f* src, Vec3f* dest);
 void Matrix_MultZero(Vec3f* dest);
-void Matrix_GetStateTranslationAndScaledX(f32 x, Vec3f* dest);
-void Matrix_GetStateTranslationAndScaledY(f32 y, Vec3f* dest);
-void Matrix_GetStateTranslationAndScaledZ(f32 z, Vec3f* dest);
+void Matrix_MultVecX(f32 x, Vec3f* dest);
+void Matrix_MultVecY(f32 y, Vec3f* dest);
+void Matrix_MultVecZ(f32 z, Vec3f* dest);
 void Matrix_MultVec3fXZ(Vec3f* src, Vec3f* dest);
 void Matrix_MtxFCopy(MtxF* dest, MtxF* src);
 void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest);

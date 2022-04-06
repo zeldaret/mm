@@ -1555,7 +1555,7 @@ void EnWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == 6) {
-        Matrix_GetStateTranslationAndScaledX(1200.0f, &sp20);
+        Matrix_MultVecX(1200.0f, &sp20);
         this->collider3.dim.pos.x = sp20.x;
         this->collider3.dim.pos.y = sp20.y;
         this->collider3.dim.pos.z = sp20.z;

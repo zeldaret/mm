@@ -551,7 +551,7 @@ void EnCrow_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     EnCrow* this = (EnCrow*)thisx;
 
     if (limbIndex == OBJECT_CROW_LIMB_BODY) {
-        Matrix_GetStateTranslationAndScaledX(2500.0f, this->bodyPartsPos);
+        Matrix_MultVecX(2500.0f, this->bodyPartsPos);
         return;
     }
     if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||

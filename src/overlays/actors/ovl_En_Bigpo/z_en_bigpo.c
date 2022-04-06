@@ -1250,7 +1250,7 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == 7) {
         // we scale the vec3f... then do nothing with it?
-        Matrix_GetStateTranslationAndScaledY(1400.0f, &unusedVec);
+        Matrix_MultVecY(1400.0f, &unusedVec);
         if ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer > 18)) {
             if (this->actor.scale.x != 0.0f) {
                 Matrix_Scale(0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x, 0.014f / this->actor.scale.x,
@@ -1265,13 +1265,13 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         if (limbByte < 3) {
             Matrix_MultZero(&this->limbPos[limbByte]);
         } else if (limbByte == 3) {
-            Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[limbByte]);
+            Matrix_MultVecX(3000.0f, &this->limbPos[limbByte]);
         } else if (limbByte == 4) {
-            Matrix_GetStateTranslationAndScaledY(-2000.0f, &this->limbPos[limbByte]);
+            Matrix_MultVecY(-2000.0f, &this->limbPos[limbByte]);
         } else {
             v2ptr = &this->limbPos[limbByte + 1];
             v1ptr = D_80B65084;
-            Matrix_GetStateTranslationAndScaledX(-4000.0f, &this->limbPos[limbByte]);
+            Matrix_MultVecX(-4000.0f, &this->limbPos[limbByte]);
 
             for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
                 Matrix_MultVec3f(v1ptr, v2ptr);
@@ -1387,7 +1387,7 @@ void EnBigpo_DrawLantern(Actor* thisx, GlobalContext* globalCtx) {
 
     gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(globalCtx->state.gfxCtx, 160, 0, 255, this->mainColor.a));
 
-    Matrix_GetStateTranslationAndScaledY(1400.0f, &vec2);
+    Matrix_MultVecY(1400.0f, &vec2);
     Lights_PointGlowSetInfo(&this->fires[0].info, vec2.x + vec1.x, vec2.y + vec1.y, vec2.z + vec1.z,
                             this->lanternColor.r, this->lanternColor.g, this->lanternColor.b, this->lanternColor.a);
 

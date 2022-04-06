@@ -182,7 +182,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                                               50.0f;
                     if (gSaveContext.save.weekEventReg[84] & 0x10) {
                         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
-                        Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp64);
+                        Matrix_MultVecZ(52.519997f, &sp64);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp64, &sp64);
                         this->unk_360 = (EnOt*)Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_OT, sp64.x, sp64.y,
                                                            sp64.z, 0, BINANG_ROT180(this->actor.shape.rot.y), 1,
@@ -207,7 +207,7 @@ void EnOt_Init(Actor* thisx, GlobalContext* globalCtx) {
                         this->unk_360 = D_80B5E888;
                         this->unk_360->unk_360 = this;
                         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
-                        Matrix_GetStateTranslationAndScaledZ(800.0f, &sp58);
+                        Matrix_MultVecZ(800.0f, &sp58);
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp58, &sp58);
                         Math_Vec3f_Copy(&this->unk_360->actor.world.pos, &sp58);
                         Math_Vec3f_Copy(&this->unk_360->actor.prevPos, &sp58);
@@ -355,7 +355,7 @@ void func_80B5BFB8(EnOt* this, GlobalContext* globalCtx) {
     if (Actor_DistanceBetweenActors(&this->actor, &this->unk_360->actor) <= 52.519997f) {
         this->unk_73C = 50;
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
-        Matrix_GetStateTranslationAndScaledZ(52.519997f, &sp34);
+        Matrix_MultVecZ(52.519997f, &sp34);
         this->unk_360->actor.world.pos.x = this->actor.world.pos.x + sp34.x;
         this->unk_360->actor.world.pos.y = this->actor.world.pos.y + sp34.y;
         this->unk_360->actor.world.pos.z = this->actor.world.pos.z + sp34.z;
@@ -438,8 +438,8 @@ void func_80B5C3D8(EnOt* this, GlobalContext* globalCtx) {
 
     this->unk_3A0 += 0x2D8;
     Matrix_RotateYS(this->unk_3A0, MTXMODE_NEW);
-    Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp5C);
-    Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp50);
+    Matrix_MultVecZ(26.259998f, &sp5C);
+    Matrix_MultVecZ(-26.259998f, &sp50);
     this->unk_348.x = this->unk_394.x + sp5C.x;
     this->unk_348.y = this->unk_394.y;
     this->unk_348.z = this->unk_394.z + sp5C.z;
@@ -502,7 +502,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
     sp3E = Actor_YawToPoint(&player->actor, &this->unk_394);
     Matrix_RotateYS(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
     if (this->unk_33C == 2) {
-        Matrix_GetStateTranslationAndScaledZ(26.259998f, &sp30);
+        Matrix_MultVecZ(26.259998f, &sp30);
     } else {
         if (this->unk_73C == 0) {
             gSaveContext.save.weekEventReg[84] |= 0x10;
@@ -519,7 +519,7 @@ void func_80B5C6DC(EnOt* this, GlobalContext* globalCtx) {
         } else {
             this->unk_73C--;
         }
-        Matrix_GetStateTranslationAndScaledZ(-26.259998f, &sp30);
+        Matrix_MultVecZ(-26.259998f, &sp30);
     }
     this->unk_348.x = this->unk_394.x + sp30.x;
     this->unk_348.y = this->unk_394.y;
@@ -712,7 +712,7 @@ void func_80B5CEC8(EnOt* this, GlobalContext* globalCtx) {
             this->unk_360 = D_80B5E888;
             this->unk_360->unk_360 = this;
             Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_NEW);
-            Matrix_GetStateTranslationAndScaledZ(800.0f, &sp2C);
+            Matrix_MultVecZ(800.0f, &sp2C);
             Math_Vec3f_Sum(&this->actor.world.pos, &sp2C, &this->unk_360->actor.world.pos);
             Math_Vec3f_Copy(&this->unk_360->actor.prevPos, &this->unk_360->actor.world.pos);
             this->unk_32C &= ~0x800;
