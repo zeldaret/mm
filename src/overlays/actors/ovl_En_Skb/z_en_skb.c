@@ -1087,7 +1087,7 @@ s32 EnSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     }
 
     if (limbIndex == 10) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 
     return false;
@@ -1112,7 +1112,7 @@ void EnSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
             (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
             (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-            Matrix_GetStateTranslation(&this->limbPos[this->limbCount]);
+            Matrix_MultZero(&this->limbPos[this->limbCount]);
             this->limbCount++;
         } else if ((limbIndex == 11) && !(this->unk_3D8 & 2)) {
             Matrix_MultVec3f(&D_80997564, &this->limbPos[this->limbCount]);

@@ -172,7 +172,7 @@ void func_80B80440(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     } else {
         Matrix_Translate(D_80B8216C.x, D_80B8216C.y, D_80B8216C.z, MTXMODE_APPLY);
     }
-    Matrix_GetStateTranslation(&sp50);
+    Matrix_MultZero(&sp50);
     func_80B80358(&sp50);
     this->unk_204.unk_00 = Actor_SpawnAsChildAndCutscene(
         &globalCtx->actorCtx, globalCtx, ACTOR_BG_IKANA_BLOCK, sp50.x, sp50.y, sp50.z, this->dyna.actor.shape.rot.x,
@@ -221,7 +221,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                     Matrix_RotateYS(actor->shape.rot.y - this->dyna.actor.home.rot.y, MTXMODE_APPLY);
                     Matrix_RotateXS(actor->shape.rot.x - this->dyna.actor.home.rot.x, MTXMODE_APPLY);
                     Matrix_RotateZS(actor->shape.rot.z - this->dyna.actor.home.rot.z, MTXMODE_APPLY);
-                    Matrix_GetStateTranslation(&actor->world.pos);
+                    Matrix_MultZero(&actor->world.pos);
                     func_80B80358(&actor->world.pos);
                     Matrix_Get(&sp68);
                     func_8018219C(&sp68, &actor->shape.rot, 0);
@@ -400,7 +400,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_Push();
 
         Matrix_Mult(&this->unk_204.unk_04, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&ikanaBlock->actor.world.pos);
+        Matrix_MultZero(&ikanaBlock->actor.world.pos);
         func_80B80358(&ikanaBlock->actor.world.pos);
         Matrix_Get(&sp3C);
         func_8018219C(&sp3C, &ikanaBlock->actor.shape.rot, 0);
@@ -414,7 +414,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_Push();
 
             Matrix_Mult(&this->unk_248[i].unk_04, MTXMODE_APPLY);
-            Matrix_GetStateTranslation(&ptr->world.pos);
+            Matrix_MultZero(&ptr->world.pos);
             func_80B80358(&ptr->world.pos);
             Matrix_Get(&sp3C);
             func_8018219C(&sp3C, &ptr->shape.rot, 0);
@@ -429,7 +429,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_Push();
 
             Matrix_Mult(&this->unk_2D0[i].unk_04, MTXMODE_APPLY);
-            Matrix_GetStateTranslation(&ptr2->world.pos);
+            Matrix_MultZero(&ptr2->world.pos);
             func_80B80358(&ptr2->world.pos);
             Matrix_Get(&sp3C);
             func_8018219C(&sp3C, &ptr2->shape.rot, 0);
@@ -444,7 +444,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_Push();
 
             Matrix_Mult(&this->unk_3E0[i].unk_04, MTXMODE_APPLY);
-            Matrix_GetStateTranslation(&ptr3->world.pos);
+            Matrix_MultZero(&ptr3->world.pos);
             func_80B80358(&ptr3->world.pos);
             Matrix_Get(&sp3C);
             func_8018219C(&sp3C, &ptr3->shape.rot, 0);
@@ -458,7 +458,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_Push();
 
         Matrix_Mult(&this->unk_520.unk_00, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&player->actor.world.pos);
+        Matrix_MultZero(&player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
         func_80B80358(&player->actor.world.pos);
         Matrix_Get(&sp3C);
@@ -484,10 +484,10 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&sp34);
+        Matrix_MultZero(&sp34);
         Matrix_SetStateRotationAndTranslation(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
                                               sp40->actor.world.pos.z, &sp40->actor.shape.rot);
-        Matrix_GetStateTranslation(&sp28);
+        Matrix_MultZero(&sp28);
 
         Matrix_Pop();
 

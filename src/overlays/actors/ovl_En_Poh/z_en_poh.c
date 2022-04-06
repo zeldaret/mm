@@ -899,7 +899,7 @@ void EnPoh_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
     temp_s3 = D_80B2F71C[limbIndex];
     if (temp_s3 != -1) {
         if (temp_s3 < 4) {
-            Matrix_GetStateTranslation(&this->limbPos[temp_s3]);
+            Matrix_MultZero(&this->limbPos[temp_s3]);
         } else if (temp_s3 == 4) {
             Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[temp_s3]);
         } else {

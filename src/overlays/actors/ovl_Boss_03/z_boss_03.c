@@ -2629,7 +2629,7 @@ void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPDisplayList(POLY_OPA_DISP++, sGyorgSeaweedDLs[i]);
 
-        Matrix_GetStateTranslation(&this->seaweedSegmentPositions[i]);
+        Matrix_MultZero(&this->seaweedSegmentPositions[i]);
         Matrix_Translate(4000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 

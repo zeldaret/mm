@@ -580,7 +580,7 @@ void EnPr_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
     if ((limbIndex == 0) || (limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) ||
         (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 8) || (limbIndex == 9)) {
-        Matrix_GetStateTranslation(&this->limbPos[this->unk_228]);
+        Matrix_MultZero(&this->limbPos[this->unk_228]);
         this->unk_228++;
         if (this->unk_228 >= ARRAY_COUNT(this->limbPos)) {
             this->unk_228 = 0;

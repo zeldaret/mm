@@ -1977,7 +1977,7 @@ s32 EnGo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if ((ENGO_GET_F(&this->actor) == ENGO_F_8) && (limbIndex == 10)) {
         limbIndex = limbIndex;
-        Matrix_GetStateTranslation(&sp30);
+        Matrix_MultZero(&sp30);
         sp30.y = this->actor.world.pos.y;
         Math_Vec3f_ToVec3s(&this->colliderSphere.dim.worldSphere.center, &sp30);
     }

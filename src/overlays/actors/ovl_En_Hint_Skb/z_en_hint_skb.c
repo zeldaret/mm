@@ -852,7 +852,7 @@ s32 EnHintSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 10) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     } else if ((limbIndex == 12) && (this->unk_3DE == 1)) {
         Matrix_RotateZS(0x71C, MTXMODE_APPLY);
     }
@@ -883,7 +883,7 @@ void EnHintSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
             if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
                 (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
                 (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-                Matrix_GetStateTranslation(&this->limbPos[this->limbCount]);
+                Matrix_MultZero(&this->limbPos[this->limbCount]);
                 this->limbCount++;
             } else if ((limbIndex == 11) && !(this->unk_3E8 & 2)) {
                 Matrix_MultVec3f(&D_80C21E70, &this->limbPos[this->limbCount]);

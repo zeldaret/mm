@@ -1072,7 +1072,7 @@ void EnOt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (limbIndex == 1) {
-        Matrix_GetStateTranslation(&this->unk_378);
+        Matrix_MultZero(&this->unk_378);
         this->unk_32C |= 0x400;
     }
 }

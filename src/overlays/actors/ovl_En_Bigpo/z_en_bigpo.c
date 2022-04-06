@@ -1263,7 +1263,7 @@ void EnBigpo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     limbByte = D_80B65078[limbIndex];
     if (limbByte != -1) {
         if (limbByte < 3) {
-            Matrix_GetStateTranslation(&this->limbPos[limbByte]);
+            Matrix_MultZero(&this->limbPos[limbByte]);
         } else if (limbByte == 3) {
             Matrix_GetStateTranslationAndScaledX(3000.0f, &this->limbPos[limbByte]);
         } else if (limbByte == 4) {

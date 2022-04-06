@@ -1057,7 +1057,7 @@ void EnPoSisters_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     f32 temp_f2;
 
     if (D_80B1DB08[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_80B1DB08[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_80B1DB08[limbIndex]]);
     } else if (limbIndex == 9) {
         Matrix_GetStateTranslationAndScaledY(-2500.0f, &this->limbPos[4]);
         Matrix_GetStateTranslationAndScaledY(3000.0f, &this->limbPos[5]);

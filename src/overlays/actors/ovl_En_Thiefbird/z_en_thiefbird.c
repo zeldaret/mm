@@ -1100,7 +1100,7 @@ void EnThiefbird_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
         if (idx == 9) {
             Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[idx]);
         } else {
-            Matrix_GetStateTranslation(&this->limbPos[idx]);
+            Matrix_MultZero(&this->limbPos[idx]);
             if ((idx == 3) || (idx == 5)) {
                 Matrix_GetStateTranslationAndScaledX(2000.0f, &this->limbPos[idx + 1]);
             }

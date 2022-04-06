@@ -1162,7 +1162,7 @@ void EnFloormas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     EnFloormas* this = THIS;
 
     if (D_808D393C[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_808D393C[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_808D393C[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {

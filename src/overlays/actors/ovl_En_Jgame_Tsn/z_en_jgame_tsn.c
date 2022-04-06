@@ -626,7 +626,7 @@ s32 EnJgamesTsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
 
 void EnJgamesTsn_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     if (limbIndex == OBJECT_TSN_LIMB_0F) {
-        Matrix_GetStateTranslation(&thisx->focus.pos);
+        Matrix_MultZero(&thisx->focus.pos);
     }
 }
 

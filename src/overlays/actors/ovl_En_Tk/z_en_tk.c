@@ -1353,7 +1353,7 @@ void EnTk_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (this->unk_2B0 != 2) {
         switch (limbIndex) {
             case 16:
-                Matrix_GetStateTranslation(&this->actor.focus.pos);
+                Matrix_MultZero(&this->actor.focus.pos);
                 break;
 
             case 14:

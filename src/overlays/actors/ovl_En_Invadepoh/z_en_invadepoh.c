@@ -2393,7 +2393,7 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Translate(0, 57.0f, -36.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
         Matrix_RotateZS(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&this->actor.child->world.pos);
+        Matrix_MultZero(&this->actor.child->world.pos);
         Matrix_Get(&unkMtx);
         func_8018219C(&unkMtx, &this->actor.child->shape.rot, 0);
         Matrix_Pop();
@@ -4603,7 +4603,7 @@ void func_80B4E784(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
     EnInvadepoh* this = THIS;
 
     if (limbIndex == 9) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 }
 

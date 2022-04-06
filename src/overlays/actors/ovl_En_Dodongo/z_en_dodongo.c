@@ -1081,13 +1081,13 @@ void EnDodongo_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Collider_UpdateSpheres(limbIndex, &this->collider1);
     Collider_UpdateSpheres(limbIndex, &this->collider2);
     if (D_80879388[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_80879388[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_80879388[limbIndex]]);
     }
 
     if (limbIndex == 7) {
         Matrix_MultVec3f(&D_80879370, &this->unk_308);
         Matrix_MultVec3f(&D_8087937C, &this->limbPos[0]);
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
         Matrix_GetStateTranslationAndScaledY(-200.0f, &this->limbPos[1]);
     } else if (limbIndex == 13) {
         Matrix_GetStateTranslationAndScaledX(1600.0f, &this->unk_320);

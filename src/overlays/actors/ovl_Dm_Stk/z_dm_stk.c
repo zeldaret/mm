@@ -1621,7 +1621,7 @@ void DmStk_PostLimbDraw2(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     DmStk* this = THIS;
 
     if (limbIndex == 17) {
-        Matrix_GetStateTranslation(&this->unk_304);
+        Matrix_MultZero(&this->unk_304);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 

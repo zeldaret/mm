@@ -223,7 +223,7 @@ void func_80B8264C(BgDblueBalance* this) {
         Matrix_Push();
         Matrix_RotateXS(phi_s0->unk_0C, MTXMODE_NEW);
         Matrix_Translate(-545.0f, 0.0f, 270.0f, MTXMODE_APPLY);
-        Matrix_GetStateTranslation(&sp78);
+        Matrix_MultZero(&sp78);
         Matrix_Pop();
         Matrix_MultVec3f(&sp78, &phi_s0->unk_00);
 

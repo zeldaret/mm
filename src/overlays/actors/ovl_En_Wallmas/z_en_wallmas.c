@@ -709,7 +709,7 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     Gfx* gfx;
 
     if (sLimbIndexToLimbPosIndex[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {

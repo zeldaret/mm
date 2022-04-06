@@ -1129,7 +1129,7 @@ void EnRailSkb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
             if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
                 (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
                 (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-                Matrix_GetStateTranslation(&this->limbPos[this->limbCount]);
+                Matrix_MultZero(&this->limbPos[this->limbCount]);
                 this->limbCount++;
             } else if ((limbIndex == 11) && !(this->unk_402 & 2)) {
                 Matrix_MultVec3f(&D_80B734D0, &this->limbPos[this->limbCount]);

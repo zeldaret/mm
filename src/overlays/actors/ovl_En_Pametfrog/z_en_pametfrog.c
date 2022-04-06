@@ -1395,7 +1395,7 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
     s8 index;
 
     if (limbIndex == GEKKO_LIMB_HEAD) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
         this->actor.focus.rot.y = this->actor.shape.rot.y;
         Matrix_GetStateTranslationAndScaledY(2500.0f, &vec);
         center = &this->collider.elements[0].dim.worldSphere.center;
@@ -1410,7 +1410,7 @@ void EnPametfrog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLi
 
     index = limbPosIndex[limbIndex];
     if (index != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[index]);
+        Matrix_MultZero(&this->limbPos[index]);
     }
 }
 

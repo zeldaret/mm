@@ -922,11 +922,11 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_Pop();
         matrix++;
         if (i == 3) {
-            Matrix_GetStateTranslation(&spA4);
+            Matrix_MultZero(&spA4);
         }
     }
 
-    Matrix_GetStateTranslation(&this->unk_228);
+    Matrix_MultZero(&this->unk_228);
     this->collider2.dim.pos.x = ((this->unk_228.x - spA4.x) * 0.85f) + spA4.x;
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;

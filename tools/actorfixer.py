@@ -64,8 +64,9 @@ animdict = {
     "Matrix_InsertYRotation_f":                "Matrix_RotateYF",
     "Matrix_InsertZRotation_s":                "Matrix_RotateZS",
     "Matrix_InsertZRotation_f":                "Matrix_RotateZF",
+    
     "Matrix_MultiplyVector3fByState":          "Matrix_MultVec3f",
-
+    "Matrix_GetStateTranslation":              "Matrix_MultZero",
     "Matrix_MultiplyVector3fXZByCurrentState": "Matrix_MultVec3fXZ",
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",

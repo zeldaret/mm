@@ -594,7 +594,7 @@ void func_809ED50C(Boss04* this) {
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, 10.0f, MTXMODE_APPLY);
-    Matrix_GetStateTranslation(&this->unk_6BC);
+    Matrix_MultZero(&this->unk_6BC);
     Matrix_Scale(this->actor.scale.x * 13.0f, this->actor.scale.y * 13.0f, this->actor.scale.z * 16.0f, MTXMODE_APPLY);
     Matrix_RotateYS(this->unk_2DC, MTXMODE_APPLY);
     Matrix_RotateXS(this->unk_2DE, MTXMODE_APPLY);
@@ -663,10 +663,10 @@ void func_809ED50C(Boss04* this) {
     Matrix_Push();
     Matrix_Translate(100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
 
-    Matrix_GetStateTranslation(&this->unk_6A4);
+    Matrix_MultZero(&this->unk_6A4);
     Matrix_Pop();
     Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    Matrix_GetStateTranslation(&this->unk_6B0);
+    Matrix_MultZero(&this->unk_6B0);
 }
 
 void Boss04_Update(Actor* thisx, GlobalContext* globalCtx2) {

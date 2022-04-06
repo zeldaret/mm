@@ -691,9 +691,9 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, D_808F2E2C[i]);
 
-            Matrix_GetStateTranslation(&this->limbPos[1 + i]);
+            Matrix_MultZero(&this->limbPos[1 + i]);
             if ((i == 0) && (this->actionFunc == func_808F1C84)) {
-                Matrix_GetStateTranslation(&this->actor.focus.pos);
+                Matrix_MultZero(&this->actor.focus.pos);
             }
         }
 
@@ -719,7 +719,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_001828);
 
-        Matrix_GetStateTranslation(&this->limbPos[3]);
+        Matrix_MultZero(&this->limbPos[3]);
     }
 
     func_800AE5A0(globalCtx);

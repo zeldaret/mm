@@ -1551,7 +1551,7 @@ void EnWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Collider_UpdateSpheres(limbIndex, &this->collider1);
 
     if (D_809942FC[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->limbPos[D_809942FC[limbIndex]]);
+        Matrix_MultZero(&this->limbPos[D_809942FC[limbIndex]]);
     }
 
     if (limbIndex == 6) {

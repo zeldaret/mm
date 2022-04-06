@@ -2893,7 +2893,7 @@ asm/non_matchings/code/sys_matrix/Matrix_GetStateAsRSPMatrix.s,Matrix_GetStateAs
 asm/non_matchings/code/sys_matrix/Matrix_NewMtx.s,Matrix_NewMtx,0x80181A40,0xB
 asm/non_matchings/code/sys_matrix/Matrix_AppendToPolyOpaDisp.s,Matrix_AppendToPolyOpaDisp,0x80181A6C,0xB
 asm/non_matchings/code/sys_matrix/Matrix_MultVec3f.s,Matrix_MultVec3f,0x80181A98,0x2E
-asm/non_matchings/code/sys_matrix/Matrix_GetStateTranslation.s,Matrix_GetStateTranslation,0x80181B50,0xA
+asm/non_matchings/code/sys_matrix/Matrix_MultZero.s,Matrix_MultZero,0x80181B50,0xA
 asm/non_matchings/code/sys_matrix/Matrix_GetStateTranslationAndScaledX.s,Matrix_GetStateTranslationAndScaledX,0x80181B78,0x13
 asm/non_matchings/code/sys_matrix/Matrix_GetStateTranslationAndScaledY.s,Matrix_GetStateTranslationAndScaledY,0x80181BC4,0x13
 asm/non_matchings/code/sys_matrix/Matrix_GetStateTranslationAndScaledZ.s,Matrix_GetStateTranslationAndScaledZ,0x80181C10,0x13

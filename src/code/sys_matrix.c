@@ -330,9 +330,9 @@ void Matrix_RotateXS(s16 x, s32 mode) {
  *
  * where \f[ c = \cos x, s = \sin x \f].
  *
- * @note The same as Matrix_RotateXS, but uses a float angle in degrees.
+ * @note The same as Matrix_RotateXS, but uses a float angle in radians.
  *
- * @param x rotation angle in degrees.
+ * @param x rotation angle in radians.
  * @param mode APPLY or NEW.
  *
  * @remark original name may have been "Matrix_RotateX", but clashed with the previous function.
@@ -409,7 +409,7 @@ void Matrix_RotateXF(f32 x, s32 mode) {
  *
  * @note Matrix_RotateXF with mode APPLY.
  *
- * @param x rotation angle in degrees.
+ * @param x rotation angle in radians.
  */
 void Matrix_RotateXFApply(f32 x) {
     MtxF* cmf;
@@ -453,7 +453,7 @@ void Matrix_RotateXFApply(f32 x) {
  *
  * @note Matrix_RotateXF with mode NEW.
  *
- * @param x rotation angle in degrees.
+ * @param x rotation angle in radians.
  */
 void Matrix_RotateXFNew(f32 x) {
     MtxF* cmf = sCurrentMatrix;
@@ -598,9 +598,9 @@ void Matrix_RotateYS(s16 y, s32 mode) {
  *
  * where \f[ c = \cos y, s = \sin y \f].
  *
- * @note The same as Matrix_RotateYS, but uses a float angle in degrees.
+ * @note The same as Matrix_RotateYS, but uses a float angle in radians.
  *
- * @param y rotation angle in degrees.
+ * @param y rotation angle in radians.
  * @param mode APPLY or NEW.
  *
  * @remark original name may have been "Matrix_RotateY", but clashed with the previous function.
@@ -780,9 +780,9 @@ void Matrix_RotateZS(s16 z, s32 mode) {
  *
  * where \f[ c = \cos z, s = \sin z \f].
  *
- * @note The same as Matrix_RotateYS, but uses a float angle in degrees.
+ * @note The same as Matrix_RotateYS, but uses a float angle in radians.
  *
- * @param z rotation angle in degrees.
+ * @param z rotation angle in radians.
  * @param mode APPLY or NEW.
  *
  * @remark original name may have been "Matrix_RotateZ", but clashed with the previous function.
@@ -1216,16 +1216,37 @@ void Matrix_MultVec3f(Vec3f* src, Vec3f* dest) {
 }
 
 // Matrix_GetTranslation
-// Gets the translation part of a transformation matrix
-void Matrix_GetStateTranslation(Vec3f* translateOut) {
+/**
+ * @brief Multiply the vector `(0, 0, 0, 1)` by current.
+ *
+ * Can also see it as obtaining the translation vector part of current, but the former interpretation is consistent with
+ * the other functions nearby.
+ *
+ * @note Special case of Matrix_MultVec3f with `src = { 0, 0, 0 }`.
+ *
+ * @param dest output.
+ *
+ * @remark original name: "Matrix_Position_Zero"
+ */
+void Matrix_MultZero(Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
-    translateOut->x = cmf->xw;
-    translateOut->y = cmf->yw;
-    translateOut->z = cmf->zw;
+    dest->x = cmf->xw;
+    dest->y = cmf->yw;
+    dest->z = cmf->zw;
 }
 
-// Matrix_MultX
+// Matrix_MultVecX
+/**
+ * @brief Multiply the vector `(x, 0, 0, 1)` by current.
+ *
+ * I.e. calculate \f[ A(x, 0, 0) + b \f].
+ *
+ * @note Special case of Matrix_MultVec3f with `src = { x, 0, 0 }`.
+ *
+ * @param x multiplier of unit vector in x direction.
+ * @param dest output.
+ */
 void Matrix_GetStateTranslationAndScaledX(f32 x, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
@@ -1234,7 +1255,17 @@ void Matrix_GetStateTranslationAndScaledX(f32 x, Vec3f* dest) {
     dest->z = cmf->zw + cmf->zx * x;
 }
 
-// Matrix_MultY
+// Matrix_MultVecY
+/**
+ * @brief Multiply the vector `(0,y,0,1)` by current.
+ *
+ * I.e. calculate \f[ A(0,y,0) + b \f].
+ *
+ * @note Special case of Matrix_MultVec3f with `src = { 0, y, 0 }`.
+ *
+ * @param y multiplier of unit vector in y direction.
+ * @param dest output.
+ */
 void Matrix_GetStateTranslationAndScaledY(f32 y, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
@@ -1243,7 +1274,17 @@ void Matrix_GetStateTranslationAndScaledY(f32 y, Vec3f* dest) {
     dest->z = cmf->zw + cmf->zy * y;
 }
 
-// Matrix_MultZ
+// Matrix_MultVecZ
+/**
+ * @brief Multiply the vector `(0,0,z,1)` by current.
+ *
+ * I.e. calculate \f[ A(0,0,z) + b \f]`.
+ *
+ * @note Special case of Matrix_MultVec3f with `src = { 0, 0, z }`.
+ *
+ * @param z multiplier of unit vector in z direction.
+ * @param dest output.
+ */
 void Matrix_GetStateTranslationAndScaledZ(f32 z, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
@@ -1257,8 +1298,8 @@ void Matrix_GetStateTranslationAndScaledZ(f32 z, Vec3f* dest) {
  *
  * The same as @sa Matrix_MultVec3f, but only applies to the x and z components.
  *
- * @param src input vector
- * @param dest output vector
+ * @param src input vector.
+ * @param dest output vector.
  */
 void Matrix_MultVec3fXZ(Vec3f* src, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;

@@ -483,7 +483,7 @@ void EnVm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (limbIndex == OBJECT_VM_LIMB_02) {
         sp4C = NULL;
 
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
         Matrix_GetStateTranslationAndScaledZ(1600.0f, &this->unk_228);
         Matrix_GetStateTranslationAndScaledZ(this->unk_224 * 71.428566f, &this->unk_234);
 

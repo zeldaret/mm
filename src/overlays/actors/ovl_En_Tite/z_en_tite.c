@@ -1121,14 +1121,14 @@ void EnTite_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
     if (this->unk_2BA == 0) {
         idx = D_80896B70[limbIndex];
         if (idx != -1) {
-            Matrix_GetStateTranslation(&this->limbPos[idx]);
+            Matrix_MultZero(&this->limbPos[idx]);
             if (idx >= 1) {
                 Matrix_GetStateTranslationAndScaledX(2500.0f, &this->limbPos[idx + 4]);
             }
         }
     } else if (this->unk_2BA > 0) {
         if (D_80896B8C[limbIndex] != -1) {
-            Matrix_GetStateTranslation(&this->limbPos[D_80896B8C[limbIndex]]);
+            Matrix_MultZero(&this->limbPos[D_80896B8C[limbIndex]]);
         }
 
         if (limbIndex == 24) {

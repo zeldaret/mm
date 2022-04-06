@@ -404,7 +404,7 @@ void EnHg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     if (limbIndex == HG_LIMB_HEAD) {
         Matrix_Get(&this->unk1D8);
     } else if (limbIndex == HG_LIMB_PELVIS) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 }
 

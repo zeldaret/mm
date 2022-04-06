@@ -713,7 +713,7 @@ void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         if (value < 3) {
             Matrix_GetStateTranslationAndScaledX(1000.0f, &this->limbPos[value]);
         } else {
-            Matrix_GetStateTranslation(&this->limbPos[value]);
+            Matrix_MultZero(&this->limbPos[value]);
             ptr1 = &D_808BEFA4[0];
             ptr2 = &this->limbPos[value + 1];
             for (i = value + 1; i < ARRAY_COUNT(this->limbPos); i++) {
@@ -724,7 +724,7 @@ void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
 
     if (limbIndex == 2) {
-        Matrix_GetStateTranslation(&this->actor.focus.pos);
+        Matrix_MultZero(&this->actor.focus.pos);
     }
 }
 
