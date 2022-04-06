@@ -726,14 +726,14 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
             phi_v0 = (globalCtx->gameplayFrames % 256) * 4000;
         }
 
-        Matrix_InsertZRotation_s(phi_v0, MTXMODE_APPLY);
+        Matrix_RotateZS(phi_v0, MTXMODE_APPLY);
         Matrix_Scale(sp5C, sp5C, sp5C, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
 
         Matrix_Pop();
-        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     } else if (this->actor.velocity.y != 0.0f) {

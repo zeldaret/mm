@@ -111,7 +111,7 @@ void func_80A3D9C4(ObjSmork* this, GlobalContext* globalCtx) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
         this->actor.shape.rot.y = BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)));
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.1f, 0.1f, 0.0f, MTXMODE_APPLY);
 
         OPEN_DISPS(globalCtx->state.gfxCtx);

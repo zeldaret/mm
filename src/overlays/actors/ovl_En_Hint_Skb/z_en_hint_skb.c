@@ -854,7 +854,7 @@ s32 EnHintSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
     } else if (limbIndex == 10) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);
     } else if ((limbIndex == 12) && (this->unk_3DE == 1)) {
-        Matrix_InsertZRotation_s(0x71C, MTXMODE_APPLY);
+        Matrix_RotateZS(0x71C, MTXMODE_APPLY);
     }
 
     if (((limbIndex == 11) || (limbIndex == 12)) && (this->unk_3E8 & 2)) {

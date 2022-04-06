@@ -420,9 +420,9 @@ void ObjVspinyroll_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f,
                              this->dyna.actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z + 0x4000, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x + this->unk_3C6, MTXMODE_APPLY);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z + 0x4000, MTXMODE_APPLY);
+    Matrix_RotateXS(this->dyna.actor.shape.rot.x + this->unk_3C6, MTXMODE_APPLY);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Gfx_DrawDListOpa(globalCtx, object_spinyroll_DL_000460);
 }
@@ -440,9 +440,9 @@ void func_80A3D2C0(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f,
                              this->dyna.actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(sp3C.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(sp3C.z, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(sp3C.x, MTXMODE_APPLY);
+    Matrix_RotateYS(sp3C.y, MTXMODE_APPLY);
+    Matrix_RotateZS(sp3C.z, MTXMODE_APPLY);
+    Matrix_RotateXS(sp3C.x, MTXMODE_APPLY);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

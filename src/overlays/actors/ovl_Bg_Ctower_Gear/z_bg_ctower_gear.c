@@ -74,9 +74,9 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     s16 rotZ = this->dyna.actor.shape.rot.z & 0x1FFF;
 
     if (flag40 && (rotZ < 0x1B58) && (rotZ >= 0x1388)) {
-        Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_NEW);
-        Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
+        Matrix_RotateXS(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
         for (i = 0; i < 4; i++) {
             if ((u32)Rand_Next() >= 0x40000000) {
                 splashOffset.x = sExitSplashOffsets[i].x - (Rand_ZeroOne() * 30.0f);
@@ -92,9 +92,9 @@ void BgCtowerGear_Splash(BgCtowerGear* this, GlobalContext* globalCtx) {
     }
     if ((rotZ < 0x1F4) && (rotZ >= 0)) {
         if (flag40) {
-            Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(this->dyna.actor.home.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->dyna.actor.home.rot.z, MTXMODE_APPLY);
             for (i = 0; i < 3; i++) {
                 for (j = 0; j < 2; j++) {
                     splashOffset.x = sEnterSplashOffsets[i].x + (Rand_ZeroOne() * 10.0f);

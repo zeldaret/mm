@@ -1586,7 +1586,7 @@ s32 EnSob1_BombShopkeeper_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbInd
     EnSob1* this = THIS;
 
     if (limbIndex == 15) {
-        Matrix_InsertXRotation_s(this->headRot, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot, MTXMODE_APPLY);
     }
     return false;
 }

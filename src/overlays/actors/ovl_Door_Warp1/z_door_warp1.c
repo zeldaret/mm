@@ -1053,7 +1053,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                              MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
 
@@ -1070,7 +1070,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                              MTXMODE_NEW);
-    Matrix_RotateY(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 0.0f, 1.0f, MTXMODE_APPLY);
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);

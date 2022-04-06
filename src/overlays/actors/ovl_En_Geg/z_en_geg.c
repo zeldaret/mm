@@ -969,7 +969,7 @@ void EnGeg_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
 
         Matrix_MultiplyVector3fByState(&D_80BB407C, &this->unk_4B4);
         Matrix_Push();
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&sp38, &this->unk_4C0[0]);
         Matrix_MultiplyVector3fByState(&sp2C, &this->unk_4C0[1]);
         Matrix_Pop();
@@ -1001,9 +1001,9 @@ void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
             Matrix_Pop();
             Matrix_Translate(this->unk_470.x, this->unk_470.y, this->unk_470.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_47C.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_47C.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_47C.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_47C.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_47C.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_47C.z, MTXMODE_APPLY);
             Matrix_Push();
             break;
 
@@ -1025,9 +1025,9 @@ void EnGeg_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
             Matrix_Pop();
             Matrix_Translate(this->unk_484.x, this->unk_484.y, this->unk_484.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_490.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_490.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_490.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_490.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_490.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_490.z, MTXMODE_APPLY);
             Matrix_Push();
             break;
     }
@@ -1064,12 +1064,12 @@ void func_80BB3CB4(EnGeg* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
                              this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(sp24, MTXMODE_APPLY);
+    Matrix_RotateXS(sp24, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_oF1d_map_DL_0091A8);

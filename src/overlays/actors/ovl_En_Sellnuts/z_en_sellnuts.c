@@ -1101,7 +1101,7 @@ s32 EnSellnuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     }
 
     if (limbIndex == 24) {
-        Matrix_InsertXRotation_s(this->unk_342, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_342, MTXMODE_APPLY);
     }
 
     if (limbIndex == 26) {
@@ -1131,7 +1131,7 @@ void EnSellnuts_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor
     }
 
     if (limbIndex == 24) {
-        Matrix_RotateY(this->unk_344, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_344, MTXMODE_APPLY);
     }
 }
 

@@ -592,7 +592,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->unk_1A8,
                                  this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_knight_DL_0193B0);
@@ -600,7 +600,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         if (this->unk_1D8 > 0.0f) {
             Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 84.0f,
                                      this->actor.world.pos.z - 2.0f, MTXMODE_NEW);
-            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
             func_809F2120(1, 0x71A5, 0x263A);
 
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 10, 0, 0);
@@ -648,7 +648,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 205, (u8)((100.0f * sp68) + 65.0f), 128);
 
         Matrix_Scale(this->unk_1DC, this->unk_1DC, 1.0f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 64, MTXMODE_APPLY);
+        Matrix_RotateZS(globalCtx->gameplayFrames * 64, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);

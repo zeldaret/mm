@@ -140,9 +140,9 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
     Vec3f sp88;
     MtxF sp48;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_MultiplyVector3fByState(&D_80939018, &spAC);
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spA0);
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
@@ -155,7 +155,7 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
         func_800C0094(this->dyna.actor.floorPoly, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                       this->dyna.actor.world.pos.z, &sp48);
         Matrix_Put(&sp48);
-        Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Get(&sp48);
         func_8018219C(&sp48, &this->dyna.actor.shape.rot, 0);
         return true;

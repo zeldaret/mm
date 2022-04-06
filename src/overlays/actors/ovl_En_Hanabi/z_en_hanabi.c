@@ -161,7 +161,7 @@ void func_80B22FA8(EnHanabiStruct* arg0, GlobalContext* globalCtx2) {
             } else {
                 Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
             }
-            Matrix_InsertZRotation_s(globalCtx->gameplayFrames * 4864, MTXMODE_APPLY);
+            Matrix_RotateZS(globalCtx->gameplayFrames * 4864, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

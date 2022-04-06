@@ -214,7 +214,7 @@ void Boss04_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_6F6 = 82;
     phi_s0_2 = 0;
     for (i = 0; i < 82; i++) {
-        Matrix_RotateY(phi_s0_2, MTXMODE_NEW);
+        Matrix_RotateYS(phi_s0_2, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(phi_f20, &sp90);
         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_TANRON2, this->unk_6E8 + sp90.x,
                            phi_f24, this->unk_6F0 + sp90.z, 0, 0, 0, i);
@@ -245,7 +245,7 @@ void func_809EC568(Boss04* this, GlobalContext* globalCtx) {
     this->unk_1FE = 15;
     if ((this->unk_708 != 0) && (this->unk_708 < 10)) {
         this->actor.world.pos.y = (Math_SinS(this->unk_1F4 * 512) * 10.0f) + (this->actor.floorHeight + 160.0f);
-        Matrix_RotateY(this->actor.yawTowardsPlayer, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
     }
 
     switch (this->unk_708) {
@@ -592,12 +592,12 @@ void func_809ED50C(Boss04* this) {
     this->unk_2DC += this->unk_2E0;
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, 10.0f, MTXMODE_APPLY);
     Matrix_GetStateTranslation(&this->unk_6BC);
     Matrix_Scale(this->actor.scale.x * 13.0f, this->actor.scale.y * 13.0f, this->actor.scale.z * 16.0f, MTXMODE_APPLY);
-    Matrix_RotateY(this->unk_2DC, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->unk_2DE, MTXMODE_APPLY);
+    Matrix_RotateYS(this->unk_2DC, MTXMODE_APPLY);
+    Matrix_RotateXS(this->unk_2DE, MTXMODE_APPLY);
     Matrix_Push();
 
     for (i = 0; i < ARRAY_COUNT(this->unk_2E4); i++) {
@@ -838,7 +838,7 @@ void Boss04_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPDisplayList(POLY_XLU_DISP++, object_boss04_DL_004510);
 
         Matrix_Translate(this->unk_6BC.x, this->actor.floorHeight, this->unk_6BC.z, MTXMODE_NEW);
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, -20.0f, MTXMODE_APPLY);
         Matrix_Scale(this->unk_6F8 * 1.8f, 0.0f, this->unk_700 * 2.8f, MTXMODE_APPLY);
 

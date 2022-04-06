@@ -912,7 +912,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         Matrix_ToMtx(matrix);
 
         if ((i & 1) != 0) {
-            Matrix_RotateY(0x2000, MTXMODE_APPLY);
+            Matrix_RotateYS(0x2000, MTXMODE_APPLY);
         }
 
         Matrix_GetStateTranslationAndScaledZ(1842.1053f, vecPtr++);

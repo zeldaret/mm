@@ -284,7 +284,7 @@ void func_80919768(Actor* thisx, GlobalContext* globalCtx2) {
         if (*distanceTraveled < 1.0f) {
             aux = 1.0f - SQ(*distanceTraveled);
             Matrix_Translate(thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z, MTXMODE_NEW);
-            Matrix_RotateY(sp92, MTXMODE_APPLY);
+            Matrix_RotateYS(sp92, MTXMODE_APPLY);
             Matrix_Translate(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
                                      initialPositions->y * ((this->dy * aux) + (1.0f - this->dy)),
                                      initialPositions->z * ((this->dz * aux) + (1.0f - this->dz)), MTXMODE_APPLY);

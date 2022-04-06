@@ -1318,7 +1318,7 @@ void EnSw_Draw(Actor* thisx, GlobalContext* globalCtx) {
             func_800B8050(&this->actor, globalCtx, MTXMODE_NEW);
         }
         func_8012C28C(globalCtx->state.gfxCtx);
-        Matrix_InsertXRotation_s(-0x3C72, MTXMODE_APPLY);
+        Matrix_RotateXS(-0x3C72, MTXMODE_APPLY);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSw_OverrideLimbDraw, NULL,
                           &this->actor);
     }

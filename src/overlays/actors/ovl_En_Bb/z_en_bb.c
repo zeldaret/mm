@@ -664,7 +664,7 @@ void EnBb_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
             currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
             currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
             currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
-            Matrix_InsertZRotation_s(thisx->world.rot.z, MTXMODE_APPLY);
+            Matrix_RotateZS(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, this->limbDList);
@@ -691,7 +691,7 @@ void EnBb_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->flameScaleX > 0.0f) {
         currentMatrixState = Matrix_GetCurrent();
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_RotateY(
+        Matrix_RotateYS(
             ((Camera_GetCamDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) - this->actor.shape.rot.y) + 0x8000),
             MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);

@@ -2391,8 +2391,8 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                               &this->actor.shape.rot);
         Matrix_Translate(0, 57.0f, -36.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
+        Matrix_RotateXS(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
+        Matrix_RotateZS(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
         Matrix_GetStateTranslation(&this->actor.child->world.pos);
         Matrix_Get(&unkMtx);
         func_8018219C(&unkMtx, &this->actor.child->shape.rot, 0);
@@ -4350,15 +4350,15 @@ void func_80B4D9F4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
 
     if ((limbIndex == 12) && (this->alienBeamAlpha != 0)) {
         Matrix_Push();
-        Matrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
-        Matrix_RotateY(-0x3830, MTXMODE_APPLY);
+        Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
+        Matrix_RotateYS(-0x3830, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
         Matrix_Get(&D_80B502A0);
         Matrix_Pop();
     } else if ((limbIndex == 13) && (this->alienBeamAlpha != 0)) {
         Matrix_Push();
-        Matrix_InsertZRotation_s(-0x53ED, MTXMODE_APPLY);
-        Matrix_RotateY(-0x47D0, MTXMODE_APPLY);
+        Matrix_RotateZS(-0x53ED, MTXMODE_APPLY);
+        Matrix_RotateYS(-0x47D0, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 1.0f, 1.5f, MTXMODE_APPLY);
         Matrix_Get(&D_80B502E0);
         Matrix_Pop();
@@ -4537,7 +4537,7 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     sp5C.z += thisx->world.pos.z;
     EnInvadepoh_SetSysMatrix(&sp5C);
     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-    Matrix_InsertZRotation_s(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
+    Matrix_RotateZS(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

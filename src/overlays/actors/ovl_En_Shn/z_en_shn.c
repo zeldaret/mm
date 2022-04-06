@@ -424,9 +424,9 @@ void EnShn_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
         Matrix_Pop();
         Matrix_Translate(this->unk_1E8.x, this->unk_1E8.y, this->unk_1E8.z, 0);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, 1);
-        Matrix_RotateY(this->unk_1F4.y, 1);
-        Matrix_InsertXRotation_s(this->unk_1F4.x, 1);
-        Matrix_InsertZRotation_s(this->unk_1F4.z, 1);
+        Matrix_RotateYS(this->unk_1F4.y, 1);
+        Matrix_RotateXS(this->unk_1F4.x, 1);
+        Matrix_RotateZS(this->unk_1F4.z, 1);
         Matrix_Push();
     }
 }

@@ -78,7 +78,7 @@ s32 func_808F8AA0(EnHorseGameCheck* this, GlobalContext* globalCtx) {
                   this->dyna.actor.world.pos.z, &sp38);
 
     Matrix_Put(&sp38);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.y, MTXMODE_APPLY);
     Matrix_Get(&sp38);
 
@@ -374,7 +374,7 @@ s32 func_808F96E4(EnHorseGameCheck* this, GlobalContext* globalCtx) {
                   this->dyna.actor.world.pos.z, &sp38);
 
     Matrix_Put(&sp38);
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.y, MTXMODE_APPLY);
     Matrix_Get(&sp38);
 

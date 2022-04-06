@@ -1101,7 +1101,7 @@ s32 EnRailSkb_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 
         Matrix_MultiplyVector3fByState(&sp24, &this->actor.focus.pos);
     } else if ((limbIndex == 12) && (this->unk_3FA == 1)) {
-        Matrix_InsertZRotation_s(1820, MTXMODE_APPLY);
+        Matrix_RotateZS(1820, MTXMODE_APPLY);
     }
 
     if (((limbIndex == 11) || (limbIndex == 12)) && (this->unk_402 & 2)) {

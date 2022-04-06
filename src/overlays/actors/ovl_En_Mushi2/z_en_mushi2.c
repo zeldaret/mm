@@ -283,9 +283,9 @@ void func_80A68ED8(EnMushi2* this) {
 }
 
 void func_80A68F24(EnMushi2* this) {
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_MultiplyVector3fByState(&D_80A6B9A0, &this->unk_310);
     Matrix_MultiplyVector3fByState(&D_80A6B9AC, &this->unk_31C);
     Matrix_MultiplyVector3fByState(&D_80A6B9B8, &this->unk_328);
@@ -320,7 +320,7 @@ s32 func_80A68F9C(EnMushi2* this, s16 arg1) {
     matrix->mf[3][2] = 0.0f;
     matrix->mf[3][3] = 0.0f;
 
-    Matrix_RotateY(arg1, MTXMODE_APPLY);
+    Matrix_RotateYS(arg1, MTXMODE_APPLY);
 
     this->unk_310.x = matrix->mf[0][0];
     this->unk_310.y = matrix->mf[0][1];
@@ -367,7 +367,7 @@ s32 func_80A690C4(EnMushi2* this, s16 arg1) {
     matrix->mf[3][2] = 0.0f;
     matrix->mf[3][3] = 0.0f;
 
-    Matrix_InsertXRotation_s(arg1, MTXMODE_APPLY);
+    Matrix_RotateXS(arg1, MTXMODE_APPLY);
 
     this->unk_310.x = matrix->mf[0][0];
     this->unk_310.y = matrix->mf[0][1];

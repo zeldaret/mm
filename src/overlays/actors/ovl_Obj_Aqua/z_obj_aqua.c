@@ -284,12 +284,12 @@ void ObjAqua_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (actionFuncTemp) {
         s16 rotation = Math_SinS(this->unk_198) * 8000.0f;
 
-        Matrix_InsertZRotation_s(rotation, MTXMODE_APPLY);
+        Matrix_RotateZS(rotation, MTXMODE_APPLY);
         Matrix_Scale(1.3f, 1.0f, 1.0f, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(rotation * -1, MTXMODE_APPLY);
+        Matrix_RotateZS(rotation * -1, MTXMODE_APPLY);
         Matrix_Scale(10.0f / 13.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     }
-    Matrix_RotateY(yaw, MTXMODE_APPLY);
+    Matrix_RotateYS(yaw, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
     CLOSE_DISPS(globalCtx->state.gfxCtx);

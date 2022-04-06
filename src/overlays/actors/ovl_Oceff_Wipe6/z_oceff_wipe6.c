@@ -91,7 +91,7 @@ void OceffWipe6_Draw(Actor* thisx, GlobalContext* globalCtx) {
                              activeCamEye.z + quakeOffset.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-    Matrix_InsertXRotation_s(0x708, MTXMODE_APPLY);
+    Matrix_RotateXS(0x708, MTXMODE_APPLY);
     Matrix_Translate(0.0f, 0.0f, -z, MTXMODE_APPLY);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     AnimatedMat_Draw(globalCtx, ovl_Oceff_Wipe6_Matanimheader_000338);

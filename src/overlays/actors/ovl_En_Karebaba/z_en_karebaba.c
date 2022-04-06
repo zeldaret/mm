@@ -708,7 +708,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Matrix_Scale(sp8C, sp8C, sp8C, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.home.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.home.rot.y, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_dekubaba_DL_0010F0);

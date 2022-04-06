@@ -310,9 +310,9 @@ void func_8095DFF0(EnIshi* this, GlobalContext* globalCtx) {
         sp3C = Item_DropCollectible(globalCtx, &this->actor.world.pos, temp | (ENISHI_GET_FE00(&this->actor) << 8));
         if (sp3C != NULL) {
             Matrix_Push();
-            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
             Matrix_GetStateTranslationAndScaledY(1.0f, &sp30);
             sp2C = Math3D_Parallel(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {

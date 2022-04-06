@@ -1541,14 +1541,14 @@ s32 EnIn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == 16) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk358.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->unk358.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk358.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->unk358.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         func_808F6334(this, globalCtx);
     }
     if (limbIndex == 9) {
-        Matrix_RotateY(this->unk35E.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk35E.x, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk35E.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk35E.x, MTXMODE_APPLY);
     }
     if (limbIndex == 9 || limbIndex == 10 || limbIndex == 13) {
         rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);

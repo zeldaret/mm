@@ -117,6 +117,6 @@ void EnCha_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     Gfx_DrawDListOpa(globalCtx, object_cha_DL_000710);
     Matrix_Translate(-1094.0f, 4950.0f, 9.0f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->actor.home.rot.x, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.home.rot.x, MTXMODE_APPLY);
     Gfx_DrawDListOpa(globalCtx, object_cha_DL_000958);
 }

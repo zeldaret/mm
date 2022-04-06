@@ -1418,7 +1418,7 @@ void EnPametfrog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnPametfrog* this = THIS;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_RotateY(this->spinYaw, MTXMODE_APPLY);
+    Matrix_RotateYS(this->spinYaw, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnPametfrog_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,

@@ -575,7 +575,7 @@ void func_809E34B8(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
 
     xDiff = this->unk_268.x - this->actor.world.pos.x;
     yDiff = this->unk_268.y - this->actor.world.pos.y;
@@ -708,7 +708,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
-        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(sp44, &sp50);
 
         xDiff = sp50.x - player->actor.world.pos.x;
@@ -834,7 +834,7 @@ void Boss03_SetupChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     this->actionFunc = Boss03_ChewPlayer;
 
     pitchAngle = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
-    Matrix_RotateY(pitchAngle, MTXMODE_NEW);
+    Matrix_RotateYS(pitchAngle, MTXMODE_NEW);
 
     out.x = 0.0f;
     out.y = 200.0f;
@@ -865,7 +865,7 @@ void Boss03_ChewPlayer(Boss03* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
 
     xDiff = this->unk_268.x - this->actor.world.pos.x;
     yDiff = this->unk_268.y - this->actor.world.pos.y;
@@ -1396,9 +1396,9 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                  MTXMODE_NEW);
-        Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_InsertYRotation_f(sp5C, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
         Matrix_GetStateTranslationAndScaledZ(100.0f, &this->csCamAt);
 
         this->csCamEye = this->actor.world.pos;
@@ -1517,7 +1517,7 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
             Math_ApproachF(&this->actor.world.pos.y, Math_SinS(this->unk_240 * 0x1000) * 80.0f + this->waterHeight,
                            1.0f, 10.0f);
             this->actor.shape.rot.z += 0x100;
-            Matrix_RotateY(this->unk_2BE, MTXMODE_NEW);
+            Matrix_RotateYS(this->unk_2BE, MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledZ(500.0f, &sp84);
             Math_ApproachF(&this->actor.world.pos.x, sp84.x, 0.1f, 5.0f);
             Math_ApproachF(&this->actor.world.pos.z, sp84.z, 0.1f, 5.0f);
@@ -1694,7 +1694,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
 
                     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                              MTXMODE_NEW);
-                    Matrix_RotateY(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
+                    Matrix_RotateYS(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
                     Matrix_GetStateTranslationAndScaledZ(340.0f, &this->csCamEye);
 
                     this->csCamAt.x = this->actor.world.pos.x;
@@ -2612,17 +2612,17 @@ void Boss03_SeaweedDraw(Actor* thisx, GlobalContext* globalCtx) {
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateZS(0x4000, MTXMODE_APPLY);
     // The indices looks a bit random...
-    Matrix_RotateY(this->jointTable[5].x * -5.0f * 0.1f, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->jointTable[3].y * -5.0f * 0.1f, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->jointTable[2].z * 6.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_RotateYS(this->jointTable[5].x * -5.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_RotateXS(this->jointTable[3].y * -5.0f * 0.1f, MTXMODE_APPLY);
+    Matrix_RotateZS(this->jointTable[2].z * 6.0f * 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(sGyorgSeaweedDLs); i++, mtx++) {
-        Matrix_RotateY(this->jointTable[i].x + this->morphTable[i].x, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->jointTable[i].y + this->morphTable[i].y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->jointTable[i].z + this->morphTable[i].z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->jointTable[i].x + this->morphTable[i].x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->jointTable[i].y + this->morphTable[i].y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->jointTable[i].z + this->morphTable[i].z, MTXMODE_APPLY);
 
         Matrix_ToMtx(mtx);
         gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

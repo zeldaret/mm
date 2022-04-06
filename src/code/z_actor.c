@@ -95,7 +95,7 @@ void ActorShadow_Draw(Actor* actor, Lights* lights, GlobalContext* globalCtx, Gf
             Matrix_Put(&mtx);
 
             if ((dlist != gCircleShadowDL) || (actor->scale.x != actor->scale.z)) {
-                Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
+                Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
             }
 
             shadowScale *= actor->shape.shadowScale;
@@ -152,7 +152,7 @@ void ActorShadow_DrawFoot(GlobalContext* globalCtx, Light* light, MtxF* arg2, s3
     shadowScaleZ *= (4.5f - (light->l.dir[1] * 0.035f));
     shadowScaleZ = CLAMP_MIN(shadowScaleZ, 1.0f);
     Matrix_Put(arg2);
-    Matrix_RotateY(sp58, MTXMODE_APPLY);
+    Matrix_RotateYS(sp58, MTXMODE_APPLY);
     Matrix_Scale(shadowScaleX, 1.0f, shadowScaleX * shadowScaleZ, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -538,10 +538,10 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b,
                                         (u8)alpha);
 
-                        Matrix_InsertZRotation_s((targetCtx->unk4B * 512), MTXMODE_APPLY);
+                        Matrix_RotateZS((targetCtx->unk4B * 512), MTXMODE_APPLY);
 
                         for (i = 0; i < 4; i++) {
-                            Matrix_InsertZRotation_s(0x4000, MTXMODE_APPLY);
+                            Matrix_RotateZS(0x4000, MTXMODE_APPLY);
                             Matrix_Push();
                             Matrix_Translate(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
                             gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -568,7 +568,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
             Matrix_Translate(actor->focus.pos.x,
                                      actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
                                      actor->focus.pos.z, MTXMODE_NEW);
-            Matrix_RotateY((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
+            Matrix_RotateYS((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
             Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f,
                          MTXMODE_APPLY);
 

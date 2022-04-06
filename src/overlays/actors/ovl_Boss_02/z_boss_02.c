@@ -911,7 +911,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
             this->unk_0152 = 15;
             if ((s16)(BREG(71) + 140) < this->unk_0146[1]) {
                 if (this->unk_0146[0] == 0) {
-                    Matrix_RotateY(Math_Atan2S(-player->actor.world.pos.x, -player->actor.world.pos.z), MTXMODE_NEW);
+                    Matrix_RotateYS(Math_Atan2S(-player->actor.world.pos.x, -player->actor.world.pos.z), MTXMODE_NEW);
                     Matrix_GetStateTranslationAndScaledZ(1500.0f * D_809DF5B0, &spA4);
                     this->unk_0146[0] = 50;
                     this->unk_01B0.x = player->actor.world.pos.x + spA4.x;
@@ -1562,8 +1562,8 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                 flag++;
             }
             Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_RotateY(effect->unk_30, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(effect->unk_2E, MTXMODE_APPLY);
+            Matrix_RotateYS(effect->unk_30, MTXMODE_APPLY);
+            Matrix_RotateXS(effect->unk_2E, MTXMODE_APPLY);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0,
                          MTXMODE_APPLY);
 
@@ -2020,7 +2020,7 @@ void func_809DD934(Boss02* this, GlobalContext* globalCtx) {
     }
 
     if ((this->unk_1D18 != 0) && (this->unk_1D22 != 0)) {
-        Matrix_RotateY(player->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateYS(player->actor.shape.rot.y, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(this->unk_1D64, &sp58);
 
         this->unk_1D24.x = player->actor.world.pos.x + sp58.x;

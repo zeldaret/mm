@@ -503,9 +503,9 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         func_80B76ED4(this->unk_348, this->unk_34A, &this->unk_33C, &this->unk_336, phi_v0);
         Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_336.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_336.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_336.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_336.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_336.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_336.z, MTXMODE_APPLY);
     }
 
     if (limbIndex == OBJECT_TRU_LIMB_0E) {
@@ -515,9 +515,9 @@ void EnTruMt_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
         Matrix_MultiplyVector3fByState(&D_80B77668, &this->unk_370);
         Matrix_Translate(this->unk_370.x, this->unk_370.y, this->unk_370.z, MTXMODE_NEW);
-        Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_38E.z, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_38E.x, MTXMODE_APPLY);
+        Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_38E.z, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_38E.x, MTXMODE_APPLY);
         Matrix_Scale(0.008f, 0.008f, 0.008f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -549,9 +549,9 @@ void EnTruMt_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* t
     if (limbIndex == OBJECT_TRU_LIMB_15) {
         Matrix_Translate(this->unk_33C.x, this->unk_33C.y, this->unk_33C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_336.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_336.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_336.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_336.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_336.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_336.z, MTXMODE_APPLY);
     }
 }
 

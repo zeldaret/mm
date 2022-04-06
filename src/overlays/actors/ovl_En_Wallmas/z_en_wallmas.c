@@ -722,8 +722,8 @@ void EnWallmas_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
 
         Matrix_Push();
         Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
-        Matrix_RotateY(0x2AAA, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(0xAAA, MTXMODE_APPLY);
+        Matrix_RotateYS(0x2AAA, MTXMODE_APPLY);
+        Matrix_RotateZS(0xAAA, MTXMODE_APPLY);
         Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[0], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

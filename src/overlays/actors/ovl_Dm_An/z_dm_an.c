@@ -323,9 +323,9 @@ void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         Matrix_Pop();
         Matrix_Translate(this->unk_18C.x, this->unk_18C.y, this->unk_18C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_1A4.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_1A4.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_1A4.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_1A4.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1A4.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1A4.z, MTXMODE_APPLY);
         Matrix_Push();
     } else if (limbIndex == OBJECT_AN1_LIMB_02) {
         func_8013AD9C(this->unk_2C2 + 0x4000, this->unk_2C4 + this->actor.shape.rot.y + 0x4000, &this->unk_194,
@@ -333,9 +333,9 @@ void func_80C1CEFC(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         Matrix_Pop();
         Matrix_Translate(this->unk_194.x, this->unk_194.y, this->unk_194.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_1AA.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_1AA.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_1AA.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_1AA.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_1AA.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_1AA.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }

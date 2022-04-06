@@ -288,14 +288,14 @@ s32 EnZo_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == 15) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->headRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->upperBodyRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->upperBodyRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->upperBodyRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->upperBodyRot.x, MTXMODE_APPLY);
     }
 
     if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
@@ -352,7 +352,7 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                            EnZo_OverrideLimbDraw, EnZo_PostLimbDraw, &this->actor, POLY_OPA_DISP);
-    Matrix_InsertXRotation_s(0, 0);
+    Matrix_RotateXS(0, 0);
 
     for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8) * SQ(64); i++) {
         *shadowTexIter = 0;

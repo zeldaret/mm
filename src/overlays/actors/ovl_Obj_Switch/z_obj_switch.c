@@ -640,12 +640,12 @@ s32 ObjSwitch_IsEyeSwitchHit(ObjSwitch* this) {
             Vec3f sp20;
 
             Matrix_Push();
-            Matrix_RotateY(acActor->world.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(acActor->world.rot.x, MTXMODE_APPLY);
+            Matrix_RotateYS(acActor->world.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(acActor->world.rot.x, MTXMODE_APPLY);
             Matrix_GetStateTranslationAndScaledZ(1.0f, &sp2C);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
             Matrix_GetStateTranslationAndScaledZ(1.0f, &sp20);
             Matrix_Pop();
             if ((Math3D_Parallel(&sp2C, &sp20) < COS_OF_5_PI_DIV_8)) {

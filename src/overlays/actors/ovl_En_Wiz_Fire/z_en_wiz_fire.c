@@ -135,8 +135,8 @@ void func_80A4984C(EnWizFire* this, GlobalContext* globalCtx) {
 
     this->unk_16E = 0;
     Matrix_Push();
-    Matrix_RotateY(this->actor.world.rot.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(this->actor.world.rot.x, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
+    Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
 
     if (this->unk_162 != 0) {
         sp44.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
@@ -203,7 +203,7 @@ void func_80A49A44(EnWizFire* this, GlobalContext* globalCtx) {
             this->unk_16A = 10;
 
             Matrix_Push();
-            Matrix_RotateY((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
+            Matrix_RotateYS((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
             sp54.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
             Matrix_MultiplyVector3fByState(&sp54, &this->actor.velocity);
             Matrix_Pop();
@@ -645,7 +645,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
                                     -globalCtx->state.frames & 0x7F, 0x20, 0x40, 1, globalCtx->state.frames & 0xFF,
                                     globalCtx->state.frames & 0xFF, 0x10, 0x10));
 
-        Matrix_RotateY(0, MTXMODE_APPLY);
+        Matrix_RotateYS(0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_005750);
@@ -746,7 +746,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                      this->unk_178[i].z, MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_InsertZRotation_s(this->actor.world.rot.z, MTXMODE_APPLY);
+            Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

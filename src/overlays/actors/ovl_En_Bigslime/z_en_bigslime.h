@@ -97,7 +97,7 @@ typedef struct EnBigslime {
     /* 0x02C4 */ s16 numGekkoPosGrabPlayer; // The Gekko will melee-attack link at 6 positions while engulfed in bigslime
     /* 0x02C6 */ s16 subCamId;
     /* 0x02C8 */ s16 subCamYawGrabPlayer;
-    /* 0x02CA */ s16 rotation; // is always 0, used in Matrix_RotateY
+    /* 0x02CA */ s16 rotation; // is always 0, used in Matrix_RotateYS
     /* 0x02CC */ s16 itemDropTimer; // items only drop when zero, Set to 40 then decrements, prevents itemDrop spam
     /* 0x02CE */ Vec3s gekkoRot;
     /* 0x02D4 */ Vec3f gekkoPosOffset; // Used when Bigslime grabs link

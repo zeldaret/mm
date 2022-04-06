@@ -543,9 +543,9 @@ void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
             Matrix_Pop();
             Matrix_Translate(this->unk_1EC.x, this->unk_1EC.y, this->unk_1EC.z, MTXMODE_NEW);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-            Matrix_RotateY(this->unk_274.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_274.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_274.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_274.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_274.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_274.z, MTXMODE_APPLY);
             Matrix_Push();
         }
     } else {
@@ -554,9 +554,9 @@ void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         Matrix_Pop();
         Matrix_Translate(this->unk_1F8.x, this->unk_1F8.y, this->unk_1F8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_27A.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_27A.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_27A.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_27A.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_27A.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_27A.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }

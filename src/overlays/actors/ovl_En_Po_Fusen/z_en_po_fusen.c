@@ -290,8 +290,8 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
         Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
         Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-zRot, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(-xRot, MTXMODE_APPLY);
+        Matrix_RotateZS(-zRot, MTXMODE_APPLY);
+        Matrix_RotateXS(-xRot, MTXMODE_APPLY);
     } else if (limbIndex == 3) {
         rot->y += this->limb3Rot;
     } else if (limbIndex == 6) {

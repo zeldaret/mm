@@ -561,9 +561,9 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     }
 
     Matrix_InsertRotationAroundUnitVector_f(sp7C, &sp64, MTXMODE_NEW);
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_Get(&sp24);
     func_8018219C(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
 }

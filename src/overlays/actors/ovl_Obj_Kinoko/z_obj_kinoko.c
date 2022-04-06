@@ -81,7 +81,7 @@ void ObjKinoko_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gDPSetRenderMode(&gfx[2], G_RM_PASS, G_RM_ZB_CLD_SURF2);
     gSPMatrix(&gfx[3], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&gfx[4], &gameplay_keep_DL_029D10[2]);
-    Matrix_InsertXRotation_s(-0x4000, 1);
+    Matrix_RotateXS(-0x4000, 1);
     gSPMatrix(&gfx[5], Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(&gfx[6], &gameplay_keep_DL_029D10[2]);
     POLY_XLU_DISP = &gfx[7];

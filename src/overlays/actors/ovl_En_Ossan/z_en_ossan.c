@@ -1673,7 +1673,7 @@ s32 EnOssan_CuriosityShopMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limb
     EnOssan* this = THIS;
 
     if (limbIndex == FSN_LIMB_HEAD) {
-        Matrix_InsertXRotation_s(this->headRot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
     }
     return false;
 }
@@ -1683,8 +1683,8 @@ s32 EnOssan_PartTimeWorker_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIn
     EnOssan* this = THIS;
 
     if (limbIndex == ANI_LIMB_HEAD) {
-        Matrix_InsertXRotation_s(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->headRotPartTimeWorker.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->headRotPartTimeWorker.x, MTXMODE_APPLY);
     }
     return false;
 }

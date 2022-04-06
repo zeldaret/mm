@@ -496,7 +496,7 @@ s32 func_80A86BAC(EnTru* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        Matrix_InsertXRotation_s(-0x4000, MTXMODE_APPLY);
+        Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_tru_DL_0020C8);
@@ -514,7 +514,7 @@ s32 func_80A86BAC(EnTru* this, GlobalContext* globalCtx) {
 
         gDPPipeSync(POLY_XLU_DISP++);
 
-        Matrix_InsertXRotation_s(-0x4000, MTXMODE_APPLY);
+        Matrix_RotateXS(-0x4000, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_tru_DL_001F90);
@@ -1226,9 +1226,9 @@ void EnTru_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thi
             this->unk_204.z = this->unk_204.x;
             this->unk_204.x = oldZ;
         }
-        Matrix_RotateY(this->unk_204.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_204.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_204.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_204.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_204.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_204.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }

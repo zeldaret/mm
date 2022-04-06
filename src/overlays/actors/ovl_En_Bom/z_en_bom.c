@@ -613,7 +613,7 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
             gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_015FA0);
 
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_InsertXRotation_s(0x4000, MTXMODE_APPLY);
+            Matrix_RotateXS(0x4000, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -629,10 +629,10 @@ void EnBom_Draw(Actor* thisx, GlobalContext* globalCtx) {
                 s16 sp4A = this->actor.world.rot.y - this->actor.shape.rot.y;
                 f32 sp44 = (1000.0f / Math_CosS(ABS_ALT((s16)(this->unk_1FA % 10922)) - 0x1555)) + -1000.0f;
 
-                Matrix_RotateY(sp4A, MTXMODE_APPLY);
+                Matrix_RotateYS(sp4A, MTXMODE_APPLY);
                 Matrix_Translate(0.0f, sp44, 0.0f, MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(this->unk_1FA, MTXMODE_APPLY);
-                Matrix_RotateY(-sp4A, MTXMODE_APPLY);
+                Matrix_RotateXS(this->unk_1FA, MTXMODE_APPLY);
+                Matrix_RotateYS(-sp4A, MTXMODE_APPLY);
             }
 
             Matrix_MultiplyVector3fByState(&D_80872EEC, &this->actor.home.pos);

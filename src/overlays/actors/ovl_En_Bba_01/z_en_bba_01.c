@@ -262,14 +262,14 @@ s32 EnBba01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
     }
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->enHy.headRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->enHy.headRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->enHy.headRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->enHy.headRot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == BBA_LIMB_BAG) {
-        Matrix_InsertXRotation_s(-this->enHy.torsoRot.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->enHy.torsoRot.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->enHy.torsoRot.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->enHy.torsoRot.x, MTXMODE_APPLY);
     }
 
     if ((limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) && this->enHy.inMsgState3 &&
@@ -320,7 +320,7 @@ void EnBba01_Draw(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->enHy.skelAnime.skeleton, this->enHy.skelAnime.jointTable,
                                    this->enHy.skelAnime.dListCount, EnBba01_OverrideLimbDraw, EnBba01_PostLimbDraw,
                                    EnBba01_TransformLimbDraw, &this->enHy.actor);
-    Matrix_InsertXRotation_s(0, MTXMODE_NEW);
+    Matrix_RotateXS(0, MTXMODE_NEW);
 
     for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8[64][64]); i++) {
         *shadowTexIter++ = 0;

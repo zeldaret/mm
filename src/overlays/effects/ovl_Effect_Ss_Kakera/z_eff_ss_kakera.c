@@ -101,8 +101,8 @@ void EffectSsKakera_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) {
     }
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
-    Matrix_RotateY(this->rYaw, MTXMODE_APPLY);
-    Matrix_InsertXRotation_s(this->rPitch, MTXMODE_APPLY);
+    Matrix_RotateYS(this->rYaw, MTXMODE_APPLY);
+    Matrix_RotateXS(this->rPitch, MTXMODE_APPLY);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
     if ((((this->rReg4 >> 7) & 1) << 7) == 0x80) {

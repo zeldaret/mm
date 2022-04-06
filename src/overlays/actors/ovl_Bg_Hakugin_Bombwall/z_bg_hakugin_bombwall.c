@@ -135,7 +135,7 @@ void func_80ABBFC0(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     s32 i;
     s32 j;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0; i < 6; i++) {
         temp = i + 1;
@@ -250,7 +250,7 @@ void func_80ABC58C(BgHakuginBombwall* this, GlobalContext* globalCtx) {
     spA8.y = 0.0f;
     spB4.y = 0.3f;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0, phi_s1 = 0; i < 21; i++, phi_s1 += 0x618) {
         temp_f20 = Math_SinS(phi_s1);

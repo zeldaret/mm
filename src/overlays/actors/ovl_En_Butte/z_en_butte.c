@@ -144,9 +144,9 @@ void func_8091C178(EnButte* this, GlobalContext* globalCtx) {
     sp48 = CLAMP(sp48, 0, 255);
 
     func_800DFC90(&sp40, GET_ACTIVE_CAM(globalCtx));
-    Matrix_RotateY(sp40.y, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(sp40.x, MTXMODE_APPLY);
-    Matrix_InsertZRotation_s(sp40.z, MTXMODE_APPLY);
+    Matrix_RotateYS(sp40.y, MTXMODE_NEW);
+    Matrix_RotateXS(sp40.x, MTXMODE_APPLY);
+    Matrix_RotateZS(sp40.z, MTXMODE_APPLY);
     Matrix_MultiplyVector3fByState(&D_8091D3A4, &sp4C);
     Matrix_SetStateRotationAndTranslation(this->actor.focus.pos.x + sp4C.x, this->actor.focus.pos.y + sp4C.y,
                                           this->actor.focus.pos.z + sp4C.z, &sp40);

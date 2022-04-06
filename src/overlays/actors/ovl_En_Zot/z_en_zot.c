@@ -1357,14 +1357,14 @@ s32 EnZot_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
     if (limbIndex == 15) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_2C4.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2C4.x, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_2C4.y, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2C4.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(this->unk_2CA.y * -1, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2CA.x * -1, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_2CA.y * -1, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2CA.x * -1, MTXMODE_APPLY);
     }
 
     if (((this->unk_2F0 == 8) || (this->unk_2F0 == 9)) &&

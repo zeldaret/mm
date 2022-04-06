@@ -518,9 +518,9 @@ void DemoSyoten_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
 
     if (this->unk_3E4 & 4) {
-        Matrix_InsertZRotation_s(-this->actor.shape.rot.z, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->actor.shape.rot.z, MTXMODE_APPLY);
         Matrix_Mult(&globalCtx->billboardMtxF, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
+        Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
         Matrix_Scale(1.0f, 5.0f, 1.0f, MTXMODE_APPLY);
     }
 
@@ -555,7 +555,7 @@ void func_80C17690(Actor* thisx, GlobalContext* globalCtx) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
-    Matrix_RotateY(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
+    Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx))), MTXMODE_APPLY);
 
     if (this->unk_3E4 & 8) {
         func_80C17468(globalCtx);

@@ -499,9 +499,9 @@ void EnBaguo_DrawRockParticles(EnBaguo* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
         if (particle->isVisible) {
             Matrix_Translate(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
+            Matrix_RotateXS(particle->rotation.x, MTXMODE_APPLY);
+            Matrix_RotateYS(particle->rotation.y, MTXMODE_APPLY);
+            Matrix_RotateZS(particle->rotation.z, MTXMODE_APPLY);
             Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

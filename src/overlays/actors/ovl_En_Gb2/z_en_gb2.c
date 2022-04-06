@@ -983,7 +983,7 @@ s32 EnGb2_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
     if (limbIndex == 7) {
         limbIndex = limbIndex;
-        Matrix_RotateY(this->unk_270.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_270.y, MTXMODE_APPLY);
     }
 
     if (limbIndex == 1) {

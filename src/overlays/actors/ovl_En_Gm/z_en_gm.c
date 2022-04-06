@@ -1721,9 +1721,9 @@ void EnGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         Matrix_Pop();
         Matrix_Translate(this->unk_290.x, this->unk_290.y, this->unk_290.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_2A8.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_2A8.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2A8.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_2A8.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_2A8.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2A8.z, MTXMODE_APPLY);
         Matrix_Push();
     } else if (limbIndex == 9) {
         func_8013AD9C(BINANG_ADD(this->unk_3C0, 0x4000), BINANG_ADD(this->unk_3C2 + this->actor.shape.rot.y, 0x4000),
@@ -1731,9 +1731,9 @@ void EnGm_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* this
         Matrix_Pop();
         Matrix_Translate(this->unk_29C.x, this->unk_29C.y, this->unk_29C.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_2AE.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_2AE.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_2AE.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_2AE.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_2AE.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_2AE.z, MTXMODE_APPLY);
         Matrix_Push();
     }
 }

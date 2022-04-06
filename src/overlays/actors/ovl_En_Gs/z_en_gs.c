@@ -383,7 +383,7 @@ void func_809985B8(EnGs* this, GlobalContext* globalCtx) {
     if (SubS_StartActorCutscene(&this->actor, this->unk_212[0], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
         Player* player = GET_PLAYER(globalCtx);
 
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(160.0f, &sp38);
         Math_Vec3f_Sum(&player->actor.world.pos, &sp38, &player->actor.world.pos);
         Math_Vec3f_Copy(&player->actor.prevPos, &player->actor.world.pos);
@@ -1073,13 +1073,13 @@ void EnGs_Draw(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_Push();
 
     if (this->unk_19A & 1) {
-        Matrix_RotateY(this->unk_19E[0].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_19E[0].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_19E[0].z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_19E[0].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_19E[0].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_19E[0].z, MTXMODE_APPLY);
         Matrix_Scale(this->unk_1B0[0].x, this->unk_1B0[0].y, this->unk_1B0[0].z, MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_19E[1].y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_19E[1].x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_19E[1].z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_19E[1].y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_19E[1].x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_19E[1].z, MTXMODE_APPLY);
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

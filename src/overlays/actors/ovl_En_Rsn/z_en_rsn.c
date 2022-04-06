@@ -68,7 +68,7 @@ s32 EnRsn_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     EnRsn* this = THIS;
 
     if (limbIndex == 14) {
-        Matrix_InsertXRotation_s(this->unk1D8.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk1D8.y, MTXMODE_APPLY);
     }
     return false;
 }

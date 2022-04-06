@@ -311,9 +311,9 @@ void func_80A51AA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
@@ -388,9 +388,9 @@ void func_80A51DA4(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             this->unk_294 = sp3C.z;
         }
 
-        Matrix_RotateY(this->unk_292, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_290, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_294, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_292, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_290, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_294, MTXMODE_APPLY);
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);

@@ -218,9 +218,9 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                     ((ptr->unk_00 ^ spC4) && (ptr->unk_01 == 0U))) {
                     Matrix_Push();
                     Matrix_Translate(spB4.x, spB4.y, spB4.z, MTXMODE_APPLY);
-                    Matrix_RotateY(actor->shape.rot.y - this->dyna.actor.home.rot.y, MTXMODE_APPLY);
-                    Matrix_InsertXRotation_s(actor->shape.rot.x - this->dyna.actor.home.rot.x, MTXMODE_APPLY);
-                    Matrix_InsertZRotation_s(actor->shape.rot.z - this->dyna.actor.home.rot.z, MTXMODE_APPLY);
+                    Matrix_RotateYS(actor->shape.rot.y - this->dyna.actor.home.rot.y, MTXMODE_APPLY);
+                    Matrix_RotateXS(actor->shape.rot.x - this->dyna.actor.home.rot.x, MTXMODE_APPLY);
+                    Matrix_RotateZS(actor->shape.rot.z - this->dyna.actor.home.rot.z, MTXMODE_APPLY);
                     Matrix_GetStateTranslation(&actor->world.pos);
                     func_80B80358(&actor->world.pos);
                     Matrix_Get(&sp68);
@@ -272,9 +272,9 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
     Matrix_Push();
 
-    Matrix_InsertZRotation_s(-this->dyna.actor.shape.rot.z, MTXMODE_NEW);
-    Matrix_InsertXRotation_s(-this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-    Matrix_RotateY(-this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+    Matrix_RotateZS(-this->dyna.actor.shape.rot.z, MTXMODE_NEW);
+    Matrix_RotateXS(-this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+    Matrix_RotateYS(-this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(-this->dyna.actor.world.pos.x, -this->dyna.actor.world.pos.y,
                              -this->dyna.actor.world.pos.z, MTXMODE_APPLY);
 
@@ -282,9 +282,9 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_Push();
 
         Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-        Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
         Matrix_Get(&this->unk_204.unk_04);
 
         Matrix_Pop();
@@ -303,9 +303,9 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_Push();
 
             Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
             Matrix_Get(&this->unk_248[i].unk_04);
 
             Matrix_Pop();
@@ -327,9 +327,9 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_Push();
 
             Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
             Matrix_Get(&this->unk_2D0[i].unk_04);
 
             Matrix_Pop();
@@ -353,9 +353,9 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_Push();
 
             Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-            Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
             Matrix_Get(&this->unk_3E0[i].unk_04);
 
             Matrix_Pop();
@@ -371,9 +371,9 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_Push();
 
         Matrix_Translate(actor->world.pos.x, actor->world.pos.y, actor->world.pos.z, MTXMODE_APPLY);
-        Matrix_RotateY(actor->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(actor->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(actor->shape.rot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(actor->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(actor->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(actor->shape.rot.z, MTXMODE_APPLY);
         Matrix_Get(&this->unk_520.unk_00);
 
         Matrix_Pop();
@@ -605,9 +605,9 @@ void func_80B81234(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
             Matrix_Push();
 
-            Matrix_RotateY(player->actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(player->actor.shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(player->actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(player->actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(player->actor.shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(player->actor.shape.rot.z, MTXMODE_APPLY);
             Matrix_GetStateTranslationAndScaledY(sp44, &sp4C);
 
             Matrix_Pop();
@@ -666,7 +666,7 @@ void func_80B81570(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     s32 pad2;
 
     Matrix_Push();
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
 
     for (i = 0; i < ARRAY_COUNT(D_80B821C4); i++) {
         sp64.x = D_80B821C4[i].x;

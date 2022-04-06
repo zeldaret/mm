@@ -400,7 +400,7 @@ void func_80BAAFDC(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 10.0f;
         Matrix_Push();
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
         Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         Matrix_Pop();
@@ -432,7 +432,7 @@ void func_80BAB1A0(EnSuttari* this, GlobalContext* globalCtx) {
         effectPos.y += 60.0f;
         effectPos.z += Math_CosS(this->actor.world.rot.y + this->unk3F4) * 350.0f;
         Matrix_Push();
-        Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+        Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
         effectVelOffset.z = 20.0f;
         Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
         Matrix_Pop();
@@ -1467,14 +1467,14 @@ s32 EnSuttari_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         *dList = object_boj_DL_00AF90;
         if (!(this->flags1 & 4)) {
             Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk3F2, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(-this->unk2DC.x, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk3F2, MTXMODE_APPLY);
+            Matrix_RotateZS(-this->unk2DC.x, MTXMODE_APPLY);
             Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }
     }
     if (limbIndex == 8) {
-        Matrix_InsertXRotation_s(-this->unk2E2.y, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(-this->unk2E2.x, MTXMODE_APPLY);
+        Matrix_RotateXS(-this->unk2E2.y, MTXMODE_APPLY);
+        Matrix_RotateZS(-this->unk2E2.x, MTXMODE_APPLY);
     }
     if (limbIndex == 8 || limbIndex == 9 || limbIndex == 0xC) {
         rot->y += (s16)(Math_SinS(this->unk2FA[limbIndex]) * 200.0f);

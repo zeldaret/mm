@@ -261,7 +261,7 @@ void func_80BB6BD8(EnTanron2* this, GlobalContext* globalCtx) {
                     }
                     break;
             }
-            Matrix_RotateY(sp32, MTXMODE_NEW);
+            Matrix_RotateYS(sp32, MTXMODE_NEW);
             Matrix_GetStateTranslationAndScaledZ(this->actor.speedXZ, &this->actor.velocity);
             this->actor.velocity.y = Rand_ZeroFloat(5.0f) + 12.0f;
             this->unk_14E = 5;
@@ -436,7 +436,7 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
             } else {
                 this->unk_154 = 15;
                 if (this->actionFunc != func_80BB69FC) {
-                    Matrix_RotateY(this->actor.yawTowardsPlayer, MTXMODE_NEW);
+                    Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);
                     if ((acHitInfo->toucher.dmgFlags & 0x300000) != 0) {
                         this->unk_154 = 10;
                         Matrix_GetStateTranslationAndScaledZ(-10.0f, &this->actor.velocity);
@@ -464,7 +464,7 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
     block_18:
         func_80BB6B80(this);
         this->unk_158 = 2;
-        Matrix_RotateY(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
+        Matrix_RotateYS(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
                                    this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
                        MTXMODE_NEW);
         Matrix_GetStateTranslationAndScaledZ(10.0f, &this->actor.velocity);
@@ -628,9 +628,9 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                                      D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
             Matrix_Scale(D_80BB8458[i]->actor.scale.x, D_80BB8458[i]->actor.scale.y, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
+            Matrix_RotateZS(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
             Matrix_Scale(0.13f, 0.14299999f, 0.13f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
+            Matrix_RotateZS(-D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

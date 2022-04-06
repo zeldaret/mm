@@ -679,7 +679,7 @@ void func_80B68310(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* 
             if (this->unk_29C & 1) {
                 if (Object_IsLoaded(&globalCtx->objectCtx, this->unk_29F)) {
                     Matrix_Push();
-                    Matrix_InsertZRotation_s(0x3A98, MTXMODE_APPLY);
+                    Matrix_RotateZS(0x3A98, MTXMODE_APPLY);
                     Matrix_Translate(0.0f, 190.0f, 0.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

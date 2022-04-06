@@ -89,11 +89,11 @@ void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
                              MTXMODE_NEW);
 
     if (this->dyna.actor.shape.rot.x != 0) {
-        Matrix_RotateY(this->dyna.actor.home.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-        Matrix_RotateY(BINANG_SUB(this->dyna.actor.shape.rot.y, this->dyna.actor.home.rot.y), MTXMODE_APPLY);
+        Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateYS(BINANG_SUB(this->dyna.actor.shape.rot.y, this->dyna.actor.home.rot.y), MTXMODE_APPLY);
     } else {
-        Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     }
 
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);

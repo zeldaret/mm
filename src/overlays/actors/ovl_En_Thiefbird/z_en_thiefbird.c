@@ -1125,8 +1125,8 @@ void func_80C13354(EnThiefbird* this, GlobalContext* globalCtx2) {
         if (ptr->unk_22 != 0) {
             Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
             Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
-            Matrix_RotateY(ptr->unk_1E, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(ptr->unk_20, MTXMODE_APPLY);
+            Matrix_RotateYS(ptr->unk_1E, MTXMODE_APPLY);
+            Matrix_RotateZS(ptr->unk_20, MTXMODE_APPLY);
             Matrix_Translate(0.0f, -10.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(ptr->unk_18, ptr->unk_18, 1.0f, MTXMODE_APPLY);
 

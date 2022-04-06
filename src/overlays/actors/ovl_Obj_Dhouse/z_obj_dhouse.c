@@ -241,7 +241,7 @@ void func_80B12E7C(ObjDhouse* this, GlobalContext* globalCtx, ObjDhouseStruct1* 
     Vec3f sp88;
     ObjDhouseStruct2* ptr2;
 
-    Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
     Matrix_MultiplyVector3fXZByCurrentState(&D_80B13FC4, &sp94);
     sp94.y = 100.0f;
     func_80B12A50(ptr, ptr3, &spA0);

@@ -1141,7 +1141,7 @@ void EnTite_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         matrix->xw = this->limbPos[D_80896B8C[limbIndex]].x;
         matrix->yw = this->limbPos[D_80896B8C[limbIndex]].y;
         matrix->zw = this->limbPos[D_80896B8C[limbIndex]].z;
-        Matrix_InsertZRotation_s(this->actor.world.rot.z, MTXMODE_APPLY);
+        Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, this->unk_3A8);

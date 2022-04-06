@@ -866,9 +866,9 @@ void func_80A25440(ObjIceblock* this) {
         if (this->unk_2B0 == 3) {
             sp24 = this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y;
 
-            Matrix_RotateY(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-            Matrix_InsertXRotation_s(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
 
             sp34.x = this->unk_248.x;
             sp34.y = this->unk_248.y - sp24;
@@ -881,9 +881,9 @@ void func_80A25440(ObjIceblock* this) {
             sp34.z = this->dyna.actor.world.pos.z;
 
             Math_Vec3f_Sum(&sp34, &sp28, &temp_s1->world.pos);
-            Matrix_RotateY(this->unk_254.y + this->dyna.actor.home.rot.y, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_254.x + this->dyna.actor.home.rot.x, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->unk_254.z + this->dyna.actor.home.rot.z, MTXMODE_APPLY);
+            Matrix_RotateYS(this->unk_254.y + this->dyna.actor.home.rot.y, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_254.x + this->dyna.actor.home.rot.x, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_254.z + this->dyna.actor.home.rot.z, MTXMODE_APPLY);
             Matrix_Get(&sp40);
             func_8018219C(&sp40, &temp_s1->shape.rot, MTXMODE_APPLY);
         } else {

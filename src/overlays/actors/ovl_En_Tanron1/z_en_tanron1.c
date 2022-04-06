@@ -264,8 +264,8 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
 
                     Math_ApproachS(&ptr->unk_1A, ptr->unk_20, 2, this->unk_158);
                     Math_ApproachS(&ptr->unk_18, ptr->unk_1E, 2, this->unk_158);
-                    Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
-                    Matrix_InsertXRotation_s(-ptr->unk_18, MTXMODE_APPLY);
+                    Matrix_RotateYS(ptr->unk_1A, MTXMODE_NEW);
+                    Matrix_RotateXS(-ptr->unk_18, MTXMODE_APPLY);
                     Matrix_GetStateTranslationAndScaledZ(6.0f, &ptr->unk_0C);
 
                     if (phi_s2 != NULL) {
@@ -277,8 +277,8 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                             ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
                             ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
 
-                            Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
-                            Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
+                            Matrix_RotateYS(ptr->unk_20, MTXMODE_NEW);
+                            Matrix_RotateXS(-ptr->unk_1E, MTXMODE_APPLY);
                             Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
 
                             if (phi_f28 >= 100000.0f) {
@@ -299,7 +299,7 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                 } else {
                     ptr->unk_1A += ptr->unk_2A;
                     Math_ApproachS(&ptr->unk_18, 0, 0xA, 0x1000);
-                    Matrix_RotateY(ptr->unk_1A, MTXMODE_NEW);
+                    Matrix_RotateYS(ptr->unk_1A, MTXMODE_NEW);
                     Matrix_GetStateTranslationAndScaledZ(ptr->unk_30, &spA4);
 
                     ptr->unk_0C.x = spA4.x;
@@ -315,8 +315,8 @@ void func_80BB5318(EnTanron1* this, GlobalContext* globalCtx) {
                             ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
                             ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
 
-                            Matrix_RotateY(ptr->unk_20, MTXMODE_NEW);
-                            Matrix_InsertXRotation_s(-ptr->unk_1E, MTXMODE_APPLY);
+                            Matrix_RotateYS(ptr->unk_20, MTXMODE_NEW);
+                            Matrix_RotateXS(-ptr->unk_1E, MTXMODE_APPLY);
                             Matrix_GetStateTranslationAndScaledZ(-20.0f, &ptr->unk_0C);
 
                             ptr->unk_3C = ptr->unk_00.y - 1000.0f;
@@ -379,8 +379,8 @@ void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
                 flag++;
             }
             Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-            Matrix_RotateY(ptr->unk_1A, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(ptr->unk_18 * -1, MTXMODE_APPLY);
+            Matrix_RotateYS(ptr->unk_1A, MTXMODE_APPLY);
+            Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
             Matrix_Scale(1.2f, ptr->unk_2C, 1.2f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -404,8 +404,8 @@ void func_80BB5AAC(EnTanron1* this, GlobalContext* globalCtx) {
         }
 
         Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-        Matrix_RotateY(ptr->unk_1A, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(ptr->unk_18 * -1, MTXMODE_APPLY);
+        Matrix_RotateYS(ptr->unk_1A, MTXMODE_APPLY);
+        Matrix_RotateXS(ptr->unk_18 * -1, MTXMODE_APPLY);
         Matrix_Scale(1.0f, ptr->unk_2C, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

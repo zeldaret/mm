@@ -333,7 +333,7 @@ void EnLookNuts_Update(Actor* thisx, GlobalContext* globalCtx) {
             effectPos.y += 30.0f;
             effectPos.z += Math_CosS((this->actor.world.rot.y + (s16)this->headRotation.y)) * 10.0f;
             Matrix_Push();
-            Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+            Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
             effectVelOffset.z = 20.0f;
             Matrix_MultiplyVector3fByState(&effectVelOffset, &effectVel);
             Matrix_Pop();

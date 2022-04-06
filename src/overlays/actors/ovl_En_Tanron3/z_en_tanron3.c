@@ -232,7 +232,7 @@ void EnTanron3_Live(EnTanron3* this, GlobalContext* globalCtx) {
                 // opposite direction and swim away. In both cases, the fish's target y-position
                 // will be slightly above the halfway point of the water.
                 atanTemp = Math_FAtan2F(this->targetPos.z, this->targetPos.x);
-                Matrix_RotateY(atanTemp, MTXMODE_NEW);
+                Matrix_RotateYS(atanTemp, MTXMODE_NEW);
                 Matrix_GetStateTranslationAndScaledZ(700.0f, &this->targetPos);
                 this->targetPos.y = 250.0f;
 

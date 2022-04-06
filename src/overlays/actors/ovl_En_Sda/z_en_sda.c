@@ -265,8 +265,8 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
 
         Matrix_Mult(&player->shieldMf, MTXMODE_NEW);
         Matrix_MultiplyVector3fByState(&D_80947A60, &sp16C);
-        Matrix_RotateY(sp178.y, MTXMODE_NEW);
-        Matrix_InsertXRotation_s(sp178.x, MTXMODE_APPLY);
+        Matrix_RotateYS(sp178.y, MTXMODE_NEW);
+        Matrix_RotateXS(sp178.x, MTXMODE_APPLY);
 
         for (i = 0; i < 22; i++) {
             Matrix_MultiplyVector3fByState(&D_80947B10[i], &sp188);

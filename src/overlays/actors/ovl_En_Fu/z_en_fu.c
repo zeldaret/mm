@@ -362,7 +362,7 @@ void func_8096209C(EnFu* this, GlobalContext* globalCtx) {
     }
 
     Matrix_Push();
-    Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
     Matrix_MultiplyVector3fByState(&sp34, &this->actor.focus.pos);
     Matrix_Pop();
     this->actor.focus.pos.x += this->actor.world.pos.x;
@@ -1349,15 +1349,15 @@ s32 EnFu_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == 9) {
         Matrix_Translate(1600.0f, 300.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_524[1], MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_524[0], MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_524[2], MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_524[1], MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_524[0], MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_524[2], MTXMODE_APPLY);
         Matrix_Translate(-1600.0f, -300.0f, 0.0f, MTXMODE_APPLY);
     } else if (limbIndex == 20) {
         Matrix_Translate(1800.0f, 200.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(this->unk_52A[1], MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(this->unk_52A[0], MTXMODE_APPLY);
-        Matrix_RotateY(this->unk_52A[2], MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_52A[1], MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_52A[0], MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_52A[2], MTXMODE_APPLY);
         Matrix_Translate(-1800.0f, -200.0f, 0.0f, MTXMODE_APPLY);
     }
     return false;
@@ -1434,7 +1434,7 @@ void func_809647EC(GlobalContext* globalCtx, EnFuUnkStruct* ptr, s32 len) {
             ptr->unk_08.z += 2.0f * Math_CosS(ptr->unk_2C);
             Matrix_Push();
             Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
-            Matrix_RotateY(yaw, MTXMODE_APPLY);
+            Matrix_RotateYS(yaw, MTXMODE_APPLY);
             Matrix_MultiplyVector3fByState(&sp44, &ptr->unk_08);
             Matrix_Pop();
             ptr->unk_2C += 6000;

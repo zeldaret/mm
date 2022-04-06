@@ -152,7 +152,7 @@ void func_80A715DC(EnDno* this, GlobalContext* globalCtx) {
                 if (func_8013E5CC(&crace->actor.home.pos, &crace->actor.home.rot, &D_80A73B2C, &this->actor.prevPos,
                                   &this->actor.world.pos, &sp88)) {
                     Math_Vec3f_Diff(&this->actor.world.pos, &crace->actor.home.pos, &sp7C);
-                    Matrix_RotateY(-crace->actor.home.rot.y, MTXMODE_NEW);
+                    Matrix_RotateYS(-crace->actor.home.rot.y, MTXMODE_NEW);
                     Matrix_MultiplyVector3fByState(&sp7C, &sp70);
                     if ((fabsf(sp70.x) < 100.0f) && (sp70.y >= -10.0f) && (sp70.y <= 180.0f) && (sp70.z < 0.0f)) {
                         crace->unk_170 |= 1;
@@ -970,7 +970,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         func_8012C28C(globalCtx->state.gfxCtx);
         if (limbIndex == 13) {
             Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY);
-            Matrix_InsertXRotation_s(this->unk_45C, MTXMODE_APPLY);
+            Matrix_RotateXS(this->unk_45C, MTXMODE_APPLY);
         }
 
         gfxOpa = POLY_OPA_DISP;

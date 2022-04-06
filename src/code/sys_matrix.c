@@ -19,7 +19,7 @@
  *
  * As such, we label the elements in column-major order so we can follow the same conventions for multiplying matrices
  * as the rest of the world, i.e. that \f[ [AB]_{ij} = \sum_k A_{ik} B_{kj} \f].
- * 
+ *
  * Throughout this file, `mode` indicates whether to multiply the matrix on top of the stack by the new construction
  * (APPLY), or to just overwrite it (NEW).
  */
@@ -113,11 +113,12 @@ MtxF* Matrix_GetCurrent(void) {
 }
 
 /**
- * @brief General multiplication of current by a matrix. APPLY replaces current by current * mf. NEW replaces current by
- * mf.
+ * @brief General multiplication of current by a matrix.
+ *      APPLY: current * mf -> current
+ *      NEW: mf -> current
  *
  * @param mf Matrix to multiply by.
- * @param mode NEW or APPLY
+ * @param mode APPLY or NEW
  *
  * @remark original name: "Matrix_mult"
  */
@@ -132,12 +133,12 @@ void Matrix_Mult(MtxF* mf, s32 mode) {
 }
 
 /**
- * @brief Right-multiply current by a translation matrix T. 
- * APPLY: current * T -> current
- * NEW: T -> current
- * 
+ * @brief Right-multiply current by a translation matrix T.
+ *      APPLY: current * T -> current
+ *      NEW: T -> current
+ *
  * T is given by
- * 
+ *
  * \f[
  *  \begin{pmatrix}
  *      1 & 0 & 0 & x \\
@@ -146,16 +147,16 @@ void Matrix_Mult(MtxF* mf, s32 mode) {
  *      0 & 0 & 0 & 1
  *  \end{pmatrix}
  * \f]
- * 
+ *
  * @param x translation distance in the x direction
  * @param y translation distance in the y direction
  * @param z translation distance in the z direction
- * @param mode NEW or APPLY
+ * @param mode APPLY or NEW
  *
  * @remark original name: "Matrix_translate"
  */
 void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode) {
-    MtxF* cmf;
+    MtxF* cmf = sCurrentMatrix;
     f32 tx;
     f32 ty;
 
@@ -177,6 +178,29 @@ void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode) {
     }
 }
 
+/**
+ * @brief Right-multiply by the diagonal scale matrix S = diag(x,y,z,1)
+ *      APPLY: current * S -> current
+ *      NEW: S -> current
+ *
+ * S is given by
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      x & 0 & 0 & 0 \\
+ *      0 & y & 0 & 0 \\
+ *      0 & 0 & z & 0 \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * @param x scale in x direction
+ * @param y scale in y direction
+ * @param z scale in z direction
+ * @param mode APPLY or NEW
+ *
+ * @remark original name: "Matrix_scale"
+ */
 void Matrix_Scale(f32 x, f32 y, f32 z, s32 mode) {
     MtxF* cmf = sCurrentMatrix;
 
@@ -198,13 +222,37 @@ void Matrix_Scale(f32 x, f32 y, f32 z, s32 mode) {
     }
 }
 
-// Matrix_RotateXS
-void Matrix_InsertXRotation_s(s16 x, s32 mode) {
+/**
+ * @brief Right-multiply by a rotation about the x axis
+ *      APPLY: current * R -> current
+ *      NEW: R -> current
+ *
+ * R is given by
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      1 & 0 & 0 & 0 \\
+ *      0 & c & -s & 0 \\
+ *      0 & s & c & 0 \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * where \f[ c = \cos x, s = \sin x \f].
+ *
+ * @note The same as Matrix_RotateXF, but uses a binary angle.
+ * 
+ * @param x rotation angle (binary)
+ * @param mode APPLY or NEW
+ *
+ * @remark original name: "Matrix_RotateX"
+ */
+void Matrix_RotateXS(s16 x, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 temp1;
-    f32 temp2;
+    f32 tempY;
+    f32 tempZ;
 
     if (mode == MTXMODE_APPLY) {
         if (x != 0) {
@@ -213,25 +261,25 @@ void Matrix_InsertXRotation_s(s16 x, s32 mode) {
             sin = Math_SinS(x);
             cos = Math_CosS(x);
 
-            temp1 = cmf->xy;
-            temp2 = cmf->xz;
-            cmf->xy = temp1 * cos + temp2 * sin;
-            cmf->xz = temp2 * cos - temp1 * sin;
+            tempY = cmf->xy;
+            tempZ = cmf->xz;
+            cmf->xy = tempY * cos + tempZ * sin;
+            cmf->xz = tempZ * cos - tempY * sin;
 
-            temp1 = cmf->yy;
-            temp2 = cmf->yz;
-            cmf->yy = temp1 * cos + temp2 * sin;
-            cmf->yz = temp2 * cos - temp1 * sin;
+            tempY = cmf->yy;
+            tempZ = cmf->yz;
+            cmf->yy = tempY * cos + tempZ * sin;
+            cmf->yz = tempZ * cos - tempY * sin;
 
-            temp1 = cmf->zy;
-            temp2 = cmf->zz;
-            cmf->zy = temp1 * cos + temp2 * sin;
-            cmf->zz = temp2 * cos - temp1 * sin;
+            tempY = cmf->zy;
+            tempZ = cmf->zz;
+            cmf->zy = tempY * cos + tempZ * sin;
+            cmf->zz = tempZ * cos - tempY * sin;
 
-            temp1 = cmf->wy;
-            temp2 = cmf->wz;
-            cmf->wy = temp1 * cos + temp2 * sin;
-            cmf->wz = temp2 * cos - temp1 * sin;
+            tempY = cmf->wy;
+            tempZ = cmf->wz;
+            cmf->wy = tempY * cos + tempZ * sin;
+            cmf->wz = tempZ * cos - tempY * sin;
         }
     } else {
         cmf = sCurrentMatrix;
@@ -265,6 +313,31 @@ void Matrix_InsertXRotation_s(s16 x, s32 mode) {
 
 // Unused
 // Matrix_RotateX
+/**
+ * @brief Right-multiply by a rotation about the x axis
+ *      APPLY: current * R -> current
+ *      NEW: R -> current
+ *
+ * R is given by
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      1 & 0 & 0 & 0 \\
+ *      0 & c & -s & 0 \\
+ *      0 & s & c & 0 \\
+ *      0 & 0 & 0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * where \f[ c = \cos x, s = \sin x \f].
+ *
+ * @note The same as Matrix_RotateXS, but uses a float angle in degrees.
+ * 
+ * @param x rotation angle in degrees
+ * @param mode APPLY or NEW
+ *
+ * @remark original name may have been "Matrix_RotateX", but clashed with the previous function
+ */
 void Matrix_InsertXRotation_f(f32 x, s32 mode) {
     MtxF* cmf;
     f32 sin;
@@ -405,8 +478,7 @@ void Matrix_SetStateXRotation(f32 x) {
     }
 }
 
-// Matrix_RotateYS?
-void Matrix_RotateY(s16 y, s32 mode) {
+void Matrix_RotateYS(s16 y, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -470,7 +542,7 @@ void Matrix_RotateY(s16 y, s32 mode) {
     }
 }
 
-// Matrix_RotateY
+// Matrix_RotateYS
 void Matrix_InsertYRotation_f(f32 y, s32 mode) {
     MtxF* cmf;
     f32 sin;
@@ -538,7 +610,7 @@ void Matrix_InsertYRotation_f(f32 y, s32 mode) {
 }
 
 // Matrix_RotateZS
-void Matrix_InsertZRotation_s(s16 z, s32 mode) {
+void Matrix_RotateZS(s16 z, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -905,6 +977,7 @@ Mtx* Matrix_ToRSPMatrix(MtxF* src, Mtx* dest) {
     u16* intPart = (u16*)&dest->m[0][0];
     u16* fracPart = (u16*)&dest->m[2][0];
 
+    // For some reason the first 9 elements use the intPart temp
     temp = src->xx * 0x10000;
     intPart[0] = (temp >> 0x10);
     intPart[16 + 0] = temp;
@@ -987,6 +1060,43 @@ Mtx* Matrix_AppendToPolyOpaDisp(MtxF* src, GraphicsContext* gfxCtx) {
 }
 
 // Matrix_MultVec3f
+/**
+ * @brief Calculates current * (src,1) and writes its components to dest.
+ *
+ * This assumes that current has the form
+ *
+ * \f[
+ *  M =
+ *  \begin{pmatrix}
+ *      A & b \\
+ *      0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * and so calculates
+ *
+ * \f[
+ *  MX =
+ *  \begin{pmatrix}
+ *      A & b \\
+ *      0 & 1
+ *  \end{pmatrix}
+ *  \begin{pmatrix}
+ *      x \\
+ *      1
+ *  \end{pmatrix}
+ *  =
+ *  \begin{pmatrix}
+ *      Ax + b \\
+ *      1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * and discards the extra w component (1).
+ *
+ * @param src input vector
+ * @param dest output vector
+ */
 void Matrix_MultiplyVector3fByState(Vec3f* src, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
@@ -1033,56 +1143,73 @@ void Matrix_GetStateTranslationAndScaledZ(f32 arg0, Vec3f* dst) {
 }
 
 // Matrix_MultVec3fXZ
-void Matrix_MultiplyVector3fXZByCurrentState(Vec3f* arg0, Vec3f* dst) {
+/**
+ * @brief Calculates current * (src,1) and writes its x and z components to dest.
+ *
+ * The same as @sa Matrix_MultVec3f, but only writes the x and z components.
+ *
+ * @param src input vector
+ * @param dest output vector
+ */
+void Matrix_MultiplyVector3fXZByCurrentState(Vec3f* src, Vec3f* dest) {
     MtxF* cmf = sCurrentMatrix;
 
-    dst->x = cmf->xw + (cmf->xx * arg0->x + cmf->xy * arg0->y + cmf->xz * arg0->z);
-    dst->z = cmf->zw + (cmf->zx * arg0->x + cmf->zy * arg0->y + cmf->zz * arg0->z);
+    dest->x = cmf->xw + (cmf->xx * src->x + cmf->xy * src->y + cmf->xz * src->z);
+    dest->z = cmf->zw + (cmf->zx * src->x + cmf->zy * src->y + cmf->zz * src->z);
 }
 
+/**
+ * @brief Copies the matrix src into dest.
+ *
+ * @param dest matrix to copy to.
+ * @param src matrix to copy from.
+ *
+ * @remark original name: "Matrix_copy_MtxF"
+ */
 void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
-    f32 f0;
-    f32 f2;
+    f32 fv0;
+    f32 fv1;
 
+    // This ought to be a loop, but all attempts to match it as one have so far failed.
     if (1) {
-        f0 = src->mf[0][0];
-        f2 = src->mf[0][1];
-        dest->mf[0][0] = f0;
-        dest->mf[0][1] = f2;
-        f0 = src->mf[0][2];
-        f2 = src->mf[0][3];
-        dest->mf[0][2] = f0;
-        dest->mf[0][3] = f2;
+        fv0 = src->mf[0][0];
+        fv1 = src->mf[0][1];
+        dest->mf[0][0] = fv0;
+        dest->mf[0][1] = fv1;
+        fv0 = src->mf[0][2];
+        fv1 = src->mf[0][3];
+        dest->mf[0][2] = fv0;
+        dest->mf[0][3] = fv1;
     }
     if (1) {
-        f0 = src->mf[1][0];
-        f2 = src->mf[1][1];
-        dest->mf[1][0] = f0;
-        dest->mf[1][1] = f2;
-        f0 = src->mf[1][2];
-        f2 = src->mf[1][3];
-        dest->mf[1][2] = f0;
-        dest->mf[1][3] = f2;
+        fv0 = src->mf[1][0];
+        fv1 = src->mf[1][1];
+        dest->mf[1][0] = fv0;
+        dest->mf[1][1] = fv1;
+        fv0 = src->mf[1][2];
+        fv1 = src->mf[1][3];
+        dest->mf[1][2] = fv0;
+        dest->mf[1][3] = fv1;
     }
     if (1) {
-        f0 = src->mf[2][0];
-        f2 = src->mf[2][1];
-        dest->mf[2][0] = f0;
-        dest->mf[2][1] = f2;
-        f0 = src->mf[2][2];
-        f2 = src->mf[2][3];
-        dest->mf[2][2] = f0;
-        dest->mf[2][3] = f2;
+        fv0 = src->mf[2][0];
+        fv1 = src->mf[2][1];
+        dest->mf[2][0] = fv0;
+        dest->mf[2][1] = fv1;
+        fv0 = src->mf[2][2];
+        fv1 = src->mf[2][3];
+        dest->mf[2][2] = fv0;
+        dest->mf[2][3] = fv1;
     }
     if (1) {
-        f0 = src->mf[3][0];
-        f2 = src->mf[3][1];
-        dest->mf[3][0] = f0;
-        dest->mf[3][1] = f2;
-        f0 = src->mf[3][2];
-        f2 = src->mf[3][3];
-        dest->mf[3][2] = f0;
-        dest->mf[3][3] = f2;
+        fv0 = src->mf[3][0];
+        fv1 = src->mf[3][1];
+        dest->mf[3][0] = fv0;
+        dest->mf[3][1] = fv1;
+        fv0 = src->mf[3][2];
+        fv1 = src->mf[3][3];
+        dest->mf[3][2] = fv0;
+        dest->mf[3][3] = fv1;
     }
 }
 
@@ -1092,6 +1219,8 @@ void Matrix_MtxFCopy(MtxF* dest, MtxF* src) {
  *
  * @param[in] src mtx to convert
  * @param[out] dest MtxF to output to
+ *
+ * @remark original name: "Matrix_MtxtoMtxF"
  */
 void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
     u16* intPart = (u16*)&src->m[0][0];
@@ -1117,6 +1246,15 @@ void Matrix_FromRSPMatrix(Mtx* src, MtxF* dest) {
 
 // Unused
 // Matrix_MultVec3fExt
+/**
+ * @brief Calculates mf * (src,1) and writes its components to dest.
+ *
+ * This is the same as @sa Matrix_MultVec3f but using a specified matrix rather than the current one.
+ *
+ * @param src input vector
+ * @param dest output vector
+ * @param mf matrix to multiply by
+ */
 void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dest, MtxF* mf) {
     dest->x = mf->xw + (mf->xx * src->x + mf->xy * src->y + mf->xz * src->z);
     dest->y = mf->yw + (mf->yx * src->x + mf->yy * src->y + mf->yz * src->z);
@@ -1124,6 +1262,13 @@ void Matrix_MultiplyVector3fByMatrix(Vec3f* src, Vec3f* dest, MtxF* mf) {
 }
 
 // Matrix_Transpose or Matrix_Reverse
+/**
+ * @brief Transposes the linear part of mf.
+ *
+ * @param mf matrix to transpose
+ *
+ * @remark original name: "Matrix_reverse"
+ */
 void Matrix_TransposeXYZ(MtxF* mf) {
     f32 temp;
 

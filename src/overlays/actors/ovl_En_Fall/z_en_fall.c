@@ -809,9 +809,9 @@ void EnFall_LodMoon_DrawWithLerp(Actor* thisx, GlobalContext* globalCtx) {
         translation.z = (-(globalCtx->view.eye.z - thisx->world.pos.z) * scale) + globalCtx->view.eye.z;
         Matrix_Translate(translation.x, translation.y, translation.z, MTXMODE_NEW);
         Matrix_Scale(thisx->scale.x, thisx->scale.y, thisx->scale.z, MTXMODE_APPLY);
-        Matrix_RotateY(thisx->shape.rot.y, MTXMODE_APPLY);
-        Matrix_InsertXRotation_s(thisx->shape.rot.x, MTXMODE_APPLY);
-        Matrix_InsertZRotation_s(thisx->shape.rot.z, MTXMODE_APPLY);
+        Matrix_RotateYS(thisx->shape.rot.y, MTXMODE_APPLY);
+        Matrix_RotateXS(thisx->shape.rot.x, MTXMODE_APPLY);
+        Matrix_RotateZS(thisx->shape.rot.z, MTXMODE_APPLY);
     }
 
     EnFall_LodMoon_Draw(thisx, globalCtx);

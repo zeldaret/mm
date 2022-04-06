@@ -676,7 +676,7 @@ void DoorShutter_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         if (this->unk_164 == 7) {
             Matrix_Translate(0.0f, 64.96f, 0.0f, MTXMODE_APPLY);
-            Matrix_InsertZRotation_s(this->actor.home.rot.z, MTXMODE_APPLY);
+            Matrix_RotateZS(this->actor.home.rot.z, MTXMODE_APPLY);
             Matrix_Translate(0.0f, -64.96f, 0.0f, MTXMODE_APPLY);
         }
 
