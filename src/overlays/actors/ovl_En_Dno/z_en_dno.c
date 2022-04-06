@@ -990,7 +990,7 @@ void EnDno_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Ve
         frames = globalCtx->gameplayFrames;
         Matrix_MultVec3f(&D_80A73B40, &sp84);
         func_80A711D0(this, globalCtx, &sp84);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
         gfxXlu = func_8012C2B4(POLY_XLU_DISP);

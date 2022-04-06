@@ -1014,7 +1014,7 @@ void func_80934464(EnFz* this, GlobalContext* globalCtx) {
                                         (ptr->unk_01 + (i * 3)) * 15, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
             Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_30, ptr->unk_30, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

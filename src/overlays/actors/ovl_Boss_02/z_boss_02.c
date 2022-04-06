@@ -1543,7 +1543,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1584,7 +1584,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)effect->unk_2C);
 
             Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -1608,7 +1608,7 @@ void func_809DD2F8(GlobalContext* globalCtx) {
                                         (effect->unk_26 + (i * 3)) * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_Translate(effect->unk_00.x, effect->unk_00.y, effect->unk_00.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->unk_34 * D_809DF5B0, effect->unk_34 * D_809DF5B0, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

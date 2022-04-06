@@ -676,7 +676,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
                               COMBINED, 0, ENVIRONMENT, 0, COMBINED, 0, ENVIRONMENT, 0);
             gDPSetEnvColor(POLY_XLU_DISP++, 230, 225, 150, spA4);
 
-            Matrix_NormalizeXYZ(&gIdentityMtxF);
+            Matrix_ReplaceRotation(&gIdentityMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

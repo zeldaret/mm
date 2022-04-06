@@ -4536,7 +4536,7 @@ void func_80B4E3F0(Actor* thisx, GlobalContext* globalCtx) {
     sp5C.y += thisx->world.pos.y;
     sp5C.z += thisx->world.pos.z;
     EnInvadepoh_SetSysMatrix(&sp5C);
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
     Matrix_RotateZS(((EnInvadepoh*)thisx)->unk304, MTXMODE_APPLY);
     OPEN_DISPS(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);

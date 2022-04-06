@@ -882,7 +882,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 5, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->smokeScaleX * effect->scale, effect->smokeScaleY * effect->scale, 1.0f, MTXMODE_APPLY);
             Matrix_Translate(0.0f, 20.0f, 0.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -908,7 +908,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
                 POLY_XLU_DISP++, 0x08,
                 Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -effect->actionTimer * 15, 32, 64, 1, 0, 0, 32, 32));
             Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFireEffectDL);
@@ -930,7 +930,7 @@ void EnClearTag_DrawEffects(Actor* thisx, GlobalContext* globalCtx) {
             // Draw the flash billboard effect.
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (s8)effect->primColor.a);
             Matrix_Translate(effect->position.x, effect->position.y, effect->position.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(2.0f * effect->scale, 2.0f * effect->scale, 1.0f, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, gClearTagFlashEffectDL);

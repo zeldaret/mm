@@ -682,7 +682,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         Matrix_Push();
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, globalCtx->state.frames % 128,
@@ -701,7 +701,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         Matrix_Pop();
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                                  MTXMODE_NEW);
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, (-globalCtx->state.frames * 3) % 128, 0, 0x20, 0x20, 1,
@@ -745,7 +745,7 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_Translate(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset,
                                      this->unk_178[i].z, MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -866,7 +866,7 @@ void func_80A4BF78(EnWizFire* this, GlobalContext* globalCtx) {
                                         (ptr->unk_01 * 0xF) & 0xFF, 0x20, 0x40, 1, 0, 0, 0x20, 0x20));
 
             Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_0C, ptr->unk_0C, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -228,7 +228,7 @@ void func_80BDC9DC(EnZowStruct* ptr, GlobalContext* globalCtx) {
             }
 
             Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -261,7 +261,7 @@ void func_80BDCB84(EnZowStruct* ptr, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, ptr->unk_0F);
 
             Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

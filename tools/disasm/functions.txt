@@ -3388,7 +3388,7 @@
     0x80181D64:("Matrix_MtxToMtxF",),
     0x80181FB8:("Matrix_MultVec3fExt",),
     0x80182068:("Matrix_Transpose",),
-    0x801820A0:("Matrix_NormalizeXYZ",),
+    0x801820A0:("Matrix_ReplaceRotation",),
     0x8018219C:("func_8018219C",),
     0x801822C4:("func_801822C4",),
     0x801823EC:("Matrix_InsertRotationAroundUnitVector_f",),

@@ -4604,7 +4604,7 @@ void Actor_DrawDamageEffects(GlobalContext* globalCtx, Actor* actor, Vec3f limbP
                                                 twoTexScrollParam * -12, 32, 64, 1, 0, 0, 32, 32));
 
                     Matrix_Translate(limbPos->x, limbPos->y, limbPos->z, MTXMODE_NEW);
-                    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
                     Matrix_Scale(steamScale, steamScale, 1.0f, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

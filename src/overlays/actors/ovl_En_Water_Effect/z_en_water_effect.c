@@ -298,7 +298,7 @@ void EnWaterEffect_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             if (ptr->unk_00 == 1) {
                 Matrix_RotateYS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
             } else {
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             }
 
             Matrix_Scale(ptr->unk_2C.x, ptr->unk_2C.y, 1.0f, MTXMODE_APPLY);
@@ -533,7 +533,7 @@ void func_80A5A184(Actor* thisx, GlobalContext* globalCtx2) {
             Matrix_Translate(ptr->unk_04.x, ptr->unk_04.y, ptr->unk_04.z, MTXMODE_NEW);
 
             if (ptr->unk_2A >= 2) {
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             } else {
                 Matrix_RotateYS(Camera_GetInputDirYaw(GET_ACTIVE_CAM(globalCtx)), MTXMODE_APPLY);
             }

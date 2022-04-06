@@ -177,7 +177,7 @@ void func_80A85788(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
                        Gfx_TwoTexScroll(globalCtx->state.gfxCtx, 0, 0, -arg0->unk_02 * 5, 32, 64, 1, 0, 0, 32, 32));
 
             Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
             Matrix_Translate(0.0f, 14.0f, 0.0f, MTXMODE_APPLY);
 
@@ -235,7 +235,7 @@ void func_80A85BCC(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 200, (u8)alpha);
 
             Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -305,7 +305,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, GlobalContext* globalCtx) {
 
             Matrix_Translate(arg0->unk_04.x, arg0->unk_04.y, arg0->unk_04.z, MTXMODE_NEW);
             Matrix_Scale(arg0->unk_28, arg0->unk_28, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

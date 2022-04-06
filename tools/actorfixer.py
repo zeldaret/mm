@@ -74,6 +74,7 @@ animdict = {
     "Matrix_MultiplyVector3fXZByCurrentState": "Matrix_MultVec3fXZ",
     "Matrix_FromRSPMatrix":                    "Matrix_MtxToMtxF",
     "Matrix_TransposeXYZ":                     "Matrix_Transpose",
+    "Matrix_NormalizeXYZ":                     "Matrix_ReplaceRotation",
 
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",

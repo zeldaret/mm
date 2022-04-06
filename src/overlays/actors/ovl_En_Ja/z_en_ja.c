@@ -436,7 +436,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
 
             Matrix_Push();
             Matrix_Translate(D_80BC378C.x, D_80BC378C.y, D_80BC378C.z, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gDPPipeSync(POLY_OPA_DISP++);
 
@@ -476,7 +476,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
                 Matrix_Push();
 
                 Matrix_Translate(D_80BC3798.x, D_80BC3798.y, D_80BC3798.z, MTXMODE_APPLY);
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
                 gDPPipeSync(POLY_OPA_DISP++);
 

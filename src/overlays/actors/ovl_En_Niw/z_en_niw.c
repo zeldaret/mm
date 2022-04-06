@@ -1007,7 +1007,7 @@ void EnNiw_DrawFeathers(EnNiw* this, GlobalContext* globalCtx) {
             }
 
             Matrix_Translate(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(feather->scale, feather->scale, 1.0f, MTXMODE_APPLY);
             Matrix_RotateZF(feather->zRot, MTXMODE_APPLY);
             Matrix_Translate(0.0f, -1000.0f, 0.0f, MTXMODE_APPLY);

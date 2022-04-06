@@ -1,6 +1,6 @@
 /**
  * File: sys_matrix.c
- * Description: Matrix system that mostly uses a matrix stack.
+ * Description: Matrix system that mostly uses a matrix stack, and concerns affine transformations.
  *
  * @note The RSP matrix format (and hence the `MtxF` format) is column-major: vectors are presumed to be row vectors,
  * and matrices as a column of row vectors. This means that, for example, a translation matrix
@@ -20,9 +20,23 @@
  * As such, we label the elements in column-major order so we can follow the same conventions for multiplying matrices
  * as the rest of the world, i.e. that \f[ [AB]_{ij} = \sum_k A_{ik} B_{kj} \f].
  *
+ * This file is primarily concerned with matrices representing affine transformations, implemented using an augmented
+ * matrix formalism,
+ *
+ * \f[
+ *  \begin{pmatrix}
+ *      A & b \\
+ *      0 & 1
+ *  \end{pmatrix}
+ * \f]
+ *
+ * where \f[ A \f] is a \f[ 3 \times 3 \f] matrix (the *linear part*) and \f[ b \f] a \f[ 3 \times 1 \f] matrix, i.e. a
+ * 3D vector (the *translation part*), and most of the functions assume that the matrices have this form.
+ *
  * Throughout this file, `mode` indicates whether to multiply the matrix on top of the stack by the new construction
  * (APPLY), or to just overwrite it (NEW).
  */
+
 #include "global.h"
 
 // clang-format off
@@ -1454,7 +1468,6 @@ void Matrix_MultVec3fExt(Vec3f* src, Vec3f* dest, MtxF* mf) {
     dest->z = mf->zw + (mf->zx * src->x + mf->zy * src->y + mf->zz * src->z);
 }
 
-// Matrix_Transpose or Matrix_Reverse
 /**
  * @brief Transposes the linear part of mf (ignores the translational part).
  *
@@ -1492,48 +1505,59 @@ void Matrix_Transpose(MtxF* mf) {
     mf->yz = temp;
 }
 
-// Matrix_ReplaceRotation
-void Matrix_NormalizeXYZ(MtxF* mf) {
+/**
+ * @brief Decompose the linear part A of current into B * S, where B has normalised columns and S is diagonal, and
+ * replace B by `mf`.
+ *
+ * Since B is typically a rotation matrix, and the linear part R * S to `mf` * S, this operation can be
+ * seen as replacing the B rotation with `mf`, hence the function name.
+ *
+ * @param mf matrix whose linear part will replace the normalised part of A.
+ */
+void Matrix_ReplaceRotation(MtxF* mf) {
     MtxF* cmf = sCurrentMatrix;
-    f32 temp;
-    f32 temp2;
-    f32 temp3;
+    f32 acc;
+    f32 component;
+    f32 curColNorm;
 
-    temp = cmf->xx;
-    temp *= temp;
-    temp2 = cmf->yx;
-    temp += SQ(temp2);
-    temp2 = cmf->zx;
-    temp += SQ(temp2);
-    temp3 = sqrtf(temp);
+    // compute the Euclidean norm of the first column of the current matrix
+    acc = cmf->xx;
+    acc *= acc;
+    component = cmf->yx;
+    acc += SQ(component);
+    component = cmf->zx;
+    acc += SQ(component);
+    curColNorm = sqrtf(acc);
 
-    cmf->xx = mf->xx * temp3;
-    cmf->yx = mf->yx * temp3;
-    cmf->zx = mf->zx * temp3;
+    cmf->xx = mf->xx * curColNorm;
+    cmf->yx = mf->yx * curColNorm;
+    cmf->zx = mf->zx * curColNorm;
 
-    temp = cmf->xy;
-    temp *= temp;
-    temp2 = cmf->yy;
-    temp += SQ(temp2);
-    temp2 = cmf->zy;
-    temp += SQ(temp2);
-    temp3 = sqrtf(temp);
+    // second column
+    acc = cmf->xy;
+    acc *= acc;
+    component = cmf->yy;
+    acc += SQ(component);
+    component = cmf->zy;
+    acc += SQ(component);
+    curColNorm = sqrtf(acc);
 
-    cmf->xy = mf->xy * temp3;
-    cmf->yy = mf->yy * temp3;
-    cmf->zy = mf->zy * temp3;
+    cmf->xy = mf->xy * curColNorm;
+    cmf->yy = mf->yy * curColNorm;
+    cmf->zy = mf->zy * curColNorm;
 
-    temp = cmf->xz;
-    temp *= temp;
-    temp2 = cmf->yz;
-    temp += SQ(temp2);
-    temp2 = cmf->zz;
-    temp += SQ(temp2);
-    temp3 = sqrtf(temp);
+    // third column
+    acc = cmf->xz;
+    acc *= acc;
+    component = cmf->yz;
+    acc += SQ(component);
+    component = cmf->zz;
+    acc += SQ(component);
+    curColNorm = sqrtf(acc);
 
-    cmf->xz = mf->xz * temp3;
-    cmf->yz = mf->yz * temp3;
-    cmf->zz = mf->zz * temp3;
+    cmf->xz = mf->xz * curColNorm;
+    cmf->yz = mf->yz * curColNorm;
+    cmf->zz = mf->zz * curColNorm;
 }
 
 // Matrix_MtxFToYXZRotS

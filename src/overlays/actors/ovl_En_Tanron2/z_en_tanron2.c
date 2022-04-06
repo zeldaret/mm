@@ -626,7 +626,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         if (D_80BB8458[i] != NULL) {
             Matrix_Translate(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
                                      D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(D_80BB8458[i]->actor.scale.x, D_80BB8458[i]->actor.scale.y, 0.0f, MTXMODE_APPLY);
             Matrix_RotateZS(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
             Matrix_Scale(0.13f, 0.14299999f, 0.13f, MTXMODE_APPLY);

@@ -1054,7 +1054,7 @@ void EnFish2_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         Matrix_Push();
-        Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+        Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);

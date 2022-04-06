@@ -2415,7 +2415,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
 
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
             Matrix_Scale(eff->unk_34.x, eff->unk_34.x, 1.0f, MTXMODE_APPLY);
-            Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+            Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -2451,7 +2451,7 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
                                              (M_PI / 0x8000),
                                          MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
-                Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+                Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             }
 
             Matrix_Scale(eff->unk_34.x, eff->unk_34.y, 1.0f, MTXMODE_APPLY);

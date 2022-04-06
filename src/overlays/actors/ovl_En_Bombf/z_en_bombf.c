@@ -450,7 +450,7 @@ Gfx* func_808AF86C(GraphicsContext* gfxCtx, GlobalContext* globalCtx) {
     Gfx* head = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 6);
     Gfx* gfx = head;
 
-    Matrix_NormalizeXYZ(&globalCtx->billboardMtxF);
+    Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
     gSPMatrix(gfx++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPEndDisplayList(gfx++);
