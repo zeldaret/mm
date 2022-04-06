@@ -95,11 +95,11 @@ endif
 
 # Check code syntax with host compiler
 ifneq ($(RUN_CC_CHECK),0)
-	CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
-	CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
-	ifneq ($(WERROR), 0)
-		CC_CHECK += -Werror
-	endif
+  CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion -Wno-unused-but-set-variable -Wno-unused-label
+  CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
+  ifneq ($(WERROR), 0)
+    CC_CHECK += -Werror
+  endif
 else
 	CC_CHECK := @:
 endif
@@ -121,9 +121,9 @@ CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_
 OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
 
 ifneq ($(OBJDUMP_BUILD), 0)
-	OBJDUMP_CMD = $(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+  OBJDUMP_CMD = $(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
 else
-	OBJDUMP_CMD = @:
+  OBJDUMP_CMD = @:
 endif
 
 ifeq ($(shell getconf LONG_BIT), 32)
@@ -137,7 +137,7 @@ endif
 # rom compression flags
 COMPFLAGS := --threads $(N_THREADS)
 ifneq ($(NON_MATCHING),1)
-	COMPFLAGS += --matching
+  COMPFLAGS += --matching
 endif
 
 #### Files ####
