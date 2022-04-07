@@ -38,7 +38,13 @@
         <Texture Name="object_kamejima_Tex_00B3D8" OutName="tex_00B3D8" Format="ci8" Width="16" Height="32" Offset="0xB3D8" />
         <Texture Name="object_kamejima_Tex_00B5D8" OutName="tex_00B5D8" Format="ci8" Width="64" Height="32" Offset="0xB5D8" />
         <Texture Name="object_kamejima_Tex_00BDD8" OutName="tex_00BDD8" Format="ci8" Width="16" Height="16" Offset="0xBDD8" />
-        <!-- <Blob Name="object_kamejima_Blob_00BED8" Size="0x1800" Offset="0xBED8" /> -->
+        <Texture Name="gTurtleEyeOpenStarightTex" OutName="eye_open_staright" Format="ci8" Width="32" Height="32" Offset="0xBED8" TlutOffset="0xAAD8"/>
+        <Texture Name="gTurtleEyeHalfStarightTex" OutName="eye_half_staright" Format="ci8" Width="32" Height="32" Offset="0xC2D8" TlutOffset="0xAAD8"/>
+        <Texture Name="gTurtleEyeClosedTex" OutName="eye_closed" Format="ci8" Width="32" Height="32" Offset="0xC6D8" TlutOffset="0xAAD8"/> 
+        <Texture Name="gTurtleEyeHalfLeftTex" OutName="eye_half_left" Format="ci8" Width="32" Height="32" Offset="0xCAD8" TlutOffset="0xAAD8"/>
+        <Texture Name="gTurtleEyeHalfRightTex" OutName="eye_half_right" Format="ci8" Width="32" Height="32" Offset="0xCED8" TlutOffset="0xAAD8"/>
+        <Texture Name="gTurtleEyeHalfLeft2Tex" OutName="eye_half_left_2" Format="ci8" Width="32" Height="32" Offset="0xD2D8" TlutOffset="0xAAD8"/>
+
         <Texture Name="object_kamejima_Tex_00D6D8" OutName="tex_00D6D8" Format="ci8" Width="16" Height="16" Offset="0xD6D8" />
         <Texture Name="object_kamejima_Tex_00D7D8" OutName="tex_00D7D8" Format="ci8" Width="32" Height="64" Offset="0xD7D8" />
         <Texture Name="object_kamejima_Tex_00DFD8" OutName="tex_00DFD8" Format="ci8" Width="32" Height="32" Offset="0xDFD8" />
