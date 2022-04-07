@@ -906,7 +906,7 @@ void EnRr_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         ptr = &this->unk_324[i];
 
         Matrix_Translate(0.0f, ptr->unk_00 + 1000.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertRotation(ptr->unk_1A.x, ptr->unk_1A.y, ptr->unk_1A.z, MTXMODE_APPLY);
+        Matrix_RotateZYX(ptr->unk_1A.x, ptr->unk_1A.y, ptr->unk_1A.z, MTXMODE_APPLY);
         Matrix_Push();
         Matrix_Scale(temp_f20, 1.0f, temp_f20, MTXMODE_APPLY);
         Matrix_ToMtx(matrix);

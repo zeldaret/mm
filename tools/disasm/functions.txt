@@ -3371,7 +3371,7 @@
     0x80180B48:("Matrix_RotateYF",),
     0x80180CF8:("Matrix_RotateZS",),
     0x80180E90:("Matrix_RotateZF",),
-    0x8018103C:("Matrix_InsertRotation",),
+    0x8018103C:("Matrix_RotateZYX",),
     0x801812FC:("Matrix_JointPosition",),
     0x80181650:("Matrix_SetStateRotationAndTranslation",),
     0x801817FC:("Matrix_MtxFToMtx",),

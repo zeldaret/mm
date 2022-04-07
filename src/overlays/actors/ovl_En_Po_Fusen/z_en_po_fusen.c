@@ -288,7 +288,7 @@ s32 EnPoFusen_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
         yScale = yScale * yScale;
         xRot = ((Math_SinS(this->randXZRotChange) * 2730.0f));
         zRot = ((Math_CosS(this->randXZRotChange) * 2730.0f));
-        Matrix_InsertRotation(xRot, 0, zRot, MTXMODE_APPLY);
+        Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
         Matrix_Scale(xScale, yScale, zScale, MTXMODE_APPLY);
         Matrix_RotateZS(-zRot, MTXMODE_APPLY);
         Matrix_RotateXS(-xRot, MTXMODE_APPLY);

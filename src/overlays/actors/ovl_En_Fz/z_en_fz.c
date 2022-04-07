@@ -260,7 +260,7 @@ void func_80932784(EnFz* this, GlobalContext* globalCtx) {
     sp5C.z = this->actor.world.pos.z;
 
     Matrix_Translate(sp5C.x, sp5C.y, sp5C.z, MTXMODE_NEW);
-    Matrix_InsertRotation(this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, MTXMODE_APPLY);
+    Matrix_RotateZYX(this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z, MTXMODE_APPLY);
 
     sp44.x = sp44.y = 0.0f;
     sp44.z = 440.0f;

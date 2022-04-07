@@ -777,7 +777,7 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     Matrix_Translate(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_NEW);
-    Matrix_InsertRotation(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
+    Matrix_RotateZYX(ptr->unk_1A, ptr->unk_18, 0, MTXMODE_APPLY);
     Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -788,7 +788,7 @@ void func_80872BC0(GlobalContext* globalCtx, s32 arg1) {
 
     for (i = 1; i < temp_s5; i++, ptr2++) {
         Matrix_Translate(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, MTXMODE_NEW);
-        Matrix_InsertRotation(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(ptr2->unk_1A, ptr2->unk_18, 0, MTXMODE_APPLY);
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

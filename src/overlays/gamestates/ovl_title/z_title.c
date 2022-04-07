@@ -82,7 +82,7 @@ void Title_Draw(GameState* thisx) {
     func_8012C28C(this->gameState.gfxCtx);
     Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_InsertRotation(0, titleRotation, 0, MTXMODE_APPLY);
+    Matrix_RotateZYX(0, titleRotation, 0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->gameState.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);

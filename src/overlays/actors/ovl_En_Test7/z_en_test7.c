@@ -351,7 +351,7 @@ void func_80AF14FC(GlobalContext* globalCtx2, EnTest7Struct2* arg1) {
         Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
 
         if (ptr->unk_00 == 1) {
-            Matrix_InsertRotation(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
+            Matrix_RotateZYX(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
         } else {
             SkinMatrix_SetRotateYRP(&sp6C, ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z);
             Matrix_Mult(&sp6C, MTXMODE_APPLY);
@@ -963,7 +963,7 @@ void EnTest7_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_144 & 2) {
         Matrix_Push();
         Matrix_Translate(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_InsertRotation(0, this->unk_148.unk_10, 0, MTXMODE_APPLY);
+        Matrix_RotateZYX(0, this->unk_148.unk_10, 0, MTXMODE_APPLY);
         Matrix_Scale(this->unk_148.unk_08 * 100.0f, this->unk_148.unk_0C * 100.0f, this->unk_148.unk_08 * 100.0f,
                      MTXMODE_APPLY);
         sp40 = this->unk_148.unk_00;

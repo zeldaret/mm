@@ -2885,7 +2885,7 @@ asm/non_matchings/code/sys_matrix/Matrix_RotateYS.s,Matrix_RotateYS,0x801809AC,0
 asm/non_matchings/code/sys_matrix/Matrix_RotateYF.s,Matrix_RotateYF,0x80180B48,0x6C
 asm/non_matchings/code/sys_matrix/Matrix_RotateZS.s,Matrix_RotateZS,0x80180CF8,0x66
 asm/non_matchings/code/sys_matrix/Matrix_RotateZF.s,Matrix_RotateZF,0x80180E90,0x6B
-asm/non_matchings/code/sys_matrix/Matrix_InsertRotation.s,Matrix_InsertRotation,0x8018103C,0xB0
+asm/non_matchings/code/sys_matrix/Matrix_RotateZYX.s,Matrix_RotateZYX,0x8018103C,0xB0
 asm/non_matchings/code/sys_matrix/Matrix_RotateAndTranslateState.s,Matrix_RotateAndTranslateState,0x801812FC,0xD5
 asm/non_matchings/code/sys_matrix/Matrix_SetStateRotationAndTranslation.s,Matrix_SetStateRotationAndTranslation,0x80181650,0x6B
 asm/non_matchings/code/sys_matrix/Matrix_MtxFToMtx.s,Matrix_MtxFToMtx,0x801817FC,0x87

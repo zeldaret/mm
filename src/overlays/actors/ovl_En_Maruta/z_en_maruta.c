@@ -622,7 +622,7 @@ void func_80B38060(EnMaruta* this, Vec3f* arg1) {
 
 void func_80B3828C(Vec3f* arg0, Vec3f* arg1, s16 arg2, s16 arg3, s32 arg4) {
     Matrix_Push();
-    Matrix_InsertRotation(arg2, arg3, arg4, MTXMODE_NEW);
+    Matrix_RotateZYX(arg2, arg3, arg4, MTXMODE_NEW);
     Matrix_MultVec3f(arg0, arg1);
     Matrix_Pop();
 }

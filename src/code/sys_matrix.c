@@ -865,8 +865,24 @@ void Matrix_RotateZF(f32 z, s32 mode) {
     }
 }
 
-// Matrix_RotateZYX
-void Matrix_InsertRotation(s16 x, s16 y, s16 z, s32 mode) {
+/**
+ * @brief Rotate using ZYX Tait-Bryan angles.
+ *      APPLY: current Rz Ry Rx -> current
+ *      NEW: Rz Ry Rx -> current
+ *
+ * This means a (column) vector is first rotated around X, then around Y, then around Z, then (if `mode` is APPLY) gets
+ * transformed by what the matrix was before adding the ZYX rotation.
+ * 
+ * See above for the forms of Rz,Ry,Rx
+ *
+ * @param x binary angle to rotate about x axis
+ * @param y binary angle to rotate about y axis
+ * @param z binary angle to rotate about z axis
+ * @param mode APPLY or NEW
+ *
+ * @remark Original name: "Matrix_RotateXYZ", changed to reflect rotation order.
+ */
+void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
     MtxF* cmf = sCurrentMatrix;
     f32 temp1;
     f32 temp2;

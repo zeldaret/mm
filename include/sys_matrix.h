@@ -22,7 +22,7 @@ void Matrix_RotateYS(s16 y, s32 mode);
 void Matrix_RotateYF(f32 y, s32 mode);
 void Matrix_RotateZS(s16 z, s32 mode);
 void Matrix_RotateZF(f32 z, s32 mode);
-void Matrix_InsertRotation(s16 x, s16 y, s16 z, s32 mode);
+void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode);
 void Matrix_JointPosition(Vec3f* pos, Vec3s* rot);
 void Matrix_RotateAndTranslateState(Vec3f* translation, Vec3s* rot);
 void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rotation);

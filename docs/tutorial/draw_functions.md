@@ -213,7 +213,7 @@ void ObjTree_Draw(Actor *thisx, GlobalContext *globalCtx) {
     temp_s0->polyOpa.p = temp_v0_2 + 8;
     temp_v0_2->words.w1 = (u32) &D_06000680;
     temp_v0_2->words.w0 = 0xDE000000;
-    Matrix_InsertRotation(sp36, 0, sp34, 1);
+    Matrix_RotateZYX(sp36, 0, sp34, 1);
     temp_v0_3 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0_3 + 8;
     temp_v0_3->words.w0 = 0xDA380003;
@@ -286,7 +286,7 @@ void ObjTree_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 
-    Matrix_InsertRotation(sp36, 0, sp34, MTXMODE_APPLY);
+    Matrix_RotateZYX(sp36, 0, sp34, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_060007C8);
 
