@@ -6,7 +6,7 @@
     <Array Name="D_80AB1648" Count="12" Offset="0x25F8">
         <Vector Type="s16" Dimensions="3" />
     </Array>
-    <Collision Name="D_80AB1690" Offset="0x2640"/>
+    <Collision Name="sTurtleCollision" Offset="0x2640"/>
     </File>
 </Root>
 
