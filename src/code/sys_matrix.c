@@ -872,7 +872,7 @@ void Matrix_RotateZF(f32 z, s32 mode) {
  *
  * This means a (column) vector is first rotated around X, then around Y, then around Z, then (if `mode` is APPLY) gets
  * transformed by what the matrix was before adding the ZYX rotation.
- * 
+ *
  * See above for the forms of Rz,Ry,Rx
  *
  * @param x binary angle to rotate about x axis
@@ -880,7 +880,7 @@ void Matrix_RotateZF(f32 z, s32 mode) {
  * @param z binary angle to rotate about z axis
  * @param mode APPLY or NEW
  *
- * @remark Original name: "Matrix_RotateXYZ", changed to reflect rotation order.
+ * @remark original name: "Matrix_RotateXYZ", changed to reflect rotation order.
  */
 void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
     MtxF* cmf = sCurrentMatrix;
@@ -970,6 +970,19 @@ void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
 }
 
 // Matrix_TranslateRotateZYX
+/**
+ * @brief Translate and rotate using ZYX Tait-Bryan angles.
+ *      APPLY: current T Rz Ry Rx -> current
+ *      NEW: T Rz Ry Rx -> current
+ *
+ * This means a (column) vector is first rotated around X, then around Y, then around Z, then translated, then gets
+ * transformed by whatever the matrix was previously.
+ *
+ * @param translation vector by which to translate.
+ * @param rot vector of rotation angles.
+ *
+ * @remark original name appears to be "Matrix_softcv3_mult"?
+ */
 void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
     f32 sin = Math_SinS(rot->z);
@@ -977,6 +990,7 @@ void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
     f32 temp1;
     f32 temp2;
 
+    // No check for z != 0, presumably since translation is interleaved.
     temp1 = cmf->xx;
     temp2 = cmf->xy;
     cmf->xw += temp1 * translation->x + temp2 * translation->y + cmf->xz * translation->z;
@@ -1053,6 +1067,21 @@ void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
 }
 
 // Matrix_SetTranslateRotateYXZ
+/**
+ * @brief Translate and rotate using YXZ Tait-Bryan angles.
+ *      APPLY: current T Ry Rx Rz -> current
+ *      NEW: T Ry Rx Rz -> current
+ *
+ * This means a (column) vector is first rotated around Y, then around X, then around Z, then translated, then gets
+ * transformed by whatever the matrix was previously.
+ *
+ * @param x amount to translate in X direction.
+ * @param y amount to translate in Y direction.
+ * @param z amount to translate in Z direction.
+ * @param rot vector of rotation angles.
+ *
+ * @remark original name appears to be "Matrix_softcv3_load"?
+ */
 void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
     f32 sp30 = Math_SinS(rot->y);
@@ -1577,6 +1606,22 @@ void Matrix_ReplaceRotation(MtxF* mf) {
 }
 
 // Matrix_MtxFToYXZRotS
+/**
+ * @brief Extract the YXZ Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
+ *
+ * \f[ A \f] is required to have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
+ * with \f[ S \f] a scale matrix.
+ *
+ * If A has orthonormal columns (i.e. it is just a rotation matrix with no scaling), it is sufficient (and faster) to
+ * have `flag` off: `flag` being set enables extraction of the angles from a matrix with columns that are orthogonal but
+ * not normalised, at the cost of requiring extra calculation.
+ *
+ * @param mf Matrix to extract angles from.
+ * @param rotDest vector to write angles to.
+ * @param flag boolean: true enables handling matrices with unnormalised columns.
+ *
+ * @remark original name: "Matrix_to_rotate_new"?
+ */
 void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
     f32 temp;
     f32 temp2;
@@ -1588,6 +1633,7 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
     temp += SQ(mf->zz);
     rotDest->x = Math_Atan2S(-mf->yz, sqrtf(temp));
 
+    // cos(x) = 0 if either of these is true, and we get gimbal locking; fix z to make y well-defined.
     if ((rotDest->x == 0x4000) || (rotDest->x == -0x4000)) {
         rotDest->z = 0;
 
@@ -1595,6 +1641,7 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
     } else {
         rotDest->y = Math_Atan2S(mf->xz, mf->zz);
 
+        // assume the columns are already normalised
         if (!flag) {
             rotDest->z = Math_Atan2S(mf->yx, mf->yy);
         } else {
@@ -1602,27 +1649,48 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
             temp2 = mf->zx;
             temp3 = mf->zy;
 
+            // find norm of the first column
             temp *= temp;
             temp += SQ(temp2);
             temp2 = mf->yx;
             temp += SQ(temp2);
+            // temp = xx^2+zx^2+yx^2 == 1 for a rotation matrix
             temp = sqrtf(temp);
-            temp = temp2 / temp;
+            temp = temp2 / temp; // yx in normalised column
 
+            // find norm of the second column
             temp2 = mf->xy;
             temp2 *= temp2;
             temp2 += SQ(temp3);
             temp3 = mf->yy;
             temp2 += SQ(temp3);
+            // temp2 = xy^2+zy^2+yy^2 == 1 for a rotation matrix
             temp2 = sqrtf(temp2);
-            temp2 = temp3 / temp2;
+            temp2 = temp3 / temp2; // yy in normalised column
 
+            // for a rotation matrix, temp == yx and temp2 == yy which is the same as in the !flag branch
             rotDest->z = Math_Atan2S(temp, temp2);
         }
     }
 }
 
 // Matrix_MtxFToZYXRotS
+/**
+ * @brief Extract the ZYX Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
+ *
+ * \f[ A \f] is required to have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
+ * with \f[ S \f] a scale matrix.
+ *
+ * If A has orthonormal columns (i.e. it is just a rotation matrix with no scaling), it is sufficient (and faster) to
+ * have `flag` off: `flag` being set enables extraction of the angles from a matrix with columns that are orthogonal but
+ * not normalised, at the cost of requiring extra calculation.
+ *
+ * @param mf Matrix to extract angles from.
+ * @param rotDest vector to write angles to.
+ * @param flag boolean: true enables handling matrices with unnormalised columns.
+ *
+ * @remark original name: "Matrix_to_rotate2_new"?
+ */
 void func_801822C4(MtxF* mf, Vec3s* rotDest, s32 flag) {
     f32 temp;
     f32 temp2;
@@ -1637,34 +1705,33 @@ void func_801822C4(MtxF* mf, Vec3s* rotDest, s32 flag) {
     if ((rotDest->y == 0x4000) || (rotDest->y == -0x4000)) {
         rotDest->x = 0;
         rotDest->z = Math_Atan2S(-mf->xy, mf->yy);
-        return;
-    }
-
-    rotDest->z = Math_Atan2S(mf->yx, mf->xx);
-
-    if (!flag) {
-        rotDest->x = Math_Atan2S(mf->zy, mf->zz);
     } else {
-        temp = mf->xy;
-        temp2 = mf->yy;
-        temp3 = mf->yz;
+        rotDest->z = Math_Atan2S(mf->yx, mf->xx);
 
-        temp *= temp;
-        temp += SQ(temp2);
-        temp2 = mf->zy;
-        temp += SQ(temp2);
-        temp = sqrtf(temp);
-        temp = temp2 / temp;
+        if (!flag) {
+            rotDest->x = Math_Atan2S(mf->zy, mf->zz);
+        } else {
+            temp = mf->xy;
+            temp2 = mf->yy;
+            temp3 = mf->yz;
 
-        temp2 = mf->xz;
-        temp2 *= temp2;
-        temp2 += SQ(temp3);
-        temp3 = mf->zz;
-        temp2 += SQ(temp3);
-        temp2 = sqrtf(temp2);
-        temp2 = temp3 / temp2;
+            temp *= temp;
+            temp += SQ(temp2);
+            temp2 = mf->zy;
+            temp += SQ(temp2);
+            temp = sqrtf(temp);
+            temp = temp2 / temp;
 
-        rotDest->x = Math_Atan2S(temp, temp2);
+            temp2 = mf->xz;
+            temp2 *= temp2;
+            temp2 += SQ(temp3);
+            temp3 = mf->zz;
+            temp2 += SQ(temp3);
+            temp2 = sqrtf(temp2);
+            temp2 = temp3 / temp2;
+
+            rotDest->x = Math_Atan2S(temp, temp2);
+        }
     }
 }
 
