@@ -1601,7 +1601,6 @@ void Matrix_ReplaceRotation(MtxF* mf) {
     cmf->zz = mf->zz * curColNorm;
 }
 
-// Matrix_MtxFToYXZRotS
 /**
  * @brief Extract the YXZ Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
  *
@@ -1672,7 +1671,6 @@ void Matrix_MtxFToYXZRot(MtxF* mf, Vec3s* rotDest, s32 flag) {
     }
 }
 
-// Matrix_MtxFToZYXRotS
 /**
  * @brief Extract the ZYX Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
  *
@@ -1691,7 +1689,7 @@ void Matrix_MtxFToYXZRot(MtxF* mf, Vec3s* rotDest, s32 flag) {
  *
  * See Matrix_MtxFToYXZRot for full inline documentation.
  */
-void func_801822C4(MtxF* mf, Vec3s* rotDest, s32 flag) {
+void Matrix_MtxFToZYXRot(MtxF* mf, Vec3s* rotDest, s32 flag) {
     f32 temp;
     f32 temp2;
     f32 temp3;

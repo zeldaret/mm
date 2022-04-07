@@ -78,6 +78,7 @@ animdict = {
     "Matrix_TransposeXYZ":                     "Matrix_Transpose",
     "Matrix_NormalizeXYZ":                     "Matrix_ReplaceRotation",
     "func_8018219C":                           "Matrix_MtxFToYXZRot",
+    "func_801822C4":                           "Matrix_MtxFToZYXRot",
     "Matrix_InsertRotationAroundUnitVector_f": "Matrix_RotateAxisF",
     "Matrix_InsertRotationAroundUnitVector_s": "Matrix_RotateAxisS",
 

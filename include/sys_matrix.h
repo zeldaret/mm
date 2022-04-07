@@ -44,7 +44,7 @@ void Matrix_MultVec3fExt(Vec3f* src, Vec3f* dest, MtxF* matrix);
 void Matrix_Transpose(MtxF* mtx);
 void Matrix_ReplaceRotation(MtxF* mtx);
 void Matrix_MtxFToYXZRot(MtxF* mtx, Vec3s* rotDest, s32 flag);
-void func_801822C4(MtxF* mtx, Vec3s* rotDest, s32 flag);
+void Matrix_MtxFToZYXRot(MtxF* mtx, Vec3s* rotDest, s32 flag);
 void Matrix_RotateAxisF(f32 angle, Vec3f* axis, s32 mode);
 void Matrix_RotateAxisS(s16 angle, Vec3f* axis, s32 mode);
 
