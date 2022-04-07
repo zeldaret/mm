@@ -208,7 +208,7 @@ void ObjSwitch_InitJntSphCollider(ObjSwitch* this, GlobalContext* globalCtx, Col
 
     Collider_InitJntSph(globalCtx, &this->colliderJntSph);
     Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->dyna.actor, init, this->colliderJntSphElements);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
                                           this->dyna.actor.world.pos.y +
                                               (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
@@ -225,7 +225,7 @@ void ObjSwitch_InitTrisCollider(ObjSwitch* this, GlobalContext* globalCtx, Colli
     Collider_InitTris(globalCtx, &this->colliderTris);
     Collider_SetTris(globalCtx, &this->colliderTris, &this->dyna.actor, init, this->colliderTrisElements);
     Matrix_Push();
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
                                           this->dyna.actor.world.pos.y +
                                               this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);

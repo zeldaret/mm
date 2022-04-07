@@ -2510,12 +2510,12 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
     Lights_Draw(light, globalCtx->state.gfxCtx);
 
     if (actor->flags & ACTOR_FLAG_1000) {
-        Matrix_SetStateRotationAndTranslation(
+        Matrix_SetTranslateRotateYXZ(
             actor->world.pos.x + globalCtx->mainCamera.skyboxOffset.x,
             actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y),
             actor->world.pos.z + globalCtx->mainCamera.skyboxOffset.z, &actor->shape.rot);
     } else {
-        Matrix_SetStateRotationAndTranslation(actor->world.pos.x,
+        Matrix_SetTranslateRotateYXZ(actor->world.pos.x,
                                               actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
                                               actor->world.pos.z, &actor->shape.rot);
     }

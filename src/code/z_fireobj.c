@@ -159,7 +159,7 @@ void FireObj_Draw(GlobalContext* globalCtx, FireObj* fire) {
         vec.x = 0;
         vec.y = Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) + 0x8000;
         vec.z = 0;
-        Matrix_SetStateRotationAndTranslation(fire->position.x, fire->position.y, fire->position.z, &vec);
+        Matrix_SetTranslateRotateYXZ(fire->position.x, fire->position.y, fire->position.z, &vec);
         Matrix_Scale(fire->xScale, fire->yScale, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

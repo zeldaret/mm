@@ -346,7 +346,7 @@ void func_809A5960(ObjArmos* this, GlobalContext* globalCtx) {
     Vec3f sp28;
 
     sp28.x = Math_SinS(this->dyna.actor.shape.rot.y);
-    Matrix_SetStateRotationAndTranslation(
+    Matrix_SetTranslateRotateYXZ(
         (sp28.x * -9.0f) + this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
         (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(0.014f, 0.014f, 0.014f, MTXMODE_APPLY);

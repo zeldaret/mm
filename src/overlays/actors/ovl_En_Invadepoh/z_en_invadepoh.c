@@ -2388,7 +2388,7 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
     Math_ScaledStepToS(&this->actor.shape.rot.x, D_80B4EDC0[temp], 0x32);
     if (this->actor.child != NULL) {
         Matrix_Push();
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                               &this->actor.shape.rot);
         Matrix_Translate(0, 57.0f, -36.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.shape.rot.x * -0.7f, MTXMODE_APPLY);
@@ -4416,7 +4416,7 @@ void func_80B4DB14(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (this->drawAlienDeathEffect) {
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f,
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 68.0f,
                                               this->actor.world.pos.z, &this->actor.shape.rot);
         Matrix_Scale(this->alienDeathEffectScale.x, this->alienDeathEffectScale.y, this->alienDeathEffectScale.z,
                      MTXMODE_APPLY);

@@ -457,7 +457,7 @@ void func_809AA54C(Actor* thisx, GlobalContext* globalCtx2) {
 
                 if ((ptr2->unk_0F & 1) && (ptr2->unk_10 == 255)) {
                     sp70.y = ptr2->unk_0C;
-                    Matrix_SetStateRotationAndTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp70);
+                    Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp70);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
                     if (ptr2->unk_0F & 2) {
                         func_809A91FC(&this->unk_2F88[j]);
@@ -497,7 +497,7 @@ void func_809AA798(Actor* thisx, GlobalContext* globalCtx) {
 
                 if ((ptr2->unk_0F & 1) && (ptr2->unk_10 > 0) && (ptr2->unk_10 < 255)) {
                     sp6C.y = ptr2->unk_0C;
-                    Matrix_SetStateRotationAndTranslation(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp6C);
+                    Matrix_SetTranslateRotateYXZ(ptr2->unk_00.x, ptr2->unk_00.y, ptr2->unk_00.z, &sp6C);
                     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

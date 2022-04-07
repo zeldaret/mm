@@ -969,7 +969,6 @@ void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
     }
 }
 
-// Matrix_TranslateRotateZYX
 /**
  * @brief Translate and rotate using ZYX Tait-Bryan angles.
  *      APPLY: current T Rz Ry Rx -> current
@@ -1066,7 +1065,6 @@ void Matrix_TranslateRotateZYX(Vec3f* translation, Vec3s* rot) {
     }
 }
 
-// Matrix_SetTranslateRotateYXZ
 /**
  * @brief Set current to a general translation and rotation using YXZ Tait-Bryan angles: T Ry Rx Rz -> current
  *
@@ -1080,7 +1078,7 @@ void Matrix_TranslateRotateZYX(Vec3f* translation, Vec3s* rot) {
  *
  * @remark original name appears to be "Matrix_softcv3_load"
  */
-void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rot) {
+void Matrix_SetTranslateRotateYXZ(f32 x, f32 y, f32 z, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
     f32 sp30 = Math_SinS(rot->y);
     f32 sp2C = Math_CosS(rot->y);

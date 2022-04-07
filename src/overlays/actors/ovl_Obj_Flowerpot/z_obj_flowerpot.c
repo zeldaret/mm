@@ -208,7 +208,7 @@ void func_80A1B9CC(ObjFlowerpot* this, GlobalContext* globalCtx) {
 }
 
 void func_80A1BA04(ObjFlowerpot* this, Vec3f* arg1) {
-    Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
+    Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
                                           &this->actor.shape.rot);
     Matrix_MultVec3f(&D_80A1D408, arg1);
 }
@@ -404,7 +404,7 @@ void ObjFlowerpot_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     Collider_InitJntSph(globalCtx, &this->collider);
     Collider_SetJntSph(globalCtx, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
-    Matrix_SetStateRotationAndTranslation(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
+    Matrix_SetTranslateRotateYXZ(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                                           &this->actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);

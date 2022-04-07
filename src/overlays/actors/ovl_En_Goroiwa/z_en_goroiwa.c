@@ -1572,7 +1572,7 @@ void func_80942B1C(EnGoroiwa* this, GlobalContext* globalCtx) {
             sp80.y = ptr->unk_1E;
             sp80.z = ptr->unk_20;
 
-            Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
+            Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &sp80);
             Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
             Gfx_DrawDListOpa(globalCtx, phi_fp);
 

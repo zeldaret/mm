@@ -407,7 +407,7 @@ void func_80ACF1F4(EnFuMato* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < 2; i++) {
         Matrix_Push();
-        Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &ptr->unk_24);
+        Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &ptr->unk_24);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -450,7 +450,7 @@ void func_80ACF3F4(EnFuMato* this, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(D_80ACF63C); i++, ptr++) {
         Matrix_Push();
-        Matrix_SetStateRotationAndTranslation(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &ptr->unk_24);
+        Matrix_SetTranslateRotateYXZ(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, &ptr->unk_24);
         Matrix_Scale(scale->x, scale->y, scale->z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

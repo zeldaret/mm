@@ -137,7 +137,7 @@ void ObjHakaisi_Init(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_Get(&sp3C);
     func_8018219C(&sp3C, &this->dyna.actor.shape.rot, 1);
     this->dyna.actor.world.rot = this->dyna.actor.shape.rot;
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
     Matrix_MultVec3f(&D_80B155B0, &this->dyna.actor.focus.pos);

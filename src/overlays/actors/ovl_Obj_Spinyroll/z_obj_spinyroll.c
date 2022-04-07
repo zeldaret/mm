@@ -694,7 +694,7 @@ void ObjSpinyroll_Draw(Actor* thisx, GlobalContext* globalCtx) {
     sp84.z = this->dyna.actor.shape.rot.z;
 
     for (i = 0; i < phi_s4; i++) {
-        Matrix_SetStateRotationAndTranslation(phi_f22, temp_f30, phi_f24, &sp84);
+        Matrix_SetTranslateRotateYXZ(phi_f22, temp_f30, phi_f24, &sp84);
         Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

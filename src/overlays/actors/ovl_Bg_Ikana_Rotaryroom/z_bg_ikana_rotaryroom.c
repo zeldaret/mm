@@ -140,7 +140,7 @@ CollisionHeader* D_80B82218[] = { &object_ikana_obj_Colheader_006368, &object_ik
 void func_80B802E0(BgIkanaRotaryroom* this) {
     s32 pad;
 
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
@@ -165,7 +165,7 @@ void func_80B80440(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     Vec3f sp50;
 
     Matrix_Push();
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     if (Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
@@ -204,7 +204,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     sp60.x = BINANG_ROT180(this->dyna.actor.home.rot.x);
     sp60.y = this->dyna.actor.home.rot.y;
     sp60.z = this->dyna.actor.home.rot.z;
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &sp60);
 
     while (actor != NULL) {
@@ -251,7 +251,7 @@ BgIkanaRotaryroomStruct4* func_80B80778(BgIkanaRotaryroom* this, GlobalContext* 
         for (i = 0; i < ARRAY_COUNT(D_80B82184); i++) {
             ptr = &D_80B82184[temp_s3][i];
             if ((ptr->unk_01 == 0) &&
-                (Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+                (Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                                        this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot),
                  Matrix_MultVec3f(&ptr->unk_04, &sp68),
                  (Math3D_Vec3fDistSq(&arg2->world.pos, &sp68) < SQ(250.0f)))) {
@@ -393,7 +393,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     MtxF sp3C;
 
     Matrix_Push();
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     if (ikanaBlock != NULL) {
@@ -481,11 +481,11 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     if (sp40 != NULL) {
         Matrix_Push();
 
-        Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+        Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                               this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
         Matrix_MultZero(&sp34);
-        Matrix_SetStateRotationAndTranslation(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
+        Matrix_SetTranslateRotateYXZ(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
                                               sp40->actor.world.pos.z, &sp40->actor.shape.rot);
         Matrix_MultZero(&sp28);
 

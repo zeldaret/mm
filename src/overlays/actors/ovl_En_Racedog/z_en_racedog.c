@@ -583,7 +583,7 @@ void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
 
         func_8012C28C(globalCtx->state.gfxCtx);
         func_80B2583C(this);
-        Matrix_SetStateRotationAndTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
                                               this->actor.world.pos.z, &sp48);
 
         gDPPipeSync(POLY_OPA_DISP++);

@@ -653,7 +653,7 @@ void BgDblueBalance_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (!(BGDBLUEBALANCE_GET_300(&this->dyna.actor)) && (this->unk_160 != NULL)) {
         AnimatedMat_Draw(globalCtx, D_80B83C74);
         sp38 = this->unk_160;
-        Matrix_SetStateRotationAndTranslation(sp38->dyna.actor.world.pos.x, sp38->dyna.actor.world.pos.y,
+        Matrix_SetTranslateRotateYXZ(sp38->dyna.actor.world.pos.x, sp38->dyna.actor.world.pos.y,
                                               sp38->dyna.actor.world.pos.z, &sp38->dyna.actor.shape.rot);
         Matrix_Translate(30.0f, 15.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(sp38->dyna.actor.scale.x, sp38->dyna.actor.scale.y, sp38->dyna.actor.scale.z, MTXMODE_APPLY);

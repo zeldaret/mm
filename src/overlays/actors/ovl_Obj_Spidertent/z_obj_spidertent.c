@@ -570,7 +570,7 @@ void ObjSpidertent_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     DynaPolyActor_LoadMesh(globalCtx, &this->dyna, ptr->unk_04);
     Collider_SetTris(globalCtx, &this->collider, &this->dyna.actor, D_80B31350[temp_s1].unk_08, this->colliderElements);
-    Matrix_SetStateRotationAndTranslation(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
+    Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     sp64.x = ptr->unk_10 * 1.2f;
