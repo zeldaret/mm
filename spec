@@ -3447,8 +3447,7 @@ beginseg
     name "ovl_Bg_Open_Spot"
     compress
     include "build/src/overlays/actors/ovl_Bg_Open_Spot/z_bg_open_spot.o"
-    include "build/data/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot.data.o"
-    include "build/data/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Open_Spot/ovl_Bg_Open_Spot_reloc.o"
 endseg
 
 beginseg
