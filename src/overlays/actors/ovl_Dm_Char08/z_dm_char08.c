@@ -47,7 +47,6 @@ typedef struct struct_80AB16BC {
 
 void func_80AAF15C(SkelAnime* skelAnime, struct_80AB16BC* entry, u16 arg2);
 
-#if 0
 const ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
     ACTORCAT_BG,
@@ -60,6 +59,19 @@ const ActorInit Dm_Char08_InitVars = {
     (ActorFunc)DmChar08_Draw,
 };
 
+#include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
+
+
+struct_80AB16BC D_80AB16BC[7] = {
+    { &object_kamejima_Anim_0048B0, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+    { &object_kamejima_Anim_006980, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+    { &object_kamejima_Anim_012260, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+    { &object_kamejima_Anim_0100CC, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+    { &object_kamejima_Anim_0047B8, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+    { &object_kamejima_Anim_0119D4, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+    { &object_kamejima_Anim_014E8C, 1.0f, 0.0f, -1.0f, 0, -24.0f },
+};
+
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80AB1764[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
@@ -67,20 +79,22 @@ static InitChainEntry D_80AB1764[] = {
     ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
 };
 
-#endif
 
-extern InitChainEntry D_80AB1764[];
-
-extern CollisionHeader D_06002470;
-extern UNK_TYPE D_06004E70;
-extern FlexSkeletonHeader D_0600E748;
-extern CollisionHeader D_06002328;
-extern CollisionHeader D_06002328;
-extern CollisionHeader D_80AB1690;
-
-extern struct_80AB16BC D_80AB16BC[];
-
-extern s16 D_80AB1770;
+s16 D_80AB1770 = 0;
+Color_RGBA8 D_80AB1774 = { 0xFA, 0xC8, 0xFA, 0x64 };
+Color_RGBA8 D_80AB1778 = { 0x50, 0x50, 0x50, 0 };
+Vec3f D_80AB177C = { 0.0f, -0.8f, 0.0f };
+void *D_80AB1788[9] = {
+    (void *)0x0600D2D8,
+    (void *)0x0600CAD8,
+    (void *)0x0600C6D8,
+    (void *)0x0600CAD8,
+    (void *)0x0600BED8,
+    (void *)0x0600C2D8,
+    (void *)0x0600C6D8,
+    (void *)0x0600C2D8,
+    (void *)0x0600CED8,
+};
 
 // Overly complicated eye update function?
 void func_80AAF050(DmChar08* this) {
@@ -149,7 +163,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk200 = 2;
     this->dyna.actor.targetArrowOffset = 120.0f;
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_0600E748, NULL, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_kamejima_Skel_00E748, NULL, NULL, NULL, 0);
     Actor_ProcessInitChain(&this->dyna.actor, D_80AB1764);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->unk1F4 = 0;
@@ -164,10 +178,10 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
     if (globalCtx->sceneNum == SCENE_31MISAKI) {
         if ((gSaveContext.save.weekEventReg[0x35] & 0x20) != 0) {
             DynaPolyActor_Init(&this->dyna, 3);
-            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06002470);
+            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kamejima_Colheader_002470);
         } else {
             DynaPolyActor_Init(&this->dyna, 3);
-            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06002328);
+            DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kamejima_Colheader_002328);
         }
         this->unk209 = 1;
     } else if (globalCtx->sceneNum == SCENE_SEA) {
@@ -294,7 +308,7 @@ void func_80AAF884(DmChar08* this, GlobalContext* globalCtx) {
 
     if (globalCtx->csCtx.state == 0) {
         DynaPolyActor_Init(&this->dyna, 3);
-        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &D_06002470);
+        DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kamejima_Colheader_002470);
         this->dyna.actor.flags |= 1;
         this->actionFunc = func_80AAF8F4;
     }
@@ -362,9 +376,6 @@ void func_80AAFB04(DmChar08* this, GlobalContext* globalCtx) {
 
 void func_80AAFB94(DmChar08* this, GlobalContext* globalCtx) {
 }
-extern Vec3f D_80AB177C;
-extern Color_RGBA8 D_80AB1774;
-extern Color_RGBA8 D_80AB1778;
 
 void func_80AAFBA4(DmChar08* this, GlobalContext* globalCtx) {
     s32 i;
@@ -845,11 +856,7 @@ void func_80AB096C(DmChar08* this, GlobalContext* globalCtx) {
     }
 }
 
-extern Vec3s D_80AB13A0[12];
-extern Vec3s D_80AB14D0[12];
-extern Vec3s D_80AB1600[12];
-extern Vec3s D_80AB1648[12];
-extern void* D_80AB16A8[3];
+
 
 // not today
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char08/func_80AB0A10.s")
@@ -871,18 +878,18 @@ void func_80AB0A10(DmChar08* this, GlobalContext* globalCtx) {
             phi_f12 = 29.0f;
         }
 
-        D_80AB16A8[0] = &D_80AB13A0;
+        D_80AB1690.polyList = D_80AB1690Polygons;
 
-        for (i = 0; i < ARRAY_COUNT(D_80AB1600); i++) {
-            D_80AB1600[i].x = D_80AB1648[i].x;
+        for (i = 0; i < ARRAY_COUNT(D_80AB1690Vertices); i++) {
+            D_80AB1690Vertices[i].x = D_80AB1648[i].x;
         }
 
-        D_80AB1600[0].y = (100.0f * phi_f2) + 900.0f;
-        D_80AB1600[1].y = (100.0f * phi_f2) + 900.0f;
-        D_80AB1600[2].y = (500.0f * phi_f2) + -200.0f;
-        D_80AB1600[3].y = (900.0f * phi_f2) + -800.0f;
-        D_80AB1600[5].y = 0x4B0;
-        D_80AB1600[9].y = 0x6A4;
+        D_80AB1690Vertices[0].y = (100.0f * phi_f2) + 900.0f;
+        D_80AB1690Vertices[1].y = (100.0f * phi_f2) + 900.0f;
+        D_80AB1690Vertices[2].y = (500.0f * phi_f2) + -200.0f;
+        D_80AB1690Vertices[3].y = (900.0f * phi_f2) + -800.0f;
+        D_80AB1690Vertices[5].y = 0x4B0;
+        D_80AB1690Vertices[9].y = 0x6A4;
     } else {
         phi_f0 = this->skelAnime.curFrame + 26.0f;
         if (phi_f0 > 29.0f) {
@@ -896,18 +903,18 @@ void func_80AB0A10(DmChar08* this, GlobalContext* globalCtx) {
             phi_f2 = (29.0f - phi_f0) / 10.0f;
         }
 
-        D_80AB16A8[0] = &D_80AB14D0;
+        D_80AB1690.polyList = D_80AB14D0;
 
-        for (i = 0; i < ARRAY_COUNT(D_80AB1600); i++) {
-            D_80AB1600[i].x = -D_80AB1648[i].x;
+        for (i = 0; i < ARRAY_COUNT(D_80AB1690Vertices); i++) {
+            D_80AB1690Vertices[i].x = -D_80AB1648[i].x;
         }
 
-        D_80AB1600[0].y = (500.0f * phi_f2) + 720.0f;
-        D_80AB1600[1].y = (660.0f * phi_f2) + 420.0f;
-        D_80AB1600[2].y = (1130.0f * phi_f2) + -430.0f;
-        D_80AB1600[3].y = (1430.0f * phi_f2) + -1060.0f;
-        D_80AB1600[5].y = 0x4B0;
-        D_80AB1600[9].y = 0x6A4;
+        D_80AB1690Vertices[0].y = (500.0f * phi_f2) + 720.0f;
+        D_80AB1690Vertices[1].y = (660.0f * phi_f2) + 420.0f;
+        D_80AB1690Vertices[2].y = (1130.0f * phi_f2) + -430.0f;
+        D_80AB1690Vertices[3].y = (1430.0f * phi_f2) + -1060.0f;
+        D_80AB1690Vertices[5].y = 0x4B0;
+        D_80AB1690Vertices[9].y = 0x6A4;
     }
     func_800C6554(globalCtx, &globalCtx->colCtx.dyna);
 }
@@ -1034,7 +1041,6 @@ void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
 #endif
 
 void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx); /* extern */
-extern TexturePtr D_80AB1788[9];                                           // Eye textures
 
 void DmChar08_Draw(Actor* thisx, GlobalContext* globalCtx) {
     DmChar08* this = (DmChar08*)thisx;
