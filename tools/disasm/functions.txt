@@ -10238,7 +10238,7 @@
     0x80A36B9C:("EnSyatekiOkuta_Update",),
     0x80A36CB0:("func_80A36CB0",),
     0x80A370EC:("func_80A370EC",),
-    0x80A37294:("func_80A37294",),
+    0x80A37294:("EnSyatekiOkuta_OverrideLimbDraw",),
     0x80A3735C:("EnSyatekiOkuta_Draw",),
     0x80A37ED0:("ObjShutter_Init",),
     0x80A37EE0:("ObjShutter_Destroy",),
