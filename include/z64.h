@@ -1156,7 +1156,7 @@ typedef struct {
 typedef enum {
     /* 0 */ DISTORTION_INACTIVE,
     /* 1 */ DISTORTION_ACTIVE,
-    /* 2 */ DISTORTION_SETUP,
+    /* 2 */ DISTORTION_SETUP
 } DistortionState;
 
 typedef struct {
