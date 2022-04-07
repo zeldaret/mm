@@ -435,7 +435,7 @@ void func_80A69388(EnMushi2* this) {
     D_80A6B9C4.mf[2][1] = this->unk_328.y;
     D_80A6B9C4.mf[2][2] = this->unk_328.z;
 
-    func_8018219C(&D_80A6B9C4, &this->actor.world.rot, 0);
+    Matrix_MtxFToYXZRot(&D_80A6B9C4, &this->actor.world.rot, 0);
     this->actor.shape.rot = this->actor.world.rot;
 }
 

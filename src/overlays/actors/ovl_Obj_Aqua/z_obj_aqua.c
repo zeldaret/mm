@@ -123,7 +123,7 @@ void func_80ACBA10(ObjAqua* this) {
 
     func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                   &sp2C);
-    func_8018219C(&sp2C, &this->actor.shape.rot, 0);
+    Matrix_MtxFToYXZRot(&sp2C, &this->actor.shape.rot, 0);
 }
 
 s32 func_80ACBA60(ObjAqua* this, GlobalContext* globalCtx) {

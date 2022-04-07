@@ -224,7 +224,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                     Matrix_MultZero(&actor->world.pos);
                     func_80B80358(&actor->world.pos);
                     Matrix_Get(&sp68);
-                    func_8018219C(&sp68, &actor->shape.rot, 0);
+                    Matrix_MtxFToYXZRot(&sp68, &actor->shape.rot, 0);
                     Matrix_Pop();
                 }
             }
@@ -403,7 +403,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_MultZero(&ikanaBlock->actor.world.pos);
         func_80B80358(&ikanaBlock->actor.world.pos);
         Matrix_Get(&sp3C);
-        func_8018219C(&sp3C, &ikanaBlock->actor.shape.rot, 0);
+        Matrix_MtxFToYXZRot(&sp3C, &ikanaBlock->actor.shape.rot, 0);
 
         Matrix_Pop();
     }
@@ -417,7 +417,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_MultZero(&ptr->world.pos);
             func_80B80358(&ptr->world.pos);
             Matrix_Get(&sp3C);
-            func_8018219C(&sp3C, &ptr->shape.rot, 0);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr->shape.rot, 0);
 
             Matrix_Pop();
         }
@@ -432,7 +432,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_MultZero(&ptr2->world.pos);
             func_80B80358(&ptr2->world.pos);
             Matrix_Get(&sp3C);
-            func_8018219C(&sp3C, &ptr2->shape.rot, 0);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr2->shape.rot, 0);
 
             Matrix_Pop();
         }
@@ -447,7 +447,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_MultZero(&ptr3->world.pos);
             func_80B80358(&ptr3->world.pos);
             Matrix_Get(&sp3C);
-            func_8018219C(&sp3C, &ptr3->shape.rot, 0);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr3->shape.rot, 0);
 
             Matrix_Pop();
         }
@@ -462,7 +462,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
         func_80B80358(&player->actor.world.pos);
         Matrix_Get(&sp3C);
-        func_8018219C(&sp3C, &player->actor.shape.rot, 0);
+        Matrix_MtxFToYXZRot(&sp3C, &player->actor.shape.rot, 0);
 
         Matrix_Pop();
         player->actor.freezeTimer = 2;

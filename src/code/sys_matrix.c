@@ -1618,7 +1618,7 @@ void Matrix_ReplaceRotation(MtxF* mf) {
  *
  * @remark original name: "Matrix_to_rotate_new"?
  */
-void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
+void Matrix_MtxFToYXZRot(MtxF* mf, Vec3s* rotDest, s32 flag) {
     f32 temp;
     f32 temp2;
     f32 temp3;
@@ -1629,10 +1629,10 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
     temp += SQ(mf->zz);
     rotDest->x = Math_Atan2S(-mf->yz, sqrtf(temp));
 
-    // cos(x) = 0 if either of these is true, and we get gimbal locking
-    // (https://en.wikipedia.org/wiki/Gimbal_lock#Loss_of_a_degree_of_freedom_with_Euler_angles); fix z to make y
-    // well-defined.
     if ((rotDest->x == 0x4000) || (rotDest->x == -0x4000)) {
+        // cos(x) = 0 if either of these is true, and we get gimbal locking
+        // (https://en.wikipedia.org/wiki/Gimbal_lock#Loss_of_a_degree_of_freedom_with_Euler_angles); fix z to make y
+        // well-defined.
         rotDest->z = 0;
 
         rotDest->y = Math_Atan2S(-mf->zx, mf->xx);
@@ -1689,7 +1689,7 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
  *
  * @remark original name: "Matrix_to_rotate2_new"?
  *
- * See func_8018219C for full inline documentation.
+ * See Matrix_MtxFToYXZRot for full inline documentation.
  */
 void func_801822C4(MtxF* mf, Vec3s* rotDest, s32 flag) {
     f32 temp;

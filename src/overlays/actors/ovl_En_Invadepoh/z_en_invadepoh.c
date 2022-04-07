@@ -2395,7 +2395,7 @@ void func_80B48060(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_RotateZS(this->actor.shape.rot.z * -0.7f, MTXMODE_APPLY);
         Matrix_MultZero(&this->actor.child->world.pos);
         Matrix_Get(&unkMtx);
-        func_8018219C(&unkMtx, &this->actor.child->shape.rot, 0);
+        Matrix_MtxFToYXZRot(&unkMtx, &this->actor.child->shape.rot, 0);
         Matrix_Pop();
     }
 }

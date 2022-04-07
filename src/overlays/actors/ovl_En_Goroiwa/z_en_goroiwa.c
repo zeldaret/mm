@@ -565,7 +565,7 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_Get(&sp24);
-    func_8018219C(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
+    Matrix_MtxFToYXZRot(&sp24, &this->actor.shape.rot, MTXMODE_NEW);
 }
 
 void func_8093FC00(EnGoroiwa* this) {

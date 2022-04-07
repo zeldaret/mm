@@ -287,7 +287,7 @@ void func_8086A238(EnPametfrog* this) {
     unkMtx.yz = this->unk_2D0.y;
     unkMtx.zz = this->unk_2D0.z;
 
-    func_8018219C(&unkMtx, &this->actor.shape.rot, 0);
+    Matrix_MtxFToYXZRot(&unkMtx, &this->actor.shape.rot, 0);
     this->actor.world.rot.x = -this->actor.shape.rot.x;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.z = this->actor.shape.rot.z;

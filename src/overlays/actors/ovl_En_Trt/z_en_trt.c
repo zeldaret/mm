@@ -1699,7 +1699,7 @@ void EnTrt_UpdateHeadPosAndRot(s16 pitch, s16 yaw, Vec3f* pos, Vec3s* rot, s32 i
 
     Matrix_MultVec3f(&zeroVec, &newPos);
     Matrix_Get(&currentState);
-    func_8018219C(&currentState, &newRot, MTXMODE_NEW);
+    Matrix_MtxFToYXZRot(&currentState, &newRot, MTXMODE_NEW);
     *pos = newPos;
     if (isFullyAwake) {
         newRot.x += pitch;

@@ -258,7 +258,7 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, GlobalContext
     }
 
     if (this->actor.params != ENSDA_1) {
-        func_8018219C(&player->shieldMf, &sp178, false);
+        Matrix_MtxFToYXZRot(&player->shieldMf, &sp178, false);
 
         sp178.y += (KREG(87) * 0x8000) + 0x8000;
         sp178.x *= (KREG(88) - 1);

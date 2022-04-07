@@ -112,7 +112,7 @@ void EnNutsball_Update(Actor* thisx, GlobalContext* globalCtx2) {
             if ((player->currentShield == PLAYER_SHIELD_HEROS_SHIELD) && (this->collider.base.atFlags & AT_HIT) &&
                 (this->collider.base.atFlags & AT_TYPE_ENEMY) && (this->collider.base.atFlags & AT_BOUNCED)) {
                 EnNutsball_InitColliderParams(this);
-                func_8018219C(&player->shieldMf, &worldRot, 0);
+                Matrix_MtxFToYXZRot(&player->shieldMf, &worldRot, 0);
                 this->actor.world.rot.y = BINANG_ROT180(worldRot.y);
                 this->timer = 20;
             } else {

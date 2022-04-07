@@ -77,7 +77,7 @@ animdict = {
     "Matrix_FromRSPMatrix":                    "Matrix_MtxToMtxF",
     "Matrix_TransposeXYZ":                     "Matrix_Transpose",
     "Matrix_NormalizeXYZ":                     "Matrix_ReplaceRotation",
-
+    "func_8018219C":                           "Matrix_MtxFToYXZRot",
     "Matrix_InsertRotationAroundUnitVector_f": "Matrix_RotateAxisF",
     "Matrix_InsertRotationAroundUnitVector_s": "Matrix_RotateAxisS",
 

@@ -1609,7 +1609,7 @@ void EnFishing_DrawLureHook(GlobalContext* globalCtx, Vec3f* pos, Vec3f* refPos,
 
             Matrix_MultVec3f(&sZeroVec, &effect->pos);
             Matrix_Get(&mf);
-            func_8018219C(&mf, &sEffOwnerHatRot, 0);
+            Matrix_MtxFToYXZRot(&mf, &sEffOwnerHatRot, 0);
 
             D_8090CD10 = 0;
             D_8090CD0C = 0;

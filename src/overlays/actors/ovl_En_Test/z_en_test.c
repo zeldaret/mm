@@ -182,7 +182,7 @@ void EnTest_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
         thisx->world.pos.y = thisx->floorHeight;
         func_800C0094(thisx->floorPoly, thisx->world.pos.x, thisx->floorHeight, thisx->world.pos.z, &sp38);
-        func_8018219C(&sp38, &thisx->shape.rot, 1);
+        Matrix_MtxFToYXZRot(&sp38, &thisx->shape.rot, 1);
         thisx->world.rot = thisx->shape.rot;
         this->unk_20A = func_800C9BB8(&globalCtx->colCtx, thisx->floorPoly, sp34);
     }

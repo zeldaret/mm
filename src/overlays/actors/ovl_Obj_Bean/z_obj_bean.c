@@ -157,7 +157,7 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
         Matrix_Put(&sp48);
         Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Get(&sp48);
-        func_8018219C(&sp48, &this->dyna.actor.shape.rot, 0);
+        Matrix_MtxFToYXZRot(&sp48, &this->dyna.actor.shape.rot, 0);
         return true;
     }
     return false;

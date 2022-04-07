@@ -2903,7 +2903,7 @@ asm/non_matchings/code/sys_matrix/Matrix_MtxToMtxF.s,Matrix_MtxToMtxF,0x80181D64
 asm/non_matchings/code/sys_matrix/Matrix_MultVec3fExt.s,Matrix_MultVec3fExt,0x80181FB8,0x2C
 asm/non_matchings/code/sys_matrix/Matrix_Transpose.s,Matrix_Transpose,0x80182068,0xE
 asm/non_matchings/code/sys_matrix/Matrix_ReplaceRotation.s,Matrix_ReplaceRotation,0x801820A0,0x3F
-asm/non_matchings/code/sys_matrix/func_8018219C.s,func_8018219C,0x8018219C,0x4A
+asm/non_matchings/code/sys_matrix/Matrix_MtxFToYXZRot.s,Matrix_MtxFToYXZRot,0x8018219C,0x4A
 asm/non_matchings/code/sys_matrix/func_801822C4.s,func_801822C4,0x801822C4,0x4A
 asm/non_matchings/code/sys_matrix/Matrix_RotateAxisF.s,Matrix_RotateAxisF,0x801823EC,0x118
 asm/non_matchings/code/sys_matrix/Matrix_RotateAxisS.s,Matrix_RotateAxisS,0x8018284C,0x111

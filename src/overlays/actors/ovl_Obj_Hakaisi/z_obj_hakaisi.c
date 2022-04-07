@@ -135,7 +135,7 @@ void ObjHakaisi_Init(Actor* thisx, GlobalContext* globalCtx) {
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
     Matrix_Get(&sp3C);
-    func_8018219C(&sp3C, &this->dyna.actor.shape.rot, 1);
+    Matrix_MtxFToYXZRot(&sp3C, &this->dyna.actor.shape.rot, 1);
     this->dyna.actor.world.rot = this->dyna.actor.shape.rot;
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                           this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
@@ -415,7 +415,7 @@ void func_80B15330(ObjHakaisi* this, GlobalContext* globalCtx) {
     Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_Get(&sp34);
 
-    func_8018219C(&sp34, &this->dyna.actor.shape.rot, 0);
+    Matrix_MtxFToYXZRot(&sp34, &this->dyna.actor.shape.rot, 0);
 }
 
 void func_80B1544C(Actor* thisx, GlobalContext* globalCtx) {

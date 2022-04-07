@@ -427,7 +427,7 @@ s32 func_80B3D974(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4, s32 ar
 
     Matrix_MultVec3f(&gZeroVec3f, &sp74);
     Matrix_Get(&sp2C);
-    func_8018219C(&sp2C, &sp6C, 0);
+    Matrix_MtxFToYXZRot(&sp2C, &sp6C, 0);
     *arg2 = sp74;
     if (arg4 == 0) {
         if (arg5 != 0) {
