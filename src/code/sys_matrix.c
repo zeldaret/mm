@@ -1652,13 +1652,20 @@ void func_801822C4(MtxF* mf, Vec3s* rotDest, s32 flag) {
     }
 }
 
-// Matrix_RotateAxisF
-void Matrix_InsertRotationAroundUnitVector_f(f32 angle, Vec3f* axis, s32 mode) {
+/**
+ * @brief Rotate by `angle` radians about `axis`, which is assumed to be a unit vector.
+ *
+ * @param angle rotation angle in radians.
+ * @param axis axis about which to rotate, must be a unit vector.
+ * @param mode APPLY or NEW.
+ *
+ * @remark original name may have been "Matrix_RotateVector", but clashed with the next function.
+ */
+void Matrix_RotateAxisF(f32 angle, Vec3f* axis, s32 mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
-    f32 rCos;
-    f32 vrs;
+    f32 versin;
     f32 temp1;
     f32 temp2;
     f32 temp3;
@@ -1672,9 +1679,9 @@ void Matrix_InsertRotationAroundUnitVector_f(f32 angle, Vec3f* axis, s32 mode) {
             sin = sinf(angle);
             cos = cosf(angle);
 
+            temp1 = cmf->xx;
             temp2 = cmf->xy;
             temp3 = cmf->xz;
-            temp1 = cmf->xx;
             temp4 = (axis->x * temp1 + axis->y * temp2 + axis->z * temp3) * (1.0f - cos);
             cmf->xx = temp1 * cos + axis->x * temp4 + sin * (temp2 * axis->z - temp3 * axis->y);
             cmf->xy = temp2 * cos + axis->y * temp4 + sin * (temp3 * axis->x - temp1 * axis->z);
@@ -1702,25 +1709,25 @@ void Matrix_InsertRotationAroundUnitVector_f(f32 angle, Vec3f* axis, s32 mode) {
         if (angle != 0) {
             sin = sinf(angle);
             cos = cosf(angle);
-            rCos = 1.0f - cos;
+            versin = 1.0f - cos;
 
-            cmf->xx = axis->x * axis->x * rCos + cos;
-            cmf->yy = axis->y * axis->y * rCos + cos;
-            cmf->zz = axis->z * axis->z * rCos + cos;
+            cmf->xx = axis->x * axis->x * versin + cos;
+            cmf->yy = axis->y * axis->y * versin + cos;
+            cmf->zz = axis->z * axis->z * versin + cos;
 
             if (0) {}
 
-            temp2 = axis->x * rCos * axis->y;
+            temp2 = axis->x * versin * axis->y;
             temp3 = axis->z * sin;
             cmf->yx = temp2 + temp3;
             cmf->xy = temp2 - temp3;
 
-            temp2 = axis->x * rCos * axis->z;
+            temp2 = axis->x * versin * axis->z;
             temp3 = axis->y * sin;
             cmf->zx = temp2 - temp3;
             cmf->xz = temp2 + temp3;
 
-            temp2 = axis->y * rCos * axis->z;
+            temp2 = axis->y * versin * axis->z;
             temp3 = axis->x * sin;
             cmf->zy = temp2 + temp3;
             cmf->yz = temp2 - temp3;
@@ -1728,32 +1735,40 @@ void Matrix_InsertRotationAroundUnitVector_f(f32 angle, Vec3f* axis, s32 mode) {
             cmf->wx = cmf->wy = cmf->wz = cmf->xw = cmf->yw = cmf->zw = 0.0f;
             cmf->ww = 1.0f;
         } else {
+            cmf->xx = 1.0f;
             cmf->yx = 0.0f;
             cmf->zx = 0.0f;
             cmf->wx = 0.0f;
             cmf->xy = 0.0f;
+            cmf->yy = 1.0f;
             cmf->zy = 0.0f;
             cmf->wy = 0.0f;
             cmf->xz = 0.0f;
             cmf->yz = 0.0f;
+            cmf->zz = 1.0f;
             cmf->wz = 0.0f;
             cmf->xw = 0.0f;
             cmf->yw = 0.0f;
             cmf->zw = 0.0f;
-            cmf->xx = 1.0f;
-            cmf->yy = 1.0f;
-            cmf->zz = 1.0f;
             cmf->ww = 1.0f;
         }
     }
 }
 
-// Matrix_RotateAxisS
-void Matrix_InsertRotationAroundUnitVector_s(s16 angle, Vec3f* axis, s32 mode) {
+/**
+ * @brief Rotate by binary angle `angle` about `axis`, which is assumed to be a unit vector.
+ *
+ * @param angle rotation angle in binary.
+ * @param axis axis about which to rotate, must be a unit vector.
+ * @param mode APPLY or NEW.
+ *
+ * @remark original name: "Matrix_RotateVector"
+ */
+void Matrix_RotateAxisS(s16 angle, Vec3f* axis, s32 mode) {
     MtxF* cmf;
     f32 cos;
     f32 sin;
-    f32 rCos;
+    f32 versin;
     f32 temp1;
     f32 temp2;
     f32 temp3;
@@ -1766,9 +1781,9 @@ void Matrix_InsertRotationAroundUnitVector_s(s16 angle, Vec3f* axis, s32 mode) {
             sin = Math_SinS(angle);
             cos = Math_CosS(angle);
 
+            temp1 = cmf->xx;
             temp2 = cmf->xy;
             temp3 = cmf->xz;
-            temp1 = cmf->xx;
             temp4 = (axis->x * temp1 + axis->y * temp2 + axis->z * temp3) * (1.0f - cos);
             cmf->xx = temp1 * cos + axis->x * temp4 + sin * (temp2 * axis->z - temp3 * axis->y);
             cmf->xy = temp2 * cos + axis->y * temp4 + sin * (temp3 * axis->x - temp1 * axis->z);
@@ -1796,25 +1811,25 @@ void Matrix_InsertRotationAroundUnitVector_s(s16 angle, Vec3f* axis, s32 mode) {
         if (angle != 0) {
             sin = Math_SinS(angle);
             cos = Math_CosS(angle);
-            rCos = 1.0f - cos;
+            versin = 1.0f - cos;
 
-            cmf->xx = axis->x * axis->x * rCos + cos;
-            cmf->yy = axis->y * axis->y * rCos + cos;
-            cmf->zz = axis->z * axis->z * rCos + cos;
+            cmf->xx = axis->x * axis->x * versin + cos;
+            cmf->yy = axis->y * axis->y * versin + cos;
+            cmf->zz = axis->z * axis->z * versin + cos;
 
             if (0) {}
 
-            temp2 = axis->x * rCos * axis->y;
+            temp2 = axis->x * versin * axis->y;
             temp3 = axis->z * sin;
             cmf->yx = temp2 + temp3;
             cmf->xy = temp2 - temp3;
 
-            temp2 = axis->x * rCos * axis->z;
+            temp2 = axis->x * versin * axis->z;
             temp3 = axis->y * sin;
             cmf->zx = temp2 - temp3;
             cmf->xz = temp2 + temp3;
 
-            temp2 = axis->y * rCos * axis->z;
+            temp2 = axis->y * versin * axis->z;
             temp3 = axis->x * sin;
             cmf->zy = temp2 + temp3;
             cmf->yz = temp2 - temp3;
@@ -1822,21 +1837,21 @@ void Matrix_InsertRotationAroundUnitVector_s(s16 angle, Vec3f* axis, s32 mode) {
             cmf->wx = cmf->wy = cmf->wz = cmf->xw = cmf->yw = cmf->zw = 0.0f;
             cmf->ww = 1.0f;
         } else {
+            cmf->xx = 1.0f;
             cmf->yx = 0.0f;
             cmf->zx = 0.0f;
             cmf->wx = 0.0f;
             cmf->xy = 0.0f;
+            cmf->yy = 1.0f;
             cmf->zy = 0.0f;
             cmf->wy = 0.0f;
             cmf->xz = 0.0f;
             cmf->yz = 0.0f;
+            cmf->zz = 1.0f;
             cmf->wz = 0.0f;
             cmf->xw = 0.0f;
             cmf->yw = 0.0f;
             cmf->zw = 0.0f;
-            cmf->xx = 1.0f;
-            cmf->yy = 1.0f;
-            cmf->zz = 1.0f;
             cmf->ww = 1.0f;
         }
     }

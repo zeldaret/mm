@@ -76,6 +76,8 @@ animdict = {
     "Matrix_TransposeXYZ":                     "Matrix_Transpose",
     "Matrix_NormalizeXYZ":                     "Matrix_ReplaceRotation",
 
+    "Matrix_InsertRotationAroundUnitVector_f": "Matrix_RotateAxisF",
+    "Matrix_InsertRotationAroundUnitVector_s": "Matrix_RotateAxisS",
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_8012403C": "Player_GetMask",

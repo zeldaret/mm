@@ -674,7 +674,7 @@ void EnMaruta_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         Matrix_Push();
         Matrix_Translate(sp50.x, sp50.y, sp50.z, MTXMODE_APPLY);
-        Matrix_InsertRotationAroundUnitVector_s(this->unk_218, &this->unk_194, MTXMODE_APPLY);
+        Matrix_RotateAxisS(this->unk_218, &this->unk_194, MTXMODE_APPLY);
         Matrix_Translate(-sp50.x, -sp50.y, -sp50.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -47,7 +47,7 @@ void Matrix_Transpose(MtxF* mtx);
 void Matrix_ReplaceRotation(MtxF* mtx);
 void func_8018219C(MtxF* mtx, Vec3s* rotDest, s32 flag);
 void func_801822C4(MtxF* mtx, Vec3s* rotDest, s32 flag);
-void Matrix_InsertRotationAroundUnitVector_f(f32 angle, Vec3f* axis, s32 mode);
-void Matrix_InsertRotationAroundUnitVector_s(s16 angle, Vec3f* axis, s32 mode);
+void Matrix_RotateAxisF(f32 angle, Vec3f* axis, s32 mode);
+void Matrix_RotateAxisS(s16 angle, Vec3f* axis, s32 mode);
 
 #endif

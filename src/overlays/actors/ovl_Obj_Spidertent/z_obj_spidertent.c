@@ -478,7 +478,7 @@ void func_80B300F4(ObjSpidertent* thisx, GlobalContext* globalCtx, TriNorm* triN
 
         for (i = 0; i < sp80->unk_0F; i++) {
             temp_f2 = (Rand_ZeroOne() * temp_f24) + phi_f22;
-            Matrix_InsertRotationAroundUnitVector_f(temp_f2, &spAC, MTXMODE_NEW);
+            Matrix_RotateAxisF(temp_f2, &spAC, MTXMODE_NEW);
             Matrix_MultVec3f(&spA0, &sp94);
 
             if (arg5 == 0) {

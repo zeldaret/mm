@@ -277,7 +277,7 @@ void func_808D90F0(EnSw* this, s32 arg1, s16 arg2) {
         temp = arg2;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
+    Matrix_RotateAxisF(BINANG_TO_RAD(temp), &this->unk_368, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_350, &sp2C);
     Math_Vec3f_Copy(&this->unk_350, &sp2C);
     Math3D_CrossProduct(&this->unk_368, &this->unk_350, &this->unk_35C);
@@ -316,7 +316,7 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
     }
 
     Math_Vec3f_Scale(&sp2C, 1.0f / temp_f0);
-    Matrix_InsertRotationAroundUnitVector_f(sp4C, &sp2C, MTXMODE_NEW);
+    Matrix_RotateAxisF(sp4C, &sp2C, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_35C, &sp2C);
     Math_Vec3f_Copy(&this->unk_35C, &sp2C);
     Math3D_CrossProduct(&this->unk_35C, &sp38, &this->unk_350);

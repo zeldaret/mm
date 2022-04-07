@@ -560,7 +560,7 @@ void func_8093FAA4(EnGoroiwa* this, GlobalContext* globalCtx) {
         sp64 = this->unk_1B4;
     }
 
-    Matrix_InsertRotationAroundUnitVector_f(sp7C, &sp64, MTXMODE_NEW);
+    Matrix_RotateAxisF(sp7C, &sp64, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);

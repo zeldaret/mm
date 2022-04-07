@@ -409,7 +409,7 @@ void func_80B15330(ObjHakaisi* this, GlobalContext* globalCtx) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 
-    Matrix_InsertRotationAroundUnitVector_s(this->unk_19C, &this->unk_184, MTXMODE_NEW);
+    Matrix_RotateAxisS(this->unk_19C, &this->unk_184, MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_RotateXS(this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);

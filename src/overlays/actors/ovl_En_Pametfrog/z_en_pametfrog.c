@@ -315,7 +315,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
 
     Math3D_CrossProduct(&this->unk_2DC, &floorNorm, &vec2);
     EnPametfrog_Vec3fNormalize(&vec2);
-    Matrix_InsertRotationAroundUnitVector_f(rotation, &vec2, MTXMODE_NEW);
+    Matrix_RotateAxisF(rotation, &vec2, MTXMODE_NEW);
     Matrix_MultVec3f(&this->unk_2E8, &vec2);
     Math_Vec3f_Copy(&this->unk_2E8, &vec2);
     Math3D_CrossProduct(&this->unk_2E8, &floorNorm, &this->unk_2D0);
@@ -683,7 +683,7 @@ void EnPametfrog_WallPause(EnPametfrog* this, GlobalContext* globalCtx) {
     } else {
         SkelAnime_Update(&this->skelAnime);
         this->timer--;
-        Matrix_InsertRotationAroundUnitVector_f(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
+        Matrix_RotateAxisF(this->wallRotation, &this->unk_2DC, MTXMODE_NEW);
         Matrix_MultVec3f(&this->unk_2D0, &vec);
         Math_Vec3f_Copy(&this->unk_2D0, &vec);
         Math3D_CrossProduct(&this->unk_2DC, &this->unk_2D0, &this->unk_2E8);

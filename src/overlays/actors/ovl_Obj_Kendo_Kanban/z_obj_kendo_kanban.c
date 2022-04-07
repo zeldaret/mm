@@ -474,7 +474,7 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_dora_DL_000180);
     } else {
-        Matrix_InsertRotationAroundUnitVector_s(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
+        Matrix_RotateAxisS(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
         Matrix_Translate(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
