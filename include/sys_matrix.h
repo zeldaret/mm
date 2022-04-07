@@ -29,9 +29,7 @@ void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rotation)
 
 Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest);
 Mtx* Matrix_ToMtx(Mtx* dest);
-Mtx* Matrix_GetStateAsRSPMatrix(Mtx* mtx);
 Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx);
-Mtx* Matrix_AppendStateToPolyOpaDisp(GraphicsContext* gfxCtx);
 Mtx* Matrix_MtxFToNewMtx(MtxF* mtx, GraphicsContext* gfxCtx);
 
 void Matrix_MultVec3f(Vec3f* src, Vec3f* dest);

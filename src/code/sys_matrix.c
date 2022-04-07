@@ -890,7 +890,7 @@ void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
     f32 cos;
 
     if (mode == MTXMODE_APPLY) {
-        if (z != 0) {
+        if (z != 0) { // Added in MM, OoT always follows the nonzero path
             sin = Math_SinS(z);
             cos = Math_CosS(z);
 
@@ -981,7 +981,7 @@ void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
  * @param translation vector by which to translate.
  * @param rot vector of rotation angles.
  *
- * @remark original name appears to be "Matrix_softcv3_mult"?
+ * @remark original name appears to be "Matrix_softcv3_mult"
  */
 void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
@@ -1068,9 +1068,7 @@ void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
 
 // Matrix_SetTranslateRotateYXZ
 /**
- * @brief Translate and rotate using YXZ Tait-Bryan angles.
- *      APPLY: current T Ry Rx Rz -> current
- *      NEW: T Ry Rx Rz -> current
+ * @brief Set current to a general translation and rotation using YXZ Tait-Bryan angles: T Ry Rx Rz -> current
  *
  * This means a (column) vector is first rotated around Y, then around X, then around Z, then translated, then gets
  * transformed by whatever the matrix was previously.
@@ -1080,7 +1078,7 @@ void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
  * @param z amount to translate in Z direction.
  * @param rot vector of rotation angles.
  *
- * @remark original name appears to be "Matrix_softcv3_load"?
+ * @remark original name appears to be "Matrix_softcv3_load"
  */
 void Matrix_SetStateRotationAndTranslation(f32 x, f32 y, f32 z, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
@@ -1609,16 +1607,16 @@ void Matrix_ReplaceRotation(MtxF* mf) {
 /**
  * @brief Extract the YXZ Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
  *
- * \f[ A \f] is required to have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
+ * \f[ A \f] should have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
  * with \f[ S \f] a scale matrix.
  *
- * If A has orthonormal columns (i.e. it is just a rotation matrix with no scaling), it is sufficient (and faster) to
- * have `flag` off: `flag` being set enables extraction of the angles from a matrix with columns that are orthogonal but
- * not normalised, at the cost of requiring extra calculation.
+ * If A has columns with the same norm (such as if it is just a rotation matrix), it is sufficient (and faster) to use
+ * `flag` off: `flag` being set enables extraction of the angles from a matrix with columns that are orthogonal but have
+ * different scales, at the cost of requiring extra calculation.
  *
  * @param mf Matrix to extract angles from.
  * @param rotDest vector to write angles to.
- * @param flag boolean: true enables handling matrices with unnormalised columns.
+ * @param flag boolean: true enables handling matrices with differently-scaled columns.
  *
  * @remark original name: "Matrix_to_rotate_new"?
  */
@@ -1633,7 +1631,9 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
     temp += SQ(mf->zz);
     rotDest->x = Math_Atan2S(-mf->yz, sqrtf(temp));
 
-    // cos(x) = 0 if either of these is true, and we get gimbal locking; fix z to make y well-defined.
+    // cos(x) = 0 if either of these is true, and we get gimbal locking
+    // (https://en.wikipedia.org/wiki/Gimbal_lock#Loss_of_a_degree_of_freedom_with_Euler_angles); fix z to make y
+    // well-defined.
     if ((rotDest->x == 0x4000) || (rotDest->x == -0x4000)) {
         rotDest->z = 0;
 
@@ -1641,8 +1641,8 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
     } else {
         rotDest->y = Math_Atan2S(mf->xz, mf->zz);
 
-        // assume the columns are already normalised
         if (!flag) {
+            // assume the columns have the same normalisation
             rotDest->z = Math_Atan2S(mf->yx, mf->yy);
         } else {
             temp = mf->xx;
@@ -1678,18 +1678,20 @@ void func_8018219C(MtxF* mf, Vec3s* rotDest, s32 flag) {
 /**
  * @brief Extract the ZYX Tate-Bryan rotation angles from the linear part \f[ A \f] of a matrix.
  *
- * \f[ A \f] is required to have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
+ * \f[ A \f] should have orthogonal columns; the most general matrix of this form can be written as \f[ RS \f]
  * with \f[ S \f] a scale matrix.
  *
- * If A has orthonormal columns (i.e. it is just a rotation matrix with no scaling), it is sufficient (and faster) to
- * have `flag` off: `flag` being set enables extraction of the angles from a matrix with columns that are orthogonal but
- * not normalised, at the cost of requiring extra calculation.
+ * If A has columns with the same norm (such as if it is just a rotation matrix), it is sufficient (and faster) to use
+ * `flag` off: `flag` being set enables extraction of the angles from a matrix with columns that are orthogonal but have
+ * different scales, at the cost of requiring extra calculation.
  *
  * @param mf Matrix to extract angles from.
  * @param rotDest vector to write angles to.
  * @param flag boolean: true enables handling matrices with unnormalised columns.
  *
  * @remark original name: "Matrix_to_rotate2_new"?
+ *
+ * See func_8018219C for full inline documentation.
  */
 void func_801822C4(MtxF* mf, Vec3s* rotDest, s32 flag) {
     f32 temp;
