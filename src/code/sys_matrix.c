@@ -983,7 +983,7 @@ void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
  *
  * @remark original name appears to be "Matrix_softcv3_mult"
  */
-void Matrix_JointPosition(Vec3f* translation, Vec3s* rot) {
+void Matrix_TranslateRotateZYX(Vec3f* translation, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
     f32 sin = Math_SinS(rot->z);
     f32 cos = Math_CosS(rot->z);

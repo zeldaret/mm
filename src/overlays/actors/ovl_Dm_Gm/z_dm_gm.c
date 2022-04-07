@@ -281,7 +281,7 @@ void DmGm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         Matrix_Push();
-        Matrix_JointPosition(&D_80C25218, &D_80C25224);
+        Matrix_TranslateRotateZYX(&D_80C25218, &D_80C25224);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[sp2A].segment);

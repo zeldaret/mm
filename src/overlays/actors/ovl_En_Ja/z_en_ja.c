@@ -419,7 +419,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
         Matrix_Push();
-        Matrix_JointPosition(&D_80BC3774, &D_80BC37A4);
+        Matrix_TranslateRotateZYX(&D_80BC3774, &D_80BC37A4);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, object_boj_DL_00BA30);
