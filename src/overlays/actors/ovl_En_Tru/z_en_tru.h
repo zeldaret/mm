@@ -8,6 +8,8 @@ struct EnTru;
 typedef void (*EnTruActionFunc)(struct EnTru*, GlobalContext*);
 typedef s32 (*EnTruUnkFunc)(Actor*, GlobalContext*);
 
+#define ENTRU_GET_PATH(thisx) ((thisx)->params & 0xFF)
+
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;

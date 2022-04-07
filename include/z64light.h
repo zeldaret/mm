@@ -63,7 +63,6 @@ typedef struct LightNode {
     /* 0x8 */ struct LightNode* next;
 } LightNode; // size = 0xC
 
-// TODO move LightsBuffer to .c file once .bss has been split
 #define LIGHTS_BUFFER_SIZE 32
 
 typedef struct LightsBuffer {

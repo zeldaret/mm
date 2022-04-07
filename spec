@@ -486,7 +486,6 @@ beginseg
     include "build/src/code/z_lib.o"
     include "build/src/code/z_lifemeter.o"
     include "build/src/code/z_lights.o"
-    include "build/data/code/z_lights.bss.o"
     include "build/src/code/z_malloc.o"
     include "build/src/code/z_map_disp.o"
     include "build/data/code/z_map_disp.data.o"
@@ -2722,8 +2721,7 @@ beginseg
     name "ovl_En_Syateki_Okuta"
     compress
     include "build/src/overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.o"
-    include "build/data/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.data.o"
-    include "build/data/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta_reloc.o"
 endseg
 
 beginseg
@@ -4058,8 +4056,7 @@ beginseg
     name "ovl_En_Dragon"
     compress
     include "build/src/overlays/actors/ovl_En_Dragon/z_en_dragon.o"
-    include "build/data/ovl_En_Dragon/ovl_En_Dragon.data.o"
-    include "build/data/ovl_En_Dragon/ovl_En_Dragon.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dragon/ovl_En_Dragon_reloc.o"
 endseg
 
 beginseg

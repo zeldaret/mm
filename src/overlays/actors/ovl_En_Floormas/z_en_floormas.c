@@ -558,7 +558,7 @@ void func_808D19D4(EnFloormas* this) {
     this->drawDmgEffAlpha = 0.0f;
     Actor_SetScale(&this->actor, 0.004f);
     this->actor.flags |= ACTOR_FLAG_10;
-    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
         this->actor.draw = func_808D3754;
     } else {
         this->actor.draw = EnFloormas_Draw;

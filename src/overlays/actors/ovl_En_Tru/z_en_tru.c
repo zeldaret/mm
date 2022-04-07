@@ -807,42 +807,33 @@ s32 func_80A875AC(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 func_80A8777C(Actor* thisx, GlobalContext* globalCtx) {
-    s32 temp_v0;
+    EnTru* this = THIS;
     s32 ret = 0;
-
-    temp_v0 = Message_GetState(&globalCtx->msgCtx);
+    s32 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     switch (temp_v0) {
-        default:
-            if (temp_v0 != 0x10) {
-                break;
-            }
-            if (0) {
-
-                case 4:
-                case 5:
-                    if (!Message_ShouldAdvance(globalCtx)) {
-                        break;
+        case 4:
+        case 5:
+            if (Message_ShouldAdvance(globalCtx)) {
+                case 16:
+                    temp_v0 = func_80123810(globalCtx);
+                    if ((temp_v0 == 35) || (temp_v0 == 36)) {
+                        this->unk_34E |= 8;
+                        if (temp_v0 == 35) {
+                            this->unk_390 = 1;
+                        } else {
+                            this->unk_390 = 2;
+                        }
+                        this->unk_378 = func_80A87880;
+                        this->unk_364 = 0;
+                        ret = 1;
+                    } else if (temp_v0 < 0) {
+                        ret = 3;
+                    } else if (temp_v0 != 0) {
+                        ret = 2;
                     }
+                    break;
             }
-
-            temp_v0 = func_80123810(globalCtx);
-            if ((temp_v0 == 35) || (temp_v0 == 36)) {
-                ((EnTru*)thisx)->unk_34E |= 8;
-                if (temp_v0 == 35) {
-                    ((EnTru*)thisx)->unk_390 = 1;
-                } else {
-                    ((EnTru*)thisx)->unk_390 = 2;
-                }
-                ((EnTru*)thisx)->unk_378 = func_80A87880;
-                ((EnTru*)thisx)->unk_364 = 0;
-                ret = 1;
-            } else if (temp_v0 < 0) {
-                ret = 3;
-            } else if (temp_v0 != 0) {
-                ret = 2;
-            }
-            break;
     }
 
     return ret;
@@ -1127,7 +1118,7 @@ void EnTru_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->unk_37C = -1;
     func_80A86924(this, 0);
-    this->path = SubS_GetDayDependentPath(globalCtx, this->actor.params & 0xFF, 255, &this->unk_384);
+    this->path = SubS_GetDayDependentPath(globalCtx, ENTRU_GET_PATH(&this->actor), 255, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
     }

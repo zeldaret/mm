@@ -389,7 +389,7 @@ typedef enum {
     /* 0x6A */ GID_6A = 0x6A,
     /* 0x6B */ GID_6B,
     /* 0x70 */ GID_70 = 0x70,
-    /* 0x71 */ GID_71,
+    /* 0x71 */ GID_71
 } GetItemDrawID;
 
 // TODO: fill
