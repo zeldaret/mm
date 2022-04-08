@@ -74,8 +74,8 @@ void EnHs_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnHs* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gHsSkeleton, &gHsIdleAnim, this->jointTable,
-                       this->morphTable, OBJECT_HS_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gHsSkeleton, &gHsIdleAnim, this->jointTable, this->morphTable,
+                       OBJECT_HS_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gHsIdleAnim);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -327,15 +327,16 @@ s32 EnHs_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
             return false;
 
         // these two limbs both have empty enddisplaylist, they do nothing
+        // at the same time params == HS_TYPE_UNK1 is always false, because vanilla params is 0xFE01
         case OBJECT_HS_LIMB_0C:
-            if (this->actor.params == GROG_TYPE_UNK1) {
+            if (this->actor.params == HS_TYPE_UNK1) {
                 *dList = NULL;
                 return false;
             }
             break;
 
         case OBJECT_HS_LIMB_0D:
-            if (this->actor.params == GROG_TYPE_UNK1) {
+            if (this->actor.params == HS_TYPE_UNK1) {
                 *dList = NULL;
                 return false;
             }
