@@ -30,6 +30,7 @@ void func_80A17530(EnRaf* this);
 void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx);
 void func_80A17848(EnRaf* this, GlobalContext* globalCtx);
 void func_80A179C8(EnRaf* this, GlobalContext* globalCtx);
+void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -448,7 +449,26 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A18A90.s")
+void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5) {
+    EnRafUnkStruct* ptr;
+    s16 i;
+
+    ptr = this->unk_41C;
+    for (i = 0; i < 31; i++, ptr++) {
+        if (ptr->unk_00 == 0) {
+            ptr->unk_00 = 1;
+            ptr->unk_04 = *arg1;
+            ptr->unk_10 = *arg2;
+            ptr->unk_1C = *arg3;
+            ptr->unk_30 = arg4;
+            ptr->unk_34 = arg5;
+            ptr->unk_28.x = randPlusMinusPoint5Scaled(30000.0f);
+            ptr->unk_28.y = randPlusMinusPoint5Scaled(30000.0f);
+            ptr->unk_28.z = randPlusMinusPoint5Scaled(30000.0f);
+            return;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A18B8C.s")
 
