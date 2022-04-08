@@ -19,14 +19,16 @@ typedef struct EnRaf {
     /* 0x230 */ EnRafActionFunc actionFunc;
     /* 0x234 */ Vec3f unk_234[12];
     /* 0x2C4 */ Vec3f unk_2C4[12];
-    /* 0x354 */ char unk_354[0x4C];
+    /* 0x354 */ char unk_354[0x48];
+    /* 0x39C */ s16 unk_39C;
+    /* 0x39E */ char unk_39E[0x2];
     /* 0x3A0 */ f32 unk_3A0;
     /* 0x3A4 */ char unk_3A4[0xC];
     /* 0x3B0 */ f32 unk_3B0;
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ char unk_3B6[0x4];
     /* 0x3BA */ s16 unk_3BA;
-    /* 0x3BC */ char unk_3BC[2];
+    /* 0x3BC */ s16 unk_3BC;
     /* 0x3BE */ s16 unk_3BE;
     /* 0x3C0 */ s16 unk_3C0;
     /* 0x3C2 */ s16 unk_3C2;

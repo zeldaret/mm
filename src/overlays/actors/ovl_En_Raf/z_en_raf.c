@@ -25,6 +25,7 @@ void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx);
 void func_80A180B4(EnRaf* this, GlobalContext* globalCtx);
 void func_80A1712C(EnRaf* this);
 void func_80A18080(EnRaf* this);
+void func_80A17414(EnRaf* this);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -97,6 +98,7 @@ extern Vec3f D_80A193BC;
 extern AnimationHeader* D_80A193C8[];
 extern u8 D_80A193E0[];
 extern Vec3f D_80A1940C;
+extern Vec3f D_80A193E8;
 
 extern AnimationHeader D_06000A64;
 extern FlexSkeletonHeader D_06003428;
@@ -161,7 +163,12 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Destroy.s")
+void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnRaf* this = THIS;
+
+    DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
 void func_80A17060(EnRaf* this, s32 index) {
     f32 startFrame = 0.0f;
@@ -178,11 +185,83 @@ void func_80A17060(EnRaf* this, s32 index) {
                      -4.0f);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A1712C.s")
+void func_80A1712C(EnRaf* this) {
+    Vec3f sp3C = D_80A193E8;
+    s32 i;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A171D8.s")
+    func_80A17060(this, 0);
+    for (i = 2; i < 11; i++) {
+        Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17414.s")
+    this->unk_3C2 = 3;
+    this->unk_3C6 = 0;
+    this->actionFunc = func_80A171D8;
+}
+
+void func_80A171D8(EnRaf* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    Actor* explosive;
+    f32 xDiff;
+    f32 yDiff;
+    f32 zDiff;
+
+    if (this->unk_3B4 == 0) {
+        if ((player->transformation != PLAYER_FORM_DEKU) &&
+            (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
+             DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & 0x8000000) &&
+             globalCtx->grabPlayer(globalCtx, player))) {
+            player->actor.parent = &this->dyna.actor;
+            this->unk_39C = 0;
+
+            if (player->transformation == PLAYER_FORM_GORON) {
+                this->unk_39C = 2;
+            } else {
+                player->unk_AE8 = 50;
+            }
+
+            this->unk_3BC = player->actor.world.rot.y;
+            func_80A17414(this);
+            return;
+        }
+
+        if ((globalCtx->gameplayFrames % 2) == 0) {
+            return;
+        }
+
+        explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
+        while (explosive != NULL) {
+            if ((EnRaf*)explosive == this) {
+                explosive = explosive->next;
+                continue;
+            }
+
+            xDiff = explosive->world.pos.x - this->dyna.actor.world.pos.x;
+            yDiff = explosive->world.pos.y - this->dyna.actor.world.pos.y;
+            zDiff = explosive->world.pos.z - this->dyna.actor.world.pos.z;
+            if ((fabsf(xDiff) < 80.0f) && (fabsf(yDiff) < 30.0f) && (fabsf(zDiff) < 80.0f) &&
+                (explosive->update != NULL) && (explosive->velocity.y != 0.0f)) {
+                Actor_MarkForDeath(explosive);
+                this->unk_39C = 1;
+                this->collider.dim.radius = 30;
+                this->collider.dim.height = 90;
+                this->collider.dim.yShift = -10;
+                func_80A17414(this);
+                return;
+            }
+
+            explosive = explosive->next;
+        }
+    }
+}
+
+void func_80A17414(EnRaf* this) {
+    func_80A17060(this, 1);
+    this->unk_3C2 = 1;
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
+    this->unk_3C6 = 1;
+    this->actionFunc = func_80A17464;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17464.s")
 
