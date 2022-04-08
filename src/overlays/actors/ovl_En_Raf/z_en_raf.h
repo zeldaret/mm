@@ -19,7 +19,7 @@ typedef struct EnRaf {
     /* 0x230 */ EnRafActionFunc actionFunc;
     /* 0x234 */ Vec3f unk_234[12];
     /* 0x2C4 */ Vec3f unk_2C4[12];
-    /* 0x354 */ char unk_354[0x48];
+    /* 0x354 */ Vec3s unk_354[12];
     /* 0x39C */ s16 unk_39C;
     /* 0x39E */ char unk_39E[0x2];
     /* 0x3A0 */ f32 unk_3A0;
@@ -32,7 +32,7 @@ typedef struct EnRaf {
     /* 0x3BE */ s16 unk_3BE;
     /* 0x3C0 */ s16 unk_3C0;
     /* 0x3C2 */ s16 unk_3C2;
-    /* 0x3C4 */ char unk_3C4[0x2];
+    /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
     /* 0x3C8 */ char unk_3C8[0x8];
     /* 0x3D0 */ ColliderCylinder collider;

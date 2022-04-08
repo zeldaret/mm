@@ -26,6 +26,7 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx);
 void func_80A1712C(EnRaf* this);
 void func_80A18080(EnRaf* this);
 void func_80A17414(EnRaf* this);
+void func_80A17530(EnRaf* this);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -263,9 +264,36 @@ void func_80A17414(EnRaf* this) {
     this->actionFunc = func_80A17464;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17464.s")
+void func_80A17464(EnRaf* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 curFrame = this->skelAnime.curFrame;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17530.s")
+    if ((this->unk_39C != 1) && (player->stateFlags2 & 0x80) && (&this->dyna.actor == player->actor.parent)) {
+        Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
+        Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
+        Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
+    }
+
+    if (this->unk_3A0 <= curFrame) {
+        func_80A17530(this);
+    }
+}
+
+void func_80A17530(EnRaf* this) {
+    s32 i;
+
+    func_80A17060(this, 2);
+    this->unk_3C4 = 0;
+    for (i = 0; i < 12; i++) {
+        this->unk_354[i].x = Rand_S16Offset(8, 8) << 8;
+        this->unk_354[i].y = Rand_S16Offset(8, 8) << 8;
+        this->unk_354[i].z = Rand_S16Offset(8, 8) << 8;
+    }
+
+    this->unk_3C2 = 2;
+    this->unk_3C6 = 2;
+    this->actionFunc = func_80A175E4;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A175E4.s")
 
