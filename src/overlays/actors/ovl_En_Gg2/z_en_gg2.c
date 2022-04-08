@@ -369,7 +369,7 @@ void EnGg2_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_gg_Skel_00F6C0, &object_gg_Anim_00F578, this->jointTable,
                        this->morphTable, 20);
-    this->unk_1D8 = func_8013D648(globalCtx, ENGG2_GET_FC00(&this->actor), 0x3F);
+    this->unk_1D8 = SubS_GetPathByIndex(globalCtx, ENGG2_GET_FC00(&this->actor), 0x3F);
     this->actor.flags &= ~ACTOR_FLAG_80;
     this->unk_2F0 = 0;
     this->unk_2F1 = 0;

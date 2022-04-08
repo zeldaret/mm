@@ -38,7 +38,6 @@ beginseg
     include "build/src/boot_O2/mtxuty-cvt.o"
     include "build/src/boot_O2/assert.o"
     include "build/src/boot_O2/boot_800862E0.o"
-    include "build/data/boot/boot_800862E0.data.o"
     include "build/src/boot_O2/padsetup.o"
     include "build/src/boot_O2/boot_80086760.o"
     include "build/asm/boot/fp.text.o"
@@ -480,7 +479,6 @@ beginseg
     include "build/data/code/z_horse.data.o"
     include "build/src/code/z_jpeg.o"
     include "build/src/code/z_kaleido_setup.o"
-    include "build/data/code/z_kaleido_setup.data.o"
     include "build/src/code/z_kanfont.o"
     include "build/src/code/z_kankyo.o"
     include "build/data/code/z_kankyo.data.o"
@@ -488,7 +486,6 @@ beginseg
     include "build/src/code/z_lib.o"
     include "build/src/code/z_lifemeter.o"
     include "build/src/code/z_lights.o"
-    include "build/data/code/z_lights.bss.o"
     include "build/src/code/z_malloc.o"
     include "build/src/code/z_map_disp.o"
     include "build/data/code/z_map_disp.data.o"
@@ -531,7 +528,6 @@ beginseg
     include "build/src/code/z_skin_matrix.o"
     include "build/src/code/z_snap.o"
     include "build/src/code/z_sub_s.o"
-    include "build/data/code/z_sub_s.data.o"
     include "build/data/code/code_801DE890.rodata.o"
     include "build/src/code/code_8013EC10.o"
     include "build/data/code/code_8013EC10.bss.o"
@@ -737,8 +733,7 @@ beginseg
     name "ovl_En_Test"
     compress
     include "build/src/overlays/actors/ovl_En_Test/z_en_test.o"
-    include "build/data/ovl_En_Test/ovl_En_Test.data.o"
-    include "build/data/ovl_En_Test/ovl_En_Test.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Test/ovl_En_Test_reloc.o"
 endseg
 
 beginseg
@@ -804,8 +799,7 @@ beginseg
     name "ovl_En_Wallmas"
     compress
     include "build/src/overlays/actors/ovl_En_Wallmas/z_en_wallmas.o"
-    include "build/data/ovl_En_Wallmas/ovl_En_Wallmas.data.o"
-    include "build/data/ovl_En_Wallmas/ovl_En_Wallmas.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Wallmas/ovl_En_Wallmas_reloc.o"
 endseg
 
 beginseg
@@ -826,8 +820,11 @@ beginseg
     name "ovl_En_Horse"
     compress
     include "build/src/overlays/actors/ovl_En_Horse/z_en_horse.o"
-    include "build/data/ovl_En_Horse/ovl_En_Horse.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_En_Horse/ovl_En_Horse_reloc.o"
+#else
     include "build/data/ovl_En_Horse/ovl_En_Horse.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -2206,8 +2203,7 @@ beginseg
     name "ovl_Obj_Hamishi"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hamishi/z_obj_hamishi.o"
-    include "build/data/ovl_Obj_Hamishi/ovl_Obj_Hamishi.data.o"
-    include "build/data/ovl_Obj_Hamishi/ovl_Obj_Hamishi.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hamishi/ovl_Obj_Hamishi_reloc.o"
 endseg
 
 beginseg
@@ -2236,8 +2232,7 @@ beginseg
     name "ovl_Obj_Pzlblock"
     compress
     include "build/src/overlays/actors/ovl_Obj_Pzlblock/z_obj_pzlblock.o"
-    include "build/data/ovl_Obj_Pzlblock/ovl_Obj_Pzlblock.data.o"
-    include "build/data/ovl_Obj_Pzlblock/ovl_Obj_Pzlblock.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Pzlblock/ovl_Obj_Pzlblock_reloc.o"
 endseg
 
 beginseg
@@ -2725,8 +2720,7 @@ beginseg
     name "ovl_En_Syateki_Okuta"
     compress
     include "build/src/overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.o"
-    include "build/data/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.data.o"
-    include "build/data/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta_reloc.o"
 endseg
 
 beginseg
@@ -2790,8 +2784,7 @@ beginseg
     name "ovl_Obj_Smork"
     compress
     include "build/src/overlays/actors/ovl_Obj_Smork/z_obj_smork.o"
-    include "build/data/ovl_Obj_Smork/ovl_Obj_Smork.data.o"
-    include "build/data/ovl_Obj_Smork/ovl_Obj_Smork.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Smork/ovl_Obj_Smork_reloc.o"
 endseg
 
 beginseg
@@ -3627,8 +3620,7 @@ beginseg
     name "ovl_Obj_Bigicicle"
     compress
     include "build/src/overlays/actors/ovl_Obj_Bigicicle/z_obj_bigicicle.o"
-    include "build/data/ovl_Obj_Bigicicle/ovl_Obj_Bigicicle.data.o"
-    include "build/data/ovl_Obj_Bigicicle/ovl_Obj_Bigicicle.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Bigicicle/ovl_Obj_Bigicicle_reloc.o"
 endseg
 
 beginseg
@@ -4063,8 +4055,7 @@ beginseg
     name "ovl_En_Dragon"
     compress
     include "build/src/overlays/actors/ovl_En_Dragon/z_en_dragon.o"
-    include "build/data/ovl_En_Dragon/ovl_En_Dragon.data.o"
-    include "build/data/ovl_En_Dragon/ovl_En_Dragon.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dragon/ovl_En_Dragon_reloc.o"
 endseg
 
 beginseg
@@ -4097,8 +4088,7 @@ beginseg
     name "ovl_Obj_Hariko"
     compress
     include "build/src/overlays/actors/ovl_Obj_Hariko/z_obj_hariko.o"
-    include "build/data/ovl_Obj_Hariko/ovl_Obj_Hariko.data.o"
-    include "build/data/ovl_Obj_Hariko/ovl_Obj_Hariko.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Hariko/ovl_Obj_Hariko_reloc.o"
 endseg
 
 beginseg
@@ -4380,8 +4370,11 @@ beginseg
     name "ovl_Mir_Ray3"
     compress
     include "build/src/overlays/actors/ovl_Mir_Ray3/z_mir_ray3.o"
-    include "build/data/ovl_Mir_Ray3/ovl_Mir_Ray3.data.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Mir_Ray3/ovl_Mir_Ray3_reloc.o"
+#else
     include "build/data/ovl_Mir_Ray3/ovl_Mir_Ray3.reloc.o"
+#endif
 endseg
 
 beginseg
@@ -4447,8 +4440,7 @@ beginseg
     name "ovl_En_Kujiya"
     compress
     include "build/src/overlays/actors/ovl_En_Kujiya/z_en_kujiya.o"
-    include "build/data/ovl_En_Kujiya/ovl_En_Kujiya.data.o"
-    include "build/data/ovl_En_Kujiya/ovl_En_Kujiya.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Kujiya/ovl_En_Kujiya_reloc.o"
 endseg
 
 beginseg
@@ -4534,8 +4526,7 @@ beginseg
     name "ovl_Bg_F40_Block"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Block/z_bg_f40_block.o"
-    include "build/data/ovl_Bg_F40_Block/ovl_Bg_F40_Block.data.o"
-    include "build/data/ovl_Bg_F40_Block/ovl_Bg_F40_Block.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Block/ovl_Bg_F40_Block_reloc.o"
 endseg
 
 beginseg

@@ -1028,7 +1028,7 @@ void EnGk_Init(Actor* thisx, GlobalContext* globalCtx) {
                 Actor_MarkForDeath(&this->actor);
             } else {
                 this->unk_318 = this->actor.cutscene;
-                this->path = func_8013D648(globalCtx, ENGK_GET_F0(&this->actor), 15);
+                this->path = SubS_GetPathByIndex(globalCtx, ENGK_GET_F0(&this->actor), 15);
                 this->actionFunc = func_80B51760;
             }
         } else if (globalCtx->sceneNum == SCENE_GORONRACE) {

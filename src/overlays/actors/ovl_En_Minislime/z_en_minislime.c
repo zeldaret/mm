@@ -506,7 +506,7 @@ void EnMinislime_SetupMoveToBigslime(EnMinislime* this) {
     }
     this->frozenAlpha = 0;
 
-    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         this->actor.flags &= ~ACTOR_FLAG_2000;
     }
     this->actionFunc = EnMinislime_MoveToBigslime;
@@ -562,7 +562,7 @@ void EnMinislime_SetupDefeatIdle(EnMinislime* this) {
     }
 
     this->frozenAlpha = 0;
-    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 
@@ -630,7 +630,7 @@ void EnMinislime_SetupMoveToGekko(EnMinislime* this) {
     this->actor.velocity.y = 0.0f;
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.ocFlags1 &= ~OC1_ON;
-    if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+    if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
         this->actor.flags &= ~ACTOR_FLAG_2000;
     }
 
@@ -720,7 +720,7 @@ void EnMinislime_Update(Actor* thisx, GlobalContext* globalCtx) {
     } else if ((this->actor.params == MINISLIME_FORM_BIGSLIME) && (this->actionFunc != EnMinislime_MoveToBigslime)) {
         EnMinislime_SetupMoveToBigslime(this);
     } else {
-        if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_2000) {
+        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_2000)) {
             this->collider.base.acFlags &= ~AC_HIT;
             return;
         }

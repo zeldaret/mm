@@ -1156,7 +1156,7 @@ typedef struct {
 typedef enum {
     /* 0 */ DISTORTION_INACTIVE,
     /* 1 */ DISTORTION_ACTIVE,
-    /* 2 */ DISTORTION_SETUP,
+    /* 2 */ DISTORTION_SETUP
 } DistortionState;
 
 typedef struct {
@@ -1322,7 +1322,7 @@ struct GlobalContext {
     /* 0x18760 */ DoorContext doorCtx;
     /* 0x18768 */ void (*playerInit)(Player* player, struct GlobalContext* globalCtx, FlexSkeletonHeader* skelHeader);
     /* 0x1876C */ void (*playerUpdate)(Player* player, struct GlobalContext* globalCtx, Input* input);
-    /* 0x18770 */ void* unk_18770; //! @TODO: Determine function prototype
+    /* 0x18770 */ void (*unk_18770)(struct GlobalContext* globalCtx, Player* player);
     /* 0x18774 */ s32 (*startPlayerFishing)(struct GlobalContext* globalCtx);
     /* 0x18778 */ s32 (*grabPlayer)(struct GlobalContext* globalCtx, Player* player);
     /* 0x1877C */ s32 (*startPlayerCutscene)(struct GlobalContext* globalCtx, Player* player, s32 mode);
