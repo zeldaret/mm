@@ -927,8 +927,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
     gSPDisplayList(POLY_OPA_DISP++, object_kanban_DL_000C30);
 
     if (this->actionState != ENKANBAN_SIGN) {
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateXFApply(this->floorRot.x);
         Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
@@ -1012,7 +1011,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z + zShift,
-                                 MTXMODE_NEW);
+                         MTXMODE_NEW);
         Matrix_RotateXFApply(this->floorRot.x);
         Matrix_RotateZF(this->floorRot.z, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, 0.0f, this->actor.scale.z, MTXMODE_APPLY);

@@ -706,8 +706,7 @@ void Boss03_ChasePlayer(Boss03* this, GlobalContext* globalCtx) {
             sp44 = 100.0f;
         }
 
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_MultVecZ(sp44, &sp50);
 
@@ -1394,8 +1393,7 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
         phi_f2 = CLAMP_MAX(phi_f2, 0.12f);
 
         sp5C = Math_SinS(this->unk_240 * sp5A) * phi_f2;
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
         Matrix_RotateYF(sp5C, MTXMODE_APPLY);
         Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
@@ -1693,7 +1691,7 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                     player->actor.shape.rot.y = player->actor.world.rot.y = this->actor.world.rot.y + 0x8000;
 
                     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                             MTXMODE_NEW);
+                                     MTXMODE_NEW);
                     Matrix_RotateYS(this->actor.shape.rot.y + this->unk_2BE, MTXMODE_APPLY);
                     Matrix_MultVecZ(340.0f, &this->csCamEye);
 
@@ -2447,9 +2445,8 @@ void Boss03_DrawEffects(GlobalContext* globalCtx) {
             Matrix_Translate(eff->pos.x, eff->pos.y, eff->pos.z, MTXMODE_NEW);
 
             if (eff->type == GYORG_EFFECT_DROPLET) {
-                Matrix_RotateYF(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) *
-                                             (M_PI / 0x8000),
-                                         MTXMODE_APPLY);
+                Matrix_RotateYF(Camera_GetInputDirYaw(globalCtx->cameraPtrs[globalCtx->activeCamera]) * (M_PI / 0x8000),
+                                MTXMODE_APPLY);
             } else { // GYORG_EFFECT_SPLASH
                 Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             }

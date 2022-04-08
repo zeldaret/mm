@@ -161,7 +161,7 @@ void func_80A50510(EnDnb* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         Matrix_Push();
         Matrix_Translate(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
-                                 MTXMODE_NEW);
+                         MTXMODE_NEW);
         Matrix_RotateXS(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateYS(this->particles[i].unk_18.y, MTXMODE_APPLY);
         Matrix_RotateZS(this->particles[i].unk_18.z, MTXMODE_APPLY);
@@ -186,7 +186,7 @@ void func_80A5063C(EnDnb* this, GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(this->particles); i++) {
         Matrix_Push();
         Matrix_Translate(this->particles[i].unk_0C.x, this->particles[i].unk_0C.y, this->particles[i].unk_0C.z,
-                                 MTXMODE_NEW);
+                         MTXMODE_NEW);
         Matrix_RotateXS(this->particles[i].unk_18.x, MTXMODE_APPLY);
         Matrix_RotateYS(this->particles[i].unk_18.y, MTXMODE_APPLY);
         Matrix_RotateZS(this->particles[i].unk_18.z, MTXMODE_APPLY);

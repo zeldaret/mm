@@ -153,12 +153,9 @@ void DemoKakyo_LostWoodsSparkleActionFunc(DemoKankyo* this, GlobalContext* globa
 
                     Math_SmoothStepToF(&this->particles[i].scale, 0.1, 0.1f, 0.001f, 0.00001f);
                     Math_SmoothStepToF(&this->particles[i].speed, this->particles[i].speedTarget, 0.5f, 0.2f, 0.02f);
-                    this->particles[i].posOffset.x +=
-                        sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
-                    this->particles[i].posOffset.y +=
-                        sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
-                    this->particles[i].posOffset.z +=
-                        sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
+                    this->particles[i].posOffset.x += sinf(this->particles[i].speedClock.x) * this->particles[i].speed;
+                    this->particles[i].posOffset.y += sinf(this->particles[i].speedClock.y) * this->particles[i].speed;
+                    this->particles[i].posOffset.z += sinf(this->particles[i].speedClock.z) * this->particles[i].speed;
 
                     switch ((i >> 1) & 3) {
                         case 0:

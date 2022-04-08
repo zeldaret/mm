@@ -949,7 +949,7 @@ void func_80938E00(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_1FE & 1) {
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_1B8, this->unk_1B8, this->unk_1B8, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

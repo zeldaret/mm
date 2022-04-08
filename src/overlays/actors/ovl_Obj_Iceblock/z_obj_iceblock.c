@@ -1535,7 +1535,7 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
         sp70.x = ptr->unk_00;
         sp70.y = ptr->unk_02;
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                              this->dyna.actor.world.pos.z, &sp70);
+                                     this->dyna.actor.world.pos.z, &sp70);
         Matrix_Scale(ptr->unk_04, ptr->unk_08, ptr->unk_0C, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1545,7 +1545,7 @@ void func_80A26BF8(ObjIceblock* this, GlobalContext* globalCtx) {
     if (GET_ICEBLOCK_ICEBERG(&this->dyna.actor) && (this->unk_2B4 > 0.0f)) {
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(gIceBlockIceBergSublimatingAirTexAnim));
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y - 20.0f,
-                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Scale(this->unk_2B4, this->unk_2B4, this->unk_2B4, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

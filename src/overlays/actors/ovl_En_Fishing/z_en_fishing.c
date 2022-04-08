@@ -3608,8 +3608,8 @@ void EnFishing_UpdateFish(Actor* thisx, GlobalContext* globalCtx2) {
                         for (spA2 = 0; spA2 < 100; spA2++) {
 
                             Matrix_RotateYF(randPlusMinusPoint5Scaled(2.3561945f) +
-                                                         (((this->actor.yawTowardsPlayer + 0x8000) / 32768.0f) * M_PI),
-                                                     MTXMODE_NEW);
+                                                (((this->actor.yawTowardsPlayer + 0x8000) / 32768.0f) * M_PI),
+                                            MTXMODE_NEW);
                             Matrix_MultVec3f(&sp10C, &sp100);
 
                             this->unk_1AC.x = this->actor.world.pos.x + sp100.x;

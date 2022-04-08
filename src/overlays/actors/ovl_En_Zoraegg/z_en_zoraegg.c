@@ -694,7 +694,7 @@ void func_80B32F04(Actor* thisx, GlobalContext* globalCtx) {
     sp7C = -((15.0f * Math_CosS(sp62)) * Math_CosS(sp60));
 
     Matrix_Translate(this->actor.world.pos.x + sp74, this->actor.world.pos.y + sp78 + 6.0f,
-                             temp_f2 = this->actor.world.pos.z + sp7C, 0);
+                     temp_f2 = this->actor.world.pos.z + sp7C, 0);
 
     sp7C = Math_SinS(globalCtx->gameplayFrames * 0x4000);
 

@@ -540,7 +540,7 @@ void EnOsk_Draw(Actor* thisx, GlobalContext* globalCtx) {
         sp80.z = -(15.0f * (Math_CosS(sp62)) * Math_CosS(sp60));
 
         Matrix_Translate(this->actor.focus.pos.x + sp80.x, this->actor.focus.pos.y + sp80.y,
-                                 sp80.z = this->actor.focus.pos.z + sp80.z, MTXMODE_NEW);
+                         sp80.z = this->actor.focus.pos.z + sp80.z, MTXMODE_NEW);
 
         sp80.z = Math_SinS(globalCtx->gameplayFrames << 0xE);
         sp80.z = ((sp80.z + 1.0f) * 0.1f) + 2.0f;

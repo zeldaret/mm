@@ -972,8 +972,8 @@ void func_808BAE9C(DoorWarp1* this, GlobalContext* globalCtx) {
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B4);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255.0f * sp84, 255, 255);
 
-    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f,
-                             this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 1.0f, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
     phi_f12 = 1.0f;
     if (this->unk_203 != 0) {
         phi_f12 = this->unk_204 * phi_f12;
@@ -1034,7 +1034,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
 
     if (this->unk_1D4 != 0) {
         Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + this->unk_1A4,
-                                 this->dyna.actor.world.pos.z, MTXMODE_NEW);
+                         this->dyna.actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(4.0f, this->unk_1AC, 4.0f, MTXMODE_APPLY);
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0044D8));
         Gfx_DrawDListXlu(globalCtx, object_warp1_DL_003230);
@@ -1052,7 +1052,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
     }
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+                     MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, this->unk_1A8, 1.0f, MTXMODE_APPLY);
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_0057D8));
@@ -1069,7 +1069,7 @@ void func_808BB4F4(DoorWarp1* this, GlobalContext* globalCtx2) {
 
     AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_warp1_Matanimheader_007238));
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+                     MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 0.0f, 1.0f, MTXMODE_APPLY);
 

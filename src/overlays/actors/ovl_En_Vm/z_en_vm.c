@@ -543,8 +543,7 @@ void EnVm_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         gSPSegment(&gfx[0], 0x08, func_8012CB28(globalCtx->state.gfxCtx, 0, this->unk_212));
 
-        Matrix_Translate(this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.focus.pos.x, this->actor.focus.pos.y, this->actor.focus.pos.z, MTXMODE_NEW);
         Matrix_RotateZYX(this->unk_216, this->unk_218 + this->actor.shape.rot.y, 0, MTXMODE_APPLY);
         Matrix_Scale(this->unk_220, this->unk_220, this->unk_224 * 0.0015f, MTXMODE_APPLY);
 

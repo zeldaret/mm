@@ -709,7 +709,7 @@ void func_80A55B34(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         Matrix_SetTranslateRotateYXZ(ptr->unk_0C.x, ptr->unk_0C.y + (325.0f * ptr->unk_00.y), ptr->unk_0C.z,
-                                              &ptr->unk_1C);
+                                     &ptr->unk_1C);
         Matrix_Scale(ptr->unk_00.x, ptr->unk_00.y, ptr->unk_00.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -325.0f, 0.0f, MTXMODE_APPLY);
 

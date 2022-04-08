@@ -421,7 +421,7 @@ void ObjChan_DrawFire(ObjChan* this, GlobalContext* globalCtx) {
     sp4C = globalCtx->gameplayFrames;
 
     Matrix_RotateYS(Camera_GetCamDirYaw(GET_ACTIVE_CAM(globalCtx)) - this->actor.shape.rot.y - this->rotation + 0x8000,
-                   MTXMODE_APPLY);
+                    MTXMODE_APPLY);
     Matrix_Scale(sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].x * this->flameSize,
                  sObjChanFlameSize[OBJCHAN_SUBTYPE(&this->actor)].y * this->flameSize, 1.0f, MTXMODE_APPLY);
     Matrix_Translate(0.0f, sObjChanFlameYOffset[OBJCHAN_SUBTYPE(&this->actor)], 0.0f, MTXMODE_APPLY);

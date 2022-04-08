@@ -870,11 +870,10 @@ void EnFall_RisingDebris_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < ARRAY_COUNT(debrisParticles); i++) {
         if (debrisParticles[i].modelIndex < 3) {
-            Matrix_Translate(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(debrisParticles[i].pos.x, debrisParticles[i].pos.y, debrisParticles[i].pos.z, MTXMODE_NEW);
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
             Matrix_RotateZYX(debrisParticles[i].rot.x, debrisParticles[i].rot.y, debrisParticles[i].rot.z,
-                                  MTXMODE_APPLY);
+                             MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, sDebrisModelDLists[debrisParticles[i].modelIndex]);

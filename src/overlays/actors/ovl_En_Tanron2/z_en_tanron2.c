@@ -465,8 +465,8 @@ void func_80BB7578(EnTanron2* this, GlobalContext* globalCtx) {
         func_80BB6B80(this);
         this->unk_158 = 2;
         Matrix_RotateYS(Math_Atan2S(this->actor.world.pos.x - D_80BB8450->unk_6BC.x,
-                                   this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
-                       MTXMODE_NEW);
+                                    this->actor.world.pos.z - D_80BB8450->unk_6BC.z),
+                        MTXMODE_NEW);
         Matrix_MultVecZ(10.0f, &this->actor.velocity);
         this->unk_152 = Rand_ZeroFloat(100.0f) + 200.0f;
     } else if (D_80BB8450->unk_1F6 == 10) {
@@ -625,7 +625,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     for (i = 0; i < ARRAY_COUNT(D_80BB8458); i++) {
         if (D_80BB8458[i] != NULL) {
             Matrix_Translate(D_80BB8458[i]->actor.world.pos.x, D_80BB8458[i]->actor.world.pos.y,
-                                     D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
+                             D_80BB8458[i]->actor.world.pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_Scale(D_80BB8458[i]->actor.scale.x, D_80BB8458[i]->actor.scale.y, 0.0f, MTXMODE_APPLY);
             Matrix_RotateZS(D_80BB8458[i]->unk_14A, MTXMODE_APPLY);
@@ -646,8 +646,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     tanron2 = globalCtx->actorCtx.actorLists[ACTORCAT_BOSS].first;
     while (tanron2 != NULL) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0)) {
-            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z,
-                                     MTXMODE_NEW);
+            Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight, tanron2->world.pos.z, MTXMODE_NEW);
             Matrix_Scale(0.6f, 0.0f, 0.6f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
@@ -669,7 +668,7 @@ void EnTanron2_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         if ((tanron2->params < 100) && (((EnTanron2*)tanron2)->unk_15B != 0) &&
             (tanron2->world.pos.y <= tanron2->floorHeight)) {
             Matrix_Translate(tanron2->world.pos.x, D_80BB8450->actor.floorHeight + 2.0f, tanron2->world.pos.z,
-                                     MTXMODE_NEW);
+                             MTXMODE_NEW);
             Matrix_Scale(D_80BB8454, 0.0f, D_80BB8454, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),

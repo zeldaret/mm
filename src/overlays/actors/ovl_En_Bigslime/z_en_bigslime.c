@@ -2941,7 +2941,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, GlobalContext* globalCtx2) {
         func_8012C2DC(globalCtx->state.gfxCtx);
         func_800B8118(&minislime->actor, globalCtx, 0);
         Matrix_SetTranslateRotateYXZ(minislime->actor.world.pos.x, minislime->actor.world.pos.y,
-                                              minislime->actor.world.pos.z, &minislime->actor.shape.rot);
+                                     minislime->actor.world.pos.z, &minislime->actor.shape.rot);
         Matrix_Scale(minislime->actor.scale.x, minislime->actor.scale.y, minislime->actor.scale.z, MTXMODE_APPLY);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, minislime->actor.shape.shadowAlpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3145,7 +3145,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, GlobalContext* globalCtx
         iceShardEffect = &this->iceShardEffect[i];
         if (iceShardEffect->isActive > false) {
             Matrix_SetTranslateRotateYXZ(iceShardEffect->pos.x, iceShardEffect->pos.y, iceShardEffect->pos.z,
-                                                  &iceShardEffect->rotation);
+                                         &iceShardEffect->rotation);
             Matrix_Scale(iceShardEffect->scale, iceShardEffect->scale, iceShardEffect->scale, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

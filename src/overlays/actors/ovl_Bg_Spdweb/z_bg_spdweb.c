@@ -187,7 +187,7 @@ void func_809CE068(BgSpdweb* this) {
     s32 j;
 
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < this->collider.count; i++) {
         for (j = 0; j < ARRAY_COUNT(sp64); j++) {

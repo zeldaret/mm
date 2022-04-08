@@ -418,8 +418,8 @@ void ObjVspinyroll_Update(Actor* thisx, GlobalContext* globalCtx2) {
 void ObjVspinyroll_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjVspinyroll* this = THIS;
 
-    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f,
-                             this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_RotateZS(this->dyna.actor.shape.rot.z + 0x4000, MTXMODE_APPLY);
     Matrix_RotateXS(this->dyna.actor.shape.rot.x + this->unk_3C6, MTXMODE_APPLY);
@@ -438,8 +438,8 @@ void func_80A3D2C0(Actor* thisx, GlobalContext* globalCtx) {
     sp3C.z = this->dyna.actor.shape.rot.z + 0x4000;
 
     func_8012C28C(globalCtx->state.gfxCtx);
-    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f,
-                             this->dyna.actor.world.pos.z, MTXMODE_NEW);
+    Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f, this->dyna.actor.world.pos.z,
+                     MTXMODE_NEW);
     Matrix_RotateYS(sp3C.y, MTXMODE_APPLY);
     Matrix_RotateZS(sp3C.z, MTXMODE_APPLY);
     Matrix_RotateXS(sp3C.x, MTXMODE_APPLY);

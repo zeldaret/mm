@@ -141,7 +141,7 @@ void func_80B802E0(BgIkanaRotaryroom* this) {
     s32 pad;
 
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
 
     Collider_UpdateSpheres(0, &this->collider);
@@ -166,7 +166,7 @@ void func_80B80440(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
     Matrix_Push();
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     if (Flags_GetSwitch(globalCtx, BGIKANAROTARYROOM_GET_7F00(&this->dyna.actor))) {
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
     } else {
@@ -205,7 +205,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     sp60.y = this->dyna.actor.home.rot.y;
     sp60.z = this->dyna.actor.home.rot.z;
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &sp60);
+                                 this->dyna.actor.world.pos.z, &sp60);
 
     while (actor != NULL) {
         if (actor->id == ACTOR_DOOR_SHUTTER) {
@@ -252,9 +252,8 @@ BgIkanaRotaryroomStruct4* func_80B80778(BgIkanaRotaryroom* this, GlobalContext* 
             ptr = &D_80B82184[temp_s3][i];
             if ((ptr->unk_01 == 0) &&
                 (Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                                       this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot),
-                 Matrix_MultVec3f(&ptr->unk_04, &sp68),
-                 (Math3D_Vec3fDistSq(&arg2->world.pos, &sp68) < SQ(250.0f)))) {
+                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot),
+                 Matrix_MultVec3f(&ptr->unk_04, &sp68), (Math3D_Vec3fDistSq(&arg2->world.pos, &sp68) < SQ(250.0f)))) {
                 sp58 = ptr;
                 break;
             }
@@ -275,8 +274,8 @@ void func_80B80894(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     Matrix_RotateZS(-this->dyna.actor.shape.rot.z, MTXMODE_NEW);
     Matrix_RotateXS(-this->dyna.actor.shape.rot.x, MTXMODE_APPLY);
     Matrix_RotateYS(-this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
-    Matrix_Translate(-this->dyna.actor.world.pos.x, -this->dyna.actor.world.pos.y,
-                             -this->dyna.actor.world.pos.z, MTXMODE_APPLY);
+    Matrix_Translate(-this->dyna.actor.world.pos.x, -this->dyna.actor.world.pos.y, -this->dyna.actor.world.pos.z,
+                     MTXMODE_APPLY);
 
     if (actor != NULL) {
         Matrix_Push();
@@ -394,7 +393,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
     Matrix_Push();
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     if (ikanaBlock != NULL) {
         Matrix_Push();
@@ -482,11 +481,11 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_Push();
 
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                              this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                     this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
         Matrix_MultZero(&sp34);
         Matrix_SetTranslateRotateYXZ(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
-                                              sp40->actor.world.pos.z, &sp40->actor.shape.rot);
+                                     sp40->actor.world.pos.z, &sp40->actor.shape.rot);
         Matrix_MultZero(&sp28);
 
         Matrix_Pop();

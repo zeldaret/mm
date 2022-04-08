@@ -1023,8 +1023,7 @@ void func_809DAB78(Boss02* this, GlobalContext* globalCtx) {
 
                 for (i = 0; i < 15; i++) {
                     Matrix_RotateYF(((2.0f * (i * M_PI)) / 15.0f) + sp9C, MTXMODE_NEW);
-                    Matrix_MultVecZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f,
-                                                         &sp90);
+                    Matrix_MultVecZ((10 - this->unk_0146[0]) * (D_809DF5B0 * 300.0f) * 0.1f, &sp90);
                     spD0.x = this->unk_0170.x + sp90.x;
                     spD0.y = this->unk_0170.y + (1000.0f * D_809DF5B0);
                     spD0.z = this->unk_0170.z + sp90.z;
@@ -1406,8 +1405,7 @@ void Boss02_Draw(Actor* thisx, GlobalContext* globalCtx2) {
             spA0 = spA8;
         }
 
-        Matrix_Translate(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->unk_01BC[phi_v0].x, this->unk_01BC[phi_v0].y, this->unk_01BC[phi_v0].z, MTXMODE_NEW);
         Matrix_RotateYF(this->unk_0B1C[phi_v0].y + spA0, MTXMODE_APPLY);
         Matrix_RotateXFApply(spA4 - this->unk_0B1C[phi_v0].x);
         Matrix_RotateZF(this->unk_0B1C[phi_v0].z, MTXMODE_APPLY);
@@ -2083,8 +2081,7 @@ void func_809DEAC4(Boss02* this, GlobalContext* globalCtx) {
                 }
                 this->unk_0150 += 0x4000;
                 sp58 = (Math_SinS(this->unk_0150) * (BREG(19) + 5)) * 0.1f;
-                Matrix_RotateZF(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f),
-                                         MTXMODE_NEW);
+                Matrix_RotateZF(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f), MTXMODE_NEW);
                 Matrix_MultVecY(1.0f, &this->unk_1D3C);
                 func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             }

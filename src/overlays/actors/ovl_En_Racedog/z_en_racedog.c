@@ -583,8 +583,8 @@ void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
 
         func_8012C28C(globalCtx->state.gfxCtx);
         func_80B2583C(this);
-        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f,
-                                              this->actor.world.pos.z, &sp48);
+        Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
+                                     &sp48);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 255, 255, this->unk_2BC, 0, 255);

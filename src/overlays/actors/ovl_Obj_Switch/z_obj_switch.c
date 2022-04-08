@@ -209,9 +209,9 @@ void ObjSwitch_InitJntSphCollider(ObjSwitch* this, GlobalContext* globalCtx, Col
     Collider_InitJntSph(globalCtx, &this->colliderJntSph);
     Collider_SetJntSph(globalCtx, &this->colliderJntSph, &this->dyna.actor, init, this->colliderJntSphElements);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
-                                          this->dyna.actor.world.pos.y +
-                                              (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.y +
+                                     (this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y),
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(this->dyna.actor.scale.x, this->dyna.actor.scale.y, this->dyna.actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->colliderJntSph);
 }
@@ -226,9 +226,9 @@ void ObjSwitch_InitTrisCollider(ObjSwitch* this, GlobalContext* globalCtx, Colli
     Collider_SetTris(globalCtx, &this->colliderTris, &this->dyna.actor, init, this->colliderTrisElements);
     Matrix_Push();
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x,
-                                          this->dyna.actor.world.pos.y +
-                                              this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.y +
+                                     this->dyna.actor.shape.yOffset * this->dyna.actor.scale.y,
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
         if (this) {}

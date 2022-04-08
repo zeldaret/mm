@@ -629,8 +629,7 @@ void func_80A4B0C8(EnWizFire* this, GlobalContext* globalCtx) {
     if ((this->unk_162 == 0) && (this->unk_160 == 2)) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
-        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -665,8 +664,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         func_8012C28C(globalCtx->state.gfxCtx);
         func_8012C2DC(globalCtx->state.gfxCtx);
         Matrix_Push();
-        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -680,8 +678,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
 
         Matrix_Pop();
         Matrix_Push();
-        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -699,8 +696,7 @@ void func_80A4B33C(EnWizFire* this, GlobalContext* globalCtx2) {
         gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
 
         Matrix_Pop();
-        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -742,8 +738,8 @@ void EnWizFire_Draw(Actor* thisx, GlobalContext* globalCtx2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 220, 255, 235, 0);
             }
 
-            Matrix_Translate(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset,
-                                     this->unk_178[i].z, MTXMODE_NEW);
+            Matrix_Translate(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset, this->unk_178[i].z,
+                             MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&globalCtx->billboardMtxF);
             Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
@@ -771,8 +767,7 @@ void func_80A4BAB4(Actor* thisx, GlobalContext* globalCtx) {
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
-    Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight + 20.0f, this->actor.world.pos.z,
-                             MTXMODE_NEW);
+    Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight + 20.0f, this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_Scale(this->unk_14C + this->unk_154, this->unk_14C + this->unk_158, this->unk_14C + this->unk_15C,
                  MTXMODE_APPLY);
 

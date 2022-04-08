@@ -597,7 +597,7 @@ void func_80B3610C(EnGgStruct* ptr, GlobalContext* globalCtx) {
             temp_f20 = Rand_ZeroOne() * 0.003f;
 
             Matrix_Translate((Rand_Centered() * (100.0f * phi_f22)) + temp_f24, temp_f26,
-                                     ((30.0f * phi_f22) * Rand_Centered()) + temp_f28, MTXMODE_NEW);
+                             ((30.0f * phi_f22) * Rand_Centered()) + temp_f28, MTXMODE_NEW);
             Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);

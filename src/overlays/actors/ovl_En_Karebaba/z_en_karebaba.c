@@ -665,8 +665,7 @@ void EnKarebaba_Draw(Actor* thisx, GlobalContext* globalCtx) {
     } else if (this->actionFunc != func_808F254C) {
         func_800AE2A0(globalCtx, &D_808F2E28, 1, 2);
         SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
 
         if ((this->actionFunc == func_808F241C) || (this->actionFunc == func_808F200C) ||
             (this->actionFunc == func_808F15B0)) {

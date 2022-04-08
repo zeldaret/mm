@@ -174,7 +174,7 @@ void ObjKendoKanban_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetTris(globalCtx, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
 
     Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                          &this->actor.shape.rot);
+                                 &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     for (i = 0; i < ARRAY_COUNT(this->colliderTrisElements); i++) {
@@ -341,7 +341,7 @@ void func_80B65DA8(ObjKendoKanban* this, GlobalContext* globalCtx) {
 
         Matrix_Push();
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                              &this->actor.shape.rot);
+                                     &this->actor.shape.rot);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_MultVec3f(&this->unk_2E4, &this->actor.world.pos);
         this->actor.world.pos = sp5C;

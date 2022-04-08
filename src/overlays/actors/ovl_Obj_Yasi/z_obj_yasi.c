@@ -86,7 +86,7 @@ void ObjYasi_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjYasi* this = THIS;
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+                     MTXMODE_NEW);
 
     if (this->dyna.actor.shape.rot.x != 0) {
         Matrix_RotateYS(this->dyna.actor.home.rot.y, MTXMODE_APPLY);

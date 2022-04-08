@@ -111,7 +111,7 @@ void func_80B823B0(BgDblueBalance* this) {
     Vec3f sp28;
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+                     MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
 
@@ -137,7 +137,7 @@ s32 func_80B82454(BgDblueBalance* this, GlobalContext* globalCtx) {
     Vec3f sp3C;
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+                     MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_RotateZS(this->dyna.actor.shape.rot.z, MTXMODE_APPLY);
 
@@ -213,7 +213,7 @@ void func_80B8264C(BgDblueBalance* this) {
     }
 
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                             MTXMODE_NEW);
+                     MTXMODE_NEW);
     Matrix_RotateYS(this->dyna.actor.shape.rot.y, MTXMODE_APPLY);
 
     for (i = 0, phi_s0 = &this->unk_188[0], phi_s2 = 0; i < ARRAY_COUNT(this->unk_188);
@@ -654,7 +654,7 @@ void BgDblueBalance_Draw(Actor* thisx, GlobalContext* globalCtx) {
         AnimatedMat_Draw(globalCtx, D_80B83C74);
         sp38 = this->unk_160;
         Matrix_SetTranslateRotateYXZ(sp38->dyna.actor.world.pos.x, sp38->dyna.actor.world.pos.y,
-                                              sp38->dyna.actor.world.pos.z, &sp38->dyna.actor.shape.rot);
+                                     sp38->dyna.actor.world.pos.z, &sp38->dyna.actor.shape.rot);
         Matrix_Translate(30.0f, 15.0f, 0.0f, MTXMODE_APPLY);
         Matrix_Scale(sp38->dyna.actor.scale.x, sp38->dyna.actor.scale.y, sp38->dyna.actor.scale.z, MTXMODE_APPLY);
 

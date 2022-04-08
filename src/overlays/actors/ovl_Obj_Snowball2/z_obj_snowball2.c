@@ -80,8 +80,8 @@ Vec3f D_80B3A92C = { 0.0f, 0.3f, 0.0f };
 
 void func_80B38E20(ObjSnowball2* this) {
     Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x,
-                                          this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
-                                          this->actor.world.pos.z, &this->actor.shape.rot);
+                                 this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y),
+                                 this->actor.world.pos.z, &this->actor.shape.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
     Collider_UpdateSpheres(0, &this->collider);
 }

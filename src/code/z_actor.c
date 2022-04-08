@@ -566,8 +566,8 @@ void Actor_DrawZTarget(TargetContext* targetCtx, GlobalContext* globalCtx) {
             POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x07);
 
             Matrix_Translate(actor->focus.pos.x,
-                                     actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
-                                     actor->focus.pos.z, MTXMODE_NEW);
+                             actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+                             actor->focus.pos.z, MTXMODE_NEW);
             Matrix_RotateYS((globalCtx->gameplayFrames * 3000), MTXMODE_APPLY);
             Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f,
                          MTXMODE_APPLY);
@@ -2515,9 +2515,8 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
             actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y),
             actor->world.pos.z + globalCtx->mainCamera.skyboxOffset.z, &actor->shape.rot);
     } else {
-        Matrix_SetTranslateRotateYXZ(actor->world.pos.x,
-                                              actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
-                                              actor->world.pos.z, &actor->shape.rot);
+        Matrix_SetTranslateRotateYXZ(actor->world.pos.x, actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),
+                                     actor->world.pos.z, &actor->shape.rot);
     }
 
     Matrix_Scale(actor->scale.x, actor->scale.y, actor->scale.z, MTXMODE_APPLY);

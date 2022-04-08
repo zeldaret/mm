@@ -328,8 +328,7 @@ void func_80947668(u8* shadowTexture, Player* player, GlobalContext* globalCtx) 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 0, 0, 0, (BREG(52) + 50));
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
 
-    Matrix_Translate(player->actor.world.pos.x, player->actor.floorHeight, player->actor.world.pos.z,
-                             MTXMODE_NEW);
+    Matrix_Translate(player->actor.world.pos.x, player->actor.floorHeight, player->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYF(BREG(51) / 100.0f, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 1.0f, (BREG(63) / 10.0f) + 1.0f, MTXMODE_APPLY);
 

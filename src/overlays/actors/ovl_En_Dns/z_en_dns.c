@@ -381,7 +381,7 @@ void func_8092D108(EnDns* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     Matrix_SetTranslateRotateYXZ(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
-                                          &this->actor.home.rot);
+                                 &this->actor.home.rot);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

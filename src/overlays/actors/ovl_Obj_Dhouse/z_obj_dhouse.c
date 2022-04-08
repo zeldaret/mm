@@ -512,7 +512,7 @@ void func_80B13C08(Actor* thisx, GlobalContext* globalCtx) {
     for (i = 0, ptr = &this->unk_160[0], ptr3 = &D_80B13E90[0]; i < ARRAY_COUNT(this->unk_160); i++, ptr3++, ptr++) {
         if (ptr->unk_1E >= 0) {
             Matrix_SetTranslateRotateYXZ(ptr->unk_00.x + ptr3->unk_08.x, ptr->unk_00.y + ptr3->unk_08.y,
-                                                  ptr->unk_00.z + ptr3->unk_08.z, &ptr->unk_18);
+                                         ptr->unk_00.z + ptr3->unk_08.z, &ptr->unk_18);
             Matrix_Translate(-ptr3->unk_08.x, -ptr3->unk_08.y, -ptr3->unk_08.z, MTXMODE_APPLY);
             Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 

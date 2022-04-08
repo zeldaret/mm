@@ -1071,8 +1071,7 @@ void func_80A137C0(EnGo* this, GlobalContext* globalCtx, f32 arg2, f32 arg3) {
 
         func_8012C2DC(globalCtx->state.gfxCtx);
 
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z,
-                                 MTXMODE_NEW);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_Scale(arg2 * 0.7f, arg2 * 0.8f, arg2, MTXMODE_APPLY);
         func_800B8118(&this->actor, globalCtx, 0);
 
@@ -1950,7 +1949,7 @@ void func_80A15B80(EnGo* this, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
-                             this->actor.world.pos.z, MTXMODE_NEW);
+                     this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Translate(0.0f, -this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
     Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
