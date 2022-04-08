@@ -500,7 +500,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
                       NULL, &this->actor);
     func_8012C2DC(globalCtx->state.gfxCtx);
     if (this->actionFunc == func_80A365EC) {
-        Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f,
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f,
                                  this->actor.world.pos.z + 20.0f, 0);
 
         if (this->unk_2AA >= 256) {

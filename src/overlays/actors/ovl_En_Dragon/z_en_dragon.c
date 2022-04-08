@@ -826,15 +826,15 @@ void EnDragon_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
     Vec3f playerGrabOffsetFromJawPos = { 350.0f, -120.0f, -60.0f };
 
     if (limbIndex == DEEP_PYTHON_LIMB_JAW) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->jawPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->jawPos);
         playerGrabOffsetFromJawPos.x = 350.0f;
         playerGrabOffsetFromJawPos.y = -120.0f;
         playerGrabOffsetFromJawPos.z = -60.0f;
-        Matrix_MultiplyVector3fByState(&playerGrabOffsetFromJawPos, &this->playerGrabPosition);
+        Matrix_MultVec3f(&playerGrabOffsetFromJawPos, &this->playerGrabPosition);
     }
 
     if (limbIndex == DEEP_PYTHON_LIMB_HEAD_AND_COLLAR_ROOT) {
-        Matrix_MultiplyVector3fByState(&gZeroVec3f, &this->focusPos);
+        Matrix_MultVec3f(&gZeroVec3f, &this->focusPos);
     }
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
