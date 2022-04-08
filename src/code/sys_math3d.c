@@ -18,7 +18,7 @@
 #define Math3D_SphVsCylOverlapDist Math3D_ColSphereCylinderDistance
 #define Math3D_CylVsLineSeg func_8017E350
 #define Math3D_TriVsSphIntersect Math3D_ColSphereTri
-#define Math3D_PointOnInfiniteLine Math3D_ScaleAndAdd
+#define Math3D_PointOnDirectedLine Math3D_ScaleAndAdd
 #define Math3D_LineSplitRatio Math3D_Lerp
 #define Math3D_PlaneVsPlaneVsLineClosestPoint func_80179D74
 #define Math3D_PointInCyl func_8017E294
@@ -249,17 +249,20 @@ s32 Math3D_PlaneVsPlaneVsLineClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC,
 #pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_80179D74.s")
 #endif
 
-void Math3D_PointOnInfiniteLine(Vec3f* v0, Vec3f* dir, f32 dist, Vec3f* ret) {
-    ret->x = (dir->x * dist) + v0->x;
-    ret->y = (dir->y * dist) + v0->y;
-    ret->z = (dir->z * dist) + v0->z;
+/**
+ * Calculates the point on the line from starting point `v0`, in the direction `dir` scaled by `scale`. Result is placed in `ret`
+ */
+void Math3D_PointOnDirectedLine(Vec3f* v0, Vec3f* dir, f32 scale, Vec3f* ret) {
+    ret->x = (dir->x * scale) + v0->x;
+    ret->y = (dir->y * scale) + v0->y;
+    ret->z = (dir->z * scale) + v0->z;
 }
 
 void Math3D_LineSplitRatio(Vec3f* v0, Vec3f* v1, f32 ratio, Vec3f* ret) {
     Vec3f diff;
 
     Math_Vec3f_Diff(v1, v0, &diff);
-    Math3D_PointOnInfiniteLine(v0, &diff, ratio, ret);
+    Math3D_PointOnDirectedLine(v0, &diff, ratio, ret);
 }
 
 /**
@@ -2040,7 +2043,7 @@ s32 Math3D_CylTriVsIntersect(Cylinder16* cyl, TriNorm* tri, Vec3f* intersect) {
         }
 
         radiusTodistFromCylYIntersectTov0v1 = cyl->radius / distFromCylYIntersectTov0v1;
-        Math3D_PointOnInfiniteLine(&cylIntersectCenter, &diffMidpointIntersect, radiusTodistFromCylYIntersectTov0v1,
+        Math3D_PointOnDirectedLine(&cylIntersectCenter, &diffMidpointIntersect, radiusTodistFromCylYIntersectTov0v1,
                                    intersect);
         return true;
     }
