@@ -1080,13 +1080,13 @@ void Matrix_TranslateRotateZYX(Vec3f* translation, Vec3s* rot) {
  */
 void Matrix_SetTranslateRotateYXZ(f32 x, f32 y, f32 z, Vec3s* rot) {
     MtxF* cmf = sCurrentMatrix;
-    f32 sp30 = Math_SinS(rot->y);
-    f32 sp2C = Math_CosS(rot->y);
-    f32 sp28;
-    f32 sp24;
+    f32 sinY = Math_SinS(rot->y);
+    f32 cosY = Math_CosS(rot->y);
+    f32 cosTemp;
+    f32 sinTemp;
 
-    cmf->xx = sp2C;
-    cmf->zx = -sp30;
+    cmf->xx = cosY;
+    cmf->zx = -sinY;
     cmf->xw = x;
     cmf->yw = y;
     cmf->zw = z;
@@ -1096,18 +1096,18 @@ void Matrix_SetTranslateRotateYXZ(f32 x, f32 y, f32 z, Vec3s* rot) {
     cmf->ww = 1.0f;
 
     if (rot->x != 0) {
-        sp24 = Math_SinS(rot->x);
-        sp28 = Math_CosS(rot->x);
+        sinTemp = Math_SinS(rot->x);
+        cosTemp = Math_CosS(rot->x);
 
-        cmf->zz = sp2C * sp28;
-        cmf->zy = sp2C * sp24;
-        cmf->xz = sp30 * sp28;
-        cmf->xy = sp30 * sp24;
-        cmf->yz = -sp24;
-        cmf->yy = sp28;
+        cmf->zz = cosY * cosTemp;
+        cmf->zy = cosY * sinTemp;
+        cmf->xz = sinY * cosTemp;
+        cmf->xy = sinY * sinTemp;
+        cmf->yz = -sinTemp;
+        cmf->yy = cosTemp;
     } else {
-        cmf->zz = sp2C;
-        cmf->xz = sp30;
+        cmf->zz = cosY;
+        cmf->xz = sinY;
         cmf->yz = 0.0f;
         cmf->zy = 0.0f;
         cmf->xy = 0.0f;
@@ -1115,22 +1115,22 @@ void Matrix_SetTranslateRotateYXZ(f32 x, f32 y, f32 z, Vec3s* rot) {
     }
 
     if (rot->z != 0) {
-        sp24 = Math_SinS(rot->z);
-        sp28 = Math_CosS(rot->z);
+        sinTemp = Math_SinS(rot->z);
+        cosTemp = Math_CosS(rot->z);
 
-        sp30 = cmf->xx;
-        sp2C = cmf->xy;
-        cmf->xx = sp30 * sp28 + sp2C * sp24;
-        cmf->xy = sp2C * sp28 - sp30 * sp24;
+        sinY = cmf->xx;
+        cosY = cmf->xy;
+        cmf->xx = sinY * cosTemp + cosY * sinTemp;
+        cmf->xy = cosY * cosTemp - sinY * sinTemp;
 
-        sp30 = cmf->zx;
-        sp2C = cmf->zy;
-        cmf->zx = sp30 * sp28 + sp2C * sp24;
-        cmf->zy = sp2C * sp28 - sp30 * sp24;
+        sinY = cmf->zx;
+        cosY = cmf->zy;
+        cmf->zx = sinY * cosTemp + cosY * sinTemp;
+        cmf->zy = cosY * cosTemp - sinY * sinTemp;
 
-        sp2C = cmf->yy;
-        cmf->yx = sp2C * sp24;
-        cmf->yy = sp2C * sp28;
+        cosY = cmf->yy;
+        cmf->yx = cosY * sinTemp;
+        cmf->yy = cosY * cosTemp;
     } else {
         cmf->yx = 0.0f;
     }

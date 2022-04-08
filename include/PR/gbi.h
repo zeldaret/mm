@@ -1346,6 +1346,7 @@ typedef union {
     Hilite_t	h;
     long int	force_structure_alignment[4];
 } Hilite;
+
 #define gdSPDefLights0(ar,ag,ab)        \
         {                               \
             {{                          \
