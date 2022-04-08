@@ -27,6 +27,7 @@ void func_80A1712C(EnRaf* this);
 void func_80A18080(EnRaf* this);
 void func_80A17414(EnRaf* this);
 void func_80A17530(EnRaf* this);
+void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -353,9 +354,20 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Update.s")
 
+void func_80A1859C(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A1859C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Draw.s")
+void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnRaf* this = THIS;
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    func_8012C2DC(globalCtx->state.gfxCtx);
+    SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
+                                   this->skelAnime.dListCount, NULL, NULL, func_80A1859C, &this->dyna.actor);
+    if (this->unk_3C6 == 4) {
+        func_80A18DA0(this, globalCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A18A90.s")
 
