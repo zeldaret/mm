@@ -7,7 +7,7 @@ struct BgOpenSpot;
 
 typedef struct BgOpenSpot {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ AnimatedMaterial* animatedMaterial;
+    /* 0x144 */ AnimatedMaterial* texScroll;
 } BgOpenSpot; // size = 0x148
 
 extern const ActorInit Bg_Open_Spot_InitVars;
