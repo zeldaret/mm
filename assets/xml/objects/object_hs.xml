@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_hs" Segment="6">
-        <Animation Name="gHsFearAnim" Offset="0x304" /> <!-- unused, "h_purupuru" japanese onomatopoeic for 'shivering' -->
+        <Animation Name="gHsShiveringAnim" Offset="0x304" /> <!-- unused, "h_purupuru" japanese onomatopoeic for 'shivering' -->
         <Animation Name="gHsPleadingAnim" Offset="0x528" /> <!-- unused, "h_tanomuu" japanese for 'to beg' -->
         <Animation Name="gHsIdleAnim" Offset="0x5C0" /> <!-- "h_matsu" japanese for 'to wait' -->
         <DList Name="object_hs_DL_003760" Offset="0x3760" />
