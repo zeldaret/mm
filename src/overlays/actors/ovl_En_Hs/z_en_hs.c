@@ -176,26 +176,26 @@ void func_80953098(EnHs* this, GlobalContext* globalCtx) {
 void func_80953180(EnHs* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.currentTextId) {
-            case 0x33F4:
-            case 0x33F6:
+            case 0x33F4: // text: laughing that they are all roosters (!)
+            case 0x33F6: // text: Grog regrest not being able to see his chicks reach adult hood
                 func_801477B4(globalCtx);
                 this->actionFunc = func_8095345C;
                 break;
 
-            case 0x33F7:
+            case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 func_801477B4(globalCtx);
                 this->actionFunc = func_80953098;
                 func_80953098(this, globalCtx);
                 break;
 
-            case 0x33F9:
+            case 0x33F9: // text: laughing that they are all roosters (.)
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 func_801477B4(globalCtx);
                 this->actionFunc = func_8095345C;
                 break;
 
-            case 0x33F5:
+            case 0x33F5: // He heard from his gramps (?) the moon is going to fall
                 globalCtx->msgCtx.unk11F10 = 0;
                 this->actionFunc = func_80952FE0;
                 this->stateTimer = 0;
