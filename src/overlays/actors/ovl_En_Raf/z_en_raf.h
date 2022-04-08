@@ -23,7 +23,8 @@ typedef struct EnRaf {
     /* 0x39C */ s16 unk_39C;
     /* 0x39E */ char unk_39E[0x2];
     /* 0x3A0 */ f32 unk_3A0;
-    /* 0x3A4 */ char unk_3A4[0xC];
+    /* 0x3A4 */ f32 unk_3A4;
+    /* 0x3A4 */ char unk_3A8[0x8];
     /* 0x3B0 */ f32 unk_3B0;
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ char unk_3B6[0x4];

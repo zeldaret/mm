@@ -28,6 +28,8 @@ void func_80A18080(EnRaf* this);
 void func_80A17414(EnRaf* this);
 void func_80A17530(EnRaf* this);
 void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx);
+void func_80A17848(EnRaf* this, GlobalContext* globalCtx);
+void func_80A179C8(EnRaf* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -296,11 +298,88 @@ void func_80A17530(EnRaf* this) {
     this->actionFunc = func_80A175E4;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A175E4.s")
+void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
+    f32 temp;
+    f32 curFrame;
+    Player* player = GET_PLAYER(globalCtx);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17848.s")
+    curFrame = this->skelAnime.curFrame;
+    temp = (BREG(51) / 100.0f) + 0.2f;
+    Math_ApproachF(&this->unk_3A4, temp, 0.2f, 0.03f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A178A0.s")
+    if ((player->stateFlags2 & 0x80) && (this->unk_39C != 1) && (&this->dyna.actor == player->actor.parent)) {
+        Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
+        Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
+        Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
+    }
+
+    if (this->unk_3A0 <= curFrame) {
+        if (BREG(52) == 0) {
+            this->unk_3C4++;
+        }
+
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
+        switch (this->unk_39C) {
+            case 0:
+                globalCtx->damagePlayer(globalCtx, -2);
+                func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+                CollisionCheck_GreenBlood(globalCtx, NULL, &player->actor.world.pos);
+                if (((BREG(53) + 5) < this->unk_3C4) || !(player->stateFlags2 & 0x80)) {
+                    player->actor.freezeTimer = 10;
+                    func_80A17848(this, globalCtx);
+                    return;
+                }
+                break;
+
+            case 1:
+                Actor_ApplyDamage(&this->dyna.actor);
+                if ((BREG(54) + 4) < this->unk_3C4) {
+                    func_80A179C8(this, globalCtx);
+                    return;
+                }
+                break;
+
+            case 2:
+                if ((BREG(54) + 4) < this->unk_3C4) {
+                    player->actor.parent = NULL;
+                    player->unk_AE8 = 1000;
+                    func_80A179C8(this, globalCtx);
+                }
+                break;
+        }
+    }
+}
+
+void func_80A17848(EnRaf* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+
+    func_80A17060(this, 3);
+    player->actor.freezeTimer = 10;
+    this->unk_3C2 = 3;
+    this->unk_3C6 = 3;
+    this->actionFunc = func_80A178A0;
+}
+
+void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
+    Player* player = GET_PLAYER(globalCtx);
+    f32 curFrame = this->skelAnime.curFrame;
+
+    if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
+        player->actor.freezeTimer = 0;
+        player->actor.parent = NULL;
+        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
+        func_800B8D50(globalCtx, &this->dyna.actor, BREG(55) + 3.0f, this->unk_3BC + 0x8000, BREG(56) + 10.0f, 0);
+    } else if (curFrame < 10.0f) {
+        player->actor.freezeTimer = 10;
+    }
+
+    if (this->unk_3A0 <= curFrame) {
+        this->unk_3C2 = 3;
+        this->unk_3C6 = 0;
+        this->unk_3B4 = 0x14;
+        this->actionFunc = func_80A171D8;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A179C8.s")
 
