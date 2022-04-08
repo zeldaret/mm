@@ -23,6 +23,8 @@ void func_80A17C6C(EnRaf* this, GlobalContext* globalCtx);
 void func_80A17D54(EnRaf* this, GlobalContext* globalCtx);
 void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx);
 void func_80A180B4(EnRaf* this, GlobalContext* globalCtx);
+void func_80A1712C(EnRaf* this);
+void func_80A18080(EnRaf* this);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -84,8 +86,11 @@ static DamageTable D_80A1939C = {
 
 extern ColliderCylinderInit D_80A18EE0;
 extern DamageTable D_80A1939C;
+extern Vec3f D_80A193BC;
 
-extern UNK_TYPE D_06000108;
+extern AnimationHeader D_06000A64;
+extern FlexSkeletonHeader D_06003428;
+extern CollisionHeader D_06000108;
 extern UNK_TYPE D_060024E0;
 extern UNK_TYPE D_060032F8;
 
@@ -93,7 +98,54 @@ extern UNK_TYPE D_060032F8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A16D6C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Init.s")
+void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnRaf* this = THIS;
+    Vec3f sp60 = D_80A193BC;
+    s32 i;
+    s32 j;
+    CollisionHeader* colHeader = NULL;
+
+    DynaPolyActor_Init(&this->dyna, 0);
+    CollisionHeader_GetVirtual(&D_06000108, &colHeader);
+    this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A18EE0);
+    this->dyna.actor.targetMode = 3;
+    this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06003428, &D_06000A64, this->jointTable, this->morphTable, 12);
+    for (i = 0; i < 12; i++) {
+        Math_Vec3f_Copy(&this->unk_2C4[i], &sp60);
+        Math_Vec3f_Copy(&this->unk_234[i], &sp60);
+    }
+
+    this->dyna.actor.colChkInfo.damageTable = &D_80A1939C;
+    this->dyna.actor.colChkInfo.health = BREG(1) + 2;
+    this->unk_3BE = EN_RAF_GET_F(&this->dyna.actor);
+    this->unk_3BA = EN_RAF_GET_1F(&this->dyna.actor);
+    this->unk_3C0 = EN_RAF_GET_7F(&this->dyna.actor);
+    if (this->unk_3C0 == 0x7F) {
+        this->unk_3C0 = -1;
+    }
+
+    if (this->unk_3BA == 0x1F) {
+        this->unk_3BA = -1;
+    } else {
+        this->unk_3BA = 0x1E;
+    }
+
+    if (((this->unk_3C0 >= 0) || (this->unk_3BE == 1) || (gSaveContext.save.weekEventReg[12] & 1)) &&
+        ((Flags_GetSwitch(globalCtx, this->unk_3C0)) || (this->unk_3BE == 1))) {
+        for (j = 2; j < 11; j++) {
+            Math_Vec3f_Copy(&this->unk_234[j], &gZeroVec3f);
+            Math_Vec3f_Copy(&this->unk_2C4[j], &gZeroVec3f);
+        }
+
+        func_80A18080(this);
+    } else {
+        this->unk_3B0 = Rand_ZeroFloat(1.0f) * 20000.0f;
+        Actor_SetScale(&this->dyna.actor, 0.01f);
+        func_80A1712C(this);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Destroy.s")
 
