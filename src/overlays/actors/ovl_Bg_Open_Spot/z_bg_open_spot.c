@@ -53,7 +53,6 @@ void BgOpenSpot_Update(Actor* thisx, GlobalContext* globalCtx) {
         action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 0x7D)]->action;
         if (action == 1) {
             this->actor.draw = NULL;
-            return;
         } else if (action == 2) {
             this->actor.draw = BgOpenSpot_Draw;
         }
@@ -61,7 +60,7 @@ void BgOpenSpot_Update(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void BgOpenSpot_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    u32 pad;
+    s32 pad;
     BgOpenSpot* this = (BgOpenSpot*)thisx;
 
     AnimatedMat_Draw(globalCtx, this->texScroll);
