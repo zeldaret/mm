@@ -121,11 +121,11 @@ CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_
 OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
 
 ifneq ($(OBJDUMP_BUILD), 0)
-	OBJDUMP_CMD = $(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
-	OBJCOPY_BIN = $(OBJCOPY) -O binary $@ $@.bin
+  OBJDUMP_CMD = $(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
+  OBJCOPY_BIN = $(OBJCOPY) -O binary $@ $@.bin
 else
-	OBJDUMP_CMD = @:
-	OBJCOPY_BIN = @:
+  OBJDUMP_CMD = @:
+  OBJCOPY_BIN = @:
 endif
 
 ifeq ($(shell getconf LONG_BIT), 32)
