@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_blockstop.h"
+#include "overlays/actors/ovl_Obj_Oshihiki/z_obj_oshihiki.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -53,7 +54,7 @@ void ObjBlockstop_CheckCollision(ObjBlockstop *this, GlobalContext *globalCtx) {
             (fabsf(tempActor->world.pos.z - this->actor.world.pos.z) < 20.0f) && 
             (fabsf(tempActor->world.pos.y - this->actor.world.pos.y) < 20.0f)) {
                  
-                s32 params = (tempActor->params & 0xF);
+                s32 params = OBJOSHIHIKI_GET_F(tempActor);
                 if(params < 3){
                     ActorCutscene_SetIntentToPlay((s16) this->actor.cutscene);
                     this->actionFunc = ObjBlockstop_TryPlayCutscene;
