@@ -82,15 +82,29 @@ static DamageTable D_80A1939C = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
+static AnimationHeader* D_80A193C8[] = {
+    &D_06000A64, &D_06000C7C, &D_06000B30, &D_06000A64, &D_060003FC, &D_060007A8
+};
+static u8 D_80A193E0[] = {
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE
+};
+
 #endif
 
 extern ColliderCylinderInit D_80A18EE0;
 extern DamageTable D_80A1939C;
 extern Vec3f D_80A193BC;
+extern AnimationHeader* D_80A193C8[];
+extern u8 D_80A193E0[];
+extern Vec3f D_80A1940C;
 
 extern AnimationHeader D_06000A64;
 extern FlexSkeletonHeader D_06003428;
 extern CollisionHeader D_06000108;
+extern AnimationHeader D_06000C7C;
+extern AnimationHeader D_06000B30;
+extern AnimationHeader D_060003FC;
+extern AnimationHeader D_060007A8;
 extern UNK_TYPE D_060024E0;
 extern UNK_TYPE D_060032F8;
 
@@ -149,7 +163,20 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Destroy.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17060.s")
+void func_80A17060(EnRaf* this, s32 index) {
+    f32 startFrame = 0.0f;
+    f32 playSpeed = 1.0f;
+
+    this->unk_3A0 = Animation_GetLastFrame(D_80A193C8[index]);
+    if (index == 0) {
+        startFrame = this->unk_3A0;
+    } else if (index == 1) {
+        playSpeed = 2.0f;
+    }
+
+    Animation_Change(&this->skelAnime, D_80A193C8[index], playSpeed, startFrame, this->unk_3A0, D_80A193E0[index],
+                     -4.0f);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A1712C.s")
 
@@ -179,9 +206,43 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17E1C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A18080.s")
+void func_80A18080(EnRaf* this) {
+    if (this->unk_3C6 == 4) {
+        this->unk_3B4 = 0x5A;
+    } else {
+        this->unk_3C6 = 7;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A180B4.s")
+    this->actionFunc = func_80A180B4;
+}
+
+void func_80A180B4(EnRaf* this, GlobalContext* globalCtx) {
+    Vec3f sp3C = D_80A1940C;
+    s32 i;
+
+    if (this->unk_3B4 == 0) {
+        this->unk_3C6 = 7;
+    }
+
+    if (this->unk_3BA >= 0) {
+        if (this->unk_3BA != 0) {
+            this->unk_3BA--;
+        }
+
+        if (this->unk_3BA == 0) {
+            func_80A17060(this, 3);
+            for (i = 2; i < 11; i++) {
+                Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
+            }
+
+            this->unk_3C2 = 3;
+            this->unk_3C6 = 0;
+            this->unk_3BA = EN_RAF_GET_1F(&this->dyna.actor);
+            this->unk_3BA += 0x1E;
+            this->actionFunc = func_80A171D8;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Update.s")
 
