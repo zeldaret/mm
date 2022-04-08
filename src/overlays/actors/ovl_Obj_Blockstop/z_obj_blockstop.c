@@ -37,14 +37,12 @@ void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc = ObjBlockstop_CheckCollision;
 }
 
-// checks that the position of the push block is within 20 units and activates, since the block falls and stops on the
-// blockstop
 void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
     Actor* tempActor;
     tempActor = globalCtx->actorCtx.actorLists[6].first;
     while (tempActor) {
-        if ((tempActor->id == 0x7A) &&                                           // check if oshihiki (push block)
-            (fabsf(tempActor->world.pos.x - this->actor.world.pos.x) < 20.0f) && // check coords for collision
+        if ((tempActor->id == 0x7A) && // check if oshihiki (push block)
+            (fabsf(tempActor->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
             (fabsf(tempActor->world.pos.z - this->actor.world.pos.z) < 20.0f) &&
             (fabsf(tempActor->world.pos.y - this->actor.world.pos.y) < 20.0f)) {
 
