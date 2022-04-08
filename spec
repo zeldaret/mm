@@ -4103,8 +4103,7 @@ beginseg
     name "ovl_Bg_Sinkai_Kabe"
     compress
     include "build/src/overlays/actors/ovl_Bg_Sinkai_Kabe/z_bg_sinkai_kabe.o"
-    include "build/data/ovl_Bg_Sinkai_Kabe/ovl_Bg_Sinkai_Kabe.data.o"
-    include "build/data/ovl_Bg_Sinkai_Kabe/ovl_Bg_Sinkai_Kabe.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Sinkai_Kabe/ovl_Bg_Sinkai_Kabe_reloc.o"
 endseg
 
 beginseg

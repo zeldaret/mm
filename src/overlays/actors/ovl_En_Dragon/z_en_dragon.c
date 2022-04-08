@@ -32,16 +32,6 @@ typedef enum {
 } DeepPythonAnimationIndex;
 
 typedef enum {
-    /* 0 */ DEEP_PYTHON_ACTION_IDLE,
-    /* 1 */ DEEP_PYTHON_ACTION_EXTEND,
-    /* 2 */ DEEP_PYTHON_ACTION_GRAB,
-    /* 3 */ DEEP_PYTHON_ACTION_DAMAGE,
-    /* 4 */ DEEP_PYTHON_ACTION_RETREAT,
-    /* 5 */ DEEP_PYTHON_ACTION_SETUP_DEAD,
-    /* 6 */ DEEP_PYTHON_ACTION_DEAD,
-} DeepPythonAction;
-
-typedef enum {
     /* 0 */ DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED,
     /* 1 */ DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED,
     /* 2 */ DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY,
