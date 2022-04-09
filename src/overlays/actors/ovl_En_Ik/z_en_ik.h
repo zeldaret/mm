@@ -34,7 +34,7 @@ typedef struct EnIk {
     /* 0x0300 */ s32 effectIndex;
     /* 0x0304 */ f32 effectAlpha;
     /* 0x0308 */ f32 effectScale;
-    /* 0x030C */ f32 unk_30C;
+    /* 0x030C */ f32 steamScale;
     /* 0x0310 */ Vec3f limbPos[13];
     /* 0x03AC */ ColliderCylinder colliderCylinder;
     /* 0x03F8 */ ColliderQuad colliderQuad;

@@ -1,14 +1,14 @@
 ﻿<Root>
     <File Name="object_ik" Segment="6">
-        <Animation Name="gIronKnuckleVerticleAttackAnim" Offset="0xCE8" />
-        <Animation Name="gIronkKnuckleRecoverVerticleAttackAnim" Offset="0x15F8" />
-        <Animation Name="gIronKnuckleEndVerticleAttackAnim" Offset="0x1ABC" />
-        <Animation Name="gIronKnuckleHorizontalDoubleAttackAnim" Offset="0x2484" />
+        <Animation Name="gIronKnuckleVerticalAttackAnim" Offset="0xCE8" />
+        <Animation Name="gIronKnuckleRecoverVerticalAttackAnim" Offset="0x15F8" />
+        <Animation Name="gIronKnuckleEndVerticalAttackAnim" Offset="0x1ABC" />
+        <Animation Name="gIronKnuckleHorizontalAttackAnim" Offset="0x2484" />
         <Animation Name="gIronKnuckleEndHorizontalAttackAnim" Offset="0x2E7C" />
-        <Animation Name="gIronKuckleBackHitAnim" Offset="0x367C" />
+        <Animation Name="gIronKnuckleBackHitAnim" Offset="0x367C" />
         <Animation Name="gIronKnuckleBlockAnim" Offset="0x391C" />
         <Animation Name="gIronKnuckleDeathAnim" Offset="0x4A04" />
-        <Animation Name="gIronKuckleFrontHitAnim" Offset="0x5254" />
+        <Animation Name="gIronKnuckleFrontHitAnim" Offset="0x5254" />
         <Animation Name="gIronKnuckleRunAnim" Offset="0x57F4" />
         <Animation Name="gIronKnuckleWalkAnim" Offset="0x6294" />
         <!-- <Blob Name="object_ik_Blob_006730" Size="0x5A0" Offset="0x6730" /> -->
@@ -18,7 +18,7 @@
         <!-- <Blob Name="object_ik_Blob_009740" Size="0x300" Offset="0x9740" /> -->
         <DList Name="object_ik_DL_009A40" Offset="0x9A40" />
         <DList Name="object_ik_DL_009BC8" Offset="0x9BC8" />
-        <DList Name="gIronKuckleAxeDL" Offset="0x9D20" />
+        <DList Name="gIronKnuckleAxeDL" Offset="0x9D20" />
         <DList Name="object_ik_DL_009FD8" Offset="0x9FD8" />
         <DList Name="object_ik_DL_00A130" Offset="0xA130" />
         <DList Name="object_ik_DL_00A1F0" Offset="0xA1F0" />
@@ -30,7 +30,7 @@
         <DList Name="object_ik_DL_00A780" Offset="0xA780" />
         <DList Name="object_ik_DL_00A820" Offset="0xA820" />
         <DList Name="object_ik_DL_00BF80" Offset="0xBF80" />
-        <DList Name="object_ik_DL_00C200" Offset="0xC200" />
+        <DList Name="gGerudoHead" Offset="0xC200" />
         <DList Name="object_ik_DL_00CF08" Offset="0xCF08" />
         <DList Name="object_ik_DL_00D038" Offset="0xD038" />
         <DList Name="object_ik_DL_00D050" Offset="0xD050" />
