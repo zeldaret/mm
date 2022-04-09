@@ -27,8 +27,8 @@ typedef struct EnHs {
     /* 0x01D4 */ Vec3s jointTable[OBJECT_HS_LIMB_MAX];
     /* 0x0234 */ Vec3s morphTable[OBJECT_HS_LIMB_MAX];
     /* 0x0294 */ Vec3s headRot;
-    /* 0x029A */ Vec3s unkRot29A; // probably not chest, as chest is same limb as lower body
-    /* 0x02A0 */ u16 unkStateFlags2A0;
+    /* 0x029A */ Vec3s unusedRot; // probably not chest, as chest is same limb as lower body
+    /* 0x02A0 */ u16 stateFlags;
     /* 0x02A2 */ s16 stateTimer;
     /* 0x02A4 */ Vec3f nwcPos[20]; // actual position are even values, odds are read but never set (?)
     /* 0x0394 */ EnHsActionFunc actionFunc;

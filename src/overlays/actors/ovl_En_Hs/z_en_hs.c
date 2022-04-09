@@ -177,7 +177,7 @@ void func_80953180(EnHs* this, GlobalContext* globalCtx) {
     if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (globalCtx->msgCtx.currentTextId) {
             case 0x33F4: // text: laughing that they are all roosters (!)
-            case 0x33F6: // text: Grog regrest not being able to see his chicks reach adult hood
+            case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
                 func_801477B4(globalCtx);
                 this->actionFunc = func_8095345C;
                 break;
@@ -263,7 +263,7 @@ void func_8095345C(EnHs* this, GlobalContext* globalCtx) {
     } else if (this->actor.home.rot.x >= 20) { // chicks turned adult >= 10
         this->actionFunc = func_80953354;
         this->stateTimer = 40;
-    } else if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_10000) {
+    } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
         this->unkStateFlags2A0 |= 1;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, globalCtx)) {
