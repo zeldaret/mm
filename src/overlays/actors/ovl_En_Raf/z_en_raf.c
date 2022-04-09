@@ -15,24 +15,24 @@ void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx);
 void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
+void func_80A1712C(EnRaf* this);
 void func_80A171D8(EnRaf* this, GlobalContext* globalCtx);
+void func_80A17414(EnRaf* this);
 void func_80A17464(EnRaf* this, GlobalContext* globalCtx);
+void func_80A17530(EnRaf* this);
 void func_80A175E4(EnRaf* this, GlobalContext* globalCtx);
+void func_80A17848(EnRaf* this, GlobalContext* globalCtx);
 void func_80A178A0(EnRaf* this, GlobalContext* globalCtx);
+void func_80A179C8(EnRaf* this, GlobalContext* globalCtx);
 void func_80A17C6C(EnRaf* this, GlobalContext* globalCtx);
 void func_80A17D54(EnRaf* this, GlobalContext* globalCtx);
-void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx);
-void func_80A180B4(EnRaf* this, GlobalContext* globalCtx);
-void func_80A1712C(EnRaf* this);
-void func_80A18080(EnRaf* this);
-void func_80A17414(EnRaf* this);
-void func_80A17530(EnRaf* this);
-void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx);
-void func_80A17848(EnRaf* this, GlobalContext* globalCtx);
-void func_80A179C8(EnRaf* this, GlobalContext* globalCtx);
-void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
-void func_80A18B8C(EnRaf* this, GlobalContext* globalCtx);
 void func_80A17DDC(EnRaf* this);
+void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx);
+void func_80A18080(EnRaf* this);
+void func_80A180B4(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_InitializeParticle(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
+void EnRaf_UpdateParticles(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_DrawParticles(EnRaf* this, GlobalContext* globalCtx);
 
 const ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
@@ -46,8 +46,7 @@ const ActorInit En_Raf_InitVars = {
     (ActorFunc)EnRaf_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80A18EE0 = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
         AT_ON | AT_TYPE_ENEMY,
@@ -111,8 +110,7 @@ static u8 D_80A1918C[] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 };
 
-// static DamageTable sDamageTable = {
-static DamageTable D_80A1939C = {
+static DamageTable sDamageTable = {
     /* Deku Nut       */ DMG_ENTRY(0, 0xF),
     /* Deku Stick     */ DMG_ENTRY(0, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -149,12 +147,12 @@ static DamageTable D_80A1939C = {
 
 static Vec3f D_80A193BC = { 1.0f, 1.0f, 1.0f };
 
-static AnimationHeader* D_80A193C8[] = {
+static AnimationHeader* sAnimations[] = {
     &object_raf_Anim_000A64, &object_raf_Anim_000C7C, &object_raf_Anim_000B30,
     &object_raf_Anim_000A64, &object_raf_Anim_0003FC, &object_raf_Anim_0007A8,
 };
 
-static u8 D_80A193E0[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
 };
 
@@ -212,7 +210,7 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&object_raf_Colheader_000108, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
-    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A18EE0);
+    Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.targetMode = 3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_raf_Skel_003428, &object_raf_Anim_000A64, this->jointTable,
@@ -222,13 +220,13 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->unk_234[i], &sp60);
     }
 
-    this->dyna.actor.colChkInfo.damageTable = &D_80A1939C;
+    this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     this->dyna.actor.colChkInfo.health = BREG(1) + 2;
     this->unk_3BE = EN_RAF_GET_F(&this->dyna.actor);
     this->unk_3BA = EN_RAF_GET_1F(&this->dyna.actor);
-    this->unk_3C0 = EN_RAF_GET_7F(&this->dyna.actor);
-    if (this->unk_3C0 == 0x7F) {
-        this->unk_3C0 = -1;
+    this->switchFlag = EN_RAF_GET_SWITCH_FLAG(&this->dyna.actor);
+    if (this->switchFlag == 0x7F) {
+        this->switchFlag = -1;
     }
 
     if (this->unk_3BA == 0x1F) {
@@ -237,8 +235,8 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_3BA = 0x1E;
     }
 
-    if (((this->unk_3C0 >= 0) || (this->unk_3BE == 1) || (gSaveContext.save.weekEventReg[12] & 1)) &&
-        ((Flags_GetSwitch(globalCtx, this->unk_3C0)) || (this->unk_3BE == 1))) {
+    if (((this->switchFlag >= 0) || (this->unk_3BE == 1) || (gSaveContext.save.weekEventReg[12] & 1)) &&
+        ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->unk_3BE == 1))) {
         for (j = 2; j < 11; j++) {
             Math_Vec3f_Copy(&this->unk_234[j], &gZeroVec3f);
             Math_Vec3f_Copy(&this->unk_2C4[j], &gZeroVec3f);
@@ -259,26 +257,26 @@ void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-void func_80A17060(EnRaf* this, s32 index) {
+void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
     f32 startFrame = 0.0f;
     f32 playSpeed = 1.0f;
 
-    this->unk_3A0 = Animation_GetLastFrame(D_80A193C8[index]);
+    this->endFrame = Animation_GetLastFrame(sAnimations[index]);
     if (index == 0) {
-        startFrame = this->unk_3A0;
+        startFrame = this->endFrame;
     } else if (index == 1) {
         playSpeed = 2.0f;
     }
 
-    Animation_Change(&this->skelAnime, D_80A193C8[index], playSpeed, startFrame, this->unk_3A0, D_80A193E0[index],
-                     -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[index], playSpeed, startFrame, this->endFrame,
+                     sAnimationModes[index], -4.0f);
 }
 
 void func_80A1712C(EnRaf* this) {
     Vec3f sp3C = D_80A193E8;
     s32 i;
 
-    func_80A17060(this, 0);
+    EnRaf_ChangeAnimation(this, 0);
     for (i = 2; i < 11; i++) {
         Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
     }
@@ -345,7 +343,7 @@ void func_80A171D8(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A17414(EnRaf* this) {
-    func_80A17060(this, 1);
+    EnRaf_ChangeAnimation(this, 1);
     this->unk_3C2 = 1;
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
     this->unk_3C6 = 1;
@@ -362,7 +360,7 @@ void func_80A17464(EnRaf* this, GlobalContext* globalCtx) {
         Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
     }
 
-    if (this->unk_3A0 <= curFrame) {
+    if (this->endFrame <= curFrame) {
         func_80A17530(this);
     }
 }
@@ -370,7 +368,7 @@ void func_80A17464(EnRaf* this, GlobalContext* globalCtx) {
 void func_80A17530(EnRaf* this) {
     s32 i;
 
-    func_80A17060(this, 2);
+    EnRaf_ChangeAnimation(this, 2);
     this->unk_3C4 = 0;
     for (i = 0; i < 12; i++) {
         this->unk_354[i].x = Rand_S16Offset(8, 8) << 8;
@@ -398,7 +396,7 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
         Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
     }
 
-    if (this->unk_3A0 <= curFrame) {
+    if (this->endFrame <= curFrame) {
         if (BREG(52) == 0) {
             this->unk_3C4++;
         }
@@ -418,14 +416,14 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
 
             case 1:
                 Actor_ApplyDamage(&this->dyna.actor);
-                if ((BREG(54) + 4) < this->unk_3C4) {
+                if (this->unk_3C4 > (BREG(54) + 4)) {
                     func_80A179C8(this, globalCtx);
                     return;
                 }
                 break;
 
             case 2:
-                if ((BREG(54) + 4) < this->unk_3C4) {
+                if (this->unk_3C4 > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
                     player->unk_AE8 = 1000;
                     func_80A179C8(this, globalCtx);
@@ -438,7 +436,7 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
 void func_80A17848(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    func_80A17060(this, 3);
+    EnRaf_ChangeAnimation(this, 3);
     player->actor.freezeTimer = 10;
     this->unk_3C2 = 3;
     this->unk_3C6 = 3;
@@ -458,7 +456,7 @@ void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 10;
     }
 
-    if (this->unk_3A0 <= curFrame) {
+    if (this->endFrame <= curFrame) {
         this->unk_3C2 = 3;
         this->unk_3C6 = 0;
         this->unk_3B4 = 0x14;
@@ -480,8 +478,8 @@ void func_80A179C8(EnRaf* this, GlobalContext* globalCtx) {
                 CLEAR_TAG_SMALL_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
-    if (this->unk_3C0 >= 0) {
-        Flags_SetSwitch(globalCtx, this->unk_3C0);
+    if (this->switchFlag >= 0) {
+        Flags_SetSwitch(globalCtx, this->switchFlag);
     }
 
     this->unk_3C2 = 0;
@@ -492,7 +490,8 @@ void func_80A179C8(EnRaf* this, GlobalContext* globalCtx) {
         spAC.x = Rand_ZeroOne() - 0.5f;
         spAC.y = Rand_ZeroOne() * 10.0f;
         spAC.z = Rand_ZeroOne() - 0.5f;
-        func_80A18A90(this, &this->dyna.actor.world.pos, &spAC, &spA0, (Rand_ZeroFloat(1.0f) / 500.0f) + 0.002f, 90);
+        EnRaf_InitializeParticle(this, &this->dyna.actor.world.pos, &spAC, &spA0,
+                                 (Rand_ZeroFloat(1.0f) / 500.0f) + 0.002f, 90);
     }
 
     for (i = 2; i < 11; i++) {
@@ -523,7 +522,7 @@ void func_80A17C6C(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A17D14(EnRaf* this) {
-    func_80A17060(this, 4);
+    EnRaf_ChangeAnimation(this, 4);
     this->unk_3C4 = 0;
     this->unk_3C6 = 5;
     this->actionFunc = func_80A17D54;
@@ -532,11 +531,11 @@ void func_80A17D14(EnRaf* this) {
 void func_80A17D54(EnRaf* this, GlobalContext* globalCtx) {
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->unk_3A0 <= curFrame) {
+    if (this->endFrame <= curFrame) {
         this->unk_3C4++;
         if ((BREG(2) + 2) < this->unk_3C4) {
-            if (this->unk_3C0 >= 0) {
-                Flags_SetSwitch(globalCtx, this->unk_3C0);
+            if (this->switchFlag >= 0) {
+                Flags_SetSwitch(globalCtx, this->switchFlag);
             }
 
             func_80A17DDC(this);
@@ -545,7 +544,7 @@ void func_80A17D54(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A17DDC(EnRaf* this) {
-    func_80A17060(this, 5);
+    EnRaf_ChangeAnimation(this, 5);
     this->unk_3C6 = 6;
     this->unk_3B6 = 0;
     this->actionFunc = func_80A17E1C;
@@ -555,7 +554,7 @@ void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
 
-    if (this->unk_3A0 <= curFrame) {
+    if (this->endFrame <= curFrame) {
         this->unk_3B6++;
         if (this->unk_3B6 < (BREG(3) + 105)) {
             for (i = 0; i < (BREG(4) + 5); i++) {
@@ -620,7 +619,7 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_3BA == 0) {
-            func_80A17060(this, 3);
+            EnRaf_ChangeAnimation(this, 3);
             for (i = 2; i < 11; i++) {
                 Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
             }
@@ -689,7 +688,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Math_ApproachZeroF(&this->unk_3AC, 0.3f, 2.0f);
     if (this->unk_3C6 == 4) {
-        func_80A18B8C(this, globalCtx);
+        EnRaf_UpdateParticles(this, globalCtx);
     }
 
     for (i = 0; i < 12; i++) {
@@ -710,7 +709,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A1859C(GlobalContext* globalCtx2, s32 limbIndex, Actor* thisx) {
+void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* thisx) {
     GlobalContext* globalCtx = globalCtx2;
     EnRaf* this = THIS;
     s32 i;
@@ -780,13 +779,13 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C28C(globalCtx->state.gfxCtx);
     func_8012C2DC(globalCtx->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                                   this->skelAnime.dListCount, NULL, NULL, func_80A1859C, &this->dyna.actor);
+                                   this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
     if (this->unk_3C6 == 4) {
-        func_80A18DA0(this, globalCtx);
+        EnRaf_DrawParticles(this, globalCtx);
     }
 }
 
-void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5) {
+void EnRaf_InitializeParticle(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5) {
     s16 i;
     EnRafParticle* particle = this->particles;
 
@@ -806,7 +805,7 @@ void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4,
     }
 }
 
-void func_80A18B8C(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_UpdateParticles(EnRaf* this, GlobalContext* globalCtx) {
     s32 i;
     EnRafParticle* particle = this->particles;
 
@@ -844,7 +843,7 @@ void func_80A18B8C(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_DrawParticles(EnRaf* this, GlobalContext* globalCtx) {
     s16 i;
     EnRafParticle* particle = this->particles;
     GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;

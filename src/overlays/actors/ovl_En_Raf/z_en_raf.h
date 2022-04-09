@@ -4,9 +4,9 @@
 #include "global.h"
 #include "objects/object_raf/object_raf.h"
 
-#define EN_RAF_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define EN_RAF_GET_1F(thisx) (((thisx)->params >> 7) & 0x1F)
 #define EN_RAF_GET_F(thisx) (((thisx)->params >> 12) & 0xF)
+#define EN_RAF_GET_1F(thisx) (((thisx)->params >> 7) & 0x1F)
+#define EN_RAF_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 struct EnRaf;
 
@@ -33,7 +33,7 @@ typedef struct EnRaf {
     /* 0x354 */ Vec3s unk_354[12];
     /* 0x39C */ s16 unk_39C;
     /* 0x39E */ u8 unk_39E;
-    /* 0x3A0 */ f32 unk_3A0;
+    /* 0x3A0 */ f32 endFrame;
     /* 0x3A4 */ f32 unk_3A4;
     /* 0x3A8 */ f32 unk_3A8;
     /* 0x3AC */ f32 unk_3AC;
@@ -44,7 +44,7 @@ typedef struct EnRaf {
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
     /* 0x3BE */ s16 unk_3BE;
-    /* 0x3C0 */ s16 unk_3C0;
+    /* 0x3C0 */ s16 switchFlag;
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
