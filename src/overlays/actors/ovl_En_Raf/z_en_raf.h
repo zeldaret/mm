@@ -2,6 +2,7 @@
 #define Z_EN_RAF_H
 
 #include "global.h"
+#include "objects/object_raf/object_raf.h"
 
 #define EN_RAF_GET_7F(thisx) ((thisx)->params & 0x7F)
 #define EN_RAF_GET_1F(thisx) (((thisx)->params >> 7) & 0x1F)
@@ -24,15 +25,14 @@ typedef struct {
 typedef struct EnRaf {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ SkelAnime skelAnime;
-    /* 0x1A0 */ Vec3s jointTable[12];
-    /* 0x1E8 */ Vec3s morphTable[12];
+    /* 0x1A0 */ Vec3s jointTable[OBJECT_RAF_LIMB_MAX];
+    /* 0x1E8 */ Vec3s morphTable[OBJECT_RAF_LIMB_MAX];
     /* 0x230 */ EnRafActionFunc actionFunc;
     /* 0x234 */ Vec3f unk_234[12];
     /* 0x2C4 */ Vec3f unk_2C4[12];
     /* 0x354 */ Vec3s unk_354[12];
     /* 0x39C */ s16 unk_39C;
     /* 0x39E */ u8 unk_39E;
-    /* 0x39E */ char unk_39F[0x1];
     /* 0x3A0 */ f32 unk_3A0;
     /* 0x3A4 */ f32 unk_3A4;
     /* 0x3A8 */ f32 unk_3A8;

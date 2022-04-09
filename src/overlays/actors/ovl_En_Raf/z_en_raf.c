@@ -91,7 +91,7 @@ static DamageTable D_80A1939C = {
 };
 
 static AnimationHeader* D_80A193C8[] = {
-    &D_06000A64, &D_06000C7C, &D_06000B30, &D_06000A64, &D_060003FC, &D_060007A8
+    &object_raf_Anim_000A64, &object_raf_Anim_000C7C, &object_raf_Anim_000B30, &object_raf_Anim_000A64, &object_raf_Anim_0003FC, &object_raf_Anim_0007A8
 };
 static u8 D_80A193E0[] = {
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE
@@ -119,17 +119,6 @@ extern u8 D_80A18F4C[];
 extern u8 D_80A18F8C[];
 extern u8 D_80A1918C[];
 
-extern AnimationHeader D_06000A64;
-extern FlexSkeletonHeader D_06003428;
-extern CollisionHeader D_06000108;
-extern AnimationHeader D_06000C7C;
-extern AnimationHeader D_06000B30;
-extern AnimationHeader D_060003FC;
-extern AnimationHeader D_060007A8;
-extern Gfx D_060024E0[];
-extern TexturePtr D_06002EF8;
-extern TexturePtr D_060032F8;
-
 void func_80A16D40(u16* texture, u8* arg1, s32 arg2) {
     if ((arg2 < 0x40) && (arg1[arg2] != 0)) {
         texture[arg2] = 0;
@@ -150,12 +139,13 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    CollisionHeader_GetVirtual(&D_06000108, &colHeader);
+    CollisionHeader_GetVirtual(&object_raf_Colheader_000108, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &D_80A18EE0);
     this->dyna.actor.targetMode = 3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &D_06003428, &D_06000A64, this->jointTable, this->morphTable, 12);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_raf_Skel_003428, &object_raf_Anim_000A64, this->jointTable,
+                       this->morphTable, OBJECT_RAF_LIMB_MAX);
     for (i = 0; i < 12; i++) {
         Math_Vec3f_Copy(&this->unk_2C4[i], &sp60);
         Math_Vec3f_Copy(&this->unk_234[i], &sp60);
@@ -498,8 +488,8 @@ void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx) {
         this->unk_3B6++;
         if (this->unk_3B6 < (BREG(3) + 105)) {
             for (i = 0; i < (BREG(4) + 5); i++) {
-                func_80A16D6C(Lib_SegmentedToVirtual(&D_06002EF8), D_80A18F8C, this->unk_3C8);
-                func_80A16D40(Lib_SegmentedToVirtual(&D_060032F8), D_80A18F0C, this->unk_3CA);
+                func_80A16D6C(Lib_SegmentedToVirtual(&object_raf_Tex_002EF8), D_80A18F8C, this->unk_3C8);
+                func_80A16D40(Lib_SegmentedToVirtual(&object_raf_Tex_0032F8), D_80A18F0C, this->unk_3CA);
                 if (this->unk_3C8 < 0x200) {
                     this->unk_3C8++;
                 }
@@ -513,8 +503,8 @@ void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx) {
 
     if (this->unk_3B6 > (BREG(5) + 50)) {
         for (i = 0; i < (BREG(6) + 5); i++) {
-            func_80A16D6C(Lib_SegmentedToVirtual(&D_06002EF8), D_80A1918C, this->unk_3CC);
-            func_80A16D40(Lib_SegmentedToVirtual(&D_060032F8), D_80A18F4C, this->unk_3CE);
+            func_80A16D6C(Lib_SegmentedToVirtual(&object_raf_Tex_002EF8), D_80A1918C, this->unk_3CC);
+            func_80A16D40(Lib_SegmentedToVirtual(&object_raf_Tex_0032F8), D_80A18F4C, this->unk_3CE);
             if (this->unk_3CC < 0x200) {
                 this->unk_3CC++;
             }
@@ -800,7 +790,7 @@ void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx) {
             Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, D_060024E0);
+            gSPDisplayList(POLY_OPA_DISP++, object_raf_DL_0024E0);
         }
     }
 
