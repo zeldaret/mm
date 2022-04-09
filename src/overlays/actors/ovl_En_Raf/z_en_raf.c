@@ -106,6 +106,12 @@ extern Vec3f D_80A1940C;
 extern Vec3f D_80A193E8;
 extern Vec3f D_80A193F4;
 extern Vec3f D_80A19400;
+extern s16 D_80A19418[];
+extern Vec3f D_80A19420[];
+extern Vec3f D_80A19444[];
+extern s16 D_80A19468[];
+extern Vec3f D_80A19474[];
+extern Vec3f D_80A194B0[];
 
 extern AnimationHeader D_06000A64;
 extern FlexSkeletonHeader D_06003428;
@@ -488,8 +494,69 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Update.s")
 
-void func_80A1859C(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A1859C.s")
+void func_80A1859C(GlobalContext* globalCtx2, s32 limbIndex, Actor* thisx) {
+    GlobalContext* globalCtx = globalCtx2;
+    EnRaf* this = THIS;
+    s32 i;
+
+    switch (this->unk_3C2) {
+        case 1:
+            if ((limbIndex == 3) || (limbIndex == 9) || (limbIndex == 6)) {
+                for (i = 0; i < 3; i++) {
+                    if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
+                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19420[i]);
+                    }
+                }
+            }
+
+            if ((limbIndex == 4) || (limbIndex == 10) || (limbIndex == 7)) {
+                for (i = 0; i < 3; i++) {
+                    if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
+                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19444[i]);
+                    }
+                }
+            }
+            break;
+
+        case 2:
+            if ((limbIndex == 3) || (limbIndex == 9) || (limbIndex == 6)) {
+                Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19420[2]);
+            } else if ((limbIndex == 4) || (limbIndex == 10) || (limbIndex == 7)) {
+                Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19444[2]);
+            }
+
+            if ((limbIndex > 1) && (limbIndex < 11)) {
+                Matrix_RotateY((this->unk_354[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_InsertXRotation_s((this->unk_354[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_InsertZRotation_s((this->unk_354[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_Scale(this->unk_3A4 + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+                Matrix_InsertZRotation_s(-(this->unk_354[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_InsertXRotation_s(-(this->unk_354[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateY(-(this->unk_354[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
+            }
+            break;
+
+        case 3:
+            if ((limbIndex == 3) || (limbIndex == 9) || (limbIndex == 6)) {
+                for (i = 0; i < 5; i++) {
+                    if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
+                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19474[i]);
+                    }
+                }
+            }
+
+            if ((limbIndex == 4) || (limbIndex == 0xA) || (limbIndex == 7)) {
+                for (i = 0; i < 4; i++) {
+                    if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
+                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A194B0[i]);
+                    }
+                }
+            }
+            break;
+    }
+
+    Matrix_Scale(this->unk_234[limbIndex].x, this->unk_234[limbIndex].y, this->unk_234[limbIndex].z, MTXMODE_APPLY);
+}
 
 void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnRaf* this = THIS;
