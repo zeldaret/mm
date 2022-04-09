@@ -104,6 +104,8 @@ extern AnimationHeader* D_80A193C8[];
 extern u8 D_80A193E0[];
 extern Vec3f D_80A1940C;
 extern Vec3f D_80A193E8;
+extern Vec3f D_80A193F4;
+extern Vec3f D_80A19400;
 
 extern AnimationHeader D_06000A64;
 extern FlexSkeletonHeader D_06003428;
@@ -382,9 +384,61 @@ void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A179C8.s")
+void func_80A179C8(EnRaf* this, GlobalContext* globalCtx) {
+    Vec3f spAC = D_80A193F4;
+    Vec3f spA0 = D_80A19400;
+    Vec3f sp94;
+    s32 i;
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17C6C.s")
+    this->unk_3C6 = 4;
+    Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
+    sp94.y += 10.0f;
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp94.x, sp94.y, sp94.z, 0, 0, 0,
+                CLEAR_TAG_SMALL_EXPLOSION);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
+    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
+    if (this->unk_3C0 >= 0) {
+        Flags_SetSwitch(globalCtx, this->unk_3C0);
+    }
+
+    this->unk_3C2 = 0;
+    for (i = 0; i < BREG(57) + 30; i++) {
+        spA0.x = (Rand_ZeroOne() - 0.5f) * 0.5f;
+        spA0.y = -0.3f;
+        spA0.z = (Rand_ZeroOne() - 0.5f) * 0.5f;
+        spAC.x = Rand_ZeroOne() - 0.5f;
+        spAC.y = Rand_ZeroOne() * 10.0f;
+        spAC.z = Rand_ZeroOne() - 0.5f;
+        func_80A18A90(this, &this->dyna.actor.world.pos, &spAC, &spA0, (Rand_ZeroFloat(1.0f) / 500.0f) + 0.002f, 90);
+    }
+
+    for (i = 2; i < 11; i++) {
+        Math_Vec3f_Copy(&this->unk_2C4[i], &gZeroVec3f);
+    }
+
+    this->unk_3B4 = 5;
+    if (this->unk_39C == 1) {
+        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->dyna.actor, 5);
+        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+    }
+
+    this->actionFunc = func_80A17C6C;
+}
+
+void func_80A17C6C(EnRaf* this, GlobalContext* globalCtx) {
+    if (this->unk_3B4 == 0) {
+        this->collider.dim.radius = 50;
+        this->collider.dim.height = 10;
+        func_800BC154(globalCtx, &globalCtx->actorCtx, &this->dyna.actor, 6);
+        this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        func_80A18080(this);
+    } else if (this->unk_39C == 1) {
+        this->collider.dim.radius = 80;
+        this->collider.dim.height = 50;
+        CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17D14.s")
 
