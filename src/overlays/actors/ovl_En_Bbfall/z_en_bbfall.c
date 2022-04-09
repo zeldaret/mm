@@ -207,6 +207,9 @@ void EnBbfall_Thaw(EnBbfall* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Returns true if the Bubble is touching a floor that it should "sink into" (i.e., if it's touching lava).
+ */
 s32 EnBbfall_IsTouchingLava(EnBbfall* this, GlobalContext* globalCtx) {
     if (!SurfaceType_IsWallDamage(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
         u32 floorType = func_800C99D4(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId);
