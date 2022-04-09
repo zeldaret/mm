@@ -1,7 +1,7 @@
 /*
  * File: z_en_raf.c
  * Overlay: ovl_En_Raf
- * Description: Carnivorous Lilypad
+ * Description: Carnivorous Lily Pad
  */
 
 #include "z_en_raf.h"
@@ -33,6 +33,15 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_InitializeParticle(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void EnRaf_UpdateParticles(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_DrawParticles(EnRaf* this, GlobalContext* globalCtx);
+
+typedef enum {
+    /* 0 */ EN_RAF_ANIMATION_IDLE,
+    /* 1 */ EN_RAF_ANIMATION_CLOSE,
+    /* 2 */ EN_RAF_ANIMATION_CHEW,
+    /* 3 */ EN_RAF_ANIMATION_SPIT,
+    /* 4 */ EN_RAF_ANIMATION_CONVULSE,
+    /* 5 */ EN_RAF_ANIMATION_DEATH
+} EnRafAnimationIndex;
 
 const ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
@@ -148,8 +157,8 @@ static DamageTable sDamageTable = {
 static Vec3f D_80A193BC = { 1.0f, 1.0f, 1.0f };
 
 static AnimationHeader* sAnimations[] = {
-    &object_raf_Anim_000A64, &object_raf_Anim_000C7C, &object_raf_Anim_000B30,
-    &object_raf_Anim_000A64, &object_raf_Anim_0003FC, &object_raf_Anim_0007A8,
+    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
+    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
 };
 
 static u8 sAnimationModes[] = {
@@ -213,8 +222,8 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.targetMode = 3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_raf_Skel_003428, &object_raf_Anim_000A64, this->jointTable,
-                       this->morphTable, OBJECT_RAF_LIMB_MAX);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim,
+                       this->jointTable, this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
     for (i = 0; i < 12; i++) {
         Math_Vec3f_Copy(&this->unk_2C4[i], &sp60);
         Math_Vec3f_Copy(&this->unk_234[i], &sp60);
@@ -262,9 +271,9 @@ void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
     f32 playSpeed = 1.0f;
 
     this->endFrame = Animation_GetLastFrame(sAnimations[index]);
-    if (index == 0) {
+    if (index == EN_RAF_ANIMATION_IDLE) {
         startFrame = this->endFrame;
-    } else if (index == 1) {
+    } else if (index == EN_RAF_ANIMATION_CLOSE) {
         playSpeed = 2.0f;
     }
 
@@ -276,7 +285,7 @@ void func_80A1712C(EnRaf* this) {
     Vec3f sp3C = D_80A193E8;
     s32 i;
 
-    EnRaf_ChangeAnimation(this, 0);
+    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_IDLE);
     for (i = 2; i < 11; i++) {
         Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
     }
@@ -343,7 +352,7 @@ void func_80A171D8(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A17414(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, 1);
+    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CLOSE);
     this->unk_3C2 = 1;
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
     this->unk_3C6 = 1;
@@ -368,7 +377,7 @@ void func_80A17464(EnRaf* this, GlobalContext* globalCtx) {
 void func_80A17530(EnRaf* this) {
     s32 i;
 
-    EnRaf_ChangeAnimation(this, 2);
+    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CHEW);
     this->unk_3C4 = 0;
     for (i = 0; i < 12; i++) {
         this->unk_354[i].x = Rand_S16Offset(8, 8) << 8;
@@ -436,7 +445,7 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
 void func_80A17848(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    EnRaf_ChangeAnimation(this, 3);
+    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
     player->actor.freezeTimer = 10;
     this->unk_3C2 = 3;
     this->unk_3C6 = 3;
@@ -522,7 +531,7 @@ void func_80A17C6C(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A17D14(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, 4);
+    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CONVULSE);
     this->unk_3C4 = 0;
     this->unk_3C6 = 5;
     this->actionFunc = func_80A17D54;
@@ -544,7 +553,7 @@ void func_80A17D54(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void func_80A17DDC(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, 5);
+    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_DEATH);
     this->unk_3C6 = 6;
     this->unk_3B6 = 0;
     this->actionFunc = func_80A17E1C;
@@ -619,7 +628,7 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx) {
         }
 
         if (this->unk_3BA == 0) {
-            EnRaf_ChangeAnimation(this, 3);
+            EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
             for (i = 2; i < 11; i++) {
                 Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
             }
@@ -716,7 +725,9 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
 
     switch (this->unk_3C2) {
         case 1:
-            if ((limbIndex == 3) || (limbIndex == 9) || (limbIndex == 6)) {
+            if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < 3; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
                         Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19420[i]);
@@ -724,7 +735,9 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 }
             }
 
-            if ((limbIndex == 4) || (limbIndex == 10) || (limbIndex == 7)) {
+            if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_UPPER_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 3; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
                         Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19444[i]);
@@ -734,13 +747,17 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             break;
 
         case 2:
-            if ((limbIndex == 3) || (limbIndex == 9) || (limbIndex == 6)) {
+            if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19420[2]);
-            } else if ((limbIndex == 4) || (limbIndex == 10) || (limbIndex == 7)) {
+            } else if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_UPPER_SEGMENT) ||
+                       (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
+                       (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19444[2]);
             }
 
-            if ((limbIndex > 1) && (limbIndex < 11)) {
+            if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
                 Matrix_RotateY((this->unk_354[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
                 Matrix_InsertXRotation_s((this->unk_354[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
                 Matrix_InsertZRotation_s((this->unk_354[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
@@ -752,7 +769,9 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             break;
 
         case 3:
-            if ((limbIndex == 3) || (limbIndex == 9) || (limbIndex == 6)) {
+            if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < 5; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
                         Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19474[i]);
@@ -760,7 +779,9 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 }
             }
 
-            if ((limbIndex == 4) || (limbIndex == 0xA) || (limbIndex == 7)) {
+            if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_UPPER_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
+                (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 4; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
                         Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A194B0[i]);

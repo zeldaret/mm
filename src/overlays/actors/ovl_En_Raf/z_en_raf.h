@@ -25,12 +25,12 @@ typedef struct {
 typedef struct EnRaf {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ SkelAnime skelAnime;
-    /* 0x1A0 */ Vec3s jointTable[OBJECT_RAF_LIMB_MAX];
-    /* 0x1E8 */ Vec3s morphTable[OBJECT_RAF_LIMB_MAX];
+    /* 0x1A0 */ Vec3s jointTable[CARNIVOROUS_LILY_PAD_LIMB_MAX];
+    /* 0x1E8 */ Vec3s morphTable[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x230 */ EnRafActionFunc actionFunc;
-    /* 0x234 */ Vec3f unk_234[12];
-    /* 0x2C4 */ Vec3f unk_2C4[12];
-    /* 0x354 */ Vec3s unk_354[12];
+    /* 0x234 */ Vec3f unk_234[CARNIVOROUS_LILY_PAD_LIMB_MAX];
+    /* 0x2C4 */ Vec3f unk_2C4[CARNIVOROUS_LILY_PAD_LIMB_MAX];
+    /* 0x354 */ Vec3s unk_354[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x39C */ s16 unk_39C;
     /* 0x39E */ u8 unk_39E;
     /* 0x3A0 */ f32 endFrame;
