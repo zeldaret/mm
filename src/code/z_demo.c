@@ -22,7 +22,7 @@ u8 sCutsceneStoredPlayerForm = 0;
 static u16 seqId;
 #endif
 s16 sCutsceneQuakeIndex;
-struct_801F4D48 sCutsceneCameraInfo;
+DbCameraUnkStruct sCutsceneCameraInfo;
 u16 D_801F4DC8[10];
 UNK_TYPE D_801F4DDC;
 u8 D_801F4DE0;
