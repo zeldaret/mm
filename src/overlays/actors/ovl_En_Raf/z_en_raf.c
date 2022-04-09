@@ -32,6 +32,7 @@ void func_80A17848(EnRaf* this, GlobalContext* globalCtx);
 void func_80A179C8(EnRaf* this, GlobalContext* globalCtx);
 void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
 void func_80A18B8C(EnRaf* this, GlobalContext* globalCtx);
+void func_80A17DDC(EnRaf* this);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -122,11 +123,20 @@ extern AnimationHeader D_06000B30;
 extern AnimationHeader D_060003FC;
 extern AnimationHeader D_060007A8;
 extern Gfx D_060024E0[];
-extern UNK_TYPE D_060032F8;
+extern TexturePtr D_06002EF8;
+extern TexturePtr D_060032F8;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A16D40.s")
+void func_80A16D40(u16* texture, u8* arg1, s32 arg2) {
+    if ((arg2 < 0x40) && (arg1[arg2] != 0)) {
+        texture[arg2] = 0;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A16D6C.s")
+void func_80A16D6C(u16* texture, u8* arg1, s32 arg2) {
+    if (arg1[arg2] != 0) {
+        texture[arg2] = 0;
+    }
+}
 
 void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRaf* this = THIS;
@@ -454,9 +464,27 @@ void func_80A17D14(EnRaf* this) {
     this->actionFunc = func_80A17D54;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17D54.s")
+void func_80A17D54(EnRaf* this, GlobalContext* globalCtx) {
+    f32 curFrame = this->skelAnime.curFrame;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17DDC.s")
+    if (this->unk_3A0 <= curFrame) {
+        this->unk_3C4++;
+        if ((BREG(2) + 2) < this->unk_3C4) {
+            if (this->unk_3C0 >= 0) {
+                Flags_SetSwitch(globalCtx, this->unk_3C0);
+            }
+
+            func_80A17DDC(this);
+        }
+    }
+}
+
+void func_80A17DDC(EnRaf* this) {
+    func_80A17060(this, 5);
+    this->unk_3C6 = 6;
+    this->unk_3B6 = 0;
+    this->actionFunc = func_80A17E1C;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17E1C.s")
 

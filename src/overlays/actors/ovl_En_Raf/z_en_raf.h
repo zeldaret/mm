@@ -39,7 +39,7 @@ typedef struct EnRaf {
     /* 0x3AC */ f32 unk_3AC;
     /* 0x3B0 */ f32 unk_3B0;
     /* 0x3B4 */ s16 unk_3B4;
-    /* 0x3B6 */ char unk_3B6[0x2];
+    /* 0x3B6 */ s16 unk_3B6;
     /* 0x3B8 */ s16 unk_3B8;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
@@ -48,7 +48,10 @@ typedef struct EnRaf {
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
-    /* 0x3C8 */ char unk_3C8[0x8];
+    /* 0x3C8 */ s16 unk_3C8;
+    /* 0x3CA */ s16 unk_3CA;
+    /* 0x3CC */ s16 unk_3CC;
+    /* 0x3CE */ s16 unk_3CE;
     /* 0x3D0 */ ColliderCylinder collider;
     /* 0x41C */ EnRafParticle particles[31];
 } EnRaf; // size = 0xAE4
