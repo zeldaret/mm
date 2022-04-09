@@ -68,12 +68,12 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
     sCurrentPythonIndex++;
 
     if (!(gSaveContext.save.weekEventReg[13] & 1)) {
-        this->deepPythonChild =
+        this->deepPython =
             Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EN_DRAGON, pos.x, pos.y, pos.z,
                                0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
 
-        if (this->deepPythonChild != NULL) {
-            EnDragon* dragon = (EnDragon*)this->deepPythonChild;
+        if (this->deepPython != NULL) {
+            EnDragon* dragon = (EnDragon*)this->deepPython;
 
             dragon->grabCutsceneIndex = this->cutscenes[0];
             dragon->deathCutsceneIndex = this->cutscenes[1];
@@ -120,9 +120,9 @@ void BgSinkaiKabe_Destroy(Actor* thisx, GlobalContext* globalCtx) {
  * Extends this actor's Deep Python if the player gets close enough.
  */
 void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, GlobalContext* globalCtx) {
-    if (this->deepPythonChild != NULL) {
-        if (this->deepPythonChild->update != NULL) {
-            EnDragon* dragon = (EnDragon*)this->deepPythonChild;
+    if (this->deepPython != NULL) {
+        if (this->deepPython->update != NULL) {
+            EnDragon* dragon = (EnDragon*)this->deepPython;
 
             if (dragon->action == DEEP_PYTHON_ACTION_IDLE) {
                 Player* player = GET_PLAYER(globalCtx);
@@ -136,11 +136,11 @@ void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, GlobalContext* globalCtx) {
                 }
             }
         } else {
-            this->deepPythonChild = NULL;
+            this->deepPython = NULL;
         }
     }
 
-    if (this->deepPythonChild == NULL) {
+    if (this->deepPython == NULL) {
         Actor_MarkForDeath(&this->dyna.actor);
     }
 }

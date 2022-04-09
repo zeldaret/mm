@@ -11,7 +11,7 @@ typedef void (*BgSinkaiKabeActionFunc)(struct BgSinkaiKabe*, GlobalContext*);
 typedef struct BgSinkaiKabe {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgSinkaiKabeActionFunc actionFunc;
-    /* 0x160 */ Actor* deepPythonChild;
+    /* 0x160 */ Actor* deepPython;
     /* 0x164 */ s16 cutscenes[2];
     /* 0x168 */ UNK_TYPE1 unk_168[0x4];
     /* 0x16C */ s32 pythonIndex;
