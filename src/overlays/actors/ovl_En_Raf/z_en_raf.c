@@ -114,6 +114,10 @@ extern Vec3f D_80A19444[];
 extern s16 D_80A19468[];
 extern Vec3f D_80A19474[];
 extern Vec3f D_80A194B0[];
+extern u8 D_80A18F0C[];
+extern u8 D_80A18F4C[];
+extern u8 D_80A18F8C[];
+extern u8 D_80A1918C[];
 
 extern AnimationHeader D_06000A64;
 extern FlexSkeletonHeader D_06003428;
@@ -486,7 +490,50 @@ void func_80A17DDC(EnRaf* this) {
     this->actionFunc = func_80A17E1C;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17E1C.s")
+void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx) {
+    f32 curFrame = this->skelAnime.curFrame;
+    s32 i;
+
+    if (this->unk_3A0 <= curFrame) {
+        this->unk_3B6++;
+        if (this->unk_3B6 < (BREG(3) + 105)) {
+            for (i = 0; i < (BREG(4) + 5); i++) {
+                func_80A16D6C(Lib_SegmentedToVirtual(&D_06002EF8), D_80A18F8C, this->unk_3C8);
+                func_80A16D40(Lib_SegmentedToVirtual(&D_060032F8), D_80A18F0C, this->unk_3CA);
+                if (this->unk_3C8 < 0x200) {
+                    this->unk_3C8++;
+                }
+
+                if (this->unk_3CA < 0x40) {
+                    this->unk_3CA++;
+                }
+            }
+        }
+    }
+
+    if (this->unk_3B6 > (BREG(5) + 50)) {
+        for (i = 0; i < (BREG(6) + 5); i++) {
+            func_80A16D6C(Lib_SegmentedToVirtual(&D_06002EF8), D_80A1918C, this->unk_3CC);
+            func_80A16D40(Lib_SegmentedToVirtual(&D_060032F8), D_80A18F4C, this->unk_3CE);
+            if (this->unk_3CC < 0x200) {
+                this->unk_3CC++;
+            }
+
+            if (this->unk_3CE < 0x40) {
+                this->unk_3CE++;
+            }
+        }
+    }
+
+    if (this->unk_3B6 > (BREG(7) + 160)) {
+        for (i = 2; i < 11; i++) {
+            Math_Vec3f_Copy(&this->unk_234[i], &gZeroVec3f);
+            Math_Vec3f_Copy(&this->unk_2C4[i], &gZeroVec3f);
+        }
+
+        func_80A18080(this);
+    }
+}
 
 void func_80A18080(EnRaf* this) {
     if (this->unk_3C6 == 4) {
