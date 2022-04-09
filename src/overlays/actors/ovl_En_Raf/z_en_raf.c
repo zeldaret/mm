@@ -31,6 +31,7 @@ void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx);
 void func_80A17848(EnRaf* this, GlobalContext* globalCtx);
 void func_80A179C8(EnRaf* this, GlobalContext* globalCtx);
 void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
+void func_80A18B8C(EnRaf* this, GlobalContext* globalCtx);
 
 #if 0
 const ActorInit En_Raf_InitVars = {
@@ -446,7 +447,12 @@ void func_80A17C6C(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17D14.s")
+void func_80A17D14(EnRaf* this) {
+    func_80A17060(this, 4);
+    this->unk_3C4 = 0;
+    this->unk_3C6 = 5;
+    this->actionFunc = func_80A17D54;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A17D54.s")
 
@@ -492,7 +498,81 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/EnRaf_Update.s")
+void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
+    s32 pad;
+    EnRaf* this = THIS;
+    WaterBox* waterBox;
+    f32 ySurface;
+    Vec3f ripplePos;
+    s32 i;
+
+    SkelAnime_Update(&this->skelAnime);
+    DECR(this->unk_3B8);
+    DECR(this->unk_3B4);
+    this->actionFunc(this, globalCtx);
+
+    if ((this->unk_3C6 == 0) && (gSaveContext.save.weekEventReg[12] & 1)) {
+        this->unk_3C2 = 0;
+        func_80A17D14(this);
+        return;
+    }
+
+    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if ((this->unk_3AC > -0.1f) && (this->unk_39E == 0)) {
+            this->unk_3AC = -20.0f;
+            this->unk_39E = 1;
+            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
+        }
+    } else {
+        this->unk_39E = 0;
+    }
+
+    this->unk_3B0 += 3000.0f;
+    this->unk_3A8 = 2.0f * Math_SinS(this->unk_3B0);
+    if (this->unk_3BE != 2) {
+        ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
+        if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
+                                 this->dyna.actor.world.pos.z, &ySurface, &waterBox)) {
+            ySurface -= this->unk_3A8 + BREG(59);
+            Math_ApproachF(&this->dyna.actor.world.pos.y, this->unk_3AC + ySurface, 0.5f, 40.0f);
+            if (this->unk_3B8 == 0) {
+                this->unk_3B8 = 0x1E;
+                if (this->unk_3C2 == 2) {
+                    this->unk_3B8 = 0xA;
+                }
+
+                Math_Vec3f_Copy(&ripplePos, &this->dyna.actor.world.pos);
+                ripplePos.y = ySurface;
+                EffectSsGRipple_Spawn(globalCtx, &ripplePos, 650, 3150, 0);
+            }
+        }
+    } else {
+        Math_ApproachF(&this->dyna.actor.world.pos.y, (this->dyna.actor.home.pos.y + this->unk_3AC) - this->unk_3A8,
+                       0.5f, 40.0f);
+    }
+
+    Math_ApproachZeroF(&this->unk_3AC, 0.3f, 2.0f);
+    if (this->unk_3C6 == 4) {
+        func_80A18B8C(this, globalCtx);
+    }
+
+    for (i = 0; i < 12; i++) {
+        if (this->unk_3C6 < 4) {
+            Math_ApproachF(&this->unk_234[i].x, this->unk_2C4[i].x, 0.4f, 0.5f);
+            Math_ApproachF(&this->unk_234[i].y, this->unk_2C4[i].y, 0.4f, 0.5f);
+            Math_ApproachF(&this->unk_234[i].z, this->unk_2C4[i].z, 0.4f, 0.5f);
+        } else {
+            Math_ApproachF(&this->unk_234[i].x, this->unk_2C4[i].x, 1.0f, 1.0f);
+            Math_ApproachF(&this->unk_234[i].y, this->unk_2C4[i].y, 1.0f, 1.0f);
+            Math_ApproachF(&this->unk_234[i].z, this->unk_2C4[i].z, 1.0f, 1.0f);
+        }
+    }
+
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    if (this->unk_3C6 < 4) {
+        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+    }
+}
 
 void func_80A1859C(GlobalContext* globalCtx2, s32 limbIndex, Actor* thisx) {
     GlobalContext* globalCtx = globalCtx2;
