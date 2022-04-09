@@ -1,9 +1,11 @@
-# Build options can either be changed by modifying the makefile, by building with 'make SETTING=value', 
-# or setting them in a file called .make_options as `SETTING=value
+# Build options can be changed by modifying the makefile or by building with 'make SETTING=value'.
+# It is also possible to override the settings in Defaults in a file called .make_options as `SETTING=value.
 
 -include .make_options
 
 MAKEFLAGS += --no-builtin-rules
+
+#### Defaults ####
 
 # If COMPARE is 1, check the output md5sum after building
 COMPARE ?= 1
@@ -23,6 +25,8 @@ RUN_CC_CHECK ?= 1
 OBJDUMP_BUILD ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
+
+#### Setup ####
 
 ifeq ($(NON_MATCHING),1)
   CFLAGS := -DNON_MATCHING
@@ -118,7 +122,7 @@ MIPS_VERSION := -mips2
 CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712
 
 # Use relocations and abi fpr names in the dump
-OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
+OBJDUMP_FLAGS := --disassemble --reloc --disassemble-zeroes -Mreg-names=32
 
 ifneq ($(OBJDUMP_BUILD), 0)
   OBJDUMP_CMD = $(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
