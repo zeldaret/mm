@@ -13,7 +13,7 @@
  */
 typedef enum {
     /* 0 */ RACEDOG_RACE_STATUS_BEFORE_POINT_9,
-    /* 1 */ RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11,
+    /* 1 */ RACEDOG_RACE_STATUS_BETWEEN_POINTS_9_AND_11,
     /* 2 */ RACEDOG_RACE_STATUS_AFTER_POINT_11,
     /* 3 */ RACEDOG_RACE_STATUS_FINISHED
 } RacedogRaceStatus;
@@ -43,8 +43,8 @@ typedef struct EnRacedog {
     /* 0x294 */ UNK_TYPE1 unk_294[0x4];
     /* 0x298 */ f32 targetSpeed;
     /* 0x29C */ s16 raceStatus;
-    /* 0x2A0 */ Vec3f previousRotation;
-    /* 0x2AC */ Vec3f currentRotation;
+    /* 0x2A0 */ Vec3f prevRot;
+    /* 0x2AC */ Vec3f curRot;
     /* 0x2B8 */ s32 pointForCurrentTargetSpeed;
     /* 0x2BC */ s32 selectionArrowGreenPrimColor;
     /* 0x2C0 */ s32 selectionArrowGreenEnvColor;

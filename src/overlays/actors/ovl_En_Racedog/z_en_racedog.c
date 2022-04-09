@@ -255,27 +255,27 @@ void EnRacedog_UpdateCollision(EnRacedog* this, GlobalContext* globalCtx) {
  */
 s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) {
     Vec3s* point;
-    f32 xDiffWithRandomDeviation;
-    f32 zDiffWithRandomVariation;
+    f32 xDiffRand;
+    f32 zDiffRand;
     f32 xDiff;
     f32 zDiff;
 
     if (path != NULL) {
         point = Lib_SegmentedToVirtual(path->points);
         point = &point[pointIndex];
-        xDiffWithRandomDeviation = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
-        zDiffWithRandomVariation = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
+        xDiffRand = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
+        zDiffRand = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
         xDiff = point->x - pos->x;
         zDiff = point->z - pos->z;
     } else {
-        xDiffWithRandomDeviation = 0.0f;
-        zDiffWithRandomVariation = 0.0f;
+        xDiffRand = 0.0f;
+        zDiffRand = 0.0f;
         xDiff = 0.0f;
         zDiff = 0.0f;
     }
 
     *distSQ = SQ(xDiff) + SQ(zDiff);
-    return RADF_TO_BINANG(Math_Acot2F(zDiffWithRandomVariation, xDiffWithRandomDeviation));
+    return RADF_TO_BINANG(Math_Acot2F(zDiffRand, xDiffRand));
 }
 
 void EnRacedog_CalculateFloorTangent(EnRacedog* this, Vec3f* floorTangent) {
@@ -313,9 +313,9 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->selectionArrowGreenPrimColor = 255;
     this->selectionArrowGreenEnvColor = 50;
     this->selectionArrowTimer = 12;
-    this->previousRotation.x = 0.0f;
-    this->previousRotation.y = 0.0f;
-    this->previousRotation.z = 0.0f;
+    this->prevRot.x = 0.0f;
+    this->prevRot.y = 0.0f;
+    this->prevRot.z = 0.0f;
     this->selectionArrowScale = 1.0f;
 
     // The first part of this check is a bit strange. If they intended to check for dogs that were
@@ -541,10 +541,10 @@ void EnRacedog_CalculateFinalStretchTargetSpeed(EnRacedog* this) {
  */
 void EnRacedog_UpdateRaceVariables(EnRacedog* this) {
     if ((this->currentPoint >= 9) && (this->raceStatus == RACEDOG_RACE_STATUS_BEFORE_POINT_9)) {
-        this->raceStatus = RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11;
+        this->raceStatus = RACEDOG_RACE_STATUS_BETWEEN_POINTS_9_AND_11;
     }
 
-    if ((this->currentPoint >= 11) && (this->raceStatus == RACEDOG_RACE_STATUS_BETWEEN_POINT_9_AND_11)) {
+    if ((this->currentPoint >= 11) && (this->raceStatus == RACEDOG_RACE_STATUS_BETWEEN_POINTS_9_AND_11)) {
         this->raceStatus = RACEDOG_RACE_STATUS_AFTER_POINT_11;
     }
 
@@ -669,10 +669,10 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     EnRacedog_UpdateCollision(this, globalCtx);
     EnRacedog_CalculateFloorTangent(this, &floorTangent);
-    Math_ApproachF(&this->currentRotation.x, floorTangent.x, 0.2f, 0.1f);
+    Math_ApproachF(&this->curRot.x, floorTangent.x, 0.2f, 0.1f);
 
-    if (this->previousRotation.x > 0.0f) {
-        if ((this->currentRotation.x < 0.0f) && (this->currentRotation.x > -0.1f)) {
+    if (this->prevRot.x > 0.0f) {
+        if ((this->curRot.x < 0.0f) && (this->curRot.x > -0.1f)) {
             // Moves to the part of the running animation where the dog has four feet
             // on the ground and is about to lift its feet off the ground.
             this->skelAnime.curFrame = 4.0f;
@@ -684,7 +684,7 @@ void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->skelAnime.curFrame = 0.0f;
     }
 
-    this->previousRotation = this->currentRotation;
+    this->prevRot = this->curRot;
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -788,7 +788,7 @@ void EnRacedog_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Matrix_InsertTranslation(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateStateAroundXAxis(this->currentRotation.x);
+    Matrix_RotateStateAroundXAxis(this->curRot.x);
     Matrix_InsertZRotation_s(this->actor.shape.rot.z, MTXMODE_APPLY);
     Matrix_RotateY(this->actor.shape.rot.y, MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
