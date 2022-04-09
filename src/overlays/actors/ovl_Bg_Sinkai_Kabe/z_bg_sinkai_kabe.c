@@ -1,12 +1,14 @@
 /*
  * File: z_bg_sinkai_kabe.c
  * Overlay: ovl_Bg_Sinkai_Kabe
- * Description: Manages the Deep Pythons and Seahorse in Pinnacle Rock
+ * Description: Manages the Deep Pythons in Pinnacle Rock
  *
  * While its name describes one of its responsibilities ("Deep Sea Wall", aka the invisible
  * wall blocking a Deep Python's den before you defeat it), it is also responsible for
  * spawning in the Deep Pythons when the area first loads, as well as signalling to the
- * Deep Python that it should extend its body.
+ * Deep Python that it should extend its body. Furthermore, if the player defeats all
+ * eight Deep Pythons and spawns the second Seahorse, this actor is responsible for spawning
+ * it again if the player leaves and re-enters Pinnacle Rock.
  */
 
 #include "z_bg_sinkai_kabe.h"
@@ -38,10 +40,10 @@ static s32 sCurrentPythonIndex = 0;
 
 void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgSinkaiKabe* this = THIS;
-    Actor* child;
+    s32 pad;
     CollisionHeader* colHeader = NULL;
     Vec3f pos;
-    s32 pad;
+    s32 pad2;
     s32 shouldSpawnSeahorse;
     s32 cs;
     s32 i;
@@ -66,11 +68,11 @@ void BgSinkaiKabe_Init(Actor* thisx, GlobalContext* globalCtx) {
     sCurrentPythonIndex++;
 
     if (!(gSaveContext.save.weekEventReg[13] & 1)) {
-        child = Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EN_DRAGON, pos.x, pos.y,
-                                   pos.z, 0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
-        this->deepPythonChild = child;
+        this->deepPythonChild =
+            Actor_SpawnAsChild(&globalCtx->actorCtx, &this->dyna.actor, globalCtx, ACTOR_EN_DRAGON, pos.x, pos.y, pos.z,
+                               0, this->dyna.actor.world.rot.y, 1, this->dyna.actor.params);
 
-        if (child != NULL) {
+        if (this->deepPythonChild != NULL) {
             EnDragon* dragon = (EnDragon*)this->deepPythonChild;
 
             dragon->grabCutsceneIndex = this->cutscenes[0];
@@ -125,7 +127,7 @@ void BgSinkaiKabe_WaitForPlayer(BgSinkaiKabe* this, GlobalContext* globalCtx) {
             if (dragon->action == DEEP_PYTHON_ACTION_IDLE) {
                 Player* player = GET_PLAYER(globalCtx);
 
-                if (this->dyna.actor.xzDistToPlayer < 500.0f ||
+                if ((this->dyna.actor.xzDistToPlayer < 500.0f) ||
                     ((ABS_ALT(BINANG_SUB(this->dyna.actor.yawTowardsPlayer, this->dyna.actor.world.rot.y)) < 0x2000) &&
                      (this->dyna.actor.xzDistToPlayer < 700.0f))) {
                     if (fabsf(this->dyna.actor.world.pos.y - player->actor.world.pos.y) < 400.0f) {
