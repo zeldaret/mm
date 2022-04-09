@@ -7641,7 +7641,7 @@
     0x80952CC8:("EnHs_Init",),
     0x80952DD0:("EnHs_Destroy",),
     0x80952DFC:("func_80952DFC",),
-    0x80952E50:("func_80952E50",),
+    0x80952E50:("EnHs_UpdateChickPos",),
     0x80952F00:("func_80952F00",),
     0x80952FE0:("func_80952FE0",),
     0x80953098:("func_80953098",),

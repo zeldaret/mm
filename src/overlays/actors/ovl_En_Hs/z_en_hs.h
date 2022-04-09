@@ -12,7 +12,7 @@ typedef void (*EnHsActionFunc)(struct EnHs*, GlobalContext*);
 
 #define HS_TYPE_UNK1 1
 
-// params mystery: Vanilla grog is 0xFE01
+// params mystery: Vanilla Grog is 0xFE01
 //   0xFE00 space is never checked in Grog code
 //   at the same time, type UNK1 is only checked directly with params == 1, no &F
 //   so HS_TYPE_UNK1 is never valid and is unused, as 0xFE00 is still present even if its not doing anything else
@@ -29,8 +29,8 @@ typedef struct EnHs {
     /* 0x0294 */ Vec3s headRot;
     /* 0x029A */ Vec3s unusedRot; // probably not chest, as chest is same limb as lower body
     /* 0x02A0 */ u16 stateFlags;
-    /* 0x02A2 */ s16 stateTimer;
-    /* 0x02A4 */ Vec3f nwcPos[20]; // actual position are even values, odds are read but never set (?)
+    /* 0x02A2 */ s16 stateTimer; // reused for different actionFunc
+    /* 0x02A4 */ Vec3f nwcPos[20]; // actual chick position are even values, odd values seem to be extra values for smoother chain
     /* 0x0394 */ EnHsActionFunc actionFunc;
 } EnHs; // size = 0x398
 
