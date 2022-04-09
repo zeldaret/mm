@@ -121,7 +121,7 @@ extern AnimationHeader D_06000C7C;
 extern AnimationHeader D_06000B30;
 extern AnimationHeader D_060003FC;
 extern AnimationHeader D_060007A8;
-extern UNK_TYPE D_060024E0;
+extern Gfx D_060024E0[];
 extern UNK_TYPE D_060032F8;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A16D40.s")
@@ -651,26 +651,83 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_80A18A90(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5) {
-    EnRafUnkStruct* ptr;
     s16 i;
+    EnRafParticle* particle = this->particles;
 
-    ptr = this->unk_41C;
-    for (i = 0; i < 31; i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            ptr->unk_00 = 1;
-            ptr->unk_04 = *arg1;
-            ptr->unk_10 = *arg2;
-            ptr->unk_1C = *arg3;
-            ptr->unk_30 = arg4;
-            ptr->unk_34 = arg5;
-            ptr->unk_28.x = randPlusMinusPoint5Scaled(30000.0f);
-            ptr->unk_28.y = randPlusMinusPoint5Scaled(30000.0f);
-            ptr->unk_28.z = randPlusMinusPoint5Scaled(30000.0f);
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
+        if (!particle->isVisible) {
+            particle->isVisible = true;
+            particle->position = *arg1;
+            particle->velocity = *arg2;
+            particle->acceleration = *arg3;
+            particle->scale = arg4;
+            particle->timer = arg5;
+            particle->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
+            particle->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
+            particle->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
             return;
         }
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A18B8C.s")
+void func_80A18B8C(EnRaf* this, GlobalContext* globalCtx) {
+    s32 i;
+    EnRafParticle* particle = this->particles;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Raf/func_80A18DA0.s")
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
+        if (particle->isVisible) {
+            particle->position.x += particle->velocity.x;
+            particle->position.y += particle->velocity.y;
+            particle->position.z += particle->velocity.z;
+            particle->rotation.x += 0xBB8;
+            particle->rotation.y += 0xBB8;
+            particle->rotation.z += 0xBB8;
+            particle->velocity.x += particle->acceleration.x;
+            particle->velocity.y += particle->acceleration.y;
+            particle->velocity.z += particle->acceleration.z;
+
+            if (this->unk_3BE != 2) {
+                if (particle->position.y < (this->dyna.actor.world.pos.y - 10.0f)) {
+                    EffectSsGSplash_Spawn(globalCtx, &particle->position, NULL, NULL, 0, particle->scale * 200000.0f);
+                    SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &particle->position, 50, NA_SE_EV_BOMB_DROP_WATER);
+                    particle->isVisible = false;
+                }
+            } else if (particle->position.y < (this->dyna.actor.world.pos.y - 10.0f)) {
+                Math_ApproachZeroF(&particle->scale, 0.2f, 0.001f);
+                if (particle->scale <= 0.0001f) {
+                    particle->timer = 0;
+                }
+            }
+
+            if (particle->timer != 0) {
+                particle->timer--;
+            } else {
+                particle->isVisible = false;
+            }
+        }
+    }
+}
+
+void func_80A18DA0(EnRaf* this, GlobalContext* globalCtx) {
+    s16 i;
+    EnRafParticle* particle = this->particles;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+
+    OPEN_DISPS(gfxCtx);
+
+    func_8012C28C(globalCtx->state.gfxCtx);
+    for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
+        if (particle->isVisible) {
+            Matrix_InsertTranslation(particle->position.x, particle->position.y, particle->position.z, MTXMODE_NEW);
+            Matrix_Scale(particle->scale, particle->scale, particle->scale, MTXMODE_APPLY);
+            Matrix_InsertXRotation_s(particle->rotation.x, MTXMODE_APPLY);
+            Matrix_RotateY(particle->rotation.y, MTXMODE_APPLY);
+            Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, D_060024E0);
+        }
+    }
+
+    CLOSE_DISPS(gfxCtx);
+}

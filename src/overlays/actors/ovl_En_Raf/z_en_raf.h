@@ -12,15 +12,14 @@ struct EnRaf;
 typedef void (*EnRafActionFunc)(struct EnRaf*, GlobalContext*);
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ Vec3f unk_04;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ Vec3f unk_1C;
-    /* 0x28 */ Vec3s unk_28;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ s16 unk_34;
-    /* 0x36 */ char unk_36[0x2];
-} EnRafUnkStruct; // size = 0x38
+    /* 0x00 */ u8 isVisible;
+    /* 0x04 */ Vec3f position;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3f acceleration;
+    /* 0x28 */ Vec3s rotation;
+    /* 0x30 */ f32 scale;
+    /* 0x34 */ s16 timer;
+} EnRafParticle; // size = 0x38
 
 typedef struct EnRaf {
     /* 0x000 */ DynaPolyActor dyna;
@@ -51,7 +50,7 @@ typedef struct EnRaf {
     /* 0x3C6 */ s16 unk_3C6;
     /* 0x3C8 */ char unk_3C8[0x8];
     /* 0x3D0 */ ColliderCylinder collider;
-    /* 0x41C */ EnRafUnkStruct unk_41C[31];
+    /* 0x41C */ EnRafParticle particles[31];
 } EnRaf; // size = 0xAE4
 
 extern const ActorInit En_Raf_InitVars;
