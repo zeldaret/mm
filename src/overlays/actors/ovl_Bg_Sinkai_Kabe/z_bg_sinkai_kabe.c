@@ -1,7 +1,7 @@
 /*
  * File: z_bg_sinkai_kabe.c
  * Overlay: ovl_Bg_Sinkai_Kabe
- * Description: Large Rotating Green Rupee
+ * Description: Manages the Deep Pythons and Seahorse in Pinnacle Rock
  */
 
 #include "z_bg_sinkai_kabe.h"
