@@ -75,17 +75,17 @@ static ColliderCylinderInit sCylinderInit = {
     { 50, 10, -10, { 0, 0, 0 } },
 };
 
-static u8 D_80A18F0C[] = {
+static u8 sTeethClearPixelTableFirstPass[] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
     1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0,
 };
 
-static u8 D_80A18F4C[] = {
+static u8 sTeethClearPixelTableSecondPass[] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 };
 
-static u8 D_80A18F8C[] = {
+static u8 sPetalClearPixelTableFirstPass[] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1,
@@ -102,7 +102,7 @@ static u8 D_80A18F8C[] = {
     0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1,
 };
 
-static u8 D_80A1918C[] = {
+static u8 sPetalClearPixelTableSecondPass[] = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -197,15 +197,23 @@ static Vec3f D_80A194B0[] = {
     { 1.5f, 1.5f, 1.7f }, { 1.5f, 1.5f, 1.3f }, { 3.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
 };
 
-void func_80A16D40(u16* texture, u8* arg1, s32 arg2) {
-    if ((arg2 < 0x40) && (arg1[arg2] != 0)) {
-        texture[arg2] = 0;
+/**
+ * Sets the `index`th pixel of the trap teeth texture to 0 (transparent black)
+ * according to the `clearPixelTable`
+ */
+void EnRaf_ClearPixelsTeeth(u16* texture, u8* clearPixelTable, s32 index) {
+    if ((index < 0x40) && (clearPixelTable[index] != 0)) {
+        texture[index] = 0;
     }
 }
 
-void func_80A16D6C(u16* texture, u8* arg1, s32 arg2) {
-    if (arg1[arg2] != 0) {
-        texture[arg2] = 0;
+/**
+ * Sets the `index`th pixel of the trap petal texture to 0 (transparent black)
+ * according to the `clearPixelTable`
+ */
+void EnRaf_ClearPixelsPetal(u16* texture, u8* clearPixelTable, s32 index) {
+    if (clearPixelTable[index] != 0) {
+        texture[index] = 0;
     }
 }
 
@@ -225,8 +233,8 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim,
                        this->jointTable, this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
     for (i = 0; i < 12; i++) {
-        Math_Vec3f_Copy(&this->unk_2C4[i], &sp60);
-        Math_Vec3f_Copy(&this->unk_234[i], &sp60);
+        Math_Vec3f_Copy(&this->targetLimbScale[i], &sp60);
+        Math_Vec3f_Copy(&this->limbScale[i], &sp60);
     }
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
@@ -247,8 +255,8 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (((this->switchFlag >= 0) || (this->unk_3BE == 1) || (gSaveContext.save.weekEventReg[12] & 1)) &&
         ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->unk_3BE == 1))) {
         for (j = 2; j < 11; j++) {
-            Math_Vec3f_Copy(&this->unk_234[j], &gZeroVec3f);
-            Math_Vec3f_Copy(&this->unk_2C4[j], &gZeroVec3f);
+            Math_Vec3f_Copy(&this->limbScale[j], &gZeroVec3f);
+            Math_Vec3f_Copy(&this->targetLimbScale[j], &gZeroVec3f);
         }
 
         func_80A18080(this);
@@ -287,7 +295,7 @@ void func_80A1712C(EnRaf* this) {
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_IDLE);
     for (i = 2; i < 11; i++) {
-        Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
+        Math_Vec3f_Copy(&this->targetLimbScale[i], &sp3C);
     }
 
     this->unk_3C2 = 3;
@@ -504,7 +512,7 @@ void func_80A179C8(EnRaf* this, GlobalContext* globalCtx) {
     }
 
     for (i = 2; i < 11; i++) {
-        Math_Vec3f_Copy(&this->unk_2C4[i], &gZeroVec3f);
+        Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
     }
 
     this->unk_3B4 = 5;
@@ -542,7 +550,7 @@ void func_80A17D54(EnRaf* this, GlobalContext* globalCtx) {
 
     if (this->endFrame <= curFrame) {
         this->unk_3C4++;
-        if ((BREG(2) + 2) < this->unk_3C4) {
+        if (this->unk_3C4 > (BREG(2) + 2)) {
             if (this->switchFlag >= 0) {
                 Flags_SetSwitch(globalCtx, this->switchFlag);
             }
@@ -555,7 +563,7 @@ void func_80A17D54(EnRaf* this, GlobalContext* globalCtx) {
 void func_80A17DDC(EnRaf* this) {
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_DEATH);
     this->unk_3C6 = 6;
-    this->unk_3B6 = 0;
+    this->dissolveTimer = 0;
     this->actionFunc = func_80A17E1C;
 }
 
@@ -564,40 +572,44 @@ void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx) {
     s32 i;
 
     if (this->endFrame <= curFrame) {
-        this->unk_3B6++;
-        if (this->unk_3B6 < (BREG(3) + 105)) {
+        this->dissolveTimer++;
+        if (this->dissolveTimer < (BREG(3) + 105)) {
             for (i = 0; i < (BREG(4) + 5); i++) {
-                func_80A16D6C(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex), D_80A18F8C, this->unk_3C8);
-                func_80A16D40(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex), D_80A18F0C, this->unk_3CA);
-                if (this->unk_3C8 < 0x200) {
-                    this->unk_3C8++;
+                EnRaf_ClearPixelsPetal(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex),
+                                       sPetalClearPixelTableFirstPass, this->petalClearPixelFirstPassIndex);
+                EnRaf_ClearPixelsTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
+                                       sTeethClearPixelTableFirstPass, this->teethClearPixelFirstPassIndex);
+                if (this->petalClearPixelFirstPassIndex < 0x200) {
+                    this->petalClearPixelFirstPassIndex++;
                 }
 
-                if (this->unk_3CA < 0x40) {
-                    this->unk_3CA++;
+                if (this->teethClearPixelFirstPassIndex < 0x40) {
+                    this->teethClearPixelFirstPassIndex++;
                 }
             }
         }
     }
 
-    if (this->unk_3B6 > (BREG(5) + 50)) {
+    if (this->dissolveTimer > (BREG(5) + 50)) {
         for (i = 0; i < (BREG(6) + 5); i++) {
-            func_80A16D6C(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex), D_80A1918C, this->unk_3CC);
-            func_80A16D40(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex), D_80A18F4C, this->unk_3CE);
-            if (this->unk_3CC < 0x200) {
-                this->unk_3CC++;
+            EnRaf_ClearPixelsPetal(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex),
+                                   sPetalClearPixelTableSecondPass, this->petalClearPixelSecondPassIndex);
+            EnRaf_ClearPixelsTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
+                                   sTeethClearPixelTableSecondPass, this->teethClearPixelSecondPassIndex);
+            if (this->petalClearPixelSecondPassIndex < 0x200) {
+                this->petalClearPixelSecondPassIndex++;
             }
 
-            if (this->unk_3CE < 0x40) {
-                this->unk_3CE++;
+            if (this->teethClearPixelSecondPassIndex < 0x40) {
+                this->teethClearPixelSecondPassIndex++;
             }
         }
     }
 
-    if (this->unk_3B6 > (BREG(7) + 160)) {
+    if (this->dissolveTimer > (BREG(7) + 160)) {
         for (i = 2; i < 11; i++) {
-            Math_Vec3f_Copy(&this->unk_234[i], &gZeroVec3f);
-            Math_Vec3f_Copy(&this->unk_2C4[i], &gZeroVec3f);
+            Math_Vec3f_Copy(&this->limbScale[i], &gZeroVec3f);
+            Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
         }
 
         func_80A18080(this);
@@ -630,7 +642,7 @@ void func_80A180B4(EnRaf* this, GlobalContext* globalCtx) {
         if (this->unk_3BA == 0) {
             EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
             for (i = 2; i < 11; i++) {
-                Math_Vec3f_Copy(&this->unk_2C4[i], &sp3C);
+                Math_Vec3f_Copy(&this->targetLimbScale[i], &sp3C);
             }
 
             this->unk_3C2 = 3;
@@ -662,13 +674,13 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-        if ((this->unk_3AC > -0.1f) && (this->unk_39E == 0)) {
+        if ((this->unk_3AC > -0.1f) && !this->isCurrentlyInRidingMovingState) {
             this->unk_3AC = -20.0f;
-            this->unk_39E = 1;
+            this->isCurrentlyInRidingMovingState = true;
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
         }
     } else {
-        this->unk_39E = 0;
+        this->isCurrentlyInRidingMovingState = false;
     }
 
     this->unk_3B0 += 3000.0f;
@@ -702,13 +714,13 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     for (i = 0; i < 12; i++) {
         if (this->unk_3C6 < 4) {
-            Math_ApproachF(&this->unk_234[i].x, this->unk_2C4[i].x, 0.4f, 0.5f);
-            Math_ApproachF(&this->unk_234[i].y, this->unk_2C4[i].y, 0.4f, 0.5f);
-            Math_ApproachF(&this->unk_234[i].z, this->unk_2C4[i].z, 0.4f, 0.5f);
+            Math_ApproachF(&this->limbScale[i].x, this->targetLimbScale[i].x, 0.4f, 0.5f);
+            Math_ApproachF(&this->limbScale[i].y, this->targetLimbScale[i].y, 0.4f, 0.5f);
+            Math_ApproachF(&this->limbScale[i].z, this->targetLimbScale[i].z, 0.4f, 0.5f);
         } else {
-            Math_ApproachF(&this->unk_234[i].x, this->unk_2C4[i].x, 1.0f, 1.0f);
-            Math_ApproachF(&this->unk_234[i].y, this->unk_2C4[i].y, 1.0f, 1.0f);
-            Math_ApproachF(&this->unk_234[i].z, this->unk_2C4[i].z, 1.0f, 1.0f);
+            Math_ApproachF(&this->limbScale[i].x, this->targetLimbScale[i].x, 1.0f, 1.0f);
+            Math_ApproachF(&this->limbScale[i].y, this->targetLimbScale[i].y, 1.0f, 1.0f);
+            Math_ApproachF(&this->limbScale[i].z, this->targetLimbScale[i].z, 1.0f, 1.0f);
         }
     }
 
@@ -730,7 +742,7 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < 3; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
-                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19420[i]);
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19420[i]);
                     }
                 }
             }
@@ -740,7 +752,7 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 3; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
-                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19444[i]);
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19444[i]);
                     }
                 }
             }
@@ -750,11 +762,11 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
-                Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19420[2]);
+                Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19420[2]);
             } else if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_UPPER_SEGMENT) ||
                        (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                        (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
-                Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19444[2]);
+                Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19444[2]);
             }
 
             if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
@@ -774,7 +786,7 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < 5; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
-                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A19474[i]);
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19474[i]);
                     }
                 }
             }
@@ -784,14 +796,15 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 4; i++) {
                     if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
-                        Math_Vec3f_Copy(&this->unk_2C4[limbIndex], &D_80A194B0[i]);
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A194B0[i]);
                     }
                 }
             }
             break;
     }
 
-    Matrix_Scale(this->unk_234[limbIndex].x, this->unk_234[limbIndex].y, this->unk_234[limbIndex].z, MTXMODE_APPLY);
+    Matrix_Scale(this->limbScale[limbIndex].x, this->limbScale[limbIndex].y, this->limbScale[limbIndex].z,
+                 MTXMODE_APPLY);
 }
 
 void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {

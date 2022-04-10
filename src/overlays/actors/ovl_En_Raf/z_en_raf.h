@@ -28,18 +28,18 @@ typedef struct EnRaf {
     /* 0x1A0 */ Vec3s jointTable[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x1E8 */ Vec3s morphTable[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x230 */ EnRafActionFunc actionFunc;
-    /* 0x234 */ Vec3f unk_234[CARNIVOROUS_LILY_PAD_LIMB_MAX];
-    /* 0x2C4 */ Vec3f unk_2C4[CARNIVOROUS_LILY_PAD_LIMB_MAX];
+    /* 0x234 */ Vec3f limbScale[CARNIVOROUS_LILY_PAD_LIMB_MAX];
+    /* 0x2C4 */ Vec3f targetLimbScale[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x354 */ Vec3s unk_354[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x39C */ s16 unk_39C;
-    /* 0x39E */ u8 unk_39E;
+    /* 0x39E */ u8 isCurrentlyInRidingMovingState;
     /* 0x3A0 */ f32 endFrame;
     /* 0x3A4 */ f32 unk_3A4;
     /* 0x3A8 */ f32 unk_3A8;
     /* 0x3AC */ f32 unk_3AC;
     /* 0x3B0 */ f32 unk_3B0;
     /* 0x3B4 */ s16 unk_3B4;
-    /* 0x3B6 */ s16 unk_3B6;
+    /* 0x3B6 */ s16 dissolveTimer;
     /* 0x3B8 */ s16 unk_3B8;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
@@ -48,10 +48,10 @@ typedef struct EnRaf {
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ s16 unk_3C6;
-    /* 0x3C8 */ s16 unk_3C8;
-    /* 0x3CA */ s16 unk_3CA;
-    /* 0x3CC */ s16 unk_3CC;
-    /* 0x3CE */ s16 unk_3CE;
+    /* 0x3C8 */ s16 petalClearPixelFirstPassIndex;
+    /* 0x3CA */ s16 teethClearPixelFirstPassIndex;
+    /* 0x3CC */ s16 petalClearPixelSecondPassIndex;
+    /* 0x3CE */ s16 teethClearPixelSecondPassIndex;
     /* 0x3D0 */ ColliderCylinder collider;
     /* 0x41C */ EnRafParticle particles[31];
 } EnRaf; // size = 0xAE4
