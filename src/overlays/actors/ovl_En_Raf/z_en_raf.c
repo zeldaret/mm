@@ -217,7 +217,7 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
-    CollisionHeader_GetVirtual(&object_raf_Colheader_000108, &colHeader);
+    CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(globalCtx, &globalCtx->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->dyna.actor, &sCylinderInit);
     this->dyna.actor.targetMode = 3;
@@ -567,8 +567,8 @@ void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx) {
         this->unk_3B6++;
         if (this->unk_3B6 < (BREG(3) + 105)) {
             for (i = 0; i < (BREG(4) + 5); i++) {
-                func_80A16D6C(Lib_SegmentedToVirtual(&object_raf_Tex_002EF8), D_80A18F8C, this->unk_3C8);
-                func_80A16D40(Lib_SegmentedToVirtual(&object_raf_Tex_0032F8), D_80A18F0C, this->unk_3CA);
+                func_80A16D6C(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex), D_80A18F8C, this->unk_3C8);
+                func_80A16D40(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex), D_80A18F0C, this->unk_3CA);
                 if (this->unk_3C8 < 0x200) {
                     this->unk_3C8++;
                 }
@@ -582,8 +582,8 @@ void func_80A17E1C(EnRaf* this, GlobalContext* globalCtx) {
 
     if (this->unk_3B6 > (BREG(5) + 50)) {
         for (i = 0; i < (BREG(6) + 5); i++) {
-            func_80A16D6C(Lib_SegmentedToVirtual(&object_raf_Tex_002EF8), D_80A1918C, this->unk_3CC);
-            func_80A16D40(Lib_SegmentedToVirtual(&object_raf_Tex_0032F8), D_80A18F4C, this->unk_3CE);
+            func_80A16D6C(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex), D_80A1918C, this->unk_3CC);
+            func_80A16D40(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex), D_80A18F4C, this->unk_3CE);
             if (this->unk_3CC < 0x200) {
                 this->unk_3CC++;
             }
@@ -881,7 +881,7 @@ void EnRaf_DrawParticles(EnRaf* this, GlobalContext* globalCtx) {
             Matrix_InsertZRotation_s(particle->rotation.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_raf_DL_0024E0);
+            gSPDisplayList(POLY_OPA_DISP++, gCarnivorousLilyPadParticleDL);
         }
     }
 
