@@ -15,7 +15,7 @@ void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 
 void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx);
-void ObjBlockstop_TryPlayCutscene(ObjBlockstop* arg0, GlobalContext* arg1);
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Blockstop_InitVars = {
     ACTOR_OBJ_BLOCKSTOP,
@@ -31,6 +31,7 @@ const ActorInit Obj_Blockstop_InitVars = {
 
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBlockstop* this = THIS;
+
     if (Flags_GetSwitch(globalCtx, (s32)this->actor.params)) {
         Actor_MarkForDeath(&this->actor);
     }
@@ -38,8 +39,8 @@ void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
-    Actor* tempActor;
-    tempActor = globalCtx->actorCtx.actorLists[6].first;
+    Actor* tempActor = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
+    
     while (tempActor) {
         if ((tempActor->id == 0x7A) && // check if oshihiki (push block)
             (fabsf(tempActor->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
@@ -56,19 +57,20 @@ void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
     }
 }
 
-void ObjBlockstop_TryPlayCutscene(ObjBlockstop* arg0, GlobalContext* arg1) {
-    if (ActorCutscene_GetCanPlayNext((s16)arg0->actor.cutscene) != 0) {
-        Flags_SetSwitch(arg1, (s32)arg0->actor.params);
-        if (ActorCutscene_GetLength((s16)arg0->actor.cutscene) != -1) {
-            ActorCutscene_StartAndSetUnkLinkFields((s16)arg0->actor.cutscene, &arg0->actor);
+void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx) {
+    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+        Flags_SetSwitch(globalCtx, this->actor.params);
+        if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
+            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
         }
-        Actor_MarkForDeath(&arg0->actor);
+        Actor_MarkForDeath(&this->actor);
         return;
     }
-    ActorCutscene_SetIntentToPlay((s16)arg0->actor.cutscene);
+    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
 }
 
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx) {
-    ObjBlockstop* this = (ObjBlockstop*)thisx;
+    ObjBlockstop* this = THIS;
+    
     this->actionFunc(this, globalCtx);
 }
