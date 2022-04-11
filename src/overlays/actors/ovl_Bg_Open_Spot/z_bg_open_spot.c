@@ -39,7 +39,7 @@ void BgOpenSpot_Init(Actor* thisx, GlobalContext* globalCtx) {
     BgOpenSpot* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->texScroll = Lib_SegmentedToVirtual(gSpotlightTexAnim);
+    this->texScrolls = Lib_SegmentedToVirtual(gSpotlightTexAnim);
 }
 
 void BgOpenSpot_Destroy(Actor* thisx, GlobalContext* globalCtx) {
@@ -63,7 +63,7 @@ void BgOpenSpot_Draw(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     BgOpenSpot* this = (BgOpenSpot*)thisx;
 
-    AnimatedMat_Draw(globalCtx, this->texScroll);
+    AnimatedMat_Draw(globalCtx, this->texScrolls);
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C2DC(globalCtx->state.gfxCtx);
