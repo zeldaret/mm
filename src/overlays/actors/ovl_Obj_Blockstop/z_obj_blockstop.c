@@ -49,7 +49,7 @@ void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
 
             s32 params = OBJOSHIHIKI_GET_F(tempActor);
             if (params < 3) {
-                ActorCutscene_SetIntentToPlay((s16)this->actor.cutscene);
+                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
                 this->actionFunc = ObjBlockstop_TryPlayCutscene;
             }
         }
