@@ -1,110 +1,117 @@
 #include "global.h"
 
+// SetTextId?, OOT's func_80035B18
 void func_800E8EA0(GlobalContext* globalCtx, Actor* actor, u16 textId) {
-    func_80151938(globalCtx, textId);
+    func_80151938(globalCtx, textId); // ContinueTextBox?
     actor->textId = textId;
 }
 
-s32 nop_800E8ED0(UNK_TYPE4 param_1) {
-    return 0;
+// OOT's Flags_GetEventChkInf?
+s32 nop_800E8ED0(UNK_TYPE4 arg0) {
+    return false;
 }
 
-void nop_800E8EE0(UNK_TYPE4 param_1) {
+// OOT's Flags_SetEventChkInf?
+void nop_800E8EE0(UNK_TYPE4 arg0) {
 }
 
-s32 nop_800E8EEC(UNK_TYPE4 param_1) {
-    return 0;
+// OOT's Flags_GetInfTable?
+s32 nop_800E8EEC(UNK_TYPE4 arg0) {
+    return false;
 }
 
-void nop_800E8EFC(UNK_TYPE4 param_1) {
+// OOT's Flags_SetInfTable?
+void nop_800E8EFC(UNK_TYPE4 arg0) {
 }
 
-s32 func_800E8F08(Vec3s* param_1, Vec3s* param_2) {
-    Math_SmoothStepToS(&param_1->y, 0, 6, 6200, 100);
-    Math_SmoothStepToS(&param_1->x, 0, 6, 6200, 100);
-    Math_SmoothStepToS(&param_2->y, 0, 6, 6200, 100);
-    Math_SmoothStepToS(&param_2->x, 0, 6, 6200, 100);
-    return 1;
+
+// RotateBack, OOT's func_80037F30
+s32 func_800E8F08(Vec3s* headRot, Vec3s* torsoRot) {
+    Math_SmoothStepToS(&headRot->y, 0, 6, 0x1838, 0x64);
+    Math_SmoothStepToS(&headRot->x, 0, 6, 0x1838, 0x64);
+    Math_SmoothStepToS(&torsoRot->y, 0, 6, 0x1838, 0x64);
+    Math_SmoothStepToS(&torsoRot->x, 0, 6, 0x1838, 0x64);
+    return true;
 }
 
-// param_2 target, param_3 headRot, param_4 torsoRot
-s32 func_800E8FA4(Actor* actor, Vec3f* param_2, Vec3s* param_3, Vec3s* param_4) {
+// RotateToPoint, OOT's func_80037FC8
+s32 func_800E8FA4(Actor* actor, Vec3f* target, Vec3s* headRot, Vec3s* torsoRot) {
     s16 targetPitch;
     s16 targetYaw;
     s16 yawDiffFromTarget;
 
-    targetPitch = Math_Vec3f_Pitch(&actor->focus.pos, param_2);
-    targetYaw = Math_Vec3f_Yaw(&actor->focus.pos, param_2) - actor->world.rot.y;
+    targetPitch = Math_Vec3f_Pitch(&actor->focus.pos, target);
+    targetYaw = Math_Vec3f_Yaw(&actor->focus.pos, target) - actor->world.rot.y;
 
-    Math_SmoothStepToS(&param_3->x, targetPitch, 6, 2000, 1);
-    param_3->x = CLAMP(param_3->x, -6000, 6000);
+    Math_SmoothStepToS(&headRot->x, targetPitch, 6, 0x7D0, 1);
+    headRot->x = CLAMP(headRot->x, -0x1770, 0x1770);
 
-    yawDiffFromTarget = Math_SmoothStepToS(&param_3->y, targetYaw, 6, 2000, 1);
-    param_3->y = CLAMP(param_3->y, -8000, 8000);
+    yawDiffFromTarget = Math_SmoothStepToS(&headRot->y, targetYaw, 6, 0x7D0, 1);
+    headRot->y = CLAMP(headRot->y, -0x1F40, 0x1F40);
 
     if (yawDiffFromTarget != 0) {
-        if (ABS_ALT(param_3->y) < 8000) {
-            return 0;
+        if (ABS_ALT(headRot->y) < 0x1F40) {
+            return false;
         }
     }
 
-    Math_SmoothStepToS(&param_4->y, targetYaw - param_3->y, 4, 2000, 1);
-    param_4->y = CLAMP(param_4->y, -12000, 12000);
+    Math_SmoothStepToS(&torsoRot->y, targetYaw - headRot->y, 4, 0x7D0, 1);
+    torsoRot->y = CLAMP(torsoRot->y, -0x2EE0, 0x2EE0);
 
-    return 1;
+    return true;
 }
 
-// param_3 headRot, param_4 torsoRot, param_5 focusPosAdjY
-s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, f32 param_5) {
+// TurnToPlayer, OOT's func_80038154
+s32 func_800E9138(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, f32 focusPosYAdj) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 sVar3;
-    Vec3f local_14;
+    s16 yaw;
+    Vec3f target;
 
     actor->focus.pos = actor->world.pos;
-    actor->focus.pos.y += param_5;
+    actor->focus.pos.y += focusPosYAdj;
 
-    if ((globalCtx->csCtx.state == 0) && (D_801D0D50 == 0)) {
-        sVar3 = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
-        if (sVar3 >= 0x4300) {
-            func_800E8F08(param_3, param_4);
-            return 0;
+    if (!((globalCtx->csCtx.state != 0) || D_801D0D50)) {
+        yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
+        if (yaw >= 0x4300) {
+            func_800E8F08(headRot, torsoRot);
+            return false;
         }
     }
 
-    if ((globalCtx->csCtx.state != 0) || (D_801D0D50 != 0)) {
-        local_14 = globalCtx->view.eye;
+    if ((globalCtx->csCtx.state != 0) || D_801D0D50) {
+        target = globalCtx->view.eye;
     } else {
-        local_14 = player->actor.focus.pos;
+        target = player->actor.focus.pos;
     }
 
-    func_800E8FA4(actor, &local_14, param_3, param_4);
+    func_800E8FA4(actor, &target, headRot, torsoRot);
 
-    return 1;
+    return true;
 }
 
-// param_3 headRot, param_4 torsoRot, param_5 focusPos
-s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* param_3, Vec3s* param_4, Vec3f param_5) {
+// TurnToPlayerSetFocus, OOT's func_80038290
+s32 func_800E9250(GlobalContext* globalCtx, Actor* actor, Vec3s* headRot, Vec3s* torsoRot, Vec3f focusPos) {
     Player* player = GET_PLAYER(globalCtx);
-    s16 sVar3;
-    Vec3f local_14;
+    s16 yaw;
+    Vec3f target;
 
-    actor->focus.pos = param_5;
+    actor->focus.pos = focusPos;
 
-    if ((globalCtx->csCtx.state == 0) && (D_801D0D50 == 0)) {
-        sVar3 = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
-        if (sVar3 >= 0x4300) {
-            func_800E8F08(param_3, param_4);
-            return 0;
+    if (!((globalCtx->csCtx.state != 0) || D_801D0D50)) {
+        yaw = ABS_ALT(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
+        if (yaw >= 0x4300) {
+            func_800E8F08(headRot, torsoRot);
+            return false;
         }
     }
 
-    if ((globalCtx->csCtx.state != 0) || (D_801D0D50 != 0)) {
-        local_14 = globalCtx->view.eye;
+    if ((globalCtx->csCtx.state != 0) || D_801D0D50) {
+        target = globalCtx->view.eye;
     } else {
-        local_14 = player->actor.focus.pos;
+        target = player->actor.focus.pos;
     }
 
-    func_800E8FA4(actor, &local_14, param_3, param_4);
+    func_800E8FA4(actor, &target, headRot, torsoRot);
 
-    return 1;
+    return true;
 }
