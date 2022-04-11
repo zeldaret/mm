@@ -2273,55 +2273,76 @@ s32 Math3D_YZInSphere(Sphere16* sphere, f32 y, f32 z) {
     return false;
 }
 
-s32 func_8017FB1C(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32* arg7, f32* arg8, f32* arg9,
-                  f32* argA) {
-    f32 temp_fa0;
-    f32 temp_fa1;
-    f32 temp_fs0;
-    f32 temp_fv0;
-    f32 temp_ft5;
-    f32 temp_fv1;
-    f32 temp_ft2;
-    s32 phi_a1;
 
-    temp_fa1 = SQ(arg5) + SQ(arg6);
-    temp_fv1 = arg3 - arg0;
-    temp_fa0 = arg4 - arg1;
+// Math3D_CircleLineIntersections?
+/**
+ * @brief Computes the intersection points, if any, of the circle of radius radius, center (centerX, centerY) with the
+ * line through the point (pointX, pointY) in direction (dirX, dirY).
+ *
+ * @param[in] centreX x coordinate of centre of circle
+ * @param[in] centerY y coordinate of centre of circle
+ * @param[in] radius of circle
+ * @param[in] pointX x coordinate of point on line
+ * @param[in] pointY y coordinate of point on line
+ * @param[in] dirX x value of direction vector of line
+ * @param[in] dirY y value of direction vecotr of line
+ * @param[out] intersectAX x coordinate of first intersection
+ * @param[out] intersectAY y coordinate of first intersection
+ * @param[out] intersectBX x coordinate of second intersection
+ * @param[out] intersectBY y coordinate of second intersection
+ * @return number of intersections(ish)
+ */
+s32 func_8017FB1C(f32 centreX, f32 centerY, f32 radius, f32 pointX, f32 pointY, f32 dirX, f32 dirY, f32* intersectAX,
+                  f32* intersectAY, f32* intersectBX, f32* intersectBY) {
+    f32 a = SQ(dirX) + SQ(dirY); // t^2 coefficient, |dir|^2
+    f32 diffX = pointX - centreX;
+    f32 diffY = pointY - centerY;
+    f32 b;     // t coefficient
+    f32 delta; // discriminant of quadratic
+    f32 rootP; // larger root of quadratic
+    f32 rootN; // smaller root of quadratic
+    s32 ret;
 
-    if ((IS_ZERO(arg5) && IS_ZERO(arg6)) || IS_ZERO(temp_fa1)) {
-        *arg7 = 0.0f;
-        *arg8 = 0.0f;
-        *arg9 = 0.0f;
-        *argA = 0.0f;
+    // if the direction vector's magnitude is too small, assume no intersections
+    if ((IS_ZERO(dirX) && IS_ZERO(dirY)) || IS_ZERO(a)) {
+        *intersectAX = 0.0f;
+        *intersectAY = 0.0f;
+        *intersectBX = 0.0f;
+        *intersectBY = 0.0f;
         return 0;
     }
 
-    temp_fs0 = 2.0f * ((arg5 * temp_fv1) + (arg6 * temp_fa0));
-    temp_ft5 = SQ(temp_fs0) - (4.0f * temp_fa1 * ((SQ(temp_fv1) + SQ(temp_fa0)) - SQ(arg2)));
-    phi_a1 = 0;
+    b = 2.0f * (dirX * diffX + dirY * diffY); // 2 dir . (point - centre)
+    delta = SQ(b) - 4.0f * a * (SQ(diffX) + SQ(diffY) - SQ(radius));
+    ret = 0;
 
-    if (IS_ZERO(temp_ft5)) {
-        temp_fv0 = (-temp_fs0 / (2.0f * temp_fa1));
-        *arg7 = (arg5 * temp_fv0) + arg3;
-        *arg8 = (arg6 * temp_fv0) + arg4;
-        *arg9 = 0.0f;
-        *argA = 0.0f;
+    if (IS_ZERO(delta)) { // At most one root if discriminant is close to zero
+        // This root is always overwritten later.
+        rootN = -b / (2.0f * a);
+        *intersectAX = dirX * rootN + pointX;
+        *intersectAY = dirY * rootN + pointY;
+
+        *intersectBX = 0.0f;
+        *intersectBY = 0.0f;
     }
 
-    if (temp_ft5 > 0.0f) {
-        temp_fv0 = ((-temp_fs0 - sqrtf(temp_ft5)) / (2.0f * temp_fa1));
-        temp_ft2 = ((-temp_fs0 + sqrtf(temp_ft5)) / (2.0f * temp_fa1));
-        *arg7 = (arg5 * temp_fv0) + arg3;
-        *arg8 = (arg6 * temp_fv0) + arg4;
-        *arg9 = (arg5 * temp_ft2) + arg3;
-        *argA = (arg6 * temp_ft2) + arg4;
-        phi_a1 = 2;
-    } else {
-        *arg7 = 0.0f;
-        *arg8 = 0.0f;
+    if (delta > 0.0f) { // Two roots if discriminant > 0
+        rootN = (-b - sqrtf(delta)) / (2.0f * a);
+        *intersectAX = dirX * rootN + pointX;
+        *intersectAY = dirY * rootN + pointY;
+
+        rootP = (-b + sqrtf(delta)) / (2.0f * a);
+        *intersectBX = dirX * rootP + pointX;
+        *intersectBY = dirY * rootP + pointY;
+
+        ret = 2;
+    } else { // "No roots if discriminant <= 0.0f"*
+        //! @bug Should be one root if discriminant == 0, not zero (although this case is unlikely for floats)
+        *intersectAX = 0.0f;
+        *intersectAY = 0.0f;
     }
 
-    return phi_a1;
+    return ret;
 }
 
 void func_8017FD44(Vec3f* arg0, Vec3f* arg1, Vec3f* dst, f32 arg3) {
