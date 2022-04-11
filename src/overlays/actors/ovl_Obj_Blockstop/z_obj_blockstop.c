@@ -40,7 +40,7 @@ void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
 
 void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
     Actor* tempActor = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
-    
+
     while (tempActor) {
         if ((tempActor->id == 0x7A) && // check if oshihiki (push block)
             (fabsf(tempActor->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
@@ -71,6 +71,6 @@ void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx) 
 
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx) {
     ObjBlockstop* this = THIS;
-    
+
     this->actionFunc(this, globalCtx);
 }
