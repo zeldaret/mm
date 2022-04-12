@@ -58,7 +58,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 AnimationHeader* D_80C0479C[] = {
-    &object_cs_Anim_0064B8, &object_cs_Anim_0053F4, &object_cs_Anim_01007C, &object_cs_Anim_00349C,
+    &gBomberIdleAnim,       &object_cs_Anim_0053F4, &object_cs_Anim_01007C, &object_cs_Anim_00349C,
     &object_cs_Anim_004960, &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_001A1C,
     &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
     &object_cs_Anim_001708, &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0,
@@ -94,7 +94,7 @@ void EnBombers_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     this->actor.gravity = -1.0f;
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &object_cs_Anim_0064B8, this->jointTable,
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphtable, 21);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->actor.targetMode = 0;
@@ -104,19 +104,19 @@ void EnBombers_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2BE = ENBOMBERS_GET_F(&this->actor);
 
     if (this->unk_2BC == ENBOMBERS_F0_0) {
-        if ((gSaveContext.weekEventReg[73] & 0x10) || (gSaveContext.weekEventReg[85] & 2)) {
+        if ((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) {
             Actor_MarkForDeath(&this->actor);
         } else {
             this->unk_2BE++;
             func_80C03ACC(this);
         }
-    } else if (((gSaveContext.weekEventReg[73] & 0x10) || (gSaveContext.weekEventReg[85] & 2)) &&
-               (((this->unk_2BE == ENBOMBERS_F_0) && (gSaveContext.weekEventReg[76] & 1)) ||
-                ((this->unk_2BE == ENBOMBERS_F_1) && (gSaveContext.weekEventReg[76] & 2)) ||
-                ((this->unk_2BE == ENBOMBERS_F_2) && (gSaveContext.weekEventReg[76] & 4)) ||
-                ((this->unk_2BE == ENBOMBERS_F_3) && (gSaveContext.weekEventReg[76] & 8)) ||
-                ((this->unk_2BE == ENBOMBERS_F_4) && (gSaveContext.weekEventReg[76] & 0x10)))) {
-        if (gSaveContext.weekEventReg[75] & 0x40) {
+    } else if (((gSaveContext.save.weekEventReg[73] & 0x10) || (gSaveContext.save.weekEventReg[85] & 2)) &&
+               (((this->unk_2BE == ENBOMBERS_F_0) && (gSaveContext.save.weekEventReg[76] & 1)) ||
+                ((this->unk_2BE == ENBOMBERS_F_1) && (gSaveContext.save.weekEventReg[76] & 2)) ||
+                ((this->unk_2BE == ENBOMBERS_F_2) && (gSaveContext.save.weekEventReg[76] & 4)) ||
+                ((this->unk_2BE == ENBOMBERS_F_3) && (gSaveContext.save.weekEventReg[76] & 8)) ||
+                ((this->unk_2BE == ENBOMBERS_F_4) && (gSaveContext.save.weekEventReg[76] & 0x10)))) {
+        if (gSaveContext.save.weekEventReg[75] & 0x40) {
             if (this->unk_2BE == ENBOMBERS_F_0) {
                 EnBomBowlMan* bomBowlMan = (EnBomBowlMan*)Actor_Spawn(
                     &globalCtx->actorCtx, globalCtx, ACTOR_EN_BOM_BOWL_MAN, this->actor.world.pos.x,
@@ -130,11 +130,11 @@ void EnBombers_Init(Actor* thisx, GlobalContext* globalCtx) {
                     while (cs != -1) { bomBowlMan->unk_2CC[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
                     // clang-format on
 
-                    gSaveContext.weekEventReg[76] &= (u8)~1;
-                    gSaveContext.weekEventReg[76] &= (u8)~2;
-                    gSaveContext.weekEventReg[76] &= (u8)~4;
-                    gSaveContext.weekEventReg[76] &= (u8)~8;
-                    gSaveContext.weekEventReg[76] &= (u8)~0x10;
+                    gSaveContext.save.weekEventReg[76] &= (u8)~1;
+                    gSaveContext.save.weekEventReg[76] &= (u8)~2;
+                    gSaveContext.save.weekEventReg[76] &= (u8)~4;
+                    gSaveContext.save.weekEventReg[76] &= (u8)~8;
+                    gSaveContext.save.weekEventReg[76] &= (u8)~0x10;
                 }
             }
             Actor_MarkForDeath(&this->actor);
@@ -180,7 +180,7 @@ void func_80C039A8(EnBombers* this, GlobalContext* globalCtx) {
     switch (player->transformation) {
         case PLAYER_FORM_HUMAN:
             this->actor.textId = 0x73D;
-            if (gSaveContext.weekEventReg[84] & 0x80) {
+            if (gSaveContext.save.weekEventReg[84] & 0x80) {
                 this->actor.textId = 0x74B;
             }
             break;
@@ -194,14 +194,14 @@ void func_80C039A8(EnBombers* this, GlobalContext* globalCtx) {
             break;
 
         case PLAYER_FORM_DEKU:
-            if (gSaveContext.weekEventReg[73] & 0x20) {
+            if (gSaveContext.save.weekEventReg[73] & 0x20) {
                 this->actor.textId = 0x75A;
-            } else if (gSaveContext.weekEventReg[73] & 0x40) {
+            } else if (gSaveContext.save.weekEventReg[73] & 0x40) {
                 this->actor.textId = 0x749;
-                if (((this->unk_2BE == ENBOMBERS_F_1) && (gSaveContext.weekEventReg[74] & 1)) ||
-                    ((this->unk_2BE == ENBOMBERS_F_2) && (gSaveContext.weekEventReg[74] & 2)) ||
-                    ((this->unk_2BE == ENBOMBERS_F_3) && (gSaveContext.weekEventReg[74] & 4)) ||
-                    ((this->unk_2BE == ENBOMBERS_F_4) && (gSaveContext.weekEventReg[74] & 8))) {
+                if (((this->unk_2BE == ENBOMBERS_F_1) && (gSaveContext.save.weekEventReg[74] & 1)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_2) && (gSaveContext.save.weekEventReg[74] & 2)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_3) && (gSaveContext.save.weekEventReg[74] & 4)) ||
+                    ((this->unk_2BE == ENBOMBERS_F_4) && (gSaveContext.save.weekEventReg[74] & 8))) {
                     this->actor.textId = 0x74A;
                 }
             } else {
@@ -334,7 +334,7 @@ void func_80C03FAC(EnBombers* this, GlobalContext* globalCtx) {
             break;
     }
 
-    if ((this->unk_2A6 == Message_GetState(&globalCtx->msgCtx)) && func_80147624(globalCtx)) {
+    if ((this->unk_2A6 == Message_GetState(&globalCtx->msgCtx)) && Message_ShouldAdvance(globalCtx)) {
         sp2A = 0;
         func_801477B4(globalCtx);
         this->unk_2A6 = 5;
@@ -375,7 +375,7 @@ void func_80C03FAC(EnBombers* this, GlobalContext* globalCtx) {
                 sp2A = 1;
             }
         } else if (this->actor.textId == 0x744) {
-            s32 day = gSaveContext.day - 1;
+            s32 day = gSaveContext.save.day - 1;
 
             if (day == 2) {
                 this->actor.textId = 0x746;
@@ -393,22 +393,22 @@ void func_80C03FAC(EnBombers* this, GlobalContext* globalCtx) {
         } else if (this->actor.textId == 0x748) {
             switch (this->unk_2BE) {
                 case ENBOMBERS_F_1:
-                    gSaveContext.weekEventReg[74] |= 1;
+                    gSaveContext.save.weekEventReg[74] |= 1;
                     break;
 
                 case ENBOMBERS_F_2:
-                    gSaveContext.weekEventReg[74] |= 2;
+                    gSaveContext.save.weekEventReg[74] |= 2;
                     break;
 
                 case ENBOMBERS_F_3:
-                    gSaveContext.weekEventReg[74] |= 4;
+                    gSaveContext.save.weekEventReg[74] |= 4;
                     break;
 
                 case ENBOMBERS_F_4:
-                    gSaveContext.weekEventReg[74] |= 8;
+                    gSaveContext.save.weekEventReg[74] |= 8;
                     break;
             }
-            gSaveContext.weekEventReg[73] |= 0x40;
+            gSaveContext.save.weekEventReg[73] |= 0x40;
         }
 
         switch (sp2A) {
@@ -446,7 +446,7 @@ void func_80C04354(EnBombers* this, GlobalContext* globalCtx) {
 
 void func_80C043C8(EnBombers* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->unk_288, this->unk_28E, 1, 0x3E8, 0);
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         func_801477B4(globalCtx);
         func_80C042F8(this);
     }

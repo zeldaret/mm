@@ -4,12 +4,11 @@
  * Description: Honey & Darling
  */
 
+#include "z_en_fu.h"
 #include "overlays/actors/ovl_En_Fu_Mato/z_en_fu_mato.h"
 #include "overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.h"
-#include "overlays/actors/ovl_Bg_Fu_Mizu/z_bg_fu_mizu.h"
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "z_en_fu.h"
 #include "objects/object_mu/object_mu.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -112,7 +111,7 @@ void func_809616E0(EnFu* this, GlobalContext* globalCtx) {
     s16 spA0 = false;
     Vec3f sp94;
 
-    if ((gSaveContext.playerForm == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
+    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
         spA0 = true;
     }
     this->unk_54C = 0;
@@ -230,8 +229,8 @@ void EnFu_Init(Actor* thisx, GlobalContext* globalCtx) {
 void EnFu_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnFu* this = THIS;
 
-    gSaveContext.weekEventReg[63] &= (u8)~1;
-    gSaveContext.weekEventReg[8] &= (u8)~1;
+    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+    gSaveContext.save.weekEventReg[8] &= (u8)~1;
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
@@ -386,12 +385,12 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
-                if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     Message_StartTextbox(globalCtx, 0x287E, &this->actor);
                     this->unk_552 = 0x287E;
-                } else if ((CURRENT_DAY == 3) && (gSaveContext.weekEventReg[22] & 0x10) &&
-                           (gSaveContext.weekEventReg[22] & 0x20)) {
-                    if ((gSaveContext.weekEventReg[22] & 0x40)) {
+                } else if ((CURRENT_DAY == 3) && (gSaveContext.save.weekEventReg[22] & 0x10) &&
+                           (gSaveContext.save.weekEventReg[22] & 0x20)) {
+                    if ((gSaveContext.save.weekEventReg[22] & 0x40)) {
                         Message_StartTextbox(globalCtx, 0x2883, &this->actor);
                         this->unk_552 = 0x2883;
                     } else {
@@ -426,10 +425,10 @@ void func_80962340(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_80962588(EnFu* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx) && (this->unk_552 == 0x2871)) {
+    if (Message_ShouldAdvance(globalCtx) && (this->unk_552 == 0x2871)) {
         if (1) {}
         if (globalCtx->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.rupees >= 10) {
+            if (gSaveContext.save.playerData.rupees >= 10) {
                 func_8019F208();
                 func_801159EC(-10);
                 func_80963DE4(this, globalCtx);
@@ -449,7 +448,7 @@ void func_80962588(EnFu* this, GlobalContext* globalCtx) {
 void func_80962660(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_552) {
             case 0x283C:
                 func_80963F44(this, globalCtx);
@@ -532,8 +531,8 @@ void func_80962660(EnFu* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x287D:
-                gSaveContext.weekEventReg[63] |= 1;
-                gSaveContext.weekEventReg[63] &= (u8)~2;
+                gSaveContext.save.weekEventReg[63] |= 1;
+                gSaveContext.save.weekEventReg[63] &= (u8)~2;
                 func_801477B4(globalCtx);
                 player->stateFlags1 |= 0x20;
                 this->unk_53C = 0;
@@ -596,7 +595,7 @@ void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 this->unk_54A = 1;
                 switch (this->unk_552) {
                     case 0x287F:
@@ -605,8 +604,8 @@ void func_809628D0(EnFu* this, GlobalContext* globalCtx) {
                     case 0x2884:
                     case 0x2887:
                     case 0x288A:
-                        gSaveContext.weekEventReg[63] &= (u8)~1;
-                        gSaveContext.weekEventReg[63] &= (u8)~2;
+                        gSaveContext.save.weekEventReg[63] &= (u8)~1;
+                        gSaveContext.save.weekEventReg[63] &= (u8)~2;
                         func_809622FC(this);
                         break;
 
@@ -652,10 +651,10 @@ void func_80962A10(EnFu* this, GlobalContext* globalCtx) {
         this->unk_546 = 1;
     }
 
-    if ((gSaveContext.playerForm == PLAYER_FORM_DEKU) && gSaveContext.magicAcquired) {
+    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.magicAcquired) {
         s16 temp = gSaveContext.unk_3F30;
 
-        Parameter_AddMagic(globalCtx, temp + (gSaveContext.doubleMagic * 48) + 48);
+        Parameter_AddMagic(globalCtx, temp + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
     }
 
     func_80962F10(this);
@@ -739,7 +738,7 @@ void func_80962EBC(EnFu* this, GlobalContext* globalCtx) {
 void func_80962F10(EnFu* this) {
     this->unk_548 = 0;
     this->actor.flags &= ~ACTOR_FLAG_1;
-    gSaveContext.weekEventReg[8] |= 1;
+    gSaveContext.save.weekEventReg[8] |= 1;
     this->actionFunc = func_80962F4C;
 }
 
@@ -749,7 +748,7 @@ void func_80962F4C(EnFu* this, GlobalContext* globalCtx) {
 
     switch (this->unk_542) {
         case 0:
-            if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 player->stateFlags3 |= 0x400;
             }
             break;
@@ -822,11 +821,11 @@ void func_8096326C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_809632D0(EnFu* this) {
-    if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
         Interface_ChangeAlpha(50);
     }
 
-    gSaveContext.weekEventReg[8] &= (u8)~1;
+    gSaveContext.save.weekEventReg[8] &= (u8)~1;
 
     if (this->unk_2D4 != NULL) {
         BgFuMizu* mizu = this->unk_2D4;
@@ -842,7 +841,7 @@ void func_80963350(EnFu* this, GlobalContext* globalCtx) {
     static s32 D_80964C24 = 0;
     BgFuKaiten* fuKaiten = (BgFuKaiten*)this->actor.child;
 
-    if ((this->unk_54A == 0) && (((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) ||
+    if ((this->unk_54A == 0) && (((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) ||
                                  ((Message_GetState(&globalCtx->msgCtx) == 2) && (globalCtx->msgCtx.unk12023 == 1)))) {
         func_801477B4(globalCtx);
         this->unk_54A = 2;
@@ -879,7 +878,7 @@ void func_80963560(EnFu* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
         func_80963610(this);
-    } else if ((this->unk_552 == 0x2880) && !(gSaveContext.weekEventReg[22] & 0x80)) {
+    } else if ((this->unk_552 == 0x2880) && !(gSaveContext.save.weekEventReg[22] & 0x80)) {
         Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 500.0f, 100.0f);
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -896,13 +895,13 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20) && (CURRENT_DAY == 3) &&
-            (gSaveContext.playerForm == PLAYER_FORM_HUMAN)) {
-            if (gSaveContext.weekEventReg[22] & 0x40) {
+        if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20) &&
+            (CURRENT_DAY == 3) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+            if (gSaveContext.save.weekEventReg[22] & 0x40) {
                 Message_StartTextbox(globalCtx, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
-            } else if (!(gSaveContext.weekEventReg[22] & 0x80)) {
-                gSaveContext.weekEventReg[22] |= 0x80;
+            } else if (!(gSaveContext.save.weekEventReg[22] & 0x80)) {
+                gSaveContext.save.weekEventReg[22] |= 0x80;
                 Message_StartTextbox(globalCtx, 0x2882, &this->actor);
                 this->unk_552 = 0x2882;
             } else {
@@ -918,18 +917,18 @@ void func_80963630(EnFu* this, GlobalContext* globalCtx) {
         this->actor.child->freezeTimer = 0;
         func_809628BC(this);
 
-        if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
             switch (CURRENT_DAY) {
                 case 1:
-                    gSaveContext.weekEventReg[22] |= 0x10;
+                    gSaveContext.save.weekEventReg[22] |= 0x10;
                     break;
 
                 case 2:
-                    gSaveContext.weekEventReg[22] |= 0x20;
+                    gSaveContext.save.weekEventReg[22] |= 0x20;
                     break;
 
                 case 3:
-                    gSaveContext.weekEventReg[22] |= 0x40;
+                    gSaveContext.save.weekEventReg[22] |= 0x40;
                     break;
             }
         }
@@ -1016,11 +1015,11 @@ s32 func_809638F8(GlobalContext* globalCtx) {
 void func_809639D0(EnFu* this, GlobalContext* globalCtx) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+            if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
                 if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                     Message_StartTextbox(globalCtx, 0x2853, &this->actor);
                     this->unk_552 = 0x2853;
-                } else if (gSaveContext.weekEventReg[22] & 0x10) {
+                } else if (gSaveContext.save.weekEventReg[22] & 0x10) {
                     Message_StartTextbox(globalCtx, 0x284D, &this->actor);
                     this->unk_552 = 0x284D;
                 } else if (this->unk_53E == 1) {
@@ -1038,13 +1037,13 @@ void func_809639D0(EnFu* this, GlobalContext* globalCtx) {
             break;
 
         case 2:
-            if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
+            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
                 Message_StartTextbox(globalCtx, 0x286F, &this->actor);
                 this->unk_552 = 0x286F;
             } else if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                 Message_StartTextbox(globalCtx, 0x2853, &this->actor);
                 this->unk_552 = 0x2853;
-            } else if (!(gSaveContext.weekEventReg[22] & 0x10)) {
+            } else if (!(gSaveContext.save.weekEventReg[22] & 0x10)) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(globalCtx, 0x285B, &this->actor);
                     this->unk_552 = 0x285B;
@@ -1053,7 +1052,7 @@ void func_809639D0(EnFu* this, GlobalContext* globalCtx) {
                     Message_StartTextbox(globalCtx, 0x285D, &this->actor);
                     this->unk_552 = 0x285D;
                 }
-            } else if (gSaveContext.weekEventReg[22] & 0x20) {
+            } else if (gSaveContext.save.weekEventReg[22] & 0x20) {
                 Message_StartTextbox(globalCtx, 0x2855, &this->actor);
                 this->unk_552 = 0x2855;
             } else if (this->unk_53E == 1) {
@@ -1067,8 +1066,8 @@ void func_809639D0(EnFu* this, GlobalContext* globalCtx) {
             break;
 
         case 3:
-            if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
-                if (gSaveContext.playerForm == PLAYER_FORM_DEKU) {
+            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                     func_80963EAC(this, globalCtx);
                 } else {
                     Message_StartTextbox(globalCtx, 0x2841, &this->actor);
@@ -1077,15 +1076,15 @@ void func_809639D0(EnFu* this, GlobalContext* globalCtx) {
             } else if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
                 Message_StartTextbox(globalCtx, 0x284B, &this->actor);
                 this->unk_552 = 0x284B;
-            } else if (gSaveContext.weekEventReg[22] & 0x40) {
-                if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20)) {
+            } else if (gSaveContext.save.weekEventReg[22] & 0x40) {
+                if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20)) {
                     Message_StartTextbox(globalCtx, 0x285F, &this->actor);
                     this->unk_552 = 0x285F;
                 } else {
                     Message_StartTextbox(globalCtx, 0x2861, &this->actor);
                     this->unk_552 = 0x2861;
                 }
-            } else if ((gSaveContext.weekEventReg[22] & 0x10) && (gSaveContext.weekEventReg[22] & 0x20)) {
+            } else if ((gSaveContext.save.weekEventReg[22] & 0x10) && (gSaveContext.save.weekEventReg[22] & 0x20)) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(globalCtx, 0x2863, &this->actor);
                     this->unk_552 = 0x2863;
@@ -1094,7 +1093,7 @@ void func_809639D0(EnFu* this, GlobalContext* globalCtx) {
                     Message_StartTextbox(globalCtx, 0x2865, &this->actor);
                     this->unk_552 = 0x2865;
                 }
-            } else if ((gSaveContext.weekEventReg[22] & 0x10) || (gSaveContext.weekEventReg[22] & 0x20)) {
+            } else if ((gSaveContext.save.weekEventReg[22] & 0x10) || (gSaveContext.save.weekEventReg[22] & 0x20)) {
                 if (this->unk_53E == 1) {
                     Message_StartTextbox(globalCtx, 0x2867, &this->actor);
                     this->unk_552 = 0x2867;
@@ -1118,7 +1117,7 @@ void func_809639D0(EnFu* this, GlobalContext* globalCtx) {
 void func_80963DE4(EnFu* this, GlobalContext* globalCtx) {
     switch (this->unk_542) {
         case 0:
-            if (gSaveContext.playerForm != PLAYER_FORM_HUMAN) {
+            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
                 Message_StartTextbox(globalCtx, 0x2875, &this->actor);
                 this->unk_552 = 0x2875;
             } else {
@@ -1140,7 +1139,7 @@ void func_80963DE4(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_80963EAC(EnFu* this, GlobalContext* globalCtx) {
-    if (gSaveContext.magicAcquired) {
+    if (gSaveContext.save.playerData.magicAcquired) {
         if (this->unk_540 == 1) {
             Message_StartTextbox(globalCtx, 0x2847, &this->actor);
             this->unk_552 = 0x2847;
@@ -1210,7 +1209,7 @@ void func_8096413C(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_80964190(EnFu* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_552) {
             case 0x2842:
             case 0x2844:
@@ -1262,7 +1261,7 @@ void func_80964190(EnFu* this, GlobalContext* globalCtx) {
 }
 
 void func_8096426C(EnFu* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_552) {
             case 0x2840:
             case 0x2841:

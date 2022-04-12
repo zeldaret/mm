@@ -11,10 +11,10 @@ Nice differ for assembly code. Currently supports MIPS, PPC, AArch64, and ARM32;
 
 ## Usage
 
-Create a file `diff_settings.sh` in some directory (see the one in this repo for an example). Then from that directory, run
+Create a file `diff_settings.py` in some directory (see the one in this repo for an example). Then from that directory, run
 
 ```bash
-/path/to/diff.sh [flags] (function|rom addr)
+/path/to/diff.py [flags] (function|rom addr)
 ```
 
 Recommended flags are `-mwo` (automatically run `make` on source file changes, and include symbols in diff). See `--help` for more details.

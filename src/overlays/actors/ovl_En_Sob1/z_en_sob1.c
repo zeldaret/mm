@@ -53,7 +53,7 @@ void EnSob1_Blink(EnSob1* this);
 
 s32 EnSob1_TakeItemOffShelf(EnSob1* this);
 s32 EnSob1_ReturnItemToShelf(EnSob1* this);
-s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
+s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq);
 
 static AnimationInfoS sAnimationsBombShopkeeper[] = {
     { &object_rs_Anim_009120, 2.0f, 0, -1, ANIMMODE_LOOP, 20 },
@@ -185,9 +185,9 @@ u16 EnSob1_GetTalkOption(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->shopType == BOMB_SHOP) {
-        if (gSaveContext.day == 1 && gSaveContext.time >= CLOCK_TIME(6, 00)) {
+        if (gSaveContext.save.day == 1 && gSaveContext.save.time >= CLOCK_TIME(6, 00)) {
             return 0x648;
-        } else if (gSaveContext.weekEventReg[33] & 8) {
+        } else if (gSaveContext.save.weekEventReg[33] & 8) {
             return 0x649;
         } else {
             return 0x64A;
@@ -257,58 +257,58 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (gSaveContext.weekEventReg[57] & 0x10) {
+                if (gSaveContext.save.weekEventReg[57] & 0x10) {
                     return 0x12CF;
                 }
-                gSaveContext.weekEventReg[57] |= 0x10;
+                gSaveContext.save.weekEventReg[57] |= 0x10;
                 return 0x12CE;
             case PLAYER_FORM_DEKU:
-                if (gSaveContext.weekEventReg[57] & 0x20) {
+                if (gSaveContext.save.weekEventReg[57] & 0x20) {
                     return 0x12D1;
                 }
-                gSaveContext.weekEventReg[57] |= 0x20;
+                gSaveContext.save.weekEventReg[57] |= 0x20;
                 return 0x12D0;
             case PLAYER_FORM_GORON:
-                if (gSaveContext.weekEventReg[57] & 0x40) {
+                if (gSaveContext.save.weekEventReg[57] & 0x40) {
                     return 0x12D3;
                 }
-                gSaveContext.weekEventReg[57] |= 0x40;
+                gSaveContext.save.weekEventReg[57] |= 0x40;
                 return 0x12D2;
             case PLAYER_FORM_ZORA:
-                if (gSaveContext.weekEventReg[57] & 0x80) {
+                if (gSaveContext.save.weekEventReg[57] & 0x80) {
                     return 0x12D5;
                 }
-                gSaveContext.weekEventReg[57] |= 0x80;
+                gSaveContext.save.weekEventReg[57] |= 0x80;
                 return 0x12D4;
             default:
                 return 0x12CE;
         }
     } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.weekEventReg[58] & 4) {
+            if (gSaveContext.save.weekEventReg[58] & 4) {
                 return 0xBB9;
             }
-            gSaveContext.weekEventReg[58] |= 4;
+            gSaveContext.save.weekEventReg[58] |= 4;
             return 0xBB8;
         } else {
-            if (gSaveContext.weekEventReg[58] & 8) {
+            if (gSaveContext.save.weekEventReg[58] & 8) {
                 return 0xBBB;
             }
-            gSaveContext.weekEventReg[58] |= 8;
+            gSaveContext.save.weekEventReg[58] |= 8;
             return 0xBBA;
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (gSaveContext.weekEventReg[58] & 0x10) {
+            if (gSaveContext.save.weekEventReg[58] & 0x10) {
                 return 0xBBD;
             }
-            gSaveContext.weekEventReg[58] |= 0x10;
+            gSaveContext.save.weekEventReg[58] |= 0x10;
             return 0xBBC;
         } else {
-            if (gSaveContext.weekEventReg[58] & 0x20) {
+            if (gSaveContext.save.weekEventReg[58] & 0x20) {
                 return 0xBBF;
             }
-            gSaveContext.weekEventReg[58] |= 0x20;
+            gSaveContext.save.weekEventReg[58] |= 0x20;
             return 0xBBE;
         }
     }
@@ -317,11 +317,11 @@ u16 EnSob1_GetWelcome(EnSob1* this, GlobalContext* globalCtx) {
 
 u16 EnSob1_GetGoodbye(EnSob1* this) {
     if (this->shopType == BOMB_SHOP) {
-        if (gSaveContext.day == 1) {
+        if (gSaveContext.save.day == 1) {
             return 0x64C;
-        } else if (gSaveContext.day == 2) {
+        } else if (gSaveContext.save.day == 2) {
             return 0x64D;
-        } else if (!gSaveContext.isNight) {
+        } else if (!gSaveContext.save.isNight) {
             return 0x64E;
         } else {
             return 0x64F;
@@ -383,7 +383,7 @@ void EnSob1_Init(Actor* thisx, GlobalContext* globalCtx) {
             this->shopType = ZORA_SHOP;
             break;
         case GORON_SHOP:
-            if (gSaveContext.weekEventReg[33] & 0x80) {
+            if (gSaveContext.save.weekEventReg[33] & 0x80) {
                 this->shopType = GORON_SHOP_SPRING;
             } else {
                 this->shopType = GORON_SHOP;
@@ -503,7 +503,7 @@ void EnSob1_SetupLookToShopkeeperFromShelf(GlobalContext* globalCtx, EnSob1* thi
 }
 
 void EnSob1_EndingInteraction(EnSob1* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         EnSob1_EndInteraction(globalCtx, this);
     }
 }
@@ -607,7 +607,7 @@ void EnSob1_Hello(EnSob1* this, GlobalContext* globalCtx) {
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
     }
-    if ((talkState == 5) && (func_80147624(globalCtx)) &&
+    if ((talkState == 5) && (Message_ShouldAdvance(globalCtx)) &&
         (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx)))) {
         if (this->welcomeTextId == 0x68A) { // Welcome text when wearing Kafei's mask
             EnSob1_EndInteraction(globalCtx, this);
@@ -659,7 +659,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
         if (talkState == 4) {
             func_8011552C(globalCtx, 6);
             if (!EnSob1_TestEndInteraction(this, globalCtx, CONTROLLER1(globalCtx))) {
-                if (!func_80147624(globalCtx) || !EnSob1_FacingShopkeeperDialogResult(this, globalCtx)) {
+                if (!Message_ShouldAdvance(globalCtx) || !EnSob1_FacingShopkeeperDialogResult(this, globalCtx)) {
                     if (this->stickAccumX > 0) {
                         cursorIdx = EnSob1_SetCursorIndexFromNeutral(this, 2);
                         if (cursorIdx != CURSOR_INVALID) {
@@ -677,7 +677,7 @@ void EnSob1_FaceShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_TalkingToShopkeeper(EnSob1* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         EnSob1_StartShopping(globalCtx, this);
     }
 }
@@ -711,10 +711,9 @@ void EnSob1_EndWalk(EnSob1* this, GlobalContext* globalCtx) {
     s16 curFrame = this->skelAnime.curFrame / this->skelAnime.playSpeed;
     s16 animLastFrame = Animation_GetLastFrame(&object_rs_Anim_009120) / (s16)this->skelAnime.playSpeed;
 
-    Math_SmoothStepToS(
-        &this->actor.world.rot.y,
-        EnSob1_GetXZAngleAndDistanceSqToPoint(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &distSq), 4,
-        1000, 1);
+    Math_SmoothStepToS(&this->actor.world.rot.y,
+                       EnSob1_GetDistSqAndOrient(this->path, this->pathPointsIdx - 1, &this->actor.world.pos, &distSq),
+                       4, 1000, 1);
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Math_ApproachF(&this->actor.speedXZ, 0.5f, 0.2f, 1.0f);
     if (distSq < 12.0f) {
@@ -750,10 +749,9 @@ void EnSob1_Walk(EnSob1* this, GlobalContext* globalCtx) {
         }
     }
     if (this->path != NULL) {
-        Math_SmoothStepToS(
-            &this->actor.world.rot.y,
-            EnSob1_GetXZAngleAndDistanceSqToPoint(this->path, this->pathPointsIdx, &this->actor.world.pos, &distSq), 4,
-            1000, 1);
+        Math_SmoothStepToS(&this->actor.world.rot.y,
+                           EnSob1_GetDistSqAndOrient(this->path, this->pathPointsIdx, &this->actor.world.pos, &distSq),
+                           4, 1000, 1);
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.speedXZ = 2.0f;
         if (distSq < SQ(5.0f)) {
@@ -1020,7 +1018,7 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 
     if (EnSob1_TakeItemOffShelf(this) && talkState == 4) {
         func_8011552C(globalCtx, 6);
-        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && func_80147624(globalCtx)) {
+        if (!EnSob1_TestCancelOption(this, globalCtx, CONTROLLER1(globalCtx)) && Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     EnSob1_HandleCanBuyItem(globalCtx, this);
@@ -1037,7 +1035,7 @@ void EnSob1_SelectItem(EnSob1* this, GlobalContext* globalCtx) {
 
 void EnSob1_CannotBuy(EnSob1* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             this->actionFunc = this->tmpActionFunc;
             func_80151938(globalCtx, this->items[this->cursorIdx]->actor.textId);
         }
@@ -1047,7 +1045,7 @@ void EnSob1_CannotBuy(EnSob1* this, GlobalContext* globalCtx) {
 void EnSob1_CanBuy(EnSob1* this, GlobalContext* globalCtx) {
     EnGirlA* item;
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         this->shopItemSelectedTween = 0.0f;
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
@@ -1067,7 +1065,7 @@ void EnSob1_BuyItemWithFanfare(EnSob1* this, GlobalContext* globalCtx) {
 }
 
 void EnSob1_SetupItemPurchased(EnSob1* this, GlobalContext* globalCtx) {
-    if (Message_GetState(&globalCtx->msgCtx) == 6 && func_80147624(globalCtx)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 6 && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         EnSob1_SetupAction(this, EnSob1_ItemPurchased);
@@ -1086,7 +1084,7 @@ void EnSob1_ContinueShopping(EnSob1* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     EnGirlA* item;
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (func_80147624(globalCtx))) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && (Message_ShouldAdvance(globalCtx))) {
         EnSob1_ResetItemPosition(this);
         item = this->items[this->cursorIdx];
         item->restockFunc(globalCtx, item);
@@ -1249,7 +1247,7 @@ void EnSob1_UpdateStickDirectionPromptAnim(EnSob1* this) {
     this->stickLeftPrompt.stickTexY = 95.0f;
 }
 
-s16 EnSob1_GetXZAngleAndDistanceSqToPoint(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq) {
+s16 EnSob1_GetDistSqAndOrient(Path* path, s32 pointIdx, Vec3f* pos, f32* distSq) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
@@ -1360,7 +1358,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->actor.world.pos.y += posOffset->y;
         this->actor.world.pos.z += posOffset->z;
         shopItems = sShops[this->shopType];
-        if ((this->shopType == BOMB_SHOP) && (gSaveContext.weekEventReg[33] & 8)) {
+        if ((this->shopType == BOMB_SHOP) && (gSaveContext.save.weekEventReg[33] & 8)) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
@@ -1375,7 +1373,7 @@ void EnSob1_InitShop(EnSob1* this, GlobalContext* globalCtx) {
         this->pathPointsIdx = 0;
 
         if (this->shopType == BOMB_SHOP) {
-            this->path = func_8013D648(globalCtx, ENSOB1_GET_PATH(&this->actor), 0x1F);
+            this->path = SubS_GetPathByIndex(globalCtx, ENSOB1_GET_PATH(&this->actor), 0x1F);
         }
         if (this->shopType == BOMB_SHOP) {
             EnSob1_SetupAction(this, EnSob1_SetupWalk);

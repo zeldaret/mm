@@ -170,7 +170,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-// gSaveContext.weekEventReg[KEY] = VALUE
+// gSaveContext.save.weekEventReg[KEY] = VALUE
 // KEY | VALUE
 static s32 isFrogReturnedFlags[] = {
     (32 << 8) | 0x40, // Woodfall Temple Frog Returned
@@ -192,7 +192,7 @@ void EnPametfrog_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(globalCtx, globalCtx->roomCtx.currRoom.num)) {
         Actor_MarkForDeath(&this->actor);
-        if (!(gSaveContext.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
+        if (!(gSaveContext.save.weekEventReg[isFrogReturnedFlags[this->actor.params - 1] >> 8] &
               (u8)isFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_MINIFROG, this->actor.world.pos.x,
                         this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
@@ -1035,7 +1035,7 @@ void EnPametfrog_LookAround(EnPametfrog* this, GlobalContext* globalCtx) {
     EnPametfrog_IdleWaterEffects(this, globalCtx);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 5, 0x400, 0x80);
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if (SkelAnime_Update(&this->skelAnime) && (func_801690CC(globalCtx) == 0)) {
+    if (SkelAnime_Update(&this->skelAnime) && !Play_InCsMode(globalCtx)) {
         if (!this->unk_2AE) {
             func_801A2E54(NA_BGM_MINI_BOSS);
             this->unk_2AE = true;

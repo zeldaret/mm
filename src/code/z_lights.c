@@ -1,6 +1,8 @@
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
+LightsBuffer sLightsBuffer;
+
 void Lights_PointSetInfo(LightInfo* info, s16 x, s16 y, s16 z, u8 r, u8 g, u8 b, s16 radius, s32 type) {
     info->type = type;
     info->params.point.x = x;
@@ -128,6 +130,7 @@ void Lights_BindPoint(Lights* lights, LightParams* params, GlobalContext* global
     Vec3f posF;
     Vec3f adjustedPos;
     u32 pad;
+
     if (radiusF > 0) {
         posF.x = params->point.x;
         posF.y = params->point.y;
@@ -373,7 +376,7 @@ void Lights_GlowCheck(GlobalContext* globalCtx) {
     LightNode* light = globalCtx->lightCtx.listHead;
 
     while (light != NULL) {
-        LightPoint* params = (LightPoint*)&light->info->params;
+        LightPoint* params = &light->info->params.point;
 
         if (light->info->type == LIGHT_POINT_GLOW) {
             Vec3f pos;
@@ -422,7 +425,7 @@ void Lights_DrawGlow(GlobalContext* globalCtx) {
 
         do {
             if (light->info->type == LIGHT_POINT_GLOW) {
-                params = (LightPoint*)&light->info->params;
+                params = &light->info->params.point;
                 if (params->drawGlow) {
                     f32 scale = SQ((f32)params->radius) * 2e-6f;
 

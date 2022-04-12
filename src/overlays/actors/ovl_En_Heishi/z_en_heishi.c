@@ -73,14 +73,16 @@ void EnHeishi_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->paramsCopy == 0) {
         this->shouldSetHeadRotation = 1;
-        if (!(gSaveContext.weekEventReg[63] & 0x80) && !((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        if (!(gSaveContext.save.weekEventReg[63] & 0x80) &&
+            !((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
         this->colliderCylinder.dim.radius = 30;
         this->colliderCylinder.dim.height = 60;
         this->colliderCylinder.dim.yShift = 0;
-        if ((gSaveContext.weekEventReg[63] & 0x80) || ((gSaveContext.day == 3) && gSaveContext.isNight)) {
+        if ((gSaveContext.save.weekEventReg[63] & 0x80) ||
+            ((gSaveContext.save.day == 3) && gSaveContext.save.isNight)) {
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -150,7 +152,7 @@ void EnHeishi_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    if ((this->paramsCopy != 0) && (gSaveContext.day == 3) && gSaveContext.isNight) {
+    if ((this->paramsCopy != 0) && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_MarkForDeath(&this->actor);
     } else {
         this->actionFunc(this, globalCtx);

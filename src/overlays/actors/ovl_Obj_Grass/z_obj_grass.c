@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_grass.h"
+#include "overlays/actors/ovl_Obj_Grass_Carry/z_obj_grass_carry.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -266,7 +267,7 @@ void func_809A983C(ObjGrass* this, GlobalContext* globalCtx) {
                                   Math_Vec3f_Yaw(&player->actor.world.pos, &ptr->unk_0C[j].unk_00);
 
                             if (ABS_ALT(yaw) < 0x2000) {
-                                this->unk_3294 = &ptr->unk_0C[j].unk_00;
+                                this->unk_3294 = &ptr->unk_0C[j];
                             }
                         }
                     }

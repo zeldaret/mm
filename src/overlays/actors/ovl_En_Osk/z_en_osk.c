@@ -169,7 +169,7 @@ void func_80BF5F70(EnOsk* this) {
 void func_80BF609C(EnOsk* this, GlobalContext* globalCtx) {
     if (this->actor.draw != NULL) {
         if (this->actor.home.rot.z != 0) {
-            if (globalCtx->msgCtx.unk11F04 == 0x1531) {
+            if (globalCtx->msgCtx.currentTextId == 0x1531) {
                 this->actor.home.rot.z = 0;
             }
         } else {

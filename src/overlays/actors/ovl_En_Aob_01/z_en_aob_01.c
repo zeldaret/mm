@@ -7,7 +7,6 @@
 #include "z_en_aob_01.h"
 #include "overlays/actors/ovl_En_Racedog/z_en_racedog.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
-#include "objects/object_aob/object_aob.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -46,12 +45,12 @@ const ActorInit En_Aob_01_InitVars = {
 };
 
 static AnimationInfo D_809C3790[6] = {
-    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_aob_Anim_0068B4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_aob_Anim_00700C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_aob_Anim_0058EC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &object_aob_Anim_006040, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &object_aob_Anim_007758, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gMamamuYanSurpriseStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gMamamuYanSurpriseLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -91,21 +90,21 @@ static EnAobStruct D_809C384C[] = {
 };
 
 void func_809C10B0(EnAob01* this, s32 arg1) {
-    if (DECR(this->unk_3F0) == 0) {
-        this->unk_3EE++;
-        if (this->unk_3EE >= arg1) {
-            this->unk_3EE = 0;
-            this->unk_3F0 = Rand_S16Offset(30, 30);
+    if (DECR(this->blinkTimer) == 0) {
+        this->eyeIndex++;
+        if (this->eyeIndex >= arg1) {
+            this->eyeIndex = 0;
+            this->blinkTimer = Rand_S16Offset(30, 30);
         }
     }
 }
 
 void func_809C1124(void) {
-    u16 time = gSaveContext.time;
+    u16 time = gSaveContext.save.time;
 
-    gSaveContext.time = (u16)REG(15) + time;
-    time = gSaveContext.time;
-    gSaveContext.time = (u16)gSaveContext.unk_14 + time;
+    gSaveContext.save.time = (u16)REG(15) + time;
+    time = gSaveContext.save.time;
+    gSaveContext.save.time = (u16)gSaveContext.save.daySpeed + time;
 }
 
 void func_809C1158(EnAob01* this, GlobalContext* globalCtx) {
@@ -114,7 +113,7 @@ void func_809C1158(EnAob01* this, GlobalContext* globalCtx) {
 
     if (temp_s0 != 0x3F) {
         do {
-            this->unk_1D8[i] = func_8013D648(globalCtx, temp_s0, 0x3F);
+            this->unk_1D8[i] = SubS_GetPathByIndex(globalCtx, temp_s0, 0x3F);
             temp_s0 = this->unk_1D8[i]->unk1;
             i++;
         } while (temp_s0 != 0xFF);
@@ -219,18 +218,18 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
         case 0x3548:
         case 0x3549:
         case 0x354A:
-            switch (gSaveContext.day) {
+            switch (gSaveContext.save.day) {
                 case 1:
-                    if (!gSaveContext.isNight) {
-                        if (!(gSaveContext.weekEventReg[64] & 0x80)) {
-                            gSaveContext.weekEventReg[64] |= 0x80;
+                    if (!gSaveContext.save.isNight) {
+                        if (!(gSaveContext.save.weekEventReg[64] & 0x80)) {
+                            gSaveContext.save.weekEventReg[64] |= 0x80;
                             this->unk_210 = 0x3520;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(gSaveContext.weekEventReg[65] & 1)) {
-                            gSaveContext.weekEventReg[65] |= 1;
+                        if (!(gSaveContext.save.weekEventReg[65] & 1)) {
+                            gSaveContext.save.weekEventReg[65] |= 1;
                             this->unk_210 = 0x3530;
                         } else {
                             this->unk_210 = 0x352F;
@@ -239,16 +238,16 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                     break;
 
                 case 2:
-                    if (!gSaveContext.isNight) {
-                        if (!(gSaveContext.weekEventReg[65] & 2)) {
-                            gSaveContext.weekEventReg[65] |= 2;
+                    if (!gSaveContext.save.isNight) {
+                        if (!(gSaveContext.save.weekEventReg[65] & 2)) {
+                            gSaveContext.save.weekEventReg[65] |= 2;
                             this->unk_210 = 0x3531;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(gSaveContext.weekEventReg[65] & 4)) {
-                            gSaveContext.weekEventReg[65] |= 4;
+                        if (!(gSaveContext.save.weekEventReg[65] & 4)) {
+                            gSaveContext.save.weekEventReg[65] |= 4;
                             this->unk_210 = 0x3532;
                         } else {
                             this->unk_210 = 0x352F;
@@ -257,16 +256,16 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                     break;
 
                 case 3:
-                    if (!gSaveContext.isNight) {
-                        if (!(gSaveContext.weekEventReg[65] & 8)) {
-                            gSaveContext.weekEventReg[65] |= 8;
+                    if (!gSaveContext.save.isNight) {
+                        if (!(gSaveContext.save.weekEventReg[65] & 8)) {
+                            gSaveContext.save.weekEventReg[65] |= 8;
                             this->unk_210 = 0x3533;
                         } else {
                             this->unk_210 = 0x352F;
                         }
                     } else {
-                        if (!(gSaveContext.weekEventReg[65] & 0x10)) {
-                            gSaveContext.weekEventReg[65] |= 0x10;
+                        if (!(gSaveContext.save.weekEventReg[65] & 0x10)) {
+                            gSaveContext.save.weekEventReg[65] |= 0x10;
                             this->unk_210 = 0x3534;
                         } else {
                             this->unk_210 = 0x352F;
@@ -307,7 +306,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
                         break;
 
                     case PLAYER_FORM_HUMAN:
-                        if (gSaveContext.rupees < 10) {
+                        if (gSaveContext.save.playerData.rupees < 10) {
                             this->unk_210 = 0x3524;
                             this->unk_2D2 |= 0x10;
                         } else {
@@ -371,7 +370,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             break;
 
         case 0x3528:
-            if (gSaveContext.rupees < this->unk_434) {
+            if (gSaveContext.save.playerData.rupees < this->unk_434) {
                 this->unk_210 = 0x3536;
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
@@ -416,8 +415,8 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
 
 void func_809C1C9C(EnAob01* this, GlobalContext* globalCtx) {
     if (gSaveContext.rupeeAccumulator == 0) {
-        gSaveContext.weekEventReg[63] |= 1;
-        gSaveContext.weekEventReg[63] &= (u8)~2;
+        gSaveContext.save.weekEventReg[63] |= 1;
+        gSaveContext.save.weekEventReg[63] &= (u8)~2;
         this->unk_2D2 |= 0x20;
         func_800FD750(0x40);
         globalCtx->nextEntranceIndex = 0x7C10;
@@ -433,10 +432,10 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
     if (temp_v0 == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
-                    if (gSaveContext.rupees < 10) {
+                    if (gSaveContext.save.playerData.rupees < 10) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_210 = 0x3524;
                         Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
@@ -457,7 +456,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
                     break;
             }
         }
-    } else if ((temp_v0 == 5) && func_80147624(globalCtx)) {
+    } else if ((temp_v0 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_210 = 0;
@@ -561,7 +560,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2D2 &= ~8;
         }
     } else if (sp2F == 4) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             this->unk_2D2 &= ~0x40;
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
@@ -577,7 +576,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
             }
         }
     } else if (sp2F == 5) {
-        if (func_80147624(globalCtx)) {
+        if (Message_ShouldAdvance(globalCtx)) {
             this->unk_2D2 &= ~0x40;
             if (this->unk_2D2 & 0x10) {
                 this->unk_2D2 &= ~0x10;
@@ -588,7 +587,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
                 func_809C16DC(this, globalCtx);
             }
         }
-    } else if ((sp2F == 14) && func_80147624(globalCtx)) {
+    } else if ((sp2F == 14) && Message_ShouldAdvance(globalCtx)) {
         this->unk_2D2 &= ~0x40;
         this->unk_434 = globalCtx->msgCtx.bankRupeesSelected;
         func_809C16DC(this, globalCtx);
@@ -749,7 +748,7 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
     u8 sp2F = Message_GetState(&globalCtx->msgCtx);
 
     if (func_809C15BC(this)) {
-        if ((sp2F == 5) && func_80147624(globalCtx)) {
+        if ((sp2F == 5) && Message_ShouldAdvance(globalCtx)) {
             this->unk_434 = 0;
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -761,13 +760,13 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
             this->unk_2E0 = this->unk_2F2;
             this->actor.parent = NULL;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            if (gSaveContext.weekEventReg[8] & 0x20) {
+            if (gSaveContext.save.weekEventReg[8] & 0x20) {
                 this->actionFunc = func_809C2BE4;
             } else {
-                gSaveContext.weekEventReg[8] |= 0x20;
+                gSaveContext.save.weekEventReg[8] |= 0x20;
                 this->actionFunc = func_809C2BE4;
             }
-        } else if (gSaveContext.weekEventReg[8] & 0x20) {
+        } else if (gSaveContext.save.weekEventReg[8] & 0x20) {
             Actor_PickUp(&this->actor, globalCtx, GI_RUPEE_RED, 300.0f, 300.0f);
         } else {
             Actor_PickUp(&this->actor, globalCtx, GI_HEART_PIECE, 300.0f, 300.0f);
@@ -778,13 +777,13 @@ void func_809C2A64(EnAob01* this, GlobalContext* globalCtx) {
 void func_809C2BE4(EnAob01* this, GlobalContext* globalCtx) {
     u8 temp_v0 = Message_GetState(&globalCtx->msgCtx);
 
-    if (((temp_v0 == 5) || (temp_v0 == 6)) && func_80147624(globalCtx)) {
-        if (gSaveContext.weekEventReg[63] & 2) {
-            gSaveContext.weekEventReg[63] &= (u8)~2;
+    if (((temp_v0 == 5) || (temp_v0 == 6)) && Message_ShouldAdvance(globalCtx)) {
+        if (gSaveContext.save.weekEventReg[63] & 2) {
+            gSaveContext.save.weekEventReg[63] &= (u8)~2;
         }
 
-        if (gSaveContext.weekEventReg[63] & 1) {
-            gSaveContext.weekEventReg[63] &= (u8)~1;
+        if (gSaveContext.save.weekEventReg[63] & 1) {
+            gSaveContext.save.weekEventReg[63] &= (u8)~1;
         }
 
         this->unk_210 = 0;
@@ -819,7 +818,7 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
         }
     }
 
-    if ((sp2F == 5) && func_80147624(globalCtx)) {
+    if ((sp2F == 5) && Message_ShouldAdvance(globalCtx)) {
         this->unk_2D2 &= ~0x40;
         this->unk_2D2 &= ~0x80;
         if (this->unk_434 >= 150) {
@@ -833,12 +832,12 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
 
             this->unk_434 = 0;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            if (gSaveContext.weekEventReg[63] & 2) {
-                gSaveContext.weekEventReg[63] &= (u8)~2;
+            if (gSaveContext.save.weekEventReg[63] & 2) {
+                gSaveContext.save.weekEventReg[63] &= (u8)~2;
             }
 
-            if (gSaveContext.weekEventReg[63] & 1) {
-                gSaveContext.weekEventReg[63] &= (u8)~1;
+            if (gSaveContext.save.weekEventReg[63] & 1) {
+                gSaveContext.save.weekEventReg[63] &= (u8)~1;
             }
 
             this->unk_210 = 0x354C;
@@ -902,7 +901,7 @@ void func_809C2FA0(void) {
     }
 
     for (i = 0; i < ARRAY_COUNT(sp44); i++) {
-        gSaveContext.weekEventReg[42 + i] = 0;
+        gSaveContext.save.weekEventReg[42 + i] = 0;
         sp44[i] = 0;
     }
 
@@ -912,8 +911,8 @@ void func_809C2FA0(void) {
 
         if (i % 2) {
             sp44[idx2] |= orig2 << 0x4;
-            idx = gSaveContext.weekEventReg[42 + idx2];
-            gSaveContext.weekEventReg[42 + idx2] = idx | sp44[idx2];
+            idx = gSaveContext.save.weekEventReg[42 + idx2];
+            gSaveContext.save.weekEventReg[42 + idx2] = idx | sp44[idx2];
         } else {
             sp44[idx2] |= orig2;
         }
@@ -925,8 +924,8 @@ void EnAob01_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnAob01* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_aob_Skel_000180, NULL, this->jointTable, this->morphTable,
-                       16);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gMamamuYanSkel, NULL, this->jointTable, this->morphTable,
+                       MAMAMU_YAN_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     this->unk_43C = 0;
@@ -967,7 +966,7 @@ void EnAob01_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnAob01* this = THIS;
 
     if (!(this->unk_2D2 & 0x20)) {
-        gSaveContext.weekEventReg[63] &= (u8)~1;
+        gSaveContext.save.weekEventReg[63] &= (u8)~1;
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
@@ -982,35 +981,36 @@ void EnAob01_Update(Actor* thisx, GlobalContext* globalCtx) {
 s32 EnAob01_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
                              Actor* thisx) {
     EnAob01* this = THIS;
-    TexturePtr sp38[] = {
-        object_aob_Tex_000658,
-        object_aob_Tex_000E58,
-        object_aob_Tex_001658,
+    TexturePtr eyeTextures[] = {
+        gMamamuYanEyeOpenTex,
+        gMamamuYanEyeHalfTex,
+        gMamamuYanEyeClosedTex,
     };
 
-    if (limbIndex == 15) {
+    if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
 
-        *dList = object_aob_DL_003D18;
+        *dList = gMamamuYanHeadDL;
 
-        gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sp38[this->unk_3EE]));
+        gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(eyeTextures[this->eyeIndex]));
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
         Matrix_InsertTranslation(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_InsertXRotation_s(this->unk_2DA.y, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_2DA.x * -1, MTXMODE_APPLY);
         Matrix_InsertTranslation(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 8) {
+    if (limbIndex == MAMAMU_YAN_LIMB_TORSO) {
         Matrix_InsertXRotation_s(this->unk_2E0.y * -1, MTXMODE_APPLY);
         Matrix_InsertZRotation_s(this->unk_2E0.x * -1, MTXMODE_APPLY);
     }
 
-    if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 12)) {
+    if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
+        (limbIndex == MAMAMU_YAN_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += (s16)Math_SinS(this->unk_2F8[limbIndex]) * 200;
         rot->z += (s16)Math_CosS(this->unk_318[limbIndex]) * 200;
     }
@@ -1021,7 +1021,7 @@ void EnAob01_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, 
     static Vec3f D_809C3968 = { 0.0f, 0.0f, 0.0f };
     EnAob01* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == MAMAMU_YAN_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&D_809C3968, &this->actor.focus.pos);
     }
 }

@@ -182,7 +182,7 @@ void func_8092C934(EnDns* this) {
 s32* func_8092C9BC(EnDns* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!(gSaveContext.weekEventReg[23] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             return &D_8092DCB0[16];
         } else if (this->unk_2FC != 0) {
@@ -274,7 +274,7 @@ s32 func_8092CC68(GlobalContext* globalCtx) {
     s32 ret = false;
     s16 bgId;
 
-    if (!func_801690CC(globalCtx) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
+    if (!Play_InCsMode(globalCtx) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
         bgId = player->actor.floorBgId;
         if (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, bgId) != 4) {
             ret = true;
@@ -361,14 +361,14 @@ s32 func_8092D068(EnDns* this) {
     s32 ret = false;
 
     if (ENDNS_GET_8000(&this->actor)) {
-        if (gSaveContext.weekEventReg[23] & 0x20) {
+        if (gSaveContext.save.weekEventReg[23] & 0x20) {
             ret = true;
         }
     } else if (ENDNS_GET_4000(&this->actor)) {
-        if ((gSaveContext.weekEventReg[9] & 0x80) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+        if ((gSaveContext.save.weekEventReg[9] & 0x80) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             ret = true;
         }
-    } else if (!(gSaveContext.weekEventReg[9] & 0x80) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+    } else if (!(gSaveContext.save.weekEventReg[9] & 0x80) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
         ret = true;
     }
 
@@ -399,7 +399,8 @@ void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
     }
 
     if (!ENDNS_GET_4000(&this->actor) || (this->unk_2D2 != 0)) {
-        if (!(gSaveContext.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) && func_8092CC68(globalCtx)) {
+        if (!(gSaveContext.save.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) &&
+            func_8092CC68(globalCtx)) {
             player->stateFlags1 |= 0x20;
             this->unk_2C6 |= 0x100;
             SubS_UpdateFlags(&this->unk_2C6, 4, 7);
@@ -524,7 +525,7 @@ void EnDns_Init(Actor* thisx, GlobalContext* globalCtx) {
     SubS_UpdateFlags(&this->unk_2C6, 3, 7);
     this->unk_2C6 |= (0x40 | 0x10);
     this->unk_2C6 |= 0x200;
-    if (gSaveContext.weekEventReg[9] & 0x80) {
+    if (gSaveContext.save.weekEventReg[9] & 0x80) {
         this->unk_2FC = 1;
     } else {
         this->unk_2FC = 0;
