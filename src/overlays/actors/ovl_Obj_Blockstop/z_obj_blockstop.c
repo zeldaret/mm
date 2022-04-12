@@ -32,28 +32,28 @@ const ActorInit Obj_Blockstop_InitVars = {
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
     ObjBlockstop* this = THIS;
 
-    if (Flags_GetSwitch(globalCtx, (s32)this->actor.params)) {
+    if (Flags_GetSwitch(globalCtx, this->actor.params)) {
         Actor_MarkForDeath(&this->actor);
     }
     this->actionFunc = ObjBlockstop_CheckCollision;
 }
 
 void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
-    Actor* tempActor = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
+    Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
-    while (tempActor) {
-        if ((tempActor->id == 0x7A) && // check if oshihiki (push block)
-            (fabsf(tempActor->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
-            (fabsf(tempActor->world.pos.z - this->actor.world.pos.z) < 20.0f) &&
-            (fabsf(tempActor->world.pos.y - this->actor.world.pos.y) < 20.0f)) {
+    while (prop != NULL) {
+        if ((prop->id == ACTOR_OBJ_OSHIHIKI) &&
+            (fabsf(prop->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
+            (fabsf(prop->world.pos.z - this->actor.world.pos.z) < 20.0f) &&
+            (fabsf(prop->world.pos.y - this->actor.world.pos.y) < 20.0f)) {
 
-            s32 params = OBJOSHIHIKI_GET_F(tempActor);
+            s32 params = OBJOSHIHIKI_GET_F(prop);
             if (params < 3) {
                 ActorCutscene_SetIntentToPlay(this->actor.cutscene);
                 this->actionFunc = ObjBlockstop_TryPlayCutscene;
             }
         }
-        tempActor = tempActor->next;
+        prop = prop->next;
     }
 }
 
