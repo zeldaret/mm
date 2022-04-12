@@ -735,7 +735,7 @@ void EnDragon_UpdateDamage(EnDragon* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     u32 sp30;
 
-    if ((this->action == DEEP_PYTHON_ACTION_EXTEND)) {
+    if (this->action == DEEP_PYTHON_ACTION_EXTEND) {
         if ((this->collider.elements[2].info.bumperFlags & BUMP_HIT) ||
             (this->collider.elements[3].info.bumperFlags & BUMP_HIT) ||
             (this->collider.elements[4].info.bumperFlags & BUMP_HIT) ||
