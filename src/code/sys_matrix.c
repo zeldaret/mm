@@ -136,7 +136,7 @@ MtxF* Matrix_GetCurrent(void) {
  *
  * @remark original name: "Matrix_mult"
  */
-void Matrix_Mult(MtxF* mf, s32 mode) {
+void Matrix_Mult(MtxF* mf, MatrixMode mode) {
     MtxF* cmf = Matrix_GetCurrent();
 
     if (mode == MTXMODE_APPLY) {
@@ -169,7 +169,7 @@ void Matrix_Mult(MtxF* mf, s32 mode) {
  *
  * @remark original name: "Matrix_translate"
  */
-void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode) {
+void Matrix_Translate(f32 x, f32 y, f32 z, MatrixMode mode) {
     MtxF* cmf = sCurrentMatrix;
     f32 tx;
     f32 ty;
@@ -215,7 +215,7 @@ void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode) {
  *
  * @remark original name: "Matrix_scale"
  */
-void Matrix_Scale(f32 x, f32 y, f32 z, s32 mode) {
+void Matrix_Scale(f32 x, f32 y, f32 z, MatrixMode mode) {
     MtxF* cmf = sCurrentMatrix;
 
     if (mode == MTXMODE_APPLY) {
@@ -261,7 +261,7 @@ void Matrix_Scale(f32 x, f32 y, f32 z, s32 mode) {
  *
  * @remark original name: "Matrix_RotateX"
  */
-void Matrix_RotateXS(s16 x, s32 mode) {
+void Matrix_RotateXS(s16 x, MatrixMode mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -351,7 +351,7 @@ void Matrix_RotateXS(s16 x, s32 mode) {
  *
  * @remark original name may have been "Matrix_RotateX", but clashed with the previous function.
  */
-void Matrix_RotateXF(f32 x, s32 mode) {
+void Matrix_RotateXF(f32 x, MatrixMode mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -530,7 +530,7 @@ void Matrix_RotateXFNew(f32 x) {
  *
  * @remark original name: "Matrix_RotateY"
  */
-void Matrix_RotateYS(s16 y, s32 mode) {
+void Matrix_RotateYS(s16 y, MatrixMode mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -619,7 +619,7 @@ void Matrix_RotateYS(s16 y, s32 mode) {
  *
  * @remark original name may have been "Matrix_RotateY", but clashed with the previous function.
  */
-void Matrix_RotateYF(f32 y, s32 mode) {
+void Matrix_RotateYF(f32 y, MatrixMode mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -710,7 +710,7 @@ void Matrix_RotateYF(f32 y, s32 mode) {
  *
  * @remark original name: "Matrix_RotateZ"
  */
-void Matrix_RotateZS(s16 z, s32 mode) {
+void Matrix_RotateZS(s16 z, MatrixMode mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -801,7 +801,7 @@ void Matrix_RotateZS(s16 z, s32 mode) {
  *
  * @remark original name may have been "Matrix_RotateZ", but clashed with the previous function.
  */
-void Matrix_RotateZF(f32 z, s32 mode) {
+void Matrix_RotateZF(f32 z, MatrixMode mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -882,7 +882,7 @@ void Matrix_RotateZF(f32 z, s32 mode) {
  *
  * @remark original name: "Matrix_RotateXYZ", changed to reflect rotation order.
  */
-void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode) {
+void Matrix_RotateZYX(s16 x, s16 y, s16 z, MatrixMode mode) {
     MtxF* cmf = sCurrentMatrix;
     f32 temp1;
     f32 temp2;
@@ -1742,7 +1742,7 @@ void Matrix_MtxFToZYXRot(MtxF* mf, Vec3s* rotDest, s32 flag) {
  *
  * @remark original name may have been "Matrix_RotateVector", but clashed with the next function.
  */
-void Matrix_RotateAxisF(f32 angle, Vec3f* axis, s32 mode) {
+void Matrix_RotateAxisF(f32 angle, Vec3f* axis, MatrixMode mode) {
     MtxF* cmf;
     f32 sin;
     f32 cos;
@@ -1845,7 +1845,7 @@ void Matrix_RotateAxisF(f32 angle, Vec3f* axis, s32 mode) {
  *
  * @remark original name: "Matrix_RotateVector"
  */
-void Matrix_RotateAxisS(s16 angle, Vec3f* axis, s32 mode) {
+void Matrix_RotateAxisS(s16 angle, Vec3f* axis, MatrixMode mode) {
     MtxF* cmf;
     f32 cos;
     f32 sin;

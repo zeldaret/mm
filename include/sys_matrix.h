@@ -11,18 +11,18 @@ void Matrix_Get(MtxF* dest);
 void Matrix_Put(MtxF* src);
 MtxF* Matrix_GetCurrent(void);
 
-void Matrix_Mult(MtxF* matrix, s32 mode);
-void Matrix_Translate(f32 x, f32 y, f32 z, s32 mode);
-void Matrix_Scale(f32 xScale, f32 yScale, f32 zScale, s32 mode);
-void Matrix_RotateXS(s16 x, s32 mode);
-void Matrix_RotateXF(f32 x, s32 mode);
+void Matrix_Mult(MtxF* matrix, MatrixMode mode);
+void Matrix_Translate(f32 x, f32 y, f32 z, MatrixMode mode);
+void Matrix_Scale(f32 xScale, f32 yScale, f32 zScale, MatrixMode mode);
+void Matrix_RotateXS(s16 x, MatrixMode mode);
+void Matrix_RotateXF(f32 x, MatrixMode mode);
 void Matrix_RotateXFApply(f32 x);
 void Matrix_RotateXFNew(f32 x);
-void Matrix_RotateYS(s16 y, s32 mode);
-void Matrix_RotateYF(f32 y, s32 mode);
-void Matrix_RotateZS(s16 z, s32 mode);
-void Matrix_RotateZF(f32 z, s32 mode);
-void Matrix_RotateZYX(s16 x, s16 y, s16 z, s32 mode);
+void Matrix_RotateYS(s16 y, MatrixMode mode);
+void Matrix_RotateYF(f32 y, MatrixMode mode);
+void Matrix_RotateZS(s16 z, MatrixMode mode);
+void Matrix_RotateZF(f32 z, MatrixMode mode);
+void Matrix_RotateZYX(s16 x, s16 y, s16 z, MatrixMode mode);
 void Matrix_TranslateRotateZYX(Vec3f* pos, Vec3s* rot);
 void Matrix_RotateAndTranslateState(Vec3f* translation, Vec3s* rot);
 void Matrix_SetTranslateRotateYXZ(f32 x, f32 y, f32 z, Vec3s* rot);
@@ -45,7 +45,7 @@ void Matrix_Transpose(MtxF* mtx);
 void Matrix_ReplaceRotation(MtxF* mtx);
 void Matrix_MtxFToYXZRot(MtxF* mtx, Vec3s* rotDest, s32 flag);
 void Matrix_MtxFToZYXRot(MtxF* mtx, Vec3s* rotDest, s32 flag);
-void Matrix_RotateAxisF(f32 angle, Vec3f* axis, s32 mode);
-void Matrix_RotateAxisS(s16 angle, Vec3f* axis, s32 mode);
+void Matrix_RotateAxisF(f32 angle, Vec3f* axis, MatrixMode mode);
+void Matrix_RotateAxisS(s16 angle, Vec3f* axis, MatrixMode mode);
 
 #endif
