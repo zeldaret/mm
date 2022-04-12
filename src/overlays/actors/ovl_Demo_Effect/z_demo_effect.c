@@ -272,14 +272,17 @@ s32 func_808CDE78(GlobalContext* globalCtx, SkelAnimeCurve* skelCuve, s32 limbIn
 }
 
 void func_808CDFF8(Actor* thisx, GlobalContext* globalCtx) {
-    OPEN_DISPS(globalCtx->state.gfxCtx);
+    DemoEffect* this = THIS;
+    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+
+    OPEN_DISPS(gfxCtx);
 
     POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 25);
 
     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-    SkelCurve_Draw(thisx, globalCtx, &THIS->skelCurve, func_808CDE78, NULL, 1, thisx);
+    SkelCurve_Draw(&this->actor, globalCtx, &this->skelCurve, func_808CDE78, NULL, 1, &this->actor);
 
-    CLOSE_DISPS(globalCtx->state.gfxCtx);
+    CLOSE_DISPS(gfxCtx);
 }
 
 void func_808CE078(Actor* thisx, GlobalContext* globalCtx2) {
