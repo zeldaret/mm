@@ -477,8 +477,8 @@ s32 EnAm_UpdateDamage(EnAm* this, GlobalContext* globalCtx) {
         }
         this->enemyCollider.base.atFlags &= ~AT_HIT;
         if (this->actor.colChkInfo.damageEffect == 0x4) {
-            this->effectScale = 0.7f;
-            this->effectAlpha = 4.0f;
+            this->drawDmgEffScale = 0.7f;
+            this->drawDmgEffAlpha = 4.0f;
             Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, this->enemyCollider.info.bumper.hitPos.x,
                         this->enemyCollider.info.bumper.hitPos.y, this->enemyCollider.info.bumper.hitPos.z, 0, 0, 0,
                         CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -521,9 +521,9 @@ void EnAm_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->enemyCollider.base);
     }
-    Math_StepToF(&this->effectAlpha, 0.0f, 0.05f);
-    this->effectScale = (this->effectAlpha + 1.0f) * 0.35f;
-    this->effectScale = (this->effectScale > 0.7f) ? 0.7f : this->effectScale;
+    Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+    this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.35f;
+    this->drawDmgEffScale = (this->drawDmgEffScale > 0.7f) ? 0.7f : this->drawDmgEffScale;
 }
 
 void EnAm_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -566,6 +566,7 @@ void EnAm_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP = &gfx[2];
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnAm_PostLimbDraw,
                       &this->actor);
-    func_800BE680(globalCtx, &this->actor, this->limbPos, 13, this->effectScale, 0.0f, this->effectAlpha, 20);
+    Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+                            0.0f, this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }

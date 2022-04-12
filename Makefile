@@ -133,6 +133,8 @@ ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell fi
 
 ## Assets binaries (PNGs, JPGs, etc)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+# Prevents building C files that will be #include'd
+ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
 ASSET_FILES_XML := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.xml))
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
@@ -144,7 +146,7 @@ TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
 TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
 
-C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS),$(wildcard $(dir)/*.c))
+C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
 BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
@@ -174,7 +176,7 @@ build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/code/audio/%.o: OPTFLAGS := -O2
 
-build/assets/%.o: OPTFLAGS := 
+build/assets/%.o: OPTFLAGS := -O1
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
@@ -204,6 +206,8 @@ build/src/overlays/effects/%.o: CC := python3 tools/asm-processor/build.py $(CC)
 build/src/overlays/fbdemos/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/gamestates/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 build/src/overlays/kaleido_scope/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+
+build/assets/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 

@@ -35,30 +35,30 @@
         <DList Name="object_grasshopper_DL_003BE0" Offset="0x3BE0" />
         <DList Name="object_grasshopper_DL_003C70" Offset="0x3C70" />
         <DList Name="object_grasshopper_DL_003D00" Offset="0x3D00" />
-        <Limb Name="object_grasshopper_Standardlimb_003D90" Type="Standard" Offset="0x3D90" />
-        <Limb Name="object_grasshopper_Standardlimb_003D9C" Type="Standard" Offset="0x3D9C" />
-        <Limb Name="object_grasshopper_Standardlimb_003DA8" Type="Standard" Offset="0x3DA8" />
-        <Limb Name="object_grasshopper_Standardlimb_003DB4" Type="Standard" Offset="0x3DB4" />
-        <Limb Name="object_grasshopper_Standardlimb_003DC0" Type="Standard" Offset="0x3DC0" />
-        <Limb Name="object_grasshopper_Standardlimb_003DCC" Type="Standard" Offset="0x3DCC" />
-        <Limb Name="object_grasshopper_Standardlimb_003DD8" Type="Standard" Offset="0x3DD8" />
-        <Limb Name="object_grasshopper_Standardlimb_003DE4" Type="Standard" Offset="0x3DE4" />
-        <Limb Name="object_grasshopper_Standardlimb_003DF0" Type="Standard" Offset="0x3DF0" />
-        <Limb Name="object_grasshopper_Standardlimb_003DFC" Type="Standard" Offset="0x3DFC" />
-        <Limb Name="object_grasshopper_Standardlimb_003E08" Type="Standard" Offset="0x3E08" />
-        <Limb Name="object_grasshopper_Standardlimb_003E14" Type="Standard" Offset="0x3E14" />
-        <Limb Name="object_grasshopper_Standardlimb_003E20" Type="Standard" Offset="0x3E20" />
-        <Limb Name="object_grasshopper_Standardlimb_003E2C" Type="Standard" Offset="0x3E2C" />
-        <Limb Name="object_grasshopper_Standardlimb_003E38" Type="Standard" Offset="0x3E38" />
-        <Limb Name="object_grasshopper_Standardlimb_003E44" Type="Standard" Offset="0x3E44" />
-        <Limb Name="object_grasshopper_Standardlimb_003E50" Type="Standard" Offset="0x3E50" />
-        <Limb Name="object_grasshopper_Standardlimb_003E5C" Type="Standard" Offset="0x3E5C" />
-        <Limb Name="object_grasshopper_Standardlimb_003E68" Type="Standard" Offset="0x3E68" />
-        <Limb Name="object_grasshopper_Standardlimb_003E74" Type="Standard" Offset="0x3E74" />
-        <Limb Name="object_grasshopper_Standardlimb_003E80" Type="Standard" Offset="0x3E80" />
-        <Limb Name="object_grasshopper_Standardlimb_003E8C" Type="Standard" Offset="0x3E8C" />
-        <Limb Name="object_grasshopper_Standardlimb_003E98" Type="Standard" Offset="0x3E98" />
-        <Skeleton Name="object_grasshopper_Skel_003F00" Type="Normal" LimbType="Standard" Offset="0x3F00" />
+        <Limb Name="object_grasshopper_Standardlimb_003D90" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_01" Offset="0x3D90" />
+        <Limb Name="object_grasshopper_Standardlimb_003D9C" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_02" Offset="0x3D9C" />
+        <Limb Name="object_grasshopper_Standardlimb_003DA8" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_03" Offset="0x3DA8" />
+        <Limb Name="object_grasshopper_Standardlimb_003DB4" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_04" Offset="0x3DB4" />
+        <Limb Name="object_grasshopper_Standardlimb_003DC0" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_05" Offset="0x3DC0" />
+        <Limb Name="object_grasshopper_Standardlimb_003DCC" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_06" Offset="0x3DCC" />
+        <Limb Name="object_grasshopper_Standardlimb_003DD8" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_07" Offset="0x3DD8" />
+        <Limb Name="object_grasshopper_Standardlimb_003DE4" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_08" Offset="0x3DE4" />
+        <Limb Name="object_grasshopper_Standardlimb_003DF0" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_09" Offset="0x3DF0" />
+        <Limb Name="object_grasshopper_Standardlimb_003DFC" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_0A" Offset="0x3DFC" />
+        <Limb Name="object_grasshopper_Standardlimb_003E08" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_0B" Offset="0x3E08" />
+        <Limb Name="object_grasshopper_Standardlimb_003E14" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_0C" Offset="0x3E14" />
+        <Limb Name="object_grasshopper_Standardlimb_003E20" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_0D" Offset="0x3E20" />
+        <Limb Name="object_grasshopper_Standardlimb_003E2C" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_0E" Offset="0x3E2C" />
+        <Limb Name="object_grasshopper_Standardlimb_003E38" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_0F" Offset="0x3E38" />
+        <Limb Name="object_grasshopper_Standardlimb_003E44" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_10" Offset="0x3E44" />
+        <Limb Name="object_grasshopper_Standardlimb_003E50" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_11" Offset="0x3E50" />
+        <Limb Name="object_grasshopper_Standardlimb_003E5C" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_12" Offset="0x3E5C" />
+        <Limb Name="object_grasshopper_Standardlimb_003E68" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_13" Offset="0x3E68" />
+        <Limb Name="object_grasshopper_Standardlimb_003E74" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_14" Offset="0x3E74" />
+        <Limb Name="object_grasshopper_Standardlimb_003E80" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_15" Offset="0x3E80" />
+        <Limb Name="object_grasshopper_Standardlimb_003E8C" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_16" Offset="0x3E8C" />
+        <Limb Name="object_grasshopper_Standardlimb_003E98" Type="Standard" EnumName="OBJECT_GRASSHOPPER_LIMB_17" Offset="0x3E98" />
+        <Skeleton Name="object_grasshopper_Skel_003F00" Type="Normal" LimbType="Standard" LimbNone="OBJECT_GRASSHOPPER_LIMB_NONE" LimbMax="OBJECT_GRASSHOPPER_LIMB_MAX" EnumName="object_grasshopper_Limbs" Offset="0x3F00" />
         <Animation Name="object_grasshopper_Anim_0042F0" Offset="0x42F0" />
         <Animation Name="object_grasshopper_Anim_0047AC" Offset="0x47AC" />
         <Animation Name="object_grasshopper_Anim_004BC8" Offset="0x4BC8" />

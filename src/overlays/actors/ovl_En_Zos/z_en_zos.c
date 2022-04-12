@@ -218,12 +218,12 @@ void func_80BBB15C(EnZos* this, GlobalContext* globalCtx) {
             this->unk_2B6 |= 0x10;
         }
     }
-    func_801518B0(globalCtx, textId, &this->actor);
+    Message_StartTextbox(globalCtx, textId, &this->actor);
 }
 
 void func_80BBB2C4(EnZos* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, 0x124F, &this->actor);
+        Message_StartTextbox(globalCtx, 0x124F, &this->actor);
         this->actionFunc = func_80BBB8AC;
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
@@ -253,13 +253,13 @@ void func_80BBB354(EnZos* this, GlobalContext* globalCtx) {
 void func_80BBB414(EnZos* this, GlobalContext* globalCtx) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (func_800EE29C(globalCtx, 0x1F5)) {
-        s16 temp = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1F5)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 501)) {
+        s16 action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 501)]->action;
 
-        if (temp != this->unk_2BA) {
-            this->unk_2BA = temp;
+        if (action != this->unk_2BA) {
+            this->unk_2BA = action;
 
-            switch (temp) {
+            switch (action) {
                 case 1:
                     func_80BBAE84(this, 1, 0);
                     break;
@@ -471,17 +471,17 @@ void func_80BBBB84(EnZos* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-            func_801518B0(globalCtx, 0x1248, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1248, &this->actor);
             this->actionFunc = func_80BBB8AC;
             func_80BBAE84(this, 6, 0);
             this->unk_2B6 |= 2;
         } else if (gSaveContext.weekEventReg[41] & 0x10) {
-            func_801518B0(globalCtx, 0x124A, &this->actor);
+            Message_StartTextbox(globalCtx, 0x124A, &this->actor);
             this->actionFunc = func_80BBB8AC;
             func_80BBAE84(this, 6, 0);
         } else {
             gSaveContext.weekEventReg[41] |= 0x10;
-            func_801518B0(globalCtx, 0x124B, &this->actor);
+            Message_StartTextbox(globalCtx, 0x124B, &this->actor);
             this->actionFunc = func_80BBB574;
             func_80BBAE84(this, 9, 2);
             this->unk_2B6 |= 0x10;
@@ -495,7 +495,7 @@ void func_80BBBCBC(EnZos* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80BBAE84(this, 5, 0);
-        func_801518B0(globalCtx, 0x124D, &this->actor);
+        Message_StartTextbox(globalCtx, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
@@ -504,7 +504,7 @@ void func_80BBBCBC(EnZos* this, GlobalContext* globalCtx) {
 
 void func_80BBBD5C(EnZos* this, GlobalContext* globalCtx) {
     func_80BBB414(this, globalCtx);
-    if (!func_800EE29C(globalCtx, 0x1F5)) {
+    if (!Cutscene_CheckActorAction(globalCtx, 0x1F5)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
@@ -537,7 +537,7 @@ void func_80BBBDE0(EnZos* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = func_80BBB8AC;
         func_80BBB15C(this, globalCtx);
-    } else if (func_800EE29C(globalCtx, 0x1F5)) {
+    } else if (Cutscene_CheckActorAction(globalCtx, 0x1F5)) {
         this->actionFunc = func_80BBBD5C;
     } else if (func_80BBAF5C(this, globalCtx)) {
         func_800B8614(&this->actor, globalCtx, 120.0f);
@@ -572,7 +572,7 @@ void func_80BBBFBC(EnZos* this, GlobalContext* globalCtx) {
         textId = 0x1258;
         func_80BBAE84(this, 6, 0);
     }
-    func_801518B0(globalCtx, textId, &this->actor);
+    Message_StartTextbox(globalCtx, textId, &this->actor);
 }
 
 void func_80BBC070(EnZos* this, GlobalContext* globalCtx) {
@@ -645,8 +645,8 @@ void func_80BBC298(EnZos* this, GlobalContext* globalCtx) {
         this->unk_2BC = 999;
     }
 
-    if (func_800EE29C(globalCtx, 0x203)) {
-        if (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x203)]->unk0 == 1) {
+    if (Cutscene_CheckActorAction(globalCtx, 515)) {
+        if (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 515)]->action == 1) {
             this->actionFunc = func_80BBC37C;
             this->unk_2BC = -1;
         }
@@ -658,7 +658,8 @@ void func_80BBC298(EnZos* this, GlobalContext* globalCtx) {
 
 void func_80BBC37C(EnZos* this, GlobalContext* globalCtx) {
     func_80BBAFFC(this, globalCtx);
-    if (func_800EE29C(globalCtx, 0x203) && (globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x203)]->unk0 == 3)) {
+    if (Cutscene_CheckActorAction(globalCtx, 515) &&
+        (globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 515)]->action == 3)) {
         this->actionFunc = func_80BBC298;
     }
 }

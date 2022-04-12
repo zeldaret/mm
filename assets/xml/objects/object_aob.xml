@@ -1,22 +1,22 @@
 ﻿<Root>
     <File Name="object_aob" Segment="6">
         <Animation Name="object_aob_Anim_00007C" Offset="0x7C" />
-        <Limb Name="object_aob_Standardlimb_000090" Type="Standard" Offset="0x90" />
-        <Limb Name="object_aob_Standardlimb_00009C" Type="Standard" Offset="0x9C" />
-        <Limb Name="object_aob_Standardlimb_0000A8" Type="Standard" Offset="0xA8" />
-        <Limb Name="object_aob_Standardlimb_0000B4" Type="Standard" Offset="0xB4" />
-        <Limb Name="object_aob_Standardlimb_0000C0" Type="Standard" Offset="0xC0" />
-        <Limb Name="object_aob_Standardlimb_0000CC" Type="Standard" Offset="0xCC" />
-        <Limb Name="object_aob_Standardlimb_0000D8" Type="Standard" Offset="0xD8" />
-        <Limb Name="object_aob_Standardlimb_0000E4" Type="Standard" Offset="0xE4" />
-        <Limb Name="object_aob_Standardlimb_0000F0" Type="Standard" Offset="0xF0" />
-        <Limb Name="object_aob_Standardlimb_0000FC" Type="Standard" Offset="0xFC" />
-        <Limb Name="object_aob_Standardlimb_000108" Type="Standard" Offset="0x108" />
-        <Limb Name="object_aob_Standardlimb_000114" Type="Standard" Offset="0x114" />
-        <Limb Name="object_aob_Standardlimb_000120" Type="Standard" Offset="0x120" />
-        <Limb Name="object_aob_Standardlimb_00012C" Type="Standard" Offset="0x12C" />
-        <Limb Name="object_aob_Standardlimb_000138" Type="Standard" Offset="0x138" />
-        <Skeleton Name="object_aob_Skel_000180" Type="Flex" LimbType="Standard" Offset="0x180" />
+        <Limb Name="object_aob_Standardlimb_000090" Type="Standard" EnumName="OBJECT_AOB_LIMB_01" Offset="0x90" />
+        <Limb Name="object_aob_Standardlimb_00009C" Type="Standard" EnumName="OBJECT_AOB_LIMB_02" Offset="0x9C" />
+        <Limb Name="object_aob_Standardlimb_0000A8" Type="Standard" EnumName="OBJECT_AOB_LIMB_03" Offset="0xA8" />
+        <Limb Name="object_aob_Standardlimb_0000B4" Type="Standard" EnumName="OBJECT_AOB_LIMB_04" Offset="0xB4" />
+        <Limb Name="object_aob_Standardlimb_0000C0" Type="Standard" EnumName="OBJECT_AOB_LIMB_05" Offset="0xC0" />
+        <Limb Name="object_aob_Standardlimb_0000CC" Type="Standard" EnumName="OBJECT_AOB_LIMB_06" Offset="0xCC" />
+        <Limb Name="object_aob_Standardlimb_0000D8" Type="Standard" EnumName="OBJECT_AOB_LIMB_07" Offset="0xD8" />
+        <Limb Name="object_aob_Standardlimb_0000E4" Type="Standard" EnumName="OBJECT_AOB_LIMB_08" Offset="0xE4" />
+        <Limb Name="object_aob_Standardlimb_0000F0" Type="Standard" EnumName="OBJECT_AOB_LIMB_09" Offset="0xF0" />
+        <Limb Name="object_aob_Standardlimb_0000FC" Type="Standard" EnumName="OBJECT_AOB_LIMB_0A" Offset="0xFC" />
+        <Limb Name="object_aob_Standardlimb_000108" Type="Standard" EnumName="OBJECT_AOB_LIMB_0B" Offset="0x108" />
+        <Limb Name="object_aob_Standardlimb_000114" Type="Standard" EnumName="OBJECT_AOB_LIMB_0C" Offset="0x114" />
+        <Limb Name="object_aob_Standardlimb_000120" Type="Standard" EnumName="OBJECT_AOB_LIMB_0D" Offset="0x120" />
+        <Limb Name="object_aob_Standardlimb_00012C" Type="Standard" EnumName="OBJECT_AOB_LIMB_0E" Offset="0x12C" />
+        <Limb Name="object_aob_Standardlimb_000138" Type="Standard" EnumName="OBJECT_AOB_LIMB_0F" Offset="0x138" />
+        <Skeleton Name="object_aob_Skel_000180" Type="Flex" LimbType="Standard" LimbNone="OBJECT_AOB_LIMB_NONE" LimbMax="OBJECT_AOB_LIMB_MAX" EnumName="object_aob_Limbs" Offset="0x180" />
         <Texture Name="object_aob_TLUT_000198" OutName="tlut_000198" Format="rgba16" Width="16" Height="16" Offset="0x198" />
         <Texture Name="object_aob_Tex_000398" OutName="tex_000398" Format="ci8" Width="16" Height="16" Offset="0x398" />
         <Texture Name="object_aob_Tex_000498" OutName="tex_000498" Format="ci8" Width="8" Height="8" Offset="0x498" />

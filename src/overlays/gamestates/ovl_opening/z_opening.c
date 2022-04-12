@@ -37,7 +37,7 @@ void func_80803EA0(OpeningContext* this) {
 void Opening_Main(GameState* thisx) {
     OpeningContext* this = (OpeningContext*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, 0, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, false, true, 0, 0, 0);
     Opening_SetupForTitleCutscene(this);
     func_80803EA0(this);
 }

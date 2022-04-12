@@ -19,12 +19,12 @@ typedef struct EnKarebaba {
     /* 0x0188 */ EnKarebabaActionFunc actionFunc;
     /* 0x018C */ Vec3s jointTable[8];
     /* 0x01BC */ Vec3s morphTable[8];
-    /* 0x01EC */ u8 unk_1EC;
+    /* 0x01EC */ u8 drawDmgEffType;
     /* 0x01EE */ s16 unk_1EE;
-    /* 0x01F0 */ f32 unk_1F0;
-    /* 0x01F4 */ f32 unk_1F4;
-    /* 0x01F8 */ f32 unk_1F8;
-    /* 0x01FC */ Vec3f unk_1FC[4];
+    /* 0x01F0 */ f32 drawDmgEffAlpha;
+    /* 0x01F4 */ f32 drawDmgEffScale;
+    /* 0x01F8 */ f32 drawDmgEffFrozenSteamScale;
+    /* 0x01FC */ Vec3f limbPos[4];
     /* 0x022C */ CollisionPoly* unk_22C;
     /* 0x0230 */ ColliderCylinder collider1;
     /* 0x027C */ ColliderCylinder collider2;

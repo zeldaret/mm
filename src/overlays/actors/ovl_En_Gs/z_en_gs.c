@@ -206,7 +206,7 @@ void func_80997DEC(EnGs* this, GlobalContext* globalCtx) {
 void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 0:
-            func_801518B0(globalCtx, this->unk_210, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
             break;
 
         case 1:
@@ -262,7 +262,7 @@ void func_80997E4C(EnGs* this, GlobalContext* globalCtx) {
 }
 
 void func_80997FF0(EnGs* this, GlobalContext* globalCtx) {
-    if (SubS_StartActorCutscene(&this->actor, globalCtx->unk_1879C[0], -1, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartActorCutscene(&this->actor, globalCtx->playerActorCsIds[0], -1, SUBS_CUTSCENE_NORMAL)) {
         func_80998040(this, globalCtx);
     }
 }
@@ -339,7 +339,7 @@ void func_8099807C(EnGs* this, GlobalContext* globalCtx) {
 
 void func_80998300(EnGs* this, GlobalContext* globalCtx) {
     if (this->actor.cutscene != -1) {
-        ActorCutscene_Stop(globalCtx->unk_1879C[0]);
+        ActorCutscene_Stop(globalCtx->playerActorCsIds[0]);
     }
 }
 
@@ -533,10 +533,11 @@ s32 func_80998A48(EnGs* this, GlobalContext* globalCtx) {
     } else if (this->unk_19D == 1) {
         if (func_80998334(this, globalCtx, &this->unk_1DC, &this->unk_1E0, &this->unk_1D4, 0.8f, 0.007f, 0.001f, 7,
                           0) == 0.0f) {
-            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) && !Message_GetState(&globalCtx->msgCtx)) {
+            if ((this->actor.params != ENGS_0) && !func_801690CC(globalCtx) &&
+                Message_GetState(&globalCtx->msgCtx) == 0) {
                 this->unk_216 = 0;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FAIVE_LUPY_COUNT);
-                func_801518B0(globalCtx, 0x20D2, NULL);
+                Message_StartTextbox(globalCtx, 0x20D2, NULL);
             }
             this->unk_19A &= ~1;
             sp3C = 0;
@@ -1024,8 +1025,8 @@ void EnGs_Update(Actor* thisx, GlobalContext* globalCtx) {
         if ((this->actor.flags & ACTOR_FLAG_40) || (this->unk_19A & 0x100) || (this->unk_19A & 0x200)) {
             func_80999BC8(&this->actor, globalCtx);
             Actor_GetScreenPos(globalCtx, &this->actor, &sp2E, &sp2C);
-            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > 320) || (sp2C < 0) ||
-                (sp2C > 240)) {
+            if ((this->actor.xyzDistToPlayerSq > SQ(400.0f)) || (sp2E < 0) || (sp2E > SCREEN_WIDTH) || (sp2C < 0) ||
+                (sp2C > SCREEN_HEIGHT)) {
                 this->unk_216 = 0;
             } else if (this->unk_21C > 0) {
                 func_800BC848(&this->actor, globalCtx, this->unk_21C, this->unk_21E);

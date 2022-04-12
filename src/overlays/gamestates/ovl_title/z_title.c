@@ -119,7 +119,7 @@ void Title_Draw(GameState* thisx) {
 void Title_Main(GameState* thisx) {
     TitleContext* this = (TitleContext*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->gameState.gfxCtx, true, true, 0, 0, 0);
 
     OPEN_DISPS(this->gameState.gfxCtx);
 

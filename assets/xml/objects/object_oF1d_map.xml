@@ -78,24 +78,24 @@
         <Texture Name="object_oF1d_map_Tex_011438" OutName="tex_011438" Format="rgba16" Width="8" Height="8" Offset="0x11438" />
         <Texture Name="object_oF1d_map_Tex_0114B8" OutName="tex_0114B8" Format="ci8" Width="16" Height="16" Offset="0x114B8" />
         <Texture Name="object_oF1d_map_Tex_0115B8" OutName="tex_0115B8" Format="rgba16" Width="32" Height="16" Offset="0x115B8" />
-        <Limb Name="object_oF1d_map_Standardlimb_0119B8" Type="Standard" Offset="0x119B8" />
-        <Limb Name="object_oF1d_map_Standardlimb_0119C4" Type="Standard" Offset="0x119C4" />
-        <Limb Name="object_oF1d_map_Standardlimb_0119D0" Type="Standard" Offset="0x119D0" />
-        <Limb Name="object_oF1d_map_Standardlimb_0119DC" Type="Standard" Offset="0x119DC" />
-        <Limb Name="object_oF1d_map_Standardlimb_0119E8" Type="Standard" Offset="0x119E8" />
-        <Limb Name="object_oF1d_map_Standardlimb_0119F4" Type="Standard" Offset="0x119F4" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A00" Type="Standard" Offset="0x11A00" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A0C" Type="Standard" Offset="0x11A0C" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A18" Type="Standard" Offset="0x11A18" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A24" Type="Standard" Offset="0x11A24" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A30" Type="Standard" Offset="0x11A30" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A3C" Type="Standard" Offset="0x11A3C" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A48" Type="Standard" Offset="0x11A48" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A54" Type="Standard" Offset="0x11A54" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A60" Type="Standard" Offset="0x11A60" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A6C" Type="Standard" Offset="0x11A6C" />
-        <Limb Name="object_oF1d_map_Standardlimb_011A78" Type="Standard" Offset="0x11A78" />
-        <Skeleton Name="object_oF1d_map_Skel_011AC8" Type="Flex" LimbType="Standard" Offset="0x11AC8" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119B8" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_01" Offset="0x119B8" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119C4" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_02" Offset="0x119C4" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119D0" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_03" Offset="0x119D0" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119DC" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_04" Offset="0x119DC" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119E8" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_05" Offset="0x119E8" />
+        <Limb Name="object_oF1d_map_Standardlimb_0119F4" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_06" Offset="0x119F4" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A00" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_07" Offset="0x11A00" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A0C" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_08" Offset="0x11A0C" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A18" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_09" Offset="0x11A18" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A24" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0A" Offset="0x11A24" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A30" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0B" Offset="0x11A30" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A3C" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0C" Offset="0x11A3C" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A48" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0D" Offset="0x11A48" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A54" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0E" Offset="0x11A54" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A60" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_0F" Offset="0x11A60" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A6C" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_10" Offset="0x11A6C" />
+        <Limb Name="object_oF1d_map_Standardlimb_011A78" Type="Standard" EnumName="OBJECT_OF1D_MAP_LIMB_11" Offset="0x11A78" />
+        <Skeleton Name="object_oF1d_map_Skel_011AC8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OF1D_MAP_LIMB_NONE" LimbMax="OBJECT_OF1D_MAP_LIMB_MAX" EnumName="object_oF1d_map_Limbs" Offset="0x11AC8" />
         <Animation Name="object_oF1d_map_Anim_011D98" Offset="0x11D98" />
         <Animation Name="object_oF1d_map_Anim_012DE0" Offset="0x12DE0" />
         <Animation Name="object_oF1d_map_Anim_0135E8" Offset="0x135E8" />

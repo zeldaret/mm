@@ -147,8 +147,8 @@ s32 func_80936D58(ObjBean* this, GlobalContext* globalCtx) {
     Math_Vec3f_Sum(&this->dyna.actor.world.pos, &spAC, &spA0);
     Math_Vec3f_Diff(&this->dyna.actor.world.pos, &spAC, &sp94);
 
-    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, 1, 1, 1, 1, &spB8,
-                                &this->dyna.actor)) {
+    if (BgCheck_EntityLineTest2(&globalCtx->colCtx, &spA0, &sp94, &sp88, &this->dyna.actor.floorPoly, true, true, true,
+                                true, &spB8, &this->dyna.actor)) {
         this->dyna.actor.world.pos.x = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.x) * 1.9f) + sp88.x;
         this->dyna.actor.world.pos.y = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.y) * 1.9f) + sp88.y;
         this->dyna.actor.world.pos.z = (COLPOLY_GET_NORMAL(this->dyna.actor.floorPoly->normal.z) * 1.9f) + sp88.z;
@@ -346,7 +346,7 @@ void func_809375F4(ObjBean* this, GlobalContext* globalCtx) {
             phi_v0 = 0x40;
         }
         EffectSsKakera_Spawn(globalCtx, &spC4, &spB8, &spC4, phi_s3, phi_v0, 40, 3, 0, temp_s2, 0, 0,
-                             (temp_s2 >> 3) + 40, -1, 1, D_80939024[i & 1]);
+                             (temp_s2 >> 3) + 40, -1, GAMEPLAY_KEEP, D_80939024[i & 1]);
     }
 }
 

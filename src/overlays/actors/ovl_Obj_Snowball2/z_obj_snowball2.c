@@ -178,7 +178,7 @@ void func_80B39108(ObjSnowball2* this, GlobalContext* globalCtx) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &spD0, &spDC, &spD0, -300, phi_s1, 30, 0, 0, (temp >> 0x1D) + 8, phi_v0, 0, 50,
-                             -1, 0xEF, D_80B3A91C[i & 3]);
+                             -1, OBJECT_GOROIWA, D_80B3A91C[i & 3]);
 
         spD0.x += (Rand_ZeroOne() - 0.5f) * 40.0f;
         spD0.y += (Rand_ZeroOne() - 0.3f) * 45.0f;

@@ -360,10 +360,10 @@ void EnWf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 void func_809907D4(EnWf* this) {
-    this->unk_2B0 = 0.75f;
-    this->unk_2B4 = 1.125f;
-    this->unk_2AC = 1.0f;
-    this->unk_296 = 10;
+    this->drawDmgEffScale = 0.75f;
+    this->drawDmgEffFrozenSteamScale = 1.125f;
+    this->drawDmgEffAlpha = 1.0f;
+    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->collider2.base.colType = COLTYPE_HIT3;
     this->collider3.base.colType = COLTYPE_HIT3;
     this->unk_2A0 = 80;
@@ -372,12 +372,12 @@ void func_809907D4(EnWf* this) {
 }
 
 void func_80990854(EnWf* this, GlobalContext* globalCtx) {
-    if (this->unk_296 == 10) {
-        this->unk_296 = 0;
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider2.base.colType = COLTYPE_HIT5;
         this->collider3.base.colType = COLTYPE_HIT5;
-        this->unk_2AC = 0.0f;
-        Actor_SpawnIceEffects(globalCtx, &this->actor, this->unk_2B8, 10, 2, 0.3f, 0.2f);
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(globalCtx, &this->actor, this->limbPos, 10, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -1410,7 +1410,7 @@ void func_8099386C(EnWf* this, GlobalContext* globalCtx) {
         this->collider3.base.acFlags &= ~AC_HIT;
         this->collider1.base.atFlags &= ~AT_ON;
 
-        if (((this->unk_296 != 10) ||
+        if (((this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) ||
              !(collider->info.acHitInfo->toucher.dmgFlags &
                (0x80000 | 0x40000 | 0x10000 | 0x8000 | 0x2000 | 0x1000 | 0x80 | 0x20 | 0x10 | 0x2 | 0x1))) &&
             (this->actor.colChkInfo.damageEffect != 0xF)) {
@@ -1428,9 +1428,9 @@ void func_8099386C(EnWf* this, GlobalContext* globalCtx) {
             } else if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2A0 = 40;
                 Actor_SetColorFilter(&this->actor, 0, 0xFF, 0, 40);
-                this->unk_296 = 30;
-                this->unk_2B0 = 0.75f;
-                this->unk_2AC = 2.0f;
+                this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
+                this->drawDmgEffScale = 0.75f;
+                this->drawDmgEffAlpha = 2.0f;
                 Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_809923B0(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
@@ -1442,13 +1442,13 @@ void func_8099386C(EnWf* this, GlobalContext* globalCtx) {
                 func_809923B0(this);
             } else {
                 if (this->actor.colChkInfo.damageEffect == 2) {
-                    this->unk_296 = 0;
-                    this->unk_2B0 = 0.75f;
-                    this->unk_2AC = 4.0f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+                    this->drawDmgEffScale = 0.75f;
+                    this->drawDmgEffAlpha = 4.0f;
                 } else if (this->actor.colChkInfo.damageEffect == 4) {
-                    this->unk_296 = 20;
-                    this->unk_2B0 = 0.75f;
-                    this->unk_2AC = 4.0f;
+                    this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+                    this->drawDmgEffScale = 0.75f;
+                    this->drawDmgEffAlpha = 4.0f;
                     Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
                                 collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
                                 CLEAR_TAG_LARGE_LIGHT_RAYS);
@@ -1517,16 +1517,16 @@ void EnWf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     Actor_SetFocus(&this->actor, 25.0f);
 
-    if (this->unk_2AC > 0.0f) {
-        if (this->unk_296 != 10) {
-            Math_StepToF(&this->unk_2AC, 0.0f, 0.05f);
-            this->unk_2B0 = (this->unk_2AC + 1.0f) * 0.375f;
-            if (this->unk_2B0 > 0.75f) {
-                this->unk_2B0 = 0.75f;
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
+            if (this->drawDmgEffScale > 0.75f) {
+                this->drawDmgEffScale = 0.75f;
             } else {
-                this->unk_2B0 = this->unk_2B0;
+                this->drawDmgEffScale = this->drawDmgEffScale;
             }
-        } else if (!Math_StepToF(&this->unk_2B4, 0.75f, 0.01875f)) {
+        } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
             func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
@@ -1551,7 +1551,7 @@ void EnWf_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     Collider_UpdateSpheres(limbIndex, &this->collider1);
 
     if (D_809942FC[limbIndex] != -1) {
-        Matrix_GetStateTranslation(&this->unk_2B8[D_809942FC[limbIndex]]);
+        Matrix_GetStateTranslation(&this->limbPos[D_809942FC[limbIndex]]);
     }
 
     if (limbIndex == 6) {
@@ -1580,8 +1580,9 @@ void EnWf_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                               this->skelAnime.dListCount, EnWf_OverrideLimbDraw, EnWf_PostLimbDraw, &this->actor);
-        func_800BE680(globalCtx, &this->actor, this->unk_2B8, 10, this->unk_2B0, this->unk_2B4, this->unk_2AC,
-                      this->unk_296);
+        Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                                this->drawDmgEffType);
     }
 }
 

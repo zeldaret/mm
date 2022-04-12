@@ -54,28 +54,28 @@
         <DList Name="object_death_DL_00A688" Offset="0xA688" />
         <DList Name="object_death_DL_00A788" Offset="0xA788" />
         <Texture Name="object_death_Tex_00A7B8" OutName="tex_00A7B8" Format="rgba16" Width="32" Height="16" Offset="0xA7B8" />
-        <Limb Name="object_death_Standardlimb_00ABB8" Type="Standard" Offset="0xABB8" />
-        <Limb Name="object_death_Standardlimb_00ABC4" Type="Standard" Offset="0xABC4" />
-        <Limb Name="object_death_Standardlimb_00ABD0" Type="Standard" Offset="0xABD0" />
-        <Limb Name="object_death_Standardlimb_00ABDC" Type="Standard" Offset="0xABDC" />
-        <Limb Name="object_death_Standardlimb_00ABE8" Type="Standard" Offset="0xABE8" />
-        <Limb Name="object_death_Standardlimb_00ABF4" Type="Standard" Offset="0xABF4" />
-        <Limb Name="object_death_Standardlimb_00AC00" Type="Standard" Offset="0xAC00" />
-        <Limb Name="object_death_Standardlimb_00AC0C" Type="Standard" Offset="0xAC0C" />
-        <Limb Name="object_death_Standardlimb_00AC18" Type="Standard" Offset="0xAC18" />
-        <Limb Name="object_death_Standardlimb_00AC24" Type="Standard" Offset="0xAC24" />
-        <Limb Name="object_death_Standardlimb_00AC30" Type="Standard" Offset="0xAC30" />
-        <Limb Name="object_death_Standardlimb_00AC3C" Type="Standard" Offset="0xAC3C" />
-        <Limb Name="object_death_Standardlimb_00AC48" Type="Standard" Offset="0xAC48" />
-        <Limb Name="object_death_Standardlimb_00AC54" Type="Standard" Offset="0xAC54" />
-        <Limb Name="object_death_Standardlimb_00AC60" Type="Standard" Offset="0xAC60" />
-        <Limb Name="object_death_Standardlimb_00AC6C" Type="Standard" Offset="0xAC6C" />
-        <Limb Name="object_death_Standardlimb_00AC78" Type="Standard" Offset="0xAC78" />
-        <Limb Name="object_death_Standardlimb_00AC84" Type="Standard" Offset="0xAC84" />
-        <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" Offset="0xAC90" />
-        <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" Offset="0xAC9C" />
-        <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" Offset="0xACA8" />
-        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" Offset="0xAD08" />
+        <Limb Name="object_death_Standardlimb_00ABB8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_01" Offset="0xABB8" />
+        <Limb Name="object_death_Standardlimb_00ABC4" Type="Standard" EnumName="OBJECT_DEATH_LIMB_02" Offset="0xABC4" />
+        <Limb Name="object_death_Standardlimb_00ABD0" Type="Standard" EnumName="OBJECT_DEATH_LIMB_03" Offset="0xABD0" />
+        <Limb Name="object_death_Standardlimb_00ABDC" Type="Standard" EnumName="OBJECT_DEATH_LIMB_04" Offset="0xABDC" />
+        <Limb Name="object_death_Standardlimb_00ABE8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_05" Offset="0xABE8" />
+        <Limb Name="object_death_Standardlimb_00ABF4" Type="Standard" EnumName="OBJECT_DEATH_LIMB_06" Offset="0xABF4" />
+        <Limb Name="object_death_Standardlimb_00AC00" Type="Standard" EnumName="OBJECT_DEATH_LIMB_07" Offset="0xAC00" />
+        <Limb Name="object_death_Standardlimb_00AC0C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_08" Offset="0xAC0C" />
+        <Limb Name="object_death_Standardlimb_00AC18" Type="Standard" EnumName="OBJECT_DEATH_LIMB_09" Offset="0xAC18" />
+        <Limb Name="object_death_Standardlimb_00AC24" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0A" Offset="0xAC24" />
+        <Limb Name="object_death_Standardlimb_00AC30" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0B" Offset="0xAC30" />
+        <Limb Name="object_death_Standardlimb_00AC3C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0C" Offset="0xAC3C" />
+        <Limb Name="object_death_Standardlimb_00AC48" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0D" Offset="0xAC48" />
+        <Limb Name="object_death_Standardlimb_00AC54" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0E" Offset="0xAC54" />
+        <Limb Name="object_death_Standardlimb_00AC60" Type="Standard" EnumName="OBJECT_DEATH_LIMB_0F" Offset="0xAC60" />
+        <Limb Name="object_death_Standardlimb_00AC6C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_10" Offset="0xAC6C" />
+        <Limb Name="object_death_Standardlimb_00AC78" Type="Standard" EnumName="OBJECT_DEATH_LIMB_11" Offset="0xAC78" />
+        <Limb Name="object_death_Standardlimb_00AC84" Type="Standard" EnumName="OBJECT_DEATH_LIMB_12" Offset="0xAC84" />
+        <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" EnumName="OBJECT_DEATH_LIMB_13" Offset="0xAC90" />
+        <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_14" Offset="0xAC9C" />
+        <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_15" Offset="0xACA8" />
+        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DEATH_LIMB_NONE" LimbMax="OBJECT_DEATH_LIMB_MAX" EnumName="object_death_Limbs" Offset="0xAD08" />
         <Animation Name="object_death_Anim_00B284" Offset="0xB284" />
         <Animation Name="object_death_Anim_00B508" Offset="0xB508" />
         <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" />

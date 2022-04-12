@@ -408,7 +408,7 @@ s32 func_8095B06C(EnOwl* this) {
 
 void func_8095B0C8(EnOwl* this) {
     s32 pad;
-    Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(this->path->points);
 
     points += this->unk_3F8;
     this->unk_3EC = Math_FAtan2F(points->z - this->actor.world.pos.z, points->x - this->actor.world.pos.x);
@@ -542,7 +542,7 @@ void func_8095B76C(EnOwl* this, GlobalContext* globalCtx) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (sp44 < SQ(this->actor.speedXZ)) {
         this->actor.speedXZ = 0.0f;
-        points = (Vec3s*)Lib_SegmentedToVirtual(this->path->points);
+        points = Lib_SegmentedToVirtual(this->path->points);
         points += this->unk_3F8;
 
         do {

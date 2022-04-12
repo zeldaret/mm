@@ -213,8 +213,8 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
 }
 
 void func_80A51890(EnDnk* this, GlobalContext* globalCtx) {
-    if (func_800EE29C(globalCtx, 0x7E)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x7E));
+    if (Cutscene_CheckActorAction(globalCtx, 126)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 126));
     }
 }
 

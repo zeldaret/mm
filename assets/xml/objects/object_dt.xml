@@ -47,21 +47,21 @@
         <Texture Name="object_dt_Tex_00A790" OutName="tex_00A790" Format="ci8" Width="32" Height="32" Offset="0xA790" />
         <Texture Name="object_dt_Tex_00AB90" OutName="tex_00AB90" Format="ci8" Width="32" Height="32" Offset="0xAB90" />
         <TextureAnimation Name="object_dt_Matanimheader_00AFDC" Offset="0xAFDC" />
-        <Limb Name="object_dt_Standardlimb_00AFEC" Type="Standard" Offset="0xAFEC" />
-        <Limb Name="object_dt_Standardlimb_00AFF8" Type="Standard" Offset="0xAFF8" />
-        <Limb Name="object_dt_Standardlimb_00B004" Type="Standard" Offset="0xB004" />
-        <Limb Name="object_dt_Standardlimb_00B010" Type="Standard" Offset="0xB010" />
-        <Limb Name="object_dt_Standardlimb_00B01C" Type="Standard" Offset="0xB01C" />
-        <Limb Name="object_dt_Standardlimb_00B028" Type="Standard" Offset="0xB028" />
-        <Limb Name="object_dt_Standardlimb_00B034" Type="Standard" Offset="0xB034" />
-        <Limb Name="object_dt_Standardlimb_00B040" Type="Standard" Offset="0xB040" />
-        <Limb Name="object_dt_Standardlimb_00B04C" Type="Standard" Offset="0xB04C" />
-        <Limb Name="object_dt_Standardlimb_00B058" Type="Standard" Offset="0xB058" />
-        <Limb Name="object_dt_Standardlimb_00B064" Type="Standard" Offset="0xB064" />
-        <Limb Name="object_dt_Standardlimb_00B070" Type="Standard" Offset="0xB070" />
-        <Limb Name="object_dt_Standardlimb_00B07C" Type="Standard" Offset="0xB07C" />
-        <Limb Name="object_dt_Standardlimb_00B088" Type="Standard" Offset="0xB088" />
-        <Skeleton Name="object_dt_Skel_00B0CC" Type="Flex" LimbType="Standard" Offset="0xB0CC" />
+        <Limb Name="object_dt_Standardlimb_00AFEC" Type="Standard" EnumName="OBJECT_DT_LIMB_01" Offset="0xAFEC" />
+        <Limb Name="object_dt_Standardlimb_00AFF8" Type="Standard" EnumName="OBJECT_DT_LIMB_02" Offset="0xAFF8" />
+        <Limb Name="object_dt_Standardlimb_00B004" Type="Standard" EnumName="OBJECT_DT_LIMB_03" Offset="0xB004" />
+        <Limb Name="object_dt_Standardlimb_00B010" Type="Standard" EnumName="OBJECT_DT_LIMB_04" Offset="0xB010" />
+        <Limb Name="object_dt_Standardlimb_00B01C" Type="Standard" EnumName="OBJECT_DT_LIMB_05" Offset="0xB01C" />
+        <Limb Name="object_dt_Standardlimb_00B028" Type="Standard" EnumName="OBJECT_DT_LIMB_06" Offset="0xB028" />
+        <Limb Name="object_dt_Standardlimb_00B034" Type="Standard" EnumName="OBJECT_DT_LIMB_07" Offset="0xB034" />
+        <Limb Name="object_dt_Standardlimb_00B040" Type="Standard" EnumName="OBJECT_DT_LIMB_08" Offset="0xB040" />
+        <Limb Name="object_dt_Standardlimb_00B04C" Type="Standard" EnumName="OBJECT_DT_LIMB_09" Offset="0xB04C" />
+        <Limb Name="object_dt_Standardlimb_00B058" Type="Standard" EnumName="OBJECT_DT_LIMB_0A" Offset="0xB058" />
+        <Limb Name="object_dt_Standardlimb_00B064" Type="Standard" EnumName="OBJECT_DT_LIMB_0B" Offset="0xB064" />
+        <Limb Name="object_dt_Standardlimb_00B070" Type="Standard" EnumName="OBJECT_DT_LIMB_0C" Offset="0xB070" />
+        <Limb Name="object_dt_Standardlimb_00B07C" Type="Standard" EnumName="OBJECT_DT_LIMB_0D" Offset="0xB07C" />
+        <Limb Name="object_dt_Standardlimb_00B088" Type="Standard" EnumName="OBJECT_DT_LIMB_0E" Offset="0xB088" />
+        <Skeleton Name="object_dt_Skel_00B0CC" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DT_LIMB_NONE" LimbMax="OBJECT_DT_LIMB_MAX" EnumName="object_dt_Limbs" Offset="0xB0CC" />
         <Animation Name="object_dt_Anim_00B500" Offset="0xB500" />
     </File>
 </Root>

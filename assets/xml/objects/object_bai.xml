@@ -28,26 +28,26 @@
         <Texture Name="object_bai_Tex_0073D8" OutName="tex_0073D8" Format="ci8" Width="16" Height="16" Offset="0x73D8" />
         <Texture Name="object_bai_Tex_0074D8" OutName="tex_0074D8" Format="ci8" Width="16" Height="16" Offset="0x74D8" />
         <Texture Name="object_bai_Tex_0075D8" OutName="tex_0075D8" Format="rgba16" Width="16" Height="16" Offset="0x75D8" />
-        <Limb Name="object_bai_Standardlimb_0077D8" Type="Standard" Offset="0x77D8" />
-        <Limb Name="object_bai_Standardlimb_0077E4" Type="Standard" Offset="0x77E4" />
-        <Limb Name="object_bai_Standardlimb_0077F0" Type="Standard" Offset="0x77F0" />
-        <Limb Name="object_bai_Standardlimb_0077FC" Type="Standard" Offset="0x77FC" />
-        <Limb Name="object_bai_Standardlimb_007808" Type="Standard" Offset="0x7808" />
-        <Limb Name="object_bai_Standardlimb_007814" Type="Standard" Offset="0x7814" />
-        <Limb Name="object_bai_Standardlimb_007820" Type="Standard" Offset="0x7820" />
-        <Limb Name="object_bai_Standardlimb_00782C" Type="Standard" Offset="0x782C" />
-        <Limb Name="object_bai_Standardlimb_007838" Type="Standard" Offset="0x7838" />
-        <Limb Name="object_bai_Standardlimb_007844" Type="Standard" Offset="0x7844" />
-        <Limb Name="object_bai_Standardlimb_007850" Type="Standard" Offset="0x7850" />
-        <Limb Name="object_bai_Standardlimb_00785C" Type="Standard" Offset="0x785C" />
-        <Limb Name="object_bai_Standardlimb_007868" Type="Standard" Offset="0x7868" />
-        <Limb Name="object_bai_Standardlimb_007874" Type="Standard" Offset="0x7874" />
-        <Limb Name="object_bai_Standardlimb_007880" Type="Standard" Offset="0x7880" />
-        <Limb Name="object_bai_Standardlimb_00788C" Type="Standard" Offset="0x788C" />
-        <Limb Name="object_bai_Standardlimb_007898" Type="Standard" Offset="0x7898" />
-        <Limb Name="object_bai_Standardlimb_0078A4" Type="Standard" Offset="0x78A4" />
-        <Limb Name="object_bai_Standardlimb_0078B0" Type="Standard" Offset="0x78B0" />
-        <Skeleton Name="object_bai_Skel_007908" Type="Flex" LimbType="Standard" Offset="0x7908" />
+        <Limb Name="object_bai_Standardlimb_0077D8" Type="Standard" EnumName="OBJECT_BAI_LIMB_01" Offset="0x77D8" />
+        <Limb Name="object_bai_Standardlimb_0077E4" Type="Standard" EnumName="OBJECT_BAI_LIMB_02" Offset="0x77E4" />
+        <Limb Name="object_bai_Standardlimb_0077F0" Type="Standard" EnumName="OBJECT_BAI_LIMB_03" Offset="0x77F0" />
+        <Limb Name="object_bai_Standardlimb_0077FC" Type="Standard" EnumName="OBJECT_BAI_LIMB_04" Offset="0x77FC" />
+        <Limb Name="object_bai_Standardlimb_007808" Type="Standard" EnumName="OBJECT_BAI_LIMB_05" Offset="0x7808" />
+        <Limb Name="object_bai_Standardlimb_007814" Type="Standard" EnumName="OBJECT_BAI_LIMB_06" Offset="0x7814" />
+        <Limb Name="object_bai_Standardlimb_007820" Type="Standard" EnumName="OBJECT_BAI_LIMB_07" Offset="0x7820" />
+        <Limb Name="object_bai_Standardlimb_00782C" Type="Standard" EnumName="OBJECT_BAI_LIMB_08" Offset="0x782C" />
+        <Limb Name="object_bai_Standardlimb_007838" Type="Standard" EnumName="OBJECT_BAI_LIMB_09" Offset="0x7838" />
+        <Limb Name="object_bai_Standardlimb_007844" Type="Standard" EnumName="OBJECT_BAI_LIMB_0A" Offset="0x7844" />
+        <Limb Name="object_bai_Standardlimb_007850" Type="Standard" EnumName="OBJECT_BAI_LIMB_0B" Offset="0x7850" />
+        <Limb Name="object_bai_Standardlimb_00785C" Type="Standard" EnumName="OBJECT_BAI_LIMB_0C" Offset="0x785C" />
+        <Limb Name="object_bai_Standardlimb_007868" Type="Standard" EnumName="OBJECT_BAI_LIMB_0D" Offset="0x7868" />
+        <Limb Name="object_bai_Standardlimb_007874" Type="Standard" EnumName="OBJECT_BAI_LIMB_0E" Offset="0x7874" />
+        <Limb Name="object_bai_Standardlimb_007880" Type="Standard" EnumName="OBJECT_BAI_LIMB_0F" Offset="0x7880" />
+        <Limb Name="object_bai_Standardlimb_00788C" Type="Standard" EnumName="OBJECT_BAI_LIMB_10" Offset="0x788C" />
+        <Limb Name="object_bai_Standardlimb_007898" Type="Standard" EnumName="OBJECT_BAI_LIMB_11" Offset="0x7898" />
+        <Limb Name="object_bai_Standardlimb_0078A4" Type="Standard" EnumName="OBJECT_BAI_LIMB_12" Offset="0x78A4" />
+        <Limb Name="object_bai_Standardlimb_0078B0" Type="Standard" EnumName="OBJECT_BAI_LIMB_13" Offset="0x78B0" />
+        <Skeleton Name="object_bai_Skel_007908" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAI_LIMB_NONE" LimbMax="OBJECT_BAI_LIMB_MAX" EnumName="object_bai_Limbs" Offset="0x7908" />
         <Animation Name="object_bai_Anim_008198" Offset="0x8198" />
     </File>
 </Root>

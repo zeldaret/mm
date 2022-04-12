@@ -59,24 +59,24 @@
         <Texture Name="object_ob_Tex_0160E8" OutName="tex_0160E8" Format="ci8" Width="8" Height="8" Offset="0x160E8" />
         <Texture Name="object_ob_Tex_016128" OutName="tex_016128" Format="ci8" Width="8" Height="16" Offset="0x16128" />
         <Texture Name="object_ob_Tex_0161A8" OutName="tex_0161A8" Format="ci8" Width="16" Height="32" Offset="0x161A8" />
-        <Limb Name="object_ob_Standardlimb_0163A8" Type="Standard" Offset="0x163A8" />
-        <Limb Name="object_ob_Standardlimb_0163B4" Type="Standard" Offset="0x163B4" />
-        <Limb Name="object_ob_Standardlimb_0163C0" Type="Standard" Offset="0x163C0" />
-        <Limb Name="object_ob_Standardlimb_0163CC" Type="Standard" Offset="0x163CC" />
-        <Limb Name="object_ob_Standardlimb_0163D8" Type="Standard" Offset="0x163D8" />
-        <Limb Name="object_ob_Standardlimb_0163E4" Type="Standard" Offset="0x163E4" />
-        <Limb Name="object_ob_Standardlimb_0163F0" Type="Standard" Offset="0x163F0" />
-        <Limb Name="object_ob_Standardlimb_0163FC" Type="Standard" Offset="0x163FC" />
-        <Limb Name="object_ob_Standardlimb_016408" Type="Standard" Offset="0x16408" />
-        <Limb Name="object_ob_Standardlimb_016414" Type="Standard" Offset="0x16414" />
-        <Limb Name="object_ob_Standardlimb_016420" Type="Standard" Offset="0x16420" />
-        <Limb Name="object_ob_Standardlimb_01642C" Type="Standard" Offset="0x1642C" />
-        <Limb Name="object_ob_Standardlimb_016438" Type="Standard" Offset="0x16438" />
-        <Limb Name="object_ob_Standardlimb_016444" Type="Standard" Offset="0x16444" />
-        <Limb Name="object_ob_Standardlimb_016450" Type="Standard" Offset="0x16450" />
-        <Limb Name="object_ob_Standardlimb_01645C" Type="Standard" Offset="0x1645C" />
-        <Limb Name="object_ob_Standardlimb_016468" Type="Standard" Offset="0x16468" />
-        <Skeleton Name="object_ob_Skel_0164B8" Type="Flex" LimbType="Standard" Offset="0x164B8" />
+        <Limb Name="object_ob_Standardlimb_0163A8" Type="Standard" EnumName="OBJECT_OB_LIMB_01" Offset="0x163A8" />
+        <Limb Name="object_ob_Standardlimb_0163B4" Type="Standard" EnumName="OBJECT_OB_LIMB_02" Offset="0x163B4" />
+        <Limb Name="object_ob_Standardlimb_0163C0" Type="Standard" EnumName="OBJECT_OB_LIMB_03" Offset="0x163C0" />
+        <Limb Name="object_ob_Standardlimb_0163CC" Type="Standard" EnumName="OBJECT_OB_LIMB_04" Offset="0x163CC" />
+        <Limb Name="object_ob_Standardlimb_0163D8" Type="Standard" EnumName="OBJECT_OB_LIMB_05" Offset="0x163D8" />
+        <Limb Name="object_ob_Standardlimb_0163E4" Type="Standard" EnumName="OBJECT_OB_LIMB_06" Offset="0x163E4" />
+        <Limb Name="object_ob_Standardlimb_0163F0" Type="Standard" EnumName="OBJECT_OB_LIMB_07" Offset="0x163F0" />
+        <Limb Name="object_ob_Standardlimb_0163FC" Type="Standard" EnumName="OBJECT_OB_LIMB_08" Offset="0x163FC" />
+        <Limb Name="object_ob_Standardlimb_016408" Type="Standard" EnumName="OBJECT_OB_LIMB_09" Offset="0x16408" />
+        <Limb Name="object_ob_Standardlimb_016414" Type="Standard" EnumName="OBJECT_OB_LIMB_0A" Offset="0x16414" />
+        <Limb Name="object_ob_Standardlimb_016420" Type="Standard" EnumName="OBJECT_OB_LIMB_0B" Offset="0x16420" />
+        <Limb Name="object_ob_Standardlimb_01642C" Type="Standard" EnumName="OBJECT_OB_LIMB_0C" Offset="0x1642C" />
+        <Limb Name="object_ob_Standardlimb_016438" Type="Standard" EnumName="OBJECT_OB_LIMB_0D" Offset="0x16438" />
+        <Limb Name="object_ob_Standardlimb_016444" Type="Standard" EnumName="OBJECT_OB_LIMB_0E" Offset="0x16444" />
+        <Limb Name="object_ob_Standardlimb_016450" Type="Standard" EnumName="OBJECT_OB_LIMB_0F" Offset="0x16450" />
+        <Limb Name="object_ob_Standardlimb_01645C" Type="Standard" EnumName="OBJECT_OB_LIMB_10" Offset="0x1645C" />
+        <Limb Name="object_ob_Standardlimb_016468" Type="Standard" EnumName="OBJECT_OB_LIMB_11" Offset="0x16468" />
+        <Skeleton Name="object_ob_Skel_0164B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_OB_LIMB_NONE" LimbMax="OBJECT_OB_LIMB_MAX" EnumName="object_ob_Limbs" Offset="0x164B8" />
         <Animation Name="object_ob_Anim_016F58" Offset="0x16F58" />
         <Animation Name="object_ob_Anim_01764C" Offset="0x1764C" />
         <Animation Name="object_ob_Anim_017E98" Offset="0x17E98" />

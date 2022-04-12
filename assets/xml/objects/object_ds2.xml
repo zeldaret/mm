@@ -19,14 +19,14 @@
         <Texture Name="object_ds2_Tex_003DD8" OutName="tex_003DD8" Format="ci8" Width="16" Height="16" Offset="0x3DD8" />
         <Texture Name="object_ds2_Tex_003ED8" OutName="tex_003ED8" Format="ci8" Width="16" Height="16" Offset="0x3ED8" />
         <Texture Name="object_ds2_Tex_003FD8" OutName="tex_003FD8" Format="ci8" Width="16" Height="32" Offset="0x3FD8" />
-        <Limb Name="object_ds2_Standardlimb_0041D8" Type="Standard" Offset="0x41D8" />
-        <Limb Name="object_ds2_Standardlimb_0041E4" Type="Standard" Offset="0x41E4" />
-        <Limb Name="object_ds2_Standardlimb_0041F0" Type="Standard" Offset="0x41F0" />
-        <Limb Name="object_ds2_Standardlimb_0041FC" Type="Standard" Offset="0x41FC" />
-        <Limb Name="object_ds2_Standardlimb_004208" Type="Standard" Offset="0x4208" />
-        <Limb Name="object_ds2_Standardlimb_004214" Type="Standard" Offset="0x4214" />
-        <Limb Name="object_ds2_Standardlimb_004220" Type="Standard" Offset="0x4220" />
-        <Limb Name="object_ds2_Standardlimb_00422C" Type="Standard" Offset="0x422C" />
-        <Skeleton Name="object_ds2_Skel_004258" Type="Flex" LimbType="Standard" Offset="0x4258" />
+        <Limb Name="object_ds2_Standardlimb_0041D8" Type="Standard" EnumName="OBJECT_DS2_LIMB_01" Offset="0x41D8" />
+        <Limb Name="object_ds2_Standardlimb_0041E4" Type="Standard" EnumName="OBJECT_DS2_LIMB_02" Offset="0x41E4" />
+        <Limb Name="object_ds2_Standardlimb_0041F0" Type="Standard" EnumName="OBJECT_DS2_LIMB_03" Offset="0x41F0" />
+        <Limb Name="object_ds2_Standardlimb_0041FC" Type="Standard" EnumName="OBJECT_DS2_LIMB_04" Offset="0x41FC" />
+        <Limb Name="object_ds2_Standardlimb_004208" Type="Standard" EnumName="OBJECT_DS2_LIMB_05" Offset="0x4208" />
+        <Limb Name="object_ds2_Standardlimb_004214" Type="Standard" EnumName="OBJECT_DS2_LIMB_06" Offset="0x4214" />
+        <Limb Name="object_ds2_Standardlimb_004220" Type="Standard" EnumName="OBJECT_DS2_LIMB_07" Offset="0x4220" />
+        <Limb Name="object_ds2_Standardlimb_00422C" Type="Standard" EnumName="OBJECT_DS2_LIMB_08" Offset="0x422C" />
+        <Skeleton Name="object_ds2_Skel_004258" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DS2_LIMB_NONE" LimbMax="OBJECT_DS2_LIMB_MAX" EnumName="object_ds2_Limbs" Offset="0x4258" />
     </File>
 </Root>

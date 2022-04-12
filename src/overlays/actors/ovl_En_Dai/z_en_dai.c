@@ -179,7 +179,7 @@ s32 func_80B3E69C(EnDai* this, GlobalContext* globalCtx) {
     s32 ret = false;
 
     if ((globalCtx->csCtx.state != 0) && (globalCtx->sceneNum == SCENE_12HAKUGINMAE) &&
-        (globalCtx->csCtx.unk_12 == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
+        (globalCtx->csCtx.currentCsIndex == 0) && !(gSaveContext.weekEventReg[30] & 1)) {
         if (!(this->unk_1CE & 0x10)) {
             Flags_SetSwitch(globalCtx, 20);
             this->unk_1CE |= (0x80 | 0x10);
@@ -444,13 +444,12 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
     static s32 D_80B3FE38[] = {
         0, 0, 6, 7, 8,
     };
-
     s32 sp2C = 0;
     s32 sp28;
 
-    if (func_800EE29C(globalCtx, 0x1D8)) {
-        sp2C = func_800EE200(globalCtx, 0x1D8);
-        sp28 = globalCtx->csCtx.npcActions[sp2C]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 472)) {
+        sp2C = Cutscene_GetActorActionIndex(globalCtx, 472);
+        sp28 = globalCtx->csCtx.actorActions[sp2C]->action;
         if (this->unk_1CC != (u8)sp28) {
             func_80B3E5DC(this, D_80B3FE38[sp28]);
             switch (sp28) {
@@ -508,7 +507,7 @@ void func_80B3F044(EnDai* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_800EDF24(&this->actor, globalCtx, sp2C);
+    Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, sp2C);
 }
 
 void EnDai_Init(Actor* thisx, GlobalContext* globalCtx) {

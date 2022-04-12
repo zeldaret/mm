@@ -655,7 +655,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                         break;
                 }
 
-                gSPDisplayList(POLY_XLU_DISP++, &gameplay_keep_DL_023348);
+                gSPDisplayList(POLY_XLU_DISP++, &gLightOrb1DL);
 
                 Matrix_InsertMatrix(&globalCtx->billboardMtxF, MTXMODE_APPLY);
 
@@ -667,7 +667,7 @@ void DemoKankyo_DrawMoonAndGiant(Actor* thisx, GlobalContext* globalCtx2) {
                 if (this->actor.params == DEMO_KANKYO_TYPE_GIANTS) {
                     gSPDisplayList(POLY_XLU_DISP++, object_bubble_DL_001000);
                 } else {
-                    gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023428);
+                    gSPDisplayList(POLY_XLU_DISP++, gLightOrbVtxDL);
                 }
             }
         }

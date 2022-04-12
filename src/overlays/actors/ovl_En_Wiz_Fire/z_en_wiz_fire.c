@@ -108,19 +108,19 @@ void EnWizFire_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     EnWizFire* this = THIS;
 
     if (this->unk_162 == 0) {
-        globalCtx->envCtx.unk_8C.fogColor[2] = 0;
-        globalCtx->envCtx.unk_8C.fogColor[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.fogColor[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor2[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.diffuseColor1[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[2] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[1] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.ambientColor[0] = globalCtx->envCtx.unk_8C.fogColor[2];
-        globalCtx->envCtx.unk_8C.fogNear = globalCtx->envCtx.unk_8C.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogColor[2] = 0;
+        globalCtx->envCtx.lightSettings.fogColor[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogColor[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor2[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.diffuseColor1[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[2] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[1] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.fogColor[2];
+        globalCtx->envCtx.lightSettings.fogNear = globalCtx->envCtx.lightSettings.fogColor[2];
     }
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
@@ -483,37 +483,37 @@ void EnWizFire_Update(Actor* thisx, GlobalContext* globalCtx2) {
                 phi_f0 = 968.0f;
             }
 
-            globalCtx->envCtx.unk_8C.fogNear = (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
+            globalCtx->envCtx.lightSettings.fogNear = (phi_f0 - (s16)globalCtx->envCtx.unk_C4.fogNear) * this->unk_204;
 
-            globalCtx->envCtx.unk_8C.ambientColor[0] =
+            globalCtx->envCtx.lightSettings.ambientColor[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.ambientColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.ambientColor[1] =
+            globalCtx->envCtx.lightSettings.ambientColor[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.ambientColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.ambientColor[2] =
+            globalCtx->envCtx.lightSettings.ambientColor[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.ambientColor[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.diffuseColor1[0] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.diffuseColor1[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor1[1] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.diffuseColor1[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor1[2] =
+            globalCtx->envCtx.lightSettings.diffuseColor1[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.diffuseColor1[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.diffuseColor2[0] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.diffuseColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor2[1] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.diffuseColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.diffuseColor2[2] =
+            globalCtx->envCtx.lightSettings.diffuseColor2[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.diffuseColor[2]) * this->unk_204;
 
             idx++;
-            globalCtx->envCtx.unk_8C.fogColor[0] =
+            globalCtx->envCtx.lightSettings.fogColor[0] =
                 ((f32)D_80A4C234[idx].r - globalCtx->envCtx.unk_C4.fogColor[0]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.fogColor[1] =
+            globalCtx->envCtx.lightSettings.fogColor[1] =
                 ((f32)D_80A4C234[idx].g - globalCtx->envCtx.unk_C4.fogColor[1]) * this->unk_204;
-            globalCtx->envCtx.unk_8C.fogColor[2] =
+            globalCtx->envCtx.lightSettings.fogColor[2] =
                 ((f32)D_80A4C234[idx].b - globalCtx->envCtx.unk_C4.fogColor[2]) * this->unk_204;
         }
     }

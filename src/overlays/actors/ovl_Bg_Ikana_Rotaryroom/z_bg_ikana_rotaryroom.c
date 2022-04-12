@@ -647,7 +647,7 @@ void func_80B814B8(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
         if (player->actor.bgCheckFlags & 0x100) {
             func_800B8E58(player, NA_SE_VO_LI_DAMAGE_S + player->ageProperties->unk_92);
-            func_80169EFC(globalCtx);
+            func_80169EFC(&globalCtx->state);
             func_800B8E58(player, NA_SE_VO_LI_TAKEN_AWAY + player->ageProperties->unk_92);
             globalCtx->unk_18845 = 1;
             play_sound(NA_SE_OC_ABYSS);

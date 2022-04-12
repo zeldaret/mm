@@ -2,17 +2,22 @@
 #define Z_EN_DRS_H
 
 #include "global.h"
+#include "objects/object_drs/object_drs.h"
+#include "objects/object_msmo/object_msmo.h"
 
 struct EnDrs;
 
 typedef void (*EnDrsActionFunc)(struct EnDrs*, GlobalContext*);
 
 typedef struct EnDrs {
-    /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x44];
-    /* 0x0188 */ EnDrsActionFunc actionFunc;
-    /* 0x018C */ char unk_18C[0x80];
-} EnDrs; // size = 0x20C
+    /* 0x000 */ Actor actor;
+    /* 0x144 */ SkelAnime skelAnime;
+    /* 0x188 */ EnDrsActionFunc actionFunc;
+    /* 0x18C */ ColliderCylinder collider;
+    /* 0x1D8 */ Vec3s jointTable[WEDDING_DRESS_MANNEQUIN_LIMB_MAX];
+    /* 0x1F0 */ Vec3s morphTable[WEDDING_DRESS_MANNEQUIN_LIMB_MAX];
+    /* 0x208 */ s8 moonMaskObjBankIndex;
+} EnDrs; // size = 0x20C */
 
 extern const ActorInit En_Drs_InitVars;
 

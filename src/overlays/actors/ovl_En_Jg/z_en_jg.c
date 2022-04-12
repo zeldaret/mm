@@ -349,7 +349,7 @@ void EnJg_Idle(EnJg* this, GlobalContext* globalCtx) {
 void EnJg_GoronShrineIdle(EnJg* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
     } else if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
         func_800B863C(&this->actor, globalCtx);
@@ -367,7 +367,7 @@ void EnJg_GoronShrineTalk(EnJg* this, GlobalContext* globalCtx) {
             this->actionFunc = EnJg_GoronShrineIdle;
         } else {
             this->textId = EnJg_GetNextTextId(this);
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
         }
     }
 }
@@ -504,7 +504,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
                        (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
                 // The player already has the Lullaby or Lullaby Intro, so say "I'm counting on you"
                 this->textId = EnJg_GetNextTextId(this);
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
                 this->actionFunc = EnJg_SetupTalk;
             } else {
                 // To get to this point, the player *has* talked to the Goron Child, but doesn't
@@ -522,7 +522,7 @@ void EnJg_Talk(EnJg* this, GlobalContext* globalCtx) {
             }
         } else {
             this->textId = EnJg_GetNextTextId(this);
-            func_801518B0(globalCtx, this->textId, &this->actor);
+            Message_StartTextbox(globalCtx, this->textId, &this->actor);
             this->actionFunc = EnJg_SetupTalk;
         }
     }
@@ -591,7 +591,7 @@ void EnJg_FrozenIdle(EnJg* this, GlobalContext* globalCtx) {
         }
     } else {
         if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-            func_801518B0(globalCtx, 0x236, &this->actor); // The old Goron is frozen solid!
+            Message_StartTextbox(globalCtx, 0x236, &this->actor); // The old Goron is frozen solid!
             this->actionFunc = EnJg_EndFrozenInteraction;
         } else if (this->actor.isTargeted) {
             func_800B863C(&this->actor, globalCtx);
@@ -622,13 +622,13 @@ void EnJg_TeachLullabyIntro(EnJg* this, GlobalContext* globalCtx) {
 void EnJg_LullabyIntroCutsceneAction(EnJg* this, GlobalContext* globalCtx) {
     s32 pad;
 
-    if (func_800EE29C(globalCtx, 0x1D6)) {
-        u32 actionIndex = func_800EE200(globalCtx, 0x1D6);
+    if (Cutscene_CheckActorAction(globalCtx, 470)) {
+        s32 actionIndex = Cutscene_GetActorActionIndex(globalCtx, 470);
 
-        if (this->csAction != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->csAction = globalCtx->csCtx.npcActions[actionIndex]->unk0;
+        if (this->csAction != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->csAction = globalCtx->csCtx.actorActions[actionIndex]->action;
 
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     this->cutsceneAnimationIndex = EN_JG_ANIMATION_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
@@ -913,7 +913,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, GlobalContext* 
             gSaveContext.weekEventReg[24] |= 0x10;
         }
 
-        func_801518B0(globalCtx, this->textId, &this->actor);
+        Message_StartTextbox(globalCtx, this->textId, &this->actor);
         this->actionFunc = EnJg_SetupTalk;
     } else {
         if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
@@ -949,7 +949,7 @@ void EnJg_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     if (!EN_JG_IS_IN_GORON_SHRINE(thisx)) {
         if ((globalCtx->sceneNum == SCENE_SPOT00) && (gSaveContext.sceneSetupIndex == 7) &&
-            (globalCtx->csCtx.unk_12 == 0)) {
+            (globalCtx->csCtx.currentCsIndex == 0)) {
             // This is the elder that appears in the cutscene for learning the full Goron Lullaby.
             this->animationIndex = EN_JG_ANIMATION_IDLE;
             this->action = EN_JG_ACTION_LULLABY_INTRO_CS;

@@ -187,7 +187,7 @@ void EnBba01_Talk(EnHy* this, GlobalContext* globalCtx) {
         case 0:
             yaw = ABS_ALT(this->actor.shape.rot.y - this->actor.yawTowardsPlayer);
             if (yaw < 0x64) {
-                func_801518B0(globalCtx, this->textId, NULL);
+                Message_StartTextbox(globalCtx, this->textId, NULL);
             }
             break;
         case 2:

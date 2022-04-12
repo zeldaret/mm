@@ -514,7 +514,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnJa_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnJa* this = THIS;
     s32 phi_v1;
     s32 phi_v0;
@@ -602,7 +602,7 @@ void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnJa_OverrideLimbDraw, EnJa_PostLimbDraw,
-                                       EnJa_TransformDraw, &this->actor);
+                                       EnJa_TransformLimbDraw, &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

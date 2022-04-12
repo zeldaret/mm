@@ -147,7 +147,7 @@ void DoorAna_WaitOpen(DoorAna* this, GlobalContext* globalCtx) {
                 // unused in vanilla, the highest params bits can directly index an address
                 entranceIndex = GET_DOORANA_DIRECT_ENTRANCE(this);
 
-                func_80169E6C(globalCtx, 3, 0x4FF);
+                Play_SetupRespawnPoint(&globalCtx->state, 3, 0x4FF);
 
                 gSaveContext.respawn[3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[3].yaw = this->actor.home.rot.y;

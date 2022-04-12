@@ -599,21 +599,21 @@ void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
         if (Player_GetMask(globalCtx) == PLAYER_MASK_GIBDO) {
             if (1) {}
             func_80BD93CC(this, 0, 1);
-            func_801518B0(globalCtx, 0x15A8, &this->actor);
+            Message_StartTextbox(globalCtx, 0x15A8, &this->actor);
 
             this->unk_324 = 0x15A8;
         } else if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
                    ((gSaveContext.weekEventReg[52] & 0x20) && (!(gSaveContext.weekEventReg[75] & 0x20)))) {
             func_80BD93CC(this, 1, 0);
-            func_801518B0(globalCtx, 0x158E, &this->actor);
+            Message_StartTextbox(globalCtx, 0x158E, &this->actor);
             this->unk_324 = 0x158E;
         } else {
             if (!(this->unk_322 & 1)) {
                 this->unk_322 |= 1;
-                func_801518B0(globalCtx, 0x1587, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1587, &this->actor);
                 this->unk_324 = 0x1587;
             } else {
-                func_801518B0(globalCtx, 0x158C, &this->actor);
+                Message_StartTextbox(globalCtx, 0x158C, &this->actor);
                 this->unk_324 = 0x158C;
             }
         }
@@ -654,23 +654,23 @@ void func_80BD9B4C(EnPamera* this, GlobalContext* globalCtx) {
     if (func_80147624(globalCtx)) {
         switch (this->unk_324) {
             case 0x1587:
-                func_801518B0(globalCtx, 0x1588, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1588, &this->actor);
                 this->unk_324 = 0x1588;
                 break;
             case 0x1588:
-                func_801518B0(globalCtx, 0x1589, &this->actor);
+                Message_StartTextbox(globalCtx, 0x1589, &this->actor);
                 this->unk_324 = 0x1589;
                 break;
             case 0x1589:
-                func_801518B0(globalCtx, 0x158A, &this->actor);
+                Message_StartTextbox(globalCtx, 0x158A, &this->actor);
                 this->unk_324 = 0x158A;
                 break;
             case 0x158A:
-                func_801518B0(globalCtx, 0x158B, &this->actor);
+                Message_StartTextbox(globalCtx, 0x158B, &this->actor);
                 this->unk_324 = 0x158B;
                 break;
             case 0x158C:
-                func_801518B0(globalCtx, 0x158D, &this->actor);
+                Message_StartTextbox(globalCtx, 0x158D, &this->actor);
                 this->unk_324 = 0x158D;
                 break;
             case 0x158E:
@@ -690,14 +690,14 @@ void func_80BD9C70(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx) {
-    u32 actionIndex;
+    s32 actionIndex;
 
-    if (func_800EE29C(globalCtx, 0x1E5)) {
-        actionIndex = func_800EE200(globalCtx, 0x1E5);
-        if (this->unk_326 != globalCtx->csCtx.npcActions[actionIndex]->unk0) {
-            this->unk_326 = globalCtx->csCtx.npcActions[actionIndex]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 0x1E5)) {
+        actionIndex = Cutscene_GetActorActionIndex(globalCtx, 0x1E5);
+        if (this->unk_326 != globalCtx->csCtx.actorActions[actionIndex]->action) {
+            this->unk_326 = globalCtx->csCtx.actorActions[actionIndex]->action;
 
-            switch (globalCtx->csCtx.npcActions[actionIndex]->unk0) {
+            switch (globalCtx->csCtx.actorActions[actionIndex]->action) {
                 case 1:
                     func_80BD9E88(this);
                     break;
@@ -722,7 +722,7 @@ s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx) {
                     break;
             }
         }
-        func_800EDF24(&this->actor, globalCtx, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, actionIndex);
         this->setupFunc(this, globalCtx);
         return 1;
     }

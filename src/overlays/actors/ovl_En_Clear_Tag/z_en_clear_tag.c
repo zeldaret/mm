@@ -544,7 +544,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             }
             break;
         case 1:
-            func_800EA0D4(globalCtx, &globalCtx->csCtx);
+            Cutscene_Start(globalCtx, &globalCtx->csCtx);
             this->subCamId = Play_CreateSubCamera(globalCtx);
             Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
             Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
@@ -556,7 +556,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             this->subCamAt.x = mainCam->at.x;
             this->subCamAt.y = mainCam->at.y;
             this->subCamAt.z = mainCam->at.z;
-            func_801518B0(globalCtx, 0xF, NULL);
+            Message_StartTextbox(globalCtx, 0xF, NULL);
             this->cameraState = 2;
             func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
@@ -573,7 +573,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
                 mainCam->eyeNext = this->subCamEye;
                 mainCam->at = this->subCamAt;
                 func_80169AFC(globalCtx, this->subCamId, 0);
-                func_800EA0EC(globalCtx, &globalCtx->csCtx);
+                Cutscene_End(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 6);
                 this->cameraState = 0;
                 this->subCamId = CAM_ID_MAIN;

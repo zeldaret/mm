@@ -17,7 +17,7 @@ typedef struct EnKame {
     /* 0x0280 */ Vec3s morphTable2[4];
     /* 0x0298 */ EnKameActionFunc actionFunc;
     /* 0x029C */ u8 unk_29C;
-    /* 0x029D */ u8 unk_29D;
+    /* 0x029D */ u8 drawDmgEffType;
     /* 0x029E */ s16 unk_29E;
     /* 0x02A0 */ s16 unk_2A0;
     /* 0x02A2 */ s16 unk_2A2;
@@ -25,11 +25,11 @@ typedef struct EnKame {
     /* 0x02A6 */ s16 unk_2A6;
     /* 0x02A8 */ f32 unk_2A8;
     /* 0x02AC */ f32 unk_2AC;
-    /* 0x02B0 */ f32 unk_2B0;
-    /* 0x02B4 */ f32 unk_2B4;
-    /* 0x02B8 */ f32 unk_2B8;
+    /* 0x02B0 */ f32 drawDmgEffAlpha;
+    /* 0x02B4 */ f32 drawDmgEffScale;
+    /* 0x02B8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x02BC */ Vec3f unk_2BC;
-    /* 0x02C8 */ Vec3f unk_2C8[10];
+    /* 0x02C8 */ Vec3f limbPos[10];
     /* 0x0340 */ ColliderCylinder collider;
 } EnKame; // size = 0x38C
 

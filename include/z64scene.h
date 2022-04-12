@@ -1,15 +1,16 @@
-#ifndef _Z64SCENE_H_
-#define _Z64SCENE_H_
+#ifndef Z64SCENE_H
+#define Z64SCENE_H
 
 #include "ultra64.h"
 #include "z64dma.h"
+#include "z64cutscene.h"
 #include "unk.h"
 
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 typedef struct {
-    /* 0x00 */ u32 vromStart;
-    /* 0x04 */ u32 vromEnd;
+    /* 0x00 */ uintptr_t vromStart;
+    /* 0x04 */ uintptr_t vromEnd;
 } RomFile; // size = 0x8
 
 typedef struct {
@@ -309,13 +310,6 @@ typedef struct {
     /* 0x8 */ Vec3s rot;
     /* 0xE */ s16 params;
 } ActorEntry; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32 data;
-    /* 0x4 */ s16 unk4;
-    /* 0x6 */ u8 unk6;
-    /* 0x7 */ u8 unk7;
-} CutsceneEntry; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8 spawn;

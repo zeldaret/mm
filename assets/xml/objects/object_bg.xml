@@ -28,30 +28,30 @@
         <Texture Name="object_bg_Tex_008858" OutName="tex_008858" Format="ci8" Width="16" Height="16" Offset="0x8858" />
         <Texture Name="object_bg_Tex_008958" OutName="tex_008958" Format="ci8" Width="32" Height="32" Offset="0x8958" />
         <Texture Name="object_bg_Tex_008D58" OutName="tex_008D58" Format="ci8" Width="16" Height="16" Offset="0x8D58" />
-        <Limb Name="object_bg_Standardlimb_008E58" Type="Standard" Offset="0x8E58" />
-        <Limb Name="object_bg_Standardlimb_008E64" Type="Standard" Offset="0x8E64" />
-        <Limb Name="object_bg_Standardlimb_008E70" Type="Standard" Offset="0x8E70" />
-        <Limb Name="object_bg_Standardlimb_008E7C" Type="Standard" Offset="0x8E7C" />
-        <Limb Name="object_bg_Standardlimb_008E88" Type="Standard" Offset="0x8E88" />
-        <Limb Name="object_bg_Standardlimb_008E94" Type="Standard" Offset="0x8E94" />
-        <Limb Name="object_bg_Standardlimb_008EA0" Type="Standard" Offset="0x8EA0" />
-        <Limb Name="object_bg_Standardlimb_008EAC" Type="Standard" Offset="0x8EAC" />
-        <Limb Name="object_bg_Standardlimb_008EB8" Type="Standard" Offset="0x8EB8" />
-        <Limb Name="object_bg_Standardlimb_008EC4" Type="Standard" Offset="0x8EC4" />
-        <Limb Name="object_bg_Standardlimb_008ED0" Type="Standard" Offset="0x8ED0" />
-        <Limb Name="object_bg_Standardlimb_008EDC" Type="Standard" Offset="0x8EDC" />
-        <Limb Name="object_bg_Standardlimb_008EE8" Type="Standard" Offset="0x8EE8" />
-        <Limb Name="object_bg_Standardlimb_008EF4" Type="Standard" Offset="0x8EF4" />
-        <Limb Name="object_bg_Standardlimb_008F00" Type="Standard" Offset="0x8F00" />
-        <Limb Name="object_bg_Standardlimb_008F0C" Type="Standard" Offset="0x8F0C" />
-        <Limb Name="object_bg_Standardlimb_008F18" Type="Standard" Offset="0x8F18" />
-        <Limb Name="object_bg_Standardlimb_008F24" Type="Standard" Offset="0x8F24" />
-        <Limb Name="object_bg_Standardlimb_008F30" Type="Standard" Offset="0x8F30" />
-        <Limb Name="object_bg_Standardlimb_008F3C" Type="Standard" Offset="0x8F3C" />
-        <Limb Name="object_bg_Standardlimb_008F48" Type="Standard" Offset="0x8F48" />
-        <Limb Name="object_bg_Standardlimb_008F54" Type="Standard" Offset="0x8F54" />
-        <Limb Name="object_bg_Standardlimb_008F60" Type="Standard" Offset="0x8F60" />
-        <Skeleton Name="object_bg_Skel_008FC8" Type="Flex" LimbType="Standard" Offset="0x8FC8" />
+        <Limb Name="object_bg_Standardlimb_008E58" Type="Standard" EnumName="OBJECT_BG_1_LIMB_01" Offset="0x8E58" />
+        <Limb Name="object_bg_Standardlimb_008E64" Type="Standard" EnumName="OBJECT_BG_1_LIMB_02" Offset="0x8E64" />
+        <Limb Name="object_bg_Standardlimb_008E70" Type="Standard" EnumName="OBJECT_BG_1_LIMB_03" Offset="0x8E70" />
+        <Limb Name="object_bg_Standardlimb_008E7C" Type="Standard" EnumName="OBJECT_BG_1_LIMB_04" Offset="0x8E7C" />
+        <Limb Name="object_bg_Standardlimb_008E88" Type="Standard" EnumName="OBJECT_BG_1_LIMB_05" Offset="0x8E88" />
+        <Limb Name="object_bg_Standardlimb_008E94" Type="Standard" EnumName="OBJECT_BG_1_LIMB_06" Offset="0x8E94" />
+        <Limb Name="object_bg_Standardlimb_008EA0" Type="Standard" EnumName="OBJECT_BG_1_LIMB_07" Offset="0x8EA0" />
+        <Limb Name="object_bg_Standardlimb_008EAC" Type="Standard" EnumName="OBJECT_BG_1_LIMB_08" Offset="0x8EAC" />
+        <Limb Name="object_bg_Standardlimb_008EB8" Type="Standard" EnumName="OBJECT_BG_1_LIMB_09" Offset="0x8EB8" />
+        <Limb Name="object_bg_Standardlimb_008EC4" Type="Standard" EnumName="OBJECT_BG_1_LIMB_0A" Offset="0x8EC4" />
+        <Limb Name="object_bg_Standardlimb_008ED0" Type="Standard" EnumName="OBJECT_BG_1_LIMB_0B" Offset="0x8ED0" />
+        <Limb Name="object_bg_Standardlimb_008EDC" Type="Standard" EnumName="OBJECT_BG_1_LIMB_0C" Offset="0x8EDC" />
+        <Limb Name="object_bg_Standardlimb_008EE8" Type="Standard" EnumName="OBJECT_BG_1_LIMB_0D" Offset="0x8EE8" />
+        <Limb Name="object_bg_Standardlimb_008EF4" Type="Standard" EnumName="OBJECT_BG_1_LIMB_0E" Offset="0x8EF4" />
+        <Limb Name="object_bg_Standardlimb_008F00" Type="Standard" EnumName="OBJECT_BG_1_LIMB_0F" Offset="0x8F00" />
+        <Limb Name="object_bg_Standardlimb_008F0C" Type="Standard" EnumName="OBJECT_BG_1_LIMB_10" Offset="0x8F0C" />
+        <Limb Name="object_bg_Standardlimb_008F18" Type="Standard" EnumName="OBJECT_BG_1_LIMB_11" Offset="0x8F18" />
+        <Limb Name="object_bg_Standardlimb_008F24" Type="Standard" EnumName="OBJECT_BG_1_LIMB_12" Offset="0x8F24" />
+        <Limb Name="object_bg_Standardlimb_008F30" Type="Standard" EnumName="OBJECT_BG_1_LIMB_13" Offset="0x8F30" />
+        <Limb Name="object_bg_Standardlimb_008F3C" Type="Standard" EnumName="OBJECT_BG_1_LIMB_14" Offset="0x8F3C" />
+        <Limb Name="object_bg_Standardlimb_008F48" Type="Standard" EnumName="OBJECT_BG_1_LIMB_15" Offset="0x8F48" />
+        <Limb Name="object_bg_Standardlimb_008F54" Type="Standard" EnumName="OBJECT_BG_1_LIMB_16" Offset="0x8F54" />
+        <Limb Name="object_bg_Standardlimb_008F60" Type="Standard" EnumName="OBJECT_BG_1_LIMB_17" Offset="0x8F60" />
+        <Skeleton Name="object_bg_Skel_008FC8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_1_LIMB_NONE" LimbMax="OBJECT_BG_1_LIMB_MAX" EnumName="object_bg_1_Limbs" Offset="0x8FC8" />
         <Animation Name="object_bg_Anim_009890" Offset="0x9890" />
         <Animation Name="object_bg_Anim_009F20" Offset="0x9F20" />
         <Animation Name="object_bg_Anim_00A280" Offset="0xA280" />
@@ -84,29 +84,29 @@
         <Texture Name="object_bg_Tex_0110F0" OutName="tex_0110F0" Format="ci8" Width="32" Height="32" Offset="0x110F0" />
         <Texture Name="object_bg_Tex_0114F0" OutName="tex_0114F0" Format="ci8" Width="16" Height="16" Offset="0x114F0" />
         <Texture Name="object_bg_Tex_0115F0" OutName="tex_0115F0" Format="ci8" Width="32" Height="32" Offset="0x115F0" />
-        <Limb Name="object_bg_Standardlimb_0119F0" Type="Standard" Offset="0x119F0" />
-        <Limb Name="object_bg_Standardlimb_0119FC" Type="Standard" Offset="0x119FC" />
-        <Limb Name="object_bg_Standardlimb_011A08" Type="Standard" Offset="0x11A08" />
-        <Limb Name="object_bg_Standardlimb_011A14" Type="Standard" Offset="0x11A14" />
-        <Limb Name="object_bg_Standardlimb_011A20" Type="Standard" Offset="0x11A20" />
-        <Limb Name="object_bg_Standardlimb_011A2C" Type="Standard" Offset="0x11A2C" />
-        <Limb Name="object_bg_Standardlimb_011A38" Type="Standard" Offset="0x11A38" />
-        <Limb Name="object_bg_Standardlimb_011A44" Type="Standard" Offset="0x11A44" />
-        <Limb Name="object_bg_Standardlimb_011A50" Type="Standard" Offset="0x11A50" />
-        <Limb Name="object_bg_Standardlimb_011A5C" Type="Standard" Offset="0x11A5C" />
-        <Limb Name="object_bg_Standardlimb_011A68" Type="Standard" Offset="0x11A68" />
-        <Limb Name="object_bg_Standardlimb_011A74" Type="Standard" Offset="0x11A74" />
-        <Limb Name="object_bg_Standardlimb_011A80" Type="Standard" Offset="0x11A80" />
-        <Limb Name="object_bg_Standardlimb_011A8C" Type="Standard" Offset="0x11A8C" />
-        <Limb Name="object_bg_Standardlimb_011A98" Type="Standard" Offset="0x11A98" />
-        <Limb Name="object_bg_Standardlimb_011AA4" Type="Standard" Offset="0x11AA4" />
-        <Limb Name="object_bg_Standardlimb_011AB0" Type="Standard" Offset="0x11AB0" />
-        <Limb Name="object_bg_Standardlimb_011ABC" Type="Standard" Offset="0x11ABC" />
-        <Limb Name="object_bg_Standardlimb_011AC8" Type="Standard" Offset="0x11AC8" />
-        <Limb Name="object_bg_Standardlimb_011AD4" Type="Standard" Offset="0x11AD4" />
-        <Limb Name="object_bg_Standardlimb_011AE0" Type="Standard" Offset="0x11AE0" />
-        <Limb Name="object_bg_Standardlimb_011AEC" Type="Standard" Offset="0x11AEC" />
-        <Limb Name="object_bg_Standardlimb_011AF8" Type="Standard" Offset="0x11AF8" />
-        <Skeleton Name="object_bg_Skel_011B60" Type="Flex" LimbType="Standard" Offset="0x11B60" />
+        <Limb Name="object_bg_Standardlimb_0119F0" Type="Standard" EnumName="OBJECT_BG_2_LIMB_01" Offset="0x119F0" />
+        <Limb Name="object_bg_Standardlimb_0119FC" Type="Standard" EnumName="OBJECT_BG_2_LIMB_02" Offset="0x119FC" />
+        <Limb Name="object_bg_Standardlimb_011A08" Type="Standard" EnumName="OBJECT_BG_2_LIMB_03" Offset="0x11A08" />
+        <Limb Name="object_bg_Standardlimb_011A14" Type="Standard" EnumName="OBJECT_BG_2_LIMB_04" Offset="0x11A14" />
+        <Limb Name="object_bg_Standardlimb_011A20" Type="Standard" EnumName="OBJECT_BG_2_LIMB_05" Offset="0x11A20" />
+        <Limb Name="object_bg_Standardlimb_011A2C" Type="Standard" EnumName="OBJECT_BG_2_LIMB_06" Offset="0x11A2C" />
+        <Limb Name="object_bg_Standardlimb_011A38" Type="Standard" EnumName="OBJECT_BG_2_LIMB_07" Offset="0x11A38" />
+        <Limb Name="object_bg_Standardlimb_011A44" Type="Standard" EnumName="OBJECT_BG_2_LIMB_08" Offset="0x11A44" />
+        <Limb Name="object_bg_Standardlimb_011A50" Type="Standard" EnumName="OBJECT_BG_2_LIMB_09" Offset="0x11A50" />
+        <Limb Name="object_bg_Standardlimb_011A5C" Type="Standard" EnumName="OBJECT_BG_2_LIMB_0A" Offset="0x11A5C" />
+        <Limb Name="object_bg_Standardlimb_011A68" Type="Standard" EnumName="OBJECT_BG_2_LIMB_0B" Offset="0x11A68" />
+        <Limb Name="object_bg_Standardlimb_011A74" Type="Standard" EnumName="OBJECT_BG_2_LIMB_0C" Offset="0x11A74" />
+        <Limb Name="object_bg_Standardlimb_011A80" Type="Standard" EnumName="OBJECT_BG_2_LIMB_0D" Offset="0x11A80" />
+        <Limb Name="object_bg_Standardlimb_011A8C" Type="Standard" EnumName="OBJECT_BG_2_LIMB_0E" Offset="0x11A8C" />
+        <Limb Name="object_bg_Standardlimb_011A98" Type="Standard" EnumName="OBJECT_BG_2_LIMB_0F" Offset="0x11A98" />
+        <Limb Name="object_bg_Standardlimb_011AA4" Type="Standard" EnumName="OBJECT_BG_2_LIMB_10" Offset="0x11AA4" />
+        <Limb Name="object_bg_Standardlimb_011AB0" Type="Standard" EnumName="OBJECT_BG_2_LIMB_11" Offset="0x11AB0" />
+        <Limb Name="object_bg_Standardlimb_011ABC" Type="Standard" EnumName="OBJECT_BG_2_LIMB_12" Offset="0x11ABC" />
+        <Limb Name="object_bg_Standardlimb_011AC8" Type="Standard" EnumName="OBJECT_BG_2_LIMB_13" Offset="0x11AC8" />
+        <Limb Name="object_bg_Standardlimb_011AD4" Type="Standard" EnumName="OBJECT_BG_2_LIMB_14" Offset="0x11AD4" />
+        <Limb Name="object_bg_Standardlimb_011AE0" Type="Standard" EnumName="OBJECT_BG_2_LIMB_15" Offset="0x11AE0" />
+        <Limb Name="object_bg_Standardlimb_011AEC" Type="Standard" EnumName="OBJECT_BG_2_LIMB_16" Offset="0x11AEC" />
+        <Limb Name="object_bg_Standardlimb_011AF8" Type="Standard" EnumName="OBJECT_BG_2_LIMB_17" Offset="0x11AF8" />
+        <Skeleton Name="object_bg_Skel_011B60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_2_LIMB_NONE" LimbMax="OBJECT_BG_2_LIMB_MAX" EnumName="object_bg_2_Limbs" Offset="0x11B60" />
     </File>
 </Root>

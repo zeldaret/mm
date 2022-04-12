@@ -260,7 +260,7 @@ void EnYb_SetupLeaving(EnYb* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnYb_Talk;
         // I am counting on you
-        func_801518B0(globalCtx, 0x147D, &this->actor);
+        Message_StartTextbox(globalCtx, 0x147D, &this->actor);
         func_80BFA2FC(globalCtx);
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
@@ -323,7 +323,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
-        func_801518B0(globalCtx, 0x147C, &this->actor);
+        Message_StartTextbox(globalCtx, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
@@ -362,10 +362,10 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
         this->actionFunc = EnYb_Talk;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
             // I have taught you, go use it
-            func_801518B0(globalCtx, 0x147C, &this->actor);
+            Message_StartTextbox(globalCtx, 0x147C, &this->actor);
         } else {
             // regular talk to him first dialogue
-            func_801518B0(globalCtx, 0x147B, &this->actor);
+            Message_StartTextbox(globalCtx, 0x147B, &this->actor);
         }
     } else if (EnYb_CanTalk(this, globalCtx)) {
         func_800B8614(&this->actor, globalCtx, 120.0f);

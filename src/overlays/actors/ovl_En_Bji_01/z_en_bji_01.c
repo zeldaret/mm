@@ -183,7 +183,7 @@ void func_809CD028(EnBji01* this, GlobalContext* globalCtx) {
                             tempDay = gSaveContext.day;
                             tempTimeBeforeMoonCrash =
                                 ((-(tempDay % 5 << 0x10) - ((u16)(gSaveContext.time - 0x4000))) + 0x40000);
-                            if (tempTimeBeforeMoonCrash < 2730.6667f) { /* 1 hr */
+                            if (tempTimeBeforeMoonCrash < CLOCK_TIME_F(1, 0)) { /* 1 hr */
                                 this->textId = 0x5E8;
                             } else {
                                 this->textId = 0x5EB;
@@ -203,7 +203,7 @@ void EnBji01_DialogueHandler(EnBji01* this, GlobalContext* globalCtx) {
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x444);
             func_809CCDE0(this, globalCtx);
             if (this->actor.shape.rot.y == this->actor.yawTowardsPlayer) {
-                func_801518B0(globalCtx, this->textId, &this->actor);
+                Message_StartTextbox(globalCtx, this->textId, &this->actor);
             }
             break;
         case 4:
@@ -299,7 +299,7 @@ void func_809CD634(EnBji01* this, GlobalContext* globalCtx) {
     Audio_QueueSeqCmd(0xE0000101);
     globalCtx->nextEntranceIndex = 0x54A0; /* Termina Field from telescope */
     gSaveContext.respawn[0].entranceIndex = globalCtx->nextEntranceIndex;
-    func_80169EFC(globalCtx); /* Load new entrance? */
+    func_80169EFC(&globalCtx->state); /* Load new entrance? */
     gSaveContext.respawnFlag = -2;
     this->actionFunc = EnBji01_DoNothing;
 }

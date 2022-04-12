@@ -868,7 +868,7 @@ void Select_DrawLoadingScreen(SelectContext* this) {
 void Select_Draw(SelectContext* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
-    func_8012CF0C(gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
 
     SET_FULLSCREEN_VIEWPORT(&this->view);
     View_RenderView(&this->view, 0xF);

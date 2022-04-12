@@ -193,7 +193,7 @@ void Daytelop_Draw(DaytelopContext* this) {
 void Daytelop_Main(GameState* thisx) {
     DaytelopContext* this = (DaytelopContext*)thisx;
 
-    func_8012CF0C(this->state.gfxCtx, 1, 1, 0, 0, 0);
+    func_8012CF0C(this->state.gfxCtx, true, true, 0, 0, 0);
 
     OPEN_DISPS(this->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x09, this->daytelopStaticFile);

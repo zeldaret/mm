@@ -411,7 +411,7 @@ void func_809C16DC(EnAob01* this, GlobalContext* globalCtx) {
             break;
     }
 
-    func_801518B0(globalCtx, this->unk_210, &this->actor);
+    Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
 }
 
 void func_809C1C9C(EnAob01* this, GlobalContext* globalCtx) {
@@ -439,13 +439,13 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
                     if (gSaveContext.rupees < 10) {
                         play_sound(NA_SE_SY_ERROR);
                         this->unk_210 = 0x3524;
-                        func_801518B0(globalCtx, this->unk_210, &this->actor);
+                        Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
                     } else {
                         func_8019F208();
                         this->unk_2D2 |= 4;
                         this->unk_2D2 |= 0x10;
                         this->unk_210 = 0x3522;
-                        func_801518B0(globalCtx, this->unk_210, &this->actor);
+                        Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
                         this->actionFunc = func_809C21E0;
                     }
                     break;
@@ -453,7 +453,7 @@ void func_809C1D64(EnAob01* this, GlobalContext* globalCtx) {
                 case 1:
                     func_8019F230();
                     this->unk_210 = 0x3535;
-                    func_801518B0(globalCtx, this->unk_210, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
                     break;
             }
         }
@@ -556,7 +556,7 @@ void func_809C21E0(EnAob01* this, GlobalContext* globalCtx) {
                 this->unk_2D2 |= 0x40;
                 this->unk_43C = 1;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, D_809C3790, 1);
-                func_801518B0(globalCtx, 0x354B, &this->actor);
+                Message_StartTextbox(globalCtx, 0x354B, &this->actor);
             }
             this->unk_2D2 &= ~8;
         }
@@ -738,7 +738,7 @@ void func_809C28B8(EnAob01* this, GlobalContext* globalCtx) {
                 break;
         }
 
-        func_801518B0(globalCtx, this->unk_210, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
         this->actionFunc = func_809C2D0C;
     } else if (this->actor.xzDistToPlayer < 100.0f) {
         func_800B8614(&this->actor, globalCtx, 100.0f);
@@ -824,7 +824,7 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
         this->unk_2D2 &= ~0x80;
         if (this->unk_434 >= 150) {
             this->unk_210 = 0x352E;
-            func_801518B0(globalCtx, this->unk_210, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
             this->actionFunc = func_809C2A64;
         } else {
             this->unk_2D4 = this->unk_2E6;
@@ -842,7 +842,7 @@ void func_809C2D0C(EnAob01* this, GlobalContext* globalCtx) {
             }
 
             this->unk_210 = 0x354C;
-            func_801518B0(globalCtx, this->unk_210, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_210, &this->actor);
             this->actionFunc = func_809C1D64;
             gSaveContext.eventInf[0] &= (u8)~7;
         }

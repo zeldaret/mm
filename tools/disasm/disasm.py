@@ -18,6 +18,14 @@ parser.add_argument(
     default=False,
     help="Decompile all files regardless of whether they are used or not",
 )
+parser.add_argument(
+    "-files",
+    "--files",
+    dest="files",
+    nargs="+",
+    required=False,
+    help="Optional list of files to diassemble separated by a space. This is a whitelist, all files will be skipped besides the ones listed here if used.",
+)
 
 args = parser.parse_args()
 jobs = args.jobs
@@ -26,7 +34,7 @@ ASM_OUT = "asm/"
 DATA_OUT = "data/"
 
 
-def discard_decomped_files(files_spec):
+def discard_decomped_files(files_spec, include_files):
     root_path = Path(__file__).parent.parent.parent
 
     with open(root_path / "spec", "r") as f:
@@ -37,6 +45,12 @@ def discard_decomped_files(files_spec):
     new_spec = []
     for f in files_spec:
         name, _, type, _, file_list = f
+
+        force_include = False
+        if include_files:
+            if not any([x in name for x in include_files]):
+                continue
+            force_include = True
 
         # Find the beginseg for this file
         i = 0
@@ -92,6 +106,7 @@ def discard_decomped_files(files_spec):
                             if "GLOBAL_ASM" in f2.read():
                                 include = True
 
+            include |= force_include
             if include:
                 new_files[offset] = file
                 included = True
@@ -2191,16 +2206,23 @@ for segment in files_spec:
     full_file_list[segment[0]] = new
 
 if args.full:
+    new_spec = []
     for segment in files_spec:
+        if args.files and not any(
+            [file_name in segment[0] for file_name in args.files]
+        ):
+            continue
         for offset, name in segment[4].items():
             if name == "":
                 name = f"{segment[2]}_{offset:08X}"
             segment[4][offset] = name
+        new_spec.append(segment)
+    files_spec = new_spec
 else:
     # Prune
     old_file_count = sum([len(f[4].keys()) for f in files_spec])
 
-    files_spec = discard_decomped_files(files_spec)
+    files_spec = discard_decomped_files(files_spec, args.files)
 
     new_file_count = sum([len(f[4].keys()) for f in files_spec])
 
@@ -2413,193 +2435,201 @@ rodata_symbols_regex = re.compile(r"(?<=\n)glabel (.+)(?=\n)")
 asm_symbols_regex = re.compile(r"%(?:lo|hi)\((.+?)\)")
 
 # Split files and migrate rodata that should be migrated
-for root, dirs, files in os.walk(ASM_OUT):
-    for f in files:
-        if "non_matchings" in root:
-            continue
-        asm_path = os.path.join(root, f)
-        rodata_path = (
-            asm_path.replace(ASM_OUT + "overlays/", DATA_OUT)
-            .replace(ASM_OUT, DATA_OUT)
-            .replace(".text.s", ".rodata.s")
+for file in Path(ASM_OUT).glob("**/*.s"):
+    asm_path = str(file)
+
+    if "non_matchings" in asm_path:
+        continue
+
+    if file.parts[1] == "overlays":
+        name = file.parts[2]
+    else:
+        name = file.parts[1]
+
+    if not any([name == section[-1]["name"] for section in all_sections]):
+        continue
+
+    rodata_path = (
+        asm_path.replace(ASM_OUT + "overlays/", DATA_OUT)
+        .replace(ASM_OUT, DATA_OUT)
+        .replace(".text.s", ".rodata.s")
+    )
+
+    print(asm_path)
+
+    asm = ""
+    with open(asm_path, "r") as infile:
+        asm = infile.read()
+
+    rodata = ""
+    if os.path.exists(rodata_path):
+        # print(rodata_path)
+        with open(rodata_path, "r") as rodata_file:
+            rodata = rodata_file.read()
+
+        rodata_info = list(zip(rodata_syms(rodata), rodata_blocks(rodata)))
+
+        # populate rdata and late_rodata lists
+        first_late_rodata = find_late_rodata_start(rodata_info)
+        rdata_info = []
+        late_rodata_info = []
+        target = rdata_info  # first populate rdata
+        for sym, block in rodata_info:
+            # now populate late_rodata, if there is any
+            if sym == first_late_rodata:
+                target = late_rodata_info
+            target.append((sym, block))
+
+    # print([(sym,block.split("\n")[1:]) for sym,block in zip(rdata_syms,rdata_blocks)])
+
+    function_info = list(
+        zip(
+            [s.replace("glabel", "").strip() for s in func_regex.findall(asm)],
+            func_regex.split(asm)[1:],
         )
+    )
 
-        print(asm_path)
+    rdata_map = {}
+    late_rodata_map = {}
 
-        asm = ""
-        with open(asm_path, "r") as infile:
-            asm = infile.read()
+    # pass 1 to resolve rodata splits
+    if rodata != "":
+        last_fn = None
 
-        rodata = ""
-        if os.path.exists(rodata_path):
-            # print(rodata_path)
-            with open(rodata_path, "r") as rodata_file:
-                rodata = rodata_file.read()
+        referenced_in = {}  # key=rodata label , value=function label
 
-            rodata_info = list(zip(rodata_syms(rodata), rodata_blocks(rodata)))
+        for sym, _ in rodata_info:
+            all_refs = [
+                label for label, body in function_info if "%lo(" + sym + ")" in body
+            ]
+            # ignore multiple refs, take only the first
+            referenced_in.update({sym: all_refs[0] if len(all_refs) != 0 else None})
 
-            # populate rdata and late_rodata lists
-            first_late_rodata = find_late_rodata_start(rodata_info)
-            rdata_info = []
-            late_rodata_info = []
-            target = rdata_info  # first populate rdata
-            for sym, block in rodata_info:
-                # now populate late_rodata, if there is any
-                if sym == first_late_rodata:
-                    target = late_rodata_info
-                target.append((sym, block))
+        def do_splits(out_dict, info):
+            first = True
+            last_ref = None
+            cr = None
+            for sym, block in info:
+                ref = referenced_in[sym]
+                if first:
+                    cr = ref or sym
 
-        # print([(sym,block.split("\n")[1:]) for sym,block in zip(rdata_syms,rdata_blocks)])
+                if ref is not None and not first:
+                    if ref != last_ref:
+                        # existing function
+                        cr = ref
+                elif last_ref is not None:
+                    # new GLOBAL_ASM
+                    cr = sym
 
-        function_info = list(
-            zip(
-                [s.replace("glabel", "").strip() for s in func_regex.findall(asm)],
-                func_regex.split(asm)[1:],
-            )
-        )
+                # add to output
+                if cr not in out_dict.keys():
+                    out_dict.update({cr: []})
+                out_dict[cr].append((sym, block))
 
-        rdata_map = {}
-        late_rodata_map = {}
+                # setup next iter
+                last_ref = ref
+                first = False
 
-        # pass 1 to resolve rodata splits
+        do_splits(rdata_map, rdata_info)
+        do_splits(late_rodata_map, late_rodata_info)
+
+    # all output files, order is irrelevant at this point
+    all_output = set([label for label, _ in function_info]).union(
+        set(rdata_map.keys()), set(late_rodata_map.keys())
+    )
+
+    # pass 2 to output splits
+    for label in all_output:
+        fn_body = dict(function_info).get(label, None)
+
+        text_out = ""
+        rodata_out = ""
+
+        if fn_body is not None:
+            text_out = "glabel " + label.strip() + "\n" + fn_body.strip() + "\n"
+
         if rodata != "":
-            last_fn = None
+            rdata = rdata_map.get(label, None)
+            late_rodata = late_rodata_map.get(label, None)
 
-            referenced_in = {}  # key=rodata label , value=function label
-
-            for sym, _ in rodata_info:
-                all_refs = [
-                    label for label, body in function_info if "%lo(" + sym + ")" in body
-                ]
-                # ignore multiple refs, take only the first
-                referenced_in.update({sym: all_refs[0] if len(all_refs) != 0 else None})
-
-            def do_splits(out_dict, info):
-                first = True
-                last_ref = None
-                cr = None
-                for sym, block in info:
-                    ref = referenced_in[sym]
-                    if first:
-                        cr = ref or sym
-
-                    if ref is not None and not first:
-                        if ref != last_ref:
-                            # existing function
-                            cr = ref
-                    elif last_ref is not None:
-                        # new GLOBAL_ASM
-                        cr = sym
-
-                    # add to output
-                    if cr not in out_dict.keys():
-                        out_dict.update({cr: []})
-                    out_dict[cr].append((sym, block))
-
-                    # setup next iter
-                    last_ref = ref
-                    first = False
-
-            do_splits(rdata_map, rdata_info)
-            do_splits(late_rodata_map, late_rodata_info)
-
-        # all output files, order is irrelevant at this point
-        all_output = set([label for label, _ in function_info]).union(
-            set(rdata_map.keys()), set(late_rodata_map.keys())
-        )
-
-        # pass 2 to output splits
-        for label in all_output:
-            fn_body = dict(function_info).get(label, None)
-
-            text_out = ""
-            rodata_out = ""
-
-            if fn_body is not None:
-                text_out = "glabel " + label.strip() + "\n" + fn_body.strip() + "\n"
-
-            if rodata != "":
-                rdata = rdata_map.get(label, None)
-                late_rodata = late_rodata_map.get(label, None)
-
-                # check for late_rodata_alignment
-                late_rodata_alignment = ""
-                if fn_body is not None and late_rodata is not None:
-                    ratio = late_rodata_size(
-                        [block for _, block in late_rodata]
-                    ) / text_block_size(fn_body)
-                    if ratio > 1.0 / 3:
-                        # print(f"{label} : {ratio}")
-                        # TODO hack: getting the address from a comment
-                        first_block_split = late_rodata[0][1].split(" */ .")
-                        vaddr = None
-                        if first_block_split[1].startswith(
-                            "float"
-                        ) or first_block_split[1].startswith("double"):
-                            vaddr = first_block_split[0].split(" ")[-2]
-                        else:
-                            vaddr = first_block_split[0].split(" ")[-1]
-                        assert vaddr is not None
-                        vaddr = int(vaddr, 16)
-                        if vaddr not in [
-                            0x801E0E28,
-                            0x80C1C2B0,
-                            0x80AA7820,
-                            0x80AA3CC0,
-                            0x80AA418C,
-                            0x80BE0160,
-                            0x80B591D8,
-                            0x80B59610,
-                            0x80B59780,
-                            0x80964E00,
-                            0x80964F10,
-                            0x80BB40A0,
-                            0x80952038,
-                            0x80AFB920,
-                            0x80AFBBFC,
-                            0x80AFBE28,
-                            0x80983320,
-                        ]:
-                            # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
-                            # comparatively tiny functions, can we swat these programmatically?
-                            late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
-
-                rdata_out = ""
-                if rdata is not None:
-                    rdata_out = ".rdata\n" + "".join([block for _, block in rdata])
-
-                late_rodata_out = ""
-                if late_rodata is not None:
-                    late_rodata_out = (
-                        ".late_rodata\n"
-                        + late_rodata_alignment
-                        + "".join([block for _, block in late_rodata])
-                    )
-
-                rodata_out = (
-                    rdata_out
-                    + late_rodata_out
-                    + (
-                        "\n.text\n"
-                        if (
-                            (rdata is not None or late_rodata is not None)
-                            and fn_body is not None
+            # check for late_rodata_alignment
+            late_rodata_alignment = ""
+            if fn_body is not None and late_rodata is not None:
+                ratio = late_rodata_size(
+                    [block for _, block in late_rodata]
+                ) / text_block_size(fn_body)
+                if ratio > 1.0 / 3:
+                    # print(f"{label} : {ratio}")
+                    # TODO hack: getting the address from a comment
+                    first_block_split = late_rodata[0][1].split(" */ .")
+                    vaddr = None
+                    if first_block_split[1].startswith("float") or first_block_split[
+                        1
+                    ].startswith("double"):
+                        vaddr = first_block_split[0].split(" ")[-2]
+                    else:
+                        vaddr = first_block_split[0].split(" ")[-1]
+                    assert vaddr is not None
+                    vaddr = int(vaddr, 16)
+                    if vaddr not in [
+                        0x801E0E28,
+                        0x80C1C2B0,
+                        0x80AA7820,
+                        0x80AA3CC0,
+                        0x80AA418C,
+                        0x80BE0160,
+                        0x80B591D8,
+                        0x80B59610,
+                        0x80B59780,
+                        0x80964E00,
+                        0x80964F10,
+                        0x80BB40A0,
+                        0x80952038,
+                        0x80AFB920,
+                        0x80AFBBFC,
+                        0x80AFBE28,
+                        0x80983320,
+                    ]:
+                        # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
+                        # comparatively tiny functions, can we swat these programmatically?
+                        late_rodata_alignment = (
+                            f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
                         )
-                        else ""
-                    )
+
+            rdata_out = ""
+            if rdata is not None:
+                rdata_out = ".rdata\n" + "".join([block for _, block in rdata])
+
+            late_rodata_out = ""
+            if late_rodata is not None:
+                late_rodata_out = (
+                    ".late_rodata\n"
+                    + late_rodata_alignment
+                    + "".join([block for _, block in late_rodata])
                 )
 
-            all_out = rodata_out + text_out
-
-            # write it out
-            out_path = (
-                root.replace(ASM_OUT, f"{ASM_OUT}/non_matchings/")
-                + "/"
-                + ((f.replace(".text.s", "") + "/") if "overlays" not in root else "")
+            rodata_out = (
+                rdata_out
+                + late_rodata_out
+                + (
+                    "\n.text\n"
+                    if (
+                        (rdata is not None or late_rodata is not None)
+                        and fn_body is not None
+                    )
+                    else ""
+                )
             )
-            os.makedirs(out_path, exist_ok=True)
-            with open(out_path + label + ".s", "w") as outfile:
-                outfile.write(all_out.strip() + "\n")
 
-            # remove rodata and unsplit file
-            # TODO
+        all_out = rodata_out + text_out
+
+        # write it out
+        out_path = Path(asm_path.replace(ASM_OUT, f"{ASM_OUT}non_matchings/")).parent
+        if out_path.parts[2] not in ("overlays", "makerom"):
+            out_path /= file.name.split(".")[0]
+        out_path.mkdir(parents=True, exist_ok=True)
+
+        out_path /= label + ".s"
+        with open(out_path, "w") as outfile:
+            outfile.write(all_out.strip() + "\n")

@@ -651,7 +651,7 @@ void func_80B5CD40(EnOt* this, GlobalContext* globalCtx) {
             if (1) {}
             if (!temp) {
                 gSaveContext.weekEventReg[23] |= 0x10;
-                func_801518B0(globalCtx, 0x1069, NULL);
+                Message_StartTextbox(globalCtx, 0x1069, NULL);
             }
             break;
 
@@ -765,12 +765,12 @@ void func_80B5D160(EnOt* this, GlobalContext* globalCtx) {
                         } else {
                             phi_a1 = 0x10A5;
                         }
-                        func_801518B0(globalCtx, phi_a1, &this->actor);
+                        Message_StartTextbox(globalCtx, phi_a1, &this->actor);
                         func_80B5D114(this, globalCtx);
                         break;
 
                     case 1:
-                        func_801518B0(globalCtx, 0x106D, &this->actor);
+                        Message_StartTextbox(globalCtx, 0x106D, &this->actor);
                         func_80B5D114(this, globalCtx);
                         break;
                 }
@@ -1038,7 +1038,7 @@ void EnOt_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 
-    AnimatedMat_Draw(globalCtx, (AnimatedMaterial*)Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
+    AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(object_ot_Matanimheader_0005F8));
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           NULL, EnOt_PostLimbDraw, &this->actor);
     Matrix_InsertTranslation(this->unk_378.x, this->unk_378.y, this->unk_378.z, MTXMODE_NEW);

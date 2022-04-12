@@ -16,8 +16,6 @@ void ObjMilkBin_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void ObjMilkBin_Update(Actor* thisx, GlobalContext* globalCtx);
 void ObjMilkBin_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-// gMilkBinMilkJarDL
-
 const ActorInit Obj_Milk_Bin_InitVars = {
     ACTOR_OBJ_MILK_BIN,
     ACTORCAT_PROP,

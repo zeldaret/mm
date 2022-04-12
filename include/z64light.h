@@ -23,7 +23,7 @@ typedef struct {
     /* 0x12 */ s16 fogColor[3];
     /* 0x18 */ s16 fogNear;
     /* 0x1A */ s16 fogFar;
-} LightSettings2;  // size = 0x1C
+} EnvLightSettings; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 x;
@@ -56,11 +56,6 @@ typedef struct Lights {
     /* 0x01 */ u8 numLights;
     /* 0x08 */ Lightsn l;
 } Lights; // size = 0x80
-
-typedef struct LightInfoPositional {
-    /* 0x0 */ u8 type;
-    /* 0x2 */ LightPoint params;
-} LightInfoPositional; // size = 0xE
 
 typedef struct LightNode {
     /* 0x0 */ LightInfo* info;

@@ -45,27 +45,27 @@
         <Texture Name="object_rz_Tex_00D1D0" OutName="tex_00D1D0" Format="i8" Width="16" Height="16" Offset="0xD1D0" />
         <Texture Name="object_rz_Tex_00D2D0" OutName="tex_00D2D0" Format="i8" Width="32" Height="32" Offset="0xD2D0" />
         <TextureAnimation Name="object_rz_Matanimheader_00D768" Offset="0xD768" />
-        <Limb Name="object_rz_Standardlimb_00D788" Type="Standard" Offset="0xD788" />
-        <Limb Name="object_rz_Standardlimb_00D794" Type="Standard" Offset="0xD794" />
-        <Limb Name="object_rz_Standardlimb_00D7A0" Type="Standard" Offset="0xD7A0" />
-        <Limb Name="object_rz_Standardlimb_00D7AC" Type="Standard" Offset="0xD7AC" />
-        <Limb Name="object_rz_Standardlimb_00D7B8" Type="Standard" Offset="0xD7B8" />
-        <Limb Name="object_rz_Standardlimb_00D7C4" Type="Standard" Offset="0xD7C4" />
-        <Limb Name="object_rz_Standardlimb_00D7D0" Type="Standard" Offset="0xD7D0" />
-        <Limb Name="object_rz_Standardlimb_00D7DC" Type="Standard" Offset="0xD7DC" />
-        <Limb Name="object_rz_Standardlimb_00D7E8" Type="Standard" Offset="0xD7E8" />
-        <Limb Name="object_rz_Standardlimb_00D7F4" Type="Standard" Offset="0xD7F4" />
-        <Limb Name="object_rz_Standardlimb_00D800" Type="Standard" Offset="0xD800" />
-        <Limb Name="object_rz_Standardlimb_00D80C" Type="Standard" Offset="0xD80C" />
-        <Limb Name="object_rz_Standardlimb_00D818" Type="Standard" Offset="0xD818" />
-        <Limb Name="object_rz_Standardlimb_00D824" Type="Standard" Offset="0xD824" />
-        <Limb Name="object_rz_Standardlimb_00D830" Type="Standard" Offset="0xD830" />
-        <Limb Name="object_rz_Standardlimb_00D83C" Type="Standard" Offset="0xD83C" />
-        <Limb Name="object_rz_Standardlimb_00D848" Type="Standard" Offset="0xD848" />
-        <Limb Name="object_rz_Standardlimb_00D854" Type="Standard" Offset="0xD854" />
-        <Limb Name="object_rz_Standardlimb_00D860" Type="Standard" Offset="0xD860" />
-        <Limb Name="object_rz_Standardlimb_00D86C" Type="Standard" Offset="0xD86C" />
-        <Limb Name="object_rz_Standardlimb_00D878" Type="Standard" Offset="0xD878" />
-        <Skeleton Name="object_rz_Skel_00D8D8" Type="Flex" LimbType="Standard" Offset="0xD8D8" />
+        <Limb Name="object_rz_Standardlimb_00D788" Type="Standard" EnumName="OBJECT_RZ_LIMB_01" Offset="0xD788" />
+        <Limb Name="object_rz_Standardlimb_00D794" Type="Standard" EnumName="OBJECT_RZ_LIMB_02" Offset="0xD794" />
+        <Limb Name="object_rz_Standardlimb_00D7A0" Type="Standard" EnumName="OBJECT_RZ_LIMB_03" Offset="0xD7A0" />
+        <Limb Name="object_rz_Standardlimb_00D7AC" Type="Standard" EnumName="OBJECT_RZ_LIMB_04" Offset="0xD7AC" />
+        <Limb Name="object_rz_Standardlimb_00D7B8" Type="Standard" EnumName="OBJECT_RZ_LIMB_05" Offset="0xD7B8" />
+        <Limb Name="object_rz_Standardlimb_00D7C4" Type="Standard" EnumName="OBJECT_RZ_LIMB_06" Offset="0xD7C4" />
+        <Limb Name="object_rz_Standardlimb_00D7D0" Type="Standard" EnumName="OBJECT_RZ_LIMB_07" Offset="0xD7D0" />
+        <Limb Name="object_rz_Standardlimb_00D7DC" Type="Standard" EnumName="OBJECT_RZ_LIMB_08" Offset="0xD7DC" />
+        <Limb Name="object_rz_Standardlimb_00D7E8" Type="Standard" EnumName="OBJECT_RZ_LIMB_09" Offset="0xD7E8" />
+        <Limb Name="object_rz_Standardlimb_00D7F4" Type="Standard" EnumName="OBJECT_RZ_LIMB_0A" Offset="0xD7F4" />
+        <Limb Name="object_rz_Standardlimb_00D800" Type="Standard" EnumName="OBJECT_RZ_LIMB_0B" Offset="0xD800" />
+        <Limb Name="object_rz_Standardlimb_00D80C" Type="Standard" EnumName="OBJECT_RZ_LIMB_0C" Offset="0xD80C" />
+        <Limb Name="object_rz_Standardlimb_00D818" Type="Standard" EnumName="OBJECT_RZ_LIMB_0D" Offset="0xD818" />
+        <Limb Name="object_rz_Standardlimb_00D824" Type="Standard" EnumName="OBJECT_RZ_LIMB_0E" Offset="0xD824" />
+        <Limb Name="object_rz_Standardlimb_00D830" Type="Standard" EnumName="OBJECT_RZ_LIMB_0F" Offset="0xD830" />
+        <Limb Name="object_rz_Standardlimb_00D83C" Type="Standard" EnumName="OBJECT_RZ_LIMB_10" Offset="0xD83C" />
+        <Limb Name="object_rz_Standardlimb_00D848" Type="Standard" EnumName="OBJECT_RZ_LIMB_11" Offset="0xD848" />
+        <Limb Name="object_rz_Standardlimb_00D854" Type="Standard" EnumName="OBJECT_RZ_LIMB_12" Offset="0xD854" />
+        <Limb Name="object_rz_Standardlimb_00D860" Type="Standard" EnumName="OBJECT_RZ_LIMB_13" Offset="0xD860" />
+        <Limb Name="object_rz_Standardlimb_00D86C" Type="Standard" EnumName="OBJECT_RZ_LIMB_14" Offset="0xD86C" />
+        <Limb Name="object_rz_Standardlimb_00D878" Type="Standard" EnumName="OBJECT_RZ_LIMB_15" Offset="0xD878" />
+        <Skeleton Name="object_rz_Skel_00D8D8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_RZ_LIMB_NONE" LimbMax="OBJECT_RZ_LIMB_MAX" EnumName="object_rz_Limbs" Offset="0xD8D8" />
     </File>
 </Root>

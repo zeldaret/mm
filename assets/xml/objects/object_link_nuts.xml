@@ -53,27 +53,27 @@
         <Texture Name="object_link_nuts_Tex_00A4E0" OutName="tex_00A4E0" Format="rgba16" Width="32" Height="64" Offset="0xA4E0" />
         <DList Name="object_link_nuts_DL_00B690" Offset="0xB690" />
         <Texture Name="object_link_nuts_Tex_00B780" OutName="tex_00B780" Format="ci8" Width="16" Height="16" Offset="0xB780" />
-        <Limb Name="object_link_nuts_Lodlimb_00B880" Type="LOD" Offset="0xB880" />
-        <Limb Name="object_link_nuts_Lodlimb_00B890" Type="LOD" Offset="0xB890" />
-        <Limb Name="object_link_nuts_Lodlimb_00B8A0" Type="LOD" Offset="0xB8A0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B8B0" Type="LOD" Offset="0xB8B0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B8C0" Type="LOD" Offset="0xB8C0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B8D0" Type="LOD" Offset="0xB8D0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B8E0" Type="LOD" Offset="0xB8E0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B8F0" Type="LOD" Offset="0xB8F0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B900" Type="LOD" Offset="0xB900" />
-        <Limb Name="object_link_nuts_Lodlimb_00B910" Type="LOD" Offset="0xB910" />
-        <Limb Name="object_link_nuts_Lodlimb_00B920" Type="LOD" Offset="0xB920" />
-        <Limb Name="object_link_nuts_Lodlimb_00B930" Type="LOD" Offset="0xB930" />
-        <Limb Name="object_link_nuts_Lodlimb_00B940" Type="LOD" Offset="0xB940" />
-        <Limb Name="object_link_nuts_Lodlimb_00B950" Type="LOD" Offset="0xB950" />
-        <Limb Name="object_link_nuts_Lodlimb_00B960" Type="LOD" Offset="0xB960" />
-        <Limb Name="object_link_nuts_Lodlimb_00B970" Type="LOD" Offset="0xB970" />
-        <Limb Name="object_link_nuts_Lodlimb_00B980" Type="LOD" Offset="0xB980" />
-        <Limb Name="object_link_nuts_Lodlimb_00B990" Type="LOD" Offset="0xB990" />
-        <Limb Name="object_link_nuts_Lodlimb_00B9A0" Type="LOD" Offset="0xB9A0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B9B0" Type="LOD" Offset="0xB9B0" />
-        <Limb Name="object_link_nuts_Lodlimb_00B9C0" Type="LOD" Offset="0xB9C0" />
-        <Skeleton Name="object_link_nuts_Skel_00BA24" Type="Flex" LimbType="Standard" Offset="0xBA24" />
+        <Limb Name="object_link_nuts_Lodlimb_00B880" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_01" Offset="0xB880" />
+        <Limb Name="object_link_nuts_Lodlimb_00B890" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_02" Offset="0xB890" />
+        <Limb Name="object_link_nuts_Lodlimb_00B8A0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_03" Offset="0xB8A0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B8B0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_04" Offset="0xB8B0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B8C0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_05" Offset="0xB8C0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B8D0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_06" Offset="0xB8D0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B8E0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_07" Offset="0xB8E0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B8F0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_08" Offset="0xB8F0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B900" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_09" Offset="0xB900" />
+        <Limb Name="object_link_nuts_Lodlimb_00B910" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_0A" Offset="0xB910" />
+        <Limb Name="object_link_nuts_Lodlimb_00B920" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_0B" Offset="0xB920" />
+        <Limb Name="object_link_nuts_Lodlimb_00B930" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_0C" Offset="0xB930" />
+        <Limb Name="object_link_nuts_Lodlimb_00B940" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_0D" Offset="0xB940" />
+        <Limb Name="object_link_nuts_Lodlimb_00B950" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_0E" Offset="0xB950" />
+        <Limb Name="object_link_nuts_Lodlimb_00B960" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_0F" Offset="0xB960" />
+        <Limb Name="object_link_nuts_Lodlimb_00B970" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_10" Offset="0xB970" />
+        <Limb Name="object_link_nuts_Lodlimb_00B980" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_11" Offset="0xB980" />
+        <Limb Name="object_link_nuts_Lodlimb_00B990" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_12" Offset="0xB990" />
+        <Limb Name="object_link_nuts_Lodlimb_00B9A0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_13" Offset="0xB9A0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B9B0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_14" Offset="0xB9B0" />
+        <Limb Name="object_link_nuts_Lodlimb_00B9C0" Type="LOD" EnumName="OBJECT_LINK_NUTS_LIMB_15" Offset="0xB9C0" />
+        <Skeleton Name="object_link_nuts_Skel_00BA24" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_NUTS_LIMB_NONE" LimbMax="OBJECT_LINK_NUTS_LIMB_MAX" EnumName="object_link_nuts_Limbs" Offset="0xBA24" />
     </File>
 </Root>

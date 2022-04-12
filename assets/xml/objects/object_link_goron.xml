@@ -76,33 +76,33 @@
         <DList Name="object_link_goron_DL_016A88" Offset="0x16A88" />
         <DList Name="object_link_goron_DL_017180" Offset="0x17180" />
         <DList Name="object_link_goron_DL_017620" Offset="0x17620" />
-        <Limb Name="object_link_goron_Standardlimb_017778" Type="Standard" Offset="0x17778" />
-        <Limb Name="object_link_goron_Standardlimb_017784" Type="Standard" Offset="0x17784" />
-        <Limb Name="object_link_goron_Standardlimb_017790" Type="Standard" Offset="0x17790" />
-        <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" Offset="0x1779C" />
-        <Skeleton Name="object_link_goron_Skel_0177B8" Type="Flex" LimbType="Standard" Offset="0x177B8" />
+        <Limb Name="object_link_goron_Standardlimb_017778" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_01" Offset="0x17778" />
+        <Limb Name="object_link_goron_Standardlimb_017784" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_02" Offset="0x17784" />
+        <Limb Name="object_link_goron_Standardlimb_017790" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_03" Offset="0x17790" />
+        <Limb Name="object_link_goron_Standardlimb_01779C" Type="Standard" EnumName="OBJECT_LINK_GORON_1_LIMB_04" Offset="0x1779C" />
+        <Skeleton Name="object_link_goron_Skel_0177B8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_1_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_1_LIMB_MAX" EnumName="object_link_goron_1_Limbs" Offset="0x177B8" />
         <!-- <Blob Name="object_link_goron_Blob_0178D0" Size="0x10" Offset="0x178D0" /> -->
-        <Limb Name="object_link_goron_Lodlimb_0178E0" Type="LOD" Offset="0x178E0" />
-        <Limb Name="object_link_goron_Lodlimb_0178F0" Type="LOD" Offset="0x178F0" />
-        <Limb Name="object_link_goron_Lodlimb_017900" Type="LOD" Offset="0x17900" />
-        <Limb Name="object_link_goron_Lodlimb_017910" Type="LOD" Offset="0x17910" />
-        <Limb Name="object_link_goron_Lodlimb_017920" Type="LOD" Offset="0x17920" />
-        <Limb Name="object_link_goron_Lodlimb_017930" Type="LOD" Offset="0x17930" />
-        <Limb Name="object_link_goron_Lodlimb_017940" Type="LOD" Offset="0x17940" />
-        <Limb Name="object_link_goron_Lodlimb_017950" Type="LOD" Offset="0x17950" />
-        <Limb Name="object_link_goron_Lodlimb_017960" Type="LOD" Offset="0x17960" />
-        <Limb Name="object_link_goron_Lodlimb_017970" Type="LOD" Offset="0x17970" />
-        <Limb Name="object_link_goron_Lodlimb_017980" Type="LOD" Offset="0x17980" />
-        <Limb Name="object_link_goron_Lodlimb_017990" Type="LOD" Offset="0x17990" />
-        <Limb Name="object_link_goron_Lodlimb_0179A0" Type="LOD" Offset="0x179A0" />
-        <Limb Name="object_link_goron_Lodlimb_0179B0" Type="LOD" Offset="0x179B0" />
-        <Limb Name="object_link_goron_Lodlimb_0179C0" Type="LOD" Offset="0x179C0" />
-        <Limb Name="object_link_goron_Lodlimb_0179D0" Type="LOD" Offset="0x179D0" />
-        <Limb Name="object_link_goron_Lodlimb_0179E0" Type="LOD" Offset="0x179E0" />
-        <Limb Name="object_link_goron_Lodlimb_0179F0" Type="LOD" Offset="0x179F0" />
-        <Limb Name="object_link_goron_Lodlimb_017A00" Type="LOD" Offset="0x17A00" />
-        <Limb Name="object_link_goron_Lodlimb_017A10" Type="LOD" Offset="0x17A10" />
-        <Limb Name="object_link_goron_Lodlimb_017A20" Type="LOD" Offset="0x17A20" />
-        <Skeleton Name="object_link_goron_Skel_017A84" Type="Flex" LimbType="Standard" Offset="0x17A84" />
+        <Limb Name="object_link_goron_Lodlimb_0178E0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_01" Offset="0x178E0" />
+        <Limb Name="object_link_goron_Lodlimb_0178F0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_02" Offset="0x178F0" />
+        <Limb Name="object_link_goron_Lodlimb_017900" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_03" Offset="0x17900" />
+        <Limb Name="object_link_goron_Lodlimb_017910" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_04" Offset="0x17910" />
+        <Limb Name="object_link_goron_Lodlimb_017920" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_05" Offset="0x17920" />
+        <Limb Name="object_link_goron_Lodlimb_017930" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_06" Offset="0x17930" />
+        <Limb Name="object_link_goron_Lodlimb_017940" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_07" Offset="0x17940" />
+        <Limb Name="object_link_goron_Lodlimb_017950" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_08" Offset="0x17950" />
+        <Limb Name="object_link_goron_Lodlimb_017960" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_09" Offset="0x17960" />
+        <Limb Name="object_link_goron_Lodlimb_017970" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_0A" Offset="0x17970" />
+        <Limb Name="object_link_goron_Lodlimb_017980" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_0B" Offset="0x17980" />
+        <Limb Name="object_link_goron_Lodlimb_017990" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_0C" Offset="0x17990" />
+        <Limb Name="object_link_goron_Lodlimb_0179A0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_0D" Offset="0x179A0" />
+        <Limb Name="object_link_goron_Lodlimb_0179B0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_0E" Offset="0x179B0" />
+        <Limb Name="object_link_goron_Lodlimb_0179C0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_0F" Offset="0x179C0" />
+        <Limb Name="object_link_goron_Lodlimb_0179D0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_10" Offset="0x179D0" />
+        <Limb Name="object_link_goron_Lodlimb_0179E0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_11" Offset="0x179E0" />
+        <Limb Name="object_link_goron_Lodlimb_0179F0" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_12" Offset="0x179F0" />
+        <Limb Name="object_link_goron_Lodlimb_017A00" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_13" Offset="0x17A00" />
+        <Limb Name="object_link_goron_Lodlimb_017A10" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_14" Offset="0x17A10" />
+        <Limb Name="object_link_goron_Lodlimb_017A20" Type="LOD" EnumName="OBJECT_LINK_GORON_2_LIMB_15" Offset="0x17A20" />
+        <Skeleton Name="object_link_goron_Skel_017A84" Type="Flex" LimbType="Standard" LimbNone="OBJECT_LINK_GORON_2_LIMB_NONE" LimbMax="OBJECT_LINK_GORON_2_LIMB_MAX" EnumName="object_link_goron_2_Limbs" Offset="0x17A84" />
     </File>
 </Root>
