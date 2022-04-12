@@ -507,7 +507,7 @@ s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     u16 phi_a1;
     s32 idx = arg2->unk0 - 1;
 
-    this->unk_3C8 = func_8013BB34(globalCtx, params, D_80AEF8E8[idx + 1]);
+    this->unk_3C8 = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
     if (this->unk_3C8 == 0) {
         return false;
     }
@@ -1043,7 +1043,7 @@ s32 func_80AEE86C(EnTk* this, GlobalContext* globalCtx) {
         (this->actor.xyzDistToPlayerSq <= SQ(115.0f)) &&
         func_80AEE7E0(&this->actor.world.pos, 100.0f, this->unk_324, this->unk_36C) &&
         (((this->unk_2CA & 2) && (Math_Vec3f_DistXZ(&this->unk_300, &sp28) >= 100.0f)) || !(this->unk_2CA & 2)) &&
-        !func_801690CC(globalCtx)) {
+        !Play_InCsMode(globalCtx)) {
         Math_Vec3f_Copy(&this->unk_300, &sp28);
         ret = true;
     }
@@ -1189,7 +1189,7 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (Message_GetState(&globalCtx->msgCtx) == 0 && !func_801690CC(globalCtx) && (this->unk_2C6-- <= 0)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 0 && !Play_InCsMode(globalCtx) && (this->unk_2C6-- <= 0)) {
         Message_StartTextbox(globalCtx, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;

@@ -3799,13 +3799,13 @@ void func_800BC7D8(GlobalContext* globalCtx, s16 y, s16 countdown, s16 speed) {
     Quake_SetCountdown(idx, countdown);
 }
 
-void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 arg2, s16 arg3) {
-    if (arg2 >= 5) {
+void func_800BC848(Actor* actor, GlobalContext* globalCtx, s16 y, s16 countdown) {
+    if (y >= 5) {
         func_8013ECE0(actor->xyzDistToPlayerSq, 255, 20, 150);
     } else {
         func_8013ECE0(actor->xyzDistToPlayerSq, 180, 20, 100);
     }
-    func_800BC770(globalCtx, arg2, arg3);
+    func_800BC770(globalCtx, y, countdown);
 }
 
 typedef struct {
@@ -4232,11 +4232,11 @@ Gfx D_801AEFA0[] = {
     gsSPEndDisplayList(),
 };
 
-void* func_800BD9A0(GraphicsContext* gfxCtx) {
+Gfx* func_800BD9A0(GraphicsContext* gfxCtx) {
     Gfx* displayListHead;
     Gfx* displayList;
 
-    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, 0x10);
+    displayListHead = displayList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
 
     gDPSetRenderMode(displayListHead++,
                      AA_EN | Z_CMP | Z_UPD | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | ZMODE_XLU | FORCE_BL |

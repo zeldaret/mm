@@ -473,8 +473,8 @@ void func_80BAB434(EnSuttari* this) {
 }
 
 void EnSuttari_GetPaths(EnSuttari* this, GlobalContext* globalCtx) {
-    this->paths[0] = func_8013D648(globalCtx, ENSUTTARI_GET_PATH(&this->actor), 0x3F);
-    this->paths[1] = func_8013D648(globalCtx, this->paths[0]->unk1, 0x3F);
+    this->paths[0] = SubS_GetPathByIndex(globalCtx, ENSUTTARI_GET_PATH(&this->actor), 0x3F);
+    this->paths[1] = SubS_GetPathByIndex(globalCtx, this->paths[0]->unk1, 0x3F);
 }
 
 void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
@@ -504,28 +504,29 @@ void func_80BAB4F0(EnSuttari* this, GlobalContext* globalCtx) {
     SubS_FillLimbRotTables(globalCtx, this->unk2FA, this->unk31A, ARRAY_COUNT(this->unk2FA));
 }
 
-s16 func_80BAB698(Path* path, s32 idx, Vec3f* pos, f32* distSQ) {
+s16 EnSuttari_GetDistSqAndOrient(Path* path, s32 index, Vec3f* pos, f32* distSq) {
     Vec3s* points;
     f32 diffX;
     f32 diffZ;
 
     if (path != NULL) {
         points = Lib_SegmentedToVirtual(path->points);
-        points = &points[idx];
+        points = &points[index];
         diffX = points->x - pos->x;
         diffZ = points->z - pos->z;
     } else {
         diffX = 0.0f;
         diffZ = 0.0f;
     }
-    *distSQ = SQ(diffX) + SQ(diffZ);
-    return Math_Acot2F(diffZ, diffX) * (0x8000 / M_PI);
+
+    *distSq = SQ(diffX) + SQ(diffZ);
+    return RADF_TO_BINANG(Math_Acot2F(diffZ, diffX));
 }
 
 s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
     s32 sp58 = path->count;
-    s32 idx = arg2;
+    s32 index = arg2;
     s32 ret = false;
     f32 sp54;
     f32 sp48;
@@ -534,16 +535,16 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
     f32 sp3C;
     Vec3f sp30;
 
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[idx]);
-    if (idx == 0) {
+    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    if (index == 0) {
         sp54 = sp5C[1].x - sp5C[0].x;
         sp48 = sp5C[1].z - sp5C[0].z;
-    } else if (idx == sp58 - 1) {
+    } else if (index == sp58 - 1) {
         sp54 = sp5C[sp58 - 1].x - sp5C[sp58 - 2].x;
         sp48 = sp5C[sp58 - 1].z - sp5C[sp58 - 2].z;
     } else {
-        sp54 = sp5C[idx + 1].x - sp5C[idx - 1].x;
-        sp48 = sp5C[idx + 1].z - sp5C[idx - 1].z;
+        sp54 = sp5C[index + 1].x - sp5C[index - 1].x;
+        sp48 = sp5C[index + 1].z - sp5C[index - 1].z;
     }
     func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
@@ -554,29 +555,26 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
 
 s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
     Vec3s* sp5C = Lib_SegmentedToVirtual(path->points);
-    s32 sp58;
+    s32 sp58 = path->count;
+    s32 index = arg2;
+    s32 ret = false;
     f32 sp54;
-    s32 ret;
-    s32 pad4C;
     f32 sp48;
     f32 sp44;
     f32 sp40;
     f32 sp3C;
     Vec3f sp30;
 
-    if (sp5C[arg2 - 1].x) {}
-    sp58 = path->count;
-    ret = false;
-    Math_Vec3s_ToVec3f(&sp30, &sp5C[arg2]);
-    if (arg2 == 0) {
+    Math_Vec3s_ToVec3f(&sp30, &sp5C[index]);
+    if (index == 0) {
         sp54 = sp5C[0].x - sp5C[1].x;
         sp48 = sp5C[0].z - sp5C[1].z;
-    } else if (arg2 == sp58 - 1) {
+    } else if (index == sp58 - 1) {
         sp54 = sp5C[sp58 - 2].x - sp5C[sp58 - 1].x;
         sp48 = sp5C[sp58 - 2].z - sp5C[sp58 - 1].z;
     } else {
-        sp54 = sp5C[arg2 - 1].x - sp5C[arg2 + 1].x;
-        sp48 = sp5C[arg2 - 1].z - sp5C[arg2 + 1].z;
+        sp54 = sp5C[index - 1].x - sp5C[index + 1].x;
+        sp48 = sp5C[index - 1].z - sp5C[index + 1].z;
     }
     func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
@@ -590,7 +588,7 @@ void func_80BABA90(EnSuttari* this, s32 arg1, u8 arg2) {
     f32 dist;
 
     if (this->paths[arg1] != NULL) {
-        target = func_80BAB698(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &dist);
+        target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &dist);
         if (this->actor.bgCheckFlags & 8) {
             if (arg2 == 2) {
                 this->unk1F4[arg1] = -0x63;
@@ -619,7 +617,7 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
     f32 sp30;
 
     if (this->paths[arg1] != NULL) {
-        target = func_80BAB698(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &sp30);
+        target = EnSuttari_GetDistSqAndOrient(this->paths[arg1], this->unk1F4[arg1], &this->actor.world.pos, &sp30);
         if (this->actor.bgCheckFlags & 8) {
             target = this->actor.wallYaw;
         }
@@ -644,7 +642,7 @@ s32 func_80BABC48(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     u16 phi_a0;
 
     if (sp1C >= 0) {
-        this->unk404 = func_8013BB34(globalCtx, sp23, sp1C);
+        this->unk404 = SubS_GetAdditionalPath(globalCtx, sp23, sp1C);
     }
     if (this->unk404 == NULL) {
         return 0;
@@ -686,7 +684,7 @@ s32 func_80BABDD8(EnSuttari* this, GlobalContext* globalCtx, struct_80133038_arg
     sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, globalCtx, ACTORCAT_DOOR, ACTOR_EN_DOOR);
     sp24 = D_80BAE8F8[unkStruct->unk0];
     if ((sp48 != NULL) && (sp24 >= 0)) {
-        this->unk404 = func_8013BB34(globalCtx, sp47, sp24);
+        this->unk404 = SubS_GetAdditionalPath(globalCtx, sp47, sp24);
     }
     if ((sp48 == NULL) || (this->unk404 == NULL)) {
         return 0;

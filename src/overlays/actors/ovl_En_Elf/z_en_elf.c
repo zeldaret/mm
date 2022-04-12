@@ -1504,7 +1504,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
     } else {
         this->actionFunc(this, globalCtx);
 
-        if (!func_801690CC(globalCtx)) {
+        if (!Play_InCsMode(globalCtx)) {
             if (gSaveContext.save.playerData.tatlTimer < 25800) {
                 gSaveContext.save.playerData.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {

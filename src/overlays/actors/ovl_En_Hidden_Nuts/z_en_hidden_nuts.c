@@ -103,7 +103,7 @@ void EnHiddenNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         return;
     }
 
-    this->path = func_8013D648(globalCtx, this->unk_21E, 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, this->unk_21E, 0x3F);
     this->unk_226 = this->actor.cutscene;
     func_801A5080(2);
     func_80BDB268(this);
@@ -311,7 +311,7 @@ void func_80BDBA28(EnHiddenNuts* this, GlobalContext* globalCtx) {
     Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
     this->unk_208 = 1;
 
-    if ((this->path != NULL) && !func_8013D68C(this->path, this->unk_208, &this->unk_20C)) {
+    if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -376,7 +376,7 @@ void func_80BDBB48(EnHiddenNuts* this, GlobalContext* globalCtx) {
             this->unk_208++;
             if (this->unk_208 >= this->path->count) {
                 func_80BDBE70(this, globalCtx);
-            } else if ((this->path != NULL) && !func_8013D68C(this->path, this->unk_208, &this->unk_20C)) {
+            } else if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
                 Actor_MarkForDeath(&this->actor);
             }
         }

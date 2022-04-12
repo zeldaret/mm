@@ -10,7 +10,7 @@ typedef enum {
     /* 2 */ SUBS_CUTSCENE_SET_FLAG
 } SubSCutsceneType;
 
-typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, Vec3s*);
+typedef s32 (*func_8013E748_arg6)(struct GlobalContext*, Actor*, void*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 

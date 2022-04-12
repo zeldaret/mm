@@ -212,7 +212,7 @@ s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
     if (idx == 0) {
         phi_f12 = sp5C[1].x - sp5C[0].x;
         phi_f14 = sp5C[1].z - sp5C[0].z;
-    } else if ((idx + 1) == ((void)0, count)) {
+    } else if (idx == count - 1) {
         phi_f12 = sp5C[count - 1].x - sp5C[count - 2].x;
         phi_f14 = sp5C[count - 1].z - sp5C[count - 2].z;
     } else {
@@ -220,7 +220,7 @@ s32 func_80989418(EnDg* this, Path* arg1, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, func_80086B30(phi_f12, phi_f14) * 10430.378f, &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -1114,7 +1114,7 @@ void EnDg_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1DC = func_8013D648(globalCtx, ENDG_GET_FC00(&this->actor), 0x3F);
+    this->unk_1DC = SubS_GetPathByIndex(globalCtx, ENDG_GET_FC00(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;

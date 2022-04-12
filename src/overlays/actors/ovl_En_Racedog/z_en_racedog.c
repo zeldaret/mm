@@ -225,7 +225,7 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1E0 = func_8013D648(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->unk_1E0 = SubS_GetPathByIndex(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
     if (ENRACEDOG_GET_3E0(&this->actor) < 14) {

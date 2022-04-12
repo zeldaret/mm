@@ -1606,7 +1606,7 @@ void EnAkindonuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.gravity = -1.0f;
 
     if (!ENAKINDONUTS_GET_4(&this->actor)) {
-        this->path = func_8013D648(globalCtx, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(globalCtx, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
         if (this->path == NULL) {
             Actor_MarkForDeath(&this->actor);
             return;

@@ -67,7 +67,7 @@ void EnDaiku_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
         this->unk_288 = ENDAIKU_GET_FF00(&this->actor);
-        this->unk_258 = func_8013D648(globalCtx, this->unk_288, 0x3F);
+        this->unk_258 = SubS_GetPathByIndex(globalCtx, this->unk_288, 0x3F);
     } else if (this->unk_278 == ENDAIKU_PARAMS_FF_2) {
         this->unk_264 = -2000;
     }
@@ -134,7 +134,7 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
 
 void func_809437C8(EnDaiku* this) {
     if ((this->unk_288 != -1) && (this->unk_258 != 0)) {
-        if (!func_8013D68C(this->unk_258, this->unk_25C, &this->unk_26C)) {
+        if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_26C)) {
             Actor_MarkForDeath(&this->actor);
         }
     }

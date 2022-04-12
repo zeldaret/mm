@@ -49,14 +49,13 @@
 
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
 
-#define TIME_TO_MINUTES(time) (s32)((time) * ((24 * 60) / 0x10000))
 #define CLOCK_TIME(hr, min) (s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60))
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
 
-#define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000))
+#define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
 #define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
 
-#define TIME_TO_MINUTES_ALT_F(time) ((time) / (24.0f * 60.0f / 0x10000))
+#define TIME_TO_MINUTES_ALT_F(time) ((time) / (0x10000 / (24.0f * 60.0f)))
 #define CLOCK_TIME_ALT_F(hr, min) (((hr) * 60.0f + (min)) / (24.0f * 60.0f / 0x10000))
 
 #define SLOT(item) gItemSlots[item]

@@ -274,7 +274,7 @@ s32 func_8092CC68(GlobalContext* globalCtx) {
     s32 ret = false;
     s16 bgId;
 
-    if (!func_801690CC(globalCtx) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
+    if (!Play_InCsMode(globalCtx) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
         bgId = player->actor.floorBgId;
         if (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, bgId) != 4) {
             ret = true;

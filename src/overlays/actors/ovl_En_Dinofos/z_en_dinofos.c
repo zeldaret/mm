@@ -1234,7 +1234,7 @@ void func_8089D42C(EnDinofos* this, GlobalContext* globalCtx) {
         Math_ScaledStepToS(&this->unk_28E, cos_rad(M_PI) * 0x2C00, 0x233);
     } else if (this->actionFunc == func_8089CBEC) {
         this->unk_28E = cos_rad(this->unk_290 * (M_PI / 20)) * 0x2C00;
-    } else if (!func_801690CC(globalCtx)) {
+    } else if (!Play_InCsMode(globalCtx)) {
         temp_v0_2 = this->unk_28E + this->actor.shape.rot.y;
         temp_v0_2 = BINANG_SUB(this->actor.yawTowardsPlayer, temp_v0_2);
         temp_v0_2 = CLAMP(temp_v0_2, -0x300, 0x300);

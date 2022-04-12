@@ -405,7 +405,7 @@ void func_80A59C04(Actor* thisx, GlobalContext* globalCtx2) {
 
     if ((rotaryRoom != NULL) && Flags_GetSwitch(globalCtx, (rotaryRoom->params >> 1) & 0x7F)) {
         this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
-    } else if (!func_801690CC(globalCtx)) {
+    } else if (!Play_InCsMode(globalCtx)) {
         this->unk_DC4++;
         if (this->unk_DC6 == 0) {
             this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;

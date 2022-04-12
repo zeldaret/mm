@@ -902,7 +902,7 @@ s32 func_8094F7D0(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     actor = func_8094DEE0(this, globalCtx, arg3, arg4);
 
     if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80951A0C[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80951A0C[arg2->unk0]);
     }
 
     if ((actor != NULL) && (actor->update != NULL)) {
@@ -933,7 +933,7 @@ s32 func_8094F904(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     door = func_8094DF90(globalCtx, arg2->unk0);
 
     if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp55, D_80951A0C[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp55, D_80951A0C[arg2->unk0]);
     }
 
     if ((door != NULL) && (door->dyna.actor.update != NULL)) {
@@ -974,7 +974,7 @@ s32 func_8094FAC4(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 
     this->unk_234 = NULL;
     if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp2B, D_80951A0C[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp2B, D_80951A0C[arg2->unk0]);
     }
 
     if ((this->unk_234 != NULL) && (this->unk_234->count < 3)) {
@@ -1076,7 +1076,7 @@ s32 func_8094FF04(EnGm* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
     this->unk_234 = NULL;
 
     if (D_80951A0C[arg2->unk0] >= 0) {
-        this->unk_234 = func_8013BB34(globalCtx, sp4F, D_80951A0C[arg2->unk0]);
+        this->unk_234 = SubS_GetAdditionalPath(globalCtx, sp4F, D_80951A0C[arg2->unk0]);
     }
 
     if (this->unk_234 != NULL) {

@@ -164,7 +164,7 @@ void func_80953F14(BgIngate* this, GlobalContext* globalCtx) {
     player->actor.focus.rot.y = player->actor.shape.rot.y;
     this->unk160 |= 0x10;
     func_80953DA8(this, globalCtx);
-    if (this->unk164 != 0) {
+    if (this->unk164 != NULL) {
         func_80953B40(this);
     }
     this->unk16E = -1;
@@ -259,7 +259,7 @@ void func_809542A0(BgIngate* this, GlobalContext* globalCtx) {
 
 void func_80954340(BgIngate* this, GlobalContext* globalCtx) {
     if (!DECR(this->unk16A)) {
-        if (this->unk164 != 0) {
+        if (this->unk164 != NULL) {
             func_800B7298(globalCtx, &this->dyna.actor, 6);
             this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
             func_80953F14(this, globalCtx);
@@ -285,7 +285,7 @@ void func_809543D4(BgIngate* this, GlobalContext* globalCtx) {
                     func_800FE498();
                     func_8019F208();
                 } else {
-                    if (this->unk164 != 0) {
+                    if (this->unk164 != NULL) {
                         this->unk164 = &globalCtx->setupPathList[this->unk164->unk1];
                     }
                     func_80953F14(this, globalCtx);
@@ -328,7 +328,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
         this->unk160 |= 0x8;
         this->unk160 |= 0x10;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
         if (gSaveContext.save.weekEventReg[20] & 2) {
             gSaveContext.save.weekEventReg[90] &= (u8)~0x40;
@@ -350,8 +350,8 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->actionFunc = func_80953F8C;
             }
         }
-        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
-        if (this->unk164 != 0) {
+        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
+        if (this->unk164 != NULL) {
             sp38 = Lib_SegmentedToVirtual(this->unk164->points);
             Math_Vec3s_ToVec3f(&sp2C, &sp38[0]);
             Math_Vec3s_ToVec3f(&sp20, &sp38[1]);
@@ -361,7 +361,7 @@ void BgIngate_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->dyna.actor.world.pos.y = -15.0f;
             this->dyna.actor.world.pos.z = sp2C.z;
         }
-        this->unk164 = func_8013BB34(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->unk164 = SubS_GetAdditionalPath(globalCtx, BGINGATE_GET_FF(&this->dyna.actor), 0);
     } else {
         Actor_MarkForDeath(&this->dyna.actor);
     }
