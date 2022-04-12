@@ -26,7 +26,7 @@ void func_80BA3044(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA311C(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA3230(ObjNozoki* this, GlobalContext* globalCtx);
 void func_80BA3344(ObjNozoki* this, GlobalContext* globalCtx);
-void func_80BA3434(Actor* thisx, GlobalContext* globalCtx);
+void ObjNozoki_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 s32 D_80BA36B0;
 s32 D_80BA36B4;
@@ -102,7 +102,7 @@ void func_80BA2514(ObjNozoki* this, GlobalContext* globalCtx) {
 
     if (Object_IsLoaded(&globalCtx->objectCtx, sp24)) {
         this->dyna.actor.objBankIndex = sp24;
-        this->dyna.actor.draw = func_80BA3434;
+        this->dyna.actor.draw = ObjNozoki_Draw;
 
         if (this->unk_15C == 0) {
             Actor_SetObjectDependency(globalCtx, &this->dyna.actor);
@@ -297,7 +297,7 @@ void func_80BA2C94(ObjNozoki* this, GlobalContext* globalCtx) {
         D_80BA36B4 = temp_v0;
     }
 
-    if ((temp_v0 < 0) && func_801690CC(globalCtx)) {
+    if ((temp_v0 < 0) && Play_InCsMode(globalCtx)) {
         return;
     }
 
@@ -454,12 +454,13 @@ void ObjNozoki_Update(Actor* thisx, GlobalContext* globalCtx) {
 
 Gfx* D_80BA34FC[] = {
     object_secom_obj_DL_000080,
-    (Gfx*)0x0A0001A0,
+    (Gfx*)0x0A0001A0, //! @bug This dlist should point to a dlist in OBJECT_GI_MSSA, but the segment and the offset are
+                      //! wrong. This doesn't have side effects because of the extra check in the Draw function
     object_secom_obj_DL_001230,
     object_secom_obj_DL_001300,
 };
 
-void func_80BA3434(Actor* thisx, GlobalContext* globalCtx) {
+void ObjNozoki_Draw(Actor* thisx, GlobalContext* globalCtx) {
     ObjNozoki* this = THIS;
 
     if (this->unk_15C == 1) {

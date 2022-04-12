@@ -15076,7 +15076,7 @@
     0x80BA3230:("func_80BA3230",),
     0x80BA3344:("func_80BA3344",),
     0x80BA3410:("ObjNozoki_Update",),
-    0x80BA3434:("func_80BA3434",),
+    0x80BA3434:("ObjNozoki_Draw",),
     0x80BA36C0:("func_80BA36C0",),
     0x80BA36FC:("EnToto_Init",),
     0x80BA3810:("EnToto_Destroy",),
