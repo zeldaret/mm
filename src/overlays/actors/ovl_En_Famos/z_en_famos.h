@@ -17,7 +17,9 @@ typedef struct EnFamosRock {
 
 #define GET_FAMOS_PATH(thisx) (thisx->params)
 
-// delayTimer gets reused:
+// params: [this->actor.shape.rot.x] is used to set agro distance
+
+// stateTimer gets reused:
 //   after spotting player, counts frames until first attack (8)
 //   after lost agro, measures frames looking around before returning to home (60)
 //   before smash attack, counts frames before disabling emblem colider (4)
@@ -34,26 +36,25 @@ typedef struct EnFamos {
     /* 0x1D5 */ u8 stableRotation;
     /* 0x1D6 */ u8 pathNodeCount;
     /* 0x1D7 */ u8 currentPathNode;
-    /* 0x1D8 */ u8 unk1D8;
-    /* 0x1D9 */ u8 unk1D9;
-    /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment
-    /* 0x1DC */ s16 delayTimer; // reused for different functions
-    /* 0x1DE */ s16 unkTimer1DE;
+    /* 0x1D8 */ u8 isCalm; // is NOT aware of player
+    /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment when hovering
+    /* 0x1DC */ s16 stateTimer; // reused for different actionFunc
+    /* 0x1DE */ s16 debrisTimer; // also counts frames until despawning bom after death
     /* 0x1E0 */ s16 flippedTimer; // frames until it flips right side up
-    /* 0x1E2 */ s16 unkTimer1E2;
-    /* 0x1E4 */ s16 unk1E4;
-    /* 0x1E6 */ s16 unk1E6;
+    /* 0x1E2 */ s16 cratorDespawnTimer;
+    /* 0x1E4 */ s16 targetYaw;
+    /* 0x1E6 */ s16 flipRot; // is used to detect if the actor has been flipped upside down by light arrows
     /* 0x1E8 */ Vec3s* pathPoints;
-    /* 0x1EC */ f32 unk1EC; // height?
-    /* 0x1F0 */ f32 unk1F0;
+    /* 0x1EC */ f32 baseHeight; // (because hover can hit the floor, we need to keep track so famos cannot by adjusted/moved by terain)
+    /* 0x1F0 */ f32 agroDistance;
     /* 0x1F4 */ Vec3f targetDest;
-    /* 0x200 */ Vec3f unk200; // current pos? why not use actor.pos
+    /* 0x200 */ Vec3f calmPos;
     // havent figured out what the difference between the colliders are, only one cylinder is visible in KZ
     /* 0x20C */ ColliderCylinder collider1;
     /* 0x258 */ ColliderCylinder collider2;
     /* 0x2A4 */ ColliderJntSph   emblemCollider;
     /* 0x2C4 */ ColliderJntSphElement emblemColliderElements;
-    /* 0x340 */ u8 unk340[0x40];
+    /* 0x340 */ u8 pad340[0x40];
     /* 0x344 */ EnFamosRock rocks[20];
 } EnFamos; // size = 0x614
 
