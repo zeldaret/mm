@@ -1265,8 +1265,7 @@ void func_80A939E8(EnTest6* this, GlobalContext* globalCtx2) {
             if (this->unk_254 != NULL) {
                 for (i = 0; i < ARRAY_COUNT(this->unk_254[0]); i++) {
                     temp_f20 = Rand_ZeroOne() * 0.0025f;
-                    Matrix_Translate((*this->unk_254)[i].x, (*this->unk_254)[i].y, (*this->unk_254)[i].z,
-                                             MTXMODE_NEW);
+                    Matrix_Translate((*this->unk_254)[i].x, (*this->unk_254)[i].y, (*this->unk_254)[i].z, MTXMODE_NEW);
                     Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
 
                     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 128, 128, 128, this->unk_282 >> 1);
