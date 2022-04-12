@@ -822,7 +822,7 @@ void EnFamos_DrawDebris(EnFamos* this, GlobalContext* globalCtx) {
         OPEN_DISPS(globalCtx->state.gfxCtx);
         dispOpa = POLY_OPA_DISP;
 
-        gSPDisplayList(&dispOpa[0], &sSetupDL[0x96]);
+        gSPDisplayList(&dispOpa[0], &sSetupDL[6 * 0x19]);
 
         gDPSetPrimColor(&dispOpa[1], 0, 0x80, 255, 255, 255, 255);
 
