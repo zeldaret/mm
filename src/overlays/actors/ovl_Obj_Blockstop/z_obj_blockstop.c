@@ -42,8 +42,7 @@ void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
     Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (prop != NULL) {
-        if ((prop->id == ACTOR_OBJ_OSHIHIKI) &&
-            (fabsf(prop->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
+        if ((prop->id == ACTOR_OBJ_OSHIHIKI) && (fabsf(prop->world.pos.x - this->actor.world.pos.x) < 20.0f) &&
             (fabsf(prop->world.pos.z - this->actor.world.pos.z) < 20.0f) &&
             (fabsf(prop->world.pos.y - this->actor.world.pos.y) < 20.0f)) {
 
