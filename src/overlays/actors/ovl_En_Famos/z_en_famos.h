@@ -17,11 +17,11 @@ typedef struct EnFamosRock {
 
 #define GET_FAMOS_PATH(thisx) (thisx->params)
 
-// params: [this->actor.shape.rot.x] is used to set agro distance
+// params: [this->actor.shape.rot.x] is used to set aggro distance
 
 // stateTimer gets reused:
 //   after spotting player, counts frames until first attack (8)
-//   after lost agro, measures frames looking around before returning to home (60)
+//   after lost aggro, measures frames looking around before returning to home (60)
 //   before smash attack, counts frames before disabling emblem colider (4)
 //   after smash attack collision, counts frames before rising (3)
 //   after smash attack finish, counts frames rising above ground before next attempt (20)
@@ -33,11 +33,11 @@ typedef struct EnFamos {
     /* 0x1AC */ Vec3s morphTable[FAMOS_LIMB_MAX];
     /* 0x1D0 */ EnFamosActionFunc actionFunc;
     /* 0x1D4 */ u8 animatedMaterialIndex;
-    /* 0x1D5 */ u8 stableRotation;
+    /* 0x1D5 */ u8 hasFinishedRotating; // stable up or down
     /* 0x1D6 */ u8 pathNodeCount;
     /* 0x1D7 */ u8 currentPathNode;
     /* 0x1D8 */ u8 isCalm; // is NOT aware of player
-    /* 0x1DA */ s16 hoverClk; // 30->0, repeat, for height adjustment when hovering
+    /* 0x1DA */ s16 hoverClk; // timer, 30->0 then repeat, for sin height adjustment when hovering
     /* 0x1DC */ s16 stateTimer; // reused for different actionFunc
     /* 0x1DE */ s16 debrisTimer; // also counts frames until despawning bom after death
     /* 0x1E0 */ s16 flippedTimer; // frames until it flips right side up
@@ -46,7 +46,7 @@ typedef struct EnFamos {
     /* 0x1E6 */ s16 flipRot; // is used to detect if the actor has been flipped upside down by light arrows
     /* 0x1E8 */ Vec3s* pathPoints;
     /* 0x1EC */ f32 baseHeight; // (because hover can hit the floor, we need to keep track so famos cannot by adjusted/moved by terain)
-    /* 0x1F0 */ f32 agroDistance;
+    /* 0x1F0 */ f32 aggroDistance;
     /* 0x1F4 */ Vec3f targetDest;
     /* 0x200 */ Vec3f calmPos;
     // havent figured out what the difference between the colliders are, only one cylinder is visible in KZ
