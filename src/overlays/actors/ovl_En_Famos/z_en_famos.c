@@ -148,7 +148,7 @@ typedef enum {
 } FamosAnimatedMatArrayIndexes;
 
 static AnimatedMaterial* sEmblemAnimatedMats[] = { gFamosNormalGlowingEmblemTexAnim,
-                                                   gFamosFlippedGlowingEmblemTexAnim};
+                                                   gFamosFlippedGlowingEmblemTexAnim };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 15, ICHAIN_CONTINUE),
