@@ -14,7 +14,7 @@
 void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx);
 void ObjBlockstop_Update(Actor* thisx, GlobalContext* globalCtx);
 
-void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx);
+void ObjBlockstop_CheckForBlock(ObjBlockstop* this, GlobalContext* globalCtx);
 void ObjBlockstop_TryPlayCutscene(ObjBlockstop* this, GlobalContext* globalCtx);
 
 const ActorInit Obj_Blockstop_InitVars = {
@@ -35,10 +35,10 @@ void ObjBlockstop_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (Flags_GetSwitch(globalCtx, this->actor.params)) {
         Actor_MarkForDeath(&this->actor);
     }
-    this->actionFunc = ObjBlockstop_CheckCollision;
+    this->actionFunc = ObjBlockstop_CheckForBlock;
 }
 
-void ObjBlockstop_CheckCollision(ObjBlockstop* this, GlobalContext* globalCtx) {
+void ObjBlockstop_CheckForBlock(ObjBlockstop* this, GlobalContext* globalCtx) {
     Actor* prop = globalCtx->actorCtx.actorLists[ACTORCAT_PROP].first;
 
     while (prop != NULL) {
