@@ -1496,6 +1496,20 @@ enum fram_mode {
 };
 
 typedef struct {
+    /* 0x00 */ UNK_TYPE1 unk_00[0x14];
+    /* 0x14 */ s16 unk_14;
+    /* 0x16 */ s16 unk_16;
+    /* 0x18 */ s16 unk_18;
+    /* 0x1A */ UNK_TYPE1 unk_1A[0x3];
+    /* 0x0C */ u8 unk_1D;
+    /* 0x1E */ UNK_TYPE1 unk_1E[0xC];
+    /* 0x2A */ s16 unk_2A;
+    /* 0x1E */ UNK_TYPE1 unk_2C[0x1];
+    /* 0x2D */ u8 unk_2D;
+    /* 0x2E */ UNK_TYPE1 unk_2E[2];
+} DbCameraUnkSubStruct; // size = 0x30
+
+typedef struct {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;
@@ -1504,18 +1518,12 @@ typedef struct {
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ UNK_TYPE1 unk_0E[0x02];
-    /* 0x10 */ UNK_TYPE1 unk_10[0x2C];
-    /* 0x3C */ UNK_TYPE1 unk_3C[0x01];
-    /* 0x3D */ u8 unk_3D;
-    /* 0x3E */ UNK_TYPE1 unk_3E[0x02];
-    /* 0x40 */ UNK_TYPE1 unk_40[0x2C];
-    /* 0x6C */ UNK_TYPE1 unk_6C[0x01];
-    /* 0x6D */ u8 unk_6D;
-    /* 0x6E */ UNK_TYPE1 unk_6E[0x02];
+    /* 0x10 */ DbCameraUnkSubStruct unk_10;
+    /* 0x40 */ DbCameraUnkSubStruct unk_40;
     /* 0x70 */ UNK_PTR unk_70;
     /* 0x74 */ UNK_PTR unk_74;
     /* 0x78 */ UNK_PTR unk_78;
     /* 0x7C */ Camera* camera;
-} struct_801F4D48; // size = 0x80
+} DbCameraUnkStruct; // size = 0x80
 
 #endif
