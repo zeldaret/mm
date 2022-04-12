@@ -519,7 +519,7 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     func_8012C28C(globalCtx->state.gfxCtx);
 
-    temp_v0 = gSaveContext.time;
+    temp_v0 = gSaveContext.save.time;
     if (temp_v0 > CLOCK_TIME(12, 0)) {
         temp_v0 = 0xFFFF - temp_v0;
     }

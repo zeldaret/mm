@@ -73,7 +73,7 @@ void EnTanron4_Init(Actor* thisx, GlobalContext* globalCtx2) {
             }
         }
 
-        if ((gSaveContext.time > CLOCK_TIME(20, 0)) || (gSaveContext.time < CLOCK_TIME(4, 0))) {
+        if ((gSaveContext.save.time > CLOCK_TIME(20, 0)) || (gSaveContext.save.time < CLOCK_TIME(4, 0))) {
             this->timeInfluence = 1500.0f;
             thisx->world.pos.y += 1500.0f;
         }
@@ -99,7 +99,7 @@ void EnTanron4_FlyNearHome(EnTanron4* this, GlobalContext* globalCtx) {
 
     // `timeInfluence` controls both the height of the seagulls and when they are visible.
     // They fly higher in the sky as the night goes on, and they disapear as dawn approaches.
-    if ((gSaveContext.time > CLOCK_TIME(20, 0)) || (gSaveContext.time < CLOCK_TIME(4, 0))) {
+    if ((gSaveContext.save.time > CLOCK_TIME(20, 0)) || (gSaveContext.save.time < CLOCK_TIME(4, 0))) {
         Math_ApproachF(&this->timeInfluence, 1500.0f, 1.0f, 1.0f);
     } else {
         Math_ApproachZeroF(&this->timeInfluence, 1.0f, 1.0f);

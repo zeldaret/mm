@@ -502,12 +502,12 @@ s32 func_80AED354(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* ar
 }
 
 s32 func_80AED38C(EnTk* this, GlobalContext* globalCtx, struct_80133038_arg2* arg2) {
-    u16 sp1E = gSaveContext.time - 0x3FFC;
+    u16 sp1E = gSaveContext.save.time - 0x3FFC;
     u8 params = ENTK_GET_F800(&this->actor);
     u16 phi_a1;
     s32 idx = arg2->unk0 - 1;
 
-    this->unk_3C8 = func_8013BB34(globalCtx, params, D_80AEF8E8[idx + 1]);
+    this->unk_3C8 = SubS_GetAdditionalPath(globalCtx, params, D_80AEF8E8[idx + 1]);
     if (this->unk_3C8 == 0) {
         return false;
     }
@@ -534,14 +534,14 @@ void func_80AED4F8(EnTk* this, GlobalContext* globalCtx) {
 }
 
 void func_80AED544(EnTk* this, GlobalContext* globalCtx) {
-    if (!(gSaveContext.weekEventReg[31] & 0x10)) {
+    if (!(gSaveContext.save.weekEventReg[31] & 0x10)) {
         Message_StartTextbox(globalCtx, 0x13FE, &this->actor);
-        gSaveContext.weekEventReg[31] |= 0x10;
-    } else if (gSaveContext.time < CLOCK_TIME(9, 0)) {
+        gSaveContext.save.weekEventReg[31] |= 0x10;
+    } else if (gSaveContext.save.time < CLOCK_TIME(9, 0)) {
         Message_StartTextbox(globalCtx, 0x13FF, &this->actor);
-    } else if (gSaveContext.time < CLOCK_TIME(12, 0)) {
+    } else if (gSaveContext.save.time < CLOCK_TIME(12, 0)) {
         Message_StartTextbox(globalCtx, 0x1400, &this->actor);
-    } else if (gSaveContext.time < CLOCK_TIME(15, 0)) {
+    } else if (gSaveContext.save.time < CLOCK_TIME(15, 0)) {
         Message_StartTextbox(globalCtx, 0x1401, &this->actor);
     } else {
         Message_StartTextbox(globalCtx, 0x1402, &this->actor);
@@ -563,7 +563,7 @@ void func_80AED610(EnTk* this, GlobalContext* globalCtx) {
                     func_80AED544(this, globalCtx);
                 } else if (!Flags_GetSwitch(globalCtx, ENTK_GET_7F0(&this->actor))) {
                     Message_StartTextbox(globalCtx, 0x1403, &this->actor);
-                } else if (gSaveContext.weekEventReg[60] & 2) {
+                } else if (gSaveContext.save.weekEventReg[60] & 2) {
                     func_80AED544(this, globalCtx);
                 } else {
                     Message_StartTextbox(globalCtx, 0x1413, &this->actor);
@@ -579,8 +579,8 @@ void func_80AED610(EnTk* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x13FD:
                         this->unk_2CA |= 0x10;
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 0, &this->unk_2D4);
@@ -594,7 +594,7 @@ void func_80AED610(EnTk* this, GlobalContext* globalCtx) {
 
                     case 0x1413:
                         func_801159EC(30);
-                        gSaveContext.weekEventReg[60] |= 2;
+                        gSaveContext.save.weekEventReg[60] |= 2;
                         func_80151938(globalCtx, 0x13FF);
                         break;
 
@@ -757,7 +757,7 @@ void func_80AEDE10(EnTk* this, GlobalContext* globalCtx) {
             switch (this->unk_310) {
                 case 0:
                     this->unk_2CA &= ~0x1000;
-                    if (!(gSaveContext.weekEventReg[52] & 0x80)) {
+                    if (!(gSaveContext.save.weekEventReg[52] & 0x80)) {
                         this->unk_2E6 = 0x1405;
                     } else {
                         this->unk_2E6 = 0x140B;
@@ -828,8 +828,8 @@ void func_80AEDF5C(EnTk* this, GlobalContext* globalCtx) {
         case 4:
         case 5:
         case 6:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x1404:
                         this->unk_2CA |= 0x1000;
                         func_80AED898(this, globalCtx);
@@ -862,7 +862,7 @@ void func_80AEDF5C(EnTk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0x140A:
-                        gSaveContext.weekEventReg[52] |= 0x80;
+                        gSaveContext.save.weekEventReg[52] |= 0x80;
 
                     case 0x140B:
                         func_80AEE784(this, globalCtx);
@@ -1043,7 +1043,7 @@ s32 func_80AEE86C(EnTk* this, GlobalContext* globalCtx) {
         (this->actor.xyzDistToPlayerSq <= SQ(115.0f)) &&
         func_80AEE7E0(&this->actor.world.pos, 100.0f, this->unk_324, this->unk_36C) &&
         (((this->unk_2CA & 2) && (Math_Vec3f_DistXZ(&this->unk_300, &sp28) >= 100.0f)) || !(this->unk_2CA & 2)) &&
-        !func_801690CC(globalCtx)) {
+        !Play_InCsMode(globalCtx)) {
         Math_Vec3f_Copy(&this->unk_300, &sp28);
         ret = true;
     }
@@ -1189,7 +1189,7 @@ void func_80AEED38(EnTk* this, GlobalContext* globalCtx) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    if (Message_GetState(&globalCtx->msgCtx) == 0 && !func_801690CC(globalCtx) && (this->unk_2C6-- <= 0)) {
+    if (Message_GetState(&globalCtx->msgCtx) == 0 && !Play_InCsMode(globalCtx) && (this->unk_2C6-- <= 0)) {
         Message_StartTextbox(globalCtx, 0x140C, NULL);
         this->unk_2CA |= 0x4000;
         this->unk_2C6 = 200;

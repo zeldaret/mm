@@ -6,11 +6,11 @@
 #define DYNA_RAYCAST_WALLS 2
 #define DYNA_RAYCAST_CEILINGS 4
 
-static u32 sWallFlags[32] = {
+u32 sWallFlags[32] = {
     0, 1, 3, 5, 8, 16, 32, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-static u16 sSurfaceTypeSfx[] = {
+u16 sSurfaceTypeSfx[] = {
     /* 0x00 */ NA_SE_PL_WALK_GROUND - SFX_FLAG,
     /* 0x01 */ NA_SE_PL_WALK_SAND - SFX_FLAG,
     /* 0x02 */ NA_SE_PL_WALK_CONCRETE - SFX_FLAG,
@@ -28,7 +28,7 @@ static u16 sSurfaceTypeSfx[] = {
     /* 0x0E */ NA_SE_PL_WALK_SNOW - SFX_FLAG
 };
 
-static u8 D_801B46C0[] = {
+u8 D_801B46C0[] = {
     /* 0x00 */ 1,
     /* 0x01 */ 1,
     /* 0x02 */ 0,
@@ -46,7 +46,7 @@ static u8 D_801B46C0[] = {
     /* 0x0E */ 1
 };
 
-static s16 sSmallMemScenes[] = {
+s16 sSmallMemScenes[] = {
     SCENE_F01,
 };
 
@@ -55,7 +55,7 @@ typedef struct {
     u32 memSize;
 } BgCheckSceneMemEntry;
 
-static BgCheckSceneMemEntry sSceneMemList[] = {
+BgCheckSceneMemEntry sSceneMemList[] = {
     { SCENE_00KEIKOKU, 0xC800 },
 };
 

@@ -197,7 +197,7 @@ void ObjTokeiStep_Init(Actor* thisx, GlobalContext* globalCtx) {
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &gClocktowerPanelCol);
         ObjTokeiStep_InitSteps(this);
         ObjTokeiStep_SetupBeginOpen(this);
-    } else if (((CURRENT_DAY == 3) && (gSaveContext.time < CLOCK_TIME(6, 0))) || (gSaveContext.day >= 4)) {
+    } else if (((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (gSaveContext.save.day >= 4)) {
         this->dyna.actor.draw = ObjTokeiStep_DrawOpen;
         ObjTokeiStep_InitStepsOpen(this);
         ObjTokeiStep_SetupDoNothingOpen(this);

@@ -438,7 +438,7 @@ void func_80C208D0(EnHintSkb* this, GlobalContext* globalCtx) {
             break;
 
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80C2075C(this);
             }
             break;
@@ -516,7 +516,7 @@ void func_80C20A74(EnHintSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80C20B88(EnHintSkb* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             func_8019F208();
             this->unk_3E8 |= 0x10;
@@ -531,7 +531,7 @@ void func_80C20B88(EnHintSkb* this, GlobalContext* globalCtx) {
 }
 
 void func_80C20C24(EnHintSkb* this, GlobalContext* globalCtx) {
-    if (!func_80147624(globalCtx)) {
+    if (!Message_ShouldAdvance(globalCtx)) {
         return;
     }
 

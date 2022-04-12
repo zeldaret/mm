@@ -991,7 +991,7 @@ void EnKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if ((this->actor.projectedPos.z <= 400.0f) && (this->actor.projectedPos.z > 0.0f) &&
         (this->actor.floorHeight > -3000.0f) && ((this->bounceX != 0) || (this->bounceZ != 0))) {
-        u16 dayTime = gSaveContext.time;
+        u16 dayTime = gSaveContext.save.time;
         f32 shadowAlpha;
 
         if (dayTime >= CLOCK_TIME(12, 0)) {

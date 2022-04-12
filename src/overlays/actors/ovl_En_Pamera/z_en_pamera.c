@@ -155,14 +155,14 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
         func_80BD8588(this, globalCtx);
         func_80BD8658(this);
         if (1) {}
-        if (!(gSaveContext.weekEventReg[14] & 4) || (gSaveContext.weekEventReg[52] & 0x20) ||
-            (gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.entranceIndex == 0x2090)) {
+        if (!(gSaveContext.save.weekEventReg[14] & 4) || (gSaveContext.save.weekEventReg[52] & 0x20) ||
+            (gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.entranceIndex == 0x2090)) {
             Actor_MarkForDeath(&this->actor);
         }
-        if (gSaveContext.weekEventReg[61] & 4) {
-            if (!(gSaveContext.weekEventReg[59] & 1) || (gSaveContext.entranceIndex != 0x2020)) {
-                if ((gSaveContext.entranceIndex != 0x2020) && (gSaveContext.weekEventReg[59] & 1)) {
-                    gSaveContext.weekEventReg[59] &= (u8)~1;
+        if (gSaveContext.save.weekEventReg[61] & 4) {
+            if (!(gSaveContext.save.weekEventReg[59] & 1) || (gSaveContext.save.entranceIndex != 0x2020)) {
+                if ((gSaveContext.save.entranceIndex != 0x2020) && (gSaveContext.save.weekEventReg[59] & 1)) {
+                    gSaveContext.save.weekEventReg[59] &= (u8)~1;
                 }
                 func_80BD8700(this);
             } else {
@@ -173,7 +173,7 @@ void EnPamera_Init(Actor* thisx, GlobalContext* globalCtx) {
                 func_80BD8CCC(this);
             }
         } else {
-            gSaveContext.weekEventReg[59] |= 1;
+            gSaveContext.save.weekEventReg[59] |= 1;
             func_80BD8FF0(this);
         }
     }
@@ -200,7 +200,7 @@ void func_80BD8588(EnPamera* this, GlobalContext* globalCtx) {
     if (path == NULL) {
         Actor_MarkForDeath(&this->actor);
     }
-    if (gSaveContext.weekEventReg[61] & 4) {
+    if (gSaveContext.save.weekEventReg[61] & 4) {
         path = &globalCtx->setupPathList[path->unk1];
     }
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
@@ -289,7 +289,7 @@ void func_80BD8964(EnPamera* this, GlobalContext* globalCtx) {
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &vec, 1.0f) < 5.0f) {
         this->actor.speedXZ = 1.5f;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
-        gSaveContext.weekEventReg[59] |= 1;
+        gSaveContext.save.weekEventReg[59] |= 1;
         func_80BD8B50(this);
     }
 }
@@ -304,10 +304,10 @@ void func_80BD8A7C(EnPamera* this, GlobalContext* globalCtx) {
                        0x3000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Math_Vec3f_StepTo(&this->actor.world.pos, &this->actor.home.pos, 1.5f) < 10.0f) {
-        gSaveContext.weekEventReg[59] &= (u8)~1;
-        if (!(gSaveContext.weekEventReg[61] & 4)) {
+        gSaveContext.save.weekEventReg[59] &= (u8)~1;
+        if (!(gSaveContext.save.weekEventReg[61] & 4)) {
             func_80BD92D0(this, globalCtx);
-            gSaveContext.weekEventReg[61] |= 4;
+            gSaveContext.save.weekEventReg[61] |= 4;
         }
         func_80BD8700(this);
     }
@@ -567,7 +567,7 @@ void func_80BD9840(EnPamera* this, GlobalContext* globalCtx) {
     this->actor.update = func_80BDA344;
     this->actor.flags |= ACTOR_FLAG_2000000;
     this->actor.flags |= ACTOR_FLAG_100000;
-    if ((gSaveContext.weekEventReg[75] & 0x20) || (gSaveContext.weekEventReg[52] & 0x20)) {
+    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
         func_80BD9E60(this);
         func_80BD9938(this);
     } else {
@@ -575,7 +575,7 @@ void func_80BD9840(EnPamera* this, GlobalContext* globalCtx) {
         func_80BD9E60(this);
         func_80BD9904(this);
     }
-    if (gSaveContext.weekEventReg[14] & 4) {
+    if (gSaveContext.save.weekEventReg[14] & 4) {
         func_801A0204(NA_BGM_MUSIC_BOX_HOUSE);
     } else {
         func_801A0204(NA_BGM_INSIDE_A_HOUSE);
@@ -602,8 +602,8 @@ void func_80BD994C(EnPamera* this, GlobalContext* globalCtx) {
             Message_StartTextbox(globalCtx, 0x15A8, &this->actor);
 
             this->unk_324 = 0x15A8;
-        } else if ((gSaveContext.playerForm != PLAYER_FORM_HUMAN) ||
-                   ((gSaveContext.weekEventReg[52] & 0x20) && (!(gSaveContext.weekEventReg[75] & 0x20)))) {
+        } else if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
+                   ((gSaveContext.save.weekEventReg[52] & 0x20) && (!(gSaveContext.save.weekEventReg[75] & 0x20)))) {
             func_80BD93CC(this, 1, 0);
             Message_StartTextbox(globalCtx, 0x158E, &this->actor);
             this->unk_324 = 0x158E;
@@ -639,7 +639,7 @@ void EnPamera_HandleDialogue(EnPamera* this, GlobalContext* globalCtx) {
             func_80BD9B4C(this, globalCtx);
             break;
         case 6:
-            if (func_80147624(globalCtx)) {
+            if (Message_ShouldAdvance(globalCtx)) {
                 func_80BD9938(this);
             }
             break;
@@ -651,7 +651,7 @@ void EnPamera_HandleDialogue(EnPamera* this, GlobalContext* globalCtx) {
 }
 
 void func_80BD9B4C(EnPamera* this, GlobalContext* globalCtx) {
-    if (func_80147624(globalCtx)) {
+    if (Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_324) {
             case 0x1587:
                 Message_StartTextbox(globalCtx, 0x1588, &this->actor);
@@ -726,7 +726,7 @@ s32 func_80BD9CB8(EnPamera* this, GlobalContext* globalCtx) {
         this->setupFunc(this, globalCtx);
         return 1;
     }
-    if ((globalCtx->csCtx.state == 0) && (gSaveContext.weekEventReg[75] & 0x20)) {
+    if ((globalCtx->csCtx.state == 0) && (gSaveContext.save.weekEventReg[75] & 0x20)) {
         if ((this->actionFunc != func_80BD994C) && (this->actionFunc != EnPamera_HandleDialogue)) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             func_80BD9904(this);
@@ -850,11 +850,11 @@ void func_80BDA344(Actor* thisx, GlobalContext* globalCtx) {
     func_80BD9384(this, globalCtx);
     if (func_80BD9CB8(this, globalCtx)) {
         // Pamela is outside
-        if (gSaveContext.weekEventReg[59] & 1) {
-            gSaveContext.weekEventReg[59] &= (u8)~1;
+        if (gSaveContext.save.weekEventReg[59] & 1) {
+            gSaveContext.save.weekEventReg[59] &= (u8)~1;
         }
-        if (!(gSaveContext.weekEventReg[61] & 4)) {
-            gSaveContext.weekEventReg[61] |= 4;
+        if (!(gSaveContext.save.weekEventReg[61] & 4)) {
+            gSaveContext.save.weekEventReg[61] |= 4;
         }
         func_800E8F08(&this->limb9Rot, &this->limb8Rot);
     } else {
@@ -863,7 +863,7 @@ void func_80BDA344(Actor* thisx, GlobalContext* globalCtx) {
             Collider_UpdateCylinder(&this->actor, &this->collider);
             CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
         }
-        if (gSaveContext.weekEventReg[14] & 4) {
+        if (gSaveContext.save.weekEventReg[14] & 4) {
             globalCtx->roomCtx.unk7A[0]++;
         }
     }
