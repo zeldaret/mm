@@ -286,7 +286,7 @@ void EnFamos_UpdateBobbingHeight(EnFamos* this) {
     }
 
     this->hoverClk--;
-    this->actor.world.pos.y = (Math_SinS(this->hoverClk * 2184) * 10.0f) + this->baseHeight;
+    this->actor.world.pos.y = (Math_SinS(this->hoverClk * 0x888) * 10.0f) + this->baseHeight;
 
     if (ABS_ALT(this->flipRot) > 0x4000) { // is famos upside down
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
@@ -426,7 +426,7 @@ void EnFamos_ReturnHome(EnFamos* this, GlobalContext* globalCtx) {
     if (EnFamos_IsPlayerSeen(this, globalCtx)) {
         EnFamos_SetupAlert(this);
     } else if (distance < 20.0f) {
-        if (this->pathPoints != 0) {
+        if (this->pathPoints != NULL) {
             EnFamos_SetupPathingIdle(this);
         } else {
             EnFamos_SetupStillIdle(this);
@@ -445,6 +445,7 @@ void EnFamos_SetupAlert(EnFamos* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->stateTimer = 8;
     this->actor.speedXZ = 0.0f;
+
     if (this->isCalm == true) {
         this->isCalm = false;
         Math_Vec3f_Copy(&this->calmPos, &this->actor.world.pos);
@@ -625,6 +626,7 @@ void EnFamos_SetupScanForPlayer(EnFamos* this) {
 void EnFamos_ScanForPlayer(EnFamos* this, GlobalContext* globalCtx) {
     EnFamos_UpdateBobbingHeight(this);
     this->stateTimer--;
+
     if (EnFamos_IsPlayerSeen(this, globalCtx)) {
         EnFamos_SetupAlert(this);
     } else if (this->stateTimer == 0) {
@@ -795,7 +797,7 @@ s32 EnFamos_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         *dList = NULL;
     }
 
-    return 0;
+    return false;
 }
 
 void EnFamos_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {

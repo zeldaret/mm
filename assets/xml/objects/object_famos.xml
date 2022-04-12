@@ -24,7 +24,7 @@
         <Skeleton Name="gFamosSkeleton" Type="Normal" LimbType="Standard" LimbNone="FAMOS_LIMB_NONE" LimbMax="FAMOS_LIMB_MAX" EnumName="ObjectFamosLimbs" Offset="0x3D38" />
 
         <Animation Name="gFamosLowerSNSAnim" Offset="0x3DC8" />
-        <TextureAnimation Name="gFamosNormalGlowingEmblemAnimTex" Offset="0x3E30" />
-        <TextureAnimation Name="gFamosFlippedGlowingEmblemAnimTex" Offset="0x3E38" />
+        <TextureAnimation Name="gFamosNormalGlowingEmblemTexAnim" Offset="0x3E30" />
+        <TextureAnimation Name="gFamosFlippedGlowingEmblemTexAnim" Offset="0x3E38" />
     </File>
 </Root>
