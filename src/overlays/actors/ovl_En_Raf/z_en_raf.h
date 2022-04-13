@@ -40,14 +40,14 @@ typedef struct EnRaf {
     /* 0x3B0 */ f32 unk_3B0;
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ s16 dissolveTimer;
-    /* 0x3B8 */ s16 unk_3B8;
+    /* 0x3B8 */ s16 rippleTimer;
     /* 0x3BA */ s16 unk_3BA;
     /* 0x3BC */ s16 unk_3BC;
     /* 0x3BE */ s16 unk_3BE;
     /* 0x3C0 */ s16 switchFlag;
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;
-    /* 0x3C6 */ s16 unk_3C6;
+    /* 0x3C6 */ s16 action;
     /* 0x3C8 */ s16 petalClearPixelFirstPassIndex;
     /* 0x3CA */ s16 teethClearPixelFirstPassIndex;
     /* 0x3CC */ s16 petalClearPixelSecondPassIndex;
