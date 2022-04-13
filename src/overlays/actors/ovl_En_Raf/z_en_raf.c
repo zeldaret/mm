@@ -253,16 +253,16 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     this->dyna.actor.colChkInfo.health = BREG(1) + 2;
     this->unk_3BE = EN_RAF_GET_F(&this->dyna.actor);
-    this->unk_3BA = EN_RAF_GET_1F(&this->dyna.actor);
+    this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
     this->switchFlag = EN_RAF_GET_SWITCH_FLAG(&this->dyna.actor);
     if (this->switchFlag == 0x7F) {
         this->switchFlag = -1;
     }
 
-    if (this->unk_3BA == 0x1F) {
-        this->unk_3BA = -1;
+    if (this->reviveTimer == 31) {
+        this->reviveTimer = -1;
     } else {
-        this->unk_3BA = 0x1E;
+        this->reviveTimer = 30;
     }
 
     if (((this->switchFlag >= 0) || (this->unk_3BE == 1) || (gSaveContext.save.weekEventReg[12] & 1)) &&
@@ -647,12 +647,10 @@ void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
         this->action = EN_RAF_ACTION_DEAD_IDLE;
     }
 
-    if (this->unk_3BA >= 0) {
-        if (this->unk_3BA != 0) {
-            this->unk_3BA--;
-        }
+    if (this->reviveTimer >= 0) {
+        DECR(this->reviveTimer);
 
-        if (this->unk_3BA == 0) {
+        if (this->reviveTimer == 0) {
             EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
             for (i = 2; i < 11; i++) {
                 Math_Vec3f_Copy(&this->targetLimbScale[i], &sp3C);
@@ -660,8 +658,8 @@ void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
 
             this->unk_3C2 = 3;
             this->action = EN_RAF_ACTION_IDLE;
-            this->unk_3BA = EN_RAF_GET_1F(&this->dyna.actor);
-            this->unk_3BA += 0x1E;
+            this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
+            this->reviveTimer += 30;
             this->actionFunc = EnRaf_Idle;
         }
     }

@@ -5,7 +5,7 @@
 #include "objects/object_raf/object_raf.h"
 
 #define EN_RAF_GET_F(thisx) (((thisx)->params >> 12) & 0xF)
-#define EN_RAF_GET_1F(thisx) (((thisx)->params >> 7) & 0x1F)
+#define EN_RAF_GET_REVIVE_TIMER(thisx) (((thisx)->params >> 7) & 0x1F)
 #define EN_RAF_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 
 struct EnRaf;
@@ -41,7 +41,7 @@ typedef struct EnRaf {
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ s16 dissolveTimer;
     /* 0x3B8 */ s16 rippleTimer;
-    /* 0x3BA */ s16 unk_3BA;
+    /* 0x3BA */ s16 reviveTimer;
     /* 0x3BC */ s16 unk_3BC;
     /* 0x3BE */ s16 unk_3BE;
     /* 0x3C0 */ s16 switchFlag;
