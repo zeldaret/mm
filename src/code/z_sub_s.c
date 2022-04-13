@@ -873,34 +873,39 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
 }
 
 /**
- * Computes a plane based on a point on the plane, a rotationPoint and two angles
+ * Computes a plane based on a point on the plane, a normal vector and two angles
  *
  * @param[in] point a point on the plane
- * @param[in] rotPoint the point to rotate about
- * @param[in] rot the angles to rotate with
+ * @param[in] normal the vector rotated that becomes the plane's normal
+ * @param[in] rot the angles to rotate with, uses just the x and y components
  * @param[out] plane the computed plane
+ *
+ * Notes:
+ *  The normal input vector is expected to already be normalized (only uses are with the z unit vector)
+ *  The plane paramaters are of form `ax + by + cz + d = 0` where `a,b,c` are the planes normal vector
+ *
  */
-void SubS_ComputePlane(Vec3f* point, Vec3f* rotPoint, Vec3s* rot, Plane* plane) {
+void SubS_ComputePlane(Vec3f* point, Vec3f* normal, Vec3s* rot, Plane* plane) {
     f32 sin;
     f32 cos;
-    f32 sp2C;
-    f32 rotPointZ;
-    f32 normY;
-    f32 rotPointYX;
+    f32 temp;
+    f32 normZ;
+    f32 rotNormY;
+    f32 normTemp;
 
     sin = Math_SinS(-rot->x);
     cos = Math_CosS(-rot->x);
-    rotPointZ = rotPoint->z;
-    rotPointYX = rotPoint->y;
-    sp2C = (rotPointZ * cos) - (rotPointYX * sin);
-    normY = (rotPointZ * sin) + (rotPointYX * cos);
+    normZ = normal->z;
+    normTemp = normal->y;
+    temp = (normZ * cos) - (normTemp * sin);
+    rotNormY = (normZ * sin) + (normTemp * cos);
 
     sin = Math_SinS(rot->y);
     cos = Math_CosS(rot->y);
-    rotPointYX = rotPoint->x;
-    plane->normal.y = normY;
-    plane->normal.z = (sp2C * cos) - (rotPointYX * sin);
-    plane->normal.x = (sp2C * sin) + (rotPointYX * cos);
+    normTemp = normal->x;
+    plane->normal.y = rotNormY;
+    plane->normal.z = (temp * cos) - (normTemp * sin);
+    plane->normal.x = (temp * sin) + (normTemp * cos);
     plane->originDist = -((point->x * plane->normal.x) + (plane->normal.y * point->y) + (plane->normal.z * point->z));
 }
 
