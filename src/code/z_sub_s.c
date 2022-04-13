@@ -873,39 +873,39 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
 }
 
 /**
- * Computes a plane based on a point on the plane, a normal vector and two angles
+ * Computes a plane based on a point on the plane, a unit vector and two angles
  *
  * @param[in] point a point on the plane
- * @param[in] normal the vector rotated that becomes the plane's normal
+ * @param[in] unitVec the unit vector rotated that becomes the plane's normal
  * @param[in] rot the angles to rotate with, uses just the x and y components
  * @param[out] plane the computed plane
  *
  * Notes:
- *  The normal input vector is expected to already be normalized (only uses are with the z unit vector)
+ *  The unit input vector is expected to already be normalized (only uses are with the z unit vector)
  *  The plane paramaters are of form `ax + by + cz + d = 0` where `a,b,c` are the planes normal vector
  *
  */
-void SubS_ComputePlane(Vec3f* point, Vec3f* normal, Vec3s* rot, Plane* plane) {
+void SubS_ComputePlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
     f32 sin;
     f32 cos;
     f32 temp;
-    f32 normZ;
-    f32 rotNormY;
-    f32 normTemp;
+    f32 unitVecZ;
+    f32 normY;
+    f32 unitVecTemp;
 
     sin = Math_SinS(-rot->x);
     cos = Math_CosS(-rot->x);
-    normZ = normal->z;
-    normTemp = normal->y;
-    temp = (normZ * cos) - (normTemp * sin);
-    rotNormY = (normZ * sin) + (normTemp * cos);
+    unitVecZ = unitVec->z;
+    unitVecTemp = unitVec->y;
+    temp = (unitVecZ * cos) - (unitVecTemp * sin);
+    normY = (unitVecZ * sin) + (unitVecTemp * cos);
 
     sin = Math_SinS(rot->y);
     cos = Math_CosS(rot->y);
-    normTemp = normal->x;
-    plane->normal.y = rotNormY;
-    plane->normal.z = (temp * cos) - (normTemp * sin);
-    plane->normal.x = (temp * sin) + (normTemp * cos);
+    unitVecTemp = unitVec->x;
+    plane->normal.y = normY;
+    plane->normal.z = (temp * cos) - (unitVecTemp * sin);
+    plane->normal.x = (temp * sin) + (unitVecTemp * cos);
     plane->originDist = -((point->x * plane->normal.x) + (plane->normal.y * point->y) + (plane->normal.z * point->z));
 }
 
