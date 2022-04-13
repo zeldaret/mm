@@ -341,7 +341,7 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-//! @TODO: Needs docs with func_800B8500
+//! TODO: Needs docs with func_800B8500
 s32 func_8013C964(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
     s32 ret = false;
     s16 x;
@@ -505,9 +505,9 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
     }
 }
 
-void SubS_DrawShadowTex(Actor* actor, GlobalContext* globalCtx, u8* tex) {
+void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     s32 pad;
-    GraphicsContext* gfxCtx = globalCtx->state.gfxCtx;
+    GraphicsContext* gfxCtx = gameState->gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
@@ -882,39 +882,42 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
  *
  * Notes:
  *  The unit input vector is expected to already be normalized (only uses are with the z unit vector)
- *  The plane paramaters are of form `ax + by + cz + d = 0` where `a,b,c` are the planes normal vector
  *
  */
-void SubS_ComputePlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
+void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane) {
     f32 sin;
     f32 cos;
     f32 temp;
     f32 unitVecZ;
     f32 normY;
-    f32 unitVecTemp;
+    f32 unitVecYX;
 
     sin = Math_SinS(-rot->x);
     cos = Math_CosS(-rot->x);
     unitVecZ = unitVec->z;
-    unitVecTemp = unitVec->y;
-    temp = (unitVecZ * cos) - (unitVecTemp * sin);
-    normY = (unitVecZ * sin) + (unitVecTemp * cos);
+    unitVecYX = unitVec->y;
+
+    // Apply a rotation by -x about the X axis
+    temp = (unitVecZ * cos) - (unitVecYX * sin);
+    normY = (unitVecZ * sin) + (unitVecYX * cos);
 
     sin = Math_SinS(rot->y);
     cos = Math_CosS(rot->y);
-    unitVecTemp = unitVec->x;
+    unitVecYX = unitVec->x;
     plane->normal.y = normY;
-    plane->normal.z = (temp * cos) - (unitVecTemp * sin);
-    plane->normal.x = (temp * sin) + (unitVecTemp * cos);
+
+    // Apply a rotation by y about the Y axis
+    plane->normal.z = (temp * cos) - (unitVecYX * sin);
+    plane->normal.x = (temp * sin) + (unitVecYX * cos);
     plane->originDist = -((point->x * plane->normal.x) + (plane->normal.y * point->y) + (plane->normal.z * point->z));
 }
 
-s32 SubS_LineSegVsPlane(Vec3f* pos, Vec3s* rot, Vec3f* rotPoint, Vec3f* linePointA, Vec3f* linePointB,
+s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePointA, Vec3f* linePointB,
                         Vec3f* intersect) {
     s32 lineSegVsPlane;
     Plane plane;
 
-    SubS_ComputePlane(pos, rotPoint, rot, &plane);
+    SubS_ConstructPlane(point, unitVec, rot, &plane);
     lineSegVsPlane = Math3D_LineSegVsPlane(plane.normal.x, plane.normal.y, plane.normal.z, plane.originDist, linePointA,
                                            linePointB, intersect, false);
 
@@ -943,7 +946,7 @@ Actor* SubS_FindActorCustom(GlobalContext* globalCtx, Actor* actor, Actor* actor
     return actorIter;
 }
 
-//! @TODO: Needs docs with func_800B8500
+//! TODO: Needs docs with func_800B8500
 s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
                   func_8013E748_VerifyFunc verifyFunc) {
     s32 ret = false;
@@ -973,7 +976,7 @@ s32 SubS_ActorAndPlayerAreFacing(GlobalContext* globalCtx, Actor* actor, void* d
     return areFacing;
 }
 
-//! @TODO: Needs docs with func_800B8500
+//! TODO: Needs docs with func_800B8500
 s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
                   s16 actorYawTol) {
     Vec3s yawTols;

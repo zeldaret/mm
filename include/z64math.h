@@ -49,6 +49,7 @@ typedef struct {
     /* 0x0C */ f32   radius;
 } Spheref; // size = 0x10
 
+/* The plane paramaters are of form `ax + by + cz + d = 0` where `a,b,c` are the plane's normal vector */
 typedef struct {
     /* 0x00 */ Vec3f normal;
     /* 0x0C */ f32   originDist;

@@ -336,7 +336,7 @@ static Gfx sTransparencyDlist[] = {
 void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     EnZo* this = THIS;
     s32 i;
-    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, (s32)sizeof(u8[64][64]));
+    u8* shadowTex = GRAPH_ALLOC(globalCtx->state.gfxCtx, sizeof(u8[64][64]));
     u8* shadowTexIter;
     TexturePtr eyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
 
@@ -363,6 +363,6 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
                           ARRAY_COUNT(this->bodyPartsPos), sShadowSizes, sParentBodyParts);
     }
 
-    SubS_DrawShadowTex(&this->actor, globalCtx, shadowTex);
+    SubS_DrawShadowTex(&this->actor, &globalCtx->state, shadowTex);
     CLOSE_DISPS(globalCtx->state.gfxCtx);
 }
