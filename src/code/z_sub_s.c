@@ -909,6 +909,7 @@ void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane)
     // Apply a rotation by y about the Y axis
     plane->normal.z = (temp * cos) - (unitVecYX * sin);
     plane->normal.x = (temp * sin) + (unitVecYX * cos);
+
     plane->originDist = -((point->x * plane->normal.x) + (plane->normal.y * point->y) + (plane->normal.z * point->z));
 }
 
@@ -957,7 +958,7 @@ s32 func_8013E748(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
     return ret;
 }
 
-s32 SubS_ActorAndPlayerAreFacing(GlobalContext* globalCtx, Actor* actor, void* data) {
+s32 SubS_ActorAndPlayerFaceEachOther(GlobalContext* globalCtx, Actor* actor, void* data) {
     Player* player = GET_PLAYER(globalCtx);
     Vec3s* yawTols = (Vec3s*)data;
     s16 playerYaw = ABS(BINANG_SUB(Actor_YawBetweenActors(&player->actor, actor), player->actor.shape.rot.y));
@@ -983,7 +984,7 @@ s32 func_8013E8F8(Actor* actor, GlobalContext* globalCtx, f32 xzRange, f32 yRang
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerAreFacing);
+    return func_8013E748(actor, globalCtx, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sub_s/func_8013E950.s")
