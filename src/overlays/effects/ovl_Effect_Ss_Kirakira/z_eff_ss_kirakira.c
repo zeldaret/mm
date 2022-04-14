@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_kirakira.c
  * Overlay: ovl_Effect_Ss_Kirakira
- * Description:
+ * Description: Sparkles
  */
 
 #include "z_eff_ss_kirakira.h"
@@ -43,12 +43,12 @@ u32 EffectSsKirakira_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, v
 
     if ((this->life = initParams->life) < 0) {
         this->life = -this->life;
-        this->gfx = gameplay_keep_DL_054A90;
+        this->gfx = gEffSparklesDL;
         this->update = func_80977F28;
         this->rEnvColorA = initParams->scale;
         this->rScale = 0;
     } else {
-        this->gfx = gameplay_keep_DL_054A90;
+        this->gfx = gEffSparklesDL;
 
         if (initParams->updateMode == 0) {
             this->update = func_80977DB4;
@@ -85,10 +85,10 @@ void EffectSsKirakira_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     f32 scale = this->rScale / 10000.0f;
     s32 pad;
     MtxF mfTrans;
-    MtxF mfRotY;
+    MtxF mfRot;
     MtxF mfScale;
-    MtxF mfTrans11DA0;
-    MtxF mfTrans11DA0RotY;
+    MtxF mfTransBillboard;
+    MtxF mfTransBillboardRot;
     MtxF mfResult;
     Mtx* mtx;
 
@@ -97,11 +97,11 @@ void EffectSsKirakira_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this) 
     OPEN_DISPS(gfxCtx);
 
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
-    SkinMatrix_SetRotateRPY(&mfRotY, 0, 0, this->rYaw);
+    SkinMatrix_SetRotateRPY(&mfRot, 0, 0, this->rYaw);
     SkinMatrix_SetScale(&mfScale, scale, scale, 1.0f);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTrans11DA0);
-    SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfRotY, &mfTrans11DA0RotY);
-    SkinMatrix_MtxFMtxFMult(&mfTrans11DA0RotY, &mfScale, &mfResult);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTransBillboard);
+    SkinMatrix_MtxFMtxFMult(&mfTransBillboard, &mfRot, &mfTransBillboardRot);
+    SkinMatrix_MtxFMtxFMult(&mfTransBillboardRot, &mfScale, &mfResult);
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);

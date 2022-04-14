@@ -1177,7 +1177,7 @@
         <Texture Name="gameplay_keep_Tex_054140" OutName="tex_054140" Format="i4" Width="64" Height="64" Offset="0x54140" />
         <DList Name="gameplay_keep_DL_054940" Offset="0x54940" />
         <DList Name="gameplay_keep_DL_0549A8" Offset="0x549A8" />
-        <DList Name="gameplay_keep_DL_054A90" Offset="0x54A90" />
+        <DList Name="gEffSparklesDL" Offset="0x54A90" />
         <Texture Name="gameplay_keep_Tex_054AF0" OutName="tex_054AF0" Format="i4" Width="16" Height="16" Offset="0x54AF0" />
         <DList Name="gameplay_keep_DL_054C90" Offset="0x54C90" />
         <Texture Name="gameplay_keep_Tex_054D90" OutName="tex_054D90" Format="i4" Width="16" Height="16" Offset="0x54D90" />

@@ -730,7 +730,7 @@ void EnArrow_Draw(Actor* thisx, GlobalContext* globalCtx) {
         Matrix_Scale(sp5C, sp5C, sp5C, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054A90);
+        gSPDisplayList(POLY_XLU_DISP++, gEffSparklesDL);
 
         Matrix_StatePop();
         Matrix_RotateY(this->actor.world.rot.y, MTXMODE_APPLY);
