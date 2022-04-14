@@ -273,7 +273,7 @@ disasm:
 diff-init: uncompressed
 	$(RM) -rf expected/
 	mkdir -p expected/
-	cp -r build/ expected
+	cp -r build expected/build
 
 init:
 	$(MAKE) distclean
