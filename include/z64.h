@@ -34,6 +34,7 @@
 #include "z64item.h"
 #include "z64light.h"
 #include "z64math.h"
+#include "sys_matrix.h"
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
@@ -303,11 +304,6 @@ typedef struct {
     /* 0x10 */ OSTime resetTime;
 } NmiBuff; // size >= 0x18
 
-// typedef struct {
-//     /* 0x00 */ s16 intPart[16];
-//     /* 0x20 */ u16 fracPart[16];
-// } RSPMatrix; // size = 0x40
-
 typedef struct {
     /* 0x0 */ s8 letterboxTarget;
     /* 0x1 */ s8 letterboxMagnitude;
@@ -381,13 +377,6 @@ typedef struct {
     /* 0x18 */ s16 unk18;
     /* 0x1A */ s16 unk1A;
 } s80874650; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ f32 x[4];
-    /* 0x10 */ f32 y[4];
-    /* 0x20 */ f32 z[4];
-    /* 0x30 */ f32 w[4];
-} z_Matrix; // size = 0x40
 
 typedef union {
     F3DVertexColor color;
@@ -1425,16 +1414,6 @@ typedef struct {
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* monoDl;
 } VisMono; // size = 0x18
-
-typedef enum {
-    MTXMODE_NEW,  // generates a new matrix
-    MTXMODE_APPLY // applies transformation to the current matrix
-} MatrixMode;
-
-typedef struct {
-    /* 0x00 */ u16 intPart[4][4];
-    /* 0x20 */ u16 fracPart[4][4];
-} MatrixInternal; // size = 0x40
 
 typedef struct DebugDispObject {
     /* 0x00 */ Vec3f pos;

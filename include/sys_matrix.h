@@ -1,16 +1,35 @@
 #ifndef SYS_MATRIX_H
 #define SYS_MATRIX_H
 
-#include "z64.h"
+#include "z64math.h"
+
+struct GraphicsContext;
+struct GameState;
+
+typedef enum {
+    MTXMODE_NEW,  // generates a new matrix
+    MTXMODE_APPLY // applies transformation to the current matrix
+} MatrixMode;
+
+typedef struct {
+    /* 0x00 */ u16 intPart[4][4];
+    /* 0x20 */ u16 fracPart[4][4];
+} MatrixInternal; // size = 0x40
+
+
+extern Mtx gIdentityMtx;
+extern MtxF gIdentityMtxF;
+
 
 /* Stack operations */
-void Matrix_Init(GameState* gameState);
+void Matrix_Init(struct GameState* gameState);
 void Matrix_Push(void);
 void Matrix_Pop(void);
 void Matrix_Get(MtxF* dest);
 void Matrix_Put(MtxF* src);
 MtxF* Matrix_GetCurrent(void);
 
+/* Basic operations */
 void Matrix_Mult(MtxF* matrix, MatrixMode mode);
 void Matrix_Translate(f32 x, f32 y, f32 z, MatrixMode mode);
 void Matrix_Scale(f32 xScale, f32 yScale, f32 zScale, MatrixMode mode);
@@ -22,24 +41,32 @@ void Matrix_RotateYS(s16 y, MatrixMode mode);
 void Matrix_RotateYF(f32 y, MatrixMode mode);
 void Matrix_RotateZS(s16 z, MatrixMode mode);
 void Matrix_RotateZF(f32 z, MatrixMode mode);
+
+/* Compound operations */
 void Matrix_RotateZYX(s16 x, s16 y, s16 z, MatrixMode mode);
 void Matrix_TranslateRotateZYX(Vec3f* pos, Vec3s* rot);
 void Matrix_RotateAndTranslateState(Vec3f* translation, Vec3s* rot);
 void Matrix_SetTranslateRotateYXZ(f32 x, f32 y, f32 z, Vec3s* rot);
 
+/* Conversion and allocation operations */
 Mtx* Matrix_MtxFToMtx(MtxF* src, Mtx* dest);
 Mtx* Matrix_ToMtx(Mtx* dest);
-Mtx* Matrix_NewMtx(GraphicsContext* gfxCtx);
-Mtx* Matrix_MtxFToNewMtx(MtxF* mtx, GraphicsContext* gfxCtx);
+Mtx* Matrix_NewMtx(struct GraphicsContext* gfxCtx);
+Mtx* Matrix_MtxFToNewMtx(MtxF* mtx, struct GraphicsContext* gfxCtx);
 
+/* Vector operations */
 void Matrix_MultVec3f(Vec3f* src, Vec3f* dest);
 void Matrix_MultZero(Vec3f* dest);
 void Matrix_MultVecX(f32 x, Vec3f* dest);
 void Matrix_MultVecY(f32 y, Vec3f* dest);
 void Matrix_MultVecZ(f32 z, Vec3f* dest);
 void Matrix_MultVec3fXZ(Vec3f* src, Vec3f* dest);
+
+/* Copy and another conversion */
 void Matrix_MtxFCopy(MtxF* dest, MtxF* src);
 void Matrix_MtxToMtxF(Mtx* src, MtxF* dest);
+
+/* Miscellaneous */
 void Matrix_MultVec3fExt(Vec3f* src, Vec3f* dest, MtxF* matrix);
 void Matrix_Transpose(MtxF* mtx);
 void Matrix_ReplaceRotation(MtxF* mtx);
