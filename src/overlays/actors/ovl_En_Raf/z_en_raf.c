@@ -377,10 +377,10 @@ void func_80A17530(EnRaf* this) {
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CHEW);
     this->chewCount = 0;
-    for (i = 0; i < ARRAY_COUNT(this->unk_354); i++) {
-        this->unk_354[i].x = Rand_S16Offset(8, 8) << 8;
-        this->unk_354[i].y = Rand_S16Offset(8, 8) << 8;
-        this->unk_354[i].z = Rand_S16Offset(8, 8) << 8;
+    for (i = 0; i < ARRAY_COUNT(this->limbRot); i++) {
+        this->limbRot[i].x = Rand_S16Offset(8, 8) << 8;
+        this->limbRot[i].y = Rand_S16Offset(8, 8) << 8;
+        this->limbRot[i].z = Rand_S16Offset(8, 8) << 8;
     }
 
     this->unk_3C2 = 2;
@@ -788,13 +788,13 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             }
 
             if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
-                Matrix_RotateY((this->unk_354[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_InsertXRotation_s((this->unk_354[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_InsertZRotation_s((this->unk_354[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateY((this->limbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_InsertXRotation_s((this->limbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_InsertZRotation_s((this->limbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
                 Matrix_Scale(this->unk_3A4 + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                Matrix_InsertZRotation_s(-(this->unk_354[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_InsertXRotation_s(-(this->unk_354[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
-                Matrix_RotateY(-(this->unk_354[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_InsertZRotation_s(-(this->limbRot[limbIndex].z * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_InsertXRotation_s(-(this->limbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
+                Matrix_RotateY(-(this->limbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
             }
             break;
 
