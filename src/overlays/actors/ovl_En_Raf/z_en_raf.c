@@ -41,7 +41,6 @@ typedef enum {
     /* 3 */ EN_RAF_ANIMATION_SPIT,
     /* 4 */ EN_RAF_ANIMATION_CONVULSE,
     /* 5 */ EN_RAF_ANIMATION_DEATH,
-    /* 6 */ EN_RAF_ANIMATION_MAX
 } EnRafAnimationIndex;
 
 typedef enum {
@@ -53,8 +52,13 @@ typedef enum {
     /* 5 */ EN_RAF_ACTION_CONVULSE,
     /* 6 */ EN_RAF_ACTION_DISSOLVE,
     /* 7 */ EN_RAF_ACTION_DEAD_IDLE,
-    /* 8 */ EN_RAF_ACTION_MAX
 } EnRafAction;
+
+typedef enum {
+    /* 0 */ EN_RAF_GRAB_TARGET_PLAYER,
+    /* 1 */ EN_RAF_GRAB_TARGET_EXPLOSIVE,
+    /* 2 */ EN_RAF_GRAB_TARGET_GORON_PLAYER
+} EnRafGrabTarget;
 
 const ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
@@ -324,21 +328,21 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
     f32 yDiff;
     f32 zDiff;
 
-    if (this->unk_3B4 == 0) {
+    if (this->timer == 0) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
              DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & 0x8000000) &&
              globalCtx->grabPlayer(globalCtx, player))) {
             player->actor.parent = &this->dyna.actor;
-            this->unk_39C = 0;
+            this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
 
             if (player->transformation == PLAYER_FORM_GORON) {
-                this->unk_39C = 2;
+                this->grabTarget = EN_RAF_GRAB_TARGET_GORON_PLAYER;
             } else {
                 player->unk_AE8 = 50;
             }
 
-            this->unk_3BC = player->actor.world.rot.y;
+            this->playerYRotWhenGrabbed = player->actor.world.rot.y;
             func_80A17414(this);
             return;
         }
@@ -360,7 +364,7 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
             if ((fabsf(xDiff) < 80.0f) && (fabsf(yDiff) < 30.0f) && (fabsf(zDiff) < 80.0f) &&
                 (explosive->update != NULL) && (explosive->velocity.y != 0.0f)) {
                 Actor_MarkForDeath(explosive);
-                this->unk_39C = 1;
+                this->grabTarget = EN_RAF_GRAB_TARGET_EXPLOSIVE;
                 this->collider.dim.radius = 30;
                 this->collider.dim.height = 90;
                 this->collider.dim.yShift = -10;
@@ -385,7 +389,8 @@ void func_80A17464(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->unk_39C != 1) && (player->stateFlags2 & 0x80) && (&this->dyna.actor == player->actor.parent)) {
+    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & 0x80) &&
+        (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
@@ -400,7 +405,7 @@ void func_80A17530(EnRaf* this) {
     s32 i;
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CHEW);
-    this->unk_3C4 = 0;
+    this->chewCount = 0;
     for (i = 0; i < 12; i++) {
         this->unk_354[i].x = Rand_S16Offset(8, 8) << 8;
         this->unk_354[i].y = Rand_S16Offset(8, 8) << 8;
@@ -421,7 +426,8 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
     temp = (BREG(51) / 100.0f) + 0.2f;
     Math_ApproachF(&this->unk_3A4, temp, 0.2f, 0.03f);
 
-    if ((player->stateFlags2 & 0x80) && (this->unk_39C != 1) && (&this->dyna.actor == player->actor.parent)) {
+    if ((player->stateFlags2 & 0x80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
+        (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.z, this->dyna.actor.world.pos.z, 0.3f, 10.0f);
@@ -429,32 +435,32 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
 
     if (this->endFrame <= curFrame) {
         if (BREG(52) == 0) {
-            this->unk_3C4++;
+            this->chewCount++;
         }
 
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
-        switch (this->unk_39C) {
-            case 0:
+        switch (this->grabTarget) {
+            case EN_RAF_GRAB_TARGET_PLAYER:
                 globalCtx->damagePlayer(globalCtx, -2);
                 func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
                 CollisionCheck_GreenBlood(globalCtx, NULL, &player->actor.world.pos);
-                if (((BREG(53) + 5) < this->unk_3C4) || !(player->stateFlags2 & 0x80)) {
+                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & 0x80)) {
                     player->actor.freezeTimer = 10;
                     func_80A17848(this, globalCtx);
                     return;
                 }
                 break;
 
-            case 1:
+            case EN_RAF_GRAB_TARGET_EXPLOSIVE:
                 Actor_ApplyDamage(&this->dyna.actor);
-                if (this->unk_3C4 > (BREG(54) + 4)) {
+                if (this->chewCount > (BREG(54) + 4)) {
                     EnRaf_Explode(this, globalCtx);
                     return;
                 }
                 break;
 
-            case 2:
-                if (this->unk_3C4 > (BREG(54) + 4)) {
+            case EN_RAF_GRAB_TARGET_GORON_PLAYER:
+                if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
                     player->unk_AE8 = 1000;
                     EnRaf_Explode(this, globalCtx);
@@ -482,7 +488,8 @@ void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 0;
         player->actor.parent = NULL;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
-        func_800B8D50(globalCtx, &this->dyna.actor, BREG(55) + 3.0f, this->unk_3BC + 0x8000, BREG(56) + 10.0f, 0);
+        func_800B8D50(globalCtx, &this->dyna.actor, BREG(55) + 3.0f, this->playerYRotWhenGrabbed + 0x8000,
+                      BREG(56) + 10.0f, 0);
     } else if (curFrame < 10.0f) {
         player->actor.freezeTimer = 10;
     }
@@ -490,7 +497,7 @@ void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
     if (this->endFrame <= curFrame) {
         this->unk_3C2 = 3;
         this->action = EN_RAF_ACTION_IDLE;
-        this->unk_3B4 = 0x14;
+        this->timer = 20;
         this->actionFunc = EnRaf_Idle;
     }
 }
@@ -529,8 +536,8 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
     }
 
-    this->unk_3B4 = 5;
-    if (this->unk_39C == 1) {
+    this->timer = 5;
+    if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->dyna.actor, 5);
         this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
     }
@@ -539,13 +546,13 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx) {
-    if (this->unk_3B4 == 0) {
+    if (this->timer == 0) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->dyna.actor, 6);
         this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
         EnRaf_SetupDeadIdle(this);
-    } else if (this->unk_39C == 1) {
+    } else if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;
         this->collider.dim.height = 50;
         CollisionCheck_SetAT(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
@@ -554,7 +561,7 @@ void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx) {
 
 void EnRaf_SetupConvulse(EnRaf* this) {
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CONVULSE);
-    this->unk_3C4 = 0;
+    this->chewCount = 0;
     this->action = EN_RAF_ACTION_CONVULSE;
     this->actionFunc = EnRaf_Convulse;
 }
@@ -563,8 +570,8 @@ void EnRaf_Convulse(EnRaf* this, GlobalContext* globalCtx) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if (this->endFrame <= curFrame) {
-        this->unk_3C4++;
-        if (this->unk_3C4 > (BREG(2) + 2)) {
+        this->chewCount++;
+        if (this->chewCount > (BREG(2) + 2)) {
             if (this->switchFlag >= 0) {
                 Flags_SetSwitch(globalCtx, this->switchFlag);
             }
@@ -632,7 +639,7 @@ void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
 
 void EnRaf_SetupDeadIdle(EnRaf* this) {
     if (this->action == EN_RAF_ACTION_EXPLODE) {
-        this->unk_3B4 = 0x5A;
+        this->timer = 90;
     } else {
         this->action = EN_RAF_ACTION_DEAD_IDLE;
     }
@@ -644,7 +651,7 @@ void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
     Vec3f sp3C = D_80A1940C;
     s32 i;
 
-    if (this->unk_3B4 == 0) {
+    if (this->timer == 0) {
         this->action = EN_RAF_ACTION_DEAD_IDLE;
     }
 
@@ -676,7 +683,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     SkelAnime_Update(&this->skelAnime);
     DECR(this->rippleTimer);
-    DECR(this->unk_3B4);
+    DECR(this->timer);
     this->actionFunc(this, globalCtx);
 
     if ((this->action == EN_RAF_ACTION_IDLE) && (gSaveContext.save.weekEventReg[12] & 1)) {
