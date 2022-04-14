@@ -2344,7 +2344,7 @@ void Boss03_UpdateEffects(GlobalContext* globalCtx) {
                 eff->alphaDelta = Rand_ZeroFloat(4.0f) + 5.0f;
 
                 for (j = 0; j < 4; j++) {
-                    Matrix_RotateYF((2.0f * (j * M_PI)) / 6.0f, 0);
+                    Matrix_RotateYF((2.0f * (j * M_PI)) / 6.0f, MTXMODE_NEW);
                     sp94.x = 0.0f;
                     sp94.y = Rand_ZeroFloat(4.0f) + 2.0f;
                     sp94.z = Rand_ZeroFloat(1.5f) + 1.5f;
