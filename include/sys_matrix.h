@@ -3,13 +3,16 @@
 
 #include "z64math.h"
 
+
 struct GraphicsContext;
 struct GameState;
+
 
 typedef enum {
     MTXMODE_NEW,  // generates a new matrix
     MTXMODE_APPLY // applies transformation to the current matrix
 } MatrixMode;
+
 
 typedef struct {
     /* 0x00 */ u16 intPart[4][4];

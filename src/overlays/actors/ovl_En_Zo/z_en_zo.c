@@ -352,7 +352,7 @@ void EnZo_Draw(Actor* thisx, GlobalContext* globalCtx) {
     POLY_OPA_DISP =
         SkelAnime_DrawFlex(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                            EnZo_OverrideLimbDraw, EnZo_PostLimbDraw, &this->actor, POLY_OPA_DISP);
-    Matrix_RotateXS(0, 0);
+    Matrix_RotateXS(0, MTXMODE_NEW);
 
     for (i = 0, shadowTexIter = shadowTex; i < (s32)sizeof(u8) * SQ(64); i++) {
         *shadowTexIter = 0;

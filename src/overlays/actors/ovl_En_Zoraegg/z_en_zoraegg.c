@@ -694,13 +694,13 @@ void func_80B32F04(Actor* thisx, GlobalContext* globalCtx) {
     sp7C = -((15.0f * Math_CosS(sp62)) * Math_CosS(sp60));
 
     Matrix_Translate(this->actor.world.pos.x + sp74, this->actor.world.pos.y + sp78 + 6.0f,
-                     temp_f2 = this->actor.world.pos.z + sp7C, 0);
+                     temp_f2 = this->actor.world.pos.z + sp7C, MTXMODE_NEW);
 
     sp7C = Math_SinS(globalCtx->gameplayFrames * 0x4000);
 
     Matrix_Scale(this->actor.scale.x * (((sp7C + 1.0f) * 0.1f) + 9.0f),
                  this->actor.scale.y * (((sp7C + 1.0f) * 0.1f) + 9.0f),
-                 this->actor.scale.z * (((sp7C + 1.0f) * 0.1f) + 9.0f), 1);
+                 this->actor.scale.z * (((sp7C + 1.0f) * 0.1f) + 9.0f), MTXMODE_APPLY);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
     gfx = POLY_XLU_DISP;

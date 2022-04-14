@@ -3548,7 +3548,7 @@ void Actor_SpawnBodyParts(Actor* actor, GlobalContext* globalCtx, s32 arg2, Gfx*
         if (spawnedPart != NULL) {
             part = (EnPart*)spawnedPart;
 
-            Matrix_MtxFToYXZRot(currentMatrix, &part->actor.shape.rot, 0);
+            Matrix_MtxFToYXZRot(currentMatrix, &part->actor.shape.rot, false);
             part->unk_150 = *dList;
             Math_Vec3f_Copy(&part->actor.scale, &actor->scale);
         }

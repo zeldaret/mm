@@ -167,7 +167,7 @@ void EnBomChu_UpdateRotation(EnBomChu* this) {
     mf.yz = this->axisForwards.y;
     mf.zz = this->axisForwards.z;
 
-    Matrix_MtxFToYXZRot(&mf, &this->actor.world.rot, 0);
+    Matrix_MtxFToYXZRot(&mf, &this->actor.world.rot, false);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 

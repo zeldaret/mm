@@ -1502,7 +1502,7 @@ void EnSuttari_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
                         Actor_SpawnAsChild(&globalCtx->actorCtx, &this->actor, globalCtx, ACTOR_EN_NIMOTSU,
                                            curState->mf[3][0], curState->mf[3][1], curState->mf[3][2], 0, 0, 0, -1);
                     if (bombBag != NULL) {
-                        Matrix_MtxFToYXZRot(curState, &bombBag->shape.rot, 0);
+                        Matrix_MtxFToYXZRot(curState, &bombBag->shape.rot, false);
                     }
                 } else {
                     func_8012C28C(globalCtx->state.gfxCtx);

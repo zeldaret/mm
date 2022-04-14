@@ -571,7 +571,8 @@ void Boss06_Draw(Actor* thisx, GlobalContext* globalCtx2) {
         }
 
         AnimatedMat_Draw(globalCtx, Lib_SegmentedToVirtual(&object_knight_Matanimheader_019360));
-        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y - 234.0f, this->actor.world.pos.z + 30.0f, 0);
+        Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y - 234.0f, this->actor.world.pos.z + 30.0f,
+                         MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, -1112.0f, MTXMODE_APPLY);
 

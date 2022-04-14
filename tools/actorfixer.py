@@ -13,6 +13,8 @@ animdict = {
     
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
+    # "SysMatrix_StatePop":                           "Matrix_StatePop",
+    # "SysMatrix_GetCurrentState":                    "Matrix_GetCurrentState",
     # "SysMatrix_CopyCurrentState":                   "Matrix_CopyCurrentState",
     # "SysMatrix_SetCurrentState":                    "Matrix_SetCurrentState",
     # "SysMatrix_InsertTranslation":                  "Matrix_InsertTranslation",
@@ -208,8 +210,6 @@ animdict = {
     "func_80137748": "SkelAnime_UpdateTranslation",
     "func_801378B8": "Animation_OnFrame",
     "SkelAnime_CopyVec3s": "SkelAnime_CopyFrameTable",
-    # "SysMatrix_StatePop": "Matrix_StatePop",
-    # "SysMatrix_GetCurrentState": "Matrix_GetCurrentState",
     "Actor_SetObjectSegment": "Actor_SetObjectDependency",
     "func_800B3FC0": "ActorShadow_DrawCircle",
     "func_800B4024": "ActorShadow_DrawSquare",

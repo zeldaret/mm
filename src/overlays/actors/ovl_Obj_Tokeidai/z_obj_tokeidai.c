@@ -844,7 +844,7 @@ void ObjTokeidai_Clock_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     Matrix_Translate(0.0f, -1112.0f, -19.6f, MTXMODE_APPLY);
-    Matrix_RotateYS((s16)this->sunMoonPanelRotation, MTXMODE_APPLY);
+    Matrix_RotateYS(this->sunMoonPanelRotation, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerSunAndMoonPanelDL);
 

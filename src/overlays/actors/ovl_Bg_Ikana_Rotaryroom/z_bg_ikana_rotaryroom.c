@@ -215,7 +215,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                 ptr = &D_80B82184[spC8][i];
 
                 if ((Math3D_Vec3fDistSq(&spB4, &D_80B82184[spC8][i].unk_04) < SQ(250.0f)) &&
-                    ((ptr->unk_00 ^ spC4) && (ptr->unk_01 == 0U))) {
+                    ((ptr->unk_00 ^ spC4) && (ptr->unk_01 == 0))) {
                     Matrix_Push();
                     Matrix_Translate(spB4.x, spB4.y, spB4.z, MTXMODE_APPLY);
                     Matrix_RotateYS(actor->shape.rot.y - this->dyna.actor.home.rot.y, MTXMODE_APPLY);
@@ -224,7 +224,7 @@ void func_80B80550(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                     Matrix_MultZero(&actor->world.pos);
                     func_80B80358(&actor->world.pos);
                     Matrix_Get(&sp68);
-                    Matrix_MtxFToYXZRot(&sp68, &actor->shape.rot, 0);
+                    Matrix_MtxFToYXZRot(&sp68, &actor->shape.rot, false);
                     Matrix_Pop();
                 }
             }
@@ -402,7 +402,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_MultZero(&ikanaBlock->actor.world.pos);
         func_80B80358(&ikanaBlock->actor.world.pos);
         Matrix_Get(&sp3C);
-        Matrix_MtxFToYXZRot(&sp3C, &ikanaBlock->actor.shape.rot, 0);
+        Matrix_MtxFToYXZRot(&sp3C, &ikanaBlock->actor.shape.rot, false);
 
         Matrix_Pop();
     }
@@ -416,7 +416,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_MultZero(&ptr->world.pos);
             func_80B80358(&ptr->world.pos);
             Matrix_Get(&sp3C);
-            Matrix_MtxFToYXZRot(&sp3C, &ptr->shape.rot, 0);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr->shape.rot, false);
 
             Matrix_Pop();
         }
@@ -431,7 +431,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_MultZero(&ptr2->world.pos);
             func_80B80358(&ptr2->world.pos);
             Matrix_Get(&sp3C);
-            Matrix_MtxFToYXZRot(&sp3C, &ptr2->shape.rot, 0);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr2->shape.rot, false);
 
             Matrix_Pop();
         }
@@ -446,7 +446,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
             Matrix_MultZero(&ptr3->world.pos);
             func_80B80358(&ptr3->world.pos);
             Matrix_Get(&sp3C);
-            Matrix_MtxFToYXZRot(&sp3C, &ptr3->shape.rot, 0);
+            Matrix_MtxFToYXZRot(&sp3C, &ptr3->shape.rot, false);
 
             Matrix_Pop();
         }
@@ -461,7 +461,7 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Math_Vec3f_Copy(&player->actor.home.pos, &player->actor.world.pos);
         func_80B80358(&player->actor.world.pos);
         Matrix_Get(&sp3C);
-        Matrix_MtxFToYXZRot(&sp3C, &player->actor.shape.rot, 0);
+        Matrix_MtxFToYXZRot(&sp3C, &player->actor.shape.rot, false);
 
         Matrix_Pop();
         player->actor.freezeTimer = 2;

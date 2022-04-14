@@ -1653,22 +1653,22 @@ typedef union {
         xz, yz, zz, wz, \
         xw, yw, zw, ww) \
     {{                                  \
-        (IPART(xx) << 16) | IPART(xy),  \
-        (IPART(xz) << 16) | IPART(xw),  \
-        (IPART(yx) << 16) | IPART(yy),  \
-        (IPART(yz) << 16) | IPART(yw),  \
-        (IPART(zx) << 16) | IPART(zy),  \
-        (IPART(zz) << 16) | IPART(zw),  \
-        (IPART(wx) << 16) | IPART(wy),  \
-        (IPART(wz) << 16) | IPART(ww),  \
-        (FPART(xx) << 16) | FPART(xy),  \
-        (FPART(xz) << 16) | FPART(xw),  \
-        (FPART(yx) << 16) | FPART(yy),  \
-        (FPART(yz) << 16) | FPART(yw),  \
-        (FPART(zx) << 16) | FPART(zy),  \
-        (FPART(zz) << 16) | FPART(zw),  \
-        (FPART(wx) << 16) | FPART(wy),  \
-        (FPART(wz) << 16) | FPART(ww),  \
+        (IPART(xx) << 0x10) | IPART(xy),  \
+        (IPART(xz) << 0x10) | IPART(xw),  \
+        (IPART(yx) << 0x10) | IPART(yy),  \
+        (IPART(yz) << 0x10) | IPART(yw),  \
+        (IPART(zx) << 0x10) | IPART(zy),  \
+        (IPART(zz) << 0x10) | IPART(zw),  \
+        (IPART(wx) << 0x10) | IPART(wy),  \
+        (IPART(wz) << 0x10) | IPART(ww),  \
+        (FPART(xx) << 0x10) | FPART(xy),  \
+        (FPART(xz) << 0x10) | FPART(xw),  \
+        (FPART(yx) << 0x10) | FPART(yy),  \
+        (FPART(yz) << 0x10) | FPART(yw),  \
+        (FPART(zx) << 0x10) | FPART(zy),  \
+        (FPART(zz) << 0x10) | FPART(zw),  \
+        (FPART(wx) << 0x10) | FPART(wy),  \
+        (FPART(wz) << 0x10) | FPART(ww),  \
     }}
 
 /*

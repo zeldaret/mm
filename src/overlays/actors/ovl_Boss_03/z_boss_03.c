@@ -2258,7 +2258,7 @@ void Boss03_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, V
         D_809E91B4.x = this->unk_2C4 + 300.0f;
         Matrix_MultVec3f(&D_809E91B4, &this->insideJawPos);
         Matrix_Get(&mf);
-        Matrix_MtxFToYXZRot(&mf, &this->unk_2A2, 0);
+        Matrix_MtxFToYXZRot(&mf, &this->unk_2A2, false);
     }
 }
 

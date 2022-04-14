@@ -344,7 +344,7 @@ void func_808D93BC(EnSw* this) {
     sp18.xz = this->unk_350.x;
     sp18.yz = this->unk_350.y;
     sp18.zz = this->unk_350.z;
-    Matrix_MtxFToYXZRot(&sp18, &this->actor.world.rot, 0);
+    Matrix_MtxFToYXZRot(&sp18, &this->actor.world.rot, false);
     this->actor.world.rot.x = -this->actor.world.rot.x;
 }
 
