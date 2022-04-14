@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_lightning.c
  * Overlay: ovl_Effect_Ss_Lightning
- * Description:
+ * Description: Lightning
  */
 
 #include "z_eff_ss_lightning.h"
@@ -36,7 +36,7 @@ const EffectSsInit Effect_Ss_Lightning_InitVars = {
     EffectSsLightning_Init,
 };
 
-static s32 sIsVirtualized = false;
+static s32 sIsDesegmented = false;
 
 u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, void* initParamsx) {
     EffectSsLightningInitParams* initParams = PARAMS;
@@ -60,11 +60,11 @@ u32 EffectSsLightning_Init(GlobalContext* globalCtx, u32 index, EffectSs* this, 
     this->rYaw = initParams->yaw;
     this->rLifespan = initParams->life;
 
-    if (!sIsVirtualized) {
+    if (!sIsDesegmented) {
         for (i = 0; i < ARRAY_COUNT(sLightningTextures); i++) {
             sLightningTextures[i] = Lib_SegmentedToVirtual(sLightningTextures[i]);
         }
-        sIsVirtualized = true;
+        sIsDesegmented = true;
     }
 
     return 1;
@@ -89,8 +89,8 @@ void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this)
     MtxF mfTrans;
     MtxF mfScale;
     MtxF mfRotate;
-    MtxF mfTrans11DA0;
-    MtxF mfTrans11DA0Rotate;
+    MtxF mfTransBillboard;
+    MtxF mfTransBillboardRotate;
     Mtx* mtx;
     f32 yScale;
     s32 texIndex;
@@ -101,17 +101,17 @@ void EffectSsLightning_Draw(GlobalContext* globalCtx, u32 index, EffectSs* this)
     yScale = this->rScale * 0.01f;
     texIndex = this->rLifespan - this->life;
 
-    if (texIndex > 7) {
-        texIndex = 7;
+    if (texIndex >= ARRAY_COUNT(sLightningTextures)) {
+        texIndex = ARRAY_COUNT(sLightningTextures) - 1;
     }
 
     SkinMatrix_SetTranslate(&mfTrans, this->pos.x, this->pos.y, this->pos.z);
     xzScale = yScale * 0.6f;
     SkinMatrix_SetScale(&mfScale, xzScale, yScale, xzScale);
     SkinMatrix_SetRotateRPY(&mfRotate, this->vec.x, this->vec.y, this->rYaw);
-    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTrans11DA0);
-    SkinMatrix_MtxFMtxFMult(&mfTrans11DA0, &mfRotate, &mfTrans11DA0Rotate);
-    SkinMatrix_MtxFMtxFMult(&mfTrans11DA0Rotate, &mfScale, &mfResult);
+    SkinMatrix_MtxFMtxFMult(&mfTrans, &globalCtx->billboardMtxF, &mfTransBillboard);
+    SkinMatrix_MtxFMtxFMult(&mfTransBillboard, &mfRotate, &mfTransBillboardRotate);
+    SkinMatrix_MtxFMtxFMult(&mfTransBillboardRotate, &mfScale, &mfResult);
 
     gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
