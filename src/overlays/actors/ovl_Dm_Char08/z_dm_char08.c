@@ -26,17 +26,20 @@ void func_80AAF79C(DmChar08* this, GlobalContext* globalCtx);
 void func_80AAF884(DmChar08* this, GlobalContext* globalCtx);
 void func_80AAFB04(DmChar08* this, GlobalContext* globalCtx);
 void func_80AAFB94(DmChar08* this, GlobalContext* globalCtx);
-void DmChar08_UpdateEyes(DmChar08* this);
 void func_80AAFE88(DmChar08* this, GlobalContext* globalCtx);
 void func_80AB023C(DmChar08* this, GlobalContext* globalCtx);
-void func_80AB032C(DmChar08* this, GlobalContext* globalCtx);
 void func_80AB01E8(DmChar08* this, GlobalContext* globalCtx);
 void func_80AAFBA4(DmChar08* this, GlobalContext* globalCtx);
 void func_80AAFCCC(DmChar08* this, GlobalContext* globalCtx);
-void func_80AB096C(DmChar08* this, GlobalContext* globalCtx);
-void DmChar08_UpdateCollision(DmChar08* this, GlobalContext* globalCtx);
 
-void DmChar08_SetAnimation(SkelAnime* skelAnime, AnimationInfo* entry, u16 arg2);
+typedef enum {
+    EYEMODE_0,
+    EYEMODE_1,
+    EYEMODE_2,
+    EYEMODE_3,
+    EYEMODE_4,
+    EYEMODE_5,
+} EyeMode;
 
 const ActorInit Dm_Char08_InitVars = {
     ACTOR_DM_CHAR08,
@@ -68,15 +71,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 4000, ICHAIN_STOP),
 };
 
-s16 D_80AB1770 = 0;
-
-// Overly complicated eye update function?
 void DmChar08_UpdateEyes(DmChar08* this) {
-    switch (this->unk_200) {
-        case 0:
+    switch (this->eyeMode) {
+        case EYEMODE_0:
             this->eyeIndex = 0;
             if (this->blinkTimer > 0) {
-                this->blinkTimer = this->blinkTimer - 1;
+                this->blinkTimer--;
             } else {
                 this->blinkTimer = 0;
             }
@@ -89,10 +89,10 @@ void DmChar08_UpdateEyes(DmChar08* this) {
             break;
         default:
             break;
-        case 1:
+        case EYEMODE_1:
             this->eyeIndex = 4;
             if (this->blinkTimer > 0) {
-                this->blinkTimer = this->blinkTimer - 1;
+                this->blinkTimer--;
             } else {
                 this->blinkTimer = 0;
             }
@@ -103,13 +103,13 @@ void DmChar08_UpdateEyes(DmChar08* this) {
                 this->blinkTimer = Rand_S16Offset(30, 30);
             }
             break;
-        case 2:
+        case EYEMODE_2:
             this->eyeIndex = 2;
             break;
-        case 3:
+        case EYEMODE_3:
             this->eyeIndex = 4;
             break;
-        case 5:
+        case EYEMODE_5:
             this->eyeIndex = 8;
             break;
     }
@@ -133,10 +133,10 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
     GlobalContext* globalCtx = globalCtx2;
 
     this->dyna.actor.targetMode = 5;
-    this->unk_200 = 2;
+    this->eyeMode = EYEMODE_2;
     this->dyna.actor.targetArrowOffset = 120.0f;
     ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_kamejima_Skel_00E748, NULL, NULL, NULL, 0);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gTurtleSkel, NULL, NULL, NULL, 0);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->unk_1F4 = 0;
@@ -145,22 +145,22 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->alpha = 0;
     this->animIndex = 0;
     this->unk_1FC = 0xFFFF;
-    this->unk_209 = 0;
+    this->dynapolyInitialized = false;
     this->targetYPos = this->dyna.actor.world.pos.y;
     this->unk_1F0 = 0.0f;
     if (globalCtx->sceneNum == SCENE_31MISAKI) {
-        if ((gSaveContext.save.weekEventReg[0x35] & 0x20)) {
+        if (gSaveContext.save.weekEventReg[0x35] & 0x20) {
             DynaPolyActor_Init(&this->dyna, 3);
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kamejima_Colheader_002470);
         } else {
             DynaPolyActor_Init(&this->dyna, 3);
             DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &object_kamejima_Colheader_002328);
         }
-        this->unk_209 = 1;
+        this->dynapolyInitialized = true;
     } else if (globalCtx->sceneNum == SCENE_SEA) {
         DynaPolyActor_Init(&this->dyna, 3);
         DynaPolyActor_LoadMesh(globalCtx, &this->dyna, &sTurtleCollision);
-        this->unk_209 = 1;
+        this->dynapolyInitialized = true;
         if (&this->dyna.actor.world) {}
     }
 
@@ -185,12 +185,12 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
                 this->unk_1FF = 2;
                 this->animIndex = 2;
                 this->unk_203 = 0x63;
-                this->unk_200 = 1;
+                this->eyeMode = EYEMODE_1;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
                 this->dyna.actor.flags |= ACTOR_FLAG_1;
                 if (gSaveContext.save.entranceIndex == 0x6A80) {
-                    this->unk_200 = 0;
+                    this->eyeMode = EYEMODE_0;
                     this->actionFunc = func_80AAFAC4;
                 } else {
                     this->actionFunc = func_80AAF8F4;
@@ -203,7 +203,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->unk_1FF = 2;
             this->animIndex = 2;
             this->unk_203 = 0x63;
-            this->unk_200 = 0;
+            this->eyeMode = EYEMODE_0;
             this->unk_207 = 0;
             this->unk_208 = 0;
             this->dyna.actor.flags |= ACTOR_FLAG_1;
@@ -214,7 +214,7 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
             this->unk_1FF = 2;
             this->animIndex = 2;
             this->unk_203 = 0x63;
-            this->unk_200 = 0;
+            this->eyeMode = EYEMODE_0;
             this->unk_207 = 0;
             this->unk_208 = 0;
             this->actionFunc = func_80AAFE78;
@@ -227,10 +227,12 @@ void DmChar08_Init(Actor* thisx, GlobalContext* globalCtx2) {
 void DmChar08_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     DmChar08* this = THIS;
 
-    if (this->unk_209 != 0) {
+    if (this->dynapolyInitialized) {
         DynaPoly_DeleteBgActor(globalCtx, &globalCtx->colCtx.dyna, this->dyna.bgId);
     }
 }
+
+s16 D_80AB1770 = 0; //Some kind of latch for playing a sound only once?
 
 void func_80AAF610(DmChar08* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
@@ -240,7 +242,7 @@ void func_80AAF610(DmChar08* this, GlobalContext* globalCtx) {
         ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f) &&
          (player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f))) {
         if (D_80AB1770 == 0) {
-            play_sound(0x4807U);
+            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             D_80AB1770 = 1;
         }
     } else {
@@ -449,10 +451,10 @@ void func_80AAFE88(DmChar08* this, GlobalContext* globalCtx) {
                     this->animIndex = 1;
                     break;
                 case 6:
-                    this->unk_200 = 0;
+                    this->eyeMode = EYEMODE_0;
                     break;
                 case 7:
-                    this->unk_200 = 2;
+                    this->eyeMode = EYEMODE_2;
                     break;
                 case 8:
                     this->animIndex = 6;
@@ -575,13 +577,13 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = 6;
-                    this->unk_200 = 2;
+                    this->eyeMode = EYEMODE_2;
                     this->unk_208++;
                     break;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -592,21 +594,21 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = 4;
-                    this->unk_200 = 2;
+                    this->eyeMode = EYEMODE_2;
                     this->unk_208++;
                     break;
                     ;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 3;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -620,16 +622,16 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                 case 0:
                     this->animIndex = 3;
                     if (this->unk_207 >= 5) {
-                        this->unk_200 = 2;
+                        this->eyeMode = EYEMODE_2;
                     } else {
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                     }
                     this->unk_208 = 2;
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 5;
-                        this->unk_200 = 2;
+                        this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
@@ -637,14 +639,14 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         if (this->unk_207 != 4) {
                             this->animIndex = 2;
-                            this->unk_200 = 0;
+                            this->eyeMode = EYEMODE_0;
                             this->unk_207 = 0;
                             this->unk_208 = 0;
                             break;
                             ;
                         }
                         this->animIndex = 3;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
                     break;
@@ -657,7 +659,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                 case 6:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -668,7 +670,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = 3;
-                    this->unk_200 = 0;
+                    this->eyeMode = EYEMODE_0;
                     this->unk_208++;
                     break;
                     ;
@@ -681,14 +683,14 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 5;
-                        this->unk_200 = 2;
+                        this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 5:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -699,7 +701,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = 3;
-                    this->unk_200 = 5;
+                    this->eyeMode = EYEMODE_5;
                     this->unk_208++;
                     return;
                 case 1:
@@ -710,7 +712,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -721,20 +723,20 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = 5;
-                    this->unk_200 = 2;
+                    this->eyeMode = EYEMODE_2;
                     this->unk_208++;
                     return;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 3;
-                        this->unk_200 = 2;
+                        this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -745,7 +747,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = 3;
-                    this->unk_200 = 0;
+                    this->eyeMode = EYEMODE_0;
                     this->unk_208++;
                     return;
                 case 1:
@@ -759,7 +761,7 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
                     if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
@@ -769,14 +771,14 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 4;
-                        this->unk_200 = 2;
+                        this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -787,27 +789,27 @@ void func_80AB032C(DmChar08* this, GlobalContext* globalCtx) {
             switch (this->unk_208) {
                 case 0:
                     this->animIndex = 3;
-                    this->unk_200 = 0;
+                    this->eyeMode = EYEMODE_0;
                     this->unk_208++;
                     break;
                 case 1:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 5;
-                        this->unk_200 = 2;
+                        this->eyeMode = EYEMODE_2;
                         this->unk_208++;
                     }
                     break;
                 case 2:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 3;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_208++;
                     }
                     break;
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                         this->animIndex = 2;
-                        this->unk_200 = 0;
+                        this->eyeMode = EYEMODE_0;
                         this->unk_207 = 0;
                         this->unk_208 = 0;
                     }
@@ -831,19 +833,19 @@ void func_80AB096C(DmChar08* this, GlobalContext* globalCtx) {
 
 void DmChar08_UpdateCollision(DmChar08* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    f32 temp_f0;
+    f32 curFrame;
     f32 phi_f2;
     f32 phi_f0;
     f32 phi_f12;
     s32 i;
 
     if (player->actor.world.pos.x > 0.0f) {
-        temp_f0 = this->skelAnime.curFrame;
-        if (temp_f0 <= 19.0f) {
+        curFrame = this->skelAnime.curFrame;
+        if (curFrame <= 19.0f) {
             phi_f12 = 19.0f;
-            phi_f2 = temp_f0 / 19.0f;
+            phi_f2 = curFrame / 19.0f;
         } else {
-            phi_f2 = (29.0f - temp_f0) / 9.0f;
+            phi_f2 = (29.0f - curFrame) / 9.0f;
             phi_f12 = 29.0f;
         }
 
@@ -897,9 +899,11 @@ void DmChar08_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.focus.rot.x = this->dyna.actor.world.rot.x;
     this->dyna.actor.focus.rot.y = this->dyna.actor.world.rot.y;
     this->dyna.actor.focus.rot.z = this->dyna.actor.world.rot.z;
+
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &globalCtx->state)) {
         this->unk_206 = 1;
     }
+    
     DmChar08_UpdateEyes(this);
     this->actionFunc(this, globalCtx);
     func_80AAFE88(this, globalCtx);
@@ -961,12 +965,8 @@ void DmChar08_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList,
 
 #ifdef NON_MATCHING
 void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
-    f32 temp_f0;
     f32 temp_f12;
-    f32 temp_f12_2;
-    f32 temp_f12_3;
-    f32 temp_f12_4;
-    f32 temp_f12_5;
+
     DmChar08* this = THIS;
 
     switch (limbIndex) {
@@ -981,26 +981,26 @@ void func_80AB0F90(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
         case 21:
         case 22:
             Matrix_StatePop();
-            temp_f12_2 = (this->unk_1F0 * 0.4f) + 0.6f;
-            Matrix_Scale(temp_f12_2, temp_f12_2, temp_f12_2, 1);
+            temp_f12 = (this->unk_1F0 * 0.4f) + 0.6f;
+            Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             Matrix_StatePush();
             return;
         case 19:
         case 23:
-            temp_f12_3 = (this->unk_1F0 * 0.4f) + 0.6f;
-            Matrix_Scale(temp_f12_3, temp_f12_3, temp_f12_3, 1);
+            temp_f12 = (this->unk_1F0 * 0.4f) + 0.6f;
+            Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             return;
         case 14:
             Matrix_StatePop();
-            temp_f12_4 = (this->unk_1F0 * 0.52f) + 0.48f;
-            Matrix_Scale(temp_f12_4, temp_f12_4, temp_f12_4, 1);
+            temp_f12 = (this->unk_1F0 * 0.52f) + 0.48f;
+            Matrix_Scale(temp_f12, temp_f12, temp_f12, 1);
             Matrix_StatePush();
             return;
         case 10:
         case 12:
-            temp_f12_5 = (this->unk_1F0 * 0.55f) + 0.45f;
-            Matrix_Scale(temp_f12_5, (this->unk_1F0 * 0.2f) + 0.8f, temp_f12_5, 1);
-            /* fallthrough */
+            temp_f12 = (this->unk_1F0 * 0.55f) + 0.45f;
+            Matrix_Scale(temp_f12, (this->unk_1F0 * 0.2f) + 0.8f, temp_f12, 1);
+            return;
         default:
             return;
     }
