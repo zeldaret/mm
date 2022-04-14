@@ -30,7 +30,7 @@ void EnRaf_SetupDissolve(EnRaf* this);
 void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_SetupDeadIdle(EnRaf* this);
 void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_InitializeParticle(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5);
+void EnRaf_InitializeParticle(EnRaf* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer);
 void EnRaf_UpdateParticles(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_DrawParticles(EnRaf* this, GlobalContext* globalCtx);
 
@@ -193,9 +193,9 @@ void EnRaf_ClearPixelsPetal(u16* texture, u8* clearPixelTable, s32 index) {
 
 void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRaf* this = THIS;
-    Vec3f sp60 = { 1.0f, 1.0f, 1.0f };
+    Vec3f limbScale = { 1.0f, 1.0f, 1.0f };
+    s32 pad;
     s32 i;
-    s32 j;
     CollisionHeader* colHeader = NULL;
 
     DynaPolyActor_Init(&this->dyna, 0);
@@ -206,9 +206,10 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim,
                        this->jointTable, this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
-    for (i = 0; i < 12; i++) {
-        Math_Vec3f_Copy(&this->targetLimbScale[i], &sp60);
-        Math_Vec3f_Copy(&this->limbScale[i], &sp60);
+
+    for (i = 0; i < ARRAY_COUNT(this->limbScale); i++) {
+        Math_Vec3f_Copy(&this->targetLimbScale[i], &limbScale);
+        Math_Vec3f_Copy(&this->limbScale[i], &limbScale);
     }
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
@@ -229,9 +230,12 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     if (((this->switchFlag >= 0) || (this->type == EN_RAF_TYPE_ALEADY_DEAD) ||
          (gSaveContext.save.weekEventReg[12] & 1)) &&
         ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->type == EN_RAF_TYPE_ALEADY_DEAD))) {
-        for (j = 2; j < 11; j++) {
-            Math_Vec3f_Copy(&this->limbScale[j], &gZeroVec3f);
-            Math_Vec3f_Copy(&this->targetLimbScale[j], &gZeroVec3f);
+        s32 i;
+
+        for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
+             i++) {
+            Math_Vec3f_Copy(&this->limbScale[i], &gZeroVec3f);
+            Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
         }
 
         EnRaf_SetupDeadIdle(this);
@@ -274,12 +278,13 @@ void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
 }
 
 void EnRaf_SetupIdle(EnRaf* this) {
-    Vec3f sp3C = { 1.0f, 1.0f, 1.0f };
+    Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_IDLE);
-    for (i = 2; i < 11; i++) {
-        Math_Vec3f_Copy(&this->targetLimbScale[i], &sp3C);
+
+    for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
+        Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
     }
 
     this->unk_3C2 = 3;
@@ -372,7 +377,7 @@ void func_80A17530(EnRaf* this) {
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CHEW);
     this->chewCount = 0;
-    for (i = 0; i < 12; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_354); i++) {
         this->unk_354[i].x = Rand_S16Offset(8, 8) << 8;
         this->unk_354[i].y = Rand_S16Offset(8, 8) << 8;
         this->unk_354[i].z = Rand_S16Offset(8, 8) << 8;
@@ -469,17 +474,17 @@ void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
-    Vec3f spAC = { 0.0f, 0.0f, 0.0f };
-    Vec3f spA0 = { 0.0f, 0.0f, 0.0f };
-    Vec3f sp94;
+    Vec3f velocity = { 0.0f, 0.0f, 0.0f };
+    Vec3f acceleration = { 0.0f, 0.0f, 0.0f };
+    Vec3f explosionPos;
     s32 i;
     s32 pad;
 
     this->action = EN_RAF_ACTION_EXPLODE;
-    Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
-    sp94.y += 10.0f;
-    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, sp94.x, sp94.y, sp94.z, 0, 0, 0,
-                CLEAR_TAG_SMALL_EXPLOSION);
+    Math_Vec3f_Copy(&explosionPos, &this->dyna.actor.world.pos);
+    explosionPos.y += 10.0f;
+    Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0,
+                0, 0, CLEAR_TAG_SMALL_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {
@@ -488,17 +493,17 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
 
     this->unk_3C2 = 0;
     for (i = 0; i < BREG(57) + 30; i++) {
-        spA0.x = (Rand_ZeroOne() - 0.5f) * 0.5f;
-        spA0.y = -0.3f;
-        spA0.z = (Rand_ZeroOne() - 0.5f) * 0.5f;
-        spAC.x = Rand_ZeroOne() - 0.5f;
-        spAC.y = Rand_ZeroOne() * 10.0f;
-        spAC.z = Rand_ZeroOne() - 0.5f;
-        EnRaf_InitializeParticle(this, &this->dyna.actor.world.pos, &spAC, &spA0,
+        acceleration.x = (Rand_ZeroOne() - 0.5f) * 0.5f;
+        acceleration.y = -0.3f;
+        acceleration.z = (Rand_ZeroOne() - 0.5f) * 0.5f;
+        velocity.x = Rand_ZeroOne() - 0.5f;
+        velocity.y = Rand_ZeroOne() * 10.0f;
+        velocity.z = Rand_ZeroOne() - 0.5f;
+        EnRaf_InitializeParticle(this, &this->dyna.actor.world.pos, &velocity, &acceleration,
                                  (Rand_ZeroFloat(1.0f) / 500.0f) + 0.002f, 90);
     }
 
-    for (i = 2; i < 11; i++) {
+    for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
     }
 
@@ -594,7 +599,8 @@ void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
     }
 
     if (this->dissolveTimer > (BREG(7) + 160)) {
-        for (i = 2; i < 11; i++) {
+        for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
+             i++) {
             Math_Vec3f_Copy(&this->limbScale[i], &gZeroVec3f);
             Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
         }
@@ -614,7 +620,7 @@ void EnRaf_SetupDeadIdle(EnRaf* this) {
 }
 
 void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
-    Vec3f sp3C = { 1.0f, 1.0f, 1.0f };
+    Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
     if (this->timer == 0) {
@@ -626,8 +632,10 @@ void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
 
         if (this->reviveTimer == 0) {
             EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
-            for (i = 2; i < 11; i++) {
-                Math_Vec3f_Copy(&this->targetLimbScale[i], &sp3C);
+
+            for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT;
+                 i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
+                Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
             }
 
             this->unk_3C2 = 3;
@@ -698,7 +706,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
         EnRaf_UpdateParticles(this, globalCtx);
     }
 
-    for (i = 0; i < 12; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->limbScale); i++) {
         if (this->action < EN_RAF_ACTION_EXPLODE) {
             Math_ApproachF(&this->limbScale[i].x, this->targetLimbScale[i].x, 0.4f, 0.5f);
             Math_ApproachF(&this->limbScale[i].y, this->targetLimbScale[i].y, 0.4f, 0.5f);
@@ -829,18 +837,19 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-void EnRaf_InitializeParticle(EnRaf* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, s16 arg5) {
+void EnRaf_InitializeParticle(EnRaf* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale,
+                              s16 timer) {
     s16 i;
     EnRafParticle* particle = this->particles;
 
     for (i = 0; i < ARRAY_COUNT(this->particles); i++, particle++) {
         if (!particle->isVisible) {
             particle->isVisible = true;
-            particle->position = *arg1;
-            particle->velocity = *arg2;
-            particle->acceleration = *arg3;
-            particle->scale = arg4;
-            particle->timer = arg5;
+            particle->position = *position;
+            particle->velocity = *velocity;
+            particle->acceleration = *acceleration;
+            particle->scale = scale;
+            particle->timer = timer;
             particle->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
             particle->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
             particle->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
