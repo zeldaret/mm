@@ -171,49 +171,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0xF),
 };
 
-static Vec3f D_80A193BC = { 1.0f, 1.0f, 1.0f };
-
-static AnimationHeader* sAnimations[] = {
-    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
-    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
-};
-
-static u8 sAnimationModes[] = {
-    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-};
-
-static Vec3f D_80A193E8 = { 1.0f, 1.0f, 1.0f };
-
-static Vec3f D_80A193F4 = { 0.0f, 0.0f, 0.0f };
-
-static Vec3f D_80A19400 = { 0.0f, 0.0f, 0.0f };
-
-static Vec3f D_80A1940C = { 1.0f, 1.0f, 1.0f };
-
-static s16 D_80A19418[] = { 0, 4, 6 };
-
-static Vec3f D_80A19420[] = {
-    { 1.0f, 1.0f, 1.0f },
-    { 1.0f, 2.0f, 1.0f },
-    { 0.0f, 1.5f, 0.7f },
-};
-
-static Vec3f D_80A19444[] = {
-    { 1.0f, 1.0f, 1.0f },
-    { 3.0f, 2.0f, 1.5f },
-    { 1.5f, 1.2f, 0.8f },
-};
-
-static s16 D_80A19468[] = { 0, 7, 9, 13, 19 };
-
-static Vec3f D_80A19474[] = {
-    { 1.0f, 1.5f, 0.7f }, { 1.0f, 2.0f, 1.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
-};
-
-static Vec3f D_80A194B0[] = {
-    { 1.5f, 1.5f, 1.7f }, { 1.5f, 1.5f, 1.3f }, { 3.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
-};
-
 /**
  * Sets the `index`th pixel of the trap teeth texture to 0 (transparent black)
  * according to the `clearPixelTable`
@@ -236,7 +193,7 @@ void EnRaf_ClearPixelsPetal(u16* texture, u8* clearPixelTable, s32 index) {
 
 void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
     EnRaf* this = THIS;
-    Vec3f sp60 = D_80A193BC;
+    Vec3f sp60 = { 1.0f, 1.0f, 1.0f };
     s32 i;
     s32 j;
     CollisionHeader* colHeader = NULL;
@@ -292,6 +249,15 @@ void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
+static AnimationHeader* sAnimations[] = {
+    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
+    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
+};
+
+static u8 sAnimationModes[] = {
+    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
+};
+
 void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
     f32 startFrame = 0.0f;
     f32 playSpeed = 1.0f;
@@ -308,7 +274,7 @@ void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
 }
 
 void EnRaf_SetupIdle(EnRaf* this) {
-    Vec3f sp3C = D_80A193E8;
+    Vec3f sp3C = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_IDLE);
@@ -503,8 +469,8 @@ void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
 }
 
 void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
-    Vec3f spAC = D_80A193F4;
-    Vec3f spA0 = D_80A19400;
+    Vec3f spAC = { 0.0f, 0.0f, 0.0f };
+    Vec3f spA0 = { 0.0f, 0.0f, 0.0f };
     Vec3f sp94;
     s32 i;
     s32 pad;
@@ -648,7 +614,7 @@ void EnRaf_SetupDeadIdle(EnRaf* this) {
 }
 
 void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
-    Vec3f sp3C = D_80A1940C;
+    Vec3f sp3C = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
     if (this->timer == 0) {
@@ -749,6 +715,30 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
         CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
     }
 }
+
+static s16 D_80A19418[] = { 0, 4, 6 };
+
+static Vec3f D_80A19420[] = {
+    { 1.0f, 1.0f, 1.0f },
+    { 1.0f, 2.0f, 1.0f },
+    { 0.0f, 1.5f, 0.7f },
+};
+
+static Vec3f D_80A19444[] = {
+    { 1.0f, 1.0f, 1.0f },
+    { 3.0f, 2.0f, 1.5f },
+    { 1.5f, 1.2f, 0.8f },
+};
+
+static s16 D_80A19468[] = { 0, 7, 9, 13, 19 };
+
+static Vec3f D_80A19474[] = {
+    { 1.0f, 1.5f, 0.7f }, { 1.0f, 2.0f, 1.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
+};
+
+static Vec3f D_80A194B0[] = {
+    { 1.5f, 1.5f, 1.7f }, { 1.5f, 1.5f, 1.3f }, { 3.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
+};
 
 void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* thisx) {
     GlobalContext* globalCtx = globalCtx2;
