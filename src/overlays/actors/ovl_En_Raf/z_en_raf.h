@@ -41,9 +41,9 @@ typedef struct EnRaf {
     /* 0x39E */ u8 isCurrentlyInRidingMovingState;
     /* 0x3A0 */ f32 endFrame;
     /* 0x3A4 */ f32 unk_3A4;
-    /* 0x3A8 */ f32 unk_3A8;
-    /* 0x3AC */ f32 unk_3AC;
-    /* 0x3B0 */ f32 unk_3B0;
+    /* 0x3A8 */ f32 heightDiffFromBob;
+    /* 0x3AC */ f32 heightDiffFromPlayer;
+    /* 0x3B0 */ f32 bobPhase;
     /* 0x3B4 */ s16 unk_3B4;
     /* 0x3B6 */ s16 dissolveTimer;
     /* 0x3B8 */ s16 rippleTimer;

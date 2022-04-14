@@ -275,7 +275,7 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         EnRaf_SetupDeadIdle(this);
     } else {
-        this->unk_3B0 = Rand_ZeroFloat(1.0f) * 20000.0f;
+        this->bobPhase = Rand_ZeroFloat(1.0f) * 20000.0f;
         Actor_SetScale(&this->dyna.actor, 0.01f);
         EnRaf_SetupIdle(this);
     }
@@ -686,8 +686,8 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-        if ((this->unk_3AC > -0.1f) && !this->isCurrentlyInRidingMovingState) {
-            this->unk_3AC = -20.0f;
+        if ((this->heightDiffFromPlayer > -0.1f) && !this->isCurrentlyInRidingMovingState) {
+            this->heightDiffFromPlayer = -20.0f;
             this->isCurrentlyInRidingMovingState = true;
             Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
         }
@@ -695,14 +695,14 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->isCurrentlyInRidingMovingState = false;
     }
 
-    this->unk_3B0 += 3000.0f;
-    this->unk_3A8 = 2.0f * Math_SinS(this->unk_3B0);
+    this->bobPhase += 3000.0f;
+    this->heightDiffFromBob = 2.0f * Math_SinS(this->bobPhase);
     if (this->type != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
         ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
         if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
                                  this->dyna.actor.world.pos.z, &ySurface, &waterBox)) {
-            ySurface -= this->unk_3A8 + BREG(59);
-            Math_ApproachF(&this->dyna.actor.world.pos.y, this->unk_3AC + ySurface, 0.5f, 40.0f);
+            ySurface -= this->heightDiffFromBob + BREG(59);
+            Math_ApproachF(&this->dyna.actor.world.pos.y, this->heightDiffFromPlayer + ySurface, 0.5f, 40.0f);
             if (this->rippleTimer == 0) {
                 this->rippleTimer = 30;
                 if (this->unk_3C2 == 2) {
@@ -715,11 +715,12 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
             }
         }
     } else {
-        Math_ApproachF(&this->dyna.actor.world.pos.y, (this->dyna.actor.home.pos.y + this->unk_3AC) - this->unk_3A8,
-                       0.5f, 40.0f);
+        Math_ApproachF(&this->dyna.actor.world.pos.y,
+                       (this->dyna.actor.home.pos.y + this->heightDiffFromPlayer) - this->heightDiffFromBob, 0.5f,
+                       40.0f);
     }
 
-    Math_ApproachZeroF(&this->unk_3AC, 0.3f, 2.0f);
+    Math_ApproachZeroF(&this->heightDiffFromPlayer, 0.3f, 2.0f);
     if (this->action == EN_RAF_ACTION_EXPLODE) {
         EnRaf_UpdateParticles(this, globalCtx);
     }
