@@ -28,7 +28,7 @@ typedef struct DmChar08 {
     /* 0x1FC */ u16 unk_1FC;
     /* 0x1FE */ u8 bubbleCount;
     /* 0x1FF */ u8 unk_1FF;
-    /* 0x200 */ u8 unk_200;
+    /* 0x200 */ u8 eyeMode;
     /* 0x201 */ u8 eyeIndex;
     /* 0x202 */ u8 animIndex;
     /* 0x203 */ u8 unk_203;
@@ -37,7 +37,7 @@ typedef struct DmChar08 {
     /* 0x206 */ u8 unk_206;
     /* 0x207 */ u8 unk_207;
     /* 0x208 */ u8 unk_208;
-    /* 0x209 */ u8 unk_209;
+    /* 0x209 */ u8 dynapolyInitialized;
 } DmChar08;// Size = 0x020C 
 
 extern const ActorInit Dm_Char08_InitVars;
