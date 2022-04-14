@@ -4,9 +4,15 @@
 #include "global.h"
 #include "objects/object_raf/object_raf.h"
 
-#define EN_RAF_GET_F(thisx) (((thisx)->params >> 12) & 0xF)
+#define EN_RAF_GET_TYPE(thisx) (((thisx)->params >> 12) & 0xF)
 #define EN_RAF_GET_REVIVE_TIMER(thisx) (((thisx)->params >> 7) & 0x1F)
 #define EN_RAF_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+
+typedef enum {
+    /* 0 */ EN_RAF_TYPE_NORMAL,
+    /* 1 */ EN_RAF_TYPE_ALEADY_DEAD,          // Spawns without trap, so it can't eat bombs/player
+    /* 2 */ EN_RAF_TYPE_NO_WATER_INTERACTIONS // Won't produce ripples, and particles won't produce splashes
+} EnRafType;
 
 struct EnRaf;
 
@@ -43,7 +49,7 @@ typedef struct EnRaf {
     /* 0x3B8 */ s16 rippleTimer;
     /* 0x3BA */ s16 reviveTimer;
     /* 0x3BC */ s16 unk_3BC;
-    /* 0x3BE */ s16 unk_3BE;
+    /* 0x3BE */ s16 type;
     /* 0x3C0 */ s16 switchFlag;
     /* 0x3C2 */ s16 unk_3C2;
     /* 0x3C4 */ s16 unk_3C4;

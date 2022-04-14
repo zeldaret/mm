@@ -252,7 +252,7 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     this->dyna.actor.colChkInfo.health = BREG(1) + 2;
-    this->unk_3BE = EN_RAF_GET_F(&this->dyna.actor);
+    this->type = EN_RAF_GET_TYPE(&this->dyna.actor);
     this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
     this->switchFlag = EN_RAF_GET_SWITCH_FLAG(&this->dyna.actor);
     if (this->switchFlag == 0x7F) {
@@ -265,8 +265,9 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->reviveTimer = 30;
     }
 
-    if (((this->switchFlag >= 0) || (this->unk_3BE == 1) || (gSaveContext.save.weekEventReg[12] & 1)) &&
-        ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->unk_3BE == 1))) {
+    if (((this->switchFlag >= 0) || (this->type == EN_RAF_TYPE_ALEADY_DEAD) ||
+         (gSaveContext.save.weekEventReg[12] & 1)) &&
+        ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->type == EN_RAF_TYPE_ALEADY_DEAD))) {
         for (j = 2; j < 11; j++) {
             Math_Vec3f_Copy(&this->limbScale[j], &gZeroVec3f);
             Math_Vec3f_Copy(&this->targetLimbScale[j], &gZeroVec3f);
@@ -696,7 +697,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_3B0 += 3000.0f;
     this->unk_3A8 = 2.0f * Math_SinS(this->unk_3B0);
-    if (this->unk_3BE != 2) {
+    if (this->type != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
         ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
         if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
                                  this->dyna.actor.world.pos.z, &ySurface, &waterBox)) {
@@ -866,7 +867,7 @@ void EnRaf_UpdateParticles(EnRaf* this, GlobalContext* globalCtx) {
             particle->velocity.y += particle->acceleration.y;
             particle->velocity.z += particle->acceleration.z;
 
-            if (this->unk_3BE != 2) {
+            if (this->type != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
                 if (particle->position.y < (this->dyna.actor.world.pos.y - 10.0f)) {
                     EffectSsGSplash_Spawn(globalCtx, &particle->position, NULL, NULL, 0, particle->scale * 200000.0f);
                     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &particle->position, 50, NA_SE_EV_BOMB_DROP_WATER);
