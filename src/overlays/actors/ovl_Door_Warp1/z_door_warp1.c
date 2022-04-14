@@ -1164,7 +1164,7 @@ void func_808BB8D4(DoorWarp1* this, GlobalContext* globalCtx, s32 arg2) {
             D_808BBB5C.x = -Math_SinS(temp_s0) * 5.0f;
             D_808BBB5C.z = Math_CosS(temp_s0) * 5.0f;
         }
-        EffectSsKiraKira_SpawnDispersed(globalCtx, &sp9C, &D_808BBB5C, &D_808BBB68, &sp98, &sp94, temp_s1, phi_s2);
+        EffectSsKirakira_SpawnDispersed(globalCtx, &sp9C, &D_808BBB5C, &D_808BBB68, &sp98, &sp94, temp_s1, phi_s2);
     }
 }
 #else
