@@ -3251,7 +3251,11 @@ beginseg
     name "ovl_Dm_Char08"
     compress
     include "build/src/overlays/actors/ovl_Dm_Char08/z_dm_char08.o"
+#ifdef NON_MATCHING
+    include "build/src/overlays/actors/ovl_Dm_Char08/ovl_Dm_Char08_reloc.o"
+#else
     include "build/data/ovl_Dm_Char08/ovl_Dm_Char08.reloc.o"
+#endif
 endseg
 
 beginseg
