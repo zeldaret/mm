@@ -36,11 +36,11 @@ typedef struct EnRaf {
     /* 0x230 */ EnRafActionFunc actionFunc;
     /* 0x234 */ Vec3f limbScale[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x2C4 */ Vec3f targetLimbScale[CARNIVOROUS_LILY_PAD_LIMB_MAX];
-    /* 0x354 */ Vec3s limbRot[CARNIVOROUS_LILY_PAD_LIMB_MAX]; // Completely useless in practice, since the rotations just get undone
+    /* 0x354 */ Vec3s chewLimbRot[CARNIVOROUS_LILY_PAD_LIMB_MAX];
     /* 0x39C */ s16 grabTarget;
     /* 0x39E */ u8 isCurrentlyInRidingMovingState;
     /* 0x3A0 */ f32 endFrame;
-    /* 0x3A4 */ f32 unk_3A4;
+    /* 0x3A4 */ f32 chewScale;
     /* 0x3A8 */ f32 heightDiffFromBob;
     /* 0x3AC */ f32 heightDiffFromPlayer;
     /* 0x3B0 */ f32 bobPhase;
