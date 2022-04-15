@@ -51,7 +51,7 @@ typedef struct {
 
 /* 
 The plane paramaters are of form `ax + by + cz + d = 0` 
-where `a,b,c` are the plane's normal vector and d is the originDist
+where `(a,b,c)` is the plane's normal vector and d is the originDist
  */
 typedef struct {
     /* 0x00 */ Vec3f normal;
