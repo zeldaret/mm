@@ -4,9 +4,8 @@
 s32 D_80096C30 = 2;
 
 #ifdef NON_MATCHING
-// This needs lots of work. Mostly regalloc and getting the address of D_80096C30 placed in s5 at the beginning of the
-// function
-void Load2_Relocate(void* allocatedVRamAddress, OverlayRelocationSection* overlayInfo, u32 vRamStart) {
+// Mostly regalloc and getting the address of D_80096C30 placed in s5 at the beginning of the function
+void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 vRamStart) {
     u32 sections[4];
     u32* relocDataP;
     u32 reloc;
@@ -15,18 +14,18 @@ void Load2_Relocate(void* allocatedVRamAddress, OverlayRelocationSection* overla
     u32* luiInstRef;
     u32* luiRefs[32];
     u32 luiVals[32];
-    uintptr_t allocu32 = (uintptr_t)allocatedVRamAddress;
+    uintptr_t allocu32 = (uintptr_t)allocatedVRamAddr;
     u32* regValP;
     u32 isLoNeg;
     s32 signedOffset;
 
     sections[0] = 0;
     sections[1] = allocu32;
-    sections[2] = allocu32 + overlayInfo->textSize;
-    sections[3] = sections[2] + overlayInfo->dataSize;
+    sections[2] = allocu32 + ovl->textSize;
+    sections[3] = sections[2] + ovl->dataSize;
 
-    for (i = 0; i < overlayInfo->nRelocations; i++) {
-        reloc = overlayInfo->relocations[i];
+    for (i = 0; i < ovl->nRelocations; i++) {
+        reloc = ovl->relocations[i];
         relocDataP = (u32*)(sections[reloc >> 0x1E] + (reloc & 0xFFFFFF));
 
         switch (reloc & 0x3F000000) {
