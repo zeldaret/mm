@@ -19,6 +19,10 @@ typedef s32 (*func_8013E748_VerifyFunc)(struct GlobalContext*, Actor*, void*);
 
 typedef s32 (*VerifyActor)(struct GlobalContext*, Actor*, Actor*, void*);
 
+#define SUBS_SHADOW_TEX_WIDTH 64
+#define SUBS_SHADOW_TEX_HEIGHT 64
+#define SUBS_SHADOW_TEX_SIZE ((s32)sizeof(u8[SUBS_SHADOW_TEX_HEIGHT][SUBS_SHADOW_TEX_WIDTH]))
+
 #define ACTOR_PATHING_RETURN_TO_START (1 << 0)
 #define ACTOR_PATHING_SWITCH_DIRECTION (1 << 1)
 #define ACTOR_PATHING_MOVE_BACKWARDS (1 << 3)

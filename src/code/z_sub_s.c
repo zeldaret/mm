@@ -464,7 +464,7 @@ void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size) {
         start = ((startRow + i) * 64) + startCol - 390;
         for (j = 0; j < 12; j++) {
             if (sShadowMaps[size][i][j] != 0) {
-                if ((start + j >= 0) && (start + j < (s32)sizeof(u8[64][64]))) {
+                if ((start + j >= 0) && (start + j < SUBS_SHADOW_TEX_SIZE)) {
                     tex[start + j] = 255;
                 }
             }
@@ -518,8 +518,8 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
     Matrix_Scale(0.6f, 1.0f, 0.6f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gShadowDL);
-    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                        G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, SUBS_SHADOW_TEX_WIDTH, SUBS_SHADOW_TEX_HEIGHT, 0,
+                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(POLY_OPA_DISP++, gShadowVtxDL);
 
     CLOSE_DISPS(gfxCtx);
