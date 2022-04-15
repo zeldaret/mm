@@ -4,7 +4,7 @@
 s32 D_80096C20 = 2;
 
 #ifdef NON_MATCHING
-// Mostly regalloc and getting the address of D_80096C30 placed in s5 at the beginning of the function
+// Mostly regalloc and getting the address of D_80096C20 placed in s5 at the beginning of the function
 void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 vRamStart) {
     u32 sections[4];
     u32* relocDataP;
