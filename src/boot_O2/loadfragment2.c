@@ -1,63 +1,76 @@
 #include "global.h"
 #include "system_malloc.h"
 
-UNK_TYPE4 D_80096C30 = 2;
+s32 D_80096C30 = 2;
 
 #ifdef NON_MATCHING
 // This needs lots of work. Mostly regalloc and getting the address of D_80096C30 placed in s5 at the beginning of the
 // function
-void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo, u32 vRamStart) {
-    s32 sectionLocations[4];
-    u32* regReferences[32];
-    u32 regValues[32];
-    u32 i;
+void Load2_Relocate(void* allocatedVRamAddress, OverlayRelocationSection* overlayInfo, u32 vRamStart) {
+    u32 sections[4];
+    u32* relocDataP;
+    u32 reloc;
     u32 relocatedAddress;
+    u32 i;
+    u32* luiInstRef;
+    u32* luiRefs[32];
+    u32 luiVals[32];
+    uintptr_t allocu32 = (uintptr_t)allocatedVRamAddress;
+    u32* regValP;
+    u32 isLoNeg;
     s32 signedOffset;
-    u32* lastInst;
-    u32* inst;
-    u32 relocation;
-    u32 relocationIndex;
 
-    sectionLocations[0] = 0;
-    sectionLocations[1] = allocatedVRamAddr;
-    sectionLocations[2] = overlayInfo->textSize + allocatedVRamAddr;
-    sectionLocations[3] = sectionLocations[2] + overlayInfo->dataSize;
-    for (i = 0, relocationIndex = 0; i < overlayInfo->nRelocations; relocationIndex++) {
-        relocation = overlayInfo->relocations[relocationIndex];
-        i++;
-        inst = (u32*)(sectionLocations[relocation >> 0x1e] + (relocation & 0xffffff));
+    sections[0] = 0;
+    sections[1] = allocu32;
+    sections[2] = allocu32 + overlayInfo->textSize;
+    sections[3] = sections[2] + overlayInfo->dataSize;
 
-        switch (relocation & 0x3f000000) {
+    for (i = 0; i < overlayInfo->nRelocations; i++) {
+        reloc = overlayInfo->relocations[i];
+        relocDataP = (u32*)(sections[reloc >> 0x1E] + (reloc & 0xFFFFFF));
+
+        switch (reloc & 0x3F000000) {
             case 0x2000000:
-                if ((*inst & 0xf000000) == 0) {
-                    *inst = (*inst - vRamStart) + allocatedVRamAddr;
+                /* R_MIPS_32
+                 * Handles 32-bit address relocation.  Used in things such as
+                 * jump tables.
+                 */
+                if ((*relocDataP & 0xF000000) == 0) {
+                    *relocDataP = (*relocDataP - vRamStart) + allocu32;
+                } else {
+                    if (D_80096C30 >= 3) {}
                 }
-                /*
-                else {
-                    if (D_80096C30 > 2) {
-                        ;
-                    }
-                }
-                */
                 break;
             case 0x4000000:
-                *inst =
-                    (*inst & 0xfc000000) |
-                    ((((((*inst & 0x3ffffff) << 2 | 0x80000000) - vRamStart) + allocatedVRamAddr) & 0xfffffff) >> 2);
+                /* R_MIPS_26
+                 * Handles 26-bit address relocation, used for jumps and jals
+                 */
+                *relocDataP =
+                    (*relocDataP & 0xFC000000) |
+                    (((allocu32 + ((((*relocDataP & 0x3FFFFFF) << 2) | 0x80000000) - vRamStart)) & 0xFFFFFFF) >> 2);
                 break;
             case 0x5000000:
-                regReferences[*inst >> 0x10 & 0x1f] = inst;
-                regValues[*inst >> 0x10 & 0x1f] = *inst;
+                /* R_MIPS_HI16
+                 * Handles relocation for a lui instruciton, store the reference to
+                 * the instruction, and will update it in the R_MIPS_LO16 section.
+                 */
+                luiRefs[(*relocDataP >> 0x10) & 0x1F] = relocDataP;
+                luiVals[(*relocDataP >> 0x10) & 0x1F] = *relocDataP;
                 break;
             case 0x6000000:
-                lastInst = regReferences[*inst >> 0x15 & 0x1f];
-                signedOffset = (s16)*inst;
-                if (((signedOffset + *lastInst * 0x10000) & 0xf000000) == 0) {
+                /* R_MIPS_LO16
+                 * Updates the LUI instruction to reflect the relocated address.
+                 * The full address is calculated from the LUI and lo parts, and then updated.
+                 * if the lo part is negative, add 1 to the lui.
+                 */
+                luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
+                signedOffset = (s16)*relocDataP;
+                if (((signedOffset + (*luiInstRef << 0x10)) & 0x0F000000) == 0) {
                     relocatedAddress =
-                        ((signedOffset + regValues[*inst >> 0x15 & 0x1f] * 0x10000) - vRamStart) + allocatedVRamAddr;
-                    *lastInst = (((relocatedAddress >> 0x10) & 0xFFFF) + ((relocatedAddress & 0x8000) ? 1 : 0)) |
-                                (*lastInst & 0xffff0000);
-                    *inst = (*inst & 0xffff0000) | (relocatedAddress & 0xffff);
+                        ((signedOffset + (luiVals[(*relocDataP >> 0x15) & 0x1F] << 0x10)) - vRamStart) + allocu32;
+                    isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
+                    *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
+                    *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
                 }
                 break;
         }
@@ -67,54 +80,40 @@ void Load2_Relocate(u32 allocatedVRamAddr, OverlayRelocationSection* overlayInfo
 #pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment2/Load2_Relocate.s")
 #endif
 
-#ifdef NON_MATCHING
-// Very minor stack stuff with a saved value
-s32 Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, u32 allocatedVRamAddr) {
-    int nbytes;
-    u32 pad;
-    size_t size;
+size_t Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, void* allocatedVRamAddr) {
+    s32 pad[2];
+    size_t size = vRomEnd - vRomStart;
     void* end;
-    OverlayRelocationSection* overlayInfo;
+    OverlayRelocationSection* ovl;
 
-    size = vRomEnd - vRomStart;
+    if (1) {}
 
-    if (1) {
-        ;
-    }
-
+    end = (uintptr_t)allocatedVRamAddr + size;
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
-    end = (void*)(allocatedVRamAddr + size);
-    overlayInfo = (OverlayRelocationSection*)((int)end - *(int*)((int)end + -4));
+    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
 
-    if (1) {
-        ;
+    if (ovl->bssSize && ovl->bssSize) {}
+
+    Load2_Relocate(allocatedVRamAddr, ovl, vRamStart);
+
+    if (ovl->bssSize != 0) {
+        bzero(end, ovl->bssSize);
     }
-
-    Load2_Relocate(allocatedVRamAddr, overlayInfo, vRamStart);
-
-    if (overlayInfo->bssSize != 0) {
-        bzero(end, overlayInfo->bssSize);
-    }
-
-    nbytes = vRamEnd - vRamStart;
-
-    osWritebackDCache((void*)allocatedVRamAddr, nbytes);
-    osInvalICache((void*)allocatedVRamAddr, nbytes);
-    return nbytes;
-}
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment2/Load2_LoadOverlay.s")
-#endif
-
-void* Overlay_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {
-    void* allocatedVRamAddr;
-    size_t size;
 
     size = vRamEnd - vRamStart;
-    allocatedVRamAddr = SystemArena_MallocR(size);
+
+    osWritebackDCache(allocatedVRamAddr, size);
+    osInvalICache(allocatedVRamAddr, size);
+
+    return size;
+}
+
+void* Overlay_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {
+    void* allocatedVRamAddr = SystemArena_MallocR(vRamEnd - vRamStart);
+
     if (allocatedVRamAddr != NULL) {
-        Load2_LoadOverlay(vRomStart, vRomEnd, vRamStart, vRamEnd, (u32)allocatedVRamAddr);
+        Load2_LoadOverlay(vRomStart, vRomEnd, vRamStart, vRamEnd, allocatedVRamAddr);
     }
 
     return allocatedVRamAddr;
