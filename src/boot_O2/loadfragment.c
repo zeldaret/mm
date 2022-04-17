@@ -1,23 +1,22 @@
 #include "global.h"
 #include "system_malloc.h"
 
-s32 D_80096C20 = 2;
+s32 gLoadLogSeverity = 2;
 
-#ifdef NON_MATCHING
-// Mostly regalloc and getting the address of D_80096C20 placed in s5 at the beginning of the function
 void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 vRamStart) {
     u32 sections[4];
     u32* relocDataP;
     u32 reloc;
-    u32 relocatedAddress;
+    uintptr_t relocatedAddress;
     u32 i;
     u32* luiInstRef;
-    u32* luiRefs[32];
-    u32 luiVals[32];
     uintptr_t allocu32 = (uintptr_t)allocatedVRamAddr;
     u32* regValP;
+    u32* luiRefs[32];
+    u32 luiVals[32];
     u32 isLoNeg;
-    s32 signedOffset;
+
+    if (gLoadLogSeverity >= 3) {}
 
     sections[0] = 0;
     sections[1] = allocu32;
@@ -37,7 +36,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 v
                 if ((*relocDataP & 0xF000000) == 0) {
                     *relocDataP = (*relocDataP - vRamStart) + allocu32;
                 } else {
-                    if (D_80096C20 >= 3) {}
+                    if (gLoadLogSeverity >= 3) {}
                 }
                 break;
             case 0x4000000:
@@ -63,55 +62,56 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 v
                  * if the lo part is negative, add 1 to the lui.
                  */
                 luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
-                signedOffset = (s16)*relocDataP;
-                if (((signedOffset + (*luiInstRef << 0x10)) & 0x0F000000) == 0) {
-                    relocatedAddress =
-                        ((signedOffset + (luiVals[(*relocDataP >> 0x15) & 0x1F] << 0x10)) - vRamStart) + allocu32;
+                regValP = &luiVals[((*relocDataP) >> 0x15) & 0x1F];
+                if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
+                    relocatedAddress = (*regValP << 0x10) + (s16)*relocDataP - vRamStart + allocu32;
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
+                } else {
+                    if (gLoadLogSeverity >= 3) {}
                 }
                 break;
         }
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment/Load_Relocate.s")
-#endif
 
 size_t Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, void* allocatedVRamAddr, size_t allocatedBytes) {
     size_t size = vRomEnd - vRomStart;
-    size_t bssSize;
     void* end;
+    s32 pad;
     OverlayRelocationSection* ovl;
 
-    if (1) {}
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
+    if (gLoadLogSeverity >= 3) {}
 
     end = (uintptr_t)allocatedVRamAddr + size;
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
     ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
-    bssSize = ovl->bssSize + size;
 
-    if (allocatedBytes < bssSize) {
+    if (gLoadLogSeverity >= 3) {}
+
+    if (allocatedBytes < ovl->bssSize + size) {
+        if (gLoadLogSeverity >= 3) {}
         return 0;
     }
 
     allocatedBytes = ovl->bssSize + size;
 
+    if (gLoadLogSeverity >= 3) {}
+
     Load_Relocate(allocatedVRamAddr, ovl, vRamStart);
 
     if (ovl->bssSize != 0) {
-        if (1) {}
+        if (gLoadLogSeverity >= 3) {}
         bzero(end, ovl->bssSize);
     }
 
     osWritebackDCache(allocatedVRamAddr, allocatedBytes);
     osInvalICache(allocatedVRamAddr, allocatedBytes);
 
-    bssSize = ovl->bssSize + size;
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
 
     return allocatedBytes;
 }
@@ -124,16 +124,16 @@ void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart) {
     OverlayRelocationSection* ovl;
     size_t bssSize;
 
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
 
     allocatedVRamAddr = SystemArena_MallocR(size);
     end = (uintptr_t)allocatedVRamAddr + size;
 
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
 
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
 
     ovlOffset = (uintptr_t)end - 4;
     ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
@@ -144,28 +144,28 @@ void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart) {
 
     allocatedVRamAddr = SystemArena_Realloc(allocatedVRamAddr, bssSize);
 
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
 
     if (allocatedVRamAddr == NULL) {
-        if (1) {}
+        if (gLoadLogSeverity >= 3) {}
         return allocatedVRamAddr;
     }
 
     end = (uintptr_t)allocatedVRamAddr + size;
     ovl = (OverlayRelocationSection*)((uintptr_t)end - *(uintptr_t*)ovlOffset);
 
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
 
     Load_Relocate(allocatedVRamAddr, ovl, vRamStart);
 
     if (ovl->bssSize != 0) {
-        if (1) {}
+        if (gLoadLogSeverity >= 3) {}
         bzero(end, ovl->bssSize);
     }
 
     osInvalICache(allocatedVRamAddr, bssSize);
 
-    if (1) {}
+    if (gLoadLogSeverity >= 3) {}
 
     return allocatedVRamAddr;
 }
