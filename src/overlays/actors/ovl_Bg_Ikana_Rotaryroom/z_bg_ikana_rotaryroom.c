@@ -399,10 +399,10 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
         Matrix_Push();
 
         Matrix_Mult(&this->unk_204.unk_04, MTXMODE_APPLY);
-        Matrix_MultZero(&ikanaBlock->actor.world.pos);
-        func_80B80358(&ikanaBlock->actor.world.pos);
+        Matrix_MultZero(&ikanaBlock->dyna.actor.world.pos);
+        func_80B80358(&ikanaBlock->dyna.actor.world.pos);
         Matrix_Get(&sp3C);
-        Matrix_MtxFToYXZRot(&sp3C, &ikanaBlock->actor.shape.rot, false);
+        Matrix_MtxFToYXZRot(&sp3C, &ikanaBlock->dyna.actor.shape.rot, false);
 
         Matrix_Pop();
     }
@@ -472,20 +472,20 @@ void func_80B80C88(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
 
 s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
     s32 pad;
-    BgIkanaBlock* sp40 = (BgIkanaBlock*)this->unk_204.unk_00;
+    BgIkanaBlock* ikanaBlock = (BgIkanaBlock*)this->unk_204.unk_00;
     Vec3f sp34;
     Vec3f sp28;
     s32 sp24 = false;
 
-    if (sp40 != NULL) {
+    if (ikanaBlock != NULL) {
         Matrix_Push();
 
         Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
         Matrix_MultZero(&sp34);
-        Matrix_SetTranslateRotateYXZ(sp40->actor.world.pos.x, sp40->actor.world.pos.y + sp40->unk_170,
-                                     sp40->actor.world.pos.z, &sp40->actor.shape.rot);
+        Matrix_SetTranslateRotateYXZ(ikanaBlock->dyna.actor.world.pos.x, ikanaBlock->dyna.actor.world.pos.y + ikanaBlock->unk_170,
+                                     ikanaBlock->dyna.actor.world.pos.z, &ikanaBlock->dyna.actor.shape.rot);
         Matrix_MultZero(&sp28);
 
         Matrix_Pop();
