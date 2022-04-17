@@ -107,13 +107,28 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E614.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Update.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Update.s")
+
+void BgKin2Bombwall_Update(Actor *thisx, GlobalContext *globalCtx) {
+    BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
+    this->actionFunc(this, globalCtx);
+}
+
 // void BgKin2Bombwall_Update(Actor *thisx, GlobalContext *globalCtx) {
 //     BgKin2Bombwall *this = THIS;
 //     ((void (*)()) this->unk15C.base.at)();
 // }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Draw.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Draw.s")
+
+extern Gfx D_060002C0;
+
+void BgKin2Bombwall_Draw(Actor *thisx, GlobalContext *globalCtx) {
+    BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
+    func_800BDFC0(globalCtx, (Gfx *) &D_06000360);
+    func_800BE03C(globalCtx, &D_060002C0);
+}
+
 // extern Gfx D_060002C0;
 
 // void BgKin2Bombwall_Draw(Actor *thisx, GlobalContext *globalCtx) {
