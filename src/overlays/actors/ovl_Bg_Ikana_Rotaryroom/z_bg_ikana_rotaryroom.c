@@ -484,7 +484,8 @@ s32 func_80B80F08(BgIkanaRotaryroom* this, GlobalContext* globalCtx) {
                                      this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
         Matrix_Translate(D_80B82178.x, D_80B82178.y, D_80B82178.z, MTXMODE_APPLY);
         Matrix_MultZero(&sp34);
-        Matrix_SetTranslateRotateYXZ(ikanaBlock->dyna.actor.world.pos.x, ikanaBlock->dyna.actor.world.pos.y + ikanaBlock->unk_170,
+        Matrix_SetTranslateRotateYXZ(ikanaBlock->dyna.actor.world.pos.x,
+                                     ikanaBlock->dyna.actor.world.pos.y + ikanaBlock->unk_170,
                                      ikanaBlock->dyna.actor.world.pos.z, &ikanaBlock->dyna.actor.shape.rot);
         Matrix_MultZero(&sp28);
 

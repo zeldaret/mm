@@ -90,7 +90,7 @@ s32 func_80B6FB30(BgKin2Shelf* this, GlobalContext* globalCtx) {
 
     Matrix_MultVec3f(&sp58, &sp88);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_MultVec3f(&sp94, &sp7C);
     Matrix_MultVec3f(&sp88, &sp70);
 
@@ -132,7 +132,7 @@ s32 func_80B6FCA4(BgKin2Shelf* this, GlobalContext* globalCtx) {
 
     Matrix_MultVec3f(&sp54, &sp84);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
-                                          this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
+                                 this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_MultVec3f(&sp90, &sp78);
     Matrix_MultVec3f(&sp84, &sp6C);
 
