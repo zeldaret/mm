@@ -17,12 +17,12 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx);
 
 void EnRaf_SetupIdle(EnRaf* this);
 void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx);
-void func_80A17414(EnRaf* this);
-void func_80A17464(EnRaf* this, GlobalContext* globalCtx);
-void func_80A17530(EnRaf* this);
-void func_80A175E4(EnRaf* this, GlobalContext* globalCtx);
-void func_80A17848(EnRaf* this, GlobalContext* globalCtx);
-void func_80A178A0(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_SetupGrab(EnRaf* this);
+void EnRaf_Grab(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_SetupChew(EnRaf* this);
+void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_SetupThrow(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_Convulse(EnRaf* this, GlobalContext* globalCtx);
@@ -45,9 +45,9 @@ typedef enum {
 
 typedef enum {
     /* 0 */ EN_RAF_ACTION_IDLE,
-    /* 1 */ EN_RAF_ACTION_UNK_1,
-    /* 2 */ EN_RAF_ACTION_UNK_2,
-    /* 3 */ EN_RAF_ACTION_UNK_3,
+    /* 1 */ EN_RAF_ACTION_GRAB,
+    /* 2 */ EN_RAF_ACTION_CHEW,
+    /* 3 */ EN_RAF_ACTION_THROW,
     /* 4 */ EN_RAF_ACTION_EXPLODE,
     /* 5 */ EN_RAF_ACTION_CONVULSE,
     /* 6 */ EN_RAF_ACTION_DISSOLVE,
@@ -59,6 +59,13 @@ typedef enum {
     /* 1 */ EN_RAF_GRAB_TARGET_EXPLOSIVE,
     /* 2 */ EN_RAF_GRAB_TARGET_GORON_PLAYER
 } EnRafGrabTarget;
+
+typedef enum {
+    /* 0 */ EN_RAF_PETAL_SCALE_TYPE_DEAD,
+    /* 1 */ EN_RAF_PETAL_SCALE_TYPE_GRAB,
+    /* 2 */ EN_RAF_PETAL_SCALE_TYPE_CHEW,
+    /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
+} EnRafPetalScaleType;
 
 const ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
@@ -287,7 +294,7 @@ void EnRaf_SetupIdle(EnRaf* this) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
     }
 
-    this->unk_3C2 = 3;
+    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
     this->action = EN_RAF_ACTION_IDLE;
     this->actionFunc = EnRaf_Idle;
 }
@@ -314,7 +321,7 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
             }
 
             this->playerYRotWhenGrabbed = player->actor.world.rot.y;
-            func_80A17414(this);
+            EnRaf_SetupGrab(this);
             return;
         }
 
@@ -339,7 +346,7 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
                 this->collider.dim.radius = 30;
                 this->collider.dim.height = 90;
                 this->collider.dim.yShift = -10;
-                func_80A17414(this);
+                EnRaf_SetupGrab(this);
                 return;
             }
 
@@ -348,15 +355,15 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A17414(EnRaf* this) {
+void EnRaf_SetupGrab(EnRaf* this) {
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CLOSE);
-    this->unk_3C2 = 1;
+    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_GRAB;
     Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
-    this->action = EN_RAF_ACTION_UNK_1;
-    this->actionFunc = func_80A17464;
+    this->action = EN_RAF_ACTION_GRAB;
+    this->actionFunc = EnRaf_Grab;
 }
 
-void func_80A17464(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Grab(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 curFrame = this->skelAnime.curFrame;
 
@@ -368,11 +375,11 @@ void func_80A17464(EnRaf* this, GlobalContext* globalCtx) {
     }
 
     if (this->endFrame <= curFrame) {
-        func_80A17530(this);
+        EnRaf_SetupChew(this);
     }
 }
 
-void func_80A17530(EnRaf* this) {
+void EnRaf_SetupChew(EnRaf* this) {
     s32 i;
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CHEW);
@@ -383,12 +390,12 @@ void func_80A17530(EnRaf* this) {
         this->chewLimbRot[i].z = Rand_S16Offset(8, 8) << 8;
     }
 
-    this->unk_3C2 = 2;
-    this->action = EN_RAF_ACTION_UNK_2;
-    this->actionFunc = func_80A175E4;
+    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_CHEW;
+    this->action = EN_RAF_ACTION_CHEW;
+    this->actionFunc = EnRaf_Chew;
 }
 
-void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx) {
     f32 targetChewScale;
     f32 curFrame;
     Player* player = GET_PLAYER(globalCtx);
@@ -417,7 +424,7 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
                 CollisionCheck_GreenBlood(globalCtx, NULL, &player->actor.world.pos);
                 if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & 0x80)) {
                     player->actor.freezeTimer = 10;
-                    func_80A17848(this, globalCtx);
+                    EnRaf_SetupThrow(this, globalCtx);
                     return;
                 }
                 break;
@@ -441,17 +448,17 @@ void func_80A175E4(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_80A17848(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_SetupThrow(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
     player->actor.freezeTimer = 10;
-    this->unk_3C2 = 3;
-    this->action = EN_RAF_ACTION_UNK_3;
-    this->actionFunc = func_80A178A0;
+    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
+    this->action = EN_RAF_ACTION_THROW;
+    this->actionFunc = EnRaf_Throw;
 }
 
-void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 curFrame = this->skelAnime.curFrame;
 
@@ -466,7 +473,7 @@ void func_80A178A0(EnRaf* this, GlobalContext* globalCtx) {
     }
 
     if (this->endFrame <= curFrame) {
-        this->unk_3C2 = 3;
+        this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
         this->action = EN_RAF_ACTION_IDLE;
         this->timer = 20;
         this->actionFunc = EnRaf_Idle;
@@ -491,7 +498,7 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
         Flags_SetSwitch(globalCtx, this->switchFlag);
     }
 
-    this->unk_3C2 = 0;
+    this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
     for (i = 0; i < BREG(57) + 30; i++) {
         acceleration.x = (Rand_ZeroOne() - 0.5f) * 0.5f;
         acceleration.y = -0.3f;
@@ -638,7 +645,7 @@ void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
                 Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
             }
 
-            this->unk_3C2 = 3;
+            this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
             this->action = EN_RAF_ACTION_IDLE;
             this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
             this->reviveTimer += 30;
@@ -661,7 +668,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     this->actionFunc(this, globalCtx);
 
     if ((this->action == EN_RAF_ACTION_IDLE) && (gSaveContext.save.weekEventReg[12] & 1)) {
-        this->unk_3C2 = 0;
+        this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
         EnRaf_SetupConvulse(this);
         return;
     }
@@ -686,7 +693,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
             Math_ApproachF(&this->dyna.actor.world.pos.y, this->heightDiffFromPlayer + ySurface, 0.5f, 40.0f);
             if (this->rippleTimer == 0) {
                 this->rippleTimer = 30;
-                if (this->unk_3C2 == 2) {
+                if (this->petalScaleType == EN_RAF_PETAL_SCALE_TYPE_CHEW) {
                     this->rippleTimer = 10;
                 }
 
@@ -724,27 +731,27 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-static s16 D_80A19418[] = { 0, 4, 6 };
+static s16 sGrabAnimationFrameCheck[] = { 0, 4, 6 };
 
-static Vec3f D_80A19420[] = {
+static Vec3f sMiddleSegmentTargetScaleDuringGrab[] = {
     { 1.0f, 1.0f, 1.0f },
     { 1.0f, 2.0f, 1.0f },
     { 0.0f, 1.5f, 0.7f },
 };
 
-static Vec3f D_80A19444[] = {
+static Vec3f sUpperSegmentTargetScaleDuringGrab[] = {
     { 1.0f, 1.0f, 1.0f },
     { 3.0f, 2.0f, 1.5f },
     { 1.5f, 1.2f, 0.8f },
 };
 
-static s16 D_80A19468[] = { 0, 7, 9, 13, 19 };
+static s16 sSpitAnimationFrameCheck[] = { 0, 7, 9, 13, 19 };
 
-static Vec3f D_80A19474[] = {
+static Vec3f sMiddleSegmentTargetScaleDuringSpit[] = {
     { 1.0f, 1.5f, 0.7f }, { 1.0f, 2.0f, 1.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
 };
 
-static Vec3f D_80A194B0[] = {
+static Vec3f sUpperSegmentTargetScaleDuringSpit[] = {
     { 1.5f, 1.5f, 1.7f }, { 1.5f, 1.5f, 1.3f }, { 3.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
 };
 
@@ -753,14 +760,14 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
     EnRaf* this = THIS;
     s32 i;
 
-    switch (this->unk_3C2) {
-        case 1:
+    switch (this->petalScaleType) {
+        case EN_RAF_PETAL_SCALE_TYPE_GRAB:
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < 3; i++) {
-                    if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
-                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19420[i]);
+                    if ((s16)this->skelAnime.curFrame == sGrabAnimationFrameCheck[i]) {
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sMiddleSegmentTargetScaleDuringGrab[i]);
                     }
                 }
             }
@@ -769,22 +776,22 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 3; i++) {
-                    if ((s16)this->skelAnime.curFrame == D_80A19418[i]) {
-                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19444[i]);
+                    if ((s16)this->skelAnime.curFrame == sGrabAnimationFrameCheck[i]) {
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringGrab[i]);
                     }
                 }
             }
             break;
 
-        case 2:
+        case EN_RAF_PETAL_SCALE_TYPE_CHEW:
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
-                Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19420[2]);
+                Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sMiddleSegmentTargetScaleDuringGrab[2]);
             } else if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_UPPER_SEGMENT) ||
                        (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                        (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
-                Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19444[2]);
+                Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringGrab[2]);
             }
 
             if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
@@ -798,13 +805,13 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             }
             break;
 
-        case 3:
+        case EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW:
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
                 for (i = 0; i < 5; i++) {
-                    if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
-                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A19474[i]);
+                    if ((s16)this->skelAnime.curFrame == sSpitAnimationFrameCheck[i]) {
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sMiddleSegmentTargetScaleDuringSpit[i]);
                     }
                 }
             }
@@ -813,8 +820,8 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 4; i++) {
-                    if ((s16)this->skelAnime.curFrame == D_80A19468[i]) {
-                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &D_80A194B0[i]);
+                    if ((s16)this->skelAnime.curFrame == sSpitAnimationFrameCheck[i]) {
+                        Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringSpit[i]);
                     }
                 }
             }
@@ -832,7 +839,7 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
-    if (this->action == 4) {
+    if (this->action == EN_RAF_ACTION_EXPLODE) {
         EnRaf_DrawParticles(this, globalCtx);
     }
 }

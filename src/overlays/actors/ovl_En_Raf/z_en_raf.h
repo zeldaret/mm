@@ -51,7 +51,7 @@ typedef struct EnRaf {
     /* 0x3BC */ s16 playerYRotWhenGrabbed;
     /* 0x3BE */ s16 type;
     /* 0x3C0 */ s16 switchFlag;
-    /* 0x3C2 */ s16 unk_3C2;
+    /* 0x3C2 */ s16 petalScaleType; // this name sucks!
     /* 0x3C4 */ s16 chewCount;
     /* 0x3C6 */ s16 action;
     /* 0x3C8 */ s16 petalClearPixelFirstPassIndex;
