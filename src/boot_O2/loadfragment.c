@@ -79,24 +79,23 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 v
 #pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment/Load_Relocate.s")
 #endif
 
-#ifdef NON_MATCHING
-// Small stack issue, compiler managed is too low
 size_t Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, void* allocatedVRamAddr, size_t allocatedBytes) {
-    s32 pad[2];
     size_t size = vRomEnd - vRomStart;
-    OverlayRelocationSection* ovl;
+    size_t bssSize;
     void* end;
+    OverlayRelocationSection* ovl;
 
     if (1) {}
     if (1) {}
-
-    DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
     end = (uintptr_t)allocatedVRamAddr + size;
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
-    if (allocatedBytes < ovl->bssSize + size) {
-        return (ovl->bssSize + size) * 0;
+    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    bssSize = ovl->bssSize + size;
+
+    if (allocatedBytes < bssSize) {
+        return 0;
     }
 
     allocatedBytes = ovl->bssSize + size;
@@ -111,13 +110,11 @@ size_t Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, void* allocat
     osWritebackDCache(allocatedVRamAddr, allocatedBytes);
     osInvalICache(allocatedVRamAddr, allocatedBytes);
 
+    bssSize = ovl->bssSize + size;
     if (1) {}
 
     return allocatedBytes;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/boot/loadfragment/Load_LoadOverlay.s")
-#endif
 
 void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart) {
     size_t size = vRomEnd - vRomStart;
@@ -132,6 +129,8 @@ void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart) {
     allocatedVRamAddr = SystemArena_MallocR(size);
     end = (uintptr_t)allocatedVRamAddr + size;
 
+    if (1) {}
+
     DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
 
     if (1) {}
@@ -139,7 +138,7 @@ void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart) {
     ovlOffset = (uintptr_t)end - 4;
     ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
 
-    if (allocatedVRamAddr && allocatedVRamAddr) {}
+    if (1) {}
 
     bssSize = ovl->bssSize + size;
 
