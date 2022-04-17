@@ -282,12 +282,12 @@ s32 EnFamos_IsPlayerSeen(EnFamos* this, GlobalContext* globalCtx) {
 }
 
 void EnFamos_UpdateBobbingHeight(EnFamos* this) {
-    if (this->hoverClk == 0) {
-        this->hoverClk = 30;
+    if (this->hoverTimer == 0) {
+        this->hoverTimer = 30;
     }
 
-    this->hoverClk--;
-    this->actor.world.pos.y = (Math_SinS(this->hoverClk * 0x888) * 10.0f) + this->baseHeight;
+    this->hoverTimer--;
+    this->actor.world.pos.y = (Math_SinS(this->hoverTimer * 0x888) * 10.0f) + this->baseHeight;
 
     if (ABS_ALT(this->flipRot) > 0x4000) { // is famos upside down
         func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
@@ -476,7 +476,7 @@ void EnFamos_Alert(EnFamos* this, GlobalContext* globalCtx) {
  * Summary: Famos has spotted the player; Begin chasing to attack.
  */
 void EnFamos_SetupChase(EnFamos* this) {
-    this->hoverClk = 0;
+    this->hoverTimer = 0;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actionFunc = EnFamos_Chase;
 }
@@ -740,11 +740,11 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnFamos* this = THIS;
     f32 oldHeight;
-    s32 oldHoverClk; // save old value to test if changed
+    s32 oldHoverTimer; // save old value to test if changed
 
     if (this->debrisTimer <= 0 ||
         (this->debrisTimer--, EnFamos_UpdateDebrisPosRot(this), (this->actionFunc != EnFamos_DeathFade))) {
-        oldHoverClk = this->hoverClk;
+        oldHoverTimer = this->hoverTimer;
         EnFamos_UpdateFlipStatus(this);
         if (this->cratorDespawnTimer > 0 && --this->cratorDespawnTimer == 0) {
             this->actor.child->parent = NULL; // child is EnTest (Crator after stomp)
@@ -753,7 +753,7 @@ void EnFamos_Update(Actor* thisx, GlobalContext* globalCtx) {
         this->actionFunc(this, globalCtx);
         oldHeight = this->actor.world.pos.y;
         Actor_MoveWithoutGravity(&this->actor);
-        if (oldHoverClk != this->hoverClk) { // test if updated in actionFunc
+        if (oldHoverTimer != this->hoverTimer) { // test if updated in actionFunc
             this->baseHeight += this->actor.world.pos.y - oldHeight;
         }
 

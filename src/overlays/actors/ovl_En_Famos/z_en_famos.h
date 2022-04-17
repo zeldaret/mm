@@ -37,7 +37,7 @@ typedef struct EnFamos {
     /* 0x1D6 */ u8 pathNodeCount;
     /* 0x1D7 */ u8 currentPathNode;
     /* 0x1D8 */ u8 isCalm; // is NOT aware of player
-    /* 0x1DA */ s16 hoverClk; // timer, 30->0 then repeat, for sin height adjustment when hovering
+    /* 0x1DA */ s16 hoverTimer; // start 30, decr to 0, repeat: for trig height adjustment when hovering
     /* 0x1DC */ s16 stateTimer; // reused for different actionFunc
     /* 0x1DE */ s16 debrisTimer; // also counts frames until despawning bom after death
     /* 0x1E0 */ s16 flippedTimer; // frames until it flips right side up
@@ -45,7 +45,7 @@ typedef struct EnFamos {
     /* 0x1E4 */ s16 targetYaw;
     /* 0x1E6 */ s16 flipRot; // is used to detect if the actor has been flipped upside down by light arrows
     /* 0x1E8 */ Vec3s* pathPoints;
-    /* 0x1EC */ f32 baseHeight; // (because hover can hit the floor, we need to keep track so famos cannot by adjusted/moved by terain)
+    /* 0x1EC */ f32 baseHeight; // because hover can hit the floor, we need to keep track so famos cannot by adjusted/moved by terain
     /* 0x1F0 */ f32 aggroDistance;
     /* 0x1F4 */ Vec3f targetDest;
     /* 0x200 */ Vec3f calmPos;
@@ -53,8 +53,7 @@ typedef struct EnFamos {
     /* 0x20C */ ColliderCylinder collider1;
     /* 0x258 */ ColliderCylinder collider2;
     /* 0x2A4 */ ColliderJntSph   emblemCollider;
-    /* 0x2C4 */ ColliderJntSphElement emblemColliderElements;
-    /* 0x340 */ u8 pad340[0x40];
+    /* 0x2C4 */ ColliderJntSphElement emblemColliderElements[2];
     /* 0x344 */ EnFamosRock rocks[20];
 } EnFamos; // size = 0x614
 
