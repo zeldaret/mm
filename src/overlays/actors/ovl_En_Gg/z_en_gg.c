@@ -230,7 +230,7 @@ void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
+        if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
             func_800B90F4(globalCtx);
         }
         this->unk_308 = 1;
@@ -239,7 +239,7 @@ void func_80B35450(EnGg* this, GlobalContext* globalCtx) {
         if (gSaveContext.save.weekEventReg[19] & 0x80) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xCEE;
-        } else if CHECK_FLAG_ALL (this->actor.flags, ACTOR_FLAG_80) {
+        } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_80)) {
             func_800B863C(&this->actor, globalCtx);
             this->actor.textId = 0xCE5;
         }
