@@ -9,7 +9,7 @@ typedef void (*BgKin2BombwallActionFunc)(struct BgKin2Bombwall*, GlobalContext*)
 
 typedef struct BgKin2Bombwall {
     /* 0x0000 */ Actor actor;
-    /* 0x0144 */ char unk_144[0x18];
+    /* 0x0144 */ s32 unk_144[0x6];
     /* 0x15C */ ColliderCylinder unk15C;  
     /* 0x01A8 */ BgKin2BombwallActionFunc actionFunc;
     /* 0x01AC */ char unk_1AC[0x4];

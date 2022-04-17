@@ -71,8 +71,18 @@ void BgKin2Bombwall_Init(Actor *thisx, GlobalContext *globalCtx) {
     func_80B6E4B8(this);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Destroy.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Destroy.s")
+void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
+    DynaCollisionContext *temp_a1;
+    GlobalContext *temp_a0;
+    BgKin2Bombwall *this = (BgKin2Bombwall *) thisx;
 
+    temp_a0 = globalCtx;
+    temp_a1 = &globalCtx->colCtx.dyna;
+    globalCtx = globalCtx;
+    DynaPoly_DeleteBgActor(temp_a0, temp_a1, this->unk_144[0]);
+    Collider_DestroyCylinder(globalCtx, &this->unk15C);
+}
 // void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 //     DynaCollisionContext *temp_a1;
 //     GlobalContext *temp_a0;
