@@ -12,7 +12,7 @@ typedef struct BgKin2Bombwall {
     /* 0x0144 */ s32 unk_144[0x6];
     /* 0x15C */ ColliderCylinder unk15C;  
     /* 0x01A8 */ BgKin2BombwallActionFunc actionFunc;
-    /* 0x01AC */ char unk_1AC[0x4];
+    /* 0x01AC */ s8 unk_1AC[0x4];
 } BgKin2Bombwall; // size = 0x1B0
 
 //typedef struct BgKin2Bombwall {

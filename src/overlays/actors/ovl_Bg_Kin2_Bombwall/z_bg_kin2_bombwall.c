@@ -45,6 +45,7 @@ extern ColliderCylinderInit D_80B6E6F0;
 extern InitChainEntry D_80B6E748[];
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E020.s")
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E090.s")
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Init.s")
     
@@ -95,17 +96,80 @@ void BgKin2Bombwall_Destroy(Actor *thisx, GlobalContext *globalCtx) {
 //     Collider_DestroyCylinder(globalCtx, (ColliderCylinder *) &this->unk_144[6]);
 // }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4B8.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4B8.s")
+void func_80B6E4CC(BgKin2Bombwall *, GlobalContext *); /* extern */
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4CC.s")
+void func_80B6E4B8(BgKin2Bombwall *arg0) {
+    arg0->actionFunc = func_80B6E4CC;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E544.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E4CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E558.s")
+s32 func_80B6E020(BgKin2Bombwall *, GlobalContext *); /* extern */
+void func_80B6E544(BgKin2Bombwall *);                  /* extern */ //was ? return type at first
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E5F8.s")
+void func_80B6E4CC(BgKin2Bombwall *arg0, GlobalContext *arg1) {
+    BgKin2Bombwall *temp_a0;
+    s8 temp_a0_2;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E614.s")
+    temp_a0 = arg0;
+    arg0 = arg0;
+    if (func_80B6E020(temp_a0, arg1) != 0) {
+        temp_a0_2 = arg0->actor.cutscene;
+        arg0->unk15C.base.acFlags &= 0xFFFD;
+        arg0 = arg0;
+        ActorCutscene_SetIntentToPlay((s16) temp_a0_2);
+        func_80B6E544(arg0);
+        return;
+    }
+    CollisionCheck_SetAC(arg1, &arg1->colChkCtx, &arg0->unk15C.base);
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E544.s")
+void func_80B6E558(BgKin2Bombwall *, GlobalContext *); /* extern */
+
+void func_80B6E544(BgKin2Bombwall *arg0) {
+    arg0->actionFunc = func_80B6E558;
+}
+// #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E558.s")
+void func_80B6E090(BgKin2Bombwall *, GlobalContext *); /* extern */ //was ? return type before.
+void func_80B6E5F8(BgKin2Bombwall *);                  /* extern */ //was ? return type before.
+
+void func_80B6E558(BgKin2Bombwall *arg0, GlobalContext *arg1) {
+    if (ActorCutscene_GetCanPlayNext((s16) arg0->actor.cutscene) != 0) {
+        ActorCutscene_StartAndSetUnkLinkFields((s16) arg0->actor.cutscene, &arg0->actor);
+        Actor_SetSwitchFlag(arg1, arg0->actor.params & 0x7F);
+        Audio_PlaySoundAtPosition(arg1, &arg0->actor.world.pos, 0x3C, 0x2810U);
+        func_800C62BC(arg1, &arg1->colCtx.dyna, arg0->unk_144[0]);
+        arg0->actor.draw = NULL;
+        func_80B6E090(arg0, arg1);
+        func_80B6E5F8(arg0);
+        return;
+    }
+    ActorCutscene_SetIntentToPlay((s16) arg0->actor.cutscene);
+}
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E5F8.s")
+
+void func_80B6E614(BgKin2Bombwall *, GlobalContext *); /* extern */
+
+void func_80B6E5F8(BgKin2Bombwall *arg0) {
+    arg0->unk_1AC[0] = 0x28;
+    arg0->actionFunc = func_80B6E614;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/func_80B6E614.s")
+
+void func_80B6E614(BgKin2Bombwall *arg0, GlobalContext *arg1) {
+    s8 temp_a0;
+
+    arg0->unk_1AC[0] += -1;//-1
+    if ((s32) arg0->unk_1AC[0] <= 0) {
+        temp_a0 = arg0->actor.cutscene;
+        arg0 = arg0;
+        ActorCutscene_Stop((s16) temp_a0);
+        Actor_MarkForDeath(&arg0->actor);
+    }
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Bg_Kin2_Bombwall/BgKin2Bombwall_Update.s")
 
