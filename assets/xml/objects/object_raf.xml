@@ -38,9 +38,9 @@
         <Texture Name="gCarnivorousLilyPadFlowerCenterTex" OutName="carnivorous_lily_pad_flower_center" Format="rgba16" Width="16" Height="16" Offset="0x2CF8" />
         <Texture Name="gCarnivorousLilyPadTrapPetalTex" OutName="carnivorous_lily_pad_trap_petal" Format="rgba16" Width="16" Height="32" Offset="0x2EF8" />
         <Texture Name="gCarnivorousLilyPadTrapTeethTex" OutName="carnivorous_lily_pad_trap_teeth" Format="rgba16" Width="8" Height="8" Offset="0x32F8" />
-        <Limb Name="gCarnivorousLilyPadFlowerLimb" Type="Standard" EnumName="CARNIVOROUS_LILY_PAD_LIMB_FLOWER" Offset="0x3378" />
 
         <!-- Carnivorous Lily Pad Limbs -->
+        <Limb Name="gCarnivorousLilyPadFlowerLimb" Type="Standard" EnumName="CARNIVOROUS_LILY_PAD_LIMB_FLOWER" Offset="0x3378" />
         <Limb Name="gCarnivorousLilyPadTrap1LowerSegmentLimb" Type="Standard" EnumName="CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT" Offset="0x3384" />
         <Limb Name="gCarnivorousLilyPadTrap1MiddleSegmentLimb" Type="Standard" EnumName="CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT" Offset="0x3390" />
         <Limb Name="gCarnivorousLilyPadTrap1UpperSegmentLimb" Type="Standard" EnumName="CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_UPPER_SEGMENT" Offset="0x339C" />

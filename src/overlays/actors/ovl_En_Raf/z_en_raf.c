@@ -28,8 +28,8 @@ void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_Convulse(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_SetupDissolve(EnRaf* this);
 void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx);
-void EnRaf_SetupDeadIdle(EnRaf* this);
-void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx);
+void EnRaf_SetupDormant(EnRaf* this);
+void EnRaf_Dormant(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_InitializeParticle(EnRaf* this, Vec3f* position, Vec3f* velocity, Vec3f* acceleration, f32 scale, s16 timer);
 void EnRaf_UpdateParticles(EnRaf* this, GlobalContext* globalCtx);
 void EnRaf_DrawParticles(EnRaf* this, GlobalContext* globalCtx);
@@ -182,7 +182,7 @@ static DamageTable sDamageTable = {
  * Sets the `index`th pixel of the trap teeth texture to 0 (transparent black)
  * according to the `clearPixelTable`
  */
-void EnRaf_ClearPixelsTeeth(u16* texture, u8* clearPixelTable, s32 index) {
+void EnRaf_ClearPixelTeeth(u16* texture, u8* clearPixelTable, s32 index) {
     if ((index < 0x40) && (clearPixelTable[index] != 0)) {
         texture[index] = 0;
     }
@@ -192,7 +192,7 @@ void EnRaf_ClearPixelsTeeth(u16* texture, u8* clearPixelTable, s32 index) {
  * Sets the `index`th pixel of the trap petal texture to 0 (transparent black)
  * according to the `clearPixelTable`
  */
-void EnRaf_ClearPixelsPetal(u16* texture, u8* clearPixelTable, s32 index) {
+void EnRaf_ClearPixelPetal(u16* texture, u8* clearPixelTable, s32 index) {
     if (clearPixelTable[index] != 0) {
         texture[index] = 0;
     }
@@ -221,7 +221,7 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     this->dyna.actor.colChkInfo.damageTable = &sDamageTable;
     this->dyna.actor.colChkInfo.health = BREG(1) + 2;
-    this->type = EN_RAF_GET_TYPE(&this->dyna.actor);
+    this->mainType = EN_RAF_GET_TYPE(&this->dyna.actor);
     this->reviveTimer = EN_RAF_GET_REVIVE_TIMER(&this->dyna.actor);
     this->switchFlag = EN_RAF_GET_SWITCH_FLAG(&this->dyna.actor);
     if (this->switchFlag == 0x7F) {
@@ -234,9 +234,8 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->reviveTimer = 30;
     }
 
-    if (((this->switchFlag >= 0) || (this->type == EN_RAF_TYPE_ALEADY_DEAD) ||
-         (gSaveContext.save.weekEventReg[12] & 1)) &&
-        ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->type == EN_RAF_TYPE_ALEADY_DEAD))) {
+    if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) || (gSaveContext.save.weekEventReg[12] & 1)) &&
+        ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
 
         for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
@@ -245,7 +244,7 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
         }
 
-        EnRaf_SetupDeadIdle(this);
+        EnRaf_SetupDormant(this);
     } else {
         this->bobPhase = Rand_ZeroFloat(1.0f) * 20000.0f;
         Actor_SetScale(&this->dyna.actor, 0.01f);
@@ -260,16 +259,14 @@ void EnRaf_Destroy(Actor* thisx, GlobalContext* globalCtx) {
     Collider_DestroyCylinder(globalCtx, &this->collider);
 }
 
-static AnimationHeader* sAnimations[] = {
-    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
-    &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
-};
-
-static u8 sAnimationModes[] = {
-    ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-};
-
 void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
+    static AnimationHeader* sAnimations[] = {
+        &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
+        &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
+    };
+    static u8 sAnimationModes[] = {
+        ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
+    };
     f32 startFrame = 0.0f;
     f32 playSpeed = 1.0f;
 
@@ -323,7 +320,7 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
                 player->unk_AE8 = 50;
             }
 
-            this->playerYRotWhenGrabbed = player->actor.world.rot.y;
+            this->playerRotYWhenGrabbed = player->actor.world.rot.y;
             EnRaf_SetupGrab(this);
             return;
         }
@@ -480,7 +477,7 @@ void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx) {
         player->actor.freezeTimer = 0;
         player->actor.parent = NULL;
         Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
-        func_800B8D50(globalCtx, &this->dyna.actor, BREG(55) + 3.0f, this->playerYRotWhenGrabbed + 0x8000,
+        func_800B8D50(globalCtx, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000,
                       BREG(56) + 10.0f, 0);
     } else if (curFrame < 10.0f) {
         player->actor.freezeTimer = 10;
@@ -549,7 +546,7 @@ void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx) {
         this->collider.dim.height = 10;
         func_800BC154(globalCtx, &globalCtx->actorCtx, &this->dyna.actor, 6);
         this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-        EnRaf_SetupDeadIdle(this);
+        EnRaf_SetupDormant(this);
     } else if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;
         this->collider.dim.height = 50;
@@ -565,7 +562,7 @@ void EnRaf_SetupConvulse(EnRaf* this) {
 }
 
 /**
- * Plays the convulsing animation and sets the lily pad's switch flag to prevent them from
+ * Plays the convulsing animation and sets the lily pad's switch flag to prevent it from
  * ever coming back to life. When the water in Woodfall Temple is purified, this function
  * and EnRaf_Dissolve are jointly responsible for controlling the lily pad's death.
  */
@@ -604,10 +601,10 @@ void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
         this->dissolveTimer++;
         if (this->dissolveTimer < (BREG(3) + 105)) {
             for (i = 0; i < (BREG(4) + 5); i++) {
-                EnRaf_ClearPixelsPetal(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex),
-                                       sPetalClearPixelTableFirstPass, this->petalClearPixelFirstPassIndex);
-                EnRaf_ClearPixelsTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
-                                       sTeethClearPixelTableFirstPass, this->teethClearPixelFirstPassIndex);
+                EnRaf_ClearPixelPetal(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex),
+                                      sPetalClearPixelTableFirstPass, this->petalClearPixelFirstPassIndex);
+                EnRaf_ClearPixelTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
+                                      sTeethClearPixelTableFirstPass, this->teethClearPixelFirstPassIndex);
                 if (this->petalClearPixelFirstPassIndex < 0x200) {
                     this->petalClearPixelFirstPassIndex++;
                 }
@@ -621,10 +618,10 @@ void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
 
     if (this->dissolveTimer > (BREG(5) + 50)) {
         for (i = 0; i < (BREG(6) + 5); i++) {
-            EnRaf_ClearPixelsPetal(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex),
-                                   sPetalClearPixelTableSecondPass, this->petalClearPixelSecondPassIndex);
-            EnRaf_ClearPixelsTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
-                                   sTeethClearPixelTableSecondPass, this->teethClearPixelSecondPassIndex);
+            EnRaf_ClearPixelPetal(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapPetalTex),
+                                  sPetalClearPixelTableSecondPass, this->petalClearPixelSecondPassIndex);
+            EnRaf_ClearPixelTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
+                                  sTeethClearPixelTableSecondPass, this->teethClearPixelSecondPassIndex);
             if (this->petalClearPixelSecondPassIndex < 0x200) {
                 this->petalClearPixelSecondPassIndex++;
             }
@@ -642,25 +639,25 @@ void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
             Math_Vec3f_Copy(&this->targetLimbScale[i], &gZeroVec3f);
         }
 
-        EnRaf_SetupDeadIdle(this);
+        EnRaf_SetupDormant(this);
     }
 }
 
-void EnRaf_SetupDeadIdle(EnRaf* this) {
+void EnRaf_SetupDormant(EnRaf* this) {
     if (this->action == EN_RAF_ACTION_EXPLODE) {
         this->timer = 90;
     } else {
         this->action = EN_RAF_ACTION_DEAD_IDLE;
     }
 
-    this->actionFunc = EnRaf_DeadIdle;
+    this->actionFunc = EnRaf_Dormant;
 }
 
 /**
  * Simply sits around doing nothing. If the revive timer is non-zero, then this function
  * will decrement the revive timer and revive the trap petals once it reaches 0.
  */
-void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
+void EnRaf_Dormant(EnRaf* this, GlobalContext* globalCtx) {
     Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
@@ -718,12 +715,12 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     this->bobPhase += 3000.0f;
-    this->heightDiffFromBob = 2.0f * Math_SinS(this->bobPhase);
-    if (this->type != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
+    this->bobOffset = 2.0f * Math_SinS(this->bobPhase);
+    if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
         ySurface = BREG(60) + (this->dyna.actor.world.pos.y - 60.0f);
         if (WaterBox_GetSurface1(globalCtx, &globalCtx->colCtx, this->dyna.actor.world.pos.x,
                                  this->dyna.actor.world.pos.z, &ySurface, &waterBox)) {
-            ySurface -= this->heightDiffFromBob + BREG(59);
+            ySurface -= this->bobOffset + BREG(59);
             Math_ApproachF(&this->dyna.actor.world.pos.y, this->heightDiffFromPlayer + ySurface, 0.5f, 40.0f);
             if (this->rippleTimer == 0) {
                 this->rippleTimer = 30;
@@ -738,7 +735,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     } else {
         Math_ApproachF(&this->dyna.actor.world.pos.y,
-                       (this->dyna.actor.home.pos.y + this->heightDiffFromPlayer) - this->heightDiffFromBob, 0.5f,
+                       (this->dyna.actor.home.pos.y + this->heightDiffFromPlayer) - this->bobOffset, 0.5f,
                        40.0f);
     }
 
@@ -828,7 +825,8 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringGrab[2]);
             }
 
-            // These matrix operations make the trap petals look a bit more "wobbly" as it chews.
+            // These matrix operations make the trap petals look a bit more "wobbly" as it chews
+            // by stretching the limbs in various random directions.
             if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
                 Matrix_RotateY((this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
                 Matrix_InsertXRotation_s((this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
@@ -917,7 +915,7 @@ void EnRaf_UpdateParticles(EnRaf* this, GlobalContext* globalCtx) {
             particle->velocity.y += particle->acceleration.y;
             particle->velocity.z += particle->acceleration.z;
 
-            if (this->type != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
+            if (this->mainType != EN_RAF_TYPE_NO_WATER_INTERACTIONS) {
                 if (particle->position.y < (this->dyna.actor.world.pos.y - 10.0f)) {
                     EffectSsGSplash_Spawn(globalCtx, &particle->position, NULL, NULL, 0, particle->scale * 200000.0f);
                     SoundSource_PlaySfxAtFixedWorldPos(globalCtx, &particle->position, 50, NA_SE_EV_BOMB_DROP_WATER);

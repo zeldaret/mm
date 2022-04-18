@@ -10,7 +10,7 @@
 
 typedef enum {
     /* 0 */ EN_RAF_TYPE_NORMAL,
-    /* 1 */ EN_RAF_TYPE_ALEADY_DEAD,          // Spawns without trap, so it can't eat bombs/player
+    /* 1 */ EN_RAF_TYPE_DORMANT,              // Spawns without trap, so it can't eat bombs/player
     /* 2 */ EN_RAF_TYPE_NO_WATER_INTERACTIONS // Won't produce ripples, and particles won't produce splashes
 } EnRafType;
 
@@ -41,15 +41,15 @@ typedef struct EnRaf {
     /* 0x39E */ u8 isCurrentlyInRidingMovingState;
     /* 0x3A0 */ f32 endFrame;
     /* 0x3A4 */ f32 chewScale;
-    /* 0x3A8 */ f32 heightDiffFromBob;
+    /* 0x3A8 */ f32 bobOffset;
     /* 0x3AC */ f32 heightDiffFromPlayer;
     /* 0x3B0 */ f32 bobPhase;
     /* 0x3B4 */ s16 timer;
     /* 0x3B6 */ s16 dissolveTimer;
     /* 0x3B8 */ s16 rippleTimer;
     /* 0x3BA */ s16 reviveTimer;
-    /* 0x3BC */ s16 playerYRotWhenGrabbed;
-    /* 0x3BE */ s16 type;
+    /* 0x3BC */ s16 playerRotYWhenGrabbed;
+    /* 0x3BE */ s16 mainType;
     /* 0x3C0 */ s16 switchFlag;
     /* 0x3C2 */ s16 petalScaleType;
     /* 0x3C4 */ s16 chewCount;
