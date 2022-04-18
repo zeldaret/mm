@@ -51,7 +51,7 @@ typedef enum {
     /* 4 */ EN_RAF_ACTION_EXPLODE,
     /* 5 */ EN_RAF_ACTION_CONVULSE,
     /* 6 */ EN_RAF_ACTION_DISSOLVE,
-    /* 7 */ EN_RAF_ACTION_DEAD_IDLE,
+    /* 7 */ EN_RAF_ACTION_DORMANT,
 } EnRafAction;
 
 typedef enum {
@@ -180,7 +180,7 @@ static DamageTable sDamageTable = {
 
 /**
  * Sets the `index`th pixel of the trap teeth texture to 0 (transparent black)
- * according to the `clearPixelTable`
+ * according to the `clearPixelTable`. Only works if the texture uses 16-bit pixels.
  */
 void EnRaf_ClearPixelTeeth(u16* texture, u8* clearPixelTable, s32 index) {
     if ((index < (8 * 8)) && (clearPixelTable[index] != 0)) {
@@ -190,7 +190,7 @@ void EnRaf_ClearPixelTeeth(u16* texture, u8* clearPixelTable, s32 index) {
 
 /**
  * Sets the `index`th pixel of the trap petal texture to 0 (transparent black)
- * according to the `clearPixelTable`
+ * according to the `clearPixelTable`. Only works if the texture uses 16-bit pixels.
  */
 void EnRaf_ClearPixelPetal(u16* texture, u8* clearPixelTable, s32 index) {
     if (clearPixelTable[index] != 0) {
@@ -332,7 +332,7 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
 
         explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
         while (explosive != NULL) {
-            // This check is pointless, since EnRaf never spawns as an explosive.
+            // This check is pointless, since EnRaf is never in the explosive category.
             if ((EnRaf*)explosive == this) {
                 explosive = explosive->next;
                 continue;
@@ -649,7 +649,7 @@ void EnRaf_SetupDormant(EnRaf* this) {
     if (this->action == EN_RAF_ACTION_EXPLODE) {
         this->timer = 90;
     } else {
-        this->action = EN_RAF_ACTION_DEAD_IDLE;
+        this->action = EN_RAF_ACTION_DORMANT;
     }
 
     this->actionFunc = EnRaf_Dormant;
@@ -664,7 +664,7 @@ void EnRaf_Dormant(EnRaf* this, GlobalContext* globalCtx) {
     s32 i;
 
     if (this->timer == 0) {
-        this->action = EN_RAF_ACTION_DEAD_IDLE;
+        this->action = EN_RAF_ACTION_DORMANT;
     }
 
     if (this->reviveTimer >= 0) {
