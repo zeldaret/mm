@@ -223,7 +223,7 @@ All functions should go in the main C file in the same order as the assembly (th
 
 ### Objects
 
-Are covered in the ZAPD extraction xml spec []. Symbol names are `gPrefixDescriptionSuffix` for symbols accessed from the header (they will be global). Texture OutNames are in snake_case since they are filenames.
+Are covered in the [ZAPD extraction xml spec](../tools/ZAPD/docs/zapd_extraction_xml_reference.md). Symbol names are `gPrefixDescriptionSuffix` for symbols accessed from the header (they will be global). Texture OutNames are in snake_case since they are filenames.
 
 ## Above all else
 
