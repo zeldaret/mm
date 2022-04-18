@@ -183,7 +183,7 @@ static DamageTable sDamageTable = {
  * according to the `clearPixelTable`
  */
 void EnRaf_ClearPixelTeeth(u16* texture, u8* clearPixelTable, s32 index) {
-    if ((index < 0x40) && (clearPixelTable[index] != 0)) {
+    if ((index < (8 * 8)) && (clearPixelTable[index] != 0)) {
         texture[index] = 0;
     }
 }
@@ -605,11 +605,11 @@ void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
                                       sPetalClearPixelTableFirstPass, this->petalClearPixelFirstPassIndex);
                 EnRaf_ClearPixelTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
                                       sTeethClearPixelTableFirstPass, this->teethClearPixelFirstPassIndex);
-                if (this->petalClearPixelFirstPassIndex < 0x200) {
+                if (this->petalClearPixelFirstPassIndex < (16 * 32)) {
                     this->petalClearPixelFirstPassIndex++;
                 }
 
-                if (this->teethClearPixelFirstPassIndex < 0x40) {
+                if (this->teethClearPixelFirstPassIndex < (8 * 8)) {
                     this->teethClearPixelFirstPassIndex++;
                 }
             }
@@ -622,11 +622,11 @@ void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
                                   sPetalClearPixelTableSecondPass, this->petalClearPixelSecondPassIndex);
             EnRaf_ClearPixelTeeth(Lib_SegmentedToVirtual(&gCarnivorousLilyPadTrapTeethTex),
                                   sTeethClearPixelTableSecondPass, this->teethClearPixelSecondPassIndex);
-            if (this->petalClearPixelSecondPassIndex < 0x200) {
+            if (this->petalClearPixelSecondPassIndex < (16 * 32)) {
                 this->petalClearPixelSecondPassIndex++;
             }
 
-            if (this->teethClearPixelSecondPassIndex < 0x40) {
+            if (this->teethClearPixelSecondPassIndex < (8 * 8)) {
                 this->teethClearPixelSecondPassIndex++;
             }
         }
