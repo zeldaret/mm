@@ -278,7 +278,7 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     return RADF_TO_BINANG(Math_Acot2F(zDiffRand, xDiffRand));
 }
 
-void EnRacedog_CalculateFloorTangent(EnRacedog* this, Vec3f* floorTangent) {
+void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
     f32 ny;
     f32 nz;
 
@@ -286,7 +286,7 @@ void EnRacedog_CalculateFloorTangent(EnRacedog* this, Vec3f* floorTangent) {
         ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        floorTangent->x = -Math_Acot2F(1.0f, -nz * ny);
+        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
     }
 }
 
@@ -661,15 +661,15 @@ void EnRacedog_PlayWalkSfx(EnRacedog* this) {
 void EnRacedog_Update(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad;
     EnRacedog* this = THIS;
-    Vec3f floorTangent = { 0.0f, 0.0f, 0.0f };
+    Vec3f floorRot = { 0.0f, 0.0f, 0.0f };
 
     this->selectedDogIndex = sSelectedDogInfo.index;
 
     this->actionFunc(this, globalCtx);
 
     EnRacedog_UpdateCollision(this, globalCtx);
-    EnRacedog_CalculateFloorTangent(this, &floorTangent);
-    Math_ApproachF(&this->curRot.x, floorTangent.x, 0.2f, 0.1f);
+    EnRacedog_GetFloorRot(this, &floorRot);
+    Math_ApproachF(&this->curRot.x, floorRot.x, 0.2f, 0.1f);
 
     if (this->prevRot.x > 0.0f) {
         if ((this->curRot.x < 0.0f) && (this->curRot.x > -0.1f)) {
