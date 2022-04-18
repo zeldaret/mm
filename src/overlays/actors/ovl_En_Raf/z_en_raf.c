@@ -299,6 +299,9 @@ void EnRaf_SetupIdle(EnRaf* this) {
     this->actionFunc = EnRaf_Idle;
 }
 
+/**
+ * Sits around waiting for the player or an explosive to get near in order to grab them.
+ */
 void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     Actor* explosive;
@@ -363,6 +366,9 @@ void EnRaf_SetupGrab(EnRaf* this) {
     this->actionFunc = EnRaf_Grab;
 }
 
+/**
+ * Grabs the player or explosive that entered its range.
+ */
 void EnRaf_Grab(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 curFrame = this->skelAnime.curFrame;
@@ -395,6 +401,11 @@ void EnRaf_SetupChew(EnRaf* this) {
     this->actionFunc = EnRaf_Chew;
 }
 
+/**
+ * Chews the player or explosive that was grabbed. If it grabbed a non-Goron player, it will deal
+ * damage to them and eventually throw them. If it grabbed a Goron player or explosive, it will
+ * instead explode after chewing them a bit.
+ */
 void EnRaf_Chew(EnRaf* this, GlobalContext* globalCtx) {
     f32 targetChewScale;
     f32 curFrame;
@@ -458,6 +469,9 @@ void EnRaf_SetupThrow(EnRaf* this, GlobalContext* globalCtx) {
     this->actionFunc = EnRaf_Throw;
 }
 
+/**
+ * Spits out the grabbed player.
+ */
 void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     f32 curFrame = this->skelAnime.curFrame;
@@ -480,6 +494,9 @@ void EnRaf_Throw(EnRaf* this, GlobalContext* globalCtx) {
     }
 }
 
+/**
+ * Creates an explosion effect/sound and spawns particles.
+ */
 void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
     Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     Vec3f acceleration = { 0.0f, 0.0f, 0.0f };
@@ -523,6 +540,9 @@ void EnRaf_Explode(EnRaf* this, GlobalContext* globalCtx) {
     this->actionFunc = EnRaf_PostDetonation;
 }
 
+/**
+ * Switches the lily pad to the "dead" state once the timer reaches 0.
+ */
 void EnRaf_PostDetonation(EnRaf* this, GlobalContext* globalCtx) {
     if (this->timer == 0) {
         this->collider.dim.radius = 50;
@@ -544,6 +564,11 @@ void EnRaf_SetupConvulse(EnRaf* this) {
     this->actionFunc = EnRaf_Convulse;
 }
 
+/**
+ * Plays the convulsing animation and sets the lily pad's switch flag to prevent them from
+ * ever coming back to life. When the water in Woodfall Temple is purified, this function
+ * and EnRaf_Dissolve are jointly responsible for controlling the lily pad's death.
+ */
 void EnRaf_Convulse(EnRaf* this, GlobalContext* globalCtx) {
     f32 curFrame = this->skelAnime.curFrame;
 
@@ -566,6 +591,11 @@ void EnRaf_SetupDissolve(EnRaf* this) {
     this->actionFunc = EnRaf_Dissolve;
 }
 
+/**
+ * Makes the trap petals on the lily pad dissolve and switches the lily pad to the "dead" state.
+ * When the water in Woodfall Temple is purified, this function and EnRaf_Convulse are jointly
+ * responsible for controlling the lily pad's death.
+ */
 void EnRaf_Dissolve(EnRaf* this, GlobalContext* globalCtx) {
     f32 curFrame = this->skelAnime.curFrame;
     s32 i;
@@ -626,6 +656,10 @@ void EnRaf_SetupDeadIdle(EnRaf* this) {
     this->actionFunc = EnRaf_DeadIdle;
 }
 
+/**
+ * Simply sits around doing nothing. If the revive timer is non-zero, then this function
+ * will decrement the revive timer and revive the trap petals once it reaches 0.
+ */
 void EnRaf_DeadIdle(EnRaf* this, GlobalContext* globalCtx) {
     Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
@@ -731,7 +765,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
     }
 }
 
-static s16 sGrabAnimationFrameCheck[] = { 0, 4, 6 };
+static s16 sGrabAnimationCheckFrames[] = { 0, 4, 6 };
 
 static Vec3f sMiddleSegmentTargetScaleDuringGrab[] = {
     { 1.0f, 1.0f, 1.0f },
@@ -745,7 +779,7 @@ static Vec3f sUpperSegmentTargetScaleDuringGrab[] = {
     { 1.5f, 1.2f, 0.8f },
 };
 
-static s16 sSpitAnimationFrameCheck[] = { 0, 7, 9, 13, 19 };
+static s16 sSpitAnimationCheckFrames[] = { 0, 7, 9, 13, 19 };
 
 static Vec3f sMiddleSegmentTargetScaleDuringSpit[] = {
     { 1.0f, 1.5f, 0.7f }, { 1.0f, 2.0f, 1.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 2.0f, 0.5f }, { 1.0f, 1.0f, 1.0f },
@@ -765,8 +799,8 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
-                for (i = 0; i < 3; i++) {
-                    if ((s16)this->skelAnime.curFrame == sGrabAnimationFrameCheck[i]) {
+                for (i = 0; i < ARRAY_COUNT(sGrabAnimationCheckFrames); i++) {
+                    if ((s16)this->skelAnime.curFrame == sGrabAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sMiddleSegmentTargetScaleDuringGrab[i]);
                     }
                 }
@@ -775,8 +809,8 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_UPPER_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
-                for (i = 0; i < 3; i++) {
-                    if ((s16)this->skelAnime.curFrame == sGrabAnimationFrameCheck[i]) {
+                for (i = 0; i < ARRAY_COUNT(sGrabAnimationCheckFrames); i++) {
+                    if ((s16)this->skelAnime.curFrame == sGrabAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringGrab[i]);
                     }
                 }
@@ -794,6 +828,7 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringGrab[2]);
             }
 
+            // These matrix operations make the trap petals look a bit more "wobbly" as it chews.
             if ((limbIndex > CARNIVOROUS_LILY_PAD_LIMB_FLOWER) && (limbIndex < CARNIVOROUS_LILY_PAD_LIMB_ROOTS)) {
                 Matrix_RotateY((this->chewLimbRot[limbIndex].y * globalCtx->gameplayFrames), MTXMODE_APPLY);
                 Matrix_InsertXRotation_s((this->chewLimbRot[limbIndex].x * globalCtx->gameplayFrames), MTXMODE_APPLY);
@@ -809,8 +844,8 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
             if ((limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_MIDDLE_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_MIDDLE_SEGMENT)) {
-                for (i = 0; i < 5; i++) {
-                    if ((s16)this->skelAnime.curFrame == sSpitAnimationFrameCheck[i]) {
+                for (i = 0; i < ARRAY_COUNT(sSpitAnimationCheckFrames); i++) {
+                    if ((s16)this->skelAnime.curFrame == sSpitAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sMiddleSegmentTargetScaleDuringSpit[i]);
                     }
                 }
@@ -820,7 +855,7 @@ void EnRaf_TransformLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Actor* th
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT) ||
                 (limbIndex == CARNIVOROUS_LILY_PAD_LIMB_TRAP_2_UPPER_SEGMENT)) {
                 for (i = 0; i < 4; i++) {
-                    if ((s16)this->skelAnime.curFrame == sSpitAnimationFrameCheck[i]) {
+                    if ((s16)this->skelAnime.curFrame == sSpitAnimationCheckFrames[i]) {
                         Math_Vec3f_Copy(&this->targetLimbScale[limbIndex], &sUpperSegmentTargetScaleDuringSpit[i]);
                     }
                 }
@@ -839,6 +874,7 @@ void EnRaf_Draw(Actor* thisx, GlobalContext* globalCtx) {
     func_8012C2DC(globalCtx->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
+
     if (this->action == EN_RAF_ACTION_EXPLODE) {
         EnRaf_DrawParticles(this, globalCtx);
     }
