@@ -3,7 +3,7 @@
 
 s32 gLoad2LogSeverity = 2;
 
-void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 vRamStart) {
+void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintptr_t vRamStart) {
     u32 sections[4];
     u32* relocDataP;
     u32 reloc;
@@ -76,7 +76,8 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 
     }
 }
 
-size_t Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd, void* allocatedVRamAddr) {
+size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd,
+                         void* allocatedVRamAddr) {
     s32 pad[2];
     size_t size = vRomEnd - vRomStart;
     void* end;
@@ -110,7 +111,7 @@ size_t Load2_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd,
     return size;
 }
 
-void* Overlay_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart, u32 vRamEnd) {
+void* Overlay_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd) {
     void* allocatedVRamAddr = SystemArena_MallocR(vRamEnd - vRamStart);
 
     if (allocatedVRamAddr != NULL) {

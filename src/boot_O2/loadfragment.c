@@ -3,7 +3,7 @@
 
 s32 gLoadLogSeverity = 2;
 
-void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 vRamStart) {
+void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintptr_t vRamStart) {
     u32 sections[4];
     u32* relocDataP;
     u32 reloc;
@@ -29,38 +29,40 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 v
 
         switch (reloc & 0x3F000000) {
             case 0x2000000:
-                /* R_MIPS_32
-                 * Handles 32-bit address relocation.  Used in things such as
-                 * jump tables.
-                 */
+                // R_MIPS_32
+                // Handles 32-bit address relocation, used for jump tables.
+
                 if ((*relocDataP & 0xF000000) == 0) {
                     *relocDataP = (*relocDataP - vRamStart) + allocu32;
-                } else {
-                    if (gLoadLogSeverity >= 3) {}
+                } else if (gLoadLogSeverity >= 3) {
                 }
                 break;
+
             case 0x4000000:
-                /* R_MIPS_26
-                 * Handles 26-bit address relocation, used for jumps and jals
-                 */
+                // R_MIPS_26
+                // Handles 26-bit address relocation, used for jumps and jals.
+
                 *relocDataP =
                     (*relocDataP & 0xFC000000) |
                     (((allocu32 + ((((*relocDataP & 0x3FFFFFF) << 2) | 0x80000000) - vRamStart)) & 0xFFFFFFF) >> 2);
                 break;
+
             case 0x5000000:
-                /* R_MIPS_HI16
-                 * Handles relocation for a lui instruciton, store the reference to
-                 * the instruction, and will update it in the R_MIPS_LO16 section.
-                 */
+                // R_MIPS_HI16
+                // Handles relocation for a lui instruction, part 1.
+                // Store the reference to the instruction, and update it in the R_MIPS_LO16 section.
+
                 luiRefs[(*relocDataP >> 0x10) & 0x1F] = relocDataP;
                 luiVals[(*relocDataP >> 0x10) & 0x1F] = *relocDataP;
                 break;
+
             case 0x6000000:
-                /* R_MIPS_LO16
-                 * Updates the LUI instruction to reflect the relocated address.
-                 * The full address is calculated from the LUI and lo parts, and then updated.
-                 * if the lo part is negative, add 1 to the lui.
-                 */
+                // R_MIPS_LO16
+                // Handles relocation for a lui instruction, part 2.
+                // Updates the LUI instruction to reflect the relocated address.
+                // The full address is calculated from the LUI and lo parts, and then updated.
+                // If the lo part is negative, add 1 to the lui.
+
                 luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
                 regValP = &luiVals[((*relocDataP) >> 0x15) & 0x1F];
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
@@ -68,15 +70,15 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, u32 v
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
-                } else {
-                    if (gLoadLogSeverity >= 3) {}
+                } else if (gLoadLogSeverity >= 3) {
                 }
                 break;
         }
     }
 }
 
-size_t Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, void* allocatedVRamAddr, size_t allocatedBytes) {
+size_t Load_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, void* allocatedVRamAddr,
+                        size_t allocatedBytes) {
     size_t size = vRomEnd - vRomStart;
     void* end;
     s32 pad;
@@ -116,7 +118,7 @@ size_t Load_LoadOverlay(u32 vRomStart, u32 vRomEnd, u32 vRamStart, void* allocat
     return allocatedBytes;
 }
 
-void* Load_AllocateAndLoad(u32 vRomStart, u32 vRomEnd, u32 vRamStart) {
+void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart) {
     size_t size = vRomEnd - vRomStart;
     void* end;
     void* allocatedVRamAddr;
