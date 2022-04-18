@@ -332,6 +332,7 @@ void EnRaf_Idle(EnRaf* this, GlobalContext* globalCtx) {
 
         explosive = globalCtx->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].first;
         while (explosive != NULL) {
+            // This check is pointless, since EnRaf never spawns as an explosive.
             if ((EnRaf*)explosive == this) {
                 explosive = explosive->next;
                 continue;
