@@ -30,8 +30,9 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
         switch (reloc & 0x3F000000) {
             case 0x2000000:
                 // R_MIPS_32
-                // Handles 32-bit address relocation, used for jump tables.
+                // Handles 32-bit address relocation, used for things such as jump tables.
 
+                // Check address is valid for relocation
                 if ((*relocDataP & 0xF000000) == 0) {
                     *relocDataP = (*relocDataP - vRamStart) + allocu32;
                 } else if (gLoadLogSeverity >= 3) {
@@ -65,6 +66,8 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
                 luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
                 regValP = &luiVals[((*relocDataP) >> 0x15) & 0x1F];
+
+                // Check address is valid for relocation
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
                     relocatedAddress = (*regValP << 0x10) + (s16)*relocDataP - vRamStart + allocu32;
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
