@@ -234,7 +234,8 @@ void EnRaf_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->reviveTimer = 30;
     }
 
-    if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) || (gSaveContext.save.weekEventReg[12] & 1)) &&
+    if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
+         (gSaveContext.save.weekEventReg[12] & 1)) &&
         ((Flags_GetSwitch(globalCtx, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
 
@@ -735,8 +736,7 @@ void EnRaf_Update(Actor* thisx, GlobalContext* globalCtx) {
         }
     } else {
         Math_ApproachF(&this->dyna.actor.world.pos.y,
-                       (this->dyna.actor.home.pos.y + this->heightDiffFromPlayer) - this->bobOffset, 0.5f,
-                       40.0f);
+                       (this->dyna.actor.home.pos.y + this->heightDiffFromPlayer) - this->bobOffset, 0.5f, 40.0f);
     }
 
     Math_ApproachZeroF(&this->heightDiffFromPlayer, 0.3f, 2.0f);
