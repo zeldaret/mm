@@ -25,7 +25,7 @@ parts of the ROM may not be 'shiftable' yet, so modifying them could currently b
 
 This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not, and will not, produce a PC port.** For frequently asked questions, you can visit [our website](https://zelda64.dev/mm), and for more information you can get in touch with the team on our [Discord server](https://discord.zelda64.dev).
 
-The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally differet game).
+The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally different game).
 
 It currently builds the following ROM:
 * mm.us.rev1.rom.z64 `md5: 2a0a8acb61538235bc1094d297fb6556`

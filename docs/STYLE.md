@@ -84,7 +84,7 @@ Numbers below `10`/`0xA` do not need the `0x` if by themselves in code.
 
 ### Booleans
 
-If a function returns only `0` or `1`, and is used as a boolean (i.e. in conditionals), replace the returns by `false` and `true`. (We do not use `bool`, partly because is a C99 thing, and partly because the original has used almost any integer type as a boolean return at some point!)
+If a function returns only `0` or `1`, and is used as a boolean (i.e. in conditionals), replace the returns by `false` and `true`. (We do not use `bool`, partly because is a C99 thing, and partly because the original has used almost every integer type as a boolean return at some point!)
 
 ### Floats
 

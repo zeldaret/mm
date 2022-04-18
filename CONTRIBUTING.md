@@ -12,10 +12,10 @@ Most discussions happen on our [Discord Server](https://discord.zelda64.dev) whe
 
 ## Useful Links
 
-- [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) - We use this to track decompilation progress and file reservations, not GitHub Issues or Trello or similar.
+- [Google Sheet](https://docs.google.com/spreadsheets/d/1X83YCPRa532v-Zo0WgUsJ2kB1X9RxBta5_p9aWA8uro) - We use this to track decompilation progress and file reservations, instead of GitHub Issues or Trello or similar.
 
 - [Installation guide](https://github.com/zeldaret/mm/blob/master/README.md#installation) - Instructions for getting this repository set up and built on your machine.
-- [Style Guide](docs/STYLE.md) - Description of our project style that we ask contributors to adhere to.
+- [Style Guide](docs/STYLE.md) - Description of the project style that we ask contributors to adhere to.
 - [Code Review Guidelines](REVIEWING.md) - These are the guidelines that reviewers will be using when reviewing your code. Good to be familiar with these before submitting your code.
 
 - [Zelda 64 Reverse Engineering Website](https://zelda64.dev/mm) - Our homepage, with FAQ and progress graph :chart_with_upwards_trend: .
