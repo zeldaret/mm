@@ -440,7 +440,7 @@ void EnElforg_FreeFloating(EnElforg* this, GlobalContext* globalCtx) {
     if (!Player_InCsMode(&globalCtx->state)) {
         if ((this->actor.xzDistToPlayer < 30.0f) && (scaledYDistance < 12.0f) && (scaledYDistance > -68.0f)) {
             EnElforg_SetupFairyCollected(this, globalCtx);
-            func_80115908(globalCtx, 48);
+            Health_ChangeBy(globalCtx, 48);
             switch (STRAY_FAIRY_TYPE(&this->actor)) {
                 case STRAY_FAIRY_TYPE_COLLECTIBLE:
                     Flags_SetCollectible(globalCtx, STRAY_FAIRY_FLAG(&this->actor));

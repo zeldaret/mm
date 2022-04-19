@@ -323,7 +323,7 @@ void func_80AE04FC(EnTsn* this, GlobalContext* globalCtx) {
             func_801477B4(globalCtx);
             this->actionFunc = func_80AE0704;
             if (sp24 == 19) {
-                if (CHECK_QUEST_ITEM(QUEST_UNK_19)) {
+                if (CHECK_QUEST_ITEM(QUEST_PICTOBOX)) {
                     if (func_8013A4C4(1 | 8)) {
                         player->actor.textId = 0x107B;
                         return;
@@ -424,7 +424,7 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0x107C:
-                        if (Interface_HasEmptyBottle()) {
+                        if (Inventory_HasEmptyBottle()) {
                             gSaveContext.save.weekEventReg[26] |= 8;
                             func_801477B4(globalCtx);
                             this->actionFunc = func_80AE0460;
@@ -433,7 +433,7 @@ void func_80AE0704(EnTsn* this, GlobalContext* globalCtx) {
                             this->actor.focus.pos = this->actor.world.pos;
                             ActorCutscene_Stop(this->actor.cutscene);
                             this->actor.flags &= ~ACTOR_FLAG_100;
-                            REMOVE_QUEST_ITEM(QUEST_UNK_19);
+                            REMOVE_QUEST_ITEM(QUEST_PICTOBOX);
                         } else {
                             func_80151938(globalCtx, 0x10A8);
                         }

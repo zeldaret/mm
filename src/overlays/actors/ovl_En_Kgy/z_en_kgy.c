@@ -629,7 +629,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                                     } else {
                                         func_8019F208();
                                         func_80B40E74(this, globalCtx, 0xC42);
-                                        func_801159EC(-globalCtx->msgCtx.unk1206C);
+                                        Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
                                     }
                                     break;
 
@@ -719,7 +719,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                             this->actor.textId = 0xC43;
                             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                             SET_EQUIP_VALUE(EQUIP_SWORD, 0);
-                            func_80112B40(globalCtx, 0);
+                            Interface_LoadItemIconImpl(globalCtx, 0);
                             func_80B40C74(globalCtx);
                             break;
 
@@ -752,7 +752,7 @@ void func_80B41E18(EnKgy* this, GlobalContext* globalCtx) {
                             func_80B41368(this, globalCtx, 4);
                             if (this->unk_29C & 0x10) {
                                 this->actor.textId = 0xC56;
-                                func_801159EC(globalCtx->msgCtx.unk1206C);
+                                Rupees_ChangeBy(globalCtx->msgCtx.unk1206C);
                             } else {
                                 this->actor.textId = 0xC42;
                             }

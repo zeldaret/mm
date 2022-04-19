@@ -343,7 +343,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
-                        func_801159EC(this->unk_358 * -1);
+                        Rupees_ChangeBy(this->unk_358 * -1);
                         this->actionFunc = func_80BCB90C;
                     }
                     break;

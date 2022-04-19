@@ -481,7 +481,7 @@ void func_80A3A610(EnElfgrp* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
     if (this->unk_144 == 60) {
-        Parameter_AddMagic(globalCtx,
+        Interface_AddMagic(globalCtx,
                            ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
         gSaveContext.healthAccumulator = 320;
     }

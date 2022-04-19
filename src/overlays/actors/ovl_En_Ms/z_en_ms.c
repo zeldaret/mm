@@ -121,13 +121,13 @@ void EnMs_Talk(EnMs* this, GlobalContext* globalCtx) {
                         if (gSaveContext.save.playerData.rupees < 10) {
                             play_sound(NA_SE_SY_ERROR);
                             func_80151938(globalCtx, 0x935); // "[...] You don't have enough Rupees."
-                        } else if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
+                        } else if (AMMO(ITEM_BEAN) >= 20) {
                             play_sound(NA_SE_SY_ERROR);
                             func_80151938(globalCtx, 0x937); // "[...] You can't carry anymore."
                         } else {
                             func_8019F208();
                             Actor_PickUp(&this->actor, globalCtx, GI_MAGIC_BEANS, 90.0f, 10.0f);
-                            func_801159EC(-10);
+                            Rupees_ChangeBy(-10);
                             this->actionFunc = EnMs_Sell;
                         }
                         break;

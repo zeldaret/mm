@@ -433,7 +433,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, GlobalContext* globalCtx) {
             gSaveContext.nextTransition = 2;
             func_801477B4(globalCtx);
             func_800B7298(globalCtx, &this->actor, 7);
-            Parameter_AddMagic(globalCtx,
+            Interface_AddMagic(globalCtx,
                                ((void)0, gSaveContext.unk_3F30) + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
 
             gSaveContext.eventInf[1] &= (u8)~1;

@@ -1130,7 +1130,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, GlobalContext* globalCtx) {
                 if ((effect->unk_2C >= 100) && (Message_GetState(&globalCtx->msgCtx) == 5)) {
                     if (Message_ShouldAdvance(globalCtx) || Message_GetState(&globalCtx->msgCtx) == 0) {
                         func_801477B4(globalCtx);
-                        func_801159EC(-50);
+                        Rupees_ChangeBy(-50);
                         effect->unk_2C = -1;
                     }
                 }
@@ -4729,7 +4729,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, GlobalContext* globalCtx) {
                 switch (globalCtx->msgCtx.choiceIndex) {
                     case 0:
                         if (gSaveContext.save.playerData.rupees >= 20) {
-                            func_801159EC(-20);
+                            Rupees_ChangeBy(-20);
                             if (func_8013EE04() == 0) {
                                 this->actor.textId = 0x407C;
                             } else {

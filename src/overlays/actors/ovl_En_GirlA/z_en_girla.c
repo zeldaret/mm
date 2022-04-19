@@ -185,7 +185,7 @@ void EnGirlA_Destroy(Actor* thisx, GlobalContext* globalCtx) {
 }
 
 s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
@@ -195,7 +195,7 @@ s32 EnGirlA_CanBuyPotionRed(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyPotionGreen(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
@@ -208,7 +208,7 @@ s32 EnGirlA_CanBuyPotionBlue(GlobalContext* globalCtx, EnGirlA* this) {
     if (!(gSaveContext.save.weekEventReg[53] & 8)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (!(gSaveContext.save.weekEventReg[53] & 0x10)) {
@@ -240,7 +240,7 @@ s32 EnGirlA_CanBuyNuts(GlobalContext* globalCtx, EnGirlA* this) {
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (func_80114978(ITEM_NUT) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_NUT) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -263,7 +263,7 @@ s32 EnGirlA_CanBuyStick(GlobalContext* globalCtx, EnGirlA* this) {
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (func_80114978(ITEM_STICK) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_STICK) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -322,7 +322,7 @@ s32 EnGirlA_CanBuyBombchus(GlobalContext* globalCtx, EnGirlA* this) {
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (func_80114978(ITEM_BOMBCHU) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_BOMBCHU) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -366,7 +366,7 @@ s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyFairy(GlobalContext* globalCtx, EnGirlA* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
@@ -398,12 +398,12 @@ void EnGirlA_BuyBottleItem(GlobalContext* globalCtx, EnGirlA* this) {
             Item_Give(globalCtx, ITEM_FAIRY);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyArrows(GlobalContext* globalCtx, EnGirlA* this) {
-    func_80115A14(ITEM_BOW, this->itemParams);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Inventory_ChangeAmmo(ITEM_BOW, this->itemParams);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyNuts(GlobalContext* globalCtx, EnGirlA* this) {
@@ -415,22 +415,22 @@ void EnGirlA_BuyNuts(GlobalContext* globalCtx, EnGirlA* this) {
             Item_Give(globalCtx, ITEM_NUTS_10);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyShieldHero(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_SHIELD_HERO);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyStick(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_STICK);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyMaskAllNight(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_MASK_ALL_NIGHT);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyBombBag(GlobalContext* globalCtx, EnGirlA* this) {
@@ -446,14 +446,14 @@ void EnGirlA_BuyBombBag(GlobalContext* globalCtx, EnGirlA* this) {
             Item_Give(globalCtx, ITEM_BOMB_BAG_40);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyBombchus(GlobalContext* globalCtx, EnGirlA* this) {
     if (this->itemParams == 10) {
         Item_Give(globalCtx, ITEM_BOMBCHUS_10);
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyBombs(GlobalContext* globalCtx, EnGirlA* this) {
@@ -471,12 +471,12 @@ void EnGirlA_BuyBombs(GlobalContext* globalCtx, EnGirlA* this) {
             Item_Give(globalCtx, ITEM_BOMBS_30);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyBottle(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_BOTTLE);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuySword(GlobalContext* globalCtx, EnGirlA* this) {
@@ -494,17 +494,17 @@ void EnGirlA_BuySword(GlobalContext* globalCtx, EnGirlA* this) {
             Item_Give(globalCtx, ITEM_SWORD_GREAT_FAIRY);
             break;
     }
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_BuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
     Item_Give(globalCtx, ITEM_SHIELD_MIRROR);
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 // Fanfare is handled by ovl_en_ossan
 void EnGirlA_BuyFanfare(GlobalContext* globalCtx, EnGirlA* this) {
-    func_801159EC(-globalCtx->msgCtx.unk1206C);
+    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
 }
 
 void EnGirlA_DoNothing(EnGirlA* this, GlobalContext* globalCtx) {

@@ -461,7 +461,7 @@ void func_80B973BC(EnZot* this, GlobalContext* globalCtx) {
                 break;
 
             case 0x126F:
-                func_801159EC(90);
+                Rupees_ChangeBy(90);
                 func_80151938(globalCtx, 0x1270);
                 break;
 
@@ -470,7 +470,7 @@ void func_80B973BC(EnZot* this, GlobalContext* globalCtx) {
                     func_80151938(globalCtx, 0x1277);
                 } else {
                     func_80151938(globalCtx, 0x1278);
-                    func_801159EC(-10);
+                    Rupees_ChangeBy(-10);
                 }
                 break;
 
@@ -956,13 +956,13 @@ void func_80B985EC(EnZot* this, GlobalContext* globalCtx) {
         itemActionParam = func_80123810(globalCtx);
         if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(globalCtx);
-            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_UNK_19) && func_8013A4C4(4)) {
+            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOBOX) && func_8013A4C4(4)) {
                 if (func_8013A4C4(5) && func_8013A4C4(6)) {
                     player->actor.textId = 0x12AE;
                 } else {
                     player->actor.textId = 0x12AC;
                 }
-                REMOVE_QUEST_ITEM(QUEST_UNK_19);
+                REMOVE_QUEST_ITEM(QUEST_PICTOBOX);
             } else {
                 player->actor.textId = 0x12AB;
             }

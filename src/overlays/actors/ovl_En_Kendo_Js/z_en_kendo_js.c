@@ -227,7 +227,7 @@ void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
                     this->unk_288 = 0x2718;
                 } else {
                     func_8019F208();
-                    func_801159EC(-globalCtx->msgCtx.unk1206C);
+                    Rupees_ChangeBy(-globalCtx->msgCtx.unk1206C);
                     Message_StartTextbox(globalCtx, 0x2719, &this->actor);
                     this->unk_288 = 0x2719;
                 }
@@ -245,7 +245,7 @@ void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
                     this->unk_288 = 0x2718;
                 } else {
                     func_8019F208();
-                    func_801159EC(-globalCtx->msgCtx.unk12070);
+                    Rupees_ChangeBy(-globalCtx->msgCtx.unk12070);
                     Message_StartTextbox(globalCtx, 0x273A, &this->actor);
                     this->unk_288 = 0x273A;
                 }

@@ -430,7 +430,7 @@ void func_80B0FFA8(EnGb2* this, GlobalContext* globalCtx) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     func_8019F208();
-                    func_801159EC(-this->unk_288);
+                    Rupees_ChangeBy(-this->unk_288);
                     globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
@@ -582,7 +582,7 @@ void func_80B10634(EnGb2* this, GlobalContext* globalCtx) {
                     Message_StartTextbox(globalCtx, this->unk_26E, &this->actor);
                 } else {
                     func_8019F208();
-                    func_801159EC(-this->unk_288);
+                    Rupees_ChangeBy(-this->unk_288);
                     globalCtx->msgCtx.msgMode = 0x43;
                     globalCtx->msgCtx.unk12023 = 4;
                     func_800B7298(globalCtx, NULL, 7);
@@ -628,7 +628,7 @@ void func_80B10924(EnGb2* this, GlobalContext* globalCtx) {
         if (sp24 == 12) {
             gSaveContext.save.weekEventReg[54] |= 0x40;
         } else {
-            func_801159EC(50);
+            Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {

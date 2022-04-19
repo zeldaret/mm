@@ -168,7 +168,7 @@ u16 func_80B50410(EnGk* this, GlobalContext* globalCtx) {
         if (player->transformation == PLAYER_FORM_GORON) {
             if (!(gSaveContext.save.weekEventReg[41] & 4)) {
                 if (this->unk_31C == 0xE88) {
-                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                    if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                         return 0xE89;
                     }
                     gSaveContext.save.weekEventReg[41] |= 4;
@@ -179,7 +179,7 @@ u16 func_80B50410(EnGk* this, GlobalContext* globalCtx) {
             }
 
             if ((this->unk_31C == 0xE8D) || (this->unk_31C == 0xE98)) {
-                if (!(gSaveContext.save.weekEventReg[41] & 8) || Interface_HasEmptyBottle()) {
+                if (!(gSaveContext.save.weekEventReg[41] & 8) || Inventory_HasEmptyBottle()) {
                     return 0xE89;
                 }
                 gSaveContext.save.weekEventReg[41] |= 4;
@@ -727,7 +727,7 @@ void func_80B51B40(EnGk* this, GlobalContext* globalCtx) {
                     globalCtx->sceneLoadFlag = 0x14;
                     globalCtx->unk_1887F = 3;
                     gSaveContext.nextTransition = 3;
-                    Parameter_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) +
+                    Interface_AddMagic(globalCtx, ((void)0, gSaveContext.unk_3F30) +
                                                       (gSaveContext.save.playerData.doubleMagic * 0x30) + 0x30);
                 } else {
                     this->actionFunc = func_80B51760;

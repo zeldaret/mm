@@ -593,7 +593,7 @@ void func_80AED610(EnTk* this, GlobalContext* globalCtx) {
                         break;
 
                     case 0x1413:
-                        func_801159EC(30);
+                        Rupees_ChangeBy(30);
                         gSaveContext.save.weekEventReg[60] |= 2;
                         func_80151938(globalCtx, 0x13FF);
                         break;

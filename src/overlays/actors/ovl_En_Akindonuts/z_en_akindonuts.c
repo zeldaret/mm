@@ -230,7 +230,7 @@ s32 func_80BECFBC(EnAkindonuts* this) {
             return 0x9A;
 
         case 3:
-            func_801149A0(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
+            Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
             return 0x7;
     }
     return 0;
@@ -296,7 +296,7 @@ s32 func_80BED140(GlobalContext* globalCtx) {
 }
 
 s32 func_80BED208(EnAkindonuts* this) {
-    if (INV_CONTENT(ITEM_MAGIC_BEANS) != 10U) {
+    if (INV_CONTENT(ITEM_BEAN) != 10U) {
         return 0;
     }
 
@@ -304,7 +304,7 @@ s32 func_80BED208(EnAkindonuts* this) {
         return 1;
     }
 
-    if (AMMO(ITEM_MAGIC_BEANS) >= 20) {
+    if (AMMO(ITEM_BEAN) >= 20) {
         return 2;
     }
 
@@ -332,7 +332,7 @@ s32 func_80BED27C(EnAkindonuts* this) {
 }
 
 s32 func_80BED2FC(EnAkindonuts* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return 2;
     }
 
@@ -346,7 +346,7 @@ s32 func_80BED2FC(EnAkindonuts* this) {
 }
 
 s32 func_80BED35C(EnAkindonuts* this) {
-    if (!Interface_HasEmptyBottle()) {
+    if (!Inventory_HasEmptyBottle()) {
         return 2;
     }
 
@@ -1326,7 +1326,7 @@ void func_80BEF360(EnAkindonuts* this, GlobalContext* globalCtx) {
     if (this->unk_32C & 0x40) {
         if (Actor_HasParent(&this->actor, globalCtx)) {
             this->actor.parent = NULL;
-            func_801159EC(this->unk_364);
+            Rupees_ChangeBy(this->unk_364);
             this->unk_32C &= ~0x40;
             this->actionFunc = func_80BEF450;
         } else {

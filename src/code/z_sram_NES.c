@@ -149,9 +149,9 @@ s32 D_801C6798[] = {
 };
 
 u8 D_801C67B0[24] = {
-    ITEM_NONE,  ITEM_BOW,  ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
-    ITEM_STICK, ITEM_NUT,  ITEM_MAGIC_BEANS, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
-    ITEM_NONE,  ITEM_NONE, ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
+    ITEM_NONE,  ITEM_BOW,  ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
+    ITEM_STICK, ITEM_NUT,  ITEM_BEAN, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
+    ITEM_NONE,  ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
 };
 
 s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
@@ -276,7 +276,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.save.weekEventReg[84] & 0x20) {
-        func_801149A0(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
+        Inventory_DeleteItem(ITEM_MASK_FIERCE_DEITY, SLOT(ITEM_MASK_FIERCE_DEITY));
     }
 
     for (i = 0; i < ARRAY_COUNT(D_801C66D0); i++) {
@@ -346,7 +346,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
                 for (j = 1; j < 4; j++) {
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
-                        func_80112B40(globalCtx, j);
+                        Interface_LoadItemIconImpl(globalCtx, j);
                     }
                 }
                 gSaveContext.save.inventory.items[i] = ITEM_BOTTLE;
@@ -354,7 +354,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
         }
     }
 
-    REMOVE_QUEST_ITEM(QUEST_UNK_19);
+    REMOVE_QUEST_ITEM(QUEST_PICTOBOX);
 
     if (gSaveContext.save.playerData.health < 0x30) {
         gSaveContext.save.playerData.health = 0x30;
@@ -408,14 +408,14 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     SET_STOLEN_ITEM_2(STOLEN_ITEM_NONE);
 
     // ??
-    func_801149A0(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
-    func_801149A0(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
-    func_801149A0(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
+    Inventory_DeleteItem(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
+    Inventory_DeleteItem(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
+    Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
     for (j = 1; j < 4; j++) {
         if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
-            func_80112B40(globalCtx, j);
+            Interface_LoadItemIconImpl(globalCtx, j);
         }
     }
 
@@ -718,7 +718,7 @@ Inventory sSaveDebugInventory = {
         ITEM_BOMBCHU,
         ITEM_STICK,
         ITEM_NUT,
-        ITEM_MAGIC_BEANS,
+        ITEM_BEAN,
         ITEM_ROOM_KEY,
         ITEM_POWDER_KEG,
         ITEM_PICTO_BOX,

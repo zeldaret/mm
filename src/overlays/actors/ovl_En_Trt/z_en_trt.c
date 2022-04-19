@@ -387,7 +387,7 @@ void EnTrt_Goodbye(EnTrt* this, GlobalContext* globalCtx) {
 void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x88F) {
-            if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            if (Inventory_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -408,7 +408,7 @@ void EnTrt_SetupTryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
                 EnTrt_SetupStartShopping(globalCtx, this, 0);
             } else if (gSaveContext.save.weekEventReg[84] & 0x40) {
                 this->textId = 0x83B;
-                if (Interface_HasItemInBottle(ITEM_POTION_RED)) {
+                if (Inventory_HasItemInBottle(ITEM_POTION_RED)) {
                     EnTrt_SetupStartShopping(globalCtx, this, false);
                 } else {
                     this->actionFunc = EnTrt_TryToGiveRedPotion;
@@ -720,7 +720,7 @@ void EnTrt_SelectItem(EnTrt* this, GlobalContext* globalCtx) {
                 }
             }
         } else if (talkState == 5 && Message_ShouldAdvance(globalCtx)) {
-            if (!Interface_HasEmptyBottle()) {
+            if (!Inventory_HasEmptyBottle()) {
                 play_sound(NA_SE_SY_ERROR);
                 EnTrt_SetupCannotBuy(globalCtx, this, 0x846);
             } else {
@@ -931,7 +931,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 
     this->blinkFunc = EnTrt_Blink;
     if (talkState == 6 && Message_ShouldAdvance(globalCtx)) {
-        if (Interface_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
+        if (Inventory_HasEmptyBottle() || !(gSaveContext.save.weekEventReg[12] & 0x10)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 ActorCutscene_Stop(this->cutscene);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -950,7 +950,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, GlobalContext* globalCt
 void EnTrt_TryToGiveRedPotion(EnTrt* this, GlobalContext* globalCtx) {
     if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx)) {
         if (this->textId == 0x83C) {
-            if (Interface_HasEmptyBottle()) {
+            if (Inventory_HasEmptyBottle()) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     ActorCutscene_Stop(this->cutscene);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;

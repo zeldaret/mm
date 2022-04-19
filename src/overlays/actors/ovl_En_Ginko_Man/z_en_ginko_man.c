@@ -357,7 +357,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         this->isNewAccount = true;
                     }
 
-                    func_801159EC((s16)-globalCtx->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy((s16)-globalCtx->msgCtx.bankRupeesSelected);
                     this->previousBankValue = gSaveContext.save.bankRupees & 0xFFFF;
                     gSaveContext.save.bankRupees =
                         ((gSaveContext.save.bankRupees & 0xFFFF) + globalCtx->msgCtx.bankRupeesSelected) |
@@ -425,7 +425,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         (((gSaveContext.save.bankRupees & 0xFFFF) - globalCtx->msgCtx.bankRupeesSelected) -
                          this->serviceFee) |
                         (gSaveContext.save.bankRupees & 0xFFFF0000);
-                    func_801159EC(globalCtx->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy(globalCtx->msgCtx.bankRupeesSelected);
                 }
             } else {
                 func_8019F230();

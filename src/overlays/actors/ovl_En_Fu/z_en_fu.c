@@ -430,7 +430,7 @@ void func_80962588(EnFu* this, GlobalContext* globalCtx) {
         if (globalCtx->msgCtx.choiceIndex == 0) {
             if (gSaveContext.save.playerData.rupees >= 10) {
                 func_8019F208();
-                func_801159EC(-10);
+                Rupees_ChangeBy(-10);
                 func_80963DE4(this, globalCtx);
             } else {
                 play_sound(NA_SE_SY_ERROR);
@@ -654,7 +654,7 @@ void func_80962A10(EnFu* this, GlobalContext* globalCtx) {
     if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.magicAcquired) {
         s16 temp = gSaveContext.unk_3F30;
 
-        Parameter_AddMagic(globalCtx, temp + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
+        Interface_AddMagic(globalCtx, temp + (gSaveContext.save.playerData.doubleMagic * 48) + 48);
     }
 
     func_80962F10(this);

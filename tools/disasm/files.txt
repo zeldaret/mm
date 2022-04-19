@@ -544,7 +544,7 @@
             0x801BF550 : "z_map_exp",
             0x801BF5C0 : "z_msgevent",
             0x801BF6C0 : "z_parameter",
-            0x801BFDD0 : "z_player_lib",
+            0x801BFDA0 : "z_player_lib",
             0x801C0EC0 : "z_quake",
             0x801C0EF0 : "z_rcp",
             0x801C1D10 : "z_room",

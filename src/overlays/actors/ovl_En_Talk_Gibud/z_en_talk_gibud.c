@@ -200,7 +200,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 8, 0, 0, 0, MASS_HEAVY };
 
 static EnTalkGibudRequestedItem sRequestedItemTable[] = {
     { PLAYER_AP_BOTTLE_POTION_BLUE, ITEM_POTION_BLUE, 1, true },
-    { PLAYER_AP_MAGIC_BEANS, ITEM_MAGIC_BEANS, 5, false },
+    { PLAYER_AP_MAGIC_BEANS, ITEM_BEAN, 5, false },
     { PLAYER_AP_BOTTLE_SPRING_WATER, ITEM_SPRING_WATER, 1, true },
     { PLAYER_AP_BOTTLE_FISH, ITEM_FISH, 1, true },
     { PLAYER_AP_BOTTLE_BUG, ITEM_BUG, 1, true },
@@ -713,7 +713,7 @@ s32 EnTalkGibud_PresentedItemMatchesRequest(EnTalkGibud* this, GlobalContext* gl
                 return EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO;
             }
         }
-        if (Interface_HasItemInBottle(requestedItem->item)) {
+        if (Inventory_HasItemInBottle(requestedItem->item)) {
             return EN_TALK_GIBUD_REQUESTED_ITEM_MET;
         }
     }
@@ -819,7 +819,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, GlobalContext* globalCtx) {
                     // Remove the requested item/amount from the player's inventory
                     requestedItem = &sRequestedItemTable[this->requestedItemIndex];
                     if (!requestedItem->isBottledItem) {
-                        func_80115A14(requestedItem->item, -requestedItem->amount);
+                        Inventory_ChangeAmmo(requestedItem->item, -requestedItem->amount);
                     } else {
                         func_80123D50(globalCtx, player, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                     }

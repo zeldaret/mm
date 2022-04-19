@@ -224,7 +224,7 @@ void EnItem00_Init(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
-            func_80115908(globalCtx, 0x70);
+            Health_ChangeBy(globalCtx, 0x70);
             break;
         case ITEM00_BOMBS_A:
         case ITEM00_BOMBS_B:
@@ -537,7 +537,7 @@ void EnItem00_Update(Actor* thisx, GlobalContext* globalCtx) {
             break;
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
-            func_80115908(globalCtx, 0x70);
+            Health_ChangeBy(globalCtx, 0x70);
             break;
         case ITEM00_BOMBS_A:
         case ITEM00_BOMBS_B:

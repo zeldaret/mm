@@ -238,7 +238,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (isItemFound) {
-        func_801149A0(itemId2, slotId);
+        Inventory_DeleteItem(itemId2, slotId);
         this->unk_3E8 = object_thiefbird_DL_0033B0;
         if (Message_GetState(&globalCtx->msgCtx) == 0) {
             Message_StartTextbox(globalCtx, 0xF4, NULL);
@@ -255,7 +255,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
 
         itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
-            func_801149A0(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
+            Inventory_DeleteItem(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
             this->unk_3E8 = object_thiefbird_DL_003D58;
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
@@ -404,7 +404,7 @@ s32 func_80C10E98(GlobalContext* globalCtx) {
 
     AMMO(ITEM_BOMB) -= spB0 * 5;
     AMMO(ITEM_BOW) -= spAC * 10;
-    func_801159EC(-((phi_s0_2 * 50) + (spA0 * 20) + (phi_s2 * 5) + spA8));
+    Rupees_ChangeBy(-((phi_s0_2 * 50) + (spA0 * 20) + (phi_s2 * 5) + spA8));
     return true;
 }
 
