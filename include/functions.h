@@ -157,7 +157,7 @@ void SystemArena_FreeNullCheck(void* ptr);
 void SystemArena_RunInits(void);
 void SystemArena_Init(void* start, size_t size);
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
-// void func_80086760(void);
+f32 func_80086760(f32 x);
 // void func_80086794(void);
 // void func_800867B4(void);
 // void func_800867D4(void);
