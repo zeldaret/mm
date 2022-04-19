@@ -31,7 +31,7 @@ typedef struct EnRr {
     /* 0x144 */ EnRrActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collider1;
     /* 0x194 */ ColliderCylinder collider2;
-    /* 0x1E0 */ u8 unk_1E0;
+    /* 0x1E0 */ u8 drawDmgEffType;
     /* 0x1E1 */ u8 unk_1E1;
     /* 0x1E2 */ u8 unk_1E2;
     /* 0x1E4 */ s16 unk_1E4;
@@ -54,11 +54,11 @@ typedef struct EnRr {
     /* 0x210 */ f32 unk_210;
     /* 0x214 */ f32 unk_214;
     /* 0x218 */ f32 unk_218;
-    /* 0x21C */ f32 unk_21C;
-    /* 0x220 */ f32 unk_220;
-    /* 0x224 */ f32 unk_224;
+    /* 0x21C */ f32 drawDmgEffAlpha;
+    /* 0x220 */ f32 drawDmgEffScale;
+    /* 0x224 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x228 */ Vec3f unk_228;
-    /* 0x234 */ Vec3f unk_234[20];
+    /* 0x234 */ Vec3f limbPos[20];
     /* 0x324 */ EnRrStruct unk_324[5];
 } EnRr; // size = 0x3C4
 

@@ -117,7 +117,7 @@ void Camera_Init(Camera* camera, View* view, CollisionContext* colCtx, GlobalCon
     camera->trackActor = NULL;
     camera->target = NULL;
     Camera_SetFlags(camera, CAM_FLAG2_4000);
-    camera->skyboxOffset.z = camera->skyboxOffset.y = camera->skyboxOffset.x = 0;
+    camera->quakeOffset.z = camera->quakeOffset.y = camera->quakeOffset.x = 0;
     camera->up.z = camera->up.x = 0.0f;
     camera->atLERPStepScale = 1;
     camera->up.y = 1.0f;
@@ -326,7 +326,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
     static s16 earthquakeTimer = 0;
     u16 dayTime;
     s16 quake;
-    s32 changeZeldaTime;
+    s32 daySpeed;
     s16 earthquakeFreq[] = {
         0x0FFC, // 1 Large Earthquake  between CLOCK_TIME(0, 00) to CLOCK_TIME(1, 30)
         0x07FC, // 2 Large Earthquakes between CLOCK_TIME(1, 30) to CLOCK_TIME(3, 00)
@@ -335,8 +335,8 @@ void Camera_EarthquakeDay3(Camera* camera) {
     };
 
     if ((CURRENT_DAY == 3) && (ActorCutscene_GetCurrentIndex() == -1)) {
-        dayTime = gSaveContext.time;
-        changeZeldaTime = gSaveContext.unk_14;
+        dayTime = gSaveContext.save.time;
+        daySpeed = gSaveContext.save.daySpeed;
 
         // Large earthquake created
         // Times based on sEarthquakeFreq
@@ -346,7 +346,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
             if (quake != 0) {
                 Quake_SetSpeed(quake, 30000);
                 Quake_SetQuakeValues(quake, (dayTime >> 12) + 2, 1, 5, 60);
-                earthquakeTimer = ((dayTime >> 10) - changeZeldaTime) + 80;
+                earthquakeTimer = ((dayTime >> 10) - daySpeed) + 80;
                 Quake_SetCountdown(quake, earthquakeTimer);
             }
         }
@@ -359,7 +359,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
             if (quake != 0) {
                 Quake_SetSpeed(quake, 16000);
                 Quake_SetQuakeValues(quake, 1, 0, 0, dayTime & 0x3F); // %64
-                earthquakeTimer = 120 - changeZeldaTime;
+                earthquakeTimer = 120 - daySpeed;
                 Quake_SetCountdown(quake, earthquakeTimer);
             }
         }
@@ -659,7 +659,7 @@ Vec3s* Camera_Update(Vec3s* inputDir, Camera* camera) {
         camera->up = viewUp;
     }
 
-    camera->skyboxOffset = quake.eyeOffset;
+    camera->quakeOffset = quake.eyeOffset;
     View_SetScale(&camera->globalCtx->view, (OREG(67) * 0.01f) + 1.0f);
     camera->globalCtx->view.fovy = viewFov;
     View_SetViewOrientation(&camera->globalCtx->view, &viewEye, &viewAt, &viewUp);
@@ -1116,8 +1116,8 @@ s32 Camera_IsDbgCamEnabled(void) {
     return 0;
 }
 
-Vec3f* Camera_GetSkyboxOffset(Vec3f* dst, Camera* camera) {
-    *dst = camera->skyboxOffset;
+Vec3f* Camera_GetQuakeOffset(Vec3f* dst, Camera* camera) {
+    *dst = camera->quakeOffset;
     return dst;
 }
 

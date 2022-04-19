@@ -211,7 +211,7 @@ void func_80BC1E40(EnJa* this, GlobalContext* globalCtx) {
     s32 sp20 = Message_GetState(&globalCtx->msgCtx);
     f32 phi_f0;
 
-    if (((globalCtx->msgCtx.unk11F04 < 0xFF) || (globalCtx->msgCtx.unk11F04 > 0x200)) && (sp20 == 3) &&
+    if (((globalCtx->msgCtx.currentTextId < 0xFF) || (globalCtx->msgCtx.currentTextId > 0x200)) && (sp20 == 3) &&
         (this->unk_374 == 3) && (&this->actor == player->targetActor)) {
         if ((globalCtx->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
@@ -291,7 +291,7 @@ void func_80BC2150(EnJa* this, GlobalContext* globalCtx) {
 }
 
 void func_80BC21A8(EnJa* this, GlobalContext* globalCtx) {
-    u32* unk_14 = &gSaveContext.unk_14;
+    u32* unk_14 = &gSaveContext.save.daySpeed;
     struct_80133038_arg2 sp18;
 
     this->unk_35C = REG(15) + *unk_14;
@@ -514,7 +514,7 @@ void EnJa_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList, Vec
     }
 }
 
-void EnJa_TransformDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
+void EnJa_TransformLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Actor* thisx) {
     EnJa* this = THIS;
     s32 phi_v1;
     s32 phi_v0;
@@ -602,7 +602,7 @@ void EnJa_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
         SkelAnime_DrawTransformFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnJa_OverrideLimbDraw, EnJa_PostLimbDraw,
-                                       EnJa_TransformDraw, &this->actor);
+                                       EnJa_TransformLimbDraw, &this->actor);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }

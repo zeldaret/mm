@@ -177,7 +177,7 @@ void EnCne01_Talk(EnHy* this, GlobalContext* globalCtx) {
         case 0:
             yaw = ABS_ALT(this->actor.shape.rot.y - this->actor.yawTowardsPlayer);
             if (yaw < 0x64) {
-                func_801518B0(globalCtx, this->textId, NULL);
+                Message_StartTextbox(globalCtx, this->textId, NULL);
             }
             break;
         case 2:
@@ -210,7 +210,7 @@ void EnCne01_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = func_8013D648(globalCtx, ENCNE01_GET_PATH(&this->enHy.actor), ENCNE01_NO_PATH);
+    this->enHy.path = SubS_GetPathByIndex(globalCtx, ENCNE01_GET_PATH(&this->enHy.actor), ENCNE01_NO_PATH);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnCne01_FinishInit;

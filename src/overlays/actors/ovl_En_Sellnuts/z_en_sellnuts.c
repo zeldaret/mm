@@ -348,29 +348,29 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
         } else {
             switch (this->unk_340) {
                 case 0x60E:
-                    gSaveContext.weekEventReg[17] |= 0x20;
-                    gSaveContext.weekEventReg[86] |= 4;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    gSaveContext.save.weekEventReg[17] |= 0x20;
+                    gSaveContext.save.weekEventReg[86] |= 4;
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x628:
-                    gSaveContext.weekEventReg[77] |= 0x40;
-                    gSaveContext.weekEventReg[86] |= 4;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    gSaveContext.save.weekEventReg[77] |= 0x40;
+                    gSaveContext.save.weekEventReg[86] |= 4;
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x614:
-                    gSaveContext.weekEventReg[17] |= 0x40;
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    gSaveContext.save.weekEventReg[17] |= 0x40;
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
                 case 0x610:
                 case 0x616:
                 case 0x629:
-                    func_801518B0(globalCtx, this->unk_340, &this->actor);
+                    Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
                     this->actionFunc = func_80ADB0D8;
                     break;
 
@@ -384,22 +384,22 @@ void func_80ADB544(EnSellnuts* this, GlobalContext* globalCtx) {
                this->actor.isTargeted) {
         func_800B85E0(&this->actor, globalCtx, 80.0f, EXCH_ITEM_2A);
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (gSaveContext.day == 3) {
+            if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
-                if (gSaveContext.weekEventReg[77] & 0x40) {
+                if (gSaveContext.save.weekEventReg[77] & 0x40) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             } else {
                 this->unk_33A = 1;
-                if (gSaveContext.weekEventReg[17] & 0x20) {
+                if (gSaveContext.save.weekEventReg[17] & 0x20) {
                     this->unk_340 = D_80ADD918[this->unk_33A];
                 } else {
                     this->unk_340 = D_80ADD910[this->unk_33A];
                 }
             }
-        } else if (gSaveContext.weekEventReg[17] & 0x40) {
+        } else if (gSaveContext.save.weekEventReg[17] & 0x40) {
             this->unk_340 = D_80ADD918[this->unk_33A];
         } else {
             this->unk_340 = D_80ADD910[this->unk_33A];
@@ -438,7 +438,7 @@ void func_80ADB924(EnSellnuts* this, GlobalContext* globalCtx) {
             func_80151938(globalCtx, this->unk_340);
             this->actionFunc = func_80ADB0D8;
         }
-    } else if ((msgState == 5) && func_80147624(globalCtx)) {
+    } else if ((msgState == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_340 == D_80ADD910[this->unk_33A]) {
             this->unk_340 = D_80ADD938[this->unk_33A];
             func_80151938(globalCtx, this->unk_340);
@@ -468,7 +468,7 @@ void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 6);
     }
 
-    if ((sp27 == 5) && func_80147624(globalCtx)) {
+    if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->actionFunc = func_80ADBBEC;
@@ -479,7 +479,7 @@ void func_80ADBAB8(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        gSaveContext.weekEventReg[17] |= 0x80;
+        gSaveContext.save.weekEventReg[17] |= 0x80;
         this->actionFunc = func_80ADBCE4;
     } else {
         Actor_PickUp(&this->actor, globalCtx, GI_DEED_LAND, 300.0f, 300.0f);
@@ -488,7 +488,7 @@ void func_80ADBBEC(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, this->unk_340, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
@@ -497,7 +497,7 @@ void func_80ADBC60(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBCE4(EnSellnuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 6) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 6) && Message_ShouldAdvance(globalCtx)) {
         func_800B85E0(&this->actor, globalCtx, 400.0f, EXCH_ITEM_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
@@ -514,7 +514,7 @@ void func_80ADBD64(EnSellnuts* this, GlobalContext* globalCtx) {
         SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 0);
     }
 
-    if ((sp27 == 5) && func_80147624(globalCtx)) {
+    if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_338 &= ~2;
@@ -556,7 +556,7 @@ void func_80ADBE80(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 void func_80ADBFA0(EnSellnuts* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (this->unk_34C == 0) {
@@ -699,7 +699,7 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         player->linearVelocity = 0.0f;
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        func_801518B0(globalCtx, this->unk_340, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_340, &this->actor);
         if (this->unk_340 == 0x625) {
             this->unk_338 |= 1;
             this->actor.draw = EnSellnuts_Draw;
@@ -719,11 +719,11 @@ void func_80ADC5A4(EnSellnuts* this, GlobalContext* globalCtx) {
 void func_80ADC6D0(EnSellnuts* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (gSaveContext.day == 3) {
+            if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
             } else {
                 this->unk_33A = 1;
@@ -749,7 +749,7 @@ void func_80ADC7B4(EnSellnuts* this, GlobalContext* globalCtx) {
             }
             ActorCutscene_SetIntentToPlay(this->cutscene);
         }
-    } else if ((this->unk_366 == 1) && (temp == 5) && func_80147624(globalCtx)) {
+    } else if ((this->unk_366 == 1) && (temp == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_366 = 0;
@@ -835,7 +835,7 @@ void func_80ADCA64(EnSellnuts* this, GlobalContext* globalCtx) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80ADD990, 17);
         } else if (this->unk_34C == 17) {
             ActorCutscene_Stop(this->cutscene);
-            gSaveContext.weekEventReg[73] |= 4;
+            gSaveContext.save.weekEventReg[73] |= 4;
             Actor_MarkForDeath(&this->actor);
         }
     }
@@ -871,7 +871,7 @@ void func_80ADCC04(EnSellnuts* this, GlobalContext* globalCtx) {
 
 void func_80ADCD3C(EnSellnuts* this, GlobalContext* globalCtx) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
-    if (gSaveContext.weekEventReg[73] & 4) {
+    if (gSaveContext.save.weekEventReg[73] & 4) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
@@ -892,7 +892,7 @@ void func_80ADCD3C(EnSellnuts* this, GlobalContext* globalCtx) {
 }
 
 s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
-    Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+    Vec3s* points = Lib_SegmentedToVirtual(path->points);
     s32 count = path->count;
     s32 var = arg2;
     s32 ret = false;
@@ -915,7 +915,7 @@ s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
         pointY = points[var + 1].z - points[var - 1].z;
     }
 
-    func_8017B7F8(&sp30, func_80086B30(pointX, pointY) * 10430.378f, &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -929,7 +929,7 @@ f32 func_80ADCFE8(Path* path, s32 arg1, Vec3f* pos, Vec3s* arg3) {
     Vec3s* points;
 
     if (path != NULL) {
-        points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
+        points = Lib_SegmentedToVirtual(path->points);
         points = &points[arg1];
         sp20.x = points->x;
         sp20.y = points->y;
@@ -947,7 +947,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
     s32 pad2;
 
-    if ((gSaveContext.weekEventReg[17] & 0x80) || (gSaveContext.weekEventReg[61] & 0x10)) {
+    if ((gSaveContext.save.weekEventReg[17] & 0x80) || (gSaveContext.save.weekEventReg[61] & 0x10)) {
         Actor_MarkForDeath(&this->actor);
     }
 
@@ -957,7 +957,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinderType1(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    this->path = func_8013D648(globalCtx, ENSELLNUTS_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(globalCtx, ENSELLNUTS_GET_FC00(&this->actor), 0x3F);
     this->cutscene = this->actor.cutscene;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 0;
@@ -969,7 +969,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_36C = 0.01f;
     this->actor.speedXZ = 0.0f;
     this->actor.velocity.y = 0.0f;
-    if (gSaveContext.weekEventReg[73] & 4) {
+    if (gSaveContext.save.weekEventReg[73] & 4) {
         if (ENSELLNUTS_GET_1(&this->actor)) {
             Actor_MarkForDeath(&this->actor);
             return;
@@ -977,7 +977,7 @@ void EnSellnuts_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         if (player->transformation == PLAYER_FORM_DEKU) {
-            if (gSaveContext.day == 3) {
+            if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
             } else {
                 this->unk_33A = 1;
@@ -1035,7 +1035,7 @@ void EnSellnuts_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->unk_328++;
     if (player->transformation == PLAYER_FORM_DEKU) {
-        if (gSaveContext.day == 3) {
+        if (gSaveContext.save.day == 3) {
             this->unk_33A = 2;
         } else {
             this->unk_33A = 1;

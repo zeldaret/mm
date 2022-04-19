@@ -1,21 +1,21 @@
 ﻿<Root>
     <File Name="object_bob" Segment="6">
-        <Limb Name="object_bob_Standardlimb_000000" Type="Standard" Offset="0x0" />
-        <Limb Name="object_bob_Standardlimb_00000C" Type="Standard" Offset="0xC" />
-        <Limb Name="object_bob_Standardlimb_000018" Type="Standard" Offset="0x18" />
-        <Limb Name="object_bob_Standardlimb_000024" Type="Standard" Offset="0x24" />
-        <Limb Name="object_bob_Standardlimb_000030" Type="Standard" Offset="0x30" />
-        <Limb Name="object_bob_Standardlimb_00003C" Type="Standard" Offset="0x3C" />
-        <Limb Name="object_bob_Standardlimb_000048" Type="Standard" Offset="0x48" />
-        <Limb Name="object_bob_Standardlimb_000054" Type="Standard" Offset="0x54" />
-        <Limb Name="object_bob_Standardlimb_000060" Type="Standard" Offset="0x60" />
-        <Limb Name="object_bob_Standardlimb_00006C" Type="Standard" Offset="0x6C" />
-        <Limb Name="object_bob_Standardlimb_000078" Type="Standard" Offset="0x78" />
-        <Limb Name="object_bob_Standardlimb_000084" Type="Standard" Offset="0x84" />
-        <Limb Name="object_bob_Standardlimb_000090" Type="Standard" Offset="0x90" />
-        <Limb Name="object_bob_Standardlimb_00009C" Type="Standard" Offset="0x9C" />
-        <Limb Name="object_bob_Standardlimb_0000A8" Type="Standard" Offset="0xA8" />
-        <Skeleton Name="object_bob_Skel_0000F0" Type="Flex" LimbType="Standard" Offset="0xF0" />
+        <Limb Name="object_bob_Standardlimb_000000" Type="Standard" EnumName="OBJECT_BOB_LIMB_01" Offset="0x0" />
+        <Limb Name="object_bob_Standardlimb_00000C" Type="Standard" EnumName="OBJECT_BOB_LIMB_02" Offset="0xC" />
+        <Limb Name="object_bob_Standardlimb_000018" Type="Standard" EnumName="OBJECT_BOB_LIMB_03" Offset="0x18" />
+        <Limb Name="object_bob_Standardlimb_000024" Type="Standard" EnumName="OBJECT_BOB_LIMB_04" Offset="0x24" />
+        <Limb Name="object_bob_Standardlimb_000030" Type="Standard" EnumName="OBJECT_BOB_LIMB_05" Offset="0x30" />
+        <Limb Name="object_bob_Standardlimb_00003C" Type="Standard" EnumName="OBJECT_BOB_LIMB_06" Offset="0x3C" />
+        <Limb Name="object_bob_Standardlimb_000048" Type="Standard" EnumName="OBJECT_BOB_LIMB_07" Offset="0x48" />
+        <Limb Name="object_bob_Standardlimb_000054" Type="Standard" EnumName="OBJECT_BOB_LIMB_08" Offset="0x54" />
+        <Limb Name="object_bob_Standardlimb_000060" Type="Standard" EnumName="OBJECT_BOB_LIMB_09" Offset="0x60" />
+        <Limb Name="object_bob_Standardlimb_00006C" Type="Standard" EnumName="OBJECT_BOB_LIMB_0A" Offset="0x6C" />
+        <Limb Name="object_bob_Standardlimb_000078" Type="Standard" EnumName="OBJECT_BOB_LIMB_0B" Offset="0x78" />
+        <Limb Name="object_bob_Standardlimb_000084" Type="Standard" EnumName="OBJECT_BOB_LIMB_0C" Offset="0x84" />
+        <Limb Name="object_bob_Standardlimb_000090" Type="Standard" EnumName="OBJECT_BOB_LIMB_0D" Offset="0x90" />
+        <Limb Name="object_bob_Standardlimb_00009C" Type="Standard" EnumName="OBJECT_BOB_LIMB_0E" Offset="0x9C" />
+        <Limb Name="object_bob_Standardlimb_0000A8" Type="Standard" EnumName="OBJECT_BOB_LIMB_0F" Offset="0xA8" />
+        <Skeleton Name="object_bob_Skel_0000F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOB_LIMB_NONE" LimbMax="OBJECT_BOB_LIMB_MAX" EnumName="object_bob_Limbs" Offset="0xF0" />
         <Texture Name="object_bob_TLUT_000108" OutName="tlut_000108" Format="rgba16" Width="16" Height="16" Offset="0x108" />
         <Texture Name="object_bob_Tex_000308" OutName="tex_000308" Format="ci8" Width="8" Height="8" Offset="0x308" />
         <Texture Name="object_bob_Tex_000348" OutName="tex_000348" Format="ci8" Width="8" Height="8" Offset="0x348" />

@@ -388,6 +388,18 @@ typedef struct ActorContext {
 } ActorContext; // size = 0x284
 
 typedef enum {
+    /* 00 */ ACTOR_DRAW_DMGEFF_FIRE,
+    /* 01 */ ACTOR_DRAW_DMGEFF_BLUE_FIRE,
+    /* 10 */ ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX = 10,
+    /* 11 */ ACTOR_DRAW_DMGEFF_FROZEN_SFX,
+    /* 20 */ ACTOR_DRAW_DMGEFF_LIGHT_ORBS = 20,
+    /* 21 */ ACTOR_DRAW_DMGEFF_BLUE_LIGHT_ORBS,
+    /* 30 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL = 30,
+    /* 31 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM,
+    /* 32 */ ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE
+} ActorDrawDamageEffectType;
+
+typedef enum {
     /* 0x000 */ ACTOR_PLAYER,
     /* 0x001 */ ACTOR_EN_TEST,
     /* 0x002 */ ACTOR_EN_GIRLA,
@@ -1160,7 +1172,7 @@ typedef enum {
     /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
     /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
     /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
 } ClearTagType;
 
 #endif

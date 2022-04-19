@@ -44,7 +44,7 @@ void ObjEnding_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->modelInfo = &sModelInfo[thisx->params];
     animMat = this->modelInfo->animMat;
     if (animMat != NULL) {
-        this->animMat = (AnimatedMaterial*)Lib_SegmentedToVirtual(animMat);
+        this->animMat = Lib_SegmentedToVirtual(animMat);
     }
 }
 

@@ -254,7 +254,7 @@ s32 func_80A52A78(EnDnq* this, GlobalContext* globalCtx) {
 
 s32 func_80A52B68(EnDnq* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
-    u16 temp = globalCtx->msgCtx.unk11F04;
+    u16 temp = globalCtx->msgCtx.currentTextId;
 
     if ((player->stateFlags1 & 0x40) && (player->targetActor == &this->actor)) {
         switch (temp) {
@@ -306,7 +306,7 @@ void func_80A52C6C(EnDnq* this, GlobalContext* globalCtx) {
 }
 
 s32* func_80A52CF8(EnDnq* this, GlobalContext* globalCtx) {
-    if (gSaveContext.weekEventReg[23] & 0x20) {
+    if (gSaveContext.save.weekEventReg[23] & 0x20) {
         return &D_80A53400[14];
     }
 
@@ -340,12 +340,12 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
         SubS_UpdateFlags(&this->unk_37C, 0, 7);
     }
 
-    if (!(gSaveContext.weekEventReg[23] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
         this->unk_390 = 70.0f;
-        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !func_801690CC(globalCtx) &&
+        if (Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) && !Play_InCsMode(globalCtx) &&
             (Message_GetState(&globalCtx->msgCtx) == 0) && (ActorCutscene_GetCurrentIndex() == -1)) {
-            if ((DECR(this->unk_384) == 0) && (gSaveContext.weekEventReg[29] & 0x40)) {
-                func_801518B0(globalCtx, 0x969, NULL);
+            if ((DECR(this->unk_384) == 0) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+                Message_StartTextbox(globalCtx, 0x969, NULL);
                 this->unk_384 = 200;
             }
         }
@@ -358,7 +358,7 @@ void func_80A52DC8(EnDnq* this, GlobalContext* globalCtx) {
 
         this->actor.xzDistToPlayer = this->unk_394;
 
-        if (gSaveContext.weekEventReg[83] & 8) {
+        if (gSaveContext.save.weekEventReg[83] & 8) {
             func_80A52A78(this, globalCtx);
         } else if (this->unk_3A4 == 0) {
             Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
@@ -388,12 +388,12 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
     static s32 D_80A535FC[] = {
         0, 1, 2, 3, 5, 6,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     u32 temp_v1;
 
-    if (func_800EE29C(globalCtx, 0x69)) {
-        temp_v0 = func_800EE200(globalCtx, 0x69);
-        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 105)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 105);
+        temp_v1 = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_1DC != (u8)temp_v1) {
             func_80A5257C(this, D_80A535FC[temp_v1]);
             this->unk_1DC = temp_v1;
@@ -408,7 +408,7 @@ void func_80A53038(EnDnq* this, GlobalContext* globalCtx) {
             func_80A5257C(this, this->unk_398 + 1);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 
@@ -427,7 +427,7 @@ void EnDnq_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_386 = 0;
     this->unk_37C = 0;
     SubS_UpdateFlags(&this->unk_37C, 3, 7);
-    if (gSaveContext.weekEventReg[9] & 0x80) {
+    if (gSaveContext.save.weekEventReg[9] & 0x80) {
         this->unk_3A4 = 1;
     } else {
         this->unk_3A4 = 0;

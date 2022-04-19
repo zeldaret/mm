@@ -182,7 +182,7 @@ void func_8092C934(EnDns* this) {
 s32* func_8092C9BC(EnDns* this, GlobalContext* globalCtx) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (!(gSaveContext.weekEventReg[23] & 0x20)) {
+    if (!(gSaveContext.save.weekEventReg[23] & 0x20)) {
         if (player->transformation != PLAYER_FORM_DEKU) {
             return &D_8092DCB0[16];
         } else if (this->unk_2FC != 0) {
@@ -210,16 +210,16 @@ s32* func_8092C9BC(EnDns* this, GlobalContext* globalCtx) {
 s32 func_8092CA74(EnDns* this) {
     switch (ENDNS_GET_7(&this->actor)) {
         case ENDNS_GET_7_0:
-            return 0x1D1;
+            return 465;
 
         case ENDNS_GET_7_1:
-            return 0x1D2;
+            return 466;
 
         case ENDNS_GET_7_2:
-            return 0x1D3;
+            return 467;
 
         case ENDNS_GET_7_3:
-            return 0x1D4;
+            return 468;
     }
 
     return 0;
@@ -274,7 +274,7 @@ s32 func_8092CC68(GlobalContext* globalCtx) {
     s32 ret = false;
     s16 bgId;
 
-    if (!func_801690CC(globalCtx) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
+    if (!Play_InCsMode(globalCtx) && (player->actor.bgCheckFlags & 1) && (player->transformation != PLAYER_FORM_DEKU)) {
         bgId = player->actor.floorBgId;
         if (SurfaceType_GetSceneExitIndex(&globalCtx->colCtx, player->actor.floorPoly, bgId) != 4) {
             ret = true;
@@ -361,14 +361,14 @@ s32 func_8092D068(EnDns* this) {
     s32 ret = false;
 
     if (ENDNS_GET_8000(&this->actor)) {
-        if (gSaveContext.weekEventReg[23] & 0x20) {
+        if (gSaveContext.save.weekEventReg[23] & 0x20) {
             ret = true;
         }
     } else if (ENDNS_GET_4000(&this->actor)) {
-        if ((gSaveContext.weekEventReg[9] & 0x80) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+        if ((gSaveContext.save.weekEventReg[9] & 0x80) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             ret = true;
         }
-    } else if (!(gSaveContext.weekEventReg[9] & 0x80) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+    } else if (!(gSaveContext.save.weekEventReg[9] & 0x80) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
         ret = true;
     }
 
@@ -399,7 +399,8 @@ void func_8092D1B8(EnDns* this, GlobalContext* globalCtx) {
     }
 
     if (!ENDNS_GET_4000(&this->actor) || (this->unk_2D2 != 0)) {
-        if (!(gSaveContext.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) && func_8092CC68(globalCtx)) {
+        if (!(gSaveContext.save.weekEventReg[23] & 0x20) && !(gSaveContext.eventInf[1] & 0x20) &&
+            func_8092CC68(globalCtx)) {
             player->stateFlags1 |= 0x20;
             this->unk_2C6 |= 0x100;
             SubS_UpdateFlags(&this->unk_2C6, 4, 7);
@@ -480,12 +481,12 @@ void func_8092D5E8(EnDns* this, GlobalContext* globalCtx) {
         EN_DNS_ANIMATION_SURPRISE_START,
         EN_DNS_ANIMATION_RUN_START,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     u32 temp_v1;
 
-    if (func_800EE29C(globalCtx, this->unk_2C8)) {
-        temp_v0 = func_800EE200(globalCtx, this->unk_2C8);
-        temp_v1 = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, this->unk_2C8)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, this->unk_2C8);
+        temp_v1 = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_1D8 != (u8)temp_v1) {
             func_8092C63C(this, D_8092DE0C[temp_v1]);
             this->unk_1D8 = temp_v1;
@@ -497,7 +498,7 @@ void func_8092D5E8(EnDns* this, GlobalContext* globalCtx) {
             func_8092C63C(this, this->animationIndex + 1);
         }
 
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 
@@ -524,7 +525,7 @@ void EnDns_Init(Actor* thisx, GlobalContext* globalCtx) {
     SubS_UpdateFlags(&this->unk_2C6, 3, 7);
     this->unk_2C6 |= (0x40 | 0x10);
     this->unk_2C6 |= 0x200;
-    if (gSaveContext.weekEventReg[9] & 0x80) {
+    if (gSaveContext.save.weekEventReg[9] & 0x80) {
         this->unk_2FC = 1;
     } else {
         this->unk_2FC = 0;

@@ -112,7 +112,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.cutscene = this->cutscenes[0];
 
     // between midnight and morning start spawned
-    if (gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         this->alpha = 255;
     } else { // else (night 6pm to midnight): wait to appear
         this->alpha = 0;
@@ -121,7 +121,7 @@ void EnYb_Init(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     // check if already healed
-    if (gSaveContext.weekEventReg[82] & 4) {
+    if (gSaveContext.save.weekEventReg[82] & 4) {
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -260,7 +260,7 @@ void EnYb_SetupLeaving(EnYb* this, GlobalContext* globalCtx) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnYb_Talk;
         // I am counting on you
-        func_801518B0(globalCtx, 0x147D, &this->actor);
+        Message_StartTextbox(globalCtx, 0x147D, &this->actor);
         func_80BFA2FC(globalCtx);
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
@@ -287,12 +287,12 @@ void EnYb_Talk(EnYb* this, GlobalContext* globalCtx) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     EnYb_UpdateAnimation(this, globalCtx);
 
-    if (Message_GetState(&globalCtx->msgCtx) == 5 && func_80147624(globalCtx) != 0) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if (Message_GetState(&globalCtx->msgCtx) == 5 && Message_ShouldAdvance(globalCtx) != 0) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x147D: // I am counting on you
                 func_801477B4(globalCtx);
                 this->actionFunc = EnYb_Disappear;
-                gSaveContext.weekEventReg[82] |= 0x4;
+                gSaveContext.save.weekEventReg[82] |= 0x4;
                 break;
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
@@ -323,7 +323,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
-        func_801518B0(globalCtx, 0x147C, &this->actor);
+        Message_StartTextbox(globalCtx, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
@@ -353,7 +353,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
     EnYb_UpdateAnimation(this, globalCtx);
     if (this->actor.xzDistToPlayer < 180.0f && fabsf(this->actor.playerHeightRel) < 50.0f &&
         globalCtx->msgCtx.ocarinaMode == 3 && globalCtx->msgCtx.unk1202E == 7 &&
-        gSaveContext.playerForm == PLAYER_FORM_HUMAN) {
+        gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
@@ -362,10 +362,10 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
         this->actionFunc = EnYb_Talk;
         if (Player_GetMask(globalCtx) == PLAYER_MASK_KAMARO) {
             // I have taught you, go use it
-            func_801518B0(globalCtx, 0x147C, &this->actor);
+            Message_StartTextbox(globalCtx, 0x147C, &this->actor);
         } else {
             // regular talk to him first dialogue
-            func_801518B0(globalCtx, 0x147B, &this->actor);
+            Message_StartTextbox(globalCtx, 0x147B, &this->actor);
         }
     } else if (EnYb_CanTalk(this, globalCtx)) {
         func_800B8614(&this->actor, globalCtx, 120.0f);
@@ -385,7 +385,7 @@ void EnYb_Idle(EnYb* this, GlobalContext* globalCtx) {
 }
 
 void EnYb_WaitForMidnight(EnYb* this, GlobalContext* globalCtx) {
-    if (gSaveContext.time < CLOCK_TIME(6, 0)) {
+    if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
         EnYb_UpdateAnimation(this, globalCtx);
         this->alpha += 5;
         if (this->alpha > 250) {

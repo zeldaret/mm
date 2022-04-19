@@ -34,6 +34,7 @@ extern EffectSsInit Effect_Ss_Ice_Smoke_InitVars;
 extern EffectSsInit Effect_En_Ice_Block_InitVars;
 extern EffectSsInit Effect_Ss_Sbn_InitVars;
 
+extern ActorInit Player_InitVars;
 extern ActorInit Arms_Hook_InitVars;
 extern ActorInit Arrow_Fire_InitVars;
 extern ActorInit Arrow_Ice_InitVars;

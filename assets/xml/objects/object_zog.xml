@@ -85,28 +85,28 @@
         <Texture Name="object_zog_Tex_028610" OutName="tex_028610" Format="rgba16" Width="16" Height="16" Offset="0x28610" />
         <Texture Name="object_zog_Tex_028810" OutName="tex_028810" Format="rgba16" Width="16" Height="32" Offset="0x28810" />
         <Texture Name="object_zog_Tex_028C10" OutName="tex_028C10" Format="rgba16" Width="16" Height="32" Offset="0x28C10" />
-        <Limb Name="object_zog_Standardlimb_029010" Type="Standard" Offset="0x29010" />
-        <Limb Name="object_zog_Standardlimb_02901C" Type="Standard" Offset="0x2901C" />
-        <Limb Name="object_zog_Standardlimb_029028" Type="Standard" Offset="0x29028" />
-        <Limb Name="object_zog_Standardlimb_029034" Type="Standard" Offset="0x29034" />
-        <Limb Name="object_zog_Standardlimb_029040" Type="Standard" Offset="0x29040" />
-        <Limb Name="object_zog_Standardlimb_02904C" Type="Standard" Offset="0x2904C" />
-        <Limb Name="object_zog_Standardlimb_029058" Type="Standard" Offset="0x29058" />
-        <Limb Name="object_zog_Standardlimb_029064" Type="Standard" Offset="0x29064" />
-        <Limb Name="object_zog_Standardlimb_029070" Type="Standard" Offset="0x29070" />
-        <Limb Name="object_zog_Standardlimb_02907C" Type="Standard" Offset="0x2907C" />
-        <Limb Name="object_zog_Standardlimb_029088" Type="Standard" Offset="0x29088" />
-        <Limb Name="object_zog_Standardlimb_029094" Type="Standard" Offset="0x29094" />
-        <Limb Name="object_zog_Standardlimb_0290A0" Type="Standard" Offset="0x290A0" />
-        <Limb Name="object_zog_Standardlimb_0290AC" Type="Standard" Offset="0x290AC" />
-        <Limb Name="object_zog_Standardlimb_0290B8" Type="Standard" Offset="0x290B8" />
-        <Limb Name="object_zog_Standardlimb_0290C4" Type="Standard" Offset="0x290C4" />
-        <Limb Name="object_zog_Standardlimb_0290D0" Type="Standard" Offset="0x290D0" />
-        <Limb Name="object_zog_Standardlimb_0290DC" Type="Standard" Offset="0x290DC" />
-        <Limb Name="object_zog_Standardlimb_0290E8" Type="Standard" Offset="0x290E8" />
-        <Limb Name="object_zog_Standardlimb_0290F4" Type="Standard" Offset="0x290F4" />
-        <Limb Name="object_zog_Standardlimb_029100" Type="Standard" Offset="0x29100" />
-        <Limb Name="object_zog_Standardlimb_02910C" Type="Standard" Offset="0x2910C" />
-        <Skeleton Name="object_zog_Skel_029170" Type="Flex" LimbType="Standard" Offset="0x29170" />
+        <Limb Name="object_zog_Standardlimb_029010" Type="Standard" EnumName="OBJECT_ZOG_LIMB_01" Offset="0x29010" />
+        <Limb Name="object_zog_Standardlimb_02901C" Type="Standard" EnumName="OBJECT_ZOG_LIMB_02" Offset="0x2901C" />
+        <Limb Name="object_zog_Standardlimb_029028" Type="Standard" EnumName="OBJECT_ZOG_LIMB_03" Offset="0x29028" />
+        <Limb Name="object_zog_Standardlimb_029034" Type="Standard" EnumName="OBJECT_ZOG_LIMB_04" Offset="0x29034" />
+        <Limb Name="object_zog_Standardlimb_029040" Type="Standard" EnumName="OBJECT_ZOG_LIMB_05" Offset="0x29040" />
+        <Limb Name="object_zog_Standardlimb_02904C" Type="Standard" EnumName="OBJECT_ZOG_LIMB_06" Offset="0x2904C" />
+        <Limb Name="object_zog_Standardlimb_029058" Type="Standard" EnumName="OBJECT_ZOG_LIMB_07" Offset="0x29058" />
+        <Limb Name="object_zog_Standardlimb_029064" Type="Standard" EnumName="OBJECT_ZOG_LIMB_08" Offset="0x29064" />
+        <Limb Name="object_zog_Standardlimb_029070" Type="Standard" EnumName="OBJECT_ZOG_LIMB_09" Offset="0x29070" />
+        <Limb Name="object_zog_Standardlimb_02907C" Type="Standard" EnumName="OBJECT_ZOG_LIMB_0A" Offset="0x2907C" />
+        <Limb Name="object_zog_Standardlimb_029088" Type="Standard" EnumName="OBJECT_ZOG_LIMB_0B" Offset="0x29088" />
+        <Limb Name="object_zog_Standardlimb_029094" Type="Standard" EnumName="OBJECT_ZOG_LIMB_0C" Offset="0x29094" />
+        <Limb Name="object_zog_Standardlimb_0290A0" Type="Standard" EnumName="OBJECT_ZOG_LIMB_0D" Offset="0x290A0" />
+        <Limb Name="object_zog_Standardlimb_0290AC" Type="Standard" EnumName="OBJECT_ZOG_LIMB_0E" Offset="0x290AC" />
+        <Limb Name="object_zog_Standardlimb_0290B8" Type="Standard" EnumName="OBJECT_ZOG_LIMB_0F" Offset="0x290B8" />
+        <Limb Name="object_zog_Standardlimb_0290C4" Type="Standard" EnumName="OBJECT_ZOG_LIMB_10" Offset="0x290C4" />
+        <Limb Name="object_zog_Standardlimb_0290D0" Type="Standard" EnumName="OBJECT_ZOG_LIMB_11" Offset="0x290D0" />
+        <Limb Name="object_zog_Standardlimb_0290DC" Type="Standard" EnumName="OBJECT_ZOG_LIMB_12" Offset="0x290DC" />
+        <Limb Name="object_zog_Standardlimb_0290E8" Type="Standard" EnumName="OBJECT_ZOG_LIMB_13" Offset="0x290E8" />
+        <Limb Name="object_zog_Standardlimb_0290F4" Type="Standard" EnumName="OBJECT_ZOG_LIMB_14" Offset="0x290F4" />
+        <Limb Name="object_zog_Standardlimb_029100" Type="Standard" EnumName="OBJECT_ZOG_LIMB_15" Offset="0x29100" />
+        <Limb Name="object_zog_Standardlimb_02910C" Type="Standard" EnumName="OBJECT_ZOG_LIMB_16" Offset="0x2910C" />
+        <Skeleton Name="object_zog_Skel_029170" Type="Flex" LimbType="Standard" LimbNone="OBJECT_ZOG_LIMB_NONE" LimbMax="OBJECT_ZOG_LIMB_MAX" EnumName="object_zog_Limbs" Offset="0x29170" />
     </File>
 </Root>

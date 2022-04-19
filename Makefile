@@ -21,8 +21,9 @@ ifeq ($(NON_MATCHING),1)
   COMPARE := 0
 endif
 
+DISASM_FLAGS := --reg-names=o32
 ifneq ($(FULL_DISASM), 0)
-  DISASM_FLAGS += --full
+  DISASM_FLAGS += --all
 endif
 
 PROJECT_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
@@ -72,6 +73,9 @@ AS         := $(MIPS_BINUTILS_PREFIX)as
 LD         := $(MIPS_BINUTILS_PREFIX)ld
 OBJCOPY    := $(MIPS_BINUTILS_PREFIX)objcopy
 OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
+ASM_PROC   := python3 tools/asm-processor/build.py
+
+ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp
 
 IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
 
@@ -97,6 +101,9 @@ MIPS_VERSION := -mips2
 
 # we support Microsoft extensions such as anonymous structs, which the compiler does support but warns for their usage. Surpress the warnings with -woff.
 CFLAGS += -G 0 -non_shared -Xfullwarn -Xcpluscomm $(IINC) -nostdinc -Wab,-r4300_mul -woff 624,649,838,712
+
+# Use relocations and abi fpr names in the dump
+OBJDUMP_FLAGS := -d -r -z -Mreg-names=32
 
 ifeq ($(shell getconf LONG_BIT), 32)
   # Work around memory allocation bug in QEMU
@@ -133,6 +140,8 @@ ASM_DIRS := $(shell find asm -type d -not -path "asm/non_matchings*") $(shell fi
 
 ## Assets binaries (PNGs, JPGs, etc)
 ASSET_BIN_DIRS := $(shell find assets/* -type d -not -path "assets/xml*")
+# Prevents building C files that will be #include'd
+ASSET_BIN_DIRS_C_FILES := $(shell find assets/* -type d -not -path "assets/xml*" -not -path "assets/code*" -not -path "assets/overlays*")
 
 ASSET_FILES_XML := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.xml))
 ASSET_FILES_BIN := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.bin))
@@ -144,7 +153,7 @@ TEXTURE_FILES_JPG := $(foreach dir,$(ASSET_BIN_DIRS),$(wildcard $(dir)/*.jpg))
 TEXTURE_FILES_OUT := $(foreach f,$(TEXTURE_FILES_PNG:.png=.inc.c),build/$f) \
 					 $(foreach f,$(TEXTURE_FILES_JPG:.jpg=.jpg.inc.c),build/$f) \
 
-C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS),$(wildcard $(dir)/*.c))
+C_FILES       := $(foreach dir,$(SRC_DIRS) $(ASSET_BIN_DIRS_C_FILES),$(wildcard $(dir)/*.c))
 S_FILES       := $(shell grep -F "build/asm" spec | sed 's/.*build\/// ; s/\.o\".*/.s/') \
                  $(shell grep -F "build/data" spec | sed 's/.*build\/// ; s/\.o\".*/.s/')
 BASEROM_FILES := $(shell grep -F "build/baserom" spec | sed 's/.*build\/// ; s/\.o\".*//')
@@ -174,7 +183,8 @@ build/src/libultra/flash/%.o: MIPS_VERSION := -mips1
 
 build/src/code/audio/%.o: OPTFLAGS := -O2
 
-build/assets/%.o: OPTFLAGS := 
+build/assets/%.o: OPTFLAGS := -O1
+build/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
 build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
@@ -191,19 +201,19 @@ build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
 build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
-build/src/boot_O2/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot_O2_g3/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot_O2_g3/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/src/libultra/%.o: CC := python3 tools/asm-processor/build.py $(CC_OLD) -- $(AS) $(ASFLAGS) --
+build/src/libultra/%.o: CC := $(CC_OLD)
+# Needed at least until voice is decompiled
+build/src/libultra/voice/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC_OLD) -- $(AS) $(ASFLAGS) --
 
-build/src/code/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/code/audio/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/code/audio/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
-build/src/overlays/actors/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/overlays/effects/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/overlays/fbdemos/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/overlays/gamestates/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
-build/src/overlays/kaleido_scope/%.o: CC := python3 tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+build/src/overlays/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+
+build/assets/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 #### Main Targets ###
 
@@ -298,7 +308,7 @@ build/data/%.o: data/%.s
 build/src/overlays/%.o: src/overlays/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
 # TODO: `() || true` is currently necessary to suppress `Error 1 (ignored)` make warnings caused by `test`, but this will go away if 
 # 	the following is moved to a separate rule that is only run once when all the required objects have been compiled. 
 	$(ZAPD) bovl -eh -i $@ -cfg $< --outputpath $(@D)/$(notdir $(@D))_reloc.s
@@ -308,21 +318,21 @@ build/src/overlays/%.o: src/overlays/%.c
 build/src/%.o: src/%.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
-	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
 	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
-	@$(OBJDUMP) -d $@ > $(@:.o=.s)
+	@$(OBJDUMP) $(OBJDUMP_FLAGS) $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
 
 # Build C files from assets

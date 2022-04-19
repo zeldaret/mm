@@ -107,7 +107,7 @@ void EnZov_Init(Actor* thisx, GlobalContext* globalCtx) {
         case ENZOV_F_1:
             this->actionFunc = func_80BD1F1C;
             func_80BD1570(this, 9, 0);
-            if (!(gSaveContext.weekEventReg[55] & 0x80)) {
+            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
                 Actor_MarkForDeath(&this->actor);
                 return;
             }
@@ -120,7 +120,7 @@ void EnZov_Init(Actor* thisx, GlobalContext* globalCtx) {
 
         default:
             this->unk_320 |= 2;
-            if ((gSaveContext.weekEventReg[55] & 0x80) || (gSaveContext.weekEventReg[53] & 0x20)) {
+            if ((gSaveContext.save.weekEventReg[55] & 0x80) || (gSaveContext.save.weekEventReg[53] & 0x20)) {
                 Actor_MarkForDeath(&this->actor);
             }
             break;
@@ -185,9 +185,9 @@ s32 func_80BD15A4(EnZov* this, GlobalContext* globalCtx) {
 void func_80BD160C(EnZov* this, GlobalContext* globalCtx) {
     s32 textId = 0;
 
-    if (gSaveContext.weekEventReg[53] & 0x20) {
+    if (gSaveContext.save.weekEventReg[53] & 0x20) {
         this->unk_320 &= ~2;
-        if (gSaveContext.playerForm != PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
             textId = 0x1024;
             if ((this->unk_322 == 0) || (this->unk_322 == 4)) {
                 func_80BD1570(this, 4, 2);
@@ -201,7 +201,7 @@ void func_80BD160C(EnZov* this, GlobalContext* globalCtx) {
             this->unk_320 |= 4;
             func_80BD1570(this, 3, 2);
         }
-    } else if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
+    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
         func_80BD1570(this, 2, 2);
         this->actionFunc = func_80BD19FC;
         this->unk_324 = 10;
@@ -213,7 +213,7 @@ void func_80BD160C(EnZov* this, GlobalContext* globalCtx) {
 
     this->unk_320 |= 1;
     if (textId != 0) {
-        func_801518B0(globalCtx, textId, &this->actor);
+        Message_StartTextbox(globalCtx, textId, &this->actor);
     }
 }
 
@@ -261,8 +261,8 @@ void func_80BD187C(EnZov* this, GlobalContext* globalCtx) {
 
     switch (Message_GetState(&globalCtx->msgCtx)) {
         case 5:
-            if (func_80147624(globalCtx)) {
-                switch (globalCtx->msgCtx.unk11F04) {
+            if (Message_ShouldAdvance(globalCtx)) {
+                switch (globalCtx->msgCtx.currentTextId) {
                     case 0x1022:
                         func_80151938(globalCtx, 0x1023);
                         break;
@@ -314,7 +314,7 @@ void func_80BD19FC(EnZov* this, GlobalContext* globalCtx) {
             this->unk_324--;
         } else {
             func_80BD13DC(this);
-            func_801518B0(globalCtx, 0x1021, &this->actor);
+            Message_StartTextbox(globalCtx, 0x1021, &this->actor);
             ((EnElf*)(GET_PLAYER(globalCtx)->tatlActor))->unk_264 |= 4;
             Actor_ChangeFocus(&this->actor, globalCtx, GET_PLAYER(globalCtx)->tatlActor);
             this->actionFunc = func_80BD187C;
@@ -328,11 +328,11 @@ void func_80BD19FC(EnZov* this, GlobalContext* globalCtx) {
 s32 func_80BD1AE0(EnZov* this, GlobalContext* globalCtx) {
     func_80BD1764(this);
 
-    if (func_800EE29C(globalCtx, 0x1F8)) {
-        s16 temp_v1 = globalCtx->csCtx.npcActions[func_800EE200(globalCtx, 0x1F8)]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 504)) {
+        s16 action = globalCtx->csCtx.actorActions[Cutscene_GetActorActionIndex(globalCtx, 504)]->action;
 
-        if (temp_v1 != this->unk_326) {
-            this->unk_326 = temp_v1;
+        if (action != this->unk_326) {
+            this->unk_326 = action;
             switch (this->unk_326) {
                 case 1:
                     func_80BD1570(this, 0, 0);
@@ -354,6 +354,7 @@ s32 func_80BD1AE0(EnZov* this, GlobalContext* globalCtx) {
         }
         return true;
     }
+
     return false;
 }
 
@@ -366,7 +367,7 @@ void func_80BD1BF0(EnZov* this, GlobalContext* globalCtx) {
 
 void func_80BD1C38(EnZov* this, GlobalContext* globalCtx) {
     if (func_80BD1AE0(this, globalCtx)) {
-        func_800EDF24(&this->actor, globalCtx, func_800EE200(globalCtx, 0x1F8));
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, Cutscene_GetActorActionIndex(globalCtx, 504));
     }
 }
 
@@ -380,7 +381,7 @@ void func_80BD1C84(EnZov* this, GlobalContext* globalCtx) {
         func_800B8614(&this->actor, globalCtx, 120.0f);
     }
 
-    if (func_800EE29C(globalCtx, 0x1F8)) {
+    if (Cutscene_CheckActorAction(globalCtx, 0x1F8)) {
         this->actionFunc = func_80BD1BF0;
         func_80BD1BF0(this, globalCtx);
     }
@@ -389,8 +390,8 @@ void func_80BD1C84(EnZov* this, GlobalContext* globalCtx) {
 void func_80BD1D30(EnZov* this, GlobalContext* globalCtx) {
     u16 textId;
 
-    if (gSaveContext.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.weekEventReg[79] & 1) {
+    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (gSaveContext.save.weekEventReg[79] & 1) {
             textId = 0x1032;
         } else {
             textId = 0x1033;
@@ -398,7 +399,7 @@ void func_80BD1D30(EnZov* this, GlobalContext* globalCtx) {
     } else {
         textId = 0x1031;
     }
-    func_801518B0(globalCtx, textId, &this->actor);
+    Message_StartTextbox(globalCtx, textId, &this->actor);
 }
 
 void func_80BD1D94(EnZov* this, GlobalContext* globalCtx) {
@@ -410,22 +411,22 @@ void func_80BD1DB8(EnZov* this, GlobalContext* globalCtx) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
 
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
-        switch (globalCtx->msgCtx.unk11F04) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
+        switch (globalCtx->msgCtx.currentTextId) {
             case 0x1033:
             case 0x1034:
             case 0x1035:
             case 0x1036:
             case 0x1037:
             case 0x1038:
-                func_80151938(globalCtx, globalCtx->msgCtx.unk11F04 + 1);
+                func_80151938(globalCtx, globalCtx->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1039:
                 globalCtx->nextEntranceIndex = globalCtx->setupExitList[ENZOV_GET_FE00(&this->actor)];
                 globalCtx->unk_1887F = 5;
                 globalCtx->sceneLoadFlag = 0x14;
-                gSaveContext.weekEventReg[78] |= 1;
+                gSaveContext.save.weekEventReg[78] |= 1;
                 this->actionFunc = func_80BD1D94;
                 globalCtx->msgCtx.unk11F10 = 0;
                 Audio_QueueSeqCmd(0x101400FF);
@@ -476,7 +477,7 @@ void EnZov_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     this->actionFunc(this, globalCtx);
 
-    if (!func_800EE29C(globalCtx, 0x1F8)) {
+    if (!Cutscene_CheckActorAction(globalCtx, 0x1F8)) {
         this->unk_320 &= ~0x10;
     }
 

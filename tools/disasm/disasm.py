@@ -2,31 +2,49 @@
 
 import argparse, ast, math, os, re, struct
 import bisect
-from mips_isa import *
-from multiprocessing import *
+import multiprocessing
 from pathlib import Path
+import mips_isa
+
+# Consider implementing gpr naming too, but already uses abi names by default
+fpr_name_options = {
+    "numeric": mips_isa.numeric_fpr_names,
+    "o32": mips_isa.o32_fpr_names,
+}
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "-j", dest="jobs", type=int, default=1, help="number of processes to run at once"
 )
 parser.add_argument(
-    "--full",
-    "-f",
-    dest="full",
+    "-a",
+    "--all",
+    dest="all",
     action="store_true",
     default=False,
     help="Decompile all files regardless of whether they are used or not",
 )
+parser.add_argument(
+    "-f",
+    "--files",
+    dest="files",
+    nargs="+",
+    required=False,
+    help="Optional list of files to diassemble separated by a space. This is a whitelist, all files will be skipped besides the ones listed here if used.",
+)
+parser.add_argument("--reg-names", choices=fpr_name_options.keys(), help="How to name registers in the output")
 
 args = parser.parse_args()
 jobs = args.jobs
+
+mips_isa.mips_fpr_names = fpr_name_options.get(args.reg_names, mips_isa.mips_fpr_names)
+
 
 ASM_OUT = "asm/"
 DATA_OUT = "data/"
 
 
-def discard_decomped_files(files_spec):
+def discard_decomped_files(files_spec, include_files):
     root_path = Path(__file__).parent.parent.parent
 
     with open(root_path / "spec", "r") as f:
@@ -37,6 +55,12 @@ def discard_decomped_files(files_spec):
     new_spec = []
     for f in files_spec:
         name, _, type, _, file_list = f
+
+        force_include = False
+        if include_files:
+            if not any([x in name for x in include_files]):
+                continue
+            force_include = True
 
         # Find the beginseg for this file
         i = 0
@@ -92,6 +116,7 @@ def discard_decomped_files(files_spec):
                             if "GLOBAL_ASM" in f2.read():
                                 include = True
 
+            include |= force_include
             if include:
                 new_files[offset] = file
                 included = True
@@ -107,71 +132,71 @@ def discard_decomped_files(files_spec):
 
 
 MIPS_BRANCH_LIKELY_INSNS = [
-    MIPS_INS_BEQL,
-    MIPS_INS_BGEZALL,
-    MIPS_INS_BGEZL,
-    MIPS_INS_BGTZL,
-    MIPS_INS_BLEZL,
-    MIPS_INS_BLTZALL,
-    MIPS_INS_BLTZL,
-    MIPS_INS_BNEL,
-    MIPS_INS_BC1TL,
-    MIPS_INS_BC1FL,
+    mips_isa.MIPS_INS_BEQL,
+    mips_isa.MIPS_INS_BGEZALL,
+    mips_isa.MIPS_INS_BGEZL,
+    mips_isa.MIPS_INS_BGTZL,
+    mips_isa.MIPS_INS_BLEZL,
+    mips_isa.MIPS_INS_BLTZALL,
+    mips_isa.MIPS_INS_BLTZL,
+    mips_isa.MIPS_INS_BNEL,
+    mips_isa.MIPS_INS_BC1TL,
+    mips_isa.MIPS_INS_BC1FL,
 ]
 
 MIPS_BRANCH_INSNS = [
     *MIPS_BRANCH_LIKELY_INSNS,
-    MIPS_INS_BEQ,
-    MIPS_INS_BGEZ,
-    MIPS_INS_BGEZAL,
-    MIPS_INS_BGTZ,
-    MIPS_INS_BNE,
-    MIPS_INS_BLTZ,
-    MIPS_INS_BLTZAL,
-    MIPS_INS_BLEZ,
-    MIPS_INS_BC1T,
-    MIPS_INS_BC1F,
-    MIPS_INS_BEQZ,
-    MIPS_INS_BNEZ,
-    MIPS_INS_B,
+    mips_isa.MIPS_INS_BEQ,
+    mips_isa.MIPS_INS_BGEZ,
+    mips_isa.MIPS_INS_BGEZAL,
+    mips_isa.MIPS_INS_BGTZ,
+    mips_isa.MIPS_INS_BNE,
+    mips_isa.MIPS_INS_BLTZ,
+    mips_isa.MIPS_INS_BLTZAL,
+    mips_isa.MIPS_INS_BLEZ,
+    mips_isa.MIPS_INS_BC1T,
+    mips_isa.MIPS_INS_BC1F,
+    mips_isa.MIPS_INS_BEQZ,
+    mips_isa.MIPS_INS_BNEZ,
+    mips_isa.MIPS_INS_B,
 ]
 
-MIPS_JUMP_INSNS = [MIPS_INS_JAL, MIPS_INS_JALR, MIPS_INS_J, MIPS_INS_JR]
+MIPS_JUMP_INSNS = [mips_isa.MIPS_INS_JAL, mips_isa.MIPS_INS_JALR, mips_isa.MIPS_INS_J, mips_isa.MIPS_INS_JR]
 
-MIPS_FP_LOAD_INSNS = [MIPS_INS_LWC1, MIPS_INS_LDC1]
+MIPS_FP_LOAD_INSNS = [mips_isa.MIPS_INS_LWC1, mips_isa.MIPS_INS_LDC1]
 
-MIPS_FP_STORE_INSNS = [MIPS_INS_SWC1, MIPS_INS_SDC1]
+MIPS_FP_STORE_INSNS = [mips_isa.MIPS_INS_SWC1, mips_isa.MIPS_INS_SDC1]
 
 MIPS_FP_LOAD_STORE_INSNS = [*MIPS_FP_LOAD_INSNS, *MIPS_FP_STORE_INSNS]
 
 MIPS_STORE_INSNS = [
-    MIPS_INS_SB,
-    MIPS_INS_SH,
-    MIPS_INS_SW,
-    MIPS_INS_SWL,
-    MIPS_INS_SWR,
-    MIPS_INS_SD,
-    MIPS_INS_SDL,
-    MIPS_INS_SDR,
-    MIPS_INS_SC,
-    MIPS_INS_SCD,
+    mips_isa.MIPS_INS_SB,
+    mips_isa.MIPS_INS_SH,
+    mips_isa.MIPS_INS_SW,
+    mips_isa.MIPS_INS_SWL,
+    mips_isa.MIPS_INS_SWR,
+    mips_isa.MIPS_INS_SD,
+    mips_isa.MIPS_INS_SDL,
+    mips_isa.MIPS_INS_SDR,
+    mips_isa.MIPS_INS_SC,
+    mips_isa.MIPS_INS_SCD,
     *MIPS_FP_STORE_INSNS,
 ]
 
 MIPS_LOAD_STORE_INSNS = [
-    MIPS_INS_LB,
-    MIPS_INS_LBU,
-    MIPS_INS_LH,
-    MIPS_INS_LHU,
-    MIPS_INS_LW,
-    MIPS_INS_LWL,
-    MIPS_INS_LWR,
-    MIPS_INS_LWU,
-    MIPS_INS_LD,
-    MIPS_INS_LDL,
-    MIPS_INS_LDR,
-    MIPS_INS_LL,
-    MIPS_INS_LLD,
+    mips_isa.MIPS_INS_LB,
+    mips_isa.MIPS_INS_LBU,
+    mips_isa.MIPS_INS_LH,
+    mips_isa.MIPS_INS_LHU,
+    mips_isa.MIPS_INS_LW,
+    mips_isa.MIPS_INS_LWL,
+    mips_isa.MIPS_INS_LWR,
+    mips_isa.MIPS_INS_LWU,
+    mips_isa.MIPS_INS_LD,
+    mips_isa.MIPS_INS_LDL,
+    mips_isa.MIPS_INS_LDR,
+    mips_isa.MIPS_INS_LL,
+    mips_isa.MIPS_INS_LLD,
     *MIPS_STORE_INSNS,
     *MIPS_FP_LOAD_STORE_INSNS,
 ]
@@ -600,7 +625,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
         # assert insn.value_forname(insn.fields[0]) is not None
         # print(f"insn: {insn.mnemonic}, rt: {insn.rt}, first: {insn.value_forname(insn.fields[0])}")
-        # assert insn.id not in [MIPS_INS_ORI, MIPS_INS_ADDIU, *MIPS_LOAD_STORE_INSNS] or insn.rt == insn.value_forname(insn.fields[0])
+        # assert insn.id not in [MIPS_INS_ORI, mips_isa.MIPS_INS_ADDIU, *MIPS_LOAD_STORE_INSNS] or insn.rt == insn.value_forname(insn.fields[0])
 
         if (
             delay_slot
@@ -621,9 +646,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
     insns = []
     for i, raw_insn in enumerate(raw_insns, 0):
-        insn = decode_insn(raw_insn, vram + i * 4)
+        insn = mips_isa.decode_insn(raw_insn, vram + i * 4)
 
-        if insn.id == MIPS_INS_JR and insn.rs != MIPS_REG_RA:
+        if insn.id == mips_isa.MIPS_INS_JR and insn.rs != mips_isa.MIPS_REG_RA:
             # It's hard to find when two jump tables next to each other end, so do a naive first pass
             # to try and find as many jump tables as possible.
             # Luckily IDO has a very homogeneous output for jump tables for which it is very unlikely
@@ -636,9 +661,9 @@ def find_symbols_in_text(section, rodata_section, data_regions):
             insn_m2 = insns[-2]
             insn_m3 = insns[-3]
             if (
-                insn_m1.id == MIPS_INS_LW
-                and insn_m2.id == MIPS_INS_ADDU
-                and insn_m3.id == MIPS_INS_LUI
+                insn_m1.id == mips_isa.MIPS_INS_LW
+                and insn_m2.id == mips_isa.MIPS_INS_ADDU
+                and insn_m3.id == mips_isa.MIPS_INS_LUI
             ):
                 prospective_jtbls.add((insn_m3.imm << 0x10) + insn_m1.imm)
         insns.append(insn)
@@ -659,7 +684,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 Relocated jump targets give us functions in this section
                 """
                 assert (
-                    insn.id == MIPS_INS_JAL
+                    insn.id == mips_isa.MIPS_INS_JAL
                 ), f"R_MIPS_26 applied to {insn.mnemonic} when it should be JAL"
                 put_symbol(symbols_dict, "functions", insn.target)
             elif reloc[1] == 5:  # R_MIPS_HI16
@@ -667,7 +692,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 Relocated %hi gives us %hi values to match with associated %lo
                 """
                 assert (
-                    insn.id == MIPS_INS_LUI
+                    insn.id == mips_isa.MIPS_INS_LUI
                 ), f"R_MIPS_HI16 applied to {insn.mnemonic} when it should be LUI"
                 prev_hi = insn.imm
                 hi_vram = vram + reloc[2]
@@ -676,7 +701,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 Relocated %lo + a %hi to match with gives us relocated symbols in data sections
                 """
                 assert (
-                    insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS
+                    insn.id == mips_isa.MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS
                 ), f"R_MIPS_HI16 applied to {insn.mnemonic} when it should be ADDIU or a load/store"
                 symbol_value = (prev_hi << 0x10) + insn.imm
                 put_symbols(symbols_dict, "symbols", {hi_vram: symbol_value})
@@ -742,16 +767,16 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         if insn.id in MIPS_BRANCH_INSNS:
             func_branch_labels.add(insn.offset)
             delayed_insn = insn
-        elif insn.id == MIPS_INS_ERET:
+        elif insn.id == mips_isa.MIPS_INS_ERET:
             put_symbol(symbols_dict, "functions", vaddr + 4)
         elif insn.id in MIPS_JUMP_INSNS:
-            if insn.id == MIPS_INS_JAL:
+            if insn.id == mips_isa.MIPS_INS_JAL:
                 # mark function at target
                 put_symbol(symbols_dict, "functions", insn.target)
-            elif insn.id == MIPS_INS_J:
+            elif insn.id == mips_isa.MIPS_INS_J:
                 # mark label at target
                 func_branch_labels.add(insn.target)
-            elif insn.id == MIPS_INS_JR:
+            elif insn.id == mips_isa.MIPS_INS_JR:
                 # check if anything branches past it in either branch or jtbl labels
                 if vaddr >= max(func_branch_labels, default=0) and vaddr >= max(
                     func_jtbl_labels, default=0
@@ -777,7 +802,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                                 symbols_dict, "functions", vaddr + 8 + n_padding * 4
                             )
             delayed_insn = insn
-        elif insn.id == MIPS_INS_LUI:
+        elif insn.id == mips_isa.MIPS_INS_LUI:
             """
             Process LUI instruction
 
@@ -794,34 +819,34 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 save_tracker(delayed_insn.offset, {insn.rt: (vaddr, insn.imm)})
             else:
                 lui_tracker.update({insn.rt: (vaddr, insn.imm)})
-        elif insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
+        elif insn.id == mips_isa.MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
             # try match with tracked lui and mark symbol
             hi_vram, imm_value = lui_tracker.get(
-                insn.rs if insn.id == MIPS_INS_ADDIU else insn.base, (None, None)
+                insn.rs if insn.id == mips_isa.MIPS_INS_ADDIU else insn.base, (None, None)
             )
             # if a match was found, validate and record the symbol, TODO improve validation
             if hi_vram != None and (
                 (((imm_value >> 0x8) & 0xF) != 0 and imm_value < 0x1000)
                 or (imm_value >= 0x8000 and imm_value < 0x80D0)
                 or (imm_value >= 0xA400 and imm_value < 0xA480)
-                or (imm_value < 0x0400 and insn.id == MIPS_INS_ADDIU)
+                or (imm_value < 0x0400 and insn.id == mips_isa.MIPS_INS_ADDIU)
             ):
                 lo_vram = vaddr
                 symbol_value = (imm_value << 0x10) + insn.imm
                 put_symbols(symbols_dict, "symbols", {hi_vram: symbol_value})
                 put_symbols(symbols_dict, "symbols", {lo_vram: symbol_value})
-                if insn.id == MIPS_INS_LW:
+                if insn.id == mips_isa.MIPS_INS_LW:
                     # try find jr within the same block
                     cur_idx = i
                     lookahead_insn = insns[cur_idx]  # TODO fix vaddr here
                     # still in same block unless one of these instructions are found
                     while lookahead_insn.id not in [
                         *MIPS_BRANCH_INSNS,
-                        MIPS_INS_JAL,
-                        MIPS_INS_JALR,
-                        MIPS_INS_J,
+                        mips_isa.MIPS_INS_JAL,
+                        mips_isa.MIPS_INS_JALR,
+                        mips_isa.MIPS_INS_J,
                     ]:
-                        if lookahead_insn.id == MIPS_INS_JR:
+                        if lookahead_insn.id == mips_isa.MIPS_INS_JR:
                             if lookahead_insn.rs == (
                                 insn.ft
                                 if insn.id in MIPS_FP_LOAD_STORE_INSNS
@@ -869,24 +894,24 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                         if cur_idx >= len(raw_insns):
                             break
                         lookahead_insn = insns[cur_idx]  # TODO fix vaddr here
-                elif insn.id == MIPS_INS_LD:  # doubleword loads
+                elif insn.id == mips_isa.MIPS_INS_LD:  # doubleword loads
                     put_symbol(symbols_dict, "dwords", symbol_value)
-                elif insn.id in [MIPS_INS_LWC1, MIPS_INS_SWC1]:  # float load/stores
+                elif insn.id in [mips_isa.MIPS_INS_LWC1, mips_isa.MIPS_INS_SWC1]:  # float load/stores
                     # add float
                     put_symbol(symbols_dict, "floats", symbol_value)
-                elif insn.id in [MIPS_INS_LDC1, MIPS_INS_SDC1]:  # double load/stores
+                elif insn.id in [mips_isa.MIPS_INS_LDC1, mips_isa.MIPS_INS_SDC1]:  # double load/stores
                     # add double
                     put_symbol(symbols_dict, "doubles", symbol_value)
                 elif (
-                    insn.id == MIPS_INS_ADDIU and vaddr % 4 == 0
+                    insn.id == mips_isa.MIPS_INS_ADDIU and vaddr % 4 == 0
                 ):  # strings seem to only ever be 4-byte aligned
                     # add possible string
                     put_symbol(symbols_dict, "prospective_strings", symbol_value)
             # clear lui tracking state if register is clobbered by the addiu/load instruction itself
-            # insn.rt == (insn.rs if insn.id == MIPS_INS_ADDIU else insn.base) and
+            # insn.rt == (insn.rs if insn.id == mips_isa.MIPS_INS_ADDIU else insn.base) and
             if insn.id not in MIPS_STORE_INSNS and insn.id not in MIPS_FP_LOAD_INSNS:
                 clobber_conditionally(insn)
-        elif insn.id == MIPS_INS_ORI:
+        elif insn.id == mips_isa.MIPS_INS_ORI:
             # try match with tracked lui and mark constant
             hi_vram, imm_value = lui_tracker.get(insn.rs, (None, None))
             if hi_vram != None:  # found match
@@ -901,7 +926,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
         else:
             # clear lui tracking if register is clobbered by something unrelated
             if (
-                insn.id == MIPS_INS_ADDU
+                insn.id == mips_isa.MIPS_INS_ADDU
                 and insn.rs in lui_tracker.keys()
                 and (insn.rd == insn.rs)
             ):
@@ -914,35 +939,35 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 pass
             # insns listed either write to fprs/cop0 or don't write to any
             elif insn.id not in [
-                MIPS_INS_MTC0,
-                MIPS_INS_MTC1,
-                MIPS_INS_DMTC1,
-                MIPS_INS_MULT,
-                MIPS_INS_MULTU,
-                MIPS_INS_DMULT,
-                MIPS_INS_DMULTU,
-                MIPS_INS_DIV,
-                MIPS_INS_DIVU,
-                MIPS_INS_DDIV,
-                MIPS_INS_DDIVU,
-                MIPS_INS_MTHI,
-                MIPS_INS_MTLO,
-                MIPS_INS_CTC1,
-                MIPS_INS_NOP,
-                MIPS_INS_BREAK,
-                MIPS_INS_TLBP,
-                MIPS_INS_TLBR,
-                MIPS_INS_TLBWI,
-                MIPS_INS_MOV_S,
-                MIPS_INS_MOV_D,
-                MIPS_INS_C_LT_S,
-                MIPS_INS_C_LT_D,
-                MIPS_INS_DIV_S,
-                MIPS_INS_MUL_S,
-                MIPS_INS_TRUNC_W_S,
-                MIPS_INS_CVT_S_W,
-                MIPS_INS_SUB_S,
-                MIPS_INS_ADD_S,
+                mips_isa.MIPS_INS_MTC0,
+                mips_isa.MIPS_INS_MTC1,
+                mips_isa.MIPS_INS_DMTC1,
+                mips_isa.MIPS_INS_MULT,
+                mips_isa.MIPS_INS_MULTU,
+                mips_isa.MIPS_INS_DMULT,
+                mips_isa.MIPS_INS_DMULTU,
+                mips_isa.MIPS_INS_DIV,
+                mips_isa.MIPS_INS_DIVU,
+                mips_isa.MIPS_INS_DDIV,
+                mips_isa.MIPS_INS_DDIVU,
+                mips_isa.MIPS_INS_MTHI,
+                mips_isa.MIPS_INS_MTLO,
+                mips_isa.MIPS_INS_CTC1,
+                mips_isa.MIPS_INS_NOP,
+                mips_isa.MIPS_INS_BREAK,
+                mips_isa.MIPS_INS_TLBP,
+                mips_isa.MIPS_INS_TLBR,
+                mips_isa.MIPS_INS_TLBWI,
+                mips_isa.MIPS_INS_MOV_S,
+                mips_isa.MIPS_INS_MOV_D,
+                mips_isa.MIPS_INS_C_LT_S,
+                mips_isa.MIPS_INS_C_LT_D,
+                mips_isa.MIPS_INS_DIV_S,
+                mips_isa.MIPS_INS_MUL_S,
+                mips_isa.MIPS_INS_TRUNC_W_S,
+                mips_isa.MIPS_INS_CVT_S_W,
+                mips_isa.MIPS_INS_SUB_S,
+                mips_isa.MIPS_INS_ADD_S,
             ]:
                 clobber_conditionally(insn)
 
@@ -985,18 +1010,18 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                     part += ", "
                 op_str.append(part)
 
-        elif insn.id == MIPS_INS_LUI:
+        elif insn.id == mips_isa.MIPS_INS_LUI:
             op_str = [op_str]
             instr["rt"] = insn.rt
 
-        elif insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
+        elif insn.id == mips_isa.MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
             op_str = [op_str]
             instr["rt"] = insn.rt
             instr["rs"] = insn.rs
             instr["ft"] = insn.ft
             instr["base"] = insn.base
 
-        elif insn.id == MIPS_INS_ORI:
+        elif insn.id == mips_isa.MIPS_INS_ORI:
             op_str = [op_str]
             instr["rt"] = insn.rt
             instr["rs"] = insn.rs
@@ -1016,13 +1041,13 @@ def find_symbols_in_text(section, rodata_section, data_regions):
 
         if delay_slot and delayed_insn is not None:
             if (
-                delayed_insn.id == MIPS_INS_JAL
-                or delayed_insn.id == MIPS_INS_JALR
-                or (delayed_insn.id == MIPS_INS_JR and delayed_insn.rs == MIPS_REG_RA)
+                delayed_insn.id == mips_isa.MIPS_INS_JAL
+                or delayed_insn.id == mips_isa.MIPS_INS_JALR
+                or (delayed_insn.id == mips_isa.MIPS_INS_JR and delayed_insn.rs == mips_isa.MIPS_REG_RA)
             ):
                 # destroy lui tracking state
                 lui_tracker.clear()
-            elif delayed_insn.id == MIPS_INS_JR and vaddr == next_jtbl_jr + 4:
+            elif delayed_insn.id == mips_isa.MIPS_INS_JR and vaddr == next_jtbl_jr + 4:
                 # save lui tracking state for each jtbl label
                 for label in individual_jtbl_labels[next_jtbl_jr]:
                     save_tracker(label, lui_tracker.copy())
@@ -1031,7 +1056,7 @@ def find_symbols_in_text(section, rodata_section, data_regions):
                 # save lui tracking state
                 save_tracker(delayed_insn.offset, lui_tracker.copy())
                 # destroy current lui tracking state for unconditional branches
-                if delayed_insn.id == MIPS_INS_B:
+                if delayed_insn.id == mips_isa.MIPS_INS_B:
                     lui_tracker.clear()
 
             delayed_insn = None
@@ -1250,35 +1275,35 @@ def fixup_text_symbols(data, vram, data_regions, info):
                 else:
                     line += op_part
 
-        elif insn["id"] == MIPS_INS_LUI:
+        elif insn["id"] == mips_isa.MIPS_INS_LUI:
             symbol_value = symbols.get(vaddr, None)
             if symbol_value is not None:
                 line += (
-                    f"{mips_gpr_names[insn['rt']]}, %hi({proper_name(symbol_value)})"
+                    f"{ mips_isa.mips_gpr_names[insn['rt']]}, %hi({proper_name(symbol_value)})"
                 )
             else:
                 constant_value = constants.get(vaddr, None)
                 if constant_value is not None:
                     line += (
-                        f"{mips_gpr_names[insn['rt']]}, (0x{constant_value:08X} >> 16)"
+                        f"{ mips_isa.mips_gpr_names[insn['rt']]}, (0x{constant_value:08X} >> 16)"
                     )
                 else:
                     line += entry["op"][0]
 
-        elif insn["id"] == MIPS_INS_ADDIU or insn["id"] in MIPS_LOAD_STORE_INSNS:
+        elif insn["id"] == mips_isa.MIPS_INS_ADDIU or insn["id"] in MIPS_LOAD_STORE_INSNS:
             symbol_value = symbols.get(vaddr, None)
             if symbol_value is not None:
-                if insn["id"] == MIPS_INS_ADDIU:
-                    line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, %lo({proper_name(symbol_value)})"
+                if insn["id"] == mips_isa.MIPS_INS_ADDIU:
+                    line += f"{ mips_isa.mips_gpr_names[insn['rt']]}, { mips_isa.mips_gpr_names[insn['rs']]}, %lo({proper_name(symbol_value)})"
                 else:
-                    line += f"{mips_fpr_names[insn['ft']] if insn['id'] in MIPS_FP_LOAD_STORE_INSNS else mips_gpr_names[insn['rt']]}, %lo({proper_name(symbol_value)})({mips_gpr_names[insn['base']]})"
+                    line += f"{mips_isa.mips_fpr_names[insn['ft']] if insn['id'] in MIPS_FP_LOAD_STORE_INSNS else  mips_isa.mips_gpr_names[insn['rt']]}, %lo({proper_name(symbol_value)})({ mips_isa.mips_gpr_names[insn['base']]})"
             else:
                 line += entry["op"][0]
 
-        elif insn["id"] == MIPS_INS_ORI:
+        elif insn["id"] == mips_isa.MIPS_INS_ORI:
             constant_value = constants.get(vaddr, None)
             if constant_value is not None:
-                line += f"{mips_gpr_names[insn['rt']]}, {mips_gpr_names[insn['rs']]}, (0x{constant_value:08X} & 0xFFFF)"
+                line += f"{ mips_isa.mips_gpr_names[insn['rt']]}, { mips_isa.mips_gpr_names[insn['rs']]}, (0x{constant_value:08X} & 0xFFFF)"
             else:
                 line += entry["op"][0]
 
@@ -1314,7 +1339,7 @@ def disassemble_text(data, vram, data_regions, info):
     for i, raw_insn in enumerate(raw_insns, 0):
         i *= 4
         vaddr = vram + i
-        insn = decode_insn(raw_insns[i // 4], vaddr)
+        insn = mips_isa.decode_insn(raw_insns[i // 4], vaddr)
         mnemonic = insn.mnemonic
         op_str = insn.op_str
 
@@ -1374,27 +1399,27 @@ def disassemble_text(data, vram, data_regions, info):
                     op_str_parts.append(insn.format_field(field))
             op_str = ", ".join(op_str_parts)
             delayed_insn = insn
-        elif insn.id == MIPS_INS_LUI:
+        elif insn.id == mips_isa.MIPS_INS_LUI:
             symbol_value = symbols.get(vaddr, None)
             if symbol_value is not None:
-                op_str = f"{mips_gpr_names[insn.rt]}, %hi({proper_name(symbol_value)})"
+                op_str = f"{ mips_isa.mips_gpr_names[insn.rt]}, %hi({proper_name(symbol_value)})"
             else:
                 constant_value = constants.get(vaddr, None)
                 if constant_value is not None:
                     op_str = (
-                        f"{mips_gpr_names[insn.rt]}, (0x{constant_value:08X} >> 16)"
+                        f"{ mips_isa.mips_gpr_names[insn.rt]}, (0x{constant_value:08X} >> 16)"
                     )
-        elif insn.id == MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
+        elif insn.id == mips_isa.MIPS_INS_ADDIU or insn.id in MIPS_LOAD_STORE_INSNS:
             symbol_value = symbols.get(vaddr, None)
             if symbol_value is not None:
-                if insn.id == MIPS_INS_ADDIU:
-                    op_str = f"{mips_gpr_names[insn.rt]}, {mips_gpr_names[insn.rs]}, %lo({proper_name(symbol_value)})"
+                if insn.id == mips_isa.MIPS_INS_ADDIU:
+                    op_str = f"{ mips_isa.mips_gpr_names[insn.rt]}, { mips_isa.mips_gpr_names[insn.rs]}, %lo({proper_name(symbol_value)})"
                 else:
-                    op_str = f"{mips_fpr_names[insn.ft] if insn.id in MIPS_FP_LOAD_STORE_INSNS else mips_gpr_names[insn.rt]}, %lo({proper_name(symbol_value)})({mips_gpr_names[insn.base]})"
-        elif insn.id == MIPS_INS_ORI:
+                    op_str = f"{mips_isa.mips_fpr_names[insn.ft] if insn.id in MIPS_FP_LOAD_STORE_INSNS else  mips_isa.mips_gpr_names[insn.rt]}, %lo({proper_name(symbol_value)})({ mips_isa.mips_gpr_names[insn.base]})"
+        elif insn.id == mips_isa.MIPS_INS_ORI:
             constant_value = constants.get(vaddr, None)
             if constant_value is not None:
-                op_str = f"{mips_gpr_names[insn.rt]}, {mips_gpr_names[insn.rs]}, (0x{constant_value:08X} & 0xFFFF)"
+                op_str = f"{ mips_isa.mips_gpr_names[insn.rt]}, { mips_isa.mips_gpr_names[insn.rs]}, (0x{constant_value:08X} & 0xFFFF)"
 
         if delay_slot:
             mnemonic = " " + mnemonic
@@ -2190,17 +2215,24 @@ for segment in files_spec:
         new[offset] = name
     full_file_list[segment[0]] = new
 
-if args.full:
+if args.all:
+    new_spec = []
     for segment in files_spec:
+        if args.files and not any(
+            [file_name in segment[0] for file_name in args.files]
+        ):
+            continue
         for offset, name in segment[4].items():
             if name == "":
                 name = f"{segment[2]}_{offset:08X}"
             segment[4][offset] = name
+        new_spec.append(segment)
+    files_spec = new_spec
 else:
     # Prune
     old_file_count = sum([len(f[4].keys()) for f in files_spec])
 
-    files_spec = discard_decomped_files(files_spec)
+    files_spec = discard_decomped_files(files_spec, args.files)
 
     new_file_count = sum([len(f[4].keys()) for f in files_spec])
 
@@ -2335,7 +2367,7 @@ for segment in files_spec:
 
 del files_spec[:]
 
-pool = get_context("fork").Pool(jobs)
+pool = multiprocessing.get_context("fork").Pool(jobs)
 # Find symbols for each segment
 for section in all_sections:
     if section[-1]["name"] == "makerom":
@@ -2371,7 +2403,7 @@ for section in all_sections:
 pool.close()
 pool.join()
 
-pool = get_context("fork").Pool(jobs)
+pool = multiprocessing.get_context("fork").Pool(jobs)
 for section in all_sections:
     if section[-1]["type"] == "makerom":
         continue
@@ -2396,7 +2428,7 @@ for section in all_sections:
 vrom_addrs = {addr for _, addr in vrom_variables}
 
 # Textual disassembly for each segment
-with get_context("fork").Pool(jobs) as p:
+with multiprocessing.get_context("fork").Pool(jobs) as p:
     p.map(
         disassemble_segment,
         [
@@ -2413,193 +2445,201 @@ rodata_symbols_regex = re.compile(r"(?<=\n)glabel (.+)(?=\n)")
 asm_symbols_regex = re.compile(r"%(?:lo|hi)\((.+?)\)")
 
 # Split files and migrate rodata that should be migrated
-for root, dirs, files in os.walk(ASM_OUT):
-    for f in files:
-        if "non_matchings" in root:
-            continue
-        asm_path = os.path.join(root, f)
-        rodata_path = (
-            asm_path.replace(ASM_OUT + "overlays/", DATA_OUT)
-            .replace(ASM_OUT, DATA_OUT)
-            .replace(".text.s", ".rodata.s")
+for file in Path(ASM_OUT).glob("**/*.s"):
+    asm_path = str(file)
+
+    if "non_matchings" in asm_path:
+        continue
+
+    if file.parts[1] == "overlays":
+        name = file.parts[2]
+    else:
+        name = file.parts[1]
+
+    if not any([name == section[-1]["name"] for section in all_sections]):
+        continue
+
+    rodata_path = (
+        asm_path.replace(ASM_OUT + "overlays/", DATA_OUT)
+        .replace(ASM_OUT, DATA_OUT)
+        .replace(".text.s", ".rodata.s")
+    )
+
+    print(asm_path)
+
+    asm = ""
+    with open(asm_path, "r") as infile:
+        asm = infile.read()
+
+    rodata = ""
+    if os.path.exists(rodata_path):
+        # print(rodata_path)
+        with open(rodata_path, "r") as rodata_file:
+            rodata = rodata_file.read()
+
+        rodata_info = list(zip(rodata_syms(rodata), rodata_blocks(rodata)))
+
+        # populate rdata and late_rodata lists
+        first_late_rodata = find_late_rodata_start(rodata_info)
+        rdata_info = []
+        late_rodata_info = []
+        target = rdata_info  # first populate rdata
+        for sym, block in rodata_info:
+            # now populate late_rodata, if there is any
+            if sym == first_late_rodata:
+                target = late_rodata_info
+            target.append((sym, block))
+
+    # print([(sym,block.split("\n")[1:]) for sym,block in zip(rdata_syms,rdata_blocks)])
+
+    function_info = list(
+        zip(
+            [s.replace("glabel", "").strip() for s in func_regex.findall(asm)],
+            func_regex.split(asm)[1:],
         )
+    )
 
-        print(asm_path)
+    rdata_map = {}
+    late_rodata_map = {}
 
-        asm = ""
-        with open(asm_path, "r") as infile:
-            asm = infile.read()
+    # pass 1 to resolve rodata splits
+    if rodata != "":
+        last_fn = None
 
-        rodata = ""
-        if os.path.exists(rodata_path):
-            # print(rodata_path)
-            with open(rodata_path, "r") as rodata_file:
-                rodata = rodata_file.read()
+        referenced_in = {}  # key=rodata label , value=function label
 
-            rodata_info = list(zip(rodata_syms(rodata), rodata_blocks(rodata)))
+        for sym, _ in rodata_info:
+            all_refs = [
+                label for label, body in function_info if "%lo(" + sym + ")" in body
+            ]
+            # ignore multiple refs, take only the first
+            referenced_in.update({sym: all_refs[0] if len(all_refs) != 0 else None})
 
-            # populate rdata and late_rodata lists
-            first_late_rodata = find_late_rodata_start(rodata_info)
-            rdata_info = []
-            late_rodata_info = []
-            target = rdata_info  # first populate rdata
-            for sym, block in rodata_info:
-                # now populate late_rodata, if there is any
-                if sym == first_late_rodata:
-                    target = late_rodata_info
-                target.append((sym, block))
+        def do_splits(out_dict, info):
+            first = True
+            last_ref = None
+            cr = None
+            for sym, block in info:
+                ref = referenced_in[sym]
+                if first:
+                    cr = ref or sym
 
-        # print([(sym,block.split("\n")[1:]) for sym,block in zip(rdata_syms,rdata_blocks)])
+                if ref is not None and not first:
+                    if ref != last_ref:
+                        # existing function
+                        cr = ref
+                elif last_ref is not None:
+                    # new GLOBAL_ASM
+                    cr = sym
 
-        function_info = list(
-            zip(
-                [s.replace("glabel", "").strip() for s in func_regex.findall(asm)],
-                func_regex.split(asm)[1:],
-            )
-        )
+                # add to output
+                if cr not in out_dict.keys():
+                    out_dict.update({cr: []})
+                out_dict[cr].append((sym, block))
 
-        rdata_map = {}
-        late_rodata_map = {}
+                # setup next iter
+                last_ref = ref
+                first = False
 
-        # pass 1 to resolve rodata splits
+        do_splits(rdata_map, rdata_info)
+        do_splits(late_rodata_map, late_rodata_info)
+
+    # all output files, order is irrelevant at this point
+    all_output = set([label for label, _ in function_info]).union(
+        set(rdata_map.keys()), set(late_rodata_map.keys())
+    )
+
+    # pass 2 to output splits
+    for label in all_output:
+        fn_body = dict(function_info).get(label, None)
+
+        text_out = ""
+        rodata_out = ""
+
+        if fn_body is not None:
+            text_out = "glabel " + label.strip() + "\n" + fn_body.strip() + "\n"
+
         if rodata != "":
-            last_fn = None
+            rdata = rdata_map.get(label, None)
+            late_rodata = late_rodata_map.get(label, None)
 
-            referenced_in = {}  # key=rodata label , value=function label
-
-            for sym, _ in rodata_info:
-                all_refs = [
-                    label for label, body in function_info if "%lo(" + sym + ")" in body
-                ]
-                # ignore multiple refs, take only the first
-                referenced_in.update({sym: all_refs[0] if len(all_refs) != 0 else None})
-
-            def do_splits(out_dict, info):
-                first = True
-                last_ref = None
-                cr = None
-                for sym, block in info:
-                    ref = referenced_in[sym]
-                    if first:
-                        cr = ref or sym
-
-                    if ref is not None and not first:
-                        if ref != last_ref:
-                            # existing function
-                            cr = ref
-                    elif last_ref is not None:
-                        # new GLOBAL_ASM
-                        cr = sym
-
-                    # add to output
-                    if cr not in out_dict.keys():
-                        out_dict.update({cr: []})
-                    out_dict[cr].append((sym, block))
-
-                    # setup next iter
-                    last_ref = ref
-                    first = False
-
-            do_splits(rdata_map, rdata_info)
-            do_splits(late_rodata_map, late_rodata_info)
-
-        # all output files, order is irrelevant at this point
-        all_output = set([label for label, _ in function_info]).union(
-            set(rdata_map.keys()), set(late_rodata_map.keys())
-        )
-
-        # pass 2 to output splits
-        for label in all_output:
-            fn_body = dict(function_info).get(label, None)
-
-            text_out = ""
-            rodata_out = ""
-
-            if fn_body is not None:
-                text_out = "glabel " + label.strip() + "\n" + fn_body.strip() + "\n"
-
-            if rodata != "":
-                rdata = rdata_map.get(label, None)
-                late_rodata = late_rodata_map.get(label, None)
-
-                # check for late_rodata_alignment
-                late_rodata_alignment = ""
-                if fn_body is not None and late_rodata is not None:
-                    ratio = late_rodata_size(
-                        [block for _, block in late_rodata]
-                    ) / text_block_size(fn_body)
-                    if ratio > 1.0 / 3:
-                        # print(f"{label} : {ratio}")
-                        # TODO hack: getting the address from a comment
-                        first_block_split = late_rodata[0][1].split(" */ .")
-                        vaddr = None
-                        if first_block_split[1].startswith(
-                            "float"
-                        ) or first_block_split[1].startswith("double"):
-                            vaddr = first_block_split[0].split(" ")[-2]
-                        else:
-                            vaddr = first_block_split[0].split(" ")[-1]
-                        assert vaddr is not None
-                        vaddr = int(vaddr, 16)
-                        if vaddr not in [
-                            0x801E0E28,
-                            0x80C1C2B0,
-                            0x80AA7820,
-                            0x80AA3CC0,
-                            0x80AA418C,
-                            0x80BE0160,
-                            0x80B591D8,
-                            0x80B59610,
-                            0x80B59780,
-                            0x80964E00,
-                            0x80964F10,
-                            0x80BB40A0,
-                            0x80952038,
-                            0x80AFB920,
-                            0x80AFBBFC,
-                            0x80AFBE28,
-                            0x80983320,
-                        ]:
-                            # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
-                            # comparatively tiny functions, can we swat these programmatically?
-                            late_rodata_alignment = f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
-
-                rdata_out = ""
-                if rdata is not None:
-                    rdata_out = ".rdata\n" + "".join([block for _, block in rdata])
-
-                late_rodata_out = ""
-                if late_rodata is not None:
-                    late_rodata_out = (
-                        ".late_rodata\n"
-                        + late_rodata_alignment
-                        + "".join([block for _, block in late_rodata])
-                    )
-
-                rodata_out = (
-                    rdata_out
-                    + late_rodata_out
-                    + (
-                        "\n.text\n"
-                        if (
-                            (rdata is not None or late_rodata is not None)
-                            and fn_body is not None
+            # check for late_rodata_alignment
+            late_rodata_alignment = ""
+            if fn_body is not None and late_rodata is not None:
+                ratio = late_rodata_size(
+                    [block for _, block in late_rodata]
+                ) / text_block_size(fn_body)
+                if ratio > 1.0 / 3:
+                    # print(f"{label} : {ratio}")
+                    # TODO hack: getting the address from a comment
+                    first_block_split = late_rodata[0][1].split(" */ .")
+                    vaddr = None
+                    if first_block_split[1].startswith("float") or first_block_split[
+                        1
+                    ].startswith("double"):
+                        vaddr = first_block_split[0].split(" ")[-2]
+                    else:
+                        vaddr = first_block_split[0].split(" ")[-1]
+                    assert vaddr is not None
+                    vaddr = int(vaddr, 16)
+                    if vaddr not in [
+                        0x801E0E28,
+                        0x80C1C2B0,
+                        0x80AA7820,
+                        0x80AA3CC0,
+                        0x80AA418C,
+                        0x80BE0160,
+                        0x80B591D8,
+                        0x80B59610,
+                        0x80B59780,
+                        0x80964E00,
+                        0x80964F10,
+                        0x80BB40A0,
+                        0x80952038,
+                        0x80AFB920,
+                        0x80AFBBFC,
+                        0x80AFBE28,
+                        0x80983320,
+                    ]:
+                        # hacks for especially badly behaved rodata, TODO these are ALL jumptables associated with
+                        # comparatively tiny functions, can we swat these programmatically?
+                        late_rodata_alignment = (
+                            f".late_rodata_alignment {'8' if vaddr % 8 == 0 else '4'}\n"
                         )
-                        else ""
-                    )
+
+            rdata_out = ""
+            if rdata is not None:
+                rdata_out = ".rdata\n" + "".join([block for _, block in rdata])
+
+            late_rodata_out = ""
+            if late_rodata is not None:
+                late_rodata_out = (
+                    ".late_rodata\n"
+                    + late_rodata_alignment
+                    + "".join([block for _, block in late_rodata])
                 )
 
-            all_out = rodata_out + text_out
-
-            # write it out
-            out_path = (
-                root.replace(ASM_OUT, f"{ASM_OUT}/non_matchings/")
-                + "/"
-                + ((f.replace(".text.s", "") + "/") if "overlays" not in root else "")
+            rodata_out = (
+                rdata_out
+                + late_rodata_out
+                + (
+                    "\n.text\n"
+                    if (
+                        (rdata is not None or late_rodata is not None)
+                        and fn_body is not None
+                    )
+                    else ""
+                )
             )
-            os.makedirs(out_path, exist_ok=True)
-            with open(out_path + label + ".s", "w") as outfile:
-                outfile.write(all_out.strip() + "\n")
 
-            # remove rodata and unsplit file
-            # TODO
+        all_out = rodata_out + text_out
+
+        # write it out
+        out_path = Path(asm_path.replace(ASM_OUT, f"{ASM_OUT}non_matchings/")).parent
+        if out_path.parts[2] not in ("overlays", "makerom"):
+            out_path /= file.name.split(".")[0]
+        out_path.mkdir(parents=True, exist_ok=True)
+
+        out_path /= label + ".s"
+        with open(out_path, "w") as outfile:
+            outfile.write(all_out.strip() + "\n")

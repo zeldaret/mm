@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 Vec3f D_801EDE00;
@@ -1145,7 +1146,7 @@ ColChkResetFunc sATResetFuncs[] = {
 s32 CollisionCheck_SetAT(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sATResetFuncs[collider->shape](globalCtx, collider);
@@ -1171,7 +1172,7 @@ s32 CollisionCheck_SetAT(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetAT_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sATResetFuncs[collider->shape](globalCtx, collider);
@@ -1205,7 +1206,7 @@ ColChkResetFunc sACResetFuncs[] = {
 s32 CollisionCheck_SetAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sACResetFuncs[collider->shape](globalCtx, collider);
@@ -1231,7 +1232,7 @@ s32 CollisionCheck_SetAC(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot
  */
 s32 CollisionCheck_SetAC_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sACResetFuncs[collider->shape](globalCtx, collider);
@@ -1265,7 +1266,7 @@ ColChkResetFunc sOCResetFuncs[] = {
 s32 CollisionCheck_SetOC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](globalCtx, collider);
@@ -1291,7 +1292,7 @@ s32 CollisionCheck_SetOC(GlobalContext* globalCtx, CollisionCheckContext* colCtx
  * will be inserted into the next slot.
  */
 s32 CollisionCheck_SetOC_SAC(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, Collider* collider, s32 index) {
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
     sOCResetFuncs[collider->shape](globalCtx, collider);
@@ -1323,7 +1324,7 @@ s32 CollisionCheck_SetOC_SAC(GlobalContext* globalCtx, CollisionCheckContext* co
 s32 CollisionCheck_SetOCLine(GlobalContext* globalCtx, CollisionCheckContext* colCtxt, OcLine* line) {
     s32 index;
 
-    if (FrameAdvance_IsEnabled(globalCtx)) {
+    if (FrameAdvance_IsEnabled(&globalCtx->state)) {
         return -1;
     }
 

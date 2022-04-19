@@ -255,7 +255,7 @@ void func_8095DABC(Actor* thisx, GlobalContext* globalCtx) {
         }
 
         EffectSsKakera_Spawn(globalCtx, &spCC, &spD8, &this->actor.world.pos, phi_v1, phi_v0, 30, 5, 0, D_8095F758[i],
-                             5, 2, 70, 0, 2, gameplay_field_keep_DL_006420);
+                             5, 2, 70, 0, GAMEPLAY_FIELD_KEEP, gameplay_field_keep_DL_006420);
     }
 }
 

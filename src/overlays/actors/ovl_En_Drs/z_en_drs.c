@@ -1,7 +1,7 @@
 /*
  * File: z_en_drs.c
  * Overlay: ovl_En_Drs
- * Description: Wedding dress manequin
+ * Description: Anju's Wedding Dress Mannequin
  */
 
 #include "z_en_drs.h"
@@ -13,11 +13,10 @@
 void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx);
 void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx);
+void EnDrs_Draw(Actor* thisx, GlobalContext* globalCtx);
 
-void func_80C1E2D4(EnDrs* this, GlobalContext* globalCtx);
-void func_80C1E3DC(EnDrs* this, GlobalContext* globalCtx);
+void EnDrs_Idle(EnDrs* this, GlobalContext* globalCtx);
 
-#if 0
 const ActorInit En_Drs_InitVars = {
     ACTOR_EN_DRS,
     ACTORCAT_PROP,
@@ -30,36 +29,98 @@ const ActorInit En_Drs_InitVars = {
     (ActorFunc)NULL,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80C1E5E0 = {
-    { COLTYPE_HIT1, AT_NONE, AC_NONE, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK1, { 0x00000000, 0x00, 0x00 }, { 0x00000000, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_NONE, OCELEM_ON, },
+static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_HIT1,
+        AT_NONE,
+        AC_NONE,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK1,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x00000000, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_ON,
+    },
     { 16, 62, 0, { 0, 0, 0 } },
 };
 
-// sColChkInfoInit
-static CollisionCheckInfoInit2 D_80C1E60C = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-#endif
+static AnimationInfoS sAnimations = { &gWeddingDressMannequinIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
-extern ColliderCylinderInit D_80C1E5E0;
-extern CollisionCheckInfoInit2 D_80C1E60C;
+void EnDrs_CollisionUpdate(EnDrs* this, GlobalContext* globalCtx) {
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &this->collider.base);
+}
 
-extern UNK_TYPE D_06000E70;
-extern UNK_TYPE D_06005A78;
+void EnDrs_Setup(EnDrs* this, GlobalContext* globalCtx) {
+    s32 pad[2];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E290.s")
+    if ((this->moonMaskObjBankIndex >= 0) && SubS_IsObjectLoaded(this->moonMaskObjBankIndex, globalCtx)) {
+        ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWeddingDressMannequinSkel, NULL, this->jointTable,
+                           this->morphTable, WEDDING_DRESS_MANNEQUIN_LIMB_MAX);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, &sAnimations, 0);
+        Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
+        CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
+        Actor_SetScale(&this->actor, 0.01f);
+        this->actor.draw = EnDrs_Draw;
+        this->actionFunc = EnDrs_Idle;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E2D4.s")
+void EnDrs_Idle(EnDrs* this, GlobalContext* globalCtx) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E3DC.s")
+void EnDrs_Init(Actor* thisx, GlobalContext* globalCtx) {
+    EnDrs* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/EnDrs_Init.s")
+    this->moonMaskObjBankIndex = SubS_GetObjectIndex(OBJECT_MSMO, globalCtx);
+    this->actionFunc = EnDrs_Setup;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/EnDrs_Destroy.s")
+void EnDrs_Destroy(Actor* thisx, GlobalContext* globalCtx) {
+    EnDrs* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/EnDrs_Update.s")
+    Collider_DestroyCylinder(globalCtx, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E4B0.s")
+void EnDrs_Update(Actor* thisx, GlobalContext* globalCtx) {
+    EnDrs* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Drs/func_80C1E568.s")
+    this->actionFunc(this, globalCtx);
+    if (this->actor.draw != NULL) {
+        SkelAnime_Update(&this->skelAnime);
+        EnDrs_CollisionUpdate(this, globalCtx);
+    }
+}
+
+void EnDrs_PostLimbDraw(GlobalContext* globalCtx2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnDrs* this = THIS;
+    GlobalContext* globalCtx = globalCtx2;
+    s8 temp = this->moonMaskObjBankIndex;
+    s8 temp2 = this->actor.objBankIndex;
+
+    // Anju removes the Moon Mask at the start of the Couple's Mask cutscene
+    // after that it will no longer be rendered.
+    if (!(gSaveContext.save.weekEventReg[87] & 2) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
+        OPEN_DISPS(globalCtx->state.gfxCtx);
+        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[temp].segment);
+        gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);
+        gSPSegment(POLY_OPA_DISP++, 0x06, globalCtx->objectCtx.status[temp2].segment);
+        CLOSE_DISPS(globalCtx->state.gfxCtx);
+    }
+}
+
+void EnDrs_Draw(Actor* thisx, GlobalContext* globalCtx) {
+    EnDrs* this = THIS;
+
+    func_8012C5B0(globalCtx->state.gfxCtx);
+    SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          NULL, EnDrs_PostLimbDraw, &this->actor);
+}

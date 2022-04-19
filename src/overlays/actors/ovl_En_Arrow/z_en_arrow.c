@@ -357,10 +357,10 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
 
             if ((this->unk_262 != 0) && (this->actor.wallBgId == BG_ACTOR_MAX)) {
 
-                Math_Vec3f_Copy(&sp84.unk_00, &this->actor.world.pos);
-                sp84.unk_0C = this->actor.wallPoly;
-                sp84.unk_10 = this->bubble.unk_144;
-                EffectSs_Spawn(globalCtx, EFFECT_SS_SBN, 128, &sp84.unk_00);
+                Math_Vec3f_Copy(&sp84.pos, &this->actor.world.pos);
+                sp84.colPoly = this->actor.wallPoly;
+                sp84.scale = this->bubble.unk_144;
+                EffectSs_Spawn(globalCtx, EFFECT_SS_SBN, 128, &sp84);
             }
         }
         Actor_MarkForDeath(&this->actor);
@@ -472,7 +472,7 @@ void func_8088ACE0(EnArrow* this, GlobalContext* globalCtx) {
         }
 
         this->unk_262 = BgCheck_ProjectileLineTest(&globalCtx->colCtx, &this->actor.prevPos, &this->actor.world.pos,
-                                                   &sp9C, &this->actor.wallPoly, 1, 1, 1, 1, &spA8);
+                                                   &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8);
         if (this->unk_262 != 0) {
             func_800B90AC(globalCtx, &this->actor, this->actor.wallPoly, spA8, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);

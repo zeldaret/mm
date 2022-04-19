@@ -442,7 +442,7 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
                 this->unk_49A = this->unk_49C[2];
                 this->unk_230 &= ~4;
             }
-            func_801518B0(globalCtx, this->unk_496, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
             this->actor.flags &= ~ACTOR_FLAG_10000;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
@@ -452,10 +452,10 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
         }
     } else {
         this->unk_230 &= ~4;
-        if (gSaveContext.weekEventReg[35] & 0x40) {
+        if (gSaveContext.save.weekEventReg[35] & 0x40) {
             if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_230 & 8)) {
                 this->unk_496 = 0xD62;
-                func_801518B0(globalCtx, this->unk_496, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
                 this->unk_230 &= ~8;
                 this->actionFunc = func_80BB27D4;
             } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
@@ -463,10 +463,10 @@ void func_80BB221C(EnGeg* this, GlobalContext* globalCtx) {
                 this->unk_230 |= 8;
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state) && (this->unk_230 & 8)) {
-            gSaveContext.weekEventReg[35] |= 0x40;
+            gSaveContext.save.weekEventReg[35] |= 0x40;
             this->unk_496 = 0xD5E;
             this->unk_49A = this->unk_49C[0];
-            func_801518B0(globalCtx, this->unk_496, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
             this->actionFunc = func_80BB2520;
             this->unk_230 &= ~8;
             this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -542,7 +542,7 @@ void func_80BB2520(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_496) {
             case 0xD5E:
                 this->unk_49A = this->unk_49C[1];
@@ -559,12 +559,12 @@ void func_80BB26EC(EnGeg* this, GlobalContext* globalCtx) {
         }
 
         this->unk_496 = func_80BB16D0(this);
-        func_801518B0(globalCtx, this->unk_496, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
     }
 }
 
 void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         switch (this->unk_496) {
             case 0xD63:
                 globalCtx->msgCtx.msgMode = 0x43;
@@ -599,7 +599,7 @@ void func_80BB27D4(EnGeg* this, GlobalContext* globalCtx) {
 
             default:
                 this->unk_496 = func_80BB16D0(this);
-                func_801518B0(globalCtx, this->unk_496, &this->actor);
+                Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
                 break;
         }
     }
@@ -615,7 +615,7 @@ void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
             this->unk_4AC = 6;
             func_80BB2020(this, globalCtx);
         }
-    } else if ((sp27 == 5) && func_80147624(globalCtx)) {
+    } else if ((sp27 == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_496 == 0xD67) {
             globalCtx->msgCtx.msgMode = 0x43;
             globalCtx->msgCtx.unk12023 = 4;
@@ -629,7 +629,7 @@ void func_80BB2944(EnGeg* this, GlobalContext* globalCtx) {
 }
 
 void func_80BB2A54(EnGeg* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         if (this->unk_496 == 0xD65) {
             ActorCutscene_Stop(this->unk_498);
             this->unk_230 &= ~0x10;
@@ -639,7 +639,7 @@ void func_80BB2A54(EnGeg* this, GlobalContext* globalCtx) {
             this->actionFunc = func_80BB347C;
         } else {
             this->unk_496 = func_80BB16D0(this);
-            func_801518B0(globalCtx, this->unk_496, &this->actor);
+            Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
         }
     }
 }
@@ -655,7 +655,7 @@ void func_80BB2B1C(EnGeg* this, GlobalContext* globalCtx) {
 
     if (ActorCutscene_GetCurrentIndex() != this->unk_49C[4]) {
         if (ActorCutscene_GetCanPlayNext(this->unk_498)) {
-            gSaveContext.weekEventReg[37] |= 8;
+            gSaveContext.save.weekEventReg[37] |= 8;
             if (this->actor.child != NULL) {
                 Actor_MarkForDeath(this->actor.child);
             }
@@ -771,7 +771,7 @@ void func_80BB30B4(EnGeg* this, GlobalContext* globalCtx) {
         } else {
             this->unk_496 = 0xD6E;
         }
-        func_801518B0(globalCtx, this->unk_496, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else if (this->actor.xzDistToPlayer < 150.0f) {
@@ -797,7 +797,7 @@ void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx) {
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
-        gSaveContext.weekEventReg[61] |= 1;
+        gSaveContext.save.weekEventReg[61] |= 1;
         if (getItemId == GI_MASK_DON_GERO) {
             this->unk_230 |= 0x40;
         }
@@ -809,7 +809,7 @@ void func_80BB31B8(EnGeg* this, GlobalContext* globalCtx) {
 
 void func_80BB32AC(EnGeg* this, GlobalContext* globalCtx) {
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801518B0(globalCtx, this->unk_496, &this->actor);
+        Message_StartTextbox(globalCtx, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
     } else {
         func_800B85E0(&this->actor, globalCtx, 400.0f, -1);
@@ -860,7 +860,7 @@ void EnGeg_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 pad2;
     s32 sp34[] = { 0x3E, 0xF64 };
 
-    if (gSaveContext.weekEventReg[61] & 1) {
+    if (gSaveContext.save.weekEventReg[61] & 1) {
         Actor_MarkForDeath(&this->actor);
         return;
     }

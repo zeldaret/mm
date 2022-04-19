@@ -206,7 +206,7 @@ s32 func_80B3CF60(EnDnp* this, GlobalContext* globalCtx) {
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(gSaveContext.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
+    } else if (!(gSaveContext.save.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, globalCtx)) {
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
@@ -244,18 +244,18 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
     static s32 D_80B3DE74[] = {
         0, 16, 14, 10, 18, 12, 5, 7, 2, 19, 21, 22, 24, 8,
     };
-    u32 temp_v0;
+    s32 temp_v0;
     s32 val;
 
-    if (!(gSaveContext.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
-        (globalCtx->csCtx.unk_12 == 0)) {
+    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (globalCtx->sceneNum == SCENE_MITURIN) &&
+        (globalCtx->csCtx.currentCsIndex == 0)) {
         this->unk_322 |= 0x20;
-        gSaveContext.weekEventReg[29] |= 0x40;
+        gSaveContext.save.weekEventReg[29] |= 0x40;
     }
 
-    if (func_800EE29C(globalCtx, 0x65)) {
-        temp_v0 = func_800EE200(globalCtx, 0x65);
-        val = globalCtx->csCtx.npcActions[temp_v0]->unk0;
+    if (Cutscene_CheckActorAction(globalCtx, 101)) {
+        temp_v0 = Cutscene_GetActorActionIndex(globalCtx, 101);
+        val = globalCtx->csCtx.actorActions[temp_v0]->action;
         if (this->unk_324 != (u8)val) {
             func_80B3CC38(this, D_80B3DE74[val]);
             if (this->unk_340 == 16) {
@@ -281,7 +281,7 @@ void func_80B3D11C(EnDnp* this, GlobalContext* globalCtx) {
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             func_80B3CC38(this, this->unk_340 + 1);
         }
-        func_800EDF24(&this->actor, globalCtx, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, globalCtx, temp_v0);
     }
 }
 
@@ -337,7 +337,7 @@ void func_80B3D47C(EnDnp* this, GlobalContext* globalCtx) {
 void func_80B3D558(EnDnp* this, GlobalContext* globalCtx) {
     if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
         ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        gSaveContext.weekEventReg[23] |= 0x20;
+        gSaveContext.save.weekEventReg[23] |= 0x20;
     } else {
         ActorCutscene_SetIntentToPlay(this->actor.cutscene);
     }
@@ -366,12 +366,12 @@ void EnDnp_Init(Actor* thisx, GlobalContext* globalCtx) {
         this->actor.cutscene = 0x10;
         this->actionFunc = func_80B3D47C;
     } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Interface_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
-                !(gSaveContext.weekEventReg[23] & 0x20)) ||
-               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.weekEventReg[23] & 0x20))) {
+                !(gSaveContext.save.weekEventReg[23] & 0x20)) ||
+               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.save.weekEventReg[23] & 0x20))) {
         Actor_SetScale(&this->actor, 0.0085f);
         SubS_UpdateFlags(&this->unk_322, 3, 7);
         this->unk_322 |= 0x400;
-        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.weekEventReg[29] & 0x40)) {
+        if ((globalCtx->sceneNum == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
             this->unk_322 |= 0x20;
             func_80B3CC38(this, 1);
         }
@@ -407,7 +407,7 @@ void EnDnp_Update(Actor* thisx, GlobalContext* globalCtx) {
         Actor_UpdateBgCheckInfo(globalCtx, &this->actor, 30.0f, 12.0f, 0.0f, 4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
-        if ((this->unk_322 & 0x400) && !(gSaveContext.weekEventReg[23] & 0x20)) {
+        if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
             Actor_PickUp(&this->actor, globalCtx, GI_MAX, sp2C, sp28);
         }
         func_8013C964(&this->actor, globalCtx, sp2C, sp28, 0, this->unk_322 & 7);

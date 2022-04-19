@@ -14,10 +14,10 @@ void SkelCurve_Clear(SkelAnimeCurve* skelCurve) {
 s32 SkelCurve_Init(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve, SkelCurveLimbList* limbListSeg,
                    TransformUpdateIndex* transUpdIdx) {
     SkelCurveLimb** limbs;
-    SkelCurveLimbList* limbList = (SkelCurveLimbList*)Lib_SegmentedToVirtual(limbListSeg);
+    SkelCurveLimbList* limbList = Lib_SegmentedToVirtual(limbListSeg);
 
     skelCurve->limbCount = limbList->limbCount;
-    skelCurve->limbList = (SkelCurveLimb**)Lib_SegmentedToVirtual(limbList->limbs);
+    skelCurve->limbList = Lib_SegmentedToVirtual(limbList->limbs);
 
     skelCurve->transforms = ZeldaArena_Malloc(sizeof(*skelCurve->transforms) * skelCurve->limbCount);
 
@@ -100,7 +100,7 @@ s32 SkelCurve_Update(GlobalContext* globalCtx, SkelAnimeCurve* skelCurve) {
 
 void SkelCurve_DrawLimb(GlobalContext* globalCtx, s32 limbIndex, SkelAnimeCurve* skelCurve,
                         OverrideCurveLimbDraw overrideLimbDraw, PostCurveLimbDraw postLimbDraw, s32 lod, Actor* thisx) {
-    SkelCurveLimb* limb = (SkelCurveLimb*)Lib_SegmentedToVirtual(skelCurve->limbList[limbIndex]);
+    SkelCurveLimb* limb = Lib_SegmentedToVirtual(skelCurve->limbList[limbIndex]);
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 

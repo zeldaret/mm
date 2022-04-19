@@ -116,7 +116,7 @@ void ObjIcePoly_Init(Actor* thisx, GlobalContext* globalCtx) {
     thisx->shape.rot.z = -0x500;
 
     if (((this->unk_149 != OBJICEPOLY_FF_FF) && Flags_GetSwitch(globalCtx, this->unk_149)) ||
-        ((globalCtx->sceneNum == SCENE_KAJIYA) && (gSaveContext.weekEventReg[33] & 0x80))) {
+        ((globalCtx->sceneNum == SCENE_KAJIYA) && (gSaveContext.save.weekEventReg[33] & 0x80))) {
         Actor_MarkForDeath(thisx);
         return;
     }
