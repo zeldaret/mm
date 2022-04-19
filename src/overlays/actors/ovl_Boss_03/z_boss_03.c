@@ -810,8 +810,8 @@ void Boss03_CatchPlayer(Boss03* this, GlobalContext* globalCtx) {
         if (this->unk_2B8 > 30.0f) {
             if ((&this->actor != player->actor.parent) && (globalCtx->grabPlayer(globalCtx, player) != 0)) {
                 player->actor.parent = &this->actor;
-                Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &D_801DB4B0, &D_801DB4B0,
-                                     &D_801DB4B8);
+                Audio_PlaySfxGeneral(NA_SE_VO_LI_DAMAGE_S, &player->actor.projectedPos, 4, &gSfxDefaultVolOrFreq,
+                                     &gSfxDefaultVolOrFreq, &gSfxDefaultReverbAddNone);
                 Boss03_SetupChewPlayer(this, globalCtx);
             }
         } else {

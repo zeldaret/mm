@@ -3380,7 +3380,7 @@ asm/non_matchings/code/code_8019AF00/func_8019E4B0.s,func_8019E4B0,0x8019E4B0,0x
 asm/non_matchings/code/code_8019AF00/func_8019E634.s,func_8019E634,0x8019E634,0x8C
 asm/non_matchings/code/code_8019AF00/func_8019E864.s,func_8019E864,0x8019E864,0x77
 asm/non_matchings/code/code_8019AF00/func_8019EA40.s,func_8019EA40,0x8019EA40,0x3B
-asm/non_matchings/code/code_8019AF00/func_8019EB2C.s,func_8019EB2C,0x8019EB2C,0x13E
+asm/non_matchings/code/code_8019AF00/Audio_SetSfxProperties.s,Audio_SetSfxProperties,0x8019EB2C,0x13E
 asm/non_matchings/code/code_8019AF00/func_8019F024.s,func_8019F024,0x8019F024,0xE
 asm/non_matchings/code/code_8019AF00/func_8019F05C.s,func_8019F05C,0x8019F05C,0x1B
 asm/non_matchings/code/code_8019AF00/play_sound.s,play_sound,0x8019F0C8,0x18

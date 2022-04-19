@@ -1469,7 +1469,7 @@ void func_8089010C(Actor* thisx, GlobalContext* globalCtx) {
     }
 
     if (Actor_ProcessTalkRequest(thisx, &globalCtx->state)) {
-        func_8019FDC8(&D_801DB4A4, NA_SE_VO_NA_LISTEN, 0x20);
+        func_8019FDC8(&gSfxDefaultPosScreenCenter, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
         if (thisx->textId == ElfMessage_GetFirstCycleHint(globalCtx)) {

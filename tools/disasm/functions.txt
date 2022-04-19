@@ -3864,7 +3864,7 @@
     0x8019E634:("func_8019E634",),
     0x8019E864:("func_8019E864",),
     0x8019EA40:("func_8019EA40",),
-    0x8019EB2C:("func_8019EB2C",),
+    0x8019EB2C:("Audio_SetSfxProperties",),
     0x8019F024:("func_8019F024",),
     0x8019F05C:("func_8019F05C",),
     0x8019F0C8:("play_sound",),

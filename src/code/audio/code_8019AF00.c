@@ -2148,7 +2148,7 @@ s32 AudioOcarina_MemoryGameGenerateNotes(void) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019EA40.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019EB2C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SetSfxProperties.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_8019F024.s")
 
@@ -2225,8 +2225,8 @@ void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale) {
         sRiverFreqScaleLerp.remainingFrames = 40;
         sRiverFreqScaleLerp.step = (sRiverFreqScaleLerp.target - sRiverFreqScaleLerp.value) / 40;
     }
-    Audio_PlaySfxGeneral(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value, &D_801DB4B0,
-                         &D_801DB4B8);
+    Audio_PlaySfxGeneral(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value, &gSfxDefaultVolOrFreq,
+                         &gSfxDefaultReverbAddNone);
 }
 
 /**
@@ -2242,7 +2242,7 @@ void Audio_PlaySfxForWaterfall(Vec3f* pos, f32 freqScale) {
         sWaterfallFreqScaleLerp.step = (sWaterfallFreqScaleLerp.target - sWaterfallFreqScaleLerp.value) / 40;
     }
     Audio_PlaySfxGeneral(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, pos, 4, &sWaterfallFreqScaleLerp.value,
-                         &sWaterfallFreqScaleLerp.value, &D_801DB4B8);
+                         &sWaterfallFreqScaleLerp.value, &gSfxDefaultReverbAddNone);
 }
 
 /**
