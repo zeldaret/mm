@@ -2,6 +2,7 @@
 #define Z_EN_RACEDOG_H
 
 #include "global.h"
+#include "objects/object_dog/object_dog.h"
 
 #define ENRACEDOG_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
 #define ENRACEDOG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
@@ -20,8 +21,8 @@ typedef struct EnRacedog {
     /* 0x1E0 */ Path* unk_1E0;
     /* 0x1E4 */ UNK_TYPE1 unk_1E4[0x4];
     /* 0x1E8 */ s32 unk_1E8;
-    /* 0x1EC */ Vec3s jointTable[13];
-    /* 0x23A */ Vec3s morphTable[13];
+    /* 0x1EC */ Vec3s jointTable[DOG_LIMB_MAX];
+    /* 0x23A */ Vec3s morphTable[DOG_LIMB_MAX];
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;
     /* 0x28C */ s16 unk_28C;
