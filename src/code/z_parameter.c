@@ -762,27 +762,313 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     return temp;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Item_CheckObtainabilityImpl.s")
+u8 Item_CheckObtainabilityImpl(u8 item) {
+    s16 i;
+    u8 slot;
+    u8 temp;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Item_CheckObtainability.s")
+    slot = SLOT(item);
+    if (item >= ITEM_STICKS_5) {
+        slot = SLOT(sExtraItemBases[item - ITEM_STICKS_5]);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_DeleteItem.s")
+    if (item == ITEM_SKULL_TOKEN) {
+        return ITEM_NONE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_UnequipItem.s")
+    } else if (item == ITEM_TINGLE_MAP) {
+        return ITEM_NONE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_ReplaceItem.s")
+    } else if (item == ITEM_BOMBERS_NOTEBOOK) {
+        return ITEM_NONE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_UpdateDeitySwordEquip.s")
+    } else if ((item >= ITEM_SWORD_KOKIRI) && (item <= ITEM_SWORD_GILDED)) {
+        return ITEM_NONE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_HasEmptyBottle.s")
+    } else if ((item >= ITEM_SHIELD_HERO) && (item <= ITEM_SHIELD_MIRROR)) {
+        return ITEM_NONE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_HasItemInBottle.s")
+    } else if ((item == ITEM_KEY_BOSS) || (item == ITEM_COMPASS) || (item == ITEM_DUNGEON_MAP)) {
+        if (!CHECK_DUNGEON_ITEM(item - ITEM_KEY_BOSS, gSaveContext.mapIndex)) {
+            return ITEM_NONE;
+        }
+        return item;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_UpdateBottleItem.s")
+    } else if (item == ITEM_KEY_SMALL) {
+        return ITEM_NONE;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_ConsumeFairy.s")
+    } else if ((item == ITEM_OCARINA) || (item == ITEM_BOMBCHU) || (item == ITEM_HOOKSHOT) || (item == ITEM_LENS) ||
+               (item == ITEM_SWORD_GREAT_FAIRY) || (item == ITEM_PICTO_BOX)) {
+        if (INV_CONTENT(item) == ITEM_NONE) {
+            return ITEM_NONE;
+        }
+        return INV_CONTENT(item);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_UpdateItem.s")
+    } else if ((item >= ITEM_BOMBS_5) && (item == ITEM_BOMBS_30)) {
+        //! @bug: Should be a range check: (item <= ITEM_BOMBS_30)
+        if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
+            return ITEM_NONE;
+        }
+        return 0;
+
+    } else if ((item >= ITEM_BOMBCHUS_20) && (item <= ITEM_BOMBCHUS_5)) {
+        if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
+            return ITEM_NONE;
+        }
+        return 0;
+
+    } else if ((item == ITEM_QUIVER_30) || (item == ITEM_BOW)) {
+        if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
+            return ITEM_NONE;
+        }
+        return 0;
+
+    } else if ((item == ITEM_QUIVER_40) || (item == ITEM_QUIVER_50)) {
+        return ITEM_NONE;
+
+    } else if ((item == ITEM_BOMB_BAG_20) || (item == ITEM_BOMB)) {
+        if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
+            return ITEM_NONE;
+        }
+        return 0;
+
+    } else if ((item >= ITEM_STICK_UPGRADE_20) && (item <= ITEM_NUT_UPGRADE_40)) {
+        return ITEM_NONE;
+
+    } else if ((item >= ITEM_BOMB_BAG_30) && (item <= ITEM_WALLET_GIANT)) {
+        return ITEM_NONE;
+
+    } else if (item == ITEM_BEAN) {
+        return ITEM_NONE;
+
+    } else if (item == ITEM_POWDER_KEG) {
+        return ITEM_NONE;
+
+    } else if ((item == ITEM_HEART_PIECE_2) || (item == ITEM_HEART_PIECE)) {
+        return ITEM_NONE;
+
+    } else if (item == ITEM_HEART_CONTAINER) {
+        return ITEM_NONE;
+
+    } else if (item == ITEM_HEART) {
+        return ITEM_HEART;
+
+    } else if ((item == ITEM_MAGIC_SMALL) || (item == ITEM_MAGIC_LARGE)) {
+        if (!(gSaveContext.save.weekEventReg[12] & 0x80)) {
+            return ITEM_NONE;
+        }
+        return item;
+
+    } else if ((item >= ITEM_RUPEE_GREEN) && (item <= ITEM_RUPEE_HUGE)) {
+        return ITEM_NONE;
+
+    } else if ((item >= ITEM_REMAINS_ODOLWA) && (item <= ITEM_REMAINS_TWINMOLD)) {
+        return ITEM_NONE;
+
+    } else if (item == ITEM_LONGSHOT) {
+        return ITEM_NONE;
+
+    } else if (item == ITEM_BOTTLE) {
+        return ITEM_NONE;
+
+    } else if ((item == ITEM_MILK_BOTTLE) || (item == ITEM_POE) || (item == ITEM_GOLD_DUST) || (item == ITEM_CHATEAU) ||
+               (item == ITEM_HYLIAN_LOACH)) {
+        return ITEM_NONE;
+
+    } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
+               (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
+               (item == ITEM_SEA_HORSE_CAUGHT)) {
+        temp = SLOT(item);
+
+        if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
+            if (item == ITEM_CHATEAU_2) {
+                item = ITEM_CHATEAU;
+
+            } else if (item == ITEM_MILK) {
+                item = ITEM_MILK_BOTTLE;
+
+            } else if (item == ITEM_GOLD_DUST_2) {
+                item = ITEM_GOLD_DUST;
+
+            } else if (item == ITEM_HYLIAN_LOACH_2) {
+                item = ITEM_HYLIAN_LOACH;
+
+            } else if (item == ITEM_SEA_HORSE_CAUGHT) {
+                item = ITEM_SEA_HORSE;
+            }
+            temp = SLOT(item);
+
+            for (i = 0; i < 6; i++) {
+                if (gSaveContext.save.inventory.items[temp + i] == ITEM_BOTTLE) {
+                    return ITEM_NONE;
+                }
+            }
+        } else {
+            for (i = 0; i < 6; i++) {
+                if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
+                    return ITEM_NONE;
+                }
+            }
+        }
+    } else if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_MASK_GIANT)) {
+        return ITEM_NONE;
+    }
+
+    return gSaveContext.save.inventory.items[slot];
+}
+
+u8 Item_CheckObtainability(u8 item) {
+    return Item_CheckObtainabilityImpl(item);
+}
+
+void Inventory_DeleteItem(s16 item, s16 invSlot) {
+    s16 btn;
+
+    gSaveContext.save.inventory.items[invSlot] = ITEM_NONE;
+
+    for (btn = 1; btn < 4; btn++) {
+        if (GET_CUR_FORM_BTN_ITEM(btn) == item) {
+            SET_CUR_FORM_BTN_ITEM(btn, ITEM_NONE);
+            SET_CUR_FORM_BTN_SLOT(btn, SLOT_NONE);
+        }
+    }
+}
+
+void Inventory_UnequipItem(s16 item) {
+    s16 btn;
+
+    for (btn = 1; btn < 4; btn++) {
+        if (GET_CUR_FORM_BTN_ITEM(btn) == item) {
+            SET_CUR_FORM_BTN_ITEM(btn, ITEM_NONE);
+            SET_CUR_FORM_BTN_SLOT(btn, SLOT_NONE);
+        }
+    }
+}
+
+s32 Inventory_ReplaceItem(GlobalContext* globalCtx, u8 oldItem, u8 newItem) {
+    u8 i;
+
+    for (i = 0; i < 24; i++) {
+        if (gSaveContext.save.inventory.items[i] == oldItem) {
+            gSaveContext.save.inventory.items[i] = newItem;
+
+            for (i = 1; i < 4; i++) {
+                if (GET_CUR_FORM_BTN_ITEM(i) == oldItem) {
+                    SET_CUR_FORM_BTN_ITEM(i, newItem);
+                    Interface_LoadItemIconImpl(globalCtx, i);
+                    break;
+                }
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+void Inventory_UpdateDeitySwordEquip(GlobalContext* globalCtx) {
+    InterfaceContext* interfaceCtx = &globalCtx->interfaceCtx;
+    u8 btn;
+
+    if (CUR_FORM == PLAYER_FORM_FIERCE_DEITY) {
+        interfaceCtx->unk_21C = 0;
+        interfaceCtx->unk_21E = 0;
+        if ((((gSaveContext.save.playerForm > 0) && (gSaveContext.save.playerForm < 4))
+                 ? 1
+                 : gSaveContext.save.playerForm >> 1) == 0) {
+            BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_DEITY;
+        } else {
+            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_SWORD_DEITY) {
+                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == 0) {
+                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
+                } else {
+                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) =
+                        GET_CUR_EQUIP_VALUE(EQUIP_SWORD) + ITEM_SWORD_KOKIRI - 1;
+                }
+            }
+        }
+    }
+
+    for (btn = 0; btn < 1; btn++) {
+        if ((GET_CUR_FORM_BTN_ITEM(btn) != ITEM_NONE) && (GET_CUR_FORM_BTN_ITEM(btn) != ITEM_UNK_FD)) {
+            Interface_LoadItemIconImpl(globalCtx, btn);
+        }
+    }
+}
+
+s32 Inventory_HasEmptyBottle(void) {
+    s32 slot;
+
+    for (slot = SLOT_BOTTLE_1; slot <= SLOT_BOTTLE_6; slot++) {
+        if (gSaveContext.save.inventory.items[slot] == ITEM_BOTTLE) {
+            return true;
+        }
+    }
+    return false;
+}
+
+s32 Inventory_HasItemInBottle(u8 item) {
+    s32 slot;
+
+    for (slot = SLOT_BOTTLE_1; slot <= SLOT_BOTTLE_6; slot++) {
+        if (gSaveContext.save.inventory.items[slot] == item) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Inventory_UpdateBottleItem(GlobalContext* globalCtx, u8 item, u8 btn) {
+    gSaveContext.save.inventory.items[GET_CUR_FORM_BTN_SLOT(btn)] = item;
+    SET_CUR_FORM_BTN_ITEM(btn, item);
+
+    Interface_LoadItemIconImpl(globalCtx, btn);
+
+    globalCtx->pauseCtx.cursorItem[0] = item;
+    gSaveContext.buttonStatus[btn] = BTN_ENABLED;
+
+    if (item == ITEM_HOT_SPRING_WATER) {
+        func_8010EBA0(60, GET_CUR_FORM_BTN_SLOT(btn) - 18);
+    }
+}
+
+s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
+    u8 bottleSlot = SLOT(ITEM_FAIRY);
+    u8 btn;
+    u8 i;
+
+    for (i = 0; i < 6; i++) {
+        if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_FAIRY) {
+            for (btn = 1; btn < 4; btn++) {
+                if (GET_CUR_FORM_BTN_ITEM(btn) == ITEM_FAIRY) {
+                    SET_CUR_FORM_BTN_ITEM(btn, ITEM_BOTTLE);
+                    Interface_LoadItemIconImpl(globalCtx, btn);
+                    bottleSlot = GET_CUR_FORM_BTN_SLOT(btn);
+                    i = 0;
+                    break;
+                }
+            }
+            gSaveContext.save.inventory.items[bottleSlot + i] = ITEM_BOTTLE;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Only used to equip spring water when hot sprint water timer runs out
+ */
+void Inventory_UpdateItem(GlobalContext* globalCtx, s16 slot, s16 item) {
+    s16 btn;
+
+    gSaveContext.save.inventory.items[slot] = item;
+
+    for (btn = 1; btn < 4; btn++) {
+        if (GET_CUR_FORM_BTN_SLOT(btn) == slot) {
+            SET_CUR_FORM_BTN_ITEM(btn, item);
+            Interface_LoadItemIconImpl(globalCtx, btn);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_801153C8.s")
 
@@ -800,13 +1086,93 @@ TexturePtr sDoActionTextures[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115844.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Health_ChangeBy.s")
+s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
+    if (healthChange > 0) {
+        play_sound(NA_SE_SY_HP_RECOVER);
+    } else if ((gSaveContext.save.playerData.doubleDefense != 0) && (healthChange < 0)) {
+        healthChange >>= 1;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Health_GiveHearts.s")
+    gSaveContext.save.playerData.health += healthChange;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Rupees_ChangeBy.s")
+    if (((void)0, gSaveContext.save.playerData.health) > ((void)0, gSaveContext.save.playerData.healthCapacity)) {
+        gSaveContext.save.playerData.health = gSaveContext.save.playerData.healthCapacity;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Inventory_ChangeAmmo.s")
+    if (gSaveContext.save.playerData.health <= 0) {
+        gSaveContext.save.playerData.health = 0;
+        return false;
+    } else {
+        return true;
+    }
+}
+
+void Health_GiveHearts(s16 hearts) {
+    gSaveContext.save.playerData.healthCapacity += hearts * 0x10;
+}
+
+void Rupees_ChangeBy(s16 rupeeChange) {
+    gSaveContext.rupeeAccumulator += rupeeChange;
+}
+
+void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
+    if (item == ITEM_STICK) {
+        AMMO(ITEM_STICK) += ammoChange;
+
+        if (AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS)) {
+            AMMO(ITEM_STICK) = CUR_CAPACITY(UPG_STICKS);
+        } else if (AMMO(ITEM_STICK) < 0) {
+            AMMO(ITEM_STICK) = 0;
+        }
+
+    } else if (item == ITEM_NUT) {
+        AMMO(ITEM_NUT) += ammoChange;
+
+        if (AMMO(ITEM_NUT) >= CUR_CAPACITY(UPG_NUTS)) {
+            AMMO(ITEM_NUT) = CUR_CAPACITY(UPG_NUTS);
+        } else if (AMMO(ITEM_NUT) < 0) {
+            AMMO(ITEM_NUT) = 0;
+        }
+
+    } else if (item == ITEM_BOMBCHU) {
+        AMMO(ITEM_BOMBCHU) += ammoChange;
+
+        if (AMMO(ITEM_BOMBCHU) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
+            AMMO(ITEM_BOMBCHU) = CUR_CAPACITY(UPG_BOMB_BAG);
+        } else if (AMMO(ITEM_BOMBCHU) < 0) {
+            AMMO(ITEM_BOMBCHU) = 0;
+        }
+
+    } else if (item == ITEM_BOW) {
+        AMMO(ITEM_BOW) += ammoChange;
+
+        if (AMMO(ITEM_BOW) >= CUR_CAPACITY(UPG_QUIVER)) {
+            AMMO(ITEM_BOW) = CUR_CAPACITY(UPG_QUIVER);
+        } else if (AMMO(ITEM_BOW) < 0) {
+            AMMO(ITEM_BOW) = 0;
+        }
+
+    } else if (item == ITEM_BOMB) {
+        AMMO(ITEM_BOMB) += ammoChange;
+
+        if (AMMO(ITEM_BOMB) >= CUR_CAPACITY(UPG_BOMB_BAG)) {
+            AMMO(ITEM_BOMB) = CUR_CAPACITY(UPG_BOMB_BAG);
+        } else if (AMMO(ITEM_BOMB) < 0) {
+            AMMO(ITEM_BOMB) = 0;
+        }
+
+    } else if (item == ITEM_BEAN) {
+        AMMO(ITEM_BEAN) += ammoChange;
+
+    } else if (item == ITEM_POWDER_KEG) {
+        AMMO(ITEM_POWDER_KEG) += ammoChange;
+        if (AMMO(ITEM_POWDER_KEG) >= 1) {
+            AMMO(ITEM_POWDER_KEG) = 1;
+        } else if (AMMO(ITEM_POWDER_KEG) < 0) {
+            AMMO(ITEM_POWDER_KEG) = 0;
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_AddMagic.s")
 
