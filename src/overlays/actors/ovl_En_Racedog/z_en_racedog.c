@@ -9,7 +9,6 @@
  */
 
 #include "z_en_racedog.h"
-#include "objects/object_dog/object_dog.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
@@ -142,22 +141,14 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS D_80B25EF0[] = {
-    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dog_Anim_0021C8, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &object_dog_Anim_001BD8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dog_Anim_000998, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
-    { &object_dog_Anim_001FB0, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
-    { &object_dog_Anim_001048, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },
-    { &object_dog_Anim_001348, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &object_dog_Anim_001048, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },
-    { &object_dog_Anim_001048, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
-    { &object_dog_Anim_001048, 1.0f, 54, 54, ANIMMODE_ONCE, -6 },
-    { &object_dog_Anim_0021C8, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
-    { &object_dog_Anim_001560, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dog_Anim_001A84, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dog_Anim_0017C0, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dog_Anim_0021C8, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
+    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },  { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
+    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
+    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
+    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gDogJump2Anim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static InitChainEntry sInitChain[] = {
@@ -228,14 +219,13 @@ void EnRacedog_Init(Actor* thisx, GlobalContext* globalCtx) {
     ColliderCylinder* collider = &this->collider;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_dog_Skel_0080F0, NULL, this->jointTable, this->morphTable,
-                       13);
+    SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gDogSkel, NULL, this->jointTable, this->morphTable, DOG_LIMB_MAX);
     Collider_InitCylinder(globalCtx, collider);
     Collider_SetCylinder(globalCtx, collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->unk_1E0 = func_8013D648(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->unk_1E0 = SubS_GetPathByIndex(globalCtx, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
     if (ENRACEDOG_GET_3E0(&this->actor) < 14) {
@@ -340,10 +330,10 @@ void func_80B24CB4(EnRacedog* this, GlobalContext* globalCtx) {
 void func_80B24E14(EnRacedog* this) {
     if (this->unk_290 % 2) {
         D_80B25D88[this->unk_290].unk_0E =
-            (((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
+            (((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (0x10 | 0x20 | 0x40 | 0x80)) >> 4) + 0x3539;
     } else {
         D_80B25D88[this->unk_290].unk_0E =
-            ((gSaveContext.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
+            ((gSaveContext.save.weekEventReg[42 + (this->unk_290 / 2)]) & (1 | 2 | 4 | 8)) + 0x3539;
     }
 
     if ((D_80B25D88[this->unk_290].unk_0E >= 0x3547) || (D_80B25D88[this->unk_290].unk_0E < 0x3539)) {
@@ -481,13 +471,13 @@ s32 func_80B25490(EnRacedog* this, Vec2f* arg1) {
     f32 temp;
 
     xDistToTopFront = this->actor.world.pos.x - arg1[0].x;
-    zDistToTopFront = this->actor.world.pos.z - arg1[0].y;
+    zDistToTopFront = this->actor.world.pos.z - arg1[0].z;
     xDistToBottomFront = this->actor.world.pos.x - arg1[1].x;
-    zDistToBottomFront = this->actor.world.pos.z - arg1[1].y;
+    zDistToBottomFront = this->actor.world.pos.z - arg1[1].z;
     xDistToBottomBack = this->actor.world.pos.x - arg1[2].x;
-    zDistToBottomBack = this->actor.world.pos.z - arg1[2].y;
+    zDistToBottomBack = this->actor.world.pos.z - arg1[2].z;
     xDistToTopBack = this->actor.world.pos.x - arg1[3].x;
-    zDistToTopBack = this->actor.world.pos.z - arg1[3].y;
+    zDistToTopBack = this->actor.world.pos.z - arg1[3].z;
 
     temp_f0 = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     temp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
@@ -601,8 +591,8 @@ void func_80B258D8(EnRacedog* this, GlobalContext* globalCtx) {
         gDPSetEnvColor(POLY_OPA_DISP++, 255, this->unk_2C0, 0, 255);
         Matrix_Scale(this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, this->unk_2C4 * 2.0f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_dog_DL_000618);
-        gSPDisplayList(POLY_OPA_DISP++, object_dog_DL_000550);
+        gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowEmptyDL);
+        gSPDisplayList(POLY_OPA_DISP++, gDogSelectionArrowDL);
 
         CLOSE_DISPS(globalCtx->state.gfxCtx);
     }
@@ -618,11 +608,11 @@ void EnRacedog_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dList
     EnRacedog* this = THIS;
     Vec3f sp1C = { 0.0f, 20.0f, 0.0f };
 
-    if (limbIndex == 5) {
+    if (limbIndex == DOG_LIMB_HEAD) {
         Matrix_MultiplyVector3fByState(&sp1C, &this->actor.focus.pos);
     }
 
-    if (limbIndex == 12) {
+    if (limbIndex == DOG_LIMB_TAIL) {
         func_80B258D8(this, globalCtx);
     }
 }

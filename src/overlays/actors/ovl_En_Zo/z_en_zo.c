@@ -141,12 +141,12 @@ s32 EnZo_PlayWalkingSound(EnZo* this, GlobalContext* globalCtx) {
         sfxId = SurfaceType_GetSfx(&globalCtx->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
     }
 
-    this->isLeftFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->leftFootPos, -6.0f);
+    this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(globalCtx, &this->leftFootPos, -6.0f);
     if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
 
-    this->isRightFootGrounded = isFootGrounded = func_8013DB90(globalCtx, &this->rightFootPos, -6.0f);
+    this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(globalCtx, &this->rightFootPos, -6.0f);
     if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
         Actor_PlaySfxAtPos(&this->actor, sfxId);
     }
@@ -218,7 +218,7 @@ void EnZo_FollowPath(EnZo* this, GlobalContext* globalCtx) {
 
     Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
     speed = this->actor.speedXZ * 400.0f;
-    if (func_8013D68C(this->path, this->waypoint, &pos) && func_8013D768(&this->actor, &pos, speed)) {
+    if (SubS_CopyPointFromPath(this->path, this->waypoint, &pos) && SubS_MoveActorToPoint(&this->actor, &pos, speed)) {
         this->waypoint++;
         if (this->waypoint >= this->path->count) {
             this->waypoint = 0;
@@ -259,7 +259,7 @@ void EnZo_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = func_8013D648(globalCtx, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
+    this->path = SubS_GetPathByIndex(globalCtx, ENZO_GET_PATH(&this->actor), ENZO_NO_PATH);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actionFunc = EnZo_Walk;

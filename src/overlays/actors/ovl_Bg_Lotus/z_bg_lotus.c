@@ -97,7 +97,7 @@ void BgLotus_Wait(BgLotus* this, GlobalContext* globalCtx) {
                 EffectSsGRipple_Spawn(globalCtx, &this->dyna.actor.world.pos, 1000, 1400, 8);
                 this->timer = 40;
             }
-            if (gSaveContext.playerForm != PLAYER_FORM_DEKU) {
+            if (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) {
                 this->timer = 40;
                 this->dyna.actor.flags |= ACTOR_FLAG_10;
                 this->actionFunc = BgLotus_Sink;

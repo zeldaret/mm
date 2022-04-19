@@ -172,7 +172,7 @@ void func_80B3B05C(EnGg2* this, GlobalContext* globalCtx) {
 }
 
 void func_80B3B0A0(EnGg2* this, GlobalContext* globalCtx) {
-    if ((Message_GetState(&globalCtx->msgCtx) == 5) && func_80147624(globalCtx)) {
+    if ((Message_GetState(&globalCtx->msgCtx) == 5) && Message_ShouldAdvance(globalCtx)) {
         globalCtx->msgCtx.msgMode = 0x43;
         globalCtx->msgCtx.unk12023 = 4;
         this->unk_2F0 = 0;
@@ -214,17 +214,17 @@ void func_80B3B294(EnGg2* this, GlobalContext* globalCtx) {
 
     if (this->unk_2F1 == 0) {
         if (globalCtx->sceneNum == SCENE_11GORONNOSATO) {
-            gSaveContext.weekEventReg[20] |= 4;
-            gSaveContext.weekEventReg[20] &= (u8)~8;
-            gSaveContext.weekEventReg[20] &= (u8)~0x10;
+            gSaveContext.save.weekEventReg[20] |= 4;
+            gSaveContext.save.weekEventReg[20] &= (u8)~8;
+            gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
         } else if (globalCtx->sceneNum == SCENE_17SETUGEN) {
-            gSaveContext.weekEventReg[20] &= (u8)~4;
-            gSaveContext.weekEventReg[20] |= 8;
-            gSaveContext.weekEventReg[20] &= (u8)~0x10;
+            gSaveContext.save.weekEventReg[20] &= (u8)~4;
+            gSaveContext.save.weekEventReg[20] |= 8;
+            gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
         } else if (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA) {
-            gSaveContext.weekEventReg[20] &= (u8)~4;
-            gSaveContext.weekEventReg[20] &= (u8)~8;
-            gSaveContext.weekEventReg[20] |= 0x10;
+            gSaveContext.save.weekEventReg[20] &= (u8)~4;
+            gSaveContext.save.weekEventReg[20] &= (u8)~8;
+            gSaveContext.save.weekEventReg[20] |= 0x10;
         }
 
         if (this->unk_1D8 != NULL) {
@@ -240,17 +240,17 @@ void func_80B3B294(EnGg2* this, GlobalContext* globalCtx) {
                 } else {
                     this->unk_2F1 = 1;
                     if (globalCtx->sceneNum == SCENE_11GORONNOSATO) {
-                        gSaveContext.weekEventReg[20] |= 4;
-                        gSaveContext.weekEventReg[20] &= (u8)~8;
-                        gSaveContext.weekEventReg[20] &= (u8)~0x10;
+                        gSaveContext.save.weekEventReg[20] |= 4;
+                        gSaveContext.save.weekEventReg[20] &= (u8)~8;
+                        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
                     } else if (globalCtx->sceneNum == SCENE_17SETUGEN) {
-                        gSaveContext.weekEventReg[20] &= (u8)~4;
-                        gSaveContext.weekEventReg[20] |= 8;
-                        gSaveContext.weekEventReg[20] &= (u8)~0x10;
+                        gSaveContext.save.weekEventReg[20] &= (u8)~4;
+                        gSaveContext.save.weekEventReg[20] |= 8;
+                        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
                     } else if (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA) {
-                        gSaveContext.weekEventReg[20] &= (u8)~4;
-                        gSaveContext.weekEventReg[20] &= (u8)~8;
-                        gSaveContext.weekEventReg[20] |= 0x10;
+                        gSaveContext.save.weekEventReg[20] &= (u8)~4;
+                        gSaveContext.save.weekEventReg[20] &= (u8)~8;
+                        gSaveContext.save.weekEventReg[20] |= 0x10;
                     }
                 }
             }
@@ -360,7 +360,7 @@ void EnGg2_Init(Actor* thisx, GlobalContext* globalCtx2) {
         return;
     }
 
-    if (gSaveContext.weekEventReg[91] & 0x10) {
+    if (gSaveContext.save.weekEventReg[91] & 0x10) {
         Actor_MarkForDeath(&this->actor);
         return;
     }
@@ -369,7 +369,7 @@ void EnGg2_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->actor.bgCheckFlags |= 0x400;
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &object_gg_Skel_00F6C0, &object_gg_Anim_00F578, this->jointTable,
                        this->morphTable, 20);
-    this->unk_1D8 = func_8013D648(globalCtx, ENGG2_GET_FC00(&this->actor), 0x3F);
+    this->unk_1D8 = SubS_GetPathByIndex(globalCtx, ENGG2_GET_FC00(&this->actor), 0x3F);
     this->actor.flags &= ~ACTOR_FLAG_80;
     this->unk_2F0 = 0;
     this->unk_2F1 = 0;
@@ -381,16 +381,16 @@ void EnGg2_Init(Actor* thisx, GlobalContext* globalCtx2) {
     this->unk_2EA = 0;
 
     if (globalCtx->sceneNum == SCENE_11GORONNOSATO) {
-        gSaveContext.weekEventReg[20] &= (u8)~4;
-        gSaveContext.weekEventReg[20] &= (u8)~8;
-        gSaveContext.weekEventReg[20] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[20] &= (u8)~4;
+        gSaveContext.save.weekEventReg[20] &= (u8)~8;
+        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
         this->unk_2EE = 0;
         Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
         this->actionFunc = func_80B3AFB0;
     } else if (globalCtx->sceneNum == SCENE_17SETUGEN) {
-        if ((gSaveContext.weekEventReg[20] & 4) && !(gSaveContext.weekEventReg[20] & 8) &&
-            !(gSaveContext.weekEventReg[20] & 0x10)) {
-            gSaveContext.weekEventReg[20] &= (u8)~4;
+        if ((gSaveContext.save.weekEventReg[20] & 4) && !(gSaveContext.save.weekEventReg[20] & 8) &&
+            !(gSaveContext.save.weekEventReg[20] & 0x10)) {
+            gSaveContext.save.weekEventReg[20] &= (u8)~4;
             this->unk_2EE = 8;
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
@@ -398,9 +398,9 @@ void EnGg2_Init(Actor* thisx, GlobalContext* globalCtx2) {
             Actor_MarkForDeath(&this->actor);
         }
     } else if (globalCtx->sceneNum == SCENE_10YUKIYAMANOMURA) {
-        if (!(gSaveContext.weekEventReg[20] & 4) && (gSaveContext.weekEventReg[20] & 8) &&
-            !(gSaveContext.weekEventReg[20] & 0x10)) {
-            gSaveContext.weekEventReg[20] &= (u8)~8;
+        if (!(gSaveContext.save.weekEventReg[20] & 4) && (gSaveContext.save.weekEventReg[20] & 8) &&
+            !(gSaveContext.save.weekEventReg[20] & 0x10)) {
+            gSaveContext.save.weekEventReg[20] &= (u8)~8;
             this->unk_2EE = 8;
             Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
@@ -408,9 +408,9 @@ void EnGg2_Init(Actor* thisx, GlobalContext* globalCtx2) {
             Actor_MarkForDeath(&this->actor);
         }
     } else {
-        gSaveContext.weekEventReg[20] &= (u8)~4;
-        gSaveContext.weekEventReg[20] &= (u8)~8;
-        gSaveContext.weekEventReg[20] &= (u8)~0x10;
+        gSaveContext.save.weekEventReg[20] &= (u8)~4;
+        gSaveContext.save.weekEventReg[20] &= (u8)~8;
+        gSaveContext.save.weekEventReg[20] &= (u8)~0x10;
         Actor_MarkForDeath(&this->actor);
     }
 }
