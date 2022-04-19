@@ -296,7 +296,7 @@ s32 func_80BED140(GlobalContext* globalCtx) {
 }
 
 s32 func_80BED208(EnAkindonuts* this) {
-    if (INV_CONTENT(ITEM_BEAN) != 10U) {
+    if ((u32)INV_CONTENT(ITEM_BEAN) != 10) {
         return 0;
     }
 

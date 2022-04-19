@@ -357,7 +357,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, GlobalContext* globalCtx)
                         this->isNewAccount = true;
                     }
 
-                    Rupees_ChangeBy((s16)-globalCtx->msgCtx.bankRupeesSelected);
+                    Rupees_ChangeBy(-globalCtx->msgCtx.bankRupeesSelected);
                     this->previousBankValue = gSaveContext.save.bankRupees & 0xFFFF;
                     gSaveContext.save.bankRupees =
                         ((gSaveContext.save.bankRupees & 0xFFFF) + globalCtx->msgCtx.bankRupeesSelected) |

@@ -407,7 +407,6 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     SET_STOLEN_ITEM_1(STOLEN_ITEM_NONE);
     SET_STOLEN_ITEM_2(STOLEN_ITEM_NONE);
 
-    // ??
     Inventory_DeleteItem(ITEM_OCARINA_FAIRY, SLOT_TRADE_DEED);
     Inventory_DeleteItem(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
     Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);

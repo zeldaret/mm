@@ -920,10 +920,10 @@ u8 Item_CheckObtainability(u8 item) {
     return Item_CheckObtainabilityImpl(item);
 }
 
-void Inventory_DeleteItem(s16 item, s16 invSlot) {
+void Inventory_DeleteItem(s16 item, s16 slot) {
     s16 btn;
 
-    gSaveContext.save.inventory.items[invSlot] = ITEM_NONE;
+    gSaveContext.save.inventory.items[slot] = ITEM_NONE;
 
     for (btn = 1; btn < 4; btn++) {
         if (GET_CUR_FORM_BTN_ITEM(btn) == item) {

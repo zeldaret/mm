@@ -1915,7 +1915,7 @@ void Interface_LoadItemIconImpl(GlobalContext* globalCtx, u8 arg1);
 // void func_80112C0C(void);
 u8 Item_Give(GlobalContext* globalCtx, u8 item);
 u8 Item_CheckObtainability(u8 item);
-void Inventory_DeleteItem(s16 item, s16 invSlot);
+void Inventory_DeleteItem(s16 item, s16 slot);
 void Inventory_UnequipItem(s16 item);
 s32 Inventory_ReplaceItem(GlobalContext* globalCtx, u8 oldItem, u8 newItem);
 void Inventory_UpdateDeitySwordEquip(GlobalContext* globalCtx) ;

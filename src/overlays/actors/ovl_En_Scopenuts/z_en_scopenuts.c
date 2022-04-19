@@ -331,7 +331,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
             }
         }
     } else if (temp_v0 == 4) {
-        if (Message_ShouldAdvance(globalCtx) != 0) {
+        if (Message_ShouldAdvance(globalCtx)) {
             switch (globalCtx->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.playerData.rupees < this->unk_358) {
@@ -343,7 +343,7 @@ void func_80BCB6D0(EnScopenuts* this, GlobalContext* globalCtx) {
                         func_8019F208();
                         globalCtx->msgCtx.msgMode = 0x43;
                         globalCtx->msgCtx.unk12023 = 4;
-                        Rupees_ChangeBy(this->unk_358 * -1);
+                        Rupees_ChangeBy(-this->unk_358);
                         this->actionFunc = func_80BCB90C;
                     }
                     break;
