@@ -200,8 +200,8 @@ void func_809F24C8(Boss06* this, GlobalContext* globalCtx) {
             Cutscene_Start(globalCtx, &globalCtx->csCtx);
             func_800B7298(globalCtx, &this->actor, 7);
             this->unk_A00 = Play_CreateSubCamera(globalCtx);
-            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(globalCtx, this->unk_A00, 7);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(globalCtx, this->unk_A00, CAM_STATUS_ACTIVE);
             D_809F4970->unk_151 = 1;
             this->unk_1C9 = 1;
             this->unk_1C8 = 1;

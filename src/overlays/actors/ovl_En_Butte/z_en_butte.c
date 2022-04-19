@@ -143,7 +143,7 @@ void func_8091C178(EnButte* this, GlobalContext* globalCtx) {
     sp48 = Math_SinS(D_8091D3A0) * 250.0f;
     sp48 = CLAMP(sp48, 0, 255);
 
-    func_800DFC90(&sp40, GET_ACTIVE_CAM(globalCtx));
+    Camera_GetCamDir(&sp40, GET_ACTIVE_CAM(globalCtx));
     Matrix_RotateY(sp40.y, MTXMODE_NEW);
     Matrix_InsertXRotation_s(sp40.x, MTXMODE_APPLY);
     Matrix_InsertZRotation_s(sp40.z, MTXMODE_APPLY);

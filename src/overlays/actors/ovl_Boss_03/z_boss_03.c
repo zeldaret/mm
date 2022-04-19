@@ -1154,8 +1154,8 @@ void Boss03_IntroCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 7);
                 this->csCamId = Play_CreateSubCamera(globalCtx);
-                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(globalCtx, this->csCamId, CAM_STATUS_ACTIVE);
 
                 this->actor.world.rot.y = -0x7B30;
                 this->prevPlayerPos.y = 1850.0f;
@@ -1455,8 +1455,8 @@ void Boss03_DeathCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 1);
                 this->csCamId = Play_CreateSubCamera(globalCtx);
-                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(globalCtx, this->csCamId, CAM_STATUS_ACTIVE);
                 this->unk_2BE = Math_FAtan2F(this->actor.world.pos.z, this->actor.world.pos.x);
 
                 // Player is above water && Player is standing on ground
@@ -1669,8 +1669,8 @@ void Boss03_SpawnSmallFishesCutscene(Boss03* this, GlobalContext* globalCtx) {
                 Cutscene_Start(globalCtx, &globalCtx->csCtx);
                 func_800B7298(globalCtx, &this->actor, 1);
                 this->csCamId = Play_CreateSubCamera(globalCtx);
-                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-                Play_CameraChangeStatus(globalCtx, this->csCamId, 7);
+                Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+                Play_CameraChangeStatus(globalCtx, this->csCamId, CAM_STATUS_ACTIVE);
                 this->csState = 1;
                 this->unk_2BE = 0xBB8;
 

@@ -21,7 +21,6 @@
 #define SEGMENTED_TO_VIRTUAL(addr) (void*)(PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(globalCtx) ((globalCtx)->cameraPtrs[(globalCtx)->activeCamera])
-#define CAM_ID_MAIN 0
 
 #define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
     (curState)->nextGameStateInit = (GameStateFunc)newInit; \

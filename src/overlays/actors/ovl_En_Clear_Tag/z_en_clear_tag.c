@@ -546,8 +546,8 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
         case 1:
             Cutscene_Start(globalCtx, &globalCtx->csCtx);
             this->subCamId = Play_CreateSubCamera(globalCtx);
-            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(globalCtx, this->subCamId, 7);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(globalCtx, this->subCamId, CAM_STATUS_ACTIVE);
             func_800B7298(globalCtx, &this->actor, 4);
             mainCam = Play_GetCamera(globalCtx, CAM_ID_MAIN);
             this->subCamEye.x = mainCam->eye.x;

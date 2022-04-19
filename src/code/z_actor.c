@@ -1341,7 +1341,7 @@ void Actor_SetCameraHorseSetting(GlobalContext* globalCtx, Player* player) {
         EnHorse* rideActor = (EnHorse*)player->rideActor;
 
         if ((rideActor != NULL) && !(rideActor->unk_1EC & 0x10)) {
-            func_800DFAC8(Play_GetCamera(globalCtx, CAM_ID_MAIN), 4);
+            Camera_ChangeSetting(Play_GetCamera(globalCtx, CAM_ID_MAIN), CAM_SET_HORSE);
         }
     }
 }
@@ -2511,9 +2511,9 @@ void Actor_Draw(GlobalContext* globalCtx, Actor* actor) {
 
     if (actor->flags & ACTOR_FLAG_1000) {
         Matrix_SetStateRotationAndTranslation(
-            actor->world.pos.x + globalCtx->mainCamera.skyboxOffset.x,
-            actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.skyboxOffset.y),
-            actor->world.pos.z + globalCtx->mainCamera.skyboxOffset.z, &actor->shape.rot);
+            actor->world.pos.x + globalCtx->mainCamera.quakeOffset.x,
+            actor->world.pos.y + ((actor->shape.yOffset * actor->scale.y) + globalCtx->mainCamera.quakeOffset.y),
+            actor->world.pos.z + globalCtx->mainCamera.quakeOffset.z, &actor->shape.rot);
     } else {
         Matrix_SetStateRotationAndTranslation(actor->world.pos.x,
                                               actor->world.pos.y + (actor->shape.yOffset * actor->scale.y),

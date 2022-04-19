@@ -413,7 +413,7 @@ void EnBombf_Update(Actor* thisx, GlobalContext* globalCtx) {
                 globalCtx->envCtx.lightSettings.ambientColor[0] = globalCtx->envCtx.lightSettings.ambientColor[1] =
                     globalCtx->envCtx.lightSettings.ambientColor[2] = 250;
 
-                func_800DFD04(&globalCtx->mainCamera, 2, 11, 8);
+                Camera_AddQuake(&globalCtx->mainCamera, 2, 11, 8);
 
                 this->actor.params = ENBOMBF_1;
                 this->timer = 10;

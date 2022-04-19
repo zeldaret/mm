@@ -91,7 +91,7 @@ void BgCtowerRot_CorridorRotate(BgCtowerRot* this, GlobalContext* globalCtx) {
         rotZtmp = CLAMP_MAX(1100.0f - offset.z, 1000.0f);
         rotZ = rotZtmp;
     }
-    func_800DFAC8(globalCtx->cameraPtrs[CAM_ID_MAIN], 17);
+    Camera_ChangeSetting(globalCtx->cameraPtrs[CAM_ID_MAIN], CAM_SET_DUNGEON0);
     this->dyna.actor.shape.rot.z = rotZ * 16.384f;
     if (globalCtx->csCtx.frames == 132) {
         play_sound(NA_SE_SY_SPIRAL_DASH);

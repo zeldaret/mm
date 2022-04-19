@@ -5169,8 +5169,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
 
         case 1:
             sCameraId = Play_CreateSubCamera(globalCtx);
-            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(globalCtx, sCameraId, 7);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(globalCtx, sCameraId, CAM_STATUS_ACTIVE);
             camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
             sCameraEye.y = camera->eye.y;
@@ -5297,8 +5297,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         case 10:
             Cutscene_Start(globalCtx, &globalCtx->csCtx);
             sCameraId = Play_CreateSubCamera(globalCtx);
-            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(globalCtx, sCameraId, 7);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(globalCtx, sCameraId, CAM_STATUS_ACTIVE);
             func_800B7298(globalCtx, &this->actor, 4);
             camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
@@ -5336,8 +5336,8 @@ void EnFishing_UpdateOwner(Actor* thisx, GlobalContext* globalCtx2) {
         case 20:
             Cutscene_Start(globalCtx, &globalCtx->csCtx);
             sCameraId = Play_CreateSubCamera(globalCtx);
-            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, 1);
-            Play_CameraChangeStatus(globalCtx, sCameraId, 7);
+            Play_CameraChangeStatus(globalCtx, CAM_ID_MAIN, CAM_STATUS_WAIT);
+            Play_CameraChangeStatus(globalCtx, sCameraId, CAM_STATUS_ACTIVE);
             func_800B7298(globalCtx, &this->actor, 4);
             camera = Play_GetCamera(globalCtx, CAM_ID_MAIN);
             sCameraEye.x = camera->eye.x;
