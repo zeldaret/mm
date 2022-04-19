@@ -30,7 +30,7 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
         switch (reloc & 0x3F000000) {
             case 0x2000000:
                 // R_MIPS_32
-                // Handles 32-bit address relocation, used for things such as jump tables.
+                // Handles 32-bit address relocation, used for things such as jump tables and pointers in data.
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0xF000000) == 0) {
@@ -50,8 +50,8 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
 
             case 0x5000000:
                 // R_MIPS_HI16
-                // Handles relocation for a lui instruction, part 1.
-                // Store the reference to the instruction, and update it in the R_MIPS_LO16 section.
+                // Handles relocation for a hi/lo pair, part 1.
+                // Store the reference to the LUI instruction, and update it in the R_MIPS_LO16 section.
 
                 luiRefs[(*relocDataP >> 0x10) & 0x1F] = relocDataP;
                 luiVals[(*relocDataP >> 0x10) & 0x1F] = *relocDataP;
@@ -59,10 +59,10 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
 
             case 0x6000000:
                 // R_MIPS_LO16
-                // Handles relocation for a lui instruction, part 2.
-                // Updates the LUI instruction to reflect the relocated address.
+                // Handles relocation for a hi/lo pair, part 2.
+                // Updates the LUI instruction (hi) to reflect the relocated address.
                 // The full address is calculated from the LUI and lo parts, and then updated.
-                // If the lo part is negative, add 1 to the lui.
+                // If the lo part is negative, add 1 to the LUI.
 
                 luiInstRef = luiRefs[(*relocDataP >> 0x15) & 0x1F];
                 regValP = &luiVals[((*relocDataP) >> 0x15) & 0x1F];
