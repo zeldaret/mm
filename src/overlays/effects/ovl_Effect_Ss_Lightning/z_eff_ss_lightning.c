@@ -1,7 +1,7 @@
 /*
  * File: z_eff_ss_lightning.c
  * Overlay: ovl_Effect_Ss_Lightning
- * Description: Lightning
+ * Description: Electric Discharge
  */
 
 #include "z_eff_ss_lightning.h"
