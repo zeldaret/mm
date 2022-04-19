@@ -366,7 +366,7 @@ void func_80A6F9DC(EnMm3* this, GlobalContext* globalCtx) {
 }
 
 void func_80A6FBA0(EnMm3* this) {
-    func_801A5BD0(0x6F);
+    Audio_SetSfxBanksMute(0x6F);
     func_801A0238(0, 5);
     gSaveContext.save.weekEventReg[63] |= 1;
     gSaveContext.save.weekEventReg[63] &= (u8)~2;
@@ -398,7 +398,7 @@ void func_80A6FBFC(EnMm3* this, GlobalContext* globalCtx) {
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &globalCtx->state)) {
-        func_801A5BD0(0);
+        Audio_SetSfxBanksMute(0);
         func_801A0238(0x7F, 5);
         Message_StartTextbox(globalCtx, 0x2791, &this->actor);
         this->unk_2B4 = 0x2791;

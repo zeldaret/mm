@@ -593,9 +593,9 @@ void func_80A91760(EnTest6* this, GlobalContext* globalCtx) {
                (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_B))) {
         this->unk_286 = 1;
         if (ENTEST6_GET(&this->actor) == ENTEST6_25) {
-            func_801A75E8(NA_SE_SY_TIME_CONTROL_SLOW);
+            Audio_StopSfxById(NA_SE_SY_TIME_CONTROL_SLOW);
         } else if (ENTEST6_GET(&this->actor) == ENTEST6_24) {
-            func_801A75E8(NA_SE_SY_TIME_CONTROL_NORMAL);
+            Audio_StopSfxById(NA_SE_SY_TIME_CONTROL_NORMAL);
         }
     }
 

@@ -550,7 +550,7 @@ void func_80AA076C(DmStk* this, GlobalContext* globalCtx) {
             break;
 
         case 2000:
-            func_801A5BD0(0x7F);
+            Audio_SetSfxBanksMute(0x7F);
             break;
     }
 
