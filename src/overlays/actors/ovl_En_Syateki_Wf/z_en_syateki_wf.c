@@ -180,7 +180,7 @@ void EnSyatekiWf_Init(Actor* thisx, GlobalContext* globalCtx) {
     Collider_InitCylinder(globalCtx, &this->unk_300);
     Collider_SetCylinder(globalCtx, &this->unk_300, &this->actor, &sCylinderInit2);
     Collider_InitJntSph(globalCtx, &this->unk_34C);
-    Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &sJntSphInit, &this->unk_36C);
+    Collider_SetJntSph(globalCtx, &this->unk_34C, &this->actor, &sJntSphInit, this->unk_36C);
     this->unk_34C.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
     SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gWolfosNormalSkel, &gWolfosWaitingAnim, this->jointTable,
