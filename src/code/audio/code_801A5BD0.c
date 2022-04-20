@@ -14,7 +14,7 @@ typedef struct {
     /* 0x4 */ f32 target;
     /* 0x8 */ f32 step;
     /* 0xC */ u16 remainingFrames;
-} UnusedBankLerp; // size = 0x10
+} SfxBankLerp; // size = 0x10
 
 extern u8 D_801D6600[7];
 extern u8 D_801D6608[7];
@@ -36,7 +36,7 @@ u8 sSfxBankUnused[7];
 ActiveSfx gActiveSfxs[7][3];
 u8 sCurSfxPlayerChannelIdx;
 u8 gSfxBankMuted[7];
-UnusedBankLerp sUnusedBankLerp[7];
+SfxBankLerp sSfxBankLerp[7];
 
 // data
 
@@ -739,22 +739,22 @@ void Audio_SetSfxBankLerp(u8 bankId, u8 target, u16 delay) {
         delay++;
     }
 
-    sUnusedBankLerp[bankId].target = target / 127.0f;
-    sUnusedBankLerp[bankId].remainingFrames = delay;
-    sUnusedBankLerp[bankId].step = ((sUnusedBankLerp[bankId].value - sUnusedBankLerp[bankId].target) / delay);
+    sSfxBankLerp[bankId].target = target / 127.0f;
+    sSfxBankLerp[bankId].remainingFrames = delay;
+    sSfxBankLerp[bankId].step = ((sSfxBankLerp[bankId].value - sSfxBankLerp[bankId].target) / delay);
 }
 
 /**
  * Unused
  */
 void Audio_StepSfxBankLerp(u8 bankId) {
-    if (sUnusedBankLerp[bankId].remainingFrames != 0) {
-        sUnusedBankLerp[bankId].remainingFrames--;
+    if (sSfxBankLerp[bankId].remainingFrames != 0) {
+        sSfxBankLerp[bankId].remainingFrames--;
 
-        if (sUnusedBankLerp[bankId].remainingFrames != 0) {
-            sUnusedBankLerp[bankId].value -= sUnusedBankLerp[bankId].step;
+        if (sSfxBankLerp[bankId].remainingFrames != 0) {
+            sSfxBankLerp[bankId].value -= sSfxBankLerp[bankId].step;
         } else {
-            sUnusedBankLerp[bankId].value = sUnusedBankLerp[bankId].target;
+            sSfxBankLerp[bankId].value = sSfxBankLerp[bankId].target;
         }
     }
 }
@@ -802,8 +802,8 @@ void Audio_ResetSfxs(void) {
         sSfxBankFreeListStart[bankId] = 1;
         sSfxBankUnused[bankId] = 0;
         gSfxBankMuted[bankId] = false;
-        sUnusedBankLerp[bankId].value = 1.0f;
-        sUnusedBankLerp[bankId].remainingFrames = 0;
+        sSfxBankLerp[bankId].value = 1.0f;
+        sSfxBankLerp[bankId].remainingFrames = 0;
     }
 
     for (bankId = 0; bankId < ARRAY_COUNT(gSfxBanks); bankId++) {
