@@ -558,7 +558,7 @@ void EnClearTag_UpdateCamera(EnClearTag* this, GlobalContext* globalCtx) {
             this->subCamAt.z = mainCam->at.z;
             Message_StartTextbox(globalCtx, 0xF, NULL);
             this->cameraState = 2;
-            func_8019FDC8(&gSfxDefaultPosScreenCenter, NA_SE_VO_NA_LISTEN, 0x20);
+            func_8019FDC8(&gSfxPosScreenCenter, NA_SE_VO_NA_LISTEN, 0x20);
         case 2:
             if (player->actor.world.pos.z > 0.0f) {
                 player->actor.world.pos.z = 290.0f;

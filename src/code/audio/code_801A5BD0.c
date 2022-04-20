@@ -67,11 +67,11 @@ u8 sBankSizes[ARRAY_COUNT(gSfxBanks)] = {
 
 u8 gSfxChannelLayout = 0;
 u16 sSfxChannelLowVolumeFlag = 0;
-Vec3f gSfxDefaultPosScreenCenter = { 0.0f, 0.0f, 0.0f }; // default pos at the center of the screen
-f32 gSfxDefaultVolOrFreq = 1.0f;                         // default freqScale and vol
-s32 D_801DB4B4 = 0;                                      // unused
-s8 gSfxDefaultReverbAddNone = 0;                         // default reverbAdd (none added)
-s32 D_801DB4BC = 0;                                      // unused
+Vec3f gSfxPosScreenCenter = { 0.0f, 0.0f, 0.0f }; // default pos at the center of the screen
+f32 gSfxVolOrFreqDefaultVal = 1.0f;               // default freqScale and vol
+s32 D_801DB4B4 = 0;                               // unused
+s8 gSfxReverbAddNone = 0;                         // default reverbAdd (none added)
+s32 D_801DB4BC = 0;                               // unused
 
 void Audio_SetSfxBanksMute(u16 muteMask) {
     u8 bankId;
@@ -366,7 +366,7 @@ void Audio_ChooseActiveSfxs(u8 bankId) {
         } else if (gSfxBanks[bankId][entryIndex].state != SFX_STATE_EMPTY) {
             entry = &gSfxBanks[bankId][entryIndex];
 
-            if (&gSfxDefaultPosScreenCenter.x == entry[0].posX) {
+            if (&gSfxPosScreenCenter.x == entry[0].posX) {
                 entry->dist = 0.0f;
             } else {
                 entryPosY = *entry->posY * 1;
