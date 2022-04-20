@@ -381,7 +381,7 @@ void func_80990854(EnWf* this, GlobalContext* globalCtx) {
     }
 }
 
-void func_809908E0(EnWf* this) {
+void EnWf_Blink(EnWf* this) {
     if (this->eyeIndex != 0) {
         this->eyeIndex++;
         if (this->eyeIndex == 4) {
@@ -1476,7 +1476,7 @@ void EnWf_Update(Actor* thisx, GlobalContext* globalCtx) {
 
     func_8099386C(this, globalCtx);
     if (this->actionFunc != func_809923E4) {
-        func_809908E0(this);
+        EnWf_Blink(this);
     }
 
     this->actionFunc(this, globalCtx);

@@ -30,7 +30,7 @@ typedef struct EnSyatekiWf {
     /* 0x2B4 */ ColliderCylinder unk_2B4;
     /* 0x300 */ ColliderCylinder unk_300;
     /* 0x34C */ ColliderJntSph unk_34C;
-    /* 0x36C */ ColliderJntSphElement unk_36C;
+    /* 0x36C */ ColliderJntSphElement unk_36C[1];
     /* 0x3AC */ UNK_TYPE1 unk_3AC[0x20];
 } EnSyatekiWf; // size = 0x3CC
 
