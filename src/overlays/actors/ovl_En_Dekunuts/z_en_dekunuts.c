@@ -6,7 +6,6 @@
 
 #include "z_en_dekunuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -120,7 +119,7 @@ void EnDekunuts_Init(Actor* thisx, GlobalContext* globalCtx) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubIdleAnim, this->jointTable,
-                   this->morphTable, 10);
+                   this->morphTable, DEKU_SCRUB_LIMB_MAX);
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->unk_194 = ENDEKUNUTS_GET_FF00(&this->actor);
@@ -669,7 +668,7 @@ s32 EnDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
     f32 currentFrame;
 
     if (this->actionFunc == func_808BDA4C) {
-        if (limbIndex == 5) {
+        if (limbIndex == DEKU_SCRUB_LIMB_SNOUT) {
             currentFrame = this->skelAnime.curFrame;
             if (currentFrame <= 6.0f) {
                 arg2 = 1.0f - (currentFrame * 0.0833f);
@@ -688,7 +687,7 @@ s32 EnDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** d
                 return 0;
             }
             Matrix_Scale(arg1, arg2, arg3, MTXMODE_APPLY);
-        } else if ((limbIndex == 2) && (this->actor.params == ENDEKUNUTS_GET_FF00_2)) {
+        } else if ((limbIndex == DEKU_SCRUB_LIMB_HEAD) && (this->actor.params == ENDEKUNUTS_GET_FF00_2)) {
             rot->z = this->actor.world.rot.x;
         }
     }
@@ -723,7 +722,7 @@ void EnDekunuts_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dLis
         }
     }
 
-    if (limbIndex == 2) {
+    if (limbIndex == DEKU_SCRUB_LIMB_HEAD) {
         Matrix_GetStateTranslation(&this->actor.focus.pos);
     }
 }

@@ -7,7 +7,6 @@
 #include "z_en_syateki_dekunuts.h"
 #include "overlays/actors/ovl_En_Syateki_Man/z_en_syateki_man.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
-#include "objects/object_dekunuts/object_dekunuts.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_8000000)
 
@@ -125,7 +124,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubBurrowAnim, this->jointTable,
-                   this->morphTable, 10);
+                   this->morphTable, DEKU_SCRUB_LIMB_MAX);
     if (path == NULL) {
         Actor_MarkForDeath(&this->actor);
         return;
@@ -398,7 +397,7 @@ s32 EnSyatekiDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, 
                                        Actor* thisx) {
     EnSyatekiDekunuts* this = THIS;
 
-    if ((limbIndex == OBJECT_DEKUNUTS_LIMB_03) && (this->unk_1F0 == 1)) {
+    if ((limbIndex == DEKU_SCRUB_LIMB_HAIR) && (this->unk_1F0 == 1)) {
         rot->z += this->unk_1F2;
     }
 
