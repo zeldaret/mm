@@ -543,7 +543,7 @@ void func_808BE4D4(EnDekunuts* this, GlobalContext* globalCtx) {
         Actor_Spawn(&globalCtx->actorCtx, globalCtx, ACTOR_OBJ_ETCETERA, this->actor.home.pos.x, this->actor.home.pos.y,
                     this->actor.home.pos.z, 0, this->actor.home.rot.y, 0, 0x80);
         EffectSsHahen_SpawnBurst(globalCtx, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, 64, 10,
-                                 object_dekunuts_DL_001F50);
+                                 gDekuScrubFlowerFragmentDL);
         Actor_MarkForDeath(&this->actor);
     }
 }
@@ -739,7 +739,7 @@ void EnDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->actor.colorFilterTimer != 0) {
         func_800AE5A0(globalCtx);
     }
-    Gfx_DrawDListOpa(globalCtx, object_dekunuts_DL_001E50);
+    Gfx_DrawDListOpa(globalCtx, gDekuScrubFlowerDL);
     Actor_DrawDamageEffects(globalCtx, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

@@ -190,8 +190,8 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
                 break;
 
             case ENDNK_GET_3_2:
-                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable,
-                               this->morphTable, 10);
+                SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
+                               10);
                 func_80A514F0(&this->skelAnime, 35);
                 break;
         }

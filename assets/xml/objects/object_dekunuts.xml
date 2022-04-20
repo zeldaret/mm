@@ -15,8 +15,8 @@
         <Texture Name="object_dekunuts_Tex_0011F0" OutName="tex_0011F0" Format="rgba16" Width="32" Height="32" Offset="0x11F0" />
         <Texture Name="object_dekunuts_Tex_0019F0" OutName="tex_0019F0" Format="rgba16" Width="8" Height="8" Offset="0x19F0" />
         <Texture Name="object_dekunuts_Tex_001A70" OutName="tex_001A70" Format="rgba16" Width="16" Height="16" Offset="0x1A70" />
-        <DList Name="object_dekunuts_DL_001E50" Offset="0x1E50" />
-        <DList Name="object_dekunuts_DL_001F50" Offset="0x1F50" />
+        <DList Name="gDekuScrubFlowerDL" Offset="0x1E50" />
+        <DList Name="gDekuScrubFlowerFragmentDL" Offset="0x1F50" />
         <Texture Name="object_dekunuts_Tex_001FD8" OutName="tex_001FD8" Format="rgba16" Width="16" Height="32" Offset="0x1FD8" />
         <Limb Name="gDekuScrubBodyLimb" Type="Standard" EnumName="OBJECT_DEKUNUTS_LIMB_01" Offset="0x23D8" />
         <Limb Name="gDekuScrubHeadLimb" Type="Standard" EnumName="OBJECT_DEKUNUTS_LIMB_02" Offset="0x23E4" />

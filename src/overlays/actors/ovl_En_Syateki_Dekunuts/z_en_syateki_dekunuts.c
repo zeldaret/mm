@@ -428,7 +428,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, GlobalContext* globalCtx) {
             Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx),
                       G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, &object_dekunuts_DL_001E50);
+            gSPDisplayList(POLY_OPA_DISP++, gDekuScrubFlowerDL);
 
             CLOSE_DISPS(globalCtx->state.gfxCtx);
         }
