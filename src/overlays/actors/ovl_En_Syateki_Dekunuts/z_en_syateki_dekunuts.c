@@ -124,7 +124,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, GlobalContext* globalCtx2) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &object_dekunuts_Skel_002468, &gDekuScrubBurrowAnim, this->jointTable,
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuScrubSkel, &gDekuScrubBurrowAnim, this->jointTable,
                    this->morphTable, 10);
     if (path == NULL) {
         Actor_MarkForDeath(&this->actor);
