@@ -1,0 +1,59 @@
+<Root>
+     <File Name="do_action_static" Segment="9">
+        <Texture Name="gAttackDoActionENGTex" OutName="attack_eng" Format="ia4" Width="48" Height="16" Offset="0x0"/>
+        <Texture Name="gCheckDoActionENGTex" OutName="check_eng" Format="ia4" Width="48" Height="16" Offset="0x180"/>
+        <Texture Name="gEnterDoActionENGTex" OutName="enter_eng" Format="ia4" Width="48" Height="16" Offset="0x300"/>
+        <Texture Name="gReturnDoActionENGTex" OutName="return_eng" Format="ia4" Width="48" Height="16" Offset="0x480"/>
+        <Texture Name="gOpenDoActionENGTex" OutName="open_eng" Format="ia4" Width="48" Height="16" Offset="0x600"/>
+        <Texture Name="gJumpDoActionENGTex" OutName="jump_eng" Format="ia4" Width="48" Height="16" Offset="0x780"/>
+        <Texture Name="gDecideDoActionENGTex" OutName="decide_eng" Format="ia4" Width="48" Height="16" Offset="0x900"/>
+        <Texture Name="gDiveDoActionENGTex" OutName="dive_eng" Format="ia4" Width="48" Height="16" Offset="0xA80"/>
+        <Texture Name="gFasterDoActionENGTex" OutName="faster_eng" Format="ia4" Width="48" Height="16" Offset="0xC00"/>
+        <Texture Name="gThrowDoActionENGTex" OutName="throw_eng" Format="ia4" Width="48" Height="16" Offset="0xD80"/>
+
+        <!-- Unused and left untranslated from Japanese -->
+        <Texture Name="gNaviDoActionENGTex" OutName="navi_eng" Format="ia4" Width="48" Height="16" Offset="0xF00"/>
+
+        <Texture Name="gClimbDoActionENGTex" OutName="climb_eng" Format="ia4" Width="48" Height="16" Offset="0x1080"/>
+        <Texture Name="gDropDoActionENGTex" OutName="drop_eng" Format="ia4" Width="48" Height="16" Offset="0x1200"/>
+        <Texture Name="gDownDoActionENGTex" OutName="down_eng" Format="ia4" Width="48" Height="16" Offset="0x1380"/>
+        <Texture Name="gQuitDoActionENGTex" OutName="quit_eng" Format="ia4" Width="48" Height="16" Offset="0x1500"/>
+        <Texture Name="gSpeakDoActionENGTex" OutName="speak_eng" Format="ia4" Width="48" Height="16" Offset="0x1680"/>
+        <Texture Name="gNextDoActionENGTex" OutName="next_eng" Format="ia4" Width="48" Height="16" Offset="0x1800"/>
+        <Texture Name="gGrabDoActionENGTex" OutName="grab_eng" Format="ia4" Width="48" Height="16" Offset="0x1980"/>
+        <Texture Name="gStopDoActionENGTex" OutName="stop_eng" Format="ia4" Width="48" Height="16" Offset="0x1B00"/>
+        <Texture Name="gPutAwayDoActionENGTex" OutName="put_away_eng" Format="ia4" Width="48" Height="16" Offset="0x1C80"/>
+
+        <!-- Unused and left untranslated from Japanese -->
+        <Texture Name="gReelDoActionENGTex" OutName="reel_eng" Format="ia4" Width="48" Height="16" Offset="0x1E00"/>
+
+
+        <Texture Name="gInfoDoActionENGTex" OutName="info_eng" Format="ia4" Width="48" Height="16" Offset="0x1F80"/>
+        <Texture Name="gWarpDoActionENGTex" OutName="warp_eng" Format="ia4" Width="48" Height="16" Offset="0x2100"/>
+        <Texture Name="gSnapDoActionENGTex" OutName="snap_eng" Format="ia4" Width="48" Height="16" Offset="0x2280"/>
+        <Texture Name="gExplodeDoActionENGTex" OutName="explode_eng" Format="ia4" Width="48" Height="16" Offset="0x2400"/>
+        <Texture Name="gDanceDoActionENGTex" OutName="dance_eng" Format="ia4" Width="48" Height="16" Offset="0x2580"/>
+        <Texture Name="gMarchDoActionENGTex" OutName="march_eng" Format="ia4" Width="48" Height="16" Offset="0x2700"/>
+
+        <Texture Name="gNum1DoActionENGTex" OutName="num_1_eng" Format="ia4" Width="48" Height="16" Offset="0x2880"/>
+        <Texture Name="gNum2DoActionENGTex" OutName="num_2_eng" Format="ia4" Width="48" Height="16" Offset="0x2A00"/>
+        <Texture Name="gNum3DoActionENGTex" OutName="num_3_eng" Format="ia4" Width="48" Height="16" Offset="0x2B80"/>
+        <Texture Name="gNum4DoActionENGTex" OutName="num_4_eng" Format="ia4" Width="48" Height="16" Offset="0x2D00"/>
+        <Texture Name="gNum5DoActionENGTex" OutName="num_5_eng" Format="ia4" Width="48" Height="16" Offset="0x2E80"/>
+        <Texture Name="gNum6DoActionENGTex" OutName="num_6_eng" Format="ia4" Width="48" Height="16" Offset="0x3000"/>
+        <Texture Name="gNum7DoActionENGTex" OutName="num_7_eng" Format="ia4" Width="48" Height="16" Offset="0x3180"/>
+        <Texture Name="gNum8DoActionENGTex" OutName="num_8_eng" Format="ia4" Width="48" Height="16" Offset="0x3300"/>
+
+        <Texture Name="gCurlDoActionGERTex" OutName="curl_eng" Format="ia4" Width="48" Height="16" Offset="0x3480"/>
+        <Texture Name="gSurfaceDoActionGERTex" OutName="surface_eng" Format="ia4" Width="48" Height="16" Offset="0x3600"/>
+        <Texture Name="gSwimDoActionGERTex" OutName="swim_eng" Format="ia4" Width="48" Height="16" Offset="0x3780"/>
+        <Texture Name="gPunchDoActionGERTex" OutName="punch_eng" Format="ia4" Width="48" Height="16" Offset="0x3900"/>
+        <Texture Name="gPoundDoActionGERTex" OutName="pound_eng" Format="ia4" Width="48" Height="16" Offset="0x3A80"/>
+
+        <!-- Unused and left untranslated from Japanese -->
+        <Texture Name="gHookDoActionGERTex" OutName="hook_eng" Format="ia4" Width="48" Height="16" Offset="0x3C00"/>
+        
+        <Texture Name="gShootDoActionGERTex" OutName="shoot_eng" Format="ia4" Width="48" Height="16" Offset="0x3D80"/>
+        
+     </File>
+</Root>
