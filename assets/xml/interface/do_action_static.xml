@@ -43,15 +43,15 @@
         <Texture Name="gNum7DoActionENGTex" OutName="num_7_eng" Format="ia4" Width="48" Height="16" Offset="0x3180"/>
         <Texture Name="gNum8DoActionENGTex" OutName="num_8_eng" Format="ia4" Width="48" Height="16" Offset="0x3300"/>
 
-        <Texture Name="gCurlDoActionGERTex" OutName="curl_eng" Format="ia4" Width="48" Height="16" Offset="0x3480"/>
-        <Texture Name="gSurfaceDoActionGERTex" OutName="surface_eng" Format="ia4" Width="48" Height="16" Offset="0x3600"/>
-        <Texture Name="gSwimDoActionGERTex" OutName="swim_eng" Format="ia4" Width="48" Height="16" Offset="0x3780"/>
-        <Texture Name="gPunchDoActionGERTex" OutName="punch_eng" Format="ia4" Width="48" Height="16" Offset="0x3900"/>
-        <Texture Name="gPoundDoActionGERTex" OutName="pound_eng" Format="ia4" Width="48" Height="16" Offset="0x3A80"/>
+        <Texture Name="gCurlDoActionENGTex" OutName="curl_eng" Format="ia4" Width="48" Height="16" Offset="0x3480"/>
+        <Texture Name="gSurfaceDoActionENGTex" OutName="surface_eng" Format="ia4" Width="48" Height="16" Offset="0x3600"/>
+        <Texture Name="gSwimDoActionENGTex" OutName="swim_eng" Format="ia4" Width="48" Height="16" Offset="0x3780"/>
+        <Texture Name="gPunchDoActionENGTex" OutName="punch_eng" Format="ia4" Width="48" Height="16" Offset="0x3900"/>
+        <Texture Name="gPoundDoActionENGTex" OutName="pound_eng" Format="ia4" Width="48" Height="16" Offset="0x3A80"/>
 
         <!-- Unused and left untranslated from Japanese -->
-        <Texture Name="gHookDoActionGERTex" OutName="hook_eng" Format="ia4" Width="48" Height="16" Offset="0x3C00"/>
+        <Texture Name="gHookDoActionENGTex" OutName="hook_eng" Format="ia4" Width="48" Height="16" Offset="0x3C00"/>
 
-        <Texture Name="gShootDoActionGERTex" OutName="shoot_eng" Format="ia4" Width="48" Height="16" Offset="0x3D80"/>
+        <Texture Name="gShootDoActionENGTex" OutName="shoot_eng" Format="ia4" Width="48" Height="16" Offset="0x3D80"/>
      </File>
 </Root>
