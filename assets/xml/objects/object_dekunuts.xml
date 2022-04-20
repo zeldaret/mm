@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_dekunuts" Segment="6">
-        <Animation Name="object_dekunuts_Anim_000168" Offset="0x168" />
+        <Animation Name="gDekuScrubSpitAnim" Offset="0x168" /> <!-- Original name is "dn_atack" -->
         <DList Name="object_dekunuts_DL_000A00" Offset="0xA00" />
         <DList Name="object_dekunuts_DL_000AA8" Offset="0xAA8" />
         <DList Name="object_dekunuts_DL_000B40" Offset="0xB40" />
@@ -28,15 +28,15 @@
         <Limb Name="object_dekunuts_Standardlimb_00242C" Type="Standard" EnumName="OBJECT_DEKUNUTS_LIMB_08" Offset="0x242C" />
         <Limb Name="object_dekunuts_Standardlimb_002438" Type="Standard" EnumName="OBJECT_DEKUNUTS_LIMB_09" Offset="0x2438" />
         <Skeleton Name="object_dekunuts_Skel_002468" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DEKUNUTS_LIMB_NONE" LimbMax="OBJECT_DEKUNUTS_LIMB_MAX" EnumName="object_dekunuts_Limbs" Offset="0x2468" />
-        <Animation Name="object_dekunuts_Anim_00259C" Offset="0x259C" />
-        <Animation Name="object_dekunuts_Anim_002950" Offset="0x2950" />
-        <Animation Name="object_dekunuts_Anim_002A5C" Offset="0x2A5C" />
-        <Animation Name="object_dekunuts_Anim_002BD4" Offset="0x2BD4" />
-        <Animation Name="object_dekunuts_Anim_002DD4" Offset="0x2DD4" />
-        <Animation Name="object_dekunuts_Anim_002FA4" Offset="0x2FA4" />
-        <Animation Name="object_dekunuts_Anim_003180" Offset="0x3180" />
-        <Animation Name="object_dekunuts_Anim_00326C" Offset="0x326C" />
-        <Animation Name="object_dekunuts_Anim_0033E4" Offset="0x33E4" />
-        <Animation Name="object_dekunuts_Anim_003780" Offset="0x3780" />
+        <Animation Name="gDekuScrubDamageAnim" Offset="0x259C" /> <!-- Original name is "dn_damage" -->
+        <Animation Name="gDekuScrubStandingIdleAnim" Offset="0x2950" /> <!-- Original name is "dn_demowait" -->
+        <Animation Name="gDekuScrubBurrowAnim" Offset="0x2A5C" /> <!-- Original name is "dn_dig" -->
+        <Animation Name="gDekuScrubDieAnim" Offset="0x2BD4" /> <!-- Original name is "dn_down" -->
+        <Animation Name="gDekuScrubUnburrowAnim" Offset="0x2DD4" /> <!-- Original name is "dn_jump" -->
+        <Animation Name="gDekuScrubLookAroundAnim" Offset="0x2FA4" /> <!-- Original name is "dn_lookaround" -->
+        <Animation Name="gDekuScrubUpAnim" Offset="0x3180" /> <!-- Original name is "dn_start" -->
+        <Animation Name="gDekuScrubIdleAnim" Offset="0x326C" /> <!-- Original name is "dn_wait" -->
+        <Animation Name="gDekuScrubPantingAnim" Offset="0x33E4" /> <!-- Original name is "dn_wait02" -->
+        <Animation Name="gDekuScrubRunAnim" Offset="0x3780" /> <!-- Original name is "dn_walk" -->
     </File>
 </Root>
