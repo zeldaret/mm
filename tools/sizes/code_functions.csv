@@ -3563,8 +3563,8 @@ asm/non_matchings/code/code_801A5BD0/Audio_StopSfxByPosAndId.s,Audio_StopSfxByPo
 asm/non_matchings/code/code_801A5BD0/Audio_StopSfxByTokenAndId.s,Audio_StopSfxByTokenAndId,0x801A7484,0x59
 asm/non_matchings/code/code_801A5BD0/Audio_StopSfxById.s,Audio_StopSfxById,0x801A75E8,0x4E
 asm/non_matchings/code/code_801A5BD0/Audio_ProcessSfxRequests.s,Audio_ProcessSfxRequests,0x801A7720,0x1D
-asm/non_matchings/code/code_801A5BD0/Audio_SetUnusedBankLerp.s,Audio_SetUnusedBankLerp,0x801A7794,0x25
-asm/non_matchings/code/code_801A5BD0/Audio_StepUnusedBankLerp.s,Audio_StepUnusedBankLerp,0x801A7828,0x15
+asm/non_matchings/code/code_801A5BD0/Audio_SetSfxBankLerp.s,Audio_SetSfxBankLerp,0x801A7794,0x25
+asm/non_matchings/code/code_801A5BD0/Audio_StepSfxBankLerp.s,Audio_StepSfxBankLerp,0x801A7828,0x15
 asm/non_matchings/code/code_801A5BD0/Audio_ProcessActiveSfxs.s,Audio_ProcessActiveSfxs,0x801A787C,0x1A
 asm/non_matchings/code/code_801A5BD0/Audio_IsSfxPlaying.s,Audio_IsSfxPlaying,0x801A78E4,0x1A
 asm/non_matchings/code/code_801A5BD0/Audio_ResetSfxs.s,Audio_ResetSfxs,0x801A794C,0x71
