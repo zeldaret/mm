@@ -27,7 +27,6 @@
         <!-- Unused and left untranslated from Japanese -->
         <Texture Name="gReelDoActionENGTex" OutName="reel_eng" Format="ia4" Width="48" Height="16" Offset="0x1E00"/>
 
-
         <Texture Name="gInfoDoActionENGTex" OutName="info_eng" Format="ia4" Width="48" Height="16" Offset="0x1F80"/>
         <Texture Name="gWarpDoActionENGTex" OutName="warp_eng" Format="ia4" Width="48" Height="16" Offset="0x2100"/>
         <Texture Name="gSnapDoActionENGTex" OutName="snap_eng" Format="ia4" Width="48" Height="16" Offset="0x2280"/>
@@ -52,8 +51,7 @@
 
         <!-- Unused and left untranslated from Japanese -->
         <Texture Name="gHookDoActionGERTex" OutName="hook_eng" Format="ia4" Width="48" Height="16" Offset="0x3C00"/>
-        
+
         <Texture Name="gShootDoActionGERTex" OutName="shoot_eng" Format="ia4" Width="48" Height="16" Offset="0x3D80"/>
-        
      </File>
 </Root>
