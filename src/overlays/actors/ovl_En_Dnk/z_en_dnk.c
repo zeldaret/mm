@@ -179,7 +179,7 @@ void func_80A51648(EnDnk* this, GlobalContext* globalCtx) {
         switch (ENDNK_GET_3(&this->actor)) {
             case ENDNK_GET_3_0:
                 SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable,
-                               this->morphTable, OBJECT_DNK_LIMB_MAX);
+                               this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
                 func_80A514F0(&this->skelAnime, 7);
                 break;
 
