@@ -4,6 +4,7 @@
  * Description: Unused OoT Saria's Song Ocarina Effect
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_oceff_wipe3.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000)

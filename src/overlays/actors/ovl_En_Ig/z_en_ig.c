@@ -894,7 +894,7 @@ void func_80BF2BD4(EnIg* this, GlobalContext* globalCtx) {
     Vec3f sp38;
     Vec3f sp2C;
 
-    if (func_8010BF58(&this->actor, globalCtx, this->unk_2A0, this->unk_3F8, &this->unk_2A4)) {
+    if (func_8010BF58(&this->actor, globalCtx, this->unk_29C, this->unk_3F8, &this->unk_2A0)) {
         SubS_UpdateFlags(&this->unk_3D0, 3, 7);
         this->unk_3D0 &= ~0x20;
         this->unk_3D0 |= 0x200;
