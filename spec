@@ -9153,7 +9153,8 @@ endseg
 beginseg
     name "week_static"
     romalign 0x1000
-    include "build/baserom/week_static.o"
+    include "build/assets/interface/week_static/week_static.o"
+    number 9
 endseg
 
 beginseg
