@@ -94,8 +94,8 @@ void EnSyatekiOkuta_Init(Actor* thisx, GlobalContext* globalCtx) {
     s32 bgId;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_Init(globalCtx, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable,
-                   this->morphTable, OCTOROK_LIMB_MAX);
+    SkelAnime_Init(globalCtx, &this->skelAnime, &gOctorokSkel, &gOctorokAppearAnim, this->jointTable, this->morphTable,
+                   OCTOROK_LIMB_MAX);
     Collider_InitCylinder(globalCtx, &this->collider);
     Collider_SetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
 
@@ -493,7 +493,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
     if (this->unk_2A6 == 1) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
     } else {
-        gSPSegment(POLY_OPA_DISP++, 0x08, ovl_En_Syateki_Okuta_DL_001640);
+        gSPSegment(POLY_OPA_DISP++, 0x08, gShootingGalleryOctorokBlueMaterialDL);
     }
 
     SkelAnime_DrawOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw,
@@ -512,9 +512,9 @@ void EnSyatekiOkuta_Draw(Actor* thisx, GlobalContext* globalCtx) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (this->unk_2A6 == 2) {
-            gSPDisplayList(POLY_XLU_DISP++, ovl_En_Syateki_Okuta_DL_001A98);
+            gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCrossDL);
         } else {
-            gSPDisplayList(POLY_XLU_DISP++, ovl_En_Syateki_Okuta_DL_001B18);
+            gSPDisplayList(POLY_XLU_DISP++, gShootingGalleryOctorokCircleDL);
         }
     }
 
