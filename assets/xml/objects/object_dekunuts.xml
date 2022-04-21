@@ -10,7 +10,7 @@
         <DList Name="gDekuScrubLeftLegDL" Offset="0xBE8" />
         <DList Name="gDekuScrubSnoutDL" Offset="0xC80" />
         <DList Name="gDekuScrubCrestDL" Offset="0xD90" />
-        <DList Name="gDekuScrubHairDL" Offset="0xE30" />
+        <DList Name="gDekuScrubHeaddressDL" Offset="0xE30" />
         <DList Name="gDekuScrubHeadDL" Offset="0xF20" />
         <DList Name="gDekuScrubBodyDL" Offset="0x1050" />
 
@@ -29,7 +29,7 @@
         <!-- Deku Scrub Limbs -->
         <Limb Name="gDekuScrubBodyLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_BODY" Offset="0x23D8" />
         <Limb Name="gDekuScrubHeadLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_HEAD" Offset="0x23E4" />
-        <Limb Name="gDekuScrubHairLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_HAIR" Offset="0x23F0" />
+        <Limb Name="gDekuScrubHeaddressLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_HEADDRESS" Offset="0x23F0" />
         <Limb Name="gDekuScrubCrestLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_CREST" Offset="0x23FC" />
         <Limb Name="gDekuScrubSnoutLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_SNOUT" Offset="0x2408" />
         <Limb Name="gDekuScrubLeftLegLimb" Type="Standard" EnumName="DEKU_SCRUB_LIMB_LEFT_LEG" Offset="0x2414" />

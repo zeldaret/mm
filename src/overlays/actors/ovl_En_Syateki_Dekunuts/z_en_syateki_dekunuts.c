@@ -397,7 +397,7 @@ s32 EnSyatekiDekunuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, 
                                        Actor* thisx) {
     EnSyatekiDekunuts* this = THIS;
 
-    if ((limbIndex == DEKU_SCRUB_LIMB_HAIR) && (this->unk_1F0 == 1)) {
+    if ((limbIndex == DEKU_SCRUB_LIMB_HEADDRESS) && (this->unk_1F0 == 1)) {
         rot->z += this->unk_1F2;
     }
 
