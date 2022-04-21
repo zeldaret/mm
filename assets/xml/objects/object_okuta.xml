@@ -4,18 +4,18 @@
         <Animation Name="gOctorokShootAnim" Offset="0x44C" /> <!-- Original name is "oc_atack" -->
 
         <!-- Octorok Limb DisplayLists -->
-        <DList Name="gFrontRightLegBaseDL" Offset="0xDC0" />
-        <DList Name="gFrontRightLegMiddleDL" Offset="0xE70" />
-        <DList Name="gFrontRightLegEndDL" Offset="0xF28" />
-        <DList Name="gBackRightLegBaseDL" Offset="0xFD8" />
-        <DList Name="gBackRightLegMiddleDL" Offset="0x1088" />
-        <DList Name="gBackRightLegEndDL" Offset="0x1140" />
-        <DList Name="gBackLeftLegBaseDL" Offset="0x11F0" />
-        <DList Name="gBackLeftLegMiddleDL" Offset="0x12A0" />
-        <DList Name="gBackLeftLegEndDL" Offset="0x1358" />
-        <DList Name="gFrontLeftLegBaseDL" Offset="0x1408" />
-        <DList Name="gFrontLeftLegMiddleDL" Offset="0x14B8" />
-        <DList Name="gFrontLeftLegEndDL" Offset="0x1570" />
+        <DList Name="gFrontRightArmBaseDL" Offset="0xDC0" />
+        <DList Name="gFrontRightArmMiddleDL" Offset="0xE70" />
+        <DList Name="gFrontRightArmEndDL" Offset="0xF28" />
+        <DList Name="gBackRightArmBaseDL" Offset="0xFD8" />
+        <DList Name="gBackRightArmMiddleDL" Offset="0x1088" />
+        <DList Name="gBackRightArmEndDL" Offset="0x1140" />
+        <DList Name="gBackLeftArmBaseDL" Offset="0x11F0" />
+        <DList Name="gBackLeftArmMiddleDL" Offset="0x12A0" />
+        <DList Name="gBackLeftArmEndDL" Offset="0x1358" />
+        <DList Name="gFrontLeftArmBaseDL" Offset="0x1408" />
+        <DList Name="gFrontLeftArmMiddleDL" Offset="0x14B8" />
+        <DList Name="gFrontLeftArmEndDL" Offset="0x1570" />
         <DList Name="gOctorokSnoutDL" Offset="0x1620" />
         <DList Name="gOctorokUnderEyeTrianglesDL" Offset="0x1730" /> <!-- Used as part of the head displaylist -->
         <DList Name="gOctorokHeadBottomDL" Offset="0x17F0" /> <!-- Used as part of the head displaylist -->
@@ -44,18 +44,18 @@
 
         <!-- Octorok Limbs -->
         <Limb Name="gOctorokBodyLimb" Type="Standard" EnumName="OCTOROK_LIMB_BODY" Offset="0x32E0" />
-        <Limb Name="gFrontLeftLegBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_LEFT_LEG_BASE" Offset="0x32EC" />
-        <Limb Name="gFrontLeftLegMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_LEFT_LEG_MIDDLE" Offset="0x32F8" />
-        <Limb Name="gFrontLeftLegEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_LEFT_LEG_END" Offset="0x3304" />
-        <Limb Name="gFrontRightLegBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_RIGHT_LEG_BASE" Offset="0x3310" />
-        <Limb Name="gFrontRightLegMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_RIGHT_LEG_MIDDLE" Offset="0x331C" />
-        <Limb Name="gFrontRightLegEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_RIGHT_LEG_END" Offset="0x3328" />
-        <Limb Name="gBackLeftLegBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_LEFT_LEG_BASE" Offset="0x3334" />
-        <Limb Name="gBackLeftLegMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_LEFT_LEG_MIDDLE" Offset="0x3340" />
-        <Limb Name="gBackLeftLegEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_LEFT_LEG_END" Offset="0x334C" />
-        <Limb Name="gBackRightLegBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_RIGHT_LEG_BASE" Offset="0x3358" />
-        <Limb Name="gBackRightLegMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_RIGHT_LEG_MIDDLE" Offset="0x3364" />
-        <Limb Name="gBackRightLegEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_RIGHT_LEG_END" Offset="0x3370" />
+        <Limb Name="gFrontLeftArmBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_LEFT_ARM_BASE" Offset="0x32EC" />
+        <Limb Name="gFrontLeftArmMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_LEFT_ARM_MIDDLE" Offset="0x32F8" />
+        <Limb Name="gFrontLeftArmEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_LEFT_ARM_END" Offset="0x3304" />
+        <Limb Name="gFrontRightArmBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_RIGHT_ARM_BASE" Offset="0x3310" />
+        <Limb Name="gFrontRightArmMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_RIGHT_ARM_MIDDLE" Offset="0x331C" />
+        <Limb Name="gFrontRightArmEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_FRONT_RIGHT_ARM_END" Offset="0x3328" />
+        <Limb Name="gBackLeftArmBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_LEFT_ARM_BASE" Offset="0x3334" />
+        <Limb Name="gBackLeftArmMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_LEFT_ARM_MIDDLE" Offset="0x3340" />
+        <Limb Name="gBackLeftArmEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_LEFT_ARM_END" Offset="0x334C" />
+        <Limb Name="gBackRightArmBaseLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_RIGHT_ARM_BASE" Offset="0x3358" />
+        <Limb Name="gBackRightArmMiddleLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_RIGHT_ARM_MIDDLE" Offset="0x3364" />
+        <Limb Name="gBackRightArmEndLimb" Type="Standard" EnumName="OCTOROK_LIMB_BACK_RIGHT_ARM_END" Offset="0x3370" />
         <Limb Name="gOctorokHeadLimb" Type="Standard" EnumName="OCTOROK_LIMB_HEAD" Offset="0x337C" />
         <Limb Name="gOctorokSnoutLimb" Type="Standard" EnumName="OCTOROK_LIMB_SNOUT" Offset="0x3388" />
 
