@@ -1,7 +1,7 @@
 #include "global.h"
 
 #define SCHEDULE_CALC_TIME(hour, minute, dest, temp) \
-    (temp) = (hour)*60.0f;                           \
+    (temp) = (hour) * 60.0f;                         \
     (temp) += (minute);                              \
     (dest) = (temp) * (0x10000 / 60 / 24.0f);        \
     (dest) = SCHEDULE_CONVERT_TIME(dest);
@@ -11,7 +11,7 @@ s32 Schedule_CheckFlagS(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
     if (gSaveContext.save.weekEventReg[flag >> 8] & (flag & 0xFF)) {
-        *script = *script + cmd->offset;
+        *script += cmd->offset;
     }
 
     return false;
@@ -22,14 +22,14 @@ s32 Schedule_CheckFlagL(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
 
     if (gSaveContext.save.weekEventReg[flag >> 8] & (flag & 0xFF)) {
-        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
     return false;
 }
 
 s32 Schedule_CheckTimeRangeS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
-    s32 inRange = 0;
+    s32 inRange = false;
     ScheduleCmdCheckTimeRangeS* cmd = (ScheduleCmdCheckTimeRangeS*)*script;
     f32 f;
     u16 start;
@@ -39,16 +39,16 @@ s32 Schedule_CheckTimeRangeS(GlobalContext* globalCtx, u8** script, ScheduleResu
     SCHEDULE_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
 
     SCHEDULE_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
-    end -= 1;
+    end--;
 
     now = SCHEDULE_TIME_NOW;
 
     if ((start <= now) && (now <= end)) {
-        inRange = 1;
+        inRange = true;
     }
 
-    if (inRange == 1) {
-        *script = *script + cmd->offset;
+    if (inRange == true) {
+        *script += cmd->offset;
     }
 
     return false;
@@ -65,7 +65,7 @@ s32 Schedule_CheckTimeRangeL(GlobalContext* globalCtx, u8** script, ScheduleResu
     SCHEDULE_CALC_TIME(cmd->startHr, cmd->startMin, start, f);
 
     SCHEDULE_CALC_TIME(cmd->endHr, cmd->endMin, end, f);
-    end -= 1;
+    end--;
 
     now = SCHEDULE_TIME_NOW;
 
@@ -73,8 +73,8 @@ s32 Schedule_CheckTimeRangeL(GlobalContext* globalCtx, u8** script, ScheduleResu
         inRange = true;
     }
 
-    if (inRange == true) { // direct comparison required to match
-        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+    if (inRange == true) {
+        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
     return false;
@@ -83,7 +83,8 @@ s32 Schedule_CheckTimeRangeL(GlobalContext* globalCtx, u8** script, ScheduleResu
 s32 Schedule_ReturnValueL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     ScheduleCmdReturnValueL* cmd = (ScheduleCmdReturnValueL*)*script;
 
-    result->result = (cmd->retH << 8) | cmd->retL; //! @bug result is a u8, value is truncated
+    //! @bug result is a u8, value is truncated
+    result->result = (cmd->retH << 8) | cmd->retL;
     result->hasResult = true;
 
     return true;
@@ -112,7 +113,7 @@ s32 Schedule_CheckMiscS(GlobalContext* globalCtx, u8** script, ScheduleResult* r
         ((cmd->which == SCHEDULE_CHECK_MISC_LETTER_TO_KAFEI) &&
          (INV_CONTENT(ITEM_LETTER_TO_KAFEI) == ITEM_LETTER_TO_KAFEI)) ||
         ((cmd->which == SCHEDULE_CHECK_MISC_MASK_ROMANI) && (Player_GetMask(globalCtx) == PLAYER_MASK_ROMANI))) {
-        *script = *script + cmd->offset;
+        *script += cmd->offset;
     }
 
     return false;
@@ -132,7 +133,7 @@ s32 Schedule_CheckSceneS(GlobalContext* globalCtx, u8** script, ScheduleResult* 
     s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
 
     if (scene != globalCtx->sceneNum) {
-        *script = *script + cmd->offset;
+        *script += cmd->offset;
     }
 
     return false;
@@ -154,7 +155,7 @@ s32 Schedule_CheckDayS(GlobalContext* globalCtx, u8** script, ScheduleResult* re
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
     if (day != (s16)gSaveContext.save.day) {
-        *script = *script + cmd->offset;
+        *script += cmd->offset;
     }
 
     return false;
@@ -165,7 +166,7 @@ s32 Schedule_CheckDayL(GlobalContext* globalCtx, u8** script, ScheduleResult* re
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
     if (day != (s16)gSaveContext.save.day) {
-        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
     return false;
@@ -180,7 +181,7 @@ s32 Schedule_ReturnTime(GlobalContext* globalCtx, u8** script, ScheduleResult* r
     SCHEDULE_CALC_TIME(cmd->time0Hr, cmd->time0Min, time0, f);
 
     SCHEDULE_CALC_TIME(cmd->time1Hr, cmd->time1Min, time1, f);
-    time1 -= 1;
+    time1--;
 
     result->result = cmd->result;
     result->time0 = time0;
@@ -201,7 +202,7 @@ s32 Schedule_CheckBeforeTimeS(GlobalContext* globalCtx, u8** script, ScheduleRes
     now = SCHEDULE_TIME_NOW;
 
     if (now < testTime) {
-        *script = *script + cmd->offset;
+        *script += cmd->offset;
     }
 
     return false;
@@ -218,7 +219,7 @@ s32 Schedule_CheckBeforeTimeL(GlobalContext* globalCtx, u8** script, ScheduleRes
     now = SCHEDULE_TIME_NOW;
 
     if (now < testTime) {
-        *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+        *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
     return false;
@@ -227,18 +228,18 @@ s32 Schedule_CheckBeforeTimeL(GlobalContext* globalCtx, u8** script, ScheduleRes
 s32 Schedule_BranchS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     ScheduleCmdBranchS* cmd = (ScheduleCmdBranchS*)*script;
 
-    *script = *script + cmd->offset;
+    *script += cmd->offset;
     return false;
 }
 
 s32 Schedule_BranchL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
     ScheduleCmdBranchL* cmd = (ScheduleCmdBranchL*)*script;
 
-    *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
+    *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     return false;
 }
 
-static s32 (*sCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = {
+static s32 (*sScheduleCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = {
     Schedule_CheckFlagS,       Schedule_CheckFlagL,   Schedule_CheckTimeRangeS, Schedule_CheckTimeRangeL,
     Schedule_ReturnValueL,     Schedule_ReturnNone,   Schedule_ReturnEmpty,     Schedule_Nop,
     Schedule_CheckMiscS,       Schedule_ReturnValueS, Schedule_CheckSceneS,     Schedule_CheckSceneL,
@@ -246,7 +247,7 @@ static s32 (*sCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = {
     Schedule_CheckBeforeTimeL, Schedule_BranchS,      Schedule_BranchL,
 };
 
-static u8 sCmdSizes[] = {
+static u8 sScheduleCmdSizes[] = {
     sizeof(ScheduleCmdCheckFlagS),
     sizeof(ScheduleCmdCheckFlagL),
     sizeof(ScheduleCmdCheckTimeRangeS),
@@ -273,8 +274,8 @@ s32 Schedule_RunScript(GlobalContext* globalCtx, u8* script, ScheduleResult* res
     s32 stop;
 
     do {
-        size = sCmdSizes[*script];
-        stop = (*sCmdFuncs[*script])(globalCtx, &script, result);
+        size = sScheduleCmdSizes[*script];
+        stop = (*sScheduleCmdFuncs[*script])(globalCtx, &script, result);
         script += size;
     } while (!stop);
 

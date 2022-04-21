@@ -24,25 +24,25 @@
 #define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
 
 typedef enum {
-    /* 00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,        // Checks if a weekEventReg flag is set and branches if so, short range branch
-    /* 01 */ SCHEDULE_CMD_ID_CHECK_FLAG_L,        // Checks if a weekEventReg flag is set and branches if so, long range branch
-    /* 02 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S,  // Checks if the current time is within the range of the two provided times and branches if so, short range branch
-    /* 03 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L,  // Checks if the current time is within the range of the two provided times and branches if so, long range branch
-    /* 04 */ SCHEDULE_CMD_ID_RET_VAL_L,           // Ends script and returns 2-byte value (Note: bugged as the return value size is only 1 byte in the struct)
-    /* 05 */ SCHEDULE_CMD_ID_RET_NONE,            // Ends script without returning anything
-    /* 06 */ SCHEDULE_CMD_ID_RET_EMPTY,           // Ends script and indicates return without changing existing value
-    /* 07 */ SCHEDULE_CMD_ID_NOP,                 // No-Op
-    /* 08 */ SCHEDULE_CMD_ID_CHECK_MISC_S,        // Special check based on items or masks and branches if check passes, short range branch
-    /* 09 */ SCHEDULE_CMD_ID_RET_VAL_S,           // Ends script and returns byte value
-    /* 10 */ SCHEDULE_CMD_ID_CHECK_SCENE_S,       // Checks if the current scene is SceneNum and branches if not, short range branch
-    /* 11 */ SCHEDULE_CMD_ID_CHECK_SCENE_L,       // Checks if the current scene is SceneNum and branches if not, long range branch
-    /* 12 */ SCHEDULE_CMD_ID_CHECK_DAY_S,         // Checks if the current day is Day and branches if not, short range branch
-    /* 13 */ SCHEDULE_CMD_ID_CHECK_DAY_L,         // Checks if the current day is Day and branches if not, long range branch
-    /* 14 */ SCHEDULE_CMD_ID_RET_TIME,            // Returns 2 time values
-    /* 15 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S, // Branches if the current time is less than the command time, short range branch
-    /* 16 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L, // Branches if the current time is less than the command time, long range branch
-    /* 17 */ SCHEDULE_CMD_ID_BRANCH_S,            // Always branch, short range branch
-    /* 18 */ SCHEDULE_CMD_ID_BRANCH_L,            // Always branch, long range branch
+    /* 00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,         // Checks if a weekEventReg flag is set and branches if so, short range branch
+    /* 01 */ SCHEDULE_CMD_ID_CHECK_FLAG_L,         // Checks if a weekEventReg flag is set and branches if so, long range branch
+    /* 02 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S,   // Checks if the current time is within the range of the two provided times and branches if so, short range branch
+    /* 03 */ SCHEDULE_CMD_ID_CHECK_TIME_RANGE_L,   // Checks if the current time is within the range of the two provided times and branches if so, long range branch
+    /* 04 */ SCHEDULE_CMD_ID_RET_VAL_L,            // Ends script and returns 2-byte value (Note: bugged as the return value size is only 1 byte in the struct)
+    /* 05 */ SCHEDULE_CMD_ID_RET_NONE,             // Ends script without returning anything
+    /* 06 */ SCHEDULE_CMD_ID_RET_EMPTY,            // Ends script and indicates return without changing existing value
+    /* 07 */ SCHEDULE_CMD_ID_NOP,                  // No-Op
+    /* 08 */ SCHEDULE_CMD_ID_CHECK_MISC_S,         // Special check based on items or masks and branches if check passes, short range branch
+    /* 09 */ SCHEDULE_CMD_ID_RET_VAL_S,            // Ends script and returns byte value
+    /* 10 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, // Checks if the current scene is not SceneNum and branches if so, short range branch
+    /* 11 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, // Checks if the current scene is not SceneNum and branches if so, long range branch
+    /* 12 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S,   // Checks if the current day is not Day and branches if so, short range branch
+    /* 13 */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L,   // Checks if the current day is not Day and branches if so, long range branch
+    /* 14 */ SCHEDULE_CMD_ID_RET_TIME,             // Returns 2 time values
+    /* 15 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S,  // Branches if the current time is less than the command time, short range branch
+    /* 16 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L,  // Branches if the current time is less than the command time, long range branch
+    /* 17 */ SCHEDULE_CMD_ID_BRANCH_S,             // Always branch, short range branch
+    /* 18 */ SCHEDULE_CMD_ID_BRANCH_L,             // Always branch, long range branch
 } ScheduleCommandId;
 
 typedef enum {
@@ -218,17 +218,17 @@ typedef struct {
 #define SCHEDULE_CMD_RET_VAL_S(result) \
     SCHEDULE_CMD_ID_RET_VAL_S, (result)
 
-#define SCHEDULE_CMD_CHECK_SCENE_S(scene, offset) \
-    SCHEDULE_CMD_ID_CHECK_SCENE_S, SCHEDULE_PACK_S16(scene), (offset)
+#define SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(scene, offset) \
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, SCHEDULE_PACK_S16(scene), (offset)
 
-#define SCHEDULE_CMD_CHECK_SCENE_L(scene, offset) \
-    SCHEDULE_CMD_ID_CHECK_SCENE_L, SCHEDULE_PACK_S16(scene), SCHEDULE_PACK_S16(offset)
+#define SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L(scene, offset) \
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, SCHEDULE_PACK_S16(scene), SCHEDULE_PACK_S16(offset)
 
-#define SCHEDULE_CMD_CHECK_DAY_S(day, offset) \
-    SCHEDULE_CMD_ID_CHECK_DAY_S, SCHEDULE_PACK_S16(day), (offset)
+#define SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(day, offset) \
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S, SCHEDULE_PACK_S16(day), (offset)
 
-#define SCHEDULE_CMD_CHECK_DAY_L(day, offset) \
-    SCHEDULE_CMD_ID_CHECK_DAY_L, SCHEDULE_PACK_S16(day), SCHEDULE_PACK_S16(offset)
+#define SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(day, offset) \
+    SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L, SCHEDULE_PACK_S16(day), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_RET_TIME(time0Hr, time0Min, time1Hr, time1Min, result) \
     SCHEDULE_CMD_ID_RET_TIME, (time0Hr), (time0Min), (time1Hr), (time1Min), (result)

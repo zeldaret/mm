@@ -1400,12 +1400,6 @@ typedef struct {
 } struct_800BD888_arg1; // size = 0x28
 
 typedef struct {
-    /* 0x0 */ u8 unk0;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8; // game script pointer?
-} struct_80133038_arg2; // size = 0xC
-
-typedef struct {
     /* 0x00 */ u32 type;
     /* 0x04 */ u32 setScissor;
     /* 0x08 */ Color_RGBA8 color;

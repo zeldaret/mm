@@ -3,29 +3,29 @@
 #   MM Event Script Disassembler
 #
 
-import argparse, os, struct
+import argparse, os, struct, math
 from actor_symbols import resolve_symbol
 
 cmd_info = [
-    ('SCHEDULE_CMD_CHECK_FLAG_S',        0x04, '>BBb',   (2, )),
-    ('SCHEDULE_CMD_CHECK_FLAG_L',        0x05, '>BBh',   (2, )),
-    ('SCHEDULE_CMD_CHECK_TIME_RANGE_S',  0x06, '>BBBBb', (4, )),
-    ('SCHEDULE_CMD_CHECK_TIME_RANGE_L',  0x07, '>BBBBh', (4, )),
-    ('SCHEDULE_CMD_RET_VAL_L',           0x03, '>H',     (   )),
-    ('SCHEDULE_CMD_RET_NONE',            0x01, '',       (   )),
-    ('SCHEDULE_CMD_RET_EMPTY',           0x01, '',       (   )),
-    ('SCHEDULE_CMD_NOP',                 0x04, '>BBB',   (   )),
-    ('SCHEDULE_CMD_CHECK_MISC_S',        0x03, '>Bb',    (1, )),
-    ('SCHEDULE_CMD_RET_VAL_S',           0x02, '>B',     (   )),
-    ('SCHEDULE_CMD_CHECK_SCENE_S',       0x04, '>Hb',    (1, )),
-    ('SCHEDULE_CMD_CHECK_SCENE_L',       0x05, '>Hh',    (1, )),
-    ('SCHEDULE_CMD_CHECK_DAY_S',         0x04, '>Hb',    (1, )),
-    ('SCHEDULE_CMD_CHECK_DAY_L',         0x05, '>Hh',    (1, )),
-    ('SCHEDULE_CMD_RET_TIME',            0x06, '>BBBBB', (   )),
-    ('SCHEDULE_CMD_CHECK_BEFORE_TIME_S', 0x04, '>BBb',   (2, )),
-    ('SCHEDULE_CMD_CHECK_BEFORE_TIME_L', 0x05, '>BBh',   (2, )),
-    ('SCHEDULE_CMD_BRANCH_S',            0x02, '>b',     (0, )),
-    ('SCHEDULE_CMD_BRANCH_L',            0x03, '>h',     (0, )),
+    ('SCHEDULE_CMD_CHECK_FLAG_S',         0x04, '>BBb',   (2, )),
+    ('SCHEDULE_CMD_CHECK_FLAG_L',         0x05, '>BBh',   (2, )),
+    ('SCHEDULE_CMD_CHECK_TIME_RANGE_S',   0x06, '>BBBBb', (4, )),
+    ('SCHEDULE_CMD_CHECK_TIME_RANGE_L',   0x07, '>BBBBh', (4, )),
+    ('SCHEDULE_CMD_RET_VAL_L',            0x03, '>H',     (   )),
+    ('SCHEDULE_CMD_RET_NONE',             0x01, '',       (   )),
+    ('SCHEDULE_CMD_RET_EMPTY',            0x01, '',       (   )),
+    ('SCHEDULE_CMD_NOP',                  0x04, '>BBB',   (   )),
+    ('SCHEDULE_CMD_CHECK_MISC_S',         0x03, '>Bb',    (1, )),
+    ('SCHEDULE_CMD_RET_VAL_S',            0x02, '>B',     (   )),
+    ('SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S', 0x04, '>Hb',    (1, )),
+    ('SCHEDULE_CMD_CHECK_NOT_IN_SCENE_L', 0x05, '>Hh',    (1, )),
+    ('SCHEDULE_CMD_CHECK_NOT_IN_DAY_S',   0x04, '>Hb',    (1, )),
+    ('SCHEDULE_CMD_CHECK_NOT_IN_DAY_L',   0x05, '>Hh',    (1, )),
+    ('SCHEDULE_CMD_RET_TIME',             0x06, '>BBBBB', (   )),
+    ('SCHEDULE_CMD_CHECK_BEFORE_TIME_S',  0x04, '>BBb',   (2, )),
+    ('SCHEDULE_CMD_CHECK_BEFORE_TIME_L',  0x05, '>BBh',   (2, )),
+    ('SCHEDULE_CMD_BRANCH_S',             0x02, '>b',     (0, )),
+    ('SCHEDULE_CMD_BRANCH_L',             0x03, '>h',     (0, )),
 ]
 
 scene_names = [
@@ -148,12 +148,35 @@ def read_bytes(data_file, offset, len):
     data_file.seek(offset)
     return bytearray(data_file.read(len))
 
-def disassemble_unk_script(data_file, offset):
+def calc_length(data_file, offset):
     off = 0
     cmd = None
     branch_targets = []
 
-    out = "static u8 sEventScript[] = {\n"
+    # Parse script, just keeping track of branches, until we find the end
+    while any([branch >= off for branch in branch_targets]) or cmd not in [0x04, 0x05, 0x06, 0x09]:
+        cmd = read_bytes(data_file, offset + off, 1)[0]
+
+        cmd_len = cmd_info[cmd][1]
+        cmd_args = cmd_info[cmd][2]
+
+        if len(cmd_args) > 1:
+            arg_values = struct.unpack(cmd_args, read_bytes(data_file, offset + off + 1, cmd_len - 1))
+            for i in cmd_info[cmd][3]:
+                branch_targets.append(off + arg_values[i] + cmd_len)
+
+        off += cmd_len
+
+    return off
+
+def disassemble_unk_script(data_file, offset):
+    off = 0
+    cmd = None
+    branch_targets = []
+    script_len = calc_length(data_file, offset);
+    script_len_num_digits = 0 if script_len == 1 else int(math.ceil(math.log(script_len - 1, 16)))
+
+    out = "static u8 sScheduleScript[] = {\n"
 
     # Keep trying to disassemble until it hits a terminator and no commands branch past it
     while any([branch >= off for branch in branch_targets]) or cmd not in [0x04, 0x05, 0x06, 0x09]:
@@ -204,12 +227,12 @@ def disassemble_unk_script(data_file, offset):
                     if arg_value == cmd_len:
                         arg_formatted == "0"
                     else:
-                        arg_formatted = f"0x{off + arg_value:04X} - 0x{off + cmd_len:04X}"
+                        arg_formatted = f"0x{off + arg_value:0{script_len_num_digits}X} - 0x{off + cmd_len:0{script_len_num_digits}X}"
                 args_formatted.append(arg_formatted)
 
         args = ", ".join(args_formatted) if len(args_formatted) != 0 else ""
 
-        out += f"    /* 0x{off:04X} */ {cmd_name}({args}),\n"
+        out += f"    /* 0x{off:0{script_len_num_digits}X} */ {cmd_name}({args}),\n"
 
         off += cmd_len
 
