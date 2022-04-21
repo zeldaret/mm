@@ -125,7 +125,7 @@ typedef struct {
     /* 0x1 */ u8 sceneH;
     /* 0x2 */ u8 sceneL;
     /* 0x3 */ s8 offset;
-} ScheduleCmdCheckSceneS; // size = 0x4
+} ScheduleCmdCheckNotInSceneS; // size = 0x4
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
@@ -133,14 +133,14 @@ typedef struct {
     /* 0x2 */ u8 sceneL;
     /* 0x3 */ u8 offsetH;
     /* 0x4 */ u8 offsetL;
-} ScheduleCmdCheckSceneL; // size = 0x5
+} ScheduleCmdCheckNotInSceneL; // size = 0x5
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
     /* 0x1 */ u8 dayH;
     /* 0x2 */ u8 dayL;
     /* 0x3 */ s8 offset;
-} ScheduleCmdCheckDayS; // size = 0x4
+} ScheduleCmdCheckNotInDayS; // size = 0x4
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
@@ -148,7 +148,7 @@ typedef struct {
     /* 0x2 */ u8 dayL;
     /* 0x3 */ u8 offsetH;
     /* 0x4 */ u8 offsetL;
-} ScheduleCmdCheckDayL; // size = 0x5
+} ScheduleCmdCheckNotInDayL; // size = 0x5
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;

@@ -128,8 +128,8 @@ s32 Schedule_ReturnValueS(GlobalContext* globalCtx, u8** script, ScheduleResult*
     return true;
 }
 
-s32 Schedule_CheckSceneS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
-    ScheduleCmdCheckSceneS* cmd = (ScheduleCmdCheckSceneS*)*script;
+s32 Schedule_CheckNotInSceneS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdCheckNotInSceneS* cmd = (ScheduleCmdCheckNotInSceneS*)*script;
     s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
 
     if (scene != globalCtx->sceneNum) {
@@ -139,8 +139,8 @@ s32 Schedule_CheckSceneS(GlobalContext* globalCtx, u8** script, ScheduleResult* 
     return false;
 }
 
-s32 Schedule_CheckSceneL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
-    ScheduleCmdCheckSceneL* cmd = (ScheduleCmdCheckSceneL*)*script;
+s32 Schedule_CheckNotInSceneL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdCheckNotInSceneL* cmd = (ScheduleCmdCheckNotInSceneL*)*script;
     s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
 
     if (scene != globalCtx->sceneNum) {
@@ -150,8 +150,8 @@ s32 Schedule_CheckSceneL(GlobalContext* globalCtx, u8** script, ScheduleResult* 
     return false;
 }
 
-s32 Schedule_CheckDayS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
-    ScheduleCmdCheckDayS* cmd = (ScheduleCmdCheckDayS*)*script;
+s32 Schedule_CheckNotInDayS(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdCheckNotInDayS* cmd = (ScheduleCmdCheckNotInDayS*)*script;
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
     if (day != (s16)gSaveContext.save.day) {
@@ -161,8 +161,8 @@ s32 Schedule_CheckDayS(GlobalContext* globalCtx, u8** script, ScheduleResult* re
     return false;
 }
 
-s32 Schedule_CheckDayL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
-    ScheduleCmdCheckDayL* cmd = (ScheduleCmdCheckDayL*)*script;
+s32 Schedule_CheckNotInDayL(GlobalContext* globalCtx, u8** script, ScheduleResult* result) {
+    ScheduleCmdCheckNotInDayL* cmd = (ScheduleCmdCheckNotInDayL*)*script;
     s16 day = (cmd->dayH << 8) | cmd->dayL;
 
     if (day != (s16)gSaveContext.save.day) {
@@ -242,8 +242,8 @@ s32 Schedule_BranchL(GlobalContext* globalCtx, u8** script, ScheduleResult* resu
 static s32 (*sScheduleCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = {
     Schedule_CheckFlagS,       Schedule_CheckFlagL,   Schedule_CheckTimeRangeS, Schedule_CheckTimeRangeL,
     Schedule_ReturnValueL,     Schedule_ReturnNone,   Schedule_ReturnEmpty,     Schedule_Nop,
-    Schedule_CheckMiscS,       Schedule_ReturnValueS, Schedule_CheckSceneS,     Schedule_CheckSceneL,
-    Schedule_CheckDayS,        Schedule_CheckDayL,    Schedule_ReturnTime,      Schedule_CheckBeforeTimeS,
+    Schedule_CheckMiscS,       Schedule_ReturnValueS, Schedule_CheckNotInSceneS,     Schedule_CheckNotInSceneL,
+    Schedule_CheckNotInDayS,        Schedule_CheckNotInDayL,    Schedule_ReturnTime,      Schedule_CheckBeforeTimeS,
     Schedule_CheckBeforeTimeL, Schedule_BranchS,      Schedule_BranchL,
 };
 
@@ -258,10 +258,10 @@ static u8 sScheduleCmdSizes[] = {
     sizeof(ScheduleCmdNop),
     sizeof(ScheduleCmdCheckMiscS),
     sizeof(ScheduleCmdReturnValueS),
-    sizeof(ScheduleCmdCheckSceneS),
-    sizeof(ScheduleCmdCheckSceneL),
-    sizeof(ScheduleCmdCheckDayS),
-    sizeof(ScheduleCmdCheckDayL),
+    sizeof(ScheduleCmdCheckNotInSceneS),
+    sizeof(ScheduleCmdCheckNotInSceneL),
+    sizeof(ScheduleCmdCheckNotInDayS),
+    sizeof(ScheduleCmdCheckNotInDayL),
     sizeof(ScheduleCmdReturnTime),
     sizeof(ScheduleCmdCheckBeforeTimeS),
     sizeof(ScheduleCmdCheckBeforeTimeL),
