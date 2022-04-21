@@ -230,8 +230,8 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     s16 sceneNum;
     s32 j;
     s32 i;
-    u8 temp;
-    u8 temp2;
+    u8 slot;
+    u8 item;
 
     gSaveContext.save.daySpeed = 0;
     gSaveContext.save.daysElapsed = 0;
@@ -306,26 +306,26 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     }
 
     if (INV_CONTENT(ITEM_BOMB) == ITEM_BOMB) {
-        temp2 = INV_CONTENT(ITEM_BOMB);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_BOMB);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 2;
         }
     }
     if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
-        temp2 = INV_CONTENT(ITEM_NUT);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_NUT);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 4;
         }
     }
     if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
-        temp2 = INV_CONTENT(ITEM_STICK);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_STICK);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 8;
         }
     }
     if (INV_CONTENT(ITEM_BOW) == ITEM_BOW) {
-        temp2 = INV_CONTENT(ITEM_BOW);
-        if (AMMO(temp2) != 0) {
+        item = INV_CONTENT(ITEM_BOW);
+        if (AMMO(item) != 0) {
             gSaveContext.eventInf[7] |= 0x10;
         }
     }
@@ -333,8 +333,8 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     for (i = 0; i < ARRAY_COUNT(D_801C67B0); i++) {
         if (D_801C67B0[i] != ITEM_NONE) {
             if ((gSaveContext.save.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTO_BOX)) {
-                temp2 = gSaveContext.save.inventory.items[i];
-                AMMO(temp2) = 0;
+                item = gSaveContext.save.inventory.items[i];
+                AMMO(item) = 0;
             }
         }
     }
@@ -385,20 +385,20 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     }
 
     if (STOLEN_ITEM_1 == ITEM_BOTTLE) {
-        temp = SLOT(ITEM_BOTTLE);
+        slot = SLOT(ITEM_BOTTLE);
         for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
+            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;
             }
         }
     }
 
     if (STOLEN_ITEM_2 == ITEM_BOTTLE) {
-        temp = SLOT(ITEM_BOTTLE);
+        slot = SLOT(ITEM_BOTTLE);
         for (i = 0; i < 6; i++) {
-            if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[temp + i] = ITEM_BOTTLE;
+            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.inventory.items[slot + i] = ITEM_BOTTLE;
                 break;
             }
         }

@@ -567,7 +567,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return ITEM_BOW;
 
     } else if (item == ITEM_OCARINA) {
-        INV_CONTENT(ITEM_OCARINA) = 0;
+        INV_CONTENT(ITEM_OCARINA) = ITEM_OCARINA;
         return ITEM_NONE;
 
     } else if (item == ITEM_MAGIC_BEANS) {
