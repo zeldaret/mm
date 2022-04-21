@@ -98,7 +98,7 @@ void EnBomBowlMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->unk_2C8 = 80.0f;
 
     if ((gSaveContext.save.entranceIndex == 0xD220) && (gSaveContext.save.weekEventReg[73] & 0x80) &&
-        !CHECK_QUEST_ITEM(ITEM_BOTTLE)) {
+        !CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         this->unk_2D6 = this->actor.cutscene;
         if (this->unk_2D6 == 0) {
             Actor_MarkForDeath(&this->actor);
@@ -261,7 +261,7 @@ void func_809C4DA4(EnBomBowlMan* this, GlobalContext* globalCtx) {
                 func_809C493C(this, 3, 1.0f);
                 this->unk_2D4 = this->actor.yawTowardsPlayer;
                 this->unk_2C0 = 2;
-                if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_QUEST_ITEM(ITEM_BOTTLE)) {
+                if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
                     this->unk_2C0 = 4;
                 }
                 break;
