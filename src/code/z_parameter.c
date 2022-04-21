@@ -296,7 +296,6 @@ s16 sBombchuRefillCounts[] = { 20, 10, 1, 5 };
 s16 sRupeeRefillCounts[] = {
     1, 5, 10, 20, 50, 100, 200,
 };
-
 u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     Player* player = GET_PLAYER(globalCtx);
     u8 i;
