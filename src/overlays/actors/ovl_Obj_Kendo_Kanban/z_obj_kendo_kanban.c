@@ -45,10 +45,10 @@ Vec3f D_80B6669C = { 150.0f, 425.0f, 40.0f };
 Vec3f D_80B666A8 = { 0.0f, 140.0f, 40.0f };
 Vec3f D_80B666B4 = { 0.0f, 565.0f, 40.0f };
 
-Gfx* D_80B666C0 = object_dora_DL_002080;
-Gfx* D_80B666C4 = object_dora_DL_002180;
-Gfx* D_80B666C8 = object_dora_DL_002380;
-Gfx* D_80B666CC = object_dora_DL_002280;
+Gfx* D_80B666C0 = gKendoKanbanTopRightDL;
+Gfx* D_80B666C4 = gKendoKanbanTopLeftDL;
+Gfx* D_80B666C8 = gKendoKanbanBottomRightDL;
+Gfx* D_80B666CC = gKendoKanbanBottomLeftDL;
 
 Vec3f D_80B666D0 = { -300.0f, 850.0f, 40.0f };
 Vec3f D_80B666DC = { 10.0f, 850.0f, 40.0f };
@@ -472,7 +472,7 @@ void ObjKendoKanban_Draw(Actor* thisx, GlobalContext* globalCtx) {
 
     if (this->unk_30C == OBJKENDOKANBAN_F_0) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(globalCtx->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_dora_DL_000180);
+        gSPDisplayList(POLY_OPA_DISP++, gKendoKanbanDL);
     } else {
         Matrix_InsertRotationAroundUnitVector_s(this->unk_302, &this->unk_2F0, MTXMODE_APPLY);
         Matrix_InsertTranslation(-this->unk_2E4.x, -this->unk_2E4.y, -this->unk_2E4.z, MTXMODE_APPLY);

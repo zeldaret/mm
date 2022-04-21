@@ -98,7 +98,7 @@ void EnGuardNuts_Init(Actor* thisx, GlobalContext* globalCtx) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_Init(globalCtx, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
-                   this->morphTable, OBJECT_DNK_LIMB_MAX);
+                   this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = 1;
     Collider_InitAndSetCylinder(globalCtx, &this->collider, &this->actor, &sCylinderInit);
@@ -355,7 +355,7 @@ s32 EnGuardNuts_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** 
                                  Actor* thisx) {
     EnGuardNuts* this = THIS;
 
-    if (limbIndex == OBJECT_DNK_LIMB_HEAD) {
+    if (limbIndex == DEKU_PALACE_GUARD_LIMB_HEAD) {
         rot->x += this->headRot.x;
         rot->y += this->headRot.y;
         rot->z += this->headRot.z;

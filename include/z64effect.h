@@ -257,6 +257,7 @@ typedef struct {
     /* 0x18 */ u8 unk18; // Always 1?
 } EffectSsOverlay; // size = 0x1C
 
+//! TODO: Review reuse of vec/gfx/actor fields across all effects
 typedef struct EffectSs {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;

@@ -21,7 +21,7 @@ u8 sCutsceneStoredPlayerForm = 0;
 static u16 seqId;
 #endif
 s16 sCutsceneQuakeIndex;
-struct_801F4D48 sCutsceneCameraInfo;
+DbCameraUnkStruct sCutsceneCameraInfo;
 u16 D_801F4DC8[10];
 UNK_TYPE D_801F4DDC;
 u8 D_801F4DE0;
@@ -1417,6 +1417,7 @@ void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, 
     }
 }
 #else
+void Cutscene_ProcessCommands(GlobalContext* globalCtx, CutsceneContext* csCtx, u8* cutscenePtr);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/Cutscene_ProcessCommands.s")
 #endif
 
