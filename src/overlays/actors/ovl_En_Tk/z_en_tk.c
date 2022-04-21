@@ -63,9 +63,9 @@ void func_80AEF5F4(Actor* thisx, GlobalContext* globalCtx);
 static s32 D_80AF0050;
 
 static u8 D_80AEF800[] = {
-    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L( 6,  0, 18,  0, 0x8 - 0x7),
+    /* 0x0 */ SCHEDULE_CMD_CHECK_TIME_RANGE_L(6, 0, 18, 0, 0x8 - 0x7),
     /* 0x7 */ SCHEDULE_CMD_RET_NONE(),
-    /* 0x8 */ SCHEDULE_CMD_RET_TIME( 6,  0, 18,  0,  1),
+    /* 0x8 */ SCHEDULE_CMD_RET_TIME(6, 0, 18, 0, 1),
     /* 0xE */ SCHEDULE_CMD_RET_NONE(),
 };
 

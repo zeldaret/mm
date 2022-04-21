@@ -1,7 +1,7 @@
 #include "global.h"
 
 #define SCHEDULE_CALC_TIME(hour, minute, dest, temp) \
-    (temp) = (hour) * 60.0f;                         \
+    (temp) = (hour)*60.0f;                           \
     (temp) += (minute);                              \
     (dest) = (temp) * (0x10000 / 60 / 24.0f);        \
     (dest) = SCHEDULE_CONVERT_TIME(dest);
@@ -240,11 +240,11 @@ s32 Schedule_BranchL(GlobalContext* globalCtx, u8** script, ScheduleResult* resu
 }
 
 static s32 (*sScheduleCmdFuncs[])(GlobalContext*, u8**, ScheduleResult*) = {
-    Schedule_CheckFlagS,       Schedule_CheckFlagL,   Schedule_CheckTimeRangeS, Schedule_CheckTimeRangeL,
-    Schedule_ReturnValueL,     Schedule_ReturnNone,   Schedule_ReturnEmpty,     Schedule_Nop,
-    Schedule_CheckMiscS,       Schedule_ReturnValueS, Schedule_CheckNotInSceneS,     Schedule_CheckNotInSceneL,
-    Schedule_CheckNotInDayS,        Schedule_CheckNotInDayL,    Schedule_ReturnTime,      Schedule_CheckBeforeTimeS,
-    Schedule_CheckBeforeTimeL, Schedule_BranchS,      Schedule_BranchL,
+    Schedule_CheckFlagS,       Schedule_CheckFlagL,     Schedule_CheckTimeRangeS,  Schedule_CheckTimeRangeL,
+    Schedule_ReturnValueL,     Schedule_ReturnNone,     Schedule_ReturnEmpty,      Schedule_Nop,
+    Schedule_CheckMiscS,       Schedule_ReturnValueS,   Schedule_CheckNotInSceneS, Schedule_CheckNotInSceneL,
+    Schedule_CheckNotInDayS,   Schedule_CheckNotInDayL, Schedule_ReturnTime,       Schedule_CheckBeforeTimeS,
+    Schedule_CheckBeforeTimeL, Schedule_BranchS,        Schedule_BranchL,
 };
 
 static u8 sScheduleCmdSizes[] = {
