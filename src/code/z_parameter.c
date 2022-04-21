@@ -290,9 +290,13 @@ void func_8010EBA0(s16 timer, s16 timerId);
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80112C0C.s")
 
-s16 sAmmoRefillCounts[] = {
-    5, 10, 20, 30, 10, 30, 40, 50, 20, 10, 1, 5, 1, 5, 10, 20, 50, 100, 200, 0,
+s16 sAmmoRefillCounts[] = { 5, 10, 20, 30 };
+s16 sArrowRefillCounts[] = { 10, 30, 40, 50 };
+s16 sBombchuRefillCounts[] = { 20, 10, 1, 5 };
+s16 sRupeeRefillCounts[] = {
+    1, 5, 10, 20, 50, 100, 200,
 };
+
 u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     Player* player = GET_PLAYER(globalCtx);
     u8 i;
@@ -542,7 +546,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
     } else if ((item >= ITEM_BOMBCHUS_20) && (item <= ITEM_BOMBCHUS_5)) {
         if (gSaveContext.save.inventory.items[SLOT_BOMBCHU] != ITEM_BOMBCHU) {
             INV_CONTENT(ITEM_BOMBCHU) = ITEM_BOMBCHU;
-            AMMO(ITEM_BOMBCHU) += sAmmoRefillCounts[item - ITEM_BOMBCHUS_20 + 8];
+            AMMO(ITEM_BOMBCHU) += sBombchuRefillCounts[item - ITEM_BOMBCHUS_20];
 
             if (AMMO(ITEM_BOMBCHU) > CUR_CAPACITY(UPG_BOMB_BAG)) {
                 AMMO(ITEM_BOMBCHU) = CUR_CAPACITY(UPG_BOMB_BAG);
@@ -550,13 +554,13 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
             return ITEM_NONE;
         }
 
-        if ((AMMO(ITEM_BOMBCHU) += sAmmoRefillCounts[item - ITEM_BOMBCHUS_20 + 8]) > CUR_CAPACITY(UPG_BOMB_BAG)) {
+        if ((AMMO(ITEM_BOMBCHU) += sBombchuRefillCounts[item - ITEM_BOMBCHUS_20]) > CUR_CAPACITY(UPG_BOMB_BAG)) {
             AMMO(ITEM_BOMBCHU) = CUR_CAPACITY(UPG_BOMB_BAG);
         }
         return ITEM_NONE;
 
     } else if ((item >= ITEM_ARROWS_10) && (item <= ITEM_ARROWS_50)) {
-        AMMO(ITEM_BOW) += sAmmoRefillCounts[item - ITEM_ARROWS_10 + 4];
+        AMMO(ITEM_BOW) += sArrowRefillCounts[item - ITEM_ARROWS_10];
 
         if ((AMMO(ITEM_BOW) >= CUR_CAPACITY(UPG_QUIVER)) || (AMMO(ITEM_BOW) < 0)) {
             AMMO(ITEM_BOW) = CUR_CAPACITY(UPG_QUIVER);
@@ -603,7 +607,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return item;
 
     } else if ((item >= ITEM_RUPEE_GREEN) && (item <= ITEM_RUPEE_HUGE)) {
-        Rupees_ChangeBy(sAmmoRefillCounts[item - ITEM_RUPEE_GREEN + 12]); // TODO: Different to OoT? Or wrong.
+        Rupees_ChangeBy(sRupeeRefillCounts[item - ITEM_RUPEE_GREEN]);
         return ITEM_NONE;
 
     } else if (item == ITEM_LONGSHOT) {
