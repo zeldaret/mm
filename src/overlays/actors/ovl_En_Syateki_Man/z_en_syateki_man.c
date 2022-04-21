@@ -5,7 +5,6 @@
  */
 
 #include "z_en_syateki_man.h"
-#include "objects/object_shn/object_shn.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
 
@@ -132,11 +131,11 @@ void EnSyatekiMan_Init(Actor* thisx, GlobalContext* globalCtx) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (globalCtx->sceneNum == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00DFEC, this->jointTable,
-                           this->morphTable, OBJECT_SHN_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel, &object_shn_Anim_00DFEC, this->jointTable,
+                           this->morphTable, SHOOTING_GALLERY_MAN_LIMB_MAX);
     } else {
-        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gObjectShnSkel, &object_shn_Anim_00D9D0, this->jointTable,
-                           this->morphTable, OBJECT_SHN_LIMB_MAX);
+        SkelAnime_InitFlex(globalCtx, &this->skelAnime, &gShootingGalleryManSkel, &object_shn_Anim_00D9D0, this->jointTable,
+                           this->morphTable, SHOOTING_GALLERY_MAN_LIMB_MAX);
     }
 
     this->actor.colChkInfo.cylRadius = 100;
@@ -1242,7 +1241,7 @@ s32 EnSyatekiMan_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx**
     EnSyatekiMan* this = THIS;
 
     if ((globalCtx->sceneNum == SCENE_SYATEKI_MIZU) && (limbIndex == 15)) {
-        *dList = object_shn_DL_00F2D0;
+        *dList = gTownShootingGalleryManHeadDL;
     }
 
     if (limbIndex == 15) {
@@ -1267,30 +1266,30 @@ void EnSyatekiMan_PostLimbDraw(GlobalContext* globalCtx, s32 limbIndex, Gfx** dL
 }
 
 void EnSyatekiMan_Draw(Actor* thisx, GlobalContext* globalCtx) {
-    static TexturePtr D_809C94B8[] = {
-        object_shn_Tex_005AC8,
-        object_shn_Tex_0062C8,
-        object_shn_Tex_0062C8,
+    static TexturePtr sEyeTextures[] = {
+        gSwampShootingGalleryManEyeOpenTex,
+        gSwampShootingGalleryManEyeHalfTex,
+        gSwampShootingGalleryManEyeHalfTex,
     };
     EnSyatekiMan* this = THIS;
     s32 pad;
 
     if (globalCtx->sceneNum == SCENE_SYATEKI_MIZU) {
-        D_809C94B8[0] = object_shn_Tex_00FB90;
-        D_809C94B8[1] = object_shn_Tex_010390;
-        D_809C94B8[2] = object_shn_Tex_010390;
+        sEyeTextures[0] = gTownShootingGalleryManEyeOpenTex;
+        sEyeTextures[1] = gTownShootingGalleryManEyeClosedTex;
+        sEyeTextures[2] = gTownShootingGalleryManEyeClosedTex;
     } else {
-        D_809C94B8[0] = object_shn_Tex_005AC8;
-        D_809C94B8[1] = object_shn_Tex_0062C8;
-        D_809C94B8[2] = object_shn_Tex_0062C8;
+        sEyeTextures[0] = gSwampShootingGalleryManEyeOpenTex;
+        sEyeTextures[1] = gSwampShootingGalleryManEyeHalfTex;
+        sEyeTextures[2] = gSwampShootingGalleryManEyeHalfTex;
     }
 
     OPEN_DISPS(globalCtx->state.gfxCtx);
 
     func_8012C5B0(globalCtx->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_809C94B8[this->unk_264]));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_809C94B8[this->unk_264]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->unk_264]));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->unk_264]));
 
     SkelAnime_DrawFlexOpa(globalCtx, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                      EnSyatekiMan_OverrideLimbDraw, EnSyatekiMan_PostLimbDraw, &this->actor);
