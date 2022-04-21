@@ -2225,8 +2225,8 @@ void Audio_PlaySfxForRiver(Vec3f* pos, f32 freqScale) {
         sRiverFreqScaleLerp.remainingFrames = 40;
         sRiverFreqScaleLerp.step = (sRiverFreqScaleLerp.target - sRiverFreqScaleLerp.value) / 40;
     }
-    Audio_PlaySfxGeneral(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value, &gSfxVolOrFreqDefaultVal,
-                         &gSfxReverbAddNone);
+    Audio_PlaySfxGeneral(NA_SE_EV_RIVER_STREAM - SFX_FLAG, pos, 4, &sRiverFreqScaleLerp.value,
+                         &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
 }
 
 /**
@@ -2242,7 +2242,7 @@ void Audio_PlaySfxForWaterfall(Vec3f* pos, f32 freqScale) {
         sWaterfallFreqScaleLerp.step = (sWaterfallFreqScaleLerp.target - sWaterfallFreqScaleLerp.value) / 40;
     }
     Audio_PlaySfxGeneral(NA_SE_EV_WATER_WALL_BIG - SFX_FLAG, pos, 4, &sWaterfallFreqScaleLerp.value,
-                         &sWaterfallFreqScaleLerp.value, &gSfxReverbAddNone);
+                         &sWaterfallFreqScaleLerp.value, &gSfxDefaultReverb);
 }
 
 /**

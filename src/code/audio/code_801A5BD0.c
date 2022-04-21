@@ -67,11 +67,19 @@ u8 sBankSizes[ARRAY_COUNT(gSfxBanks)] = {
 
 u8 gSfxChannelLayout = 0;
 u16 sSfxChannelLowVolumeFlag = 0;
-Vec3f gSfxPosScreenCenter = { 0.0f, 0.0f, 0.0f }; // default pos at the center of the screen
-f32 gSfxVolOrFreqDefaultVal = 1.0f;               // default freqScale and vol
-s32 D_801DB4B4 = 0;                               // unused
-s8 gSfxReverbAddNone = 0;                         // default reverbAdd (none added)
-s32 D_801DB4BC = 0;                               // unused
+
+// The center of the screen in projected coordinates.
+// Gives the impression that the sfx has no specific location
+Vec3f gSfxDefaultPos = { 0.0f, 0.0f, 0.0f };
+
+// Reused as either frequency or volume multiplicative scaling factor
+// Does not alter or change frequency or volume
+f32 gSfxDefaultFreqAndVolScale = 1.0f;
+s32 D_801DB4B4 = 0; // unused
+
+// Adds no reverb to the existing reverb
+s8 gSfxDefaultReverb = 0;
+s32 D_801DB4BC = 0; // unused
 
 void Audio_SetSfxBanksMute(u16 muteMask) {
     u8 bankId;
@@ -366,7 +374,7 @@ void Audio_ChooseActiveSfxs(u8 bankId) {
         } else if (gSfxBanks[bankId][entryIndex].state != SFX_STATE_EMPTY) {
             entry = &gSfxBanks[bankId][entryIndex];
 
-            if (&gSfxPosScreenCenter.x == entry[0].posX) {
+            if (&gSfxDefaultPos.x == entry[0].posX) {
                 entry->dist = 0.0f;
             } else {
                 entryPosY = *entry->posY * 1;
@@ -500,7 +508,7 @@ void Audio_PlayActiveSfxs(u8 bankId) {
     SequenceChannel* channel;
     SfxBankEntry* entry;
     u8 i;
-    u8 temp;
+    u8 ioPort5Data;
 
     for (i = 0; i < gChannelsPerBank[gSfxChannelLayout][bankId]; i++) {
         entryIndex = gActiveSfxs[bankId][i].entryIndex;
@@ -535,17 +543,17 @@ void Audio_PlayActiveSfxs(u8 bankId) {
                 Audio_QueueCmdS8(0x06020000 | ((sCurSfxPlayerChannelIdx & 0xFF) << 8) | 4, entry->sfxId & 0xFF);
 
                 if (D_801D6600[bankId]) {
-                    temp = ((u8)((entry->sfxId & 0x300) >> 7) + (u8)((entry->sfxId & 0xFF) >> 7));
+                    ioPort5Data = ((u8)((entry->sfxId & 0x300) >> 7) + (u8)((entry->sfxId & 0xFF) >> 7));
                 } else {
-                    temp = 0;
+                    ioPort5Data = 0;
                 }
 
                 if ((entry->sfxParams & 0x100) && (entry->freshness == 0x80)) {
-                    temp += 0x80;
+                    ioPort5Data += 0x80;
                 }
 
                 if (D_801D6608[bankId]) {
-                    Audio_QueueCmdS8(0x06020000 | ((sCurSfxPlayerChannelIdx & 0xFF) << 8) | 5, temp);
+                    Audio_QueueCmdS8(0x06020000 | ((sCurSfxPlayerChannelIdx & 0xFF) << 8) | 5, ioPort5Data);
                 }
 
                 if (entry->sfxId & 0xC00) {
