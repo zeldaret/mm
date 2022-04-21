@@ -337,7 +337,7 @@ typedef struct {
 } CameraSetting; // size = 0xC
 
 typedef struct Camera {
-    /* 0x000 */ char paramData[0x50]; // function Data, acts like a heap that's reset every time a new action function is switched to
+    /* 0x000 */ u8 paramData[0x50]; // function Data, acts like a heap that's reset every time a new action function is switched to
     /* 0x050 */ Vec3f at;
     /* 0x05C */ Vec3f eye;
     /* 0x068 */ Vec3f up;
