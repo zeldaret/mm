@@ -956,13 +956,13 @@ void func_80B985EC(EnZot* this, GlobalContext* globalCtx) {
         itemActionParam = func_80123810(globalCtx);
         if (itemActionParam > PLAYER_AP_NONE) {
             func_801477B4(globalCtx);
-            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOBOX) && func_8013A4C4(4)) {
+            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) && func_8013A4C4(4)) {
                 if (func_8013A4C4(5) && func_8013A4C4(6)) {
                     player->actor.textId = 0x12AE;
                 } else {
                     player->actor.textId = 0x12AC;
                 }
-                REMOVE_QUEST_ITEM(QUEST_PICTOBOX);
+                REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
             } else {
                 player->actor.textId = 0x12AB;
             }

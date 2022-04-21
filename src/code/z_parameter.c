@@ -8,11 +8,9 @@ typedef struct {
     /* 0x03 */ u8 flags3;
 } RestrictionFlags;
 
-// bss
 Input D_801F5850[4];
 
-// data
-static RestrictionFlags sRestrictionFlags[] = {
+RestrictionFlags sRestrictionFlags[] = {
     { SCENE_20SICHITAI2, 0x00, 0x00, 0x00 },
     { SCENE_UNSET_1, 0x00, 0x00, 0x00 },
     { SCENE_UNSET_2, 0x00, 0x00, 0x00 },
@@ -131,7 +129,7 @@ static RestrictionFlags sRestrictionFlags[] = {
 s16 D_801BF884 = 0;     // pictoBox related
 s16 D_801BF888 = false; // pictoBox related
 
-s16 sHBAScoreTier = 0;
+s16 sHBAScoreTier = 0; // Remnant of OoT, non-functional
 
 u16 sMinigameScoreDigits[] = { 0, 0, 0, 0 };
 
@@ -195,63 +193,17 @@ Gfx D_801BF988[] = {
 };
 
 s16 D_801BF9B0 = 0;
-
-f32 D_801BF9B4[] = {
-    100.0f,
-    109.0f,
-};
-
-s16 D_801BF9BC[] = {
-    0x226,
-    0x2A8,
-    0x2A8,
-    0x2A8,
-};
-
-s16 D_801BF9C4[] = {
-    0x9E,
-    0x9B,
-};
-
-s16 D_801BF9C8[] = {
-    0x17,
-    0x16,
-};
-
-f32 D_801BF9CC[] = {
-    -380.0f,
-    -350.0f,
-};
-
-s16 D_801BF9D4[] = {
-    0xA7,
-    0xE3,
-};
-
-s16 D_801BF9D8[] = {
-    0xF9,
-    0x10F,
-};
-
-s16 D_801BF9DC[] = {
-    0x11,
-    0x12,
-};
-
-s16 D_801BF9E0[] = {
-    0x22,
-    0x12,
-};
-
-s16 D_801BF9E4[] = {
-    0x23F,
-    0x26C,
-};
-
-s16 D_801BF9E8[] = {
-    0x26C,
-    0x26C,
-};
+f32 D_801BF9B4[] = { 100.0f, 109.0f };
+s16 D_801BF9BC[] = { 0x226, 0x2A8, 0x2A8, 0x2A8 };
+s16 D_801BF9C4[] = { 0x9E, 0x9B };
+s16 D_801BF9C8[] = { 0x17, 0x16 };
+f32 D_801BF9CC[] = { -380.0f, -350.0f };
+s16 D_801BF9D4[] = { 0xA7, 0xE3 };
+s16 D_801BF9D8[] = { 0xF9, 0x10F };
+s16 D_801BF9DC[] = { 0x11, 0x12 };
+s16 D_801BF9E0[] = { 0x22, 0x12 };
+s16 D_801BF9E4[] = { 0x23F, 0x26C };
+s16 D_801BF9E8[] = { 0x26C, 0x26C };
 
 s16 sFinalHoursClockDigitsRed = 0;
 s16 sFinalHoursClockFrameEnvRed = 0;
@@ -279,22 +231,22 @@ s16 sFinalHoursClockColorTargetIndex = 0;
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010DE38.s")
 
 s16 D_801BFA04[] = {
-    0xFFF2, 0xFFF2, 0xFFE8, 0xFFF8, 0xFFF4, 0xFFF4, 0xFFF9, 0xFFF8, 0xFFF9, 0xFFF8, 0xFFF4, 0,
+    -14, -14, -24, -8, -12, -12, -7, -8, -7, -8, -12, 0,
 };
 s16 D_801BFA1C[] = {
     0x1C, 0x1C, 0x30, 0x10, 0x18, 0x18, 0x10, 0x10, 0x10, 0x10, 0x18, 0,
 };
 s16 D_801BFA34[] = {
-    0xE, 0xE, 0x8, 0x18, 0xFFAE, 0xFFAE, 0x3A, 0x3B, 0x3A, 0x3B, 0x20, 0,
+    14, 14, 8, 24, -82, -82, 58, 59, 58, 59, 32, 0,
 };
 s16 D_801BFA4C[] = {
     0x1C, 0x1C, 0x10, 0x10, 0x18, 0x18, 0xB, 0xB, 0xB, 0xB, 0x20, 0,
 };
 s16 D_801BFA64[] = {
-    0xFFC3, 0xFFD3, 0x001D, 0x0068, 0xFF8B, 0xFFD6, 0x0020, 0x0037,
+    -61, -45, 29, 104, -117, -42, 32, 55,
 };
 s16 D_801BFA74[] = {
-    0x0001, 0xFFBA, 0xFF9D, 0xFFBA, 0x0047, 0x0065, 0x0048, 0x0001,
+    1, -70, -99, -70, 71, 101, 72, 1,
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8010E028.s")
 
@@ -383,17 +335,17 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_SWORD_KOKIRI) && (item <= ITEM_SWORD_GILDED)) {
-        SET_EQUIP_VALUE(EQUIP_SWORD, item - ITEM_SWORD_KOKIRI + 1);
+        SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, item - ITEM_SWORD_KOKIRI + EQUIP_VALUE_SWORD_KOKIRI);
         BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = item;
-        Interface_LoadItemIconImpl(globalCtx, 0);
+        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_B);
         if (item == ITEM_SWORD_RAZOR) {
             gSaveContext.save.playerData.swordHealth = 100;
         }
         return ITEM_NONE;
 
     } else if ((item >= ITEM_SHIELD_HERO) && (item <= ITEM_SHIELD_MIRROR)) {
-        if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != (u16)(item - ITEM_SHIELD_HERO + 1)) {
-            SET_EQUIP_VALUE(EQUIP_SHIELD, item - ITEM_SHIELD_HERO + 1);
+        if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != (u16)(item - ITEM_SHIELD_HERO + EQUIP_VALUE_SHIELD_HERO)) {
+            SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, item - ITEM_SHIELD_HERO + EQUIP_VALUE_SHIELD_HERO);
             Player_SetEquipmentData(globalCtx, player);
             return ITEM_NONE;
         }
@@ -424,6 +376,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
                 AMMO(ITEM_BOW) = CUR_CAPACITY(UPG_QUIVER);
             }
         }
+
     } else if (item == ITEM_QUIVER_40) {
         Inventory_ChangeUpgrade(UPG_QUIVER, 2);
         INV_CONTENT(ITEM_BOW) = ITEM_BOW;
@@ -512,6 +465,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
                 AMMO(ITEM_STICK) = CUR_CAPACITY(UPG_STICKS);
             }
         }
+
     } else if ((item == ITEM_STICKS_5) || (item == ITEM_STICKS_10)) {
         if (INV_CONTENT(ITEM_STICK) != ITEM_STICK) {
             Inventory_ChangeUpgrade(UPG_STICKS, 1);
@@ -613,14 +567,14 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         INV_CONTENT(ITEM_OCARINA) = 0;
         return ITEM_NONE;
 
-    } else if (item == ITEM_BEAN) {
-        if (INV_CONTENT(ITEM_BEAN) == ITEM_NONE) {
+    } else if (item == ITEM_MAGIC_BEANS) {
+        if (INV_CONTENT(ITEM_MAGIC_BEANS) == ITEM_NONE) {
             INV_CONTENT(item) = item;
-            AMMO(ITEM_BEAN) = 1;
-        } else if (AMMO(ITEM_BEAN) < 20) {
-            AMMO(ITEM_BEAN)++;
+            AMMO(ITEM_MAGIC_BEANS) = 1;
+        } else if (AMMO(ITEM_MAGIC_BEANS) < 20) {
+            AMMO(ITEM_MAGIC_BEANS)++;
         } else {
-            AMMO(ITEM_BEAN) = 20;
+            AMMO(ITEM_MAGIC_BEANS) = 20;
         }
         return ITEM_NONE;
 
@@ -715,18 +669,18 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
                         func_8010EBA0(60, i);
                     }
 
-                    if ((slot + i) == C_SLOT_EQUIP(0, 1)) {
+                    if ((slot + i) == C_SLOT_EQUIP(0, EQUIP_SLOT_C_LEFT)) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) = item;
-                        Interface_LoadItemIconImpl(globalCtx, 1);
-                        gSaveContext.buttonStatus[1] = BTN_ENABLED;
-                    } else if ((slot + i) == C_SLOT_EQUIP(0, 2)) {
+                        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_C_LEFT);
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+                    } else if ((slot + i) == C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN)) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = item;
-                        Interface_LoadItemIconImpl(globalCtx, 2);
-                        gSaveContext.buttonStatus[2] = BTN_ENABLED;
-                    } else if ((slot + i) == C_SLOT_EQUIP(0, 3)) {
+                        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_C_DOWN);
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+                    } else if ((slot + i) == C_SLOT_EQUIP(0, EQUIP_SLOT_C_RIGHT)) {
                         BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) = item;
-                        Interface_LoadItemIconImpl(globalCtx, 3);
-                        gSaveContext.buttonStatus[3] = BTN_ENABLED;
+                        Interface_LoadItemIconImpl(globalCtx, EQUIP_SLOT_C_RIGHT);
+                        gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
                     }
 
                     gSaveContext.save.inventory.items[slot + i] = item;
@@ -746,7 +700,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
         temp = INV_CONTENT(item);
         INV_CONTENT(item) = item;
         if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_PENDANT_MEMORIES) && (temp != ITEM_NONE)) {
-            for (i = 1; i < 4; i++) {
+            for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (temp == GET_CUR_FORM_BTN_ITEM(i)) {
                     SET_CUR_FORM_BTN_ITEM(i, item);
                     Interface_LoadItemIconImpl(globalCtx, i);
@@ -765,7 +719,7 @@ u8 Item_Give(GlobalContext* globalCtx, u8 item) {
 u8 Item_CheckObtainabilityImpl(u8 item) {
     s16 i;
     u8 slot;
-    u8 temp;
+    u8 bottleSlot;
 
     slot = SLOT(item);
     if (item >= ITEM_STICKS_5) {
@@ -837,7 +791,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
     } else if ((item >= ITEM_BOMB_BAG_30) && (item <= ITEM_WALLET_GIANT)) {
         return ITEM_NONE;
 
-    } else if (item == ITEM_BEAN) {
+    } else if (item == ITEM_MAGIC_BEANS) {
         return ITEM_NONE;
 
     } else if (item == ITEM_POWDER_KEG) {
@@ -877,7 +831,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
     } else if (((item >= ITEM_POTION_RED) && (item <= ITEM_OBABA_DRINK)) || (item == ITEM_CHATEAU_2) ||
                (item == ITEM_MILK) || (item == ITEM_GOLD_DUST_2) || (item == ITEM_HYLIAN_LOACH_2) ||
                (item == ITEM_SEA_HORSE_CAUGHT)) {
-        temp = SLOT(item);
+        bottleSlot = SLOT(item);
 
         if ((item != ITEM_MILK_BOTTLE) && (item != ITEM_MILK_HALF)) {
             if (item == ITEM_CHATEAU_2) {
@@ -895,16 +849,16 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
             } else if (item == ITEM_SEA_HORSE_CAUGHT) {
                 item = ITEM_SEA_HORSE;
             }
-            temp = SLOT(item);
+            bottleSlot = SLOT(item);
 
             for (i = 0; i < 6; i++) {
-                if (gSaveContext.save.inventory.items[temp + i] == ITEM_BOTTLE) {
+                if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
                     return ITEM_NONE;
                 }
             }
         } else {
             for (i = 0; i < 6; i++) {
-                if (gSaveContext.save.inventory.items[temp + i] == ITEM_NONE) {
+                if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_NONE) {
                     return ITEM_NONE;
                 }
             }
@@ -925,7 +879,7 @@ void Inventory_DeleteItem(s16 item, s16 slot) {
 
     gSaveContext.save.inventory.items[slot] = ITEM_NONE;
 
-    for (btn = 1; btn < 4; btn++) {
+    for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_ITEM(btn) == item) {
             SET_CUR_FORM_BTN_ITEM(btn, ITEM_NONE);
             SET_CUR_FORM_BTN_SLOT(btn, SLOT_NONE);
@@ -936,7 +890,7 @@ void Inventory_DeleteItem(s16 item, s16 slot) {
 void Inventory_UnequipItem(s16 item) {
     s16 btn;
 
-    for (btn = 1; btn < 4; btn++) {
+    for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_ITEM(btn) == item) {
             SET_CUR_FORM_BTN_ITEM(btn, ITEM_NONE);
             SET_CUR_FORM_BTN_SLOT(btn, SLOT_NONE);
@@ -951,7 +905,7 @@ s32 Inventory_ReplaceItem(GlobalContext* globalCtx, u8 oldItem, u8 newItem) {
         if (gSaveContext.save.inventory.items[i] == oldItem) {
             gSaveContext.save.inventory.items[i] = newItem;
 
-            for (i = 1; i < 4; i++) {
+            for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (GET_CUR_FORM_BTN_ITEM(i) == oldItem) {
                     SET_CUR_FORM_BTN_ITEM(i, newItem);
                     Interface_LoadItemIconImpl(globalCtx, i);
@@ -975,19 +929,17 @@ void Inventory_UpdateDeitySwordEquip(GlobalContext* globalCtx) {
                  ? 1
                  : gSaveContext.save.playerForm >> 1) == 0) {
             BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_DEITY;
-        } else {
-            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_SWORD_DEITY) {
-                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == 0) {
-                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
-                } else {
-                    BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) =
-                        GET_CUR_EQUIP_VALUE(EQUIP_SWORD) + ITEM_SWORD_KOKIRI - 1;
-                }
+        } else if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_SWORD_DEITY) {
+            if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
+            } else {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) =
+                    GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) - EQUIP_VALUE_SWORD_KOKIRI + ITEM_SWORD_KOKIRI;
             }
         }
     }
 
-    for (btn = 0; btn < 1; btn++) {
+    for (btn = EQUIP_SLOT_B; btn <= EQUIP_SLOT_B; btn++) {
         if ((GET_CUR_FORM_BTN_ITEM(btn) != ITEM_NONE) && (GET_CUR_FORM_BTN_ITEM(btn) != ITEM_UNK_FD)) {
             Interface_LoadItemIconImpl(globalCtx, btn);
         }
@@ -1037,7 +989,7 @@ s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
 
     for (i = 0; i < 6; i++) {
         if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_FAIRY) {
-            for (btn = 1; btn < 4; btn++) {
+            for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
                 if (GET_CUR_FORM_BTN_ITEM(btn) == ITEM_FAIRY) {
                     SET_CUR_FORM_BTN_ITEM(btn, ITEM_BOTTLE);
                     Interface_LoadItemIconImpl(globalCtx, btn);
@@ -1055,14 +1007,14 @@ s32 Inventory_ConsumeFairy(GlobalContext* globalCtx) {
 }
 
 /**
- * Only used to equip spring water when hot sprint water timer runs out
+ * Only used to equip Spring Water when Hot Spring Water timer runs out.
  */
 void Inventory_UpdateItem(GlobalContext* globalCtx, s16 slot, s16 item) {
     s16 btn;
 
     gSaveContext.save.inventory.items[slot] = item;
 
-    for (btn = 1; btn < 4; btn++) {
+    for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_SLOT(btn) == slot) {
             SET_CUR_FORM_BTN_ITEM(btn, item);
             Interface_LoadItemIconImpl(globalCtx, btn);
@@ -1086,6 +1038,9 @@ TexturePtr sDoActionTextures[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80115844.s")
 
+/**
+ * Returns true if player still has health left. Otherwise, return false.
+ */
 s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
     if (healthChange > 0) {
         play_sound(NA_SE_SY_HP_RECOVER);
@@ -1161,8 +1116,8 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
             AMMO(ITEM_BOMB) = 0;
         }
 
-    } else if (item == ITEM_BEAN) {
-        AMMO(ITEM_BEAN) += ammoChange;
+    } else if (item == ITEM_MAGIC_BEANS) {
+        AMMO(ITEM_MAGIC_BEANS) += ammoChange;
 
     } else if (item == ITEM_POWDER_KEG) {
         AMMO(ITEM_POWDER_KEG) += ammoChange;
@@ -1270,7 +1225,7 @@ TexturePtr D_801BFC14[] = {
     gFinalHoursClockDigit8Tex, gFinalHoursClockDigit9Tex, gFinalHoursClockColonTex,
 };
 s16 D_801BFC40[] = {
-    0x007F, 0x0088, 0x0090, 0x0097, 0x00A0, 0x00A8, 0x00AF, 0x00B8,
+    127, 136, 144, 151, 160, 168, 175, 184,
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_80119610.s")
 
@@ -1285,26 +1240,26 @@ s16 D_801BFC60[][3] = {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011B5C0.s")
 
 s16 D_801BFC6C[] = {
-    0x004E, 0x0036, 0x001D, 0x0005, 0xFFEE, 0xFFD6, 0xFFBD, 0xFFAB,
+    78, 54, 29, 5, -18, -42, -67, -85,
 };
 s16 D_801BFC7C[] = {
-    0x00B4, 0x00B4, 0x00B4, 0x00B4, 0xFF4C, 0xFF4C, 0xFF4C, 0xFF4C,
+    180, 180, 180, 180, -180, -180, -180, -180,
 };
 s16 D_801BFC8C[2][3] = {
-    { 0xFF, 0xFF, 0xFF },
-    { 0xFF, 0xA5, 0x37 },
+    { 255, 255, 255 },
+    { 255, 165, 55 },
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011B9E0.s")
 
 s16 D_801BFC98[] = {
-    0x004E, 0x0036, 0x001D, 0x0005, 0xFFEE, 0xFFD6, 0xFFBD, 0xFFAB,
+    78, 54, 29, 5, -18, -42, -67, -85,
 };
 u16 D_801BFCA8[] = {
     0xC000, 0xE000, 0x0000, 0x2000, 0xA000, 0x8000, 0x6000, 0x4000,
 };
 s16 D_801BFCB8[2][3] = {
-    { 0xFF, 0xFF, 0xFF },
-    { 0xFF, 0xA5, 0x37 },
+    { 255, 255, 255 },
+    { 255, 165, 55 },
 };
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/func_8011BF70.s")
 
@@ -1320,10 +1275,10 @@ TexturePtr D_801BFCC4[] = {
 
 s16 D_801BFCE4 = 0;
 s16 D_801BFCE8[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-s16 D_801BFCF8 = 0x63;
+s16 D_801BFCF8 = 99;
 s16 D_801BFCFC[] = {
     // timer digit width
-    0x10, 0x19, 0x22, 0x2A, 0x33, 0x3C, 0x44, 0x4D,
+    16, 25, 34, 42, 51, 60, 68, 77,
 };
 s16 D_801BFD0C[] = {
     // digit width
@@ -1368,7 +1323,7 @@ Color_RGB16 D_801BFD6C[] = {
     { 120, 170, 255 },
 };
 // grandma's story pictures
-s32 D_801BFD84[] = {
+TexturePtr D_801BFD84[] = {
     0x07000000,
     0x07012C00,
 };

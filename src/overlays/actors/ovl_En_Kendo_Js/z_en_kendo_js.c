@@ -216,7 +216,7 @@ void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
     if (Message_ShouldAdvance(globalCtx) && (this->unk_288 == 0x2716)) {
         switch (globalCtx->msgCtx.choiceIndex) {
             case 0:
-                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == EQUIP_SWORD) {
+                if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(globalCtx, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
@@ -234,7 +234,7 @@ void func_80B26758(EnKendoJs* this, GlobalContext* globalCtx) {
                 break;
 
             case 1:
-                if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) == EQUIP_SWORD) {
+                if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(globalCtx, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;

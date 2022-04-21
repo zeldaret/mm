@@ -66,6 +66,7 @@
 #define EQUIP_SLOT_C_LEFT 1
 #define EQUIP_SLOT_C_DOWN 2
 #define EQUIP_SLOT_C_RIGHT 3
+#define EQUIP_SLOT_UNUSED 4
 
 typedef struct {
     /* 0x0 */ s16 priority; // Lower means higher priority. -1 means it ignores priority

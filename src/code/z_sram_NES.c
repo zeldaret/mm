@@ -149,9 +149,9 @@ s32 D_801C6798[] = {
 };
 
 u8 D_801C67B0[24] = {
-    ITEM_NONE,  ITEM_BOW,  ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
-    ITEM_STICK, ITEM_NUT,  ITEM_BEAN, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
-    ITEM_NONE,  ITEM_NONE, ITEM_NONE, ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
+    ITEM_NONE,  ITEM_BOW,  ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_BOMB, ITEM_BOMBCHU,
+    ITEM_STICK, ITEM_NUT,  ITEM_MAGIC_BEANS, ITEM_NONE, ITEM_POWDER_KEG, ITEM_PICTO_BOX, ITEM_NONE, ITEM_NONE,
+    ITEM_NONE,  ITEM_NONE, ITEM_NONE,        ITEM_NONE, ITEM_NONE,       ITEM_NONE,      ITEM_NONE, ITEM_NONE,
 };
 
 s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280 };
@@ -343,7 +343,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
         // Check for all bottled items
         if (gSaveContext.save.inventory.items[i] >= ITEM_POTION_RED) {
             if (gSaveContext.save.inventory.items[i] <= ITEM_OBABA_DRINK) {
-                for (j = 1; j < 4; j++) {
+                for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
                     if (GET_CUR_FORM_BTN_ITEM(j) == gSaveContext.save.inventory.items[i]) {
                         SET_CUR_FORM_BTN_ITEM(j, ITEM_BOTTLE);
                         Interface_LoadItemIconImpl(globalCtx, j);
@@ -354,26 +354,26 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
         }
     }
 
-    REMOVE_QUEST_ITEM(QUEST_PICTOBOX);
+    REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
 
     if (gSaveContext.save.playerData.health < 0x30) {
         gSaveContext.save.playerData.health = 0x30;
     }
 
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SWORD) < 3) {
-        SET_EQUIP_VALUE(EQUIP_SWORD, 1);
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) <= EQUIP_VALUE_SWORD_RAZOR) {
+        SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_KOKIRI);
 
         if (CUR_FORM == 0) {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
-                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
+                SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_GILDED);
             } else {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
         } else {
             if ((STOLEN_ITEM_1 >= ITEM_SWORD_GILDED) || (STOLEN_ITEM_2 >= ITEM_SWORD_GILDED)) {
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_GILDED;
-                SET_EQUIP_VALUE(EQUIP_SWORD, 3);
+                SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_GILDED);
             } else {
                 BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
             }
@@ -411,7 +411,7 @@ void Sram_SaveEndOfCycle(GlobalContext* globalCtx) {
     Inventory_DeleteItem(ITEM_SLINGSHOT, SLOT_TRADE_KEY_MAMA);
     Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
-    for (j = 1; j < 4; j++) {
+    for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
         if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
             Interface_LoadItemIconImpl(globalCtx, j);
@@ -717,7 +717,7 @@ Inventory sSaveDebugInventory = {
         ITEM_BOMBCHU,
         ITEM_STICK,
         ITEM_NUT,
-        ITEM_BEAN,
+        ITEM_MAGIC_BEANS,
         ITEM_ROOM_KEY,
         ITEM_POWDER_KEG,
         ITEM_PICTO_BOX,
@@ -808,8 +808,8 @@ void Sram_InitDebugSave(void) {
     Lib_MemCpy(&gSaveContext.save.checksum, &sSaveDebugChecksum, sizeof(gSaveContext.save.checksum));
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-        BUTTON_ITEM_EQUIP(0, 2) = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
-        C_SLOT_EQUIP(0, 2) = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A48[((void)0, gSaveContext.save.playerForm & 0xFF)];
+        C_SLOT_EQUIP(0, EQUIP_SLOT_C_DOWN) = D_801C6A50[((void)0, gSaveContext.save.playerForm & 0xFF)];
     }
 
     gSaveContext.save.hasTatl = true;

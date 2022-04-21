@@ -107,7 +107,7 @@ void* gItemIcons[] = {
     0x08007000,        // ITEM_BOMBCHU
     0x08008000,        // ITEM_STICK
     0x08009000,        // ITEM_NUT
-    0x0800A000,        // ITEM_BEAN
+    0x0800A000,        // ITEM_MAGIC_BEANS
     0x0800B000,        // ITEM_SLINGSHOT
     0x0800C000,        // ITEM_POWDER_KEG
     0x0800D000,        // ITEM_PICTO_BOX
@@ -242,7 +242,7 @@ u8 gItemSlots[] = {
     SLOT_BOMBCHU,            // ITEM_BOMBCHU
     SLOT_STICK,              // ITEM_STICK
     SLOT_NUT,                // ITEM_NUT
-    SLOT_MAGIC_BEANS,        // ITEM_BEAN
+    SLOT_MAGIC_BEANS,        // ITEM_MAGIC_BEANS
     SLOT_TRADE_KEY_MAMA,     // ITEM_SLINGSHOT
     SLOT_POWDER_KEG,         // ITEM_POWDER_KEG
     SLOT_PICTO_BOX,          // ITEM_PICTO_BOX
@@ -322,7 +322,7 @@ s16 gItemPrices[] = {
     0,   // ITEM_BOMBCHU
     0,   // ITEM_STICK
     0,   // ITEM_NUT
-    0,   // ITEM_BEAN
+    0,   // ITEM_MAGIC_BEANS
     0,   // ITEM_SLINGSHOT
     0,   // ITEM_POWDER_KEG
     0,   // ITEM_PICTO_BOX
@@ -495,7 +495,7 @@ s32 Inventory_GetBtnBItem(GlobalContext* globalCtx) {
  * Only changes shield
  */
 void Inventory_ChangeEquipment(s16 value) {
-    SET_EQUIP_VALUE(EQUIP_SHIELD, value);
+    SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, value);
 }
 
 /**
@@ -504,8 +504,8 @@ void Inventory_ChangeEquipment(s16 value) {
 u8 Inventory_DeleteEquipment(GlobalContext* globalCtx, s16 equipment) {
     Player* player = GET_PLAYER(globalCtx);
 
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
-        SET_EQUIP_VALUE(EQUIP_SHIELD, 0);
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
+        SET_EQUIP_VALUE(EQUIP_TYPE_SHIELD, EQUIP_VALUE_SHIELD_NONE);
         Player_SetEquipmentData(globalCtx, player);
         return true;
     }

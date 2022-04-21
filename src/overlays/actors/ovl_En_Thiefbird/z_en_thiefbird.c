@@ -223,7 +223,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
     }
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-        phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_SWORD);
+        phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
         if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
         }
@@ -260,7 +260,7 @@ s32 func_80C10B0C(EnThiefbird* this, GlobalContext* globalCtx) {
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
-            SET_EQUIP_VALUE(EQUIP_SWORD, 0);
+            SET_EQUIP_VALUE(EQUIP_TYPE_SWORD, EQUIP_VALUE_SWORD_NONE);
             this->unk_3E8 = D_80C13680[phi_a3 - 1];
         }
 

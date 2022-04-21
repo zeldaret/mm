@@ -247,7 +247,7 @@ s32 EnGirlA_CanBuyNuts(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyShieldHero(GlobalContext* globalCtx, EnGirlA* this) {
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {
@@ -356,7 +356,7 @@ s32 EnGirlA_CanBuySword(GlobalContext* globalCtx, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyShieldMirror(GlobalContext* globalCtx, EnGirlA* this) {
-    if (GET_CUR_EQUIP_VALUE(EQUIP_SHIELD) != 0) {
+    if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) != EQUIP_VALUE_SHIELD_NONE) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.save.playerData.rupees < globalCtx->msgCtx.unk1206C) {

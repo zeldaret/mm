@@ -35,8 +35,8 @@ void GameOver_Update(GlobalContext* globalCtx) {
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED &&
                     CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_DEITY) {
 
-                    if (gSaveContext.buttonStatus[0] != BTN_ENABLED) {
-                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[0];
+                    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] != BTN_ENABLED) {
+                        CUR_FORM_EQUIP(EQUIP_SLOT_B) = gSaveContext.buttonStatus[EQUIP_SLOT_B];
                     } else {
                         CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
                     }
@@ -51,11 +51,11 @@ void GameOver_Update(GlobalContext* globalCtx) {
             gSaveContext.eventInf[1] = 0;
             gSaveContext.eventInf[2] = 0;
             gSaveContext.eventInf[3] = 0;
-            gSaveContext.buttonStatus[0] = BTN_ENABLED;
-            gSaveContext.buttonStatus[1] = BTN_ENABLED;
-            gSaveContext.buttonStatus[2] = BTN_ENABLED;
-            gSaveContext.buttonStatus[3] = BTN_ENABLED;
-            gSaveContext.buttonStatus[4] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
+            gSaveContext.buttonStatus[EQUIP_SLOT_UNUSED] = BTN_ENABLED;
             gSaveContext.unk_3F1E = 0;
             gSaveContext.unk_3F20 = 0;
             gSaveContext.unk_3F22 = 0;
