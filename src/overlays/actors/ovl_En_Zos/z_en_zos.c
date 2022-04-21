@@ -232,7 +232,7 @@ void func_80BBB2C4(EnZos* this, GlobalContext* globalCtx) {
 }
 
 void func_80BBB354(EnZos* this, GlobalContext* globalCtx) {
-    s32 item;
+    s32 getItemId;
 
     if (Actor_HasParent(&this->actor, globalCtx)) {
         this->actor.parent = NULL;
@@ -242,11 +242,11 @@ void func_80BBB354(EnZos* this, GlobalContext* globalCtx) {
         func_800B8500(&this->actor, globalCtx, 1000.0f, 1000.0f, -1);
     } else {
         if (gSaveContext.save.weekEventReg[39] & 0x20) {
-            item = GI_RUPEE_PURPLE;
+            getItemId = GI_RUPEE_PURPLE;
         } else {
-            item = GI_HEART_PIECE;
+            getItemId = GI_HEART_PIECE;
         }
-        Actor_PickUp(&this->actor, globalCtx, item, 10000.0f, 50.0f);
+        Actor_PickUp(&this->actor, globalCtx, getItemId, 10000.0f, 50.0f);
     }
 }
 

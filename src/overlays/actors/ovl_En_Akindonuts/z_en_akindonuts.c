@@ -221,36 +221,36 @@ s16 func_80BECF6C(Path* path) {
 s32 func_80BECFBC(EnAkindonuts* this) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            return 0x98;
+            return GI_DEED_SWAMP;
 
         case 1:
-            return 0x99;
+            return GI_DEED_MOUNTAIN;
 
         case 2:
-            return 0x9A;
+            return GI_DEED_OCEAN;
 
         case 3:
             Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
-            return 0x7;
+            return GI_RUPEE_HUGE;
     }
-    return 0;
+    return GI_NONE;
 }
 
 s32 func_80BED034(EnAkindonuts* this) {
     switch (ENAKINDONUTS_GET_3(&this->actor)) {
         case 0:
-            return 0x35;
+            return GI_MAGIC_BEANS;
 
         case 1:
-            return 0x1D;
+            return GI_BOMB_BAG_40;
 
         case 2:
-            return 0x5C;
+            return GI_POTION_GREEN;
 
         case 3:
-            return 0x5D;
+            return GI_POTION_BLUE;
     }
-    return 0;
+    return GI_NONE;
 }
 
 void func_80BED090(GlobalContext* globalCtx) {
