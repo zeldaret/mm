@@ -1047,7 +1047,7 @@ TexturePtr sDoActionTextures[] = {
 s32 Health_ChangeBy(GlobalContext* globalCtx, s16 healthChange) {
     if (healthChange > 0) {
         play_sound(NA_SE_SY_HP_RECOVER);
-    } else if ((gSaveContext.save.playerData.doubleDefense != 0) && (healthChange < 0)) {
+    } else if (gSaveContext.save.playerData.doubleDefense && (healthChange < 0)) {
         healthChange >>= 1;
     }
 
